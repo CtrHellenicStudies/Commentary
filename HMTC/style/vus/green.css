@@ -1,0 +1,83 @@
+body
+{ background: #656565;
+  color: #D5D2D6;
+}
+
+blockquote{border-color: #8AAF55;}
+
+#main
+{ background: #414141 url(main.png) repeat-y;
+  color: #D5D2D6;
+}
+
+#links, #footer, #menu li a
+{ background: #545454 url(gradient.png);
+  color: #D5D2D6;
+  border-color: #8AAF55;
+}
+
+#links a, #footer a
+{ background: transparent;
+  color: #D5D2D6;
+}
+
+#links a:hover, #footer a:hover
+{ background: transparent;
+  color: #8AAF55;
+}
+
+#logo
+{ background: #FFF url(logo.jpg) no-repeat;
+  color: #D5D2D6;
+  border-color: #8AAF55;
+}
+
+h1, #column1 h1, #column2 h1
+{ background: transparent;
+  color: #8AAF55;
+  border-color: #787878;
+}
+
+#menu
+{ background: transparent;
+  color: #D5D2D6;
+}
+
+.sidebaritem
+{ background: #545454;
+  color: #D5D2D6;
+}
+
+#menu li a:hover, #menu li a#selected, #menu li a#selected:hover
+{ background: #8AAF55;
+  color: #FFF;
+} 
+
+#content, #column2, #column2 a
+{ background: #414141;
+  color: #D5D2D6;
+  border-color: #D5D2D6;
+}
+
+#column2 a:hover
+{ background: #414141;
+  color: #8AAF55;
+  border-color: #8AAF55;
+}
+
+.sbilinks li a, .sidebaritem a
+{ background: #545454 url(arrow.png) no-repeat left center;
+  color: #D5D2D6;
+} 
+
+.sbilinks li a:hover, .sidebaritem a:hover
+{ background: #545454 url(green_arrow.png) no-repeat left center;
+  color: #8AAF55;
+} 
+
+/* Based on Nifty Corners: rounded corners without images */
+/* By Alessandro Fulciniti */
+/* http://www.html.it/articoli/nifty/index.html */
+.rtop, .rbottom{background: #414141;}
+.rtop .r1, .rtop .r2, .rtop .r3, .rtop .r4,
+.rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4{background: #545454;}

@@ -1,0 +1,346 @@
+/* global */
+html {
+    height: 100%;
+}
+
+body { 
+    font-family: verdana, arial, sans-serif;
+    padding: 0px;
+    margin: 0px;
+    font-size: .68em;
+}
+
+p {
+    margin: 0px;
+    padding: 0px 0px 16px 0px;
+    line-height: 1.7em;
+}
+
+h1 { 
+    font-family: arial, sans-serif;
+    font-size: 108%;
+    letter-spacing: .1em;
+}
+
+h2 { 
+    margin: 0px;
+    padding: 0px 0px 4px 0px;
+    font-size: 100%;
+}
+
+img {
+    border: 0px;
+}
+
+a {
+    outline: none;
+}
+
+/* image positioning - left, right and center */
+.left { 
+    float: left; 
+    padding: 0px 8px 0px 0px;
+}
+
+.right { 
+    float: right; 
+    padding: 0px 0px 0px 8px;
+}
+
+.center { 
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* block quote */
+blockquote { 
+    margin: 20px 0px 20px 0px; 
+    padding: 10px 20px 0px 20px;
+    border-left: 8px solid;
+}
+
+/* unordered list */
+ul {
+    margin: 8px 0px 0px 16px;
+    padding: 0px;
+}
+
+ul li { 
+    list-style-type: square;
+    margin: 0px 0px 11px 0px; 
+    padding: 0px;
+}
+
+/* ordered list */
+ol { 
+    margin: 8px 0px 0px 24px;
+    padding: 0px;
+}
+
+ol li { 
+    margin: 0px 0px 11px 0px; 
+    padding: 0px;
+}
+
+/* margin lefts / margin rights - to centre content */
+#main, #links, #footer, #logo, #menu, #content { 
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+/* main container */
+#main {
+    width: MAINpx;
+}
+
+/* links above the logo / footer */
+#links, #footer {
+    width: LINKSpx;
+    height: 20px;
+    font-size: 88%;
+    /*text-transform: uppercase;*/
+    padding: 8px 21px 0px 19px;
+}
+
+#links {
+    text-align: right;
+}
+
+#footer { 
+    text-align: center; 
+    border-top: 2px solid;
+}
+
+#links a, #footer a, #links a:hover, #footer a:hover {
+    text-decoration: none;
+}
+
+/* logo */
+#logo { 
+    width: LOGOWpx;
+    height: LOGOHpx;
+    border-top: 2px solid;
+    border-bottom: 5px solid;
+}
+
+#logo h1, #logo h2 { 
+    margin: 0px;
+    letter-spacing: .2em;
+    text-align: center;
+}
+#logo h1 { 
+    padding : 18px 0px 0px 39px;
+    font : 320% 'Finger Paint', arial; 
+    color : #COULEURPOLICELOGOETSURMENU;
+    /*font-weight : bold;*/
+}
+
+#logo h2 { 
+    font-family: arial, sans-serif;
+    padding: 5px 0px 0px 139px;
+    font-size: 200%;
+    text-align: left;
+}
+
+/* navigation menu */
+
+#menu { 
+    height: 31px;
+    width: LOGOWpx;
+    margin-top: -31px;
+    /*float: right;*/
+    position: relative;
+}
+
+#menu ul {
+    margin: 0px auto;
+    float: right;
+} 
+
+#menu li { 
+    float: left; 
+    margin: 0px 5px 0px 0px; 
+    padding: 0px;
+    list-style: none;
+    font : 130% 'Finger Paint', arial; 
+} 
+
+#menu li a { 
+    display: block; 
+    float: left; 
+    height: 22px;
+    text-decoration: none; 
+    padding: 6px 19px 2px 19px;
+    text-transform: uppercase;
+    font-size: 88%;
+    border-bottom: 1px solid;
+} 
+
+#menu li a:hover, #menu li a#selected, #menu li a#selected:hover { 
+    height: 22px;
+    padding: 6px 19px 2px 19px;
+    border: 0px;
+} 
+
+/* main content */
+#content { 
+    width: LOGOWpx;
+    overflow: hidden;
+} 
+
+/* column 1 - contains sidebar items */
+#column1 { 
+    /*border: 1px solid #000000;*/
+    width: COLUMN1px;
+    margin: 22px 0px 0px 0px;
+    float: right;
+    padding: 19px 19px 15px 19px;
+}
+
+.sidebaritem { 
+    text-align: left;
+    width: 184px;
+    float: left;
+    margin: 0px 0px 29px 4px;
+}
+
+.sidebaritem h1, .sidebaritem h2, .sidebaritem p {
+    margin: 0px 10px 0px 10px
+}
+
+.sidebaritem h1 { 
+    font-weight: normal;
+    padding: 8px 0px 16px 0px;
+    text-transform: uppercase;
+}
+
+.sidebaritem p { 
+    line-height: 16px; 
+    padding: 0px 0px 8px 0px;
+}
+
+.sidebaritem a, .sidebaritem a:hover { 
+    padding: 0px 0px 2px 19px;
+    text-decoration: none;
+}
+
+.sbilinks ul {
+    margin: 0px 0px 0px 10px;
+}
+
+.sbilinks li { 
+    list-style: none; 
+    padding: 0px 0px 0px 0px; 
+}
+
+.sbilinks li a, .sbilinks li a:hover { 
+    height: 16px;
+    text-decoration: none; 
+    width: 149px;
+} 
+
+/* column 2 - page content */
+#column2 {  
+    /*border: 2px solid #COULEURPOLICELOGOETSURMENU;*/
+    text-align: justify;
+    width: COLUMN2px;
+    float: left;
+    padding: 2px 3px 15px 19px;
+}
+
+#column2 h1 { 
+    font-family: arial, sans-serif;
+    padding: 16px 0px 5px 0px; 
+    margin: 0px 0px 12px 0px; 
+    border-bottom: 1px solid;
+    font-size: 150%;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+#column2 a, #column2 a:hover { 
+    padding: 0px 0px 2px 0px; 
+    text-decoration: none;
+    border-bottom: 1px dashed;
+}
+
+#column2 a:hover {
+    border-bottom: 1px solid;
+}
+
+/* Based on Nifty Corners: rounded corners without images */
+/* By Alessandro Fulciniti */
+/* http://www.html.it/articoli/nifty/index.html */
+.rtop, .rbottom {
+    display: block;
+}
+
+.rtop .r1, .rtop .r2, .rtop .r3, .rtop .r4,
+.rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4 { 
+    display: block;
+    height: 1px;
+    overflow: hidden; 
+}
+
+.r1 {
+    margin: 0 5px
+}
+
+.r2 {
+    margin: 0 3px 
+}
+
+.r3 {
+    margin: 0 2px 
+}
+
+.rtop .r4, .rbottom .r4 { 
+    margin: 0 1px;
+    height: 2px
+}
+
+/* additional colour scheme selections */
+#colour {
+    margin: 0px 0px 20px 0px;
+}
+
+#colour a, #colour a:hover {
+    border: 0px; 
+}
+
+.blue { 
+    background: #COULEURFOND url(blue.png) no-repeat left center;
+    color: #109CEF;
+    padding: 0px 40px 0px 20px;
+}
+
+.green { 
+    background: #COULEURFOND url(green.png) no-repeat left center;
+    color: #94C65A;
+    padding: 0px 40px 0px 20px;
+}
+
+.purple { 
+    background: #COULEURFOND url(purple.png) no-repeat left center;
+    color: #CE5AEF;
+    padding: 0px 40px 0px 20px;
+}
+
+.orange { 
+    background: #COULEURFOND url(orange.png) no-repeat left center;
+    color: #FF9C21;
+    padding: 0px 40px 0px 20px;
+}
+
+/* ======================================================= */
+/* Ajouté par François Recher */
+/* ======================================================= */
+
+#column2 a.image, #column2 a:hover.image {
+    border-bottom: none; 
+}
+
+body {
+    overflow-y : scroll;
+}

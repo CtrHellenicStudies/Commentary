@@ -1,0 +1,173 @@
+body
+{ background: #COULEURARRIEREPLAN;
+  color: #COULEURPOLICE;
+}
+
+blockquote{
+    border-top: 2px solid;/*border : 2px solid #000;*/
+    border-left: 2px solid;/*border : 2px solid #000;*/
+    border-color: #CODECOULEUR;
+}
+
+#main
+{ background: #COULEURFOND url(main.png) repeat-y;
+  color: #COULEURPOLICE;
+}
+
+#links, #footer, #menu li a
+{ background: #COULEURENTREARRIEREETFOND url(gradient.png);
+  color: #COULEURPOLICE;
+  border-color: #CODECOULEUR;
+}
+
+#links a, #footer a
+{ background: transparent;
+  color: #COULEURPOLICE;
+}
+
+#links a:hover, #footer a:hover
+{ background: transparent;
+  color: #CODECOULEUR;
+}
+
+#logo{ 
+    background: #COULEURPOLICELOGOETSURMENU url(logo.jpg) no-repeat;
+    color: #COULEURPOLICE;
+    border-color: #CODECOULEUR;
+}
+
+h1, #column1 h1, #column2 h1{ 
+    background: transparent;
+    color: #CODECOULEUR;
+    /*border-color: #787878;*/
+}
+
+#menu{ 
+    background: transparent;
+    color: #COULEURPOLICE;
+}
+
+.sidebaritem{ 
+    background: #COULEURENTREARRIEREETFOND;
+    color: #COULEURPOLICE;
+}
+
+#menu li a:hover, #menu li a#selected, #menu li a#selected:hover{ 
+    background: #CODECOULEUR;
+    color: #COULEURPOLICELOGOETSURMENU;
+} 
+
+#content, #column2, #column2 a{ 
+    background: #COULEURFOND;
+    color: #COULEURPOLICE;
+    border-color: #COULEURPOLICE;
+}
+
+#column2 a:hover{ 
+    background: #COULEURFOND;
+    color: #CODECOULEUR;
+    border-color: #CODECOULEUR;
+}
+
+.sbilinks li a, .sidebaritem a{ 
+    background: #COULEURENTREARRIEREETFOND url(fleche_COULEURFLECHE.png) no-repeat left center;
+    color: #COULEURPOLICE;
+} 
+
+.sbilinks li a:hover, .sidebaritem a:hover{ 
+    background: #COULEURENTREARRIEREETFOND url(fleche_NOMCOULEUR.png) no-repeat left center;
+    color: #CODECOULEUR;
+} 
+
+/* Based on Nifty Corners: rounded corners without images */
+/* By Alessandro Fulciniti */
+/* http://www.html.it/articoli/nifty/index.html */
+.rtop, .rbottom{background: #COULEURFOND;}
+.rtop .r1, .rtop .r2, .rtop .r3, .rtop .r4,
+.rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4{background: #COULEURENTREARRIEREETFOND;}
+
+
+/* ======================================================= */
+/* Ajouté par François Recher */
+/* ======================================================= */
+
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+/*    width: 100%;    */
+}
+.table {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+/*    -webkit-box-shadow: 0 1px 1px #ccc; 
+    -moz-box-shadow: 0 1px 1px #ccc; 
+    box-shadow: 0 1px 1px #ccc;         */
+}
+
+.table tr:hover {
+    background: #COULEURARRIEREPLAN;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;     
+}    
+    
+.table td, .table th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    /*text-align: left;   */
+}
+
+.table th {/*dce9f9;*/
+    /*color:#COULEURFOND;*/
+    background-color: #CODECOULEUR;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#COULEURARRIEREPLAN), to(CODECOULEUR));
+    background-image: -webkit-linear-gradient(top, #COULEURARRIEREPLAN, #CODECOULEUR);
+    background-image:    -moz-linear-gradient(top, #COULEURARRIEREPLAN, #CODECOULEUR);
+    background-image:     -ms-linear-gradient(top, #COULEURARRIEREPLAN, #CODECOULEUR);
+    background-image:      -o-linear-gradient(top, #COULEURARRIEREPLAN, #CODECOULEUR);
+    background-image:         linear-gradient(top, #COULEURARRIEREPLAN, #CODECOULEUR);
+/*    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset; 
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;        */
+    border-top: none;
+/*    text-shadow: 0 1px 0 rgba(255,255,255,.5); */
+}
+
+.table td:first-child, .table th:first-child {
+    border-left: none;
+}
+
+.table th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+.table th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+.table th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.table tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+.table tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}

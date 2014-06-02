@@ -1,0 +1,173 @@
+body
+{ background: #656565;
+  color: #d5d2d6;
+}
+
+blockquote{
+    border-top: 2px solid;/*border : 2px solid #000;*/
+    border-left: 2px solid;/*border : 2px solid #000;*/
+    border-color: #FF9C27;
+}
+
+#main
+{ background: #414141 url(main.png) repeat-y;
+  color: #d5d2d6;
+}
+
+#links, #footer, #menu li a
+{ background: #535353 url(gradient.png);
+  color: #d5d2d6;
+  border-color: #FF9C27;
+}
+
+#links a, #footer a
+{ background: transparent;
+  color: #d5d2d6;
+}
+
+#links a:hover, #footer a:hover
+{ background: transparent;
+  color: #FF9C27;
+}
+
+#logo{ 
+    background: #ffffff url(logo.jpg) no-repeat;
+    color: #d5d2d6;
+    border-color: #FF9C27;
+}
+
+h1, #column1 h1, #column2 h1{ 
+    background: transparent;
+    color: #FF9C27;
+    /*border-color: #787878;*/
+}
+
+#menu{ 
+    background: transparent;
+    color: #d5d2d6;
+}
+
+.sidebaritem{ 
+    background: #535353;
+    color: #d5d2d6;
+}
+
+#menu li a:hover, #menu li a#selected, #menu li a#selected:hover{ 
+    background: #FF9C27;
+    color: #ffffff;
+} 
+
+#content, #column2, #column2 a{ 
+    background: #414141;
+    color: #d5d2d6;
+    border-color: #d5d2d6;
+}
+
+#column2 a:hover{ 
+    background: #414141;
+    color: #FF9C27;
+    border-color: #FF9C27;
+}
+
+.sbilinks li a, .sidebaritem a{ 
+    background: #535353 url(fleche_c9c9c9.png) no-repeat left center;
+    color: #d5d2d6;
+} 
+
+.sbilinks li a:hover, .sidebaritem a:hover{ 
+    background: #535353 url(fleche_orange.png) no-repeat left center;
+    color: #FF9C27;
+} 
+
+/* Based on Nifty Corners: rounded corners without images */
+/* By Alessandro Fulciniti */
+/* http://www.html.it/articoli/nifty/index.html */
+.rtop, .rbottom{background: #414141;}
+.rtop .r1, .rtop .r2, .rtop .r3, .rtop .r4,
+.rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4{background: #535353;}
+
+
+/* ======================================================= */
+/* Ajouté par François Recher */
+/* ======================================================= */
+
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+/*    width: 100%;    */
+}
+.table {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+/*    -webkit-box-shadow: 0 1px 1px #ccc; 
+    -moz-box-shadow: 0 1px 1px #ccc; 
+    box-shadow: 0 1px 1px #ccc;         */
+}
+
+.table tr:hover {
+    background: #656565;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;     
+}    
+    
+.table td, .table th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    /*text-align: left;   */
+}
+
+.table th {/*dce9f9;*/
+    /*color:#414141;*/
+    background-color: #FF9C27;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#656565), to(FF9C27));
+    background-image: -webkit-linear-gradient(top, #656565, #FF9C27);
+    background-image:    -moz-linear-gradient(top, #656565, #FF9C27);
+    background-image:     -ms-linear-gradient(top, #656565, #FF9C27);
+    background-image:      -o-linear-gradient(top, #656565, #FF9C27);
+    background-image:         linear-gradient(top, #656565, #FF9C27);
+/*    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset; 
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;        */
+    border-top: none;
+/*    text-shadow: 0 1px 0 rgba(255,255,255,.5); */
+}
+
+.table td:first-child, .table th:first-child {
+    border-left: none;
+}
+
+.table th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+.table th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+.table th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.table tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+.table tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}

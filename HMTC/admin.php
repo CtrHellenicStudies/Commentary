@@ -200,7 +200,7 @@ else {
 
 
   if (isset($_GET["id_work"])) {
-    $form.="<div align=\"right\"><a href=\"https://math1pcisn.univ-lille1.fr/HMTC/table.php?prefixetable=&table=commentaries&quoi=modification&postaction=INSERT&id_writer=".$_GET["id_writer"]."&id_author=".$_GET["id_author"]."&id_work=".$_GET["id_work"]."&submit=Search\" class=\"image\">Add a new record</a></div>";
+    $form.="<div align=\"right\"><a href=\"table.php?prefixetable=&table=commentaries&quoi=modification&postaction=INSERT&id_writer=".$_GET["id_writer"]."&id_author=".$_GET["id_author"]."&id_work=".$_GET["id_work"]."&submit=Search\" class=\"image\">Add a new record</a></div>";
   }
 
   $form.="\n</form>";

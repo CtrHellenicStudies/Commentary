@@ -1,6 +1,0 @@
-# Emacs backup files
-*~
-# Emacs working/lock files
-^\#*
-# Mac Directory Status Cruft
-.DS_Store

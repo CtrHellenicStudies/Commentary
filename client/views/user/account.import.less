@@ -1,0 +1,169 @@
+.user-profile-tease {
+	a {
+		width:100%;
+		padding:20px;
+	}
+	.user-image-wrap {
+		@include border-radius(100px);
+		overflow:hidden;
+		vertical-align: top;
+		width:40px;
+		height:40px;
+		display:inline-block;
+		img {
+			width:40px;
+		}
+	}
+	h3 {
+		vertical-align: top;
+		display:inline-block;
+		font-size:20px;
+		padding:10px 0 10px 10px;
+		margin:0;
+	}
+}
+
+.page-user {
+
+
+}
+
+.user-divider {
+  margin:100px auto;
+  width:100%;
+  max-width:320px;
+  height:4px;
+  background:$divider-color;
+
+}
+
+.user-account-form {
+
+  .fieldcontain {
+	display:block;
+	width:100%;
+	padding:5px 0;
+  }
+
+  label {
+	float:left;
+	clear:both;
+	font-size:14px;
+	color:$primary;
+	text-transform:uppercase;
+	font-weight:bold;
+	margin:0 0 5px 0;
+	.required-indicator {
+	  color:$accent;
+	}
+
+  }
+
+  .user-avatar-wrap {
+	width:260px;
+	margin:5px 10px;
+	overflow:hidden;
+	border-radius:50%;
+
+	img {
+	  clear:both;
+	  width:100%;
+	}
+
+
+  }
+
+  input[type="file"]{
+	padding:0 10px;
+  }
+
+  input[type="submit"] {
+	width:auto;
+	padding:5px 50px;
+	display:block;
+	margin:25px 0;
+	height:auto;
+  }
+
+
+}
+
+.user-discussion-comments {
+
+  max-width:980px;
+  width:100%;
+  margin:30px auto;
+  display:block;
+
+  // Intentionally nested here because this is a special use-case for discussion comments
+  // appearing only user profiles
+  .user-discussion-comment {
+	width:100%;
+	border-top:2px solid $primary;
+	margin:25px auto;
+	display:block;
+
+	.user-discussion-comment-title {
+	  font-size:26px;
+	  text-align:left;
+	  padding:50px 0 0px;
+	  margin:0 auto;
+	  max-width:888px;
+	  display:block;
+	  &:hover {
+		color:$primary;
+	  }
+	}
+
+	md-card-content {
+	  padding:5px 16px;
+	  text-align:left;
+	  p {
+		font-size:18px;
+		margin:0 auto;
+		padding:5px 0 20px;
+		max-width:950px;
+
+	  }
+	}
+
+
+	.user-discussion-comment-replies {
+	  display:block;
+	  margin:10px 50px 20px;
+	  float:left;
+	  &:hover {
+		background:$light;
+		span, i {
+		  color:$primary;
+		}
+	  }
+
+	  span, i {
+		font-size:16px;
+		color:$secondary-text;
+		text-transform:uppercase;
+	  }
+
+	  i {
+		margin-right:10px;
+	  }
+
+	}
+
+  }
+
+  .no-results.no-discussion-comments {
+	text-align:center;
+	font-size:24px;
+	color:#999;
+
+  }
+
+}
+
+#remember_me_holder {
+ input {
+   margin-left:10px;
+ }
+}

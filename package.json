@@ -1,0 +1,33 @@
+{
+  "name": "ahcip",
+  "version": "0.2.1",
+  "description": "A Homer Commentary in Progress",
+  "main": "main.js",
+  "dependencies": {
+    "material-ui": "^0.15.0",
+    "pseries": "^2.0.0",
+    "react": "^15.0.2",
+    "react-addons-create-fragment": "^15.0.2",
+    "react-addons-css-transition-group": "^15.0.2",
+    "react-addons-linked-state-mixin": "^15.0.2",
+    "react-addons-perf": "^15.0.2",
+    "react-addons-pure-render-mixin": "^15.0.2",
+    "react-addons-test-utils": "^15.0.2",
+    "react-addons-transition-group": "^15.0.2",
+    "react-addons-update": "^15.0.2",
+    "react-dom": "^15.0.2",
+    "react-list": "^0.7.18",
+    "react-slick": "^0.12.2",
+    "react-tap-event-plugin": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.archimedesdigital.io:archimedes/view.git"
+  },
+  "author": "",
+  "license": "MIT"
+}

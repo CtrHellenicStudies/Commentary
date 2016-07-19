@@ -1,0 +1,23 @@
+{
+    "environment": "dev",
+
+    "public": {
+        "ga": {
+            "id": "UA-XXXXXXXX-1"
+        },
+        "mixpanel": {
+            "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "identifyUsers": true
+        }
+    },
+    "serviceConfigurations": {
+        "facebook": {
+            "appId": "",
+            "secret": ""
+        },
+        "googe": {
+          "clientId" : "xxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com",
+          "secret" : "xxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "loginStyle" : "popup"
+        }
+    }

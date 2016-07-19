@@ -1,0 +1,32 @@
+# -*- mode: gitignore; -*-
+
+# Application specific
+local
+private/settings/production.json
+*.log
+.uploads
+node_modules
+
+
+# Editors
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+*.sw[po]
+.idea/
+*.iml
+*.iws
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

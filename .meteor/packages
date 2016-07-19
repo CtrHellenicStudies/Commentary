@@ -1,0 +1,82 @@
+# Meteor packages used by this project, one per line.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+# Packages from meteor-starter template application
+less
+accounts-base
+accounts-password
+aldeed:collection2
+dburles:collection-helpers
+matb33:collection-hooks
+alanning:roles
+aldeed:simple-schema
+fortawesome:fontawesome
+tap:i18n
+raix:handlebar-helpers
+cfs:standard-packages
+cfs:gridfs
+aldeed:template-extension
+cfs:graphicsmagick
+yogiben:helpers
+# manuelschoebel:ms-seo
+# spiderable
+accounts-facebook
+accounts-google
+accounts-twitter
+accounts-ui
+jparker:gravatar
+service-configuration
+yogiben:mixpanel
+juliancwirko:s-alert
+juliancwirko:s-alert-stackslide
+momentjs:moment
+zimme:active-route
+twbs:bootstrap
+reywood:publish-composite
+natestrauser:animate-css
+meteorhacks:subs-manager
+yogiben:admin
+timmyg:wow
+tsega:skrollr
+utilities:avatar
+meteor-base
+mongo
+blaze-html-templates
+session
+jquery
+tracker
+logging
+reload
+random
+ejson
+yogiben:pretty-email
+aldeed:autoform
+yogiben:autoform-modals
+yogiben:autoform-file
+yogiben:autoform-map
+check
+#iron:router
+#multiply:iron-router-progress
+useraccounts:core
+useraccounts:bootstrap
+useraccounts:iron-routing
+percolate:momentum-iron-router
+percolate:momentum
+
+# Packages added for project
+http
+react
+ecmascript
+archimedigital:core
+jabbslad:basic-auth
+deanius:promise
+kadira:flow-router
+kadira:react-layout
+user-thumbs
+standard-minifier-css
+standard-minifier-js
+simple:rest
+dburles:google-maps
+natestrauser:jquery-scrollto

@@ -1,4 +1,4 @@
-import ReactList from 'react-list';
+import RaisedButton from 'material-ui/RaisedButton';
 
 CommentaryPage = React.createClass({
 
@@ -36,6 +36,8 @@ CommentaryPage = React.createClass({
 
     return (
         <div className="reading-environment commentary-page">
+          <Commentary />
+
 
         </div>
 

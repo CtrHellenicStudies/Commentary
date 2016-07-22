@@ -1,6 +1,30 @@
 this.Keywords = new Meteor.Collection('keywords');
 
 Schemas.Keywords = new SimpleSchema({
+  wordpressId: {
+    type: Number,
+    optional: true,
+  },
+
+  title: {
+    type: String,
+    optional: true,
+  },
+
+  slug: {
+    type: String,
+    optional: true,
+  },
+
+  description: {
+    type: String,
+    optional: true,
+  },
+
+  count: {
+    type: Number,
+    optional: true,
+  },
 
   createdAt: {
     type: Date,

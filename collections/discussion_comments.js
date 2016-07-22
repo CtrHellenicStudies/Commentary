@@ -1,11 +1,30 @@
-this.DiscussionComments = new Meteor.Collection('discussion_comment');
+this.DiscussionComments = new Meteor.Collection('discussion_comments');
 
 Schemas.DiscussionComments = new SimpleSchema({
-  text: {
+  user: {
+    type: User,
+  },
+  content: {
     type: String,
-    autoform: {
-      rows: 5
-    }
+    optional: true,
+  },
+  parentId: {
+    type: Number,
+    optional: true,
+  },
+  comment: {
+    type: Comment,
+  },
+  status: {
+    type: String,
+  },
+  votes: {
+    type: Number,
+    optional: true,
+  },
+  voters: {
+    type: [User],
+    optional: true,
   },
   createdAt: {
     type: Date,

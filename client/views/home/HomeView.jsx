@@ -1,4 +1,5 @@
 
+import RaisedButton from 'material-ui/RaisedButton';
 
 HomeView = React.createClass({
 
@@ -14,153 +15,179 @@ HomeView = React.createClass({
 
   render(){
       return (
-        <div>
-          <section id="intro" className="cover fullscreen image-bg bg-dark ">
+        <div className="home">
 
-              <div className="background-image-holder less-blur blur">
-                <img src="/images/column.jpg" alt="image" />
-              </div>
-              <div className="background-screen cyan">
-              </div>
+          <div data-ng-controller="IndexController as index" class="content primary">
 
-              <div className="container v-align-transform header-container">
-                  <div className="row">
+            <section class="header cover fullscreen parallax">
+                <div class="background-image-holder remove-blur blur-10">
+                   <asset:image alt="image" class="background-image" src="hector.jpg"/>
+                </div>
+                <div class="block-screen brown"></div>
 
-                      <div className="header-center text-center">
+                <div class="container v-align-transform wow fadeIn" data-wow-duration="1s" data-wow-delay="0.1s">
 
-                          <h1>Explore open classical literature</h1>
-                          <input className="header-search" type="text" placeholder="Search . . ." />
+                    <div class="grid inner">
+                        <div class="center-content" >
 
-                          <h6 className="uppercase mb16">Read classical works in Greek, Latin, Chinese, Coptic, and Pali <br/>  and research metadata on your favorite texts.</h6>
+                            <div class="site-title-wrap">
+                                <h1 class="site-title">A Homer Commentary<br>in Progress</h1>
+                                <h3 class="site-subtitle">
+                                    An evolving, collaborative commentary based on the cumulative research of Milman Parry and Albert Lord, who created a new way of thinking about Homeric poetry
+                                </h3>
+                            </div>
 
-                          <a className="btn btn-large md-button learn-more-button md-ink-ripple paper-shadow" href="#beliefs" aria-label="Learn More">
-                            <span>Learn More</span>
-                            <div className="md-ripple-container"></div>
+                            <RaisedButton href="#intro"  class="cover-link learn-more">
+                                Learn More
+                            </RaisedButton>
 
-                          </a>
+                            <RaisedButton href="/commentary/"  class="cover-link accent paper-shadow">
+                                Go to Commentary
+                            </RaisedButton>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="intro">
+                <div class="container">
+                    <div class="row">
+                        <h2 >Quid faciat laetas segetes quo</h2>
+
+                        <div class="intro-col intro-col-text">
+
+                            <div class="mb40 mb-xs-24l intro-block-text ">
+                                <h5 class="uppercase intro-block-header">Sidere terram vertere</h5>
+                                <span class="intro-block-desc">
+                                    Mycenas, ulmisque adiungere vites conveniat quae curum boum qui cultus
+                                    habendo sit pecori apibus quanta experientia parcis.
+                                </span>
+                            </div>
+
+                            <div class="mb40 mb-xs-24 intro-block-text ">
+                                <h5 class="uppercase intro-block-header">Hinc canere incipiam</h5>
+                                <span class="intro-block-desc">
+                                    Vos, o agrestum praesentia numina fauni ferte simul faunique pedem dryadesque
+                                    puellae munera vestro cano.
+                                </span>
+                            </div>
+
+                            <RaisedButton class="cover-link dark " href="/"  class=" paper-shadow">
+                                Troiae qui primus
+                            </RaisedButton>
+
+                        </div>
+                        <div class="intro-col intro-col-image image-wrap wow fadeIn">
+                            <asset:image class="paper-shadow" alt="Ajax and Achilles" src="ajax_achilles_3.jpg" />
+                            <div class="caption">
+                                <span class="caption-text">"Quid faciat laetas segetes quo sidere", Terram Vertere. 1865. Oil on canvas. Center for Hellenic Studies, Washington, DC.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end of row-->
+                </div>
+                <!--end of container-->
+            </section>
 
 
+            <section class="goals parallax">
+
+                <div class="background-image-holder blur-4--no-remove">
+                   <asset:image alt="image" class="background-image" src="mss_2.jpg"/>
+                </div>
+                <div class="block-screen brown"></div>
+
+                <div class="container ">
+
+                  <div class="goal hvr-grow wow fadeInUp" >
+                      <asset:image class="goal-image" src="svg-icons/pen.svg"></asset:image>
+                      <div class="goal-text">
+                        <h3 class="goal-title">Collaborative commenting and editing</h3>
+                        <span class="goal-desc">Writing as a collaborative process between principal authors and associate editors</span>
                       </div>
+                  </div>
 
+                  <div class="goal hvr-grow wow fadeInUp" data-wow-delay="0.5s">
+                      <asset:image class="goal-image" src="svg-icons/book-opened.svg"></asset:image>
+                      <div class="goal-text">
+                        <h3 class="goal-title">System and beauty</h3>
+                        <span class="goal-desc">Linguistic approach analyzing both synchronically and diachronically the formulaic system of Homeric poetry</span>
+                      </div>
+                  </div>
 
+                  <div class="goal hvr-grow wow fadeInUp" data-wow-delay="1s">
+                      <asset:image class="goal-image" src="svg-icons/bank.svg"></asset:image>
+                      <div class="goal-text">
+                        <h3 class="goal-title">A growing effort of scholars still in progress</h3>
+                        <span class="goal-desc">The commentary constitutes work from a diverse team representing three generations of researchers</span>
+                      </div>
                   </div>
 
               </div>
 
-          </section>
 
-          <section id="get-started" className="bg-gray" >
-            <div className="container text-center">
-              <div className="row">
-                <h2 className="section-title">Get Started </h2>
-                <hr className="section-header-line" />
-                <h4 className="uppercase" >Browse popular authors, poets, and historians</h4>
+            </section>
 
-              </div>
-            </div>
+            <section class="browse-commentary block-shadow" >
 
-            <WorksList />
+              <WorksList />
+
+            </section>
 
 
-            <div className="container text-center">
-              <div className="row">
-                <a href="#" className="btn btn-lg md-button md-ink-ripple view-more paper-shadow" aria-label="View more">
-                  View more
-                </a>
-              </div>
-            </div>
-          </section>
+            <section class="keywords">
+                <div class="grid inner">
+                    <h2 class="keyword-divider-title">Keywords</h2>
+                    <div class="underline"></div>
 
-          <section id="features" >
+                    <KeywordsList />
 
-            <div className="feature f1">
-              <div className="feature-image-screen"></div>
-              <div className="feature-inner">
+                    <RaisedButton href="/keyword/index"  class="cover-link show-more primary paper-shadow">
+                        More Keywords
+                    </RaisedButton>
 
-                <h3 className="feature-n">137</h3>
-                <span className="feature-title">Authors</span>
-
-                <div className="feature-line"></div>
-
-                <span className="feature-desc">
-                    Authors with works included quid faciat laetas segetes quo sidere terram vertere
-                </span>
-
-              </div>
-
-            </div>
-            <div className="feature f2">
-              <div className="feature-image-screen"></div>
-              <div className="feature-inner">
-
-                <h3 className="feature-n">482</h3>
-                <span className="feature-title">Texts</span>
-
-                <div className="feature-line"></div>
-
-                <span className="feature-desc">
-                    Texts available to read quid faciat laetas segetes quo sidere terram vertere
-                </span>
-
-              </div>
-
-            </div>
-            <div className="feature f3">
-              <div className="feature-image-screen"></div>
-              <div className="feature-inner">
-
-                <h3 className="feature-n">1,427</h3>
-                <span className="feature-title">Entities</span>
-
-                <div className="feature-line"></div>
-
-                <span className="feature-desc">
-                    Named entities annotated quid faciat laetas segetes quo sidere terram vertere
-                </span>
-
-              </div>
-
-            </div>
-
-
-          </section>
-
-          <section id="build" >
-            <div className="container text-center">
-
-              <div className="row">
-
-                <h2 className="section-title">Contribute code to the CLTK Archive or Core</h2>
-
-                <hr className="section-header-line" />
-              </div>
-              <div className="row">
-
-
-                <div className="col-sm-6 text-center">
-
-                  <a href="https://github.com/cltk/cltk_frontend" target="_blank" className="start-building-item">
-                    <i className="mdi mdi-github-circle icon-lg mb40 mb-xs-24 "></i>
-                    <h5 className="uppercase">Lorem ipsum dolor sit amet</h5>
-                    <span className="item-text">Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque adiungere vites conveniat</span>
-
-                  </a>
                 </div>
-                <div className="col-sm-6 text-center">
+            </section>
 
-                <a href="https://github.com/cltk/cltk" target="_blank" className="start-building-item">
-                  <i className="mdi mdi-github-circle icon-lg mb40 mb-xs-24  "></i>
-                  <h5 className="uppercase">Lorem ipsum dolor sit amet</h5>
-                  <span className="item-text">Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque adiungere vites conveniat</span>
-                </a>
+            <section class="parallax commentators">
+                <div class="background-image-holder blur-4--no-remove">
+                   <asset:image alt="image" class="background-image" src="school-athens.jpg"/>
+                </div>
+                <div class="block-screen"></div>
+
+                <div class="container">
+
+                  <h2 class="block-title">Commenters</h2>
+
+
+                    <CommentersList />
+
+                    <RaisedButton href="/commentator/index"  class="cover-link light show-more paper-shadow">
+                        Other Commenters
+                    </RaisedButton>
 
                 </div>
 
-              </div>
-            </div>
+            </section>
 
-          </section>
-    </div>
+            <section class="get-started" layout="column" flex>
+
+                  <h2 class="block-title">Get Started</h2>
+
+                  <div class="get-started-comments">
+
+                    <
+
+                  </div>
+
+            </section>
+
+            <ContextPanel />
+
+          </div>
+
+        </div>
 
     );
   }

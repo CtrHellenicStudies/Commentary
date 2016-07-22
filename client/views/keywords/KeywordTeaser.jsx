@@ -1,16 +1,6 @@
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import Divider from 'material-ui/Divider';
+import Card from 'material-ui/Card';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import CommunicationComment from 'material-ui/svg-icons/communication/comment';
-import ActionInput from 'material-ui/svg-icons/action/input';
-import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-// Needed for onTouchTap
-// Check this repo:
-// https://github.com/zilverline/react-tap-event-plugin
-injectTapEventPlugin();
 
 KeywordTeaser = React.createClass({
 
@@ -32,10 +22,15 @@ KeywordTeaser = React.createClass({
     let keyword_url = "/keywords/" + keyword.slug ;
 
      return (
-       <div className="keyword-teaser">
+       <div  class="keyword-teaser wow fadeInUp" data-wow-duration="0.2s">
+        <a class="keyword-title" href="/keyword/show/{keyword.id}" >
+            {keyword.title}
+        </a>
+        <span class="keyword-comment-count">437 Comments</span>
+        <span class="keyword-description">{keyword.description}</span>
 
+      </div>
 
-        </div>
       );
     }
 

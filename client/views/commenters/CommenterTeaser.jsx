@@ -1,28 +1,20 @@
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import Divider from 'material-ui/Divider';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import CommunicationComment from 'material-ui/svg-icons/communication/comment';
-import ActionInput from 'material-ui/svg-icons/action/input';
-import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-// Needed for onTouchTap
-// Check this repo:
-// https://github.com/zilverline/react-tap-event-plugin
-injectTapEventPlugin();
 
 // commenter Teaser
 CommenterTeaser = React.createClass({
-
-  getChildContext() {
-    return { muiTheme: getMuiTheme(baseTheme) };
-  },
 
   propTypes: {
     commenter: React.PropTypes.object.isRequired
   },
 
+  getChildContext() {
+    return { muiTheme: getMuiTheme(baseTheme) };
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object.isRequired,
+  },
 
   render() {
     let commenter = this.props.commenter;
@@ -30,6 +22,23 @@ CommenterTeaser = React.createClass({
 
      return (
        <div className="commenter-teaser">
+         <div class="author-teaser hvr-grow wow fadeIn" >
+                <a href="/commentator/show/${commentator.id}" >
+                    <div class="author-image paper-shadow">
+                      <img src="/images/default_user.jpg" alt="{commentator.name}"/>
+                    </div>
+                </a>
+                <div class="author-teaser-text">
+                    <a href="/commentator/show/{commentator.id}" >
+                        <h3>${commentator.name}</h3>
+                    </a>
+                    <hr>
+                    <p class="author-description">
+                        {commentator.tagline}
+                    </p>
+
+                </div>
+            </div>
 
 
         </div>
@@ -37,7 +46,3 @@ CommenterTeaser = React.createClass({
     }
 
 });
-
-commenterTeaser.childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired,
-};

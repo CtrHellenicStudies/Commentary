@@ -1,6 +1,19 @@
 this.Revisions = new Meteor.Collection('revisions');
 
 Schemas.Revisions = new SimpleSchema({
+  title: {
+    type: String,
+    optional: true,
+  },
+
+  text: {
+    type: String,
+    optional: true,
+    autoform: {
+      rows: 5
+    }
+
+  },
 
   createdAt: {
     type: Date,

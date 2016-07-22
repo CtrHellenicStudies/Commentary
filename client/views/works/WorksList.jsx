@@ -16,7 +16,13 @@ WorksList = React.createClass({
 
 
   renderWorks(){
-    
+
+    return this.data.works.map((work, i) => {
+      return <WorkVisualization
+              key={i}
+              work={work} />;
+
+    });
 
   },
 

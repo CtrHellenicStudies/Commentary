@@ -33,7 +33,7 @@ DiscussionCommentsList = React.createClass({
        <div className="discussionComments-list">
 
          {this.data.discussionComments.map((discussionComment) => {
-            return <discussionCommentTeaser
+            return <DiscussionCommentTeaser
               key={discussionComment._id}
               discussionComment={discussionComment} />;
           })}

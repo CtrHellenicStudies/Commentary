@@ -1,4 +1,5 @@
 
+import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -10,7 +11,7 @@ ModalSignup = React.createClass({
     return { muiTheme: getMuiTheme(baseTheme) };
   },
 
-  childContextTypes = {
+  childContextTypes: {
     muiTheme: React.PropTypes.object.isRequired,
   },
 
@@ -40,48 +41,38 @@ ModalSignup = React.createClass({
         </div>
         <div class="modal-inner">
           <div class="login-links">
-            <md-button class="login-option login-option-google paper-card" href="/oauth/authenticate/google" target="_self">
+            <RaisedButton class="login-option login-option-google paper-card" href="/oauth/authenticate/google" target="_self">
               <i class="login-icon mdi mdi-google"></i>
               <span class="login-text">
                 Join with Google
               </span>
-            </md-button>
-            <md-button class="login-option login-option-facebook paper-card" href="/oauth/authenticate/facebook"  target="_self">
+            </RaisedButton>
+            <RaisedButton class="login-option login-option-facebook paper-card" href="/oauth/authenticate/facebook"  target="_self">
               <i class="login-icon mdi mdi-facebook"></i>
               <span class="login-text">
                 Join with Facebook
               </span>
-            </md-button>
-            <md-button class="login-option login-option-twitter paper-card" href="/oauth/authenticate/twitter"  target="_self">
+            </RaisedButton>
+            <RaisedButton class="login-option login-option-twitter paper-card" href="/oauth/authenticate/twitter"  target="_self">
               <i class="login-icon mdi mdi-twitter"></i>
               <span class="login-text">
                 Join with Twitter
               </span>
-            </md-button>
-            <hr>
+            </RaisedButton>
+            <hr/>
             <div class="login-other-option">
               <span class="login-other-option-label">
                 Or, join with your email address.
               </span>
-                <g:form class="login-other-option-form" controller="user" action="register" method="POST">
-                    <fieldset>
-                        <g:hasErrors bean="${user}">
-                            <div class="errors">
-                                <g:renderErrors bean="${user}"/>
-                            </div>
-                        </g:hasErrors>
-                        <g:textField name="username" value="${user?.username}" placeholder="Username"
-                                     class="${hasErrors(bean:user,field:'username','errors')}"/>
-                        <g:textField name="email" value="${user?.email}" placeholder="Email"
-                                     class="${hasErrors(bean:user,field:'email','errors')}"/>
-                        <g:passwordField name="password" placeholder="Password"
-                                         class="${hasErrors(bean:user,field:'password','errors')}" />
-                        <g:passwordField name="confirm" placeholder="Repeat password"
-                                         class="${hasErrors(bean:user,field:'password','errors')}" />
-                        <g:submitButton class="button paper-card" name="submitButton" value="Create Account" />
-                    </fieldset>
-                </g:form>
             </div>
+              <form class="signup-form" method="POST" action="/j_spring_security_check" ng-submit="login($event)">
+                <label for="email">Email</label>
+                <input id="email" type="text" name="j_username" placeholder="odysseus@ithica.edu" ng-model="email"/>
+                <label for="email">Password</label>
+                <input id="pass" type="password" name="j_password" ng-model="password"/>
+                 <a class="forgot-password" href="/forgot-password" target="_self">Forgot your password?</a>
+                <input class="paper-card" type="submit" value="Login"/>
+              </form>
           </div>
         </div>
       </div>

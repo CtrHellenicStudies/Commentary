@@ -22,12 +22,12 @@ KeywordTeaser = React.createClass({
     let keyword_url = "/keywords/" + keyword.slug ;
 
      return (
-       <div  class="keyword-teaser wow fadeInUp" data-wow-duration="0.2s">
-        <a class="keyword-title" href="/keyword/show/{keyword.id}" >
+       <div  className="keyword-teaser wow fadeInUp" data-wow-duration="0.2s">
+        <a className="keyword-title" href="/keyword/show/{keyword.id}" >
             {keyword.title}
         </a>
-        <span class="keyword-comment-count">437 Comments</span>
-        <span class="keyword-description">{keyword.description}</span>
+        <span className="keyword-comment-count">437 Comments</span>
+        <span className="keyword-description">{keyword.description}</span>
 
       </div>
 

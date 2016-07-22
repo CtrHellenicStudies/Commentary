@@ -3,8 +3,8 @@
  */
 
 html, body, input, p, span, label {
-	@include font-body;
-	color:$font-gray;
+	font-family:@font-body;
+	color:@font-gray;
 }
 
 body {
@@ -14,14 +14,14 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	@include font-title;
+	font-family:@font-title;
 }
 
 a {
-	color:$dark;
+	color:@dark;
 	text-decoration: none;
 	&:hover, &:focus {
-		color:$dark;
+		color:@dark;
 		text-decoration: none;
 	}
 }
@@ -60,10 +60,10 @@ li {
 
 // Set text highlighting to accent colors
 ::selection {
-  background: $md-blue-100;
+  background: @md-blue-100;
 }
 ::-moz-selection {
-  background: $md-blue-100;
+  background: @md-blue-100;
 }
 
 /*
@@ -92,10 +92,10 @@ li {
 	position:relative;
 }
 .lemma-text {
-  @include font-lemma();
+	font-family:@font-lemma;
 }
 .logo {
-  @include font-accent();
+	font-family:@font-accent;
 
 }
 
@@ -105,7 +105,7 @@ li {
 		padding:20px 0;
 		font-size:14px;
 		font-style:italic;
-		color:$secondary-text;
+		color:@secondary-text;
 
 	}
 
@@ -120,20 +120,20 @@ header {
 	position:fixed;
 	z-index:98;
 	top:0;
-	color:$dark-2;
+	color:@dark-2;
 	background:rgba(255,255,255,0.97);
 	-webkit-transform: translateZ(0);
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),0 1px 5px 0 rgba(0, 0, 0, 0.1),0 3px 1px -2px rgba(0, 0, 0, 0.01);
-    @include transition(all, 300ms, ease-out);
+    .transition(all 300ms ease-out);
 
     &.search-enabled {
       background:#f6f6f6;
 
 	  .search-toggle {
 		.md-button {
-		  background-color:$primary;
+		  background-color:@primary;
 		  span, i {
-			color:$light;
+			color:@light;
 		  }
 		}
 
@@ -159,19 +159,19 @@ header {
 	}
 
 	a {
-		color:$dark-2;
+		color:@dark-2;
 		text-decoration: none;
         margin:0;
         padding:0;
 
 		&:hover {
-			color:$dark-2;
+			color:@dark-2;
 		}
 
 	  	&:visited, &:focus {
 		  text-decoration: none;
 		  outline:none;
-		  color:$dark-2;
+		  color:@dark-2;
 
 		}
 
@@ -188,16 +188,16 @@ header {
   	.side-menu-toggle {
       padding:18px 20px 13px;
 	  font-size:24px;
-	  @include transition(all 100ms ease-out);
+	  .transition(all 100ms ease-out);
 	  &:hover, &:focus {
-		color: $primary;
+		color: @primary;
 		background:transparent !important;
 	  }
 	}
 
   	.site-title, .active-comment-meta {
       padding:15px 5px;
-	  @include transition(all 100ms ease-out);
+	  .transition(all 100ms ease-out);
 
 	  h3.logo {
         color:#444;
@@ -205,15 +205,15 @@ header {
 		margin:10px 0;
 		display:inline-block;
 		vertical-align:top;
-		@include transition(all 100ms ease-out);
+		.transition(all 100ms ease-out);
 
 	  }
 
 	  &:hover, &:focus {
-		color: $primary;
+		color: @primary;
 		background:transparent !important;
 		h3.logo {
-		  color: $primary;
+		  color: @primary;
 
 		}
 	  }
@@ -232,13 +232,14 @@ header {
 		a {
 			display:inline-block;
 			vertical-align: top;
-			color:$dark-2;
+			color:@dark-2;
 			text-transform:uppercase;
 			margin:0 10px;
 
 
             span {
-			  @include font-label( 14px );
+							font-family:@font-label;
+							font-size:14px;
 
             }
 		}
@@ -250,21 +251,22 @@ header {
       float:right;
 
 	  a.md-button:not([disabled]) {
-		@include font-label( 16px );
+				font-family:@font-label;
+				font-size:16px;
         margin:0;
         margin-right:-5px;
         padding:16px 20px;
-		@include transition(all 100ms ease-out);
+		.transition(all 100ms ease-out);
 
 		&:hover {
-		  background-color:$primary;
+		  background-color:@primary;
 		  span, i {
-			color:$light;
+			color:@light;
 		  }
 		}
 
         span, i {
-		  @include transition(all 100ms ease-out);
+		  .transition(all 100ms ease-out);
         }
 		i {
 		  font-size: 24px;
@@ -282,17 +284,17 @@ header {
       .md-button {
         display:block;
         padding:21px 20px 12px;
-		@include transition(all 100ms ease-out);
+		.transition(all 100ms ease-out);
 
 		&:hover {
-		  background-color:$primary;
+		  background-color:@primary;
 		  span, i {
-			color:$light;
+			color:@light;
 		  }
 		}
 
 		span, i {
-		  @include transition(all 100ms ease-out);
+		  .transition(all 100ms ease-out);
 		  font-size: 24px;
 		}
       }
@@ -305,15 +307,15 @@ header {
     }
 
     .join {
-     // background:$terracotta;
+     // background:@terracotta;
 
       span {
-      //  color:$light;
+      //  color:@light;
       }
 
       &:hover {
         span {
-       //   color:$primary-dark;
+       //   color:@primary-dark;
         }
       }
 
@@ -335,14 +337,14 @@ header {
 
   header.headroom--top {
 	background: transparent;
-	color: $light;
+	color: @light;
 	box-shadow: none;
 
 	md-toolbar.md-menu-toolbar {
 	  background: transparent;
-	  color: $light;
+	  color: @light;
 	  a, button, a span {
-		color: $light;
+		color: @light;
 
 	  }
 	  .join {
@@ -392,8 +394,8 @@ header {
  */
 footer {
 	clear:both;
-  background:$dark-brown;
-	color:$light;
+  background:@dark-brown;
+	color:@light;
 	padding:80px 0 100px;
 	text-align:center;
 	width:100%;
@@ -402,9 +404,9 @@ footer {
 
 
 	a, a.md-button {
-		color:$light;
+		color:@light;
         span {
-          color:$light;
+          color:@light;
         }
 		&:hover{
 			color:rgba(255,255,255,0.95);
@@ -426,7 +428,7 @@ footer {
 
     p.lead {
       text-align:left;
-      color:$light;
+      color:@light;
 	  a {
 		text-decoration:underline;
 
@@ -445,7 +447,7 @@ footer {
     }
 
     .site-logo {
-      @include filter(grayscale(100%) brightness(3));
+      //@include filter(grayscale(100%) brightness(3));
       width:77px;
     }
 
@@ -458,7 +460,7 @@ footer {
 		margin:10px 0;
 
 		a {
-			color:$light;
+			color:@light;
 		  	text-decoration:underline;
 
 			&:hover {
@@ -498,23 +500,27 @@ footer {
 	}
 }
 ::-webkit-input-placeholder {
-   color: $dark-1;
-  @include font-body( 16px );
+   color: @dark-1;
+  font-family:@font-body;
+	font-size:16px;
   text-transform:none;
 }
 :-moz-placeholder {
-   color: $dark-1;
-  @include font-body( 16px );
+   color: @dark-1;
+  font-family:@font-body;
+	font-size:16px;
   text-transform:none;
 }
 ::-moz-placeholder {
-   color: $dark-1;
-  @include font-body( 16px );
+   color: @dark-1;
+  font-family:@font-body;
+	font-size:16px;
   text-transform:none;
 }
 :-ms-input-placeholder {
-   color: $dark-1;
-  @include font-body( 16px );
+   color: @dark-1;
+  font-family:@font-body;
+	font-size:16px;
   text-transform:none;
 }
 
@@ -529,7 +535,7 @@ footer {
 	overflow:hidden;
 	z-index:1040;
 	background:rgba(255,255,255,0.85);
-	@include transition(top, 300ms, ease-out, 0);
+	.transition(top 300ms ease-out 0);
 	-webkit-transform: translateZ(0);
 	.exit {
 		position:absolute;
@@ -538,7 +544,7 @@ footer {
 		cursor:pointer;
 		span.fa {
 			font-size:30px;
-			color:$dark-1;
+			color:@dark-1;
 		}
 	}
 	&.modal-lowered {
@@ -565,7 +571,7 @@ footer {
 	  	border:none;
 	  	outline:none;
 	  	height:3px;
-	  	background:$light-gray;
+	  	background:@light-gray;
 
 	}
 }
@@ -573,7 +579,7 @@ footer {
 .login-options {
 	margin:20px auto;
 	.login-option {
-		background:$opaque-dark-2;
+		background:@opaque-dark-2;
 		margin:20px auto;
 		padding:15px 20px;
 		display:block;
@@ -584,7 +590,7 @@ footer {
 		span.fa {
 			display:inline-block;
 			font-size:30px;
-			color:$light;
+			color:@light;
 			vertical-align:middle;
 
 			float:left;
@@ -592,7 +598,7 @@ footer {
 		.login-option-text {
 			font-size:18px;
 			display:inline-block;
-			color:$light;
+			color:@light;
 			vertical-align:middle;
 		}
 	}
@@ -615,21 +621,21 @@ footer {
 		padding:8px;
 		font-size:18px;
 		margin:5px 0;
-		border:3px solid $opaque-dark-2;
+		border:3px solid @opaque-dark-2;
 		&:focus {
-			border:3px solid $primary-light;
+			border:3px solid @primary-light;
 			outline:none;
 		}
 	}
 	input[type=submit] {
-		background:$accent;
+		background:@accent;
 		border:none;
 		outline:none;
 		padding:10px;
-		color:$light;
+		color:@light;
 		margin:10px;
 		&:hover {
-			background: $md-accent-700;
+			background: @md-accent-700;
 		}
 	}
 
@@ -668,8 +674,8 @@ footer {
 
 .create-account {
 	a {
-		border-bottom: 1px solid $primary-light;
-		box-shadow: inset 0 -4px 0 $primary-light;
+		border-bottom: 1px solid @primary-light;
+		box-shadow: inset 0 -4px 0 @primary-light;
 	}
 }
 
@@ -790,17 +796,38 @@ md-sidenav.md-locked-open {
 // Animations and effects
 .background-image-holder {
 	&.blur-10, &.blur-10--no-remove {
-	  filter:blur(10px) !important;
-	  -webkit-filter:blur(10px) !important;
+		filter: blur(8px) sepia(30%) brightness(0.7); /* Someday, sigh ... */
+		-webkit-filter: blur(8px) sepia(30%) brightness(0.7); /* Prefixed CSS3 blur filters */
+		-moz-filter: blur(8px);
+		-o-filter: blur(8px);
+		-ms-filter: blur(8px);
+	  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='8'); /* IE lte 9 */
 	}
 	&.blur-4, &.blur-4--no-remove {
-	  @include filter(blur(4px));
+		filter: blur(4px) sepia(30%) brightness(0.7); /* Someday, sigh ... */
+	-webkit-filter: blur(4px) sepia(30%) brightness(0.7); /* Prefixed CSS3 blur filters */
+	-moz-filter: blur(4px);
+	-o-filter: blur(4px);
+	-ms-filter: blur(4px);
+  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4'); /* IE lte 9 */
 	}
 	&.blur-2, &.blur-2--no-remove {
-	  @include filter(blur(2px));
+		filter: blur(2px) sepia(30%) brightness(0.7); /* Someday, sigh ... */
+-webkit-filter: blur(2px) sepia(30%) brightness(0.7); /* Prefixed CSS3 blur filters */
+-moz-filter: blur(2px);
+-o-filter: blur(2px);
+-ms-filter: blur(2px);
+filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='2'); /* IE lte 9 */
+
 	}
 	&.blur-1, &.blur-1--no-remove {
-	  @include filter(blur(1px));
+		filter: blur(1px) sepia(30%) brightness(0.7); /* Someday, sigh ... */
+-webkit-filter: blur(1px) sepia(30%) brightness(0.7); /* Prefixed CSS3 blur filters */
+-moz-filter: blur(1px);
+-o-filter: blur(1px);
+-ms-filter: blur(1px);
+filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='1'); /* IE lte 9 */
+
 	}
 
 }
@@ -860,11 +887,11 @@ md-sidenav.md-locked-open {
 }
 
 input[type="submit"] {
-  border:2px solid $accent;
-  background:$accent;
+  border:2px solid @accent;
+  background:@accent;
   &:hover, &:focus {
-	border:2px solid $md-accent-700;
-	background:$md-accent-700;
+	border:2px solid @md-accent-700;
+	background:@md-accent-700;
 
   }
 }
@@ -874,6 +901,6 @@ pre code {
   clear:both;
   width:100%;
   &.error {
-	border-bottom:2px solid $md-accent-500;
+	border-bottom:2px solid @md-accent-500;
   }
 }

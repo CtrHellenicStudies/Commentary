@@ -3,19 +3,19 @@
 	width:50%;
 	margin:0 auto;
 	a {
-		background:$dark-1;
+		background:@dark-1;
 		text-decoration: none;
 		&:hover {
-			background:$dark-2;
+			background:@dark-2;
 		}
 	}
 	.seq-page {
 		display:inline-block;
 		vertical-align: top;
 		a {
-			//border-top:1px solid $light-1;
-			@include font-lemma;
-			color:$light;
+			//border-top:1px solid @light-1;
+			font-family:@font-lemma;
+			color:@light;
 			display:block;
 			//margin:10px 50px;
 			vertical-align: top;

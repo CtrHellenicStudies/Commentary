@@ -13,7 +13,7 @@ section {
 	  z-index:1;
 	}
 	.background-image-holder {
-		@include filter(blur(0px));
+		//@include filter(blur(0px));
 
 	}
 
@@ -34,22 +34,23 @@ section {
 	}
 
 	p {
-		@include font-commentary( 20px );
+		font-family:@font-commentary;
+		font-size:20px;
 		line-height:1.8em;
 		width:90%;
 		max-width:700px;
 		margin:0px auto;
 		padding:20px 0;
 		text-align:left;
-		color:$reading-text;
+		color:@reading-text;
 
 
 		a {
 			text-decoration:none;
-			border-bottom: 1px solid $accent-light;
-			box-shadow: inset 0 -4px 0 $accent-light;
+			border-bottom: 1px solid @accent-light;
+			box-shadow: inset 0 -4px 0 @accent-light;
 			font-weight:inherit;
-			@include transition(none);
+			.transition(none);
 			&:hover {
 				border-bottom:none;
 				box-shadow:none;
@@ -67,29 +68,35 @@ section {
 		width:100%;
 		height:100%;
 		z-index:1;
-		@include background-image( linear-gradient(
+		/*
+		background-image( linear-gradient(
 						rgba(0,0,0, 0.6),
 						rgba(0,0,0, 0.4) 10%,
 						rgba(0,0,0, 0.4) 90%,
 						rgba(0,0,0, 0.6)
 			  ) );
+				*/
 
 		&.brown {
-		  @include background-image( linear-gradient(
+			/*
+		  background-image( linear-gradient(
 						  rgba(62,39,35, 0.7),
 						  rgba(62,39,35, 0.5) 10%,
 						  rgba(62,39,35, 0.5) 90%,
 						  rgba(62,39,35, 0.7)
 		  ) );
+			*/
 
 		}
 		&.light-brown {
+			/*
 		  @include background-image( linear-gradient(
 						  rgba(94, 63, 55, 0.6),
 						  rgba(94, 63, 55, 0.4) 10%,
 						  rgba(94, 63, 55, 0.4) 90%,
 						  rgba(94, 63, 55, 0.6)
 		  ) );
+			*/
 		}
 
 
@@ -103,30 +110,31 @@ section.header {
 
 	position:relative;
 	padding:0;
-	background-color:$primary-dark;
+	background-color:@primary-dark;
 
 
 	.center-content {
 		width:100%;
 		text-align:left;
-		color:$light;
+		color:@light;
 		padding:0 0 60px 0;
 
 		.site-title {
-			@include font-accent( 4.5em );
+			font-family:@font-accent;
+			font-size:4.5em;
 			font-weight: 900;
 			margin:0;
 			padding:0;
 			color:#FFFFFF;
 			line-height:1.2em;
 			padding:20px 0;
-			text-shadow: 2px 2px $md-primary-800-40;
+			text-shadow: 2px 2px @md-primary-800-40;
 		}
 		.site-subtitle {
 			display:block;
 			font-size:24px;
 			max-width:660px;
-			color:$light;
+			color:@light;
 			line-height:1.2em;
 			padding:20px 0;
 		}
@@ -153,39 +161,39 @@ section.header {
 	display:inline-block;
 	margin:10px 10px 10px 0;
 	padding:14px 26px;
-	color:$light;
+	color:@light;
 	border-radius:0px;
-	border:2px solid $light;
+	border:2px solid @light;
 
 	span {
-		@include font-label( 12px );
+		font-family:@font-label( 12px );
 		text-transform: uppercase;
 		font-weight:700;
 
 	}
 
 	&:hover {
-		background:$primary-dark !important;
-		color:$light !important;
-		border:2px solid $primary-dark !important;
+		background:@primary-dark !important;
+		color:@light !important;
+		border:2px solid @primary-dark !important;
 
 	}
 
 	&.primary{
-		background:$primary;
-		border:2px solid $primary;
-		color:$light;
+		background:@primary;
+		border:2px solid @primary;
+		color:@light;
 		span {
-			color:$light;
+			color:@light;
 
 		}
 
 		&:hover {
-			background:$primary-dark-2 !important;
-			border:2px solid $primary-dark-2 !important;
-			color:$light !important;
+			background:@primary-dark-2 !important;
+			border:2px solid @primary-dark-2 !important;
+			color:@light !important;
 			span {
-				color:$light !important;
+				color:@light !important;
 
 			}
 		}
@@ -193,32 +201,32 @@ section.header {
 	}
 
 	&.accent {
-		background:$accent;
-		border:2px solid $accent;
-		color:$light;
+		background:@accent;
+		border:2px solid @accent;
+		color:@light;
 
 		&:hover {
-			background:$accent-dark-2 !important;
-			border:2px solid $accent-dark-2 !important;
-			color:$light !important;
+			background:@accent-dark-2 !important;
+			border:2px solid @accent-dark-2 !important;
+			color:@light !important;
 		}
 
 	}
 
 	&.dark {
-		background:$light;
-		border:2px solid $dark;
-		color:$dark;
+		background:@light;
+		border:2px solid @dark;
+		color:@dark;
 		span {
-			color:$dark;
+			color:@dark;
 		}
 
 		&:hover {
-			background:$accent-dark-2 !important;
-			border:2px solid $accent-dark-2 !important;
-			color:$light !important;
+			background:@accent-dark-2 !important;
+			border:2px solid @accent-dark-2 !important;
+			color:@light !important;
 			span {
-				color:$light !important;
+				color:@light !important;
 			}
 		}
 
@@ -247,7 +255,7 @@ section.intro {
 	}
 
 	.intro-block-desc {
-		color:$reading-text;
+		color:@reading-text;
 
 	}
 
@@ -257,8 +265,8 @@ section.intro {
 
 	a.md-button {
 		padding:10px 15px;
-		border:2px solid $dark;
-		color:$dark;
+		border:2px solid @dark;
+		color:@dark;
 	}
 
 
@@ -268,20 +276,22 @@ section.intro {
 
 section.goals {
 	padding:100px 0;
-	background-color:$primary-dark;
+	background-color:@primary-dark;
 	text-align:center;
 
 	.block-screen {
-		@include background-image( linear-gradient(
+		/*
+		background-image( linear-gradient(
 						rgba(62,39,35, 0.9),
 						rgba(62,39,35, 0.7) 10%,
 						rgba(62,39,35, 0.7) 90%,
 						rgba(62,39,35, 0.9)
 		) );
+		*/
 
 	}
 	.goal {
-		color:$light;
+		color:@light;
   	width:26%;
   	margin:0 2%;
   	padding:20px 0;
@@ -296,7 +306,7 @@ section.goals {
 		}
 
 		h3 {
-			color:$light;
+			color:@light;
 			cursor:default;
 
 		}
@@ -341,7 +351,7 @@ section.keywords {
 
   span {
 	font-size:20px;
-	color:$light;
+	color:@light;
   }
 
 }
@@ -360,7 +370,7 @@ section.browse-commentary {
 	margin:0 auto;
 	padding:20px 0 60px;
 	text-align:left;
-	@include transition( all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) );
+	.transition( all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) );
 	display:block;
 	clear:both;
 
@@ -386,7 +396,7 @@ section.browse-commentary {
 	.text-title {
 		width:100%;
 		margin:0 auto;
-		@include font-title(42px);
+		font-family:@font-title(42px);
 		text-align:center;
 	}
 
@@ -395,7 +405,7 @@ section.browse-commentary {
 		width:100%;
 		max-width:200px;
 		height:4px;
-		background:$primary;
+		background:@primary;
 	}
 
 	.text-meta {
@@ -407,13 +417,13 @@ section.browse-commentary {
 			font-style:italic;
 			padding:5px 10px;
 			span {
-				color:$secondary-text;
+				color:@secondary-text;
 
 			}
 			/*
 			&:hover{
 				span {
-					color:$primary;
+					color:@primary;
 
 				}
 			}
@@ -458,13 +468,13 @@ section.browse-commentary {
 			margin:auto;
 
 			&:hover {
-			  background:$md-accent-500 !important;
+			  background:@md-accent-500 !important;
 
 			  animation: subwork-inner-circle 300ms 1 ease-out;
 			  transform: scale(1.05);
 
 			  span {
-				color:$light;
+				color:@light;
 			  }
 
 				.subwork-alpha {
@@ -491,28 +501,28 @@ section.browse-commentary {
 			&.subwork-weight-9 {
 				width:92%;
 				height:92%;
-				//background:$md-primary-600;
+				//background:@md-primary-600;
 				background:rgba(93, 89, 88, 0.07);
 
 			}
 			&.subwork-weight-8 {
 				width:84%;
 				height:84%;
-				//background:$md-primary-500;
+				//background:@md-primary-500;
 				background:rgba(93, 89, 88, 0.05);
 
 			}
 			&.subwork-weight-7 {
 				width:75%;
 				height:75%;
-				//background:$md-primary-400;
+				//background:@md-primary-400;
 				background:rgba(93, 89, 88, 0.04);
 
 			}
 			&.subwork-weight-6, &.subwork-weight-5 {
 				width:68%;
 				height:68%;
-				//background:$md-primary-300;
+				//background:@md-primary-300;
 				background:rgba(93, 89, 88, 0.03);
 
 			}
@@ -532,7 +542,7 @@ section.browse-commentary {
 			width:100%;
 			border-radius:50%;
 			opacity:0;
-			border:1px solid $md-primary-100;
+			border:1px solid @md-primary-100;
 			z-index:1;
 
 
@@ -547,12 +557,12 @@ section.browse-commentary {
 			right:0;
 			margin:0 auto;
 		  display:block;
-		  @include font-commentary( 22px );
+		  font-family:@font-commentary( 22px );
 
-		  color:$light;
-		  color:$dark;
+		  color:@light;
+		  color:@dark;
 			margin-top:-22px;
-			@include transition(all 300ms ease);
+			.transition(all 300ms ease);
 
 			// ensure centered (adjust for font)
 			line-height:42px;
@@ -639,7 +649,7 @@ section.browse-commentary {
 	.card-text {
 
 		p	{
-			@include font-label( 22px );
+			font-family:@font-label( 22px );
 			margin-left: 40px;
 			margin-right:none;
 			color:#455A64;
@@ -670,7 +680,7 @@ section.browse-commentary {
 	.card-text {
 
 		p	{
-			@include font-label( 22px );
+			font-family:@font-label( 22px );
 			margin-top: 20px;
 			margin-left: 40px;
 			margin-right:none;
@@ -702,7 +712,7 @@ section.browse-commentary {
 	.card-text {
 
 		p	{
-			@include font-label( 22px );
+			font-family:@font-label( 22px );
 			margin-top: 20px;
 			margin-left: 40px;
 			margin-right:none;
@@ -728,26 +738,28 @@ section.browse-commentary {
 
 //Author styles
 section.commentators {
-	background-color:$primary-dark;
+	background-color:@primary-dark;
 
 	.block-screen {
-		@include background-image( linear-gradient(
+		/*
+		background-image( linear-gradient(
 						rgba(94, 63, 55, 0.9),
 						rgba(94, 63, 55, 0.8) 10%,
 						rgba(94, 63, 55, 0.8) 90%,
 						rgba(94, 63, 55, 0.9)
 		) );
+		*/
 
 	}
 
 	h2 {
-		color:$light;
+		color:@light;
 		padding:60px 0 20px;
 	}
 
 }
 section.get-started {
-	background:$background-gray;
+	background:@background-gray;
 
 	h2.block-title {
 		padding-bottom:0;

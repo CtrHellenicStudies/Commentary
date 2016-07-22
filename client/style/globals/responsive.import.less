@@ -259,7 +259,7 @@
 		width:100%;
 		z-index:999;
 
-		@include box-shadow( none );
+		//@include box-shadow( none );
 
 	}
 	.text-browser-tool .tool-browser {
@@ -294,12 +294,12 @@
 
 			font-size:22px;
 			display:inline-block;
-			background:$dark-1;
+			background:@dark-1;
 			margin:10px;
 			text-align:center;
 			padding:20px;
 			border:none;
-			color:$light;
+			color:@light;
 		}
 
 
@@ -555,13 +555,13 @@
 	}
 	.pagination .seq-page {
 		width:100%;
-		border-bottom:1px solid $primary;
+		border-bottom:1px solid @primary;
 		a {
 			text-align:center;
 			padding:10px;
 		}
 		&:first-child {
-			border-top:1px solid $primary;
+			border-top:1px solid @primary;
 		}
 	}
 	.get-more {

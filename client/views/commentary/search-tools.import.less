@@ -57,22 +57,22 @@
 		}
 
         span {
-          @include font-label( 14px );
+          font-family:@font-label( 14px );
         }
 
 		&:hover {
 		  background:#f0f0f0;
 		  i {
-			color:$dark;
+			color:@dark;
 
 		  }
 		}
 
         &.selected {
-          background:$primary;
+          background:@primary;
 
           i, span {
-            color:$light;
+            color:@light;
 
           }
 
@@ -89,7 +89,7 @@
   display:inline-block;
   vertical-align: top;
   height:69px;
-  background:$light;
+  background:@light;
   padding:10px 20px 5px 25px;
   border-right:1px solid #ddd;
   margin-right:-5px;
@@ -100,7 +100,7 @@
   }
 
   &:hover {
-    background:$terracotta;
+    background:@terracotta;
   }
   span, i, input {
     display:inline-block;
@@ -108,13 +108,13 @@
   }
 
   span {
-    @include font-label(14px);
-    color:$primary-dark;
+    font-family:@font-label(14px);
+    color:@primary-dark;
 
   }
 
   i {
-    color:$primary-dark;
+    color:@primary-dark;
     font-size:18px;
     margin:9px 0 6px 20px;
 
@@ -122,7 +122,7 @@
   }
 
   &.selected {
-	background:$primary;
+	background:@primary;
     .unchecked {
       display:none;
     }
@@ -138,15 +138,15 @@
 }
 
 .dropdown.open .search-tool {
-  background:$primary;
+  background:@primary;
   span, i {
-    color:$light;
+    color:@light;
   }
 }
 
 .text-search {
   padding:0;
-  color:$primary-text;
+  color:@primary-text;
   background:transparent;
   border:0;
   padding:11px 10px 5px 15px;
@@ -165,7 +165,7 @@
   input {
     background:transparent;
     width: 260px;
-    border-bottom:2px solid $primary-dark;
+    border-bottom:2px solid @primary-dark;
     height:auto;
     padding:10px;
 
@@ -180,8 +180,8 @@
 
 
   label {
-    @include font-label(14px);
-    color:$primary-dark;
+    font-family:@font-label(14px);
+    color:@primary-dark;
     display:inline-block;
     padding:14px 5px 5px 0;
 
@@ -190,7 +190,7 @@
   input {
     width:69px;
     margin:3px 10px 0 0;
-    @include font-body(14px);
+    font-family:@font-body(14px);
 
   }
 
@@ -242,24 +242,24 @@
 .filter {
   display:block;
   margin:4px 0;
-  @include transition( all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) );
+  //.transition( all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) );
 
 
   .filter-key, .filter-vals, .filter-val {
     display:inline-block;
     vertical-align: top;
-    @include transition( all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) );
+    //.transition( all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) );
     margin-right:-5px;
 
 
   }
 
   .filter-key {
-    background:$primary;
-    color:$light;
+    background:@primary;
+    color:@light;
     padding:10px 20px;
-    border:1px solid $primary;
-    @include font-label(14px);
+    border:1px solid @primary;
+    font-family:@font-label(14px);
     text-transform:uppercase;
 
   }
@@ -268,7 +268,7 @@
     padding:2px 15px;
     border:1px solid #eee;
     margin:0 0 0 -1px;
-    color:$primary-dark;
+    color:@primary-dark;
     background:rgba(255,255,255,0.95);
 
 
@@ -283,7 +283,7 @@
     }
 
     span {
-      @include font-body(13px);
+      font-family:@font-body(13px);
       display:inline-block;
       vertical-align: top;
 
@@ -319,9 +319,9 @@
 		//width:125px;
 		margin:10px 30px 0px 0px;
 		padding:14px 26px;
-		@include font-label( 16px );
+		font-family:@font-label( 16px );
 		background:#607D8B;
-		color:$light;
+		color:@light;
 		border-radius:0px;
 		outline:none;
 
@@ -359,7 +359,7 @@
 	text-align:center;
 
 	span {
-		@include font-label(16px);
+		font-family:@font-label(16px);
 
 	}
 }

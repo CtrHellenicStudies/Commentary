@@ -45,7 +45,7 @@
     h1, h2, h3, h4, h5 {
       max-width:750px;
       padding:10px 0;
-      @include font-title;
+      font-family:@font-title;
     }
     h1 {
       font-size:42px;
@@ -61,13 +61,15 @@
 
     p {
       max-width: 720px;
-      @include font-commentary(20px);
+      font-family:@font-commentary;
+      font-size:20px;
       line-height:1.7em;
       display:block;
       word-wrap:break-word;
 
       .lemma {
-        @include font-lemma(20px);
+        font-family:@font-lemma;
+        font-size:20px;
 
       }
 
@@ -77,7 +79,7 @@
       max-width:200px;
       margin:50px auto;
       height:3px;
-      background:$divider-color;
+      background:@divider-color;
       border:none;
       display:block;
 
@@ -94,7 +96,8 @@
   line-height:56px;
   font-weight:lighter !important;
   text-align:left;
-  @include font-body(48px);
+  font-family:@font-body;
+  font-size:48px;
   padding-bottom:30px;
 
 }
@@ -102,12 +105,12 @@
   margin-top:10%;
   margin-bottom:5%;
   h1,h5 {
-    color:$primary-text;
+    color:@primary-text;
   }
 }
 
 .background-gray {
-  background-color: $background-gray;
+  background-color: @background-gray;
 }
 
 .progress-bars {
@@ -252,16 +255,16 @@
 .recent-comments {
   padding-bottom:120px;
   h3 {
-    color:$secondary-text;
+    color:@secondary-text;
 
   }
   .quote-icon {
-    color:$secondary-text;
+    color:@secondary-text;
     font-size:42px;
     padding:40px 0 20px;
   }
   p {
-    color:$secondary-text;
+    color:@secondary-text;
     font-size:18px;
     line-height:1.9em;
     font-style:italic;
@@ -269,7 +272,7 @@
   }
   h4 {
     font-size:18px;
-    color:$secondary-text;
+    color:@secondary-text;
   }
 }
 .data-visualization {
@@ -290,10 +293,10 @@
 	max-width:700px;
 	border:none;
 	box-shadow:none;
-	background:$light;
+	background:@light;
 
 	.fheader {
-	  background:$light;
+	  background:@light;
 	  width:100%;
 	  margin:15px 0 40px;
 	  padding:0;
@@ -303,7 +306,7 @@
 
 	#loginForm{
 	  width:100%;
-	  background:$light;
+	  background:@light;
 	}
 
 	.cssform {

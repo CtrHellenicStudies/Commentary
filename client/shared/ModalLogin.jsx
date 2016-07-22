@@ -1,4 +1,5 @@
 
+import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -10,7 +11,7 @@ ModalLogin = React.createClass({
     return { muiTheme: getMuiTheme(baseTheme) };
   },
 
-  childContextTypes = {
+  childContextTypes: {
     muiTheme: React.PropTypes.object.isRequired,
   },
 
@@ -40,24 +41,24 @@ ModalLogin = React.createClass({
         </div>
         <div class="modal-inner">
           <div class="login-links">
-            <md-button href="/oauth/authenticate/google" class="login-option login-option-google paper-card" target="_self">
+            <RaisedButton href="/oauth/authenticate/google" class="login-option login-option-google paper-card" target="_self">
               <i class="login-icon mdi mdi-google"></i>
               <span class="login-text">
                 Login with Google
               </span>
-            </md-button>
-            <md-button href="/oauth/authenticate/facebook" class="login-option login-option-facebook paper-card" target="_self">
+            </RaisedButton>
+            <RaisedButton href="/oauth/authenticate/facebook" class="login-option login-option-facebook paper-card" target="_self">
               <i class="login-icon mdi mdi-facebook"></i>
               <span class="login-text">
                 Login with Facebook
               </span>
-            </md-button>
-            <md-button href="/oauth/authenticate/twitter" class="login-option login-option-twitter paper-card" target="_self">
+            </RaisedButton>
+            <RaisedButton href="/oauth/authenticate/twitter" class="login-option login-option-twitter paper-card" target="_self">
               <i class="login-icon mdi mdi-twitter"></i>
               <span class="login-text">
                 Login with Twitter
               </span>
-            </md-button>
+            </RaisedButton>
               <hr/>
             <div class="login-other-option">
               <span class="login-other-option-label">

@@ -9,24 +9,24 @@ CommentsRecent = React.createClass({
     return { muiTheme: getMuiTheme(baseTheme) };
   },
 
-  childContextTypes = {
+  childContextTypes: {
     muiTheme: React.PropTypes.object.isRequired,
   },
 
   render(){
 
     return (
-      <section class="background-gray recent-comments">
+      <section className="background-gray recent-comments">
 
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2 text-center">
-                    <h3 class=" uppercase">
+        <div className="container">
+            <div className="row">
+                <div className="col-sm-8 col-sm-offset-2 text-center">
+                    <h3 className=" uppercase">
                       Recently from the Commentary
                     </h3>
-                    <i class="mdi mdi-format-quote quote-icon"></i>
-                    <div class="text-slider slider-arrow-controls">
-                        <ul class="slides">
+                    <i className="mdi mdi-format-quote quote-icon"></i>
+                    <div className="text-slider slider-arrow-controls">
+                        <ul className="slides">
                             <li>
                                 <p >
                                   Incidentally, it is also clear just from our Iliad that there could be another starting point for the tale of Achilles' wrath. When a bit later in Iliad 1 Achilles answers his mother's request to ἐξαυδᾶν 'speak out' what has befallen him, he begins . . .

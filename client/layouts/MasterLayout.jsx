@@ -4,19 +4,18 @@ MasterLayout = React.createClass({
 		return(
 			<div className="chs-layout master-layout">
 
-			  <Sidebar />
-
-
+			  <LeftMenu />
 
 				<Header />
+
 				<main>
 					{this.props.content}
 				</main>
 				<Footer/>
 
-			  <g:render template="/shared/filter_widget" />
+				<FilterWidget />
 			  <ModalLogin />
-			  <g:render template="/shared/modal_signup" />
+				<ModalSignup />
 
 			</div>
 			);

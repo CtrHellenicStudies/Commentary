@@ -1,39 +1,28 @@
-/*
- * Available fonts
- *
-font-family:'Futura LT W01 Light';
-font-family:'Futura LT W01 Light Oblique';
-font-family:'Futura LT W01 Book';
-font-family:'Futura LT W01 Bold';
-font-family:'Futura LT W01 Book Oblique';
-font-family:'Freight Big W01 Light Regular';
-font-family:'Freight Big W01 Light Italic';
-font-family:'Freight Big W01 Book Regular';
-font-family:'Freight Big W01 Book Italic';
-font-family:'Freight Display W01 Light';
-font-family:'Freight Display W01 Light It';
-font-family:'Freight Display W01 Book';
-font-family:'Freight Display W01 Boo1197149';
-font-family:'Freight Display W01 Medium';
-font-family:'Freight Display W01 Medium It';
-font-family:'Brown Gothic W01 Cd Bold';
- *
- */
+@grey:#555;
+@light: #fff;
+@dark: #222;
 
+// colors
+@primary: #aaa;
+@primary-dark:#455A64;
+@light-2: #f0f0f0;
+@light-1: #ddd;
+@dark-1: rgba(0,0,0,0.6);
+@dark-2: rgba(0,0,0,0.8);
 
-@font-light:'Futura LT W01 Light';
-@font-label:'Futura LT W01 Book';
-@font-title:'Brown Gothic W01 Cd Bold';
-@font-reading:'Merriweather', @font-light, Georgia, Times New Roman, serif;
-@font-logo:'Roboto Condensed', sans-serif;
-@font-family-default-starter: 'Lato', sans-serif;
-@font-family-default-regular:@font-light;
-@font-family-default-regular-alt:@font-label;
-@font-family-default:@font-light;
-
-
-@light:#fff;
-@dark:#222222;
+// AHCIP colors
+@light: #fff;
+@dark: #222;
+@blue-gray: #03435e;
+@terracotta: rgb(151, 100, 76);
+@terracotta: #bc5500;
+@dark-brown: #352721;
+@gray: #555;
+@light-gray: #eee;
+@marble: #f7f5f2;
+@white: #fff;
+@font-gray:rgba(0,0,0,0.7);
+@background-gray:#f6f6f6;
 @black:#000000;
 @text-dark:#212121;
 @text-secondary:#727272;
@@ -43,37 +32,113 @@ font-family:'Brown Gothic W01 Cd Bold';
 @divider-transparent:rgba(204, 204, 204, 0.4);
 @background-gray:#f6f6f6;
 
-@md-primary-dark:#0097A7;
-@md-primary:#00BCD4;
-@md-primary-light:#B2EBF2;
-@md-accent:#795548;
-
-@md-primary-100: rgba(178, 235, 242, 1);
-@md-primary-200: rgba(128, 222, 234, 1);
-@md-primary-300: rgba(77, 208, 225, 1);
-@md-primary-400: rgba(38, 198, 218, 1);
-@md-primary-500: rgba(0, 188, 212, 1);
-@md-primary-600: rgba(0, 172, 193, 1);
-@md-primary-700: rgba(0, 151, 167, 1);
-@md-primary-800: rgba(0, 131, 143, 1);
-@md-primary-900: rgba(0, 96, 100, 1);
-
-@md-accent-100: #D7CCC8;
-@md-accent-200: #BCAAA4;
-@md-accent-300: #A1887F;
-@md-accent-400: #8D6E63;
-@md-accent-500: #795548;
-@md-accent-600: #6D4C41;
-@md-accent-700: #5D4037;
-@md-accent-800: #4E342E;
-@md-accent-900: #3E2723;
-
-@md-accent-500-60: rgba(121, 85, 72, 0.6);
-@md-accent-500-40: rgba(121, 85, 72, 0.4);
-@md-accent-800-60: rgba(78, 52, 46, 0.6);
-@md-accent-800-40: rgba(78, 52, 46, 0.4);
 
 
+// Material browns
+@md-primary-100: #D7CCC8;
+@md-primary-200: #BCAAA4;
+@md-primary-300: #A1887F;
+@md-primary-400: #8D6E63;
+@md-primary-500: #795548;
+@md-primary-600: #6D4C41;
+@md-primary-700: #5D4037;
+@md-primary-800: #4E342E;
+@md-primary-900: #3E2723;
+@md-primary:@md-primary-500;
+@md-primary-light:@md-primary-100;
+@md-primary-dark:@md-primary-800;
+
+// Extra browns
+@md-primary-500-60: rgba(121, 85, 72, 0.6);
+@md-primary-500-40: rgba(121, 85, 72, 0.4);
+@md-primary-800-80: rgba(78, 52, 46, 0.8);
+@md-primary-800-60: rgba(78, 52, 46, 0.6);
+@md-primary-800-40: rgba(78, 52, 46, 0.4);
+
+// Blues
+@md-blue-50: #E0F7FA;
+@md-blue-100: #B2EBF2;
+@md-blue-200: #80DEEA;
+@md-blue-300: #4DD0E1;
+@md-blue-400: #26C6DA;
+@md-blue-500: #00BCD4;
+@md-blue-600: #00ACC1;
+@md-blue-700: #0097A7;
+@md-blue-800: #00838F;
+@md-blue-900: #006064;
+
+// Theme colors
+@chs-accent-300: rgba(101, 66, 62,1);
+@chs-accent-500: #63232D;
+@chs-accent-700: #56282F;
+@chs-accent-900: rgba(51, 19, 16, 1);
+@chs-accent-1100: rgba(39, 9, 6,1); //it goes to 11...
+
+// Standardize CHS reds with the md naming convention
+@md-accent: @chs-accent-500;
+@md-accent-300: @chs-accent-300;
+@md-accent-500: @chs-accent-500;
+@md-accent-700: @chs-accent-700;
+@md-accent-900: @chs-accent-900;
+@md-accent-1100: @chs-accent-1100;
+@md-accent-500-60: rgba(244, 67, 54, 0.6);
+@md-accent-500-40: rgba(244, 67, 54, 0.4);
+
+// Naming regularization
+@primary: @md-primary-500;
+@primary-dark: @md-primary-700;
+@primary-dark-2: @md-primary-900;
+@primary-light: @md-primary-100;
+@accent:@md-accent-500;
+@accent-dark:@md-accent-700;
+@accent-dark-2:@md-accent-900;
+@accent-light:#BBDEFB;
+
+// Text colors
+@primary-text: #212121;
+@secondary-text:#727272;
+@light-text:#999;
+@reading-text:rgba(0,0,0,0.8);
+@third-text:#ddd;
+@divider-color:#b6b6b6;
+
+// General help colors
+@trans-light-9: rgba(255,255,255,.9);
+@trans-light-8: rgba(255,255,255,.8);
+@opaque-dark-1: rgba(100,100,100,1);
+@opaque-dark-2: rgba(50,50,50,1);
+
+/*
+ * Fonts
+
+// Fonts are currently loaded from fonts.com
+font-family:'Museo Sans W01_900';
+font-family:'ProximaNW01-AltLightReg';
+font-family:'Proxima N W01 At Smbd';
+font-family:'Museo W01_700';
+font-family:'Proxima N W01 Thin Reg';
+font-family:'Proxima Nova W08 Reg';
+font-family:'Proxima Nova W15 Medium';
+font-family:'Proxima Nova W07 Semibold';
+font-family:'Proxima Nova W07 Bold';
+font-family:'Proxima Nova W07 Extrabold';
+font-family:'Proxima Nova W07 Black';
+
+ *
+ */
+
+@font-body:'ProximaNW01-AltLightReg';
+@font-commentary: 'Merriweather', serif;
+@font-label:'Proxima N W01 At Smbd';
+@font-title:'Proxima Nova W08 Reg';
+@font-accent:'Museo Sans W01_900';
+@font-lemma:'Merriweather', 'Proxima N W01 Light', Georgia, Times New Roman, serif;
+@font-light:@font-body;
+@font-logo: @font-accent;
+@font-family-default-starter:@font-light;
+@font-family-default-regular:@font-light;
+@font-family-default-regular-alt:@font-label;
+@font-family-default:@font-light;
 
 
 

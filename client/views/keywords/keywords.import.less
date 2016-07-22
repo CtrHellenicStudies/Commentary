@@ -1,10 +1,10 @@
 .keyword {
-  background:$light;
+  background:@light;
   display:inline-block;
   vertical-align:top;
   padding:15px 25px;
   margin:7px;
-  border-top:2px solid $primary;
+  border-top:2px solid @primary;
   width:40%;
   text-align:left;
 
@@ -29,8 +29,9 @@
   }
 
   .keyword-title {
-	color:$primary-text;
-	@include font-body( 22px );
+	color:@primary-text;
+  font-family:@font-body;
+  font-size:22px;
 	text-transform:uppercase;
 	margin-right:10px;
 	display:inline-block;
@@ -38,7 +39,7 @@
 	vertical-align: top;
 
 	&:hover {
-	  color:$primary;
+	  color:@primary;
 	}
 
   }
@@ -57,7 +58,8 @@
   .keyword-description{
 	display:block;
 	color:#aaa;
-	@include font-commentary(16px);
+  font-family:@font-commentary;
+  font-size:16px;
 	line-height:1.5em;
 	width:97%;
 	margin:0 auto;
@@ -94,7 +96,7 @@
 
 }
 section.keyword-single {
-  background:$background-gray;
+  background:@background-gray;
 
 
 }

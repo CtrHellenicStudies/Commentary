@@ -24,22 +24,22 @@ ProfilePage = React.createClass({
 
     return (
         <div className="page page-user-profile">
-          <div class="content primary">
+          <div className="content primary">
 
-              <section class="block header cover parallax">
-                  <div class="background-image-holder blur-2--no-remove blur-10 remove-blur">
-                      <img alt="image" class="background-image" src="/images/capitals.jpg"/>
+              <section className="block header cover parallax">
+                  <div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
+                      <img alt="image" className="background-image" src="/images/capitals.jpg"/>
                   </div>
-                  <div class="block-screen brown"></div>
+                  <div className="block-screen brown"></div>
 
-                  <div class="container v-align-transform">
+                  <div className="container v-align-transform">
 
-                      <div class="grid inner">
-                          <div class="center-content">
+                      <div className="grid inner">
+                          <div className="center-content">
 
-                              <div class="page-title-wrap">
-                                  <h2 class="page-title ">{user.nicename}</h2>
-                                  <h3 class="page-subtitle"></h3>
+                              <div className="page-title-wrap">
+                                  <h2 className="page-title ">{user.nicename}</h2>
+                                  <h3 className="page-subtitle"></h3>
                               </div>
 
 
@@ -48,12 +48,13 @@ ProfilePage = React.createClass({
                   </div>
               </section>
 
-              <section class="page-content">
+              <section className="page-content">
                 {user_is_loggedin ?
                       <p>
                           {user.bio}
                       </p>
                   :
+                  <div>
                     <div className="user-profile-section">
                         <div className="user-profile-picture">
                           <img src="/images/entity_cato-small.jpg" />
@@ -67,7 +68,7 @@ ProfilePage = React.createClass({
                           <input
                             ref="fileUpload"
                             type="file"
-                            style={"display" : "none"}
+                            style={{"display" : "none"}}
                             onChange={this._handleChange}/>
 
                         </div>
@@ -136,17 +137,18 @@ ProfilePage = React.createClass({
                         className="user-profile-button save-button"
                         />
 
+                    </div>
 
                   }
 
-                  <div class="article-content">
-                      <div id="container1" class="data-visualization"></div>
-                      <div id="container2" class="data-visualization"></div>
+                  <div className="article-content">
+                      <div id="container1" className="data-visualization"></div>
+                      <div id="container2" className="data-visualization"></div>
                   </div>
 
-                  <hr class="user-divider"/>
+                  <hr className="user-divider"/>
 
-                  <div class="user-discussion-comments">
+                  <div className="user-discussion-comments">
                       <DiscussionCommentsList />
 
                   </div>

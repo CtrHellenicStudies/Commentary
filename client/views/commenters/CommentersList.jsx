@@ -9,7 +9,7 @@ CommentersList = React.createClass({
     let query = {};
 
     return {
-      commenters: Commenters.find(query, {sort: {lastName: 1, firstName: 1}).fetch(),
+      commenters: Commenters.find(query, {sort: {lastName: 1, firstName: 1}}).fetch(),
     };
   },
 

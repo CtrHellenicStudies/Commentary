@@ -2,6 +2,7 @@ this.Comments = new Meteor.Collection('comments');
 
 Schemas.Comments = new SimpleSchema({
 
+/*
   wordpressId: {
     type: Number,
     optional: true
@@ -14,12 +15,12 @@ Schemas.Comments = new SimpleSchema({
   },
 
   work: {
-    type: Work,
+    type: Works,
 
   },
 
   subwork: {
-    type: Subwork,
+    type: Subworks,
 
   },
 
@@ -77,20 +78,21 @@ Schemas.Comments = new SimpleSchema({
     optional: true
   },
 
-  keywords: {
+  /*keywords: {
     type: [Keywords],
     optional: true
-  }
+  },
 
   revisions: {
     type: [Revisions],
     optional: true
-  }
+  },
+  */
 
-  discussionComments: {
+  /*discussionComments: {
     type: [DiscussionComments],
     optional: true
-  }
+  },*/
 
   createdAt: {
     type: Date,

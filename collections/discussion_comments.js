@@ -1,7 +1,7 @@
 this.DiscussionComments = new Meteor.Collection('discussion_comments');
 
 Schemas.DiscussionComments = new SimpleSchema({
-  user: {
+  /*user: {
     type: User,
   },
   content: {
@@ -13,7 +13,7 @@ Schemas.DiscussionComments = new SimpleSchema({
     optional: true,
   },
   comment: {
-    type: Comment,
+    type: Comments,
   },
   status: {
     type: String,
@@ -22,10 +22,11 @@ Schemas.DiscussionComments = new SimpleSchema({
     type: Number,
     optional: true,
   },
-  voters: {
+  /*voters: {
     type: [User],
     optional: true,
   },
+  */
   createdAt: {
     type: Date,
     autoValue: function() {

@@ -1,12 +1,12 @@
 .authors {
 
   text-align:center;
-  @include transition( all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) );
+  .transition( all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) );
   padding:40px 0;
 }
 .author-teaser {
   text-align:center;
-  color:$light;
+  color:@light;
   margin:0 3%;
   display:inline-block;
   vertical-align: top;
@@ -24,14 +24,14 @@
 	  padding:10px 0 20px;
 	  margin:0;
 	  font-size:22px;
-	  color:$light;
+	  color:@light;
 	}
 	hr {
 	  min-width:200px;
 	  width:50%;
 	  margin:0 auto;
 	  height:2px;
-	  background-color: $light;
+	  background-color: @light;
 	  border:none;
 	  outline:none;
 
@@ -40,13 +40,15 @@
 	  color:#eee;
 	  display:block;
 	  line-height:1.3em;
-	  @include font-body(16px);
+	  font-family:@font-body;
+    font-size:16px;
 	  padding:25px 0;
 	  width:100%;
 	  text-align:center;
 	}
 	.project-link {
-	  @include font-label(12px);
+	  font-family:@font-label;
+    font-size:12px;
 	  color:rgba(0,0,0,0.4);
 
 	}
@@ -81,21 +83,21 @@
 	  a {
 		&:hover {
 		  h3 {
-			color:$primary;
+			color:@primary;
 
 		  }
 		}
 	  }
 	  h3 {
-		color:$primary-text;
+		color:@primary-text;
 		text-align:center;
 		margin-bottom:20px;
 	  }
 	  hr {
-		background:$primary;
+		background:@primary;
 	  }
 	  .author-description {
-		color:$secondary-text;
+		color:@secondary-text;
 		margin-top:10px;
 	  }
 

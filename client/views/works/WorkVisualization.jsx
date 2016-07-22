@@ -1,11 +1,5 @@
 import RaisedButton from 'material-ui/RaisedButton';
 
-
-// Needed for onTouchTap
-// Check this repo:
-// https://github.com/zilverline/react-tap-event-plugin
-injectTapEventPlugin();
-
 WorkVisualization = React.createClass({
 
   getChildContext() {
@@ -27,29 +21,27 @@ WorkVisualization = React.createClass({
 
      return (
        <div className="work-teaser">
-         <div class="commentary-text ${work.slug}">
+         <div className="commentary-text ${work.slug}">
 
             <a href="/commentary"  >
-                <h3 class="text-title">${work.title}</h3>
+                <h3 className="text-title">${work.title}</h3>
             </a>
 
-            <hr class="text-divider">
+            <hr className="text-divider" />
 
-            <div class="text-meta">
+            <div className="text-meta">
             </div>
 
 
-            <div class="text-subworks " >
+            <div className="text-subworks " >
 
-                <div class="text-subwork">
+                <div className="text-subwork">
                 </div>
 
             </div>
 
 
-
-        </div>
-
+          </div>
 
         </div>
       );

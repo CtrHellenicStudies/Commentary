@@ -8,21 +8,21 @@ KeywordsPage = React.createClass({
      return (
        <div className="page keywords-page">
 
-          <div data-ng-controller="PageController as page" class="content primary">
+          <div data-ng-controller="PageController as page" className="content primary">
 
-              <section class="block header header-page  cover parallax">
-                  <div class="background-image-holder blur-2--no-remove remove-blur  blur-10">
-                      <asset:image alt="image" class="background-image" src="apotheosis_homer.jpg"/>
+              <section className="block header header-page  cover parallax">
+                  <div className="background-image-holder blur-2--no-remove remove-blur  blur-10">
+                      <img className="background-image" src="/images/apotheosis_homer.jpg"/>
                   </div>
-                  <div class="block-screen brown"></div>
+                  <div className="block-screen brown"></div>
 
-                  <div class="container v-align-transform">
+                  <div className="container v-align-transform">
 
-                      <div class="grid inner">
-                          <div class="center-content">
+                      <div className="grid inner">
+                          <div className="center-content">
 
-                              <div class="page-title-wrap">
-                                  <h2 class="page-title ">${keyword.title}</h2>
+                              <div className="page-title-wrap">
+                                  <h2 className="page-title ">${keyword.title}</h2>
                               </div>
 
 
@@ -30,7 +30,7 @@ KeywordsPage = React.createClass({
                       </div>
                   </div>
               </section>
-              <section class="page-content">
+              <section className="page-content">
 
 
                   <p>

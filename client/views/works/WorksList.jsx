@@ -29,8 +29,9 @@ WorksList = React.createClass({
   render(){
 
 		return(
-      {this.renderWorks()}
-
+      <div>
+        {this.renderWorks()}
+      </div>
 		);
 	}
 

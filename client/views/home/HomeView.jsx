@@ -1,7 +1,20 @@
 
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 HomeView = React.createClass({
+
+  getChildContext() {
+    return { muiTheme: getMuiTheme(baseTheme) };
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object.isRequired,
+  },
 
   componentDidMount() {
 
@@ -17,7 +30,7 @@ HomeView = React.createClass({
       return (
         <div className="home">
 
-          <div data-ng-controller="IndexController as index" className="content primary">
+          <div className="content primary">
 
             <section className="header cover fullscreen parallax">
                 <div className="background-image-holder remove-blur blur-10">
@@ -37,12 +50,18 @@ HomeView = React.createClass({
                                 </h3>
                             </div>
 
-                            <RaisedButton href="#intro"  className="cover-link learn-more">
-                                Learn More
+                            <RaisedButton
+                              href="#intro"
+                              className="cover-link learn-more"
+                              label="Learn More"
+                              >
                             </RaisedButton>
 
-                            <RaisedButton href="/commentary/"  className="cover-link accent paper-shadow">
-                                Go to Commentary
+                            <RaisedButton
+                              href="/commentary/"
+                              className="cover-link go-to-commentary"
+                              label="Go to Commentary"
+                              >
                             </RaisedButton>
 
                         </div>
@@ -73,8 +92,11 @@ HomeView = React.createClass({
                                 </span>
                             </div>
 
-                            <RaisedButton className="cover-link dark " href="/"  className=" paper-shadow">
-                                Troiae qui primus
+                            <RaisedButton
+                              className="cover-link dark "
+                              href="/"
+                              label="Troiae qui primus"
+                              >
                             </RaisedButton>
 
                         </div>
@@ -143,8 +165,11 @@ HomeView = React.createClass({
 
                     <KeywordsList />
 
-                    <RaisedButton href="/keyword/index"  className="cover-link show-more primary paper-shadow">
-                        More Keywords
+                    <RaisedButton
+                      href="/keyword/index"
+                      className="cover-link show-more primary "
+                      label="More Keywords"
+                      >
                     </RaisedButton>
 
                 </div>
@@ -163,8 +188,11 @@ HomeView = React.createClass({
 
                     <CommentersList />
 
-                    <RaisedButton href="/commentator/index"  className="cover-link light show-more paper-shadow">
-                        Other Commenters
+                    <RaisedButton
+                      href="/commentator/index"
+                      className="cover-link light show-more "
+                      label="Other Commenters"
+                      >
                     </RaisedButton>
 
                 </div>
@@ -183,7 +211,6 @@ HomeView = React.createClass({
 
             </section>
 
-            <ContextPanel />
 
           </div>
 

@@ -160,10 +160,25 @@ section.header {
 .cover-link {
 	display:inline-block;
 	margin:10px 10px 10px 0;
-	padding:14px 26px;
 	color:@light;
-	border-radius:0px;
+	border-radius:0px !important;
 	border:2px solid @light;
+
+	button {
+		border-radius:0px !important;
+		height:auto !important;
+
+		>div {
+
+			>div {
+				padding:10px 20px !important;
+				height:auto !important;
+
+			}
+
+		}
+
+	}
 
 	span {
 		font-family:@font-label( 12px );
@@ -179,21 +194,65 @@ section.header {
 
 	}
 
-	&.primary{
-		background:@primary;
-		border:2px solid @primary;
+	&.learn-more {
+		background-color:@ahcip-red !important;
+		border:2px solid @ahcip-red;
 		color:@light;
-		span {
-			color:@light;
+
+		button {
+			background-color:@ahcip-red !important;
+
+			span {
+				color:@light !important;
+
+			}
 
 		}
 
 		&:hover {
-			background:@primary-dark-2 !important;
-			border:2px solid @primary-dark-2 !important;
+			background:transparent !important;
+			border:2px solid @light !important;
 			color:@light !important;
+
+			button {
+				background-color:transparent !important;
+			}
+
 			span {
 				color:@light !important;
+
+			}
+		}
+
+	}
+
+	&.go-to-commentary {
+		background:@ahcip-blue;
+		border:2px solid @ahcip-blue;
+		color:@light;
+
+		button {
+			background-color:@ahcip-blue !important;
+
+			span {
+				color:@light !important;
+
+			}
+
+		}
+
+		&:hover {
+			background:transparent !important;
+			border:2px solid @light !important;
+			color:@light !important;
+
+			button {
+				background-color:transparent !important;
+
+				span {
+					color:@light !important;
+
+				}
 
 			}
 		}

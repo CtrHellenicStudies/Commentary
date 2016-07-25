@@ -12,6 +12,10 @@ Commentary = React.createClass({
 
   getInitialState(){
     return {
+      selectedEdition : "",
+      contextPanelOpen : false,
+      referenceLemma : [],
+      referenceLemmaSelectedEdition : {lines: []}
     }
 
   },
@@ -25,70 +29,160 @@ Commentary = React.createClass({
     muiTheme: React.PropTypes.object.isRequired,
   },
 
+  mixins: [ReactMeteorData],
+
+  getMeteorData(){
+    var query = {},
+        lemma_query = {},
+        lemma_text = [],
+        selected_edition = { lines: []};
+
+    var comments = Comments.find(query).fetch();
+
+    //On the client
+    Meteor.call('textServer', lemma_query,
+      function(error,response){
+          lemma_text = response;
+      });
+
+    if(lemma_text.length > 0){
+      selected_edition = lemma_text[0];
+    }
+
+    if(lemma_text.length > 0){
+      selected_edition = lemma_text[0];
+    }
+
+    return {
+      commentGroups: [],
+      lemmaText: lemma_text,
+      selectedEdition: selected_edition
+    };
+  },
+
+  componentDidMount(){
+    this.textServerEdition = new Meteor.Collection('textServerEdition');
+
+  },
+
+  toggleLemmaEdition(){
+    this.setState({
+      selectedEdition : {}
+    });
+
+  },
+
+  closeContextPanel(){
+    this.setState({
+      contextPanelOpen : false
+    });
+
+  },
+
+  searchReferenceLemma(){
+    this.setState({
+      referenceLemma: [],
+      referenceLemmaSelectedEdition: {lines: []}
+    });
+
+  },
+
 
   render() {
 
+    var comment_groups = this.data.commentGroups;
+
     return (
-            <div data-ng-controller="CommentaryController as c" className="commentary-primary content ">
+      <div className="commentary-primary content ">
+      {comment_groups.map(function(comment_group){
 
-
-              <div className="comment-group " ng-repeat="comment_group in commentary" layout="column" data-ref="{comment_group.ref}">
-                  <div className="comments" layout="column" layout-align="center top">
+          return(
+              <div className="comment-group " data-ref="{comment_group.ref}">
+                  <div className="comments" >
 
                       <CommentLemma />
 
-                      <div className="comment-outer has-discussion " ng-repeat="comment in comment_group.comments">
+                      {comment_group.comments.map(function(comment){
+                        <div className="comment-outer has-discussion " >
 
-                          <CommentDetail />
+                            <Comment/>
 
-                          <CommentDiscussion />
+                            <CommentDiscussion />
 
 
-                      </div> {/*<!-- .comment-outer -->*/}
-
+                        </div>
+                      })}
 
                   </div> {/*<!-- .comments -->*/}
 
                   <hr className="comment-group-end"/>
 
-              </div> {/*<!-- .comment-group -->*/}
+              </div>
+          )
+        })}
 
+        <div className="ahcip-spinner commentary-loading" >
+            <div className="double-bounce1"></div>
+            <div className="double-bounce2"></div>
 
-              <div className="ahcip-spinner commentary-loading" infinite-scroll="infinite_scroll()" infinite-scroll-distance="3" ng-hide="is_homepage || no_commentary || no_more_commentary" >
-                  <div className="double-bounce1"></div>
-                  <div className="double-bounce2"></div>
+        </div>  {/*<!-- .spinner -->*/}
 
-              </div>  {/*<!-- .spinner -->*/}
-              <div className="no-commentary-wrap">
-                <p className="no-commentary no-results" ng-show="no_commentary">
-                  No commentary available for the current search.
-                </p>
+        <div className="no-commentary-wrap">
+          <p className="no-commentary no-results" >
+            No commentary available for the current search.
+          </p>
 
-              </div> {/*<!-- .read-more-link -->*/}
-              <div className="read-more-link">
-                  <RaisedButton href="/commentary/"  className="cover-link primary show-more paper-shadow" ng-show="is_homepage">
-                      Continue reading
-                  </RaisedButton>
+        </div> {/*<!-- .read-more-link -->*/}
 
-              </div>{/*<!-- .read-more-link -->*/}
+        <div className="read-more-link">
+            <RaisedButton href="/commentary/"  className="cover-link primary show-more paper-shadow" >
+                Continue reading
+            </RaisedButton>
 
-              <div className="lemma-reference-modal">
-                  <article className="comment  lemma-comment paper-shadow " layout="column">
-                      <p className="lemma-text" ng-repeat="lemma in lemma_reference_modal.selected_edition.lines" ng-bind="lemma.html"></p>
-                      <div className="edition-tabs tabs">
-                          <RaisedButton data-edition="{edition.title}" aria-label="Edition {edition.title}" className="edition-tab tab" ng-className="{'selected-edition-tab paper-shadow':$first}" ng-click="toggle_edition_lemma_reference_modal($event)" ng-repeat="edition in lemma_reference_modal.editions">
-                              {edition.title}
-                          </RaisedButton>
-                      </div>
-                      <i className="mdi mdi-close paper-shadow" ng-click="hide_lemma_reference($event)">
-                      </i>
-                  </article>
+        </div>{/*<!-- .read-more-link -->*/}
 
-              </div>{/*<!-- .lemma-reference-modal -->*/}
+        <div className="lemma-reference-modal">
+            <article className="comment  lemma-comment paper-shadow " layout="column">
+              {this.state.referenceLemmaSelectedEdition.lines.map(function(line){
 
+                return <p
+                  className="lemma-text"
+                  dangerouslySetInnerHTML={{__html: line.html}}
+                  ></p>
 
-            {/*<!-- .commentary-primary -->*/}
-          </div>
+              })}
+
+                <div className="edition-tabs tabs">
+                  {this.state.referenceLemma.map(function(lemma_text_edition){
+
+                    return <FlatButton
+                              label={edition.title}
+                              data-edition={edition.title}
+                              className="edition-tab tab"
+                              onClick={this.toggleLemmaEdition}
+                              >
+                          </FlatButton>
+
+                  })}
+
+                </div>
+
+                <i className="mdi mdi-close paper-shadow" onClick="hide_lemma_reference($event)">
+                </i>
+            </article>
+
+        </div>{/*<!-- .lemma-reference-modal -->*/}
+
+        <ContextPanel
+          open={this.state.contextPanelOpen}
+          closeContextPanel={this.closeContextPanel}
+          selectedEdition={this.data.selectedEdition}
+          lemmaText={this.data.lemmaText}
+          toggleLemmaEdition={this.toggleLemmaEdition}
+
+          />
+        {/*<!-- .commentary-primary -->*/}
+      </div>
      );
    }
 

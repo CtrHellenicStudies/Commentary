@@ -1,9 +1,12 @@
 
-import RaisedButton from 'material-ui/RaisedButton';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import IconButton from 'material-ui/IconButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+
 
 Header = React.createClass({
 
@@ -17,8 +20,17 @@ Header = React.createClass({
 
   getInitialState(){
     return {
-      leftMenuOpen : false
+      leftMenuOpen : false,
+      searchEnabled : false,
+      searchDropdownOpen : "",
+      searchTerms : []
     };
+  },
+
+  toggleSearchMode(){
+    this.setState({
+      searchEnabled : !this.state.searchEnabled
+    });
   },
 
   toggleLeftMenu(){
@@ -33,6 +45,15 @@ Header = React.createClass({
     });
   },
 
+  toggleSearchDropdown(){
+    this.setState({
+    });
+  },
+
+  toggleSearchTerm(){
+    this.setState({
+    });
+  },
 
 
   render(){
@@ -41,7 +62,7 @@ Header = React.createClass({
       flatButton : {
         width: "auto",
         minWidth: "none",
-        height: "55px",
+        height: "60px",
         padding: "10px 5px"
       },
       flatIconButton : {
@@ -64,189 +85,249 @@ Header = React.createClass({
     var work = {id:1};
     var subwork = {work:{title:"Iliad"},id:1, title:"1"};
 
+    console.log("Header.state", this.state);
+
     return (
       <div>
         <LeftMenu
           open={this.state.leftMenuOpen}
           closeLeftMenu={this.closeLeftMenu}
           />
-      	<header ng-class="{'search-enabled': search_enabled == true}" headroom>
-      		<md-toolbar class="md-menu-toolbar" ng-hide="search_enabled">
-      			<div class="toolbar-tools">
+      	<header headroom>
+          {!this.state.searchEnabled ?
 
-      				<RaisedButton aria-label="Toggle side menu" ng-click="togglePrimary()" class="side-menu-toggle">
-      					<i class="mdi mdi-menu"></i>
-      				</RaisedButton>
+        		<div className="md-menu-toolbar" >
+        			<div className="toolbar-tools">
 
-      				<RaisedButton aria-label="Home" href="/"  class="site-title" ng-show="!active_comment">
-      					<h3 class="logo">A Homer Commentary in Progress</h3>
-      				</RaisedButton>
+                <FlatButton
+                  className="left-drawer-toggle"
+                  style={styles.flatIconButton}
+                  icon={<FontIcon className="mdi mdi-menu" />}
+                  onClick={this.toggleLeftMenu}
+                />
 
-              {active_comment ?
-        				<div class="active-comment-meta" ng-show="active_comment">
-        					<h3>{active_comment.title}:</h3>
-        					<p class="lemma-text">{active_comment.lemma}</p>
+                <a href="/" className="header-home-link" >
+        					<h3 className="logo">A Homer Commentary in Progress</h3>
+        				</a>
 
+        				<div className="search-toggle">
+        					<IconButton
+                    className="search-button"
+                    onClick={this.toggleSearchMode}
+                    iconClassName="mdi mdi-magnify"
+                    >
+
+        					</IconButton>
         				</div>
-              : ""}
+
+        				<div className="header-section-wrap nav-wrap" >
+        					<FlatButton
+                    label="Commentary"
+                    href="/commentary/"
+                    linkButton={true}
+                    style={styles.flatButton}
+                    >
+        					</FlatButton>
+        					<FlatButton
+                    label="About"
+                    href="/about"
+                    linkButton={true}
+                    style={styles.flatButton}
+                    ></FlatButton>
+                  {user_is_loggedin ?
+                      <div>
+                        <FlatButton
+                          label="Profile"
+                          className=""
+                          linkButton={true}
+                          style={styles.flatButton}
+                          >
+                        </FlatButton>
+                      </div>
+                    :
+                      <div>
+                        <FlatButton
+                          href="#"
+                          label="Login"
+                          onClick={this.showLoginModal}
+                          linkButton={true}
+                          style={styles.flatButton}
+                          >
+                        </FlatButton>
+                        <FlatButton
+                          href="#"
+                          label="Join the Community"
+                          onClick={this.showJoinModal}
+                          linkButton={true}
+                          style={styles.flatButton}
+                          >
+                        </FlatButton>
+                      </div>
+                  }
+        				</div>
+
+        			</div>
+
+        		</div>
+
+          :
+        		<div className="md-menu-toolbar" >
+        			<div className="toolbar-tools">
+
+                <FlatButton
+                  className="left-drawer-toggle"
+                  style={styles.flatIconButton}
+                  icon={<FontIcon className="mdi mdi-menu" />}
+                  onClick={this.toggleLeftMenu}
+                />
+
+        				<div className="search-tools">
+
+        					<div className="search-tool text-search">
+                    <TextField
+                        hintText=". . ."
+                        floatingLabelText="Search"
+                      />
+        					</div>
+
+        					<div className="dropdown search-dropdown search-dropdown-keywords">
+        						<FlatButton
+                      className="search-tool search-type-keyword dropdown-toggle"
+                      label="Keyword"
+                      icon={<FontIcon className="mdi mdi-chevron-down" />}
+                      onClick={this.toggleSearchDropdown}
+        						>
+        						</FlatButton>
+
+        						<ul className="dropdown-menu">
+        							<div className="dropdown-menu-inner">
+                        <li>
+                          <FlatButton
+                            onClick={this.toggleSearchTerm}
+                            data-key="keyword"
+                            data-id={keyword.id}
+                            >
+                              <i className="mdi mdi-plus-circle-outline"></i>
+                              <span>
+                                  {keyword.title}
+                              </span>
+                          </FlatButton>
+
+                        </li>
+        							</div>
+        						</ul>
+
+        					</div>
+
+        					<div className="dropdown search-dropdown search-dropdown-commenters">
+        						<FlatButton
+                      className="search-tool search-type-keyword dropdown-toggle"
+                      label="Commenter"
+                      icon={<FontIcon className="mdi mdi-chevron-down" />}
+                      onClick={this.toggleSearchDropdown}
+        						>
+                    </FlatButton>
+
+        						<ul className="dropdown-menu">
+        							<div className="dropdown-menu-inner">
+                        <li>
+                          <FlatButton
+                            onClick={this.toggleSearchTerm}
+                            data-key="commenter"
+                            data-id={commenter.id}
+                            >
+                              <i className="mdi mdi-plus-circle-outline"></i>
+                              <span>
+                                  {commenter.name}
+                              </span>
+                          </FlatButton>
+                        </li>
+        							</div>
+        						</ul>
+
+        					</div>
+
+        					<div className="dropdown search-dropdown search-dropdown-work">
+        						<FlatButton
+                      className="search-tool search-type-keyword dropdown-toggle"
+                      label="Work"
+                      icon={<FontIcon className="mdi mdi-chevron-down" />}
+                      onClick={this.toggleSearchDropdown}
+        						>
+                    </FlatButton>
+
+        						<ul className="dropdown-menu">
+        							<div className="dropdown-menu-inner">
+                        <li>
+                          <FlatButton
+                            onClick={this.toggleSearchTerm}
+                            data-key="work"
+                            data-id={work.id}
+                            >
+                              <i className="mdi mdi-plus-circle-outline"></i>
+                              <span>{work.title}</span>
+                          </FlatButton>
+                        </li>
+        							</div>
+
+        						</ul>
+
+        					</div>
+
+        					<div className="dropdown search-dropdown search-dropdown-book">
+        						<FlatButton
+                      className="search-tool search-type-keyword dropdown-toggle"
+                      label="Book"
+                      icon={<FontIcon className="mdi mdi-chevron-down" />}
+                      onClick={this.toggleSearchDropdown}
+        						>
+                    </FlatButton>
+
+        						<ul className="dropdown-menu">
+        							<div className="dropdown-menu-inner">
+                        <li>
+                          <FlatButton
+                            onClick={this.toggleSearchTerm}
+                            data-key="subwork"
+                            data-id={subwork.id}
+                            >
+                            <i className="mdi mdi-plus-circle-outline"></i>
+                            <span>{subwork.work.title} {subwork.title}</span>
+                          </FlatButton>
+
+                        </li>
+        							</div>
 
 
-      				<div class="search-toggle">
-      					<RaisedButton aria-label="Search" class="search-button" ng-click="toggle_search_mode()">
-      						<i class="mdi mdi-magnify"></i>
-      					</RaisedButton>
-      				</div>
+        						</ul>
 
-      				<div class="header-section-wrap nav-wrap" ng-show="!active_comment">
-      					<RaisedButton aria-label="Commentary" href="/commentary/"  >Commentary</RaisedButton>
-      					<RaisedButton aria-label="About" href="/about" >About </RaisedButton>
-                {user_is_loggedin ?
-                    <div>
-                      <RaisedButton href="/user/show/{applicationContext.springSecurityService.currentUser.id}"  >
-                          {applicationContext.springSecurityService.currentUser.nicename}
-                      </RaisedButton>
-                    </div>
-                  :
-                    <div>
-                      <RaisedButton aria-label="Login" href="#" ng-click="show_login_modal($event, 'signin')" ng-hide="username.length">Login</RaisedButton>
-                      <RaisedButton class="RaisedButtons-signup" aria-label="Join" href="#" ng-click="show_login_modal($event, 'signup')" ng-hide="username.length">Join the Community</RaisedButton>
-                      <RaisedButton class="RaisedButtons-signup" aria-label="Join" href="#" ng-click="show_login_modal($event, 'signup')" ng-hide="!username.length">{username}</RaisedButton>
-                    </div>
-                }
-      				</div>
+        					</div>
+        					<div className="search-tool text-search line-search">
+        						<label>Line</label>
+                     <TextField
+                        hintText="00"
+                        floatingLabelText="From"
+                      />
+                    <TextField
+                        hintText="00"
+                        floatingLabelText="To"
+                      />
+        					</div>
+        				</div>
 
-      				<div class="dropdown-search-tools">
-      					<div class="grid inner"></div>
-      				</div>
+        				<div className="search-toggle">
+        					<IconButton
+                    className="search-button"
+                    onClick={this.toggleSearchMode}
+                    iconClassName="mdi mdi-magnify"
+                    >
 
-      			</div>
+        					</IconButton>
+        				</div>
 
-      		</md-toolbar>
-
-      		<md-toolbar class="md-menu-toolbar" ng-show="search_enabled">
-      			<div class="toolbar-tools">
-
-      				<RaisedButton aria-label="Toggle side menu" ng-click="togglePrimary()" class="side-menu-toggle">
-      					<i class="mdi mdi-menu"></i>
-      				</RaisedButton>
-
-      				<div class="search-tools">
-
-      					<div class="search-tool text-search">
-      						<input type="text" ng-model="form.textsearch" placeholder="Search" ng-model-options="{debounce:500}"/>
-      					</div>
-
-      					<div class="dropdown">
-      						<RaisedButton class="search-tool search-type-keyword dropdown-toggle" type="button"
-      								   id="dropdownMenu-keyword" data-toggle="dropdown" aria-haspopup="true"
-      								   aria-expanded="true"
-      						>
-      							Keyword
-      							<i class="mdi mdi-chevron-down"></i>
-      						</RaisedButton>
-
-      						<ul class="dropdown-menu" aria-labelledby="dropdownMenu-keyword">
-      							<div class="dropdown-menu-inner">
-                      <li>
-                        <RaisedButton ng-click="toggle_search_term( $event )" data-key="keyword" data-id={keyword.id}>
-                            <i class="mdi mdi-plus-circle-outline"></i>
-                            <span>
-                                {keyword.title}
-                            </span>
-                        </RaisedButton>
-
-                      </li>
-      							</div>
-      						</ul>
-
-      					</div>
-
-      					<div class="dropdown">
-      						<RaisedButton class="search-tool search-type-commenter dropdown-toggle" type="button"
-      								   id="dropdownMenu-keyword" data-toggle="dropdown" aria-haspopup="true"
-      								   aria-expanded="true"
-      						>
-      							Commenter
-      							<i class="mdi mdi-chevron-down"></i>
-      						</RaisedButton>
-
-      						<ul class="dropdown-menu" aria-labelledby="dropdownMenu-keyword">
-      							<div class="dropdown-menu-inner">
-                      <li>
-                        <RaisedButton ng-click="toggle_search_term( $event )" data-key="commenter" data-id={commenter.id}>
-                            <i class="mdi mdi-plus-circle-outline"></i>
-                            <span>
-                                {commenter.name}
-                            </span>
-                        </RaisedButton>
-                      </li>
-      							</div>
-      						</ul>
-
-      					</div>
-
-      					<div class="dropdown">
-      						<RaisedButton class="search-tool search-type-work dropdown-toggle" type="button"
-      								   id="dropdownMenu-keyword" data-toggle="dropdown" aria-haspopup="true"
-      								   aria-expanded="true"
-      						>
-      							Work
-      							<i class="mdi mdi-chevron-down"></i>
-      						</RaisedButton>
-
-      						<ul class="dropdown-menu" aria-labelledby="dropdownMenu-keyword">
-      							<div class="dropdown-menu-inner">
-                      <li>
-                        <RaisedButton ng-click="toggle_search_term( $event )" data-key="work" data-id={work.id}>
-                            <i class="mdi mdi-plus-circle-outline"></i>
-                            <span>{work.title}</span>
-                        </RaisedButton>
-                      </li>
-      							</div>
-
-      						</ul>
-
-      					</div>
-
-      					<div class="dropdown">
-      						<RaisedButton class="search-tool search-type-book dropdown-toggle" type="button"
-      								   id="dropdownMenu-keyword" data-toggle="dropdown" aria-haspopup="true"
-      								   aria-expanded="true"
-      						>
-      							Book
-      							<i class="mdi mdi-chevron-down"></i>
-      						</RaisedButton>
-
-      						<ul class="dropdown-menu" aria-labelledby="dropdownMenu-keyword">
-      							<div class="dropdown-menu-inner">
-                      <li>
-                        <RaisedButton ng-click="toggle_search_term( $event )" data-key="book" data-id={subwork.id}>
-                          <i class="mdi mdi-plus-circle-outline"></i>
-                          <span>{subwork.work.title} {subwork.title}</span>
-                        </RaisedButton>
-
-                      </li>
-      							</div>
-
-
-      						</ul>
-
-      					</div>
-      					<div class="search-tool text-search line-search">
-      						<label>Line</label>
-      						<input type="text" ng-model="form.linefrom" placeholder="From"
-      							   ng-model-options="{debounce:500}"/>
-      						<input type="text" ng-model="form.lineto" placeholder="To"
-      							   ng-model-options="{debounce:500}"/>
-      					</div>
-      				</div>
-      				<div class="search-toggle">
-      					<RaisedButton aria-label="Search" class="search-button" ng-click="toggle_search_mode()">
-      						<i class="mdi mdi-magnify"></i>
-      					</RaisedButton>
-      				</div>
-      			</div>
-      		</md-toolbar>
+        			</div>
+        		</div>
+          }
       	</header>
       </div>
     )

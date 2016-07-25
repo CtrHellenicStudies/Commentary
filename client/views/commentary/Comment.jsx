@@ -33,7 +33,7 @@ Comment = React.createClass({
                     <div className="comment-topics">
                         <RaisedButton aria-label="Topic {topic.title}" ui-sref="search" className="comment-topic paper-shadow"
                                    ng-repeat="topic in comment.topics"
-                                   ng-click="add_search_term($event, 'topic')"
+                                   onClick="add_search_term($event, 'topic')"
                                    data-id="{topic.id}" data-text="{topic.topic}">{topic.title}</RaisedButton>
                     </div>
                 </div>
@@ -58,7 +58,7 @@ Comment = React.createClass({
 
             </div>
             <div className="comment-lower">
-                <div className="comment-body" ng-click="load_lemma_reference($event)" ng-bind-html="to_trusted(comment.selected_revision.text)">
+                <div className="comment-body" onClick="load_lemma_reference($event)" ng-bind-html="to_trusted(comment.selected_revision.text)">
                 </div>
                 <div className="comment-reference" ng-show="comment.reference">
                     <h4>Secondary Source(s):</h4>
@@ -70,7 +70,7 @@ Comment = React.createClass({
             </div>
             <div className="comment-revisions">
                 <RaisedButton aria-label="Revision {revision.updated | amDateFormat:'DD MMMM YYYY'}" data-id="{revision.id}" className="revision" ng-className="{'selected-revision':$last}"
-                           ng-repeat="revision in comment.revisions" ng-click="select_revision( $event )">
+                           ng-repeat="revision in comment.revisions" onClick="select_revision( $event )">
                     Revision {revision.updated}
                 </RaisedButton>
             </div>

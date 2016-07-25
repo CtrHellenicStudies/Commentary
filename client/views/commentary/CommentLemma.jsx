@@ -31,7 +31,7 @@ CommentLemma = React.createClass({
                       <div className="comment-author" ng-repeat="commentator in comment_group.commentators" data-commentator-id="{commentator.id}">
                           <span className="comment-author-name">{commentator.name}</span>
                           <div className="comment-author-image-wrap paper-shadow">
-                              <a href="#" ng-click="go_to_author_comment($event)" >
+                              <a href="#" onClick="go_to_author_comment($event)" >
 
                                   <img ng-src="/assets/{commentator.thumbnail}" ng-show="commentator.thumbnail.length"/>
                                   <img ng-src="/assets/default_user.jpg" ng-hide="commentator.thumbnail.length"/>
@@ -49,12 +49,12 @@ CommentLemma = React.createClass({
           <article className="comment  lemma-comment paper-shadow " layout="column">
               <p className="lemma-text" ng-repeat="lemma in comment_group.selected_edition.lines" ng-bind="lemma.html"></p>
               <div className="edition-tabs tabs">
-                  <RaisedButton data-edition="{edition.title}" aria-label="Edition {edition.title}" className="edition-tab tab" ng-className="{'selected-edition-tab paper-shadow':$first}" ng-click="toggle_edition($event)" ng-repeat="edition in comment_group.editions">
+                  <RaisedButton data-edition="{edition.title}" aria-label="Edition {edition.title}" className="edition-tab tab" ng-className="{'selected-edition-tab paper-shadow':$first}" onClick="toggle_edition($event)" ng-repeat="edition in comment_group.editions">
                       {edition.title}
                   </RaisedButton>
               </div>
               <div className="context-tabs tabs">
-                  <RaisedButton aria-label="Context" className="context-tab tab" ng-click="show_lemma_panel($event)">
+                  <RaisedButton aria-label="Context" className="context-tab tab" onClick="show_lemma_panel($event)">
                       Context
                       <i className="mdi mdi-chevron-right"></i>
                   </RaisedButton>

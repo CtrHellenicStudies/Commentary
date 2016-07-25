@@ -36,92 +36,89 @@ LeftMenu = React.createClass({
                     open={this.props.open}
                     docked={false}
                     onRequestChange={open => this.setState({open})}
-                    className="leftnav"
+                    className="md-sidenav-left"
                 >
-                    <div className="leftnav-upper">
+                    <div className="sidenav-top">
+                      {is_logged_in ?
+                          <div>
+                            <div class="user-image paper-shadow">
+                              <img src="/images/default_user.jpg"/>
+                            </div>
+                          </div>
+                          : ""
+                      }
+                      <span class="user-fullname">
+                        Archimedes of Syracuse
+                      </span>
+
 
                     </div>
-                    {is_logged_in ?
-                        <div>
-                            <MenuItem
-                                href="/admin"
-                                target="_blank"
-                                primaryText="Admin"
-                                onTouchTap={this.props.closeLeftMenu}
-                                onClick={this.props.closeLeftMenu}
-                            />
-                            <Divider />
-                        </div>
-                        : ""
-                    }
-                    {/*<MenuItem
-                     href="/sign-up"
-                     primaryText="Create an Account"
-                     onTouchTap={this.props.closeLeftMenu}
-                     onClick={this.props.closeLeftMenu}
-                     />
-                     <MenuItem
-                     href="/sign-in"
-                     primaryText="Sign In"
-                     onTouchTap={this.props.closeLeftMenu}
-                     onClick={this.props.closeLeftMenu}
-                     />
-                     <Divider />*/}
-
                     <MenuItem
-                        href="#plan-your-trip"
-                        primaryText="PLAN YOUR TRIP"
+                        href="/"
+                        primaryText="Home"
                         onTouchTap={this.props.closeLeftMenu}
                         onClick={this.props.closeLeftMenu}
                     />
                     <MenuItem
-                        href="#events"
-                        primaryText="EVENTS"
+                        href="/commentary/"
+                        primaryText="Commentary"
                         onTouchTap={this.props.closeLeftMenu}
                         onClick={this.props.closeLeftMenu}
                     />
                     <MenuItem
-                          href="#symposium"
-                          primaryText="SYMPOSIUM"
+                          href="/keywords/"
+                          primaryText="Keywords"
                           onTouchTap={this.props.closeLeftMenu}
                           onClick={this.props.closeLeftMenu}
                       />
                     <MenuItem
-                          href="#catalog"
-                          primaryText="CATALOG"
+                          href="/commenters/"
+                          primaryText="Commenters"
                           onTouchTap={this.props.closeLeftMenu}
                           onClick={this.props.closeLeftMenu}
                       />
                     <MenuItem
-                          href="#lenders"
-                          primaryText="LENDERS"
+                          href="/about"
+                          primaryText="About"
                           onTouchTap={this.props.closeLeftMenu}
                           onClick={this.props.closeLeftMenu}
                       />
 
                     <Divider />
 
+                    {is_logged_in ?
+                      <div>
+                        <MenuItem
+                            href="/profile/"
+                            primaryText="Your Comments"
+                            target="_blank"
+                            onTouchTap={this.props.closeLeftMenu}
+                            onClick={this.props.closeLeftMenu}
+                        />
+                        <MenuItem
+                            href="/account/"
+                            primaryText="Account"
+                            target="_blank"
+                            onTouchTap={this.props.closeLeftMenu}
+                            onClick={this.props.closeLeftMenu}
+                        />
+                        <MenuItem
+                            href="/sign-out"
+                            primaryText="Sign out"
+                            target="_blank"
+                            onTouchTap={this.props.closeLeftMenu}
+                            onClick={this.props.closeLeftMenu}
+                        />
+                    </div>
+                    :
                     <MenuItem
-                        href="//hcl.harvard.edu/libraries/houghton/"
-                        primaryText="Houghton"
-                        target="_blank"
-                        onTouchTap={this.props.closeLeftMenu}
-                        onClick={this.props.closeLeftMenu}
-                    />
-                    <MenuItem
-                        href="//www.bc.edu/sites/artmuseum/"
-                        primaryText="McMullen"
-                        target="_blank"
-                        onTouchTap={this.props.closeLeftMenu}
-                        onClick={this.props.closeLeftMenu}
-                    />
-                    <MenuItem
-                        href="//www.gardnermuseum.org/collection/exhibitions"
-                        primaryText="Gardner"
-                        target="_blank"
-                        onTouchTap={this.props.closeLeftMenu}
-                        onClick={this.props.closeLeftMenu}
-                    />
+                          href="/sign-in"
+                          primaryText="Sign in"
+                          target="_blank"
+                          onTouchTap={this.props.closeLeftMenu}
+                          onClick={this.props.closeLeftMenu}
+                      />
+                    }
                 </Drawer>
             </div>
         );

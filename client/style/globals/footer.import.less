@@ -5,7 +5,19 @@ footer
 
   .logo {
     margin:0 auto;
-    text-align: center;
+    text-align: right;
+    color:@light;
+  }
+
+  .site-logo {
+    @filterString: ~"grayscale(1) brightness(5)";
+
+     -webkit-filter: @filterString;
+    -moz-filter: @filterString;
+    -o-filter: @filterString;
+    -ms-filter: @filterString;
+    filter: @filterString;
+
   }
 
 

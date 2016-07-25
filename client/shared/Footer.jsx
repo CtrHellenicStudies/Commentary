@@ -1,8 +1,5 @@
 
-import RaisedButton from 'material-ui/RaisedButton';
-
 import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -38,49 +35,73 @@ Footer = React.createClass({
 
     return (
 
-      	<footer class="block-shadow">
-      		<div class="container">
-      			<div class="row footer-nav-row">
-      				<div class="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
-      					<div class="footer-nav-links" role="nav">
-      						<RaisedButton href="/commentary/?q=work.1" >Search</RaisedButton>
-      						<RaisedButton href="/commentator/index" >Commentors</RaisedButton>
-      						<RaisedButton href="/topic/index" >Topics</RaisedButton>
-      						<RaisedButton href="/about" >About</RaisedButton>
+      	<footer className="block-shadow">
+      		<div className="container">
+      			<div className="row footer-nav-row">
+      				<div className="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
+      					<div className="footer-nav-links" role="nav">
+      						<FlatButton
+                    href="/commentary/"
+                    label="Search"
+                    linkButton={true}
+                    ></FlatButton>
+      						<FlatButton
+                    href="/commentators/"
+                    label="Commentors"
+                    linkButton={true}
+                    ></FlatButton>
+      						<FlatButton
+                    href="/topics/"
+                    label="Topics"
+                    linkButton={true}
+                    ></FlatButton>
+      						<FlatButton
+                    href="/about"
+                    label="About"
+                    linkButton={true}
+                    ></FlatButton>
                   { user_is_loggedin ? "" :
                     <div>
-                      <RaisedButton aria-label="Login" href="#" ng-click="show_login_modal($event, 'signin')">Login</RaisedButton>
-                      <RaisedButton class="RaisedButtons-signup" aria-label="Join" href="#" ng-click="show_login_modal($event, 'signup')">Join the Community</RaisedButton>
+                      <FlatButton
+                        href="#"
+                        label="Login"
+                        linkButton={true}
+                        ></FlatButton>
+                      <FlatButton
+                        href="#"
+                        label="Join the Community"
+                        linkButton={true}
+                        ></FlatButton>
                     </div>
                   }
       					</div>
       				</div>
       			</div>
-      			<div class="row mb64 mb-xs-32">
-      				<div class="col-md-5 text-right text-left-xs">
-      					<h1 class="logo">A Homer Commentary in Progress</h1>
+      			<div className="row mb64 mb-xs-32">
+      				<div className="col-md-5 text-right text-left-xs">
+      					<h1 className="logo">A Homer Commentary in Progress</h1>
       				</div>
 
-      				<div class="col-md-2 hidden-sm hidden-xs text-center">
+      				<div className="col-md-2 hidden-sm hidden-xs text-center">
       					<a href="http://chs.harvard.edu" target="_blank">
-      						<img class="site-logo" src="/images/logo-tower.png"/>
+      						<img className="site-logo" src="/images/logo-tower.png"/>
       					</a>
       				</div>
 
-      				<div class="col-md-5 col-sm-6">
-      					<p class="lead">
+      				<div className="col-md-5 col-sm-6">
+      					<p className="lead">
       						For more information about the Commentary or general media inquiries, please contact <a href="mailto:contact@ahcip.chs.harvard.edu">contact@ahcip.chs.harvard.edu</a>.
       					</p>
 
-      					<p class="lead">
+      					<p className="lead">
       					 This website is provided by <a href="http://chs.harvard.edu" target="_blank">The Center for Hellenic Studies</a>.
       					</p>
 
       				</div>
       			</div>{/*<!--end of row-->*/}
-      			<div class="row">
-      				<div class="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
-      					<p class="fade-1-4 copyright">&copy; 2016 The Center for Hellenic Studies.  See our <a href="/terms" >terms and privacy policy</a>.</p>
+      			<div className="row">
+      				<div className="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
+      					<p className="fade-1-4 copyright">&copy; 2016 The Center for Hellenic Studies.  See our <a href="/terms" >terms and privacy policy</a>.</p>
       				</div>
       			</div>{/*<!--end of row-->*/}
       		</div>{/*<!--end of container-->*/}

@@ -14,6 +14,15 @@ WorksList = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
+  mixins: [ReactMeteorData],
+
+  getMeteorData(){
+    let query = {};
+    return {
+      works: Works.find(query, {sort:{order:1}}).fetch(),
+    };
+  },
+
 
   renderWorks(){
 

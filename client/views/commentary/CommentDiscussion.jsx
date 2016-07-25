@@ -20,7 +20,7 @@ CommentDiscussion = React.createClass({
     return (
 
         <div className="discussion-wrap" ng-controller="DiscussionController as d">
-            <div ng-click="show_discussion( $event )" className="continue-discussion">
+            <div onClick="show_discussion( $event )" className="continue-discussion">
                 <i className="mdi mdi-comment"></i>
                 <span className="continue-discussion-text"
                       ng-show="$parent.comment.discussion_comments.length > 0">{$parent.comment
@@ -35,7 +35,7 @@ CommentDiscussion = React.createClass({
 
             <div className="discussion-thread" layout="column">
                 <div className="add-comment-wrap paper-shadow " layout="column">
-                    <RaisedButton aria-label="Close Discussion" className="mdi mdi-close close-discussion paper-shadow" ng-click="hide_discussion($event)"></RaisedButton>
+                    <RaisedButton aria-label="Close Discussion" className="mdi mdi-close close-discussion paper-shadow" onClick="hide_discussion($event)"></RaisedButton>
                     <form className="new-comment-form" name="new-comment-form">
                         <div className="add-comment-row-1" >
                             {/*<sec:ifLoggedIn>
@@ -57,14 +57,14 @@ CommentDiscussion = React.createClass({
                                 <span className="error-message-text">Please enter your text to submit.</span>
                             </div>
                             { user_is_loggedin ?
-                                <RaisedButton aria-label="Submit" type="submit" className="submit-comment-button paper-shadow" ng-click="add_discussion_comment( $event )" >Submit</RaisedButton>
+                                <RaisedButton aria-label="Submit" type="submit" className="submit-comment-button paper-shadow" onClick="add_discussion_comment( $event )" >Submit</RaisedButton>
                               :
                                 <div className="new-comment-login">
-                                        <RaisedButton aria-label="Join" className="join-link" ng-click="show_login_modal($event, 'signup')">
+                                        <RaisedButton aria-label="Join" className="join-link" onClick="show_login_modal($event, 'signup')">
                                             Join
                                         </RaisedButton>
                                         <RaisedButton aria-label="Login" className="login-link"
-                                                   ng-click="show_login_modal($event, 'signin')">
+                                                   onClick="show_login_modal($event, 'signin')">
                                             Login
                                         </RaisedButton>
                                 </div>
@@ -74,8 +74,8 @@ CommentDiscussion = React.createClass({
                 </div>
                 <div className="sort-by-wrap" ng-show="discussion_thread.discussion_comments.length">
                     <span className="sort-by-label">Sort by:</span>
-                    <RaisedButton aria-label="Sort by Top" className="sort-by-option selected-sort sort-by-top" ng-click="sort_by_option('top')">Top</RaisedButton>
-                    <RaisedButton aria-label="Sort by Newest" className="sort-by-option sort-by-new" ng-click="sort_by_option('new')">Newest</RaisedButton>
+                    <RaisedButton aria-label="Sort by Top" className="sort-by-option selected-sort sort-by-top" onClick="sort_by_option('top')">Top</RaisedButton>
+                    <RaisedButton aria-label="Sort by Newest" className="sort-by-option sort-by-new" onClick="sort_by_option('new')">Newest</RaisedButton>
                 </div>
                 <div className="no-results-wrap" ng-show="discussion_thread.discussion_comments.length === 0">
                     <span className="no-results-text"></span>
@@ -105,28 +105,28 @@ CommentDiscussion = React.createClass({
                               <textarea className="new-comment-text" ng-model="discussion_comment.content" ></textarea>
                               <RaisedButton aria-label="Update" type="submit" className="submit-comment-button paper-shadow" >Update</RaisedButton>
                               <RaisedButton aria-label="Close Update"
-                                           className="close-form-button " ng-click="close_update($event)">Close
+                                           className="close-form-button " onClick="close_update($event)">Close
                               </RaisedButton>
                             </form>
 
                         </div>
                     </div>
                     <div className="inner-comment-row" ng-hide="discussion_comment.status === 'removed'">
-                        <RaisedButton aria-label="Upvote" ng-click="upvote($event)"
+                        <RaisedButton aria-label="Upvote" onClick="upvote($event)"
                                    ng-className="discussion_comment.user_has_upvoted ? 'vote-up upvoted' : 'vote-up'">
                             <i className="mdi mdi-chevron-up"></i>
                             <span>{discussion_comment.votes}</span>
                         </RaisedButton>
-                        <RaisedButton aria-label="Reply" ng-click="show_reply_form($event)" className="reply">
+                        <RaisedButton aria-label="Reply" onClick="show_reply_form($event)" className="reply">
                             Reply
                         </RaisedButton>
-                        {/*<!--RaisedButton aria-label="Share" className="share" ng-click="share_discussion_comment($event)">
+                        {/*<!--RaisedButton aria-label="Share" className="share" onClick="share_discussion_comment($event)">
                             Share
                         </RaisedButton-->*/}
-                        <RaisedButton aria-label="Edit" ng-click="edit_discussion_comment($event)" className="edit" ng-show="discussion_comment.editable === true">
+                        <RaisedButton aria-label="Edit" onClick="edit_discussion_comment($event)" className="edit" ng-show="discussion_comment.editable === true">
                             Edit
                         </RaisedButton>
-                        <RaisedButton aria-label="Remove" ng-click="remove_discussion_comment($event)" className="remove" ng-show="false">
+                        <RaisedButton aria-label="Remove" onClick="remove_discussion_comment($event)" className="remove" ng-show="false">
                             Remove
                         </RaisedButton>
                     </div>
@@ -143,7 +143,7 @@ CommentDiscussion = React.createClass({
                                     </textarea>
                                     <RaisedButton aria-label="Submit" type="submit" className="submit-comment-button paper-shadow" >Submit</RaisedButton>
                                     <RaisedButton aria-label="Close Reply"
-                                               className="close-form-button " ng-click="close_reply($event)">Close
+                                               className="close-form-button " onClick="close_reply($event)">Close
                                     </RaisedButton>
                                 </div>
                             </form>
@@ -174,7 +174,7 @@ CommentDiscussion = React.createClass({
                             </div>
                             <div className="inner-comment-row">
                                 <RaisedButton aria-label="Upvote" className="vote-up"
-                                           ng-click="upvote($event)">
+                                           onClick="upvote($event)">
                                     <i className="mdi mdi-chevron-up"></i>
                                     <span>{discussion_comment_child.votes}</span>
                                 </RaisedButton>
@@ -186,10 +186,10 @@ CommentDiscussion = React.createClass({
                                 {/*<!--RaisedButton aria-label="Share" className="share">
                                     Share
                                 </RaisedButton-->*/}
-                                <RaisedButton aria-label="Edit" ng-click="edit_reply($event)" className="edit" ng-show="discussion_comment.editable">
+                                <RaisedButton aria-label="Edit" onClick="edit_reply($event)" className="edit" ng-show="discussion_comment.editable">
                                     Edit
                                 </RaisedButton>
-                                <RaisedButton aria-label="Remove" ng-click="remove_reply($event)" className="remove">
+                                <RaisedButton aria-label="Remove" onClick="remove_reply($event)" className="remove">
                                     Remove
                                 </RaisedButton>
 

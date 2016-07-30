@@ -1,10 +1,12 @@
+import '../../node_modules/mdi/css/materialdesignicons.css';
+
+
+
 MasterLayout = React.createClass({
 
 	render(){
 		return(
 			<div className="chs-layout master-layout">
-
-			  <LeftMenu />
 
 				<Header />
 
@@ -13,9 +15,9 @@ MasterLayout = React.createClass({
 				</main>
 				<Footer/>
 
-				<FilterWidget />
-			  <ModalLogin />
-				<ModalSignup />
+				<FilterWidget filters={[]}/>
+			  {/*<ModalLogin />
+				<ModalSignup />*/}
 
 			</div>
 			);

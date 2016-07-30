@@ -1,10 +1,12 @@
-HomeLayout = React.createClass({
+CommentaryLayout = React.createClass({
+
 	render(){
 		return(
-			<div className="chs-layout home-layout">
+			<div className="chs-layout commentary-layout">
+
 				<Header />
 
-				<HomeView />
+				<Commentary />
 
 				<Footer/>
 

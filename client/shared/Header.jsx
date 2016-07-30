@@ -99,10 +99,10 @@ Header = React.createClass({
         		<div className="md-menu-toolbar" >
         			<div className="toolbar-tools">
 
-                <FlatButton
+                <IconButton
                   className="left-drawer-toggle"
                   style={styles.flatIconButton}
-                  icon={<FontIcon className="mdi mdi-menu" />}
+                  iconClassName="mdi mdi-menu"
                   onClick={this.toggleLeftMenu}
                 />
 
@@ -124,14 +124,12 @@ Header = React.createClass({
         					<FlatButton
                     label="Commentary"
                     href="/commentary/"
-                    linkButton={true}
                     style={styles.flatButton}
                     >
         					</FlatButton>
         					<FlatButton
                     label="About"
                     href="/about"
-                    linkButton={true}
                     style={styles.flatButton}
                     ></FlatButton>
                   {user_is_loggedin ?
@@ -139,7 +137,6 @@ Header = React.createClass({
                         <FlatButton
                           label="Profile"
                           className=""
-                          linkButton={true}
                           style={styles.flatButton}
                           >
                         </FlatButton>
@@ -150,7 +147,6 @@ Header = React.createClass({
                           href="#"
                           label="Login"
                           onClick={this.showLoginModal}
-                          linkButton={true}
                           style={styles.flatButton}
                           >
                         </FlatButton>
@@ -158,7 +154,6 @@ Header = React.createClass({
                           href="#"
                           label="Join the Community"
                           onClick={this.showJoinModal}
-                          linkButton={true}
                           style={styles.flatButton}
                           >
                         </FlatButton>

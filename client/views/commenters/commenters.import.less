@@ -3,14 +3,22 @@
   text-align:center;
   .transition( all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) );
   padding:40px 0;
+
 }
 .author-teaser {
   text-align:center;
   color:@light;
-  margin:0 3%;
+  margin:0;
   display:inline-block;
   vertical-align: top;
-  width:26%;
+  width:28%;
+	height:550px;
+	padding:20px 30px;
+	background:@tan3;
+
+	&:hover {
+		background:@tan2;
+	}
 
   a {
 	cursor:pointer;
@@ -24,23 +32,23 @@
 	  padding:10px 0 20px;
 	  margin:0;
 	  font-size:22px;
-	  color:@light;
+	  color:@dark;
 	}
 	hr {
 	  min-width:200px;
 	  width:50%;
 	  margin:0 auto;
 	  height:2px;
-	  background-color: @light;
+	  background-color: @secondary-text;
 	  border:none;
 	  outline:none;
 
 	}
 	.author-description {
-	  color:#eee;
+	  color:@secondary-text;
 	  display:block;
 	  line-height:1.3em;
-	  font-family:@font-body;
+	  font-family:@font-reading;
     font-size:16px;
 	  padding:25px 0;
 	  width:100%;

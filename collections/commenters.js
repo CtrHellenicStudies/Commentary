@@ -12,6 +12,16 @@ Schemas.Commenters = new SimpleSchema({
     max: 255
   },
 
+  slug: {
+    type: String,
+    max: 200,
+    optional: true,
+    autoform: {
+      type: "hidden",
+      label: false
+    }
+  },
+
   bio: {
     type: String,
     optional: true,
@@ -35,25 +45,33 @@ Schemas.Commenters = new SimpleSchema({
     optional: true,
   },
 
-  createdAt: {
+  created: {
     type: Date,
     autoValue: function() {
       if (this.isInsert) {
-        return new Date();
+        return new Date;
       }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
     }
   },
-
-  updatedAt: {
+  updated: {
     type: Date,
     optional: true,
     autoValue: function() {
       if (this.isUpdate) {
-        return new Date();
+        return new Date;
       }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
     }
   }
 
 });
 
 Commenters.attachSchema(Schemas.Commenters);
+Commenters.friendlySlugs('name');

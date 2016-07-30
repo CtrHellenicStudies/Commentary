@@ -41,13 +41,13 @@ LeftMenu = React.createClass({
                     <div className="sidenav-top">
                       {is_logged_in ?
                           <div>
-                            <div class="user-image paper-shadow">
+                            <div className="user-image paper-shadow">
                               <img src="/images/default_user.jpg"/>
                             </div>
                           </div>
                           : ""
                       }
-                      <span class="user-fullname">
+                      <span className="user-fullname">
                         Archimedes of Syracuse
                       </span>
 
@@ -56,31 +56,26 @@ LeftMenu = React.createClass({
                     <MenuItem
                         href="/"
                         primaryText="Home"
-                        onTouchTap={this.props.closeLeftMenu}
                         onClick={this.props.closeLeftMenu}
                     />
                     <MenuItem
                         href="/commentary/"
                         primaryText="Commentary"
-                        onTouchTap={this.props.closeLeftMenu}
                         onClick={this.props.closeLeftMenu}
                     />
                     <MenuItem
                           href="/keywords/"
                           primaryText="Keywords"
-                          onTouchTap={this.props.closeLeftMenu}
                           onClick={this.props.closeLeftMenu}
                       />
                     <MenuItem
                           href="/commenters/"
                           primaryText="Commenters"
-                          onTouchTap={this.props.closeLeftMenu}
                           onClick={this.props.closeLeftMenu}
                       />
                     <MenuItem
                           href="/about"
                           primaryText="About"
-                          onTouchTap={this.props.closeLeftMenu}
                           onClick={this.props.closeLeftMenu}
                       />
 
@@ -92,21 +87,18 @@ LeftMenu = React.createClass({
                             href="/profile/"
                             primaryText="Your Comments"
                             target="_blank"
-                            onTouchTap={this.props.closeLeftMenu}
                             onClick={this.props.closeLeftMenu}
                         />
                         <MenuItem
                             href="/account/"
                             primaryText="Account"
                             target="_blank"
-                            onTouchTap={this.props.closeLeftMenu}
                             onClick={this.props.closeLeftMenu}
                         />
                         <MenuItem
                             href="/sign-out"
                             primaryText="Sign out"
                             target="_blank"
-                            onTouchTap={this.props.closeLeftMenu}
                             onClick={this.props.closeLeftMenu}
                         />
                     </div>
@@ -115,7 +107,6 @@ LeftMenu = React.createClass({
                           href="/sign-in"
                           primaryText="Sign in"
                           target="_blank"
-                          onTouchTap={this.props.closeLeftMenu}
                           onClick={this.props.closeLeftMenu}
                       />
                     }

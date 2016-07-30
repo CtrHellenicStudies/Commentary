@@ -35,42 +35,42 @@ ModalLogin = React.createClass({
     };
 
     return (
-      <div class="ahcip-modal-login ahcip-modal ahcip-login-signup" ng-controller="LoginController as l">
-        <div class="close-modal paper-shadow" ng-click="hide_login_modal($event)">
-          <i class="mdi mdi-close"></i>
+      <div className="ahcip-modal-login ahcip-modal ahcip-login-signup" >
+        <div className="close-modal paper-shadow" >
+          <i className="mdi mdi-close"></i>
         </div>
-        <div class="modal-inner">
-          <div class="login-links">
-            <RaisedButton href="/oauth/authenticate/google" class="login-option login-option-google paper-card" target="_self">
-              <i class="login-icon mdi mdi-google"></i>
-              <span class="login-text">
+        <div className="modal-inner">
+          <div className="login-links">
+            <RaisedButton href="/oauth/authenticate/google" className="login-option login-option-google paper-card" target="_self">
+              <i className="login-icon mdi mdi-google"></i>
+              <span className="login-text">
                 Login with Google
               </span>
             </RaisedButton>
-            <RaisedButton href="/oauth/authenticate/facebook" class="login-option login-option-facebook paper-card" target="_self">
-              <i class="login-icon mdi mdi-facebook"></i>
-              <span class="login-text">
+            <RaisedButton href="/oauth/authenticate/facebook" className="login-option login-option-facebook paper-card" target="_self">
+              <i className="login-icon mdi mdi-facebook"></i>
+              <span className="login-text">
                 Login with Facebook
               </span>
             </RaisedButton>
-            <RaisedButton href="/oauth/authenticate/twitter" class="login-option login-option-twitter paper-card" target="_self">
-              <i class="login-icon mdi mdi-twitter"></i>
-              <span class="login-text">
+            <RaisedButton href="/oauth/authenticate/twitter" className="login-option login-option-twitter paper-card" target="_self">
+              <i className="login-icon mdi mdi-twitter"></i>
+              <span className="login-text">
                 Login with Twitter
               </span>
             </RaisedButton>
               <hr/>
-            <div class="login-other-option">
-              <span class="login-other-option-label">
+            <div className="login-other-option">
+              <span className="login-other-option-label">
                 Or login with your email address.
               </span>
-              <form class="signup-form" method="POST" action="/j_spring_security_check" ng-submit="login($event)">
+              <form className="signup-form" method="POST" action="/j_spring_security_check" >
                 <label for="email">Email</label>
-                <input id="email" type="text" name="j_username" placeholder="odysseus@ithica.edu" ng-model="email"/>
+                <input id="email" type="text" name="j_username" placeholder="odysseus@ithica.edu" />
                 <label for="email">Password</label>
-                <input id="pass" type="password" name="j_password" ng-model="password"/>
-                 <a class="forgot-password" href="/forgot-password" target="_self">Forgot your password?</a>
-                <input class="paper-card" type="submit" value="Login"/>
+                <input id="pass" type="password" name="j_password" />
+                 <a className="forgot-password" href="/forgot-password" target="_self">Forgot your password?</a>
+                <input className="paper-card" type="submit" value="Login"/>
               </form>
             </div>
           </div>

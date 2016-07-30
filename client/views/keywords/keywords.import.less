@@ -100,3 +100,44 @@ section.keyword-single {
 
 
 }
+
+
+.keyword-teaser {
+	width:100%;
+	max-width:1000px;
+	background:@light;
+	cursor:pointer;
+	margin:10px auto;
+	padding:20px;
+
+	text-align:left;
+
+	&:hover {
+		background:@ahcip-yellow;
+		.keyword-title, .keyword-comment-count {
+			color:@light;
+		}
+	}
+
+
+	.keyword-title {
+		display:inline-block;
+		vertical-align: top;
+		font-size:24px;
+
+	}
+
+	.keyword-comment-count {
+		font-style:italic;
+		float:right;
+		display:inline-block;
+		vertical-align: top;
+		padding:0px 10px;
+		font-size:14px;
+		font-family:@font-reading;
+		font-weight:light;
+		color:@secondary-text;
+
+	}
+
+}

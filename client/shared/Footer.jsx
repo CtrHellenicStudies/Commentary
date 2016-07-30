@@ -43,34 +43,28 @@ Footer = React.createClass({
       						<FlatButton
                     href="/commentary/"
                     label="Search"
-                    linkButton={true}
                     ></FlatButton>
       						<FlatButton
                     href="/commentators/"
                     label="Commentors"
-                    linkButton={true}
                     ></FlatButton>
       						<FlatButton
                     href="/topics/"
                     label="Topics"
-                    linkButton={true}
                     ></FlatButton>
       						<FlatButton
                     href="/about"
                     label="About"
-                    linkButton={true}
                     ></FlatButton>
                   { user_is_loggedin ? "" :
                     <div>
                       <FlatButton
                         href="#"
                         label="Login"
-                        linkButton={true}
                         ></FlatButton>
                       <FlatButton
                         href="#"
                         label="Join the Community"
-                        linkButton={true}
                         ></FlatButton>
                     </div>
                   }

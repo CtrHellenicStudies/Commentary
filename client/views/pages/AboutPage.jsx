@@ -4,7 +4,7 @@ AboutPage = React.createClass({
 
     return (
 
-      <div className="content primary">
+      <div className="page page-about content primary">
 
           <section className="block header header-page  cover parallax">
               <div className="background-image-holder blur-2--no-remove remove-blur  blur-10">

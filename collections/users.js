@@ -64,9 +64,32 @@ Schemas.User = new SimpleSchema({
   "emails.$.verified": {
     type: Boolean
   },
-  createdAt: {
-    type: Date
+  created: {
+    type: Date,
+    autoValue: function() {
+      if (this.isInsert) {
+        return new Date;
+      }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
+    }
   },
+  updated: {
+    type: Date,
+    optional: true,
+    autoValue: function() {
+      if (this.isUpdate) {
+        return new Date;
+      }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
+    }
+  },
+
   profile: {
     type: Schemas.UserProfile,
     optional: true

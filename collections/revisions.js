@@ -6,6 +6,17 @@ Schemas.Revisions = new SimpleSchema({
     optional: true,
   },
 
+  slug: {
+    type: String,
+    max: 200,
+    optional: true,
+    autoform: {
+      type: "hidden",
+      label: false
+    }
+  },
+
+
   text: {
     type: String,
     optional: true,
@@ -14,26 +25,33 @@ Schemas.Revisions = new SimpleSchema({
     }
 
   },
-
-  createdAt: {
+  created: {
     type: Date,
     autoValue: function() {
       if (this.isInsert) {
-        return new Date();
+        return new Date;
       }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
     }
   },
-
-  updatedAt: {
+  updated: {
     type: Date,
     optional: true,
     autoValue: function() {
       if (this.isUpdate) {
-        return new Date();
+        return new Date;
       }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
     }
   }
 
 });
 
 Revisions.attachSchema(Schemas.Revisions);
+Revisions.friendlySlugs('title');

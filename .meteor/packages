@@ -17,6 +17,7 @@ tap:i18n
 raix:handlebar-helpers
 cfs:standard-packages
 cfs:gridfs
+#jalik:ufs
 aldeed:template-extension
 cfs:graphicsmagick
 yogiben:helpers
@@ -79,4 +80,4 @@ standard-minifier-css
 standard-minifier-js
 simple:rest
 dburles:google-maps
-natestrauser:jquery-scrollto
+todda00:friendly-slugs

@@ -140,6 +140,7 @@ font-family:'Proxima Nova W07 Black';
 
 @font-body:'ProximaNW01-AltLightReg';
 @font-commentary: 'Merriweather', serif;
+@font-reading:@font-commentary;
 @font-label:'Proxima N W01 At Smbd';
 @font-title:'Proxima Nova W08 Reg';
 @font-accent:'Museo Sans W01_900';
@@ -216,13 +217,14 @@ font-family:'Proxima Nova W07 Black';
 	opacity: 		@opacity;
 }
 
-.gradient (@startColor: #eee, @endColor: white) {
+.gradient (@startColor: #eee, @middleColor1:#fff, @middleColor2:#fff, @endColor:#eee) {
 	background-color: @startColor;
 	background: -webkit-gradient(linear, left top, left bottom, from(@startColor), to(@endColor));
-	background: -webkit-linear-gradient(top, @startColor, @endColor);
-	background: -moz-linear-gradient(top, @startColor, @endColor);
-	background: -ms-linear-gradient(top, @startColor, @endColor);
-	background: -o-linear-gradient(top, @startColor, @endColor);
+	background: -webkit-linear-gradient(top, @startColor, @middleColor1 10%, @middleColor2 90%, @endColor);
+	background: -moz-linear-gradient(top, @startColor, @middleColor1 10%, @middleColor2 90%, @endColor);
+	background: -ms-linear-gradient(top, @startColor, @middleColor1 10%, @middleColor2 90%, @endColor);
+	background: -o-linear-gradient(top, @startColor, @middleColor1 10%, @middleColor2 90%, @endColor);
+
 }
 .horizontal-gradient (@startColor: #eee, @endColor: white) {
  	background-color: @startColor;

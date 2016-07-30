@@ -34,7 +34,7 @@ HomeView = React.createClass({
 
             <section className="header cover fullscreen parallax">
                 <div className="background-image-holder remove-blur blur-10">
-                   <img className="background-image" src="/images/hector.jpg"/>
+                   <img className="background-image" src="/images/hp_image.jpg"/>
                 </div>
                 <div className="block-screen brown"></div>
 
@@ -113,12 +113,13 @@ HomeView = React.createClass({
             </section>
 
 
-            <section className="goals parallax">
+            <section className="goals ">
 
-                <div className="background-image-holder blur-4--no-remove">
+                {/*}<div className="background-image-holder blur-4--no-remove">
                    <img alt="image" className="background-image" src="/images/mss_2.jpg"/>
                 </div>
                 <div className="block-screen brown"></div>
+								*/}
 
                 <div className="container ">
 
@@ -152,8 +153,15 @@ HomeView = React.createClass({
             </section>
 
             <section className="browse-commentary block-shadow" >
+              <h2 className="keyword-divider-title">Commentary</h2>
 
-              <WorksList />
+              <div className="container data-visualization-container">
+								<img src="/images/data_visualization_example.png"/>
+
+								<img src="/images/data_visualization_example.png"/>
+
+								<img src="/images/data_visualization_example.png"/>
+              </div>
 
             </section>
 
@@ -166,7 +174,7 @@ HomeView = React.createClass({
                     <KeywordsList />
 
                     <RaisedButton
-                      href="/keyword/index"
+                      href="/keywords"
                       className="cover-link show-more primary "
                       label="More Keywords"
                       >
@@ -175,11 +183,13 @@ HomeView = React.createClass({
                 </div>
             </section>
 
-            <section className="parallax commentators">
+            <section className="commentors">
+							{/*
                 <div className="background-image-holder blur-4--no-remove">
                    <img className="background-image" src="/images/school-athens.jpg"/>
                 </div>
                 <div className="block-screen"></div>
+								*/}
 
                 <div className="container">
 
@@ -189,7 +199,7 @@ HomeView = React.createClass({
                     <CommentersList />
 
                     <RaisedButton
-                      href="/commentator/index"
+                      href="/commenters"
                       className="cover-link light show-more "
                       label="Other Commenters"
                       >
@@ -199,15 +209,27 @@ HomeView = React.createClass({
 
             </section>
 
-            <section className="get-started" layout="column" flex>
+            <section className="get-started" >
 
                   <h2 className="block-title">Get Started</h2>
 
                   <div className="get-started-comments">
 
-                    <Commentary />
+                    <Commentary isOnHomeView={true} />
+
+						        <div className="read-more-link">
+	                    <RaisedButton
+	                      href="/commenters"
+	                      className="cover-link light show-more "
+	                      label="Read More"
+	                      >
+	                    </RaisedButton>
+
+
+						        </div>
 
                   </div>
+
 
             </section>
 

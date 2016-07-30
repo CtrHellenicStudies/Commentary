@@ -7,6 +7,10 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 FilterWidget = React.createClass({
 
+  propTypes: {
+    filters: React.PropTypes.array.isRequired
+  },
+
   getChildContext() {
     return { muiTheme: getMuiTheme(baseTheme) };
   },
@@ -19,17 +23,20 @@ FilterWidget = React.createClass({
 
 		return(
 
-      	<div class="filters">
-      		<div class="filter " ng-repeat="filter in filters">
-      			<span class="filter-key paper-shadow">{filter.key}</span>
-      			<RaisedButton class="filter-val paper-shadow" data-key="{filter.key}" data-id="{val.id}"
-      				  ng-repeat="val in filter.vals" ng-click="remove_search_term( $event )">
-      				{val.text}
-      				<i class="mdi mdi-close"></i>
-      			</RaisedButton>
+      	<div className="filters">
+					{this.props.filters.map((filter) => {
+	      		<div className="filter " >
+	      			<span className="filter-key paper-shadow">{filter.key}</span>
+	      			<RaisedButton className="filter-val paper-shadow" data-key="{filter.key}" data-id="{val.id}"
+	      				  ng-repeat="val in filter.vals" ng-click="remove_search_term( $event )">
+	      				{val.text}
+	      				<i className="mdi mdi-close"></i>
+	      			</RaisedButton>
 
 
-      		</div>
+	      		</div>
+
+					})}
 
       	</div>
 

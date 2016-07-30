@@ -7,43 +7,44 @@ Schemas.Subworks = new SimpleSchema({
   },
   slug: {
     type: String,
-    max: 60
+    max: 200,
+    optional: true,
+    autoform: {
+      type: "hidden",
+      label: false
+    }
   },
+
   n: {
     type: Number,
     min: 0
   },
-  createdAt: {
+  created: {
     type: Date,
     autoValue: function() {
       if (this.isInsert) {
-        return new Date();
+        return new Date;
       }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
     }
   },
-  updatedAt: {
+  updated: {
     type: Date,
     optional: true,
     autoValue: function() {
       if (this.isUpdate) {
-        return new Date();
+        return new Date;
       }
-    }
-  },
-  work: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
+    },
     autoform: {
-      options: function() {
-        return _.map(Meteor.works.find().fetch(), function(work) {
-          return {
-            label: work.title,
-            value: work._id
-          };
-        });
-      }
+      type: "hidden",
+      label: false
     }
   }
 });
 
 Subworks.attachSchema(Schemas.Subworks);
+Subworks.friendlySlugs('title');

@@ -1,28 +1,27 @@
 this.Comments = new Meteor.Collection('comments');
 
 Schemas.Comments = new SimpleSchema({
-
-/*
   wordpressId: {
     type: Number,
     optional: true
   },
 
   commenters: {
-    type: [Commenters],
+    type: [Schemas.Commenters],
     optional: true,
 
   },
 
   work: {
-    type: Works,
+    type: Schemas.Works,
 
   },
 
   subwork: {
-    type: Subworks,
+    type: Schemas.Subworks,
 
   },
+
 
   lineFrom: {
     type: Number,
@@ -78,38 +77,45 @@ Schemas.Comments = new SimpleSchema({
     optional: true
   },
 
-  /*keywords: {
-    type: [Keywords],
+  keywords: {
+    type: [Schemas.Keywords],
     optional: true
   },
 
   revisions: {
-    type: [Revisions],
+    type: [Schemas.Revisions],
     optional: true
   },
-  */
 
-  /*discussionComments: {
-    type: [DiscussionComments],
+
+  discussionComments: {
+    type: [Schemas.DiscussionComments],
     optional: true
-  },*/
+  },
 
-  createdAt: {
+  created: {
     type: Date,
     autoValue: function() {
       if (this.isInsert) {
-        return new Date();
+        return new Date;
       }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
     }
   },
-
-  updatedAt: {
+  updated: {
     type: Date,
     optional: true,
     autoValue: function() {
       if (this.isUpdate) {
-        return new Date();
+        return new Date;
       }
+    },
+    autoform: {
+      type: "hidden",
+      label: false
     }
   }
 

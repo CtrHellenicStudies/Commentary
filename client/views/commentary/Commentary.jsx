@@ -8,6 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 Commentary = React.createClass({
 
   propTypes: {
+		isOnHomeView: React.PropTypes.bool
   },
 
   getInitialState(){
@@ -125,24 +126,17 @@ Commentary = React.createClass({
             <div className="double-bounce1"></div>
             <div className="double-bounce2"></div>
 
-        </div>  {/*<!-- .spinner -->*/}
+        </div>
 
         <div className="no-commentary-wrap">
           <p className="no-commentary no-results" >
             No commentary available for the current search.
           </p>
 
-        </div> {/*<!-- .read-more-link -->*/}
-
-        <div className="read-more-link">
-            <RaisedButton href="/commentary/"  className="cover-link primary show-more paper-shadow" >
-                Continue reading
-            </RaisedButton>
-
-        </div>{/*<!-- .read-more-link -->*/}
+        </div>
 
         <div className="lemma-reference-modal">
-            <article className="comment  lemma-comment paper-shadow " layout="column">
+            <article className="comment  lemma-comment paper-shadow " >
               {this.state.referenceLemmaSelectedEdition.lines.map(function(line){
 
                 return <p
@@ -167,7 +161,7 @@ Commentary = React.createClass({
 
                 </div>
 
-                <i className="mdi mdi-close paper-shadow" onClick="hide_lemma_reference($event)">
+                <i className="mdi mdi-close paper-shadow" onClick={this.hideLemmaReference}>
                 </i>
             </article>
 

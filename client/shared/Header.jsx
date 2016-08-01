@@ -93,7 +93,7 @@ Header = React.createClass({
           open={this.state.leftMenuOpen}
           closeLeftMenu={this.closeLeftMenu}
           />
-      	<header headroom>
+      	<header >
           {!this.state.searchEnabled ?
 
         		<div className="md-menu-toolbar" >

@@ -1,4 +1,5 @@
 HomeLayout = React.createClass({
+
 	render(){
 		return(
 			<div className="chs-layout home-layout">
@@ -8,7 +9,6 @@ HomeLayout = React.createClass({
 
 				<Footer/>
 
-				<FilterWidget filters={[]}/>
 			  {/*<ModalLogin />
 				<ModalSignup />*/}
 

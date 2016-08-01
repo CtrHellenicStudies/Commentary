@@ -38,38 +38,36 @@ Footer = React.createClass({
       	<footer className="block-shadow">
       		<div className="container">
       			<div className="row footer-nav-row">
-      				<div className="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
-      					<div className="footer-nav-links" role="nav">
-      						<FlatButton
-                    href="/commentary/"
-                    label="Search"
-                    ></FlatButton>
-      						<FlatButton
-                    href="/commentators/"
-                    label="Commentors"
-                    ></FlatButton>
-      						<FlatButton
-                    href="/topics/"
-                    label="Topics"
-                    ></FlatButton>
-      						<FlatButton
-                    href="/about"
-                    label="About"
-                    ></FlatButton>
-                  { user_is_loggedin ? "" :
-                    <div>
-                      <FlatButton
-                        href="#"
-                        label="Login"
-                        ></FlatButton>
-                      <FlatButton
-                        href="#"
-                        label="Join the Community"
-                        ></FlatButton>
-                    </div>
-                  }
-      					</div>
-      				</div>
+    					<div className="footer-nav-links" role="nav">
+    						<FlatButton
+                  href="/commentary/"
+                  label="Commentary"
+                  ></FlatButton>
+    						<FlatButton
+                  href="/commenters/"
+                  label="Commentors"
+                  ></FlatButton>
+    						<FlatButton
+                  href="/keywords/"
+                  label="Keywords"
+                  ></FlatButton>
+    						<FlatButton
+                  href="/about"
+                  label="About"
+                  ></FlatButton>
+                { user_is_loggedin ? "" :
+                  <div>
+                    <FlatButton
+                      href="#"
+                      label="Login"
+                      ></FlatButton>
+                    <FlatButton
+                      href="#"
+                      label="Join the Community"
+                      ></FlatButton>
+                  </div>
+                }
+    					</div>
       			</div>
       			<div className="row mb64 mb-xs-32">
       				<div className="col-md-5 text-right text-left-xs">

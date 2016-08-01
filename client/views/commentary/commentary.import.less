@@ -272,7 +272,7 @@ article.lemma-comment {
     text-overflow:ellipsis;
 
     span {
-      font-family:@font-label;
+      //font-family:@font-label;
       font-size:14px;
     }
 
@@ -293,34 +293,37 @@ article.lemma-comment {
 
     }
 
-    &.context-tab {
 
-      &:hover {
-        i {
-          margin-right:-4px;
-        }
-      }
+  }
 
-      span {
-        text-transform:uppercase;
-        font-size:14px;
-        color:@secondary-text;
-        display:inline-block;
-        vertical-align:top;
-        padding-top:1px;
-        .transition( all 100ms ease-out );
-        padding-right:3px;
+  .context-tab {
 
-      }
+		box-shadow:none !important;
+
+    &:hover {
       i {
-        font-size:18px;
-        color:@secondary-text;
-        display:inline-block;
-        vertical-align:top;
-        .transition( all 100ms ease-out );
-        margin-right:0px;
-
+        margin-right:-4px;
       }
+    }
+
+    span {
+      text-transform:uppercase;
+      font-size:14px;
+      color:@secondary-text;
+      display:inline-block;
+      vertical-align:top;
+      padding-top:1px;
+      .transition( all 100ms ease-out );
+      padding-right:3px;
+
+    }
+    i {
+      font-size:18px;
+      color:@secondary-text;
+      display:inline-block;
+      vertical-align:top;
+      .transition( all 100ms ease-out );
+      margin-right:0px;
 
     }
 
@@ -553,20 +556,24 @@ article.lemma-comment {
   background:@primary;
   display:inline-block;
   vertical-align:top;
-  padding:6px 10px;
   margin:15px 12px 10px 0;
   border-radius:0;
   cursor:pointer;
-    min-height:0;
-    line-height:1.3em;
+  min-height:0;
+  line-height:1.3em;
 
-    span {
-      color:@light;
-      font-size:@font-label;
-      font-size:12px;
-      text-transform:uppercase;
+	button {
+	  background-color:@primary !important;
 
-    }
+	}
+
+  span {
+    color:@light !important;
+    font-size:@font-label;
+    font-size:12px;
+    text-transform:uppercase;
+
+  }
 
   &:hover, &:focus {
     color:@light;

@@ -115,11 +115,10 @@ HomeView = React.createClass({
 
             <section className="goals ">
 
-                {/*}<div className="background-image-holder blur-4--no-remove">
+                <div className="background-image-holder blur-4--no-remove">
                    <img alt="image" className="background-image" src="/images/mss_2.jpg"/>
                 </div>
                 <div className="block-screen brown"></div>
-								*/}
 
                 <div className="container ">
 
@@ -184,12 +183,10 @@ HomeView = React.createClass({
             </section>
 
             <section className="commentors">
-							{/*
                 <div className="background-image-holder blur-4--no-remove">
                    <img className="background-image" src="/images/school-athens.jpg"/>
                 </div>
                 <div className="block-screen"></div>
-								*/}
 
                 <div className="container">
 
@@ -219,7 +216,7 @@ HomeView = React.createClass({
 
 						        <div className="read-more-link">
 	                    <RaisedButton
-	                      href="/commenters"
+	                      href="/commentary"
 	                      className="cover-link light show-more "
 	                      label="Read More"
 	                      >

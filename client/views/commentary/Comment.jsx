@@ -1,78 +1,143 @@
 
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 Comment = React.createClass({
 
   propTypes: {
-    comment: React.PropTypes.object.isRequired
+    comment: React.PropTypes.object.isRequired,
+    commentGroup: React.PropTypes.object.isRequired,
+    addSearchTerm: React.PropTypes.func
   },
 
   getInitialState(){
     return {
+			selected_revision: {}
     }
 
   },
 
+	addSearchTerm(e){
+		if('addSearchTerm' in this.props){
+			this.props.addSearchTerm(e);
+		}else {
+			// On home page, go to commentary with this filter selected.
+
+		}
+
+	},
+
   render() {
+		var comment = this.props.comment;
+		var selectedRevision = comment.revisions[0];
+		var commentGroup = this.props.commentGroup;
+		var self = this;
 
     return (
-        <article className="comment commentary-comment paper-shadow " data-id="{comment.id}" data-commentator-id="{comment.commentator.id}" layout="column">
+        <article
+					className="comment commentary-comment paper-shadow "
+					data-id={comment._id}
+					data-commenter-id={comment.commenters[0]._id}>
             <div className="comment-fixed-title-wrap paper-shadow">
-                <h3 className="comment-fixed-title">{comment.selected_revision.title}:</h3>
-                <p className="comment-fixed-lemma lemma-text" ng-bind-html="comment_group.selected_edition
-                .lines[0].html">&nbsp;<span className="fixed-title-lemma-ellipsis"
-                                       ng-show="comment_group.selected_edition.lemma.length > 1">&hellip;</span></p>
-                <a href="/author" ><span className="comment-author-name">{comment.commentator.name}</span></a>
+                <h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
+								{(commentGroup.selectedEdition.lines.length) ?
+	                <p
+										className="comment-fixed-lemma lemma-text"
+										dangerouslySetInnerHTML={{__html: commentGroup.selectedEdition
+	                .lines[0].html}}
+										></p>
+									: ""}
+
+								{commentGroup.selectedEdition.lines.length > 1 ?
+									<span className="fixed-title-lemma-ellipsis">&hellip;</span>
+								: "" }
+
+								{comment.commenters.map(function(commenter, i){
+	                return <a
+										key={i}
+										href={"/author/" + commenter.slug}
+										>
+										<span className="comment-author-name">
+											{commenter.name}
+										</span>
+									</a>
+
+								})}
 
             </div>
 
             <div className="comment-upper">
 
                 <div className="comment-upper-left">
-                    <h1 className="comment-title">{comment.selected_revision.title}</h1>
-                    <div className="comment-topics">
-                        <RaisedButton aria-label="Topic {topic.title}" ui-sref="search" className="comment-topic paper-shadow"
-                                   ng-repeat="topic in comment.topics"
-                                   onClick="add_search_term($event, 'topic')"
-                                   data-id="{topic.id}" data-text="{topic.topic}">{topic.title}</RaisedButton>
+                    <h1 className="comment-title">{selectedRevision.title}</h1>
+                    <div className="comment-keywords">
+											{comment.keywords.map(function(keyword, i){
+	                        return <RaisedButton
+														key={i}
+														className="comment-keyword paper-shadow"
+	                          onClick={self.addSearchTerm}
+	                          data-id={keyword._id}
+														label={keyword.title} />
+
+											 })}
                     </div>
                 </div>
 
                 <div className="comment-upper-right">
-                    <div className="comment-author">
+									{comment.commenters.map(function(commenter, i){
+                    return <div
+											key={i}
+											className="comment-author">
                         <div className="comment-author-text">
-                            <a href="/commentator/show/{comment.commentator.id}" >
-                                <span className="comment-author-name">{comment.commentator.name}</span>
+                            <a href={"/commenter/" + commenter.slug} >
+                                <span className="comment-author-name">{commenter.name}</span>
                             </a>
-                            <span className="comment-date">{comment.revisions}</span>
+                            <span className="comment-date">{/*selectedRevision.created*/}</span>
                         </div>
                         <div className="comment-author-image-wrap paper-shadow">
-                            <a href="/commentator/show/{comment.commentator.id}" >
-
-                                <img ng-src="/assets/{comment.commentator.thumbnail}" ng-show="comment.commentator.thumbnail.length"/>
-                                <img ng-src="/assets/default_user.jpg" ng-hide="comment.commentator.thumbnail.length"/>
+                            <a href={"/commenter/" + commenter.slug}>
+                                <img src="/images/default_user.jpg" />
                             </a>
                         </div>
                     </div>
+									})}
                 </div>
 
             </div>
             <div className="comment-lower">
-                <div className="comment-body" onClick="load_lemma_reference($event)" ng-bind-html="to_trusted(comment.selected_revision.text)">
+                <div
+									className="comment-body"
+									dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
                 </div>
-                <div className="comment-reference" ng-show="comment.reference">
+                <div className="comment-reference" >
                     <h4>Secondary Source(s):</h4>
                     <p>
-                        <a href="{comment.referenceLink}" target="_blank" ng-show="comment.referenceLink">{comment.reference}</a>
-                        <span ng-show="!comment.referenceLink">{comment.reference}</span>
+											{comment.referenceLink ?
+                        <a href={comment.referenceLink} target="_blank" >
+													{comment.reference}
+												</a>
+												:
+                        <span >
+													{comment.reference}
+												</span>
+											}
                     </p>
                 </div>
             </div>
             <div className="comment-revisions">
-                <RaisedButton aria-label="Revision {revision.updated | amDateFormat:'DD MMMM YYYY'}" data-id="{revision.id}" className="revision" ng-className="{'selected-revision':$last}"
-                           ng-repeat="revision in comment.revisions" onClick="select_revision( $event )">
+							{comment.revisions.map(function(revision, i){
+                return <FlatButton
+									key={i}
+									data-id="{revision.id}"
+									className="revision selected-revision"
+                  onClick={this.selectRevision}>
                     Revision {revision.updated}
-                </RaisedButton>
+                </FlatButton>
+
+							})}
             </div>
 
         </article>

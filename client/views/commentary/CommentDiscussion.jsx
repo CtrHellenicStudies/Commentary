@@ -8,9 +8,30 @@ CommentDiscussion = React.createClass({
 
   getInitialState(){
     return {
+			hidden : true
     }
 
   },
+
+  mixins: [ReactMeteorData],
+
+  getMeteorData(){
+    var query = {},
+				sort = {updated: -1};
+
+
+		return {
+			loaded : true,
+			discussionComments: DiscussionComments.find(query, {sort:sort}).fetch()
+		};
+	},
+
+	toggleDiscussion(){
+		this.setState({
+			hidden : !this.state.hidden
+		});
+
+	},
 
   render() {
 
@@ -19,35 +40,46 @@ CommentDiscussion = React.createClass({
 
     return (
 
-        <div className="discussion-wrap" ng-controller="DiscussionController as d">
-            <div onClick="show_discussion( $event )" className="continue-discussion">
+        <div className="discussion-wrap" >
+            <div
+							onClick={this.toggleDiscussion}
+							className="continue-discussion">
                 <i className="mdi mdi-comment"></i>
-                <span className="continue-discussion-text"
-                      ng-show="$parent.comment.discussion_comments.length > 0">{$parent.comment
-                .discussion_comments.length}</span>
+								{this.data.discussionComments.length ?
+		                <span className="continue-discussion-text">
+											{this.data.discussionComments.length}
+										</span>
+									: ""
+								}
             </div>
 
-            <div className="ahcip-spinner" ng-hide="discussion_thread">
-                <div className="double-bounce1"></div>
-                <div className="double-bounce2"></div>
+						{!this.data.loaded ?
+	            <div className="ahcip-spinner" >
+	                <div className="double-bounce1"></div>
+	                <div className="double-bounce2"></div>
 
-            </div> {/*<!-- .spinner -->*/}
+	            </div>
+						: ""
+						}
 
-            <div className="discussion-thread" layout="column">
-                <div className="add-comment-wrap paper-shadow " layout="column">
-                    <RaisedButton aria-label="Close Discussion" className="mdi mdi-close close-discussion paper-shadow" onClick="hide_discussion($event)"></RaisedButton>
+            <div className="discussion-thread" >
+                <div className="add-comment-wrap paper-shadow " >
+                    <RaisedButton
+											label="Close Discussion"
+											className="mdi mdi-close close-discussion paper-shadow"
+											onClick={this.hideDiscussion}>
+                    </RaisedButton>
+
                     <form className="new-comment-form" name="new-comment-form">
                         <div className="add-comment-row-1" >
-                            {/*<sec:ifLoggedIn>
-                                <!--div className="profile-picture paper-shadow">
-                                    <asset:image src="default_user.jpg"/>
-                                </div-->
-                            </sec:ifLoggedIn>*/}
+	                          <div className="profile-picture paper-shadow">
+	                              <img src="/images/default_user.jpg"/>
+	                          </div>
                             { user_is_loggedin ?
-                                <textarea className="new-comment-text" ng-model="new_comment_text"
+                                <textarea className="new-comment-text"
                                           placeholder="Enter your comment here . . . " >
                                 </textarea>
-                                : <textarea className="new-comment-text" ng-model="new_comment_text"
+                                : <textarea className="new-comment-text"
                                           placeholder="Please login to write a comment." >
                                 </textarea>
                             }
@@ -57,156 +89,206 @@ CommentDiscussion = React.createClass({
                                 <span className="error-message-text">Please enter your text to submit.</span>
                             </div>
                             { user_is_loggedin ?
-                                <RaisedButton aria-label="Submit" type="submit" className="submit-comment-button paper-shadow" onClick="add_discussion_comment( $event )" >Submit</RaisedButton>
+                                <RaisedButton
+																	label="Submit"
+																	type="submit"
+																	className="submit-comment-button paper-shadow"
+																	onClick={this.addDiscussionComment} ></RaisedButton>
                               :
                                 <div className="new-comment-login">
-                                        <RaisedButton aria-label="Join" className="join-link" onClick="show_login_modal($event, 'signup')">
-                                            Join
-                                        </RaisedButton>
-                                        <RaisedButton aria-label="Login" className="login-link"
-                                                   onClick="show_login_modal($event, 'signin')">
-                                            Login
-                                        </RaisedButton>
+                                  <RaisedButton
+																		label="Join"
+																		className="join-link"
+																		onClick={this.showLoginModal}>
+                                  </RaisedButton>
+                                  <RaisedButton
+																		label="Login"
+																		className="login-link"
+																		onClick={this.showLoginModal}>
+                                  </RaisedButton>
                                 </div>
                               }
                         </div>
                     </form>
                 </div>
-                <div className="sort-by-wrap" ng-show="discussion_thread.discussion_comments.length">
+                <div className="sort-by-wrap" >
                     <span className="sort-by-label">Sort by:</span>
-                    <RaisedButton aria-label="Sort by Top" className="sort-by-option selected-sort sort-by-top" onClick="sort_by_option('top')">Top</RaisedButton>
-                    <RaisedButton aria-label="Sort by Newest" className="sort-by-option sort-by-new" onClick="sort_by_option('new')">Newest</RaisedButton>
+                    <RaisedButton
+											label="Top"
+											className="sort-by-option selected-sort sort-by-top"
+											onClick={this.toggleSort}>
+                    </RaisedButton>
+                    <RaisedButton
+											label="Newest"
+											className="sort-by-option sort-by-new"
+											onClick={this.toggleSort}>
+										</RaisedButton>
                 </div>
-                <div className="no-results-wrap" ng-show="discussion_thread.discussion_comments.length === 0">
-                    <span className="no-results-text"></span>
+                <div className="no-results-wrap" >
+                    <span className="no-results-text">No discussion comments.</span>
                 </div>
-                <div className="discussion-comment paper-shadow" data-comment_id="{discussion_comment.id}" data-comment_user_id="{discussion_comment.user.id}" ng-repeat="discussion_comment in discussion_thread.discussion_comments">
-                    <div className="inner-comment-row" ng-hide="discussion_comment.status === 'removed'">
+								{this.data.discussionComments.map(function(discussionComment, i){
 
-                        <div className="discussion-commenter-profile-picture profile-picture paper-shadow" ng-show="discussion_comment.user.has_thumbnail">
-                            <img src="/images/{discussion_comment.user.id}"/>
-                        </div>
+	                return <div
+										className="discussion-comment paper-shadow"
+										data-comment_id={discussionComment._id}
+										data-comment_user_id={discussionComment.user._id}
+										>
+	                    <div
+												className="inner-comment-row">
 
-                        <div className="discussion-commenter-meta">
-                            <span className="discussion-commenter-name">
-                                {discussion_comment.user.nicename}
-                            </span>
-                            <span className="discussion-comment-date">
-                                <span ng-show="discussion_comment.status == 'edited'">Edited:</span>
-                                {discussion_comment.updated}
-                            </span>
-                        </div>
+	                        <div className="discussion-commenter-profile-picture profile-picture paper-shadow">
+	                            <img src="/images/default_user.png"/>
+	                        </div>
 
-                    </div>
-                    <div className="inner-comment-row">
-                        <div className="discussion-comment-text">
-                            <div ng-bind-html="discussion_comment.content" ng-hide="discussion_comment.edit_enabled"></div>
-                            <form className="update-comment-form clearfix" name="update-comment-form" ng-submit="update_discussion_comment($event)" ng-show="discussion_comment.edit_enabled">
-                              <textarea className="new-comment-text" ng-model="discussion_comment.content" ></textarea>
-                              <RaisedButton aria-label="Update" type="submit" className="submit-comment-button paper-shadow" >Update</RaisedButton>
-                              <RaisedButton aria-label="Close Update"
-                                           className="close-form-button " onClick="close_update($event)">Close
-                              </RaisedButton>
-                            </form>
+	                        <div className="discussion-commenter-meta">
+	                            <span className="discussion-commenter-name">
+	                                {discussionComment.user.nicename}
+	                            </span>
+	                            <span className="discussion-comment-date">
+	                                <span >Updated:</span>
+	                                {discussionComment.updated}
+	                            </span>
+	                        </div>
 
-                        </div>
-                    </div>
-                    <div className="inner-comment-row" ng-hide="discussion_comment.status === 'removed'">
-                        <RaisedButton aria-label="Upvote" onClick="upvote($event)"
-                                   ng-className="discussion_comment.user_has_upvoted ? 'vote-up upvoted' : 'vote-up'">
-                            <i className="mdi mdi-chevron-up"></i>
-                            <span>{discussion_comment.votes}</span>
-                        </RaisedButton>
-                        <RaisedButton aria-label="Reply" onClick="show_reply_form($event)" className="reply">
-                            Reply
-                        </RaisedButton>
-                        {/*<!--RaisedButton aria-label="Share" className="share" onClick="share_discussion_comment($event)">
-                            Share
-                        </RaisedButton-->*/}
-                        <RaisedButton aria-label="Edit" onClick="edit_discussion_comment($event)" className="edit" ng-show="discussion_comment.editable === true">
-                            Edit
-                        </RaisedButton>
-                        <RaisedButton aria-label="Remove" onClick="remove_discussion_comment($event)" className="remove" ng-show="false">
-                            Remove
-                        </RaisedButton>
-                    </div>
+	                    </div>
+	                    <div className="inner-comment-row">
+	                        <div className="discussion-comment-text">
 
+	                            <div
+																dangerouslySetInnerHTML={{ __html: discussionComment.content}}
+																></div>
 
-                    <div className="reply-create-form" ng-show="discussion_comment.reply_enabled">
-                        <div className="add-comment-wrap">
-                            <form className="new-comment-form" name="new-comment-form" ng-submit="add_discussion_reply($event)">
-                                <div className="add-comment-row-1" >
-                                    {/*<!--div className="profile-picture paper-shadow">
-                                        <asset:image src="default_user.jpg"/>
-                                    </div-->*/}
-                                    <textarea className="new-comment-text" ng-model="$parent.new_reply_text" placeholder="Enter your reply here . . . " enter-submit="add_discussion_reply($event)">
-                                    </textarea>
-                                    <RaisedButton aria-label="Submit" type="submit" className="submit-comment-button paper-shadow" >Submit</RaisedButton>
-                                    <RaisedButton aria-label="Close Reply"
-                                               className="close-form-button " onClick="close_reply($event)">Close
-                                    </RaisedButton>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+															{false ?
+		                            <form className="update-comment-form clearfix" name="update-comment-form" >
+		                              <textarea className="new-comment-text" ></textarea>
+		                              <RaisedButton label="Update" type="submit" className="submit-comment-button paper-shadow" >Update</RaisedButton>
+		                              <RaisedButton label="Close Update"
+		                                           className="close-form-button " onClick={this.closeUpdate}>Close
+		                              </RaisedButton>
+		                            </form>
+															: ""}
 
-                    <div className="discussion-comment-children">
-
-                        <div className="discussion-comment discussion-comment-child" data-comment_id="{[discussion_comment_child.id]}" data-comment_user_id="{[discussion_comment_child.user.id]}" ng-repeat="discussion_comment_child in discussion_comment.children">
-                            <div className="inner-comment-row">
-                                <div className="discussion-commenter-profile-picture profile-picture paper-shadow" ng-show="discussion_comment_child.user.has_thumbnail">
-                                    <img ng-src="/images/{discussion_comment_child.user.id}"/>
-                                </div>
-                                <div className="discussion-commenter-meta">
-                                    <span className="discussion-commenter-name">
-                                        {discussion_comment_child.user.nicename}
-                                    </span>
-                                    <span className="discussion-comment-date">
-                                        {discussion_comment_child.updated}
-                                    </span>
-                                </div>
-
-                            </div>
-                            <div className="inner-comment-row">
-                                <div className="discussion-comment-text">
-                                    <p ng-bind-html="discussion_comment_child.content"></p>
-                                </div>
-                            </div>
-                            <div className="inner-comment-row">
-                                <RaisedButton aria-label="Upvote" className="vote-up"
-                                           onClick="upvote($event)">
-                                    <i className="mdi mdi-chevron-up"></i>
-                                    <span>{discussion_comment_child.votes}</span>
-                                </RaisedButton>
-                                {/*<!--RaisedButton aria-label="Downvote" className="vote-down">
-                                    <i className="mdi mdi-chevron-down"></i>
-                                    <span>{discussion_comment_child.votes.down}</span>
-                                </RaisedButton-->*/}
-
-                                {/*<!--RaisedButton aria-label="Share" className="share">
-                                    Share
-                                </RaisedButton-->*/}
-                                <RaisedButton aria-label="Edit" onClick="edit_reply($event)" className="edit" ng-show="discussion_comment.editable">
-                                    Edit
-                                </RaisedButton>
-                                <RaisedButton aria-label="Remove" onClick="remove_reply($event)" className="remove">
-                                    Remove
-                                </RaisedButton>
-
-                            </div>
+	                        </div>
+	                    </div>
+	                    <div className="inner-comment-row" >
+	                        <FlatButton
+														label={discussionComment.votes}
+														onClick={this.upvoteDiscussionComment}
+	                          className="vote-up upvoted"
+					                  icon={<FontIcon className="mdi mdi-chevron-up" />}
+														>
+	                        </FlatButton>
+	                        <FlatButton
+														label="Reply"
+														onClick={this.showReplyForm}
+														className="reply">
+	                        </FlatButton>
+	                        {/*<!--RaisedButton label="Share" className="share" onClick="share_discussionComment($event)">
+	                            Share
+	                        </RaisedButton-->*/}
+	                        <FlatButton
+														label="Edit"
+														onClick={this.editDiscussionComment}
+														className="edit"
+														>
+	                        </FlatButton>
+	                        <FlatButton
+														label="Remove"
+														onClick={this.removeDiscussionComment}
+														className="remove"
+														>
+	                        </FlatButton>
+	                    </div>
 
 
+											{false ?
+		                    <div className="reply-create-form" >
+		                        <div className="add-comment-wrap">
+		                            <form className="new-comment-form" name="new-comment-form" >
+		                                <div className="add-comment-row-1" >
+		                                    {/*<!--div className="profile-picture paper-shadow">
+		                                        <asset:image src="default_user.jpg"/>
+		                                    </div-->*/}
+		                                    <textarea className="new-comment-text" placeholder="Enter your reply here . . . " enter-submit="add_discussion_reply($event)">
+		                                    </textarea>
+		                                    <RaisedButton label="Submit" type="submit" className="submit-comment-button paper-shadow" >Submit</RaisedButton>
+		                                    <RaisedButton label="Close Reply"
+		                                               className="close-form-button " onClick={this.closeReply}>Close
+		                                    </RaisedButton>
+		                                </div>
+		                            </form>
+		                        </div>
+		                    </div>
+											: ""}
 
-                            <div className="discussion-comment-children">
+	                    <div className="discussion-comment-children">
+
+												{discussionComment.children.map(function(discussionCommentChild){
+	                        <div
+														className="discussion-comment discussion-comment-child" data-comment_id={discussionCommentChild._id}
+														data-comment_user_id={discussionCommentChild.user._id} >
+	                            <div className="inner-comment-row">
+	                                <div className="discussion-commenter-profile-picture profile-picture paper-shadow">
+	                                    <img src="/images/default_user.png"/>
+	                                </div>
+	                                <div className="discussion-commenter-meta">
+	                                    <span className="discussion-commenter-name">
+	                                        {discussionCommentChild.user.name}
+	                                    </span>
+	                                    <span className="discussion-comment-date">
+	                                        {discussionCommentChild.updated}
+	                                    </span>
+	                                </div>
+
+	                            </div>
+	                            <div className="inner-comment-row">
+	                                <div className="discussion-comment-text">
+	                                    <p dangerouslySetInnerHTML={{ __html: discussionCommentChild.content}}></p>
+	                                </div>
+	                            </div>
+	                            <div className="inner-comment-row">
+				                        <FlatButton
+																	label={discussionComment.votes}
+																	onClick={this.upvoteDiscussionComment}
+				                          className="vote-up upvoted"
+								                  icon={<FontIcon className="mdi mdi-chevron-up" />}
+																	>
+				                        </FlatButton>
+				                        <FlatButton
+																	label="Reply"
+																	onClick={this.showReplyForm}
+																	className="reply">
+				                        </FlatButton>
+				                        {/*<!--RaisedButton label="Share" className="share" onClick="share_discussionComment($event)">
+				                            Share
+				                        </RaisedButton-->*/}
+				                        <FlatButton
+																	label="Edit"
+																	onClick={this.editDiscussionComment}
+																	className="edit"
+																	>
+				                        </FlatButton>
+				                        <FlatButton
+																	label="Remove"
+																	onClick={this.removeDiscussionComment}
+																	className="remove"
+																	>
+				                        </FlatButton>
+
+	                            </div>
 
 
-                            </div>
 
-                        </div>{/*<!-- .discussion-comment-child -->*/}
+	                        {/*<!-- .discussion-comment-child -->*/}</div>
 
-                    </div>{/*<!-- .discussion-comment-children -->*/}
+												})}
 
-                </div>{/*<!-- .discussion-comment -->*/}
+	                    {/*<!-- .discussion-comment-children -->*/}</div>
+
+	                {/*<!-- .discussion-comment -->*/}</div>
+
+								})}
 
             </div>{/*<!-- .discussion-thread -->*/}
 

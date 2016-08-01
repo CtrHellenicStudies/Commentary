@@ -1,12 +1,16 @@
 CommentaryLayout = React.createClass({
 
+	addSearchTerm(){
+
+	},
+
 	render(){
 		return(
 			<div className="chs-layout commentary-layout">
 
-				<Header />
+				<Header addSearchTerm={this.addSearchTerm} />
 
-				<Commentary />
+				<Commentary addSearchTerm={this.addSearchTerm} />
 
 				<Footer/>
 

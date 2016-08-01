@@ -1,14 +1,15 @@
-CommentersPage = React.createClass({
+CommenterDetail = React.createClass({
 
   propTypes: {
+		commenter: React.PropTypes.object
   },
 
   render() {
 
      return (
-       <div className="page page-commenters">
+       <div className="page commenters-page">
 
-          <div className="content primary">
+          <div data-ng-controller="PageController as page" className="content primary">
 
               <section className="block header cover parallax">
                   <div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
@@ -23,7 +24,7 @@ CommentersPage = React.createClass({
 
                               <div className="page-title-wrap">
                                   <h2 className="page-title ">
-																		Commenters
+                                      {commenter.name}
                                   </h2>
                                   <h3 className="page-subtitle"></h3>
                               </div>
@@ -35,7 +36,23 @@ CommentersPage = React.createClass({
               </section>
               <section className="page-content">
 
-								<CommentersList />
+                  <div className="author-image paper-shadow">
+                      <img src="/images/default_user.jpg" alt="{commenter.name}"/>
+                  </div>
+
+                  <div className="user-bio">
+                    {commenter.bio ?
+                        <div>{commenter.bio}</div>
+                      :
+                        <p>There is no biography information for this user yet.</p>
+                    }
+
+                  </div>
+
+                  <div className="article-content">
+                      <div id="container1" className="data-visualization"></div>
+                      <div id="container2" className="data-visualization"></div>
+                  </div>
 
               </section>
 

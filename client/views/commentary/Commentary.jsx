@@ -19,11 +19,12 @@ Commentary = React.createClass({
       contextPanelOpen : false,
       referenceLemma : [],
       referenceLemmaSelectedEdition : {lines: []},
-			limit: 10
+			skip: 0
     }
 
   },
 
+	commentGroups: [],
 
   getChildContext() {
     return { muiTheme: getMuiTheme(baseTheme) };
@@ -37,13 +38,17 @@ Commentary = React.createClass({
 
   getMeteorData(){
     var query = {},
+				comments = [],
         lemma_query = {},
         lemma_text = [],
         selected_edition = { lines: []},
 				commentGroups = [];
 
-    var comments = Comments.find(query, {limit: this.state.limit}).fetch();
-		console.log(comments);
+		var handle = Meteor.subscribe('comments', this.state.skip, 10);
+    if(handle.ready()) {
+	    comments = Comments.find(query).fetch();
+			console.log(comments);
+    }
 
     //On the client
     Meteor.call('textServer', lemma_query,
@@ -151,12 +156,17 @@ Commentary = React.createClass({
 
   },
 
-	loadMoreComments(e){
-		console.log("Load more comments:", e);
-    this.setState({
-      limit : this.state.limit + 10
-    });
-		Session.set("limit");
+	loadMoreComments(){
+
+		if(!this.props.isOnHomeView && this.commentGroups.length){
+
+	    this.setState({
+	      skip : this.state.skip + 10
+	    });
+
+			console.log("Load more comments:", this.state.skip);
+
+		}
 
 	},
 
@@ -185,9 +195,10 @@ Commentary = React.createClass({
 
   render() {
 
-    var commentGroups = this.data.commentGroups;
+		var self = this;
 		var more_commentary_left = true;
-		var isOnHomePage;
+		var isOnHomeView;
+    var commentGroups;
 
 		if('isOnHomeView' in this.props){
 			isOnHomeView = this.props.isOnHomeView;
@@ -196,6 +207,30 @@ Commentary = React.createClass({
 			isOnHomeView = false;
 
 		}
+
+		if(this.commentGroups.length === 0){
+			this.commentGroups = this.data.commentGroups;
+
+		}else {
+
+			this.data.commentGroups.forEach(function(dataCommentGroup){
+				var isInCommentGroups = false;
+				self.commentGroups.forEach(function(commentGroup){
+					if(dataCommentGroup.ref === commentGroup.ref){
+						commentGroup.comments.push.apply(commentGroup.comments, dataCommentGroup.comments);
+						isInCommentGroups = true;
+					}
+				});
+
+				if(!isInCommentGroups){
+					self.commentGroups.push(dataCommentGroup);
+				}
+
+			});
+		}
+
+
+		commentGroups = this.commentGroups;
 
     return (
       <div className="commentary-primary content ">

@@ -5,7 +5,9 @@
 if (Meteor.isServer){
 
   Meteor.publish('comments', function() {
-    return Comments.find();
+		let query = {};
+
+    return Comments.find(query, {limit: 10, sort: {'work.order': 1, 'subwork.n':1, lineFrom:1, nLines:-1}});
   });
 
   Meteor.publish('commenters', function() {

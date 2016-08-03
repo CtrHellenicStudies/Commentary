@@ -23,14 +23,32 @@ Header = React.createClass({
       leftMenuOpen : false,
       searchEnabled : false,
       searchDropdownOpen : "",
-      searchTerms : []
+      searchTerms : [],
+			lineMin: 0,
+			lineMax: 2000
     };
   },
 
+	componentDidMount(){
+		if(location.pathname.indexOf("/commentary") === 0){
+	    this.setState({
+	      searchEnabled : true
+	    });
+
+		}
+
+	},
+
   toggleSearchMode(){
-    this.setState({
-      searchEnabled : !this.state.searchEnabled
-    });
+
+		if(location.pathname.indexOf("/commentary") === 0){
+	    this.setState({
+	      searchEnabled : !this.state.searchEnabled
+	    });
+
+		}else {
+			location.href = "/commentary";
+		}
   },
 
   toggleLeftMenu(){
@@ -54,6 +72,14 @@ Header = React.createClass({
     this.setState({
     });
   },
+
+	handleLineSearchChange(){
+    this.setState({
+			lineMin : 1,
+			lineMax: 2000
+    });
+
+	},
 
 
   render(){
@@ -180,7 +206,7 @@ Header = React.createClass({
 
         					<div className="search-tool text-search">
                     <TextField
-                        hintText=". . ."
+                        hintText=""
                         floatingLabelText="Search"
                       />
         					</div>
@@ -189,6 +215,7 @@ Header = React.createClass({
         						<FlatButton
                       className="search-tool search-type-keyword dropdown-toggle"
                       label="Keyword"
+											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
                       onClick={this.toggleSearchDropdown}
         						>
@@ -199,13 +226,11 @@ Header = React.createClass({
                         <li>
                           <FlatButton
                             onClick={this.toggleSearchTerm}
+														label={keyword.title}
                             data-key="keyword"
                             data-id={keyword.id}
+			                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
                             >
-                              <i className="mdi mdi-plus-circle-outline"></i>
-                              <span>
-                                  {keyword.title}
-                              </span>
                           </FlatButton>
 
                         </li>
@@ -218,6 +243,7 @@ Header = React.createClass({
         						<FlatButton
                       className="search-tool search-type-keyword dropdown-toggle"
                       label="Commenter"
+											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
                       onClick={this.toggleSearchDropdown}
         						>
@@ -228,13 +254,11 @@ Header = React.createClass({
                         <li>
                           <FlatButton
                             onClick={this.toggleSearchTerm}
+														label={commenter.name}
                             data-key="commenter"
                             data-id={commenter.id}
+			                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
                             >
-                              <i className="mdi mdi-plus-circle-outline"></i>
-                              <span>
-                                  {commenter.name}
-                              </span>
                           </FlatButton>
                         </li>
         							</div>
@@ -246,6 +270,7 @@ Header = React.createClass({
         						<FlatButton
                       className="search-tool search-type-keyword dropdown-toggle"
                       label="Work"
+											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
                       onClick={this.toggleSearchDropdown}
         						>
@@ -256,11 +281,11 @@ Header = React.createClass({
                         <li>
                           <FlatButton
                             onClick={this.toggleSearchTerm}
+														label={work.title}
                             data-key="work"
                             data-id={work.id}
+			                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
                             >
-                              <i className="mdi mdi-plus-circle-outline"></i>
-                              <span>{work.title}</span>
                           </FlatButton>
                         </li>
         							</div>
@@ -273,6 +298,7 @@ Header = React.createClass({
         						<FlatButton
                       className="search-tool search-type-keyword dropdown-toggle"
                       label="Book"
+											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
                       onClick={this.toggleSearchDropdown}
         						>
@@ -283,11 +309,11 @@ Header = React.createClass({
                         <li>
                           <FlatButton
                             onClick={this.toggleSearchTerm}
+														label={subwork.work.title + " " + subwork.title}
                             data-key="subwork"
                             data-id={subwork.id}
+			                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
                             >
-                            <i className="mdi mdi-plus-circle-outline"></i>
-                            <span>{subwork.work.title} {subwork.title}</span>
                           </FlatButton>
 
                         </li>
@@ -298,15 +324,8 @@ Header = React.createClass({
 
         					</div>
         					<div className="search-tool text-search line-search">
-        						<label>Line</label>
-                     <TextField
-                        hintText="00"
-                        floatingLabelText="From"
-                      />
-                    <TextField
-                        hintText="00"
-                        floatingLabelText="To"
-                      />
+        						<label></label>
+										<LineRangeSlider handleLineSearchChange={this.handleLineSearchChange}/>
         					</div>
         				</div>
 

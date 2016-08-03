@@ -41,7 +41,7 @@ Commentary = React.createClass({
         selected_edition = { lines: []},
 				commentGroups = [];
 
-    var comments = Comments.find(query).fetch();
+    var comments = Comments.find(query, {limit: 10, sort: {'work.order': 1, 'subwork.n':1, lineFrom:1}}).fetch();
 		console.log(comments);
 
     //On the client
@@ -65,11 +65,11 @@ Commentary = React.createClass({
 			commentGroups.forEach(function(commentGroup){
 				if (
 						comment.work.title === commentGroup.work.title
-					&& comment.subwork.n === comment.subwork.n
-					&& comment.lineFrom === comment.lineFrom
-					&& comment.lineTo === comment.lineTo
+					&& comment.subwork.n === commentGroup.subwork.n
+					&& comment.lineFrom === commentGroup.lineFrom
+					&& comment.lineTo === commentGroup.lineTo
 					) {
-						isIncommentGroup = true;
+						isInCommentGroup = true;
 						commentGroup.comments.push(comment)
 
 					}
@@ -182,6 +182,15 @@ Commentary = React.createClass({
 
     var commentGroups = this.data.commentGroups;
 		var more_commentary_left = true;
+		var isOnHomePage;
+
+		if('isOnHomeView' in this.props){
+			isOnHomeView = this.props.isOnHomeView;
+
+		}else {
+			isOnHomeView = false;
+
+		}
 
     return (
       <div className="commentary-primary content ">
@@ -235,7 +244,7 @@ Commentary = React.createClass({
 
 				</InfiniteScroll>
 
-				{(this.data.loaded && commentGroups.length > 0 && more_commentary_left) ?
+				{(!isOnHomeView && this.data.loaded && commentGroups.length > 0 && more_commentary_left) ?
 	        <div className="ahcip-spinner commentary-loading" >
 	            <div className="double-bounce1"></div>
 	            <div className="double-bounce2"></div>

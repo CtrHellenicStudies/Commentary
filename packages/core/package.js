@@ -15,7 +15,7 @@ Package.onUse(function(api) {
 
   api.addFiles([
         'client/smooth-scroll.min.js',
-        'client/parallax.js',
+        ///'client/parallax.js',
         'client/headroom.min.js',
         'lib/client/jsdifflib/difflib.js',
         'lib/client/jsdifflib/diffview.js',

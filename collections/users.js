@@ -66,6 +66,7 @@ Schemas.User = new SimpleSchema({
   },
   created: {
     type: Date,
+    optional: true,
     autoValue: function() {
       if (this.isInsert) {
         return new Date;

@@ -15,7 +15,7 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 	let work = Works.findOne({slug: comment_candidate.work})
 	let subwork;
 	work.subworks.forEach(function(work_subwork){
-		if(work_subwork.n === comment_candidate.subwork){
+		if(work_subwork.n === parseInt(comment_candidate.subwork)){
 				subwork = work_subwork;
 
 		}
@@ -75,8 +75,8 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 					slug: subwork.slug,
 					n: subwork.n,
 				},
-				lineFrom: comment_candidate.line_from,
-				lineTo: comment_candidate.line_to,
+				lineFrom: parseInt(comment_candidate.line_from),
+				lineTo: parseInt(comment_candidate.line_to),
 				lineLetter: comment_candidate.line_letter,
 				nLines: nLines,
 				commentOrder: commentOrder,

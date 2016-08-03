@@ -18,7 +18,8 @@ Commentary = React.createClass({
       selectedEdition : "",
       contextPanelOpen : false,
       referenceLemma : [],
-      referenceLemmaSelectedEdition : {lines: []}
+      referenceLemmaSelectedEdition : {lines: []},
+			limit: 10
     }
 
   },
@@ -41,7 +42,7 @@ Commentary = React.createClass({
         selected_edition = { lines: []},
 				commentGroups = [];
 
-    var comments = Comments.find(query, {limit: 10, sort: {'work.order': 1, 'subwork.n':1, lineFrom:1}}).fetch();
+    var comments = Comments.find(query, {limit: this.state.limit}).fetch();
 		console.log(comments);
 
     //On the client
@@ -152,6 +153,10 @@ Commentary = React.createClass({
 
 	loadMoreComments(e){
 		console.log("Load more comments:", e);
+    this.setState({
+      limit : this.state.limit + 10
+    });
+		Session.set("limit");
 
 	},
 
@@ -195,7 +200,6 @@ Commentary = React.createClass({
     return (
       <div className="commentary-primary content ">
 				<InfiniteScroll
-					container="commentary-comment-groups"
 					endPadding={100}
 					loadMore={this.loadMoreComments}
 					>

@@ -4,10 +4,13 @@
 
 if (Meteor.isServer){
 
-  Meteor.publish('comments', function() {
+  Meteor.publish('comments', function(limit) {
 		let query = {};
+		if(!limit || isNaN(parseInt(limit))){
+			limit = 10;
+		}
 
-    return Comments.find(query, {limit: 10, sort: {'work.order': 1, 'subwork.n':1, lineFrom:1, nLines:-1}});
+    return Comments.find(query, {limit: limit, sort: {'work.order': 1, 'subwork.n':1, lineFrom:1, nLines:-1}});
   });
 
   Meteor.publish('commenters', function() {

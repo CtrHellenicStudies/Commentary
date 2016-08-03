@@ -12,7 +12,6 @@ CommentaryLayout = React.createClass({
 
 				<Commentary addSearchTerm={this.addSearchTerm} />
 
-				<Footer/>
 
 				<FilterWidget filters={[]}/>
 			  {/*<ModalLogin />

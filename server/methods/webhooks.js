@@ -66,7 +66,7 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 			let reference = "";
 
 			if('line_to' in comment_candidate && !isNaN(comment_candidate.line_to) && comment_candidate.line_from !== comment_candidate.line_to){
-				nLines = parseInt(comment_candidate.line_to) - parseInt(comment_candidate.line_from);
+				nLines = parseInt(comment_candidate.line_to) - parseInt(comment_candidate.line_from) + 1;
 			}
 
 			let new_comment = {
@@ -114,11 +114,11 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 			}
 
 
-			console.log("New comment:", new_comment);
+			//console.log("New comment:", new_comment);
 
 			upsert_response = Comments.insert(new_comment);
 
-			console.log("Upsert response:", upsert_response);
+			//console.log("Upsert response:", upsert_response);
 
 	}
 

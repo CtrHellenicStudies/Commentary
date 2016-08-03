@@ -26,12 +26,20 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 		keywords.push(Keywords.findOne({wordpressId: keyword_wordpress_id}));
 	});
 
+	if(comment_candidate.text.slice(0,1) !== "<"){
+		comment_candidate.text = "<p>" + comment_candidate.text + "</p>";
+	}
+
+
 	let revision = Revisions.insert({
 		title: comment_candidate.title,
 		text: comment_candidate.text
 
 	});
 
+	/*
+	 * Fix nested revision in the future
+	 */
 	if(revision){
 		revision = Revisions.findOne({_id:revision});
 	}
@@ -53,9 +61,14 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 
 	}else {
 
-			let nLines = 0;
+			let nLines = 1;
 			let commentOrder = 0;
 			let reference = "";
+
+			if('line_to' in comment_candidate && !isNaN(comment_candidate.line_to) && comment_candidate.line_from !== comment_candidate.line_to){
+				nLines = parseInt(comment_candidate.line_to) - parseInt(comment_candidate.line_from);
+			}
+
 			let new_comment = {
 				wordpressId: comment_candidate.comment_id,
 				commenters: [
@@ -76,7 +89,6 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 					n: subwork.n,
 				},
 				lineFrom: parseInt(comment_candidate.line_from),
-				lineTo: parseInt(comment_candidate.line_to),
 				lineLetter: comment_candidate.line_letter,
 				nLines: nLines,
 				commentOrder: commentOrder,
@@ -95,6 +107,12 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 
 
 			};
+
+			if('line_to' in comment_candidate && !isNaN(comment_candidate.line_to)){
+				new_comment.lineTo = parseInt(comment_candidate.line_to);
+
+			}
+
 
 			console.log("New comment:", new_comment);
 

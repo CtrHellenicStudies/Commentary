@@ -35,6 +35,11 @@ Header = React.createClass({
 	      searchEnabled : true
 	    });
 
+		}else {
+	    this.setState({
+	      searchEnabled : false
+			});
+
 		}
 
 	},
@@ -88,8 +93,8 @@ Header = React.createClass({
       flatButton : {
         width: "auto",
         minWidth: "none",
-        height: "60px",
-        padding: "10px 5px"
+        height: "80px",
+        padding: "21px 5px"
       },
       flatIconButton : {
         padding: "10px 20px",

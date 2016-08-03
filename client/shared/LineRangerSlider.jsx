@@ -12,10 +12,10 @@ LineRangeSlider = React.createClass({
 
 	componentDidMount(){
 		$("#line-range").ionRangeSlider({
+			type: "double",
 			min: 1,
-			max: 2000,
+			max: 2100,
 			grid: true,
-			force_edges: true,
 			prettify_enabled: true,
 			prettify_separator: ",",
 			prefix: "Line: ",

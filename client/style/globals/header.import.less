@@ -1,7 +1,7 @@
 
 header {
   width:100%;
-  height:60px;
+  height:80px;
 	position:fixed;
 	z-index:98;
 	top:0;
@@ -34,19 +34,22 @@ header {
   .left-drawer-toggle{
     display:inline-block;
     vertical-align: top;
-		padding: 17px 20px !important;
+		height:80px !important;
 
   }
 
   button.search-button {
-		padding: 17px 46px 17px 20px !important;
+		padding: 29px 46px 29px 20px !important;
+		height:80px !important;
+		margin-right:5px !important;
 
   }
 
   .header-home-link {
-    padding: 10px 5px ;
+    padding: 22px 5px ;
     vertical-align: top ;
     display:inline-block;
+
     h3.logo {
       font-family:@font-logo !important;
       font-weight: 900 !important;
@@ -221,4 +224,37 @@ header {
     }
 
   }
+}
+
+.search-dropdown {
+	.dropdown-toggle {
+		height:80px !important;
+		margin:0px 10px !important;
+
+		.mdi.mdi-chevron-down {
+			color:@primary !important;
+
+		}
+
+	}
+
+}
+
+.search-tool.line-search {
+
+	.irs {
+		width:240px;
+	}
+	.irs-from, .irs-to, .irs-single {
+		background:@primary !important;
+		color:@light !important;
+		&:after {
+			border-top-color:@primary !important;
+		}
+	}
+
+	.irs-line-mid, .irs-line-left, .irs-line-right, .irs-bar, .irs-bar-edge, .irs-slider {
+		background-image: url('/images/sprite-skin-flat.png') repeat-x !important;
+	}
+
 }

@@ -7,7 +7,7 @@ import '../../node_modules/ion-rangeslider/css/ion.rangeSlider.skinFlat.css';
 LineRangeSlider = React.createClass({
 
 	propTypes: {
-		handleLineSearchChange: React.PropTypes.func.isRequired
+		handleChangeLineN: React.PropTypes.func.isRequired
 	},
 
 	componentDidMount(){

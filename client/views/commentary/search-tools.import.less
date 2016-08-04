@@ -14,15 +14,49 @@
     vertical-align: top;
     position:inherit;
 
+		&.open {
+			button.search-tool {
+				background:@primary !important;
+				span,i {
+					color:@light !important;
+
+				}
+
+			}
+
+			.dropdown-panel {
+				display:block !important;
+				height:200px;
+				width:100%;
+				top:80px;
+				background:@light;
+				box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),0 1px 5px 0 rgba(0, 0, 0, 0.12),0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+			}
+
+
+		 .dropdown-menu {
+			  -webkit-transform: scale(1, 1);
+			  transform: scale(1, 1);
+			  opacity:1;
+
+			}
+
+		}
+
 
     .dropdown-menu {
       width:100%;
       border-radius:0;
-      background:rgba(255,255,255,0.9);
+      background:rgba(255,255,255,0.98);
       margin:0;
       max-height:460px;
       overflow-y:scroll;
       text-align:center;
+			position:fixed;
+			top:80px;
+			left:0;
+			padding:10px 0 30px;
 
       .dropdown-menu-inner {
         width:95%;
@@ -35,48 +69,57 @@
       li {
         display:inline-block;
         vertical-align: top;
-        width:19%;
-        margin:2px 0;
+        width:23%;
+        margin:5px 1%;
         text-align:left;
+				overflow:hidden;
 
       }
 
-      .md-button {
+      button {
         background:#f6f6f6;
         padding:10px 15px;
-        text-align:left;
+        text-align:left !important;
         width:100%;
         text-overflow:ellipsis;
 
-		i {
-		  font-size: 20px;
-		  display: inline-block;
-		  margin: 8px 15px 10px 0px;
-		  vertical-align: top;
-		  color:#999;
-		}
+				.mdi {
+				  display: inline-block !important;
+				  vertical-align: top;
+				  color:#999 !important;
+					line-height:0;
+					margin:0;
+					padding:0;
+					margin-top:-20px !important;
+
+					&:before {
+					  font-size: 18px !important;
+
+					}
+
+				}
 
         span {
           font-family:@font-label( 14px );
         }
 
-		&:hover {
-		  background:#f0f0f0;
-		  i {
-			color:@dark;
+				&:hover {
+				  background:#f0f0f0;
+				  i {
+					color:@dark;
 
-		  }
-		}
+				  }
+				}
 
-        &.selected {
-          background:@primary;
+	      &.selected {
+	        background:@primary;
 
-          i, span {
-            color:@light;
+	        i, span {
+	          color:@light;
 
-          }
+	        }
 
-        }
+	      }
 
       }
 
@@ -137,13 +180,6 @@
 
 }
 
-.dropdown.open .search-tool {
-  background:@primary;
-  span, i {
-    color:@light;
-  }
-}
-
 .text-search {
   padding:0;
   color:@primary-text;
@@ -187,11 +223,6 @@
   }
 
 
-}
-.open > .dropdown-menu {
-  -webkit-transform: scale(1, 1);
-  transform: scale(1, 1);
-  opacity:1;
 }
 
 .dropdown-menu {

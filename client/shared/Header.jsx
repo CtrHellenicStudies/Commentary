@@ -10,6 +10,11 @@ import TextField from 'material-ui/TextField';
 
 Header = React.createClass({
 
+	propTypes: {
+		toggleSearchTerm: React.PropTypes.func,
+		handleChangeLineN: React.PropTypes.func
+	},
+
   getChildContext() {
     return { muiTheme: getMuiTheme(baseTheme) };
   },
@@ -28,6 +33,19 @@ Header = React.createClass({
 			lineMax: 2000
     };
   },
+
+  mixins: [ReactMeteorData],
+
+  getMeteorData(){
+    var query = {};
+
+		return {
+			keywords: Keywords.find().fetch(),
+			commenters: Commenters.find().fetch(),
+			works: Works.find().fetch(),
+			subworks: Subworks.find().fetch(),
+		}
+	},
 
 	componentDidMount(){
 		if(location.pathname.indexOf("/commentary") === 0){
@@ -68,26 +86,44 @@ Header = React.createClass({
     });
   },
 
-  toggleSearchDropdown(){
-    this.setState({
-    });
+  toggleSearchDropdown(e){
+		var $target = $(e.target),
+				targetDropdown = "";
+
+		if($target.prop("tagName") !== "BUTTON"){
+			$target = $target.parents("button");
+
+		}
+
+		if($target.hasClass("search-type-keyword")){
+			targetDropdown = "keyword";
+
+		}else if ($target.hasClass("search-type-commenter")){
+			targetDropdown = "commenter";
+
+		}else if ($target.hasClass("search-type-work")){
+			targetDropdown = "work";
+
+		}else if ($target.hasClass("search-type-subwork")){
+			targetDropdown = "subwork";
+
+		}
+
+		if(this.state.searchDropdownOpen === targetDropdown){
+	    this.setState({
+				searchDropdownOpen : ""
+	    });
+
+		}else {
+	    this.setState({
+				searchDropdownOpen : targetDropdown
+	    });
+
+		}
   },
-
-  toggleSearchTerm(){
-    this.setState({
-    });
-  },
-
-	handleLineSearchChange(){
-    this.setState({
-			lineMin : 1,
-			lineMax: 2000
-    });
-
-	},
-
 
   render(){
+		var self = this;
 
     let styles = {
       flatButton : {
@@ -117,6 +153,7 @@ Header = React.createClass({
     var subwork = {work:{title:"Iliad"},id:1, title:"1"};
 
     console.log("Header.state", this.state);
+    console.log("Header.data", this.data);
 
     return (
       <div>
@@ -216,7 +253,7 @@ Header = React.createClass({
                       />
         					</div>
 
-        					<div className="dropdown search-dropdown search-dropdown-keywords">
+        					<div className={"dropdown search-dropdown search-dropdown-keywords" + (self.state.searchDropdownOpen === "keyword" ? " open" : "")}>
         						<FlatButton
                       className="search-tool search-type-keyword dropdown-toggle"
                       label="Keyword"
@@ -226,27 +263,33 @@ Header = React.createClass({
         						>
         						</FlatButton>
 
-        						<ul className="dropdown-menu">
-        							<div className="dropdown-menu-inner">
-                        <li>
-                          <FlatButton
-                            onClick={this.toggleSearchTerm}
-														label={keyword.title}
-                            data-key="keyword"
-                            data-id={keyword.id}
-			                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
-                            >
-                          </FlatButton>
+	        						<ul className="dropdown-menu ">
+	        							<div className="dropdown-menu-inner">
+													{self.data.keywords.map(function(keyword, i){
+		                        return <li
+															key={i}
+															>
+		                          <FlatButton
+		                            onClick={self.props.toggleSearchTerm}
+																label={keyword.title}
+		                            data-key="keyword"
+		                            data-id={keyword._id}
+					                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
+		                            >
+		                          </FlatButton>
 
-                        </li>
-        							</div>
-        						</ul>
+		                        </li>
+
+													})}
+	        							</div>
+	        						</ul>
+
 
         					</div>
 
-        					<div className="dropdown search-dropdown search-dropdown-commenters">
+        					<div className={"dropdown search-dropdown search-dropdown-commenters" + (this.state.searchDropdownOpen === "commenter" ? " open" : "")}>
         						<FlatButton
-                      className="search-tool search-type-keyword dropdown-toggle"
+                      className="search-tool search-type-commenter dropdown-toggle"
                       label="Commenter"
 											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
@@ -256,24 +299,27 @@ Header = React.createClass({
 
         						<ul className="dropdown-menu">
         							<div className="dropdown-menu-inner">
-                        <li>
-                          <FlatButton
-                            onClick={this.toggleSearchTerm}
-														label={commenter.name}
-                            data-key="commenter"
-                            data-id={commenter.id}
-			                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
-                            >
-                          </FlatButton>
-                        </li>
+												{self.data.commenters.map(function(commenter, i){
+	                        return <li
+														key={i} >
+	                          <FlatButton
+	                            onClick={self.props.toggleSearchTerm}
+															label={commenter.name}
+	                            data-key="commenter"
+	                            data-id={commenter.id}
+				                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
+	                            >
+	                          </FlatButton>
+	                        </li>
+												})}
         							</div>
         						</ul>
 
         					</div>
 
-        					<div className="dropdown search-dropdown search-dropdown-work">
+        					<div className={"dropdown search-dropdown search-dropdown-works" + (this.state.searchDropdownOpen === "work" ? " open" : "")}>
         						<FlatButton
-                      className="search-tool search-type-keyword dropdown-toggle"
+                      className="search-tool search-type-work dropdown-toggle"
                       label="Work"
 											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
@@ -283,25 +329,28 @@ Header = React.createClass({
 
         						<ul className="dropdown-menu">
         							<div className="dropdown-menu-inner">
-                        <li>
-                          <FlatButton
-                            onClick={this.toggleSearchTerm}
-														label={work.title}
-                            data-key="work"
-                            data-id={work.id}
-			                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
-                            >
-                          </FlatButton>
-                        </li>
+												{self.data.works.map(function(work, i){
+	                        return <li
+															key={i} >
+	                          <FlatButton
+	                            onClick={self.props.toggleSearchTerm}
+															label={work.title}
+	                            data-key="work"
+	                            data-id={work.id}
+				                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
+	                            >
+	                          </FlatButton>
+	                        </li>
+												})}
         							</div>
 
         						</ul>
 
         					</div>
 
-        					<div className="dropdown search-dropdown search-dropdown-book">
+        					<div className={"dropdown search-dropdown search-dropdown-book" + (this.state.searchDropdownOpen === "subwork" ? " open" : "")}>
         						<FlatButton
-                      className="search-tool search-type-keyword dropdown-toggle"
+                      className="search-tool search-type-subwork dropdown-toggle"
                       label="Book"
 											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
@@ -311,27 +360,32 @@ Header = React.createClass({
 
         						<ul className="dropdown-menu">
         							<div className="dropdown-menu-inner">
-                        <li>
-                          <FlatButton
-                            onClick={this.toggleSearchTerm}
-														label={subwork.work.title + " " + subwork.title}
-                            data-key="subwork"
-                            data-id={subwork.id}
-			                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
-                            >
-                          </FlatButton>
+												{self.data.subworks.map(function(subwork, i){
+	                        return <li
+															key={i} >
+	                          <FlatButton
+	                            onClick={self.props.toggleSearchTerm}
+															label={subwork.work.title + " " + subwork.title}
+	                            data-key="subwork"
+	                            data-id={subwork.id}
+				                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
+	                            >
+	                          </FlatButton>
 
-                        </li>
+	                        </li>
+												})}
         							</div>
 
 
         						</ul>
 
         					</div>
+
         					<div className="search-tool text-search line-search">
         						<label></label>
-										<LineRangeSlider handleLineSearchChange={this.handleLineSearchChange}/>
+										<LineRangeSlider handleChangeLineN={this.props.handleChangeLineN}/>
         					</div>
+
         				</div>
 
         				<div className="search-toggle">

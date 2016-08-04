@@ -1,6 +1,12 @@
 CommentaryLayout = React.createClass({
 
-	addSearchTerm(){
+	toggleSearchTerm(){
+		debugger;
+
+	},
+
+	handleChangeLineN(){
+		debugger;
 
 	},
 
@@ -8,9 +14,9 @@ CommentaryLayout = React.createClass({
 		return(
 			<div className="chs-layout commentary-layout">
 
-				<Header addSearchTerm={this.addSearchTerm} />
+				<Header toggleSearchTerm={this.toggleSearchTerm} handleChangeLineN={this.handleChangeLineN}/>
 
-				<Commentary addSearchTerm={this.addSearchTerm} />
+				<Commentary toggleSearchTerm={this.toggleSearchTerm} />
 
 
 				<FilterWidget filters={[]}/>

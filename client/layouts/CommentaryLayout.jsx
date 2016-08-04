@@ -1,11 +1,21 @@
 CommentaryLayout = React.createClass({
 
-	toggleSearchTerm(){
+  getInitialState(){
+    return {
+      filters : []
+		}
+	},
+
+	toggleSearchTerm(e){
+		var $target = $(e.target);
+
 		debugger;
 
 	},
 
-	handleChangeLineN(){
+	handleChangeLineN(e){
+		var $target = $(e.target);
+
 		debugger;
 
 	},

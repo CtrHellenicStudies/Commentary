@@ -217,8 +217,26 @@ Commentary = React.createClass({
 				var isInCommentGroups = false;
 				self.commentGroups.forEach(function(commentGroup){
 					if(dataCommentGroup.ref === commentGroup.ref){
-						commentGroup.comments.push.apply(commentGroup.comments, dataCommentGroup.comments);
 						isInCommentGroups = true;
+
+
+						dataCommentGroup.comments.forEach(function(dataComment){
+							var isInCommentGroup = false;
+
+							commentGroup.comments.forEach(function(comment){
+								if(dataComment._id === comment._id){
+									isInCommentGroup = true;
+								}
+
+							});
+
+							if(!isInCommentGroup){
+								commentGroup.comments.push(dataComment);
+							}
+
+						});
+
+
 					}
 				});
 

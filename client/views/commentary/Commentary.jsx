@@ -10,6 +10,7 @@ Commentary = React.createClass({
 
   propTypes: {
 		isOnHomeView: React.PropTypes.bool,
+		filters: React.PropTypes.array,
 		addSearchTerm: React.PropTypes.func
   },
 

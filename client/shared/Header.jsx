@@ -28,7 +28,6 @@ Header = React.createClass({
       leftMenuOpen : false,
       searchEnabled : false,
       searchDropdownOpen : "",
-      searchTerms : [],
 			lineMin: 0,
 			lineMax: 2000
     };
@@ -121,6 +120,11 @@ Header = React.createClass({
 
 		}
   },
+
+	toggleSearchTerm(key, value){
+			this.props.toggleSearchTerm(key, value);
+
+	},
 
   render(){
 		var self = this;
@@ -270,7 +274,7 @@ Header = React.createClass({
 															key={i}
 															>
 		                          <FlatButton
-		                            onClick={self.props.toggleSearchTerm}
+		                            onClick={self.toggleSearchTerm.bind(null, "keywords", keyword)}
 																label={keyword.title}
 		                            data-key="keyword"
 		                            data-id={keyword._id}

@@ -27,11 +27,13 @@ FilterWidget = React.createClass({
 					{this.props.filters.map((filter) => {
 	      		<div className="filter " >
 	      			<span className="filter-key paper-shadow">{filter.key}</span>
-	      			<RaisedButton className="filter-val paper-shadow" data-key="{filter.key}" data-id="{val.id}"
-	      				  ng-repeat="val in filter.vals" ng-click="remove_search_term( $event )">
-	      				{val.text}
-	      				<i className="mdi mdi-close"></i>
-	      			</RaisedButton>
+								{filter.values.map((val) => {
+				      			<RaisedButton className="filter-val paper-shadow" data-key="{filter.key}" data-id="{val.id}"
+				      				  ng-repeat="val in filter.vals" ng-click="remove_search_term( $event )">
+				      				{val.text}
+				      				<i className="mdi mdi-close"></i>
+				      			</RaisedButton>
+								})}
 
 
 	      		</div>

@@ -2,6 +2,7 @@
 import '../../node_modules/ion-rangeslider/js/ion.rangeSlider.js';
 import '../../node_modules/ion-rangeslider/css/ion.rangeSlider.css';
 import '../../node_modules/ion-rangeslider/css/ion.rangeSlider.skinFlat.css';
+import {debounce} from 'throttle-debounce';
 
 
 LineRangeSlider = React.createClass({
@@ -20,6 +21,7 @@ LineRangeSlider = React.createClass({
 			prettify_separator: ",",
 			prefix: "Line: ",
 			values_separator: " to ",
+			onChange:debounce(500, this.props.handleChangeLineN)
 
 		});
 

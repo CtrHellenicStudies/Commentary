@@ -35,7 +35,7 @@ CommentaryLayout = React.createClass({
 				})
 
 				if(valueIsInFilter){
-					filter.values = filter.values.splice(filterValueToRemove, 1);
+					filter.values.splice(filterValueToRemove, 1);
 					if(filter.values.length === 0){
 						filterToRemove = i;
 					}
@@ -50,6 +50,7 @@ CommentaryLayout = React.createClass({
 			}
 
 		});
+
 
 		if(typeof filterToRemove !== "undefined"){
 			filters.splice(filterToRemove, 1);

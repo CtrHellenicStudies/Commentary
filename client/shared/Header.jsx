@@ -6,12 +6,14 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import {debounce} from 'throttle-debounce';
 
 
 Header = React.createClass({
 
 	propTypes: {
 		toggleSearchTerm: React.PropTypes.func,
+		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func
 	},
 
@@ -283,6 +285,7 @@ Header = React.createClass({
                     <TextField
                         hintText=""
                         floatingLabelText="Search"
+												onChange={debounce(500, this.props.handleChangeTextsearch)}
                       />
         					</div>
 

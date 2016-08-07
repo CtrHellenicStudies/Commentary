@@ -71,8 +71,51 @@ CommentaryLayout = React.createClass({
 
 	},
 
-	handleChangeLineN(e){
-		var $target = $(e.target);
+	handleChangeTextsearch(e){
+
+		var filters = this.state.filters;
+
+		if(e.target.value && e.target.value.length){
+			var textsearchInFilters = false;
+
+			filters.forEach(function(filter, i){
+				if(filter.key === "textsearch"){
+					filter.values = [e.target.value];
+					textsearchInFilters = true;
+				}
+			});
+
+			if(!textsearchInFilters){
+				filters.push({
+					key:"textsearch",
+					values:[e.target.value]
+				})
+			}
+
+		}else {
+			var filterToRemove;
+
+			filters.forEach(function(filter, i){
+				if(filter.key === "textsearch"){
+					filterToRemove = i;
+				}
+
+			});
+
+			if(typeof filterToRemove !== "undefined"){
+				filters.splice(filterToRemove, 1);
+			}
+
+
+		}
+
+		this.setState({
+			filters: filters
+		})
+
+	},
+
+	handleChangeLineN(){
 
 		debugger;
 
@@ -85,7 +128,9 @@ CommentaryLayout = React.createClass({
 
 				<Header
 					toggleSearchTerm={this.toggleSearchTerm}
-					handleChangeLineN={this.handleChangeLineN}/>
+					handleChangeLineN={this.handleChangeLineN}
+					handleChangeTextsearch={this.handleChangeTextsearch}
+					/>
 
 				<Commentary
 					filters={this.state.filters}

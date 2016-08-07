@@ -4,8 +4,7 @@
 
 if (Meteor.isServer){
 
-  Meteor.publish('comments', function(skip, limit) {
-		let query = {};
+  Meteor.publish('comments', function(query, skip, limit) {
 		if(!skip){
 			skip = 0;
 		}

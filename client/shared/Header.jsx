@@ -28,8 +28,10 @@ Header = React.createClass({
       leftMenuOpen : false,
       searchEnabled : false,
       searchDropdownOpen : "",
+			subworks: [],
 			lineMin: 0,
-			lineMax: 2000
+			lineMax: 2000,
+			activeWork: ""
     };
   },
 
@@ -41,8 +43,8 @@ Header = React.createClass({
 		return {
 			keywords: Keywords.find().fetch(),
 			commenters: Commenters.find().fetch(),
-			works: Works.find().fetch(),
-			subworks: Subworks.find().fetch(),
+			works: Works.find({}, {sort:{order:1}}).fetch(),
+			subworks: Subworks.find({}, {sort:{n:1}}).fetch(),
 		}
 	},
 
@@ -122,7 +124,34 @@ Header = React.createClass({
   },
 
 	toggleSearchTerm(key, value){
-			this.props.toggleSearchTerm(key, value);
+		this.props.toggleSearchTerm(key, value);
+
+	},
+
+	toggleWorkSearchTerm(key, value){
+		var work = value;
+
+		value.subworks.forEach(function(subwork){
+			subwork.work = work;
+		});
+
+		console.log("Header.state", this.state);
+
+		if(this.state.activeWork === value.slug){
+			this.setState({
+				subworks: [],
+				activeWork: ""
+			});
+
+		}else {
+			this.setState({
+				subworks: value.subworks,
+				activeWork: value.slug
+			});
+
+		}
+
+		this.props.toggleSearchTerm(key, value);
 
 	},
 
@@ -156,8 +185,8 @@ Header = React.createClass({
     var work = {id:1};
     var subwork = {work:{title:"Iliad"},id:1, title:"1"};
 
-    console.log("Header.state", this.state);
-    console.log("Header.data", this.data);
+    //console.log("Header.state", this.state);
+    //console.log("Header.data", this.data);
 
     return (
       <div>
@@ -270,20 +299,13 @@ Header = React.createClass({
 	        						<ul className="dropdown-menu ">
 	        							<div className="dropdown-menu-inner">
 													{self.data.keywords.map(function(keyword, i){
-		                        return <li
-															key={i}
-															>
-		                          <FlatButton
-		                            onClick={self.toggleSearchTerm.bind(null, "keywords", keyword)}
+		                        return <SearchTermButton
+																key={i}
+																toggleSearchTerm={self.toggleSearchTerm}
 																label={keyword.title}
-		                            data-key="keyword"
-		                            data-id={keyword._id}
-					                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
-		                            >
-		                          </FlatButton>
-
-		                        </li>
-
+																searchTermKey="keywords"
+																value={keyword}
+																/>
 													})}
 	        							</div>
 	        						</ul>
@@ -304,17 +326,13 @@ Header = React.createClass({
         						<ul className="dropdown-menu">
         							<div className="dropdown-menu-inner">
 												{self.data.commenters.map(function(commenter, i){
-	                        return <li
-														key={i} >
-	                          <FlatButton
-	                            onClick={self.props.toggleSearchTerm}
+	                        return <SearchTermButton
+															key={i}
+															toggleSearchTerm={self.toggleSearchTerm}
 															label={commenter.name}
-	                            data-key="commenter"
-	                            data-id={commenter.id}
-				                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
-	                            >
-	                          </FlatButton>
-	                        </li>
+															searchTermKey="commenters"
+															value={commenter}
+															/>
 												})}
         							</div>
         						</ul>
@@ -334,17 +352,15 @@ Header = React.createClass({
         						<ul className="dropdown-menu">
         							<div className="dropdown-menu-inner">
 												{self.data.works.map(function(work, i){
-	                        return <li
-															key={i} >
-	                          <FlatButton
-	                            onClick={self.props.toggleSearchTerm}
+													var activeWork = (self.state.activeWork === work.slug);
+	                        return <SearchTermButton
+															key={i}
+															toggleSearchTerm={self.toggleWorkSearchTerm}
 															label={work.title}
-	                            data-key="work"
-	                            data-id={work.id}
-				                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
-	                            >
-	                          </FlatButton>
-	                        </li>
+															searchTermKey="works"
+															value={work}
+															activeWork={activeWork}
+															/>
 												})}
         							</div>
 
@@ -352,7 +368,7 @@ Header = React.createClass({
 
         					</div>
 
-        					<div className={"dropdown search-dropdown search-dropdown-book" + (this.state.searchDropdownOpen === "subwork" ? " open" : "")}>
+        					<div className={"dropdown search-dropdown search-dropdown-book" + (this.state.searchDropdownOpen === "subwork" ? " open" : "") }>
         						<FlatButton
                       className="search-tool search-type-subwork dropdown-toggle"
                       label="Book"
@@ -364,19 +380,14 @@ Header = React.createClass({
 
         						<ul className="dropdown-menu">
         							<div className="dropdown-menu-inner">
-												{self.data.subworks.map(function(subwork, i){
-	                        return <li
-															key={i} >
-	                          <FlatButton
-	                            onClick={self.props.toggleSearchTerm}
+												{self.state.subworks.map(function(subwork, i){
+	                        return <SearchTermButton
+															key={i}
+															toggleSearchTerm={self.toggleSearchTerm}
 															label={subwork.work.title + " " + subwork.title}
-	                            data-key="subwork"
-	                            data-id={subwork.id}
-				                      icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
-	                            >
-	                          </FlatButton>
-
-	                        </li>
+															searchTermKey="subworks"
+															value={subwork}
+															/>
 												})}
         							</div>
 

@@ -65,7 +65,7 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 			let commentOrder = 0;
 			let reference = "";
 
-			if('line_to' in comment_candidate && !isNaN(comment_candidate.line_to) && comment_candidate.line_from !== comment_candidate.line_to){
+			if('line_to' in comment_candidate && !isNaN(parseInt(comment_candidate.line_to)) && comment_candidate.line_from !== comment_candidate.line_to){
 				nLines = parseInt(comment_candidate.line_to) - parseInt(comment_candidate.line_from) + 1;
 			}
 

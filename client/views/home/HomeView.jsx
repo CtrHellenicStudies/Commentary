@@ -212,7 +212,10 @@ HomeView = React.createClass({
 
                   <div className="get-started-comments">
 
-                    <Commentary isOnHomeView={true} />
+                    <Commentary
+											isOnHomeView={true}
+											filters={[]}
+											/>
 
 						        <div className="read-more-link">
 	                    <RaisedButton

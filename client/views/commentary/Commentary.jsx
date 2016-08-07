@@ -11,7 +11,9 @@ Commentary = React.createClass({
   propTypes: {
 		isOnHomeView: React.PropTypes.bool,
 		filters: React.PropTypes.array,
-		addSearchTerm: React.PropTypes.func
+		addSearchTerm: React.PropTypes.func,
+		loadMoreComments: React.PropTypes.func,
+		skip: React.PropTypes.number
   },
 
   getInitialState(){
@@ -45,10 +47,61 @@ Commentary = React.createClass({
         selected_edition = { lines: []},
 				commentGroups = [];
 
-		var handle = Meteor.subscribe('comments', this.state.skip, 10);
+		// Parse the filters to the query
+		this.props.filters.forEach(function(filter){
+			switch(filter.key){
+				case "keywords":
+					var values = [];
+					filter.values.forEach(function(value){
+						values.push(value.wordpressId);
+					})
+					query['keywords.wordpressId'] = { $in: values };
+					break;
+
+				case "commenters":
+					var values = [];
+					filter.values.forEach(function(value){
+						values.push(value.wordpressId);
+					})
+					query['commenters.wordpressId'] = { $in: values };
+					break;
+
+				case "works":
+					var values = [];
+					filter.values.forEach(function(value){
+						values.push(value.slug);
+					})
+					query['work.slug'] = { $in: values };
+					break;
+
+				case "subworks":
+					var values = [];
+					filter.values.forEach(function(value){
+						values.push(value.n);
+					})
+					query['subwork.n'] = { $in: values };
+					break;
+
+				case "lineFrom":
+					// Values will always be an array with a length of one
+					query.lineFrom = query.lineFrom || {};
+					query.lineFrom.$gte = filter.values[0];
+					break;
+
+				case "lineTo":
+					// Values will always be an array with a length of one
+					query.lineFrom = query.lineFrom || {};
+					query.lineFrom.$lte = filter.values[0];
+					break;
+
+			}
+		});
+
+		console.log("Commentary query:", query);
+		var handle = Meteor.subscribe('comments', query, this.props.skip, 10);
     if(handle.ready()) {
-	    comments = Comments.find(query).fetch();
-			console.log(comments);
+	    comments = Comments.find({}, {sort:{"work.order":1, "subwork.n":1, lineFrom:1, nLines:-1}}).fetch();
+			//console.log("Commentary comments:", comments);
     }
 
     //On the client
@@ -56,10 +109,6 @@ Commentary = React.createClass({
       function(error,response){
           lemma_text = response;
       });
-
-    if(lemma_text.length > 0){
-      selected_edition = lemma_text[0];
-    }
 
     if(lemma_text.length > 0){
       selected_edition = lemma_text[0];
@@ -93,14 +142,6 @@ Commentary = React.createClass({
 
 				}
 
-				var nLines = 1;
-
-				if( comment.lineTo ){
-					ref = ref + "-" + comment.lineTo
-					n_lines = comment.lineTo - comment.lineFrom + 1
-				}
-
-
 				commentGroups.push({
 					ref : ref,
 					editions : [],
@@ -109,7 +150,7 @@ Commentary = React.createClass({
 					subwork : comment.subwork,
 					lineFrom : comment.lineFrom,
 					lineTo : comment.lineTo,
-					nLines : nLines,
+					nLines : comment.nLines,
 					comments : [comment]
 				});
 
@@ -160,13 +201,7 @@ Commentary = React.createClass({
 	loadMoreComments(){
 
 		if(!this.props.isOnHomeView && this.commentGroups.length){
-
-	    this.setState({
-	      skip : this.state.skip + 10
-	    });
-
-			console.log("Load more comments:", this.state.skip);
-
+			this.props.loadMoreComments();
 		}
 
 	},
@@ -200,6 +235,7 @@ Commentary = React.createClass({
 		var more_commentary_left = true;
 		var isOnHomeView;
     var commentGroups;
+		var filtersChanged = false;
 
 		if('isOnHomeView' in this.props){
 			isOnHomeView = this.props.isOnHomeView;
@@ -209,7 +245,15 @@ Commentary = React.createClass({
 
 		}
 
-		if(this.commentGroups.length === 0){
+		//console.log("Commentary comments:", this.data.commentGroups);
+		//console.log("Commentary.props.skip", this.props.skip);
+
+		if(
+				this.commentGroups.length === 0
+			|| this.props.skip === 0
+		){
+			$("html, body").animate({ scrollTop: 0 }, "fast");
+			this.commentGroups = [];
 			this.commentGroups = this.data.commentGroups;
 
 		}else {
@@ -220,23 +264,23 @@ Commentary = React.createClass({
 					if(dataCommentGroup.ref === commentGroup.ref){
 						isInCommentGroups = true;
 
-
 						dataCommentGroup.comments.forEach(function(dataComment){
 							var isInCommentGroup = false;
 
 							commentGroup.comments.forEach(function(comment){
 								if(dataComment._id === comment._id){
 									isInCommentGroup = true;
+
 								}
 
 							});
 
 							if(!isInCommentGroup){
 								commentGroup.comments.push(dataComment);
+
 							}
 
 						});
-
 
 					}
 				});
@@ -246,10 +290,10 @@ Commentary = React.createClass({
 				}
 
 			});
+
 		}
 
-
-		commentGroups = this.commentGroups;
+		//console.log("Commentary.commentGroups", this.commentGroups);
 
     return (
       <div className="commentary-primary content ">
@@ -259,7 +303,7 @@ Commentary = React.createClass({
 					>
 
 					<div className="commentary-comments commentary-comment-groups">
-		      	{commentGroups.map(function(commentGroup, i){
+		      	{this.commentGroups.map(function(commentGroup, i){
 		          return(
 		              <div
 										className="comment-group "
@@ -302,7 +346,7 @@ Commentary = React.createClass({
 
 				</InfiniteScroll>
 
-				{(!isOnHomeView && this.data.loaded && commentGroups.length > 0 && more_commentary_left) ?
+				{(!isOnHomeView && this.data.loaded && this.commentGroups.length > 0 && more_commentary_left) ?
 	        <div className="ahcip-spinner commentary-loading" >
 	            <div className="double-bounce1"></div>
 	            <div className="double-bounce2"></div>
@@ -310,7 +354,7 @@ Commentary = React.createClass({
 	        </div>
 				: "" }
 
-				{(this.data.loaded && commentGroups.length === 0 ) ?
+				{(this.data.loaded && this.commentGroups.length === 0 ) ?
 	        <div className="no-commentary-wrap">
 	          <p className="no-commentary no-results" >
 	            No commentary available for the current search.

@@ -1,0 +1,3 @@
+Comments._ensureIndex({
+	"$**": "text"
+});

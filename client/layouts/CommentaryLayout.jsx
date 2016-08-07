@@ -74,13 +74,14 @@ CommentaryLayout = React.createClass({
 	handleChangeTextsearch(e){
 
 		var filters = this.state.filters;
+		var textsearch = $(".text-search input").val();
 
-		if(e.target.value && e.target.value.length){
+		if(textsearch && textsearch.length){
 			var textsearchInFilters = false;
 
 			filters.forEach(function(filter, i){
 				if(filter.key === "textsearch"){
-					filter.values = [e.target.value];
+					filter.values = [textsearch];
 					textsearchInFilters = true;
 				}
 			});
@@ -88,7 +89,7 @@ CommentaryLayout = React.createClass({
 			if(!textsearchInFilters){
 				filters.push({
 					key:"textsearch",
-					values:[e.target.value]
+					values:[textsearch]
 				})
 			}
 

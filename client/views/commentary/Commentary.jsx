@@ -42,10 +42,7 @@ Commentary = React.createClass({
   getMeteorData(){
     var query = {},
 				comments = [],
-        lemma_query = {},
-        lemma_text = [],
         selected_edition = { lines: []},
-				commentGroups = [];
 
 		// Parse the filters to the query
 		this.props.filters.forEach(function(filter){
@@ -108,12 +105,6 @@ Commentary = React.createClass({
 			//console.log("Commentary comments:", comments);
     }
 
-    //On the client
-    Meteor.call('textServer', lemma_query,
-      function(error,response){
-          lemma_text = response;
-      });
-
     if(lemma_text.length > 0){
       selected_edition = lemma_text[0];
     }
@@ -166,6 +157,8 @@ Commentary = React.createClass({
 		commentGroups.forEach(function(commentGroup){
 			var isInCommenters = false;
 			var commenters = [];
+			var lemmaQuery = {};
+
 			commentGroup.comments.forEach(function(comment){
 				isInCommenters = false;
 				comment.commenters.forEach(function(commenter){
@@ -186,13 +179,21 @@ Commentary = React.createClass({
 
 			commentGroup.commenters = commenters;
 
+
+	    Meteor.call('textServer', lemmaQuery,
+	      function(error,response){
+	          var lemmaText = response;
+						debugger;
+						commentGroup.lemmaText = lemmaText;
+	      });
+
+
 		});
 
 
     return {
 			loaded: true,
       commentGroups: commentGroups,
-      lemmaText: lemma_text,
       selectedEdition: selected_edition
     };
   },

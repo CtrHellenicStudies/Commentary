@@ -12,7 +12,6 @@ if (Meteor.isServer){
 		if(!limit){
 			limit = 10;
 		}
-		console.log(skip, limit);
 
     return Comments.find(query, {skip: skip, limit: limit, sort: {'work.order': 1, 'subwork.n':1, lineFrom:1, nLines:-1}});
   });

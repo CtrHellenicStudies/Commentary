@@ -16,6 +16,7 @@ CommentLemma = React.createClass({
 
   render() {
 		var commentGroup = this.props.commentGroup;
+		console.log("CommentLemma.commentGroup:", commentGroup);
 
     return (
 
@@ -63,7 +64,8 @@ CommentLemma = React.createClass({
           </div>
 
           <article className="comment lemma-comment paper-shadow">
-							{commentGroup.selectedEdition.lines.map(function(lemma, i){
+
+							{commentGroup.selectedLemmaEdition.lines.map(function(lemma, i){
 	              return <p
 													key={i}
 													className="lemma-text"
@@ -72,12 +74,12 @@ CommentLemma = React.createClass({
 
 							})}
               <div className="edition-tabs tabs">
-								{commentGroup.editions.map(function(edition){
+								{commentGroup.lemmaText.map(function(lemmaTextEdition){
                   <RaisedButton
-										data-edition={edition.title}
+										data-edition={lemmaTextEdition.title}
 										className="edition-tab tab selected_edition"
 										onClick={this.toggleEdition}>
-                      {edition.title}
+                      {lemmaTextEdition.title}
                   </RaisedButton>
 
 								})}

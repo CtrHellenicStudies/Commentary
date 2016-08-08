@@ -43,15 +43,15 @@ Comment = React.createClass({
 					data-commenter-id={comment.commenters[0]._id}>
             <div className="comment-fixed-title-wrap paper-shadow">
                 <h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
-								{(commentGroup.selectedEdition.lines.length) ?
+								{(commentGroup.selectedLemmaEdition.lines.length) ?
 	                <p
 										className="comment-fixed-lemma lemma-text"
-										dangerouslySetInnerHTML={{__html: commentGroup.selectedEdition
+										dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
 	                .lines[0].html}}
 										></p>
 									: ""}
 
-								{commentGroup.selectedEdition.lines.length > 1 ?
+								{commentGroup.selectedLemmaEdition.lines.length > 1 ?
 									<span className="fixed-title-lemma-ellipsis">&hellip;</span>
 								: "" }
 

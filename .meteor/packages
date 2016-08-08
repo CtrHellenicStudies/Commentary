@@ -81,3 +81,4 @@ standard-minifier-js@1.1.8
 simple:rest
 dburles:google-maps
 todda00:friendly-slugs
+# mquandalle:promisify-core

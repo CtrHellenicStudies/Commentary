@@ -4,7 +4,7 @@ Meteor.methods({
 
     try {
 
-      var url = 'http://localhost:3000';
+      var url = 'http://localhost:8000';
 
       /*
       if( location.hostname.indexOf("dev") >= 0 || location.hostname.indexOf("localhost") >= 0){
@@ -20,7 +20,6 @@ Meteor.methods({
 
       url += "/api";
 
-
       var response = HTTP.get(url, {
         params: query
       });
@@ -28,8 +27,8 @@ Meteor.methods({
       var editions = [],
           is_in_edition = false;
 
-      if("res" in response){
-        response.res.forEach(function(text_object){
+      if("res" in response.data){
+        response.data.res.forEach(function(text_object){
           text_object.text.forEach(function(text_edition){
 
             editions.forEach(function(edition){
@@ -55,6 +54,7 @@ Meteor.methods({
 
 
         });
+
 
         return editions;
 

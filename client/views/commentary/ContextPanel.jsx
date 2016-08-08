@@ -9,7 +9,7 @@ ContextPanel = React.createClass({
   propTypes: {
     open: React.PropTypes.bool.isRequired,
     closeContextPanel: React.PropTypes.func.isRequired,
-    selectedEdition: React.PropTypes.object,
+    selectedLemmaEdition: React.PropTypes.object,
     lemmaText: React.PropTypes.array,
     toggleLemmaEdition: React.PropTypes.func,
   },
@@ -54,7 +54,7 @@ ContextPanel = React.createClass({
 				</IconButton>
 
         <div className="lemma-text-wrap">
-          {this.props.selectedEdition.lines.map(function(line){
+          {this.props.selectedLemmaEdition.lines.map(function(line){
             return <div data-line_n="{line.n}">
 
                 <div className="lemma-meta">

@@ -18,7 +18,6 @@ Commentary = React.createClass({
 
   getInitialState(){
     return {
-      selectedEdition : "",
       contextPanelOpen : false,
       referenceLemma : [],
       referenceLemmaSelectedEdition : {lines: []},
@@ -42,7 +41,7 @@ Commentary = React.createClass({
   getMeteorData(){
     var query = {},
 				comments = [],
-        selected_edition = { lines: []},
+				commentGroups = [];
 
 		// Parse the filters to the query
 		this.props.filters.forEach(function(filter){
@@ -105,10 +104,6 @@ Commentary = React.createClass({
 			//console.log("Commentary comments:", comments);
     }
 
-    if(lemma_text.length > 0){
-      selected_edition = lemma_text[0];
-    }
-
 		// Make comment groups from comments
 		var isInCommentGroup = false;
 		comments.forEach(function(comment){
@@ -139,8 +134,8 @@ Commentary = React.createClass({
 
 				commentGroups.push({
 					ref : ref,
-					editions : [],
-					selectedEdition : {lines:[]},
+					selectedLemmaEdition : {lines:[]},
+					lemmaText: [],
 					work : comment.work,
 					subwork : comment.subwork,
 					lineFrom : comment.lineFrom,
@@ -179,22 +174,11 @@ Commentary = React.createClass({
 
 			commentGroup.commenters = commenters;
 
-
-	    Meteor.call('textServer', lemmaQuery,
-	      function(error,response){
-	          var lemmaText = response;
-						debugger;
-						commentGroup.lemmaText = lemmaText;
-	      });
-
-
 		});
 
 
     return {
-			loaded: true,
-      commentGroups: commentGroups,
-      selectedEdition: selected_edition
+      commentGroups: commentGroups
     };
   },
 
@@ -213,7 +197,7 @@ Commentary = React.createClass({
 
   toggleLemmaEdition(){
     this.setState({
-      selectedEdition : {}
+      selectedLemmaEdition : {}
     });
 
   },
@@ -297,6 +281,7 @@ Commentary = React.createClass({
 			});
 
 		}
+
 
 		//console.log("Commentary.commentGroups", this.commentGroups);
 
@@ -405,8 +390,8 @@ Commentary = React.createClass({
         <ContextPanel
           open={this.state.contextPanelOpen}
           closeContextPanel={this.closeContextPanel}
-          selectedEdition={this.data.selectedEdition}
-          lemmaText={this.data.lemmaText}
+          selectedLemmaEdition={this.state.referenceLemmaSelectedEdition}
+          lemmaText={this.state.referenceLemma}
           toggleLemmaEdition={this.toggleLemmaEdition}
 
           />

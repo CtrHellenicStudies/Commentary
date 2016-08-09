@@ -119,6 +119,7 @@ mongo-livedata@1.0.12
 mpowaga:jquery-fileupload@9.11.2
 mpowaga:jquery-ui-widget@1.11.4
 mpowaga:string-template@0.1.0
+mquandalle:promisify-core@0.1.0
 natestrauser:animate-css@3.5.1
 npm-bcrypt@0.8.7
 npm-mongo@1.5.45

@@ -14,13 +14,21 @@ if (Meteor.isServer){
 		}
 
     return Comments.find(query, {skip: skip, limit: limit, sort: {'work.order': 1, 'subwork.n':1, lineFrom:1, nLines:-1}});
+
+  });
+
+  Meteor.publish('textNodes', function(textQuery) {
+		var query = textQuery || {};
+
+    return TextNodes.find(query, {limit:100, sort:{"text.n":1}});
+
   });
 
   Meteor.publish('commenters', function() {
     return Commenters.find();
   });
 
-  Meteor.publish('discussion_comments', function() {
+  Meteor.publish('discussionComments', function() {
     return DiscussionComments.find();
   });
 

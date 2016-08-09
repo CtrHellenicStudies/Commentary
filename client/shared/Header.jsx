@@ -247,14 +247,14 @@ Header = React.createClass({
                     :
                       <div>
                         <FlatButton
-                          href="#"
+                          href="/sign-in"
                           label="Login"
                           onClick={this.showLoginModal}
                           style={styles.flatButton}
                           >
                         </FlatButton>
                         <FlatButton
-                          href="#"
+                          href="/sign-up"
                           label="Join the Community"
                           onClick={this.showJoinModal}
                           style={styles.flatButton}

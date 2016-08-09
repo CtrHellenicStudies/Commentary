@@ -262,39 +262,53 @@ article.lemma-comment {
 
   }
 
-  button {
+	.edition-tab {
     display:inline-block;
-    padding:5px 10px;
-    line-height:1.3em;
-    min-height:0;
-    margin-right:5px;
-    max-width:200px;
-    text-overflow:ellipsis;
-
-    span {
-      //font-family:@font-label;
-      font-size:14px;
-    }
+    margin:5px;
+		box-shadow:none !important;
+		border-radius:2px;
 
     &.selected-edition-tab {
-      background:@primary;
+      background:@primary !important;
       margin:3px;
-    color:@light;
-      span {
-        color:@light;
+	    color:@light;
+			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),0 1px 5px 0 rgba(0, 0, 0, 0.12),0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
+			border-radius:2px;
 
+			button, div {
+	      background:@primary !important;
+
+			}
+
+      span {
+        color:@light !important;
 
       }
 
       &:hover {
-        background:@primary;
+        background:@primary-dark-2 !important;
+				button,div {
+	        background:@primary-dark-2 !important;
+
+				}
 
       }
 
     }
 
+	  button {
+	    padding:5px 10px;
+	    max-width:200px;
+	    text-overflow:ellipsis;
 
-  }
+	    span {
+	      //font-family:@font-label;
+	      font-size:14px;
+	    }
+
+	  }
+
+	}
 
   .context-tab {
 

@@ -1,5 +1,5 @@
 Meteor.methods({
-  'discussion_comment.insert'(discussionComment) {
+  'discussionComments.insert'(discussionComment) {
 
     // Make sure the user is logged in before inserting
     if (! this.userId) {
@@ -21,7 +21,7 @@ Meteor.methods({
 
   },
 
-  'discussion_comment.remove'(discussionCommentId) {
+  'discussionComments.remove'(discussionCommentId) {
     // Make sure the user is permitted to remove
     var discussionComment = DiscussionComment.findOne(discussionCommentId);
 
@@ -40,7 +40,7 @@ Meteor.methods({
 
   },
 
-  'discussion_comment.update'(discussionCommentId, discussionCommentData) {
+  'discussionComments.update'(discussionCommentId, discussionCommentData) {
     // Make sure the user is permitted to update
     var discussionComment = DiscussionComment.findOne(discussionCommentId);
 

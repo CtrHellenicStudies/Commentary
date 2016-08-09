@@ -6,17 +6,52 @@ import FontIcon from 'material-ui/FontIcon';
 CommentLemma = React.createClass({
 
   propTypes: {
-    commentGroup: React.PropTypes.object.isRequired
+    commentGroup: React.PropTypes.object.isRequired,
+    showLemmaPanel: React.PropTypes.func.isRequired
   },
 
   getInitialState(){
-		return {}
+		return {
+			selectedLemmaEdition: {lines:[]}
+
+		}
 
   },
 
+	componentDidUpdate(){
+		console.log(this.props.commentGroup);
+		if(this.props.commentGroup.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0){
+			this.setState({
+				selectedLemmaEdition: this.props.commentGroup.lemmaText[0]
+			});
+		}
+
+	},
+
+	toggleEdition(editionSlug){
+		if(this.state.selectedLemmaEdition.slug !== editionSlug){
+			var newSelectedEdition = {};
+			this.props.commentGroup.lemmaText.forEach(function(edition){
+					if(edition.slug === editionSlug){
+						newSelectedEdition = edition;
+					}
+			});
+
+			this.setState({
+				selectedLemmaEdition: newSelectedEdition
+			});
+
+		}
+
+	},
+
+	showLemmaPanel(commentGroup){
+		this.props.showLemmaPanel(commentGroup);
+	},
+
   render() {
+		var self = this;
 		var commentGroup = this.props.commentGroup;
-		console.log("CommentLemma.commentGroup:", commentGroup);
 
     return (
 
@@ -49,7 +84,7 @@ CommentLemma = React.createClass({
 															>
 	                              <a
 																	href="#"
-																	onClick={this.goToAuthorComment}
+																	onClick={self.goToAuthorComment}
 																	>
 	                                  <img src="/images/default_user.jpg" />
 	                              </a>
@@ -65,21 +100,24 @@ CommentLemma = React.createClass({
 
           <article className="comment lemma-comment paper-shadow">
 
-							{commentGroup.selectedLemmaEdition.lines.map(function(lemma, i){
+							{this.state.selectedLemmaEdition.lines.map(function(line, i){
 	              return <p
 													key={i}
 													className="lemma-text"
-													dangerouslySetInnerHTML={{ __html: lemma.html}}
+													dangerouslySetInnerHTML={{ __html: line.html}}
 													></p>
 
 							})}
               <div className="edition-tabs tabs">
-								{commentGroup.lemmaText.map(function(lemmaTextEdition){
-                  <RaisedButton
+								{commentGroup.lemmaText.map(function(lemmaTextEdition, i){
+                  return <RaisedButton
+										key={i}
+										label={lemmaTextEdition.title}
 										data-edition={lemmaTextEdition.title}
-										className="edition-tab tab selected_edition"
-										onClick={this.toggleEdition}>
-                      {lemmaTextEdition.title}
+										className={self.state.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
+										onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+										>
+
                   </RaisedButton>
 
 								})}
@@ -87,7 +125,7 @@ CommentLemma = React.createClass({
               <div className="context-tabs tabs">
                   <RaisedButton
 										className="context-tab tab"
-										onClick={this.showLemmaPanel}
+										onClick={this.showLemmaPanel.bind(null, this.props.commentGroup)}
 										label="Context"
 										labelPosition="before"
 	                  icon={<FontIcon className="mdi mdi-chevron-right" />}

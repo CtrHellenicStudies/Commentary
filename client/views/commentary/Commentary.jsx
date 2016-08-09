@@ -13,7 +13,7 @@ Commentary = React.createClass({
 		filters: React.PropTypes.array,
 		addSearchTerm: React.PropTypes.func,
 		loadMoreComments: React.PropTypes.func,
-		skip: React.PropTypes.number
+		skip: React.PropTypes.number,
   },
 
   getInitialState(){
@@ -21,7 +21,8 @@ Commentary = React.createClass({
       contextPanelOpen : false,
       referenceLemma : [],
       referenceLemmaSelectedEdition : {lines: []},
-			skip: 0
+			commentLemmaGroups: []
+
     }
 
   },
@@ -149,7 +150,7 @@ Commentary = React.createClass({
 		});
 
 		// Unique commenters for each comment group
-		commentGroups.forEach(function(commentGroup){
+		commentGroups.forEach(function(commentGroup, i){
 			var isInCommenters = false;
 			var commenters = [];
 			var lemmaQuery = {};
@@ -169,17 +170,83 @@ Commentary = React.createClass({
 					}
 
 				});
-
 			});
+
 
 			commentGroup.commenters = commenters;
 
-		});
+			var lemmaQuery = {
+						'work.slug' : commentGroup.work.slug,
+						'subwork.n' : commentGroup.subwork.n,
+						'text.n' : {
+							$gte: commentGroup.lineFrom,
+						}
+					};
 
+			if(typeof commentGroup.lineTo !== "undefined"){
+				lemmaQuery['text.n'] = {
+							$lte: commentGroup.lineTo
+						};
+
+			}else {
+				lemmaQuery['text.n'] = {
+							$lte: commentGroup.lineFrom
+						};
+
+			}
+
+			var handle2 = Meteor.subscribe('textNodes', lemmaQuery);
+			if (handle2.ready()) {
+				var textNodes = TextNodes.find(lemmaQuery).fetch();
+				var editions = [];
+
+				var textIsInEdition = false;
+				textNodes.forEach(function(textNode){
+
+					textNode.text.forEach(function(text){
+						textIsInEdition = false;
+
+						editions.forEach(function(edition){
+
+							if(text.edition.slug === edition.slug){
+								edition.lines.push({
+									html: text.html,
+									n: text.n
+								});
+								textIsInEdition = true;
+
+							}
+
+						})
+
+						if(!textIsInEdition){
+							editions.push({
+								title : text.edition.title,
+								slug : text.edition.slug,
+								lines : [
+									{
+										html: text.html,
+										n: text.n
+									}
+								],
+							})
+
+						}
+
+					});
+
+				});
+
+				commentGroup.lemmaText = editions;
+			}
+
+
+		});
 
     return {
       commentGroups: commentGroups
     };
+
   },
 
   componentDidMount(){
@@ -216,6 +283,20 @@ Commentary = React.createClass({
     });
 
   },
+
+	showLemmaPanel(commentGroup){
+
+	},
+	hideLemmaPanel(){
+
+	},
+
+	showDiscussionThread(commentGroup){
+
+	},
+	hideDiscussionThread(){
+
+	},
 
 
   render() {
@@ -304,6 +385,7 @@ Commentary = React.createClass({
 
 		                      <CommentLemma
 														commentGroup={commentGroup}
+														showLemmaPanel={self.showLemmaPanel}
 														/>
 
 													{commentGroup.comments.map(function(comment, i){

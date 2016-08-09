@@ -1,4 +1,4 @@
-this.DiscussionComments = new Meteor.Collection('discussion_comments');
+this.DiscussionComments = new Meteor.Collection('discussionComments');
 
 Schemas.DiscussionComments = new SimpleSchema({
   user: {

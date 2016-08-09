@@ -20,48 +20,52 @@ Meteor.methods({
 
       url += "/api";
 
-      var response = HTTP.get(url, {
+      var promise = HTTP.get(url, {
         params: query
       });
 
-      var editions = [],
-          is_in_edition = false;
+			return promise.then(response => {
 
-      if("res" in response.data){
-        response.data.res.forEach(function(text_object){
-          text_object.text.forEach(function(text_edition){
+	      var editions = [],
+	          is_in_edition = false;
 
-            editions.forEach(function(edition){
-              if( text_edition.edition.slug === edition.slug ){
-                is_in_edition = true;
+	      if("res" in response.data){
+	        response.data.res.forEach(function(text_object){
+	          text_object.text.forEach(function(text_edition){
 
-                edition.lines.push(text_edition);
-              }
+	            editions.forEach(function(edition){
+	              if( text_edition.edition.slug === edition.slug ){
+	                is_in_edition = true;
 
-            });
+	                edition.lines.push(text_edition);
+	              }
 
-            if ( !is_in_edition ){
-              editions.push({
-                title : text_edition.edition.title,
-                slug : text_edition.edition.slug,
-                lines : [ text_edition ]
+	            });
 
-              });
+	            if ( !is_in_edition ){
+	              editions.push({
+	                title : text_edition.edition.title,
+	                slug : text_edition.edition.slug,
+	                lines : [ text_edition ]
 
-            }
+	              });
 
-          });
+	            }
+
+	          });
 
 
-        });
+	        });
 
 
-        return editions;
+	        return editions;
 
-      }else {
-        console.error("Unable to connect to TextServer");
+	      }else {
+	        console.error("Unable to connect to TextServer");
 
-      }
+	      }
+
+			});
 
 
     } catch(error) {

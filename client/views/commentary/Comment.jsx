@@ -15,7 +15,7 @@ Comment = React.createClass({
 
   getInitialState(){
     return {
-			selected_revision: {}
+			selectedRevision: {}
     }
 
   },
@@ -30,11 +30,21 @@ Comment = React.createClass({
 
 	},
 
+	componentDidUpdate(){
+		if(!("title" in this.state.selectedRevision)){
+			this.setState({
+				selectedRevision: this.props.comment.revisions[0]
+			});
+		}
+
+	},
+
   render() {
-		var comment = this.props.comment;
-		var selectedRevision = comment.revisions[0];
-		var commentGroup = this.props.commentGroup;
 		var self = this;
+		var comment = this.props.comment;
+		var selectedRevision = this.state.selectedRevision;
+		var commentGroup = this.props.commentGroup;
+
 
     return (
         <article
@@ -95,7 +105,7 @@ Comment = React.createClass({
                             <a href={"/commenter/" + commenter.slug} >
                                 <span className="comment-author-name">{commenter.name}</span>
                             </a>
-                            <span className="comment-date">{/*selectedRevision.created*/}</span>
+                            <span className="comment-date">{moment(selectedRevision.created).format('D MMMM YYYY')}</span>
                         </div>
                         <div className="comment-author-image-wrap paper-shadow">
                             <a href={"/commenter/" + commenter.slug}>
@@ -133,8 +143,10 @@ Comment = React.createClass({
 									key={i}
 									data-id="{revision.id}"
 									className="revision selected-revision"
-                  onClick={this.selectRevision}>
-                    Revision {revision.updated}
+                  onClick={this.selectRevision}
+									label={"Revision " + moment(revision.updated).format('D MMMM YYYY')}
+									>
+
                 </FlatButton>
 
 							})}

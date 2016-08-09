@@ -418,7 +418,7 @@ Commentary = React.createClass({
 
 				</InfiniteScroll>
 
-				{(!isOnHomeView && this.data.loaded && this.commentGroups.length > 0 && more_commentary_left) ?
+				{(!isOnHomeView && this.commentGroups.length > 0 && more_commentary_left) ?
 	        <div className="ahcip-spinner commentary-loading" >
 	            <div className="double-bounce1"></div>
 	            <div className="double-bounce2"></div>

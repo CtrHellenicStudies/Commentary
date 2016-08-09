@@ -89,29 +89,7 @@ Header = React.createClass({
     });
   },
 
-  toggleSearchDropdown(e){
-		var $target = $(e.target),
-				targetDropdown = "";
-
-		if($target.prop("tagName") !== "BUTTON"){
-			$target = $target.parents("button");
-
-		}
-
-		if($target.hasClass("search-type-keyword")){
-			targetDropdown = "keyword";
-
-		}else if ($target.hasClass("search-type-commenter")){
-			targetDropdown = "commenter";
-
-		}else if ($target.hasClass("search-type-work")){
-			targetDropdown = "work";
-
-		}else if ($target.hasClass("search-type-subwork")){
-			targetDropdown = "subwork";
-
-		}
-
+  toggleSearchDropdown(targetDropdown){
 		if(this.state.searchDropdownOpen === targetDropdown){
 	    this.setState({
 				searchDropdownOpen : ""
@@ -137,7 +115,7 @@ Header = React.createClass({
 			subwork.work = work;
 		});
 
-		console.log("Header.state", this.state);
+		//console.log("Header.state", this.state);
 
 		if(this.state.activeWork === value.slug){
 			this.setState({
@@ -295,7 +273,7 @@ Header = React.createClass({
                       label="Keyword"
 											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
-                      onClick={this.toggleSearchDropdown}
+                      onClick={self.toggleSearchDropdown.bind(null, "keyword")}
         						>
         						</FlatButton>
 
@@ -311,6 +289,12 @@ Header = React.createClass({
 																/>
 													})}
 	        							</div>
+
+												<IconButton
+													className="close-dropdown"
+													iconClassName="mdi mdi-close"
+		                      onClick={self.toggleSearchDropdown.bind(null, "keyword")}
+													></IconButton>
 	        						</ul>
 
 
@@ -322,7 +306,7 @@ Header = React.createClass({
                       label="Commenter"
 											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
-                      onClick={this.toggleSearchDropdown}
+                      onClick={self.toggleSearchDropdown.bind(null, "commenter")}
         						>
                     </FlatButton>
 
@@ -338,7 +322,14 @@ Header = React.createClass({
 															/>
 												})}
         							</div>
+
+											<IconButton
+												className="close-dropdown"
+												iconClassName="mdi mdi-close"
+	                      onClick={this.toggleSearchDropdown.bind(null, "commenter")}
+												></IconButton>
         						</ul>
+
 
         					</div>
 
@@ -348,7 +339,7 @@ Header = React.createClass({
                       label="Work"
 											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
-                      onClick={this.toggleSearchDropdown}
+                      onClick={self.toggleSearchDropdown.bind(null, "work")}
         						>
                     </FlatButton>
 
@@ -367,6 +358,12 @@ Header = React.createClass({
 												})}
         							</div>
 
+											<IconButton
+												className="close-dropdown"
+												iconClassName="mdi mdi-close"
+	                      onClick={this.toggleSearchDropdown.bind(null, "work")}
+												></IconButton>
+
         						</ul>
 
         					</div>
@@ -377,7 +374,7 @@ Header = React.createClass({
                       label="Book"
 											labelPosition="before"
                       icon={<FontIcon className="mdi mdi-chevron-down" />}
-                      onClick={this.toggleSearchDropdown}
+                      onClick={self.toggleSearchDropdown.bind(null, "subwork")}
         						>
                     </FlatButton>
 
@@ -394,8 +391,14 @@ Header = React.createClass({
 												})}
         							</div>
 
+											<IconButton
+												className="close-dropdown"
+												iconClassName="mdi mdi-close"
+	                      onClick={this.toggleSearchDropdown.bind(null, "subwork")}
+												></IconButton>
 
         						</ul>
+
 
         					</div>
 

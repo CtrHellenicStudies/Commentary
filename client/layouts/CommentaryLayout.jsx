@@ -212,7 +212,10 @@ CommentaryLayout = React.createClass({
 					/>
 
 
-				<FilterWidget filters={this.state.filters}/>
+				<FilterWidget
+					filters={this.state.filters}
+					toggleSearchTerm={this.toggleSearchTerm}
+					/>
 			  {/*<ModalLogin />
 				<ModalSignup />*/}
 

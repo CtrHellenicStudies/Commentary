@@ -19,7 +19,6 @@ CommentLemma = React.createClass({
   },
 
 	componentDidUpdate(){
-		console.log(this.props.commentGroup);
 		if(this.props.commentGroup.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0){
 			this.setState({
 				selectedLemmaEdition: this.props.commentGroup.lemmaText[0]

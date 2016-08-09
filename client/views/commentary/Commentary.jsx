@@ -184,19 +184,16 @@ Commentary = React.createClass({
 					};
 
 			if(typeof commentGroup.lineTo !== "undefined"){
-				lemmaQuery['text.n'] = {
-							$lte: commentGroup.lineTo
-						};
+				lemmaQuery['text.n'].$lte = commentGroup.lineTo;
 
 			}else {
-				lemmaQuery['text.n'] = {
-							$lte: commentGroup.lineFrom
-						};
+				lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
 
 			}
 
 			var handle2 = Meteor.subscribe('textNodes', lemmaQuery);
 			if (handle2.ready()) {
+				console.log("lemmaQuery", lemmaQuery);
 				var textNodes = TextNodes.find(lemmaQuery).fetch();
 				var editions = [];
 

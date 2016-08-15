@@ -47,7 +47,11 @@ LeftMenu = React.createClass({
         var is_logged_in = Meteor.userId() ? Meteor.userId() : false;
 				var username = "";
 
-				if(is_logged_in){
+				if(this.data.currentUser){
+						console.log("currentUser", this.data.currentUser);
+						if(this.data.currentUser.emails.length){
+							username = this.data.currentUser.emails[0].address;
+						}
 
 				}
 
@@ -70,7 +74,7 @@ LeftMenu = React.createClass({
                           : ""
                       }
                       <span className="user-fullname">
-                        Archimedes of Syracuse
+												{username}
                       </span>
 
 
@@ -106,14 +110,8 @@ LeftMenu = React.createClass({
                     {is_logged_in ?
                       <div>
                         <MenuItem
-                            href="/profile/"
-                            primaryText="Your Comments"
-                            target="_blank"
-                            onClick={this.props.closeLeftMenu}
-                        />
-                        <MenuItem
-                            href="/account/"
-                            primaryText="Account"
+                            href="/profile"
+                            primaryText="Profile"
                             target="_blank"
                             onClick={this.props.closeLeftMenu}
                         />

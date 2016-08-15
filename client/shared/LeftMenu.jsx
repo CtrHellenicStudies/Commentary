@@ -24,6 +24,18 @@ LeftMenu = React.createClass({
         muiTheme: React.PropTypes.object.isRequired,
     },
 
+
+	  mixins: [ReactMeteorData],
+
+	  getMeteorData(){
+	    var query = {};
+
+			return {
+				currentUser: Meteor.users.findOne({_id: Meteor.userId()})
+			}
+
+		},
+
     scrollToAbout(e){
         $("html, body").animate({scrollTop: $('#about').height() - 100}, 300);
 
@@ -33,6 +45,13 @@ LeftMenu = React.createClass({
 
     render(){
         var is_logged_in = Meteor.userId() ? Meteor.userId() : false;
+				var username = "";
+
+				if(is_logged_in){
+
+				}
+
+
         return (
             <div>
                 <Drawer

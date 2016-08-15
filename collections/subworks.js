@@ -19,6 +19,25 @@ Schemas.Subworks = new SimpleSchema({
     type: Number,
     min: 0
   },
+
+  nComments: {
+    type: Number,
+		optional: true,
+    min: 0
+  },
+
+	commentHeatmap: {
+			type: [Object],
+			optional: true
+	},
+	'commentHeatmap.$.lineN': {
+			type: Number,
+	},
+	'commentHeatmap.$.commentCount': {
+			type: Number,
+	},
+
+
   created: {
     type: Date,
     optional: true,

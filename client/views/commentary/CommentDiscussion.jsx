@@ -3,12 +3,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 CommentDiscussion = React.createClass({
 
   propTypes: {
-    comment: React.PropTypes.object.isRequired
+    comment: React.PropTypes.object.isRequired,
+    showDiscussionThread: React.PropTypes.func.isRequired
   },
 
   getInitialState(){
     return {
-			hidden : true
     }
 
   },
@@ -16,7 +16,7 @@ CommentDiscussion = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData(){
-    var query = {},
+    var query = {comment: this.props.comment._id},
 				sort = {updated: -1};
 
 
@@ -26,11 +26,8 @@ CommentDiscussion = React.createClass({
 		};
 	},
 
-	toggleDiscussion(){
-		this.setState({
-			hidden : !this.state.hidden
-		});
-
+	showDiscussionThread(){
+			this.props.showDiscussionThread(this.props.comment);
 	},
 
   render() {
@@ -42,7 +39,7 @@ CommentDiscussion = React.createClass({
 
         <div className="discussion-wrap" >
             <div
-							onClick={this.toggleDiscussion}
+							onClick={this.showDiscussionThread}
 							className="continue-discussion">
                 <i className="mdi mdi-comment"></i>
 								{this.data.discussionComments.length ?

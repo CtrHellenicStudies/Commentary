@@ -19,6 +19,7 @@ CommenterTeaser = React.createClass({
   render() {
     let commenter = this.props.commenter;
     let commenter_url = "/commenters/" + commenter.slug ;
+		let commenterExcerpt = commenter.tagline ? Utils.trunc(commenter.tagline, 120) : "";
 
      return (
        <div className="author-teaser hvr-grow wow fadeIn" >
@@ -33,7 +34,7 @@ CommenterTeaser = React.createClass({
                   </a>
                   <hr/>
                   <p className="author-description">
-                      {commenter.tagline}
+                      {commenterExcerpt}
                   </p>
 
               </div>

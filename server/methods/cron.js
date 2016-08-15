@@ -30,18 +30,18 @@ Meteor.method("cron", function () {
 				if(comment.work.slug === work.slug){
 					isInCommentCountsWorks = true;
 					isInCommentCountsSubworks = false;
-					work.count++;
+					work.nComments++;
 
 					work.subworks.forEach(function(subwork){
 						if(comment.subwork.n === subwork.n){
 							isInCommentCountsSubworks = true;
 							isInCommentCountsLines = false;
-							subwork.count++;
+							subwork.nComments++;
 
-							subwork.lines.forEach(function(line){
+							subwork.commentHeatmap.forEach(function(line){
 								if(comment.lineFrom === line.n){
 									isInCommentCountsLines = true;
-									line.count++;
+									line.nComments++;
 								}
 
 
@@ -49,9 +49,9 @@ Meteor.method("cron", function () {
 							});
 
 							if(!isInCommentCountsLines){
-								subwork.lines.push({
+								subwork.commentHeatmap.push({
 										n: comment.lineFrom,
-										count: 1
+										nComments: 1
 								})
 
 							}
@@ -66,10 +66,12 @@ Meteor.method("cron", function () {
 					if(!isInCommentCountsSubworks){
 						work.subworks.push({
 								n: comment.subwork.n,
-								count: 1,
-								lines: [{
+								title: comment.subwork.title,
+								slug: comment.subwork.slug,
+								nComments: 1,
+								commentHeatmap: [{
 									n: comment.lineFrom,
-									count: 1
+									nComments: 1
 								}]
 
 						});
@@ -82,13 +84,15 @@ Meteor.method("cron", function () {
 			if(!isInCommentCountsWorks){
 				commentCounts.push({
 					slug: comment.work.slug,
-					count: 1,
+					nComments: 1,
 					subworks: [{
 						n: comment.subwork.n,
-						count: 1,
-						lines: [{
+						title: comment.subwork.title,
+						slug: comment.subwork.slug,
+						nComments: 1,
+						commentHeatmap: [{
 							n: comment.lineFrom,
-							count: 1
+							nComments: 1
 						}]
 					}]
 				})
@@ -100,10 +104,32 @@ Meteor.method("cron", function () {
 		});
 
 		commentCounts.forEach(function(countsWork){
-			var work = Work.find({slug: countsWork.slug});
-			console.log(countsWork);
+			var work = Works.findOne({slug: countsWork.slug});
+			work.subworks.forEach(function(subwork){
+				work.nComments = countsWork.nComments;
+				countsWork.subworks.forEach(function(countsSubwork){
+					if(subwork.n === countsSubwork.n){
+
+						subwork.nComments = countsSubwork.nComments;
+						subwork.commentHeatmap = countsSubwork.commentHeatmap;
+
+
+					}
+
+				});
+
+			});
+
+
+			var updateStatus = Works.update({slug: countsWork.slug}, {$set:{
+														subworks: countsWork.subworks,
+														nComments: countsWork.nComments
+													}});
+			console.log(countsWork, updateStatus);
 
 		});
+
+		console.log(" -- Cron run complete: Commentary")
 
 		return 1;
 

@@ -26,26 +26,28 @@ FilterWidget = React.createClass({
 
       	<div className="filters">
 					{this.props.filters.map((filter, i) => {
-	      		return <div
-							key={i}
-							className="filter "
-							 >
-	      			<span className="filter-key paper-shadow">{filter.key}</span>
-								{filter.values.map((val, j) => {
-				      			return <RaisedButton
-											key={j}
-											labelPosition="before"
-											className="filter-val "
-			      				  onClick={this.props.toggleSearchTerm.bind(null, filter.key, val)}
-											label={val.title || val.name}
-											>
+						return (["lineFrom", "lineTo"].indexOf(filter.key) < 0) ?
+		      		<div
+								key={i}
+								className="filter "
+								 >
+		      			<span className="filter-key paper-shadow">{filter.key}</span>
+									{filter.values.map((val, j) => {
+					      			return <RaisedButton
+												key={j}
+												labelPosition="before"
+												className="filter-val "
+				      				  onClick={this.props.toggleSearchTerm.bind(null, filter.key, val)}
+												label={val.title || val.name || val}
+												>
 
-				      				<i className="mdi mdi-close"></i>
-				      			</RaisedButton>
-								})}
+					      				<i className="mdi mdi-close"></i>
+					      			</RaisedButton>
+									})}
 
 
-	      		</div>
+		      		</div>
+						: ""
 
 					})}
 

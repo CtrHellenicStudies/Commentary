@@ -13,7 +13,7 @@ Schemas.DiscussionComments = new SimpleSchema({
     optional: true,
   },
   comment: {
-    type: Schemas.Comments,
+    type: String,
   },
   status: {
     type: String,
@@ -26,6 +26,7 @@ Schemas.DiscussionComments = new SimpleSchema({
     type: [Schemas.User],
     optional: true,
   },
+	
   created: {
     type: Date,
     optional: true,

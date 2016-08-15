@@ -10,7 +10,7 @@ Comment = React.createClass({
   propTypes: {
     comment: React.PropTypes.object.isRequired,
     commentGroup: React.PropTypes.object.isRequired,
-    addSearchTerm: React.PropTypes.func
+    addSearchTerm: React.PropTypes.func.isRequired,
   },
 
   getInitialState(){

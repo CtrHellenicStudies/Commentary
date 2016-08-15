@@ -9,9 +9,6 @@ ContextPanel = React.createClass({
   propTypes: {
     open: React.PropTypes.bool.isRequired,
     closeContextPanel: React.PropTypes.func.isRequired,
-    selectedLemmaEdition: React.PropTypes.object,
-    lemmaText: React.PropTypes.array,
-    toggleLemmaEdition: React.PropTypes.func,
   },
 
   getChildContext() {
@@ -22,19 +19,105 @@ ContextPanel = React.createClass({
     muiTheme: React.PropTypes.object.isRequired
   },
 
-  getDefaultProps() {
+  getInitialState() {
     return {
-      toggleCommentary: false,
-      toggleTranslations: false
-    };
+			selectedLemmaEdition : ""
+		};
   },
+
+	toggleEdition(editionSlug){
+		if(this.state.selectedLemmaEdition !== editionSlug){
+			this.setState({
+				selectedLemmaEdition: editionSlug
+			});
+
+		}
+
+	},
+
 
   mixins: [ReactMeteorData],
 
   getMeteorData(){
 
-    return {
+		var lemmaText = [];
+		var commentGroup = this.props.commentGroup;
+		var selectedLemmaEdition = {lines:[], slug:""};
 
+		var lemmaQuery = {
+					'work.slug' : commentGroup.work.slug,
+					'subwork.n' : commentGroup.subwork.n,
+					'text.n' : {
+						$gte: commentGroup.lineFrom,
+						$lte: commentGroup.lineFrom + 49
+					}
+				};
+
+		var handle2 = Meteor.subscribe('textNodes', lemmaQuery);
+		if (handle2.ready()) {
+			console.log("Context Panel lemmaQuery", lemmaQuery);
+			var textNodes = TextNodes.find(lemmaQuery).fetch();
+			var editions = [];
+
+			var textIsInEdition = false;
+			textNodes.forEach(function(textNode){
+
+				textNode.text.forEach(function(text){
+					textIsInEdition = false;
+
+					editions.forEach(function(edition){
+
+						if(text.edition.slug === edition.slug){
+							edition.lines.push({
+								html: text.html,
+								n: text.n
+							});
+							textIsInEdition = true;
+
+						}
+
+					})
+
+					if(!textIsInEdition){
+						editions.push({
+							title : text.edition.title,
+							slug : text.edition.slug,
+							lines : [
+								{
+									html: text.html,
+									n: text.n
+								}
+							],
+						})
+
+					}
+
+				});
+
+			});
+
+			lemmaText = editions;
+
+			if(this.state.selectedLemmaEdition.length){
+				lemmaText.forEach(function(edition){
+					if(edition.slug === this.state.selectedLemmaEdition){
+						selectedLemmaEdition = edition;
+					}
+				});
+			}else {
+				selectedLemmaEdition = lemmaText[0];
+			}
+
+		}
+
+		console.log("Context Panel lemmaText", lemmaText);
+
+
+
+
+    return {
+			lemmaText: lemmaText,
+			selectedLemmaEdition: selectedLemmaEdition
     };
 
 
@@ -42,8 +125,15 @@ ContextPanel = React.createClass({
 
 
   render() {
+		var self = this;
+		var contextPanelStyles = "lemma-panel paper-shadow";
+
+		if(this.props.open){
+			contextPanelStyles += " extended";
+		}
+
     return (
-      <div className="lemma-panel paper-shadow">
+      <div className={contextPanelStyles}>
 
 				<IconButton
           className="close-lemma-panel"
@@ -54,7 +144,7 @@ ContextPanel = React.createClass({
 				</IconButton>
 
         <div className="lemma-text-wrap">
-          {this.props.selectedLemmaEdition.lines.map(function(line){
+          {this.data.selectedLemmaEdition.lines.map(function(line){
             return <div data-line_n="{line.n}">
 
                 <div className="lemma-meta">
@@ -66,8 +156,7 @@ ContextPanel = React.createClass({
                   }
                 </div>
 
-                <div className="lemma-text">
-                    {line.text}
+                <div className="lemma-text" dangerouslySetInnerHTML={{line.html}} >
                 </div>
 
 
@@ -83,15 +172,18 @@ ContextPanel = React.createClass({
         </div>
 
         <div className="edition-tabs tabs">
-          {this.props.lemmaText.map(function(lemma_text_edition){
+          {this.data.lemmaText.map(function(lemmaTextEdition, i){
+						let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-            return <FlatButton
-                      label={edition.title}
-                      data-edition={edition.title}
-                      className="edition-tab tab"
-                      onClick={this.toggleLemmaEdition}
-                      >
-                  </FlatButton>
+						return <RaisedButton
+							key={i}
+							label={lemmaEditionTitle}
+							data-edition={lemmaTextEdition.title}
+							className={self.data.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
+							onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+							>
+
+						</RaisedButton>
 
           })}
 

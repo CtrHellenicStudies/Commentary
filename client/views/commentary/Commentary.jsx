@@ -18,7 +18,10 @@ Commentary = React.createClass({
 
   getInitialState(){
     return {
+			contextCommentGroupSelected: {},
       contextPanelOpen : false,
+			discussionSelected: {},
+      discussionPanelOpen: false,
       referenceLemma : [],
       referenceLemmaSelectedEdition : {lines: []},
 			commentLemmaGroups: []
@@ -266,13 +269,6 @@ Commentary = React.createClass({
 
   },
 
-  closeContextPanel(){
-    this.setState({
-      contextPanelOpen : false
-    });
-
-  },
-
   searchReferenceLemma(){
     this.setState({
       referenceLemma: [],
@@ -281,17 +277,34 @@ Commentary = React.createClass({
 
   },
 
-	showLemmaPanel(commentGroup){
+  showContextPanel(commentGroup){
+    this.setState({
+			contextCommentGroupSelected: commentGroup,
+      contextPanelOpen : true
+    });
 
-	},
-	hideLemmaPanel(){
+  },
 
-	},
+  closeContextPanel(){
+    this.setState({
+			contextCommentGroupSelected: {},
+      contextPanelOpen: false
+    });
 
-	showDiscussionThread(commentGroup){
+  },
+
+	showDiscussionThread(comment){
+    this.setState({
+			discussionSelected: comment,
+      discussionPanelOpen : true
+    });
 
 	},
 	hideDiscussionThread(){
+    this.setState({
+			discussionSelected: {},
+      discussionPanelOpen : false
+    });
 
 	},
 
@@ -299,10 +312,11 @@ Commentary = React.createClass({
   render() {
 
 		var self = this;
-		var more_commentary_left = true;
+		var moreCommentaryLeft = true;
 		var isOnHomeView;
     var commentGroups;
 		var filtersChanged = false;
+		var commentsClass = "comments ";
 
 		if('isOnHomeView' in this.props){
 			isOnHomeView = this.props.isOnHomeView;
@@ -310,6 +324,10 @@ Commentary = React.createClass({
 		}else {
 			isOnHomeView = false;
 
+		}
+
+		if(this.state.contextPanelOpen){
+			commentsClass += "lemma-panel-visible";
 		}
 
 		//console.log("Commentary comments:", this.data.commentGroups);
@@ -360,7 +378,6 @@ Commentary = React.createClass({
 
 		}
 
-
 		//console.log("Commentary.commentGroups", this.commentGroups);
 
     return (
@@ -378,26 +395,33 @@ Commentary = React.createClass({
 										data-ref={commentGroup.ref}
 										key={i}
 										>
-		                  <div className="comments" >
+		                  <div className={commentsClass} >
 
 		                      <CommentLemma
 														commentGroup={commentGroup}
-														showLemmaPanel={self.showLemmaPanel}
+														showContextPanel={self.showContextPanel}
 														/>
 
 													{commentGroup.comments.map(function(comment, i){
+														var commentClass = "comment-outer has-discussion ";
+														if(comment._id === self.state.discussionSelected){
+															commentClass += "discussion--width discussion--visible";
+														}
+
 		                        return <div
 															key={i}
-															className="comment-outer has-discussion "
+															className={commentClass}
 															>
 
 		                            <Comment
 																	commentGroup={commentGroup}
 																	comment={comment}
+																	addSearchTerm={self.props.addSearchTerm}
 																	/>
 
 		                            <CommentDiscussion
 																	comment={comment}
+																	showDiscussionThread={self.showDiscussionThread}
 																	/>
 
 
@@ -415,7 +439,7 @@ Commentary = React.createClass({
 
 				</InfiniteScroll>
 
-				{(!isOnHomeView && this.commentGroups.length > 0 && more_commentary_left) ?
+				{(!isOnHomeView && this.commentGroups.length > 0 && moreCommentaryLeft) ?
 	        <div className="ahcip-spinner commentary-loading" >
 	            <div className="double-bounce1"></div>
 	            <div className="double-bounce2"></div>
@@ -466,14 +490,15 @@ Commentary = React.createClass({
 
         </div>{/*<!-- .lemma-reference-modal -->*/}
 
-        <ContextPanel
-          open={this.state.contextPanelOpen}
-          closeContextPanel={this.closeContextPanel}
-          selectedLemmaEdition={this.state.referenceLemmaSelectedEdition}
-          lemmaText={this.state.referenceLemma}
-          toggleLemmaEdition={this.toggleLemmaEdition}
+				{"work" in this.state.contextCommentGroupSelected ?
+	        <ContextPanel
+	          open={this.state.contextPanelOpen}
+	          closeContextPanel={this.closeContextPanel}
+						commentGroup={this.state.contextCommentGroupSelected}
 
-          />
+	          />
+					: ""
+				}
         {/*<!-- .commentary-primary -->*/}
       </div>
      );

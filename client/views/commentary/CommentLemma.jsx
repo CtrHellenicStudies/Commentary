@@ -7,7 +7,7 @@ CommentLemma = React.createClass({
 
   propTypes: {
     commentGroup: React.PropTypes.object.isRequired,
-    showLemmaPanel: React.PropTypes.func.isRequired
+    showContextPanel: React.PropTypes.func.isRequired
   },
 
   getInitialState(){
@@ -44,8 +44,8 @@ CommentLemma = React.createClass({
 
 	},
 
-	showLemmaPanel(commentGroup){
-		this.props.showLemmaPanel(commentGroup);
+	showContextPanel(commentGroup){
+		this.props.showContextPanel(commentGroup);
 	},
 
   render() {
@@ -109,9 +109,11 @@ CommentLemma = React.createClass({
 							})}
               <div className="edition-tabs tabs">
 								{commentGroup.lemmaText.map(function(lemmaTextEdition, i){
+									let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+
                   return <RaisedButton
 										key={i}
-										label={lemmaTextEdition.title}
+										label={lemmaEditionTitle}
 										data-edition={lemmaTextEdition.title}
 										className={self.state.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
 										onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
@@ -124,7 +126,7 @@ CommentLemma = React.createClass({
               <div className="context-tabs tabs">
                   <RaisedButton
 										className="context-tab tab"
-										onClick={this.showLemmaPanel.bind(null, this.props.commentGroup)}
+										onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
 										label="Context"
 										labelPosition="before"
 	                  icon={<FontIcon className="mdi mdi-chevron-right" />}

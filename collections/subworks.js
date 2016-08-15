@@ -30,10 +30,10 @@ Schemas.Subworks = new SimpleSchema({
 			type: [Object],
 			optional: true
 	},
-	'commentHeatmap.$.lineN': {
+	'commentHeatmap.$.n': {
 			type: Number,
 	},
-	'commentHeatmap.$.commentCount': {
+	'commentHeatmap.$.nComments': {
 			type: Number,
 	},
 

@@ -17,6 +17,13 @@ Schemas.Works = new SimpleSchema({
   order: {
     type: Number,
   },
+
+  nComments: {
+    type: Number,
+		optional: true,
+    min: 0
+  },
+
   subworks: {
     type: [Schemas.Subworks],
     optional: true,

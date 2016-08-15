@@ -52,6 +52,7 @@ check@1.2.3
 cmather:handlebars-server@2.0.0
 coffeescript@1.0.17
 cosmos:browserify@0.9.4
+d3js:d3@3.5.8
 dburles:collection-helpers@1.0.4
 dburles:google-maps@1.1.5
 ddp@1.2.5

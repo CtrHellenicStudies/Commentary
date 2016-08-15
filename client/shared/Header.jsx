@@ -155,7 +155,7 @@ Header = React.createClass({
 
     };
 
-    var user_is_loggedin = false;
+    var user_is_loggedin = Meteor.user();
 
     var active_comment = false;
     var username = false;
@@ -216,6 +216,7 @@ Header = React.createClass({
                   {user_is_loggedin ?
                       <div>
                         <FlatButton
+                          href="/profile"
                           label="Profile"
                           className=""
                           style={styles.flatButton}

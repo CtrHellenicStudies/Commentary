@@ -8,6 +8,7 @@ ContextPanel = React.createClass({
 
   propTypes: {
     open: React.PropTypes.bool.isRequired,
+    commentGroup: React.PropTypes.object.isRequired,
     closeContextPanel: React.PropTypes.func.isRequired,
   },
 
@@ -144,8 +145,24 @@ ContextPanel = React.createClass({
 				</IconButton>
 
         <div className="lemma-text-wrap">
-          {this.data.selectedLemmaEdition.lines.map(function(line){
-            return <div data-line_n="{line.n}">
+          {this.data.selectedLemmaEdition.lines.map(function(line, i){
+						var lineClass="lemma-line";
+						var lineFrom = self.props.commentGroup.lineFrom;
+						var lineTo;
+
+						if(typeof self.props.commentGroup.lineTo !== "undefined"){
+								lineTo = self.props.commentGroup.lineTo;
+						}else {
+								lineTo = self.props.commentGroup.lineFrom;
+						}
+
+						if(lineFrom <= line.n && line.n <= lineTo){
+							lineClass += " highlighted";
+						}
+
+            return <div
+							className={lineClass}
+							key={i}>
 
                 <div className="lemma-meta">
                   {(line.n % 5 === 0) ?
@@ -156,7 +173,7 @@ ContextPanel = React.createClass({
                   }
                 </div>
 
-                <div className="lemma-text" dangerouslySetInnerHTML={{line.html}} >
+                <div className="lemma-text" dangerouslySetInnerHTML={{__html: line.html}} >
                 </div>
 
 

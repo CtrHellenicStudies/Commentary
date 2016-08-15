@@ -8,6 +8,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 HomeView = React.createClass({
 
+	propTypes: {
+		filters: React.PropTypes.array,
+		toggleSearchTerm: React.PropTypes.func,
+		loadMoreComments: React.PropTypes.func,
+		skip: React.PropTypes.number
+	},
+
   getChildContext() {
     return { muiTheme: getMuiTheme(baseTheme) };
   },
@@ -26,6 +33,20 @@ HomeView = React.createClass({
 
   },
 
+
+  mixins: [ReactMeteorData],
+
+  getMeteorData(){
+    var query = {},
+				works = [];
+
+		works = Works.find({}, {sort:{order:1}}).fetch();
+
+		return {
+			works: works
+		}
+	},
+
   render(){
       return (
         <div className="home">
@@ -34,7 +55,7 @@ HomeView = React.createClass({
 
             <section className="header cover fullscreen parallax">
                 <div className="background-image-holder remove-blur blur-10">
-                   <img className="background-image" src="/images/hp_image.jpg"/>
+                   <img className="background-image" src="/images/hector.jpg"/>
                 </div>
                 <div className="block-screen brown"></div>
 
@@ -152,14 +173,13 @@ HomeView = React.createClass({
             </section>
 
             <section className="browse-commentary block-shadow" >
-              <h2 className="keyword-divider-title">Commentary</h2>
+              {/*<h2 className="keyword-divider-title"></h2>*/}
 
               <div className="container data-visualization-container">
-								<img src="/images/data_visualization_example.png"/>
+								<WorksList />
 
-								<img src="/images/data_visualization_example.png"/>
+								{/*<img src="/images/data_visualization_example.png"/>*/}
 
-								<img src="/images/data_visualization_example.png"/>
               </div>
 
             </section>
@@ -193,7 +213,9 @@ HomeView = React.createClass({
                   <h2 className="block-title">Commenters</h2>
 
 
-                    <CommentersList />
+                    <CommentersList
+											limit={3}
+											/>
 
                     <RaisedButton
                       href="/commenters"
@@ -214,7 +236,10 @@ HomeView = React.createClass({
 
                     <Commentary
 											isOnHomeView={true}
-											filters={[]}
+											filters={this.props.filters}
+											toggleSearchTerm={this.props.toggleSearchTerm}
+											loadMoreComments={this.props.loadMoreComments}
+											skip={this.props.skip}
 											/>
 
 						        <div className="read-more-link">

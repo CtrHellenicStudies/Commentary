@@ -18,7 +18,7 @@ WorkVisualization = React.createClass({
 
 	componentDidMount(){
 
-		var margin = {top: 20, right: 20, bottom: 30, left: 40},
+		var margin = {top: 20, right: 20, bottom: 80, left: 60},
 	    width = 860 - margin.left - margin.right,
 	    height = 421 - margin.top - margin.bottom;
 
@@ -34,14 +34,21 @@ WorkVisualization = React.createClass({
 
 		var yAxis = d3.svg.axis()
 		    .scale(y)
-		    .orient("left")
-		    .ticks(10, "%");
+		    .orient("left");
 
 		var data = this.props.work.subworks;
+		data.sort(function(a, b){
+		  if (a.n < b.n)
+		    return -1;
+		  if (a.n > b.n)
+		    return 1;
+		  return 0;
 
-		var color = d3.scale.ordinal()
-    .domain([0, d3.max(data, function(d) { return d.nComments; })])
-    .range(["#fbf8ec", "#b6ae97"]);
+		});
+
+		var color = d3.scale.linear()
+							    .domain([0, d3.max(data, function(d) { return d.nComments; })])
+							    .range(["#fbf8ec", "#b6ae97"]);
 
 		var svg = d3.select(".text-subworks-visualization-" + this.props.work.slug).append("svg")
 		    .attr("width", width + margin.left + margin.right)
@@ -58,9 +65,10 @@ WorkVisualization = React.createClass({
 		      .attr("transform", "translate(0," + height + ")")
 		      .call(xAxis)
 		    .append("text")
-		      .attr("x", 1)
-		      .attr("dx", "-1em")
-		      .style("text-anchor", "end")
+		      .attr("x", 360)
+		      .attr("y", 36)
+		      .attr("dx", "1em")
+		      .style("text-anchor", "start")
 		      .text("Book");
 
 		  svg.append("g")
@@ -69,7 +77,8 @@ WorkVisualization = React.createClass({
 		      .call(yAxis)
 		    .append("text")
 		      .attr("transform", "rotate(-90)")
-		      .attr("y", 1)
+		      .attr("y", -60)
+		      .attr("x", -90)
 		      .attr("dy", "1em")
 		      .style("text-anchor", "end")
 		      .text("Number of Comments");
@@ -78,10 +87,16 @@ WorkVisualization = React.createClass({
 		      .data(data)
 		    .enter().append("rect")
 		      .attr("class", "bar")
-					.attr("fill", function(d){ return color(d.nComments) })
 		      .attr("x", function(d) { return x(d.n); })
 		      .attr("width", x.rangeBand())
-		      .attr("y", function(d) { return y(d.nComments); })
+		      .attr("y", function(d) {
+													if("nComments" in d && typeof d.nComments !== "undefined" && d.nComments && !isNaN(d.nComments)){
+														return y(d.nComments);
+													}else{
+														return y(0);
+													}
+												})
+					.attr("fill", function(d){ return color(d.nComments) })
 		      .attr("height", function(d) { return height - y(d.nComments); });
 
 	},

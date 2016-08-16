@@ -12,64 +12,48 @@
 
   }
 
-  md-card-title {
-	width:100%;
-	display:inline-block;
-	vertical-align: top;
-	text-align:left;
-  }
-  md-card-content {
-	width:100%;
-	display:inline-block;
-	vertical-align: top;
-	float:right;
-	text-align:right;
-	margin:0;
-	padding:5px 0;
-  }
-
   .keyword-title {
-	color:@primary-text;
-  font-family:@font-body;
-  font-size:22px;
-	text-transform:uppercase;
-	margin-right:10px;
-	display:inline-block;
-	padding:10px 0 5px;
-	vertical-align: top;
+		color:@primary-text;
+	  font-family:@font-body;
+	  font-size:22px;
+		text-transform:uppercase;
+		margin-right:10px;
+		display:inline-block;
+		padding:10px 0 5px;
+		vertical-align: top;
 
-	&:hover {
-	  color:@primary;
-	}
+		&:hover {
+		  color:@primary;
+		}
 
   }
 
   .keyword-comment-count {
-	font-size:16px;
-	font-weight:light;
-	color:#999;
-	display:inline-block;
-	vertical-align: top;
-	margin:0;
-	padding:15px 0 0 0;
+		font-size:16px;
+		font-weight:light;
+		color:#999;
+		display:inline-block;
+		vertical-align: top;
+		margin:0;
+		padding:15px 0 0 0;
 
   }
 
   .keyword-description{
-	display:block;
-	color:#aaa;
-  font-family:@font-commentary;
-  font-size:16px;
-	line-height:1.5em;
-	width:97%;
-	margin:0 auto;
-	padding-bottom:30px;
-	text-align:left;
+		display:block;
+		color:#aaa;
+	  font-family:@font-commentary;
+	  font-size:16px;
+		line-height:1.5em;
+		width:97%;
+		margin:0 auto;
+		padding-bottom:30px;
+		text-align:left;
 
   }
 
   .md-card-title {
-	display:inline-block;
+		display:inline-block;
   }
 
 
@@ -79,17 +63,17 @@
 .page-keywords {
   .page-content {
 
-	width:100%;
-	max-width:1200px;
-	margin:20px auto;
-	text-align:center;
+		width:100%;
+		max-width:1200px;
+		margin:20px auto;
+		text-align:center;
 
-	.keyword {
-	  .keyword-subheader {
-		margin:10px 0;
-	  }
+		.keyword {
+		  .keyword-subheader {
+				margin:10px 0;
+		  }
 
-	}
+		}
 
   }
 
@@ -105,17 +89,64 @@ section.keyword-single {
 .keyword-teaser {
 	width:100%;
 	max-width:1000px;
-	background:@light;
+	background:#f6f6f6;
 	cursor:pointer;
 	margin:10px auto;
 	padding:20px;
-
 	text-align:left;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),0 1px 3px 0 rgba(0, 0, 0, 0.12),0 1px 1px -1px rgba(0, 0, 0, 0.2);
+
+	&.keyword-open {
+		background:@light;
+		box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.14),0 3px 7px 0 rgba(0, 0, 0, 0.12),0 5px 3px -4px rgba(0, 0, 0, 0.2);
+		.keyword-title {
+			color:@dark;
+		}
+		.keyword-comment-count, .keyword-description, .mdi, .keyword-read-more {
+			color:@secondary-text;
+		}
+		.keyword-description, hr {
+			display:block;
+		}
+		.mdi.mdi-minus {
+			display:inline-block;
+		}
+		.mdi.mdi-plus {
+			display:none;
+		}
+		.keyword-read-more {
+			display:block;
+		}
+		&:hover {
+			background:@light;
+			.keyword-title {
+				color:@dark;
+				&:hover {
+					color:@dark;
+				}
+			}
+			.keyword-comment-count, .keyword-description, .mdi, .keyword-read-more {
+				color:@secondary-text;
+				&:hover {
+					color:@secondary-text;
+
+				}
+			}
+		}
+
+
+	}
+
 
 	&:hover {
 		background:@ahcip-yellow;
-		.keyword-title, .keyword-comment-count {
+		.keyword-title, .keyword-comment-count, .keyword-description, .mdi, .keyword-read-more {
 			color:@light;
+			&:hover {
+				color:@light;
+
+			}
+
 		}
 	}
 
@@ -123,7 +154,23 @@ section.keyword-single {
 	.keyword-title {
 		display:inline-block;
 		vertical-align: top;
-		font-size:24px;
+		font-size:22px;
+		font-family:@font-title;
+		margin:0;
+
+	}
+
+	.mdi {
+		display:inline-block;
+		vertical-align: top;
+		float:right;
+		padding:7px 10px;
+		color:@secondary-text;
+
+		&.mdi-minus {
+			display:none;
+
+		}
 
 	}
 
@@ -132,12 +179,69 @@ section.keyword-single {
 		float:right;
 		display:inline-block;
 		vertical-align: top;
-		padding:0px 10px;
+		padding:4px 10px;
 		font-size:14px;
 		font-family:@font-reading;
 		font-weight:light;
 		color:@secondary-text;
 
 	}
+
+	hr {
+		width:100%;
+		margin:15px auto;
+		display:none;
+	}
+
+	.keyword-description {
+		display:none;
+		width:98%;
+		margin:10px 5px 20px;
+		max-width:700px;
+		font-size:15px;
+		font-family:@font-reading;
+		line-height:1.5em;
+
+	}
+
+	.keyword-read-more {
+		display:none;
+		clear:both;
+		color:@secondary-text;
+		font-family:@font-label;
+		text-transform: uppercase;
+		font-size:12px;
+		margin:10px 6px 0;
+		font-weight:light;
+
+		&:hover {
+			color:@primary-text;
+
+		}
+
+	}
+
+}
+
+.keywords-page {
+	.keyword-teaser {
+		border:1px solid #ddd;
+
+		h4 {
+			padding:0;
+			
+		}
+
+		.keyword-description {
+			margin:15px 5px;
+		}
+
+		.mdi {
+			padding:19px 10px;
+
+		}
+
+	}
+
 
 }

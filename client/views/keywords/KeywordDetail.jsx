@@ -9,7 +9,7 @@ KeywordDetail = React.createClass({
 	getMeteorData() {
     let query = {};
 
-		query.slug = this.props.commenter_slug;
+		query.slug = this.props.slug;
 
     return {
       keyword: Keywords.findOne(query)
@@ -19,10 +19,11 @@ KeywordDetail = React.createClass({
   render() {
 		var keyword = this.data.keyword;
 
+		if(keyword){
      return (
        <div className="page keywords-page keywords-detail-page">
 
-          <div data-ng-controller="PageController as page" className="content primary">
+          <div className="content primary">
 
               <section className="block header header-page  cover parallax">
                   <div className="background-image-holder blur-2--no-remove remove-blur  blur-10">
@@ -70,7 +71,10 @@ KeywordDetail = React.createClass({
 
 
       );
-    }
+		}else{
+			return <div></div>;
+		}
 
+	}
 
 });

@@ -101,7 +101,7 @@ Commentary = React.createClass({
 			}
 		});
 
-		console.log("Commentary query:", query);
+		//console.log("Commentary query:", query);
 		var handle = Meteor.subscribe('comments', query, this.props.skip, 10);
     if(handle.ready()) {
 	    comments = Comments.find({}, {sort:{"work.order":1, "subwork.n":1, lineFrom:1, nLines:-1}}).fetch();
@@ -196,7 +196,7 @@ Commentary = React.createClass({
 
 			var handle2 = Meteor.subscribe('textNodes', lemmaQuery);
 			if (handle2.ready()) {
-				console.log("lemmaQuery", lemmaQuery);
+				//console.log("lemmaQuery", lemmaQuery);
 				var textNodes = TextNodes.find(lemmaQuery).fetch();
 				var editions = [];
 

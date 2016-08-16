@@ -56,7 +56,7 @@ ContextPanel = React.createClass({
 
 		var handle2 = Meteor.subscribe('textNodes', lemmaQuery);
 		if (handle2.ready()) {
-			console.log("Context Panel lemmaQuery", lemmaQuery);
+			//console.log("Context Panel lemmaQuery", lemmaQuery);
 			var textNodes = TextNodes.find(lemmaQuery).fetch();
 			var editions = [];
 

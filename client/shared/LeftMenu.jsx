@@ -48,7 +48,6 @@ LeftMenu = React.createClass({
 				var username = "";
 
 				if(this.data.currentUser){
-						console.log("currentUser", this.data.currentUser);
 						if(this.data.currentUser.emails.length){
 							username = this.data.currentUser.emails[0].address;
 						}

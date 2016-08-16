@@ -16,7 +16,7 @@ CommentersList = React.createClass({
     }
 
     return {
-      commenters: Commenters.find(query, {sort: {lastName: 1, firstName: 1}, limit: limit}).fetch(),
+      commenters: Commenters.find(query, {sort: {name: 1}, limit: limit}).fetch(),
     };
   },
 

@@ -1,10 +1,23 @@
 KeywordDetail = React.createClass({
 
   propTypes: {
-		keyword: React.PropTypes.object
+		slug: React.PropTypes.string.isRequired
+	},
+
+  mixins: [ReactMeteorData],
+
+	getMeteorData() {
+    let query = {};
+
+		query.slug = this.props.commenter_slug;
+
+    return {
+      keyword: Keywords.findOne(query)
+    };
   },
 
   render() {
+		var keyword = this.data.keyword;
 
      return (
        <div className="page keywords-page keywords-detail-page">

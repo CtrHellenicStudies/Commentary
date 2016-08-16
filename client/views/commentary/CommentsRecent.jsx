@@ -34,7 +34,7 @@ CommentsRecent = React.createClass({
                                 <h4>&mdash; Douglas Frame, Iliad 1.4-6</h4>
 
                             </li>
-                            <li>
+                            {/*<li>
                                 <p >
                                   Like every word in the epic song-generating system, this first word of the poem has dimensions that were disclosed to its original audiences and performers through age-old, recurrent exposure to poetry in performance. Those dimensions are invisible . . .
                                </p>
@@ -47,7 +47,7 @@ CommentsRecent = React.createClass({
                                </p>
                                 <h4>&mdash; Gregory Nagy, Iliad 1.9</h4>
 
-                            </li>
+                            </li>*/}
                         </ul>
                     </div>
                 </div>

@@ -1,16 +1,32 @@
 CommenterDetail = React.createClass({
 
   propTypes: {
-		commenter: React.PropTypes.object
+		slug: React.PropTypes.string.isRequired
+  },
+
+  mixins: [ReactMeteorData],
+
+	getMeteorData() {
+    let query = {};
+
+		query.slug = this.props.slug;
+
+		console.log("Query", query);
+
+    return {
+      commenter: Commenters.findOne(query)
+    };
   },
 
   render() {
-		var commenter = this.props.commenter;
+		var commenter = this.data.commenter;
+
+		if(commenter){
 
      return (
        <div className="page commenters-page">
 
-          <div data-ng-controller="PageController as page" className="content primary">
+          <div className="content primary">
 
               <section className="block header cover parallax">
                   <div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
@@ -64,7 +80,10 @@ CommenterDetail = React.createClass({
 
 
       );
-    }
 
+		}else {
+			return <div></div>
+		}
+	}
 
 });

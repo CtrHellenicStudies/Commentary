@@ -51,16 +51,6 @@ DiscussionThread = React.createClass({
 
 	},
 
-	editDiscussionComment(){
-		debugger;
-
-	},
-
-	upvoteDiscussionComment(){
-		debugger;
-
-	},
-
   render() {
 		var self = this;
     var userIsLoggedIn = this.data.currentUser ? true : false;
@@ -110,7 +100,7 @@ DiscussionThread = React.createClass({
 									<IconButton
 											className="close-discussion paper-shadow"
 											iconClassName="mdi mdi-close"
-											onClick={this.hideDiscussion}
+											onClick={this.hideDiscussionThread}
 										/>
 
 									<form ref="newCommentForm" className="new-comment-form" name="new-comment-form">

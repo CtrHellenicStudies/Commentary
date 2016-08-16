@@ -12,9 +12,24 @@ DiscussionComment = React.createClass({
 
   getInitialState(){
     return {
-    }
+			editMode: false
+		}
 
   },
+
+	showEditMode(){
+		this.setState({
+			editMode: true
+		});
+
+	},
+
+	closeEditMode(){
+		this.setState({
+			editMode: false
+		});
+
+	},
 
 	updateDiscussionComment(){
 
@@ -27,6 +42,16 @@ DiscussionComment = React.createClass({
 		});
 
 		$(this.refs.newCommentForm).find("textarea").val("");
+
+	},
+
+	upvoteDiscussionComment(){
+		if(typeof this.props.currentUser !== "undefined"){
+			Meteor.call("discussionComments.upvote", {
+				discussionCommentId: this.props.discussionComment._id
+			});
+
+		}
 
 	},
 
@@ -62,7 +87,7 @@ DiscussionComment = React.createClass({
                             {username}
                         </span>
                         <span className="discussion-comment-date">
-                            <span >Updated:</span>
+                            <span >Updated: </span>
 														{moment(discussionComment.updated).format('D MMMM YYYY') || moment(discussionComment.created).format('D MMMM YYYY')}
                         </span>
                     </div>
@@ -95,6 +120,13 @@ DiscussionComment = React.createClass({
                       className={(userUpvoted) ? "vote-up upvoted" : "vote-up"}
 		                  icon={<FontIcon className="mdi mdi-chevron-up" />}
 											>
+											{userIsLoggedIn ?
+												""
+												:
+												<span className="vote-up-tooltip">
+													You must be signed in to upvote.
+												</span>
+											}
                     </FlatButton>
                     {/*<FlatButton
 											label="Reply"

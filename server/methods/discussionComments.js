@@ -56,20 +56,16 @@ Meteor.methods({
     }
   },
 
-  'discussionComments.upvote'(discussionCommentId, discussionCommentData) {
-    // Make sure the user is permitted to update
+  'discussionComments.upvote'(discussionCommentId) {
     var discussionComment = DiscussionComment.findOne(discussionCommentId);
 
-    if (this.userId != discussionComment.user) {
+    // Make sure the user has not already upvoted
+    if (discussionComment.voters.indexOf(this.userId) >= 0) {
       throw new Meteor.Error('not-authorized');
     }
 
-    check(discussionComment.user, String);
-    check(discussionComment.content, String);
-    check(discussionComment.votes, Number);
-
     try {
-      DiscussionComments.update(discussionCommentId, { $set: discussionCommentData });
+      DiscussionComments.update({_id: discussionCommentId}, { $push: { voters: this.userId }});
     }
 
     catch(err){

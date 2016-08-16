@@ -182,6 +182,7 @@ Comment = React.createClass({
 	      <DiscussionThread
 					comment={comment}
 					showDiscussionThread={self.showDiscussionThread}
+					hideDiscussionThread={self.hideDiscussionThread}
 					discussionVisible={self.state.discussionVisible}
 					/>
 

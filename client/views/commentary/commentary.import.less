@@ -757,7 +757,7 @@ article.lemma-comment {
 
     span {
       font-size:16px;
-      padding:9px 8px;
+      padding:1px 8px;
       .transition( all 300ms ease-out );
       text-transform:uppercase;
       position:absolute;
@@ -768,11 +768,16 @@ article.lemma-comment {
     }
 
   i {
-    font-size:46px;
     display:inline-block;
     vertical-align: top;
     .transition( all 300ms ease-out );
     color:@primary-light;
+		font-size:38px;
+
+		&:before {
+	    font-size:46px;
+
+		}
 
   }
 
@@ -817,6 +822,7 @@ article.lemma-comment {
       vertical-align:top;
       padding:0px 10px;
       min-height:0;
+			margin:0px 2px;
 
       span {
         font-family:@font-label;
@@ -839,7 +845,7 @@ article.lemma-comment {
     clear:both;
     background:@light;
     padding:30px 30px 20px;
-  position:relative;
+	  position:relative;
 
     .profile-picture {
       width:50px;
@@ -925,9 +931,14 @@ article.lemma-comment {
 
 
     .submit-comment-button {
-      background:@primary;
+      background:@primary !important;
+			button {
+	      background:@primary !important;
+
+			}
+
       span {
-        color:@light;
+        color:@light !important;
 
       }
 
@@ -945,9 +956,9 @@ article.lemma-comment {
   .close-discussion {
     font-size:22px;
     padding:9px 10px 10px;
-    background:@light;
+    background:@light !important;
     border-radius:50%;
-    position:absolute;
+    position:absolute !important;
     top:-15px;
     right:-15px;
 
@@ -1016,6 +1027,18 @@ article.lemma-comment {
 
   }
 
+	.no-results-wrap {
+		margin:15px auto;
+		width:95%;
+	}
+
+	.no-results-text {
+		font-size:16px;
+		font-family:@font-commentary;
+		line-height:1.5em;
+		color:@secondary-text;
+
+	}
 
 }
 
@@ -1124,18 +1147,18 @@ article.lemma-comment {
 
     .vote-up.upvoted {
       color:@md-blue-500;
-	  cursor:default;
-	  background:transparent !important;
+		  cursor:default;
+		  background:transparent !important;
 
-	  &:hover {
-		background:transparent !important;
+		  &:hover {
+			background:transparent !important;
 
-	  }
+		  }
 
       i, span {
-		color:@md-blue-500;
-		background:transparent !important;
-		cursor:default;
+				color:@md-blue-500 !important;
+				background:transparent !important;
+				cursor:default;
       }
 
     }

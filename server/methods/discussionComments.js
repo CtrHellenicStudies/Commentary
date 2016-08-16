@@ -1,37 +1,25 @@
 Meteor.methods({
   'discussionComments.insert'(discussionComment) {
-
     // Make sure the user is logged in before inserting
     if (! this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    check(discussionComment.user, String);
-    check(discussionComment.textNodes, [String]);
-    check(discussionComment.isPrivate, Boolean);
+		var currentUser = Meteor.users.findOne({_id: this.userId});
+
+
+		discussionComment.user = currentUser;
+		discussionComment.votes = 1;
+		discussionComment.voters = [currentUser._id];
+
+    //check(discussionComment.user, Schemas.User);
     check(discussionComment.content, String);
+    check(discussionComment.votes, Number);
+    check(discussionComment.commentId, String);
 
+		console.log("Inserting new comment", discussionComment);
     try {
-      DiscussionComment.insert(discussionComment);
-    }
-
-    catch(err){
-      console.log(err);
-    }
-
-  },
-
-  'discussionComments.remove'(discussionCommentId) {
-    // Make sure the user is permitted to remove
-    var discussionComment = DiscussionComment.findOne(discussionCommentId);
-
-    if (this.userId != discussionComment.user) {
-      throw new Meteor.Error('not-authorized');
-    }
-
-    check(discussionCommentId, String);
-    try {
-      DiscussionComment.remove(discussionCommentId);
+      DiscussionComments.insert(discussionComment);
     }
 
     catch(err){
@@ -41,6 +29,34 @@ Meteor.methods({
   },
 
   'discussionComments.update'(discussionCommentId, discussionCommentData) {
+    // Make sure the user is logged in before inserting
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+		var currentUser = Meteor.users.findOne({_id: this.userId});
+
+
+		discussionComment.user = currentUser;
+		discussionComment.votes = 1;
+		discussionComment.voters = [currentUser._id];
+
+    //check(discussionComment.user, Schemas.User);
+    check(discussionComment.content, String);
+    check(discussionComment.votes, Number);
+    check(discussionComment.commentId, String);
+
+		console.log("Inserting new comment", discussionComment);
+    try {
+      DiscussionComments.insert(discussionComment);
+    }
+
+    catch(err){
+      console.log(err);
+    }
+  },
+
+  'discussionComments.upvote'(discussionCommentId, discussionCommentData) {
     // Make sure the user is permitted to update
     var discussionComment = DiscussionComment.findOne(discussionCommentId);
 
@@ -48,12 +64,12 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    check(discussionCommentId, String);
-    check(discussionCommentData.isPrivate, Boolean);
-    check(discussionCommentData.content, String);
+    check(discussionComment.user, String);
+    check(discussionComment.content, String);
+    check(discussionComment.votes, Number);
 
     try {
-      DiscussionComment.update(discussionCommentId, { $set: discussionCommentData });
+      DiscussionComments.update(discussionCommentId, { $set: discussionCommentData });
     }
 
     catch(err){

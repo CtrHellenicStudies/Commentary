@@ -44,10 +44,10 @@ LeftMenu = React.createClass({
     },
 
     render(){
-        var is_logged_in = Meteor.userId() ? Meteor.userId() : false;
+        var userIsLoggedIn = this.data.currentUser ? true : false;
 				var username = "";
 
-				if(this.data.currentUser){
+				if(userIsLoggedIn){
 						if(this.data.currentUser.emails.length){
 							username = this.data.currentUser.emails[0].address;
 						}
@@ -64,7 +64,7 @@ LeftMenu = React.createClass({
                     className="md-sidenav-left"
                 >
                     <div className="sidenav-top">
-                      {is_logged_in ?
+                      {userIsLoggedIn ?
                           <div>
                             <div className="user-image paper-shadow">
                               <img src="/images/default_user.jpg"/>
@@ -106,7 +106,7 @@ LeftMenu = React.createClass({
 
                     <Divider />
 
-                    {is_logged_in ?
+                    {userIsLoggedIn ?
                       <div>
                         <MenuItem
                             href="/profile"

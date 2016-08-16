@@ -293,22 +293,6 @@ Commentary = React.createClass({
 
   },
 
-	showDiscussionThread(comment){
-    this.setState({
-			discussionSelected: comment,
-      discussionPanelOpen : true
-    });
-
-	},
-	hideDiscussionThread(){
-    this.setState({
-			discussionSelected: {},
-      discussionPanelOpen : false
-    });
-
-	},
-
-
   render() {
 
 		var self = this;
@@ -383,7 +367,7 @@ Commentary = React.createClass({
     return (
       <div className="commentary-primary content ">
 				<InfiniteScroll
-					endPadding={100}
+					endPadding={120}
 					loadMore={this.loadMoreComments}
 					>
 
@@ -403,29 +387,12 @@ Commentary = React.createClass({
 														/>
 
 													{commentGroup.comments.map(function(comment, i){
-														var commentClass = "comment-outer has-discussion ";
-														if(comment._id === self.state.discussionSelected){
-															commentClass += "discussion--width discussion--visible";
-														}
-
-		                        return <div
-															key={i}
-															className={commentClass}
-															>
-
-		                            <Comment
-																	commentGroup={commentGroup}
-																	comment={comment}
-																	addSearchTerm={self.props.addSearchTerm}
-																	/>
-
-		                            <CommentDiscussion
-																	comment={comment}
-																	showDiscussionThread={self.showDiscussionThread}
-																	/>
-
-
-		                        </div>
+	                          return <Comment
+																key={i}
+																commentGroup={commentGroup}
+																comment={comment}
+																addSearchTerm={self.props.addSearchTerm}
+																/>
 		                      })}
 
 		                  </div> {/*<!-- .comments -->*/}

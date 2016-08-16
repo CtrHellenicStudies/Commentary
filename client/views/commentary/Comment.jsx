@@ -15,7 +15,8 @@ Comment = React.createClass({
 
   getInitialState(){
     return {
-			selectedRevision: {}
+			selectedRevision: {},
+			discussionVisible: false
     }
 
   },
@@ -39,14 +40,38 @@ Comment = React.createClass({
 
 	},
 
+	showDiscussionThread(comment){
+    this.setState({
+			discussionVisible: true,
+    });
+
+	},
+
+	hideDiscussionThread(){
+    this.setState({
+			discussionVisible: false,
+    });
+
+	},
+
+
+
   render() {
 		var self = this;
 		var comment = this.props.comment;
 		var selectedRevision = this.state.selectedRevision;
 		var commentGroup = this.props.commentGroup;
+		var commentClass = "comment-outer has-discussion ";
+		if(self.state.discussionVisible){
+			commentClass += "discussion--width discussion--visible";
+		}
 
 
-    return (
+
+		return (<div
+				className={commentClass}
+				>
+
         <article
 					className="comment commentary-comment paper-shadow "
 					data-id={comment._id}
@@ -153,6 +178,15 @@ Comment = React.createClass({
             </div>
 
         </article>
+
+	      <DiscussionThread
+					comment={comment}
+					showDiscussionThread={self.showDiscussionThread}
+					discussionVisible={self.state.discussionVisible}
+					/>
+
+
+      </div>
 
      );
    }

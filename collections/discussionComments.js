@@ -2,21 +2,25 @@ this.DiscussionComments = new Meteor.Collection('discussionComments');
 
 Schemas.DiscussionComments = new SimpleSchema({
   user: {
-    type: Schemas.User,
+    type: Object,
+		// Come back to this after redefining the user schemas
+		blackbox: true
   },
   content: {
     type: String,
     optional: true,
   },
   parentId: {
-    type: Number,
+    type: String,
     optional: true,
   },
-  comment: {
+  commentId: {
     type: String,
+    optional: true,
   },
   status: {
     type: String,
+    optional: true,
   },
   votes: {
     type: Number,
@@ -26,7 +30,7 @@ Schemas.DiscussionComments = new SimpleSchema({
     type: [Schemas.User],
     optional: true,
   },
-	
+
   created: {
     type: Date,
     optional: true,

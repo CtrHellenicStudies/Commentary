@@ -23,13 +23,13 @@ CommenterTeaser = React.createClass({
 
      return (
        <div className="author-teaser hvr-grow wow fadeIn" >
-              <a href={"/commenter/" + commenter.slug} >
+              <a href={commenter_url} >
                   <div className="author-image paper-shadow">
                     <img src="/images/default_user.jpg" alt="{commenter.name}"/>
                   </div>
               </a>
               <div className="author-teaser-text">
-	              <a href={"/commenter/" + commenter.slug} >
+	              <a href={commenter_url} >
                       <h3>{commenter.name}</h3>
                   </a>
                   <hr/>

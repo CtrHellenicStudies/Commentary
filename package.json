@@ -20,6 +20,7 @@
     "react-addons-update": "^15.0.2",
     "react-dom": "^15.3.0",
     "react-list": "^0.7.18",
+    "react-mounter": "^1.2.0",
     "react-rangeslider": "^1.0.3",
     "react-slick": "^0.12.2",
     "react-tap-event-plugin": "^1.0.0",

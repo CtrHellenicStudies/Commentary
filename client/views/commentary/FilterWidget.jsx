@@ -9,8 +9,8 @@ FilterWidget = React.createClass({
 
   propTypes: {
     filters: React.PropTypes.array.isRequired,
-		toggleSearchTerm: React.PropTypes.func.isRequired
-  },
+		toggleSearchTerm: React.PropTypes.func
+	},
 
   getChildContext() {
     return { muiTheme: getMuiTheme(baseTheme) };

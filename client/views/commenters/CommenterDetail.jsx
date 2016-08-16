@@ -5,6 +5,7 @@ CommenterDetail = React.createClass({
   },
 
   render() {
+		var commenter = this.props.commenter;
 
      return (
        <div className="page commenters-page">
@@ -37,12 +38,12 @@ CommenterDetail = React.createClass({
               <section className="page-content">
 
                   <div className="author-image paper-shadow">
-                      <img src="/images/default_user.jpg" alt="{commenter.name}"/>
+                      <img src="/images/default_user.jpg" alt={commenter.name} />
                   </div>
 
                   <div className="user-bio">
                     {commenter.bio ?
-                        <div>{commenter.bio}</div>
+                        <div dangerouslySetInnerHTML={{__html: commenter.bio}}></div>
                       :
                         <p>There is no biography information for this user yet.</p>
                     }

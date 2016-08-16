@@ -21,7 +21,7 @@ DiscussionThread = React.createClass({
 
   getMeteorData(){
     var query = {commentId: this.props.comment._id},
-				sort = {updated: -1};
+				sort = {votes: -1, updated: -1};
 
 		return {
 			loaded : true,

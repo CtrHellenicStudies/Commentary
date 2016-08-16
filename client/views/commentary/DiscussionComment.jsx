@@ -33,23 +33,24 @@ DiscussionComment = React.createClass({
 
 	updateDiscussionComment(){
 
-		var content = $(this.refs.editCommentForm).find("textarea").val();
+		var content = $(this.refs.updateCommentForm).find("textarea").val();
 
 		Meteor.call("discussionComments.update", {
-		//DiscussionComments.insert({
-			content: content,
-			discussionCommentId: this.props.discussionComment._id
+			_id: this.props.discussionComment._id,
+			content: content
 		});
 
-		$(this.refs.newCommentForm).find("textarea").val("");
+		this.setState({
+			editMode: false
+		});
 
 	},
 
 	upvoteDiscussionComment(){
 		if(typeof this.props.currentUser !== "undefined"){
-			Meteor.call("discussionComments.upvote", {
-				discussionCommentId: this.props.discussionComment._id
-			});
+			Meteor.call("discussionComments.upvote",
+				this.props.discussionComment._id
+			);
 
 		}
 
@@ -99,17 +100,27 @@ DiscussionComment = React.createClass({
                         {/*<div
 													dangerouslySetInnerHTML={{ __html: discussionComment.content}}
 													></div>*/}
+												{this.state.editMode ?
+                          <form className="update-comment-form clearfix" name="update-comment-form" ref="updateCommentForm">
+                            <textarea className="new-comment-text" defaultValue={this.props.discussionComment.content}></textarea>
+														<div className="comment-edit-buttons">
+	                            <RaisedButton
+																label="Update"
+																className="submit-comment-button paper-shadow"
+																onClick={this.updateDiscussionComment}
+																>
+	                            </RaisedButton>
+	                            <FlatButton
+																label="Close "
+	                              className="close-form-button "
+																onClick={this.closeEditMode}>
+	                            </FlatButton>
+														</div>
+                          </form>
+												:
 												<div>{discussionComment.content}</div>
 
-												{false ?
-                          <form className="update-comment-form clearfix" name="update-comment-form" >
-                            <textarea className="new-comment-text" ></textarea>
-                            <RaisedButton label="Update" type="submit" className="submit-comment-button paper-shadow" >Update</RaisedButton>
-                            <RaisedButton label="Close Update"
-                                         className="close-form-button " onClick={this.closeUpdate}>Close
-                            </RaisedButton>
-                          </form>
-												: ""}
+											}
 
                     </div>
                 </div>
@@ -140,7 +151,7 @@ DiscussionComment = React.createClass({
 											? (self.props.currentUser._id === discussionComment.user._id) ?
 	                      <FlatButton
 													label="Edit"
-													onClick={this.editDiscussionComment}
+													onClick={this.showEditMode}
 													className="edit"
 													>
 	                      </FlatButton>

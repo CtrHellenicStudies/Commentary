@@ -991,7 +991,17 @@ article.lemma-comment {
       border:none;
       outline:none;
       margin:0 0 10px 0;
-      border-bottom:1px solid #eee;
+      border-bottom:2px solid #ddd;
+      padding:10px;
+      resize:none;
+      font-family:@font-commentary;
+      font-size:16px;
+      line-height:1.5em;
+      font-weight:300;
+      color:rgba(0, 0, 0, 0.7);
+      background:@light;
+      text-transform: none;
+
       &:focus {
         border:none;
         border-bottom:1px solid #eee;
@@ -1000,25 +1010,38 @@ article.lemma-comment {
       }
     }
 
+		.comment-edit-buttons {
+			position:absolute;
+			right:42px;
+			bottom:20px;
+		}
+
     .submit-comment-button {
-      background:@primary;
       float:right;
+			margin:0 3px;
+			border-radius:2px;
+
+			button > div {
+	      background:@primary !important;
+
+			}
+
       span {
-        color:@light;
+        color:@light !important;
 
       }
-      &:hover, &:focus {
-        background:@primary-dark;
-        span {
-          color:@light;
 
-        }
+      &:hover, &:focus {
+				> div {
+		      background:@primary-dark !important;
+
+				}
 
       }
     }
-  .close-form-button {
-    float:right;
-  }
+	  .close-form-button {
+	    float:right;
+	  }
 
   }
 
@@ -1074,6 +1097,7 @@ article.lemma-comment {
   background:@light;
   padding:40px 30px 20px;
   margin:10px auto;
+	position:relative;
 
   .profile-picture {
     display:inline-block;

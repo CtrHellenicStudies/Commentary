@@ -18,3 +18,22 @@ Meteor.publishComposite('user', function() {
     ]
   };
 });
+
+Meteor.publish('user.discussionComments', function(query, skip, limit) {
+	if(!skip){
+		skip = 0;
+	}
+
+	if(!limit){
+		limit = 1000;
+	}
+
+	if(Meteor.userId && query){
+		query["user._id"] = Meteor.userId;
+	  return DiscussionComments.find(query, {skip: skip, limit: limit, sort: {created: -1}});
+	}else {
+		return [];
+	}
+
+
+});

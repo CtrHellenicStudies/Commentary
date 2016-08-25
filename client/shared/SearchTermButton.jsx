@@ -10,7 +10,8 @@ SearchTermButton = React.createClass({
 		label: React.PropTypes.string.isRequired,
 		searchTermKey: React.PropTypes.string.isRequired,
 		value: React.PropTypes.object.isRequired,
-		activeWork: React.PropTypes.bool
+		activeWork: React.PropTypes.bool,
+		active: React.PropTypes.bool,
   },
 
   getChildContext() {
@@ -30,15 +31,12 @@ SearchTermButton = React.createClass({
 
 	toggleSearchTerm(){
 		this.props.toggleSearchTerm(this.props.searchTermKey, this.props.value);
-		this.setState({
-			active: !this.state.active
-		});
 
 	},
 
   render(){
 		var className = "search-term-button";
-		var active = false;
+		var active = this.props.active;
 
 		if("activeWork" in this.props){
 			if(this.props.activeWork === true){

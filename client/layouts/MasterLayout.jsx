@@ -15,8 +15,6 @@ MasterLayout = React.createClass({
 				</main>
 				<Footer/>
 
-				<FilterWidget filters={[]}/>
-
 			</div>
 			);
 		}

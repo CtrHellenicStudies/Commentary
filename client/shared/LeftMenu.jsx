@@ -8,6 +8,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
 
+
 LeftMenu = React.createClass({
 
 
@@ -48,9 +49,13 @@ LeftMenu = React.createClass({
 				var username = "";
 
 				if(userIsLoggedIn){
-						if(this.data.currentUser.emails.length){
-							username = this.data.currentUser.emails[0].address;
-						}
+					if(this.data.currentUser.profile && this.data.currentUser.profile.name){
+						username = this.data.currentUser.profile.name;
+
+					}else if(this.data.currentUser.emails.length){
+						username = this.data.currentUser.emails[0].address;
+
+					}
 
 				}
 
@@ -125,7 +130,6 @@ LeftMenu = React.createClass({
                     <MenuItem
                           href="/sign-in"
                           primaryText="Sign in"
-                          target="_blank"
                           onClick={this.props.closeLeftMenu}
                       />
                     }

@@ -1,21 +1,34 @@
+import '../../node_modules/mdi/css/materialdesignicons.css';
+
+
 UserLayout = React.createClass({
+  mixins: [ReactMeteorData],
+  getMeteorData(){
+		var user = Meteor.user();
+
+		if(user && !("profile" in user)){
+			user.profile = {};
+		}
+		return {
+			user: user
+		}
+
+	},
+
+
 	render(){
 		return(
-			<div className="chs-layout user-layout">
+			<div className="chs-layout master-layout">
+
 				<Header />
-				<div className="container" >
-					<div className="row">
-						<div className="col-md-8">
-							<BlazeToReact blazeTemplate="profile" />
-						</div>
-						<div className="col-md-4">
-							<div>
-								{/*<BookmarkList />*/}
-							</div>
-						</div>
-					</div>
-				</div>
+
+				<main>
+					{this.data.user ?
+						<ProfilePage user={this.data.user}/>
+					: ""}
+				</main>
 				<Footer/>
+
 			</div>
 			);
 		}

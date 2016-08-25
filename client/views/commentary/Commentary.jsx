@@ -14,6 +14,8 @@ Commentary = React.createClass({
 		addSearchTerm: React.PropTypes.func,
 		loadMoreComments: React.PropTypes.func,
 		skip: React.PropTypes.number,
+		limit: React.PropTypes.number,
+		toggleSearchTerm: React.PropTypes.func,
   },
 
   getInitialState(){
@@ -467,6 +469,12 @@ Commentary = React.createClass({
 					: ""
 				}
         {/*<!-- .commentary-primary -->*/}
+
+				<FilterWidget
+					filters={this.props.filters}
+					toggleSearchTerm={this.props.toggleSearchTerm}
+					/>
+
       </div>
      );
    }

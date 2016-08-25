@@ -3,13 +3,14 @@ CommentaryLayout = React.createClass({
   getInitialState(){
     return {
       filters: [],
-			skip: 0
+			skip: 0,
+			limit: 10
     };
   },
 
 	loadMoreComments(){
 	    this.setState({
-	      skip : this.state.skip + 10
+	      skip : this.state.skip + this.state.limit
 	    });
 
 			//console.log("Load more comments:", this.state.skip);
@@ -199,6 +200,7 @@ CommentaryLayout = React.createClass({
 			<div className="chs-layout commentary-layout">
 
 				<Header
+					filters={this.state.filters}
 					toggleSearchTerm={this.toggleSearchTerm}
 					handleChangeLineN={this.handleChangeLineN}
 					handleChangeTextsearch={this.handleChangeTextsearch}
@@ -209,15 +211,8 @@ CommentaryLayout = React.createClass({
 					toggleSearchTerm={this.toggleSearchTerm}
 					loadMoreComments={this.loadMoreComments}
 					skip={this.state.skip}
+					limit={this.state.limit}
 					/>
-
-
-				<FilterWidget
-					filters={this.state.filters}
-					toggleSearchTerm={this.toggleSearchTerm}
-					/>
-			  {/*<ModalLogin />
-				<ModalSignup />*/}
 
 			</div>
 			);

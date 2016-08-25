@@ -10,11 +10,7 @@ Schemas.UserProfile = new SimpleSchema({
       }
     }
   },
-  firstName: {
-    type: String,
-    optional: true
-  },
-  lastName: {
+  name: {
     type: String,
     optional: true
   },
@@ -22,12 +18,28 @@ Schemas.UserProfile = new SimpleSchema({
     type: Date,
     optional: true
   },
-  bio: {
+  biography: {
     type: String,
     optional: true,
     autoform: {
       rows: 4
     }
+  },
+  academiaEdu: {
+    type: String,
+    optional: true,
+  },
+  twitter: {
+    type: String,
+    optional: true,
+  },
+  facebook: {
+    type: String,
+    optional: true,
+  },
+  google: {
+    type: String,
+    optional: true,
   },
   location: {
     type: String,

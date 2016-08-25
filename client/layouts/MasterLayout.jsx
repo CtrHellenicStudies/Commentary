@@ -16,8 +16,6 @@ MasterLayout = React.createClass({
 				<Footer/>
 
 				<FilterWidget filters={[]}/>
-			  {/*<ModalLogin />
-				<ModalSignup />*/}
 
 			</div>
 			);

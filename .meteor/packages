@@ -58,12 +58,11 @@ yogiben:autoform-modals
 yogiben:autoform-file
 yogiben:autoform-map
 check@1.2.3
-#iron:router
+iron:router
 #multiply:iron-router-progress
 useraccounts:core
 useraccounts:bootstrap
-useraccounts:iron-routing
-percolate:momentum-iron-router
+useraccounts:flow-routing@1.14.3
 percolate:momentum
 
 # Packages added for project
@@ -75,6 +74,7 @@ jabbslad:basic-auth
 deanius:promise
 kadira:flow-router
 kadira:react-layout
+kadira:blaze-layout
 user-thumbs
 standard-minifier-css@1.1.8
 standard-minifier-js@1.1.8
@@ -83,6 +83,7 @@ dburles:google-maps
 todda00:friendly-slugs
 mquandalle:promisify-core
 d3js:d3
+gwendall:blaze-to-react
 jalik:ufs
 jalik:ufs-local
 jalik:ufs-gridfs

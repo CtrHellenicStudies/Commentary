@@ -33,7 +33,9 @@ Header = React.createClass({
 			subworks: [],
 			lineMin: 0,
 			lineMax: 2000,
-			activeWork: ""
+			activeWork: "",
+			modalLoginLowered: false,
+			modalSignupLowered: false
     };
   },
 
@@ -143,6 +145,31 @@ Header = React.createClass({
 
 	},
 
+	showLoginModal(){
+		this.setState({
+			modalLoginLowered: true
+		});
+
+	},
+	showSignupModal(){
+		this.setState({
+			modalSignupLowered: true
+		});
+
+	},
+	closeLoginModal(){
+		this.setState({
+			modalLoginLowered: false
+		});
+
+	},
+	closeSignupModal(){
+		this.setState({
+			modalSignupLowered: false
+		});
+
+	},
+
   render(){
 		var self = this;
 
@@ -234,16 +261,16 @@ Header = React.createClass({
                     :
                       <div>
                         <FlatButton
-                          href="/sign-in"
+                          href="#"
                           label="Login"
                           onClick={this.showLoginModal}
                           style={styles.flatButton}
                           >
                         </FlatButton>
                         <FlatButton
-                          href="/sign-up"
+                          href="#"
                           label="Join the Community"
-                          onClick={this.showJoinModal}
+                          onClick={this.showSignupModal}
                           style={styles.flatButton}
                           >
                         </FlatButton>
@@ -432,6 +459,14 @@ Header = React.createClass({
         		</div>
           }
       	</header>
+			  <ModalLogin
+					lowered={this.state.modalLoginLowered}
+					closeModal={this.closeLoginModal}
+					/>
+				<ModalSignup
+					lowered={this.state.modalSignupLowered}
+					closeModal={this.closeSignupModal}
+					/>
       </div>
     )
   }

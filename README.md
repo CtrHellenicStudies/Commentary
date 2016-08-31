@@ -1,6 +1,6 @@
 = A Homer Commentary in Progress
 
-This is the Meteor application for the Beyond Words 2016 exhibition.
+This is the Meteor application for A Homer Commentary in Progress 
 
 
 ### Building
@@ -28,4 +28,4 @@ Start the Upstart service with whatever you named your service file.  Something 
 ```
 sudo start ahcip
 ```
-If you named your Upstart service file ahcip.conf; otherwise, start whatever you named your Upstart service file. 
+If you named your Upstart service file ahcip.conf; otherwise, start whatever you named your Upstart service file.

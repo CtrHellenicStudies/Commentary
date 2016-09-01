@@ -148,6 +148,7 @@ Comment = React.createClass({
 									dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
                 </div>
                 <div className="comment-reference" >
+                	<h5>Comment ID: {comment._id}</h5>
                     <h4>Secondary Source(s):</h4>
                     <p>
 											{comment.referenceLink ?

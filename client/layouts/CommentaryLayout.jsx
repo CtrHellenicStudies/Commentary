@@ -72,10 +72,9 @@ CommentaryLayout = React.createClass({
 
 	},
 
-	handleChangeTextsearch(e){
+	handleChangeTextsearch(textsearch){
 
 		var filters = this.state.filters;
-		var textsearch = $(".text-search input").val();
 
 		if(textsearch && textsearch.length){
 			var textsearchInFilters = false;
@@ -117,7 +116,7 @@ CommentaryLayout = React.createClass({
 
 	},
 
-	handleChangeLineN(e){
+	handleChangeDate(e){
 
 		var filters = this.state.filters;
 
@@ -202,8 +201,9 @@ CommentaryLayout = React.createClass({
 				<Header
 					filters={this.state.filters}
 					toggleSearchTerm={this.toggleSearchTerm}
-					handleChangeLineN={this.handleChangeLineN}
+					handleChangeDate={this.handleChangeDate}
 					handleChangeTextsearch={this.handleChangeTextsearch}
+					initialSearchEnabled
 					/>
 
 				<Commentary

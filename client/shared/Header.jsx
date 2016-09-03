@@ -4,9 +4,8 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IconButton from 'material-ui/IconButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import {debounce} from 'throttle-debounce';
+import { debounce } from 'throttle-debounce';
 
 
 Header = React.createClass({
@@ -14,460 +13,500 @@ Header = React.createClass({
 	propTypes: {
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeLineN: React.PropTypes.func
+		handleChangeDate: React.PropTypes.func,
+		initialSearchEnabled: React.PropTypes.bool,
 	},
 
-  getChildContext() {
-    return { muiTheme: getMuiTheme(baseTheme) };
-  },
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object.isRequired,
-  },
+	mixins: [ReactMeteorData],
 
-  getInitialState(){
-    return {
-      leftMenuOpen : false,
-      searchEnabled : false,
-      searchDropdownOpen : "",
+	getInitialState() {
+		return {
+			leftMenuOpen: false,
+			rightMenuOpen: false,
+			searchEnabled: this.props.initialSearchEnabled,
+			searchDropdownOpen: '',
 			subworks: [],
 			lineMin: 0,
 			lineMax: 2000,
-			activeWork: "",
+			activeWork: '',
 			modalLoginLowered: false,
-			modalSignupLowered: false
-    };
-  },
+			modalSignupLowered: false,
+		};
+	},
 
-  mixins: [ReactMeteorData],
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
-  getMeteorData(){
-    var query = {};
-
+	getMeteorData() {
 		return {
 			keywords: Keywords.find().fetch(),
 			commenters: Commenters.find().fetch(),
-			works: Works.find({}, {sort:{order:1}}).fetch(),
-			subworks: Subworks.find({}, {sort:{n:1}}).fetch(),
-		}
+			works: Works.find({}, { sort: { order: 1 } }).fetch(),
+			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
+		};
 	},
 
-	componentDidMount(){
-		if(location.pathname.indexOf("/commentary") === 0){
-	    this.setState({
-	      searchEnabled : true
-	    });
-
-		}else {
-	    this.setState({
-	      searchEnabled : false
+	toggleSearchMode() {
+		if (location.pathname.indexOf('/commentary') === 0) {
+			this.setState({
+				searchEnabled: !this.state.searchEnabled,
 			});
-
+		} else {
+			location.href = '/commentary';
 		}
-
 	},
 
-  toggleSearchMode(){
+	toggleLeftMenu() {
+		this.setState({
+			leftMenuOpen: !this.state.leftMenuOpen,
+		});
+	},
 
-		if(location.pathname.indexOf("/commentary") === 0){
-	    this.setState({
-	      searchEnabled : !this.state.searchEnabled
-	    });
+	closeLeftMenu() {
+		this.setState({
+			leftMenuOpen: false,
+		});
+	},
 
-		}else {
-			location.href = "/commentary";
+	toggleRightMenu() {
+		this.setState({
+			rightMenuOpen: !this.state.rightMenuOpen,
+		});
+		console.log(this.state.rightMenuOpen);
+	},
+
+	closeRightMenu() {
+		this.setState({
+			rightMenuOpen: false,
+		});
+	},
+
+	toggleSearchDropdown(targetDropdown) {
+		if (this.state.searchDropdownOpen === targetDropdown) {
+			this.setState({
+				searchDropdownOpen: '',
+			});
+		} else {
+			this.setState({
+				searchDropdownOpen: targetDropdown,
+			});
 		}
-  },
+	},
 
-  toggleLeftMenu(){
-    this.setState({
-      leftMenuOpen : !this.state.leftMenuOpen
-    });
-  },
-
-  closeLeftMenu(){
-    this.setState({
-      leftMenuOpen : false
-    });
-  },
-
-  toggleSearchDropdown(targetDropdown){
-		if(this.state.searchDropdownOpen === targetDropdown){
-	    this.setState({
-				searchDropdownOpen : ""
-	    });
-
-		}else {
-	    this.setState({
-				searchDropdownOpen : targetDropdown
-	    });
-
-		}
-  },
-
-	toggleSearchTerm(key, value){
+	toggleSearchTerm(key, value) {
 		this.props.toggleSearchTerm(key, value);
-
 	},
 
-	toggleWorkSearchTerm(key, value){
-		var work = value;
+	handleChangeTextsearch(event) {
+		this.props.handleChangeTextsearch(event.target.value);
+	},
 
-		value.subworks.forEach(function(subwork){
-			subwork.work = work;
+	toggleWorkSearchTerm(key, value) {
+		const work = value;
+
+		value.subworks.forEach((subwork, i) => {
+			subworks[i].work = work;
 		});
 
-		//console.log("Header.state", this.state);
+		// console.log("Header.state", this.state);
 
-		if(this.state.activeWork === value.slug){
+		if (this.state.activeWork === value.slug) {
 			this.setState({
 				subworks: [],
-				activeWork: ""
+				activeWork: '',
 			});
-
-		}else {
-			value.subworks.sort(function(a, b){
-			  if (a.n < b.n)
-			    return -1;
-			  if (a.n > b.n)
-			    return 1;
-			  return 0;
-
+		} else {
+			value.subworks.sort((a, b) => {
+				if (a.n < b.n) {
+					return -1;
+				}
+				if (a.n > b.n) {
+					return 1;
+				}
+				return 0;
 			});
 			this.setState({
 				subworks: value.subworks,
-				activeWork: value.slug
+				activeWork: value.slug,
 			});
-
 		}
 
 		this.props.toggleSearchTerm(key, value);
-
 	},
 
-	showLoginModal(){
+	showLoginModal() {
 		this.setState({
-			modalLoginLowered: true
+			modalLoginLowered: true,
 		});
-
 	},
-	showSignupModal(){
+	showSignupModal() {
 		this.setState({
-			modalSignupLowered: true
+			modalSignupLowered: true,
 		});
-
 	},
-	closeLoginModal(){
+	closeLoginModal() {
 		this.setState({
-			modalLoginLowered: false
+			modalLoginLowered: false,
 		});
-
 	},
-	closeSignupModal(){
+	closeSignupModal() {
 		this.setState({
-			modalSignupLowered: false
+			modalSignupLowered: false,
 		});
-
 	},
 
-  render(){
-		var self = this;
+	render() {
+		const self = this;
 
-    let styles = {
-      flatButton : {
-        width: "auto",
-        minWidth: "none",
-        height: "80px",
-        padding: "21px 5px"
-      },
-      flatIconButton : {
-        padding: "10px 20px",
-        width: "auto",
-        minWidth: "none",
-        height: "55px",
+		const styles = {
+			flatButton: {
+				width: 'auto',
+				minWidth: 'none',
+				height: '80px',
+				padding: '25px 5px',
+			},
+			flatIconButton: {
+				padding: '10px 20px',
+				width: 'auto',
+				minWidth: 'none',
+				height: '55px',
 
-      }
+			},
 
-    };
+		};
 
-    var user_is_loggedin = Meteor.user();
+		const userIsLoggedIn = Meteor.user();
 
-    var active_comment = false;
-    var username = false;
+		// const active_comment = false;
+		// const username = false;
 
-    var keyword = {id:1};
-    var commenter = {id:1};
-    var work = {id:1};
-    var subwork = {work:{title:"Iliad"},id:1, title:"1"};
+		// const keyword = { id: 1 };
+		// const commenter = { id: 1 };
+		// const work = { id: 1 };
+		// const subwork = { work: { title: 'Iliad' }, id: 1, title: '1' };
 
-    //console.log("Header.state", this.state);
-    //console.log("Header.data", this.data);
+		// console.log("Header.state", this.state);
+		// console.log("Header.data", this.data);
 
-    return (
-      <div>
-        <LeftMenu
-          open={this.state.leftMenuOpen}
-          closeLeftMenu={this.closeLeftMenu}
-          />
-      	<header >
-          {!this.state.searchEnabled ?
+		return (
+			<div>
+				<LeftMenu
+					open={this.state.leftMenuOpen}
+					closeLeftMenu={this.closeLeftMenu}
+				/>
+				<CommentarySearchPanel
+					toggleSearchTerm={this.props.toggleSearchTerm}
+					handleChangeTextsearch={this.props.handleChangeTextsearch}
+					handleChangeDate={this.props.handleChangeDate}
+					open={this.state.rightMenuOpen}
+					closeRightMenu={this.closeRightMenu}
+				/>
+				<header >
+					{!this.state.searchEnabled ?
 
-        		<div className="md-menu-toolbar" >
-        			<div className="toolbar-tools">
+						<div className="md-menu-toolbar" >
+							<div className="toolbar-tools">
+								<IconButton
+									className="left-drawer-toggle"
+									style={styles.flatIconButton}
+									iconClassName="mdi mdi-menu"
+									onClick={this.toggleLeftMenu}
+								/>
 
-                <IconButton
-                  className="left-drawer-toggle"
-                  style={styles.flatIconButton}
-                  iconClassName="mdi mdi-menu"
-                  onClick={this.toggleLeftMenu}
-                />
+								<a href="/" className="header-home-link" >
+									<h3 className="logo">A Homer Commentary in Progress</h3>
+								</a>
+								<div className="search-toggle">
+									<IconButton
+										className="search-button right-drawer-toggle"
+										onClick={this.toggleRightMenu}
+										iconClassName="mdi mdi-magnify"
+									/>
+								</div>
+								<div className="header-section-wrap nav-wrap collapse" >
+									<FlatButton
+										label="Commentary"
+										href="/commentary/"
+										style={styles.flatButton}
+									/>
+									<FlatButton
+										label="About"
+										href="/about"
+										style={styles.flatButton}
+									/>
+									{userIsLoggedIn ?
+										<div>
+											<FlatButton
+												href="/profile"
+												label="Profile"
+												className=""
+												style={styles.flatButton}
+											/>
+										</div>
+										:
+										<div>
+											<FlatButton
+												href="#"
+												label="Login"
+												onClick={this.showLoginModal}
+												style={styles.flatButton}
+											/>
+											<FlatButton
+												href="#"
+												label="Join the Community"
+												onClick={this.showSignupModal}
+												style={styles.flatButton}
+											/>
+										</div>
+									}
+									<div className="search-toggle">
+										<IconButton
+											className="search-button"
+											onClick={this.toggleSearchMode}
+											iconClassName="mdi mdi-magnify"
+										/>
+									</div>
+								</div>
+							</div>
 
-                <a href="/" className="header-home-link" >
-        					<h3 className="logo">A Homer Commentary in Progress</h3>
-        				</a>
+						</div>
 
-        				<div className="search-toggle">
-        					<IconButton
-                    className="search-button"
-                    onClick={this.toggleSearchMode}
-                    iconClassName="mdi mdi-magnify"
-                    >
+						:
+						<div className="md-menu-toolbar" >
+							<div className="toolbar-tools">
 
-        					</IconButton>
-        				</div>
+								<IconButton
+									className="left-drawer-toggle"
+									style={styles.flatIconButton}
+									iconClassName="mdi mdi-menu"
+									onClick={this.toggleLeftMenu}
+								/>
 
-        				<div className="header-section-wrap nav-wrap" >
-        					<FlatButton
-                    label="Commentary"
-                    href="/commentary/"
-                    style={styles.flatButton}
-                    >
-        					</FlatButton>
-        					<FlatButton
-                    label="About"
-                    href="/about"
-                    style={styles.flatButton}
-                    ></FlatButton>
-                  {user_is_loggedin ?
-                      <div>
-                        <FlatButton
-                          href="/profile"
-                          label="Profile"
-                          className=""
-                          style={styles.flatButton}
-                          >
-                        </FlatButton>
-                      </div>
-                    :
-                      <div>
-                        <FlatButton
-                          href="#"
-                          label="Login"
-                          onClick={this.showLoginModal}
-                          style={styles.flatButton}
-                          >
-                        </FlatButton>
-                        <FlatButton
-                          href="#"
-                          label="Join the Community"
-                          onClick={this.showSignupModal}
-                          style={styles.flatButton}
-                          >
-                        </FlatButton>
-                      </div>
-                  }
-        				</div>
+								<a href="/" className="header-home-link" >
+									<h3 className="logo">AHCIP</h3>
+								</a>
+								<div className="search-toggle">
+									<IconButton
+										className="search-button right-drawer-toggle"
+										onClick={this.toggleRightMenu}
+										iconClassName="mdi mdi-magnify"
+									/>
+								</div>
 
-        			</div>
+								<div className="search-tools collapse">
 
-        		</div>
+									<div className="search-tool text-search">
+										<TextField
+											hintText=""
+											floatingLabelText="Search"
+											onChange={this.handleChangeTextsearch}
+										/>
+									</div>
 
-          :
-        		<div className="md-menu-toolbar" >
-        			<div className="toolbar-tools">
-
-                <FlatButton
-                  className="left-drawer-toggle"
-                  style={styles.flatIconButton}
-                  icon={<FontIcon className="mdi mdi-menu" />}
-                  onClick={this.toggleLeftMenu}
-                />
-
-        				<div className="search-tools">
-
-        					<div className="search-tool text-search">
-                    <TextField
-                        hintText=""
-                        floatingLabelText="Search"
-												onChange={debounce(500, this.props.handleChangeTextsearch)}
-                      />
-        					</div>
-
-        					<div className={"dropdown search-dropdown search-dropdown-keywords" + (self.state.searchDropdownOpen === "keyword" ? " open" : "")}>
-        						<FlatButton
-                      className="search-tool search-type-keyword dropdown-toggle"
-                      label="Keyword"
+									<div
+										className={`dropdown search-dropdown search-dropdown-keywords${
+											self.state.searchDropdownOpen === 'keyword' ? ' open' : ''}`}
+									>
+										<FlatButton
+											className="search-tool search-type-keyword dropdown-toggle"
+											label="Keyword"
 											labelPosition="before"
-                      icon={<FontIcon className="mdi mdi-chevron-down" />}
-                      onClick={self.toggleSearchDropdown.bind(null, "keyword")}
-        						>
-        						</FlatButton>
+											icon={<FontIcon className="mdi mdi-chevron-down" />}
+											onClick={self.toggleSearchDropdown.bind(null, 'keyword')}
+										/>
 
-	        						<ul className="dropdown-menu ">
-	        							<div className="dropdown-menu-inner">
-													{self.data.keywords.map(function(keyword, i){
-		                        return <SearchTermButton
-																key={i}
-																toggleSearchTerm={self.toggleSearchTerm}
-																label={keyword.title}
-																searchTermKey="keywords"
-																value={keyword}
-																/>
-													})}
-	        							</div>
-
-												<IconButton
-													className="close-dropdown"
-													iconClassName="mdi mdi-close"
-		                      onClick={self.toggleSearchDropdown.bind(null, "keyword")}
-													></IconButton>
-	        						</ul>
-
-
-        					</div>
-
-        					<div className={"dropdown search-dropdown search-dropdown-commenters" + (this.state.searchDropdownOpen === "commenter" ? " open" : "")}>
-        						<FlatButton
-                      className="search-tool search-type-commenter dropdown-toggle"
-                      label="Commenter"
-											labelPosition="before"
-                      icon={<FontIcon className="mdi mdi-chevron-down" />}
-                      onClick={self.toggleSearchDropdown.bind(null, "commenter")}
-        						>
-                    </FlatButton>
-
-        						<ul className="dropdown-menu">
-        							<div className="dropdown-menu-inner">
-												{self.data.commenters.map(function(commenter, i){
-	                        return <SearchTermButton
-															key={i}
-															toggleSearchTerm={self.toggleSearchTerm}
-															label={commenter.name}
-															searchTermKey="commenters"
-															value={commenter}
-															/>
-												})}
-        							</div>
+										<ul className="dropdown-menu ">
+											<div className="dropdown-menu-inner">
+												{self.data.keywords.map((keyword, i) => (
+													<SearchTermButton
+														key={i}
+														toggleSearchTerm={self.toggleSearchTerm}
+														label={keyword.title}
+														searchTermKey="keywords"
+														value={keyword}
+													/>
+												))}
+											</div>
 
 											<IconButton
 												className="close-dropdown"
 												iconClassName="mdi mdi-close"
-	                      onClick={this.toggleSearchDropdown.bind(null, "commenter")}
-												></IconButton>
-        						</ul>
+												onClick={self.toggleSearchDropdown.bind(null, 'keyword')}
+											/>
+										</ul>
 
 
-        					</div>
+									</div>
 
-        					<div className={"dropdown search-dropdown search-dropdown-works" + (this.state.searchDropdownOpen === "work" ? " open" : "")}>
-        						<FlatButton
-                      className="search-tool search-type-work dropdown-toggle"
-                      label="Work"
+									<div
+										className={`dropdown search-dropdown search-dropdown-commenters${
+											this.state.searchDropdownOpen === 'commenter' ? ' open' : ''}`}
+									>
+										<FlatButton
+											className="search-tool search-type-commenter dropdown-toggle"
+											label="Commenter"
 											labelPosition="before"
-                      icon={<FontIcon className="mdi mdi-chevron-down" />}
-                      onClick={self.toggleSearchDropdown.bind(null, "work")}
-        						>
-                    </FlatButton>
+											icon={<FontIcon className="mdi mdi-chevron-down" />}
+											onClick={self.toggleSearchDropdown.bind(null, 'commenter')}
+										/>
 
-        						<ul className="dropdown-menu">
-        							<div className="dropdown-menu-inner">
-												{self.data.works.map(function(work, i){
-													var activeWork = (self.state.activeWork === work.slug);
-	                        return <SearchTermButton
+										<ul className="dropdown-menu">
+											<div className="dropdown-menu-inner">
+												{self.data.commenters.map((commenter, i) => (
+													<SearchTermButton
+														key={i}
+														toggleSearchTerm={self.toggleSearchTerm}
+														label={commenter.name}
+														searchTermKey="commenters"
+														value={commenter}
+													/>
+												))}
+											</div>
+
+											<IconButton
+												className="close-dropdown"
+												iconClassName="mdi mdi-close"
+												onClick={this.toggleSearchDropdown.bind(null, 'commenter')}
+											/>
+										</ul>
+
+
+									</div>
+
+									<div
+										className={`dropdown search-dropdown search-dropdown-works${
+											this.state.searchDropdownOpen === 'work' ? ' open' : ''}`}
+									>
+										<FlatButton
+											className="search-tool search-type-work dropdown-toggle"
+											label="Work"
+											labelPosition="before"
+											icon={<FontIcon className="mdi mdi-chevron-down" />}
+											onClick={self.toggleSearchDropdown.bind(null, 'work')}
+										/>
+
+										<ul className="dropdown-menu">
+											<div className="dropdown-menu-inner">
+												{self.data.works.map((work, i) => {
+													const activeWork = (self.state.activeWork === work.slug);
+													return (
+														<SearchTermButton
 															key={i}
 															toggleSearchTerm={self.toggleWorkSearchTerm}
 															label={work.title}
 															searchTermKey="works"
 															value={work}
 															activeWork={activeWork}
-															/>
+														/>
+													);
 												})}
-        							</div>
+											</div>
 
 											<IconButton
 												className="close-dropdown"
 												iconClassName="mdi mdi-close"
-	                      onClick={this.toggleSearchDropdown.bind(null, "work")}
-												></IconButton>
+												onClick={this.toggleSearchDropdown.bind(null, 'work')}
+											/>
 
-        						</ul>
+										</ul>
 
-        					</div>
+									</div>
 
-        					<div className={"dropdown search-dropdown search-dropdown-book" + (this.state.searchDropdownOpen === "subwork" ? " open" : "") }>
-        						<FlatButton
-                      className="search-tool search-type-subwork dropdown-toggle"
-                      label="Book"
+									<div
+										className={`dropdown search-dropdown search-dropdown-book${
+											this.state.searchDropdownOpen === 'subwork' ? ' open' : ''}`}
+									>
+										<FlatButton
+											className="search-tool search-type-subwork dropdown-toggle"
+											label="Book"
 											labelPosition="before"
-                      icon={<FontIcon className="mdi mdi-chevron-down" />}
-                      onClick={self.toggleSearchDropdown.bind(null, "subwork")}
-        						>
-                    </FlatButton>
+											icon={<FontIcon className="mdi mdi-chevron-down" />}
+											onClick={self.toggleSearchDropdown.bind(null, 'subwork')}
+										/>
 
-        						<ul className="dropdown-menu">
-        							<div className="dropdown-menu-inner">
-												{self.state.subworks.map(function(subwork, i){
-	                        return <SearchTermButton
-															key={i}
-															toggleSearchTerm={self.toggleSearchTerm}
-															label={subwork.work.title + " " + subwork.title}
-															searchTermKey="subworks"
-															value={subwork}
-															/>
-												})}
-        							</div>
+										<ul className="dropdown-menu">
+											<div className="dropdown-menu-inner">
+												{self.state.subworks.map((subwork, i) => (
+													<SearchTermButton
+														key={i}
+														toggleSearchTerm={self.toggleSearchTerm}
+														label={`${subwork.work.title} ${subwork.title}`}
+														searchTermKey="subworks"
+														value={subwork}
+													/>
+												))}
+											</div>
 
 											<IconButton
 												className="close-dropdown"
 												iconClassName="mdi mdi-close"
-	                      onClick={this.toggleSearchDropdown.bind(null, "subwork")}
-												></IconButton>
+												onClick={this.toggleSearchDropdown.bind(null, 'subwork')}
+											/>
 
-        						</ul>
+										</ul>
 
 
-        					</div>
+									</div>
 
-        					<div className="search-tool text-search line-search">
-        						<label></label>
-										<LineRangeSlider handleChangeLineN={this.props.handleChangeLineN}/>
-        					</div>
+									<div
+										className={`dropdown search-dropdown search-dropdown-date${
+											this.state.searchDropdownOpen === 'date' ? ' open' : ''}`}
+									>
+										<FlatButton
+											className="search-tool search-type-date dropdown-toggle"
+											label="Date"
+											labelPosition="before"
+											icon={<FontIcon className="mdi mdi-chevron-down" />}
+											onClick={self.toggleSearchDropdown.bind(null, 'date')}
+										/>
 
-        				</div>
+										<ul className="dropdown-menu">
+											<div className="dropdown-menu-inner">
+												<div className="search-tool--date">
+													<DateRangeSlider
+														handleChangeDate={this.props.handleChangeDate}
+													/>
+												</div>
+											</div>
 
-        				<div className="search-toggle">
-        					<IconButton
-                    className="search-button"
-                    onClick={this.toggleSearchMode}
-                    iconClassName="mdi mdi-magnify"
-                    >
+											<IconButton
+												className="close-dropdown"
+												iconClassName="mdi mdi-close"
+												onClick={this.toggleSearchDropdown.bind(null, 'date')}
+											/>
 
-        					</IconButton>
-        				</div>
+										</ul>
 
-        			</div>
-        		</div>
-          }
-      	</header>
-			  <ModalLogin
+
+									</div>
+
+									<div className="search-toggle">
+										<IconButton
+											className="search-button"
+											onClick={this.toggleSearchMode}
+											iconClassName="mdi mdi-magnify"
+										/>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					}
+				</header>
+				<ModalLogin
 					lowered={this.state.modalLoginLowered}
 					closeModal={this.closeLoginModal}
-					/>
+				/>
 				<ModalSignup
 					lowered={this.state.modalSignupLowered}
 					closeModal={this.closeSignupModal}
-					/>
-      </div>
-    )
-  }
+				/>
+			</div>
+);
+	},
 });

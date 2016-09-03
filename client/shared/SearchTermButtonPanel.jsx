@@ -1,9 +1,11 @@
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { brown500, brown800, grey300, white, black } from 'material-ui/styles/colors';
+import Avatar from 'material-ui/Avatar';
+import FontIcon from 'material-ui/FontIcon';
+import Chip from 'material-ui/Chip';
 
-SearchTermButton = React.createClass({
+SearchTermButtonPanel = React.createClass({
 
 	propTypes: {
 		toggleSearchTerm: React.PropTypes.func.isRequired,
@@ -24,15 +26,21 @@ SearchTermButton = React.createClass({
 		};
 	},
 
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	toggleSearchTerm() {
 		this.props.toggleSearchTerm(this.props.searchTermKey, this.props.value);
+		this.setState({
+			active: !this.state.active,
+		});
 	},
 
 	render() {
+		let backgroundColor = grey300;
+		let color = black;
 		let className = 'search-term-button';
 		let active = this.props.active;
 
@@ -44,17 +52,43 @@ SearchTermButton = React.createClass({
 
 		if (active) {
 			className += ' search-term-button--active';
+			backgroundColor = brown500;
+			color = white;
 		}
+		const styles = {
+			chip: {
+				margin: 5,
+				maxWidth: '100%',
+			},
+			chipLabel: {
+				color,
+				textOverflow: 'ellipsis',
+				overflow: 'hidden',
+			},
+		};
+
 
 		return (
-			<li>
-				<FlatButton
-					className={className}
-					onClick={this.toggleSearchTerm}
-					label={this.props.label}
-					icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
+			<Chip
+				className={className}
+				backgroundColor={backgroundColor}
+				onTouchTap={this.toggleSearchTerm}
+				style={styles.chip}
+				labelStyle={styles.chipLabel}
+			>	
+				{active?
+					<Avatar
+						icon={<FontIcon className="mdi mdi-minus" />}
+						backgroundColor={brown800}
+					/>
+					:
+					<Avatar 
+						icon={<FontIcon className="mdi mdi-plus" />}
 				/>
-			</li>
+				}
+				
+				{this.props.label}
+			</Chip>
 		)
 	},
 });

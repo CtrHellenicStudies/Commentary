@@ -5,8 +5,6 @@ import FontIcon from 'material-ui/FontIcon';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
-import { debounce } from 'throttle-debounce';
-
 
 Header = React.createClass({
 
@@ -30,8 +28,6 @@ Header = React.createClass({
 			searchEnabled: this.props.initialSearchEnabled,
 			searchDropdownOpen: '',
 			subworks: [],
-			lineMin: 0,
-			lineMax: 2000,
 			activeWork: '',
 			modalLoginLowered: false,
 			modalSignupLowered: false,

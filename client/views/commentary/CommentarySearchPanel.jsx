@@ -22,13 +22,8 @@ CommentarySearchPanel = React.createClass({
 
 	getInitialState() {
 		return {
-			searchDropdownOpen: '',
-			yearMin: 600,
-			yearMax: 1700,
-			scribes: [],
-			illuminators: [],
-			institutions: [],
-			places: [],
+			subworks: [],
+			activeWork: '',
 		};
 	},
 
@@ -46,6 +41,37 @@ CommentarySearchPanel = React.createClass({
 	},
 
 	toggleSearchTerm(key, value) {
+		this.props.toggleSearchTerm(key, value);
+	},
+
+	toggleWorkSearchTerm(key, value) {
+		const work = value;
+
+		value.subworks.forEach((subwork, i) => {
+			subworks[i].work = work;
+		});
+
+		if (this.state.activeWork === value.slug) {
+			this.setState({
+				subworks: [],
+				activeWork: '',
+			});
+		} else {
+			value.subworks.sort((a, b) => {
+				if (a.n < b.n) {
+					return -1;
+				}
+				if (a.n > b.n) {
+					return 1;
+				}
+				return 0;
+			});
+			this.setState({
+				subworks: value.subworks,
+				activeWork: value.slug,
+			});
+		}
+
 		this.props.toggleSearchTerm(key, value);
 	},
 

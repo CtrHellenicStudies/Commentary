@@ -7,19 +7,19 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 Comment = React.createClass({
 
-  propTypes: {
-    comment: React.PropTypes.object.isRequired,
-    commentGroup: React.PropTypes.object.isRequired,
-    addSearchTerm: React.PropTypes.func,
-  },
+	propTypes: {
+		comment: React.PropTypes.object.isRequired,
+		commentGroup: React.PropTypes.object.isRequired,
+		addSearchTerm: React.PropTypes.func,
+	},
 
-  getInitialState(){
-    return {
+	getInitialState(){
+		return {
 			selectedRevision: {},
 			discussionVisible: false
-    }
+		}
 
-  },
+	},
 
 	addSearchTerm(e){
 		if('addSearchTerm' in this.props){
@@ -41,22 +41,22 @@ Comment = React.createClass({
 	},
 
 	showDiscussionThread(comment){
-    this.setState({
+		this.setState({
 			discussionVisible: true,
-    });
+		});
 
 	},
 
 	hideDiscussionThread(){
-    this.setState({
+		this.setState({
 			discussionVisible: false,
-    });
+		});
 
 	},
 
 
 
-  render() {
+	render() {
 		var self = this;
 		var comment = this.props.comment;
 		var selectedRevision = this.state.selectedRevision;
@@ -72,17 +72,17 @@ Comment = React.createClass({
 				className={commentClass}
 				>
 
-        <article
+				<article
 					className="comment commentary-comment paper-shadow "
 					data-id={comment._id}
 					data-commenter-id={comment.commenters[0]._id}>
-            <div className="comment-fixed-title-wrap paper-shadow">
-                <h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
+						<div className="comment-fixed-title-wrap paper-shadow">
+								<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
 								{(commentGroup.selectedLemmaEdition.lines.length) ?
-	                <p
+									<p
 										className="comment-fixed-lemma lemma-text"
 										dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
-	                .lines[0].html}}
+									.lines[0].html}}
 										></p>
 									: ""}
 
@@ -91,7 +91,7 @@ Comment = React.createClass({
 								: "" }
 
 								{comment.commenters.map(function(commenter, i){
-	                return <a
+									return <a
 										key={i}
 										href={"/author/" + commenter.slug}
 										>
@@ -102,84 +102,86 @@ Comment = React.createClass({
 
 								})}
 
-            </div>
+						</div>
 
-            <div className="comment-upper">
+						<div className="comment-upper">
 
-                <div className="comment-upper-left">
-                    <h1 className="comment-title">{selectedRevision.title}</h1>
-                    <div className="comment-keywords">
+								<div className="comment-upper-left">
+										<h1 className="comment-title">{selectedRevision.title}</h1>
+										<div className="comment-keywords">
 											{comment.keywords.map(function(keyword, i){
-	                        return <RaisedButton
-														key={i}
-														className="comment-keyword paper-shadow"
-	                          onClick={self.addSearchTerm}
-	                          data-id={keyword._id}
-														label={keyword.title} />
+												console.log(keyword);
+													return <RaisedButton
+																	key={i}
+																	className="comment-keyword paper-shadow"
+																	onClick={self.addSearchTerm}
+																	data-id={keyword._id}
+																	label={(keyword.title || keyword.wordpressId)}
+																/>
 
 											 })}
-                    </div>
-                </div>
+										</div>
+								</div>
 
-                <div className="comment-upper-right">
+								<div className="comment-upper-right">
 									{comment.commenters.map(function(commenter, i){
-                    return <div
+										return <div
 											key={i}
 											className="comment-author">
-                        <div className="comment-author-text">
-                            <a href={"/commenter/" + commenter.slug} >
-                                <span className="comment-author-name">{commenter.name}</span>
-                            </a>
-                            <span className="comment-date">{moment(selectedRevision.created).format('D MMMM YYYY')}</span>
-                        </div>
-                        <div className="comment-author-image-wrap paper-shadow">
-                            <a href={"/commenter/" + commenter.slug}>
-                                <img src="/images/default_user.jpg" />
-                            </a>
-                        </div>
-                    </div>
+											<div className="comment-author-text">
+												<a href={"/commenter/" + commenter.slug} >
+													<span className="comment-author-name">{commenter.name}</span>
+												</a>
+												<span className="comment-date">{moment(selectedRevision.created).format('D MMMM YYYY')}</span>
+											</div>
+											<div className="comment-author-image-wrap paper-shadow">
+												<a href={"/commenter/" + commenter.slug}>
+													<img src="/images/default_user.jpg" />
+												</a>
+											</div>
+										</div>
 									})}
-                </div>
+								</div>
 
-            </div>
-            <div className="comment-lower">
-                <div
+						</div>
+						<div className="comment-lower">
+								<div
 									className="comment-body"
 									dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
-                </div>
-                <div className="comment-reference" >
-                    <h4>Secondary Source(s):</h4>
-                    <p>
+								</div>
+								<div className="comment-reference" >
+										<h4>Secondary Source(s):</h4>
+										<p>
 											{comment.referenceLink ?
-                        <a href={comment.referenceLink} target="_blank" >
+												<a href={comment.referenceLink} target="_blank" >
 													{comment.reference}
 												</a>
 												:
-                        <span >
+												<span >
 													{comment.reference}
 												</span>
 											}
-                    </p>
-                </div>
-            </div>
-            <div className="comment-revisions">
+										</p>
+								</div>
+						</div>
+						<div className="comment-revisions">
 							{comment.revisions.map(function(revision, i){
-                return <FlatButton
+								return <FlatButton
 									key={i}
 									data-id="{revision.id}"
 									className="revision selected-revision"
-                  onClick={this.selectRevision}
+									onClick={this.selectRevision}
 									label={"Revision " + moment(revision.updated).format('D MMMM YYYY')}
 									>
 
-                </FlatButton>
+								</FlatButton>
 
 							})}
-            </div>
+						</div>
 
-        </article>
+				</article>
 
-	      <DiscussionThread
+				<DiscussionThread
 					comment={comment}
 					showDiscussionThread={self.showDiscussionThread}
 					hideDiscussionThread={self.hideDiscussionThread}
@@ -187,9 +189,9 @@ Comment = React.createClass({
 					/>
 
 
-      </div>
+			</div>
 
-     );
-   }
+		 );
+	 }
 
 });

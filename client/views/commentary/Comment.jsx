@@ -124,6 +124,12 @@ Comment = React.createClass({
 
 								<div className="comment-upper-right">
 									{comment.commenters.map(function(commenter, i){
+										let image = {};
+										let imageUrl = "";
+										if (commenter.attachment) {
+											image = commenter.attachment;
+											imageUrl = image.url();
+										}
 										return <div
 											key={i}
 											className="comment-author">
@@ -135,7 +141,7 @@ Comment = React.createClass({
 											</div>
 											<div className="comment-author-image-wrap paper-shadow">
 												<a href={"/commenters/" + commenter.slug}>
-													<img src="/images/default_user.jpg" />
+													<img src={imageUrl.length ? imageUrl : "/images/default_user.jpg"} />
 												</a>
 											</div>
 										</div>

@@ -144,6 +144,12 @@ CommentLemma = React.createClass({
                   <div className="comment-group-commenters">
 
 											{commentGroup.commenters.map(function(commenter, i){
+												let image = {};
+												let imageUrl = "";
+												if (commenter.attachment) {
+													image = commenter.attachment;
+													imageUrl = image.url();
+												}
 
 	                      return <div
 													key={i}
@@ -159,7 +165,7 @@ CommentLemma = React.createClass({
 																	href={"/commenters/" + commenter.slug}
 																	onClick={self.goToAuthorComment}
 																	>
-	                                  <img src="/images/default_user.jpg" />
+	                                  <img src={imageUrl.length ? imageUrl : "/images/default_user.jpg"} />
 	                              </a>
 
 	                          </div>

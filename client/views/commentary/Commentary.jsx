@@ -162,26 +162,40 @@ Commentary = React.createClass({
 			var commenters = [];
 			var lemmaQuery = {};
 
-			commentGroup.comments.forEach(function(comment){
-				isInCommenters = false;
-				comment.commenters.forEach(function(commenter){
+			const imageSubscription = Meteor.subscribe('profilePictures');
+			const commenterSubscription = Meteor.subscribe('commenters');
+			if (imageSubscription.ready() && commenterSubscription.ready()){
+				commentGroup.comments.forEach(function(comment){
+					isInCommenters = false;
 
-					if(commenters.some(function(c){
-						return c.slug === commenter.slug
-					})){
-						isInCommenters = true;
+					comment.commenters.forEach(function(commenter, i){
 
-					}else {
-						commenters.push(commenter);
+						var commenterRecord = Commenters.findOne({slug: commenter.slug});
+						comment.commenters[i] = commenterRecord;
+						console.log(commenterRecord);
+						// get the attachment
+						if(commenterRecord.picture){
+							commenterRecord.attachment = ProfilePictures.findOne(commenterRecord.picture);
+							console.log(commenterRecord.attachment);
+						}
 
-					}
+						// add to the unique commenter set
+						if(commenters.some(function(c){
+							return c.slug === commenter.slug
+						})){
+							isInCommenters = true;
 
+						}else {
+							commenters.push(commenterRecord);
+
+						}
+
+					});
 				});
-			});
 
+			}
 
 			commentGroup.commenters = commenters;
-
 
 
 		});

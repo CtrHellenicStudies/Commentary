@@ -110,7 +110,6 @@ Comment = React.createClass({
 										<h1 className="comment-title">{selectedRevision.title}</h1>
 										<div className="comment-keywords">
 											{comment.keywords.map(function(keyword, i){
-												console.log(keyword);
 													return <RaisedButton
 																	key={i}
 																	className="comment-keyword paper-shadow"
@@ -145,25 +144,29 @@ Comment = React.createClass({
 
 						</div>
 						<div className="comment-lower">
-								<div
-									className="comment-body"
-									dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
-								</div>
-								<div className="comment-reference" >
-                	<h5>Comment ID: {comment._id}</h5>
-                    <h4>Secondary Source(s):</h4>
-                    <p>
-											{comment.referenceLink ?
-												<a href={comment.referenceLink} target="_blank" >
-													{comment.reference}
-												</a>
-												:
-												<span >
-													{comment.reference}
-												</span>
-											}
-										</p>
-								</div>
+							<div
+								className="comment-body"
+								dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
+							</div>
+							<div className="comment-reference" >
+								<h4>Secondary Source(s):</h4>
+								<p>
+									{comment.referenceLink ?
+										<a href={comment.referenceLink} target="_blank" >
+											{comment.reference}
+										</a>
+										:
+										<span >
+											{comment.reference}
+										</span>
+									}
+								</p>
+							</div>
+							<div className="comment-persistent-identifier">
+								<a href={"/commentary/?_id=" + comment._id}>
+									<span>Persistent Identifier</span>
+								</a>
+							</div>
 						</div>
 						<div className="comment-revisions">
 							{comment.revisions.map(function(revision, i){

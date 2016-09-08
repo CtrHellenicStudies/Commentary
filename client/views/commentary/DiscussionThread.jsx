@@ -69,7 +69,7 @@ DiscussionThread = React.createClass({
 			textareaPlaceholder = "Please login to enter a comment.";
 		}
 
-		console.log("CommentDiscussion.data", this.data);
+		//console.log("CommentDiscussion.data", this.data);
 
     return (
 

@@ -52,6 +52,9 @@ Commentary = React.createClass({
 		// Parse the filters to the query
 		this.props.filters.forEach(function(filter){
 			switch(filter.key){
+				case "_id":
+					query._id = filter.values[0];
+					break;
 				case "textsearch":
 					query.$text = { $search : filter.values[0]};
 					break;

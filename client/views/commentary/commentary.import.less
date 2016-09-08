@@ -671,6 +671,36 @@ article.lemma-comment {
 
 }
 
+.comment-persistent-identifier {
+	position:absolute;
+	bottom:70px;
+	right:50px;
+
+
+	a, span {
+		display:inline-block;
+	}
+
+	a {
+		font-size:12px;
+		background:#f6f6f6;
+		border-radius:2px;
+		padding:5px 15px;
+		text-transform: uppercase;
+		font-weight:bold;
+
+		&:hover {
+			background:@md-primary;
+			span {
+				color:@light;
+
+			}
+		}
+
+	}
+
+}
+
 .comment-meta-section {
   margin:20px auto 30px;
   width:100%;

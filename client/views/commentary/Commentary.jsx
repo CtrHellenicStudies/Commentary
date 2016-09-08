@@ -253,8 +253,40 @@ Commentary = React.createClass({
 
   componentDidMount(){
     this.textServerEdition = new Meteor.Collection('textServerEdition');
+    window.addEventListener("resize", this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
 
   },
+
+	handleScroll() {
+		var scrollY = window.scrollY;
+		this.data.commentGroups.map(function(commentGroup, i){
+			var id = "#comment-group-" + i;
+			var offset = $(id).offset();
+			var height = $(id + " .comments").height();
+			// var element = $(id + " .comment-group-meta-inner");
+			var element = $(id).find(".comment-group-meta-inner,.comment-group-meta-inner-fixed,.comment-group-meta-inner-bottom");
+			if (scrollY < offset.top) {
+				element.addClass("comment-group-meta-inner");
+				element.removeClass("comment-group-meta-inner-fixed");
+				element.removeClass("comment-group-meta-inner-bottom");
+				// element.removeClass("fixed");
+				// element.css("top", "115px");
+			} else if (scrollY >= offset.top && scrollY < offset.top + height - 275) {
+				element.addClass("comment-group-meta-inner-fixed");
+				element.removeClass("comment-group-meta-inner");
+				element.removeClass("comment-group-meta-inner-bottom");
+				// element.addClass("fixed");
+				// element.css("top", "115px");
+			} else {
+				element.addClass("comment-group-meta-inner-bottom");
+				element.removeClass("comment-group-meta-inner-fixed");
+				element.removeClass("comment-group-meta-inner");
+				// element.removeClass("fixed");
+				// element.css("top", height - 160 + "px");
+			};
+		});
+	},
 
 	loadMoreComments(){
 
@@ -380,6 +412,7 @@ Commentary = React.createClass({
 										className="comment-group "
 										data-ref={commentGroup.ref}
 										key={i}
+										id={"comment-group-" + i}
 										>
 		                  <div className={commentsClass} >
 

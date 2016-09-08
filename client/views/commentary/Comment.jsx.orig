@@ -148,11 +148,18 @@ Comment = React.createClass({
 								<div
 									className="comment-body"
 									dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
+<<<<<<< HEAD
 								</div>
 								<div className="comment-reference" >
+										<h4>Secondary Source(s):</h4>
+										<p>
+=======
+                </div>
+                <div className="comment-reference" >
                 	<h5>Comment ID: {comment._id}</h5>
                     <h4>Secondary Source(s):</h4>
                     <p>
+>>>>>>> f5e7309f63a3d387175c190afa93fa7bd1b80a8b
 											{comment.referenceLink ?
 												<a href={comment.referenceLink} target="_blank" >
 													{comment.reference}

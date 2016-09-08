@@ -82,7 +82,7 @@ CommentLemma = React.createClass({
 															className="comment-author-image-wrap paper-shadow"
 															>
 	                              <a
-																	href="#"
+																	href={"/commenters/" + commenter.slug}
 																	onClick={self.goToAuthorComment}
 																	>
 	                                  <img src="/images/default_user.jpg" />

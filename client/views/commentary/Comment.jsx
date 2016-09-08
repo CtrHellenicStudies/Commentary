@@ -93,7 +93,7 @@ Comment = React.createClass({
 								{comment.commenters.map(function(commenter, i){
 									return <a
 										key={i}
-										href={"/author/" + commenter.slug}
+										href={"/commenters/" + commenter.slug}
 										>
 										<span className="comment-author-name">
 											{commenter.name}
@@ -128,13 +128,13 @@ Comment = React.createClass({
 											key={i}
 											className="comment-author">
 											<div className="comment-author-text">
-												<a href={"/commenter/" + commenter.slug} >
+												<a href={"/commenters/" + commenter.slug} >
 													<span className="comment-author-name">{commenter.name}</span>
 												</a>
 												<span className="comment-date">{moment(selectedRevision.created).format('D MMMM YYYY')}</span>
 											</div>
 											<div className="comment-author-image-wrap paper-shadow">
-												<a href={"/commenter/" + commenter.slug}>
+												<a href={"/commenters/" + commenter.slug}>
 													<img src="/images/default_user.jpg" />
 												</a>
 											</div>

@@ -144,7 +144,6 @@ Commentary = React.createClass({
 				commentGroups.push({
 					ref : ref,
 					selectedLemmaEdition : {lines:[]},
-					lemmaText: [],
 					work : comment.work,
 					subwork : comment.subwork,
 					lineFrom : comment.lineFrom,
@@ -183,67 +182,6 @@ Commentary = React.createClass({
 
 			commentGroup.commenters = commenters;
 
-			var lemmaQuery = {
-						'work.slug' : commentGroup.work.slug,
-						'subwork.n' : commentGroup.subwork.n,
-						'text.n' : {
-							$gte: commentGroup.lineFrom,
-						}
-					};
-
-			if(typeof commentGroup.lineTo !== "undefined"){
-				lemmaQuery['text.n'].$lte = commentGroup.lineTo;
-
-			}else {
-				lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
-
-			}
-
-			var handle2 = Meteor.subscribe('textNodes', lemmaQuery);
-			if (handle2.ready()) {
-				//console.log("lemmaQuery", lemmaQuery);
-				var textNodes = TextNodes.find(lemmaQuery).fetch();
-				var editions = [];
-
-				var textIsInEdition = false;
-				textNodes.forEach(function(textNode){
-
-					textNode.text.forEach(function(text){
-						textIsInEdition = false;
-
-						editions.forEach(function(edition){
-
-							if(text.edition.slug === edition.slug){
-								edition.lines.push({
-									html: text.html,
-									n: text.n
-								});
-								textIsInEdition = true;
-
-							}
-
-						})
-
-						if(!textIsInEdition){
-							editions.push({
-								title : text.edition.title,
-								slug : text.edition.slug,
-								lines : [
-									{
-										html: text.html,
-										n: text.n
-									}
-								],
-							})
-
-						}
-
-					});
-
-				});
-
-				commentGroup.lemmaText = editions;
-			}
 
 
 		});

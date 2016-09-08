@@ -583,7 +583,7 @@ article.lemma-comment {
   background:@primary;
   display:inline-block;
   vertical-align:top;
-  margin:15px 12px 10px 0;
+  margin:0px 12px 0 0;
   border-radius:0;
   cursor:pointer;
   min-height:0;
@@ -616,11 +616,11 @@ article.lemma-comment {
   cursor:default;
 
   &:focus {
-	outline:none;
-	border:none;
+		outline:none;
+		border:none;
   }
 
-  p {
+  p, li, span, a {
     font-family:@font-commentary;
     font-size:18px;
     line-height:1.76em;
@@ -628,9 +628,21 @@ article.lemma-comment {
     margin: 0;
     max-width:1000px;
     padding:15px 0;
+		word-break:break-word;
 
 
   }
+
+	ol {
+		list-style: disc;
+		margin:0px;
+		padding:5px 15px;
+		li {
+			margin:0;
+			padding:2px 0;
+	    font-size:16px;
+		}
+	}
 
   a {
 	cursor:pointer;
@@ -676,7 +688,7 @@ article.lemma-comment {
 
 .comment-persistent-identifier {
 	position:absolute;
-	bottom:70px;
+	bottom:60px;
 	right:50px;
 
 
@@ -691,9 +703,11 @@ article.lemma-comment {
 		padding:5px 15px;
 		text-transform: uppercase;
 		font-weight:bold;
+		opacity:0.7;
 
 		&:hover {
 			background:@md-primary;
+			opacity:1;
 			span {
 				color:@light;
 

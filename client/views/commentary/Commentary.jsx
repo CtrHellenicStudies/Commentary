@@ -52,6 +52,9 @@ Commentary = React.createClass({
 		// Parse the filters to the query
 		this.props.filters.forEach(function(filter){
 			switch(filter.key){
+				case "_id":
+					query._id = filter.values[0];
+					break;
 				case "textsearch":
 					query.$text = { $search : filter.values[0]};
 					break;
@@ -141,7 +144,6 @@ Commentary = React.createClass({
 				commentGroups.push({
 					ref : ref,
 					selectedLemmaEdition : {lines:[]},
-					lemmaText: [],
 					work : comment.work,
 					subwork : comment.subwork,
 					lineFrom : comment.lineFrom,
@@ -160,87 +162,40 @@ Commentary = React.createClass({
 			var commenters = [];
 			var lemmaQuery = {};
 
-			commentGroup.comments.forEach(function(comment){
-				isInCommenters = false;
-				comment.commenters.forEach(function(commenter){
+			const imageSubscription = Meteor.subscribe('profilePictures');
+			const commenterSubscription = Meteor.subscribe('commenters');
+			if (imageSubscription.ready() && commenterSubscription.ready()){
+				commentGroup.comments.forEach(function(comment){
+					isInCommenters = false;
 
-					if(commenters.some(function(c){
-						return c.slug === commenter.slug
-					})){
-						isInCommenters = true;
+					comment.commenters.forEach(function(commenter, i){
 
-					}else {
-						commenters.push(commenter);
-
-					}
-
-				});
-			});
-
-
-			commentGroup.commenters = commenters;
-
-			var lemmaQuery = {
-						'work.slug' : commentGroup.work.slug,
-						'subwork.n' : commentGroup.subwork.n,
-						'text.n' : {
-							$gte: commentGroup.lineFrom,
+						var commenterRecord = Commenters.findOne({slug: commenter.slug});
+						comment.commenters[i] = commenterRecord;
+						console.log(commenterRecord);
+						// get the attachment
+						if(commenterRecord.picture){
+							commenterRecord.attachment = ProfilePictures.findOne(commenterRecord.picture);
+							console.log(commenterRecord.attachment);
 						}
-					};
 
-			if(typeof commentGroup.lineTo !== "undefined"){
-				lemmaQuery['text.n'].$lte = commentGroup.lineTo;
+						// add to the unique commenter set
+						if(commenters.some(function(c){
+							return c.slug === commenter.slug
+						})){
+							isInCommenters = true;
 
-			}else {
-				lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
-
-			}
-
-			var handle2 = Meteor.subscribe('textNodes', lemmaQuery);
-			if (handle2.ready()) {
-				//console.log("lemmaQuery", lemmaQuery);
-				var textNodes = TextNodes.find(lemmaQuery).fetch();
-				var editions = [];
-
-				var textIsInEdition = false;
-				textNodes.forEach(function(textNode){
-
-					textNode.text.forEach(function(text){
-						textIsInEdition = false;
-
-						editions.forEach(function(edition){
-
-							if(text.edition.slug === edition.slug){
-								edition.lines.push({
-									html: text.html,
-									n: text.n
-								});
-								textIsInEdition = true;
-
-							}
-
-						})
-
-						if(!textIsInEdition){
-							editions.push({
-								title : text.edition.title,
-								slug : text.edition.slug,
-								lines : [
-									{
-										html: text.html,
-										n: text.n
-									}
-								],
-							})
+						}else {
+							commenters.push(commenterRecord);
 
 						}
 
 					});
-
 				});
 
-				commentGroup.lemmaText = editions;
 			}
+
+			commentGroup.commenters = commenters;
 
 
 		});
@@ -253,8 +208,40 @@ Commentary = React.createClass({
 
   componentDidMount(){
     this.textServerEdition = new Meteor.Collection('textServerEdition');
+    window.addEventListener("resize", this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
 
   },
+
+	handleScroll() {
+		var scrollY = window.scrollY;
+		this.data.commentGroups.map(function(commentGroup, i){
+			var id = "#comment-group-" + i;
+			var offset = $(id).offset();
+			var height = $(id + " .comments").height();
+			// var element = $(id + " .comment-group-meta-inner");
+			var element = $(id).find(".comment-group-meta-inner,.comment-group-meta-inner-fixed,.comment-group-meta-inner-bottom");
+			if (scrollY < offset.top) {
+				element.addClass("comment-group-meta-inner");
+				element.removeClass("comment-group-meta-inner-fixed");
+				element.removeClass("comment-group-meta-inner-bottom");
+				// element.removeClass("fixed");
+				// element.css("top", "115px");
+			} else if (scrollY >= offset.top && scrollY < offset.top + height - 275) {
+				element.addClass("comment-group-meta-inner-fixed");
+				element.removeClass("comment-group-meta-inner");
+				element.removeClass("comment-group-meta-inner-bottom");
+				// element.addClass("fixed");
+				// element.css("top", "115px");
+			} else {
+				element.addClass("comment-group-meta-inner-bottom");
+				element.removeClass("comment-group-meta-inner-fixed");
+				element.removeClass("comment-group-meta-inner");
+				// element.removeClass("fixed");
+				// element.css("top", height - 160 + "px");
+			};
+		});
+	},
 
 	loadMoreComments(){
 
@@ -380,6 +367,7 @@ Commentary = React.createClass({
 										className="comment-group "
 										data-ref={commentGroup.ref}
 										key={i}
+										id={"comment-group-" + i}
 										>
 		                  <div className={commentsClass} >
 

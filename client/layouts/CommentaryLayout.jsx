@@ -1,8 +1,21 @@
 CommentaryLayout = React.createClass({
 
+	propTypes: {
+		queryParams: React.PropTypes.object,
+	},
+
   getInitialState(){
+		const filters = [];
+
+		if("_id" in this.props.queryParams){
+			filters.push({
+				key: "_id",
+				values: [this.props.queryParams._id]
+			});
+		}
+
     return {
-      filters: [],
+      filters: filters,
 			skip: 0,
 			limit: 10
     };

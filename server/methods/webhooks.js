@@ -2,7 +2,7 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 
 	var valid = false;
 
-	console.log("Potential comment:", comment_candidate);
+	//console.log("Potential comment:", comment_candidate);
 
 	let commenters = [];
 	/*
@@ -11,6 +11,7 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 	});
 	*/
 	commenters.push(Commenters.findOne({wordpressId: comment_candidate.commenter}));
+
 
 	let work = Works.findOne({slug: comment_candidate.work})
 	let subwork;
@@ -48,16 +49,16 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 
 	let upsert_response;
 
-	console.log("Work:", work);
-	console.log("Subwork:", subwork);
-	console.log("Commenters:", commenters);
-	console.log("Keywords:", keywords);
-	console.log("Revision:", revision);
-	console.log("Comment:", comment);
+	//console.log("Work:", work);
+	//console.log("Subwork:", subwork);
+	//console.log("Commenters:", commenters);
+	//console.log("Keywords:", keywords);
+	//console.log("Revision:", revision);
+	//console.log("Comment:", comment);
 
 	if(comment){
 			upsert_response = Comments.update({_id: comment_candidate._id}, {$addToSet: {revisions: revision}});
-			console.log("Upsert response:", upsert_response);
+			console.log("Update response:", upsert_response);
 
 	}else {
 
@@ -114,11 +115,8 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 			}
 
 
-			//console.log("New comment:", new_comment);
-
-			upsert_response = Comments.insert(new_comment);
-
-			//console.log("Upsert response:", upsert_response);
+			insert_response = Comments.insert(new_comment);
+			console.log("New comment:", insert_response);
 
 	}
 

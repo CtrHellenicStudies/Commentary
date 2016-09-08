@@ -97,13 +97,13 @@ header .line-wrap {
 
 
   .comment-group-end {
-	margin:100px auto 0;
-	outline:none;
-	border:none;
-	height:5px;
-	background:@primary-light;
-	min-width:200px;
-	width:50%;
+		margin:100px auto 0;
+		outline:none;
+		border:none;
+		height:5px;
+		background:@primary-light;
+		min-width:200px;
+		width:50%;
 
 
   }
@@ -118,21 +118,34 @@ header .line-wrap {
   width:10%;
 
   .comment-group-meta-inner {
-	position:absolute;
-	top:115px;
+		position:absolute;
+		top:115px;
+		left:90px;
+  }
+
+  .comment-group-meta-inner-fixed {
+    position:fixed;
+    top:115px;
+		left:90px;
+  }
+
+  .comment-group-meta-inner-bottom {
+    position:absolute;
+    bottom:173px;
+		left:90px;
   }
 
   .comment-group-ref-above {
-	cursor:default;
-	text-transform:uppercase;
-	font-weight:bold;
-	color:@secondary-text;
-	padding:30px 0px 5px 0;
-	margin:0 30px 0 0 ;
-  font-family:@font-label;
-  font-size:16px;
-	text-align:right;
-	display:block;
+		cursor:default;
+		text-transform:uppercase;
+		font-weight:bold;
+		color:@secondary-text;
+		padding:30px 0px 5px 0;
+		margin:0 0px 0 0 ;
+	  font-family:@font-label;
+	  font-size:16px;
+		text-align:right;
+		display:block;
 
   }
 
@@ -142,20 +155,20 @@ header .line-wrap {
     font-size:46px;
     font-weight:bold;
     color:#424242;
-	margin:0 14px;
+		margin:0;
     padding:5px 0px;
     display:inline-block;
     vertical-align: top;
-	max-width:89px;
-	text-align:right;
-	display:block;
+		max-width:89px;
+		text-align:right;
+		display:block;
 
-	span {
-    font-family:@font-title;
-    font-size:46px;
-	  font-weight:bold;
+		span {
+	    font-family:@font-title;
+	    font-size:46px;
+		  font-weight:bold;
 
-	}
+		}
 
     &.fixed {
       top:50px;
@@ -186,7 +199,7 @@ header .line-wrap {
 
 
   .comment-group-commenters {
-	padding:5px 30px 10px 0;
+	padding:5px 0px 10px 0;
 
 	.comment-author {
 	  clear:both;
@@ -570,7 +583,7 @@ article.lemma-comment {
   background:@primary;
   display:inline-block;
   vertical-align:top;
-  margin:15px 12px 10px 0;
+  margin:0px 12px 0 0;
   border-radius:0;
   cursor:pointer;
   min-height:0;
@@ -603,11 +616,11 @@ article.lemma-comment {
   cursor:default;
 
   &:focus {
-	outline:none;
-	border:none;
+		outline:none;
+		border:none;
   }
 
-  p {
+  p, li, span, a {
     font-family:@font-commentary;
     font-size:18px;
     line-height:1.76em;
@@ -615,9 +628,21 @@ article.lemma-comment {
     margin: 0;
     max-width:1000px;
     padding:15px 0;
+		word-break:break-word;
 
 
   }
+
+	ol {
+		list-style: disc;
+		margin:0px;
+		padding:5px 15px;
+		li {
+			margin:0;
+			padding:2px 0;
+	    font-size:16px;
+		}
+	}
 
   a {
 	cursor:pointer;
@@ -657,6 +682,38 @@ article.lemma-comment {
 
 	p {
 		margin:7px;
+	}
+
+}
+
+.comment-persistent-identifier {
+	position:absolute;
+	bottom:60px;
+	right:50px;
+
+
+	a, span {
+		display:inline-block;
+	}
+
+	a {
+		font-size:12px;
+		background:#f6f6f6;
+		border-radius:2px;
+		padding:5px 15px;
+		text-transform: uppercase;
+		font-weight:bold;
+		opacity:0.7;
+
+		&:hover {
+			background:@md-primary;
+			opacity:1;
+			span {
+				color:@light;
+
+			}
+		}
+
 	}
 
 }
@@ -1425,4 +1482,8 @@ article.lemma-comment {
     color:@light-text;
     font-style:italic;
 
+}
+
+.fixed {
+  position: fixed !important;
 }

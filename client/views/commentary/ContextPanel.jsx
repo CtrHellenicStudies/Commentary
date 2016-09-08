@@ -111,7 +111,7 @@ ContextPanel = React.createClass({
 
 		}
 
-		console.log("Context Panel lemmaText", lemmaText);
+		//console.log("Context Panel lemmaText", lemmaText);
 
 
 

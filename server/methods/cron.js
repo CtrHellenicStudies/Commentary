@@ -30,28 +30,55 @@ Meteor.method("cron", function () {
 					work.nComments++;
 
 					work.subworks.forEach(function(subwork){
+
+						// TODO: build and array of lin 10 incrementation
 						if(comment.subwork.n === subwork.n){
 							isInCommentCountsSubworks = true;
-							isInCommentCountsLines = false;
+							
 							subwork.nComments++;
 
-							subwork.commentHeatmap.forEach(function(line){
-								if(comment.lineFrom === line.n){
-									isInCommentCountsLines = true;
-									line.nComments++;
+							var iterations = Math.floor((comment.lineFrom + comment.nLines - 1)/10) - Math.floor(comment.lineFrom/10) + 1;
+							
+							for (var i = 0; i < iterations; i++) {
+								var nFrom = Math.floor(comment.lineFrom/10)*10 + i*10;
+								isInCommentCountsLines = false;
+
+								subwork.commentHeatmap.forEach(function(line){
+									if(nFrom === line.n){
+										isInCommentCountsLines = true;
+										line.nComments++;
+									}
+
+								});
+
+								if(!isInCommentCountsLines){
+									subwork.commentHeatmap.push({
+											n: nFrom,
+											nComments: 1
+									})
+
 								}
 
+								// arr.push(nFrom);
+							};
+
+							// subwork.commentHeatmap.forEach(function(line){
+							// 	if(comment.lineFrom === line.n){
+							// 		isInCommentCountsLines = true;
+							// 		line.nComments++;
+							// 	}
 
 
-							});
 
-							if(!isInCommentCountsLines){
-								subwork.commentHeatmap.push({
-										n: comment.lineFrom,
-										nComments: 1
-								})
+							// });
 
-							}
+							// if(!isInCommentCountsLines){
+							// 	subwork.commentHeatmap.push({
+							// 			n: comment.lineFrom,
+							// 			nComments: 1
+							// 	})
+
+							// }
 
 
 
@@ -67,7 +94,7 @@ Meteor.method("cron", function () {
 								slug: comment.subwork.slug,
 								nComments: 1,
 								commentHeatmap: [{
-									n: comment.lineFrom,
+									n: Math.floor(comment.lineFrom/10)*10,
 									nComments: 1
 								}]
 
@@ -88,7 +115,7 @@ Meteor.method("cron", function () {
 						slug: comment.subwork.slug,
 						nComments: 1,
 						commentHeatmap: [{
-							n: comment.lineFrom,
+							n: Math.floor(comment.lineFrom/10)*10,
 							nComments: 1
 						}]
 					}]

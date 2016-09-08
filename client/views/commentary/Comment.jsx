@@ -31,7 +31,7 @@ Comment = React.createClass({
 
 	},
 
-	componentDidUpdate(){
+	componentDidMount(){
 		if(!("title" in this.state.selectedRevision)){
 			this.setState({
 				selectedRevision: this.props.comment.revisions[0]
@@ -78,22 +78,22 @@ Comment = React.createClass({
 					data-commenter-id={comment.commenters[0]._id}>
 						<div className="comment-fixed-title-wrap paper-shadow">
 								<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
-								{(commentGroup.selectedLemmaEdition.lines.length) ?
+								{/*(commentGroup.selectedLemmaEdition.lines.length) ?
 									<p
 										className="comment-fixed-lemma lemma-text"
 										dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
 									.lines[0].html}}
 										></p>
-									: ""}
+									: ""*/}
 
-								{commentGroup.selectedLemmaEdition.lines.length > 1 ?
+								{/*commentGroup.selectedLemmaEdition.lines.length > 1 ?
 									<span className="fixed-title-lemma-ellipsis">&hellip;</span>
-								: "" }
+								: "" */}
 
 								{comment.commenters.map(function(commenter, i){
 									return <a
 										key={i}
-										href={"/author/" + commenter.slug}
+										href={"/commenters/" + commenter.slug}
 										>
 										<span className="comment-author-name">
 											{commenter.name}
@@ -110,7 +110,6 @@ Comment = React.createClass({
 										<h1 className="comment-title">{selectedRevision.title}</h1>
 										<div className="comment-keywords">
 											{comment.keywords.map(function(keyword, i){
-												console.log(keyword);
 													return <RaisedButton
 																	key={i}
 																	className="comment-keyword paper-shadow"
@@ -125,18 +124,24 @@ Comment = React.createClass({
 
 								<div className="comment-upper-right">
 									{comment.commenters.map(function(commenter, i){
+										let image = {};
+										let imageUrl = "";
+										if (commenter.attachment) {
+											image = commenter.attachment;
+											imageUrl = image.url();
+										}
 										return <div
 											key={i}
 											className="comment-author">
 											<div className="comment-author-text">
-												<a href={"/commenter/" + commenter.slug} >
+												<a href={"/commenters/" + commenter.slug} >
 													<span className="comment-author-name">{commenter.name}</span>
 												</a>
 												<span className="comment-date">{moment(selectedRevision.created).format('D MMMM YYYY')}</span>
 											</div>
 											<div className="comment-author-image-wrap paper-shadow">
-												<a href={"/commenter/" + commenter.slug}>
-													<img src="/images/default_user.jpg" />
+												<a href={"/commenters/" + commenter.slug}>
+													<img src={imageUrl.length ? imageUrl : "/images/default_user.jpg"} />
 												</a>
 											</div>
 										</div>
@@ -145,24 +150,29 @@ Comment = React.createClass({
 
 						</div>
 						<div className="comment-lower">
-								<div
-									className="comment-body"
-									dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
-								</div>
-								<div className="comment-reference" >
-										<h4>Secondary Source(s):</h4>
-										<p>
-											{comment.referenceLink ?
-												<a href={comment.referenceLink} target="_blank" >
-													{comment.reference}
-												</a>
-												:
-												<span >
-													{comment.reference}
-												</span>
-											}
-										</p>
-								</div>
+							<div
+								className="comment-body"
+								dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
+							</div>
+							<div className="comment-reference" >
+								<h4>Secondary Source(s):</h4>
+								<p>
+									{comment.referenceLink ?
+										<a href={comment.referenceLink} target="_blank" >
+											{comment.reference}
+										</a>
+										:
+										<span >
+											{comment.reference}
+										</span>
+									}
+								</p>
+							</div>
+							<div className="comment-persistent-identifier">
+								<a href={"/commentary/?_id=" + comment._id}>
+									<span>Persistent Identifier</span>
+								</a>
+							</div>
 						</div>
 						<div className="comment-revisions">
 							{comment.revisions.map(function(revision, i){

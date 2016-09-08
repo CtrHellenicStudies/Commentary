@@ -7,7 +7,7 @@ Schemas.Comments = new SimpleSchema({
   },
 
   commenters: {
-    type: [Schemas.Commenters],
+    type: Array,
     optional: true,
 		/*autoform: {
 			options: function() {
@@ -22,6 +22,10 @@ Schemas.Comments = new SimpleSchema({
 		*/
 
   },
+	'commenters.$': {
+		type: Object,
+		blackbox: true,
+	},
 
   work: {
     type: Schemas.Works,

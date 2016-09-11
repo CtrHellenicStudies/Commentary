@@ -494,15 +494,23 @@ Header = React.createClass({
 						</div>
 					}
 				</header>
-				<ModalLogin
-					lowered={this.state.modalLoginLowered}
-					closeModal={this.closeLoginModal}
-				/>
-				<ModalSignup
-					lowered={this.state.modalSignupLowered}
-					closeModal={this.closeSignupModal}
-				/>
+				{this.state.modalLoginLowered ?
+					<ModalLogin
+						lowered={this.state.modalLoginLowered}
+						closeModal={this.closeLoginModal}
+					/>
+					:
+					''
+				}
+				{this.state.modalSignupLowered ?
+					<ModalSignup
+						lowered={this.state.modalSignupLowered}
+						closeModal={this.closeSignupModal}
+					/>
+					:
+					''
+				}
 			</div>
-);
+		);
 	},
 });

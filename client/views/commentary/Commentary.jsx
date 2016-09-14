@@ -16,6 +16,7 @@ Commentary = React.createClass({
 		skip: React.PropTypes.number,
 		limit: React.PropTypes.number,
 		toggleSearchTerm: React.PropTypes.func,
+		contextScrollPosition: React.PropTypes.number,
   },
 
   getInitialState(){
@@ -282,6 +283,13 @@ Commentary = React.createClass({
 
   },
 
+  contextScrollPosition(scrollPosition, index) {
+   	this.setState({
+   		contextScrollPosition: scrollPosition,
+   		commentLemmaIndex: index
+   	});
+   },
+
   render() {
 
 		var self = this;
@@ -372,8 +380,10 @@ Commentary = React.createClass({
 		                  <div className={commentsClass} >
 
 		                      <CommentLemma
+														index={i}
 														commentGroup={commentGroup}
 														showContextPanel={self.showContextPanel}
+														scrollPosition={self.contextScrollPosition}
 														/>
 
 													{commentGroup.comments.map(function(comment, i){
@@ -452,6 +462,8 @@ Commentary = React.createClass({
 	          open={this.state.contextPanelOpen}
 	          closeContextPanel={this.closeContextPanel}
 						commentGroup={this.state.contextCommentGroupSelected}
+						scrollPosition={this.state.contextScrollPosition}
+ 						commentLemmaIndex={this.state.commentLemmaIndex}
 
 	          />
 					: ""

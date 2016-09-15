@@ -9,7 +9,7 @@ if (Meteor.isServer){
 			skip = 0;
 		}
 
-		if(!limit){
+		if(!limit || limit !=0){
 			limit = 10;
 		}
 
@@ -46,10 +46,6 @@ if (Meteor.isServer){
 
   Meteor.publish('works', function() {
     return Works.find();
-  });
-
-  Meteor.publish('profilePictures', function() {
-    return ProfilePictures.find();
   });
 
 

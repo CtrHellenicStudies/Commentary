@@ -33,8 +33,23 @@ AddCommentForm = React.createClass({
 
     mixins: [ReactMeteorData],
 
-    getMeteorData(){
-      return {}
+    getMeteorData() {
+        var keywords_options = [];
+        var keywords = Keywords.find().fetch();
+        keywords.map(function(word) {
+            keywords_options.push({
+                value: word.slug,
+                label: word.title,
+            });
+        });
+        
+        // TODO: key ideas
+        var keyideas_options = [];
+
+        return {
+            keywords_options: keywords_options,
+            keyideas_options: keyideas_options,
+        }
     },
 
     handleSubmit(event) {
@@ -79,17 +94,7 @@ AddCommentForm = React.createClass({
       });
     },
 
-    closeContextPanel(){
-        console.long('closed');
-    },
-
     render() {
-
-        var keywords_options = [
-        // TODO: pull keywords_options from collection in getMeteorData
-            { value: 'one', label: 'One' },
-            { value: 'two', label: 'Two' }
-        ];
 
         var keyideas_options = [
         // TODO: pull keyideas_options from collection in getMeteorData
@@ -144,17 +149,21 @@ AddCommentForm = React.createClass({
                         onChange={this.referenceLinkValueChange}
                     />
 
+                    <h5>Keywords:</h5>
+
                     <Select
                         name="keywords"
                         id="keywords"
                         className="form-element"
                         required={false}
-                        options={keywords_options}
+                        options={this.data.keywords_options}
                         multi={true}
                         allowCreate={true}
                         value={this.state.keywordValue}
                         onChange={this.keywordsValueChange}
                     />
+
+                    <h5>Keyideas:</h5>
 
                     <Select
                         name="keyideas"
@@ -162,7 +171,7 @@ AddCommentForm = React.createClass({
                         className="form-element"
                         required={false}
                         value="one"
-                        options={keyideas_options}
+                        options={this.data.keyideas_options}
                         multi={true}
                         allowCreate={true}
                         value={this.state.keyideasValue}

@@ -192,15 +192,15 @@ ContextPanel = React.createClass({
           {this.data.lemmaText.map(function(lemmaTextEdition, i){
 						let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-						return <RaisedButton
-							key={i}
-							label={lemmaEditionTitle}
-							data-edition={lemmaTextEdition.title}
-							className={self.data.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
-							onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-							>
+						return 
 
-						</RaisedButton>
+                            <RaisedButton
+                                key={i}
+                                label={lemmaEditionTitle}
+                                data-edition={lemmaTextEdition.title}
+                                className={self.data.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
+                                onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+                            />
 
           })}
 

@@ -5,6 +5,9 @@ AddCommentLayout = React.createClass({
     getInitialState() {
         return {
             filters: [],
+
+            selectedLineFrom: 0,
+            selectedLineTo: 0,
         };
     },
 
@@ -12,6 +15,25 @@ AddCommentLayout = React.createClass({
 
     getMeteorData() {
         return {}
+    },
+
+    updateSelecetedLines(selectedLineFrom, selectedLineTo) {
+        if(selectedLineFrom === null) {
+            this.setState({
+                selectedLineTo: selectedLineTo,
+            });
+        } else if (selectedLineTo === null) {
+            this.setState({
+                selectedLineFrom: selectedLineFrom,
+            });
+        } else if (selectedLineTo != null && selectedLineTo != null) {
+            this.setState({
+                selectedLineFrom: selectedLineFrom,
+                selectedLineTo: selectedLineTo,
+            });
+        } else {
+            // do nothing
+        };
     },
 
     toggleSearchTerm(key, value) {
@@ -68,39 +90,43 @@ AddCommentLayout = React.createClass({
 
     },
 
-    addComment() {
+    addComment(formData) {
         // TODO: pull data from AddCommentForm & ContextRreader
-        // var work = Works.find({'slug': /*input work slug*/ }).fetch()[0];
-        // var subwork = work.subwork[/*input subwork - 1*/];
-        // Meteor.call("comments.insert", {
-        //     test: true // to be deleted - easy to search added documents in comment collection and delete them
-        //     wordpressId: // TODO: is it needed?
-        //     commenters: // TODO: from login info
-        //     work: {
-        //         title: work.title,
-        //         slug: work.slug,
-        //         order: work.order,
-        //     },
-        //     subwork: {
-        //         title: subwork.title,
-        //         n: subwork.n,
-        //     },
-        //     lineFrom: // input lineFrom,
-        //     lineTo: // input lineTo
-        //     lineLetter: // what is this?
-        //     nLines: // calsulate
-        //     commentOrder: // what is this?
-        //     keywords: // input keywords
-        //     revisions: [{
-        //         title: // input title
-        //         text: // input text
-        //         creted: // what info?
-        //         slug: // how is it created?
-        //     }],
-        //     reference: // input reference
-        //     referenceLink: // input referenceLink
-        //     created: // date
-        // });
+        var work = Works.find({
+            'slug': this.state.filters[0].values[0].slug
+        }).fetch()[0];
+        var subwork = work.subworks[this.state.filters[1].values[0].n - 1];
+        var comment = {
+            test: true, // to be deleted - easy to search added documents in comment collection and delete them
+            // wordpressId: // TODO: is it needed?
+            // commenters: // TODO: from login info
+            work: {
+                title: work.title,
+                slug: work.slug,
+                order: work.order,
+            },
+            subwork: {
+                title: subwork.title,
+                n: subwork.n,
+            },
+            lineFrom: this.state.selectedLineFrom,
+            lineTo: this.state.selectedLineTo,
+            // lineLetter: // what is this?
+            nLines: this.state.selectedLineTo - this.state.selectedLineFrom + 1,
+            // commentOrder: // what is this?
+            keywords: formData.keywordValue,
+            revisions: [{
+                title: formData.titleValue,
+                text: formData.textValue,
+                // creted: // what info?
+                // slug: // how is it created?
+            }],
+            reference: formData.referenceValue,
+            referenceLink: formData.referenceLinkValue,
+            // created: // date
+        };
+        console.log('comment', comment);
+        Meteor.call("comments.insert", comment);
     },
 
     render() {
@@ -117,13 +143,18 @@ AddCommentLayout = React.createClass({
                     <div className="col-xs-6 add-comment">
 
                         <AddCommentForm 
-                            
+                            selectedLineFrom={this.state.selectedLineFrom}
+                            selectedLineTo={this.state.selectedLineTo}
+                            submiteForm={this.addComment}
                         />
 
                         {this.state.filters.length > 1 ?
                             <ContextReader 
                                 workSlug={this.state.filters[0].values[0].slug}
                                 subwork_n={this.state.filters[1].values[0].n}
+                                selectedLineFrom={this.state.selectedLineFrom}
+                                selectedLineTo={this.state.selectedLineTo}
+                                updateSelecetedLines={this.updateSelecetedLines}
                             />
                         :
                             ''

@@ -21,6 +21,9 @@ ContextReader = React.createClass({
     propTypes: {
         workSlug: React.PropTypes.string.isRequired,
         subwork_n: React.PropTypes.number.isRequired,
+        selectedLineFrom: React.PropTypes.number.isRequired,
+        selectedLineTo: React.PropTypes.number.isRequired,
+        updateSelecetedLines: React.PropTypes.func.isRequired,
         // initLineFrom: React.PropTypes.number.isRequired,
         // initLineTo: React.PropTypes.number.isRequired,
         // initHighlightLineFrom: React.PropTypes.number,
@@ -34,14 +37,38 @@ ContextReader = React.createClass({
             lineFrom: 1,
             lineTo: 50,
             selectedLemmaEdition : "",
+            // selectedLineFrom: 0,
+            // selectedLineTo: 0,
         };
     },
 
-	// componentDidUpdate(prevProps, prevState) {
- //        this.checkIfPropsChanged();
- //        this.checkIfStateChanged();
+	componentDidUpdate(prevProps, prevState) {
+        // this.checkIfPropsChanged();
+        // this.checkIfStateChanged();
 
-	// },
+        
+        if (this.props.selectedLineFrom === 0) {
+            for (var i = 1; i <= Object.keys(this.refs).length; i++) {
+                this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+            };
+        } else if (this.props.selectedLineTo === 0) {
+            for (var i = 1; i <= Object.keys(this.refs).length; i++) {
+                if (i === this.props.selectedLineFrom) {
+                    this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
+                } else {
+                    this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                };
+            };
+        } else {
+            for (var i = 1; i <= Object.keys(this.refs).length; i++) {
+                if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
+                    this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
+                } else {
+                    this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                };
+            };
+        }
+	},
 
 
     mixins: [ReactMeteorData],
@@ -136,8 +163,31 @@ ContextReader = React.createClass({
         }
     },
 
-    handeLineMouseOver(event) {
-        console.log('event', event);
+    handeLineMouseEnter(event) {
+        var style = event.target.style;
+        style.backgroundColor = "#d59518";
+    },
+
+    handeLineMouseLeave(event) {
+        var style = event.target.style;
+        style.backgroundColor = "#ffffff";
+    },
+
+    handleLineClick(event) {
+        var target = event.target;
+        var style = event.target.style;
+        var id = parseInt(target.id);
+        if (this.props.selectedLineFrom === 0) {
+            this.props.updateSelecetedLines(id, null);
+        } else if (id === this.props.selectedLineFrom && this.props.selectedLineTo === 0) {
+            this.props.updateSelecetedLines(0, null);
+        } else if (this.props.selectedLineTo === 0 && id > this.props.selectedLineFrom) {
+            this.props.updateSelecetedLines(null, id);
+        } else if (this.props.selectedLineTo === 0 && id < this.props.selectedLineFrom) {
+            this.props.updateSelecetedLines(id, this.props.selectedLineFrom);
+        } else {
+            this.props.updateSelecetedLines(id, 0);
+        };
     },
 
     render() {
@@ -155,7 +205,7 @@ ContextReader = React.createClass({
                 {this.data.selectedLemmaEdition.lines.map(function(line, i){
                     var lineClass="lemma-line";
 
-                    return <div className={lineClass} key={i} onMouseOver={self.handeLineMouseOver}>
+                    return <div className={lineClass} key={i}>
 
                         <div className="lemma-meta">
                             {(line.n % 5 === 0) ?
@@ -165,7 +215,7 @@ ContextReader = React.createClass({
                             : ""}
                         </div>
 
-                        <div className="lemma-text" dangerouslySetInnerHTML={{__html: line.html}} >
+                        <div className="lemma-text" ref={i+1} id={i+1} dangerouslySetInnerHTML={{__html: line.html}} onMouseEnter={self.handeLineMouseEnter} onMouseLeave={self.handeLineMouseLeave} onClick={self.handleLineClick} style={{cursor: "pointer"}}>
                         </div>
 
                     </div>

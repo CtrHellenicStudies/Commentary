@@ -20,6 +20,18 @@ AddCommentForm = React.createClass({
         return {muiTheme: getMuiTheme(baseTheme)};
     },
 
+    propTypes: {
+        selectedLineFrom: React.PropTypes.number.isRequired,
+        selectedLineTo: React.PropTypes.number.isRequired,
+        submiteForm: React.PropTypes.func.isRequired,
+        // titleValue: React.PropTypes.string.isRequired,
+        // textValue: React.PropTypes.string.isRequired,
+        // referenceValue: React.PropTypes.string.isRequired,
+        // referenceLinkValue: React.PropTypes.string.isRequired,
+        // keywordValue: React.PropTypes.array.isRequired,
+        // keyideasValue: React.PropTypes.array.isRequired,
+    },
+
     getInitialState(){
         return {
             titleValue: '',
@@ -53,9 +65,10 @@ AddCommentForm = React.createClass({
     },
 
     handleSubmit(event) {
-      event.preventDefault();
-      console.log('state', this.state);
-      // TODO: update collection
+        // TODO: form validation
+        event.preventDefault();
+        // TODO: update collection
+        this.props.submiteForm(this.state);
     },
 
     titleValueChange(event) {
@@ -92,6 +105,24 @@ AddCommentForm = React.createClass({
       this.setState({
         keyideasValue: val
       });
+    },
+
+    renderSelectedLines() {
+        if(this.props.selectedLineFrom > 0 && this.props.selectedLineTo === 0) {
+            return (
+                <h5>Selected line: {this.props.selectedLineFrom}</h5>
+            );
+        } else if (this.props.selectedLineFrom > 0 && this.props.selectedLineTo > 0) {
+            return (
+                <div>
+                    <h5>Selected lines: {this.props.selectedLineFrom} to {this.props.selectedLineTo}</h5>
+                </div>
+            );
+        } else {
+            return (
+                <h5>No line selected</h5>
+            );
+        }
     },
 
     render() {
@@ -177,6 +208,8 @@ AddCommentForm = React.createClass({
                         value={this.state.keyideasValue}
                         onChange={this.keyideasValueChange}
                     />
+
+                    {this.renderSelectedLines()}
 
                     <RaisedButton 
                         type="submit"

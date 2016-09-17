@@ -21,6 +21,7 @@ tramp
 .idea/
 *.iml
 *.iws
+.vscode/
 
 # OS
 .DS_Store

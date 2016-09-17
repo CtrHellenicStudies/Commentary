@@ -7,7 +7,8 @@ CommentLemma = React.createClass({
 
   propTypes: {
     commentGroup: React.PropTypes.object.isRequired,
-    showContextPanel: React.PropTypes.func.isRequired
+    showContextPanel: React.PropTypes.func.isRequired,
+     scrollPosition: React.PropTypes.func.isRequired,
   },
 
   getInitialState(){
@@ -118,6 +119,8 @@ CommentLemma = React.createClass({
 	},
 
 	showContextPanel(commentGroup){
+		var scroll = $('#comment-group-' + this.props.index).offset().top;
+ 		this.props.scrollPosition(scroll, this.props.index);
 		this.props.showContextPanel(commentGroup);
 	},
 

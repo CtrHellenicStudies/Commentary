@@ -10,6 +10,8 @@ ContextPanel = React.createClass({
     open: React.PropTypes.bool.isRequired,
     commentGroup: React.PropTypes.object.isRequired,
     closeContextPanel: React.PropTypes.func.isRequired,
+    scrollPosition: React.PropTypes.number.isRequired,
+    commentLemmaIndex: React.PropTypes.number.isRequired,
   },
 
   getChildContext() {
@@ -123,6 +125,39 @@ ContextPanel = React.createClass({
 
 
   },
+
+  scrollElement(state) {
+         var that = this;
+         switch (state) {
+             case 'open':
+             console.log('top', $('#comment-group-' + that.props.commentLemmaIndex).offset().top);
+                 window.requestAnimationFrame(function() {
+                     var scroll = $('#comment-group-' + that.props.commentLemmaIndex).offset().top;
+                     $(document).scrollTop(scroll);
+                 });
+                 break;
+             case 'close':
+                window.requestAnimationFrame(function() {
+                 	console.log('that.props.scrollPosition', that.props.scrollPosition);
+                 	setTimeout(function(){
+                 		$(document).scrollTop(that.props.scrollPosition);
+                 	}, 1000);
+                });
+                break;
+         }
+     },
+ 
+     componentDidMount() {
+         this.scrollElement('open');
+     },
+ 
+     componentDidUpdate(prevProps, prevState) {
+        this.scrollElement('open');
+     },
+ 
+     componentWillUnmount() {
+     	this.scrollElement('close');
+     },
 
 
   render() {

@@ -130,7 +130,7 @@ ContextReader = React.createClass({
             });
 
             lemmaText = editions;
-            console.log('lemmaText',lemmaText);
+            // console.log('lemmaText',lemmaText);
 
             if (this.state.selectedLemmaEdition.length) {
                 lemmaText.forEach(function(edition) {

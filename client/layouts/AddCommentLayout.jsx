@@ -131,6 +131,8 @@ AddCommentLayout = React.createClass({
 
     render() {
 
+        var CommentLemmaController = false;
+
         return (
             <div className="chs-layout add-comment-layout">
 
@@ -139,6 +141,15 @@ AddCommentLayout = React.createClass({
                 />
 
                 <main>
+
+                    <CommentLemmnaSelect
+                        selectedLineFrom={this.state.selectedLineFrom}
+                        selectedLineTo={this.state.selectedLineTo}
+                        workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : 0}
+                        subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                    />
+
+                    <AddComment/>
 
                     <div className="col-xs-6 add-comment">
 

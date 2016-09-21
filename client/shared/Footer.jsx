@@ -52,6 +52,10 @@ Footer = React.createClass({
                   label="Keywords"
                   ></FlatButton>
     						<FlatButton
+                  href="/keyideas/"
+                  label="Key Ideas"
+                  ></FlatButton>
+    						<FlatButton
                   href="/about"
                   label="About"
                   ></FlatButton>

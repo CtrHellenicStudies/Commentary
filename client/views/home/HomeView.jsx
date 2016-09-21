@@ -190,12 +190,29 @@ HomeView = React.createClass({
                     <h2 className="keyword-divider-title">Keywords</h2>
                     <div className="underline"></div>
 
-                    <KeywordsList />
+                    <KeywordsList type="word" title="Keywords" />
 
                     <RaisedButton
                       href="/keywords"
                       className="cover-link show-more primary "
                       label="More Keywords"
+                      >
+                    </RaisedButton>
+
+                </div>
+            </section>
+
+            <section className="keywords">
+                <div className="grid inner">
+                    <h2 className="keyword-divider-title">Key Ideas</h2>
+                    <div className="underline"></div>
+
+                    <KeywordsList type="idea" title="Key Ideas" />
+
+                    <RaisedButton
+                      href="/keywords"
+                      className="cover-link show-more primary "
+                      label="More Key Ideas"
                       >
                     </RaisedButton>
 

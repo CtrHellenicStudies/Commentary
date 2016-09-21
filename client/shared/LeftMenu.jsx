@@ -99,6 +99,11 @@ LeftMenu = React.createClass({
                           onClick={this.props.closeLeftMenu}
                       />
                     <MenuItem
+                          href="/keyideas/"
+                          primaryText="Key Ideas"
+                          onClick={this.props.closeLeftMenu}
+                      />
+                    <MenuItem
                           href="/commenters/"
                           primaryText="Commenters"
                           onClick={this.props.closeLeftMenu}

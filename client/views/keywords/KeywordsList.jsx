@@ -4,11 +4,14 @@ KeywordsList = React.createClass({
   mixins: [ReactMeteorData],
 
   propTypes: {
+    type: React.PropTypes.string.isRequired
   },
 
   // Loads items from the keywords collection and puts them on this.data.keywords
   getMeteorData() {
-    let query = {};
+    const query = {
+      type: this.props.type
+    };
 
     return {
       keywords: Keywords.find(query, {sort: {title: 1}}).fetch()

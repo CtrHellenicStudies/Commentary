@@ -1,6 +1,8 @@
 KeywordsPage = React.createClass({
 
   propTypes: {
+      type: React.PropTypes.string.isRequired,
+      title: React.PropTypes.string.isRequired
   },
 
   render() {
@@ -22,7 +24,7 @@ KeywordsPage = React.createClass({
                           <div className="center-content">
 
                               <div className="page-title-wrap">
-                                  <h2 className="page-title ">Keywords</h2>
+                                  <h2 className="page-title ">{this.props.title}</h2>
                               </div>
 
 
@@ -31,7 +33,7 @@ KeywordsPage = React.createClass({
                   </div>
               </section>
               <section className="page-content">
-								<KeywordsList />
+								<KeywordsList type={this.props.type} />
 
 							</section>
 

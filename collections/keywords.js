@@ -26,6 +26,12 @@ Schemas.Keywords = new SimpleSchema({
     optional: true,
   },
 
+	isIdea: {
+		type: String,
+    optional: true,
+		defaultValue: "word"
+	},
+
   count: {
     type: Number,
     optional: true,

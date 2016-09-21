@@ -19,6 +19,9 @@ ContextReader = React.createClass({
     },
 
     propTypes: {
+        open: React.PropTypes.bool.isRequired,
+        contextReaderOpen: React.PropTypes.func.isRequired,
+
         workSlug: React.PropTypes.string.isRequired,
         subwork_n: React.PropTypes.number.isRequired,
         selectedLineFrom: React.PropTypes.number.isRequired,
@@ -77,82 +80,88 @@ ContextReader = React.createClass({
 
         var that = this;
 
-        var lemmaText = [];
-        // var commentGroup = this.props.commentGroup;
-        var selectedLemmaEdition = {
-            lines: [],
-            slug: ""
-        };
+        if (this.props.workSlug != "" && this.props.subwork_n != 0) {
 
-        var lemmaQuery = {
-            'work.slug': this.props.workSlug,
-            'subwork.n': this.props.subwork_n,
-            'text.n': {
-                $gte: this.state.lineFrom,
-                $lte: this.state.lineTo
-            }
-        };
+            var lemmaText = [];
+            // var commentGroup = this.props.commentGroup;
+            var selectedLemmaEdition = {
+                lines: [],
+                slug: ""
+            };
 
-        var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
-        if (textNodesSubscription.ready()) {
-            //console.log("Context Panel lemmaQuery", lemmaQuery);
-            var textNodes = TextNodes.find(lemmaQuery).fetch();
-            var editions = [];
+            var lemmaQuery = {
+                'work.slug': this.props.workSlug,
+                'subwork.n': this.props.subwork_n,
+                'text.n': {
+                    $gte: this.state.lineFrom,
+                    $lte: this.state.lineTo
+                }
+            };
 
-            var textIsInEdition = false;
-            textNodes.forEach(function(textNode) {
+            var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
+            if (textNodesSubscription.ready()) {
+                //console.log("Context Panel lemmaQuery", lemmaQuery);
+                var textNodes = TextNodes.find(lemmaQuery).fetch();
+                var editions = [];
 
-                textNode.text.forEach(function(text) {
-                    textIsInEdition = false;
+                var textIsInEdition = false;
+                textNodes.forEach(function(textNode) {
 
-                    editions.forEach(function(edition) {
+                    textNode.text.forEach(function(text) {
+                        textIsInEdition = false;
 
-                        if (text.edition.slug === edition.slug) {
-                            edition.lines.push({
-                                html: text.html,
-                                n: text.n
-                            });
-                            textIsInEdition = true;
-                        }
-                    })
+                        editions.forEach(function(edition) {
 
-                    if (!textIsInEdition) {
-                        editions.push({
-                            title: text.edition.title,
-                            slug: text.edition.slug,
-                            lines: [{
-                                html: text.html,
-                                n: text.n
-                            }],
+                            if (text.edition.slug === edition.slug) {
+                                edition.lines.push({
+                                    html: text.html,
+                                    n: text.n
+                                });
+                                textIsInEdition = true;
+                            }
                         })
-                    }
-                });
-            });
 
-            lemmaText = editions;
-            // console.log('lemmaText',lemmaText);
-
-            if (this.state.selectedLemmaEdition.length) {
-                lemmaText.forEach(function(edition) {
-                    if (edition.slug === that.state.selectedLemmaEdition) {
-                        selectedLemmaEdition = edition;
-                    }
+                        if (!textIsInEdition) {
+                            editions.push({
+                                title: text.edition.title,
+                                slug: text.edition.slug,
+                                lines: [{
+                                    html: text.html,
+                                    n: text.n
+                                }],
+                            })
+                        }
+                    });
                 });
-            } else {
-                selectedLemmaEdition = lemmaText[0];
+
+                lemmaText = editions;
+                // console.log('lemmaText',lemmaText);
+
+                if (this.state.selectedLemmaEdition.length) {
+                    lemmaText.forEach(function(edition) {
+                        if (edition.slug === that.state.selectedLemmaEdition) {
+                            selectedLemmaEdition = edition;
+                        }
+                    });
+                } else {
+                    selectedLemmaEdition = lemmaText[0];
+                }
+
             }
 
-        }
-
-        //console.log("Context Panel lemmaText", lemmaText);
+            //console.log("Context Panel lemmaText", lemmaText);
 
 
-        return {
-            lemmaText: lemmaText,
-            selectedLemmaEdition: selectedLemmaEdition
+            return {
+                lemmaText: lemmaText,
+                selectedLemmaEdition: selectedLemmaEdition
+            };
+        } else {
+            return {
+                lemmaText: "",
+                selectedLemmaEdition: ""
+            };
         };
-
-
     },
 
     toggleEdition(editionSlug) {
@@ -194,63 +203,87 @@ ContextReader = React.createClass({
 		var self = this;
 		var contextPanelStyles = "lemma-panel paper-shadow";
 
-		// if(this.props.open){
+		if(this.props.open){
 			contextPanelStyles += " extended";
-		// }
+		}
 
         return (
-          <div className={contextPanelStyles}>
+            <div>
+                {this.props.workSlug != "" && this.props.subwork_n != 0 ?
+                    
+                    <div className={contextPanelStyles}>
 
-            <div className="lemma-text-wrap">
-                {this.data.selectedLemmaEdition.lines.map(function(line, i){
-                    var lineClass="lemma-line";
+                        <IconButton
+                            className="close-lemma-panel"
+                            onClick={this.props.closeContextPanel}
+                            iconClassName="mdi mdi-close"
+                        />
 
-                    return <div className={lineClass} key={i}>
+                        <div className="lemma-text-wrap">
+                            {this.data.selectedLemmaEdition.lines.map(function(line, i){
+                                var lineClass="lemma-line";
 
-                        <div className="lemma-meta">
-                            {(line.n % 5 === 0) ?
-                                <span className="lemma-line-n">
-                                    {line.n}
-                                </span>
-                            : ""}
+                                return <div className={lineClass} key={i}>
+
+                                    <div className="lemma-meta">
+                                        {(line.n % 5 === 0) ?
+                                            <span className="lemma-line-n">
+                                                {line.n}
+                                            </span>
+                                        : ""}
+                                    </div>
+
+                                    <div className="lemma-text" ref={i+1} id={i+1} dangerouslySetInnerHTML={{__html: line.html}} onMouseEnter={self.handeLineMouseEnter} onMouseLeave={self.handeLineMouseLeave} onClick={self.handleLineClick} style={{cursor: "pointer"}}>
+                                    </div>
+
+                                </div>
+
+                            })}
+
+                            <div className="read-more-link">
+                                <RaisedButton
+                                    className="cover-link light show-more "
+                                    label="Read More"
+                                    onClick={this.readMoreClicked}
+                                />
+                            </div>
+
                         </div>
 
-                        <div className="lemma-text" ref={i+1} id={i+1} dangerouslySetInnerHTML={{__html: line.html}} onMouseEnter={self.handeLineMouseEnter} onMouseLeave={self.handeLineMouseLeave} onClick={self.handleLineClick} style={{cursor: "pointer"}}>
+                        <div className="edition-tabs tabs">
+                            {this.data.lemmaText.map(function(lemmaTextEdition, i){
+                                let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+                                
+                                return (
+                                    <RaisedButton
+                                        key={i}
+                                        label={lemmaEditionTitle}
+                                        data-edition={lemmaTextEdition.title}
+                                        className={self.data.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
+                                        onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+                                    />
+                                );
+
+                            })}
+
                         </div>
 
                     </div>
 
-                })}
-
-                <div className="read-more-link">
-                    <RaisedButton
-                        className="cover-link light show-more "
-                        label="Read More"
-                        onClick={this.readMoreClicked}
-                    />
-                </div>
-
-            </div>
-
-            <div className="edition-tabs tabs">
-                {this.data.lemmaText.map(function(lemmaTextEdition, i){
-                    let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
-                    
-                    return (
-                        <RaisedButton
-                            key={i}
-                            label={lemmaEditionTitle}
-                            data-edition={lemmaTextEdition.title}
-                            className={self.data.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
-                            onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+                :
+                    <div className={contextPanelStyles}>
+                        <IconButton
+                            className="close-lemma-panel"
+                            onClick={this.props.closeContextPanel}
+                            iconClassName="mdi mdi-close"
                         />
-                    );
-
-                })}
+                        <div className="lemma-text-wrap">
+                            No work & book selected
+                        </div>
+                    </div>
+                }
 
             </div>
-
-        </div>
 
         );
     }

@@ -18,6 +18,7 @@ CommentLemmnaSelect = React.createClass({
         subwork_n: React.PropTypes.number.isRequired,
         selectedLineFrom: React.PropTypes.number.isRequired,
         selectedLineTo: React.PropTypes.number.isRequired,
+        openContextReader: React.PropTypes.func.isRequired,
     },
 
     getInitialState() {
@@ -38,14 +39,25 @@ CommentLemmnaSelect = React.createClass({
             lines: [],
             slug: ""
         };
-
-        var lemmaQuery = {
-            'work.slug': this.props.workSlug,
-            'subwork.n': this.props.subwork_n,
-            'text.n': {
-                $gte: this.props.selectedLineFrom,
-                $lte: this.props.selectedLineTo
-            }
+        var lemmaQuery = {};
+        if (this.props.selectedLineFrom <= this.props.selectedLineTo) {
+            lemmaQuery = {
+                'work.slug': this.props.workSlug,
+                'subwork.n': this.props.subwork_n,
+                'text.n': {
+                    $gte: this.props.selectedLineFrom,
+                    $lte: this.props.selectedLineTo
+                }
+            };
+        } else {
+            lemmaQuery = {
+                'work.slug': this.props.workSlug,
+                'subwork.n': this.props.subwork_n,
+                'text.n': {
+                    $gte: this.props.selectedLineFrom,
+                    $lte: this.props.selectedLineFrom,
+                }
+            };
         };
 
         var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
@@ -124,7 +136,7 @@ CommentLemmnaSelect = React.createClass({
         return (
             <div className="comment-outer comment-lemma-comment-outer">
 
-                {this.props.selectedLineFrom > 0 && this.props.selectedLineTo > 0 ?
+                {this.props.selectedLineFrom > 0 ?
                     <article className="comment lemma-comment paper-shadow">
 
                         {this.data.selectedLemmaEdition.lines.map(function(line, i){
@@ -158,7 +170,7 @@ CommentLemmnaSelect = React.createClass({
 
                             <RaisedButton
                                 className="context-tab tab"
-                                onClick={this.TODO}
+                                onClick={this.props.openContextReader}
                                 label="Context"
                                 labelPosition="before"
                                 icon={<FontIcon className="mdi mdi-chevron-right" />}
@@ -174,8 +186,8 @@ CommentLemmnaSelect = React.createClass({
                         <div className="context-tabs tabs">
                             <RaisedButton
                                 className="context-tab tab"
-                                onClick={this.TODO}
-                                label="Select context"
+                                onClick={this.props.openContextReader}
+                                label="Context"
                                 labelPosition="before"
                                 icon={<FontIcon className="mdi mdi-chevron-right" />}
                                 >

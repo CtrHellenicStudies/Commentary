@@ -8,6 +8,8 @@ AddCommentLayout = React.createClass({
 
             selectedLineFrom: 0,
             selectedLineTo: 0,
+
+            contextReaderOpen: false,
         };
     },
 
@@ -129,6 +131,19 @@ AddCommentLayout = React.createClass({
         Meteor.call("comments.insert", comment);
     },
 
+    closeContextReader() {
+        this.setState({
+            contextReaderOpen: false
+        });
+    },
+
+    openContextReader() {
+        this.setState({
+            contextReaderOpen: true
+        });
+    },
+
+
     render() {
 
         var CommentLemmaController = false;
@@ -147,33 +162,25 @@ AddCommentLayout = React.createClass({
                         selectedLineTo={this.state.selectedLineTo}
                         workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : 0}
                         subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                        openContextReader={this.openContextReader}
                     />
 
-                    <AddComment/>
+                    <AddComment
+                        selectedLineFrom={this.state.selectedLineFrom}
+                        selectedLineTo={this.state.selectedLineTo}
+                        submiteForm={this.addComment}
+                    />
 
-                    <div className="col-xs-6 add-comment">
+                    <ContextReader
+                        open={this.state.contextReaderOpen}
+                        closeContextPanel={this.closeContextReader}
+                        workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : ""}
+                        subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                        selectedLineFrom={this.state.selectedLineFrom}
+                        selectedLineTo={this.state.selectedLineTo}
+                        updateSelecetedLines={this.updateSelecetedLines}
+                    />
 
-                        <AddCommentForm 
-                            selectedLineFrom={this.state.selectedLineFrom}
-                            selectedLineTo={this.state.selectedLineTo}
-                            submiteForm={this.addComment}
-                        />
-
-                        {this.state.filters.length > 1 ?
-                            <ContextReader 
-                                workSlug={this.state.filters[0].values[0].slug}
-                                subwork_n={this.state.filters[1].values[0].n}
-                                selectedLineFrom={this.state.selectedLineFrom}
-                                selectedLineTo={this.state.selectedLineTo}
-                                updateSelecetedLines={this.updateSelecetedLines}
-                            />
-                        :
-                            ''
-                        }
-
-                    </div>
-
-            
                 </main>
                 
                 <Footer/>

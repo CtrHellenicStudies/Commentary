@@ -1,6 +1,6 @@
-this.Revisions = new Meteor.Collection('revisions');
+this.ReferenceWorks = new Meteor.Collection('referenceWorks');
 
-Schemas.Revisions = new SimpleSchema({
+Schemas.ReferenceWorks = new SimpleSchema({
   title: {
     type: String,
     optional: true,
@@ -14,15 +14,6 @@ Schemas.Revisions = new SimpleSchema({
       type: "hidden",
       label: false
     }
-  },
-
-  text: {
-    type: String,
-    optional: true,
-    autoform: {
-      rows: 5
-    }
-
   },
 
   created: {
@@ -54,5 +45,5 @@ Schemas.Revisions = new SimpleSchema({
 
 });
 
-Revisions.attachSchema(Schemas.Revisions);
-Revisions.friendlySlugs('title');
+ReferenceWorks.attachSchema(Schemas.ReferenceWorks);
+ReferenceWorks.friendlySlugs('title');

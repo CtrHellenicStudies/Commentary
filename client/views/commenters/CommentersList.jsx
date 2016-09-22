@@ -3,7 +3,8 @@ CommentersList = React.createClass({
   mixins: [ReactMeteorData],
 
   propTypes: {
-    limit: React.PropTypes.number
+    limit: React.PropTypes.number,
+		featureOnHomepage: React.PropTypes.bool,
   },
 
   getMeteorData() {
@@ -11,9 +12,12 @@ CommentersList = React.createClass({
 
     var limit = 100;
 
-    if(typeof this.props.limit !== "undefined"){
+    if(this.props.limit){
       limit = this.props.limit;
     }
+		if(this.props.featureOnHomepage){
+			query.featureOnHomepage = this.props.featureOnHomepage;
+		}
 
     return {
       commenters: Commenters.find(query, {sort: {name: 1}, limit: limit}).fetch(),

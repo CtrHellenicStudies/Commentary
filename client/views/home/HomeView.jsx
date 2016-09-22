@@ -232,6 +232,7 @@ HomeView = React.createClass({
 
                     <CommentersList
 											limit={3}
+											featureOnHomepage={true}
 											/>
 
                     <RaisedButton

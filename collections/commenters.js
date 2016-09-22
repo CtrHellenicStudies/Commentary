@@ -21,7 +21,7 @@ Schemas.Commenters = new SimpleSchema({
       label: false
     }
   },
-	
+
   picture: {
     type: String,
     optional: true,
@@ -44,6 +44,11 @@ Schemas.Commenters = new SimpleSchema({
 
   tagline: {
     type: String,
+    optional: true,
+  },
+
+  featureOnHomepage: {
+    type: Boolean,
     optional: true,
   },
 

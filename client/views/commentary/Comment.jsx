@@ -54,6 +54,12 @@ Comment = React.createClass({
 
 	},
 
+	createRevisionMarkup(html){
+		//comment.selected_revision.text = comment.selected_revision.text.replace(/Iliad (\d+).(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-line_from='$2'>Iliad $1.$2</a>");
+
+		return { __html: html };
+
+	},
 
 
 	render() {
@@ -62,11 +68,10 @@ Comment = React.createClass({
 		var selectedRevision = this.state.selectedRevision;
 		var commentGroup = this.props.commentGroup;
 		var commentClass = "comment-outer has-discussion ";
+
 		if(self.state.discussionVisible){
 			commentClass += "discussion--width discussion--visible";
 		}
-
-
 
 		return (<div
 				className={commentClass}
@@ -152,7 +157,7 @@ Comment = React.createClass({
 						<div className="comment-lower">
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={{ __html: selectedRevision.text}}>
+								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}>
 							</div>
 							<div className="comment-reference" >
 								<h4>Secondary Source(s):</h4>

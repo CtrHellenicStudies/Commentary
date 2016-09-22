@@ -3,12 +3,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 
-CommentLemma = React.createClass({
+LemmaReferenceModal = React.createClass({
 
 	propTypes: {
 		commentGroup: React.PropTypes.object.isRequired,
-		showContextPanel: React.PropTypes.func.isRequired,
-		 scrollPosition: React.PropTypes.func.isRequired,
 	},
 
 	getInitialState(){
@@ -118,69 +116,14 @@ CommentLemma = React.createClass({
 
 	},
 
-	showContextPanel(commentGroup){
-		var scroll = $('#comment-group-' + this.props.index).offset().top;
- 		this.props.scrollPosition(scroll, this.props.index);
-		this.props.showContextPanel(commentGroup);
-	},
-
 	render() {
 		var self = this;
 		var commentGroup = this.props.commentGroup;
 		var lemmaText = this.data.lemmaText;
 
 		return (
-
-			<div className="comment-outer comment-lemma-comment-outer">
-
-					<div className="comment-group-meta">
-							<div className="comment-group-meta-inner">
-									<div className="comment-group-ref">
-											<span className="comment-group-ref-above">
-													{commentGroup.work.title} {commentGroup.subwork.title}
-											</span>
-											<h2 className="comment-group-ref-below">
-												{commentGroup.lineFrom}{commentGroup.lineTo ? "-" + commentGroup.lineTo : "" }
-											</h2>
-
-									</div>
-									<div className="comment-group-commenters">
-
-											{commentGroup.commenters.map(function(commenter, i){
-												let image = {};
-												let imageUrl = "";
-												if (commenter.attachment) {
-													image = commenter.attachment;
-													imageUrl = image.url();
-												}
-
-												return <div
-													key={i}
-													className="comment-author"
-													data-commenter-id={commenter.id}>
-														<span className="comment-author-name">
-															{commenter.name}
-														</span>
-														<div
-															className="comment-author-image-wrap paper-shadow"
-															>
-																<a
-																	href={"/commenters/" + commenter.slug}
-																	onClick={self.goToAuthorComment}
-																	>
-																		<img src={imageUrl.length ? imageUrl : "/images/default_user.jpg"} />
-																</a>
-
-														</div>
-												</div>
-											})}
-
-									</div>
-							</div>
-
-					</div>
-
-					<article className="comment lemma-comment paper-shadow">
+			<div className="lemma-reference-modal">
+					<article className="comment	lemma-comment paper-shadow " layout="column">
 
 							{this.state.selectedLemmaEdition.lines.map(function(line, i){
 								return <p
@@ -190,6 +133,7 @@ CommentLemma = React.createClass({
 													></p>
 
 							})}
+
 							<div className="edition-tabs tabs">
 								{lemmaText.map(function(lemmaTextEdition, i){
 									let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
@@ -206,21 +150,11 @@ CommentLemma = React.createClass({
 
 								})}
 							</div>
-							<div className="context-tabs tabs">
-									<RaisedButton
-										className="context-tab tab"
-										onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
-										label="Context"
-										labelPosition="before"
-										icon={<FontIcon className="mdi mdi-chevron-right" />}
-										>
-									</RaisedButton>
-							</div>
-					</article>
-					<div className="discussion-wrap">
-					</div>
-			</div>
 
+							<i className="mdi mdi-close paper-shadow" onClick={this.closeLemmaReference} />
+					</article>
+
+			</div>
 
 		 );
 	 }

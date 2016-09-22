@@ -11,7 +11,7 @@ Header = React.createClass({
 	propTypes: {
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeDate: React.PropTypes.func,
+		handleChangeLineN: React.PropTypes.func,
 		initialSearchEnabled: React.PropTypes.bool,
 	},
 
@@ -198,7 +198,7 @@ Header = React.createClass({
 				<CommentarySearchPanel
 					toggleSearchTerm={this.props.toggleSearchTerm}
 					handleChangeTextsearch={this.props.handleChangeTextsearch}
-					handleChangeDate={this.props.handleChangeDate}
+					handleChangeLineN={this.props.handleChangeLineN}
 					open={this.state.rightMenuOpen}
 					closeRightMenu={this.closeRightMenu}
 				/>
@@ -283,9 +283,6 @@ Header = React.createClass({
 									onClick={this.toggleLeftMenu}
 								/>
 
-								<a href="/" className="header-home-link" >
-									<h3 className="logo">AHCIP</h3>
-								</a>
 								<div className="search-toggle">
 									<IconButton
 										className="search-button right-drawer-toggle"
@@ -449,37 +446,10 @@ Header = React.createClass({
 
 									</div>
 
-									<div
-										className={`dropdown search-dropdown search-dropdown-date${
-											this.state.searchDropdownOpen === 'date' ? ' open' : ''}`}
-									>
-										<FlatButton
-											className="search-tool search-type-date dropdown-toggle"
-											label="Date"
-											labelPosition="before"
-											icon={<FontIcon className="mdi mdi-chevron-down" />}
-											onClick={self.toggleSearchDropdown.bind(null, 'date')}
-										/>
-
-										<ul className="dropdown-menu">
-											<div className="dropdown-menu-inner">
-												<div className="search-tool--date">
-													<DateRangeSlider
-														handleChangeDate={this.props.handleChangeDate}
-													/>
-												</div>
-											</div>
-
-											<IconButton
-												className="close-dropdown"
-												iconClassName="mdi mdi-close"
-												onClick={this.toggleSearchDropdown.bind(null, 'date')}
-											/>
-
-										</ul>
-
-
-									</div>
+         					<div className="search-tool text-search line-search">
+         						<label></label>
+ 										<LineRangeSlider handleChangeLineN={this.props.handleChangeLineN}/>
+         					</div>
 
 									<div className="search-toggle">
 										<IconButton

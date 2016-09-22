@@ -129,7 +129,7 @@ CommentaryLayout = React.createClass({
 
 	},
 
-	handleChangeDate(e){
+	handleChangeLineN(e){
 
 		var filters = this.state.filters;
 
@@ -214,7 +214,7 @@ CommentaryLayout = React.createClass({
 				<Header
 					filters={this.state.filters}
 					toggleSearchTerm={this.toggleSearchTerm}
-					handleChangeDate={this.handleChangeDate}
+					handleChangeLineN={this.handleChangeLineN}
 					handleChangeTextsearch={this.handleChangeTextsearch}
 					initialSearchEnabled
 					/>

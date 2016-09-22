@@ -104,6 +104,10 @@ CommentarySearchPanel = React.createClass({
 				padding: '0px 10px',
 				background: '#f2f2f2',
 			},
+			cardHeader: {
+				fontFamily: 'Proxima N W01 At Smbd',
+				textTransform: 'uppercase',
+			},
 		};
 
 		return (
@@ -123,14 +127,15 @@ CommentarySearchPanel = React.createClass({
 				</div>
 				<Card>
 					<CardHeader
-						title="Date"
+						title="Line Number"
+						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
 					/>
 					<CardText expandable style={styles.wrapper}>
 						<div className="search-tool--date">
-							<DateRangeSlider
-								handleChangeDate={this.props.handleChangeDate}
+							<LineRangeSlider
+								handleChangeLineN={this.props.handleChangeLineN}
 							/>
 						</div>
 					</CardText>
@@ -138,6 +143,7 @@ CommentarySearchPanel = React.createClass({
 				<Card>
 					<CardHeader
 						title="Keyword"
+						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
 					/>
@@ -160,6 +166,7 @@ CommentarySearchPanel = React.createClass({
 				<Card>
 					<CardHeader
 						title="Commenter"
+						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
 					/>
@@ -182,6 +189,7 @@ CommentarySearchPanel = React.createClass({
 				<Card>
 					<CardHeader
 						title="Work"
+						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
 					/>
@@ -205,6 +213,7 @@ CommentarySearchPanel = React.createClass({
 				<Card>
 					<CardHeader
 						title="Book"
+						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
 					/>

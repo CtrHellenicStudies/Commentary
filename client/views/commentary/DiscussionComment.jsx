@@ -5,17 +5,17 @@ import FontIcon from 'material-ui/FontIcon';
 
 DiscussionComment = React.createClass({
 
-  propTypes: {
-    discussionComment: React.PropTypes.object.isRequired,
+	propTypes: {
+		discussionComment: React.PropTypes.object.isRequired,
 		currentUser: React.PropTypes.object
-  },
+	},
 
-  getInitialState(){
-    return {
+	getInitialState(){
+		return {
 			editMode: false
 		}
 
-  },
+	},
 
 	showEditMode(){
 		this.setState({
@@ -56,9 +56,9 @@ DiscussionComment = React.createClass({
 
 	},
 
-  render() {
+	render() {
 		var self = this;
-    var userIsLoggedIn = this.props.currentUser ? true : false;
+		var userIsLoggedIn = this.props.currentUser ? true : false;
 		var discussionComment = this.props.discussionComment;
 		discussionComment.children = [];
 		var userUpvoted = false;
@@ -73,63 +73,63 @@ DiscussionComment = React.createClass({
 				userUpvoted = true;
 		}
 
-    return (<div
+		return (<div
 							className="discussion-comment paper-shadow"
 							>
-                <div
+								<div
 									className="inner-comment-row">
 
-                    <div className="discussion-commenter-profile-picture profile-picture paper-shadow">
-                        <img src="/images/default_user.jpg"/>
-                    </div>
+										<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
+												<img src="/images/default_user.jpg"/>
+										</div>
 
-                    <div className="discussion-commenter-meta">
-                        <span className="discussion-commenter-name">
-                            {username}
-                        </span>
-                        <span className="discussion-comment-date">
-                            <span >Updated: </span>
+										<div className="discussion-commenter-meta">
+												<span className="discussion-commenter-name">
+														{username}
+												</span>
+												<span className="discussion-comment-date">
+														<span >Updated: </span>
 														{moment(discussionComment.updated).format('D MMMM YYYY') || moment(discussionComment.created).format('D MMMM YYYY')}
-                        </span>
-                    </div>
+												</span>
+										</div>
 
-                </div>
-                <div className="inner-comment-row">
-                    <div className="discussion-comment-text">
+								</div>
+								<div className="inner-comment-row">
+										<div className="discussion-comment-text">
 
-                        {/*<div
+												{/*<div
 													dangerouslySetInnerHTML={{ __html: discussionComment.content}}
 													></div>*/}
 												{this.state.editMode ?
-                          <form className="update-comment-form clearfix" name="update-comment-form" ref="updateCommentForm">
-                            <textarea className="new-comment-text" defaultValue={this.props.discussionComment.content}></textarea>
+													<form className="update-comment-form clearfix" name="update-comment-form" ref="updateCommentForm">
+														<textarea className="new-comment-text" defaultValue={this.props.discussionComment.content}></textarea>
 														<div className="comment-edit-buttons">
-	                            <RaisedButton
+															<RaisedButton
 																label="Update"
 																className="submit-comment-button paper-shadow"
 																onClick={this.updateDiscussionComment}
 																>
-	                            </RaisedButton>
-	                            <FlatButton
+															</RaisedButton>
+															<FlatButton
 																label="Close "
-	                              className="close-form-button "
+																className="close-form-button "
 																onClick={this.closeEditMode}>
-	                            </FlatButton>
+															</FlatButton>
 														</div>
-                          </form>
+													</form>
 												:
 												<div>{discussionComment.content}</div>
 
 											}
 
-                    </div>
-                </div>
-                <div className="inner-comment-row" >
-                    <FlatButton
+										</div>
+								</div>
+								<div className="inner-comment-row" >
+										<FlatButton
 											label={discussionComment.votes}
 											onClick={this.upvoteDiscussionComment}
-                      className={(userUpvoted) ? "vote-up upvoted" : "vote-up"}
-		                  icon={<FontIcon className="mdi mdi-chevron-up" />}
+											className={(userUpvoted) ? "vote-up upvoted" : "vote-up"}
+											icon={<FontIcon className="mdi mdi-chevron-up" />}
 											>
 											{userIsLoggedIn ?
 												""
@@ -138,123 +138,123 @@ DiscussionComment = React.createClass({
 													You must be signed in to upvote.
 												</span>
 											}
-                    </FlatButton>
-                    {/*<FlatButton
+										</FlatButton>
+										{/*<FlatButton
 											label="Reply"
 											onClick={this.showReplyForm}
 											className="reply">
-                    </FlatButton>*/}
-                    {/*<!--RaisedButton label="Share" className="share" onClick="share_discussionComment($event)">
-                        Share
-                    </RaisedButton-->*/}
+										</FlatButton>*/}
+										{/*<!--RaisedButton label="Share" className="share" onClick="share_discussionComment($event)">
+												Share
+										</RaisedButton-->*/}
 										{("currentUser" in self.props && self.props.currentUser !== null && typeof self.props.currentUser !== "undefined")
 											? (self.props.currentUser._id === discussionComment.user._id) ?
-	                      <FlatButton
+												<FlatButton
 													label="Edit"
 													onClick={this.showEditMode}
 													className="edit"
 													>
-	                      </FlatButton>
+												</FlatButton>
 												: ""
 											: ""
 										}
-                    {/*<FlatButton
+										{/*<FlatButton
 											label="Remove"
 											onClick={this.removeDiscussionComment}
 											className="remove"
 											>
-                    </FlatButton>*/}
-                </div>
+										</FlatButton>*/}
+								</div>
 
 
 								{false ?
-                  <div className="reply-create-form" >
-                      <div className="add-comment-wrap">
-                          <form className="new-comment-form" name="new-comment-form" >
-                              <div className="add-comment-row-1" >
-                                  {/*<!--div className="profile-picture paper-shadow">
-                                      <asset:image src="default_user.jpg"/>
-                                  </div-->*/}
-                                  <textarea className="new-comment-text" placeholder="Enter your reply here . . . " enter-submit="add_discussion_reply($event)">
-                                  </textarea>
-                                  <RaisedButton label="Submit" type="submit" className="submit-comment-button paper-shadow" >Submit</RaisedButton>
-                                  <RaisedButton label="Close Reply"
-                                             className="close-form-button " onClick={this.closeReply}>Close
-                                  </RaisedButton>
-                              </div>
-                          </form>
-                      </div>
-                  </div>
+									<div className="reply-create-form" >
+											<div className="add-comment-wrap">
+													<form className="new-comment-form" name="new-comment-form" >
+															<div className="add-comment-row-1" >
+																	{/*<!--div className="profile-picture paper-shadow">
+																			<asset:image src="default_user.jpg"/>
+																	</div-->*/}
+																	<textarea className="new-comment-text" placeholder="Enter your reply here . . . " enter-submit="add_discussion_reply($event)">
+																	</textarea>
+																	<RaisedButton label="Submit" type="submit" className="submit-comment-button paper-shadow" >Submit</RaisedButton>
+																	<RaisedButton label="Close Reply"
+																						 className="close-form-button " onClick={this.closeReply}>Close
+																	</RaisedButton>
+															</div>
+													</form>
+											</div>
+									</div>
 								: ""}
 
-                <div className="discussion-comment-children">
+								<div className="discussion-comment-children">
 
 									{discussionComment.children.map(function(discussionCommentChild, j){
-                    <div
+										<div
 											key={j}
 											className="discussion-comment discussion-comment-child"
 											 >
-                        <div className="inner-comment-row">
-                            <div className="discussion-commenter-profile-picture profile-picture paper-shadow">
-                                <img src="/images/default_user.png"/>
-                            </div>
-                            <div className="discussion-commenter-meta">
-                                <span className="discussion-commenter-name">
-                                    {discussionCommentChild.user.name}
-                                </span>
-                                <span className="discussion-comment-date">
-                                    {discussionCommentChild.updated}
-                                </span>
-                            </div>
+												<div className="inner-comment-row">
+														<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
+																<img src="/images/default_user.png"/>
+														</div>
+														<div className="discussion-commenter-meta">
+																<span className="discussion-commenter-name">
+																		{discussionCommentChild.user.name}
+																</span>
+																<span className="discussion-comment-date">
+																		{discussionCommentChild.updated}
+																</span>
+														</div>
 
-                        </div>
-                        <div className="inner-comment-row">
-                            <div className="discussion-comment-text">
-                                <p dangerouslySetInnerHTML={{ __html: discussionCommentChild.content}}></p>
-                            </div>
-                        </div>
-                        <div className="inner-comment-row">
-	                        <FlatButton
+												</div>
+												<div className="inner-comment-row">
+														<div className="discussion-comment-text">
+																<p dangerouslySetInnerHTML={{ __html: discussionCommentChild.content}}></p>
+														</div>
+												</div>
+												<div className="inner-comment-row">
+													<FlatButton
 														label={discussionComment.votes}
 														onClick={this.upvoteDiscussionComment}
-	                          className="vote-up upvoted"
-					                  icon={<FontIcon className="mdi mdi-chevron-up" />}
+														className="vote-up upvoted"
+														icon={<FontIcon className="mdi mdi-chevron-up" />}
 														>
-	                        </FlatButton>
-	                        <FlatButton
+													</FlatButton>
+													<FlatButton
 														label="Reply"
 														onClick={this.showReplyForm}
 														className="reply">
-	                        </FlatButton>
-	                        {/*<!--RaisedButton label="Share" className="share" onClick="share_discussionComment($event)">
-	                            Share
-	                        </RaisedButton-->*/}
-	                        <FlatButton
+													</FlatButton>
+													{/*<!--RaisedButton label="Share" className="share" onClick="share_discussionComment($event)">
+															Share
+													</RaisedButton-->*/}
+													<FlatButton
 														label="Edit"
 														onClick={this.editDiscussionComment}
 														className="edit"
 														>
-	                        </FlatButton>
-	                        <FlatButton
+													</FlatButton>
+													<FlatButton
 														label="Remove"
 														onClick={this.removeDiscussionComment}
 														className="remove"
 														>
-	                        </FlatButton>
+													</FlatButton>
 
-                        </div>
+												</div>
 
 
 
-                    {/*<!-- .discussion-comment-child -->*/}</div>
+										{/*<!-- .discussion-comment-child -->*/}</div>
 
 									})}
 
-                {/*<!-- .discussion-comment-children -->*/}</div>
+								{/*<!-- .discussion-comment-children -->*/}</div>
 
-            {/*<!-- .discussion-comment -->*/}</div>
+						{/*<!-- .discussion-comment -->*/}</div>
 
-     );
-   }
+		 );
+	 }
 
 });

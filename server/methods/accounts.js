@@ -6,15 +6,15 @@ Meteor.methods({
 
 		console.log(accountData);
 
-    //check(accountData.name, String);
-    //check(accountData.biography, String);
-    //check(accountData.academiaEdu, String);
-    //check(accountData.twitter, String);
-    //check(accountData.facebook, String);
-    //check(accountData.google, String);
+		//check(accountData.name, String);
+		//check(accountData.biography, String);
+		//check(accountData.academiaEdu, String);
+		//check(accountData.twitter, String);
+		//check(accountData.facebook, String);
+		//check(accountData.google, String);
 
 		return Meteor.users.update({
-        _id: this.userId
+				_id: this.userId
 
 			}, {
 				$set: {
@@ -28,11 +28,11 @@ Meteor.methods({
 
 			});
 	},
-  deleteAccount: function(userId) {
-    if (this.userId === userId) {
-      return Meteor.users.remove({
-        _id: this.userId
-      });
-    }
-  }
+	deleteAccount: function(userId) {
+		if (this.userId === userId) {
+			return Meteor.users.remove({
+				_id: this.userId
+			});
+		}
+	}
 });

@@ -14,13 +14,13 @@ import {debounce} from 'throttle-debounce';
 ProfilePage = React.createClass({
 
 
-  propTypes: {
+	propTypes: {
 		user: React.PropTypes.object
-  },
+	},
 
-  getInitialState() {
-    return {
-      annotationCheckList: [],
+	getInitialState() {
+		return {
+			annotationCheckList: [],
 			skip: 0,
 			limit: 10,
 			name: "",
@@ -29,19 +29,19 @@ ProfilePage = React.createClass({
 			twitter: "",
 			facebook: "",
 			google: ""
-    }
-  },
+		}
+	},
 
-  getChildContext() {
-    return { muiTheme: getMuiTheme(baseTheme) };
-  },
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object.isRequired,
-  },
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
-  mixins: [ReactMeteorData],
-  getMeteorData(){
+	mixins: [ReactMeteorData],
+	getMeteorData(){
 		var discussionComments = [];
 
 		var handle = Meteor.subscribe("user.discussionComments", Meteor.user(), this.state.skip, this.state.limit);
@@ -49,8 +49,8 @@ ProfilePage = React.createClass({
 			discussionComments = DiscussionComments.find().fetch();
 
 			discussionComments.forEach(function(discussionComment){
-	      var commentHandle = Meteor.subscribe('comments', {_id: discussionComment.commentId}, 0, 1);
-	      if (commentHandle.ready()) {
+				var commentHandle = Meteor.subscribe('comments', {_id: discussionComment.commentId}, 0, 1);
+				if (commentHandle.ready()) {
 					var comments = Comments.find().fetch();
 					if(comments.length){
 						discussionComment.comment = comments[0]
@@ -68,22 +68,22 @@ ProfilePage = React.createClass({
 
 		}
 
-    return {
+		return {
 			discussionComments: discussionComments,
-    };
-  },
-
-	loadMore(){
-	    this.setState({
-	      skip : this.state.skip + 10
-	    });
+		};
 	},
 
-  _openFileDialog: function(){
-    var fileUploadDom = this.refs.fileUpload;
-    fileUploadDom.click();
+	loadMore(){
+			this.setState({
+				skip : this.state.skip + 10
+			});
+	},
 
-  },
+	_openFileDialog: function(){
+		var fileUploadDom = this.refs.fileUpload;
+		fileUploadDom.click();
+
+	},
 
 	componentDidMount(){
 
@@ -129,48 +129,48 @@ ProfilePage = React.createClass({
 
 	},
 
-  render() {
-    let currentUser = this.props.user;
+	render() {
+		let currentUser = this.props.user;
 		if(!currentUser){
 			currentUser = {"profile":{}};
 		}
 
-    return (
+		return (
 			(currentUser ?
-        <div className="page page-user-profile">
-          <div className="content primary">
+				<div className="page page-user-profile">
+					<div className="content primary">
 
-              <section className="block header cover parallax">
-                  <div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
-                      <img alt="image" className="background-image" src="/images/capitals.jpg"/>
-                  </div>
-                  <div className="block-screen brown"></div>
+							<section className="block header cover parallax">
+									<div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
+											<img alt="image" className="background-image" src="/images/capitals.jpg"/>
+									</div>
+									<div className="block-screen brown"></div>
 
-                  <div className="container v-align-transform">
+									<div className="container v-align-transform">
 
-                      <div className="grid inner">
-                          <div className="center-content">
+											<div className="grid inner">
+													<div className="center-content">
 
-                              <div className="page-title-wrap">
-                                  {/*<h2 className="page-title ">{currentUser.nicename}</h2>
-                                  <h3 className="page-subtitle"></h3>
+															<div className="page-title-wrap">
+																	{/*<h2 className="page-title ">{currentUser.nicename}</h2>
+																	<h3 className="page-subtitle"></h3>
 																	*/}
-                              </div>
+															</div>
 
 
-                          </div>
-                      </div>
-                  </div>
-              </section>
+													</div>
+											</div>
+									</div>
+							</section>
 
-              <section className="page-content">
-                  <div>
-                    <div className="user-profile-section">
-                        <div className="user-profile-picture"
+							<section className="page-content">
+									<div>
+										<div className="user-profile-section">
+												<div className="user-profile-picture"
 													onClick={this._openFileDialog}
 													>
-                          <img src="/images/default_user.jpg" />
-	                        <div className="upload-profile-picture">
+													<img src="/images/default_user.jpg" />
+													<div className="upload-profile-picture">
 														<i className="mdi mdi-image-area"></i>
 														<span className="help-text">
 															Select to upload or drag and drop.
@@ -181,99 +181,99 @@ ProfilePage = React.createClass({
 															ref="dropzone"
 															onDrop={this.onDrop}>
 														</Dropzone>*/}
-	                          <input
-	                            ref="fileUpload"
-	                            type="file"
-	                            style={{"display" : "none"}}
-	                            onChange={this._handleChange}/>
-	                        </div>
+														<input
+															ref="fileUpload"
+															type="file"
+															style={{"display" : "none"}}
+															onChange={this._handleChange}/>
+													</div>
 
-                        </div>
+												</div>
 
-                      </div>
-                      <br/>
+											</div>
+											<br/>
 
-                      <div className="user-profile-textfields">
+											<div className="user-profile-textfields">
 
-                        <TextField
+												<TextField
 														ref="name"
-                            fullWidth={true}
-                            floatingLabelText="Name"
+														fullWidth={true}
+														floatingLabelText="Name"
 														defaultValue={currentUser.profile.name}
 														onChange={debounce(3000, this.handleChangeText.bind(null, "name"))}
-                          />
-                        <br/>
-
-                        <TextField
-														ref="biography"
-                            multiLine={true}
-                            rows={2}
-                            rowsMax={10}
-                            fullWidth={true}
-                            floatingLabelText="Biography"
-														defaultValue={currentUser.profile.biography}
-														onChange={debounce(3000, this.handleChangeText.bind(null, "biography"))}
-                          />
-                        <br />
-
-                        <TextField
-														ref="academiaEdu"
-                            fullWidth={true}
-                            hintText="http://university.academia.edu/YourName"
-                            floatingLabelText="Academia.edu"
-														defaultValue={currentUser.profile.academiaEdu}
-														onChange={debounce(3000, this.handleChangeText.bind(null, "academiaEdu"))}
-                          />
-                        <br/>
-
-                        <TextField
-														ref="twitter"
-                            fullWidth={true}
-                            hintText="https://twitter.com/@your_name"
-                            floatingLabelText="Twitter"
-														defaultValue={currentUser.profile.twitter}
-														onChange={debounce(3000, this.handleChangeText.bind(null, "twitter"))}
-                          />
-                        <br/>
-
-                        <TextField
-														ref="facebook"
-                            fullWidth={true}
-                            hintText="https://facebook.com/your.name"
-                            floatingLabelText="Facebook"
-														defaultValue={currentUser.profile.facebook}
-														onChange={debounce(3000, this.handleChangeText.bind(null, "facebook"))}
-                          />
+													/>
 												<br/>
 
-                        <TextField
+												<TextField
+														ref="biography"
+														multiLine={true}
+														rows={2}
+														rowsMax={10}
+														fullWidth={true}
+														floatingLabelText="Biography"
+														defaultValue={currentUser.profile.biography}
+														onChange={debounce(3000, this.handleChangeText.bind(null, "biography"))}
+													/>
+												<br />
+
+												<TextField
+														ref="academiaEdu"
+														fullWidth={true}
+														hintText="http://university.academia.edu/YourName"
+														floatingLabelText="Academia.edu"
+														defaultValue={currentUser.profile.academiaEdu}
+														onChange={debounce(3000, this.handleChangeText.bind(null, "academiaEdu"))}
+													/>
+												<br/>
+
+												<TextField
+														ref="twitter"
+														fullWidth={true}
+														hintText="https://twitter.com/@your_name"
+														floatingLabelText="Twitter"
+														defaultValue={currentUser.profile.twitter}
+														onChange={debounce(3000, this.handleChangeText.bind(null, "twitter"))}
+													/>
+												<br/>
+
+												<TextField
+														ref="facebook"
+														fullWidth={true}
+														hintText="https://facebook.com/your.name"
+														floatingLabelText="Facebook"
+														defaultValue={currentUser.profile.facebook}
+														onChange={debounce(3000, this.handleChangeText.bind(null, "facebook"))}
+													/>
+												<br/>
+
+												<TextField
 														ref="google"
-                            fullWidth={true}
-                            hintText="https://plus.google.com/+YourName"
-                            floatingLabelText="Google Plus"
+														fullWidth={true}
+														hintText="https://plus.google.com/+YourName"
+														floatingLabelText="Google Plus"
 														defaultValue={currentUser.profile.google}
 														onChange={debounce(3000, this.handleChangeText.bind(null, "google"))}
-                          />
+													/>
 
-                        <br/>
-                        <br/>
-                        <br/>
+												<br/>
+												<br/>
+												<br/>
 												<span className="form-save-help">
 													(These values are saved automatically.)
 												</span>
 
-                      </div>
+											</div>
 
-                    </div>
+										</div>
 
-                  <div className="article-content">
-                      <div id="container1" className="data-visualization"></div>
-                      <div id="container2" className="data-visualization"></div>
-                  </div>
+									<div className="article-content">
+											<div id="container1" className="data-visualization"></div>
+											<div id="container2" className="data-visualization"></div>
+									</div>
 
-                  <hr className="user-divider"/>
+									<hr className="user-divider"/>
 
-                  <div className="user-discussion-comments">
+									<div className="user-discussion-comments">
 
 										<h2>Your Comments</h2>
 										{/*}<InfiniteScroll
@@ -281,33 +281,33 @@ ProfilePage = React.createClass({
 											loadMore={this.loadMore}
 											>*/}
 
-                      <DiscussionCommentsList
+											<DiscussionCommentsList
 												discussionComments={this.data.discussionComments}
 												/>
 
 											{/*
-							        <div className="ahcip-spinner commentary-loading" >
-							            <div className="double-bounce1"></div>
-							            <div className="double-bounce2"></div>
+											<div className="ahcip-spinner commentary-loading" >
+													<div className="double-bounce1"></div>
+													<div className="double-bounce2"></div>
 
-							        </div>
+											</div>
 											*/}
 
 									{/*}</InfiniteScroll>*/}
 
-                </div>
+								</div>
 
-              </section>
+							</section>
 
-          </div>
+					</div>
 
-        </div>
+				</div>
 			: <div>
 				</div>
 			)
 
-    );
+		);
 
-  }
+	}
 
 });

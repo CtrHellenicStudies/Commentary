@@ -2,8 +2,8 @@ import '../../node_modules/mdi/css/materialdesignicons.css';
 
 
 UserLayout = React.createClass({
-  mixins: [ReactMeteorData],
-  getMeteorData(){
+	mixins: [ReactMeteorData],
+	getMeteorData(){
 		var user = Meteor.user();
 
 		if(user && !("profile" in user)){

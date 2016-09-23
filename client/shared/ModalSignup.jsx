@@ -7,52 +7,52 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 ModalSignup = React.createClass({
 
-  getChildContext() {
-    return { muiTheme: getMuiTheme(baseTheme) };
-  },
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object.isRequired,
-  },
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
 	propTypes: {
 		lowered: React.PropTypes.bool,
 		closeModal: React.PropTypes.func
 	},
 
-  render(){
+	render(){
 
-    let styles = {
-      flatButton : {
-        width: "auto",
-        minWidth: "none",
-        height: "55px",
-        padding: "10px 5px"
-      },
-      flatIconButton : {
-        padding: "10px 20px",
-        width: "auto",
-        minWidth: "none",
-        height: "55px",
+		let styles = {
+			flatButton : {
+				width: "auto",
+				minWidth: "none",
+				height: "55px",
+				padding: "10px 5px"
+			},
+			flatIconButton : {
+				padding: "10px 20px",
+				width: "auto",
+				minWidth: "none",
+				height: "55px",
 
-      }
+			}
 
-    };
+		};
 
 		let lowered = this.props.lowered;
 
-    return (
-      <div className={"ahcip-modal-signup ahcip-modal ahcip-login-signup" + ((lowered) ? " lowered" : "")}>
-        <div className="close-modal paper-shadow"
+		return (
+			<div className={"ahcip-modal-signup ahcip-modal ahcip-login-signup" + ((lowered) ? " lowered" : "")}>
+				<div className="close-modal paper-shadow"
 					onClick={this.props.closeModal}
 					>
-          <i className="mdi mdi-close"></i>
-        </div>
-        <div className="modal-inner">
+					<i className="mdi mdi-close"></i>
+				</div>
+				<div className="modal-inner">
 					<BlazeToReact blazeTemplate="atForm" state="signUp" />
-        </div>
-      </div>
+				</div>
+			</div>
 
-      );
-  }
+			);
+	}
 });

@@ -5,22 +5,22 @@ import FontIcon from 'material-ui/FontIcon';
 
 DiscussionThread = React.createClass({
 
-  propTypes: {
-    comment: React.PropTypes.object.isRequired,
+	propTypes: {
+		comment: React.PropTypes.object.isRequired,
 		discussionVisible: React.PropTypes.bool.isRequired,
-    showDiscussionThread: React.PropTypes.func.isRequired
-  },
+		showDiscussionThread: React.PropTypes.func.isRequired
+	},
 
-  getInitialState(){
-    return {
-    }
+	getInitialState(){
+		return {
+		}
 
-  },
+	},
 
-  mixins: [ReactMeteorData],
+	mixins: [ReactMeteorData],
 
-  getMeteorData(){
-    var query = {commentId: this.props.comment._id},
+	getMeteorData(){
+		var query = {commentId: this.props.comment._id},
 				sort = {votes: -1, updated: -1};
 
 		return {
@@ -51,9 +51,9 @@ DiscussionThread = React.createClass({
 
 	},
 
-  render() {
+	render() {
 		var self = this;
-    var userIsLoggedIn = this.data.currentUser ? true : false;
+		var userIsLoggedIn = this.data.currentUser ? true : false;
 
 		var discussionWrapClass = "discussion-wrap";
 
@@ -71,32 +71,32 @@ DiscussionThread = React.createClass({
 
 		//console.log("CommentDiscussion.data", this.data);
 
-    return (
+		return (
 
-        <div className={discussionWrapClass} >
-            <div
+				<div className={discussionWrapClass} >
+						<div
 							onClick={this.showDiscussionThread}
 							className="continue-discussion">
-                <i className="mdi mdi-comment"></i>
+								<i className="mdi mdi-comment"></i>
 								{this.data.discussionComments.length ?
-		                <span className="continue-discussion-text">
+										<span className="continue-discussion-text">
 											{this.data.discussionComments.length}
 										</span>
 									: ""
 								}
-            </div>
+						</div>
 
 						{!this.data.loaded ?
-	            <div className="ahcip-spinner" >
-	                <div className="double-bounce1"></div>
-	                <div className="double-bounce2"></div>
+							<div className="ahcip-spinner" >
+									<div className="double-bounce1"></div>
+									<div className="double-bounce2"></div>
 
-	            </div>
+							</div>
 						: ""
 						}
 
-            <div className="discussion-thread" >
-                <div className="add-comment-wrap paper-shadow " >
+						<div className="discussion-thread" >
+								<div className="add-comment-wrap paper-shadow " >
 									<IconButton
 											className="close-discussion paper-shadow"
 											iconClassName="mdi mdi-close"
@@ -104,65 +104,65 @@ DiscussionThread = React.createClass({
 										/>
 
 									<form ref="newCommentForm" className="new-comment-form" name="new-comment-form">
-                      <div className="add-comment-row-1" >
-                          <div className="profile-picture paper-shadow">
-                              <img src="/images/default_user.jpg"/>
-                          </div>
-                          <textarea className="new-comment-text"
+											<div className="add-comment-row-1" >
+													<div className="profile-picture paper-shadow">
+															<img src="/images/default_user.jpg"/>
+													</div>
+													<textarea className="new-comment-text"
 																		name="newCommentText"
-                                    placeholder={textareaPlaceholder} >
-                          </textarea>
-                      </div>
-                      <div className="add-comment-row-2 add-comment-row">
-                          <div className="error-message">
-                              <span className="error-message-text">Please enter your text to submit.</span>
-                          </div>
-                          { userIsLoggedIn ?
-                              <RaisedButton
+																		placeholder={textareaPlaceholder} >
+													</textarea>
+											</div>
+											<div className="add-comment-row-2 add-comment-row">
+													<div className="error-message">
+															<span className="error-message-text">Please enter your text to submit.</span>
+													</div>
+													{ userIsLoggedIn ?
+															<RaisedButton
 																label="Submit"
 																className="submit-comment-button paper-shadow"
 																onClick={this.addDiscussionComment} ></RaisedButton>
-                            :
-                              <div className="new-comment-login">
-                                <FlatButton
+														:
+															<div className="new-comment-login">
+																<FlatButton
 																	label="Join"
 																	className="join-link"
 																	href="/sign-up">
-                                </FlatButton>
-                                <FlatButton
+																</FlatButton>
+																<FlatButton
 																	label="Login"
 																	className="login-link"
 																	href="/sign-in">
-                                </FlatButton>
-                              </div>
-                            }
-                      </div>
-                  </form>
-                </div>
-                <div className="sort-by-wrap" >
+																</FlatButton>
+															</div>
+														}
+											</div>
+									</form>
+								</div>
+								<div className="sort-by-wrap" >
 									{/*
-                    <span className="sort-by-label">Sort by:</span>
-                    <RaisedButton
+										<span className="sort-by-label">Sort by:</span>
+										<RaisedButton
 											label="Top"
 											className="sort-by-option selected-sort sort-by-top"
 											onClick={this.toggleSort}>
-                    </RaisedButton>
-                    <RaisedButton
+										</RaisedButton>
+										<RaisedButton
 											label="Newest"
 											className="sort-by-option sort-by-new"
 											onClick={this.toggleSort}>
 										</RaisedButton>
 										*/}
-                </div>
+								</div>
 								{this.data.discussionComments.length === 0 ?
-	                <div className="no-results-wrap" >
-	                    <span className="no-results-text">No discussion comments.</span>
-	                </div>
+									<div className="no-results-wrap" >
+											<span className="no-results-text">No discussion comments.</span>
+									</div>
 									: ""
 								}
 								{this.data.discussionComments.map(function(discussionComment, i){
 
-	                return <DiscussionComment
+									return <DiscussionComment
 										key={i}
 										className="discussion-comment paper-shadow"
 										discussionComment={discussionComment}
@@ -171,11 +171,11 @@ DiscussionThread = React.createClass({
 
 								})}
 
-            </div>{/*<!-- .discussion-thread -->*/}
+						</div>{/*<!-- .discussion-thread -->*/}
 
-        </div>
+				</div>
 
-     );
-   }
+		 );
+	 }
 
 });

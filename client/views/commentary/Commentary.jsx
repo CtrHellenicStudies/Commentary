@@ -8,7 +8,7 @@ import InfiniteScroll from '../../../imports/InfiniteScroll';
 
 Commentary = React.createClass({
 
-  propTypes: {
+	propTypes: {
 		isOnHomeView: React.PropTypes.bool,
 		filters: React.PropTypes.array,
 		addSearchTerm: React.PropTypes.func,
@@ -16,36 +16,37 @@ Commentary = React.createClass({
 		skip: React.PropTypes.number,
 		limit: React.PropTypes.number,
 		toggleSearchTerm: React.PropTypes.func,
-  },
+		contextScrollPosition: React.PropTypes.number,
+	},
 
-  getInitialState(){
-    return {
+	getInitialState(){
+		return {
 			contextCommentGroupSelected: {},
-      contextPanelOpen : false,
+			contextPanelOpen : false,
 			discussionSelected: {},
-      discussionPanelOpen: false,
-      referenceLemma : [],
-      referenceLemmaSelectedEdition : {lines: []},
-			commentLemmaGroups: []
+			discussionPanelOpen: false,
+			referenceLemma : [],
+			referenceLemmaSelectedEdition : {lines: []},
+			commentLemmaGroups: [],
 
-    }
+		}
 
-  },
+	},
 
 	commentGroups: [],
 
-  getChildContext() {
-    return { muiTheme: getMuiTheme(baseTheme) };
-  },
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object.isRequired,
-  },
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
-  mixins: [ReactMeteorData],
+	mixins: [ReactMeteorData],
 
-  getMeteorData(){
-    var query = {},
+	getMeteorData(){
+		var query = {},
 				comments = [],
 				commentGroups = [];
 
@@ -108,10 +109,10 @@ Commentary = React.createClass({
 
 		//console.log("Commentary query:", query);
 		var handle = Meteor.subscribe('comments', query, this.props.skip, 10);
-    if(handle.ready()) {
-	    comments = Comments.find({}, {sort:{"work.order":1, "subwork.n":1, lineFrom:1, nLines:-1}}).fetch();
+		if(handle.ready()) {
+			comments = Comments.find({}, {sort:{"work.order":1, "subwork.n":1, lineFrom:1, nLines:-1}}).fetch();
 			//console.log("Commentary comments:", comments);
-    }
+		}
 
 		// Make comment groups from comments
 		var isInCommentGroup = false;
@@ -172,11 +173,11 @@ Commentary = React.createClass({
 
 						var commenterRecord = Commenters.findOne({slug: commenter.slug});
 						comment.commenters[i] = commenterRecord;
-						console.log(commenterRecord);
+						//console.log(commenterRecord);
 						// get the attachment
 						if(commenterRecord.picture){
 							commenterRecord.attachment = ProfilePictures.findOne(commenterRecord.picture);
-							console.log(commenterRecord.attachment);
+							//console.log(commenterRecord.attachment);
 						}
 
 						// add to the unique commenter set
@@ -200,18 +201,18 @@ Commentary = React.createClass({
 
 		});
 
-    return {
-      commentGroups: commentGroups
-    };
+		return {
+			commentGroups: commentGroups
+		};
 
-  },
+	},
 
-  componentDidMount(){
-    this.textServerEdition = new Meteor.Collection('textServerEdition');
-    window.addEventListener("resize", this.handleScroll);
-    window.addEventListener("scroll", this.handleScroll);
+	componentDidMount(){
+		this.textServerEdition = new Meteor.Collection('textServerEdition');
+		window.addEventListener("resize", this.handleScroll);
+		window.addEventListener("scroll", this.handleScroll);
 
-  },
+	},
 
 	handleScroll() {
 		var scrollY = window.scrollY;
@@ -251,43 +252,50 @@ Commentary = React.createClass({
 
 	},
 
-  toggleLemmaEdition(){
-    this.setState({
-      selectedLemmaEdition : {}
-    });
+	toggleLemmaEdition(){
+		this.setState({
+			selectedLemmaEdition : {}
+		});
 
-  },
+	},
 
-  searchReferenceLemma(){
-    this.setState({
-      referenceLemma: [],
-      referenceLemmaSelectedEdition: {lines: []}
-    });
+	searchReferenceLemma(){
+		this.setState({
+			referenceLemma: [],
+			referenceLemmaSelectedEdition: {lines: []}
+		});
 
-  },
+	},
 
-  showContextPanel(commentGroup){
-    this.setState({
+	showContextPanel(commentGroup){
+		this.setState({
 			contextCommentGroupSelected: commentGroup,
-      contextPanelOpen : true
-    });
+			contextPanelOpen : true
+		});
 
-  },
+	},
 
-  closeContextPanel(){
-    this.setState({
+	closeContextPanel(){
+		this.setState({
 			contextCommentGroupSelected: {},
-      contextPanelOpen: false
-    });
+			contextPanelOpen: false
+		});
 
-  },
+	},
 
-  render() {
+	contextScrollPosition(scrollPosition, index) {
+	 	this.setState({
+	 		contextScrollPosition: scrollPosition,
+	 		commentLemmaIndex: index
+	 	});
+	 },
+
+	render() {
 
 		var self = this;
 		var moreCommentaryLeft = true;
 		var isOnHomeView;
-    var commentGroups;
+		var commentGroups;
 		var filtersChanged = false;
 		var commentsClass = "comments ";
 
@@ -353,118 +361,123 @@ Commentary = React.createClass({
 
 		//console.log("Commentary.commentGroups", this.commentGroups);
 
-    return (
-      <div className="commentary-primary content ">
+		return (
+			<div className="commentary-primary content ">
 				<InfiniteScroll
 					endPadding={120}
 					loadMore={this.loadMoreComments}
 					>
 
 					<div className="commentary-comments commentary-comment-groups">
-		      	{this.commentGroups.map(function(commentGroup, i){
-		          return(
-		              <div
+						{this.commentGroups.map(function(commentGroup, i){
+							return(
+									<div
 										className="comment-group "
 										data-ref={commentGroup.ref}
 										key={i}
 										id={"comment-group-" + i}
 										>
-		                  <div className={commentsClass} >
+											<div className={commentsClass} >
 
-		                      <CommentLemma
+													<CommentLemma
+														index={i}
 														commentGroup={commentGroup}
 														showContextPanel={self.showContextPanel}
+														scrollPosition={self.contextScrollPosition}
 														/>
 
 													{commentGroup.comments.map(function(comment, i){
-	                          return <Comment
+														return <Comment
 																key={i}
 																commentGroup={commentGroup}
 																comment={comment}
 																addSearchTerm={self.props.addSearchTerm}
+																checkIfToggleLemmaReferenceModal={self.checkIfToggleLemmaReferenceModal}
 																/>
-		                      })}
+													})}
 
-		                  </div> {/*<!-- .comments -->*/}
+											</div> {/*<!-- .comments -->*/}
 
-		                  <hr className="comment-group-end"/>
+											<hr className="comment-group-end"/>
 
-		              </div>
-		          )
-		        })}
+									</div>
+							)
+						})}
 					</div>
 
 				</InfiniteScroll>
 
 				{(!isOnHomeView && this.commentGroups.length > 0 && moreCommentaryLeft) ?
-	        <div className="ahcip-spinner commentary-loading" >
-	            <div className="double-bounce1"></div>
-	            <div className="double-bounce2"></div>
+					<div className="ahcip-spinner commentary-loading" >
+							<div className="double-bounce1"></div>
+							<div className="double-bounce2"></div>
 
-	        </div>
+					</div>
 				: "" }
 
 				{(this.data.loaded && this.commentGroups.length === 0 ) ?
-	        <div className="no-commentary-wrap">
-	          <p className="no-commentary no-results" >
-	            No commentary available for the current search.
-	          </p>
+					<div className="no-commentary-wrap">
+						<p className="no-commentary no-results" >
+							No commentary available for the current search.
+						</p>
 
-	        </div>
+					</div>
 				: "" }
 
-        <div className="lemma-reference-modal">
-            <article className="comment  lemma-comment paper-shadow " >
-              {this.state.referenceLemmaSelectedEdition.lines.map(function(line, i){
+				<div className="lemma-reference-modal">
+						<article className="comment	lemma-comment paper-shadow " >
+							{this.state.referenceLemmaSelectedEdition.lines.map(function(line, i){
 
-                return <p
+								return <p
 									key={i}
-                  className="lemma-text"
-                  dangerouslySetInnerHTML={{__html: line.html}}
-                  ></p>
+									className="lemma-text"
+									dangerouslySetInnerHTML={{__html: line.html}}
+									></p>
 
-              })}
+							})}
 
-                <div className="edition-tabs tabs">
-                  {this.state.referenceLemma.map(function(lemma_text_edition, i){
+								<div className="edition-tabs tabs">
+									{this.state.referenceLemma.map(function(lemma_text_edition, i){
 
-                    return <FlatButton
+										return <FlatButton
 															key={i}
-                              label={edition.title}
-                              data-edition={edition.title}
-                              className="edition-tab tab"
-                              onClick={this.toggleLemmaEdition}
-                              >
-                          </FlatButton>
+															label={edition.title}
+															data-edition={edition.title}
+															className="edition-tab tab"
+															onClick={this.toggleLemmaEdition}
+															>
+													</FlatButton>
 
-                  })}
+									})}
 
-                </div>
+								</div>
 
-                <i className="mdi mdi-close paper-shadow" onClick={this.hideLemmaReference}>
-                </i>
-            </article>
+								<i className="mdi mdi-close paper-shadow" onClick={this.hideLemmaReference}>
+								</i>
+						</article>
 
-        </div>{/*<!-- .lemma-reference-modal -->*/}
+				</div>{/*<!-- .lemma-reference-modal -->*/}
 
 				{"work" in this.state.contextCommentGroupSelected ?
-	        <ContextPanel
-	          open={this.state.contextPanelOpen}
-	          closeContextPanel={this.closeContextPanel}
+					<ContextPanel
+						open={this.state.contextPanelOpen}
+						closeContextPanel={this.closeContextPanel}
 						commentGroup={this.state.contextCommentGroupSelected}
+						scrollPosition={this.state.contextScrollPosition}
+ 						commentLemmaIndex={this.state.commentLemmaIndex}
 
-	          />
+						/>
 					: ""
 				}
-        {/*<!-- .commentary-primary -->*/}
+				{/*<!-- .commentary-primary -->*/}
 
 				<FilterWidget
 					filters={this.props.filters}
 					toggleSearchTerm={this.props.toggleSearchTerm}
 					/>
 
-      </div>
-     );
-   }
+			</div>
+		 );
+	 }
 
 });

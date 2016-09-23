@@ -26,7 +26,7 @@ Schemas.Keywords = new SimpleSchema({
 		optional: true,
 	},
 
-	isIdea: {
+	type: {
 		type: String,
 		optional: true,
 		defaultValue: "word"

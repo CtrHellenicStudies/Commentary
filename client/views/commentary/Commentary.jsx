@@ -173,11 +173,11 @@ Commentary = React.createClass({
 
 						var commenterRecord = Commenters.findOne({slug: commenter.slug});
 						comment.commenters[i] = commenterRecord;
-						console.log(commenterRecord);
+						//console.log(commenterRecord);
 						// get the attachment
 						if(commenterRecord.picture){
 							commenterRecord.attachment = ProfilePictures.findOne(commenterRecord.picture);
-							console.log(commenterRecord.attachment);
+							//console.log(commenterRecord.attachment);
 						}
 
 						// add to the unique commenter set

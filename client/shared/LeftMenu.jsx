@@ -121,13 +121,11 @@ LeftMenu = React.createClass({
 												<MenuItem
 														href="/profile"
 														primaryText="Profile"
-														target="_blank"
 														onClick={this.props.closeLeftMenu}
 												/>
 												<MenuItem
 														href="/sign-out"
 														primaryText="Sign out"
-														target="_blank"
 														onClick={this.props.closeLeftMenu}
 												/>
 										</div>

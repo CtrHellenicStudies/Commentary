@@ -1,6 +1,5 @@
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
-import TextField from 'material-ui/TextField';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -25,7 +24,6 @@ CommentLemmnaSelect = React.createClass({
     getInitialState() {
         return {
             selectedLemmaEdition : "",
-            lineLetterValue: "",
         };
     },
 
@@ -64,7 +62,9 @@ CommentLemmnaSelect = React.createClass({
 
         var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
         if (textNodesSubscription.ready()) {
+            //console.log("Context Panel lemmaQuery", lemmaQuery);
             var textNodes = TextNodes.find(lemmaQuery).fetch();
+            console.log('textNodes', textNodes);
             var editions = [];
 
             var textIsInEdition = false;
@@ -98,6 +98,7 @@ CommentLemmnaSelect = React.createClass({
             });
 
             lemmaText = editions;
+            console.log('lemmaText',lemmaText);
 
             if (this.state.selectedLemmaEdition.length) {
                 lemmaText.forEach(function(edition) {
@@ -110,6 +111,9 @@ CommentLemmnaSelect = React.createClass({
             }
 
         }
+
+        //console.log("Context Panel lemmaText", lemmaText);
+
 
         return {
             lemmaText: lemmaText,
@@ -126,13 +130,6 @@ CommentLemmnaSelect = React.createClass({
         }
     },
 
-    onLineLetterValueChange(event) {
-        console.log('jestem');
-        this.setState({
-            lineLetterValue: event.target.value,
-        });
-    },
-
     render() {
         var self = this;
 
@@ -143,6 +140,7 @@ CommentLemmnaSelect = React.createClass({
                     <article className="comment lemma-comment paper-shadow">
 
                         {this.data.selectedLemmaEdition.lines.map(function(line, i){
+                            console.log('line', line);
                             return <div>
                                 <p
                                     key={i}
@@ -151,21 +149,6 @@ CommentLemmnaSelect = React.createClass({
                                 ></p></div>
 
                         })}
-
-                        {self.props.selectedLineTo === 0 ?
-                            <div>
-                                <TextField
-                                    name="lineLetter"
-                                    id="lineLetter"
-                                    required={false}
-                                    floatingLabelText="Line letter..."
-                                    value={this.state.lineLetterValue}
-                                    onChange={this.onLineLetterValueChange}
-                                />
-                            </div>
-                            :
-                            ""
-                        }
 
                         <div className="edition-tabs tabs">
                             {this.data.lemmaText.map(function(lemmaTextEdition, i){

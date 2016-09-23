@@ -139,10 +139,11 @@ LemmaReferenceModal = React.createClass({
 			},
 
 		};
+		const hasLemma = ~this.state.selectedLemmaEdition.lines.length;
 
 		return (
 			<div
-				className={'lemma-reference-modal' + (this.props.visible ? ' lemma-reference-modal-visible' : '')}
+				className={'lemma-reference-modal' + ((this.props.visible && hasLemma) ? ' lemma-reference-modal-visible' : '')}
 				style={styles.lemmaReferenceModal}
 			>
 					<article className='comment	lemma-comment paper-shadow ' >

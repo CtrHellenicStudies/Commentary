@@ -81,7 +81,7 @@ Comment = React.createClass({
 
 	checkIfToggleLemmaReferenceModal(e){
 		const $target = $(e.target);
-		let upperOffset = 0;
+		let upperOffset = 90;
 		let lineFrom = 0;
 		let lineTo = 0;
 		let subwork = 0;
@@ -92,12 +92,10 @@ Comment = React.createClass({
 			lineTo = parseInt($target.data().lineto);
 
 			if(lineTo){
-				upperOffset = (lineTo - lineFrom) * 30;
-				if(upperOffset > 210){
-					upperOffset = 210;
+				upperOffset += ((lineTo - lineFrom) * 60);
+				if(upperOffset > 260){
+					upperOffset = 260;
 				}
-			}else {
-				upperOffset = 60;
 			}
 
 
@@ -107,8 +105,8 @@ Comment = React.createClass({
 				lemmaReferenceSubwork: subwork,
 				lemmaReferenceLineFrom: lineFrom,
 				lemmaReferenceLineTo: lineTo,
-				lemmaReferenceTop: $target.position().top + 580 - upperOffset,
-				lemmaReferenceLeft: $target.position().left + 200,
+				lemmaReferenceTop: $target.position().top - upperOffset,
+				lemmaReferenceLeft: $target.position().left + 160,
 			});
 
 		}

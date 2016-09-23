@@ -1,6 +1,3 @@
-import FlatButton from 'material-ui/FlatButton';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 WorkVisualization = React.createClass({
 
@@ -9,18 +6,10 @@ WorkVisualization = React.createClass({
 				return {
 						selectedBar: -1,
 						svg: undefined,
-						cellSize: 16,
+						cellSize: 30,
 						cellPadding: 4,
 				}
 		},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
 
 	propTypes: {
 		work: React.PropTypes.object.isRequired
@@ -35,9 +24,9 @@ WorkVisualization = React.createClass({
 				// --- BEGIN SVG --- //
 				var margin = {
 								top: 20,
-								right: 20,
+								right: 100,
 								bottom: 80,
-								left: 60
+								left: 20
 						},
 						width = 970 - margin.left - margin.right,
 						height = 421 - margin.top - margin.bottom;
@@ -103,12 +92,6 @@ WorkVisualization = React.createClass({
 						.attr("height", 60)
 						.attr("transform", "translate(0," + height + ")")
 						.attr("fill", "#efebde");
-
-				// barGraph_xAxis.append("g")
-				//		 .attr("class", "axis bargraph-x-axis-ticks-" + slug)
-				//		 // .attr("fill", "#999999")
-				//		 .attr("transform", "translate(0," + (height + 15) + ")")
-				//		 .call(xAxis);
 
 				barGraph_xAxis.append("g")
 						.attr("class", "bargraph-x-axis-label-" + slug)
@@ -235,22 +218,20 @@ WorkVisualization = React.createClass({
 
 			 barGraph_bars
 						.on("click", function(d) {
-								// // var selectedBar = that.state.selectedBar;
-								// var slug = that.props.work.slug;
 
 								that.setState({
 										selectedBar: d.n,
 								});
 
 								//	TODO: get the real number of lines per book - not from the works collection:
-								var numberOfLines = d3.max(that.props.work.subworks[that.state.selectedBar-1].commentHeatmap, function(d) {
+								var numberOfLines = Math.floor(d3.max(that.props.work.subworks[that.state.selectedBar-1].commentHeatmap, function(d) {
 										return d.n;
-								});
+								})/10);
 								var cellSize = that.state.cellSize;
 								var cellPadding = that.state.cellPadding;
-								var heatMapWidth = Math.ceil(numberOfLines / 10) * (cellSize + cellPadding) - cellPadding;
+								var heatMapWidth = Math.ceil(numberOfLines / 5) * (cellSize + cellPadding) - cellPadding;
 
-								var heatMapHeight = 10 *(cellSize + cellPadding) - cellPadding
+								var heatMapHeight = 5 *(cellSize + cellPadding) - cellPadding
 
 								// --- BEGIN ANIMATION - EXPAND BAR --- //
 								// Hide BarGraph:
@@ -292,6 +273,13 @@ WorkVisualization = React.createClass({
 								selectBar.transition()
 										.delay(3000)
 										.style("display", "none");
+
+								// Show button:
+								d3.select(".heatmap-button-" + slug).transition()
+										.delay(2000)
+										.duration(1000)
+										.style("opacity", 1)
+										.style("display", "");
 								// --- END ANIMATION - EXPAND BAR --- //
 
 						})
@@ -324,6 +312,55 @@ WorkVisualization = React.createClass({
 						})
 				// --- END BARS --- //
 				// --- END BARGRAPH --- //
+
+				// --- BEGIN BUTTON --- //
+				// Create button group:
+				var button = svg.append("g")
+						.attr("class", "heatmap-button-" + slug)
+						.style("opacity", 0)
+						.style("display", "none");
+
+				// Create button rect:
+				button
+						.append("rect")
+						.attr("class", "heatmap-button-rect-" + slug)
+						.attr("x", 0)
+						.attr("y", 180)
+						.attr("width", 58)
+						.attr("height", 30)
+						// .attr("fill", "#d59518");
+						.attr("fill", "#ffffff");
+
+				// Create button text:
+				button
+						.append("text")
+						.attr("class", "heatmap-button-text-" + slug)
+						.attr("x", 10)
+						.attr("y", 200)
+						.style("text-anchor", "left")
+						.style("opacity", .5)
+						.text("BACK");
+
+				// Button animation:
+				button
+						.on("click", function(d) {
+								that.hideHeatMap();
+						})
+						.on("mouseover", function(d) {
+								d3.select(".heatmap-button-rect-" + slug)
+										.attr("fill", "#d59518");
+								d3.select(".heatmap-button-text-" + slug)
+										.style("opacity", 1);
+								d3.select(this)
+										.style("cursor", "pointer");
+						})
+						.on("mouseout", function(d) {
+								d3.select(".heatmap-button-rect-" + slug)
+										.attr("fill", "#ffffff");
+								d3.select(".heatmap-button-text-" + slug)
+										.style("opacity", .5);
+						});
+				// --- END BUTTON --- //
 		},
 
 		componentDidUpdate() {
@@ -352,13 +389,12 @@ WorkVisualization = React.createClass({
 						});
 
 						//	TODO: get the real number of lines per book - not from the works collection:
-						var numberOfLines = d3.max(dataHeatMap, function(d) {
+						var numberOfLines = Math.floor(d3.max(dataHeatMap, function(d) {
 								return d.n;
-						});
+						})/10);
 						var allLines = Array.apply(null, {
 								length: numberOfLines
 						}).map(Number.call, Number)
-						allLines.splice(0, 1); // remove line number 0
 						allLines.push(numberOfLines);
 
 						// Define the div for the tooltip:
@@ -369,7 +405,7 @@ WorkVisualization = React.createClass({
 						var cellSize = this.state.cellSize;
 						var cellPadding = this.state.cellPadding;
 
-						var tooltipOffsetLeft = 83;
+						var tooltipOffsetLeft = 52;
 						var tooltipOffsetLTop = 0;
 
 						var counter = 0;
@@ -396,10 +432,10 @@ WorkVisualization = React.createClass({
 								.attr("width", cellSize)
 								.attr("height", cellSize)
 								.attr("x", function(d) {
-										return Math.floor(d / 10.0001) * (cellSize + cellPadding);
+										return Math.floor(d / 5) * (cellSize + cellPadding);
 								})
 								.attr("y", function(d) {
-										if (counter != 9) {
+										if (counter != 4) {
 												var y = counter * cellSize + cellPadding * counter;
 												counter++;
 												return y;
@@ -416,16 +452,16 @@ WorkVisualization = React.createClass({
 										tooltip.transition()
 												.duration(200)
 												.style("opacity", .9);
-										var i = dataN.indexOf(d);
+										var i = dataN.indexOf(d*10);
 										var elementOffset = $('.text-subworks-visualization-' + that.props.work.slug).offset()
 										var cellPositionX = parseInt(d3.select(this).attr('x'));
 										var cellPositionY = parseInt(d3.select(this).attr('y'));
 										if (i > -1) {
-												tooltip.html('Line number: ' + d + ', Comments: ' + dataHeatMap[i].nComments)
+												tooltip.html('Line span: ' + ((d*10) + 1) + ' - '+ ((d + 1)*10) + ', Comments: ' + dataHeatMap[i].nComments)
 														.style("left", elementOffset.left + cellPositionX + tooltipOffsetLeft + "px")
 														.style("top", elementOffset.top + cellPositionY + tooltipOffsetLTop + "px");
 										} else {
-												tooltip.html('Line number: ' + d + ', Comments: 0')
+												tooltip.html('Line span: ' + ((d*10) + 1) + ' - '+ ((d + 1)*10) + ', Comments: 0')
 														.style("left", elementOffset.left + cellPositionX + tooltipOffsetLeft + "px")
 														.style("top", elementOffset.top + cellPositionY + tooltipOffsetLTop + "px");
 										}
@@ -440,16 +476,16 @@ WorkVisualization = React.createClass({
 
 						// Add fill color to commented lines:
 						rect.filter(function(d) {
-								return dataN.indexOf(d) > -1;
+								return dataN.indexOf(d*10) > -1;
 						})
 								.attr("fill", function(d) {
-										var i = dataN.indexOf(d);
+										var i = dataN.indexOf(d*10);
 										return color(dataHeatMap[i].nComments);
 								});
 						// --- END HEATMAP CELLS --- //
 
 						// --- BEGIN HEATMAP Y LABEL --- //
-						var arrayData = [1,2,3,4,5,6,7,8,9,10];
+						var arrayData = [1,2,3,4,5];
 						var rect = heatmap
 								.append("g")
 								.attr("class", "heatmap-y-labels-" + this.props.work.slug)
@@ -462,7 +498,7 @@ WorkVisualization = React.createClass({
 								.attr("text-anchor", "middle")
 								.attr("x", -15)
 								.attr("y", function(d) {
-										return that.state.cellSize - that.state.cellPadding + (that.state.cellSize + that.state.cellPadding) * (d - 1);
+										return that.state.cellSize/2 + that.state.cellPadding + (that.state.cellSize + that.state.cellPadding) * (d - 1);
 								})
 								.text(function(d) {
 										return d;
@@ -470,26 +506,26 @@ WorkVisualization = React.createClass({
 						// --- END HEATMAP Y LABEL --- //
 
 						// --- BEGIN HEATMAP X LABEL --- //
-						var numberOfLines10 = Math.ceil(allLines.length/10);
-						var allLines10 = Array.apply(null, {
-								length: numberOfLines10
+						var numberOfLines5 = Math.ceil(allLines.length/5);
+						var allLines5 = Array.apply(null, {
+								length: numberOfLines5
 						}).map(Number.call, Number);
-						console.log('allLines10', allLines10);
-						// allLines10.splice(0, 1); // remove line number 0
-						// allLines10.push(numberOfLines10);
+						for (var i = 0; i < allLines5.length; i++) {
+								allLines5[i] = allLines5[i]*50;
+						};
 
 						var rect = heatmap
 								.append("g")
 								.attr("class", "heatmap-x-labels-" + this.props.work.slug)
 								.selectAll(".heatmap-label-x")
-								.data(allLines10)
+								.data(allLines5)
 								.enter()
 								.append("text")
 								.attr("class", "heatmap-label-x")
 								.attr("fill", "#d7d1c0")
 								.attr("text-anchor", "middle")
 								.attr("x", function(d) {
-										return that.state.cellSize/2 +	(that.state.cellSize + that.state.cellPadding) * d;
+										return that.state.cellSize/2 +	(that.state.cellSize + that.state.cellPadding) * d/50;
 								})
 								.attr("y", -10)
 								.text(function(d) {
@@ -510,7 +546,7 @@ WorkVisualization = React.createClass({
 				}
 				// --- END HEATMAP --- //
 },
-		showBarGraph() {
+		hideHeatMap() {
 
 				var that = this;
 
@@ -561,6 +597,13 @@ WorkVisualization = React.createClass({
 						.delay(1600)
 						.duration(500)
 						.style("opacity", 1);
+
+				// Hide button:
+				var selectButton = d3.select(".heatmap-button-" + slug);
+				selectButton.transition()
+						.duration(1000)
+						.style("opacity", 0)
+						.style("display", "");
 				// --- END ANIMATION - CONTRACT BAR --- //
 		},
 
@@ -572,7 +615,7 @@ WorkVisualization = React.createClass({
 			 <div className="work-teaser">
 				 <div className={"commentary-text " + work.slug}>
 
-						<a href="/commentary"	>
+						<a href="/commentary">
 								<h3 className="text-title">{work.title}</h3>
 						</a>
 
@@ -585,13 +628,6 @@ WorkVisualization = React.createClass({
 						<div className={"text-subworks text-subworks-visualization-" + work.slug}>
 
 						</div>
-
-						<FlatButton
-								onClick={this.showBarGraph}
-								label="Back"
-								>
-
-						</FlatButton>
 
 					</div>
 

@@ -27,7 +27,7 @@ Commentary = React.createClass({
 			discussionPanelOpen: false,
 			referenceLemma : [],
 			referenceLemmaSelectedEdition : {lines: []},
-			commentLemmaGroups: []
+			commentLemmaGroups: [],
 
 		}
 
@@ -392,6 +392,7 @@ Commentary = React.createClass({
 																commentGroup={commentGroup}
 																comment={comment}
 																addSearchTerm={self.props.addSearchTerm}
+																checkIfToggleLemmaReferenceModal={self.checkIfToggleLemmaReferenceModal}
 																/>
 													})}
 

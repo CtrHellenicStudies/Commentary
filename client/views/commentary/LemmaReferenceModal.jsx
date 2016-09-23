@@ -6,7 +6,14 @@ import FontIcon from 'material-ui/FontIcon';
 LemmaReferenceModal = React.createClass({
 
 	propTypes: {
-		commentGroup: React.PropTypes.object.isRequired,
+		visible: React.PropTypes.bool,
+		top: React.PropTypes.number,
+		left: React.PropTypes.number,
+		work: React.PropTypes.string,
+		subwork: React.PropTypes.number,
+		lineFrom: React.PropTypes.number,
+		lineTo: React.PropTypes.number,
+		closeLemmaReference: React.PropTypes.func,
 	},
 
 	getInitialState(){
@@ -20,27 +27,26 @@ LemmaReferenceModal = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData(){
-		const commentGroup = this.props.commentGroup;
 		let lemmaQuery = {
-					'work.slug' : commentGroup.work.slug,
-					'subwork.n' : commentGroup.subwork.n,
+					'work.slug' : this.props.work,
+					'subwork.n' : this.props.subwork,
 					'text.n' : {
-						$gte: commentGroup.lineFrom,
+						$gte: this.props.lineFrom,
 					}
 				};
 		let lemmaText = [];
 
-		if(typeof commentGroup.lineTo !== "undefined"){
-			lemmaQuery['text.n'].$lte = commentGroup.lineTo;
+		if(this.props.lineTo){
+			lemmaQuery['text.n'].$lte = this.props.lineTo;
 
 		}else {
-			lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
+			lemmaQuery['text.n'].$lte = this.props.lineFrom;
 
 		}
 
-		var handle2 = Meteor.subscribe('textNodes', lemmaQuery);
-		if (handle2.ready()) {
-			//console.log("lemmaQuery", lemmaQuery);
+		var textHandle = Meteor.subscribe('textNodes', lemmaQuery);
+		if (textHandle.ready()) {
+			//console.log('lemmaQuery', lemmaQuery);
 			var textNodes = TextNodes.find(lemmaQuery).fetch();
 			var editions = [];
 
@@ -91,10 +97,16 @@ LemmaReferenceModal = React.createClass({
 	},
 
 	componentDidUpdate(){
+		//console.log('lemmaReferenceModal', this.props);
 		if(this.data.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0){
 			this.setState({
-				selectedLemmaEdition: this.data.lemmaText[0]
+				selectedLemmaEdition: this.data.lemmaText[0],
 			});
+		}else if(!this.props.visible && this.state.selectedLemmaEdition.lines.length){
+			this.setState({
+				selectedLemmaEdition: {lines:[]},
+			});
+
 		}
 
 	},
@@ -117,41 +129,56 @@ LemmaReferenceModal = React.createClass({
 	},
 
 	render() {
-		var self = this;
-		var commentGroup = this.props.commentGroup;
-		var lemmaText = this.data.lemmaText;
+		const self = this;
+		const lemmaText = this.data.lemmaText;
+		const styles = {
+			lemmaReferenceModal: {
+				top: this.props.top,
+				left: this.props.left,
+
+			},
+
+		};
 
 		return (
-			<div className="lemma-reference-modal">
-					<article className="comment	lemma-comment paper-shadow " layout="column">
+			<div
+				className={'lemma-reference-modal' + (this.props.visible ? ' lemma-reference-modal-visible' : '')}
+				style={styles.lemmaReferenceModal}
+			>
+					<article className='comment	lemma-comment paper-shadow ' >
 
+						<div className='lemma-reference-text'>
 							{this.state.selectedLemmaEdition.lines.map(function(line, i){
 								return <p
-													key={i}
-													className="lemma-text"
-													dangerouslySetInnerHTML={{ __html: line.html}}
-													></p>
+									key={i}
+									className='lemma-text'
+									dangerouslySetInnerHTML={{ __html: line.html}}
+									></p>
 
 							})}
+						</div>
 
-							<div className="edition-tabs tabs">
-								{lemmaText.map(function(lemmaTextEdition, i){
-									let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+						<div className='edition-tabs tabs'>
+							{lemmaText.map(function(lemmaTextEdition, i){
+								let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-									return <RaisedButton
-										key={i}
-										label={lemmaEditionTitle}
-										data-edition={lemmaTextEdition.title}
-										className={self.state.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
-										onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-										>
+								return <RaisedButton
+									key={i}
+									label={lemmaEditionTitle}
+									data-edition={lemmaTextEdition.title}
+									className={self.state.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+									onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+									>
 
-									</RaisedButton>
+								</RaisedButton>
 
-								})}
-							</div>
+							})}
+						</div>
 
-							<i className="mdi mdi-close paper-shadow" onClick={this.closeLemmaReference} />
+						<i
+							className='mdi mdi-close paper-shadow'
+							onClick={this.props.closeLemmaReference}
+						/>
 					</article>
 
 			</div>

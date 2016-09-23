@@ -16,7 +16,15 @@ Comment = React.createClass({
 	getInitialState(){
 		return {
 			selectedRevision: {},
-			discussionVisible: false
+			discussionVisible: false,
+			lemmaReferenceModalVisible: false,
+			lemmaReferenceTop: 0,
+			lemmaReferenceLeft: 0,
+			lemmaReferenceWork: 'iliad',
+			lemmaReferenceSubwork: 0,
+			lemmaReferenceLineFrom: 0,
+			lemmaReferenceLineTo: null,
+
 		}
 
 	},
@@ -55,12 +63,70 @@ Comment = React.createClass({
 	},
 
 	createRevisionMarkup(html){
-		//comment.selected_revision.text = comment.selected_revision.text.replace(/Iliad (\d+).(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-line_from='$2'>Iliad $1.$2</a>");
+		if(!html){
+			html = "";
+		}
+
+		html = html.replace(/Iliad (\d+).(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2'>Iliad $1.$2</a>");
+		html = html.replace(/Odyssey (\d+).(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2'>Odyssey $1.$2</a>");
+		html = html.replace(/Homeric Hymns (\d+).(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2'>Homeric Hymns $1.$2</a>");
+		html = html.replace(/Hymns (\d+).(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2'>Hymns $1.$2</a>");
+		html = html.replace(/I.(\d+).(\d+)-(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>I.$1.$2-$3</a>");
+		html = html.replace(/O.(\d+).(\d+)-(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>O.$1.$2-$3</a>");
+
 
 		return { __html: html };
 
 	},
 
+	checkIfToggleLemmaReferenceModal(e){
+		const $target = $(e.target);
+		let upperOffset = 0;
+		let lineFrom = 0;
+		let lineTo = 0;
+		let subwork = 0;
+
+		if($target.hasClass("has-lemma-reference")){
+			subwork = parseInt($target.data().subwork);
+			lineFrom = parseInt($target.data().linefrom);
+			lineTo = parseInt($target.data().lineto);
+
+			if(lineTo){
+				upperOffset = (lineTo - lineFrom) * 30;
+				if(upperOffset > 210){
+					upperOffset = 210;
+				}
+			}else {
+				upperOffset = 60;
+			}
+
+
+			this.setState({
+				lemmaReferenceModalVisible: true,
+				lemmaReferenceWork: $target.data().work,
+				lemmaReferenceSubwork: subwork,
+				lemmaReferenceLineFrom: lineFrom,
+				lemmaReferenceLineTo: lineTo,
+				lemmaReferenceTop: $target.position().top + 580 - upperOffset,
+				lemmaReferenceLeft: $target.position().left + 200,
+			});
+
+		}
+
+	},
+
+	closeLemmaReference(){
+			this.setState({
+				lemmaReferenceModalVisible: false,
+				lemmaReferenceWork: 'iliad',
+				lemmaReferenceSubwork: 0,
+				lemmaReferenceLineFrom: 0,
+				lemmaReferenceLineTo: null,
+				lemmaReferenceTop: 0,
+				lemmaReferenceLeft: 0,
+			});
+
+	},
 
 	render() {
 		var self = this;
@@ -112,19 +178,19 @@ Comment = React.createClass({
 						<div className="comment-upper">
 
 								<div className="comment-upper-left">
-										<h1 className="comment-title">{selectedRevision.title}</h1>
-										<div className="comment-keywords">
-											{comment.keywords.map(function(keyword, i){
-													return <RaisedButton
-																	key={i}
-																	className="comment-keyword paper-shadow"
-																	onClick={self.addSearchTerm}
-																	data-id={keyword._id}
-																	label={(keyword.title || keyword.wordpressId)}
-																/>
+									<h1 className="comment-title">{selectedRevision.title}</h1>
+									<div className="comment-keywords">
+										{comment.keywords.map(function(keyword, i){
+											return <RaisedButton
+													key={i}
+													className="comment-keyword paper-shadow"
+													onClick={self.addSearchTerm}
+													data-id={keyword._id}
+													label={(keyword.title || keyword.wordpressId)}
+												/>
 
-											 })}
-										</div>
+										 })}
+									</div>
 								</div>
 
 								<div className="comment-upper-right">
@@ -157,8 +223,9 @@ Comment = React.createClass({
 						<div className="comment-lower">
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}>
-							</div>
+								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
+								onClick={this.checkIfToggleLemmaReferenceModal}
+							/>
 							<div className="comment-reference" >
 								<h4>Secondary Source(s):</h4>
 								<p>
@@ -201,6 +268,16 @@ Comment = React.createClass({
 					showDiscussionThread={self.showDiscussionThread}
 					hideDiscussionThread={self.hideDiscussionThread}
 					discussionVisible={self.state.discussionVisible}
+					/>
+				<LemmaReferenceModal
+					visible={self.state.lemmaReferenceModalVisible}
+					top={self.state.lemmaReferenceTop}
+					left={self.state.lemmaReferenceLeft}
+					work={self.state.lemmaReferenceWork}
+					subwork={self.state.lemmaReferenceSubwork}
+					lineFrom={self.state.lemmaReferenceLineFrom}
+					lineTo={self.state.lemmaReferenceLineTo}
+					closeLemmaReference={self.closeLemmaReference}
 					/>
 
 

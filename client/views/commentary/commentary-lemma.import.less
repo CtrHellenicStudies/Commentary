@@ -167,40 +167,56 @@
   display:none;
   z-index:100;
 
+	&.lemma-reference-modal-visible {
+		display:block;
+	}
+
   .comment {
-	width:auto;
-	border:none;
-	margin:0;
-	padding:20px 30px 15px;
-	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+		width:auto;
+		border:none;
+		margin:0;
+		padding:20px 30px 15px;
+		box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 
-	p.lemma-text {
-	  padding:5px;
-	  font-size:18px;
-	}
+		p.lemma-text {
+		  padding:5px;
+		  font-size:18px;
+		}
 
-	.context-tabs, .edition-tabs {
-	  padding-top:10px;
-	}
+		.context-tabs, .edition-tabs {
+		  padding-top:10px;
+		}
 
-	button span {
-	  font-size:12px;
-	}
+		button span {
+		  font-size:12px;
+		}
   }
 
-  .mdi-close {
-	border-radius:50%;
-	background:@light;
-	padding:10px;
-	font-size:22px;
-	position:absolute;
-	top:-10px;
-	right:-15px;
-
-	&:focus {
-	  outline:none;
-	  border:none;
+	.lemma-reference-text {
+		max-height:168px;
+		overflow-y:scroll;
+		border-bottom:1px solid #eee;
 	}
+
+  .mdi-close {
+		border-radius:50%;
+		background:@light;
+		padding:10px;
+		font-size:22px;
+		position:absolute;
+		top:-10px;
+		right:-15px;
+		cursor:pointer;
+
+		&:hover {
+			background:#eee;
+		}
+
+		&:focus {
+		  outline:none;
+		  border:none;
+		}
+
   }
 
 }

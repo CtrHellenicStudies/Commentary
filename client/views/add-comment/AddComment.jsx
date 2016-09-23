@@ -19,9 +19,11 @@ const singleLinePlugin = createSingleLinePlugin();
 import createRichButtonsPlugin from 'draft-js-richbuttons-plugin';
 const richButtonsPlugin = createRichButtonsPlugin();
 
-const {
-  // inline buttons
-  ItalicButton,
+const {    
+  // inline buttons 
+  ItalicButton, BoldButton, MonospaceButton, UnderlineButton,
+  // block buttons 
+  OLButton, ULButton
 } = richButtonsPlugin;
 
 AddComment = React.createClass({
@@ -51,7 +53,7 @@ AddComment = React.createClass({
             textValue: '',
             referenceValue: '',
             referenceLinkValue: '',
-            keywordValue: '',
+            keywordsValue: '',
             keyideasValue: '',
 
             snackbarOpen: false,
@@ -64,10 +66,10 @@ AddComment = React.createClass({
     getMeteorData() {
         var keywords_options = [];
         var keywords = Keywords.find().fetch();
-        keywords.map(function(word) {
+        keywords.map(function(keyword) {
             keywords_options.push({
-                value: word.slug,
-                label: word.title,
+                value: keyword.title,
+                label: keyword.title,
             });
         });
         
@@ -77,6 +79,7 @@ AddComment = React.createClass({
         return {
             keywords_options: keywords_options,
             keyideas_options: keyideas_options,
+            keywords: keywords,
         };
     },
 
@@ -97,37 +100,31 @@ AddComment = React.createClass({
         });
     },
 
-    onKeywordsChange(keywordsEditorState) {
-        this.setState({
-            keywordsEditorState: keywordsEditorState,
-        });
+    onKeywordsValueChange(keywords) {
+        if (keywords.length > 0) {
+            this.setState({
+                keywordsValue: keywords.split(","),
+            });
+        } else {
+            this.setState({
+                keywordsValue: null,
+            });
+        };
     },
 
-    onReferenceChange(referenceEditorState) {
-        this.setState({
-            referenceEditorState: referenceEditorState,
-        });
+    onKeywideasValueChange(keyideas) {
+        // this.setState({
+        //     keyideasValue: keyideas.split(","),
+        // });
     },
 
-    onReferenceLinkChange(referenceLinkEditorState) {
-        this.setState({
-            referenceLinkEditorState: referenceLinkEditorState,
-        });
-    },
-
-    keywordsValueChange(value) {
-        this.setState({
-            keywordValue: value
-        });
-    },
-
-    referenceValueChange(event) {
+    onReferenceValueChange(event) {
         this.setState({
             referenceValue: event.target.value
         });
     },
 
-    referenceLinkValueChange(event) {
+    onReferenceLinkValueChange(event) {
         this.setState({
             referenceLinkValue: event.target.value
         });
@@ -246,20 +243,33 @@ AddComment = React.createClass({
                         <Select
                             name="keywords"
                             id="keywords"
-                            className="form-element"
                             required={false}
                             options={this.data.keywords_options}
                             multi={true}
                             allowCreate={true}
-                            value={this.state.keywordValue}
-                            onChange={this.keywordsValueChange}
+                            value={this.state.keywordsValue}
+                            onChange={this.onKeywordsValueChange}
                             placeholder='Keywords...'
                         />
-                        {/*JSON.stringify(raw)*/}
+                        <Select
+                            name="keyideas"
+                            id="keyideas"
+                            required={false}
+                            options={this.data.keywords_options /*TODO: change to keyideas_options*/}
+                            multi={true}
+                            allowCreate={true}
+                            value={this.state.keyideasValue}
+                            onChange={this.onKeywideasValueChange}
+                            placeholder='Keyideas...'
+                        />
 
                     </div>
                     <div className="comment-lower" style={{paddingTop: 20}}>
-                        <ItalicButton/>{/*TODO: delete button*/}
+                        <BoldButton/>
+                        <ItalicButton/>
+                        <UnderlineButton/>
+                        <OLButton/>
+                        <ULButton/>
                         <div className="add-comment-text">
                             <Editor
                                 editorState={this.state.textEditorState}
@@ -317,7 +327,7 @@ AddComment = React.createClass({
                                 required={false}
                                 floatingLabelText="Reference..."
                                 value={this.state.referenceValue}
-                                onChange={this.referenceValueChange}
+                                onChange={this.onReferenceValueChange}
                             />
                         </div>
                         <div>
@@ -328,7 +338,7 @@ AddComment = React.createClass({
                                 required={false}
                                 floatingLabelText="Reference link..."
                                 value={this.state.referenceLinkValue}
-                                onChange={this.referenceLinkValueChange}
+                                onChange={this.onReferenceLinkValueChange}
                             />
                         </div>
                         <div className="add-comment-button">

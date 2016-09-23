@@ -1,52 +1,52 @@
 CommentersList = React.createClass({
 
-  mixins: [ReactMeteorData],
+	mixins: [ReactMeteorData],
 
-  propTypes: {
-    limit: React.PropTypes.number,
+	propTypes: {
+		limit: React.PropTypes.number,
 		featureOnHomepage: React.PropTypes.bool,
-  },
+	},
 
-  getMeteorData() {
-    let query = {};
+	getMeteorData() {
+		let query = {};
 
-    var limit = 100;
+		var limit = 100;
 
-    if(this.props.limit){
-      limit = this.props.limit;
-    }
+		if(this.props.limit){
+			limit = this.props.limit;
+		}
 		if(this.props.featureOnHomepage){
 			query.featureOnHomepage = this.props.featureOnHomepage;
 		}
 
-    return {
-      commenters: Commenters.find(query, {sort: {name: 1}, limit: limit}).fetch(),
-    };
-  },
+		return {
+			commenters: Commenters.find(query, {sort: {name: 1}, limit: limit}).fetch(),
+		};
+	},
 
-  renderCommenters() {
+	renderCommenters() {
 
-    return this.data.commenters.map((commenter) => {
-      return <CommenterTeaser
-              key={commenter._id}
-              commenter={commenter} />;
+		return this.data.commenters.map((commenter) => {
+			return <CommenterTeaser
+							key={commenter._id}
+							commenter={commenter} />;
 
-    });
+		});
 
-  },
+	},
 
-  render() {
+	render() {
 
-     return (
-       <div className="commenters-list">
+		 return (
+			 <div className="commenters-list">
 
-         {this.renderCommenters()}
+				 {this.renderCommenters()}
 
-       </div>
+			 </div>
 
 
-      );
-    }
+			);
+		}
 
 
 });

@@ -446,10 +446,10 @@ Header = React.createClass({
 
 									</div>
 
-         					<div className="search-tool text-search line-search">
-         						<label></label>
+				 					<div className="search-tool text-search line-search">
+				 						<label></label>
  										<LineRangeSlider handleChangeLineN={this.props.handleChangeLineN}/>
-         					</div>
+				 					</div>
 
 									<div className="search-toggle">
 										<IconButton

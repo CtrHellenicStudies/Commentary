@@ -15,29 +15,29 @@ HomeView = React.createClass({
 		skip: React.PropTypes.number
 	},
 
-  getChildContext() {
-    return { muiTheme: getMuiTheme(baseTheme) };
-  },
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object.isRequired,
-  },
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
-  componentDidMount() {
+	componentDidMount() {
 
-    /*
-     * Init wow animations on homepage
-     */
-    var w;
-    w = new WOW().init();
+		/*
+		 * Init wow animations on homepage
+		 */
+		var w;
+		w = new WOW().init();
 
-  },
+	},
 
 
-  mixins: [ReactMeteorData],
+	mixins: [ReactMeteorData],
 
-  getMeteorData(){
-    var query = {},
+	getMeteorData(){
+		var query = {},
 				works = [];
 
 		works = Works.find({}, {sort:{order:1}}).fetch();
@@ -47,212 +47,212 @@ HomeView = React.createClass({
 		}
 	},
 
-  render(){
-      return (
-        <div className="home">
+	render(){
+			return (
+				<div className="home">
 
-          <div className="content primary">
+					<div className="content primary">
 
-            <section className="header cover fullscreen parallax">
-                <div className="background-image-holder remove-blur blur-10">
-                   <img className="background-image" src="/images/hector.jpg"/>
-                </div>
-                <div className="block-screen brown"></div>
+						<section className="header cover fullscreen parallax">
+								<div className="background-image-holder remove-blur blur-10">
+									 <img className="background-image" src="/images/hector.jpg"/>
+								</div>
+								<div className="block-screen brown"></div>
 
-                <div className="container v-align-transform wow fadeIn" data-wow-duration="1s" data-wow-delay="0.1s">
+								<div className="container v-align-transform wow fadeIn" data-wow-duration="1s" data-wow-delay="0.1s">
 
-                    <div className="grid inner">
-                        <div className="center-content" >
+										<div className="grid inner">
+												<div className="center-content" >
 
-                            <div className="site-title-wrap">
-                                <h1 className="site-title">A Homer Commentary<br/>in Progress</h1>
-                                <h3 className="site-subtitle">
-                                    An evolving, collaborative commentary based on the cumulative research of Milman Parry and Albert Lord, who created a new way of thinking about Homeric poetry
-                                </h3>
-                            </div>
+														<div className="site-title-wrap">
+																<h1 className="site-title">A Homer Commentary<br/>in Progress</h1>
+																<h3 className="site-subtitle">
+																		An evolving, collaborative commentary based on the cumulative research of Milman Parry and Albert Lord, who created a new way of thinking about Homeric poetry
+																</h3>
+														</div>
 
-                            <RaisedButton
-                              href="#intro"
-                              className="cover-link learn-more"
-                              label="Learn More"
-                              >
-                            </RaisedButton>
+														<RaisedButton
+															href="#intro"
+															className="cover-link learn-more"
+															label="Learn More"
+															>
+														</RaisedButton>
 
-                            <RaisedButton
-                              href="/commentary/"
-                              className="cover-link go-to-commentary"
-                              label="Go to Commentary"
-                              >
-                            </RaisedButton>
+														<RaisedButton
+															href="/commentary/"
+															className="cover-link go-to-commentary"
+															label="Go to Commentary"
+															>
+														</RaisedButton>
 
-                        </div>
-                    </div>
-                </div>
-            </section>
+												</div>
+										</div>
+								</div>
+						</section>
 
-            <section className="intro">
-                <div className="container">
-                    <div className="row">
-                        <h2 >Quid faciat laetas segetes quo</h2>
+						<section className="intro">
+								<div className="container">
+										<div className="row">
+												<h2 >Quid faciat laetas segetes quo</h2>
 
-                        <div className="intro-col intro-col-text">
+												<div className="intro-col intro-col-text">
 
-                            <div className="mb40 mb-xs-24l intro-block-text ">
-                                <h5 className="uppercase intro-block-header">Sidere terram vertere</h5>
-                                <span className="intro-block-desc">
-                                    Mycenas, ulmisque adiungere vites conveniat quae curum boum qui cultus
-                                    habendo sit pecori apibus quanta experientia parcis.
-                                </span>
-                            </div>
+														<div className="mb40 mb-xs-24l intro-block-text ">
+																<h5 className="uppercase intro-block-header">Sidere terram vertere</h5>
+																<span className="intro-block-desc">
+																		Mycenas, ulmisque adiungere vites conveniat quae curum boum qui cultus
+																		habendo sit pecori apibus quanta experientia parcis.
+																</span>
+														</div>
 
-                            <div className="mb40 mb-xs-24 intro-block-text ">
-                                <h5 className="uppercase intro-block-header">Hinc canere incipiam</h5>
-                                <span className="intro-block-desc">
-                                    Vos, o agrestum praesentia numina fauni ferte simul faunique pedem dryadesque
-                                    puellae munera vestro cano.
-                                </span>
-                            </div>
+														<div className="mb40 mb-xs-24 intro-block-text ">
+																<h5 className="uppercase intro-block-header">Hinc canere incipiam</h5>
+																<span className="intro-block-desc">
+																		Vos, o agrestum praesentia numina fauni ferte simul faunique pedem dryadesque
+																		puellae munera vestro cano.
+																</span>
+														</div>
 
-                            <RaisedButton
-                              className="cover-link dark "
-                              href="/"
-                              label="Troiae qui primus"
-                              >
-                            </RaisedButton>
+														<RaisedButton
+															className="cover-link dark "
+															href="/"
+															label="Troiae qui primus"
+															>
+														</RaisedButton>
 
-                        </div>
-                        <div className="intro-col intro-col-image image-wrap wow fadeIn">
-                            <img className="paper-shadow" alt="Ajax and Achilles" src="/images/ajax_achilles_3.jpg" />
-                            <div className="caption">
-                                <span className="caption-text">"Quid faciat laetas segetes quo sidere", Terram Vertere. 1865. Oil on canvas. Center for Hellenic Studies, Washington, DC.</span>
-                            </div>
-                        </div>
-                    </div>
-                    {/*<!--end of row-->*/}
-                </div>
-                {/*<!--end of container-->*/}
-            </section>
-
-
-            <section className="goals ">
-
-                <div className="background-image-holder blur-4--no-remove">
-                   <img alt="image" className="background-image" src="/images/mss_2.jpg"/>
-                </div>
-                <div className="block-screen brown"></div>
-
-                <div className="container ">
-
-                  <div className="goal hvr-grow wow fadeInUp" >
-                      <img className="goal-image" src="/images/svg-icons/pen.svg"/>
-                      <div className="goal-text">
-                        <h3 className="goal-title">Collaborative commenting and editing</h3>
-                        <span className="goal-desc">Writing as a collaborative process between principal authors and associate editors</span>
-                      </div>
-                  </div>
-
-                  <div className="goal hvr-grow wow fadeInUp" data-wow-delay="0.5s">
-                      <img className="goal-image" src="/images/svg-icons/book-opened.svg"/>
-                      <div className="goal-text">
-                        <h3 className="goal-title">System and beauty</h3>
-                        <span className="goal-desc">Linguistic approach analyzing both synchronically and diachronically the formulaic system of Homeric poetry</span>
-                      </div>
-                  </div>
-
-                  <div className="goal hvr-grow wow fadeInUp" data-wow-delay="1s">
-                      <img className="goal-image" src="/images/svg-icons/bank.svg"/>
-                      <div className="goal-text">
-                        <h3 className="goal-title">A growing effort of scholars still in progress</h3>
-                        <span className="goal-desc">The commentary constitutes work from a diverse team representing three generations of researchers</span>
-                      </div>
-                  </div>
-
-              </div>
+												</div>
+												<div className="intro-col intro-col-image image-wrap wow fadeIn">
+														<img className="paper-shadow" alt="Ajax and Achilles" src="/images/ajax_achilles_3.jpg" />
+														<div className="caption">
+																<span className="caption-text">"Quid faciat laetas segetes quo sidere", Terram Vertere. 1865. Oil on canvas. Center for Hellenic Studies, Washington, DC.</span>
+														</div>
+												</div>
+										</div>
+										{/*<!--end of row-->*/}
+								</div>
+								{/*<!--end of container-->*/}
+						</section>
 
 
-            </section>
+						<section className="goals ">
 
-            <section className="browse-commentary block-shadow" >
-              {/*<h2 className="keyword-divider-title"></h2>*/}
+								<div className="background-image-holder blur-4--no-remove">
+									 <img alt="image" className="background-image" src="/images/mss_2.jpg"/>
+								</div>
+								<div className="block-screen brown"></div>
 
-              <div className="container data-visualization-container">
+								<div className="container ">
+
+									<div className="goal hvr-grow wow fadeInUp" >
+											<img className="goal-image" src="/images/svg-icons/pen.svg"/>
+											<div className="goal-text">
+												<h3 className="goal-title">Collaborative commenting and editing</h3>
+												<span className="goal-desc">Writing as a collaborative process between principal authors and associate editors</span>
+											</div>
+									</div>
+
+									<div className="goal hvr-grow wow fadeInUp" data-wow-delay="0.5s">
+											<img className="goal-image" src="/images/svg-icons/book-opened.svg"/>
+											<div className="goal-text">
+												<h3 className="goal-title">System and beauty</h3>
+												<span className="goal-desc">Linguistic approach analyzing both synchronically and diachronically the formulaic system of Homeric poetry</span>
+											</div>
+									</div>
+
+									<div className="goal hvr-grow wow fadeInUp" data-wow-delay="1s">
+											<img className="goal-image" src="/images/svg-icons/bank.svg"/>
+											<div className="goal-text">
+												<h3 className="goal-title">A growing effort of scholars still in progress</h3>
+												<span className="goal-desc">The commentary constitutes work from a diverse team representing three generations of researchers</span>
+											</div>
+									</div>
+
+							</div>
+
+
+						</section>
+
+						<section className="browse-commentary block-shadow" >
+							{/*<h2 className="keyword-divider-title"></h2>*/}
+
+							<div className="container data-visualization-container">
 								<WorksList />
 
 								{/*<img src="/images/data_visualization_example.png"/>*/}
 
-              </div>
+							</div>
 
-            </section>
-
-
-            <section className="keywords">
-                <div className="grid inner">
-                    <h2 className="keyword-divider-title">Keywords</h2>
-                    <div className="underline"></div>
-
-                    <KeywordsList type="word" title="Keywords" />
-
-                    <RaisedButton
-                      href="/keywords"
-                      className="cover-link show-more primary "
-                      label="More Keywords"
-                      >
-                    </RaisedButton>
-
-                </div>
-            </section>
-
-            <section className="keywords">
-                <div className="grid inner">
-                    <h2 className="keyword-divider-title">Key Ideas</h2>
-                    <div className="underline"></div>
-
-                    <KeywordsList type="idea" title="Key Ideas" />
-
-                    <RaisedButton
-                      href="/keywords"
-                      className="cover-link show-more primary "
-                      label="More Key Ideas"
-                      >
-                    </RaisedButton>
-
-                </div>
-            </section>
-
-            <section className="commentors">
-                <div className="background-image-holder blur-4--no-remove">
-                   <img className="background-image" src="/images/school-athens.jpg"/>
-                </div>
-                <div className="block-screen"></div>
-
-                <div className="container">
-
-                  <h2 className="block-title">Commenters</h2>
+						</section>
 
 
-                    <CommentersList
+						<section className="keywords">
+								<div className="grid inner">
+										<h2 className="keyword-divider-title">Keywords</h2>
+										<div className="underline"></div>
+
+										<KeywordsList type="word" title="Keywords" />
+
+										<RaisedButton
+											href="/keywords"
+											className="cover-link show-more primary "
+											label="More Keywords"
+											>
+										</RaisedButton>
+
+								</div>
+						</section>
+
+						<section className="keywords">
+								<div className="grid inner">
+										<h2 className="keyword-divider-title">Key Ideas</h2>
+										<div className="underline"></div>
+
+										<KeywordsList type="idea" title="Key Ideas" />
+
+										<RaisedButton
+											href="/keywords"
+											className="cover-link show-more primary "
+											label="More Key Ideas"
+											>
+										</RaisedButton>
+
+								</div>
+						</section>
+
+						<section className="commentors">
+								<div className="background-image-holder blur-4--no-remove">
+									 <img className="background-image" src="/images/school-athens.jpg"/>
+								</div>
+								<div className="block-screen"></div>
+
+								<div className="container">
+
+									<h2 className="block-title">Commenters</h2>
+
+
+										<CommentersList
 											limit={3}
 											featureOnHomepage={true}
 											/>
 
-                    <RaisedButton
-                      href="/commenters"
-                      className="cover-link light show-more "
-                      label="Other Commenters"
-                      >
-                    </RaisedButton>
+										<RaisedButton
+											href="/commenters"
+											className="cover-link light show-more "
+											label="Other Commenters"
+											>
+										</RaisedButton>
 
-                </div>
+								</div>
 
-            </section>
+						</section>
 
-            <section className="get-started" >
+						<section className="get-started" >
 
-                  <h2 className="block-title">Get Started</h2>
+									<h2 className="block-title">Get Started</h2>
 
-                  <div className="get-started-comments">
+									<div className="get-started-comments">
 
-                    <Commentary
+										<Commentary
 											isOnHomeView={true}
 											filters={this.props.filters}
 											toggleSearchTerm={this.props.toggleSearchTerm}
@@ -260,27 +260,27 @@ HomeView = React.createClass({
 											skip={this.props.skip}
 											/>
 
-						        <div className="read-more-link">
-	                    <RaisedButton
-	                      href="/commentary"
-	                      className="cover-link light show-more "
-	                      label="Read More"
-	                      >
-	                    </RaisedButton>
+										<div className="read-more-link">
+											<RaisedButton
+												href="/commentary"
+												className="cover-link light show-more "
+												label="Read More"
+												>
+											</RaisedButton>
 
 
-						        </div>
+										</div>
 
-                  </div>
-
-
-            </section>
+									</div>
 
 
-          </div>
+						</section>
 
-        </div>
 
-    );
-  }
+					</div>
+
+				</div>
+
+		);
+	}
 });

@@ -216,7 +216,7 @@ HomeLayout = React.createClass({
 
 				<Footer/>
 
-			  {/*<ModalLogin />
+				{/*<ModalLogin />
 				<ModalSignup />*/}
 
 			</div>

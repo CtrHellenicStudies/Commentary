@@ -4,7 +4,7 @@ CommentaryLayout = React.createClass({
 		queryParams: React.PropTypes.object,
 	},
 
-  getInitialState(){
+	getInitialState(){
 		const filters = [];
 
 		if("_id" in this.props.queryParams){
@@ -14,17 +14,17 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-    return {
-      filters: filters,
+		return {
+			filters: filters,
 			skip: 0,
 			limit: 10
-    };
-  },
+		};
+	},
 
 	loadMoreComments(){
-	    this.setState({
-	      skip : this.state.skip + this.state.limit
-	    });
+			this.setState({
+				skip : this.state.skip + this.state.limit
+			});
 
 			//console.log("Load more comments:", this.state.skip);
 	},

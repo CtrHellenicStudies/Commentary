@@ -1,12 +1,12 @@
 Meteor.methods({
-    'comments.insert' (comment) {
-        console.log('comment insert called');
-        console.log('comment:', comment);
+		'comments.insert' (comment) {
+				console.log('comment insert called');
+				console.log('comment:', comment);
 
-        try {
+				try {
 
-        } catch (err) {
-            console.log(err);
-        }
-    },
+				} catch (err) {
+						console.log(err);
+				}
+		},
 });

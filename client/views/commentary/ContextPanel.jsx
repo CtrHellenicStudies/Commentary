@@ -6,27 +6,27 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 ContextPanel = React.createClass({
 
-  propTypes: {
-    open: React.PropTypes.bool.isRequired,
-    commentGroup: React.PropTypes.object.isRequired,
-    closeContextPanel: React.PropTypes.func.isRequired,
-    scrollPosition: React.PropTypes.number.isRequired,
-    commentLemmaIndex: React.PropTypes.number.isRequired,
-  },
+	propTypes: {
+		open: React.PropTypes.bool.isRequired,
+		commentGroup: React.PropTypes.object.isRequired,
+		closeContextPanel: React.PropTypes.func.isRequired,
+		scrollPosition: React.PropTypes.number.isRequired,
+		commentLemmaIndex: React.PropTypes.number.isRequired,
+	},
 
-  getChildContext() {
-    return { muiTheme: getMuiTheme(baseTheme) };
-  },
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object.isRequired
-  },
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired
+	},
 
-  getInitialState() {
-    return {
+	getInitialState() {
+		return {
 			selectedLemmaEdition : ""
 		};
-  },
+	},
 
 	toggleEdition(editionSlug){
 		if(this.state.selectedLemmaEdition !== editionSlug){
@@ -39,9 +39,9 @@ ContextPanel = React.createClass({
 	},
 
 
-  mixins: [ReactMeteorData],
+	mixins: [ReactMeteorData],
 
-  getMeteorData(){
+	getMeteorData(){
 
 		var lemmaText = [];
 		var commentGroup = this.props.commentGroup;
@@ -118,49 +118,49 @@ ContextPanel = React.createClass({
 
 
 
-    return {
+		return {
 			lemmaText: lemmaText,
 			selectedLemmaEdition: selectedLemmaEdition
-    };
+		};
 
 
-  },
+	},
 
-  scrollElement(state) {
-         var that = this;
-         switch (state) {
-             case 'open':
-             console.log('top', $('#comment-group-' + that.props.commentLemmaIndex).offset().top);
-                 window.requestAnimationFrame(function() {
-                     var scroll = $('#comment-group-' + that.props.commentLemmaIndex).offset().top;
-                     $(document).scrollTop(scroll);
-                 });
-                 break;
-             case 'close':
-                window.requestAnimationFrame(function() {
-                 	console.log('that.props.scrollPosition', that.props.scrollPosition);
-                 	setTimeout(function(){
-                 		$(document).scrollTop(that.props.scrollPosition);
-                 	}, 1000);
-                });
-                break;
-         }
-     },
- 
-     componentDidMount() {
-         this.scrollElement('open');
-     },
- 
-     componentDidUpdate(prevProps, prevState) {
-        this.scrollElement('open');
-     },
- 
-     componentWillUnmount() {
-     	this.scrollElement('close');
-     },
+	scrollElement(state) {
+				 var that = this;
+				 switch (state) {
+						 case 'open':
+						 console.log('top', $('#comment-group-' + that.props.commentLemmaIndex).offset().top);
+								 window.requestAnimationFrame(function() {
+										 var scroll = $('#comment-group-' + that.props.commentLemmaIndex).offset().top;
+										 $(document).scrollTop(scroll);
+								 });
+								 break;
+						 case 'close':
+								window.requestAnimationFrame(function() {
+								 	console.log('that.props.scrollPosition', that.props.scrollPosition);
+								 	setTimeout(function(){
+								 		$(document).scrollTop(that.props.scrollPosition);
+								 	}, 1000);
+								});
+								break;
+				 }
+		 },
+
+		 componentDidMount() {
+				 this.scrollElement('open');
+		 },
+
+		 componentDidUpdate(prevProps, prevState) {
+				this.scrollElement('open');
+		 },
+
+		 componentWillUnmount() {
+		 	this.scrollElement('close');
+		 },
 
 
-  render() {
+	render() {
 		var self = this;
 		var contextPanelStyles = "lemma-panel paper-shadow";
 
@@ -168,19 +168,19 @@ ContextPanel = React.createClass({
 			contextPanelStyles += " extended";
 		}
 
-    return (
-      <div className={contextPanelStyles}>
+		return (
+			<div className={contextPanelStyles}>
 
 				<IconButton
-          className="close-lemma-panel"
-          onClick={this.props.closeContextPanel}
-          iconClassName="mdi mdi-close"
-          >
+					className="close-lemma-panel"
+					onClick={this.props.closeContextPanel}
+					iconClassName="mdi mdi-close"
+					>
 
 				</IconButton>
 
-        <div className="lemma-text-wrap">
-          {this.data.selectedLemmaEdition.lines.map(function(line, i){
+				<div className="lemma-text-wrap">
+					{this.data.selectedLemmaEdition.lines.map(function(line, i){
 						var lineClass="lemma-line";
 						var lineFrom = self.props.commentGroup.lineFrom;
 						var lineTo;
@@ -195,70 +195,70 @@ ContextPanel = React.createClass({
 							lineClass += " highlighted";
 						}
 
-            return <div
+						return <div
 							className={lineClass}
 							key={i}>
 
-                <div className="lemma-meta">
-                  {(line.n % 5 === 0) ?
-                    <span className="lemma-line-n" >
-                        {line.n}
-                    </span>
-                  : ""
-                  }
-                </div>
+								<div className="lemma-meta">
+									{(line.n % 5 === 0) ?
+										<span className="lemma-line-n" >
+												{line.n}
+										</span>
+									: ""
+									}
+								</div>
 
-                <div className="lemma-text" dangerouslySetInnerHTML={{__html: line.html}} >
-                </div>
+								<div className="lemma-text" dangerouslySetInnerHTML={{__html: line.html}} >
+								</div>
 
 
-            </div>
+						</div>
 
-          })}
+					})}
 
-            <div className="lemma-load" >
-                <div className="lemma-spinner"></div>
+						<div className="lemma-load" >
+								<div className="lemma-spinner"></div>
 
-            </div>
+						</div>
 
-        </div>
+				</div>
 
-        <div className="edition-tabs tabs">
-          {this.data.lemmaText.map(function(lemmaTextEdition, i){
+				<div className="edition-tabs tabs">
+					{this.data.lemmaText.map(function(lemmaTextEdition, i){
 						let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-						return 
+						return
 
-                            <RaisedButton
-                                key={i}
-                                label={lemmaEditionTitle}
-                                data-edition={lemmaTextEdition.title}
-                                className={self.data.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
-                                onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-                            />
+														<RaisedButton
+																key={i}
+																label={lemmaEditionTitle}
+																data-edition={lemmaTextEdition.title}
+																className={self.data.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
+																onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+														/>
 
-          })}
+					})}
 
-        </div>
+				</div>
 
-        <div className="meta-tabs tabs">
-            <FlatButton
-                label="Highlighting"
-                className="edition-tab tab"
-                onClick={this.toggleHighlighting}
-                >
-            </FlatButton>
-            <FlatButton
-                label="Scansion"
-                className="edition-tab tab"
-                onClick={this.toggleScansion}
-                >
-            </FlatButton>
-        </div>
-    </div>
+				<div className="meta-tabs tabs">
+						<FlatButton
+								label="Highlighting"
+								className="edition-tab tab"
+								onClick={this.toggleHighlighting}
+								>
+						</FlatButton>
+						<FlatButton
+								label="Scansion"
+								className="edition-tab tab"
+								onClick={this.toggleScansion}
+								>
+						</FlatButton>
+				</div>
+		</div>
 
 
-   );
-  }
+	 );
+	}
 
 });

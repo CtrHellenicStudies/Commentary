@@ -75,18 +75,18 @@ SearchTermButtonPanel = React.createClass({
 				onTouchTap={this.toggleSearchTerm}
 				style={styles.chip}
 				labelStyle={styles.chipLabel}
-			>	
+			>
 				{active?
 					<Avatar
 						icon={<FontIcon className="mdi mdi-minus" />}
 						backgroundColor={brown800}
 					/>
 					:
-					<Avatar 
+					<Avatar
 						icon={<FontIcon className="mdi mdi-plus" />}
 				/>
 				}
-				
+
 				{this.props.label}
 			</Chip>
 		)

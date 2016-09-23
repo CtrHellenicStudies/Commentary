@@ -34,11 +34,11 @@ Meteor.method("cron", function () {
 						// TODO: build and array of lin 10 incrementation
 						if(comment.subwork.n === subwork.n){
 							isInCommentCountsSubworks = true;
-							
+
 							subwork.nComments++;
 
 							var iterations = Math.floor((comment.lineFrom + comment.nLines - 1)/10) - Math.floor(comment.lineFrom/10) + 1;
-							
+
 							for (var i = 0; i < iterations; i++) {
 								var nFrom = Math.floor(comment.lineFrom/10)*10 + i*10;
 								isInCommentCountsLines = false;
@@ -158,13 +158,13 @@ Meteor.method("cron", function () {
 		return 1;
 
 	}, {
-	  url: "commentary/cron",
-	  getArgsFromRequest: function (request) {
+		url: "commentary/cron",
+		getArgsFromRequest: function (request) {
 			// Sometime soon do validation here
-	    var content = request.body;
+			var content = request.body;
 
-	    return [content];
-	  }
+			return [content];
+		}
 });
 
 Meteor.method("keyword_cron", function () {
@@ -202,11 +202,11 @@ Meteor.method("keyword_cron", function () {
 		return 1;
 
 	}, {
-	  url: "keywords/cron",
-	  getArgsFromRequest: function (request) {
+		url: "keywords/cron",
+		getArgsFromRequest: function (request) {
 			// Sometime soon do validation here
-	    var content = request.body;
+			var content = request.body;
 
-	    return [content];
-	  }
+			return [content];
+		}
 });

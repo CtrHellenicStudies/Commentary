@@ -1,40 +1,40 @@
 // List of discussionComments
 DiscussionCommentsList = React.createClass({
 
-  // This mixin makes the getMeteorData method discussionComment
-  //mixins: [ReactMeteorData],
+	// This mixin makes the getMeteorData method discussionComment
+	//mixins: [ReactMeteorData],
 
-  propTypes: {
+	propTypes: {
 		discussionComments: React.PropTypes.array
-  },
+	},
 
-  // Loads items from the discussionComments collection and puts them on this.data.discussionComments
+	// Loads items from the discussionComments collection and puts them on this.data.discussionComments
 	/*
-  getMeteorData() {
-    let query = {};
+	getMeteorData() {
+		let query = {};
 
-    return {
-      discussionComments: DiscussionComments.find(query, {sort: {author: 1, title: 1}}).fetch()
-    };
-  },
+		return {
+			discussionComments: DiscussionComments.find(query, {sort: {author: 1, title: 1}}).fetch()
+		};
+	},
 	*/
 
-  render() {
+	render() {
 
-     return (
-       <div className="discussion-comments-list">
+		 return (
+			 <div className="discussion-comments-list">
 
-         {this.props.discussionComments.map((discussionComment, i) => {
-            return <DiscussionCommentTeaser
-              key={i}
-              discussionComment={discussionComment} />;
-          })}
+				 {this.props.discussionComments.map((discussionComment, i) => {
+						return <DiscussionCommentTeaser
+							key={i}
+							discussionComment={discussionComment} />;
+					})}
 
-       </div>
+			 </div>
 
 
-      );
-    }
+			);
+		}
 
 
 });

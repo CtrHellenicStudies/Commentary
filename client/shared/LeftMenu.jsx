@@ -12,24 +12,24 @@ injectTapEventPlugin();
 LeftMenu = React.createClass({
 
 
-    propTypes: {
-        open: React.PropTypes.bool.isRequired,
-        closeLeftMenu: React.PropTypes.func.isRequired,
-    },
+		propTypes: {
+				open: React.PropTypes.bool.isRequired,
+				closeLeftMenu: React.PropTypes.func.isRequired,
+		},
 
-    getChildContext() {
-        return {muiTheme: getMuiTheme(baseTheme)};
-    },
+		getChildContext() {
+				return {muiTheme: getMuiTheme(baseTheme)};
+		},
 
-    childContextTypes: {
-        muiTheme: React.PropTypes.object.isRequired,
-    },
+		childContextTypes: {
+				muiTheme: React.PropTypes.object.isRequired,
+		},
 
 
-	  mixins: [ReactMeteorData],
+		mixins: [ReactMeteorData],
 
-	  getMeteorData(){
-	    var query = {};
+		getMeteorData(){
+			var query = {};
 
 			return {
 				currentUser: Meteor.users.findOne({_id: Meteor.userId()})
@@ -37,15 +37,15 @@ LeftMenu = React.createClass({
 
 		},
 
-    scrollToAbout(e){
-        $("html, body").animate({scrollTop: $('#about').height() - 100}, 300);
+		scrollToAbout(e){
+				$("html, body").animate({scrollTop: $('#about').height() - 100}, 300);
 
-        this.props.closeLeftMenu();
-        e.preventDefault();
-    },
+				this.props.closeLeftMenu();
+				e.preventDefault();
+		},
 
-    render(){
-        var userIsLoggedIn = this.data.currentUser ? true : false;
+		render(){
+				var userIsLoggedIn = this.data.currentUser ? true : false;
 				var username = "";
 
 				if(userIsLoggedIn){
@@ -60,86 +60,86 @@ LeftMenu = React.createClass({
 				}
 
 
-        return (
-            <div>
-                <Drawer
-                    open={this.props.open}
-                    docked={false}
-                    onRequestChange={this.props.closeLeftMenu}
-                    className="md-sidenav-left"
-                >
-                    <div className="sidenav-top">
-                      {userIsLoggedIn ?
-                          <div>
-                            <div className="user-image paper-shadow">
-                              <img src="/images/default_user.jpg"/>
-                            </div>
-                          </div>
-                          : ""
-                      }
-                      <span className="user-fullname">
+				return (
+						<div>
+								<Drawer
+										open={this.props.open}
+										docked={false}
+										onRequestChange={this.props.closeLeftMenu}
+										className="md-sidenav-left"
+								>
+										<div className="sidenav-top">
+											{userIsLoggedIn ?
+													<div>
+														<div className="user-image paper-shadow">
+															<img src="/images/default_user.jpg"/>
+														</div>
+													</div>
+													: ""
+											}
+											<span className="user-fullname">
 												{username}
-                      </span>
+											</span>
 
 
-                    </div>
-                    <MenuItem
-                        href="/"
-                        primaryText="Home"
-                        onClick={this.props.closeLeftMenu}
-                    />
-                    <MenuItem
-                        href="/commentary/"
-                        primaryText="Commentary"
-                        onClick={this.props.closeLeftMenu}
-                    />
-                    <MenuItem
-                          href="/keywords/"
-                          primaryText="Keywords"
-                          onClick={this.props.closeLeftMenu}
-                      />
-                    <MenuItem
-                          href="/keyideas/"
-                          primaryText="Key Ideas"
-                          onClick={this.props.closeLeftMenu}
-                      />
-                    <MenuItem
-                          href="/commenters/"
-                          primaryText="Commenters"
-                          onClick={this.props.closeLeftMenu}
-                      />
-                    <MenuItem
-                          href="/about"
-                          primaryText="About"
-                          onClick={this.props.closeLeftMenu}
-                      />
+										</div>
+										<MenuItem
+												href="/"
+												primaryText="Home"
+												onClick={this.props.closeLeftMenu}
+										/>
+										<MenuItem
+												href="/commentary/"
+												primaryText="Commentary"
+												onClick={this.props.closeLeftMenu}
+										/>
+										<MenuItem
+													href="/keywords/"
+													primaryText="Keywords"
+													onClick={this.props.closeLeftMenu}
+											/>
+										<MenuItem
+													href="/keyideas/"
+													primaryText="Key Ideas"
+													onClick={this.props.closeLeftMenu}
+											/>
+										<MenuItem
+													href="/commenters/"
+													primaryText="Commenters"
+													onClick={this.props.closeLeftMenu}
+											/>
+										<MenuItem
+													href="/about"
+													primaryText="About"
+													onClick={this.props.closeLeftMenu}
+											/>
 
-                    <Divider />
+										<Divider />
 
-                    {userIsLoggedIn ?
-                      <div>
-                        <MenuItem
-                            href="/profile"
-                            primaryText="Profile"
-                            target="_blank"
-                            onClick={this.props.closeLeftMenu}
-                        />
-                        <MenuItem
-                            href="/sign-out"
-                            primaryText="Sign out"
-                            target="_blank"
-                            onClick={this.props.closeLeftMenu}
-                        />
-                    </div>
-                    :
-                    <MenuItem
-                          href="/sign-in"
-                          primaryText="Sign in"
-                          onClick={this.props.closeLeftMenu}
-                      />
-                    }
-                </Drawer>
-            </div>
-        );
-    }
+										{userIsLoggedIn ?
+											<div>
+												<MenuItem
+														href="/profile"
+														primaryText="Profile"
+														target="_blank"
+														onClick={this.props.closeLeftMenu}
+												/>
+												<MenuItem
+														href="/sign-out"
+														primaryText="Sign out"
+														target="_blank"
+														onClick={this.props.closeLeftMenu}
+												/>
+										</div>
+										:
+										<MenuItem
+													href="/sign-in"
+													primaryText="Sign in"
+													onClick={this.props.closeLeftMenu}
+											/>
+										}
+								</Drawer>
+						</div>
+				);
+		}
 });

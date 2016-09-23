@@ -122,14 +122,14 @@ Meteor.method("commentary-webhook", function (comment_candidate) {
 
 
 
-  return valid;
+	return valid;
 
 }, {
-  url: "commentary/webhook",
-  getArgsFromRequest: function (request) {
+	url: "commentary/webhook",
+	getArgsFromRequest: function (request) {
 		// Sometime soon do validation here
-    var content = request.body;
+		var content = request.body;
 
-    return [content];
-  }
+		return [content];
+	}
 });

@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // https://github.com/JedWatson/react-select
 import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+// import 'react-select/dist/react-select.css';
 
 AddCommentForm = React.createClass({
 

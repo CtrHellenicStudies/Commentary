@@ -48,5 +48,9 @@ if (Meteor.isServer){
 		return Works.find();
 	});
 
+	Meteor.publish('profilePictures', function() {
+		return ProfilePictures.find();
+	});
+
 
 }

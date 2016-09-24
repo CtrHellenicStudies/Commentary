@@ -1,135 +1,136 @@
-Meteor.method("commentary-webhook", function (comment_candidate) {
+Meteor.method('commentary-webhook', (commentCandidate) => {
+	let valid = false;
 
-	var valid = false;
+	// console.log('Potential comment:', commentCandidate);
+	// if (commentCandidate.keywords && commentCandidate.keywords.length > 0) {
+	// 	console.log('keywords:', commentCandidate.keywords);
+	// }
 
-	//console.log("Potential comment:", comment_candidate);
-
-	let commenters = [];
+	const commenters = [];
 	/*
 	comment_candidate.commenters.forEach(function(commenter_wordpress_id, i){
 		commenters.push(Commenters.findOne({wordpressId: commenter_wordpress_id}));
 	});
 	*/
-	commenters.push(Commenters.findOne({wordpressId: comment_candidate.commenter}));
-
-
-	let work = Works.findOne({slug: comment_candidate.work})
+	const commenter = Commenters.findOne({ wordpressId: commentCandidate.commenter });
+	if (!commenter) {
+		console.error(`Could not find commenter with wordpressId:${commentCandidate.commenter}`);
+		return false;
+	}
+	commenters.push(commenter);
+	const work = Works.findOne({ slug: commentCandidate.work });
+	if (!work) {
+		console.error(`Could not find work with slug:${commentCandidate.work}`);
+		return false;
+	}
 	let subwork;
-	work.subworks.forEach(function(work_subwork){
-		if(work_subwork.n === parseInt(comment_candidate.subwork)){
-				subwork = work_subwork;
-
+	work.subworks.forEach((workSubwork) => {
+		if (workSubwork.n === parseInt(commentCandidate.subwork, 10)) {
+			subwork = workSubwork;
 		}
 	});
 
-	let keywords = [];
-	comment_candidate.keywords.forEach(function(keyword_wordpress_id, i){
-		keywords.push(Keywords.findOne({wordpressId: keyword_wordpress_id}));
+	const keywords = [];
+	commentCandidate.keywords.forEach((keywordWordpressId) => {
+		keywords.push(Keywords.findOne({ wordpressId: keywordWordpressId }));
 	});
 
-	if(comment_candidate.text.slice(0,1) !== "<"){
-		comment_candidate.text = "<p>" + comment_candidate.text + "</p>";
-	}
-
+	const text = commentCandidate.text.slice(0, 1) !== '<' ?
+		'<p>${commentCandidate.text}</p>' :
+		commentCandidate.text;
 
 	let revision = Revisions.insert({
-		title: comment_candidate.title,
-		text: comment_candidate.text
-
+		title: commentCandidate.title,
+		text,
 	});
 
 	/*
 	 * Fix nested revision in the future
 	 */
-	if(revision){
-		revision = Revisions.findOne({_id:revision});
+	if (revision) {
+		revision = Revisions.findOne({ _id: revision });
 	}
 
-	let comment = Comments.findOne(comment_candidate.comment_id);
+	const comment = Comments.findOne(commentCandidate.comment_id);
 
-	let upsert_response;
+	let upsertResponse;
 
-	//console.log("Work:", work);
-	//console.log("Subwork:", subwork);
-	//console.log("Commenters:", commenters);
-	//console.log("Keywords:", keywords);
-	//console.log("Revision:", revision);
-	//console.log("Comment:", comment);
+	// console.log("Work:", work);
+	// console.log("Subwork:", subwork);
+	// console.log("Commenters:", commenters);
+	// console.log("Keywords:", keywords);
+	// console.log("Revision:", revision);
+	// console.log("Comment:", comment);
 
-	if(comment){
-			upsert_response = Comments.update({_id: comment_candidate._id}, {$addToSet: {revisions: revision}});
-			console.log("Update response:", upsert_response);
+	if (comment) {
+		upsertResponse = Comments.update(
+			{ _id: commentCandidate._id },
+			{ $addToSet: { revisions: revision } });
+		console.log('Update response:', upsertResponse);
+	} else {
+		let nLines = 1;
+		const commentOrder = 0;
 
-	}else {
+		if ('line_to' in commentCandidate
+			&& !isNaN(parseInt(commentCandidate.line_to, 10))
+			&& commentCandidate.line_from !== commentCandidate.line_to) {
+			nLines = (parseInt(commentCandidate.line_to, 10)
+			- parseInt(commentCandidate.line_from, 10))
+			+ 1;
+		}
 
-			let nLines = 1;
-			let commentOrder = 0;
-			let reference = "";
-
-			if('line_to' in comment_candidate && !isNaN(parseInt(comment_candidate.line_to)) && comment_candidate.line_from !== comment_candidate.line_to){
-				nLines = parseInt(comment_candidate.line_to) - parseInt(comment_candidate.line_from) + 1;
-			}
-
-			let new_comment = {
-				wordpressId: comment_candidate.comment_id,
-				commenters: [
-					{
-						wordpressId: commenters[0].wordpressId,
-						name: commenters[0].name,
-						slug: commenters[0].slug,
-					}
-				],
-				work: {
-					title: work.title,
-					slug: work.slug,
-					order: work.order
+		const newComment = {
+			wordpressId: commentCandidate.comment_id,
+			commenters: [
+				{
+					wordpressId: commenters[0].wordpressId,
+					name: commenters[0].name,
+					slug: commenters[0].slug,
 				},
-				subwork: {
-					title: subwork.title,
-					slug: subwork.slug,
-					n: subwork.n,
-				},
-				lineFrom: parseInt(comment_candidate.line_from),
-				lineLetter: comment_candidate.line_letter,
-				nLines: nLines,
-				commentOrder: commentOrder,
+			],
+			work: {
+				title: work.title,
+				slug: work.slug,
+				order: work.order,
+			},
+			subwork: {
+				title: subwork.title,
+				slug: subwork.slug,
+				n: subwork.n,
+			},
+			lineFrom: parseInt(commentCandidate.line_from, 10),
+			lineLetter: commentCandidate.line_letter,
+			nLines,
+			commentOrder,
 
-				keywords: keywords,
-				revisions: [revision],
-				discussionComments: [],
+			keywords,
+			revisions: [revision],
+			discussionComments: [],
 
-				reference: comment_candidate.reference,
-				referenceLink: comment_candidate.referenceLink,
-				//referenceSection: null,
-				//referenceChapter: null,
-				//referenceTranslation: null,
-				//referenceNote: null,
+			reference: commentCandidate.reference,
+			referenceLink: commentCandidate.referenceLink,
+			// referenceSection: null,
+			// referenceChapter: null,
+			// referenceTranslation: null,
+			// referenceNote: null,
+		};
 
+		if ('line_to' in commentCandidate && !isNaN(commentCandidate.line_to)) {
+			newComment.lineTo = parseInt(commentCandidate.line_to, 10);
+		}
 
-
-			};
-
-			if('line_to' in comment_candidate && !isNaN(comment_candidate.line_to)){
-				new_comment.lineTo = parseInt(comment_candidate.line_to);
-
-			}
-
-
-			insert_response = Comments.insert(new_comment);
-			console.log("New comment:", insert_response);
-
+		const insertResponse = Comments.insert(newComment);
+		if (insertResponse) {
+			valid = true;
+		}
 	}
-
-
 
 	return valid;
-
 }, {
-	url: "commentary/webhook",
-	getArgsFromRequest: function (request) {
+	url: 'commentary/webhook',
+	getArgsFromRequest(request) {
 		// Sometime soon do validation here
-		var content = request.body;
-
+		const content = request.body;
 		return [content];
-	}
+	},
 });

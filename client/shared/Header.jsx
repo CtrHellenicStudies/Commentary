@@ -8,7 +8,7 @@ Header = React.createClass({
 	propTypes: {
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeDate: React.PropTypes.func,
+		handleChangeLineN: React.PropTypes.func,
 		initialSearchEnabled: React.PropTypes.bool,
 	},
 
@@ -195,7 +195,7 @@ Header = React.createClass({
 				<CommentarySearchPanel
 					toggleSearchTerm={this.props.toggleSearchTerm}
 					handleChangeTextsearch={this.props.handleChangeTextsearch}
-					handleChangeDate={this.props.handleChangeDate}
+					handleChangeLineN={this.props.handleChangeLineN}
 					open={this.state.rightMenuOpen}
 					closeRightMenu={this.closeRightMenu}
 				/>
@@ -272,7 +272,6 @@ Header = React.createClass({
 						:
 						<div className="md-menu-toolbar" >
 							<div className="toolbar-tools">
-
 								<IconButton
 									className="left-drawer-toggle"
 									style={styles.flatIconButton}
@@ -280,9 +279,6 @@ Header = React.createClass({
 									onClick={this.toggleLeftMenu}
 								/>
 
-								<a href="/" className="header-home-link" >
-									<h3 className="logo">AHCIP</h3>
-								</a>
 								<div className="search-toggle">
 									<IconButton
 										className="search-button right-drawer-toggle"
@@ -290,12 +286,13 @@ Header = React.createClass({
 										iconClassName="mdi mdi-magnify"
 									/>
 								</div>
+
 								<div className="search-tools collapse">
 
 									<CommentarySearchToolbar
 										toggleSearchTerm={this.props.toggleSearchTerm}
 										handleChangeTextsearch={this.props.handleChangeTextsearch}
-										handleChangeDate={this.props.handleChangeDate}
+										handleChangeLineN={this.props.handleChangeLineN}
 									/>
 									<div className="search-toggle">
 										<IconButton

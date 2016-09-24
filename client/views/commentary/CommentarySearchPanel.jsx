@@ -9,7 +9,7 @@ CommentarySearchPanel = React.createClass({
 	propTypes: {
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeDate: React.PropTypes.func,
+		handleChangeLineN: React.PropTypes.func,
 		open: React.PropTypes.bool,
 		closeRightMenu: React.PropTypes.func,
 	},
@@ -104,6 +104,10 @@ CommentarySearchPanel = React.createClass({
 				padding: '0px 10px',
 				background: '#f2f2f2',
 			},
+			lineSearch: {
+				width: '99%',
+				margin: '0px auto',
+			},
 		};
 
 		return (
@@ -123,14 +127,14 @@ CommentarySearchPanel = React.createClass({
 				</div>
 				<Card>
 					<CardHeader
-						title="Date"
+						title="Line Range"
 						actAsExpander
 						showExpandableButton
 					/>
 					<CardText expandable style={styles.wrapper}>
-						<div className="search-tool--date">
-							<DateRangeSlider
-								handleChangeDate={this.props.handleChangeDate}
+						<div style={styles.lineSearch} className="line-search">
+							<LineRangeSlider
+								handleChangeLineN={this.props.handleChangeLineN}
 							/>
 						</div>
 					</CardText>

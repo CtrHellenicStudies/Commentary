@@ -7,7 +7,7 @@ CommentarySearchToolbar = React.createClass({
 	propTypes: {
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeDate: React.PropTypes.func,
+		handleChangeLineN: React.PropTypes.func,
 	},
 
 	childContextTypes: {
@@ -90,6 +90,12 @@ CommentarySearchToolbar = React.createClass({
 
 	render() {
 		const self = this;
+		const styles = {
+			lineSearch: {
+				width: 250,
+				padding: '10px 15px',
+			},
+		};
 		return (
 			<span>
 
@@ -168,18 +174,11 @@ CommentarySearchToolbar = React.createClass({
 						/>
 					))}
 				</SearchToolDropdown>
-
-				<SearchToolDropdown
-					name="Date"
-					open={self.state.searchDropdownOpen === 'Date'}
-					toggle={self.toggleSearchDropdown}
-				>
-					<div className="search-tool--date">
-						<DateRangeSlider
-							handleChangeDate={this.props.handleChangeDate}
-						/>
-					</div>
-				</SearchToolDropdown>
+				<div style={styles.lineSearch} className="line-search">
+					<LineRangeSlider
+						handleChangeLineN={this.props.handleChangeLineN}
+					/>
+				</div>
 			</span>
 		);
 	},

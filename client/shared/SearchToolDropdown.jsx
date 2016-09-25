@@ -52,3 +52,5 @@ SearchToolDropdown = React.createClass({
 		);
 	},
 });
+
+export default SearchToolDropdown;

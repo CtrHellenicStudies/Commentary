@@ -89,3 +89,5 @@ jalik:ufs-local
 jalik:ufs-gridfs
 buishi:autoform-ufs
 mpowaga:autoform-summernote
+practicalmeteor:mocha
+dburles:factory

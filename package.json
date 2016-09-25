@@ -9,6 +9,7 @@
     "linkifyjs": "^2.0.5",
     "material-ui": "^0.15.0",
     "mdi": "^1.6.50",
+    "meteor-node-stubs": "^0.2.3",
     "pseries": "^2.0.0",
     "react": "^15.3.0",
     "react-addons-create-fragment": "^15.0.2",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
+    "enzyme": "^2.4.1",
     "eslint": "^3.4.0",
     "eslint-config-airbnb": "^10.0.1",
     "eslint-import-resolver-meteor": "^0.3.3",

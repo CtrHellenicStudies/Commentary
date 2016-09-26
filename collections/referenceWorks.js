@@ -16,6 +16,12 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		}
 	},
 
+	link: {
+		type: String,
+		optional: true,
+		regEx: SimpleSchema.RegEx.Url, // for http, https and ftp urls
+	},
+
 	created: {
 		type: Date,
 		optional: true,

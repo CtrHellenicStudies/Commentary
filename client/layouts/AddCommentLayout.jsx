@@ -110,6 +110,23 @@ AddCommentLayout = React.createClass({
             lineLetter = this.refs.CommentLemmnaSelect.state.lineLetterValue;
         };
 
+        var referenceWorks = ReferenceWorks.find({slug: formData.referenceWorksValue}, {limit:1}).fetch();
+
+        var referenceWorksInputObject = {};
+        if(referenceWorks.length) {
+            referenceWorksInputObject = {
+                revisionsCreated: referenceWorks[0].created,
+                reference: referenceWorks[0].title,
+                referenceLink: referenceWorks[0].link,
+            };
+        } else {
+            referenceWorksInputObject = {
+                revisionsCreated: new Date(),
+                reference: null,
+                referenceLink: null,
+            };
+        }
+
         var comment = {
             // commenters: // TODO: from login info
             work: {
@@ -130,11 +147,11 @@ AddCommentLayout = React.createClass({
             revisions: [{
                 title: formData.titleValue,
                 text: formData.textValue,
-                // created: // what info?
+                created: referenceWorksInputObject.revisionsCreated,
                 // slug: // how is it created?
             }],
-            reference: formData.referenceValue,
-            referenceLink: formData.referenceLinkValue,
+            reference: referenceWorksInputObject.reference,
+            referenceLink: referenceWorksInputObject.referenceLink,
             // created: // date
         };
 
@@ -188,13 +205,12 @@ AddCommentLayout = React.createClass({
 
     render() {
 
-        var CommentLemmaController = false;
-
         return (
             <div className="chs-layout add-comment-layout">
 
-                <AddCommentHeader
+                <Header
                     toggleSearchTerm={this.toggleSearchTerm}
+                    initialSearchEnabled
                 />
 
                 <main>

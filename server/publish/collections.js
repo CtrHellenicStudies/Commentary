@@ -52,5 +52,9 @@ if (Meteor.isServer){
 		return ProfilePictures.find();
 	});
 
+	Meteor.publish('referenceWorks', function() {
+		return ReferenceWorks.find();
+	});
+
 
 }

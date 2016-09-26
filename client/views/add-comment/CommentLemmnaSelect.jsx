@@ -143,12 +143,12 @@ CommentLemmnaSelect = React.createClass({
                     <article className="comment lemma-comment paper-shadow">
 
                         {this.data.selectedLemmaEdition.lines.map(function(line, i){
-                            return <div>
+                            return (
                                 <p
                                     key={i}
                                     className="lemma-text"
                                     dangerouslySetInnerHTML={{ __html: line.html}}
-                                ></p></div>
+                                ></p> );
 
                         })}
 
@@ -171,14 +171,14 @@ CommentLemmnaSelect = React.createClass({
                             {this.data.lemmaText.map(function(lemmaTextEdition, i){
                                 let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-                                return <div>
-                                    <RaisedButton
+                                return (<RaisedButton
                                         key={i}
                                         label={lemmaEditionTitle}
                                         data-edition={lemmaTextEdition.title}
                                         className={self.data.selectedLemmaEdition.slug ===  lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
                                         onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-                                    /></div>
+                                    >
+                                    </RaisedButton>);
 
                             })}
                         </div>

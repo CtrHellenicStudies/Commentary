@@ -118,23 +118,47 @@ LeftMenu = React.createClass({
 
 										{userIsLoggedIn ?
 											<div>
+												{userIsLoggedIn.commenterId ?
+													<div>
+														<MenuItem
+															href="/add-comment"
+															primaryText="Add Comment"
+															onClick={this.props.closeLeftMenu}
+														/>
+														<MenuItem
+																href="/profile"
+																primaryText="Profile"
+																onClick={this.props.closeLeftMenu}
+														/>
+														<MenuItem
+																href="/sign-out"
+																primaryText="Sign out"
+																onClick={this.props.closeLeftMenu}
+														/>
+													</div>
+													:
+													<div>
+														<MenuItem
+																href="/profile"
+																primaryText="Profile"
+																onClick={this.props.closeLeftMenu}
+														/>
+														<MenuItem
+																href="/sign-out"
+																primaryText="Sign out"
+																onClick={this.props.closeLeftMenu}
+														/>
+													</div>
+												}
+											</div>
+											:
+											<div>
 												<MenuItem
-														href="/profile"
-														primaryText="Profile"
+														href="/sign-in"
+														primaryText="Sign in"
 														onClick={this.props.closeLeftMenu}
 												/>
-												<MenuItem
-														href="/sign-out"
-														primaryText="Sign out"
-														onClick={this.props.closeLeftMenu}
-												/>
-										</div>
-										:
-										<MenuItem
-													href="/sign-in"
-													primaryText="Sign in"
-													onClick={this.props.closeLeftMenu}
-											/>
+											</div>
 										}
 								</Drawer>
 						</div>

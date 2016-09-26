@@ -1,5 +1,4 @@
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -46,13 +45,10 @@ AddComment = React.createClass({
         return {
             titleEditorState: EditorState.createEmpty(),
             textEditorState: EditorState.createEmpty(),
-            referenceEditorState: EditorState.createEmpty(),
-            referenceLinkEditorState: EditorState.createEmpty(),
 
             titleValue: '',
             textValue: '',
-            referenceValue: '',
-            referenceLinkValue: '',
+            referenceWorksValue: '',
             keywordsValue: '',
             keyideasValue: '',
 
@@ -76,9 +72,19 @@ AddComment = React.createClass({
         // TODO: key ideas
         var keyideas_options = [];
 
+        var referenceWorks_options = [];
+        var referenceWorks = ReferenceWorks.find().fetch();
+        referenceWorks.map(function(referenceWork) {
+            referenceWorks_options.push({
+                value: referenceWork.slug,
+                label: referenceWork.title,
+            });
+        });
+
         return {
             keywords_options: keywords_options,
             keyideas_options: keyideas_options,
+            referenceWorks_options: referenceWorks_options,
             keywords: keywords,
         };
     },
@@ -113,9 +119,16 @@ AddComment = React.createClass({
     },
 
     onKeywideasValueChange(keyideas) {
+        // TODO
         // this.setState({
         //     keyideasValue: keyideas.split(","),
         // });
+    },
+
+    onReferenceWorksValueChange(referenceWork) {
+        this.setState({
+            referenceWorksValue: referenceWork
+        });
     },
 
     onReferenceValueChange(event) {
@@ -214,12 +227,12 @@ AddComment = React.createClass({
     render() {
 
         // const raw = convertToRaw(this.state.titleEditorState.getCurrentContent());
-        var titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-        var title = jQuery(titleHtml).text();
+        // var titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
+        // var title = jQuery(titleHtml).text();
 
-        const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
-        var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-        var text = jQuery(textHtml).text();
+        // const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+        // var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+        // var text = jQuery(textHtml).text();
         // console.log('html', jQuery(html).text());
 
 
@@ -282,65 +295,17 @@ AddComment = React.createClass({
                         </div>
 
                         <div className="comment-reference" >
-                            {/*<h4>Secondary Source(s):
-                            <Editor
-                                editorState={this.state.referenceEditorState}
-                                onChange={this.onReferenceChange}
+                            <Select
+                                name="referenceWorks"
+                                id="referenceWorks"
+                                required={false}
+                                options={this.data.referenceWorks_options}
+                                value={this.state.referenceWorksValue}
+                                onChange={this.onReferenceWorksValueChange}
                                 placeholder='Reference...'
-                                spellCheck={true}
-                                stripPastedStyles={true}
-                                plugins={plugins}
-                                blockRenderMap={singleLinePlugin.blockRenderMap}
                             />
-                            <Editor
-                                editorState={this.state.referenceLinkEditorState}
-                                onChange={this.onReferenceLinkChange}
-                                placeholder='Reference link...'
-                                spellCheck={true}
-                                stripPastedStyles={true}
-                                plugins={plugins}
-                                blockRenderMap={singleLinePlugin.blockRenderMap}
-                            />
-                            
-                            </h4>*/}
+                        </div>
 
-
-                            
-                            {/*<p>
-                                {comment.referenceLink ?
-                                    <a href={comment.referenceLink} target="_blank" >
-                                        {comment.reference}
-                                    </a>
-                                    :
-                                    <span >
-                                        {comment.reference}
-                                    </span>
-                                }
-                            </p>*/}
-                        {/* references input */}
-                        </div>
-                        <div>
-                            <TextField
-                                name="reference"
-                                id="reference"
-                                className="form-element"
-                                required={false}
-                                floatingLabelText="Reference..."
-                                value={this.state.referenceValue}
-                                onChange={this.onReferenceValueChange}
-                            />
-                        </div>
-                        <div>
-                            <TextField
-                                name="referenceLink"
-                                id="referenceLink"
-                                className="form-element"
-                                required={false}
-                                floatingLabelText="Reference link..."
-                                value={this.state.referenceLinkValue}
-                                onChange={this.onReferenceLinkValueChange}
-                            />
-                        </div>
                         <div className="add-comment-button">
                             <RaisedButton 
                                 type="submit"

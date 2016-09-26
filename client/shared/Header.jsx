@@ -9,6 +9,7 @@ import TextField from 'material-ui/TextField';
 Header = React.createClass({
 
 	propTypes: {
+		filters: React.PropTypes.array,
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func,
@@ -106,7 +107,7 @@ Header = React.createClass({
 		const work = value;
 
 		value.subworks.forEach((subwork, i) => {
-			subworks[i].work = work;
+			value.subworks[i].work = work;
 		});
 
 		// console.log("Header.state", this.state);
@@ -158,6 +159,7 @@ Header = React.createClass({
 
 	render() {
 		const self = this;
+		const filters = this.props.filters;
 
 		const styles = {
 			flatButton: {
@@ -315,15 +317,28 @@ Header = React.createClass({
 
 										<ul className="dropdown-menu ">
 											<div className="dropdown-menu-inner">
-												{self.data.keywords.map((keyword, i) => (
-													<SearchTermButton
+												{self.data.keywords.map((keyword, i) => {
+
+													let active = false;
+													filters.forEach((filter) => {
+														if (filter.key === 'keywords') {
+															filter.values.forEach((value) => {
+																if (keyword._id === value._id) {
+																	active = true;
+																}
+															});
+														}
+													});
+
+													return <SearchTermButton
 														key={i}
 														toggleSearchTerm={self.toggleSearchTerm}
 														label={keyword.title}
 														searchTermKey="keywords"
 														value={keyword}
+														active={active}
 													/>
-												))}
+												})}
 											</div>
 
 											<IconButton
@@ -350,15 +365,28 @@ Header = React.createClass({
 
 										<ul className="dropdown-menu">
 											<div className="dropdown-menu-inner">
-												{self.data.commenters.map((commenter, i) => (
-													<SearchTermButton
+												{self.data.commenters.map((commenter, i) => {
+
+													let active = false;
+													filters.forEach((filter) => {
+														if (filter.key === 'commenters') {
+															filter.values.forEach((value) => {
+																if (commenter._id === value._id) {
+																	active = true;
+																}
+															});
+														}
+													});
+
+													return <SearchTermButton
 														key={i}
 														toggleSearchTerm={self.toggleSearchTerm}
 														label={commenter.name}
 														searchTermKey="commenters"
 														value={commenter}
+														active={active}
 													/>
-												))}
+												})}
 											</div>
 
 											<IconButton
@@ -415,24 +443,38 @@ Header = React.createClass({
 											this.state.searchDropdownOpen === 'subwork' ? ' open' : ''}`}
 									>
 										<FlatButton
-											className="search-tool search-type-subwork dropdown-toggle"
+											className={`search-tool search-type-subwork dropdown-toggle ${(self.state.subworks.length === 0) ? 'search-tool-disabled': ''}`}
 											label="Book"
 											labelPosition="before"
 											icon={<FontIcon className="mdi mdi-chevron-down" />}
 											onClick={self.toggleSearchDropdown.bind(null, 'subwork')}
+											disabled={(self.state.subworks.length === 0) ? true : false}
 										/>
 
 										<ul className="dropdown-menu">
 											<div className="dropdown-menu-inner">
-												{self.state.subworks.map((subwork, i) => (
-													<SearchTermButton
+												{self.state.subworks.map((subwork, i) => {
+
+													let active = false;
+													filters.forEach((filter) => {
+														if (filter.key === 'subworks') {
+															filter.values.forEach((value) => {
+																if (subwork.n === value.n) {
+																	active = true;
+																}
+															});
+														}
+													});
+
+													return <SearchTermButton
 														key={i}
 														toggleSearchTerm={self.toggleSearchTerm}
 														label={`${subwork.work.title} ${subwork.title}`}
 														searchTermKey="subworks"
 														value={subwork}
+														active={active}
 													/>
-												))}
+												})}
 											</div>
 
 											<IconButton

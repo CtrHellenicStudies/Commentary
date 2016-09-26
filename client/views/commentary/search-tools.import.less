@@ -71,6 +71,9 @@
         margin:0 auto;
         max-width:1200px;
         text-align:left;
+				overflow-y:scroll;
+				max-height:392px;
+				border-bottom:1px solid #eee;
 
       }
 
@@ -151,6 +154,10 @@
     border-left:1px solid #ddd;
 
   }
+
+	&.search-tool-disabled {
+		opacity:0.5;
+	}
 
   &:hover {
     background:@terracotta;

@@ -92,3 +92,4 @@ mpowaga:autoform-summernote
 reactive-var
 practicalmeteor:mocha
 dburles:factory
+mdg:validated-method

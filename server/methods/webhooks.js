@@ -1,3 +1,44 @@
+
+Meteor.method('keyword-webhook', (keywordCandidate) => {
+	check(keywordCandidate.wordpressId, Number);
+	check(keywordCandidate.slug, String);
+	check(keywordCandidate.title, String);
+	check(keywordCandidate.type, String);
+
+	if (keywordCandidate.wordpressId <= 1) {
+		throw new Meteor.Error(
+			`wordpressId must be greater than 1; was ${keywordCandidate.wordpressId}`);
+	}
+
+	if (keywordCandidate.type !== 'word' && keywordCandidate.type !== 'idea') {
+		throw new Meteor.Error(
+			`type must be word or idea; was ${keywordCandidate.type}`);
+	}
+
+	const keywordDoc = {
+		wordpressId: keywordCandidate.wordpressId,
+		title: keywordCandidate.title,
+		slug: keywordCandidate.slug,
+		type: keywordCandidate.type,
+	};
+
+	const upsertResult = Keywords.upsert(
+		{ wordpressId: keywordCandidate.wordpressId },
+		{ $set: keywordDoc });
+
+	console.log('keyword upsert: numberAffected=',
+		upsertResult.numberAffected,
+		', insertedId=',
+		upsertResult.insertedId);
+}, {
+	url: 'keyword/webhook',
+	getArgsFromRequest(request) {
+		// Sometime soon do validation here
+		const content = request.body;
+		return [content];
+	},
+});
+
 Meteor.method('commentary-webhook', (commentCandidate) => {
 	let valid = false;
 

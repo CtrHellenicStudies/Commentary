@@ -90,3 +90,5 @@ jalik:ufs-gridfs
 buishi:autoform-ufs
 mpowaga:autoform-summernote
 reactive-var
+practicalmeteor:mocha
+dburles:factory

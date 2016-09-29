@@ -15,7 +15,6 @@ Schemas.Commenters = new SimpleSchema({
 	slug: {
 		type: String,
 		max: 200,
-		optional: true,
 		autoform: {
 			type: "hidden",
 			label: false
@@ -93,3 +92,55 @@ Schemas.Commenters = new SimpleSchema({
 
 Commenters.attachSchema(Schemas.Commenters);
 Commenters.friendlySlugs('name');
+
+// Manage Roles based to commenters:
+// TODO: test all hooks
+Commenters.after.insert((userId, commneter) => {
+    try {
+        Roles.createRole(commneter.slug);
+        console.log('Created role:', commneter.slug);
+    } catch (err) {
+        console.log(err);
+    };
+});
+
+Commenters.before.update((userId, commenter, fieldNames) => {
+    // check if slug was modified:
+    if (fieldNames.indexOf("slug") > -1) {
+        try {
+            Roles.deleteRole(commenter.slug);
+            console.log('Deleted role:', role.name);
+        } catch (err) {
+            if (err.error === 403) {
+                console.log('Role \'' + role.name + '\' is in use.');
+            } else {
+                console.log(err);
+            };
+        };
+    };
+});
+
+Commenters.after.update((userId, commenter, fieldNames) => {
+    // check if slug was modified
+    if (fieldNames.indexOf("slug") > -1) {
+        try {
+            Roles.createRole(commneter.slug);
+            console.log('Created role:', commneter.slug);
+        } catch (err) {
+            console.log(err);
+        };
+    };
+});
+
+Commenters.before.remove((userId, commenter) => {
+    try {
+        Roles.deleteRole(commenter.slug);
+        console.log('Deleted role:', role.name);
+    } catch (err) {
+        if (err.error === 403) {
+            console.log('Role \'' + role.name + '\' is in use.');
+        } else {
+            console.log(err);
+        };
+    };
+});

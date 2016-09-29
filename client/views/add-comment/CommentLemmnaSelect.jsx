@@ -127,7 +127,6 @@ CommentLemmnaSelect = React.createClass({
     },
 
     onLineLetterValueChange(event) {
-        console.log('jestem');
         this.setState({
             lineLetterValue: event.target.value,
         });

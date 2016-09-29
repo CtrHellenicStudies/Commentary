@@ -202,6 +202,15 @@ Comment = React.createClass({
 										return <div
 											key={i}
 											className="comment-author">
+											{Roles.userIsInRole(Meteor.user(), [commenter.slug]) ?
+												<FlatButton
+													label='Edit comment'
+													href={"/add-revision/" + comment._id}
+													icon={<FontIcon className="mdi mdi-pen" />}
+												/>
+												:
+												""
+											}
 											<div className="comment-author-text">
 												<a href={"/commenters/" + commenter.slug} >
 													<span className="comment-author-name">{commenter.name}</span>

@@ -118,7 +118,7 @@ LeftMenu = React.createClass({
 
 										{userIsLoggedIn ?
 											<div>
-												{userIsLoggedIn.commenterId ?
+												{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
 													<div>
 														<MenuItem
 															href="/add-comment"

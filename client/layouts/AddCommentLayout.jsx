@@ -148,7 +148,7 @@ AddCommentLayout = React.createClass({
                 title: formData.titleValue,
                 text: formData.textValue,
                 created: referenceWorksInputObject.revisionsCreated,
-                // slug: // how is it created?
+                slug: slugify(formData.titleValue),
             }],
             reference: referenceWorksInputObject.reference,
             referenceLink: referenceWorksInputObject.referenceLink,

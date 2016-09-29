@@ -11,7 +11,7 @@ AddRevisionLayout = React.createClass({
             // selectedLineFrom: 0,
             // selectedLineTo: 0,
 
-            // contextReaderOpen: true,
+            contextReaderOpen: true,
         };
     },
 
@@ -20,184 +20,44 @@ AddRevisionLayout = React.createClass({
     getMeteorData() {
         var commentSubscription = Meteor.subscribe('comments', {_id: this.props.commentId}, 0, 1);
         var comment =  {};
+        var canShow = false;
+
         if(commentSubscription.ready()) {
             comment = Comments.find().fetch()[0];
+            comment.commenters.forEach((commenter) => {
+                canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
+            });
+        };
+
+        if(Roles.userIsInRole(Meteor.user(), ['developer', 'admin'])) {
+            canShow = true;
         };
 
         return {
             comment: comment,
+            canShow: canShow,
         }
     },
 
-    // updateSelecetedLines(selectedLineFrom, selectedLineTo) {
-    //     if(selectedLineFrom === null) {
-    //         this.setState({
-    //             selectedLineTo: selectedLineTo,
-    //         });
-    //     } else if (selectedLineTo === null) {
-    //         this.setState({
-    //             selectedLineFrom: selectedLineFrom,
-    //         });
-    //     } else if (selectedLineTo != null && selectedLineTo != null) {
-    //         this.setState({
-    //             selectedLineFrom: selectedLineFrom,
-    //             selectedLineTo: selectedLineTo,
-    //         });
-    //     } else {
-    //         // do nothing
-    //     };
-    // },
+    addRevision(formData) {
 
-    // toggleSearchTerm(key, value) {
-    //     var self = this,
-    //         filters = this.state.filters;
-    //     var keyIsInFilter = false,
-    //         valueIsInFilter = false,
-    //         filterValueToRemove,
-    //         filterToRemove;
+        var revision = {
+            title: formData.titleValue,
+            text: formData.textValue,
+            created: new Date(),
+            slug: slugify(formData.titleValue),
+        };
 
-    //     filters.forEach(function(filter, i) {
-    //         if (filter.key === key) {
-    //             keyIsInFilter = true;
+        Meteor.call("comments.add.revision", this.props.commentId, revision);
 
-    //             filter.values.forEach(function(filterValue, j) {
-    //                 if (filterValue._id === value._id) {
-    //                     valueIsInFilter = true;
-    //                     filterValueToRemove = j;
-    //                 }
-    //             })
-
-    //             if (valueIsInFilter) {
-    //                 filter.values.splice(filterValueToRemove, 1);
-    //                 if (filter.values.length === 0) {
-    //                     filterToRemove = i;
-    //                 }
-    //             } else {
-    //                 if (key === "works") {
-    //                     filter.values = [value];
-    //                 } else {
-    //                     filter.values.push(value);
-    //                 }
-    //             }
-    //         }
-
-    //     });
-
-
-    //     if (typeof filterToRemove !== "undefined") {
-    //         filters.splice(filterToRemove, 1);
-    //     }
-
-    //     if (!keyIsInFilter) {
-    //         filters.push({
-    //             key: key,
-    //             values: [value]
-    //         });
-    //     }
-
-    //     this.setState({
-    //         filters: filters,
-    //         skip: 0
-    //     });
-
-    // },
-
-    AddRevision() {
-        // TODO
+        // TODO: handle behavior after comment added (route to commentary with with filter on new comment)
     },
 
-    // addComment(formData) {
-
-    //     var work = Works.find({
-    //         'slug': this.state.filters[0].values[0].slug
-    //     }).fetch()[0];
-
-    //     var subwork = work.subworks[this.state.filters[1].values[0].n - 1];
-
-    //     var lineLetter = "";
-    //     if(this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) { // checkingif one line was selected
-    //         lineLetter = this.refs.CommentLemmnaSelect.state.lineLetterValue;
-    //     };
-
-    //     var referenceWorks = ReferenceWorks.find({slug: formData.referenceWorksValue}, {limit:1}).fetch();
-
-    //     var referenceWorksInputObject = {};
-    //     if(referenceWorks.length) {
-    //         referenceWorksInputObject = {
-    //             revisionsCreated: referenceWorks[0].created,
-    //             reference: referenceWorks[0].title,
-    //             referenceLink: referenceWorks[0].link,
-    //         };
-    //     } else {
-    //         referenceWorksInputObject = {
-    //             revisionsCreated: new Date(),
-    //             reference: null,
-    //             referenceLink: null,
-    //         };
-    //     }
-
-    //     var comment = {
-    //         // commenters: // TODO: from login info
-    //         work: {
-    //             title: work.title,
-    //             slug: work.slug,
-    //             order: work.order,
-    //         },
-    //         subwork: {
-    //             title: subwork.title,
-    //             n: subwork.n,
-    //         },
-    //         lineFrom: this.state.selectedLineFrom,
-    //         lineTo: this.state.selectedLineTo,
-    //         lineLetter: lineLetter,
-    //         nLines: this.state.selectedLineTo - this.state.selectedLineFrom + 1,
-    //         // commentOrder: // what is this?
-    //         keywords: formData.keywordsValue, // TODO: correct to fit schema
-    //         revisions: [{
-    //             title: formData.titleValue,
-    //             text: formData.textValue,
-    //             created: referenceWorksInputObject.revisionsCreated,
-    //             // slug: // how is it created?
-    //         }],
-    //         reference: referenceWorksInputObject.reference,
-    //         referenceLink: referenceWorksInputObject.referenceLink,
-    //         // created: // date
-    //     };
-
-    //     this.addNewKeyword(formData.keywordsValue);
-
-    //     Meteor.call("comments.insert", comment);
-
-    //     // TODO: handle behavior after comment added (route to commentary with with filter on new comment)
-    // },
-
-    // addNewKeyword(keywords) {
-    //     if (keywords.length > 0) {
-    //         var that = this;
-    //         var insertKeywords = [];
-    //         keywords.forEach(function(keyword) {
-    //             var foundKeyword = that.data.keywords.find(function(d) {
-    //                 return d.title === keyword;
-    //             });
-    //             if (foundKeyword === undefined) {
-    //                 var _keyword = {
-    //                     title: keyword,
-    //                     slug: slugify(keyword),
-    //                 };
-    //                 insertKeywords.push(_keyword);
-    //             };
-    //         })
-    //         if (insertKeywords.length > 0) {
-    //             Meteor.call("keywords.insert", insertKeywords);
-    //         };
-    //     };
-    // },
-
-    // closeContextReader() {
-    //     this.setState({
-    //         contextReaderOpen: false
-    //     });
-    // },
+    closeContextReader() {
+        this.setState({
+            contextReaderOpen: false
+        });
+    },
 
     openContextReader() {
         this.setState({
@@ -205,46 +65,51 @@ AddRevisionLayout = React.createClass({
         });
     },
 
-    // lineLetterUpdate(value) {
-    //     this.setState({
-    //         lineLetter: value,
-    //     });
-    // },
-
-
     render() {
 
-        // var CommentLemmaController = false;
-
-        console.log('comment', this.data.comment);
+        var comment = this.data.comment;
 
         return (
             <div className="chs-layout add-comment-layout">
 
                 <Header />
 
-                {Object.keys(this.data.comment).length ? 
+                {this.data.canShow && Object.keys(this.data.comment).length ? 
 
                     <main>
 
                         <CommentLemmnaSelect
                             ref="CommentLemmnaSelect"
-                            selectedLineFrom={2}
-                            selectedLineTo={5}
-                            workSlug={this.data.comment.work.slug}
-                            subwork_n={this.data.comment.subwork.n}
+                            selectedLineFrom={comment.lineFrom}
+                            selectedLineTo={comment.lineFrom + comment.nLines - 1}
+                            workSlug={comment.work.slug}
+                            subwork_n={comment.subwork.n}
                             openContextReader={this.openContextReader}
                         />
 
                         <AddRevision
-                            submiteForm={this.AddRevision}
-                            comment={this.data.comment}
+                            submiteForm={this.addRevision}
+                            comment={comment}
+                        />
+
+                        <ContextReader
+                            open={this.state.contextReaderOpen}
+                            closeContextPanel={this.closeContextReader}
+                            workSlug={comment.work.slug}
+                            subwork_n={comment.subwork.n}
+                            selectedLineFrom={comment.lineFrom}
+                            selectedLineTo={comment.lineFrom + comment.nLines - 1}
+                            initialLineFrom={comment.lineFrom}
+                            initialLineTo={comment.lineFrom + comment.nLines - 1 + 30}
+                            disableEdit={true}
                         />
 
                     </main>
 
                     :
-                        <main></main>
+                        <main style={{textAlign: 'center'}}>
+                            <span>Permission denied. Access not grunted.</span>
+                        </main>
 
                 }
                 

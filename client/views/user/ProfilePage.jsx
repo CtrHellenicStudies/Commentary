@@ -277,7 +277,7 @@ ProfilePage = React.createClass({
 									<div className="user-discussion-comments">
 
 										<h2>Your Comments</h2>
-										{userIsLoggedIn.commenterId ?
+										{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
 											<div>
 												<FlatButton
 													label="Add new comment"

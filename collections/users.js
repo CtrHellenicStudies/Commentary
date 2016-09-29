@@ -76,11 +76,6 @@ Schemas.User = new SimpleSchema({
 	"emails.$.verified": {
 		type: Boolean
 	},
-	commenterId: {	//if user is a commenter
-		type: String,
-		optional: true,
-		regEx: SimpleSchema.RegEx.Id,
-	},
 	created: {
 		type: Date,
 		optional: true,

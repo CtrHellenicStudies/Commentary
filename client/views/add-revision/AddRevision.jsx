@@ -34,13 +34,15 @@ AddRevision = React.createClass({
 
     propTypes: {
         submiteForm: React.PropTypes.func.isRequired,
-        comment: React.PropTypes.array.isRequired,
+        comment: React.PropTypes.object.isRequired,
     },
 
     getInitialState(){
-        var length = this.props.comment.revisions.length;
-        var revision = this.props.comment.revisions[length - 1]; // get newest revision
+        var revisionId = this.props.comment.revisions.length - 1;
+        var revision = this.props.comment.revisions[revisionId]; // get newest revision
         return {
+            revision: revision,
+
             titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
             textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
 
@@ -86,8 +88,22 @@ AddRevision = React.createClass({
         //     snackbarMessage: error.errorMessage,
         // });
         // if (!error.errors) {
-        //     this.props.submiteForm(this.state);
+            this.props.submiteForm(this.state);
         // };
+    },
+
+    selectRevision(event) {
+        var revision = this.props.comment.revisions[event.currentTarget.id];
+        this.setState({
+            revision: revision,
+            titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
+            textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+        });
+    },
+
+    removeRevision() { // TODO: delete
+        console.log('this.state.revision', this.state.revision);
+        Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
     },
 
     // validateStateForSubmit() {
@@ -116,6 +132,8 @@ AddRevision = React.createClass({
     // },
 
     render() {
+
+        var that = this;
 
         return (
             <div className={'comment-outer'}>
@@ -190,22 +208,37 @@ AddRevision = React.createClass({
                                 icon={<FontIcon className="mdi mdi-plus" />}
                             />
                         </div>
+                        {Roles.userIsInRole(Meteor.user(), ['developer']) ? /*TODO: delete*/
+                            <div className="add-comment-button">
+                                <RaisedButton 
+                                    type="submit"
+                                    label="(developer only) Remove revision"
+                                    labelPosition="after"
+                                    onClick={this.removeRevision}
+                                    icon={<FontIcon className="mdi mdi-minus" />}
+                                />
+                            </div>
+                            :
+                            ""
+                        }
+
                     </div>
+                    
                     <div className="comment-revisions">
-                            {this.props.comment.revisions.map(function(revision, i){
-                                return <FlatButton
-                                    key={i}
-                                    data-id="{revision.id}"
-                                    className="revision selected-revision"
-                                    onClick={this.selectRevision}
-                                    label={"Revision " + moment(revision.created).format('D MMMM YYYY')}
-                                    >
+                        {this.props.comment.revisions.map(function(revision, i){
+                            return <FlatButton
+                                key={i}
+                                id={i}
+                                className="revision selected-revision"
+                                onClick={that.selectRevision}
+                                label={"Revision " + moment(revision.created).format('D MMMM YYYY')}
+                                >
 
-                                </FlatButton>
+                            </FlatButton>
 
-                            })}
-                        </div>
-
+                        })}
+                    </div>
+                        
                 </article>
 
             </div>

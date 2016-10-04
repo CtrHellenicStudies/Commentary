@@ -192,8 +192,17 @@ HomeLayout = React.createClass({
 
 	},
 
+	componentDidMount() {
+		if (typeof location.hash !== 'undefined' && location.hash.length > 0) {
+			setTimeout(() => {
+				$('html, body').animate({ scrollTop: $(location.hash).offset().top - 100 }, 300);
+			}, 1000);
+		}
+	},
+
+
 	render(){
-		console.log("HomeLayout.filters", this.state.filters);
+		//console.log("HomeLayout.filters", this.state.filters);
 		return(
 			<div className="chs-layout home-layout">
 				<Header

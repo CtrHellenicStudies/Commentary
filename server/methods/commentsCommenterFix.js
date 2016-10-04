@@ -1,4 +1,4 @@
-Meteor.method("commentsCommenterSlugFix", function() {
+Meteor.method("commentsCommenterFix", function() {
 
     var comments = Comments.find().fetch();
     comments.forEach((comment) => {
@@ -13,12 +13,23 @@ Meteor.method("commentsCommenterSlugFix", function() {
                     console.log(err);
                 };
             };
+
+            // if any of the comments commenters don't have a an id:
+            if (!commenter._id) {
+                var commenterId = Commenters.find({name: commenter.name}).fetch()[0]._id;
+                try {
+                    Comments.update({'_id': comment._id, 'commenters.name': commenter.name}, {$set: {'commenters.$._id': commenterId}});
+                    console.log('commenterId:', commenterId, 'added to comment id:', comment._id);
+                } catch(err) {
+                    console.log(err);
+                };
+            };
         });
     });
-    console.log(" -- method commentsCommenterSlugFix run completed")
+    console.log(" -- method commentsCommenterFix run completed")
 
     return 1;
 
 }, {
-    url: "comments/commenter/slug-fix",
+    url: "comments/commenter/fix",
 });

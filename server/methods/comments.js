@@ -7,6 +7,7 @@ Meteor.methods({
 
             try {
                 // TODO: insert new comment
+                commentId = Comments.insert(comment);
                 console.log('Comment', commentId, 'insert successful');
             } catch (err) {
                 console.log(err);
@@ -16,17 +17,25 @@ Meteor.methods({
             console.log('Permission denied on method comments.insert, for user:', Meteor.userId());
         };
 
+        return commentId;
+
     },
 
     'comments.add.revision' (commentId, revision) {
 
         var comment = Comments.find({_id: commentId}).fetch()[0];
-        var roles = ['developer', 'admin'];
+        var allow = false;
+        // var roles = ['developer', 'admin'];
         comment.commenters.forEach((commenter) => {
-            roles.push(commenter.slug);
+            // roles.push(commenter.slug);
+            allow = (Meteor.user().commenterId === commenter._id);
         });
 
-        if (Roles.userIsInRole(Meteor.user(), roles)) {
+        if(Roles.userIsInRole(Meteor.user(), ['developer', 'admin'])) {
+            allow = true;
+        };
+
+        if (allow) {
             console.log('Method called: \'comment.add.revision\'');
             console.log('Updated comment\'s id:', commentId);
             console.log('Revision:', revision);
@@ -67,5 +76,9 @@ Meteor.methods({
         } else {
             console.log('Permission denied on method comment.remove.revision, for user:', Meteor.userId());
         };
+    },
+
+    'users' () {
+        console.log(Meteor.user());
     },
 });

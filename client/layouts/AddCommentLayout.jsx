@@ -125,10 +125,27 @@ AddCommentLayout = React.createClass({
                 reference: null,
                 referenceLink: null,
             };
-        }
+        };
+
+        var commenterSlug = '';
+        Meteor.user().roles.forEach((role) => {
+            if(role != 'developer' || 'admin' || 'commenter'){
+                commenterSlug = role;
+            };
+        });
+        var commenter = Commenters.find({_id:Meteor.user().commenterId}).fetch()[0];
+
+        var keywords = [];
+        if (formData.keywordsValue) {
+            formData.keywordsValue.forEach((keyword) => {
+                var foundKeyword = Keywords.find({
+                    title: keyword
+                }).fetch()[0];
+                keywords.push(foundKeyword);
+            });
+        };
 
         var comment = {
-            // commenters: // TODO: from login info
             work: {
                 title: work.title,
                 slug: work.slug,
@@ -142,8 +159,7 @@ AddCommentLayout = React.createClass({
             lineTo: this.state.selectedLineTo,
             lineLetter: lineLetter,
             nLines: this.state.selectedLineTo - this.state.selectedLineFrom + 1,
-            // commentOrder: // what is this?
-            keywords: formData.keywordsValue, // TODO: correct to fit schema
+            // commentOrder:
             revisions: [{
                 title: formData.titleValue,
                 text: formData.textValue,
@@ -152,14 +168,30 @@ AddCommentLayout = React.createClass({
             }],
             reference: referenceWorksInputObject.reference,
             referenceLink: referenceWorksInputObject.referenceLink,
-            // created: // date
+            created: new Date(),
+        };
+        if (commenter) {
+            comment.commenters = [{
+                _id: commenter._id,
+                name: commenter.name,
+                slug: commenter.slug
+            }];
+        } else{
+            comment.commenters = [{}];
+        };
+        if (keywords) {
+            comment.keywords = keywords;
+        } else {
+            comment.keywords = [{}];
         };
 
         this.addNewKeyword(formData.keywordsValue);
 
-        Meteor.call("comments.insert", comment);
+        Meteor.call("comments.insert", comment, function(error, commentId) {
+            FlowRouter.go('/commentary/?_id=' + commentId);
+        });
 
-        // TODO: handle behavior after comment added (route to commentary with with filter on new comment)
+        // TODO: handle behavior after comment added (add info about success)
     },
 
     addNewKeyword(keywords) {
@@ -219,7 +251,7 @@ AddCommentLayout = React.createClass({
                         ref="CommentLemmnaSelect"
                         selectedLineFrom={this.state.selectedLineFrom}
                         selectedLineTo={this.state.selectedLineTo}
-                        workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : 0}
+                        workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
                         subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
                         openContextReader={this.openContextReader}
                     />

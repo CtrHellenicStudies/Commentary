@@ -20,7 +20,6 @@ ContextReader = React.createClass({
 
 		propTypes: {
 				open: React.PropTypes.bool.isRequired,
-				// contextReaderOpen: React.PropTypes.func.isRequired,
 
 				workSlug: React.PropTypes.string.isRequired,
 				subwork_n: React.PropTypes.number.isRequired,
@@ -30,12 +29,6 @@ ContextReader = React.createClass({
 				initialLineFrom: React.PropTypes.number,
 				initialLineTo: React.PropTypes.number,
 				disableEdit: React.PropTypes.bool,
-				// initLineFrom: React.PropTypes.number.isRequired,
-				// initLineTo: React.PropTypes.number.isRequired,
-				// initHighlightLineFrom: React.PropTypes.number,
-				// initHighlightLineTo: React.PropTypes.number,
-				// commentGroup: React.PropTypes.object.isRequired,
-				// closeContextPanel: React.PropTypes.func.isRequired,
 		},
 
 		getInitialState() {
@@ -51,35 +44,32 @@ ContextReader = React.createClass({
 				lineFrom: lineFrom,
 				lineTo: lineTo,
 				selectedLemmaEdition : "",
-				// selectedLineFrom: 0,
-				// selectedLineTo: 0,
 			};
 		},
 
     componentDidUpdate(prevProps, prevState) {
-        // this.checkIfPropsChanged();
-        // this.checkIfStateChanged();
         var lineFrom = this.state.lineFrom,
-        	lineTo = this.state.lineTo;
-
-        if (this.props.selectedLineFrom === 0) {
-            for (var i = lineFrom; i <= lineTo; i++) {
-                this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
-            };
-        } else if (this.props.selectedLineTo === 0) {
-            for (var i = lineFrom; i <= lineTo; i++) {
-                if (i === this.props.selectedLineFrom) {
-                    this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
-                } else {
+            lineTo = this.state.lineTo;
+        if (Object.keys(this.refs).length) {
+            if (this.props.selectedLineFrom === 0) {
+                for (var i = lineFrom; i <= lineTo; i++) {
                     this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
                 };
-            };
-        } else {
-            for (var i = lineFrom; i <= lineTo; i++) {
-                if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
-                    this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
-                } else {
-                    this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+            } else if (this.props.selectedLineTo === 0) {
+                for (var i = lineFrom; i <= lineTo; i++) {
+                    if (i === this.props.selectedLineFrom) {
+                        this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
+                    } else {
+                        this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                    };
+                };
+            } else {
+                for (var i = lineFrom; i <= lineTo; i++) {
+                    if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
+                        this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
+                    } else {
+                        this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                    };
                 };
             };
         }

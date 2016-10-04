@@ -25,7 +25,8 @@ AddRevisionLayout = React.createClass({
         if(commentSubscription.ready()) {
             comment = Comments.find().fetch()[0];
             comment.commenters.forEach((commenter) => {
-                canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
+            //     canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
+                canShow = (Meteor.user().commenterId === commenter._id);
             });
         };
 
@@ -48,9 +49,11 @@ AddRevisionLayout = React.createClass({
             slug: slugify(formData.titleValue),
         };
 
-        Meteor.call("comments.add.revision", this.props.commentId, revision);
+        Meteor.call("comments.add.revision", this.props.commentId, revision, function(err) {
+            FlowRouter.go('/commentary/?_id=' + this.data.comment._id);
+        });
 
-        // TODO: handle behavior after comment added (route to commentary with with filter on new comment)
+        // TODO: handle behavior after comment added (add info about success)
     },
 
     closeContextReader() {

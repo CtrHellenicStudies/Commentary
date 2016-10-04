@@ -85,9 +85,18 @@ HomeView = React.createClass({
 															>
 														</RaisedButton>
 
+
 												</div>
 										</div>
 								</div>
+
+								<div className="scroll-down-helper">
+									<p>
+										<em>Scroll down for an overview of the project.</em>
+									</p>
+									<i className="mdi mdi-chevron-down" />
+								</div>
+
 						</section>
 
 						<section className="intro">

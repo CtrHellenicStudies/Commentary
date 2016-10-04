@@ -191,6 +191,7 @@ HomeView = React.createClass({
 						<section id="visualizations" className="browse-commentary block-shadow" >
 							{/*<h2 className="keyword-divider-title"></h2>*/}
 
+							<span className="visualizations-coaching-text">Visualizations help text Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque adiungere vites conveniat quae curum boum qui cultus habendo</span>
 							<div className="container data-visualization-container">
 								<WorksList />
 

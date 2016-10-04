@@ -172,7 +172,7 @@ HomeView = React.createClass({
 
 						</section>
 
-						<section className="browse-commentary block-shadow" >
+						<section id="visualizations" className="browse-commentary block-shadow" >
 							{/*<h2 className="keyword-divider-title"></h2>*/}
 
 							<div className="container data-visualization-container">

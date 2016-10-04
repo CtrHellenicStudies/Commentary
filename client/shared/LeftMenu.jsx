@@ -88,6 +88,11 @@ LeftMenu = React.createClass({
 												primaryText="Home"
 												onClick={this.props.closeLeftMenu}
 										/>
+									<MenuItem
+												href="/#visualizations"
+												primaryText="Visualizations"
+												onClick={this.props.closeLeftMenu}
+										/>
 										<MenuItem
 												href="/commentary/"
 												primaryText="Commentary"

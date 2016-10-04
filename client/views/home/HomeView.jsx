@@ -47,6 +47,12 @@ HomeView = React.createClass({
 		}
 	},
 
+	scrollToIntro(e) {
+		$('html, body').animate({ scrollTop: $('#intro').offset().top - 100 }, 300);
+
+		e.preventDefault();
+	},
+
 	render(){
 			return (
 				<div className="home">
@@ -75,6 +81,7 @@ HomeView = React.createClass({
 															href="#intro"
 															className="cover-link learn-more"
 															label="Learn More"
+															onClick={this.scrollToIntro}
 															>
 														</RaisedButton>
 
@@ -99,7 +106,7 @@ HomeView = React.createClass({
 
 						</section>
 
-						<section className="intro">
+						<section id="intro" className="intro">
 								<div className="container">
 										<div className="row">
 												<h2 >Quid faciat laetas segetes quo</h2>

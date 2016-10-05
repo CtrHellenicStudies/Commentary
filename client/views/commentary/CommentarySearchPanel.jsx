@@ -34,8 +34,10 @@ CommentarySearchPanel = React.createClass({
 
 	getMeteorData() {
 		return {
-			keywords: Keywords.find().fetch(),
-			commenters: Commenters.find().fetch(),
+			keywords: Keywords.find({
+				count: {$gt: 0},
+			},{sort: {title: 1}}).fetch(),
+			commenters: Commenters.find({}, {sort:{name: 1}}).fetch(),
 			works: Works.find({}, { sort: { order: 1 } }).fetch(),
 			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
 		};

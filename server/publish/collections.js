@@ -25,7 +25,7 @@ if (Meteor.isServer){
 	});
 
 	Meteor.publish('commenters', function() {
-		return Commenters.find();
+		return Commenters.find({}, {sort:{name: 1}});
 	});
 
 	Meteor.publish('discussionComments', function() {
@@ -33,7 +33,7 @@ if (Meteor.isServer){
 	});
 
 	Meteor.publish('keywords', function() {
-		return Keywords.find();
+		return Keywords.find({},{sort:{title:1}});
 	});
 
 	Meteor.publish('revisions', function() {

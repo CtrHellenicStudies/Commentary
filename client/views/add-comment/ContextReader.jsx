@@ -1,6 +1,7 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import InfiniteScroll from '../../../imports/InfiniteScroll';
@@ -44,6 +45,8 @@ ContextReader = React.createClass({
 				lineFrom: lineFrom,
 				lineTo: lineTo,
 				selectedLemmaEdition : "",
+				maxLine: 0,
+				linePagination: [],
 			};
 		},
 
@@ -72,99 +75,131 @@ ContextReader = React.createClass({
                     };
                 };
             };
-        }
+        };
+
+        if (this.props.workSlug != "" && this.props.subwork_n != 0 && (prevProps.workSlug != this.props.workSlug || prevProps.subwork_n != this.props.subwork_n)) {
+            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
+                if (err) {
+                    console.log(err);
+                } else if (res) {
+                	var linePagination = [];
+                	for (var i = 1; i <= res; i+=100) {
+                		linePagination.push(i);
+                	};
+                    this.setState({
+                    	linePagination: linePagination,
+                    	maxLine: res,
+                    });
+                }
+            });
+        };
     },
 
+    componentDidMount() {
+        if (this.props.workSlug && this.props.subwork_n) {
+            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
+                if (err) {
+                    console.log(err);
+                } else if (res) {
+                    var linePagination = [];
+                    for (var i = 1; i <= res; i += 100) {
+                        linePagination.push(i);
+                    };
+                    this.setState({
+                        linePagination: linePagination,
+                        maxLine: res,
+                    });
+                }
+            });
+        };
+    },
 
-		mixins: [ReactMeteorData],
+	mixins: [ReactMeteorData],
 
-		getMeteorData() {
+    getMeteorData() {
 
-				var that = this;
+        var that = this;
 
-				if (this.props.workSlug != "" && this.props.subwork_n != 0) {
+        if (this.props.workSlug != "" && this.props.subwork_n != 0) {
 
-						var lemmaText = [];
-						// var commentGroup = this.props.commentGroup;
-						var selectedLemmaEdition = {
-								lines: [],
-								slug: ""
-						};
+            var lemmaText = [];
+            // var commentGroup = this.props.commentGroup;
+            var selectedLemmaEdition = {
+                lines: [],
+                slug: ""
+            };
 
-						var lemmaQuery = {
-								'work.slug': this.props.workSlug,
-								'subwork.n': this.props.subwork_n,
-								'text.n': {
-										$gte: this.state.lineFrom,
-										$lte: this.state.lineTo
-								}
-						};
+            var lemmaQuery = {
+                'work.slug': this.props.workSlug,
+                'subwork.n': this.props.subwork_n,
+                'text.n': {
+                    $gte: this.state.lineFrom,
+                    $lte: this.state.lineTo
+                }
+            };
 
-						var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
-						if (textNodesSubscription.ready()) {
-								//console.log("Context Panel lemmaQuery", lemmaQuery);
-								var textNodes = TextNodes.find(lemmaQuery).fetch();
-								var editions = [];
+            var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
+            if (textNodesSubscription.ready()) {
+                //console.log("Context Panel lemmaQuery", lemmaQuery);
+                var textNodes = TextNodes.find(lemmaQuery, {sort:{'text.n':1}}).fetch();
+                var editions = [];
 
-								var textIsInEdition = false;
-								textNodes.forEach(function(textNode) {
+                var textIsInEdition = false;
+                textNodes.forEach(function(textNode) {
 
-										textNode.text.forEach(function(text) {
-												textIsInEdition = false;
+                    textNode.text.forEach(function(text) {
+                        textIsInEdition = false;
 
-												editions.forEach(function(edition) {
+                        editions.forEach(function(edition) {
 
-														if (text.edition.slug === edition.slug) {
-																edition.lines.push({
-																		html: text.html,
-																		n: text.n
-																});
-																textIsInEdition = true;
-														}
-												})
+                            if (text.edition.slug === edition.slug) {
+                                edition.lines.push({
+                                    html: text.html,
+                                    n: text.n
+                                });
+                                textIsInEdition = true;
+                            }
+                        })
 
-												if (!textIsInEdition) {
-														editions.push({
-																title: text.edition.title,
-																slug: text.edition.slug,
-																lines: [{
-																		html: text.html,
-																		n: text.n
-																}],
-														})
-												}
-										});
-								});
+                        if (!textIsInEdition) {
+                            editions.push({
+                                title: text.edition.title,
+                                slug: text.edition.slug,
+                                lines: [{
+                                    html: text.html,
+                                    n: text.n
+                                }],
+                            })
+                        }
+                    });
+                });
 
-								lemmaText = editions;
-								// console.log('lemmaText',lemmaText);
+                lemmaText = editions;
+                // console.log('lemmaText',lemmaText);
 
-								if (this.state.selectedLemmaEdition.length) {
-										lemmaText.forEach(function(edition) {
-												if (edition.slug === that.state.selectedLemmaEdition) {
-														selectedLemmaEdition = edition;
-												}
-										});
-								} else {
-										selectedLemmaEdition = lemmaText[0];
-								}
+                if (this.state.selectedLemmaEdition.length) {
+                    lemmaText.forEach(function(edition) {
+                        if (edition.slug === that.state.selectedLemmaEdition) {
+                            selectedLemmaEdition = edition;
+                        }
+                    });
+                } else {
+                    selectedLemmaEdition = lemmaText[0];
+                };
 
-						}
+            }
 
-						//console.log("Context Panel lemmaText", lemmaText);
-
-
-						return {
-								lemmaText: lemmaText,
-								selectedLemmaEdition: selectedLemmaEdition
-						};
-				} else {
-						return {
-								lemmaText: "",
-								selectedLemmaEdition: ""
-						};
-				};
-		},
+            return {
+                lemmaText: lemmaText,
+                selectedLemmaEdition: selectedLemmaEdition
+            };
+        } else {
+            return {
+                lemmaText: "",
+                selectedLemmaEdition: ""
+            };
+        };
+    },
 
 		toggleEdition(editionSlug) {
 				if (this.state.selectedLemmaEdition !== editionSlug) {
@@ -207,6 +242,31 @@ ContextReader = React.createClass({
 			};
 		},
 
+    onAfterClicked() {
+        if (this.state.lineTo <= this.state.maxLine) {
+            this.setState({
+                lineFrom: this.state.lineFrom + 25,
+                lineTo: this.state.lineTo + 25,
+            });
+        };
+    },
+
+    onBeforeClicked() {
+        if (this.state.lineFrom != 1) {
+            this.setState({
+                lineFrom: this.state.lineFrom - 25,
+                lineTo: this.state.lineTo - 25,
+            });
+        };
+    },
+
+		linePaginationClicked(line) {
+			this.setState({
+				lineFrom: line,
+				lineTo: line + 50,
+			});
+		},
+
 		render() {
 		var self = this;
 		var contextPanelStyles = "lemma-panel paper-shadow";
@@ -228,6 +288,26 @@ ContextReader = React.createClass({
 										/>
 
 										<div className="lemma-text-wrap">
+
+												{this.state.linePagination.map(function(line, i){
+													return (
+														<RaisedButton
+																key={i}
+																label={line}
+																className={"edition-tab tab"}
+																onClick={self.linePaginationClicked.bind(null, line)}
+														/>
+														);
+												})}
+
+												<div className="before-link">
+														<RaisedButton
+																className="cover-link light"
+																label="Before"
+																onClick={this.onBeforeClicked}
+																icon={<FontIcon className="mdi mdi-arrow-up" />}
+														/>
+												</div>
 												{this.data.selectedLemmaEdition.lines.map(function(line, i){
 														var lineClass="lemma-line";
 
@@ -256,11 +336,12 @@ ContextReader = React.createClass({
 
 												})}
 
-												<div className="read-more-link">
+												<div className="after-link">
 														<RaisedButton
-																className="cover-link light show-more "
-																label="Read More"
-																onClick={this.readMoreClicked}
+																className="cover-link light"
+																label="After"
+																onClick={this.onAfterClicked}
+																icon={<FontIcon className="mdi mdi-arrow-down" />}
 														/>
 												</div>
 

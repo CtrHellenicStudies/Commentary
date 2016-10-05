@@ -103,7 +103,7 @@ AddRevisionLayout = React.createClass({
                             selectedLineFrom={comment.lineFrom}
                             selectedLineTo={comment.lineFrom + comment.nLines - 1}
                             initialLineFrom={comment.lineFrom}
-                            initialLineTo={comment.lineFrom + comment.nLines - 1 + 30}
+                            initialLineTo={comment.lineFrom + comment.nLines - 1 + 50}
                             disableEdit={true}
                         />
 

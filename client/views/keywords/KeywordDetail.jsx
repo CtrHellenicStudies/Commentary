@@ -1,3 +1,5 @@
+import KeywordContext from '../../../imports/ui/components/KeywordContext.jsx';
+
 KeywordDetail = React.createClass({
 
 	propTypes: {
@@ -41,6 +43,7 @@ KeywordDetail = React.createClass({
 					</section>
 
 					<section className="page-content">
+						<KeywordContext slug={this.props.slug} maxLines={3} />
 						<p>
 							Quae res in civitate duae plurimum possunt, eae contra nos ambae faciunt in hoc tempore,
 							summa gratia et eloquentia; quarum alterum, C. Aquili, vereor, alteram metuo. Eloquentia

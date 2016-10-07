@@ -29,7 +29,7 @@ if (Meteor.isClient) {
 			const wrapper = shallow(
 				<SearchToolDropdown
 					name="TestDropdown"
-					open={true}
+					open
 				>
 					<p>children</p>
 				</SearchToolDropdown>
@@ -45,7 +45,7 @@ if (Meteor.isClient) {
 			const wrapper = shallow(
 				<SearchToolDropdown
 					name="TestDropdown"
-					disabled={true}
+					disabled
 				>
 					<p>children</p>
 				</SearchToolDropdown>

@@ -37,7 +37,7 @@ FilterWidget = React.createClass({
 												key={j}
 												labelPosition="before"
 												className="filter-val "
-												label={val.title || val.name || val}
+												label={val.title || val.name || val.slug || val}
 												onClick={this.props.toggleSearchTerm.bind(null, filter.key, val)}
 												>
 

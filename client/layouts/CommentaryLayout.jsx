@@ -57,6 +57,7 @@ CommentaryLayout = React.createClass({
 			this.props.queryParams.works.split(",").forEach(function(work){
 				works.push({
 					slug: work,
+					title: Utils.capitalize(work),
 				});
 			});
 
@@ -67,7 +68,20 @@ CommentaryLayout = React.createClass({
 		}
 
 		if("subworks" in this.props.queryParams){
-			let subworks = this.props.queryParams.subworks.split(",");
+			let subworks = [];
+
+			this.props.queryParams.subworks.split(",").forEach(function(subwork){
+				let subworkNumber = parseInt(subwork);
+
+				if(!Number.isNaN(subworkNumber)){
+					subworks.push({
+						title: subwork,
+						n: subworkNumber,
+					})
+
+				}
+			});
+
 
 			filters.push({
 				key: "subworks",

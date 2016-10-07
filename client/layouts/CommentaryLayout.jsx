@@ -32,7 +32,7 @@ CommentaryLayout = React.createClass({
 
 			filters.push({
 				key: "keywords",
-				values: [keywords],
+				values: keywords,
 			});
 		}
 
@@ -47,16 +47,22 @@ CommentaryLayout = React.createClass({
 
 			filters.push({
 				key: "commenters",
-				values: [commenters],
+				values: commenters,
 			});
 		}
 
 		if("works" in this.props.queryParams){
-			let works = this.props.queryParams.works.split(",");
+			let works = [];
+
+			this.props.queryParams.works.split(",").forEach(function(work){
+				works.push({
+					slug: work,
+				});
+			});
 
 			filters.push({
 				key: "works",
-				values: [works],
+				values: works,
 			});
 		}
 
@@ -65,7 +71,7 @@ CommentaryLayout = React.createClass({
 
 			filters.push({
 				key: "subworks",
-				values: [subworks],
+				values: subworks,
 			});
 		}
 

@@ -471,10 +471,10 @@ Commentary = React.createClass({
 				}
 				{/*<!-- .commentary-primary -->*/}
 
-				<FilterWidget
+				{/*}<FilterWidget
 					filters={this.props.filters}
 					toggleSearchTerm={this.props.toggleSearchTerm}
-					/>
+					/>*/}
 
 			</div>
 		 );

@@ -1,3 +1,5 @@
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import KeywordContext from '../../../imports/ui/components/KeywordContext.jsx';
 
 KeywordDetail = React.createClass({
@@ -6,7 +8,15 @@ KeywordDetail = React.createClass({
 		slug: React.PropTypes.string.isRequired,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
 	mixins: [ReactMeteorData],
+
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
 	getMeteorData() {
 		const query = {
@@ -27,7 +37,7 @@ KeywordDetail = React.createClass({
 				<div className="content primary">
 					<section className="block header header-page	cover parallax">
 						<div className="background-image-holder blur-2--no-remove remove-blur	blur-10">
-							<img className="background-image" src="/images/apotheosis_homer.jpg"/>
+							<img className="background-image" src="/images/apotheosis_homer.jpg" />
 						</div>
 						<div className="block-screen brown" />
 

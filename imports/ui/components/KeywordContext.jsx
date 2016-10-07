@@ -106,6 +106,22 @@ export default KeywordContext = React.createClass({
 					/>;
 				})
 			}
+			<div className="edition-tabs tabs">
+				{
+					this.data.lemmaText.map((lemmaTextEdition, i) => {
+						let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+
+						return <RaisedButton
+							key={i}
+							label={lemmaEditionTitle}
+							data-edition={lemmaTextEdition.title}
+							className={this.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
+							onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
+						>
+						</RaisedButton>
+					})
+				}
+			</div>
 		</article>);
 	},
 

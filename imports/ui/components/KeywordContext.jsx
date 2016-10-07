@@ -69,6 +69,18 @@ export default KeywordContext = React.createClass({
 			});
 		});
 
+		// sort lines for each edition by line number
+		for (let i=0; i < editions.length; ++i) {
+			editions[i].lines.sort((a,b) => {
+				if (a.n < b.n)
+					return -1;
+				else if (b.n < a.n)
+					return 1;
+				else
+					return 0;
+			});
+		}
+
 		return editions;
 	},
 

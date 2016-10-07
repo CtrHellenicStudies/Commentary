@@ -113,6 +113,11 @@ LeftMenu = React.createClass({
 													primaryText="About"
 													onClick={this.props.closeLeftMenu}
 											/>
+										<MenuItem
+												href="/#visualizations"
+												primaryText="Visualizations"
+												onClick={this.props.closeLeftMenu}
+										/>
 
 										<Divider />
 

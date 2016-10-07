@@ -76,7 +76,8 @@ SearchTermButtonPanel = React.createClass({
 				style={styles.chip}
 				labelStyle={styles.chipLabel}
 			>
-				{active?
+
+				{active ?
 					<Avatar
 						icon={<FontIcon className="mdi mdi-minus" />}
 						backgroundColor={brown800}
@@ -84,11 +85,11 @@ SearchTermButtonPanel = React.createClass({
 					:
 					<Avatar
 						icon={<FontIcon className="mdi mdi-plus" />}
-				/>
+					/>
 				}
 
 				{this.props.label}
 			</Chip>
-		)
+		);
 	},
 });

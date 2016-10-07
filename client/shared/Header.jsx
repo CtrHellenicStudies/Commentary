@@ -1,14 +1,12 @@
-
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IconButton from 'material-ui/IconButton';
-import TextField from 'material-ui/TextField';
 
 Header = React.createClass({
 
 	propTypes: {
+		filters: React.PropTypes.array,
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func,
@@ -106,7 +104,7 @@ Header = React.createClass({
 		const work = value;
 
 		value.subworks.forEach((subwork, i) => {
-			subworks[i].work = work;
+			value.subworks[i].work = work;
 		});
 
 		// console.log("Header.state", this.state);
@@ -201,6 +199,7 @@ Header = React.createClass({
 					handleChangeLineN={this.props.handleChangeLineN}
 					open={this.state.rightMenuOpen}
 					closeRightMenu={this.closeRightMenu}
+					filters={this.props.filters}
 				/>
 				<header >
 					{!this.state.searchEnabled ?
@@ -275,7 +274,6 @@ Header = React.createClass({
 						:
 						<div className="md-menu-toolbar" >
 							<div className="toolbar-tools">
-
 								<IconButton
 									className="left-drawer-toggle"
 									style={styles.flatIconButton}
@@ -292,165 +290,12 @@ Header = React.createClass({
 								</div>
 
 								<div className="search-tools collapse">
-
-									<div className="search-tool text-search">
-										<TextField
-											hintText=""
-											floatingLabelText="Search"
-											onChange={this.handleChangeTextsearch}
-										/>
-									</div>
-
-									<div
-										className={`dropdown search-dropdown search-dropdown-keywords${
-											self.state.searchDropdownOpen === 'keyword' ? ' open' : ''}`}
-									>
-										<FlatButton
-											className="search-tool search-type-keyword dropdown-toggle"
-											label="Keyword"
-											labelPosition="before"
-											icon={<FontIcon className="mdi mdi-chevron-down" />}
-											onClick={self.toggleSearchDropdown.bind(null, 'keyword')}
-										/>
-
-										<ul className="dropdown-menu ">
-											<div className="dropdown-menu-inner">
-												{self.data.keywords.map((keyword, i) => (
-													<SearchTermButton
-														key={i}
-														toggleSearchTerm={self.toggleSearchTerm}
-														label={keyword.title}
-														searchTermKey="keywords"
-														value={keyword}
-													/>
-												))}
-											</div>
-
-											<IconButton
-												className="close-dropdown"
-												iconClassName="mdi mdi-close"
-												onClick={self.toggleSearchDropdown.bind(null, 'keyword')}
-											/>
-										</ul>
-
-
-									</div>
-
-									<div
-										className={`dropdown search-dropdown search-dropdown-commenters${
-											this.state.searchDropdownOpen === 'commenter' ? ' open' : ''}`}
-									>
-										<FlatButton
-											className="search-tool search-type-commenter dropdown-toggle"
-											label="Commenter"
-											labelPosition="before"
-											icon={<FontIcon className="mdi mdi-chevron-down" />}
-											onClick={self.toggleSearchDropdown.bind(null, 'commenter')}
-										/>
-
-										<ul className="dropdown-menu">
-											<div className="dropdown-menu-inner">
-												{self.data.commenters.map((commenter, i) => (
-													<SearchTermButton
-														key={i}
-														toggleSearchTerm={self.toggleSearchTerm}
-														label={commenter.name}
-														searchTermKey="commenters"
-														value={commenter}
-													/>
-												))}
-											</div>
-
-											<IconButton
-												className="close-dropdown"
-												iconClassName="mdi mdi-close"
-												onClick={this.toggleSearchDropdown.bind(null, 'commenter')}
-											/>
-										</ul>
-
-
-									</div>
-
-									<div
-										className={`dropdown search-dropdown search-dropdown-works${
-											this.state.searchDropdownOpen === 'work' ? ' open' : ''}`}
-									>
-										<FlatButton
-											className="search-tool search-type-work dropdown-toggle"
-											label="Work"
-											labelPosition="before"
-											icon={<FontIcon className="mdi mdi-chevron-down" />}
-											onClick={self.toggleSearchDropdown.bind(null, 'work')}
-										/>
-
-										<ul className="dropdown-menu">
-											<div className="dropdown-menu-inner">
-												{self.data.works.map((work, i) => {
-													const activeWork = (self.state.activeWork === work.slug);
-													return (
-														<SearchTermButton
-															key={i}
-															toggleSearchTerm={self.toggleWorkSearchTerm}
-															label={work.title}
-															searchTermKey="works"
-															value={work}
-															activeWork={activeWork}
-														/>
-													);
-												})}
-											</div>
-
-											<IconButton
-												className="close-dropdown"
-												iconClassName="mdi mdi-close"
-												onClick={this.toggleSearchDropdown.bind(null, 'work')}
-											/>
-
-										</ul>
-
-									</div>
-
-									<div
-										className={`dropdown search-dropdown search-dropdown-book${
-											this.state.searchDropdownOpen === 'subwork' ? ' open' : ''}`}
-									>
-										<FlatButton
-											className="search-tool search-type-subwork dropdown-toggle"
-											label="Book"
-											labelPosition="before"
-											icon={<FontIcon className="mdi mdi-chevron-down" />}
-											onClick={self.toggleSearchDropdown.bind(null, 'subwork')}
-										/>
-
-										<ul className="dropdown-menu">
-											<div className="dropdown-menu-inner">
-												{self.state.subworks.map((subwork, i) => (
-													<SearchTermButton
-														key={i}
-														toggleSearchTerm={self.toggleSearchTerm}
-														label={`${subwork.work.title} ${subwork.title}`}
-														searchTermKey="subworks"
-														value={subwork}
-													/>
-												))}
-											</div>
-
-											<IconButton
-												className="close-dropdown"
-												iconClassName="mdi mdi-close"
-												onClick={this.toggleSearchDropdown.bind(null, 'subwork')}
-											/>
-
-										</ul>
-
-
-									</div>
-
-				 					<div className="search-tool text-search line-search">
-				 						<label></label>
- 										<LineRangeSlider handleChangeLineN={this.props.handleChangeLineN}/>
-				 					</div>
-
+									<CommentarySearchToolbar
+										toggleSearchTerm={this.props.toggleSearchTerm}
+										handleChangeTextsearch={this.props.handleChangeTextsearch}
+										handleChangeLineN={this.props.handleChangeLineN}
+										filters={this.props.filters}
+									/>
 									<div className="search-toggle">
 										<IconButton
 											className="search-button"
@@ -459,7 +304,6 @@ Header = React.createClass({
 										/>
 									</div>
 								</div>
-
 							</div>
 						</div>
 					}

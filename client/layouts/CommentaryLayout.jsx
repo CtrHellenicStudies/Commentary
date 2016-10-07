@@ -10,8 +10,107 @@ CommentaryLayout = React.createClass({
 		if("_id" in this.props.queryParams){
 			filters.push({
 				key: "_id",
-				values: [this.props.queryParams._id]
+				values: [this.props.queryParams._id],
 			});
+		}
+
+		if("textsearch" in this.props.queryParams){
+			filters.push({
+				key: "textsearch",
+				values: [this.props.queryParams.textsearch],
+			});
+		}
+
+		if("keywords" in this.props.queryParams){
+			let keywords = [];
+
+			this.props.queryParams.keywords.split(",").forEach(function(keyword){
+					keywords.push({
+						wordpressId: keyword,
+					});
+			});
+
+			filters.push({
+				key: "keywords",
+				values: keywords,
+			});
+		}
+
+		if("commenters" in this.props.queryParams){
+			let commenters = [];
+
+			this.props.queryParams.commenters.split(",").forEach(function(commenter){
+					commenters.push({
+						wordpressId: commenter,
+					});
+			});
+
+			filters.push({
+				key: "commenters",
+				values: commenters,
+			});
+		}
+
+		if("works" in this.props.queryParams){
+			let works = [];
+
+			this.props.queryParams.works.split(",").forEach(function(work){
+				works.push({
+					slug: work,
+					title: Utils.capitalize(work),
+				});
+			});
+
+			filters.push({
+				key: "works",
+				values: works,
+			});
+		}
+
+		if("subworks" in this.props.queryParams){
+			let subworks = [];
+
+			this.props.queryParams.subworks.split(",").forEach(function(subwork){
+				let subworkNumber = parseInt(subwork);
+
+				if(!Number.isNaN(subworkNumber)){
+					subworks.push({
+						title: subwork,
+						n: subworkNumber,
+					})
+
+				}
+			});
+
+
+			filters.push({
+				key: "subworks",
+				values: subworks,
+			});
+		}
+
+		if("lineFrom" in this.props.queryParams){
+			let lineFrom = parseInt(this.props.queryParams.lineFrom);
+
+			if(!Number.isNaN(lineFrom)){
+				filters.push({
+					key: "lineFrom",
+					values: [lineFrom],
+				});
+
+			}
+		}
+
+		if("lineTo" in this.props.queryParams){
+			let lineTo = parseInt(this.props.queryParams.lineTo);
+
+			if(!Number.isNaN(lineTo)){
+				filters.push({
+					key: "lineTo",
+					values: [lineTo],
+				});
+
+			}
 		}
 
 		return {

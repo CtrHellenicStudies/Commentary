@@ -10,7 +10,8 @@ KeywordsList = React.createClass({
 	// Loads items from the keywords collection and puts them on this.data.keywords
 	getMeteorData() {
 		const query = {
-			type: this.props.type
+			type: this.props.type,
+			count: {$gt: 0},
 		};
 
 		return {

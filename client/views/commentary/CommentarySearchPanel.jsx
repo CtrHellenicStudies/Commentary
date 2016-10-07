@@ -7,9 +7,10 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 CommentarySearchPanel = React.createClass({
 
 	propTypes: {
+		filters: React.PropTypes.array,
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeDate: React.PropTypes.func,
+		handleChangeLineN: React.PropTypes.func,
 		open: React.PropTypes.bool,
 		closeRightMenu: React.PropTypes.func,
 	},
@@ -33,8 +34,10 @@ CommentarySearchPanel = React.createClass({
 
 	getMeteorData() {
 		return {
-			keywords: Keywords.find().fetch(),
-			commenters: Commenters.find().fetch(),
+			keywords: Keywords.find({
+				count: {$gt: 0},
+			},{sort: {title: 1}}).fetch(),
+			commenters: Commenters.find({}, {sort:{name: 1}}).fetch(),
 			works: Works.find({}, { sort: { order: 1 } }).fetch(),
 			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
 		};
@@ -81,6 +84,7 @@ CommentarySearchPanel = React.createClass({
 
 	render() {
 		const self = this;
+		const filters = this.props.filters;
 
 		const styles = {
 			flatButton: {
@@ -108,6 +112,10 @@ CommentarySearchPanel = React.createClass({
 				fontFamily: 'Proxima N W01 At Smbd',
 				textTransform: 'uppercase',
 			},
+			lineSearch: {
+				width: '99%',
+				margin: '0px auto',
+			},
 		};
 
 		return (
@@ -133,7 +141,7 @@ CommentarySearchPanel = React.createClass({
 						showExpandableButton
 					/>
 					<CardText expandable style={styles.wrapper}>
-						<div className="search-tool--date">
+						<div style={styles.lineSearch} className="line-search">
 							<LineRangeSlider
 								handleChangeLineN={this.props.handleChangeLineN}
 							/>
@@ -148,15 +156,29 @@ CommentarySearchPanel = React.createClass({
 						showExpandableButton
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{self.data.keywords.map((keyword, i) => (
-							<SearchTermButtonPanel
-								key={i}
-								toggleSearchTerm={self.toggleSearchTerm}
-								label={keyword.title}
-								searchTermKey="keywords"
-								value={keyword}
-							/>
-						))}
+						{self.data.keywords.map((keyword, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'keywords') {
+									filter.values.forEach((value) => {
+										if (keyword._id === value._id) {
+											active = true;
+										}
+									});
+								}
+							});
+
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={self.toggleSearchTerm}
+									label={keyword.title}
+									searchTermKey="keywords"
+									value={keyword}
+									active={active}
+								/>
+							);
+						})}
 						{self.data.keywords.length === 0 ?
 							<div className="no-results">No keywords found in objects.</div>
 							: ''
@@ -171,15 +193,29 @@ CommentarySearchPanel = React.createClass({
 						showExpandableButton
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{self.data.commenters.map((commenter, i) => (
-							<SearchTermButtonPanel
-								key={i}
-								toggleSearchTerm={self.toggleSearchTerm}
-								label={commenter.name}
-								searchTermKey="commenters"
-								value={commenter}
-							/>
-						))}
+						{self.data.commenters.map((commenter, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'commenters') {
+									filter.values.forEach((value) => {
+										if (commenter._id === value._id) {
+											active = true;
+										}
+									});
+								}
+							});
+
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={self.toggleSearchTerm}
+									label={commenter.name}
+									searchTermKey="commenters"
+									value={commenter}
+									active={active}
+								/>
+							);
+						})}
 						{self.data.commenters.length === 0 ?
 							<div className="no-results">No commenters found in objects.</div>
 							: ''
@@ -214,19 +250,33 @@ CommentarySearchPanel = React.createClass({
 					<CardHeader
 						title="Book"
 						style={styles.cardHeader}
-						actAsExpander
-						showExpandableButton
+						actAsExpander={!(self.state.subworks.length === 0)}
+						showExpandableButton={!(self.state.subworks.length === 0)}
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{self.data.subworks.map((subwork, i) => (
-							<SearchTermButtonPanel
-								key={i}
-								toggleSearchTerm={self.toggleSearchTerm}
-								label={`${subwork.work.title} ${subwork.title}`}
-								searchTermKey="subworks"
-								value={subwork}
-							/>
-						))}
+						{self.state.subworks.map((subwork, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'subworks') {
+									filter.values.forEach((value) => {
+										if (subwork.n === value.n) {
+											active = true;
+										}
+									});
+								}
+							});
+
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={self.toggleSearchTerm}
+									label={`${subwork.work.title} ${subwork.title}`}
+									searchTermKey="subworks"
+									value={subwork}
+									active={active}
+								/>
+							);
+						})}
 						{self.data.subworks.length === 0 ?
 							<div className="no-results">No subworks found in objects.</div>
 							: ''

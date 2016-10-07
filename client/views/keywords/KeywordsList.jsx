@@ -11,6 +11,7 @@ KeywordsList = React.createClass({
 	getMeteorData() {
 		const query = {
 			type: this.props.type,
+			count: {$gt: 0},
 		};
 
 		return {

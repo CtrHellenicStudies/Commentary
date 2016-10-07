@@ -99,6 +99,37 @@ section {
 
 }
 
+.scroll-down-helper {
+	position:absolute;
+	bottom:30px;
+	right:40px;
+	z-index:10;
+	width:400px;
+	text-align:right;
+	opacity:0.4;
+
+	p {
+		display:inline-block;
+		vertical-align:top;
+		color:@light;
+		font-size:14px;
+		line-height:1.3em;
+		text-align:right;
+
+	}
+
+	.mdi {
+		display:inline-block;
+		vertical-align:top;
+		color:@light;
+		padding:19px 5px;
+		font-size:22px;
+
+	}
+
+}
+
+
 
 section.header {
 
@@ -425,6 +456,17 @@ section.keywords {
 //Commentary Section styles
 section.browse-commentary {
   background:url('/assets/marble_background.png');
+
+	.visualizations-coaching-text {
+		font-size:16px;
+		font-family:@font-reading;
+		font-weight:100;
+		line-height:1.6em;
+		display:block;
+		max-width:700px;
+		margin:15px auto;
+		color:@secondary-text;
+	}
 
 	.data-visualization-container {
 		max-width:1000px;

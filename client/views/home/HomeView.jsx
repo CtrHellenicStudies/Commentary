@@ -47,6 +47,12 @@ HomeView = React.createClass({
 		}
 	},
 
+	scrollToIntro(e) {
+		$('html, body').animate({ scrollTop: $('#intro').offset().top - 100 }, 300);
+
+		e.preventDefault();
+	},
+
 	render(){
 			return (
 				<div className="home">
@@ -75,6 +81,7 @@ HomeView = React.createClass({
 															href="#intro"
 															className="cover-link learn-more"
 															label="Learn More"
+															onClick={this.scrollToIntro}
 															>
 														</RaisedButton>
 
@@ -85,12 +92,21 @@ HomeView = React.createClass({
 															>
 														</RaisedButton>
 
+
 												</div>
 										</div>
 								</div>
+
+								<div className="scroll-down-helper">
+									<p>
+										<em>Scroll down for an overview of the project.</em>
+									</p>
+									<i className="mdi mdi-chevron-down" />
+								</div>
+
 						</section>
 
-						<section className="intro">
+						<section id="intro" className="intro">
 								<div className="container">
 										<div className="row">
 												<h2 >Quid faciat laetas segetes quo</h2>
@@ -172,9 +188,10 @@ HomeView = React.createClass({
 
 						</section>
 
-						<section className="browse-commentary block-shadow" >
+						<section id="visualizations" className="browse-commentary block-shadow" >
 							{/*<h2 className="keyword-divider-title"></h2>*/}
 
+							<span className="visualizations-coaching-text">Visualizations help text Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque adiungere vites conveniat quae curum boum qui cultus habendo</span>
 							<div className="container data-visualization-container">
 								<WorksList />
 

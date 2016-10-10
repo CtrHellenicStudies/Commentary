@@ -20,10 +20,11 @@ const richButtonsPlugin = createRichButtonsPlugin();
 
 const {    
   // inline buttons 
-  ItalicButton, BoldButton, MonospaceButton, UnderlineButton,
+  ItalicButton, UnderlineButton,
   // block buttons 
-  OLButton, ULButton
+  ULButton
 } = richButtonsPlugin;
+
 
 AddComment = React.createClass({
 
@@ -118,13 +119,6 @@ AddComment = React.createClass({
         };
     },
 
-    onKeywideasValueChange(keyideas) {
-        // TODO
-        // this.setState({
-        //     keyideasValue: keyideas.split(","),
-        // });
-    },
-
     onReferenceWorksValueChange(referenceWork) {
         this.setState({
             referenceWorksValue: referenceWork
@@ -144,7 +138,6 @@ AddComment = React.createClass({
     },
 
     handleSubmit(event) {
-        // TODO: form validation
         event.preventDefault();
 
         var error = this.validateStateForSubmit();
@@ -183,55 +176,15 @@ AddComment = React.createClass({
         };
     },
 
-    // onMouseDown(event) {
-    //     var selectedText = "";
-    //     if (window.getSelection) {
-    //         selectedText = window.getSelection();
-    //     } else if (document.selection && document.selection.type != "Control") {
-    //         selectedText = document.selection;
-    //     };
-    //     if(selectedText != "") {
-    //         console.log('selectedText', selectedText);
-    //         console.log('X position', event.pageX);
-    //         console.log('Y position', event.target.offsetTop, event.target.offsetLeft);
-    //     }
-    // },
-
-    // _onBoldClick() {
-    //     this.onChange(RichUtils.toggleInlineStyle(
-    //         this.state.editorState, 'BOLD'
-    //     ));
-    // },
-
-    // _test() {
-    //     var selection = window.getSelection();
-    //     console.log('selection ', selection );
-    // },
-
-    // handleKeyCommand(command) {
-    //     const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
-    //     if (newState) {
-    //         this.onChange(newState);
-    //         return 'handled';
-    //     }
-    //     return 'not-handled';
-    // },
-
-    // myBlockStyleFn(contentBlock) {
-    //     const type = contentBlock.getType();
-    //     if (type === 'unstyled') {
-    //         return 'text-paragraph';
-    //     }
-    // },
-
     render() {
-
         // const raw = convertToRaw(this.state.titleEditorState.getCurrentContent());
         // var titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
         // var title = jQuery(titleHtml).text();
 
         // const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+        // console.log('textRaw', textRaw);
         // var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+        // console.log('textHtml', textHtml);
         // var text = jQuery(textHtml).text();
         // console.log('html', jQuery(html).text());
 
@@ -278,10 +231,8 @@ AddComment = React.createClass({
 
                     </div>
                     <div className="comment-lower" style={{paddingTop: 20}}>
-                        <BoldButton/>
                         <ItalicButton/>
                         <UnderlineButton/>
-                        <OLButton/>
                         <ULButton/>
                         <div className="add-comment-text">
                             <Editor

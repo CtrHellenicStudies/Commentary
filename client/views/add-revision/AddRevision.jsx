@@ -17,9 +17,9 @@ const richButtonsPlugin = createRichButtonsPlugin();
 
 const {    
   // inline buttons 
-  ItalicButton, BoldButton, MonospaceButton, UnderlineButton,
+  ItalicButton, UnderlineButton,
   // block buttons 
-  OLButton, ULButton
+  ULButton
 } = richButtonsPlugin;
 
 AddRevision = React.createClass({
@@ -168,10 +168,8 @@ AddRevision = React.createClass({
 
                     </div>
                     <div className="comment-lower" style={{paddingTop: 20}}>
-                        <BoldButton/>
                         <ItalicButton/>
                         <UnderlineButton/>
-                        <OLButton/>
                         <ULButton/>
                         <div className="add-comment-text">
                             <Editor

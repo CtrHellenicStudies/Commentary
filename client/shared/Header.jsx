@@ -176,6 +176,7 @@ Header = React.createClass({
 
 		const userIsLoggedIn = Meteor.user();
 
+
 		// const active_comment = false;
 		// const username = false;
 

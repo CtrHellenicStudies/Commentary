@@ -4,6 +4,7 @@
   "description": "A Homer Commentary in Progress",
   "main": "main.js",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "draft-js": "^0.9.1",
     "draft-js-editor": "^1.7.2",
     "draft-js-export-html": "^0.4.0",

@@ -15,6 +15,7 @@ Comment = React.createClass({
 
 	getInitialState(){
 		return {
+			selectedRevisionIndex: this.props.comment.revisions.length - 1,
 			selectedRevision: {},
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
@@ -29,6 +30,15 @@ Comment = React.createClass({
 
 	},
 
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		var selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex]
+        return {
+        	selectedRevision: selectedRevision,
+        };
+    },
+
 	addSearchTerm(e){
 		if('addSearchTerm' in this.props){
 			this.props.addSearchTerm(e);
@@ -39,13 +49,13 @@ Comment = React.createClass({
 
 	},
 
-	componentDidMount(){
+	componentDidUdate(){
 		if(!("title" in this.state.selectedRevision)){
 			this.setState({
-				selectedRevision: this.props.comment.revisions[0]
+				selectedRevision: this.props.comment.revisions[this.state.selectedRevisionIndex],
+				// selectedRevisionIndex = this.props.comment.revisions.length - 1,
 			});
-		}
-
+		};
 	},
 
 	showDiscussionThread(comment){
@@ -126,12 +136,28 @@ Comment = React.createClass({
 
 	},
 
+	selectRevision(event) {
+        this.setState({
+            selectedRevisionIndex: event.currentTarget.id,
+        });
+    },
+
+
+	handleEditCommentClick(id) {
+		FlowRouter.go('/add-revision/' + id);
+	},
+
 	render() {
 		var self = this;
 		var comment = this.props.comment;
-		var selectedRevision = this.state.selectedRevision;
+		var selectedRevision = this.data.selectedRevision;
 		var commentGroup = this.props.commentGroup;
 		var commentClass = "comment-outer has-discussion ";
+		var userCommenterId = 'no commenter';
+		if(Meteor.userId()){
+			var userCommenterId = Meteor.user().commenterId;
+		};
+		
 
 		if(self.state.discussionVisible){
 			commentClass += "discussion--width discussion--visible";
@@ -202,6 +228,15 @@ Comment = React.createClass({
 										return <div
 											key={i}
 											className="comment-author">
+											{userCommenterId === commenter._id ?
+												<FlatButton
+													label='Edit comment'
+													onClick={self.handleEditCommentClick.bind(null, comment._id)}
+													icon={<FontIcon className="mdi mdi-pen" />}
+												/>
+												:
+												""
+											}
 											<div className="comment-author-text">
 												<a href={"/commenters/" + commenter.slug} >
 													<span className="comment-author-name">{commenter.name}</span>
@@ -248,9 +283,10 @@ Comment = React.createClass({
 							{comment.revisions.map(function(revision, i){
 								return <FlatButton
 									key={i}
+									id={i}
 									data-id="{revision.id}"
 									className="revision selected-revision"
-									onClick={this.selectRevision}
+									onClick={self.selectRevision}
 									label={"Revision " + moment(revision.updated).format('D MMMM YYYY')}
 									>
 

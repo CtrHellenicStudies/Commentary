@@ -37,3 +37,7 @@ Meteor.publish('user.discussionComments', function(query, skip, limit) {
 
 
 });
+
+Meteor.publish('userData', function() {
+	return Meteor.users.find({'_id': this.userId});
+});

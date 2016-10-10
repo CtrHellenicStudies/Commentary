@@ -133,7 +133,8 @@ ProfilePage = React.createClass({
 		let currentUser = this.props.user;
 		if(!currentUser){
 			currentUser = {"profile":{}};
-		}
+		};
+		const userIsLoggedIn = Meteor.user();
 
 		return (
 			(currentUser ?
@@ -276,6 +277,18 @@ ProfilePage = React.createClass({
 									<div className="user-discussion-comments">
 
 										<h2>Your Comments</h2>
+										{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+											<div>
+												<FlatButton
+													label="Add new comment"
+													href="/add-comment"
+													icon={<FontIcon className="mdi mdi-plus" />}
+													style={{height:'100%', lineHeight: '100%'}}
+												/>
+											</div>
+											:
+											""
+										}
 										{/*}<InfiniteScroll
 											endPadding={120}
 											loadMore={this.loadMore}

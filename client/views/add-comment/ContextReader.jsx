@@ -324,7 +324,7 @@ ContextReader = React.createClass({
 																<div 
 																	className="lemma-text"
 																	ref={line.n}
-																	id={i+1}
+																	id={line.n}
 																	dangerouslySetInnerHTML={{__html: line.html}}
 																	onMouseEnter={self.handeLineMouseEnter}
 																	onMouseLeave={self.handeLineMouseLeave}

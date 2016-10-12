@@ -99,21 +99,24 @@ AddCommentLayout = React.createClass({
 
     addComment(formData) {
 
-        var work = Works.find({
-            'slug': this.state.filters[0].values[0].slug
-        }).fetch()[0];
+        var that = this;
 
-        var subwork = work.subworks[this.state.filters[1].values[0].n - 1];
+        var work = this.state.filters[0].values[0];
+        var subwork = this.state.filters[1].values[0];
 
         var lineLetter = "";
-        if(this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) { // checkingif one line was selected
+        if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) { // checking if one line was selected
             lineLetter = this.refs.CommentLemmnaSelect.state.lineLetterValue;
         };
 
-        var referenceWorks = ReferenceWorks.find({slug: formData.referenceWorksValue}, {limit:1}).fetch();
+        var referenceWorks = ReferenceWorks.find({
+            slug: formData.referenceWorksValue
+        }, {
+            limit: 1
+        }).fetch();
 
         var referenceWorksInputObject = {};
-        if(referenceWorks.length) {
+        if (referenceWorks.length) {
             referenceWorksInputObject = {
                 revisionsCreated: referenceWorks[0].created,
                 reference: referenceWorks[0].title,
@@ -127,74 +130,74 @@ AddCommentLayout = React.createClass({
             };
         };
 
-        var commenterSlug = '';
-        Meteor.user().roles.forEach((role) => {
-            if(role != 'developer' || 'admin' || 'commenter'){
-                commenterSlug = role;
+        var commenter = Commenters.find({
+            _id: Meteor.user().commenterId
+        }).fetch()[0];
+
+        this.addNewKeyword(formData.keywordsValue, function() {
+
+            var keywords = [];
+            if (formData.keywordsValue) {
+                formData.keywordsValue.forEach((keyword) => {
+                    var foundKeyword = Keywords.find({
+                        title: keyword
+                    }).fetch()[0];
+                    keywords.push(foundKeyword);
+                });
             };
-        });
-        var commenter = Commenters.find({_id:Meteor.user().commenterId}).fetch()[0];
 
-        var keywords = [];
-        if (formData.keywordsValue) {
-            formData.keywordsValue.forEach((keyword) => {
-                var foundKeyword = Keywords.find({
-                    title: keyword
-                }).fetch()[0];
-                keywords.push(foundKeyword);
+            var comment = {
+                work: {
+                    title: work.title,
+                    slug: work.slug,
+                    order: work.order,
+                },
+                subwork: {
+                    title: subwork.title,
+                    n: subwork.n,
+                },
+                lineFrom: that.state.selectedLineFrom,
+                lineTo: that.state.selectedLineTo,
+                lineLetter: lineLetter,
+                nLines: that.state.selectedLineTo - that.state.selectedLineFrom + 1,
+                // commentOrder:
+                revisions: [{
+                    title: formData.titleValue,
+                    text: formData.textValue,
+                    created: referenceWorksInputObject.revisionsCreated,
+                    slug: slugify(formData.titleValue),
+                }],
+                reference: referenceWorksInputObject.reference,
+                referenceLink: referenceWorksInputObject.referenceLink,
+                created: new Date(),
+            };
+            if (commenter) {
+                comment.commenters = [{
+                    _id: commenter._id,
+                    name: commenter.name,
+                    slug: commenter.slug
+                }];
+            } else {
+                comment.commenters = [{}];
+            };
+            if (keywords) {
+                comment.keywords = keywords;
+            } else {
+                comment.keywords = [{}];
+            };
+
+            Meteor.call("comments.insert", comment, function(error, commentId) {
+                FlowRouter.go('/commentary/?_id=' + commentId);
             });
-        };
 
-        var comment = {
-            work: {
-                title: work.title,
-                slug: work.slug,
-                order: work.order,
-            },
-            subwork: {
-                title: subwork.title,
-                n: subwork.n,
-            },
-            lineFrom: this.state.selectedLineFrom,
-            lineTo: this.state.selectedLineTo,
-            lineLetter: lineLetter,
-            nLines: this.state.selectedLineTo - this.state.selectedLineFrom + 1,
-            // commentOrder:
-            revisions: [{
-                title: formData.titleValue,
-                text: formData.textValue,
-                created: referenceWorksInputObject.revisionsCreated,
-                slug: slugify(formData.titleValue),
-            }],
-            reference: referenceWorksInputObject.reference,
-            referenceLink: referenceWorksInputObject.referenceLink,
-            created: new Date(),
-        };
-        if (commenter) {
-            comment.commenters = [{
-                _id: commenter._id,
-                name: commenter.name,
-                slug: commenter.slug
-            }];
-        } else{
-            comment.commenters = [{}];
-        };
-        if (keywords) {
-            comment.keywords = keywords;
-        } else {
-            comment.keywords = [{}];
-        };
+            // TODO: handle behavior after comment added (add info about success)
 
-        this.addNewKeyword(formData.keywordsValue);
-
-        Meteor.call("comments.insert", comment, function(error, commentId) {
-            FlowRouter.go('/commentary/?_id=' + commentId);
         });
 
-        // TODO: handle behavior after comment added (add info about success)
+
     },
 
-    addNewKeyword(keywords) {
+    addNewKeyword(keywords, next) {
         if (keywords.length > 0) {
             var that = this;
             var insertKeywords = [];
@@ -211,7 +214,13 @@ AddCommentLayout = React.createClass({
                 };
             })
             if (insertKeywords.length > 0) {
-                Meteor.call("keywords.insert", insertKeywords);
+                Meteor.call("keywords.insert", insertKeywords, function(err, data) {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        return next();
+                    };
+                });
             };
         };
     },
@@ -243,6 +252,7 @@ AddCommentLayout = React.createClass({
                 <Header
                     toggleSearchTerm={this.toggleSearchTerm}
                     initialSearchEnabled
+                    filters={this.state.filters}
                 />
 
                 <main>

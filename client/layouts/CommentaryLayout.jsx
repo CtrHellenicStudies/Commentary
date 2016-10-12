@@ -139,6 +139,7 @@ CommentaryLayout = React.createClass({
 		filters.forEach(function(filter, i){
 			if(filter.key === key){
 				keyIsInFilter = true;
+				valueIsInFilter = false;
 
 				filter.values.forEach(function(filterValue, j){
 						if(filterValue._id === value._id){
@@ -148,6 +149,7 @@ CommentaryLayout = React.createClass({
 				})
 
 				if(valueIsInFilter){
+					console.log('jestem');
 					filter.values.splice(filterValueToRemove, 1);
 					if(filter.values.length === 0){
 						filterToRemove = i;
@@ -305,6 +307,11 @@ CommentaryLayout = React.createClass({
 
 	},
 
+	addSearchTerm(keyword) {
+		console.log('keyword', keyword);
+		this.toggleSearchTerm('keywords', keyword);
+	},
+
 	render(){
 		console.log("CommentaryLayout.filters", this.state.filters);
 		return(
@@ -324,6 +331,7 @@ CommentaryLayout = React.createClass({
 					loadMoreComments={this.loadMoreComments}
 					skip={this.state.skip}
 					limit={this.state.limit}
+					addSearchTerm={this.addSearchTerm}
 					/>
 
 			</div>

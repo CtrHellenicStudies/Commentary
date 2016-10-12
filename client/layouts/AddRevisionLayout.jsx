@@ -1,8 +1,6 @@
 import '../../node_modules/mdi/css/materialdesignicons.css';
 
 import slugify from 'slugify';
-import diffview from 'jsdifflib';
-
 
 AddRevisionLayout = React.createClass({
 
@@ -70,21 +68,6 @@ AddRevisionLayout = React.createClass({
         });
     },
 
-    getDiff(baseTextRaw, newTextRaw) {
-        // build the diff view and return a DOM node 
-        return diffview.buildView({
-            baseText: baseTextRaw,
-            newText: newTextRaw,
-            // set the display titles for each resource 
-            baseTextName: "Base Text",
-            newTextName: "New Text",
-            contextSize: 10,
-            //set inine to true if you want inline 
-            //rather than side by side diff 
-            inline: false
-        });
-    },
-
     render() {
 
         var comment = this.data.comment;
@@ -123,8 +106,6 @@ AddRevisionLayout = React.createClass({
                             initialLineTo={comment.lineFrom + comment.nLines - 1 + 50}
                             disableEdit={true}
                         />
-
-                        {comment ? <div dangerouslySetInnerHTML={{__html: '<table class=\'table-diff\'>' + this.getDiff(comment.revisions[1].text, comment.revisions[2].text).innerHTML + '</table>'}} /> : ''}
 
                     </main>
 

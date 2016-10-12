@@ -5,6 +5,8 @@ import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
+import diffview from 'jsdifflib';
+
 Comment = React.createClass({
 
 	propTypes: {
@@ -16,7 +18,6 @@ Comment = React.createClass({
 	getInitialState(){
 		return {
 			selectedRevisionIndex: this.props.comment.revisions.length - 1,
-			selectedRevision: {},
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
 			lemmaReferenceTop: 0,
@@ -138,7 +139,7 @@ Comment = React.createClass({
 
 	selectRevision(event) {
         this.setState({
-            selectedRevisionIndex: event.currentTarget.id,
+            selectedRevisionIndex: parseInt(event.currentTarget.id),
         });
     },
 
@@ -147,10 +148,28 @@ Comment = React.createClass({
 		FlowRouter.go('/add-revision/' + id);
 	},
 
+	getDiff() {
+        // build the diff view and return a DOM node
+        var baseRevision = this.data.selectedRevision;
+        var newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
+        return diffview.buildView({
+            baseText: baseRevision.text,
+            newText: newRevision.text,
+            // set the display titles for each resource 
+            baseTextName: "Revision " + moment(baseRevision.created).format('D MMMM YYYY'),
+            newTextName: "Revision " + moment(newRevision.created).format('D MMMM YYYY'),
+            contextSize: null,
+            //set inine to true if you want inline 
+            //rather than side by side diff 
+            inline: true,
+        });
+    },
+
 	render() {
 		var self = this;
 		var comment = this.props.comment;
 		var selectedRevision = this.data.selectedRevision;
+		var selectedRevisionIndex = this.state.selectedRevisionIndex;
 		var commentGroup = this.props.commentGroup;
 		var commentClass = "comment-outer has-discussion ";
 		var userCommenterId = 'no commenter';
@@ -254,11 +273,19 @@ Comment = React.createClass({
 
 						</div>
 						<div className="comment-lower">
-							<div
-								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
-								onClick={this.checkIfToggleLemmaReferenceModal}
-							/>
+							{selectedRevisionIndex === comment.revisions.length - 1 ?
+								<div
+									className="comment-body"
+									dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
+									onClick={this.checkIfToggleLemmaReferenceModal}
+								/>
+								:
+								<div
+									className="comment-body"
+									dangerouslySetInnerHTML={comment ? {__html: '<table class=\'table-diff\'>' + this.getDiff().innerHTML + '</table>'} : ''}
+									onClick={this.checkIfToggleLemmaReferenceModal}
+								/>
+							}
 							<div className="comment-reference" >
 								<h4>Secondary Source(s):</h4>
 								<p>
@@ -287,7 +314,7 @@ Comment = React.createClass({
 									data-id="{revision.id}"
 									className="revision selected-revision"
 									onClick={self.selectRevision}
-									label={"Revision " + moment(revision.updated).format('D MMMM YYYY')}
+									label={"Revision " + moment(revision.created).format('D MMMM YYYY')}
 									>
 
 								</FlatButton>

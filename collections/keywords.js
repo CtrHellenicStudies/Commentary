@@ -1,6 +1,10 @@
 this.Keywords = new Meteor.Collection('keywords');
 
 Schemas.Keywords = new SimpleSchema({
+    _id: {
+        type: String,
+    },
+
 	wordpressId: {
 		type: Number,
 		optional: true,

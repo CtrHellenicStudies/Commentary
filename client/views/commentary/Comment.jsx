@@ -208,7 +208,7 @@ Comment = React.createClass({
 											return <RaisedButton
 													key={i}
 													className="comment-keyword paper-shadow"
-													onClick={self.addSearchTerm}
+													onClick={self.addSearchTerm.bind(null, keyword)}
 													data-id={keyword._id}
 													label={(keyword.title || keyword.wordpressId)}
 												/>

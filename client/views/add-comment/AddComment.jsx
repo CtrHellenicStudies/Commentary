@@ -62,7 +62,7 @@ AddComment = React.createClass({
 
     getMeteorData() {
         var keywords_options = [];
-        var keywords = Keywords.find({}).fetch();
+        var keywords = Keywords.find({type: 'word'}).fetch();
         keywords.map(function(keyword) {
             keywords_options.push({
                 value: keyword.title,
@@ -70,8 +70,14 @@ AddComment = React.createClass({
             });
         });
         
-        // TODO: key ideas
         var keyideas_options = [];
+        var keyideas = Keywords.find({type: 'idea'}).fetch();
+        keyideas.map(function(keyidea) {
+            keyideas_options.push({
+                value: keyidea.title,
+                label: keyidea.title,
+            });
+        });
 
         var referenceWorks_options = [];
         var referenceWorks = ReferenceWorks.find().fetch();
@@ -115,6 +121,18 @@ AddComment = React.createClass({
         } else {
             this.setState({
                 keywordsValue: null,
+            });
+        };
+    },
+
+    onKeywideasValueChange(keyideas) {
+        if (keyideas.length > 0) {
+            this.setState({
+                keyideasValue: keyideas.split(","),
+            });
+        } else {
+            this.setState({
+                keyideasValue: null,
             });
         };
     },
@@ -221,7 +239,7 @@ AddComment = React.createClass({
                             name="keyideas"
                             id="keyideas"
                             required={false}
-                            options={this.data.keywords_options /*TODO: change to keyideas_options*/}
+                            options={this.data.keyideas_options}
                             multi={true}
                             allowCreate={true}
                             value={this.state.keyideasValue}

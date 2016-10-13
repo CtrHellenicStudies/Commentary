@@ -62,7 +62,7 @@ AddComment = React.createClass({
 
     getMeteorData() {
         var keywords_options = [];
-        var keywords = Keywords.find().fetch();
+        var keywords = Keywords.find({}).fetch();
         keywords.map(function(keyword) {
             keywords_options.push({
                 value: keyword.title,

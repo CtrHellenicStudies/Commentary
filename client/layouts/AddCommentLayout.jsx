@@ -24,6 +24,10 @@ AddCommentLayout = React.createClass({
         }
     },
 
+    componentWillUpdate(nextProps, nextState) {
+        this.handlePermissions();
+    },
+
     updateSelecetedLines(selectedLineFrom, selectedLineTo) {
         if(selectedLineFrom === null) {
             this.setState({
@@ -243,49 +247,70 @@ AddCommentLayout = React.createClass({
         });
     },
 
+    handlePermissions() {
+        if (Roles.subscription.ready()) {
+            if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
+                FlowRouter.go('/');
+            };
+        };
+    },
+
+    ifReady() {
+        var ready = Roles.subscription.ready();
+        return ready;
+    },
 
     render() {
 
         return (
-            <div className="chs-layout add-comment-layout">
+            <div>
+                {this.ifReady() ? 
+                    <div className="chs-layout add-comment-layout">
+                        <div>
+                            <Header
+                                toggleSearchTerm={this.toggleSearchTerm}
+                                initialSearchEnabled
+                                filters={this.state.filters}
+                            />
 
-                <Header
-                    toggleSearchTerm={this.toggleSearchTerm}
-                    initialSearchEnabled
-                    filters={this.state.filters}
-                />
+                            <main>
 
-                <main>
+                                <CommentLemmnaSelect
+                                    ref="CommentLemmnaSelect"
+                                    selectedLineFrom={this.state.selectedLineFrom}
+                                    selectedLineTo={this.state.selectedLineTo}
+                                    workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
+                                    subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                                    openContextReader={this.openContextReader}
+                                />
 
-                    <CommentLemmnaSelect
-                        ref="CommentLemmnaSelect"
-                        selectedLineFrom={this.state.selectedLineFrom}
-                        selectedLineTo={this.state.selectedLineTo}
-                        workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
-                        subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
-                        openContextReader={this.openContextReader}
-                    />
+                                <AddComment
+                                    selectedLineFrom={this.state.selectedLineFrom}
+                                    selectedLineTo={this.state.selectedLineTo}
+                                    submiteForm={this.addComment}
+                                />
 
-                    <AddComment
-                        selectedLineFrom={this.state.selectedLineFrom}
-                        selectedLineTo={this.state.selectedLineTo}
-                        submiteForm={this.addComment}
-                    />
+                                <ContextReader
+                                    open={this.state.contextReaderOpen}
+                                    closeContextPanel={this.closeContextReader}
+                                    workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : ""}
+                                    subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                                    selectedLineFrom={this.state.selectedLineFrom}
+                                    selectedLineTo={this.state.selectedLineTo}
+                                    updateSelecetedLines={this.updateSelecetedLines}
+                                />
 
-                    <ContextReader
-                        open={this.state.contextReaderOpen}
-                        closeContextPanel={this.closeContextReader}
-                        workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : ""}
-                        subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
-                        selectedLineFrom={this.state.selectedLineFrom}
-                        selectedLineTo={this.state.selectedLineTo}
-                        updateSelecetedLines={this.updateSelecetedLines}
-                    />
-
-                </main>
-                
-                <Footer/>
-
+                            </main>
+                            
+                            <Footer/>
+                        </div>
+                    </div>
+                    :
+                    <div className="ahcip-spinner commentary-loading full-page-spinner" >
+                        <div className="double-bounce1"></div>
+                        <div className="double-bounce2"></div>
+                    </div>
+                }
             </div>
         );
     }

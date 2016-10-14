@@ -12,7 +12,7 @@ Schemas.Keywords = new SimpleSchema({
 
 	title: {
 		type: String,
-		optional: true,
+		// optional: true,
 	},
 
 	slug: {

@@ -12,17 +12,17 @@ AddCommentLayout = React.createClass({
             selectedLineTo: 0,
 
             contextReaderOpen: true,
+
+            loading: false,
         };
     },
 
     mixins: [ReactMeteorData],
 
     getMeteorData() {
-        var keywords = Keywords.find({type:'word'}).fetch();
-        var keyideas = Keywords.find({type:'idea'}).fetch();
+        var keywords = Keywords.find().fetch();
         return {
             keywords: keywords,
-            keyideas: keyideas,
         }
     },
 
@@ -104,9 +104,12 @@ AddCommentLayout = React.createClass({
     },
 
     addComment(formData) {
-        // TODO: handle that keyideas and keywords can't have the same titles
-        // TODO: comment and clear code
+
         var that = this;
+
+        this.setState({
+            loading: true,
+        });
 
         var work = this.state.filters[0].values[0];
         var subwork = this.state.filters[1].values[0];
@@ -225,13 +228,14 @@ AddCommentLayout = React.createClass({
     },
 
     addNewKeywords(keywords, type, next) {
-        if (keywords.length > 0) {
+        if (keywords) {
             var that = this;
             var insertKeywords = [];
             keywords.forEach(function(keyword) {
                 foundKeyword = that.data.keywords.find(function(d) {
                     return d.title === keyword;
                 });
+                console.log('foundKeyword', foundKeyword, 'keyword', keyword);
                 if (foundKeyword === undefined) {
                     var _keyword = {
                         title: keyword,
@@ -292,7 +296,7 @@ AddCommentLayout = React.createClass({
 
         return (
             <div>
-                {this.ifReady() ? 
+                {this.ifReady() || this.state.loading ? 
                     <div className="chs-layout add-comment-layout">
                         <div>
                             <Header

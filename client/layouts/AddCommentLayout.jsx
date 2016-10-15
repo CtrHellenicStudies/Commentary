@@ -12,6 +12,8 @@ AddCommentLayout = React.createClass({
             selectedLineTo: 0,
 
             contextReaderOpen: true,
+
+            loading: false,
         };
     },
 
@@ -22,6 +24,10 @@ AddCommentLayout = React.createClass({
         return {
             keywords: keywords,
         }
+    },
+
+    componentWillUpdate(nextProps, nextState) {
+        this.handlePermissions();
     },
 
     updateSelecetedLines(selectedLineFrom, selectedLineTo) {
@@ -101,6 +107,10 @@ AddCommentLayout = React.createClass({
 
         var that = this;
 
+        this.setState({
+            loading: true,
+        });
+
         var work = this.state.filters[0].values[0];
         var subwork = this.state.filters[1].values[0];
 
@@ -114,7 +124,6 @@ AddCommentLayout = React.createClass({
         }, {
             limit: 1
         }).fetch();
-
         var referenceWorksInputObject = {};
         if (referenceWorks.length) {
             referenceWorksInputObject = {
@@ -134,17 +143,15 @@ AddCommentLayout = React.createClass({
             _id: Meteor.user().commenterId
         }).fetch()[0];
 
-        this.addNewKeyword(formData.keywordsValue, function() {
-
+        this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, function() {
             var keywords = [];
-            if (formData.keywordsValue) {
-                formData.keywordsValue.forEach((keyword) => {
-                    var foundKeyword = Keywords.find({
-                        title: keyword
-                    }).fetch()[0];
-                    keywords.push(foundKeyword);
-                });
-            };
+            that.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
+                keywords.push(matchedKeyword);
+            });
+            that.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
+                keywords.push(matchedKeyword);
+            });
+            console.log('keywords', keywords);
 
             var comment = {
                 work: {
@@ -160,7 +167,6 @@ AddCommentLayout = React.createClass({
                 lineTo: that.state.selectedLineTo,
                 lineLetter: lineLetter,
                 nLines: that.state.selectedLineTo - that.state.selectedLineFrom + 1,
-                // commentOrder:
                 revisions: [{
                     title: formData.titleValue,
                     text: formData.textValue,
@@ -171,6 +177,7 @@ AddCommentLayout = React.createClass({
                 referenceLink: referenceWorksInputObject.referenceLink,
                 created: new Date(),
             };
+
             if (commenter) {
                 comment.commenters = [{
                     _id: commenter._id,
@@ -180,6 +187,7 @@ AddCommentLayout = React.createClass({
             } else {
                 comment.commenters = [{}];
             };
+
             if (keywords) {
                 comment.keywords = keywords;
             } else {
@@ -197,22 +205,46 @@ AddCommentLayout = React.createClass({
 
     },
 
-    addNewKeyword(keywords, next) {
-        if (keywords.length > 0) {
+    matchKeywords(keywords) {
+        var matchedKeywords = [];
+        if (keywords) {
+            keywords.forEach((keyword) => {
+                var foundKeyword = Keywords.find({
+                    title: keyword
+                }).fetch()[0];
+                matchedKeywords.push(foundKeyword);
+            });
+        };
+        return matchedKeywords;
+    },
+
+    addNewKeywordsAndIdeas(keywords, keyideas, next) {
+        var that = this;
+        this.addNewKeywords(keywords, 'word', function() {
+            that.addNewKeywords(keyideas, 'idea', function() {
+                return next();
+            });
+        });
+    },
+
+    addNewKeywords(keywords, type, next) {
+        if (keywords) {
             var that = this;
             var insertKeywords = [];
             keywords.forEach(function(keyword) {
-                var foundKeyword = that.data.keywords.find(function(d) {
+                foundKeyword = that.data.keywords.find(function(d) {
                     return d.title === keyword;
                 });
+                console.log('foundKeyword', foundKeyword, 'keyword', keyword);
                 if (foundKeyword === undefined) {
                     var _keyword = {
                         title: keyword,
                         slug: slugify(keyword),
+                        type: type,
                     };
                     insertKeywords.push(_keyword);
                 };
-            })
+            });
             if (insertKeywords.length > 0) {
                 Meteor.call("keywords.insert", insertKeywords, function(err, data) {
                     if(err) {
@@ -221,7 +253,11 @@ AddCommentLayout = React.createClass({
                         return next();
                     };
                 });
+            } else {
+                return next();
             };
+        } else {
+            return next();
         };
     },
 
@@ -243,49 +279,70 @@ AddCommentLayout = React.createClass({
         });
     },
 
+    handlePermissions() {
+        if (Roles.subscription.ready()) {
+            if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
+                FlowRouter.go('/');
+            };
+        };
+    },
+
+    ifReady() {
+        var ready = Roles.subscription.ready();
+        return ready;
+    },
 
     render() {
 
         return (
-            <div className="chs-layout add-comment-layout">
+            <div>
+                {this.ifReady() || this.state.loading ? 
+                    <div className="chs-layout add-comment-layout">
+                        <div>
+                            <Header
+                                toggleSearchTerm={this.toggleSearchTerm}
+                                initialSearchEnabled
+                                filters={this.state.filters}
+                            />
 
-                <Header
-                    toggleSearchTerm={this.toggleSearchTerm}
-                    initialSearchEnabled
-                    filters={this.state.filters}
-                />
+                            <main>
 
-                <main>
+                                <CommentLemmnaSelect
+                                    ref="CommentLemmnaSelect"
+                                    selectedLineFrom={this.state.selectedLineFrom}
+                                    selectedLineTo={this.state.selectedLineTo}
+                                    workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
+                                    subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                                    openContextReader={this.openContextReader}
+                                />
 
-                    <CommentLemmnaSelect
-                        ref="CommentLemmnaSelect"
-                        selectedLineFrom={this.state.selectedLineFrom}
-                        selectedLineTo={this.state.selectedLineTo}
-                        workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
-                        subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
-                        openContextReader={this.openContextReader}
-                    />
+                                <AddComment
+                                    selectedLineFrom={this.state.selectedLineFrom}
+                                    selectedLineTo={this.state.selectedLineTo}
+                                    submiteForm={this.addComment}
+                                />
 
-                    <AddComment
-                        selectedLineFrom={this.state.selectedLineFrom}
-                        selectedLineTo={this.state.selectedLineTo}
-                        submiteForm={this.addComment}
-                    />
+                                <ContextReader
+                                    open={this.state.contextReaderOpen}
+                                    closeContextPanel={this.closeContextReader}
+                                    workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : ""}
+                                    subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                                    selectedLineFrom={this.state.selectedLineFrom}
+                                    selectedLineTo={this.state.selectedLineTo}
+                                    updateSelecetedLines={this.updateSelecetedLines}
+                                />
 
-                    <ContextReader
-                        open={this.state.contextReaderOpen}
-                        closeContextPanel={this.closeContextReader}
-                        workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : ""}
-                        subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
-                        selectedLineFrom={this.state.selectedLineFrom}
-                        selectedLineTo={this.state.selectedLineTo}
-                        updateSelecetedLines={this.updateSelecetedLines}
-                    />
-
-                </main>
-                
-                <Footer/>
-
+                            </main>
+                            
+                            <Footer/>
+                        </div>
+                    </div>
+                    :
+                    <div className="ahcip-spinner commentary-loading full-page-spinner" >
+                        <div className="double-bounce1"></div>
+                        <div className="double-bounce2"></div>
+                    </div>
+                }
             </div>
         );
     }

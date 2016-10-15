@@ -50,8 +50,8 @@ AddComment = React.createClass({
             titleValue: '',
             textValue: '',
             referenceWorksValue: '',
-            keywordsValue: '',
-            keyideasValue: '',
+            keywordsValue: null,
+            keyideasValue: null,
 
             snackbarOpen: false,
             snackbarMessage: ""
@@ -62,7 +62,7 @@ AddComment = React.createClass({
 
     getMeteorData() {
         var keywords_options = [];
-        var keywords = Keywords.find().fetch();
+        var keywords = Keywords.find({type: 'word'}).fetch();
         keywords.map(function(keyword) {
             keywords_options.push({
                 value: keyword.title,
@@ -70,8 +70,14 @@ AddComment = React.createClass({
             });
         });
         
-        // TODO: key ideas
         var keyideas_options = [];
+        var keyideas = Keywords.find({type: 'idea'}).fetch();
+        keyideas.map(function(keyidea) {
+            keyideas_options.push({
+                value: keyidea.title,
+                label: keyidea.title,
+            });
+        });
 
         var referenceWorks_options = [];
         var referenceWorks = ReferenceWorks.find().fetch();
@@ -108,13 +114,41 @@ AddComment = React.createClass({
     },
 
     onKeywordsValueChange(keywords) {
-        if (keywords.length > 0) {
+        if (keywords) {
+            keywords = keywords.split(",");
+            var errorKeywords = this.errorKeywords(keywords, 'word');
+            if (errorKeywords.length) {
+                errorKeywords.forEach((keyword) => {
+                    var index = keywords.indexOf(keyword);
+                    keywords.splice(index, 1);
+                });
+            };
             this.setState({
-                keywordsValue: keywords.split(","),
+                keywordsValue: keywords,
             });
         } else {
             this.setState({
                 keywordsValue: null,
+            });
+        };
+    },
+
+    onKeyideasValueChange(keyideas) {
+        if (keyideas) {
+            keyideas = keyideas.split(",");
+            var errorKeywords = this.errorKeywords(keyideas, 'idea');
+            if (errorKeywords.length) {
+                errorKeywords.forEach((keyword) => {
+                    var index = keyideas.indexOf(keyword);
+                    keyideas.splice(index, 1);
+                });
+            };
+            this.setState({
+                keyideasValue: keyideas,
+            });
+        } else {
+            this.setState({
+                keyideasValue: null,
             });
         };
     },
@@ -142,13 +176,69 @@ AddComment = React.createClass({
 
         var error = this.validateStateForSubmit();
 
+        this.showSnackBar(error);
+        
+        if (!error.errors) {
+            this.props.submiteForm(this.state);
+        };
+    },
+
+    errorKeywords(keywordsArray, type) {
+        // 'type' is the type of keywords passed to this function
+        var errorKeywords = [];
+        switch (type) {
+
+            case 'word':
+                var keyideasValue = this.state.keyideasValue;
+                keywordsArray.forEach((keyword) => {
+                    this.data.keyideas_options.forEach((keyidea_option) => {
+                        if (keyword === keyidea_option.value) {
+                            errorKeywords.push(keyword);
+                        };
+                    });
+
+                    if (Array.isArray(keyideasValue)) {
+                        keyideasValue.forEach((keyideaValue) => {
+                            if (keyword === keyideaValue) {
+                                errorKeywords.push(keyword);
+                            };
+                        });
+                    };
+                });
+                break;
+
+            case 'idea':
+                var keywordsValue = this.state.keywordsValue;
+                keywordsArray.forEach((keyword) => {
+                    this.data.keywords_options.forEach((keyword_option) => {
+                        if (keyword === keyword_option.value) {
+                            errorKeywords.push(keyword);
+                        };
+                    });
+
+                    if (Array.isArray(keywordsValue)) {
+                        keywordsValue.forEach((keywordValue) => {
+                            if (keyword === keywordValue) {
+                                errorKeywords.push(keyword);
+                            };
+                        });
+                    };
+                });
+                break;
+        };
+        return errorKeywords;
+    },
+
+    showSnackBar(error) {
         this.setState({
             snackbarOpen: error.errors,
             snackbarMessage: error.errorMessage,
         });
-        if (!error.errors) {
-            this.props.submiteForm(this.state);
-        };
+        setTimeout(() => {
+            this.setState({
+                snackbarOpen: false,
+            });
+        }, 4000);
     },
 
     validateStateForSubmit() {
@@ -221,11 +311,11 @@ AddComment = React.createClass({
                             name="keyideas"
                             id="keyideas"
                             required={false}
-                            options={this.data.keywords_options /*TODO: change to keyideas_options*/}
+                            options={this.data.keyideas_options}
                             multi={true}
                             allowCreate={true}
                             value={this.state.keyideasValue}
-                            onChange={this.onKeywideasValueChange}
+                            onChange={this.onKeyideasValueChange}
                             placeholder='Keyideas...'
                         />
 

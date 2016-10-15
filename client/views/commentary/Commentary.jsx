@@ -366,7 +366,7 @@ Commentary = React.createClass({
 				<InfiniteScroll
 					endPadding={120}
 					loadMore={this.loadMoreComments}
-					>
+				>
 
 					<div className="commentary-comments commentary-comment-groups">
 						{this.commentGroups.map(function(commentGroup, i){

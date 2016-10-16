@@ -18,12 +18,6 @@ SearchTermButton = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	getInitialState() {
-		return {
-			active: false,
-		};
-	},
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
@@ -34,15 +28,8 @@ SearchTermButton = React.createClass({
 
 	render() {
 		let className = 'search-term-button';
-		let active = this.props.active;
 
-		if ('activeWork' in this.props && this.props.activeWork === true) {
-			active = true;
-		} else if (this.state.active) {
-			active = true;
-		}
-
-		if (active) {
+		if (this.props.active || this.props.activeWork) {
 			className += ' search-term-button--active';
 		}
 
@@ -55,6 +42,8 @@ SearchTermButton = React.createClass({
 					icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
 				/>
 			</li>
-		)
+		);
 	},
 });
+
+export default SearchTermButton;

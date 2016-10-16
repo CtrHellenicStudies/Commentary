@@ -93,3 +93,5 @@ SearchTermButtonPanel = React.createClass({
 		);
 	},
 });
+
+export default SearchTermButtonPanel;

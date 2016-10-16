@@ -56,7 +56,6 @@ SinglePage = React.createClass({
 		const pageClass = `page page-${slug}`;
 		const headerImageSource = this.data.images[0] ? this.data.images[0].url : null;
 		if (headerImageSource) {
-			// console.log(headerImageSource);
 			this.backgroundImages();
 		}
 		// var page = Pages.findOne({slug: slug});

@@ -10,10 +10,10 @@ Header = React.createClass({
 
     propTypes: {
     	filters: React.PropTypes.array,
-        toggleSearchTerm: React.PropTypes.func,
-        handleChangeTextsearch: React.PropTypes.func,
-        handleChangeLineN: React.PropTypes.func,
-        initialSearchEnabled: React.PropTypes.bool,
+      toggleSearchTerm: React.PropTypes.func,
+      handleChangeTextsearch: React.PropTypes.func,
+      handleChangeLineN: React.PropTypes.func,
+      initialSearchEnabled: React.PropTypes.bool,
     },
 
     childContextTypes: {
@@ -214,7 +214,7 @@ Header = React.createClass({
                 />
                 <header >
                     {!this.state.searchEnabled ?
-                        
+
                         <div className="md-menu-toolbar" >
                             <div className="toolbar-tools">
                                 <IconButton
@@ -300,7 +300,7 @@ Header = React.createClass({
                             </div>
 
                         </div>
-                            
+
                         :
 
                         <div>
@@ -446,7 +446,6 @@ Header = React.createClass({
 
                                         </div>
 
-                                        
 
                                     </div>
 

@@ -30,21 +30,11 @@ export const AvatarStore = new UploadFS.store.Local({
 });
 
 AvatarStore.onFinishUpload = function handleAvatarFinishUpdate(avatar) {
-	const userId = Meteor.userId();
 	const user = Meteor.user();
-
-	if ('avatar' in user && '_id' in user.avatar) {
-		AvatarStore.delete(user.avatar._id, (error) => {
-			if (error) {
-				console.error('could not delete avatar ', user.avatar, ' for user ', userId, 
-					'; error:', error
-				);
-			}
-		});
-	}
-
+	const oldAvatarId = 'avatar' in user && '_id' in user.avatar ? user.avatar._id : null; 
+	
 	Meteor.users.update(
-		{ _id: userId }, 
+		{ _id: user._id }, 
 		{
 			$set: {
 				avatar: {
@@ -55,11 +45,20 @@ AvatarStore.onFinishUpload = function handleAvatarFinishUpdate(avatar) {
 			},
 		},
 		{ multi: false, },
-		error => {
-			if (error) {
-				console.error('could not update user ', userId, ' with avatar ', avatar._id, 
-					'; error:', error
+		function handleAvatarUpdateComplete(avatarUpdateErr) {
+			if (avatarUpdateErr) {
+				console.error('could not update user ', user._id, ' with avatar ', avatar._id, 
+					'; error:', avatarUpdateErr
 				);
+				AvatarStore.delete(avatar._id);
+			} else if (oldAvatarId) {
+				AvatarStore.delete(oldAvatarId, (storeDeleteErr) => {
+					if (storeDeleteErr) {
+						console.error('could not delete avatar ', user.avatar, ' for user ', user._id, 
+							'; error:', storeDeleteErr
+						);
+					}
+				});
 			}
 		}
 	);

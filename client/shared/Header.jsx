@@ -335,10 +335,10 @@ Header = React.createClass({
 
                                             <CommentarySearchToolbar
                                             	toggleSearchTerm={this.props.toggleSearchTerm}
-		                                        handleChangeTextsearch={this.props.handleChangeTextsearch}
-		                                        handleChangeLineN={this.props.handleChangeLineN}
-		                                        filters={this.props.filters}
-		                                    />
+			                                        handleChangeTextsearch={this.props.handleChangeTextsearch}
+			                                        handleChangeLineN={this.props.handleChangeLineN}
+			                                        filters={this.props.filters}
+				                                    />
 
                                             <div className="search-toggle">
                                                 <IconButton
@@ -442,6 +442,11 @@ Header = React.createClass({
                                                 </ul>
 
                                             </div>
+																						<div style={styles.lineSearch} className="line-search">
+																							<LineRangeSlider
+																								handleChangeLineN={this.props.handleChangeLineN}
+																							/>
+																						</div>
 
                                             <div className="search-toggle">
                                                 <IconButton

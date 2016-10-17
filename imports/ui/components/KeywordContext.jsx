@@ -1,14 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import { queryCommentWithKeyword, makeKeywordContextQueryFromComment } from '../../api/api_utils.js';
+import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '../../api/api_utils.js';
 
 export default KeywordContext = React.createClass({
 
 	mixins: [ReactMeteorData],
 
 	propTypes: {
-		slug: React.PropTypes.string.isRequired,
+		keywordId: React.PropTypes.string,
 		maxLines: React.PropTypes.number.isRequired,
 	},
 
@@ -21,12 +21,15 @@ export default KeywordContext = React.createClass({
 	},
 
 	getMeteorData() {
+		if (!this.props.keywordId) {
+			return;
+		}
 		let lemmaText = [];
 
-		const commentsSub = Meteor.subscribe('comments.keyword_context', this.props.slug);
+		const commentsSub = Meteor.subscribe('comments.keyword_context', this.props.keywordId);
 
 		if (commentsSub.ready()) {
-			const commentCursor = queryCommentWithKeyword(this.props.slug);
+			const commentCursor = queryCommentWithKeywordId(this.props.keywordId);
 			if (commentCursor.count() > 0) {
 				const comment = commentCursor.fetch()[0];
 

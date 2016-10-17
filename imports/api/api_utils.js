@@ -1,13 +1,14 @@
 
-export function queryCommentWithKeyword(keyword_slug) {
+export function queryCommentWithKeywordId(keyword_id) {
 	return Comments.find({
-		'keywords.slug': keyword_slug,
+		'keywords._id': keyword_id,
 	}, {
 		limit:1,
 		fields: {
 			'work.slug':1,
 			'subwork.n':1,
 			'keywords.slug':1,
+			'keywords._id':1,
 			lineFrom:1,
 			lineTo:1,
 			nLines:1,

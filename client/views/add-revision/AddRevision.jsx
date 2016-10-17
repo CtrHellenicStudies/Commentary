@@ -15,10 +15,10 @@ const singleLinePlugin = createSingleLinePlugin();
 import createRichButtonsPlugin from 'draft-js-richbuttons-plugin';
 const richButtonsPlugin = createRichButtonsPlugin();
 
-const {    
-  // inline buttons 
+const {
+  // inline buttons
   ItalicButton, UnderlineButton,
-  // block buttons 
+  // block buttons
   ULButton
 } = richButtonsPlugin;
 
@@ -136,6 +136,7 @@ AddRevision = React.createClass({
         var that = this;
 
         return (
+					<div className="comments lemma-panel-visible">
             <div className={'comment-outer'}>
 
                 <article className="comment commentary-comment paper-shadow " style={{marginLeft: 0}}>
@@ -198,7 +199,7 @@ AddRevision = React.createClass({
                         </div>
 
                         <div className="add-comment-button">
-                            <RaisedButton 
+                            <RaisedButton
                                 type="submit"
                                 label="Add revision"
                                 labelPosition="after"
@@ -208,7 +209,7 @@ AddRevision = React.createClass({
                         </div>
                         {Roles.userIsInRole(Meteor.user(), ['developer']) ? /*TODO: delete*/
                             <div className="add-comment-button">
-                                <RaisedButton 
+                                <RaisedButton
                                     type="submit"
                                     label="(developer only) Remove revision"
                                     labelPosition="after"
@@ -221,7 +222,7 @@ AddRevision = React.createClass({
                         }
 
                     </div>
-                    
+
                     <div className="comment-revisions">
                         {this.props.comment.revisions.map(function(revision, i){
                             return <FlatButton
@@ -236,10 +237,11 @@ AddRevision = React.createClass({
 
                         })}
                     </div>
-                        
+
                 </article>
 
             </div>
+					</div>
 
         );
     }

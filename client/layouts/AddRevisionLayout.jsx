@@ -102,13 +102,15 @@ AddRevisionLayout = React.createClass({
 
         return (
             <div>
-                {this.ifReady() ? 
+                {this.ifReady() ?
                     <div className="chs-layout add-comment-layout">
 
                         <Header />
 
                             <main>
 
+														<div className="commentary-comments">
+															<div className="comment-group">
                                 <CommentLemmnaSelect
                                     ref="CommentLemmnaSelect"
                                     selectedLineFrom={comment.lineFrom}
@@ -134,9 +136,12 @@ AddRevisionLayout = React.createClass({
                                     initialLineTo={comment.lineFrom + comment.nLines - 1 + 50}
                                     disableEdit={true}
                                 />
+																</div>
+															</div>
+
 
                             </main>
-                        
+
                         <Footer/>
 
                     </div>

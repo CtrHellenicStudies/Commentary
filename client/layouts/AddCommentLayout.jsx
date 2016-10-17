@@ -296,7 +296,7 @@ AddCommentLayout = React.createClass({
 
         return (
             <div>
-                {this.ifReady() || this.state.loading ? 
+                {this.ifReady() || this.state.loading ?
                     <div className="chs-layout add-comment-layout">
                         <div>
                             <Header
@@ -307,6 +307,8 @@ AddCommentLayout = React.createClass({
 
                             <main>
 
+														<div className="commentary-comments">
+															<div className="comment-group">
                                 <CommentLemmnaSelect
                                     ref="CommentLemmnaSelect"
                                     selectedLineFrom={this.state.selectedLineFrom}
@@ -331,9 +333,11 @@ AddCommentLayout = React.createClass({
                                     selectedLineTo={this.state.selectedLineTo}
                                     updateSelecetedLines={this.updateSelecetedLines}
                                 />
+															</div>
+														</div>
 
                             </main>
-                            
+
                             <Footer/>
                         </div>
                     </div>

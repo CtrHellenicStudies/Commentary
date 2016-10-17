@@ -136,6 +136,7 @@ CommentLemmnaSelect = React.createClass({
         var self = this;
 
         return (
+					<div className="comments lemma-panel-visible">
             <div className="comment-outer comment-lemma-comment-outer">
 
                 {this.props.selectedLineFrom > 0 ?
@@ -196,7 +197,7 @@ CommentLemmnaSelect = React.createClass({
 
                     </article>
                 :
-                    
+
                     <article className="comment lemma-comment paper-shadow">
                         <p className="lemma-text">No line selected</p>
                         <div className="context-tabs tabs">
@@ -213,6 +214,7 @@ CommentLemmnaSelect = React.createClass({
                 }
 
             </div>
+					</div>
         );
     }
 });

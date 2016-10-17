@@ -18,10 +18,10 @@ const singleLinePlugin = createSingleLinePlugin();
 import createRichButtonsPlugin from 'draft-js-richbuttons-plugin';
 const richButtonsPlugin = createRichButtonsPlugin();
 
-const {    
-  // inline buttons 
+const {
+  // inline buttons
   ItalicButton, UnderlineButton,
-  // block buttons 
+  // block buttons
   ULButton
 } = richButtonsPlugin;
 
@@ -69,7 +69,7 @@ AddComment = React.createClass({
                 label: keyword.title,
             });
         });
-        
+
         var keyideas_options = [];
         var keyideas = Keywords.find({type: 'idea'}).fetch();
         keyideas.map(function(keyidea) {
@@ -177,7 +177,7 @@ AddComment = React.createClass({
         var error = this.validateStateForSubmit();
 
         this.showSnackBar(error);
-        
+
         if (!error.errors) {
             this.props.submiteForm(this.state);
         };
@@ -280,6 +280,7 @@ AddComment = React.createClass({
 
 
         return (
+					<div className="comments lemma-panel-visible">
             <div className={'comment-outer'}>
 
                 <article className="comment commentary-comment paper-shadow " style={{marginLeft: 0}}>
@@ -348,7 +349,7 @@ AddComment = React.createClass({
                         </div>
 
                         <div className="add-comment-button">
-                            <RaisedButton 
+                            <RaisedButton
                                 type="submit"
                                 label="Add comment"
                                 labelPosition="after"
@@ -368,7 +369,7 @@ AddComment = React.createClass({
                 />
 
             </div>
-
+					</div>
         );
     }
 });

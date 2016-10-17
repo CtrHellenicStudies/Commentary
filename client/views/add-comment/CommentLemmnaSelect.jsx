@@ -200,7 +200,7 @@ CommentLemmnaSelect = React.createClass({
 
                     <article className="comment lemma-comment paper-shadow">
                         <p className="lemma-text">No line selected</p>
-                        <div className="context-tabs tabs">
+                        {/*<div className="context-tabs tabs">
                             <RaisedButton
                                 className="context-tab tab"
                                 onClick={this.props.openContextReader}
@@ -209,7 +209,7 @@ CommentLemmnaSelect = React.createClass({
                                 icon={<FontIcon className="mdi mdi-chevron-right" />}
                                 >
                             </RaisedButton>
-                        </div>
+                        </div>*/}
                     </article>
                 }
 

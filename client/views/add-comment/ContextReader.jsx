@@ -281,11 +281,11 @@ ContextReader = React.createClass({
 
 								<div className={contextPanelStyles}>
 
-										<IconButton
+										{/* <IconButton
 												className="close-lemma-panel"
 												onClick={this.props.closeContextPanel}
 												iconClassName="mdi mdi-close"
-										/>
+										/> */}
 
 										<div className="lemma-text-wrap">
 
@@ -321,7 +321,7 @@ ContextReader = React.createClass({
 																		: ""}
 																</div>
 
-																<div 
+																<div
 																	className="lemma-text"
 																	ref={line.n}
 																	id={line.n}
@@ -369,11 +369,11 @@ ContextReader = React.createClass({
 
 						:
 								<div className={contextPanelStyles}>
-										<IconButton
+										{/*<IconButton
 												className="close-lemma-panel"
 												onClick={this.props.closeContextPanel}
 												iconClassName="mdi mdi-close"
-										/>
+										/>*/}
 										<div className="lemma-text-wrap">
 												No work & book selected
 										</div>

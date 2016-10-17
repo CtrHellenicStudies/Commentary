@@ -286,6 +286,83 @@ AddCommentLayout = React.createClass({
             };
         };
     },
+		
+		handleChangeLineN(e){
+
+			var filters = this.state.filters;
+
+			if(e.from > 1){
+				var lineFromInFilters = false;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineFrom"){
+						filter.values = [e.from];
+						lineFromInFilters = true;
+					}
+				});
+
+				if(!lineFromInFilters){
+					filters.push({
+						key:"lineFrom",
+						values:[e.from]
+					})
+				}
+
+			}else {
+				var filterToRemove;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineFrom"){
+						filterToRemove = i;
+					}
+
+				});
+
+				if(typeof filterToRemove !== "undefined"){
+					filters.splice(filterToRemove, 1);
+				}
+
+			}
+
+			if(e.to < 2100){
+				var lineToInFilters = false;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineTo"){
+						filter.values = [e.to];
+						lineToInFilters = true;
+					}
+				});
+
+				if(!lineToInFilters){
+					filters.push({
+						key:"lineTo",
+						values:[e.to]
+					})
+				}
+
+			}else {
+				var filterToRemove;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineTo"){
+						filterToRemove = i;
+					}
+
+				});
+
+				if(typeof filterToRemove !== "undefined"){
+					filters.splice(filterToRemove, 1);
+				}
+
+			}
+
+
+			this.setState({
+				filters: filters
+			})
+
+		},
 
     ifReady() {
         var ready = Roles.subscription.ready();
@@ -301,8 +378,9 @@ AddCommentLayout = React.createClass({
                         <div>
                             <Header
                                 toggleSearchTerm={this.toggleSearchTerm}
-                                initialSearchEnabled
+																handleChangeLineN={this.handleChangeLineN}
                                 filters={this.state.filters}
+                                initialSearchEnabled
                             />
 
                             <main>

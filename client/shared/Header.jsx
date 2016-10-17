@@ -57,6 +57,14 @@ Header = React.createClass({
         };
     },
 
+    componentDidUpdate() {
+        if (location.pathname.indexOf('/add-comment') === 0 && !this.state.addCommentPage) {
+            this.setState({
+                addCommentPage: true,
+            });
+        };
+    },
+
     toggleSearchMode() {
         if (location.pathname.indexOf('/commentary') === 0 || location.pathname.indexOf('/add-comment') === 0) {
             this.setState({

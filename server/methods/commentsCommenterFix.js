@@ -1,5 +1,7 @@
 Meteor.method("commentsCommenterFix", function() {
-
+    // ---
+    // FIX the commenter field in the comments collection - add commenter.slug and commenter._id if doesn't exist
+    // ---
     var comments = Comments.find().fetch();
     comments.forEach((comment) => {
         comment.commenters.forEach((commenter, i) => {
@@ -31,5 +33,5 @@ Meteor.method("commentsCommenterFix", function() {
     return 1;
 
 }, {
-    url: "comments/commenter/fix",
+    url: "fix/comments/commenter",
 });

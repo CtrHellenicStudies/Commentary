@@ -1,5 +1,8 @@
 Meteor.method("commentsKeywordsFix", function() {
 
+    // ---
+    // FIX the keywords field in the comments collection - add keywords._id if doesn't exist
+    // ---
     var comments = Comments.find().fetch();
     comments.forEach((comment) => {
         if (comment.keywords.length > 0) {
@@ -22,5 +25,5 @@ Meteor.method("commentsKeywordsFix", function() {
     return 1;
 
 }, {
-    url: "comments/keywords/fix",
+    url: "fix/comments/keywords",
 });

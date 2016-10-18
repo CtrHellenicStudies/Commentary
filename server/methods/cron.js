@@ -127,6 +127,96 @@ Meteor.method("cron", function () {
 
 		});
 
+		// get a array of all subworks into tableOfContents
+		var tableOfContents = [];
+		Meteor.call('getTableOfContents', (err, res) => {
+			if (err) {
+				console.log(err);
+			} else if (res) {
+				tableOfContents = res;
+			};
+		});
+
+		// search for subworks which have not been commented on
+		// modify tableOfContents so only missing subworks are left
+	    commentCounts.forEach((work, i) => {
+	        var _work = tableOfContents.find(function(element, index, array) {
+	            return element._id === work.slug;
+	        });
+	        work.subworks.forEach((subwork, j) => {
+	            _work.subworks.forEach((n, k) => {
+	                if (n === subwork.n) {
+	                	_work.subworks.splice(k, 1);
+	                };
+	            });
+	        });
+	    });
+
+	    // tableOfContents.forEach((_work, i) => {
+	    // 	var isInCommentCountsWorks = false;
+	    // 	commentCounts.forEach((work) => {
+	    // 		if (_work._id === work.slug) {
+     //                isInCommentCountsWorks = true;
+
+     //                // work.subworks.push({
+     //                //     n: n,
+     //                //     title: n.toString(),
+     //                //     nComments: 0,
+     //                //     commentHeatmap: []
+     //                // });
+     //            };
+	    // 	});
+
+	    // 	if (!isInCommentCountsWorks) {
+     //            commentCounts.push({
+     //                slug: _work._id,
+     //                nComments: 0,
+     //                subworks: [{
+     //                    n: n,
+     //                    title: n.toString(),
+     //                    nComments: 0,
+     //                    commentHeatmap: []
+     //                }]
+     //            });
+     //        };
+	    // });
+
+	    tableOfContents.forEach((_work, i) => {
+	        _work.subworks.forEach((n) => {
+
+	            var isInCommentCountsWorks = false;
+	            commentCounts.forEach((work) => {
+
+	                if (_work._id === work.slug) {
+	                    isInCommentCountsWorks = true;
+
+	                    work.subworks.push({
+	                        n: n,
+	                        title: n.toString(),
+	                        nComments: 0,
+	                        commentHeatmap: []
+	                    });
+	                };
+	            });
+
+	            if (!isInCommentCountsWorks) {
+	                commentCounts.push({
+	                    slug: _work._id,
+	                    nComments: 0,
+	                    subworks: [{
+	                        n: n,
+	                        title: n.toString(),
+	                        nComments: 0,
+	                        commentHeatmap: []
+	                    }]
+	                });
+	            };
+	        });
+	    });
+
+	    console.log('commentCounts', commentCounts);
+
+
 		commentCounts.forEach(function(countsWork){
 			var work = Works.findOne({slug: countsWork.slug});
 			work.subworks.forEach(function(subwork){
@@ -149,9 +239,11 @@ Meteor.method("cron", function () {
 														subworks: countsWork.subworks,
 														nComments: countsWork.nComments
 													}});
-			console.log(countsWork, updateStatus);
+			// console.log(countsWork, updateStatus);
 
 		});
+
+		// console.log('commentCounts', commentCounts);
 
 		console.log(" -- Cron run complete: Commentary")
 

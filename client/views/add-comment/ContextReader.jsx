@@ -33,6 +33,7 @@ ContextReader = React.createClass({
 		},
 
 		getInitialState() {
+            console.log('props', this.props);
 			var lineFrom = 1,
 				lineTo = 50;
 			if(this.props.initialLineFrom) {
@@ -51,6 +52,31 @@ ContextReader = React.createClass({
 		},
 
     componentDidUpdate(prevProps, prevState) {
+
+        if (this.props.workSlug != "" && this.props.subwork_n != 0 && (prevProps.workSlug != this.props.workSlug || prevProps.subwork_n != this.props.subwork_n)) {
+            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
+                if (err) {
+                    console.log(err);
+                } else if (res) {
+                    var linePagination = [];
+                    for (var i = 1; i <= res; i+=100) {
+                        linePagination.push(i);
+                    };
+                    this.setState({
+                        linePagination: linePagination,
+                        maxLine: res,
+                    });
+                }
+            });
+        };
+
+        // incase a subwork has less lines then initial this.state.lineTo
+        if (this.state.maxLine != 0 && this.state.maxLine < this.state.lineTo) {
+            this.setState({
+                lineTo: this.state.maxLine,
+            });
+        };
+
         var lineFrom = this.state.lineFrom,
             lineTo = this.state.lineTo;
         if (Object.keys(this.refs).length) {
@@ -75,23 +101,6 @@ ContextReader = React.createClass({
                     };
                 };
             };
-        };
-
-        if (this.props.workSlug != "" && this.props.subwork_n != 0 && (prevProps.workSlug != this.props.workSlug || prevProps.subwork_n != this.props.subwork_n)) {
-            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
-                if (err) {
-                    console.log(err);
-                } else if (res) {
-                	var linePagination = [];
-                	for (var i = 1; i <= res; i+=100) {
-                		linePagination.push(i);
-                	};
-                    this.setState({
-                    	linePagination: linePagination,
-                    	maxLine: res,
-                    });
-                }
-            });
         };
     },
 
@@ -201,46 +210,46 @@ ContextReader = React.createClass({
         };
     },
 
-		toggleEdition(editionSlug) {
-				if (this.state.selectedLemmaEdition !== editionSlug) {
-						this.setState({
-								selectedLemmaEdition: editionSlug
-						});
-				}
-		},
+    toggleEdition(editionSlug) {
+        if (this.state.selectedLemmaEdition !== editionSlug) {
+            this.setState({
+                selectedLemmaEdition: editionSlug
+            });
+        }
+    },
 
-		handeLineMouseEnter(event) {
-			if(!this.props.disableEdit) {
-				var style = event.target.style;
-				style.backgroundColor = "#d59518";
-			};
-		},
+    handeLineMouseEnter(event) {
+        if (!this.props.disableEdit) {
+            var style = event.target.style;
+            style.backgroundColor = "#d59518";
+        };
+    },
 
-		handeLineMouseLeave(event) {
-			if(!this.props.disableEdit) {
-				var style = event.target.style;
-				style.backgroundColor = "#ffffff";
-			};
-		},
+    handeLineMouseLeave(event) {
+        if (!this.props.disableEdit) {
+            var style = event.target.style;
+            style.backgroundColor = "#ffffff";
+        };
+    },
 
-		handleLineClick(event) {
-			if(!this.props.disableEdit) {
-				var target = event.target;
-				var style = event.target.style;
-				var id = parseInt(target.id);
-				if (this.props.selectedLineFrom === 0) {
-						this.props.updateSelecetedLines(id, null);
-				} else if (id === this.props.selectedLineFrom && this.props.selectedLineTo === 0) {
-						this.props.updateSelecetedLines(0, null);
-				} else if (this.props.selectedLineTo === 0 && id > this.props.selectedLineFrom) {
-						this.props.updateSelecetedLines(null, id);
-				} else if (this.props.selectedLineTo === 0 && id < this.props.selectedLineFrom) {
-						this.props.updateSelecetedLines(id, this.props.selectedLineFrom);
-				} else {
-						this.props.updateSelecetedLines(id, 0);
-				};
-			};
-		},
+    handleLineClick(event) {
+        if (!this.props.disableEdit) {
+            var target = event.target;
+            var style = event.target.style;
+            var id = parseInt(target.id);
+            if (this.props.selectedLineFrom === 0) {
+                this.props.updateSelecetedLines(id, null);
+            } else if (id === this.props.selectedLineFrom && this.props.selectedLineTo === 0) {
+                this.props.updateSelecetedLines(0, null);
+            } else if (this.props.selectedLineTo === 0 && id > this.props.selectedLineFrom) {
+                this.props.updateSelecetedLines(null, id);
+            } else if (this.props.selectedLineTo === 0 && id < this.props.selectedLineFrom) {
+                this.props.updateSelecetedLines(id, this.props.selectedLineFrom);
+            } else {
+                this.props.updateSelecetedLines(id, 0);
+            };
+        };
+    },
 
     onAfterClicked() {
         if (this.state.lineTo <= this.state.maxLine) {
@@ -310,7 +319,6 @@ ContextReader = React.createClass({
 												</div>
 												{this.data.selectedLemmaEdition.lines.map(function(line, i){
 														var lineClass="lemma-line";
-
 														return <div className={lineClass} key={i}>
 
 																<div className="lemma-meta">

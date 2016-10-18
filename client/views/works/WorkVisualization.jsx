@@ -163,6 +163,7 @@ WorkVisualization = React.createClass({
 							if ("nComments" in d && typeof d.nComments !== "undefined" && d.nComments && !isNaN(d.nComments)) {
 									return y(d.nComments);
 							} else {
+								console.log('y(0)', y(0));
 									return y(0);
 							}
 					})

@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-CommentLemmnaSelect = React.createClass({
+CommentLemmaSelect = React.createClass({
 
     childContextTypes: {
         muiTheme: React.PropTypes.object.isRequired,

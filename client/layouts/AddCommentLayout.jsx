@@ -116,7 +116,7 @@ AddCommentLayout = React.createClass({
 
         var lineLetter = "";
         if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) { // checking if one line was selected
-            lineLetter = this.refs.CommentLemmnaSelect.state.lineLetterValue;
+            lineLetter = this.refs.CommentLemmaSelect.state.lineLetterValue;
         };
 
         var referenceWorks = ReferenceWorks.find({
@@ -286,7 +286,7 @@ AddCommentLayout = React.createClass({
             };
         };
     },
-		
+
 		handleChangeLineN(e){
 
 			var filters = this.state.filters;
@@ -387,8 +387,8 @@ AddCommentLayout = React.createClass({
 
 														<div className="commentary-comments">
 															<div className="comment-group">
-                                <CommentLemmnaSelect
-                                    ref="CommentLemmnaSelect"
+                                <CommentLemmaSelect
+                                    ref="CommentLemmaSelect"
                                     selectedLineFrom={this.state.selectedLineFrom}
                                     selectedLineTo={this.state.selectedLineTo}
                                     workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}

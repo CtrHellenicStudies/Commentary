@@ -191,6 +191,10 @@ Header = React.createClass({
                 height: '55px',
 
             },
+						lineSearch: {
+							width: 250,
+							padding: '10px 15px',
+						},
 
         };
 
@@ -441,7 +445,7 @@ Header = React.createClass({
 
                                                 </ul>
 
-                                            </div>
+	                                          </div>
 																						<div style={styles.lineSearch} className="line-search">
 																							<LineRangeSlider
 																								handleChangeLineN={this.props.handleChangeLineN}

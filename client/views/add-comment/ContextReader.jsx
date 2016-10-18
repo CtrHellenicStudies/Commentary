@@ -61,7 +61,32 @@ ContextReader = React.createClass({
 
     componentDidUpdate(prevProps, prevState) {
         let lineFrom = this.state.lineFrom,
-            lineTo = this.state.lineTo;
+
+        if (this.props.workSlug != "" && this.props.subwork_n != 0 && (prevProps.workSlug != this.props.workSlug || prevProps.subwork_n != this.props.subwork_n)) {
+            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
+                if (err) {
+                    console.log(err);
+                } else if (res) {
+                    var linePagination = [];
+                    for (var i = 1; i <= res; i+=100) {
+                        linePagination.push(i);
+                    };
+                    this.setState({
+                        linePagination: linePagination,
+                        maxLine: res,
+                    });
+                }
+            });
+        };
+
+        // incase a subwork has less lines then initial this.state.lineTo
+        if (this.state.maxLine != 0 && this.state.maxLine < this.state.lineTo) {
+            this.setState({
+                lineTo: this.state.maxLine,
+            });
+        };
+
+        var lineFrom = this.state.lineFrom,
 
         if (Object.keys(this.refs).length) {
             if (this.props.selectedLineFrom === 0) {
@@ -226,13 +251,13 @@ ContextReader = React.createClass({
         };
     },
 
-		toggleEdition(editionSlug) {
-				if (this.state.selectedLemmaEdition !== editionSlug) {
-						this.setState({
-								selectedLemmaEdition: editionSlug
-						});
-				}
-		},
+    toggleEdition(editionSlug) {
+        if (this.state.selectedLemmaEdition !== editionSlug) {
+            this.setState({
+                selectedLemmaEdition: editionSlug
+            });
+        }
+    },
 
 		handeLineMouseEnter(event) {
 			if(!this.props.disableEdit) {
@@ -241,12 +266,12 @@ ContextReader = React.createClass({
 			};
 		},
 
-		handeLineMouseLeave(event) {
-			if(!this.props.disableEdit) {
-				var style = event.target.style;
-				style.backgroundColor = "#ffffff";
-			};
-		},
+    handeLineMouseLeave(event) {
+        if (!this.props.disableEdit) {
+            var style = event.target.style;
+            style.backgroundColor = "#ffffff";
+        };
+    },
 
 		handleLineClick(event) {
 			if(!this.props.disableEdit) {
@@ -330,7 +355,6 @@ ContextReader = React.createClass({
 
 												{this.data.selectedLemmaEdition.lines.map(function(line, i){
 														var lineClass="lemma-line";
-
 														return <div className={lineClass} key={i}>
 
 																<div className="lemma-meta">

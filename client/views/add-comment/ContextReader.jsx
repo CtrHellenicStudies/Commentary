@@ -275,13 +275,14 @@ ContextReader = React.createClass({
 		},
 
 		render() {
-		var self = this;
-		var contextPanelStyles = "lemma-panel paper-shadow";
+		const self = this;
+		let contextPanelStyles = "lemma-panel paper-shadow";
 		contextPanelStyles += " extended";
+
 
 		return (
 				<div>
-						{this.props.workSlug != "" && this.props.subworkN != 0 ?
+						{this.data.selectedLemmaEdition && 'lines' in this.data.selectedLemmaEdition ?
 
 								<div className={contextPanelStyles}>
 
@@ -293,25 +294,22 @@ ContextReader = React.createClass({
 
 										<div className="lemma-text-wrap">
 
-												{this.state.linePagination.map(function(line, i){
-													return (
-														<RaisedButton
-																key={i}
-																label={line}
-																className={"edition-tab tab"}
-																onClick={self.linePaginationClicked.bind(null, line)}
-														/>
-														);
-												})}
+												<LinePagination
+													linePagination={this.state.linePagination}
+													linePaginationClicked={this.linePaginationClicked}
+												/>
 
-												<div className="before-link">
-														<RaisedButton
-																className="cover-link light"
-																label="Before"
-																onClick={this.onBeforeClicked}
-																icon={<FontIcon className="mdi mdi-arrow-up" />}
-														/>
-												</div>
+												{this.state.lineFrom > 1 ?
+													<div className="before-link">
+															<RaisedButton
+																	className="cover-link light"
+																	label="Previous"
+																	onClick={this.onBeforeClicked}
+																	icon={<i className="mdi mdi-chevron-up" />}
+															/>
+													</div>
+												: '' }
+
 												{this.data.selectedLemmaEdition.lines.map(function(line, i){
 														var lineClass="lemma-line";
 
@@ -340,14 +338,16 @@ ContextReader = React.createClass({
 
 												})}
 
-												<div className="after-link">
+												{this.state.lineFrom < this.state.maxLine ?
+													<div className="after-link">
 														<RaisedButton
-																className="cover-link light"
-																label="After"
-																onClick={this.onAfterClicked}
-																icon={<FontIcon className="mdi mdi-arrow-down" />}
+															className="cover-link light"
+															label="Next"
+															onClick={this.onAfterClicked}
+															icon={<i className="mdi mdi-chevron-down" />}
 														/>
-												</div>
+													</div>
+												: '' }
 
 										</div>
 
@@ -379,6 +379,8 @@ ContextReader = React.createClass({
 												iconClassName="mdi mdi-close"
 										/>*/}
 										<div className="lemma-text-wrap">
+											<br />
+											<br />
 											<div className="well-spinner" />
 										</div>
 								</div>

@@ -390,7 +390,6 @@ AddCommentLayout = React.createClass({
                                     selectedLineTo={this.state.selectedLineTo}
                                     workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
                                     subworkN={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
-                                    openContextReader={this.openContextReader}
                                 />
 
                                 <AddComment
@@ -401,9 +400,8 @@ AddCommentLayout = React.createClass({
 
                                 <ContextReader
                                     open={this.state.contextReaderOpen}
-                                    closeContextPanel={this.closeContextReader}
-                                    workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : ""}
-                                    subworkN={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                                    workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : "iliad"}
+                                    subworkN={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 1}
                                     selectedLineFrom={this.state.selectedLineFrom}
                                     selectedLineTo={this.state.selectedLineTo}
                                     updateSelectedLines={this.updateSelectedLines}

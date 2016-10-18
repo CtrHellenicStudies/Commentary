@@ -60,6 +60,7 @@ CommentLemmaSelect = React.createClass({
                 }
             };
         };
+				console.log("CommentLemmaSelect lemmaQuery", lemmaQuery);
 
         var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
         if (textNodesSubscription.ready()) {
@@ -97,6 +98,8 @@ CommentLemmaSelect = React.createClass({
             });
 
             lemmaText = editions;
+
+						console.log("CommentLemmaSelect lemmaText", lemmaText);
 
             if (this.state.selectedLemmaEdition.length) {
                 lemmaText.forEach(function(edition) {
@@ -138,7 +141,7 @@ CommentLemmaSelect = React.createClass({
 					<div className="comments lemma-panel-visible">
             <div className="comment-outer comment-lemma-comment-outer">
 
-                {this.props.selectedLineFrom > 0 ?
+                {this.props.selectedLineFrom > 0 && this.data.selectedLemmaEdition && 'lines' in this.data.selectedLemmaEdition ?
                     <article className="comment lemma-comment paper-shadow">
 
                         {this.data.selectedLemmaEdition.lines.map(function(line, i){

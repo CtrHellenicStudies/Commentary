@@ -66,14 +66,14 @@ ContextReader = React.createClass({
         if (Object.keys(this.refs).length) {
             if (this.props.selectedLineFrom === 0) {
                 for (var i = lineFrom; i <= lineTo; i++) {
-                    this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
+                    //this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                 };
             } else if (this.props.selectedLineTo === 0) {
                 for (var i = lineFrom; i <= lineTo; i++) {
                     if (i === this.props.selectedLineFrom) {
                         this.refs[i.toString()].style.borderBottom = "2px solid #B2EBF2";
                     } else {
-                        this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
+                        //this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                     };
                 };
             } else {
@@ -81,7 +81,7 @@ ContextReader = React.createClass({
                     if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
                         this.refs[i.toString()].style.borderBottom = "2px solid #B2EBF2";
                     } else {
-                        this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
+                        //this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                     };
                 };
             };
@@ -160,7 +160,7 @@ ContextReader = React.createClass({
               }
           };
 
-					console.log('lemmaQuery', lemmaQuery);
+					// console.log('lemmaQuery', lemmaQuery);
 
 
           const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
@@ -200,7 +200,7 @@ ContextReader = React.createClass({
               });
 
               lemmaText = editions;
-	            console.log('lemmaText', lemmaText);
+	            // console.log('lemmaText', lemmaText);
 
               if (this.state.selectedLemmaEdition.length) {
                   lemmaText.forEach(function(edition) {

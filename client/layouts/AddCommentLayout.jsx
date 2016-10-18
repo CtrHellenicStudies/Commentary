@@ -406,8 +406,7 @@ AddCommentLayout = React.createClass({
 			});
 
 			console.log("AddCommentLayout.filters", this.state.filters);
-			console.log("AddCommentLayout lineTo", lineTo);
-			console.log("AddCommentLayout lineFrom", lineFrom);
+			console.log("AddCommentLayout.state", this.state);
 
       return (
           <div>
@@ -429,8 +428,8 @@ AddCommentLayout = React.createClass({
                                   ref="CommentLemmaSelect"
                                   selectedLineFrom={this.state.selectedLineFrom}
                                   selectedLineTo={this.state.selectedLineTo}
-                                  workSlug={work ? work.slug : ""}
-                                  subworkN={subwork ? subwork.n : 0}
+                                  workSlug={work ? work.slug : "iliad"}
+                                  subworkN={subwork ? subwork.n : 1}
                               />
 
                               <AddComment

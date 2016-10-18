@@ -60,9 +60,17 @@ ContextReader = React.createClass({
 		},
 
     componentDidUpdate(prevProps, prevState) {
-        let lineFrom = this.state.lineFrom,
+        let lineFrom = this.state.lineFrom;
+        let lineTo = this.state.lineTo;
 
-        if (this.props.workSlug != "" && this.props.subwork_n != 0 && (prevProps.workSlug != this.props.workSlug || prevProps.subwork_n != this.props.subwork_n)) {
+        if (
+					this.props.workSlug != ""
+					&& this.props.subwork_n != 0
+					&& (
+						prevProps.workSlug != this.props.workSlug
+						|| prevProps.subwork_n != this.props.subwork_n
+					)
+				) {
             Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
                 if (err) {
                     console.log(err);
@@ -85,8 +93,6 @@ ContextReader = React.createClass({
                 lineTo: this.state.maxLine,
             });
         };
-
-        var lineFrom = this.state.lineFrom,
 
         if (Object.keys(this.refs).length) {
             if (this.props.selectedLineFrom === 0) {

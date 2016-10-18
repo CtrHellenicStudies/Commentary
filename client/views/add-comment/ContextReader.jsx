@@ -20,16 +20,23 @@ ContextReader = React.createClass({
 		},
 
 		propTypes: {
-				open: React.PropTypes.bool.isRequired,
-
 				workSlug: React.PropTypes.string.isRequired,
-				subwork_n: React.PropTypes.number.isRequired,
+				subworkN: React.PropTypes.number.isRequired,
 				selectedLineFrom: React.PropTypes.number.isRequired,
 				selectedLineTo: React.PropTypes.number.isRequired,
-				updateSelecetedLines: React.PropTypes.func,
+				updateSelectedLines: React.PropTypes.func,
 				initialLineFrom: React.PropTypes.number,
 				initialLineTo: React.PropTypes.number,
 				disableEdit: React.PropTypes.bool,
+		},
+
+		getDefaultProps() {
+			return {
+				workSlug: 'iliad',
+				subworkN: 1,
+
+			};
+
 		},
 
 		getInitialState() {
@@ -77,8 +84,8 @@ ContextReader = React.createClass({
             };
         };
 
-        if (this.props.workSlug != "" && this.props.subwork_n != 0 && (prevProps.workSlug != this.props.workSlug || prevProps.subwork_n != this.props.subwork_n)) {
-            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
+        if (this.props.workSlug != "" && this.props.subworkN != 0 && (prevProps.workSlug != this.props.workSlug || prevProps.subworkN != this.props.subworkN)) {
+            Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
                 if (err) {
                     console.log(err);
                 } else if (res) {
@@ -96,8 +103,8 @@ ContextReader = React.createClass({
     },
 
     componentDidMount() {
-        if (this.props.workSlug && this.props.subwork_n) {
-            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
+        if (this.props.workSlug && this.props.subworkN) {
+            Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
                 if (err) {
                     console.log(err);
                 } else if (res) {
@@ -120,7 +127,7 @@ ContextReader = React.createClass({
 
         var that = this;
 
-        if (this.props.workSlug != "" && this.props.subwork_n != 0) {
+        if (this.props.workSlug != "" && this.props.subworkN != 0) {
 
             var lemmaText = [];
             // var commentGroup = this.props.commentGroup;
@@ -131,7 +138,7 @@ ContextReader = React.createClass({
 
             var lemmaQuery = {
                 'work.slug': this.props.workSlug,
-                'subwork.n': this.props.subwork_n,
+                'subwork.n': this.props.subworkN,
                 'text.n': {
                     $gte: this.state.lineFrom,
                     $lte: this.state.lineTo
@@ -229,15 +236,15 @@ ContextReader = React.createClass({
 				var style = event.target.style;
 				var id = parseInt(target.id);
 				if (this.props.selectedLineFrom === 0) {
-						this.props.updateSelecetedLines(id, null);
+						this.props.updateSelectedLines(id, null);
 				} else if (id === this.props.selectedLineFrom && this.props.selectedLineTo === 0) {
-						this.props.updateSelecetedLines(0, null);
+						this.props.updateSelectedLines(0, null);
 				} else if (this.props.selectedLineTo === 0 && id > this.props.selectedLineFrom) {
-						this.props.updateSelecetedLines(null, id);
+						this.props.updateSelectedLines(null, id);
 				} else if (this.props.selectedLineTo === 0 && id < this.props.selectedLineFrom) {
-						this.props.updateSelecetedLines(id, this.props.selectedLineFrom);
+						this.props.updateSelectedLines(id, this.props.selectedLineFrom);
 				} else {
-						this.props.updateSelecetedLines(id, 0);
+						this.props.updateSelectedLines(id, 0);
 				};
 			};
 		},
@@ -270,14 +277,11 @@ ContextReader = React.createClass({
 		render() {
 		var self = this;
 		var contextPanelStyles = "lemma-panel paper-shadow";
-
-		if(this.props.open){
-			contextPanelStyles += " extended";
-		}
+		contextPanelStyles += " extended";
 
 		return (
 				<div>
-						{this.props.workSlug != "" && this.props.subwork_n != 0 ?
+						{this.props.workSlug != "" && this.props.subworkN != 0 ?
 
 								<div className={contextPanelStyles}>
 
@@ -375,7 +379,7 @@ ContextReader = React.createClass({
 												iconClassName="mdi mdi-close"
 										/>*/}
 										<div className="lemma-text-wrap">
-												No work & book selected
+											<div className="well-spinner" />
 										</div>
 								</div>
 						}

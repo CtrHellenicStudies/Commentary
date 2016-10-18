@@ -7,12 +7,9 @@ AddCommentLayout = React.createClass({
     getInitialState() {
         return {
             filters: [],
-
             selectedLineFrom: 0,
             selectedLineTo: 0,
-
             contextReaderOpen: true,
-
             loading: false,
         };
     },
@@ -30,7 +27,7 @@ AddCommentLayout = React.createClass({
         this.handlePermissions();
     },
 
-    updateSelecetedLines(selectedLineFrom, selectedLineTo) {
+    updateSelectedLines(selectedLineFrom, selectedLineTo) {
         if(selectedLineFrom === null) {
             this.setState({
                 selectedLineTo: selectedLineTo,
@@ -392,7 +389,7 @@ AddCommentLayout = React.createClass({
                                     selectedLineFrom={this.state.selectedLineFrom}
                                     selectedLineTo={this.state.selectedLineTo}
                                     workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
-                                    subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                                    subworkN={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
                                     openContextReader={this.openContextReader}
                                 />
 
@@ -406,10 +403,10 @@ AddCommentLayout = React.createClass({
                                     open={this.state.contextReaderOpen}
                                     closeContextPanel={this.closeContextReader}
                                     workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : ""}
-                                    subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
+                                    subworkN={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
                                     selectedLineFrom={this.state.selectedLineFrom}
                                     selectedLineTo={this.state.selectedLineTo}
-                                    updateSelecetedLines={this.updateSelecetedLines}
+                                    updateSelectedLines={this.updateSelectedLines}
                                 />
 															</div>
 														</div>

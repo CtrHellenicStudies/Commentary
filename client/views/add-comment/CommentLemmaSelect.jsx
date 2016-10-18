@@ -16,7 +16,7 @@ CommentLemmaSelect = React.createClass({
 
     propTypes: {
         workSlug: React.PropTypes.string.isRequired,
-        subwork_n: React.PropTypes.number.isRequired,
+        subworkN: React.PropTypes.number.isRequired,
         selectedLineFrom: React.PropTypes.number.isRequired,
         selectedLineTo: React.PropTypes.number.isRequired,
         openContextReader: React.PropTypes.func.isRequired,
@@ -45,7 +45,7 @@ CommentLemmaSelect = React.createClass({
         if (this.props.selectedLineFrom <= this.props.selectedLineTo) {
             lemmaQuery = {
                 'work.slug': this.props.workSlug,
-                'subwork.n': this.props.subwork_n,
+                'subwork.n': this.props.subworkN,
                 'text.n': {
                     $gte: this.props.selectedLineFrom,
                     $lte: this.props.selectedLineTo
@@ -54,7 +54,7 @@ CommentLemmaSelect = React.createClass({
         } else {
             lemmaQuery = {
                 'work.slug': this.props.workSlug,
-                'subwork.n': this.props.subwork_n,
+                'subwork.n': this.props.subworkN,
                 'text.n': {
                     $gte: this.props.selectedLineFrom,
                     $lte: this.props.selectedLineFrom,

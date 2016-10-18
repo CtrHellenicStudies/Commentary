@@ -58,32 +58,8 @@ Meteor.method("cron", function () {
 									})
 
 								}
-
-								// arr.push(nFrom);
 							};
-
-							// subwork.commentHeatmap.forEach(function(line){
-							// 	if(comment.lineFrom === line.n){
-							// 		isInCommentCountsLines = true;
-							// 		line.nComments++;
-							// 	}
-
-
-
-							// });
-
-							// if(!isInCommentCountsLines){
-							// 	subwork.commentHeatmap.push({
-							// 			n: comment.lineFrom,
-							// 			nComments: 1
-							// 	})
-
-							// }
-
-
-
 						}
-
 
 					});
 
@@ -152,35 +128,7 @@ Meteor.method("cron", function () {
 	        });
 	    });
 
-	    // tableOfContents.forEach((_work, i) => {
-	    // 	var isInCommentCountsWorks = false;
-	    // 	commentCounts.forEach((work) => {
-	    // 		if (_work._id === work.slug) {
-     //                isInCommentCountsWorks = true;
-
-     //                // work.subworks.push({
-     //                //     n: n,
-     //                //     title: n.toString(),
-     //                //     nComments: 0,
-     //                //     commentHeatmap: []
-     //                // });
-     //            };
-	    // 	});
-
-	    // 	if (!isInCommentCountsWorks) {
-     //            commentCounts.push({
-     //                slug: _work._id,
-     //                nComments: 0,
-     //                subworks: [{
-     //                    n: n,
-     //                    title: n.toString(),
-     //                    nComments: 0,
-     //                    commentHeatmap: []
-     //                }]
-     //            });
-     //        };
-	    // });
-
+	    // creat missing works and subworks from textNodes wwhich haven't been commented
 	    tableOfContents.forEach((_work, i) => {
 	        _work.subworks.forEach((n) => {
 
@@ -214,8 +162,6 @@ Meteor.method("cron", function () {
 	        });
 	    });
 
-	    console.log('commentCounts', commentCounts);
-
 
 		commentCounts.forEach(function(countsWork){
 			var work = Works.findOne({slug: countsWork.slug});
@@ -226,7 +172,6 @@ Meteor.method("cron", function () {
 
 						subwork.nComments = countsSubwork.nComments;
 						subwork.commentHeatmap = countsSubwork.commentHeatmap;
-
 
 					}
 
@@ -239,11 +184,9 @@ Meteor.method("cron", function () {
 														subworks: countsWork.subworks,
 														nComments: countsWork.nComments
 													}});
-			// console.log(countsWork, updateStatus);
+			console.log(countsWork, updateStatus);
 
 		});
-
-		// console.log('commentCounts', commentCounts);
 
 		console.log(" -- Cron run complete: Commentary")
 

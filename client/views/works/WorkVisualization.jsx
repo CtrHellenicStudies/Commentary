@@ -163,7 +163,6 @@ WorkVisualization = React.createClass({
 							if ("nComments" in d && typeof d.nComments !== "undefined" && d.nComments && !isNaN(d.nComments)) {
 									return y(d.nComments);
 							} else {
-								console.log('y(0)', y(0));
 									return y(0);
 							}
 					})
@@ -228,10 +227,13 @@ WorkVisualization = React.createClass({
 							var numberOfLines = Math.floor(d3.max(self.props.work.subworks[self.state.selectedBar-1].commentHeatmap, function(d) {
 									return d.n;
 							})/10);
+							// fixes heatmap error if only commented lines are from 1 to 10:
+							if (numberOfLines === 0) {
+								numberOfLines = 1;
+							};
 							var cellSize = self.state.cellSize;
 							var cellPadding = self.state.cellPadding;
 							var heatMapWidth = Math.ceil(numberOfLines / 5) * (cellSize + cellPadding) - cellPadding;
-
 							var heatMapHeight = 5 *(cellSize + cellPadding) - cellPadding
 
 							// --- BEGIN ANIMATION - EXPAND BAR --- //

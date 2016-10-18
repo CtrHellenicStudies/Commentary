@@ -218,15 +218,19 @@ WorkVisualization = React.createClass({
 
 		 barGraph_bars
 					.on("click", function(d) {
-
+						if (d.nComments) {
 							self.setState({
 									selectedBar: d.n,
 							});
 
-							//	TODO: get the real number of lines per book - not from the works collection:
-							var numberOfLines = Math.floor(d3.max(self.props.work.subworks[self.state.selectedBar-1].commentHeatmap, function(d) {
+							//	TODO: get the real number of lines per book - not from the works collection
+							var foundSubwork = self.props.work.subworks.find(function(element, index, array) {
+								return element.n === self.state.selectedBar
+							});
+							var numberOfLines = Math.floor(d3.max(foundSubwork.commentHeatmap, function(d) {
 									return d.n;
 							})/10);
+
 							// fixes heatmap error if only commented lines are from 1 to 10:
 							if (numberOfLines === 0) {
 								numberOfLines = 1;
@@ -284,6 +288,7 @@ WorkVisualization = React.createClass({
 									.style("opacity", 1)
 									.style("display", "");
 							// --- END ANIMATION - EXPAND BAR --- //
+						};
 
 					})
 					.on("mouseover", function(d) {
@@ -372,8 +377,11 @@ WorkVisualization = React.createClass({
 
 			// --- BEGIN HEATMAP --- //
 			if (this.state.selectedBar > -1) {
-				var dataHeatMap = this.props.work.subworks[this.state.selectedBar - 1].commentHeatmap;
-				const subworkN = this.props.work.subworks[this.state.selectedBar - 1].n;
+				var foundSubwork = this.props.work.subworks.find(function(element, index, array) {
+					return element.n === self.state.selectedBar
+				});
+				var dataHeatMap = foundSubwork.commentHeatmap;
+				const subworkN = foundSubwork.n;
 				dataHeatMap.sort(function(a, b) {
 						if (a.n < b.n)
 								return -1;

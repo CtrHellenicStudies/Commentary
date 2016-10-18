@@ -102,26 +102,41 @@ AddCommentLayout = React.createClass({
 
     addComment(formData) {
 
-        var that = this;
+        const that = this;
 
         this.setState({
             loading: true,
         });
 
-        var work = this.state.filters[0].values[0];
-        var subwork = this.state.filters[1].values[0];
+				const filters = this.state.filters;
 
-        var lineLetter = "";
-        if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) { // checking if one line was selected
-            lineLetter = this.refs.CommentLemmaSelect.state.lineLetterValue;
+        let work;
+        let subwork;
+				filters.forEach(function(filter){
+					if (filter.key === 'work') {
+						work = values[0];
+
+					}else if (filter.key === 'subwork') {
+						subwork = values[0];
+
+					}
+
+				});
+
+        let lineLetter = "";
+        if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
+					// checking if one line was selected
+          lineLetter = this.refs.CommentLemmaSelect.state.lineLetterValue;
         };
 
-        var referenceWorks = ReferenceWorks.find({
+        let referenceWorksInputObject = {};
+        const referenceWorks = ReferenceWorks.find({
             slug: formData.referenceWorksValue
         }, {
             limit: 1
         }).fetch();
-        var referenceWorksInputObject = {};
+
+
         if (referenceWorks.length) {
             referenceWorksInputObject = {
                 revisionsCreated: referenceWorks[0].created,
@@ -136,7 +151,7 @@ AddCommentLayout = React.createClass({
             };
         };
 
-        var commenter = Commenters.find({
+        const commenter = Commenters.find({
             _id: Meteor.user().commenterId
         }).fetch()[0];
 
@@ -196,7 +211,6 @@ AddCommentLayout = React.createClass({
             });
 
             // TODO: handle behavior after comment added (add info about success)
-
         });
 
 
@@ -286,10 +300,10 @@ AddCommentLayout = React.createClass({
 
 		handleChangeLineN(e){
 
-			var filters = this.state.filters;
+			const filters = this.state.filters;
 
 			if(e.from > 1){
-				var lineFromInFilters = false;
+				let lineFromInFilters = false;
 
 				filters.forEach(function(filter, i){
 					if(filter.key === "lineFrom"){
@@ -306,7 +320,7 @@ AddCommentLayout = React.createClass({
 				}
 
 			}else {
-				var filterToRemove;
+				let filterToRemove;
 
 				filters.forEach(function(filter, i){
 					if(filter.key === "lineFrom"){
@@ -339,7 +353,7 @@ AddCommentLayout = React.createClass({
 				}
 
 			}else {
-				var filterToRemove;
+				let filterToRemove;
 
 				filters.forEach(function(filter, i){
 					if(filter.key === "lineTo"){
@@ -367,60 +381,83 @@ AddCommentLayout = React.createClass({
     },
 
     render() {
+			const self = this;
+			const filters = this.state.filters;
+      let work;
+      let subwork;
 
-        return (
-            <div>
-                {this.ifReady() || this.state.loading ?
-                    <div className="chs-layout add-comment-layout">
-                        <div>
-                            <Header
-                                toggleSearchTerm={this.toggleSearchTerm}
-																handleChangeLineN={this.handleChangeLineN}
-                                filters={this.state.filters}
-                                initialSearchEnabled
-                            />
+			filters.forEach(function(filter){
+				if (filter.key === 'work') {
+					work = values[0];
 
-                            <main>
+				}else if (filter.key === 'subwork') {
+					subwork = values[0];
 
-														<div className="commentary-comments">
-															<div className="comment-group">
-                                <CommentLemmaSelect
-                                    ref="CommentLemmaSelect"
-                                    selectedLineFrom={this.state.selectedLineFrom}
-                                    selectedLineTo={this.state.selectedLineTo}
-                                    workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
-                                    subworkN={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
-                                />
+				}
 
-                                <AddComment
-                                    selectedLineFrom={this.state.selectedLineFrom}
-                                    selectedLineTo={this.state.selectedLineTo}
-                                    submiteForm={this.addComment}
-                                />
+			});
 
-                                <ContextReader
-                                    open={this.state.contextReaderOpen}
-                                    workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : "iliad"}
-                                    subworkN={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 1}
-                                    selectedLineFrom={this.state.selectedLineFrom}
-                                    selectedLineTo={this.state.selectedLineTo}
-                                    updateSelectedLines={this.updateSelectedLines}
-                                />
-															</div>
+			console.log("AddCommentLayout.filters", this.state.filters);
+
+      return (
+          <div>
+              {this.ifReady() || this.state.loading ?
+                  <div className="chs-layout add-comment-layout">
+                      <div>
+                          <Header
+                              toggleSearchTerm={this.toggleSearchTerm}
+															handleChangeLineN={this.handleChangeLineN}
+                              filters={this.state.filters}
+                              initialSearchEnabled
+                          />
+
+                          <main>
+
+													<div className="commentary-comments">
+														<div className="comment-group">
+                              <CommentLemmaSelect
+                                  ref="CommentLemmaSelect"
+                                  selectedLineFrom={this.state.selectedLineFrom}
+                                  selectedLineTo={this.state.selectedLineTo}
+                                  workSlug={work ? work.slug : ""}
+                                  subworkN={subwork ? subwork.n : 0}
+                              />
+
+                              <AddComment
+                                  selectedLineFrom={this.state.selectedLineFrom}
+                                  selectedLineTo={this.state.selectedLineTo}
+                                  submiteForm={this.addComment}
+                              />
+
+                              <ContextReader
+                                  open={this.state.contextReaderOpen}
+                                  workSlug={work ? work.slug : "iliad"}
+                                  subworkN={subwork ? subwork.n : 1}
+                                  selectedLineFrom={this.state.selectedLineFrom}
+                                  selectedLineTo={this.state.selectedLineTo}
+                                  updateSelectedLines={this.updateSelectedLines}
+                              />
 														</div>
+													</div>
 
-                            </main>
+													<FilterWidget
+														filters={filters}
+														toggleSearchTerm={this.toggleSearchTerm}
+													/>
 
-                            <Footer/>
-                        </div>
-                    </div>
-                    :
-                    <div className="ahcip-spinner commentary-loading full-page-spinner" >
-                        <div className="double-bounce1"></div>
-                        <div className="double-bounce2"></div>
-                    </div>
-                }
-            </div>
-        );
+                        </main>
+
+                          {/* <Footer/> */}
+
+                      </div>
+                  </div>
+                  :
+                  <div className="ahcip-spinner commentary-loading full-page-spinner" >
+                      <div className="double-bounce1"></div>
+                      <div className="double-bounce2"></div>
+                  </div>
+              }
+          </div>
+      );
     }
 });

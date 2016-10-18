@@ -63,22 +63,22 @@ ContextReader = React.createClass({
         if (Object.keys(this.refs).length) {
             if (this.props.selectedLineFrom === 0) {
                 for (var i = lineFrom; i <= lineTo; i++) {
-                    this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                    this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                 };
             } else if (this.props.selectedLineTo === 0) {
                 for (var i = lineFrom; i <= lineTo; i++) {
                     if (i === this.props.selectedLineFrom) {
-                        this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
+                        this.refs[i.toString()].style.borderBottom = "2px solid #B2EBF2";
                     } else {
-                        this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                        this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                     };
                 };
             } else {
                 for (var i = lineFrom; i <= lineTo; i++) {
                     if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
-                        this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
+                        this.refs[i.toString()].style.borderBottom = "2px solid #B2EBF2";
                     } else {
-                        this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                        this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                     };
                 };
             };
@@ -219,7 +219,7 @@ ContextReader = React.createClass({
 		handeLineMouseEnter(event) {
 			if(!this.props.disableEdit) {
 				var style = event.target.style;
-				style.backgroundColor = "#d59518";
+				style.backgroundColor = "#E0F7FA";
 			};
 		},
 

@@ -8,7 +8,7 @@ LinePagination = React.createClass({
 
 	render() {
 		const self = this;
-		
+
 		return (
 			<div className="line-pagination">
 				{this.props.linePagination.map(function(line, i){
@@ -16,7 +16,7 @@ LinePagination = React.createClass({
 						<RaisedButton
 								key={i}
 								label={line}
-								className={"edition-tab tab"}
+								className="line-page"
 								onClick={self.props.linePaginationClicked.bind(null, line)}
 						/>
 						);

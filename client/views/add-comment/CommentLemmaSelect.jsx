@@ -6,27 +6,26 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 CommentLemmaSelect = React.createClass({
 
+    propTypes: {
+      workSlug: React.PropTypes.string.isRequired,
+      subworkN: React.PropTypes.number.isRequired,
+      selectedLineFrom: React.PropTypes.number.isRequired,
+      selectedLineTo: React.PropTypes.number.isRequired,
+    },
+
     childContextTypes: {
-        muiTheme: React.PropTypes.object.isRequired,
+      muiTheme: React.PropTypes.object.isRequired,
     },
 
     getChildContext() {
-        return {muiTheme: getMuiTheme(baseTheme)};
-    },
-
-    propTypes: {
-        workSlug: React.PropTypes.string.isRequired,
-        subworkN: React.PropTypes.number.isRequired,
-        selectedLineFrom: React.PropTypes.number.isRequired,
-        selectedLineTo: React.PropTypes.number.isRequired,
-        openContextReader: React.PropTypes.func.isRequired,
+      return {muiTheme: getMuiTheme(baseTheme)};
     },
 
     getInitialState() {
-        return {
-            selectedLemmaEdition : "",
-            lineLetterValue: "",
-        };
+      return {
+          selectedLemmaEdition : "",
+          lineLetterValue: "",
+      };
     },
 
     mixins: [ReactMeteorData],

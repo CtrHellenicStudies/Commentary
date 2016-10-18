@@ -39,7 +39,7 @@ AddComment = React.createClass({
     propTypes: {
         selectedLineFrom: React.PropTypes.number,
         selectedLineTo: React.PropTypes.number,
-        submiteForm: React.PropTypes.func.isRequired,
+        submitForm: React.PropTypes.func.isRequired,
     },
 
     getInitialState(){
@@ -179,7 +179,7 @@ AddComment = React.createClass({
         this.showSnackBar(error);
 
         if (!error.errors) {
-            this.props.submiteForm(this.state);
+            this.props.submitForm(this.state);
         };
     },
 

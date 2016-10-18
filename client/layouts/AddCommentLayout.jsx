@@ -385,19 +385,29 @@ AddCommentLayout = React.createClass({
 			const filters = this.state.filters;
       let work;
       let subwork;
+      let lineFrom;
+      let lineTo;
 
 			filters.forEach(function(filter){
-				if (filter.key === 'work') {
-					work = values[0];
+				if (filter.key === 'works') {
+					work = filter.values[0];
 
-				}else if (filter.key === 'subwork') {
-					subwork = values[0];
+				}else if (filter.key === 'subworks') {
+					subwork = filter.values[0];
+
+				}else if (filter.key === 'lineTo') {
+					lineTo = filter.values[0];
+
+				}else if (filter.key === 'lineFrom') {
+					lineFrom = filter.values[0];
 
 				}
 
 			});
 
 			console.log("AddCommentLayout.filters", this.state.filters);
+			console.log("AddCommentLayout lineTo", lineTo);
+			console.log("AddCommentLayout lineFrom", lineFrom);
 
       return (
           <div>
@@ -426,13 +436,15 @@ AddCommentLayout = React.createClass({
                               <AddComment
                                   selectedLineFrom={this.state.selectedLineFrom}
                                   selectedLineTo={this.state.selectedLineTo}
-                                  submiteForm={this.addComment}
+                                  submitForm={this.addComment}
                               />
 
                               <ContextReader
                                   open={this.state.contextReaderOpen}
                                   workSlug={work ? work.slug : "iliad"}
                                   subworkN={subwork ? subwork.n : 1}
+																	initialLineFrom={lineFrom ? lineFrom : 1}
+																	initialLineTo={lineTo ? lineTo : 100}
                                   selectedLineFrom={this.state.selectedLineFrom}
                                   selectedLineTo={this.state.selectedLineTo}
                                   updateSelectedLines={this.updateSelectedLines}

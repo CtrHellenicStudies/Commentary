@@ -7,12 +7,9 @@ AddCommentLayout = React.createClass({
     getInitialState() {
         return {
             filters: [],
-
             selectedLineFrom: 0,
             selectedLineTo: 0,
-
             contextReaderOpen: true,
-
             loading: false,
         };
     },
@@ -30,7 +27,7 @@ AddCommentLayout = React.createClass({
         this.handlePermissions();
     },
 
-    updateSelecetedLines(selectedLineFrom, selectedLineTo) {
+    updateSelectedLines(selectedLineFrom, selectedLineTo) {
         if(selectedLineFrom === null) {
             this.setState({
                 selectedLineTo: selectedLineTo,
@@ -105,26 +102,41 @@ AddCommentLayout = React.createClass({
 
     addComment(formData) {
 
-        var that = this;
+        const that = this;
 
         this.setState({
             loading: true,
         });
 
-        var work = this.state.filters[0].values[0];
-        var subwork = this.state.filters[1].values[0];
+				const filters = this.state.filters;
 
-        var lineLetter = "";
-        if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) { // checking if one line was selected
-            lineLetter = this.refs.CommentLemmnaSelect.state.lineLetterValue;
+        let work;
+        let subwork;
+				filters.forEach(function(filter){
+					if (filter.key === 'work') {
+						work = values[0];
+
+					}else if (filter.key === 'subwork') {
+						subwork = values[0];
+
+					}
+
+				});
+
+        let lineLetter = "";
+        if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
+					// checking if one line was selected
+          lineLetter = this.refs.CommentLemmaSelect.state.lineLetterValue;
         };
 
-        var referenceWorks = ReferenceWorks.find({
+        let referenceWorksInputObject = {};
+        const referenceWorks = ReferenceWorks.find({
             slug: formData.referenceWorksValue
         }, {
             limit: 1
         }).fetch();
-        var referenceWorksInputObject = {};
+
+
         if (referenceWorks.length) {
             referenceWorksInputObject = {
                 revisionsCreated: referenceWorks[0].created,
@@ -139,7 +151,7 @@ AddCommentLayout = React.createClass({
             };
         };
 
-        var commenter = Commenters.find({
+        const commenter = Commenters.find({
             _id: Meteor.user().commenterId
         }).fetch()[0];
 
@@ -199,7 +211,6 @@ AddCommentLayout = React.createClass({
             });
 
             // TODO: handle behavior after comment added (add info about success)
-
         });
 
 
@@ -287,63 +298,177 @@ AddCommentLayout = React.createClass({
         };
     },
 
+		handleChangeLineN(e){
+
+			const filters = this.state.filters;
+
+			if(e.from > 1){
+				let lineFromInFilters = false;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineFrom"){
+						filter.values = [e.from];
+						lineFromInFilters = true;
+					}
+				});
+
+				if(!lineFromInFilters){
+					filters.push({
+						key:"lineFrom",
+						values:[e.from]
+					})
+				}
+
+			}else {
+				let filterToRemove;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineFrom"){
+						filterToRemove = i;
+					}
+
+				});
+
+				if(typeof filterToRemove !== "undefined"){
+					filters.splice(filterToRemove, 1);
+				}
+
+			}
+
+			if(e.to < 2100){
+				var lineToInFilters = false;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineTo"){
+						filter.values = [e.to];
+						lineToInFilters = true;
+					}
+				});
+
+				if(!lineToInFilters){
+					filters.push({
+						key:"lineTo",
+						values:[e.to]
+					})
+				}
+
+			}else {
+				let filterToRemove;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineTo"){
+						filterToRemove = i;
+					}
+
+				});
+
+				if(typeof filterToRemove !== "undefined"){
+					filters.splice(filterToRemove, 1);
+				}
+
+			}
+
+
+			this.setState({
+				filters: filters
+			})
+
+		},
+
     ifReady() {
         var ready = Roles.subscription.ready();
         return ready;
     },
 
     render() {
+			const self = this;
+			const filters = this.state.filters;
+      let work;
+      let subwork;
+      let lineFrom;
+      let lineTo;
 
-        return (
-            <div>
-                {this.ifReady() || this.state.loading ? 
-                    <div className="chs-layout add-comment-layout">
-                        <div>
-                            <Header
-                                toggleSearchTerm={this.toggleSearchTerm}
-                                initialSearchEnabled
-                                filters={this.state.filters}
-                            />
+			filters.forEach(function(filter){
+				if (filter.key === 'works') {
+					work = filter.values[0];
 
-                            <main>
+				}else if (filter.key === 'subworks') {
+					subwork = filter.values[0];
 
-                                <CommentLemmnaSelect
-                                    ref="CommentLemmnaSelect"
-                                    selectedLineFrom={this.state.selectedLineFrom}
-                                    selectedLineTo={this.state.selectedLineTo}
-                                    workSlug={this.state.filters.length > 0 ? this.state.filters[0].values[0].slug : ""}
-                                    subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
-                                    openContextReader={this.openContextReader}
-                                />
+				}else if (filter.key === 'lineTo') {
+					lineTo = filter.values[0];
 
-                                <AddComment
-                                    selectedLineFrom={this.state.selectedLineFrom}
-                                    selectedLineTo={this.state.selectedLineTo}
-                                    submiteForm={this.addComment}
-                                />
+				}else if (filter.key === 'lineFrom') {
+					lineFrom = filter.values[0];
 
-                                <ContextReader
-                                    open={this.state.contextReaderOpen}
-                                    closeContextPanel={this.closeContextReader}
-                                    workSlug={this.state.filters.length > 1 ? this.state.filters[0].values[0].slug : ""}
-                                    subwork_n={this.state.filters.length > 1 ? this.state.filters[1].values[0].n : 0}
-                                    selectedLineFrom={this.state.selectedLineFrom}
-                                    selectedLineTo={this.state.selectedLineTo}
-                                    updateSelecetedLines={this.updateSelecetedLines}
-                                />
+				}
 
-                            </main>
-                            
-                            <Footer/>
-                        </div>
-                    </div>
-                    :
-                    <div className="ahcip-spinner commentary-loading full-page-spinner" >
-                        <div className="double-bounce1"></div>
-                        <div className="double-bounce2"></div>
-                    </div>
-                }
-            </div>
-        );
+			});
+
+			console.log("AddCommentLayout.filters", this.state.filters);
+			console.log("AddCommentLayout.state", this.state);
+
+      return (
+          <div>
+              {this.ifReady() || this.state.loading ?
+                  <div className="chs-layout add-comment-layout">
+                      <div>
+                          <Header
+                              toggleSearchTerm={this.toggleSearchTerm}
+															handleChangeLineN={this.handleChangeLineN}
+                              filters={this.state.filters}
+                              initialSearchEnabled
+                          />
+
+                          <main>
+
+													<div className="commentary-comments">
+														<div className="comment-group">
+                              <CommentLemmaSelect
+                                  ref="CommentLemmaSelect"
+                                  selectedLineFrom={this.state.selectedLineFrom}
+                                  selectedLineTo={this.state.selectedLineTo}
+                                  workSlug={work ? work.slug : "iliad"}
+                                  subworkN={subwork ? subwork.n : 1}
+                              />
+
+                              <AddComment
+                                  selectedLineFrom={this.state.selectedLineFrom}
+                                  selectedLineTo={this.state.selectedLineTo}
+                                  submitForm={this.addComment}
+                              />
+
+                              <ContextReader
+                                  open={this.state.contextReaderOpen}
+                                  workSlug={work ? work.slug : "iliad"}
+                                  subworkN={subwork ? subwork.n : 1}
+																	initialLineFrom={lineFrom ? lineFrom : 1}
+																	initialLineTo={lineTo ? lineTo : 100}
+                                  selectedLineFrom={this.state.selectedLineFrom}
+                                  selectedLineTo={this.state.selectedLineTo}
+                                  updateSelectedLines={this.updateSelectedLines}
+                              />
+														</div>
+													</div>
+
+													<FilterWidget
+														filters={filters}
+														toggleSearchTerm={this.toggleSearchTerm}
+													/>
+
+                        </main>
+
+                          {/* <Footer/> */}
+
+                      </div>
+                  </div>
+                  :
+                  <div className="ahcip-spinner commentary-loading full-page-spinner" >
+                      <div className="double-bounce1"></div>
+                      <div className="double-bounce2"></div>
+                  </div>
+              }
+          </div>
+      );
     }
 });

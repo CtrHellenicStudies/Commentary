@@ -302,7 +302,7 @@ ContextReader = React.createClass({
 												{this.state.lineFrom > 1 ?
 													<div className="before-link">
 															<RaisedButton
-																	className="cover-link light"
+																	className="light"
 																	label="Previous"
 																	onClick={this.onBeforeClicked}
 																	icon={<i className="mdi mdi-chevron-up" />}
@@ -341,7 +341,7 @@ ContextReader = React.createClass({
 												{this.state.lineFrom < this.state.maxLine ?
 													<div className="after-link">
 														<RaisedButton
-															className="cover-link light"
+															className="light"
 															label="Next"
 															onClick={this.onAfterClicked}
 															icon={<i className="mdi mdi-chevron-down" />}

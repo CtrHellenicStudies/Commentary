@@ -5,7 +5,7 @@ import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
-import AvatarEditorContainer from '/imports/avatar/client/ui/AvatarEditorContainer.js';
+import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
 
 ProfilePage = React.createClass({
 
@@ -158,7 +158,7 @@ ProfilePage = React.createClass({
 						<section className="page-content">
 							<div>
 								<div className="user-profile-section">
-									<AvatarEditorContainer
+									<AvatarEditor
 										defaultAvatarUrl="/images/default_user.jpg"
 									/>
 								</div>

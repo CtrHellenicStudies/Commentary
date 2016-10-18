@@ -24,7 +24,7 @@ const AvatarFilter = new UploadFS.Filter({
 export const AvatarStore = new UploadFS.store.Local({
 	collection: Avatars,
 	name: 'avatars',
-	path: './var/avatars',
+	path: '../../../var/avatars',
 	filter: AvatarFilter,
 	permissions: AvatarPermissions,
 });

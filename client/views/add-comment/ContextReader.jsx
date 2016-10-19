@@ -9,38 +9,47 @@ import { ReactiveVar } from 'meteor/reactive-var'
 
 ContextReader = React.createClass({
 
-		getChildContext() {
-				return {
-						muiTheme: getMuiTheme(baseTheme)
-				};
+		propTypes: {
+				workSlug: React.PropTypes.string.isRequired,
+				subworkN: React.PropTypes.number.isRequired,
+				selectedLineFrom: React.PropTypes.number.isRequired,
+				selectedLineTo: React.PropTypes.number.isRequired,
+				updateSelectedLines: React.PropTypes.func,
+				initialLineFrom: React.PropTypes.number,
+				initialLineTo: React.PropTypes.number,
+				disableEdit: React.PropTypes.bool,
+		},
+
+		getDefaultProps() {
+			return {
+				workSlug: 'iliad',
+				subworkN: 1,
+
+			};
+
 		},
 
 		childContextTypes: {
 				muiTheme: React.PropTypes.object.isRequired
 		},
 
-		propTypes: {
-				open: React.PropTypes.bool.isRequired,
-
-				workSlug: React.PropTypes.string.isRequired,
-				subwork_n: React.PropTypes.number.isRequired,
-				selectedLineFrom: React.PropTypes.number.isRequired,
-				selectedLineTo: React.PropTypes.number.isRequired,
-				updateSelecetedLines: React.PropTypes.func,
-				initialLineFrom: React.PropTypes.number,
-				initialLineTo: React.PropTypes.number,
-				disableEdit: React.PropTypes.bool,
+		getChildContext() {
+				return {
+						muiTheme: getMuiTheme(baseTheme)
+				};
 		},
 
 		getInitialState() {
-			var lineFrom = 1,
+			let lineFrom = 1,
 				lineTo = 50;
+
 			if(this.props.initialLineFrom) {
 				lineFrom = this.props.initialLineFrom
 			};
 			if(this.props.initialLineTo) {
 				lineTo = this.props.initialLineTo
 			};
+
 			return {
 				lineFrom: lineFrom,
 				lineTo: lineTo,
@@ -51,34 +60,75 @@ ContextReader = React.createClass({
 		},
 
     componentDidUpdate(prevProps, prevState) {
-        var lineFrom = this.state.lineFrom,
-            lineTo = this.state.lineTo;
+        let lineFrom = this.state.lineFrom;
+        let lineTo = this.state.lineTo;
+
+        if (
+					this.props.workSlug != ""
+					&& this.props.subwork_n != 0
+					&& (
+						prevProps.workSlug != this.props.workSlug
+						|| prevProps.subwork_n != this.props.subwork_n
+					)
+				) {
+            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
+                if (err) {
+                    console.log(err);
+                } else if (res) {
+                    var linePagination = [];
+                    for (var i = 1; i <= res; i+=100) {
+                        linePagination.push(i);
+                    };
+                    this.setState({
+                        linePagination: linePagination,
+                        maxLine: res,
+                    });
+                }
+            });
+        };
+
+        // incase a subwork has less lines then initial this.state.lineTo
+        if (this.state.maxLine != 0 && this.state.maxLine < this.state.lineTo) {
+            this.setState({
+                lineTo: this.state.maxLine,
+            });
+        };
+
         if (Object.keys(this.refs).length) {
             if (this.props.selectedLineFrom === 0) {
                 for (var i = lineFrom; i <= lineTo; i++) {
-                    this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                    //this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                 };
             } else if (this.props.selectedLineTo === 0) {
                 for (var i = lineFrom; i <= lineTo; i++) {
                     if (i === this.props.selectedLineFrom) {
-                        this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
+                        this.refs[i.toString()].style.borderBottom = "2px solid #B2EBF2";
                     } else {
-                        this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                        //this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                     };
                 };
             } else {
                 for (var i = lineFrom; i <= lineTo; i++) {
                     if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
-                        this.refs[i.toString()].style.borderBottom = "1px solid #d59518";
+                        this.refs[i.toString()].style.borderBottom = "2px solid #B2EBF2";
                     } else {
-                        this.refs[i.toString()].style.borderBottom = "1px solid #ffffff";
+                        //this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
                     };
                 };
             };
         };
 
-        if (this.props.workSlug != "" && this.props.subwork_n != 0 && (prevProps.workSlug != this.props.workSlug || prevProps.subwork_n != this.props.subwork_n)) {
-            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
+        if (
+						this.props.workSlug != ""
+					&& this.props.subworkN != 0
+					&& (
+							prevProps.workSlug != this.props.workSlug
+						|| prevProps.subworkN != this.props.subworkN
+						|| prevProps.initialLineTo != this.props.initialLineTo
+						|| prevProps.initialLineFrom != this.props.initialLineFrom
+					)
+				) {
+            Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
                 if (err) {
                     console.log(err);
                 } else if (res) {
@@ -89,6 +139,8 @@ ContextReader = React.createClass({
                     this.setState({
                     	linePagination: linePagination,
                     	maxLine: res,
+											lineFrom: this.props.initialLineFrom,
+											lineTo: this.props.initialLineTo,
                     });
                 }
             });
@@ -96,132 +148,136 @@ ContextReader = React.createClass({
     },
 
     componentDidMount() {
-        if (this.props.workSlug && this.props.subwork_n) {
-            Meteor.call('getMaxLine', this.props.workSlug, this.props.subwork_n, (err, res) => {
-                if (err) {
-                    console.log(err);
-                } else if (res) {
-                    var linePagination = [];
-                    for (var i = 1; i <= res; i += 100) {
-                        linePagination.push(i);
-                    };
-                    this.setState({
-                        linePagination: linePagination,
-                        maxLine: res,
-                    });
-                }
+      if (this.props.workSlug && this.props.subworkN) {
+        Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
+          if (err) {
+            console.log(err);
+          } else if (res) {
+            const linePagination = [];
+            for (let i = 1; i <= res; i += 100) {
+                linePagination.push(i);
+            };
+
+            this.setState({
+                linePagination: linePagination,
+                maxLine: res,
             });
-        };
+          }
+        });
+      };
     },
 
 	mixins: [ReactMeteorData],
 
     getMeteorData() {
 
-        var that = this;
+      var self = this;
 
-        if (this.props.workSlug != "" && this.props.subwork_n != 0) {
+      if (this.props.workSlug != "" && this.props.subworkN != 0) {
 
-            var lemmaText = [];
-            // var commentGroup = this.props.commentGroup;
-            var selectedLemmaEdition = {
-                lines: [],
-                slug: ""
-            };
+          let lemmaText = [];
+          // var commentGroup = this.props.commentGroup;
+          let selectedLemmaEdition = {
+              lines: [],
+              slug: ""
+          };
 
-            var lemmaQuery = {
-                'work.slug': this.props.workSlug,
-                'subwork.n': this.props.subwork_n,
-                'text.n': {
-                    $gte: this.state.lineFrom,
-                    $lte: this.state.lineTo
-                }
-            };
+          const lemmaQuery = {
+              'work.slug': this.props.workSlug,
+              'subwork.n': this.props.subworkN,
+              'text.n': {
+                  $gte: this.state.lineFrom,
+                  $lte: this.state.lineTo
+              }
+          };
 
-            var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
-            if (textNodesSubscription.ready()) {
-                //console.log("Context Panel lemmaQuery", lemmaQuery);
-                var textNodes = TextNodes.find(lemmaQuery, {sort:{'text.n':1}}).fetch();
-                var editions = [];
+					// console.log('lemmaQuery', lemmaQuery);
 
-                var textIsInEdition = false;
-                textNodes.forEach(function(textNode) {
 
-                    textNode.text.forEach(function(text) {
-                        textIsInEdition = false;
+          const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
+          if (textNodesSubscription.ready()) {
+              //console.log("Context Panel lemmaQuery", lemmaQuery);
+              const textNodes = TextNodes.find(lemmaQuery, {sort:{'text.n':1}}).fetch();
+              const editions = [];
 
-                        editions.forEach(function(edition) {
+              let textIsInEdition = false;
+              textNodes.forEach(function(textNode) {
 
-                            if (text.edition.slug === edition.slug) {
-                                edition.lines.push({
-                                    html: text.html,
-                                    n: text.n
-                                });
-                                textIsInEdition = true;
-                            }
-                        })
+                  textNode.text.forEach(function(text) {
+                      textIsInEdition = false;
 
-                        if (!textIsInEdition) {
-                            editions.push({
-                                title: text.edition.title,
-                                slug: text.edition.slug,
-                                lines: [{
-                                    html: text.html,
-                                    n: text.n
-                                }],
-                            })
-                        }
-                    });
-                });
+                      editions.forEach(function(edition) {
 
-                lemmaText = editions;
-                // console.log('lemmaText',lemmaText);
+                          if (text.edition.slug === edition.slug) {
+                              edition.lines.push({
+                                  html: text.html,
+                                  n: text.n
+                              });
+                              textIsInEdition = true;
+                          }
+                      })
 
-                if (this.state.selectedLemmaEdition.length) {
-                    lemmaText.forEach(function(edition) {
-                        if (edition.slug === that.state.selectedLemmaEdition) {
-                            selectedLemmaEdition = edition;
-                        }
-                    });
-                } else {
-                    selectedLemmaEdition = lemmaText[0];
-                };
+                      if (!textIsInEdition) {
+                          editions.push({
+                              title: text.edition.title,
+                              slug: text.edition.slug,
+                              lines: [{
+                                  html: text.html,
+                                  n: text.n
+                              }],
+                          })
+                      }
+                  });
+              });
 
-            }
+              lemmaText = editions;
+	            // console.log('lemmaText', lemmaText);
 
-            return {
-                lemmaText: lemmaText,
-                selectedLemmaEdition: selectedLemmaEdition
-            };
+              if (this.state.selectedLemmaEdition.length) {
+                  lemmaText.forEach(function(edition) {
+                      if (edition.slug === self.state.selectedLemmaEdition) {
+                          selectedLemmaEdition = edition;
+                      }
+                  });
+              } else {
+                  selectedLemmaEdition = lemmaText[0];
+              };
+
+          }
+
+          return {
+            lemmaText: lemmaText,
+            selectedLemmaEdition: selectedLemmaEdition
+          };
         } else {
-            return {
-                lemmaText: "",
-                selectedLemmaEdition: ""
-            };
+          return {
+            lemmaText: "",
+            selectedLemmaEdition: ""
+          };
         };
     },
 
-		toggleEdition(editionSlug) {
-				if (this.state.selectedLemmaEdition !== editionSlug) {
-						this.setState({
-								selectedLemmaEdition: editionSlug
-						});
-				}
-		},
+    toggleEdition(editionSlug) {
+        if (this.state.selectedLemmaEdition !== editionSlug) {
+            this.setState({
+                selectedLemmaEdition: editionSlug
+            });
+        }
+    },
 
 		handeLineMouseEnter(event) {
 			if(!this.props.disableEdit) {
 				var style = event.target.style;
-				style.backgroundColor = "#d59518";
+				style.backgroundColor = "#E0F7FA";
 			};
 		},
 
-		handeLineMouseLeave(event) {
-			if(!this.props.disableEdit) {
-				var style = event.target.style;
-				style.backgroundColor = "#ffffff";
-			};
-		},
+    handeLineMouseLeave(event) {
+        if (!this.props.disableEdit) {
+            var style = event.target.style;
+            style.backgroundColor = "#ffffff";
+        };
+    },
 
 		handleLineClick(event) {
 			if(!this.props.disableEdit) {
@@ -229,15 +285,15 @@ ContextReader = React.createClass({
 				var style = event.target.style;
 				var id = parseInt(target.id);
 				if (this.props.selectedLineFrom === 0) {
-						this.props.updateSelecetedLines(id, null);
+						this.props.updateSelectedLines(id, null);
 				} else if (id === this.props.selectedLineFrom && this.props.selectedLineTo === 0) {
-						this.props.updateSelecetedLines(0, null);
+						this.props.updateSelectedLines(0, null);
 				} else if (this.props.selectedLineTo === 0 && id > this.props.selectedLineFrom) {
-						this.props.updateSelecetedLines(null, id);
+						this.props.updateSelectedLines(null, id);
 				} else if (this.props.selectedLineTo === 0 && id < this.props.selectedLineFrom) {
-						this.props.updateSelecetedLines(id, this.props.selectedLineFrom);
+						this.props.updateSelectedLines(id, this.props.selectedLineFrom);
 				} else {
-						this.props.updateSelecetedLines(id, 0);
+						this.props.updateSelectedLines(id, 0);
 				};
 			};
 		},
@@ -268,49 +324,43 @@ ContextReader = React.createClass({
 		},
 
 		render() {
-		var self = this;
-		var contextPanelStyles = "lemma-panel paper-shadow";
+		const self = this;
+		let contextPanelStyles = "lemma-panel paper-shadow";
+		contextPanelStyles += " extended";
 
-		if(this.props.open){
-			contextPanelStyles += " extended";
-		}
 
 		return (
 				<div>
-						{this.props.workSlug != "" && this.props.subwork_n != 0 ?
+						{this.data.selectedLemmaEdition && 'lines' in this.data.selectedLemmaEdition ?
 
 								<div className={contextPanelStyles}>
 
-										<IconButton
+										{/* <IconButton
 												className="close-lemma-panel"
 												onClick={this.props.closeContextPanel}
 												iconClassName="mdi mdi-close"
-										/>
+										/> */}
 
 										<div className="lemma-text-wrap">
 
-												{this.state.linePagination.map(function(line, i){
-													return (
-														<RaisedButton
-																key={i}
-																label={line}
-																className={"edition-tab tab"}
-																onClick={self.linePaginationClicked.bind(null, line)}
-														/>
-														);
-												})}
+												<LinePagination
+													linePagination={this.state.linePagination}
+													linePaginationClicked={this.linePaginationClicked}
+												/>
 
-												<div className="before-link">
-														<RaisedButton
-																className="cover-link light"
-																label="Before"
-																onClick={this.onBeforeClicked}
-																icon={<FontIcon className="mdi mdi-arrow-up" />}
-														/>
-												</div>
+												{this.state.lineFrom > 1 ?
+													<div className="before-link">
+															<RaisedButton
+																	className="light"
+																	label="Previous"
+																	onClick={this.onBeforeClicked}
+																	icon={<i className="mdi mdi-chevron-up" />}
+															/>
+													</div>
+												: '' }
+
 												{this.data.selectedLemmaEdition.lines.map(function(line, i){
 														var lineClass="lemma-line";
-
 														return <div className={lineClass} key={i}>
 
 																<div className="lemma-meta">
@@ -321,7 +371,7 @@ ContextReader = React.createClass({
 																		: ""}
 																</div>
 
-																<div 
+																<div
 																	className="lemma-text"
 																	ref={line.n}
 																	id={line.n}
@@ -336,14 +386,24 @@ ContextReader = React.createClass({
 
 												})}
 
-												<div className="after-link">
+												{this.state.lineFrom < this.state.maxLine ?
+													<div className="after-link">
 														<RaisedButton
-																className="cover-link light"
-																label="After"
-																onClick={this.onAfterClicked}
-																icon={<FontIcon className="mdi mdi-arrow-down" />}
+															className="light"
+															label="Next"
+															onClick={this.onAfterClicked}
+															icon={<i className="mdi mdi-chevron-down" />}
 														/>
-												</div>
+													</div>
+												: '' }
+
+												{this.data.selectedLemmaEdition.lines.length === 0 ?
+													<div className="no-results">
+														<p>
+															No source text found for your query.
+														</p>
+													</div>
+												: '' }
 
 										</div>
 
@@ -369,13 +429,15 @@ ContextReader = React.createClass({
 
 						:
 								<div className={contextPanelStyles}>
-										<IconButton
+										{/*<IconButton
 												className="close-lemma-panel"
 												onClick={this.props.closeContextPanel}
 												iconClassName="mdi mdi-close"
-										/>
+										/>*/}
 										<div className="lemma-text-wrap">
-												No work & book selected
+											<br />
+											<br />
+											<div className="well-spinner" />
 										</div>
 								</div>
 						}

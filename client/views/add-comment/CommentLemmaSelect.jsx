@@ -4,29 +4,28 @@ import TextField from 'material-ui/TextField';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-CommentLemmnaSelect = React.createClass({
+CommentLemmaSelect = React.createClass({
+
+    propTypes: {
+      workSlug: React.PropTypes.string.isRequired,
+      subworkN: React.PropTypes.number.isRequired,
+      selectedLineFrom: React.PropTypes.number.isRequired,
+      selectedLineTo: React.PropTypes.number.isRequired,
+    },
 
     childContextTypes: {
-        muiTheme: React.PropTypes.object.isRequired,
+      muiTheme: React.PropTypes.object.isRequired,
     },
 
     getChildContext() {
-        return {muiTheme: getMuiTheme(baseTheme)};
-    },
-
-    propTypes: {
-        workSlug: React.PropTypes.string.isRequired,
-        subwork_n: React.PropTypes.number.isRequired,
-        selectedLineFrom: React.PropTypes.number.isRequired,
-        selectedLineTo: React.PropTypes.number.isRequired,
-        openContextReader: React.PropTypes.func.isRequired,
+      return {muiTheme: getMuiTheme(baseTheme)};
     },
 
     getInitialState() {
-        return {
-            selectedLemmaEdition : "",
-            lineLetterValue: "",
-        };
+      return {
+          selectedLemmaEdition : "",
+          lineLetterValue: "",
+      };
     },
 
     mixins: [ReactMeteorData],
@@ -45,7 +44,7 @@ CommentLemmnaSelect = React.createClass({
         if (this.props.selectedLineFrom <= this.props.selectedLineTo) {
             lemmaQuery = {
                 'work.slug': this.props.workSlug,
-                'subwork.n': this.props.subwork_n,
+                'subwork.n': this.props.subworkN,
                 'text.n': {
                     $gte: this.props.selectedLineFrom,
                     $lte: this.props.selectedLineTo
@@ -54,13 +53,14 @@ CommentLemmnaSelect = React.createClass({
         } else {
             lemmaQuery = {
                 'work.slug': this.props.workSlug,
-                'subwork.n': this.props.subwork_n,
+                'subwork.n': this.props.subworkN,
                 'text.n': {
                     $gte: this.props.selectedLineFrom,
                     $lte: this.props.selectedLineFrom,
                 }
             };
         };
+				console.log("CommentLemmaSelect lemmaQuery", lemmaQuery);
 
         var textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
         if (textNodesSubscription.ready()) {
@@ -99,6 +99,8 @@ CommentLemmnaSelect = React.createClass({
 
             lemmaText = editions;
 
+						console.log("CommentLemmaSelect lemmaText", lemmaText);
+
             if (this.state.selectedLemmaEdition.length) {
                 lemmaText.forEach(function(edition) {
                     if (edition.slug === that.state.selectedLemmaEdition) {
@@ -136,9 +138,10 @@ CommentLemmnaSelect = React.createClass({
         var self = this;
 
         return (
+					<div className="comments lemma-panel-visible">
             <div className="comment-outer comment-lemma-comment-outer">
 
-                {this.props.selectedLineFrom > 0 ?
+                {this.props.selectedLineFrom > 0 && this.data.selectedLemmaEdition && 'lines' in this.data.selectedLemmaEdition ?
                     <article className="comment lemma-comment paper-shadow">
 
                         {this.data.selectedLemmaEdition.lines.map(function(line, i){
@@ -184,22 +187,22 @@ CommentLemmnaSelect = React.createClass({
 
                         <div className="context-tabs tabs">
 
-                            <RaisedButton
+                            {/* <RaisedButton
                                 className="context-tab tab"
                                 onClick={this.props.openContextReader}
                                 label="Context"
                                 labelPosition="before"
                                 icon={<FontIcon className="mdi mdi-chevron-right" />}
-                            />
+                            /> */}
 
                         </div>
 
                     </article>
                 :
-                    
+
                     <article className="comment lemma-comment paper-shadow">
-                        <p className="lemma-text">No line selected</p>
-                        <div className="context-tabs tabs">
+                        <p className="lemma-text no-lines-selected">No line(s) selected</p>
+                        {/*<div className="context-tabs tabs">
                             <RaisedButton
                                 className="context-tab tab"
                                 onClick={this.props.openContextReader}
@@ -208,11 +211,12 @@ CommentLemmnaSelect = React.createClass({
                                 icon={<FontIcon className="mdi mdi-chevron-right" />}
                                 >
                             </RaisedButton>
-                        </div>
+                        </div>*/}
                     </article>
                 }
 
             </div>
+					</div>
         );
     }
 });

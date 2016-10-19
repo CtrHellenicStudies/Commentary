@@ -2,8 +2,7 @@
  * Replace these in the future as they will publish our entire collections.
  */
 
-if (Meteor.isServer){
-
+if (Meteor.isServer) {
 	Meteor.publish('comments', function(query, skip, limit) {
 		if(!skip){
 			skip = 0;
@@ -56,5 +55,36 @@ if (Meteor.isServer){
 		return ReferenceWorks.find();
 	});
 
-
+	Meteor.publish('pageImages', function pageImages(pageSlug) {
+		check(pageSlug, String);
+		const page = Pages.findOne({
+			slug: pageSlug,
+		});
+		if (page) {
+			const imageArray = page.headerImage;
+			if (imageArray && Array.isArray(imageArray)) {
+				return [
+					Images.find({
+						_id: { $in: imageArray },
+					}),
+					/*Thumbnails.find({
+						originalId: { $in: imageArray },
+					}),*/
+				];
+			}
+		}
+		return this.ready();
+	});
+	Meteor.publish('pages', (slug) => {
+		check(slug, String);
+		let query;
+		if (slug) {
+			query = {
+				slug,
+			};
+		} else {
+			query = {};
+		}
+		return Pages.find(query);
+	});
 }

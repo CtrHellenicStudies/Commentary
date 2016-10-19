@@ -23,7 +23,7 @@ AddCommentForm = React.createClass({
 		propTypes: {
 				selectedLineFrom: React.PropTypes.number.isRequired,
 				selectedLineTo: React.PropTypes.number.isRequired,
-				submiteForm: React.PropTypes.func.isRequired,
+				submitForm: React.PropTypes.func.isRequired,
 				// titleValue: React.PropTypes.string.isRequired,
 				// textValue: React.PropTypes.string.isRequired,
 				// referenceValue: React.PropTypes.string.isRequired,
@@ -68,7 +68,7 @@ AddCommentForm = React.createClass({
 				// TODO: form validation
 				event.preventDefault();
 				// TODO: update collection
-				this.props.submiteForm(this.state);
+				this.props.submitForm(this.state);
 		},
 
 		titleValueChange(event) {

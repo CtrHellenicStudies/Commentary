@@ -17,7 +17,7 @@
 }
 
 .add-comment-layout {
-	padding: 110px 0 0 0;
+	padding: 47px 0 0 0;
 }
 
 .add-comment-title span {
@@ -56,6 +56,12 @@
 
 .add-comment-button {
 	padding-top: 30px;
+	button {
+		background:@md-primary !important;
+		span {
+			color:@light !important;
+		}
+	}
 }
 
 .add-comment-snackbar {
@@ -72,4 +78,52 @@
 .after-link {
     text-align: center;
     margin: 20px 0;
+}
+
+article.lemma-comment p.lemma-text.no-lines-selected {
+	color:@text-secondary;
+}
+
+.line-pagination {
+	position:absolute;
+	top:0;
+	padding-top:82px;
+	left:0;
+	width:100%;
+	background:#f6f6f6;
+	border-bottom:1px solid #eee;
+	display:none;
+
+	.line-page {
+		min-width:0 !important;
+		height: auto !important;
+		padding:0 !important;
+		box-shadow:none !important;
+		border-right:1px solid #eee;
+
+		&:hover {
+			button > div > div {
+				background-color:@md-primary-300;
+
+			}
+
+		}
+
+		button {
+			height: auto !important;
+			box-shadow:none !important;
+			border-radius:0px !important;
+
+			>div >div {
+				padding:5px 10px !important;
+				height: auto !important;
+
+
+			}
+
+
+		}
+
+	}
+
 }

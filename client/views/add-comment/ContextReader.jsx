@@ -78,8 +78,6 @@ ContextReader = React.createClass({
 					lineTo = this.props.initialLineTo;
 				}
 
-				debugger;
-
         if (
 					this.props.workSlug != ""
 					&& this.props.subwork_n != 0
@@ -114,14 +112,18 @@ ContextReader = React.createClass({
         if (Object.keys(this.refs).length) {
             if (this.props.selectedLineFrom === 0) {
                 for (var i = lineFrom; i <= lineTo; i++) {
+									if(i.toString() in this.refs) {
                     this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
+									}
                 };
             } else if (this.props.selectedLineTo === 0) {
                 for (var i = lineFrom; i <= lineTo; i++) {
                     if (i === this.props.selectedLineFrom) {
                         this.refs[i.toString()].style.borderBottom = "2px solid #B2EBF2";
                     } else {
+											if(i.toString() in this.refs) {
                         this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
+											}
                     };
                 };
             } else {
@@ -129,7 +131,9 @@ ContextReader = React.createClass({
                     if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
                         this.refs[i.toString()].style.borderBottom = "2px solid #B2EBF2";
                     } else {
+											if(i.toString() in this.refs) {
                         this.refs[i.toString()].style.borderBottom = "2px solid #ffffff";
+											}
                     };
                 };
             };

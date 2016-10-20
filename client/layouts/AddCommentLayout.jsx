@@ -110,8 +110,8 @@ AddCommentLayout = React.createClass({
 
 				const filters = this.state.filters;
 
-        let work;
-        let subwork;
+        let work = null;
+        let subwork = null;
 				filters.forEach(function(filter){
 					if (filter.key === 'work') {
 						work = values[0];
@@ -122,6 +122,21 @@ AddCommentLayout = React.createClass({
 					}
 
 				});
+
+				if(!work){
+					work = {
+						title: "Iliad",
+						slug: "iliad",
+						order: 1,
+					};
+				}
+				if(!subwork){
+					subwork = {
+						title: "Iliad",
+						slug: "iliad",
+						n: 1,
+					};
+				}
 
         let lineLetter = "";
         if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
@@ -155,6 +170,13 @@ AddCommentLayout = React.createClass({
             _id: Meteor.user().commenterId
         }).fetch()[0];
 
+				let selectedLineTo = 0;
+				if(this.state.selectedLineTo === 0){
+					selectedLineTo = this.state.selectedLineFrom;
+				}else {
+					selectedLineTo = this.state.selectedLineTo;
+				}
+
         this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, function() {
             var keywords = [];
             that.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
@@ -176,7 +198,7 @@ AddCommentLayout = React.createClass({
                     n: subwork.n,
                 },
                 lineFrom: that.state.selectedLineFrom,
-                lineTo: that.state.selectedLineTo,
+                lineTo: selectedLineTo,
                 lineLetter: lineLetter,
                 nLines: that.state.selectedLineTo - that.state.selectedLineFrom + 1,
                 revisions: [{

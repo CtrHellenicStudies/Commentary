@@ -6,7 +6,7 @@ AddRevisionLayout = React.createClass({
 
     getInitialState() {
         return {
-            // filters: [],
+            filters: [],
 
             // selectedLineFrom: 0,
             // selectedLineTo: 0,
@@ -52,8 +52,10 @@ AddRevisionLayout = React.createClass({
             slug: slugify(formData.titleValue),
         };
 
+				const self = this;
+
         Meteor.call("comments.add.revision", this.props.commentId, revision, function(err) {
-            FlowRouter.go('/commentary/?_id=' + this.data.comment._id);
+            FlowRouter.go('/commentary/?_id=' + self.data.comment._id);
         });
 
         // TODO: handle behavior after comment added (add info about success)
@@ -90,6 +92,138 @@ AddRevisionLayout = React.createClass({
         };
     },
 
+    toggleSearchTerm(key, value) {
+        var self = this,
+            filters = this.state.filters;
+        var keyIsInFilter = false,
+            valueIsInFilter = false,
+            filterValueToRemove,
+            filterToRemove;
+
+        filters.forEach(function(filter, i) {
+            if (filter.key === key) {
+                keyIsInFilter = true;
+
+                filter.values.forEach(function(filterValue, j) {
+                    if (filterValue._id === value._id) {
+                        valueIsInFilter = true;
+                        filterValueToRemove = j;
+                    }
+                })
+
+                if (valueIsInFilter) {
+                    filter.values.splice(filterValueToRemove, 1);
+                    if (filter.values.length === 0) {
+                        filterToRemove = i;
+                    }
+                } else {
+                    if (key === "works") {
+                        filter.values = [value];
+                    } else {
+                        filter.values.push(value);
+                    }
+                }
+            }
+
+        });
+
+
+        if (typeof filterToRemove !== "undefined") {
+            filters.splice(filterToRemove, 1);
+        }
+
+        if (!keyIsInFilter) {
+            filters.push({
+                key: key,
+                values: [value]
+            });
+        }
+
+        this.setState({
+            filters: filters,
+            skip: 0
+        });
+
+    },
+
+		handleChangeLineN(e){
+
+			const filters = this.state.filters;
+
+			if(e.from > 1){
+				let lineFromInFilters = false;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineFrom"){
+						filter.values = [e.from];
+						lineFromInFilters = true;
+					}
+				});
+
+				if(!lineFromInFilters){
+					filters.push({
+						key:"lineFrom",
+						values:[e.from]
+					})
+				}
+
+			}else {
+				let filterToRemove;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineFrom"){
+						filterToRemove = i;
+					}
+
+				});
+
+				if(typeof filterToRemove !== "undefined"){
+					filters.splice(filterToRemove, 1);
+				}
+
+			}
+
+			if(e.to < 2100){
+				var lineToInFilters = false;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineTo"){
+						filter.values = [e.to];
+						lineToInFilters = true;
+					}
+				});
+
+				if(!lineToInFilters){
+					filters.push({
+						key:"lineTo",
+						values:[e.to]
+					})
+				}
+
+			}else {
+				let filterToRemove;
+
+				filters.forEach(function(filter, i){
+					if(filter.key === "lineTo"){
+						filterToRemove = i;
+					}
+
+				});
+
+				if(typeof filterToRemove !== "undefined"){
+					filters.splice(filterToRemove, 1);
+				}
+
+			}
+
+
+			this.setState({
+				filters: filters
+			})
+
+		},
+
+
     ifReady() {
         var ready = Roles.subscription.ready();
         ready = ready && Object.keys(this.data.comment).length;
@@ -98,6 +232,7 @@ AddRevisionLayout = React.createClass({
 
     render() {
 
+				const filters = this.state.filters;
         var comment = this.data.comment;
 
         return (
@@ -105,23 +240,27 @@ AddRevisionLayout = React.createClass({
                 {this.ifReady() ?
                     <div className="chs-layout add-comment-layout">
 
-                        <Header />
+                          <Header
+                              toggleSearchTerm={this.toggleSearchTerm}
+															handleChangeLineN={this.handleChangeLineN}
+                              filters={filters}
+                              initialSearchEnabled
+                          />
 
                             <main>
 
 														<div className="commentary-comments">
 															<div className="comment-group">
-                                <CommentLemmnaSelect
-                                    ref="CommentLemmnaSelect"
+                                <CommentLemmaSelect
+                                    ref="CommentLemmaSelect"
                                     selectedLineFrom={comment.lineFrom}
                                     selectedLineTo={comment.lineFrom + comment.nLines - 1}
                                     workSlug={comment.work.slug}
-                                    subwork_n={comment.subwork.n}
-                                    openContextReader={this.openContextReader}
+                                    subworkN={comment.subwork.n}
                                 />
 
                                 <AddRevision
-                                    submiteForm={this.addRevision}
+                                    submitForm={this.addRevision}
                                     comment={comment}
                                 />
 
@@ -141,6 +280,11 @@ AddRevisionLayout = React.createClass({
 
 
                             </main>
+
+												<FilterWidget
+													filters={filters}
+													toggleSearchTerm={this.toggleSearchTerm}
+												/>
 
                         <Footer/>
 

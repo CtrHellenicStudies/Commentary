@@ -19,7 +19,7 @@ Meteor.methods({
     },
 
     getTableOfContents: function() {
-        
+
         var tableOfContents = TextNodes.aggregate([{
             $group: {
                 _id: '$work.slug',
@@ -33,7 +33,7 @@ Meteor.methods({
                 return a-b;
             });
         });
-        
+
         return tableOfContents;
     }
 });

@@ -33,7 +33,7 @@ AddRevision = React.createClass({
     },
 
     propTypes: {
-        submiteForm: React.PropTypes.func.isRequired,
+        submitForm: React.PropTypes.func.isRequired,
         comment: React.PropTypes.object.isRequired,
     },
 
@@ -88,7 +88,7 @@ AddRevision = React.createClass({
         //     snackbarMessage: error.errorMessage,
         // });
         // if (!error.errors) {
-            this.props.submiteForm(this.state);
+            this.props.submitForm(this.state);
         // };
     },
 

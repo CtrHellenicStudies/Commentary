@@ -1,4 +1,4 @@
-Meteor.method("cron", function () {
+Meteor.method("commentary_cron", function () {
 
 		var comments = Comments.find().fetch();
 
@@ -165,19 +165,22 @@ Meteor.method("cron", function () {
 
 		commentCounts.forEach(function(countsWork){
 			var work = Works.findOne({slug: countsWork.slug});
-			work.subworks.forEach(function(subwork){
-				work.nComments = countsWork.nComments;
-				countsWork.subworks.forEach(function(countsSubwork){
-					if(subwork.n === countsSubwork.n){
+			if(work){
+				work.subworks.forEach(function(subwork){
+					work.nComments = countsWork.nComments;
+					countsWork.subworks.forEach(function(countsSubwork){
+						if(subwork.n === countsSubwork.n){
 
-						subwork.nComments = countsSubwork.nComments;
-						subwork.commentHeatmap = countsSubwork.commentHeatmap;
+							subwork.nComments = countsSubwork.nComments;
+							subwork.commentHeatmap = countsSubwork.commentHeatmap;
 
-					}
+						}
+
+					});
 
 				});
 
-			});
+			}
 
 
 			var updateStatus = Works.update({slug: countsWork.slug}, {$set:{

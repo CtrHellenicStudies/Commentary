@@ -4,7 +4,7 @@ Schemas.Commenters = new SimpleSchema({
     _id: {
         type: String,
     },
-    
+
 	wordpressId: {
 		type: Number,
 		optional: true
@@ -55,12 +55,42 @@ Schemas.Commenters = new SimpleSchema({
 		optional: true,
 	},
 
-	nCommentsPerBook: {
+	nCommentsKeywords: {
+		type: [Object],
+		optional: true,
+	},
+
+	'nCommentsKeywords.$.title': {
+		type: String,
+		optional: true,
+	},
+
+	'nCommentsKeywords.$.slug': {
+		type: String,
+		optional: true,
+	},
+
+	'nCommentsKeywords.$.count': {
 		type: Number,
 		optional: true,
 	},
 
-	nCommentsPerKeyword: {
+	nComments: {
+		type: Number,
+		optional: true,
+	},
+
+	nCommentsIliad: {
+		type: Number,
+		optional: true,
+	},
+
+	nCommentsOdyssey: {
+		type: Number,
+		optional: true,
+	},
+
+	nCommentsHymns: {
 		type: Number,
 		optional: true,
 	},

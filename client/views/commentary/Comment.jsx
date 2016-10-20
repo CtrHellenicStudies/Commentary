@@ -1,4 +1,3 @@
-
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -26,7 +25,9 @@ Comment = React.createClass({
 			lemmaReferenceSubwork: 0,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,
-
+			persistentIdentifierModalVisible: false,
+			persistentIdentifierModalTop: 0,
+			persistentIdentifierModalLeft: 0,
 		}
 
 	},
@@ -109,7 +110,6 @@ Comment = React.createClass({
 				}
 			}
 
-
 			this.setState({
 				lemmaReferenceModalVisible: true,
 				lemmaReferenceWork: $target.data().work,
@@ -163,6 +163,21 @@ Comment = React.createClass({
             //rather than side by side diff 
             inline: true,
         });
+    },
+
+    togglePersistentIdentifierModal(e) {
+    	const $target = $(e.target);
+    	this.setState({
+    		persistentIdentifierModalVisible: !this.state.persistentIdentifierModalVisible,
+    		persistentIdentifierModalTop: $target.position().top - 34,
+			persistentIdentifierModalLeft: $target.position().left,
+    	});
+    },
+
+    closePersistentIdentifierModal() {
+    	this.setState({
+    		persistentIdentifierModalVisible: false,
+    	});
     },
 
 	render() {
@@ -300,11 +315,16 @@ Comment = React.createClass({
 									}
 								</p>
 							</div>
-							<div className="comment-persistent-identifier">
+							{/*<div className="comment-persistent-identifier">
 								<a href={"/commentary/?_id=" + comment._id}>
 									<span>Persistent Identifier</span>
 								</a>
-							</div>
+							</div>*/}
+							<CommentCitation 
+								componentClass="comment-citation"
+								title="Cite this comment"
+								comment={comment}
+							/>
 						</div>
 						<div className="comment-revisions">
 							{comment.revisions.map(function(revision, i){

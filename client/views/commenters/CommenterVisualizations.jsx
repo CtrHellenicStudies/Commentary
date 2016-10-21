@@ -4,7 +4,11 @@ import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-CommenterVisualization = React.createClass({
+CommenterVisualizations = React.createClass({
+
+	propTypes:  {
+		commenter: React.PropTypes.object.isRequired,
+	},
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };

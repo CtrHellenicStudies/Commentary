@@ -4,7 +4,7 @@ Schemas.Commenters = new SimpleSchema({
     _id: {
         type: String,
     },
-    
+
 	wordpressId: {
 		type: Number,
 		optional: true
@@ -33,6 +33,17 @@ Schemas.Commenters = new SimpleSchema({
 			afFieldInput: {
 				type: 'fileUpload',
 				collection: 'ProfilePictures'
+			}
+		}
+	},
+
+	avatar: {
+		type: String,
+		optional: true,
+		label: 'Profile picture (avatar)',
+		autoform: {
+			afFieldInput: {
+				type: 'adminAvatarEditor',
 			}
 		}
 	},

@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+import { Avatars } from '/imports/avatar/avatar_collections.js';
 
 const PublicAvatarFields = {
 	name:1,
@@ -6,6 +8,7 @@ const PublicAvatarFields = {
 	type:1,
 	userId:1,
 	url:1,
+	commenterId:1,
 };
 const PublicUserAvatarFields = {
 	'avatar.name': 1,
@@ -25,4 +28,8 @@ Meteor.publish('users.myAvatar', function() {
 	}
 });
 
-// TODO: publish list of avatars (other than logged in user)
+Meteor.publish('avatars.commenter', function(ids) {
+	check(ids, [String]);
+
+	return Avatars.find({ commenterId: { $in: ids } }, PublicAvatarFields);
+});

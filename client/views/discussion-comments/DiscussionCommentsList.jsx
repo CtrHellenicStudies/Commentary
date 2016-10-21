@@ -29,6 +29,10 @@ DiscussionCommentsList = React.createClass({
 							key={i}
 							discussionComment={discussionComment} />;
 					})}
+				{!this.props.discussionComments.length ?
+					<p className="no-results">You haven't created any comments yet.</p>
+					: ''
+				}
 
 			 </div>
 

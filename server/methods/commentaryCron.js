@@ -1,4 +1,4 @@
-Meteor.method("cron", function () {
+Meteor.method("commentary_cron", function () {
 
 		var comments = Comments.find().fetch();
 
@@ -21,10 +21,18 @@ Meteor.method("cron", function () {
 
 		comments.forEach(function(comment){
 
+			let commentWorkSlug = '';
+
+			if (commentWorkSlug === 'hymns') {
+				commentWorkSlug = 'homeric-hymns';
+			} else {
+				commentWorkSlug = comment.work.slug
+			}
+			
 			isInCommentCountsWorks = false;
 			commentCounts.forEach(function(work){
 
-				if(comment.work.slug === work.slug){
+				if(commentWorkSlug === work.slug){
 					isInCommentCountsWorks = true;
 					isInCommentCountsSubworks = false;
 					work.nComments++;
@@ -83,7 +91,7 @@ Meteor.method("cron", function () {
 
 			if(!isInCommentCountsWorks){
 				commentCounts.push({
-					slug: comment.work.slug,
+					slug: commentWorkSlug,
 					nComments: 1,
 					subworks: [{
 						n: comment.subwork.n,
@@ -92,14 +100,11 @@ Meteor.method("cron", function () {
 						nComments: 1,
 						commentHeatmap: [{
 							n: Math.floor(comment.lineFrom/10)*10,
-							nComments: 1
+							nComments: 1,
 						}]
 					}]
 				})
 			}
-
-
-
 
 		});
 
@@ -115,58 +120,69 @@ Meteor.method("cron", function () {
 
 		// search for subworks which have not been commented on
 		// modify tableOfContents so only missing subworks are left
-	    commentCounts.forEach((work, i) => {
-	        var _work = tableOfContents.find(function(element, index, array) {
-	            return element._id === work.slug;
-	        });
-	        work.subworks.forEach((subwork, j) => {
-	            _work.subworks.forEach((n, k) => {
-	                if (n === subwork.n) {
-	                	_work.subworks.splice(k, 1);
-	                };
-	            });
-	        });
-	    });
+		commentCounts.forEach((work, i) => {
+			var _work = tableOfContents.find(function(element, index, array) {
+				return element._id === work.slug;
+			});
+			work.subworks.forEach((subwork, j) => {
+				_work.subworks.forEach((n, k) => {
+					if (n === subwork.n) {
+						_work.subworks.splice(k, 1);
+					};
+				});
+			});
+		});
 
-	    // creat missing works and subworks from textNodes wwhich haven't been commented
-	    tableOfContents.forEach((_work, i) => {
-	        _work.subworks.forEach((n) => {
+			// creat missing works and subworks from textNodes wwhich haven't been commented
+			tableOfContents.forEach((_work, i) => {
+					_work.subworks.forEach((n) => {
 
-	            var isInCommentCountsWorks = false;
-	            commentCounts.forEach((work) => {
+							var isInCommentCountsWorks = false;
+							commentCounts.forEach((work) => {
 
-	                if (_work._id === work.slug) {
-	                    isInCommentCountsWorks = true;
+									if (_work._id === work.slug) {
+											isInCommentCountsWorks = true;
 
-	                    work.subworks.push({
-	                        n: n,
-	                        title: n.toString(),
-	                        nComments: 0,
-	                        commentHeatmap: []
-	                    });
-	                };
-	            });
+											work.subworks.push({
+													n: n,
+													title: n.toString(),
+													nComments: 0,
+													commentHeatmap: []
+											});
+									};
+							});
 
-	            if (!isInCommentCountsWorks) {
-	                commentCounts.push({
-	                    slug: _work._id,
-	                    nComments: 0,
-	                    subworks: [{
-	                        n: n,
-	                        title: n.toString(),
-	                        nComments: 0,
-	                        commentHeatmap: []
-	                    }]
-	                });
-	            };
-	        });
-	    });
+							if (!isInCommentCountsWorks) {
+									commentCounts.push({
+											slug: _work._id,
+											nComments: 0,
+											subworks: [{
+													n: n,
+													title: n.toString(),
+													nComments: 0,
+													commentHeatmap: []
+											}]
+									});
+							};
+					});
+			});
 
 
 		commentCounts.forEach(function(countsWork){
-			var work = Works.findOne({slug: countsWork.slug});
+			let workSlug = '';
+			let work = {}
+
+			if(countsWork.slug === 'hymns'){
+				workSlug = 'homeric-hymns';
+			}else {
+				workSlug = countsWork.slug;
+			}
+
+			work = Works.findOne({slug: workSlug});
+
 			work.subworks.forEach(function(subwork){
 				work.nComments = countsWork.nComments;
+
 				countsWork.subworks.forEach(function(countsSubwork){
 					if(subwork.n === countsSubwork.n){
 
@@ -179,8 +195,7 @@ Meteor.method("cron", function () {
 
 			});
 
-
-			var updateStatus = Works.update({slug: countsWork.slug}, {$set:{
+			var updateStatus = Works.update({slug: workSlug}, {$set:{
 														subworks: countsWork.subworks,
 														nComments: countsWork.nComments
 													}});

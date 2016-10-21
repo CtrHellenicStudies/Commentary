@@ -149,7 +149,6 @@ CommentaryLayout = React.createClass({
 				})
 
 				if(valueIsInFilter){
-					console.log('jestem');
 					filter.values.splice(filterValueToRemove, 1);
 					if(filter.values.length === 0){
 						filterToRemove = i;

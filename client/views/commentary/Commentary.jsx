@@ -366,7 +366,7 @@ Commentary = React.createClass({
 				<InfiniteScroll
 					endPadding={120}
 					loadMore={this.loadMoreComments}
-					>
+				>
 
 					<div className="commentary-comments commentary-comment-groups">
 						{this.commentGroups.map(function(commentGroup, i){
@@ -393,6 +393,7 @@ Commentary = React.createClass({
 																comment={comment}
 																addSearchTerm={self.props.addSearchTerm}
 																checkIfToggleLemmaReferenceModal={self.checkIfToggleLemmaReferenceModal}
+																filters={self.props.filters}
 																/>
 													})}
 

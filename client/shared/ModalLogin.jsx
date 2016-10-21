@@ -41,17 +41,21 @@ ModalLogin = React.createClass({
 
 		let lowered = this.props.lowered;
 
-		return (
-			<div className={"ahcip-modal-login ahcip-modal ahcip-login-signup" + ((lowered) ? " lowered" : "")}>
-				<div className="close-modal paper-shadow"
-					onClick={this.props.closeModal}
-					>
-					<i className="mdi mdi-close"></i>
+		return (<div>
+			{!Meteor.userId() ?
+				<div className={"ahcip-modal-login ahcip-modal ahcip-login-signup" + ((lowered) ? " lowered" : "")}>
+					<div className="close-modal paper-shadow"
+						onClick={this.props.closeModal}
+						>
+						<i className="mdi mdi-close"></i>
+					</div>
+					<div className="modal-inner">
+						<BlazeToReact blazeTemplate="atForm" state="signIn" />
+					</div>
 				</div>
-				<div className="modal-inner">
-					<BlazeToReact blazeTemplate="atForm" state="signIn" />
-				</div>
-			</div>
-			);
+				:
+				""
+			}
+			</div>);
 	}
 });

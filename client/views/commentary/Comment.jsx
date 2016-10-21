@@ -1,9 +1,10 @@
-
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+import diffview from 'jsdifflib';
 
 Comment = React.createClass({
 
@@ -11,11 +12,25 @@ Comment = React.createClass({
 		comment: React.PropTypes.object.isRequired,
 		commentGroup: React.PropTypes.object.isRequired,
 		addSearchTerm: React.PropTypes.func,
+		filters: React.PropTypes.array,
 	},
 
 	getInitialState(){
+		var selectedRevisionIndex = null;
+		var foundRevision = null;
+		this.props.filters.forEach((filter) => {
+			if (filter.key === "revision") {
+				foundRevision = filter.values[0];
+			};
+		});
+		if (foundRevision != null && foundRevision >= 0 && foundRevision < this.props.comment.revisions.length) {
+			selectedRevisionIndex = foundRevision;
+		} else {
+			selectedRevisionIndex = this.props.comment.revisions.length - 1;
+		};
+		console.log('selectedRevisionIndex', selectedRevisionIndex);
 		return {
-			selectedRevision: {},
+			selectedRevisionIndex: selectedRevisionIndex,
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
 			lemmaReferenceTop: 0,
@@ -24,10 +39,22 @@ Comment = React.createClass({
 			lemmaReferenceSubwork: 0,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,
-
+			persistentIdentifierModalVisible: false,
+			persistentIdentifierModalTop: 0,
+			persistentIdentifierModalLeft: 0,
 		}
 
 	},
+
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		var selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex];
+		console.log('this.state.selectedRevisionIndex', this.state.selectedRevisionIndex);
+        return {
+        	selectedRevision: selectedRevision,
+        };
+    },
 
 	addSearchTerm(e){
 		if('addSearchTerm' in this.props){
@@ -39,14 +66,14 @@ Comment = React.createClass({
 
 	},
 
-	componentDidMount(){
-		if(!("title" in this.state.selectedRevision)){
-			this.setState({
-				selectedRevision: this.props.comment.revisions[0]
-			});
-		}
-
-	},
+	// componentDidUdate(){
+	// 	if(!("title" in this.state.selectedRevision)){
+	// 		this.setState({
+	// 			selectedRevision: this.props.comment.revisions[this.state.selectedRevisionIndex],
+	// 			// selectedRevisionIndex = this.props.comment.revisions.length - 1,
+	// 		});
+	// 	};
+	// },
 
 	showDiscussionThread(comment){
 		this.setState({
@@ -98,7 +125,6 @@ Comment = React.createClass({
 				}
 			}
 
-
 			this.setState({
 				lemmaReferenceModalVisible: true,
 				lemmaReferenceWork: $target.data().work,
@@ -126,12 +152,61 @@ Comment = React.createClass({
 
 	},
 
+	selectRevision(event) {
+        this.setState({
+            selectedRevisionIndex: parseInt(event.currentTarget.id),
+        });
+    },
+
+
+	handleEditCommentClick(id) {
+		FlowRouter.go('/add-revision/' + id);
+	},
+
+	getDiff() {
+        // build the diff view and return a DOM node
+        var baseRevision = this.data.selectedRevision;
+        var newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
+        return diffview.buildView({
+            baseText: baseRevision.text,
+            newText: newRevision.text,
+            // set the display titles for each resource 
+            baseTextName: "Revision " + moment(baseRevision.created).format('D MMMM YYYY'),
+            newTextName: "Revision " + moment(newRevision.created).format('D MMMM YYYY'),
+            contextSize: null,
+            //set inine to true if you want inline 
+            //rather than side by side diff 
+            inline: true,
+        });
+    },
+
+    togglePersistentIdentifierModal(e) {
+    	const $target = $(e.target);
+    	this.setState({
+    		persistentIdentifierModalVisible: !this.state.persistentIdentifierModalVisible,
+    		persistentIdentifierModalTop: $target.position().top - 34,
+			persistentIdentifierModalLeft: $target.position().left,
+    	});
+    },
+
+    closePersistentIdentifierModal() {
+    	this.setState({
+    		persistentIdentifierModalVisible: false,
+    	});
+    },
+
 	render() {
 		var self = this;
 		var comment = this.props.comment;
-		var selectedRevision = this.state.selectedRevision;
+		var selectedRevision = this.data.selectedRevision;
+		var selectedRevisionIndex = this.state.selectedRevisionIndex;
 		var commentGroup = this.props.commentGroup;
 		var commentClass = "comment-outer has-discussion ";
+		var userCommenterId = 'no commenter';
+		if(Meteor.userId()){
+			var userCommenterId = Meteor.user().commenterId;
+		};
+		
 
 		if(self.state.discussionVisible){
 			commentClass += "discussion--width discussion--visible";
@@ -182,7 +257,7 @@ Comment = React.createClass({
 											return <RaisedButton
 													key={i}
 													className="comment-keyword paper-shadow"
-													onClick={self.addSearchTerm}
+													onClick={self.addSearchTerm.bind(null, keyword)}
 													data-id={keyword._id}
 													label={(keyword.title || keyword.wordpressId)}
 												/>
@@ -202,6 +277,15 @@ Comment = React.createClass({
 										return <div
 											key={i}
 											className="comment-author">
+											{userCommenterId === commenter._id ?
+												<FlatButton
+													label='Edit comment'
+													onClick={self.handleEditCommentClick.bind(null, comment._id)}
+													icon={<FontIcon className="mdi mdi-pen" />}
+												/>
+												:
+												""
+											}
 											<div className="comment-author-text">
 												<a href={"/commenters/" + commenter.slug} >
 													<span className="comment-author-name">{commenter.name}</span>
@@ -219,11 +303,19 @@ Comment = React.createClass({
 
 						</div>
 						<div className="comment-lower">
-							<div
-								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
-								onClick={this.checkIfToggleLemmaReferenceModal}
-							/>
+							{selectedRevisionIndex === comment.revisions.length - 1 ?
+								<div
+									className="comment-body"
+									dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
+									onClick={this.checkIfToggleLemmaReferenceModal}
+								/>
+								:
+								<div
+									className="comment-body"
+									dangerouslySetInnerHTML={comment ? {__html: '<table class=\'table-diff\'>' + this.getDiff().innerHTML + '</table>'} : ''}
+									onClick={this.checkIfToggleLemmaReferenceModal}
+								/>
+							}
 							<div className="comment-reference" >
 								<h4>Secondary Source(s):</h4>
 								<p>
@@ -238,20 +330,26 @@ Comment = React.createClass({
 									}
 								</p>
 							</div>
-							<div className="comment-persistent-identifier">
+							{/*<div className="comment-persistent-identifier">
 								<a href={"/commentary/?_id=" + comment._id}>
 									<span>Persistent Identifier</span>
 								</a>
-							</div>
+							</div>*/}
+							<CommentCitation 
+								componentClass="comment-citation"
+								title="Cite this comment"
+								comment={comment}
+							/>
 						</div>
 						<div className="comment-revisions">
 							{comment.revisions.map(function(revision, i){
 								return <FlatButton
 									key={i}
+									id={i}
 									data-id="{revision.id}"
 									className="revision selected-revision"
-									onClick={this.selectRevision}
-									label={"Revision " + moment(revision.updated).format('D MMMM YYYY')}
+									onClick={self.selectRevision}
+									label={"Revision " + moment(revision.created).format('D MMMM YYYY')}
 									>
 
 								</FlatButton>

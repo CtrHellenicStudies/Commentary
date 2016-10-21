@@ -191,7 +191,9 @@ HomeView = React.createClass({
 						<section id="visualizations" className="browse-commentary block-shadow" >
 							{/*<h2 className="keyword-divider-title"></h2>*/}
 
-							<span className="visualizations-coaching-text">Visualizations help text Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque adiungere vites conveniat quae curum boum qui cultus habendo</span>
+							<span className="visualizations-coaching-text">
+								The charts below visualize data about the number of comments per book or hymn, but they are also an interface into the commentary itself. The darker the shade of the bar, the more comments there are, but try clicking on the shaded elements and see what happens.
+							</span>
 							<div className="container data-visualization-container">
 								<WorksList />
 

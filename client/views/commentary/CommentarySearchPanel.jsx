@@ -84,7 +84,7 @@ CommentarySearchPanel = React.createClass({
 
 	render() {
 		const self = this;
-		const filters = this.props.filters;
+		const filters = this.props.filters || [];
 
 		const styles = {
 			flatButton: {

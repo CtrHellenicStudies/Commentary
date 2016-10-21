@@ -4,19 +4,23 @@
 	"description": "A Homer Commentary in Progress",
 	"main": "main.js",
 	"dependencies": {
+		"bcrypt": "^0.8.7",
+		"diff": "^3.0.1",
 		"draft-js": "^0.9.1",
 		"draft-js-editor": "^1.7.2",
 		"draft-js-export-html": "^0.4.0",
+		"draft-js-import-html": "^0.2.2",
 		"draft-js-mention-plugin": "^2.0.0-beta5",
 		"draft-js-plugins-editor": "^2.0.0-beta5",
 		"draft-js-richbuttons-plugin": "^1.1.0",
 		"draft-js-single-line-plugin": "0.0.1",
 		"dropzone": "^4.3.0",
 		"ion-rangeslider": "^2.1.4",
+		"jsdifflib": "^1.1.0",
 		"linkifyjs": "^2.0.5",
 		"material-ui": "^0.15.0",
 		"mdi": "^1.6.50",
-    "meteor-node-stubs": "^0.2.3",
+		"meteor-node-stubs": "^0.2.3",
 		"pseries": "^2.0.0",
 		"react": "^15.3.0",
 		"react-addons-create-fragment": "^15.0.2",
@@ -36,11 +40,12 @@
 		"react-select": "^0.9.1",
 		"react-slick": "^0.12.2",
 		"react-tap-event-plugin": "^1.0.0",
+		"slugify": "^1.0.2",
 		"throttle-debounce": "^1.0.1"
 	},
 	"devDependencies": {
 		"babel-eslint": "^6.1.2",
-    "enzyme": "^2.4.1",
+		"enzyme": "^2.4.1",
 		"eslint": "^3.4.0",
 		"eslint-config-airbnb": "^10.0.1",
 		"eslint-import-resolver-meteor": "^0.3.3",
@@ -57,8 +62,6 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git@gitlab.archimedesdigital.io:archimedes/view.git"
-	},
-	"author": "",
-	"license": "MIT"
+		"url": "git@gitlab.archimedesdigital.io:archimedes/ahcip.git"
+	}
 }

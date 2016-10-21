@@ -33,3 +33,7 @@ Meteor.publish('avatars.commenter', function(ids) {
 
 	return Avatars.find({ commenterId: { $in: ids } }, PublicAvatarFields);
 });
+
+Meteor.publish('avatars.commenter.all', function() {
+	return Avatars.find({ commenterId: { $exists:true } });
+});

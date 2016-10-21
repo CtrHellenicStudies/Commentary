@@ -35,7 +35,7 @@ CommentersPage = React.createClass({
 							</section>
 							<section className="page-content">
 
-								<CommentersList />
+								<CommentersList defaultAvatarUrl="/images/default_user.jpg" />
 
 							</section>
 

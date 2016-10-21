@@ -37,6 +37,17 @@ Schemas.Commenters = new SimpleSchema({
 		}
 	},
 
+	avatar: {
+		type: String,
+		optional: true,
+		label: 'Profile picture (avatar)',
+		autoform: {
+			afFieldInput: {
+				type: 'adminAvatarEditor',
+			}
+		}
+	},
+
 	bio: {
 		type: String,
 		optional: true,

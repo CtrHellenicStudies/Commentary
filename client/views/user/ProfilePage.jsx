@@ -58,7 +58,7 @@ ProfilePage = React.createClass({
 	getMeteorData() {
 		let discussionComments = [];
 
-		const handle = Meteor.subscribe('user.discussionComments', Meteor.user(), this.state.skip, this.state.limit);
+		const handle = Meteor.subscribe('user.discussionComments', {}, this.state.skip, this.state.limit);
 		if (handle.ready()) {
 			discussionComments = DiscussionComments.find().fetch();
 
@@ -247,7 +247,8 @@ ProfilePage = React.createClass({
 							<div className="user-discussion-comments">
 
 								<h2>Your Comments</h2>
-								{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+								{/*
+									Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
 									<div>
 										<FlatButton
 											label="Add new comment"
@@ -258,7 +259,7 @@ ProfilePage = React.createClass({
 									</div>
 											:
 											''
-										}
+										*/}
 								{
 									/*
 									<InfiniteScroll

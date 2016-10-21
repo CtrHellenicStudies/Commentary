@@ -20,15 +20,20 @@ Meteor.publishComposite('user', function() {
 });
 
 Meteor.publish('user.discussionComments', function(query, skip, limit) {
+
+	if(!query){
+		query = {};
+	}
+
 	if(!skip){
 		skip = 0;
 	}
 
 	if(!limit){
-		limit = 1000;
+		limit = 100;
 	}
 
-	if(Meteor.userId && query){
+	if(Meteor.userId){
 		query["user._id"] = Meteor.userId;
 		return DiscussionComments.find(query, {skip: skip, limit: limit, sort: {created: -1}});
 	}else {

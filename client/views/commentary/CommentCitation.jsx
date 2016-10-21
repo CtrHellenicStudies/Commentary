@@ -58,6 +58,7 @@ CommentCitation = React.createClass({
                     {comment.revisions.map(function(revision, i){
                         return (<MenuItem
                             key={i}
+                            href={"/commentary/?_id=" + comment._id + '&revision=' + i}
                             primaryText={"Revision " + moment(revision.created).format('D MMMM YYYY')}
                         ></MenuItem>);
                     })}

@@ -12,11 +12,25 @@ Comment = React.createClass({
 		comment: React.PropTypes.object.isRequired,
 		commentGroup: React.PropTypes.object.isRequired,
 		addSearchTerm: React.PropTypes.func,
+		filters: React.PropTypes.array,
 	},
 
 	getInitialState(){
+		var selectedRevisionIndex = null;
+		var foundRevision = null;
+		this.props.filters.forEach((filter) => {
+			if (filter.key === "revision") {
+				foundRevision = filter.values[0];
+			};
+		});
+		if (foundRevision != null && foundRevision >= 0 && foundRevision < this.props.comment.revisions.length) {
+			selectedRevisionIndex = foundRevision;
+		} else {
+			selectedRevisionIndex = this.props.comment.revisions.length - 1;
+		};
+		console.log('selectedRevisionIndex', selectedRevisionIndex);
 		return {
-			selectedRevisionIndex: this.props.comment.revisions.length - 1,
+			selectedRevisionIndex: selectedRevisionIndex,
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
 			lemmaReferenceTop: 0,
@@ -35,7 +49,8 @@ Comment = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-		var selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex]
+		var selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex];
+		console.log('this.state.selectedRevisionIndex', this.state.selectedRevisionIndex);
         return {
         	selectedRevision: selectedRevision,
         };
@@ -51,14 +66,14 @@ Comment = React.createClass({
 
 	},
 
-	componentDidUdate(){
-		if(!("title" in this.state.selectedRevision)){
-			this.setState({
-				selectedRevision: this.props.comment.revisions[this.state.selectedRevisionIndex],
-				// selectedRevisionIndex = this.props.comment.revisions.length - 1,
-			});
-		};
-	},
+	// componentDidUdate(){
+	// 	if(!("title" in this.state.selectedRevision)){
+	// 		this.setState({
+	// 			selectedRevision: this.props.comment.revisions[this.state.selectedRevisionIndex],
+	// 			// selectedRevisionIndex = this.props.comment.revisions.length - 1,
+	// 		});
+	// 	};
+	// },
 
 	showDiscussionThread(comment){
 		this.setState({

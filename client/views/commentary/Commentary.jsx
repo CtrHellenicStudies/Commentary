@@ -393,6 +393,7 @@ Commentary = React.createClass({
 																comment={comment}
 																addSearchTerm={self.props.addSearchTerm}
 																checkIfToggleLemmaReferenceModal={self.checkIfToggleLemmaReferenceModal}
+																filters={self.props.filters}
 																/>
 													})}
 

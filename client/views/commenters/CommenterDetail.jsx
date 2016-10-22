@@ -69,9 +69,10 @@ CommenterDetail = React.createClass({
 
 									</div>
 
-									<div className="article-content">
-											<div id="container1" className="data-visualization"></div>
-											<div id="container2" className="data-visualization"></div>
+									<div className="commenter-visualizatin">
+										<CommenterVisualizations
+											commenter={commenter}
+										/>
 									</div>
 
 							</section>

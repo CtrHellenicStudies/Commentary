@@ -28,6 +28,12 @@ Meteor.publish('users.myAvatar', function() {
 	}
 });
 
+Meteor.publish('avatars', function(ids) {
+	check(ids, [String]);
+
+	return Avatars.find({ _id: { $in: ids } }, PublicAvatarFields);
+});
+
 Meteor.publish('avatars.commenter', function(ids) {
 	check(ids, [String]);
 

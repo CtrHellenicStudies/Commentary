@@ -1,21 +1,24 @@
+import { Avatars } from '/imports/avatar/avatar_collections.js';
+
 CommenterDetail = React.createClass({
 
 	propTypes: {
-		slug: React.PropTypes.string.isRequired
+		slug: React.PropTypes.string.isRequired,
+		defaultAvatarUrl: React.PropTypes.string.isRequired,
 	},
 
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-		let query = {};
-
-		query.slug = this.props.slug;
-
-		console.log("Query", query);
-
-		return {
-			commenter: Commenters.findOne(query)
-		};
+		const commenter = Commenters.findOne({ slug:this.props.slug });
+		let avatarUrl = this.props.defaultAvatarUrl;
+		if (commenter != null && commenter.avatar != null) {
+			Meteor.subscribe('avatars', [commenter.avatar]);
+			const avatar = Avatars.findOne({ _id:commenter.avatar });
+			if (avatar)
+				avatarUrl = avatar.url;
+		}
+		return { commenter, avatarUrl };
 	},
 
 	render() {
@@ -54,7 +57,7 @@ CommenterDetail = React.createClass({
 							<section className="page-content">
 
 									<div className="author-image paper-shadow">
-											<img src="/images/default_user.jpg" alt={commenter.name} />
+											<img src={ this.data.avatarUrl } alt={commenter.name} />
 									</div>
 
 									<div className="user-bio">

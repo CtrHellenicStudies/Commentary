@@ -5,8 +5,8 @@
 
 # Packages from meteor-starter template application
 less@2.7.4
-accounts-base@1.2.9
-accounts-password@1.2.12
+accounts-base
+accounts-password
 aldeed:collection2
 dburles:collection-helpers
 matb33:collection-hooks
@@ -23,10 +23,10 @@ cfs:graphicsmagick
 yogiben:helpers
 # manuelschoebel:ms-seo
 # spiderable
-accounts-facebook@1.0.10
-accounts-google@1.0.10
-accounts-twitter@1.1.11
-accounts-ui@1.1.9
+accounts-facebook
+accounts-google
+accounts-twitter
+accounts-ui
 jparker:gravatar
 service-configuration@1.0.10
 yogiben:mixpanel

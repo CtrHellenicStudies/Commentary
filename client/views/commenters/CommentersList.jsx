@@ -1,3 +1,5 @@
+import { Avatars } from '/imports/avatar/avatar_collections.js';
+
 CommentersList = React.createClass({
 
 	mixins: [ReactMeteorData],
@@ -5,9 +7,12 @@ CommentersList = React.createClass({
 	propTypes: {
 		limit: React.PropTypes.number,
 		featureOnHomepage: React.PropTypes.bool,
+		defaultAvatarUrl: React.PropTypes.string,
 	},
 
 	getMeteorData() {
+		Meteor.subscribe('avatars.commenter.all');
+
 		let query = {};
 
 		var limit = 100;
@@ -19,8 +24,21 @@ CommentersList = React.createClass({
 			query.featureOnHomepage = this.props.featureOnHomepage;
 		}
 
+		const commenters = Commenters.find(query, {sort: {name: 1}, limit: limit}).fetch();
+		for (let i=0; i < commenters.length; ++i) {
+			if (commenters[i].avatar == null) {
+				commenters[i].avatarUrl = this.props.defaultAvatarUrl;
+			} else {
+				var avatar = Avatars.findOne({ _id: commenters[i].avatar });
+				if (avatar) {
+					commenters[i].avatarUrl = avatar.url;
+				} else {
+					commenters[i].avatarUrl = this.props.defaultAvatarUrl;
+				}
+			}
+		}
 		return {
-			commenters: Commenters.find(query, {sort: {name: 1}, limit: limit}).fetch(),
+			commenters,
 		};
 	},
 

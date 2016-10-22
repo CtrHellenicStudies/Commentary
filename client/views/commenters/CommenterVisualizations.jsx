@@ -70,6 +70,11 @@ CommenterVisualizations = React.createClass({
 
 		return (
 			<div className={classes}>
+				<div className="commenter-visualization-title">
+					<h2>
+						Comments
+					</h2>
+				</div>
 				<div className="commenter-work-circles">
 					{workIliadLevel ?
 						<CommenterWorkCircle

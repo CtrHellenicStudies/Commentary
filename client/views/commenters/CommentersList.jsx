@@ -2,7 +2,6 @@ import { Avatars } from '/imports/avatar/avatar_collections.js';
 
 CommentersList = React.createClass({
 
-	mixins: [ReactMeteorData],
 
 	propTypes: {
 		limit: React.PropTypes.number,
@@ -10,26 +9,28 @@ CommentersList = React.createClass({
 		defaultAvatarUrl: React.PropTypes.string,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getMeteorData() {
 		Meteor.subscribe('avatars.commenter.all');
 
-		let query = {};
+		const query = {};
+		let limit = 100;
 
-		var limit = 100;
-
-		if(this.props.limit){
+		if (this.props.limit) {
 			limit = this.props.limit;
 		}
-		if(this.props.featureOnHomepage){
+
+		if (this.props.featureOnHomepage) {
 			query.featureOnHomepage = this.props.featureOnHomepage;
 		}
 
-		const commenters = Commenters.find(query, {sort: {name: 1}, limit: limit}).fetch();
-		for (let i=0; i < commenters.length; ++i) {
+		const commenters = Commenters.find(query, { sort: { name: 1 }, limit }).fetch();
+		for (let i = 0; i < commenters.length; ++i) {
 			if (commenters[i].avatar == null) {
 				commenters[i].avatarUrl = this.props.defaultAvatarUrl;
 			} else {
-				var avatar = Avatars.findOne({ _id: commenters[i].avatar });
+				const avatar = Avatars.findOne({ _id: commenters[i].avatar });
 				if (avatar) {
 					commenters[i].avatarUrl = avatar.url;
 				} else {
@@ -43,28 +44,19 @@ CommentersList = React.createClass({
 	},
 
 	renderCommenters() {
-
-		return this.data.commenters.map((commenter) => {
-			return <CommenterTeaser
-							key={commenter._id}
-							commenter={commenter} />;
-
-		});
-
+		return this.data.commenters.map((commenter) =>
+			<CommenterTeaser
+				key={commenter._id}
+				commenter={commenter}
+			/>
+		);
 	},
 
 	render() {
-
-		 return (
-			 <div className="commenters-list">
-
-				 {this.renderCommenters()}
-
-			 </div>
-
-
+		return (
+			<div className="commenters-list">
+				{this.renderCommenters()}
+			</div>
 			);
-		}
-
-
+	},
 });

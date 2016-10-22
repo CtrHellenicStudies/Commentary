@@ -1,0 +1,267 @@
+.page-commenter-detail {
+
+	.page-title {
+		padding:90px 0 0;
+	}
+
+	.page-content {
+		overflow:visible;
+		padding-top:140px;
+	}
+
+	.commenter-image {
+		position:absolute;
+		z-index:1;
+		top:-120px;
+		width:230px;
+		height:230px;
+		left:50%;
+		margin-left:-100px;
+		border-radius:100%;
+		overflow:hidden;
+		border:3px solid @light;
+
+		img {
+			display:block;
+			width:100%;
+		}
+
+	}
+
+
+}
+
+.page-content .commenter-work-visualization {
+	display:none;
+	position:relative;
+
+	.text-title {
+		text-align:center;
+		font-size:32px;
+		margin:0 auto;
+
+	}
+
+	.close-visualization {
+		position:absolute;
+		top:60px;
+		right:90px;
+		cursor:pointer;
+		border-radius:100%;
+
+		&:hover {
+			color:@md-primary;
+
+		}
+
+		&:before {
+			font-size:42px;
+		}
+
+	}
+
+}
+
+.commenter-visualizations-iliad-visible {
+	.commenter-work-circles {
+		display:none;
+	}
+	.commenter-work-visualization--iliad {
+		display:block;
+	}
+}
+.commenter-visualizations-odyssey-visible {
+	.commenter-work-circles {
+		display:none;
+	}
+	.commenter-work-visualization--odyssey {
+		display:block;
+	}
+}
+.commenter-visualizations-homeric-hymns-visible {
+	.commenter-work-circles {
+		display:none;
+	}
+	.commenter-work-visualization--homeric-hymns {
+		display:block;
+	}
+}
+
+@keyframes circle-label-enter {
+	from {
+		transform: rotate(180deg) scaleX(0.5);
+		opacity:0;
+	}
+	to {
+		transform: rotate(0deg) scaleX(1);
+		opacity:1;
+	}
+}
+
+@keyframes circle-label-exit {
+	from {
+	}
+	to {
+	}
+}
+
+@keyframes circle-inner-circle {
+	from {
+		transform: scale(1.1);
+	}
+	to {
+		transform: scale(1.05);
+	}
+}
+
+@keyframes circle-outer-circle {
+	from {
+		transform: scale(1);
+		opacity:0.5;
+	}
+	to {
+		transform: scale(2);
+		opacity:0;
+	}
+}
+
+.page-content .commenter-work-circle {
+	margin:15px 35px;
+	height:210px;
+	width:210px;
+	display:inline-block;
+	vertical-align: top;
+	overflow:visible;
+	cursor:pointer;
+	position:relative;
+
+
+	.circle-inner {
+		border-radius:100%;
+		background:@md-primary;
+		width:100%;
+		height:100%;
+		overflow:visible;
+		position:absolute;
+		left:0;
+		right:0;
+		top:0;
+		bottom:0;
+		margin:auto;
+		text-align:center;
+
+		&:hover {
+			background:@md-primary-800;
+
+			animation: circle-inner-circle 300ms 1 ease-out;
+			transform: scale(1.05);
+
+			span {
+				color:@light;
+			}
+
+			.grow-border {
+				animation: circle-outer-circle 500ms 1 ease-out;
+
+			}
+		}
+
+		&.circle-level-10 {
+			width:98%;
+			height:98%;
+			opacity:1;
+
+		}
+
+		&.circle-level-9 {
+			width:92%;
+			height:92%;
+			opacity:0.95;
+
+		}
+		&.circle-level-8 {
+			width:84%;
+			height:84%;
+			opacity:0.9;
+
+		}
+		&.circle-level-7 {
+			width:75%;
+			height:75%;
+			opacity:0.84;
+
+		}
+		&.circle-level-6 {
+			width:68%;
+			height:68%;
+			opacity:0.78;
+		}
+
+		&.circle-level-5 {
+			width:62%;
+			height:62%;
+			opacity:0.66;
+
+		}
+		&.circle-level-4 {
+			width:50%;
+			height:50%;
+			opacity:0.5;
+
+		}
+
+	}
+
+	.md-ripple-container {
+		border-radius:100px;
+
+	}
+
+	.grow-border {
+		position:absolute;
+		top:0;
+		left:0;
+		height:100%;
+		width:100%;
+		border-radius:50%;
+		opacity:0;
+		border:1px solid @md-primary-100;
+		z-index:1;
+
+
+
+	}
+
+	.work-title {
+		position:absolute;
+		top:50%;
+		left:0;
+		right:0;
+		margin:-22px auto 0;
+		display:block;
+		font-family:@font-label;
+		text-align:center;
+		color:@light;
+		text-transform:uppercase;
+		font-size:16px;
+		.transition(all 300ms ease);
+
+		// ensure centered (adjust for font)
+		line-height:42px;
+		padding-left:1px;
+
+	}
+
+	.circle-num {
+		opacity:1;
+		transform: rotate(0deg) scaleX(1);
+
+	}
+
+	.circle-alpha {
+		opacity:0;
+		transform: rotate(180deg) scaleX(0.5);
+
+	}
+
+}

@@ -83,7 +83,10 @@ CommenterDetail = React.createClass({
 
 
 							</div>
-							<div className={`read-more-toggle ${(self.state.readMoreBio ? 'read-more-toggle-expanded' : '')}`}>
+							<div
+								className={`read-more-toggle
+								${(self.state.readMoreBio ? 'read-more-toggle-expanded' : '')}`}
+							>
 								<hr />
 								<div
 									className="read-more-button"

@@ -10,20 +10,126 @@ Meteor.method('commenters_cron', () => {
 			commenters.forEach((commenter) => {
 				if (commenter.slug === commentCommenter.slug) {
 					isInCommenters = true;
-					commenter.count++;
+					commenter.nCommentsTotal++;
+					switch (comment.work.slug) {
+					case 'iliad': {
+						commenter.nCommentsIliad++;
+						break;
+					}
+					case 'odyssey': {
+						commenter.nCommentsOdyssey++;
+						break;
+					}
+					case 'homeric-hymns': {
+						commenter.nCommentsHymns++;
+						break;
+					}
+					case 'hymns': {
+						commenter.nCommentsHymns++;
+						break;
+					}
+					default: {
+						break;
+					} }
 				}
+
+				commenter.nCommentsWorks.forEach((work) => {
+					if (comment.work.slug === work.slug) {
+						work.subworks.forEach((subwork) => {
+							if (subwork.n === comment.subwork.n) {
+								subwork.nComments++;
+								let isInHeatmap = false;
+								subwork.commentHeatmap.forEach((commentGroup) => {
+									if (commentGroup.n === comment.lineFrom) {
+										commentGroup.nComments++;
+										isInHeatmap = true;
+									}
+								});
+								if (!isInHeatmap) {
+									subwork.commentHeatmap.push({
+										n: comment.lineFrom,
+										nComments: 1,
+									});
+								}
+							}
+						});
+					}
+				});
+
 			});
 
 			if (!isInCommenters) {
-				commentCommenter.count = 0;
+				commentCommenter.nCommentsTotal = 0;
+				commentCommenter.nCommentsIliad = 0;
+				commentCommenter.nCommentsOdyssey = 0;
+				commentCommenter.nCommentsHymns = 0;
+				commentCommenter.nCommentsWorks = [];
+
+				let iliad = {
+					title: "Iliad",
+					slug: "iliad",
+					subworks: [],
+				};
+				let odyssey = {
+					title: "Odyssey",
+					slug: "odyssey",
+					subworks: [],
+				};
+				let hymns = {
+					title: "Homeric Hymns",
+					slug: "homeric-hymns",
+					subworks: [],
+				};
+
+				for(let i = 1; i <= 24; i++){
+					iliad.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+					odyssey.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+				}
+
+				for(let i = 1; i <= 33; i++){
+					hymns.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+				}
+
+				commentCommenter.nCommentsWorks.push(iliad);
+				commentCommenter.nCommentsWorks.push(odyssey);
+				commentCommenter.nCommentsWorks.push(hymns);
+
 				commenters.push(commentCommenter);
 			}
 		});
 	});
 
 	commenters.forEach((commenter) => {
-		console.log(commenter.title, commenter.count);
-		Commenters.update({ slug: commenter.slug }, { $set: { count: commenter.count } });
+		console.log(commenter.name, commenter.nCommentsTotal);
+		Commenters.update({
+			slug: commenter.slug,
+		}, {
+			$set: {
+				nCommentsTotal: commenter.nCommentsTotal,
+				nCommentsWorks: commenter.nCommentsWorks,
+				nCommentsIliad: commenter.nCommentsIliad,
+				nCommentsOdyssey: commenter.nCommentsOdyssey,
+				nCommentsHymns: commenter.nCommentsHymns,
+			},
+		});
 	});
 
 	/*

@@ -9,10 +9,11 @@ CommenterWorkCircle = React.createClass({
 	},
 
 	render() {
+		console.log(this.props);
 		return (
-			<div className={`commenter-work-circle circle-level-${this.props.workLevel}`}>
+			<div className="commenter-work-circle">
 				<div
-					className="circle-inner"
+					className={`circle-inner circle-level-${this.props.workLevel}`}
 					onClick={this.props.toggleVisibleWork.bind(null, this.props.workSlug)}
 				>
 					<span className="work-title">{this.props.workTitle}</span>

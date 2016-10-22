@@ -68,6 +68,37 @@ Schemas.Commenters = new SimpleSchema({
 		optional: true,
 	},
 
+	nCommentsTotal: {
+		type: Number,
+		optional: true,
+	},
+
+	nCommentsWorks: {
+		type: [Object],
+		optional: true,
+	},
+
+	'nCommentsWorks.$': {
+		type: Object,
+		blackbox: true,
+		optional: true,
+	},
+
+	nCommentsIliad: {
+		type: Number,
+		optional: true,
+	},
+
+	nCommentsOdyssey: {
+		type: Number,
+		optional: true,
+	},
+
+	nCommentsHymns: {
+		type: Number,
+		optional: true,
+	},
+
 	nCommentsKeywords: {
 		type: [Object],
 		optional: true,
@@ -88,25 +119,6 @@ Schemas.Commenters = new SimpleSchema({
 		optional: true,
 	},
 
-	nCommentsWorks: {
-		type: [Schemas.Works],
-		optional: true,
-	},
-
-	nCommentsIliad: {
-		type: Number,
-		optional: true,
-	},
-
-	nCommentsOdyssey: {
-		type: Number,
-		optional: true,
-	},
-
-	nCommentsHymns: {
-		type: Number,
-		optional: true,
-	},
 
 	created: {
 		type: Date,

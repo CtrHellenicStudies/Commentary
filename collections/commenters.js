@@ -25,6 +25,7 @@ Schemas.Commenters = new SimpleSchema({
 		}
 	},
 
+	/* TODO: cleanup from db
 	picture: {
 		type: String,
 		optional: true,
@@ -36,6 +37,7 @@ Schemas.Commenters = new SimpleSchema({
 			}
 		}
 	},
+	*/
 
 	avatar: {
 		type: String,

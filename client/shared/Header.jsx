@@ -282,11 +282,13 @@ Header = React.createClass({
 												label="Login"
 												onClick={this.showLoginModal}
 												style={styles.flatButton}
+												className="account-button account-button-login"
 											/>
 											<FlatButton
 												label="Join the Community"
 												onClick={this.showSignupModal}
 												style={styles.flatButton}
+												className="account-button account-button-login"
 											/>
 										</div>
 									}

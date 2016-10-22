@@ -360,7 +360,7 @@ WorkVisualization = React.createClass({
 		// Button animation:
 		button
 			.on('click', (d) => {
-					self.hideHeatMap();
+				self.hideHeatMap();
 			})
 			.on('mouseover', (d) => {
 				d3.select('.heatmap-button-rect-' + slug)

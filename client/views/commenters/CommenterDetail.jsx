@@ -9,6 +9,12 @@ CommenterDetail = React.createClass({
 
 	mixins: [ReactMeteorData],
 
+	getInitialState() {
+		return {
+			readMoreBio: false,
+		};
+	},
+
 	getMeteorData() {
 		const commenter = Commenters.findOne({ slug: this.props.slug });
 		let avatarUrl = this.props.defaultAvatarUrl;
@@ -22,7 +28,18 @@ CommenterDetail = React.createClass({
 		return { commenter, avatarUrl };
 	},
 
+	toggleReadMoreBio() {
+		let readMoreBio = true;
+		if (this.state.readMoreBio) {
+			readMoreBio = false;
+		}
+		this.setState({
+			readMoreBio,
+		});
+	},
+
 	render() {
+		const self = this;
 		const commenter = this.data.commenter;
 
 		if (commenter) {
@@ -56,13 +73,32 @@ CommenterDetail = React.createClass({
 								<img src={this.data.avatarUrl} alt={commenter.name} />
 							</div>
 
-							<div className="user-bio">
+							<div className={`user-bio ${(self.state.readMoreBio ? 'user-bio--read-more' : '')}`}>
+
 								{commenter.bio ?
 									<div dangerouslySetInnerHTML={{ __html: commenter.bio }} />
 								:
 									<p>There is no biography information for this user yet.</p>
 								}
 
+
+							</div>
+							<div className={`read-more-toggle ${(self.state.readMoreBio ? 'read-more-toggle-expanded' : '')}`}>
+								<hr />
+								<div
+									className="read-more-button"
+									onClick={this.toggleReadMoreBio}
+								>
+									{this.state.readMoreBio ?
+										<span className="read-less-text">
+											Show Less
+										</span>
+									:
+										<span className="read-more-text">
+											Read More
+										</span>
+									}
+								</div>
 							</div>
 
 							<CommenterVisualizations

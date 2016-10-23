@@ -55,7 +55,6 @@ Meteor.method('commenters_cron', () => {
 						});
 					}
 				});
-
 			});
 
 			if (!isInCommenters) {
@@ -65,23 +64,23 @@ Meteor.method('commenters_cron', () => {
 				commentCommenter.nCommentsHymns = 0;
 				commentCommenter.nCommentsWorks = [];
 
-				let iliad = {
-					title: "Iliad",
-					slug: "iliad",
+				const iliad = {
+					title: 'Iliad',
+					slug: 'iliad',
 					subworks: [],
 				};
-				let odyssey = {
-					title: "Odyssey",
-					slug: "odyssey",
+				const odyssey = {
+					title: 'Odyssey',
+					slug: 'odyssey',
 					subworks: [],
 				};
-				let hymns = {
-					title: "Homeric Hymns",
-					slug: "homeric-hymns",
+				const hymns = {
+					title: 'Homeric Hymns',
+					slug: 'homeric-hymns',
 					subworks: [],
 				};
 
-				for(let i = 1; i <= 24; i++){
+				for (let i = 1; i <= 24; i++) {
 					iliad.subworks.push({
 						title: String(i),
 						slug: String(i),
@@ -98,7 +97,7 @@ Meteor.method('commenters_cron', () => {
 					});
 				}
 
-				for(let i = 1; i <= 33; i++){
+				for (let i = 1; i <= 33; i++) {
 					hymns.subworks.push({
 						title: String(i),
 						slug: String(i),

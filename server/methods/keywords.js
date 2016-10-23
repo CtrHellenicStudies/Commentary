@@ -1,23 +1,22 @@
 Meteor.methods({
-    'keywords.insert' (keywords) {
-
+    										'keywords.insert': function (keywords) {
         // Make sure the user is logged in before inserting
-        if (!this.userId) {
-            throw new Meteor.Error('not-authorized');
+        										if (!this.userId) {
+            										throw new Meteor.Error('not-authorized');
         }
-        var keywordsIds = [];
-        console.log('keywords insert called');
-        console.log('keywords:', keywords);
-        keywords.forEach((keyword) => {
-            try {
-                var keywordId = Keywords.insert(keyword);
-                console.log('Keyword', keywordId, 'insert successful');
-                keywordsIds.push(keywordId);
+        								const keywordsIds = [];
+        										console.log('keywords insert called');
+        										console.log('keywords:', keywords);
+        										keywords.forEach((keyword) => {
+            										try {
+                								const keywordId = Keywords.insert(keyword);
+                										console.log('Keyword', keywordId, 'insert successful');
+                										keywordsIds.push(keywordId);
             } catch (err) {
-                console.log(err);
+                										console.log(err);
             }
         });
 
-        return keywordsIds;
+        										return keywordsIds;
     },
 });

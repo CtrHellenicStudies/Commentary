@@ -47,7 +47,7 @@ if (Meteor.isServer) {
 		if (sortMethod === 'recent') {
 			sort = {
 				updated: -1,
-				votes: -1
+				votes: -1,
 			};
 		}
 

@@ -1,7 +1,6 @@
 TermsPage = React.createClass({
 
 	render() {
-
 		return (
 
 				<div className="page page-terms">
@@ -9,11 +8,10 @@ TermsPage = React.createClass({
 					<section className="page-head fullscreen image-bg bg-dark">
 
 						<div className="background-image-holder blur">
-							<img className="background-image" alt='image' src='/images/greek-inscription.jpg'/>
+							<img className="background-image" alt="image" src="/images/greek-inscription.jpg" />
 						</div>
 
-						<div className="background-screen">
-						</div>
+						<div className="background-screen" />
 
 						<div className="container v-align-transform">
 							<div className="row">
@@ -60,5 +58,5 @@ TermsPage = React.createClass({
 
 				</div>
 				);
-		}
+	},
 });

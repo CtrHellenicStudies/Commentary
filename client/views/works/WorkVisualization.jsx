@@ -198,59 +198,59 @@ WorkVisualization = React.createClass({
 		barGraphBars
 				.append('rect')
 				.attr('class', (d) => {
-						return 'bargraph-bar-foot-' + slug + '-' + d.n;
+					return 'bargraph-bar-foot-' + slug + '-' + d.n;
 				})
 				.attr('x', (d) => {
-						return x(d.n) - footSize;
+					return x(d.n) - footSize;
 				})
 				.attr('y', height - footSize)
-				.attr('width', x.rangeBand() + footSize*2)
+				.attr('width', x.rangeBand() + footSize * 2)
 				.attr('height', footSize)
 				.attr('fill', (d) => {
-						return color(d.nComments)
+					return color(d.nComments);
 				});
 
 		barGraphBars
 				.append('text')
 				.attr('class', (d) => {
-						return 'bargraph-bar-label-' + slug + '-' + d.n;
+					return 'bargraph-bar-label-' + slug + '-' + d.n;
 				})
 				.attr('x', (d) => {
-						return x(d.n) + x.rangeBand()/2;
+					return x(d.n) + x.rangeBand() / 2;
 				})
 				.attr('y', height + 35)
 				.style('text-anchor', 'middle')
 				.text((d) => {
-						return d.n;
-				})
+					return d.n;
+				});
 
-	 barGraphBars
+	 										barGraphBars
 				.on('click', (d) => {
 					if (d.nComments) {
 						self.setState({
-								selectedBar: d.n,
+							selectedBar: d.n,
 						});
 
 						//	TODO: get the real number of lines per book - not from the works collection
-						var foundSubwork = self.props.work.subworks.find((element, index, array) => {
-							return element.n === self.state.selectedBar
+						const foundSubwork = self.props.work.subworks.find((element, index, array) => {
+							return element.n === self.state.selectedBar;
 						});
-						var numberOfLines = Math.floor(d3.max(foundSubwork.commentHeatmap, (d) => {
-								return d.n;
-						})/10);
+						let numberOfLines = Math.floor(d3.max(foundSubwork.commentHeatmap, (d) => {
+							return d.n;
+						}) / 10);
 
 						// fixes heatmap error if only commented lines are from 1 to 10:
 						if (numberOfLines === 0) {
 							numberOfLines = 1;
-						};
-						var cellSize = self.state.cellSize;
-						var cellPadding = self.state.cellPadding;
-						var heatMapWidth = Math.ceil(numberOfLines / 5) * (cellSize + cellPadding) - cellPadding;
-						var heatMapHeight = 5 *(cellSize + cellPadding) - cellPadding
+						}
+						const cellSize = self.state.cellSize;
+						const cellPadding = self.state.cellPadding;
+						const heatMapWidth = Math.ceil(numberOfLines / 5) * (cellSize + cellPadding) - cellPadding;
+						const heatMapHeight = 5 * (cellSize + cellPadding) - cellPadding;
 
 						// --- BEGIN ANIMATION - EXPAND BAR --- //
 						// Hide BarGraph:
-						var selectBarGraph = d3.selectAll('.bargraph-x-axis-' + slug + ',.bargraph-y-axis-' + slug + ',[class^="bargraph-bar-' + slug + '-"]');
+						const selectBarGraph = d3.selectAll('.bargraph-x-axis-' + slug + ',.bargraph-y-axis-' + slug + ',[class^="bargraph-bar-' + slug + '-"]');
 						selectBarGraph.transition()
 								.duration(1000)
 								.style('opacity', 0);
@@ -259,7 +259,7 @@ WorkVisualization = React.createClass({
 								.style('display', 'none');
 
 						// Expand bar:
-						var suffix = slug + '-' + d.n;
+						const suffix = slug + '-' + d.n;
 						var selectBar = d3.select('.bargraph-bar-' + suffix);
 						selectBar.transition()
 								.style('opacity', 1);
@@ -296,36 +296,35 @@ WorkVisualization = React.createClass({
 								.style('opacity', 1)
 								.style('display', '');
 						// --- END ANIMATION - EXPAND BAR --- //
-					};
-
+					}
 				})
 				.on('mouseover', (d) => {
-						var suffix = slug + '-' + d.n;
-						d3.select('.bargraph-bar-column-' + suffix)
+					const suffix = slug + '-' + d.n;
+					d3.select('.bargraph-bar-column-' + suffix)
 								.attr('fill', '#d59518')
 								.style('cursor', 'pointer');
-						d3.select('.bargraph-bar-foot-' + suffix)
+					d3.select('.bargraph-bar-foot-' + suffix)
 								.attr('fill', '#d59518')
 								.style('cursor', 'pointer');
-						d3.select('.bargraph-bar-label-' + suffix)
+					d3.select('.bargraph-bar-label-' + suffix)
 								.attr('fill', '#d59518')
 								.style('text-decoration', 'underline')
 								.style('cursor', 'pointer');
 				})
 				.on('mouseout', (d) => {
-						var suffix = slug + '-' + d.n;
-						d3.select('.bargraph-bar-column-' + suffix)
+					const suffix = slug + '-' + d.n;
+					d3.select('.bargraph-bar-column-' + suffix)
 								.attr('fill', (d) => {
-										return color(d.nComments)
+									return color(d.nComments);
 								});
-						d3.select('.bargraph-bar-foot-' + suffix)
+					d3.select('.bargraph-bar-foot-' + suffix)
 								.attr('fill', (d) => {
-										return color(d.nComments)
+									return color(d.nComments);
 								});
-						d3.select('.bargraph-bar-label-' + suffix)
+					d3.select('.bargraph-bar-label-' + suffix)
 								.attr('fill', '#000000')
 								.style('text-decoration', 'none');
-				})
+				});
 		// --- END BARS --- //
 		// --- END BARGRAPH --- //
 
@@ -384,50 +383,50 @@ WorkVisualization = React.createClass({
 
 		// --- BEGIN HEATMAP --- //
 		if (this.state.selectedBar > -1) {
-			var foundSubwork = this.props.work.subworks.find(function(element, index, array) {
-				return element.n === self.state.selectedBar
+			const foundSubwork = this.props.work.subworks.find(function (element, index, array) {
+				return element.n === self.state.selectedBar;
 			});
-			var dataHeatMap = foundSubwork.commentHeatmap;
+			const dataHeatMap = foundSubwork.commentHeatmap;
 			const subworkN = foundSubwork.n;
-			dataHeatMap.sort(function(a, b) {
-					if (a.n < b.n)
-							return -1;
-					if (a.n > b.n)
-							return 1;
-					return 0;
+			dataHeatMap.sort(function (a, b) {
+				if (a.n < b.n)
+					return -1;
+				if (a.n > b.n)
+					return 1;
+				return 0;
 			});
 
 			// Color scale:
-			var color = d3.scale.linear()
-					.domain([0, d3.max(dataHeatMap, function(d) {
-							return d.nComments;
+			const color = d3.scale.linear()
+					.domain([0, d3.max(dataHeatMap, function (d) {
+						return d.nComments;
 					})])
 					.range(['#fbf8ec', '#b6ae97']);
-			var dataN = dataHeatMap.map(function(a) {
-					return a.n;
+			const dataN = dataHeatMap.map(function (a) {
+				return a.n;
 			});
 
 			//	TODO: get the real number of lines per book - not from the works collection:
-			var numberOfLines = Math.floor(d3.max(dataHeatMap, function(d) {
-					return d.n;
-			})/10);
-			var allLines = Array.apply(null, {
-					length: numberOfLines
-			}).map(Number.call, Number)
+			const numberOfLines = Math.floor(d3.max(dataHeatMap, function (d) {
+				return d.n;
+			}) / 10);
+			const allLines = Array.apply(null, {
+				length: numberOfLines,
+			}).map(Number.call, Number);
 			allLines.push(numberOfLines);
 
 			// Define the div for the tooltip:
-			var tooltip = d3.select('body').append('div')
+			const tooltip = d3.select('body').append('div')
 					.attr('class', 'tooltip')
 					.style('opacity', 0);
 
-			var cellSize = this.state.cellSize;
-			var cellPadding = this.state.cellPadding;
+			const cellSize = this.state.cellSize;
+			const cellPadding = this.state.cellPadding;
 
-			var tooltipOffsetLeft = 52;
-			var tooltipOffsetLTop = 0;
+			const tooltipOffsetLeft = 52;
+			const tooltipOffsetLTop = 0;
 
-			var counter = 0;
+			let counter = 0;
 
 			const workSlug = self.props.work.slug;
 
@@ -435,7 +434,7 @@ WorkVisualization = React.createClass({
 			d3.select('.heatmap-' + this.props.work.slug).remove();
 
 			// Create heatmap group:
-			var heatmap = this.state.svg
+			const heatmap = this.state.svg
 					.append('g')
 					.attr('class', 'heatmap-' + this.props.work.slug)
 					.style('display', 'none')
@@ -452,67 +451,67 @@ WorkVisualization = React.createClass({
 					.attr('class', 'heatmap-cell')
 					.attr('width', cellSize)
 					.attr('height', cellSize)
-					.attr('x', function(d) {
-							return Math.floor(d / 5) * (cellSize + cellPadding);
+					.attr('x', function (d) {
+						return Math.floor(d / 5) * (cellSize + cellPadding);
 					})
-					.attr('y', function(d) {
-							if (counter != 4) {
-									var y = counter * cellSize + cellPadding * counter;
-									counter++;
-									return y;
-							} else {
-									var y = counter * cellSize + cellPadding * counter;
-									counter = 0;
-									return y;
-							};
+					.attr('y', function (d) {
+						if (counter != 4) {
+							var y = counter * cellSize + cellPadding * counter;
+							counter++;
+							return y;
+						} else {
+							var y = counter * cellSize + cellPadding * counter;
+							counter = 0;
+							return y;
+						}
 					})
 					.attr('fill', '#fff')
-					.on('mouseover', function(d) {
-							d3.select(this)
+					.on('mouseover', function (d) {
+						d3.select(this)
 									.classed('heatmap-cell-selected', true);
-							tooltip.transition()
+						tooltip.transition()
 									.duration(200)
 									.style('opacity', .9);
-							var i = dataN.indexOf(d*10);
-							var elementOffset = $('.text-subworks-visualization-' + self.props.work.slug).offset()
-							var cellPositionX = parseInt(d3.select(this).attr('x'));
-							var cellPositionY = parseInt(d3.select(this).attr('y'));
-							if (i > -1) {
-									tooltip.html('Line span: ' + ((d*10) + 1) + ' - '+ ((d + 1)*10) + ', Comments: ' + dataHeatMap[i].nComments)
+						const i = dataN.indexOf(d * 10);
+						const elementOffset = $('.text-subworks-visualization-' + self.props.work.slug).offset();
+						const cellPositionX = parseInt(d3.select(this).attr('x'));
+						const cellPositionY = parseInt(d3.select(this).attr('y'));
+						if (i > -1) {
+							tooltip.html('Line span: ' + ((d * 10) + 1) + ' - ' + ((d + 1) * 10) + ', Comments: ' + dataHeatMap[i].nComments)
 											.style('left', elementOffset.left + cellPositionX + tooltipOffsetLeft + 'px')
 											.style('top', elementOffset.top + cellPositionY + tooltipOffsetLTop + 'px');
-							} else {
-									tooltip.html('Line span: ' + ((d*10) + 1) + ' - '+ ((d + 1)*10) + ', Comments: 0')
+						} else {
+							tooltip.html('Line span: ' + ((d * 10) + 1) + ' - ' + ((d + 1) * 10) + ', Comments: 0')
 											.style('left', elementOffset.left + cellPositionX + tooltipOffsetLeft + 'px')
 											.style('top', elementOffset.top + cellPositionY + tooltipOffsetLTop + 'px');
-							}
+						}
 					})
-					.on('mouseout', function(d) {
-							d3.select(this)
+					.on('mouseout', function (d) {
+						d3.select(this)
 									.classed('heatmap-cell-selected', false);
-							tooltip.transition()
+						tooltip.transition()
 									.duration(500)
 									.style('opacity', 0);
 					})
-					.on('click', function(d){
-						window.location = '/commentary/?works=' + workSlug + '&subworks=' + subworkN + '&lineFrom=' + ((d*10) + 1)+ '&lineTo=' + ((d + 1)*10);
-						//debugger;
+					.on('click', function (d) {
+						window.location = '/commentary/?works=' + workSlug + '&subworks=' + subworkN + '&lineFrom=' + ((d * 10) + 1) + '&lineTo=' + ((d + 1) * 10);
+						// debugger;
 					})
 					;
 
 				// Add fill color to commented lines:
-				rect.filter(function(d) {
-						return dataN.indexOf(d*10) > -1;
-				})
-						.attr('fill', function(d) {
-								var i = dataN.indexOf(d*10);
-								return color(dataHeatMap[i].nComments);
+			rect.filter(function (d) {
+				return dataN.indexOf(d * 10) > -1;
+			})
+						.attr('fill', function (d) {
+							const i = dataN.indexOf(d * 10);
+							return color(dataHeatMap[i].nComments);
 						});
 				// --- END HEATMAP CELLS --- //
 
 				// --- BEGIN HEATMAP Y LABEL --- //
-				var arrayData = [1,2,3,4,5];
-				var rect = heatmap
+			const arrayData = [1, 2, 3, 4, 5];
+			var rect = heatmap
 						.append('g')
 						.attr('class', 'heatmap-y-labels-' + this.props.work.slug)
 						.selectAll('.heatmap-label-y')
@@ -523,24 +522,24 @@ WorkVisualization = React.createClass({
 						.attr('fill', '#d7d1c0')
 						.attr('text-anchor', 'middle')
 						.attr('x', -15)
-						.attr('y', function(d) {
-								return self.state.cellSize/2 + self.state.cellPadding + (self.state.cellSize + self.state.cellPadding) * (d - 1);
+						.attr('y', function (d) {
+							return self.state.cellSize / 2 + self.state.cellPadding + (self.state.cellSize + self.state.cellPadding) * (d - 1);
 						})
-						.text(function(d) {
-								return d;
+						.text(function (d) {
+							return d;
 						});
 				// --- END HEATMAP Y LABEL --- //
 
 				// --- BEGIN HEATMAP X LABEL --- //
-				var numberOfLines5 = Math.ceil(allLines.length/5);
-				var allLines5 = Array.apply(null, {
-						length: numberOfLines5
-				}).map(Number.call, Number);
-				for (var i = 0; i < allLines5.length; i++) {
-						allLines5[i] = allLines5[i]*50;
-				};
+			const numberOfLines5 = Math.ceil(allLines.length / 5);
+			const allLines5 = Array.apply(null, {
+				length: numberOfLines5,
+			}).map(Number.call, Number);
+			for (let i = 0; i < allLines5.length; i++) {
+				allLines5[i] = allLines5[i] * 50;
+			}
 
-				var rect = heatmap
+			var rect = heatmap
 						.append('g')
 						.attr('class', 'heatmap-x-labels-' + this.props.work.slug)
 						.selectAll('.heatmap-label-x')
@@ -550,22 +549,22 @@ WorkVisualization = React.createClass({
 						.attr('class', 'heatmap-label-x')
 						.attr('fill', '#d7d1c0')
 						.attr('text-anchor', 'middle')
-						.attr('x', function(d) {
-								return self.state.cellSize/2 +	(self.state.cellSize + self.state.cellPadding) * d/50;
+						.attr('x', function (d) {
+							return self.state.cellSize / 2 +	(self.state.cellSize + self.state.cellPadding) * d / 50;
 						})
 						.attr('y', -10)
-						.text(function(d) {
-								return d;
+						.text(function (d) {
+							return d;
 						})
 						;
 				// --- END HEATMAP X LABEL --- //
 
 				// --- BEGIN ANIMATION - SHOW HEATMAP --- //
-				var selectHeatMap = d3.select('.heatmap-' + this.props.work.slug);
-				selectHeatMap.transition()
+			const selectHeatMap = d3.select('.heatmap-' + this.props.work.slug);
+			selectHeatMap.transition()
 						.delay(900)
 						.style('display', '');
-				selectHeatMap.transition()
+			selectHeatMap.transition()
 						.delay(2000)
 						.duration(1000)
 						.style('opacity', 1);
@@ -580,7 +579,7 @@ WorkVisualization = React.createClass({
 		const slug = self.props.work.slug;
 
 		// --- BEGIN ANIMATION - HIDE HEATMAP --- //
-		var selectHeatMap = d3.select('.heatmap-' + this.props.work.slug)
+		const selectHeatMap = d3.select('.heatmap-' + this.props.work.slug);
 		selectHeatMap.transition()
 				.duration(1000)
 				.style('opacity', 0);
@@ -591,8 +590,8 @@ WorkVisualization = React.createClass({
 
 		// --- BEGIN ANIMATION - CONTRACT BAR --- //
 		// Contract Bar:
-		var suffix = slug + '-' + this.state.selectedBar;
-		var selectBar = d3.select('.bargraph-bar-column-' + suffix);
+		const suffix = slug + '-' + this.state.selectedBar;
+		const selectBar = d3.select('.bargraph-bar-column-' + suffix);
 		selectBar.transition()
 				.style('display', '');
 		selectBar.transition()
@@ -616,7 +615,7 @@ WorkVisualization = React.createClass({
 				.style('opacity', 1);
 
 		// Show BarGraph:
-		var selectBarGraph = d3.selectAll('.bargraph-x-axis-' + slug + ',.bargraph-y-axis-' + slug + ',[class^="bargraph-bar-' + slug + '-"]');
+		const selectBarGraph = d3.selectAll('.bargraph-x-axis-' + slug + ',.bargraph-y-axis-' + slug + ',[class^="bargraph-bar-' + slug + '-"]');
 		selectBarGraph.transition()
 				.delay(1550)
 				.style('display', '');
@@ -626,7 +625,7 @@ WorkVisualization = React.createClass({
 				.style('opacity', 1);
 
 		// Hide button:
-		var selectButton = d3.select('.heatmap-button-' + slug);
+		const selectButton = d3.select('.heatmap-button-' + slug);
 		selectButton.transition()
 				.duration(1000)
 				.style('opacity', 0)

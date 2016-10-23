@@ -4,7 +4,7 @@ Schemas.DiscussionComments = new SimpleSchema({
 	user: {
 		type: Object,
 		// Come back to this after redefining the user schemas
-		blackbox: true
+		blackbox: true,
 	},
 	content: {
 		type: String,
@@ -34,29 +34,29 @@ Schemas.DiscussionComments = new SimpleSchema({
 	created: {
 		type: Date,
 		optional: true,
-		autoValue: function() {
+		autoValue() {
 			if (this.isInsert) {
 				return new Date;
 			}
 		},
 		autoform: {
-			type: "hidden",
-			label: false
-		}
+			type: 'hidden',
+			label: false,
+		},
 	},
 	updated: {
 		type: Date,
 		optional: true,
-		autoValue: function() {
+		autoValue() {
 			if (this.isUpdate) {
 				return new Date;
 			}
 		},
 		autoform: {
-			type: "hidden",
-			label: false
-		}
-	}
+			type: 'hidden',
+			label: false,
+		},
+	},
 
 });
 

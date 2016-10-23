@@ -52,19 +52,19 @@ LeftMenu = React.createClass({
 		return (
 				<div>
 						<Drawer
-								open={this.props.open}
-								docked={false}
-								onRequestChange={this.props.closeLeftMenu}
-								className="md-sidenav-left"
+							open={this.props.open}
+							docked={false}
+							onRequestChange={this.props.closeLeftMenu}
+							className="md-sidenav-left"
 						>
 								<div className="sidenav-top">
 									{userIsLoggedIn ?
 											<div>
 												<div className="user-image paper-shadow">
-													<img src="/images/default_user.jpg"/>
+													<img src="/images/default_user.jpg" />
 												</div>
 											</div>
-											: ""
+											: ''
 									}
 									<span className="user-fullname">
 										{username}
@@ -73,39 +73,39 @@ LeftMenu = React.createClass({
 
 								</div>
 								<MenuItem
-										href="/"
-										primaryText="Home"
-										onClick={this.props.closeLeftMenu}
+									href="/"
+									primaryText="Home"
+									onClick={this.props.closeLeftMenu}
 								/>
 								<MenuItem
-										href="/commentary/"
-										primaryText="Commentary"
-										onClick={this.props.closeLeftMenu}
+									href="/commentary/"
+									primaryText="Commentary"
+									onClick={this.props.closeLeftMenu}
 								/>
 								<MenuItem
-											href="/keywords/"
-											primaryText="Keywords"
-											onClick={this.props.closeLeftMenu}
-									/>
+									href="/keywords/"
+									primaryText="Keywords"
+									onClick={this.props.closeLeftMenu}
+        />
 								<MenuItem
-											href="/keyideas/"
-											primaryText="Key Ideas"
-											onClick={this.props.closeLeftMenu}
-									/>
+									href="/keyideas/"
+									primaryText="Key Ideas"
+									onClick={this.props.closeLeftMenu}
+        />
 								<MenuItem
-											href="/commenters/"
-											primaryText="Commenters"
-											onClick={this.props.closeLeftMenu}
-									/>
+									href="/commenters/"
+									primaryText="Commenters"
+									onClick={this.props.closeLeftMenu}
+        />
 								<MenuItem
-											href="/about"
-											primaryText="About"
-											onClick={this.props.closeLeftMenu}
-									/>
+									href="/about"
+									primaryText="About"
+									onClick={this.props.closeLeftMenu}
+        />
 								<MenuItem
-										href="/#visualizations"
-										primaryText="Visualizations"
-										onClick={this.props.closeLeftMenu}
+									href="/#visualizations"
+									primaryText="Visualizations"
+									onClick={this.props.closeLeftMenu}
 								/>
 
 								<Divider />
@@ -120,27 +120,27 @@ LeftMenu = React.createClass({
 													onClick={this.props.closeLeftMenu}
 												/>
 												<MenuItem
-														href="/profile"
-														primaryText="Profile"
-														onClick={this.props.closeLeftMenu}
+													href="/profile"
+													primaryText="Profile"
+													onClick={this.props.closeLeftMenu}
 												/>
 												<MenuItem
-														href="/sign-out"
-														primaryText="Sign out"
-														onClick={this.props.closeLeftMenu}
+													href="/sign-out"
+													primaryText="Sign out"
+													onClick={this.props.closeLeftMenu}
 												/>
 											</div>
 											:
 											<div>
 												<MenuItem
-														href="/profile"
-														primaryText="Profile"
-														onClick={this.props.closeLeftMenu}
+													href="/profile"
+													primaryText="Profile"
+													onClick={this.props.closeLeftMenu}
 												/>
 												<MenuItem
-														href="/sign-out"
-														primaryText="Sign out"
-														onClick={this.props.closeLeftMenu}
+													href="/sign-out"
+													primaryText="Sign out"
+													onClick={this.props.closeLeftMenu}
 												/>
 											</div>
 										}
@@ -148,9 +148,9 @@ LeftMenu = React.createClass({
 									:
 									<div>
 										<MenuItem
-												href="/sign-in"
-												primaryText="Sign in"
-												onClick={this.props.closeLeftMenu}
+											href="/sign-in"
+											primaryText="Sign in"
+											onClick={this.props.closeLeftMenu}
 										/>
 									</div>
 								}

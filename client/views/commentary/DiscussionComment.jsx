@@ -57,7 +57,10 @@ DiscussionComment = React.createClass({
 		let userUpvoted = false;
 		let username = '';
 
-		if (discussionComment.user.emails.length) {
+		if (
+			'emails' in discussionComment.user
+			&& discussionComment.user.emails.length
+		) {
 			username = discussionComment.user.emails[0].address.split('@')[0];
 		}
 

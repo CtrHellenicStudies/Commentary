@@ -25,7 +25,7 @@ DiscussionThread = React.createClass({
 
 		const handle = Meteor.subscribe('discussionComments', this.props.comment._id);
 		if (handle.ready()) {
-			discussionComments = DiscussionComments.find({}).fetch();
+			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id }).fetch();
 			loaded = true;
 		}
 

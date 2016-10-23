@@ -1,5 +1,5 @@
 Meteor.methods({
-	'discussionComments.insert': (discussionCommentCandidate) => {
+	'discussionComments.insert': function insertDiscussionComment(discussionCommentCandidate) {
 		check(discussionCommentCandidate, Object);
 		const discussionComment = discussionCommentCandidate;
 		// Make sure the user is logged in before inserting
@@ -25,7 +25,7 @@ Meteor.methods({
 		}
 	},
 
-	'discussionComments.update': (discussionCommentData) => {
+	'discussionComments.update': function updateDiscussionComment(discussionCommentData) {
 		check(discussionCommentData, Object);
 		console.log('Discussion comment update:', discussionCommentData);
 
@@ -53,7 +53,7 @@ Meteor.methods({
 		}
 	},
 
-	'discussionComments.upvote': (discussionCommentId) => {
+	'discussionComments.upvote': function upvoteDiscussionComment(discussionCommentId) {
 		check(discussionCommentId, Number);
 
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);

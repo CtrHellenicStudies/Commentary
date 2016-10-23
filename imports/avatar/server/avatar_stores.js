@@ -104,12 +104,14 @@ AvatarStore.onFinishUpload = function handleAvatarFinishUpdate(avatar) {
 		finishCommenterAvatarUpload(avatar);
 };
 
-// TODO:
 AvatarStore.onCopyError = (err, avatarId, avatar) => {
+	console.log('Avatar copy error. avatar:', avatar, ' error:', err);
 };
 
 AvatarStore.nReadError = (err, avatarId, avatar) => {
+	console.log('Avatar read error. avatar:', avatar, ' error', err);
 };
 
 AvatarStore.onWriteError = (err, avatarId, avatar) => {
+	console.log('Avatar write error. avatar:', avatar, ' error', err);
 };

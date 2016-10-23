@@ -2,10 +2,10 @@
 DiscussionCommentsList = React.createClass({
 
 	// This mixin makes the getMeteorData method discussionComment
-	//mixins: [ReactMeteorData],
+	// mixins: [ReactMeteorData],
 
 	propTypes: {
-		discussionComments: React.PropTypes.array
+		discussionComments: React.PropTypes.array,
 	},
 
 	// Loads items from the discussionComments collection and puts them on this.data.discussionComments
@@ -20,15 +20,15 @@ DiscussionCommentsList = React.createClass({
 	*/
 
 	render() {
-
 		 return (
 			 <div className="discussion-comments-list">
 
 				 {this.props.discussionComments.map((discussionComment, i) => {
-						return <DiscussionCommentTeaser
-							key={i}
-							discussionComment={discussionComment} />;
-					})}
+					return (<DiscussionCommentTeaser
+						key={i}
+						discussionComment={discussionComment}
+     />);
+				})}
 				{!this.props.discussionComments.length ?
 					<p className="no-results">You haven't created any comments yet.</p>
 					: ''
@@ -38,7 +38,7 @@ DiscussionCommentsList = React.createClass({
 
 
 			);
-		}
+	},
 
 
 });

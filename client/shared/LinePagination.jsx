@@ -11,19 +11,18 @@ LinePagination = React.createClass({
 
 		return (
 			<div className="line-pagination">
-				{this.props.linePagination.map(function(line, i){
+				{this.props.linePagination.map(function (line, i) {
 					return (
 						<RaisedButton
-								key={i}
-								label={line}
-								className="line-page"
-								onClick={self.props.linePaginationClicked.bind(null, line)}
+							key={i}
+							label={line}
+							className="line-page"
+							onClick={self.props.linePaginationClicked.bind(null, line)}
 						/>
 						);
 				})}
 			</div>
 
 		);
-
-	}
+	},
 });

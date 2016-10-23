@@ -15,7 +15,7 @@ AccountPage = React.createClass({
 
 	getInitialState() {
 		return {
-		}
+		};
 	},
 
 	getChildContext() {
@@ -27,25 +27,24 @@ AccountPage = React.createClass({
 	},
 
 	mixins: [ReactMeteorData],
-	getMeteorData(){
-		var discussionComments = [];
-		var user = Meteor.user();
+	getMeteorData() {
+		let discussionComments = [];
+		const user = Meteor.user();
 
-		var handle = Meteor.subscribe("user.discussionComments", Meteor.user());
-		if(handle.ready()){
+		const handle = Meteor.subscribe('user.discussionComments', Meteor.user());
+		if (handle.ready()) {
 			discussionComments = DiscussionComments.find().fetch();
-
 		}
 
 		return {
-			discussionComments: discussionComments,
-			user: user
+			discussionComments,
+			user,
 		};
 	},
 
 	render() {
-		let userIsLoggedIn = false;
-		let currentUser = this.data.user;
+		const userIsLoggedIn = false;
+		const currentUser = this.data.user;
 
 		return (
 			(currentUser ?
@@ -54,9 +53,9 @@ AccountPage = React.createClass({
 
 							<section className="block header cover parallax">
 									<div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
-											<img alt="image" className="background-image" src="/images/capitals.jpg"/>
+											<img alt="image" className="background-image" src="/images/capitals.jpg" />
 									</div>
-									<div className="block-screen brown"></div>
+									<div className="block-screen brown" />
 
 									<div className="container v-align-transform">
 
@@ -65,7 +64,7 @@ AccountPage = React.createClass({
 
 															<div className="page-title-wrap">
 																	<h2 className="page-title ">{user.nicename}</h2>
-																	<h3 className="page-subtitle"></h3>
+																	<h3 className="page-subtitle" />
 															</div>
 
 
@@ -88,78 +87,80 @@ AccountPage = React.createClass({
 													<FlatButton
 														label="Change Profile Picture"
 														className="user-profile-button save-button"
-														onClick={this._openFileDialog}/>
+														onClick={this._openFileDialog}
+             />
 													<input
 														ref="fileUpload"
 														type="file"
-														style={{"display" : "none"}}
-														onChange={this._handleChange}/>
+														style={{ 'display': 'none' }}
+														onChange={this._handleChange}
+             />
 
 												</div>
 											</div>
-											<br/>
+											<br />
 
 											<div className="user-profile-textfields">
 												<TextField
-														fullWidth={true}
-														defaultValue="Archimedes"
-														floatingLabelText="First Name"
-													/>
-												<br/>
-
-												<TextField
-														fullWidth={true}
-														defaultValue="of Syracuse"
-														floatingLabelText="Last Name"
-													/>
-												<br/>
-
-												<TextField
-														multiLine={true}
-														rows={2}
-														rowsMax={10}
-														fullWidth={true}
-														defaultValue="Inventor of the Claw and the Death Ray. Helped build the walls of Syracuse. All around badass."
-														floatingLabelText="Biography"
-													/>
+													fullWidth
+													defaultValue="Archimedes"
+													floatingLabelText="First Name"
+            />
 												<br />
 
 												<TextField
-														fullWidth={true}
-														hintText="http://university.academia.edu/YourName"
-														floatingLabelText="Academia.edu"
-													/>
-												<br/>
+													fullWidth
+													defaultValue="of Syracuse"
+													floatingLabelText="Last Name"
+            />
+												<br />
 
 												<TextField
-														fullWidth={true}
-														hintText="https://plus.google.com/+YourName"
-														floatingLabelText="Google Plus"
-													/>
-												<br/>
+													multiLine
+													rows={2}
+													rowsMax={10}
+													fullWidth
+													defaultValue="Inventor of the Claw and the Death Ray. Helped build the walls of Syracuse. All around badass."
+													floatingLabelText="Biography"
+            />
+												<br />
 
 												<TextField
-														fullWidth={true}
-														hintText="https://twitter.com/@your_name"
-														floatingLabelText="Twitter"
-													/>
-												<br/>
+													fullWidth
+													hintText="http://university.academia.edu/YourName"
+													floatingLabelText="Academia.edu"
+            />
+												<br />
 
 												<TextField
-														fullWidth={true}
-														hintText="https://facebook.com/your.name"
-														floatingLabelText="Facebook"
-													/>
-												<br/>
-												<br/>
-												<br/>
+													fullWidth
+													hintText="https://plus.google.com/+YourName"
+													floatingLabelText="Google Plus"
+            />
+												<br />
+
+												<TextField
+													fullWidth
+													hintText="https://twitter.com/@your_name"
+													floatingLabelText="Twitter"
+            />
+												<br />
+
+												<TextField
+													fullWidth
+													hintText="https://facebook.com/your.name"
+													floatingLabelText="Facebook"
+            />
+												<br />
+												<br />
+												<br />
 
 											</div>
 
 											<FlatButton
 												label="Save"
 												className="user-profile-button save-button"
-												/>
+           />
 
 										</div>
 
@@ -169,12 +170,10 @@ AccountPage = React.createClass({
 					</div>
 
 				</div>
-			: <div>
-				</div>
+			: <div />
 			)
 
 		);
-
-	}
+	},
 
 });

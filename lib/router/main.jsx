@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'react-mounter';
-import { Session } from 'meteor/session'
+import { Session } from 'meteor/session';
 
 /*
  * For the moment add subscriptions here; in future iterations, make them route

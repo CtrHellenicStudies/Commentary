@@ -1,28 +1,28 @@
 Meteor.startup(() => {
 	// Delete all roles not in use:
-	var roles = Roles.getAllRoles().fetch();
+	const roles = Roles.getAllRoles().fetch();
 	roles.forEach((role) => {
-			try {
-					Roles.deleteRole(role.name);
-					console.log('Deleted role:', role.name);
-			} catch (err) {
-					if (err.error === 403) {
-							console.log('Role \'' + role.name + '\' is in use.');
-					} else {
-							console.log(err);
-					};
-			};
+		try {
+			Roles.deleteRole(role.name);
+			console.log('Deleted role:', role.name);
+		} catch (err) {
+			if (err.error === 403) {
+				console.log('Role \'' + role.name + '\' is in use.');
+			} else {
+				console.log(err);
+			}
+		}
 	});
 
 	// Create admin and commenter roles if they don't exist:
-	var startUpRoles = ['admin', 'commenter', 'developer'];
+	const startUpRoles = ['admin', 'commenter', 'developer'];
 	startUpRoles.forEach((role) => {
-			try {
-					Roles.createRole(role);
-					console.log('Created role:', role);
-			} catch (err) {
+		try {
+			Roles.createRole(role);
+			console.log('Created role:', role);
+		} catch (err) {
 					// console.log(err);
-			};
+		}
 	});
 
 	// Create role for each commenter:
@@ -36,5 +36,5 @@ Meteor.startup(() => {
 	//		 };
 	// });
 
-	return console.log(`Roles generator finished.`);
+	return console.log('Roles generator finished.');
 });

@@ -1,3 +1,3 @@
 Comments._ensureIndex({
-	"$**": "text"
+	'$**': 'text',
 });

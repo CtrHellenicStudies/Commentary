@@ -17,18 +17,18 @@ DiscussionCommentTeaser = React.createClass({
 	},
 
 	propTypes: {
-		discussionComment: React.PropTypes.object.isRequired
+		discussionComment: React.PropTypes.object.isRequired,
 	},
 
 
 	render() {
-		let discussionComment = this.props.discussionComment;
+		const discussionComment = this.props.discussionComment;
 
 		 return (
 			 <Card	className="user-discussion-comment paper-shadow wow fadeInUp clearfix" data-wow-duration="0.2s">
 					 <div className="card-title-outer">
 							 <div className="card-title-text">
-									 {/*<a className="user-discussion-comment-title" href="/commentary/?q=work.{discussion_comment.comment.work.id}:book.{discussion_comment.comment.subwork.id}:line%20from.{discussion_comment.comment.line_from}" >*/}
+									 {/* <a className="user-discussion-comment-title" href="/commentary/?q=work.{discussion_comment.comment.work.id}:book.{discussion_comment.comment.subwork.id}:line%20from.{discussion_comment.comment.line_from}" >*/}
 									 <a className="user-discussion-comment-title" href="/commentary/" >
 											 Comment on {discussionComment.comment.work.title} {discussionComment.comment.subwork.title}.{discussionComment.comment.lineFrom}
 									 </a>
@@ -40,15 +40,14 @@ DiscussionCommentTeaser = React.createClass({
 							 </p>
 
 							 <FlatButton
-								 label={"Context (" + discussionComment.otherCommentsCount + ")"}
+								 label={'Context (' + discussionComment.otherCommentsCount + ')'}
 								 className="user-discussion-comment-replies"
 								 href="/commentary/"
 								 icon={<FontIcon className="mdi mdi-comment" />}
-								 >
-							 </FlatButton>
+        />
 					 </div>
 
-			 </Card>			);
-		}
+			 </Card>);
+	},
 
 });

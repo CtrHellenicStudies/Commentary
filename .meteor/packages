@@ -4,47 +4,38 @@
 # but you can also edit it by hand.
 
 # Packages from meteor-starter template application
-less@2.7.4
-accounts-base
-accounts-password
+less
+accounts-ui@1.1.9
+accounts-password@1.2.12
 accounts-facebook
 accounts-google
 accounts-twitter
-accounts-ui
 aldeed:collection2
 dburles:collection-helpers
 matb33:collection-hooks
 alanning:roles
 aldeed:simple-schema
-fortawesome:fontawesome
+# fortawesome:fontawesome
 tap:i18n
-raix:handlebar-helpers
+# raix:handlebar-helpers
 cfs:standard-packages
 cfs:gridfs
-#jalik:ufs
-aldeed:template-extension
 cfs:graphicsmagick
+aldeed:template-extension
 yogiben:helpers
 # manuelschoebel:ms-seo
 # spiderable
-jparker:gravatar
 service-configuration
-yogiben:mixpanel
-juliancwirko:s-alert
-juliancwirko:s-alert-stackslide
 momentjs:moment
-zimme:active-route
 twbs:bootstrap
 reywood:publish-composite
 natestrauser:animate-css
-meteorhacks:subs-manager
 yogiben:admin
 timmyg:wow
 tsega:skrollr
-utilities:avatar
-meteor-base
-mongo
-blaze-html-templates
+meteor-base@1.0.4
+mongo@1.1.10
+blaze-html-templates@1.0.4
 session
 jquery
 tracker
@@ -59,19 +50,16 @@ yogiben:autoform-file
 yogiben:autoform-map
 check
 iron:router
-#multiply:iron-router-progress
 useraccounts:core
 useraccounts:bootstrap
 useraccounts:flow-routing@1.14.3
-percolate:momentum
 
 # Packages added for project
-http@1.2.8
+http
 react
 ecmascript@0.5.7
+es5-shim@4.6.13
 archimedigital:core
-jabbslad:basic-auth
-deanius:promise
 kadira:flow-router
 kadira:react-layout
 kadira:blaze-layout
@@ -81,7 +69,6 @@ standard-minifier-js@1.1.8
 simple:rest
 dburles:google-maps
 todda00:friendly-slugs
-mquandalle:promisify-core
 d3js:d3
 gwendall:blaze-to-react
 jalik:ufs
@@ -89,7 +76,8 @@ jalik:ufs-local
 jalik:ufs-gridfs
 buishi:autoform-ufs
 mpowaga:autoform-summernote
-reactive-var
+reactive-var@1.0.10
+reactive-dict@1.1.8
 practicalmeteor:mocha
 dburles:factory
 mdg:validated-method

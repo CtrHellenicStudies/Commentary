@@ -29,21 +29,11 @@ FlowRouter.subscriptions = subscriptions;
 //		 // }
 // });
 
-/*
- * Account routes
- */
-
-AccountsTemplates.configureRoute('changePwd');
-AccountsTemplates.configureRoute('forgotPwd');
-AccountsTemplates.configureRoute('resetPwd');
-AccountsTemplates.configureRoute('signIn');
-AccountsTemplates.configureRoute('signUp');
-AccountsTemplates.configureRoute('verifyEmail');
 
 /*
  * Route groups with permissions
  */
-exposedGroupe = FlowRouter.group({
+publicGroup = FlowRouter.group({
 	triggersEnter: [
 		(context, redirect) => {
 			if (context.path !== '/sign-in') {
@@ -68,7 +58,7 @@ loggedInGroup = FlowRouter.group({
 	],
 });
 
-// commenterGroupe = loggedInGroup.group({
+// commenterGroup = loggedInGroup.group({
 //		 // triggersEnter: [
 //		 //		 function(context, redirect, stop) {
 //		 //				 if (Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
@@ -108,27 +98,27 @@ loggedInGroup.route('/loggedin', {
 	],
 });
 
-exposedGroupe.route('/', {
+publicGroup.route('/', {
 	name: 'home',
 	action: () => {
 		mount(HomeLayout);
 	},
 });
 
-exposedGroupe.route('/commentary', {
+publicGroup.route('/commentary', {
 	name: 'commentary',
 	action: (params, queryParams) => {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
 
-exposedGroupe.route('/commentary/', {
+publicGroup.route('/commentary/', {
 	action: (params, queryParams) => {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
 
-exposedGroupe.route('/keywords/:slug', {
+publicGroup.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <KeywordDetail slug={params.slug} />,
@@ -136,7 +126,7 @@ exposedGroupe.route('/keywords/:slug', {
 	},
 });
 
-exposedGroupe.route('/keywords', {
+publicGroup.route('/keywords', {
 	name: 'keywords',
 	action: () => {
 		mount(MasterLayout, {
@@ -145,7 +135,7 @@ exposedGroupe.route('/keywords', {
 	},
 });
 
-exposedGroupe.route('/keyideas', {
+publicGroup.route('/keyideas', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <KeywordsPage type="idea" title="Key Ideas" />,
@@ -153,7 +143,7 @@ exposedGroupe.route('/keyideas', {
 	},
 });
 
-exposedGroupe.route('/commenters/:slug', {
+publicGroup.route('/commenters/:slug', {
 	name: 'CommentersDetail',
 	action: (params) => {
 		mount(MasterLayout, {
@@ -165,7 +155,7 @@ exposedGroupe.route('/commenters/:slug', {
 	},
 });
 
-exposedGroupe.route('/commenters', {
+publicGroup.route('/commenters', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <CommentersPage />,
@@ -173,7 +163,7 @@ exposedGroupe.route('/commenters', {
 	},
 });
 
-exposedGroupe.route('/about', {
+publicGroup.route('/about', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <AboutPage />,
@@ -182,7 +172,7 @@ exposedGroupe.route('/about', {
 });
 
 
-exposedGroupe.route('/terms', {
+publicGroup.route('/terms', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <TermsPage />,
@@ -220,7 +210,7 @@ loggedInGroup.route('/account', {
 	},
 });
 
-exposedGroupe.route('/sign-out', {
+publicGroup.route('/sign-out', {
 	triggersEnter: [
 		(context, redirect) => {
 			AccountsTemplates.logout();
@@ -237,7 +227,7 @@ exposedGroupe.route('/sign-out', {
 * Single page view
 * 404 check is in the actual template
 */
-exposedGroupe.route('/:slug', {
+publicGroup.route('/:slug', {
 	action(params) {
 		// console.log(params);
 		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];

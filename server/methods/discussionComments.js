@@ -1,36 +1,37 @@
 Meteor.methods({
-	'discussionComments.insert'(discussionComment) {
+	'discussionComments.insert': function insertDiscussionComment(discussionCommentCandidate) {
+		check(discussionCommentCandidate, Object);
+		const discussionComment = discussionCommentCandidate;
 		// Make sure the user is logged in before inserting
-		if (! this.userId) {
+		if (!this.userId) {
 			throw new Meteor.Error('not-authorized');
 		}
 
-		var currentUser = Meteor.users.findOne({_id: this.userId});
-
-
+		const currentUser = Meteor.users.findOne({ _id: this.userId });
 		discussionComment.user = currentUser;
 		discussionComment.votes = 1;
 		discussionComment.voters = [currentUser._id];
 
-		//check(discussionComment.user, Schemas.User);
+		// check(discussionComment.user, Schemas.User);
 		check(discussionComment.content, String);
 		check(discussionComment.votes, Number);
 		check(discussionComment.commentId, String);
 
-		console.log("Inserting new comment", discussionComment);
+		console.log('Inserting new comment', discussionComment);
 		try {
 			DiscussionComments.insert(discussionComment);
-		}
-
-		catch(err){
+		} catch (err) {
 			console.log(err);
 		}
-
 	},
 
-	'discussionComments.update'(discussionCommentData) {
-		console.log("Discussion comment update:", discussionCommentData);
-		var discussionComment = DiscussionComments.findOne({_id: discussionCommentData._id});
+	'discussionComments.update': function updateDiscussionComment(discussionCommentData) {
+		check(discussionCommentData, Object);
+		console.log('Discussion comment update:', discussionCommentData);
+
+		const discussionComment = DiscussionComments.findOne({
+			_id: discussionCommentData._id,
+		});
 
 		// Make sure the user has auth to edit
 		if (this.userId !== discussionComment.user._id) {
@@ -38,19 +39,24 @@ Meteor.methods({
 		}
 
 		check(discussionCommentData.content, String);
-
-		console.log("Updating comment", discussionComment);
+		console.log('Updating comment', discussionComment);
 		try {
-			DiscussionComments.update({_id: discussionComment._id}, {$set: {content: discussionCommentData.content}});
-		}
-
-		catch(err){
+			DiscussionComments.update({
+				_id: discussionComment._id,
+			}, {
+				$set: {
+					content: discussionCommentData.content,
+				},
+			});
+		} catch (err) {
 			console.log(err);
 		}
 	},
 
-	'discussionComments.upvote'(discussionCommentId) {
-		var discussionComment = DiscussionComments.findOne(discussionCommentId);
+	'discussionComments.upvote': function upvoteDiscussionComment(discussionCommentId) {
+		check(discussionCommentId, Number);
+
+		const discussionComment = DiscussionComments.findOne(discussionCommentId);
 
 		// Make sure the user has not already upvoted
 		if (discussionComment.voters.indexOf(this.userId) >= 0) {
@@ -58,16 +64,15 @@ Meteor.methods({
 		}
 
 		try {
-			DiscussionComments.update({_id: discussionCommentId}, {
+			DiscussionComments.update({
+				_id: discussionCommentId,
+			}, {
 				$push: { voters: this.userId },
-				$inc: { votes: 1 }
+				$inc: { votes: 1 },
 			});
-		}
-
-		catch(err){
+		} catch (err) {
 			console.log(err);
 		}
-
 	},
 
 });

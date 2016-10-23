@@ -24,7 +24,7 @@ ProfilePage = React.createClass({
 		return {
 			annotationCheckList: [],
 			skip: 0,
-			limit: 10,
+			limit: 100,
 			name: '',
 			biography: '',
 			academiaEdu: '',
@@ -58,9 +58,16 @@ ProfilePage = React.createClass({
 	getMeteorData() {
 		let discussionComments = [];
 
-		const handle = Meteor.subscribe('user.discussionComments', {}, this.state.skip, this.state.limit);
+		const handle = Meteor.subscribe('user.discussionComments',
+			{},
+			this.state.skip,
+			this.state.limit
+		);
+
 		if (handle.ready()) {
-			discussionComments = DiscussionComments.find().fetch();
+			discussionComments = DiscussionComments.find({
+				'user._id': Meteor.userId(),
+			}).fetch();
 
 			discussionComments.forEach(function (discussionComment) {
 				const commentHandle = Meteor.subscribe('comments', { _id: discussionComment.commentId }, 0, 1);

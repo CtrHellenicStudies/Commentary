@@ -20,7 +20,6 @@ Meteor.publishComposite('user', function() {
 });
 
 Meteor.publish('user.discussionComments', function(query, skip, limit) {
-
 	if(!query){
 		query = {};
 	}
@@ -33,14 +32,12 @@ Meteor.publish('user.discussionComments', function(query, skip, limit) {
 		limit = 100;
 	}
 
-	if(Meteor.userId){
-		query["user._id"] = Meteor.userId;
+	if (this.userId) {
+		query["user._id"] = this.userId;
 		return DiscussionComments.find(query, {skip: skip, limit: limit, sort: {created: -1}});
 	}else {
 		return [];
 	}
-
-
 });
 
 Meteor.publish('userData', function() {

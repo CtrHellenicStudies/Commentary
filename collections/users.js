@@ -109,7 +109,7 @@ Schemas.User = new SimpleSchema({
 	created: {
 		type: Date,
 		optional: true,
-		autoValue: function () {
+		autoValue() {
 			if (this.isInsert) {
 				return new Date();
 			}
@@ -122,7 +122,7 @@ Schemas.User = new SimpleSchema({
 	updated: {
 		type: Date,
 		optional: true,
-		autoValue: function () {
+		autoValue() {
 			if (this.isUpdate) {
 				return new Date();
 			}

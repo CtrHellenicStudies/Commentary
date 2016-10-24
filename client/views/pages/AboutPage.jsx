@@ -1,16 +1,15 @@
 AboutPage = React.createClass({
 
 	render() {
-
 		return (
 
 			<div className="page page-about content primary">
 
 					<section className="block header header-page	cover parallax">
 							<div className="background-image-holder blur-2--no-remove remove-blur	blur-10">
-								 <img className="background-image" src="/images/apotheosis_homer.jpg"/>
+								 <img className="background-image" src="/images/apotheosis_homer.jpg" />
 							</div>
-							<div className="block-screen brown"></div>
+							<div className="block-screen brown" />
 
 							<div className="container v-align-transform">
 
@@ -32,7 +31,7 @@ AboutPage = React.createClass({
 							<p>
 									The intellectual goal of the original editors is simple and at the same time most ambitious: of all existing commentaries on Homeric poetry, this project is the first and only such commentary that is based squarely on the cumulative research of Milman Parry and his student, Albert Lord, who created a new way of thinking about Homeric poetry. Both Parry and Lord taught at Harvard University (Parry died prematurely in 1935, when he was still an assistant professor, while Lord was a distinguished Emeritus Professor at the time of his death in 1991). The lifelong research of Parry (collected papers: 1971) and Lord (1960; second edition 2000 by Stephen Mitchell and Gregory Nagy, with new introduction), as summarized in Lord’s magisterial synthesis, <em>The Singer of Tales</em> (1960), proved that Homeric poetry is a <strong>system</strong> generated from oral traditions, and that the building blocks of this system are <strong>formulas</strong> on the level of form and <strong>themes</strong> on the level of meaning (Lord 1960:4). Our commentary is designed to analyze and explain this system of formulas and themes, to which we refer short-hand as a <strong>formulaic system</strong>. Such a system can best be visualized as a specialized language that has its own specialized grammar. And, just as the grammar of any language is a system in its own right, so also the linguistic analysis of any grammar needs to be correspondingly systematic. Our Homer commentary offers such a systematic analysis.
 							</p>
-							{/*<!-- div className="image-wrap align-right width-half">
+							{/* <!-- div className="image-wrap align-right width-half">
 									<asset:image className="paper-shadow" alt="Homer" src="homer.jpg" />
 									<div className="caption">
 											<span className="caption-text">"Quid faciat laetas segetes quo sidere", Terram Vertere. 1865. Oil on canvas. Center for Hellenic Studies, Washington, DC.</span>
@@ -86,7 +85,6 @@ AboutPage = React.createClass({
 			</div>
 
 
-
 			);
-		}
-	});
+	},
+});

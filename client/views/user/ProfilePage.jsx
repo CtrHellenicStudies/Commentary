@@ -24,7 +24,7 @@ ProfilePage = React.createClass({
 		return {
 			annotationCheckList: [],
 			skip: 0,
-			limit: 10,
+			limit: 100,
 			name: '',
 			biography: '',
 			academiaEdu: '',
@@ -58,9 +58,16 @@ ProfilePage = React.createClass({
 	getMeteorData() {
 		let discussionComments = [];
 
-		const handle = Meteor.subscribe('user.discussionComments', {}, this.state.skip, this.state.limit);
+		const handle = Meteor.subscribe('user.discussionComments',
+			{},
+			this.state.skip,
+			this.state.limit
+		);
+
 		if (handle.ready()) {
-			discussionComments = DiscussionComments.find().fetch();
+			discussionComments = DiscussionComments.find({
+				'user._id': Meteor.userId(),
+			}).fetch();
 
 			discussionComments.forEach(function (discussionComment) {
 				const commentHandle = Meteor.subscribe('comments', { _id: discussionComment.commentId }, 0, 1);
@@ -80,7 +87,7 @@ ProfilePage = React.createClass({
 		}
 
 		return {
-			discussionComments: discussionComments,
+			discussionComments,
 		};
 	},
 
@@ -90,7 +97,7 @@ ProfilePage = React.createClass({
 		});
 	},
 
-	_openFileDialog: function () {
+	_openFileDialog() {
 		const fileUploadDom = this.refs.fileUpload;
 		fileUploadDom.click();
 	},
@@ -168,7 +175,7 @@ ProfilePage = React.createClass({
 
 									<TextField
 										ref="name"
-										fullWidth={true}
+										fullWidth
 										floatingLabelText="Name"
 										defaultValue={currentUser.profile.name}
 										onChange={debounce(3000, this.handleChangeText.bind(null, 'name'))}
@@ -177,10 +184,10 @@ ProfilePage = React.createClass({
 
 									<TextField
 										ref="biography"
-										multiLine={true}
+										multiLine
 										rows={2}
 										rowsMax={10}
-										fullWidth={true}
+										fullWidth
 										floatingLabelText="Biography"
 										defaultValue={currentUser.profile.biography}
 										onChange={debounce(3000, this.handleChangeText.bind(null, 'biography'))}
@@ -189,7 +196,7 @@ ProfilePage = React.createClass({
 
 									<TextField
 										ref="academiaEdu"
-										fullWidth={true}
+										fullWidth
 										hintText="http://university.academia.edu/YourName"
 										floatingLabelText="Academia.edu"
 										defaultValue={currentUser.profile.academiaEdu}
@@ -199,7 +206,7 @@ ProfilePage = React.createClass({
 
 									<TextField
 										ref="twitter"
-										fullWidth={true}
+										fullWidth
 										hintText="https://twitter.com/@your_name"
 										floatingLabelText="Twitter"
 										defaultValue={currentUser.profile.twitter}
@@ -209,7 +216,7 @@ ProfilePage = React.createClass({
 
 									<TextField
 										ref="facebook"
-										fullWidth={true}
+										fullWidth
 										hintText="https://facebook.com/your.name"
 										floatingLabelText="Facebook"
 										defaultValue={currentUser.profile.facebook}
@@ -219,7 +226,7 @@ ProfilePage = React.createClass({
 
 									<TextField
 										ref="google"
-										fullWidth={true}
+										fullWidth
 										hintText="https://plus.google.com/+YourName"
 										floatingLabelText="Google Plus"
 										defaultValue={currentUser.profile.google}
@@ -242,7 +249,7 @@ ProfilePage = React.createClass({
 								<div id="container2" className="data-visualization" />
 							</div>
 
-							<hr className="user-divider"/>
+							<hr className="user-divider" />
 
 							<div className="user-discussion-comments">
 
@@ -281,7 +288,7 @@ ProfilePage = React.createClass({
 											</div>
 											*/}
 
-								{/*}</InfiniteScroll>*/}
+								{/* }</InfiniteScroll>*/}
 
 							</div>
 

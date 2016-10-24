@@ -11,9 +11,9 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		max: 200,
 		optional: true,
 		autoform: {
-			type: "hidden",
-			label: false
-		}
+			type: 'hidden',
+			label: false,
+		},
 	},
 
 	link: {
@@ -95,29 +95,29 @@ Schemas.ReferenceWorks = new SimpleSchema({
 	created: {
 		type: Date,
 		optional: true,
-		autoValue: function() {
+		autoValue() {
 			if (this.isInsert) {
 				return new Date;
 			}
 		},
 		autoform: {
-			type: "hidden",
-			label: false
-		}
+			type: 'hidden',
+			label: false,
+		},
 	},
 	updated: {
 		type: Date,
 		optional: true,
-		autoValue: function() {
+		autoValue() {
 			if (this.isUpdate) {
 				return new Date;
 			}
 		},
 		autoform: {
-			type: "hidden",
-			label: false
-		}
-	}
+			type: 'hidden',
+			label: false,
+		},
+	},
 
 });
 

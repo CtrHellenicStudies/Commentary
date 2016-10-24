@@ -11,46 +11,46 @@ Schemas.Revisions = new SimpleSchema({
 		max: 200,
 		optional: true,
 		autoform: {
-			type: "hidden",
-			label: false
-		}
+			type: 'hidden',
+			label: false,
+		},
 	},
 
 	text: {
 		type: String,
 		optional: true,
 		autoform: {
-			rows: 5
-		}
+			rows: 5,
+		},
 
 	},
 
 	created: {
 		type: Date,
 		optional: true,
-		autoValue: function() {
+		autoValue() {
 			if (this.isInsert) {
 				return new Date;
 			}
 		},
 		autoform: {
-			type: "hidden",
-			label: false
-		}
+			type: 'hidden',
+			label: false,
+		},
 	},
 	updated: {
 		type: Date,
 		optional: true,
-		autoValue: function() {
+		autoValue() {
 			if (this.isUpdate) {
 				return new Date;
 			}
 		},
 		autoform: {
-			type: "hidden",
-			label: false
-		}
-	}
+			type: 'hidden',
+			label: false,
+		},
+	},
 
 });
 

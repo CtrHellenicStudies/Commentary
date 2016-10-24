@@ -1,70 +1,160 @@
+Meteor.method('commenters_cron', () => {
+	const comments = Comments.find().fetch();
+	const commenters = [];
 
-Meteor.method("commenters_cron", function () {
+	let isInCommenters = false;
 
-		const comments = Comments.find().fetch();
-		const commenters = [];
-
-		let isInCommenters = false;
-
-
-
-		comments.forEach(function(comment){
-			comment.commenters.forEach(function(commentCommenter){
-				isInCommenters = false;
-				commenters.forEach(function(commenter){
-
-					if(commenter.slug === commentCommenter.slug){
-						isInCommenters = true;
-						commenter.count++;
+	comments.forEach((comment) => {
+		comment.commenters.forEach((commentCommenter) => {
+			isInCommenters = false;
+			commenters.forEach((commenter) => {
+				if (commenter.slug === commentCommenter.slug) {
+					isInCommenters = true;
+					commenter.nCommentsTotal++;
+					switch (comment.work.slug) {
+					case 'iliad': {
+						commenter.nCommentsIliad++;
+						break;
 					}
-
-				});
-
-				if(!isInCommenters){
-					commentCommenter.count = 0;
-					commenters.push(commentCommenter);
-
+					case 'odyssey': {
+						commenter.nCommentsOdyssey++;
+						break;
+					}
+					case 'homeric-hymns': {
+						commenter.nCommentsHymns++;
+						break;
+					}
+					case 'hymns': {
+						commenter.nCommentsHymns++;
+						break;
+					}
+					default: {
+						break;
+					} }
 				}
 
+				commenter.nCommentsWorks.forEach((work) => {
+					if (comment.work.slug === work.slug) {
+						work.subworks.forEach((subwork) => {
+							if (subwork.n === comment.subwork.n) {
+								subwork.nComments++;
+								let isInHeatmap = false;
+								subwork.commentHeatmap.forEach((commentGroup) => {
+									if (commentGroup.n === comment.lineFrom) {
+										commentGroup.nComments++;
+										isInHeatmap = true;
+									}
+								});
+								if (!isInHeatmap) {
+									subwork.commentHeatmap.push({
+										n: comment.lineFrom,
+										nComments: 1,
+									});
+								}
+							}
+						});
+					}
+				});
 			});
 
-		});
+			if (!isInCommenters) {
+				commentCommenter.nCommentsTotal = 0;
+				commentCommenter.nCommentsIliad = 0;
+				commentCommenter.nCommentsOdyssey = 0;
+				commentCommenter.nCommentsHymns = 0;
+				commentCommenter.nCommentsWorks = [];
 
+				const iliad = {
+					title: 'Iliad',
+					slug: 'iliad',
+					subworks: [],
+				};
+				const odyssey = {
+					title: 'Odyssey',
+					slug: 'odyssey',
+					subworks: [],
+				};
+				const hymns = {
+					title: 'Homeric Hymns',
+					slug: 'homeric-hymns',
+					subworks: [],
+				};
 
-		commenters.forEach(function(commenter){
+				for (let i = 1; i <= 24; i++) {
+					iliad.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+					odyssey.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+				}
 
-			console.log(commenter.title, commenter.count);
+				for (let i = 1; i <= 33; i++) {
+					hymns.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+				}
 
-			Commenters.update({slug:commenter.slug}, {$set:{count: commenter.count}});
+				commentCommenter.nCommentsWorks.push(iliad);
+				commentCommenter.nCommentsWorks.push(odyssey);
+				commentCommenter.nCommentsWorks.push(hymns);
 
-
-		});
-
-		/*
-		comments.forEach(function(comment){
-			var nLines = 1;
-
-			if('lineTo' in comment && comment.lineTo){
-				nLines = comment.lineTo - comment.lineFrom + 1;
-				// console.log(comment.lineFrom, comment.lineTo, comment.nLines);
-
+				commenters.push(commentCommenter);
 			}
-
-			Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
 		});
-		*/
+	});
 
+	commenters.forEach((commenter) => {
+		console.log(commenter.name, commenter.nCommentsTotal);
+		Commenters.update({
+			slug: commenter.slug,
+		}, {
+			$set: {
+				nCommentsTotal: commenter.nCommentsTotal,
+				nCommentsWorks: commenter.nCommentsWorks,
+				nCommentsIliad: commenter.nCommentsIliad,
+				nCommentsOdyssey: commenter.nCommentsOdyssey,
+				nCommentsHymns: commenter.nCommentsHymns,
+			},
+		});
+	});
 
-		console.log(" -- Cron run complete: Commenters")
+	/*
+	comments.forEach(function(comment){
+		var nLines = 1;
 
-		return 1;
+		if('lineTo' in comment && comment.lineTo){
+			nLines = comment.lineTo - comment.lineFrom + 1;
+			// console.log(comment.lineFrom, comment.lineTo, comment.nLines);
 
-	}, {
-		url: "commenters/cron",
-		getArgsFromRequest: function (request) {
-			// Sometime soon do validation here
-			var content = request.body;
-
-			return [content];
 		}
+
+		Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
+	});
+	*/
+
+
+	console.log(' -- Cron run complete: Commenters');
+
+	return 1;
+}, {
+	url: 'commenters/cron',
+	getArgsFromRequest: (request) => {
+		// Sometime soon do validation here
+		const content = request.body;
+
+		return [content];
+	},
 });

@@ -3,57 +3,88 @@
  */
 
 if (Meteor.isServer) {
-	Meteor.publish('comments', function(query, skip, limit) {
-		if(!skip){
-			skip = 0;
+	Meteor.publish('comments', (query, skip = 0, limit = 10) => {
+		check(query, Object);
+		check(skip, Number);
+		check(limit, Number);
+
+		return Comments.find(query, {
+			skip,
+			limit,
+			sort: {
+				'work.order': 1,
+				'subwork.n': 1,
+				lineFrom: 1,
+				nLines: -1,
+			},
+		});
+	});
+
+	Meteor.publish('textNodes', (textQuery) => {
+		check(textQuery, Object);
+		const query = textQuery || {};
+
+		return TextNodes.find(query, {
+			limit: 100,
+			sort: {
+				'text.n': 1,
+			},
+		});
+	});
+
+	Meteor.publish('commenters', () =>
+		Commenters.find({}, {
+			sort: {
+				name: 1,
+			},
+		})
+	);
+
+	Meteor.publish('discussionComments', (commentId, sortMethod = 'votes') => {
+		check(commentId, String);
+		let sort = { votes: -1, updated: -1 };
+
+		if (sortMethod === 'recent') {
+			sort = {
+				updated: -1,
+				votes: -1,
+			};
 		}
 
-		if(!limit || limit !=0){
-			limit = 10;
-		}
-
-		return Comments.find(query, {skip: skip, limit: limit, sort: {'work.order': 1, 'subwork.n':1, lineFrom:1, nLines:-1}});
-
+		return DiscussionComments.find({
+			commentId,
+		}, {
+			sort,
+		});
 	});
 
-	Meteor.publish('textNodes', function(textQuery) {
-		var query = textQuery || {};
+	Meteor.publish('keywords', () =>
+		Keywords.find({}, {
+			sort: {
+				title: 1,
+			},
+		})
+	);
 
-		return TextNodes.find(query, {limit:100, sort:{"text.n":1}});
+	Meteor.publish('revisions', () =>
+		Revisions.find()
+	);
 
-	});
+	Meteor.publish('subworks', () =>
+		Subworks.find()
+	);
 
-	Meteor.publish('commenters', function() {
-		return Commenters.find({}, {sort:{name: 1}});
-	});
+	Meteor.publish('works', () =>
+		Works.find()
+	);
 
-	Meteor.publish('discussionComments', function() {
-		return DiscussionComments.find();
-	});
+	Meteor.publish('profilePictures', () =>
+		ProfilePictures.find()
+	);
 
-	Meteor.publish('keywords', function() {
-		return Keywords.find({},{sort:{title:1}});
-	});
-
-	Meteor.publish('revisions', function() {
-		return Revisions.find();
-	});
-
-	Meteor.publish('subworks', function() {
-		return Subworks.find();
-	});
-
-	Meteor.publish('works', function() {
-		return Works.find();
-	});
-
-	Meteor.publish('profilePictures', function() {
-		return ProfilePictures.find();
-	});
-
-	Meteor.publish('referenceWorks', function() {
-		return ReferenceWorks.find();
-	});
+	Meteor.publish('referenceWorks', () =>
+		ReferenceWorks.find()
+	);
 
 	Meteor.publish('pageImages', function pageImages(pageSlug) {
 		check(pageSlug, String);

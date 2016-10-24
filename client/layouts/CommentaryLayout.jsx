@@ -6,12 +6,21 @@ CommentaryLayout = React.createClass({
 
 	getInitialState() {
 		const filters = [];
+		let selectedRevisionIndex = null;
+
+		console.log('this.props.queryParams', this.props.queryParams);
 
 		if ('_id' in this.props.queryParams) {
 			filters.push({
 				key: '_id',
 				values: [this.props.queryParams._id],
 			});
+			if ("revision" in this.props.queryParams) {
+				filters.push({
+					key: "revision",
+					values: [Number(this.props.queryParams.revision)],
+				});
+			};
 		}
 
 		if ('textsearch' in this.props.queryParams) {
@@ -83,8 +92,9 @@ CommentaryLayout = React.createClass({
 
 
 			filters.push({
-				key: 'subworks',
+				key: "subworks",
 				values: subworks,
+				selectedRevision
 			});
 		}
 
@@ -114,6 +124,7 @@ CommentaryLayout = React.createClass({
 			filters,
 			skip: 0,
 			limit: 10,
+			selectedRevisionIndex,
 		};
 	},
 

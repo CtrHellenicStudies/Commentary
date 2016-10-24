@@ -12,11 +12,26 @@ Comment = React.createClass({
 		comment: React.PropTypes.object.isRequired,
 		commentGroup: React.PropTypes.object.isRequired,
 		addSearchTerm: React.PropTypes.func,
+		filters: React.PropTypes.array,
 	},
 
-	getInitialState() {
+	getInitialState(){
+		var selectedRevisionIndex = null;
+		var foundRevision = null;
+		this.props.filters.forEach((filter) => {
+			if (filter.key === "revision") {
+				foundRevision = filter.values[0];
+			};
+		});
+		if (foundRevision != null && foundRevision >= 0 && foundRevision < this.props.comment.revisions.length) {
+			selectedRevisionIndex = foundRevision;
+		} else {
+			selectedRevisionIndex = this.props.comment.revisions.length - 1;
+		};
+		console.log('selectedRevisionIndex', selectedRevisionIndex);
+
 		return {
-			selectedRevisionIndex: this.props.comment.revisions.length - 1,
+			selectedRevisionIndex: selectedRevisionIndex,
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
 			lemmaReferenceTop: 0,
@@ -35,10 +50,10 @@ Comment = React.createClass({
 
 	getMeteorData() {
 		const selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex];
-        																				return {
-        										selectedRevision,
-        };
-    										},
+		return {
+			selectedRevision,
+	  };
+	},
 
 	addSearchTerm(e) {
 		if ('addSearchTerm' in this.props) {
@@ -57,7 +72,7 @@ Comment = React.createClass({
 			});
 		}
 	},
-
+	
 	showDiscussionThread(comment) {
 		this.setState({
 			discussionVisible: true,

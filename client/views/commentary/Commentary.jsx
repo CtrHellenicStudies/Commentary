@@ -207,7 +207,7 @@ Commentary = React.createClass({
 			const height = $(id + ' .comments').height();
 			// var element = $(id + " .comment-group-meta-inner");
 			const element = $(id).find('.comment-group-meta-inner,.comment-group-meta-inner-fixed,.comment-group-meta-inner-bottom');
-			if (scrollY < offset.top) {
+			if (offset && scrollY < offset.top) {
 				element.addClass('comment-group-meta-inner');
 				element.removeClass('comment-group-meta-inner-fixed');
 				element.removeClass('comment-group-meta-inner-bottom');

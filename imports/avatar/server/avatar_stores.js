@@ -1,20 +1,23 @@
 import { Meteor } from 'meteor/meteor';
 import { UploadFS } from 'meteor/jalik:ufs';
+import { Roles } from 'meteor/alanning:roles';
 import { Avatars } from '../avatar_collections.js';
 
-// TODO: avatar permissions
-const AvatarPermissions = new UploadFS.StorePermissions({
-	insert: (userId, avatar) => {
-		// todo: for commenter context check role
-		// console.log('AvatarPermissions.insert userId:', userId, ' avatar:', avatar);
-	},
-	remove: (userId, avatar) => {
-		// console.log('AvatarPermissions.remove userId:', userId, ' avatar:', avatar);
-	},
-	update: (userId, avatar) => {
-		// console.log('AvatarPermissions.update userId:', userId, ' avatar:', avatar);
-	},
-});
+export function checkAvatarPermissions(userId, avatar) {
+	if (!userId)
+		return false;
+
+	if (Roles.userIsInRole(userId, ['developer', 'admin']))
+		return true;
+
+	if (avatar.contextType === 'user') {
+		return userId === avatar.userId;
+	} else if (avatar.contextType === 'commenter') {
+
+	} else {
+		throw new Error(`Invalid context type ${avatar.contextType}`);
+	}
+}
 
 const AvatarFilter = new UploadFS.Filter({
 	minSize: 1,
@@ -28,7 +31,11 @@ export const AvatarStore = new UploadFS.store.Local({
 	name: 'avatars',
 	path: '../../../var/avatars',
 	filter: AvatarFilter,
-	permissions: AvatarPermissions,
+	permissions: new UploadFS.StorePermissions({
+		insert: checkAvatarPermissions,
+		remove: checkAvatarPermissions,
+		update: checkAvatarPermissions,
+	}),
 });
 
 function finishUserAvatarUpload(avatar) {

@@ -351,16 +351,17 @@ Commentary = React.createClass({
 														commentGroup={commentGroup}
 														showContextPanel={self.showContextPanel}
 														scrollPosition={self.contextScrollPosition}
-             />
+													/>
 
-													{commentGroup.comments.map(function (comment, i) {
-														return (<Comment
-															key={i}
-															commentGroup={commentGroup}
-															comment={comment}
-															addSearchTerm={self.props.addSearchTerm}
-															checkIfToggleLemmaReferenceModal={self.checkIfToggleLemmaReferenceModal}
-              />);
+													{commentGroup.comments.map(function(comment, i){
+														return <Comment
+																key={i}
+																commentGroup={commentGroup}
+																comment={comment}
+																addSearchTerm={self.props.addSearchTerm}
+																checkIfToggleLemmaReferenceModal={self.checkIfToggleLemmaReferenceModal}
+																filters={self.props.filters}
+																/>
 													})}
 
 											</div> {/* <!-- .comments -->*/}

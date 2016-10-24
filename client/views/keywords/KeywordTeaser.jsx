@@ -40,7 +40,8 @@ KeywordTeaser = React.createClass({
 		return (<div
 			className={keywordClass}
 			data-wow-duration="0.2s"
-			onClick={this.toggleOpen}>
+			onClick={this.toggleOpen}
+  >
 			<h4 className="keyword-title">
 				{keyword.title}
 			</h4>

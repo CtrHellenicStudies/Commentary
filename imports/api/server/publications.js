@@ -1,12 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check'
 import { Match } from 'meteor/check'
-import { queryCommentWithKeyword } from '../api_utils.js';
+import { queryCommentWithKeywordId } from '../api_utils.js';
 
-Meteor.publish('comments.keyword_context', function (keyword_slug) {
-	check(keyword_slug, String);
+Meteor.publish('comments.keyword_context', function (keyword_id) {
+	check(keyword_id, String);
 
-	return queryCommentWithKeyword(keyword_slug);
+	return queryCommentWithKeywordId(keyword_id);
 });
 
 Meteor.publish('textnodes.keyword_context', function (lemma_query) {

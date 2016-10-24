@@ -1,44 +1,34 @@
 
-Meteor.method("keyword_cron", function () {
+Meteor.method('keyword_cron', function () {
+	const comments = Comments.find().fetch();
+	const keywords = [];
 
-		const comments = Comments.find().fetch();
-		const keywords = [];
-
-		let isInKeywords = false;
-
+	let isInKeywords = false;
 
 
-		comments.forEach(function(comment){
-			comment.keywords.forEach(function(commentKeyword){
-				isInKeywords = false;
-				keywords.forEach(function(keyword){
-
-					if(keyword.slug === commentKeyword.slug){
-						isInKeywords = true;
-						keyword.count++;
-					}
-
-				});
-
-				if(!isInKeywords){
-					commentKeyword.count = 0;
-					keywords.push(commentKeyword);
-
+	comments.forEach(function (comment) {
+		comment.keywords.forEach(function (commentKeyword) {
+			isInKeywords = false;
+			keywords.forEach(function (keyword) {
+				if (keyword.slug === commentKeyword.slug) {
+					isInKeywords = true;
+					keyword.count++;
 				}
-
 			});
 
+			if (!isInKeywords) {
+				commentKeyword.count = 0;
+				keywords.push(commentKeyword);
+			}
 		});
+	});
 
 
-		keywords.forEach(function(keyword){
+	keywords.forEach(function (keyword) {
+		console.log(keyword.title, keyword.count);
 
-			console.log(keyword.title, keyword.count);
-
-			Keywords.update({slug:keyword.slug}, {$set:{count: keyword.count}});
-
-
-		});
+		Keywords.update({ slug: keyword.slug }, { $set: { count: keyword.count } });
+	});
 
 		/*
 		comments.forEach(function(comment){
@@ -55,16 +45,15 @@ Meteor.method("keyword_cron", function () {
 		*/
 
 
-		console.log(" -- Cron run complete: Keywords")
+	console.log(' -- Cron run complete: Keywords');
 
-		return 1;
-
-	}, {
-		url: "keywords/cron",
-		getArgsFromRequest: function (request) {
+	return 1;
+}, {
+	url: 'keywords/cron',
+	getArgsFromRequest(request) {
 			// Sometime soon do validation here
-			var content = request.body;
+		const content = request.body;
 
-			return [content];
-		}
+		return [content];
+	},
 });

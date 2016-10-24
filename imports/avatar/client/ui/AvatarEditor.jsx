@@ -8,16 +8,20 @@ class AvatarEditor extends React.Component {
 		super(props);
 		this.state = {
 			avatarUrl: props.defaultAvatarUrl,
+			isDefault: true,
 		};
 
 		this.preventDefault = this.preventDefault.bind(this);
 		this.handleDrop = this.handleDrop.bind(this);
 		this.handleSelectFile = this.handleSelectFile.bind(this);
+		this.handleDeleteAvatar = this.handleDeleteAvatar.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
+		const isDefault = !nextProps.avatar.url;
 		this.setState({
-			avatarUrl: nextProps.avatar.url? nextProps.avatar.url : nextProps.defaultAvatarUrl,
+			isDefault,
+			avatarUrl: isDefault? nextProps.defaultAvatarUrl : nextProps.avatar.url,
 		});
 	}
 
@@ -34,25 +38,39 @@ class AvatarEditor extends React.Component {
 		UploadFS.selectFile(data => uploadAvatar(data, { type:'user' }));
 	}
 
+	handleDeleteAvatar(event) {
+		if (!this.state.isDefault && this.props.avatar._id) {
+			Meteor.call('avatar.delete', { avatarId: this.props.avatar._id });
+		}
+	}
+
 	render() {
 		return (
-			<div className="user-profile-picture"
-			>
-				<img src={this.state.avatarUrl} />
+			<div>
+				<div className="userAvatarDelete" onClick={this.handleDeleteAvatar} >
+					<i className=
+						{"mdi mdi-delete mdi-36px mdi-dark " + (this.state.isDefault?
+							"mdi-inactive userAvatarDeleteInactive"
+							: "userAvatarDeleteActive")
+						}
+					/>
+				</div>
+				<div className="user-profile-picture">
+					<img src={this.state.avatarUrl} />
 
-				<div className="upload-profile-picture"
-					onClick={this.handleSelectFile}
-					onDragStart={this.preventDefault}
-					onDragEnter={this.preventDefault}
-					onDragOver={this.preventDefault}
-					onDragLeave={this.preventDefault}
-					onDrop={this.handleDrop}
-				>
-					<i className="mdi mdi-image-area"></i>
-					<span className="help-text">
-						Select to upload or drag and drop.
-					</span>
-
+					<div className="upload-profile-picture"
+						onClick={this.handleSelectFile}
+						onDragStart={this.preventDefault}
+						onDragEnter={this.preventDefault}
+						onDragOver={this.preventDefault}
+						onDragLeave={this.preventDefault}
+						onDrop={this.handleDrop}
+					>
+						<i className="mdi mdi-image-area"></i>
+						<span className="help-text">
+							Select to upload or drag and drop.
+						</span>
+					</div>
 				</div>
 			</div>
 		);

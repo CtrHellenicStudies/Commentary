@@ -8,7 +8,7 @@ function deleteUserAvatar(userId, avatar) {
 	if (userId == avatar.userId || Roles.userIsInRole(userId, ['developer', 'admin'])) {
 		Meteor.users.update(
 			{ _id: userId, 'avatar._id': avatar._id },
-			{ $unset:avatar }
+			{ $unset:{ avatar:1 } }
 		);
 		return Avatars.remove({ _id:avatar._id });
 	} else {

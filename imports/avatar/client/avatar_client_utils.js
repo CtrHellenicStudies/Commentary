@@ -1,4 +1,5 @@
-import {check } from 'meteor/check';
+import { check } from 'meteor/check';
+import { sendSnack } from '/imports/ui/components/SnackAttack.jsx';
 
 export function uploadAvatar(data, context) {
 	const file = {
@@ -33,6 +34,7 @@ export function uploadAvatar(data, context) {
 		},
 		onError: function (err) {
 			console.error(err);
+			sendSnack(err.reason);
 		},
 		onAbort: function (avatar) {
 			console.log(avatar.name, ' upload has been aborted');

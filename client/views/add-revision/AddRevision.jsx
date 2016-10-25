@@ -4,10 +4,12 @@ import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-import { EditorState, ContentState, Modifier, RichUtils, convertToRaw } from 'draft-js';
+import Select from 'react-select';
+
+import {EditorState, ContentState, Modifier, RichUtils, convertToRaw} from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
-import { stateToHTML } from 'draft-js-export-html';
-import { stateFromHTML } from 'draft-js-import-html';
+import {stateToHTML} from 'draft-js-export-html';
+import {stateFromHTML} from 'draft-js-import-html';
 
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 const singleLinePlugin = createSingleLinePlugin();
@@ -19,66 +21,103 @@ const {
   // inline buttons
   ItalicButton, UnderlineButton,
   // block buttons
-  ULButton,
+  ULButton
 } = richButtonsPlugin;
 
 AddRevision = React.createClass({
 
-    										childContextTypes: {
-        										muiTheme: React.PropTypes.object.isRequired,
+    childContextTypes: {
+        muiTheme: React.PropTypes.object.isRequired,
     },
 
-    										getChildContext() {
-        										return { muiTheme: getMuiTheme(baseTheme) };
+    getChildContext() {
+        return {muiTheme: getMuiTheme(baseTheme)};
     },
 
-    										propTypes: {
-        										submitForm: React.PropTypes.func.isRequired,
-        										comment: React.PropTypes.object.isRequired,
+    propTypes: {
+        submitForm: React.PropTypes.func.isRequired,
+        comment: React.PropTypes.object.isRequired,
     },
 
-    										getInitialState() {
-        								const revisionId = this.props.comment.revisions.length - 1;
-        								const revision = this.props.comment.revisions[revisionId]; // get newest revision
-        										return {
-            									revision,
+    getInitialState(){
+        var revisionId = this.props.comment.revisions.length - 1;
+        var revision = this.props.comment.revisions[revisionId]; // get newest revision
 
-            										titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-            										textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+        var keywordsValue = [];
+        var keyideasValue = [];
+        if (this.props.comment.keywords) {
+            this.props.comment.keywords.map(function(keyword, i) {
+                switch(keyword.type) {
+                    case 'word':
+                        keywordsValue.push(keyword.title);
+                        break;
+                    case 'idea':
+                        keyideasValue.push(keyword.title);
+                };
+            });
+        };
 
-            										titleValue: '',
-            										textValue: '',
+        return {
+            revision: revision,
+
+            titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
+            textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+
+            titleValue: '',
+            textValue: '',
+
+            keywordsValue: keywordsValue,
+            keyideasValue: keyideasValue,
         };
     },
 
-    										mixins: [ReactMeteorData],
+    mixins: [ReactMeteorData],
 
-    										getMeteorData() {
-        										return {
+    getMeteorData() {
+        var keywords_options = [];
+        var keywords = Keywords.find({type: 'word'}).fetch();
+        keywords.map(function(keyword) {
+            keywords_options.push({
+                value: keyword.title,
+                label: keyword.title,
+            });
+        });
 
+        var keyideas_options = [];
+        var keyideas = Keywords.find({type: 'idea'}).fetch();
+        keyideas.map(function(keyidea) {
+            keyideas_options.push({
+                value: keyidea.title,
+                label: keyidea.title,
+            });
+        });
+
+        return {
+            keywords_options: keywords_options,
+            keyideas_options: keyideas_options,
         };
     },
 
-    										onTitleChange(titleEditorState) {
-        								const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-        								const title = jQuery(titleHtml).text();
-        										this.setState({
-            									titleEditorState,
-            										titleValue: title,
+    onTitleChange(titleEditorState) {
+        var titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
+        var title = jQuery(titleHtml).text();
+        this.setState({
+            titleEditorState: titleEditorState,
+            titleValue: title,
         });
     },
 
-    										onTextChange(textEditorState) {
-        								const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-        										this.setState({
-            									textEditorState,
-            										textValue: textHtml,
+    onTextChange(textEditorState) {
+        var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+        this.setState({
+            textEditorState: textEditorState,
+            textValue: textHtml,
         });
     },
 
-    										handleSubmit(event) {
+    handleSubmit(event) {
         // TODO: form validation
-        										event.preventDefault();
+        event.preventDefault();
 
         // var error = this.validateStateForSubmit();
 
@@ -87,22 +126,108 @@ AddRevision = React.createClass({
         //     snackbarMessage: error.errorMessage,
         // });
         // if (!error.errors) {
-            										this.props.submitForm(this.state);
+            this.props.submitForm(this.state);
         // };
     },
 
-    										selectRevision(event) {
-        								const revision = this.props.comment.revisions[event.currentTarget.id];
-        										this.setState({
-            									revision,
-            										titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-            										textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+    selectRevision(event) {
+        var revision = this.props.comment.revisions[event.currentTarget.id];
+        this.setState({
+            revision: revision,
+            titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
+            textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
         });
     },
 
-    										removeRevision() { // TODO: delete
-        										console.log('this.state.revision', this.state.revision);
-        										Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
+    removeRevision() { // TODO: delete
+        console.log('this.state.revision', this.state.revision);
+        Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
+    },
+
+    onKeywordsValueChange(keywords) {
+        if (keywords) {
+            keywords = keywords.split(",");
+            var errorKeywords = this.errorKeywords(keywords, 'word');
+            if (errorKeywords.length) {
+                errorKeywords.forEach((keyword) => {
+                    var index = keywords.indexOf(keyword);
+                    keywords.splice(index, 1);
+                });
+            };
+            this.setState({
+                keywordsValue: keywords,
+            });
+        } else {
+            this.setState({
+                keywordsValue: null,
+            });
+        };
+    },
+
+    onKeyideasValueChange(keyideas) {
+        if (keyideas) {
+            keyideas = keyideas.split(",");
+            var errorKeywords = this.errorKeywords(keyideas, 'idea');
+            if (errorKeywords.length) {
+                errorKeywords.forEach((keyword) => {
+                    var index = keyideas.indexOf(keyword);
+                    keyideas.splice(index, 1);
+                });
+            };
+            this.setState({
+                keyideasValue: keyideas,
+            });
+        } else {
+            this.setState({
+                keyideasValue: null,
+            });
+        };
+    },
+
+    errorKeywords(keywordsArray, type) {
+        // 'type' is the type of keywords passed to this function
+        var errorKeywords = [];
+        switch (type) {
+
+            case 'word':
+                var keyideasValue = this.state.keyideasValue;
+                keywordsArray.forEach((keyword) => {
+                    this.data.keyideas_options.forEach((keyidea_option) => {
+                        if (keyword === keyidea_option.value) {
+                            errorKeywords.push(keyword);
+                        };
+                    });
+
+                    if (Array.isArray(keyideasValue)) {
+                        keyideasValue.forEach((keyideaValue) => {
+                            if (keyword === keyideaValue) {
+                                errorKeywords.push(keyword);
+                            };
+                        });
+                    };
+                });
+                break;
+
+            case 'idea':
+                var keywordsValue = this.state.keywordsValue;
+                keywordsArray.forEach((keyword) => {
+                    this.data.keywords_options.forEach((keyword_option) => {
+                        if (keyword === keyword_option.value) {
+                            errorKeywords.push(keyword);
+                        };
+                    });
+
+                    if (Array.isArray(keywordsValue)) {
+                        keywordsValue.forEach((keywordValue) => {
+                            if (keyword === keywordValue) {
+                                errorKeywords.push(keyword);
+                            };
+                        });
+                    };
+                });
+                break;
+        };
+        return errorKeywords;
     },
 
     // validateStateForSubmit() {
@@ -130,53 +255,65 @@ AddRevision = React.createClass({
     //     };
     // },
 
-    										render() {
-        								const that = this;
+    render() {
 
-        										return (
+        var that = this;
+
+        return (
 					<div className="comments lemma-panel-visible">
             <div className={'comment-outer'}>
 
-                <article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
+                <article className="comment commentary-comment paper-shadow " style={{marginLeft: 0}}>
 
                     <div className="comment-upper">
                         <h1 className="add-comment-title">
                             <Editor
-	editorState={this.state.titleEditorState}
-	onChange={this.onTitleChange}
-	placeholder="Comment title..."
-	spellCheck
-	stripPastedStyles
-	plugins={[singleLinePlugin]}
-	blockRenderMap={singleLinePlugin.blockRenderMap}
+                                editorState={this.state.titleEditorState}
+                                onChange={this.onTitleChange}
+                                placeholder='Comment title...'
+                                spellCheck={true}
+                                stripPastedStyles={true}
+                                plugins={[singleLinePlugin]}
+                                blockRenderMap={singleLinePlugin.blockRenderMap}
                             />
                         </h1>
-                        <div className="comment-keywords">
-                            {this.props.comment.keywords.map(function (keyword, i) {
-                                										return <RaisedButton
-	key={i}
-	className="comment-keyword paper-shadow"
-	onClick={self.addSearchTerm}
-	data-id={keyword._id}
-	label={(keyword.title || keyword.wordpressId)}
-                                         />;
-                             })}
-                        </div>
-                        {/* TODO: this.props.comment.keyideas*/}
+                        <Select
+                            name="keywords"
+                            id="keywords"
+                            required={false}
+                            options={this.data.keywords_options}
+                            multi={true}
+                            allowCreate={true}
+                            value={this.state.keywordsValue}
+                            onChange={this.onKeywordsValueChange}
+                            placeholder='Keywords...'
+                        />
+                        <Select
+                            name="keyideas"
+                            id="keyideas"
+                            required={false}
+                            options={this.data.keyideas_options}
+                            multi={true}
+                            allowCreate={true}
+                            value={this.state.keyideasValue}
+                            onChange={this.onKeyideasValueChange}
+                            placeholder='Keyideas...'
+                        />
+                        {/*TODO: this.props.comment.keyideas*/}
 
                     </div>
-                    <div className="comment-lower" style={{ paddingTop: 20 }}>
-                        <ItalicButton />
-                        <UnderlineButton />
-                        <ULButton />
+                    <div className="comment-lower" style={{paddingTop: 20}}>
+                        <ItalicButton/>
+                        <UnderlineButton/>
+                        <ULButton/>
                         <div className="add-comment-text">
                             <Editor
-	editorState={this.state.textEditorState}
-	onChange={this.onTextChange}
-	placeholder="Comment text..."
-	spellCheck
-	stripPastedStyles
-	plugins={[richButtonsPlugin]}
+                                editorState={this.state.textEditorState}
+                                onChange={this.onTextChange}
+                                placeholder='Comment text...'
+                                spellCheck={true}
+                                stripPastedStyles={true}
+                                plugins={[richButtonsPlugin]}
                             />
                         </div>
 
@@ -197,38 +334,41 @@ AddRevision = React.createClass({
 
                         <div className="add-comment-button">
                             <RaisedButton
-	type="submit"
-	label="Add revision"
-	labelPosition="after"
-	onClick={this.handleSubmit}
-	icon={<FontIcon className="mdi mdi-plus" />}
+                                type="submit"
+                                label="Add revision"
+                                labelPosition="after"
+                                onClick={this.handleSubmit}
+                                icon={<FontIcon className="mdi mdi-plus" />}
                             />
                         </div>
-                        {Roles.userIsInRole(Meteor.user(), ['developer']) ? /* TODO: delete*/
+                        {Roles.userIsInRole(Meteor.user(), ['developer']) ? /*TODO: delete*/
                             <div className="add-comment-button">
                                 <RaisedButton
-	type="submit"
-	label="(developer only) Remove revision"
-	labelPosition="after"
-	onClick={this.removeRevision}
-	icon={<FontIcon className="mdi mdi-minus" />}
+                                    type="submit"
+                                    label="(developer only) Remove revision"
+                                    labelPosition="after"
+                                    onClick={this.removeRevision}
+                                    icon={<FontIcon className="mdi mdi-minus" />}
                                 />
                             </div>
                             :
-                            ''
+                            ""
                         }
 
                     </div>
 
                     <div className="comment-revisions">
-                        {this.props.comment.revisions.map(function (revision, i) {
-                            										return <FlatButton
-	key={i}
-	id={i}
-	className="revision selected-revision"
-	onClick={that.selectRevision}
-	label={'Revision ' + moment(revision.created).format('D MMMM YYYY')}
-                                     />;
+                        {this.props.comment.revisions.map(function(revision, i){
+                            return <FlatButton
+                                key={i}
+                                id={i}
+                                className="revision selected-revision"
+                                onClick={that.selectRevision}
+                                label={"Revision " + moment(revision.created).format('D MMMM YYYY')}
+                                >
+
+                            </FlatButton>
+
                         })}
                     </div>
 
@@ -238,5 +378,5 @@ AddRevision = React.createClass({
 					</div>
 
         );
-    },
+    }
 });

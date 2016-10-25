@@ -354,7 +354,7 @@ Commentary = React.createClass({
 													/>
 
 													{commentGroup.comments.map(function(comment, i){
-														return <Comment
+														return <CommentDetail
 																key={i}
 																commentGroup={commentGroup}
 																comment={comment}

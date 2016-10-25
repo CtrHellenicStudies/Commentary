@@ -2,7 +2,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import { green100, green500, red100, red500, black, fullWhite } from 'material-ui/styles/colors';
-// import diffview from 'jsdifflib';
 import JsDiff from 'diff';
 
 CommentDetail = React.createClass({
@@ -55,12 +54,6 @@ CommentDetail = React.createClass({
 		};
 	},
 
-	stripHTMLFromText(htmlText) {
-		const tempElem = document.createElement("DIV");
-		tempElem.innerHTML = htmlText
-		return tempElem.textContent || tempElem.innerText || '';
-	},
-
 	getRevisionDiff() {
 		// build the diff view and return a DOM node
 		const baseRevision = this.data.selectedRevision;
@@ -88,8 +81,13 @@ CommentDetail = React.createClass({
 				.createTextNode(part.value));
 			revisionDiff.appendChild(span);
 		});
-		console.log(baseRevision.text, newRevision.text);
 		return revisionDiff;
+	},
+
+	stripHTMLFromText(htmlText) {
+		const tempElem = document.createElement('div');
+		tempElem.innerHTML = htmlText;
+		return tempElem.textContent || tempElem.innerText || '';
 	},
 
 	addSearchTerm(e) {
@@ -334,7 +332,8 @@ CommentDetail = React.createClass({
 							<div
 								id="comment-body"
 								className="comment-body"
-								dangerouslySetInnerHTML={comment ? { __html: this.getRevisionDiff().innerHTML } : ''}
+								dangerouslySetInnerHTML={comment ?
+									{ __html: this.getRevisionDiff().innerHTML } : ''}
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}

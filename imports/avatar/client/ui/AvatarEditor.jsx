@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import LinearProgress from 'material-ui/LinearProgress';
 import { createContainer } from 'meteor/react-meteor-data';
 import { sendSnack } from '/imports/ui/components/SnackAttack.jsx';
+import { AvatarUploader } from '/imports/avatar/client/avatar_client_utils.js';
 
 class AvatarEditor extends React.Component {
 	constructor(props) {
@@ -33,36 +34,11 @@ class AvatarEditor extends React.Component {
 	}
 
 	uploadAvatar(data, context) {
-		const file = {
-			name: data.name,
-			size: data.size,
-			type: data.type,
-			contextType: context.type,
-		};
-
-		if (context.type === 'commenter') {
-			check(context.commenterId, String);
-			file.commenterId = context.commenterId;
-		} else if (context.type !== 'user') {
-			throw new Error(`invalid context type ${context.type}`);
-		}
-		const self = this;
-		const uploader = new UploadFS.Uploader({
-			store: 'avatars',
-			adaptive: true,
-			capacity: 0.8, // 80%
-			chunkSize: 8 * 1024, // 8k
-			maxChunkSize: 128 * 1024, // 128k
-			maxTries: 3,
-			data,
-			file,
-
-			onCreate(avatar) {
-				console.log(avatar.name, ' has been created');
-			},
-			onStart(avatar) {
-				console.log(avatar.name, ' started');
-				self.setState({
+		const uploader = new AvatarUploader({
+			data, context,
+			onStart: (avatar) => {
+				this.setState({
+					progress: 0,
 					isProgressShown: true,
 				});
 			},
@@ -70,26 +46,18 @@ class AvatarEditor extends React.Component {
 				console.error(err);
 				sendSnack(err.reason);
 			},
-			onAbort(avatar) {
-				console.log(avatar.name, ' upload has been aborted');
-			},
-			onComplete(avatar) {
-				console.log(avatar.name, ' has been uploaded');
-				self.setState({
+			onComplete: (avatar) => {
+				this.setState({
 					isProgressShown: false,
 				});
 				sendSnack('Profile pic has been uploaded');
 			},
-			onProgress(avatar, progress) {
-				console.log(avatar.name, ' ', (progress * 100), '% uploaded');
+			onProgress: (avatar, progress) => {
 				if (progress > 100) {
-					self.setState({ progress: 100 });
+					this.setState({ progress: 100 });
 				} else {
-					self.setState({ progress: Math.floor(progress * 100) });
+					this.setState({ progress: Math.floor(progress * 100) });
 				}
-			},
-			onStop(avatar) {
-				console.log(avatar.name, ' stopped');
 			},
 		});
 

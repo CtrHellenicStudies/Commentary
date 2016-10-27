@@ -82,6 +82,7 @@ CommenterVisualizations = React.createClass({
 							workTitle={"Iliad"}
 							workSlug={"iliad"}
 							workLevel={workIliadLevel}
+							nComments={commenter.nCommentsIliad}
 						/>
 					: '' }
 					{workOdysseyLevel ?
@@ -90,6 +91,7 @@ CommenterVisualizations = React.createClass({
 							workTitle={"Odyssey"}
 							workSlug={"odyssey"}
 							workLevel={workOdysseyLevel}
+							nComments={commenter.nCommentsOdyssey}
 						/>
 					: '' }
 					{workHymnsLevel ?
@@ -98,6 +100,7 @@ CommenterVisualizations = React.createClass({
 							workTitle={"Hymns"}
 							workSlug={"homeric-hymns"}
 							workLevel={workHymnsLevel}
+							nComments={commenter.nCommentsHymns}
 						/>
 					: '' }
 				</div>

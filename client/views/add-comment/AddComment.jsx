@@ -15,15 +15,7 @@ import {stateToHTML} from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 const singleLinePlugin = createSingleLinePlugin();
 
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin';
-const richButtonsPlugin = createRichButtonsPlugin();
-
-const {
-  // inline buttons
-  ItalicButton, UnderlineButton,
-  // block buttons
-  ULButton
-} = richButtonsPlugin;
+import RichTextEditor from 'react-rte';
 
 
 AddComment = React.createClass({
@@ -45,7 +37,7 @@ AddComment = React.createClass({
     getInitialState(){
         return {
             titleEditorState: EditorState.createEmpty(),
-            textEditorState: EditorState.createEmpty(),
+            textEditorState: RichTextEditor.createEmptyValue(),
 
             titleValue: '',
             textValue: '',
@@ -105,10 +97,10 @@ AddComment = React.createClass({
     },
 
     onTextChange(textEditorState) {
-        var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+        // var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
         this.setState({
             textEditorState: textEditorState,
-            textValue: textHtml,
+            textValue: textEditorState.toString('html'),
         });
     },
 
@@ -266,16 +258,21 @@ AddComment = React.createClass({
     },
 
     render() {
-        // const raw = convertToRaw(this.state.titleEditorState.getCurrentContent());
-        // var titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-        // var title = jQuery(titleHtml).text();
 
-        // const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
-        // console.log('textRaw', textRaw);
-        // var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-        // console.log('textHtml', textHtml);
-        // var text = jQuery(textHtml).text();
-        // console.log('html', jQuery(html).text());
+        const toolbarConfig = {
+            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
+            INLINE_STYLE_BUTTONS: [{
+                label: 'Italic',
+                style: 'ITALIC',
+            }, {
+                label: 'Underline',
+                style: 'UNDERLINE'
+            }],
+            BLOCK_TYPE_BUTTONS: [{
+                label: 'UL',
+                style: 'unordered-list-item'
+            }]
+        };
 
 
         return (
@@ -321,20 +318,12 @@ AddComment = React.createClass({
 
                     </div>
                     <div className="comment-lower" style={{paddingTop: 20}}>
-                        <ItalicButton/>
-                        <UnderlineButton/>
-                        <ULButton/>
-                        <div className="add-comment-text">
-                            <Editor
-                                editorState={this.state.textEditorState}
-                                onChange={this.onTextChange}
-                                placeholder='Comment text...'
-                                spellCheck={true}
-                                stripPastedStyles={true}
-                                plugins={[richButtonsPlugin]}
-                            />
-                        </div>
-
+                        <RichTextEditor
+                            placeholder='Comment text...'
+                            value={this.state.textEditorState}
+                            onChange={this.onTextChange}
+                            toolbarConfig={toolbarConfig}
+                        />
                         <div className="comment-reference" >
                             <Select
                                 name="referenceWorks"

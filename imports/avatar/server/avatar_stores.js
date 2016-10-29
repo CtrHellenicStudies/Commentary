@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { UploadFS } from 'meteor/jalik:ufs';
 import { Roles } from 'meteor/alanning:roles';
+import gm from 'gm';
 import { Avatars } from '../avatar_collections.js';
 
 export function checkAvatarPermissions(userId, avatar) {
@@ -36,6 +37,16 @@ export const AvatarStore = new UploadFS.store.Local({
 		remove: checkAvatarPermissions,
 		update: checkAvatarPermissions,
 	}),
+
+
+	transformWrite: function(from, to, fileId, file) {
+		let p = gm(from);
+		p.resize(230, 230)
+			.gravity('Center')
+			.extent(230, 230)
+			.quality(100);
+		p.stream().pipe(to);
+	}
 });
 
 function finishUserAvatarUpload(avatar) {

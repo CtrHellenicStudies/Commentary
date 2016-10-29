@@ -10,7 +10,6 @@ export function sendSnack(msg) {
 		console.warn('Tried to send snack, but no SnackAttacks.', msg);
 	}
 
-	console.log('showing snack', msg);
 	for (let sa of mountedAttacks)
 		sa.showSnack(msg);
 }

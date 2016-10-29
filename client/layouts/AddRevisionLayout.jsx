@@ -4,25 +4,27 @@ import slugify from 'slugify';
 
 AddRevisionLayout = React.createClass({
 
-    										getInitialState() {
-        										return {
-            										filters: [],
+    getInitialState() {
+        return {
+            filters: [],
 
             // selectedLineFrom: 0,
             // selectedLineTo: 0,
 
-            										contextReaderOpen: true,
+            contextReaderOpen: true,
         };
     },
 
-    										mixins: [ReactMeteorData],
+    mixins: [ReactMeteorData],
 
-    										getMeteorData() {
-        								const commentSubscription = Meteor.subscribe('comments', { _id: this.props.commentId }, 0, 1);
-        									let comment = {};
+    getMeteorData() {
+        const commentSubscription = Meteor.subscribe('comments', {
+            _id: this.props.commentId
+        }, 0, 1);
+        let comment = {};
 
-        										if (commentSubscription.ready()) {
-            										comment = Comments.find().fetch()[0];
+        if (commentSubscription.ready()) {
+            comment = Comments.find().fetch()[0];
             // comment.commenters.forEach((commenter) => {
             // //     canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
             //     canShow = (Meteor.user().commenterId === commenter._id);
@@ -33,113 +35,192 @@ AddRevisionLayout = React.createClass({
         // console.log('Object.keys(this.data.comment).length', Object.keys(comment).length);
         // var ready = Roles.subscription.ready() && Object.keys(comment).length;
 
-        										return {
+        const keywords = Keywords.find().fetch();
+
+        return {
             // ready: ready,
-            									comment,
+            comment,
+            keywords,
         };
     },
 
-    										componentWillUpdate(nextProps, nextState) {
-        										this.handlePermissions();
+    componentWillUpdate(nextProps, nextState) {
+        this.handlePermissions();
     },
 
-    										addRevision(formData) {
-        								const revision = {
-            										title: formData.titleValue,
-            										text: formData.textValue,
-            										created: new Date(),
-            										slug: slugify(formData.titleValue),
-        };
+    addRevision(formData) {
 
-	const self = this;
+        const self = this;
 
-        										Meteor.call('comments.add.revision', this.props.commentId, revision, function (err) {
-            										FlowRouter.go('/commentary/?_id=' + self.data.comment._id);
+        this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, function() {
+            const keywords = [];
+            self.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
+                keywords.push(matchedKeyword);
+            });
+            self.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
+                keywords.push(matchedKeyword);
+            });
+
+            const revision = {
+                title: formData.titleValue,
+                text: formData.textValue,
+                created: new Date(),
+                slug: slugify(formData.titleValue),
+            };
+
+            let update = [{}];
+            if (keywords) {
+                update = {
+                    keywords: keywords
+                };
+            };
+
+            Meteor.call('comments.add.revision', self.props.commentId, revision, function(err) {
+                Meteor.call('comment.update', self.props.commentId, update, function(err2) {
+                    FlowRouter.go('/commentary/?_id=' + self.data.comment._id);
+                });
+            });
         });
 
         // TODO: handle behavior after comment added (add info about success)
     },
 
-    										closeContextReader() {
-        										this.setState({
-            										contextReaderOpen: false,
-        });
-    },
-
-    										openContextReader() {
-        										this.setState({
-            										contextReaderOpen: true,
-        });
-    },
-
-    										handlePermissions() {
-        										if (Roles.subscription.ready()) {
-            										if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
-                										FlowRouter.go('/');
-            }
+    matchKeywords(keywords) {
+        const matchedKeywords = [];
+        if (keywords) {
+            keywords.forEach((keyword) => {
+                const foundKeyword = Keywords.find({
+                    title: keyword,
+                }).fetch()[0];
+                matchedKeywords.push(foundKeyword);
+            });
         }
-        										if (Object.keys(this.data.comment).length) {
-            									let isOwner = false;
-            										this.data.comment.commenters.forEach((commenter) => {
-                										if (!isOwner) {
-                    										isOwner = (Meteor.user().commenterId === commenter._id);
+        return matchedKeywords;
+    },
+
+    addNewKeywordsAndIdeas(keywords, keyideas, next) {
+        const that = this;
+        this.addNewKeywords(keywords, 'word', function() {
+            that.addNewKeywords(keyideas, 'idea', function() {
+                return next();
+            });
+        });
+    },
+
+    addNewKeywords(keywords, type, next) {
+        if (keywords) {
+            const that = this;
+            const insertKeywords = [];
+            keywords.forEach(function(keyword) {
+                foundKeyword = that.data.keywords.find(function(d) {
+                    return d.title === keyword;
+                });
+                console.log('foundKeyword', foundKeyword, 'keyword', keyword);
+                if (foundKeyword === undefined) {
+                    const _keyword = {
+                        title: keyword,
+                        slug: slugify(keyword),
+                        type,
+                    };
+                    insertKeywords.push(_keyword);
                 }
             });
-            										if (!isOwner) {
-                										FlowRouter.go('/');
+            if (insertKeywords.length > 0) {
+                Meteor.call('keywords.insert', insertKeywords, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        return next();
+                    }
+                });
+            } else {
+                return next();
+            }
+        } else {
+            return next();
+        }
+    },
+
+    closeContextReader() {
+        this.setState({
+            contextReaderOpen: false,
+        });
+    },
+
+    openContextReader() {
+        this.setState({
+            contextReaderOpen: true,
+        });
+    },
+
+    handlePermissions() {
+        if (Roles.subscription.ready()) {
+            if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
+                FlowRouter.go('/');
+            }
+        }
+        if (Object.keys(this.data.comment).length) {
+            let isOwner = false;
+            this.data.comment.commenters.forEach((commenter) => {
+                if (!isOwner) {
+                    isOwner = (Meteor.user().commenterId === commenter._id);
+                }
+            });
+            if (!isOwner) {
+                FlowRouter.go('/');
             }
         }
     },
 
-    										toggleSearchTerm(key, value) {
-        									let self = this,
-            										filters = this.state.filters;
-        									let keyIsInFilter = false,
-            										valueIsInFilter = false,
-            										filterValueToRemove,
-            										filterToRemove;
+    toggleSearchTerm(key, value) {
+        let self = this,
+            filters = this.state.filters;
+        let keyIsInFilter = false,
+            valueIsInFilter = false,
+            filterValueToRemove,
+            filterToRemove;
 
-        										filters.forEach(function (filter, i) {
-            										if (filter.key === key) {
-                										keyIsInFilter = true;
+        filters.forEach(function(filter, i) {
+            if (filter.key === key) {
+                keyIsInFilter = true;
 
-                										filter.values.forEach(function (filterValue, j) {
-                    										if (filterValue._id === value._id) {
-                        										valueIsInFilter = true;
-                        										filterValueToRemove = j;
+                filter.values.forEach(function(filterValue, j) {
+                    if (filterValue._id === value._id) {
+                        valueIsInFilter = true;
+                        filterValueToRemove = j;
                     }
                 });
 
-                										if (valueIsInFilter) {
-                    										filter.values.splice(filterValueToRemove, 1);
-                    										if (filter.values.length === 0) {
-                        										filterToRemove = i;
+                if (valueIsInFilter) {
+                    filter.values.splice(filterValueToRemove, 1);
+                    if (filter.values.length === 0) {
+                        filterToRemove = i;
                     }
                 } else {
-                    										if (key === 'works') {
-                        										filter.values = [value];
+                    if (key === 'works') {
+                        filter.values = [value];
                     } else {
-                        										filter.values.push(value);
+                        filter.values.push(value);
                     }
                 }
             }
         });
 
 
-        										if (typeof filterToRemove !== 'undefined') {
-            										filters.splice(filterToRemove, 1);
+        if (typeof filterToRemove !== 'undefined') {
+            filters.splice(filterToRemove, 1);
         }
 
-        										if (!keyIsInFilter) {
-            										filters.push({
-                									key,
-                										values: [value],
+        if (!keyIsInFilter) {
+            filters.push({
+                key,
+                values: [value],
             });
         }
 
-        										this.setState({
-            									filters,
-            										skip: 0,
+        this.setState({
+            filters,
+            skip: 0,
         });
     },
 

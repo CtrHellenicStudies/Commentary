@@ -23,12 +23,12 @@ WorkVisualization = React.createClass({
 			top: 20,
 			right: 100,
 			bottom: 80,
-			left: 20,
+			left: 60,
 		};
 		const width = 970 - margin.left - margin.right;
 		const height = 421 - margin.top - margin.bottom;
 		const barGraphMargin = {
-			left: 60,
+			left: 10,
 		};
 
 		const svg = d3.select(`.text-subworks-visualization-${slug}`).append('svg')
@@ -95,7 +95,7 @@ WorkVisualization = React.createClass({
 		barGraphXAxis.append('g')
 				.attr('class', `bargraph-x-axis-label-${slug}`)
 				.append('text')
-				.attr('x', -13)
+				.attr('x', -70)
 				.attr('y', height + 35)
 				.attr('dx', '1em')
 				.style('text-anchor', 'start')
@@ -129,7 +129,7 @@ WorkVisualization = React.createClass({
 				.append('text')
 				.attr('transform', 'rotate(-90)')
 				.attr('x', -height / 2)
-				.attr('y', 5)
+				.attr('y', -60)
 				.attr('dy', '1em')
 				.style('text-anchor', 'middle')
 				.text('# OF COMMENTS');
@@ -224,7 +224,33 @@ WorkVisualization = React.createClass({
 					return d.n;
 				});
 
-	 										barGraphBars
+		barGraphBars
+			.append('text')
+			.attr('class', (d) => {
+					return 'bargraph-bar-top-label-' + slug + '-' + d.n;
+				})
+			.attr('x', (d) => {
+				return x(d.n) + x.rangeBand() / 2;
+			})
+			.attr('y', (d) => {
+				if (
+						'nComments' in d
+					&& typeof d.nComments !== 'undefined'
+					&& d.nComments
+					&& !isNaN(d.nComments)
+				) {
+					return y(d.nComments) - x.rangeBand() / 2;
+				}
+				return y(0) - x.rangeBand() / 2;
+			})
+			.style('text-anchor', 'middle')
+			.style('opacity', 0)
+			.attr('fill', '#d59518')
+			.text((d) => {
+				return d.nComments;
+			});
+
+	 	barGraphBars
 				.on('click', (d) => {
 					if (d.nComments) {
 						self.setState({
@@ -269,6 +295,19 @@ WorkVisualization = React.createClass({
 						d3.select('.bargraph-bar-label-' + suffix).transition()
 								.duration(1000)
 								.style('opacity', 0);
+						d3.select('.bargraph-bar-top-label-' + suffix).transition()
+								.duration(1000)
+								.style('opacity', 0);
+
+						d3.select('.bargraph-bar-foot-' + suffix).transition()
+								.delay(1000)
+								.style('display', 'none');
+						d3.select('.bargraph-bar-label-' + suffix).transition()
+								.delay(1000)
+								.style('display', 'none');
+						d3.select('.bargraph-bar-top-label-' + suffix).transition()
+								.delay(1000)
+								.style('display', 'none');
 
 						var selectBar = d3.select('.bargraph-bar-column-' + suffix);
 						selectBar.transition()
@@ -310,6 +349,9 @@ WorkVisualization = React.createClass({
 								.attr('fill', '#d59518')
 								.style('text-decoration', 'underline')
 								.style('cursor', 'pointer');
+					d3.select('.bargraph-bar-top-label-' + suffix)
+								.style('opacity', 1)
+								.style('cursor', 'pointer');
 				})
 				.on('mouseout', (d) => {
 					const suffix = slug + '-' + d.n;
@@ -324,6 +366,8 @@ WorkVisualization = React.createClass({
 					d3.select('.bargraph-bar-label-' + suffix)
 								.attr('fill', '#000000')
 								.style('text-decoration', 'none');
+					d3.select('.bargraph-bar-top-label-' + suffix)
+								.style('opacity', 0);
 				});
 		// --- END BARS --- //
 		// --- END BARGRAPH --- //
@@ -344,6 +388,7 @@ WorkVisualization = React.createClass({
 			.attr('width', 58)
 			.attr('height', 30)
 			// .attr('fill', '#d59518');
+			.style('cursor', 'pointer')
 			.attr('fill', '#ffffff');
 
 		// Create button text:
@@ -354,6 +399,7 @@ WorkVisualization = React.createClass({
 				.attr('y', 200)
 				.style('text-anchor', 'left')
 				.style('opacity', 0.5)
+				.style('cursor', 'pointer')
 				.text('BACK');
 
 		// Button animation:
@@ -606,6 +652,16 @@ WorkVisualization = React.createClass({
 				.attr('x', selectBar.attr('x_origin'))
 				.attr('y', selectBar.attr('y_origin'))
 				.attr('fill', selectBar.attr('fill_origin'));
+
+		d3.select('.bargraph-bar-foot-' + suffix).transition()
+				.delay(1500)
+				.style('display', '');
+		d3.select('.bargraph-bar-label-' + suffix).transition()
+				.delay(1500)
+				.style('display', '');
+		d3.select('.bargraph-bar-top-label-' + suffix).transition()
+				.delay(1500)
+				.style('display', '');
 
 		d3.select('.bargraph-bar-foot-' + suffix).transition()
 				.delay(1550)

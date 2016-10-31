@@ -357,7 +357,27 @@
 
 	.work-title {
 		position:absolute;
-		top:50%;
+		top:45%;
+		left:0;
+		right:0;
+		margin:-22px auto 0;
+		display:block;
+		font-family:@font-label;
+		text-align:center;
+		color:@light;
+		text-transform:uppercase;
+		font-size:16px;
+		.transition(all 300ms ease);
+
+		// ensure centered (adjust for font)
+		line-height:42px;
+		padding-left:1px;
+
+	}
+
+	.work-count {
+		position:absolute;
+		top:60%;
 		left:0;
 		right:0;
 		margin:-22px auto 0;

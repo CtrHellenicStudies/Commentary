@@ -14,15 +14,8 @@ import {stateFromHTML} from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 const singleLinePlugin = createSingleLinePlugin();
 
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin';
-const richButtonsPlugin = createRichButtonsPlugin();
+import RichTextEditor from 'react-rte';
 
-const {
-  // inline buttons
-  ItalicButton, UnderlineButton,
-  // block buttons
-  ULButton
-} = richButtonsPlugin;
 
 AddRevision = React.createClass({
 
@@ -61,7 +54,7 @@ AddRevision = React.createClass({
             revision: revision,
 
             titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-            textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+            textEditorState: RichTextEditor.createValueFromString(revision.text, 'html'),
 
             titleValue: '',
             textValue: '',
@@ -108,10 +101,10 @@ AddRevision = React.createClass({
     },
 
     onTextChange(textEditorState) {
-        var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+        // var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
         this.setState({
             textEditorState: textEditorState,
-            textValue: textHtml,
+            textValue: textEditorState.toString('html'),
         });
     },
 
@@ -259,6 +252,22 @@ AddRevision = React.createClass({
 
         var that = this;
 
+        const toolbarConfig = {
+            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
+            INLINE_STYLE_BUTTONS: [{
+                label: 'Italic',
+                style: 'ITALIC',
+            }, {
+                label: 'Underline',
+                style: 'UNDERLINE'
+            }],
+            BLOCK_TYPE_BUTTONS: [{
+                label: 'UL',
+                style: 'unordered-list-item'
+            }]
+        };
+
+
         return (
 					<div className="comments lemma-panel-visible">
             <div className={'comment-outer'}>
@@ -303,19 +312,12 @@ AddRevision = React.createClass({
 
                     </div>
                     <div className="comment-lower" style={{paddingTop: 20}}>
-                        <ItalicButton/>
-                        <UnderlineButton/>
-                        <ULButton/>
-                        <div className="add-comment-text">
-                            <Editor
-                                editorState={this.state.textEditorState}
-                                onChange={this.onTextChange}
-                                placeholder='Comment text...'
-                                spellCheck={true}
-                                stripPastedStyles={true}
-                                plugins={[richButtonsPlugin]}
-                            />
-                        </div>
+                        <RichTextEditor
+                            placeholder='Comment text...'
+                            value={this.state.textEditorState}
+                            onChange={this.onTextChange}
+                            toolbarConfig={toolbarConfig}
+                        />
 
                         <div className="comment-reference" >
                             <h4>Secondary Source(s):</h4>

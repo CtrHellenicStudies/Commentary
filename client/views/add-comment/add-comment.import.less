@@ -26,7 +26,7 @@
     color: rgba(0, 0, 0, 0.8);
 }
 
-.add-comment-text {
+.add-comment-text, .RichTextEditor__editor___1QqIU {
 	font-family: 'Merriweather', serif;
     font-size: 18px;
     line-height: 1.76em;
@@ -34,6 +34,11 @@
     margin: 0;
     max-width: 1000px;
     word-break: break-word;
+
+    a {
+        border-bottom: 2px solid #795548;
+        pointer-events: none;
+    }
 
     span {
 		font-family: 'Merriweather', serif;
@@ -126,4 +131,20 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 
 	}
 
+}
+
+.IconButton__isActive___2Ey8p {
+    background-color: #795548 !important;
+}
+
+.RichTextEditor__root___2QXK- {
+    border: none !important;
+
+    .EditorToolbar__root___3_Aqz {
+        border: none;
+
+        .InputPopover__input___264Za {
+            margin-bottom: 0px;
+        }
+    }
 }

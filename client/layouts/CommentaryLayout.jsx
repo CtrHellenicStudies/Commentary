@@ -94,7 +94,6 @@ CommentaryLayout = React.createClass({
 			filters.push({
 				key: "subworks",
 				values: subworks,
-				selectedRevision
 			});
 		}
 

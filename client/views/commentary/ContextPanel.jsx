@@ -184,7 +184,7 @@ ContextPanel = React.createClass({
       >
 
 								<div className="lemma-meta">
-									{(line.n % 5 === 0) ?
+									{(line.n % 5 === 0 || line.n === 1) ?
 										<span className="lemma-line-n" >
 												{line.n}
 										</span>

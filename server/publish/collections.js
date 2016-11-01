@@ -78,10 +78,6 @@ if (Meteor.isServer) {
 		Works.find()
 	);
 
-	Meteor.publish('profilePictures', () =>
-		ProfilePictures.find()
-	);
-
 	Meteor.publish('referenceWorks', () =>
 		ReferenceWorks.find()
 	);

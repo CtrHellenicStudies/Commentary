@@ -4,7 +4,7 @@ import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import InfiniteScroll from '../../../imports/InfiniteScroll';
-
+import { Avatars } from '/imports/avatar/avatar_collections.js';
 
 Commentary = React.createClass({
 
@@ -157,20 +157,19 @@ Commentary = React.createClass({
 			const commenters = [];
 			const lemmaQuery = {};
 
-			const imageSubscription = Meteor.subscribe('profilePictures');
+			const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
 			const commenterSubscription = Meteor.subscribe('commenters');
-			if (imageSubscription.ready() && commenterSubscription.ready()) {
+			if (avatarSubscription.ready() && commenterSubscription.ready()) {
 				commentGroup.comments.forEach(function (comment) {
 					isInCommenters = false;
 
 					comment.commenters.forEach(function (commenter, i) {
 						const commenterRecord = Commenters.findOne({ slug: commenter.slug });
 						comment.commenters[i] = commenterRecord;
-						// console.log(commenterRecord);
-						// get the attachment
-						if (commenterRecord.picture) {
-							commenterRecord.attachment = ProfilePictures.findOne(commenterRecord.picture);
-							// console.log(commenterRecord.attachment);
+
+						// get commenter avatar
+						if (commenterRecord.avatar) {
+							commenterRecord.avatarData = Avatars.findOne(commenterRecord.avatar);
 						}
 
 						// add to the unique commenter set

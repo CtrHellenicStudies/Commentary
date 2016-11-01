@@ -202,14 +202,6 @@ loggedInGroup.route('/profile', {
 	},
 });
 
-loggedInGroup.route('/account', {
-	action: () => {
-		mount(UserLayout, {
-			content: < AccountPage / >,
-		});
-	},
-});
-
 publicGroup.route('/sign-out', {
 	triggersEnter: [
 		(context, redirect) => {

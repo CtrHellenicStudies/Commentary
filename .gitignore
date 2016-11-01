@@ -7,6 +7,8 @@ private/settings/production.json
 .uploads
 node_modules
 
+# Temp files
+tmp/
 
 # Editors
 *~

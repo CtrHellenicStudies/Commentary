@@ -32,6 +32,13 @@ FilterWidget = React.createClass({
 						>
 							<span className="filter-key paper-shadow">{filter.key}</span>
 								{filter.values.map((val, j) => {
+									// commenters query through URL fix:
+									if(filter.key === 'commenters' && !val.name && val.wordpressId) {
+										const foundCommenter = Commenters.findOne({wordpressId:val.wordpressId});
+										if(foundCommenter){
+											val.name = foundCommenter.name;
+										}
+									}
 									return <RaisedButton
 										key={j}
 										labelPosition="before"

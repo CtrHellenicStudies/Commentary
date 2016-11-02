@@ -50,7 +50,7 @@ CommentaryLayout = React.createClass({
 
 			this.props.queryParams.commenters.split(',').forEach(function (commenter) {
 				commenters.push({
-					wordpressId: commenter,
+					wordpressId: Number(commenter),
 				});
 			});
 

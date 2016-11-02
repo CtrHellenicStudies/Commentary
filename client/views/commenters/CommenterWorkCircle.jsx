@@ -10,7 +10,6 @@ CommenterWorkCircle = React.createClass({
 	},
 
 	render() {
-		console.log(this.props);
 		return (
 			<div className="commenter-work-circle">
 				<div

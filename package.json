@@ -11,9 +11,10 @@
     "draft-js-export-html": "^0.4.0",
     "draft-js-import-html": "^0.2.2",
     "draft-js-mention-plugin": "^2.0.0-beta5",
-    "draft-js-plugins-editor": "^2.0.0-beta1",
+    "draft-js-plugins-editor": "^2.0.0-beta5",
     "draft-js-richbuttons-plugin": "^1.1.0",
     "draft-js-single-line-plugin": "0.0.1",
+    "gm": "^1.23.0",
     "install": "^0.8.2",
     "ion-rangeslider": "^2.1.4",
     "jsdifflib": "^1.1.0",
@@ -42,7 +43,8 @@
     "react-slick": "^0.12.2",
     "react-tap-event-plugin": "^1.0.0",
     "slugify": "^1.0.2",
-    "throttle-debounce": "^1.0.1"
+    "throttle-debounce": "^1.0.1",
+    "try-thread-sleep": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",

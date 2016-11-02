@@ -39,13 +39,12 @@ export default KeywordContext = React.createClass({
 
 		if (commentsSub.ready()) {
 			const commentCursor = queryCommentWithKeywordId(this.props.keywordId);
-			console.log(commentCursor.count());
+
 			if (commentCursor.count() > 0) {
 				const comment = commentCursor.fetch()[0];
-				console.log(comment);
 				const textNodesQuery = makeKeywordContextQueryFromComment(comment, this.props.maxLines);
 				const textNodesSub = Meteor.subscribe('textnodes.keyword_context', textNodesQuery);
-				console.log(textNodesQuery);
+
 				context.work = textNodesQuery['work.slug'];
 				context.subwork = textNodesQuery['subwork.n'];
 				context.lineFrom = textNodesQuery['text.n'].$gte;

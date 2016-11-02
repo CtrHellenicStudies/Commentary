@@ -27,7 +27,7 @@ CommenterTeaser = React.createClass({
 			 <div className="commenter-teaser hvr-grow wow fadeIn" >
 							<a href={commenter_url} >
 									<div className="commenter-image paper-shadow">
-										<img src={commenter.avatarUrl} alt={commenter.name} />
+										<img src={commenter.avatarUrl ? commenter.avatarUrl : '/images/default_user.jpg' } alt={commenter.name} />
 									</div>
 							</a>
 							<div className="commenter-teaser-text">

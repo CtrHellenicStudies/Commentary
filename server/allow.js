@@ -1,27 +1,3 @@
-ProfilePictures.allow({
-	insert(userId, doc) {
-		return true;
-	},
-	update(userId, doc, fieldNames, modifier) {
-		return true;
-	},
-	download(userId) {
-		return true;
-	},
-});
-
-Attachments.allow({
-	insert(userId, doc) {
-		return true;
-	},
-	update(userId, doc, fieldNames, modifier) {
-		return true;
-	},
-	download(userId) {
-		return true;
-	},
-});
-
 
 Meteor.users.allow({
 	update(userId, doc, fieldNames, modifier) {

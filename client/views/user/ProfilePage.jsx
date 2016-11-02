@@ -97,11 +97,6 @@ ProfilePage = React.createClass({
 		});
 	},
 
-	_openFileDialog() {
-		const fileUploadDom = this.refs.fileUpload;
-		fileUploadDom.click();
-	},
-
 	handleChangeText(key) {
 		const user = this.props.user;
 		const self = this;

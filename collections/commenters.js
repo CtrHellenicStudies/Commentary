@@ -25,20 +25,6 @@ Schemas.Commenters = new SimpleSchema({
 		},
 	},
 
-	/* TODO: cleanup from db
-	picture: {
-		type: String,
-		optional: true,
-		label: 'Profile picture',
-		autoform: {
-			afFieldInput: {
-				type: 'fileUpload',
-				collection: 'ProfilePictures'
-			}
-		}
-	},
-	*/
-
 	avatar: {
 		type: String,
 		optional: true,

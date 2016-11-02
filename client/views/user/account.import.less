@@ -39,7 +39,7 @@
 .user-profile-section {
 	position:relative;
 
-	.user-profile-picture {
+	.user-profile-picture-container {
 		position:absolute;
 		z-index:1;
 		top:-210px;
@@ -47,9 +47,13 @@
 		height:230px;
 		left:50%;
 		margin-left:-100px;
+	}
+	.user-profile-picture {
 		border-radius:100%;
 		overflow:hidden;
 		border:3px solid @light;
+		width:230px;
+		height:230px;
 		cursor:pointer;
 
 		&:hover {
@@ -73,6 +77,10 @@
 			background:rgba(0,0,0,0.6);
 			opacity:0;
 			.transition(opacity 200ms ease-out);
+			border-radius:100%;
+			overflow:hidden;
+			border:3px solid @light;
+			cursor:pointer;
 
 			.mdi.mdi-image-area {
 				color:@light;

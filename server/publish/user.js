@@ -1,23 +1,3 @@
-Meteor.publishComposite('user', function () {
-	return {
-		find() {
-			return Meteor.users.find({
-				_id: this.userId,
-			});
-		},
-		children: [
-			{
-				find(user) {
-					let _id, ref;
-					_id = ((ref = user.profile) != null ? ref.picture : void 0) || null;
-					return ProfilePictures.find({
-						_id,
-					});
-				},
-			},
-		],
-	};
-});
 
 Meteor.publish('user.discussionComments', function (query, skip, limit) {
 	if (!query) {

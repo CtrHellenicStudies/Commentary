@@ -3,8 +3,8 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
 import diffview from 'jsdifflib';
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
 Comment = React.createClass({
 
@@ -72,7 +72,7 @@ Comment = React.createClass({
 			});
 		}
 	},
-	
+
 	showDiscussionThread(comment) {
 		this.setState({
 			discussionVisible: true,
@@ -259,12 +259,6 @@ Comment = React.createClass({
 
 								<div className="comment-upper-right">
 									{comment.commenters.map(function (commenter, i) {
-										let image = {};
-										let imageUrl = '';
-										if (commenter.attachment) {
-											image = commenter.attachment;
-											imageUrl = image.url();
-										}
 										return (<div
 											key={i}
 											className="comment-author"
@@ -286,7 +280,7 @@ Comment = React.createClass({
 											</div>
 											<div className="comment-author-image-wrap paper-shadow">
 												<a href={'/commenters/' + commenter.slug}>
-													<img src={imageUrl.length ? imageUrl : '/images/default_user.jpg'} />
+													<AvatarIcon avatar={commenter.avatarData} />
 												</a>
 											</div>
 										</div>);

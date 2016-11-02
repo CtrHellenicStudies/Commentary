@@ -1,20 +1,24 @@
 import { Meteor } from 'meteor/meteor';
 import { UploadFS } from 'meteor/jalik:ufs';
+import { Roles } from 'meteor/alanning:roles';
+import gm from 'gm';
 import { Avatars } from '../avatar_collections.js';
 
-// TODO: avatar permissions
-const AvatarPermissions = new UploadFS.StorePermissions({
-	insert: (userId, avatar) => {
-		// todo: for commenter context check role
-		// console.log('AvatarPermissions.insert userId:', userId, ' avatar:', avatar);
-	},
-	remove: (userId, avatar) => {
-		// console.log('AvatarPermissions.remove userId:', userId, ' avatar:', avatar);
-	},
-	update: (userId, avatar) => {
-		// console.log('AvatarPermissions.update userId:', userId, ' avatar:', avatar);
-	},
-});
+export function checkAvatarPermissions(userId, avatar) {
+	if (!userId)
+		return false;
+
+	if (Roles.userIsInRole(userId, ['developer', 'admin']))
+		return true;
+
+	if (avatar.contextType === 'user') {
+		return userId === avatar.userId;
+	} else if (avatar.contextType === 'commenter') {
+
+	} else {
+		throw new Error(`Invalid context type ${avatar.contextType}`);
+	}
+}
 
 const AvatarFilter = new UploadFS.Filter({
 	minSize: 1,
@@ -28,7 +32,21 @@ export const AvatarStore = new UploadFS.store.Local({
 	name: 'avatars',
 	path: '../../../var/avatars',
 	filter: AvatarFilter,
-	permissions: AvatarPermissions,
+	permissions: new UploadFS.StorePermissions({
+		insert: checkAvatarPermissions,
+		remove: checkAvatarPermissions,
+		update: checkAvatarPermissions,
+	}),
+
+
+	transformWrite: function(from, to, fileId, file) {
+		let p = gm(from);
+		p.resize(230, 230)
+			.gravity('Center')
+			.extent(230, 230)
+			.quality(100);
+		p.stream().pipe(to);
+	}
 });
 
 function finishUserAvatarUpload(avatar) {
@@ -104,12 +122,14 @@ AvatarStore.onFinishUpload = function handleAvatarFinishUpdate(avatar) {
 		finishCommenterAvatarUpload(avatar);
 };
 
-// TODO:
 AvatarStore.onCopyError = (err, avatarId, avatar) => {
+	console.log('Avatar copy error. avatar:', avatar, ' error:', err);
 };
 
 AvatarStore.nReadError = (err, avatarId, avatar) => {
+	console.log('Avatar read error. avatar:', avatar, ' error', err);
 };
 
 AvatarStore.onWriteError = (err, avatarId, avatar) => {
+	console.log('Avatar write error. avatar:', avatar, ' error', err);
 };

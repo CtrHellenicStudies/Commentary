@@ -40,6 +40,7 @@ CommenterVisualizations = React.createClass({
 				key={i}
 				toggleVisibleWork={this.toggleVisibleWork}
 				work={work}
+				commenterWordpressId={this.props.commenter.wordpressId}
 			/>
 		);
 	},
@@ -66,7 +67,6 @@ CommenterVisualizations = React.createClass({
 		if (commenter.nCommentsHymns > 0) {
 			workHymnsLevel = Math.floor((commenter.nCommentsHymns / commenter.nCommentsTotal) * 10);
 		}
-		console.log(workIliadLevel);
 
 		return (
 			<div className={classes}>

@@ -31,30 +31,59 @@ Meteor.method('commenters_cron', () => {
 					default: {
 						break;
 					} }
-				}
+				// }
 
 				commenter.nCommentsWorks.forEach((work) => {
 					if (comment.work.slug === work.slug) {
-						work.subworks.forEach((subwork) => {
-							if (subwork.n === comment.subwork.n) {
-								subwork.nComments++;
-								let isInHeatmap = false;
-								subwork.commentHeatmap.forEach((commentGroup) => {
-									if (commentGroup.n === comment.lineFrom) {
-										commentGroup.nComments++;
-										isInHeatmap = true;
-									}
-								});
-								if (!isInHeatmap) {
-									subwork.commentHeatmap.push({
-										n: comment.lineFrom,
-										nComments: 1,
-									});
-								}
-							}
-						});
+
+                        work.subworks.forEach((subwork) => {
+                            // TODO: build and array of lin 10 incrementation
+                            if (comment.subwork.n === subwork.n) {
+                                subwork.nComments++;
+
+                                const iterations = Math.floor((comment.lineFrom + comment.nLines - 1) / 10) - Math.floor(comment.lineFrom / 10) + 1;
+
+                                for (let i = 0; i < iterations; i++) {
+                                    const nFrom = Math.floor(comment.lineFrom / 10) * 10 + i * 10;
+                                    isInCommentCountsLines = false;
+
+                                    subwork.commentHeatmap.forEach((line) => {
+                                        if (nFrom === line.n) {
+                                            isInCommentCountsLines = true;
+                                            line.nComments++;
+                                        }
+                                    });
+
+                                    if (!isInCommentCountsLines) {
+                                        subwork.commentHeatmap.push({
+                                            n: nFrom,
+                                            nComments: 1,
+                                        });
+                                    }
+                                }
+                            }
+                        });
+
+						// work.subworks.forEach((subwork) => {
+						// 	if (subwork.n === comment.subwork.n) {
+						// 		subwork.nComments++;
+						// 		let isInHeatmap = false;
+						// 		subwork.commentHeatmap.forEach((commentGroup) => {
+						// 			if (commentGroup.n === comment.lineFrom) {
+						// 				commentGroup.nComments++;
+						// 				isInHeatmap = true;
+						// 			}
+						// 		});
+						// 		if (!isInHeatmap) {
+						// 			subwork.commentHeatmap.push({
+						// 				n: comment.lineFrom,
+						// 				nComments: 1,
+						// 			});
+						// 		}
+						// 	}
+						// });
 					}
-				});
+				});}
 			});
 
 			if (!isInCommenters) {

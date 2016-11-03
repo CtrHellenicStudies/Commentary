@@ -115,6 +115,11 @@ CommentLemma = React.createClass({
 		const self = this;
 		const commentGroup = this.props.commentGroup;
 		const lemmaText = this.data.lemmaText;
+		let workTitle = commentGroup.work.title;
+
+		if (workTitle === "Homeric Hymns") {
+			workTitle = "Hymns";
+		}
 
 		return (
 
@@ -124,7 +129,7 @@ CommentLemma = React.createClass({
 							<div className="comment-group-meta-inner">
 									<div className="comment-group-ref">
 											<span className="comment-group-ref-above">
-													{commentGroup.work.title} {commentGroup.subwork.title}
+													{workTitle} {commentGroup.subwork.title}
 											</span>
 											<h2 className="comment-group-ref-below">
 												{commentGroup.lineFrom}{commentGroup.lineTo ? '-' + commentGroup.lineTo : '' }

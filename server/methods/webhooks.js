@@ -77,7 +77,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	});
 
 	const text = commentCandidate.text.slice(0, 1) !== '<' ?
-		'<p>${commentCandidate.text}</p>' :
+		`<p>${commentCandidate.text}</p>` :
 		commentCandidate.text;
 
 	let revision = Revisions.insert({

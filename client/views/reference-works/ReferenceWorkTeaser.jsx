@@ -30,7 +30,7 @@ ReferenceWorkTeaser = React.createClass({
 
 	createMarkup() {
 		return {
-			__html: Utils.trunc(this.props.referenceWork.description.replace(/(<([^>]+)>)/ig, ''), 120)
+			__html: Utils.trunc(this.props.referenceWork.description, 100),
 		};
 	},
 
@@ -52,8 +52,7 @@ ReferenceWorkTeaser = React.createClass({
 				<span
 					className="reference-work-description"
 					dangerouslySetInnerHTML={this.createMarkup()}
-				>
-				</span>
+				/>
 			</a>
 		);
 	},

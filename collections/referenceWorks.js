@@ -27,7 +27,6 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		optional: true,
 		autoform: {
 			options: function () {
-				console.log("commenters", Commenters.find().fetch());
 				return _.map(Commenters.find().fetch(), function (commenter) {
 					return {
 						label: commenter.name,

@@ -1,0 +1,148 @@
+.reference-work {
+  background:@light;
+  display:inline-block;
+  vertical-align:top;
+  padding:15px 25px;
+  margin:7px;
+  border-top:2px solid @primary;
+  width:40%;
+  text-align:left;
+
+  &:hover, &:focus {
+
+  }
+
+  .reference-work-title {
+		color:@primary-text;
+	  font-family:@font-body;
+	  font-size:22px;
+		text-transform:uppercase;
+		margin-right:10px;
+		display:inline-block;
+		padding:10px 0 5px;
+		vertical-align: top;
+
+		&:hover {
+		  color:@primary;
+		}
+
+  }
+
+}
+
+section.reference-work-single {
+  background:@background-gray;
+
+
+}
+
+.reference-works-list {
+	text-align: center;
+	margin:0 auto;
+}
+
+
+.reference-work-teaser {
+	width:480px;
+	background:@light;
+	cursor:pointer;
+	margin:10px 1%;
+	padding:20px;
+	text-align:left;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),0 1px 3px 0 rgba(0, 0, 0, 0.12),0 1px 1px -1px rgba(0, 0, 0, 0.2);
+	display:inline-block;
+	vertical-align: top;
+
+	&:hover {
+		.reference-work-title, .reference-work-comment-count, .reference-work-description, .mdi, .reference-work-read-more {
+			color:@ahcip-yellow;
+			&:hover {
+				color:@ahcip-yellow;
+
+			}
+
+		}
+	}
+
+
+	.reference-work-title {
+		display:inline-block;
+		vertical-align: top;
+		font-size:22px;
+		font-family:@font-title;
+		margin:0 !important;
+		padding:0 !important;
+		line-height:1.4em;
+	}
+
+	.mdi {
+		display:inline-block;
+		vertical-align: top;
+		float:right;
+		padding:7px 10px;
+		color:@secondary-text;
+
+		&.mdi-minus {
+			display:none;
+
+		}
+
+	}
+
+	hr {
+		width:100%;
+		max-width:250px;
+		margin:10px 0;
+		height:2px;
+		background:#eee;
+
+	}
+
+	.reference-work-description {
+		width:98%;
+		margin:10px 5px 20px;
+		max-width:700px;
+		font-size:15px;
+		font-family:@font-reading;
+		line-height:1.5em;
+		font-weight:300;
+
+		span {
+			font-size:15px !important;
+			font-family:@font-reading !important;
+			line-height:1.5em;
+			display:block;
+			font-weight:300;
+
+		}
+
+	}
+
+	.reference-work-read-more {
+		clear:both;
+		color:@secondary-text;
+		font-family:@font-label;
+		text-transform: uppercase;
+		font-size:12px;
+		margin:10px 6px 0;
+		font-weight:light;
+
+		&:hover {
+			color:@primary-text;
+
+		}
+
+	}
+
+}
+
+.page.reference-works-page {
+  background:@background-gray;
+
+	.page-content {
+		overflow:visible;
+		max-width: none;
+	}
+
+
+}

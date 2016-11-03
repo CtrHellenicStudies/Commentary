@@ -1,5 +1,3 @@
-import Masonry from 'react-masonry-component/lib';
-
 ReferenceWorksList = React.createClass({
 
 	propTypes: {
@@ -30,19 +28,9 @@ ReferenceWorksList = React.createClass({
 	},
 
 	render() {
-		const masonryOptions = {
-			isFitWidth : true,
-			transitionDuration: 300,
-		};
-
 		return (
 			<div className="reference-works-list">
-				<Masonry
-					options={masonryOptions}
-					className="reference-works-list--container container"
-				>
-					{this.renderReferenceWorks()}
-				</Masonry>
+				{this.renderReferenceWorks()}
 			</div>
 		);
 	},

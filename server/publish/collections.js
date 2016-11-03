@@ -79,7 +79,7 @@ if (Meteor.isServer) {
 	);
 
 	Meteor.publish('referenceWorks', () =>
-		ReferenceWorks.find()
+		ReferenceWorks.find({}, { sort: { title: 1 } })
 	);
 
 	Meteor.publish('pageImages', function pageImages(pageSlug) {

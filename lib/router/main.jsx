@@ -143,6 +143,23 @@ publicGroup.route('/keyideas', {
 	},
 });
 
+publicGroup.route('/referenceWorks/:slug', {
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <ReferenceWorkDetail slug={params.slug} />,
+		});
+	},
+});
+
+publicGroup.route('/referenceWorks', {
+	name: 'referenceWorks',
+	action: () => {
+		mount(MasterLayout, {
+			content: <ReferenceWorksPage title="ReferenceWorks" />,
+		});
+	},
+});
+
 publicGroup.route('/commenters/:slug', {
 	name: 'CommentersDetail',
 	action: (params) => {

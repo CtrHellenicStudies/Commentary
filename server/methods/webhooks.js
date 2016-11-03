@@ -160,6 +160,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 			newComment.lineTo = parseInt(commentCandidate.line_to, 10);
 		}
 
+		console.log(newComment);
 		const insertResponse = Comments.insert(newComment);
 		if (insertResponse) {
 			valid = true;

@@ -42,12 +42,18 @@ ReferenceWorksList = React.createClass({
 		};
 
 		return (
-			<Masonry
-				options={masonryOptions}
-				className="reference-works-list"
-			>
-				{this.renderReferenceWorks()}
-			</Masonry>
+			<div>
+				{this.data.referenceWorks.length ?
+					<Masonry
+						options={masonryOptions}
+						className="reference-works-list"
+					>
+							{this.renderReferenceWorks()}
+					</Masonry>
+				:
+					<p className="no-results no-results-reference-works">No reference works found.</p>
+				}
+			</div>
 		);
 	},
 

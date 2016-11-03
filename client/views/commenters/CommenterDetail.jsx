@@ -108,6 +108,18 @@ CommenterDetail = React.createClass({
 								commenter={commenter}
 							/>
 
+							<br />
+							<br />
+							<br />
+							<hr />
+							<br />
+							<br />
+							<br />
+
+							<CommenterReferenceWorks
+								commenter={commenter}
+							/>
+
 						</section>
 
 						<CommentsRecent />

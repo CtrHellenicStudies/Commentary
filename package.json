@@ -43,6 +43,7 @@
     "react-slick": "^0.12.2",
     "react-tap-event-plugin": "^1.0.0",
     "slugify": "^1.0.2",
+    "spawn-sync": "^1.0.15",
     "throttle-debounce": "^1.0.1",
     "try-thread-sleep": "^1.0.0"
   },

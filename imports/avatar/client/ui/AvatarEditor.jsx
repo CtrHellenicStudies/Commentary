@@ -63,6 +63,7 @@ AvatarEditor.propTypes = {
 	defaultAvatarUrl: React.PropTypes.string.isRequired,
 	avatar: React.PropTypes.object,
 	avatarLoading: React.PropTypes.bool,
+	user: React.PropTypes.object,
 };
 
 AvatarEditor.defaultProps = {
@@ -73,10 +74,16 @@ AvatarEditor.defaultProps = {
 
 export default createContainer((props) => {
 	const myAvatarHandle = Meteor.subscribe('users.myAvatar');
+	let userAvatar = '';
+	if (props.user) {
+		userAvatar = props.user.avatar || {};
+	} else {
+		userAvatar = Meteor.user().avatar || {};
+	};
 
 	return {
 		defaultAvatarUrl: props.defaultAvatarUrl,
-		avatar: Meteor.user().avatar,
+		avatar: userAvatar,
 		avatarLoading: !myAvatarHandle.ready(),
 	};
 }, AvatarEditor);

@@ -13,22 +13,10 @@ function subscriptions() {
 	this.register('works', Meteor.subscribe('works'));
 	this.register('users', Meteor.subscribe('users'));
 	this.register('referenceWorks', Meteor.subscribe('referenceWorks'));
-	this.register('userData', Meteor.subscribe('userData'));
+	// this.register('userData', Meteor.subscribe('userData'));
 }
 
 FlowRouter.subscriptions = subscriptions;
-
-// FlowRouter.wait();
-
-// Tracker.autorun(function() {
-//		 // wait on roles to intialise so we can check is use is in proper role
-//		 debugger;
-//		 // console.log(Roles.subscription.ready());
-//		 // if (Roles.subscription.ready() && !FlowRouter._initialized) {
-//		 //		 FlowRouter.initialize()
-//		 // }
-// });
-
 
 /*
  * Route groups with permissions
@@ -57,27 +45,6 @@ loggedInGroup = FlowRouter.group({
 		},
 	],
 });
-
-// commenterGroup = loggedInGroup.group({
-//		 // triggersEnter: [
-//		 //		 function(context, redirect, stop) {
-//		 //				 if (Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
-//		 //						 route = FlowRouter.current();
-//		 //				 } else if (Meteor.userId()) {
-//		 //						 redirect('/');
-//		 //				 };
-//		 //		 }
-//		 // ],
-// });
-
-// Accounts.onLogin(function(user) {
-//		 console.log('Session', Session);
-//		 redirect = Session.get('redirectAfterLogin');
-//		 if(redirect){
-//				 FlowRouter.go(redirect);
-//		 };
-// });
-
 
 /*
  * Routes for application
@@ -201,6 +168,19 @@ loggedInGroup.route('/profile', {
 		});
 	},
 });
+
+publicGroup.route('/profile/:userId', {
+	subscriptions: function(params) {
+		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
+    },
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <PublicProfilePage
+				userId={params.userId}
+			/>,
+		});
+	},
+})
 
 loggedInGroup.route('/account', {
 	action: () => {

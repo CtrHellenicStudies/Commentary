@@ -30,7 +30,7 @@ DiscussionCommentsList = React.createClass({
      />);
 				})}
 				{!this.props.discussionComments.length ?
-					<p className="no-results">You haven't created any comments yet.</p>
+					<p className="no-results">No comments found.</p>
 					: ''
 				}
 

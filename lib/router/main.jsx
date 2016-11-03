@@ -146,7 +146,7 @@ publicGroup.route('/keyideas', {
 publicGroup.route('/referenceWorks/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
-			content: <ReferenceWorksDetail slug={params.slug} />,
+			content: <ReferenceWorkDetail slug={params.slug} />,
 		});
 	},
 });

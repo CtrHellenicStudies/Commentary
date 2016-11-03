@@ -23,7 +23,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 	},
 
 	authors: {
-		type: String,
+		type: [String],
 		optional: true,
 		autoform: {
 			options: function () {

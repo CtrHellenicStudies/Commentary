@@ -30,7 +30,7 @@ ReferenceWorkTeaser = React.createClass({
 
 	createMarkup() {
 		return {
-			__html: Utils.trunc(this.props.referenceWork.description, 100),
+			__html: Utils.trunc(this.props.referenceWork.description.replace(/(<([^>]+)>)/ig, ''), 120),
 		};
 	},
 

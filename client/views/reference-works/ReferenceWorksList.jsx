@@ -1,6 +1,10 @@
+import Masonry from 'react-masonry-component/lib';
+
+
 ReferenceWorksList = React.createClass({
 
 	propTypes: {
+		commenterId: React.PropTypes.string,
 	},
 
 	// This mixin makes the getMeteorData method referenceWork
@@ -10,6 +14,10 @@ ReferenceWorksList = React.createClass({
 	getMeteorData() {
 		const query = {
 		};
+
+		if (this.props.commenterId) {
+			query.authors = this.props.commenterId;
+		}
 
 		return {
 			referenceWorks: ReferenceWorks.find(query, { sort: { title: 1 } }).fetch(),
@@ -28,10 +36,18 @@ ReferenceWorksList = React.createClass({
 	},
 
 	render() {
+		const masonryOptions = {
+			isFitWidth : true,
+			transitionDuration: 300,
+		};
+
 		return (
-			<div className="reference-works-list">
+			<Masonry
+				options={masonryOptions}
+				className="reference-works-list"
+			>
 				{this.renderReferenceWorks()}
-			</div>
+			</Masonry>
 		);
 	},
 

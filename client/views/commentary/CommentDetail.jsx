@@ -54,6 +54,15 @@ CommentDetail = React.createClass({
 		};
 	},
 
+	componentDidUpdate() {
+		if (!('title' in this.state.selectedRevision)) {
+			this.setState({
+				selectedRevision: this.props.comment.revisions[this.state.selectedRevisionIndex],
+				// selectedRevisionIndex = this.props.comment.revisions.length - 1,
+			});
+		}
+	},
+
 	getRevisionDiff() {
 		// build the diff view and return a DOM node
 		const baseRevision = this.data.selectedRevision;
@@ -95,15 +104,6 @@ CommentDetail = React.createClass({
 			this.props.addSearchTerm(e);
 		} else {
 			// On home page, go to commentary with this filter selected.
-		}
-	},
-
-	componentDidUdate() {
-		if (!('title' in this.state.selectedRevision)) {
-			this.setState({
-				selectedRevision: this.props.comment.revisions[this.state.selectedRevisionIndex],
-				// selectedRevisionIndex = this.props.comment.revisions.length - 1,
-			});
 		}
 	},
 

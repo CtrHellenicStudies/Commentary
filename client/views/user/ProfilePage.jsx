@@ -106,13 +106,19 @@ ProfilePage = React.createClass({
 		const user = this.props.user;
 		const self = this;
 
-		this.setState({
-			[key]: this.refs[key].input.value,
-		});
+        let value = null;
+        if (key != 'biography') {
+            value = this.refs[key].input.value;
+        } else {
+            value = this.refs[key].input.refs.input.value;
+        }
+        this.setState({
+            [key]: value,
+        });
 
 		Meteor.call('updateAccount', {
 			name: self.refs.name.input.value || user.profile.name,
-			biography: self.refs.biography.input.value || user.profile.biography,
+			biography: self.refs.biography.input.refs.input.value || user.profile.biography,
 			academiaEdu: self.refs.academiaEdu.input.value || user.profile.academiaEdu,
 			twitter: self.refs.twitter.input.value || user.profile.twitter,
 			facebook: self.refs.facebook.input.value || user.profile.facebook,

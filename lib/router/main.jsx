@@ -13,7 +13,7 @@ function subscriptions() {
 	this.register('works', Meteor.subscribe('works'));
 	this.register('users', Meteor.subscribe('users'));
 	this.register('referenceWorks', Meteor.subscribe('referenceWorks'));
-	// this.register('userData', Meteor.subscribe('userData'));
+	this.register('userData', Meteor.subscribe('userData'));
 }
 
 FlowRouter.subscriptions = subscriptions;
@@ -24,7 +24,7 @@ FlowRouter.subscriptions = subscriptions;
 publicGroup = FlowRouter.group({
 	triggersEnter: [
 		(context, redirect) => {
-			if (context.path !== '/sign-in') {
+			if (context.path != '/sign-in' && context.path != '/logging-hook') {
 				Session.set('redirectAfterLogin', context.path);
 			}
 		},
@@ -37,7 +37,7 @@ loggedInGroup = FlowRouter.group({
 			if (Meteor.loggingIn() || Meteor.userId()) {
 				route = FlowRouter.current();
 			} else {
-				if (context.path !== '/sign-in') {
+				if (context.path != '/sign-in' && context.path != '/logging-hook') {
 					Session.set('redirectAfterLogin', context.path);
 				}
 				redirect('/sign-in');
@@ -50,19 +50,23 @@ loggedInGroup = FlowRouter.group({
  * Routes for application
  */
 
-loggedInGroup.route('/loggedin', {
-	name: 'loggedin',
-	triggersEnter: [
-		(context, redirect) => {
-			const redirectAfterLoginPath = Session.get('redirectAfterLogin');
-			if (redirectAfterLoginPath) {
-				redirect(redirectAfterLoginPath);
-				Session.set('redirectAfterLogin', undefined);
-			} else {
-				redirect('home');
-			}
-		},
-	],
+publicGroup.route('/logging-hook', {
+    name: 'logging-hook',
+    triggersEnter: [
+        (context, redirect) => {
+            if (Meteor.loggingIn() || Meteor.userId()) {
+                const redirectAfterLoginPath = Session.get('redirectAfterLogin');
+                if (redirectAfterLoginPath) {
+                    redirect(redirectAfterLoginPath);
+                    Session.set('redirectAfterLogin', '/');
+                } else {
+                    redirect('home');
+                };
+            } else {
+            	redirect('home');
+            };
+        },
+    ],
 });
 
 publicGroup.route('/', {
@@ -190,11 +194,11 @@ loggedInGroup.route('/account', {
 	},
 });
 
-publicGroup.route('/sign-out', {
+loggedInGroup.route('/sign-out', {
 	triggersEnter: [
 		(context, redirect) => {
 			AccountsTemplates.logout();
-			redirect('/');
+			// redirect('/');
 		},
 	],
 	action: () => {

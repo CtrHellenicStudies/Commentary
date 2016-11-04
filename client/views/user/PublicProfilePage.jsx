@@ -49,6 +49,7 @@ PublicProfilePage = React.createClass({
       discussionComments = DiscussionComments.find({
         'user._id': this.props.userId,
       }).fetch();
+      console.log('discussionComments', discussionComments);
 
       discussionComments.forEach(function(discussionComment) {
         const commentHandle = Meteor.subscribe('comments', {

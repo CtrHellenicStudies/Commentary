@@ -1,7 +1,5 @@
 import React from 'react';
 import { mount } from 'react-mounter';
-import { Session } from 'meteor/session';
-
 /*
  * For the moment add subscriptions here; in future iterations, make them route
  * specific as necessary
@@ -21,75 +19,31 @@ FlowRouter.subscriptions = subscriptions;
 /*
  * Route groups with permissions
  */
-publicGroup = FlowRouter.group({
-	triggersEnter: [
-		(context, redirect) => {
-			if (context.path != '/sign-in' && context.path != '/logging-hook') {
-				Session.set('redirectAfterLogin', context.path);
-			}
-		},
-	],
-});
-
 loggedInGroup = FlowRouter.group({
-	triggersEnter: [
-		(context, redirect, stop) => {
-			if (Meteor.loggingIn() || Meteor.userId()) {
-				route = FlowRouter.current();
-			} else {
-				if (context.path != '/sign-in' && context.path != '/logging-hook') {
-					Session.set('redirectAfterLogin', context.path);
-				}
-				redirect('/sign-in');
-			}
-		},
-	],
+	triggersEnter: [AccountsTemplates.ensureSignedIn],
 });
 
-/*
- * Routes for application
- */
-
-publicGroup.route('/logging-hook', {
-    name: 'logging-hook',
-    triggersEnter: [
-        (context, redirect) => {
-            if (Meteor.loggingIn() || Meteor.userId()) {
-                const redirectAfterLoginPath = Session.get('redirectAfterLogin');
-                if (redirectAfterLoginPath) {
-                    redirect(redirectAfterLoginPath);
-                    Session.set('redirectAfterLogin', '/');
-                } else {
-                    redirect('home');
-                };
-            } else {
-            	redirect('home');
-            };
-        },
-    ],
-});
-
-publicGroup.route('/', {
+FlowRouter.route('/', {
 	name: 'home',
 	action: () => {
 		mount(HomeLayout);
 	},
 });
 
-publicGroup.route('/commentary', {
+FlowRouter.route('/commentary', {
 	name: 'commentary',
 	action: (params, queryParams) => {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
 
-publicGroup.route('/commentary/', {
+FlowRouter.route('/commentary/', {
 	action: (params, queryParams) => {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
 
-publicGroup.route('/keywords/:slug', {
+FlowRouter.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <KeywordDetail slug={params.slug} />,
@@ -97,7 +51,7 @@ publicGroup.route('/keywords/:slug', {
 	},
 });
 
-publicGroup.route('/keywords', {
+FlowRouter.route('/keywords', {
 	name: 'keywords',
 	action: () => {
 		mount(MasterLayout, {
@@ -106,7 +60,7 @@ publicGroup.route('/keywords', {
 	},
 });
 
-publicGroup.route('/keyideas', {
+FlowRouter.route('/keyideas', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <KeywordsPage type="idea" title="Key Ideas" />,
@@ -114,7 +68,7 @@ publicGroup.route('/keyideas', {
 	},
 });
 
-publicGroup.route('/commenters/:slug', {
+FlowRouter.route('/commenters/:slug', {
 	name: 'CommentersDetail',
 	action: (params) => {
 		mount(MasterLayout, {
@@ -126,7 +80,7 @@ publicGroup.route('/commenters/:slug', {
 	},
 });
 
-publicGroup.route('/commenters', {
+FlowRouter.route('/commenters', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <CommentersPage />,
@@ -134,7 +88,7 @@ publicGroup.route('/commenters', {
 	},
 });
 
-publicGroup.route('/about', {
+FlowRouter.route('/about', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <AboutPage />,
@@ -143,7 +97,7 @@ publicGroup.route('/about', {
 });
 
 
-publicGroup.route('/terms', {
+FlowRouter.route('/terms', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <TermsPage />,
@@ -173,16 +127,17 @@ loggedInGroup.route('/profile', {
 	},
 });
 
-publicGroup.route('/users/:userId', {
-	subscriptions: function(params) {
+FlowRouter.route('/users/:userId', {
+	subscriptions(params) {
 		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
-		this.register('userDiscussionComments'), Meteor.subscribe('userDiscussionComments', params.userId);
-    },
-    triggersEnter: [
-		(context, redirect, stop) => {
+		this.register('userDiscussionComments',
+			Meteor.subscribe('userDiscussionComments', params.userId));
+	},
+	triggersEnter: [
+		(context, redirect) => {
 			if (Meteor.userId() && Meteor.userId() === context.params.userId) {
 				redirect('/profile');
-			};
+			}
 		},
 	],
 	action: (params) => {
@@ -194,16 +149,17 @@ publicGroup.route('/users/:userId', {
 	},
 });
 
-publicGroup.route('/users/:userId/:username', {
-	subscriptions: function(params) {
+FlowRouter.route('/users/:userId/:username', {
+	subscriptions(params) {
 		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
-		this.register('userDiscussionComments'), Meteor.subscribe('userDiscussionComments', params.userId);
-    },
-    triggersEnter: [
-		(context, redirect, stop) => {
+		this.register('userDiscussionComments',
+			Meteor.subscribe('userDiscussionComments', params.userId));
+	},
+	triggersEnter: [
+		(context, redirect) => {
 			if (Meteor.userId() && Meteor.userId() === context.params.userId) {
 				redirect('/profile');
-			};
+			}
 		},
 	],
 	action: (params) => {
@@ -225,9 +181,8 @@ loggedInGroup.route('/account', {
 
 loggedInGroup.route('/sign-out', {
 	triggersEnter: [
-		(context, redirect) => {
+		() => {
 			AccountsTemplates.logout();
-			// redirect('/');
 		},
 	],
 	action: () => {
@@ -240,7 +195,7 @@ loggedInGroup.route('/sign-out', {
 * Single page view
 * 404 check is in the actual template
 */
-publicGroup.route('/:slug', {
+FlowRouter.route('/:slug', {
 	action(params) {
 		// console.log(params);
 		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];

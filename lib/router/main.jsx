@@ -178,6 +178,13 @@ publicGroup.route('/users/:userId', {
 		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
 		this.register('userDiscussionComments'), Meteor.subscribe('userDiscussionComments', params.userId);
     },
+    triggersEnter: [
+		(context, redirect, stop) => {
+			if (Meteor.userId() && Meteor.userId() === context.params.userId) {
+				redirect('/profile');
+			};
+		},
+	],
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <PublicProfilePage
@@ -192,6 +199,13 @@ publicGroup.route('/users/:userId/:username', {
 		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
 		this.register('userDiscussionComments'), Meteor.subscribe('userDiscussionComments', params.userId);
     },
+    triggersEnter: [
+		(context, redirect, stop) => {
+			if (Meteor.userId() && Meteor.userId() === context.params.userId) {
+				redirect('/profile');
+			};
+		},
+	],
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <PublicProfilePage

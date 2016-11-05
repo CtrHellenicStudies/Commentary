@@ -31,6 +31,8 @@ ProfilePage = React.createClass({
 			twitter: '',
 			facebook: '',
 			google: '',
+
+			usernameError: '',
 		};
 	},
 
@@ -100,14 +102,24 @@ ProfilePage = React.createClass({
 	handleChangeText(key) {
 		const user = this.props.user;
 		const self = this;
+		if (key === 'username') {
+			console.log(/^[a-z0-9A-Z_]{3,15}$/.test(value = this.refs[key].input.value));
+		};
 
-		this.setState({
-			[key]: this.refs[key].input.value,
-		});
+        let value = null;
+        if (key != 'biography') {
+            value = this.refs[key].input.value;
+        } else {
+            value = this.refs[key].input.refs.input.value;
+        }
+        this.setState({
+            [key]: value,
+        });
 
 		Meteor.call('updateAccount', {
+			username: self.refs.username.input.value || user.username,
 			name: self.refs.name.input.value || user.profile.name,
-			biography: self.refs.biography.input.value || user.profile.biography,
+			biography: self.refs.biography.input.refs.input.value || user.profile.biography,
 			academiaEdu: self.refs.academiaEdu.input.value || user.profile.academiaEdu,
 			twitter: self.refs.twitter.input.value || user.profile.twitter,
 			facebook: self.refs.facebook.input.value || user.profile.facebook,
@@ -118,6 +130,20 @@ ProfilePage = React.createClass({
 				console.error(err);
 			}
 		});
+	},
+
+	handleUsernameChange () {
+		var key = 'username'
+		if (/^[a-z0-9A-Z_]{3,15}$/.test(value = this.refs[key].input.value)) {
+			this.setState({
+				usernameError: '',
+			});
+			this.handleChangeText.bind(null, key);
+		} else {
+			this.setState({
+				usernameError: 'Username has following the requirements: only letters and numbers are aloud, no whitespaces, min. length: 3, max. length: 15',
+			});
+		};	
 	},
 
 	render() {
@@ -167,6 +193,16 @@ ProfilePage = React.createClass({
 								<br />
 
 								<div className="user-profile-textfields">
+
+									<TextField
+										ref="username"
+										fullWidth
+										floatingLabelText="Username"
+										defaultValue={currentUser.username}
+										onChange={debounce(1500, this.handleUsernameChange)}
+										errorText={this.state.usernameError}
+									/>
+									<br />
 
 									<TextField
 										ref="name"

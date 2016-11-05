@@ -1,7 +1,5 @@
 import React from 'react';
 import { mount } from 'react-mounter';
-import { Session } from 'meteor/session';
-
 /*
  * For the moment add subscriptions here; in future iterations, make them route
  * specific as necessary
@@ -18,107 +16,34 @@ function subscriptions() {
 
 FlowRouter.subscriptions = subscriptions;
 
-// FlowRouter.wait();
-
-// Tracker.autorun(function() {
-//		 // wait on roles to intialise so we can check is use is in proper role
-//		 debugger;
-//		 // console.log(Roles.subscription.ready());
-//		 // if (Roles.subscription.ready() && !FlowRouter._initialized) {
-//		 //		 FlowRouter.initialize()
-//		 // }
-// });
-
-
 /*
  * Route groups with permissions
  */
-publicGroup = FlowRouter.group({
-	triggersEnter: [
-		(context, redirect) => {
-			if (context.path !== '/sign-in') {
-				Session.set('redirectAfterLogin', context.path);
-			}
-		},
-	],
-});
-
 loggedInGroup = FlowRouter.group({
-	triggersEnter: [
-		(context, redirect, stop) => {
-			if (Meteor.loggingIn() || Meteor.userId()) {
-				route = FlowRouter.current();
-			} else {
-				if (context.path !== '/sign-in') {
-					Session.set('redirectAfterLogin', context.path);
-				}
-				redirect('/sign-in');
-			}
-		},
-	],
+	triggersEnter: [AccountsTemplates.ensureSignedIn],
 });
 
-// commenterGroup = loggedInGroup.group({
-//		 // triggersEnter: [
-//		 //		 function(context, redirect, stop) {
-//		 //				 if (Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
-//		 //						 route = FlowRouter.current();
-//		 //				 } else if (Meteor.userId()) {
-//		 //						 redirect('/');
-//		 //				 };
-//		 //		 }
-//		 // ],
-// });
-
-// Accounts.onLogin(function(user) {
-//		 console.log('Session', Session);
-//		 redirect = Session.get('redirectAfterLogin');
-//		 if(redirect){
-//				 FlowRouter.go(redirect);
-//		 };
-// });
-
-
-/*
- * Routes for application
- */
-
-loggedInGroup.route('/loggedin', {
-	name: 'loggedin',
-	triggersEnter: [
-		(context, redirect) => {
-			const redirectAfterLoginPath = Session.get('redirectAfterLogin');
-			if (redirectAfterLoginPath) {
-				redirect(redirectAfterLoginPath);
-				Session.set('redirectAfterLogin', undefined);
-			} else {
-				redirect('home');
-			}
-		},
-	],
-});
-
-publicGroup.route('/', {
+FlowRouter.route('/', {
 	name: 'home',
 	action: () => {
 		mount(HomeLayout);
 	},
 });
 
-publicGroup.route('/commentary', {
+FlowRouter.route('/commentary', {
 	name: 'commentary',
 	action: (params, queryParams) => {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
 
-publicGroup.route('/commentary/', {
+FlowRouter.route('/commentary/', {
 	action: (params, queryParams) => {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
 
-publicGroup.route('/keywords/:slug', {
+FlowRouter.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <KeywordDetail slug={params.slug} />,
@@ -126,7 +51,7 @@ publicGroup.route('/keywords/:slug', {
 	},
 });
 
-publicGroup.route('/keywords', {
+FlowRouter.route('/keywords', {
 	name: 'keywords',
 	action: () => {
 		mount(MasterLayout, {
@@ -135,7 +60,7 @@ publicGroup.route('/keywords', {
 	},
 });
 
-publicGroup.route('/keyideas', {
+FlowRouter.route('/keyideas', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <KeywordsPage type="idea" title="Key Ideas" />,
@@ -143,6 +68,7 @@ publicGroup.route('/keyideas', {
 	},
 });
 
+<<<<<<< HEAD
 publicGroup.route('/referenceWorks/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
@@ -161,6 +87,9 @@ publicGroup.route('/referenceWorks', {
 });
 
 publicGroup.route('/commenters/:slug', {
+=======
+FlowRouter.route('/commenters/:slug', {
+>>>>>>> feature/public-user-account
 	name: 'CommentersDetail',
 	action: (params) => {
 		mount(MasterLayout, {
@@ -172,7 +101,7 @@ publicGroup.route('/commenters/:slug', {
 	},
 });
 
-publicGroup.route('/commenters', {
+FlowRouter.route('/commenters', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <CommentersPage />,
@@ -180,7 +109,7 @@ publicGroup.route('/commenters', {
 	},
 });
 
-publicGroup.route('/about', {
+FlowRouter.route('/about', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <AboutPage />,
@@ -189,7 +118,7 @@ publicGroup.route('/about', {
 });
 
 
-publicGroup.route('/terms', {
+FlowRouter.route('/terms', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <TermsPage />,
@@ -219,11 +148,66 @@ loggedInGroup.route('/profile', {
 	},
 });
 
+<<<<<<< HEAD
 publicGroup.route('/sign-out', {
+=======
+FlowRouter.route('/users/:userId', {
+	subscriptions(params) {
+		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
+		this.register('userDiscussionComments',
+			Meteor.subscribe('userDiscussionComments', params.userId));
+	},
 	triggersEnter: [
 		(context, redirect) => {
+			if (Meteor.userId() && Meteor.userId() === context.params.userId) {
+				redirect('/profile');
+			}
+		},
+	],
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <PublicProfilePage
+				userId={params.userId}
+			/>,
+		});
+	},
+});
+
+FlowRouter.route('/users/:userId/:username', {
+	subscriptions(params) {
+		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
+		this.register('userDiscussionComments',
+			Meteor.subscribe('userDiscussionComments', params.userId));
+	},
+	triggersEnter: [
+		(context, redirect) => {
+			if (Meteor.userId() && Meteor.userId() === context.params.userId) {
+				redirect('/profile');
+			}
+		},
+	],
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <PublicProfilePage
+				userId={params.userId}
+			/>,
+		});
+	},
+});
+
+loggedInGroup.route('/account', {
+	action: () => {
+		mount(UserLayout, {
+			content: < AccountPage / >,
+		});
+	},
+});
+
+loggedInGroup.route('/sign-out', {
+>>>>>>> feature/public-user-account
+	triggersEnter: [
+		() => {
 			AccountsTemplates.logout();
-			redirect('/');
 		},
 	],
 	action: () => {
@@ -236,7 +220,7 @@ publicGroup.route('/sign-out', {
 * Single page view
 * 404 check is in the actual template
 */
-publicGroup.route('/:slug', {
+FlowRouter.route('/:slug', {
 	action(params) {
 		// console.log(params);
 		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];

@@ -58,6 +58,24 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('userDiscussionComments', (userId, sortMethod = 'votes') => {
+		check(userId, String);
+		let sort = { votes: -1, updated: -1 };
+
+		if (sortMethod === 'recent') {
+			sort = {
+				updated: -1,
+				votes: -1,
+			};
+		}
+
+		return DiscussionComments.find({
+			'user._id': userId,
+		}, {
+			sort,
+		});
+	});
+
 	Meteor.publish('keywords', () =>
 		Keywords.find({}, {
 			sort: {
@@ -114,4 +132,17 @@ if (Meteor.isServer) {
 		}
 		return Pages.find(query);
 	});
+
+    Meteor.publish('allUsers', (userId) => {
+    	check(userId, String);
+        return Meteor.users.find({
+            _id: userId
+        }, {
+            fields: {
+            	username: 1,
+            	avatar: 1,
+                profile: 1
+            }
+        });
+    });
 }

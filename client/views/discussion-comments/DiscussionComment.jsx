@@ -42,7 +42,7 @@ DiscussionComment = React.createClass({
 	},
 
 	upvoteDiscussionComment() {
-		if (typeof this.props.currentUser !== 'undefined') {
+		if (typeof this.props.currentUser !== 'undefined' || 'null') {
 			Meteor.call('discussionComments.upvote',
 				this.props.discussionComment._id
 			);
@@ -53,19 +53,27 @@ DiscussionComment = React.createClass({
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
 		const discussionComment = this.props.discussionComment;
+		let userLink = '';
+		if (discussionComment.user.username) {
+			userLink = '/users/' + discussionComment.user._id + '/' + discussionComment.user.username;
+		} else {
+			userLink = '/users/' + discussionComment.user._id;
+		}
 		discussionComment.children = [];
 		let userUpvoted = false;
 		let username = '';
 
-		if (
+		if (discussionComment.user.username) {
+			username = discussionComment.user.username;
+		} else if (
 			'emails' in discussionComment.user
 			&& discussionComment.user.emails.length
 		) {
 			username = discussionComment.user.emails[0].address.split('@')[0];
-		}
+		};
 
 		if (
-				typeof this.props.currentUser !== 'undefined'
+				typeof this.props.currentUser !== 'undefined' || 'null'
 			&& discussionComment.voters.indexOf(this.props.currentUser._id) >= 0
 		) {
 			userUpvoted = true;
@@ -79,13 +87,17 @@ DiscussionComment = React.createClass({
 			>
 
 				<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
-					<img src="/images/default_user.jpg" alt={username} />
+					<a href={userLink}>
+						<img src={discussionComment.user.avatar ? discussionComment.user.avatar.url : '/images/default_user.jpg'} alt={username} />
+					</a>
 				</div>
 
 				<div className="discussion-commenter-meta">
-					<span className="discussion-commenter-name">
-						{username}
-					</span>
+					<a href={userLink}>
+						<span className="discussion-commenter-name">
+							{username}
+						</span>
+					</a>
 					<span className="discussion-comment-date">
 						<span >Updated: </span>
 						{moment(discussionComment.updated).format('D MMMM YYYY')

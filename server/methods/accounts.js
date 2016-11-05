@@ -18,6 +18,7 @@ Meteor.methods({
 
 		}, {
 			$set: {
+				'username': accountData.username,
 				'profile.name': accountData.name,
 				'profile.biography': accountData.biography,
 				'profile.academiaEdu': accountData.academiaEdu,

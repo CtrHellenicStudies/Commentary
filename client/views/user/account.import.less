@@ -205,6 +205,10 @@
 
 	}
 
+	span {
+		display: initial !important;
+	}
+
   // Intentionally nested here because this is a special use-case for discussion comments
   // appearing only user profiles
   .user-discussion-comment {
@@ -284,4 +288,46 @@
  input {
    margin-left:10px;
  }
+}
+
+.public-profile-link {
+	h3 {
+		font-family: 'Proxima N W01 At Smbd';
+	    font-size: 18px;
+	    text-transform: uppercase;
+	    margin: 20px 0 0 0 !important;
+	    padding-right: 12px;
+	    color: #795548;
+	}
+	a {
+		font-weight: lighter;
+	    font-family: 'ProximaNW01-AltLightReg';
+	    font-size: 18px;
+		border-bottom: 2px solid #795548;
+
+		&:hover {
+			border-bottom: 2px solid #ffffff;
+		}
+	}
+}
+
+.public-profile-biography {
+	p {
+	    font-family: 'Merriweather', serif;
+	    line-height: 1.7em;
+	    word-wrap: break-word;
+	    font-weight: 300;
+	    font-size: 18px;
+	    color: #727272;
+	    margin: 0 !important;
+	}
+}
+
+.public-profile-name {
+	h2 {
+		margin-bottom: 20px;
+	    font-family: 'Proxima N W01 At Smbd';
+	    font-size: 28px;
+	    color: rgba(0, 0, 0, 1);
+	}
 }

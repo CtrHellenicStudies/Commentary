@@ -189,11 +189,6 @@ CommentDetail = React.createClass({
 		});
 	},
 
-
-	handleEditCommentClick(id) {
-		FlowRouter.go(`/add-revision/${id}`);
-	},
-
 	togglePersistentIdentifierModal(e) {
 		const $target = $(e.target);
 		this.setState({
@@ -293,7 +288,7 @@ CommentDetail = React.createClass({
 										{userCommenterId === commenter._id ?
 											<FlatButton
 												label="Edit comment"
-												onClick={self.handleEditCommentClick.bind(null, comment._id)}
+												href={`/add-revision/${comment._id}`}
 												icon={<FontIcon className="mdi mdi-pen" />}
 											/>
 											:

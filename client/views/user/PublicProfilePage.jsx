@@ -41,31 +41,18 @@ PublicProfilePage = React.createClass({
 
     let discussionComments = [];
 
-    const handle = Meteor.subscribe('userDiscussionComments',
-      this.props.userId
-    );
+    discussionComments = DiscussionComments.find({
+      'user._id': this.props.userId,
+    }).fetch();
 
-    if (handle.ready()) {
-      discussionComments = DiscussionComments.find({
-        'user._id': this.props.userId,
-      }).fetch();
-      console.log('discussionComments', discussionComments);
-
-      discussionComments.forEach(function(discussionComment) {
-        const commentHandle = Meteor.subscribe('comments', {
-          _id: discussionComment.commentId
-        }, 0, 1);
-        if (commentHandle.ready()) {
-          const comments = Comments.find().fetch();
-          if (comments.length) {
-            discussionComment.comment = comments[0];
-          } else {
-            discussionComment.comment = {
-              work: '',
-              subwork: '',
-              discussionComments: []
-            };
-          }
+    discussionComments.forEach(function(discussionComment) {
+      const commentHandle = Meteor.subscribe('comments', {
+        _id: discussionComment.commentId
+      }, 0, 1);
+      if (commentHandle.ready()) {
+        const comments = Comments.find().fetch();
+        if (comments.length) {
+          discussionComment.comment = comments[0];
         } else {
           discussionComment.comment = {
             work: '',
@@ -73,16 +60,33 @@ PublicProfilePage = React.createClass({
             discussionComments: []
           };
         }
+      } else {
+        discussionComment.comment = {
+          work: '',
+          subwork: '',
+          discussionComments: []
+        };
+      }
 
-        discussionComment.otherCommentsCount = DiscussionComments.find({
-          commentId: discussionComment.commentId
-        }).count();
-      });
-    }
+      discussionComment.otherCommentsCount = DiscussionComments.find({
+        commentId: discussionComment.commentId
+      }).count();
+    });
+
+    if (user) {
+      this.checkUsername(user);
+    };
 
     return {
       user,
       discussionComments,
+    };
+  },
+
+  checkUsername(user) {
+    if (user.username != FlowRouter.getParam("username")) {
+      const route = '/users/' + FlowRouter.getParam("userId");
+      FlowRouter.go(route);
     };
   },
 

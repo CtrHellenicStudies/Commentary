@@ -30,7 +30,6 @@ DiscussionThread = React.createClass({
 		}
 
 		return {
-			currentUser: Meteor.users.findOne({ _id: Meteor.userId() }),
 			discussionComments,
 			loaded,
 		};
@@ -57,7 +56,7 @@ DiscussionThread = React.createClass({
 
 	render() {
 		const self = this;
-		const userIsLoggedIn = Meteor.user();
+		const currentUser = Meteor.user();
 
 		let discussionWrapClass = 'discussion-wrap';
 
@@ -66,7 +65,7 @@ DiscussionThread = React.createClass({
 		}
 
 		let textareaPlaceholder = '';
-		if (userIsLoggedIn) {
+		if (currentUser) {
 			textareaPlaceholder = 'Enter your comment here . . .';
 		} else {
 			textareaPlaceholder = 'Please login to enter a comment.';
@@ -111,7 +110,7 @@ DiscussionThread = React.createClass({
 								<div className="add-comment-row-1" >
 									<div className="profile-picture paper-shadow">
 										<img
-											src="/images/default_user.jpg"
+											src={currentUser && currentUser.avatar ? currentUser.avatar.url : '/images/default_user.jpg'}
 											alt="Commentary User"
 										/>
 									</div>
@@ -125,7 +124,7 @@ DiscussionThread = React.createClass({
 									<div className="error-message">
 										<span className="error-message-text">Please enter your text to submit.</span>
 									</div>
-									{ userIsLoggedIn ?
+									{ currentUser ?
 										<RaisedButton
 											label="Submit"
 											className="submit-comment-button paper-shadow"
@@ -178,7 +177,7 @@ DiscussionThread = React.createClass({
 								key={i}
 								className="discussion-comment paper-shadow"
 								discussionComment={discussionComment}
-								currentUser={self.data.currentUser}
+								currentUser={currentUser}
 							/>
 						)}
 					</div>

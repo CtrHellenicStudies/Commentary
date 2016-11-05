@@ -28,8 +28,7 @@ Comment = React.createClass({
 		} else {
 			selectedRevisionIndex = this.props.comment.revisions.length - 1;
 		};
-		console.log('selectedRevisionIndex', selectedRevisionIndex);
-
+		
 		return {
 			selectedRevisionIndex: selectedRevisionIndex,
 			discussionVisible: false,

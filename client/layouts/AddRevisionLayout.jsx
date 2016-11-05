@@ -294,10 +294,10 @@ AddRevisionLayout = React.createClass({
 	},
 
 
-    										ifReady() {
-        									let ready = Roles.subscription.ready();
-        										ready = ready && Object.keys(this.data.comment).length;
-        										return ready;
+    ifReady() {
+        let ready = Roles.subscription.ready();
+        ready = ready && Object.keys(this.data.comment).length;
+        return ready;
     },
 
     										render() {

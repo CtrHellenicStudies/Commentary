@@ -42,7 +42,7 @@ DiscussionComment = React.createClass({
 	},
 
 	upvoteDiscussionComment() {
-		if (typeof this.props.currentUser !== 'undefined') {
+		if (typeof this.props.currentUser !== 'undefined' || 'null') {
 			Meteor.call('discussionComments.upvote',
 				this.props.discussionComment._id
 			);
@@ -65,7 +65,7 @@ DiscussionComment = React.createClass({
 		}
 
 		if (
-				typeof this.props.currentUser !== 'undefined'
+				typeof this.props.currentUser !== 'undefined' || 'null'
 			&& discussionComment.voters.indexOf(this.props.currentUser._id) >= 0
 		) {
 			userUpvoted = true;
@@ -79,7 +79,7 @@ DiscussionComment = React.createClass({
 			>
 
 				<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
-					<img src="/images/default_user.jpg" alt={username} />
+					<img src={discussionComment.user.avatar ? discussionComment.user.avatar.url : '/images/default_user.jpg'} alt={username} />
 				</div>
 
 				<div className="discussion-commenter-meta">

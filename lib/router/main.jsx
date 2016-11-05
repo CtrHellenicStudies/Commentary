@@ -173,9 +173,10 @@ loggedInGroup.route('/profile', {
 	},
 });
 
-publicGroup.route('/profile/:userId', {
+publicGroup.route('/users/:userId', {
 	subscriptions: function(params) {
 		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
+		this.register('userDiscussionComments'), Meteor.subscribe('userDiscussionComments', params.userId);
     },
 	action: (params) => {
 		mount(MasterLayout, {
@@ -184,7 +185,21 @@ publicGroup.route('/profile/:userId', {
 			/>,
 		});
 	},
-})
+});
+
+publicGroup.route('/users/:userId/:username', {
+	subscriptions: function(params) {
+		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
+		this.register('userDiscussionComments'), Meteor.subscribe('userDiscussionComments', params.userId);
+    },
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <PublicProfilePage
+				userId={params.userId}
+			/>,
+		});
+	},
+});
 
 loggedInGroup.route('/account', {
 	action: () => {

@@ -143,6 +143,7 @@ if (Meteor.isServer) {
             _id: userId
         }, {
             fields: {
+            	username: 1,
             	avatar: 1,
                 profile: 1
             }

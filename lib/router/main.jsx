@@ -68,8 +68,7 @@ FlowRouter.route('/keyideas', {
 	},
 });
 
-<<<<<<< HEAD
-publicGroup.route('/referenceWorks/:slug', {
+FlowRouter.route('/referenceWorks/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <ReferenceWorkDetail slug={params.slug} />,
@@ -77,7 +76,7 @@ publicGroup.route('/referenceWorks/:slug', {
 	},
 });
 
-publicGroup.route('/referenceWorks', {
+FlowRouter.route('/referenceWorks', {
 	name: 'referenceWorks',
 	action: () => {
 		mount(MasterLayout, {
@@ -86,10 +85,7 @@ publicGroup.route('/referenceWorks', {
 	},
 });
 
-publicGroup.route('/commenters/:slug', {
-=======
 FlowRouter.route('/commenters/:slug', {
->>>>>>> feature/public-user-account
 	name: 'CommentersDetail',
 	action: (params) => {
 		mount(MasterLayout, {
@@ -148,9 +144,6 @@ loggedInGroup.route('/profile', {
 	},
 });
 
-<<<<<<< HEAD
-publicGroup.route('/sign-out', {
-=======
 FlowRouter.route('/users/:userId', {
 	subscriptions(params) {
 		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
@@ -204,7 +197,6 @@ loggedInGroup.route('/account', {
 });
 
 loggedInGroup.route('/sign-out', {
->>>>>>> feature/public-user-account
 	triggersEnter: [
 		() => {
 			AccountsTemplates.logout();

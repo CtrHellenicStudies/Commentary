@@ -27,26 +27,28 @@ const AvatarFilter = new UploadFS.Filter({
 	extensions: [ 'jpg', 'jpeg' , 'png', 'gif' ],
 });
 
-export const AvatarStore = new UploadFS.store.Local({
+const AvatarPermissions = new UploadFS.StorePermissions({
+	insert: checkAvatarPermissions,
+	remove: checkAvatarPermissions,
+	update: checkAvatarPermissions,
+});
+
+function transformAvatar(from, to, fileId, file) {
+	let p = gm(from);
+	p.resize(230, 230)
+		.gravity('Center')
+		.extent(230, 230)
+		.quality(100);
+	p.stream().pipe(to);
+}
+
+export const AvatarStore = new UploadFS.store.GridFS({
 	collection: Avatars,
 	name: 'avatars',
-	path: '../../../var/avatars',
+	chunkSize: 1024 * 64,
 	filter: AvatarFilter,
-	permissions: new UploadFS.StorePermissions({
-		insert: checkAvatarPermissions,
-		remove: checkAvatarPermissions,
-		update: checkAvatarPermissions,
-	}),
-
-
-	transformWrite: function(from, to, fileId, file) {
-		let p = gm(from);
-		p.resize(230, 230)
-			.gravity('Center')
-			.extent(230, 230)
-			.quality(100);
-		p.stream().pipe(to);
-	}
+	permissions: AvatarPermissions,
+	transformWrite: transformAvatar
 });
 
 function finishUserAvatarUpload(avatar) {

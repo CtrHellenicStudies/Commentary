@@ -28,11 +28,6 @@ Schemas.Revisions = new SimpleSchema({
 	created: {
 		type: Date,
 		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date;
-			}
-		},
 		autoform: {
 			type: 'hidden',
 			label: false,

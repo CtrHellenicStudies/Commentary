@@ -29,7 +29,6 @@ CommentDetail = React.createClass({
 		} else {
 			selectedRevisionIndex = this.props.comment.revisions.length - 1;
 		}
-		console.log('selectedRevisionIndex', selectedRevisionIndex);
 
 		return {
 			selectedRevisionIndex,
@@ -55,9 +54,9 @@ CommentDetail = React.createClass({
 	},
 
 	componentDidUpdate() {
-		if (!('title' in this.state.selectedRevision)) {
+		if (!('title' in this.data.selectedRevision)) {
 			this.setState({
-				selectedRevision: this.props.comment.revisions[this.state.selectedRevisionIndex],
+				selectedRevision: this.props.comment.revisions[this.data.selectedRevisionIndex],
 				// selectedRevisionIndex = this.props.comment.revisions.length - 1,
 			});
 		}
@@ -210,10 +209,11 @@ CommentDetail = React.createClass({
 		const selectedRevision = this.data.selectedRevision;
 		const selectedRevisionIndex = this.state.selectedRevisionIndex;
 		let commentClass = 'comment-outer has-discussion ';
-		let userCommenterId = 'no commenter';
-		if (Meteor.userId()) {
+		let userCommenterId = [];
+		if (Meteor.user()) {
 			userCommenterId = Meteor.user().commenterId;
 		}
+		console.log('userCommenterId', userCommenterId);
 
 
 		if (self.state.discussionVisible) {
@@ -285,7 +285,7 @@ CommentDetail = React.createClass({
 										key={i}
 										className="comment-author"
 									>
-										{userCommenterId === commenter._id ?
+										{userCommenterId.indexOf(commenter._id) > -1 ?
 											<FlatButton
 												label="Edit comment"
 												href={`/add-revision/${comment._id}`}

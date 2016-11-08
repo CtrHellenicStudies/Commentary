@@ -1,4 +1,3 @@
-
 CommenterWorkCircle = React.createClass({
 
 	propTypes: {
@@ -18,7 +17,7 @@ CommenterWorkCircle = React.createClass({
 				>
 					<span className="work-title">{this.props.workTitle}</span>
 					<span className="work-count">{this.props.nComments}</span>
-					<div className="grow-border" />
+					<div className="grow-border"/>
 				</div>
 			</div>
 		);

@@ -1,10 +1,8 @@
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import InfiniteScroll from '../../../imports/InfiniteScroll';
-import { Avatars } from '/imports/avatar/avatar_collections.js';
+import FlatButton from "material-ui/FlatButton";
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import InfiniteScroll from "../../../imports/InfiniteScroll";
+import {Avatars} from "/imports/avatar/avatar_collections.js";
 
 Commentary = React.createClass({
 
@@ -26,7 +24,7 @@ Commentary = React.createClass({
 			discussionSelected: {},
 			discussionPanelOpen: false,
 			referenceLemma: [],
-			referenceLemmaSelectedEdition: { lines: [] },
+			referenceLemmaSelectedEdition: {lines: []},
 			commentLemmaGroups: [],
 
 		};
@@ -35,7 +33,7 @@ Commentary = React.createClass({
 	commentGroups: [],
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	childContextTypes: {
@@ -52,56 +50,56 @@ Commentary = React.createClass({
 		// Parse the filters to the query
 		this.props.filters.forEach(function (filter) {
 			switch (filter.key) {
-			case '_id':
-				query._id = filter.values[0];
-				break;
-			case 'textsearch':
-				query.$text = { $search: filter.values[0] };
-				break;
+				case '_id':
+					query._id = filter.values[0];
+					break;
+				case 'textsearch':
+					query.$text = {$search: filter.values[0]};
+					break;
 
-			case 'keywords':
-				var values = [];
-				filter.values.forEach(function (value) {
-					values.push(value.wordpressId);
-				});
-				query['keywords.wordpressId'] = { $in: values };
-				break;
+				case 'keywords':
+					var values = [];
+					filter.values.forEach(function (value) {
+						values.push(value.wordpressId);
+					});
+					query['keywords.wordpressId'] = {$in: values};
+					break;
 
-			case 'commenters':
-				var values = [];
-				filter.values.forEach(function (value) {
-					values.push(value.wordpressId);
-				});
-				query['commenters.wordpressId'] = { $in: values };
-				break;
+				case 'commenters':
+					var values = [];
+					filter.values.forEach(function (value) {
+						values.push(value.wordpressId);
+					});
+					query['commenters.wordpressId'] = {$in: values};
+					break;
 
-			case 'works':
-				var values = [];
-				filter.values.forEach(function (value) {
-					values.push(value.slug);
-				});
-				query['work.slug'] = { $in: values };
-				break;
+				case 'works':
+					var values = [];
+					filter.values.forEach(function (value) {
+						values.push(value.slug);
+					});
+					query['work.slug'] = {$in: values};
+					break;
 
-			case 'subworks':
-				var values = [];
-				filter.values.forEach(function (value) {
-					values.push(value.n);
-				});
-				query['subwork.n'] = { $in: values };
-				break;
+				case 'subworks':
+					var values = [];
+					filter.values.forEach(function (value) {
+						values.push(value.n);
+					});
+					query['subwork.n'] = {$in: values};
+					break;
 
-			case 'lineFrom':
+				case 'lineFrom':
 					// Values will always be an array with a length of one
-				query.lineFrom = query.lineFrom || {};
-				query.lineFrom.$gte = filter.values[0];
-				break;
+					query.lineFrom = query.lineFrom || {};
+					query.lineFrom.$gte = filter.values[0];
+					break;
 
-			case 'lineTo':
+				case 'lineTo':
 					// Values will always be an array with a length of one
-				query.lineFrom = query.lineFrom || {};
-				query.lineFrom.$lte = filter.values[0];
-				break;
+					query.lineFrom = query.lineFrom || {};
+					query.lineFrom.$lte = filter.values[0];
+					break;
 
 			}
 		});
@@ -109,7 +107,7 @@ Commentary = React.createClass({
 		// console.log("Commentary query:", query);
 		const handle = Meteor.subscribe('comments', query, this.props.skip, 10);
 		if (handle.ready()) {
-			comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
+			comments = Comments.find({}, {sort: {'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1}}).fetch();
 			// console.log("Commentary comments:", comments);
 		}
 
@@ -119,11 +117,11 @@ Commentary = React.createClass({
 			isInCommentGroup = false;
 			commentGroups.forEach(function (commentGroup) {
 				if (
-						comment.work.title === commentGroup.work.title
+					comment.work.title === commentGroup.work.title
 					&& comment.subwork.n === commentGroup.subwork.n
 					&& comment.lineFrom === commentGroup.lineFrom
 					&& comment.lineTo === commentGroup.lineTo
-					) {
+				) {
 					isInCommentGroup = true;
 					commentGroup.comments.push(comment);
 				}
@@ -140,7 +138,7 @@ Commentary = React.createClass({
 
 				commentGroups.push({
 					ref,
-					selectedLemmaEdition: { lines: [] },
+					selectedLemmaEdition: {lines: []},
 					work: comment.work,
 					subwork: comment.subwork,
 					lineFrom: comment.lineFrom,
@@ -164,7 +162,7 @@ Commentary = React.createClass({
 					isInCommenters = false;
 
 					comment.commenters.forEach(function (commenter, i) {
-						const commenterRecord = Commenters.findOne({ slug: commenter.slug });
+						const commenterRecord = Commenters.findOne({slug: commenter.slug});
 						comment.commenters[i] = commenterRecord;
 
 						// get commenter avatar
@@ -174,8 +172,8 @@ Commentary = React.createClass({
 
 						// add to the unique commenter set
 						if (commenters.some(function (c) {
-							return c.slug === commenter.slug;
-						})) {
+								return c.slug === commenter.slug;
+							})) {
 							isInCommenters = true;
 						} else {
 							commenters.push(commenterRecord);
@@ -243,7 +241,7 @@ Commentary = React.createClass({
 	searchReferenceLemma() {
 		this.setState({
 			referenceLemma: [],
-			referenceLemmaSelectedEdition: { lines: [] },
+			referenceLemmaSelectedEdition: {lines: []},
 		});
 	},
 
@@ -262,11 +260,11 @@ Commentary = React.createClass({
 	},
 
 	contextScrollPosition(scrollPosition, index) {
-	 											this.setState({
-	 												contextScrollPosition: scrollPosition,
-	 												commentLemmaIndex: index,
-	 	});
-	 },
+		this.setState({
+			contextScrollPosition: scrollPosition,
+			commentLemmaIndex: index,
+		});
+	},
 
 	render() {
 		const self = this;
@@ -290,10 +288,10 @@ Commentary = React.createClass({
 		// console.log("Commentary.props.skip", this.props.skip);
 
 		if (
-				this.commentGroups.length === 0
+			this.commentGroups.length === 0
 			|| this.props.skip === 0
 		) {
-			$('html, body').animate({ scrollTop: 0 }, 'fast');
+			$('html, body').animate({scrollTop: 0}, 'fast');
 			this.commentGroups = [];
 			this.commentGroups = this.data.commentGroups;
 		} else {
@@ -337,37 +335,38 @@ Commentary = React.createClass({
 					<div className="commentary-comments commentary-comment-groups">
 						{this.commentGroups.map(function (commentGroup, i) {
 							return (
-									<div
-										className="comment-group "
-										data-ref={commentGroup.ref}
-										key={i}
-										id={'comment-group-' + i}
-         >
-											<div className={commentsClass} >
+								<div
+									className="comment-group "
+									data-ref={commentGroup.ref}
+									key={i}
+									id={'comment-group-' + i}
+								>
+									<div className={commentsClass}>
 
-													<CommentLemma
-														index={i}
-														commentGroup={commentGroup}
-														showContextPanel={self.showContextPanel}
-														scrollPosition={self.contextScrollPosition}
-													/>
+										<CommentLemma
+											index={i}
+											commentGroup={commentGroup}
+											showContextPanel={self.showContextPanel}
+											scrollPosition={self.contextScrollPosition}
+										/>
 
-													{commentGroup.comments.map(function(comment, i){
-														return <CommentDetail
-																key={i}
-																commentGroup={commentGroup}
-																comment={comment}
-																addSearchTerm={self.props.addSearchTerm}
-																checkIfToggleLemmaReferenceModal={self.checkIfToggleLemmaReferenceModal}
-																filters={self.props.filters}
-																/>
-													})}
-
-											</div> {/* <!-- .comments -->*/}
-
-											<hr className="comment-group-end" />
+										{commentGroup.comments.map(function (comment, i) {
+											return <CommentDetail
+												key={i}
+												commentGroup={commentGroup}
+												comment={comment}
+												addSearchTerm={self.props.addSearchTerm}
+												checkIfToggleLemmaReferenceModal={self.checkIfToggleLemmaReferenceModal}
+												filters={self.props.filters}
+											/>
+										})}
 
 									</div>
+									{/* <!-- .comments -->*/}
+
+									<hr className="comment-group-end"/>
+
+								</div>
 							);
 						})}
 					</div>
@@ -375,49 +374,50 @@ Commentary = React.createClass({
 				</InfiniteScroll>
 
 				{(!isOnHomeView && this.commentGroups.length > 0 && moreCommentaryLeft) ?
-					<div className="ahcip-spinner commentary-loading" >
-							<div className="double-bounce1" />
-							<div className="double-bounce2" />
+					<div className="ahcip-spinner commentary-loading">
+						<div className="double-bounce1"/>
+						<div className="double-bounce2"/>
 
 					</div>
-				: '' }
+					: '' }
 
 				{(this.data.loaded && this.commentGroups.length === 0) ?
 					<div className="no-commentary-wrap">
-						<p className="no-commentary no-results" >
+						<p className="no-commentary no-results">
 							No commentary available for the current search.
 						</p>
 
 					</div>
-				: '' }
+					: '' }
 
 				<div className="lemma-reference-modal">
-						<article className="comment	lemma-comment paper-shadow " >
-							{this.state.referenceLemmaSelectedEdition.lines.map(function (line, i) {
-								return (<p
+					<article className="comment	lemma-comment paper-shadow ">
+						{this.state.referenceLemmaSelectedEdition.lines.map(function (line, i) {
+							return (<p
+								key={i}
+								className="lemma-text"
+								dangerouslySetInnerHTML={{__html: line.html}}
+							/>);
+						})}
+
+						<div className="edition-tabs tabs">
+							{this.state.referenceLemma.map(function (lemma_text_edition, i) {
+								return (<FlatButton
 									key={i}
-									className="lemma-text"
-									dangerouslySetInnerHTML={{ __html: line.html }}
-        />);
+									label={edition.title}
+									data-edition={edition.title}
+									className="edition-tab tab"
+									onClick={this.toggleLemmaEdition}
+								/>);
 							})}
 
-								<div className="edition-tabs tabs">
-									{this.state.referenceLemma.map(function (lemma_text_edition, i) {
-										return (<FlatButton
-											key={i}
-											label={edition.title}
-											data-edition={edition.title}
-											className="edition-tab tab"
-											onClick={this.toggleLemmaEdition}
-          />);
-									})}
+						</div>
 
-								</div>
+						<i className="mdi mdi-close paper-shadow" onClick={this.hideLemmaReference}/>
+					</article>
 
-								<i className="mdi mdi-close paper-shadow" onClick={this.hideLemmaReference} />
-						</article>
-
-				</div>{/* <!-- .lemma-reference-modal -->*/}
+				</div>
+				{/* <!-- .lemma-reference-modal -->*/}
 
 				{'work' in this.state.contextCommentGroupSelected ?
 					<ContextPanel
@@ -426,7 +426,7 @@ Commentary = React.createClass({
 						commentGroup={this.state.contextCommentGroupSelected}
 						scrollPosition={this.state.contextScrollPosition}
 						commentLemmaIndex={this.state.commentLemmaIndex}
-     />
+					/>
 					: ''
 				}
 				{/* <!-- .commentary-primary -->*/}
@@ -434,10 +434,10 @@ Commentary = React.createClass({
 				<FilterWidget
 					filters={this.props.filters}
 					toggleSearchTerm={this.props.toggleSearchTerm}
-    />
+				/>
 
 			</div>
-		 );
-	 },
+		);
+	},
 
 });

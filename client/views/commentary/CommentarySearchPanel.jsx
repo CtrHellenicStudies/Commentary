@@ -1,8 +1,8 @@
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import TextField from 'material-ui/TextField';
-import Drawer from 'material-ui/Drawer';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import TextField from "material-ui/TextField";
+import Drawer from "material-ui/Drawer";
+import {Card, CardHeader, CardText} from "material-ui/Card";
 
 CommentarySearchPanel = React.createClass({
 
@@ -29,17 +29,17 @@ CommentarySearchPanel = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	getMeteorData() {
 		return {
 			keywords: Keywords.find({
-				count: { $gt: 0 },
-			}, { sort: { title: 1 } }).fetch(),
-			commenters: Commenters.find({}, { sort: { name: 1 } }).fetch(),
-			works: Works.find({}, { sort: { order: 1 } }).fetch(),
-			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
+				count: {$gt: 0},
+			}, {sort: {title: 1}}).fetch(),
+			commenters: Commenters.find({}, {sort: {name: 1}}).fetch(),
+			works: Works.find({}, {sort: {order: 1}}).fetch(),
+			subworks: Subworks.find({}, {sort: {n: 1}}).fetch(),
 		};
 	},
 

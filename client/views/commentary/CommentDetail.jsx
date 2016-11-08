@@ -1,8 +1,8 @@
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import { green100, green500, red100, red500, black, fullWhite } from 'material-ui/styles/colors';
-import JsDiff from 'diff';
+import RaisedButton from "material-ui/RaisedButton";
+import FlatButton from "material-ui/FlatButton";
+import FontIcon from "material-ui/FontIcon";
+import {green100, green500, red100, red500, black, fullWhite} from "material-ui/styles/colors";
+import JsDiff from "diff";
 
 CommentDetail = React.createClass({
 
@@ -137,7 +137,7 @@ CommentDetail = React.createClass({
 			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
 			" data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>O.$1.$2-$3</a>");
 
-		return { __html: newHtml };
+		return {__html: newHtml};
 	},
 
 	checkIfToggleLemmaReferenceModal(e) {
@@ -221,7 +221,7 @@ CommentDetail = React.createClass({
 		}
 
 		return (
-			<div className={commentClass} >
+			<div className={commentClass}>
 
 				<article
 					className="comment commentary-comment paper-shadow "
@@ -231,16 +231,16 @@ CommentDetail = React.createClass({
 					<div className="comment-fixed-title-wrap paper-shadow">
 						<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
 						{/* (commentGroup.selectedLemmaEdition.lines.length) ?
-							<p
-								className="comment-fixed-lemma lemma-text"
-								dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
-							.lines[0].html}}
-								></p>
-							: ""*/}
+						 <p
+						 className="comment-fixed-lemma lemma-text"
+						 dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
+						 .lines[0].html}}
+						 ></p>
+						 : ""*/}
 
 						{/* commentGroup.selectedLemmaEdition.lines.length > 1 ?
-							<span className="fixed-title-lemma-ellipsis">&hellip;</span>
-						: "" */}
+						 <span className="fixed-title-lemma-ellipsis">&hellip;</span>
+						 : "" */}
 
 						{comment.commenters.map((commenter, i) => (
 							<a
@@ -289,13 +289,13 @@ CommentDetail = React.createClass({
 											<FlatButton
 												label="Edit comment"
 												href={`/add-revision/${comment._id}`}
-												icon={<FontIcon className="mdi mdi-pen" />}
+												icon={<FontIcon className="mdi mdi-pen"/>}
 											/>
 											:
 											''
 										}
 										<div className="comment-author-text">
-											<a href={`/commenters/${commenter.slug}`} >
+											<a href={`/commenters/${commenter.slug}`}>
 												<span className="comment-author-name">{commenter.name}</span>
 											</a>
 											<span className="comment-date">
@@ -328,11 +328,11 @@ CommentDetail = React.createClass({
 								id="comment-body"
 								className="comment-body"
 								dangerouslySetInnerHTML={comment ?
-									{ __html: this.getRevisionDiff().innerHTML } : ''}
+								{__html: this.getRevisionDiff().innerHTML} : ''}
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}
-						<div className="comment-reference" >
+						<div className="comment-reference">
 							<h4>Secondary Source(s):</h4>
 							<p>
 								{comment.referenceLink ?
@@ -351,10 +351,10 @@ CommentDetail = React.createClass({
 							</p>
 						</div>
 						{/* <div className="comment-persistent-identifier">
-							<a href={"/commentary/?_id=" + comment._id}>
-								<span>Persistent Identifier</span>
-							</a>
-						</div>*/}
+						 <a href={"/commentary/?_id=" + comment._id}>
+						 <span>Persistent Identifier</span>
+						 </a>
+						 </div>*/}
 						<CommentCitation
 							componentClass="comment-citation"
 							title="Cite this comment"

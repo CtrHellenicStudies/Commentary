@@ -1,4 +1,4 @@
-import '../../node_modules/mdi/css/materialdesignicons.css';
+import "../../node_modules/mdi/css/materialdesignicons.css";
 
 
 MasterLayout = React.createClass({

@@ -1,4 +1,4 @@
-import { Avatars } from '/imports/avatar/avatar_collections.js';
+import {Avatars} from "/imports/avatar/avatar_collections.js";
 
 CommentersList = React.createClass({
 
@@ -25,12 +25,12 @@ CommentersList = React.createClass({
 			query.featureOnHomepage = this.props.featureOnHomepage;
 		}
 
-		const commenters = Commenters.find(query, { sort: { name: 1 }, limit }).fetch();
+		const commenters = Commenters.find(query, {sort: {name: 1}, limit}).fetch();
 		for (let i = 0; i < commenters.length; ++i) {
 			if (commenters[i].avatar == null) {
 				commenters[i].avatarUrl = this.props.defaultAvatarUrl;
 			} else {
-				const avatar = Avatars.findOne({ _id: commenters[i].avatar });
+				const avatar = Avatars.findOne({_id: commenters[i].avatar});
 				if (avatar) {
 					commenters[i].avatarUrl = avatar.url;
 				} else {
@@ -57,6 +57,6 @@ CommentersList = React.createClass({
 			<div className="commenters-list">
 				{this.renderCommenters()}
 			</div>
-			);
+		);
 	},
 });

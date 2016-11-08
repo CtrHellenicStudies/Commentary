@@ -1,4 +1,4 @@
-import Masonry from 'react-masonry-component/lib';
+import Masonry from "react-masonry-component/lib";
 
 
 ReferenceWorksList = React.createClass({
@@ -12,15 +12,14 @@ ReferenceWorksList = React.createClass({
 
 	// Loads items from the referenceWorks collection and puts them on this.data.referenceWorks
 	getMeteorData() {
-		const query = {
-		};
+		const query = {};
 
 		if (this.props.commenterId) {
 			query.authors = this.props.commenterId;
 		}
 
 		return {
-			referenceWorks: ReferenceWorks.find(query, { sort: { title: 1 } }).fetch(),
+			referenceWorks: ReferenceWorks.find(query, {sort: {title: 1}}).fetch(),
 		};
 	},
 
@@ -37,7 +36,7 @@ ReferenceWorksList = React.createClass({
 
 	render() {
 		const masonryOptions = {
-			isFitWidth : true,
+			isFitWidth: true,
 			transitionDuration: 300,
 		};
 
@@ -48,9 +47,9 @@ ReferenceWorksList = React.createClass({
 						options={masonryOptions}
 						className="reference-works-list"
 					>
-							{this.renderReferenceWorks()}
+						{this.renderReferenceWorks()}
 					</Masonry>
-				:
+					:
 					<p className="no-results no-results-reference-works">No reference works found.</p>
 				}
 			</div>

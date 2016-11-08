@@ -1,8 +1,7 @@
-
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import FlatButton from 'material-ui/FlatButton';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import IconButton from 'material-ui/IconButton';
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import FlatButton from "material-ui/FlatButton";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import IconButton from "material-ui/IconButton";
 
 Header = React.createClass({
 
@@ -35,7 +34,7 @@ Header = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	componentWillMount() {
@@ -58,14 +57,14 @@ Header = React.createClass({
 		return {
 			keywords: Keywords.find().fetch(),
 			commenters: Commenters.find().fetch(),
-			works: Works.find({}, { sort: { order: 1 } }).fetch(),
-			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
+			works: Works.find({}, {sort: {order: 1}}).fetch(),
+			subworks: Subworks.find({}, {sort: {n: 1}}).fetch(),
 		};
 	},
 
 	toggleSearchMode() {
 		if (
-				location.pathname.indexOf('/commentary') === 0
+			location.pathname.indexOf('/commentary') === 0
 			|| location.pathname.indexOf('/add-comment') === 0
 		) {
 			this.setState({
@@ -218,7 +217,7 @@ Header = React.createClass({
 				/>
 				<header >
 					{!this.state.searchEnabled ?
-						<div className="md-menu-toolbar" >
+						<div className="md-menu-toolbar">
 							<div className="toolbar-tools">
 								<IconButton
 									className="left-drawer-toggle"
@@ -227,7 +226,7 @@ Header = React.createClass({
 									onClick={this.toggleLeftMenu}
 								/>
 
-								<a href="/" className="header-home-link" >
+								<a href="/" className="header-home-link">
 									<h3 className="logo">A Homer Commentary in Progress</h3>
 								</a>
 								<div className="search-toggle">
@@ -237,7 +236,7 @@ Header = React.createClass({
 										iconClassName="mdi mdi-magnify"
 									/>
 								</div>
-								<div className="header-section-wrap nav-wrap collapse" >
+								<div className="header-section-wrap nav-wrap collapse">
 									<FlatButton
 										label="Commentary"
 										href="/commentary/"
@@ -276,7 +275,7 @@ Header = React.createClass({
 												</div>
 											}
 										</div>
-									:
+										:
 										<div>
 											<FlatButton
 												label="Login"
@@ -302,10 +301,10 @@ Header = React.createClass({
 								</div>
 							</div>
 						</div>
-					:
+						:
 						<div>
 							{!this.state.addCommentPage ?
-								<div className="md-menu-toolbar" >
+								<div className="md-menu-toolbar">
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"
@@ -338,7 +337,7 @@ Header = React.createClass({
 									</div>
 								</div>
 								:
-								<div className="md-menu-toolbar" >
+								<div className="md-menu-toolbar">
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"

@@ -8,7 +8,7 @@ DiscussionCommentDetail = React.createClass({
 		const discussionComment = this.props.discussionComment;
 
 		return (
-						<div />
-				);
+			<div />
+		);
 	},
 });

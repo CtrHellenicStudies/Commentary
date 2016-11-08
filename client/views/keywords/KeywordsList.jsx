@@ -11,11 +11,11 @@ KeywordsList = React.createClass({
 	getMeteorData() {
 		const query = {
 			type: this.props.type,
-			count: { $gt: 0 },
+			count: {$gt: 0},
 		};
 
 		return {
-			keywords: Keywords.find(query, { sort: { title: 1 } }).fetch(),
+			keywords: Keywords.find(query, {sort: {title: 1}}).fetch(),
 		};
 	},
 

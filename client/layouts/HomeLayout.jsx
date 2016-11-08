@@ -11,7 +11,7 @@ HomeLayout = React.createClass({
 			skip: this.state.skip + 10,
 		});
 
-			// console.log("Load more comments:", this.state.skip);
+		// console.log("Load more comments:", this.state.skip);
 	},
 
 	toggleSearchTerm(key, value) {
@@ -177,7 +177,7 @@ HomeLayout = React.createClass({
 	componentDidMount() {
 		if (typeof location.hash !== 'undefined' && location.hash.length > 0) {
 			setTimeout(() => {
-				$('html, body').animate({ scrollTop: $(location.hash).offset().top - 100 }, 300);
+				$('html, body').animate({scrollTop: $(location.hash).offset().top - 100}, 300);
 			}, 1000);
 		}
 	},
@@ -191,27 +191,27 @@ HomeLayout = React.createClass({
 					toggleSearchTerm={this.toggleSearchTerm}
 					handleChangeLineN={this.handleChangeLineN}
 					handleChangeTextsearch={this.handleChangeTextsearch}
-    />
+				/>
 
 				<HomeView
 					filters={this.state.filters}
 					toggleSearchTerm={this.toggleSearchTerm}
 					loadMoreComments={this.loadMoreComments}
 					skip={this.state.skip}
-    />
+				/>
 
 				<FilterWidget
 					filters={this.state.filters}
 					toggleSearchTerm={this.toggleSearchTerm}
-    />
+				/>
 
 				<Footer />
 
 				{/* <ModalLogin />
-				<ModalSignup />*/}
+				 <ModalSignup />*/}
 
 			</div>
-			);
+		);
 	},
 
 });

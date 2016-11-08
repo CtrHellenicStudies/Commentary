@@ -1,9 +1,9 @@
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { brown500, brown800, grey300, white, black } from 'material-ui/styles/colors';
-import Avatar from 'material-ui/Avatar';
-import FontIcon from 'material-ui/FontIcon';
-import Chip from 'material-ui/Chip';
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import {brown500, brown800, grey300, white, black} from "material-ui/styles/colors";
+import Avatar from "material-ui/Avatar";
+import FontIcon from "material-ui/FontIcon";
+import Chip from "material-ui/Chip";
 
 SearchTermButtonPanel = React.createClass({
 
@@ -28,7 +28,7 @@ SearchTermButtonPanel = React.createClass({
 
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	toggleSearchTerm() {
@@ -79,12 +79,12 @@ SearchTermButtonPanel = React.createClass({
 
 				{active ?
 					<Avatar
-						icon={<FontIcon className="mdi mdi-minus" />}
+						icon={<FontIcon className="mdi mdi-minus"/>}
 						backgroundColor={brown800}
 					/>
 					:
 					<Avatar
-						icon={<FontIcon className="mdi mdi-plus" />}
+						icon={<FontIcon className="mdi mdi-plus"/>}
 					/>
 				}
 

@@ -1,4 +1,4 @@
-import { UploadFS } from 'meteor/jalik:ufs';
+import {UploadFS} from 'meteor/jalik:ufs';
 
 // TODO: this should probably be a local per project file
 

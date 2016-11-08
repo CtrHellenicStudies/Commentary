@@ -20,5 +20,5 @@ TextNodes._ensureIndex({
 });
 
 Commenters._ensureIndex({
-	name:1
+	name: 1
 });

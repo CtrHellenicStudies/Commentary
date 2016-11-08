@@ -1,20 +1,18 @@
-
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+import RaisedButton from "material-ui/RaisedButton";
+import FontIcon from "material-ui/FontIcon";
+import AvatarIcon from "/imports/avatar/client/ui/AvatarIcon.jsx";
 
 CommentLemma = React.createClass({
 
 	propTypes: {
 		commentGroup: React.PropTypes.object.isRequired,
 		showContextPanel: React.PropTypes.func.isRequired,
-		 scrollPosition: React.PropTypes.func.isRequired,
+		scrollPosition: React.PropTypes.func.isRequired,
 	},
 
 	getInitialState() {
 		return {
-			selectedLemmaEdition: { lines: [] },
+			selectedLemmaEdition: {lines: []},
 
 		};
 	},
@@ -107,7 +105,7 @@ CommentLemma = React.createClass({
 
 	showContextPanel(commentGroup) {
 		const scroll = $('#comment-group-' + this.props.index).offset().top;
- 																						this.props.scrollPosition(scroll, this.props.index);
+		this.props.scrollPosition(scroll, this.props.index);
 		this.props.showContextPanel(commentGroup);
 	},
 
@@ -125,85 +123,85 @@ CommentLemma = React.createClass({
 
 			<div className="comment-outer comment-lemma-comment-outer">
 
-					<div className="comment-group-meta">
-							<div className="comment-group-meta-inner">
-									<div className="comment-group-ref">
+				<div className="comment-group-meta">
+					<div className="comment-group-meta-inner">
+						<div className="comment-group-ref">
 											<span className="comment-group-ref-above">
 													{workTitle} {commentGroup.subwork.title}
 											</span>
-											<h2 className="comment-group-ref-below">
-												{commentGroup.lineFrom}{commentGroup.lineTo ? '-' + commentGroup.lineTo : '' }
-											</h2>
+							<h2 className="comment-group-ref-below">
+								{commentGroup.lineFrom}{commentGroup.lineTo ? '-' + commentGroup.lineTo : '' }
+							</h2>
 
-									</div>
-									<div className="comment-group-commenters">
+						</div>
+						<div className="comment-group-commenters">
 
-											{commentGroup.commenters.map(function (commenter, i) {
+							{commentGroup.commenters.map(function (commenter, i) {
 
-												return (<div
-													key={i}
-													className="comment-author"
-													data-commenter-id={commenter.id}
-            >
+								return (<div
+									key={i}
+									className="comment-author"
+									data-commenter-id={commenter.id}
+								>
 														<span className="comment-author-name">
 															{commenter.name}
 														</span>
-														<div
-															className="comment-author-image-wrap paper-shadow"
-              >
-																<a
-																	href={'/commenters/' + commenter.slug}
-																	onClick={self.goToAuthorComment}
-                >
-																		<AvatarIcon avatar={commenter.avatarData} />
-																</a>
-
-														</div>
-												</div>);
-											})}
+									<div
+										className="comment-author-image-wrap paper-shadow"
+									>
+										<a
+											href={'/commenters/' + commenter.slug}
+											onClick={self.goToAuthorComment}
+										>
+											<AvatarIcon avatar={commenter.avatarData}/>
+										</a>
 
 									</div>
-							</div>
+								</div>);
+							})}
 
+						</div>
 					</div>
 
-					<article className="comment lemma-comment paper-shadow">
+				</div>
 
-							{this.state.selectedLemmaEdition.lines.map(function (line, i) {
-								return (<p
-									key={i}
-									className="lemma-text"
-									dangerouslySetInnerHTML={{ __html: line.html }}
-        />);
-							})}
-							<div className="edition-tabs tabs">
-								{lemmaText.map(function (lemmaTextEdition, i) {
-									const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+				<article className="comment lemma-comment paper-shadow">
 
-									return (<RaisedButton
-										key={i}
-										label={lemmaEditionTitle}
-										data-edition={lemmaTextEdition.title}
-										className={self.state.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-										onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-         />);
-								})}
-							</div>
-							<div className="context-tabs tabs">
-									<RaisedButton
-										className="context-tab tab"
-										onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
-										label="Context"
-										labelPosition="before"
-										icon={<FontIcon className="mdi mdi-chevron-right" />}
-         />
-							</div>
-					</article>
-					<div className="discussion-wrap" />
+					{this.state.selectedLemmaEdition.lines.map(function (line, i) {
+						return (<p
+							key={i}
+							className="lemma-text"
+							dangerouslySetInnerHTML={{__html: line.html}}
+						/>);
+					})}
+					<div className="edition-tabs tabs">
+						{lemmaText.map(function (lemmaTextEdition, i) {
+							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+
+							return (<RaisedButton
+								key={i}
+								label={lemmaEditionTitle}
+								data-edition={lemmaTextEdition.title}
+								className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+							/>);
+						})}
+					</div>
+					<div className="context-tabs tabs">
+						<RaisedButton
+							className="context-tab tab"
+							onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
+							label="Context"
+							labelPosition="before"
+							icon={<FontIcon className="mdi mdi-chevron-right"/>}
+						/>
+					</div>
+				</article>
+				<div className="discussion-wrap"/>
 			</div>
 
 
-		 );
-	 },
+		);
+	},
 
 });

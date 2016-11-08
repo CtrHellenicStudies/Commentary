@@ -1,6 +1,6 @@
-import React from 'react';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import React from "react";
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 
 ReferenceWorkTeaser = React.createClass({
 
@@ -19,7 +19,7 @@ ReferenceWorkTeaser = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	toggleOpen() {

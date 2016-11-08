@@ -1,6 +1,6 @@
-import IconButton from 'material-ui/IconButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+import IconButton from "material-ui/IconButton";
+import RaisedButton from "material-ui/RaisedButton";
+import FlatButton from "material-ui/FlatButton";
 
 DiscussionThread = React.createClass({
 
@@ -25,7 +25,7 @@ DiscussionThread = React.createClass({
 
 		const handle = Meteor.subscribe('discussionComments', this.props.comment._id);
 		if (handle.ready()) {
-			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id }).fetch();
+			discussionComments = DiscussionComments.find({commentId: this.props.comment._id}).fetch();
 			loaded = true;
 		}
 
@@ -75,27 +75,27 @@ DiscussionThread = React.createClass({
 
 		return (
 
-			<div className={discussionWrapClass} >
+			<div className={discussionWrapClass}>
 				<div
 					onClick={this.showDiscussionThread}
 					className="continue-discussion"
 				>
-					<i className="mdi mdi-comment" />
+					<i className="mdi mdi-comment"/>
 					{this.data.discussionComments.length ?
 						<span className="continue-discussion-text">
 							{this.data.discussionComments.length}
 						</span>
-					: ''}
+						: ''}
 				</div>
 
 				{!this.data.loaded ?
-					<div className="ahcip-spinner" >
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
+					<div className="ahcip-spinner">
+						<div className="double-bounce1"/>
+						<div className="double-bounce2"/>
 					</div>
-				:
-					<div className="discussion-thread" >
-						<div className="add-comment-wrap paper-shadow " >
+					:
+					<div className="discussion-thread">
+						<div className="add-comment-wrap paper-shadow ">
 							<IconButton
 								className="close-discussion paper-shadow"
 								iconClassName="mdi mdi-close"
@@ -107,7 +107,7 @@ DiscussionThread = React.createClass({
 								className="new-comment-form"
 								name="new-comment-form"
 							>
-								<div className="add-comment-row-1" >
+								<div className="add-comment-row-1">
 									<div className="profile-picture paper-shadow">
 										<img
 											src={currentUser && currentUser.avatar ? currentUser.avatar.url : '/images/default_user.jpg'}
@@ -130,7 +130,7 @@ DiscussionThread = React.createClass({
 											className="submit-comment-button paper-shadow"
 											onClick={this.addDiscussionComment}
 										/>
-									:
+										:
 										<div
 											className="new-comment-login"
 										>
@@ -152,22 +152,22 @@ DiscussionThread = React.createClass({
 						<div
 							className="sort-by-wrap"
 						>
-								{/*
-									<span className="sort-by-label">Sort by:</span>
-									<RaisedButton
-										label="Top"
-										className="sort-by-option selected-sort sort-by-top"
-										onClick={this.toggleSort}>
-									</RaisedButton>
-									<RaisedButton
-										label="Newest"
-										className="sort-by-option sort-by-new"
-										onClick={this.toggleSort}>
-									</RaisedButton>
-									*/}
+							{/*
+							 <span className="sort-by-label">Sort by:</span>
+							 <RaisedButton
+							 label="Top"
+							 className="sort-by-option selected-sort sort-by-top"
+							 onClick={this.toggleSort}>
+							 </RaisedButton>
+							 <RaisedButton
+							 label="Newest"
+							 className="sort-by-option sort-by-new"
+							 onClick={this.toggleSort}>
+							 </RaisedButton>
+							 */}
 						</div>
 						{this.data.discussionComments.length === 0 ?
-							<div className="no-results-wrap" >
+							<div className="no-results-wrap">
 								<span className="no-results-text">No discussion comments.</span>
 							</div>
 							: ''

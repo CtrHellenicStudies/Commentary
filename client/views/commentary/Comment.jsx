@@ -1,10 +1,7 @@
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
-import diffview from 'jsdifflib';
+import RaisedButton from "material-ui/RaisedButton";
+import FlatButton from "material-ui/FlatButton";
+import FontIcon from "material-ui/FontIcon";
+import diffview from "jsdifflib";
 
 Comment = React.createClass({
 
@@ -21,14 +18,16 @@ Comment = React.createClass({
 		this.props.filters.forEach((filter) => {
 			if (filter.key === "revision") {
 				foundRevision = filter.values[0];
-			};
+			}
+			;
 		});
 		if (foundRevision != null && foundRevision >= 0 && foundRevision < this.props.comment.revisions.length) {
 			selectedRevisionIndex = foundRevision;
 		} else {
 			selectedRevisionIndex = this.props.comment.revisions.length - 1;
-		};
-		
+		}
+		;
+
 		return {
 			selectedRevisionIndex: selectedRevisionIndex,
 			discussionVisible: false,
@@ -51,7 +50,7 @@ Comment = React.createClass({
 		const selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex];
 		return {
 			selectedRevision,
-	  };
+		};
 	},
 
 	addSearchTerm(e) {
@@ -71,7 +70,7 @@ Comment = React.createClass({
 			});
 		}
 	},
-	
+
 	showDiscussionThread(comment) {
 		this.setState({
 			discussionVisible: true,
@@ -97,7 +96,7 @@ Comment = React.createClass({
 		html = html.replace(/O.(\d+).(\d+)-(\d+)/g, "<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>O.$1.$2-$3</a>");
 
 
-		return { __html: html };
+		return {__html: html};
 	},
 
 	checkIfToggleLemmaReferenceModal(e) {
@@ -144,10 +143,10 @@ Comment = React.createClass({
 	},
 
 	selectRevision(event) {
-        																				this.setState({
-            										selectedRevisionIndex: parseInt(event.currentTarget.id),
-        });
-    										},
+		this.setState({
+			selectedRevisionIndex: parseInt(event.currentTarget.id),
+		});
+	},
 
 
 	handleEditCommentClick(id) {
@@ -155,36 +154,36 @@ Comment = React.createClass({
 	},
 
 	getDiff() {
-        // build the diff view and return a DOM node
-        																const baseRevision = this.data.selectedRevision;
-        																const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
-        																				return diffview.buildView({
-            										baseText: baseRevision.text,
-            										newText: newRevision.text,
-            // set the display titles for each resource
-            										baseTextName: 'Revision ' + moment(baseRevision.created).format('D MMMM YYYY'),
-            										newTextName: 'Revision ' + moment(newRevision.created).format('D MMMM YYYY'),
-            										contextSize: null,
-            // set inine to true if you want inline
-            // rather than side by side diff
-            										inline: true,
-        });
-    										},
+		// build the diff view and return a DOM node
+		const baseRevision = this.data.selectedRevision;
+		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
+		return diffview.buildView({
+			baseText: baseRevision.text,
+			newText: newRevision.text,
+			// set the display titles for each resource
+			baseTextName: 'Revision ' + moment(baseRevision.created).format('D MMMM YYYY'),
+			newTextName: 'Revision ' + moment(newRevision.created).format('D MMMM YYYY'),
+			contextSize: null,
+			// set inine to true if you want inline
+			// rather than side by side diff
+			inline: true,
+		});
+	},
 
-    										togglePersistentIdentifierModal(e) {
-    											const $target = $(e.target);
-    											this.setState({
-    												persistentIdentifierModalVisible: !this.state.persistentIdentifierModalVisible,
-    												persistentIdentifierModalTop: $target.position().top - 34,
-	persistentIdentifierModalLeft: $target.position().left,
-    	});
-    },
+	togglePersistentIdentifierModal(e) {
+		const $target = $(e.target);
+		this.setState({
+			persistentIdentifierModalVisible: !this.state.persistentIdentifierModalVisible,
+			persistentIdentifierModalTop: $target.position().top - 34,
+			persistentIdentifierModalLeft: $target.position().left,
+		});
+	},
 
-    										closePersistentIdentifierModal() {
-    											this.setState({
-    												persistentIdentifierModalVisible: false,
-    	});
-    },
+	closePersistentIdentifierModal() {
+		this.setState({
+			persistentIdentifierModalVisible: false,
+		});
+	},
 
 	render() {
 		const self = this;
@@ -204,146 +203,147 @@ Comment = React.createClass({
 		}
 
 		return (<div
-			className={commentClass}
-  >
+				className={commentClass}
+			>
 
 				<article
 					className="comment commentary-comment paper-shadow "
 					data-id={comment._id}
 					data-commenter-id={comment.commenters[0]._id}
-    >
-						<div className="comment-fixed-title-wrap paper-shadow">
-								<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
-								{/* (commentGroup.selectedLemmaEdition.lines.length) ?
-									<p
-										className="comment-fixed-lemma lemma-text"
-										dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
-									.lines[0].html}}
-										></p>
-									: ""*/}
+				>
+					<div className="comment-fixed-title-wrap paper-shadow">
+						<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
+						{/* (commentGroup.selectedLemmaEdition.lines.length) ?
+						 <p
+						 className="comment-fixed-lemma lemma-text"
+						 dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
+						 .lines[0].html}}
+						 ></p>
+						 : ""*/}
 
-								{/* commentGroup.selectedLemmaEdition.lines.length > 1 ?
-									<span className="fixed-title-lemma-ellipsis">&hellip;</span>
-								: "" */}
+						{/* commentGroup.selectedLemmaEdition.lines.length > 1 ?
+						 <span className="fixed-title-lemma-ellipsis">&hellip;</span>
+						 : "" */}
 
-								{comment.commenters.map(function (commenter, i) {
-									return (<a
-										key={i}
-										href={'/commenters/' + commenter.slug}
-         >
+						{comment.commenters.map(function (commenter, i) {
+							return (<a
+								key={i}
+								href={'/commenters/' + commenter.slug}
+							>
 										<span className="comment-author-name">
 											{commenter.name}
 										</span>
-									</a>);
+							</a>);
+						})}
+
+					</div>
+
+					<div className="comment-upper">
+
+						<div className="comment-upper-left">
+							<h1 className="comment-title">{selectedRevision.title}</h1>
+							<div className="comment-keywords">
+								{comment.keywords.map(function (keyword, i) {
+									return (<RaisedButton
+										key={i}
+										className="comment-keyword paper-shadow"
+										onClick={self.addSearchTerm.bind(null, keyword)}
+										data-id={keyword._id}
+										label={(keyword.title || keyword.wordpressId)}
+									/>);
 								})}
-
-						</div>
-
-						<div className="comment-upper">
-
-								<div className="comment-upper-left">
-									<h1 className="comment-title">{selectedRevision.title}</h1>
-									<div className="comment-keywords">
-										{comment.keywords.map(function (keyword, i) {
-											return (<RaisedButton
-												key={i}
-												className="comment-keyword paper-shadow"
-												onClick={self.addSearchTerm.bind(null, keyword)}
-												data-id={keyword._id}
-												label={(keyword.title || keyword.wordpressId)}
-           />);
-										 })}
-									</div>
-								</div>
-
-								<div className="comment-upper-right">
-									{comment.commenters.map(function (commenter, i) {
-										let image = {};
-										let imageUrl = '';
-										if (commenter.attachment) {
-											image = commenter.attachment;
-											imageUrl = image.url();
-										}
-										return (<div
-											key={i}
-											className="comment-author"
-          >
-											{userCommenterId === commenter._id ?
-												<FlatButton
-													label="Edit comment"
-													onClick={self.handleEditCommentClick.bind(null, comment._id)}
-													icon={<FontIcon className="mdi mdi-pen" />}
-												/>
-												:
-												''
-											}
-											<div className="comment-author-text">
-												<a href={'/commenters/' + commenter.slug} >
-													<span className="comment-author-name">{commenter.name}</span>
-												</a>
-												<span className="comment-date">{moment(selectedRevision.created).format('D MMMM YYYY')}</span>
-											</div>
-											<div className="comment-author-image-wrap paper-shadow">
-												<a href={'/commenters/' + commenter.slug}>
-													<img src={imageUrl.length ? imageUrl : '/images/default_user.jpg'} />
-												</a>
-											</div>
-										</div>);
-									})}
-								</div>
-
-						</div>
-						<div className="comment-lower">
-							{selectedRevisionIndex === comment.revisions.length - 1 ?
-								<div
-									className="comment-body"
-									dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
-									onClick={this.checkIfToggleLemmaReferenceModal}
-								/>
-								:
-								<div
-									className="comment-body"
-									dangerouslySetInnerHTML={comment ? { __html: '<table class=\'table-diff\'>' + this.getDiff().innerHTML + '</table>' } : ''}
-									onClick={this.checkIfToggleLemmaReferenceModal}
-								/>
-							}
-							<div className="comment-reference" >
-								<h4>Secondary Source(s):</h4>
-								<p>
-									{comment.referenceLink ?
-										<a href={comment.referenceLink} target="_blank" >
-											{comment.reference}
-										</a>
-										:
-										<span >
-											{comment.reference}
-										</span>
-									}
-								</p>
 							</div>
-							{/* <div className="comment-persistent-identifier">
-								<a href={"/commentary/?_id=" + comment._id}>
-									<span>Persistent Identifier</span>
-								</a>
-							</div>*/}
-							<CommentCitation
-								componentClass="comment-citation"
-								title="Cite this comment"
-								comment={comment}
-							/>
 						</div>
-						<div className="comment-revisions">
-							{comment.revisions.map(function (revision, i) {
-								return (<FlatButton
+
+						<div className="comment-upper-right">
+							{comment.commenters.map(function (commenter, i) {
+								let image = {};
+								let imageUrl = '';
+								if (commenter.attachment) {
+									image = commenter.attachment;
+									imageUrl = image.url();
+								}
+								return (<div
 									key={i}
-									id={i}
-									data-id="{revision.id}"
-									className="revision selected-revision"
-									onClick={self.selectRevision}
-									label={'Revision ' + moment(revision.created).format('D MMMM YYYY')}
-        />);
+									className="comment-author"
+								>
+									{userCommenterId === commenter._id ?
+										<FlatButton
+											label="Edit comment"
+											onClick={self.handleEditCommentClick.bind(null, comment._id)}
+											icon={<FontIcon className="mdi mdi-pen"/>}
+										/>
+										:
+										''
+									}
+									<div className="comment-author-text">
+										<a href={'/commenters/' + commenter.slug}>
+											<span className="comment-author-name">{commenter.name}</span>
+										</a>
+										<span
+											className="comment-date">{moment(selectedRevision.created).format('D MMMM YYYY')}</span>
+									</div>
+									<div className="comment-author-image-wrap paper-shadow">
+										<a href={'/commenters/' + commenter.slug}>
+											<img src={imageUrl.length ? imageUrl : '/images/default_user.jpg'}/>
+										</a>
+									</div>
+								</div>);
 							})}
 						</div>
+
+					</div>
+					<div className="comment-lower">
+						{selectedRevisionIndex === comment.revisions.length - 1 ?
+							<div
+								className="comment-body"
+								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
+								onClick={this.checkIfToggleLemmaReferenceModal}
+							/>
+							:
+							<div
+								className="comment-body"
+								dangerouslySetInnerHTML={comment ? {__html: '<table class=\'table-diff\'>' + this.getDiff().innerHTML + '</table>'} : ''}
+								onClick={this.checkIfToggleLemmaReferenceModal}
+							/>
+						}
+						<div className="comment-reference">
+							<h4>Secondary Source(s):</h4>
+							<p>
+								{comment.referenceLink ?
+									<a href={comment.referenceLink} target="_blank">
+										{comment.reference}
+									</a>
+									:
+									<span >
+											{comment.reference}
+										</span>
+								}
+							</p>
+						</div>
+						{/* <div className="comment-persistent-identifier">
+						 <a href={"/commentary/?_id=" + comment._id}>
+						 <span>Persistent Identifier</span>
+						 </a>
+						 </div>*/}
+						<CommentCitation
+							componentClass="comment-citation"
+							title="Cite this comment"
+							comment={comment}
+						/>
+					</div>
+					<div className="comment-revisions">
+						{comment.revisions.map(function (revision, i) {
+							return (<FlatButton
+								key={i}
+								id={i}
+								data-id="{revision.id}"
+								className="revision selected-revision"
+								onClick={self.selectRevision}
+								label={'Revision ' + moment(revision.created).format('D MMMM YYYY')}
+							/>);
+						})}
+					</div>
 
 				</article>
 
@@ -352,7 +352,7 @@ Comment = React.createClass({
 					showDiscussionThread={self.showDiscussionThread}
 					hideDiscussionThread={self.hideDiscussionThread}
 					discussionVisible={self.state.discussionVisible}
-    />
+				/>
 				<LemmaReferenceModal
 					visible={self.state.lemmaReferenceModalVisible}
 					top={self.state.lemmaReferenceTop}
@@ -362,12 +362,12 @@ Comment = React.createClass({
 					lineFrom={self.state.lemmaReferenceLineFrom}
 					lineTo={self.state.lemmaReferenceLineTo}
 					closeLemmaReference={self.closeLemmaReference}
-    />
+				/>
 
 
 			</div>
 
-		 );
-	 },
+		);
+	},
 
 });

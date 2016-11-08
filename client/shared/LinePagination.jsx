@@ -1,4 +1,4 @@
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from "material-ui/RaisedButton";
 
 LinePagination = React.createClass({
 	propTypes: {
@@ -19,7 +19,7 @@ LinePagination = React.createClass({
 							className="line-page"
 							onClick={self.props.linePaginationClicked.bind(null, line)}
 						/>
-						);
+					);
 				})}
 			</div>
 

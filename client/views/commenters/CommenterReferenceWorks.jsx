@@ -1,4 +1,3 @@
-
 CommenterReferenceWorks = React.createClass({
 
 	propTypes: {

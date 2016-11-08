@@ -1,4 +1,3 @@
-
 Meteor.method('keyword_cron', function () {
 	const comments = Comments.find().fetch();
 	const keywords = [];
@@ -27,22 +26,22 @@ Meteor.method('keyword_cron', function () {
 	keywords.forEach(function (keyword) {
 		console.log(keyword.title, keyword.count);
 
-		Keywords.update({ slug: keyword.slug }, { $set: { count: keyword.count } });
+		Keywords.update({slug: keyword.slug}, {$set: {count: keyword.count}});
 	});
 
-		/*
-		comments.forEach(function(comment){
-			var nLines = 1;
+	/*
+	 comments.forEach(function(comment){
+	 var nLines = 1;
 
-			if('lineTo' in comment && comment.lineTo){
-				nLines = comment.lineTo - comment.lineFrom + 1;
-				// console.log(comment.lineFrom, comment.lineTo, comment.nLines);
+	 if('lineTo' in comment && comment.lineTo){
+	 nLines = comment.lineTo - comment.lineFrom + 1;
+	 // console.log(comment.lineFrom, comment.lineTo, comment.nLines);
 
-			}
+	 }
 
-			Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
-		});
-		*/
+	 Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
+	 });
+	 */
 
 
 	console.log(' -- Cron run complete: Keywords');
@@ -51,7 +50,7 @@ Meteor.method('keyword_cron', function () {
 }, {
 	url: 'keywords/cron',
 	getArgsFromRequest(request) {
-			// Sometime soon do validation here
+		// Sometime soon do validation here
 		const content = request.body;
 
 		return [content];

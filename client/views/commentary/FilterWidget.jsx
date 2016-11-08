@@ -1,9 +1,6 @@
-
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import RaisedButton from "material-ui/RaisedButton";
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 
 FilterWidget = React.createClass({
 
@@ -13,7 +10,7 @@ FilterWidget = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	childContextTypes: {
@@ -31,26 +28,26 @@ FilterWidget = React.createClass({
 							className="filter "
 						>
 							<span className="filter-key paper-shadow">{filter.key}</span>
-								{filter.values.map((val, j) => {
-									// commenters query through URL fix:
-									if(filter.key === 'commenters' && !val.name && val.wordpressId) {
-										const foundCommenter = Commenters.findOne({wordpressId:val.wordpressId});
-										if(foundCommenter){
-											val.name = foundCommenter.name;
-										}
+							{filter.values.map((val, j) => {
+								// commenters query through URL fix:
+								if (filter.key === 'commenters' && !val.name && val.wordpressId) {
+									const foundCommenter = Commenters.findOne({wordpressId: val.wordpressId});
+									if (foundCommenter) {
+										val.name = foundCommenter.name;
 									}
-									return <RaisedButton
-										key={j}
-										labelPosition="before"
-										className="filter-val "
-										label={val.title || val.name || val.slug || val.toString()}
-										onClick={this.props.toggleSearchTerm.bind(null, filter.key, val)}
-									>
-										<i className="mdi mdi-close" />
-									</RaisedButton>
-								})}
+								}
+								return <RaisedButton
+									key={j}
+									labelPosition="before"
+									className="filter-val "
+									label={val.title || val.name || val.slug || val.toString()}
+									onClick={this.props.toggleSearchTerm.bind(null, filter.key, val)}
+								>
+									<i className="mdi mdi-close"/>
+								</RaisedButton>
+							})}
 						</div>
-					: '';
+						: '';
 				})}
 
 			</div>

@@ -7,7 +7,7 @@ Meteor.methods({
 			throw new Meteor.Error('not-authorized');
 		}
 
-		const currentUser = Meteor.users.findOne({ _id: this.userId });
+		const currentUser = Meteor.users.findOne({_id: this.userId});
 		discussionComment.user = currentUser;
 		discussionComment.votes = 1;
 		discussionComment.voters = [currentUser._id];
@@ -67,8 +67,8 @@ Meteor.methods({
 			DiscussionComments.update({
 				_id: discussionCommentId,
 			}, {
-				$push: { voters: this.userId },
-				$inc: { votes: 1 },
+				$push: {voters: this.userId},
+				$inc: {votes: 1},
 			});
 		} catch (err) {
 			console.log(err);

@@ -1,4 +1,4 @@
-import { UploadFS } from 'meteor/jalik:ufs';
+import {UploadFS} from 'meteor/jalik:ufs';
 
 import '../uploadfs_config.js';
 import '../avatar_publications.js';

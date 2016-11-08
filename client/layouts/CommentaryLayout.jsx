@@ -20,7 +20,8 @@ CommentaryLayout = React.createClass({
 					key: "revision",
 					values: [Number(this.props.queryParams.revision)],
 				});
-			};
+			}
+			;
 		}
 
 		if ('textsearch' in this.props.queryParams) {
@@ -132,7 +133,7 @@ CommentaryLayout = React.createClass({
 			skip: this.state.skip + this.state.limit,
 		});
 
-			// console.log("Load more comments:", this.state.skip);
+		// console.log("Load more comments:", this.state.skip);
 	},
 
 	toggleSearchTerm(key, value) {
@@ -311,7 +312,7 @@ CommentaryLayout = React.createClass({
 					handleChangeLineN={this.handleChangeLineN}
 					handleChangeTextsearch={this.handleChangeTextsearch}
 					initialSearchEnabled
-    />
+				/>
 
 				<Commentary
 					filters={this.state.filters}
@@ -320,10 +321,10 @@ CommentaryLayout = React.createClass({
 					skip={this.state.skip}
 					limit={this.state.limit}
 					addSearchTerm={this.addSearchTerm}
-    />
+				/>
 
 			</div>
-			);
+		);
 	},
 
 });

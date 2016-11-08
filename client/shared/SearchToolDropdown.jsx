@@ -1,8 +1,8 @@
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import IconButton from 'material-ui/IconButton';
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import FlatButton from "material-ui/FlatButton";
+import FontIcon from "material-ui/FontIcon";
+import IconButton from "material-ui/IconButton";
 
 SearchToolDropdown = React.createClass({
 
@@ -19,7 +19,7 @@ SearchToolDropdown = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	render() {
@@ -32,8 +32,10 @@ SearchToolDropdown = React.createClass({
 						? 'search-tool-disabled' : ''}`}
 					label={this.props.name}
 					labelPosition="before"
-					icon={<FontIcon className="mdi mdi-chevron-down" />}
-					onClick={() => { this.props.toggle(this.props.name); }}
+					icon={<FontIcon className="mdi mdi-chevron-down"/>}
+					onClick={() => {
+						this.props.toggle(this.props.name);
+					}}
 					disabled={this.props.disabled}
 				/>
 
@@ -45,7 +47,9 @@ SearchToolDropdown = React.createClass({
 					<IconButton
 						className="close-dropdown"
 						iconClassName="mdi mdi-close"
-						onClick={() => { this.props.toggle(this.props.name); }}
+						onClick={() => {
+							this.props.toggle(this.props.name);
+						}}
 					/>
 				</ul>
 

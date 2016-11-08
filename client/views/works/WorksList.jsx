@@ -1,13 +1,10 @@
-
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 
 WorksList = React.createClass({
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	childContextTypes: {
@@ -19,7 +16,7 @@ WorksList = React.createClass({
 	getMeteorData() {
 		const query = {};
 		return {
-			works: Works.find(query, { sort: { order: 1 } }).fetch(),
+			works: Works.find(query, {sort: {order: 1}}).fetch(),
 		};
 	},
 
@@ -30,7 +27,7 @@ WorksList = React.createClass({
 				return (<WorkVisualization
 					key={i}
 					work={work}
-    />);
+				/>);
 			});
 		}
 	},

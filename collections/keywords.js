@@ -4,7 +4,7 @@ Schemas.Keywords = new SimpleSchema({
 	_id: {
 		type: String,
 		optional: true,
-  },
+	},
 
 	wordpressId: {
 		type: Number,

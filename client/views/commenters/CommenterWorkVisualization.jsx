@@ -1,4 +1,3 @@
-
 CommenterWorkVisualization = React.createClass({
 
 	propTypes: {

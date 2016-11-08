@@ -14,12 +14,12 @@ SinglePage = React.createClass({
 		if (handle.ready()) {
 			// console.log(tweets);
 			// TweetCollection = new Mongo.Collection("tweetCollection");
-			page = Pages.find({ slug }).fetch()[0];
+			page = Pages.find({slug}).fetch()[0];
 			const imageSub = Meteor.subscribe('pageImages', slug);
 			if (imageSub.ready()) {
 				if (page.headerImage && Array.isArray(page.headerImage)) {
-					images = Images.find({ _id: { $in: page.headerImage } }).fetch();
-					thumbnails = Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch();
+					images = Images.find({_id: {$in: page.headerImage}}).fetch();
+					thumbnails = Thumbnails.find({originalId: {$in: page.headerImage}}).fetch();
 				}
 			}
 			loading = false;
@@ -75,7 +75,7 @@ SinglePage = React.createClass({
 
 				<section className="page-head fullscreen image-bg bg-dark">
 					<div className="background-image-holder less-blur blur">
-					{/* <img className="background-image" alt='image' src={headerImageSource}/>*/}
+						{/* <img className="background-image" alt='image' src={headerImageSource}/>*/}
 						<img
 							className="background-image"
 							role="presentation"
@@ -83,7 +83,7 @@ SinglePage = React.createClass({
 						/>
 					</div>
 
-					<div className="background-screen primary" />
+					<div className="background-screen primary"/>
 
 					<div className="container v-align-transform">
 						<div className="row">
@@ -102,7 +102,7 @@ SinglePage = React.createClass({
 				</section>
 
 				<section className="page-content container">
-					<div dangerouslySetInnerHTML={{ __html: page.content }} />
+					<div dangerouslySetInnerHTML={{__html: page.content}}/>
 				</section>
 
 

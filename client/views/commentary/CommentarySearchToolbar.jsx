@@ -1,6 +1,6 @@
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import TextField from 'material-ui/TextField';
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import TextField from "material-ui/TextField";
 
 CommentarySearchToolbar = React.createClass({
 
@@ -26,15 +26,15 @@ CommentarySearchToolbar = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	getMeteorData() {
 		return {
 			keywords: Keywords.find().fetch(),
 			commenters: Commenters.find().fetch(),
-			works: Works.find({}, { sort: { order: 1 } }).fetch(),
-			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
+			works: Works.find({}, {sort: {order: 1}}).fetch(),
+			subworks: Subworks.find({}, {sort: {n: 1}}).fetch(),
 		};
 	},
 

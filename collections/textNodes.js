@@ -1,22 +1,22 @@
 this.TextNodes = new Meteor.Collection('textNodes');
 
 Schemas.TextNodes = new SimpleSchema({
-	text: { type: [Object] },
+	text: {type: [Object]},
 
-	'text.$.n': { type: Number },
-	'text.$.text': { type: String },
-	'text.$.html': { type: String },
-	'text.$.edition': { type: Object },
-	'text.$.edition.title': { type: String },
-	'text.$.edition.slug': { type: String },
+	'text.$.n': {type: Number},
+	'text.$.text': {type: String},
+	'text.$.html': {type: String},
+	'text.$.edition': {type: Object},
+	'text.$.edition.title': {type: String},
+	'text.$.edition.slug': {type: String},
 
-	work: { type: Object },
+	work: {type: Object},
 	// 'work.id': { type: ObjectId }, // TODO: objectid type?
-	'work.slug': { type: String },
+	'work.slug': {type: String},
 
-	subwork: { type: Object },
-	'subwork.title': { type: String },
-	'subwork.n': { type: Number },
+	subwork: {type: Object},
+	'subwork.title': {type: String},
+	'subwork.n': {type: Number},
 
 	// entities: [] // TODO:
 
@@ -27,7 +27,7 @@ Schemas.TextNodes = new SimpleSchema({
 // 	"translations" : [ ],
 // 	"articles" : [ ],
 
-	related_passages: { type: [Object] },
+	related_passages: {type: [Object]},
 // "related_passages" : [
 // 		{
 // 			"text" : {

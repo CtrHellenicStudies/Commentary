@@ -1,6 +1,5 @@
-
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 
 CommenterVisualizations = React.createClass({
 
@@ -19,7 +18,7 @@ CommenterVisualizations = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	toggleVisibleWork(workToToggle) {
@@ -84,7 +83,7 @@ CommenterVisualizations = React.createClass({
 							workLevel={workIliadLevel}
 							nComments={commenter.nCommentsIliad}
 						/>
-					: '' }
+						: '' }
 					{workOdysseyLevel ?
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
@@ -93,7 +92,7 @@ CommenterVisualizations = React.createClass({
 							workLevel={workOdysseyLevel}
 							nComments={commenter.nCommentsOdyssey}
 						/>
-					: '' }
+						: '' }
 					{workHymnsLevel ?
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
@@ -102,7 +101,7 @@ CommenterVisualizations = React.createClass({
 							workLevel={workHymnsLevel}
 							nComments={commenter.nCommentsHymns}
 						/>
-					: '' }
+						: '' }
 				</div>
 				<div className="work-visualizations">
 					{this.renderWorks()}

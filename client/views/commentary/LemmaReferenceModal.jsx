@@ -1,7 +1,4 @@
-
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
+import RaisedButton from "material-ui/RaisedButton";
 
 LemmaReferenceModal = React.createClass({
 
@@ -18,7 +15,7 @@ LemmaReferenceModal = React.createClass({
 
 	getInitialState() {
 		return {
-			selectedLemmaEdition: { lines: [] },
+			selectedLemmaEdition: {lines: []},
 
 		};
 	},
@@ -93,7 +90,7 @@ LemmaReferenceModal = React.createClass({
 			});
 		} else if (!this.props.visible && this.state.selectedLemmaEdition.lines.length) {
 			this.setState({
-				selectedLemmaEdition: { lines: [] },
+				selectedLemmaEdition: {lines: []},
 			});
 		}
 	},
@@ -131,41 +128,41 @@ LemmaReferenceModal = React.createClass({
 				className={'lemma-reference-modal' + ((this.props.visible && hasLemma) ? ' lemma-reference-modal-visible' : '')}
 				style={styles.lemmaReferenceModal}
 			>
-					<article className="comment	lemma-comment paper-shadow " >
+				<article className="comment	lemma-comment paper-shadow ">
 
-						<div className="lemma-reference-text">
-							{this.state.selectedLemmaEdition.lines.map(function (line, i) {
-								return (<p
-									key={i}
-									className="lemma-text"
-									dangerouslySetInnerHTML={{ __html: line.html }}
-        />);
-							})}
-						</div>
+					<div className="lemma-reference-text">
+						{this.state.selectedLemmaEdition.lines.map(function (line, i) {
+							return (<p
+								key={i}
+								className="lemma-text"
+								dangerouslySetInnerHTML={{__html: line.html}}
+							/>);
+						})}
+					</div>
 
-						<div className="edition-tabs tabs">
-							{lemmaText.map(function (lemmaTextEdition, i) {
-								const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+					<div className="edition-tabs tabs">
+						{lemmaText.map(function (lemmaTextEdition, i) {
+							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-								return (<RaisedButton
-									key={i}
-									label={lemmaEditionTitle}
-									data-edition={lemmaTextEdition.title}
-									className={self.state.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-									onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-        />);
-							})}
-						</div>
+							return (<RaisedButton
+								key={i}
+								label={lemmaEditionTitle}
+								data-edition={lemmaTextEdition.title}
+								className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+							/>);
+						})}
+					</div>
 
-						<i
-							className="mdi mdi-close paper-shadow"
-							onClick={this.props.closeLemmaReference}
-						/>
-					</article>
+					<i
+						className="mdi mdi-close paper-shadow"
+						onClick={this.props.closeLemmaReference}
+					/>
+				</article>
 
 			</div>
 
-		 );
-	 },
+		);
+	},
 
 });

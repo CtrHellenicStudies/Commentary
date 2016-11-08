@@ -1,7 +1,7 @@
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import FlatButton from "material-ui/FlatButton";
+import FontIcon from "material-ui/FontIcon";
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 
 SearchTermButton = React.createClass({
 
@@ -19,7 +19,7 @@ SearchTermButton = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	toggleSearchTerm() {
@@ -39,7 +39,7 @@ SearchTermButton = React.createClass({
 					className={className}
 					onClick={this.toggleSearchTerm}
 					label={this.props.label}
-					icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
+					icon={<FontIcon className="mdi mdi-plus-circle-outline"/>}
 				/>
 			</li>
 		);

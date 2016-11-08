@@ -1,5 +1,5 @@
-import React from 'react';
-import { mount } from 'react-mounter';
+import React from "react";
+import {mount} from "react-mounter";
 /*
  * For the moment add subscriptions here; in future iterations, make them route
  * specific as necessary
@@ -33,20 +33,20 @@ FlowRouter.route('/', {
 FlowRouter.route('/commentary', {
 	name: 'commentary',
 	action: (params, queryParams) => {
-		mount(CommentaryLayout, { params, queryParams });
+		mount(CommentaryLayout, {params, queryParams});
 	},
 });
 
 FlowRouter.route('/commentary/', {
 	action: (params, queryParams) => {
-		mount(CommentaryLayout, { params, queryParams });
+		mount(CommentaryLayout, {params, queryParams});
 	},
 });
 
 FlowRouter.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
-			content: <KeywordDetail slug={params.slug} />,
+			content: <KeywordDetail slug={params.slug}/>,
 		});
 	},
 });
@@ -55,7 +55,7 @@ FlowRouter.route('/keywords', {
 	name: 'keywords',
 	action: () => {
 		mount(MasterLayout, {
-			content: <KeywordsPage type="word" title="Keywords" />,
+			content: <KeywordsPage type="word" title="Keywords"/>,
 		});
 	},
 });
@@ -63,7 +63,7 @@ FlowRouter.route('/keywords', {
 FlowRouter.route('/keyideas', {
 	action: () => {
 		mount(MasterLayout, {
-			content: <KeywordsPage type="idea" title="Key Ideas" />,
+			content: <KeywordsPage type="idea" title="Key Ideas"/>,
 		});
 	},
 });
@@ -71,7 +71,7 @@ FlowRouter.route('/keyideas', {
 FlowRouter.route('/referenceWorks/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
-			content: <ReferenceWorkDetail slug={params.slug} />,
+			content: <ReferenceWorkDetail slug={params.slug}/>,
 		});
 	},
 });
@@ -80,7 +80,7 @@ FlowRouter.route('/referenceWorks', {
 	name: 'referenceWorks',
 	action: () => {
 		mount(MasterLayout, {
-			content: <ReferenceWorksPage title="ReferenceWorks" />,
+			content: <ReferenceWorksPage title="ReferenceWorks"/>,
 		});
 	},
 });
@@ -141,10 +141,10 @@ loggedInGroup.route('/profile', {
 		mount(UserLayout, {
 			content: < ProfilePage / >,
 		});
-	},
-});
+		},
+		});
 
-FlowRouter.route('/users/:userId', {
+		FlowRouter.route('/users/:userId', {
 	subscriptions(params) {
 		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
 		this.register('userDiscussionComments',

@@ -1,6 +1,6 @@
-import React from 'react';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import React from "react";
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 
 KeywordTeaser = React.createClass({
 
@@ -19,7 +19,7 @@ KeywordTeaser = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return {muiTheme: getMuiTheme(baseTheme)};
 	},
 
 	toggleOpen() {
@@ -41,19 +41,19 @@ KeywordTeaser = React.createClass({
 			className={keywordClass}
 			data-wow-duration="0.2s"
 			onClick={this.toggleOpen}
-  >
+		>
 			<h4 className="keyword-title">
 				{keyword.title}
 			</h4>
-			<i className="mdi mdi-plus" />
-			<i className="mdi mdi-minus" />
+			<i className="mdi mdi-plus"/>
+			<i className="mdi mdi-minus"/>
 			<span className="keyword-comment-count">({keyword.count} Comments)</span>
 			<hr />
 			<span
 				className="keyword-description"
 			> {
-					keyword.description
-					|| `Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque
+				keyword.description
+				|| `Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque
 					adiungere vites conveniat quae curum boum qui cultus habendo sit pecori
 					apibus quanta experientia parcis, hinc canere incipiam`
 			} </span>

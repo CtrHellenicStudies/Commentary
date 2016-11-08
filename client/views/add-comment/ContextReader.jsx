@@ -1,6 +1,6 @@
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import RaisedButton from 'material-ui/RaisedButton';
+import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import RaisedButton from "material-ui/RaisedButton";
 
 ContextReader = React.createClass({
 
@@ -83,13 +83,13 @@ ContextReader = React.createClass({
 			lineFrom = this.props.initialLineFrom;
 		}
 
-		if (prevProps.initialLineTo	&& (prevProps.initialLineTo !== this.props.initialLineTo)) {
+		if (prevProps.initialLineTo && (prevProps.initialLineTo !== this.props.initialLineTo)) {
 			lineTo = this.props.initialLineTo;
 		}
 
 		if (this.props.workSlug !== '' && this.props.subworkN !== 0 &&
 			(prevProps.workSlug !== this.props.workSlug ||
-				prevProps.subworkN !== this.props.subworkN)) {
+			prevProps.subworkN !== this.props.subworkN)) {
 			Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
 				if (err) {
 					console.log(err);
@@ -141,8 +141,8 @@ ContextReader = React.createClass({
 
 		if (this.props.workSlug !== '' && this.props.subworkN !== 0 &&
 			(prevProps.workSlug !== this.props.workSlug || prevProps.subworkN !== this.props.subworkN
-				|| prevProps.initialLineTo !== this.props.initialLineTo ||
-				prevProps.initialLineFrom !== this.props.initialLineFrom)) {
+			|| prevProps.initialLineTo !== this.props.initialLineTo ||
+			prevProps.initialLineFrom !== this.props.initialLineFrom)) {
 			Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
 				if (err) {
 					console.log(err);
@@ -214,7 +214,7 @@ ContextReader = React.createClass({
 			const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
 			if (textNodesSubscription.ready()) {
 				// console.log("Context Panel lemmaQuery", lemmaQuery);
-				const textNodes = TextNodes.find(lemmaQuery, { sort: { 'text.n': 1 } }).fetch();
+				const textNodes = TextNodes.find(lemmaQuery, {sort: {'text.n': 1}}).fetch();
 				const editions = [];
 
 				let textIsInEdition = false;
@@ -323,10 +323,10 @@ ContextReader = React.createClass({
 					<div className={contextPanelStyles}>
 
 						{/* <IconButton
-								className="close-lemma-panel"
-								onClick={this.props.closeContextPanel}
-								iconClassName="mdi mdi-close"
-						/> */}
+						 className="close-lemma-panel"
+						 onClick={this.props.closeContextPanel}
+						 iconClassName="mdi mdi-close"
+						 /> */}
 
 						<div className="lemma-text-wrap">
 
@@ -337,12 +337,12 @@ ContextReader = React.createClass({
 
 							{this.state.lineFrom > 1 ?
 								<div className="before-link">
-										<RaisedButton
-											className="light"
-											label="Previous"
-											onClick={this.onBeforeClicked}
-											icon={<i className="mdi mdi-chevron-up" />}
-										/>
+									<RaisedButton
+										className="light"
+										label="Previous"
+										onClick={this.onBeforeClicked}
+										icon={<i className="mdi mdi-chevron-up"/>}
+									/>
 								</div>
 								:
 								''
@@ -354,24 +354,24 @@ ContextReader = React.createClass({
 									<div className={lineClass} key={i}>
 
 										<div className="lemma-meta">
-												{(line.n % 5 === 0 || line.n === 1) ?
-													<span className="lemma-line-n">
+											{(line.n % 5 === 0 || line.n === 1) ?
+												<span className="lemma-line-n">
 															{line.n}
 													</span>
-													:
-													''
-												}
+												:
+												''
+											}
 										</div>
 
 										<div
 											className="lemma-text"
 											ref={line.n}
 											id={line.n}
-											dangerouslySetInnerHTML={{ __html: line.html }}
+											dangerouslySetInnerHTML={{__html: line.html}}
 											onMouseEnter={self.handeLineMouseEnter}
 											onMouseLeave={self.handeLineMouseLeave}
 											onClick={self.handleLineClick}
-											style={{ cursor: 'pointer' }}
+											style={{cursor: 'pointer'}}
 										/>
 									</div>
 								);
@@ -383,7 +383,7 @@ ContextReader = React.createClass({
 										className="light"
 										label="Next"
 										onClick={this.onAfterClicked}
-										icon={<i className="mdi mdi-chevron-down" />}
+										icon={<i className="mdi mdi-chevron-down"/>}
 									/>
 								</div>
 								:
@@ -411,7 +411,7 @@ ContextReader = React.createClass({
 										key={i}
 										label={lemmaEditionTitle}
 										data-edition={lemmaTextEdition.title}
-										className={self.data.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ?
+										className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
 											'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 										onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 									/>
@@ -422,14 +422,14 @@ ContextReader = React.createClass({
 					:
 					<div className={contextPanelStyles}>
 						{/* <IconButton
-								className="close-lemma-panel"
-								onClick={this.props.closeContextPanel}
-								iconClassName="mdi mdi-close"
-						/>*/}
+						 className="close-lemma-panel"
+						 onClick={this.props.closeContextPanel}
+						 iconClassName="mdi mdi-close"
+						 />*/}
 						<div className="lemma-text-wrap">
 							<br />
 							<br />
-							<div className="well-spinner" />
+							<div className="well-spinner"/>
 						</div>
 					</div>
 				}

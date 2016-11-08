@@ -1,3 +1,5 @@
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import KeywordContext from '../../../imports/ui/components/KeywordContext.jsx';
 
 KeywordDetail = React.createClass({
@@ -6,7 +8,15 @@ KeywordDetail = React.createClass({
 		slug: React.PropTypes.string.isRequired,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
 	mixins: [ReactMeteorData],
+
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
 	getMeteorData() {
 		const query = {

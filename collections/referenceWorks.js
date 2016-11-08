@@ -62,7 +62,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 							// console.log(this, this.id);
 							const editorId = this.id;
 							const ONE_MB = 1024 * 100;
-							_.each(files, (file) = > {
+							_.each(files, (file) => {
 								const uploader = new UploadFS.Uploader({
 									adaptive: false,
 									chunkSize: ONE_MB * 16.66,
@@ -79,7 +79,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 								console.log(`${currentFile.name} upload completed`);
 								const url = currentFile.url;
 								// console.log(file.url, editorId, $(editorId));
-								$(`#${editorId}`).summernote('insertImage', url, () = > {
+								$(`#${editorId}`).summernote('insertImage', url, () => {
 									console.log('image inserted');
 								// $image.css('width', $image.width() / 3);
 								// $image.css('margin', 15);
@@ -129,7 +129,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 							// console.log(this, this.id);
 							const editorId = this.id;
 							const ONE_MB = 1024 * 100;
-							_.each(files, (file) = > {
+							_.each(files, (file) => {
 								const uploader = new UploadFS.Uploader({
 									adaptive: false,
 									chunkSize: ONE_MB * 16.66,
@@ -146,7 +146,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 								console.log(`${currentFile.name} upload completed`);
 								const url = currentFile.url;
 								// console.log(file.url, editorId, $(editorId));
-								$(`#${editorId}`).summernote('insertImage', url, () = > {
+								$(`#${editorId}`).summernote('insertImage', url, () => {
 									console.log('image inserted');
 								// $image.css('width', $image.width() / 3);
 								// $image.css('margin', 15);
@@ -187,8 +187,9 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		optional: true,
 		autoValue() {
 			if (this.isInsert) {
-				return new Date;
+				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',
@@ -200,8 +201,9 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		optional: true,
 		autoValue() {
 			if (this.isUpdate) {
-				return new Date;
+				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',

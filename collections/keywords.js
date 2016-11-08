@@ -46,8 +46,9 @@ Schemas.Keywords = new SimpleSchema({
 		optional: true,
 		autoValue() {
 			if (this.isInsert) {
-				return new Date;
+				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',
@@ -59,8 +60,9 @@ Schemas.Keywords = new SimpleSchema({
 		optional: true,
 		autoValue() {
 			if (this.isUpdate) {
-				return new Date;
+				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',

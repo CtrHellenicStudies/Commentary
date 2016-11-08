@@ -148,7 +148,7 @@ AddCommentLayout = React.createClass({
 
         										if (referenceWorks.length) {
             										referenceWorksInputObject = {
-                										revisionsCreated: referenceWorks[0].created,
+                                                        revisionsCreated: referenceWorks[0].date,
                 										reference: referenceWorks[0].title,
                 										referenceLink: referenceWorks[0].link,
             };

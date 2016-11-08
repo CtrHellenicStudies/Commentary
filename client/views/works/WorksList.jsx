@@ -16,33 +16,31 @@ WorksList = React.createClass({
 
 	mixins: [ReactMeteorData],
 
-	getMeteorData(){
-		let query = {};
+	getMeteorData() {
+		const query = {};
 		return {
-			works: Works.find(query, {sort:{order:1}}).fetch(),
+			works: Works.find(query, { sort: { order: 1 } }).fetch(),
 		};
 	},
 
 
-	renderWorks(){
-		if(this.data.works.length === 3) {
+	renderWorks() {
+		if (this.data.works.length === 3) {
 			return this.data.works.map((work, i) => {
-				return <WorkVisualization
-								key={i}
-								work={work} />;
-
+				return (<WorkVisualization
+					key={i}
+					work={work}
+    />);
 			});
 		}
-
 	},
 
-	render(){
-
-		return(
+	render() {
+		return (
 			<div>
 				{this.renderWorks()}
 			</div>
 		);
-	}
+	},
 
 });

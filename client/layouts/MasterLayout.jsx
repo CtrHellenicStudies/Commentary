@@ -1,11 +1,14 @@
 import '../../node_modules/mdi/css/materialdesignicons.css';
 
 
-
 MasterLayout = React.createClass({
 
-	render(){
-		return(
+	propTypes: {
+		content: React.PropTypes.object,
+	},
+
+	render() {
+		return (
 			<div className="chs-layout master-layout">
 
 				<Header />
@@ -13,10 +16,9 @@ MasterLayout = React.createClass({
 				<main>
 					{this.props.content}
 				</main>
-				<Footer/>
+				<Footer />
 
 			</div>
-			);
-		}
-
+		);
+	},
 });

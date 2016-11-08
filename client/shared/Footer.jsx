@@ -11,27 +11,26 @@ Footer = React.createClass({
 	},
 
 	childContextTypes: {
-			muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: React.PropTypes.object.isRequired,
 	},
 
 
-	render(){
+	render() {
+		const date = new Date();
+		const year = date.getFullYear();
 
-		let date = new Date();
-		let year = date.getFullYear();
-
-		let styles = {
-			circleButton : {
-				width: "auto",
-				height: "auto",
+		const styles = {
+			circleButton: {
+				width: 'auto',
+				height: 'auto',
 			},
-			circleButtonIcon : {
-				color: "#ffffff",
+			circleButtonIcon: {
+				color: '#ffffff',
 
-			}
-		}
+			},
+		};
 
-		var user_is_loggedin = false;
+		const user_is_loggedin = false;
 
 		return (
 
@@ -42,33 +41,33 @@ Footer = React.createClass({
 								<FlatButton
 									href="/commentary/"
 									label="Commentary"
-									></FlatButton>
+        />
 								<FlatButton
 									href="/commenters/"
 									label="Commenters"
-									></FlatButton>
+        />
 								<FlatButton
 									href="/keywords/"
 									label="Keywords"
-									></FlatButton>
+        />
 								<FlatButton
 									href="/keyideas/"
 									label="Key Ideas"
-									></FlatButton>
+        />
 								<FlatButton
 									href="/about"
 									label="About"
-									></FlatButton>
-								{ user_is_loggedin ? "" :
+        />
+								{ user_is_loggedin ? '' :
 									<div>
 										<FlatButton
 											href="#"
 											label="Login"
-											></FlatButton>
+          />
 										<FlatButton
 											href="#"
 											label="Join the Community"
-											></FlatButton>
+          />
 									</div>
 								}
 							</div>
@@ -80,7 +79,7 @@ Footer = React.createClass({
 
 							<div className="col-md-2 hidden-sm hidden-xs text-center">
 								<a href="http://chs.harvard.edu" target="_blank">
-									<img className="site-logo" src="/images/logo-tower.png"/>
+									<img className="site-logo" src="/images/logo-tower.png" />
 								</a>
 							</div>
 
@@ -94,15 +93,15 @@ Footer = React.createClass({
 								</p>
 
 							</div>
-						</div>{/*<!--end of row-->*/}
+						</div>{/* <!--end of row-->*/}
 						<div className="row">
 							<div className="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
 								<p className="fade-1-4 copyright">&copy; 2016 The Center for Hellenic Studies.	See our <a href="/terms" >terms and privacy policy</a>.</p>
 							</div>
-						</div>{/*<!--end of row-->*/}
-					</div>{/*<!--end of container-->*/}
+						</div>{/* <!--end of row-->*/}
+					</div>{/* <!--end of container-->*/}
 				</footer>
 
 		);
-	}
+	},
 });

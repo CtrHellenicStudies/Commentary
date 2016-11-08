@@ -35,9 +35,9 @@ CommentarySearchPanel = React.createClass({
 	getMeteorData() {
 		return {
 			keywords: Keywords.find({
-				count: {$gt: 0},
-			},{sort: {title: 1}}).fetch(),
-			commenters: Commenters.find({}, {sort:{name: 1}}).fetch(),
+				count: { $gt: 0 },
+			}, { sort: { title: 1 } }).fetch(),
+			commenters: Commenters.find({}, { sort: { name: 1 } }).fetch(),
 			works: Works.find({}, { sort: { order: 1 } }).fetch(),
 			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
 		};
@@ -84,7 +84,7 @@ CommentarySearchPanel = React.createClass({
 
 	render() {
 		const self = this;
-		const filters = this.props.filters;
+		const filters = this.props.filters || [];
 
 		const styles = {
 			flatButton: {

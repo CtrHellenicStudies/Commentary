@@ -4,74 +4,59 @@
 # but you can also edit it by hand.
 
 # Packages from meteor-starter template application
-less@2.7.4
-accounts-base@1.2.9
+less
+accounts-ui@1.1.9
 accounts-password@1.2.12
+accounts-facebook
+accounts-google
+accounts-twitter
 aldeed:collection2
 dburles:collection-helpers
 matb33:collection-hooks
 alanning:roles
 aldeed:simple-schema
-fortawesome:fontawesome
+# fortawesome:fontawesome
 tap:i18n
-raix:handlebar-helpers
-cfs:standard-packages
-cfs:gridfs
-#jalik:ufs
+# raix:handlebar-helpers
 aldeed:template-extension
-cfs:graphicsmagick
 yogiben:helpers
 # manuelschoebel:ms-seo
 # spiderable
-accounts-facebook@1.0.10
-accounts-google@1.0.10
-accounts-twitter@1.1.11
-accounts-ui@1.1.9
-jparker:gravatar
-service-configuration@1.0.10
-yogiben:mixpanel
-juliancwirko:s-alert
-juliancwirko:s-alert-stackslide
+service-configuration
 momentjs:moment
-zimme:active-route
 twbs:bootstrap
 reywood:publish-composite
 natestrauser:animate-css
-meteorhacks:subs-manager
 yogiben:admin
 timmyg:wow
 tsega:skrollr
-utilities:avatar
 meteor-base@1.0.4
 mongo@1.1.10
 blaze-html-templates@1.0.4
-session@1.1.6
-jquery@1.11.9
-tracker@1.1.0
-logging@1.1.14
-reload@1.1.10
-random@1.0.10
-ejson@1.0.12
+session
+jquery
+tracker
+logging
+reload
+random
+ejson
 yogiben:pretty-email
 aldeed:autoform
 yogiben:autoform-modals
 yogiben:autoform-file
 yogiben:autoform-map
-check@1.2.3
+check
 iron:router
-#multiply:iron-router-progress
 useraccounts:core
 useraccounts:bootstrap
 useraccounts:flow-routing@1.14.3
-percolate:momentum
 
 # Packages added for project
-http@1.2.8
+http
 react
 ecmascript@0.5.7
+es5-shim@4.6.13
 archimedigital:core
-jabbslad:basic-auth
-deanius:promise
 kadira:flow-router
 kadira:react-layout
 kadira:blaze-layout
@@ -81,15 +66,16 @@ standard-minifier-js@1.1.8
 simple:rest
 dburles:google-maps
 todda00:friendly-slugs
-mquandalle:promisify-core
 d3js:d3
 gwendall:blaze-to-react
 jalik:ufs
-jalik:ufs-local
 jalik:ufs-gridfs
 buishi:autoform-ufs
 mpowaga:autoform-summernote
-reactive-var
+reactive-var@1.0.10
+reactive-dict@1.1.8
 practicalmeteor:mocha
 dburles:factory
 mdg:validated-method
+meteorhacks:aggregate
+react-meteor-data

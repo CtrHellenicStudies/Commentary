@@ -77,7 +77,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	});
 
 	const text = commentCandidate.text.slice(0, 1) !== '<' ?
-		'<p>${commentCandidate.text}</p>' :
+		`<p>${commentCandidate.text}</p>` :
 		commentCandidate.text;
 
 	let revision = Revisions.insert({
@@ -160,6 +160,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 			newComment.lineTo = parseInt(commentCandidate.line_to, 10);
 		}
 
+		console.log(newComment);
 		const insertResponse = Comments.insert(newComment);
 		if (insertResponse) {
 			valid = true;

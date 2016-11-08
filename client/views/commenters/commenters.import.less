@@ -1,83 +1,81 @@
-
-.authors {
-
-  text-align:center;
-  .transition( all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) );
-  padding:40px 0;
+.commenters {
+	text-align:center;
+	.transition( all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) );
+	padding:40px 0;
 
 }
-.author-teaser {
-  text-align:center;
-  color:@light;
-  margin:0;
-  display:inline-block;
-  vertical-align: top;
-  width:28%;
+
+.commenter-teaser {
+	text-align:center;
+	color:@light;
+	margin:0;
+	display:inline-block;
+	vertical-align: top;
+	width:28%;
 	height:550px;
 	padding:20px 30px;
 	margin:2px;
 
-  a {
+	a {
 	cursor:pointer;
 
-  }
-
- .author-teaser-text {
-	padding:20px 0px;
-
-	h3 {
-	  padding:10px 0 20px;
-	  margin:0;
-	  font-size:22px;
-	  color:@light;
-	}
-	hr {
-	  min-width:200px;
-	  width:50%;
-	  margin:0 auto;
-	  height:2px;
-	  background-color: @light;
-	  border:none;
-	  outline:none;
-
-	}
-	.author-description {
-	  color:@light;
-	  display:block;
-	  line-height:1.3em;
-	  font-family:@font-reading;
-    font-size:16px;
-	  padding:25px 0;
-	  width:100%;
-	  text-align:center;
-	}
-	.project-link {
-	  font-family:@font-label;
-    font-size:12px;
-	  color:rgba(0,0,0,0.4);
-
 	}
 
-  }
+	.commenter-teaser-text {
+		padding:20px 0px;
+
+		h3 {
+			padding:10px 0 20px;
+			margin:0;
+			font-size:22px;
+			color:@light;
+		}
+		hr {
+			min-width:200px;
+			width:50%;
+			margin:0 auto;
+			height:2px;
+			background-color: @light;
+			border:none;
+			outline:none;
+
+		}
+		.commenter-description {
+			color:@light;
+			display:block;
+			line-height:1.3em;
+			font-family:@font-reading;
+			font-size:16px;
+			padding:25px 0;
+			width:100%;
+			text-align:center;
+		}
+		.project-link {
+			font-family:@font-label;
+			font-size:12px;
+			color:rgba(0,0,0,0.4);
+
+		}
+
+	}
 
 }
 
 
-.author-image {
-  display:inline-block;
-  position:relative;
-  width:200px;
-  height:200px;
-  border-radius:300px;
-  overflow:hidden;
+.commenter-image {
+	display:inline-block;
+	position:relative;
+	width:200px;
+	height:200px;
+	border-radius:300px;
+	overflow:hidden;
 
-  img {
+	img {
 	width:100%;
-  }
+	}
 
 
 }
-
 
 
 .page-commenters {
@@ -86,38 +84,31 @@
 		max-width:1200px;
 	}
 
-  .author-teaser {
+	.commenter-teaser {
 	text-align:center;
-	.author-teaser-text {
-	  a {
+	.commenter-teaser-text {
+		a {
 		&:hover {
-		  h3 {
+			h3 {
 			color:@primary;
 
-		  }
+			}
 		}
-	  }
-	  h3 {
+		}
+		h3 {
 		color:@primary-text;
 		text-align:center;
 		margin-bottom:20px;
-	  }
-	  hr {
+		}
+		hr {
 		background:@primary;
-	  }
-	  .author-description {
+		}
+		.commenter-description {
 		color:@secondary-text;
 		margin-top:10px;
-	  }
+		}
 
 	}
 
-  }
-}
-
-.page-commenter {
-  .author-image {
-	float:left;
-	margin:40px 50px;
-  }
+	}
 }

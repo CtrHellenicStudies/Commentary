@@ -1,5 +1,4 @@
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -16,13 +15,8 @@ import {stateToHTML} from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 const singleLinePlugin = createSingleLinePlugin();
 
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin';
-const richButtonsPlugin = createRichButtonsPlugin();
+import RichTextEditor from 'react-rte';
 
-const {
-  // inline buttons
-  ItalicButton,
-} = richButtonsPlugin;
 
 AddComment = React.createClass({
 
@@ -37,22 +31,19 @@ AddComment = React.createClass({
     propTypes: {
         selectedLineFrom: React.PropTypes.number,
         selectedLineTo: React.PropTypes.number,
-        submiteForm: React.PropTypes.func.isRequired,
+        submitForm: React.PropTypes.func.isRequired,
     },
 
     getInitialState(){
         return {
             titleEditorState: EditorState.createEmpty(),
-            textEditorState: EditorState.createEmpty(),
-            referenceEditorState: EditorState.createEmpty(),
-            referenceLinkEditorState: EditorState.createEmpty(),
+            textEditorState: RichTextEditor.createEmptyValue(),
 
             titleValue: '',
             textValue: '',
-            referenceValue: '',
-            referenceLinkValue: '',
-            keywordValue: '',
-            keyideasValue: '',
+            referenceWorksValue: '',
+            keywordsValue: null,
+            keyideasValue: null,
 
             snackbarOpen: false,
             snackbarMessage: ""
@@ -63,20 +54,36 @@ AddComment = React.createClass({
 
     getMeteorData() {
         var keywords_options = [];
-        var keywords = Keywords.find().fetch();
-        keywords.map(function(word) {
+        var keywords = Keywords.find({type: 'word'}).fetch();
+        keywords.map(function(keyword) {
             keywords_options.push({
-                value: word.slug,
-                label: word.title,
+                value: keyword.title,
+                label: keyword.title,
             });
         });
-        
-        // TODO: key ideas
+
         var keyideas_options = [];
+        var keyideas = Keywords.find({type: 'idea'}).fetch();
+        keyideas.map(function(keyidea) {
+            keyideas_options.push({
+                value: keyidea.title,
+                label: keyidea.title,
+            });
+        });
+
+        var referenceWorks_options = [];
+        var referenceWorks = ReferenceWorks.find().fetch();
+        referenceWorks.map(function(referenceWork) {
+            referenceWorks_options.push({
+                value: referenceWork.slug,
+                label: referenceWork.title,
+            });
+        });
 
         return {
             keywords_options: keywords_options,
             keyideas_options: keyideas_options,
+            referenceWorks_options: referenceWorks_options,
         };
     },
 
@@ -90,62 +97,139 @@ AddComment = React.createClass({
     },
 
     onTextChange(textEditorState) {
-        var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+        // var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
         this.setState({
             textEditorState: textEditorState,
-            textValue: textHtml,
+            textValue: textEditorState.toString('html'),
         });
     },
 
-    onKeywordsChange(keywordsEditorState) {
+    onKeywordsValueChange(keywords) {
+        if (keywords) {
+            keywords = keywords.split(",");
+            var errorKeywords = this.errorKeywords(keywords, 'word');
+            if (errorKeywords.length) {
+                errorKeywords.forEach((keyword) => {
+                    var index = keywords.indexOf(keyword);
+                    keywords.splice(index, 1);
+                });
+            };
+            this.setState({
+                keywordsValue: keywords,
+            });
+        } else {
+            this.setState({
+                keywordsValue: null,
+            });
+        };
+    },
+
+    onKeyideasValueChange(keyideas) {
+        if (keyideas) {
+            keyideas = keyideas.split(",");
+            var errorKeywords = this.errorKeywords(keyideas, 'idea');
+            if (errorKeywords.length) {
+                errorKeywords.forEach((keyword) => {
+                    var index = keyideas.indexOf(keyword);
+                    keyideas.splice(index, 1);
+                });
+            };
+            this.setState({
+                keyideasValue: keyideas,
+            });
+        } else {
+            this.setState({
+                keyideasValue: null,
+            });
+        };
+    },
+
+    onReferenceWorksValueChange(referenceWork) {
         this.setState({
-            keywordsEditorState: keywordsEditorState,
+            referenceWorksValue: referenceWork
         });
     },
 
-    onReferenceChange(referenceEditorState) {
-        this.setState({
-            referenceEditorState: referenceEditorState,
-        });
-    },
-
-    onReferenceLinkChange(referenceLinkEditorState) {
-        this.setState({
-            referenceLinkEditorState: referenceLinkEditorState,
-        });
-    },
-
-    keywordsValueChange(value) {
-        this.setState({
-            keywordValue: value
-        });
-    },
-
-    referenceValueChange(event) {
+    onReferenceValueChange(event) {
         this.setState({
             referenceValue: event.target.value
         });
     },
 
-    referenceLinkValueChange(event) {
+    onReferenceLinkValueChange(event) {
         this.setState({
             referenceLinkValue: event.target.value
         });
     },
 
     handleSubmit(event) {
-        // TODO: form validation
         event.preventDefault();
 
         var error = this.validateStateForSubmit();
 
+        this.showSnackBar(error);
+
+        if (!error.errors) {
+            this.props.submitForm(this.state);
+        };
+    },
+
+    errorKeywords(keywordsArray, type) {
+        // 'type' is the type of keywords passed to this function
+        var errorKeywords = [];
+        switch (type) {
+
+            case 'word':
+                var keyideasValue = this.state.keyideasValue;
+                keywordsArray.forEach((keyword) => {
+                    this.data.keyideas_options.forEach((keyidea_option) => {
+                        if (keyword === keyidea_option.value) {
+                            errorKeywords.push(keyword);
+                        };
+                    });
+
+                    if (Array.isArray(keyideasValue)) {
+                        keyideasValue.forEach((keyideaValue) => {
+                            if (keyword === keyideaValue) {
+                                errorKeywords.push(keyword);
+                            };
+                        });
+                    };
+                });
+                break;
+
+            case 'idea':
+                var keywordsValue = this.state.keywordsValue;
+                keywordsArray.forEach((keyword) => {
+                    this.data.keywords_options.forEach((keyword_option) => {
+                        if (keyword === keyword_option.value) {
+                            errorKeywords.push(keyword);
+                        };
+                    });
+
+                    if (Array.isArray(keywordsValue)) {
+                        keywordsValue.forEach((keywordValue) => {
+                            if (keyword === keywordValue) {
+                                errorKeywords.push(keyword);
+                            };
+                        });
+                    };
+                });
+                break;
+        };
+        return errorKeywords;
+    },
+
+    showSnackBar(error) {
         this.setState({
             snackbarOpen: error.errors,
             snackbarMessage: error.errorMessage,
         });
-        if (!error.errors) {
-            this.props.submiteForm(this.state);
-        };
+        setTimeout(() => {
+            this.setState({
+                snackbarOpen: false,
+            });
+        }, 4000);
     },
 
     validateStateForSubmit() {
@@ -173,60 +257,26 @@ AddComment = React.createClass({
         };
     },
 
-    // onMouseDown(event) {
-    //     var selectedText = "";
-    //     if (window.getSelection) {
-    //         selectedText = window.getSelection();
-    //     } else if (document.selection && document.selection.type != "Control") {
-    //         selectedText = document.selection;
-    //     };
-    //     if(selectedText != "") {
-    //         console.log('selectedText', selectedText);
-    //         console.log('X position', event.pageX);
-    //         console.log('Y position', event.target.offsetTop, event.target.offsetLeft);
-    //     }
-    // },
-
-    // _onBoldClick() {
-    //     this.onChange(RichUtils.toggleInlineStyle(
-    //         this.state.editorState, 'BOLD'
-    //     ));
-    // },
-
-    // _test() {
-    //     var selection = window.getSelection();
-    //     console.log('selection ', selection );
-    // },
-
-    // handleKeyCommand(command) {
-    //     const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
-    //     if (newState) {
-    //         this.onChange(newState);
-    //         return 'handled';
-    //     }
-    //     return 'not-handled';
-    // },
-
-    // myBlockStyleFn(contentBlock) {
-    //     const type = contentBlock.getType();
-    //     if (type === 'unstyled') {
-    //         return 'text-paragraph';
-    //     }
-    // },
-
     render() {
 
-        // const raw = convertToRaw(this.state.titleEditorState.getCurrentContent());
-        var titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-        var title = jQuery(titleHtml).text();
-
-        const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
-        var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-        var text = jQuery(textHtml).text();
-        // console.log('html', jQuery(html).text());
+        const toolbarConfig = {
+            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
+            INLINE_STYLE_BUTTONS: [{
+                label: 'Italic',
+                style: 'ITALIC',
+            }, {
+                label: 'Underline',
+                style: 'UNDERLINE'
+            }],
+            BLOCK_TYPE_BUTTONS: [{
+                label: 'UL',
+                style: 'unordered-list-item'
+            }]
+        };
 
 
         return (
+					<div className="comments lemma-panel-visible">
             <div className={'comment-outer'}>
 
                 <article className="comment commentary-comment paper-shadow " style={{marginLeft: 0}}>
@@ -246,93 +296,48 @@ AddComment = React.createClass({
                         <Select
                             name="keywords"
                             id="keywords"
-                            className="form-element"
                             required={false}
                             options={this.data.keywords_options}
                             multi={true}
                             allowCreate={true}
-                            value={this.state.keywordValue}
-                            onChange={this.keywordsValueChange}
+                            value={this.state.keywordsValue}
+                            onChange={this.onKeywordsValueChange}
                             placeholder='Keywords...'
                         />
-                        {/*JSON.stringify(raw)*/}
+                        <Select
+                            name="keyideas"
+                            id="keyideas"
+                            required={false}
+                            options={this.data.keyideas_options}
+                            multi={true}
+                            allowCreate={true}
+                            value={this.state.keyideasValue}
+                            onChange={this.onKeyideasValueChange}
+                            placeholder='Keyideas...'
+                        />
 
                     </div>
                     <div className="comment-lower" style={{paddingTop: 20}}>
-                        <ItalicButton/>{/*TODO: delete button*/}
-                        <div className="add-comment-text">
-                            <Editor
-                                editorState={this.state.textEditorState}
-                                onChange={this.onTextChange}
-                                placeholder='Comment text...'
-                                spellCheck={true}
-                                stripPastedStyles={true}
-                                plugins={[richButtonsPlugin]}
-                            />
-                        </div>
-
+                        <RichTextEditor
+                            placeholder='Comment text...'
+                            value={this.state.textEditorState}
+                            onChange={this.onTextChange}
+                            toolbarConfig={toolbarConfig}
+                        />
                         <div className="comment-reference" >
-                            {/*<h4>Secondary Source(s):
-                            <Editor
-                                editorState={this.state.referenceEditorState}
-                                onChange={this.onReferenceChange}
+                            <Select
+                                name="referenceWorks"
+                                id="referenceWorks"
+                                required={false}
+                                options={this.data.referenceWorks_options}
+                                value={this.state.referenceWorksValue}
+                                onChange={this.onReferenceWorksValueChange}
                                 placeholder='Reference...'
-                                spellCheck={true}
-                                stripPastedStyles={true}
-                                plugins={plugins}
-                                blockRenderMap={singleLinePlugin.blockRenderMap}
                             />
-                            <Editor
-                                editorState={this.state.referenceLinkEditorState}
-                                onChange={this.onReferenceLinkChange}
-                                placeholder='Reference link...'
-                                spellCheck={true}
-                                stripPastedStyles={true}
-                                plugins={plugins}
-                                blockRenderMap={singleLinePlugin.blockRenderMap}
-                            />
-                            
-                            </h4>*/}
+                        </div>
 
-
-                            
-                            {/*<p>
-                                {comment.referenceLink ?
-                                    <a href={comment.referenceLink} target="_blank" >
-                                        {comment.reference}
-                                    </a>
-                                    :
-                                    <span >
-                                        {comment.reference}
-                                    </span>
-                                }
-                            </p>*/}
-                        {/* references input */}
-                        </div>
-                        <div>
-                            <TextField
-                                name="reference"
-                                id="reference"
-                                className="form-element"
-                                required={false}
-                                floatingLabelText="Reference..."
-                                value={this.state.referenceValue}
-                                onChange={this.referenceValueChange}
-                            />
-                        </div>
-                        <div>
-                            <TextField
-                                name="referenceLink"
-                                id="referenceLink"
-                                className="form-element"
-                                required={false}
-                                floatingLabelText="Reference link..."
-                                value={this.state.referenceLinkValue}
-                                onChange={this.referenceLinkValueChange}
-                            />
-                        </div>
                         <div className="add-comment-button">
-                            <RaisedButton 
+                            <RaisedButton
                                 type="submit"
                                 label="Add comment"
                                 labelPosition="after"
@@ -352,7 +357,7 @@ AddComment = React.createClass({
                 />
 
             </div>
-
+					</div>
         );
     }
 });

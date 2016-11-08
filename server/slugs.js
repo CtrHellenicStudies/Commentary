@@ -1,4 +1,4 @@
-Meteor.startup(() => {
+/* Meteor.startup(() => {
 	let count;
 	const docs = Commenters.find({
 		slug: {
@@ -20,3 +20,4 @@ Meteor.startup(() => {
 	});
 	return console.log(`Updated slugs for ${count} Commenters.`);
 });
+*/

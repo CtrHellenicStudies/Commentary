@@ -1,37 +1,54 @@
-import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
-import { queryCommentWithKeyword, makeKeywordContextQueryFromComment } from '../../api/api_utils.js';
+import FontIcon from 'material-ui/FontIcon';
+import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '../../api/api_utils.js';
 
 export default KeywordContext = React.createClass({
 
-	mixins: [ReactMeteorData],
-
 	propTypes: {
-		slug: React.PropTypes.string.isRequired,
+		keywordId: React.PropTypes.string,
 		maxLines: React.PropTypes.number.isRequired,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
-			selectedLemmaEdition: {
-				lines: [],
-			},
-		}
+			selectedLemma: 0,
+		};
+	},
+
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
+		if (!this.props.keywordId) {
+			return;
+		}
 		let lemmaText = [];
+		const context = {};
 
-		const commentsSub = Meteor.subscribe('comments.keyword_context', this.props.slug);
+		const commentsSub = Meteor.subscribe('comments.keyword_context', this.props.keywordId);
 
 		if (commentsSub.ready()) {
-			const commentCursor = queryCommentWithKeyword(this.props.slug);
+			const commentCursor = queryCommentWithKeywordId(this.props.keywordId);
+
 			if (commentCursor.count() > 0) {
 				const comment = commentCursor.fetch()[0];
-
 				const textNodesQuery = makeKeywordContextQueryFromComment(comment, this.props.maxLines);
 				const textNodesSub = Meteor.subscribe('textnodes.keyword_context', textNodesQuery);
+
+				context.work = textNodesQuery['work.slug'];
+				context.subwork = textNodesQuery['subwork.n'];
+				context.lineFrom = textNodesQuery['text.n'].$gte;
+				context.lineTo = textNodesQuery['text.n'].$lte;
 
 				if (textNodesSub.ready()) {
 					const textNodesCursor = TextNodes.find(textNodesQuery);
@@ -42,6 +59,7 @@ export default KeywordContext = React.createClass({
 
 		return {
 			lemmaText,
+			context,
 		};
 	},
 
@@ -49,16 +67,14 @@ export default KeywordContext = React.createClass({
 		const editions = [];
 		nodesCursor.forEach(node => {
 			node.text.forEach(text => {
-				let myEdition = editions.find((e) => {
-					return text.edition.slug === e.slug;
-				});
+				let myEdition = editions.find((e) => text.edition.slug === e.slug);
 
 				if (!myEdition) {
 					myEdition = {
 						title: text.edition.title,
 						slug: text.edition.slug,
 						lines: [],
-					}
+					};
 					editions.push(myEdition);
 				}
 
@@ -84,57 +100,57 @@ export default KeywordContext = React.createClass({
 		return editions;
 	},
 
-	toggleEdition(editionSlug){
-		if(this.state.selectedLemmaEdition.slug !== editionSlug){
-			var newSelectedEdition = {};
-			this.data.lemmaText.forEach(function(edition){
-				if(edition.slug === editionSlug){
-					newSelectedEdition = edition;
-				}
-			});
-
+	toggleEdition(newSelectedLemma) {
+		if (this.state.selectedLemma !== newSelectedLemma && newSelectedLemma < this.data.lemmaText.length) {
 			this.setState({
-				selectedLemmaEdition: newSelectedEdition
-			});
-		}
-	},
-
-	componentDidUpdate(){
-		if (this.data.lemmaText.length > 0 && this.state.selectedLemmaEdition.lines.length === 0) {
-			this.setState({
-				selectedLemmaEdition: this.data.lemmaText[0]
+				selectedLemma: newSelectedLemma,
 			});
 		}
 	},
 
 	render() {
-		return (<article className="comment lemma-comment paper-shadow">
-			{
-				this.state.selectedLemmaEdition.lines.map((line, i) => {
-					return <p
-						key={i}
-						className="lemma-text"
-						dangerouslySetInnerHTML={{__html: line.html}}
-					/>;
-				})
-			}
-			<div className="edition-tabs tabs">
-				{
-					this.data.lemmaText.map((lemmaTextEdition, i) => {
-						let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
-
-						return <RaisedButton
+		const context = this.data.context;
+		return (
+			<article className="comment lemma-comment paper-shadow">
+				{this.data.lemmaText.length === 0 ?
+					''
+					:
+					this.data.lemmaText[this.state.selectedLemma].lines.map((line, i) =>
+						<p
 							key={i}
-							label={lemmaEditionTitle}
-							data-edition={lemmaTextEdition.title}
-							className={this.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
-							onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
-						>
-						</RaisedButton>
-					})
+							className="lemma-text"
+							dangerouslySetInnerHTML={{ __html: line.html }}
+						/>
+					)
 				}
-			</div>
-		</article>);
+				<div className="edition-tabs tabs">
+					{
+						this.data.lemmaText.map((lemmaTextEdition, i) => {
+							let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+
+							return <RaisedButton
+								key={i}
+								label={lemmaEditionTitle}
+								data-edition={lemmaTextEdition.title}
+								className={this.state.selectedLemma === i ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
+								onClick={this.toggleEdition.bind(null, i)}
+							>
+							</RaisedButton>
+						})
+					}
+				</div>
+				<div className="context-tabs tabs">
+					<RaisedButton
+						className="context-tab tab"
+						href={`/commentary/?works=${context.work}&subworks=${context.subwork
+						}&lineFrom=${context.lineFrom}&lineTo=${context.lineTo}`}
+						label="Context"
+						labelPosition="before"
+						icon={<FontIcon className="mdi mdi-chevron-right" />}
+					/>
+				</div>
+			</article>
+		);
 	},
 
 });

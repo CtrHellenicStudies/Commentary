@@ -11,7 +11,7 @@ SearchToolDropdown = React.createClass({
 		children: React.PropTypes.node.isRequired, // content to show inside dropdown
 		open: React.PropTypes.bool.isRequired, // whether dropdown is open or not
 		toggle: React.PropTypes.func.isRequired, // function to toggle the dropdown
-		disabled: React.PropTypes.bool.isRequired, // whether dropdown is diables or not
+		disabled: React.PropTypes.bool.isRequired, // whether dropdown is disabled or not
 	},
 
 	childContextTypes: {

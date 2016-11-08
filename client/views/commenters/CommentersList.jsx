@@ -1,52 +1,62 @@
+import { Avatars } from '/imports/avatar/avatar_collections.js';
+
 CommentersList = React.createClass({
 
-	mixins: [ReactMeteorData],
 
 	propTypes: {
 		limit: React.PropTypes.number,
 		featureOnHomepage: React.PropTypes.bool,
+		defaultAvatarUrl: React.PropTypes.string,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getMeteorData() {
-		let query = {};
+		Meteor.subscribe('avatars.commenter.all');
 
-		var limit = 100;
+		const query = {};
+		let limit = 100;
 
-		if(this.props.limit){
+		if (this.props.limit) {
 			limit = this.props.limit;
 		}
-		if(this.props.featureOnHomepage){
+
+		if (this.props.featureOnHomepage) {
 			query.featureOnHomepage = this.props.featureOnHomepage;
 		}
 
+		const commenters = Commenters.find(query, { sort: { name: 1 }, limit }).fetch();
+		for (let i = 0; i < commenters.length; ++i) {
+			if (commenters[i].avatar == null) {
+				commenters[i].avatarUrl = this.props.defaultAvatarUrl;
+			} else {
+				const avatar = Avatars.findOne({ _id: commenters[i].avatar });
+				if (avatar) {
+					commenters[i].avatarUrl = avatar.url;
+				} else {
+					commenters[i].avatarUrl = this.props.defaultAvatarUrl;
+				}
+			}
+		}
 		return {
-			commenters: Commenters.find(query, {sort: {name: 1}, limit: limit}).fetch(),
+			commenters,
 		};
 	},
 
 	renderCommenters() {
-
-		return this.data.commenters.map((commenter) => {
-			return <CommenterTeaser
-							key={commenter._id}
-							commenter={commenter} />;
-
-		});
-
+		return this.data.commenters.map((commenter) =>
+			<CommenterTeaser
+				key={commenter._id}
+				commenter={commenter}
+			/>
+		);
 	},
 
 	render() {
-
-		 return (
-			 <div className="commenters-list">
-
-				 {this.renderCommenters()}
-
-			 </div>
-
-
+		return (
+			<div className="commenters-list">
+				{this.renderCommenters()}
+			</div>
 			);
-		}
-
-
+	},
 });

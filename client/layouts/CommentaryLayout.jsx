@@ -4,211 +4,305 @@ CommentaryLayout = React.createClass({
 		queryParams: React.PropTypes.object,
 	},
 
-	getInitialState(){
+	getInitialState() {
 		const filters = [];
+		let selectedRevisionIndex = null;
 
-		if("_id" in this.props.queryParams){
+		console.log('this.props.queryParams', this.props.queryParams);
+
+		if ('_id' in this.props.queryParams) {
 			filters.push({
-				key: "_id",
-				values: [this.props.queryParams._id]
+				key: '_id',
+				values: [this.props.queryParams._id],
 			});
+			if ("revision" in this.props.queryParams) {
+				filters.push({
+					key: "revision",
+					values: [Number(this.props.queryParams.revision)],
+				});
+			};
+		}
+
+		if ('textsearch' in this.props.queryParams) {
+			filters.push({
+				key: 'textsearch',
+				values: [this.props.queryParams.textsearch],
+			});
+		}
+
+		if ('keywords' in this.props.queryParams) {
+			const keywords = [];
+
+			this.props.queryParams.keywords.split(',').forEach(function (keyword) {
+				keywords.push({
+					wordpressId: keyword,
+				});
+			});
+
+			filters.push({
+				key: 'keywords',
+				values: keywords,
+			});
+		}
+
+		if ('commenters' in this.props.queryParams) {
+			const commenters = [];
+
+			this.props.queryParams.commenters.split(',').forEach(function (commenter) {
+				commenters.push({
+					wordpressId: Number(commenter),
+				});
+			});
+
+			filters.push({
+				key: 'commenters',
+				values: commenters,
+			});
+		}
+
+		if ('works' in this.props.queryParams) {
+			const works = [];
+
+			this.props.queryParams.works.split(',').forEach(function (work) {
+				works.push({
+					slug: work,
+					title: Utils.capitalize(work),
+				});
+			});
+
+			filters.push({
+				key: 'works',
+				values: works,
+			});
+		}
+
+		if ('subworks' in this.props.queryParams) {
+			const subworks = [];
+
+			this.props.queryParams.subworks.split(',').forEach(function (subwork) {
+				const subworkNumber = parseInt(subwork);
+
+				if (!Number.isNaN(subworkNumber)) {
+					subworks.push({
+						title: subwork,
+						n: subworkNumber,
+					});
+				}
+			});
+
+
+			filters.push({
+				key: "subworks",
+				values: subworks,
+			});
+		}
+
+		if ('lineFrom' in this.props.queryParams) {
+			const lineFrom = parseInt(this.props.queryParams.lineFrom);
+
+			if (!Number.isNaN(lineFrom)) {
+				filters.push({
+					key: 'lineFrom',
+					values: [lineFrom],
+				});
+			}
+		}
+
+		if ('lineTo' in this.props.queryParams) {
+			const lineTo = parseInt(this.props.queryParams.lineTo);
+
+			if (!Number.isNaN(lineTo)) {
+				filters.push({
+					key: 'lineTo',
+					values: [lineTo],
+				});
+			}
 		}
 
 		return {
-			filters: filters,
+			filters,
 			skip: 0,
-			limit: 10
+			limit: 10,
+			selectedRevisionIndex,
 		};
 	},
 
-	loadMoreComments(){
-			this.setState({
-				skip : this.state.skip + this.state.limit
-			});
+	loadMoreComments() {
+		this.setState({
+			skip: this.state.skip + this.state.limit,
+		});
 
-			//console.log("Load more comments:", this.state.skip);
+			// console.log("Load more comments:", this.state.skip);
 	},
 
-	toggleSearchTerm(key, value){
-		var self = this,
-				filters = this.state.filters;
-		var keyIsInFilter = false,
-				valueIsInFilter = false,
-				filterValueToRemove,
-				filterToRemove;
+	toggleSearchTerm(key, value) {
+		let self = this,
+			filters = this.state.filters;
+		let keyIsInFilter = false,
+			valueIsInFilter = false,
+			filterValueToRemove,
+			filterToRemove;
 
-		filters.forEach(function(filter, i){
-			if(filter.key === key){
+		filters.forEach(function (filter, i) {
+			if (filter.key === key) {
 				keyIsInFilter = true;
+				valueIsInFilter = false;
 
-				filter.values.forEach(function(filterValue, j){
-						if(filterValue._id === value._id){
-							valueIsInFilter = true;
-							filterValueToRemove = j;
-						}
-				})
+				filter.values.forEach(function (filterValue, j) {
+					if (filterValue._id === value._id) {
+						valueIsInFilter = true;
+						filterValueToRemove = j;
+					}
+				});
 
-				if(valueIsInFilter){
+				if (valueIsInFilter) {
 					filter.values.splice(filterValueToRemove, 1);
-					if(filter.values.length === 0){
+					if (filter.values.length === 0) {
 						filterToRemove = i;
 					}
-				}else {
-					if(key === "works"){
+				} else {
+					if (key === 'works') {
 						filter.values = [value];
-					}else {
+					} else {
 						filter.values.push(value);
 					}
 				}
-
 			}
-
 		});
 
 
-		if(typeof filterToRemove !== "undefined"){
+		if (typeof filterToRemove !== 'undefined') {
 			filters.splice(filterToRemove, 1);
 		}
 
-		if(!keyIsInFilter){
+		if (!keyIsInFilter) {
 			filters.push({
-									key: key,
-									values: [value]
-								});
-
+				key,
+				values: [value],
+			});
 		}
 
 		this.setState({
-			filters: filters,
-			skip: 0
+			filters,
+			skip: 0,
 		});
-
 	},
 
-	handleChangeTextsearch(textsearch){
+	handleChangeTextsearch(textsearch) {
+		const filters = this.state.filters;
 
-		var filters = this.state.filters;
+		if (textsearch && textsearch.length) {
+			let textsearchInFilters = false;
 
-		if(textsearch && textsearch.length){
-			var textsearchInFilters = false;
-
-			filters.forEach(function(filter, i){
-				if(filter.key === "textsearch"){
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'textsearch') {
 					filter.values = [textsearch];
 					textsearchInFilters = true;
 				}
 			});
 
-			if(!textsearchInFilters){
+			if (!textsearchInFilters) {
 				filters.push({
-					key:"textsearch",
-					values:[textsearch]
-				})
+					key: 'textsearch',
+					values: [textsearch],
+				});
 			}
+		} else {
+			let filterToRemove;
 
-		}else {
-			var filterToRemove;
-
-			filters.forEach(function(filter, i){
-				if(filter.key === "textsearch"){
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'textsearch') {
 					filterToRemove = i;
 				}
-
 			});
 
-			if(typeof filterToRemove !== "undefined"){
+			if (typeof filterToRemove !== 'undefined') {
 				filters.splice(filterToRemove, 1);
 			}
-
-
 		}
 
 		this.setState({
-			filters: filters
-		})
-
+			filters,
+		});
 	},
 
-	handleChangeLineN(e){
+	handleChangeLineN(e) {
+		const filters = this.state.filters;
 
-		var filters = this.state.filters;
+		if (e.from > 1) {
+			let lineFromInFilters = false;
 
-		if(e.from > 1){
-			var lineFromInFilters = false;
-
-			filters.forEach(function(filter, i){
-				if(filter.key === "lineFrom"){
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineFrom') {
 					filter.values = [e.from];
 					lineFromInFilters = true;
 				}
 			});
 
-			if(!lineFromInFilters){
+			if (!lineFromInFilters) {
 				filters.push({
-					key:"lineFrom",
-					values:[e.from]
-				})
+					key: 'lineFrom',
+					values: [e.from],
+				});
 			}
-
-		}else {
+		} else {
 			var filterToRemove;
 
-			filters.forEach(function(filter, i){
-				if(filter.key === "lineFrom"){
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineFrom') {
 					filterToRemove = i;
 				}
-
 			});
 
-			if(typeof filterToRemove !== "undefined"){
+			if (typeof filterToRemove !== 'undefined') {
 				filters.splice(filterToRemove, 1);
 			}
-
 		}
 
-		if(e.to < 2100){
-			var lineToInFilters = false;
+		if (e.to < 2100) {
+			let lineToInFilters = false;
 
-			filters.forEach(function(filter, i){
-				if(filter.key === "lineTo"){
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineTo') {
 					filter.values = [e.to];
 					lineToInFilters = true;
 				}
 			});
 
-			if(!lineToInFilters){
+			if (!lineToInFilters) {
 				filters.push({
-					key:"lineTo",
-					values:[e.to]
-				})
+					key: 'lineTo',
+					values: [e.to],
+				});
 			}
-
-		}else {
+		} else {
 			var filterToRemove;
 
-			filters.forEach(function(filter, i){
-				if(filter.key === "lineTo"){
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineTo') {
 					filterToRemove = i;
 				}
-
 			});
 
-			if(typeof filterToRemove !== "undefined"){
+			if (typeof filterToRemove !== 'undefined') {
 				filters.splice(filterToRemove, 1);
 			}
-
 		}
 
 
 		this.setState({
-			filters: filters
-		})
-
+			filters,
+		});
 	},
 
-	render(){
-		console.log("CommentaryLayout.filters", this.state.filters);
-		return(
+	addSearchTerm(keyword) {
+		console.log('keyword', keyword);
+		this.toggleSearchTerm('keywords', keyword);
+	},
+
+	render() {
+		console.log('CommentaryLayout.filters', this.state.filters);
+		return (
 			<div className="chs-layout commentary-layout">
 
 				<Header
@@ -217,7 +311,7 @@ CommentaryLayout = React.createClass({
 					handleChangeLineN={this.handleChangeLineN}
 					handleChangeTextsearch={this.handleChangeTextsearch}
 					initialSearchEnabled
-					/>
+    />
 
 				<Commentary
 					filters={this.state.filters}
@@ -225,10 +319,11 @@ CommentaryLayout = React.createClass({
 					loadMoreComments={this.loadMoreComments}
 					skip={this.state.skip}
 					limit={this.state.limit}
-					/>
+					addSearchTerm={this.addSearchTerm}
+    />
 
 			</div>
 			);
-		}
+	},
 
 });

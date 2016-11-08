@@ -120,19 +120,19 @@ header .line-wrap {
   .comment-group-meta-inner {
 		position:absolute;
 		top:115px;
-		left:90px;
+		left:4%;
   }
 
   .comment-group-meta-inner-fixed {
     position:fixed;
-    top:115px;
-		left:90px;
+    top:173px;
+		left:5%;
   }
 
   .comment-group-meta-inner-bottom {
     position:absolute;
     bottom:173px;
-		left:90px;
+		left:5%;
   }
 
   .comment-group-ref-above {
@@ -144,7 +144,7 @@ header .line-wrap {
 		margin:0 0px 0 0 ;
 	  font-family:@font-label;
 	  font-size:16px;
-		text-align:right;
+		text-align:left;
 		display:block;
 
   }
@@ -160,7 +160,7 @@ header .line-wrap {
     display:inline-block;
     vertical-align: top;
 		max-width:89px;
-		text-align:right;
+		text-align:left;
 		display:block;
 
 		span {
@@ -343,7 +343,7 @@ article.lemma-comment {
       padding-top:1px;
       .transition( all 100ms ease-out );
       padding-right:3px;
-
+      margin: 0px;
     }
     i {
       font-size:18px;
@@ -422,7 +422,7 @@ article.lemma-comment {
     padding-top:50px;
   }
   .comment-lower {
-    padding-bottom:20px;
+    padding-bottom:40px;
   }
 
   .comment-upper-left, .comment-upper-right {
@@ -634,7 +634,7 @@ article.lemma-comment {
 
   }
 
-	ol {
+	ol, ul {
 		list-style: disc;
 		margin:0px;
 		padding:5px 15px;
@@ -700,7 +700,9 @@ article.lemma-comment {
 
 .comment-persistent-identifier {
 	position:absolute;
-	bottom:60px;
+  width:100%;
+  text-align:right;
+	bottom:80px;
 	right:50px;
 
 
@@ -725,9 +727,35 @@ article.lemma-comment {
 
 			}
 		}
-
 	}
+}
 
+.comment-citation {
+  position:absolute;
+  bottom:80px;
+  right:50px;
+
+  div {
+    box-shadow: none !important;
+  }
+
+  button {
+    background-color: #f6f6f6 !important;
+    opacity:0.7;
+
+    span {
+      font-size:12px !important;
+    }
+
+    &:hover {
+      background-color: @md-primary !important;
+      opacity:1;
+
+      span {
+        color: @light !important;
+      }
+    }
+  }
 }
 
 .comment-meta-section {
@@ -1352,6 +1380,12 @@ article.lemma-comment {
   margin: 100px auto;
 }
 
+.full-page-spinner {
+  margin: 45vh auto !important;
+  left: 50%;
+  position: fixed;
+}
+
 .double-bounce1, .double-bounce2 {
   width: 100%;
   height: 100%;
@@ -1498,4 +1532,60 @@ article.lemma-comment {
 
 .fixed {
   position: fixed !important;
+}
+
+.table-diff {
+    text-align: justify;
+
+    .texttitle {
+        font-size: 16px;
+        padding: 10px 10px;
+    }
+
+    .delete {
+        background: #fbe9eb;
+
+        th {
+            background: #fac5cd;
+            border-right: 1px solid #f9aeb9;
+            text-align: center;
+        }
+    }
+    .insert {
+        background: #ddfbe6;
+
+        th {
+            background: #c7f0d2;
+            border-right: 1px solid #a3d5b0;
+            text-align: center;
+        }
+    }
+    .equal {
+        background: #fdfdfd;
+
+        th {
+            background: #f4f4f4;
+            border-right: 1px solid #dcdcdc;
+            text-align: center;
+        }
+    }
+    .replace {
+
+    }
+
+    .author {
+
+    }
+
+    th {
+        padding: 0 10px;
+    }
+
+    td {
+        padding: 2px 10px;
+    }
+}
+
+.comment-citation {
+	
 }

@@ -13,8 +13,7 @@ CommentsRecent = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	render(){
-
+	render() {
 		return (
 			<section className="background-gray recent-comments">
 
@@ -24,7 +23,7 @@ CommentsRecent = React.createClass({
 										<h3 className=" uppercase">
 											Recently from the Commentary
 										</h3>
-										<i className="mdi mdi-format-quote quote-icon"></i>
+										<i className="mdi mdi-format-quote quote-icon" />
 										<div className="text-slider slider-arrow-controls">
 												<ul className="slides">
 														<li>
@@ -34,7 +33,7 @@ CommentsRecent = React.createClass({
 																<h4>&mdash; Douglas Frame, Iliad 1.4-6</h4>
 
 														</li>
-														{/*<li>
+														{/* <li>
 																<p >
 																	Like every word in the epic song-generating system, this first word of the poem has dimensions that were disclosed to its original audiences and performers through age-old, recurrent exposure to poetry in performance. Those dimensions are invisible . . .
 															 </p>
@@ -58,5 +57,5 @@ CommentsRecent = React.createClass({
 
 
 			);
-	}
+	},
 });

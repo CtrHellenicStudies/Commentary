@@ -1,6 +1,11 @@
 this.Keywords = new Meteor.Collection('keywords');
 
 Schemas.Keywords = new SimpleSchema({
+	_id: {
+		type: String,
+		optional: true,
+  },
+
 	wordpressId: {
 		type: Number,
 		optional: true,
@@ -8,7 +13,7 @@ Schemas.Keywords = new SimpleSchema({
 
 	title: {
 		type: String,
-		optional: true,
+		// optional: true,
 	},
 
 	slug: {
@@ -16,9 +21,9 @@ Schemas.Keywords = new SimpleSchema({
 		max: 200,
 		optional: true,
 		autoform: {
-			type: "hidden",
-			label: false
-		}
+			type: 'hidden',
+			label: false,
+		},
 	},
 
 	description: {
@@ -29,7 +34,7 @@ Schemas.Keywords = new SimpleSchema({
 	type: {
 		type: String,
 		optional: true,
-		defaultValue: "word"
+		defaultValue: 'word',
 	},
 
 	count: {
@@ -39,29 +44,29 @@ Schemas.Keywords = new SimpleSchema({
 	created: {
 		type: Date,
 		optional: true,
-		autoValue: function() {
+		autoValue() {
 			if (this.isInsert) {
 				return new Date;
 			}
 		},
 		autoform: {
-			type: "hidden",
-			label: false
-		}
+			type: 'hidden',
+			label: false,
+		},
 	},
 	updated: {
 		type: Date,
 		optional: true,
-		autoValue: function() {
+		autoValue() {
 			if (this.isUpdate) {
 				return new Date;
 			}
 		},
 		autoform: {
-			type: "hidden",
-			label: false
-		}
-	}
+			type: 'hidden',
+			label: false,
+		},
+	},
 
 });
 

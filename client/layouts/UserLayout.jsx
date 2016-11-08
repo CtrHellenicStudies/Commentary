@@ -1,36 +1,49 @@
+import React from 'react';
+import { SnackAttack } from '/imports/ui/components/SnackAttack.jsx';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import '../../node_modules/mdi/css/materialdesignicons.css';
 
-
 UserLayout = React.createClass({
-	mixins: [ReactMeteorData],
-	getMeteorData(){
-		var user = Meteor.user();
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
-		if(user && !("profile" in user)){
+	mixins: [ReactMeteorData],
+
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
+
+	getMeteorData() {
+		const user = Meteor.user();
+
+		if (user && !('profile' in user)) {
 			user.profile = {};
 		}
 		return {
-			user: user
-		}
-
+			user,
+		};
 	},
 
 
-	render(){
-		return(
+	render() {
+		return (
 			<div className="chs-layout master-layout">
 
 				<Header />
 
 				<main>
 					{this.data.user ?
-						<ProfilePage user={this.data.user}/>
-					: ""}
+						<ProfilePage user={this.data.user} />
+					:
+						<Loading />
+					}
 				</main>
-				<Footer/>
-
+				<Footer />
+				<SnackAttack />
 			</div>
 			);
-		}
+	},
 
 });

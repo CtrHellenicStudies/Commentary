@@ -137,7 +137,7 @@ Schemas.User = new SimpleSchema({
 		optional: true,
 	},
 	commenterId: {
-		type: String,
+		type: [String],
 		optional: true,
 	},
 	bookmarks: {

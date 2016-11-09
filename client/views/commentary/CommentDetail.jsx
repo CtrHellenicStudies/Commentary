@@ -210,11 +210,9 @@ CommentDetail = React.createClass({
 		const selectedRevisionIndex = this.state.selectedRevisionIndex;
 		let commentClass = 'comment-outer has-discussion ';
 		let userCommenterId = [];
-		if (Meteor.user()) {
+		if (Meteor.user() && Meteor.user().commenterId) {
 			userCommenterId = Meteor.user().commenterId;
-		}
-		console.log('userCommenterId', userCommenterId);
-
+		};
 
 		if (self.state.discussionVisible) {
 			commentClass += 'discussion--width discussion--visible';

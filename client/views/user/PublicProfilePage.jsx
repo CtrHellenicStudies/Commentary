@@ -30,19 +30,22 @@ PublicProfilePage = React.createClass({
     return {
       skip: 0,
       limit: 100,
+      userEmail: null,
     };
   },
 
   getMeteorData() {
 
+    const userId = this.props.userId;
+
     const user = Meteor.users.findOne({
-      _id: this.props.userId
+      _id: userId
     });
 
     let discussionComments = [];
 
     discussionComments = DiscussionComments.find({
-      'user._id': this.props.userId,
+      'user._id': userId,
     }).fetch();
 
     discussionComments.forEach(function(discussionComment) {
@@ -76,6 +79,8 @@ PublicProfilePage = React.createClass({
     if (user) {
       this.checkUsername(user);
     };
+
+    
 
     return {
       user,
@@ -123,15 +128,31 @@ PublicProfilePage = React.createClass({
               <br />
               <div className="user-profile-textfields">
                 { currentUser.profile.name ?
-                  <div className='public-profile-name'>
-                    <h2>{ currentUser.profile.name }</h2>
-                    <br />
+                  <div>
+                    { currentUser.username ?
+                      <div className='public-profile-name'>
+                        <h2>{ currentUser.profile.name } ({ currentUser.username })</h2>
+                        <br />
+                      </div>
+                      :
+                      <div className='public-profile-name'>
+                        <h2>{ currentUser.profile.name }</h2>
+                        <br />
+                      </div>}
                   </div>
                   :
-                  <div className='public-profile-name'>
-                    <h2>No name</h2>
-                    <br />
-                  </div> }
+                  <div>
+                    { currentUser.username ?
+                      <div className='public-profile-name'>
+                        <h2>{ currentUser.username }</h2>
+                        <br />
+                      </div>
+                      :
+                      <div className='public-profile-name'>
+                        <h2>No name</h2>
+                        <br />
+                      </div> }
+                  </div>}
                 { currentUser.profile.biography ?
                   <div className='public-profile-biography'>
                     <p>
@@ -146,6 +167,17 @@ PublicProfilePage = React.createClass({
                     </p>
                     <br />
                   </div> }
+                  {console.log('this.data.userEmail', this.data.userEmail)}
+                { currentUser.profile.publicEmailAdress ?
+                  <div className='public-profile-link'>
+                    <h3>Email: </h3>
+                    <span>
+                      { currentUser.profile.publicEmailAdress }
+                    </span>
+                    <br />
+                  </div>
+                  :
+                  '' }
                 { currentUser.profile.academiaEdu ?
                   <div className='public-profile-link'>
                     <h3>Academia:</h3>

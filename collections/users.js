@@ -14,6 +14,10 @@ Schemas.UserProfile = new SimpleSchema({
 			rows: 4,
 		},
 	},
+	publicEmailAdress: {
+		type: String,
+		optional: true,
+	},
 	academiaEdu: {
 		type: String,
 		optional: true,

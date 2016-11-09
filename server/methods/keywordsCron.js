@@ -1,32 +1,32 @@
-Meteor.method('keyword_cron', function () {
+Meteor.method('keyword_cron', () => {
 	const comments = Comments.find().fetch();
 	const keywords = [];
 
 	let isInKeywords = false;
 
 
-	comments.forEach(function (comment) {
-		comment.keywords.forEach(function (commentKeyword) {
+	comments.forEach((comment, commentIndex) => {
+		comment.keywords.forEach((commentKeyword, commentKeywordIndex) => {
 			isInKeywords = false;
-			keywords.forEach(function (keyword) {
+			keywords.forEach((keyword, keywordIndex) => {
 				if (keyword.slug === commentKeyword.slug) {
 					isInKeywords = true;
-					keyword.count++;
+					keywords[keywordIndex].count++;
 				}
 			});
 
 			if (!isInKeywords) {
-				commentKeyword.count = 0;
+				comments[commentIndex].keywords[commentKeywordIndex].count = 0;
 				keywords.push(commentKeyword);
 			}
 		});
 	});
 
 
-	keywords.forEach(function (keyword) {
+	keywords.forEach((keyword) => {
 		console.log(keyword.title, keyword.count);
 
-		Keywords.update({slug: keyword.slug}, {$set: {count: keyword.count}});
+		Keywords.update({ slug: keyword.slug }, { $set: { count: keyword.count } });
 	});
 
 	/*

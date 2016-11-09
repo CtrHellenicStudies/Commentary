@@ -1,5 +1,5 @@
-import {check} from 'meteor/check';
-import {sendSnack} from '/imports/ui/components/SnackAttack.jsx';
+import { check } from 'meteor/check';
+import { sendSnack } from '/imports/ui/components/SnackAttack.jsx';
 
 export class AvatarUploader {
 	constructor({

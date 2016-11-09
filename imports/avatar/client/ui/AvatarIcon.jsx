@@ -7,5 +7,5 @@ export default function AvatarIcon(props) {
 		url = prop.defaultUrl;
 	}
 
-	return <img src={url}/>;
+	return <img src={url} />;
 }

@@ -102,6 +102,7 @@ Schemas.User = new SimpleSchema({
 			if (this.isInsert) {
 				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',
@@ -115,6 +116,7 @@ Schemas.User = new SimpleSchema({
 			if (this.isUpdate) {
 				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',

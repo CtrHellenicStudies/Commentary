@@ -1,8 +1,8 @@
-import {Meteor} from 'meteor/meteor';
-import {UploadFS} from 'meteor/jalik:ufs';
-import {Roles} from 'meteor/alanning:roles';
+import { Meteor } from 'meteor/meteor';
+import { UploadFS } from 'meteor/jalik:ufs';
+import { Roles } from 'meteor/alanning:roles';
 import gm from 'gm';
-import {Avatars} from '../avatar_collections.js';
+import { Avatars } from '../avatar_collections.js';
 
 export function checkAvatarPermissions(userId, avatar) {
 	if (!userId)
@@ -23,8 +23,8 @@ export function checkAvatarPermissions(userId, avatar) {
 const AvatarFilter = new UploadFS.Filter({
 	minSize: 1,
 	maxSize: 1024 * 1000, // 1 MB
-	constentTypes: ['image/*'],
-	extensions: ['jpg', 'jpeg', 'png', 'gif'],
+	constentTypes: [ 'image/*' ],
+	extensions: [ 'jpg', 'jpeg' , 'png', 'gif' ],
 });
 
 const AvatarPermissions = new UploadFS.StorePermissions({
@@ -56,7 +56,7 @@ function finishUserAvatarUpload(avatar) {
 	const oldAvatarId = 'avatar' in user && '_id' in user.avatar ? user.avatar._id : null;
 
 	Meteor.users.update(
-		{_id: user._id},
+		{ _id: user._id },
 		{
 			$set: {
 				avatar: {
@@ -66,7 +66,7 @@ function finishUserAvatarUpload(avatar) {
 				},
 			},
 		},
-		{multi: false,},
+		{ multi: false, },
 		function handleUserAvatarUpdateComplete(avatarUpdateErr) {
 			if (avatarUpdateErr) {
 				console.error('could not update user ', user._id, ' with avatar ', avatar._id,
@@ -74,32 +74,30 @@ function finishUserAvatarUpload(avatar) {
 				);
 				AvatarStore.delete(avatar._id);
 			} else if (oldAvatarId) {
-				AvatarStore.delete(oldAvatarId, (storeDeleteErr) = > {
+				AvatarStore.delete(oldAvatarId, (storeDeleteErr) => {
 					if (storeDeleteErr) {
 						console.error('could not delete avatar ', user.avatar, ' for user ', user._id,
 							'; error:', storeDeleteErr
 						);
 					}
-				}
-			)
-				;
+				});
 			}
 		}
 	);
 }
 
 function finishCommenterAvatarUpload(avatar) {
-	const c = Commenters.findOne({_id: avatar.commenterId}, {fields: {_id: 1, avatar: 1}});
+	const c = Commenters.findOne({_id: avatar.commenterId}, { fields: { _id:1, avatar:1 }});
 	const oldAvatarId = 'avatar' in c && c.avatar ? c.avatar : null;
 
 	Commenters.update(
-		{_id: avatar.commenterId},
+		{ _id: avatar.commenterId },
 		{
 			$set: {
 				avatar: avatar._id,
 			}
 		},
-		{multi: false},
+		{ multi: false },
 		function handleCommenterAvatarUpdateComplete(avatarUpdateErr) {
 			if (avatarUpdateErr) {
 				console.error('could not update commenter ', avatar.commenterId, ' with avatar ', avatar._id,
@@ -107,15 +105,13 @@ function finishCommenterAvatarUpload(avatar) {
 				);
 				AvatarStore.delete(avatar._id);
 			} else if (oldAvatarId) {
-				AvatarStore.delete(oldAvatarId, (storeDeleteErr) = > {
+				AvatarStore.delete(oldAvatarId, (storeDeleteErr) => {
 					if (storeDeleteErr) {
 						console.error('could not delete avatar ', oldAvatarId, ' for commenter ', avatar.commenterId,
 							'; error:', storeDeleteErr
 						);
 					}
-				}
-			)
-				;
+				});
 			}
 		}
 	);
@@ -128,23 +124,14 @@ AvatarStore.onFinishUpload = function handleAvatarFinishUpdate(avatar) {
 		finishCommenterAvatarUpload(avatar);
 };
 
-AvatarStore.onCopyError = (err, avatarId, avatar) =
->
-{
+AvatarStore.onCopyError = (err, avatarId, avatar) => {
 	console.log('Avatar copy error. avatar:', avatar, ' error:', err);
-}
-;
+};
 
-AvatarStore.nReadError = (err, avatarId, avatar) =
->
-{
+AvatarStore.nReadError = (err, avatarId, avatar) => {
 	console.log('Avatar read error. avatar:', avatar, ' error', err);
-}
-;
+};
 
-AvatarStore.onWriteError = (err, avatarId, avatar) =
->
-{
+AvatarStore.onWriteError = (err, avatarId, avatar) => {
 	console.log('Avatar write error. avatar:', avatar, ' error', err);
-}
-;
+};

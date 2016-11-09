@@ -1,24 +1,15 @@
-Meteor.publish('user.discussionComments', function (query, skip, limit) {
-	if (!query) {
-		query = {};
-	}
-
-	if (!skip) {
-		skip = 0;
-	}
-
-	if (!limit) {
-		limit = 100;
-	}
-
+Meteor.publish('user.discussionComments', function discussionComments(query, skip, limit) {
+	check(query, Object);
+	check(skip, Number);
+	check(limit, Number);
+	const newQuery = query;
 	if (this.userId) {
-		query['user._id'] = this.userId;
-		return DiscussionComments.find(query, {skip, limit, sort: {created: -1}});
-	} else {
-		return [];
+		newQuery['user._id'] = this.userId;
+		return DiscussionComments.find(newQuery, { skip, limit, sort: { created: -1 } });
 	}
+	return [];
 });
 
-Meteor.publish('userData', function () {
-	return Meteor.users.find({'_id': this.userId});
+Meteor.publish('userData', function userData() {
+	return Meteor.users.find({ _id: this.userId });
 });

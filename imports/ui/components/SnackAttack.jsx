@@ -1,5 +1,5 @@
-import React from "react";
-import Snackbar from "material-ui/Snackbar";
+import React from 'react';
+import Snackbar from 'material-ui/Snackbar';
 
 const mountedAttacks = new Set();
 
@@ -36,7 +36,7 @@ export class SnackAttack extends React.Component {
 		mountedAttacks.delete(this);
 	}
 
-	showSnack(message, actionLabel = null, actionCallback = null) {
+	showSnack(message, actionLabel=null, actionCallback=null) {
 		this.setState({
 			open: true,
 			message,
@@ -46,18 +46,18 @@ export class SnackAttack extends React.Component {
 	}
 
 	handleRequestClose(event) {
-		this.setState({open: false});
+		this.setState({ open: false });
 	}
 
 	render() {
 		return <Snackbar
-			className="snackAttack"
-			autoHideDuration={this.props.autoHideDuration}
-			open={this.state.open}
-			message={this.state.message}
-			onRequestClose={this.handleRequestClose}
-			action={this.state.actionLabel}
-			onActionTouchTap={this.state.actionCallback}
+			className = "snackAttack"
+			autoHideDuration = {this.props.autoHideDuration}
+			open = {this.state.open}
+			message = {this.state.message}
+			onRequestClose = {this.handleRequestClose}
+			action = {this.state.actionLabel}
+			onActionTouchTap = {this.state.actionCallback}
 		/>;
 	}
 }

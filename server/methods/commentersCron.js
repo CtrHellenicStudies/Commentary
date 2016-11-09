@@ -1,214 +1,189 @@
-Meteor.method('commenters_cron', () = > {
+Meteor.method('commenters_cron', () => {
 	const comments = Comments.find().fetch();
-const commenters = [];
+	const commenters = [];
 
-let isInCommenters = false;
+	let isInCommenters = false;
+	let isInCommentCountsLines = false;
 
-comments.forEach((comment) = > {
-	comment.commenters.forEach((commentCommenter) = > {
-	isInCommenters = false;
-commenters.forEach((commenter) = > {
-	if (commenter.slug === commentCommenter.slug
-)
-{
-	isInCommenters = true;
-	commenter.nCommentsTotal++;
-	switch (comment.work.slug) {
-		case 'iliad': {
-			commenter.nCommentsIliad++;
-			break;
-		}
-		case 'odyssey': {
-			commenter.nCommentsOdyssey++;
-			break;
-		}
-		case 'homeric-hymns': {
-			commenter.nCommentsHymns++;
-			break;
-		}
-		case 'hymns': {
-			commenter.nCommentsHymns++;
-			break;
-		}
-		default: {
-			break;
-		}
-	}
-	// }
+	comments.forEach((comment, commentIndex) => {
+		comment.commenters.forEach((commentCommenter, commentCommenterIndex) => {
+			isInCommenters = false;
+			commenters.forEach((commenter, commenterIndex) => {
+				if (commenter.slug === commentCommenter.slug) {
+					isInCommenters = true;
+					commenters[commenterIndex].nCommentsTotal++;
 
-	commenter.nCommentsWorks.forEach((work) = > {
-		if (comment.work.slug === work.slug
-)
-	{
+					switch (comment.work.slug) {
+					case 'iliad':
+						commenters[commenterIndex].nCommentsIliad++;
+						break;
+					case 'odyssey':
+						commenters[commenterIndex].nCommentsOdyssey++;
+						break;
+					case 'homeric-hymns':
+						commenters[commenterIndex].nCommentsHymns++;
+						break;
+					case 'hymns':
+						commenters[commenterIndex].nCommentsHymns++;
+						break;
+					default:
+						break;
+					}
+					commenter.nCommentsWorks.forEach((work, workIndex) => {
+						if (comment.work.slug === work.slug) {
+							work.subworks.forEach((subwork, subworkIndex) => {
+								// TODO: build and array of lin 10 incrementation
+								if (comment.subwork.n === subwork.n) {
+									commenters[commenterIndex][workIndex][subworkIndex].nComments++;
 
-		work.subworks.forEach((subwork) = > {
-			// TODO: build and array of lin 10 incrementation
-			if (comment.subwork.n === subwork.n
-	)
-		{
-			subwork.nComments++;
+									const iterations = (Math.floor(((comment.lineFrom + comment.nLines) - 1) / 10) -
+										Math.floor(comment.lineFrom / 10)) + 1;
 
-			const iterations = Math.floor((comment.lineFrom + comment.nLines - 1) / 10) - Math.floor(comment.lineFrom / 10) + 1;
+									subwork.commentHeatmap.forEach(
+										(line, lineIndex) => {
+											for (let i = 0; i < iterations; i++) {
+												const nFrom = (Math.floor(comment.lineFrom / 10) * 10) + (i * 10);
+												if (nFrom === line.n) {
+													isInCommentCountsLines = true;
+													commenters[commenterIndex][workIndex][subworkIndex][lineIndex]
+														.nComments++;
+												} else {
+													isInCommentCountsLines = false;
+												}
 
-			for (let i = 0; i < iterations; i++) {
-				const nFrom = Math.floor(comment.lineFrom / 10) * 10 + i * 10;
-				isInCommentCountsLines = false;
+												if (!isInCommentCountsLines) {
+													subwork.commentHeatmap.push({
+														n: nFrom,
+														nComments: 1,
+													});
+												}
+											}
+										}
+									);
+								}
+							});
 
-				subwork.commentHeatmap.forEach((line) = > {
-					if (nFrom === line.n
-			)
-				{
-					isInCommentCountsLines = true;
-					line.nComments++;
-				}
-			})
-				;
-
-				if (!isInCommentCountsLines) {
-					subwork.commentHeatmap.push({
-						n: nFrom,
-						nComments: 1,
+							// work.subworks.forEach((subwork) => {
+							// 	if (subwork.n === comment.subwork.n) {
+							// 		subwork.nComments++;
+							// 		let isInHeatmap = false;
+							// 		subwork.commentHeatmap.forEach((commentGroup) => {
+							// 			if (commentGroup.n === comment.lineFrom) {
+							// 				commentGroup.nComments++;
+							// 				isInHeatmap = true;
+							// 			}
+							// 		});
+							// 		if (!isInHeatmap) {
+							// 			subwork.commentHeatmap.push({
+							// 				n: comment.lineFrom,
+							// 				nComments: 1,
+							// 			});
+							// 		}
+							// 	}
+							// });
+						}
 					});
 				}
+			});
+
+			if (!isInCommenters) {
+				comments[commentIndex].commenters[commentCommenterIndex].commeters.nCommentsTotal = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsIliad = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsOdyssey = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsHymns = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsWorks = [];
+
+				const iliad = {
+					title: 'Iliad',
+					slug: 'iliad',
+					subworks: [],
+				};
+				const odyssey = {
+					title: 'Odyssey',
+					slug: 'odyssey',
+					subworks: [],
+				};
+				const hymns = {
+					title: 'Homeric Hymns',
+					slug: 'homeric-hymns',
+					subworks: [],
+				};
+
+				for (let i = 1; i <= 24; i++) {
+					iliad.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+					odyssey.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+				}
+
+				for (let i = 1; i <= 33; i++) {
+					hymns.subworks.push({
+						title: String(i),
+						slug: String(i),
+						n: i,
+						nComments: 0,
+						commentHeatmap: [],
+					});
+				}
+
+				commentCommenter.nCommentsWorks.push(iliad);
+				commentCommenter.nCommentsWorks.push(odyssey);
+				commentCommenter.nCommentsWorks.push(hymns);
+
+				commenters.push(commentCommenter);
 			}
-		}
-	})
-		;
-
-		// work.subworks.forEach((subwork) => {
-		// 	if (subwork.n === comment.subwork.n) {
-		// 		subwork.nComments++;
-		// 		let isInHeatmap = false;
-		// 		subwork.commentHeatmap.forEach((commentGroup) => {
-		// 			if (commentGroup.n === comment.lineFrom) {
-		// 				commentGroup.nComments++;
-		// 				isInHeatmap = true;
-		// 			}
-		// 		});
-		// 		if (!isInHeatmap) {
-		// 			subwork.commentHeatmap.push({
-		// 				n: comment.lineFrom,
-		// 				nComments: 1,
-		// 			});
-		// 		}
-		// 	}
-		// });
-	}
-})
-	;
-}
-})
-;
-
-if (!isInCommenters) {
-	commentCommenter.nCommentsTotal = 0;
-	commentCommenter.nCommentsIliad = 0;
-	commentCommenter.nCommentsOdyssey = 0;
-	commentCommenter.nCommentsHymns = 0;
-	commentCommenter.nCommentsWorks = [];
-
-	const iliad = {
-		title: 'Iliad',
-		slug: 'iliad',
-		subworks: [],
-	};
-	const odyssey = {
-		title: 'Odyssey',
-		slug: 'odyssey',
-		subworks: [],
-	};
-	const hymns = {
-		title: 'Homeric Hymns',
-		slug: 'homeric-hymns',
-		subworks: [],
-	};
-
-	for (let i = 1; i <= 24; i++) {
-		iliad.subworks.push({
-			title: String(i),
-			slug: String(i),
-			n: i,
-			nComments: 0,
-			commentHeatmap: [],
 		});
-		odyssey.subworks.push({
-			title: String(i),
-			slug: String(i),
-			n: i,
-			nComments: 0,
-			commentHeatmap: [],
+	});
+
+	commenters.forEach((commenter) => {
+		console.log(commenter.name, commenter.nCommentsTotal);
+		Commenters.update({
+			slug: commenter.slug,
+		}, {
+			$set: {
+				nCommentsTotal: commenter.nCommentsTotal,
+				nCommentsWorks: commenter.nCommentsWorks,
+				nCommentsIliad: commenter.nCommentsIliad,
+				nCommentsOdyssey: commenter.nCommentsOdyssey,
+				nCommentsHymns: commenter.nCommentsHymns,
+			},
 		});
-	}
+	});
 
-	for (let i = 1; i <= 33; i++) {
-		hymns.subworks.push({
-			title: String(i),
-			slug: String(i),
-			n: i,
-			nComments: 0,
-			commentHeatmap: [],
-		});
-	}
+	/*
+	 comments.forEach(function(comment){
+	 var nLines = 1;
 
-	commentCommenter.nCommentsWorks.push(iliad);
-	commentCommenter.nCommentsWorks.push(odyssey);
-	commentCommenter.nCommentsWorks.push(hymns);
+	 if('lineTo' in comment && comment.lineTo){
+	 nLines = comment.lineTo - comment.lineFrom + 1;
+	 // console.log(comment.lineFrom, comment.lineTo, comment.nLines);
 
-	commenters.push(commentCommenter);
-}
-})
-;
-})
-;
+	 }
 
-commenters.forEach((commenter) = > {
-	console.log(commenter.name, commenter.nCommentsTotal);
-Commenters.update({
-	slug: commenter.slug,
+	 Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
+	 });
+	 */
+
+
+	console.log(' -- Cron run complete: Commenters');
+
+	return 1;
 }, {
-	$set: {
-		nCommentsTotal: commenter.nCommentsTotal,
-		nCommentsWorks: commenter.nCommentsWorks,
-		nCommentsIliad: commenter.nCommentsIliad,
-		nCommentsOdyssey: commenter.nCommentsOdyssey,
-		nCommentsHymns: commenter.nCommentsHymns,
-	},
-});
-})
-;
-
-/*
- comments.forEach(function(comment){
- var nLines = 1;
-
- if('lineTo' in comment && comment.lineTo){
- nLines = comment.lineTo - comment.lineFrom + 1;
- // console.log(comment.lineFrom, comment.lineTo, comment.nLines);
-
- }
-
- Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
- });
- */
-
-
-console.log(' -- Cron run complete: Commenters');
-
-return 1;
-},
-{
 	url: 'commenters/cron',
-		getArgsFromRequest
-:
-	(request) =
->
-	{
+	getArgsFromRequest: (request) => {
 		// Sometime soon do validation here
 		const content = request.body;
 
 		return [content];
-	}
-,
-}
-)
-;
+	},
+});

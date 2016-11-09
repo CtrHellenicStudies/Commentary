@@ -1,9 +1,9 @@
-import React from "react";
-import {Meteor} from "meteor/meteor";
-import LinearProgress from "material-ui/LinearProgress";
-import {createContainer} from "meteor/react-meteor-data";
-import {sendSnack} from "/imports/ui/components/SnackAttack.jsx";
-import {AvatarUploader} from "/imports/avatar/client/avatar_client_utils.js";
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import LinearProgress from 'material-ui/LinearProgress';
+import { createContainer } from 'meteor/react-meteor-data';
+import { sendSnack } from '/imports/ui/components/SnackAttack.jsx';
+import { AvatarUploader } from '/imports/avatar/client/avatar_client_utils.js';
 
 class AvatarEditor extends React.Component {
 	constructor(props) {
@@ -54,9 +54,9 @@ class AvatarEditor extends React.Component {
 			},
 			onProgress: (avatar, progress) => {
 				if (progress > 100) {
-					this.setState({progress: 100});
+					this.setState({ progress: 100 });
 				} else {
-					this.setState({progress: Math.floor(progress * 100)});
+					this.setState({ progress: Math.floor(progress * 100) });
 				}
 			},
 		});
@@ -66,16 +66,16 @@ class AvatarEditor extends React.Component {
 
 	handleDrop(event) {
 		event.preventDefault();
-		this.uploadAvatar(event.dataTransfer.files[0], {type: 'user'});
+		this.uploadAvatar(event.dataTransfer.files[0], { type: 'user' });
 	}
 
 	handleSelectFile() {
-		UploadFS.selectFile(data => this.uploadAvatar(data, {type: 'user'}));
+		UploadFS.selectFile(data => this.uploadAvatar(data, { type: 'user' }));
 	}
 
 	handleDeleteAvatar() {
 		if (!this.state.isDefault && this.props.avatar._id) {
-			Meteor.call('avatar.delete', {avatarId: this.props.avatar._id});
+			Meteor.call('avatar.delete', { avatarId: this.props.avatar._id });
 		}
 	}
 
@@ -90,14 +90,14 @@ class AvatarEditor extends React.Component {
 		}
 		return (
 			<div className="user-profile-picture-container">
-				<div className="userAvatarDelete" onClick={this.handleDeleteAvatar}>
+				<div className="userAvatarDelete" onClick={this.handleDeleteAvatar} >
 					<i
 						className={`mdi mdi-delete mdi-36px mdi-dark ${(this.state.isDefault ?
-							'mdi-inactive userAvatarDeleteInactive' : 'userAvatarDeleteActive')}`}
+							'mdi-inactive userAvatarDeleteInactive'	: 'userAvatarDeleteActive')}`}
 					/>
 				</div>
 				<div className="user-profile-picture">
-					<img alt="avatar" src={this.state.avatarUrl}/>
+					<img alt="avatar" src={this.state.avatarUrl} />
 
 					<div
 						className="upload-profile-picture"
@@ -108,13 +108,13 @@ class AvatarEditor extends React.Component {
 						onDragLeave={this.preventDefault}
 						onDrop={this.handleDrop}
 					>
-						<i className="mdi mdi-image-area"/>
+						<i className="mdi mdi-image-area" />
 						<span className="help-text">
 							Select to upload or drag and drop.
 						</span>
 					</div>
 				</div>
-				<LinearProgress mode="determinate" value={this.state.progress} style={progressStyle}/>
+				<LinearProgress mode="determinate" value={this.state.progress} style={progressStyle} />
 			</div>
 		);
 	}
@@ -140,8 +140,7 @@ export default createContainer((props) => {
 		userAvatar = props.user.avatar || {};
 	} else {
 		userAvatar = Meteor.user().avatar || {};
-	}
-	;
+	};
 
 	return {
 		defaultAvatarUrl: props.defaultAvatarUrl,

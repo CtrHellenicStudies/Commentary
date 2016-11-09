@@ -106,8 +106,7 @@ Schemas.Pages = new SimpleSchema({
 									// $image.css('width', $image.width() / 3);
 									// $image.css('margin', 15);
 									// $image.attr('data-filename', 'retriever');
-								})
-									;
+									});
 									// return file._id;
 								};
 								uploader.onCreate = function onCreate(currentFile) {

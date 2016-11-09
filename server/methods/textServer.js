@@ -1,7 +1,6 @@
 Meteor.methods({
-	'textServer': function (query) {
-		const self = this;
-
+	textServer(query) {
+		check(query, Object);
 		try {
 			let url = 'http://localhost:8000';
 
@@ -23,41 +22,39 @@ Meteor.methods({
 				params: query,
 			});
 
-			return promise.then(response = > {
-				let editions = [],
-				is_in_edition = false;
+			return promise.then(response => {
+				const editions = [];
+				let isInEdition = false;
 
-			if ('res' in response.data) {
-				response.data.res.forEach(function (text_object) {
-					text_object.text.forEach(function (text_edition) {
-						editions.forEach(function (edition) {
-							if (text_edition.edition.slug === edition.slug) {
-								is_in_edition = true;
+				if ('res' in response.data) {
+					response.data.res.forEach((textObject) => {
+						textObject.text.forEach((textEdition) => {
+							editions.forEach((edition) => {
+								if (textEdition.edition.slug === edition.slug) {
+									isInEdition = true;
 
-								edition.lines.push(text_edition);
+									edition.lines.push(textEdition);
+								}
+							});
+
+							if (!isInEdition) {
+								editions.push({
+									title: textEdition.edition.title,
+									slug: textEdition.edition.slug,
+									lines: [textEdition],
+
+								});
 							}
 						});
-
-						if (!is_in_edition) {
-							editions.push({
-								title: text_edition.edition.title,
-								slug: text_edition.edition.slug,
-								lines: [text_edition],
-
-							});
-						}
 					});
-				});
-
-
-				return editions;
-			} else {
+					return editions;
+				}
 				console.error('Unable to connect to TextServer');
-			}
-		})
-			;
+				return null;
+			});
 		} catch (error) {
 			console.log(error);
+			return null;
 		}
 	},
 

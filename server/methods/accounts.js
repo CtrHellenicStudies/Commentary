@@ -4,7 +4,7 @@ Meteor.methods({
 			throw new Meteor.Error('not-authorized');
 		}
 
-		console.log(accountData);
+		check(accountData, Object);
 
 		// check(accountData.name, String);
 		// check(accountData.biography, String);
@@ -18,7 +18,7 @@ Meteor.methods({
 
 		}, {
 			$set: {
-				'username': accountData.username,
+				username: accountData.username,
 				'profile.name': accountData.name,
 				'profile.biography': accountData.biography,
 				'profile.academiaEdu': accountData.academiaEdu,
@@ -30,10 +30,13 @@ Meteor.methods({
 		});
 	},
 	deleteAccount(userId) {
+		check(userId, String);
+
 		if (this.userId === userId) {
 			return Meteor.users.remove({
 				_id: this.userId,
 			});
 		}
+		return false;
 	},
 });

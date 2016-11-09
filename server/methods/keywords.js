@@ -1,5 +1,6 @@
 Meteor.methods({
-	'keywords.insert': function (keywords) {
+	'keywords.insert': function insertKeywords(keywords) {
+		check(keywords, [Object]);
 		// Make sure the user is logged in before inserting
 		if (!this.userId) {
 			throw new Meteor.Error('not-authorized');
@@ -7,18 +8,15 @@ Meteor.methods({
 		const keywordsIds = [];
 		console.log('keywords insert called');
 		console.log('keywords:', keywords);
-		keywords.forEach((keyword) = > {
+		keywords.forEach((keyword) => {
 			try {
 				const keywordId = Keywords.insert(keyword);
-		console.log('Keyword', keywordId, 'insert successful');
-		keywordsIds.push(keywordId);
-	} catch
-		(err)
-		{
-			console.log(err);
-		}
-	})
-		;
+				console.log('Keyword', keywordId, 'insert successful');
+				keywordsIds.push(keywordId);
+			} catch (err) {
+				console.log(err);
+			}
+		});
 
 		return keywordsIds;
 	},

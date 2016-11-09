@@ -1,9 +1,9 @@
-import React from "react";
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import RaisedButton from "material-ui/RaisedButton";
-import FontIcon from "material-ui/FontIcon";
-import {queryCommentWithKeywordId, makeKeywordContextQueryFromComment} from "../../api/api_utils.js";
+import React from 'react';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
+import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '../../api/api_utils.js';
 
 export default KeywordContext = React.createClass({
 
@@ -25,7 +25,7 @@ export default KeywordContext = React.createClass({
 	},
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
@@ -86,8 +86,8 @@ export default KeywordContext = React.createClass({
 		});
 
 		// sort lines for each edition by line number
-		for (let i = 0; i < editions.length; ++i) {
-			editions[i].lines.sort((a, b) => {
+		for (let i=0; i < editions.length; ++i) {
+			editions[i].lines.sort((a,b) => {
 				if (a.n < b.n)
 					return -1;
 				else if (b.n < a.n)
@@ -119,7 +119,7 @@ export default KeywordContext = React.createClass({
 						<p
 							key={i}
 							className="lemma-text"
-							dangerouslySetInnerHTML={{__html: line.html}}
+							dangerouslySetInnerHTML={{ __html: line.html }}
 						/>
 					)
 				}
@@ -143,10 +143,10 @@ export default KeywordContext = React.createClass({
 					<RaisedButton
 						className="context-tab tab"
 						href={`/commentary/?works=${context.work}&subworks=${context.subwork
-							}&lineFrom=${context.lineFrom}&lineTo=${context.lineTo}`}
+						}&lineFrom=${context.lineFrom}&lineTo=${context.lineTo}`}
 						label="Context"
 						labelPosition="before"
-						icon={<FontIcon className="mdi mdi-chevron-right"/>}
+						icon={<FontIcon className="mdi mdi-chevron-right" />}
 					/>
 				</div>
 			</article>

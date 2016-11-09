@@ -1,6 +1,8 @@
 Meteor.methods({
-	'comments.insert': function (comment) {
+	'comments.insert': function insertComment(comment) {
+		check(comment, Object);
 		const roles = ['developer', 'admin', 'commenter'];
+		let commentId = null;
 		if (Roles.userIsInRole(Meteor.user(), roles)) {
 			console.log('Method called: \'comment.insert\'');
 			console.log('Comment:', comment);
@@ -18,7 +20,9 @@ Meteor.methods({
 		return commentId;
 	},
 
-	'comment.update': function (commentId, update) {
+	'comment.update': function updateComment(commentId, update) {
+		check(commentId, String);
+		check(update, Object);
 		const roles = ['developer', 'admin', 'commenter'];
 		if (Roles.userIsInRole(Meteor.user(), roles)) {
 			console.log('Method called: \'comment.update\'');
@@ -26,7 +30,7 @@ Meteor.methods({
 			console.log('Update:', update);
 
 			try {
-				Comments.update({_id: commentId}, {$set: update});
+				Comments.update({ _id: commentId }, { $set: update });
 				console.log('Comment', commentId, 'update successful');
 			} catch (err) {
 				console.log(err);
@@ -38,17 +42,16 @@ Meteor.methods({
 		return commentId;
 	},
 
-	'comments.add.revision': function (commentId, revision) {
-		const comment = Comments.find({
-			_id: commentId
-		}).fetch()[0];
+	'comments.add.revision': function addRevision(commentId, revision) {
+		check(commentId, String);
+		check(revision, Object);
+		const comment = Comments.find({ _id: commentId }).fetch()[0];
 		let allow = false;
 		// var roles = ['developer', 'admin'];
-		comment.commenters.forEach((commenter) = > {
+		comment.commenters.forEach((commenter) => {
 			// roles.push(commenter.slug);
 			allow = (Meteor.user().commenterId === commenter._id);
-	})
-		;
+		});
 
 		if (Roles.userIsInRole(Meteor.user(), ['developer', 'admin'])) {
 			allow = true;
@@ -61,11 +64,11 @@ Meteor.methods({
 
 			try {
 				Comments.update({
-					_id: commentId
+					_id: commentId,
 				}, {
 					$push: {
-						revisions: revision
-					}
+						revisions: revision,
+					},
 				});
 				console.log('Comment', commentId, 'add revision successful');
 			} catch (err) {
@@ -76,7 +79,9 @@ Meteor.methods({
 		}
 	},
 
-	'comment.remove.revision': function (commentId, revision) {
+	'comment.remove.revision': function removeRevision(commentId, revision) {
+		check(commentId, String);
+		check(revision, Object);
 		const roles = ['developer'];
 		if (Roles.userIsInRole(Meteor.user(), roles)) {
 			console.log('Method called: \'comment.remove.revision\'');
@@ -92,24 +97,25 @@ Meteor.methods({
 				// });
 				// console.log('comment', comment);
 				Comments.update({
-					_id: commentId
+					_id: commentId,
 				}, {
 					$pull: {
-						'revisions': revision
-					}
+						revisions: revision,
+					},
 				}, {
-					getAutoValues: false
+					getAutoValues: false,
 				});
 				console.log('Revision', revision, 'remove successful');
 			} catch (err) {
 				console.log(err);
 			}
 		} else {
-			console.log('Permission denied on method comment.remove.revision, for user:', Meteor.userId());
+			console.log('Permission denied on method comment.remove.revision, for user:',
+				Meteor.userId());
 		}
 	},
 
-	'users': function () {
+	users() {
 		console.log(Meteor.user());
 	},
 });

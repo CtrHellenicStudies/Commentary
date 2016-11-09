@@ -1,9 +1,11 @@
 Meteor.methods({
-	getMaxLine(workSlug, subwork_n) {
+	getMaxLine(workSlug, subworkN) {
+		check(workSlug, String);
+		check(subworkN, Number);
 		const maxLine = TextNodes.aggregate([{
 			$match: {
 				'work.slug': workSlug,
-				'subwork.n': subwork_n,
+				'subwork.n': subworkN,
 			},
 		}, {
 			$group: {
@@ -26,12 +28,9 @@ Meteor.methods({
 				},
 			},
 		}]);
-		tableOfContents.forEach((work) = > {
-			work.subworks.sort(function (a, b) {
-			return a - b;
+		tableOfContents.forEach((work) => {
+			work.subworks.sort((a, b) => a - b);
 		});
-	})
-		;
 
 		return tableOfContents;
 	},

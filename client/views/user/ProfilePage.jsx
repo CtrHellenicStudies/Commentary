@@ -141,9 +141,13 @@ ProfilePage = React.createClass({
 			}
 		}
 
-		Meteor.call('updateAccount', accountData, function (err, res) {
+		Meteor.call('updateAccount', accountData, (err, res) => {
 			if (err) {
 				console.error(err);
+			} else if (res.name === "MongoError" && res.code === 11000) {
+				this.setState({
+					usernameError: 'Username already exists. Please choose another.',
+				});
 			}
 		});
 	},

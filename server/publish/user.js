@@ -1,25 +1,45 @@
+Meteor.publish('user.discussionComments', function(query, skip, limit) {
+    if (!query) {
+        query = {};
+    }
 
-Meteor.publish('user.discussionComments', function (query, skip, limit) {
-	if (!query) {
-		query = {};
-	}
+    if (!skip) {
+        skip = 0;
+    }
 
-	if (!skip) {
-		skip = 0;
-	}
+    if (!limit) {
+        limit = 100;
+    }
 
-	if (!limit) {
-		limit = 100;
-	}
-
-	if (this.userId) {
-		query['user._id'] = this.userId;
-		return DiscussionComments.find(query, { skip, limit, sort: { created: -1 } });
-	} else {
-		return [];
-	}
+    if (this.userId) {
+        query['user._id'] = this.userId;
+        return DiscussionComments.find(query, {
+            skip,
+            limit,
+            sort: {
+                created: -1
+            }
+        });
+    } else {
+        return [];
+    }
 });
 
-Meteor.publish('userData', function () {
-	return Meteor.users.find({ '_id': this.userId });
+Meteor.publish('userData', function() {
+    return Meteor.users.find({
+        '_id': this.userId
+    });
+});
+
+Meteor.publish('allUsers', (userId) => {
+    check(userId, String);
+    return Meteor.users.find({
+        _id: userId,
+    }, {
+        fields: {
+            username: 1,
+            avatar: 1,
+            profile: 1,
+        }
+    });
 });

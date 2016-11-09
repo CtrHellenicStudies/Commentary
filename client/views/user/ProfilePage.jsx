@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
+import Toggle from 'material-ui/Toggle';
 
 ProfilePage = React.createClass({
 
@@ -33,6 +34,7 @@ ProfilePage = React.createClass({
 			google: '',
 
 			usernameError: '',
+			emailError: '',
 		};
 	},
 
@@ -102,21 +104,21 @@ ProfilePage = React.createClass({
 	handleChangeText(key) {
 		const user = this.props.user;
 		const self = this;
-		if (key === 'username') {
-			console.log(/^[a-z0-9A-Z_]{3,15}$/.test(value = this.refs[key].input.value));
-		};
 
         let value = null;
-        if (key != 'biography') {
-            value = this.refs[key].input.value;
+        if (key === 'biography') {
+        	value = this.refs[key].input.refs.input.value;
+            
+        } else if (key === 'publicEmailAdress') {
+        	// do nothing
         } else {
-            value = this.refs[key].input.refs.input.value;
-        }
+            value = this.refs[key].input.value;
+        } 
         this.setState({
             [key]: value,
         });
 
-		Meteor.call('updateAccount', {
+        let accountData = {
 			username: self.refs.username.input.value || user.username,
 			name: self.refs.name.input.value || user.profile.name,
 			biography: self.refs.biography.input.refs.input.value || user.profile.biography,
@@ -124,8 +126,22 @@ ProfilePage = React.createClass({
 			twitter: self.refs.twitter.input.value || user.profile.twitter,
 			facebook: self.refs.facebook.input.value || user.profile.facebook,
 			google: self.refs.google.input.value || user.profile.google,
+		};
 
-		}, function (err, res) {
+		if (user.emails && user.emails.length > 0) {
+			accountData.emails = [{
+				address: self.refs.email.input.value || user.emails[0].address,
+				verified:  user.emails[0].verified,
+			}];
+			const setPublic = this.refs.publicEmailAdress.state.switched;
+			if (key === 'publicEmailAdress' && !setPublic) {
+				accountData.publicEmailAdress = self.refs.email.input.value || user.emails[0].address;
+			} else {
+				accountData.publicEmailAdress = "";
+			}
+		}
+
+		Meteor.call('updateAccount', accountData, function (err, res) {
 			if (err) {
 				console.error(err);
 			}
@@ -133,15 +149,31 @@ ProfilePage = React.createClass({
 	},
 
 	handleUsernameChange () {
-		var key = 'username'
-		if (/^[a-z0-9A-Z_]{3,15}$/.test(value = this.refs[key].input.value)) {
+		let key = 'username';
+		const re = /^[a-z0-9A-Z_]{3,15}$/;
+		if (re.test(value = this.refs[key].input.value)) {
 			this.setState({
 				usernameError: '',
 			});
-			this.handleChangeText.bind(null, key);
+			this.handleChangeText(key);
 		} else {
 			this.setState({
 				usernameError: 'Username has following the requirements: only letters and numbers are aloud, no whitespaces, min. length: 3, max. length: 15',
+			});
+		};	
+	},
+
+	handleEmailChange () {
+		let key = 'email';
+		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		if (re.test(value = this.refs[key].input.value)) {
+			this.setState({
+				emailError: '',
+			});
+			this.handleChangeText(key);
+		} else {
+			this.setState({
+				emailError: 'Invalid email address',
 			});
 		};	
 	},
@@ -151,7 +183,11 @@ ProfilePage = React.createClass({
 		if (!currentUser) {
 			currentUser = { 'profile': {} };
 		}
-		// const userIsLoggedIn = Meteor.user();
+		const toggleStyle = {
+			style: {
+				margin: "20px 0 0 0",
+			},
+		};
 
 		return (
 			(currentUser ?
@@ -203,6 +239,28 @@ ProfilePage = React.createClass({
 										errorText={this.state.usernameError}
 									/>
 									<br />
+
+									{currentUser.emails ?
+									<div>
+										<TextField
+											ref="email"
+											fullWidth
+											floatingLabelText="Email"
+											defaultValue={currentUser.emails[0].address}
+											onChange={debounce(1500, this.handleEmailChange)}
+											errorText={this.state.emailError}
+										/>
+										<Toggle
+											ref="publicEmailAdress"
+									        label={currentUser.profile.publicEmailAdress ? "Email public" : "Email private"}
+									        labelPosition="right"
+									        style={toggleStyle.style}
+									        toggled={currentUser.profile.publicEmailAdress ? true : false}
+									        onToggle={debounce(500, this.handleChangeText.bind(null, 'publicEmailAdress'))}
+									    />
+									</div>
+									:
+									""}
 
 									<TextField
 										ref="name"

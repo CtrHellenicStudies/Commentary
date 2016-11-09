@@ -21,8 +21,14 @@ ContextPanel = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getInitialState() {
+		const commentGroup = this.props.commentGroup;
+		const lineFrom = commentGroup.lineFrom;
+		const lineTo = lineFrom + 49;
 		return {
 			selectedLemmaEdition: '',
+			lineFrom,
+			lineTo,
+			maxLine: 0,
 		};
 	},
 
@@ -32,10 +38,32 @@ ContextPanel = React.createClass({
 
 	componentDidMount() {
 		this.scrollElement('open');
+		Meteor.call('getMaxLine', this.props.commentGroup.work.slug, this.props.commentGroup.subwork.n, (err, res) => {
+			if (err) {
+				console.log(err);
+			} else if (res) {
+				const linePagination = [];
+				for (let i = 1; i <= res; i += 100) {
+					linePagination.push(i);
+				}
+
+				this.setState({
+					linePagination,
+					maxLine: res,
+				});
+			}
+		});
 	},
 
-	componentDidUpdate() {
+	componentDidUpdate(prevProps, prevState) {
 		this.scrollElement('open');
+		const commentGroup = this.props.commentGroup;
+		if (commentGroup.ref != prevProps.commentGroup.ref) {
+			this.setState({
+				lineFrom: commentGroup.lineFrom,
+				lineTo: commentGroup.lineFrom + 49,
+			});
+		}
 	},
 
 	componentWillUnmount() {
@@ -51,8 +79,8 @@ ContextPanel = React.createClass({
 			'work.slug': commentGroup.work.slug,
 			'subwork.n': commentGroup.subwork.n,
 			'text.n': {
-				$gte: commentGroup.lineFrom,
-				$lte: commentGroup.lineFrom + 49,
+				$gte: this.state.lineFrom,
+				$lte: this.state.lineTo,
 			},
 		};
 
@@ -114,6 +142,24 @@ ContextPanel = React.createClass({
 		};
 	},
 
+	onAfterClicked() {
+		if (this.state.lineTo <= this.state.maxLine) {
+			this.setState({
+				lineFrom: this.state.lineFrom + 25,
+				lineTo: this.state.lineTo + 25,
+			});
+		}
+	},
+
+	onBeforeClicked() {
+		if (this.state.lineFrom !== 1) {
+			this.setState({
+				lineFrom: this.state.lineFrom - 25,
+				lineTo: this.state.lineTo - 25,
+			});
+		}
+	},
+
 	toggleEdition(editionSlug) {
 		if (this.state.selectedLemmaEdition !== editionSlug) {
 			this.setState({
@@ -163,6 +209,20 @@ ContextPanel = React.createClass({
 				/>
 
 				<div className="lemma-text-wrap">
+
+					{this.state.lineFrom > 1 ?
+						<div className="before-link">
+								<RaisedButton
+									className="light"
+									label="Previous"
+									onClick={this.onBeforeClicked}
+									icon={<i className="mdi mdi-chevron-up" />}
+								/>
+						</div>
+						:
+						''
+					}
+
 					{this.data.selectedLemmaEdition.lines.map((line, i) => {
 						let lineClass = 'lemma-line';
 						const lineFrom = self.props.commentGroup.lineFrom;
@@ -201,9 +261,18 @@ ContextPanel = React.createClass({
 						);
 					})}
 
-					<div className="lemma-load" >
-						<div className="lemma-spinner" />
-					</div>
+					{this.state.lineFrom < this.state.maxLine ?
+						<div className="after-link">
+							<RaisedButton
+								className="light"
+								label="Next"
+								onClick={this.onAfterClicked}
+								icon={<i className="mdi mdi-chevron-down" />}
+							/>
+						</div>
+						:
+						''
+					}
 
 				</div>
 

@@ -136,6 +136,9 @@ CommentaryLayout = React.createClass({
 	},
 
 	toggleSearchTerm(key, value) {
+		console.log('key', key);
+		console.log('value', value);
+		// FlowRouter.setQueryParams({test: '123'});
 		let self = this,
 			filters = this.state.filters;
 		let keyIsInFilter = false,
@@ -143,12 +146,12 @@ CommentaryLayout = React.createClass({
 			filterValueToRemove,
 			filterToRemove;
 
-		filters.forEach(function (filter, i) {
+		filters.forEach( (filter, i) => {
 			if (filter.key === key) {
 				keyIsInFilter = true;
 				valueIsInFilter = false;
 
-				filter.values.forEach(function (filterValue, j) {
+				filter.values.forEach((filterValue, j) => {
 					if (filterValue._id === value._id) {
 						valueIsInFilter = true;
 						filterValueToRemove = j;
@@ -160,6 +163,8 @@ CommentaryLayout = React.createClass({
 					if (filter.values.length === 0) {
 						filterToRemove = i;
 					}
+					// remove key from url:
+					this.updateRoute(key, null);
 				} else {
 					if (key === 'works') {
 						filter.values = [value];
@@ -186,6 +191,12 @@ CommentaryLayout = React.createClass({
 			filters,
 			skip: 0,
 		});
+	},
+
+	updateRoute(key, value) {
+		let queryParamsUpdate = {};
+		queryParamsUpdate[key] = value;
+		FlowRouter.setQueryParams(queryParamsUpdate);
 	},
 
 	handleChangeTextsearch(textsearch) {

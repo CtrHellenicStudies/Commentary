@@ -2,7 +2,7 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FontIcon from 'material-ui/FontIcon';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
@@ -35,6 +35,8 @@ ProfilePage = React.createClass({
 
 			usernameError: '',
 			emailError: '',
+
+			modalChangePwdLowered: false,
 		};
 	},
 
@@ -182,6 +184,19 @@ ProfilePage = React.createClass({
 		};	
 	},
 
+	showChangePwdModal() {
+		console.log('jestem');
+		this.setState({
+			modalChangePwdLowered: true,
+		});
+	},
+
+	closeChangePwdModal() {
+		this.setState({
+			modalChangePwdLowered: false,
+		});
+	},
+
 	render() {
 		let currentUser = this.props.user;
 		if (!currentUser) {
@@ -191,6 +206,10 @@ ProfilePage = React.createClass({
 			style: {
 				margin: "20px 0 0 0",
 			},
+		};
+
+		const changePwdStyle = {
+			margin: "11px 0 0 0",
 		};
 
 		return (
@@ -243,6 +262,12 @@ ProfilePage = React.createClass({
 										errorText={this.state.usernameError}
 									/>
 									<br />
+
+									<RaisedButton
+										label="Change password"
+										style={changePwdStyle}
+										onClick={this.showChangePwdModal}
+									/>
 
 									{currentUser.emails ?
 									<div>
@@ -347,47 +372,24 @@ ProfilePage = React.createClass({
 							<div className="user-discussion-comments">
 
 								<h2>Your Comments</h2>
-								{/*
-									Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
-									<div>
-										<FlatButton
-											label="Add new comment"
-											href="/add-comment"
-											icon={<FontIcon className="mdi mdi-plus" />}
-											style={{ height: '100%', lineHeight: '100%' }}
-										/>
-									</div>
-											:
-											''
-										*/}
-								{
-									/*
-									<InfiniteScroll
-										endPadding={120}
-										loadMore={this.loadMore} >
-									{
-									*/
-								}
 
 								<DiscussionCommentsList
 									discussionComments={this.data.discussionComments}
 								/>
-
-								{/*
-											<div className="ahcip-spinner commentary-loading" >
-													<div className="double-bounce1"></div>
-													<div className="double-bounce2"></div>
-
-											</div>
-											*/}
-
-								{/* }</InfiniteScroll>*/}
 
 							</div>
 
 						</section>
 
 					</div>
+
+					{this.state.modalChangePwdLowered ?
+						<ModalChangePwd
+							lowered={this.state.modalChangePwdLowered}
+							closeModal={this.closeChangePwdModal}
+						/>
+						: ''
+					}
 
 				</div>
 			: <div />

@@ -1,6 +1,5 @@
-import {Meteor} from 'meteor/meteor';
-import {uploadAvatar} from '/imports/avatar/client/avatar_client_utils.js';
-import {Avatars} from '/imports/avatar/avatar_collections.js';
+import { uploadAvatar } from '/imports/avatar/client/avatar_client_utils.js';
+import { Avatars } from '/imports/avatar/avatar_collections.js';
 
 AutoForm.addInputType('adminAvatarEditor', {
 	template: 'adminAvatarEditor',
@@ -33,30 +32,29 @@ function getCommenterDocId() {
 
 function subscribeToAvatarUrl(commenterId, reactiveUrl) {
 	return Meteor.subscribe(
-			'avatars.commenter',
-			[commenterId],
-			() = > {
-			const cursor = Avatars.find({commenterId});
-	cursor.observe({
-		added(doc) {
-			reactiveUrl.set(doc.url);
-		},
-		changed(newDoc) {
-			reactiveUrl.set(newDoc.url);
-		},
-		removed(oldDoc) {
-			const commenter = Commenters.findOne({_id: commenterId});
-			if (!commenter || !commenter.avatar || commenter.avatar === oldDoc._id) {
-				reactiveUrl.set(defaultAvatarUrl);
-			}
-		},
-	});
-}
-)
-	;
+		'avatars.commenter',
+		[commenterId],
+		() => {
+			const cursor = Avatars.find({ commenterId });
+			cursor.observe({
+				added(doc) {
+					reactiveUrl.set(doc.url);
+				},
+				changed(newDoc) {
+					reactiveUrl.set(newDoc.url);
+				},
+				removed(oldDoc) {
+					const commenter = Commenters.findOne({ _id: commenterId });
+					if (!commenter || !commenter.avatar || commenter.avatar === oldDoc._id) {
+						reactiveUrl.set(defaultAvatarUrl);
+					}
+				},
+			});
+		}
+	);
 }
 
-Template.adminAvatarEditor.onCreated(function () {
+Template.adminAvatarEditor.onCreated(function onCreated() {
 	this.avatarUrl = new ReactiveVar(defaultAvatarUrl);
 	if (this.avatarSubHandle == null) {
 		const docId = getCommenterDocId();
@@ -66,12 +64,12 @@ Template.adminAvatarEditor.onCreated(function () {
 	}
 });
 
-Template.adminAvatarEditor.onDestroyed(function () {
+Template.adminAvatarEditor.onDestroyed(function onDestroyed() {
 	this.avatarSubHandle.stop();
 	this.avatarSubHandle = null;
 });
 
-Template.adminAvatarEditor.onRendered(function () {
+Template.adminAvatarEditor.onRendered(function onRendered() {
 	if (this.avatarSubHandle == null) {
 		const docId = getCommenterDocId();
 		if (docId) {
@@ -87,37 +85,36 @@ Template.adminAvatarEditor.helpers({
 });
 
 Template.adminAvatarEditor.events({
-	'click button[name=selectFile]': function () {
+	'click button[name=selectFile]': () => {
 		const commenterId = getCommenterDocId();
-		UploadFS.selectFile(fileData = > {
+		UploadFS.selectFile(fileData => {
 			uploadAvatar(fileData, {
 				type: 'commenter',
 				commenterId,
 			});
-	})
-		;
+		});
 	},
-	'click button[name=deleteAvatar]': function () {
+	'click button[name=deleteAvatar]': () => {
 		const commenter = getCommenterDoc();
-		Meteor.call('avatar.delete', {avatarId: commenter.avatar});
+		Meteor.call('avatar.delete', { avatarId: commenter.avatar });
 	},
-	'dragstart .avatar-image': function (event) {
+	'dragstart .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragenter .avatar-image': function (event) {
+	'dragenter .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragover .avatar-image': function (event) {
+	'dragover .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragleave .avatar-image': function (event) {
+	'dragleave .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'drop .avatar-image': function (event) {
+	'drop .avatar-image': (event) => {
 		event.stopPropagation();
 		event.preventDefault();
 

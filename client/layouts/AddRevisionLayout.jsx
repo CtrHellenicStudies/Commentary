@@ -1,7 +1,13 @@
-import "../../node_modules/mdi/css/materialdesignicons.css";
-import slugify from "slugify";
+import slugify from 'slugify';
+import '../../node_modules/mdi/css/materialdesignicons.css';
 
 AddRevisionLayout = React.createClass({
+
+	propTypes: {
+		commentId: React.PropTypes.string,
+	},
+
+	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -14,11 +20,13 @@ AddRevisionLayout = React.createClass({
 		};
 	},
 
-	mixins: [ReactMeteorData],
+	componentWillUpdate() {
+		this.handlePermissions();
+	},
 
 	getMeteorData() {
 		const commentSubscription = Meteor.subscribe('comments', {
-			_id: this.props.commentId
+			_id: this.props.commentId,
 		}, 0, 1);
 		let comment = {};
 
@@ -43,15 +51,10 @@ AddRevisionLayout = React.createClass({
 		};
 	},
 
-	componentWillUpdate(nextProps, nextState) {
-		this.handlePermissions();
-	},
-
 	addRevision(formData) {
-
 		const self = this;
 
-		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, function () {
+		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 			const keywords = [];
 			self.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
 				keywords.push(matchedKeyword);
@@ -70,14 +73,13 @@ AddRevisionLayout = React.createClass({
 			let update = [{}];
 			if (keywords) {
 				update = {
-					keywords: keywords
+					keywords,
 				};
 			}
-			;
 
-			Meteor.call('comments.add.revision', self.props.commentId, revision, function (err) {
-				Meteor.call('comment.update', self.props.commentId, update, function (err2) {
-					FlowRouter.go('/commentary/?_id=' + self.data.comment._id);
+			Meteor.call('comments.add.revision', self.props.commentId, revision, () => {
+				Meteor.call('comment.update', self.props.commentId, update, () => {
+					FlowRouter.go(`/commentary/?_id=${self.data.comment._id}`);
 				});
 			});
 		});
@@ -100,10 +102,8 @@ AddRevisionLayout = React.createClass({
 
 	addNewKeywordsAndIdeas(keywords, keyideas, next) {
 		const that = this;
-		this.addNewKeywords(keywords, 'word', function () {
-			that.addNewKeywords(keyideas, 'idea', function () {
-				return next();
-			});
+		this.addNewKeywords(keywords, 'word', () => {
+			that.addNewKeywords(keyideas, 'idea', () => next());
 		});
 	},
 
@@ -111,10 +111,8 @@ AddRevisionLayout = React.createClass({
 		if (keywords) {
 			const that = this;
 			const insertKeywords = [];
-			keywords.forEach(function (keyword) {
-				foundKeyword = that.data.keywords.find(function (d) {
-					return d.title === keyword;
-				});
+			keywords.forEach((keyword) => {
+				foundKeyword = that.data.keywords.find((d) => d.title === keyword);
 				console.log('foundKeyword', foundKeyword, 'keyword', keyword);
 				if (foundKeyword === undefined) {
 					const _keyword = {
@@ -126,19 +124,16 @@ AddRevisionLayout = React.createClass({
 				}
 			});
 			if (insertKeywords.length > 0) {
-				Meteor.call('keywords.insert', insertKeywords, function (err, data) {
+				return Meteor.call('keywords.insert', insertKeywords, (err) => {
 					if (err) {
 						console.log(err);
-					} else {
-						return next();
 					}
+					return next();
 				});
-			} else {
-				return next();
 			}
-		} else {
 			return next();
 		}
+		return next();
 	},
 
 	closeContextReader() {
@@ -173,18 +168,17 @@ AddRevisionLayout = React.createClass({
 	},
 
 	toggleSearchTerm(key, value) {
-		let self = this,
-			filters = this.state.filters;
-		let keyIsInFilter = false,
-			valueIsInFilter = false,
-			filterValueToRemove,
-			filterToRemove;
+		const filters = this.state.filters;
+		let keyIsInFilter = false;
+		let valueIsInFilter = false;
+		let filterValueToRemove;
+		let filterToRemove;
 
-		filters.forEach(function (filter, i) {
+		filters.forEach((filter, i) => {
 			if (filter.key === key) {
 				keyIsInFilter = true;
 
-				filter.values.forEach(function (filterValue, j) {
+				filter.values.forEach((filterValue, j) => {
 					if (filterValue._id === value._id) {
 						valueIsInFilter = true;
 						filterValueToRemove = j;
@@ -196,12 +190,10 @@ AddRevisionLayout = React.createClass({
 					if (filter.values.length === 0) {
 						filterToRemove = i;
 					}
+				} else if (key === 'works') {
+					filters[i].values = [value];
 				} else {
-					if (key === 'works') {
-						filter.values = [value];
-					} else {
-						filter.values.push(value);
-					}
+					filter.values.push(value);
 				}
 			}
 		});
@@ -230,9 +222,9 @@ AddRevisionLayout = React.createClass({
 		if (e.from > 1) {
 			let lineFromInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
-					filter.values = [e.from];
+					filters[i].values = [e.from];
 					lineFromInFilters = true;
 				}
 			});
@@ -246,7 +238,7 @@ AddRevisionLayout = React.createClass({
 		} else {
 			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
 					filterToRemove = i;
 				}
@@ -260,9 +252,9 @@ AddRevisionLayout = React.createClass({
 		if (e.to < 2100) {
 			let lineToInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
-					filter.values = [e.to];
+					filters[i].values = [e.to];
 					lineToInFilters = true;
 				}
 			});
@@ -276,7 +268,7 @@ AddRevisionLayout = React.createClass({
 		} else {
 			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
 					filterToRemove = i;
 				}
@@ -286,7 +278,6 @@ AddRevisionLayout = React.createClass({
 				filters.splice(filterToRemove, 1);
 			}
 		}
-
 
 		this.setState({
 			filters,
@@ -323,7 +314,7 @@ AddRevisionLayout = React.createClass({
 									<CommentLemmaSelect
 										ref="CommentLemmaSelect"
 										selectedLineFrom={comment.lineFrom}
-										selectedLineTo={comment.lineFrom + comment.nLines - 1}
+										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
 									/>
@@ -339,9 +330,9 @@ AddRevisionLayout = React.createClass({
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
 										selectedLineFrom={comment.lineFrom}
-										selectedLineTo={comment.lineFrom + comment.nLines - 1}
+										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
 										initialLineFrom={comment.lineFrom}
-										initialLineTo={comment.lineFrom + comment.nLines - 1 + 50}
+										initialLineTo={((comment.lineFrom + comment.nLines) - 1) + 50}
 										disableEdit
 									/>
 								</div>
@@ -360,8 +351,8 @@ AddRevisionLayout = React.createClass({
 					</div>
 					:
 					<div className="ahcip-spinner commentary-loading full-page-spinner">
-						<div className="double-bounce1"/>
-						<div className="double-bounce2"/>
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
 					</div>
 				}
 			</div>

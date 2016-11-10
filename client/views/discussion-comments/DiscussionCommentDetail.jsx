@@ -5,7 +5,7 @@ DiscussionCommentDetail = React.createClass({
 	},
 
 	render() {
-		const discussionComment = this.props.discussionComment;
+		// const discussionComment = this.props.discussionComment;
 
 		return (
 			<div />

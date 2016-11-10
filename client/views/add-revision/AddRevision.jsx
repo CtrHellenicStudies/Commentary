@@ -1,55 +1,54 @@
-import RaisedButton from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton";
-import FontIcon from "material-ui/FontIcon";
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import Select from "react-select";
-import {EditorState, ContentState, Modifier, RichUtils, convertToRaw} from "draft-js";
-import Editor from "draft-js-plugins-editor";
-import {stateToHTML} from "draft-js-export-html";
-import {stateFromHTML} from "draft-js-import-html";
-import createSingleLinePlugin from "draft-js-single-line-plugin";
-import RichTextEditor from "react-rte";
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Select from 'react-select';
+import { EditorState, ContentState } from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
+import { stateToHTML } from 'draft-js-export-html';
+import { stateFromHTML } from 'draft-js-import-html';
+import createSingleLinePlugin from 'draft-js-single-line-plugin';
+import RichTextEditor from 'react-rte';
+
 const singleLinePlugin = createSingleLinePlugin();
 
-
 AddRevision = React.createClass({
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
-	},
 
 	propTypes: {
 		submitForm: React.PropTypes.func.isRequired,
 		comment: React.PropTypes.object.isRequired,
 	},
 
-	getInitialState(){
-		var revisionId = this.props.comment.revisions.length - 1;
-		var revision = this.props.comment.revisions[revisionId]; // get newest revision
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
-		var keywordsValue = [];
-		var keyideasValue = [];
+	mixins: [ReactMeteorData],
+
+	getInitialState() {
+		const revisionId = this.props.comment.revisions.length - 1;
+		const revision = this.props.comment.revisions[revisionId]; // get newest revision
+
+		const keywordsValue = [];
+		const keyideasValue = [];
 		if (this.props.comment.keywords) {
-			this.props.comment.keywords.map(function (keyword, i) {
+			this.props.comment.keywords.forEach((keyword) => {
 				switch (keyword.type) {
-					case 'word':
-						keywordsValue.push(keyword.title);
-						break;
-					case 'idea':
-						keyideasValue.push(keyword.title);
+				case 'word':
+					keywordsValue.push(keyword.title);
+					break;
+				case 'idea':
+					keyideasValue.push(keyword.title);
+					break;
+				default:
+					break;
 				}
-				;
 			});
 		}
-		;
 
 		return {
-			revision: revision,
+			revision,
 
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
 			textEditorState: RichTextEditor.createValueFromString(revision.text, 'html'),
@@ -57,43 +56,20 @@ AddRevision = React.createClass({
 			titleValue: '',
 			textValue: '',
 
-			keywordsValue: keywordsValue,
-			keyideasValue: keyideasValue,
+			keywordsValue,
+			keyideasValue,
 		};
 	},
 
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-		var keywords_options = [];
-		var keywords = Keywords.find({type: 'word'}).fetch();
-		keywords.map(function (keyword) {
-			keywords_options.push({
-				value: keyword.title,
-				label: keyword.title,
-			});
-		});
-
-		var keyideas_options = [];
-		var keyideas = Keywords.find({type: 'idea'}).fetch();
-		keyideas.map(function (keyidea) {
-			keyideas_options.push({
-				value: keyidea.title,
-				label: keyidea.title,
-			});
-		});
-
-		return {
-			keywords_options: keywords_options,
-			keyideas_options: keyideas_options,
-		};
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	onTitleChange(titleEditorState) {
-		var titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-		var title = jQuery(titleHtml).text();
+		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
+		const title = jQuery(titleHtml).text();
 		this.setState({
-			titleEditorState: titleEditorState,
+			titleEditorState,
 			titleValue: title,
 		});
 	},
@@ -101,9 +77,74 @@ AddRevision = React.createClass({
 	onTextChange(textEditorState) {
 		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
 		this.setState({
-			textEditorState: textEditorState,
+			textEditorState,
 			textValue: textEditorState.toString('html'),
 		});
+	},
+
+	onKeywordsValueChange(keywords) {
+		if (keywords) {
+			const keywordArray = keywords.split(',');
+			const errorKeywords = this.errorKeywords(keywordArray, 'word');
+			if (errorKeywords.length) {
+				errorKeywords.forEach((keyword) => {
+					const index = keywordArray.indexOf(keyword);
+					keywordArray.splice(index, 1);
+				});
+			}
+			this.setState({
+				keywordsValue: keywordArray,
+			});
+		} else {
+			this.setState({
+				keywordsValue: null,
+			});
+		}
+	},
+
+	onKeyideasValueChange(keyideas) {
+		if (keyideas) {
+			const keyideasArray = keyideas.split(',');
+			const errorKeywords = this.errorKeywords(keyideasArray, 'idea');
+			if (errorKeywords.length) {
+				errorKeywords.forEach((keyword) => {
+					const index = keyideasArray.indexOf(keyword);
+					keyideasArray.splice(index, 1);
+				});
+			}
+			this.setState({
+				keyideasValue: keyideasArray,
+			});
+		} else {
+			this.setState({
+				keyideasValue: null,
+			});
+		}
+	},
+
+	getMeteorData() {
+		const keywordsOptions = [];
+		const keywords = Keywords.find({ type: 'word' }).fetch();
+		keywords.forEach((keyword) => {
+			keywordsOptions.push({
+				value: keyword.title,
+				label: keyword.title,
+			});
+		});
+
+		const keyideasOptions = [];
+		const keyideas = Keywords.find({ type: 'idea' }).fetch();
+		keyideas.forEach((keyidea) => {
+			keyideasOptions.push({
+				value: keyidea.title,
+				label: keyidea.title,
+			});
+		});
+
+		return {
+			keywordsOptions,
+			keyideasOptions,
+		};
 	},
 
 	handleSubmit(event) {
@@ -122,9 +163,9 @@ AddRevision = React.createClass({
 	},
 
 	selectRevision(event) {
-		var revision = this.props.comment.revisions[event.currentTarget.id];
+		const revision = this.props.comment.revisions[event.currentTarget.id];
 		this.setState({
-			revision: revision,
+			revision,
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
 			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
 		});
@@ -135,100 +176,52 @@ AddRevision = React.createClass({
 		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
 	},
 
-	onKeywordsValueChange(keywords) {
-		if (keywords) {
-			keywords = keywords.split(",");
-			var errorKeywords = this.errorKeywords(keywords, 'word');
-			if (errorKeywords.length) {
-				errorKeywords.forEach((keyword) => {
-					var index = keywords.indexOf(keyword);
-					keywords.splice(index, 1);
-				});
-			}
-			;
-			this.setState({
-				keywordsValue: keywords,
-			});
-		} else {
-			this.setState({
-				keywordsValue: null,
-			});
-		}
-		;
-	},
-
-	onKeyideasValueChange(keyideas) {
-		if (keyideas) {
-			keyideas = keyideas.split(",");
-			var errorKeywords = this.errorKeywords(keyideas, 'idea');
-			if (errorKeywords.length) {
-				errorKeywords.forEach((keyword) => {
-					var index = keyideas.indexOf(keyword);
-					keyideas.splice(index, 1);
-				});
-			}
-			;
-			this.setState({
-				keyideasValue: keyideas,
-			});
-		} else {
-			this.setState({
-				keyideasValue: null,
-			});
-		}
-		;
-	},
-
 	errorKeywords(keywordsArray, type) {
 		// 'type' is the type of keywords passed to this function
-		var errorKeywords = [];
+		const errorKeywords = [];
+		let keyideasValue = [];
 		switch (type) {
+		case 'word':
+			keyideasValue = this.state.keyideasValue;
+			keywordsArray.forEach((keyword) => {
+				this.data.keyideasOptions.forEach((keyideaOption) => {
+					if (keyword === keyideaOption.value) {
+						errorKeywords.push(keyword);
+					}
+				});
 
-			case 'word':
-				var keyideasValue = this.state.keyideasValue;
-				keywordsArray.forEach((keyword) => {
-					this.data.keyideas_options.forEach((keyidea_option) => {
-						if (keyword === keyidea_option.value) {
+				if (Array.isArray(keyideasValue)) {
+					keyideasValue.forEach((keyideaValue) => {
+						if (keyword === keyideaValue) {
 							errorKeywords.push(keyword);
 						}
-						;
 					});
+				}
+			});
+			break;
 
-					if (Array.isArray(keyideasValue)) {
-						keyideasValue.forEach((keyideaValue) => {
-							if (keyword === keyideaValue) {
-								errorKeywords.push(keyword);
-							}
-							;
-						});
+		case 'idea':
+			keywordsValue = this.state.keywordsValue;
+			keywordsArray.forEach((keyword) => {
+				this.data.keywordsOptions.forEach((keywordOption) => {
+					if (keyword === keywordOption.value) {
+						errorKeywords.push(keyword);
 					}
-					;
 				});
-				break;
 
-			case 'idea':
-				var keywordsValue = this.state.keywordsValue;
-				keywordsArray.forEach((keyword) => {
-					this.data.keywords_options.forEach((keyword_option) => {
-						if (keyword === keyword_option.value) {
+				if (Array.isArray(keywordsValue)) {
+					keywordsValue.forEach((keywordValue) => {
+						if (keyword === keywordValue) {
 							errorKeywords.push(keyword);
 						}
-						;
 					});
+				}
+			});
+			break;
 
-					if (Array.isArray(keywordsValue)) {
-						keywordsValue.forEach((keywordValue) => {
-							if (keyword === keywordValue) {
-								errorKeywords.push(keyword);
-							}
-							;
-						});
-					}
-					;
-				});
-				break;
+		default:
+			break;
 		}
-		;
 		return errorKeywords;
 	},
 
@@ -258,8 +251,7 @@ AddRevision = React.createClass({
 	// },
 
 	render() {
-
-		var that = this;
+		const that = this;
 
 		const toolbarConfig = {
 			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
@@ -268,12 +260,12 @@ AddRevision = React.createClass({
 				style: 'ITALIC',
 			}, {
 				label: 'Underline',
-				style: 'UNDERLINE'
+				style: 'UNDERLINE',
 			}],
 			BLOCK_TYPE_BUTTONS: [{
 				label: 'UL',
-				style: 'unordered-list-item'
-			}]
+				style: 'unordered-list-item',
+			}],
 		};
 
 
@@ -281,16 +273,16 @@ AddRevision = React.createClass({
 			<div className="comments lemma-panel-visible">
 				<div className={'comment-outer'}>
 
-					<article className="comment commentary-comment paper-shadow " style={{marginLeft: 0}}>
+					<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
 
 						<div className="comment-upper">
 							<h1 className="add-comment-title">
 								<Editor
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
-									placeholder='Comment title...'
-									spellCheck={true}
-									stripPastedStyles={true}
+									placeholder="Comment title..."
+									spellCheck
+									stripPastedStyles
 									plugins={[singleLinePlugin]}
 									blockRenderMap={singleLinePlugin.blockRenderMap}
 								/>
@@ -299,30 +291,30 @@ AddRevision = React.createClass({
 								name="keywords"
 								id="keywords"
 								required={false}
-								options={this.data.keywords_options}
-								multi={true}
-								allowCreate={true}
+								options={this.data.keywordsOptions}
+								multi
+								allowCreate
 								value={this.state.keywordsValue}
 								onChange={this.onKeywordsValueChange}
-								placeholder='Keywords...'
+								placeholder="Keywords..."
 							/>
 							<Select
 								name="keyideas"
 								id="keyideas"
 								required={false}
-								options={this.data.keyideas_options}
-								multi={true}
-								allowCreate={true}
+								options={this.data.keyideasOptions}
+								multi
+								allowCreate
 								value={this.state.keyideasValue}
 								onChange={this.onKeyideasValueChange}
-								placeholder='Keyideas...'
+								placeholder="Keyideas..."
 							/>
-							{/*TODO: this.props.comment.keyideas*/}
+							{/* TODO: this.props.comment.keyideas*/}
 
 						</div>
-						<div className="comment-lower" style={{paddingTop: 20}}>
+						<div className="comment-lower" style={{ paddingTop: 20 }}>
 							<RichTextEditor
-								placeholder='Comment text...'
+								placeholder="Comment text..."
 								value={this.state.textEditorState}
 								onChange={this.onTextChange}
 								toolbarConfig={toolbarConfig}
@@ -332,13 +324,13 @@ AddRevision = React.createClass({
 								<h4>Secondary Source(s):</h4>
 								<p>
 									{this.props.comment.referenceLink ?
-										<a href={this.props.comment.referenceLink} target="_blank">
+										<a href={this.props.comment.referenceLink} target="_blank" rel="noopener noreferrer">
 											{this.props.comment.reference}
 										</a>
 										:
-										<span >
-                                        {this.props.comment.reference}
-                                    </span>
+										<span>
+											{this.props.comment.reference}
+										</span>
 									}
 								</p>
 							</div>
@@ -349,38 +341,35 @@ AddRevision = React.createClass({
 									label="Add revision"
 									labelPosition="after"
 									onClick={this.handleSubmit}
-									icon={<FontIcon className="mdi mdi-plus"/>}
+									icon={<FontIcon className="mdi mdi-plus" />}
 								/>
 							</div>
-							{Roles.userIsInRole(Meteor.user(), ['developer']) ? /*TODO: delete*/
+							{Roles.userIsInRole(Meteor.user(), ['developer']) ? /* TODO: delete*/
 								<div className="add-comment-button">
 									<RaisedButton
 										type="submit"
 										label="(developer only) Remove revision"
 										labelPosition="after"
 										onClick={this.removeRevision}
-										icon={<FontIcon className="mdi mdi-minus"/>}
+										icon={<FontIcon className="mdi mdi-minus" />}
 									/>
 								</div>
 								:
-								""
+								''
 							}
 
 						</div>
 
 						<div className="comment-revisions">
-							{this.props.comment.revisions.map(function (revision, i) {
-								return <FlatButton
+							{this.props.comment.revisions.map((revision, i) => (
+								<FlatButton
 									key={i}
 									id={i}
 									className="revision selected-revision"
 									onClick={that.selectRevision}
-									label={"Revision " + moment(revision.created).format('D MMMM YYYY')}
-								>
-
-								</FlatButton>
-
-							})}
+									label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
+								/>
+							))}
 						</div>
 
 					</article>
@@ -389,5 +378,5 @@ AddRevision = React.createClass({
 			</div>
 
 		);
-	}
+	},
 });

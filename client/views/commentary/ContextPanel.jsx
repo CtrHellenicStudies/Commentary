@@ -1,8 +1,8 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import IconButton from "material-ui/IconButton";
-import FlatButton from "material-ui/FlatButton";
-import RaisedButton from "material-ui/RaisedButton";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 
 ContextPanel = React.createClass({
 
@@ -27,7 +27,7 @@ ContextPanel = React.createClass({
 	},
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	componentDidMount() {
@@ -45,7 +45,7 @@ ContextPanel = React.createClass({
 	getMeteorData() {
 		let lemmaText = [];
 		const commentGroup = this.props.commentGroup;
-		let selectedLemmaEdition = {lines: [], slug: ''};
+		let selectedLemmaEdition = { lines: [], slug: '' };
 
 		const lemmaQuery = {
 			'work.slug': commentGroup.work.slug,
@@ -125,23 +125,23 @@ ContextPanel = React.createClass({
 	scrollElement(state) {
 		const that = this;
 		switch (state) {
-			case 'open':
+		case 'open':
 				// console.log('top', $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top);
-				window.requestAnimationFrame(() => {
-					const scroll = $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top;
-					$(document).scrollTop(scroll);
-				});
-				break;
-			case 'close':
-				window.requestAnimationFrame(() => {
-					console.log('that.props.scrollPosition', that.props.scrollPosition);
-					setTimeout(() => {
-						$(document).scrollTop(that.props.scrollPosition);
-					}, 1000);
-				});
-				break;
-			default:
-				break;
+			window.requestAnimationFrame(() => {
+				const scroll = $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top;
+				$(document).scrollTop(scroll);
+			});
+			break;
+		case 'close':
+			window.requestAnimationFrame(() => {
+				console.log('that.props.scrollPosition', that.props.scrollPosition);
+				setTimeout(() => {
+					$(document).scrollTop(that.props.scrollPosition);
+				}, 1000);
+			});
+			break;
+		default:
+			break;
 		}
 	},
 
@@ -194,7 +194,7 @@ ContextPanel = React.createClass({
 									}
 								</div>
 
-								<div className="lemma-text" dangerouslySetInnerHTML={{__html: line.html}}/>
+								<div className="lemma-text" dangerouslySetInnerHTML={{ __html: line.html }} />
 
 
 							</div>
@@ -202,7 +202,7 @@ ContextPanel = React.createClass({
 					})}
 
 					<div className="lemma-load">
-						<div className="lemma-spinner"/>
+						<div className="lemma-spinner" />
 					</div>
 
 				</div>

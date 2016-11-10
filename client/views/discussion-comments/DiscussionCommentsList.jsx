@@ -8,7 +8,8 @@ DiscussionCommentsList = React.createClass({
 		discussionComments: React.PropTypes.array,
 	},
 
-	// Loads items from the discussionComments collection and puts them on this.data.discussionComments
+	// Loads items from the discussionComments collection
+	// and puts them on this.data.discussionComments
 	/*
 	 getMeteorData() {
 	 let query = {};
@@ -23,12 +24,12 @@ DiscussionCommentsList = React.createClass({
 		return (
 			<div className="discussion-comments-list">
 
-				{this.props.discussionComments.map((discussionComment, i) => {
-					return (<DiscussionCommentTeaser
+				{this.props.discussionComments.map((discussionComment, i) => (
+					<DiscussionCommentTeaser
 						key={i}
 						discussionComment={discussionComment}
-					/>);
-				})}
+					/>
+				))}
 				{!this.props.discussionComments.length ?
 					<p className="no-results">No comments found.</p>
 					: ''

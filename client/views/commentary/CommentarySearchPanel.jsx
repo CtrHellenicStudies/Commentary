@@ -1,8 +1,8 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import TextField from "material-ui/TextField";
-import Drawer from "material-ui/Drawer";
-import {Card, CardHeader, CardText} from "material-ui/Card";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import TextField from 'material-ui/TextField';
+import Drawer from 'material-ui/Drawer';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 
 CommentarySearchPanel = React.createClass({
 
@@ -29,17 +29,17 @@ CommentarySearchPanel = React.createClass({
 	},
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
 		return {
 			keywords: Keywords.find({
-				count: {$gt: 0},
-			}, {sort: {title: 1}}).fetch(),
-			commenters: Commenters.find({}, {sort: {name: 1}}).fetch(),
-			works: Works.find({}, {sort: {order: 1}}).fetch(),
-			subworks: Subworks.find({}, {sort: {n: 1}}).fetch(),
+				count: { $gt: 0 },
+			}, { sort: { title: 1 } }).fetch(),
+			commenters: Commenters.find({}, { sort: { name: 1 } }).fetch(),
+			works: Works.find({}, { sort: { order: 1 } }).fetch(),
+			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
 		};
 	},
 
@@ -49,18 +49,18 @@ CommentarySearchPanel = React.createClass({
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
-
-		value.subworks.forEach((subwork, i) => {
-			subworks[i].work = work;
+		const newValue = value;
+		newValue.subworks.forEach((subwork, i) => {
+			newValue.subworks[i].work = work;
 		});
 
-		if (this.state.activeWork === value.slug) {
+		if (this.state.activeWork === newValue.slug) {
 			this.setState({
 				subworks: [],
 				activeWork: '',
 			});
 		} else {
-			value.subworks.sort((a, b) => {
+			newValue.subworks.sort((a, b) => {
 				if (a.n < b.n) {
 					return -1;
 				}
@@ -70,12 +70,12 @@ CommentarySearchPanel = React.createClass({
 				return 0;
 			});
 			this.setState({
-				subworks: value.subworks,
-				activeWork: value.slug,
+				subworks: newValue.subworks,
+				activeWork: newValue.slug,
 			});
 		}
 
-		this.props.toggleSearchTerm(key, value);
+		this.props.toggleSearchTerm(key, newValue);
 	},
 
 	handleChangeTextsearch(event) {

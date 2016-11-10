@@ -1,4 +1,4 @@
-import RaisedButton from "material-ui/RaisedButton";
+import RaisedButton from 'material-ui/RaisedButton';
 
 LemmaReferenceModal = React.createClass({
 
@@ -13,14 +13,27 @@ LemmaReferenceModal = React.createClass({
 		closeLemmaReference: React.PropTypes.func,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
-			selectedLemmaEdition: {lines: []},
+			selectedLemmaEdition: { lines: [] },
 
 		};
 	},
 
-	mixins: [ReactMeteorData],
+	componentDidUpdate() {
+		// console.log('lemmaReferenceModal', this.props);
+		if (this.data.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0) {
+			this.setState({
+				selectedLemmaEdition: this.data.lemmaText[0],
+			});
+		} else if (!this.props.visible && this.state.selectedLemmaEdition.lines.length) {
+			this.setState({
+				selectedLemmaEdition: { lines: [] },
+			});
+		}
+	},
 
 	getMeteorData() {
 		const lemmaQuery = {
@@ -45,11 +58,11 @@ LemmaReferenceModal = React.createClass({
 			const editions = [];
 
 			let textIsInEdition = false;
-			textNodes.forEach(function (textNode) {
-				textNode.text.forEach(function (text) {
+			textNodes.forEach((textNode) => {
+				textNode.text.forEach((text) => {
 					textIsInEdition = false;
 
-					editions.forEach(function (edition) {
+					editions.forEach((edition) => {
 						if (text.edition.slug === edition.slug) {
 							edition.lines.push({
 								html: text.html,
@@ -82,23 +95,10 @@ LemmaReferenceModal = React.createClass({
 		};
 	},
 
-	componentDidUpdate() {
-		// console.log('lemmaReferenceModal', this.props);
-		if (this.data.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0) {
-			this.setState({
-				selectedLemmaEdition: this.data.lemmaText[0],
-			});
-		} else if (!this.props.visible && this.state.selectedLemmaEdition.lines.length) {
-			this.setState({
-				selectedLemmaEdition: {lines: []},
-			});
-		}
-	},
-
 	toggleEdition(editionSlug) {
 		if (this.state.selectedLemmaEdition.slug !== editionSlug) {
 			let newSelectedEdition = {};
-			this.data.lemmaText.forEach(function (edition) {
+			this.data.lemmaText.forEach((edition) => {
 				if (edition.slug === editionSlug) {
 					newSelectedEdition = edition;
 				}
@@ -125,32 +125,35 @@ LemmaReferenceModal = React.createClass({
 
 		return (
 			<div
-				className={'lemma-reference-modal' + ((this.props.visible && hasLemma) ? ' lemma-reference-modal-visible' : '')}
+				className={`lemma-reference-modal${(this.props.visible && hasLemma) ?
+					' lemma-reference-modal-visible' : ''}`}
 				style={styles.lemmaReferenceModal}
 			>
 				<article className="comment	lemma-comment paper-shadow ">
 
 					<div className="lemma-reference-text">
-						{this.state.selectedLemmaEdition.lines.map(function (line, i) {
-							return (<p
+						{this.state.selectedLemmaEdition.lines.map((line, i) => (
+							<p
 								key={i}
 								className="lemma-text"
-								dangerouslySetInnerHTML={{__html: line.html}}
-							/>);
-						})}
+								dangerouslySetInnerHTML={{ __html: line.html }}
+							/>
+						))}
 					</div>
 
 					<div className="edition-tabs tabs">
-						{lemmaText.map(function (lemmaTextEdition, i) {
+						{lemmaText.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
-
-							return (<RaisedButton
-								key={i}
-								label={lemmaEditionTitle}
-								data-edition={lemmaTextEdition.title}
-								className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-							/>);
+							return (
+								<RaisedButton
+									key={i}
+									label={lemmaEditionTitle}
+									data-edition={lemmaTextEdition.title}
+									className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+										'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+									onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+								/>
+							);
 						})}
 					</div>
 

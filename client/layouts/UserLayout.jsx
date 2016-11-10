@@ -1,8 +1,8 @@
-import React from "react";
-import {SnackAttack} from "/imports/ui/components/SnackAttack.jsx";
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import "../../node_modules/mdi/css/materialdesignicons.css";
+import React from 'react';
+import { SnackAttack } from '/imports/ui/components/SnackAttack.jsx';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import '../../node_modules/mdi/css/materialdesignicons.css';
 
 UserLayout = React.createClass({
 	childContextTypes: {
@@ -12,7 +12,7 @@ UserLayout = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
@@ -35,7 +35,7 @@ UserLayout = React.createClass({
 
 				<main>
 					{this.data.user ?
-						<ProfilePage user={this.data.user}/>
+						<ProfilePage user={this.data.user} />
 						:
 						<Loading />
 					}

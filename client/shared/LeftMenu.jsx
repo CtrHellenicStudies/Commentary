@@ -1,9 +1,9 @@
-import MenuItem from "material-ui/MenuItem";
-import Divider from "material-ui/Divider";
-import Drawer from "material-ui/Drawer";
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import injectTapEventPlugin from "react-tap-event-plugin";
+import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
+import Drawer from 'material-ui/Drawer';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
 
@@ -21,17 +21,17 @@ LeftMenu = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
 		return {
-			currentUser: Meteor.users.findOne({_id: Meteor.userId()}),
+			currentUser: Meteor.users.findOne({ _id: Meteor.userId() }),
 		};
 	},
 
 	scrollToAbout(e) {
-		$('html, body').animate({scrollTop: $('#about').height() - 100}, 300);
+		$('html, body').animate({ scrollTop: $('#about').height() - 100 }, 300);
 
 		this.props.closeLeftMenu();
 		e.preventDefault();
@@ -61,7 +61,7 @@ LeftMenu = React.createClass({
 						{userIsLoggedIn ?
 							<div>
 								<div className="user-image paper-shadow">
-									<img src="/images/default_user.jpg"/>
+									<img src="/images/default_user.jpg" role="presentation" />
 								</div>
 							</div>
 							: ''

@@ -1,6 +1,6 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import KeywordContext from "../../../imports/ui/components/KeywordContext.jsx";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import KeywordContext from '../../../imports/ui/components/KeywordContext.jsx';
 
 KeywordDetail = React.createClass({
 
@@ -15,7 +15,7 @@ KeywordDetail = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
@@ -23,7 +23,7 @@ KeywordDetail = React.createClass({
 			slug: this.props.slug,
 		};
 
-		return {keyword: Keywords.findOne(query)};
+		return { keyword: Keywords.findOne(query) };
 	},
 
 	render() {
@@ -37,9 +37,9 @@ KeywordDetail = React.createClass({
 				<div className="content primary">
 					<section className="block header header-page	cover parallax">
 						<div className="background-image-holder blur-2--no-remove remove-blur	blur-10">
-							<img className="background-image" src="/images/apotheosis_homer.jpg"/>
+							<img className="background-image" src="/images/apotheosis_homer.jpg" role="presentation" />
 						</div>
-						<div className="block-screen brown"/>
+						<div className="block-screen brown" />
 
 						<div className="container v-align-transform">
 							<div className="grid inner">
@@ -53,7 +53,7 @@ KeywordDetail = React.createClass({
 					</section>
 
 					<section className="page-content">
-						<KeywordContext keywordId={keyword._id} maxLines={3}/>
+						<KeywordContext keywordId={keyword._id} maxLines={3} />
 						<p>
 							Quae res in civitate duae plurimum possunt, eae contra nos ambae faciunt in hoc tempore,
 							summa gratia et eloquentia; quarum alterum, C. Aquili, vereor, alteram metuo. Eloquentia

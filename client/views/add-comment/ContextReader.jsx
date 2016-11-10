@@ -1,6 +1,6 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import RaisedButton from "material-ui/RaisedButton";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import RaisedButton from 'material-ui/RaisedButton';
 
 ContextReader = React.createClass({
 
@@ -180,14 +180,6 @@ ContextReader = React.createClass({
 		}
 	},
 
-	linePaginationClicked(line) {
-		this.setState({
-			lineFrom: line,
-			lineTo: line + 50,
-		});
-	},
-
-
 	getMeteorData() {
 		const self = this;
 
@@ -214,7 +206,7 @@ ContextReader = React.createClass({
 			const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
 			if (textNodesSubscription.ready()) {
 				// console.log("Context Panel lemmaQuery", lemmaQuery);
-				const textNodes = TextNodes.find(lemmaQuery, {sort: {'text.n': 1}}).fetch();
+				const textNodes = TextNodes.find(lemmaQuery, { sort: { 'text.n': 1 } }).fetch();
 				const editions = [];
 
 				let textIsInEdition = false;
@@ -268,6 +260,13 @@ ContextReader = React.createClass({
 			lemmaText: '',
 			selectedLemmaEdition: '',
 		};
+	},
+
+	linePaginationClicked(line) {
+		this.setState({
+			lineFrom: line,
+			lineTo: line + 50,
+		});
 	},
 
 	toggleEdition(editionSlug) {
@@ -341,7 +340,7 @@ ContextReader = React.createClass({
 										className="light"
 										label="Previous"
 										onClick={this.onBeforeClicked}
-										icon={<i className="mdi mdi-chevron-up"/>}
+										icon={<i className="mdi mdi-chevron-up" />}
 									/>
 								</div>
 								:
@@ -356,8 +355,8 @@ ContextReader = React.createClass({
 										<div className="lemma-meta">
 											{(line.n % 5 === 0 || line.n === 1) ?
 												<span className="lemma-line-n">
-															{line.n}
-													</span>
+													{line.n}
+												</span>
 												:
 												''
 											}
@@ -367,11 +366,11 @@ ContextReader = React.createClass({
 											className="lemma-text"
 											ref={line.n}
 											id={line.n}
-											dangerouslySetInnerHTML={{__html: line.html}}
+											dangerouslySetInnerHTML={{ __html: line.html }}
 											onMouseEnter={self.handeLineMouseEnter}
 											onMouseLeave={self.handeLineMouseLeave}
 											onClick={self.handleLineClick}
-											style={{cursor: 'pointer'}}
+											style={{ cursor: 'pointer' }}
 										/>
 									</div>
 								);
@@ -383,7 +382,7 @@ ContextReader = React.createClass({
 										className="light"
 										label="Next"
 										onClick={this.onAfterClicked}
-										icon={<i className="mdi mdi-chevron-down"/>}
+										icon={<i className="mdi mdi-chevron-down" />}
 									/>
 								</div>
 								:
@@ -429,7 +428,7 @@ ContextReader = React.createClass({
 						<div className="lemma-text-wrap">
 							<br />
 							<br />
-							<div className="well-spinner"/>
+							<div className="well-spinner" />
 						</div>
 					</div>
 				}

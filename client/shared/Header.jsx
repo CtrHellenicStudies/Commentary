@@ -1,7 +1,7 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import FlatButton from "material-ui/FlatButton";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import IconButton from "material-ui/IconButton";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import FlatButton from 'material-ui/FlatButton';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import IconButton from 'material-ui/IconButton';
 
 Header = React.createClass({
 
@@ -34,7 +34,7 @@ Header = React.createClass({
 	},
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	componentWillMount() {
@@ -57,8 +57,8 @@ Header = React.createClass({
 		return {
 			keywords: Keywords.find().fetch(),
 			commenters: Commenters.find().fetch(),
-			works: Works.find({}, {sort: {order: 1}}).fetch(),
-			subworks: Subworks.find({}, {sort: {n: 1}}).fetch(),
+			works: Works.find({}, { sort: { order: 1 } }).fetch(),
+			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
 		};
 	},
 
@@ -121,20 +121,20 @@ Header = React.createClass({
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
-
-		value.subworks.forEach((subwork) => {
-			subwork.work = work;
+		const newValue = value;
+		newValue.subworks.forEach((subwork, i) => {
+			newValue.subworks[i].work = work;
 		});
 
 		// console.log("Header.state", this.state);
 
-		if (this.state.activeWork === value.slug) {
+		if (this.state.activeWork === newValue.slug) {
 			this.setState({
 				subworks: [],
 				activeWork: '',
 			});
 		} else {
-			value.subworks.sort((a, b) => {
+			newValue.subworks.sort((a, b) => {
 				if (a.n < b.n) {
 					return -1;
 				}
@@ -144,12 +144,12 @@ Header = React.createClass({
 				return 0;
 			});
 			this.setState({
-				subworks: value.subworks,
-				activeWork: value.slug,
+				subworks: newValue.subworks,
+				activeWork: newValue.slug,
 			});
 		}
 
-		this.props.toggleSearchTerm(key, value);
+		this.props.toggleSearchTerm(key, newValue);
 	},
 
 	showLoginModal() {

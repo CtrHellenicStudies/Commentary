@@ -1,6 +1,6 @@
-import RaisedButton from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton";
-import FontIcon from "material-ui/FontIcon";
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
 
 DiscussionComment = React.createClass({
 
@@ -54,9 +54,9 @@ DiscussionComment = React.createClass({
 		const discussionComment = this.props.discussionComment;
 		let userLink = '';
 		if (discussionComment.user.username) {
-			userLink = '/users/' + discussionComment.user._id + '/' + discussionComment.user.username;
+			userLink = `/users/${discussionComment.user._id}/${discussionComment.user.username}`;
 		} else {
-			userLink = '/users/' + discussionComment.user._id;
+			userLink = `/users/${discussionComment.user._id}`;
 		}
 		discussionComment.children = [];
 		let userUpvoted = false;
@@ -70,41 +70,38 @@ DiscussionComment = React.createClass({
 		) {
 			username = discussionComment.user.emails[0].address.split('@')[0];
 		}
-		;
 
 		if (
-			typeof this.props.currentUser !== 'undefined' || 'null'
-			&& discussionComment.voters.indexOf(this.props.currentUser._id) >= 0
+			this.props.currentUser &&
+			discussionComment.voters.indexOf(this.props.currentUser._id) >= 0
 		) {
 			userUpvoted = true;
 		}
 
-		return (<div
-				className="discussion-comment paper-shadow"
-			>
-				<div
-					className="inner-comment-row"
-				>
-
+		return (
+			<div className="discussion-comment paper-shadow">
+				<div className="inner-comment-row">
 					<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
 						<a href={userLink}>
 							<img
-								src={discussionComment.user.avatar ? discussionComment.user.avatar.url : '/images/default_user.jpg'}
-								alt={username}/>
+								src={discussionComment.user.avatar ?
+									discussionComment.user.avatar.url : '/images/default_user.jpg'}
+								alt={username}
+							/>
 						</a>
 					</div>
 
 					<div className="discussion-commenter-meta">
 						<a href={userLink}>
-						<span className="discussion-commenter-name">
-							{username}
-						</span>
+							<span className="discussion-commenter-name">
+								{username}
+							</span>
 						</a>
 						<span className="discussion-comment-date">
-						<span >Updated: </span>
+							<span>Updated: </span>
 							{moment(discussionComment.updated).format('D MMMM YYYY')
 							|| moment(discussionComment.created).format('D MMMM YYYY')}
-					</span>
+						</span>
 					</div>
 
 				</div>
@@ -148,31 +145,31 @@ DiscussionComment = React.createClass({
 						label={discussionComment.votes}
 						onClick={this.upvoteDiscussionComment}
 						className={(userUpvoted) ? 'vote-up upvoted' : 'vote-up'}
-						icon={<FontIcon className="mdi mdi-chevron-up"/>}
+						icon={<FontIcon className="mdi mdi-chevron-up" />}
 					>
-						{userIsLoggedIn ?
-							''
-							:
+						{!userIsLoggedIn ?
 							<span className="vote-up-tooltip">
-							You must be signed in to upvote.
-						</span>
+								You must be signed in to upvote.
+							</span>
+							:
+							''
 						}
 					</FlatButton>
-
-					{('currentUser' in self.props && self.props.currentUser !== null && typeof self.props.currentUser !== 'undefined')
-						? (self.props.currentUser._id === discussionComment.user._id) ?
+					{('currentUser' in self.props && self.props.currentUser &&
+						self.props.currentUser._id === discussionComment.user._id) ?
 						<FlatButton
 							label="Edit"
 							onClick={this.showEditMode}
 							className="edit"
 						/>
-						: ''
-						: ''
+						:
+						''
 					}
+
 				</div>
 
 
-				{false ?
+				{/* false ?
 					<div className="reply-create-form">
 						<div className="add-comment-wrap">
 							<form
@@ -180,10 +177,10 @@ DiscussionComment = React.createClass({
 								name="new-comment-form"
 							>
 								<div className="add-comment-row-1">
-								<textarea
-									className="new-comment-text"
-									placeholder="Enter your reply here . . . "
-								/>
+									<textarea
+										className="new-comment-text"
+										placeholder="Enter your reply here . . . "
+									/>
 									<RaisedButton
 										label="Submit"
 										type="submit"
@@ -198,7 +195,7 @@ DiscussionComment = React.createClass({
 							</form>
 						</div>
 					</div>
-					: ''}
+					: '' */}
 
 				<div className="discussion-comment-children">
 
@@ -209,15 +206,15 @@ DiscussionComment = React.createClass({
 						>
 							<div className="inner-comment-row">
 								<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
-									<img src="/images/default_user.png" alt={username}/>
+									<img src="/images/default_user.png" alt={username} />
 								</div>
 								<div className="discussion-commenter-meta">
-								<span className="discussion-commenter-name">
-									{discussionCommentChild.user.name}
-								</span>
+									<span className="discussion-commenter-name">
+										{discussionCommentChild.user.name}
+									</span>
 									<span className="discussion-comment-date">
-									{discussionCommentChild.updated}
-								</span>
+										{discussionCommentChild.updated}
+									</span>
 								</div>
 							</div>
 							<div className="inner-comment-row">
@@ -234,7 +231,7 @@ DiscussionComment = React.createClass({
 									label={discussionComment.votes}
 									onClick={this.upvoteDiscussionComment}
 									className="vote-up upvoted"
-									icon={<FontIcon className="mdi mdi-chevron-up"/>}
+									icon={<FontIcon className="mdi mdi-chevron-up" />}
 								/>
 								<FlatButton
 									label="Reply"

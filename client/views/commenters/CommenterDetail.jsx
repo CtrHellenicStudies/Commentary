@@ -1,4 +1,4 @@
-import {Avatars} from "/imports/avatar/avatar_collections.js";
+import { Avatars } from '/imports/avatar/avatar_collections.js';
 
 CommenterDetail = React.createClass({
 
@@ -16,16 +16,16 @@ CommenterDetail = React.createClass({
 	},
 
 	getMeteorData() {
-		const commenter = Commenters.findOne({slug: this.props.slug});
+		const commenter = Commenters.findOne({ slug: this.props.slug });
 		let avatarUrl = this.props.defaultAvatarUrl;
 		if (commenter != null && commenter.avatar != null) {
 			Meteor.subscribe('avatars', [commenter.avatar]);
-			const avatar = Avatars.findOne({_id: commenter.avatar});
+			const avatar = Avatars.findOne({ _id: commenter.avatar });
 			if (avatar) {
 				avatarUrl = avatar.url;
 			}
 		}
-		return {commenter, avatarUrl};
+		return { commenter, avatarUrl };
 	},
 
 	toggleReadMoreBio() {
@@ -54,7 +54,7 @@ CommenterDetail = React.createClass({
 									src="/images/capitals.jpg"
 								/>
 							</div>
-							<div className="block-screen brown"/>
+							<div className="block-screen brown" />
 							<div className="container v-align-transform">
 								<div className="grid inner">
 									<div className="center-content">
@@ -70,13 +70,13 @@ CommenterDetail = React.createClass({
 						<section className="page-content">
 
 							<div className="commenter-image">
-								<img src={this.data.avatarUrl} alt={commenter.name}/>
+								<img src={this.data.avatarUrl} alt={commenter.name} />
 							</div>
 
 							<div className={`user-bio ${(self.state.readMoreBio ? 'user-bio--read-more' : '')}`}>
 
 								{commenter.bio ?
-									<div dangerouslySetInnerHTML={{__html: commenter.bio}}/>
+									<div dangerouslySetInnerHTML={{ __html: commenter.bio }} />
 									:
 									<p>There is no biography information for this user yet.</p>
 								}

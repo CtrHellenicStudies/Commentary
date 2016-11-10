@@ -10,9 +10,9 @@ ReferenceWorksPage = React.createClass({
 				<div className="content primary">
 					<section className="block header header-page	cover parallax">
 						<div className="background-image-holder blur-2--no-remove remove-blur	blur-10">
-							<img className="background-image" src="/images/achilles_2.jpg"/>
+							<img className="background-image" src="/images/achilles_2.jpg" role="presentation" />
 						</div>
-						<div className="block-screen brown"/>
+						<div className="block-screen brown" />
 
 						<div className="container v-align-transform">
 							<div className="grid inner">

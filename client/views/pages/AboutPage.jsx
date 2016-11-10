@@ -7,9 +7,13 @@ AboutPage = React.createClass({
 
 				<section className="block header header-page	cover parallax">
 					<div className="background-image-holder blur-2--no-remove remove-blur	blur-10">
-						<img className="background-image" src="/images/apotheosis_homer.jpg"/>
+						<img
+							role="presentation"
+							className="background-image"
+							src="/images/apotheosis_homer.jpg"
+						/>
 					</div>
-					<div className="block-screen brown"/>
+					<div className="block-screen brown" />
 
 					<div className="container v-align-transform">
 

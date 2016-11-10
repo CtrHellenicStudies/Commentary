@@ -1,6 +1,6 @@
-import RaisedButton from "material-ui/RaisedButton";
-import FontIcon from "material-ui/FontIcon";
-import AvatarIcon from "/imports/avatar/client/ui/AvatarIcon.jsx";
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
 CommentLemma = React.createClass({
 
@@ -8,16 +8,25 @@ CommentLemma = React.createClass({
 		commentGroup: React.PropTypes.object.isRequired,
 		showContextPanel: React.PropTypes.func.isRequired,
 		scrollPosition: React.PropTypes.func.isRequired,
+		index: React.PropTypes.number,
 	},
+
+	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
-			selectedLemmaEdition: {lines: []},
+			selectedLemmaEdition: { lines: [] },
 
 		};
 	},
 
-	mixins: [ReactMeteorData],
+	componentDidUpdate() {
+		if (this.data.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0) {
+			this.setState({
+				selectedLemmaEdition: this.data.lemmaText[0],
+			});
+		}
+	},
 
 	getMeteorData() {
 		const commentGroup = this.props.commentGroup;
@@ -43,11 +52,11 @@ CommentLemma = React.createClass({
 			const editions = [];
 
 			let textIsInEdition = false;
-			textNodes.forEach(function (textNode) {
-				textNode.text.forEach(function (text) {
+			textNodes.forEach((textNode) => {
+				textNode.text.forEach((text) => {
 					textIsInEdition = false;
 
-					editions.forEach(function (edition) {
+					editions.forEach((edition) => {
 						if (text.edition.slug === edition.slug) {
 							edition.lines.push({
 								html: text.html,
@@ -80,18 +89,10 @@ CommentLemma = React.createClass({
 		};
 	},
 
-	componentDidUpdate() {
-		if (this.data.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0) {
-			this.setState({
-				selectedLemmaEdition: this.data.lemmaText[0],
-			});
-		}
-	},
-
 	toggleEdition(editionSlug) {
 		if (this.state.selectedLemmaEdition.slug !== editionSlug) {
 			let newSelectedEdition = {};
-			this.data.lemmaText.forEach(function (edition) {
+			this.data.lemmaText.forEach((edition) => {
 				if (edition.slug === editionSlug) {
 					newSelectedEdition = edition;
 				}
@@ -104,7 +105,7 @@ CommentLemma = React.createClass({
 	},
 
 	showContextPanel(commentGroup) {
-		const scroll = $('#comment-group-' + this.props.index).offset().top;
+		const scroll = $(`#comment-group-${this.props.index}`).offset().top;
 		this.props.scrollPosition(scroll, this.props.index);
 		this.props.showContextPanel(commentGroup);
 	},
@@ -115,8 +116,8 @@ CommentLemma = React.createClass({
 		const lemmaText = this.data.lemmaText;
 		let workTitle = commentGroup.work.title;
 
-		if (workTitle === "Homeric Hymns") {
-			workTitle = "Hymns";
+		if (workTitle === 'Homeric Hymns') {
+			workTitle = 'Hymns';
 		}
 
 		return (
@@ -126,39 +127,38 @@ CommentLemma = React.createClass({
 				<div className="comment-group-meta">
 					<div className="comment-group-meta-inner">
 						<div className="comment-group-ref">
-											<span className="comment-group-ref-above">
-													{workTitle} {commentGroup.subwork.title}
-											</span>
+							<span className="comment-group-ref-above">
+								{workTitle} {commentGroup.subwork.title}
+							</span>
 							<h2 className="comment-group-ref-below">
-								{commentGroup.lineFrom}{commentGroup.lineTo ? '-' + commentGroup.lineTo : '' }
+								{commentGroup.lineFrom}{commentGroup.lineTo ? `-${commentGroup.lineTo}` : '' }
 							</h2>
 
 						</div>
 						<div className="comment-group-commenters">
 
-							{commentGroup.commenters.map(function (commenter, i) {
-
-								return (<div
+							{commentGroup.commenters.map((commenter, i) => (
+								<div
 									key={i}
 									className="comment-author"
 									data-commenter-id={commenter.id}
 								>
-														<span className="comment-author-name">
-															{commenter.name}
-														</span>
+									<span className="comment-author-name">
+										{commenter.name}
+									</span>
 									<div
 										className="comment-author-image-wrap paper-shadow"
 									>
 										<a
-											href={'/commenters/' + commenter.slug}
+											href={`/commenters/${commenter.slug}`}
 											onClick={self.goToAuthorComment}
 										>
-											<AvatarIcon avatar={commenter.avatarData}/>
+											<AvatarIcon avatar={commenter.avatarData} />
 										</a>
 
 									</div>
-								</div>);
-							})}
+								</div>
+							))}
 
 						</div>
 					</div>
@@ -167,22 +167,23 @@ CommentLemma = React.createClass({
 
 				<article className="comment lemma-comment paper-shadow">
 
-					{this.state.selectedLemmaEdition.lines.map(function (line, i) {
-						return (<p
+					{this.state.selectedLemmaEdition.lines.map((line, i) => (
+						<p
 							key={i}
 							className="lemma-text"
-							dangerouslySetInnerHTML={{__html: line.html}}
-						/>);
-					})}
+							dangerouslySetInnerHTML={{ __html: line.html }}
+						/>
+					))}
 					<div className="edition-tabs tabs">
-						{lemmaText.map(function (lemmaTextEdition, i) {
+						{lemmaText.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
 							return (<RaisedButton
 								key={i}
 								label={lemmaEditionTitle}
 								data-edition={lemmaTextEdition.title}
-								className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+								className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+									'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 							/>);
 						})}
@@ -193,11 +194,11 @@ CommentLemma = React.createClass({
 							onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
 							label="Context"
 							labelPosition="before"
-							icon={<FontIcon className="mdi mdi-chevron-right"/>}
+							icon={<FontIcon className="mdi mdi-chevron-right" />}
 						/>
 					</div>
 				</article>
-				<div className="discussion-wrap"/>
+				<div className="discussion-wrap" />
 			</div>
 
 

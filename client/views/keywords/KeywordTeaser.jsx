@@ -1,6 +1,6 @@
-import React from "react";
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
+import React from 'react';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 KeywordTeaser = React.createClass({
 
@@ -19,7 +19,7 @@ KeywordTeaser = React.createClass({
 	},
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	toggleOpen() {
@@ -45,8 +45,8 @@ KeywordTeaser = React.createClass({
 			<h4 className="keyword-title">
 				{keyword.title}
 			</h4>
-			<i className="mdi mdi-plus"/>
-			<i className="mdi mdi-minus"/>
+			<i className="mdi mdi-plus" />
+			<i className="mdi mdi-minus" />
 			<span className="keyword-comment-count">({keyword.count} Comments)</span>
 			<hr />
 			<span

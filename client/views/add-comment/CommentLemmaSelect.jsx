@@ -1,7 +1,7 @@
-import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 CommentLemmaSelect = React.createClass({
 
@@ -16,9 +16,7 @@ CommentLemmaSelect = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
-	},
+	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -27,7 +25,15 @@ CommentLemmaSelect = React.createClass({
 		};
 	},
 
-	mixins: [ReactMeteorData],
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
+
+	onLineLetterValueChange(event) {
+		this.setState({
+			lineLetterValue: event.target.value,
+		});
+	},
 
 	getMeteorData() {
 		const that = this;
@@ -66,11 +72,11 @@ CommentLemmaSelect = React.createClass({
 			const editions = [];
 
 			let textIsInEdition = false;
-			textNodes.forEach(function (textNode) {
-				textNode.text.forEach(function (text) {
+			textNodes.forEach((textNode) => {
+				textNode.text.forEach((text) => {
 					textIsInEdition = false;
 
-					editions.forEach(function (edition) {
+					editions.forEach((edition) => {
 						if (text.edition.slug === edition.slug) {
 							edition.lines.push({
 								html: text.html,
@@ -98,7 +104,7 @@ CommentLemmaSelect = React.createClass({
 			console.log('CommentLemmaSelect lemmaText', lemmaText);
 
 			if (this.state.selectedLemmaEdition.length) {
-				lemmaText.forEach(function (edition) {
+				lemmaText.forEach((edition) => {
 					if (edition.slug === that.state.selectedLemmaEdition) {
 						selectedLemmaEdition = edition;
 					}
@@ -122,12 +128,6 @@ CommentLemmaSelect = React.createClass({
 		}
 	},
 
-	onLineLetterValueChange(event) {
-		this.setState({
-			lineLetterValue: event.target.value,
-		});
-	},
-
 	render() {
 		const self = this;
 
@@ -138,14 +138,13 @@ CommentLemmaSelect = React.createClass({
 					{this.props.selectedLineFrom > 0 && this.data.selectedLemmaEdition && 'lines' in this.data.selectedLemmaEdition ?
 						<article className="comment lemma-comment paper-shadow">
 
-							{this.data.selectedLemmaEdition.lines.map(function (line, i) {
-								return (
-									<p
-										key={i}
-										className="lemma-text"
-										dangerouslySetInnerHTML={{__html: line.html}}
-									/>);
-							})}
+							{this.data.selectedLemmaEdition.lines.map((line, i) => (
+								<p
+									key={i}
+									className="lemma-text"
+									dangerouslySetInnerHTML={{ __html: line.html }}
+								/>
+							))}
 
 							{self.props.selectedLineTo === 0 ?
 								<div>
@@ -163,7 +162,7 @@ CommentLemmaSelect = React.createClass({
 							}
 
 							<div className="edition-tabs tabs">
-								{this.data.lemmaText.map(function (lemmaTextEdition, i) {
+								{this.data.lemmaText.map((lemmaTextEdition, i) => {
 									const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
 									return (<RaisedButton

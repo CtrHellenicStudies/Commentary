@@ -1,6 +1,6 @@
-import RaisedButton from "material-ui/RaisedButton";
-import IconMenu from "material-ui/IconMenu";
-import MenuItem from "material-ui/MenuItem";
+import RaisedButton from 'material-ui/RaisedButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 CommentCitation = React.createClass({
 
@@ -10,10 +10,10 @@ CommentCitation = React.createClass({
 		comment: React.PropTypes.object,
 	},
 
-	getInitialState(){
+	getInitialState() {
 		return {
 			openMenu: false,
-		}
+		};
 	},
 
 	handleOnRequestChange(value) {
@@ -23,28 +23,18 @@ CommentCitation = React.createClass({
 	},
 
 	iconButtonMenuElement(label) {
-		var iconStyle = {
-				width: 36,
-				height: 36
-			},
-			style = {
-				width: 72,
-				height: 72,
-				padding: 16,
-			};
 		return (
 			<RaisedButton
 				label={label}
 				labelPosition="after"
-			>
-			</RaisedButton>
+			/>
 		);
 	},
 
 	render() {
-		var comment = this.props.comment,
-			title = this.props.title,
-			componentClass = this.props.componentClass;
+		const comment = this.props.comment;
+		const title = this.props.title;
+		const componentClass = this.props.componentClass;
 
 		return (
 			<div className={componentClass}>
@@ -52,19 +42,19 @@ CommentCitation = React.createClass({
 					iconButtonElement={this.iconButtonMenuElement(title)}
 					open={this.state.openMenu}
 					onRequestChange={this.handleOnRequestChange}
-					anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-					targetOrigin={{horizontal: 'left', vertical: 'bottom'}}
+					anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+					targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
 				>
-					{comment.revisions.map(function (revision, i) {
-						return (<MenuItem
+					{comment.revisions.map((revision, i) => (
+						<MenuItem
 							key={i}
-							href={"/commentary/?_id=" + comment._id + '&revision=' + i}
-							primaryText={"Revision " + moment(revision.created).format('D MMMM YYYY')}
-						></MenuItem>);
-					})}
-					<MenuItem href={"/commentary/?_id=" + comment._id} primaryText="Comment link"/>
+							href={`/commentary/?_id=${comment._id}&revision=${i}`}
+							primaryText={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
+						/>
+					))}
+					<MenuItem href={`/commentary/?_id=${comment._id}`} primaryText="Comment link" />
 				</IconMenu>
 			</div>
 		);
-	}
+	},
 });

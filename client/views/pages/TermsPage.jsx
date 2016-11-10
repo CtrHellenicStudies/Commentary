@@ -8,10 +8,14 @@ TermsPage = React.createClass({
 				<section className="page-head fullscreen image-bg bg-dark">
 
 					<div className="background-image-holder blur">
-						<img className="background-image" alt="image" src="/images/greek-inscription.jpg"/>
+						<img
+							role="presentation"
+							className="background-image"
+							src="/images/greek-inscription.jpg"
+						/>
 					</div>
 
-					<div className="background-screen"/>
+					<div className="background-screen" />
 
 					<div className="container v-align-transform">
 						<div className="row">
@@ -28,8 +32,8 @@ TermsPage = React.createClass({
 
 				<section className="page-content">
 					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id ante vel diam dignissim
-						lobortis vitae non arcu. Nulla at dignissim mauris. Nam tempor posuere volutpat. Praesent
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id ante vel diam dignissim\
+						lobortis vitae non arcu. Nulla at dignissim mauris. Nam tempor posuere volutpat. Praesent\
 						posuere, neque quis facilisis dictum, nunc ante sodales sem, vitae tempus est odio id augue.
 						Donec ac felis velit. Suspendisse in auctor magna. Donec finibus aliquam lacus eget faucibus.
 						Aliquam tincidunt nibh id nibh placerat mollis. Nam vestibulum libero id eros semper, eget

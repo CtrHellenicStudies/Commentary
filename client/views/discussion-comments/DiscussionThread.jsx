@@ -1,6 +1,6 @@
-import IconButton from "material-ui/IconButton";
-import RaisedButton from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton";
+import IconButton from 'material-ui/IconButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 
 DiscussionThread = React.createClass({
 
@@ -25,7 +25,7 @@ DiscussionThread = React.createClass({
 
 		const handle = Meteor.subscribe('discussionComments', this.props.comment._id);
 		if (handle.ready()) {
-			discussionComments = DiscussionComments.find({commentId: this.props.comment._id}).fetch();
+			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id }).fetch();
 			loaded = true;
 		}
 
@@ -55,7 +55,6 @@ DiscussionThread = React.createClass({
 	},
 
 	render() {
-		const self = this;
 		const currentUser = Meteor.user();
 
 		let discussionWrapClass = 'discussion-wrap';
@@ -80,7 +79,7 @@ DiscussionThread = React.createClass({
 					onClick={this.showDiscussionThread}
 					className="continue-discussion"
 				>
-					<i className="mdi mdi-comment"/>
+					<i className="mdi mdi-comment" />
 					{this.data.discussionComments.length ?
 						<span className="continue-discussion-text">
 							{this.data.discussionComments.length}
@@ -90,8 +89,8 @@ DiscussionThread = React.createClass({
 
 				{!this.data.loaded ?
 					<div className="ahcip-spinner">
-						<div className="double-bounce1"/>
-						<div className="double-bounce2"/>
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
 					</div>
 					:
 					<div className="discussion-thread">
@@ -110,7 +109,8 @@ DiscussionThread = React.createClass({
 								<div className="add-comment-row-1">
 									<div className="profile-picture paper-shadow">
 										<img
-											src={currentUser && currentUser.avatar ? currentUser.avatar.url : '/images/default_user.jpg'}
+											src={currentUser && currentUser.avatar ?
+												currentUser.avatar.url : '/images/default_user.jpg'}
 											alt="Commentary User"
 										/>
 									</div>

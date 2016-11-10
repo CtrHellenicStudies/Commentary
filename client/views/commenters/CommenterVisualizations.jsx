@@ -1,5 +1,5 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 CommenterVisualizations = React.createClass({
 
@@ -18,7 +18,7 @@ CommenterVisualizations = React.createClass({
 	},
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	toggleVisibleWork(workToToggle) {
@@ -78,8 +78,8 @@ CommenterVisualizations = React.createClass({
 					{workIliadLevel ?
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
-							workTitle={"Iliad"}
-							workSlug={"iliad"}
+							workTitle={'Iliad'}
+							workSlug={'iliad'}
 							workLevel={workIliadLevel}
 							nComments={commenter.nCommentsIliad}
 						/>
@@ -87,8 +87,8 @@ CommenterVisualizations = React.createClass({
 					{workOdysseyLevel ?
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
-							workTitle={"Odyssey"}
-							workSlug={"odyssey"}
+							workTitle={'Odyssey'}
+							workSlug={'odyssey'}
 							workLevel={workOdysseyLevel}
 							nComments={commenter.nCommentsOdyssey}
 						/>
@@ -96,8 +96,8 @@ CommenterVisualizations = React.createClass({
 					{workHymnsLevel ?
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
-							workTitle={"Hymns"}
-							workSlug={"homeric-hymns"}
+							workTitle={'Hymns'}
+							workSlug={'homeric-hymns'}
 							workLevel={workHymnsLevel}
 							nComments={commenter.nCommentsHymns}
 						/>

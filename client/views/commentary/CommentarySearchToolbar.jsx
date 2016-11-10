@@ -1,6 +1,6 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import TextField from "material-ui/TextField";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import TextField from 'material-ui/TextField';
 
 CommentarySearchToolbar = React.createClass({
 
@@ -26,15 +26,15 @@ CommentarySearchToolbar = React.createClass({
 	},
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
 		return {
 			keywords: Keywords.find().fetch(),
 			commenters: Commenters.find().fetch(),
-			works: Works.find({}, {sort: {order: 1}}).fetch(),
-			subworks: Subworks.find({}, {sort: {n: 1}}).fetch(),
+			works: Works.find({}, { sort: { order: 1 } }).fetch(),
+			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
 		};
 	},
 
@@ -44,20 +44,18 @@ CommentarySearchToolbar = React.createClass({
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
-
-		value.subworks.forEach((subwork, i) => {
-			value.subworks[i].work = work;
+		const newValue = value;
+		newValue.subworks.forEach((subwork, i) => {
+			newValue.subworks[i].work = work;
 		});
 
-		// console.log("Header.state", this.state);
-
-		if (this.state.activeWork === value.slug) {
+		if (this.state.activeWork === newValue.slug) {
 			this.setState({
 				subworks: [],
 				activeWork: '',
 			});
 		} else {
-			value.subworks.sort((a, b) => {
+			newValue.subworks.sort((a, b) => {
 				if (a.n < b.n) {
 					return -1;
 				}
@@ -67,12 +65,12 @@ CommentarySearchToolbar = React.createClass({
 				return 0;
 			});
 			this.setState({
-				subworks: value.subworks,
-				activeWork: value.slug,
+				subworks: newValue.subworks,
+				activeWork: newValue.slug,
 			});
 		}
 
-		this.props.toggleSearchTerm(key, value);
+		this.props.toggleSearchTerm(key, newValue);
 	},
 
 	handleChangeTextsearch(event) {

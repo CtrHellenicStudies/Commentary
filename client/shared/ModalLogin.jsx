@@ -1,5 +1,5 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 ModalLogin = React.createClass({
 
@@ -13,7 +13,7 @@ ModalLogin = React.createClass({
 	},
 
 	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	render() {
@@ -30,10 +30,10 @@ ModalLogin = React.createClass({
 							className="close-modal paper-shadow"
 							onClick={this.props.closeModal}
 						>
-							<i className="mdi mdi-close"/>
+							<i className="mdi mdi-close" />
 						</div>
 						<div className="modal-inner">
-							<BlazeToReact blazeTemplate="atForm" state="signIn"/>
+							<BlazeToReact blazeTemplate="atForm" state="signIn" />
 						</div>
 					</div>
 					: ''

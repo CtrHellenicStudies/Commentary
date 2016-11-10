@@ -14,7 +14,7 @@ CommentersPage = React.createClass({
 								alt="Commenter Page | A Homer Commentary in Progress"
 							/>
 						</div>
-						<div className="block-screen brown"/>
+						<div className="block-screen brown" />
 						<div className="container v-align-transform">
 							<div className="grid inner">
 								<div className="center-content">
@@ -29,7 +29,7 @@ CommentersPage = React.createClass({
 					</section>
 					<section className="page-content">
 
-						<CommentersList defaultAvatarUrl="/images/default_user.jpg"/>
+						<CommentersList defaultAvatarUrl="/images/default_user.jpg" />
 
 					</section>
 

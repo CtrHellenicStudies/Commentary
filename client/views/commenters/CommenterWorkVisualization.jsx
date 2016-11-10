@@ -21,7 +21,7 @@ CommenterWorkVisualization = React.createClass({
 					className="close-visualization mdi mdi-close"
 				/>
 				<WorkVisualization
-					ref='workVisualization'
+					ref="workVisualization"
 					work={work}
 					commenterWordpressId={this.props.commenterWordpressId}
 				/>

@@ -1,4 +1,4 @@
-import Masonry from "react-masonry-component/lib";
+import Masonry from 'react-masonry-component/lib';
 
 
 ReferenceWorksList = React.createClass({
@@ -19,19 +19,17 @@ ReferenceWorksList = React.createClass({
 		}
 
 		return {
-			referenceWorks: ReferenceWorks.find(query, {sort: {title: 1}}).fetch(),
+			referenceWorks: ReferenceWorks.find(query, { sort: { title: 1 } }).fetch(),
 		};
 	},
 
 	renderReferenceWorks() {
-		return this.data.referenceWorks.map((referenceWork, i) => {
-			return (
-				<ReferenceWorkTeaser
-					key={i}
-					referenceWork={referenceWork}
-				/>
-			);
-		});
+		return this.data.referenceWorks.map((referenceWork, i) => (
+			<ReferenceWorkTeaser
+				key={i}
+				referenceWork={referenceWork}
+			/>
+		));
 	},
 
 	render() {

@@ -1,8 +1,8 @@
-import RaisedButton from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton";
-import FontIcon from "material-ui/FontIcon";
-import {green100, green500, red100, red500, black, fullWhite} from "material-ui/styles/colors";
-import JsDiff from "diff";
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+import { green100, green500, red100, red500, black, fullWhite } from 'material-ui/styles/colors';
+import JsDiff from 'diff';
 
 CommentDetail = React.createClass({
 
@@ -47,13 +47,6 @@ CommentDetail = React.createClass({
 		};
 	},
 
-	getMeteorData() {
-		const selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex];
-		return {
-			selectedRevision,
-		};
-	},
-
 	componentDidUpdate() {
 		if (!('title' in this.state.selectedRevision)) {
 			this.setState({
@@ -61,6 +54,13 @@ CommentDetail = React.createClass({
 				// selectedRevisionIndex = this.props.comment.revisions.length - 1,
 			});
 		}
+	},
+
+	getMeteorData() {
+		const selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex];
+		return {
+			selectedRevision,
+		};
 	},
 
 	getRevisionDiff() {
@@ -137,7 +137,7 @@ CommentDetail = React.createClass({
 			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
 			" data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>O.$1.$2-$3</a>");
 
-		return {__html: newHtml};
+		return { __html: newHtml };
 	},
 
 	checkIfToggleLemmaReferenceModal(e) {
@@ -289,7 +289,7 @@ CommentDetail = React.createClass({
 											<FlatButton
 												label="Edit comment"
 												href={`/add-revision/${comment._id}`}
-												icon={<FontIcon className="mdi mdi-pen"/>}
+												icon={<FontIcon className="mdi mdi-pen" />}
 											/>
 											:
 											''
@@ -328,7 +328,7 @@ CommentDetail = React.createClass({
 								id="comment-body"
 								className="comment-body"
 								dangerouslySetInnerHTML={comment ?
-								{__html: this.getRevisionDiff().innerHTML} : ''}
+								{ __html: this.getRevisionDiff().innerHTML } : ''}
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}

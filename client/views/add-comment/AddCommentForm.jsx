@@ -1,24 +1,15 @@
-import {Tabs, Tab} from "material-ui/Tabs";
-import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import FontIcon from "material-ui/FontIcon";
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import Select from "react-select";
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import FontIcon from 'material-ui/FontIcon';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Select from 'react-select';
 // import FlatButton from 'material-ui/FlatButton';
 
 // https://github.com/JedWatson/react-select
 // import 'react-select/dist/react-select.css';
 
 AddCommentForm = React.createClass({
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
-	},
 
 	propTypes: {
 		selectedLineFrom: React.PropTypes.number.isRequired,
@@ -32,6 +23,12 @@ AddCommentForm = React.createClass({
 		// keyideasValue: React.PropTypes.array.isRequired,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
 			titleValue: '',
@@ -43,24 +40,26 @@ AddCommentForm = React.createClass({
 		};
 	},
 
-	mixins: [ReactMeteorData],
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
 	getMeteorData() {
-		const keywords_options = [];
+		const keywordsOptions = [];
 		const keywords = Keywords.find().fetch();
-		keywords.map(function (word) {
-			keywords_options.push({
+		keywords.forEach((word) => {
+			keywordsOptions.push({
 				value: word.slug,
 				label: word.title,
 			});
 		});
 
 		// TODO: key ideas
-		const keyideas_options = [];
+		const keyideasOptions = [];
 
 		return {
-			keywords_options,
-			keyideas_options,
+			keywordsOptions,
+			keyideasOptions,
 		};
 	},
 
@@ -118,19 +117,20 @@ AddCommentForm = React.createClass({
 					<h5>Selected lines: {this.props.selectedLineFrom} to {this.props.selectedLineTo}</h5>
 				</div>
 			);
-		} else {
-			return (
-				<h5>No line selected</h5>
-			);
 		}
+		return (
+			<h5>No line selected</h5>
+		);
 	},
 
 	render() {
-		const keyideas_options = [
-			// TODO: pull keyideas_options from collection in getMeteorData
-			{value: 'one', label: 'One'},
-			{value: 'two', label: 'Two'},
+		/*
+		const keyideasOptions = [
+			// TODO: pull keyideasOptions from collection in getMeteorData
+			{ value: 'one', label: 'One' },
+			{ value: 'two', label: 'Two' },
 		];
+		*/
 
 		return (
 
@@ -186,7 +186,7 @@ AddCommentForm = React.createClass({
 						id="keywords"
 						className="form-element"
 						required={false}
-						options={this.data.keywords_options}
+						options={this.data.keywordsOptions}
 						multi
 						allowCreate
 						value={this.state.keywordValue}
@@ -200,8 +200,7 @@ AddCommentForm = React.createClass({
 						id="keyideas"
 						className="form-element"
 						required={false}
-						value="one"
-						options={this.data.keyideas_options}
+						options={this.data.keyideasOptions}
 						multi
 						allowCreate
 						value={this.state.keyideasValue}
@@ -214,7 +213,7 @@ AddCommentForm = React.createClass({
 						type="submit"
 						label="Add comment"
 						labelPosition="after"
-						icon={<FontIcon className="mdi mdi-plus"/>}
+						icon={<FontIcon className="mdi mdi-plus" />}
 					/>
 
 				</form>

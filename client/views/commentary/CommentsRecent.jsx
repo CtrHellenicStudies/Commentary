@@ -1,16 +1,15 @@
-import baseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 CommentsRecent = React.createClass({
-
-	getChildContext() {
-		return {muiTheme: getMuiTheme(baseTheme)};
-	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 	render() {
 		return (
 			<section className="background-gray recent-comments">
@@ -21,7 +20,7 @@ CommentsRecent = React.createClass({
 							<h3 className=" uppercase">
 								Recently from the Commentary
 							</h3>
-							<i className="mdi mdi-format-quote quote-icon"/>
+							<i className="mdi mdi-format-quote quote-icon" />
 							<div className="text-slider slider-arrow-controls">
 								<ul className="slides">
 									<li>
@@ -34,20 +33,6 @@ CommentsRecent = React.createClass({
 										<h4>&mdash; Douglas Frame, Iliad 1.4-6</h4>
 
 									</li>
-									{/* <li>
-									 <p >
-									 Like every word in the epic song-generating system, this first word of the poem has dimensions that were disclosed to its original audiences and performers through age-old, recurrent exposure to poetry in performance. Those dimensions are invisible . . .
-									 </p>
-									 <h4>&mdash; Leonard Muellner, Iliad 1.1</h4>
-
-									 </li>
-									 <li>
-									 <p >
-									 Analysis and comparison of the beginnings of the arkhaia Ilias and of the Homeric Iliad that has come down to us
-									 </p>
-									 <h4>&mdash; Gregory Nagy, Iliad 1.9</h4>
-
-									 </li>*/}
 								</ul>
 							</div>
 						</div>

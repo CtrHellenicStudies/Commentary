@@ -1,7 +1,9 @@
-import "../../node_modules/mdi/css/materialdesignicons.css";
-import slugify from "slugify";
+import slugify from 'slugify';
+import '../../node_modules/mdi/css/materialdesignicons.css';
 
 AddCommentLayout = React.createClass({
+
+	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -13,17 +15,15 @@ AddCommentLayout = React.createClass({
 		};
 	},
 
-	mixins: [ReactMeteorData],
+	componentWillUpdate() {
+		this.handlePermissions();
+	},
 
 	getMeteorData() {
 		const keywords = Keywords.find().fetch();
 		return {
 			keywords,
 		};
-	},
-
-	componentWillUpdate(nextProps, nextState) {
-		this.handlePermissions();
 	},
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
@@ -46,18 +46,17 @@ AddCommentLayout = React.createClass({
 	},
 
 	toggleSearchTerm(key, value) {
-		let self = this,
-			filters = this.state.filters;
-		let keyIsInFilter = false,
-			valueIsInFilter = false,
-			filterValueToRemove,
-			filterToRemove;
+		const filters = this.state.filters;
+		let keyIsInFilter = false;
+		let valueIsInFilter = false;
+		let filterValueToRemove;
+		let filterToRemove;
 
-		filters.forEach(function (filter, i) {
+		filters.forEach((filter, i) => {
 			if (filter.key === key) {
 				keyIsInFilter = true;
 
-				filter.values.forEach(function (filterValue, j) {
+				filter.values.forEach((filterValue, j) => {
 					if (filterValue._id === value._id) {
 						valueIsInFilter = true;
 						filterValueToRemove = j;
@@ -69,12 +68,10 @@ AddCommentLayout = React.createClass({
 					if (filter.values.length === 0) {
 						filterToRemove = i;
 					}
+				} else if (key === 'works') {
+					filters[i].values = [value];
 				} else {
-					if (key === 'works') {
-						filter.values = [value];
-					} else {
-						filter.values.push(value);
-					}
+					filters[i].values.push(value);
 				}
 			}
 		});
@@ -108,7 +105,7 @@ AddCommentLayout = React.createClass({
 
 		let work = null;
 		let subwork = null;
-		filters.forEach(function (filter) {
+		filters.forEach((filter) => {
 			if (filter.key === 'work') {
 				work = values[0];
 			} else if (filter.key === 'subwork') {
@@ -170,7 +167,7 @@ AddCommentLayout = React.createClass({
 			selectedLineTo = this.state.selectedLineTo;
 		}
 
-		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, function () {
+		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 			const keywords = [];
 			that.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
 				keywords.push(matchedKeyword);
@@ -193,7 +190,7 @@ AddCommentLayout = React.createClass({
 				lineFrom: that.state.selectedLineFrom,
 				lineTo: selectedLineTo,
 				lineLetter,
-				nLines: that.state.selectedLineTo - that.state.selectedLineFrom + 1,
+				nLines: (that.state.selectedLineTo - that.state.selectedLineFrom) + 1,
 				revisions: [{
 					title: formData.titleValue,
 					text: formData.textValue,
@@ -221,8 +218,8 @@ AddCommentLayout = React.createClass({
 				comment.keywords = [{}];
 			}
 
-			Meteor.call('comments.insert', comment, function (error, commentId) {
-				FlowRouter.go('/commentary/?_id=' + commentId);
+			Meteor.call('comments.insert', comment, (error, commentId) => {
+				FlowRouter.go(`/commentary/?_id=${commentId}`);
 			});
 
 			// TODO: handle behavior after comment added (add info about success)
@@ -244,10 +241,8 @@ AddCommentLayout = React.createClass({
 
 	addNewKeywordsAndIdeas(keywords, keyideas, next) {
 		const that = this;
-		this.addNewKeywords(keywords, 'word', function () {
-			that.addNewKeywords(keyideas, 'idea', function () {
-				return next();
-			});
+		this.addNewKeywords(keywords, 'word', () => {
+			that.addNewKeywords(keyideas, 'idea', () => next());
 		});
 	},
 
@@ -255,10 +250,8 @@ AddCommentLayout = React.createClass({
 		if (keywords) {
 			const that = this;
 			const insertKeywords = [];
-			keywords.forEach(function (keyword) {
-				foundKeyword = that.data.keywords.find(function (d) {
-					return d.title === keyword;
-				});
+			keywords.forEach((keyword) => {
+				foundKeyword = that.data.keywords.find((d) => d.title === keyword);
 				console.log('foundKeyword', foundKeyword, 'keyword', keyword);
 				if (foundKeyword === undefined) {
 					const _keyword = {
@@ -270,19 +263,17 @@ AddCommentLayout = React.createClass({
 				}
 			});
 			if (insertKeywords.length > 0) {
-				Meteor.call('keywords.insert', insertKeywords, function (err, data) {
+				return Meteor.call('keywords.insert', insertKeywords, (err) => {
 					if (err) {
 						console.log(err);
-					} else {
-						return next();
+						return null;
 					}
+					return next();
 				});
-			} else {
-				return next();
 			}
-		} else {
 			return next();
 		}
+		return next();
 	},
 
 	closeContextReader() {
@@ -317,9 +308,9 @@ AddCommentLayout = React.createClass({
 		if (e.from > 1) {
 			let lineFromInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
-					filter.values = [e.from];
+					filters[i].values = [e.from];
 					lineFromInFilters = true;
 				}
 			});
@@ -333,7 +324,7 @@ AddCommentLayout = React.createClass({
 		} else {
 			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
 					filterToRemove = i;
 				}
@@ -347,9 +338,9 @@ AddCommentLayout = React.createClass({
 		if (e.to < 2100) {
 			let lineToInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
-					filter.values = [e.to];
+					filters[i].values = [e.to];
 					lineToInFilters = true;
 				}
 			});
@@ -363,7 +354,7 @@ AddCommentLayout = React.createClass({
 		} else {
 			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
 					filterToRemove = i;
 				}
@@ -386,14 +377,13 @@ AddCommentLayout = React.createClass({
 	},
 
 	render() {
-		const self = this;
 		const filters = this.state.filters;
 		let work;
 		let subwork;
 		let lineFrom;
 		let lineTo;
 
-		filters.forEach(function (filter) {
+		filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
 			} else if (filter.key === 'subworks') {
@@ -442,8 +432,8 @@ AddCommentLayout = React.createClass({
 											open={this.state.contextReaderOpen}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
-											initialLineFrom={lineFrom ? lineFrom : 1}
-											initialLineTo={lineTo ? lineTo : 100}
+											initialLineFrom={lineFrom || 1}
+											initialLineTo={lineTo || 100}
 											selectedLineFrom={this.state.selectedLineFrom}
 											selectedLineTo={this.state.selectedLineTo}
 											updateSelectedLines={this.updateSelectedLines}
@@ -464,8 +454,8 @@ AddCommentLayout = React.createClass({
 					</div>
 					:
 					<div className="ahcip-spinner commentary-loading full-page-spinner">
-						<div className="double-bounce1"/>
-						<div className="double-bounce2"/>
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
 					</div>
 				}
 			</div>

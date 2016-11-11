@@ -44,14 +44,14 @@ DiscussionThread = React.createClass({
 	},
 
 	addDiscussionComment() {
-		const content = $(this.refs.newCommentForm).find('textarea').val();
+		const content = $(this.newCommentForm).find('textarea').val();
 
 		Meteor.call('discussionComments.insert', {
 			content,
 			commentId: this.props.comment._id,
 		});
 
-		$(this.refs.newCommentForm).find('textarea').val('');
+		$(this.newCommentForm).find('textarea').val('');
 	},
 
 	render() {
@@ -102,7 +102,7 @@ DiscussionThread = React.createClass({
 							/>
 
 							<form
-								ref="newCommentForm"
+								ref={(component) => { this.newCommentForm = component; }}
 								className="new-comment-form"
 								name="new-comment-form"
 							>

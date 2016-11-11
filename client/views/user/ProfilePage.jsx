@@ -37,21 +37,8 @@ ProfilePage = React.createClass({
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	componentDidMount() {
-		const user = this.props.user;
-		let profile = {};
-		if ('profile' in user) {
-			profile = user.profile;
-		}
-
-		this.setState({
-			name: profile.name || '',
-			biography: profile.biography || '',
-			academiaEdu: profile.academiaEdu || '',
-			twitter: profile.twitter || '',
-			facebook: profile.facebook || '',
-			google: profile.google || '',
-		});
+	componentWillMount() {
+		this.handleChangeTextDebounced = debounce(1000, this.handleChangeTextDebounced);
 	},
 
 	getMeteorData() {
@@ -69,16 +56,25 @@ ProfilePage = React.createClass({
 			}).fetch();
 
 			discussionComments.forEach((discussionComment, discussionCommentIndex) => {
-				const commentHandle = Meteor.subscribe('comments', { _id: discussionComment.commentId }, 0, 1);
+				const commentHandle =
+					Meteor.subscribe('comments', { _id: discussionComment.commentId }, 0, 1);
 				if (commentHandle.ready()) {
 					const comments = Comments.find().fetch();
 					if (comments.length) {
 						discussionComments[discussionCommentIndex].comment = comments[0];
 					} else {
-						discussionComments[discussionCommentIndex].comment = { work: '', subwork: '', discussionComments: [] };
+						discussionComments[discussionCommentIndex].comment = {
+							work: '',
+							subwork: '',
+							discussionComments: [],
+						};
 					}
 				} else {
-					discussionComments[discussionCommentIndex].comment = { work: '', subwork: '', discussionComments: [] };
+					discussionComments[discussionCommentIndex].comment = {
+						work: '',
+						subwork: '',
+						discussionComments: [],
+					};
 				}
 
 				discussionComments[discussionCommentIndex].otherCommentsCount =
@@ -97,52 +93,32 @@ ProfilePage = React.createClass({
 		});
 	},
 
-	handleChangeText(key) {
-		const user = this.props.user;
-		const self = this;
-		let value = null;
+	handleChangeText(field, event) {
+		const value = event.target.value;
+		this.handleChangeTextDebounced(field, value);
+	},
 
-		if (key === 'username') {
-			console.log(/^[a-z0-9A-Z_]{3,15}$/.test(this.refs[key].input.value));
+	handleChangeTextDebounced(field, value) {
+		if (field === 'username') {
+			if (/^[a-z0-9A-Z_]{3,15}$/.test(value)) {
+				Meteor.call('updateAccount', field, value, (err) => {
+					if (err) {
+						console.error(err);
+					}
+				});
+				return;
+			}
+			this.setState({
+				usernameError: 'Username has following the requirements: only letters and ' +
+				'numbers are aloud, no whitespaces, min. length: 3, max. length: 15',
+			});
+			return;
 		}
-		if (key !== 'biography') {
-			value = this.refs[key].input.value;
-		} else {
-			value = this.refs[key].input.refs.input.value;
-		}
-		this.setState({
-			[key]: value,
-		});
-
-		Meteor.call('updateAccount', {
-			username: self.refs.username.input.value || user.username,
-			name: self.refs.name.input.value || user.profile.name,
-			biography: self.refs.biography.input.refs.input.value || user.profile.biography,
-			academiaEdu: self.refs.academiaEdu.input.value || user.profile.academiaEdu,
-			twitter: self.refs.twitter.input.value || user.profile.twitter,
-			facebook: self.refs.facebook.input.value || user.profile.facebook,
-			google: self.refs.google.input.value || user.profile.google,
-
-		}, (err) => {
+		Meteor.call('updateAccount', `profile.${field}`, value, (err) => {
 			if (err) {
 				console.error(err);
 			}
 		});
-	},
-
-	handleUsernameChange() {
-		const key = 'username';
-		if (/^[a-z0-9A-Z_]{3,15}$/.test(this.refs[key].input.value)) {
-			this.setState({
-				usernameError: '',
-			});
-			this.handleChangeText.bind(null, key);
-		} else {
-			this.setState({
-				usernameError: 'Username has following the requirements: only letters and numbers are aloud, ' +
-				'no whitespaces, min. length: 3, max. length: 15',
-			});
-		}
 	},
 
 	render() {
@@ -198,73 +174,66 @@ ProfilePage = React.createClass({
 								<div className="user-profile-textfields">
 
 									<TextField
-										ref="username"
 										fullWidth
 										floatingLabelText="Username"
 										defaultValue={currentUser.username}
-										onChange={debounce(1500, this.handleUsernameChange)}
+										onChange={this.handleChangeText.bind(null, 'username')}
 										errorText={this.state.usernameError}
 									/>
 									<br />
 
 									<TextField
-										ref="name"
 										fullWidth
 										floatingLabelText="Name"
 										defaultValue={currentUser.profile.name}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'name'))}
+										onChange={this.handleChangeText.bind(null, 'name')}
 									/>
 									<br />
 
 									<TextField
-										ref="biography"
 										multiLine
 										rows={2}
 										rowsMax={10}
 										fullWidth
 										floatingLabelText="Biography"
 										defaultValue={currentUser.profile.biography}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'biography'))}
+										onChange={this.handleChangeText.bind(null, 'biography')}
 									/>
 									<br />
 
 									<TextField
-										ref="academiaEdu"
 										fullWidth
 										hintText="http://university.academia.edu/YourName"
 										floatingLabelText="Academia.edu"
 										defaultValue={currentUser.profile.academiaEdu}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'academiaEdu'))}
+										onChange={this.handleChangeText.bind(null, 'academiaEdu')}
 									/>
 									<br />
 
 									<TextField
-										ref="twitter"
 										fullWidth
 										hintText="https://twitter.com/@your_name"
 										floatingLabelText="Twitter"
 										defaultValue={currentUser.profile.twitter}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'twitter'))}
+										onChange={this.handleChangeText.bind(null, 'twitter')}
 									/>
 									<br />
 
 									<TextField
-										ref="facebook"
 										fullWidth
 										hintText="https://facebook.com/your.name"
 										floatingLabelText="Facebook"
 										defaultValue={currentUser.profile.facebook}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'facebook'))}
+										onChange={this.handleChangeText.bind(null, 'facebook')}
 									/>
 									<br />
 
 									<TextField
-										ref="google"
 										fullWidth
 										hintText="https://plus.google.com/+YourName"
 										floatingLabelText="Google Plus"
 										defaultValue={currentUser.profile.google}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'google'))}
+										onChange={this.handleChangeText.bind(null, 'google')}
 									/>
 
 									<br />

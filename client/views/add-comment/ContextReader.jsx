@@ -113,27 +113,27 @@ ContextReader = React.createClass({
 			});
 		}
 
-		if (Object.keys(this.refs).length) {
+		if (Object.keys(this.lines).length) {
 			if (this.props.selectedLineFrom === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i.toString() in this.refs) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #ffffff';
+					if (i.toString() in this.lines) {
+						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
 			} else if (this.props.selectedLineTo === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
 					if (i === this.props.selectedLineFrom) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-					} else if (i.toString() in this.refs) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #ffffff';
+						this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
+					} else if (i.toString() in this.lines) {
+						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
 			} else {
 				for (let i = lineFrom; i <= lineTo; i++) {
 					if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-					} else if (i.toString() in this.refs) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #ffffff';
+						this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
+					} else if (i.toString() in this.lines) {
+						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
 			}
@@ -262,6 +262,8 @@ ContextReader = React.createClass({
 		};
 	},
 
+	lines: [],
+
 	linePaginationClicked(line) {
 		this.setState({
 			lineFrom: line,
@@ -364,8 +366,8 @@ ContextReader = React.createClass({
 
 										<div
 											className="lemma-text"
-											ref={line.n}
 											id={line.n}
+											ref={(component) => { this.lines[(line.n).toString()] = component; }}
 											dangerouslySetInnerHTML={{ __html: line.html }}
 											onMouseEnter={self.handeLineMouseEnter}
 											onMouseLeave={self.handeLineMouseLeave}

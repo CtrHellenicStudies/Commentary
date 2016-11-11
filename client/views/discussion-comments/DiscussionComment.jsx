@@ -28,7 +28,7 @@ DiscussionComment = React.createClass({
 	},
 
 	updateDiscussionComment() {
-		const content = $(this.refs.updateCommentForm).find('textarea').val();
+		const content = $(this.updateCommentForm).find('textarea').val();
 
 		Meteor.call('discussionComments.update', {
 			_id: this.props.discussionComment._id,
@@ -114,7 +114,7 @@ DiscussionComment = React.createClass({
 							<form
 								className="update-comment-form clearfix"
 								name="update-comment-form"
-								ref="updateCommentForm"
+								ref={(component) => { this.updateCommentForm = component; }}
 							>
 								<textarea
 									className="new-comment-text"

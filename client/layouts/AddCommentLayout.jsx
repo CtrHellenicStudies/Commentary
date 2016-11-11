@@ -131,7 +131,7 @@ AddCommentLayout = React.createClass({
 		let lineLetter = '';
 		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
 			// checking if one line was selected
-			lineLetter = this.refs.CommentLemmaSelect.state.lineLetterValue;
+			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
 		}
 
 		let referenceWorksInputObject = {};
@@ -415,7 +415,7 @@ AddCommentLayout = React.createClass({
 								<div className="commentary-comments">
 									<div className="comment-group">
 										<CommentLemmaSelect
-											ref="CommentLemmaSelect"
+											ref={(component) => { this.commentLemmaSelect = component; }}
 											selectedLineFrom={this.state.selectedLineFrom}
 											selectedLineTo={this.state.selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}

@@ -312,7 +312,7 @@ AddRevisionLayout = React.createClass({
 							<div className="commentary-comments">
 								<div className="comment-group">
 									<CommentLemmaSelect
-										ref="CommentLemmaSelect"
+										ref={(component) => { this.commentLemmaSelect = component; }}
 										selectedLineFrom={comment.lineFrom}
 										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
 										workSlug={comment.work.slug}

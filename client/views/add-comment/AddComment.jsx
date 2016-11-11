@@ -8,9 +8,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
 // import 'react-select/dist/react-select.css';
 
-import {EditorState, ContentState, Modifier, RichUtils, convertToRaw} from 'draft-js';
+import { EditorState, ContentState, Modifier, RichUtils, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
-import {stateToHTML} from 'draft-js-export-html';
+import { stateToHTML } from 'draft-js-export-html';
 
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 const singleLinePlugin = createSingleLinePlugin();
@@ -25,20 +25,25 @@ AddComment = React.createClass({
     },
 
     getChildContext() {
-        return {muiTheme: getMuiTheme(baseTheme)};
+        return {
+            muiTheme: getMuiTheme(baseTheme)
+        };
     },
 
     propTypes: {
         selectedLineFrom: React.PropTypes.number,
         selectedLineTo: React.PropTypes.number,
         submitForm: React.PropTypes.func.isRequired,
+        commenterId: React.PropTypes.array.isRequired,
     },
 
-    getInitialState(){
+    getInitialState() {
         return {
             titleEditorState: EditorState.createEmpty(),
             textEditorState: RichTextEditor.createEmptyValue(),
 
+            commenterValue: this.props.commenterId[0],
+            // commenterValue: '',
             titleValue: '',
             textValue: '',
             referenceWorksValue: '',
@@ -54,7 +59,9 @@ AddComment = React.createClass({
 
     getMeteorData() {
         var keywords_options = [];
-        var keywords = Keywords.find({type: 'word'}).fetch();
+        var keywords = Keywords.find({
+            type: 'word'
+        }).fetch();
         keywords.map(function(keyword) {
             keywords_options.push({
                 value: keyword.title,
@@ -63,7 +70,9 @@ AddComment = React.createClass({
         });
 
         var keyideas_options = [];
-        var keyideas = Keywords.find({type: 'idea'}).fetch();
+        var keyideas = Keywords.find({
+            type: 'idea'
+        }).fetch();
         keyideas.map(function(keyidea) {
             keyideas_options.push({
                 value: keyidea.title,
@@ -80,11 +89,34 @@ AddComment = React.createClass({
             });
         });
 
+        let commenters_options = [];
+        let commenters = Commenters.find({_id: { $in: this.props.commenterId}}).fetch();
+        commenters.map(function(commenter) {
+            commenters_options.push({
+                value: commenter._id,
+                label: commenter.name,
+            });
+        });
+
         return {
-            keywords_options: keywords_options,
-            keyideas_options: keyideas_options,
-            referenceWorks_options: referenceWorks_options,
-        };
+            keywords_options,
+            keyideas_options,
+            referenceWorks_options,
+            commenters_options,
+        };_
+    },
+
+    onCommenterValueChange(commenter) {
+        if (commenter) {
+            this.setState({
+                commenterValue: commenter,
+            });
+        } else {
+            this.setState({
+                commenterValue: null,
+            });
+        }
+        ;
     },
 
     onTitleChange(titleEditorState) {
@@ -113,7 +145,8 @@ AddComment = React.createClass({
                     var index = keywords.indexOf(keyword);
                     keywords.splice(index, 1);
                 });
-            };
+            }
+            ;
             this.setState({
                 keywordsValue: keywords,
             });
@@ -121,7 +154,8 @@ AddComment = React.createClass({
             this.setState({
                 keywordsValue: null,
             });
-        };
+        }
+        ;
     },
 
     onKeyideasValueChange(keyideas) {
@@ -133,7 +167,8 @@ AddComment = React.createClass({
                     var index = keyideas.indexOf(keyword);
                     keyideas.splice(index, 1);
                 });
-            };
+            }
+            ;
             this.setState({
                 keyideasValue: keyideas,
             });
@@ -141,7 +176,8 @@ AddComment = React.createClass({
             this.setState({
                 keyideasValue: null,
             });
-        };
+        }
+        ;
     },
 
     onReferenceWorksValueChange(referenceWork) {
@@ -166,12 +202,12 @@ AddComment = React.createClass({
         event.preventDefault();
 
         var error = this.validateStateForSubmit();
-
         this.showSnackBar(error);
+        console.log('error', error);
 
         if (!error.errors) {
             this.props.submitForm(this.state);
-        };
+        }
     },
 
     errorKeywords(keywordsArray, type) {
@@ -185,38 +221,44 @@ AddComment = React.createClass({
                     this.data.keyideas_options.forEach((keyidea_option) => {
                         if (keyword === keyidea_option.value) {
                             errorKeywords.push(keyword);
-                        };
+                        }
+                        ;
                     });
 
                     if (Array.isArray(keyideasValue)) {
                         keyideasValue.forEach((keyideaValue) => {
                             if (keyword === keyideaValue) {
                                 errorKeywords.push(keyword);
-                            };
+                            }
+                            ;
                         });
-                    };
+                    }
+                    ;
                 });
                 break;
 
-            case 'idea':
-                var keywordsValue = this.state.keywordsValue;
+            case 'idea': var keywordsValue = this.state.keywordsValue;
                 keywordsArray.forEach((keyword) => {
                     this.data.keywords_options.forEach((keyword_option) => {
                         if (keyword === keyword_option.value) {
                             errorKeywords.push(keyword);
-                        };
+                        }
+                        ;
                     });
 
                     if (Array.isArray(keywordsValue)) {
                         keywordsValue.forEach((keywordValue) => {
                             if (keyword === keywordValue) {
                                 errorKeywords.push(keyword);
-                            };
+                            }
+                            ;
                         });
-                    };
+                    }
+                    ;
                 });
                 break;
-        };
+        }
+        ;
         return errorKeywords;
     },
 
@@ -234,23 +276,27 @@ AddComment = React.createClass({
 
     validateStateForSubmit() {
         var errors = false;
-        var errorMessage = "Missing comment data:"
-        if(this.state.titleValue === ""){
+        var errorMessage = "Missing comment data:";
+        if (!this.state.titleValue) {
             errors = true;
             errorMessage += " title,";
-        };
-        if(this.state.textValue === "<p><br></p>"){
+        }
+        if (this.state.textValue === "<p><br></p>" || !this.state.textValue) {
             errors = true;
             errorMessage += " comment text,";
-        };
-        if(this.props.selectedLineFrom === 0){
+        }
+        if (!this.props.selectedLineFrom) {
             errors = true;
             errorMessage += " no line selected,";
-        };
-        if(errors === true) {
-            errorMessage.slice(0,-1);
+        }
+        if (!this.state.commenterValue) {
+            errors = true;
+            errorMessage += " no commenter selected,";
+        }
+        if (errors === true) {
+            errorMessage = errorMessage.slice(0, -1);
             errorMessage += ".";
-        };
+        }
         return {
             errors: errors,
             errorMessage: errorMessage,
@@ -276,88 +322,99 @@ AddComment = React.createClass({
 
 
         return (
-					<div className="comments lemma-panel-visible">
-            <div className={'comment-outer'}>
-
-                <article className="comment commentary-comment paper-shadow " style={{marginLeft: 0}}>
-
-                    <div className="comment-upper">
-                        <h1 className="add-comment-title">
-                            <Editor
-                                editorState={this.state.titleEditorState}
-                                onChange={this.onTitleChange}
-                                placeholder='Comment title...'
-                                spellCheck={true}
-                                stripPastedStyles={true}
-                                plugins={[singleLinePlugin]}
-                                blockRenderMap={singleLinePlugin.blockRenderMap}
-                            />
-                        </h1>
-                        <Select
-                            name="keywords"
-                            id="keywords"
-                            required={false}
-                            options={this.data.keywords_options}
-                            multi={true}
-                            allowCreate={true}
-                            value={this.state.keywordsValue}
-                            onChange={this.onKeywordsValueChange}
-                            placeholder='Keywords...'
+            <div className="comments lemma-panel-visible">
+              <div className={ 'comment-outer' }>
+                <article
+                  className="comment commentary-comment paper-shadow "
+                  style={ { marginLeft: 0 } }
+                >
+                  <div className="comment-upper">
+                    { this.data.commenters_options.length > 1 ?
+                      <Select
+                        name="commenter"
+                        id="commenter"
+                        required={ false }
+                        options={ this.data.commenters_options }
+                        value={ this.state.commenterValue }
+                        onChange={ this.onCommenterValueChange }
+                        placeholder='Commenter...'
+                      />
+                      :
+                      "" }
+                    <h1 className="add-comment-title">
+                        <Editor
+                          editorState={ this.state.titleEditorState }
+                          onChange={ this.onTitleChange }
+                          placeholder='Comment title...'
+                          spellCheck={ true }
+                          stripPastedStyles={ true }
+                          plugins={ [singleLinePlugin] }
+                          blockRenderMap={ singleLinePlugin.blockRenderMap }
                         />
-                        <Select
-                            name="keyideas"
-                            id="keyideas"
-                            required={false}
-                            options={this.data.keyideas_options}
-                            multi={true}
-                            allowCreate={true}
-                            value={this.state.keyideasValue}
-                            onChange={this.onKeyideasValueChange}
-                            placeholder='Keyideas...'
-                        />
-
+                    </h1>
+                    <Select
+                      name="keywords"
+                      id="keywords"
+                      required={ false }
+                      options={ this.data.keywords_options }
+                      multi={ true }
+                      allowCreate={ true }
+                      value={ this.state.keywordsValue }
+                      onChange={ this.onKeywordsValueChange }
+                      placeholder='Keywords...'
+                    />
+                    <Select
+                      name="keyideas"
+                      id="keyideas"
+                      required={ false }
+                      options={ this.data.keyideas_options }
+                      multi={ true }
+                      allowCreate={ true }
+                      value={ this.state.keyideasValue }
+                      onChange={ this.onKeyideasValueChange }
+                      placeholder='Keyideas...'
+                    />
+                  </div>
+                  <div
+                    className="comment-lower"
+                    style={ { paddingTop: 20 } }
+                  >
+                    <RichTextEditor
+                      placeholder='Comment text...'
+                      value={ this.state.textEditorState }
+                      onChange={ this.onTextChange }
+                      toolbarConfig={ toolbarConfig }
+                    />
+                    <div className="comment-reference">
+                      <Select
+                        name="referenceWorks"
+                        id="referenceWorks"
+                        required={ false }
+                        options={ this.data.referenceWorks_options }
+                        value={ this.state.referenceWorksValue }
+                        onChange={ this.onReferenceWorksValueChange }
+                        placeholder='Reference...'
+                      />
                     </div>
-                    <div className="comment-lower" style={{paddingTop: 20}}>
-                        <RichTextEditor
-                            placeholder='Comment text...'
-                            value={this.state.textEditorState}
-                            onChange={this.onTextChange}
-                            toolbarConfig={toolbarConfig}
-                        />
-                        <div className="comment-reference" >
-                            <Select
-                                name="referenceWorks"
-                                id="referenceWorks"
-                                required={false}
-                                options={this.data.referenceWorks_options}
-                                value={this.state.referenceWorksValue}
-                                onChange={this.onReferenceWorksValueChange}
-                                placeholder='Reference...'
-                            />
-                        </div>
-
-                        <div className="add-comment-button">
-                            <RaisedButton
-                                type="submit"
-                                label="Add comment"
-                                labelPosition="after"
-                                onClick={this.handleSubmit}
-                                icon={<FontIcon className="mdi mdi-plus" />}
-                            />
-                        </div>
+                    <div className="add-comment-button">
+                      <RaisedButton
+                        type="submit"
+                        label="Add comment"
+                        labelPosition="after"
+                        onClick={ this.handleSubmit }
+                        icon={ <FontIcon className="mdi mdi-plus" /> }
+                      />
                     </div>
-
+                  </div>
                 </article>
-
                 <Snackbar
-                    className="add-comment-snackbar"
-                    open={this.state.snackbarOpen}
-                    message={this.state.snackbarMessage}
-                    autoHideDuration={4000}
+                  className="add-comment-snackbar"
+                  open={ this.state.snackbarOpen }
+                  message={ this.state.snackbarMessage }
+                  autoHideDuration={ 4000 }
                 />
-
+              </div>
             </div>
-					</div>
-        );
+            );
     }
 });

@@ -1,39 +1,50 @@
 Meteor.methods({
-	updateAccount(accountData) {
-		if (!this.userId) {
-			throw new Meteor.Error('not-authorized');
-		}
+    updateAccount(accountData) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
 
-		console.log(accountData);
+        console.log(accountData);
 
-		// check(accountData.name, String);
-		// check(accountData.biography, String);
-		// check(accountData.academiaEdu, String);
-		// check(accountData.twitter, String);
-		// check(accountData.facebook, String);
-		// check(accountData.google, String);
+        // check(accountData.name, String);
+        // check(accountData.biography, String);
+        // check(accountData.academiaEdu, String);
+        // check(accountData.twitter, String);
+        // check(accountData.facebook, String);
+        // check(accountData.google, String);
 
-		return Meteor.users.update({
-			_id: this.userId,
+        let update = null;
 
-		}, {
-			$set: {
-				'username': accountData.username,
-				'profile.name': accountData.name,
-				'profile.biography': accountData.biography,
-				'profile.academiaEdu': accountData.academiaEdu,
-				'profile.twitter': accountData.twitter,
-				'profile.facebook': accountData.facebook,
-				'profile.google': accountData.google,
-			},
+        try {
+            update = Meteor.users.update({
+                _id: this.userId,
 
-		});
-	},
-	deleteAccount(userId) {
-		if (this.userId === userId) {
-			return Meteor.users.remove({
-				_id: this.userId,
-			});
-		}
-	},
+            }, {
+                $set: {
+                    'username': accountData.username,
+                    'emails': accountData.emails,
+                    'profile.publicEmailAdress': accountData.publicEmailAdress,
+                    'profile.name': accountData.name,
+                    'profile.biography': accountData.biography,
+                    'profile.academiaEdu': accountData.academiaEdu,
+                    'profile.twitter': accountData.twitter,
+                    'profile.facebook': accountData.facebook,
+                    'profile.google': accountData.google,
+                },
+
+            });
+        } catch (err) {
+        	update = err;
+            console.log(err);
+        };
+
+        return update;
+    },
+    deleteAccount(userId) {
+        if (this.userId === userId) {
+            return Meteor.users.remove({
+                _id: this.userId,
+            });
+        }
+    },
 });

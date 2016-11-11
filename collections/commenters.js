@@ -3,7 +3,6 @@ this.Commenters = new Meteor.Collection('commenters');
 Schemas.Commenters = new SimpleSchema({
 	_id: {
 		type: String,
-		optional: true,
 	},
 
 	wordpressId: {

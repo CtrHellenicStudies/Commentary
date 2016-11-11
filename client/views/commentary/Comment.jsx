@@ -59,7 +59,6 @@ Comment = React.createClass({
 			this.props.addSearchTerm(e);
 		} else {
 			// On home page, go to commentary with this filter selected.
-
 		}
 	},
 
@@ -193,9 +192,9 @@ Comment = React.createClass({
 		const selectedRevisionIndex = this.state.selectedRevisionIndex;
 		const commentGroup = this.props.commentGroup;
 		let commentClass = 'comment-outer has-discussion ';
-		var userCommenterId = 'no commenter';
+		let userCommenterId = [];
 		if (Meteor.userId()) {
-			var userCommenterId = Meteor.user().commenterId;
+			userCommenterId = Meteor.user().commenterId;
 		}
 
 
@@ -268,7 +267,7 @@ Comment = React.createClass({
 											key={i}
 											className="comment-author"
           >
-											{userCommenterId === commenter._id ?
+											{userCommenterId.indexOf(commenter._id) > -1 ?
 												<FlatButton
 													label="Edit comment"
 													onClick={self.handleEditCommentClick.bind(null, comment._id)}

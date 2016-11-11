@@ -2,10 +2,11 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FontIcon from 'material-ui/FontIcon';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
+import Toggle from 'material-ui/Toggle';
 
 ProfilePage = React.createClass({
 
@@ -33,6 +34,9 @@ ProfilePage = React.createClass({
 			google: '',
 
 			usernameError: '',
+			emailError: '',
+
+			modalChangePwdLowered: false,
 		};
 	},
 
@@ -102,21 +106,21 @@ ProfilePage = React.createClass({
 	handleChangeText(key) {
 		const user = this.props.user;
 		const self = this;
-		if (key === 'username') {
-			console.log(/^[a-z0-9A-Z_]{3,15}$/.test(value = this.refs[key].input.value));
-		};
 
         let value = null;
-        if (key != 'biography') {
-            value = this.refs[key].input.value;
+        if (key === 'biography') {
+        	value = this.refs[key].input.refs.input.value;
+            
+        } else if (key === 'publicEmailAdress') {
+        	// do nothing
         } else {
-            value = this.refs[key].input.refs.input.value;
-        }
+            value = this.refs[key].input.value;
+        } 
         this.setState({
             [key]: value,
         });
 
-		Meteor.call('updateAccount', {
+        let accountData = {
 			username: self.refs.username.input.value || user.username,
 			name: self.refs.name.input.value || user.profile.name,
 			biography: self.refs.biography.input.refs.input.value || user.profile.biography,
@@ -124,21 +128,40 @@ ProfilePage = React.createClass({
 			twitter: self.refs.twitter.input.value || user.profile.twitter,
 			facebook: self.refs.facebook.input.value || user.profile.facebook,
 			google: self.refs.google.input.value || user.profile.google,
+		};
 
-		}, function (err, res) {
+		if (user.emails && user.emails.length > 0) {
+			accountData.emails = [{
+				address: self.refs.email.input.value || user.emails[0].address,
+				verified:  user.emails[0].verified,
+			}];
+			const setPublic = this.refs.publicEmailAdress.state.switched;
+			if (key === 'publicEmailAdress' && !setPublic) {
+				accountData.publicEmailAdress = self.refs.email.input.value || user.emails[0].address;
+			} else {
+				accountData.publicEmailAdress = "";
+			}
+		}
+
+		Meteor.call('updateAccount', accountData, (err, res) => {
 			if (err) {
 				console.error(err);
+			} else if (res.name === "MongoError" && res.code === 11000) {
+				this.setState({
+					usernameError: 'Username already exists. Please choose another.',
+				});
 			}
 		});
 	},
 
 	handleUsernameChange () {
-		var key = 'username'
-		if (/^[a-z0-9A-Z_]{3,15}$/.test(value = this.refs[key].input.value)) {
+		let key = 'username';
+		const re = /^[a-z0-9A-Z_]{3,15}$/;
+		if (re.test(value = this.refs[key].input.value)) {
 			this.setState({
 				usernameError: '',
 			});
-			this.handleChangeText.bind(null, key);
+			this.handleChangeText(key);
 		} else {
 			this.setState({
 				usernameError: 'Username has following the requirements: only letters and numbers are aloud, no whitespaces, min. length: 3, max. length: 15',
@@ -146,12 +169,48 @@ ProfilePage = React.createClass({
 		};	
 	},
 
+	handleEmailChange () {
+		let key = 'email';
+		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		if (re.test(value = this.refs[key].input.value)) {
+			this.setState({
+				emailError: '',
+			});
+			this.handleChangeText(key);
+		} else {
+			this.setState({
+				emailError: 'Invalid email address',
+			});
+		};	
+	},
+
+	showChangePwdModal() {
+		console.log('jestem');
+		this.setState({
+			modalChangePwdLowered: true,
+		});
+	},
+
+	closeChangePwdModal() {
+		this.setState({
+			modalChangePwdLowered: false,
+		});
+	},
+
 	render() {
 		let currentUser = this.props.user;
 		if (!currentUser) {
 			currentUser = { 'profile': {} };
 		}
-		// const userIsLoggedIn = Meteor.user();
+		const toggleStyle = {
+			style: {
+				margin: "20px 0 0 0",
+			},
+		};
+
+		const changePwdStyle = {
+			margin: "11px 0 0 0",
+		};
 
 		return (
 			(currentUser ?
@@ -203,6 +262,34 @@ ProfilePage = React.createClass({
 										errorText={this.state.usernameError}
 									/>
 									<br />
+
+									<RaisedButton
+										label="Change password"
+										style={changePwdStyle}
+										onClick={this.showChangePwdModal}
+									/>
+
+									{currentUser.emails ?
+									<div>
+										<TextField
+											ref="email"
+											fullWidth
+											floatingLabelText="Email"
+											defaultValue={currentUser.emails[0].address}
+											onChange={debounce(1500, this.handleEmailChange)}
+											errorText={this.state.emailError}
+										/>
+										<Toggle
+											ref="publicEmailAdress"
+									        label={currentUser.profile.publicEmailAdress ? "Email public" : "Email private"}
+									        labelPosition="right"
+									        style={toggleStyle.style}
+									        toggled={currentUser.profile.publicEmailAdress ? true : false}
+									        onToggle={debounce(500, this.handleChangeText.bind(null, 'publicEmailAdress'))}
+									    />
+									</div>
+									:
+									""}
 
 									<TextField
 										ref="name"
@@ -285,47 +372,24 @@ ProfilePage = React.createClass({
 							<div className="user-discussion-comments">
 
 								<h2>Your Comments</h2>
-								{/*
-									Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
-									<div>
-										<FlatButton
-											label="Add new comment"
-											href="/add-comment"
-											icon={<FontIcon className="mdi mdi-plus" />}
-											style={{ height: '100%', lineHeight: '100%' }}
-										/>
-									</div>
-											:
-											''
-										*/}
-								{
-									/*
-									<InfiniteScroll
-										endPadding={120}
-										loadMore={this.loadMore} >
-									{
-									*/
-								}
 
 								<DiscussionCommentsList
 									discussionComments={this.data.discussionComments}
 								/>
-
-								{/*
-											<div className="ahcip-spinner commentary-loading" >
-													<div className="double-bounce1"></div>
-													<div className="double-bounce2"></div>
-
-											</div>
-											*/}
-
-								{/* }</InfiniteScroll>*/}
 
 							</div>
 
 						</section>
 
 					</div>
+
+					{this.state.modalChangePwdLowered ?
+						<ModalChangePwd
+							lowered={this.state.modalChangePwdLowered}
+							closeModal={this.closeChangePwdModal}
+						/>
+						: ''
+					}
 
 				</div>
 			: <div />

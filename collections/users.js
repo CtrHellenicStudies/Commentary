@@ -14,6 +14,10 @@ Schemas.UserProfile = new SimpleSchema({
 			rows: 4,
 		},
 	},
+	publicEmailAdress: {
+		type: String,
+		optional: true,
+	},
 	academiaEdu: {
 		type: String,
 		optional: true,
@@ -137,7 +141,7 @@ Schemas.User = new SimpleSchema({
 		optional: true,
 	},
 	commenterId: {
-		type: String,
+		type: [String],
 		optional: true,
 	},
 	bookmarks: {

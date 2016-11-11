@@ -132,17 +132,4 @@ if (Meteor.isServer) {
 		}
 		return Pages.find(query);
 	});
-
-    Meteor.publish('allUsers', (userId) => {
-    	check(userId, String);
-        return Meteor.users.find({
-            _id: userId
-        }, {
-            fields: {
-            	username: 1,
-            	avatar: 1,
-                profile: 1
-            }
-        });
-    });
 }

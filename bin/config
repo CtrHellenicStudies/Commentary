@@ -1,0 +1,15 @@
+#!/bin/sh
+
+SELF_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+pushd "$SELF_DIR/.." > /dev/null
+
+export PROJECT_DIR=`pwd`
+export BUILD_DEST=`pushd $PROJECT_DIR/../build > /dev/null; pwd; popd > /dev/null`
+export DEPLOY_ARCH=os.linux.x86_64
+
+export PROJECT_NAME=ahcip
+export IMAGE_NAME=${PROJECT_NAME}_app
+export BUILD_TAG=`git describe --dirty --always`
+
+popd > /dev/null

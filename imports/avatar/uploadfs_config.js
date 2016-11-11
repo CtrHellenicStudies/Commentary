@@ -19,7 +19,7 @@ UploadFS.config.storesPath = 'var';
 
 // Set the temporary directory where uploading files will be saved
 // before sent to the store.
-UploadFS.config.tmpDir = './tmp/uploads';
+//UploadFS.config.tmpDir = '/tmp/uploads';
 
 // Set the temporary directory permissions.
-UploadFS.config.tmpDirPermissions = '0700';
+//UploadFS.config.tmpDirPermissions = '0700';

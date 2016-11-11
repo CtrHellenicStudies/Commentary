@@ -406,9 +406,7 @@ WorkVisualization = React.createClass({
 
 			//	TODO: get the real number of lines per book - not from the works collection:
 			const numberOfLines = Math.floor(d3.max(dataHeatMap, (d) => d.n) / 10);
-			const allLines = Array.apply(null, {
-				length: numberOfLines,
-			}).map(Number.call, Number);
+			const allLines = [...Array(numberOfLines).keys()];
 			allLines.push(numberOfLines);
 
 			// Define the div for the tooltip:
@@ -471,7 +469,8 @@ WorkVisualization = React.createClass({
 					const cellPositionX = parseInt(d3.select(this).attr('x'), 10);
 					const cellPositionY = parseInt(d3.select(this).attr('y'), 10);
 					if (i > -1) {
-						tooltip.html(`Line span: ${(d * 10) + 1} - ${(d + 1) * 10}, Comments: ${dataHeatMap[i].nComments}`)
+						tooltip.html(`Line span: ${(d * 10) + 1} - ${(d + 1) * 10
+							},Comments: ${dataHeatMap[i].nComments}`)
 							.style('left', `${elementOffset.left + cellPositionX + tooltipOffsetLeft}px`)
 							.style('top', `${elementOffset.top + cellPositionY + tooltipOffsetLTop}px`);
 					} else {
@@ -489,9 +488,11 @@ WorkVisualization = React.createClass({
 				})
 				.on('click', (d) => {
 					if (self.props.commenterWordpressId) {
-						window.location = `/commentary/?works=${workSlug}&subworks=${subworkN}&lineFrom=${(d * 10) + 1}&lineTo=${(d + 1) * 10}&commenters=${self.props.commenterWordpressId}`;
+						window.location = `/commentary/?works=${workSlug}&subworks=${subworkN}&lineFrom=${
+						(d * 10) + 1}&lineTo=${(d + 1) * 10}&commenters=${self.props.commenterWordpressId}`;
 					} else {
-						window.location = `/commentary/?works=${workSlug}&subworks=${subworkN}&lineFrom=${(d * 10) + 1}&lineTo=${(d + 1) * 10}`;
+						window.location = `/commentary/?works=${workSlug}&subworks=${subworkN
+							}&lineFrom=${(d * 10) + 1}&lineTo=${(d + 1) * 10}`;
 					}
 				});
 
@@ -517,16 +518,15 @@ WorkVisualization = React.createClass({
 				.attr('text-anchor', 'middle')
 				.attr('x', -15)
 				.attr('y', (d) =>
-					(self.state.cellSize / 2) + self.state.cellPadding + ((self.state.cellSize + self.state.cellPadding) * (d - 1))
+					(self.state.cellSize / 2) + self.state.cellPadding +
+					((self.state.cellSize + self.state.cellPadding) * (d - 1))
 				)
 				.text((d) => d);
 			// --- END HEATMAP Y LABEL --- //
 
 			// --- BEGIN HEATMAP X LABEL --- //
 			const numberOfLines5 = Math.ceil(allLines.length / 5);
-			const allLines5 = Array.apply(null, {
-				length: numberOfLines5,
-			}).map(Number.call, Number);
+			const allLines5 = [...Array(numberOfLines5).keys()];
 			for (let i = 0; i < allLines5.length; i++) {
 				allLines5[i] *= 50;
 			}
@@ -621,7 +621,8 @@ WorkVisualization = React.createClass({
 			.style('opacity', 1);
 
 		// Show BarGraph:
-		const selectBarGraph = d3.selectAll(`.bargraph-x-axis-${slug},.bargraph-y-axis-${slug},[class^="bargraph-bar-${slug}-"]`);
+		const selectBarGraph = d3.selectAll(`.bargraph-x-axis-${slug
+			},.bargraph-y-axis-${slug},[class^="bargraph-bar-${slug}-"]`);
 		selectBarGraph.transition()
 			.delay(1550)
 			.style('display', '');

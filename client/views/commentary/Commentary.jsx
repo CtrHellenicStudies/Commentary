@@ -62,17 +62,17 @@ Commentary = React.createClass({
 			case 'keywords':
 				var values = [];
 				filter.values.forEach(function (value) {
-					values.push(value.wordpressId);
+					values.push(value.slug);
 				});
-				query['keywords.wordpressId'] = { $in: values };
+				query['keywords.slug'] = { $in: values };
 				break;
 
 			case 'commenters':
 				var values = [];
 				filter.values.forEach(function (value) {
-					values.push(value.wordpressId);
+					values.push(value.slug);
 				});
-				query['commenters.wordpressId'] = { $in: values };
+				query['commenters.slug'] = { $in: values };
 				break;
 
 			case 'works':

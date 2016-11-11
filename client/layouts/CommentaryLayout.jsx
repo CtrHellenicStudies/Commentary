@@ -8,8 +8,6 @@ CommentaryLayout = React.createClass({
 		const filters = [];
 		let selectedRevisionIndex = null;
 
-		console.log('this.props.queryParams', this.props.queryParams);
-
 		if ('_id' in this.props.queryParams) {
 			filters.push({
 				key: '_id',
@@ -35,7 +33,7 @@ CommentaryLayout = React.createClass({
 
 			this.props.queryParams.keywords.split(',').forEach(function (keyword) {
 				keywords.push({
-					wordpressId: keyword,
+					slug: keyword,
 				});
 			});
 
@@ -50,7 +48,7 @@ CommentaryLayout = React.createClass({
 
 			this.props.queryParams.commenters.split(',').forEach(function (commenter) {
 				commenters.push({
-					wordpressId: Number(commenter),
+					slug: commenter,
 				});
 			});
 
@@ -131,14 +129,9 @@ CommentaryLayout = React.createClass({
 		this.setState({
 			skip: this.state.skip + this.state.limit,
 		});
-
-			// console.log("Load more comments:", this.state.skip);
 	},
 
 	toggleSearchTerm(key, value) {
-		console.log('key', key);
-		console.log('value', value);
-		// FlowRouter.setQueryParams({test: '123'});
 		let self = this,
 			filters = this.state.filters;
 		let keyIsInFilter = false,
@@ -163,8 +156,6 @@ CommentaryLayout = React.createClass({
 					if (filter.values.length === 0) {
 						filterToRemove = i;
 					}
-					// remove key from url:
-					this.updateRoute(key, null);
 				} else {
 					if (key === 'works') {
 						filter.values = [value];
@@ -193,11 +184,14 @@ CommentaryLayout = React.createClass({
 		});
 	},
 
-	updateRoute(key, value) {
-		let queryParamsUpdate = {};
-		queryParamsUpdate[key] = value;
-		FlowRouter.setQueryParams(queryParamsUpdate);
-	},
+    updatequeryParams(queryParams, key, value) {
+        if (queryParams[key]) {
+            queryParams[key] = queryParams[key] + ',' + value;
+        } else {
+            queryParams[key] = value;
+        };
+        return queryParams;
+    },
 
 	handleChangeTextsearch(textsearch) {
 		const filters = this.state.filters;
@@ -306,13 +300,44 @@ CommentaryLayout = React.createClass({
 		});
 	},
 
+	componentDidUpdate(prevProps, prevState) {
+		let queryParams = {};
+		this.state.filters.forEach((filter) => {
+			filter.values.forEach((value) => {
+				const updatequeryParams = this.updatequeryParams;
+				switch(filter.key) {
+					case 'works':
+						queryParams = updatequeryParams(queryParams, filter.key, value.slug);
+						break;
+					case 'subworks':
+						queryParams = updatequeryParams(queryParams, filter.key, value.title);
+						break;
+					case 'keywords':
+						queryParams = updatequeryParams(queryParams, filter.key, value.slug);
+						break;
+					case 'commenters':
+						queryParams = updatequeryParams(queryParams, filter.key, value.slug);
+						break;
+					case 'lineFrom':
+						queryParams = updatequeryParams(queryParams, filter.key, value);
+						break;
+					case 'lineTo':
+						queryParams = updatequeryParams(queryParams, filter.key, value);
+						break;
+					case 'textsearch':
+						queryParams = updatequeryParams(queryParams, filter.key, value);
+						break;
+				}
+			});
+		});
+		FlowRouter.go('/commentary/', {}, queryParams);
+	},
+
 	addSearchTerm(keyword) {
-		console.log('keyword', keyword);
 		this.toggleSearchTerm('keywords', keyword);
 	},
 
 	render() {
-		console.log('CommentaryLayout.filters', this.state.filters);
 		return (
 			<div className="chs-layout commentary-layout">
 

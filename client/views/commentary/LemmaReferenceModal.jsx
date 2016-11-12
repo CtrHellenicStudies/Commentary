@@ -17,22 +17,9 @@ LemmaReferenceModal = React.createClass({
 
 	getInitialState() {
 		return {
-			selectedLemmaEdition: { lines: [] },
+			selectedLemmaEditionIndex: 0,
 
 		};
-	},
-
-	componentDidUpdate() {
-		// console.log('lemmaReferenceModal', this.props);
-		if (this.data.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0) {
-			this.setState({
-				selectedLemmaEdition: this.data.lemmaText[0],
-			});
-		} else if (!this.props.visible && this.state.selectedLemmaEdition.lines.length) {
-			this.setState({
-				selectedLemmaEdition: { lines: [] },
-			});
-		}
 	},
 
 	getMeteorData() {
@@ -96,23 +83,28 @@ LemmaReferenceModal = React.createClass({
 	},
 
 	toggleEdition(editionSlug) {
-		if (this.state.selectedLemmaEdition.slug !== editionSlug) {
-			let newSelectedEdition = {};
-			this.data.lemmaText.forEach((edition) => {
-				if (edition.slug === editionSlug) {
-					newSelectedEdition = edition;
-				}
-			});
+		if (this.data.lemmaText.length) {
+			if (this.data.lemmaText[this.state.selectedLemmaEditionIndex].slug !== editionSlug) {
+				let newSelectedEditionIndex = 0;
+				this.data.lemmaText.forEach((edition, index) => {
+					if (edition.slug === editionSlug) {
+						newSelectedEditionIndex = index;
+					}
+				});
 
-			this.setState({
-				selectedLemmaEdition: newSelectedEdition,
-			});
+				this.setState({
+					selectedLemmaEditionIndex: newSelectedEditionIndex,
+				});
+			}
 		}
 	},
 
 	render() {
 		const self = this;
-		const lemmaText = this.data.lemmaText;
+		const lemmaText =
+			this.data.lemmaText || [];
+		const selectedLemmaEdition =
+			this.data.lemmaText[this.state.selectedLemmaEditionIndex] || { lines: [] };
 		const styles = {
 			lemmaReferenceModal: {
 				top: this.props.top,
@@ -121,7 +113,7 @@ LemmaReferenceModal = React.createClass({
 			},
 
 		};
-		const hasLemma = ~this.state.selectedLemmaEdition.lines.length;
+		const hasLemma = ~selectedLemmaEdition.lines.length;
 
 		return (
 			<div
@@ -132,7 +124,7 @@ LemmaReferenceModal = React.createClass({
 				<article className="comment	lemma-comment paper-shadow ">
 
 					<div className="lemma-reference-text">
-						{this.state.selectedLemmaEdition.lines.map((line, i) => (
+						{selectedLemmaEdition.lines.map((line, i) => (
 							<p
 								key={i}
 								className="lemma-text"
@@ -149,7 +141,7 @@ LemmaReferenceModal = React.createClass({
 									key={i}
 									label={lemmaEditionTitle}
 									data-edition={lemmaTextEdition.title}
-									className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+									className={selectedLemmaEdition.slug === lemmaTextEdition.slug ?
 										'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 									onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 								/>

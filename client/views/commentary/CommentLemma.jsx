@@ -15,17 +15,8 @@ CommentLemma = React.createClass({
 
 	getInitialState() {
 		return {
-			selectedLemmaEdition: { lines: [] },
-
+			selectedLemmaEditionIndex: 0,
 		};
-	},
-
-	componentDidUpdate() {
-		if (this.data.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0) {
-			this.setState({
-				selectedLemmaEdition: this.data.lemmaText[0],
-			});
-		}
 	},
 
 	getMeteorData() {
@@ -90,17 +81,19 @@ CommentLemma = React.createClass({
 	},
 
 	toggleEdition(editionSlug) {
-		if (this.state.selectedLemmaEdition.slug !== editionSlug) {
-			let newSelectedEdition = {};
-			this.data.lemmaText.forEach((edition) => {
-				if (edition.slug === editionSlug) {
-					newSelectedEdition = edition;
-				}
-			});
+		if (this.data.lemmaText.length) {
+			if (this.data.lemmaText[this.state.selectedLemmaEditionIndex].slug !== editionSlug) {
+				let newSelectedEditionIndex = 0;
+				this.data.lemmaText.forEach((edition, index) => {
+					if (edition.slug === editionSlug) {
+						newSelectedEditionIndex = index;
+					}
+				});
 
-			this.setState({
-				selectedLemmaEdition: newSelectedEdition,
-			});
+				this.setState({
+					selectedLemmaEditionIndex: newSelectedEditionIndex,
+				});
+			}
 		}
 	},
 
@@ -113,9 +106,11 @@ CommentLemma = React.createClass({
 	render() {
 		const self = this;
 		const commentGroup = this.props.commentGroup;
-		const lemmaText = this.data.lemmaText;
+		const lemmaText =
+			this.data.lemmaText || [];
+		const selectedLemmaEdition =
+			this.data.lemmaText[this.state.selectedLemmaEditionIndex] || { lines: [] };
 		let workTitle = commentGroup.work.title;
-
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
 		}
@@ -167,7 +162,7 @@ CommentLemma = React.createClass({
 
 				<article className="comment lemma-comment paper-shadow">
 
-					{this.state.selectedLemmaEdition.lines.map((line, i) => (
+					{selectedLemmaEdition.lines.map((line, i) => (
 						<p
 							key={i}
 							className="lemma-text"
@@ -182,7 +177,7 @@ CommentLemma = React.createClass({
 								key={i}
 								label={lemmaEditionTitle}
 								data-edition={lemmaTextEdition.title}
-								className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+								className={selectedLemmaEdition.slug === lemmaTextEdition.slug ?
 									'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 							/>);

@@ -24,7 +24,6 @@ Header = React.createClass({
 			leftMenuOpen: false,
 			rightMenuOpen: false,
 			searchEnabled: this.props.initialSearchEnabled,
-			addCommentPage: false,
 			searchDropdownOpen: '',
 			subworks: [],
 			activeWork: '',
@@ -35,22 +34,6 @@ Header = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
-	componentWillMount() {
-		if (location.pathname.indexOf('/add-comment') === 0) {
-			this.setState({
-				addCommentPage: true,
-			});
-		}
-	},
-
-	componentDidUpdate() {
-		if (location.pathname.indexOf('/add-comment') === 0 && !this.state.addCommentPage) {
-			this.setState({
-				addCommentPage: true,
-			});
-		}
 	},
 
 	getMeteorData() {
@@ -198,7 +181,10 @@ Header = React.createClass({
 
 		const userIsLoggedIn = Meteor.user();
 		const filters = this.props.filters;
-
+		let addCommentPage = false;
+		if (location.pathname.indexOf('/add-comment') === 0) {
+			addCommentPage = true;
+		}
 		// console.log("Header.state", this.state);
 		// console.log("Header.data", this.data);
 
@@ -303,7 +289,7 @@ Header = React.createClass({
 						</div>
 						:
 						<div>
-							{!this.state.addCommentPage ?
+							{!addCommentPage ?
 								<div className="md-menu-toolbar">
 									<div className="toolbar-tools">
 										<IconButton

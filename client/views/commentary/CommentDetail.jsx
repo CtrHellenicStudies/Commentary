@@ -47,15 +47,6 @@ CommentDetail = React.createClass({
 		};
 	},
 
-	componentDidUpdate() {
-		if (!('title' in this.state.selectedRevision)) {
-			this.setState({
-				selectedRevision: this.props.comment.revisions[this.state.selectedRevisionIndex],
-				// selectedRevisionIndex = this.props.comment.revisions.length - 1,
-			});
-		}
-	},
-
 	getMeteorData() {
 		const selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex];
 		return {

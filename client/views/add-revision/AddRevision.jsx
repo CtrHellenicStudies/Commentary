@@ -324,7 +324,11 @@ AddRevision = React.createClass({
 								<h4>Secondary Source(s):</h4>
 								<p>
 									{this.props.comment.referenceLink ?
-										<a href={this.props.comment.referenceLink} target="_blank" rel="noopener noreferrer">
+										<a
+											href={this.props.comment.referenceLink}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
 											{this.props.comment.reference}
 										</a>
 										:

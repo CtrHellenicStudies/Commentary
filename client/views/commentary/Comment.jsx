@@ -22,7 +22,8 @@ Comment = React.createClass({
 				foundRevision = filter.values[0];
 			}
 		});
-		if (foundRevision != null && foundRevision >= 0 && foundRevision < this.props.comment.revisions.length) {
+		if (foundRevision != null && foundRevision >= 0 &&
+			foundRevision < this.props.comment.revisions.length) {
 			selectedRevisionIndex = foundRevision;
 		} else {
 			selectedRevisionIndex = this.props.comment.revisions.length - 1;
@@ -103,17 +104,23 @@ Comment = React.createClass({
 
 
 		newHtml = newHtml.replace(/Iliad (\d+).(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2'>Iliad $1.$2</a>");
+			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1' data-lineFrom='$2'>Iliad $1.$2</a>");
 		newHtml = newHtml.replace(/Odyssey (\d+).(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2'>Odyssey $1.$2</a>");
+			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1' data-lineFrom='$2'>Odyssey $1.$2</a>");
 		newHtml = newHtml.replace(/Homeric Hymns (\d+).(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2'>Homeric Hymns $1.$2</a>");
+			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1' data-lineFrom='$2'>Homeric Hymns $1.$2</a>");
 		newHtml = newHtml.replace(/Hymns (\d+).(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2'>Hymns $1.$2</a>");
+			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1' data-lineFrom='$2'>Hymns $1.$2</a>");
 		newHtml = newHtml.replace(/I.(\d+).(\d+)-(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>I.$1.$2-$3</a>");
+			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>I.$1.$2-$3</a>");
 		newHtml = newHtml.replace(/O.(\d+).(\d+)-(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad' data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>O.$1.$2-$3</a>");
+			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>O.$1.$2-$3</a>");
 
 
 		return { __html: newHtml };
@@ -287,7 +294,10 @@ Comment = React.createClass({
 										</div>
 										<div className="comment-author-image-wrap paper-shadow">
 											<a href={`/commenters/${commenter.slug}`}>
-												<img role="presentation" src={imageUrl.length ? imageUrl : '/images/default_user.jpg'} />
+												<img
+													role="presentation"
+													src={imageUrl.length ? imageUrl : '/images/default_user.jpg'}
+												/>
 											</a>
 										</div>
 									</div>
@@ -306,7 +316,13 @@ Comment = React.createClass({
 							:
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={comment ? { __html: `<table class=\'table-diff\'>${this.getDiff().innerHTML}</table>` } : ''}
+								dangerouslySetInnerHTML={
+									comment ? {
+										__html: `<table class=\'table-diff\'>${this.getDiff().innerHTML}</table>`,
+									}
+									:
+										''
+								}
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}

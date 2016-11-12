@@ -135,7 +135,9 @@ CommentLemmaSelect = React.createClass({
 			<div className="comments lemma-panel-visible">
 				<div className="comment-outer comment-lemma-comment-outer">
 
-					{this.props.selectedLineFrom > 0 && this.data.selectedLemmaEdition && 'lines' in this.data.selectedLemmaEdition ?
+					{this.props.selectedLineFrom > 0 &&
+						this.data.selectedLemmaEdition &&
+						'lines' in this.data.selectedLemmaEdition ?
 						<article className="comment lemma-comment paper-shadow">
 
 							{this.data.selectedLemmaEdition.lines.map((line, i) => (
@@ -169,7 +171,8 @@ CommentLemmaSelect = React.createClass({
 										key={i}
 										label={lemmaEditionTitle}
 										data-edition={lemmaTextEdition.title}
-										className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+										className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+											'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 										onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 									/>);
 								})}

@@ -28,4 +28,5 @@ Template.registerHelper('isVerb', (pos) => pos === 'verb');
 
 Template.registerHelper('isParticiple', (pos) => pos === 'participle');
 
-Template.registerHelper('isOtherPOS', (pos) => ['noun', 'pronoun', 'adjective', 'verb', 'participle'].indexOf(pos) < 0);
+Template.registerHelper('isOtherPOS', (pos) =>
+	['noun', 'pronoun', 'adjective', 'verb', 'participle'].indexOf(pos) < 0);

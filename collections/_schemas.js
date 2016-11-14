@@ -6,7 +6,7 @@ Schemas.updatePassword = new SimpleSchema({
 		label: 'Current Password',
 		max: 50,
 	},
-	'new': {
+	new: {
 		type: String,
 		min: 6,
 		max: 20,

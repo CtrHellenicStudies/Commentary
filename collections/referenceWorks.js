@@ -26,13 +26,13 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		type: [String],
 		optional: true,
 		autoform: {
-			options: function () {
-				return _.map(Commenters.find().fetch(), function (commenter) {
-					return {
+			options() {
+				return _.map(Commenters.find().fetch(), (commenter) => (
+					{
 						label: commenter.name,
 						value: commenter._id,
-					};
-				});
+					}
+				));
 			},
 		},
 
@@ -84,7 +84,8 @@ Schemas.ReferenceWorks = new SimpleSchema({
 										// $image.css('width', $image.width() / 3);
 										// $image.css('margin', 15);
 										// $image.attr('data-filename', 'retriever');
-									});
+									})
+									;
 									// return file._id;
 								};
 								uploader.onCreate = function onCreate(currentFile) {
@@ -102,7 +103,8 @@ Schemas.ReferenceWorks = new SimpleSchema({
 										\nremaining: ${(this.getRemainingTime() / 1000).toFixed(2)}s`);
 								};
 								uploader.start();
-							});
+							})
+							;
 							// Meteor.call('uploadFiles', files, function(err, res){
 							//		 console.log(res);
 							// });
@@ -167,7 +169,8 @@ Schemas.ReferenceWorks = new SimpleSchema({
 										\nremaining: ${(this.getRemainingTime() / 1000).toFixed(2)}s`);
 								};
 								uploader.start();
-							});
+							})
+							;
 							// Meteor.call('uploadFiles', files, function(err, res){
 							//		 console.log(res);
 							// });
@@ -183,8 +186,9 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		optional: true,
 		autoValue() {
 			if (this.isInsert) {
-				return new Date;
+				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',
@@ -196,8 +200,9 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		optional: true,
 		autoValue() {
 			if (this.isUpdate) {
-				return new Date;
+				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',

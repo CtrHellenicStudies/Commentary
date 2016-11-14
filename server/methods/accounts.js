@@ -1,50 +1,35 @@
 Meteor.methods({
-    updateAccount(accountData) {
-        if (!this.userId) {
-            throw new Meteor.Error('not-authorized');
-        }
+	updateAccount(field, value) {
+		if (!this.userId) {
+			throw new Meteor.Error('not-authorized');
+		}
 
-        console.log(accountData);
+		check(field, String);
+		check(value, Match.OneOf(String, [Object]));
+		const setModifier = { $set: {} };
+		setModifier.$set[field] = value;
+		let result;
+		try {
+			result = Meteor.users.update(
+				{
+					_id: this.userId,
 
-        // check(accountData.name, String);
-        // check(accountData.biography, String);
-        // check(accountData.academiaEdu, String);
-        // check(accountData.twitter, String);
-        // check(accountData.facebook, String);
-        // check(accountData.google, String);
+				}, setModifier
+			);
+		} catch (err) {
+			console.log(err);
+			return false;
+		}
+		return result;
+	},
+	deleteAccount(userId) {
+		check(userId, String);
 
-        let update = null;
-
-        try {
-            update = Meteor.users.update({
-                _id: this.userId,
-
-            }, {
-                $set: {
-                    'username': accountData.username,
-                    'emails': accountData.emails,
-                    'profile.publicEmailAdress': accountData.publicEmailAdress,
-                    'profile.name': accountData.name,
-                    'profile.biography': accountData.biography,
-                    'profile.academiaEdu': accountData.academiaEdu,
-                    'profile.twitter': accountData.twitter,
-                    'profile.facebook': accountData.facebook,
-                    'profile.google': accountData.google,
-                },
-
-            });
-        } catch (err) {
-        	update = err;
-            console.log(err);
-        };
-
-        return update;
-    },
-    deleteAccount(userId) {
-        if (this.userId === userId) {
-            return Meteor.users.remove({
-                _id: this.userId,
-            });
-        }
-    },
+		if (this.userId === userId) {
+			return Meteor.users.remove({
+				_id: this.userId,
+			});
+		}
+		return false;
+	},
 });

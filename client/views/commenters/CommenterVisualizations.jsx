@@ -1,4 +1,3 @@
-
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -79,30 +78,30 @@ CommenterVisualizations = React.createClass({
 					{workIliadLevel ?
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
-							workTitle={"Iliad"}
-							workSlug={"iliad"}
+							workTitle={'Iliad'}
+							workSlug={'iliad'}
 							workLevel={workIliadLevel}
 							nComments={commenter.nCommentsIliad}
 						/>
-					: '' }
+						: '' }
 					{workOdysseyLevel ?
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
-							workTitle={"Odyssey"}
-							workSlug={"odyssey"}
+							workTitle={'Odyssey'}
+							workSlug={'odyssey'}
 							workLevel={workOdysseyLevel}
 							nComments={commenter.nCommentsOdyssey}
 						/>
-					: '' }
+						: '' }
 					{workHymnsLevel ?
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
-							workTitle={"Hymns"}
-							workSlug={"homeric-hymns"}
+							workTitle={'Hymns'}
+							workSlug={'homeric-hymns'}
 							workLevel={workHymnsLevel}
 							nComments={commenter.nCommentsHymns}
 						/>
-					: '' }
+						: '' }
 				</div>
 				<div className="work-visualizations">
 					{this.renderWorks()}

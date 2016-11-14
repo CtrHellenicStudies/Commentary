@@ -3,95 +3,95 @@ Meteor.method('commenters_cron', () => {
 	const commenters = [];
 
 	let isInCommenters = false;
+	let isInCommentCountsLines = false;
 
-	comments.forEach((comment) => {
-		comment.commenters.forEach((commentCommenter) => {
+	comments.forEach((comment, commentIndex) => {
+		comment.commenters.forEach((commentCommenter, commentCommenterIndex) => {
 			isInCommenters = false;
-			commenters.forEach((commenter) => {
+			commenters.forEach((commenter, commenterIndex) => {
 				if (commenter.slug === commentCommenter.slug) {
 					isInCommenters = true;
-					commenter.nCommentsTotal++;
+					commenters[commenterIndex].nCommentsTotal++;
+
 					switch (comment.work.slug) {
-					case 'iliad': {
-						commenter.nCommentsIliad++;
+					case 'iliad':
+						commenters[commenterIndex].nCommentsIliad++;
+						break;
+					case 'odyssey':
+						commenters[commenterIndex].nCommentsOdyssey++;
+						break;
+					case 'homeric-hymns':
+						commenters[commenterIndex].nCommentsHymns++;
+						break;
+					case 'hymns':
+						commenters[commenterIndex].nCommentsHymns++;
+						break;
+					default:
 						break;
 					}
-					case 'odyssey': {
-						commenter.nCommentsOdyssey++;
-						break;
-					}
-					case 'homeric-hymns': {
-						commenter.nCommentsHymns++;
-						break;
-					}
-					case 'hymns': {
-						commenter.nCommentsHymns++;
-						break;
-					}
-					default: {
-						break;
-					} }
-				// }
+					commenter.nCommentsWorks.forEach((work, workIndex) => {
+						if (comment.work.slug === work.slug) {
+							work.subworks.forEach((subwork, subworkIndex) => {
+								// TODO: build and array of lin 10 incrementation
+								if (comment.subwork.n === subwork.n) {
+									commenters[commenterIndex][workIndex][subworkIndex].nComments++;
 
-				commenter.nCommentsWorks.forEach((work) => {
-					if (comment.work.slug === work.slug) {
+									const iterations = (Math.floor(((comment.lineFrom + comment.nLines) - 1) / 10) -
+										Math.floor(comment.lineFrom / 10)) + 1;
 
-                        work.subworks.forEach((subwork) => {
-                            // TODO: build and array of lin 10 incrementation
-                            if (comment.subwork.n === subwork.n) {
-                                subwork.nComments++;
+									subwork.commentHeatmap.forEach(
+										(line, lineIndex) => {
+											for (let i = 0; i < iterations; i++) {
+												const nFrom = (Math.floor(comment.lineFrom / 10) * 10) + (i * 10);
+												if (nFrom === line.n) {
+													isInCommentCountsLines = true;
+													commenters[commenterIndex][workIndex][subworkIndex][lineIndex]
+														.nComments++;
+												} else {
+													isInCommentCountsLines = false;
+												}
 
-                                const iterations = Math.floor((comment.lineFrom + comment.nLines - 1) / 10) - Math.floor(comment.lineFrom / 10) + 1;
+												if (!isInCommentCountsLines) {
+													subwork.commentHeatmap.push({
+														n: nFrom,
+														nComments: 1,
+													});
+												}
+											}
+										}
+									);
+								}
+							});
 
-                                for (let i = 0; i < iterations; i++) {
-                                    const nFrom = Math.floor(comment.lineFrom / 10) * 10 + i * 10;
-                                    isInCommentCountsLines = false;
-
-                                    subwork.commentHeatmap.forEach((line) => {
-                                        if (nFrom === line.n) {
-                                            isInCommentCountsLines = true;
-                                            line.nComments++;
-                                        }
-                                    });
-
-                                    if (!isInCommentCountsLines) {
-                                        subwork.commentHeatmap.push({
-                                            n: nFrom,
-                                            nComments: 1,
-                                        });
-                                    }
-                                }
-                            }
-                        });
-
-						// work.subworks.forEach((subwork) => {
-						// 	if (subwork.n === comment.subwork.n) {
-						// 		subwork.nComments++;
-						// 		let isInHeatmap = false;
-						// 		subwork.commentHeatmap.forEach((commentGroup) => {
-						// 			if (commentGroup.n === comment.lineFrom) {
-						// 				commentGroup.nComments++;
-						// 				isInHeatmap = true;
-						// 			}
-						// 		});
-						// 		if (!isInHeatmap) {
-						// 			subwork.commentHeatmap.push({
-						// 				n: comment.lineFrom,
-						// 				nComments: 1,
-						// 			});
-						// 		}
-						// 	}
-						// });
-					}
-				});}
+							// work.subworks.forEach((subwork) => {
+							// 	if (subwork.n === comment.subwork.n) {
+							// 		subwork.nComments++;
+							// 		let isInHeatmap = false;
+							// 		subwork.commentHeatmap.forEach((commentGroup) => {
+							// 			if (commentGroup.n === comment.lineFrom) {
+							// 				commentGroup.nComments++;
+							// 				isInHeatmap = true;
+							// 			}
+							// 		});
+							// 		if (!isInHeatmap) {
+							// 			subwork.commentHeatmap.push({
+							// 				n: comment.lineFrom,
+							// 				nComments: 1,
+							// 			});
+							// 		}
+							// 	}
+							// });
+						}
+					});
+				}
 			});
 
 			if (!isInCommenters) {
-				commentCommenter.nCommentsTotal = 0;
-				commentCommenter.nCommentsIliad = 0;
-				commentCommenter.nCommentsOdyssey = 0;
-				commentCommenter.nCommentsHymns = 0;
-				commentCommenter.nCommentsWorks = [];
+				comments[commentIndex].commenters[commentCommenterIndex].commeters.nCommentsTotal = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsIliad = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsOdyssey = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsHymns = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsWorks = [];
 
 				const iliad = {
 					title: 'Iliad',
@@ -161,18 +161,18 @@ Meteor.method('commenters_cron', () => {
 	});
 
 	/*
-	comments.forEach(function(comment){
-		var nLines = 1;
+	 comments.forEach(function(comment){
+	 var nLines = 1;
 
-		if('lineTo' in comment && comment.lineTo){
-			nLines = comment.lineTo - comment.lineFrom + 1;
-			// console.log(comment.lineFrom, comment.lineTo, comment.nLines);
+	 if('lineTo' in comment && comment.lineTo){
+	 nLines = comment.lineTo - comment.lineFrom + 1;
+	 // console.log(comment.lineFrom, comment.lineTo, comment.nLines);
 
-		}
+	 }
 
-		Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
-	});
-	*/
+	 Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
+	 });
+	 */
 
 
 	console.log(' -- Cron run complete: Commenters');

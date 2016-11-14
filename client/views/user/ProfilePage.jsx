@@ -1,7 +1,5 @@
-
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
@@ -26,17 +24,10 @@ ProfilePage = React.createClass({
 			annotationCheckList: [],
 			skip: 0,
 			limit: 100,
-			name: '',
-			biography: '',
-			academiaEdu: '',
-			twitter: '',
-			facebook: '',
-			google: '',
-
 			usernameError: '',
 			emailError: '',
-
 			modalChangePwdLowered: false,
+			isPublicEmail: this.props.user.profile.publicEmailAdress !== undefined,
 		};
 	},
 
@@ -44,21 +35,8 @@ ProfilePage = React.createClass({
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	componentDidMount() {
-		const user = this.props.user;
-		let profile = {};
-		if ('profile' in user) {
-			profile = user.profile;
-		}
-
-		this.setState({
-			name: profile.name || '',
-			biography: profile.biography || '',
-			academiaEdu: profile.academiaEdu || '',
-			twitter: profile.twitter || '',
-			facebook: profile.facebook || '',
-			google: profile.google || '',
-		});
+	componentWillMount() {
+		this.handleChangeTextDebounced = debounce(1000, this.handleChangeTextDebounced);
 	},
 
 	getMeteorData() {
@@ -75,20 +53,30 @@ ProfilePage = React.createClass({
 				'user._id': Meteor.userId(),
 			}).fetch();
 
-			discussionComments.forEach(function (discussionComment) {
-				const commentHandle = Meteor.subscribe('comments', { _id: discussionComment.commentId }, 0, 1);
+			discussionComments.forEach((discussionComment, discussionCommentIndex) => {
+				const commentHandle =
+					Meteor.subscribe('comments', { _id: discussionComment.commentId }, 0, 1);
 				if (commentHandle.ready()) {
 					const comments = Comments.find().fetch();
 					if (comments.length) {
-						discussionComment.comment = comments[0];
+						discussionComments[discussionCommentIndex].comment = comments[0];
 					} else {
-						discussionComment.comment = { work: '', subwork: '', discussionComments: [] };
+						discussionComments[discussionCommentIndex].comment = {
+							work: '',
+							subwork: '',
+							discussionComments: [],
+						};
 					}
 				} else {
-					discussionComment.comment = { work: '', subwork: '', discussionComments: [] };
+					discussionComments[discussionCommentIndex].comment = {
+						work: '',
+						subwork: '',
+						discussionComments: [],
+					};
 				}
 
-				discussionComment.otherCommentsCount = DiscussionComments.find({ commentId: discussionComment.commentId }).count();
+				discussionComments[discussionCommentIndex].otherCommentsCount =
+					DiscussionComments.find({ commentId: discussionComment.commentId }).count();
 			});
 		}
 
@@ -103,85 +91,77 @@ ProfilePage = React.createClass({
 		});
 	},
 
-	handleChangeText(key) {
+	handleChangeText(field, event) {
+		const value = event.target.value;
+		this.handleChangeTextDebounced(field, value);
+	},
+
+	handleChangeTextDebounced(field, value) {
 		const user = this.props.user;
-		const self = this;
-
-        let value = null;
-        if (key === 'biography') {
-        	value = this.refs[key].input.refs.input.value;
-            
-        } else if (key === 'publicEmailAdress') {
-        	// do nothing
-        } else {
-            value = this.refs[key].input.value;
-        } 
-        this.setState({
-            [key]: value,
-        });
-
-        let accountData = {
-			username: self.refs.username.input.value || user.username,
-			name: self.refs.name.input.value || user.profile.name,
-			biography: self.refs.biography.input.refs.input.value || user.profile.biography,
-			academiaEdu: self.refs.academiaEdu.input.value || user.profile.academiaEdu,
-			twitter: self.refs.twitter.input.value || user.profile.twitter,
-			facebook: self.refs.facebook.input.value || user.profile.facebook,
-			google: self.refs.google.input.value || user.profile.google,
-		};
-
-		if (user.emails && user.emails.length > 0) {
-			accountData.emails = [{
-				address: self.refs.email.input.value || user.emails[0].address,
-				verified:  user.emails[0].verified,
-			}];
-			const setPublic = this.refs.publicEmailAdress.state.switched;
-			if (key === 'publicEmailAdress' && !setPublic) {
-				accountData.publicEmailAdress = self.refs.email.input.value || user.emails[0].address;
+		let emailValue = [];
+		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		switch (field) {
+		case 'username':
+			if (/^[a-z0-9A-Z_]{3,15}$/.test(value)) {
+				Meteor.call('updateAccount', field, value, (err) => {
+					if (err) {
+						console.error(err);
+					}
+				});
 			} else {
-				accountData.publicEmailAdress = "";
-			}
-		}
-
-		Meteor.call('updateAccount', accountData, (err, res) => {
-			if (err) {
-				console.error(err);
-			} else if (res.name === "MongoError" && res.code === 11000) {
 				this.setState({
-					usernameError: 'Username already exists. Please choose another.',
+					usernameError: 'Username has following the requirements: only letters and ' +
+					'numbers are aloud, no whitespaces, min. length: 3, max. length: 15',
 				});
 			}
+			break;
+		case 'email':
+			if (re.test(value)) {
+				this.setState({
+					emailError: '',
+				});
+				if (user.emails && user.emails.length > 0) {
+					emailValue = [{
+						address: value || user.emails[0].address,
+						verified: user.emails[0].verified,
+					}];
+				}
+				Meteor.call('updateAccount', field, emailValue, (err) => {
+					if (err) {
+						console.error(err);
+					}
+				});
+			} else {
+				this.setState({
+					emailError: 'Invalid email address',
+				});
+			}
+			break;
+
+		default:
+			Meteor.call('updateAccount', `profile.${field}`, value, (err) => {
+				if (err) {
+					console.error(err);
+				}
+			});
+		}
+	},
+
+	handlePublicEmailToggle() {
+		const user = this.props.user;
+		const setPublic = !this.state.isPublicEmail;
+		this.setState({
+			isPublicEmail: setPublic,
 		});
-	},
-
-	handleUsernameChange () {
-		let key = 'username';
-		const re = /^[a-z0-9A-Z_]{3,15}$/;
-		if (re.test(value = this.refs[key].input.value)) {
-			this.setState({
-				usernameError: '',
-			});
-			this.handleChangeText(key);
-		} else {
-			this.setState({
-				usernameError: 'Username has following the requirements: only letters and numbers are aloud, no whitespaces, min. length: 3, max. length: 15',
-			});
-		};	
-	},
-
-	handleEmailChange () {
-		let key = 'email';
-		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		if (re.test(value = this.refs[key].input.value)) {
-			this.setState({
-				emailError: '',
-			});
-			this.handleChangeText(key);
-		} else {
-			this.setState({
-				emailError: 'Invalid email address',
-			});
-		};	
+		let publicEmailAdress = '';
+		if (setPublic) {
+			publicEmailAdress = user.emails[0].address;
+		}
+		Meteor.call('updateAccount', 'profile.publicEmailAdress', publicEmailAdress, (err) => {
+			if (err) {
+				console.error(err);
+			}
+		});
 	},
 
 	showChangePwdModal() {
@@ -200,16 +180,16 @@ ProfilePage = React.createClass({
 	render() {
 		let currentUser = this.props.user;
 		if (!currentUser) {
-			currentUser = { 'profile': {} };
+			currentUser = { profile: {} };
 		}
 		const toggleStyle = {
 			style: {
-				margin: "20px 0 0 0",
+				margin: '20px 0 0 0',
 			},
 		};
 
 		const changePwdStyle = {
-			margin: "11px 0 0 0",
+			margin: '11px 0 0 0',
 		};
 
 		return (
@@ -219,7 +199,11 @@ ProfilePage = React.createClass({
 
 						<section className="block header cover parallax">
 							<div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
-								<img className="background-image" src="/images/capitals.jpg" role="presentation" />
+								<img
+									className="background-image"
+									src="/images/capitals.jpg"
+									role="presentation"
+								/>
 							</div>
 							<div className="block-screen brown" />
 
@@ -231,9 +215,9 @@ ProfilePage = React.createClass({
 										<div className="page-title-wrap">
 											{
 												/*
-												<h2 className="page-title ">{currentUser.nicename}</h2>
-												<h3 className="page-subtitle"></h3>
-												*/
+												 <h2 className="page-title ">{currentUser.nicename}</h2>
+												 <h3 className="page-subtitle"></h3>
+												 */
 											}
 										</div>
 
@@ -254,11 +238,10 @@ ProfilePage = React.createClass({
 								<div className="user-profile-textfields">
 
 									<TextField
-										ref="username"
 										fullWidth
 										floatingLabelText="Username"
 										defaultValue={currentUser.username}
-										onChange={debounce(1500, this.handleUsernameChange)}
+										onChange={this.handleChangeText.bind(null, 'username')}
 										errorText={this.state.usernameError}
 									/>
 									<br />
@@ -270,92 +253,84 @@ ProfilePage = React.createClass({
 									/>
 
 									{currentUser.emails ?
-									<div>
-										<TextField
-											ref="email"
-											fullWidth
-											floatingLabelText="Email"
-											defaultValue={currentUser.emails[0].address}
-											onChange={debounce(1500, this.handleEmailChange)}
-											errorText={this.state.emailError}
-										/>
-										<Toggle
-											ref="publicEmailAdress"
-									        label={currentUser.profile.publicEmailAdress ? "Email public" : "Email private"}
-									        labelPosition="right"
-									        style={toggleStyle.style}
-									        toggled={currentUser.profile.publicEmailAdress ? true : false}
-									        onToggle={debounce(500, this.handleChangeText.bind(null, 'publicEmailAdress'))}
-									    />
-									</div>
-									:
-									""}
+										<div>
+											<TextField
+												fullWidth
+												floatingLabelText="Email"
+												defaultValue={currentUser.emails[0].address}
+												onChange={this.handleChangeText.bind(null, 'emails')}
+												errorText={this.state.emailError}
+											/>
+											<Toggle
+												label={this.state.isPublicEmail ? 'Email public' : 'Email private'}
+												labelPosition="right"
+												style={toggleStyle.style}
+												toggled={this.state.isPublicEmail}
+												onToggle={this.handlePublicEmailToggle}
+											/>
+										</div>
+										: ''
+									}
 
 									<TextField
-										ref="name"
 										fullWidth
 										floatingLabelText="Name"
 										defaultValue={currentUser.profile.name}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'name'))}
+										onChange={this.handleChangeText.bind(null, 'name')}
 									/>
 									<br />
 
 									<TextField
-										ref="biography"
 										multiLine
 										rows={2}
 										rowsMax={10}
 										fullWidth
 										floatingLabelText="Biography"
 										defaultValue={currentUser.profile.biography}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'biography'))}
+										onChange={this.handleChangeText.bind(null, 'biography')}
 									/>
 									<br />
 
 									<TextField
-										ref="academiaEdu"
 										fullWidth
 										hintText="http://university.academia.edu/YourName"
 										floatingLabelText="Academia.edu"
 										defaultValue={currentUser.profile.academiaEdu}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'academiaEdu'))}
+										onChange={this.handleChangeText.bind(null, 'academiaEdu')}
 									/>
 									<br />
 
 									<TextField
-										ref="twitter"
 										fullWidth
 										hintText="https://twitter.com/@your_name"
 										floatingLabelText="Twitter"
 										defaultValue={currentUser.profile.twitter}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'twitter'))}
+										onChange={this.handleChangeText.bind(null, 'twitter')}
 									/>
 									<br />
 
 									<TextField
-										ref="facebook"
 										fullWidth
 										hintText="https://facebook.com/your.name"
 										floatingLabelText="Facebook"
 										defaultValue={currentUser.profile.facebook}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'facebook'))}
+										onChange={this.handleChangeText.bind(null, 'facebook')}
 									/>
 									<br />
 
 									<TextField
-										ref="google"
 										fullWidth
 										hintText="https://plus.google.com/+YourName"
 										floatingLabelText="Google Plus"
 										defaultValue={currentUser.profile.google}
-										onChange={debounce(3000, this.handleChangeText.bind(null, 'google'))}
+										onChange={this.handleChangeText.bind(null, 'google')}
 									/>
 
 									<br />
 									<br />
 									<br />
 									<span className="form-save-help">
-													(These values are saved automatically.)
+										(These values are saved automatically.)
 									</span>
 
 								</div>
@@ -392,7 +367,7 @@ ProfilePage = React.createClass({
 					}
 
 				</div>
-			: <div />
+				: <div />
 			)
 
 		);

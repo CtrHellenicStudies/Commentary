@@ -36,14 +36,14 @@ UserLayout = React.createClass({
 				<main>
 					{this.data.user ?
 						<ProfilePage user={this.data.user} />
-					:
+						:
 						<Loading />
 					}
 				</main>
 				<Footer />
 				<SnackAttack />
 			</div>
-			);
+		);
 	},
 
 });

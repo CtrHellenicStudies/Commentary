@@ -79,3 +79,5 @@ dburles:factory
 mdg:validated-method
 meteorhacks:aggregate
 react-meteor-data
+practicalmeteor:chai
+practicalmeteor:sinon

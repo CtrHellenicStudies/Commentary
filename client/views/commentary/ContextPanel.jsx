@@ -38,27 +38,29 @@ ContextPanel = React.createClass({
 
 	componentDidMount() {
 		this.scrollElement('open');
-		Meteor.call('getMaxLine', this.props.commentGroup.work.slug, this.props.commentGroup.subwork.n, (err, res) => {
-			if (err) {
-				console.log(err);
-			} else if (res) {
-				const linePagination = [];
-				for (let i = 1; i <= res; i += 100) {
-					linePagination.push(i);
-				}
+		Meteor.call('getMaxLine', this.props.commentGroup.work.slug,
+			this.props.commentGroup.subwork.n, (err, res) => {
+				if (err) {
+					console.log(err);
+				} else if (res) {
+					const linePagination = [];
+					for (let i = 1; i <= res; i += 100) {
+						linePagination.push(i);
+					}
 
-				this.setState({
-					linePagination,
-					maxLine: res,
-				});
+					this.setState({
+						linePagination,
+						maxLine: res,
+					});
+				}
 			}
-		});
+		);
 	},
 
-	componentDidUpdate(prevProps, prevState) {
+	componentDidUpdate() {
 		this.scrollElement('open');
 		const commentGroup = this.props.commentGroup;
-		if (commentGroup.ref != prevProps.commentGroup.ref) {
+		if (commentGroup.ref !== prevProps.commentGroup.ref) {
 			this.setState({
 				lineFrom: commentGroup.lineFrom,
 				lineTo: commentGroup.lineFrom + 49,
@@ -68,6 +70,24 @@ ContextPanel = React.createClass({
 
 	componentWillUnmount() {
 		this.scrollElement('close');
+	},
+
+	onAfterClicked() {
+		if (this.state.lineTo <= this.state.maxLine) {
+			this.setState({
+				lineFrom: this.state.lineFrom + 25,
+				lineTo: this.state.lineTo + 25,
+			});
+		}
+	},
+
+	onBeforeClicked() {
+		if (this.state.lineFrom !== 1) {
+			this.setState({
+				lineFrom: this.state.lineFrom - 25,
+				lineTo: this.state.lineTo - 25,
+			});
+		}
 	},
 
 	getMeteorData() {
@@ -142,24 +162,6 @@ ContextPanel = React.createClass({
 		};
 	},
 
-	onAfterClicked() {
-		if (this.state.lineTo <= this.state.maxLine) {
-			this.setState({
-				lineFrom: this.state.lineFrom + 25,
-				lineTo: this.state.lineTo + 25,
-			});
-		}
-	},
-
-	onBeforeClicked() {
-		if (this.state.lineFrom !== 1) {
-			this.setState({
-				lineFrom: this.state.lineFrom - 25,
-				lineTo: this.state.lineTo - 25,
-			});
-		}
-	},
-
 	toggleEdition(editionSlug) {
 		if (this.state.selectedLemmaEdition !== editionSlug) {
 			this.setState({
@@ -212,12 +214,12 @@ ContextPanel = React.createClass({
 
 					{this.state.lineFrom > 1 ?
 						<div className="before-link">
-								<RaisedButton
-									className="light"
-									label="Previous"
-									onClick={this.onBeforeClicked}
-									icon={<i className="mdi mdi-chevron-up" />}
-								/>
+							<RaisedButton
+								className="light"
+								label="Previous"
+								onClick={this.onBeforeClicked}
+								icon={<i className="mdi mdi-chevron-up" />}
+							/>
 						</div>
 						:
 						''
@@ -246,7 +248,7 @@ ContextPanel = React.createClass({
 
 								<div className="lemma-meta">
 									{(line.n % 5 === 0 || line.n === 1) ?
-										<span className="lemma-line-n" >
+										<span className="lemma-line-n">
 											{line.n}
 										</span>
 										:
@@ -285,7 +287,7 @@ ContextPanel = React.createClass({
 								key={i}
 								label={lemmaEditionTitle}
 								data-edition={lemmaTextEdition.title}
-								className={self.data.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ?
+								className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
 									'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 							/>

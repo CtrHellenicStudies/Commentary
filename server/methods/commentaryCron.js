@@ -1,4 +1,4 @@
-Meteor.method('commentary_cron', function () {
+Meteor.method('commentary_cron', () => {
 	const comments = Comments.find().fetch();
 
 	const commentCounts = [];
@@ -6,19 +6,19 @@ Meteor.method('commentary_cron', function () {
 	let isInCommentCountsSubworks = false;
 	let isInCommentCountsLines = false;
 
-	comments.forEach(function (comment) {
+	comments.forEach((comment) => {
 		let nLines = 1;
 
 		if ('lineTo' in comment && comment.lineTo) {
-			nLines = comment.lineTo - comment.lineFrom + 1;
-				// console.log(comment.lineFrom, comment.lineTo, comment.nLines);
+			nLines = (comment.lineTo - comment.lineFrom) + 1;
+			// console.log(comment.lineFrom, comment.lineTo, comment.nLines);
 		}
 
 		Comments.update({ _id: comment._id }, { $set: { nLines } });
 	});
 
 
-	comments.forEach(function (comment) {
+	comments.forEach((comment) => {
 		let commentWorkSlug = '';
 
 		if (commentWorkSlug === 'hymns') {
@@ -28,44 +28,44 @@ Meteor.method('commentary_cron', function () {
 		}
 
 		isInCommentCountsWorks = false;
-		commentCounts.forEach(function (work) {
+		commentCounts.forEach((work, workIndex) => {
 			if (commentWorkSlug === work.slug) {
 				isInCommentCountsWorks = true;
 				isInCommentCountsSubworks = false;
-				work.nComments++;
+				commentCounts[workIndex].nComments++;
 
-				work.subworks.forEach(function (subwork) {
-						// TODO: build and array of lin 10 incrementation
+				work.subworks.forEach((subwork, subworkIndex) => {
+					// TODO: build and array of lin 10 incrementation
 					if (comment.subwork.n === subwork.n) {
 						isInCommentCountsSubworks = true;
 
-						subwork.nComments++;
+						commentCounts[workIndex][subworkIndex].nComments++;
 
-						const iterations = Math.floor((comment.lineFrom + comment.nLines - 1) / 10) - Math.floor(comment.lineFrom / 10) + 1;
+						const iterations = (Math.floor(((comment.lineFrom + comment.nLines) - 1) / 10) -
+							Math.floor(comment.lineFrom / 10)) + 1;
 
-						for (let i = 0; i < iterations; i++) {
-							const nFrom = Math.floor(comment.lineFrom / 10) * 10 + i * 10;
-							isInCommentCountsLines = false;
-
-							subwork.commentHeatmap.forEach(function (line) {
+						subwork.commentHeatmap.forEach((line, lineIndex) => {
+							for (let i = 0; i < iterations; i++) {
+								const nFrom = (Math.floor(comment.lineFrom / 10) * 10) + (i * 10);
 								if (nFrom === line.n) {
 									isInCommentCountsLines = true;
-									line.nComments++;
+									commentCounts[workIndex][subworkIndex][lineIndex].nComments++;
+								} else {
+									isInCommentCountsLines = false;
 								}
-							});
-
-							if (!isInCommentCountsLines) {
-								subwork.commentHeatmap.push({
-									n: nFrom,
-									nComments: 1,
-								});
+								if (!isInCommentCountsLines) {
+									commentCounts[workIndex][subworkIndex].commentHeatmap.push({
+										n: nFrom,
+										nComments: 1,
+									});
+								}
 							}
-						}
+						});
 					}
 				});
 
 				if (!isInCommentCountsSubworks) {
-					work.subworks.push({
+					commentCounts[workIndex].subworks.push({
 						n: comment.subwork.n,
 						title: comment.subwork.title,
 						slug: comment.subwork.slug,
@@ -98,7 +98,7 @@ Meteor.method('commentary_cron', function () {
 		}
 	});
 
-		// get a array of all subworks into tableOfContents
+	// get a array of all subworks into tableOfContents
 	let tableOfContents = [];
 	Meteor.call('getTableOfContents', (err, res) => {
 		if (err) {
@@ -108,13 +108,11 @@ Meteor.method('commentary_cron', function () {
 		}
 	});
 
-		// search for subworks which have not been commented on
-		// modify tableOfContents so only missing subworks are left
-	commentCounts.forEach((work, i) => {
-		const _work = tableOfContents.find(function (element, index, array) {
-			return element._id === work.slug;
-		});
-		work.subworks.forEach((subwork, j) => {
+	// search for subworks which have not been commented on
+	// modify tableOfContents so only missing subworks are left
+	commentCounts.forEach((work) => {
+		const _work = tableOfContents.find((element) => element._id === work.slug);
+		work.subworks.forEach((subwork) => {
 			_work.subworks.forEach((n, k) => {
 				if (n === subwork.n) {
 					_work.subworks.splice(k, 1);
@@ -123,10 +121,10 @@ Meteor.method('commentary_cron', function () {
 		});
 	});
 
-			// creat missing works and subworks from textNodes wwhich haven't been commented
-	tableOfContents.forEach((_work, i) => {
+	// creat missing works and subworks from textNodes wwhich haven't been commented
+	tableOfContents.forEach((_work) => {
 		_work.subworks.forEach((n) => {
-			let isInCommentCountsWorks = false;
+			isInCommentCountsWorks = false;
 			commentCounts.forEach((work) => {
 				if (_work._id === work.slug) {
 					isInCommentCountsWorks = true;
@@ -156,7 +154,7 @@ Meteor.method('commentary_cron', function () {
 	});
 
 
-	commentCounts.forEach(function (countsWork) {
+	commentCounts.forEach((countsWork) => {
 		let workSlug = '';
 		let work = {};
 
@@ -168,21 +166,23 @@ Meteor.method('commentary_cron', function () {
 
 		work = Works.findOne({ slug: workSlug });
 
-		work.subworks.forEach(function (subwork) {
+		work.subworks.forEach((subwork, subworkIndex) => {
 			work.nComments = countsWork.nComments;
 
-			countsWork.subworks.forEach(function (countsSubwork) {
-				if (subwork.n === countsSubwork.n) {
-					subwork.nComments = countsSubwork.nComments;
-					subwork.commentHeatmap = countsSubwork.commentHeatmap;
+			countsWork.subworks.forEach((countsSubwork, countsSubworkIndex) => {
+				if (work[subworkIndex].n === countsWork[countsSubworkIndex].n) {
+					work[subworkIndex].nComments = countsWork[countsSubworkIndex].nComments;
+					work[subworkIndex].commentHeatmap = countsWork[countsSubworkIndex].commentHeatmap;
 				}
 			});
 		});
 
-		const updateStatus = Works.update({ slug: workSlug }, { $set: {
-			subworks: countsWork.subworks,
-			nComments: countsWork.nComments,
-		} });
+		const updateStatus = Works.update({ slug: workSlug }, {
+			$set: {
+				subworks: countsWork.subworks,
+				nComments: countsWork.nComments,
+			},
+		});
 		console.log(countsWork, updateStatus);
 	});
 
@@ -192,7 +192,7 @@ Meteor.method('commentary_cron', function () {
 }, {
 	url: 'commentary/cron',
 	getArgsFromRequest(request) {
-			// Sometime soon do validation here
+		// Sometime soon do validation here
 		const content = request.body;
 
 		return [content];

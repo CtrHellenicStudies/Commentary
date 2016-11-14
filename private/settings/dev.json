@@ -11,14 +11,14 @@
 			"secret": ""
 		},
 		"google": {
-			"clientId" : ".apps.googleusercontent.com",
-			"secret" : "",
-			"loginStyle" : "popup"
+			"clientId": ".apps.googleusercontent.com",
+			"secret": "",
+			"loginStyle": "popup"
 		},
 		"twitter": {
 			"consumerKey": "",
 			"secret": "",
-			"loginStyle" : "popup"
+			"loginStyle": "popup"
 		}
 	}
 }

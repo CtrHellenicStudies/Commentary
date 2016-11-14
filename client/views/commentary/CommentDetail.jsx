@@ -53,15 +53,6 @@ CommentDetail = React.createClass({
 		};
 	},
 
-	componentDidUpdate() {
-		if (!('title' in this.data.selectedRevision)) {
-			this.setState({
-				selectedRevision: this.props.comment.revisions[this.data.selectedRevisionIndex],
-				// selectedRevisionIndex = this.props.comment.revisions.length - 1,
-			});
-		}
-	},
-
 	getRevisionDiff() {
 		// build the diff view and return a DOM node
 		const baseRevision = this.data.selectedRevision;
@@ -212,14 +203,14 @@ CommentDetail = React.createClass({
 		let userCommenterId = [];
 		if (Meteor.user() && Meteor.user().commenterId) {
 			userCommenterId = Meteor.user().commenterId;
-		};
+		}
 
 		if (self.state.discussionVisible) {
 			commentClass += 'discussion--width discussion--visible';
 		}
 
 		return (
-			<div className={commentClass} >
+			<div className={commentClass}>
 
 				<article
 					className="comment commentary-comment paper-shadow "
@@ -229,16 +220,16 @@ CommentDetail = React.createClass({
 					<div className="comment-fixed-title-wrap paper-shadow">
 						<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
 						{/* (commentGroup.selectedLemmaEdition.lines.length) ?
-							<p
-								className="comment-fixed-lemma lemma-text"
-								dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
-							.lines[0].html}}
-								></p>
-							: ""*/}
+						 <p
+						 className="comment-fixed-lemma lemma-text"
+						 dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
+						 .lines[0].html}}
+						 ></p>
+						 : ""*/}
 
 						{/* commentGroup.selectedLemmaEdition.lines.length > 1 ?
-							<span className="fixed-title-lemma-ellipsis">&hellip;</span>
-						: "" */}
+						 <span className="fixed-title-lemma-ellipsis">&hellip;</span>
+						 : "" */}
 
 						{comment.commenters.map((commenter, i) => (
 							<a
@@ -293,7 +284,7 @@ CommentDetail = React.createClass({
 											''
 										}
 										<div className="comment-author-text">
-											<a href={`/commenters/${commenter.slug}`} >
+											<a href={`/commenters/${commenter.slug}`}>
 												<span className="comment-author-name">{commenter.name}</span>
 											</a>
 											<span className="comment-date">
@@ -330,7 +321,7 @@ CommentDetail = React.createClass({
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}
-						<div className="comment-reference" >
+						<div className="comment-reference">
 							<h4>Secondary Source(s):</h4>
 							<p>
 								{comment.referenceLink ?
@@ -349,10 +340,10 @@ CommentDetail = React.createClass({
 							</p>
 						</div>
 						{/* <div className="comment-persistent-identifier">
-							<a href={"/commentary/?_id=" + comment._id}>
-								<span>Persistent Identifier</span>
-							</a>
-						</div>*/}
+						 <a href={"/commentary/?_id=" + comment._id}>
+						 <span>Persistent Identifier</span>
+						 </a>
+						 </div>*/}
 						<CommentCitation
 							componentClass="comment-citation"
 							title="Cite this comment"

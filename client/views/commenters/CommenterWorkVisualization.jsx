@@ -1,4 +1,3 @@
-
 CommenterWorkVisualization = React.createClass({
 
 	propTypes: {
@@ -9,7 +8,7 @@ CommenterWorkVisualization = React.createClass({
 
 	toggleVisibleWork(workSlug) {
 		this.props.toggleVisibleWork(workSlug);
-		this.refs.workVisualization.close();
+		this.workVisualization.close();
 	},
 
 	render() {
@@ -22,7 +21,7 @@ CommenterWorkVisualization = React.createClass({
 					className="close-visualization mdi mdi-close"
 				/>
 				<WorkVisualization
-					ref='workVisualization'
+					ref={(component) => { this.workVisualization = component; }}
 					work={work}
 					commenterWordpressId={this.props.commenterWordpressId}
 				/>

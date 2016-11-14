@@ -11,7 +11,11 @@ KeywordsPage = React.createClass({
 				<div data-ng-controller="PageController as page" className="content primary">
 					<section className="block header header-page	cover parallax">
 						<div className="background-image-holder blur-2--no-remove remove-blur	blur-10">
-							<img className="background-image" src="/images/apotheosis_homer.jpg" />
+							<img
+								className="background-image"
+								src="/images/apotheosis_homer.jpg"
+								role="presentation"
+							/>
 						</div>
 						<div className="block-screen brown" />
 
@@ -31,7 +35,7 @@ KeywordsPage = React.createClass({
 					</section>
 				</div>
 			</div>
-			);
+		);
 	},
 
 });

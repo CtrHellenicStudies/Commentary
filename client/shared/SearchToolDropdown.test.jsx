@@ -5,7 +5,6 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
-
 import FlatButton from 'material-ui/FlatButton';
 import SearchToolDropdown from './SearchToolDropdown.jsx';
 

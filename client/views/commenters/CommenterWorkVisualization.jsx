@@ -4,7 +4,7 @@ CommenterWorkVisualization = React.createClass({
 	propTypes: {
 		work: React.PropTypes.object.isRequired,
 		toggleVisibleWork: React.PropTypes.func.isRequired,
-		commenterWordpressId: React.PropTypes.number.isRequired,
+		commenterSlug: React.PropTypes.string.isRequired,
 	},
 
 	toggleVisibleWork(workSlug) {
@@ -24,7 +24,7 @@ CommenterWorkVisualization = React.createClass({
 				<WorkVisualization
 					ref='workVisualization'
 					work={work}
-					commenterWordpressId={this.props.commenterWordpressId}
+					commenterSlug={this.props.commenterSlug}
 				/>
 			</div>
 		);

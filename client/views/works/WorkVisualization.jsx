@@ -3,7 +3,7 @@ WorkVisualization = React.createClass({
 
   propTypes: {
     work: React.PropTypes.object.isRequired,
-    commenterWordpressId: React.PropTypes.number,
+    commenterSlug: React.PropTypes.string,
   },
 
   getInitialState() {
@@ -548,8 +548,8 @@ WorkVisualization = React.createClass({
             .style('opacity', 0);
         })
         .on('click', function(d) {
-        	if(self.props.commenterWordpressId) {
-        		window.location = '/commentary/?works=' + workSlug + '&subworks=' + subworkN + '&lineFrom=' + ((d * 10) + 1) + '&lineTo=' + ((d + 1) * 10) + '&commenters=' + self.props.commenterWordpressId;
+        	if(self.props.commenterSlug) {
+        		window.location = '/commentary/?works=' + workSlug + '&subworks=' + subworkN + '&lineFrom=' + ((d * 10) + 1) + '&lineTo=' + ((d + 1) * 10) + '&commenters=' + self.props.commenterSlug;
         	} else {
         		window.location = '/commentary/?works=' + workSlug + '&subworks=' + subworkN + '&lineFrom=' + ((d * 10) + 1) + '&lineTo=' + ((d + 1) * 10);
         	};

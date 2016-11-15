@@ -2,7 +2,23 @@ HomeLayout = React.createClass({
 	getInitialState() {
 		return {
 			filters: [],
-			skip: 0,
+		};
+	},
+
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		let comments = [];
+
+		// SUBSCRIPTIONS:
+		const commentsSub = Meteor.subscribe('comments', {}, 0, 10);
+		comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
+
+		const commentsReady = commentsSub.ready();
+
+		return {
+			comments,
+			commentsReady,
 		};
 	},
 
@@ -198,6 +214,8 @@ HomeLayout = React.createClass({
 					toggleSearchTerm={this.toggleSearchTerm}
 					loadMoreComments={this.loadMoreComments}
 					skip={this.state.skip}
+					comments={this.data.comments}
+					commentsReady={this.data.commentsReady}
     />
 
 				<FilterWidget

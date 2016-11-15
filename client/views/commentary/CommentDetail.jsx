@@ -9,8 +9,9 @@ CommentDetail = React.createClass({
 	propTypes: {
 		comment: React.PropTypes.object.isRequired,
 		commentGroup: React.PropTypes.object.isRequired,
-		addSearchTerm: React.PropTypes.func,
 		filters: React.PropTypes.array,
+		toggleSearchTerm: React.PropTypes.func,
+		isOnHomeView: React.PropTypes.bool,
 	},
 
 	mixins: [ReactMeteorData],
@@ -98,11 +99,11 @@ CommentDetail = React.createClass({
 		return tempElem.textContent || tempElem.innerText || '';
 	},
 
-	addSearchTerm(e) {
-		if ('addSearchTerm' in this.props) {
-			this.props.addSearchTerm(e);
+	addSearchTerm(keyword) {
+		if (!('isOnHomeView' in this.props) || this.props.isOnHomeView === false) {
+			this.props.toggleSearchTerm('keywords', keyword);
 		} else {
-			// On home page, go to commentary with this filter selected.
+			FlowRouter.go('/commentary/', {}, {keywords: keyword.slug});
 		}
 	},
 

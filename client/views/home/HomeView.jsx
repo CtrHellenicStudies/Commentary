@@ -13,6 +13,8 @@ HomeView = React.createClass({
 		toggleSearchTerm: React.PropTypes.func,
 		loadMoreComments: React.PropTypes.func,
 		skip: React.PropTypes.number,
+		comments: React.PropTypes.array.isRequired,
+		commentsReady: React.PropTypes.bool,
 	},
 
 	getChildContext() {
@@ -269,6 +271,8 @@ HomeView = React.createClass({
 											toggleSearchTerm={this.props.toggleSearchTerm}
 											loadMoreComments={this.props.loadMoreComments}
 											skip={this.props.skip}
+											comments={this.props.comments}
+											commentsReady={this.props.commentsReady}
           />
 
 										<div className="read-more-link">

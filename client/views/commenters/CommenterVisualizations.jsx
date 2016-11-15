@@ -40,7 +40,7 @@ CommenterVisualizations = React.createClass({
 				key={i}
 				toggleVisibleWork={this.toggleVisibleWork}
 				work={work}
-				commenterWordpressId={this.props.commenter.wordpressId}
+				commenterSlug={this.props.commenter.slug}
 			/>
 		);
 	},

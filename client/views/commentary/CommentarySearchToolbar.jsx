@@ -9,33 +9,48 @@ CommentarySearchToolbar = React.createClass({
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func,
+        works: React.PropTypes.array.isRequired,
+        keywords: React.PropTypes.array.isRequired,
+        commenters: React.PropTypes.array.isRequired,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getInitialState() {
+		const filters = this.props.filters;
+
+		let activeWork = '';
+		let subworks = [];
+		if (filters) {
+			filters.forEach((filter) => {
+				if (filter.key === 'works') {
+					activeWork = filter.values[0].slug;
+				}
+			});
+			filters.forEach((filter) => {
+				if (filter.key === 'subworks') {
+					const work = this.props.works.find((work) => {
+						return work.slug === activeWork;
+					});
+					subworks = work.subworks;
+					subworks.forEach((subwork, i) => {
+						subworks[i].work = work;
+					});
+				}
+			});
+		}
+
 		return {
 			searchDropdownOpen: '',
-			subworks: [],
-			activeWork: '',
+			subworks,
+			activeWork,
 		};
 	},
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
-	getMeteorData() {
-		return {
-			keywords: Keywords.find().fetch(),
-			commenters: Commenters.find().fetch(),
-			works: Works.find({}, { sort: { order: 1 } }).fetch(),
-			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
-		};
 	},
 
 	toggleSearchTerm(key, value) {
@@ -48,8 +63,6 @@ CommentarySearchToolbar = React.createClass({
 		value.subworks.forEach((subwork, i) => {
 			value.subworks[i].work = work;
 		});
-
-		// console.log("Header.state", this.state);
 
 		if (this.state.activeWork === value.slug) {
 			this.setState({
@@ -71,7 +84,6 @@ CommentarySearchToolbar = React.createClass({
 				activeWork: value.slug,
 			});
 		}
-
 		this.props.toggleSearchTerm(key, value);
 	},
 
@@ -101,6 +113,22 @@ CommentarySearchToolbar = React.createClass({
 				padding: '10px 15px',
 			},
 		};
+
+		const filterLineFrom = this.props.filters.find((filter) => {
+			return filter.key === 'lineFrom';
+		});
+		const filterLineTo = this.props.filters.find((filter) => {
+			return filter.key === 'lineTo';
+		});
+		let lineFrom = null,
+			lineTo = null;
+		if (filterLineFrom) {
+			lineFrom = filterLineFrom.values[0];
+		}
+		if (filterLineTo) {
+			lineTo = filterLineTo.values[0];
+		}
+
 		return (
 			<span>
 
@@ -114,16 +142,16 @@ CommentarySearchToolbar = React.createClass({
 
 				<SearchToolDropdown
 					name="Keywords"
-					open={self.state.searchDropdownOpen === 'Keywords'}
-					toggle={self.toggleSearchDropdown}
+					open={this.state.searchDropdownOpen === 'Keywords'}
+					toggle={this.toggleSearchDropdown}
 					disabled={false}
 				>
-					{self.data.keywords.map((keyword, i) => {
+					{this.props.keywords.map((keyword, i) => {
 						let active = false;
 						filters.forEach((filter) => {
 							if (filter.key === 'keywords') {
 								filter.values.forEach((value) => {
-									if (keyword._id === value._id) {
+									if (keyword.slug === value.slug) {
 										active = true;
 									}
 								});
@@ -133,7 +161,7 @@ CommentarySearchToolbar = React.createClass({
 						return (
 							<SearchTermButton
 								key={i}
-								toggleSearchTerm={self.toggleSearchTerm}
+								toggleSearchTerm={this.toggleSearchTerm}
 								label={keyword.title}
 								searchTermKey="keywords"
 								value={keyword}
@@ -145,16 +173,16 @@ CommentarySearchToolbar = React.createClass({
 
 				<SearchToolDropdown
 					name="Commenter"
-					open={self.state.searchDropdownOpen === 'Commenter'}
-					toggle={self.toggleSearchDropdown}
+					open={this.state.searchDropdownOpen === 'Commenter'}
+					toggle={this.toggleSearchDropdown}
 					disabled={false}
 				>
-					{self.data.commenters.map((commenter, i) => {
+					{this.props.commenters.map((commenter, i) => {
 						let active = false;
 						filters.forEach((filter) => {
 							if (filter.key === 'commenters') {
 								filter.values.forEach((value) => {
-									if (commenter._id === value._id) {
+									if (commenter.slug === value.slug) {
 										active = true;
 									}
 								});
@@ -164,7 +192,7 @@ CommentarySearchToolbar = React.createClass({
 						return (
 							<SearchTermButton
 								key={i}
-								toggleSearchTerm={self.toggleSearchTerm}
+								toggleSearchTerm={this.toggleSearchTerm}
 								label={commenter.name}
 								searchTermKey="commenters"
 								value={commenter}
@@ -176,16 +204,16 @@ CommentarySearchToolbar = React.createClass({
 
 				<SearchToolDropdown
 					name="Work"
-					open={self.state.searchDropdownOpen === 'Work'}
-					toggle={self.toggleSearchDropdown}
+					open={this.state.searchDropdownOpen === 'Work'}
+					toggle={this.toggleSearchDropdown}
 					disabled={false}
 				>
-					{self.data.works.map((work, i) => {
-						const activeWork = (self.state.activeWork === work.slug);
+					{this.props.works.map((work, i) => {
+						const activeWork = Boolean(this.state.activeWork === work.slug);
 						return (
 							<SearchTermButton
 								key={i}
-								toggleSearchTerm={self.toggleWorkSearchTerm}
+								toggleSearchTerm={this.toggleWorkSearchTerm}
 								label={work.title}
 								searchTermKey="works"
 								value={work}
@@ -197,12 +225,12 @@ CommentarySearchToolbar = React.createClass({
 
 				<SearchToolDropdown
 					name="Book"
-					open={self.state.searchDropdownOpen === 'Book'}
-					toggle={self.toggleSearchDropdown}
-					disabled={self.state.subworks.length === 0}
+					open={this.state.searchDropdownOpen === 'Book'}
+					toggle={this.toggleSearchDropdown}
+					disabled={this.state.subworks.length === 0}
 
 				>
-					{self.state.subworks.map((subwork, i) => {
+					{this.state.subworks.map((subwork, i) => {
 						let active = false;
 						filters.forEach((filter) => {
 							if (filter.key === 'subworks') {
@@ -217,7 +245,7 @@ CommentarySearchToolbar = React.createClass({
 						return (
 							<SearchTermButton
 								key={i}
-								toggleSearchTerm={self.toggleSearchTerm}
+								toggleSearchTerm={this.toggleSearchTerm}
 								label={`${subwork.work.title} ${subwork.title}`}
 								searchTermKey="subworks"
 								value={subwork}
@@ -229,6 +257,8 @@ CommentarySearchToolbar = React.createClass({
 				<div style={styles.lineSearch} className="line-search">
 					<LineRangeSlider
 						handleChangeLineN={this.props.handleChangeLineN}
+						lineFrom={lineFrom}
+						lineTo={lineTo}
 					/>
 				</div>
 			</span>

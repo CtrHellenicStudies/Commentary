@@ -5,10 +5,22 @@ CommentaryLayout = React.createClass({
 	},
 
 	getInitialState() {
-		const filters = [];
+		const filters = this.createFilterFromQueryParams(this.props.queryParams);
 		let selectedRevisionIndex = null;
 
-		if ('_id' in this.props.queryParams) {
+		return {
+			filters,
+			skip: 0,
+			limit: 10,
+			selectedRevisionIndex,
+		};
+	},
+
+	createFilterFromQueryParams(queryParams) {
+
+		const filters = [];
+
+		if ('_id' in queryParams) {
 			filters.push({
 				key: '_id',
 				values: [this.props.queryParams._id],
@@ -28,7 +40,7 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		if ('keywords' in this.props.queryParams) {
+		if ('keywords' in queryParams) {
 			const keywords = [];
 
 			this.props.queryParams.keywords.split(',').forEach(function (keyword) {
@@ -43,7 +55,7 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		if ('commenters' in this.props.queryParams) {
+		if ('commenters' in queryParams) {
 			const commenters = [];
 
 			this.props.queryParams.commenters.split(',').forEach(function (commenter) {
@@ -58,7 +70,7 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		if ('works' in this.props.queryParams) {
+		if ('works' in queryParams) {
 			const works = [];
 
 			this.props.queryParams.works.split(',').forEach(function (work) {
@@ -74,7 +86,7 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		if ('subworks' in this.props.queryParams) {
+		if ('subworks' in queryParams) {
 			const subworks = [];
 
 			this.props.queryParams.subworks.split(',').forEach(function (subwork) {
@@ -117,17 +129,179 @@ CommentaryLayout = React.createClass({
 			}
 		}
 
+		return filters;
+	},
+
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		let keywords = [],
+			commenters = [],
+			works = [],
+			comments = [];
+
+		let query = this.createQueryFromFilters(this.state.filters);
+
+		// SUBSCRIPTIONS:
+		const commentersSub = Meteor.subscribe('commenters'),
+			keywordsSub = Meteor.subscribe('keywords'),
+			worksSub = Meteor.subscribe('works'),
+			commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
+
+		// FETCH DATA:
+		keywords = Keywords.find().fetch();
+		commenters = Commenters.find().fetch();
+		works = Works.find({}, { sort: { order: 1 } }).fetch();
+		comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
+
+		const subsReady = commentersSub.ready() && keywordsSub.ready() && worksSub.ready(); // check if all subscriptions ready - all data loaded
+		const commentsReady = commentsSub.ready();
+
 		return {
-			filters,
-			skip: 0,
-			limit: 10,
-			selectedRevisionIndex,
+			keywords,
+			commenters,
+			works,
+			subsReady,
+			comments,
+			commentsReady,
 		};
 	},
 
+    createQueryFromFilters(filters) {
+        const query = {};
+        if (filters) {
+            filters.forEach((filter) => {
+                switch (filter.key) {
+                    case '_id':
+                        query._id = filter.values[0];
+                        break;
+                    case 'textsearch':
+                        query.$text = {
+                            $search: filter.values[0]
+                        };
+                        break;
+
+                    case 'keywords':
+                        var values = [];
+                        filter.values.forEach(function(value) {
+                            values.push(value.slug);
+                        });
+                        query['keywords.slug'] = {
+                            $in: values
+                        };
+                        break;
+
+                    case 'commenters':
+                        var values = [];
+                        filter.values.forEach(function(value) {
+                            values.push(value.slug);
+                        });
+                        query['commenters.slug'] = {
+                            $in: values
+                        };
+                        break;
+
+                    case 'works':
+                        var values = [];
+                        filter.values.forEach(function(value) {
+                            values.push(value.slug);
+                        });
+                        query['work.slug'] = {
+                            $in: values
+                        };
+                        break;
+
+                    case 'subworks':
+                        var values = [];
+                        filter.values.forEach(function(value) {
+                            values.push(value.n);
+                        });
+                        query['subwork.n'] = {
+                            $in: values
+                        };
+                        break;
+
+                    case 'lineFrom':
+                        // Values will always be an array with a length of one
+                        query.lineFrom = query.lineFrom || {};
+                        query.lineFrom.$gte = filter.values[0];
+                        break;
+
+                    case 'lineTo':
+                        // Values will always be an array with a length of one
+                        query.lineFrom = query.lineFrom || {};
+                        query.lineFrom.$lte = filter.values[0];
+                        break;
+                }
+            });
+        }
+        return query;
+    },
+
+    getFilterValue(filters, key) {
+        let value = {};
+        if (filters) {
+            const filterKey = filters.find((filter) => {
+                return filter.key === key;
+            });
+            if (filterKey) {
+                value = filterKey.values[0];
+            }
+        }
+        return value;
+    },
+
+    // --- BEGIN handle querParams --- //
+
+	componentDidUpdate(prevProps, prevState) {
+		let queryParams = {};
+		this.state.filters.forEach((filter) => {
+			filter.values.forEach((value) => {
+				const updateQueryParams = this.updateQueryParams;
+				switch(filter.key) {
+					case 'works':
+						queryParams = updateQueryParams(queryParams, filter.key, value.slug);
+						break;
+					case 'subworks':
+						queryParams = updateQueryParams(queryParams, filter.key, value.title);
+						break;
+					case 'keywords':
+						queryParams = updateQueryParams(queryParams, filter.key, value.slug);
+						break;
+					case 'commenters':
+						queryParams = updateQueryParams(queryParams, filter.key, value.slug);
+						break;
+					case 'lineFrom':
+						queryParams = updateQueryParams(queryParams, filter.key, value);
+						break;
+					case 'lineTo':
+						queryParams = updateQueryParams(queryParams, filter.key, value);
+						break;
+					case 'textsearch':
+						queryParams = updateQueryParams(queryParams, filter.key, value);
+						break;
+				}
+			});
+		});
+		if (FlowRouter.path('/commentary/', {}, queryParams) != FlowRouter.current().path) {
+			FlowRouter.go('/commentary/', {}, queryParams);
+		}
+	},
+
+	updateQueryParams(queryParams, key, value) {
+        if (queryParams[key]) {
+            queryParams[key] = queryParams[key] + ',' + value;
+        } else {
+            queryParams[key] = value;
+        };
+        return queryParams;
+    },
+
+    // --- END handle querParams --- //
+
 	loadMoreComments() {
 		this.setState({
-			skip: this.state.skip + this.state.limit,
+			limit: this.state.limit + 10,
 		});
 	},
 
@@ -146,6 +320,9 @@ CommentaryLayout = React.createClass({
 
 				filter.values.forEach((filterValue, j) => {
 					if (filterValue._id === value._id) {
+						valueIsInFilter = true;
+						filterValueToRemove = j;
+					} else if (filterValue.slug === value.slug) {
 						valueIsInFilter = true;
 						filterValueToRemove = j;
 					}
@@ -177,21 +354,11 @@ CommentaryLayout = React.createClass({
 				values: [value],
 			});
 		}
-
 		this.setState({
 			filters,
 			skip: 0,
 		});
 	},
-
-    updatequeryParams(queryParams, key, value) {
-        if (queryParams[key]) {
-            queryParams[key] = queryParams[key] + ',' + value;
-        } else {
-            queryParams[key] = value;
-        };
-        return queryParams;
-    },
 
 	handleChangeTextsearch(textsearch) {
 		const filters = this.state.filters;
@@ -300,65 +467,40 @@ CommentaryLayout = React.createClass({
 		});
 	},
 
-	componentDidUpdate(prevProps, prevState) {
-		let queryParams = {};
-		this.state.filters.forEach((filter) => {
-			filter.values.forEach((value) => {
-				const updatequeryParams = this.updatequeryParams;
-				switch(filter.key) {
-					case 'works':
-						queryParams = updatequeryParams(queryParams, filter.key, value.slug);
-						break;
-					case 'subworks':
-						queryParams = updatequeryParams(queryParams, filter.key, value.title);
-						break;
-					case 'keywords':
-						queryParams = updatequeryParams(queryParams, filter.key, value.slug);
-						break;
-					case 'commenters':
-						queryParams = updatequeryParams(queryParams, filter.key, value.slug);
-						break;
-					case 'lineFrom':
-						queryParams = updatequeryParams(queryParams, filter.key, value);
-						break;
-					case 'lineTo':
-						queryParams = updatequeryParams(queryParams, filter.key, value);
-						break;
-					case 'textsearch':
-						queryParams = updatequeryParams(queryParams, filter.key, value);
-						break;
-				}
-			});
-		});
-		FlowRouter.go('/commentary/', {}, queryParams);
-	},
-
-	addSearchTerm(keyword) {
-		this.toggleSearchTerm('keywords', keyword);
-	},
-
 	render() {
 		return (
-			<div className="chs-layout commentary-layout">
+			<div>
+				{this.data.subsReady ? 
+					<div className="chs-layout commentary-layout">
 
-				<Header
-					filters={this.state.filters}
-					toggleSearchTerm={this.toggleSearchTerm}
-					handleChangeLineN={this.handleChangeLineN}
-					handleChangeTextsearch={this.handleChangeTextsearch}
-					initialSearchEnabled
-    />
+						<Header
+							filters={this.state.filters}
+							toggleSearchTerm={this.toggleSearchTerm}
+							handleChangeLineN={this.handleChangeLineN}
+							handleChangeTextsearch={this.handleChangeTextsearch}
+							works={this.data.works}
+							keywords={this.data.keywords}
+							commenters={this.data.commenters}
+							initialSearchEnabled
+		    			/>
 
-				<Commentary
-					filters={this.state.filters}
-					toggleSearchTerm={this.toggleSearchTerm}
-					loadMoreComments={this.loadMoreComments}
-					skip={this.state.skip}
-					limit={this.state.limit}
-					addSearchTerm={this.addSearchTerm}
-    />
-
-			</div>
+		    			{this.data.commentsReady ?
+						<Commentary
+							filters={this.state.filters}
+							toggleSearchTerm={this.toggleSearchTerm}
+							loadMoreComments={this.loadMoreComments}
+							limit={this.state.limit}
+							comments={this.data.comments}
+							commentsReady={this.data.commentsReady}
+		    			/>
+		    			:
+		    			<Spinner />
+			        }
+					</div>
+				:
+					<Spinner />
+		        }
+	        </div>
 			);
 	},
 

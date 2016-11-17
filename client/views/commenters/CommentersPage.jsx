@@ -1,7 +1,6 @@
 CommentersPage = React.createClass({
 
-	propTypes: {
-	},
+	propTypes: {},
 
 	render() {
 		return (
@@ -38,6 +37,6 @@ CommentersPage = React.createClass({
 				</div>
 
 			</div>
-			);
+		);
 	},
 });

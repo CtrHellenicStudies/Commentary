@@ -22,27 +22,34 @@ HomeLayout = React.createClass({
 		};
 	},
 
+	componentDidMount() {
+		if (typeof location.hash !== 'undefined' && location.hash.length > 0) {
+			setTimeout(() => {
+				$('html, body').animate({ scrollTop: $(location.hash).offset().top - 100 }, 300);
+			}, 1000);
+		}
+	},
+
 	loadMoreComments() {
 		this.setState({
 			skip: this.state.skip + 10,
 		});
 
-			// console.log("Load more comments:", this.state.skip);
+		// console.log("Load more comments:", this.state.skip);
 	},
 
 	toggleSearchTerm(key, value) {
-		let self = this,
-			filters = this.state.filters;
-		let keyIsInFilter = false,
-			valueIsInFilter = false,
-			filterValueToRemove,
-			filterToRemove;
+		const filters = this.state.filters;
+		let keyIsInFilter = false;
+		let	valueIsInFilter = false;
+		let	filterValueToRemove;
+		let	filterToRemove;
 
-		filters.forEach(function (filter, i) {
+		filters.forEach((filter, i) => {
 			if (filter.key === key) {
 				keyIsInFilter = true;
 
-				filter.values.forEach(function (filterValue, j) {
+				filter.values.forEach((filterValue, j) => {
 					if (filterValue._id === value._id) {
 						valueIsInFilter = true;
 						filterValueToRemove = j;
@@ -54,12 +61,10 @@ HomeLayout = React.createClass({
 					if (filter.values.length === 0) {
 						filterToRemove = i;
 					}
+				} else if (key === 'works') {
+					filters[i].values = [value];
 				} else {
-					if (key === 'works') {
-						filter.values = [value];
-					} else {
-						filter.values.push(value);
-					}
+					filters[i].values.push(value);
 				}
 			}
 		});
@@ -82,16 +87,16 @@ HomeLayout = React.createClass({
 		});
 	},
 
-	handleChangeTextsearch(e) {
+	handleChangeTextsearch() {
 		const filters = this.state.filters;
 		const textsearch = $('.text-search input').val();
 
 		if (textsearch && textsearch.length) {
 			let textsearchInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'textsearch') {
-					filter.values = [textsearch];
+					filters[i].values = [textsearch];
 					textsearchInFilters = true;
 				}
 			});
@@ -105,7 +110,7 @@ HomeLayout = React.createClass({
 		} else {
 			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'textsearch') {
 					filterToRemove = i;
 				}
@@ -127,9 +132,9 @@ HomeLayout = React.createClass({
 		if (e.from > 1) {
 			let lineFromInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
-					filter.values = [e.from];
+					filters[i].values = [e.from];
 					lineFromInFilters = true;
 				}
 			});
@@ -141,9 +146,9 @@ HomeLayout = React.createClass({
 				});
 			}
 		} else {
-			var filterToRemove;
+			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
 					filterToRemove = i;
 				}
@@ -157,9 +162,9 @@ HomeLayout = React.createClass({
 		if (e.to < 2100) {
 			let lineToInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
-					filter.values = [e.to];
+					filters[i].values = [e.to];
 					lineToInFilters = true;
 				}
 			});
@@ -171,9 +176,9 @@ HomeLayout = React.createClass({
 				});
 			}
 		} else {
-			var filterToRemove;
+			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
 					filterToRemove = i;
 				}
@@ -190,14 +195,6 @@ HomeLayout = React.createClass({
 		});
 	},
 
-	componentDidMount() {
-		if (typeof location.hash !== 'undefined' && location.hash.length > 0) {
-			setTimeout(() => {
-				$('html, body').animate({ scrollTop: $(location.hash).offset().top - 100 }, 300);
-			}, 1000);
-		}
-	},
-
 
 	render() {
 		// console.log("HomeLayout.filters", this.state.filters);
@@ -207,7 +204,7 @@ HomeLayout = React.createClass({
 					toggleSearchTerm={this.toggleSearchTerm}
 					handleChangeLineN={this.handleChangeLineN}
 					handleChangeTextsearch={this.handleChangeTextsearch}
-    />
+				/>
 
 				<HomeView
 					filters={this.state.filters}
@@ -216,12 +213,12 @@ HomeLayout = React.createClass({
 					skip={this.state.skip}
 					comments={this.data.comments}
 					commentsReady={this.data.commentsReady}
-    />
+				/>
 
 				<FilterWidget
 					filters={this.state.filters}
 					toggleSearchTerm={this.toggleSearchTerm}
-    />
+				/>
 
 				<Footer />
 
@@ -229,7 +226,7 @@ HomeLayout = React.createClass({
 				<ModalSignup />*/}
 
 			</div>
-			);
+		);
 	},
 
 });

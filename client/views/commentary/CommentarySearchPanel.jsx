@@ -49,18 +49,18 @@ CommentarySearchPanel = React.createClass({
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
-
-		value.subworks.forEach((subwork, i) => {
-			subworks[i].work = work;
+		const newValue = value;
+		newValue.subworks.forEach((subwork, i) => {
+			newValue.subworks[i].work = work;
 		});
 
-		if (this.state.activeWork === value.slug) {
+		if (this.state.activeWork === newValue.slug) {
 			this.setState({
 				subworks: [],
 				activeWork: '',
 			});
 		} else {
-			value.subworks.sort((a, b) => {
+			newValue.subworks.sort((a, b) => {
 				if (a.n < b.n) {
 					return -1;
 				}
@@ -70,12 +70,12 @@ CommentarySearchPanel = React.createClass({
 				return 0;
 			});
 			this.setState({
-				subworks: value.subworks,
-				activeWork: value.slug,
+				subworks: newValue.subworks,
+				activeWork: newValue.slug,
 			});
 		}
 
-		this.props.toggleSearchTerm(key, value);
+		this.props.toggleSearchTerm(key, newValue);
 	},
 
 	handleChangeTextsearch(event) {

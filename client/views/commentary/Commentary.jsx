@@ -1,10 +1,8 @@
-import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import InfiniteScroll from '../../../imports/InfiniteScroll';
 import { Avatars } from '/imports/avatar/avatar_collections.js';
+<<<<<<< HEAD
 import { debounce } from 'throttle-debounce';
 
 Commentary = React.createClass({
@@ -309,7 +307,6 @@ Commentary = React.createClass({
                     toggleSearchTerm={this.props.toggleSearchTerm}
                 />
             </div>
-            );
+        );
     },
-
 });

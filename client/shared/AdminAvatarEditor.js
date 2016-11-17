@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { uploadAvatar } from '/imports/avatar/client/avatar_client_utils.js';
 import { Avatars } from '/imports/avatar/avatar_collections.js';
 
@@ -55,7 +54,7 @@ function subscribeToAvatarUrl(commenterId, reactiveUrl) {
 	);
 }
 
-Template.adminAvatarEditor.onCreated(function () {
+Template.adminAvatarEditor.onCreated(function onCreated() {
 	this.avatarUrl = new ReactiveVar(defaultAvatarUrl);
 	if (this.avatarSubHandle == null) {
 		const docId = getCommenterDocId();
@@ -65,12 +64,12 @@ Template.adminAvatarEditor.onCreated(function () {
 	}
 });
 
-Template.adminAvatarEditor.onDestroyed(function () {
+Template.adminAvatarEditor.onDestroyed(function onDestroyed() {
 	this.avatarSubHandle.stop();
 	this.avatarSubHandle = null;
 });
 
-Template.adminAvatarEditor.onRendered(function () {
+Template.adminAvatarEditor.onRendered(function onRendered() {
 	if (this.avatarSubHandle == null) {
 		const docId = getCommenterDocId();
 		if (docId) {
@@ -86,7 +85,7 @@ Template.adminAvatarEditor.helpers({
 });
 
 Template.adminAvatarEditor.events({
-	'click button[name=selectFile]': function () {
+	'click button[name=selectFile]': () => {
 		const commenterId = getCommenterDocId();
 		UploadFS.selectFile(fileData => {
 			uploadAvatar(fileData, {
@@ -95,27 +94,27 @@ Template.adminAvatarEditor.events({
 			});
 		});
 	},
-	'click button[name=deleteAvatar]': function () {
+	'click button[name=deleteAvatar]': () => {
 		const commenter = getCommenterDoc();
 		Meteor.call('avatar.delete', { avatarId: commenter.avatar });
 	},
-	'dragstart .avatar-image': function (event) {
+	'dragstart .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragenter .avatar-image': function (event) {
+	'dragenter .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragover .avatar-image': function (event) {
+	'dragover .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragleave .avatar-image': function (event) {
+	'dragleave .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'drop .avatar-image': function (event) {
+	'drop .avatar-image': (event) => {
 		event.stopPropagation();
 		event.preventDefault();
 

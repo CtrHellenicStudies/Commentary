@@ -1,4 +1,3 @@
-
 WorkVisualization = React.createClass({
 
   propTypes: {

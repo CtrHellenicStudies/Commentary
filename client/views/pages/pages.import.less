@@ -2,112 +2,106 @@
  * Basic page styles
  */
 
-
 .page {
-	background:@light;
+  background: @light;
 
   .block.header {
-    height:500px;
+    height: 500px;
 
     .center-content {
-      width:100%;
-      max-width:990px;
-      margin:0 auto;
-      text-align:center;
+      width: 100%;
+      max-width: 990px;
+      margin: 0 auto;
+      text-align: center;
 
     }
 
   }
 
-
-
-
   .page-title {
-    font-size:60px;
-    padding:180px 0 0px;
+    font-size: 60px;
+    padding: 180px 0 0px;
 
   }
 
   .page-subtitle {
-    font-size:34px;
+    font-size: 34px;
 
   }
 
   .page-content {
-    width:100%;
-    max-width:990px;
-    margin:0 auto;
+    width: 100%;
+    max-width: 990px;
+    margin: 0 auto;
 
     h1, h2, h3, h4, h5, p, span {
       text-align: left;
-      margin:10px auto;
+      margin: 10px auto;
 
     }
     h1, h2, h3, h4, h5 {
-      max-width:750px;
-      padding:10px 0;
-      font-family:@font-title;
+      max-width: 750px;
+      padding: 10px 0;
+      font-family: @font-title;
     }
     h1 {
-      font-size:42px;
-      padding:20px 0;
-      text-align:center;
+      font-size: 42px;
+      padding: 20px 0;
+      text-align: center;
     }
     h2 {
-      font-size:34px;
+      font-size: 34px;
     }
     h3 {
-      font-size:18px;
+      font-size: 18px;
     }
 
     p {
       max-width: 720px;
-      font-family:@font-commentary;
-      font-size:20px;
-      line-height:1.7em;
-      display:block;
-      word-wrap:break-word;
-			font-weight:300;
+      font-family: @font-commentary;
+      font-size: 20px;
+      line-height: 1.7em;
+      display: block;
+      word-wrap: break-word;
+      font-weight: 300;
 
       .lemma {
-        font-family:@font-lemma;
-        font-size:20px;
+        font-family: @font-lemma;
+        font-size: 20px;
 
       }
 
     }
 
     hr.title-divider {
-      max-width:200px;
-      margin:50px auto;
-      height:3px;
-      background:@divider-color;
-      border:none;
-      display:block;
+      max-width: 200px;
+      margin: 50px auto;
+      height: 3px;
+      background: @divider-color;
+      border: none;
+      display: block;
 
     }
 
-
   }
 
-
 }
-
 
 .thin {
-  line-height:56px;
-  font-weight:lighter !important;
-  text-align:left;
-  font-family:@font-body;
-  font-size:48px;
-  padding-bottom:30px;
+  line-height: 56px;
+  font-weight: lighter !important;
+  text-align: left;
+  font-family: @font-body;
+  font-size: 48px;
+  padding-bottom: 30px;
 
 }
+
 .about-stats {
-  margin-top:10%;
-  margin-bottom:5%;
-  h1,h5 {
-    color:@primary-text;
+  margin-top: 10%;
+  margin-bottom: 5%;
+  h1, h5 {
+    color: @primary-text;
   }
 }
 
@@ -118,53 +112,64 @@
 .progress-bars {
   margin-bottom: 24px;
 }
+
 .progress {
   height: auto;
   box-shadow: none;
 }
+
 .progress-bar {
   background: #5D4037;
   box-shadow: none !important;
 }
+
 .bg-primary .progress-bar {
   background: #63c18b;
 }
 
 #bar-width-1 {
-  width:650px;
+  width: 650px;
 }
+
 #bar-width-2 {
-  width:620px;
+  width: 620px;
 }
+
 #bar-width-3 {
-  width:600px;
+  width: 600px;
 }
+
 #bar-width-4 {
-  width:580px;
+  width: 580px;
 }
+
 .progress-1 {
   height: 32px;
   margin-bottom: 8px;
   border-radius: 0;
   border: none;
 }
+
 .progress-1:last-child {
   margin-bottom: 0;
 }
+
 .progress-1 .progress-bar {
   text-align: right;
   padding-right: 12px;
-  width:500px;
+  width: 500px;
   line-height: 32px;
   border-radius: 0;
 }
+
 .progress-2 .progress-bar {
   text-align: right;
   padding-right: 12px;
-  width:600px;
+  width: 600px;
   line-height: 32px;
   border-radius: 0;
 }
+
 .progress-1 .progress-bar span {
   font-size: 12px;
   line-height: 24px;
@@ -173,15 +178,17 @@
   letter-spacing: 2px;
   font-weight: 700;
   font-size: 11px;
-  color:#fff;
+  color: #fff;
 
 }
+
 .progress-2 {
   height: auto;
   background: none;
   text-align: center;
   margin-bottom: 8px;
 }
+
 .progress-2 span {
   font-size: 12px;
   line-height: 24px;
@@ -192,12 +199,14 @@
   display: inline-block;
   margin-bottom: 8px;
 }
+
 .progress-2 .bar-holder {
   height: 16px;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #47b475;
 }
+
 .bg-primary .progress-2 .bar-holder {
   border-color: #71c795;
 }
@@ -205,6 +214,7 @@
 .text-slider .flex-direction-nav li a:before {
   color: #222;
 }
+
 .image-bg .text-slider .flex-direction-nav li a:before {
   color: #fff;
   transition: all 0.3s ease;
@@ -212,12 +222,15 @@
   -moz-transition: all 0.3s ease;
   opacity: .5;
 }
+
 .image-bg .text-slider .flex-direction-nav li a:hover:before {
   opacity: 1;
 }
+
 .text-slider .flex-direction-nav a.flex-prev {
   left: -60px;
 }
+
 .text-slider .flex-direction-nav a.flex-next {
   right: -60px;
 }
@@ -226,136 +239,138 @@
   text-align: center;
 }
 
-.quote-author img{
-  height:60px;
-  width:60px;
-  border-radius:50%;
+.quote-author img {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
 
 }
 
 .archive.search {
-  min-height:500px;
-  padding:200px 0;
+  min-height: 500px;
+  padding: 200px 0;
 }
-
 
 .page-404 {
   .block.header {
-    height:500px;
+    height: 500px;
   }
   h2.page-title {
-    text-transform:none;
-    font-size:60px;
+    text-transform: none;
+    font-size: 60px;
   }
   .page-content {
     h2 {
-      text-align:center;
+      text-align: center;
 
     }
   }
 }
+
 .recent-comments {
-  padding-bottom:120px;
+  padding-bottom: 120px;
   h3 {
-    color:@secondary-text;
+    color: @secondary-text;
 
   }
   .quote-icon {
-    color:@secondary-text;
-    font-size:42px;
-    padding:40px 0 20px;
+    color: @secondary-text;
+    font-size: 42px;
+    padding: 40px 0 20px;
   }
   p {
-    color:@secondary-text;
-    font-size:18px;
-    line-height:1.9em;
-    font-style:italic;
+    color: @secondary-text;
+    font-size: 18px;
+    line-height: 1.9em;
+    font-style: italic;
 
   }
   h4 {
-    font-size:18px;
-    color:@secondary-text;
+    font-size: 18px;
+    color: @secondary-text;
   }
 }
+
 .data-visualization {
-  width:100%;
-  text-align:center;
+  width: 100%;
+  text-align: center;
 }
 
 .fivehundred-error-page {
-  max-width:1100px;
-  margin:100px auto;
+  max-width: 1100px;
+  margin: 100px auto;
 }
+
 .layout #login {
-  margin:100px auto;
-  width:100%;
+  margin: 100px auto;
+  width: 100%;
 
-  .inner{
-	width:100%;
-	max-width:700px;
-	border:none;
-	box-shadow:none;
-	background:@light;
+  .inner {
+    width: 100%;
+    max-width: 700px;
+    border: none;
+    box-shadow: none;
+    background: @light;
 
-	.fheader {
-	  background:@light;
-	  width:100%;
-	  margin:15px 0 40px;
-	  padding:0;
-	  text-align:center;
-	  font-size:42px;
-	}
+    .fheader {
+      background: @light;
+      width: 100%;
+      margin: 15px 0 40px;
+      padding: 0;
+      text-align: center;
+      font-size: 42px;
+    }
 
-	#loginForm{
-	  width:100%;
-	  background:@light;
-	}
+    #loginForm {
+      width: 100%;
+      background: @light;
+    }
 
-	.cssform {
-	  p {
-		margin:0;
-		padding:0;
-	  }
+    .cssform {
+      p {
+        margin: 0;
+        padding: 0;
+      }
 
-	  label {
-		float:none;
-		margin:10px 0 5px;
-		display:block;
-		width:100%;
-		text-align:left;
-		padding:0;
-	  }
+      label {
+        float: none;
+        margin: 10px 0 5px;
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 0;
+      }
 
-	  input[type='text'], input[type='password'], input[type='submit'] {
-		clear:both;
-		width:100%;
-		display:block;
-		float:none;
-		margin:5px 0;
+      input[type='text'], input[type='password'], input[type='submit'] {
+        clear: both;
+        width: 100%;
+        display: block;
+        float: none;
+        margin: 5px 0;
 
-	  }
+      }
 
-	}
+    }
 
-	#remember_me_holder {
-	  padding:0;
-	  margin:30px 0;
-	  input, label {
-		display:inline-block;
-		vertical-align: top;
+    #remember_me_holder {
+      padding: 0;
+      margin: 30px 0;
+      input, label {
+        display: inline-block;
+        vertical-align: top;
 
-	  }
-	  input {
-		margin-top:16px;
-	  }
-	  label {
-		margin-left:10px;
-	  }
-	}
+      }
+      input {
+        margin-top: 16px;
+      }
+      label {
+        margin-left: 10px;
+      }
+    }
 
-	#submit {
-	  margin:0;
-	}
+    #submit {
+      margin: 0;
+    }
 
   }
 }

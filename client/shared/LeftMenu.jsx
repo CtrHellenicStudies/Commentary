@@ -61,7 +61,7 @@ LeftMenu = React.createClass({
 						{userIsLoggedIn ?
 							<div>
 								<div className="user-image paper-shadow">
-									<img src="/images/default_user.jpg" />
+									<img src="/images/default_user.jpg" role="presentation" />
 								</div>
 							</div>
 							: ''

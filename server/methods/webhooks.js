@@ -1,4 +1,3 @@
-
 Meteor.method('keyword-webhook', (keywordCandidate) => {
 	check(keywordCandidate.wordpressId, Number);
 	check(keywordCandidate.slug, String);
@@ -49,10 +48,10 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 
 	const commenters = [];
 	/*
-	comment_candidate.commenters.forEach(function(commenter_wordpress_id, i){
-		commenters.push(Commenters.findOne({wordpressId: commenter_wordpress_id}));
-	});
-	*/
+	 comment_candidate.commenters.forEach(function(commenter_wordpress_id, i){
+	 commenters.push(Commenters.findOne({wordpressId: commenter_wordpress_id}));
+	 });
+	 */
 	const commenter = Commenters.findOne({ wordpressId: commentCandidate.commenter });
 	if (!commenter) {
 		console.error(`Could not find commenter with wordpressId:${commentCandidate.commenter}`);
@@ -116,8 +115,8 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 			&& !isNaN(parseInt(commentCandidate.line_to, 10))
 			&& commentCandidate.line_from !== commentCandidate.line_to) {
 			nLines = (parseInt(commentCandidate.line_to, 10)
-			- parseInt(commentCandidate.line_from, 10))
-			+ 1;
+				- parseInt(commentCandidate.line_from, 10))
+				+ 1;
 		}
 
 		const newComment = {

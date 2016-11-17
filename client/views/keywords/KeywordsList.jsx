@@ -20,14 +20,12 @@ KeywordsList = React.createClass({
 	},
 
 	renderKeywords() {
-		return this.data.keywords.map((keyword, i) => {
-			return (
-				<KeywordTeaser
-					key={i}
-					keyword={keyword}
-				/>
-			);
-		});
+		return this.data.keywords.map((keyword, i) => (
+			<KeywordTeaser
+				key={i}
+				keyword={keyword}
+			/>
+		));
 	},
 
 	render() {

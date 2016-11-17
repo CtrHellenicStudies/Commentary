@@ -5,8 +5,8 @@ Comments._ensureIndex({
 Comments._ensureIndex({
 	'work.order': 1,
 	'subwork.n': 1,
-	'lineFrom': 1,
-	'nLines': -1
+	lineFrom: 1,
+	nLines: -1,
 });
 
 Comments._ensureIndex({
@@ -14,11 +14,11 @@ Comments._ensureIndex({
 });
 
 TextNodes._ensureIndex({
-	"work.slug": 1,
-	"subwork.n": 1,
-	"text.n": 1
+	'work.slug': 1,
+	'subwork.n': 1,
+	'text.n': 1,
 });
 
 Commenters._ensureIndex({
-	name:1
+	name: 1,
 });

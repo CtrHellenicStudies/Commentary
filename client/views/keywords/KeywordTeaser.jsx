@@ -41,7 +41,7 @@ KeywordTeaser = React.createClass({
 			className={keywordClass}
 			data-wow-duration="0.2s"
 			onClick={this.toggleOpen}
-  >
+		>
 			<h4 className="keyword-title">
 				{keyword.title}
 			</h4>
@@ -52,8 +52,8 @@ KeywordTeaser = React.createClass({
 			<span
 				className="keyword-description"
 			> {
-					keyword.description
-					|| `Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque
+				keyword.description
+				|| `Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque
 					adiungere vites conveniat quae curum boum qui cultus habendo sit pecori
 					apibus quanta experientia parcis, hinc canere incipiam`
 			} </span>

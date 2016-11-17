@@ -83,13 +83,13 @@ ContextReader = React.createClass({
 			lineFrom = this.props.initialLineFrom;
 		}
 
-		if (prevProps.initialLineTo	&& (prevProps.initialLineTo !== this.props.initialLineTo)) {
+		if (prevProps.initialLineTo && (prevProps.initialLineTo !== this.props.initialLineTo)) {
 			lineTo = this.props.initialLineTo;
 		}
 
 		if (this.props.workSlug !== '' && this.props.subworkN !== 0 &&
 			(prevProps.workSlug !== this.props.workSlug ||
-				prevProps.subworkN !== this.props.subworkN)) {
+			prevProps.subworkN !== this.props.subworkN)) {
 			Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
 				if (err) {
 					console.log(err);
@@ -113,27 +113,27 @@ ContextReader = React.createClass({
 			});
 		}
 
-		if (Object.keys(this.refs).length) {
+		if (Object.keys(this.lines).length) {
 			if (this.props.selectedLineFrom === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i.toString() in this.refs) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #ffffff';
+					if (i.toString() in this.lines) {
+						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
 			} else if (this.props.selectedLineTo === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
 					if (i === this.props.selectedLineFrom) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-					} else if (i.toString() in this.refs) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #ffffff';
+						this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
+					} else if (i.toString() in this.lines) {
+						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
 			} else {
 				for (let i = lineFrom; i <= lineTo; i++) {
 					if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-					} else if (i.toString() in this.refs) {
-						this.refs[i.toString()].style.borderBottom = '2px solid #ffffff';
+						this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
+					} else if (i.toString() in this.lines) {
+						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
 			}
@@ -141,8 +141,8 @@ ContextReader = React.createClass({
 
 		if (this.props.workSlug !== '' && this.props.subworkN !== 0 &&
 			(prevProps.workSlug !== this.props.workSlug || prevProps.subworkN !== this.props.subworkN
-				|| prevProps.initialLineTo !== this.props.initialLineTo ||
-				prevProps.initialLineFrom !== this.props.initialLineFrom)) {
+			|| prevProps.initialLineTo !== this.props.initialLineTo ||
+			prevProps.initialLineFrom !== this.props.initialLineFrom)) {
 			Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
 				if (err) {
 					console.log(err);
@@ -179,14 +179,6 @@ ContextReader = React.createClass({
 			});
 		}
 	},
-
-	linePaginationClicked(line) {
-		this.setState({
-			lineFrom: line,
-			lineTo: line + 50,
-		});
-	},
-
 
 	getMeteorData() {
 		const self = this;
@@ -270,6 +262,15 @@ ContextReader = React.createClass({
 		};
 	},
 
+	lines: [],
+
+	linePaginationClicked(line) {
+		this.setState({
+			lineFrom: line,
+			lineTo: line + 50,
+		});
+	},
+
 	toggleEdition(editionSlug) {
 		if (this.state.selectedLemmaEdition !== editionSlug) {
 			this.setState({
@@ -323,10 +324,10 @@ ContextReader = React.createClass({
 					<div className={contextPanelStyles}>
 
 						{/* <IconButton
-								className="close-lemma-panel"
-								onClick={this.props.closeContextPanel}
-								iconClassName="mdi mdi-close"
-						/> */}
+						 className="close-lemma-panel"
+						 onClick={this.props.closeContextPanel}
+						 iconClassName="mdi mdi-close"
+						 /> */}
 
 						<div className="lemma-text-wrap">
 
@@ -337,12 +338,12 @@ ContextReader = React.createClass({
 
 							{this.state.lineFrom > 1 ?
 								<div className="before-link">
-										<RaisedButton
-											className="light"
-											label="Previous"
-											onClick={this.onBeforeClicked}
-											icon={<i className="mdi mdi-chevron-up" />}
-										/>
+									<RaisedButton
+										className="light"
+										label="Previous"
+										onClick={this.onBeforeClicked}
+										icon={<i className="mdi mdi-chevron-up" />}
+									/>
 								</div>
 								:
 								''
@@ -354,19 +355,19 @@ ContextReader = React.createClass({
 									<div className={lineClass} key={i}>
 
 										<div className="lemma-meta">
-												{(line.n % 5 === 0 || line.n === 1) ?
-													<span className="lemma-line-n">
-															{line.n}
-													</span>
-													:
-													''
-												}
+											{(line.n % 5 === 0 || line.n === 1) ?
+												<span className="lemma-line-n">
+													{line.n}
+												</span>
+												:
+												''
+											}
 										</div>
 
 										<div
 											className="lemma-text"
-											ref={line.n}
 											id={line.n}
+											ref={(component) => { this.lines[(line.n).toString()] = component; }}
 											dangerouslySetInnerHTML={{ __html: line.html }}
 											onMouseEnter={self.handeLineMouseEnter}
 											onMouseLeave={self.handeLineMouseLeave}
@@ -411,7 +412,7 @@ ContextReader = React.createClass({
 										key={i}
 										label={lemmaEditionTitle}
 										data-edition={lemmaTextEdition.title}
-										className={self.data.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ?
+										className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
 											'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 										onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 									/>
@@ -422,10 +423,10 @@ ContextReader = React.createClass({
 					:
 					<div className={contextPanelStyles}>
 						{/* <IconButton
-								className="close-lemma-panel"
-								onClick={this.props.closeContextPanel}
-								iconClassName="mdi mdi-close"
-						/>*/}
+						 className="close-lemma-panel"
+						 onClick={this.props.closeContextPanel}
+						 iconClassName="mdi mdi-close"
+						 />*/}
 						<div className="lemma-text-wrap">
 							<br />
 							<br />

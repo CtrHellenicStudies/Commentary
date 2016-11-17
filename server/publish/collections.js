@@ -113,8 +113,8 @@ if (Meteor.isServer) {
 						_id: { $in: imageArray },
 					}),
 					/*Thumbnails.find({
-						originalId: { $in: imageArray },
-					}),*/
+					 originalId: { $in: imageArray },
+					 }),*/
 				];
 			}
 		}

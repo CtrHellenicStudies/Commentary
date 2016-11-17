@@ -1,4 +1,3 @@
-
 CommenterWorkCircle = React.createClass({
 
 	propTypes: {

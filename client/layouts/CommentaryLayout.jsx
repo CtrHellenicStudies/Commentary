@@ -25,12 +25,12 @@ CommentaryLayout = React.createClass({
 				key: '_id',
 				values: [this.props.queryParams._id],
 			});
-			if ("revision" in this.props.queryParams) {
+			if ('revision' in this.props.queryParams) {
 				filters.push({
-					key: "revision",
+					key: 'revision',
 					values: [Number(this.props.queryParams.revision)],
 				});
-			};
+			}
 		}
 
 		if ('textsearch' in this.props.queryParams) {
@@ -43,7 +43,7 @@ CommentaryLayout = React.createClass({
 		if ('keywords' in queryParams) {
 			const keywords = [];
 
-			this.props.queryParams.keywords.split(',').forEach(function (keyword) {
+			this.props.queryParams.keywords.split(',').forEach((keyword) => {
 				keywords.push({
 					slug: keyword,
 				});
@@ -58,7 +58,7 @@ CommentaryLayout = React.createClass({
 		if ('commenters' in queryParams) {
 			const commenters = [];
 
-			this.props.queryParams.commenters.split(',').forEach(function (commenter) {
+			this.props.queryParams.commenters.split(',').forEach((commenter) => {
 				commenters.push({
 					slug: commenter,
 				});
@@ -73,7 +73,7 @@ CommentaryLayout = React.createClass({
 		if ('works' in queryParams) {
 			const works = [];
 
-			this.props.queryParams.works.split(',').forEach(function (work) {
+			this.props.queryParams.works.split(',').forEach((work) => {
 				works.push({
 					slug: work,
 					title: Utils.capitalize(work),
@@ -89,8 +89,8 @@ CommentaryLayout = React.createClass({
 		if ('subworks' in queryParams) {
 			const subworks = [];
 
-			this.props.queryParams.subworks.split(',').forEach(function (subwork) {
-				const subworkNumber = parseInt(subwork);
+			this.props.queryParams.subworks.split(',').forEach((subwork) => {
+				const subworkNumber = parseInt(subwork, 10);
 
 				if (!Number.isNaN(subworkNumber)) {
 					subworks.push({
@@ -102,13 +102,13 @@ CommentaryLayout = React.createClass({
 
 
 			filters.push({
-				key: "subworks",
+				key: 'subworks',
 				values: subworks,
 			});
 		}
 
 		if ('lineFrom' in this.props.queryParams) {
-			const lineFrom = parseInt(this.props.queryParams.lineFrom);
+			const lineFrom = parseInt(this.props.queryParams.lineFrom, 10);
 
 			if (!Number.isNaN(lineFrom)) {
 				filters.push({
@@ -119,7 +119,7 @@ CommentaryLayout = React.createClass({
 		}
 
 		if ('lineTo' in this.props.queryParams) {
-			const lineTo = parseInt(this.props.queryParams.lineTo);
+			const lineTo = parseInt(this.props.queryParams.lineTo, 10);
 
 			if (!Number.isNaN(lineTo)) {
 				filters.push({
@@ -306,8 +306,7 @@ CommentaryLayout = React.createClass({
 	},
 
 	toggleSearchTerm(key, value) {
-		let self = this,
-			filters = this.state.filters;
+		const filters = this.state.filters;
 		let keyIsInFilter = false,
 			valueIsInFilter = false,
 			filterValueToRemove,
@@ -333,12 +332,10 @@ CommentaryLayout = React.createClass({
 					if (filter.values.length === 0) {
 						filterToRemove = i;
 					}
+				} else if (key === 'works') {
+					filters[i].values = [value];
 				} else {
-					if (key === 'works') {
-						filter.values = [value];
-					} else {
-						filter.values.push(value);
-					}
+					filters[i].values.push(value);
 				}
 			}
 		});
@@ -366,9 +363,9 @@ CommentaryLayout = React.createClass({
 		if (textsearch && textsearch.length) {
 			let textsearchInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'textsearch') {
-					filter.values = [textsearch];
+					filters[i].values = [textsearch];
 					textsearchInFilters = true;
 				}
 			});
@@ -382,7 +379,7 @@ CommentaryLayout = React.createClass({
 		} else {
 			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'textsearch') {
 					filterToRemove = i;
 				}
@@ -404,9 +401,9 @@ CommentaryLayout = React.createClass({
 		if (e.from > 1) {
 			let lineFromInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
-					filter.values = [e.from];
+					filters[i].values = [e.from];
 					lineFromInFilters = true;
 				}
 			});
@@ -418,9 +415,9 @@ CommentaryLayout = React.createClass({
 				});
 			}
 		} else {
-			var filterToRemove;
+			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
 					filterToRemove = i;
 				}
@@ -434,9 +431,9 @@ CommentaryLayout = React.createClass({
 		if (e.to < 2100) {
 			let lineToInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
-					filter.values = [e.to];
+					filters[i].values = [e.to];
 					lineToInFilters = true;
 				}
 			});
@@ -448,9 +445,9 @@ CommentaryLayout = React.createClass({
 				});
 			}
 		} else {
-			var filterToRemove;
+			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
 					filterToRemove = i;
 				}
@@ -501,7 +498,7 @@ CommentaryLayout = React.createClass({
 					<Spinner />
 		        }
 	        </div>
-			);
+		);
 	},
 
 });

@@ -1,9 +1,7 @@
-import { Meteor } from 'meteor/meteor';
-
-Meteor.method('removeCfs', function() {
+Meteor.method('removeCfs', () => {
 	const db = Meteor.users.rawDatabase();
 
-	const dropCollection = function(collectionName) {
+	const dropCollection = (collectionName) => {
 		db.dropCollection(collectionName, (err, result) => {
 			if (err) {
 				if (err.message !== 'ns not found') {
@@ -29,11 +27,18 @@ Meteor.method('removeCfs', function() {
 	dropCollection('cfs_gridfs.thumbs.chunks');
 	dropCollection('cfs_gridfs.thumbs.files');
 
-	Commenters.rawCollection().updateMany({ picture: { $exists:true } }, { $unset: { picture:"" } }, (err, result) => {
-		if (err) {
-			console.log('error remove picture from commenters. err:', err);
-		} else {
-			console.log('removed picture from commenters.');
+	Commenters.rawCollection().updateMany(
+		{
+			picture: { $exists: true },
+		},
+		{
+			$unset: { picture: '' },
+		}, (err) => {
+			if (err) {
+				console.log('error remove picture from commenters. err:', err);
+			} else {
+				console.log('removed picture from commenters.');
+			}
 		}
-	});
+	);
 });

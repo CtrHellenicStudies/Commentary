@@ -38,8 +38,9 @@ Schemas.Revisions = new SimpleSchema({
 		optional: true,
 		autoValue() {
 			if (this.isUpdate) {
-				return new Date;
+				return new Date();
 			}
+			return null;
 		},
 		autoform: {
 			type: 'hidden',

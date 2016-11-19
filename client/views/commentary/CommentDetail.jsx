@@ -339,28 +339,23 @@ CommentDetail = React.createClass({
 								}
 							</p>
 						</div>
-						{/* <div className="comment-persistent-identifier">
-						 <a href={"/commentary/?_id=" + comment._id}>
-						 <span>Persistent Identifier</span>
-						 </a>
-						 </div>*/}
-						<CommentCitation
-							componentClass="comment-citation"
-							title="Cite this comment"
-							comment={comment}
-						/>
 					</div>
 					<div className="comment-revisions">
 						{comment.revisions.map((revision, i) => (
 							<FlatButton
 								key={i}
 								id={i}
-								data-id="{revision.id}"
+								data-id={revision.id}
 								className="revision selected-revision"
 								onClick={self.selectRevision}
 								label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
 							/>
 						))}
+						<CommentCitation
+							componentClass="comment-citation"
+							title="Cite this comment"
+							comment={comment}
+						/>
 					</div>
 
 				</article>

@@ -79,12 +79,15 @@ DiscussionThread = React.createClass({
 					onClick={this.showDiscussionThread}
 					className="continue-discussion"
 				>
-					<i className="mdi mdi-comment" />
-					{this.data.discussionComments.length ?
-						<span className="continue-discussion-text">
-							{this.data.discussionComments.length}
-						</span>
+					<h4 className="continue-discussion-label">Discussion</h4>
+					<div className="continue-discussion-icon">
+						<i className="mdi mdi-comment" />
+						{this.data.discussionComments.length ?
+							<span className="continue-discussion-text">
+								{this.data.discussionComments.length}
+							</span>
 						: ''}
+					</div>
 				</div>
 
 				{!this.data.loaded ?

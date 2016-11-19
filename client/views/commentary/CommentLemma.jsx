@@ -120,7 +120,7 @@ CommentLemma = React.createClass({
 			<div className="comment-outer comment-lemma-comment-outer">
 
 				<div className="comment-group-meta">
-					<div className="comment-group-meta-inner">
+					<div className="comment-group-meta-inner comment-group-meta-ref">
 						<div className="comment-group-ref">
 							<span className="comment-group-ref-above">
 								{workTitle} {commentGroup.subwork.title}

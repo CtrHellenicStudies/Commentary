@@ -17,15 +17,14 @@
 
     .close-lemma-panel {
       display: block;
-
     }
 
   }
 
   .lemma-text-wrap {
-    margin: 80px 0 40px;
+    margin: 80px 0 10px;
     padding: 10px 30px 10px 0;
-    height: 77%;
+    height: 83%;
     overflow-y: scroll;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
@@ -136,8 +135,7 @@
   }
 
   .close-lemma-panel {
-    position: absolute;
-    top: 80px;
+    top: 90px;
     left: -26px;
     font-size: 22px;
     background: #eee;
@@ -145,6 +143,11 @@
     border: 1px solid #ddd;
     padding: 7px 10px;
     display: none;
+		position:absolute !important;
+		background:@light !important;
+		border-radius:100%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
+
     &:hover, &:focus {
       opacity: 1;
       background: #ddd;
@@ -216,4 +219,15 @@
 
   }
 
+}
+
+.before-link, .after-link {
+	.light {
+		button > div {
+			background:@md-primary;
+			span, i {
+				color:@light !important;
+			}
+		}
+	}
 }

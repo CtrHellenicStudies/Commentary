@@ -4,8 +4,10 @@ import { Roles } from 'meteor/alanning:roles';
 import gm from 'gm';
 import { Avatars } from '../avatar_collections.js';
 
-export function checkAvatarPermissions(userId, avatar) {
-	if (!userId)
+export function checkAvatarPermissions(userId, avatar, type) {
+	if (type === 'update' && !userId)
+		return true;
+	else if (!userId)
 		return false;
 
 	if (Roles.userIsInRole(userId, ['developer', 'admin']))
@@ -14,7 +16,7 @@ export function checkAvatarPermissions(userId, avatar) {
 	if (avatar.contextType === 'user') {
 		return userId === avatar.userId;
 	} else if (avatar.contextType === 'commenter') {
-
+		return true;
 	} else {
 		throw new Error(`Invalid context type ${avatar.contextType}`);
 	}
@@ -28,9 +30,9 @@ const AvatarFilter = new UploadFS.Filter({
 });
 
 const AvatarPermissions = new UploadFS.StorePermissions({
-	insert: checkAvatarPermissions,
-	remove: checkAvatarPermissions,
-	update: checkAvatarPermissions,
+	insert: (u, a) => checkAvatarPermissions(u, a, 'insert'),
+	remove: (u, a) => checkAvatarPermissions(u, a, 'remove'),
+	update: (u, a) => checkAvatarPermissions(u, a, 'update'),
 });
 
 function transformAvatar(from, to, fileId, file) {
@@ -45,7 +47,6 @@ function transformAvatar(from, to, fileId, file) {
 export const AvatarStore = new UploadFS.store.GridFS({
 	collection: Avatars,
 	name: 'avatars',
-	chunkSize: 1024 * 64,
 	filter: AvatarFilter,
 	permissions: AvatarPermissions,
 	transformWrite: transformAvatar

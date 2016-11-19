@@ -58,6 +58,24 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('userDiscussionComments', (userId, sortMethod = 'votes') => {
+		check(userId, String);
+		let sort = { votes: -1, updated: -1 };
+
+		if (sortMethod === 'recent') {
+			sort = {
+				updated: -1,
+				votes: -1,
+			};
+		}
+
+		return DiscussionComments.find({
+			'user._id': userId,
+		}, {
+			sort,
+		});
+	});
+
 	Meteor.publish('keywords', () =>
 		Keywords.find({}, {
 			sort: {
@@ -78,12 +96,8 @@ if (Meteor.isServer) {
 		Works.find()
 	);
 
-	Meteor.publish('profilePictures', () =>
-		ProfilePictures.find()
-	);
-
 	Meteor.publish('referenceWorks', () =>
-		ReferenceWorks.find()
+		ReferenceWorks.find({}, { sort: { title: 1 } })
 	);
 
 	Meteor.publish('pageImages', function pageImages(pageSlug) {
@@ -99,8 +113,8 @@ if (Meteor.isServer) {
 						_id: { $in: imageArray },
 					}),
 					/*Thumbnails.find({
-						originalId: { $in: imageArray },
-					}),*/
+					 originalId: { $in: imageArray },
+					 }),*/
 				];
 			}
 		}

@@ -75,7 +75,7 @@ SinglePage = React.createClass({
 
 				<section className="page-head fullscreen image-bg bg-dark">
 					<div className="background-image-holder less-blur blur">
-					{/* <img className="background-image" alt='image' src={headerImageSource}/>*/}
+						{/* <img className="background-image" alt='image' src={headerImageSource}/>*/}
 						<img
 							className="background-image"
 							role="presentation"

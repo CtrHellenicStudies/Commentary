@@ -30,7 +30,6 @@ DiscussionThread = React.createClass({
 		}
 
 		return {
-			currentUser: Meteor.users.findOne({ _id: Meteor.userId() }),
 			discussionComments,
 			loaded,
 		};
@@ -45,19 +44,18 @@ DiscussionThread = React.createClass({
 	},
 
 	addDiscussionComment() {
-		const content = $(this.refs.newCommentForm).find('textarea').val();
+		const content = $(this.newCommentForm).find('textarea').val();
 
 		Meteor.call('discussionComments.insert', {
 			content,
 			commentId: this.props.comment._id,
 		});
 
-		$(this.refs.newCommentForm).find('textarea').val('');
+		$(this.newCommentForm).find('textarea').val('');
 	},
 
 	render() {
-		const self = this;
-		const userIsLoggedIn = Meteor.user();
+		const currentUser = Meteor.user();
 
 		let discussionWrapClass = 'discussion-wrap';
 
@@ -66,7 +64,7 @@ DiscussionThread = React.createClass({
 		}
 
 		let textareaPlaceholder = '';
-		if (userIsLoggedIn) {
+		if (currentUser) {
 			textareaPlaceholder = 'Enter your comment here . . .';
 		} else {
 			textareaPlaceholder = 'Please login to enter a comment.';
@@ -76,27 +74,30 @@ DiscussionThread = React.createClass({
 
 		return (
 
-			<div className={discussionWrapClass} >
+			<div className={discussionWrapClass}>
 				<div
 					onClick={this.showDiscussionThread}
 					className="continue-discussion"
 				>
-					<i className="mdi mdi-comment" />
-					{this.data.discussionComments.length ?
-						<span className="continue-discussion-text">
-							{this.data.discussionComments.length}
-						</span>
-					: ''}
+					<h4 className="continue-discussion-label">Discussion</h4>
+					<div className="continue-discussion-icon">
+						<i className="mdi mdi-comment" />
+						{this.data.discussionComments.length ?
+							<span className="continue-discussion-text">
+								{this.data.discussionComments.length}
+							</span>
+						: ''}
+					</div>
 				</div>
 
 				{!this.data.loaded ?
-					<div className="ahcip-spinner" >
+					<div className="ahcip-spinner">
 						<div className="double-bounce1" />
 						<div className="double-bounce2" />
 					</div>
-				:
-					<div className="discussion-thread" >
-						<div className="add-comment-wrap paper-shadow " >
+					:
+					<div className="discussion-thread">
+						<div className="add-comment-wrap paper-shadow ">
 							<IconButton
 								className="close-discussion paper-shadow"
 								iconClassName="mdi mdi-close"
@@ -104,14 +105,15 @@ DiscussionThread = React.createClass({
 							/>
 
 							<form
-								ref="newCommentForm"
+								ref={(component) => { this.newCommentForm = component; }}
 								className="new-comment-form"
 								name="new-comment-form"
 							>
-								<div className="add-comment-row-1" >
+								<div className="add-comment-row-1">
 									<div className="profile-picture paper-shadow">
 										<img
-											src="/images/default_user.jpg"
+											src={currentUser && currentUser.avatar ?
+												currentUser.avatar.url : '/images/default_user.jpg'}
 											alt="Commentary User"
 										/>
 									</div>
@@ -125,13 +127,13 @@ DiscussionThread = React.createClass({
 									<div className="error-message">
 										<span className="error-message-text">Please enter your text to submit.</span>
 									</div>
-									{ userIsLoggedIn ?
+									{ currentUser ?
 										<RaisedButton
 											label="Submit"
 											className="submit-comment-button paper-shadow"
 											onClick={this.addDiscussionComment}
 										/>
-									:
+										:
 										<div
 											className="new-comment-login"
 										>
@@ -153,22 +155,22 @@ DiscussionThread = React.createClass({
 						<div
 							className="sort-by-wrap"
 						>
-								{/*
-									<span className="sort-by-label">Sort by:</span>
-									<RaisedButton
-										label="Top"
-										className="sort-by-option selected-sort sort-by-top"
-										onClick={this.toggleSort}>
-									</RaisedButton>
-									<RaisedButton
-										label="Newest"
-										className="sort-by-option sort-by-new"
-										onClick={this.toggleSort}>
-									</RaisedButton>
-									*/}
+							{/*
+							 <span className="sort-by-label">Sort by:</span>
+							 <RaisedButton
+							 label="Top"
+							 className="sort-by-option selected-sort sort-by-top"
+							 onClick={this.toggleSort}>
+							 </RaisedButton>
+							 <RaisedButton
+							 label="Newest"
+							 className="sort-by-option sort-by-new"
+							 onClick={this.toggleSort}>
+							 </RaisedButton>
+							 */}
 						</div>
 						{this.data.discussionComments.length === 0 ?
-							<div className="no-results-wrap" >
+							<div className="no-results-wrap">
 								<span className="no-results-text">No discussion comments.</span>
 							</div>
 							: ''
@@ -178,7 +180,7 @@ DiscussionThread = React.createClass({
 								key={i}
 								className="discussion-comment paper-shadow"
 								discussionComment={discussionComment}
-								currentUser={self.data.currentUser}
+								currentUser={currentUser}
 							/>
 						)}
 					</div>

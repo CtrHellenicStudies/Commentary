@@ -14,30 +14,81 @@ ContextPanel = React.createClass({
 		commentLemmaIndex: React.PropTypes.number.isRequired,
 	},
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
+		const commentGroup = this.props.commentGroup;
+		const lineFrom = commentGroup.lineFrom;
+		const lineTo = lineFrom + 49;
 		return {
 			selectedLemmaEdition: '',
+			lineFrom,
+			lineTo,
+			maxLine: 0,
 		};
 	},
 
-	toggleEdition(editionSlug) {
-		if (this.state.selectedLemmaEdition !== editionSlug) {
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
+
+	componentDidMount() {
+		this.scrollElement('open');
+		Meteor.call('getMaxLine', this.props.commentGroup.work.slug,
+			this.props.commentGroup.subwork.n, (err, res) => {
+				if (err) {
+					console.log(err);
+				} else if (res) {
+					const linePagination = [];
+					for (let i = 1; i <= res; i += 100) {
+						linePagination.push(i);
+					}
+
+					this.setState({
+						linePagination,
+						maxLine: res,
+					});
+				}
+			}
+		);
+	},
+
+	componentDidUpdate(prevProps) {
+		this.scrollElement('open');
+		const commentGroup = this.props.commentGroup;
+		if (commentGroup.ref !== prevProps.commentGroup.ref) {
 			this.setState({
-				selectedLemmaEdition: editionSlug,
+				lineFrom: commentGroup.lineFrom,
+				lineTo: commentGroup.lineFrom + 49,
 			});
 		}
 	},
 
+	componentWillUnmount() {
+		this.scrollElement('close');
+	},
 
-	mixins: [ReactMeteorData],
+	onAfterClicked() {
+		if (this.state.lineTo <= this.state.maxLine) {
+			this.setState({
+				lineFrom: this.state.lineFrom + 25,
+				lineTo: this.state.lineTo + 25,
+			});
+		}
+	},
+
+	onBeforeClicked() {
+		if (this.state.lineFrom !== 1) {
+			this.setState({
+				lineFrom: this.state.lineFrom - 25,
+				lineTo: this.state.lineTo - 25,
+			});
+		}
+	},
 
 	getMeteorData() {
 		let lemmaText = [];
@@ -48,8 +99,8 @@ ContextPanel = React.createClass({
 			'work.slug': commentGroup.work.slug,
 			'subwork.n': commentGroup.subwork.n,
 			'text.n': {
-				$gte: commentGroup.lineFrom,
-				$lte: commentGroup.lineFrom + 49,
+				$gte: this.state.lineFrom,
+				$lte: this.state.lineTo,
 			},
 		};
 
@@ -60,11 +111,11 @@ ContextPanel = React.createClass({
 			const editions = [];
 
 			let textIsInEdition = false;
-			textNodes.forEach(function (textNode) {
-				textNode.text.forEach(function (text) {
+			textNodes.forEach((textNode) => {
+				textNode.text.forEach((text) => {
 					textIsInEdition = false;
 
-					editions.forEach(function (edition) {
+					editions.forEach((edition) => {
 						if (text.edition.slug === edition.slug) {
 							edition.lines.push({
 								html: text.html,
@@ -92,7 +143,7 @@ ContextPanel = React.createClass({
 			lemmaText = editions;
 
 			if (this.state.selectedLemmaEdition.length) {
-				lemmaText.forEach(function (edition) {
+				lemmaText.forEach((edition) => {
 					if (edition.slug === this.state.selectedLemmaEdition) {
 						selectedLemmaEdition = edition;
 					}
@@ -111,39 +162,36 @@ ContextPanel = React.createClass({
 		};
 	},
 
+	toggleEdition(editionSlug) {
+		if (this.state.selectedLemmaEdition !== editionSlug) {
+			this.setState({
+				selectedLemmaEdition: editionSlug,
+			});
+		}
+	},
+
 	scrollElement(state) {
 		const that = this;
 		switch (state) {
 		case 'open':
-			console.log('top', $('#comment-group-' + that.props.commentLemmaIndex).offset().top);
-			window.requestAnimationFrame(function () {
-				const scroll = $('#comment-group-' + that.props.commentLemmaIndex).offset().top;
+			// console.log('top', $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top);
+			window.requestAnimationFrame(() => {
+				const scroll = $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top;
 				$(document).scrollTop(scroll);
 			});
 			break;
 		case 'close':
-			window.requestAnimationFrame(function () {
+			window.requestAnimationFrame(() => {
 				console.log('that.props.scrollPosition', that.props.scrollPosition);
-				setTimeout(function () {
+				setTimeout(() => {
 					$(document).scrollTop(that.props.scrollPosition);
 				}, 1000);
 			});
 			break;
+		default:
+			break;
 		}
 	},
-
-	componentDidMount() {
-		this.scrollElement('open');
-	},
-
-	componentDidUpdate(prevProps, prevState) {
-		this.scrollElement('open');
-	},
-
-	componentWillUnmount() {
-		 			this.scrollElement('close');
-	},
-
 
 	render() {
 		const self = this;
@@ -160,10 +208,24 @@ ContextPanel = React.createClass({
 					className="close-lemma-panel"
 					onClick={this.props.closeContextPanel}
 					iconClassName="mdi mdi-close"
-    />
+				/>
 
 				<div className="lemma-text-wrap">
-					{this.data.selectedLemmaEdition.lines.map(function (line, i) {
+
+					{this.state.lineFrom > 1 ?
+						<div className="before-link">
+							<RaisedButton
+								className="light"
+								label="Previous"
+								onClick={this.onBeforeClicked}
+								icon={<i className="mdi mdi-chevron-up" />}
+							/>
+						</div>
+						:
+						''
+					}
+
+					{this.data.selectedLemmaEdition.lines.map((line, i) => {
 						let lineClass = 'lemma-line';
 						const lineFrom = self.props.commentGroup.lineFrom;
 						let lineTo;
@@ -178,66 +240,75 @@ ContextPanel = React.createClass({
 							lineClass += ' highlighted';
 						}
 
-						return (<div
-							className={lineClass}
-							key={i}
-      >
+						return (
+							<div
+								className={lineClass}
+								key={i}
+							>
 
 								<div className="lemma-meta">
-									{(line.n % 5 === 0) ?
-										<span className="lemma-line-n" >
-												{line.n}
+									{(line.n % 5 === 0 || line.n === 1) ?
+										<span className="lemma-line-n">
+											{line.n}
 										</span>
-									: ''
+										:
+										''
 									}
 								</div>
 
 								<div className="lemma-text" dangerouslySetInnerHTML={{ __html: line.html }} />
 
 
-						</div>);
+							</div>
+						);
 					})}
 
-						<div className="lemma-load" >
-								<div className="lemma-spinner" />
-
+					{this.state.lineFrom < this.state.maxLine ?
+						<div className="after-link">
+							<RaisedButton
+								className="light"
+								label="Next"
+								onClick={this.onAfterClicked}
+								icon={<i className="mdi mdi-chevron-down" />}
+							/>
 						</div>
+						:
+						''
+					}
 
 				</div>
 
 				<div className="edition-tabs tabs">
-					{this.data.lemmaText.map(function (lemmaTextEdition, i) {
+					{this.data.lemmaText.map((lemmaTextEdition, i) => {
 						const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-						return;
-
-						<RaisedButton
-							key={i}
-							label={lemmaEditionTitle}
-							data-edition={lemmaTextEdition.title}
-							className={self.data.selectedLemmaEdition.slug ===	lemmaTextEdition.slug ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-							onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-      />;
+						return (
+							<RaisedButton
+								key={i}
+								label={lemmaEditionTitle}
+								data-edition={lemmaTextEdition.title}
+								className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+									'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+							/>
+						);
 					})}
 
 				</div>
 
 				<div className="meta-tabs tabs">
-						<FlatButton
-							label="Highlighting"
-							className="edition-tab tab"
-							onClick={this.toggleHighlighting}
-      />
-						<FlatButton
-							label="Scansion"
-							className="edition-tab tab"
-							onClick={this.toggleScansion}
-      />
+					{/* <FlatButton
+						label="Entities"
+						className="edition-tab tab"
+						onClick={this.toggleEntities}
+					/> */}
+					<FlatButton
+						label="Scansion"
+						className="edition-tab tab"
+						onClick={this.toggleScansion}
+					/>
 				</div>
-		</div>
-
-
-	 );
+			</div>
+		);
 	},
-
 });

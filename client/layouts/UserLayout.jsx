@@ -1,8 +1,20 @@
+import React from 'react';
+import { SnackAttack } from '/imports/ui/components/SnackAttack.jsx';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import '../../node_modules/mdi/css/materialdesignicons.css';
 
-
 UserLayout = React.createClass({
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
 	mixins: [ReactMeteorData],
+
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
+
 	getMeteorData() {
 		const user = Meteor.user();
 
@@ -24,12 +36,14 @@ UserLayout = React.createClass({
 				<main>
 					{this.data.user ?
 						<ProfilePage user={this.data.user} />
-					: ''}
+						:
+						<Loading />
+					}
 				</main>
 				<Footer />
-
+				<SnackAttack />
 			</div>
-			);
+		);
 	},
 
 });

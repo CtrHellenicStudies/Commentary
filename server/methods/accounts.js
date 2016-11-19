@@ -1,38 +1,35 @@
 Meteor.methods({
-	updateAccount(accountData) {
+	updateAccount(field, value) {
 		if (!this.userId) {
 			throw new Meteor.Error('not-authorized');
 		}
 
-		console.log(accountData);
+		check(field, String);
+		check(value, Match.OneOf(String, [Object]));
+		const setModifier = { $set: {} };
+		setModifier.$set[field] = value;
+		let result;
+		try {
+			result = Meteor.users.update(
+				{
+					_id: this.userId,
 
-		// check(accountData.name, String);
-		// check(accountData.biography, String);
-		// check(accountData.academiaEdu, String);
-		// check(accountData.twitter, String);
-		// check(accountData.facebook, String);
-		// check(accountData.google, String);
-
-		return Meteor.users.update({
-			_id: this.userId,
-
-		}, {
-			$set: {
-				'profile.name': accountData.name,
-				'profile.biography': accountData.biography,
-				'profile.academiaEdu': accountData.academiaEdu,
-				'profile.twitter': accountData.twitter,
-				'profile.facebook': accountData.facebook,
-				'profile.google': accountData.google,
-			},
-
-		});
+				}, setModifier
+			);
+		} catch (err) {
+			console.log(err);
+			return false;
+		}
+		return result;
 	},
 	deleteAccount(userId) {
+		check(userId, String);
+
 		if (this.userId === userId) {
 			return Meteor.users.remove({
 				_id: this.userId,
 			});
 		}
+		return false;
 	},
 });

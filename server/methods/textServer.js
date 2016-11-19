@@ -1,21 +1,20 @@
 Meteor.methods({
-	'textServer': function (query) {
-		const self = this;
-
+	textServer(query) {
+		check(query, Object);
 		try {
 			let url = 'http://localhost:8000';
 
 			/*
-			if( location.hostname.indexOf("dev") >= 0 || location.hostname.indexOf("localhost") >= 0){
-				url += location.hostname;
-				url += ':3000';
+			 if( location.hostname.indexOf("dev") >= 0 || location.hostname.indexOf("localhost") >= 0){
+			 url += location.hostname;
+			 url += ':3000';
 
-			}else {
-				url += "ahcip-text.chs.harvard.edu";
-				url += ':80';
+			 }else {
+			 url += "ahcip-text.chs.harvard.edu";
+			 url += ':80';
 
-			}
-			*/
+			 }
+			 */
 
 			url += '/api';
 
@@ -24,39 +23,38 @@ Meteor.methods({
 			});
 
 			return promise.then(response => {
-				let editions = [],
-					is_in_edition = false;
+				const editions = [];
+				let isInEdition = false;
 
 				if ('res' in response.data) {
-					response.data.res.forEach(function (text_object) {
-						text_object.text.forEach(function (text_edition) {
-							editions.forEach(function (edition) {
-								if (text_edition.edition.slug === edition.slug) {
-									is_in_edition = true;
+					response.data.res.forEach((textObject) => {
+						textObject.text.forEach((textEdition) => {
+							editions.forEach((edition) => {
+								if (textEdition.edition.slug === edition.slug) {
+									isInEdition = true;
 
-									edition.lines.push(text_edition);
+									edition.lines.push(textEdition);
 								}
 							});
 
-							if (!is_in_edition) {
+							if (!isInEdition) {
 								editions.push({
-									title: text_edition.edition.title,
-									slug: text_edition.edition.slug,
-									lines: [text_edition],
+									title: textEdition.edition.title,
+									slug: textEdition.edition.slug,
+									lines: [textEdition],
 
 								});
 							}
 						});
 					});
-
-
 					return editions;
-				} else {
-					console.error('Unable to connect to TextServer');
 				}
+				console.error('Unable to connect to TextServer');
+				return null;
 			});
 		} catch (error) {
 			console.log(error);
+			return null;
 		}
 	},
 

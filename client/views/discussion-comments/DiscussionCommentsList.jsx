@@ -8,36 +8,37 @@ DiscussionCommentsList = React.createClass({
 		discussionComments: React.PropTypes.array,
 	},
 
-	// Loads items from the discussionComments collection and puts them on this.data.discussionComments
+	// Loads items from the discussionComments collection
+	// and puts them on this.data.discussionComments
 	/*
-	getMeteorData() {
-		let query = {};
+	 getMeteorData() {
+	 let query = {};
 
-		return {
-			discussionComments: DiscussionComments.find(query, {sort: {author: 1, title: 1}}).fetch()
-		};
-	},
-	*/
+	 return {
+	 discussionComments: DiscussionComments.find(query, {sort: {author: 1, title: 1}}).fetch()
+	 };
+	 },
+	 */
 
 	render() {
-		 return (
-			 <div className="discussion-comments-list">
+		return (
+			<div className="discussion-comments-list">
 
-				 {this.props.discussionComments.map((discussionComment, i) => {
-					return (<DiscussionCommentTeaser
+				{this.props.discussionComments.map((discussionComment, i) => (
+					<DiscussionCommentTeaser
 						key={i}
 						discussionComment={discussionComment}
-     />);
-				})}
+					/>
+				))}
 				{!this.props.discussionComments.length ?
-					<p className="no-results">You haven't created any comments yet.</p>
+					<p className="no-results">No comments found.</p>
 					: ''
 				}
 
-			 </div>
+			</div>
 
 
-			);
+		);
 	},
 
 

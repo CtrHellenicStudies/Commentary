@@ -18,9 +18,6 @@ aldeed:simple-schema
 # fortawesome:fontawesome
 tap:i18n
 # raix:handlebar-helpers
-cfs:standard-packages
-cfs:gridfs
-cfs:graphicsmagick
 aldeed:template-extension
 yogiben:helpers
 # manuelschoebel:ms-seo
@@ -72,7 +69,6 @@ todda00:friendly-slugs
 d3js:d3
 gwendall:blaze-to-react
 jalik:ufs
-jalik:ufs-local
 jalik:ufs-gridfs
 buishi:autoform-ufs
 mpowaga:autoform-summernote
@@ -83,3 +79,5 @@ dburles:factory
 mdg:validated-method
 meteorhacks:aggregate
 react-meteor-data
+practicalmeteor:chai
+practicalmeteor:sinon

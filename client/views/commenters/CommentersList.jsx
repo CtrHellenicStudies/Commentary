@@ -57,6 +57,6 @@ CommentersList = React.createClass({
 			<div className="commenters-list">
 				{this.renderCommenters()}
 			</div>
-			);
+		);
 	},
 });

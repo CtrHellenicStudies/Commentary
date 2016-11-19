@@ -7,7 +7,7 @@ Meteor.startup(() => {
 			console.log('Deleted role:', role.name);
 		} catch (err) {
 			if (err.error === 403) {
-				console.log('Role \'' + role.name + '\' is in use.');
+				console.log(`Role \'${role.name}\' is in use.`);
 			} else {
 				console.log(err);
 			}
@@ -21,7 +21,7 @@ Meteor.startup(() => {
 			Roles.createRole(role);
 			console.log('Created role:', role);
 		} catch (err) {
-					// console.log(err);
+			// console.log(err);
 		}
 	});
 

@@ -77,7 +77,7 @@ CommenterDetail = React.createClass({
 
 								{commenter.bio ?
 									<div dangerouslySetInnerHTML={{ __html: commenter.bio }} />
-								:
+									:
 									<p>There is no biography information for this user yet.</p>
 								}
 
@@ -96,7 +96,7 @@ CommenterDetail = React.createClass({
 										<span className="read-less-text">
 											Show Less
 										</span>
-									:
+										:
 										<span className="read-more-text">
 											Read More
 										</span>
@@ -105,6 +105,18 @@ CommenterDetail = React.createClass({
 							</div>
 
 							<CommenterVisualizations
+								commenter={commenter}
+							/>
+
+							<br />
+							<br />
+							<br />
+							<hr />
+							<br />
+							<br />
+							<br />
+
+							<CommenterReferenceWorks
 								commenter={commenter}
 							/>
 

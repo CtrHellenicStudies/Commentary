@@ -3,240 +3,384 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
-import { EditorState, ContentState, Modifier, RichUtils, convertToRaw } from 'draft-js';
+import Select from 'react-select';
+import { EditorState, ContentState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
-
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
+import RichTextEditor from 'react-rte';
+
 const singleLinePlugin = createSingleLinePlugin();
-
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin';
-const richButtonsPlugin = createRichButtonsPlugin();
-
-const {
-  // inline buttons
-  ItalicButton, UnderlineButton,
-  // block buttons
-  ULButton,
-} = richButtonsPlugin;
 
 AddRevision = React.createClass({
 
-    										childContextTypes: {
-        										muiTheme: React.PropTypes.object.isRequired,
-    },
+	propTypes: {
+		submitForm: React.PropTypes.func.isRequired,
+		comment: React.PropTypes.object.isRequired,
+	},
 
-    										getChildContext() {
-        										return { muiTheme: getMuiTheme(baseTheme) };
-    },
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
-    										propTypes: {
-        										submitForm: React.PropTypes.func.isRequired,
-        										comment: React.PropTypes.object.isRequired,
-    },
+	mixins: [ReactMeteorData],
 
-    										getInitialState() {
-        								const revisionId = this.props.comment.revisions.length - 1;
-        								const revision = this.props.comment.revisions[revisionId]; // get newest revision
-        										return {
-            									revision,
+	getInitialState() {
+		const revisionId = this.props.comment.revisions.length - 1;
+		const revision = this.props.comment.revisions[revisionId]; // get newest revision
 
-            										titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-            										textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+		const keywordsValue = [];
+		const keyideasValue = [];
+		if (this.props.comment.keywords) {
+			this.props.comment.keywords.forEach((keyword) => {
+				switch (keyword.type) {
+				case 'word':
+					keywordsValue.push(keyword.title);
+					break;
+				case 'idea':
+					keyideasValue.push(keyword.title);
+					break;
+				default:
+					break;
+				}
+			});
+		}
 
-            										titleValue: '',
-            										textValue: '',
-        };
-    },
+		return {
+			revision,
 
-    										mixins: [ReactMeteorData],
+			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
+			textEditorState: RichTextEditor.createValueFromString(revision.text, 'html'),
 
-    										getMeteorData() {
-        										return {
+			titleValue: '',
+			textValue: '',
 
-        };
-    },
+			keywordsValue,
+			keyideasValue,
+		};
+	},
 
-    										onTitleChange(titleEditorState) {
-        								const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-        								const title = jQuery(titleHtml).text();
-        										this.setState({
-            									titleEditorState,
-            										titleValue: title,
-        });
-    },
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
-    										onTextChange(textEditorState) {
-        								const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-        										this.setState({
-            									textEditorState,
-            										textValue: textHtml,
-        });
-    },
+	onTitleChange(titleEditorState) {
+		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
+		const title = jQuery(titleHtml).text();
+		this.setState({
+			titleEditorState,
+			titleValue: title,
+		});
+	},
 
-    										handleSubmit(event) {
-        // TODO: form validation
-        										event.preventDefault();
+	onTextChange(textEditorState) {
+		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		this.setState({
+			textEditorState,
+			textValue: textEditorState.toString('html'),
+		});
+	},
 
-        // var error = this.validateStateForSubmit();
+	onKeywordsValueChange(keywords) {
+		if (keywords) {
+			const keywordArray = keywords.split(',');
+			const errorKeywords = this.errorKeywords(keywordArray, 'word');
+			if (errorKeywords.length) {
+				errorKeywords.forEach((keyword) => {
+					const index = keywordArray.indexOf(keyword);
+					keywordArray.splice(index, 1);
+				});
+			}
+			this.setState({
+				keywordsValue: keywordArray,
+			});
+		} else {
+			this.setState({
+				keywordsValue: null,
+			});
+		}
+	},
 
-        // this.setState({
-        //     snackbarOpen: error.errors,
-        //     snackbarMessage: error.errorMessage,
-        // });
-        // if (!error.errors) {
-            										this.props.submitForm(this.state);
-        // };
-    },
+	onKeyideasValueChange(keyideas) {
+		if (keyideas) {
+			const keyideasArray = keyideas.split(',');
+			const errorKeywords = this.errorKeywords(keyideasArray, 'idea');
+			if (errorKeywords.length) {
+				errorKeywords.forEach((keyword) => {
+					const index = keyideasArray.indexOf(keyword);
+					keyideasArray.splice(index, 1);
+				});
+			}
+			this.setState({
+				keyideasValue: keyideasArray,
+			});
+		} else {
+			this.setState({
+				keyideasValue: null,
+			});
+		}
+	},
 
-    										selectRevision(event) {
-        								const revision = this.props.comment.revisions[event.currentTarget.id];
-        										this.setState({
-            									revision,
-            										titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-            										textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
-        });
-    },
+	getMeteorData() {
+		const keywordsOptions = [];
+		const keywords = Keywords.find({ type: 'word' }).fetch();
+		keywords.forEach((keyword) => {
+			keywordsOptions.push({
+				value: keyword.title,
+				label: keyword.title,
+			});
+		});
 
-    										removeRevision() { // TODO: delete
-        										console.log('this.state.revision', this.state.revision);
-        										Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
-    },
+		const keyideasOptions = [];
+		const keyideas = Keywords.find({ type: 'idea' }).fetch();
+		keyideas.forEach((keyidea) => {
+			keyideasOptions.push({
+				value: keyidea.title,
+				label: keyidea.title,
+			});
+		});
 
-    // validateStateForSubmit() {
-    //     var errors = false;
-    //     var errorMessage = "Missing comment data:"
-    //     if(this.state.titleValue === ""){
-    //         errors = true;
-    //         errorMessage += " title,";
-    //     };
-    //     if(this.state.textValue === "<p><br></p>"){
-    //         errors = true;
-    //         errorMessage += " comment text,";
-    //     };
-    //     if(this.props.selectedLineFrom === 0){
-    //         errors = true;
-    //         errorMessage += " no line selected,";
-    //     };
-    //     if(errors === true) {
-    //         errorMessage.slice(0,-1);
-    //         errorMessage += ".";
-    //     };
-    //     return {
-    //         errors: errors,
-    //         errorMessage: errorMessage,
-    //     };
-    // },
+		return {
+			keywordsOptions,
+			keyideasOptions,
+		};
+	},
 
-    										render() {
-        								const that = this;
+	handleSubmit(event) {
+		// TODO: form validation
+		event.preventDefault();
 
-        										return (
-					<div className="comments lemma-panel-visible">
-            <div className={'comment-outer'}>
+		// var error = this.validateStateForSubmit();
 
-                <article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
+		// this.setState({
+		//     snackbarOpen: error.errors,
+		//     snackbarMessage: error.errorMessage,
+		// });
+		// if (!error.errors) {
+		this.props.submitForm(this.state);
+		// };
+	},
 
-                    <div className="comment-upper">
-                        <h1 className="add-comment-title">
-                            <Editor
-	editorState={this.state.titleEditorState}
-	onChange={this.onTitleChange}
-	placeholder="Comment title..."
-	spellCheck
-	stripPastedStyles
-	plugins={[singleLinePlugin]}
-	blockRenderMap={singleLinePlugin.blockRenderMap}
-                            />
-                        </h1>
-                        <div className="comment-keywords">
-                            {this.props.comment.keywords.map(function (keyword, i) {
-                                										return <RaisedButton
-	key={i}
-	className="comment-keyword paper-shadow"
-	onClick={self.addSearchTerm}
-	data-id={keyword._id}
-	label={(keyword.title || keyword.wordpressId)}
-                                         />;
-                             })}
-                        </div>
-                        {/* TODO: this.props.comment.keyideas*/}
+	selectRevision(event) {
+		const revision = this.props.comment.revisions[event.currentTarget.id];
+		this.setState({
+			revision,
+			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
+			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+		});
+	},
 
-                    </div>
-                    <div className="comment-lower" style={{ paddingTop: 20 }}>
-                        <ItalicButton />
-                        <UnderlineButton />
-                        <ULButton />
-                        <div className="add-comment-text">
-                            <Editor
-	editorState={this.state.textEditorState}
-	onChange={this.onTextChange}
-	placeholder="Comment text..."
-	spellCheck
-	stripPastedStyles
-	plugins={[richButtonsPlugin]}
-                            />
-                        </div>
+	removeRevision() { // TODO: delete
+		console.log('this.state.revision', this.state.revision);
+		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
+	},
 
-                        <div className="comment-reference" >
-                            <h4>Secondary Source(s):</h4>
-                            <p>
-                                {this.props.comment.referenceLink ?
-                                    <a href={this.props.comment.referenceLink} target="_blank" >
-                                        {this.props.comment.reference}
-                                    </a>
-                                    :
-                                    <span >
-                                        {this.props.comment.reference}
-                                    </span>
-                                }
-                            </p>
-                        </div>
+	errorKeywords(keywordsArray, type) {
+		// 'type' is the type of keywords passed to this function
+		const errorKeywords = [];
+		let keyideasValue = [];
+		switch (type) {
+		case 'word':
+			keyideasValue = this.state.keyideasValue;
+			keywordsArray.forEach((keyword) => {
+				this.data.keyideasOptions.forEach((keyideaOption) => {
+					if (keyword === keyideaOption.value) {
+						errorKeywords.push(keyword);
+					}
+				});
 
-                        <div className="add-comment-button">
-                            <RaisedButton
-	type="submit"
-	label="Add revision"
-	labelPosition="after"
-	onClick={this.handleSubmit}
-	icon={<FontIcon className="mdi mdi-plus" />}
-                            />
-                        </div>
-                        {Roles.userIsInRole(Meteor.user(), ['developer']) ? /* TODO: delete*/
-                            <div className="add-comment-button">
-                                <RaisedButton
-	type="submit"
-	label="(developer only) Remove revision"
-	labelPosition="after"
-	onClick={this.removeRevision}
-	icon={<FontIcon className="mdi mdi-minus" />}
-                                />
-                            </div>
-                            :
-                            ''
-                        }
+				if (Array.isArray(keyideasValue)) {
+					keyideasValue.forEach((keyideaValue) => {
+						if (keyword === keyideaValue) {
+							errorKeywords.push(keyword);
+						}
+					});
+				}
+			});
+			break;
 
-                    </div>
+		case 'idea':
+			keywordsValue = this.state.keywordsValue;
+			keywordsArray.forEach((keyword) => {
+				this.data.keywordsOptions.forEach((keywordOption) => {
+					if (keyword === keywordOption.value) {
+						errorKeywords.push(keyword);
+					}
+				});
 
-                    <div className="comment-revisions">
-                        {this.props.comment.revisions.map(function (revision, i) {
-                            										return <FlatButton
-	key={i}
-	id={i}
-	className="revision selected-revision"
-	onClick={that.selectRevision}
-	label={'Revision ' + moment(revision.created).format('D MMMM YYYY')}
-                                     />;
-                        })}
-                    </div>
+				if (Array.isArray(keywordsValue)) {
+					keywordsValue.forEach((keywordValue) => {
+						if (keyword === keywordValue) {
+							errorKeywords.push(keyword);
+						}
+					});
+				}
+			});
+			break;
 
-                </article>
+		default:
+			break;
+		}
+		return errorKeywords;
+	},
 
-            </div>
-					</div>
+	// validateStateForSubmit() {
+	//     var errors = false;
+	//     var errorMessage = "Missing comment data:"
+	//     if(this.state.titleValue === ""){
+	//         errors = true;
+	//         errorMessage += " title,";
+	//     };
+	//     if(this.state.textValue === "<p><br></p>"){
+	//         errors = true;
+	//         errorMessage += " comment text,";
+	//     };
+	//     if(this.props.selectedLineFrom === 0){
+	//         errors = true;
+	//         errorMessage += " no line selected,";
+	//     };
+	//     if(errors === true) {
+	//         errorMessage.slice(0,-1);
+	//         errorMessage += ".";
+	//     };
+	//     return {
+	//         errors: errors,
+	//         errorMessage: errorMessage,
+	//     };
+	// },
 
-        );
-    },
+	render() {
+		const that = this;
+
+		const toolbarConfig = {
+			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
+			INLINE_STYLE_BUTTONS: [{
+				label: 'Italic',
+				style: 'ITALIC',
+			}, {
+				label: 'Underline',
+				style: 'UNDERLINE',
+			}],
+			BLOCK_TYPE_BUTTONS: [{
+				label: 'UL',
+				style: 'unordered-list-item',
+			}],
+		};
+
+
+		return (
+			<div className="comments lemma-panel-visible">
+				<div className={'comment-outer'}>
+
+					<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
+
+						<div className="comment-upper">
+							<h1 className="add-comment-title">
+								<Editor
+									editorState={this.state.titleEditorState}
+									onChange={this.onTitleChange}
+									placeholder="Comment title..."
+									spellCheck
+									stripPastedStyles
+									plugins={[singleLinePlugin]}
+									blockRenderMap={singleLinePlugin.blockRenderMap}
+								/>
+							</h1>
+							<Select
+								name="keywords"
+								id="keywords"
+								required={false}
+								options={this.data.keywordsOptions}
+								multi
+								allowCreate
+								value={this.state.keywordsValue}
+								onChange={this.onKeywordsValueChange}
+								placeholder="Keywords..."
+							/>
+							<Select
+								name="keyideas"
+								id="keyideas"
+								required={false}
+								options={this.data.keyideasOptions}
+								multi
+								allowCreate
+								value={this.state.keyideasValue}
+								onChange={this.onKeyideasValueChange}
+								placeholder="Keyideas..."
+							/>
+							{/* TODO: this.props.comment.keyideas*/}
+
+						</div>
+						<div className="comment-lower" style={{ paddingTop: 20 }}>
+							<RichTextEditor
+								placeholder="Comment text..."
+								value={this.state.textEditorState}
+								onChange={this.onTextChange}
+								toolbarConfig={toolbarConfig}
+							/>
+
+							<div className="comment-reference">
+								<h4>Secondary Source(s):</h4>
+								<p>
+									{this.props.comment.referenceLink ?
+										<a
+											href={this.props.comment.referenceLink}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											{this.props.comment.reference}
+										</a>
+										:
+										<span>
+											{this.props.comment.reference}
+										</span>
+									}
+								</p>
+							</div>
+
+							<div className="add-comment-button">
+								<RaisedButton
+									type="submit"
+									label="Add revision"
+									labelPosition="after"
+									onClick={this.handleSubmit}
+									icon={<FontIcon className="mdi mdi-plus" />}
+								/>
+							</div>
+							{Roles.userIsInRole(Meteor.user(), ['developer']) ? /* TODO: delete*/
+								<div className="add-comment-button">
+									<RaisedButton
+										type="submit"
+										label="(developer only) Remove revision"
+										labelPosition="after"
+										onClick={this.removeRevision}
+										icon={<FontIcon className="mdi mdi-minus" />}
+									/>
+								</div>
+								:
+								''
+							}
+
+						</div>
+
+						<div className="comment-revisions">
+							{this.props.comment.revisions.map((revision, i) => (
+								<FlatButton
+									key={i}
+									id={i}
+									className="revision selected-revision"
+									onClick={that.selectRevision}
+									label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
+								/>
+							))}
+						</div>
+
+					</article>
+
+				</div>
+			</div>
+
+		);
+	},
 });

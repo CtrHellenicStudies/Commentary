@@ -54,7 +54,7 @@ Meteor.methods({
 	},
 
 	'discussionComments.upvote': function upvoteDiscussionComment(discussionCommentId) {
-		check(discussionCommentId, Number);
+		check(discussionCommentId, String);
 
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
 

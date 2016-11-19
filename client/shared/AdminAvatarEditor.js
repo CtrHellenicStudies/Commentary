@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { uploadAvatar } from '/imports/avatar/client/avatar_client_utils.js';
 import { Avatars } from '/imports/avatar/avatar_collections.js';
 
@@ -12,16 +11,23 @@ AutoForm.addInputType('adminAvatarEditor', {
 // TODO: this should be passed in
 const defaultAvatarUrl = '/images/default_user.jpg';
 
-function getCommenterDocId() {
+function getCommenterDoc() {
 	const formId = AutoForm.getFormId();
 	const formData = AutoForm.getCurrentDataForForm(formId);
-	if (formData != null
-		&& formData['doc'] != null
-		&& formData.doc['_id']) {
-		return formData.doc._id;
-	} else {
-		return null;
+	if (formData != null && formData.doc != null) {
+		return formData.doc;
 	}
+
+	return null;
+}
+
+function getCommenterDocId() {
+	const doc = getCommenterDoc();
+	if (doc != null && doc._id) {
+		return doc._id;
+	}
+
+	return null;
 }
 
 function subscribeToAvatarUrl(commenterId, reactiveUrl) {
@@ -34,17 +40,23 @@ function subscribeToAvatarUrl(commenterId, reactiveUrl) {
 				added(doc) {
 					reactiveUrl.set(doc.url);
 				},
-				changed(newDoc, oldDoc) {
+				changed(newDoc) {
 					reactiveUrl.set(newDoc.url);
+				},
+				removed(oldDoc) {
+					const commenter = Commenters.findOne({ _id: commenterId });
+					if (!commenter || !commenter.avatar || commenter.avatar === oldDoc._id) {
+						reactiveUrl.set(defaultAvatarUrl);
+					}
 				},
 			});
 		}
 	);
 }
 
-Template.adminAvatarEditor.onCreated(function () {
+Template.adminAvatarEditor.onCreated(function onCreated() {
 	this.avatarUrl = new ReactiveVar(defaultAvatarUrl);
-	if (this['avatarSubHandle'] == null) {
+	if (this.avatarSubHandle == null) {
 		const docId = getCommenterDocId();
 		if (docId) {
 			subscribeToAvatarUrl(docId, this.avatarUrl);
@@ -52,13 +64,13 @@ Template.adminAvatarEditor.onCreated(function () {
 	}
 });
 
-Template.adminAvatarEditor.onDestroyed(function () {
+Template.adminAvatarEditor.onDestroyed(function onDestroyed() {
 	this.avatarSubHandle.stop();
 	this.avatarSubHandle = null;
 });
 
-Template.adminAvatarEditor.onRendered(function () {
-	if (this['avatarSubHandle'] == null) {
+Template.adminAvatarEditor.onRendered(function onRendered() {
+	if (this.avatarSubHandle == null) {
 		const docId = getCommenterDocId();
 		if (docId) {
 			subscribeToAvatarUrl(docId, this.avatarUrl);
@@ -73,7 +85,7 @@ Template.adminAvatarEditor.helpers({
 });
 
 Template.adminAvatarEditor.events({
-	'click button[name=selectFile]': function (event) {
+	'click button[name=selectFile]': () => {
 		const commenterId = getCommenterDocId();
 		UploadFS.selectFile(fileData => {
 			uploadAvatar(fileData, {
@@ -82,23 +94,27 @@ Template.adminAvatarEditor.events({
 			});
 		});
 	},
-	'dragstart .avatar-image': function (event) {
+	'click button[name=deleteAvatar]': () => {
+		const commenter = getCommenterDoc();
+		Meteor.call('avatar.delete', { avatarId: commenter.avatar });
+	},
+	'dragstart .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragenter .avatar-image': function (event) {
+	'dragenter .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragover .avatar-image': function (event) {
+	'dragover .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'dragleave .avatar-image': function (event) {
+	'dragleave .avatar-image': (event) => {
 		event.stopPropagation();
 		return event.preventDefault();
 	},
-	'drop .avatar-image': function (event, t) {
+	'drop .avatar-image': (event) => {
 		event.stopPropagation();
 		event.preventDefault();
 

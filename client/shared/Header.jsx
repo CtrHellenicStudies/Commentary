@@ -1,4 +1,3 @@
-
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -25,7 +24,6 @@ Header = React.createClass({
 			leftMenuOpen: false,
 			rightMenuOpen: false,
 			searchEnabled: this.props.initialSearchEnabled,
-			addCommentPage: false,
 			searchDropdownOpen: '',
 			subworks: [],
 			activeWork: '',
@@ -36,22 +34,6 @@ Header = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
-	componentWillMount() {
-		if (location.pathname.indexOf('/add-comment') === 0) {
-			this.setState({
-				addCommentPage: true,
-			});
-		}
-	},
-
-	componentDidUpdate() {
-		if (location.pathname.indexOf('/add-comment') === 0 && !this.state.addCommentPage) {
-			this.setState({
-				addCommentPage: true,
-			});
-		}
 	},
 
 	getMeteorData() {
@@ -65,7 +47,7 @@ Header = React.createClass({
 
 	toggleSearchMode() {
 		if (
-				location.pathname.indexOf('/commentary') === 0
+			location.pathname.indexOf('/commentary') === 0
 			|| location.pathname.indexOf('/add-comment') === 0
 		) {
 			this.setState({
@@ -122,20 +104,20 @@ Header = React.createClass({
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
-
-		value.subworks.forEach((subwork) => {
-			subwork.work = work;
+		const newValue = value;
+		newValue.subworks.forEach((subwork, i) => {
+			newValue.subworks[i].work = work;
 		});
 
 		// console.log("Header.state", this.state);
 
-		if (this.state.activeWork === value.slug) {
+		if (this.state.activeWork === newValue.slug) {
 			this.setState({
 				subworks: [],
 				activeWork: '',
 			});
 		} else {
-			value.subworks.sort((a, b) => {
+			newValue.subworks.sort((a, b) => {
 				if (a.n < b.n) {
 					return -1;
 				}
@@ -145,12 +127,12 @@ Header = React.createClass({
 				return 0;
 			});
 			this.setState({
-				subworks: value.subworks,
-				activeWork: value.slug,
+				subworks: newValue.subworks,
+				activeWork: newValue.slug,
 			});
 		}
 
-		this.props.toggleSearchTerm(key, value);
+		this.props.toggleSearchTerm(key, newValue);
 	},
 
 	showLoginModal() {
@@ -199,7 +181,10 @@ Header = React.createClass({
 
 		const userIsLoggedIn = Meteor.user();
 		const filters = this.props.filters;
-
+		let addCommentPage = false;
+		if (location.pathname.indexOf('/add-comment') === 0) {
+			addCommentPage = true;
+		}
 		// console.log("Header.state", this.state);
 		// console.log("Header.data", this.data);
 
@@ -218,7 +203,7 @@ Header = React.createClass({
 				/>
 				<header >
 					{!this.state.searchEnabled ?
-						<div className="md-menu-toolbar" >
+						<div className="md-menu-toolbar">
 							<div className="toolbar-tools">
 								<IconButton
 									className="left-drawer-toggle"
@@ -227,7 +212,7 @@ Header = React.createClass({
 									onClick={this.toggleLeftMenu}
 								/>
 
-								<a href="/" className="header-home-link" >
+								<a href="/" className="header-home-link">
 									<h3 className="logo">A Homer Commentary in Progress</h3>
 								</a>
 								<div className="search-toggle">
@@ -237,7 +222,7 @@ Header = React.createClass({
 										iconClassName="mdi mdi-magnify"
 									/>
 								</div>
-								<div className="header-section-wrap nav-wrap collapse" >
+								<div className="header-section-wrap nav-wrap collapse">
 									<FlatButton
 										label="Commentary"
 										href="/commentary/"
@@ -276,7 +261,7 @@ Header = React.createClass({
 												</div>
 											}
 										</div>
-									:
+										:
 										<div>
 											<FlatButton
 												label="Login"
@@ -302,10 +287,10 @@ Header = React.createClass({
 								</div>
 							</div>
 						</div>
-					:
+						:
 						<div>
-							{!this.state.addCommentPage ?
-								<div className="md-menu-toolbar" >
+							{!addCommentPage ?
+								<div className="md-menu-toolbar">
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"
@@ -338,7 +323,7 @@ Header = React.createClass({
 									</div>
 								</div>
 								:
-								<div className="md-menu-toolbar" >
+								<div className="md-menu-toolbar">
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"

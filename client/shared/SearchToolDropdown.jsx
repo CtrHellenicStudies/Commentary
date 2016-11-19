@@ -33,7 +33,9 @@ SearchToolDropdown = React.createClass({
 					label={this.props.name}
 					labelPosition="before"
 					icon={<FontIcon className="mdi mdi-chevron-down" />}
-					onClick={() => { this.props.toggle(this.props.name); }}
+					onClick={() => {
+						this.props.toggle(this.props.name);
+					}}
 					disabled={this.props.disabled}
 				/>
 
@@ -45,7 +47,9 @@ SearchToolDropdown = React.createClass({
 					<IconButton
 						className="close-dropdown"
 						iconClassName="mdi mdi-close"
-						onClick={() => { this.props.toggle(this.props.name); }}
+						onClick={() => {
+							this.props.toggle(this.props.name);
+						}}
 					/>
 				</ul>
 

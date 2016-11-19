@@ -25,20 +25,6 @@ Schemas.Commenters = new SimpleSchema({
 		},
 	},
 
-	/* TODO: cleanup from db
-	picture: {
-		type: String,
-		optional: true,
-		label: 'Profile picture',
-		autoform: {
-			afFieldInput: {
-				type: 'fileUpload',
-				collection: 'ProfilePictures'
-			}
-		}
-	},
-	*/
-
 	avatar: {
 		type: String,
 		optional: true,
@@ -119,27 +105,12 @@ Schemas.Commenters = new SimpleSchema({
 		optional: true,
 	},
 
-
 	created: {
 		type: Date,
 		optional: true,
-		autoValue: () => {
+		autoValue() {
 			if (this.isInsert) {
-				return new (Date);
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue: () => {
-			if (this.isUpdate) {
-				return new (Date);
+				return new Date();
 			}
 			return null;
 		},
@@ -149,6 +120,20 @@ Schemas.Commenters = new SimpleSchema({
 		},
 	},
 
+	updated: {
+		type: Date,
+		optional: true,
+		autoValue() {
+			if (this.isUpdate) {
+				return new Date();
+			}
+			return null;
+		},
+		autoform: {
+			type: 'hidden',
+			label: false,
+		},
+	},
 });
 
 Commenters.attachSchema(Schemas.Commenters);

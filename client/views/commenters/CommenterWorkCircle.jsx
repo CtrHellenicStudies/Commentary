@@ -1,4 +1,3 @@
-
 CommenterWorkCircle = React.createClass({
 
 	propTypes: {
@@ -6,10 +5,10 @@ CommenterWorkCircle = React.createClass({
 		workTitle: React.PropTypes.string.isRequired,
 		workSlug: React.PropTypes.string.isRequired,
 		workLevel: React.PropTypes.number.isRequired,
+		nComments: React.PropTypes.number.isRequired,
 	},
 
 	render() {
-		console.log(this.props);
 		return (
 			<div className="commenter-work-circle">
 				<div
@@ -17,6 +16,7 @@ CommenterWorkCircle = React.createClass({
 					onClick={this.props.toggleVisibleWork.bind(null, this.props.workSlug)}
 				>
 					<span className="work-title">{this.props.workTitle}</span>
+					<span className="work-count">{this.props.nComments}</span>
 					<div className="grow-border" />
 				</div>
 			</div>

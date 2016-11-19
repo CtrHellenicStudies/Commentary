@@ -6,32 +6,29 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 import { sinon } from 'meteor/practicalmeteor:sinon';
-
-import { brown500, brown800, grey300, white, black } from 'material-ui/styles/colors';
-import Chip from 'material-ui/Chip';
-import SearchTermButtonPanel from './SearchTermButtonPanel.jsx';
+import FlatButton from 'material-ui/FlatButton';
+import SearchTermButton from './SearchTermButton.jsx';
 
 if (Meteor.isClient) {
-	describe('SearchTermButtonPanel', () => {
+	describe('SearchTermButton', () => {
 		it('should render', () => {
 			const toggleSearchTerm = sinon.spy();
 			const wrapper = shallow(
-				<SearchTermButtonPanel
+				<SearchTermButton
 					toggleSearchTerm={toggleSearchTerm}
 					label="TestSearchterm"
 					searchTermKey="TestKey"
 					value={{ key: 'value' }}
 				/>
 			);
-			const chip = wrapper.find(Chip);
-			chai.assert.ok(chip, 'should contain the Chip child');
-			chai.assert.equal(chip.childAt(1).text(), 'TestSearchterm');
+			chai.assert.ok(wrapper.find(FlatButton), 'should contain the Flatbutton child');
+			chai.assert.equal(wrapper.find(FlatButton).node.props.label, 'TestSearchterm');
 		});
 
 		it('should render with active prop set', () => {
 			const toggleSearchTerm = sinon.spy();
 			const wrapper = shallow(
-				<SearchTermButtonPanel
+				<SearchTermButton
 					toggleSearchTerm={toggleSearchTerm}
 					label="TestSearchterm"
 					searchTermKey="TestKey"
@@ -39,16 +36,16 @@ if (Meteor.isClient) {
 					active
 				/>
 			);
-			const chip = wrapper.find(Chip);
-			chai.assert.ok(chip, 'should contain the Chip child');
-			chai.assert.equal(chip.childAt(1).text(), 'TestSearchterm');
-			chai.assert.include(chip.childAt(0).node.props.backgroundColor, brown800);
+			const flatButton = wrapper.find(FlatButton);
+			chai.assert.ok(flatButton, 'should contain the Flatbutton child');
+			chai.assert.equal(flatButton.node.props.label, 'TestSearchterm');
+			chai.assert.include(flatButton.node.props.className, 'search-term-button--active');
 		});
 
 		it('should render with activeWork prop set', () => {
 			const toggleSearchTerm = sinon.spy();
 			const wrapper = shallow(
-				<SearchTermButtonPanel
+				<SearchTermButton
 					toggleSearchTerm={toggleSearchTerm}
 					label="TestSearchterm"
 					searchTermKey="TestKey"
@@ -56,26 +53,26 @@ if (Meteor.isClient) {
 					activeWork
 				/>
 			);
-			const chip = wrapper.find(Chip);
-			chai.assert.ok(chip, 'should contain the Chip child');
-			chai.assert.equal(chip.childAt(1).text(), 'TestSearchterm');
-			chai.assert.include(chip.childAt(0).node.props.backgroundColor, brown800);
+			const flatButton = wrapper.find(FlatButton);
+			chai.assert.ok(flatButton, 'should contain the Flatbutton child');
+			chai.assert.equal(flatButton.node.props.label, 'TestSearchterm');
+			chai.assert.include(flatButton.node.props.className, 'search-term-button--active');
 		});
 		it('should call parent callback with correct values', () => {
 			const toggleSearchTerm = sinon.spy();
 			const wrapper = shallow(
-				<SearchTermButtonPanel
+				<SearchTermButton
 					toggleSearchTerm={toggleSearchTerm}
 					label="TestSearchterm"
 					searchTermKey="TestKey"
 					value={{ key: 'value' }}
 				/>
 			);
-			const chip = wrapper.find(Chip);
-			chip.simulate('touchTap');
+			const flatButton = wrapper.find(FlatButton);
+			flatButton.simulate('click');
 			sinon.assert.calledWith(toggleSearchTerm, 'TestKey', { key: 'value' });
-			chai.assert.ok(chip, 'should contain the Chip child');
-			chai.assert.equal(chip.childAt(1).text(), 'TestSearchterm');
+			chai.assert.ok(flatButton, 'should contain the Flatbutton child');
+			chai.assert.equal(flatButton.node.props.label, 'TestSearchterm');
 		});
 	});
 }

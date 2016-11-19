@@ -1,147 +1,220 @@
-import '../../node_modules/mdi/css/materialdesignicons.css';
-
 import slugify from 'slugify';
+import '../../node_modules/mdi/css/materialdesignicons.css';
 
 AddRevisionLayout = React.createClass({
 
-    										getInitialState() {
-        										return {
-            										filters: [],
+	propTypes: {
+		commentId: React.PropTypes.string,
+	},
 
-            // selectedLineFrom: 0,
-            // selectedLineTo: 0,
+	mixins: [ReactMeteorData],
 
-            										contextReaderOpen: true,
-        };
-    },
+	getInitialState() {
+		return {
+			filters: [],
 
-    										mixins: [ReactMeteorData],
+			// selectedLineFrom: 0,
+			// selectedLineTo: 0,
 
-    										getMeteorData() {
-        								const commentSubscription = Meteor.subscribe('comments', { _id: this.props.commentId }, 0, 1);
-        									let comment = {};
+			contextReaderOpen: true,
+		};
+	},
 
-        										if (commentSubscription.ready()) {
-            										comment = Comments.find().fetch()[0];
-            // comment.commenters.forEach((commenter) => {
-            // //     canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
-            //     canShow = (Meteor.user().commenterId === commenter._id);
-            // });
-        }
+	componentWillUpdate() {
+		this.handlePermissions();
+	},
 
-        // console.log('Roles.subscription.ready()', Roles.subscription.ready());
-        // console.log('Object.keys(this.data.comment).length', Object.keys(comment).length);
-        // var ready = Roles.subscription.ready() && Object.keys(comment).length;
+	getMeteorData() {
+		const commentSubscription = Meteor.subscribe('comments', {
+			_id: this.props.commentId,
+		}, 0, 1);
+		let comment = {};
 
-        										return {
-            // ready: ready,
-            									comment,
-        };
-    },
+		if (commentSubscription.ready()) {
+			comment = Comments.find().fetch()[0];
+			// comment.commenters.forEach((commenter) => {
+			// //     canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
+			//     canShow = (Meteor.user().commenterId === commenter._id);
+			// });
+		}
 
-    										componentWillUpdate(nextProps, nextState) {
-        										this.handlePermissions();
-    },
+		// console.log('Roles.subscription.ready()', Roles.subscription.ready());
+		// console.log('Object.keys(this.data.comment).length', Object.keys(comment).length);
+		// var ready = Roles.subscription.ready() && Object.keys(comment).length;
 
-    										addRevision(formData) {
-        								const revision = {
-            										title: formData.titleValue,
-            										text: formData.textValue,
-            										created: new Date(),
-            										slug: slugify(formData.titleValue),
-        };
+		const keywords = Keywords.find().fetch();
 
-	const self = this;
+		return {
+			// ready: ready,
+			comment,
+			keywords,
+		};
+	},
 
-        										Meteor.call('comments.add.revision', this.props.commentId, revision, function (err) {
-            										FlowRouter.go('/commentary/?_id=' + self.data.comment._id);
-        });
+	addRevision(formData) {
+		const self = this;
 
-        // TODO: handle behavior after comment added (add info about success)
-    },
+		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
+			const keywords = [];
+			self.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
+				keywords.push(matchedKeyword);
+			});
+			self.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
+				keywords.push(matchedKeyword);
+			});
 
-    										closeContextReader() {
-        										this.setState({
-            										contextReaderOpen: false,
-        });
-    },
+			const revision = {
+				title: formData.titleValue,
+				text: formData.textValue,
+				created: new Date(),
+				slug: slugify(formData.titleValue),
+			};
 
-    										openContextReader() {
-        										this.setState({
-            										contextReaderOpen: true,
-        });
-    },
+			let update = [{}];
+			if (keywords) {
+				update = {
+					keywords,
+				};
+			}
 
-    										handlePermissions() {
-        										if (Roles.subscription.ready()) {
-            										if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
-                										FlowRouter.go('/');
-            }
-        }
-        										if (Object.keys(this.data.comment).length) {
-            									let isOwner = false;
-            										this.data.comment.commenters.forEach((commenter) => {
-                										if (!isOwner) {
-                    										isOwner = (Meteor.user().commenterId === commenter._id);
-                }
-            });
-            										if (!isOwner) {
-                										FlowRouter.go('/');
-            }
-        }
-    },
+			Meteor.call('comments.add.revision', self.props.commentId, revision, () => {
+				Meteor.call('comment.update', self.props.commentId, update, () => {
+					FlowRouter.go(`/commentary/?_id=${self.data.comment._id}`);
+				});
+			});
+		});
 
-    										toggleSearchTerm(key, value) {
-        									let self = this,
-            										filters = this.state.filters;
-        									let keyIsInFilter = false,
-            										valueIsInFilter = false,
-            										filterValueToRemove,
-            										filterToRemove;
+		// TODO: handle behavior after comment added (add info about success)
+	},
 
-        										filters.forEach(function (filter, i) {
-            										if (filter.key === key) {
-                										keyIsInFilter = true;
+	matchKeywords(keywords) {
+		const matchedKeywords = [];
+		if (keywords) {
+			keywords.forEach((keyword) => {
+				const foundKeyword = Keywords.find({
+					title: keyword,
+				}).fetch()[0];
+				matchedKeywords.push(foundKeyword);
+			});
+		}
+		return matchedKeywords;
+	},
 
-                										filter.values.forEach(function (filterValue, j) {
-                    										if (filterValue._id === value._id) {
-                        										valueIsInFilter = true;
-                        										filterValueToRemove = j;
-                    }
-                });
+	addNewKeywordsAndIdeas(keywords, keyideas, next) {
+		const that = this;
+		this.addNewKeywords(keywords, 'word', () => {
+			that.addNewKeywords(keyideas, 'idea', () => next());
+		});
+	},
 
-                										if (valueIsInFilter) {
-                    										filter.values.splice(filterValueToRemove, 1);
-                    										if (filter.values.length === 0) {
-                        										filterToRemove = i;
-                    }
-                } else {
-                    										if (key === 'works') {
-                        										filter.values = [value];
-                    } else {
-                        										filter.values.push(value);
-                    }
-                }
-            }
-        });
+	addNewKeywords(keywords, type, next) {
+		if (keywords) {
+			const that = this;
+			const insertKeywords = [];
+			keywords.forEach((keyword) => {
+				foundKeyword = that.data.keywords.find((d) => d.title === keyword);
+				console.log('foundKeyword', foundKeyword, 'keyword', keyword);
+				if (foundKeyword === undefined) {
+					const _keyword = {
+						title: keyword,
+						slug: slugify(keyword),
+						type,
+					};
+					insertKeywords.push(_keyword);
+				}
+			});
+			if (insertKeywords.length > 0) {
+				return Meteor.call('keywords.insert', insertKeywords, (err) => {
+					if (err) {
+						console.log(err);
+					}
+					return next();
+				});
+			}
+			return next();
+		}
+		return next();
+	},
+
+	closeContextReader() {
+		this.setState({
+			contextReaderOpen: false,
+		});
+	},
+
+	openContextReader() {
+		this.setState({
+			contextReaderOpen: true,
+		});
+	},
+
+	handlePermissions() {
+		if (Roles.subscription.ready()) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
+				FlowRouter.go('/');
+			}
+		}
+		if (Object.keys(this.data.comment).length) {
+			let isOwner = false;
+			this.data.comment.commenters.forEach((commenter) => {
+				if (!isOwner) {
+					isOwner = (Meteor.user().commenterId === commenter._id);
+				}
+			});
+			if (!isOwner) {
+				FlowRouter.go('/');
+			}
+		}
+	},
+
+	toggleSearchTerm(key, value) {
+		const filters = this.state.filters;
+		let keyIsInFilter = false;
+		let valueIsInFilter = false;
+		let filterValueToRemove;
+		let filterToRemove;
+
+		filters.forEach((filter, i) => {
+			if (filter.key === key) {
+				keyIsInFilter = true;
+
+				filter.values.forEach((filterValue, j) => {
+					if (filterValue._id === value._id) {
+						valueIsInFilter = true;
+						filterValueToRemove = j;
+					}
+				});
+
+				if (valueIsInFilter) {
+					filter.values.splice(filterValueToRemove, 1);
+					if (filter.values.length === 0) {
+						filterToRemove = i;
+					}
+				} else if (key === 'works') {
+					filters[i].values = [value];
+				} else {
+					filter.values.push(value);
+				}
+			}
+		});
 
 
-        										if (typeof filterToRemove !== 'undefined') {
-            										filters.splice(filterToRemove, 1);
-        }
+		if (typeof filterToRemove !== 'undefined') {
+			filters.splice(filterToRemove, 1);
+		}
 
-        										if (!keyIsInFilter) {
-            										filters.push({
-                									key,
-                										values: [value],
-            });
-        }
+		if (!keyIsInFilter) {
+			filters.push({
+				key,
+				values: [value],
+			});
+		}
 
-        										this.setState({
-            									filters,
-            										skip: 0,
-        });
-    },
+		this.setState({
+			filters,
+			skip: 0,
+		});
+	},
 
 	handleChangeLineN(e) {
 		const filters = this.state.filters;
@@ -149,9 +222,9 @@ AddRevisionLayout = React.createClass({
 		if (e.from > 1) {
 			let lineFromInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
-					filter.values = [e.from];
+					filters[i].values = [e.from];
 					lineFromInFilters = true;
 				}
 			});
@@ -165,7 +238,7 @@ AddRevisionLayout = React.createClass({
 		} else {
 			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineFrom') {
 					filterToRemove = i;
 				}
@@ -179,9 +252,9 @@ AddRevisionLayout = React.createClass({
 		if (e.to < 2100) {
 			let lineToInFilters = false;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
-					filter.values = [e.to];
+					filters[i].values = [e.to];
 					lineToInFilters = true;
 				}
 			});
@@ -195,7 +268,7 @@ AddRevisionLayout = React.createClass({
 		} else {
 			let filterToRemove;
 
-			filters.forEach(function (filter, i) {
+			filters.forEach((filter, i) => {
 				if (filter.key === 'lineTo') {
 					filterToRemove = i;
 				}
@@ -206,84 +279,83 @@ AddRevisionLayout = React.createClass({
 			}
 		}
 
-
 		this.setState({
 			filters,
 		});
 	},
 
 
-    										ifReady() {
-        									let ready = Roles.subscription.ready();
-        										ready = ready && Object.keys(this.data.comment).length;
-        										return ready;
-    },
+	ifReady() {
+		let ready = Roles.subscription.ready();
+		ready = ready && Object.keys(this.data.comment).length;
+		return ready;
+	},
 
-    										render() {
-	const filters = this.state.filters;
-        								const comment = this.data.comment;
+	render() {
+		const filters = this.state.filters;
+		const comment = this.data.comment;
 
-        										return (
-            <div>
-                {this.ifReady() ?
-                    <div className="chs-layout add-comment-layout">
+		return (
+			<div>
+				{this.ifReady() ?
+					<div className="chs-layout add-comment-layout">
 
-                          <Header
-	toggleSearchTerm={this.toggleSearchTerm}
-	handleChangeLineN={this.handleChangeLineN}
-	filters={filters}
-	initialSearchEnabled
-                          />
+						<Header
+							toggleSearchTerm={this.toggleSearchTerm}
+							handleChangeLineN={this.handleChangeLineN}
+							filters={filters}
+							initialSearchEnabled
+						/>
 
-                            <main>
+						<main>
 
-														<div className="commentary-comments">
-															<div className="comment-group">
-                                <CommentLemmaSelect
-	ref="CommentLemmaSelect"
-	selectedLineFrom={comment.lineFrom}
-	selectedLineTo={comment.lineFrom + comment.nLines - 1}
-	workSlug={comment.work.slug}
-	subworkN={comment.subwork.n}
-                                />
+							<div className="commentary-comments">
+								<div className="comment-group">
+									<CommentLemmaSelect
+										ref={(component) => { this.commentLemmaSelect = component; }}
+										selectedLineFrom={comment.lineFrom}
+										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+										workSlug={comment.work.slug}
+										subworkN={comment.subwork.n}
+									/>
 
-                                <AddRevision
-	submitForm={this.addRevision}
-	comment={comment}
-                                />
+									<AddRevision
+										submitForm={this.addRevision}
+										comment={comment}
+									/>
 
-                                <ContextReader
-	open={this.state.contextReaderOpen}
-	closeContextPanel={this.closeContextReader}
-	workSlug={comment.work.slug}
-	subwork_n={comment.subwork.n}
-	selectedLineFrom={comment.lineFrom}
-	selectedLineTo={comment.lineFrom + comment.nLines - 1}
-	initialLineFrom={comment.lineFrom}
-	initialLineTo={comment.lineFrom + comment.nLines - 1 + 50}
-	disableEdit
-                                />
-																</div>
-															</div>
+									<ContextReader
+										open={this.state.contextReaderOpen}
+										closeContextPanel={this.closeContextReader}
+										workSlug={comment.work.slug}
+										subworkN={comment.subwork.n}
+										selectedLineFrom={comment.lineFrom}
+										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+										initialLineFrom={comment.lineFrom}
+										initialLineTo={((comment.lineFrom + comment.nLines) - 1) + 50}
+										disableEdit
+									/>
+								</div>
+							</div>
 
 
-                            </main>
+						</main>
 
-												<FilterWidget
-													filters={filters}
-													toggleSearchTerm={this.toggleSearchTerm}
-												/>
+						<FilterWidget
+							filters={filters}
+							toggleSearchTerm={this.toggleSearchTerm}
+						/>
 
-                        <Footer />
+						<Footer />
 
-                    </div>
-                    :
-                    <div className="ahcip-spinner commentary-loading full-page-spinner" >
-                        <div className="double-bounce1" />
-                        <div className="double-bounce2" />
-                    </div>
-                }
-            </div>
-        );
-    },
+					</div>
+					:
+					<div className="ahcip-spinner commentary-loading full-page-spinner">
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
+					</div>
+				}
+			</div>
+		);
+	},
 });

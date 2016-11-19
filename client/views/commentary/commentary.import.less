@@ -1,21 +1,21 @@
 header {
 
   .active-comment-meta {
-    margin-top:5px;
+    margin-top: 5px;
 
     h3 {
-      display:inline-block;
-      vertical-align:top;
-      font-size:22px;
+      display: inline-block;
+      vertical-align: top;
+      font-size: 22px;
 
     }
 
     .lemma-text {
-      display:inline-block;
-      vertical-align:top;
-      font-size:20px;
-      padding:0 10px;
-      margin:0;
+      display: inline-block;
+      vertical-align: top;
+      font-size: 20px;
+      padding: 0 10px;
+      margin: 0;
 
     }
 
@@ -24,237 +24,228 @@ header {
 }
 
 .commentary-index .comm-button .go-to-commentary {
-  display:none;
+  display: none;
 }
 
 .comment-index {
-  background:#f6f6f6;
+  background: #f6f6f6;
   footer {
-    display:none;
+    display: none;
   }
 }
 
-
 header .line-wrap {
-    float:right;
+  float: right;
   .line-text, .line-ref, .search {
-    display:inline-block;
+    display: inline-block;
     vertical-align: top;
-    padding:0;
-
+    padding: 0;
 
   }
 
   .line-text {
-    margin-top:20px;
-    padding:0 10px;
-    font-size:18px;
-    font-family:@font-lemma;
+    margin-top: 20px;
+    padding: 0 10px;
+    font-size: 18px;
+    font-family: @font-lemma;
   }
 
   .line-ref {
-    font-family:@font-label;
-    font-size:18px;
-    padding:3px 20px 3px 15px;
-    border-right:1px solid #aaa;
-    margin-top:18px;
+    font-family: @font-label;
+    font-size: 18px;
+    padding: 3px 20px 3px 15px;
+    border-right: 1px solid #aaa;
+    margin-top: 18px;
 
   }
 
 }
 
-
 .commentary-primary {
-  padding:60px 0;
-  background:@background-gray;
+  padding: 60px 0;
+  background: @background-gray;
 }
 
 .comment-group {
-  display:block;
-  width:100%;
+  display: block;
+  width: 100%;
   margin: 0 auto;
   padding: 50px 25px;
-  clear:both;
-  position:relative;
-
+  clear: both;
+  position: relative;
 
   &.comment-ref--fixed {
-	.comment-group-meta-inner {
-	  position:fixed;
-	  top:100px;
+    .comment-group-meta-inner {
+      position: fixed;
+      top: 100px;
 
-	  .comment-group-ref-above {
-		margin-right:15px;
-	  }
+      .comment-group-ref-above {
+        margin-right: 15px;
+      }
 
-	  .comment-group-commenters {
-		padding-right:15px;
+      .comment-group-commenters {
+        padding-right: 15px;
 
-	  }
+      }
 
-	}
+    }
   }
 
-
   .comment-group-end {
-		margin:100px auto 0;
-		outline:none;
-		border:none;
-		height:5px;
-		background:@primary-light;
-		min-width:200px;
-		width:50%;
-
+    margin: 100px auto 0;
+    outline: none;
+    border: none;
+    height: 5px;
+    background: @primary-light;
+    min-width: 200px;
+    width: 50%;
 
   }
 
 }
 
 .comment-group-meta {
-  text-align:right;
-  padding:40px 0;
-  display:inline-block;
-  vertical-align:top;
-  width:10%;
+  text-align: right;
+  padding: 40px 0;
+  display: inline-block;
+  vertical-align: top;
+  width: 10%;
 
   .comment-group-meta-inner {
-		position:absolute;
-		top:115px;
-		left:4%;
+    position: absolute;
+    top: 115px;
+    left: 4%;
   }
 
   .comment-group-meta-inner-fixed {
-    position:fixed;
-    top:173px;
-		left:5%;
+    position: fixed;
+    top: 173px;
+    left: 5%;
   }
 
   .comment-group-meta-inner-bottom {
-    position:absolute;
-    bottom:173px;
-		left:5%;
+    position: absolute;
+    bottom: 173px;
+    left: 5%;
   }
 
   .comment-group-ref-above {
-		cursor:default;
-		text-transform:uppercase;
-		font-weight:bold;
-		color:@secondary-text;
-		padding:30px 0px 5px 0;
-		margin:0 0px 0 0 ;
-	  font-family:@font-label;
-	  font-size:16px;
-		text-align:left;
-		display:block;
+    cursor: default;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: @secondary-text;
+    padding: 30px 0px 5px 0;
+    margin: 0 0px 0 0;
+    font-family: @font-label;
+    font-size: 16px;
+    text-align: left;
+    display: block;
 
   }
 
   h2.comment-group-ref-below {
-    cursor:default;
-    font-family:@font-title;
-    font-size:46px;
-    font-weight:bold;
-    color:#424242;
-		margin:0;
-    padding:5px 0px;
-    display:inline-block;
+    cursor: default;
+    font-family: @font-title;
+    font-size: 46px;
+    font-weight: bold;
+    color: #424242;
+    margin: 0;
+    padding: 5px 0px;
+    display: inline-block;
     vertical-align: top;
-		max-width:89px;
-		text-align:left;
-		display:block;
+    max-width: 89px;
+    text-align: left;
+    display: block;
 
-		span {
-	    font-family:@font-title;
-	    font-size:46px;
-		  font-weight:bold;
+    span {
+      font-family: @font-title;
+      font-size: 46px;
+      font-weight: bold;
 
-		}
+    }
 
     &.fixed {
-      top:50px;
-      left:112px;
+      top: 50px;
+      left: 112px;
 
     }
 
   }
 
   .comment-group-ref-lemma {
-	text-align:right;
-	padding:0px 0;
-	width:60%;
-	margin:0 auto;
-	display:inline-block;
-	vertical-align: top;
-	display:none;
+    text-align: right;
+    padding: 0px 0;
+    width: 60%;
+    margin: 0 auto;
+    display: inline-block;
+    vertical-align: top;
+    display: none;
 
-	p {
-	  padding:5px;
-	  margin:0;
-	  font-size:18px;
-	  color:@secondary-text;
+    p {
+      padding: 5px;
+      margin: 0;
+      font-size: 18px;
+      color: @secondary-text;
 
-	}
+    }
 
   }
-
 
   .comment-group-commenters {
-	padding:5px 0px 10px 0;
+    padding: 5px 0px 10px 0;
 
-	.comment-author {
-	  clear:both;
-	  position:relative;
+    .comment-author {
+      clear: both;
+      position: relative;
 
-	  &:hover {
-		.comment-author-name {
-		  opacity:1;
-		}
+      &:hover {
+        .comment-author-name {
+          opacity: 1;
+        }
 
+      }
 
-	  }
+    }
 
-	}
+    .comment-author-name {
+      color: @secondary-text;
+      font-size: 12px;
+      top: 15px;
+      right: 60px;
+      text-transform: uppercase;
+      position: absolute;
+      opacity: 0;
+      .transition(all 300ms ease-out);
 
-	.comment-author-name {
-	  color:@secondary-text;
-	  font-size:12px;
-	  top:15px;
-	  right:60px;
-	  text-transform:uppercase;
-	  position:absolute;
-	  opacity:0;
-	  .transition(all 300ms ease-out);
+    }
 
-	}
-
-	.comment-author-image-wrap {
-	  margin:5px 0;
-	  display:block;
-	  float:right;
-	}
+    .comment-author-image-wrap {
+      margin: 5px 0;
+      display: block;
+      float: right;
+    }
 
   }
-
 
 }
 
 .comments {
-  display:inline-block;
-  vertical-align:top;
-  width:100%;
-  text-align:center;
-  margin:0 auto;
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
 
 }
 
 .comment-outer {
-  margin:0 auto;
-  display:inline-block;
-  vertical-align:top;
-  width:100%;
-  text-align:center;
-	position:relative;
-  .transition( all 300ms ease-out );
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  .transition(all 300ms ease-out);
 
 }
 
@@ -263,204 +254,203 @@ header .line-wrap {
 }
 
 article.lemma-comment {
-  border-top:2px solid @primary;
-  margin-left:0;
-  padding:50px 40px;
+  border-top: 2px solid @primary;
+  margin-left: 0;
+  padding: 50px 40px;
 
   p.lemma-text {
-    font-size:20px;
-    padding:5px 15px;
-    margin:0;
-    font-weight:normal;
-    color:rgba(0,0,0,0.7);
+    font-size: 20px;
+    padding: 5px 15px;
+    margin: 0;
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.7);
 
   }
 
-	.edition-tab {
-    display:inline-block;
-    margin:5px;
-		box-shadow:none !important;
-		border-radius:2px;
+  .edition-tab {
+    display: inline-block;
+    margin: 5px;
+    box-shadow: none !important;
+    border-radius: 2px;
 
     &.selected-edition-tab {
-      background:@primary !important;
-      margin:3px;
-	    color:@light;
-			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),0 1px 5px 0 rgba(0, 0, 0, 0.12),0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
-			border-radius:2px;
+      background: @primary !important;
+      margin: 3px;
+      color: @light;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
+      border-radius: 2px;
 
-			button, div {
-	      background:@primary !important;
+      button, div {
+        background: @primary !important;
 
-			}
+      }
 
       span {
-        color:@light !important;
+        color: @light !important;
 
       }
 
       &:hover {
-        background:@primary-dark-2 !important;
-				button,div {
-	        background:@primary-dark-2 !important;
+        background: @primary-dark-2 !important;
+        button, div {
+          background: @primary-dark-2 !important;
 
-				}
+        }
 
       }
 
     }
 
-	  button {
-	    padding:5px 10px;
-	    max-width:200px;
-	    text-overflow:ellipsis;
+    button {
+      padding: 5px 10px;
+      max-width: 200px;
+      text-overflow: ellipsis;
 
-	    span {
-	      //font-family:@font-label;
-	      font-size:14px;
-	    }
+      span {
+        //font-family:@font-label;
+        font-size: 14px;
+      }
 
-	  }
+    }
 
-	}
+  }
 
   .context-tab {
 
-		box-shadow:none !important;
+    box-shadow: none !important;
 
     &:hover {
       i {
-        margin-right:-4px;
+        margin-right: -4px;
       }
     }
 
     span {
-      text-transform:uppercase;
-      font-size:14px;
-      color:@secondary-text;
-      display:inline-block;
-      vertical-align:top;
-      padding-top:1px;
-      .transition( all 100ms ease-out );
-      padding-right:3px;
+      text-transform: uppercase;
+      font-size: 14px;
+      color: @secondary-text;
+      display: inline-block;
+      vertical-align: top;
+      padding-top: 1px;
+      .transition(all 100ms ease-out);
+      padding-right: 3px;
       margin: 0px;
     }
     i {
-      font-size:18px;
-      color:@secondary-text;
-      display:inline-block;
-      vertical-align:top;
-      .transition( all 100ms ease-out );
-      margin-right:0px;
+      font-size: 18px;
+      color: @secondary-text;
+      display: inline-block;
+      vertical-align: top;
+      .transition(all 100ms ease-out);
+      margin-right: 0px;
 
     }
 
   }
 
   .context-tabs, .edition-tabs {
-    display:inline-block;
-    vertical-align:top;
-    padding-top:30px;
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 30px;
 
   }
 
   .context-tabs {
-    float:right;
+    float: right;
 
   }
-
 
 }
 
 .comment {
-  display:inline-block;
-  vertical-align:top;
-  padding:0;
-  margin:20px 0 20px 10%;
-  background:@light;
-  width:75%;
-  text-align:left;
-  .transition( all 300ms ease-out );
-  position:relative;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+  margin: 20px 0 20px 10%;
+  background: @light;
+  width: 75%;
+  text-align: left;
+  .transition(all 300ms ease-out);
+  position: relative;
 
   &:hover {
 
     .comment-revisions {
-      opacity:1;
+      opacity: 1;
     }
 
   }
 
   &.comment--title-fixed {
-    .comment-fixed-title-wrap{
-      position:fixed;
-      top:70px;
-      opacity:1;
-      height:63px;
-
+    .comment-fixed-title-wrap {
+      position: fixed;
+      top: 70px;
+      opacity: 1;
+      height: 63px;
 
     }
 
   }
 
   h1 {
-      margin:0;
-      padding:10px 0;
-      font-family:@font-label;
-      font-size:28px;
-      color:@reading-text;
+    margin: 0;
+    padding: 10px 0;
+    font-family: @font-label;
+    font-size: 28px;
+    color: @reading-text;
 
   }
 
   .comment-upper, .comment-lower {
-      display:block;
-      width:90%;
-      margin:0 auto;
+    display: block;
+    width: 90%;
+    margin: 0 auto;
   }
 
   .comment-upper {
-    padding-top:50px;
+    padding-top: 50px;
   }
   .comment-lower {
-    padding-bottom:40px;
+    padding-bottom: 40px;
   }
 
   .comment-upper-left, .comment-upper-right {
-    display:inline-block;
+    display: inline-block;
     vertical-align: top;
   }
 
   .comment-upper-right {
-    text-align:right;
-    float:right;
+    text-align: right;
+    float: right;
   }
 
   .comment-revisions {
-    background:#fafafa;
-    border-top:1px solid #ddd;
-    padding:0;
-    opacity:0;
-    .transition( all 300ms ease-out );
+    background: #fafafa;
+    border-top: 1px solid #ddd;
+    padding: 0;
+    opacity: 0;
+    .transition(all 300ms ease-out);
 
     .revision {
-      display:inline-block;
-      margin-right:-4px;
+      display: inline-block;
+      margin-right: -4px;
 
       span {
-        padding:3px 20px;
-        display:block;
-        font-family:@font-label;
-        font-size:12px;
-        text-transform:uppercase;
-        color:#999;
-        border-right:1px solid #ddd;
+        padding: 0px 20px;
+        display: block;
+        font-family: @font-light;
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #999;
+        border-right: 1px solid #ddd;
+				font-weight:300 !important;
 
       }
 
       &.selected-revision {
         span {
-          background:@primary;
-          color:@light;
+          background: @primary;
+          color: @light;
 
         }
       }
@@ -469,271 +459,266 @@ article.lemma-comment {
 
   }
 
-
   .revision-diff {
 
     table {
-      padding:20px 0 0;
+      padding: 20px 0 0;
     }
   }
   .revision-diff-title {
-    font-size:18px;
+    font-size: 18px;
 
   }
 
 }
 
 .comment-fixed-title-wrap {
-  position:relative;
-  z-index:1;
-  background:rgba(255,255,255,0.9);
-  width:100%;
-  display:block;
-  border-radius:0px;
-  opacity:0;
-  height:0;
-  overflow:hidden;
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  display: block;
+  border-radius: 0px;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
 
   .comment-fixed-title, .comment-fixed-lemma {
-    display:inline-block;
-    vertical-align:top;
+    display: inline-block;
+    vertical-align: top;
   }
   .comment-fixed-title {
-    padding:13px 10px 10px 20px;
-    font-size:22px;
-    margin:9px 0;
+    padding: 13px 10px 10px 20px;
+    font-size: 22px;
+    margin: 9px 0;
 
   }
   .comment-fixed-lemma {
-    font-size:19px;
-    padding-top:19px;
-    margin:0;
-    color:@secondary-text;
+    font-size: 19px;
+    padding-top: 19px;
+    margin: 0;
+    color: @secondary-text;
 
   }
 
   .comment-author-name {
-    font-size:15px;
-    display:block;
-    float:right;
-    padding:21px 20px 0px 20px;
-    color:@secondary-text;
+    font-size: 15px;
+    display: block;
+    float: right;
+    padding: 21px 20px 0px 20px;
+    color: @secondary-text;
 
     &:hover {
-      color:@primary;
+      color: @primary;
 
     }
 
   }
 
-
 }
-
 
 .comment-author {
 
-  margin:12px 0 0;
+  margin: 12px 0 0;
 
-  .comment-author-text{
-    display:inline-block;
+  .comment-author-text {
+    display: inline-block;
     vertical-align: top;
-    padding:4px 10px;
+    padding: 4px 10px;
 
   }
 
   .comment-author-name {
-      display:block;
+    display: block;
+		font-size:16px;
 
-      &:hover {
-        color:@primary;
+    &:hover {
+      color: @primary;
 
-      }
+    }
 
   }
   .comment-date {
-    display:block;
-    margin-top:5px;
-    font-size:12px;
-    color:@light-text;
+    display: block;
+    margin-top: 0px;
+    font-size: 12px;
+    color: @light-text;
     text-transform: uppercase;
-
-
 
   }
 
-  .comment-author-image-wrap{
-    display:inline-block;
+  .comment-author-image-wrap {
+    display: inline-block;
     vertical-align: top;
-    border-radius:50px;
-    width:50px;
-    height:50px;
-    overflow:hidden;
-    border:1px solid @divider-color;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border: 1px solid @divider-color;
 
     img {
-      width:100%;
+      width: 100%;
     }
   }
 }
 
 .comment-keywords {
-  margin:15px 0;
+  margin: 15px 0;
 }
 
 .comment-keyword {
-  background:@primary;
-  display:inline-block;
-  vertical-align:top;
-  margin:0px 12px 0 0;
-  border-radius:0;
-  cursor:pointer;
-  min-height:0;
-  line-height:1.3em;
+  background: @primary;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0px 12px 0 0;
+  border-radius: 0;
+  cursor: pointer;
+  min-height: 0;
+  line-height: 1.3em;
 
-	button {
-	  background-color:@primary !important;
+  button {
+    background-color: @primary !important;
 
-	}
+  }
 
   span {
-    color:@light !important;
-    font-size:@font-label;
-    font-size:12px;
-    text-transform:uppercase;
+    color: @light !important;
+    font-size: @font-label;
+    font-size: 12px;
+    text-transform: uppercase;
 
   }
 
   &:hover, &:focus {
-    color:@light;
-    background:@primary-dark-2 !important;
+    color: @light;
+    background: @primary-dark-2 !important;
 
   }
 
 }
 
 .comment-body {
-  margin-top:30px;
-  padding:0 5px;
-  cursor:default;
+  margin-top: 30px;
+  padding: 0 5px;
+  cursor: default;
 
   &:focus {
-		outline:none;
-		border:none;
+    outline: none;
+    border: none;
   }
 
   p, li, span, a {
-    font-family:@font-commentary;
-    font-size:18px;
-		font-weight:300;
-    line-height:1.76em;
-    width:100%;
+    font-family: @font-commentary;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.76em;
+    width: 100%;
     margin: 0;
-    max-width:1000px;
-    padding:15px 0;
-		word-break:break-word;
+    max-width: 1000px;
+    padding: 15px 0;
+    word-break: break-word;
 
   }
 
-	ol, ul {
-		list-style: disc;
-		margin:0px;
-		padding:5px 15px;
-		li {
-			margin:0;
-			padding:2px 0;
-	    font-size:16px;
-		}
-	}
+  ol, ul {
+    list-style: disc;
+    margin: 0px;
+    padding: 5px 15px;
+    li {
+      margin: 0;
+      padding: 2px 0;
+      font-size: 16px;
+    }
+  }
 
   a {
-		cursor:pointer;
-	  border-bottom:2px solid @primary;
-		box-shadow:none;
-		font-weight:300;
-		color:rgba(0, 0, 0, 0.7);
-		padding:0;
-	  &:hover {
-	    border-bottom:2px solid @light;
-	  }
+    cursor: pointer;
+    border-bottom: 2px solid @primary;
+    box-shadow: none;
+    font-weight: 300;
+    color: rgba(0, 0, 0, 0.7);
+    padding: 0;
+    &:hover {
+      border-bottom: 2px solid @light;
+    }
 
   }
 }
 
 .comment-reference {
-  padding-top:30px;
+  padding-top: 30px;
 
   h4 {
-	  font-family:@font-label;
-	  font-size:18px;
-	  text-transform: uppercase;
-	  margin:5px 0;
-	  padding-right:12px;
-	  color:@primary;
+    font-family: @font-label;
+    font-size: 18px;
+    text-transform: uppercase;
+    margin: 5px 0;
+    padding-right: 12px;
+    color: @primary;
   }
   h4, p, a {
-	  display:inline-block;
-	  vertical-align: top;
+    display: inline-block;
+    vertical-align: top;
 
   }
-  p,a {
-	  font-weight:lighter;
-	  font-family:@font-body;
-	  font-size:18px;
+  p, a {
+    font-weight: lighter;
+    font-family: @font-body;
+    font-size: 18px;
 
   }
 
   a {
-	  border-bottom:2px solid @primary;
-		box-shadow:none;
-	  &:hover {
-	    border-bottom:2px solid @light;
-	  }
+    border-bottom: 2px solid @primary;
+    box-shadow: none;
+    &:hover {
+      border-bottom: 2px solid @light;
+    }
   }
 
-	p {
-		margin:7px;
-		width:auto;
-		padding:0;
-	}
+  p {
+    margin: 7px;
+    width: auto;
+    padding: 0;
+  }
 
 }
 
 .comment-persistent-identifier {
-	position:absolute;
-  width:100%;
-  text-align:right;
-	bottom:80px;
-	right:50px;
+  position: absolute;
+  width: 100%;
+  text-align: right;
+  bottom: 80px;
+  right: 50px;
 
+  a, span {
+    display: inline-block;
+  }
 
-	a, span {
-		display:inline-block;
-	}
+  a {
+    font-size: 12px;
+    background: #f6f6f6;
+    border-radius: 2px;
+    padding: 5px 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+    opacity: 0.7;
 
-	a {
-		font-size:12px;
-		background:#f6f6f6;
-		border-radius:2px;
-		padding:5px 15px;
-		text-transform: uppercase;
-		font-weight:bold;
-		opacity:0.7;
+    &:hover {
+      background: @md-primary;
+      opacity: 1;
+      span {
+        color: @light;
 
-		&:hover {
-			background:@md-primary;
-			opacity:1;
-			span {
-				color:@light;
-
-			}
-		}
-	}
+      }
+    }
+  }
 }
 
 .comment-citation {
-  position:absolute;
-  bottom:80px;
-  right:50px;
+  position: absolute;
+  bottom: 80px;
+  right: 50px;
 
   div {
     box-shadow: none !important;
@@ -741,52 +726,56 @@ article.lemma-comment {
 
   button {
     background-color: #f6f6f6 !important;
-    opacity:0.7;
+    opacity: 0.7;
+		border-radius: 0px !important;
 
     span {
-      font-size:12px !important;
+      font-size: 12px !important;
     }
+
+		> div > div {
+			border-radius: 0px !important;
+		}
 
     &:hover {
       background-color: @md-primary !important;
-      opacity:1;
+      opacity: 1;
 
       span {
         color: @light !important;
       }
-    } 
+    }
   }
 }
 
 .comment-meta-section {
-  margin:20px auto 30px;
-  width:100%;
+  margin: 20px auto 30px;
+  width: 100%;
 
   h4 {
-    font-family:@font-label;
-    font-size:26px;
+    font-family: @font-label;
+    font-size: 26px;
   }
 
   .item-link {
-    display:inline-block;
+    display: inline-block;
     border-bottom: 1px solid @primary;
     box-shadow: inset 0 -2px 0 @primary;
-    font-size:18px;
-    margin-bottom:5px;
+    font-size: 18px;
+    margin-bottom: 5px;
 
     &:hover, &:focus {
 
       border-bottom: 1px solid @dark-brown;
       box-shadow: inset 0 -2px 0 @dark-brown;
 
-
     }
 
   }
 
   .item-info {
-    display:block;
-    color:rgba(0,0,0,0.7);
+    display: block;
+    color: rgba(0, 0, 0, 0.7);
 
   }
 
@@ -794,581 +783,82 @@ article.lemma-comment {
 
 .comment-outer.discussion--width {
   .comment {
-    width:50%;
-    margin-left:0;
+    width: 50%;
+    margin-left: 0;
   }
   .discussion-wrap {
-    width:49%;
+    width: 49%;
   }
-  .continue-discussion{
-    display:none;
+  .continue-discussion {
+    display: none;
   }
   .discussion-thread {
-    display:block;
+    display: block;
   }
-
 
 }
 
 .comment-outer.discussion--visible {
   .discussion-thread {
-    opacity:1;
+    opacity: 1;
   }
-
-}
-
-.discussion-wrap {
-  margin:0px;
-    text-align:left;
-    width:10%;
-    display:inline-block;
-    min-width:77px;
-    .transition( all 300ms ease-out 0ms );
-
-    &:focus {
-      outline:none;
-      border:none;
-    }
-
-}
-
-.continue-discussion {
-    margin:80px 0;
-    cursor:pointer;
-    padding-left:20px;
-    text-align:left;
-    position:relative;
-
-    &:hover {
-      i {
-        color: @primary;
-
-      }
-
-    }
-
-    &:focus {
-        outline:none;
-        border:none;
-    }
-
-    span {
-      font-size:16px;
-      padding:1px 8px;
-      .transition( all 300ms ease-out );
-      text-transform:uppercase;
-      position:absolute;
-      top:0;
-      left:30px;
-      color:@light;
-
-    }
-
-  i {
-    display:inline-block;
-    vertical-align: top;
-    .transition( all 300ms ease-out );
-    color:@primary-light;
-		font-size:38px;
-
-		&:before {
-	    font-size:46px;
-
-		}
-
-  }
-
-}
-
-.continue-discussion-text {
-  font-size:16px;
-  display:inline-block;
-  vertical-align: top;
-  padding:0px 5px;
-
-}
-
-.discussion-thread {
-  display:none;
-  opacity:0;
-  .transition( all 300ms ease-out );
-  padding:20px 0 20px 30px;
-
-  .sort-by-wrap {
-
-    margin:20px 0 5px;
-    padding:0 0px;
-    width:100%;
-    clear:both;
-    text-align:right;
-
-    .sort-by-label {
-      font-family:@font-label;
-      font-size:12px;
-      color:@secondary-text;
-      text-transform:uppercase;
-      display:inline-block;
-      vertical-align:top;
-      padding:10px 10px;
-
-    }
-
-    .sort-by-option {
-
-      display:inline-block;
-      vertical-align:top;
-      padding:0px 10px;
-      min-height:0;
-			margin:0px 2px;
-
-      span {
-        font-family:@font-label;
-        font-size:16px;
-        color:@primary-dark;
-      }
-
-      &.selected-sort {
-        border-bottom:2px solid @primary-dark;
-      }
-
-    }
-
-
-
-  }
-
-  .add-comment-wrap {
-    width:100%;
-    clear:both;
-    background:@light;
-    padding:30px 30px 20px;
-	  position:relative;
-
-    .profile-picture {
-      width:50px;
-      height:50px;
-      overflow:hidden;
-      border-radius:50px;
-      display:inline-block;
-      vertical-align:top;
-      margin-right:10px;
-      border:1px solid @divider-color;
-
-      img {
-        width:100%;
-
-      }
-
-    }
-
-    textarea {
-      width:85%;
-      margin:3px 0;
-      padding:10px;
-      outline:none;
-      border:none;
-      resize:none;
-      font-family:@font-commentary;
-      font-size:16px;
-      line-height:1.5em;
-      font-weight:300;
-      color:rgba(0, 0, 0, 0.7);
-      background:@light;
-      text-transform: none;
-
-      &::-webkit-input-placeholder {
-        text-transform:none;
-        font-weight:300;
-        font-family:@font-body;
-        font-size:16px;
-        line-height:1.5em;
-        font-weight:300;
-        color:rgba(0, 0, 0, 0.3);
-      }
-      &:-moz-placeholder { /* Firefox 18- */
-        text-transform:none;
-        font-weight:300;
-        font-family:@font-commentary;
-        font-size:16px;
-        line-height:1.5em;
-        font-weight:300;
-        color:rgba(0, 0, 0, 0.3);
-      }
-      &::-moz-placeholder {  /* Firefox 19+ */
-        text-transform:none;
-        font-weight:300;
-        font-family:@font-commentary;
-        font-size:16px;
-        line-height:1.5em;
-        font-weight:300;
-        color:rgba(0, 0, 0, 0.3);
-      }
-      &:-ms-input-placeholder {
-        text-transform:none;
-        font-weight:300;
-        font-family:@font-commentary;
-        font-size:16px;
-        line-height:1.5em;
-        font-weight:300;
-        color:rgba(0, 0, 0, 0.3);
-      }
-
-    }
-
-    .md-button {
-      padding:2px 15px;
-      margin:0;
-      min-height:0;
-      span {
-        font-family:@font-label;
-        font-size:12px;
-        text-transform:uppercase;
-      }
-    }
-
-
-    .submit-comment-button {
-      background:@primary !important;
-			button {
-	      background:@primary !important;
-
-			}
-
-      span {
-        color:@light !important;
-
-      }
-
-      &:disabled {
-        background:@primary-light;
-        cursor:default;
-
-      }
-    }
-
-  .close-form-button {
-
-  }
-
-  .close-discussion {
-    font-size:22px;
-    padding:9px 10px 10px;
-    background:@light !important;
-    border-radius:50%;
-    position:absolute !important;
-    top:-15px;
-    right:-15px;
-
-  }
-
-    .new-comment-login {
-      display:inline-block;
-      vertical-align:top;
-
-    }
-  .error-message {
-    display:inline-block;
-    vertical-align:top;
-    float:left;
-    margin:6px 0 0 0;
-    display:none;
-
-  }
-
-    .add-comment-row-2 {
-      text-align:right;
-
-    }
-
-  }
-
-  .update-comment-form {
-    textarea {
-      background:transparent;
-      border:none;
-      outline:none;
-      margin:0 0 10px 0;
-      border-bottom:2px solid #ddd;
-      padding:10px;
-      resize:none;
-      font-family:@font-commentary;
-      font-size:16px;
-      line-height:1.5em;
-      font-weight:300;
-      color:rgba(0, 0, 0, 0.7);
-      background:@light;
-      text-transform: none;
-
-      &:focus {
-        border:none;
-        border-bottom:1px solid #eee;
-        outline:none;
-
-      }
-    }
-
-		.comment-edit-buttons {
-			position:absolute;
-			right:42px;
-			bottom:20px;
-		}
-
-    .submit-comment-button {
-      float:right;
-			margin:0 3px;
-			border-radius:2px;
-
-			button > div {
-	      background:@primary !important;
-
-			}
-
-      span {
-        color:@light !important;
-
-      }
-
-      &:hover, &:focus {
-				> div {
-		      background:@primary-dark !important;
-
-				}
-
-      }
-    }
-	  .close-form-button {
-	    float:right;
-	  }
-
-  }
-
-  .discussion-comments {
-    margin:0px 0 0;
-
-  }
-
-	.no-results-wrap {
-		margin:15px auto;
-		width:95%;
-	}
-
-	.no-results-text {
-		font-size:16px;
-		font-family:@font-commentary;
-		line-height:1.5em;
-		color:@secondary-text;
-
-	}
-
-}
-
-.error-message {
-  .error-message-text {
-  color:@accent-dark;
-  font-size:14px;
-
-  }
-}
-
-.discussion-comments {
-  width:100%;
-  clear:both;
 
 }
 
 .profile-picture {
-  width:50px;
-  height:50px;
-  overflow:hidden;
-  border-radius:50px;
-  border:1px solid @divider-color;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50px;
+  border: 1px solid @divider-color;
 
   img {
-    width:100%;
+    width: 100%;
 
   }
 
-}
-
-.discussion-comment {
-  background:@light;
-  padding:40px 30px 20px;
-  margin:10px auto;
-	position:relative;
-
-  .profile-picture {
-    display:inline-block;
-    vertical-align:top;
-    margin-right:15px;
-    border:1px solid @divider-color;
-
-  }
-  .discussion-commenter-meta {
-    display:inline-block;
-    vertical-align:top;
-
-    span {
-      display:block;
-      clear:both;
-
-    }
-
-    .discussion-commenter-name {
-      font-family:@font-title;
-      font-size:18px;
-
-      &:hover {
-        color:@primary;
-
-      }
-
-    }
-    .discussion-comment-date {
-      font-size:12px;
-      margin-top:5px;
-      color:@light-text;
-      text-transform: uppercase;
-      span {
-        display:inline;
-        font-size:12px;
-        margin-top:5px;
-        color:@light-text;
-        text-transform: uppercase;
-
-      }
-
-    }
-
-  }
-
-  .discussion-comment-text {
-    font-family:@font-commentary;
-    font-size:16px;
-    line-height:1.5em;
-    color:rgba(0,0,0,0.7);
-    padding:10px;
-  margin-top:20px;
-
-    p {
-      font-family:@font-commentary;
-      font-size:16px;
-      line-height:1.5em;
-      color:rgba(0,0,0,0.7);
-      &.comment-removed {
-        color:@secondary-text;
-
-      }
-
-
-    }
-
-  }
-
-  .inner-comment-row {
-
-    .vote-up.upvoted {
-      color:@md-blue-500;
-		  cursor:default;
-		  background:transparent !important;
-
-		  &:hover {
-			background:transparent !important;
-
-		  }
-
-      i, span {
-				color:@md-blue-500 !important;
-				background:transparent !important;
-				cursor:default;
-      }
-
-    }
-
-		.vote-up {
-			&:hover {
-				.vote-up-tooltip {
-					display:block;
-				}
-			}
-			.vote-up-tooltip {
-				float:right;
-				padding-right:10px;
-				display:none;
-
-			}
-		}
-
-    .md-button {
-      padding:2px 15px;
-      margin:0;
-      min-height:0;
-      i {
-        display:inline-block;
-        vertical-align:top;
-        font-size:28px;
-        padding-top:4px;
-      }
-      span {
-        display:inline-block;
-        vertical-align:top;
-        font-family:@font-label;
-        font-size:12px;
-        text-transform:uppercase;
-
-      }
-    }
-
-  }
-
-
-}
-
-.discussion-comment-children .discussion-comment {
-  margin-left:40px;
 }
 
 //comment reply styles
 .reply-create-form {
-  margin:10px 0px 20px 40px;
+  margin: 10px 0px 20px 40px;
 
   &.shown {
-    display:block;
+    display: block;
 
   }
 
 }
 
-
-
 .comments.lemma-panel-visible {
 
-    text-align:left;
+  text-align: left;
 
-    .comment-group-meta {
-      width:0;
-      display:none;
-      h2 {
-        opacity:0;
-      }
+  .comment-group-meta {
+    width: 0;
+    display: none;
+    h2 {
+      opacity: 0;
     }
+  }
 
-    .comment-outer {
-      text-align:left;
-      width:56%;
+  .comment-outer {
+    text-align: left;
+    width: 56%;
+  }
+
+  .comment {
+    margin-left: 5px;
+    width: 100%;
+
+    &.lemma-comment {
+      margin-left: 0;
     }
+  }
 
-    .comment {
-      margin-left:5px;
-      width:100%;
-
-      &.lemma-comment {
-        margin-left:0;
-      }
-    }
-
-    .discussion-wrap {
-      display:none;
-    }
+  .discussion-wrap {
+    display: none;
+  }
 
 }
 
@@ -1382,6 +872,8 @@ article.lemma-comment {
 
 .full-page-spinner {
   margin: 45vh auto !important;
+  left: 50%;
+  position: fixed;
 }
 
 .double-bounce1, .double-bounce2 {
@@ -1404,18 +896,23 @@ article.lemma-comment {
 }
 
 @-webkit-keyframes sk-bounce {
-  0%, 100% { -webkit-transform: scale(0.0) }
-  50% { -webkit-transform: scale(1.0) }
+  0%, 100% {
+    -webkit-transform: scale(0.0)
+  }
+  50% {
+    -webkit-transform: scale(1.0)
+  }
 }
 
 @keyframes sk-bounce {
   0%, 100% {
     transform: scale(0.0);
     -webkit-transform: scale(0.0);
-  } 50% {
-      transform: scale(1.0);
-      -webkit-transform: scale(1.0);
-    }
+  }
+  50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
 }
 
 .lemma-spinner {
@@ -1430,7 +927,9 @@ article.lemma-comment {
 }
 
 @-webkit-keyframes sk-scaleout {
-  0% { -webkit-transform: scale(0) }
+  0% {
+    -webkit-transform: scale(0)
+  }
   100% {
     -webkit-transform: scale(1.0);
     opacity: 0;
@@ -1441,13 +940,13 @@ article.lemma-comment {
   0% {
     -webkit-transform: scale(0);
     transform: scale(0);
-  } 100% {
-      -webkit-transform: scale(1.0);
-      transform: scale(1.0);
-      opacity: 0;
-    }
+  }
+  100% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+    opacity: 0;
+  }
 }
-
 
 /*
  * Single comment in commentary styles
@@ -1455,54 +954,51 @@ article.lemma-comment {
 
 .single-commentary {
 
-
   .comment {
 
-    margin:20px auto;
-
+    margin: 20px auto;
 
     .comment-upper, .comment-lower {
-      margin:0 auto;
-      width:90%;
+      margin: 0 auto;
+      width: 90%;
 
     }
   }
 
-
   .comment-group-ref, .lemma-comment {
-    float:left;
+    float: left;
   }
 
   .comment-group-ref {
-    width:12.5%;
+    width: 12.5%;
   }
 
   .discussion-wrap {
-    width:75%;
-    margin:0 auto;
-    float:none;
-    clear:both;
+    width: 75%;
+    margin: 0 auto;
+    float: none;
+    clear: both;
 
   }
 
   .discussion-thread {
-    display:block;
-    opacity:1;
-    margin:30px auto;
-    padding:0;
+    display: block;
+    opacity: 1;
+    margin: 30px auto;
+    padding: 0;
 
   }
 
   .discussion-comment {
-    padding-left:50px;
-    padding-top:60px;
+    padding-left: 50px;
+    padding-top: 60px;
   }
 
   .discussion-thread .add-comment-wrap {
-    padding:60px 50px;
-    padding-bottom:50px;
+    padding: 60px 50px;
+    padding-bottom: 50px;
 
-   .add-comment-row-2 {
+    .add-comment-row-2 {
       text-align: right;
       padding-top: 20px;
     }
@@ -1511,20 +1007,20 @@ article.lemma-comment {
 }
 
 .single .continue-discussion {
-  display:none;
+  display: none;
 }
 
 .no-commentary {
-    font-family:@font-commentary;
-    font-size:22px;
-    line-height:1.8em;
-    width:90%;
-    max-width:700px;
-    margin:100px auto;
-    padding:20px 0;
-    text-align:left;
-    color:@light-text;
-    font-style:italic;
+  font-family: @font-commentary;
+  font-size: 22px;
+  line-height: 1.8em;
+  width: 90%;
+  max-width: 700px;
+  margin: 100px auto;
+  padding: 20px 0;
+  text-align: left;
+  color: @light-text;
+  font-style: italic;
 
 }
 
@@ -1533,53 +1029,57 @@ article.lemma-comment {
 }
 
 .table-diff {
-    text-align: justify;
+  text-align: justify;
 
-    .texttitle {
-        font-size: 16px;
-        padding: 10px 10px;
-    }
+  .texttitle {
+    font-size: 16px;
+    padding: 10px 10px;
+  }
 
-    .delete {
-        background: #fbe9eb;
-
-        th {
-            background: #fac5cd;
-            border-right: 1px solid #f9aeb9;
-            text-align: center;
-        }
-    }
-    .insert {
-        background: #ddfbe6;
-
-        th {
-            background: #c7f0d2;
-            border-right: 1px solid #a3d5b0;
-            text-align: center;
-        }
-    }
-    .equal {
-        background: #fdfdfd;
-
-        th {
-            background: #f4f4f4;
-            border-right: 1px solid #dcdcdc;
-            text-align: center;
-        }
-    }
-    .replace {
-
-    }
-
-    .author {
-
-    }
+  .delete {
+    background: #fbe9eb;
 
     th {
-        padding: 0 10px;
+      background: #fac5cd;
+      border-right: 1px solid #f9aeb9;
+      text-align: center;
     }
+  }
+  .insert {
+    background: #ddfbe6;
 
-    td {
-        padding: 2px 10px;
+    th {
+      background: #c7f0d2;
+      border-right: 1px solid #a3d5b0;
+      text-align: center;
     }
+  }
+  .equal {
+    background: #fdfdfd;
+
+    th {
+      background: #f4f4f4;
+      border-right: 1px solid #dcdcdc;
+      text-align: center;
+    }
+  }
+  .replace {
+
+  }
+
+  .author {
+
+  }
+
+  th {
+    padding: 0 10px;
+  }
+
+  td {
+    padding: 2px 10px;
+  }
+}
+
+.comment-citation {
+
 }

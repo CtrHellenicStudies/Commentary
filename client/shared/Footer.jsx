@@ -69,15 +69,13 @@ Footer = React.createClass({
 
 						<div className="col-md-5 col-sm-6">
 							<p className="lead">
-								For more information about the Commentary or general media inquiries, please contact
-								<a href="mailto:contact@ahcip.chs.harvard.edu">
+								For more information about the Commentary or general media inquiries, please contact <a href="mailto:contact@ahcip.chs.harvard.edu">
 									contact@ahcip.chs.harvard.edu
 								</a>.
 							</p>
 
 							<p className="lead">
-								This website is provided by
-								<a href="http://chs.harvard.edu" target="_blank" rel="noopener noreferrer">
+								This website is provided by <a href="http://chs.harvard.edu" target="_blank" rel="noopener noreferrer">
 									The Center for Hellenic Studies
 								</a>.
 							</p>
@@ -87,8 +85,7 @@ Footer = React.createClass({
 					{/* <!--end of row-->*/}
 					<div className="row">
 						<div className="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
-							<p className="fade-1-4 copyright">&copy; 2016 The Center for Hellenic Studies. See our
-								<a href="/terms">terms and privacy policy</a>
+							<p className="fade-1-4 copyright">&copy; 2016 The Center for Hellenic Studies. See our <a href="/terms">terms and privacy policy</a>
 							</p>
 						</div>
 					</div>

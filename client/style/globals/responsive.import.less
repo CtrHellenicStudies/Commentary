@@ -163,6 +163,12 @@
 }
 
 @media (max-width:1000px){
+
+	.page .page-content {
+		width:90%;
+
+	}
+
 	.text-item .meta-toggle span.fa {
 		padding:0;
 
@@ -224,6 +230,10 @@
 
 	.search-tools .dropdown {
 	  display:none;
+	}
+
+	.page-commenters .commenters-list {
+		width:100%;
 	}
 
 
@@ -729,10 +739,26 @@
 	header .social-wrap {
 		display:none;
 	}
+	.page .page-title {
+		font-size:32px;
+		padding:140px 0 0;
+		width:95%;
+		margin:0 auto;
+	}
+	.page .block.header {
+		height:330px;
+
+	}
 
 }
 
 @media (max-width:660px){
+	.page .page-content p, .recent-comments p {
+		font-size:16px;
+		line-height:1.6em;
+		padding:10px 0;
+	}
+
 	.comment-body p, .comment-body li, .comment-body span, .comment-body a {
 		font-size:16px;
 		line-height:1.6em;
@@ -823,20 +849,6 @@
 		padding:0;
 		top:1px;
 	}
-
-}
-
-@media (max-width:530px){
-	article.lemma-comment p.lemma-text {
-		font-size:18px;
-		padding:4px 0;
-	}
-	article.lemma-comment {
-		padding:30px;
-	}
-	.comment .comment-upper, .comment .comment-lower {
-		width:92%;
-	}
 	article.lemma-comment .context-tabs {
 		float:none;
 	}
@@ -858,6 +870,23 @@
 	}
 	article.lemma-comment .edition-tab.selected-edition-tab {
 		margin:0 2px 0 0;
+	}
+
+}
+
+@media (max-width:530px){
+	article.lemma-comment p.lemma-text {
+		font-size:18px;
+		padding:4px 0;
+	}
+	article.lemma-comment {
+		padding:30px;
+	}
+	.comment .comment-upper, .comment .comment-lower {
+		width:92%;
+	}
+	header .header-home-link h3.logo {
+		display:none;
 	}
 }
 

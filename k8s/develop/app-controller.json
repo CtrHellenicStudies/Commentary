@@ -1,0 +1,52 @@
+{
+  "kind": "ReplicationController",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "meteor-controller",
+    "labels": {
+      "name": "meteor"
+    }
+  },
+  "spec": {
+    "replicas": 2,
+    "template": {
+      "metadata": {
+        "labels": {
+          "name": "meteor"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "meteor",
+            "image": "us.gcr.io/archimedes-01201/ahcip_app:latest",
+            "ports": [
+              {
+                "name": "http-server",
+                "containerPort": 3000
+              }
+            ],
+            "env": [
+              {
+                "name": "HTTP_FORWARDED_COUNT",
+                "value"  :  1
+              },
+              {
+                "name": "MONGO_URL",
+                "value": "mongodb://localhost/meteor"
+              },
+              {
+                "name": "ROOT_URL",
+                "value": "http://ahcip.archimedes.digital"
+              },
+              {
+                "name": "UPLOAD_TMP",
+                "value": "/tmp/uploads"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

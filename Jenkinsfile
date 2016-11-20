@@ -8,7 +8,7 @@ node {
   checkout scm
 
   stage 'Running tests and building application/image:'
-  sh("./bin/build")
+  sh("./bin/build_app")
   sh("./bin/build_image")
 
   stage 'Pushing container image to registry:'

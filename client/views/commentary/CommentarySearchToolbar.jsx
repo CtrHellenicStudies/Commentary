@@ -31,9 +31,15 @@ CommentarySearchToolbar = React.createClass({
 
 	getMeteorData() {
 		return {
-			keywords: Keywords.find({ type: 'word' }).fetch(),
-			keyideas: Keywords.find({ type: 'idea' }).fetch(),
-			commenters: Commenters.find().fetch(),
+			keywords: Keywords.find({
+				type: 'word',
+				count: { $gt: 0 },
+			}, { sort: { title: 1 } }).fetch(),
+			keyideas: Keywords.find({
+				type: 'idea',
+				count: { $gt: 0 },
+			}, { sort: { title: 1 } }).fetch(),
+			commenters: Commenters.find({}, { sort: { name: 1 } }).fetch(),
 			works: Works.find({}, { sort: { order: 1 } }).fetch(),
 			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
 		};

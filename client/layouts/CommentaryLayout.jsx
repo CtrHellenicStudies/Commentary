@@ -155,7 +155,6 @@ CommentaryLayout = React.createClass({
 		comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
 
 		const subsReady = commentersSub.ready() && keywordsSub.ready() && worksSub.ready(); // check if all subscriptions ready - all data loaded
-		const commentsReady = commentsSub.ready();
 
 		return {
 			keywords,
@@ -163,7 +162,6 @@ CommentaryLayout = React.createClass({
 			works,
 			subsReady,
 			comments,
-			commentsReady,
 		};
 	},
 
@@ -481,18 +479,13 @@ CommentaryLayout = React.createClass({
 							initialSearchEnabled
 		    			/>
 
-		    			{this.data.commentsReady ?
 						<Commentary
 							filters={this.state.filters}
 							toggleSearchTerm={this.toggleSearchTerm}
 							loadMoreComments={this.loadMoreComments}
-							limit={this.state.limit}
 							comments={this.data.comments}
-							commentsReady={this.data.commentsReady}
 		    			/>
-		    			:
-		    			<Spinner />
-			        }
+
 					</div>
 				:
 					<Spinner />

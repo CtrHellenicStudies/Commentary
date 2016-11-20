@@ -106,7 +106,6 @@ ContextPanel = React.createClass({
 
 		const handle2 = Meteor.subscribe('textNodes', lemmaQuery);
 		if (handle2.ready()) {
-			// console.log("Context Panel lemmaQuery", lemmaQuery);
 			const textNodes = TextNodes.find(lemmaQuery).fetch();
 			const editions = [];
 
@@ -152,10 +151,6 @@ ContextPanel = React.createClass({
 				selectedLemmaEdition = lemmaText[0];
 			}
 		}
-
-		// console.log("Context Panel lemmaText", lemmaText);
-
-
 		return {
 			lemmaText,
 			selectedLemmaEdition,
@@ -174,7 +169,6 @@ ContextPanel = React.createClass({
 		const that = this;
 		switch (state) {
 		case 'open':
-			// console.log('top', $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top);
 			window.requestAnimationFrame(() => {
 				const scroll = $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top;
 				$(document).scrollTop(scroll);
@@ -182,7 +176,6 @@ ContextPanel = React.createClass({
 			break;
 		case 'close':
 			window.requestAnimationFrame(() => {
-				console.log('that.props.scrollPosition', that.props.scrollPosition);
 				setTimeout(() => {
 					$(document).scrollTop(that.props.scrollPosition);
 				}, 1000);

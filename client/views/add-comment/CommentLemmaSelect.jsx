@@ -64,7 +64,6 @@ CommentLemmaSelect = React.createClass({
 				},
 			};
 		}
-		console.log('CommentLemmaSelect lemmaQuery', lemmaQuery);
 
 		const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
 		if (textNodesSubscription.ready()) {
@@ -100,8 +99,6 @@ CommentLemmaSelect = React.createClass({
 			});
 
 			lemmaText = editions;
-
-			console.log('CommentLemmaSelect lemmaText', lemmaText);
 
 			if (this.state.selectedLemmaEdition.length) {
 				lemmaText.forEach((edition) => {

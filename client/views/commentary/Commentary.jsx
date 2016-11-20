@@ -2,8 +2,8 @@ import FlatButton from 'material-ui/FlatButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Avatars } from '/imports/avatar/avatar_collections.js';
-<<<<<<< HEAD
 import { debounce } from 'throttle-debounce';
+import InfiniteScroll from '/imports/InfiniteScroll.jsx';
 
 Commentary = React.createClass({
 
@@ -200,7 +200,6 @@ Commentary = React.createClass({
     },
 
     render() {
-        const moreCommentaryLeft = true;
         let isOnHomeView;
         let commentGroups;
         const filtersChanged = false;
@@ -257,6 +256,13 @@ Commentary = React.createClass({
                          })}
                     </div>
                 </InfiniteScroll>
+                {(!isOnHomeView && this.data.commentGroups.length > 0) ?
+                    <div className="ahcip-spinner commentary-loading">
+                        <div className="double-bounce1" />
+                        <div className="double-bounce2" />
+
+                    </div>
+                    : '' }
                 {/* --- END comments list */}
                 {/* --- BEGIN no comments found */}
                 {(this.props.commentsReady && this.data.commentGroups.length === 0) ?

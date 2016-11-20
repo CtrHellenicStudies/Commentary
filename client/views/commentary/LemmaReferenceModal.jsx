@@ -40,7 +40,6 @@ LemmaReferenceModal = React.createClass({
 
 		const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
 		if (textHandle.ready()) {
-			// console.log('lemmaQuery', lemmaQuery);
 			const textNodes = TextNodes.find(lemmaQuery).fetch();
 			const editions = [];
 

@@ -27,10 +27,6 @@ CommentarySearchToolbar = React.createClass({
 			filters.forEach((filter) => {
 				if (filter.key === 'works') {
 					activeWork = filter.values[0].slug;
-				}
-			});
-			filters.forEach((filter) => {
-				if (filter.key === 'subworks') {
 					const work = this.props.works.find((work) => {
 						return work.slug === activeWork;
 					});
@@ -59,18 +55,18 @@ CommentarySearchToolbar = React.createClass({
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
-		const newValue = value;
-		newValue.subworks.forEach((subwork, i) => {
-			newValue.subworks[i].work = work;
+
+		value.subworks.forEach((subwork, i) => {
+			value.subworks[i].work = work;
 		});
 
-		if (this.state.activeWork === newValue.slug) {
+		if (this.state.activeWork === value.slug) {
 			this.setState({
 				subworks: [],
 				activeWork: '',
 			});
 		} else {
-			newValue.subworks.sort((a, b) => {
+			value.subworks.sort((a, b) => {
 				if (a.n < b.n) {
 					return -1;
 				}
@@ -80,11 +76,11 @@ CommentarySearchToolbar = React.createClass({
 				return 0;
 			});
 			this.setState({
-				subworks: newValue.subworks,
-				activeWork: newValue.slug,
+				subworks: value.subworks,
+				activeWork: value.slug,
 			});
 		}
-		this.props.toggleSearchTerm(key, newValue);
+		this.props.toggleSearchTerm(key, value);
 	},
 
 	handleChangeTextsearch(event) {

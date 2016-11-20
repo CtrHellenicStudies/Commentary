@@ -11,9 +11,11 @@ Header = React.createClass({
 		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func,
 		initialSearchEnabled: React.PropTypes.bool,
-		works: React.PropTypes.array.isRequired,
-		keywords: React.PropTypes.array.isRequired,
-		commenters: React.PropTypes.array.isRequired,
+		works: React.PropTypes.array,
+		keywords: React.PropTypes.array,
+		commenters: React.PropTypes.array,
+		addCommentPage: React.PropTypes.bool,
+
 	},
 
 	childContextTypes: {
@@ -37,26 +39,10 @@ Header = React.createClass({
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	componentWillMount() {
-		if (location.pathname.indexOf('/add-comment') === 0) {
-			this.setState({
-				addCommentPage: true,
-			});
-		}
-	},
-
-	componentDidUpdate() {
-		if (location.pathname.indexOf('/add-comment') === 0 && !this.state.addCommentPage) {
-			this.setState({
-				addCommentPage: true,
-			});
-		}
-	},
-
     toggleSearchMode() {
         if (
             location.pathname.indexOf('/commentary') === 0 ||
-            location.pathname.indexOf('/add-comment') === 0
+            this.props.addCommentPage
         ) {
             this.setState({
                 searchEnabled: !this.state.searchEnabled,
@@ -112,20 +98,18 @@ Header = React.createClass({
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
-		const newValue = value;
-		newValue.subworks.forEach((subwork, i) => {
-			newValue.subworks[i].work = work;
+
+		value.subworks.forEach((subwork) => {
+			subwork.work = work;
 		});
 
-		// console.log("Header.state", this.state);
-
-		if (this.state.activeWork === newValue.slug) {
+		if (this.state.activeWork === value.slug) {
 			this.setState({
 				subworks: [],
 				activeWork: '',
 			});
 		} else {
-			newValue.subworks.sort((a, b) => {
+			value.subworks.sort((a, b) => {
 				if (a.n < b.n) {
 					return -1;
 				}
@@ -135,12 +119,12 @@ Header = React.createClass({
 				return 0;
 			});
 			this.setState({
-				subworks: newValue.subworks,
-				activeWork: newValue.slug,
+				subworks: value.subworks,
+				activeWork: value.slug,
 			});
 		}
 
-		this.props.toggleSearchTerm(key, newValue);
+		this.props.toggleSearchTerm(key, value);
 	},
 
 	showLoginModal() {
@@ -204,7 +188,7 @@ Header = React.createClass({
 				/>*/}
 				<header >
 					{!this.state.searchEnabled ?
-						<div className="md-menu-toolbar">
+						<div className="md-menu-toolbar" >
 							<div className="toolbar-tools">
 								<IconButton
 									className="left-drawer-toggle"
@@ -213,7 +197,7 @@ Header = React.createClass({
 									onClick={this.toggleLeftMenu}
 								/>
 
-								<a href="/" className="header-home-link">
+								<a href="/" className="header-home-link" >
 									<h3 className="logo">A Homer Commentary in Progress</h3>
 								</a>
 								<div className="search-toggle">
@@ -223,7 +207,7 @@ Header = React.createClass({
 										iconClassName="mdi mdi-magnify"
 									/>
 								</div>
-								<div className="header-section-wrap nav-wrap collapse">
+								<div className="header-section-wrap nav-wrap collapse" >
 									<FlatButton
 										label="Commentary"
 										href="/commentary/"
@@ -262,7 +246,7 @@ Header = React.createClass({
 												</div>
 											}
 										</div>
-										:
+									:
 										<div>
 											<FlatButton
 												label="Login"
@@ -288,9 +272,9 @@ Header = React.createClass({
 								</div>
 							</div>
 						</div>
-						:
+					:
 						<div>
-							{!this.state.addCommentPage ?
+							{!this.props.addCommentPage ?
 								<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
 									<div className="toolbar-tools">
 										<IconButton

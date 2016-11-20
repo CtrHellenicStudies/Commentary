@@ -155,7 +155,7 @@ CommentarySearchPanel = React.createClass({
 				</Card>
 				<Card>
 					<CardHeader
-						title="Keyword"
+						title="Keywords"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
@@ -174,7 +174,7 @@ CommentarySearchPanel = React.createClass({
 							});
 
 							return (
-								<SearchTermButton
+								<SearchTermButtonPanel
 									key={i}
 									toggleSearchTerm={self.toggleSearchTerm}
 									label={keyword.title}
@@ -192,7 +192,7 @@ CommentarySearchPanel = React.createClass({
 				</Card>
 				<Card>
 					<CardHeader
-						title="Keyidea"
+						title="Keyideas"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
@@ -211,7 +211,7 @@ CommentarySearchPanel = React.createClass({
 							});
 
 							return (
-								<SearchTermButton
+								<SearchTermButtonPanel
 									key={i}
 									toggleSearchTerm={self.toggleSearchTerm}
 									label={keyidea.title}
@@ -248,7 +248,7 @@ CommentarySearchPanel = React.createClass({
 							});
 
 							return (
-								<SearchTermButton
+								<SearchTermButtonPanel
 									key={i}
 									toggleSearchTerm={self.toggleSearchTerm}
 									label={commenter.name}
@@ -309,7 +309,7 @@ CommentarySearchPanel = React.createClass({
 							});
 
 							return (
-								<SearchTermButton
+								<SearchTermButtonPanel
 									key={i}
 									toggleSearchTerm={self.toggleSearchTerm}
 									label={`${subwork.work.title} ${subwork.title}`}

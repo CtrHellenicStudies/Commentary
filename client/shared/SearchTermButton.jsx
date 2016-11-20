@@ -27,6 +27,11 @@ SearchTermButton = React.createClass({
 	},
 
 	render() {
+		const styles = {
+			iconStyle: {
+				color: '#999',
+			},
+		};
 		let className = 'search-term-button';
 
 		if (this.props.active || this.props.activeWork) {
@@ -39,7 +44,12 @@ SearchTermButton = React.createClass({
 					className={className}
 					onClick={this.toggleSearchTerm}
 					label={this.props.label}
-					icon={<FontIcon className="mdi mdi-plus-circle-outline" />}
+					icon={
+						<FontIcon
+							className="mdi mdi-plus-circle-outline"
+							style={styles.iconStyle}
+						/>
+					}
 				/>
 			</li>
 		);

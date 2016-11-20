@@ -1,6 +1,7 @@
-import RaisedButton from 'material-ui/RaisedButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
 
 FilterWidget = React.createClass({
 
@@ -19,6 +20,13 @@ FilterWidget = React.createClass({
 
 
 	render() {
+		const styles = {
+			iconStyle: {
+				fontSize: 18,
+				color: '#666',
+			},
+		};
+
 		return (
 
 			<div className="filters">
@@ -36,15 +44,21 @@ FilterWidget = React.createClass({
 									filters[i][j].name = foundCommenter.name;
 								}
 							}
-							return (<RaisedButton
-								key={j}
-								labelPosition="before"
-								className="filter-val "
-								label={val.title || val.name || val.slug || val.toString()}
-								onClick={this.props.toggleSearchTerm.bind(null, filter.key, val)}
-							>
-								<i className="mdi mdi-close" />
-							</RaisedButton>);
+							return (
+								<RaisedButton
+									key={j}
+									labelPosition="before"
+									className="filter-val "
+									label={val.title || val.name || val.slug || val.toString()}
+									onClick={this.props.toggleSearchTerm.bind(null, filter.key, val)}
+									icon={
+										<FontIcon
+											className="mdi mdi-close mdi-18px"
+											style={styles.iconStyle}
+										/>
+									}
+								/>
+							);
 						})}
 					</div>
 					: ''

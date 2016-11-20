@@ -12,9 +12,11 @@ Header = React.createClass({
 		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func,
 		initialSearchEnabled: React.PropTypes.bool,
-		works: React.PropTypes.array.isRequired,
-		keywords: React.PropTypes.array.isRequired,
-		commenters: React.PropTypes.array.isRequired,
+		works: React.PropTypes.array,
+		keywords: React.PropTypes.array,
+		commenters: React.PropTypes.array,
+		addCommentPage: React.PropTypes.bool,
+
 	},
 
 	childContextTypes: {
@@ -26,7 +28,6 @@ Header = React.createClass({
 			leftMenuOpen: false,
 			rightMenuOpen: false,
 			searchEnabled: this.props.initialSearchEnabled,
-			addCommentPage: false,
 			searchDropdownOpen: '',
 			subworks: [],
 			activeWork: '',
@@ -39,26 +40,10 @@ Header = React.createClass({
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	componentWillMount() {
-		if (location.pathname.indexOf('/add-comment') === 0) {
-			this.setState({
-				addCommentPage: true,
-			});
-		}
-	},
-
-	componentDidUpdate() {
-		if (location.pathname.indexOf('/add-comment') === 0 && !this.state.addCommentPage) {
-			this.setState({
-				addCommentPage: true,
-			});
-		}
-	},
-
     toggleSearchMode() {
         if (
             location.pathname.indexOf('/commentary') === 0 ||
-            location.pathname.indexOf('/add-comment') === 0
+            this.props.addCommentPage
         ) {
             this.setState({
                 searchEnabled: !this.state.searchEnabled,
@@ -118,8 +103,6 @@ Header = React.createClass({
 		value.subworks.forEach((subwork) => {
 			subwork.work = work;
 		});
-
-		// console.log("Header.state", this.state);
 
 		if (this.state.activeWork === value.slug) {
 			this.setState({
@@ -292,7 +275,7 @@ Header = React.createClass({
 						</div>
 					:
 						<div>
-							{!this.state.addCommentPage ?
+							{!this.props.addCommentPage ?
 								<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
 									<div className="toolbar-tools">
 										<IconButton

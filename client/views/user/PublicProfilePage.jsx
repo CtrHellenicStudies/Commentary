@@ -167,7 +167,6 @@ PublicProfilePage = React.createClass({
                     </p>
                     <br />
                   </div> }
-                  {console.log('this.data.userEmail', this.data.userEmail)}
                 { currentUser.profile.publicEmailAdress ?
                   <div className='public-profile-link'>
                     <h3>Email: </h3>

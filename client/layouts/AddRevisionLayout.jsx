@@ -25,15 +25,7 @@ AddRevisionLayout = React.createClass({
 
         if (commentSubscription.ready()) {
             comment = Comments.find().fetch()[0];
-            // comment.commenters.forEach((commenter) => {
-            // //     canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
-            //     canShow = (Meteor.user().commenterId === commenter._id);
-            // });
         }
-
-        // console.log('Roles.subscription.ready()', Roles.subscription.ready());
-        // console.log('Object.keys(this.data.comment).length', Object.keys(comment).length);
-        // var ready = Roles.subscription.ready() && Object.keys(comment).length;
 
         const keywords = Keywords.find().fetch();
 
@@ -73,7 +65,8 @@ AddRevisionLayout = React.createClass({
                 update = {
                     keywords: keywords
                 };
-            };
+            }
+            ;
 
             Meteor.call('comments.add.revision', self.props.commentId, revision, function(err) {
                 Meteor.call('comment.update', self.props.commentId, update, function(err2) {
@@ -82,7 +75,7 @@ AddRevisionLayout = React.createClass({
             });
         });
 
-        // TODO: handle behavior after comment added (add info about success)
+    // TODO: handle behavior after comment added (add info about success)
     },
 
     matchKeywords(keywords) {
@@ -115,7 +108,6 @@ AddRevisionLayout = React.createClass({
                 foundKeyword = that.data.keywords.find(function(d) {
                     return d.title === keyword;
                 });
-                console.log('foundKeyword', foundKeyword, 'keyword', keyword);
                 if (foundKeyword === undefined) {
                     const _keyword = {
                         title: keyword,
@@ -224,74 +216,74 @@ AddRevisionLayout = React.createClass({
         });
     },
 
-	handleChangeLineN(e) {
-		const filters = this.state.filters;
+    handleChangeLineN(e) {
+        const filters = this.state.filters;
 
-		if (e.from > 1) {
-			let lineFromInFilters = false;
+        if (e.from > 1) {
+            let lineFromInFilters = false;
 
-			filters.forEach(function (filter, i) {
-				if (filter.key === 'lineFrom') {
-					filter.values = [e.from];
-					lineFromInFilters = true;
-				}
-			});
+            filters.forEach(function(filter, i) {
+                if (filter.key === 'lineFrom') {
+                    filter.values = [e.from];
+                    lineFromInFilters = true;
+                }
+            });
 
-			if (!lineFromInFilters) {
-				filters.push({
-					key: 'lineFrom',
-					values: [e.from],
-				});
-			}
-		} else {
-			let filterToRemove;
+            if (!lineFromInFilters) {
+                filters.push({
+                    key: 'lineFrom',
+                    values: [e.from],
+                });
+            }
+        } else {
+            let filterToRemove;
 
-			filters.forEach(function (filter, i) {
-				if (filter.key === 'lineFrom') {
-					filterToRemove = i;
-				}
-			});
+            filters.forEach(function(filter, i) {
+                if (filter.key === 'lineFrom') {
+                    filterToRemove = i;
+                }
+            });
 
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
+            if (typeof filterToRemove !== 'undefined') {
+                filters.splice(filterToRemove, 1);
+            }
+        }
 
-		if (e.to < 2100) {
-			let lineToInFilters = false;
+        if (e.to < 2100) {
+            let lineToInFilters = false;
 
-			filters.forEach(function (filter, i) {
-				if (filter.key === 'lineTo') {
-					filter.values = [e.to];
-					lineToInFilters = true;
-				}
-			});
+            filters.forEach(function(filter, i) {
+                if (filter.key === 'lineTo') {
+                    filter.values = [e.to];
+                    lineToInFilters = true;
+                }
+            });
 
-			if (!lineToInFilters) {
-				filters.push({
-					key: 'lineTo',
-					values: [e.to],
-				});
-			}
-		} else {
-			let filterToRemove;
+            if (!lineToInFilters) {
+                filters.push({
+                    key: 'lineTo',
+                    values: [e.to],
+                });
+            }
+        } else {
+            let filterToRemove;
 
-			filters.forEach(function (filter, i) {
-				if (filter.key === 'lineTo') {
-					filterToRemove = i;
-				}
-			});
+            filters.forEach(function(filter, i) {
+                if (filter.key === 'lineTo') {
+                    filterToRemove = i;
+                }
+            });
 
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
+            if (typeof filterToRemove !== 'undefined') {
+                filters.splice(filterToRemove, 1);
+            }
+        }
 
 
-		this.setState({
-			filters,
-		});
-	},
+        this.setState({
+            filters,
+        });
+    },
 
 
     ifReady() {
@@ -300,71 +292,59 @@ AddRevisionLayout = React.createClass({
         return ready;
     },
 
-    										render() {
-	const filters = this.state.filters;
-        								const comment = this.data.comment;
+    render() {
+        const filters = this.state.filters;
+        const comment = this.data.comment;
 
-        										return (
+        return (
             <div>
                 {this.ifReady() ?
-                    <div className="chs-layout add-comment-layout">
-
-                          <Header
-	toggleSearchTerm={this.toggleSearchTerm}
-	handleChangeLineN={this.handleChangeLineN}
-	filters={filters}
-	initialSearchEnabled
-                          />
-
-                            <main>
-
-														<div className="commentary-comments">
-															<div className="comment-group">
-                                <CommentLemmaSelect
-	ref="CommentLemmaSelect"
-	selectedLineFrom={comment.lineFrom}
-	selectedLineTo={comment.lineFrom + comment.nLines - 1}
-	workSlug={comment.work.slug}
-	subworkN={comment.subwork.n}
-                                />
-
-                                <AddRevision
-	submitForm={this.addRevision}
-	comment={comment}
-                                />
-
-                                <ContextReader
-	open={this.state.contextReaderOpen}
-	closeContextPanel={this.closeContextReader}
-	workSlug={comment.work.slug}
-	subworkN={comment.subwork.n}
-	selectedLineFrom={comment.lineFrom}
-	selectedLineTo={comment.lineFrom + comment.nLines - 1}
-	initialLineFrom={comment.lineFrom}
-	initialLineTo={comment.lineFrom + comment.nLines - 1 + 50}
-	disableEdit
-                                />
-																</div>
-															</div>
-
-
-                            </main>
-
-												<FilterWidget
-													filters={filters}
-													toggleSearchTerm={this.toggleSearchTerm}
-												/>
-
-                        <Footer />
-
-                    </div>
-                    :
-                    <div className="ahcip-spinner commentary-loading full-page-spinner" >
-                        <div className="double-bounce1" />
-                        <div className="double-bounce2" />
-                    </div>
-                }
+                 <div className="chs-layout add-comment-layout">
+                     <Header
+                         toggleSearchTerm={this.toggleSearchTerm}
+                         handleChangeLineN={this.handleChangeLineN}
+                         filters={filters}
+                     />
+                     <main>
+                         <div className="commentary-comments">
+                             <div className="comment-group">
+                                 <CommentLemmaSelect
+                                     ref="CommentLemmaSelect"
+                                     selectedLineFrom={comment.lineFrom}
+                                     selectedLineTo={comment.lineFrom + comment.nLines - 1}
+                                     workSlug={comment.work.slug}
+                                     subworkN={comment.subwork.n}
+                                 />
+                                 <AddRevision
+                                     submitForm={this.addRevision}
+                                     comment={comment}
+                                 />
+                                 <ContextReader
+                                     open={this.state.contextReaderOpen}
+                                     closeContextPanel={this.closeContextReader}
+                                     workSlug={comment.work.slug}
+                                     subworkN={comment.subwork.n}
+                                     selectedLineFrom={comment.lineFrom}
+                                     selectedLineTo={comment.lineFrom + comment.nLines - 1}
+                                     initialLineFrom={comment.lineFrom}
+                                     initialLineTo={comment.lineFrom + comment.nLines - 1 + 50}
+                                     disableEdit
+                                 />
+                             </div>
+                         </div>
+                     </main>
+                     <FilterWidget
+                         filters={filters}
+                         toggleSearchTerm={this.toggleSearchTerm}
+                     />
+                     <Footer />
+                 </div>
+                 :
+                 <div className="ahcip-spinner commentary-loading full-page-spinner">
+                     <div className="double-bounce1" />
+                     <div className="double-bounce2" />
+                 </div>}
             </div>
-        );
+            );
     },
 });

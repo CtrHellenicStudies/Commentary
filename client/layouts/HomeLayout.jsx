@@ -26,8 +26,6 @@ HomeLayout = React.createClass({
 		this.setState({
 			skip: this.state.skip + 10,
 		});
-
-			// console.log("Load more comments:", this.state.skip);
 	},
 
 	toggleSearchTerm(key, value) {
@@ -200,7 +198,6 @@ HomeLayout = React.createClass({
 
 
 	render() {
-		// console.log("HomeLayout.filters", this.state.filters);
 		return (
 			<div className="chs-layout home-layout">
 				<Header

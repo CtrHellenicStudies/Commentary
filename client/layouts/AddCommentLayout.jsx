@@ -17,12 +17,16 @@ AddCommentLayout = React.createClass({
     mixins: [ReactMeteorData],
 
     getMeteorData() {
+        let works = [];
+        const worksSub = Meteor.subscribe('works');
+        works = Works.find({}, { sort: { order: 1 } }).fetch();
         const keywords = Keywords.find().fetch();
         let commenterId = null;
         if(Meteor.user() && Meteor.user().commenterId){
             commenterId = Meteor.user().commenterId;
         };
         return {
+            works,
             keywords,
             commenterId,
         };
@@ -183,7 +187,6 @@ AddCommentLayout = React.createClass({
             that.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
                 keywords.push(matchedKeyword);
             });
-            console.log('keywords', keywords);
 
             const comment = {
                 work: {
@@ -264,7 +267,6 @@ AddCommentLayout = React.createClass({
                 foundKeyword = that.data.keywords.find(function(d) {
                     return d.title === keyword;
                 });
-                console.log('foundKeyword', foundKeyword, 'keyword', keyword);
                 if (foundKeyword === undefined) {
                     const _keyword = {
                         title: keyword,
@@ -410,9 +412,6 @@ AddCommentLayout = React.createClass({
             }
         });
 
-        console.log('AddCommentLayout.filters', this.state.filters);
-        console.log('AddCommentLayout.state', this.state);
-
         return (
             <div>
               { this.ifReady() || this.state.loading ?
@@ -422,7 +421,9 @@ AddCommentLayout = React.createClass({
                       toggleSearchTerm={ this.toggleSearchTerm }
                       handleChangeLineN={ this.handleChangeLineN }
                       filters={ this.state.filters }
+                      works={this.data.works}
                       initialSearchEnabled
+                      addCommentPage
                     />
                     <main>
                       <div className="commentary-comments">

@@ -43,7 +43,6 @@ LemmaReferenceModal = React.createClass({
 
 		const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
 		if (textHandle.ready()) {
-			// console.log('lemmaQuery', lemmaQuery);
 			const textNodes = TextNodes.find(lemmaQuery).fetch();
 			const editions = [];
 
@@ -86,7 +85,6 @@ LemmaReferenceModal = React.createClass({
 	},
 
 	componentDidUpdate() {
-		// console.log('lemmaReferenceModal', this.props);
 		if (this.data.lemmaText.length && this.state.selectedLemmaEdition.lines.length === 0) {
 			this.setState({
 				selectedLemmaEdition: this.data.lemmaText[0],

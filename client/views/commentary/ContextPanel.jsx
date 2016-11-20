@@ -57,7 +57,7 @@ ContextPanel = React.createClass({
 		);
 	},
 
-	componentDidUpdate() {
+	componentDidUpdate(prevProps) {
 		this.scrollElement('open');
 		const commentGroup = this.props.commentGroup;
 		if (commentGroup.ref !== prevProps.commentGroup.ref) {
@@ -290,11 +290,11 @@ ContextPanel = React.createClass({
 				</div>
 
 				<div className="meta-tabs tabs">
-					<FlatButton
-						label="Highlighting"
+					{/* <FlatButton
+						label="Entities"
 						className="edition-tab tab"
-						onClick={this.toggleHighlighting}
-					/>
+						onClick={this.toggleEntities}
+					/> */}
 					<FlatButton
 						label="Scansion"
 						className="edition-tab tab"

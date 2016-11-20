@@ -157,7 +157,7 @@ CommentarySearchToolbar = React.createClass({
 					{self.data.keyideas.map((keyidea, i) => {
 						let active = false;
 						filters.forEach((filter) => {
-							if (filter.key === 'keywords') {
+							if (filter.key === 'keyideas') {
 								filter.values.forEach((value) => {
 									if (keyidea._id === value._id) {
 										active = true;
@@ -171,7 +171,7 @@ CommentarySearchToolbar = React.createClass({
 								key={i}
 								toggleSearchTerm={self.toggleSearchTerm}
 								label={keyidea.title}
-								searchTermKey="keywords"
+								searchTermKey="keyideas"
 								value={keyidea}
 								active={active}
 							/>

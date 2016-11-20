@@ -261,7 +261,6 @@ AddCommentLayout = React.createClass({
 			const insertKeywords = [];
 			keywords.forEach((keyword) => {
 				foundKeyword = that.data.keywords.find((d) => d.title === keyword);
-				console.log('foundKeyword', foundKeyword, 'keyword', keyword);
 				if (foundKeyword === undefined) {
 					const _keyword = {
 						title: keyword,
@@ -403,9 +402,6 @@ AddCommentLayout = React.createClass({
 				lineFrom = filter.values[0];
 			}
 		});
-
-		console.log('AddCommentLayout.filters', this.state.filters);
-		console.log('AddCommentLayout.state', this.state);
 
 		return (
 			<div>

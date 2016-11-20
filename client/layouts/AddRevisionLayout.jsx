@@ -149,7 +149,7 @@ AddRevisionLayout = React.createClass({
 			let isOwner = false;
 			this.data.comment.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (Meteor.user().commenterId === commenter._id);
+					isOwner = (Meteor.user().commenterId.indexOf(commenter._id) > -1);
 				}
 			});
 			if (!isOwner) {

@@ -295,12 +295,12 @@ AddComment = React.createClass({
 						style={{ marginLeft: 0 }}
 					>
 						<div className="comment-upper">
-							{ this.data.commenters_options.length > 1 ?
+							{ this.data.commentersOptions.length > 1 ?
 								<Select
 									name="commenter"
 									id="commenter"
 									required={false}
-									options={this.data.commenters_options}
+									options={this.data.commentersOptions}
 									value={this.state.commenterValue}
 									onChange={this.onCommenterValueChange}
 									placeholder="Commenter..."

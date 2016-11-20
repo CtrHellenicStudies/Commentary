@@ -32,15 +32,7 @@ AddRevisionLayout = React.createClass({
 
 		if (commentSubscription.ready()) {
 			comment = Comments.find().fetch()[0];
-			// comment.commenters.forEach((commenter) => {
-			// //     canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
-			//     canShow = (Meteor.user().commenterId === commenter._id);
-			// });
 		}
-
-		// console.log('Roles.subscription.ready()', Roles.subscription.ready());
-		// console.log('Object.keys(this.data.comment).length', Object.keys(comment).length);
-		// var ready = Roles.subscription.ready() && Object.keys(comment).length;
 
 		const keywords = Keywords.find().fetch();
 
@@ -113,7 +105,6 @@ AddRevisionLayout = React.createClass({
 			const insertKeywords = [];
 			keywords.forEach((keyword) => {
 				foundKeyword = that.data.keywords.find((d) => d.title === keyword);
-				console.log('foundKeyword', foundKeyword, 'keyword', keyword);
 				if (foundKeyword === undefined) {
 					const _keyword = {
 						title: keyword,
@@ -158,7 +149,7 @@ AddRevisionLayout = React.createClass({
 			let isOwner = false;
 			this.data.comment.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (Meteor.user().commenterId === commenter._id);
+					isOwner = (Meteor.user().commenterId.indexOf(commenter._id) > -1);
 				}
 			});
 			if (!isOwner) {
@@ -304,7 +295,6 @@ AddRevisionLayout = React.createClass({
 							toggleSearchTerm={this.toggleSearchTerm}
 							handleChangeLineN={this.handleChangeLineN}
 							filters={filters}
-							initialSearchEnabled
 						/>
 
 						<main>

@@ -45,6 +45,21 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
+		if ('keyideas' in this.props.queryParams) {
+			const keyideas = [];
+
+			this.props.queryParams.keyideas.split(',').forEach((keyidea) => {
+				keyideas.push({
+					wordpressId: keyidea,
+				});
+			});
+
+			filters.push({
+				key: 'keyideas',
+				values: keyideas,
+			});
+		}
+
 		if ('commenters' in this.props.queryParams) {
 			const commenters = [];
 

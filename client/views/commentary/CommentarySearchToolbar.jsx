@@ -31,7 +31,8 @@ CommentarySearchToolbar = React.createClass({
 
 	getMeteorData() {
 		return {
-			keywords: Keywords.find().fetch(),
+			keywords: Keywords.find({ type: 'word' }).fetch(),
+			keyideas: Keywords.find({ type: 'idea' }).fetch(),
 			commenters: Commenters.find().fetch(),
 			works: Works.find({}, { sort: { order: 1 } }).fetch(),
 			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
@@ -135,6 +136,37 @@ CommentarySearchToolbar = React.createClass({
 								label={keyword.title}
 								searchTermKey="keywords"
 								value={keyword}
+								active={active}
+							/>
+						);
+					})}
+				</SearchToolDropdown>
+
+				<SearchToolDropdown
+					name="Keyideas"
+					open={self.state.searchDropdownOpen === 'Keyideas'}
+					toggle={self.toggleSearchDropdown}
+					disabled={false}
+				>
+					{self.data.keyideas.map((keyidea, i) => {
+						let active = false;
+						filters.forEach((filter) => {
+							if (filter.key === 'keywords') {
+								filter.values.forEach((value) => {
+									if (keyidea._id === value._id) {
+										active = true;
+									}
+								});
+							}
+						});
+
+						return (
+							<SearchTermButton
+								key={i}
+								toggleSearchTerm={self.toggleSearchTerm}
+								label={keyidea.title}
+								searchTermKey="keywords"
+								value={keyidea}
 								active={active}
 							/>
 						);

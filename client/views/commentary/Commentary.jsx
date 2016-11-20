@@ -57,6 +57,7 @@ Commentary = React.createClass({
 			case '_id':
 				query._id = filter.values[0];
 				break;
+
 			case 'textsearch':
 				query.$text = { $search: filter.values[0] };
 				break;
@@ -67,6 +68,14 @@ Commentary = React.createClass({
 					values.push(value.wordpressId);
 				});
 				query['keywords.wordpressId'] = { $in: values };
+				break;
+
+			case 'keyideas':
+				values = [];
+				filter.values.forEach((value) => {
+					values.push(value.wordpressId);
+				});
+				query['keyideas.wordpressId'] = { $in: values };
 				break;
 
 			case 'commenters':

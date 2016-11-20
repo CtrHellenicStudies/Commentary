@@ -35,6 +35,11 @@ CommentarySearchPanel = React.createClass({
 	getMeteorData() {
 		return {
 			keywords: Keywords.find({
+				type: 'word',
+				count: { $gt: 0 },
+			}, { sort: { title: 1 } }).fetch(),
+			keyideas: Keywords.find({
+				type: 'idea',
 				count: { $gt: 0 },
 			}, { sort: { title: 1 } }).fetch(),
 			commenters: Commenters.find({}, { sort: { name: 1 } }).fetch(),
@@ -181,6 +186,43 @@ CommentarySearchPanel = React.createClass({
 						})}
 						{self.data.keywords.length === 0 ?
 							<div className="no-results">No keywords found in objects.</div>
+							: ''
+						}
+					</CardText>
+				</Card>
+				<Card>
+					<CardHeader
+						title="Keyidea"
+						style={styles.cardHeader}
+						actAsExpander
+						showExpandableButton
+					/>
+					<CardText expandable style={styles.wrapper}>
+						{self.data.keyideas.map((keyidea, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'keyideas') {
+									filter.values.forEach((value) => {
+										if (keyidea._id === value._id) {
+											active = true;
+										}
+									});
+								}
+							});
+
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={self.toggleSearchTerm}
+									label={keyidea.title}
+									searchTermKey="keyideas"
+									value={keyidea}
+									active={active}
+								/>
+							);
+						})}
+						{self.data.keyideas.length === 0 ?
+							<div className="no-results">No keyideas found in objects.</div>
 							: ''
 						}
 					</CardText>

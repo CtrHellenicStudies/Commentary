@@ -20,16 +20,20 @@ AddCommentLayout = React.createClass({
 	},
 
 	getMeteorData() {
-		const keywords = Keywords.find().fetch();
-		let commenterId = null;
-		if (Meteor.user() && Meteor.user().commenterId) {
-			commenterId = Meteor.user().commenterId;
-		}
-		return {
-			keywords,
-			commenterId,
-		};
-	},
+        let works = [];
+        const worksSub = Meteor.subscribe('works');
+        works = Works.find({}, { sort: { order: 1 } }).fetch();
+        const keywords = Keywords.find().fetch();
+        let commenterId = null;
+        if(Meteor.user() && Meteor.user().commenterId){
+            commenterId = Meteor.user().commenterId;
+        };
+        return {
+            works,
+            keywords,
+            commenterId,
+        };
+    },
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
 		if (selectedLineFrom === null) {
@@ -257,7 +261,6 @@ AddCommentLayout = React.createClass({
 			const insertKeywords = [];
 			keywords.forEach((keyword) => {
 				foundKeyword = that.data.keywords.find((d) => d.title === keyword);
-				console.log('foundKeyword', foundKeyword, 'keyword', keyword);
 				if (foundKeyword === undefined) {
 					const _keyword = {
 						title: keyword,
@@ -400,9 +403,6 @@ AddCommentLayout = React.createClass({
 			}
 		});
 
-		console.log('AddCommentLayout.filters', this.state.filters);
-		console.log('AddCommentLayout.state', this.state);
-
 		return (
 			<div>
 				{this.ifReady() || this.state.loading ?
@@ -412,7 +412,9 @@ AddCommentLayout = React.createClass({
 								toggleSearchTerm={this.toggleSearchTerm}
 								handleChangeLineN={this.handleChangeLineN}
 								filters={this.state.filters}
-								initialSearchEnabled
+								works={this.data.works}
+                                initialSearchEnabled
+                                addCommentPage
 							/>
 
 							<main>

@@ -7,7 +7,7 @@ pushd $BUILD_DEST > /dev/null
 
 cp "$PROJECT_DIR/Dockerfile" .
 
-docker build -t $IMAGE_NAME:$BUILD_TAG -t $IMAGE_NAME:latest -f Dockerfile .
+docker build -t "$REGISTRY_PREFIX/$IMAGE_NAME:$BUILD_TAG" -t "$REGISTRY_PREFIX/$IMAGE_NAME:latest" -f Dockerfile .
 EC=$?
 if [ $EC -ne 0 ]
 then

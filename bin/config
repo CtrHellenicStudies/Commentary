@@ -16,5 +16,6 @@ export DEPLOY_ARCH=os.linux.x86_64
 
 export IMAGE_NAME=${PROJECT_NAME}_app
 export BUILD_TAG=`git describe --dirty --always`
+export REGISTRY_PREFIX="us.gcr.io/archimedes-01201"
 
 popd > /dev/null

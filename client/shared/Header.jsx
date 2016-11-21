@@ -11,13 +11,17 @@ Header = React.createClass({
 		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func,
 		initialSearchEnabled: React.PropTypes.bool,
+		works: React.PropTypes.array,
+		keyideas: React.PropTypes.array,
+		keywords: React.PropTypes.array,
+		commenters: React.PropTypes.array,
+		addCommentPage: React.PropTypes.bool,
+
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -36,20 +40,11 @@ Header = React.createClass({
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	getMeteorData() {
-		return {
-			keywords: Keywords.find().fetch(),
-			commenters: Commenters.find().fetch(),
-			works: Works.find({}, { sort: { order: 1 } }).fetch(),
-			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
-		};
-	},
-
 	toggleSearchMode() {
 		if (
-			location.pathname.indexOf('/commentary') === 0
-			|| location.pathname.indexOf('/add-comment') === 0
-		) {
+            location.pathname.indexOf('/commentary') === 0 ||
+            this.props.addCommentPage
+        ) {
 			this.setState({
 				searchEnabled: !this.state.searchEnabled,
 			});
@@ -104,20 +99,18 @@ Header = React.createClass({
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
-		const newValue = value;
-		newValue.subworks.forEach((subwork, i) => {
-			newValue.subworks[i].work = work;
+
+		value.subworks.forEach((subwork, subworkIndex) => {
+			value.subworks[subworkIndex].work = work;
 		});
 
-		// console.log("Header.state", this.state);
-
-		if (this.state.activeWork === newValue.slug) {
+		if (this.state.activeWork === value.slug) {
 			this.setState({
 				subworks: [],
 				activeWork: '',
 			});
 		} else {
-			newValue.subworks.sort((a, b) => {
+			value.subworks.sort((a, b) => {
 				if (a.n < b.n) {
 					return -1;
 				}
@@ -127,12 +120,12 @@ Header = React.createClass({
 				return 0;
 			});
 			this.setState({
-				subworks: newValue.subworks,
-				activeWork: newValue.slug,
+				subworks: value.subworks,
+				activeWork: value.slug,
 			});
 		}
 
-		this.props.toggleSearchTerm(key, newValue);
+		this.props.toggleSearchTerm(key, value);
 	},
 
 	showLoginModal() {
@@ -157,8 +150,6 @@ Header = React.createClass({
 	},
 
 	render() {
-		const self = this;
-
 		const styles = {
 			flatButton: {
 				width: 'auto',
@@ -181,12 +172,6 @@ Header = React.createClass({
 
 		const userIsLoggedIn = Meteor.user();
 		const filters = this.props.filters;
-		let addCommentPage = false;
-		if (location.pathname.indexOf('/add-comment') === 0) {
-			addCommentPage = true;
-		}
-		// console.log("Header.state", this.state);
-		// console.log("Header.data", this.data);
 
 		return (
 			<div>
@@ -203,7 +188,7 @@ Header = React.createClass({
 				/>
 				<header >
 					{!this.state.searchEnabled ?
-						<div className="md-menu-toolbar">
+						<div className="md-menu-toolbar" >
 							<div className="toolbar-tools">
 								<IconButton
 									className="left-drawer-toggle"
@@ -212,7 +197,7 @@ Header = React.createClass({
 									onClick={this.toggleLeftMenu}
 								/>
 
-								<a href="/" className="header-home-link">
+								<a href="/" className="header-home-link" >
 									<h3 className="logo">A Homer Commentary in Progress</h3>
 								</a>
 								<div className="search-toggle">
@@ -222,7 +207,7 @@ Header = React.createClass({
 										iconClassName="mdi mdi-magnify"
 									/>
 								</div>
-								<div className="header-section-wrap nav-wrap collapse">
+								<div className="header-section-wrap nav-wrap collapse" >
 									<FlatButton
 										label="Commentary"
 										href="/commentary/"
@@ -261,7 +246,7 @@ Header = React.createClass({
 												</div>
 											}
 										</div>
-										:
+									:
 										<div>
 											<FlatButton
 												label="Login"
@@ -287,10 +272,10 @@ Header = React.createClass({
 								</div>
 							</div>
 						</div>
-						:
+					:
 						<div>
-							{!addCommentPage ?
-								<div className="md-menu-toolbar">
+							{!this.props.addCommentPage ?
+								<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"
@@ -311,6 +296,10 @@ Header = React.createClass({
 												handleChangeTextsearch={this.props.handleChangeTextsearch}
 												handleChangeLineN={this.props.handleChangeLineN}
 												filters={filters}
+												works={this.props.works}
+												keyideas={this.props.keyideas}
+												keywords={this.props.keywords}
+												commenters={this.props.commenters}
 											/>
 											<div className="search-toggle">
 												<IconButton
@@ -323,7 +312,7 @@ Header = React.createClass({
 									</div>
 								</div>
 								:
-								<div className="md-menu-toolbar">
+								<div className="md-menu-toolbar" > {/* Search toolbar for /add-comment */}
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"
@@ -334,16 +323,16 @@ Header = React.createClass({
 										<div className="search-tools collapse">
 											<SearchToolDropdown
 												name="Work"
-												open={self.state.searchDropdownOpen === 'Work'}
-												toggle={self.toggleSearchDropdown}
+												open={this.state.searchDropdownOpen === 'Work'}
+												toggle={this.toggleSearchDropdown}
 												disabled={false}
 											>
-												{self.data.works.map((work, i) => {
-													const activeWork = (self.state.activeWork === work.slug);
+												{this.props.works.map((work, i) => {
+													const activeWork = (this.state.activeWork === work.slug);
 													return (
 														<SearchTermButton
 															key={i}
-															toggleSearchTerm={self.toggleWorkSearchTerm}
+															toggleSearchTerm={this.toggleWorkSearchTerm}
 															label={work.title}
 															searchTermKey="works"
 															value={work}
@@ -354,12 +343,12 @@ Header = React.createClass({
 											</SearchToolDropdown>
 											<SearchToolDropdown
 												name="Book"
-												open={self.state.searchDropdownOpen === 'Book'}
-												toggle={self.toggleSearchDropdown}
-												disabled={self.state.subworks.length === 0}
+												open={this.state.searchDropdownOpen === 'Book'}
+												toggle={this.toggleSearchDropdown}
+												disabled={this.state.subworks.length === 0}
 
 											>
-												{self.state.subworks.map((subwork, i) => {
+												{this.state.subworks.map((subwork, i) => {
 													let active = false;
 													filters.forEach((filter) => {
 														if (filter.key === 'subworks') {
@@ -374,7 +363,7 @@ Header = React.createClass({
 													return (
 														<SearchTermButton
 															key={i}
-															toggleSearchTerm={self.toggleSearchTerm}
+															toggleSearchTerm={this.toggleSearchTerm}
 															label={`${subwork.work.title} ${subwork.title}`}
 															searchTermKey="subworks"
 															value={subwork}

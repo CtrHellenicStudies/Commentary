@@ -15,6 +15,9 @@ npm install --production
 #	exit 1
 #fi
 
+# echo "Testing app"
+# npm test
+
 echo "Building to $BUILD_DEST for architecture $DEPLOY_ARCH"
 meteor build "$BUILD_DEST" --architecture $DEPLOY_ARCH
 EC=$?

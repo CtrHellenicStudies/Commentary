@@ -6,6 +6,7 @@ private/settings/production.json
 *.log
 .uploads
 node_modules
+k8s/production
 
 # Temp files
 tmp/

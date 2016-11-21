@@ -172,7 +172,6 @@ AddRevision = React.createClass({
 	},
 
 	removeRevision() { // TODO: delete
-		console.log('this.state.revision', this.state.revision);
 		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
 	},
 

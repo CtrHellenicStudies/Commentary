@@ -15,7 +15,7 @@ Meteor.startup(() => {
 	});
 
 	// Create admin and commenter roles if they don't exist:
-	const startUpRoles = ['admin', 'commenter', 'developer'];
+	const startUpRoles = ['admin', 'commenter', 'developer', 'suspended'];
 	startUpRoles.forEach((role) => {
 		try {
 			Roles.createRole(role);

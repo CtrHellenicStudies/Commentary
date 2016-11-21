@@ -1,7 +1,7 @@
 node {
   def project = 'archimedes-01201'
   def appName = 'ahcip-app'
-  def feSvcName = 'meteor'
+  def feSvcName = 'ahcip-app-serv'
   // def imageTag = "us.gcr.io/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
   def imageTag = "us.gcr.io/${project}/${appName}:latest"
 	def deployArch = "os.linux.x86_64"

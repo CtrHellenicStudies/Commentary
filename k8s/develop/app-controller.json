@@ -8,7 +8,7 @@
     }
   },
   "spec": {
-    "replicas": 2,
+    "replicas": 1,
     "template": {
       "metadata": {
         "labels": {
@@ -29,7 +29,7 @@
             "env": [
               {
                 "name": "HTTP_FORWARDED_COUNT",
-                "value"  :  1
+                "value"  :  "1"
               },
               {
                 "name": "MONGO_URL",

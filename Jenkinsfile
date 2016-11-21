@@ -12,7 +12,7 @@ node {
   // sh("npm test")
 
   stage 'Building application:'
-	sh("npm install --production")
+	sh("npm install")
   sh("meteor build . --architecture ${deployArch}")
 
   stage 'Building application image:'

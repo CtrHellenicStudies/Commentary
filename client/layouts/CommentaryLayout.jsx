@@ -20,52 +20,52 @@ CommentaryLayout = React.createClass({
 
 	// --- BEGIN handle querParams --- //
 
-	componentDidUpdate() {
-		let queryParams = {};
-		this.state.filters.forEach((filter) => {
-			filter.values.forEach((value) => {
-				const updateQueryParams = this.updateQueryParams;
-				switch (filter.key) {
-				case 'works':
-					queryParams = updateQueryParams(queryParams, filter.key, value.slug);
-					break;
-				case 'subworks':
-					queryParams = updateQueryParams(queryParams, filter.key, value.title);
-					break;
-				case 'keyideas':
-				case 'keywords':
-					queryParams = updateQueryParams(queryParams, filter.key, value.slug);
-					break;
-				case 'commenters':
-					queryParams = updateQueryParams(queryParams, filter.key, value.slug);
-					break;
-				case 'lineFrom':
-					queryParams = updateQueryParams(queryParams, filter.key, value);
-					break;
-				case 'lineTo':
-					queryParams = updateQueryParams(queryParams, filter.key, value);
-					break;
-				case 'textsearch':
-					queryParams = updateQueryParams(queryParams, filter.key, value);
-					break;
-				default:
-					break;
-				}
-			});
-		});
-		if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
-			FlowRouter.go('/commentary/', {}, queryParams);
-		}
-	},
+    componentDidUpdate() {
+        let queryParams = {};
+        this.state.filters.forEach((filter) => {
+            filter.values.forEach((value) => {
+                const getQueryParamValue = this.getQueryParamValue;
+                switch (filter.key) {
+                    case 'works':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+                        break;
+                    case 'subworks':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+                        break;
+                    case 'keyideas':
+                    case 'keywords':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+                        break;
+                    case 'commenters':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+                        break;
+                    case 'lineFrom':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+                        break;
+                    case 'lineTo':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+                        break;
+                    case 'textsearch':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
+        if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
+            FlowRouter.go('/commentary/', {}, queryParams);
+        }
+    },
 
-	updateQueryParams(queryParams, key, value) {
-		let newQueryParams;
+	getQueryParamValue(queryParams, key, value) {
+		let queryParamValue = null;
 		if (queryParams[key]) {
-			newQueryParams[key] = `${queryParams[key]},${value}`;
-		} else {
-			newQueryParams[key] = value;
-		}
-		return newQueryParams;
+            queryParamValue = queryParams[key] + ',' + value;
+        } else {
+            queryParamValue = value;
+        };
+        return queryParamValue;
 	},
 
 	// --- END handle querParams --- //

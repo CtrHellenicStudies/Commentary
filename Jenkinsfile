@@ -19,7 +19,7 @@ node {
   sh("sudo docker build -t ${imageTag} -f Dockerfile .")
 
   stage 'Pushing container image to registry:'
-  sh("gcloud docker push ${imageTag}")
+  sh("sudo gcloud docker push -- ${imageTag}")
 
   stage 'Deploying Application:'
 	sh("kubectl apply -f k8s/develop/")

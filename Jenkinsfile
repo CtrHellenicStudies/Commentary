@@ -16,7 +16,7 @@ node {
   sh("meteor build . --architecture ${deployArch}")
 
   stage 'Building application image:'
-  sh("docker build -t ${imageTag} -f Dockerfile .")
+  sh("sudo docker build -t ${imageTag} -f Dockerfile .")
 
   stage 'Pushing container image to registry:'
   sh("gcloud docker push ${imageTag}")

@@ -23,6 +23,6 @@ node {
 
   stage 'Deploying Application:'
 	sh("sudo gcloud container clusters get-credentials ahcip-cluster")
-	sh("kubectl apply -f k8s/develop/")
+	sh("sudo kubectl apply -f k8s/develop/")
 	sh("echo http://`kubectl get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")
 }

@@ -37,7 +37,7 @@
               },
               {
                 "name": "ROOT_URL",
-                "value": "http://ahcip.archimedes.digital"
+                "value": "http://ahcip-dev.archimedes.digital"
               },
               {
                 "name": "UPLOAD_TMP",

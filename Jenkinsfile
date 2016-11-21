@@ -4,12 +4,18 @@ node {
   def feSvcName = "${appName}-frontend"
   // def imageTag = "us.gcr.io/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
   def imageTag = "us.gcr.io/${project}/${appName}:latest"
+	def deployArch = "os.linux.x86_64"
 
   checkout scm
 
-  stage 'Running tests and building application/image:'
-  sh("./bin/build_app")
-  sh("./bin/build_image")
+  // stage 'Building application:'
+  // sh("npm test")
+
+  stage 'Building application:'
+  sh("meteor build . --architecture ${deployArch}")
+	
+  stage 'Building application image:'
+  sh("docker build -t ${imageTag} -f Dockerfile .")
 
   stage 'Pushing container image to registry:'
   sh("gcloud docker push ${imageTag}")

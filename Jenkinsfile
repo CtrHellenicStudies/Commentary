@@ -12,8 +12,9 @@ node {
   // sh("npm test")
 
   stage 'Building application:'
+	sh("npm install --production")
   sh("meteor build . --architecture ${deployArch}")
-	
+
   stage 'Building application image:'
   sh("docker build -t ${imageTag} -f Dockerfile .")
 

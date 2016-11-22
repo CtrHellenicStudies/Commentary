@@ -44,7 +44,11 @@ class AvatarEditor extends React.Component {
 			},
 			onError(err) {
 				console.error(err);
-				sendSnack(err.reason);
+				if(err.error === "file-too-large") {
+					sendSnack("File is too large (max = 1MB)");
+				} else{
+					sendSnack(err.reason);
+				}
 			},
 			onComplete: (avatar) => {
 				this.setState({

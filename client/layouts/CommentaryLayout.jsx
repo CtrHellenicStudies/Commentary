@@ -71,24 +71,14 @@ CommentaryLayout = React.createClass({
 	// --- END handle querParams --- //
 
 	getMeteorData() {
-		let keywords = [];
-		let	commenters = [];
-		let	works = [];
 		let comments = [];
 
 		const query = this.createQueryFromFilters(this.state.filters);
 
 		// SUBSCRIPTIONS:
-		const commentersSub = Meteor.subscribe('commenters');
-		const keywordsSub = Meteor.subscribe('keywords');
-		const worksSub = Meteor.subscribe('works');
 		Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
 
 		// FETCH DATA:
-		keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keywords = Keywords.find({ type: 'word' }).fetch();
-		commenters = Commenters.find().fetch();
-		works = Works.find({}, { sort: { order: 1 } }).fetch();
 		comments = Comments.find(
 			{},
 			{
@@ -99,15 +89,8 @@ CommentaryLayout = React.createClass({
 					nLines: -1,
 				},
 			}).fetch();
-		// check if all subscriptions ready - all data loaded
-		const subsReady = commentersSub.ready() && keywordsSub.ready() && worksSub.ready();
 
 		return {
-			keyideas,
-			keywords,
-			commenters,
-			works,
-			subsReady,
 			comments,
 		};
 	},
@@ -495,32 +478,24 @@ CommentaryLayout = React.createClass({
 	render() {
 		return (
 			<div>
-				{this.data.subsReady ?
-					<div className="chs-layout commentary-layout">
+				<div className="chs-layout commentary-layout">
 
-						<Header
-							filters={this.state.filters}
-							toggleSearchTerm={this.toggleSearchTerm}
-							handleChangeLineN={this.handleChangeLineN}
-							handleChangeTextsearch={this.handleChangeTextsearch}
-							works={this.data.works}
-							keyideas={this.data.keyideas}
-							keywords={this.data.keywords}
-							commenters={this.data.commenters}
-							initialSearchEnabled
-						/>
+					<Header
+						filters={this.state.filters}
+						toggleSearchTerm={this.toggleSearchTerm}
+						handleChangeLineN={this.handleChangeLineN}
+						handleChangeTextsearch={this.handleChangeTextsearch}
+						initialSearchEnabled
+					/>
 
-						<Commentary
-							filters={this.state.filters}
-							toggleSearchTerm={this.toggleSearchTerm}
-							loadMoreComments={this.loadMoreComments}
-							comments={this.data.comments}
-						/>
+					<Commentary
+						filters={this.state.filters}
+						toggleSearchTerm={this.toggleSearchTerm}
+						loadMoreComments={this.loadMoreComments}
+						comments={this.data.comments}
+					/>
 
-					</div>
-				:
-					<Spinner />
-				}
+				</div>
 			</div>
 		);
 	},

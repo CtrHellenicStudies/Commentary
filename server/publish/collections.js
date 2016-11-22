@@ -32,13 +32,25 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('commenters', () =>
-		Commenters.find({}, {
+	Meteor.publish('commenters', (limit = 100) => {
+		return Commenters.find({}, {
+			limit,
 			sort: {
 				name: 1,
 			},
-		})
-	);
+		});
+	});
+
+	Meteor.publish('commenters.featureOnHomepage', (limit = 100) => {
+		return Commenters.find({
+			featureOnHomepage: true,
+		}, {
+			limit,
+			sort: {
+				name: 1,
+			},
+		});
+	});
 
 	Meteor.publish('discussionComments', (commentId, sortMethod = 'votes') => {
 		check(commentId, String);
@@ -76,8 +88,31 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('keywords', () =>
+	Meteor.publish('keywords.all', (limit = 100) =>
 		Keywords.find({}, {
+			limit,
+			sort: {
+				title: 1,
+			},
+		})
+	);
+
+	Meteor.publish('keywords.keywords', (limit = 100) =>
+		Keywords.find({
+			type: 'word'
+		}, {
+			limit,
+			sort: {
+				title: 1,
+			},
+		})
+	);
+
+	Meteor.publish('keywords.keyideas', (limit = 100) =>
+		Keywords.find({
+			type: 'idea'
+		}, {
+			limit,
 			sort: {
 				title: 1,
 			},
@@ -93,7 +128,11 @@ if (Meteor.isServer) {
 	);
 
 	Meteor.publish('works', () =>
-		Works.find()
+		Works.find({}, {
+			sort: {
+				order: 1,
+			},
+		})
 	);
 
 	Meteor.publish('referenceWorks', () =>

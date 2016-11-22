@@ -9,8 +9,8 @@ Commentary = React.createClass({
 	propTypes: {
 		isOnHomeView: React.PropTypes.bool,
 		filters: React.PropTypes.array.isRequired,
-		loadMoreComments: React.PropTypes.func.isRequired,
-		toggleSearchTerm: React.PropTypes.func.isRequired,
+		loadMoreComments: React.PropTypes.func,
+		toggleSearchTerm: React.PropTypes.func,
 		comments: React.PropTypes.array.isRequired,
 		commentsReady: React.PropTypes.bool,
 	},
@@ -95,8 +95,8 @@ Commentary = React.createClass({
 			// let isInCommenters = false;
 			const commenters = [];
 			const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
-			const commenterSubscription = Meteor.subscribe('commenters');
-			if (avatarSubscription.ready() && commenterSubscription.ready()) {
+			// const commenterSubscription = Meteor.subscribe('commenters');
+			if (avatarSubscription.ready()) {
 				commentGroup.comments.forEach((comment, commentIndex) => {
 					// isInCommenters = false;
 
@@ -233,15 +233,16 @@ Commentary = React.createClass({
 										scrollPosition={this.contextScrollPosition}
 									/>
 									{commentGroup.comments.map((comment, commentIndex) => (
-										<CommentDetail
-											key={commentIndex}
-											commentGroup={commentGroup}
-											comment={comment}
-											toggleSearchTerm={this.props.toggleSearchTerm}
-											checkIfToggleLemmaReferenceModal={this.checkIfToggleLemmaReferenceModal}
-											filters={this.props.filters}
-											isOnHomeView={isOnHomeView}
-										/>
+										<div> 
+											<CommentDetail
+												key={commentIndex}
+												commentGroup={commentGroup}
+												comment={comment}
+												toggleSearchTerm={!isOnHomeView ? this.props.toggleSearchTerm : null}
+												checkIfToggleLemmaReferenceModal={this.checkIfToggleLemmaReferenceModal}
+												filters={this.props.filters}
+											/>
+										</div>
 									))}
 								</div>
 								<hr className="comment-group-end" />
@@ -266,32 +267,6 @@ Commentary = React.createClass({
 					</div>
 					: ''}
 				{/* --- END no comments found */}
-				{/* <div className="lemma-reference-modal">
-				 <article className="comment	lemma-comment paper-shadow ">
-				 {this.state.referenceLemmaSelectedEdition.lines.map(function(line, i) {
-				 return (<p
-				 key={i}
-				 className="lemma-text"
-				 dangerouslySetInnerHTML={{ __html: line.html }}
-				 />);
-				 })}
-				 <div className="edition-tabs tabs">
-				 {this.state.referenceLemma.map(function(lemma_text_edition, i) {
-				 return (<FlatButton
-				 key={i}
-				 label={edition.title}
-				 data-edition={edition.title}
-				 className="edition-tab tab"
-				 onClick={this.toggleLemmaEdition}
-				 />);
-				 })}
-				 </div>
-				 <i
-				 className="mdi mdi-close paper-shadow"
-				 onClick={this.hideLemmaReference}
-				 />
-				 </article>
-				 </div>*/}
 				{'work' in this.state.contextCommentGroupSelected ?
 					<ContextPanel
 						open={this.state.contextPanelOpen}
@@ -301,10 +276,12 @@ Commentary = React.createClass({
 						commentLemmaIndex={this.state.commentLemmaIndex}
 					/>
 					: ''}
-				<FilterWidget
-					filters={this.props.filters}
-					toggleSearchTerm={this.props.toggleSearchTerm}
-				/>
+				{!isOnHomeView ? 
+					<FilterWidget
+						filters={this.props.filters}
+						toggleSearchTerm={this.props.toggleSearchTerm}
+					/>
+					: ''}
 			</div>
 		);
 	},

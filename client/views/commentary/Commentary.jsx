@@ -9,9 +9,6 @@ Commentary = React.createClass({
 	propTypes: {
 		isOnHomeView: React.PropTypes.bool,
 		filters: React.PropTypes.array.isRequired,
-		loadMoreComments: React.PropTypes.func,
-		toggleSearchTerm: React.PropTypes.func,
-		comments: React.PropTypes.array.isRequired,
 		commentsReady: React.PropTypes.bool,
 	},
 
@@ -33,6 +30,8 @@ Commentary = React.createClass({
 			},
 			commentLemmaGroups: [],
 			commentGroups: [],
+			skip: 0,
+			limit: 10,
 		};
 	},
 
@@ -48,11 +47,25 @@ Commentary = React.createClass({
 	},
 
 	getMeteorData() {
+		const query = this.createQueryFromFilters(this.props.filters);
+
+		// SUBSCRIPTIONS:
+		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
+
+		// FETCH DATA:
+		const comments = Comments.find({}, {
+			sort: {
+				'work.order': 1,
+				'subwork.n': 1,
+				lineFrom: 1,
+				nLines: -1,
+			},
+		}).fetch();
 		const commentGroups = [];
 
 		// Make comment groups from comments
 		let isInCommentGroup = false;
-		this.props.comments.forEach((comment) => {
+		comments.forEach((comment) => {
 			isInCommentGroup = false;
 			commentGroups.forEach((commentGroup) => {
 				if (
@@ -129,6 +142,87 @@ Commentary = React.createClass({
 		};
 	},
 
+	createQueryFromFilters(filters) {
+		const query = {};
+		let values = [];
+		if (filters) {
+			filters.forEach((filter) => {
+				switch (filter.key) {
+				case '_id':
+					query._id = filter.values[0];
+					break;
+				case 'textsearch':
+					query.$text = {
+						$search: filter.values[0],
+					};
+					break;
+				case 'keyideas':
+				case 'keywords':
+					values = [];
+					filter.values.forEach((value) => {
+						values.push(value.slug);
+					});
+					query['keywords.slug'] = {
+						$in: values,
+					};
+					break;
+
+				case 'commenters':
+					values = [];
+					filter.values.forEach((value) => {
+						values.push(value.slug);
+					});
+					query['commenters.slug'] = {
+						$in: values,
+					};
+					break;
+
+				case 'works':
+					values = [];
+					filter.values.forEach((value) => {
+						values.push(value.slug);
+					});
+					query['work.slug'] = {
+						$in: values,
+					};
+					break;
+
+				case 'subworks':
+					values = [];
+					filter.values.forEach((value) => {
+						values.push(value.n);
+					});
+					query['subwork.n'] = {
+						$in: values,
+					};
+					break;
+
+				case 'lineFrom':
+					// Values will always be an array with a length of one
+					query.lineFrom = query.lineFrom || {};
+					query.lineFrom.$gte = filter.values[0];
+					break;
+
+				case 'lineTo':
+					// Values will always be an array with a length of one
+					query.lineFrom = query.lineFrom || {};
+					query.lineFrom.$lte = filter.values[0];
+					break;
+				default:
+					break;
+				}
+			});
+		}
+		return query;
+	},
+
+	toggleSearchTerm(key, value) {
+		this.props.toggleSearchTerm(key, value);
+		this.setState({
+			skip: 0,
+		});
+	},
+
 	handleScroll() {
 		const scrollY = window.scrollY;
 		this.data.commentGroups.forEach((commentGroup, i) => {
@@ -156,7 +250,9 @@ Commentary = React.createClass({
 
 	loadMoreComments() {
 		if (!this.props.isOnHomeView && this.data.commentGroups.length) {
-			this.props.loadMoreComments();
+			this.setState({
+				limit: this.state.limit + 10,
+			});
 		}
 	},
 
@@ -238,7 +334,7 @@ Commentary = React.createClass({
 												key={commentIndex}
 												commentGroup={commentGroup}
 												comment={comment}
-												toggleSearchTerm={!isOnHomeView ? this.props.toggleSearchTerm : null}
+												toggleSearchTerm={!isOnHomeView ? this.toggleSearchTerm : null}
 												checkIfToggleLemmaReferenceModal={this.checkIfToggleLemmaReferenceModal}
 												filters={this.props.filters}
 											/>
@@ -279,7 +375,7 @@ Commentary = React.createClass({
 				{!isOnHomeView ? 
 					<FilterWidget
 						filters={this.props.filters}
-						toggleSearchTerm={this.props.toggleSearchTerm}
+						toggleSearchTerm={this.toggleSearchTerm}
 					/>
 					: ''}
 			</div>

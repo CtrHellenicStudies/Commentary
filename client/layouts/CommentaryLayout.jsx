@@ -4,16 +4,12 @@ CommentaryLayout = React.createClass({
 		queryParams: React.PropTypes.object,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getInitialState() {
 		const filters = this.createFilterFromQueryParams(this.props.queryParams);
 		const selectedRevisionIndex = null;
 
 		return {
 			filters,
-			skip: 0,
-			limit: 10,
 			selectedRevisionIndex,
 		};
 	},
@@ -69,31 +65,6 @@ CommentaryLayout = React.createClass({
 	},
 
 	// --- END handle querParams --- //
-
-	getMeteorData() {
-		let comments = [];
-
-		const query = this.createQueryFromFilters(this.state.filters);
-
-		// SUBSCRIPTIONS:
-		Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
-
-		// FETCH DATA:
-		comments = Comments.find(
-			{},
-			{
-				sort: {
-					'work.order': 1,
-					'subwork.n': 1,
-					lineFrom: 1,
-					nLines: -1,
-				},
-			}).fetch();
-
-		return {
-			comments,
-		};
-	},
 
 	getFilterValue(filters, key) {
 		let value = {};
@@ -236,86 +207,6 @@ CommentaryLayout = React.createClass({
 		return filters;
 	},
 
-	createQueryFromFilters(filters) {
-		const query = {};
-		let values = [];
-		if (filters) {
-			filters.forEach((filter) => {
-				switch (filter.key) {
-				case '_id':
-					query._id = filter.values[0];
-					break;
-				case 'textsearch':
-					query.$text = {
-						$search: filter.values[0],
-					};
-					break;
-				case 'keyideas':
-				case 'keywords':
-					values = [];
-					filter.values.forEach((value) => {
-						values.push(value.slug);
-					});
-					query['keywords.slug'] = {
-						$in: values,
-					};
-					break;
-
-				case 'commenters':
-					values = [];
-					filter.values.forEach((value) => {
-						values.push(value.slug);
-					});
-					query['commenters.slug'] = {
-						$in: values,
-					};
-					break;
-
-				case 'works':
-					values = [];
-					filter.values.forEach((value) => {
-						values.push(value.slug);
-					});
-					query['work.slug'] = {
-						$in: values,
-					};
-					break;
-
-				case 'subworks':
-					values = [];
-					filter.values.forEach((value) => {
-						values.push(value.n);
-					});
-					query['subwork.n'] = {
-						$in: values,
-					};
-					break;
-
-				case 'lineFrom':
-					// Values will always be an array with a length of one
-					query.lineFrom = query.lineFrom || {};
-					query.lineFrom.$gte = filter.values[0];
-					break;
-
-				case 'lineTo':
-					// Values will always be an array with a length of one
-					query.lineFrom = query.lineFrom || {};
-					query.lineFrom.$lte = filter.values[0];
-					break;
-				default:
-					break;
-				}
-			});
-		}
-		return query;
-	},
-
-	loadMoreComments() {
-		this.setState({
-			limit: this.state.limit + 10,
-		});
-	},
-
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
 		let keyIsInFilter = false;
@@ -364,7 +255,6 @@ CommentaryLayout = React.createClass({
 		}
 		this.setState({
 			filters,
-			skip: 0,
 		});
 	},
 
@@ -492,7 +382,6 @@ CommentaryLayout = React.createClass({
 						filters={this.state.filters}
 						toggleSearchTerm={this.toggleSearchTerm}
 						loadMoreComments={this.loadMoreComments}
-						comments={this.data.comments}
 					/>
 
 				</div>

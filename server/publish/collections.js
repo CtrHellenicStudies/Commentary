@@ -97,6 +97,15 @@ if (Meteor.isServer) {
 		})
 	);
 
+	Meteor.publish('keywords.slug', (slug) => {
+		check(slug, String);
+		return Keywords.find({
+			slug,
+		}, {
+			limit: 1,
+		});
+	});
+
 	Meteor.publish('keywords.keywords', (limit = 100) =>
 		Keywords.find({
 			type: 'word'

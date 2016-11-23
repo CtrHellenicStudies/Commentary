@@ -7,16 +7,31 @@ ReferenceWorkDetail = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
+		// SUBSCRIPTIONS:
+		const referenceWorksSub = Meteor.subscribe('referenceWorks.slug', this.props.slug);
+
+		// FETCH DATA:
 		const query = {
 			slug: this.props.slug,
 		};
+		const referenceWork = ReferenceWorks.findOne(query, {
+			sort: {
+				title: 1
+			}
+		});
 
-		return { referenceWork: ReferenceWorks.findOne(query) };
+		return {
+			referenceWork,
+		};
 	},
 
 	createMarkup() {
+		let __html = '';
+		if (this.data.referenceWork) {
+			__html = this.data.referenceWork.description.replace(/(<([^>]+)>)/ig, '');
+		}
 		return {
-			__html: this.data.referenceWork.description.replace(/(<([^>]+)>)/ig, ''),
+			__html,
 		};
 	},
 

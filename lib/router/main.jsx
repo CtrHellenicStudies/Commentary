@@ -10,7 +10,7 @@ function subscriptions() {
 	// this.register('keywords', Meteor.subscribe('keywords'));
 	// this.register('works', Meteor.subscribe('works'));
 	this.register('users', Meteor.subscribe('users'));
-	this.register('referenceWorks', Meteor.subscribe('referenceWorks'));
+	// this.register('referenceWorks', Meteor.subscribe('referenceWorks'));
 	this.register('userData', Meteor.subscribe('userData'));
 }
 

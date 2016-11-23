@@ -145,8 +145,34 @@ if (Meteor.isServer) {
 	);
 
 	Meteor.publish('referenceWorks', () =>
-		ReferenceWorks.find({}, { sort: { title: 1 } })
+		ReferenceWorks.find({}, {
+			sort: {
+				title: 1
+			}
+		})
 	);
+
+	Meteor.publish('referenceWorks.commenterId', (commenterId) => {
+		check(commenterId, String);
+		return ReferenceWorks.find({
+			authors: commenterId
+		}, {
+			sort: {
+				title: 1
+			}
+		})
+	});
+
+	Meteor.publish('referenceWorks.slug', (slug) => {
+		check(slug, String);
+		return ReferenceWorks.find({
+			slug,
+		}, {
+			sort: {
+				title: 1
+			}
+		})
+	});
 
 	Meteor.publish('pageImages', function pageImages(pageSlug) {
 		check(pageSlug, String);

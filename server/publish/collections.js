@@ -52,6 +52,17 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('commenters.slug', (slug) => {
+		return Commenters.find({
+			slug,
+		}, {
+			limit: 1,
+			sort: {
+				name: 1,
+			},
+		});
+	});
+
 	Meteor.publish('discussionComments', (commentId, sortMethod = 'votes') => {
 		check(commentId, String);
 		let sort = { votes: -1, updated: -1 };
@@ -168,6 +179,7 @@ if (Meteor.isServer) {
 		return ReferenceWorks.find({
 			slug,
 		}, {
+			limit: 1,
 			sort: {
 				title: 1
 			}

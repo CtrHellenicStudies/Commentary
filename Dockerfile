@@ -1,5 +1,6 @@
 FROM node:4.6.1
 
+RUN apt-get update && apt-get install -y graphicsmagick
 RUN mkdir /app
 COPY *.tar.gz /app/.
 RUN cd /app \

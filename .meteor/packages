@@ -68,8 +68,6 @@ dburles:google-maps
 todda00:friendly-slugs
 d3js:d3
 gwendall:blaze-to-react
-jalik:ufs@0.7.1_1
-jalik:ufs-gridfs@0.1.4
 buishi:autoform-ufs
 mpowaga:autoform-summernote
 reactive-var@1.0.10
@@ -81,3 +79,5 @@ meteorhacks:aggregate
 react-meteor-data
 practicalmeteor:chai
 practicalmeteor:sinon
+jalik:ufs-gridfs
+jalik:ufs

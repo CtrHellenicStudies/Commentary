@@ -29,15 +29,17 @@ CommentarySearchToolbar = React.createClass({
 	getMeteorData() {
 
 		// SUBSCRIPTIONS:
-		const commentersSub = Meteor.subscribe('commenters');
-		const keywordsSub = Meteor.subscribe('keywords.all');
-		const worksSub = Meteor.subscribe('works');
+		if (!this.props.addCommentPage) {
+			Meteor.subscribe('commenters');
+			Meteor.subscribe('keywords.all');
+		}
+		Meteor.subscribe('works');
 
 		// FETCH DATA:
-		keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keywords = Keywords.find({ type: 'word' }).fetch();
-		commenters = Commenters.find().fetch();
-		works = Works.find({}, { sort: { order: 1 } }).fetch();
+		const keyideas = Keywords.find({ type: 'idea' }).fetch();
+		const keywords = Keywords.find({ type: 'word' }).fetch();
+		const commenters = Commenters.find().fetch();
+		const works = Works.find({}, { sort: { order: 1 } }).fetch();
 
 		return {
 			keyideas,
@@ -251,7 +253,7 @@ CommentarySearchToolbar = React.createClass({
 					name="Book"
 					open={this.state.searchDropdownOpen === 'Book'}
 					toggle={this.toggleSearchDropdown}
-					disabled={workInFilter === null}
+					disabled={workInFilter === false}
 
 				>
 					{this.data.works.map((work, i) => {
@@ -292,13 +294,15 @@ CommentarySearchToolbar = React.createClass({
 						}
 					})}
 				</SearchToolDropdown>
-				<div style={styles.lineSearch} className="line-search">
-					<LineRangeSlider
-						handleChangeLineN={this.props.handleChangeLineN}
-						lineFrom={lineFrom}
-						lineTo={lineTo}
-					/>
-				</div>
+				{!addCommentPage ?
+					<div style={styles.lineSearch} className="line-search">
+						<LineRangeSlider
+							handleChangeLineN={this.props.handleChangeLineN}
+							lineFrom={lineFrom}
+							lineTo={lineTo}
+						/>
+					</div>
+					: ''}
 			</span>
 		);
 	},

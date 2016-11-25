@@ -2,6 +2,8 @@ node {
   def project = 'archimedes-01201'
   def appName = 'ahcip-app'
   def feSvcName = 'ahcip-app-serv'
+  def deploymentName = 'ahcip-app-dep'
+  def appContainerName = 'ahcip-app-cont'
   // def imageTag = "us.gcr.io/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
   def imageTag = "us.gcr.io/${project}/${appName}:latest"
 	def deployArch = "os.linux.x86_64"
@@ -24,6 +26,6 @@ node {
   stage 'Deploying Application:'
 	// sh("sudo gcloud container clusters get-credentials ahcip-cluster")
 	//sh("kubectl apply -f k8s/develop/")
-  sh("set image deployment/ahcip-app-dep ahcip-app-cont=us.gcr.io/archimedes-01201/ahcip-app:latest")
+  sh("set image deployment/${deploymentName} ${appContainerName}=${imageTag}")
 	sh("echo http://`kubectl get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")
 }

@@ -19,7 +19,7 @@
 				"containers": [
 					{
 						"name": "ahcip-app-cont",
-						"image": "us.gcr.io/archimedes-01201/ahcip_app:latest",
+						"image": "us.gcr.io/archimedes-01201/ahcip-app:latest",
 						"ports": [
 							{
 								"name": "http-server",

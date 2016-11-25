@@ -11,6 +11,8 @@ then
 	exit 1
 fi
 
+
+
 docker run \
 	-t \
 	--tmpfs /tmp \
@@ -18,4 +20,4 @@ docker run \
 	-p 3000:3000 \
 	--rm \
 	-e MONGO_URL=$MONGO_URL \
-	${IMAGE_NAME}:latest
+	"$REGISTRY_PREFIX/$IMAGE_NAME:latest"

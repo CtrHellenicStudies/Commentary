@@ -11,6 +11,6 @@ export default function AvatarIcon(props) {
 }
 
 AvatarIcon.propTypes = {
-	defaultUrl: React.PropTypes.string.isRequired,
+	defaultUrl: React.PropTypes.string,
 	avatar: React.PropTypes.object,
 };

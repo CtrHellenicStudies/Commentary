@@ -27,7 +27,6 @@ momentjs:moment
 twbs:bootstrap
 reywood:publish-composite
 natestrauser:animate-css
-yogiben:admin
 timmyg:wow
 tsega:skrollr
 meteor-base@1.0.4
@@ -46,7 +45,6 @@ yogiben:autoform-modals
 yogiben:autoform-file
 yogiben:autoform-map
 check
-iron:router
 useraccounts:core
 useraccounts:bootstrap
 useraccounts:flow-routing@1.14.3
@@ -81,3 +79,4 @@ practicalmeteor:chai
 practicalmeteor:sinon
 jalik:ufs-gridfs
 jalik:ufs
+sach:flow-db-admin

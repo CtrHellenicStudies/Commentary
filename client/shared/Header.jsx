@@ -210,7 +210,7 @@ Header = React.createClass({
 								<div className="header-section-wrap nav-wrap collapse" >
 									<FlatButton
 										label="Commentary"
-										href="/commentary/"
+										href="/commentary"
 										style={styles.flatButton}
 									/>
 									<FlatButton

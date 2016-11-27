@@ -37,12 +37,6 @@ FlowRouter.route('/commentary', {
 	},
 });
 
-FlowRouter.route('/commentary/', {
-	action: (params, queryParams) => {
-		mount(CommentaryLayout, { params, queryParams });
-	},
-});
-
 FlowRouter.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {

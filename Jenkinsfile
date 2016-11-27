@@ -17,7 +17,7 @@ node {
 
   stage 'Building application image:'
   //sh("sudo docker build -t ${imageTag} -f Dockerfile .")
-  sh("./bin/build_image ${imageTag}")
+  sh("sudo ./bin/build_image ${imageTag}")
 
   stage 'Pushing container image to registry:'
   sh("sudo gcloud docker push -- ${imageTag}")

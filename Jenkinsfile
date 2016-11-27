@@ -10,15 +10,14 @@ node {
 
   checkout scm
 
-  // stage 'Building application:'
-  // sh("npm test")
-
   stage 'Building application:'
-	sh("npm install")
-  sh("meteor build . --architecture ${deployArch}")
+  sh("./bin/build_app")
+	//sh("npm install")
+  //sh("meteor build . --architecture ${deployArch}")
 
   stage 'Building application image:'
-  sh("sudo docker build -t ${imageTag} -f Dockerfile .")
+  //sh("sudo docker build -t ${imageTag} -f Dockerfile .")
+  sh("./bin/build_image ${imageTag}")
 
   stage 'Pushing container image to registry:'
   sh("sudo gcloud docker push -- ${imageTag}")

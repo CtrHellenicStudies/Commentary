@@ -11,13 +11,13 @@ then
 	exit 1
 fi
 
-
+	# --tmpfs /tmp \
+	# --rm \
+IMAGE_TAG=${2-$DEFAULT_IMAGE_TAG}
 
 docker run \
-	-t \
-	--tmpfs /tmp \
+	-d \
 	--name ${IMAGE_NAME} \
 	-p 3000:3000 \
-	--rm \
 	-e MONGO_URL=$MONGO_URL \
-	"$REGISTRY_PREFIX/$IMAGE_NAME:latest"
+	"$IMAGE_TAG"

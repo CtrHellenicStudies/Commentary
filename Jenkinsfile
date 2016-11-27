@@ -5,7 +5,7 @@ node {
   def deploymentName = 'ahcip-app-dep'
   def appContainerName = 'ahcip-app-cont'
   // def imageTag = "us.gcr.io/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
-  def imageTag = "us.gcr.io/${project}/${appName}:latest"
+//  def imageTag = "us.gcr.io/${project}/${appName}:latest"
 	def deployArch = "os.linux.x86_64"
 
   checkout scm
@@ -14,6 +14,10 @@ node {
   sh("./bin/build_app")
 	//sh("npm install")
   //sh("meteor build . --architecture ${deployArch}")
+
+  sh('git describe --dirty --always > built_tag.out')
+  def buildTag = readFile('build_tag.out').trim()
+  def imageTag = "us.gcr.io/${project}/${appName}:${buildTag}"
 
   stage 'Building application image:'
   //sh("sudo docker build -t ${imageTag} -f Dockerfile .")

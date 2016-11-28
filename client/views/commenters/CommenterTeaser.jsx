@@ -6,6 +6,7 @@ CommenterTeaser = React.createClass({
 
 	propTypes: {
 		commenter: React.PropTypes.object.isRequired,
+		commenterAvatarUrl: React.PropTypes.string,
 	},
 
 	childContextTypes: {
@@ -18,6 +19,7 @@ CommenterTeaser = React.createClass({
 
 	render() {
 		const commenter = this.props.commenter;
+		const commenterAvatarUrl = this.props.commenterAvatarUrl;
 		const commenterUrl = `/commenters/${commenter.slug}`;
 		const commenterExcerpt = commenter.tagline ? Utils.trunc(commenter.tagline, 120) : '';
 
@@ -27,7 +29,7 @@ CommenterTeaser = React.createClass({
 				<a href={commenterUrl}>
 					<div className="commenter-image paper-shadow">
 						<img
-							src={commenter.avatarUrl ? commenter.avatarUrl : '/images/default_user.jpg'}
+							src={commenterAvatarUrl ? commenterAvatarUrl : '/images/default_user.jpg'}
 							alt={commenter.name}
 						/>
 					</div>

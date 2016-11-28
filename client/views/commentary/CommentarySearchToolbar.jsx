@@ -9,10 +9,7 @@ CommentarySearchToolbar = React.createClass({
 		toggleSearchTerm: React.PropTypes.func,
 		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func,
-		works: React.PropTypes.array.isRequired,
-		keyideas: React.PropTypes.array.isRequired,
-		keywords: React.PropTypes.array.isRequired,
-		commenters: React.PropTypes.array.isRequired,
+		addCommentPage: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -20,29 +17,35 @@ CommentarySearchToolbar = React.createClass({
 	},
 
 	getInitialState() {
-		const filters = this.props.filters;
-
-		let activeWork = '';
-		let subworks = [];
-		if (filters) {
-			filters.forEach((filter) => {
-				if (filter.key === 'works') {
-					activeWork = filter.values[0].slug;
-					const work = this.props.works.find((work) => {
-						return work.slug === activeWork;
-					});
-					subworks = work.subworks;
-					subworks.forEach((subwork, i) => {
-						subworks[i].work = work;
-					});
-				}
-			});
-		}
 
 		return {
 			searchDropdownOpen: '',
-			subworks,
-			activeWork,
+			activeWorkNew: null,
+		};
+	},
+
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+
+		// SUBSCRIPTIONS:
+		if (!this.props.addCommentPage) {
+			Meteor.subscribe('commenters');
+			Meteor.subscribe('keywords.all');
+		}
+		Meteor.subscribe('works');
+
+		// FETCH DATA:
+		const keyideas = Keywords.find({ type: 'idea' }).fetch();
+		const keywords = Keywords.find({ type: 'word' }).fetch();
+		const commenters = Commenters.find().fetch();
+		const works = Works.find({}, { sort: { order: 1 } }).fetch();
+
+		return {
+			keyideas,
+			keywords,
+			commenters,
+			works,
 		};
 	},
 
@@ -51,36 +54,6 @@ CommentarySearchToolbar = React.createClass({
 	},
 
 	toggleSearchTerm(key, value) {
-		this.props.toggleSearchTerm(key, value);
-	},
-
-	toggleWorkSearchTerm(key, value) {
-		const work = value;
-
-		value.subworks.forEach((subwork, i) => {
-			value.subworks[i].work = work;
-		});
-
-		if (this.state.activeWork === value.slug) {
-			this.setState({
-				subworks: [],
-				activeWork: '',
-			});
-		} else {
-			value.subworks.sort((a, b) => {
-				if (a.n < b.n) {
-					return -1;
-				}
-				if (a.n > b.n) {
-					return 1;
-				}
-				return 0;
-			});
-			this.setState({
-				subworks: value.subworks,
-				activeWork: value.slug,
-			});
-		}
 		this.props.toggleSearchTerm(key, value);
 	},
 
@@ -126,109 +99,125 @@ CommentarySearchToolbar = React.createClass({
 			lineTo = filterLineTo.values[0];
 		}
 
+		const addCommentPage = this.props.addCommentPage;
+
+		let workInFilter = false;
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				workInFilter = true;
+			}
+		});
+
 		return (
 			<span>
+				{!addCommentPage ?
+					<div className="search-tool text-search">
+						<TextField
+							hintText=""
+							floatingLabelText="Search"
+							onChange={this.handleChangeTextsearch}
+						/>
+					</div>
+					: '' }
 
-				<div className="search-tool text-search">
-					<TextField
-						hintText=""
-						floatingLabelText="Search"
-						onChange={this.handleChangeTextsearch}
-					/>
-				</div>
+				{!addCommentPage ?
+					<SearchToolDropdown
+						name="Keywords"
+						open={this.state.searchDropdownOpen === 'Keywords'}
+						toggle={this.toggleSearchDropdown}
+						disabled={false}
+					>
+						{this.data.keywords.map((keyword, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'keywords') {
+									filter.values.forEach((value) => {
+										if (keyword.slug === value.slug) {
+											active = true;
+										}
+									});
+								}
+							});
 
-				<SearchToolDropdown
-					name="Keywords"
-					open={this.state.searchDropdownOpen === 'Keywords'}
-					toggle={this.toggleSearchDropdown}
-					disabled={false}
-				>
-					{this.props.keywords.map((keyword, i) => {
-						let active = false;
-						filters.forEach((filter) => {
-							if (filter.key === 'keywords') {
-								filter.values.forEach((value) => {
-									if (keyword.slug === value.slug) {
-										active = true;
-									}
-								});
-							}
-						});
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={this.toggleSearchTerm}
+									label={keyword.title}
+									searchTermKey="keywords"
+									value={keyword}
+									active={active}
+								/>
+							);
+						})}
+					</SearchToolDropdown>
+					: ''}
 
-						return (
-							<SearchTermButton
-								key={i}
-								toggleSearchTerm={this.toggleSearchTerm}
-								label={keyword.title}
-								searchTermKey="keywords"
-								value={keyword}
-								active={active}
-							/>
-						);
-					})}
-				</SearchToolDropdown>
+				{!addCommentPage ?
+					<SearchToolDropdown
+						name="Keyideas"
+						open={this.state.searchDropdownOpen === 'Keyideas'}
+						toggle={this.toggleSearchDropdown}
+						disabled={false}
+					>
+						{this.data.keyideas.map((keyidea, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'keyideas') {
+									filter.values.forEach((value) => {
+										if (keyidea.slug === value.slug) {
+											active = true;
+										}
+									});
+								}
+							});
 
-				<SearchToolDropdown
-					name="Keyideas"
-					open={this.state.searchDropdownOpen === 'Keyideas'}
-					toggle={this.toggleSearchDropdown}
-					disabled={false}
-				>
-					{this.props.keyideas.map((keyidea, i) => {
-						let active = false;
-						filters.forEach((filter) => {
-							if (filter.key === 'keyideas') {
-								filter.values.forEach((value) => {
-									if (keyidea.slug === value.slug) {
-										active = true;
-									}
-								});
-							}
-						});
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={this.toggleSearchTerm}
+									label={keyidea.title}
+									searchTermKey="keyideas"
+									value={keyidea}
+									active={active}
+								/>
+							);
+						})}
+					</SearchToolDropdown>
+					: ''}
 
-						return (
-							<SearchTermButton
-								key={i}
-								toggleSearchTerm={this.toggleSearchTerm}
-								label={keyidea.title}
-								searchTermKey="keyideas"
-								value={keyidea}
-								active={active}
-							/>
-						);
-					})}
-				</SearchToolDropdown>
+				{!addCommentPage ?
+					<SearchToolDropdown
+						name="Commenter"
+						open={this.state.searchDropdownOpen === 'Commenter'}
+						toggle={this.toggleSearchDropdown}
+						disabled={false}
+					>
+						{this.data.commenters.map((commenter, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'commenters') {
+									filter.values.forEach((value) => {
+										if (commenter.slug === value.slug) {
+											active = true;
+										}
+									});
+								}
+							});
 
-				<SearchToolDropdown
-					name="Commenter"
-					open={this.state.searchDropdownOpen === 'Commenter'}
-					toggle={this.toggleSearchDropdown}
-					disabled={false}
-				>
-					{this.props.commenters.map((commenter, i) => {
-						let active = false;
-						filters.forEach((filter) => {
-							if (filter.key === 'commenters') {
-								filter.values.forEach((value) => {
-									if (commenter.slug === value.slug) {
-										active = true;
-									}
-								});
-							}
-						});
-
-						return (
-							<SearchTermButton
-								key={i}
-								toggleSearchTerm={this.toggleSearchTerm}
-								label={commenter.name}
-								searchTermKey="commenters"
-								value={commenter}
-								active={active}
-							/>
-						);
-					})}
-				</SearchToolDropdown>
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={this.toggleSearchTerm}
+									label={commenter.name}
+									searchTermKey="commenters"
+									value={commenter}
+									active={active}
+								/>
+							);
+						})}
+					</SearchToolDropdown>
+					: ''}
 
 				<SearchToolDropdown
 					name="Work"
@@ -236,16 +225,25 @@ CommentarySearchToolbar = React.createClass({
 					toggle={this.toggleSearchDropdown}
 					disabled={false}
 				>
-					{this.props.works.map((work, i) => {
-						const activeWork = Boolean(this.state.activeWork === work.slug);
+					{this.data.works.map((work, i) => {
+						let active = false;
+						filters.forEach((filter) => {
+							if (filter.key === 'works') {
+								filter.values.forEach((value) => {
+									if (work.slug === value.slug) {
+										active = true;
+									}
+								});
+							}
+						});
 						return (
 							<SearchTermButton
 								key={i}
-								toggleSearchTerm={this.toggleWorkSearchTerm}
+								toggleSearchTerm={this.toggleSearchTerm}
 								label={work.title}
 								searchTermKey="works"
 								value={work}
-								activeWork={activeWork}
+								activeWork={active}
 							/>
 						);
 					})}
@@ -255,40 +253,56 @@ CommentarySearchToolbar = React.createClass({
 					name="Book"
 					open={this.state.searchDropdownOpen === 'Book'}
 					toggle={this.toggleSearchDropdown}
-					disabled={this.state.subworks.length === 0}
+					disabled={workInFilter === false}
 
 				>
-					{this.state.subworks.map((subwork, i) => {
-						let active = false;
+					{this.data.works.map((work, i) => {
+						let workFound = false;
 						filters.forEach((filter) => {
-							if (filter.key === 'subworks') {
+							if (filter.key === 'works') {
 								filter.values.forEach((value) => {
-									if (subwork.n === value.n) {
-										active = true;
+									if (work.slug === value.slug) {
+										workFound = true;
 									}
 								});
 							}
 						});
-
-						return (
-							<SearchTermButton
-								key={i}
-								toggleSearchTerm={this.toggleSearchTerm}
-								label={`${subwork.work.title} ${subwork.title}`}
-								searchTermKey="subworks"
-								value={subwork}
-								active={active}
-							/>
-						);
+						if (workFound) {
+							const SearchTermButtons = work.subworks.map((subwork, i) => {
+								let active = false;
+								filters.forEach((filter) => {
+									if (filter.key === 'subworks') {
+										filter.values.forEach((value) => {
+											if (subwork.n === value.n) {
+												active = true;
+											}
+										});
+									}
+								});
+								return (
+									<SearchTermButton
+										key={i}
+										toggleSearchTerm={this.toggleSearchTerm}
+										label={`${work.title} ${subwork.title}`}
+										searchTermKey="subworks"
+										value={subwork}
+										active={active}
+									/>
+								);
+							});
+							return SearchTermButtons;
+						}
 					})}
 				</SearchToolDropdown>
-				<div style={styles.lineSearch} className="line-search">
-					<LineRangeSlider
-						handleChangeLineN={this.props.handleChangeLineN}
-						lineFrom={lineFrom}
-						lineTo={lineTo}
-					/>
-				</div>
+				{!addCommentPage ?
+					<div style={styles.lineSearch} className="line-search">
+						<LineRangeSlider
+							handleChangeLineN={this.props.handleChangeLineN}
+							lineFrom={lineFrom}
+							lineTo={lineTo}
+						/>
+					</div>
+					: ''}
 			</span>
 		);
 	},

@@ -12,14 +12,20 @@ ReferenceWorksList = React.createClass({
 
 	// Loads items from the referenceWorks collection and puts them on this.data.referenceWorks
 	getMeteorData() {
+		// SUBSCRIPTIONS:
 		const query = {};
-
 		if (this.props.commenterId) {
 			query.authors = this.props.commenterId;
+			Meteor.subscribe('referenceWorks.commenterId', this.props.commenterId);
+		} else {
+			Meteor.subscribe('referenceWorks');
 		}
 
+		// FETCH DATA:
+		const referenceWorks = ReferenceWorks.find(query, { sort: { title: 1 } }).fetch()
+		
 		return {
-			referenceWorks: ReferenceWorks.find(query, { sort: { title: 1 } }).fetch(),
+			referenceWorks,
 		};
 	},
 

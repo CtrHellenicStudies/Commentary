@@ -20,6 +20,22 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('comments.id', (_id) => {
+		check(_id, String);
+		return Comments.find({
+			_id,
+		}, {
+			limit: 1,
+			sort: {
+				'work.order': 1,
+				'subwork.n': 1,
+				lineFrom: 1,
+				nLines: -1,
+			},
+		});
+	});
+
+
 	Meteor.publish('textNodes', (textQuery) => {
 		check(textQuery, Object);
 		const query = textQuery || {};
@@ -32,13 +48,36 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('commenters', () =>
-		Commenters.find({}, {
+	Meteor.publish('commenters', (limit = 100) => {
+		return Commenters.find({}, {
+			limit,
 			sort: {
 				name: 1,
 			},
-		})
-	);
+		});
+	});
+
+	Meteor.publish('commenters.featureOnHomepage', (limit = 100) => {
+		return Commenters.find({
+			featureOnHomepage: true,
+		}, {
+			limit,
+			sort: {
+				name: 1,
+			},
+		});
+	});
+
+	Meteor.publish('commenters.slug', (slug) => {
+		return Commenters.find({
+			slug,
+		}, {
+			limit: 1,
+			sort: {
+				name: 1,
+			},
+		});
+	});
 
 	Meteor.publish('discussionComments', (commentId, sortMethod = 'votes') => {
 		check(commentId, String);
@@ -76,8 +115,40 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('keywords', () =>
+	Meteor.publish('keywords.all', (limit = 100) =>
 		Keywords.find({}, {
+			limit,
+			sort: {
+				title: 1,
+			},
+		})
+	);
+
+	Meteor.publish('keywords.slug', (slug) => {
+		check(slug, String);
+		return Keywords.find({
+			slug,
+		}, {
+			limit: 1,
+		});
+	});
+
+	Meteor.publish('keywords.keywords', (limit = 100) =>
+		Keywords.find({
+			type: 'word'
+		}, {
+			limit,
+			sort: {
+				title: 1,
+			},
+		})
+	);
+
+	Meteor.publish('keywords.keyideas', (limit = 100) =>
+		Keywords.find({
+			type: 'idea'
+		}, {
+			limit,
 			sort: {
 				title: 1,
 			},
@@ -93,12 +164,43 @@ if (Meteor.isServer) {
 	);
 
 	Meteor.publish('works', () =>
-		Works.find()
+		Works.find({}, {
+			sort: {
+				order: 1,
+			},
+		})
 	);
 
 	Meteor.publish('referenceWorks', () =>
-		ReferenceWorks.find({}, { sort: { title: 1 } })
+		ReferenceWorks.find({}, {
+			sort: {
+				title: 1
+			}
+		})
 	);
+
+	Meteor.publish('referenceWorks.commenterId', (commenterId) => {
+		check(commenterId, String);
+		return ReferenceWorks.find({
+			authors: commenterId
+		}, {
+			sort: {
+				title: 1
+			}
+		})
+	});
+
+	Meteor.publish('referenceWorks.slug', (slug) => {
+		check(slug, String);
+		return ReferenceWorks.find({
+			slug,
+		}, {
+			limit: 1,
+			sort: {
+				title: 1
+			}
+		})
+	});
 
 	Meteor.publish('pageImages', function pageImages(pageSlug) {
 		check(pageSlug, String);

@@ -23,9 +23,19 @@ DiscussionThread = React.createClass({
 		let discussionComments = [];
 		let loaded = false;
 
+		let sort = {};
+		switch (this.state.sortMethod) {
+			case 'votes':
+				sort = { votes: -1, updated: -1 };
+				break;
+			case 'recent':
+				sort = { updated: -1, votes: -1 };
+				break;
+		}
+
 		const handle = Meteor.subscribe('discussionComments', this.props.comment._id);
 		if (handle.ready()) {
-			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id }).fetch();
+			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id }, {sort}).fetch();
 			loaded = true;
 		}
 
@@ -54,6 +64,12 @@ DiscussionThread = React.createClass({
 		$(this.newCommentForm).find('textarea').val('');
 	},
 
+	sortMethodSelect(value) {
+		this.setState({
+			sortMethod: value,
+		})
+	},
+
 	render() {
 		const currentUser = Meteor.user();
 
@@ -69,6 +85,10 @@ DiscussionThread = React.createClass({
 		} else {
 			textareaPlaceholder = 'Please login to enter a comment.';
 		}
+
+		const sortSelectedLabelStyle = {
+		  color: '#FFFFFF',
+		};
 
 		// console.log("CommentDiscussion.data", this.data);
 
@@ -91,10 +111,7 @@ DiscussionThread = React.createClass({
 				</div>
 
 				{!this.data.loaded ?
-					<div className="ahcip-spinner">
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
-					</div>
+					<Spinner />
 					:
 					<div className="discussion-thread">
 						<div className="add-comment-wrap paper-shadow ">
@@ -175,6 +192,20 @@ DiscussionThread = React.createClass({
 							</div>
 							: ''
 						}
+						<div className='sort-method-select'>
+							<FlatButton
+								label="Top votes"
+								labelStyle={this.state.sortMethod === "votes" ? sortSelectedLabelStyle : ""}
+								backgroundColor={this.state.sortMethod === "votes" ? "#795548" : ""}
+								onClick={this.sortMethodSelect.bind(null,"votes")}
+							/>
+							<FlatButton
+								label="Recent"
+								labelStyle={this.state.sortMethod === "recent" ? sortSelectedLabelStyle : ""}
+								backgroundColor={this.state.sortMethod === "recent" ? "#795548" : ""}
+								onClick={this.sortMethodSelect.bind(null,"recent")}
+							/>
+						</div>
 						{this.data.discussionComments.map((discussionComment, i) =>
 							<DiscussionComment
 								key={i}

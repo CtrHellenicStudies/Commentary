@@ -20,6 +20,22 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('comments.id', (_id) => {
+		check(_id, String);
+		return Comments.find({
+			_id,
+		}, {
+			limit: 1,
+			sort: {
+				'work.order': 1,
+				'subwork.n': 1,
+				lineFrom: 1,
+				nLines: -1,
+			},
+		});
+	});
+
+
 	Meteor.publish('textNodes', (textQuery) => {
 		check(textQuery, Object);
 		const query = textQuery || {};

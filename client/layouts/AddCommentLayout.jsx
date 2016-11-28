@@ -174,9 +174,9 @@ AddCommentLayout = React.createClass({
 		const matchedKeywords = [];
 		if (keywords) {
 			keywords.forEach((keyword) => {
-				const foundKeyword = Keywords.find({
+				const foundKeyword = Keywords.findOne({
 					title: keyword.label,
-				}).fetch()[0];
+				});
 				matchedKeywords.push(foundKeyword);
 			});
 		}

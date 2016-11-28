@@ -155,7 +155,7 @@ CommentarySearchToolbar = React.createClass({
 
 				{!addCommentPage ?
 					<SearchToolDropdown
-						name="Keyideas"
+						name="Key Ideas"
 						open={this.state.searchDropdownOpen === 'Keyideas'}
 						toggle={this.toggleSearchDropdown}
 						disabled={false}

@@ -144,7 +144,7 @@ DiscussionComment = React.createClass({
 					<FlatButton
 						label={discussionComment.votes}
 						onClick={this.upvoteDiscussionComment}
-						className={(userUpvoted) ? 'vote-up upvoted' : 'vote-up'}
+						className={`discussion-comment-button vote-up ${(userUpvoted) ? 'upvoted' : ''}`}
 						icon={<FontIcon className="mdi mdi-chevron-up" />}
 					>
 						{!userIsLoggedIn ?
@@ -155,17 +155,44 @@ DiscussionComment = React.createClass({
 							''
 						}
 					</FlatButton>
-					{('currentUser' in self.props && self.props.currentUser &&
-						self.props.currentUser._id === discussionComment.user._id) ?
+					{(
+							'currentUser' in self.props
+						&& self.props.currentUser
+						&& self.props.currentUser._id === discussionComment.user._id
+					) ?
 						<FlatButton
 							label="Edit"
 							onClick={this.showEditMode}
-							className="edit"
+							className="discussion-comment-button edit"
 						/>
-						:
+					:
 						''
 					}
 
+					<FlatButton
+						label="More"
+						onClick={this.reportDiscussionComment}
+						className="discussion-comment-button show-more"
+						icon={<FontIcon className="mdi mdi-flag" />}
+					>
+					</FlatButton>
+
+					<div className="more-options">
+						<FlatButton
+							label="Report"
+							onClick={this.reportDiscussionComment}
+							className={`discussion-comment-button report ${(userReported) ? 'reported' : ''}`}
+							icon={<FontIcon className="mdi mdi-flag" />}
+						>
+							{!userIsLoggedIn ?
+								<span className="vote-up-tooltip">
+									You must be signed in to report a comment.
+								</span>
+								:
+								''
+							}
+						</FlatButton>
+					</div>
 				</div>
 
 

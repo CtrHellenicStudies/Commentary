@@ -81,3 +81,4 @@ practicalmeteor:chai
 practicalmeteor:sinon
 jalik:ufs-gridfs
 jalik:ufs
+meteorhacks:ssr

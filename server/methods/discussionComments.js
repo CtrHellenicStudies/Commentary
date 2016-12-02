@@ -81,7 +81,7 @@ Meteor.methods({
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
 
 		// Make sure the user has not already reported this comment
-		if (discussionComment.reported.indexOf(this.userId) >= 0) {
+		if (discussionComment.usersReported.indexOf(this.userId) >= 0) {
 			throw new Meteor.Error('not-authorized');
 		}
 

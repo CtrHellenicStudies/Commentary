@@ -106,7 +106,7 @@ DiscussionComment = React.createClass({
 
 		if (
 			this.props.currentUser &&
-			discussionComment.flaggedVoters.indexOf(this.props.currentUser._id) >= 0
+			discussionComment.usersReported.indexOf(this.props.currentUser._id) >= 0
 		) {
 			userReported = true;
 		}

@@ -14,9 +14,10 @@ WorksList = React.createClass({
 	},
 
 	getMeteorData() {
-		const query = {};
+		const worksSub = Meteor.subscribe('works');
+		const works = Works.find().fetch();
 		return {
-			works: Works.find(query, { sort: { order: 1 } }).fetch(),
+			works,
 		};
 	},
 

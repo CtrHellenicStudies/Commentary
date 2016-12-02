@@ -19,11 +19,18 @@ KeywordDetail = React.createClass({
 	},
 
 	getMeteorData() {
+		// SUBSCRIPTIONS:
+		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug);
+
+		// FETCH DATA:
 		const query = {
 			slug: this.props.slug,
 		};
+		const keyword = Keywords.findOne(query);
 
-		return { keyword: Keywords.findOne(query) };
+		return {
+			keyword,
+		};
 	},
 
 	render() {

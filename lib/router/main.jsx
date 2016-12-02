@@ -1,20 +1,5 @@
 import React from 'react';
 import { mount } from 'react-mounter';
-/*
- * For the moment add subscriptions here; in future iterations, make them route
- * specific as necessary
- */
-
-function subscriptions() {
-	this.register('commenters', Meteor.subscribe('commenters'));
-	this.register('keywords', Meteor.subscribe('keywords'));
-	this.register('works', Meteor.subscribe('works'));
-	this.register('users', Meteor.subscribe('users'));
-	this.register('referenceWorks', Meteor.subscribe('referenceWorks'));
-	this.register('userData', Meteor.subscribe('userData'));
-}
-
-FlowRouter.subscriptions = subscriptions;
 
 /*
  * Route groups with permissions

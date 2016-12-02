@@ -11,10 +11,6 @@ Header = React.createClass({
 		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func,
 		initialSearchEnabled: React.PropTypes.bool,
-		works: React.PropTypes.array,
-		keyideas: React.PropTypes.array,
-		keywords: React.PropTypes.array,
-		commenters: React.PropTypes.array,
 		addCommentPage: React.PropTypes.bool,
 
 	},
@@ -274,120 +270,39 @@ Header = React.createClass({
 						</div>
 					:
 						<div>
-							{!this.props.addCommentPage ?
-								<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
-									<div className="toolbar-tools">
+							<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
+								<div className="toolbar-tools">
+									<IconButton
+										className="left-drawer-toggle"
+										style={styles.flatIconButton}
+										iconClassName="mdi mdi-menu"
+										onClick={this.toggleLeftMenu}
+									/>
+									<div className="search-toggle">
 										<IconButton
-											className="left-drawer-toggle"
-											style={styles.flatIconButton}
-											iconClassName="mdi mdi-menu"
-											onClick={this.toggleLeftMenu}
+											className="search-button right-drawer-toggle"
+											onClick={this.toggleRightMenu}
+											iconClassName="mdi mdi-magnify"
+										/>
+									</div>
+									<div className="search-tools collapse">
+										<CommentarySearchToolbar
+											toggleSearchTerm={this.props.toggleSearchTerm}
+											handleChangeTextsearch={this.props.handleChangeTextsearch}
+											handleChangeLineN={this.props.handleChangeLineN}
+											filters={filters}
+											addCommentPage={this.props.addCommentPage ? true : false}
 										/>
 										<div className="search-toggle">
 											<IconButton
-												className="search-button right-drawer-toggle"
-												onClick={this.toggleRightMenu}
+												className="search-button"
+												onClick={this.toggleSearchMode}
 												iconClassName="mdi mdi-magnify"
 											/>
 										</div>
-										<div className="search-tools collapse">
-											<CommentarySearchToolbar
-												toggleSearchTerm={this.props.toggleSearchTerm}
-												handleChangeTextsearch={this.props.handleChangeTextsearch}
-												handleChangeLineN={this.props.handleChangeLineN}
-												filters={filters}
-												works={this.props.works}
-												keyideas={this.props.keyideas}
-												keywords={this.props.keywords}
-												commenters={this.props.commenters}
-											/>
-											<div className="search-toggle">
-												<IconButton
-													className="search-button"
-													onClick={this.toggleSearchMode}
-													iconClassName="mdi mdi-magnify"
-												/>
-											</div>
-										</div>
 									</div>
 								</div>
-								:
-								<div className="md-menu-toolbar" > {/* Search toolbar for /add-comment */}
-									<div className="toolbar-tools">
-										<IconButton
-											className="left-drawer-toggle"
-											style={styles.flatIconButton}
-											iconClassName="mdi mdi-menu"
-											onClick={this.toggleLeftMenu}
-										/>
-										<div className="search-tools collapse">
-											<SearchToolDropdown
-												name="Work"
-												open={this.state.searchDropdownOpen === 'Work'}
-												toggle={this.toggleSearchDropdown}
-												disabled={false}
-											>
-												{this.props.works.map((work, i) => {
-													const activeWork = (this.state.activeWork === work.slug);
-													return (
-														<SearchTermButton
-															key={i}
-															toggleSearchTerm={this.toggleWorkSearchTerm}
-															label={work.title}
-															searchTermKey="works"
-															value={work}
-															activeWork={activeWork}
-														/>
-													);
-												})}
-											</SearchToolDropdown>
-											<SearchToolDropdown
-												name="Book"
-												open={this.state.searchDropdownOpen === 'Book'}
-												toggle={this.toggleSearchDropdown}
-												disabled={this.state.subworks.length === 0}
-
-											>
-												{this.state.subworks.map((subwork, i) => {
-													let active = false;
-													filters.forEach((filter) => {
-														if (filter.key === 'subworks') {
-															filter.values.forEach((value) => {
-																if (subwork.n === value.n) {
-																	active = true;
-																}
-															});
-														}
-													});
-
-													return (
-														<SearchTermButton
-															key={i}
-															toggleSearchTerm={this.toggleSearchTerm}
-															label={`${subwork.work.title} ${subwork.title}`}
-															searchTermKey="subworks"
-															value={subwork}
-															active={active}
-														/>
-													);
-												})}
-											</SearchToolDropdown>
-											<div style={styles.lineSearch} className="line-search">
-												<LineRangeSlider
-													handleChangeLineN={this.props.handleChangeLineN}
-												/>
-											</div>
-											<div className="search-toggle">
-												<IconButton
-													className="search-button"
-													onClick={this.toggleSearchMode}
-													iconClassName="mdi mdi-magnify"
-												/>
-											</div>
-										</div>
-									</div>
-								</div>
-							}
+							</div>
 						</div>
 					}
 				</header>

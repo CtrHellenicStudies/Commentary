@@ -2,6 +2,7 @@ KeywordsList = React.createClass({
 
 	propTypes: {
 		type: React.PropTypes.string.isRequired,
+		limit: React.PropTypes.number,
 	},
 
 	// This mixin makes the getMeteorData method keyword
@@ -9,13 +10,29 @@ KeywordsList = React.createClass({
 
 	// Loads items from the keywords collection and puts them on this.data.keywords
 	getMeteorData() {
+
+		let limit = 100;
+		if (this.props.limit) {
+			limit = this.props.limit;
+		}
+
+		switch (this.props.type) {
+			case 'word':
+				Meteor.subscribe('keywords.keywords', limit);
+				break;
+			case 'idea':
+				Meteor.subscribe('keywords.keyideas', limit);
+				break;
+		}
+
 		const query = {
 			type: this.props.type,
-			count: { $gt: 0 },
 		};
 
+		const keywords = Keywords.find(query, {limit}).fetch();
+
 		return {
-			keywords: Keywords.find(query, { sort: { title: 1 } }).fetch(),
+			keywords,
 		};
 	},
 

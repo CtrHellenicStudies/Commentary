@@ -1,5 +1,6 @@
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
 DiscussionComment = React.createClass({
@@ -12,6 +13,8 @@ DiscussionComment = React.createClass({
 	getInitialState() {
 		return {
 			editMode: false,
+			moreOptionsVisible: false,
+			shareOptionsVisible: false,
 		};
 	},
 
@@ -48,6 +51,28 @@ DiscussionComment = React.createClass({
 		}
 	},
 
+	reportDiscussionComment() {
+		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+			Meteor.call('discussionComments.report',
+				this.props.discussionComment._id
+			);
+		}
+	},
+
+	toggleMoreOptions() {
+		this.setState({
+			moreOptionsVisible: !this.state.moreOptionsVisible,
+			shareOptionsVisible: false,
+		});
+	},
+
+	toggleShareOptions() {
+		this.setState({
+			shareOptionsVisible: !this.state.shareOptionsVisible,
+			moreOptionsVisible: false,
+		});
+	},
+
 	render() {
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
@@ -60,6 +85,7 @@ DiscussionComment = React.createClass({
 		}
 		discussionComment.children = [];
 		let userUpvoted = false;
+		let userReported = false;
 		let username = '';
 
 		if (discussionComment.user.username) {
@@ -76,6 +102,13 @@ DiscussionComment = React.createClass({
 			discussionComment.voters.indexOf(this.props.currentUser._id) >= 0
 		) {
 			userUpvoted = true;
+		}
+
+		if (
+			this.props.currentUser &&
+			discussionComment.usersReported.indexOf(this.props.currentUser._id) >= 0
+		) {
+			userReported = true;
 		}
 
 		return (
@@ -144,28 +177,88 @@ DiscussionComment = React.createClass({
 					<FlatButton
 						label={discussionComment.votes}
 						onClick={this.upvoteDiscussionComment}
-						className={(userUpvoted) ? 'vote-up upvoted' : 'vote-up'}
+						className={`discussion-comment-button vote-up ${(userUpvoted) ? 'upvoted' : ''}`}
 						icon={<FontIcon className="mdi mdi-chevron-up" />}
 					>
 						{!userIsLoggedIn ?
-							<span className="vote-up-tooltip">
-								You must be signed in to upvote.
-							</span>
+							<span className="md-tooltip">You must be signed in to vote.</span>
 							:
 							''
 						}
 					</FlatButton>
-					{('currentUser' in self.props && self.props.currentUser &&
-						self.props.currentUser._id === discussionComment.user._id) ?
+					{(
+							'currentUser' in self.props
+						&& self.props.currentUser
+						&& self.props.currentUser._id === discussionComment.user._id
+					) ?
 						<FlatButton
 							label="Edit"
 							onClick={this.showEditMode}
-							className="edit"
+							className="discussion-comment-button edit"
 						/>
-						:
+					:
 						''
 					}
+					<FlatButton
+						label=""
+						onClick={this.toggleShareOptions}
+						className="discussion-comment-button"
+						icon={<FontIcon className="mdi mdi-share" />}
+					>
+						<span className="md-tooltip">Share</span>
+					</FlatButton>
 
+					<FlatButton
+						onClick={this.toggleMoreOptions}
+						label=""
+						className={`discussion-comment-button toggle-more-button ${(this.state.moreOptionsVisible) ? 'toggle-more-button--active' : ''}`}
+						icon={<FontIcon className="mdi mdi-dots-horizontal" />}
+					>
+						<span className="md-tooltip">Show more</span>
+					</FlatButton>
+
+					<div className={`more-options ${this.state.moreOptionsVisible ? 'more-options--visible' : ''}`}>
+						<FlatButton
+							label="Report"
+							onClick={this.reportDiscussionComment}
+							className={`discussion-comment-button report ${(userReported) ? 'reported' : ''}`}
+							icon={<FontIcon className="mdi mdi-flag" />}
+						>
+							{!userIsLoggedIn ?
+								<span className="md-tooltip">
+									You must be signed in to report a comment.
+								</span>
+								:
+								''
+							}
+						</FlatButton>
+					</div>
+					<div className={`more-options share-options ${this.state.shareOptionsVisible ? 'more-options--visible' : ''}`}>
+						<FlatButton
+							label="Facebook"
+							href="#"
+							className="discussion-comment-button"
+							icon={<FontIcon className="mdi mdi-facebook" />}
+						/>
+						<FlatButton
+							label="Twitter"
+							href="#"
+							className="discussion-comment-button"
+							icon={<FontIcon className="mdi mdi-twitter" />}
+						/>
+						<FlatButton
+							label="Google"
+							href="#"
+							className="discussion-comment-button"
+							icon={<FontIcon className="mdi mdi-google-plus" />}
+						/>
+						<FlatButton
+							label="Mail"
+							href="#"
+							className="discussion-comment-button"
+							icon={<FontIcon className="mdi mdi-email-outline" />}
+						/>
+					</div>
 				</div>
 
 

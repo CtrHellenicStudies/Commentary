@@ -4,14 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 HomeView = React.createClass({
 
-	propTypes: {
-		filters: React.PropTypes.array,
-		toggleSearchTerm: React.PropTypes.func,
-		loadMoreComments: React.PropTypes.func,
-		skip: React.PropTypes.number,
-		comments: React.PropTypes.array.isRequired,
-		commentsReady: React.PropTypes.bool,
-	},
+	propTypes: {},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
@@ -32,13 +25,19 @@ HomeView = React.createClass({
 	},
 
 	getMeteorData() {
-		const works = Works.find({}, { sort: { order: 1 } }).fetch();
+
+		// SUBSCRIPTIONS:
+		const commentsSub = Meteor.subscribe('comments', {}, 0, 10);
+
+		const comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
+
+		const commentsReady = commentsSub.ready();
 
 		return {
-			works,
+			comments,
+			commentsReady,
 		};
 	},
-
 	scrollToIntro(e) {
 		$('html, body').animate({ scrollTop: $('#intro').offset().top - 100 }, 300);
 
@@ -227,7 +226,7 @@ HomeView = React.createClass({
 							<h2 className="keyword-divider-title">Keywords</h2>
 							<div className="underline" />
 
-							<KeywordsList type="word" title="Keywords" />
+							<KeywordsList type="word" title="Keywords" limit={5} />
 
 							<RaisedButton
 								href="/keywords"
@@ -243,7 +242,7 @@ HomeView = React.createClass({
 							<h2 className="keyword-divider-title">Key Ideas</h2>
 							<div className="underline" />
 
-							<KeywordsList type="idea" title="Key Ideas" />
+							<KeywordsList type="idea" title="Key Ideas" limit={5} />
 
 							<RaisedButton
 								href="/keywords"
@@ -270,8 +269,9 @@ HomeView = React.createClass({
 
 
 							<CommentersList
-								limit={3}
 								featureOnHomepage
+								defaultAvatarUrl='/images/default_user.jpg'
+								limit={3}
 							/>
 
 							<RaisedButton
@@ -290,15 +290,15 @@ HomeView = React.createClass({
 
 						<div className="get-started-comments">
 
-							<Commentary
-								isOnHomeView
-								filters={this.props.filters}
-								toggleSearchTerm={this.props.toggleSearchTerm}
-								loadMoreComments={this.props.loadMoreComments}
-								skip={this.props.skip}
-								comments={this.props.comments}
-								commentsReady={this.props.commentsReady}
-							/>
+							{this.data.commentsReady ? 
+								<Commentary
+									isOnHomeView
+									filters={[]}
+									comments={this.data.comments}
+									commentsReady={this.data.commentsReady}
+								/>
+								:
+								<Spinner /> }
 
 							<div className="read-more-link">
 							

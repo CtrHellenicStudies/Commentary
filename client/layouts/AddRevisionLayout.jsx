@@ -21,47 +21,28 @@ AddRevisionLayout = React.createClass({
 	},
 
 	componentWillUpdate() {
-		this.handlePermissions();
+		if (this.data.ready) this.handlePermissions();
 	},
 
 	getMeteorData() {
-		const commentSubscription = Meteor.subscribe('comments', {
-			_id: this.props.commentId,
-		}, 0, 1);
+		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId);
+		const ready = Roles.subscription.ready() && commentsSub;
 		let comment = {};
-
-		if (commentSubscription.ready()) {
-			comment = Comments.find().fetch()[0];
-			// comment.commenters.forEach((commenter) => {
-			// //     canShow = Roles.userIsInRole(Meteor.user(), [commenter.slug]);
-			//     canShow = (Meteor.user().commenterId === commenter._id);
-			// });
+		if (ready) {
+			comment = Comments.findOne();
 		}
 
-		// console.log('Roles.subscription.ready()', Roles.subscription.ready());
-		// console.log('Object.keys(this.data.comment).length', Object.keys(comment).length);
-		// var ready = Roles.subscription.ready() && Object.keys(comment).length;
-
-		const keywords = Keywords.find().fetch();
-
 		return {
-			// ready: ready,
+			ready,
 			comment,
-			keywords,
 		};
 	},
 
 	addRevision(formData) {
-		const self = this;
-
 		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
-			const keywords = [];
-			self.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
-				keywords.push(matchedKeyword);
-			});
-			self.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
-				keywords.push(matchedKeyword);
-			});
+
+			// get keywords after they were created:
+			const keywords = this.getKeywords(formData);
 
 			const revision = {
 				title: formData.titleValue,
@@ -77,9 +58,9 @@ AddRevisionLayout = React.createClass({
 				};
 			}
 
-			Meteor.call('comments.add.revision', self.props.commentId, revision, () => {
-				Meteor.call('comment.update', self.props.commentId, update, () => {
-					FlowRouter.go(`/commentary/?_id=${self.data.comment._id}`);
+			Meteor.call('comments.add.revision', this.props.commentId, revision, () => {
+				Meteor.call('comment.update', this.props.commentId, update, () => {
+					FlowRouter.go('/commentary/', {}, {_id: this.data.comment._id});
 				});
 			});
 		});
@@ -91,9 +72,9 @@ AddRevisionLayout = React.createClass({
 		const matchedKeywords = [];
 		if (keywords) {
 			keywords.forEach((keyword) => {
-				const foundKeyword = Keywords.find({
-					title: keyword,
-				}).fetch()[0];
+				const foundKeyword = Keywords.findOne({
+					title: keyword.label,
+				});
 				matchedKeywords.push(foundKeyword);
 			});
 		}
@@ -101,32 +82,31 @@ AddRevisionLayout = React.createClass({
 	},
 
 	addNewKeywordsAndIdeas(keywords, keyideas, next) {
-		const that = this;
 		this.addNewKeywords(keywords, 'word', () => {
-			that.addNewKeywords(keyideas, 'idea', () => next());
+			this.addNewKeywords(keyideas, 'idea', () => next());
 		});
 	},
 
 	addNewKeywords(keywords, type, next) {
+		// TODO should be handled server-side
 		if (keywords) {
-			const that = this;
-			const insertKeywords = [];
+			const newKeywordArray = [];
 			keywords.forEach((keyword) => {
-				foundKeyword = that.data.keywords.find((d) => d.title === keyword);
-				console.log('foundKeyword', foundKeyword, 'keyword', keyword);
-				if (foundKeyword === undefined) {
-					const _keyword = {
-						title: keyword,
-						slug: slugify(keyword),
+				const foundKeyword = Keywords.findOne({title: keyword});
+				if (!foundKeyword) {
+					const newKeyword = {
+						title: keyword.label,
+						slug: slugify(keyword.label),
 						type,
 					};
-					insertKeywords.push(_keyword);
+					newKeywordArray.push(newKeyword);
 				}
 			});
-			if (insertKeywords.length > 0) {
-				return Meteor.call('keywords.insert', insertKeywords, (err) => {
+			if (newKeywordArray.length > 0) {
+				return Meteor.call('keywords.insert', newKeywordArray, (err) => {
 					if (err) {
 						console.log(err);
+						return null;
 					}
 					return next();
 				});
@@ -134,6 +114,17 @@ AddRevisionLayout = React.createClass({
 			return next();
 		}
 		return next();
+	},
+
+	getKeywords(formData) {
+		const keywords = [];
+		this.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
+			keywords.push(matchedKeyword);
+		});
+		this.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
+			keywords.push(matchedKeyword);
+		});
+		return keywords;
 	},
 
 	closeContextReader() {
@@ -154,11 +145,11 @@ AddRevisionLayout = React.createClass({
 				FlowRouter.go('/');
 			}
 		}
-		if (Object.keys(this.data.comment).length) {
+		if (this.data.comment && Object.keys(this.data.comment).length) {
 			let isOwner = false;
 			this.data.comment.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (Meteor.user().commenterId === commenter._id);
+					isOwner = (Meteor.user().commenterId.indexOf(commenter._id) > -1);
 				}
 			});
 			if (!isOwner) {
@@ -284,27 +275,19 @@ AddRevisionLayout = React.createClass({
 		});
 	},
 
-
-	ifReady() {
-		let ready = Roles.subscription.ready();
-		ready = ready && Object.keys(this.data.comment).length;
-		return ready;
-	},
-
 	render() {
 		const filters = this.state.filters;
 		const comment = this.data.comment;
 
 		return (
 			<div>
-				{this.ifReady() ?
+				{this.data.ready && this.data.comment ?
 					<div className="chs-layout add-comment-layout">
 
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
 							handleChangeLineN={this.handleChangeLineN}
 							filters={filters}
-							initialSearchEnabled
 						/>
 
 						<main>

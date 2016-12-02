@@ -5,6 +5,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import Select from 'react-select';
+import { Creatable } from 'react-select';
 import RichTextEditor from 'react-rte';
 import { EditorState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
@@ -19,24 +20,17 @@ AddComment = React.createClass({
 		selectedLineFrom: React.PropTypes.number,
 		selectedLineTo: React.PropTypes.number,
 		submitForm: React.PropTypes.func.isRequired,
-		commenterId: React.PropTypes.array.isRequired,
 	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
 			titleEditorState: EditorState.createEmpty(),
 			textEditorState: RichTextEditor.createEmptyValue(),
 
-			commenterValue: this.props.commenterId[0],
+			commenterValue: null,
 			titleValue: '',
 			textValue: '',
-			referenceWorksValue: '',
+			referenceWorksValue: null,
 			keywordsValue: null,
 			keyideasValue: null,
 
@@ -45,9 +39,68 @@ AddComment = React.createClass({
 		};
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
+
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		Meteor.subscribe('keywords.all');
+		const keywordsOptions = [];
+		const keywords = Keywords.find({ type: 'word' }).fetch();
+		keywords.forEach((keyword) => {
+			keywordsOptions.push({
+				value: keyword.title,
+				label: keyword.title,
+			});
+		});
+
+		const keyideasOptions = [];
+		const keyideas = Keywords.find({ type: 'idea' }).fetch();
+		keyideas.forEach((keyidea) => {
+			keyideasOptions.push({
+				value: keyidea.title,
+				label: keyidea.title,
+			});
+		});
+
+		Meteor.subscribe('referenceWorks');
+		const referenceWorksOptions = [];
+		const referenceWorks = ReferenceWorks.find().fetch();
+		referenceWorks.forEach((referenceWork) => {
+			referenceWorksOptions.push({
+				value: referenceWork._id,
+				label: referenceWork.title,
+			});
+		});
+
+		Meteor.subscribe('commenters');
+		const commentersOptions = [];
+		let commenters = [];
+		if (Meteor.user() && Meteor.user().commenterId) {
+			commenters = Commenters.find({ _id: { $in: Meteor.user().commenterId } }).fetch();
+		}
+		commenters.forEach((commenter) => {
+			commentersOptions.push({
+				value: commenter._id,
+				label: commenter.name,
+			});
+		});
+
+		return {
+			keywordsOptions,
+			keyideasOptions,
+			referenceWorksOptions,
+			commentersOptions,
+		};
+	},
+
+	// --- BEGIN FORM HANDLE --- //
 
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
@@ -67,43 +120,56 @@ AddComment = React.createClass({
 	},
 
 	onKeywordsValueChange(keywords) {
-		if (keywords) {
-			const keywordArray = keywords.split(',');
-			const errorKeywords = this.errorKeywords(keywordArray, 'word');
-			if (errorKeywords.length) {
-				errorKeywords.forEach((keyword) => {
-					const index = keywordArray.indexOf(keyword);
-					keywordArray.splice(index, 1);
-				});
-			}
-			this.setState({
-				keywordsValue: keywordArray,
-			});
+		this.setState({
+			keywordsValue: keywords,
+		});
+	},
+
+	onKeyideasValueChange(keyidea) {
+		this.setState({
+			keyideasValue: keyidea,
+		});
+	},
+
+	onNewOptionCreator(newOption) {
+		return {
+			label: newOption.label,
+			value: newOption.label
+		};
+	},
+
+	shouldKeyDownEventCreateNewOption(sig) {
+		if (sig.keyCode === 13 ||
+			sig.keyCode === 188) {
+			return true;
 		} else {
-			this.setState({
-				keywordsValue: null,
-			});
+			return false;
 		}
 	},
 
-	onKeyideasValueChange(keyideas) {
-		if (keyideas) {
-			const keyideasArray = keyideas.split(',');
-			const errorKeywords = this.errorKeywords(keyideasArray, 'idea');
-			if (errorKeywords.length) {
-				errorKeywords.forEach((keyword) => {
-					const index = keyideasArray.indexOf(keyword);
-					keyideasArray.splice(index, 1);
-				});
-			}
-			this.setState({
-				keyideasValue: keyideasArray,
+	isOptionUnique(newOption) {
+		const keywordsOptions = this.data.keywordsOptions;
+		const keyideasOptions = this.data.keyideasOptions;
+		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
+		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
+		const BreakException = {};
+		try {
+			keywordsOptions.forEach((keywordsOption) => {
+				if (keywordsOption.label === newOption.option.label) throw BreakException;
 			});
-		} else {
-			this.setState({
-				keyideasValue: null,
+			keyideasOptions.forEach((keyideasOption) => {
+				if (keyideasOption.label === newOption.option.label) throw BreakException;
 			});
+			keywordsValue.forEach((keywordValue) => {
+				if (keywordValue.label === newOption.option.label) throw BreakException;
+			});
+			keyideasValue.forEach((keyideaValue) => {
+				if (keyideaValue.label === newOption.option.label) throw BreakException;
+			});
+		} catch (e) {
+			if (e === BreakException) return false;
 		}
+		return true;
 	},
 
 	onReferenceWorksValueChange(referenceWork) {
@@ -112,62 +178,15 @@ AddComment = React.createClass({
 		});
 	},
 
-	onReferenceValueChange(event) {
+	onCommenterValueChange(comenter) {
 		this.setState({
-			referenceValue: event.target.value,
+			commenterValue: comenter,
 		});
 	},
 
-	onReferenceLinkValueChange(event) {
-		this.setState({
-			referenceLinkValue: event.target.value,
-		});
-	},
+	// --- END FORM HANDLE --- //
 
-	getMeteorData() {
-		const keywordsOptions = [];
-		const keywords = Keywords.find({ type: 'word' }).fetch();
-		keywords.forEach((keyword) => {
-			keywordsOptions.push({
-				value: keyword.title,
-				label: keyword.title,
-			});
-		});
-
-		const keyideasOptions = [];
-		const keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keyideas.forEach((keyidea) => {
-			keyideasOptions.push({
-				value: keyidea.title,
-				label: keyidea.title,
-			});
-		});
-
-		const referenceWorksOptions = [];
-		const referenceWorks = ReferenceWorks.find().fetch();
-		referenceWorks.forEach((referenceWork) => {
-			referenceWorksOptions.push({
-				value: referenceWork.slug,
-				label: referenceWork.title,
-			});
-		});
-
-		const commentersOptions = [];
-		const commenters = Commenters.find({ _id: { $in: this.props.commenterId } }).fetch();
-		commenters.forEach((commenter) => {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		});
-
-		return {
-			keywordsOptions,
-			keyideasOptions,
-			referenceWorksOptions,
-			commentersOptions,
-		};
-	},
+	// --- BEGIN SUBMIT / VALIDATION HANDLE --- //
 
 	handleSubmit(event) {
 		event.preventDefault();
@@ -179,54 +198,6 @@ AddComment = React.createClass({
 		if (!error.errors) {
 			this.props.submitForm(this.state);
 		}
-	},
-
-	errorKeywords(keywordsArray, type) {
-		// 'type' is the type of keywords passed to this function
-		const errorKeywords = [];
-		let keyideasValue = [];
-		switch (type) {
-		case 'word':
-			keyideasValue = this.state.keyideasValue;
-			keywordsArray.forEach((keyword) => {
-				this.data.keyideasOptions.forEach((keyideaOption) => {
-					if (keyword === keyideaOption.value) {
-						errorKeywords.push(keyword);
-					}
-				});
-
-				if (Array.isArray(keyideasValue)) {
-					keyideasValue.forEach((keyideaValue) => {
-						if (keyword === keyideaValue) {
-							errorKeywords.push(keyword);
-						}
-					});
-				}
-			});
-			break;
-
-		case 'idea':
-			keywordsValue = this.state.keywordsValue;
-			keywordsArray.forEach((keyword) => {
-				this.data.keywordsOptions.forEach((keywordOption) => {
-					if (keyword === keywordOption.value) {
-						errorKeywords.push(keyword);
-					}
-				});
-
-				if (Array.isArray(keywordsValue)) {
-					keywordsValue.forEach((keywordValue) => {
-						if (keyword === keywordValue) {
-							errorKeywords.push(keyword);
-						}
-					});
-				}
-			});
-			break;
-		default:
-			break;
-		}
-		return errorKeywords;
 	},
 
 	showSnackBar(error) {
@@ -270,6 +241,8 @@ AddComment = React.createClass({
 		};
 	},
 
+	// --- END SUBMIT / VALIDATION HANDLE --- //
+
 	render() {
 		const toolbarConfig = {
 			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
@@ -295,12 +268,12 @@ AddComment = React.createClass({
 						style={{ marginLeft: 0 }}
 					>
 						<div className="comment-upper">
-							{ this.data.commenters_options.length > 1 ?
+							{ this.data.commentersOptions.length > 1 ?
 								<Select
 									name="commenter"
 									id="commenter"
 									required={false}
-									options={this.data.commenters_options}
+									options={this.data.commentersOptions}
 									value={this.state.commenterValue}
 									onChange={this.onCommenterValueChange}
 									placeholder="Commenter..."
@@ -319,26 +292,30 @@ AddComment = React.createClass({
 									blockRenderMap={singleLinePlugin.blockRenderMap}
 								/>
 							</h1>
-							<Select
+							<Creatable
 								name="keywords"
 								id="keywords"
 								required={false}
 								options={this.data.keywordsOptions}
 								multi
-								allowCreate
 								value={this.state.keywordsValue}
 								onChange={this.onKeywordsValueChange}
+								newOptionCreator={this.onNewOptionCreator}
+								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+								isOptionUnique={this.isOptionUnique}
 								placeholder="Keywords..."
 							/>
-							<Select
+							<Creatable
 								name="keyideas"
 								id="keyideas"
 								required={false}
 								options={this.data.keyideasOptions}
 								multi
-								allowCreate
 								value={this.state.keyideasValue}
 								onChange={this.onKeyideasValueChange}
+								newOptionCreator={this.onNewOptionCreator}
+								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+								isOptionUnique={this.isOptionUnique}
 								placeholder="Keyideas..."
 							/>
 

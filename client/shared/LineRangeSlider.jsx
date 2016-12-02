@@ -7,6 +7,8 @@ LineRangeSlider = React.createClass({
 
 	propTypes: {
 		handleChangeLineN: React.PropTypes.func,
+		lineFrom: React.PropTypes.number,
+		lineTo: React.PropTypes.number,
 	},
 
 	componentDidMount() {
@@ -20,7 +22,8 @@ LineRangeSlider = React.createClass({
 			prefix: 'Line: ',
 			values_separator: ' to ',
 			onChange: debounce(500, this.props.handleChangeLineN),
-
+			from: this.props.lineFrom,
+			to: this.props.lineTo,
 		});
 	},
 

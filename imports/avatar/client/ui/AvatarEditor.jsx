@@ -1,5 +1,4 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
 import LinearProgress from 'material-ui/LinearProgress';
 import { createContainer } from 'meteor/react-meteor-data';
 import { sendSnack } from '/imports/ui/components/SnackAttack.jsx';
@@ -35,8 +34,9 @@ class AvatarEditor extends React.Component {
 
 	uploadAvatar(data, context) {
 		const uploader = new AvatarUploader({
-			data, context,
-			onStart: (avatar) => {
+			data,
+			context,
+			onStart: () => {
 				this.setState({
 					progress: 0,
 					isProgressShown: true,
@@ -44,9 +44,13 @@ class AvatarEditor extends React.Component {
 			},
 			onError(err) {
 				console.error(err);
-				sendSnack(err.reason);
+				if (err.error === 'file-too-large') {
+					sendSnack('File is too large (max = 1MB)');
+				} else {
+					sendSnack(err.reason);
+				}
 			},
-			onComplete: (avatar) => {
+			onComplete: () => {
 				this.setState({
 					isProgressShown: false,
 				});
@@ -140,7 +144,7 @@ export default createContainer((props) => {
 		userAvatar = props.user.avatar || {};
 	} else {
 		userAvatar = Meteor.user().avatar || {};
-	};
+	}
 
 	return {
 		defaultAvatarUrl: props.defaultAvatarUrl,

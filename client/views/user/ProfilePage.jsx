@@ -165,7 +165,6 @@ ProfilePage = React.createClass({
 	},
 
 	showChangePwdModal() {
-		console.log('jestem');
 		this.setState({
 			modalChangePwdLowered: true,
 		});

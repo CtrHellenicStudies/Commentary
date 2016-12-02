@@ -30,6 +30,14 @@ Schemas.DiscussionComments = new SimpleSchema({
 		type: [Schemas.User],
 		optional: true,
 	},
+	reported: {
+		type: Number,
+		optional: true,
+	},
+	usersReported: {
+		type: [Schemas.User],
+		optional: true,
+	},
 
 	created: {
 		type: Date,

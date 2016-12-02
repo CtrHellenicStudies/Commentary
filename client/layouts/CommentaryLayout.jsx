@@ -5,12 +5,82 @@ CommentaryLayout = React.createClass({
 	},
 
 	getInitialState() {
-		const filters = [];
+		const filters = this.createFilterFromQueryParams(this.props.queryParams);
 		const selectedRevisionIndex = null;
 
-		console.log('this.props.queryParams', this.props.queryParams);
+		return {
+			filters,
+			selectedRevisionIndex,
+		};
+	},
 
-		if ('_id' in this.props.queryParams) {
+	// --- BEGIN handle querParams --- //
+
+    componentDidUpdate() {
+        let queryParams = {};
+        this.state.filters.forEach((filter) => {
+            filter.values.forEach((value) => {
+                const getQueryParamValue = this.getQueryParamValue;
+                switch (filter.key) {
+                    case 'works':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+                        break;
+                    case 'subworks':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+                        break;
+                    case 'keyideas':
+                    case 'keywords':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+                        break;
+                    case 'commenters':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+                        break;
+                    case 'lineFrom':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+                        break;
+                    case 'lineTo':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+                        break;
+                    case 'textsearch':
+                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
+        if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
+            FlowRouter.go('/commentary/', {}, queryParams);
+        }
+    },
+
+	getQueryParamValue(queryParams, key, value) {
+		let queryParamValue = null;
+		if (queryParams[key]) {
+            queryParamValue = queryParams[key] + ',' + value;
+        } else {
+            queryParamValue = value;
+        };
+        return queryParamValue;
+	},
+
+	// --- END handle querParams --- //
+
+	getFilterValue(filters, key) {
+		let value = {};
+		if (filters) {
+			const filterKey = filters.find((filter) => filter.key === key);
+			if (filterKey) {
+				value = filterKey.values[0];
+			}
+		}
+		return value;
+	},
+
+	createFilterFromQueryParams(queryParams) {
+		const filters = [];
+
+		if ('_id' in queryParams) {
 			filters.push({
 				key: '_id',
 				values: [this.props.queryParams._id],
@@ -30,12 +100,27 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		if ('keywords' in this.props.queryParams) {
+		if ('keyideas' in queryParams) {
+			const keyideas = [];
+
+			this.props.queryParams.keyideas.split(',').forEach((keyidea) => {
+				keyideas.push({
+					slug: keyidea,
+				});
+			});
+
+			filters.push({
+				key: 'keyideas',
+				values: keyideas,
+			});
+		}
+
+		if ('keywords' in queryParams) {
 			const keywords = [];
 
 			this.props.queryParams.keywords.split(',').forEach((keyword) => {
 				keywords.push({
-					wordpressId: keyword,
+					slug: keyword,
 				});
 			});
 
@@ -45,12 +130,12 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		if ('commenters' in this.props.queryParams) {
+		if ('commenters' in queryParams) {
 			const commenters = [];
 
 			this.props.queryParams.commenters.split(',').forEach((commenter) => {
 				commenters.push({
-					wordpressId: Number(commenter),
+					slug: commenter,
 				});
 			});
 
@@ -60,7 +145,7 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		if ('works' in this.props.queryParams) {
+		if ('works' in queryParams) {
 			const works = [];
 
 			this.props.queryParams.works.split(',').forEach((work) => {
@@ -76,7 +161,7 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		if ('subworks' in this.props.queryParams) {
+		if ('subworks' in queryParams) {
 			const subworks = [];
 
 			this.props.queryParams.subworks.split(',').forEach((subwork) => {
@@ -119,28 +204,15 @@ CommentaryLayout = React.createClass({
 			}
 		}
 
-		return {
-			filters,
-			skip: 0,
-			limit: 10,
-			selectedRevisionIndex,
-		};
-	},
-
-	loadMoreComments() {
-		this.setState({
-			skip: this.state.skip + this.state.limit,
-		});
-
-		// console.log("Load more comments:", this.state.skip);
+		return filters;
 	},
 
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
 		let keyIsInFilter = false;
-		let	valueIsInFilter = false;
-		let	filterValueToRemove;
-		let	filterToRemove;
+		let valueIsInFilter = false;
+		let filterValueToRemove;
+		let filterToRemove;
 
 		filters.forEach((filter, i) => {
 			if (filter.key === key) {
@@ -149,6 +221,9 @@ CommentaryLayout = React.createClass({
 
 				filter.values.forEach((filterValue, j) => {
 					if (filterValue._id === value._id) {
+						valueIsInFilter = true;
+						filterValueToRemove = j;
+					} else if (filterValue.slug === value.slug) {
 						valueIsInFilter = true;
 						filterValueToRemove = j;
 					}
@@ -178,10 +253,8 @@ CommentaryLayout = React.createClass({
 				values: [value],
 			});
 		}
-
 		this.setState({
 			filters,
-			skip: 0,
 		});
 	},
 
@@ -292,33 +365,26 @@ CommentaryLayout = React.createClass({
 		});
 	},
 
-	addSearchTerm(keyword) {
-		console.log('keyword', keyword);
-		this.toggleSearchTerm('keywords', keyword);
-	},
-
 	render() {
-		console.log('CommentaryLayout.filters', this.state.filters);
 		return (
-			<div className="chs-layout commentary-layout">
+			<div>
+				<div className="chs-layout commentary-layout">
 
-				<Header
-					filters={this.state.filters}
-					toggleSearchTerm={this.toggleSearchTerm}
-					handleChangeLineN={this.handleChangeLineN}
-					handleChangeTextsearch={this.handleChangeTextsearch}
-					initialSearchEnabled
-				/>
+					<Header
+						filters={this.state.filters}
+						toggleSearchTerm={this.toggleSearchTerm}
+						handleChangeLineN={this.handleChangeLineN}
+						handleChangeTextsearch={this.handleChangeTextsearch}
+						initialSearchEnabled
+					/>
 
-				<Commentary
-					filters={this.state.filters}
-					toggleSearchTerm={this.toggleSearchTerm}
-					loadMoreComments={this.loadMoreComments}
-					skip={this.state.skip}
-					limit={this.state.limit}
-					addSearchTerm={this.addSearchTerm}
-				/>
+					<Commentary
+						filters={this.state.filters}
+						toggleSearchTerm={this.toggleSearchTerm}
+						loadMoreComments={this.loadMoreComments}
+					/>
 
+				</div>
 			</div>
 		);
 	},

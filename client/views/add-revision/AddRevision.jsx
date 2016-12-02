@@ -4,6 +4,7 @@ import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
+import { Creatable } from 'react-select';
 import { EditorState, ContentState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
@@ -19,12 +20,6 @@ AddRevision = React.createClass({
 		submitForm: React.PropTypes.func.isRequired,
 		comment: React.PropTypes.object.isRequired,
 	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		const revisionId = this.props.comment.revisions.length - 1;
@@ -61,68 +56,18 @@ AddRevision = React.createClass({
 		};
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	onTitleChange(titleEditorState) {
-		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-		const title = jQuery(titleHtml).text();
-		this.setState({
-			titleEditorState,
-			titleValue: title,
-		});
-	},
-
-	onTextChange(textEditorState) {
-		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-		this.setState({
-			textEditorState,
-			textValue: textEditorState.toString('html'),
-		});
-	},
-
-	onKeywordsValueChange(keywords) {
-		if (keywords) {
-			const keywordArray = keywords.split(',');
-			const errorKeywords = this.errorKeywords(keywordArray, 'word');
-			if (errorKeywords.length) {
-				errorKeywords.forEach((keyword) => {
-					const index = keywordArray.indexOf(keyword);
-					keywordArray.splice(index, 1);
-				});
-			}
-			this.setState({
-				keywordsValue: keywordArray,
-			});
-		} else {
-			this.setState({
-				keywordsValue: null,
-			});
-		}
-	},
-
-	onKeyideasValueChange(keyideas) {
-		if (keyideas) {
-			const keyideasArray = keyideas.split(',');
-			const errorKeywords = this.errorKeywords(keyideasArray, 'idea');
-			if (errorKeywords.length) {
-				errorKeywords.forEach((keyword) => {
-					const index = keyideasArray.indexOf(keyword);
-					keyideasArray.splice(index, 1);
-				});
-			}
-			this.setState({
-				keyideasValue: keyideasArray,
-			});
-		} else {
-			this.setState({
-				keyideasValue: null,
-			});
-		}
-	},
+	mixins: [ReactMeteorData],
 
 	getMeteorData() {
+		Meteor.subscribe('keywords.all');
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {
@@ -147,19 +92,80 @@ AddRevision = React.createClass({
 		};
 	},
 
+	onTitleChange(titleEditorState) {
+		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
+		const title = jQuery(titleHtml).text();
+		this.setState({
+			titleEditorState,
+			titleValue: title,
+		});
+	},
+
+	onTextChange(textEditorState) {
+		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		this.setState({
+			textEditorState,
+			textValue: textEditorState.toString('html'),
+		});
+	},
+
+	onKeywordsValueChange(keywords) {
+		this.setState({
+			keywordsValue: keywords,
+		});
+	},
+
+	onKeyideasValueChange(keyidea) {
+		this.setState({
+			keyideasValue: keyidea,
+		});
+	},
+
+	onNewOptionCreator(newOption) {
+		return {
+			label: newOption.label,
+			value: newOption.label
+		};
+	},
+
+	shouldKeyDownEventCreateNewOption(sig) {
+		if (sig.keyCode === 13 ||
+			sig.keyCode === 188) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+
+	isOptionUnique(newOption) {
+		const keywordsOptions = this.data.keywordsOptions;
+		const keyideasOptions = this.data.keyideasOptions;
+		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
+		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
+		const BreakException = {};
+		try {
+			keywordsOptions.forEach((keywordsOption) => {
+				if (keywordsOption.label === newOption.option.label) throw BreakException;
+			});
+			keyideasOptions.forEach((keyideasOption) => {
+				if (keyideasOption.label === newOption.option.label) throw BreakException;
+			});
+			keywordsValue.forEach((keywordValue) => {
+				if (keywordValue.label === newOption.option.label) throw BreakException;
+			});
+			keyideasValue.forEach((keyideaValue) => {
+				if (keyideaValue.label === newOption.option.label) throw BreakException;
+			});
+		} catch (e) {
+			if (e === BreakException) return false;
+		}
+		return true;
+	},
+
 	handleSubmit(event) {
 		// TODO: form validation
 		event.preventDefault();
-
-		// var error = this.validateStateForSubmit();
-
-		// this.setState({
-		//     snackbarOpen: error.errors,
-		//     snackbarMessage: error.errorMessage,
-		// });
-		// if (!error.errors) {
 		this.props.submitForm(this.state);
-		// };
 	},
 
 	selectRevision(event) {
@@ -172,83 +178,8 @@ AddRevision = React.createClass({
 	},
 
 	removeRevision() { // TODO: delete
-		console.log('this.state.revision', this.state.revision);
 		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
 	},
-
-	errorKeywords(keywordsArray, type) {
-		// 'type' is the type of keywords passed to this function
-		const errorKeywords = [];
-		let keyideasValue = [];
-		switch (type) {
-		case 'word':
-			keyideasValue = this.state.keyideasValue;
-			keywordsArray.forEach((keyword) => {
-				this.data.keyideasOptions.forEach((keyideaOption) => {
-					if (keyword === keyideaOption.value) {
-						errorKeywords.push(keyword);
-					}
-				});
-
-				if (Array.isArray(keyideasValue)) {
-					keyideasValue.forEach((keyideaValue) => {
-						if (keyword === keyideaValue) {
-							errorKeywords.push(keyword);
-						}
-					});
-				}
-			});
-			break;
-
-		case 'idea':
-			keywordsValue = this.state.keywordsValue;
-			keywordsArray.forEach((keyword) => {
-				this.data.keywordsOptions.forEach((keywordOption) => {
-					if (keyword === keywordOption.value) {
-						errorKeywords.push(keyword);
-					}
-				});
-
-				if (Array.isArray(keywordsValue)) {
-					keywordsValue.forEach((keywordValue) => {
-						if (keyword === keywordValue) {
-							errorKeywords.push(keyword);
-						}
-					});
-				}
-			});
-			break;
-
-		default:
-			break;
-		}
-		return errorKeywords;
-	},
-
-	// validateStateForSubmit() {
-	//     var errors = false;
-	//     var errorMessage = "Missing comment data:"
-	//     if(this.state.titleValue === ""){
-	//         errors = true;
-	//         errorMessage += " title,";
-	//     };
-	//     if(this.state.textValue === "<p><br></p>"){
-	//         errors = true;
-	//         errorMessage += " comment text,";
-	//     };
-	//     if(this.props.selectedLineFrom === 0){
-	//         errors = true;
-	//         errorMessage += " no line selected,";
-	//     };
-	//     if(errors === true) {
-	//         errorMessage.slice(0,-1);
-	//         errorMessage += ".";
-	//     };
-	//     return {
-	//         errors: errors,
-	//         errorMessage: errorMessage,
-	//     };
-	// },
 
 	render() {
 		const that = this;
@@ -287,26 +218,30 @@ AddRevision = React.createClass({
 									blockRenderMap={singleLinePlugin.blockRenderMap}
 								/>
 							</h1>
-							<Select
+							<Creatable
 								name="keywords"
 								id="keywords"
 								required={false}
 								options={this.data.keywordsOptions}
 								multi
-								allowCreate
 								value={this.state.keywordsValue}
 								onChange={this.onKeywordsValueChange}
+								newOptionCreator={this.onNewOptionCreator}
+								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+								isOptionUnique={this.isOptionUnique}
 								placeholder="Keywords..."
 							/>
-							<Select
+							<Creatable
 								name="keyideas"
 								id="keyideas"
 								required={false}
 								options={this.data.keyideasOptions}
 								multi
-								allowCreate
 								value={this.state.keyideasValue}
 								onChange={this.onKeyideasValueChange}
+								newOptionCreator={this.onNewOptionCreator}
+								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+								isOptionUnique={this.isOptionUnique}
 								placeholder="Keyideas..."
 							/>
 							{/* TODO: this.props.comment.keyideas*/}

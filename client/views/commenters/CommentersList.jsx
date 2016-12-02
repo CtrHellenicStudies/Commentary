@@ -2,7 +2,6 @@ import { Avatars } from '/imports/avatar/avatar_collections.js';
 
 CommentersList = React.createClass({
 
-
 	propTypes: {
 		limit: React.PropTypes.number,
 		featureOnHomepage: React.PropTypes.bool,
@@ -12,35 +11,42 @@ CommentersList = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-		Meteor.subscribe('avatars.commenter.all');
 
-		const query = {};
 		let limit = 100;
-
 		if (this.props.limit) {
 			limit = this.props.limit;
 		}
 
+		// SUBSCRIPTIONS:
 		if (this.props.featureOnHomepage) {
-			query.featureOnHomepage = this.props.featureOnHomepage;
+			Meteor.subscribe('commenters.featureOnHomepage', limit);
+		} else {
+			Meteor.subscribe('commenters', limit);
 		}
+		const avatarsSub = Meteor.subscribe('avatars.commenter.all');
 
-		const commenters = Commenters.find(query, { sort: { name: 1 }, limit }).fetch();
-		for (let i = 0; i < commenters.length; ++i) {
-			if (commenters[i].avatar == null) {
-				commenters[i].avatarUrl = this.props.defaultAvatarUrl;
-			} else {
-				const avatar = Avatars.findOne({ _id: commenters[i].avatar });
-				if (avatar) {
-					commenters[i].avatarUrl = avatar.url;
-				} else {
-					commenters[i].avatarUrl = this.props.defaultAvatarUrl;
-				}
-			}
-		}
+		const commenters = Commenters.find().fetch();
+		const avatars = Avatars.find().fetch();
+
 		return {
 			commenters,
+			avatars,
 		};
+	},
+
+	getAvatarUrl(commenter) {
+		if (commenter.avatar === null) {
+			return this.props.defaultAvatarUrl;
+		} else {
+			const avatar = this.data.avatars.find((avatar) => {
+				return avatar._id === commenterId;
+			});
+			if (avatar) {
+				return avatar.url;
+			} else {
+				return this.props.defaultAvatarUrl;
+			}
+		}
 	},
 
 	renderCommenters() {

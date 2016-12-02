@@ -30,6 +30,10 @@ Schemas.DiscussionComments = new SimpleSchema({
 		type: [Schemas.User],
 		optional: true,
 	},
+	flaggedVoters: {
+		type: [Schemas.User],
+		optional: true,
+	},
 
 	created: {
 		type: Date,

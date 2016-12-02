@@ -1,5 +1,6 @@
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
 DiscussionComment = React.createClass({
@@ -12,6 +13,8 @@ DiscussionComment = React.createClass({
 	getInitialState() {
 		return {
 			editMode: false,
+			moreOptionsVisible: false,
+			shareOptionsVisible: false,
 		};
 	},
 
@@ -48,6 +51,20 @@ DiscussionComment = React.createClass({
 		}
 	},
 
+	toggleMoreOptions() {
+		this.setState({
+			moreOptionsVisible: !this.state.moreOptionsVisible,
+			shareOptionsVisible: false,
+		});
+	},
+
+	toggleShareOptions() {
+		this.setState({
+			shareOptionsVisible: !this.state.shareOptionsVisible,
+			moreOptionsVisible: false,
+		});
+	},
+
 	render() {
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
@@ -60,6 +77,7 @@ DiscussionComment = React.createClass({
 		}
 		discussionComment.children = [];
 		let userUpvoted = false;
+		let userReported = false;
 		let username = '';
 
 		if (discussionComment.user.username) {
@@ -76,6 +94,13 @@ DiscussionComment = React.createClass({
 			discussionComment.voters.indexOf(this.props.currentUser._id) >= 0
 		) {
 			userUpvoted = true;
+		}
+
+		if (
+			this.props.currentUser &&
+			discussionComment.flaggedVoters.indexOf(this.props.currentUser._id) >= 0
+		) {
+			userReported = true;
 		}
 
 		return (
@@ -148,9 +173,7 @@ DiscussionComment = React.createClass({
 						icon={<FontIcon className="mdi mdi-chevron-up" />}
 					>
 						{!userIsLoggedIn ?
-							<span className="vote-up-tooltip">
-								You must be signed in to upvote.
-							</span>
+							<span className="md-tooltip">You must be signed in to vote.</span>
 							:
 							''
 						}
@@ -168,16 +191,25 @@ DiscussionComment = React.createClass({
 					:
 						''
 					}
-
 					<FlatButton
-						label="More"
-						onClick={this.reportDiscussionComment}
-						className="discussion-comment-button show-more"
-						icon={<FontIcon className="mdi mdi-flag" />}
+						label=""
+						onClick={this.toggleShareOptions}
+						className="discussion-comment-button"
+						icon={<FontIcon className="mdi mdi-share" />}
 					>
+						<span className="md-tooltip">Share</span>
 					</FlatButton>
 
-					<div className="more-options">
+					<FlatButton
+						onClick={this.toggleMoreOptions}
+						label=""
+						className={`discussion-comment-button toggle-more-button ${(this.state.moreOptionsVisible) ? 'toggle-more-button--active' : ''}`}
+						icon={<FontIcon className="mdi mdi-dots-horizontal" />}
+					>
+						<span className="md-tooltip">Show more</span>
+					</FlatButton>
+
+					<div className={`more-options ${this.state.moreOptionsVisible ? 'more-options--visible' : ''}`}>
 						<FlatButton
 							label="Report"
 							onClick={this.reportDiscussionComment}
@@ -185,13 +217,39 @@ DiscussionComment = React.createClass({
 							icon={<FontIcon className="mdi mdi-flag" />}
 						>
 							{!userIsLoggedIn ?
-								<span className="vote-up-tooltip">
+								<span className="md-tooltip">
 									You must be signed in to report a comment.
 								</span>
 								:
 								''
 							}
 						</FlatButton>
+					</div>
+					<div className={`more-options share-options ${this.state.shareOptionsVisible ? 'more-options--visible' : ''}`}>
+						<FlatButton
+							label="Facebook"
+							href="#"
+							className="discussion-comment-button"
+							icon={<FontIcon className="mdi mdi-facebook" />}
+						/>
+						<FlatButton
+							label="Twitter"
+							href="#"
+							className="discussion-comment-button"
+							icon={<FontIcon className="mdi mdi-twitter" />}
+						/>
+						<FlatButton
+							label="Google"
+							href="#"
+							className="discussion-comment-button"
+							icon={<FontIcon className="mdi mdi-google-plus" />}
+						/>
+						<FlatButton
+							label="Mail"
+							href="#"
+							className="discussion-comment-button"
+							icon={<FontIcon className="mdi mdi-email-outline" />}
+						/>
 					</div>
 				</div>
 

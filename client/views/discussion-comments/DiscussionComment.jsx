@@ -51,6 +51,14 @@ DiscussionComment = React.createClass({
 		}
 	},
 
+	reportDiscussionComment() {
+		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+			Meteor.call('discussionComments.report',
+				this.props.discussionComment._id
+			);
+		}
+	},
+
 	toggleMoreOptions() {
 		this.setState({
 			moreOptionsVisible: !this.state.moreOptionsVisible,

@@ -75,4 +75,26 @@ Meteor.methods({
 		}
 	},
 
+	'discussionComments.report': function upvoteDiscussionComment(discussionCommentId) {
+		check(discussionCommentId, String);
+
+		const discussionComment = DiscussionComments.findOne(discussionCommentId);
+
+		// Make sure the user has not already reported this comment
+		if (discussionComment.reported.indexOf(this.userId) >= 0) {
+			throw new Meteor.Error('not-authorized');
+		}
+
+		try {
+			DiscussionComments.update({
+				_id: discussionCommentId,
+			}, {
+				$push: { usersReported: this.userId },
+				$inc: { reported: 1 },
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	},
+
 });

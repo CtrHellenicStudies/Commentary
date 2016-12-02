@@ -30,7 +30,11 @@ Schemas.DiscussionComments = new SimpleSchema({
 		type: [Schemas.User],
 		optional: true,
 	},
-	flaggedVoters: {
+	reported: {
+		type: Number,
+		optional: true,
+	},
+	usersReported: {
 		type: [Schemas.User],
 		optional: true,
 	},

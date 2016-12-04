@@ -94,7 +94,7 @@ CommentDetail = React.createClass({
 		if (!('isOnHomeView' in this.props) || this.props.isOnHomeView === false) {
 			this.props.toggleSearchTerm('keywords', keyword);
 		} else {
-			FlowRouter.go('/commentary/', {}, {keywords: keyword.slug});
+			FlowRouter.go('/commentary/', {}, { keywords: keyword.slug });
 		}
 	},
 

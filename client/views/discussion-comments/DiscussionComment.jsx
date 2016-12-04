@@ -133,9 +133,9 @@ DiscussionComment = React.createClass({
 							</span>
 						</a>
 						<span className="discussion-comment-date">
-							<span>Updated: </span>
-							{moment(discussionComment.updated).format('D MMMM YYYY')
-							|| moment(discussionComment.created).format('D MMMM YYYY')}
+							<span>{discussionComment.updated ? 'Updated: ' : 'Created: '}</span>
+							{moment(discussionComment.updated ||
+								discussionComment.created).format('D MMMM YYYY')}
 						</span>
 					</div>
 

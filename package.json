@@ -20,7 +20,7 @@
     "ion-rangeslider": "^2.1.4",
     "jsdifflib": "^1.1.0",
     "linkifyjs": "^2.0.5",
-    "material-ui": "^0.16.2",
+    "material-ui": "^0.16.4",
     "mdi": "^1.6.50",
     "meteor-node-stubs": "^0.2.3",
     "npm": "^3.10.9",

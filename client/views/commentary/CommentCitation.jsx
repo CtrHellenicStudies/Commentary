@@ -1,5 +1,6 @@
 import RaisedButton from 'material-ui/RaisedButton';
-import IconMenu from 'material-ui/IconMenu';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
 CommentCitation = React.createClass({
@@ -13,22 +14,24 @@ CommentCitation = React.createClass({
 	getInitialState() {
 		return {
 			openMenu: false,
+			anchorEl: null,
 		};
 	},
 
-	handleOnRequestChange(value) {
+	handleTouchTap(event) {
+		// This prevents ghost click.
+		event.preventDefault();
+
 		this.setState({
-			openMenu: value,
+			openMenu: true,
+			anchorEl: event.currentTarget,
 		});
 	},
 
-	iconButtonMenuElement(label) {
-		return (
-			<RaisedButton
-				label={label}
-				labelPosition="after"
-			/>
-		);
+	handleRequestClose() {
+		this.setState({
+			openMenu: false,
+		});
 	},
 
 	render() {
@@ -38,22 +41,29 @@ CommentCitation = React.createClass({
 
 		return (
 			<div className={componentClass}>
-				<IconMenu
-					iconButtonElement={this.iconButtonMenuElement(title)}
+				<RaisedButton
+					label={title}
+					labelPosition="after"
+					onTouchTap={this.handleTouchTap}
+				/>
+				<Popover
 					open={this.state.openMenu}
-					onRequestChange={this.handleOnRequestChange}
+					anchorEl={this.state.anchorEl}
 					anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
 					targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+					onRequestClose={this.handleRequestClose}
 				>
-					{comment.revisions.map((revision, i) => (
-						<MenuItem
-							key={i}
-							href={`/commentary/?_id=${comment._id}&revision=${i}`}
-							primaryText={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
-						/>
-					))}
-					<MenuItem href={`/commentary/?_id=${comment._id}`} primaryText="Comment link" />
-				</IconMenu>
+					<Menu>
+						{comment.revisions.map((revision, i) => (
+							<MenuItem
+								key={i}
+								href={`/commentary/?_id=${comment._id}&revision=${i}`}
+								primaryText={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
+							/>
+						))}
+						<MenuItem href={`/commentary/?_id=${comment._id}`} primaryText="Comment link" />
+					</Menu>
+				</Popover>
 			</div>
 		);
 	},

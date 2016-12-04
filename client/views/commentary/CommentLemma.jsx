@@ -36,8 +36,8 @@ CommentLemma = React.createClass({
 			lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
 		}
 
-		const handle2 = Meteor.subscribe('textNodes', lemmaQuery);
-		if (handle2.ready()) {
+		const handle = Meteor.subscribe('textNodes', lemmaQuery);
+		if (handle.ready()) {
 			const textNodes = TextNodes.find(lemmaQuery).fetch();
 			const editions = [];
 

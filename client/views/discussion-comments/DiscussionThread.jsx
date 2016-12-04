@@ -87,7 +87,7 @@ DiscussionThread = React.createClass({
 		}
 
 		const sortSelectedLabelStyle = {
-		  color: '#FFFFFF',
+			color: '#FFFFFF',
 		};
 
 		// console.log("CommentDiscussion.data", this.data);
@@ -192,18 +192,18 @@ DiscussionThread = React.createClass({
 							</div>
 							: ''
 						}
-						<div className='sort-method-select'>
+						<div className="sort-method-select">
 							<FlatButton
 								label="Top votes"
-								labelStyle={this.state.sortMethod === "votes" ? sortSelectedLabelStyle : ""}
-								backgroundColor={this.state.sortMethod === "votes" ? "#795548" : ""}
-								onClick={this.sortMethodSelect.bind(null,"votes")}
+								labelStyle={this.state.sortMethod === 'votes' ? sortSelectedLabelStyle : {}}
+								backgroundColor={this.state.sortMethod === 'votes' ? '#795548' : ''}
+								onClick={this.sortMethodSelect.bind(null, 'votes')}
 							/>
 							<FlatButton
 								label="Recent"
-								labelStyle={this.state.sortMethod === "recent" ? sortSelectedLabelStyle : ""}
-								backgroundColor={this.state.sortMethod === "recent" ? "#795548" : ""}
-								onClick={this.sortMethodSelect.bind(null,"recent")}
+								labelStyle={this.state.sortMethod === 'recent' ? sortSelectedLabelStyle : {}}
+								backgroundColor={this.state.sortMethod === 'recent' ? '#795548' : ''}
+								onClick={this.sortMethodSelect.bind(null, 'recent')}
 							/>
 						</div>
 						{this.data.discussionComments.map((discussionComment, i) =>

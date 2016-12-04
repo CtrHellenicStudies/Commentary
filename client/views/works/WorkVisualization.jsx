@@ -167,15 +167,7 @@ WorkVisualization = React.createClass({
       .attr('width', x.rangeBand())
       .attr('width_origin', x.rangeBand())
       .attr('y', (d) => {
-        if (
-            'nComments' in d
-            && typeof d.nComments !== 'undefined'
-            && d.nComments
-            && !isNaN(d.nComments)
-        ) {
-          return y(d.nComments);
-        }
-        return y(0);
+          return y(d.nComments) || 0;
       })
       .attr('y_origin', (d) => {
         if (
@@ -195,7 +187,7 @@ WorkVisualization = React.createClass({
         return color(d.nComments);
       })
       .attr('height', (d) => {
-        return height - y(d.nComments);
+        return (height - y(d.nComments)) || 0;
       })
       .attr('height_origin', (d) => {
         return height - y(d.nComments);
@@ -240,15 +232,7 @@ WorkVisualization = React.createClass({
         return x(d.n) + x.rangeBand() / 2;
       })
       .attr('y', (d) => {
-        if (
-            'nComments' in d
-            && typeof d.nComments !== 'undefined'
-            && d.nComments
-            && !isNaN(d.nComments)
-        ) {
-          return y(d.nComments) - x.rangeBand() / 2;
-        }
-        return y(0) - x.rangeBand() / 2;
+          return (y(d.nComments) - x.rangeBand() / 2) || 0;
       })
       .style('text-anchor', 'middle')
       .style('opacity', 0)

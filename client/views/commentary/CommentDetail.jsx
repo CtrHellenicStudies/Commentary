@@ -3,6 +3,7 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import { green100, green500, red100, red500, black, fullWhite } from 'material-ui/styles/colors';
 import JsDiff from 'diff';
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
 CommentDetail = React.createClass({
 
@@ -263,46 +264,35 @@ CommentDetail = React.createClass({
 						</div>
 
 						<div className="comment-upper-right">
-							{comment.commenters.map((commenter, i) => {
-								let image = {};
-								let imageUrl = '';
-								if (commenter.attachment) {
-									image = commenter.attachment;
-									imageUrl = image.url();
-								}
-								return (
-									<div
-										key={i}
-										className="comment-author"
-									>
-										{userCommenterId.indexOf(commenter._id) > -1 ?
-											<FlatButton
-												label="Edit comment"
-												href={`/add-revision/${comment._id}`}
-												icon={<FontIcon className="mdi mdi-pen" />}
-											/>
-											:
-											''
-										}
-										<div className="comment-author-text">
-											<a href={`/commenters/${commenter.slug}`}>
-												<span className="comment-author-name">{commenter.name}</span>
-											</a>
-											<span className="comment-date">
-												{moment(selectedRevision.created).format('D MMMM YYYY')}
-											</span>
-										</div>
-										<div className="comment-author-image-wrap paper-shadow">
-											<a href={`/commenters/${commenter.slug}`}>
-												<img
-													src={imageUrl.length ? imageUrl : '/images/default_user.jpg'}
-													alt="commenter"
-												/>
-											</a>
-										</div>
+							{comment.commenters.map((commenter, i) => (
+								<div
+									key={i}
+									className="comment-author"
+								>
+									{userCommenterId.indexOf(commenter._id) > -1 ?
+										<FlatButton
+											label="Edit comment"
+											href={`/add-revision/${comment._id}`}
+											icon={<FontIcon className="mdi mdi-pen" />}
+										/>
+										:
+										''
+									}
+									<div className="comment-author-text">
+										<a href={`/commenters/${commenter.slug}`}>
+											<span className="comment-author-name">{commenter.name}</span>
+										</a>
+										<span className="comment-date">
+											{moment(selectedRevision.created).format('D MMMM YYYY')}
+										</span>
 									</div>
-								);
-							})}
+									<div className="comment-author-image-wrap paper-shadow">
+										<a href={`/commenters/${commenter.slug}`}>
+											<AvatarIcon avatar={commenter.avatarData} />
+										</a>
+									</div>
+								</div>
+							))}
 						</div>
 
 					</div>

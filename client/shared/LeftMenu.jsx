@@ -1,9 +1,10 @@
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
 injectTapEventPlugin();
 
@@ -61,7 +62,7 @@ LeftMenu = React.createClass({
 						{userIsLoggedIn ?
 							<div>
 								<div className="user-image paper-shadow">
-									<img src="/images/default_user.jpg" role="presentation" />
+									<AvatarIcon avatar={this.data.currentUser.avatar} />
 								</div>
 							</div>
 							: ''

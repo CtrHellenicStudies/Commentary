@@ -232,11 +232,11 @@ Commentary = React.createClass({
 			const element = $(id).find(
 				'.comment-group-meta-inner,.comment-group-meta-inner-fixed,.comment-group-meta-inner-bottom'
 			);
-			if (offset.top && scrollY < offset.top) {
+			if (offset && scrollY < offset.top) {
 				element.addClass('comment-group-meta-inner');
 				element.removeClass('comment-group-meta-inner-fixed');
 				element.removeClass('comment-group-meta-inner-bottom');
-			} else if (offset.top && scrollY >= offset.top && scrollY < (offset.top + height) - 275) {
+			} else if (offset && scrollY >= offset.top && scrollY < (offset.top + height) - 275) {
 				element.addClass('comment-group-meta-inner-fixed');
 				element.removeClass('comment-group-meta-inner');
 				element.removeClass('comment-group-meta-inner-bottom');

@@ -1,6 +1,12 @@
 import React from 'react';
 import { mount } from 'react-mounter';
 
+// Global subscription: user data is needed in almost all routes
+function subscriptions() {
+	this.register('userData', Meteor.subscribe('userData'));
+}
+FlowRouter.subscriptions = subscriptions;
+
 /*
  * Route groups with permissions
  */
@@ -124,11 +130,6 @@ loggedInGroup.route('/profile', {
 });
 
 FlowRouter.route('/users/:userId', {
-	subscriptions(params) {
-		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
-		this.register('userDiscussionComments',
-			Meteor.subscribe('userDiscussionComments', params.userId));
-	},
 	triggersEnter: [
 		(context, redirect) => {
 			if (Meteor.userId() && Meteor.userId() === context.params.userId) {
@@ -146,11 +147,6 @@ FlowRouter.route('/users/:userId', {
 });
 
 FlowRouter.route('/users/:userId/:username', {
-	subscriptions(params) {
-		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
-		this.register('userDiscussionComments',
-			Meteor.subscribe('userDiscussionComments', params.userId));
-	},
 	triggersEnter: [
 		(context, redirect) => {
 			if (Meteor.userId() && Meteor.userId() === context.params.userId) {

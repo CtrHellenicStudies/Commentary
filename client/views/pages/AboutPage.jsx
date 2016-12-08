@@ -44,8 +44,8 @@ AboutPage = React.createClass({
 						2000 by Stephen Mitchell and Gregory Nagy, with new introduction), as summarized
 						in Lord’s magisterial synthesis, <em>The Singer of Tales</em> (1960), proved that
 						Homeric poetry is a <strong>system</strong> generated from oral traditions,
-						and that the building blocks of this system are <strong>formulas</strong>
-						on the level of form and <strong>themes</strong> on the level of meaning (Lord 1960:4).
+						and that the building blocks of this system are <strong>formulas</strong> on the
+						level of form and <strong>themes</strong> on the level of meaning (Lord 1960:4).
 						Our	commentary is designed to analyze and explain this system of formulas and themes,
 						to which we	refer short-hand as a <strong>formulaic system</strong>.
 						Such a system can best be visualized as	a specialized language that has its

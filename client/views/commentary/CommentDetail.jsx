@@ -312,24 +312,26 @@ CommentDetail = React.createClass({
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}
-						<div className="comment-reference">
-							<h4>Secondary Source(s):</h4>
-							<p>
-								{comment.referenceLink ?
-									<a
-										href={comment.referenceLink}
-										rel="noopener noreferrer"
-										target="_blank"
-									>
-										{comment.reference}
-									</a>
+						{comment.referenceLink ?
+							<div className="comment-reference">
+								<h4>Secondary Source(s):</h4>
+								<p>
+									{comment.referenceLink ?
+										<a
+											href={comment.referenceLink}
+											rel="noopener noreferrer"
+											target="_blank"
+										>
+											{comment.reference}
+										</a>
 									:
 									<span >
 										{comment.reference}
 									</span>
 								}
-							</p>
-						</div>
+								</p>
+							</div>
+						: '' }
 					</div>
 					<div className="comment-revisions">
 						{comment.revisions.map((revision, i) => (

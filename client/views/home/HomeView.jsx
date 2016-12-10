@@ -150,8 +150,37 @@ HomeView = React.createClass({
 						{/* <!--end of container-->*/}
 					</section>
 
+					<section className="commentors">
+						<div className="background-image-holder blur-4--no-remove">
+							<img
+								className="background-image"
+								src="/images/school-athens.jpg"
+								role="presentation"
+							/>
+						</div>
+						<div className="block-screen" />
 
-					<section className="goals ">
+						<div className="container">
+
+							<h2 className="block-title">Commenters</h2>
+
+
+							<CommentersList
+								featureOnHomepage
+								defaultAvatarUrl='/images/default_user.jpg'
+								limit={3}
+							/>
+
+							<RaisedButton
+								href="/commenters"
+								className="cover-link light show-more "
+								label="Other Commenters"
+							/>
+
+						</div>
+
+					</section>
+				{/*	<section className="goals ">
 
 						<div className="background-image-holder blur-4--no-remove">
 							<img role="presentation" className="background-image" src="/images/mss_2.jpg" />
@@ -200,7 +229,7 @@ HomeView = React.createClass({
 						</div>
 
 
-					</section>
+					</section> */}
 
 					<section id="visualizations" className="browse-commentary block-shadow">
 						{/* <h2 className="keyword-divider-title"></h2>*/}
@@ -253,44 +282,13 @@ HomeView = React.createClass({
 						</div>
 					</section>
 
-					<section className="commentors">
-						<div className="background-image-holder blur-4--no-remove">
-							<img
-								className="background-image"
-								src="/images/school-athens.jpg"
-								role="presentation"
-							/>
-						</div>
-						<div className="block-screen" />
-
-						<div className="container">
-
-							<h2 className="block-title">Commenters</h2>
-
-
-							<CommentersList
-								featureOnHomepage
-								defaultAvatarUrl='/images/default_user.jpg'
-								limit={3}
-							/>
-
-							<RaisedButton
-								href="/commenters"
-								className="cover-link light show-more "
-								label="Other Commenters"
-							/>
-
-						</div>
-
-					</section>
-
 					<section className="get-started">
 
 						<h2 className="block-title">Get Started</h2>
 
 						<div className="get-started-comments">
 
-							{this.data.commentsReady ? 
+							{this.data.commentsReady ?
 								<Commentary
 									isOnHomeView
 									filters={[]}
@@ -301,7 +299,7 @@ HomeView = React.createClass({
 								<Spinner /> }
 
 							<div className="read-more-link">
-							
+
 								<RaisedButton
 									href="/commentary"
 									className="cover-link light show-more "

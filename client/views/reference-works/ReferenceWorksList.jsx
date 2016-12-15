@@ -22,8 +22,8 @@ ReferenceWorksList = React.createClass({
 		}
 
 		// FETCH DATA:
-		const referenceWorks = ReferenceWorks.find(query, { sort: { title: 1 } }).fetch()
-		
+		const referenceWorks = ReferenceWorks.find(query, { sort: { title: 1 } }).fetch();
+
 		return {
 			referenceWorks,
 		};
@@ -43,7 +43,6 @@ ReferenceWorksList = React.createClass({
 			isFitWidth: true,
 			transitionDuration: 300,
 		};
-
 		return (
 			<div>
 				{this.data.referenceWorks.length ?

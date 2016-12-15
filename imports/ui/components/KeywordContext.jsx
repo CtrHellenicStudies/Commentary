@@ -111,7 +111,10 @@ export default KeywordContext = React.createClass({
 	render() {
 		const context = this.data.context;
 		return (
-			<article className="comment lemma-comment paper-shadow">
+			<article className="comment lemma-comment paper-shadow keyword-context">
+				<span className="lemma-comment-ref-header">
+					Iliad 1.190-200
+				</span>
 				{this.data.lemmaText.length === 0 ?
 					''
 					:

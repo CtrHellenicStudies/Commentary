@@ -358,6 +358,8 @@ CommentDetail = React.createClass({
 					showDiscussionThread={self.showDiscussionThread}
 					hideDiscussionThread={self.hideDiscussionThread}
 					discussionVisible={self.state.discussionVisible}
+					removeLemma={this.props.removeLemma}
+					returnLemma={this.props.returnLemma}
 				/>
 				<LemmaReferenceModal
 					visible={self.state.lemmaReferenceModalVisible}

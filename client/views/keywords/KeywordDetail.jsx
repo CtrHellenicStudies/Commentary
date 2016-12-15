@@ -1,6 +1,7 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import KeywordContext from '/imports/ui/components/KeywordContext.jsx';
+import RaisedButton from 'material-ui/RaisedButton';
 
 KeywordDetail = React.createClass({
 
@@ -57,6 +58,13 @@ KeywordDetail = React.createClass({
 								<div className="center-content">
 									<div className="page-title-wrap">
 										<h2 className="page-title ">{keyword.title}</h2>
+										{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+											<RaisedButton
+												href={`/keywords/${keyword.slug}/edit`}
+												className="cover-link light"
+												label="Edit"
+											/>
+										: ''}
 									</div>
 								</div>
 							</div>
@@ -64,15 +72,20 @@ KeywordDetail = React.createClass({
 					</section>
 
 					<section className="page-content">
-						<KeywordContext keywordId={keyword._id} maxLines={3} />
-						{
-							keyword.description
-						||
+						{keyword.lineFrom ?
+							<KeywordContext keyword={keyword} />
+						: ''}
+						{keyword.description && keyword.description.length ?
+							<div className="keyword-description" dangerouslySetInnerHTML={{ __html: keyword.description }} />
+						:
 							<p className="no-description-available">
 								No description available.
 							</p>
 						}
 					</section>
+
+					<CommentsRecent />
+
 				</div>
 			</div>
 		);

@@ -252,6 +252,11 @@ section.keyword-single {
 }
 
 .keywords-detail-page .page-content {
+	min-height:600px;
+	.keyword-description {
+		min-height:220px;
+	}
+
 	.no-description-available {
 		padding:100px 0 200px;
 		color:@secondary-text;
@@ -260,11 +265,14 @@ section.keyword-single {
 }
 
 .keyword-context {
+	width:95%;
+
 	.lemma-comment-ref-header {
 		font-family:@font-label;
 		font-weight:bold;
 		font-size:16px;
-		padding:10px 15px 30px;
+		padding:0px 15px 10px;
+		display:block;
 		text-transform: uppercase;
 
 	}

@@ -1,4 +1,7 @@
 import slugify from 'slugify';
+import Snackbar from 'material-ui/Snackbar';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'mdi/css/materialdesignicons.css';
 
 AddKeywordLayout = React.createClass({
@@ -13,8 +16,19 @@ AddKeywordLayout = React.createClass({
 			selectedType: 'word',
 			contextReaderOpen: true,
 			loading: false,
+			snackbarOpen: false,
+			snackbarMessage: '',
 		};
 	},
+
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
+
 
 	componentWillUpdate() {
 		this.handlePermissions();
@@ -141,16 +155,32 @@ AddKeywordLayout = React.createClass({
 			lineTo: selectedLineTo,
 			lineLetter,
 			title: formData.titleValue,
-			slug: slugify(formData.titleValue),
+			slug: slugify(formData.titleValue.toLowerCase()),
 			description: formData.textValue,
 			type: this.state.selectedType,
 			count: 1,
 			created: new Date(),
 		};
 
-		Meteor.call('keywords.insert', keyword, (error, keywordId) => {
-			FlowRouter.go(`/keywords`, {}, {_id: keywordId});
+		Meteor.call('keywords.insert', [keyword], (error, keywordId) => {
+			if (error) {
+				this.showSnackBar(error);
+			} else {
+				FlowRouter.go(`/keywords/${keyword.slug}`);
+			}
 		});
+	},
+
+	showSnackBar(error) {
+		this.setState({
+			snackbarOpen: error.errors,
+			snackbarMessage: error.errorMessage,
+		});
+		setTimeout(() => {
+			this.setState({
+				snackbarOpen: false,
+			});
+		}, 4000);
 	},
 
 	getWork() {
@@ -378,6 +408,13 @@ AddKeywordLayout = React.createClass({
 					:
 					<Spinner fullPage />
 				}
+
+				<Snackbar
+					className="add-comment-snackbar"
+					open={this.state.snackbarOpen}
+					message={this.state.snackbarMessage}
+					autoHideDuration={4000}
+				/>
 			</div>
 		);
 	},

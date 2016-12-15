@@ -21,18 +21,18 @@ Meteor.methods({
 		return keywordsIds;
 	},
 
-	'keywords.update': function updateComment(commentId, update) {
-		check(commentId, String);
+	'keywords.update': function updateComment(keywordId, update) {
+		check(keywordId, String);
 		check(update, Object);
 		const roles = ['developer', 'admin', 'commenter'];
 		if (Roles.userIsInRole(Meteor.user(), roles)) {
 			console.log('Method called: \'comment.update\'');
-			console.log('commentId:', commentId);
+			console.log('keywordId:', keywordId);
 			console.log('Update:', update);
 
 			try {
-				Comments.update({ _id: commentId }, { $set: update });
-				console.log('Comment', commentId, 'update successful');
+				Keywords.update({ _id: keywordId }, { $set: update });
+				console.log('Keyword', keywordId, 'update successful');
 			} catch (err) {
 				console.log(err);
 			}
@@ -40,6 +40,6 @@ Meteor.methods({
 			console.log('Permission denied on method comments.update, for user:', Meteor.userId());
 		}
 
-		return commentId;
+		return keywordId;
 	},
 });

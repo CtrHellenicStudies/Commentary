@@ -81,7 +81,6 @@ DiscussionThread = React.createClass({
 	},
 
 	render() {
-		console.log(this.props);
 		const currentUser = Meteor.user();
 
 		let discussionWrapClass = 'discussion-wrap';
@@ -100,8 +99,6 @@ DiscussionThread = React.createClass({
 		const sortSelectedLabelStyle = {
 			color: '#FFFFFF',
 		};
-
-		// console.log("CommentDiscussion.data", this.data);
 
 		return (
 

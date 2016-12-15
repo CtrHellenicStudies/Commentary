@@ -142,17 +142,13 @@ CommentLemma = React.createClass({
 										<span className="comment-author-name">
 											{commenter.name}
 										</span>
-										<div
+										<a
 											className="comment-author-image-wrap paper-shadow"
+											href={`/commenters/${commenter.slug}`}
+											onClick={self.goToAuthorComment}
 										>
-											<a
-												href={`/commenters/${commenter.slug}`}
-												onClick={self.goToAuthorComment}
-											>
-												<AvatarIcon avatar={commenter.avatarData} />
-											</a>
-
-										</div>
+											<AvatarIcon avatar={commenter.avatarData} />
+										</a>
 									</div>
 								))}
 

@@ -74,6 +74,12 @@ LeftMenu = React.createClass({
 					{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
 						<div>
 							<MenuItem
+								href="/admin"
+								target="_blank"
+								primaryText="Admin"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
 								href="/commentary/add"
 								primaryText="Add Comment"
 								onClick={this.props.closeLeftMenu}

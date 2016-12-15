@@ -25,7 +25,7 @@ CommentersList = React.createClass({
 		}
 		const avatarsSub = Meteor.subscribe('avatars.commenter.all');
 
-		const commenters = Commenters.find().fetch();
+		const commenters = Commenters.find({}, {sort: {name: 1}}).fetch();
 		const avatars = Avatars.find().fetch();
 
 		return {

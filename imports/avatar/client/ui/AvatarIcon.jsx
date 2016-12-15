@@ -7,7 +7,7 @@ export default function AvatarIcon(props) {
 		url = prop.defaultUrl;
 	}
 
-	return <img src={url} alt="icon" />;
+	return <div className="avatar-icon" style={{backgroundImage: `url(${url})`}} alt="icon" />;
 }
 
 AvatarIcon.propTypes = {

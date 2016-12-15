@@ -306,19 +306,11 @@ HomeView = React.createClass({
 									label="Read More"
 								/>
 
-
 							</div>
-
 						</div>
-
-
 					</section>
-
-
 				</div>
-
 			</div>
-
 		);
 	},
 });

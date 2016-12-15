@@ -165,8 +165,8 @@ ContextReader = React.createClass({
 	onAfterClicked() {
 		if (this.state.lineTo <= this.state.maxLine) {
 			this.setState({
-				lineFrom: this.state.lineFrom + 25,
-				lineTo: this.state.lineTo + 25,
+				lineFrom: this.state.lineFrom + 100,
+				lineTo: this.state.lineTo + 100,
 			});
 		}
 	},
@@ -174,8 +174,8 @@ ContextReader = React.createClass({
 	onBeforeClicked() {
 		if (this.state.lineFrom !== 1) {
 			this.setState({
-				lineFrom: this.state.lineFrom - 25,
-				lineTo: this.state.lineTo - 25,
+				lineFrom: this.state.lineFrom - 100,
+				lineTo: this.state.lineTo - 100,
 			});
 		}
 	},

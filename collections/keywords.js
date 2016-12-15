@@ -43,13 +43,15 @@ Schemas.Keywords = new SimpleSchema({
 	},
 
 	work: {
-		type: Schemas.Works,
+		type: Object,
+		blackbox: true,
 		optional: true,
 
 	},
 
 	subwork: {
-		type: Schemas.Subworks,
+		type: Object,
+		blackbox: true,
 		optional: true,
 
 	},

@@ -4,7 +4,11 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'mdi/css/materialdesignicons.css';
 
-AddKeywordLayout = React.createClass({
+EditKeywordLayout = React.createClass({
+
+	propTypes: {
+		slug: React.PropTypes.string,
+	},
 
 	mixins: [ReactMeteorData],
 
@@ -14,10 +18,10 @@ AddKeywordLayout = React.createClass({
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
 			selectedType: 'word',
-			contextReaderOpen: true,
 			loading: false,
 			snackbarOpen: false,
 			snackbarMessage: '',
+			contextReaderOpen: true,
 		};
 	},
 
@@ -29,31 +33,31 @@ AddKeywordLayout = React.createClass({
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-
 	componentWillUpdate() {
-		this.handlePermissions();
+		if (this.data.ready) this.handlePermissions();
 	},
 
 	getMeteorData() {
-		const ready = Roles.subscription.ready();
+		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug);
+		const ready = Roles.subscription.ready() && keywordsSub;
+		let keyword = {};
+		if (ready) {
+			keyword = Keywords.findOne();
+		}
+
 		return {
 			ready,
+			keyword,
 		};
 	},
 
-	// --- BEGNI PERMISSIONS HANDLE --- //
-
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'keyworder'])) {
 				FlowRouter.go('/');
 			}
 		}
 	},
-
-	// --- END PERMISSIONS HANDLE --- //
-
-	// --- BEGNI LINE SELECTION --- //
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
 		if (selectedLineFrom === null) {
@@ -100,7 +104,7 @@ AddKeywordLayout = React.createClass({
 				} else if (key === 'works') {
 					filters[i].values = [value];
 				} else {
-					filters[i].values.push(value);
+					filter.values.push(value);
 				}
 			}
 		});
@@ -123,11 +127,7 @@ AddKeywordLayout = React.createClass({
 		});
 	},
 
-	// --- END LINE SELECTION --- //
-
-	// --- BEGNI ADD COMMENT --- //
-
-	addKeyword(formData) {
+	updateKeyword(formData) {
 
 		this.setState({
 			loading: true,
@@ -142,6 +142,7 @@ AddKeywordLayout = React.createClass({
 
 		// create keyword object to be inserted:
 		const keyword = {
+			_id: this.data.keyword._id,
 			work: {
 				title: work.title,
 				slug: work.slug,
@@ -162,7 +163,7 @@ AddKeywordLayout = React.createClass({
 			created: new Date(),
 		};
 
-		Meteor.call('keywords.insert', [keyword], (error, keywordId) => {
+		Meteor.call('keywords.update', keyword, (error, keywordId) => {
 			if (error) {
 				this.showSnackBar(error);
 			} else {
@@ -328,7 +329,6 @@ AddKeywordLayout = React.createClass({
 			}
 		}
 
-
 		this.setState({
 			filters,
 		});
@@ -336,79 +336,64 @@ AddKeywordLayout = React.createClass({
 
 	render() {
 		const filters = this.state.filters;
-		let work;
-		let subwork;
-		let lineFrom;
-		let lineTo;
-
-		filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
-			} else if (filter.key === 'lineTo') {
-				lineTo = filter.values[0];
-			} else if (filter.key === 'lineFrom') {
-				lineFrom = filter.values[0];
-			}
-		});
+		const keyword = this.data.keyword;
 
 		return (
 			<div>
-				{this.data.ready || this.state.loading ?
-					<div className="chs-layout add-comment-layout">
-						<div>
-							<Header
-								toggleSearchTerm={this.toggleSearchTerm}
-								handleChangeLineN={this.handleChangeLineN}
-								filters={this.state.filters}
-								initialSearchEnabled
-								addCommentPage
-							/>
+				{this.data.ready && this.data.keyword ?
+					<div className="chs-layout edit-keyword-layout">
 
-							<main>
+						<Header
+							toggleSearchTerm={this.toggleSearchTerm}
+							handleChangeLineN={this.handleChangeLineN}
+							filters={filters}
+							initialSearchEnabled
+							addCommentPage
+						/>
 
-								<div className="commentary-comments">
-									<div className="comment-group">
-										<CommentLemmaSelect
-											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-										/>
-										<AddKeyword
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											submitForm={this.addKeyword}
-											onTypeChange={this.onTypeChange}
-										/>
-										<ContextReader
-											open={this.state.contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-											initialLineFrom={lineFrom || 1}
-											initialLineTo={lineTo || 100}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											updateSelectedLines={this.updateSelectedLines}
-										/>
-									</div>
+						<main>
+
+							<div className="commentary-comments">
+								<div className="comment-group">
+									<CommentLemmaSelect
+										ref={(component) => { this.keywordLemmaSelect = component; }}
+										selectedLineFrom={keyword.lineFrom}
+										selectedLineTo={(keyword.lineFrom + keyword.nLines) - 1}
+										workSlug={keyword.work.slug}
+										subworkN={keyword.subwork.n}
+									/>
+
+									<EditKeyword
+										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || null}
+										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || null}
+										submitForm={this.updateKeyword}
+										onTypeChange={this.onTypeChange}
+										keyword={keyword}
+									/>
+
+									<ContextReader
+										open={this.state.contextReaderOpen}
+										closeContextPanel={this.closeContextReader}
+										workSlug={'work' in keyword ? keyword.work.slug : 'iliad'}
+										subworkN={'subwork' in keyword ? keyword.subwork.n : 1}
+										selectedLineFrom={keyword.lineFrom || 0}
+										selectedLineTo={keyword.lineTo || 0}
+										initialLineFrom={keyword.lineFrom || 1}
+										initialLineTo={keyword.lineFrom ? keyword.lineFrom + 100 : 100}
+										updateSelectedLines={this.updateSelectedLines}
+									/>
 								</div>
+							</div>
+						</main>
 
-								<FilterWidget
-									filters={filters}
-									toggleSearchTerm={this.toggleSearchTerm}
-								/>
-
-							</main>
-
-						</div>
+						<FilterWidget
+							filters={filters}
+							toggleSearchTerm={this.toggleSearchTerm}
+						/>
 					</div>
 					:
 					<Spinner fullPage />
 				}
-
 				<Snackbar
 					className="add-comment-snackbar"
 					open={this.state.snackbarOpen}

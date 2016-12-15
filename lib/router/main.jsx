@@ -37,7 +37,7 @@ FlowRouter.route('/keywords/add', {
 FlowRouter.route('/keywords/:slug/edit', {
 	action: (params) => {
 		mount(MasterLayout, {
-			content: <AddKeywordLayout slug={params.slug} />,
+			content: <EditKeywordLayout slug={params.slug} />,
 		});
 	},
 });

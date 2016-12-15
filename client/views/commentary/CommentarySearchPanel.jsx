@@ -192,7 +192,7 @@ CommentarySearchPanel = React.createClass({
 				</Card>
 				<Card>
 					<CardHeader
-						title="Keyideas"
+						title="Key Ideas"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton

@@ -225,8 +225,14 @@ Header = React.createClass({
 														style={styles.flatButton}
 													/>
 													<FlatButton
-														href="/add-comment"
+														href="/commentary/add"
 														label="Add Comment"
+														className=""
+														style={styles.flatButton}
+													/>
+													<FlatButton
+														href="/keywords/add"
+														label="Add Keyword/Idea"
 														className=""
 														style={styles.flatButton}
 													/>

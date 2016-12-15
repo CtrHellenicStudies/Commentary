@@ -242,7 +242,7 @@ AddRevision = React.createClass({
 								newOptionCreator={this.onNewOptionCreator}
 								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 								isOptionUnique={this.isOptionUnique}
-								placeholder="Keyideas..."
+								placeholder="Key Ideas..."
 							/>
 							{/* TODO: this.props.comment.keyideas*/}
 

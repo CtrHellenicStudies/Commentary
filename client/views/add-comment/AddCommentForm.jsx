@@ -193,7 +193,7 @@ AddCommentForm = React.createClass({
 						onChange={this.keywordsValueChange}
 					/>
 
-					<h5>Keyideas:</h5>
+					<h5>Key Ideas:</h5>
 
 					<Select
 						name="keyideas"

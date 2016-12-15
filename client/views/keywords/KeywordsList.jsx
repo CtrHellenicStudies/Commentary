@@ -27,6 +27,7 @@ KeywordsList = React.createClass({
 
 		const query = {
 			type: this.props.type,
+			count: { $gte: 1 },
 		};
 
 		const keywords = Keywords.find(query, {limit}).fetch();

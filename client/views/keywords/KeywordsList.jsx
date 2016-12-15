@@ -10,25 +10,26 @@ KeywordsList = React.createClass({
 
 	// Loads items from the keywords collection and puts them on this.data.keywords
 	getMeteorData() {
-
+		const type = this.props.type;
+		const skip = 0;
 		let limit = 100;
 		if (this.props.limit) {
 			limit = this.props.limit;
 		}
 
-		switch (this.props.type) {
-			case 'word':
-				Meteor.subscribe('keywords.keywords', limit);
-				break;
-			case 'idea':
-				Meteor.subscribe('keywords.keyideas', limit);
-				break;
-		}
-
 		const query = {
-			type: this.props.type,
+			type,
 			count: { $gte: 1 },
 		};
+
+		switch (type) {
+			case 'word':
+				Meteor.subscribe('keywords.keywords', query, skip, limit);
+				break;
+			case 'idea':
+				Meteor.subscribe('keywords.keyideas', query, skip, limit);
+				break;
+		}
 
 		const keywords = Keywords.find(query, {limit}).fetch();
 

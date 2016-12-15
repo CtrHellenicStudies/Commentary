@@ -237,7 +237,7 @@ HomeView = React.createClass({
 						</div>
 					</section>
 
-					<section className="keywords">
+					<section className="keywords keyideas">
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Key Ideas</h2>
 							<div className="underline" />
@@ -245,7 +245,7 @@ HomeView = React.createClass({
 							<KeywordsList type="idea" title="Key Ideas" limit={5} />
 
 							<RaisedButton
-								href="/keywords"
+								href="/keyideas"
 								className="cover-link show-more primary "
 								label="More Key Ideas"
 							/>
@@ -290,7 +290,7 @@ HomeView = React.createClass({
 
 						<div className="get-started-comments">
 
-							{this.data.commentsReady ? 
+							{this.data.commentsReady ?
 								<Commentary
 									isOnHomeView
 									filters={[]}
@@ -301,7 +301,7 @@ HomeView = React.createClass({
 								<Spinner /> }
 
 							<div className="read-more-link">
-							
+
 								<RaisedButton
 									href="/commentary"
 									className="cover-link light show-more "

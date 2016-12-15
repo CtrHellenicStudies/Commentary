@@ -152,8 +152,8 @@ EditKeywordLayout = React.createClass({
 				title: subwork.title,
 				n: subwork.n,
 			},
-			lineFrom: this.state.selectedLineFrom,
-			lineTo: selectedLineTo,
+			lineFrom: this.state.selectedLineFrom || this.data.keyword.lineFrom,
+			lineTo: selectedLineTo || this.data.keyword.lineTo,
 			lineLetter,
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
@@ -357,8 +357,8 @@ EditKeywordLayout = React.createClass({
 								<div className="comment-group">
 									<CommentLemmaSelect
 										ref={(component) => { this.keywordLemmaSelect = component; }}
-										selectedLineFrom={keyword.lineFrom}
-										selectedLineTo={(keyword.lineFrom + keyword.nLines) - 1}
+										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
+										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || 0}
 										workSlug={keyword.work.slug}
 										subworkN={keyword.subwork.n}
 									/>
@@ -376,8 +376,8 @@ EditKeywordLayout = React.createClass({
 										closeContextPanel={this.closeContextReader}
 										workSlug={'work' in keyword ? keyword.work.slug : 'iliad'}
 										subworkN={'subwork' in keyword ? keyword.subwork.n : 1}
-										selectedLineFrom={keyword.lineFrom || 0}
-										selectedLineTo={keyword.lineTo || 0}
+										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
+										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || 0}
 										initialLineFrom={keyword.lineFrom || 1}
 										initialLineTo={keyword.lineFrom ? keyword.lineFrom + 100 : 100}
 										updateSelectedLines={this.updateSelectedLines}

@@ -21,7 +21,7 @@ Meteor.methods({
 		return keywordsIds;
 	},
 
-	'keywords.update': function updateComment(keywordCandidate) {
+	'keywords.update': function updateKeyword(keywordCandidate) {
 		check(keywordCandidate, Object);
 		const roles = ['developer', 'admin', 'commenter'];
 		if (Roles.userIsInRole(Meteor.user(), roles)) {
@@ -39,5 +39,25 @@ Meteor.methods({
 		}
 
 		return keywordCandidate._id;
+	},
+
+	'keywords.delete': function deleteKeyword(keywordId) {
+		check(keywordId, String);
+		const roles = ['developer', 'admin', 'commenter'];
+		if (Roles.userIsInRole(Meteor.user(), roles)) {
+			console.log('Method called: \'keywords.delete\'');
+			console.log('Delete:', keywordId);
+
+			try {
+				Keywords.remove({ _id: keywordId });
+				console.log('Keyword', keywordId, 'delete successful');
+			} catch (err) {
+				console.log(err);
+			}
+		} else {
+			console.log('Permission denied on method comments.update, for user:', Meteor.userId());
+		}
+
+		return keywordId;
 	},
 });

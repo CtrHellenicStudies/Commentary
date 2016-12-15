@@ -44,9 +44,8 @@ CommenterDetail = React.createClass({
 	render() {
 		const self = this;
 		const commenter = this.data.commenter;
-
-		if (commenter) {
-			return (
+		return (
+			(commenter ?
 				<div className="page page-commenter-detail">
 					<div className="content primary">
 						<section className="block header cover parallax">
@@ -91,20 +90,25 @@ CommenterDetail = React.createClass({
 								${(self.state.readMoreBio ? 'read-more-toggle-expanded' : '')}`}
 							>
 								<hr />
-								<div
-									className="read-more-button"
-									onClick={this.toggleReadMoreBio}
-								>
-									{this.state.readMoreBio ?
-										<span className="read-less-text">
-											Show Less
-										</span>
-										:
-										<span className="read-more-text">
-											Read More
-										</span>
-									}
-								</div>
+								{ commenter.bio && commenter.bio.length > 500 ?
+
+									<div
+										className="read-more-button"
+										onClick={this.toggleReadMoreBio}
+									>
+										{this.state.readMoreBio ?
+											<span className="read-less-text">
+												Show Less
+											</span>
+											:
+											<span className="read-more-text">
+												Read More
+											</span>
+										}
+									</div>
+									:
+									''
+								}
 							</div>
 
 							<CommenterVisualizations
@@ -128,9 +132,9 @@ CommenterDetail = React.createClass({
 						<CommentsRecent />
 					</div>
 				</div>
-			);
-		}
-
-		return <div />;
+				:
+				<Loading />
+			)
+		);
 	},
 });

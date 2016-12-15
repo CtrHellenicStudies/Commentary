@@ -121,13 +121,13 @@ FlowRouter.route('/terms', {
 	},
 });
 
-loggedInGroup.route('/add-comment', {
+loggedInGroup.route('/commentary/add', {
 	action: () => {
 		mount(AddCommentLayout);
 	},
 });
 
-loggedInGroup.route('/add-revision/:commentId', {
+loggedInGroup.route('/commentary/:commentId/edit', {
 	action: (params) => {
 		mount(AddRevisionLayout, {
 			commentId: params.commentId,

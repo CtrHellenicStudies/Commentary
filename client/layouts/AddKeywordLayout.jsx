@@ -144,7 +144,7 @@ AddKeywordLayout = React.createClass({
 			slug: slugify(formData.titleValue),
 			description: formData.textValue,
 			type: this.state.selectedType,
-			count: 0,
+			count: 1,
 			created: new Date(),
 		};
 

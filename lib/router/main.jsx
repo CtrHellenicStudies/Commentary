@@ -4,6 +4,7 @@ import { mount } from 'react-mounter';
 // Global subscription: user data is needed in almost all routes
 function subscriptions() {
 	this.register('userData', Meteor.subscribe('userData'));
+	this.register('commenters', Meteor.subscribe('commenters'));
 }
 FlowRouter.subscriptions = subscriptions;
 

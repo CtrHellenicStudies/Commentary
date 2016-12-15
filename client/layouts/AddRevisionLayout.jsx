@@ -329,8 +329,6 @@ AddRevisionLayout = React.createClass({
 							toggleSearchTerm={this.toggleSearchTerm}
 						/>
 
-						<Footer />
-
 					</div>
 					:
 					<div className="ahcip-spinner commentary-loading full-page-spinner">

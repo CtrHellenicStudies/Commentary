@@ -28,6 +28,20 @@ FlowRouter.route('/commentary', {
 	},
 });
 
+FlowRouter.route('/keywords/add', {
+	action: (params) => {
+		mount(AddKeywordLayout);
+	},
+});
+
+FlowRouter.route('/keywords/:slug/edit', {
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <AddKeywordLayout slug={params.slug} />,
+		});
+	},
+});
+
 FlowRouter.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {

@@ -1,32 +1,33 @@
 import slugify from 'slugify';
-import '../../node_modules/mdi/css/materialdesignicons.css';
+import 'mdi/css/materialdesignicons.css';
 
-AddCommentLayout = React.createClass({
+AddKeywordLayout = React.createClass({
+
+	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
 			filters: [],
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
+			selectedType: 'word',
 			contextReaderOpen: true,
 			loading: false,
 		};
 	},
 
-	mixins: [ReactMeteorData],
-
-	// --- BEGNI PERMISSIONS HANDLE --- //
-
-	getMeteorData() {
-		const ready = Roles.subscription.ready();
-        return {
-        	ready,
-        };
-    },
-
 	componentWillUpdate() {
 		this.handlePermissions();
 	},
+
+	getMeteorData() {
+		const ready = Roles.subscription.ready();
+		return {
+			ready,
+		};
+	},
+
+	// --- BEGNI PERMISSIONS HANDLE --- //
 
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
@@ -112,110 +113,44 @@ AddCommentLayout = React.createClass({
 
 	// --- BEGNI ADD COMMENT --- //
 
-	addComment(formData) {
+	addKeyword(formData) {
 
 		this.setState({
 			loading: true,
 		});
 
-		// get data for comment:
+		// get data for keyword :
 		const work = this.getWork();
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
-		const referenceWorks = this.getReferenceWorks(formData);
-		const commenter = this.getCommenter(formData);
 		const selectedLineTo = this.getSelectedLineTo();
+		const type = this.getType();
 
-		// need to add new keywords first, so keyword id can be added to comment:
-		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
+		// create keyword object to be inserted:
+		const keyword = {
+			work: {
+				title: work.title,
+				slug: work.slug,
+				order: work.order,
+			},
+			subwork: {
+				title: subwork.title,
+				n: subwork.n,
+			},
+			lineFrom: this.state.selectedLineFrom,
+			lineTo: selectedLineTo,
+			lineLetter,
+			title: formData.titleValue,
+			slug: slugify(formData.titleValue),
+			description: formData.textValue,
+			type: this.state.selectedType,
+			count: 0,
+			created: new Date(),
+		};
 
-			// get keywords after they were created:
-			const keywords = this.getKeywords(formData);
-
-			// create comment object to be inserted:
-			const comment = {
-				work: {
-					title: work.title,
-					slug: work.slug,
-					order: work.order,
-				},
-				subwork: {
-					title: subwork.title,
-					n: subwork.n,
-				},
-				lineFrom: this.state.selectedLineFrom,
-				lineTo: selectedLineTo,
-				lineLetter,
-				nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
-				revisions: [{
-					title: formData.titleValue,
-					text: formData.textValue,
-					created: referenceWorks ? referenceWorks.date : new Date(),
-					slug: slugify(formData.titleValue),
-				}],
-				commenters: commenter ? [{
-					_id: commenter._id,
-					name: commenter.name,
-					slug: commenter.slug,
-				}] : [{}],
-				keywords: keywords ? keywords : [{}],
-				reference: referenceWorks ? referenceWorks.title : null,
-				referenceLink: referenceWorks ? referenceWorks.link : null,
-				created: new Date(),
-			};
-
-			Meteor.call('comments.insert', comment, (error, commentId) => {
-				FlowRouter.go(`/commentary`, {}, {_id: commentId});
-			});
+		Meteor.call('keywords.insert', keyword, (error, keywordId) => {
+			FlowRouter.go(`/keywords`, {}, {_id: keywordId});
 		});
-	},
-
-	matchKeywords(keywords) {
-		const matchedKeywords = [];
-		if (keywords) {
-			keywords.forEach((keyword) => {
-				const foundKeyword = Keywords.findOne({
-					title: keyword.label,
-				});
-				matchedKeywords.push(foundKeyword);
-			});
-		}
-		return matchedKeywords;
-	},
-
-	addNewKeywordsAndIdeas(keywords, keyideas, next) {
-		this.addNewKeywords(keywords, 'word', () => {
-			this.addNewKeywords(keyideas, 'idea', () => next());
-		});
-	},
-
-	addNewKeywords(keywords, type, next) {
-		// TODO should be handled server-side
-		if (keywords) {
-			const newKeywordArray = [];
-			keywords.forEach((keyword) => {
-				const foundKeyword = Keywords.findOne({title: keyword});
-				if (!foundKeyword) {
-					const newKeyword = {
-						title: keyword.label,
-						slug: slugify(keyword.label),
-						type,
-					};
-					newKeywordArray.push(newKeyword);
-				}
-			});
-			if (newKeywordArray.length > 0) {
-				return Meteor.call('keywords.insert', newKeywordArray, (err) => {
-					if (err) {
-						console.log(err);
-						return null;
-					}
-					return next();
-				});
-			}
-			return next();
-		}
-		return next();
 	},
 
 	getWork() {
@@ -223,7 +158,7 @@ AddCommentLayout = React.createClass({
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'work') {
 				work = values[0];
-			};
+			}
 		});
 		if (!work) {
 			work = {
@@ -259,14 +194,6 @@ AddCommentLayout = React.createClass({
 		return lineLetter;
 	},
 
-	getReferenceWorks(formData) {
-		let referenceWorks = null;
-		if (formData.referenceWorksValue) {
-			referenceWorks = ReferenceWorks.findOne({_id: formData.referenceWorksValue.value});
-		}
-		return referenceWorks;
-	},
-
 	getCommenter(formData) {
 		let commenter = null;
 		if (Meteor.user().commenterId.length > 1) {
@@ -291,34 +218,20 @@ AddCommentLayout = React.createClass({
 		return selectedLineTo;
 	},
 
-	getKeywords(formData) {
-		const keywords = [];
-		this.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
-			keywords.push(matchedKeyword);
-		});
-		this.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
-			keywords.push(matchedKeyword);
-		});
-		return keywords;
-	},
-
-	// --- END ADD COMMENT --- //
-
-	closeContextReader() {
-		this.setState({
-			contextReaderOpen: false,
-		});
-	},
-
-	openContextReader() {
-		this.setState({
-			contextReaderOpen: true,
-		});
+	getType() {
+		return this.state.selectedType;
 	},
 
 	lineLetterUpdate(value) {
 		this.setState({
 			lineLetter: value,
+		});
+	},
+
+	onTypeChange(type) {
+		console.log(type);
+		this.setState({
+			selectedType: type,
 		});
 	},
 
@@ -419,8 +332,8 @@ AddCommentLayout = React.createClass({
 								toggleSearchTerm={this.toggleSearchTerm}
 								handleChangeLineN={this.handleChangeLineN}
 								filters={this.state.filters}
-                                initialSearchEnabled
-                                addCommentPage
+								initialSearchEnabled
+								addCommentPage
 							/>
 
 							<main>
@@ -434,10 +347,11 @@ AddCommentLayout = React.createClass({
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
 										/>
-										<AddComment
+										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}
 											selectedLineTo={this.state.selectedLineTo}
-											submitForm={this.addComment}
+											submitForm={this.addKeyword}
+											onTypeChange={this.onTypeChange}
 										/>
 										<ContextReader
 											open={this.state.contextReaderOpen}
@@ -458,8 +372,6 @@ AddCommentLayout = React.createClass({
 								/>
 
 							</main>
-
-							{/* <Footer/> */}
 
 						</div>
 					</div>

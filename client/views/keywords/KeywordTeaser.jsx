@@ -51,9 +51,9 @@ KeywordTeaser = React.createClass({
 			<hr />
 			<span
 				className="keyword-description"
-			> {
-				keyword.description
-				|| `Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque
+			> { keyword.description ?
+					Utils.trunc(keyword.description, 300)
+				: `Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque
 					adiungere vites conveniat quae curum boum qui cultus habendo sit pecori
 					apibus quanta experientia parcis, hinc canere incipiam`
 			} </span>

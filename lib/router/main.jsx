@@ -28,6 +28,20 @@ FlowRouter.route('/commentary', {
 	},
 });
 
+FlowRouter.route('/keywords/add', {
+	action: (params) => {
+		mount(AddKeywordLayout);
+	},
+});
+
+FlowRouter.route('/keywords/:slug/edit', {
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <AddKeywordLayout slug={params.slug} />,
+		});
+	},
+});
+
 FlowRouter.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
@@ -107,13 +121,13 @@ FlowRouter.route('/terms', {
 	},
 });
 
-loggedInGroup.route('/add-comment', {
+loggedInGroup.route('/commentary/add', {
 	action: () => {
 		mount(AddCommentLayout);
 	},
 });
 
-loggedInGroup.route('/add-revision/:commentId', {
+loggedInGroup.route('/commentary/:commentId/edit', {
 	action: (params) => {
 		mount(AddRevisionLayout, {
 			commentId: params.commentId,

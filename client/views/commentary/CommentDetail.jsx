@@ -272,7 +272,7 @@ CommentDetail = React.createClass({
 									{userCommenterId.indexOf(commenter._id) > -1 ?
 										<FlatButton
 											label="Edit comment"
-											href={`/add-revision/${comment._id}`}
+											href={`/commentary/${comment._id}/edit`}
 											icon={<FontIcon className="mdi mdi-pen" />}
 										/>
 										:

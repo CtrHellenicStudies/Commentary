@@ -71,6 +71,22 @@ LeftMenu = React.createClass({
 							{username}
 						</span>
 					</div>
+					{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+						<div>
+							<MenuItem
+								href="/commentary/add"
+								primaryText="Add Comment"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/keywords/add"
+								primaryText="Add Keyword/Idea"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<Divider />
+						</div>
+						:
+						'' }
 					<MenuItem
 						href="/"
 						primaryText="Home"
@@ -116,38 +132,16 @@ LeftMenu = React.createClass({
 
 					{userIsLoggedIn ?
 						<div>
-							{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
-								<div>
-									<MenuItem
-										href="/add-comment"
-										primaryText="Add Comment"
-										onClick={this.props.closeLeftMenu}
-									/>
-									<MenuItem
-										href="/profile"
-										primaryText="Profile"
-										onClick={this.props.closeLeftMenu}
-									/>
-									<MenuItem
-										href="/sign-out"
-										primaryText="Sign out"
-										onClick={this.props.closeLeftMenu}
-									/>
-								</div>
-								:
-								<div>
-									<MenuItem
-										href="/profile"
-										primaryText="Profile"
-										onClick={this.props.closeLeftMenu}
-									/>
-									<MenuItem
-										href="/sign-out"
-										primaryText="Sign out"
-										onClick={this.props.closeLeftMenu}
-									/>
-								</div>
-							}
+							<MenuItem
+								href="/profile"
+								primaryText="Profile"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/sign-out"
+								primaryText="Sign out"
+								onClick={this.props.closeLeftMenu}
+							/>
 						</div>
 						:
 						<div>

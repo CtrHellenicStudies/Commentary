@@ -1,58 +1,43 @@
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
+import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+// https://github.com/JedWatson/react-select
 import Select from 'react-select';
 import { Creatable } from 'react-select';
-import { EditorState, ContentState } from 'draft-js';
+import RichTextEditor from 'react-rte';
+import { EditorState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
-import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
-import RichTextEditor from 'react-rte';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
 const singleLinePlugin = createSingleLinePlugin();
 
-AddRevision = React.createClass({
+AddKeyword = React.createClass({
 
 	propTypes: {
+		selectedLineFrom: React.PropTypes.number,
+		selectedLineTo: React.PropTypes.number,
 		submitForm: React.PropTypes.func.isRequired,
-		comment: React.PropTypes.object.isRequired,
+		onTypeChange: React.PropTypes.func.isRequired,
 	},
 
 	getInitialState() {
-		const revisionId = this.props.comment.revisions.length - 1;
-		const revision = this.props.comment.revisions[revisionId]; // get newest revision
-
-		const keywordsValue = [];
-		const keyideasValue = [];
-		if (this.props.comment.keywords) {
-			this.props.comment.keywords.forEach((keyword) => {
-				switch (keyword.type) {
-				case 'word':
-					keywordsValue.push(keyword.title);
-					break;
-				case 'idea':
-					keyideasValue.push(keyword.title);
-					break;
-				default:
-					break;
-				}
-			});
-		}
-
 		return {
-			revision,
+			titleEditorState: EditorState.createEmpty(),
+			textEditorState: RichTextEditor.createEmptyValue(),
 
-			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: RichTextEditor.createValueFromString(revision.text, 'html'),
-
+			commenterValue: null,
 			titleValue: '',
 			textValue: '',
+			referenceWorksValue: null,
+			keywordsValue: null,
+			keyideasValue: null,
 
-			keywordsValue,
-			keyideasValue,
+			snackbarOpen: false,
+			snackbarMessage: '',
 		};
 	},
 
@@ -86,9 +71,34 @@ AddRevision = React.createClass({
 			});
 		});
 
+		Meteor.subscribe('referenceWorks');
+		const referenceWorksOptions = [];
+		const referenceWorks = ReferenceWorks.find().fetch();
+		referenceWorks.forEach((referenceWork) => {
+			referenceWorksOptions.push({
+				value: referenceWork._id,
+				label: referenceWork.title,
+			});
+		});
+
+		Meteor.subscribe('commenters');
+		const commentersOptions = [];
+		let commenters = [];
+		if (Meteor.user() && Meteor.user().commenterId) {
+			commenters = Commenters.find({ _id: { $in: Meteor.user().commenterId } }).fetch();
+		}
+		commenters.forEach((commenter) => {
+			commentersOptions.push({
+				value: commenter._id,
+				label: commenter.name,
+			});
+		});
+
 		return {
 			keywordsOptions,
 			keyideasOptions,
+			referenceWorksOptions,
+			commentersOptions,
 		};
 	},
 
@@ -107,6 +117,10 @@ AddRevision = React.createClass({
 			textEditorState,
 			textValue: textEditorState.toString('html'),
 		});
+	},
+
+	onTypeChange(e, type) {
+		this.props.onTypeChange(type);
 	},
 
 	onKeywordsValueChange(keywords) {
@@ -162,28 +176,64 @@ AddRevision = React.createClass({
 		return true;
 	},
 
-	handleSubmit(event) {
-		// TODO: form validation
-		event.preventDefault();
-		this.props.submitForm(this.state);
-	},
-
-	selectRevision(event) {
-		const revision = this.props.comment.revisions[event.currentTarget.id];
+	onCommenterValueChange(comenter) {
 		this.setState({
-			revision,
-			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+			commenterValue: comenter,
 		});
 	},
 
-	removeRevision() { // TODO: delete
-		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
+	handleSubmit(event) {
+		event.preventDefault();
+
+		const error = this.validateStateForSubmit();
+
+		this.showSnackBar(error);
+
+		if (!error.errors) {
+			this.props.submitForm(this.state);
+		}
 	},
 
-	render() {
-		const that = this;
+	showSnackBar(error) {
+		this.setState({
+			snackbarOpen: error.errors,
+			snackbarMessage: error.errorMessage,
+		});
+		setTimeout(() => {
+			this.setState({
+				snackbarOpen: false,
+			});
+		}, 4000);
+	},
 
+	validateStateForSubmit() {
+		let errors = false;
+		let errorMessage = 'Missing comment data:';
+		if (!this.state.titleValue) {
+			errors = true;
+			errorMessage += ' title,';
+		}
+		if (this.state.textValue === '<p><br></p>' || !this.state.textValue) {
+			errors = true;
+			errorMessage += ' comment text,';
+		}
+		if (!this.props.selectedLineFrom) {
+			errors = true;
+			errorMessage += ' no line selected,';
+		}
+		if (errors === true) {
+			errorMessage = errorMessage.slice(0, -1);
+			errorMessage += '.';
+		}
+		return {
+			errors,
+			errorMessage,
+		};
+	},
+
+	// --- END SUBMIT / VALIDATION HANDLE --- //
+
+	render() {
 		const toolbarConfig = {
 			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
 			INLINE_STYLE_BUTTONS: [{
@@ -199,123 +249,88 @@ AddRevision = React.createClass({
 			}],
 		};
 
+		const styles = {
+			block: {
+				maxWidth: 250,
+			},
+			radioButton: {
+				marginBottom: 16,
+			},
+		};
+
 
 		return (
 			<div className="comments lemma-panel-visible">
 				<div className={'comment-outer'}>
-
-					<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
-
+					<article
+						className="comment commentary-comment paper-shadow "
+						style={{ marginLeft: 0 }}
+					>
 						<div className="comment-upper">
 							<h1 className="add-comment-title">
 								<Editor
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
-									placeholder="Comment title..."
+									placeholder="Key word or idea . . ."
 									spellCheck
 									stripPastedStyles
 									plugins={[singleLinePlugin]}
 									blockRenderMap={singleLinePlugin.blockRenderMap}
 								/>
 							</h1>
-							<Creatable
-								name="keywords"
-								id="keywords"
-								required={false}
-								options={this.data.keywordsOptions}
-								multi
-								value={this.state.keywordsValue}
-								onChange={this.onKeywordsValueChange}
-								newOptionCreator={this.onNewOptionCreator}
-								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-								isOptionUnique={this.isOptionUnique}
-								placeholder="Keywords..."
-							/>
-							<Creatable
-								name="keyideas"
-								id="keyideas"
-								required={false}
-								options={this.data.keyideasOptions}
-								multi
-								value={this.state.keyideasValue}
-								onChange={this.onKeyideasValueChange}
-								newOptionCreator={this.onNewOptionCreator}
-								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-								isOptionUnique={this.isOptionUnique}
-								placeholder="Key Ideas..."
-							/>
-							{/* TODO: this.props.comment.keyideas*/}
-
+							<RadioButtonGroup
+								className="keyword-type-toggle"
+								name="type"
+								defaultSelected="word"
+								onChange={this.onTypeChange}
+							>
+								<RadioButton
+									value="word"
+									label="Word"
+									style={styles.radioButton}
+									className="keyword-type-radio"
+								/>
+								<RadioButton
+									value="idea"
+									label="Idea"
+									style={styles.radioButton}
+									className="keyword-type-radio"
+								/>
+							</RadioButtonGroup>
 						</div>
-						<div className="comment-lower" style={{ paddingTop: 20 }}>
+						<div
+							className="comment-lower"
+							style={{ paddingTop: 20 }}
+						>
 							<RichTextEditor
-								placeholder="Comment text..."
+								className="keyword-editor"
+								placeholder="Keyword description . . ."
 								value={this.state.textEditorState}
 								onChange={this.onTextChange}
 								toolbarConfig={toolbarConfig}
 							/>
-
-							<div className="comment-reference">
-								<h4>Secondary Source(s):</h4>
-								<p>
-									{this.props.comment.referenceLink ?
-										<a
-											href={this.props.comment.referenceLink}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{this.props.comment.reference}
-										</a>
-										:
-										<span>
-											{this.props.comment.reference}
-										</span>
-									}
-								</p>
-							</div>
-
 							<div className="add-comment-button">
 								<RaisedButton
 									type="submit"
-									label="Add revision"
+									label="Add Keyword"
 									labelPosition="after"
 									onClick={this.handleSubmit}
 									icon={<FontIcon className="mdi mdi-plus" />}
 								/>
 							</div>
-							{Roles.userIsInRole(Meteor.user(), ['developer']) ? /* TODO: delete*/
-								<div className="add-comment-button">
-									<RaisedButton
-										type="submit"
-										label="(developer only) Remove revision"
-										labelPosition="after"
-										onClick={this.removeRevision}
-										icon={<FontIcon className="mdi mdi-minus" />}
-									/>
-								</div>
-								:
-								''
-							}
-
-						</div>
-
-						<div className="comment-revisions">
-							{this.props.comment.revisions.map((revision, i) => (
-								<FlatButton
-									key={i}
-									id={i}
-									className="revision selected-revision"
-									onClick={that.selectRevision}
-									label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
-								/>
-							))}
 						</div>
 
 					</article>
 
+					<Snackbar
+						className="add-comment-snackbar"
+						open={this.state.snackbarOpen}
+						message={this.state.snackbarMessage}
+						autoHideDuration={4000}
+					/>
+
 				</div>
 			</div>
-
 		);
 	},
 });

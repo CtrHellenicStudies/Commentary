@@ -41,6 +41,40 @@ Schemas.Keywords = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
+
+	work: {
+		type: Schemas.Works,
+		optional: true,
+
+	},
+
+	subwork: {
+		type: Schemas.Subworks,
+		optional: true,
+
+	},
+
+
+	lineFrom: {
+		type: Number,
+		optional: true,
+	},
+
+	lineTo: {
+		type: Number,
+		optional: true,
+	},
+
+	lineLetter: {
+		type: String,
+		optional: true,
+	},
+
+	nLines: {
+		type: Number,
+		optional: true,
+	},
+
 	created: {
 		type: Date,
 		optional: true,

@@ -1,4 +1,6 @@
 Meteor.method('commenters_cron', () => {
+	console.log(' -- Starting cron: Commenters');
+
 	const comments = Comments.find().fetch();
 	const commenters = [];
 
@@ -34,60 +36,39 @@ Meteor.method('commenters_cron', () => {
 							work.subworks.forEach((subwork, subworkIndex) => {
 								// TODO: build and array of lin 10 incrementation
 								if (comment.subwork.n === subwork.n) {
-									commenters[commenterIndex][workIndex][subworkIndex].nComments++;
+									commenters[commenterIndex].nCommentsWorks[workIndex].subworks[subworkIndex].nComments++;
 
 									const iterations = (Math.floor(((comment.lineFrom + comment.nLines) - 1) / 10) -
 										Math.floor(comment.lineFrom / 10)) + 1;
 
-									subwork.commentHeatmap.forEach(
-										(line, lineIndex) => {
-											for (let i = 0; i < iterations; i++) {
-												const nFrom = (Math.floor(comment.lineFrom / 10) * 10) + (i * 10);
-												if (nFrom === line.n) {
-													isInCommentCountsLines = true;
-													commenters[commenterIndex][workIndex][subworkIndex][lineIndex]
-														.nComments++;
-												} else {
-													isInCommentCountsLines = false;
-												}
+									subwork.commentHeatmap.forEach((line, lineIndex) => {
+										for (let i = 0; i < iterations; i++) {
+											const nFrom = (Math.floor(comment.lineFrom / 10) * 10) + (i * 10);
+											if (nFrom === line.n) {
+												isInCommentCountsLines = true;
+												commenters[commenterIndex][workIndex][subworkIndex][lineIndex]
+													.nComments++;
+											} else {
+												isInCommentCountsLines = false;
+											}
 
-												if (!isInCommentCountsLines) {
-													subwork.commentHeatmap.push({
-														n: nFrom,
-														nComments: 1,
-													});
-												}
+											if (!isInCommentCountsLines) {
+												subwork.commentHeatmap.push({
+													n: nFrom,
+													nComments: 1,
+												});
 											}
 										}
-									);
+									}); // subwork.commentHeatmap.forEach
 								}
-							});
-
-							// work.subworks.forEach((subwork) => {
-							// 	if (subwork.n === comment.subwork.n) {
-							// 		subwork.nComments++;
-							// 		let isInHeatmap = false;
-							// 		subwork.commentHeatmap.forEach((commentGroup) => {
-							// 			if (commentGroup.n === comment.lineFrom) {
-							// 				commentGroup.nComments++;
-							// 				isInHeatmap = true;
-							// 			}
-							// 		});
-							// 		if (!isInHeatmap) {
-							// 			subwork.commentHeatmap.push({
-							// 				n: comment.lineFrom,
-							// 				nComments: 1,
-							// 			});
-							// 		}
-							// 	}
-							// });
+							}); // work.subworks.forEach
 						}
-					});
+					}); // commenters.nCommentsWorks.forEach
 				}
-			});
+			}); // commenters.forEach
 
 			if (!isInCommenters) {
-				comments[commentIndex].commenters[commentCommenterIndex].commeters.nCommentsTotal = 0;
+				comments[commentIndex].commenters[commentCommenterIndex].nCommentsTotal = 0;
 				comments[commentIndex].commenters[commentCommenterIndex].nCommentsIliad = 0;
 				comments[commentIndex].commenters[commentCommenterIndex].nCommentsOdyssey = 0;
 				comments[commentIndex].commenters[commentCommenterIndex].nCommentsHymns = 0;
@@ -142,11 +123,11 @@ Meteor.method('commenters_cron', () => {
 
 				commenters.push(commentCommenter);
 			}
-		});
-	});
+		}); // comment.commenters.forEach
+	}); // comments.forEach
 
 	commenters.forEach((commenter) => {
-		console.log(commenter.name, commenter.nCommentsTotal);
+		console.log(' -- -- ', commenter.name, commenter.nCommentsTotal);
 		Commenters.update({
 			slug: commenter.slug,
 		}, {
@@ -160,23 +141,7 @@ Meteor.method('commenters_cron', () => {
 		});
 	});
 
-	/*
-	 comments.forEach(function(comment){
-	 var nLines = 1;
-
-	 if('lineTo' in comment && comment.lineTo){
-	 nLines = comment.lineTo - comment.lineFrom + 1;
-	 // console.log(comment.lineFrom, comment.lineTo, comment.nLines);
-
-	 }
-
-	 Comments.update({_id: comment._id}, {$set:{nLines:nLines}});
-	 });
-	 */
-
-
 	console.log(' -- Cron run complete: Commenters');
-
 	return 1;
 }, {
 	url: 'commenters/cron',

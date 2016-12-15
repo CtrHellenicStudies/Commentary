@@ -9,6 +9,8 @@ DiscussionThread = React.createClass({
 		discussionVisible: React.PropTypes.bool.isRequired,
 		showDiscussionThread: React.PropTypes.func.isRequired,
 		hideDiscussionThread: React.PropTypes.func.isRequired,
+		removeLemma: React.PropTypes.func.isRequired,
+		returnLemma: React.PropTypes.func.isRequired,
 	},
 
 	mixins: [ReactMeteorData],
@@ -45,6 +47,14 @@ DiscussionThread = React.createClass({
 		};
 	},
 
+	removeLemma() {
+		this.props.removeLemma();
+	},
+
+	returnLemma() {
+		this.props.returnLemma();
+	},
+
 	showDiscussionThread() {
 		this.props.showDiscussionThread(this.props.comment);
 	},
@@ -71,6 +81,7 @@ DiscussionThread = React.createClass({
 	},
 
 	render() {
+		console.log(this.props);
 		const currentUser = Meteor.user();
 
 		let discussionWrapClass = 'discussion-wrap';
@@ -97,10 +108,14 @@ DiscussionThread = React.createClass({
 			<div className={discussionWrapClass}>
 				<div
 					onClick={this.showDiscussionThread}
+
 					className="continue-discussion"
 				>
 					<h4 className="continue-discussion-label">Discussion</h4>
-					<div className="continue-discussion-icon">
+					<div
+						className="continue-discussion-icon"
+						onClick={this.removeLemma}
+					>
 						<i className="mdi mdi-comment" />
 						{this.data.discussionComments.length ?
 							<span className="continue-discussion-text">
@@ -118,7 +133,7 @@ DiscussionThread = React.createClass({
 							<IconButton
 								className="close-discussion paper-shadow"
 								iconClassName="mdi mdi-close"
-								onClick={this.hideDiscussionThread}
+								onClick={() => { this.hideDiscussionThread(); this.returnLemma(); }}
 							/>
 
 							<form

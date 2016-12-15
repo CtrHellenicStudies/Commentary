@@ -25,6 +25,7 @@ Commentary = React.createClass({
 			discussionSelected: {},
 			discussionPanelOpen: false,
 			referenceLemma: [],
+			hideLemmaPanel: false,
 			referenceLemmaSelectedEdition: {
 				lines: [],
 			},
@@ -262,6 +263,22 @@ Commentary = React.createClass({
 		});
 	},
 
+	removeLemma() {
+		if (this.state.hideLemmaPanel === false) {
+			this.setState({
+				hideLemmaPanel: true,
+			});
+		}
+	},
+
+	returnLemma() {
+		if (this.state.hideLemmaPanel === true) {
+			this.setState({
+				hideLemmaPanel: false,
+			});
+		}
+	},
+
 	searchReferenceLemma() {
 		this.setState({
 			referenceLemma: [],
@@ -296,6 +313,7 @@ Commentary = React.createClass({
 		let isOnHomeView;
 		let commentsClass = 'comments ';
 
+
 		if ('isOnHomeView' in this.props) {
 			isOnHomeView = this.props.isOnHomeView;
 		} else {
@@ -322,12 +340,15 @@ Commentary = React.createClass({
 								id={`comment-group-${commentGroupIndex}`}
 							>
 								<div className={commentsClass}>
-									<CommentLemma
-										index={commentGroupIndex}
-										commentGroup={commentGroup}
-										showContextPanel={this.showContextPanel}
-										scrollPosition={this.contextScrollPosition}
-									/>
+
+										<CommentLemma
+											index={commentGroupIndex}
+											commentGroup={commentGroup}
+											showContextPanel={this.showContextPanel}
+											scrollPosition={this.contextScrollPosition}
+											hideLemma={this.state.hideLemmaPanel}
+										/>
+
 									{commentGroup.comments.map((comment, commentIndex) => (
 										<div
 											key={commentIndex}
@@ -339,6 +360,8 @@ Commentary = React.createClass({
 												toggleSearchTerm={!isOnHomeView ? this.toggleSearchTerm : null}
 												checkIfToggleLemmaReferenceModal={this.checkIfToggleLemmaReferenceModal}
 												filters={this.props.filters}
+												removeLemma={this.removeLemma}
+												returnLemma={this.returnLemma}
 											/>
 										</div>
 									))}

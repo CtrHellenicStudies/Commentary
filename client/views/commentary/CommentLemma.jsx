@@ -9,6 +9,7 @@ CommentLemma = React.createClass({
 		showContextPanel: React.PropTypes.func.isRequired,
 		scrollPosition: React.PropTypes.func.isRequired,
 		index: React.PropTypes.number,
+		hideLemma: React.PropTypes.bool.isRequired,
 	},
 
 	mixins: [ReactMeteorData],
@@ -119,44 +120,45 @@ CommentLemma = React.createClass({
 			<div className="comment-outer comment-lemma-comment-outer">
 
 				<div className="comment-group-meta">
-					<div className="comment-group-meta-inner comment-group-meta-ref">
-						<div className="comment-group-ref">
-							<span className="comment-group-ref-above">
-								{workTitle} {commentGroup.subwork.title}
-							</span>
-							<h2 className="comment-group-ref-below">
-								{commentGroup.lineFrom}{commentGroup.lineTo ? `-${commentGroup.lineTo}` : '' }
-							</h2>
+					{this.props.hideLemma === false ?
+						<div className="comment-group-meta-inner comment-group-meta-ref">
+							<div className="comment-group-ref">
+								<span className="comment-group-ref-above">
+									{workTitle} {commentGroup.subwork.title}
+								</span>
+								<h2 className="comment-group-ref-below">
+									{commentGroup.lineFrom}{commentGroup.lineTo ? `-${commentGroup.lineTo}` : '' }
+								</h2>
 
-						</div>
-						<div className="comment-group-commenters">
+							</div>
+							<div className="comment-group-commenters">
 
-							{commentGroup.commenters.map((commenter, i) => (
-								<div
-									key={i}
-									className="comment-author"
-									data-commenter-id={commenter.id}
-								>
-									<span className="comment-author-name">
-										{commenter.name}
-									</span>
+								{commentGroup.commenters.map((commenter, i) => (
 									<div
-										className="comment-author-image-wrap paper-shadow"
+										key={i}
+										className="comment-author"
+										data-commenter-id={commenter.id}
 									>
-										<a
-											href={`/commenters/${commenter.slug}`}
-											onClick={self.goToAuthorComment}
+										<span className="comment-author-name">
+											{commenter.name}
+										</span>
+										<div
+											className="comment-author-image-wrap paper-shadow"
 										>
-											<AvatarIcon avatar={commenter.avatarData} />
-										</a>
+											<a
+												href={`/commenters/${commenter.slug}`}
+												onClick={self.goToAuthorComment}
+											>
+												<AvatarIcon avatar={commenter.avatarData} />
+											</a>
 
+										</div>
 									</div>
-								</div>
-							))}
+								))}
 
+							</div>
 						</div>
-					</div>
-
+					: '' }
 				</div>
 
 				<article className="comment lemma-comment paper-shadow">

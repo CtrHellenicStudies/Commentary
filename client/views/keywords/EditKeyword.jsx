@@ -31,8 +31,8 @@ EditKeyword = React.createClass({
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(keyword.title)),
 			textEditorState: RichTextEditor.createValueFromString(keyword.description, 'html'),
 
-			titleValue: '',
-			textValue: '',
+			titleValue: keyword.title,
+			textValue: keyword.description,
 
 			snackbarOpen: false,
 			snackbarMessage: '',
@@ -211,10 +211,6 @@ EditKeyword = React.createClass({
 			errors = true;
 			errorMessage += ' title,';
 		}
-		if (this.state.textValue === '<p><br></p>' || !this.state.textValue) {
-			errors = true;
-			errorMessage += ' comment text,';
-		}
 		if (!this.props.selectedLineFrom) {
 			errors = true;
 			errorMessage += ' no line selected,';
@@ -310,7 +306,7 @@ EditKeyword = React.createClass({
 							<div className="add-comment-button">
 								<RaisedButton
 									type="submit"
-									label="Add Keyword"
+									label="Update Keyword"
 									labelPosition="after"
 									onClick={this.handleSubmit}
 									icon={<FontIcon className="mdi mdi-plus" />}

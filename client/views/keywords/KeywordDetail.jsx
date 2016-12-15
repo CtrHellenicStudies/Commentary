@@ -34,6 +34,17 @@ KeywordDetail = React.createClass({
 		};
 	},
 
+	deleteKeyword() {
+		const keyword = this.data.keyword;
+		Meteor.call('keywords.delete', keyword._id, (error, keywordId) => {
+			if (error) {
+				console.log(error);
+			} else {
+				FlowRouter.go('/keywords');
+			}
+		});
+	},
+
 	render() {
 		const keyword = this.data.keyword;
 
@@ -59,11 +70,18 @@ KeywordDetail = React.createClass({
 									<div className="page-title-wrap">
 										<h2 className="page-title ">{keyword.title}</h2>
 										{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
-											<RaisedButton
-												href={`/keywords/${keyword.slug}/edit`}
-												className="cover-link light"
-												label="Edit"
-											/>
+											<div>
+												<RaisedButton
+													href={`/keywords/${keyword.slug}/edit`}
+													className="cover-link light"
+													label="Edit"
+												/>
+												<RaisedButton
+													onClick={this.deleteKeyword}
+													className="cover-link light"
+													label="Delete"
+												/>
+											</div>
 										: ''}
 									</div>
 								</div>

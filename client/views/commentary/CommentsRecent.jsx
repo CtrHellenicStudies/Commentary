@@ -1,5 +1,6 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Slider from 'react-slick';
 
 CommentsRecent = React.createClass({
 
@@ -7,10 +8,32 @@ CommentsRecent = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
+
+	getMeteorData() {
+		const handle = Meteor.subscribe('comments.recent', 3);
+		let recentComments = [];
+		if (handle.ready()) {
+			recentComments = Comments.find().fetch();
+		}
+		return {
+			recentComments,
+		};
+	},
+
 	render() {
+		const settings = {
+			dots: true,
+			infinite: true,
+			autoplay: true,
+			speed: 500,
+			slidesToShow: 1,
+			slidesToScroll: 1,
+		};
 		return (
 			<section className="background-gray recent-comments">
 
@@ -21,20 +44,28 @@ CommentsRecent = React.createClass({
 								Recently from the Commentary
 							</h3>
 							<i className="mdi mdi-format-quote quote-icon" />
-							<div className="text-slider slider-arrow-controls">
-								<ul className="slides">
-									<li>
-										<p >
-											Incidentally, it is also clear just from our Iliad that there could be
-											another starting point for the tale of Achilles' wrath. When a bit later in
-											Iliad 1 Achilles answers his mother's request to ἐξαυδᾶν 'speak out' what
-											has befallen him, he begins . . .
-										</p>
-										<h4>&mdash; Douglas Frame, Iliad 1.4-6</h4>
-
-									</li>
-								</ul>
-							</div>
+							<Slider {...settings}>
+								{this.data.recentComments.map((comment, index) => (
+									<div
+										key={index}
+									>
+										<p
+											dangerouslySetInnerHTML={{
+												__html: comment.revisions[comment.revisions.length - 1].text,
+											}}
+										/>
+										<h4>
+											-
+											{comment.commenters.map((commenter) => (
+												` ${commenter.name},`
+											))}
+											{` ${comment.work.title} ${
+											comment.subwork.title}.${comment.lineFrom}-${
+											comment.lineFrom + comment.nLines}`}
+										</h4>
+									</div>
+								))}
+							</Slider>
 						</div>
 					</div>
 				</div>

@@ -20,6 +20,17 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('comments.recent', (limit = 3) => {
+		check(limit, Number);
+
+		return Comments.find({}, {
+			limit,
+			sort: {
+				updated: -1,
+			},
+		});
+	});
+
 	Meteor.publish('comments.id', (_id) => {
 		check(_id, String);
 		return Comments.find({

@@ -30,7 +30,7 @@ ReferenceWorkTeaser = React.createClass({
 
 	createMarkup() {
 		return {
-			__html: Utils.trunc(this.props.referenceWork.description.replace(/(<([^>]+)>)/ig, ''), 120),
+			__html: Utils.trunc(this.props.referenceWork.description.replace(/(<([^>]+)>)/ig, ''), 140),
 		};
 	},
 
@@ -40,20 +40,34 @@ ReferenceWorkTeaser = React.createClass({
 
 
 		return (
-			<a
+			<div
 				className="reference-work-teaser"
 				data-wow-duration="0.2s"
 				href={referenceWorkUrl}
 			>
-				<h4 className="reference-work-title">
-					{referenceWork.title}
-				</h4>
+				<a
+					className="reference-work-title-link"
+					href={referenceWorkUrl}
+				>
+					<h4 className="reference-work-title">
+						{referenceWork.title}
+					</h4>
+				</a>
 				<hr />
 				<span
 					className="reference-work-description"
 					dangerouslySetInnerHTML={this.createMarkup()}
 				/>
-			</a>
+
+				<a
+					className="reference-work-read-more-link"
+					href={referenceWorkUrl}
+				>
+					<span className="reference-work-read-more">
+						READ MORE
+					</span>
+				</a>
+			</div>
 		);
 	},
 

@@ -8,8 +8,9 @@ Schemas.Comments = new SimpleSchema({
 	},
 
 	commenters: {
-		type: [Schemas.Commenters],
+		type: [Object],
 		optional: true,
+		blackbox: true,
 		/*autoform: {
 		 options: function() {
 		 return _.map(Commenters.find().fetch(), function(commenter) {
@@ -21,18 +22,19 @@ Schemas.Comments = new SimpleSchema({
 		 }
 		 }
 		 */
-
 	},
 
 	work: {
-		type: Schemas.Works,
+		type: Object,
 		optional: true,
+		blackbox: true,
 
 	},
 
 	subwork: {
-		type: Schemas.Subworks,
+		type: Object,
 		optional: true,
+		blackbox: true,
 
 	},
 
@@ -93,19 +95,22 @@ Schemas.Comments = new SimpleSchema({
 	},
 
 	keywords: {
-		type: [Schemas.Keywords],
+		type: [Object],
 		optional: true,
+		blackbox: true,
 	},
 
 	revisions: {
-		type: [Schemas.Revisions],
+		type: [Object],
 		optional: true,
+		blackbox: true,
 	},
 
 
 	discussionComments: {
-		type: [Schemas.DiscussionComments],
+		type: [Object],
 		optional: true,
+		blackbox: true,
 	},
 
 	created: {

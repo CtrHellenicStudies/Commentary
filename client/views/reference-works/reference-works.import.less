@@ -15,7 +15,7 @@
   .reference-work-title {
     color: @primary-text;
     font-family: @font-body;
-    font-size: 22px;
+    font-size: 26px;
     text-transform: uppercase;
     margin-right: 10px;
     display: inline-block;
@@ -48,35 +48,40 @@ section.reference-work-single {
 }
 
 .reference-work-teaser {
-  width: 480px;
+  width: 530px;
   background: @light;
-  cursor: pointer;
+  cursor: default: ;
   margin: 10px 1%;
-  padding: 20px 30px;
+  padding: 40px;
   text-align: left;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 1px -1px rgba(0, 0, 0, 0.2);
   display: inline-block;
   vertical-align: top;
+	.transition(all 300ms ease-in-out);
 
-  &:hover {
-    .reference-work-title, .reference-work-comment-count, .reference-work-description, .mdi, .reference-work-read-more {
-      color: @ahcip-yellow;
-      &:hover {
-        color: @ahcip-yellow;
 
-      }
+	&:hover {
+	  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 2px 6px 0 rgba(0, 0, 0, 0.12), 0 2px 2px -2px rgba(0, 0, 0, 0.2);
+		background:#fafafa;
+		hr {
+			background:@md-primary;
+		}
+	}
 
-    }
-  }
 
   .reference-work-title {
     display: inline-block;
     vertical-align: top;
-    font-size: 22px;
+    font-size: 24px;
     font-family: @font-title;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 10px 0 !important;
     line-height: 1.4em;
+
+		&:hover {
+			color:@md-primary;
+		}
+
   }
 
   .mdi {
@@ -95,33 +100,28 @@ section.reference-work-single {
 
   hr {
     width: 100%;
-    max-width: 250px;
+    max-width: 180px;
     margin: 10px 0;
-    height: 2px;
+    height: 3px;
     background: #eee;
+		border:none;
 
   }
 
   .reference-work-description {
     width: 98%;
-    margin: 10px 5px 20px;
+		display:block;
+    margin:25px 0 5px !important;
     max-width: 700px;
     font-size: 15px;
     font-family: @font-reading;
     line-height: 1.5em;
     font-weight: 300;
-    word-break: break-all;
-
-    span {
-      font-size: 15px !important;
-      font-family: @font-reading !important;
-      line-height: 1.5em;
-      display: block;
-      font-weight: 300;
-
-    }
-
   }
+
+  .reference-work-read-more-link {
+		display:block;
+	}
 
   .reference-work-read-more {
     clear: both;
@@ -129,11 +129,15 @@ section.reference-work-single {
     font-family: @font-label;
     text-transform: uppercase;
     font-size: 12px;
-    margin: 10px 6px 0;
+    margin: 20px 0px 0 !important;
     font-weight: light;
+		display:inline-block;
+		// background:#eee;
+		border-radius:2px;
+		padding:5px 0;
 
     &:hover {
-      color: @primary-text;
+      color: @md-primary;
 
     }
 

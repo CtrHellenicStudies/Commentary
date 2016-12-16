@@ -34,14 +34,17 @@ CommenterVisualizations = React.createClass({
 	},
 
 	renderWorks() {
-		return this.props.commenter.nCommentsWorks.map((work, i) =>
-			<CommenterWorkVisualization
-				key={i}
-				toggleVisibleWork={this.toggleVisibleWork}
-				work={work}
-				commenterSlug={this.props.commenter.slug}
-			/>
-		);
+		if (this.props.commenter.nCommentsWorks) {
+			return this.props.commenter.nCommentsWorks.map((work, i) =>
+				<CommenterWorkVisualization
+					key={i}
+					toggleVisibleWork={this.toggleVisibleWork}
+					work={work}
+					commenterSlug={this.props.commenter.slug}
+				/>
+			);
+		}
+		return '';
 	},
 
 	render() {

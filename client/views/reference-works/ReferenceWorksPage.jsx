@@ -32,6 +32,7 @@ ReferenceWorksPage = React.createClass({
 					<section className="page-content">
 						<ReferenceWorksList />
 					</section>
+					<CommentsRecent />
 				</div>
 			</div>
 		);

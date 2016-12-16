@@ -75,6 +75,14 @@ ReferenceWorkDetail = React.createClass({
 								<div className="center-content">
 									<div className="page-title-wrap">
 										<h2 className="page-title ">{referenceWork.title}</h2>
+										{referenceWork.link ?
+											<a
+												className="read-online-link"
+												href={referenceWork.link}
+											>
+												Read Online <i className="mdi mdi-open-in-new" />
+											</a>
+										: ''}
 									</div>
 								</div>
 							</div>

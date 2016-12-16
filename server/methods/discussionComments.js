@@ -75,26 +75,78 @@ Meteor.methods({
 		}
 	},
 
-	'discussionComments.report': function upvoteDiscussionComment(discussionCommentId) {
+	'discussionComments.report': function reportDiscussionComment(discussionCommentId) {
 		check(discussionCommentId, String);
+		this.unblock();
 
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
+		const comment = Comments.findOne(discussionComment.commentId);
 
 		// Make sure the user has not already reported this comment
-		if (discussionComment.usersReported.indexOf(this.userId) >= 0) {
+		if (
+				'usersReported' in discussionComment
+			&& discussionComment.usersReported.indexOf(this.userId) >= 0
+		) {
 			throw new Meteor.Error('not-authorized');
 		}
 
 		try {
-			DiscussionComments.update({
-				_id: discussionCommentId,
-			}, {
-				$push: { usersReported: this.userId },
-				$inc: { reported: 1 },
-			});
+			if ('usersReported' in discussionComment) {
+				DiscussionComments.update({
+					_id: discussionCommentId,
+				}, {
+					$push: { usersReported: this.userId },
+					$inc: { reported: 1 },
+				});
+			} else {
+				DiscussionComments.update({
+					_id: discussionCommentId,
+				}, {
+					$set: {
+						reported: 1,
+						usersReported: [this.userId],
+					},
+				});
+			}
 		} catch (err) {
-			console.log(err);
+			throw new Meteor.Error('flag-discussion-comment', err);
 		}
+
+		let commentTitle = '';
+		if (comment.revisions.length) {
+			comment.revisions.sort(Utils.sortRevisions);
+			commentTitle = comment.revisions[comment.revisions.length - 1].title;
+		}
+
+		let userFullName = '';
+		if ('name' in discussionComment.user.profile) {
+			userFullName = discussionComment.user.profile.name;
+		} else {
+			userFullName = discussionComment.user.username;
+		}
+		const discussionCommentDate = discussionComment.updated || discussionComment.created;
+		const lastUpdated = discussionCommentDate.toISOString().replace('T', ' ').substr(0, 19);
+		const commentLink = `${Meteor.absoluteUrl()}commentary/?_id=${comment._id}`;
+
+		/*
+		 * Send email notification that a discussion comment was flagged
+		 */
+		Email.send({
+			to: 'lukehollis@gmail.com',
+			from: Config.emails.from(),
+			subject: `User comment flagged on ${Config.name}`,
+			html: `Dear Administrator,
+			<br />
+			<br />
+			A user comment that was created for comment ${commentTitle} has been flagged as
+			inappropriate by another user. Please review the discussion comment by
+			${userFullName} that was last updated at ${lastUpdated} by visiting the following
+			link: <a href='${commentLink}'>${commentLink}</a>.
+			<br />
+			<br />
+			${Config.title()}
+			`,
+		});
 	},
 
 });

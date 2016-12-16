@@ -160,6 +160,16 @@ section.reference-work-single {
 
   .page-content {
 		background:@light;
+
+		.reference-work-byline {
+			text-align:center;
+			h3, a, span {
+				font-size:22px;
+				font-family:@font-reading;
+				font-weight:300;
+			}
+		}
+
 		p, span {
 			font-family:@font-reading;
 			font-size: 20px;
@@ -183,7 +193,7 @@ section.reference-work-single {
 	font-size:20px;
 	font-weight:300;
 	text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
-	border:1px solid transparent; 
+	border:1px solid transparent;
 	border-radius:2px;
 	padding:15px 25px;
 
@@ -197,6 +207,31 @@ section.reference-work-single {
 		&:before {
 			font-size:20px;
 		}
+	}
+
+}
+
+
+.reference-work-byline {
+	text-align:center;
+	h3, a {
+		font-size:22px;
+		font-family:@font-reading;
+		font-weight:300px;
+		display:inline;
+		vertical-align: top;
+
+	}
+	a {
+		border-bottom: 1px solid @md-primary-light;
+		box-shadow: inset 0 -4px 0 @md-primary-light;
+		.transition(all 300ms ease-in-out);
+		&:hover {
+			border-bottom: 1px solid transparent;
+			box-shadow: inset 0 -4px 0 transparent;
+
+		}
+
 	}
 
 }

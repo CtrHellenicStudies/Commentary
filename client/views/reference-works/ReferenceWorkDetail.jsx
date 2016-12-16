@@ -93,16 +93,26 @@ ReferenceWorkDetail = React.createClass({
 
 						{commenters && commenters.length ?
 							<div className="reference-work-byline">
-								<h3>By {commenters.map((commenter, i) => (
-									<span>
-										<a
-											href={`/commenters/${commenter.slug}`}
-											key={i}
-										>
-											{commenter.name}
-										</a>{(i < commenters.length - 1) ? ',' : ''}
-									</span>
-									))}
+								<h3>By {commenters.map((commenter, i) => {
+									let ending = '';
+
+									if (i < commenters.length - 2) {
+										ending = ', ';
+									} else if (i < commenters.length - 1) {
+										ending = ' and ';
+									}
+
+									return (
+										<span>
+											<a
+												href={`/commenters/${commenter.slug}`}
+												key={i}
+											>
+												{commenter.name}
+											</a>{ending}
+										</span>
+									);
+								})}
 								</h3>
 							</div>
 						: ''}

@@ -39,6 +39,7 @@ logging
 reload
 random
 ejson
+email
 yogiben:pretty-email
 aldeed:autoform
 yogiben:autoform-modals

@@ -35,7 +35,7 @@ Schemas.DiscussionComments = new SimpleSchema({
 		optional: true,
 	},
 	usersReported: {
-		type: [Schemas.User],
+		type: [String],
 		optional: true,
 	},
 

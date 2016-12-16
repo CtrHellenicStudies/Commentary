@@ -378,6 +378,20 @@
   position: relative;
 	text-align:left;
 
+	&.discussion-comment--user-reported {
+	  background: #fefefe;
+		max-height:170px;
+		overflow:hidden;
+		.discussion-comment-content {
+			filter: blur(10px);
+			opacity:0.6;
+		}
+
+		.discussion-comment-user-reported-message {
+			display:block;
+		}
+	}
+
   .profile-picture {
     display: inline-block;
     vertical-align: top;
@@ -488,11 +502,22 @@
         font-family: @font-label;
         font-size: 12px;
         text-transform: uppercase;
-
       }
     }
-
   }
+
+}
+
+.discussion-comment-user-reported-message {
+	width:100%;
+	text-align:center;
+	font-size:16px;
+	position:absolute;
+	top:60px;
+	left:0;
+	display:none;
+	color:@secondary-text;
+
 
 }
 
@@ -502,6 +527,11 @@
 
 .sort-method-select {
   text-align: right;
+
+	button {
+		
+	}
+
 }
 
 .discussion-comment-button {

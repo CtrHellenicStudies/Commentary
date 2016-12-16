@@ -1,3 +1,6 @@
+
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+
 ReferenceWorkDetail = React.createClass({
 
 	propTypes: {
@@ -8,27 +11,34 @@ ReferenceWorkDetail = React.createClass({
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
-		const referenceWorksSub = Meteor.subscribe('referenceWorks.slug', this.props.slug);
+		Meteor.subscribe('referenceWorks.slug', this.props.slug);
+		Meteor.subscribe('commenters');
 
 		// FETCH DATA:
 		const query = {
 			slug: this.props.slug,
 		};
-		const referenceWork = ReferenceWorks.findOne(query, {
-			sort: {
-				title: 1
-			}
-		});
+		const referenceWork = ReferenceWorks.findOne(query);
+
+		let commenters = [];
+		if (referenceWork && 'authors' in referenceWork) {
+			commenters = Commenters.find({
+				_id: { $in: referenceWork.authors },
+			}, { sort: { name: 1 } }).fetch();
+		}
 
 		return {
 			referenceWork,
+			commenters,
 		};
 	},
 
 	createMarkup() {
 		let __html = '';
 		if (this.data.referenceWork) {
-			__html = this.data.referenceWork.description.replace(/(<([^>]+)>)/ig, '');
+			__html += '<p>'
+			__html += this.data.referenceWork.description.replace('\n', '</p><p>');
+			__html += '</p>'
 		}
 		return {
 			__html,
@@ -37,10 +47,16 @@ ReferenceWorkDetail = React.createClass({
 
 	render() {
 		const referenceWork = this.data.referenceWork;
+		const commenters = this.data.commenters;
+		const commentersNames = [];
+		commenters.forEach((commenter) => {
+			commentersNames.push(commenter.name);
+		});
 
 		if (!referenceWork) {
 			return <div />;
 		}
+
 		return (
 			<div className="page reference-works-page reference-works-detail-page">
 				<div className="content primary">
@@ -66,10 +82,29 @@ ReferenceWorkDetail = React.createClass({
 					</section>
 
 					<section className="page-content">
-						<p
+
+						{commenters && commenters.length ?
+							<div className="reference-work-byline">
+								<h3>By {commenters.map((commenter, i) => (
+									<span>
+										<a
+											href={`/commenters/${commenter.slug}`}
+											key={i}
+										>
+											{commenter.name}
+										</a>{(i < commenters.length - 1) ? ',' : ''}
+									</span>
+									))}
+								</h3>
+							</div>
+						: ''}
+
+						<div
 							dangerouslySetInnerHTML={this.createMarkup()}
 						/>
 					</section>
+
+					<CommentsRecent />
 				</div>
 			</div>
 		);

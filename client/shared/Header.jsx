@@ -217,7 +217,7 @@ Header = React.createClass({
 									{userIsLoggedIn ?
 										<div>
 											{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
-												<div>
+												<div className="user-header-links admin-header-links">
 													<FlatButton
 														href="/profile"
 														label="Profile"
@@ -238,7 +238,7 @@ Header = React.createClass({
 													/>
 												</div>
 												:
-												<div>
+												<div className="user-header-links">
 													<FlatButton
 														href="/profile"
 														label="Profile"

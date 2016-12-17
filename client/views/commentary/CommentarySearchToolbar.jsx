@@ -16,41 +16,48 @@ CommentarySearchToolbar = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	getInitialState() {
+	mixins: [ReactMeteorData],
 
+	getInitialState() {
 		return {
 			searchDropdownOpen: '',
 			activeWorkNew: null,
 		};
 	},
 
-	mixins: [ReactMeteorData],
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
+	},
 
 	getMeteorData() {
-
 		// SUBSCRIPTIONS:
+		let works = [];
+		let keywords = [];
+		let keyideas = [];
+		let commenters = [];
+		let referenceWorks = [];
+
 		if (!this.props.addCommentPage) {
 			Meteor.subscribe('commenters');
 			Meteor.subscribe('keywords.all');
+			Meteor.subscribe('referenceWorks');
 		}
 		Meteor.subscribe('works');
 
 		// FETCH DATA:
-		const keyideas = Keywords.find({ type: 'idea' }).fetch();
-		const keywords = Keywords.find({ type: 'word' }).fetch();
-		const commenters = Commenters.find().fetch();
-		const works = Works.find({}, { sort: { order: 1 } }).fetch();
+		keyideas = Keywords.find({ type: 'idea' }).fetch();
+		keywords = Keywords.find({ type: 'word' }).fetch();
+		commenters = Commenters.find().fetch();
+		works = Works.find({}, { sort: { order: 1 } }).fetch();
+		referenceWorks = ReferenceWorks.find({}, { sort: { title: 1 } }).fetch();
 
 		return {
 			keyideas,
 			keywords,
 			commenters,
 			works,
+			referenceWorks,
 		};
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	toggleSearchTerm(key, value) {
@@ -74,7 +81,6 @@ CommentarySearchToolbar = React.createClass({
 	},
 
 	render() {
-		const self = this;
 		const filters = this.props.filters;
 
 		const styles = {
@@ -84,14 +90,14 @@ CommentarySearchToolbar = React.createClass({
 			},
 		};
 
-		const filterLineFrom = this.props.filters.find((filter) => {
-			return filter.key === 'lineFrom';
-		});
-		const filterLineTo = this.props.filters.find((filter) => {
-			return filter.key === 'lineTo';
-		});
-		let lineFrom = null,
-			lineTo = null;
+		const filterLineFrom = this.props.filters.find((filter) =>
+			filter.key === 'lineFrom'
+		);
+		const filterLineTo = this.props.filters.find((filter) =>
+			filter.key === 'lineTo'
+		);
+		let lineFrom = null;
+		let lineTo = null;
 		if (filterLineFrom) {
 			lineFrom = filterLineFrom.values[0];
 		}
@@ -118,7 +124,7 @@ CommentarySearchToolbar = React.createClass({
 							onChange={this.handleChangeTextsearch}
 						/>
 					</div>
-					: '' }
+				: '' }
 
 				{!addCommentPage ?
 					<SearchToolDropdown
@@ -151,7 +157,7 @@ CommentarySearchToolbar = React.createClass({
 							);
 						})}
 					</SearchToolDropdown>
-					: ''}
+				: ''}
 
 				{!addCommentPage ?
 					<SearchToolDropdown
@@ -184,7 +190,39 @@ CommentarySearchToolbar = React.createClass({
 							);
 						})}
 					</SearchToolDropdown>
-					: ''}
+				: ''}
+				{!addCommentPage ?
+					<SearchToolDropdown
+						name="reference"
+						open={this.state.searchDropdownOpen === 'reference'}
+						toggle={this.toggleSearchDropdown}
+						disabled={false}
+					>
+						{this.data.referenceWorks.map((reference, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'reference') {
+									filter.values.forEach((value) => {
+										if (keyidea.slug === value.slug) {
+											active = true;
+										}
+									});
+								}
+							});
+
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={this.toggleSearchTerm}
+									label={Utils.trunc(reference.title, 70)}
+									searchTermKey="reference"
+									value={reference}
+									active={active}
+								/>
+							);
+						})}
+					</SearchToolDropdown>
+				: ''}
 
 				{!addCommentPage ?
 					<SearchToolDropdown
@@ -217,7 +255,7 @@ CommentarySearchToolbar = React.createClass({
 							);
 						})}
 					</SearchToolDropdown>
-					: ''}
+				: ''}
 
 				<SearchToolDropdown
 					name="Work"

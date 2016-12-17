@@ -28,8 +28,11 @@ LineRangeSlider = React.createClass({
 	},
 
 	render() {
+
 		return (
-			<div id="line-range" />
+			<div
+				id="line-range"
+			/>
 		);
 	},
 

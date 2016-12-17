@@ -299,6 +299,9 @@
 	/*
 	 * shift the horizontal layout on the commentary to a vertical layout
 	 */
+	 header .header-home-link {
+		 display:none;
+	 }
 	 .headroom--unpinned {
 		 .transform(translateY(0%) translateZ(0));
 
@@ -637,6 +640,9 @@
 }
 
 @media (max-width:750px){
+	section.header .center-content .site-title {
+		font-size: 32px;
+	}
 	header .side-menu .side-menu-head {
 		padding: 7px 38px 5px 0px;
 	}
@@ -804,6 +810,16 @@
 
 	}
 
+	.page.page-commenter-detail .page-title {
+		padding: 140px 0 100px;
+	}
+
+	.page-commenter-detail .commenter-image {
+		width:200px;
+		height:200px;
+		top:-100px;
+	}
+
 }
 
 @media (max-width:660px){
@@ -831,6 +847,9 @@
 }
 
 @media (max-width:600px){
+	.search-tools-drawer .search-term-button {
+		width:100%;
+	}
 
 	.tease-item {
 		width:100%;
@@ -951,6 +970,7 @@
 	header .social-wrap {
 		display:none;
 	}
+
 	.pagination .seq-page {
 		width:100%;
 		border-bottom:1px solid @primary;
@@ -1082,6 +1102,12 @@
 }
 
 @media (max-width:400px){
+	section.header .center-content .site-title {
+		font-size: 26px;
+	}
+	section.header .center-content .site-subtitle {
+		font-size: 18px;
+	}
 	header .side-menu .side-menu-head span.site-title {
 		display:none;
 	}

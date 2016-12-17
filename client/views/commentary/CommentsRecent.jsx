@@ -28,9 +28,11 @@ CommentsRecent = React.createClass({
 	render() {
 		const settings = {
 			dots: true,
+			arrows: false,
 			infinite: true,
 			autoplay: true,
-			speed: 500,
+			speed: 300,
+			autoplaySpeed: 10000,
 			slidesToShow: 1,
 			slidesToScroll: 1,
 		};

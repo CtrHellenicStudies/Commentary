@@ -64,8 +64,8 @@ CommentarySearchToolbar = React.createClass({
 		this.props.toggleSearchTerm(key, value);
 	},
 
-	handleChangeTextsearch(event) {
-		this.props.handleChangeTextsearch(event.target.value);
+	handleChangeTextsearch() {
+		this.props.handleChangeTextsearch($('.text-search--header input').val());
 	},
 
 	toggleSearchDropdown(targetDropdown) {
@@ -117,11 +117,11 @@ CommentarySearchToolbar = React.createClass({
 		return (
 			<span>
 				{!addCommentPage ?
-					<div className="search-tool text-search">
+					<div className="search-tool text-search text-search--header">
 						<TextField
 							hintText=""
 							floatingLabelText="Search"
-							onChange={this.handleChangeTextsearch}
+							onChange={_.debounce(this.handleChangeTextsearch, 300)}
 						/>
 					</div>
 				: '' }
@@ -256,7 +256,6 @@ CommentarySearchToolbar = React.createClass({
 					</SearchToolDropdown>
 				: ''}
 
-
 				<SearchToolDropdown
 					name="Work"
 					open={this.state.searchDropdownOpen === 'Work'}
@@ -340,7 +339,145 @@ CommentarySearchToolbar = React.createClass({
 							lineTo={lineTo}
 						/>
 					</div>
-					: ''}
+				: ''}
+
+				{!addCommentPage ?
+					<SearchToolDropdown
+						name="more"
+						open={this.state.searchDropdownOpen === 'more'}
+						toggle={this.toggleSearchDropdown}
+						disabled={false}
+					>
+						<div className="search-tool text-search">
+							<TextField
+								hintText=""
+								floatingLabelText="Search"
+								onChange={this.handleChangeTextsearch}
+							/>
+						</div>
+						<SearchToolDropdown
+							name="Keywords"
+							open={this.state.searchDropdownOpen === 'Keywords'}
+							toggle={this.toggleSearchDropdown}
+							disabled={false}
+						>
+							{this.data.keywords.map((keyword, i) => {
+								let active = false;
+								filters.forEach((filter) => {
+									if (filter.key === 'keywords') {
+										filter.values.forEach((value) => {
+											if (keyword.slug === value.slug) {
+												active = true;
+											}
+										});
+									}
+								});
+
+								return (
+									<SearchTermButton
+										key={i}
+										toggleSearchTerm={this.toggleSearchTerm}
+										label={keyword.title}
+										searchTermKey="keywords"
+										value={keyword}
+										active={active}
+									/>
+								);
+							})}
+						</SearchToolDropdown>
+						<SearchToolDropdown
+							name="Key Ideas"
+							open={this.state.searchDropdownOpen === 'Keyideas'}
+							toggle={this.toggleSearchDropdown}
+							disabled={false}
+						>
+							{this.data.keyideas.map((keyidea, i) => {
+								let active = false;
+								filters.forEach((filter) => {
+									if (filter.key === 'keyideas') {
+										filter.values.forEach((value) => {
+											if (keyidea.slug === value.slug) {
+												active = true;
+											}
+										});
+									}
+								});
+
+								return (
+									<SearchTermButton
+										key={i}
+										toggleSearchTerm={this.toggleSearchTerm}
+										label={keyidea.title}
+										searchTermKey="keyideas"
+										value={keyidea}
+										active={active}
+									/>
+								);
+							})}
+						</SearchToolDropdown>
+						<SearchToolDropdown
+							name="Commenter"
+							open={this.state.searchDropdownOpen === 'Commenter'}
+							toggle={this.toggleSearchDropdown}
+							disabled={false}
+						>
+							{this.data.commenters.map((commenter, i) => {
+								let active = false;
+								filters.forEach((filter) => {
+									if (filter.key === 'commenters') {
+										filter.values.forEach((value) => {
+											if (commenter.slug === value.slug) {
+												active = true;
+											}
+										});
+									}
+								});
+
+								return (
+									<SearchTermButton
+										key={i}
+										toggleSearchTerm={this.toggleSearchTerm}
+										label={commenter.name}
+										searchTermKey="commenters"
+										value={commenter}
+										active={active}
+									/>
+								);
+							})}
+						</SearchToolDropdown>
+						<SearchToolDropdown
+							name="reference"
+							open={this.state.searchDropdownOpen === 'reference'}
+							toggle={this.toggleSearchDropdown}
+							disabled={false}
+						>
+							{this.data.referenceWorks.map((reference, i) => {
+								let active = false;
+								filters.forEach((filter) => {
+									if (filter.key === 'reference') {
+										filter.values.forEach((value) => {
+											if (reference.slug === value.slug) {
+												active = true;
+											}
+										});
+									}
+								});
+
+								return (
+									<SearchTermButton
+										key={i}
+										toggleSearchTerm={this.toggleSearchTerm}
+										label={Utils.trunc(reference.title, 30)}
+										searchTermKey="reference"
+										value={reference}
+										active={active}
+									/>
+								);
+							})}
+						</SearchToolDropdown>
+					</SearchToolDropdown>
+				: ''}
+
 			</span>
 		);
 	},

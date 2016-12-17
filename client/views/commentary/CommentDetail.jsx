@@ -312,7 +312,7 @@ CommentDetail = React.createClass({
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}
-						{comment.referenceLink ?
+						{comment.reference ?
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
 								<p>

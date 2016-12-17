@@ -3,6 +3,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import debounce from 'throttle-debounce';
 
 CommentarySearchPanel = React.createClass({
 
@@ -83,8 +84,8 @@ CommentarySearchPanel = React.createClass({
 		this.props.toggleSearchTerm(key, newValue);
 	},
 
-	handleChangeTextsearch(event) {
-		this.props.handleChangeTextsearch(event.target.value);
+	handleChangeTextsearch() {
+		this.props.handleChangeTextsearch($('.text-search--drawer input').val());
 	},
 
 	render() {
@@ -125,19 +126,81 @@ CommentarySearchPanel = React.createClass({
 
 		return (
 			<Drawer
+				className="search-tools-drawer"
 				openSecondary
 				open={this.props.open}
 				docked={false}
 				onRequestChange={this.props.closeRightMenu}
 			>
-				<div style={styles.textSearch} className="search-tool text-search">
+				<div className="search-tool text-search text-search--drawer">
 					<TextField
 						hintText=""
 						floatingLabelText="Search"
 						fullWidth
-						onChange={this.handleChangeTextsearch}
+						onChange={_.debounce(this.handleChangeTextsearch, 300)}
 					/>
 				</div>
+				<Card>
+					<CardHeader
+						title="Work"
+						style={styles.cardHeader}
+						actAsExpander
+						showExpandableButton
+					/>
+					<CardText expandable style={styles.wrapper}>
+						{self.data.works.map((work, i) => (
+							<SearchTermButtonPanel
+								key={i}
+								toggleSearchTerm={self.toggleWorkSearchTerm}
+								label={work.title}
+								searchTermKey="works"
+								value={work}
+								activeWork={self.state.activeWork === work.slug}
+							/>
+						))}
+						{self.data.works.length === 0 ?
+							<div className="no-results">No works found in objects.</div>
+							: ''
+						}
+					</CardText>
+				</Card>
+				<Card>
+					<CardHeader
+						title="Book"
+						style={styles.cardHeader}
+						actAsExpander={!(self.state.subworks.length === 0)}
+						showExpandableButton={!(self.state.subworks.length === 0)}
+					/>
+					<CardText expandable style={styles.wrapper}>
+						{self.state.subworks.map((subwork, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'subworks') {
+									filter.values.forEach((value) => {
+										if (subwork.n === value.n) {
+											active = true;
+										}
+									});
+								}
+							});
+
+							return (
+								<SearchTermButtonPanel
+									key={i}
+									toggleSearchTerm={self.toggleSearchTerm}
+									label={`${subwork.work.title} ${subwork.title}`}
+									searchTermKey="subworks"
+									value={subwork}
+									active={active}
+								/>
+							);
+						})}
+						{self.data.subworks.length === 0 ?
+							<div className="no-results">No subworks found in objects.</div>
+							: ''
+						}
+					</CardText>
+				</Card>
 				<Card>
 					<CardHeader
 						title="Line Number"
@@ -260,67 +323,6 @@ CommentarySearchPanel = React.createClass({
 						})}
 						{self.data.commenters.length === 0 ?
 							<div className="no-results">No commenters found in objects.</div>
-							: ''
-						}
-					</CardText>
-				</Card>
-				<Card>
-					<CardHeader
-						title="Work"
-						style={styles.cardHeader}
-						actAsExpander
-						showExpandableButton
-					/>
-					<CardText expandable style={styles.wrapper}>
-						{self.data.works.map((work, i) => (
-							<SearchTermButtonPanel
-								key={i}
-								toggleSearchTerm={self.toggleWorkSearchTerm}
-								label={work.title}
-								searchTermKey="works"
-								value={work}
-								activeWork={self.state.activeWork === work.slug}
-							/>
-						))}
-						{self.data.works.length === 0 ?
-							<div className="no-results">No works found in objects.</div>
-							: ''
-						}
-					</CardText>
-				</Card>
-				<Card>
-					<CardHeader
-						title="Book"
-						style={styles.cardHeader}
-						actAsExpander={!(self.state.subworks.length === 0)}
-						showExpandableButton={!(self.state.subworks.length === 0)}
-					/>
-					<CardText expandable style={styles.wrapper}>
-						{self.state.subworks.map((subwork, i) => {
-							let active = false;
-							filters.forEach((filter) => {
-								if (filter.key === 'subworks') {
-									filter.values.forEach((value) => {
-										if (subwork.n === value.n) {
-											active = true;
-										}
-									});
-								}
-							});
-
-							return (
-								<SearchTermButtonPanel
-									key={i}
-									toggleSearchTerm={self.toggleSearchTerm}
-									label={`${subwork.work.title} ${subwork.title}`}
-									searchTermKey="subworks"
-									value={subwork}
-									active={active}
-								/>
-							);
-						})}
-						{self.data.subworks.length === 0 ?
-							<div className="no-results">No subworks found in objects.</div>
 							: ''
 						}
 					</CardText>

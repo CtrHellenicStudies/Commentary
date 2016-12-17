@@ -25,7 +25,7 @@ SearchToolDropdown = React.createClass({
 	render() {
 		return (
 			<div
-				className={`dropdown search-dropdown${this.props.open ? ' open' : ''}`}
+				className={`dropdown search-dropdown search-dropdown--${this.props.name.replace(" ", "")} ${this.props.open ? 'open' : ''}`}
 			>
 				<FlatButton
 					className={`search-tool dropdown-toggle ${this.props.disabled

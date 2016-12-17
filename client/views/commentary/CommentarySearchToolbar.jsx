@@ -21,6 +21,7 @@ CommentarySearchToolbar = React.createClass({
 	getInitialState() {
 		return {
 			searchDropdownOpen: '',
+			moreDropdownOpen: false,
 			activeWorkNew: null,
 		};
 	},
@@ -78,6 +79,12 @@ CommentarySearchToolbar = React.createClass({
 				searchDropdownOpen: targetDropdown,
 			});
 		}
+	},
+
+	toggleMoreDropdown() {
+		this.setState({
+			moreDropdownOpen: !this.state.moreDropdownOpen,
+		});
 	},
 
 	render() {
@@ -162,7 +169,7 @@ CommentarySearchToolbar = React.createClass({
 				{!addCommentPage ?
 					<SearchToolDropdown
 						name="Key Ideas"
-						open={this.state.searchDropdownOpen === 'Keyideas'}
+						open={this.state.searchDropdownOpen === 'Key Ideas'}
 						toggle={this.toggleSearchDropdown}
 						disabled={false}
 					>
@@ -344,8 +351,8 @@ CommentarySearchToolbar = React.createClass({
 				{!addCommentPage ?
 					<SearchToolDropdown
 						name="more"
-						open={this.state.searchDropdownOpen === 'more'}
-						toggle={this.toggleSearchDropdown}
+						open={this.state.moreDropdownOpen}
+						toggle={this.toggleMoreDropdown}
 						disabled={false}
 					>
 						<div className="search-tool text-search">
@@ -387,7 +394,7 @@ CommentarySearchToolbar = React.createClass({
 						</SearchToolDropdown>
 						<SearchToolDropdown
 							name="Key Ideas"
-							open={this.state.searchDropdownOpen === 'Keyideas'}
+							open={this.state.searchDropdownOpen === 'Key Ideas'}
 							toggle={this.toggleSearchDropdown}
 							disabled={false}
 						>

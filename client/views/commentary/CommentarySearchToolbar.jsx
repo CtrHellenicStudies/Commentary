@@ -193,39 +193,6 @@ CommentarySearchToolbar = React.createClass({
 				: ''}
 				{!addCommentPage ?
 					<SearchToolDropdown
-						name="reference"
-						open={this.state.searchDropdownOpen === 'reference'}
-						toggle={this.toggleSearchDropdown}
-						disabled={false}
-					>
-						{this.data.referenceWorks.map((reference, i) => {
-							let active = false;
-							filters.forEach((filter) => {
-								if (filter.key === 'reference') {
-									filter.values.forEach((value) => {
-										if (keyidea.slug === value.slug) {
-											active = true;
-										}
-									});
-								}
-							});
-
-							return (
-								<SearchTermButton
-									key={i}
-									toggleSearchTerm={this.toggleSearchTerm}
-									label={Utils.trunc(reference.title, 70)}
-									searchTermKey="reference"
-									value={reference}
-									active={active}
-								/>
-							);
-						})}
-					</SearchToolDropdown>
-				: ''}
-
-				{!addCommentPage ?
-					<SearchToolDropdown
 						name="Commenter"
 						open={this.state.searchDropdownOpen === 'Commenter'}
 						toggle={this.toggleSearchDropdown}
@@ -256,6 +223,39 @@ CommentarySearchToolbar = React.createClass({
 						})}
 					</SearchToolDropdown>
 				: ''}
+				{!addCommentPage ?
+					<SearchToolDropdown
+						name="reference"
+						open={this.state.searchDropdownOpen === 'reference'}
+						toggle={this.toggleSearchDropdown}
+						disabled={false}
+					>
+						{this.data.referenceWorks.map((reference, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'reference') {
+									filter.values.forEach((value) => {
+										if (reference.slug === value.slug) {
+											active = true;
+										}
+									});
+								}
+							});
+
+							return (
+								<SearchTermButton
+									key={i}
+									toggleSearchTerm={this.toggleSearchTerm}
+									label={Utils.trunc(reference.title, 30)}
+									searchTermKey="reference"
+									value={reference}
+									active={active}
+								/>
+							);
+						})}
+					</SearchToolDropdown>
+				: ''}
+
 
 				<SearchToolDropdown
 					name="Work"

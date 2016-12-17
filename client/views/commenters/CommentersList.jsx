@@ -11,7 +11,7 @@ CommentersList = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-
+		let commenters = [];
 		let limit = 100;
 		if (this.props.limit) {
 			limit = this.props.limit;
@@ -20,12 +20,20 @@ CommentersList = React.createClass({
 		// SUBSCRIPTIONS:
 		if (this.props.featureOnHomepage) {
 			Meteor.subscribe('commenters.featureOnHomepage', limit);
+			commenters = Commenters.find({
+				featureOnHomepage: true,
+			}, {
+				sort: {
+					name: 1,
+				},
+				limit,
+			}).fetch();
 		} else {
 			Meteor.subscribe('commenters', limit);
+			commenters = Commenters.find({}, { sort: { name: 1 }, limit }).fetch();
 		}
-		const avatarsSub = Meteor.subscribe('avatars.commenter.all');
 
-		const commenters = Commenters.find({}, {sort: {name: 1}}).fetch();
+		Meteor.subscribe('avatars.commenter.all');
 		const avatars = Avatars.find().fetch();
 
 		return {

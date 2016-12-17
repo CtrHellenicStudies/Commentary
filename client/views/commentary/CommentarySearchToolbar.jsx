@@ -93,7 +93,7 @@ CommentarySearchToolbar = React.createClass({
 		const styles = {
 			lineSearch: {
 				width: 250,
-				padding: '10px 15px',
+				padding: '10px 20px',
 			},
 		};
 
@@ -298,7 +298,6 @@ CommentarySearchToolbar = React.createClass({
 					open={this.state.searchDropdownOpen === 'Book'}
 					toggle={this.toggleSearchDropdown}
 					disabled={workInFilter === false}
-
 				>
 					{this.data.works.map((work, i) => {
 						let workFound = false;
@@ -339,12 +338,16 @@ CommentarySearchToolbar = React.createClass({
 					})}
 				</SearchToolDropdown>
 				{!addCommentPage ?
-					<div style={styles.lineSearch} className="line-search">
+					<div
+						style={styles.lineSearch}
+						className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
+					>
 						<LineRangeSlider
 							handleChangeLineN={this.props.handleChangeLineN}
 							lineFrom={lineFrom}
 							lineTo={lineTo}
 						/>
+						<div className="disabled-screen" />
 					</div>
 				: ''}
 

@@ -34,18 +34,33 @@ CommentarySearchPanel = React.createClass({
 	},
 
 	getMeteorData() {
+		// SUBSCRIPTIONS:
+		let works = [];
+		let keywords = [];
+		let keyideas = [];
+		let commenters = [];
+		let referenceWorks = [];
+
+		if (!this.props.addCommentPage) {
+			Meteor.subscribe('commenters');
+			Meteor.subscribe('keywords.all');
+			Meteor.subscribe('referenceWorks');
+		}
+		Meteor.subscribe('works');
+
+		// FETCH DATA:
+		keyideas = Keywords.find({ type: 'idea' }).fetch();
+		keywords = Keywords.find({ type: 'word' }).fetch();
+		commenters = Commenters.find().fetch();
+		works = Works.find({}, { sort: { order: 1 } }).fetch();
+		referenceWorks = ReferenceWorks.find({}, { sort: { title: 1 } }).fetch();
+
 		return {
-			keywords: Keywords.find({
-				type: 'word',
-				count: { $gt: 0 },
-			}, { sort: { title: 1 } }).fetch(),
-			keyideas: Keywords.find({
-				type: 'idea',
-				count: { $gt: 0 },
-			}, { sort: { title: 1 } }).fetch(),
-			commenters: Commenters.find({}, { sort: { name: 1 } }).fetch(),
-			works: Works.find({}, { sort: { order: 1 } }).fetch(),
-			subworks: Subworks.find({}, { sort: { n: 1 } }).fetch(),
+			keyideas,
+			keywords,
+			commenters,
+			works,
+			referenceWorks,
 		};
 	},
 
@@ -93,6 +108,9 @@ CommentarySearchPanel = React.createClass({
 		const filters = this.props.filters || [];
 
 		const styles = {
+			drawer: {
+				backgroundColor: '#ddd',
+			},
 			flatButton: {
 				width: 'auto',
 				minWidth: 'none',
@@ -117,6 +135,8 @@ CommentarySearchPanel = React.createClass({
 			cardHeader: {
 				fontFamily: 'Proxima N W01 At Smbd',
 				textTransform: 'uppercase',
+				fontSize: '14px',
+				fontWeight: 'bold',
 			},
 			lineSearch: {
 				width: '99%',
@@ -124,13 +144,23 @@ CommentarySearchPanel = React.createClass({
 			},
 		};
 
+		drawerWidth = 400;
+		if (window.innerWidth < 500) {
+			drawerWidth = 300;
+		}
+		if (window.innerWidth < 300) {
+			drawerWidth = 210;
+		}
+
 		return (
 			<Drawer
+				width={drawerWidth}
 				className="search-tools-drawer"
 				openSecondary
 				open={this.props.open}
 				docked={false}
 				onRequestChange={this.props.closeRightMenu}
+				style={styles.drawer}
 			>
 				<div className="search-tool text-search text-search--drawer">
 					<TextField
@@ -140,12 +170,15 @@ CommentarySearchPanel = React.createClass({
 						onChange={_.debounce(this.handleChangeTextsearch, 300)}
 					/>
 				</div>
-				<Card>
+				<Card
+					className="search-tool-card"
+				>
 					<CardHeader
 						title="Work"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
+						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
 						{self.data.works.map((work, i) => (
@@ -158,18 +191,17 @@ CommentarySearchPanel = React.createClass({
 								activeWork={self.state.activeWork === work.slug}
 							/>
 						))}
-						{self.data.works.length === 0 ?
-							<div className="no-results">No works found in objects.</div>
-							: ''
-						}
 					</CardText>
 				</Card>
-				<Card>
+				<Card
+					className="search-tool-card"
+				>
 					<CardHeader
 						title="Book"
 						style={styles.cardHeader}
 						actAsExpander={!(self.state.subworks.length === 0)}
 						showExpandableButton={!(self.state.subworks.length === 0)}
+						className={`card-header ${(self.state.subworks.length === 0) ? '' : 'card-header--disabled'}`}
 					/>
 					<CardText expandable style={styles.wrapper}>
 						{self.state.subworks.map((subwork, i) => {
@@ -195,18 +227,17 @@ CommentarySearchPanel = React.createClass({
 								/>
 							);
 						})}
-						{self.data.subworks.length === 0 ?
-							<div className="no-results">No subworks found in objects.</div>
-							: ''
-						}
 					</CardText>
 				</Card>
-				<Card>
+				<Card
+					className="search-tool-card"
+				>
 					<CardHeader
 						title="Line Number"
 						style={styles.cardHeader}
-						actAsExpander
-						showExpandableButton
+						actAsExpander={!(self.state.subworks.length === 0)}
+						showExpandableButton={!(self.state.subworks.length === 0)}
+						className={`card-header ${(self.state.subworks.length === 0) ? '' : 'card-header--disabled'}`}
 					/>
 					<CardText expandable style={styles.wrapper}>
 						<div style={styles.lineSearch} className="line-search">
@@ -216,12 +247,15 @@ CommentarySearchPanel = React.createClass({
 						</div>
 					</CardText>
 				</Card>
-				<Card>
+				<Card
+					className="search-tool-card"
+				>
 					<CardHeader
 						title="Keywords"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
+						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
 						{self.data.keywords.map((keyword, i) => {
@@ -247,18 +281,17 @@ CommentarySearchPanel = React.createClass({
 								/>
 							);
 						})}
-						{self.data.keywords.length === 0 ?
-							<div className="no-results">No keywords found in objects.</div>
-							: ''
-						}
 					</CardText>
 				</Card>
-				<Card>
+				<Card
+					className="search-tool-card"
+				>
 					<CardHeader
 						title="Key Ideas"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
+						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
 						{self.data.keyideas.map((keyidea, i) => {
@@ -284,18 +317,17 @@ CommentarySearchPanel = React.createClass({
 								/>
 							);
 						})}
-						{self.data.keyideas.length === 0 ?
-							<div className="no-results">No keyideas found in objects.</div>
-							: ''
-						}
 					</CardText>
 				</Card>
-				<Card>
+				<Card
+					className="search-tool-card"
+				>
 					<CardHeader
 						title="Commenter"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
+						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
 						{self.data.commenters.map((commenter, i) => {
@@ -321,10 +353,42 @@ CommentarySearchPanel = React.createClass({
 								/>
 							);
 						})}
-						{self.data.commenters.length === 0 ?
-							<div className="no-results">No commenters found in objects.</div>
-							: ''
-						}
+					</CardText>
+				</Card>
+				<Card
+					className="search-tool-card"
+				>
+					<CardHeader
+						title="Reference"
+						style={styles.cardHeader}
+						actAsExpander
+						showExpandableButton
+						className="card-header"
+					/>
+					<CardText expandable style={styles.wrapper}>
+						{this.data.referenceWorks.map((reference, i) => {
+							let active = false;
+							filters.forEach((filter) => {
+								if (filter.key === 'reference') {
+									filter.values.forEach((value) => {
+										if (reference.slug === value.slug) {
+											active = true;
+										}
+									});
+								}
+							});
+
+							return (
+								<SearchTermButtonPanel
+									key={i}
+									toggleSearchTerm={this.toggleSearchTerm}
+									label={Utils.trunc(reference.title, 30)}
+									searchTermKey="reference"
+									value={reference}
+									active={active}
+								/>
+							);
+						})}
 					</CardText>
 				</Card>
 			</Drawer>

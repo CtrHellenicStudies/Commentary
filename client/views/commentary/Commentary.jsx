@@ -178,6 +178,16 @@ Commentary = React.createClass({
 					};
 					break;
 
+				case 'reference':
+					values = [];
+					filter.values.forEach((value) => {
+						values.push(value.title);
+					});
+					query.reference = {
+						$in: values,
+					};
+					break;
+
 				case 'works':
 					values = [];
 					filter.values.forEach((value) => {
@@ -214,6 +224,9 @@ Commentary = React.createClass({
 				}
 			});
 		}
+
+		console.log(query);
+
 		return query;
 	},
 

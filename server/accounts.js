@@ -9,12 +9,15 @@ Accounts.emailTemplates.verifyEmail = {
 		return 'Account Registration Confirmation';
 	},
 	text(user, url) {
-		return `Hi!
-			Click the link below to verify your email account.
+		return `Dear ${user.username},
+
+			Please click the link below to verify your email account.
+
 			${url}
-			If you didn't request this email, please ignore it.
-			Thanks,
-			A Homer Commentary in Progress team`;
+
+			If you didn't request this email, you can ignore it.
+
+			${Config.title()}`;
 	},
 	html(user, url) {
 		SSR.compileTemplate('verifyEmail', Assets.getText('verify_email.html'));

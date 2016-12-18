@@ -112,21 +112,33 @@ CommentDetail = React.createClass({
 	},
 
 	createRevisionMarkup(html) {
-		let newHtml = '';
-		newHtml = html.replace(/Odyssey (\d+).(\d+)/g,
+		let newHtml = html;
+		newHtml = newHtml.replace(/Il (\d+).(\d+)/g,
 			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1'data-lineFrom='$2'>Il $1.$2</a>");
+		newHtml = newHtml.replace(/Od (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='odyssey'" +
+			" data-subwork='$1'data-lineFrom='$2'>Od $1.$2</a>");
+		newHtml = newHtml.replace(/HH (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='hymns'" +
+			" data-subwork='$1'data-lineFrom='$2'>HH $1.$2</a>");
+		newHtml = newHtml.replace(/Iliad (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1'data-lineFrom='$2'>Iliad $1.$2</a>");
+		newHtml = newHtml.replace(/Odyssey (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='odyssey'" +
 			" data-subwork='$1'data-lineFrom='$2'>Odyssey $1.$2</a>");
-		newHtml = html.replace(/Homeric Hymns (\d+).(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+		newHtml = newHtml.replace(/Homeric Hymns (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='hymns'" +
 			" data-subwork='$1' data-lineFrom='$2'>Homeric Hymns $1.$2</a>");
-		newHtml = html.replace(/Hymns (\d+).(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+		newHtml = newHtml.replace(/Hymns (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='hymns'" +
 			" data-subwork='$1' data-lineFrom='$2'>Hymns $1.$2</a>");
-		newHtml = html.replace(/I.(\d+).(\d+)-(\d+)/g,
+		newHtml = newHtml.replace(/I.(\d+).(\d+)-(\d+)/g,
 			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
 			" data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>I.$1.$2-$3</a>");
-		newHtml = html.replace(/O.(\d+).(\d+)-(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+		newHtml = newHtml.replace(/O.(\d+).(\d+)-(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='odyssey'" +
 			" data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>O.$1.$2-$3</a>");
 
 		return { __html: newHtml };

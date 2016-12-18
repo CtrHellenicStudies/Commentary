@@ -3,6 +3,7 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import { green100, green500, red100, red500, black, fullWhite } from 'material-ui/styles/colors';
 import JsDiff from 'diff';
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
 CommentDetail = React.createClass({
 
@@ -94,7 +95,7 @@ CommentDetail = React.createClass({
 		if (!('isOnHomeView' in this.props) || this.props.isOnHomeView === false) {
 			this.props.toggleSearchTerm('keywords', keyword);
 		} else {
-			FlowRouter.go('/commentary/', {}, {keywords: keyword.slug});
+			FlowRouter.go('/commentary/', {}, { keywords: keyword.slug });
 		}
 	},
 
@@ -111,21 +112,33 @@ CommentDetail = React.createClass({
 	},
 
 	createRevisionMarkup(html) {
-		let newHtml = '';
-		newHtml = html.replace(/Odyssey (\d+).(\d+)/g,
+		let newHtml = html;
+		newHtml = newHtml.replace(/Il (\d+).(\d+)/g,
 			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1'data-lineFrom='$2'>Il $1.$2</a>");
+		newHtml = newHtml.replace(/Od (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='odyssey'" +
+			" data-subwork='$1'data-lineFrom='$2'>Od $1.$2</a>");
+		newHtml = newHtml.replace(/HH (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='hymns'" +
+			" data-subwork='$1'data-lineFrom='$2'>HH $1.$2</a>");
+		newHtml = newHtml.replace(/Iliad (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+			" data-subwork='$1'data-lineFrom='$2'>Iliad $1.$2</a>");
+		newHtml = newHtml.replace(/Odyssey (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='odyssey'" +
 			" data-subwork='$1'data-lineFrom='$2'>Odyssey $1.$2</a>");
-		newHtml = html.replace(/Homeric Hymns (\d+).(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+		newHtml = newHtml.replace(/Homeric Hymns (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='hymns'" +
 			" data-subwork='$1' data-lineFrom='$2'>Homeric Hymns $1.$2</a>");
-		newHtml = html.replace(/Hymns (\d+).(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+		newHtml = newHtml.replace(/Hymns (\d+).(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='hymns'" +
 			" data-subwork='$1' data-lineFrom='$2'>Hymns $1.$2</a>");
-		newHtml = html.replace(/I.(\d+).(\d+)-(\d+)/g,
+		newHtml = newHtml.replace(/I.(\d+).(\d+)-(\d+)/g,
 			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
 			" data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>I.$1.$2-$3</a>");
-		newHtml = html.replace(/O.(\d+).(\d+)-(\d+)/g,
-			"<a href='#' class='has-lemma-reference' data-work='iliad'" +
+		newHtml = newHtml.replace(/O.(\d+).(\d+)-(\d+)/g,
+			"<a href='#' class='has-lemma-reference' data-work='odyssey'" +
 			" data-subwork='$1' data-lineFrom='$2' data-lineTo='$3'>O.$1.$2-$3</a>");
 
 		return { __html: newHtml };
@@ -263,46 +276,35 @@ CommentDetail = React.createClass({
 						</div>
 
 						<div className="comment-upper-right">
-							{comment.commenters.map((commenter, i) => {
-								let image = {};
-								let imageUrl = '';
-								if (commenter.attachment) {
-									image = commenter.attachment;
-									imageUrl = image.url();
-								}
-								return (
-									<div
-										key={i}
-										className="comment-author"
-									>
-										{userCommenterId.indexOf(commenter._id) > -1 ?
-											<FlatButton
-												label="Edit comment"
-												href={`/add-revision/${comment._id}`}
-												icon={<FontIcon className="mdi mdi-pen" />}
-											/>
-											:
-											''
-										}
-										<div className="comment-author-text">
-											<a href={`/commenters/${commenter.slug}`}>
-												<span className="comment-author-name">{commenter.name}</span>
-											</a>
-											<span className="comment-date">
-												{moment(selectedRevision.created).format('D MMMM YYYY')}
-											</span>
-										</div>
-										<div className="comment-author-image-wrap paper-shadow">
-											<a href={`/commenters/${commenter.slug}`}>
-												<img
-													src={imageUrl.length ? imageUrl : '/images/default_user.jpg'}
-													alt="commenter"
-												/>
-											</a>
-										</div>
+							{comment.commenters.map((commenter, i) => (
+								<div
+									key={i}
+									className="comment-author"
+								>
+									{userCommenterId.indexOf(commenter._id) > -1 ?
+										<FlatButton
+											label="Edit comment"
+											href={`/commentary/${comment._id}/edit`}
+											icon={<FontIcon className="mdi mdi-pen" />}
+										/>
+										:
+										''
+									}
+									<div className="comment-author-text">
+										<a href={`/commenters/${commenter.slug}`}>
+											<span className="comment-author-name">{commenter.name}</span>
+										</a>
+										<span className="comment-date">
+											{moment(selectedRevision.created).format('D MMMM YYYY')}
+										</span>
 									</div>
-								);
-							})}
+									<div className="comment-author-image-wrap paper-shadow">
+										<a href={`/commenters/${commenter.slug}`}>
+											<AvatarIcon avatar={commenter.avatarData} />
+										</a>
+									</div>
+								</div>
+							))}
 						</div>
 
 					</div>
@@ -322,24 +324,26 @@ CommentDetail = React.createClass({
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}
-						<div className="comment-reference">
-							<h4>Secondary Source(s):</h4>
-							<p>
-								{comment.referenceLink ?
-									<a
-										href={comment.referenceLink}
-										rel="noopener noreferrer"
-										target="_blank"
-									>
-										{comment.reference}
-									</a>
+						{comment.reference ?
+							<div className="comment-reference">
+								<h4>Secondary Source(s):</h4>
+								<p>
+									{comment.referenceLink ?
+										<a
+											href={comment.referenceLink}
+											rel="noopener noreferrer"
+											target="_blank"
+										>
+											{comment.reference}
+										</a>
 									:
 									<span >
 										{comment.reference}
 									</span>
 								}
-							</p>
-						</div>
+								</p>
+							</div>
+						: '' }
 					</div>
 					<div className="comment-revisions">
 						{comment.revisions.map((revision, i) => (
@@ -366,6 +370,8 @@ CommentDetail = React.createClass({
 					showDiscussionThread={self.showDiscussionThread}
 					hideDiscussionThread={self.hideDiscussionThread}
 					discussionVisible={self.state.discussionVisible}
+					removeLemma={this.props.removeLemma}
+					returnLemma={this.props.returnLemma}
 				/>
 				<LemmaReferenceModal
 					visible={self.state.lemmaReferenceModalVisible}

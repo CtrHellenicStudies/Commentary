@@ -20,5 +20,6 @@
 			"secret": "",
 			"loginStyle": "popup"
 		}
-	}
+	},
+	"smtp": "smtp://foo:bar@example.domain:465"
 }

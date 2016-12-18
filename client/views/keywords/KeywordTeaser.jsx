@@ -51,11 +51,9 @@ KeywordTeaser = React.createClass({
 			<hr />
 			<span
 				className="keyword-description"
-			> {
-				keyword.description
-				|| `Quid faciat laetas segetes quo sidere terram vertere Mycenas ulmisque
-					adiungere vites conveniat quae curum boum qui cultus habendo sit pecori
-					apibus quanta experientia parcis, hinc canere incipiam`
+			> { keyword.description ?
+					Utils.trunc(keyword.description, 300)
+				: 'No description available.'
 			} </span>
 			<a
 				className="keyword-read-more"

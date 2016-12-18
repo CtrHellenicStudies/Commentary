@@ -30,45 +30,52 @@ PublicProfilePage = React.createClass({
 	},
 
 	getMeteorData() {
+		let user = {};
+		let discussionComments = [];
 		const userId = this.props.userId;
-		const user = Meteor.users.findOne({
-			_id: userId,
-		});
+		const usersHandle = Meteor.subscribe('allUsers', userId);
+		const discussionCommentsHandle = Meteor.subscribe('userDiscussionComments', userId);
+		if (usersHandle.ready()) {
+			user = Meteor.users.findOne({
+				_id: userId,
+			});
+			if (discussionCommentsHandle.ready()) {
+				discussionComments = DiscussionComments.find({
+					'user._id': userId,
+				}).fetch();
 
-		const discussionComments = DiscussionComments.find({
-			'user._id': userId,
-		}).fetch();
+				discussionComments.forEach((discussionComment, discussionCommentIndex) => {
+					const commentHandle = Meteor.subscribe('comments', {
+						_id: discussionComment.commentId,
+					}, 0, 1);
+					if (commentHandle.ready()) {
+						const comments = Comments.find().fetch();
+						if (comments.length) {
+							discussionComments[discussionCommentIndex].comment = comments[0];
+						} else {
+							discussionComments[discussionCommentIndex].comment = {
+								work: '',
+								subwork: '',
+								discussionComments: [],
+							};
+						}
+					} else {
+						discussionComments[discussionCommentIndex].comment = {
+							work: '',
+							subwork: '',
+							discussionComments: [],
+						};
+					}
 
-		discussionComments.forEach((discussionComment, discussionCommentIndex) => {
-			const commentHandle = Meteor.subscribe('comments', {
-				_id: discussionComment.commentId,
-			}, 0, 1);
-			if (commentHandle.ready()) {
-				const comments = Comments.find().fetch();
-				if (comments.length) {
-					discussionComments[discussionCommentIndex].comment = comments[0];
-				} else {
-					discussionComments[discussionCommentIndex].comment = {
-						work: '',
-						subwork: '',
-						discussionComments: [],
-					};
+					discussionComments[discussionCommentIndex].otherCommentsCount = DiscussionComments.find({
+						commentId: discussionComment.commentId,
+					}).count();
+				});
+
+				if (user) {
+					this.checkUsername(user);
 				}
-			} else {
-				discussionComments[discussionCommentIndex].comment = {
-					work: '',
-					subwork: '',
-					discussionComments: [],
-				};
 			}
-
-			discussionComments[discussionCommentIndex].otherCommentsCount = DiscussionComments.find({
-				commentId: discussionComment.commentId,
-			}).count();
-		});
-
-		if (user) {
-			this.checkUsername(user);
 		}
 
 		return {
@@ -85,11 +92,9 @@ PublicProfilePage = React.createClass({
 	},
 
 	render() {
-		let currentUser = this.data.user;
-		if (!currentUser) {
-			currentUser = {
-				profile: {},
-			};
+		const currentUser = this.data.user;
+		if (!currentUser.profile) {
+			currentUser.profile = {};
 		}
 
 		return (
@@ -242,7 +247,7 @@ PublicProfilePage = React.createClass({
 						</section>
 					</div>
 				</div>
-				: <div />
+				: <Loading />
 			)
 
 		);

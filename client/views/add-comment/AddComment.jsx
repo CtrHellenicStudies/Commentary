@@ -316,7 +316,7 @@ AddComment = React.createClass({
 								newOptionCreator={this.onNewOptionCreator}
 								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 								isOptionUnique={this.isOptionUnique}
-								placeholder="Keyideas..."
+								placeholder="Key ideas..."
 							/>
 
 						</div>

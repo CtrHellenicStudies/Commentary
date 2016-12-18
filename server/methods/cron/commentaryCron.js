@@ -1,4 +1,6 @@
 Meteor.method('commentary_cron', () => {
+	console.log(' -- Starting cron: Commentary');
+
 	const comments = Comments.find().fetch();
 
 	const commentCounts = [];
@@ -9,14 +11,16 @@ Meteor.method('commentary_cron', () => {
 	comments.forEach((comment) => {
 		let nLines = 1;
 
-		if ('lineTo' in comment && comment.lineTo) {
-			nLines = (comment.lineTo - comment.lineFrom) + 1;
-			// console.log(comment.lineFrom, comment.lineTo, comment.nLines);
-		}
+		if (!('nLines' in comment) || !(comment.nLines)) {
+			if ('lineTo' in comment && comment.lineTo) {
+				nLines = (comment.lineTo - comment.lineFrom) + 1;
+			}
 
-		Comments.update({ _id: comment._id }, { $set: { nLines } });
+			Comments.update({ _id: comment._id }, { $set: { nLines } });
+		}
 	});
 
+	console.log(' -- -- commentary cron: nLines updates complete')
 
 	comments.forEach((comment) => {
 		let commentWorkSlug = '';
@@ -39,7 +43,7 @@ Meteor.method('commentary_cron', () => {
 					if (comment.subwork.n === subwork.n) {
 						isInCommentCountsSubworks = true;
 
-						commentCounts[workIndex][subworkIndex].nComments++;
+						commentCounts[workIndex].subworks[subworkIndex].nComments++;
 
 						const iterations = (Math.floor(((comment.lineFrom + comment.nLines) - 1) / 10) -
 							Math.floor(comment.lineFrom / 10)) + 1;
@@ -49,12 +53,12 @@ Meteor.method('commentary_cron', () => {
 								const nFrom = (Math.floor(comment.lineFrom / 10) * 10) + (i * 10);
 								if (nFrom === line.n) {
 									isInCommentCountsLines = true;
-									commentCounts[workIndex][subworkIndex][lineIndex].nComments++;
+									commentCounts[workIndex].subworks[subworkIndex].commentHeatmap[lineIndex].nComments++;
 								} else {
 									isInCommentCountsLines = false;
 								}
 								if (!isInCommentCountsLines) {
-									commentCounts[workIndex][subworkIndex].commentHeatmap.push({
+									commentCounts[workIndex].subworks[subworkIndex].commentHeatmap.push({
 										n: nFrom,
 										nComments: 1,
 									});
@@ -170,9 +174,9 @@ Meteor.method('commentary_cron', () => {
 			work.nComments = countsWork.nComments;
 
 			countsWork.subworks.forEach((countsSubwork, countsSubworkIndex) => {
-				if (work[subworkIndex].n === countsWork[countsSubworkIndex].n) {
-					work[subworkIndex].nComments = countsWork[countsSubworkIndex].nComments;
-					work[subworkIndex].commentHeatmap = countsWork[countsSubworkIndex].commentHeatmap;
+				if (work.subworks[subworkIndex].n === countsWork.subworks[countsSubworkIndex].n) {
+					work.subworks[subworkIndex].nComments = countsWork.subworks[countsSubworkIndex].nComments;
+					work.subworks[subworkIndex].commentHeatmap = countsWork.subworks[countsSubworkIndex].commentHeatmap;
 				}
 			});
 		});
@@ -183,9 +187,9 @@ Meteor.method('commentary_cron', () => {
 				nComments: countsWork.nComments,
 			},
 		});
-		console.log(countsWork, updateStatus);
 	});
 
+	console.log(' -- -- commentary cron: counts per work/subwork completed')
 	console.log(' -- Cron run complete: Commentary');
 
 	return 1;

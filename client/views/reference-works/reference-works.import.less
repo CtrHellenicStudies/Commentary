@@ -15,7 +15,7 @@
   .reference-work-title {
     color: @primary-text;
     font-family: @font-body;
-    font-size: 22px;
+    font-size: 26px;
     text-transform: uppercase;
     margin-right: 10px;
     display: inline-block;
@@ -48,35 +48,40 @@ section.reference-work-single {
 }
 
 .reference-work-teaser {
-  width: 480px;
+  width: 530px;
   background: @light;
-  cursor: pointer;
+  cursor: default: ;
   margin: 10px 1%;
-  padding: 20px 30px;
+  padding: 40px;
   text-align: left;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 1px -1px rgba(0, 0, 0, 0.2);
   display: inline-block;
   vertical-align: top;
+	.transition(all 300ms ease-in-out);
 
-  &:hover {
-    .reference-work-title, .reference-work-comment-count, .reference-work-description, .mdi, .reference-work-read-more {
-      color: @ahcip-yellow;
-      &:hover {
-        color: @ahcip-yellow;
 
-      }
+	&:hover {
+	  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 2px 6px 0 rgba(0, 0, 0, 0.12), 0 2px 2px -2px rgba(0, 0, 0, 0.2);
+		background:#fafafa;
+		hr {
+			background:@md-primary;
+		}
+	}
 
-    }
-  }
 
   .reference-work-title {
     display: inline-block;
     vertical-align: top;
-    font-size: 22px;
+    font-size: 24px;
     font-family: @font-title;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 10px 0 !important;
     line-height: 1.4em;
+
+		&:hover {
+			color:@md-primary;
+		}
+
   }
 
   .mdi {
@@ -95,33 +100,29 @@ section.reference-work-single {
 
   hr {
     width: 100%;
-    max-width: 250px;
+    max-width: 220px;
     margin: 10px 0;
-    height: 2px;
+    height: 3px;
     background: #eee;
+		border:none;
+		.transition(all 300ms ease-in-out);
 
   }
 
   .reference-work-description {
     width: 98%;
-    margin: 10px 5px 20px;
+		display:block;
+    margin:25px 0 5px !important;
     max-width: 700px;
     font-size: 15px;
     font-family: @font-reading;
     line-height: 1.5em;
     font-weight: 300;
-    word-break: break-all;
-
-    span {
-      font-size: 15px !important;
-      font-family: @font-reading !important;
-      line-height: 1.5em;
-      display: block;
-      font-weight: 300;
-
-    }
-
   }
+
+  .reference-work-read-more-link {
+		display:block;
+	}
 
   .reference-work-read-more {
     clear: both;
@@ -129,11 +130,15 @@ section.reference-work-single {
     font-family: @font-label;
     text-transform: uppercase;
     font-size: 12px;
-    margin: 10px 6px 0;
+    margin: 10px 0px 0 !important;
     font-weight: light;
+		display:inline-block;
+		// background:#eee;
+		border-radius:2px;
+		padding:5px 0;
 
     &:hover {
-      color: @primary-text;
+      color: @md-primary;
 
     }
 
@@ -148,5 +153,91 @@ section.reference-work-single {
     overflow: visible;
     max-width: none;
   }
+
+}
+
+.page.reference-works-detail-page {
+	background:@light;
+
+	.page-title {
+		padding: 140px 0 40px;
+	}
+
+  .page-content {
+		background:@light;
+
+		.reference-work-byline {
+			text-align:center;
+			h3, a, span {
+				font-size:22px;
+				font-family:@font-reading;
+				font-weight:300;
+				line-height:1.3em;
+			}
+		}
+
+		p, span {
+			font-family:@font-reading;
+			font-size: 20px;
+			line-height: 1.8em;
+			width: 90%;
+			max-width: 700px;
+			margin: 0px auto;
+			padding: 20px 0;
+			text-align: left;
+			color: rgba(0, 0, 0, 0.8);
+		}
+
+
+  }
+
+}
+
+.read-online-link {
+	color:@light;
+	font-family:@font-light;
+	font-size:20px;
+	font-weight:300;
+	text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+	border:1px solid transparent;
+	border-radius:2px;
+	padding:15px 25px;
+
+	&:hover {
+		border:1px solid @light;
+		color:@light;
+		background:rgba(0,0,0,0.05);
+	}
+
+	i {
+		&:before {
+			font-size:20px;
+		}
+	}
+
+}
+
+
+.reference-work-byline {
+	text-align:center;
+	h3, a {
+		font-size:22px;
+		font-family:@font-reading;
+		font-weight:300px;
+		display:inline;
+		vertical-align: top;
+
+	}
+	a {
+		border-bottom: 1px solid @md-primary-light;
+		box-shadow: inset 0 -4px 0 @md-primary-light;
+		.transition(all 300ms ease-in-out);
+		&:hover {
+			border-bottom: 1px solid transparent;
+			box-shadow: inset 0 -4px 0 transparent;
+
+		}
+
+	}
 
 }

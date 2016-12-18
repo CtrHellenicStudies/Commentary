@@ -1,6 +1,13 @@
 import React from 'react';
 import { mount } from 'react-mounter';
 
+// Global subscription: user data is needed in almost all routes
+function subscriptions() {
+	this.register('userData', Meteor.subscribe('userData'));
+	this.register('commenters', Meteor.subscribe('commenters'));
+}
+FlowRouter.subscriptions = subscriptions;
+
 /*
  * Route groups with permissions
  */
@@ -22,9 +29,17 @@ FlowRouter.route('/commentary', {
 	},
 });
 
-FlowRouter.route('/commentary/', {
-	action: (params, queryParams) => {
-		mount(CommentaryLayout, { params, queryParams });
+FlowRouter.route('/keywords/add', {
+	action: (params) => {
+		mount(AddKeywordLayout);
+	},
+});
+
+FlowRouter.route('/keywords/:slug/edit', {
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <EditKeywordLayout slug={params.slug} />,
+		});
 	},
 });
 
@@ -107,13 +122,13 @@ FlowRouter.route('/terms', {
 	},
 });
 
-loggedInGroup.route('/add-comment', {
+loggedInGroup.route('/commentary/add', {
 	action: () => {
 		mount(AddCommentLayout);
 	},
 });
 
-loggedInGroup.route('/add-revision/:commentId', {
+loggedInGroup.route('/commentary/:commentId/edit', {
 	action: (params) => {
 		mount(AddRevisionLayout, {
 			commentId: params.commentId,
@@ -130,11 +145,6 @@ loggedInGroup.route('/profile', {
 });
 
 FlowRouter.route('/users/:userId', {
-	subscriptions(params) {
-		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
-		this.register('userDiscussionComments',
-			Meteor.subscribe('userDiscussionComments', params.userId));
-	},
 	triggersEnter: [
 		(context, redirect) => {
 			if (Meteor.userId() && Meteor.userId() === context.params.userId) {
@@ -152,11 +162,6 @@ FlowRouter.route('/users/:userId', {
 });
 
 FlowRouter.route('/users/:userId/:username', {
-	subscriptions(params) {
-		this.register('allUsers', Meteor.subscribe('allUsers', params.userId));
-		this.register('userDiscussionComments',
-			Meteor.subscribe('userDiscussionComments', params.userId));
-	},
 	triggersEnter: [
 		(context, redirect) => {
 			if (Meteor.userId() && Meteor.userId() === context.params.userId) {

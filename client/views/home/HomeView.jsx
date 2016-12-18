@@ -66,7 +66,7 @@ HomeView = React.createClass({
 								<div className="center-content">
 
 									<div className="site-title-wrap">
-										<h1 className="site-title">A Homer Commentary<br />in Progress</h1>
+										<h1 className="site-title">A Homer Commentary <br />in Progress</h1>
 										<h3 className="site-subtitle">
 											An evolving, collaborative commentary based on the cumulative research of
 											Milman Parry and Albert Lord, who created a new way of thinking about
@@ -150,8 +150,37 @@ HomeView = React.createClass({
 						{/* <!--end of container-->*/}
 					</section>
 
+					<section className="commentors">
+						<div className="background-image-holder blur-4--no-remove">
+							<img
+								className="background-image"
+								src="/images/school-athens.jpg"
+								role="presentation"
+							/>
+						</div>
+						<div className="block-screen" />
 
-					<section className="goals ">
+						<div className="container">
+
+							<h2 className="block-title">Commenters</h2>
+
+
+							<CommentersList
+								featureOnHomepage
+								defaultAvatarUrl='/images/default_user.jpg'
+								limit={3}
+							/>
+
+							<RaisedButton
+								href="/commenters"
+								className="cover-link light show-more "
+								label="Other Commenters"
+							/>
+
+						</div>
+
+					</section>
+				{/*	<section className="goals ">
 
 						<div className="background-image-holder blur-4--no-remove">
 							<img role="presentation" className="background-image" src="/images/mss_2.jpg" />
@@ -200,7 +229,7 @@ HomeView = React.createClass({
 						</div>
 
 
-					</section>
+					</section> */}
 
 					<section id="visualizations" className="browse-commentary block-shadow">
 						{/* <h2 className="keyword-divider-title"></h2>*/}
@@ -237,7 +266,7 @@ HomeView = React.createClass({
 						</div>
 					</section>
 
-					<section className="keywords">
+					<section className="keywords keyideas">
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Key Ideas</h2>
 							<div className="underline" />
@@ -245,43 +274,12 @@ HomeView = React.createClass({
 							<KeywordsList type="idea" title="Key Ideas" limit={5} />
 
 							<RaisedButton
-								href="/keywords"
+								href="/keyideas"
 								className="cover-link show-more primary "
 								label="More Key Ideas"
 							/>
 
 						</div>
-					</section>
-
-					<section className="commentors">
-						<div className="background-image-holder blur-4--no-remove">
-							<img
-								className="background-image"
-								src="/images/school-athens.jpg"
-								role="presentation"
-							/>
-						</div>
-						<div className="block-screen" />
-
-						<div className="container">
-
-							<h2 className="block-title">Commenters</h2>
-
-
-							<CommentersList
-								featureOnHomepage
-								defaultAvatarUrl='/images/default_user.jpg'
-								limit={3}
-							/>
-
-							<RaisedButton
-								href="/commenters"
-								className="cover-link light show-more "
-								label="Other Commenters"
-							/>
-
-						</div>
-
 					</section>
 
 					<section className="get-started">
@@ -290,7 +288,7 @@ HomeView = React.createClass({
 
 						<div className="get-started-comments">
 
-							{this.data.commentsReady ? 
+							{this.data.commentsReady ?
 								<Commentary
 									isOnHomeView
 									filters={[]}
@@ -301,26 +299,18 @@ HomeView = React.createClass({
 								<Spinner /> }
 
 							<div className="read-more-link">
-							
+
 								<RaisedButton
 									href="/commentary"
 									className="cover-link light show-more "
 									label="Read More"
 								/>
 
-
 							</div>
-
 						</div>
-
-
 					</section>
-
-
 				</div>
-
 			</div>
-
 		);
 	},
 });

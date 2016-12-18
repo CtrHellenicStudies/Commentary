@@ -27,6 +27,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		optional: true,
 		autoform: {
 			options() {
+				Meteor.subscribe("commenters");
 				return _.map(Commenters.find().fetch(), (commenter) => (
 					{
 						label: commenter.name,
@@ -117,6 +118,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 
 	citation: {
 		type: String,
+		optional: true,
 		autoform: {
 			afFieldInput: {
 				type: 'summernote',

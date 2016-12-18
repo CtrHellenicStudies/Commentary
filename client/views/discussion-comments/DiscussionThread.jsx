@@ -9,6 +9,8 @@ DiscussionThread = React.createClass({
 		discussionVisible: React.PropTypes.bool.isRequired,
 		showDiscussionThread: React.PropTypes.func.isRequired,
 		hideDiscussionThread: React.PropTypes.func.isRequired,
+		removeLemma: React.PropTypes.func.isRequired,
+		returnLemma: React.PropTypes.func.isRequired,
 	},
 
 	mixins: [ReactMeteorData],
@@ -43,6 +45,14 @@ DiscussionThread = React.createClass({
 			discussionComments,
 			loaded,
 		};
+	},
+
+	removeLemma() {
+		this.props.removeLemma();
+	},
+
+	returnLemma() {
+		this.props.returnLemma();
 	},
 
 	showDiscussionThread() {
@@ -87,20 +97,22 @@ DiscussionThread = React.createClass({
 		}
 
 		const sortSelectedLabelStyle = {
-		  color: '#FFFFFF',
+			color: '#FFFFFF',
 		};
-
-		// console.log("CommentDiscussion.data", this.data);
 
 		return (
 
 			<div className={discussionWrapClass}>
 				<div
 					onClick={this.showDiscussionThread}
+
 					className="continue-discussion"
 				>
 					<h4 className="continue-discussion-label">Discussion</h4>
-					<div className="continue-discussion-icon">
+					<div
+						className="continue-discussion-icon"
+						onClick={this.removeLemma}
+					>
 						<i className="mdi mdi-comment" />
 						{this.data.discussionComments.length ?
 							<span className="continue-discussion-text">
@@ -118,7 +130,7 @@ DiscussionThread = React.createClass({
 							<IconButton
 								className="close-discussion paper-shadow"
 								iconClassName="mdi mdi-close"
-								onClick={this.hideDiscussionThread}
+								onClick={() => { this.hideDiscussionThread(); this.returnLemma(); }}
 							/>
 
 							<form
@@ -190,22 +202,22 @@ DiscussionThread = React.createClass({
 							<div className="no-results-wrap">
 								<span className="no-results-text">No discussion comments.</span>
 							</div>
-							: ''
+							:
+							<div className="sort-method-select">
+								<FlatButton
+									label="Top votes"
+									labelStyle={this.state.sortMethod === 'votes' ? sortSelectedLabelStyle : {}}
+									backgroundColor={this.state.sortMethod === 'votes' ? '#795548' : ''}
+									onClick={this.sortMethodSelect.bind(null, 'votes')}
+								/>
+								<FlatButton
+									label="Recent"
+									labelStyle={this.state.sortMethod === 'recent' ? sortSelectedLabelStyle : {}}
+									backgroundColor={this.state.sortMethod === 'recent' ? '#795548' : ''}
+									onClick={this.sortMethodSelect.bind(null, 'recent')}
+								/>
+							</div>
 						}
-						<div className='sort-method-select'>
-							<FlatButton
-								label="Top votes"
-								labelStyle={this.state.sortMethod === "votes" ? sortSelectedLabelStyle : ""}
-								backgroundColor={this.state.sortMethod === "votes" ? "#795548" : ""}
-								onClick={this.sortMethodSelect.bind(null,"votes")}
-							/>
-							<FlatButton
-								label="Recent"
-								labelStyle={this.state.sortMethod === "recent" ? sortSelectedLabelStyle : ""}
-								backgroundColor={this.state.sortMethod === "recent" ? "#795548" : ""}
-								onClick={this.sortMethodSelect.bind(null,"recent")}
-							/>
-						</div>
 						{this.data.discussionComments.map((discussionComment, i) =>
 							<DiscussionComment
 								key={i}

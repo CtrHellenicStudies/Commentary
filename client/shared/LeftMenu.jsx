@@ -1,9 +1,10 @@
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
 injectTapEventPlugin();
 
@@ -61,7 +62,7 @@ LeftMenu = React.createClass({
 						{userIsLoggedIn ?
 							<div>
 								<div className="user-image paper-shadow">
-									<img src="/images/default_user.jpg" role="presentation" />
+									<AvatarIcon avatar={this.data.currentUser.avatar} />
 								</div>
 							</div>
 							: ''
@@ -70,33 +71,55 @@ LeftMenu = React.createClass({
 							{username}
 						</span>
 					</div>
+					{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+						<div>
+							<MenuItem
+								href="/admin"
+								target="_blank"
+								primaryText="Admin"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/commentary/add"
+								primaryText="Add Comment"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/keywords/add"
+								primaryText="Add Keyword/Idea"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<Divider />
+						</div>
+						:
+						'' }
 					<MenuItem
 						href="/"
 						primaryText="Home"
 						onClick={this.props.closeLeftMenu}
 					/>
 					<MenuItem
-						href="/commentary/"
+						href="/commentary"
 						primaryText="Commentary"
 						onClick={this.props.closeLeftMenu}
 					/>
 					<MenuItem
-						href="/keywords/"
+						href="/keywords"
 						primaryText="Keywords"
 						onClick={this.props.closeLeftMenu}
 					/>
 					<MenuItem
-						href="/keyideas/"
+						href="/keyideas"
 						primaryText="Key Ideas"
 						onClick={this.props.closeLeftMenu}
 					/>
 					<MenuItem
-						href="/commenters/"
+						href="/commenters"
 						primaryText="Commenters"
 						onClick={this.props.closeLeftMenu}
 					/>
 					<MenuItem
-						href="/referenceWorks/"
+						href="/referenceWorks"
 						primaryText="Reference Works"
 						onClick={this.props.closeLeftMenu}
 					/>
@@ -115,38 +138,16 @@ LeftMenu = React.createClass({
 
 					{userIsLoggedIn ?
 						<div>
-							{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
-								<div>
-									<MenuItem
-										href="/add-comment"
-										primaryText="Add Comment"
-										onClick={this.props.closeLeftMenu}
-									/>
-									<MenuItem
-										href="/profile"
-										primaryText="Profile"
-										onClick={this.props.closeLeftMenu}
-									/>
-									<MenuItem
-										href="/sign-out"
-										primaryText="Sign out"
-										onClick={this.props.closeLeftMenu}
-									/>
-								</div>
-								:
-								<div>
-									<MenuItem
-										href="/profile"
-										primaryText="Profile"
-										onClick={this.props.closeLeftMenu}
-									/>
-									<MenuItem
-										href="/sign-out"
-										primaryText="Sign out"
-										onClick={this.props.closeLeftMenu}
-									/>
-								</div>
-							}
+							<MenuItem
+								href="/profile"
+								primaryText="Profile"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/sign-out"
+								primaryText="Sign out"
+								onClick={this.props.closeLeftMenu}
+							/>
 						</div>
 						:
 						<div>

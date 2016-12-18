@@ -23,19 +23,19 @@ Footer = React.createClass({
 					<div className="row footer-nav-row">
 						<div className="footer-nav-links" role="navigation">
 							<FlatButton
-								href="/commentary/"
+								href="/commentary"
 								label="Commentary"
 							/>
 							<FlatButton
-								href="/commenters/"
+								href="/commenters"
 								label="Commenters"
 							/>
 							<FlatButton
-								href="/keywords/"
+								href="/keywords"
 								label="Keywords"
 							/>
 							<FlatButton
-								href="/keyideas/"
+								href="/keyideas"
 								label="Key Ideas"
 							/>
 							<FlatButton
@@ -69,7 +69,9 @@ Footer = React.createClass({
 
 						<div className="col-md-5 col-sm-6 more-info-column">
 							<p className="lead">
-								For more information about the Commentary or general media inquiries, please contact <a href="mailto:contact@ahcip.chs.harvard.edu">
+								For more information about the Commentary or general media inquiries,
+								please contact
+								<a href="mailto:contact@ahcip.chs.harvard.edu">
 									contact@ahcip.chs.harvard.edu
 								</a>.
 							</p>
@@ -85,7 +87,9 @@ Footer = React.createClass({
 					{/* <!--end of row-->*/}
 					<div className="row">
 						<div className="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
-							<p className="fade-1-4 copyright">&copy; 2016 The Center for Hellenic Studies. See our <a href="/terms">terms and privacy policy</a>
+							<p className="fade-1-4 copyright">
+								&copy; 2016 The Center for Hellenic Studies.
+								See our <a href="/terms">terms and privacy policy</a>
 							</p>
 						</div>
 					</div>

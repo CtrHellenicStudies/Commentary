@@ -49,7 +49,7 @@ export const AvatarStore = new UploadFS.store.GridFS({
 	name: 'avatars',
 	filter: AvatarFilter,
 	permissions: AvatarPermissions,
-	transformWrite: transformAvatar
+	// transformWrite: transformAvatar
 });
 
 function finishUserAvatarUpload(avatar) {

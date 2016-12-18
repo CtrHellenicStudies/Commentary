@@ -25,6 +25,7 @@ Commentary = React.createClass({
 			discussionSelected: {},
 			discussionPanelOpen: false,
 			referenceLemma: [],
+			hideLemmaPanel: false,
 			referenceLemmaSelectedEdition: {
 				lines: [],
 			},
@@ -177,6 +178,16 @@ Commentary = React.createClass({
 					};
 					break;
 
+				case 'reference':
+					values = [];
+					filter.values.forEach((value) => {
+						values.push(value.title);
+					});
+					query.reference = {
+						$in: values,
+					};
+					break;
+
 				case 'works':
 					values = [];
 					filter.values.forEach((value) => {
@@ -213,6 +224,9 @@ Commentary = React.createClass({
 				}
 			});
 		}
+
+		console.log(query);
+
 		return query;
 	},
 
@@ -232,11 +246,11 @@ Commentary = React.createClass({
 			const element = $(id).find(
 				'.comment-group-meta-inner,.comment-group-meta-inner-fixed,.comment-group-meta-inner-bottom'
 			);
-			if (offset && scrollY < offset.top) {
+			if (offset && offset.top && scrollY < offset.top) {
 				element.addClass('comment-group-meta-inner');
 				element.removeClass('comment-group-meta-inner-fixed');
 				element.removeClass('comment-group-meta-inner-bottom');
-			} else if (scrollY >= offset.top && scrollY < (offset.top + height) - 275) {
+			} else if (offset && offset.top && scrollY >= offset.top && scrollY < (offset.top + height) - 275) {
 				element.addClass('comment-group-meta-inner-fixed');
 				element.removeClass('comment-group-meta-inner');
 				element.removeClass('comment-group-meta-inner-bottom');
@@ -260,6 +274,22 @@ Commentary = React.createClass({
 		this.setState({
 			selectedLemmaEdition: {},
 		});
+	},
+
+	removeLemma() {
+		if (this.state.hideLemmaPanel === false) {
+			this.setState({
+				hideLemmaPanel: true,
+			});
+		}
+	},
+
+	returnLemma() {
+		if (this.state.hideLemmaPanel === true) {
+			this.setState({
+				hideLemmaPanel: false,
+			});
+		}
 	},
 
 	searchReferenceLemma() {
@@ -296,6 +326,7 @@ Commentary = React.createClass({
 		let isOnHomeView;
 		let commentsClass = 'comments ';
 
+
 		if ('isOnHomeView' in this.props) {
 			isOnHomeView = this.props.isOnHomeView;
 		} else {
@@ -322,14 +353,19 @@ Commentary = React.createClass({
 								id={`comment-group-${commentGroupIndex}`}
 							>
 								<div className={commentsClass}>
-									<CommentLemma
-										index={commentGroupIndex}
-										commentGroup={commentGroup}
-										showContextPanel={this.showContextPanel}
-										scrollPosition={this.contextScrollPosition}
-									/>
+
+										<CommentLemma
+											index={commentGroupIndex}
+											commentGroup={commentGroup}
+											showContextPanel={this.showContextPanel}
+											scrollPosition={this.contextScrollPosition}
+											hideLemma={this.state.hideLemmaPanel}
+										/>
+
 									{commentGroup.comments.map((comment, commentIndex) => (
-										<div> 
+										<div
+											key={commentIndex}
+										>
 											<CommentDetail
 												key={commentIndex}
 												commentGroup={commentGroup}
@@ -337,6 +373,8 @@ Commentary = React.createClass({
 												toggleSearchTerm={!isOnHomeView ? this.toggleSearchTerm : null}
 												checkIfToggleLemmaReferenceModal={this.checkIfToggleLemmaReferenceModal}
 												filters={this.props.filters}
+												removeLemma={this.removeLemma}
+												returnLemma={this.returnLemma}
 											/>
 										</div>
 									))}
@@ -372,7 +410,7 @@ Commentary = React.createClass({
 						commentLemmaIndex={this.state.commentLemmaIndex}
 					/>
 					: ''}
-				{!isOnHomeView ? 
+				{!isOnHomeView ?
 					<FilterWidget
 						filters={this.props.filters}
 						toggleSearchTerm={this.toggleSearchTerm}

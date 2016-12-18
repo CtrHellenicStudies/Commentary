@@ -20,6 +20,17 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('comments.recent', (limit = 3) => {
+		check(limit, Number);
+
+		return Comments.find({}, {
+			limit,
+			sort: {
+				updated: -1,
+			},
+		});
+	});
+
 	Meteor.publish('comments.id', (_id) => {
 		check(_id, String);
 		return Comments.find({
@@ -105,14 +116,19 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('keywords.all', (limit = 100) =>
-		Keywords.find({}, {
+	Meteor.publish('keywords.all', (query = {}, skip = 0, limit = 100) => {
+		check(query, Object);
+		check(skip, Number);
+		check(limit, Number);
+
+		return Keywords.find(query, {
+			skip,
 			limit,
 			sort: {
 				title: 1,
 			},
 		})
-	);
+	});
 
 	Meteor.publish('keywords.slug', (slug) => {
 		check(slug, String);
@@ -123,27 +139,33 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('keywords.keywords', (limit = 100) =>
-		Keywords.find({
-			type: 'word'
-		}, {
-			limit,
-			sort: {
-				title: 1,
-			},
-		})
-	);
+	Meteor.publish('keywords.keywords', (query = {}, skip = 0, limit = 100) => {
+		check(query, Object);
+		check(skip, Number);
+		check(limit, Number);
 
-	Meteor.publish('keywords.keyideas', (limit = 100) =>
-		Keywords.find({
-			type: 'idea'
-		}, {
+		return Keywords.find(query, {
+			skip,
 			limit,
 			sort: {
 				title: 1,
 			},
 		})
-	);
+	});
+
+	Meteor.publish('keywords.keyideas', (query = {}, skip = 0, limit = 100) => {
+		check(query, Object);
+		check(skip, Number);
+		check(limit, Number);
+
+		return Keywords.find(query, {
+			skip,
+			limit,
+			sort: {
+				title: 1,
+			},
+		})
+	});
 
 	Meteor.publish('revisions', () =>
 		Revisions.find()

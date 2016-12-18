@@ -225,8 +225,6 @@ Commentary = React.createClass({
 			});
 		}
 
-		console.log(query);
-
 		return query;
 	},
 

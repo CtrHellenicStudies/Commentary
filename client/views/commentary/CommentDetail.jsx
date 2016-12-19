@@ -13,6 +13,7 @@ CommentDetail = React.createClass({
 		filters: React.PropTypes.array,
 		toggleSearchTerm: React.PropTypes.func,
 		isOnHomeView: React.PropTypes.bool,
+		showLoginModal: React.PropTypes.func,
 	},
 
 	mixins: [ReactMeteorData],
@@ -372,6 +373,7 @@ CommentDetail = React.createClass({
 					discussionVisible={self.state.discussionVisible}
 					removeLemma={this.props.removeLemma}
 					returnLemma={this.props.returnLemma}
+					showLoginModal={this.props.showLoginModal}
 				/>
 				<LemmaReferenceModal
 					visible={self.state.lemmaReferenceModalVisible}

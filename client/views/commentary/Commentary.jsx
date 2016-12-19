@@ -10,6 +10,7 @@ Commentary = React.createClass({
 		isOnHomeView: React.PropTypes.bool,
 		filters: React.PropTypes.array.isRequired,
 		commentsReady: React.PropTypes.bool,
+		showLoginModal: React.PropTypes.func,
 	},
 
 	childContextTypes: {
@@ -373,6 +374,7 @@ Commentary = React.createClass({
 												filters={this.props.filters}
 												removeLemma={this.removeLemma}
 												returnLemma={this.returnLemma}
+												showLoginModal={this.props.showLoginModal}
 											/>
 										</div>
 									))}

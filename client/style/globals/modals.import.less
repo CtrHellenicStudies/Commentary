@@ -31,7 +31,7 @@
 		text-align:center;
 
     &:hover, &:focus {
-      background:@primary-dark-2;
+      background:@primary;
       outline:none;
       span,i {
         color:@light;
@@ -39,7 +39,10 @@
     }
 
     i {
-      font-size:30px;
+			&:before {
+				font-size:24px;
+				line-height:34px;
+			}
     }
   }
 

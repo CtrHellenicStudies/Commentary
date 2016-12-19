@@ -11,6 +11,7 @@ DiscussionThread = React.createClass({
 		hideDiscussionThread: React.PropTypes.func.isRequired,
 		removeLemma: React.PropTypes.func.isRequired,
 		returnLemma: React.PropTypes.func.isRequired,
+		showLoginModal: React.PropTypes.func,
 	},
 
 	mixins: [ReactMeteorData],
@@ -167,14 +168,15 @@ DiscussionThread = React.createClass({
 											className="new-comment-login"
 										>
 											<FlatButton
+												label="Login"
+												className="login-link"
+												onClick={this.props.showLoginModal}
+											/>
+											<FlatButton
 												label="Join"
 												className="join-link"
 												href="/sign-up"
-											/>
-											<FlatButton
-												label="Login"
-												className="login-link"
-												href="/sign-in"
+												target="_blank"
 											/>
 										</div>
 									}

@@ -152,7 +152,7 @@ Schemas.User = new SimpleSchema({
 		type: [String],
 		optional: true,
 	},
-	highlightingOn: {
+	highlightingPreference: {
 		type: Boolean,
 		optional: true,
 	},

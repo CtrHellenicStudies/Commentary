@@ -124,7 +124,7 @@ DiscussionThread = React.createClass({
 				</div>
 
 				{!this.data.loaded ?
-					<Spinner />
+					''
 					:
 					<div className="discussion-thread">
 						<div className="add-comment-wrap paper-shadow ">

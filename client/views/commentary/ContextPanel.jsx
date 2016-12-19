@@ -29,6 +29,7 @@ ContextPanel = React.createClass({
 			lineFrom,
 			lineTo,
 			maxLine: 0,
+			highlightingVisible: true,
 		};
 	},
 
@@ -165,6 +166,12 @@ ContextPanel = React.createClass({
 		}
 	},
 
+	toggleHighlighting() {
+		this.setState({
+			highlightingVisible: !this.state.highlightingVisible,
+		});
+	},
+
 	scrollElement(state) {
 		const that = this;
 		switch (state) {
@@ -192,6 +199,10 @@ ContextPanel = React.createClass({
 
 		if (this.props.open) {
 			contextPanelStyles += ' extended';
+		}
+
+		if (this.state.highlightingVisible) {
+			contextPanelStyles += ' highlighting-visible';
 		}
 
 		return (
@@ -290,16 +301,23 @@ ContextPanel = React.createClass({
 				</div>
 
 				<div className="meta-tabs tabs">
-					{/* <FlatButton
+					<FlatButton
+						label="Highlighting"
+						className="edition-tab tab"
+						onClick={this.toggleHighlighting}
+					/>
+					{/*
+					<FlatButton
 						label="Entities"
 						className="edition-tab tab"
 						onClick={this.toggleEntities}
-					/> */}
+					/>
 					<FlatButton
 						label="Scansion"
 						className="edition-tab tab"
 						onClick={this.toggleScansion}
 					/>
+					*/}
 				</div>
 			</div>
 		);

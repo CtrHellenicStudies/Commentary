@@ -114,7 +114,6 @@ CommentLemma = React.createClass({
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
 		}
-
 		return (
 
 			<div className="comment-outer comment-lemma-comment-outer">

@@ -14,6 +14,7 @@ CommentDetail = React.createClass({
 		toggleSearchTerm: React.PropTypes.func,
 		isOnHomeView: React.PropTypes.bool,
 		showLoginModal: React.PropTypes.func,
+		toggleLemma: React.PropTypes.func,
 	},
 
 	mixins: [ReactMeteorData],
@@ -371,8 +372,7 @@ CommentDetail = React.createClass({
 					showDiscussionThread={self.showDiscussionThread}
 					hideDiscussionThread={self.hideDiscussionThread}
 					discussionVisible={self.state.discussionVisible}
-					removeLemma={this.props.removeLemma}
-					returnLemma={this.props.returnLemma}
+					toggleLemma={this.props.toggleLemma}
 					showLoginModal={this.props.showLoginModal}
 				/>
 
@@ -386,7 +386,6 @@ CommentDetail = React.createClass({
 					lineTo={self.state.lemmaReferenceLineTo}
 					closeLemmaReference={self.closeLemmaReference}
 				/>
-				
 			</div>
 		);
 	},

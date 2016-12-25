@@ -38,7 +38,7 @@ ContextPanel = React.createClass({
 	},
 
 	componentDidMount() {
-		this.scrollElement('open');
+		// this.scrollElement('open');
 		Meteor.call('getMaxLine', this.props.commentGroup.work.slug,
 			this.props.commentGroup.subwork.n, (err, res) => {
 				if (err) {
@@ -59,7 +59,7 @@ ContextPanel = React.createClass({
 	},
 
 	componentDidUpdate(prevProps) {
-		this.scrollElement('open');
+		// this.scrollElement('open');
 		const commentGroup = this.props.commentGroup;
 		if (commentGroup.ref !== prevProps.commentGroup.ref) {
 			this.setState({
@@ -70,7 +70,7 @@ ContextPanel = React.createClass({
 	},
 
 	componentWillUnmount() {
-		this.scrollElement('close');
+		// this.scrollElement('close');
 	},
 
 	onAfterClicked() {

@@ -323,17 +323,10 @@ Commentary = React.createClass({
 
 	render() {
 		let isOnHomeView;
-		let commentsClass = 'comments ';
-
-
 		if ('isOnHomeView' in this.props) {
 			isOnHomeView = this.props.isOnHomeView;
 		} else {
 			isOnHomeView = false;
-		}
-
-		if (this.state.contextPanelOpen) {
-			commentsClass += 'lemma-panel-visible';
 		}
 
 		return (
@@ -345,42 +338,18 @@ Commentary = React.createClass({
 				>
 					<div className="commentary-comments commentary-comment-groups">
 						{this.data.commentGroups.map((commentGroup, commentGroupIndex) => (
-							<div
-								className="comment-group "
-								data-ref={commentGroup.ref}
+							<CommentGroup
 								key={commentGroupIndex}
-								id={`comment-group-${commentGroupIndex}`}
-							>
-								<div className={commentsClass}>
-
-										<CommentLemma
-											index={commentGroupIndex}
-											commentGroup={commentGroup}
-											showContextPanel={this.showContextPanel}
-											scrollPosition={this.contextScrollPosition}
-											hideLemma={this.state.hideLemmaPanel}
-										/>
-
-									{commentGroup.comments.map((comment, commentIndex) => (
-										<div
-											key={commentIndex}
-										>
-											<CommentDetail
-												key={commentIndex}
-												commentGroup={commentGroup}
-												comment={comment}
-												toggleSearchTerm={!isOnHomeView ? this.toggleSearchTerm : null}
-												checkIfToggleLemmaReferenceModal={this.checkIfToggleLemmaReferenceModal}
-												filters={this.props.filters}
-												removeLemma={this.removeLemma}
-												returnLemma={this.returnLemma}
-												showLoginModal={this.props.showLoginModal}
-											/>
-										</div>
-									))}
-								</div>
-								<hr className="comment-group-end" />
-							</div>
+								commentGroupIndex={commentGroupIndex}
+								commentGroup={commentGroup}
+								contextPanelOpen={this.state.contextPanelOpen}
+								showContextPanel={this.showContextPanel}
+								contextScrollPosition={this.contextScrollPosition}
+								toggleSearchTerm={this.toggleSearchTerm}
+								showLoginModal={this.props.showLoginModal}
+								filters={this.props.filters}
+								isOnHomeView={this.props.isOnHomeView}
+							/>
 						))}
 					</div>
 				</InfiniteScroll>

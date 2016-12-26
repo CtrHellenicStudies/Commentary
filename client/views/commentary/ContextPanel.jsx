@@ -38,7 +38,7 @@ ContextPanel = React.createClass({
 	},
 
 	componentDidMount() {
-		// this.scrollElement('open');
+		this.scrollElement('open');
 		Meteor.call('getMaxLine', this.props.commentGroup.work.slug,
 			this.props.commentGroup.subwork.n, (err, res) => {
 				if (err) {
@@ -58,8 +58,12 @@ ContextPanel = React.createClass({
 		);
 	},
 
-	componentDidUpdate(prevProps) {
-		// this.scrollElement('open');
+	componentDidUpdate(prevProps, prevState) {
+		const isLemmEditionChange = prevState.selectedLemmaEdition !== this.state.selectedLemmaEdition;
+		const isHighlighngChange = prevState.highlightingVisible !== this.state.highlightingVisible;
+		if (!(isLemmEditionChange || isHighlighngChange)) {
+			this.scrollElement('open');
+		}
 		const commentGroup = this.props.commentGroup;
 		if (commentGroup.ref !== prevProps.commentGroup.ref) {
 			this.setState({
@@ -67,10 +71,6 @@ ContextPanel = React.createClass({
 				lineTo: commentGroup.lineFrom + 49,
 			});
 		}
-	},
-
-	componentWillUnmount() {
-		// this.scrollElement('close');
 	},
 
 	onAfterClicked() {

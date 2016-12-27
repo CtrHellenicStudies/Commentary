@@ -21,6 +21,7 @@ CommentarySearchToolbar = React.createClass({
 		return {
 			searchDropdownOpen: '',
 			activeWorkNew: null,
+			selectedWork: 'Book',
 		};
 	},
 
@@ -71,6 +72,18 @@ CommentarySearchToolbar = React.createClass({
 				searchDropdownOpen: targetDropdown,
 			});
 		}
+	},
+
+	handleHymnSelected() {
+		this.setState({
+			selectedWork: 'Hymn',
+		});
+	},
+
+	handleBookSelected() {
+		this.setState({
+			selectedWork: 'Book',
+		});
 	},
 
 	render() {
@@ -244,14 +257,15 @@ CommentarySearchToolbar = React.createClass({
 								searchTermKey="works"
 								value={work}
 								activeWork={active}
+								handleHymnSelected={work.title === 'Homeric Hymns' ? this.handleHymnSelected : this.handleBookSelected}
 							/>
 						);
 					})}
 				</SearchToolDropdown>
 
 				<SearchToolDropdown
-					name="Book"
-					open={this.state.searchDropdownOpen === 'Book'}
+					name={this.state.selectedWork}
+					open={this.state.searchDropdownOpen === 'Book' || this.state.searchDropdownOpen === 'Hymn'}
 					toggle={this.toggleSearchDropdown}
 					disabled={workInFilter === false}
 

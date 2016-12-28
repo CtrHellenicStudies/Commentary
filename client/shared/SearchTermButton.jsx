@@ -12,6 +12,7 @@ SearchTermButton = React.createClass({
 		value: React.PropTypes.object.isRequired,
 		activeWork: React.PropTypes.bool,
 		active: React.PropTypes.bool,
+		handleHymnSelected: React.PropTypes.func,
 	},
 
 	childContextTypes: {
@@ -24,6 +25,10 @@ SearchTermButton = React.createClass({
 
 	toggleSearchTerm() {
 		this.props.toggleSearchTerm(this.props.searchTermKey, this.props.value);
+	},
+
+	handleHymnSelected() {
+		this.props.handleHymnSelected();
 	},
 
 	render() {
@@ -42,7 +47,7 @@ SearchTermButton = React.createClass({
 			<li>
 				<FlatButton
 					className={className}
-					onClick={this.toggleSearchTerm}
+					onClick={() => { this.toggleSearchTerm(); this.handleHymnSelected(); }}
 					label={this.props.label}
 					icon={
 						<FontIcon

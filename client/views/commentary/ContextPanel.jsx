@@ -58,8 +58,12 @@ ContextPanel = React.createClass({
 		);
 	},
 
-	componentDidUpdate(prevProps) {
-		this.scrollElement('open');
+	componentDidUpdate(prevProps, prevState) {
+		const isLemmaEditionChange = prevState.selectedLemmaEdition !== this.state.selectedLemmaEdition;
+		const isHighlightingChange = prevState.highlightingVisible !== this.state.highlightingVisible;
+		if (!(isLemmaEditionChange || isHighlightingChange)) {
+			this.scrollElement('open');
+		}
 		const commentGroup = this.props.commentGroup;
 		if (commentGroup.ref !== prevProps.commentGroup.ref) {
 			this.setState({
@@ -67,10 +71,6 @@ ContextPanel = React.createClass({
 				lineTo: commentGroup.lineFrom + 49,
 			});
 		}
-	},
-
-	componentWillUnmount() {
-		this.scrollElement('close');
 	},
 
 	onAfterClicked() {
@@ -173,18 +173,20 @@ ContextPanel = React.createClass({
 	},
 
 	scrollElement(state) {
-		const that = this;
+		const self = this;
 		switch (state) {
 		case 'open':
 			window.requestAnimationFrame(() => {
-				const scroll = $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top;
-				$(document).scrollTop(scroll);
+				setTimeout(() => {
+					const scroll = $(`#comment-group-${self.props.commentLemmaIndex}`).offset().top;
+					$(document).scrollTop(scroll);
+				}, 300);
 			});
 			break;
 		case 'close':
 			window.requestAnimationFrame(() => {
 				setTimeout(() => {
-					$(document).scrollTop(that.props.scrollPosition);
+					$(document).scrollTop(self.props.scrollPosition);
 				}, 1000);
 			});
 			break;

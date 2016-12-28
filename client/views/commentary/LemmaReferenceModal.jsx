@@ -165,11 +165,6 @@ LemmaReferenceModal = React.createClass({
 						})}
 					</div>
 					<div className="meta-tabs tabs">
-						<FlatButton
-							label="Highlighting"
-							className="edition-tab tab"
-							onClick={this.toggleHighlighting}
-						/>
 						{/*
 						<FlatButton
 							label="Entities"

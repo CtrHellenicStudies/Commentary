@@ -282,42 +282,44 @@ ContextPanel = React.createClass({
 
 				</div>
 
-				<div className="edition-tabs tabs">
-					{this.data.lemmaText.map((lemmaTextEdition, i) => {
-						const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+				<div className="lemma-panel-tabs">
+					<div className="edition-tabs tabs">
+						{this.data.lemmaText.map((lemmaTextEdition, i) => {
+							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-						return (
-							<RaisedButton
-								key={i}
-								label={lemmaEditionTitle}
-								data-edition={lemmaTextEdition.title}
-								className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
-									'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-							/>
-						);
-					})}
+							return (
+								<RaisedButton
+									key={i}
+									label={lemmaEditionTitle}
+									data-edition={lemmaTextEdition.title}
+									className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+										'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+									onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+								/>
+							);
+						})}
 
-				</div>
+					</div>
 
-				<div className="meta-tabs tabs">
-					<FlatButton
-						label="Highlighting"
-						className="edition-tab tab"
-						onClick={this.toggleHighlighting}
-					/>
-					{/*
-					<FlatButton
-						label="Entities"
-						className="edition-tab tab"
-						onClick={this.toggleEntities}
-					/>
-					<FlatButton
-						label="Scansion"
-						className="edition-tab tab"
-						onClick={this.toggleScansion}
-					/>
-					*/}
+					<div className="meta-tabs tabs">
+						<FlatButton
+							label="Highlighting"
+							className="edition-tab tab"
+							onClick={this.toggleHighlighting}
+						/>
+						{/*
+						<FlatButton
+							label="Entities"
+							className="edition-tab tab"
+							onClick={this.toggleEntities}
+						/>
+						<FlatButton
+							label="Scansion"
+							className="edition-tab tab"
+							onClick={this.toggleScansion}
+						/>
+						*/}
+					</div>
 				</div>
 			</div>
 		);

@@ -11,60 +11,58 @@ CommentaryLayout = React.createClass({
 		return {
 			filters,
 			selectedRevisionIndex,
+			modalLoginLowered: false,
 		};
 	},
 
-	// --- BEGIN handle querParams --- //
-
-    componentDidUpdate() {
-        let queryParams = {};
-        this.state.filters.forEach((filter) => {
-            filter.values.forEach((value) => {
-                const getQueryParamValue = this.getQueryParamValue;
-                switch (filter.key) {
-                    case 'works':
-                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-                        break;
-                    case 'subworks':
-                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
-                        break;
-                    case 'keyideas':
-                    case 'keywords':
-                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-                        break;
-                    case 'commenters':
-                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-                        break;
-                    case 'lineFrom':
-                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-                        break;
-                    case 'lineTo':
-                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-                        break;
-                    case 'textsearch':
-                        queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-                        break;
-                    default:
-                        break;
-                }
-            });
-        });
-        if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
-            FlowRouter.go('/commentary/', {}, queryParams);
-        }
-    },
+	componentDidUpdate() {
+		let queryParams = {};
+		this.state.filters.forEach((filter) => {
+			filter.values.forEach((value) => {
+				const getQueryParamValue = this.getQueryParamValue;
+				switch (filter.key) {
+					case 'works':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+						break;
+					case 'subworks':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+						break;
+					case 'keyideas':
+					case 'keywords':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+						break;
+					case 'commenters':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+						break;
+					case 'lineFrom':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
+					case 'lineTo':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
+					case 'textsearch':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
+					default:
+						break;
+				}
+			});
+		});
+		if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
+			FlowRouter.go('/commentary/', {}, queryParams);
+		}
+	},
 
 	getQueryParamValue(queryParams, key, value) {
 		let queryParamValue = null;
 		if (queryParams[key]) {
-            queryParamValue = queryParams[key] + ',' + value;
-        } else {
-            queryParamValue = value;
-        };
-        return queryParamValue;
-	},
+			queryParamValue = queryParams[key] + ',' + value;
+		} else {
+			queryParamValue = value;
+		}
 
-	// --- END handle querParams --- //
+		return queryParamValue;
+	},
 
 	getFilterValue(filters, key) {
 		let value = {};
@@ -365,6 +363,18 @@ CommentaryLayout = React.createClass({
 		});
 	},
 
+	showLoginModal() {
+		this.setState({
+			modalLoginLowered: true,
+		});
+	},
+
+	closeLoginModal() {
+		this.setState({
+			modalLoginLowered: false,
+		});
+	},
+
 	render() {
 		return (
 			<div>
@@ -382,9 +392,17 @@ CommentaryLayout = React.createClass({
 						filters={this.state.filters}
 						toggleSearchTerm={this.toggleSearchTerm}
 						loadMoreComments={this.loadMoreComments}
+						showLoginModal={this.showLoginModal}
 					/>
 
 				</div>
+				{this.state.modalLoginLowered ?
+					<ModalLogin
+						lowered={this.state.modalLoginLowered}
+						closeModal={this.closeLoginModal}
+					/>
+					: ''
+				}
 			</div>
 		);
 	},

@@ -9,8 +9,8 @@ DiscussionThread = React.createClass({
 		discussionVisible: React.PropTypes.bool.isRequired,
 		showDiscussionThread: React.PropTypes.func.isRequired,
 		hideDiscussionThread: React.PropTypes.func.isRequired,
-		removeLemma: React.PropTypes.func.isRequired,
-		returnLemma: React.PropTypes.func.isRequired,
+		toggleLemma: React.PropTypes.func.isRequired,
+		showLoginModal: React.PropTypes.func,
 	},
 
 	mixins: [ReactMeteorData],
@@ -47,14 +47,6 @@ DiscussionThread = React.createClass({
 		};
 	},
 
-	removeLemma() {
-		this.props.removeLemma();
-	},
-
-	returnLemma() {
-		this.props.returnLemma();
-	},
-
 	showDiscussionThread() {
 		this.props.showDiscussionThread(this.props.comment);
 	},
@@ -77,7 +69,7 @@ DiscussionThread = React.createClass({
 	sortMethodSelect(value) {
 		this.setState({
 			sortMethod: value,
-		})
+		});
 	},
 
 	render() {
@@ -111,7 +103,7 @@ DiscussionThread = React.createClass({
 					<h4 className="continue-discussion-label">Discussion</h4>
 					<div
 						className="continue-discussion-icon"
-						onClick={this.removeLemma}
+						onClick={this.props.toggleLemma}
 					>
 						<i className="mdi mdi-comment" />
 						{this.data.discussionComments.length ?
@@ -123,14 +115,14 @@ DiscussionThread = React.createClass({
 				</div>
 
 				{!this.data.loaded ?
-					<Spinner />
+					''
 					:
 					<div className="discussion-thread">
 						<div className="add-comment-wrap paper-shadow ">
 							<IconButton
 								className="close-discussion paper-shadow"
 								iconClassName="mdi mdi-close"
-								onClick={() => { this.hideDiscussionThread(); this.returnLemma(); }}
+								onClick={() => { this.hideDiscussionThread(); this.props.toggleLemma(); }}
 							/>
 
 							<form
@@ -167,14 +159,15 @@ DiscussionThread = React.createClass({
 											className="new-comment-login"
 										>
 											<FlatButton
+												label="Login"
+												className="login-link"
+												onClick={this.props.showLoginModal}
+											/>
+											<FlatButton
 												label="Join"
 												className="join-link"
 												href="/sign-up"
-											/>
-											<FlatButton
-												label="Login"
-												className="login-link"
-												href="/sign-in"
+												target="_blank"
 											/>
 										</div>
 									}

@@ -1,3 +1,6 @@
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 LemmaReferenceModal = React.createClass({
@@ -13,6 +16,10 @@ LemmaReferenceModal = React.createClass({
 		closeLemmaReference: React.PropTypes.func,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
 	mixins: [ReactMeteorData],
 
 	getInitialState() {
@@ -20,6 +27,10 @@ LemmaReferenceModal = React.createClass({
 			selectedLemmaEditionIndex: 0,
 
 		};
+	},
+
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
@@ -98,6 +109,12 @@ LemmaReferenceModal = React.createClass({
 		}
 	},
 
+	toggleHighlighting() {
+		this.setState({
+			highlightingVisible: !this.state.highlightingVisible,
+		});
+	},
+
 	render() {
 		const self = this;
 		const lemmaText =
@@ -146,6 +163,20 @@ LemmaReferenceModal = React.createClass({
 								/>
 							);
 						})}
+					</div>
+					<div className="meta-tabs tabs">
+						{/*
+						<FlatButton
+							label="Entities"
+							className="edition-tab tab"
+							onClick={this.toggleEntities}
+						/>
+						<FlatButton
+							label="Scansion"
+							className="edition-tab tab"
+							onClick={this.toggleScansion}
+						/>
+						*/}
 					</div>
 
 					<i

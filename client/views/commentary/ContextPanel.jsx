@@ -29,6 +29,7 @@ ContextPanel = React.createClass({
 			lineFrom,
 			lineTo,
 			maxLine: 0,
+			highlightingVisible: true,
 		};
 	},
 
@@ -57,8 +58,12 @@ ContextPanel = React.createClass({
 		);
 	},
 
-	componentDidUpdate(prevProps) {
-		this.scrollElement('open');
+	componentDidUpdate(prevProps, prevState) {
+		const isLemmaEditionChange = prevState.selectedLemmaEdition !== this.state.selectedLemmaEdition;
+		const isHighlightingChange = prevState.highlightingVisible !== this.state.highlightingVisible;
+		if (!(isLemmaEditionChange || isHighlightingChange)) {
+			this.scrollElement('open');
+		}
 		const commentGroup = this.props.commentGroup;
 		if (commentGroup.ref !== prevProps.commentGroup.ref) {
 			this.setState({
@@ -66,10 +71,6 @@ ContextPanel = React.createClass({
 				lineTo: commentGroup.lineFrom + 49,
 			});
 		}
-	},
-
-	componentWillUnmount() {
-		this.scrollElement('close');
 	},
 
 	onAfterClicked() {
@@ -165,19 +166,27 @@ ContextPanel = React.createClass({
 		}
 	},
 
+	toggleHighlighting() {
+		this.setState({
+			highlightingVisible: !this.state.highlightingVisible,
+		});
+	},
+
 	scrollElement(state) {
-		const that = this;
+		const self = this;
 		switch (state) {
 		case 'open':
 			window.requestAnimationFrame(() => {
-				const scroll = $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top;
-				$(document).scrollTop(scroll);
+				setTimeout(() => {
+					const scroll = $(`#comment-group-${self.props.commentLemmaIndex}`).offset().top;
+					$(document).scrollTop(scroll);
+				}, 300);
 			});
 			break;
 		case 'close':
 			window.requestAnimationFrame(() => {
 				setTimeout(() => {
-					$(document).scrollTop(that.props.scrollPosition);
+					$(document).scrollTop(self.props.scrollPosition);
 				}, 1000);
 			});
 			break;
@@ -192,6 +201,10 @@ ContextPanel = React.createClass({
 
 		if (this.props.open) {
 			contextPanelStyles += ' extended';
+		}
+
+		if (this.state.highlightingVisible) {
+			contextPanelStyles += ' highlighting-visible';
 		}
 
 		return (
@@ -271,35 +284,44 @@ ContextPanel = React.createClass({
 
 				</div>
 
-				<div className="edition-tabs tabs">
-					{this.data.lemmaText.map((lemmaTextEdition, i) => {
-						const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+				<div className="lemma-panel-tabs">
+					<div className="edition-tabs tabs">
+						{this.data.lemmaText.map((lemmaTextEdition, i) => {
+							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-						return (
-							<RaisedButton
-								key={i}
-								label={lemmaEditionTitle}
-								data-edition={lemmaTextEdition.title}
-								className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
-									'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-								onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-							/>
-						);
-					})}
+							return (
+								<RaisedButton
+									key={i}
+									label={lemmaEditionTitle}
+									data-edition={lemmaTextEdition.title}
+									className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+										'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+									onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+								/>
+							);
+						})}
 
-				</div>
+					</div>
 
-				<div className="meta-tabs tabs">
-					{/* <FlatButton
-						label="Entities"
-						className="edition-tab tab"
-						onClick={this.toggleEntities}
-					/> */}
-					<FlatButton
-						label="Scansion"
-						className="edition-tab tab"
-						onClick={this.toggleScansion}
-					/>
+					<div className="meta-tabs tabs">
+						<FlatButton
+							label="Highlighting"
+							className="edition-tab tab"
+							onClick={this.toggleHighlighting}
+						/>
+						{/*
+						<FlatButton
+							label="Entities"
+							className="edition-tab tab"
+							onClick={this.toggleEntities}
+						/>
+						<FlatButton
+							label="Scansion"
+							className="edition-tab tab"
+							onClick={this.toggleScansion}
+						/>
+						*/}
+					</div>
 				</div>
 			</div>
 		);

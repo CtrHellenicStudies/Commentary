@@ -269,55 +269,6 @@ article.lemma-comment {
     color: rgba(0, 0, 0, 0.7);
 
   }
-
-  .edition-tab {
-    display: inline-block;
-    margin: 5px;
-    box-shadow: none !important;
-    border-radius: 2px;
-
-    &.selected-edition-tab {
-      background: @primary !important;
-      margin: 3px;
-      color: @light;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
-      border-radius: 2px;
-
-      button, div {
-        background: @primary !important;
-
-      }
-
-      span {
-        color: @light !important;
-
-      }
-
-      &:hover {
-        background: @primary-dark-2 !important;
-        button, div {
-          background: @primary-dark-2 !important;
-
-        }
-
-      }
-
-    }
-
-    button {
-      padding: 5px 10px;
-      max-width: 200px;
-      text-overflow: ellipsis;
-
-      span {
-        //font-family:@font-label;
-        font-size: 14px;
-      }
-
-    }
-
-  }
-
   .context-tab {
 
     box-shadow: none !important;
@@ -474,6 +425,55 @@ article.lemma-comment {
   }
 
 }
+
+.edition-tab {
+  display: inline-block;
+  margin: 5px;
+  box-shadow: none !important;
+  border-radius: 2px;
+
+  &.selected-edition-tab {
+    background: @primary !important;
+    margin: 3px;
+    color: @light;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 2px;
+
+    button, div {
+      background: @primary !important;
+
+    }
+
+    span {
+      color: @light !important;
+
+    }
+
+    &:hover {
+      background: @primary-dark-2 !important;
+      button, div {
+        background: @primary-dark-2 !important;
+
+      }
+
+    }
+
+  }
+
+  button {
+    padding: 5px 10px;
+    max-width: 200px;
+    text-overflow: ellipsis;
+
+    span {
+      //font-family:@font-label;
+      font-size: 14px;
+    }
+
+  }
+
+}
+
 
 .comment-fixed-title-wrap {
   position: relative;

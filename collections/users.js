@@ -83,9 +83,11 @@ Schemas.UserProfile = new SimpleSchema({
 });
 
 Schemas.User = new SimpleSchema({
+	_id: {
+		type: String,
+	},
 	username: {
 		type: String,
-		regEx: /^[a-z0-9A-Z_]{3,15}$/,
 		optional: true,
 	},
 	emails: {
@@ -99,7 +101,7 @@ Schemas.User = new SimpleSchema({
 	'emails.$.verified': {
 		type: Boolean,
 	},
-	created: {
+	createdAt: {
 		type: Date,
 		optional: true,
 		autoValue() {
@@ -113,7 +115,7 @@ Schemas.User = new SimpleSchema({
 			label: false,
 		},
 	},
-	updated: {
+	updatedAt: {
 		type: Date,
 		optional: true,
 		autoValue() {
@@ -150,6 +152,10 @@ Schemas.User = new SimpleSchema({
 		type: [String],
 		optional: true,
 	},
+	highlightingPreference: {
+		type: Boolean,
+		optional: true,
+	},
 
 	avatar: {
 		type: Object,
@@ -164,6 +170,7 @@ Schemas.User = new SimpleSchema({
 	'avatar.url': {
 		type: String,
 	},
+
 });
 
 Meteor.users.attachSchema(Schemas.User);

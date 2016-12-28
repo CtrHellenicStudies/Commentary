@@ -59,9 +59,9 @@ ContextPanel = React.createClass({
 	},
 
 	componentDidUpdate(prevProps, prevState) {
-		const isLemmEditionChange = prevState.selectedLemmaEdition !== this.state.selectedLemmaEdition;
-		const isHighlighngChange = prevState.highlightingVisible !== this.state.highlightingVisible;
-		if (!(isLemmEditionChange || isHighlighngChange)) {
+		const isLemmaEditionChange = prevState.selectedLemmaEdition !== this.state.selectedLemmaEdition;
+		const isHighlightingChange = prevState.highlightingVisible !== this.state.highlightingVisible;
+		if (!(isLemmaEditionChange || isHighlightingChange)) {
 			this.scrollElement('open');
 		}
 		const commentGroup = this.props.commentGroup;
@@ -173,18 +173,20 @@ ContextPanel = React.createClass({
 	},
 
 	scrollElement(state) {
-		const that = this;
+		const self = this;
 		switch (state) {
 		case 'open':
 			window.requestAnimationFrame(() => {
-				const scroll = $(`#comment-group-${that.props.commentLemmaIndex}`).offset().top;
-				$(document).scrollTop(scroll);
+				setTimeout(() => {
+					const scroll = $(`#comment-group-${self.props.commentLemmaIndex}`).offset().top;
+					$(document).scrollTop(scroll);
+				}, 300);
 			});
 			break;
 		case 'close':
 			window.requestAnimationFrame(() => {
 				setTimeout(() => {
-					$(document).scrollTop(that.props.scrollPosition);
+					$(document).scrollTop(self.props.scrollPosition);
 				}, 1000);
 			});
 			break;

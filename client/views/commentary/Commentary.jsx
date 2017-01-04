@@ -362,7 +362,7 @@ Commentary = React.createClass({
 					: '' }
 				{/* --- END comments list */}
 				{/* --- BEGIN no comments found */}
-				{(this.props.commentsReady && this.data.commentGroups.length === 0) ?
+				{(this.data.commentGroups.length === 0) ?
 					<div className="no-commentary-wrap">
 						<p className="no-commentary no-results">
 							No commentary available for the current search.

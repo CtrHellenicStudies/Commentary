@@ -53,6 +53,9 @@ DiscussionComment = React.createClass({
 	},
 
 	reportDiscussionComment() {
+		this.setState({
+			moreOptionsVisible: false,
+		});
 		if (typeof this.props.currentUser !== 'undefined' || 'null') {
 			Meteor.call('discussionComments.report',
 				this.props.discussionComment._id

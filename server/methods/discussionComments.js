@@ -131,7 +131,7 @@ Meteor.methods({
 		/*
 		 * Send email notification that a discussion comment was flagged
 		 */
-		Email.send({
+	/*	Email.send({
 			to: 'lukehollis@gmail.com',
 			from: Config.emails.from(),
 			subject: `User comment flagged on ${Config.name}`,
@@ -146,7 +146,26 @@ Meteor.methods({
 			<br />
 			${Config.title()}
 			`,
-		});
+		}); */
 	},
 
+	'discussionComments.unreport': function unreportDiscussionComment(discussionCommentId) {
+		check(discussionCommentId, String);
+		this.unblock();
+
+		const discussionComment = DiscussionComments.findOne(discussionCommentId);
+
+		try {
+			if ('usersReported' in discussionComment) {
+				DiscussionComments.update({
+					_id: discussionCommentId,
+				}, {
+					$pull: { usersReported: this.userId },
+					$inc: { reported: -1 },
+				});
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	},
 });

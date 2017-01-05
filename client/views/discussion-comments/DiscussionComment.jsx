@@ -15,6 +15,7 @@ DiscussionComment = React.createClass({
 			editMode: false,
 			moreOptionsVisible: false,
 			shareOptionsVisible: false,
+			readComment: false,
 		};
 	},
 
@@ -59,6 +60,17 @@ DiscussionComment = React.createClass({
 		}
 	},
 
+	unreportDiscussionComment() {
+		this.setState({
+			readComment: false,
+		});
+		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+			Meteor.call('discussionComments.unreport',
+				this.props.discussionComment._id
+			);
+		}
+	},
+
 	toggleMoreOptions() {
 		this.setState({
 			moreOptionsVisible: !this.state.moreOptionsVisible,
@@ -70,6 +82,12 @@ DiscussionComment = React.createClass({
 		this.setState({
 			shareOptionsVisible: !this.state.shareOptionsVisible,
 			moreOptionsVisible: false,
+		});
+	},
+
+	readDiscussionComment() {
+		this.setState({
+			readComment: true,
 		});
 	},
 
@@ -108,13 +126,14 @@ DiscussionComment = React.createClass({
 		if (
 			this.props.currentUser &&
 			discussionComment.usersReported &&
+			discussionComment.reported > 0 &&
 			discussionComment.usersReported.indexOf(this.props.currentUser._id) >= 0
 		) {
 			userReported = true;
 		}
 
 		return (
-			<div className={`discussion-comment paper-shadow ${(userReported ? 'discussion-comment--user-reported' : '')}`}>
+			<div className={`discussion-comment paper-shadow ${(userReported && !this.state.readComment ? 'discussion-comment--user-reported' : '')}`}>
 				<div className="discussion-comment-content">
 					<div className="inner-comment-row">
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
@@ -177,6 +196,7 @@ DiscussionComment = React.createClass({
 						</div>
 					</div>
 					<div className="inner-comment-row">
+					{this.state.readComment === false ?
 						<FlatButton
 							label={discussionComment.votes}
 							onClick={this.upvoteDiscussionComment}
@@ -188,7 +208,11 @@ DiscussionComment = React.createClass({
 								:
 								''
 							}
+
 						</FlatButton>
+						:
+						''
+					}
 						{(
 								'currentUser' in self.props
 							&& self.props.currentUser
@@ -202,6 +226,7 @@ DiscussionComment = React.createClass({
 						:
 							''
 						}
+					{this.state.readComment === false ?
 						<FlatButton
 							label=""
 							onClick={this.toggleShareOptions}
@@ -210,7 +235,10 @@ DiscussionComment = React.createClass({
 						>
 							<span className="md-tooltip">Share</span>
 						</FlatButton>
-
+						:
+						''
+					}
+					{this.state.readComment === false ?
 						<FlatButton
 							onClick={this.toggleMoreOptions}
 							label=""
@@ -219,6 +247,9 @@ DiscussionComment = React.createClass({
 						>
 							<span className="md-tooltip">Show more</span>
 						</FlatButton>
+						:
+						''
+					}
 
 						<div className={`more-options ${this.state.moreOptionsVisible ? 'more-options--visible' : ''}`}>
 							<FlatButton
@@ -236,6 +267,13 @@ DiscussionComment = React.createClass({
 								}
 							</FlatButton>
 						</div>
+						{this.state.readComment === true ?
+							<FlatButton
+								label="Unreport"
+								onClick={this.unreportDiscussionComment}
+							/>
+							: ''
+						}
 						<div className={`more-options share-options ${this.state.shareOptionsVisible ? 'more-options--visible' : ''}`}>
 							<FlatButton
 								label="Facebook"
@@ -353,9 +391,19 @@ DiscussionComment = React.createClass({
 					</div>
 					{/* <!-- .discussion-comment --> */}
 				</div>
-				<span className="discussion-comment-user-reported-message">
+				<div className="discussion-comment-user-reported-message">
 					You reported this comment.
-				</span>
+					<div>
+						<FlatButton
+							label="Read"
+							onClick={this.readDiscussionComment}
+						/>
+						<FlatButton
+							label="Unreport"
+							onClick={this.unreportDiscussionComment}
+						/>
+					</div>
+				</div>
 			</div>
 		);
 	},

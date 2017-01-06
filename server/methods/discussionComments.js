@@ -131,7 +131,7 @@ Meteor.methods({
 		/*
 		 * Send email notification that a discussion comment was flagged
 		 */
-	/*	Email.send({
+		Email.send({
 			to: 'lukehollis@gmail.com',
 			from: Config.emails.from(),
 			subject: `User comment flagged on ${Config.name}`,
@@ -146,7 +146,7 @@ Meteor.methods({
 			<br />
 			${Config.title()}
 			`,
-		}); */
+		});
 	},
 
 	'discussionComments.unreport': function unreportDiscussionComment(discussionCommentId) {

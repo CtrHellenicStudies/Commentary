@@ -199,23 +199,23 @@ DiscussionComment = React.createClass({
 						</div>
 					</div>
 					<div className="inner-comment-row">
-					{this.state.readComment === false ?
-						<FlatButton
-							label={discussionComment.votes}
-							onClick={this.upvoteDiscussionComment}
-							className={`discussion-comment-button vote-up ${(userUpvoted) ? 'upvoted' : ''}`}
-							icon={<FontIcon className="mdi mdi-chevron-up" />}
-						>
-							{!userIsLoggedIn ?
-								<span className="md-tooltip">You must be signed in to vote.</span>
-								:
-								''
-							}
+						{this.state.readComment === false ?
+							<FlatButton
+								label={discussionComment.votes}
+								onClick={this.upvoteDiscussionComment}
+								className={`discussion-comment-button vote-up ${(userUpvoted) ? 'upvoted' : ''}`}
+								icon={<FontIcon className="mdi mdi-chevron-up" />}
+							>
+								{!userIsLoggedIn ?
+									<span className="md-tooltip">You must be signed in to vote.</span>
+									:
+									''
+								}
 
-						</FlatButton>
-						:
-						''
-					}
+							</FlatButton>
+							:
+							''
+						}
 						{(
 								'currentUser' in self.props
 							&& self.props.currentUser
@@ -229,30 +229,30 @@ DiscussionComment = React.createClass({
 						:
 							''
 						}
-					{this.state.readComment === false ?
-						<FlatButton
-							label=""
-							onClick={this.toggleShareOptions}
-							className="discussion-comment-button"
-							icon={<FontIcon className="mdi mdi-share" />}
-						>
-							<span className="md-tooltip">Share</span>
-						</FlatButton>
-						:
-						''
-					}
-					{this.state.readComment === false ?
-						<FlatButton
-							onClick={this.toggleMoreOptions}
-							label=""
-							className={`discussion-comment-button toggle-more-button ${(this.state.moreOptionsVisible) ? 'toggle-more-button--active' : ''}`}
-							icon={<FontIcon className="mdi mdi-dots-horizontal" />}
-						>
-							<span className="md-tooltip">Show more</span>
-						</FlatButton>
-						:
-						''
-					}
+						{this.state.readComment === false ?
+							<FlatButton
+								label=""
+								onClick={this.toggleShareOptions}
+								className="discussion-comment-button"
+								icon={<FontIcon className="mdi mdi-share" />}
+							>
+								<span className="md-tooltip">Share</span>
+							</FlatButton>
+							:
+							''
+						}
+						{this.state.readComment === false ?
+							<FlatButton
+								onClick={this.toggleMoreOptions}
+								label=""
+								className={`discussion-comment-button toggle-more-button ${(this.state.moreOptionsVisible) ? 'toggle-more-button--active' : ''}`}
+								icon={<FontIcon className="mdi mdi-dots-horizontal" />}
+							>
+								<span className="md-tooltip">Show more</span>
+							</FlatButton>
+							:
+							''
+						}
 
 						<div className={`more-options ${this.state.moreOptionsVisible ? 'more-options--visible' : ''}`}>
 							<FlatButton

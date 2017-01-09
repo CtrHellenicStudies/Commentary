@@ -114,6 +114,8 @@ CommentLemma = React.createClass({
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
 		}
+		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+
 		return (
 
 			<div className="comment-outer comment-lemma-comment-outer">

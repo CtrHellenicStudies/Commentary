@@ -419,8 +419,8 @@ AddCommentLayout = React.createClass({
 								toggleSearchTerm={this.toggleSearchTerm}
 								handleChangeLineN={this.handleChangeLineN}
 								filters={this.state.filters}
-                                initialSearchEnabled
-                                addCommentPage
+                initialSearchEnabled
+                addCommentPage
 							/>
 
 							<main>

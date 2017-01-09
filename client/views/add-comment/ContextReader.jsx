@@ -116,7 +116,7 @@ ContextReader = React.createClass({
 		if (Object.keys(this.lines).length) {
 			if (this.props.selectedLineFrom === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i.toString() in this.lines) {
+					if (i.toString() in this.lines && this.lines[i.toString()]) {
 						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
@@ -182,7 +182,6 @@ ContextReader = React.createClass({
 
 	getMeteorData() {
 		const self = this;
-
 		if (this.props.workSlug !== '' && this.props.subworkN !== 0) {
 			let lemmaText = [];
 			// var commentGroup = this.props.commentGroup;
@@ -200,8 +199,9 @@ ContextReader = React.createClass({
 				},
 			};
 
-			// console.log('lemmaQuery', lemmaQuery);
-
+			if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+				lemmaQuery['work.slug'] = 'hymns';
+			}
 
 			const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
 			if (textNodesSubscription.ready()) {

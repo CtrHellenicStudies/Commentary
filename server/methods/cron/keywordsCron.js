@@ -1,5 +1,5 @@
 Meteor.method('keyword_cron', () => {
-	console.log(' -- Starting cron: Keywords');
+	// console.log(' -- Starting cron: Keywords');
 
 	const comments = Comments.find().fetch();
 	const keywords = [];
@@ -26,7 +26,7 @@ Meteor.method('keyword_cron', () => {
 
 
 	keywords.forEach((keyword) => {
-		console.log(' -- -- ', keyword.title, keyword.count);
+		// console.log(' -- -- ', keyword.title, keyword.count);
 
 		Keywords.update({ _id: keyword._id }, { $set: { count: keyword.count } });
 	});

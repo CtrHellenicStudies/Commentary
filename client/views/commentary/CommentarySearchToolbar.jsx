@@ -88,13 +88,13 @@ CommentarySearchToolbar = React.createClass({
 		});
 	},
 
-	handleHymnSelected() {
+	switchToHymns() {
 		this.setState({
 			selectedWork: 'Hymn',
 		});
 	},
 
-	handleBookSelected() {
+	switchToBooks() {
 		this.setState({
 			selectedWork: 'Book',
 		});
@@ -301,7 +301,11 @@ CommentarySearchToolbar = React.createClass({
 								searchTermKey="works"
 								value={work}
 								activeWork={active}
-								handleHymnSelected={work.title === 'Homeric Hymns' ? this.handleHymnSelected : this.handleBookSelected}
+								switchSubworks={
+									(work.title === 'Homeric Hymns') ?
+										this.switchToHymns
+									: this.switchToBooks
+								}
 							/>
 						);
 					})}

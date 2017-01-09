@@ -149,4 +149,23 @@ Meteor.methods({
 		});
 	},
 
+	'discussionComments.unreport': function unreportDiscussionComment(discussionCommentId) {
+		check(discussionCommentId, String);
+		this.unblock();
+
+		const discussionComment = DiscussionComments.findOne(discussionCommentId);
+
+		try {
+			if ('usersReported' in discussionComment) {
+				DiscussionComments.update({
+					_id: discussionCommentId,
+				}, {
+					$pull: { usersReported: this.userId },
+					$inc: { reported: -1 },
+				});
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	},
 });

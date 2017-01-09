@@ -1,5 +1,5 @@
 Meteor.method('commenters_cron', () => {
-	console.log(' -- Starting cron: Commenters');
+	// console.log(' -- Starting cron: Commenters');
 
 	const comments = Comments.find().fetch();
 	const commenters = [];
@@ -127,7 +127,7 @@ Meteor.method('commenters_cron', () => {
 	}); // comments.forEach
 
 	commenters.forEach((commenter) => {
-		console.log(' -- -- ', commenter.name, commenter.nCommentsTotal);
+		// console.log(' -- -- ', commenter.name, commenter.nCommentsTotal);
 		Commenters.update({
 			slug: commenter.slug,
 		}, {

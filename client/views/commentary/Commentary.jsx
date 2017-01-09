@@ -49,98 +49,103 @@ Commentary = React.createClass({
 	},
 
 	getMeteorData() {
+		const commentGroups = [];
 		const query = this.createQueryFromFilters(this.props.filters);
 
 		// SUBSCRIPTIONS:
 		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
-
+		let loading = true;
 		// FETCH DATA:
-		const comments = Comments.find({}, {
-			sort: {
-				'work.order': 1,
-				'subwork.n': 1,
-				lineFrom: 1,
-				nLines: -1,
-			},
-		}).fetch();
-		const commentGroups = [];
+		if (commentsSub.ready()) {
+			const comments = Comments.find({}, {
+				sort: {
+					'work.order': 1,
+					'subwork.n': 1,
+					lineFrom: 1,
+					nLines: -1,
+				},
+			}).fetch();
+			// const commentGroups = [];
 
-		// Make comment groups from comments
-		let isInCommentGroup = false;
-		comments.forEach((comment) => {
-			isInCommentGroup = false;
-			commentGroups.forEach((commentGroup) => {
-				if (
-					comment.work.title === commentGroup.work.title
-					&& comment.subwork.n === commentGroup.subwork.n
-					&& comment.lineFrom === commentGroup.lineFrom
-					&& comment.lineTo === commentGroup.lineTo
-				) {
-					isInCommentGroup = true;
-					commentGroup.comments.push(comment);
+			// Make comment groups from comments
+			let isInCommentGroup = false;
+			comments.forEach((comment) => {
+				isInCommentGroup = false;
+				commentGroups.forEach((commentGroup) => {
+					if (
+						comment.work.title === commentGroup.work.title
+						&& comment.subwork.n === commentGroup.subwork.n
+						&& comment.lineFrom === commentGroup.lineFrom
+						&& comment.lineTo === commentGroup.lineTo
+					) {
+						isInCommentGroup = true;
+						commentGroup.comments.push(comment);
+					}
+				});
+
+				if (!isInCommentGroup) {
+					let ref;
+
+					if (comment.work.title === 'Homeric Hymns') {
+						ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
+					} else {
+						ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
+					}
+
+					commentGroups.push({
+						ref,
+						selectedLemmaEdition: {
+							lines: [],
+						},
+						work: comment.work,
+						subwork: comment.subwork,
+						lineFrom: comment.lineFrom,
+						lineTo: comment.lineTo,
+						nLines: comment.nLines,
+						comments: [comment],
+					});
 				}
 			});
 
-			if (!isInCommentGroup) {
-				let ref;
+			// Unique commenters for each comment group
+			commentGroups.forEach((commentGroup, commentGroupIndex) => {
+				// let isInCommenters = false;
+				const commenters = [];
+				const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
+				// const commenterSubscription = Meteor.subscribe('commenters');
+				if (avatarSubscription.ready()) {
+					commentGroup.comments.forEach((comment, commentIndex) => {
+						// isInCommenters = false;
 
-				if (comment.work.title === 'Homeric Hymns') {
-					ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
-				} else {
-					ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
+						comment.commenters.forEach((commenter, i) => {
+							const commenterRecord = Commenters.findOne({
+								slug: commenter.slug,
+							});
+							commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
+
+							// get commenter avatar
+							if (commenterRecord.avatar) {
+								commenterRecord.avatarData = Avatars.findOne(commenterRecord.avatar);
+							}
+
+							// add to the unique commenter set
+							if (commenters.some((c) => c.slug === commenter.slug)) {
+								// isInCommenters = true;
+							} else {
+								commenters.push(commenterRecord);
+							}
+						});
+					});
 				}
 
-				commentGroups.push({
-					ref,
-					selectedLemmaEdition: {
-						lines: [],
-					},
-					work: comment.work,
-					subwork: comment.subwork,
-					lineFrom: comment.lineFrom,
-					lineTo: comment.lineTo,
-					nLines: comment.nLines,
-					comments: [comment],
-				});
-			}
-		});
-
-		// Unique commenters for each comment group
-		commentGroups.forEach((commentGroup, commentGroupIndex) => {
-			// let isInCommenters = false;
-			const commenters = [];
-			const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
-			// const commenterSubscription = Meteor.subscribe('commenters');
-			if (avatarSubscription.ready()) {
-				commentGroup.comments.forEach((comment, commentIndex) => {
-					// isInCommenters = false;
-
-					comment.commenters.forEach((commenter, i) => {
-						const commenterRecord = Commenters.findOne({
-							slug: commenter.slug,
-						});
-						commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
-
-						// get commenter avatar
-						if (commenterRecord.avatar) {
-							commenterRecord.avatarData = Avatars.findOne(commenterRecord.avatar);
-						}
-
-						// add to the unique commenter set
-						if (commenters.some((c) => c.slug === commenter.slug)) {
-							// isInCommenters = true;
-						} else {
-							commenters.push(commenterRecord);
-						}
-					});
-				});
-			}
-
-			commentGroups[commentGroupIndex].commenters = commenters;
-		});
+				commentGroups[commentGroupIndex].commenters = commenters;
+			});
+			loading = false;
+		}
 
 		return {
 			commentGroups,
+			loading,
 		};
 	},
 
@@ -362,13 +367,18 @@ Commentary = React.createClass({
 					: '' }
 				{/* --- END comments list */}
 				{/* --- BEGIN no comments found */}
-				{(this.data.commentGroups.length === 0) ?
+				{(this.data.commentGroups.length === 0 && !this.data.loading) ?
 					<div className="no-commentary-wrap">
 						<p className="no-commentary no-results">
 							No commentary available for the current search.
 						</p>
 					</div>
-					: ''}
+					:
+					<div className="ahcip-spinner commentary-loading">
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
+					</div>
+				}
 				{/* --- END no comments found */}
 				{'work' in this.state.contextCommentGroupSelected ?
 					<ContextPanel

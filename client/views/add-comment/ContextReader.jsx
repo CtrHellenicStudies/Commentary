@@ -182,7 +182,6 @@ ContextReader = React.createClass({
 
 	getMeteorData() {
 		const self = this;
-
 		if (this.props.workSlug !== '' && this.props.subworkN !== 0) {
 			let lemmaText = [];
 			// var commentGroup = this.props.commentGroup;
@@ -200,8 +199,9 @@ ContextReader = React.createClass({
 				},
 			};
 
-			// console.log('lemmaQuery', lemmaQuery);
-
+			if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+				lemmaQuery['work.slug'] = 'hymns';
+			}
 
 			const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
 			if (textNodesSubscription.ready()) {

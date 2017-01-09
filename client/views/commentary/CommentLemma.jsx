@@ -36,6 +36,9 @@ CommentLemma = React.createClass({
 		} else {
 			lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
 		}
+		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+			lemmaQuery['work.slug'] = 'hymns';
+		}
 
 		const handle = Meteor.subscribe('textNodes', lemmaQuery);
 		if (handle.ready()) {

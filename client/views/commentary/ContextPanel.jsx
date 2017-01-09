@@ -105,53 +105,56 @@ ContextPanel = React.createClass({
 			},
 		};
 
-		const handle2 = Meteor.subscribe('textNodes', lemmaQuery);
-		if (handle2.ready()) {
-			const textNodes = TextNodes.find(lemmaQuery).fetch();
-			const editions = [];
+		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+			lemmaQuery['work.slug'] = 'hymns';
+		}
 
-			let textIsInEdition = false;
-			textNodes.forEach((textNode) => {
-				textNode.text.forEach((text) => {
-					textIsInEdition = false;
+		Meteor.subscribe('textNodes', lemmaQuery);
+		const textNodes = TextNodes.find(lemmaQuery).fetch();
+		const editions = [];
 
-					editions.forEach((edition) => {
-						if (text.edition.slug === edition.slug) {
-							edition.lines.push({
+		let textIsInEdition = false;
+		textNodes.forEach((textNode) => {
+			textNode.text.forEach((text) => {
+				textIsInEdition = false;
+
+				editions.forEach((edition) => {
+					if (text.edition.slug === edition.slug) {
+						edition.lines.push({
+							html: text.html,
+							n: text.n,
+						});
+						textIsInEdition = true;
+					}
+				});
+
+				if (!textIsInEdition) {
+					editions.push({
+						title: text.edition.title,
+						slug: text.edition.slug,
+						lines: [
+							{
 								html: text.html,
 								n: text.n,
-							});
-							textIsInEdition = true;
-						}
+							},
+						],
 					});
-
-					if (!textIsInEdition) {
-						editions.push({
-							title: text.edition.title,
-							slug: text.edition.slug,
-							lines: [
-								{
-									html: text.html,
-									n: text.n,
-								},
-							],
-						});
-					}
-				});
+				}
 			});
+		});
 
-			lemmaText = editions;
+		lemmaText = editions;
 
-			if (this.state.selectedLemmaEdition.length) {
-				lemmaText.forEach((edition) => {
-					if (edition.slug === this.state.selectedLemmaEdition) {
-						selectedLemmaEdition = edition;
-					}
-				});
-			} else {
-				selectedLemmaEdition = lemmaText[0];
-			}
+		if (this.state.selectedLemmaEdition.length) {
+			lemmaText.forEach((edition) => {
+				if (edition.slug === this.state.selectedLemmaEdition) {
+					selectedLemmaEdition = edition;
+				}
+			});
+		} else {
+			selectedLemmaEdition = lemmaText[0];
 		}
+
 		return {
 			lemmaText,
 			selectedLemmaEdition,

@@ -351,19 +351,17 @@ CommentarySearchToolbar = React.createClass({
 						}
 					})}
 				</SearchToolDropdown>
-				{!addCommentPage ?
-					<div
-						style={styles.lineSearch}
-						className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
-					>
-						<LineRangeSlider
-							handleChangeLineN={this.props.handleChangeLineN}
-							lineFrom={lineFrom}
-							lineTo={lineTo}
-						/>
-						<div className="disabled-screen" />
-					</div>
-				: ''}
+				<div
+					style={styles.lineSearch}
+					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
+				>
+					<LineRangeSlider
+						handleChangeLineN={this.props.handleChangeLineN}
+						lineFrom={lineFrom}
+						lineTo={lineTo}
+					/>
+					<div className="disabled-screen" />
+				</div>
 
 				{!addCommentPage ?
 					<SearchToolDropdown

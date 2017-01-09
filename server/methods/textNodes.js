@@ -2,6 +2,9 @@ Meteor.methods({
 	getMaxLine(workSlug, subworkN) {
 		check(workSlug, String);
 		check(subworkN, Number);
+		if (workSlug === 'homeric-hymns') {
+			workSlug = 'hymns';
+		}
 		const maxLine = TextNodes.aggregate([{
 			$match: {
 				'work.slug': workSlug,
@@ -15,6 +18,7 @@ Meteor.methods({
 				},
 			},
 		}]);
+		console.log(maxLine)
 
 		return maxLine[0].maxLine[0]; // granted that all text.editions have the same max line number
 	},

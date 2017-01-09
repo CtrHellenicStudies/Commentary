@@ -28,7 +28,9 @@ SearchTermButton = React.createClass({
 	},
 
 	handleHymnSelected() {
-		this.props.handleHymnSelected();
+		if (this.props.handleHymnSelected) {
+			this.props.handleHymnSelected();
+		}
 	},
 
 	render() {

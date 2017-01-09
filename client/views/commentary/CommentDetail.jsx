@@ -116,7 +116,7 @@ CommentDetail = React.createClass({
 	createRevisionMarkup(html) {
 		let newHtml = html;
 
-		const workNames = [{
+		const workNamesSpace = [{
 			title: 'Iliad',
 			slug: 'iliad',
 		}, {
@@ -128,11 +128,18 @@ CommentDetail = React.createClass({
 		}, {
 			title: 'Hymns',
 			slug: 'hymns',
-		}, {
+		}];
+		const workNamesPeriod = [{
 			title: 'I',
 			slug: 'iliad',
 		}, {
 			title: 'O',
+			slug: 'odyssey',
+		}, {
+			title: 'Il',
+			slug: 'iliad',
+		}, {
+			title: 'Od',
 			slug: 'odyssey',
 		}, {
 			title: 'HH',
@@ -142,12 +149,12 @@ CommentDetail = React.createClass({
 		let regex1;
 		let regex2;
 
-		workNames.forEach((workName) => {
+		workNamesSpace.forEach((workName) => {
 			// regex for range with dash
-			regex1 = new RegExp(`${workName.title}(?: |.)(\\d+).(\\d+)\\-(\\d+)`, 'g');
+			regex1 = new RegExp(`${workName.title} (\\d+).(\\d+)\\-(\\d+)`, 'g');
 
 			// regex for no range (and lookahead to ensure range isn't captured)
-			regex2 = new RegExp(`${workName.title}(?: |.)(\\d+).(?!\\d+-\\d+)(\\d+)`, 'g');
+			regex2 = new RegExp(`${workName.title} (\\d+).(?!\\d+-\\d+)(\\d+)`, 'g');
 
 			newHtml = newHtml.replace(regex1,
 				`<a
@@ -164,6 +171,30 @@ CommentDetail = React.createClass({
 					data-subwork='$1'
 					data-lineFrom='$2'
 				>${workName.title} $1.$2</a>`);
+		});
+
+		workNamesPeriod.forEach((workName) => {
+			// regex for range with dash
+			regex1 = new RegExp(`([^\\w+])${workName.title}(\\.\\s*)(\\d+).(\\d+)\\-(\\d+)`, 'g');
+
+			// regex for no range (and lookahead to ensure range isn't captured)
+			regex2 = new RegExp(`([^\\w+])${workName.title}(\\.\\s*)(\\d+).(?!\\d+-\\d+)(\\d+)`, 'g');
+
+			newHtml = newHtml.replace(regex1,
+				`$1<a
+					class='has-lemma-reference'
+					data-work=${workName.slug}
+					data-subwork='$3'
+					data-lineFrom='$4'
+					data-lineTo='$5'
+				>${workName.title}$2$3.$4-$5</a>`);
+			newHtml = newHtml.replace(regex2,
+				`$1<a
+					class='has-lemma-reference'
+					data-work=${workName.slug}
+					data-subwork='$3'
+					data-lineFrom='$4'
+				>${workName.title}$2$3.$4</a>`);
 		});
 
 		return { __html: newHtml };

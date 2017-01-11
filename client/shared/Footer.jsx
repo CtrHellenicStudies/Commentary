@@ -45,11 +45,11 @@ Footer = React.createClass({
 							{ userIsLoggedin ? '' :
 								<div>
 									<FlatButton
-										href="#"
+										href="/sign-in"
 										label="Login"
 									/>
 									<FlatButton
-										href="#"
+										href="/sign-up"
 										label="Join the Community"
 									/>
 								</div>

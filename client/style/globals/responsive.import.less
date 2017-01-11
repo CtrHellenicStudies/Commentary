@@ -437,10 +437,10 @@
 				font-weight:bold;
 				font-family:@font-label;
 				display:inline-block;
-				vertical-align: top;
+				//vertical-align: top;
 				text-transform:uppercase;
 				color:@text-secondary;
-				padding:0px 20px;
+				padding:10px 20px;
 				margin:0;
 
 			}
@@ -642,6 +642,9 @@
 	.text-modal span.modal-close {
 		right:10px;
 	}
+	.discussion-wrap .continue-discussion h4.continue-discussion-label {
+		padding:10px 20px;
+	}
 }
 
 @media (max-width:750px){
@@ -782,6 +785,9 @@
 		font-size:18px;
 		padding:7px 14px 10px;
 	}
+	.discussion-wrap .continue-discussion h4.continue-discussion-label {
+		padding:12px 20px;
+	}
 }
 
 @media (max-width:700px){
@@ -913,10 +919,12 @@
 	}
 	.discussion-wrap .continue-discussion h4.continue-discussion-label {
 		font-size:16px;
+		padding:0 20px;
 	}
 	.continue-discussion-icon i {
+		display:inline-block;
 		font-size:20px;
-		margin-top:5px;
+		padding:0;
 		&:before {
 			font-size:26px;
 
@@ -925,7 +933,7 @@
 	.continue-discussion-icon span {
 		font-size:12px;
 		padding:0;
-		top:1px;
+		top:3px;
 	}
 	article.lemma-comment .context-tabs {
 		float:none;
@@ -952,7 +960,19 @@
 	.reference-work-teaser {
 		width:400px;
 	}
-
+	section.intro {
+		.intro-col-text {
+			width:90%;
+			text-align:left;
+			.cover-link {
+				width:100%;
+			}
+		}
+		.intro-col.intro-col-image {
+			width:90%;
+			margin-left:0;
+		}
+	}
 }
 
 @media (max-width:530px){

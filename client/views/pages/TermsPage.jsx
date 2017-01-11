@@ -5,7 +5,7 @@ TermsPage = React.createClass({
 
 			<div className="page page-terms">
 
-				<section className="page-head fullscreen image-bg bg-dark">
+				<section className="page-head terms-header image-bg bg-dark">
 
 					<div className="background-image-holder blur">
 						<img

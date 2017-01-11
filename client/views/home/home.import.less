@@ -660,3 +660,8 @@ section.get-started {
   }
 
 }
+
+// IE11 fix that will prevent the commenter image from disappearing or blink on-hover
+_:-ms-lang(x), .hvr-grow {
+  transition-duration: 0s !important;
+}

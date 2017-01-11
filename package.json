@@ -48,7 +48,8 @@
     "slugify": "^1.0.2",
     "spawn-sync": "^1.0.15",
     "throttle-debounce": "^1.0.1",
-    "try-thread-sleep": "^1.0.0"
+    "try-thread-sleep": "^1.0.0",
+    "unicode": "^0.6.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
@@ -66,7 +67,8 @@
     "lint": "eslint . --ext .js,.jsx",
     "lint-fix": "eslint . --ext .js,.jsx --fix",
     "pretest": "npm run lint --silent",
-    "start": "export MONGO_URL=mongodb://ahcipDev:xsByMr5C7I09@ahcip.archimedes.digital/ahcipDev && meteor"
+    "start": "export MONGO_URL=mongodb://ahcipDev:xsByMr5C7I09@ahcip.archimedes.digital/ahcipDev && meteor",
+    "start:win": "SET MONGO_URL=mongodb://localhost/ahcipDev&& meteor"
   },
   "repository": {
     "type": "git",

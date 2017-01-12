@@ -114,7 +114,10 @@ var InfiniteScroll = function (_React$Component) {
 			var el = e.target;
 			if (this.container === window) {
 				var target = el.scrollingElement;
-				var targetScroll = target.scrollHeight - (target.clientHeight + target.scrollTop);
+				var targetScroll = 0;
+				if(target) {
+					targetScroll = target.scrollHeight - (target.clientHeight + target.scrollTop);
+				}
 				if (targetScroll < this.props.endPadding) {
 					this.props.loadMore(true); // Tell parent to do subscription
 				}

@@ -33,7 +33,11 @@ WorkVisualization = React.createClass({
 			left: 60,
 		};
 
-		const width = window.innerWidth - margin.left - margin.right;
+    let width = window.innerWidth;
+    if (width > 992) {
+      width = 992;
+    }
+		width = width - margin.left - margin.right;
 		const height = 421 - margin.top - margin.bottom;
 		const barGraphMargin = {
 			left: 10,

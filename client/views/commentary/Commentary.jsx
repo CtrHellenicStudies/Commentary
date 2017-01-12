@@ -55,6 +55,8 @@ Commentary = React.createClass({
 		// SUBSCRIPTIONS:
 		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
 		let loading = true;
+		let isMoreComments = true;
+
 		// FETCH DATA:
 		if (commentsSub.ready()) {
 			const comments = Comments.find({}, {
@@ -66,6 +68,10 @@ Commentary = React.createClass({
 				},
 			}).fetch();
 			// const commentGroups = [];
+
+			if (comments.length < this.state.limit) {
+				isMoreComments = false;
+			}
 
 			// Make comment groups from comments
 			let isInCommentGroup = false;
@@ -146,6 +152,7 @@ Commentary = React.createClass({
 		return {
 			commentGroups,
 			loading,
+			isMoreComments,
 		};
 	},
 
@@ -267,7 +274,11 @@ Commentary = React.createClass({
 	},
 
 	loadMoreComments() {
-		if (!this.props.isOnHomeView && this.data.commentGroups.length) {
+		if (
+			!this.props.isOnHomeView
+		&& this.data.commentGroups.length
+		&& this.data.isMoreComments
+	) {
 			this.setState({
 				limit: this.state.limit + 10,
 			});
@@ -326,6 +337,34 @@ Commentary = React.createClass({
 		});
 	},
 
+	renderNoCommentsOrLoading() {
+		if (
+				'isMoreComments' in this.data
+			&& typeof this.data.isMoreComments !== 'undefined'
+			&& this.data.isMoreComments
+			&& !this.props.isOnHomeView
+		) {
+			if (this.data.commentGroups.length === 0 && !this.data.loading) {
+				return (
+					<div className="no-commentary-wrap">
+						<p className="no-commentary no-results">
+							No commentary available for the current search.
+						</p>
+					</div>
+				);
+			}
+
+			return (
+				<div className="ahcip-spinner commentary-loading">
+					<div className="double-bounce1" />
+					<div className="double-bounce2" />
+				</div>
+			);
+		}
+
+		return '';
+	},
+
 	render() {
 		let isOnHomeView;
 		if ('isOnHomeView' in this.props) {
@@ -358,28 +397,10 @@ Commentary = React.createClass({
 						))}
 					</div>
 				</InfiniteScroll>
-				{(!isOnHomeView && this.data.commentGroups.length > 0) ?
-					<div className="ahcip-spinner commentary-loading">
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
-
-					</div>
-					: '' }
 				{/* --- END comments list */}
-				{/* --- BEGIN no comments found */}
-				{(this.data.commentGroups.length === 0 && !this.data.loading) ?
-					<div className="no-commentary-wrap">
-						<p className="no-commentary no-results">
-							No commentary available for the current search.
-						</p>
-					</div>
-					:
-					<div className="ahcip-spinner commentary-loading">
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
-					</div>
-				}
-				{/* --- END no comments found */}
+
+				{this.renderNoCommentsOrLoading()}
+
 				{'work' in this.state.contextCommentGroupSelected ?
 					<ContextPanel
 						open={this.state.contextPanelOpen}

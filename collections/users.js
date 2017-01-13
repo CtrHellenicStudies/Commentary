@@ -3,6 +3,12 @@ Schemas.UserProfile = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
+	
+	tenant: {
+		type: String,
+		optional: true,
+	},
+
 	birthday: {
 		type: Date,
 		optional: true,

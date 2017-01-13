@@ -187,19 +187,22 @@
 }
 
 @media (max-width:1000px){
-
 	header .collapse {
 		display:none !important;
 	}
+	
 	header .right-drawer-toggle{
 		display: inline-block !important;
 		float: right;
 	}
 
-
 	.page .page-content {
 		width:90%;
 
+	}
+
+	section.browse-commentary .data-visualization-container {
+		width:100%;
 	}
 
 	.text-item .meta-toggle span.fa {
@@ -358,6 +361,10 @@
 		color:@text-color;
 		font-weight:300;
 		padding:10px 0px 10px 10px;
+		float:none;
+		clear:none;
+		width:auto;
+		max-width:none;
 
 		&:after {
 			content: ".";
@@ -373,6 +380,10 @@
 		color:@text-color;
 		font-weight:300;
 		padding:10px 10px 10px 0px;
+		float:none;
+		clear:none;
+		width:auto;
+		max-width:none;
 	}
 	.comment-group-meta .comment-group-commenters {
 		display: inline-block;
@@ -429,10 +440,10 @@
 				font-weight:bold;
 				font-family:@font-label;
 				display:inline-block;
-				vertical-align: top;
+				//vertical-align: top;
 				text-transform:uppercase;
 				color:@text-secondary;
-				padding:0px 20px;
+				padding:10px 20px;
 				margin:0;
 
 			}
@@ -634,6 +645,9 @@
 	.text-modal span.modal-close {
 		right:10px;
 	}
+	.discussion-wrap .continue-discussion h4.continue-discussion-label {
+		padding:10px 20px;
+	}
 }
 
 @media (max-width:750px){
@@ -774,6 +788,9 @@
 		font-size:18px;
 		padding:7px 14px 10px;
 	}
+	.discussion-wrap .continue-discussion h4.continue-discussion-label {
+		padding:12px 20px;
+	}
 }
 
 @media (max-width:700px){
@@ -905,10 +922,12 @@
 	}
 	.discussion-wrap .continue-discussion h4.continue-discussion-label {
 		font-size:16px;
+		padding:0 20px;
 	}
 	.continue-discussion-icon i {
+		display:inline-block;
 		font-size:20px;
-		margin-top:5px;
+		padding:0;
 		&:before {
 			font-size:26px;
 
@@ -917,7 +936,7 @@
 	.continue-discussion-icon span {
 		font-size:12px;
 		padding:0;
-		top:1px;
+		top:3px;
 	}
 	article.lemma-comment .context-tabs {
 		float:none;
@@ -944,7 +963,19 @@
 	.reference-work-teaser {
 		width:400px;
 	}
-
+	section.intro {
+		.intro-col-text {
+			width:90%;
+			text-align:left;
+			.cover-link {
+				width:100%;
+			}
+		}
+		.intro-col.intro-col-image {
+			width:90%;
+			margin-left:0;
+		}
+	}
 }
 
 @media (max-width:530px){
@@ -1082,6 +1113,14 @@
 	}
 	footer .logo {
 		font-size:22px;
+	}
+	.comment-revisions {
+		width:100%;
+		text-align: center;
+		.revision {
+			width:100%;
+			margin-bottom:3px !important;
+		}
 	}
 
 }

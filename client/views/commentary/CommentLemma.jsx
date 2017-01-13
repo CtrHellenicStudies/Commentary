@@ -36,6 +36,9 @@ CommentLemma = React.createClass({
 		} else {
 			lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
 		}
+		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+			lemmaQuery['work.slug'] = 'hymns';
+		}
 
 		const handle = Meteor.subscribe('textNodes', lemmaQuery);
 		if (handle.ready()) {
@@ -114,6 +117,8 @@ CommentLemma = React.createClass({
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
 		}
+		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+
 		return (
 
 			<div className="comment-outer comment-lemma-comment-outer">

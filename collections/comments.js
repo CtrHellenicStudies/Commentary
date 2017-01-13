@@ -7,6 +7,11 @@ Schemas.Comments = new SimpleSchema({
 		optional: true,
 	},
 
+	tenant: {
+		type: String,
+		optional: true,
+	},
+
 	commenters: {
 		type: [Object],
 		optional: true,

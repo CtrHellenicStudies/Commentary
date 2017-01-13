@@ -49,7 +49,7 @@ FilterWidget = React.createClass({
 									key={j}
 									labelPosition="before"
 									className="filter-val "
-									label={val.title || val.name || val.slug || val.toString()}
+									label={(val.title || val.name || val.slug || val.toString()).replace('-', ' ')}
 									onClick={this.props.toggleSearchTerm.bind(null, filter.key, val)}
 									icon={
 										<FontIcon

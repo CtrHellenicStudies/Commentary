@@ -139,7 +139,9 @@ header .line-wrap {
     margin: 0 0px 0 0;
     font-family: @font-label;
     font-size: 16px;
-    text-align: left;
+    text-align: right;
+    float:right;
+    clear:both;
     display: block;
 
   }
@@ -151,11 +153,13 @@ header .line-wrap {
     font-weight: bold;
     color: #424242;
     margin: 0;
-    padding: 5px 0px;
+    padding: 10px 0px 20px;
     display: inline-block;
     vertical-align: top;
     max-width: 65px;
-    text-align: left;
+    text-align: right;
+    float:right;
+    clear:both;
     display: block;
 		width:auto;
 
@@ -322,7 +326,7 @@ article.lemma-comment {
   padding: 0;
   margin: 20px 0 20px 10%;
   background: @light;
-  width: 75%;
+  width: 74%;
   text-align: left;
   .transition(all 300ms ease-out);
   position: relative;
@@ -566,7 +570,7 @@ article.lemma-comment {
 }
 
 .comment-keywords {
-  margin: 15px 0;
+  margin: 15px 0 10px 0;
 }
 
 .comment-keyword {
@@ -578,6 +582,7 @@ article.lemma-comment {
   cursor: pointer;
   min-height: 0;
   line-height: 1.3em;
+  margin-bottom:5px;
 
   button {
     background-color: @primary !important;

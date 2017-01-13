@@ -218,7 +218,7 @@ CommentaryLayout = React.createClass({
 				valueIsInFilter = false;
 
 				filter.values.forEach((filterValue, j) => {
-					if (filterValue._id === value._id) {
+					if (value._id && filterValue._id === value._id) {
 						valueIsInFilter = true;
 						filterValueToRemove = j;
 					} else if (filterValue.slug === value.slug) {
@@ -251,6 +251,7 @@ CommentaryLayout = React.createClass({
 				values: [value],
 			});
 		}
+
 		this.setState({
 			filters,
 		});

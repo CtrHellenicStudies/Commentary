@@ -49,10 +49,12 @@ Commentary = React.createClass({
 	},
 
 	getMeteorData() {
+		let commentGroups = [];
 		const query = this.createQueryFromFilters(this.props.filters);
 
 		// SUBSCRIPTIONS:
 		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
+		let isMoreComments = true;
 
 		// FETCH DATA:
 		const comments = Comments.find({}, {
@@ -63,8 +65,22 @@ Commentary = React.createClass({
 				nLines: -1,
 			},
 		}).fetch();
-		const commentGroups = [];
 
+		commentGroups = this.parseCommentsToCommentGroups(comments);
+
+		if (comments.length < this.state.limit) {
+			isMoreComments = false;
+		}
+
+		return {
+			commentGroups,
+			isMoreComments,
+			loading: commentsSub.ready(),
+		};
+	},
+
+	parseCommentsToCommentGroups(comments) {
+		const commentGroups = [];
 		// Make comment groups from comments
 		let isInCommentGroup = false;
 		comments.forEach((comment) => {
@@ -135,13 +151,10 @@ Commentary = React.createClass({
 					});
 				});
 			}
-
 			commentGroups[commentGroupIndex].commenters = commenters;
 		});
 
-		return {
-			commentGroups,
-		};
+		return commentGroups;
 	},
 
 	createQueryFromFilters(filters) {
@@ -262,7 +275,11 @@ Commentary = React.createClass({
 	},
 
 	loadMoreComments() {
-		if (!this.props.isOnHomeView && this.data.commentGroups.length) {
+		if (
+			!this.props.isOnHomeView
+		&& this.data.commentGroups.length
+		&& this.data.isMoreComments
+	) {
 			this.setState({
 				limit: this.state.limit + 10,
 			});
@@ -321,6 +338,34 @@ Commentary = React.createClass({
 		});
 	},
 
+	renderNoCommentsOrLoading() {
+		if (
+				'isMoreComments' in this.data
+			&& typeof this.data.isMoreComments !== 'undefined'
+			&& this.data.isMoreComments
+			&& !this.props.isOnHomeView
+		) {
+			if (this.data.commentGroups.length === 0 && !this.data.loading) {
+				return (
+					<div className="no-commentary-wrap">
+						<p className="no-commentary no-results">
+							No commentary available for the current search.
+						</p>
+					</div>
+				);
+			}
+
+			return (
+				<div className="ahcip-spinner commentary-loading">
+					<div className="double-bounce1" />
+					<div className="double-bounce2" />
+				</div>
+			);
+		}
+
+		return '';
+	},
+
 	render() {
 		let isOnHomeView;
 		if ('isOnHomeView' in this.props) {
@@ -353,23 +398,10 @@ Commentary = React.createClass({
 						))}
 					</div>
 				</InfiniteScroll>
-				{(!isOnHomeView && this.data.commentGroups.length > 0) ?
-					<div className="ahcip-spinner commentary-loading">
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
-
-					</div>
-					: '' }
 				{/* --- END comments list */}
-				{/* --- BEGIN no comments found */}
-				{(this.props.commentsReady && this.data.commentGroups.length === 0) ?
-					<div className="no-commentary-wrap">
-						<p className="no-commentary no-results">
-							No commentary available for the current search.
-						</p>
-					</div>
-					: ''}
-				{/* --- END no comments found */}
+
+				{this.renderNoCommentsOrLoading()}
+
 				{'work' in this.state.contextCommentGroupSelected ?
 					<ContextPanel
 						open={this.state.contextPanelOpen}

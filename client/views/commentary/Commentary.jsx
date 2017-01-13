@@ -54,7 +54,6 @@ Commentary = React.createClass({
 
 		// SUBSCRIPTIONS:
 		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
-		let loading = true;
 		let isMoreComments = true;
 
 		// FETCH DATA:
@@ -146,13 +145,12 @@ Commentary = React.createClass({
 
 				commentGroups[commentGroupIndex].commenters = commenters;
 			});
-			loading = false;
 		}
 
 		return {
 			commentGroups,
-			loading,
 			isMoreComments,
+			loading: commentsSub.ready(),
 		};
 	},
 

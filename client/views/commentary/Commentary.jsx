@@ -49,7 +49,7 @@ Commentary = React.createClass({
 	},
 
 	getMeteorData() {
-		const commentGroups = [];
+		let commentGroups = [];
 		const query = this.createQueryFromFilters(this.props.filters);
 
 		// SUBSCRIPTIONS:
@@ -57,94 +57,19 @@ Commentary = React.createClass({
 		let isMoreComments = true;
 
 		// FETCH DATA:
-		if (commentsSub.ready()) {
-			const comments = Comments.find({}, {
-				sort: {
-					'work.order': 1,
-					'subwork.n': 1,
-					lineFrom: 1,
-					nLines: -1,
-				},
-			}).fetch();
-			// const commentGroups = [];
+		const comments = Comments.find({}, {
+			sort: {
+				'work.order': 1,
+				'subwork.n': 1,
+				lineFrom: 1,
+				nLines: -1,
+			},
+		}).fetch();
 
-			if (comments.length < this.state.limit) {
-				isMoreComments = false;
-			}
+		commentGroups = this.parseCommentsToCommentGroups(comments);
 
-			// Make comment groups from comments
-			let isInCommentGroup = false;
-			comments.forEach((comment) => {
-				isInCommentGroup = false;
-				commentGroups.forEach((commentGroup) => {
-					if (
-						comment.work.title === commentGroup.work.title
-						&& comment.subwork.n === commentGroup.subwork.n
-						&& comment.lineFrom === commentGroup.lineFrom
-						&& comment.lineTo === commentGroup.lineTo
-					) {
-						isInCommentGroup = true;
-						commentGroup.comments.push(comment);
-					}
-				});
-
-				if (!isInCommentGroup) {
-					let ref;
-
-					if (comment.work.title === 'Homeric Hymns') {
-						ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
-					} else {
-						ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
-					}
-
-					commentGroups.push({
-						ref,
-						selectedLemmaEdition: {
-							lines: [],
-						},
-						work: comment.work,
-						subwork: comment.subwork,
-						lineFrom: comment.lineFrom,
-						lineTo: comment.lineTo,
-						nLines: comment.nLines,
-						comments: [comment],
-					});
-				}
-			});
-
-			// Unique commenters for each comment group
-			commentGroups.forEach((commentGroup, commentGroupIndex) => {
-				// let isInCommenters = false;
-				const commenters = [];
-				const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
-				// const commenterSubscription = Meteor.subscribe('commenters');
-				if (avatarSubscription.ready()) {
-					commentGroup.comments.forEach((comment, commentIndex) => {
-						// isInCommenters = false;
-
-						comment.commenters.forEach((commenter, i) => {
-							const commenterRecord = Commenters.findOne({
-								slug: commenter.slug,
-							});
-							commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
-
-							// get commenter avatar
-							if (commenterRecord.avatar) {
-								commenterRecord.avatarData = Avatars.findOne(commenterRecord.avatar);
-							}
-
-							// add to the unique commenter set
-							if (commenters.some((c) => c.slug === commenter.slug)) {
-								// isInCommenters = true;
-							} else {
-								commenters.push(commenterRecord);
-							}
-						});
-					});
-				}
-
-				commentGroups[commentGroupIndex].commenters = commenters;
-			});
+		if (comments.length < this.state.limit) {
+			isMoreComments = false;
 		}
 
 		return {
@@ -152,6 +77,84 @@ Commentary = React.createClass({
 			isMoreComments,
 			loading: commentsSub.ready(),
 		};
+	},
+
+	parseCommentsToCommentGroups(comments) {
+		const commentGroups = [];
+		// Make comment groups from comments
+		let isInCommentGroup = false;
+		comments.forEach((comment) => {
+			isInCommentGroup = false;
+			commentGroups.forEach((commentGroup) => {
+				if (
+					comment.work.title === commentGroup.work.title
+					&& comment.subwork.n === commentGroup.subwork.n
+					&& comment.lineFrom === commentGroup.lineFrom
+					&& comment.lineTo === commentGroup.lineTo
+				) {
+					isInCommentGroup = true;
+					commentGroup.comments.push(comment);
+				}
+			});
+
+			if (!isInCommentGroup) {
+				let ref;
+
+				if (comment.work.title === 'Homeric Hymns') {
+					ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
+				} else {
+					ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
+				}
+
+				commentGroups.push({
+					ref,
+					selectedLemmaEdition: {
+						lines: [],
+					},
+					work: comment.work,
+					subwork: comment.subwork,
+					lineFrom: comment.lineFrom,
+					lineTo: comment.lineTo,
+					nLines: comment.nLines,
+					comments: [comment],
+				});
+			}
+		});
+
+		// Unique commenters for each comment group
+		commentGroups.forEach((commentGroup, commentGroupIndex) => {
+			// let isInCommenters = false;
+			const commenters = [];
+			const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
+			// const commenterSubscription = Meteor.subscribe('commenters');
+			if (avatarSubscription.ready()) {
+				commentGroup.comments.forEach((comment, commentIndex) => {
+					// isInCommenters = false;
+
+					comment.commenters.forEach((commenter, i) => {
+						const commenterRecord = Commenters.findOne({
+							slug: commenter.slug,
+						});
+						commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
+
+						// get commenter avatar
+						if (commenterRecord.avatar) {
+							commenterRecord.avatarData = Avatars.findOne(commenterRecord.avatar);
+						}
+
+						// add to the unique commenter set
+						if (commenters.some((c) => c.slug === commenter.slug)) {
+							// isInCommenters = true;
+						} else {
+							commenters.push(commenterRecord);
+						}
+					});
+				});
+			}
+			commentGroups[commentGroupIndex].commenters = commenters;
+		});
+
+		return commentGroups;
 	},
 
 	createQueryFromFilters(filters) {

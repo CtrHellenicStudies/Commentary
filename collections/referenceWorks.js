@@ -16,6 +16,11 @@ Schemas.ReferenceWorks = new SimpleSchema({
 		},
 	},
 
+	tenant: {
+		type: String,
+		optional: true,
+	},
+
 	link: {
 		type: String,
 		optional: true,

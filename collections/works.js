@@ -5,6 +5,11 @@ Schemas.Works = new SimpleSchema({
 		type: String,
 		max: 60,
 	},
+	tenant: {
+		type: String,
+		optional: true,
+	},
+
 	slug: {
 		type: String,
 		max: 200,

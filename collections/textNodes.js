@@ -1,6 +1,11 @@
 this.TextNodes = new Meteor.Collection('textNodes');
 
 Schemas.TextNodes = new SimpleSchema({
+	tenant: {
+		type: String,
+		optional: true,
+	},
+
 	text: { type: [Object] },
 
 	'text.$.n': { type: Number },

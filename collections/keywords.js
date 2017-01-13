@@ -10,6 +10,11 @@ Schemas.Keywords = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
+	
+	tenant: {
+		type: String,
+		optional: true,
+	},
 
 	title: {
 		type: String,

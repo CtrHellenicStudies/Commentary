@@ -32,7 +32,7 @@ tsega:skrollr
 meteor-base@1.0.4
 mongo@1.1.14
 blaze-html-templates@1.0.4
-session@1.1.7
+session
 jquery@1.11.10
 tracker@1.1.1
 logging@1.1.16

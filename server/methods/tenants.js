@@ -2,15 +2,15 @@ import { Meteor } from 'meteor/meteor';
 
 Meteor.methods({
   findTenantBySubdomain: (subdomain) => {
-      check(subdomain, String);
+    check(subdomain, String);
 
-      Tenants.upsert({
+    Tenants.upsert({
+      subdomain: subdomain
+    }, {
+      $set: {
         subdomain: subdomain
-      }, {
-        $set: {
-          subdomain: subdomain
-        }
-      });
+      }
+    });
 
     let tenant = Tenants.findOne({ subdomain: subdomain });
     if (tenant) {

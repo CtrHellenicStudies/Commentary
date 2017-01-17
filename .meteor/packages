@@ -84,3 +84,4 @@ sach:flow-db-admin
 meteorhacks:ssr
 okgrow:router-autoscroll
 shell-server
+zimme:collection-timestampable

@@ -2,7 +2,7 @@
 
 # Application specific
 local
-private/settings/production.json
+private/settings/*.json
 *.log
 .uploads
 node_modules

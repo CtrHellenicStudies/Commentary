@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import React from 'react';
 import { mount } from 'react-mounter';
 
@@ -8,6 +9,22 @@ function subscriptions() {
 }
 FlowRouter.subscriptions = subscriptions;
 
+// check tanent
+FlowRouter.triggers.enter([(context) => {
+	if (!Session.get('tenantId')) {
+	  let hostnameArray = document.location.hostname.split('.');
+	  if (hostnameArray.length > 1) {
+	    subdomain = hostnameArray[0];
+	  }
+	  if (subdomain) {
+	    Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {
+	      if (tenantId) {
+	        Session.set('tenantId', tenantId);
+	      }
+	    });
+	  }
+	}
+}]);
 /*
  * Route groups with permissions
  */

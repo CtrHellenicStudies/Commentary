@@ -4,6 +4,18 @@ Meteor.methods({
   findTenantBySubdomain: (subdomain) => {
       check(subdomain, String);
 
-      return Tenants.find({ subdomain: subdomain });
+      Tenants.upsert({
+        subdomain: subdomain
+      }, {
+        $set: {
+          subdomain: subdomain
+        }
+      });
+
+    let tenant = Tenants.findOne({ subdomain: subdomain });
+    if (tenant) {
+      return tenant._id;
+    }
+
   }
 });

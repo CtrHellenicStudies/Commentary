@@ -11,11 +11,6 @@ Schemas.Keywords = new SimpleSchema({
 		optional: true,
 	},
 
-	tenant: {
-		type: String,
-		optional: true,
-	},
-
 	title: {
 		type: String,
 		// optional: true,

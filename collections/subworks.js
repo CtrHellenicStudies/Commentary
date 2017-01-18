@@ -36,7 +36,9 @@ Schemas.Subworks = new SimpleSchema({
 	'commentHeatmap.$.nComments': {
 		type: Number,
 	},
-
+	tenantId: {
+		type: String
+	},
 
 	created: {
 		type: Date,

@@ -117,7 +117,9 @@ Schemas.Comments = new SimpleSchema({
 		optional: true,
 		blackbox: true,
 	},
-
+	tenantId: {
+		type: String
+	},
 	created: {
 		type: Date,
 		optional: true,

@@ -109,9 +109,6 @@ Schemas.Commenters = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
-	tenantId: {
-		type: String
-	},
 	created: {
 		type: Date,
 		optional: true,

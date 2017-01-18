@@ -9,7 +9,7 @@ Schemas.Commenters = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
-	
+
 	tenant: {
 		type: String,
 		optional: true,
@@ -109,7 +109,9 @@ Schemas.Commenters = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
-
+	tenantId: {
+		type: String
+	},
 	created: {
 		type: Date,
 		optional: true,

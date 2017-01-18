@@ -187,7 +187,9 @@ Schemas.ReferenceWorks = new SimpleSchema({
 			},
 		},
 	},
-
+	tenantId: {
+		type: String
+	},
 	created: {
 		type: Date,
 		optional: true,

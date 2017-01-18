@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import '../../node_modules/mdi/css/materialdesignicons.css';
 
@@ -161,6 +162,7 @@ AddCommentLayout = React.createClass({
 				keywords: keywords ? keywords : [{}],
 				reference: referenceWorks ? referenceWorks.title : null,
 				referenceLink: referenceWorks ? referenceWorks.link : null,
+				tenantId: Session.get("tenantId"),
 				created: new Date(),
 			};
 

@@ -38,7 +38,9 @@ Schemas.DiscussionComments = new SimpleSchema({
 		type: [String],
 		optional: true,
 	},
-
+	tenantId: {
+		type: String
+	},
 	created: {
 		type: Date,
 		optional: true,

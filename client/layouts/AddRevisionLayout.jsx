@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import '../../node_modules/mdi/css/materialdesignicons.css';
 
@@ -98,6 +99,7 @@ AddRevisionLayout = React.createClass({
 						title: keyword.label,
 						slug: slugify(keyword.label),
 						type,
+						tenantId: Session.get("tenantId")
 					};
 					newKeywordArray.push(newKeyword);
 				}

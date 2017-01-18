@@ -202,6 +202,7 @@ AddCommentLayout = React.createClass({
 						title: keyword.label,
 						slug: slugify(keyword.label),
 						type,
+						tenantId: Session.get("tenantId")
 					};
 					newKeywordArray.push(newKeyword);
 				}

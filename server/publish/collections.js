@@ -90,15 +90,16 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('discussionComments', (commentId) => {
+	Meteor.publish('discussionComments', (commentId, tenantId) => {
 		check(commentId, String);
 
 		return DiscussionComments.find({
 			commentId,
+			tenantId
 		});
 	});
 
-	Meteor.publish('userDiscussionComments', (userId, sortMethod = 'votes') => {
+	Meteor.publish('userDiscussionComments', (userId, sortMethod = 'votes', tenantId) => {
 		check(userId, String);
 		let sort = { votes: -1, updated: -1 };
 
@@ -111,6 +112,7 @@ if (Meteor.isServer) {
 
 		return DiscussionComments.find({
 			'user._id': userId,
+			tenantId: tenantId
 		}, {
 			sort,
 		});

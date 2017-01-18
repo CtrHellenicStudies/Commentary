@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -43,7 +44,7 @@ ProfilePage = React.createClass({
 		let discussionComments = [];
 
 		const handle = Meteor.subscribe('user.discussionComments',
-			{},
+			{tanentId: Session.get("tanentId")},
 			this.state.skip,
 			this.state.limit
 		);

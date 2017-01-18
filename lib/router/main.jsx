@@ -9,7 +9,7 @@ function subscriptions() {
 }
 FlowRouter.subscriptions = subscriptions;
 
-// check tanent
+// check tenant
 FlowRouter.triggers.enter([(context) => {
   if (!Session.get('tenantId')) {
     let hostnameArray = document.location.hostname.split('.');

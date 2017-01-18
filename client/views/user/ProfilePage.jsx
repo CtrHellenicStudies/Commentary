@@ -44,7 +44,7 @@ ProfilePage = React.createClass({
 		let discussionComments = [];
 
 		const handle = Meteor.subscribe('user.discussionComments',
-			{tanentId: Session.get("tanentId")},
+			{tenantId: Session.get("tenantId")},
 			this.state.skip,
 			this.state.limit
 		);

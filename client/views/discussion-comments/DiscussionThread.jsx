@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -60,6 +61,7 @@ DiscussionThread = React.createClass({
 
 		Meteor.call('discussionComments.insert', {
 			content,
+			tenantId: Session.get("tenantId"),
 			commentId: this.props.comment._id,
 		});
 

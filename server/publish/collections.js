@@ -118,12 +118,14 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('keywords.all', (query = {}, skip = 0, limit = 100) => {
-		check(query, Object);
+	Meteor.publish('keywords.all', (tenantId, skip = 0, limit = 100) => {
+		check(tenantId, String);
 		check(skip, Number);
 		check(limit, Number);
 
-		return Keywords.find(query, {
+		return Keywords.find({
+			tenantId: tenantId
+		}, {
 			skip,
 			limit,
 			sort: {
@@ -132,10 +134,12 @@ if (Meteor.isServer) {
 		})
 	});
 
-	Meteor.publish('keywords.slug', (slug) => {
+	Meteor.publish('keywords.slug', (slug, tenantId) => {
 		check(slug, String);
+		check(tenantId, String);
 		return Keywords.find({
 			slug,
+			tenantId
 		}, {
 			limit: 1,
 		});

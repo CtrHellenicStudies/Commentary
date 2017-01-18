@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
@@ -50,7 +51,7 @@ AddComment = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-		Meteor.subscribe('keywords.all');
+		Meteor.subscribe('keywords.all', Session.get("tenantId"));
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {

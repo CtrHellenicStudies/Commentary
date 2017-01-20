@@ -4,12 +4,12 @@
 # but you can also edit it by hand.
 
 # Packages from meteor-starter template application
-less
+less@2.7.8
 accounts-ui@1.1.9
-accounts-password@1.2.12
-accounts-facebook
-accounts-google
-accounts-twitter
+accounts-password@1.3.3
+accounts-facebook@1.0.11
+accounts-google@1.0.11
+accounts-twitter@1.1.12
 aldeed:collection2
 dburles:collection-helpers
 matb33:collection-hooks
@@ -22,7 +22,7 @@ aldeed:template-extension
 yogiben:helpers
 # manuelschoebel:ms-seo
 # spiderable
-service-configuration
+service-configuration@1.0.11
 momentjs:moment
 twbs:bootstrap
 reywood:publish-composite
@@ -30,38 +30,38 @@ natestrauser:animate-css
 timmyg:wow
 tsega:skrollr
 meteor-base@1.0.4
-mongo@1.1.10
+mongo@1.1.14
 blaze-html-templates@1.0.4
-session
-jquery
-tracker
-logging
-reload
-random
-ejson
-email
+session@1.1.7
+jquery@1.11.10
+tracker@1.1.1
+logging@1.1.16
+reload@1.1.11
+random@1.0.10
+ejson@1.0.13
+email@1.1.18
 yogiben:pretty-email
 aldeed:autoform
 yogiben:autoform-modals
 yogiben:autoform-file
 yogiben:autoform-map
-check
+check@1.2.4
 useraccounts:core
 useraccounts:bootstrap
 useraccounts:flow-routing@1.14.3
 
 # Packages added for project
-http
+http@1.2.10
 react
-ecmascript@0.5.7
-es5-shim@4.6.13
+ecmascript@0.6.1
+es5-shim@4.6.15
 archimedigital:core
 kadira:flow-router
 kadira:react-layout
 kadira:blaze-layout
 user-thumbs
-standard-minifier-css@1.1.8
-standard-minifier-js@1.1.8
+standard-minifier-css@1.3.2
+standard-minifier-js@1.2.1
 simple:rest
 dburles:google-maps
 todda00:friendly-slugs
@@ -69,7 +69,7 @@ d3js:d3
 gwendall:blaze-to-react
 buishi:autoform-ufs
 mpowaga:autoform-summernote
-reactive-var@1.0.10
+reactive-var@1.0.11
 reactive-dict@1.1.8
 practicalmeteor:mocha
 dburles:factory
@@ -83,3 +83,4 @@ jalik:ufs
 sach:flow-db-admin
 meteorhacks:ssr
 okgrow:router-autoscroll
+shell-server

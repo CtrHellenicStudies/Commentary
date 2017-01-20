@@ -67,8 +67,6 @@
     "lint": "eslint . --ext .js,.jsx",
     "lint-fix": "eslint . --ext .js,.jsx --fix",
     "pretest": "npm run lint --silent",
-    "start": "export MONGO_URL=mongodb://ahcipDev:xsByMr5C7I09@ahcip.archimedes.digital/ahcipDev && meteor",
-    "start:win": "SET MONGO_URL=mongodb://localhost/ahcipDev&& meteor"
   },
   "repository": {
     "type": "git",

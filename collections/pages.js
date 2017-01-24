@@ -51,6 +51,10 @@ Schemas.Pages = new SimpleSchema({
 			label: false,
 		},
 	},
+	tenantId: {
+		type: String,
+		optional: true
+	},
 	createdAt: {
 		type: Date,
 		autoValue() {

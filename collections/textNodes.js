@@ -1,7 +1,7 @@
 this.TextNodes = new Meteor.Collection('textNodes');
 
 Schemas.TextNodes = new SimpleSchema({
-	tenant: {
+	tenantId: {
 		type: String,
 		optional: true,
 	},

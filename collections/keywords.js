@@ -77,7 +77,8 @@ Schemas.Keywords = new SimpleSchema({
 		optional: true,
 	},
 	tenantId: {
-		type: String
+		type: String,
+		optional: true
 	},
 	created: {
 		type: Date,

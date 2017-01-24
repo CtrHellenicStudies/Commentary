@@ -7,7 +7,7 @@ Schemas.Comments = new SimpleSchema({
 		optional: true,
 	},
 
-	tenant: {
+	tenantId: {
 		type: String,
 		optional: true,
 	},
@@ -117,9 +117,7 @@ Schemas.Comments = new SimpleSchema({
 		optional: true,
 		blackbox: true,
 	},
-	tenantId: {
-		type: String
-	},
+
 	created: {
 		type: Date,
 		optional: true,

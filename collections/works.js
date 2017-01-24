@@ -5,7 +5,7 @@ Schemas.Works = new SimpleSchema({
 		type: String,
 		max: 60,
 	},
-	tenant: {
+	tenantId: {
 		type: String,
 		optional: true,
 	},

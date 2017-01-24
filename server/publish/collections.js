@@ -252,4 +252,8 @@ if (Meteor.isServer) {
 		}
 		return Pages.find(query);
 	});
+
+	Meteor.publish('tenants', () => {
+		return Tenants.find();
+	});
 }

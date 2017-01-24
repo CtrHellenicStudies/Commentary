@@ -186,15 +186,15 @@ if (Meteor.isServer) {
 		})
 	});
 
-	Meteor.publish('revisions', () =>
+	Meteor.publish('revisions', () => {
 		Revisions.find()
-	);
+	});
 
-	Meteor.publish('subworks', () =>
+	Meteor.publish('subworks', () => {
 		Subworks.find()
-	);
+	});
 
-	Meteor.publish('works', (tenantId) =>
+	Meteor.publish('works', (tenantId) => {
 		check(tenantId, String);
 
 		Works.find({
@@ -204,9 +204,9 @@ if (Meteor.isServer) {
 				order: 1,
 			},
 		})
-	);
+	});
 
-	Meteor.publish('referenceWorks', (tenantId) =>
+	Meteor.publish('referenceWorks', (tenantId) => {
 		check(tenantId, String);
 
 		ReferenceWorks.find({
@@ -216,7 +216,7 @@ if (Meteor.isServer) {
 				title: 1
 			}
 		})
-	);
+	});
 
 	Meteor.publish('referenceWorks.commenterId', (commenterId, tenantId) => {
 		check(commenterId, String);

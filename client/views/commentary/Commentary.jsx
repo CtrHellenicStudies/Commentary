@@ -51,6 +51,7 @@ Commentary = React.createClass({
 	getMeteorData() {
 		let commentGroups = [];
 		const query = this.createQueryFromFilters(this.props.filters);
+		query['tenantId'] = Session.get("tenantId");
 
 		// SUBSCRIPTIONS:
 		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
@@ -126,7 +127,7 @@ Commentary = React.createClass({
 			// let isInCommenters = false;
 			const commenters = [];
 			const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
-			// const commenterSubscription = Meteor.subscribe('commenters');
+			// const commenterSubscription = Meteor.subscribe('commenters', Session.get("tenantId"));
 			if (avatarSubscription.ready()) {
 				commentGroup.comments.forEach((comment, commentIndex) => {
 					// isInCommenters = false;

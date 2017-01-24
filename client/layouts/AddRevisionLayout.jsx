@@ -26,7 +26,7 @@ AddRevisionLayout = React.createClass({
 	},
 
 	getMeteorData() {
-		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId);
+		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId, Session.get("tenantId"));
 		const ready = Roles.subscription.ready() && commentsSub;
 		let comment = {};
 		if (ready) {

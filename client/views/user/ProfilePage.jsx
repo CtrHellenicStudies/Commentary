@@ -56,7 +56,7 @@ ProfilePage = React.createClass({
 
 			discussionComments.forEach((discussionComment, discussionCommentIndex) => {
 				const commentHandle =
-					Meteor.subscribe('comments', { _id: discussionComment.commentId }, 0, 1);
+					Meteor.subscribe('comments', { _id: discussionComment.commentId, tenantId: Session.get("tenantId") }, 0, 1);
 				if (commentHandle.ready()) {
 					const comments = Comments.find().fetch();
 					if (comments.length) {

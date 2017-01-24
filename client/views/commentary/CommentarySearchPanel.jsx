@@ -43,11 +43,11 @@ CommentarySearchPanel = React.createClass({
 		let referenceWorks = [];
 
 		if (!this.props.addCommentPage) {
-			Meteor.subscribe('commenters');
+			Meteor.subscribe('commenters', Session.get("tenantId"));
 			Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
-			Meteor.subscribe('referenceWorks');
+			Meteor.subscribe('referenceWorks', Session.get("tenantId"));
 		}
-		Meteor.subscribe('works');
+		Meteor.subscribe('works', Session.get("tenantId"));
 
 		// FETCH DATA:
 		keyideas = Keywords.find({ type: 'idea' }).fetch();

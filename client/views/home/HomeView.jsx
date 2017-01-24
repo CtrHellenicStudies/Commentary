@@ -27,7 +27,8 @@ HomeView = React.createClass({
 	getMeteorData() {
 
 		// SUBSCRIPTIONS:
-		const commentsSub = Meteor.subscribe('comments', {}, 0, 10);
+		var query = { tenantId: Session.get("tenantId") }
+		const commentsSub = Meteor.subscribe('comments', query, 0, 10);
 
 		const comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
 

@@ -80,7 +80,7 @@ EditKeyword = React.createClass({
 			});
 		});
 
-		Meteor.subscribe('commenters');
+		Meteor.subscribe('commenters', Session.get("tenantId"));
 		const commentersOptions = [];
 		let commenters = [];
 		if (Meteor.user() && Meteor.user().commenterId) {

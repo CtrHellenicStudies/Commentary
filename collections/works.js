@@ -6,10 +6,27 @@ Schemas.Works = new SimpleSchema({
 		max: 60,
 	},
 	tenantId: {
-		type: String,
-		optional: true,
-	},
+	    type: String,
+	    label: "Tenant",
+	    optional: true,
+	    autoform: {
+	    	afFieldInput: {
+	    		type: "select",
+		      options: function () {
+		      	var tenants = [];
+		        _.map(Tenants.find().fetch(), function (tenant) {
 
+		          tenants.push({
+		            label: tenant.subdomain,
+		            value: tenant._id
+		          });
+
+		        });
+		        return tenants;
+		      }
+	    	}
+	    }
+	},
 	slug: {
 		type: String,
 		max: 200,

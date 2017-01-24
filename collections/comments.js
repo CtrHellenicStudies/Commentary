@@ -8,8 +8,26 @@ Schemas.Comments = new SimpleSchema({
 	},
 
 	tenantId: {
-		type: String,
-		optional: true,
+	    type: String,
+	    label: "Tenant",
+	    optional: true,
+	    autoform: {
+	    	afFieldInput: {
+	    		type: "select",
+		      options: function () {
+		      	var tenants = [];
+		        _.map(Tenants.find().fetch(), function (tenant) {
+
+		          tenants.push({
+		            label: tenant.subdomain,
+		            value: tenant._id
+		          });
+
+		        });
+		        return tenants;
+		      }
+	    	}
+	    }
 	},
 
 	commenters: {

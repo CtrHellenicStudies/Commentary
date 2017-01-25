@@ -46,6 +46,9 @@ HomeView = React.createClass({
 	},
 
 	render() {
+		Utils.setTitle('Home');
+		Utils.setDescription('An evolving, collaborative commentary based on the cumulative research of Milman Parry and Albert Lord, who created a new way of thinking about Homeric poetry');
+		Utils.setMetaImage(`${location.origin}/images/hector.jpg`);
 		return (
 			<div className="home">
 

@@ -12,7 +12,7 @@ KeywordsPage = React.createClass({
 		} else {
 			Utils.setTitle('Key Ideas');
 		}
-		Utils.setDescription(`${Utils.capitalize(this.props.type)} for ${Config.title}`);
+		Utils.setDescription(`${Utils.capitalize(this.props.type)} for ${Config.title()}`);
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 
 		return (

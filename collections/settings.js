@@ -13,9 +13,6 @@ Schemas.Settings = new SimpleSchema({
   subtitle: {
     type: String
   },
-  logo: {
-    type: String
-  },
   footer: {
     type: String
   },
@@ -28,22 +25,6 @@ Schemas.Settings = new SimpleSchema({
   "emails.contact": {
     type: String
   },
-  defaultLanguage: {
-    type: String,
-    autoValue: function () {
-      if (this.isInsert) {
-        return 'en';
-      }
-    }
-  },
-  dateFormat: {
-    type: String,
-    autoValue: function () {
-      if (this.isInsert) {
-        return 'D/M/YYYY';
-      }
-    }
-  },
   legal: {
     type: Object
   },
@@ -52,6 +33,13 @@ Schemas.Settings = new SimpleSchema({
   },
   "legal.name": {
     type: String
+  },
+  "legal.url": {
+    type: String,
+    autoValue: function() {
+      if (this.isInsert)
+        return Meteor.absoluteUrl();
+    }
   },
   tenantId: {
       type: String,

@@ -3,16 +3,8 @@ import { Session } from 'meteor/session';
 import React from 'react';
 import { mount } from 'react-mounter';
 
-// Global subscription: user data is needed in almost all routes
-let tenantId;
-function subscriptions() {
-  this.register('userData', Meteor.subscribe('userData'));
-  this.register('commenters', Meteor.subscribe('commenters', tenantId));
-  this.register('tenants', Meteor.subscribe('tenants'));
-}
-FlowRouter.subscriptions = subscriptions;
-
 // check tenant
+let tenantId;
 FlowRouter.triggers.enter([(context) => {
   if (!Session.get('tenantId')) {
     let hostnameArray = document.location.hostname.split('.');
@@ -29,6 +21,15 @@ FlowRouter.triggers.enter([(context) => {
     }
   }
 }]);
+
+// Global subscription: user data is needed in almost all routes
+function subscriptions() {
+  this.register('userData', Meteor.subscribe('userData'));
+  this.register('commenters', Meteor.subscribe('commenters', tenantId));
+  this.register('tenants', Meteor.subscribe('tenants'));
+}
+FlowRouter.subscriptions = subscriptions;
+
 /*
  * Route groups with permissions
  */

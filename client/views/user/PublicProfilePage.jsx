@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
@@ -34,7 +35,7 @@ PublicProfilePage = React.createClass({
 		let discussionComments = [];
 		const userId = this.props.userId;
 		const usersHandle = Meteor.subscribe('allUsers', userId);
-		const discussionCommentsHandle = Meteor.subscribe('userDiscussionComments', userId);
+		const discussionCommentsHandle = Meteor.subscribe('userDiscussionComments', userId, Session.get("tenantId"));
 		if (usersHandle.ready()) {
 			user = Meteor.users.findOne({
 				_id: userId,

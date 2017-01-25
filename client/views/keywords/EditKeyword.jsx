@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
@@ -50,7 +51,7 @@ EditKeyword = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-		Meteor.subscribe('keywords.all');
+		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {
@@ -79,7 +80,7 @@ EditKeyword = React.createClass({
 			});
 		});
 
-		Meteor.subscribe('commenters');
+		Meteor.subscribe('commenters', Session.get("tenantId"));
 		const commentersOptions = [];
 		let commenters = [];
 		if (Meteor.user() && Meteor.user().commenterId) {

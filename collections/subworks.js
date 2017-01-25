@@ -37,7 +37,6 @@ Schemas.Subworks = new SimpleSchema({
 		type: Number,
 	},
 
-
 	created: {
 		type: Date,
 		optional: true,

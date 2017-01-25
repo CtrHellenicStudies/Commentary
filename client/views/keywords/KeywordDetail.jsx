@@ -21,7 +21,7 @@ KeywordDetail = React.createClass({
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
-		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug);
+		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug, Session.get("tenantId"));
 
 		// FETCH DATA:
 		const query = {

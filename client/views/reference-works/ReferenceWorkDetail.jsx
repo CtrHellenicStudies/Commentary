@@ -11,8 +11,8 @@ ReferenceWorkDetail = React.createClass({
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
-		Meteor.subscribe('referenceWorks.slug', this.props.slug);
-		Meteor.subscribe('commenters');
+		Meteor.subscribe('referenceWorks.slug', this.props.slug, Session.get("tenantId"));
+		Meteor.subscribe('commenters', Session.get("tenantId"));
 
 		// FETCH DATA:
 		const query = {

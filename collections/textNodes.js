@@ -1,9 +1,27 @@
 this.TextNodes = new Meteor.Collection('textNodes');
 
 Schemas.TextNodes = new SimpleSchema({
-	tenant: {
-		type: String,
-		optional: true,
+	tenantId: {
+	    type: String,
+	    label: "Tenant",
+	    optional: true,
+	    autoform: {
+	    	afFieldInput: {
+	    		type: "select",
+		      options: function () {
+		      	var tenants = [];
+		        _.map(Tenants.find().fetch(), function (tenant) {
+
+		          tenants.push({
+		            label: tenant.subdomain,
+		            value: tenant._id
+		          });
+
+		        });
+		        return tenants;
+		      }
+	    	}
+	    }
 	},
 
 	text: { type: [Object] },

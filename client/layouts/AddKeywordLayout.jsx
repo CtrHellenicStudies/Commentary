@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -159,6 +160,7 @@ AddKeywordLayout = React.createClass({
 			description: formData.textValue,
 			type: this.state.selectedType,
 			count: 1,
+			tenantId: Session.get("tenantId"),
 			created: new Date(),
 		};
 

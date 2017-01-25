@@ -16,9 +16,9 @@ ReferenceWorksList = React.createClass({
 		const query = {};
 		if (this.props.commenterId) {
 			query.authors = this.props.commenterId;
-			Meteor.subscribe('referenceWorks.commenterId', this.props.commenterId);
+			Meteor.subscribe('referenceWorks.commenterId', this.props.commenterId, Session.get("tenantId"));
 		} else {
-			Meteor.subscribe('referenceWorks');
+			Meteor.subscribe('referenceWorks', Session.get("tenantId"));
 		}
 
 		// FETCH DATA:

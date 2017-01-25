@@ -15,7 +15,7 @@ CommentsRecent = React.createClass({
 	},
 
 	getMeteorData() {
-		const handle = Meteor.subscribe('comments.recent', 3);
+		const handle = Meteor.subscribe('comments.recent', Session.get("tenantId"), 3);
 		let recentComments = [];
 		if (handle.ready()) {
 			recentComments = Comments.find().fetch();

@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -43,7 +44,7 @@ ProfilePage = React.createClass({
 		let discussionComments = [];
 
 		const handle = Meteor.subscribe('user.discussionComments',
-			{},
+			{tenantId: Session.get("tenantId")},
 			this.state.skip,
 			this.state.limit
 		);
@@ -55,7 +56,7 @@ ProfilePage = React.createClass({
 
 			discussionComments.forEach((discussionComment, discussionCommentIndex) => {
 				const commentHandle =
-					Meteor.subscribe('comments', { _id: discussionComment.commentId }, 0, 1);
+					Meteor.subscribe('comments', { _id: discussionComment.commentId, tenantId: Session.get("tenantId") }, 0, 1);
 				if (commentHandle.ready()) {
 					const comments = Comments.find().fetch();
 					if (comments.length) {

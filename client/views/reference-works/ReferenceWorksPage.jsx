@@ -6,7 +6,7 @@ ReferenceWorksPage = React.createClass({
 
 	render() {
 		Utils.setTitle('Reference Works');
-		Utils.setDescription(`Reference Works for ${Config.title}`);
+		Utils.setDescription(`Reference Works for ${Config.title()}`);
 		Utils.setMetaImage(`${location.origin}/images/achilles_2.jpg`);
 		return (
 			<div className="page reference-works-page">

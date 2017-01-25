@@ -57,6 +57,10 @@ ReferenceWorkDetail = React.createClass({
 			return <div />;
 		}
 
+		Utils.setTitle(`${referenceWork.title} ${commenters.join(', ')}`);
+		Utils.setDescription(Utils.trunc(referenceWork.description, 150));
+		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
+
 		return (
 			<div className="page reference-works-page reference-works-detail-page">
 				<div className="content primary">

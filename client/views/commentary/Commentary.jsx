@@ -399,6 +399,7 @@ Commentary = React.createClass({
 		Utils.setMetaTag('name', 'subject', 'content', metaSubject);
 		Utils.setTitle(title);
 		Utils.setDescription(`Commentary on ${title}: ${description}`);
+		Utils.setMetaImage();
 	},
 
 	renderNoCommentsOrLoading() {

@@ -85,3 +85,5 @@ meteorhacks:ssr
 okgrow:router-autoscroll
 shell-server
 zimme:collection-timestampable
+kadira:dochead
+kadira:flow-router-ssr

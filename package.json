@@ -24,6 +24,7 @@
     "mdi": "^1.6.50",
     "meteor-node-stubs": "^0.2.3",
     "npm": "^3.10.9",
+    "prerender-node": "^2.7.0",
     "pseries": "^2.0.0",
     "react": "^15.4.0",
     "react-addons-create-fragment": "^15.0.2",

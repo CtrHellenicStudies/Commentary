@@ -2,6 +2,8 @@ AboutPage = React.createClass({
 
 	render() {
 		Utils.setTitle('About');
+		Utils.setDescription('The intellectual goal of the original editors is simple and at the same time most ambitious: of all existing commentaries on Homeric poetry, this project is the first and only such commentary that is based squarely on the cumulative research of Milman Parry and his student, Albert Lord, who created a new way of thinking about Homeric poetry.')
+		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
 

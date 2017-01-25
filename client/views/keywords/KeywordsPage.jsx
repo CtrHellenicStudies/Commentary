@@ -6,6 +6,15 @@ KeywordsPage = React.createClass({
 	},
 
 	render() {
+		const type = this.props.type;
+		if (type === 'word') {
+			Utils.setTitle('Keywords');
+		} else {
+			Utils.setTitle('Key Ideas');
+		}
+		Utils.setDescription(`${Utils.capitalize(this.props.type)} for ${Config.title}`);
+		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
+
 		return (
 			<div className="page keywords-page">
 				<div data-ng-controller="PageController as page" className="content primary">

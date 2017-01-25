@@ -348,6 +348,8 @@ Commentary = React.createClass({
 		let subwork = '1';
 		let lineFrom = 0;
 		let lineTo = 0;
+		let metaSubject = 'Commentaries on Classical Texts';
+		let description = '';
 
 		this.props.filters.forEach((filter) => {
 			values = [];
@@ -384,9 +386,19 @@ Commentary = React.createClass({
 		if (lineTo) {
 			title = `${title}-${lineTo}`;
 		}
-		title = `${title} | ${Config.title()}`;
+		metaSubject = `${metaSubject}, ${title}, Philology`;
 
-		DocHead.setTitle(title);
+		if (
+				this.data.commentGroups.length
+			&& this.data.commentGroups[0].comments.length
+			&& this.data.commentGroups[0].comments[0].revisions.length
+		) {
+			description = Utils.trunc(this.data.commentGroups[0].comments[0].revisions[0].text, 120);
+		}
+
+		Utils.setMetaTag('name', 'subject', 'content', metaSubject);
+		Utils.setTitle(title);
+		Utils.setDescription(`Commentary on ${title}: ${description}`);
 	},
 
 	renderNoCommentsOrLoading() {

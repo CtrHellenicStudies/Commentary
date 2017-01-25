@@ -1,11 +1,13 @@
+import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import React from 'react';
 import { mount } from 'react-mounter';
 
 // Global subscription: user data is needed in almost all routes
+let tenantId;
 function subscriptions() {
   this.register('userData', Meteor.subscribe('userData'));
-  this.register('commenters', Meteor.subscribe('commenters', Session.get("tenantId")));
+  this.register('commenters', Meteor.subscribe('commenters', tenantId));
   this.register('tenants', Meteor.subscribe('tenants'));
 }
 FlowRouter.subscriptions = subscriptions;
@@ -20,6 +22,7 @@ FlowRouter.triggers.enter([(context) => {
         Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {
           if (tenantId) {
             Session.set('tenantId', tenantId);
+            this.tenantId = tenantId;
           }
         });
       }

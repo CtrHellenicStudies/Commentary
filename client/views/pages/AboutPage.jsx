@@ -1,6 +1,8 @@
 AboutPage = React.createClass({
 
 	render() {
+		Utils.setTitle('About');
+
 		return (
 
 			<div className="page page-about content primary">

@@ -69,6 +69,14 @@ SinglePage = React.createClass({
 				<PageNotFound />
 			);
 		}
+
+		if (page && page.title) {
+			Utils.setTitle(page.title);
+		}
+		if (headerImageSource) {
+			Utils.setMetaImage(headerImageSource);
+		}
+
 		return (
 			// todo: return 404 if !page.length
 			<div className={pageClass}>

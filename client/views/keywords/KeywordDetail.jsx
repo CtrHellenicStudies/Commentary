@@ -53,7 +53,9 @@ KeywordDetail = React.createClass({
 		}
 
 		Utils.setTitle(keyword.title);
-		Utils.setDescription(Utils.trunc(keyword.description, 150));
+		if (keyword.description) {
+			Utils.setDescription(Utils.trunc(keyword.description, 150));
+		}
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 
 		return (

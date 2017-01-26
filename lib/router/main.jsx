@@ -6,35 +6,35 @@ import { mount } from 'react-mounter';
 // Global subscription: user data is needed in almost all routes
 let tenantId;
 function subscriptions() {
-  this.register('userData', Meteor.subscribe('userData'));
-  this.register('commenters', Meteor.subscribe('commenters', this.tenantId));
-  this.register('tenants', Meteor.subscribe('tenants'));
+	this.register('userData', Meteor.subscribe('userData'));
+	this.register('commenters', Meteor.subscribe('commenters', this.tenantId));
+	this.register('tenants', Meteor.subscribe('tenants'));
 }
 FlowRouter.subscriptions = subscriptions;
 
 // check tenant and set document meta
 FlowRouter.triggers.enter([(context) => {
-  if (!Session.get('tenantId')) {
-    let hostnameArray = document.location.hostname.split('.');
-    if (hostnameArray.length > 1) {
-      subdomain = hostnameArray[0];
-    } else {
-	subdomain = ""
-    }
+	if (!Session.get('tenantId')) {
+		let hostnameArray = document.location.hostname.split('.');
+		if (hostnameArray.length > 1) {
+			subdomain = hostnameArray[0];
+		} else {
+			subdomain = ""
+		}
 
-    Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {
-      if (tenantId) {
-        Session.set('tenantId', tenantId);
-        this.tenantId = tenantId;
-      }
-    });
-  }
+		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {
+			if (tenantId) {
+				Session.set('tenantId', tenantId);
+				this.tenantId = tenantId;
+			}
+		});
+	}
 
-  if (Meteor.isClient) {
-    Utils.setBaseDocMeta();
-  }
+	if (Meteor.isClient) {
+		Utils.setBaseDocMeta();
+	}
 
-  this.tenantId = Session.get("tenantId");
+	this.tenantId = Session.get("tenantId");
 }]);
 
 /*

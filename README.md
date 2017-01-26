@@ -14,3 +14,8 @@ From the project directory:
 To start the procution image locally run `bin/start_prod_loc [MONGO_URL]`
 
 This will create an app instance bound to port 3000 on the host and using MONGO_URL as the DB.
+
+#### Configure env variables for Kubernetes
+To configure environment variables for the cluster, please adapt and apply the JSON file in the appropriate directory within the k8s dir.
+
+Otherwise, Jenkins should set the correct image whenever it's pushed to our container registry. 

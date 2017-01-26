@@ -67,11 +67,9 @@ HomeView = React.createClass({
 								<div className="center-content">
 
 									<div className="site-title-wrap">
-										<h1 className="site-title">A Homer Commentary <br />in Progress</h1>
+										<h2 className="site-title">{this.props.settings ? this.props.settings.name : undefined}</h2>
 										<h3 className="site-subtitle">
-											An evolving, collaborative commentary based on the cumulative research of
-											Milman Parry and Albert Lord, who created a new way of thinking about
-											Homeric poetry
+											{this.props.settings ? this.props.settings.subtitle : undefined}
 										</h3>
 									</div>
 

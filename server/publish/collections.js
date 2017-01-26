@@ -276,7 +276,7 @@ if (Meteor.isServer) {
 		return Tenants.find();
 	});
 
-	Meteor.publish('settings.currentTenant', (tenantId) => {
+	Meteor.publish('settings.tenant', (tenantId) => {
 
 		return Settings.find({ tenantId: tenantId });
 	});

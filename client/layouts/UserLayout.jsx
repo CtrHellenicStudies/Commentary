@@ -31,7 +31,7 @@ UserLayout = React.createClass({
 		return (
 			<div className="chs-layout master-layout">
 
-				<Header />
+				<Header  />
 
 				<main>
 					{this.data.user ?
@@ -40,7 +40,7 @@ UserLayout = React.createClass({
 						<Loading />
 					}
 				</main>
-				<Footer />
+				<Footer  />
 				<SnackAttack />
 			</div>
 		);

@@ -11,7 +11,8 @@ Schemas.Settings = new SimpleSchema({
     type: String
   },
   subtitle: {
-    type: String
+    type: String,
+    optional: true
   },
   footer: {
     type: String
@@ -29,10 +30,12 @@ Schemas.Settings = new SimpleSchema({
     type: Object
   },
   "legal.address": {
-    type: String
+    type: String,
+    optional: true
   },
   "legal.name": {
-    type: String
+    type: String,
+    optional: true
   },
   "legal.url": {
     type: String,

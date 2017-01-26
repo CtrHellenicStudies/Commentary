@@ -16,7 +16,7 @@ MasterLayout = React.createClass({
 				<main>
 					{this.props.content}
 				</main>
-				<Footer />
+				<Footer  />
 
 			</div>
 		);

@@ -8,7 +8,11 @@ HomeLayout = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-		return {};
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get("tenantId"));
+
+		return {
+			settings: settingsHandle.ready() ? Settings.findOne() : {}
+		};
 	},
 
 	componentDidMount() {
@@ -24,7 +28,7 @@ HomeLayout = React.createClass({
 			<div className="chs-layout home-layout">
 				<Header />
 
-				<HomeView />
+				<HomeView settings={this.data.settings} />
 
 				<Footer />
 

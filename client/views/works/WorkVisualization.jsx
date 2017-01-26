@@ -24,6 +24,8 @@ WorkVisualization = React.createClass({
 	componentDidMount() {
 		const self = this;
 		const slug = self.props.work.slug;
+		let orientation = 'horizontal';
+		let width = window.innerWidth;
 
 		// --- BEGIN SVG --- //
 		const margin = {
@@ -33,12 +35,13 @@ WorkVisualization = React.createClass({
 			left: 60,
 		};
 
-    let width = window.innerWidth;
-    if (width > 992) {
-      width = 992;
-    }
-		width = width - margin.left - margin.right;
-		const height = 421 - margin.top - margin.bottom;
+		if (width > 992) {
+			width = 992;
+		} else if (width < 700) {
+			orientation = 'vertical';
+		}
+
+		width = width - margin.left - margin.right; const height = 421 - margin.top - margin.bottom;
 		const barGraphMargin = {
 			left: 10,
 		};
@@ -77,174 +80,328 @@ WorkVisualization = React.createClass({
 			})])
 			.range(['#fbf8ec', '#b6ae97']);
 
-		// --- BEGIN X-AXIS --- //
-		const x = d3.scale.ordinal()
-			.rangeRoundBands([barGraphMargin.left, width], 0.4);
+		if (orientation === 'vertical') {
+			// --- BEGIN X-AXIS --- //
+			const x = d3.scale.ordinal()
+				.rangeRoundBands([barGraphMargin.left, width], 0.4);
 
-		/*
-		const xAxis = d3.svg.axis()
-				.scale(x)
-				.orient('bottom');
-		*/
-
-		x.domain(dataBarGraph.map((d) => {
-			return d.n;
-		}));
-
-		const barGraphXAxis = barGraph.append('g')
-			.attr('class', `bargraph-x-axis-${slug}`);
-
-		barGraphXAxis.append('g')
-			.attr('class', `bargraph-x-axis-rect-${slug}`)
-			.append('rect')
-			.attr('x', barGraphMargin.left)
-			.attr('y', 0)
-			.attr('width', width - barGraphMargin.left)
-			.attr('height', 60)
-			.attr('transform', `translate(0, ${height})`)
-			.attr('fill', '#efebde');
-
-		barGraphXAxis.append('g')
-			.attr('class', `bargraph-x-axis-label-${slug}`)
-			.append('text')
-			.attr('x', -70)
-			.attr('y', height + 35)
-			.attr('dx', '1em')
-			.style('text-anchor', 'start')
-			.text('BOOK');
-			// --- END X-AXIS --- //
-
-		// --- BEGIN Y-AXIS --- //
-		const y = d3.scale.linear()
-			.range([height, 0]);
-
-		const yAxis = d3.svg.axis()
-			.scale(y)
-			.ticks(10)
-			.tickSize(-width)
-			.orient('left');
-
-		y.domain([0, d3.max(dataBarGraph, (d) => {
-			return d.nComments;
-		})]);
-
-		const barGraphYAxis = barGraph.append('g')
-			.attr('class', `bargraph-y-axis-${slug}`);
-
-		barGraphYAxis.append('g')
-			.attr('class', `axis y-axis bargraph-y-axis-lines-${slug}`)
-			.attr('fill', '#999999')
-			.call(yAxis);
-
-		barGraphYAxis.append('g')
-			.attr('class', `bargraph-y-axis-label-${slug}`)
-			.append('text')
-			.attr('transform', 'rotate(-90)')
-			.attr('x', -height / 2)
-			.attr('y', -60)
-			.attr('dy', '1em')
-			.style('text-anchor', 'middle')
-			.text('# OF COMMENTS');
-			// --- END Y-AXIS --- //
-
-		// --- BEGIN BARS --- //
-		const barGraphBars = barGraph.append('g')
-			.attr('class', `bargraph-bars-${slug}`)
-			.selectAll('g[class^="bargraph-bar-"]')
-			.data(dataBarGraph)
-			.enter()
-			.append('g')
-			.attr('class', (d) => {
-				return `bargraph-bar-${slug}-${d.n}`;
-			});
-
-		barGraphBars
-			.append('rect')
-			.attr('class', (d) => {
-				return `bargraph-bar-column-${slug}-${d.n}`;
-			})
-			.attr('x', (d) => {
-				return x(d.n);
-			})
-			.attr('x_origin', (d) => {
-				return x(d.n);
-			})
-			.attr('width', x.rangeBand())
-			.attr('width_origin', x.rangeBand())
-			.attr('y', (d) => {
-					return y(d.nComments) || 0;
-			})
-			.attr('y_origin', (d) => {
-				if (
-						'nComments' in d
-						&& typeof d.nComments !== 'undefined'
-						&& d.nComments
-						&& !isNaN(d.nComments)
-				) {
-					return y(d.nComments);
-				}
-				return y(0);
-			})
-			.attr('fill', (d) => {
-				return color(d.nComments);
-			})
-			.attr('fill_origin', (d) => {
-				return color(d.nComments);
-			})
-			.attr('height', (d) => {
-				return (height - y(d.nComments)) || 0;
-			})
-			.attr('height_origin', (d) => {
-				return height - y(d.nComments);
-			});
-
-		const footSize = 4;
-		barGraphBars
-			.append('rect')
-			.attr('class', (d) => {
-				return 'bargraph-bar-foot-' + slug + '-' + d.n;
-			})
-			.attr('x', (d) => {
-				return x(d.n) - footSize;
-			})
-			.attr('y', height - footSize)
-			.attr('width', x.rangeBand() + footSize * 2)
-			.attr('height', footSize)
-			.attr('fill', (d) => {
-				return color(d.nComments);
-			});
-
-		barGraphBars
-			.append('text')
-			.attr('class', (d) => {
-				return 'bargraph-bar-label-' + slug + '-' + d.n;
-			})
-			.attr('x', (d) => {
-				return x(d.n) + x.rangeBand() / 2;
-			})
-			.attr('y', height + 35)
-			.style('text-anchor', 'middle')
-			.text((d) => {
+			/*
+			const xAxis = d3.svg.axis()
+					.scale(x)
+					.orient('bottom');
+			*/
+			x.domain(dataBarGraph.map((d) => {
 				return d.n;
-			});
+			}));
+			const barGraphXAxis = barGraph.append('g')
+				.attr('class', `bargraph-x-axis-${slug}`);
+			barGraphXAxis.append('g')
+				.attr('class', `bargraph-x-axis-rect-${slug}`)
+				.append('rect')
+				.attr('x', barGraphMargin.left)
+				.attr('y', 0)
+				.attr('width', width - barGraphMargin.left)
+				.attr('height', 60)
+				.attr('transform', `translate(0, ${height})`)
+				.attr('fill', '#efebde');
+			barGraphXAxis.append('g')
+				.attr('class', `bargraph-x-axis-label-${slug}`)
+				.append('text')
+				.attr('x', -70)
+				.attr('y', height + 35)
+				.attr('dx', '1em')
+				.style('text-anchor', 'start')
+				.text('BOOK');
+				// --- END X-AXIS --- //
 
-		barGraphBars
-			.append('text')
-			.attr('class', (d) => {
-				return 'bargraph-bar-top-label-' + slug + '-' + d.n;
-			})
-			.attr('x', (d) => {
-				return x(d.n) + x.rangeBand() / 2;
-			})
-			.attr('y', (d) => {
-					return (y(d.nComments) - x.rangeBand() / 2) || 0;
-			})
-			.style('text-anchor', 'middle')
-			.style('opacity', 0)
-			.attr('fill', '#d59518')
-			.text((d) => {
+			// --- BEGIN Y-AXIS --- //
+			const y = d3.scale.linear()
+				.range([height, 0]);
+			const yAxis = d3.svg.axis()
+				.scale(y)
+				.ticks(10)
+				.tickSize(-width)
+				.orient('left');
+			y.domain([0, d3.max(dataBarGraph, (d) => {
 				return d.nComments;
-			});
+			})]);
+			const barGraphYAxis = barGraph.append('g')
+				.attr('class', `bargraph-y-axis-${slug}`);
+			barGraphYAxis.append('g')
+				.attr('class', `axis y-axis bargraph-y-axis-lines-${slug}`)
+				.attr('fill', '#999999')
+				.call(yAxis);
+			barGraphYAxis.append('g')
+				.attr('class', `bargraph-y-axis-label-${slug}`)
+				.append('text')
+				.attr('transform', 'rotate(-90)')
+				.attr('x', -height / 2)
+				.attr('y', -60)
+				.attr('dy', '1em')
+				.style('text-anchor', 'middle')
+				.text('# OF COMMENTS');
+				// --- END Y-AXIS --- //
+
+			// --- BEGIN BARS --- //
+			const barGraphBars = barGraph.append('g')
+				.attr('class', `bargraph-bars-${slug}`)
+				.selectAll('g[class^="bargraph-bar-"]')
+				.data(dataBarGraph)
+				.enter()
+				.append('g')
+				.attr('class', (d) => {
+					return `bargraph-bar-${slug}-${d.n}`;
+				});
+
+			barGraphBars
+				.append('rect')
+				.attr('class', (d) => {
+					return `bargraph-bar-column-${slug}-${d.n}`;
+				})
+				.attr('x', (d) => {
+					return x(d.n);
+				})
+				.attr('x_origin', (d) => {
+					return x(d.n);
+				})
+				.attr('width', x.rangeBand())
+				.attr('width_origin', x.rangeBand())
+				.attr('y', (d) => {
+						return y(d.nComments) || 0;
+				})
+				.attr('y_origin', (d) => {
+					if (
+							'nComments' in d
+							&& typeof d.nComments !== 'undefined'
+							&& d.nComments
+							&& !isNaN(d.nComments)
+					) {
+						return y(d.nComments);
+					}
+					return y(0);
+				})
+				.attr('fill', (d) => {
+					return color(d.nComments);
+				})
+				.attr('fill_origin', (d) => {
+					return color(d.nComments);
+				})
+				.attr('height', (d) => {
+					return (height - y(d.nComments)) || 0;
+				})
+				.attr('height_origin', (d) => {
+					return height - y(d.nComments);
+				});
+
+			const footSize = 4;
+			barGraphBars
+				.append('rect')
+				.attr('class', (d) => {
+					return 'bargraph-bar-foot-' + slug + '-' + d.n;
+				})
+				.attr('x', (d) => {
+					return x(d.n) - footSize;
+				})
+				.attr('y', height - footSize)
+				.attr('width', x.rangeBand() + footSize * 2)
+				.attr('height', footSize)
+				.attr('fill', (d) => {
+					return color(d.nComments);
+				});
+
+			barGraphBars
+				.append('text')
+				.attr('class', (d) => {
+					return 'bargraph-bar-label-' + slug + '-' + d.n;
+				})
+				.attr('x', (d) => {
+					return x(d.n) + x.rangeBand() / 2;
+				})
+				.attr('y', height + 35)
+				.style('text-anchor', 'middle')
+				.text((d) => {
+					return d.n;
+				});
+
+			barGraphBars
+				.append('text')
+				.attr('class', (d) => {
+					return 'bargraph-bar-top-label-' + slug + '-' + d.n;
+				})
+				.attr('x', (d) => {
+					return x(d.n) + x.rangeBand() / 2;
+				})
+				.attr('y', (d) => {
+						return (y(d.nComments) - x.rangeBand() / 2) || 0;
+				})
+				.style('text-anchor', 'middle')
+				.style('opacity', 0)
+				.attr('fill', '#d59518')
+				.text((d) => {
+					return d.nComments;
+				});
+		} else {
+			// --- BEGIN X-AXIS --- //
+			const x = d3.scale.ordinal()
+				.rangeRoundBands([barGraphMargin.left, width], 0.4);
+
+			/*
+			const xAxis = d3.svg.axis()
+					.scale(x)
+					.orient('bottom');
+			*/
+			x.domain(dataBarGraph.map((d) => {
+				return d.n;
+			}));
+			const barGraphXAxis = barGraph.append('g')
+				.attr('class', `bargraph-x-axis-${slug}`);
+			barGraphXAxis.append('g')
+				.attr('class', `bargraph-x-axis-rect-${slug}`)
+				.append('rect')
+				.attr('x', barGraphMargin.left)
+				.attr('y', 0)
+				.attr('width', width - barGraphMargin.left)
+				.attr('height', 60)
+				.attr('transform', `translate(0, ${height})`)
+				.attr('fill', '#efebde');
+			barGraphXAxis.append('g')
+				.attr('class', `bargraph-x-axis-label-${slug}`)
+				.append('text')
+				.attr('x', -70)
+				.attr('y', height + 35)
+				.attr('dx', '1em')
+				.style('text-anchor', 'start')
+				.text('BOOK');
+				// --- END X-AXIS --- //
+
+			// --- BEGIN Y-AXIS --- //
+			const y = d3.scale.linear()
+				.range([height, 0]);
+			const yAxis = d3.svg.axis()
+				.scale(y)
+				.ticks(10)
+				.tickSize(-width)
+				.orient('left');
+			y.domain([0, d3.max(dataBarGraph, (d) => {
+				return d.nComments;
+			})]);
+			const barGraphYAxis = barGraph.append('g')
+				.attr('class', `bargraph-y-axis-${slug}`);
+			barGraphYAxis.append('g')
+				.attr('class', `axis y-axis bargraph-y-axis-lines-${slug}`)
+				.attr('fill', '#999999')
+				.call(yAxis);
+			barGraphYAxis.append('g')
+				.attr('class', `bargraph-y-axis-label-${slug}`)
+				.append('text')
+				.attr('transform', 'rotate(-90)')
+				.attr('x', -height / 2)
+				.attr('y', -60)
+				.attr('dy', '1em')
+				.style('text-anchor', 'middle')
+				.text('# OF COMMENTS');
+				// --- END Y-AXIS --- //
+
+			// --- BEGIN BARS --- //
+			const barGraphBars = barGraph.append('g')
+				.attr('class', `bargraph-bars-${slug}`)
+				.selectAll('g[class^="bargraph-bar-"]')
+				.data(dataBarGraph)
+				.enter()
+				.append('g')
+				.attr('class', (d) => {
+					return `bargraph-bar-${slug}-${d.n}`;
+				});
+
+			barGraphBars
+				.append('rect')
+				.attr('class', (d) => {
+					return `bargraph-bar-column-${slug}-${d.n}`;
+				})
+				.attr('x', (d) => {
+					return x(d.n);
+				})
+				.attr('x_origin', (d) => {
+					return x(d.n);
+				})
+				.attr('width', x.rangeBand())
+				.attr('width_origin', x.rangeBand())
+				.attr('y', (d) => {
+						return y(d.nComments) || 0;
+				})
+				.attr('y_origin', (d) => {
+					if (
+							'nComments' in d
+							&& typeof d.nComments !== 'undefined'
+							&& d.nComments
+							&& !isNaN(d.nComments)
+					) {
+						return y(d.nComments);
+					}
+					return y(0);
+				})
+				.attr('fill', (d) => {
+					return color(d.nComments);
+				})
+				.attr('fill_origin', (d) => {
+					return color(d.nComments);
+				})
+				.attr('height', (d) => {
+					return (height - y(d.nComments)) || 0;
+				})
+				.attr('height_origin', (d) => {
+					return height - y(d.nComments);
+				});
+
+			const footSize = 4;
+			barGraphBars
+				.append('rect')
+				.attr('class', (d) => {
+					return 'bargraph-bar-foot-' + slug + '-' + d.n;
+				})
+				.attr('x', (d) => {
+					return x(d.n) - footSize;
+				})
+				.attr('y', height - footSize)
+				.attr('width', x.rangeBand() + footSize * 2)
+				.attr('height', footSize)
+				.attr('fill', (d) => {
+					return color(d.nComments);
+				});
+
+			barGraphBars
+				.append('text')
+				.attr('class', (d) => {
+					return 'bargraph-bar-label-' + slug + '-' + d.n;
+				})
+				.attr('x', (d) => {
+					return x(d.n) + x.rangeBand() / 2;
+				})
+				.attr('y', height + 35)
+				.style('text-anchor', 'middle')
+				.text((d) => {
+					return d.n;
+				});
+
+			barGraphBars
+				.append('text')
+				.attr('class', (d) => {
+					return 'bargraph-bar-top-label-' + slug + '-' + d.n;
+				})
+				.attr('x', (d) => {
+					return x(d.n) + x.rangeBand() / 2;
+				})
+				.attr('y', (d) => {
+						return (y(d.nComments) - x.rangeBand() / 2) || 0;
+				})
+				.style('text-anchor', 'middle')
+				.style('opacity', 0)
+				.attr('fill', '#d59518')
+				.text((d) => {
+					return d.nComments;
+				});
+
+		}
 
 		barGraphBars
 			.on('click', (d) => {
@@ -418,6 +575,9 @@ WorkVisualization = React.createClass({
 					.style('opacity', 0.5);
 			});
 	// --- END BUTTON --- //
+
+
+
 	},
 
 	componentDidUpdate(prevProps, prevState) {

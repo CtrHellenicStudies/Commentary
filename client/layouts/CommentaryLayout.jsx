@@ -43,6 +43,9 @@ CommentaryLayout = React.createClass({
 					case 'textsearch':
 						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
 						break;
+					case 'wordpressId':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
 					default:
 						break;
 				}
@@ -198,6 +201,17 @@ CommentaryLayout = React.createClass({
 				filters.push({
 					key: 'lineTo',
 					values: [lineTo],
+				});
+			}
+		}
+
+		if ('wordpressId' in this.props.queryParams) {
+			const wordpressId = parseInt(this.props.queryParams.wordpressId, 10);
+
+			if (!Number.isNaN(wordpressId)) {
+				filters.push({
+					key: 'wordpressId',
+					values: [wordpressId],
 				});
 			}
 		}

@@ -1,6 +1,6 @@
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
-import '../../node_modules/mdi/css/materialdesignicons.css';
+import 'mdi/css/materialdesignicons.css';
 
 AddCommentLayout = React.createClass({
 

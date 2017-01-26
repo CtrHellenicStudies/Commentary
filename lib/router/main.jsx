@@ -7,7 +7,7 @@ import { mount } from 'react-mounter';
 let tenantId;
 function subscriptions() {
   this.register('userData', Meteor.subscribe('userData'));
-  this.register('commenters', Meteor.subscribe('commenters', tenantId));
+  this.register('commenters', Meteor.subscribe('commenters', this.tenantId));
   this.register('tenants', Meteor.subscribe('tenants'));
 }
 FlowRouter.subscriptions = subscriptions;
@@ -19,19 +19,24 @@ FlowRouter.triggers.enter([(context) => {
     if (hostnameArray.length > 1) {
       subdomain = hostnameArray[0];
     } else {
-			subdomain = ""
-		}
+	subdomain = ""
+    }
+
     Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {
       if (tenantId) {
         Session.set('tenantId', tenantId);
         this.tenantId = tenantId;
       }
     });
-	}
+  }
+
   if (Meteor.isClient) {
     Utils.setBaseDocMeta();
   }
+
+  this.tenantId = Session.get("tenantId");
 }]);
+
 /*
  * Route groups with permissions
  */

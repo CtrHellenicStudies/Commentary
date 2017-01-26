@@ -5,6 +5,8 @@ import IconButton from 'material-ui/IconButton';
 
 Header = React.createClass({
 
+	mixins: [ReactMeteorData],
+
 	propTypes: {
 		filters: React.PropTypes.array,
 		toggleSearchTerm: React.PropTypes.func,
@@ -34,6 +36,14 @@ Header = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
+	},
+
+	getMeteorData() {
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get("tenantId"));
+
+		return {
+			settings: settingsHandle.ready() ? Settings.findOne() : {}
+		};
 	},
 
 	toggleSearchMode() {
@@ -194,7 +204,7 @@ Header = React.createClass({
 								/>
 
 								<a href="/" className="header-home-link" >
-									<h3 className="logo">A Homer Commentary in Progress</h3>
+									<h3 className="logo">{this.data.settings ? this.data.settings.name : undefined}</h3>
 								</a>
 								<div className="search-toggle">
 									<IconButton

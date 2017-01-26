@@ -87,3 +87,4 @@ shell-server
 zimme:collection-timestampable
 kadira:dochead
 # kadira:flow-router-ssr
+edgee:slingshot

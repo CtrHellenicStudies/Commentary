@@ -2,7 +2,7 @@ import React from 'react';
 import { SnackAttack } from '/imports/ui/components/SnackAttack.jsx';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import '../../node_modules/mdi/css/materialdesignicons.css';
+import 'mdi/css/materialdesignicons.css';
 
 UserLayout = React.createClass({
 	childContextTypes: {

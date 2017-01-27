@@ -1,3 +1,5 @@
+import { Session } from 'meteor/session';
+
 KeywordsList = React.createClass({
 
 	propTypes: {
@@ -19,6 +21,7 @@ KeywordsList = React.createClass({
 
 		const query = {
 			type,
+			tenantId: Session.get("tenantId"),
 			count: { $gte: 1 },
 		};
 

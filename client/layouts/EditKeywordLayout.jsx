@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -38,7 +39,7 @@ EditKeywordLayout = React.createClass({
 	},
 
 	getMeteorData() {
-		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug);
+		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug, Session.get("tenantId"));
 		const ready = Roles.subscription.ready() && keywordsSub;
 		let keyword = {};
 		if (ready) {
@@ -359,8 +360,8 @@ EditKeywordLayout = React.createClass({
 										ref={(component) => { this.keywordLemmaSelect = component; }}
 										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
 										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										workSlug={keyword.work.slug}
-										subworkN={keyword.subwork.n}
+										workSlug={('work' in keyword) ? keyword.work.slug : 'iliad'}
+										subworkN={('subwork' in keyword) ? keyword.subwork.n : 1}
 									/>
 
 									<EditKeyword

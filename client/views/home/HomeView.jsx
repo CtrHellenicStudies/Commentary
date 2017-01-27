@@ -27,7 +27,8 @@ HomeView = React.createClass({
 	getMeteorData() {
 
 		// SUBSCRIPTIONS:
-		const commentsSub = Meteor.subscribe('comments', {}, 0, 10);
+		var query = { tenantId: Session.get("tenantId") }
+		const commentsSub = Meteor.subscribe('comments', query, 0, 10);
 
 		const comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
 
@@ -45,6 +46,9 @@ HomeView = React.createClass({
 	},
 
 	render() {
+		Utils.setTitle('Home');
+		Utils.setDescription('An evolving, collaborative commentary based on the cumulative research of Milman Parry and Albert Lord, who created a new way of thinking about Homeric poetry');
+		Utils.setMetaImage(`${location.origin}/images/hector.jpg`);
 		return (
 			<div className="home">
 
@@ -66,11 +70,9 @@ HomeView = React.createClass({
 								<div className="center-content">
 
 									<div className="site-title-wrap">
-										<h1 className="site-title">A Homer Commentary <br />in Progress</h1>
+										<h2 className="site-title">{this.props.settings ? this.props.settings.name : undefined}</h2>
 										<h3 className="site-subtitle">
-											An evolving, collaborative commentary based on the cumulative research of
-											Milman Parry and Albert Lord, who created a new way of thinking about
-											Homeric poetry
+											{this.props.settings ? this.props.settings.subtitle : undefined}
 										</h3>
 									</div>
 

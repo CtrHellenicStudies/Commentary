@@ -1,4 +1,4 @@
-import '../../node_modules/mdi/css/materialdesignicons.css';
+import 'mdi/css/materialdesignicons.css';
 
 
 MasterLayout = React.createClass({
@@ -16,7 +16,7 @@ MasterLayout = React.createClass({
 				<main>
 					{this.props.content}
 				</main>
-				<Footer />
+				<Footer  />
 
 			</div>
 		);

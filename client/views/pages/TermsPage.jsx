@@ -1,6 +1,9 @@
 TermsPage = React.createClass({
 
 	render() {
+		Utils.setTitle('Terms and Privacy');
+		Utils.setDescription('');
+		Utils.setMetaImage(`${location.origin}/images/greek-inscription.jpg`);
 		return (
 
 			<div className="page page-terms">

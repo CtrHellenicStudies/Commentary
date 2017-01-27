@@ -51,6 +51,7 @@ Commentary = React.createClass({
 	getMeteorData() {
 		let commentGroups = [];
 		const query = this.createQueryFromFilters(this.props.filters);
+		query['tenantId'] = Session.get("tenantId");
 
 		// SUBSCRIPTIONS:
 		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
@@ -126,7 +127,7 @@ Commentary = React.createClass({
 			// let isInCommenters = false;
 			const commenters = [];
 			const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
-			// const commenterSubscription = Meteor.subscribe('commenters');
+			// const commenterSubscription = Meteor.subscribe('commenters', Session.get("tenantId"));
 			if (avatarSubscription.ready()) {
 				commentGroup.comments.forEach((comment, commentIndex) => {
 					// isInCommenters = false;
@@ -135,18 +136,20 @@ Commentary = React.createClass({
 						const commenterRecord = Commenters.findOne({
 							slug: commenter.slug,
 						});
-						commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
+						if (commenterRecord) {
+							commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
 
-						// get commenter avatar
-						if (commenterRecord.avatar) {
-							commenterRecord.avatarData = Avatars.findOne(commenterRecord.avatar);
-						}
+							// get commenter avatar
+							if (commenterRecord.avatar) {
+								commenterRecord.avatarData = Avatars.findOne(commenterRecord.avatar);
+							}
 
-						// add to the unique commenter set
-						if (commenters.some((c) => c.slug === commenter.slug)) {
-							// isInCommenters = true;
-						} else {
-							commenters.push(commenterRecord);
+							// add to the unique commenter set
+							if (commenters.some((c) => c.slug === commenter.slug)) {
+								// isInCommenters = true;
+							} else {
+								commenters.push(commenterRecord);
+							}
 						}
 					});
 				});
@@ -233,6 +236,12 @@ Commentary = React.createClass({
 					query.lineFrom = query.lineFrom || {};
 					query.lineFrom.$lte = filter.values[0];
 					break;
+
+				case 'wordpressId':
+					// Values will always be an array with a length of one
+					query.wordpressId = filter.values[0];
+					break;
+
 				default:
 					break;
 				}
@@ -338,6 +347,67 @@ Commentary = React.createClass({
 		});
 	},
 
+	setPageTitleAndMeta() {
+		let title = '';
+		let values = [];
+		let work = 'Iliad';
+		let subwork = '1';
+		let lineFrom = 0;
+		let lineTo = 0;
+		let metaSubject = 'Commentaries on Classical Texts';
+		let description = '';
+
+		this.props.filters.forEach((filter) => {
+			values = [];
+			switch (filter.key) {
+			case 'works':
+				filter.values.forEach((value) => {
+					values.push(value.slug);
+				});
+				work = values.join(', ');
+				break;
+
+			case 'subworks':
+				filter.values.forEach((value) => {
+					values.push(value.n);
+				});
+				subwork = values.join(', ');
+				break;
+
+			case 'lineFrom':
+				lineFrom = filter.values[0];
+				break;
+
+			case 'lineTo':
+				lineTo = filter.values[0];
+				break;
+			default:
+				break;
+			}
+		});
+		title = `${work} ${subwork}`;
+		if (lineFrom) {
+			title = `${title} ${lineFrom}`;
+		}
+		if (lineTo) {
+			title = `${title}-${lineTo}`;
+		}
+		metaSubject = `${metaSubject}, ${title}, Philology`;
+
+		if (
+				this.data.commentGroups.length
+			&& this.data.commentGroups[0].comments.length
+			&& this.data.commentGroups[0].comments[0].revisions.length
+		) {
+			description = Utils.trunc(this.data.commentGroups[0].comments[0].revisions[0].text, 120);
+		}
+
+		Utils.setMetaTag('name', 'subject', 'content', metaSubject);
+		Utils.setTitle(title);
+		Utils.setDescription(`Commentary on ${title}: ${description}`);
+		Utils.setMetaImage();
+	},
+
 	renderNoCommentsOrLoading() {
 		if (
 				'isMoreComments' in this.data
@@ -373,6 +443,11 @@ Commentary = React.createClass({
 		} else {
 			isOnHomeView = false;
 		}
+
+		if (!isOnHomeView) {
+			this.setPageTitleAndMeta();
+		}
+
 
 		return (
 			<div className="commentary-primary content ">

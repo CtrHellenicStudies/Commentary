@@ -19,7 +19,7 @@ CommentersList = React.createClass({
 
 		// SUBSCRIPTIONS:
 		if (this.props.featureOnHomepage) {
-			Meteor.subscribe('commenters.featureOnHomepage', limit);
+			Meteor.subscribe('commenters.featureOnHomepage', Session.get("tenantId") ,limit);
 			commenters = Commenters.find({
 				featureOnHomepage: true,
 			}, {

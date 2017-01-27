@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -67,7 +68,7 @@ AddRevision = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-		Meteor.subscribe('keywords.all');
+		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {

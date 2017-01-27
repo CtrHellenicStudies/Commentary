@@ -21,7 +21,7 @@ KeywordDetail = React.createClass({
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
-		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug);
+		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug, Session.get("tenantId"));
 
 		// FETCH DATA:
 		const query = {
@@ -51,6 +51,13 @@ KeywordDetail = React.createClass({
 		if (!keyword) {
 			return <div />;
 		}
+
+		Utils.setTitle(keyword.title);
+		if (keyword.description) {
+			Utils.setDescription(Utils.trunc(keyword.description, 150));
+		}
+		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
+
 		return (
 			<div className="page keywords-page keywords-detail-page">
 				<div className="content primary">

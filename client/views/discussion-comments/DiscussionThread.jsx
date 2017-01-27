@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -35,7 +36,7 @@ DiscussionThread = React.createClass({
 				break;
 		}
 
-		const handle = Meteor.subscribe('discussionComments', this.props.comment._id);
+		const handle = Meteor.subscribe('discussionComments', this.props.comment._id, Session.get("tenantId"));
 		if (handle.ready()) {
 			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id }, {sort}).fetch();
 			loaded = true;
@@ -60,6 +61,7 @@ DiscussionThread = React.createClass({
 
 		Meteor.call('discussionComments.insert', {
 			content,
+			tenantId: Session.get("tenantId"),
 			commentId: this.props.comment._id,
 		});
 

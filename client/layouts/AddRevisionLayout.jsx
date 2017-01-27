@@ -1,5 +1,6 @@
+import { Session } from 'meteor/session';
 import slugify from 'slugify';
-import '../../node_modules/mdi/css/materialdesignicons.css';
+import 'mdi/css/materialdesignicons.css';
 
 AddRevisionLayout = React.createClass({
 
@@ -25,7 +26,7 @@ AddRevisionLayout = React.createClass({
 	},
 
 	getMeteorData() {
-		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId);
+		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId, Session.get("tenantId"));
 		const ready = Roles.subscription.ready() && commentsSub;
 		let comment = {};
 		if (ready) {
@@ -98,6 +99,7 @@ AddRevisionLayout = React.createClass({
 						title: keyword.label,
 						slug: slugify(keyword.label),
 						type,
+						tenantId: Session.get("tenantId")
 					};
 					newKeywordArray.push(newKeyword);
 				}

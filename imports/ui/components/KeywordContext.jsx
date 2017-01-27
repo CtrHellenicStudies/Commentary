@@ -61,7 +61,7 @@ export default KeywordContext = React.createClass({
 			}
 
 		} else {
-			const commentsSub = Meteor.subscribe('comments.keyword_context', this.props.keyword._id);
+			const commentsSub = Meteor.subscribe('comments.keyword_context', this.props.keyword._id, Session.get("tenantId"));
 
 			if (commentsSub.ready()) {
 				const commentCursor = queryCommentWithKeywordId(this.props.keywordId);

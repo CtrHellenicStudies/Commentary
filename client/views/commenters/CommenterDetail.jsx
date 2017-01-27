@@ -17,7 +17,7 @@ CommenterDetail = React.createClass({
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
-		const commentersSub = Meteor.subscribe('commenters.slug', this.props.slug);
+		const commentersSub = Meteor.subscribe('commenters.slug', this.props.slug, Session.get("tenantId"));
 		// FETCH DATA:
 		const commenter = Commenters.findOne({ slug: this.props.slug });
 		let avatarUrl = this.props.defaultAvatarUrl;

@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
@@ -41,8 +42,8 @@ CommentarySearchToolbar = React.createClass({
 
 		if (!this.props.addCommentPage) {
 			Meteor.subscribe('commenters');
-			Meteor.subscribe('keywords.all');
-			Meteor.subscribe('referenceWorks');
+			Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
+			Meteor.subscribe('referenceWorks', Session.get("tenantId"));
 		}
 		Meteor.subscribe('works');
 

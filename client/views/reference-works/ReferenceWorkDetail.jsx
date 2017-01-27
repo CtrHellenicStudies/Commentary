@@ -11,8 +11,8 @@ ReferenceWorkDetail = React.createClass({
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
-		Meteor.subscribe('referenceWorks.slug', this.props.slug);
-		Meteor.subscribe('commenters');
+		Meteor.subscribe('referenceWorks.slug', this.props.slug, Session.get("tenantId"));
+		Meteor.subscribe('commenters', Session.get("tenantId"));
 
 		// FETCH DATA:
 		const query = {
@@ -56,6 +56,10 @@ ReferenceWorkDetail = React.createClass({
 		if (!referenceWork) {
 			return <div />;
 		}
+
+		Utils.setTitle(`${referenceWork.title} ${commenters.join(', ')}`);
+		Utils.setDescription(Utils.trunc(referenceWork.description, 150));
+		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
 			<div className="page reference-works-page reference-works-detail-page">

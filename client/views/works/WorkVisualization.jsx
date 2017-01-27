@@ -24,8 +24,8 @@ WorkVisualization = React.createClass({
 	componentDidMount() {
 		const self = this;
 		const slug = self.props.work.slug;
-		let orientation = 'horizontal';
-		let width = window.innerWidth;
+		let orientation = 'vertical';
+		let width = window.innerWidth * 0.9;
 
 		// --- BEGIN SVG --- //
 		const margin = {
@@ -37,14 +37,34 @@ WorkVisualization = React.createClass({
 
 		if (width > 992) {
 			width = 992;
-		} else if (width < 700) {
-			orientation = 'vertical';
+		}
+		if (width < 700) {
+			orientation = 'horizontal';
 		}
 
-		width = width - margin.left - margin.right; const height = 421 - margin.top - margin.bottom;
+		width = width - margin.left - margin.right;
+		let height = 421 - margin.top - margin.bottom;
 		const barGraphMargin = {
 			left: 10,
 		};
+
+		// Data preporation:
+		const dataBarGraph = this.props.work.subworks;
+		dataBarGraph.sort((a, b) => {
+			if (a.n < b.n) {
+				return -1;
+			} else if (a.n > b.n) {
+				return 1;
+			}
+			return 0;
+		});
+
+		// If horizontal bar graph, define height by the number of bars on graph
+		if (orientation === 'horizontal') {
+			height = dataBarGraph.length * 40;
+		}
+
+		console.log('w * h', width, height);
 
 		const svg = d3.select(`.text-subworks-visualization-${slug}`).append('svg')
 			.attr('width', width + margin.left + margin.right)
@@ -61,17 +81,7 @@ WorkVisualization = React.createClass({
 		// Create bargraph group:
 		const barGraph = svg.append('g')
 			.attr('class', `bargraph-${slug}`);
-
-		// Data preporation:
-		const dataBarGraph = this.props.work.subworks;
-		dataBarGraph.sort((a, b) => {
-			if (a.n < b.n) {
-				return -1;
-			} else if (a.n > b.n) {
-				return 1;
-			}
-			return 0;
-		});
+		let barGraphBars;
 
 		// Color scale:
 		const color = d3.scale.linear()
@@ -80,6 +90,9 @@ WorkVisualization = React.createClass({
 			})])
 			.range(['#fbf8ec', '#b6ae97']);
 
+		/*
+		 * Orientation for a vertical bar graph
+		 */
 		if (orientation === 'vertical') {
 			// --- BEGIN X-AXIS --- //
 			const x = d3.scale.ordinal()
@@ -143,7 +156,7 @@ WorkVisualization = React.createClass({
 				// --- END Y-AXIS --- //
 
 			// --- BEGIN BARS --- //
-			const barGraphBars = barGraph.append('g')
+			barGraphBars = barGraph.append('g')
 				.attr('class', `bargraph-bars-${slug}`)
 				.selectAll('g[class^="bargraph-bar-"]')
 				.data(dataBarGraph)
@@ -241,76 +254,64 @@ WorkVisualization = React.createClass({
 					return d.nComments;
 				});
 		} else {
-			// --- BEGIN X-AXIS --- //
-			const x = d3.scale.ordinal()
-				.rangeRoundBands([barGraphMargin.left, width], 0.4);
-
 			/*
-			const xAxis = d3.svg.axis()
-					.scale(x)
-					.orient('bottom');
-			*/
-			x.domain(dataBarGraph.map((d) => {
-				return d.n;
-			}));
-			const barGraphXAxis = barGraph.append('g')
-				.attr('class', `bargraph-x-axis-${slug}`);
-			barGraphXAxis.append('g')
-				.attr('class', `bargraph-x-axis-rect-${slug}`)
-				.append('rect')
-				.attr('x', barGraphMargin.left)
-				.attr('y', 0)
-				.attr('width', width - barGraphMargin.left)
-				.attr('height', 60)
-				.attr('transform', `translate(0, ${height})`)
-				.attr('fill', '#efebde');
-			barGraphXAxis.append('g')
-				.attr('class', `bargraph-x-axis-label-${slug}`)
-				.append('text')
-				.attr('x', -70)
-				.attr('y', height + 35)
-				.attr('dx', '1em')
-				.style('text-anchor', 'start')
-				.text('BOOK');
-				// --- END X-AXIS --- //
-
+			 * Orientation for a horizontal bar graph
+			 */
 			// --- BEGIN Y-AXIS --- //
-			const y = d3.scale.linear()
-				.range([height, 0]);
-			const yAxis = d3.svg.axis()
-				.scale(y)
-				.ticks(10)
-				.tickSize(-width)
-				.orient('left');
-			y.domain([0, d3.max(dataBarGraph, (d) => {
-				return d.nComments;
-			})]);
+			const y = d3.scale.ordinal()
+				.rangeRoundBands([0, height], 0.4);
+			y.domain(dataBarGraph.map((d) =>
+				d.n
+			));
 			const barGraphYAxis = barGraph.append('g')
 				.attr('class', `bargraph-y-axis-${slug}`);
+
 			barGraphYAxis.append('g')
-				.attr('class', `axis y-axis bargraph-y-axis-lines-${slug}`)
-				.attr('fill', '#999999')
-				.call(yAxis);
+				.attr('class', `bargraph-y-axis-rect-${slug}`)
+				.append('rect')
+				.attr('x', 0)
+				.attr('y', 0)
+				.attr('width', 0)
+				.attr('height', height)
+				.attr('fill', '#efebde');
 			barGraphYAxis.append('g')
 				.attr('class', `bargraph-y-axis-label-${slug}`)
 				.append('text')
-				.attr('transform', 'rotate(-90)')
-				.attr('x', -height / 2)
-				.attr('y', -60)
+				.attr('x', (height / -2) - margin.left)
+				.attr('y', -30)
 				.attr('dy', '1em')
 				.style('text-anchor', 'middle')
+				.attr('transform', 'rotate(-90)')
+				.text('BOOK');
+			// --- END Y-AXIS --- //
+
+			// --- BEGIN X-AXIS --- //
+			const x = d3.scale.linear()
+				.range([0, width]);
+			const xAxis = d3.svg.axis()
+				.scale(x);
+			x.domain([0, d3.max(dataBarGraph, (d) => (d.nComments))]);
+			const barGraphXAxis = barGraph.append('g')
+				.attr('class', `bargraph-x-axis-${slug}`);
+			barGraphXAxis.append('g')
+				.attr('class', `bargraph-x-axis-label-${slug}`)
+				.append('text')
+				.attr('x', (width / 2))
+				.attr('y', 0)
+				.attr('dx', '1em')
+				.style('text-anchor', 'middle')
 				.text('# OF COMMENTS');
-				// --- END Y-AXIS --- //
+			// --- END X-AXIS --- //
 
 			// --- BEGIN BARS --- //
-			const barGraphBars = barGraph.append('g')
+			barGraphBars = barGraph.append('g')
 				.attr('class', `bargraph-bars-${slug}`)
 				.selectAll('g[class^="bargraph-bar-"]')
 				.data(dataBarGraph)
 				.enter()
 				.append('g')
 				.attr('class', (d) => {
-					return `bargraph-bar-${slug}-${d.n}`;
+				 return `bargraph-bar-${slug}-${d.n}`;
 				});
 
 			barGraphBars
@@ -318,39 +319,26 @@ WorkVisualization = React.createClass({
 				.attr('class', (d) => {
 					return `bargraph-bar-column-${slug}-${d.n}`;
 				})
-				.attr('x', (d) => {
-					return x(d.n);
-				})
-				.attr('x_origin', (d) => {
-					return x(d.n);
-				})
-				.attr('width', x.rangeBand())
-				.attr('width_origin', x.rangeBand())
 				.attr('y', (d) => {
-						return y(d.nComments) || 0;
+					return y(d.n);
 				})
 				.attr('y_origin', (d) => {
-					if (
-							'nComments' in d
-							&& typeof d.nComments !== 'undefined'
-							&& d.nComments
-							&& !isNaN(d.nComments)
-					) {
-						return y(d.nComments);
-					}
-					return y(0);
+					return y(d.n);
 				})
+				.attr('x', 16)
+				.attr('height', y.rangeBand())
+				.attr('height_origin', y.rangeBand())
 				.attr('fill', (d) => {
 					return color(d.nComments);
 				})
 				.attr('fill_origin', (d) => {
 					return color(d.nComments);
 				})
-				.attr('height', (d) => {
-					return (height - y(d.nComments)) || 0;
+				.attr('width_origin', (d) => {
+					return (x(d.nComments)) || 0;
 				})
-				.attr('height_origin', (d) => {
-					return height - y(d.nComments);
+				.attr('width', (d) => {
+					return x(d.nComments);
 				});
 
 			const footSize = 4;
@@ -359,12 +347,12 @@ WorkVisualization = React.createClass({
 				.attr('class', (d) => {
 					return 'bargraph-bar-foot-' + slug + '-' + d.n;
 				})
-				.attr('x', (d) => {
-					return x(d.n) - footSize;
+				.attr('y', (d) => {
+					return y(d.n) - footSize;
 				})
-				.attr('y', height - footSize)
-				.attr('width', x.rangeBand() + footSize * 2)
-				.attr('height', footSize)
+				.attr('x', footSize + 10)
+				.attr('height', y.rangeBand() + footSize * 2)
+				.attr('width', footSize)
 				.attr('fill', (d) => {
 					return color(d.nComments);
 				});
@@ -374,10 +362,10 @@ WorkVisualization = React.createClass({
 				.attr('class', (d) => {
 					return 'bargraph-bar-label-' + slug + '-' + d.n;
 				})
-				.attr('x', (d) => {
-					return x(d.n) + x.rangeBand() / 2;
+				.attr('y', (d) => {
+					return y(d.n) + y.rangeBand() / 2;
 				})
-				.attr('y', height + 35)
+				.attr('x', 0)
 				.style('text-anchor', 'middle')
 				.text((d) => {
 					return d.n;
@@ -388,11 +376,11 @@ WorkVisualization = React.createClass({
 				.attr('class', (d) => {
 					return 'bargraph-bar-top-label-' + slug + '-' + d.n;
 				})
-				.attr('x', (d) => {
-					return x(d.n) + x.rangeBand() / 2;
-				})
 				.attr('y', (d) => {
-						return (y(d.nComments) - x.rangeBand() / 2) || 0;
+					return y(d.n) + y.rangeBand() / 2;
+				})
+				.attr('x', (d) => {
+					return (x(d.nComments) + 40) || 0;
 				})
 				.style('text-anchor', 'middle')
 				.style('opacity', 0)
@@ -400,7 +388,6 @@ WorkVisualization = React.createClass({
 				.text((d) => {
 					return d.nComments;
 				});
-
 		}
 
 		barGraphBars
@@ -522,8 +509,8 @@ WorkVisualization = React.createClass({
 				d3.select('.bargraph-bar-top-label-' + suffix)
 					.style('opacity', 0);
 			});
-			// --- END BARS --- //
-			// --- END BARGRAPH --- //
+		// --- END BARS --- //
+		// --- END BARGRAPH --- //
 
 		// --- BEGIN BUTTON --- //
 		// Create button group:
@@ -574,10 +561,7 @@ WorkVisualization = React.createClass({
 				d3.select('.heatmap-button-text-' + slug)
 					.style('opacity', 0.5);
 			});
-	// --- END BUTTON --- //
-
-
-
+		// --- END BUTTON --- //
 	},
 
 	componentDidUpdate(prevProps, prevState) {

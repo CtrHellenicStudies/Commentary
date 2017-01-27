@@ -3,6 +3,7 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 	check(keywordCandidate.slug, String);
 	check(keywordCandidate.title, String);
 	check(keywordCandidate.type, String);
+	check(keywordCandidate.subdomain, String);
 
 	if (keywordCandidate.wordpressId <= 1) {
 		throw new Meteor.Error(
@@ -14,7 +15,15 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 			`type must be word or idea; was ${keywordCandidate.type}`);
 	}
 
+	const tenant = Tenants.findOne({subdomain: keywordCandidate.subdomain});
+
+	if (!tenant) {
+		throw new Meteor.Error(
+			`could not find tenant for given subdomain; was ${keywordCandidate.subdomain}`);
+	}
+
 	const keywordDoc = {
+		tenantId: tenant._id,
 		wordpressId: keywordCandidate.wordpressId,
 		title: keywordCandidate.title,
 		slug: keywordCandidate.slug,
@@ -40,13 +49,22 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 
 Meteor.method('commentary-webhook', (commentCandidate) => {
 	let valid = false;
+	check(commentCandidate.subdomain, String);
+
+	const tenant = Tenants.findOne({ subdomain: commentCandidate.subdomain });
+
+	if (!tenant) {
+		throw new Meteor.Error(
+			`could not find tenant for given subdomain; was ${commentCandidate.subdomain}`);
+	}
+
+	const commenters = [];
 
 	// console.log('Potential comment:', commentCandidate);
 	// if (commentCandidate.keywords && commentCandidate.keywords.length > 0) {
 	// 	console.log('keywords:', commentCandidate.keywords);
 	// }
 
-	const commenters = [];
 	/*
 	 comment_candidate.commenters.forEach(function(commenter_wordpress_id, i){
 	 commenters.push(Commenters.findOne({wordpressId: commenter_wordpress_id}));
@@ -120,6 +138,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 		}
 
 		const newComment = {
+			tenantId: tenant._id,
 			wordpressId: commentCandidate.comment_id,
 			commenters: [
 				{

@@ -1,14 +1,9 @@
 Meteor.method('keyword-webhook', (keywordCandidate) => {
-	check(keywordCandidate.wordpressId, Number);
+	check(keywordCandidate.wordpressId, Match.Maybe(Number));
 	check(keywordCandidate.slug, String);
 	check(keywordCandidate.title, String);
 	check(keywordCandidate.type, String);
 	check(keywordCandidate.subdomain, String);
-
-	if (keywordCandidate.wordpressId <= 1) {
-		throw new Meteor.Error(
-			`wordpressId must be greater than 1; was ${keywordCandidate.wordpressId}`);
-	}
 
 	if (keywordCandidate.type !== 'word' && keywordCandidate.type !== 'idea') {
 		throw new Meteor.Error(
@@ -24,14 +19,17 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 
 	const keywordDoc = {
 		tenantId: tenant._id,
-		wordpressId: keywordCandidate.wordpressId,
 		title: keywordCandidate.title,
 		slug: keywordCandidate.slug,
 		type: keywordCandidate.type,
 	};
 
+	if (keywordCandidate.wordpressId) {
+		keywordDoc.wordpressId = keywordCandidate.wordpressId;
+	}
+
 	const upsertResult = Keywords.upsert(
-		{ wordpressId: keywordCandidate.wordpressId },
+		{ slug: keywordCandidate.slug },
 		{ $set: keywordDoc });
 
 	/*
@@ -52,7 +50,7 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 Meteor.method('commentary-webhook', (commentCandidate) => {
 	let valid = false;
 	check(commentCandidate.subdomain, String);
-	check(commentCandidate.comment_id, Number);
+	check(commentCandidate.comment_id, Match.Maybe(Number));
 	check(commentCandidate.title, String);
 
 	const tenant = Tenants.findOne({ subdomain: commentCandidate.subdomain });
@@ -74,9 +72,12 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	 commenters.push(Commenters.findOne({wordpressId: commenter_wordpress_id}));
 	 });
 	 */
-	const commenter = Commenters.findOne({ wordpressId: commentCandidate.commenter });
+	let commenter = null;
+	if (commentCandidate.commenter) {
+		commenter = Commenters.findOne({ slug: commentCandidate.commenter });
+	}
 	if (!commenter) {
-		console.error(`Could not find commenter with wordpressId:${commentCandidate.commenter}`);
+		console.error(`Could not find commenter with slug:${commentCandidate.commenter}`);
 		// return false;
 	} else {
 		commenters.push(commenter);
@@ -84,7 +85,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 
 	const work = Works.findOne({ slug: commentCandidate.work });
 	if (!work) {
-		console.error(`Could not find work with slug:${commentCandidate.work}`);
+		console.error(`Could not find work with slug:${commentCandidate.work}. Not creating comment or revision`);
 		return false;
 	}
 	let subwork;
@@ -95,24 +96,37 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	});
 
 	if (!subwork) {
-		console.error(`Could not find subwork with n:${commentCandidate.subwork}`);
+		console.error(`Could not find subwork with n:${commentCandidate.subwork} work:${work.slug}`);
 		// return false;
-		subwork = work.subworks[0];
+		if (commentCandidate.subwork) {
+			const newSubwork = {
+				title: String(commentCandidate.subwork),
+				slug: String(commentCandidate.subwork),
+				n: commentCandidate.subwork,
+			};
+			Works.update({ _id: work._id }, { $addToSet: { subworks: newSubwork } });
+		} else {
+			subwork = work.subworks[0];
+		}
 	}
 
 	const keywords = [];
-	commentCandidate.keywords.forEach((keywordWordpressId) => {
-		keywords.push(Keywords.findOne({ wordpressId: keywordWordpressId }));
-	});
+	if ('keywords' in commentCandidate) {
+		commentCandidate.keywords.forEach((keywordWordpressId) => {
+			keywords.push(Keywords.findOne({ wordpressId: keywordWordpressId }));
+		});
+	}
 
 	const text = commentCandidate.text.slice(0, 1) !== '<' ?
 		`<p>${commentCandidate.text}</p>` :
 		commentCandidate.text;
 
-	const comment = Comments.findOne(commentCandidate.comment_id);
+	let comment = false;
+	if ('comment_id' in commentCandidate) {
+		comment = Comments.findOne(commentCandidate.comment_id);
+	}
 
 	let upsertResponse;
-
 	// console.log("Work:", work);
 	// console.log("Subwork:", subwork);
 	// console.log("Commenters:", commenters);
@@ -133,6 +147,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 			let revision = Revisions.insert({
 				title: commentCandidate.title,
 				text,
+				tenantId: tenant._id,
 			});
 
 			if (revision) {
@@ -152,6 +167,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 		let revision = Revisions.insert({
 			title: commentCandidate.title,
 			text,
+			tenantId: tenant._id,
 		});
 
 		if (revision) {
@@ -197,14 +213,20 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 			// referenceNote: null,
 		};
 
+		let newCommenter;
 		if (commenters.length) {
 			commenters.forEach((_commenter) => {
-				newComment.commenters.push({
-					wordpressId: _commenter.wordpressId,
+				newCommenter = {
 					name: _commenter.name,
 					slug: _commenter.slug,
-				});
-			})
+				};
+
+				if ('wordpressId' in _commenter) {
+					newCommenter.wordpressId = _commenter.wordpressId;
+				}
+
+				newComment.commenters.push(newCommenter);
+			});
 		}
 
 		if ('line_to' in commentCandidate && !isNaN(commentCandidate.line_to)) {

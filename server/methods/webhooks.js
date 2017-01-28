@@ -34,10 +34,12 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 		{ wordpressId: keywordCandidate.wordpressId },
 		{ $set: keywordDoc });
 
+	/*
 	console.log('keyword upsert: numberAffected=',
 		upsertResult.numberAffected,
 		', insertedId=',
 		upsertResult.insertedId);
+	*/
 }, {
 	url: 'keyword/webhook',
 	getArgsFromRequest(request) {
@@ -50,6 +52,8 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 Meteor.method('commentary-webhook', (commentCandidate) => {
 	let valid = false;
 	check(commentCandidate.subdomain, String);
+	check(commentCandidate.comment_id, Number);
+	check(commentCandidate.title, String);
 
 	const tenant = Tenants.findOne({ subdomain: commentCandidate.subdomain });
 
@@ -73,9 +77,11 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	const commenter = Commenters.findOne({ wordpressId: commentCandidate.commenter });
 	if (!commenter) {
 		console.error(`Could not find commenter with wordpressId:${commentCandidate.commenter}`);
-		return false;
+		// return false;
+	} else {
+		commenters.push(commenter);
 	}
-	commenters.push(commenter);
+
 	const work = Works.findOne({ slug: commentCandidate.work });
 	if (!work) {
 		console.error(`Could not find work with slug:${commentCandidate.work}`);
@@ -88,6 +94,12 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 		}
 	});
 
+	if (!subwork) {
+		console.error(`Could not find subwork with n:${commentCandidate.subwork}`);
+		// return false;
+		subwork = work.subworks[0];
+	}
+
 	const keywords = [];
 	commentCandidate.keywords.forEach((keywordWordpressId) => {
 		keywords.push(Keywords.findOne({ wordpressId: keywordWordpressId }));
@@ -96,18 +108,6 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	const text = commentCandidate.text.slice(0, 1) !== '<' ?
 		`<p>${commentCandidate.text}</p>` :
 		commentCandidate.text;
-
-	let revision = Revisions.insert({
-		title: commentCandidate.title,
-		text,
-	});
-
-	/*
-	 * Fix nested revision in the future
-	 */
-	if (revision) {
-		revision = Revisions.findOne({ _id: revision });
-	}
 
 	const comment = Comments.findOne(commentCandidate.comment_id);
 
@@ -121,13 +121,42 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	// console.log("Comment:", comment);
 
 	if (comment) {
+		let revisionExists = false;
+
+		comment.revisions.forEach((revision) => {
+			if (revision.text === text) {
+				revisionExists = true;
+			}
+		});
+
+		if (!revisionExists) {
+			let revision = Revisions.insert({
+				title: commentCandidate.title,
+				text,
+			});
+
+			if (revision) {
+				revision = Revisions.findOne({ _id: revision });
+			}
+		}
+
 		upsertResponse = Comments.update(
 			{ _id: commentCandidate._id },
 			{ $addToSet: { revisions: revision } });
-		console.log('Update response:', upsertResponse);
+		// console.log('Update response:', upsertResponse);
+
 	} else {
 		let nLines = 1;
 		const commentOrder = 0;
+
+		let revision = Revisions.insert({
+			title: commentCandidate.title,
+			text,
+		});
+
+		if (revision) {
+			revision = Revisions.findOne({ _id: revision });
+		}
 
 		if ('line_to' in commentCandidate
 			&& !isNaN(parseInt(commentCandidate.line_to, 10))
@@ -140,20 +169,14 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 		const newComment = {
 			tenantId: tenant._id,
 			wordpressId: commentCandidate.comment_id,
-			commenters: [
-				{
-					wordpressId: commenters[0].wordpressId,
-					name: commenters[0].name,
-					slug: commenters[0].slug,
-				},
-			],
+			commenters: [],
 			work: {
 				title: work.title,
 				slug: work.slug,
 				order: work.order,
 			},
 			subwork: {
-				title: subwork.title,
+				title: ((subwork && 'title' in subwork) ? subwork.title : subwork.n),
 				slug: subwork.slug,
 				n: subwork.n,
 			},
@@ -174,11 +197,20 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 			// referenceNote: null,
 		};
 
+		if (commenters.length) {
+			commenters.forEach((_commenter) => {
+				newComment.commenters.push({
+					wordpressId: _commenter.wordpressId,
+					name: _commenter.name,
+					slug: _commenter.slug,
+				});
+			})
+		}
+
 		if ('line_to' in commentCandidate && !isNaN(commentCandidate.line_to)) {
 			newComment.lineTo = parseInt(commentCandidate.line_to, 10);
 		}
 
-		console.log(newComment);
 		const insertResponse = Comments.insert(newComment);
 		if (insertResponse) {
 			valid = true;

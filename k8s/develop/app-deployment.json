@@ -42,6 +42,10 @@
 							{
 								"name": "UPLOAD_TMP",
 								"value": "/tmp/uploads"
+							},
+							{
+								"name": "METEOR_SETTINGS",
+								"value": "'smtp':'smtp://[user]:[pass]@[domain]:465','PrerenderIO': {'token': '','host': ''}",
 							}
 						]
 					}

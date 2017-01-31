@@ -45,7 +45,7 @@
 							},
 							{
 								"name": "METEOR_SETTINGS",
-								"value": "'smtp':'smtp://[user]:[pass]@[domain]:465','PrerenderIO': {'token': '','host': ''}",
+								"value": "{'smtp':'smtp://[user]:[pass]@[domain]:465','PrerenderIO': {'token': '','host': ''}}",
 							}
 						]
 					}

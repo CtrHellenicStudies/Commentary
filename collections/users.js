@@ -58,6 +58,10 @@ Schemas.UserProfile = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
+	avatarUrl: {
+		type: String,
+		optional: true
+	},
 	location: {
 		type: String,
 		optional: true,
@@ -180,23 +184,16 @@ Schemas.User = new SimpleSchema({
 		type: Boolean,
 		optional: true,
 	},
-
-	avatar: {
-		type: Object,
-		optional: true,
-	},
-	'avatar._id': {
-		type: String,
-	},
-	'avatar.type': {
-		type: String,
-	},
-	'avatar.url': {
-		type: String,
-	},
-
 });
 
 Meteor.users.attachSchema(Schemas.User);
+
+Meteor.users.allow({
+  update: function(userId, doc) {
+  	if (Meteor.userId() == userId)
+  		return true;
+    return false;
+  },
+});
 
 this.StarterSchemas = Schemas;

@@ -1,154 +1,81 @@
 import React from 'react';
-import LinearProgress from 'material-ui/LinearProgress';
 import { createContainer } from 'meteor/react-meteor-data';
 import { sendSnack } from '/imports/ui/components/SnackAttack.jsx';
 import { AvatarUploader } from '/imports/avatar/client/avatar_client_utils.js';
+import autoBind from 'react-autobind';
+import { Slingshot } from 'meteor/edgee:slingshot';
 
-class AvatarEditor extends React.Component {
+export default class AvatarEditor extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
-			avatarUrl: props.defaultAvatarUrl,
-			isDefault: true,
-			progress: 0,
-			isProgressShown: false,
+			avatarUrl: Meteor.user() && Meteor.user().profile && Meteor.user().profile.avatarUrl ? Meteor.user().profile.avatarUrl : props.defaultAvatarUrl,
 		};
 
-		this.preventDefault = this.preventDefault.bind(this);
-		this.handleDrop = this.handleDrop.bind(this);
-		this.handleSelectFile = this.handleSelectFile.bind(this);
-		this.handleDeleteAvatar = this.handleDeleteAvatar.bind(this);
-	}
-
-	componentWillReceiveProps(nextProps) {
-		const isDefault = !nextProps.avatar.url;
-		this.setState({
-			isDefault,
-			avatarUrl: isDefault ? nextProps.defaultAvatarUrl : nextProps.avatar.url,
-		});
+		//binding users
+		autoBind(this);
 	}
 
 	preventDefault(event) {
 		event.preventDefault();
 	}
 
-	uploadAvatar(data, context) {
-		const uploader = new AvatarUploader({
-			data,
-			context,
-			onStart: () => {
-				this.setState({
-					progress: 0,
-					isProgressShown: true,
-				});
-			},
-			onError(err) {
-				console.error(err);
-				if (err.error === 'file-too-large') {
-					sendSnack('File is too large (max = 1MB)');
-				} else {
-					sendSnack(err.reason);
-				}
-			},
-			onComplete: () => {
-				this.setState({
-					isProgressShown: false,
-				});
-				sendSnack('Profile pic has been uploaded');
-			},
-			onProgress: (avatar, progress) => {
-				if (progress > 100) {
-					this.setState({ progress: 100 });
-				} else {
-					this.setState({ progress: Math.floor(progress * 100) });
-				}
-			},
-		});
+	uploadAvatar(event) {
+	    let context = {user: Meteor.userId()};
 
-		uploader.start();
+	    let uploader = new Slingshot.Upload("uploads", context);
+
+	    uploader.send(event.target.files[0], (error, downloadUrl) => {
+	      if (error) {
+	        // Log service detailed response
+	        console.error('Error uploading', uploader.xhr.response);
+	        sendSnack(error);
+	      } else {
+	        Meteor.users.update({_id: Meteor.userId()}, {
+	          $set: {
+	            "profile.avatarUrl": downloadUrl
+	          }
+	        });
+
+	        this.setState({ avatarUrl: downloadUrl });
+
+       	  sendSnack('Profile pic has been uploaded');
+
+	      }
+	    });
 	}
 
-	handleDrop(event) {
-		event.preventDefault();
-		this.uploadAvatar(event.dataTransfer.files[0], { type: 'user' });
-	}
-
-	handleSelectFile() {
-		UploadFS.selectFile(data => this.uploadAvatar(data, { type: 'user' }));
-	}
-
-	handleDeleteAvatar() {
-		if (!this.state.isDefault && this.props.avatar._id) {
-			Meteor.call('avatar.delete', { avatarId: this.props.avatar._id });
-		}
+	handleSelectFile(event) {
+		this.upload.click();
 	}
 
 	render() {
-		let progressStyle = {
-			display: 'none',
-		};
-		if (this.state.isProgressShown) {
-			progressStyle = {
-				display: 'block',
-			};
-		}
 		return (
 			<div className="user-profile-picture-container">
-				<div className="userAvatarDelete" onClick={this.handleDeleteAvatar} >
-					<i
-						className={`mdi mdi-delete mdi-36px mdi-dark ${(this.state.isDefault ?
-							'mdi-inactive userAvatarDeleteInactive'	: 'userAvatarDeleteActive')}`}
-					/>
-				</div>
 				<div className="user-profile-picture">
+					<input id="avatar" type="file" ref={(ref) => this.upload = ref} onChange={this.uploadAvatar} style={{ display: 'none' }} />
 					<img alt="avatar" src={this.state.avatarUrl} />
 
 					<div
 						className="upload-profile-picture"
 						onClick={this.handleSelectFile}
-						onDragStart={this.preventDefault}
-						onDragEnter={this.preventDefault}
-						onDragOver={this.preventDefault}
-						onDragLeave={this.preventDefault}
-						onDrop={this.handleDrop}
 					>
 						<i className="mdi mdi-image-area" />
 						<span className="help-text">
-							Select to upload or drag and drop.
+							Select to upload.
 						</span>
 					</div>
 				</div>
-				<LinearProgress mode="determinate" value={this.state.progress} style={progressStyle} />
 			</div>
 		);
 	}
 }
 
 AvatarEditor.propTypes = {
-	defaultAvatarUrl: React.PropTypes.string.isRequired,
-	avatar: React.PropTypes.object,
-	avatarLoading: React.PropTypes.bool,
-	user: React.PropTypes.object,
+	defaultAvatarUrl: React.PropTypes.string.isRequired
 };
 
 AvatarEditor.defaultProps = {
 	defaultAvatarUrl: '',
-	avatar: {},
-	avatarLoading: false,
 };
-
-export default createContainer((props) => {
-	const myAvatarHandle = Meteor.subscribe('users.myAvatar');
-	let userAvatar = '';
-	if (props.user) {
-		userAvatar = props.user.avatar || {};
-	} else {
-		userAvatar = Meteor.user().avatar || {};
-	}
-
-	return {
-		defaultAvatarUrl: props.defaultAvatarUrl,
-		avatar: userAvatar,
-		avatarLoading: !myAvatarHandle.ready(),
-	};
-}, AvatarEditor);

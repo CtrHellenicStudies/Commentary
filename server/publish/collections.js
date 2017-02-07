@@ -22,9 +22,9 @@ if (Meteor.isServer) {
 
 	Meteor.publish('comments.recent', (tenantId, limit = 3) => {
 		check(limit, Number);
-
+		check(tenantId, Match.Maybe(String));
 		return Comments.find({
-			tenantId: tenantId
+			tenantId,
 		}, {
 			limit,
 			sort: {
@@ -35,9 +35,10 @@ if (Meteor.isServer) {
 
 	Meteor.publish('comments.id', (_id, tenantId) => {
 		check(_id, String);
+		check(tenantId, Match.Maybe(String));
 		return Comments.find({
 			_id,
-			tenantId: tenantId
+			tenantId,
 		}, {
 			limit: 1,
 			sort: {
@@ -63,8 +64,9 @@ if (Meteor.isServer) {
 	});
 
 	Meteor.publish('commenters', (tenantId, limit = 100) => {
+		check(tenantId, Match.Maybe(String));
 		return Commenters.find({
-			tenantId: tenantId
+			tenantId,
 		}, {
 			limit,
 			sort: {
@@ -74,9 +76,10 @@ if (Meteor.isServer) {
 	});
 
 	Meteor.publish('commenters.featureOnHomepage', (tenantId, limit = 100) => {
+		check(tenantId, Match.Maybe(String));
 		return Commenters.find({
 			featureOnHomepage: true,
-			tenantId: tenantId
+			tenantId,
 		}, {
 			limit,
 			sort: {
@@ -87,9 +90,10 @@ if (Meteor.isServer) {
 
 	Meteor.publish('commenters.slug', (slug, tenantId) => {
 		check(slug, String);
+		check(tenantId, Match.Maybe(String));
 		return Commenters.find({
 			slug,
-			tenantId: tenantId
+			tenantId,
 		}, {
 			limit: 1,
 			sort: {
@@ -100,15 +104,17 @@ if (Meteor.isServer) {
 
 	Meteor.publish('discussionComments', (commentId, tenantId) => {
 		check(commentId, String);
+		check(tenantId, Match.Maybe(String));
 
 		return DiscussionComments.find({
 			commentId,
-			tenantId
+			tenantId,
 		});
 	});
 
 	Meteor.publish('userDiscussionComments', (userId, tenantId, sortMethod = 'votes') => {
 		check(userId, String);
+		check(tenantId, Match.Maybe(String));
 
 		let sort = { votes: -1, updated: -1 };
 
@@ -121,7 +127,7 @@ if (Meteor.isServer) {
 
 		return DiscussionComments.find({
 			'user._id': userId,
-			tenantId: tenantId
+			tenantId,
 		}, {
 			sort,
 		});
@@ -138,15 +144,16 @@ if (Meteor.isServer) {
 			sort: {
 				title: 1,
 			},
-		})
+		});
 	});
 
 	Meteor.publish('keywords.slug', (slug, tenantId) => {
 		check(slug, String);
+		check(tenantId, Match.Maybe(String));
 
 		return Keywords.find({
 			slug,
-			tenantId
+			tenantId,
 		}, {
 			limit: 1,
 		});
@@ -163,7 +170,7 @@ if (Meteor.isServer) {
 			sort: {
 				title: 1,
 			},
-		})
+		});
 	});
 
 	Meteor.publish('keywords.keyideas', (query = {}, skip = 0, limit = 100) => {
@@ -177,18 +184,19 @@ if (Meteor.isServer) {
 			sort: {
 				title: 1,
 			},
-		})
+		});
 	});
 
 	Meteor.publish('revisions', () => {
-		Revisions.find()
+		Revisions.find();
 	});
 
 	Meteor.publish('subworks', () => {
-		Subworks.find()
+		Subworks.find();
 	});
 
 	Meteor.publish('works', (tenantId) => {
+		check(tenantId, Match.Maybe(String));
 		return Works.find({
 			tenantId,
 		}, {
@@ -199,6 +207,7 @@ if (Meteor.isServer) {
 	});
 
 	Meteor.publish('referenceWorks', (tenantId) => {
+		check(tenantId, Match.Maybe(String));
 		return ReferenceWorks.find({
 			tenantId,
 		}, {
@@ -210,29 +219,31 @@ if (Meteor.isServer) {
 
 	Meteor.publish('referenceWorks.commenterId', (commenterId, tenantId) => {
 		check(commenterId, String);
+		check(tenantId, Match.Maybe(String));
 
 		return ReferenceWorks.find({
 			authors: commenterId,
-			tenantId: tenantId
+			tenantId,
 		}, {
 			sort: {
-				title: 1
-			}
-		})
+				title: 1,
+			},
+		});
 	});
 
 	Meteor.publish('referenceWorks.slug', (slug, tenantId) => {
 		check(slug, String);
+		check(tenantId, Match.Maybe(String));
 
 		return ReferenceWorks.find({
 			slug,
-			tenantId: tenantId
+			tenantId,
 		}, {
 			limit: 1,
 			sort: {
-				title: 1
-			}
-		})
+				title: 1,
+			},
+		});
 	});
 
 	Meteor.publish('pageImages', function pageImages(pageSlug) {
@@ -246,7 +257,7 @@ if (Meteor.isServer) {
 				return [
 					Images.find({
 						_id: {
-							$in: imageArray
+							$in: imageArray,
 						},
 					}),
 					/*Thumbnails.find({
@@ -270,12 +281,10 @@ if (Meteor.isServer) {
 		return Pages.find(query);
 	});
 
-	Meteor.publish('tenants', () => {
-		return Tenants.find();
-	});
+	Meteor.publish('tenants', () => Tenants.find());
 
 	Meteor.publish('settings.tenant', (tenantId) => {
-
-		return Settings.find({ tenantId: tenantId });
+		check(tenantId, Match.Maybe(String));
+		return Settings.find({ tenantId });
 	});
 }

@@ -30,10 +30,13 @@ FlowRouter.triggers.enter([(context) => {
 			FlowRouter.go("/404");
 		}
 
-		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {
-			if (tenantId) {
-				Session.set('tenantId', tenantId);
-				this.tenantId = tenantId;
+		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenant) {
+			if (tenant) {
+				Session.set('tenantId', tenant._id);
+				this.tenantId = tenant._id;
+
+				if (tenant.isAnnotation)
+					FlowRouter.go("/sign-in");
 			} else {
 				FlowRouter.go("/404");
 			}

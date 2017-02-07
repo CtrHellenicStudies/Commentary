@@ -35,7 +35,7 @@ FlowRouter.triggers.enter([(context) => {
 				Session.set('tenantId', tenant._id);
 				this.tenantId = tenant._id;
 
-				if (tenant.isAnnotation)
+				if (tenant.isAnnotation && !Meteor.userId())
 					FlowRouter.go("/sign-in");
 			} else {
 				FlowRouter.go("/404");
@@ -45,6 +45,13 @@ FlowRouter.triggers.enter([(context) => {
 
 	if (Meteor.isClient) {
 		Utils.setBaseDocMeta();
+	}
+
+	if (Meteor.userId() && Session.get("tenantId")) {
+		let tenant = Tenants.findOne({ _id: Session.get("tenantId") });
+
+		if (tenant && tenant.isAnnotation && FlowRouter.current().path == "/")
+			FlowRouter.go("/profile");
 	}
 
 	this.tenantId = Session.get("tenantId");

@@ -317,17 +317,6 @@ CommentDetail = React.createClass({
 
 						<div className="comment-upper-left">
 							<h1 className="comment-title">{selectedRevision.title}</h1>
-							<div className="comment-keywords">
-								{comment.keywords.map((keyword, i) => (
-									<RaisedButton
-										key={i}
-										className="comment-keyword paper-shadow"
-										onClick={self.addSearchTerm.bind(null, keyword)}
-										data-id={keyword._id}
-										label={(keyword.title || keyword.wordpressId)}
-									/>
-								))}
-							</div>
 						</div>
 
 						<div className="comment-upper-right">
@@ -362,6 +351,19 @@ CommentDetail = React.createClass({
 							))}
 						</div>
 
+					</div>
+					<div className="comment-keywords-container">
+						<div className="comment-keywords">
+							{comment.keywords.map((keyword, i) => (
+								<RaisedButton
+									key={i}
+									className="comment-keyword paper-shadow"
+									onClick={self.addSearchTerm.bind(null, keyword)}
+									data-id={keyword._id}
+									label={(keyword.title || keyword.wordpressId)}
+								/>
+							))}
+						</div>
 					</div>
 					<div className="comment-lower">
 						{selectedRevisionIndex === comment.revisions.length - 1 ?

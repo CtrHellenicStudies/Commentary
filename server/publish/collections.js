@@ -189,25 +189,23 @@ if (Meteor.isServer) {
 	});
 
 	Meteor.publish('works', (tenantId) => {
-
-		Works.find({
-			tenantId: tenantId
+		return Works.find({
+			tenantId,
 		}, {
 			sort: {
 				order: 1,
 			},
-		})
+		});
 	});
 
 	Meteor.publish('referenceWorks', (tenantId) => {
-
-		ReferenceWorks.find({
-			tenantId: tenantId
+		return ReferenceWorks.find({
+			tenantId,
 		}, {
 			sort: {
-				title: 1
-			}
-		})
+				title: 1,
+			},
+		});
 	});
 
 	Meteor.publish('referenceWorks.commenterId', (commenterId, tenantId) => {

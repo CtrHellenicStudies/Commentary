@@ -74,7 +74,11 @@ Schemas.Commenters = new SimpleSchema({
 		autoValue: function() {
 			if (this.isInsert)
 				return false;
-		}
+		},
+		autoform: {
+			type: 'hidden',
+			label: false,
+		},
 	},
 
 	tagline: {

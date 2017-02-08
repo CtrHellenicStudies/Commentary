@@ -17,6 +17,7 @@
     "draft-js-richbuttons-plugin": "^1.1.0",
     "draft-js-single-line-plugin": "0.0.1",
     "gm": "^1.23.0",
+    "immutable": "^3.8.1",
     "install": "^0.8.2",
     "ion-rangeslider": "^2.1.4",
     "jsdifflib": "^1.1.0",

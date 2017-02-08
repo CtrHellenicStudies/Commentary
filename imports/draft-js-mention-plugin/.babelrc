@@ -1,0 +1,15 @@
+{
+  "env": {
+    "production": {
+      "plugins": [
+        [
+          "babel-plugin-webpack-loaders",
+          {
+            "config": "${WEBPACK_CONFIG}",
+            "verbose": true
+          }
+        ]
+      ]
+    }
+  }
+}

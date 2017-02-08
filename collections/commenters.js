@@ -153,6 +153,13 @@ Commenters.attachBehaviour('timestampable', {
   updatedBy: 'updatedBy'
 });
 
+
+Commenters.allow({
+  update: function(userId, doc) {
+	return true;
+  },
+});
+
 // // Manage Roles based to commenters:
 // // TODO: test all hooks
 // Commenters.after.insert((userId, commneter) => {

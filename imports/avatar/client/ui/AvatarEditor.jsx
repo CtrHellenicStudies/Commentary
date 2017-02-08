@@ -22,7 +22,7 @@ export default class AvatarEditor extends React.Component {
 	}
 
 	uploadAvatar(event) {
-	    let context = {user: Meteor.userId()};
+	    let context = {type: 'user'};
 
 	    let uploader = new Slingshot.Upload("uploads", context);
 

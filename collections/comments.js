@@ -136,6 +136,14 @@ Schemas.Comments = new SimpleSchema({
 		blackbox: true,
 	},
 
+	isAnnotation: {
+		type: Boolean,
+		autoValue: function() {
+			if (this.isInsert)
+				return false;
+		}
+	},
+
 	created: {
 		type: Date,
 		optional: true,

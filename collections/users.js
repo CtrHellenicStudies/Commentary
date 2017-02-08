@@ -114,6 +114,13 @@ Schemas.User = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
+	isAnnotator: {
+		type: Boolean,
+		autoValue: function() {
+			if (this.isInsert)
+				return false;
+		}
+	},
 	emails: {
 		type: [Object],
 		optional: true,

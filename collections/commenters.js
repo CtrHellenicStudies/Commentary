@@ -69,6 +69,14 @@ Schemas.Commenters = new SimpleSchema({
 		},
 	},
 
+	isAuthor: {
+		type: Boolean,
+		autoValue: function() {
+			if (this.isInsert)
+				return false;
+		}
+	},
+
 	tagline: {
 		type: String,
 		optional: true,

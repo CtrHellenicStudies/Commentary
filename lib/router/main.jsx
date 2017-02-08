@@ -19,7 +19,7 @@ FlowRouter.triggers.enter([(context) => {
 		if (hostnameArray.length > 1) {
 			subdomain = hostnameArray[0];
 		} else {
-			subdomain = 'homer';
+			subdomain = '';
 		}
 
 		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {

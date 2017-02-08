@@ -29,6 +29,7 @@
 			"error",
 			"tab"
 		],
+		"no-tabs": "off",
 		"no-underscore-dangle": "off",
 		"no-undef": "off",
 		"no-console": "off",

@@ -28,6 +28,7 @@ LeftMenu = React.createClass({
 	getMeteorData() {
 		return {
 			currentUser: Meteor.users.findOne({ _id: Meteor.userId() }),
+			tenant: Tenants.findOne({ _id: Session.get("tenantId") })
 		};
 	},
 
@@ -41,6 +42,8 @@ LeftMenu = React.createClass({
 	render() {
 		let username = '';
 		const userIsLoggedIn = Meteor.user();
+		const { tenant } = this.data;
+		console.log(this.data);
 
 		if (userIsLoggedIn) {
 			if (this.data.currentUser.profile && this.data.currentUser.profile.name) {
@@ -71,7 +74,7 @@ LeftMenu = React.createClass({
 							{username}
 						</span>
 					</div>
-					{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
 						<div>
 							<MenuItem
 								href="/admin"
@@ -98,42 +101,45 @@ LeftMenu = React.createClass({
 						primaryText="Home"
 						onClick={this.props.closeLeftMenu}
 					/>
-					<MenuItem
-						href="/commentary"
-						primaryText="Commentary"
-						onClick={this.props.closeLeftMenu}
-					/>
-					<MenuItem
-						href="/keywords"
-						primaryText="Keywords"
-						onClick={this.props.closeLeftMenu}
-					/>
-					<MenuItem
-						href="/keyideas"
-						primaryText="Key Ideas"
-						onClick={this.props.closeLeftMenu}
-					/>
-					<MenuItem
-						href="/commenters"
-						primaryText="Commenters"
-						onClick={this.props.closeLeftMenu}
-					/>
-					<MenuItem
-						href="/referenceWorks"
-						primaryText="Reference Works"
-						onClick={this.props.closeLeftMenu}
-					/>
-					<MenuItem
-						href="/about"
-						primaryText="About"
-						onClick={this.props.closeLeftMenu}
-					/>
-					<MenuItem
-						href="/#visualizations"
-						primaryText="Visualizations"
-						onClick={this.props.closeLeftMenu}
-					/>
-
+					{tenant && !tenant.isAnnotation &&
+						<span>
+							<MenuItem
+								href="/commentary"
+								primaryText="Commentary"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/keywords"
+								primaryText="Keywords"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/keyideas"
+								primaryText="Key Ideas"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/commenters"
+								primaryText="Commenters"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/referenceWorks"
+								primaryText="Reference Works"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/about"
+								primaryText="About"
+								onClick={this.props.closeLeftMenu}
+							/>
+							<MenuItem
+								href="/#visualizations"
+								primaryText="Visualizations"
+								onClick={this.props.closeLeftMenu}
+							/>
+						</span>
+					}
 					<Divider />
 
 					{userIsLoggedIn ?

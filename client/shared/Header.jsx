@@ -42,7 +42,8 @@ Header = React.createClass({
 		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get("tenantId"));
 
 		return {
-			settings: settingsHandle.ready() ? Settings.findOne() : {}
+			settings: settingsHandle.ready() ? Settings.findOne() : {},
+			tenant: Tenants.findOne({ _id: Session.get("tenantId") })
 		};
 	},
 
@@ -179,6 +180,8 @@ Header = React.createClass({
 		const userIsLoggedIn = Meteor.user();
 		const filters = this.props.filters;
 
+		const { tenant } = this.data;
+
 		return (
 			<div>
 				<LeftMenu
@@ -206,24 +209,30 @@ Header = React.createClass({
 								<a href="/" className="header-home-link" >
 									<h3 className="logo">{this.data.settings ? this.data.settings.name : undefined}</h3>
 								</a>
-								<div className="search-toggle">
-									<IconButton
-										className="search-button right-drawer-toggle"
-										onClick={this.toggleRightMenu}
-										iconClassName="mdi mdi-magnify"
-									/>
-								</div>
+								{tenant && !tenant.isAnnotation &&
+									<div className="search-toggle">
+										<IconButton
+											className="search-button right-drawer-toggle"
+											onClick={this.toggleRightMenu}
+											iconClassName="mdi mdi-magnify"
+										/>
+									</div>
+								}
 								<div className="header-section-wrap nav-wrap collapse" >
-									<FlatButton
-										label="Commentary"
-										href="/commentary"
-										style={styles.flatButton}
-									/>
-									<FlatButton
-										label="About"
-										href="/about"
-										style={styles.flatButton}
-									/>
+									{tenant && !tenant.isAnnotation &&
+										<span>
+											<FlatButton
+												label="Commentary"
+												href="/commentary"
+												style={styles.flatButton}
+											/>
+											<FlatButton
+												label="About"
+												href="/about"
+												style={styles.flatButton}
+											/>
+										</span>
+									}
 									{userIsLoggedIn ?
 										<div>
 											{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
@@ -234,18 +243,22 @@ Header = React.createClass({
 														className=""
 														style={styles.flatButton}
 													/>
-													<FlatButton
-														href="/commentary/add"
-														label="Add Comment"
-														className=""
-														style={styles.flatButton}
-													/>
-													<FlatButton
-														href="/keywords/add"
-														label="Add Keyword/Idea"
-														className=""
-														style={styles.flatButton}
-													/>
+													{tenant && !tenant.isAnnotation &&
+														<span>
+															<FlatButton
+																href="/commentary/add"
+																label="Add Comment"
+																className=""
+																style={styles.flatButton}
+															/>
+															<FlatButton
+																href="/keywords/add"
+																label="Add Keyword/Idea"
+																className=""
+																style={styles.flatButton}
+															/>
+														</span>
+													}
 												</div>
 												:
 												<div className="user-header-links">
@@ -262,53 +275,21 @@ Header = React.createClass({
 										<div>
 											<FlatButton
 												label="Login"
-												onClick={this.showLoginModal}
+												onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
+												href={tenant && tenant.isAnnotation ? "/sign-in" : ""}
 												style={styles.flatButton}
 												className="account-button account-button-login"
 											/>
 											<FlatButton
 												label="Join the Community"
-												onClick={this.showSignupModal}
+												onClick={tenant && !tenant.isAnnotation ? this.showSignupModal : undefined}
+												href={tenant && tenant.isAnnotation ? "/sign-up" : ""}
 												style={styles.flatButton}
 												className="account-button account-button-login"
 											/>
 										</div>
 									}
-									<div className="search-toggle">
-										<IconButton
-											className="search-button"
-											onClick={this.toggleSearchMode}
-											iconClassName="mdi mdi-magnify"
-										/>
-									</div>
-								</div>
-							</div>
-						</div>
-					:
-						<div>
-							<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
-								<div className="toolbar-tools">
-									<IconButton
-										className="left-drawer-toggle"
-										style={styles.flatIconButton}
-										iconClassName="mdi mdi-menu"
-										onClick={this.toggleLeftMenu}
-									/>
-									<div className="search-toggle">
-										<IconButton
-											className="search-button right-drawer-toggle"
-											onClick={this.toggleRightMenu}
-											iconClassName="mdi mdi-magnify"
-										/>
-									</div>
-									<div className="search-tools collapse">
-										<CommentarySearchToolbar
-											toggleSearchTerm={this.props.toggleSearchTerm}
-											handleChangeTextsearch={this.props.handleChangeTextsearch}
-											handleChangeLineN={this.props.handleChangeLineN}
-											filters={filters}
-											addCommentPage={this.props.addCommentPage ? true : false}
-										/>
+									{tenant && !tenant.isAnnotation &&
 										<div className="search-toggle">
 											<IconButton
 												className="search-button"
@@ -316,9 +297,47 @@ Header = React.createClass({
 												iconClassName="mdi mdi-magnify"
 											/>
 										</div>
-									</div>
+									}
 								</div>
 							</div>
+						</div>
+					:
+						<div>
+							{tenant && !tenant.isAnnotation &&
+								<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
+									<div className="toolbar-tools">
+										<IconButton
+											className="left-drawer-toggle"
+											style={styles.flatIconButton}
+											iconClassName="mdi mdi-menu"
+											onClick={this.toggleLeftMenu}
+										/>
+										<div className="search-toggle">
+											<IconButton
+												className="search-button right-drawer-toggle"
+												onClick={this.toggleRightMenu}
+												iconClassName="mdi mdi-magnify"
+											/>
+										</div>
+										<div className="search-tools collapse">
+											<CommentarySearchToolbar
+												toggleSearchTerm={this.props.toggleSearchTerm}
+												handleChangeTextsearch={this.props.handleChangeTextsearch}
+												handleChangeLineN={this.props.handleChangeLineN}
+												filters={filters}
+												addCommentPage={this.props.addCommentPage ? true : false}
+											/>
+											<div className="search-toggle">
+												<IconButton
+													className="search-button"
+													onClick={this.toggleSearchMode}
+													iconClassName="mdi mdi-magnify"
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
+							}
 						</div>
 					}
 				</header>

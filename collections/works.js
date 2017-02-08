@@ -50,35 +50,14 @@ Schemas.Works = new SimpleSchema({
 		type: [Schemas.Subworks],
 		optional: true,
 	},
-	created: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
 });
 
 Works.attachSchema(Schemas.Works);
 Works.friendlySlugs('title');
+
+Works.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});

@@ -236,6 +236,12 @@ Commentary = React.createClass({
 					query.lineFrom = query.lineFrom || {};
 					query.lineFrom.$lte = filter.values[0];
 					break;
+
+				case 'wordpressId':
+					// Values will always be an array with a length of one
+					query.wordpressId = filter.values[0];
+					break;
+
 				default:
 					break;
 				}

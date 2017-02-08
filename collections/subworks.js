@@ -36,36 +36,14 @@ Schemas.Subworks = new SimpleSchema({
 	'commentHeatmap.$.nComments': {
 		type: Number,
 	},
-
-	created: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
 });
 
 Subworks.attachSchema(Schemas.Subworks);
 Subworks.friendlySlugs('title');
+
+Subworks.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});

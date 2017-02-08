@@ -15,7 +15,7 @@ Schemas.Revisions = new SimpleSchema({
 			label: false,
 		},
 	},
-	
+
 	tenantId: {
 	    type: String,
 	    label: "Tenant",
@@ -47,31 +47,14 @@ Schemas.Revisions = new SimpleSchema({
 		},
 
 	},
-
-	created: {
-		type: Date,
-		optional: true,
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-
 });
 
 Revisions.attachSchema(Schemas.Revisions);
 Revisions.friendlySlugs('title');
+
+Revisions.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});

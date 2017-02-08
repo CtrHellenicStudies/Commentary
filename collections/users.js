@@ -136,35 +136,6 @@ Schemas.User = new SimpleSchema({
 	'emails.$.verified': {
 		type: Boolean,
 	},
-	createdAt: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-	updatedAt: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-
 	profile: {
 		type: Schemas.UserProfile,
 		optional: true,
@@ -209,5 +180,12 @@ Schemas.User = new SimpleSchema({
 });
 
 Meteor.users.attachSchema(Schemas.User);
+
+Meteor.users.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});
 
 this.StarterSchemas = Schemas;

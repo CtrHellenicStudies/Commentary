@@ -147,39 +147,16 @@ Schemas.Comments = new SimpleSchema({
 			label: false,
 		},
 	},
-
-	created: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-
 });
 
 Comments.attachSchema(Schemas.Comments);
+
+Comments.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});
 
 /*
  Comments.helpers({

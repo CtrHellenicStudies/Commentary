@@ -141,39 +141,17 @@ Schemas.Commenters = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
-	created: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
 });
 
 Commenters.attachSchema(Schemas.Commenters);
 Commenters.friendlySlugs('name');
+
+Commenters.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});
 
 // // Manage Roles based to commenters:
 // // TODO: test all hooks

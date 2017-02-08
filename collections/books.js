@@ -8,10 +8,12 @@ Schemas.Books = new SimpleSchema({
     type: [Object]
   },
   "books.$.url": {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Url
   },
   commentarIds: {
     type: [String],
+    optional: true,
     autoform: {
       type: "select-multiple",
       label: "Commentators",

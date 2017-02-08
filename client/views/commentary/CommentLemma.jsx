@@ -80,6 +80,7 @@ CommentLemma = React.createClass({
 
 		return {
 			lemmaText,
+			ready: handle.ready(),
 		};
 	},
 
@@ -162,7 +163,12 @@ CommentLemma = React.createClass({
 				</div>
 
 				<article className="comment lemma-comment paper-shadow">
-
+					{!this.data.ready ?
+						<div className="lemma-loading">
+							<div className="lemma-loading-top" />
+							<div className="lemma-loading-bottom" />
+						</div>
+					: ''}
 					{selectedLemmaEdition.lines.map((line, i) => (
 						<p
 							key={i}

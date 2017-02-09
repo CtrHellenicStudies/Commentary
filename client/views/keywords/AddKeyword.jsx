@@ -4,7 +4,6 @@ import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { fromJS } from 'immutable';
 // https://github.com/JedWatson/react-select
 import Select from 'react-select';
 import { Creatable } from 'react-select';
@@ -14,11 +13,8 @@ import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import createMentionPlugin, { defaultSuggestionsFilter } from '/imports/draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 
 const singleLinePlugin = createSingleLinePlugin();
-const mentionPlugin = createMentionPlugin();
-const { MentionSuggestions } = mentionPlugin;
 
 AddKeyword = React.createClass({
 
@@ -33,7 +29,6 @@ AddKeyword = React.createClass({
 		return {
 			titleEditorState: EditorState.createEmpty(),
 			textEditorState: RichTextEditor.createEmptyValue(),
-			suggestions: fromJS([]),
 
 			commenterValue: null,
 			titleValue: '',
@@ -56,12 +51,6 @@ AddKeyword = React.createClass({
 	},
 
 	mixins: [ReactMeteorData],
-
-	onSearchChange ({value}) {
-		this.setState({
-			suggestions: fromJS(this.data.keywordsOptions.concat(keyideasOptions)),
-		});
-	},
 
 	getMeteorData() {
 		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
@@ -286,7 +275,7 @@ AddKeyword = React.createClass({
 									placeholder="Key word or idea . . ."
 									spellCheck
 									stripPastedStyles
-									plugins={[singleLinePlugin, mentionPlugin]}
+									plugins={[singleLinePlugin]}
 									blockRenderMap={singleLinePlugin.blockRenderMap}
 								/>
 							</h1>
@@ -320,10 +309,6 @@ AddKeyword = React.createClass({
 								value={this.state.textEditorState}
 								onChange={this.onTextChange}
 								toolbarConfig={toolbarConfig}
-							/>
-							<MentionSuggestions
-								onSearchChange={this.onSearchChange}
-								suggestions={this.state.suggestions}
 							/>
 							<div className="add-comment-button">
 								<RaisedButton

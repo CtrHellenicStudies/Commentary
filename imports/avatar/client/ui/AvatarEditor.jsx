@@ -1,7 +1,5 @@
 import React from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
 import { sendSnack } from '/imports/ui/components/SnackAttack.jsx';
-import { AvatarUploader } from '/imports/avatar/client/avatar_client_utils.js';
 import autoBind from 'react-autobind';
 import { Slingshot } from 'meteor/edgee:slingshot';
 

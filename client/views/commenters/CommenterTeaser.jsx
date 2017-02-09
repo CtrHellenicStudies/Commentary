@@ -1,6 +1,5 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { Avatars } from '/imports/avatar/avatar_collections.js';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
 // commenter Teaser
@@ -24,34 +23,27 @@ CommenterTeaser = React.createClass({
 	getMeteorData() {
 
 		const commenter = this.props.commenter;
-		let avatarData = null;
-		const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
-		if (commenter.avatar) {
-			avatarData = Avatars.findOne(commenter.avatar);
-		}
 
 		return {
-			avatarData,
+			commenter,
 		}
 	},
 
 	render() {
 		const commenter = this.props.commenter;
-		const commenterAvatarUrl = this.props.commenterAvatarUrl;
 		const commenterUrl = `/commenters/${commenter.slug}`;
 		const commenterExcerpt = commenter.tagline ? Utils.trunc(commenter.tagline, 120) : '';
-		const avatarData = this.data.avatarData;
 
 
 		return (
 			<div className="commenter-teaser hvr-grow wow fadeIn">
 				<a href={commenterUrl}>
 					<div className="commenter-image paper-shadow">
-						{avatarData ?
-							<AvatarIcon avatar={avatarData} />
+						{commenter && commenter.avatar ?
+							<AvatarIcon avatar={commenter.avatar} />
 						:
 							<img
-								src={commenterAvatarUrl ? commenterAvatarUrl : '/images/default_user.jpg'}
+								src={commenter && commenter.avatar ? commenter.avatar : '/images/default_user.jpg'}
 								alt={commenter.name}
 							/>
 						}

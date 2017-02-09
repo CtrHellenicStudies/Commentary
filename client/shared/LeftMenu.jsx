@@ -43,7 +43,6 @@ LeftMenu = React.createClass({
 		let username = '';
 		const userIsLoggedIn = Meteor.user();
 		const { tenant } = this.data;
-		console.log(this.data);
 
 		if (userIsLoggedIn) {
 			if (this.data.currentUser.profile && this.data.currentUser.profile.name) {
@@ -65,7 +64,7 @@ LeftMenu = React.createClass({
 						{userIsLoggedIn ?
 							<div>
 								<div className="user-image paper-shadow">
-									<AvatarIcon avatar={this.data.currentUser.avatar} />
+									<AvatarIcon avatar={this.data.currentUser && this.data.currentUser.profile ? this.data.currentUser.profile.avatarUrl : "/images/default_user.jpg"} />
 								</div>
 							</div>
 							: ''

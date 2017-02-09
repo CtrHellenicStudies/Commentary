@@ -151,7 +151,7 @@ CommentLemma = React.createClass({
 											href={`/commenters/${commenter.slug}`}
 											onClick={self.goToAuthorComment}
 										>
-											<AvatarIcon avatar={commenter.avatarData} />
+											<AvatarIcon avatar={commenter.avatar} />
 										</a>
 									</div>
 								))}

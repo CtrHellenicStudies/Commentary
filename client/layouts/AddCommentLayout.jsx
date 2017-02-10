@@ -113,7 +113,7 @@ AddCommentLayout = React.createClass({
 
 	// --- BEGNI ADD COMMENT --- //
 
-	addComment(formData) {
+	addComment(formData, textValue) {
 
 		this.setState({
 			loading: true,
@@ -150,7 +150,7 @@ AddCommentLayout = React.createClass({
 				nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
 				revisions: [{
 					title: formData.titleValue,
-					text: formData.textValue,
+					text: textValue,
 					created: referenceWorks ? referenceWorks.date : new Date(),
 					slug: slugify(formData.titleValue),
 				}],

@@ -15,6 +15,7 @@
 		"name": "ahcip-app-pod"
 	},
 	"sessionAffinity": "ClientIP",
-	"type": "LoadBalancer"
+	"type": "LoadBalancer",
+	"loadBalancerIP": "xxx.xxx.xxx.xxx"
 	}
 }

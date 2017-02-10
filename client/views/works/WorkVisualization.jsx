@@ -64,8 +64,6 @@ WorkVisualization = React.createClass({
 			height = dataBarGraph.length * 40;
 		}
 
-		console.log('w * h', width, height);
-
 		const svg = d3.select(`.text-subworks-visualization-${slug}`).append('svg')
 			.attr('width', width + margin.left + margin.right)
 			.attr('height', height + margin.top + margin.bottom)

@@ -4,17 +4,23 @@ import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-// https://github.com/JedWatson/react-select
-import Select from 'react-select';
-import { Creatable } from 'react-select';
-import RichTextEditor from 'react-rte';
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import { fromJS } from 'immutable';
+import { convertToHTML } from 'draft-convert';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
+import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
 const singleLinePlugin = createSingleLinePlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin();
+const { InlineToolbar } = inlineToolbarPlugin;
+const mentionPlugin = createMentionPlugin();
+const { MentionSuggestions } = mentionPlugin;
 
 AddKeyword = React.createClass({
 
@@ -25,10 +31,17 @@ AddKeyword = React.createClass({
 		onTypeChange: React.PropTypes.func.isRequired,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
 			titleEditorState: EditorState.createEmpty(),
-			textEditorState: RichTextEditor.createEmptyValue(),
+			textEditorState: EditorState.createEmpty(),
+			// textEditorState: RichTextEditor.createEmptyValue(),
 
 			commenterValue: null,
 			titleValue: '',
@@ -39,69 +52,15 @@ AddKeyword = React.createClass({
 
 			snackbarOpen: false,
 			snackbarMessage: '',
-		};
-	},
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+			suggestions: fromJS([]),
+		};
 	},
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
-		const keywordsOptions = [];
-		const keywords = Keywords.find({ type: 'word' }).fetch();
-		keywords.forEach((keyword) => {
-			keywordsOptions.push({
-				value: keyword.title,
-				label: keyword.title,
-			});
-		});
-
-		const keyideasOptions = [];
-		const keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keyideas.forEach((keyidea) => {
-			keyideasOptions.push({
-				value: keyidea.title,
-				label: keyidea.title,
-			});
-		});
-
-		Meteor.subscribe('referenceWorks');
-		const referenceWorksOptions = [];
-		const referenceWorks = ReferenceWorks.find().fetch();
-		referenceWorks.forEach((referenceWork) => {
-			referenceWorksOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-			});
-		});
-
-		Meteor.subscribe('commenters', Session.get("tenantId"));
-		const commentersOptions = [];
-		let commenters = [];
-		if (Meteor.user() && Meteor.user().commenterId) {
-			commenters = Commenters.find({ _id: { $in: Meteor.user().commenterId } }).fetch();
-		}
-		commenters.forEach((commenter) => {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		});
-
-		return {
-			keywordsOptions,
-			keyideasOptions,
-			referenceWorksOptions,
-			commentersOptions,
-		};
-	},
 
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
@@ -114,9 +73,18 @@ AddKeyword = React.createClass({
 
 	onTextChange(textEditorState) {
 		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		/*
 		this.setState({
 			textEditorState,
 			textValue: textEditorState.toString('html'),
+		});
+		*/
+		let textHtml = '';
+		textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+
+		this.setState({
+			textEditorState,
+			textValue: textHtml,
 		});
 	},
 
@@ -140,6 +108,80 @@ AddKeyword = React.createClass({
 		return {
 			label: newOption.label,
 			value: newOption.label
+		};
+	},
+
+	onCommenterValueChange(comenter) {
+		this.setState({
+			commenterValue: comenter,
+		});
+	},
+
+	onSearchChange({ value }) {
+		const keywordSuggestions = [];
+		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		keywords.forEach((keyword) => {
+			keywordSuggestions.push({
+				name: keyword.label,
+				link: `/keywords/${keyword.slug}`,
+			});
+		});
+
+		this.setState({
+			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
+		});
+	},
+
+	getMeteorData() {
+		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+		const keywordsOptions = [];
+		const keywords = Keywords.find({ type: 'word' }).fetch();
+		keywords.forEach((keyword) => {
+			keywordsOptions.push({
+				value: keyword.title,
+				label: keyword.title,
+				slug: keyword.slug,
+			});
+		});
+
+		const keyideasOptions = [];
+		const keyideas = Keywords.find({ type: 'idea' }).fetch();
+		keyideas.forEach((keyidea) => {
+			keyideasOptions.push({
+				value: keyidea.title,
+				label: keyidea.title,
+				slug: keyidea.slug,
+			});
+		});
+
+		Meteor.subscribe('referenceWorks');
+		const referenceWorksOptions = [];
+		const referenceWorks = ReferenceWorks.find().fetch();
+		referenceWorks.forEach((referenceWork) => {
+			referenceWorksOptions.push({
+				value: referenceWork._id,
+				label: referenceWork.title,
+			});
+		});
+
+		Meteor.subscribe('commenters', Session.get('tenantId'));
+		const commentersOptions = [];
+		let commenters = [];
+		if (Meteor.user() && Meteor.user().commenterId) {
+			commenters = Commenters.find({ _id: { $in: Meteor.user().commenterId } }).fetch();
+		}
+		commenters.forEach((commenter) => {
+			commentersOptions.push({
+				value: commenter._id,
+				label: commenter.name,
+			});
+		});
+
+		return {
+			keywordsOptions,
+			keyideasOptions,
+			referenceWorksOptions,
+			commentersOptions,
 		};
 	},
 
@@ -177,12 +219,6 @@ AddKeyword = React.createClass({
 		return true;
 	},
 
-	onCommenterValueChange(comenter) {
-		this.setState({
-			commenterValue: comenter,
-		});
-	},
-
 	handleSubmit(event) {
 		event.preventDefault();
 
@@ -190,8 +226,16 @@ AddKeyword = React.createClass({
 
 		this.showSnackBar(error);
 
+		const textHtml = convertToHTML({
+			entityToHTML: (entity, originalText) => {
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" href={entity.data.mention.get('link')} data-keyword-gloss>{originalText}</a>;
+				}
+			},
+		})(this.state.textEditorState.getCurrentContent());
+
 		if (!error.errors) {
-			this.props.submitForm(this.state);
+			this.props.submitForm(this.state, textHtml);
 		}
 	},
 
@@ -214,13 +258,9 @@ AddKeyword = React.createClass({
 			errors = true;
 			errorMessage += ' title,';
 		}
-		if (this.state.textValue === '<p><br></p>' || !this.state.textValue) {
+		if (this.state.textValue === '<p><br></p>' || this.state.textValue === '' || !this.state.textValue) {
 			errors = true;
 			errorMessage += ' comment text,';
-		}
-		if (!this.props.selectedLineFrom) {
-			errors = true;
-			errorMessage += ' no line selected,';
 		}
 		if (errors === true) {
 			errorMessage = errorMessage.slice(0, -1);
@@ -233,7 +273,6 @@ AddKeyword = React.createClass({
 	},
 
 	// --- END SUBMIT / VALIDATION HANDLE --- //
-
 	render() {
 		const toolbarConfig = {
 			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
@@ -303,12 +342,25 @@ AddKeyword = React.createClass({
 							className="comment-lower"
 							style={{ paddingTop: 20 }}
 						>
-							<RichTextEditor
+							{/*<RichTextEditor
 								className="keyword-editor"
 								placeholder="Keyword description . . ."
 								value={this.state.textEditorState}
 								onChange={this.onTextChange}
 								toolbarConfig={toolbarConfig}
+							/>*/}
+							<Editor
+								editorState={this.state.textEditorState}
+								onChange={this.onTextChange}
+								placeholder="Keyword description . . ."
+								spellCheck
+								stripPastedStyles
+								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								ref={(element) => { this.editor = element; }}
+							/>
+							<MentionSuggestions
+								onSearchChange={this.onSearchChange}
+								suggestions={this.state.suggestions}
 							/>
 							<div className="add-comment-button">
 								<RaisedButton
@@ -329,7 +381,9 @@ AddKeyword = React.createClass({
 						message={this.state.snackbarMessage}
 						autoHideDuration={4000}
 					/>
-
+				</div>
+				<div className="inline-toolbar-wrap">
+					<InlineToolbar />
 				</div>
 			</div>
 		);

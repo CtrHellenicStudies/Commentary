@@ -22,6 +22,10 @@ FlowRouter.triggers.enter([(context) => {
 			subdomain = '';
 		}
 
+		if (process.env.NODE_ENV === 'development') {
+			subdomain = 'homer';
+		}
+
 		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {
 			if (tenantId) {
 				Session.set('tenantId', tenantId);

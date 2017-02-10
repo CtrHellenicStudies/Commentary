@@ -142,8 +142,8 @@ DiscussionComment = React.createClass({
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
 							<a href={userLink}>
 								<img
-									src={discussionComment.user.avatar ?
-										discussionComment.user.avatar.url : '/images/default_user.jpg'}
+									src={discussionComment.user && discussionComment.user.profile ?
+										discussionComment.user.profile.avatarUrl : '/images/default_user.jpg'}
 									alt={username}
 								/>
 							</a>

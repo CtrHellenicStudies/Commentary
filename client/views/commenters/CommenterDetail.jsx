@@ -1,5 +1,3 @@
-import { Avatars } from '/imports/avatar/avatar_collections.js';
-
 CommenterDetail = React.createClass({
 
 	propTypes: {
@@ -22,10 +20,9 @@ CommenterDetail = React.createClass({
 		const commenter = Commenters.findOne({ slug: this.props.slug });
 		let avatarUrl = this.props.defaultAvatarUrl;
 		if (commenter != null && commenter.avatar != null) {
-			Meteor.subscribe('avatars', [commenter.avatar]);
-			const avatar = Avatars.findOne({ _id: commenter.avatar });
+			const avatar = commenter.avatar;
 			if (avatar) {
-				avatarUrl = avatar.url;
+				avatarUrl = avatar;
 			}
 		}
 		return { commenter, avatarUrl };

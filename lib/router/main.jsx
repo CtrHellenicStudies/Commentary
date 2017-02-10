@@ -3,6 +3,13 @@ import { Session } from 'meteor/session';
 import React from 'react';
 import { mount } from 'react-mounter';
 
+FlowRouter.notFound = {
+  action() {
+    // Render not found page here
+    mount(NotFound);
+  },
+};
+
 // Global subscription: user data is needed in almost all routes
 let tenantId;
 function subscriptions() {
@@ -20,22 +27,35 @@ FlowRouter.triggers.enter([(context) => {
 			subdomain = hostnameArray[0];
 		} else {
 			subdomain = '';
+			FlowRouter.go("/404");
 		}
 
 		if (process.env.NODE_ENV === 'development') {
 			subdomain = 'homer';
 		}
 
-		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenantId) {
-			if (tenantId) {
-				Session.set('tenantId', tenantId);
-				this.tenantId = tenantId;
+		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenant) {
+			if (tenant) {
+				Session.set('tenantId', tenant._id);
+				this.tenantId = tenant._id;
+
+				if (tenant.isAnnotation && !Meteor.userId())
+					FlowRouter.go("/sign-in");
+			} else {
+				FlowRouter.go("/404");
 			}
 		});
 	}
 
 	if (Meteor.isClient) {
 		Utils.setBaseDocMeta();
+	}
+
+	if (Meteor.userId() && Session.get("tenantId")) {
+		let tenant = Tenants.findOne({ _id: Session.get("tenantId") });
+
+		if (tenant && tenant.isAnnotation && FlowRouter.current().path == "/")
+			FlowRouter.go("/profile");
 	}
 
 	this.tenantId = Session.get("tenantId");
@@ -235,15 +255,15 @@ loggedInGroup.route('/sign-out', {
 * Single page view
 * 404 check is in the actual template
 */
-FlowRouter.route('/:slug', {
-	action(params) {
-		// console.log(params);
-		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
-		// console.log(reservedRoutes.indexOf(params.slug));
-		if (reservedRoutes.indexOf(params.slug) === -1) {
-			mount(MasterLayout, {
-				content: <SinglePage slug={params.slug} />,
-			});
-		}
-	},
-});
+// FlowRouter.route('/:slug', {
+// 	action(params) {
+// 		// console.log(params);
+// 		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
+// 		// console.log(reservedRoutes.indexOf(params.slug));
+// 		if (reservedRoutes.indexOf(params.slug) === -1) {
+// 			mount(MasterLayout, {
+// 				content: <SinglePage slug={params.slug} />,
+// 			});
+// 		}
+// 	},
+// });

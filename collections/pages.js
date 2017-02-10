@@ -73,25 +73,6 @@ Schemas.Pages = new SimpleSchema({
 	    	}
 	    }
 	},
-	createdAt: {
-		type: Date,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
-		},
-	},
-	updatedAt: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-	},
 	content: {
 		type: String,
 		autoform: {
@@ -160,3 +141,4 @@ Schemas.Pages = new SimpleSchema({
 
 Pages.attachSchema(Schemas.Pages);
 Pages.friendlySlugs('title');
+Pages.attachBehaviour('timestampable');

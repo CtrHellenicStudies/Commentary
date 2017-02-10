@@ -58,6 +58,10 @@ Schemas.UserProfile = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
+	avatarUrl: {
+		type: String,
+		optional: true
+	},
 	location: {
 		type: String,
 		optional: true,
@@ -114,6 +118,17 @@ Schemas.User = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
+	isAnnotator: {
+		type: Boolean,
+		autoValue: function() {
+			if (this.isInsert)
+				return false;
+		},
+		autoform: {
+			type: 'hidden',
+			label: false,
+		},
+	},
 	emails: {
 		type: [Object],
 		optional: true,
@@ -125,35 +140,6 @@ Schemas.User = new SimpleSchema({
 	'emails.$.verified': {
 		type: Boolean,
 	},
-	createdAt: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-	updatedAt: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-
 	profile: {
 		type: Schemas.UserProfile,
 		optional: true,
@@ -180,23 +166,23 @@ Schemas.User = new SimpleSchema({
 		type: Boolean,
 		optional: true,
 	},
-
-	avatar: {
-		type: Object,
-		optional: true,
-	},
-	'avatar._id': {
-		type: String,
-	},
-	'avatar.type': {
-		type: String,
-	},
-	'avatar.url': {
-		type: String,
-	},
-
 });
 
 Meteor.users.attachSchema(Schemas.User);
+
+Meteor.users.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});
+
+Meteor.users.allow({
+  update: function(userId, doc) {
+  	if (Meteor.userId() == userId)
+  		return true;
+    return false;
+  },
+});
 
 this.StarterSchemas = Schemas;

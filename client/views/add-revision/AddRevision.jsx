@@ -11,12 +11,12 @@ import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
-import RichTextEditor from 'react-rte';
+import { fromJS } from 'immutable';
+import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
-import { fromJS } from 'immutable';
 
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
@@ -93,6 +93,7 @@ AddRevision = React.createClass({
 			keywordsOptions.push({
 				value: keyword.title,
 				label: keyword.title,
+				slug: keyword.slug,
 			});
 		});
 
@@ -102,6 +103,7 @@ AddRevision = React.createClass({
 			keyideasOptions.push({
 				value: keyidea.title,
 				label: keyidea.title,
+				slug: keyidea.slug,
 			});
 		});
 
@@ -121,10 +123,11 @@ AddRevision = React.createClass({
 	},
 
 	onTextChange(textEditorState) {
-		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+
 		this.setState({
 			textEditorState,
-			textValue: textEditorState.toString('html'),
+			textValue: textHtml,
 		});
 	},
 
@@ -199,7 +202,15 @@ AddRevision = React.createClass({
 	handleSubmit(event) {
 		// TODO: form validation
 		event.preventDefault();
-		this.props.submitForm(this.state);
+		const textHtml = convertToHTML({
+			entityToHTML: (entity, originalText) => {
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" href={entity.data.mention.get('link')} data-keyword-gloss>{originalText}</a>;
+				}
+			},
+		})(this.state.textEditorState.getCurrentContent());
+
+		this.props.submitForm(this.state, textHtml);
 	},
 
 	selectRevision(event) {

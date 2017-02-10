@@ -8,15 +8,17 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
 import { Creatable } from 'react-select';
 import RichTextEditor from 'react-rte';
-import { EditorState, ContentState, convertFromHTML } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import { convertToHTML } from 'draft-convert';
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+
 import { fromJS } from 'immutable';
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
@@ -81,6 +83,7 @@ EditKeyword = React.createClass({
 			keywordsOptions.push({
 				value: keyword.title,
 				label: keyword.title,
+				slug: keyword.slug,
 			});
 		});
 
@@ -90,6 +93,7 @@ EditKeyword = React.createClass({
 			keyideasOptions.push({
 				value: keyidea.title,
 				label: keyidea.title,
+				slug: keyidea.slug,
 			});
 		});
 
@@ -235,8 +239,16 @@ EditKeyword = React.createClass({
 
 		this.showSnackBar(error);
 
+		const textHtml = convertToHTML({
+			entityToHTML: (entity, originalText) => {
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" href={entity.data.mention.get('link')} data-keyword-gloss>{originalText}</a>;
+				}
+			},
+		})(this.state.textEditorState.getCurrentContent());
+
 		if (!error.errors) {
-			this.props.submitForm(this.state);
+			this.props.submitForm(this.state, textHtml);
 		}
 	},
 

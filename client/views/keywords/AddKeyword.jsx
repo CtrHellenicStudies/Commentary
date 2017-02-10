@@ -4,16 +4,17 @@ import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import { fromJS } from 'immutable';
+import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
-import { fromJS } from 'immutable';
 
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
@@ -78,8 +79,8 @@ AddKeyword = React.createClass({
 			textValue: textEditorState.toString('html'),
 		});
 		*/
-
-		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		let textHtml = '';
+		textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
 
 		this.setState({
 			textEditorState,
@@ -225,8 +226,16 @@ AddKeyword = React.createClass({
 
 		this.showSnackBar(error);
 
+		const textHtml = convertToHTML({
+			entityToHTML: (entity, originalText) => {
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" href={entity.data.mention.get('link')} data-keyword-gloss>{originalText}</a>;
+				}
+			},
+		})(this.state.textEditorState.getCurrentContent());
+
 		if (!error.errors) {
-			this.props.submitForm(this.state);
+			this.props.submitForm(this.state, textHtml);
 		}
 	},
 

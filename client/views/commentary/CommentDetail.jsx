@@ -38,12 +38,14 @@ CommentDetail = React.createClass({
 			selectedRevisionIndex,
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
-			lemmaReferenceTop: 0,
-			lemmaReferenceLeft: 0,
+			keywordReferenceModalVisible: false,
+			referenceTop: 0,
+			referenceLeft: 0,
 			lemmaReferenceWork: 'iliad',
 			lemmaReferenceSubwork: 0,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,
+			keyword: '',
 			persistentIdentifierModalVisible: false,
 			persistentIdentifierModalTop: 0,
 			persistentIdentifierModalLeft: 0,
@@ -199,7 +201,7 @@ CommentDetail = React.createClass({
 		return { __html: newHtml };
 	},
 
-	checkIfToggleLemmaReferenceModal(e) {
+	checkIfToggleReferenceModal(e) {
 		const $target = $(e.target);
 		let upperOffset = 90;
 		let lineFrom = 0;
@@ -227,6 +229,14 @@ CommentDetail = React.createClass({
 				lemmaReferenceTop: $target.position().top - upperOffset,
 				lemmaReferenceLeft: $target.position().left + 160,
 			});
+		} else if ($target.hasClass('keyword-gloss')) {
+			const keyword = $target.data().link.replace('/keywords/', '');
+			this.setState({
+				keywordReferenceModalVisible: true,
+				referenceTop: $target.position().top - upperOffset,
+				referenceLeft: $target.position().left + 160,
+				keyword: keyword,
+			});
 		}
 	},
 
@@ -237,8 +247,17 @@ CommentDetail = React.createClass({
 			lemmaReferenceSubwork: 0,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,
-			lemmaReferenceTop: 0,
-			lemmaReferenceLeft: 0,
+			referenceTop: 0,
+			referenceLeft: 0,
+		});
+	},
+
+	closeKeywordReference() {
+		this.setState({
+			keywordReferenceModalVisible: false,
+			referenceTop: 0,
+			referenceLeft: 0,
+			keyword: '',
 		});
 	},
 
@@ -317,17 +336,6 @@ CommentDetail = React.createClass({
 
 						<div className="comment-upper-left">
 							<h1 className="comment-title">{selectedRevision.title}</h1>
-							<div className="comment-keywords">
-								{comment.keywords.map((keyword, i) => (
-									<RaisedButton
-										key={i}
-										className="comment-keyword paper-shadow"
-										onClick={self.addSearchTerm.bind(null, keyword)}
-										data-id={keyword._id}
-										label={(keyword.title || keyword.wordpressId)}
-									/>
-								))}
-							</div>
 						</div>
 
 						<div className="comment-upper-right">
@@ -355,7 +363,7 @@ CommentDetail = React.createClass({
 									</div>
 									<div className="comment-author-image-wrap paper-shadow">
 										<a href={`/commenters/${commenter.slug}`}>
-											<AvatarIcon avatar={commenter.avatarData} />
+											<AvatarIcon avatar={commenter.avatar} />
 										</a>
 									</div>
 								</div>
@@ -363,12 +371,25 @@ CommentDetail = React.createClass({
 						</div>
 
 					</div>
+					<div className="comment-keywords-container">
+						<div className="comment-keywords">
+							{comment.keywords.map((keyword, i) => (
+								<RaisedButton
+									key={i}
+									className="comment-keyword paper-shadow"
+									onClick={self.addSearchTerm.bind(null, keyword)}
+									data-id={keyword._id}
+									label={(keyword.title || keyword.wordpressId)}
+								/>
+							))}
+						</div>
+					</div>
 					<div className="comment-lower">
 						{selectedRevisionIndex === comment.revisions.length - 1 ?
 							<div
 								className="comment-body"
 								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
-								onClick={this.checkIfToggleLemmaReferenceModal}
+								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:
 							<div
@@ -406,7 +427,7 @@ CommentDetail = React.createClass({
 								key={i}
 								id={i}
 								data-id={revision.id}
-								className="revision selected-revision"
+								className={`revision ${this.state.selectedRevisionIndex === i ? 'selected-revision' : ''}`}
 								onClick={self.selectRevision}
 								label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
 							/>
@@ -429,16 +450,28 @@ CommentDetail = React.createClass({
 					showLoginModal={this.props.showLoginModal}
 				/>
 
-				<LemmaReferenceModal
-					visible={self.state.lemmaReferenceModalVisible}
-					top={self.state.lemmaReferenceTop}
-					left={self.state.lemmaReferenceLeft}
-					work={self.state.lemmaReferenceWork}
-					subwork={self.state.lemmaReferenceSubwork}
-					lineFrom={self.state.lemmaReferenceLineFrom}
-					lineTo={self.state.lemmaReferenceLineTo}
-					closeLemmaReference={self.closeLemmaReference}
-				/>
+				{self.state.lemmaReferenceModalVisible ?
+					<LemmaReferenceModal
+						visible={self.state.lemmaReferenceModalVisible}
+						top={self.state.referenceTop}
+						left={self.state.referenceLeft}
+						work={self.state.lemmaReferenceWork}
+						subwork={self.state.lemmaReferenceSubwork}
+						lineFrom={self.state.lemmaReferenceLineFrom}
+						lineTo={self.state.lemmaReferenceLineTo}
+						closeLemmaReference={self.closeLemmaReference}
+					/>
+				: ''}
+
+				{self.state.keywordReferenceModalVisible ?
+					<KeywordReferenceModal
+						visible={self.state.keywordReferenceModalVisible}
+						top={self.state.referenceTop}
+						left={self.state.referenceLeft}
+						keyword={self.state.keyword}
+						close={self.closeKeywordReference}
+					/>
+				: ''}
 			</div>
 		);
 	},

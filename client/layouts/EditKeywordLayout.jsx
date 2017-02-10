@@ -43,7 +43,7 @@ EditKeywordLayout = React.createClass({
 		const ready = Roles.subscription.ready() && keywordsSub;
 		let keyword = {};
 		if (ready) {
-			keyword = Keywords.findOne();
+			keyword = Keywords.findOne({ slug: this.props.slug });
 		}
 
 		return {
@@ -128,8 +128,7 @@ EditKeywordLayout = React.createClass({
 		});
 	},
 
-	updateKeyword(formData) {
-
+	updateKeyword(formData, textValue) {
 		this.setState({
 			loading: true,
 		});
@@ -158,7 +157,7 @@ EditKeywordLayout = React.createClass({
 			lineLetter,
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
-			description: formData.textValue,
+			description: textValue,
 			type: this.state.selectedType,
 			count: 1,
 			created: new Date(),
@@ -261,7 +260,6 @@ EditKeywordLayout = React.createClass({
 	},
 
 	onTypeChange(type) {
-		console.log(type);
 		this.setState({
 			selectedType: type,
 		});

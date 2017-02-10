@@ -174,7 +174,7 @@
 	padding:5px 20px 7px;
 }
 
-.lemma-reference-modal {
+.reference-modal {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -182,7 +182,7 @@
   display: none;
   z-index: 90;
 
-  &.lemma-reference-modal-visible {
+  &.reference-modal-visible {
     display: block;
   }
 
@@ -209,7 +209,7 @@
     }
   }
 
-  .lemma-reference-text {
+  .reference-text {
     max-height: 168px;
     overflow-y: scroll;
     border-bottom: 1px solid #eee;
@@ -247,4 +247,36 @@
 			}
 		}
 	}
+}
+
+.lemma-loading {
+
+	.lemma-loading-top {
+		background:#eee;
+		height:24px;
+		width:60%;
+		margin:0 15px 15px;
+		-webkit-animation: flash linear 1.2s infinite;
+		animation: flash linear 1.2s infinite;
+	}
+
+	.lemma-loading-bottom {
+		background:#eee;
+		height:24px;
+		width:40%;
+		margin:15px 15px 22px;
+		-webkit-animation: flash linear 1.2s infinite;
+		animation: flash linear 1.2s infinite;
+	}
+}
+
+@-webkit-keyframes flash {
+	0% { opacity: 1; }
+	50% { opacity: .6; }
+	100% { opacity: 1; }
+}
+@keyframes flash {
+	0% { opacity: 1; }
+	50% { opacity: .6; }
+	100% { opacity: 1; }
 }

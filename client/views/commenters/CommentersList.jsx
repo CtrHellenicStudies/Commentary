@@ -1,5 +1,3 @@
-import { Avatars } from '/imports/avatar/avatar_collections.js';
-
 CommentersList = React.createClass({
 
 	propTypes: {
@@ -33,28 +31,9 @@ CommentersList = React.createClass({
 			commenters = Commenters.find({}, { sort: { name: 1 }, limit }).fetch();
 		}
 
-		Meteor.subscribe('avatars.commenter.all');
-		const avatars = Avatars.find().fetch();
-
 		return {
 			commenters,
-			avatars,
 		};
-	},
-
-	getAvatarUrl(commenter) {
-		if (commenter.avatar === null) {
-			return this.props.defaultAvatarUrl;
-		} else {
-			const avatar = this.data.avatars.find((avatar) => {
-				return avatar._id === commenterId;
-			});
-			if (avatar) {
-				return avatar.url;
-			} else {
-				return this.props.defaultAvatarUrl;
-			}
-		}
 	},
 
 	renderCommenters() {

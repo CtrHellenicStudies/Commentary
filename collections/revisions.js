@@ -16,6 +16,29 @@ Schemas.Revisions = new SimpleSchema({
 		},
 	},
 
+	tenantId: {
+	    type: String,
+	    label: "Tenant",
+	    optional: true,
+	    autoform: {
+	    	afFieldInput: {
+	    		type: "select",
+		      options: function () {
+		      	var tenants = [];
+		        _.map(Tenants.find().fetch(), function (tenant) {
+
+		          tenants.push({
+		            label: tenant.subdomain,
+		            value: tenant._id
+		          });
+
+		        });
+		        return tenants;
+		      }
+	    	}
+	    }
+	},
+
 	text: {
 		type: String,
 		optional: true,
@@ -24,31 +47,14 @@ Schemas.Revisions = new SimpleSchema({
 		},
 
 	},
-
-	created: {
-		type: Date,
-		optional: true,
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-
 });
 
 Revisions.attachSchema(Schemas.Revisions);
 Revisions.friendlySlugs('title');
+
+Revisions.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});

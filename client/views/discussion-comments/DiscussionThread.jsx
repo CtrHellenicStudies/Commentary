@@ -135,8 +135,8 @@ DiscussionThread = React.createClass({
 								<div className="add-comment-row-1">
 									<div className="profile-picture paper-shadow">
 										<img
-											src={currentUser && currentUser.avatar ?
-												currentUser.avatar.url : '/images/default_user.jpg'}
+											src={currentUser && currentUser.profile ?
+												currentUser.profile.avatarUrl : '/images/default_user.jpg'}
 											alt="Commentary User"
 										/>
 									</div>

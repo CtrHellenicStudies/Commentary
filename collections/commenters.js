@@ -3,6 +3,7 @@ this.Commenters = new Meteor.Collection('commenters');
 Schemas.Commenters = new SimpleSchema({
 	_id: {
 		type: String,
+		optional: true,
 	},
 
 	wordpressId: {
@@ -42,6 +43,7 @@ Schemas.Commenters = new SimpleSchema({
 	slug: {
 		type: String,
 		max: 200,
+		optional: true,
 		autoform: {
 			type: 'hidden',
 			label: false,
@@ -64,6 +66,18 @@ Schemas.Commenters = new SimpleSchema({
 		optional: true,
 		autoform: {
 			rows: 5,
+		},
+	},
+
+	isAuthor: {
+		type: Boolean,
+		autoValue: function() {
+			if (this.isInsert)
+				return false;
+		},
+		autoform: {
+			type: 'hidden',
+			label: false,
 		},
 	},
 
@@ -127,39 +141,24 @@ Schemas.Commenters = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
-	created: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
 });
 
 Commenters.attachSchema(Schemas.Commenters);
 Commenters.friendlySlugs('name');
+
+Commenters.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});
+
+
+Commenters.allow({
+  update: function(userId, doc) {
+	return true;
+  },
+});
 
 // // Manage Roles based to commenters:
 // // TODO: test all hooks

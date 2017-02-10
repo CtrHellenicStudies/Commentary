@@ -8,26 +8,26 @@ Schemas.Comments = new SimpleSchema({
 	},
 
 	tenantId: {
-	    type: String,
-	    label: "Tenant",
-	    optional: true,
-	    autoform: {
-	    	afFieldInput: {
-	    		type: "select",
-		      options: function () {
-		      	var tenants = [];
-		        _.map(Tenants.find().fetch(), function (tenant) {
+			type: String,
+			label: "Tenant",
+			optional: true,
+			autoform: {
+				afFieldInput: {
+					type: "select",
+					options: function () {
+						var tenants = [];
+						_.map(Tenants.find().fetch(), function (tenant) {
 
-		          tenants.push({
-		            label: tenant.subdomain,
-		            value: tenant._id
-		          });
+							tenants.push({
+								label: tenant.subdomain,
+								value: tenant._id
+							});
 
-		        });
-		        return tenants;
-		      }
-	    	}
-	    }
+						});
+						return tenants;
+					}
+				}
+			}
 	},
 
 	commenters: {
@@ -136,38 +136,27 @@ Schemas.Comments = new SimpleSchema({
 		blackbox: true,
 	},
 
-	created: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isInsert) {
-				return new Date();
-			}
-			return null;
+	isAnnotation: {
+		type: Boolean,
+		autoValue: function() {
+			if (this.isInsert)
+				return false;
 		},
 		autoform: {
 			type: 'hidden',
 			label: false,
 		},
 	},
-	updated: {
-		type: Date,
-		optional: true,
-		autoValue() {
-			if (this.isUpdate) {
-				return new Date();
-			}
-			return null;
-		},
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
-	},
-
 });
 
 Comments.attachSchema(Schemas.Comments);
+
+Comments.attachBehaviour('timestampable', {
+  createdAt: 'created',
+  createdBy: 'createdBy',
+  updatedAt: 'updated',
+  updatedBy: 'updatedBy'
+});
 
 /*
  Comments.helpers({

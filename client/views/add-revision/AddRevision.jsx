@@ -6,14 +6,23 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
 import { Creatable } from 'react-select';
-import { EditorState, ContentState } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
-import RichTextEditor from 'react-rte';
+import { fromJS } from 'immutable';
+import { convertToHTML } from 'draft-convert';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
+import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
 const singleLinePlugin = createSingleLinePlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin();
+const { InlineToolbar } = inlineToolbarPlugin;
+const mentionPlugin = createMentionPlugin();
+const { MentionSuggestions } = mentionPlugin;
 
 AddRevision = React.createClass({
 
@@ -43,17 +52,26 @@ AddRevision = React.createClass({
 			});
 		}
 
+		const blocksFromHTML = convertFromHTML(revision.text);
+		const revisionEditorState = EditorState.createWithContent(
+				ContentState.createFromBlockArray(
+				  blocksFromHTML.contentBlocks,
+				  blocksFromHTML.entityMap
+				)
+			);
+
 		return {
 			revision,
 
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: RichTextEditor.createValueFromString(revision.text, 'html'),
+			textEditorState: revisionEditorState,
 
 			titleValue: '',
 			textValue: '',
 
 			keywordsValue,
 			keyideasValue,
+			suggestions: fromJS([]),
 		};
 	},
 
@@ -75,6 +93,7 @@ AddRevision = React.createClass({
 			keywordsOptions.push({
 				value: keyword.title,
 				label: keyword.title,
+				slug: keyword.slug,
 			});
 		});
 
@@ -84,6 +103,7 @@ AddRevision = React.createClass({
 			keyideasOptions.push({
 				value: keyidea.title,
 				label: keyidea.title,
+				slug: keyidea.slug,
 			});
 		});
 
@@ -103,10 +123,11 @@ AddRevision = React.createClass({
 	},
 
 	onTextChange(textEditorState) {
-		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+
 		this.setState({
 			textEditorState,
-			textValue: textEditorState.toString('html'),
+			textValue: textHtml,
 		});
 	},
 
@@ -127,6 +148,21 @@ AddRevision = React.createClass({
 			label: newOption.label,
 			value: newOption.label
 		};
+	},
+
+	onSearchChange({ value }) {
+		const keywordSuggestions = [];
+		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		keywords.forEach((keyword) => {
+			keywordSuggestions.push({
+				name: keyword.label,
+				link: `/keywords/${keyword.slug}`,
+			});
+		});
+
+		this.setState({
+			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
+		});
 	},
 
 	shouldKeyDownEventCreateNewOption(sig) {
@@ -166,7 +202,15 @@ AddRevision = React.createClass({
 	handleSubmit(event) {
 		// TODO: form validation
 		event.preventDefault();
-		this.props.submitForm(this.state);
+		const textHtml = convertToHTML({
+			entityToHTML: (entity, originalText) => {
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
+				}
+			},
+		})(this.state.textEditorState.getCurrentContent());
+
+		this.props.submitForm(this.state, textHtml);
 	},
 
 	selectRevision(event) {
@@ -249,11 +293,18 @@ AddRevision = React.createClass({
 
 						</div>
 						<div className="comment-lower" style={{ paddingTop: 20 }}>
-							<RichTextEditor
-								placeholder="Comment text..."
-								value={this.state.textEditorState}
+							<Editor
+								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
-								toolbarConfig={toolbarConfig}
+								placeholder="Comment text..."
+								spellCheck
+								stripPastedStyles
+								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								ref={(element) => { this.editor = element; }}
+							/>
+							<MentionSuggestions
+								onSearchChange={this.onSearchChange}
+								suggestions={this.state.suggestions}
 							/>
 
 							<div className="comment-reference">

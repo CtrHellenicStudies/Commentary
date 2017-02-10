@@ -1,8 +1,8 @@
 export default function AvatarIcon(props) {
 	let url = '/images/default_user.jpg';
 
-	if (props.avatar && props.avatar.url) {
-		url = props.avatar.url;
+	if (props.avatar) {
+		url = props.avatar;
 	} else if (props.defaultUrl) {
 		url = prop.defaultUrl;
 	}
@@ -12,5 +12,5 @@ export default function AvatarIcon(props) {
 
 AvatarIcon.propTypes = {
 	defaultUrl: React.PropTypes.string,
-	avatar: React.PropTypes.object,
+	avatar: React.PropTypes.string,
 };

@@ -1,6 +1,5 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { Avatars } from '/imports/avatar/avatar_collections.js';
 import { debounce } from 'throttle-debounce';
 import InfiniteScroll from '/imports/InfiniteScroll.jsx';
 
@@ -126,34 +125,31 @@ Commentary = React.createClass({
 		commentGroups.forEach((commentGroup, commentGroupIndex) => {
 			// let isInCommenters = false;
 			const commenters = [];
-			const avatarSubscription = Meteor.subscribe('avatars.commenter.all');
 			// const commenterSubscription = Meteor.subscribe('commenters', Session.get("tenantId"));
-			if (avatarSubscription.ready()) {
-				commentGroup.comments.forEach((comment, commentIndex) => {
-					// isInCommenters = false;
+			commentGroup.comments.forEach((comment, commentIndex) => {
+				// isInCommenters = false;
 
-					comment.commenters.forEach((commenter, i) => {
-						const commenterRecord = Commenters.findOne({
-							slug: commenter.slug,
-						});
-						if (commenterRecord) {
-							commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
-
-							// get commenter avatar
-							if (commenterRecord.avatar) {
-								commenterRecord.avatarData = Avatars.findOne(commenterRecord.avatar);
-							}
-
-							// add to the unique commenter set
-							if (commenters.some((c) => c.slug === commenter.slug)) {
-								// isInCommenters = true;
-							} else {
-								commenters.push(commenterRecord);
-							}
-						}
+				comment.commenters.forEach((commenter, i) => {
+					const commenterRecord = Commenters.findOne({
+						slug: commenter.slug,
 					});
+					if (commenterRecord) {
+						commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
+
+						// get commenter avatar
+						if (commenterRecord.avatar) {
+							commenterRecord.avatar = commenterRecord.avatar;
+						}
+
+						// add to the unique commenter set
+						if (commenters.some((c) => c.slug === commenter.slug)) {
+							// isInCommenters = true;
+						} else {
+							commenters.push(commenterRecord);
+						}
+					}
 				});
-			}
+			});
 			commentGroups[commentGroupIndex].commenters = commenters;
 		});
 

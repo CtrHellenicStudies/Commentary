@@ -11,9 +11,19 @@ import RichTextEditor from 'react-rte';
 import { EditorState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
+import { fromJS } from 'immutable';
+import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
+import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
 const singleLinePlugin = createSingleLinePlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin();
+const { InlineToolbar } = inlineToolbarPlugin;
+const mentionPlugin = createMentionPlugin();
+const { MentionSuggestions } = mentionPlugin;
 
 AddComment = React.createClass({
 
@@ -23,10 +33,16 @@ AddComment = React.createClass({
 		submitForm: React.PropTypes.func.isRequired,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
 			titleEditorState: EditorState.createEmpty(),
-			textEditorState: RichTextEditor.createEmptyValue(),
+			textEditorState: EditorState.createEmpty(),
 
 			commenterValue: null,
 			titleValue: '',
@@ -37,27 +53,23 @@ AddComment = React.createClass({
 
 			snackbarOpen: false,
 			snackbarMessage: '',
+			suggestions: fromJS([]),
 		};
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
 	},
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	mixins: [ReactMeteorData],
-
 	getMeteorData() {
-		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
+		Meteor.subscribe('keywords.all', { tenantId: Session.get("tenantId") });
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {
 			keywordsOptions.push({
 				value: keyword.title,
 				label: keyword.title,
+				slug: keyword.slug,
 			});
 		});
 
@@ -67,6 +79,7 @@ AddComment = React.createClass({
 			keyideasOptions.push({
 				value: keyidea.title,
 				label: keyidea.title,
+				slug: keyidea.slug,
 			});
 		});
 
@@ -113,10 +126,11 @@ AddComment = React.createClass({
 	},
 
 	onTextChange(textEditorState) {
-		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+
 		this.setState({
 			textEditorState,
-			textValue: textEditorState.toString('html'),
+			textValue: textHtml,
 		});
 	},
 
@@ -137,6 +151,21 @@ AddComment = React.createClass({
 			label: newOption.label,
 			value: newOption.label
 		};
+	},
+
+	onSearchChange({ value }) {
+		const keywordSuggestions = [];
+		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		keywords.forEach((keyword) => {
+			keywordSuggestions.push({
+				name: keyword.label,
+				link: `/keywords/${keyword.slug}`,
+			});
+		});
+
+		this.setState({
+			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
+		});
 	},
 
 	shouldKeyDownEventCreateNewOption(sig) {
@@ -196,8 +225,16 @@ AddComment = React.createClass({
 
 		this.showSnackBar(error);
 
+		const textHtml = convertToHTML({
+			entityToHTML: (entity, originalText) => {
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
+				}
+			},
+		})(this.state.textEditorState.getCurrentContent());
+
 		if (!error.errors) {
-			this.props.submitForm(this.state);
+			this.props.submitForm(this.state, textHtml);
 		}
 	},
 
@@ -325,11 +362,18 @@ AddComment = React.createClass({
 							className="comment-lower"
 							style={{ paddingTop: 20 }}
 						>
-							<RichTextEditor
-								placeholder="Comment text..."
-								value={this.state.textEditorState}
+							<Editor
+								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
-								toolbarConfig={toolbarConfig}
+								placeholder="Comment text..."
+								spellCheck
+								stripPastedStyles
+								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								ref={(element) => { this.editor = element; }}
+							/>
+							<MentionSuggestions
+								onSearchChange={this.onSearchChange}
+								suggestions={this.state.suggestions}
 							/>
 							<div className="comment-reference">
 								<Select

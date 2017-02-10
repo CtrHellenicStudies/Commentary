@@ -8,11 +8,17 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
 import { Creatable } from 'react-select';
 import RichTextEditor from 'react-rte';
-import { EditorState } from 'draft-js';
+import { Modifier, EditorState, Entity } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import getSearchText from '/utils/getSearchText';
+import getTypeByTrigger from '/utils/getTypeByTrigger';
+import { WYSIWYGEditor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'draft-js-mention-plugin/lib/plugin.css';
+
 
 const singleLinePlugin = createSingleLinePlugin();
 
@@ -28,14 +34,18 @@ AddKeyword = React.createClass({
 	getInitialState() {
 		return {
 			titleEditorState: EditorState.createEmpty(),
-			textEditorState: RichTextEditor.createEmptyValue(),
-
+			textValue: RichTextEditor.createEmptyValue(),
 			commenterValue: null,
 			titleValue: '',
-			textValue: '',
 			referenceWorksValue: null,
 			keywordsValue: null,
 			keyideasValue: null,
+			showkeywordsuggestions: true,
+			keywordSuggestions: [],
+			keywordSuggestionStyles: {
+				left: 0,
+				top: 0,
+			},
 
 			snackbarOpen: false,
 			snackbarMessage: '',
@@ -112,12 +122,63 @@ AddKeyword = React.createClass({
 		});
 	},
 
-	onTextChange(textEditorState) {
+	onTextChange(value) {
 		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-		this.setState({
-			textEditorState,
-			textValue: textEditorState.toString('html'),
-		});
+		let html = value.toString('html');
+		let words = [];
+		let lastWord;
+		let hasKeywordSuggestion = false;
+
+		if (html.lastIndexOf('#') >= 0) {
+			words = html.replace(/<(?:.|\n)*?>/gm, '').split(' ');
+			lastWord = words[words.length - 1];
+
+			// html = Utils.replaceLast(html, lastWord, `<span className="keyword-candidate">${lastWord}</span>`);
+			const entityKey = Entity.create("TOKEN", "IMMUTABLE", {foo:'bar'});
+			const editorState = value.getEditorState();
+			const currentSelectionState = editorState.getSelection();
+			const { begin, end } = getSearchText(editorState, currentSelectionState);
+			const mentionTextSelection = currentSelectionState.merge({
+				anchorOffset: begin,
+				focusOffset: end,
+			});
+
+			debugger;
+			let mentionReplacedContent = Modifier.replaceText(
+				editorState.getCurrentContent(),
+				mentionTextSelection,
+				`#foo`,
+				null, // no inline style needed
+				entityKey
+			);
+
+			const blockKey = mentionTextSelection.getAnchorKey();
+			const blockSize = editorState.getCurrentContent().getBlockForKey(blockKey).getLength();
+			if (blockSize === end) {
+				mentionReplacedContent = Modifier.insertText(
+					mentionReplacedContent,
+					mentionReplacedContent.getSelectionAfter(),
+					' ',
+				);
+			}
+			const newEditorState = EditorState.push(
+				editorState,
+				mentionReplacedContent,
+				'insert-mention',
+			);
+			EditorState.forceSelection(newEditorState, mentionReplacedContent.getSelectionAfter());
+			debugger;
+
+
+			if (lastWord.length > 1 && lastWord.slice(0, 1) === '#') {
+				this.showKeywordLookahead(lastWord.replace('#', ''), 0, 0);
+			}
+		} else {
+			this.setState({
+				textValue: value,
+			});
+		}
+		console.log(this.state.textValue.toString('html'));
 	},
 
 	onTypeChange(e, type) {
@@ -232,6 +293,19 @@ AddKeyword = React.createClass({
 		};
 	},
 
+	showKeywordLookahead(word) {
+		let keywordSuggestions = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		keywordSuggestions = keywordSuggestions.filter((item) => (
+      item.label.toLowerCase().search(
+        word.toLowerCase()) !== -1
+    ));
+
+		this.setState({
+			showKeywordSuggestions: true,
+			keywordSuggestions,
+		});
+	},
+
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
 	render() {
@@ -306,10 +380,32 @@ AddKeyword = React.createClass({
 							<RichTextEditor
 								className="keyword-editor"
 								placeholder="Keyword description . . ."
-								value={this.state.textEditorState}
+								value={this.state.textValue}
 								onChange={this.onTextChange}
 								toolbarConfig={toolbarConfig}
 							/>
+							<WYSIWYGEditor
+								editorState={this.state.textValue}
+								onChange={this.onTextChange}
+								placeholder="Key word or idea . . ."
+								spellCheck
+								stripPastedStyles
+								plugins={[mentionPlugin]}
+							/>
+							<div
+								className="keywords-suggestions"
+								style={this.state.keywordSuggestionStyles}
+							>
+								{this.state.keywordSuggestions.map((suggestion, i) =>
+									<span
+										key={i}
+										className="keywords-suggestion"
+										data-value={suggestion.value}
+									>
+										{suggestion.label}
+									</span>
+								)}
+							</div>
 							<div className="add-comment-button">
 								<RaisedButton
 									type="submit"

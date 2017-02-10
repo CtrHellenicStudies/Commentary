@@ -2,6 +2,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
+import CommentLemmaText from './CommentLemmaText.jsx';
+
 CommentLemma = React.createClass({
 
 	propTypes: {
@@ -169,13 +171,9 @@ CommentLemma = React.createClass({
 							<div className="lemma-loading-bottom" />
 						</div>
 					: ''}
-					{selectedLemmaEdition.lines.map((line, i) => (
-						<p
-							key={i}
-							className="lemma-text"
-							dangerouslySetInnerHTML={{ __html: line.html }}
-						/>
-					))}
+					<CommentLemmaText
+						lines={selectedLemmaEdition.lines}
+					/>
 					<div className="edition-tabs tabs">
 						{lemmaText.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);

@@ -62,6 +62,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
+    "babel-plugin-transform-class-properties": "^6.22.0",
     "enzyme": "^2.4.1",
     "eslint": "^3.4.0",
     "eslint-config-airbnb": "^10.0.1",
@@ -75,7 +76,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx",
     "lint-fix": "eslint . --ext .js,.jsx --fix",
-    "pretest": "npm run lint --silent"
+    "pretest": "npm run lint --silent",
+    "start": "export MONGO_URL=mongodb://localhost:27017/ahcip-new && meteor --settings production.json"
   },
   "repository": {
     "type": "git",

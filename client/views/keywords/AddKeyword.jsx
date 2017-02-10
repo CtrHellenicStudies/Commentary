@@ -53,7 +53,6 @@ AddKeyword = React.createClass({
 			snackbarMessage: '',
 
 			suggestions: fromJS([]),
-
 		};
 	},
 
@@ -71,7 +70,7 @@ AddKeyword = React.createClass({
 		});
 	},
 
-	onTextChange(value) {
+	onTextChange(textEditorState) {
 		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
 		/*
 		this.setState({
@@ -80,11 +79,11 @@ AddKeyword = React.createClass({
 		});
 		*/
 
-		//const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-		//const text = jQuery(textHtml).text();
+		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+
 		this.setState({
-			textEditorState: value,
-			textValue: value.toString('html'),
+			textEditorState,
+			textValue: textHtml,
 		});
 	},
 
@@ -130,10 +129,6 @@ AddKeyword = React.createClass({
 		this.setState({
 			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
 		});
-	},
-
-	onAddMention(value) {
-		console.log(value);
 	},
 
 	getMeteorData() {
@@ -254,13 +249,9 @@ AddKeyword = React.createClass({
 			errors = true;
 			errorMessage += ' title,';
 		}
-		if (this.state.textValue === '<p><br></p>' || !this.state.textValue) {
+		if (this.state.textValue === '<p><br></p>' || this.state.textValue === '' || !this.state.textValue) {
 			errors = true;
 			errorMessage += ' comment text,';
-		}
-		if (!this.props.selectedLineFrom) {
-			errors = true;
-			errorMessage += ' no line selected,';
 		}
 		if (errors === true) {
 			errorMessage = errorMessage.slice(0, -1);
@@ -361,7 +352,6 @@ AddKeyword = React.createClass({
 							<MentionSuggestions
 								onSearchChange={this.onSearchChange}
 								suggestions={this.state.suggestions}
-								onAddMention={this.onAddMention}
 							/>
 							<div className="add-comment-button">
 								<RaisedButton

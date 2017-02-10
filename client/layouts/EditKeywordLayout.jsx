@@ -43,7 +43,7 @@ EditKeywordLayout = React.createClass({
 		const ready = Roles.subscription.ready() && keywordsSub;
 		let keyword = {};
 		if (ready) {
-			keyword = Keywords.findOne();
+			keyword = Keywords.findOne({slug: this.props.slug});
 		}
 
 		return {

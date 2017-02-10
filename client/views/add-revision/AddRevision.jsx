@@ -205,7 +205,7 @@ AddRevision = React.createClass({
 		const textHtml = convertToHTML({
 			entityToHTML: (entity, originalText) => {
 				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" href={entity.data.mention.get('link')} data-keyword-gloss>{originalText}</a>;
+					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
 				}
 			},
 		})(this.state.textEditorState.getCurrentContent());

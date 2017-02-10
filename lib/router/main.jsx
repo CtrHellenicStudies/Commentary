@@ -21,7 +21,6 @@ FlowRouter.subscriptions = subscriptions;
 
 // check tenant and set document meta
 FlowRouter.triggers.enter([(context) => {
-	console.log(Session.get('tenantId'));
 	if (!Session.get('tenantId')) {
 		let hostnameArray = document.location.hostname.split('.');
 		if (process.env.NODE_ENV === 'development') {
@@ -33,7 +32,6 @@ FlowRouter.triggers.enter([(context) => {
 			FlowRouter.go("/404");
 		}
 
-		console.log(subdomain);
 		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenant) {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);

@@ -21,26 +21,27 @@ FlowRouter.subscriptions = subscriptions;
 
 // check tenant and set document meta
 FlowRouter.triggers.enter([(context) => {
+	console.log(Session.get('tenantId'));
 	if (!Session.get('tenantId')) {
 		let hostnameArray = document.location.hostname.split('.');
-		if (hostnameArray.length > 1) {
+		if (process.env.NODE_ENV === 'development') {
+			subdomain = Meteor.settings.public.developmentSubdomain;
+		} else if (hostnameArray.length > 1) {
 			subdomain = hostnameArray[0];
 		} else {
 			subdomain = '';
 			FlowRouter.go("/404");
 		}
 
-		if (process.env.NODE_ENV === 'development') {
-			subdomain = 'homer';
-		}
-
+		console.log(subdomain);
 		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenant) {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);
 				this.tenantId = tenant._id;
 
-				if (tenant.isAnnotation && !Meteor.userId())
+				if (tenant.isAnnotation && !Meteor.userId()) {
 					FlowRouter.go("/sign-in");
+				}
 			} else {
 				FlowRouter.go("/404");
 			}

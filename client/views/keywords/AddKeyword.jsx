@@ -4,23 +4,22 @@ import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-// https://github.com/JedWatson/react-select
-import Select from 'react-select';
-import { Creatable } from 'react-select';
-import RichTextEditor from 'react-rte';
-import { Modifier, EditorState, Entity } from 'draft-js';
+import { EditorState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import getSearchText from '/utils/getSearchText';
-import getTypeByTrigger from '/utils/getTypeByTrigger';
-import { WYSIWYGEditor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import 'draft-js-mention-plugin/lib/plugin.css';
-
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
+import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+import { fromJS } from 'immutable';
 
 const singleLinePlugin = createSingleLinePlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin();
+const { InlineToolbar } = inlineToolbarPlugin;
+const mentionPlugin = createMentionPlugin();
+const { MentionSuggestions } = mentionPlugin;
 
 AddKeyword = React.createClass({
 
@@ -31,87 +30,37 @@ AddKeyword = React.createClass({
 		onTypeChange: React.PropTypes.func.isRequired,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
 			titleEditorState: EditorState.createEmpty(),
-			textValue: RichTextEditor.createEmptyValue(),
+			textEditorState: EditorState.createEmpty(),
+			// textEditorState: RichTextEditor.createEmptyValue(),
+
 			commenterValue: null,
 			titleValue: '',
+			textValue: '',
 			referenceWorksValue: null,
 			keywordsValue: null,
 			keyideasValue: null,
-			showkeywordsuggestions: true,
-			keywordSuggestions: [],
-			keywordSuggestionStyles: {
-				left: 0,
-				top: 0,
-			},
 
 			snackbarOpen: false,
 			snackbarMessage: '',
-		};
-	},
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+			suggestions: fromJS([]),
+
+		};
 	},
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
-		const keywordsOptions = [];
-		const keywords = Keywords.find({ type: 'word' }).fetch();
-		keywords.forEach((keyword) => {
-			keywordsOptions.push({
-				value: keyword.title,
-				label: keyword.title,
-			});
-		});
-
-		const keyideasOptions = [];
-		const keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keyideas.forEach((keyidea) => {
-			keyideasOptions.push({
-				value: keyidea.title,
-				label: keyidea.title,
-			});
-		});
-
-		Meteor.subscribe('referenceWorks');
-		const referenceWorksOptions = [];
-		const referenceWorks = ReferenceWorks.find().fetch();
-		referenceWorks.forEach((referenceWork) => {
-			referenceWorksOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-			});
-		});
-
-		Meteor.subscribe('commenters', Session.get("tenantId"));
-		const commentersOptions = [];
-		let commenters = [];
-		if (Meteor.user() && Meteor.user().commenterId) {
-			commenters = Commenters.find({ _id: { $in: Meteor.user().commenterId } }).fetch();
-		}
-		commenters.forEach((commenter) => {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		});
-
-		return {
-			keywordsOptions,
-			keyideasOptions,
-			referenceWorksOptions,
-			commentersOptions,
-		};
-	},
 
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
@@ -124,61 +73,19 @@ AddKeyword = React.createClass({
 
 	onTextChange(value) {
 		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-		let html = value.toString('html');
-		let words = [];
-		let lastWord;
-		let hasKeywordSuggestion = false;
+		/*
+		this.setState({
+			textEditorState,
+			textValue: textEditorState.toString('html'),
+		});
+		*/
 
-		if (html.lastIndexOf('#') >= 0) {
-			words = html.replace(/<(?:.|\n)*?>/gm, '').split(' ');
-			lastWord = words[words.length - 1];
-
-			// html = Utils.replaceLast(html, lastWord, `<span className="keyword-candidate">${lastWord}</span>`);
-			const entityKey = Entity.create("TOKEN", "IMMUTABLE", {foo:'bar'});
-			const editorState = value.getEditorState();
-			const currentSelectionState = editorState.getSelection();
-			const { begin, end } = getSearchText(editorState, currentSelectionState);
-			const mentionTextSelection = currentSelectionState.merge({
-				anchorOffset: begin,
-				focusOffset: end,
-			});
-
-			debugger;
-			let mentionReplacedContent = Modifier.replaceText(
-				editorState.getCurrentContent(),
-				mentionTextSelection,
-				`#foo`,
-				null, // no inline style needed
-				entityKey
-			);
-
-			const blockKey = mentionTextSelection.getAnchorKey();
-			const blockSize = editorState.getCurrentContent().getBlockForKey(blockKey).getLength();
-			if (blockSize === end) {
-				mentionReplacedContent = Modifier.insertText(
-					mentionReplacedContent,
-					mentionReplacedContent.getSelectionAfter(),
-					' ',
-				);
-			}
-			const newEditorState = EditorState.push(
-				editorState,
-				mentionReplacedContent,
-				'insert-mention',
-			);
-			EditorState.forceSelection(newEditorState, mentionReplacedContent.getSelectionAfter());
-			debugger;
-
-
-			if (lastWord.length > 1 && lastWord.slice(0, 1) === '#') {
-				this.showKeywordLookahead(lastWord.replace('#', ''), 0, 0);
-			}
-		} else {
-			this.setState({
-				textValue: value,
-			});
-		}
-		console.log(this.state.textValue.toString('html'));
+		//const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		//const text = jQuery(textHtml).text();
+		this.setState({
+			textEditorState: value,
+			textValue: value.toString('html'),
+		});
 	},
 
 	onTypeChange(e, type) {
@@ -201,6 +108,84 @@ AddKeyword = React.createClass({
 		return {
 			label: newOption.label,
 			value: newOption.label
+		};
+	},
+
+	onCommenterValueChange(comenter) {
+		this.setState({
+			commenterValue: comenter,
+		});
+	},
+
+	onSearchChange({ value }) {
+		const keywordSuggestions = [];
+		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		keywords.forEach((keyword) => {
+			keywordSuggestions.push({
+				name: keyword.label,
+				link: `/keywords/${keyword.slug}`,
+			});
+		});
+
+		this.setState({
+			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
+		});
+	},
+
+	onAddMention(value) {
+		console.log(value);
+	},
+
+	getMeteorData() {
+		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+		const keywordsOptions = [];
+		const keywords = Keywords.find({ type: 'word' }).fetch();
+		keywords.forEach((keyword) => {
+			keywordsOptions.push({
+				value: keyword.title,
+				label: keyword.title,
+				slug: keyword.slug,
+			});
+		});
+
+		const keyideasOptions = [];
+		const keyideas = Keywords.find({ type: 'idea' }).fetch();
+		keyideas.forEach((keyidea) => {
+			keyideasOptions.push({
+				value: keyidea.title,
+				label: keyidea.title,
+				slug: keyidea.slug,
+			});
+		});
+
+		Meteor.subscribe('referenceWorks');
+		const referenceWorksOptions = [];
+		const referenceWorks = ReferenceWorks.find().fetch();
+		referenceWorks.forEach((referenceWork) => {
+			referenceWorksOptions.push({
+				value: referenceWork._id,
+				label: referenceWork.title,
+			});
+		});
+
+		Meteor.subscribe('commenters', Session.get('tenantId'));
+		const commentersOptions = [];
+		let commenters = [];
+		if (Meteor.user() && Meteor.user().commenterId) {
+			commenters = Commenters.find({ _id: { $in: Meteor.user().commenterId } }).fetch();
+		}
+		commenters.forEach((commenter) => {
+			commentersOptions.push({
+				value: commenter._id,
+				label: commenter.name,
+			});
+		});
+
+		return {
+			keywordsOptions,
+			keyideasOptions,
+			referenceWorksOptions,
+			commentersOptions,
 		};
 	},
 
@@ -236,12 +221,6 @@ AddKeyword = React.createClass({
 			if (e === BreakException) return false;
 		}
 		return true;
-	},
-
-	onCommenterValueChange(comenter) {
-		this.setState({
-			commenterValue: comenter,
-		});
 	},
 
 	handleSubmit(event) {
@@ -293,21 +272,7 @@ AddKeyword = React.createClass({
 		};
 	},
 
-	showKeywordLookahead(word) {
-		let keywordSuggestions = this.data.keywordsOptions.concat(this.data.keyideasOptions);
-		keywordSuggestions = keywordSuggestions.filter((item) => (
-      item.label.toLowerCase().search(
-        word.toLowerCase()) !== -1
-    ));
-
-		this.setState({
-			showKeywordSuggestions: true,
-			keywordSuggestions,
-		});
-	},
-
 	// --- END SUBMIT / VALIDATION HANDLE --- //
-
 	render() {
 		const toolbarConfig = {
 			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
@@ -377,35 +342,27 @@ AddKeyword = React.createClass({
 							className="comment-lower"
 							style={{ paddingTop: 20 }}
 						>
-							<RichTextEditor
+							{/*<RichTextEditor
 								className="keyword-editor"
 								placeholder="Keyword description . . ."
-								value={this.state.textValue}
+								value={this.state.textEditorState}
 								onChange={this.onTextChange}
 								toolbarConfig={toolbarConfig}
-							/>
-							<WYSIWYGEditor
-								editorState={this.state.textValue}
+							/>*/}
+							<Editor
+								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
-								placeholder="Key word or idea . . ."
+								placeholder="Keyword description . . ."
 								spellCheck
 								stripPastedStyles
-								plugins={[mentionPlugin]}
+								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								ref={(element) => { this.editor = element; }}
 							/>
-							<div
-								className="keywords-suggestions"
-								style={this.state.keywordSuggestionStyles}
-							>
-								{this.state.keywordSuggestions.map((suggestion, i) =>
-									<span
-										key={i}
-										className="keywords-suggestion"
-										data-value={suggestion.value}
-									>
-										{suggestion.label}
-									</span>
-								)}
-							</div>
+							<MentionSuggestions
+								onSearchChange={this.onSearchChange}
+								suggestions={this.state.suggestions}
+								onAddMention={this.onAddMention}
+							/>
 							<div className="add-comment-button">
 								<RaisedButton
 									type="submit"
@@ -425,7 +382,9 @@ AddKeyword = React.createClass({
 						message={this.state.snackbarMessage}
 						autoHideDuration={4000}
 					/>
-
+				</div>
+				<div className="inline-toolbar-wrap">
+					<InlineToolbar />
 				</div>
 			</div>
 		);

@@ -133,13 +133,13 @@ LemmaReferenceModal = React.createClass({
 
 		return (
 			<div
-				className={`lemma-reference-modal${(this.props.visible && hasLemma) ?
-					' lemma-reference-modal-visible' : ''}`}
+				className={`reference-modal${(this.props.visible && hasLemma) ?
+					' reference-modal-visible' : ''}`}
 				style={styles.lemmaReferenceModal}
 			>
 				<article className="comment	lemma-comment paper-shadow ">
 
-					<div className="lemma-reference-text">
+					<div className="reference-text">
 						{selectedLemmaEdition.lines.map((line, i) => (
 							<p
 								key={i}

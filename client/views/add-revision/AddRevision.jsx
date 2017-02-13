@@ -366,6 +366,10 @@ AddRevision = React.createClass({
 					</article>
 
 				</div>
+				<div className="inline-toolbar-wrap">
+					<InlineToolbar />
+				</div>
+
 			</div>
 
 		);

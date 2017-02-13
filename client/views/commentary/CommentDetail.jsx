@@ -303,7 +303,6 @@ CommentDetail = React.createClass({
 				<article
 					className="comment commentary-comment paper-shadow "
 					data-id={comment._id}
-					data-commenter-id={comment.commenters[0]._id}
 				>
 					<div className="comment-fixed-title-wrap paper-shadow">
 						<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>

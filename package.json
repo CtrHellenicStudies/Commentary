@@ -51,6 +51,7 @@
     "react-rte": "^0.10.1",
     "react-select": "^1.0.0-rc.1",
     "react-slick": "^0.12.2",
+    "react-sticky": "^5.0.5",
     "react-tap-event-plugin": "^2.0.1",
     "shortcode-parser": "0.0.1",
     "slug": "^0.9.1",

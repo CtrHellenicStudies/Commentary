@@ -1,6 +1,7 @@
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+import { Sticky } from 'react-sticky';
 
 import CommentLemmaText from './CommentLemmaText.jsx';
 
@@ -126,43 +127,47 @@ CommentLemma = React.createClass({
 
 			<div className="comment-outer comment-lemma-comment-outer">
 
-				<div className="comment-group-meta">
-					{this.props.hideLemma === false ?
-						<div className="comment-group-meta-inner comment-group-meta-ref">
-							<div className="comment-group-ref">
-								<span className="comment-group-ref-above">
-									{workTitle} {commentGroup.subwork.title}
-								</span>
-								<h2 className="comment-group-ref-below">
-									{commentGroup.lineFrom}{commentGroup.lineTo ? `-${commentGroup.lineTo}` : '' }
-								</h2>
+				<Sticky
+					bottomOffset={250}
+				>
+					<div className="comment-group-meta">
+						{this.props.hideLemma === false ?
+							<div className="comment-group-meta-inner comment-group-meta-ref">
+								<div className="comment-group-ref">
+									<span className="comment-group-ref-above">
+										{workTitle} {commentGroup.subwork.title}
+									</span>
+									<h2 className="comment-group-ref-below">
+										{commentGroup.lineFrom}{commentGroup.lineTo ? `-${commentGroup.lineTo}` : '' }
+									</h2>
 
-							</div>
-							<div className="comment-group-commenters">
+								</div>
+								<div className="comment-group-commenters">
 
-								{commentGroup.commenters.map((commenter, i) => (
-									<div
-										key={i}
-										className="comment-author"
-										data-commenter-id={commenter.id}
-									>
-										<span className="comment-author-name">
-											{commenter.name}
-										</span>
-										<a
-											className="comment-author-image-wrap paper-shadow"
-											href={`/commenters/${commenter.slug}`}
-											onClick={self.goToAuthorComment}
+									{commentGroup.commenters.map((commenter, i) => (
+										<div
+											key={i}
+											className="comment-author"
+											data-commenter-id={commenter.id}
 										>
-											<AvatarIcon avatar={commenter.avatar} />
-										</a>
-									</div>
-								))}
+											<span className="comment-author-name">
+												{commenter.name}
+											</span>
+											<a
+												className="comment-author-image-wrap paper-shadow"
+												href={`/commenters/${commenter.slug}`}
+												onClick={self.goToAuthorComment}
+											>
+												<AvatarIcon avatar={commenter.avatar} />
+											</a>
+										</div>
+									))}
 
+								</div>
 							</div>
-						</div>
-					: '' }
-				</div>
+						: '' }
+					</div>
+				</Sticky>
 
 				<article className="comment lemma-comment paper-shadow">
 					{!this.data.ready ?

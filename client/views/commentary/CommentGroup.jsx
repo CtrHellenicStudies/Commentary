@@ -1,3 +1,7 @@
+import { StickyContainer } from 'react-sticky';
+
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+
 CommentGroup = React.createClass({
 
 	propTypes: {
@@ -36,6 +40,11 @@ CommentGroup = React.createClass({
 		} else {
 			isOnHomeView = false;
 		}
+
+		let workTitle = commentGroup.work.title;
+		if (workTitle === 'Homeric Hymns') {
+			workTitle = 'Hymns';
+		}
 		return (
 			<div
 				className="comment-group "
@@ -45,29 +54,34 @@ CommentGroup = React.createClass({
 			>
 				<div className={commentsClass}>
 
-					<CommentLemma
-						index={commentGroupIndex}
-						commentGroup={commentGroup}
-						showContextPanel={this.props.showContextPanel}
-						scrollPosition={this.props.contextScrollPosition}
-						hideLemma={this.state.hideLemma}
-					/>
+					<StickyContainer>
 
-					{commentGroup.comments.map((comment, commentIndex) => (
-						<div
-							key={commentIndex}
-						>
-							<CommentDetail
+						<CommentLemma
+							index={commentGroupIndex}
+							commentGroup={commentGroup}
+							showContextPanel={this.props.showContextPanel}
+							scrollPosition={this.props.contextScrollPosition}
+							hideLemma={this.state.hideLemma}
+						/>
+
+						{commentGroup.comments.map((comment, commentIndex) => (
+							<div
 								key={commentIndex}
-								commentGroup={commentGroup}
-								comment={comment}
-								toggleSearchTerm={!isOnHomeView ? this.props.toggleSearchTerm : null}
-								filters={this.props.filters}
-								toggleLemma={this.toggleLemma}
-								showLoginModal={this.props.showLoginModal}
-							/>
-						</div>
-					))}
+							>
+								<CommentDetail
+									key={commentIndex}
+									commentGroup={commentGroup}
+									comment={comment}
+									toggleSearchTerm={!isOnHomeView ? this.props.toggleSearchTerm : null}
+									filters={this.props.filters}
+									toggleLemma={this.toggleLemma}
+									showLoginModal={this.props.showLoginModal}
+								/>
+							</div>
+						))}
+
+					</StickyContainer>
+
 				</div>
 				<hr className="comment-group-end" />
 			</div>

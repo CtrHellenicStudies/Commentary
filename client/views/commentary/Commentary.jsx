@@ -42,11 +42,6 @@ Commentary = React.createClass({
 		};
 	},
 
-	componentDidMount() {
-		window.addEventListener('resize', this.handleScroll);
-		window.addEventListener('scroll', this.handleScroll);
-	},
-
 	getMeteorData() {
 		let commentGroups = [];
 		const query = this.createQueryFromFilters(this.props.filters);
@@ -251,31 +246,6 @@ Commentary = React.createClass({
 		this.props.toggleSearchTerm(key, value);
 		this.setState({
 			skip: 0,
-		});
-	},
-
-	handleScroll() {
-		const scrollY = window.scrollY;
-		this.data.commentGroups.forEach((commentGroup, i) => {
-			const id = `#comment-group-${i}`;
-			const offset = $(id).offset();
-			const height = $(`${id} .comments`).height();
-			const element = $(id).find(
-				'.comment-group-meta-inner,.comment-group-meta-inner-fixed,.comment-group-meta-inner-bottom'
-			);
-			if (offset && offset.top && scrollY < offset.top) {
-				element.addClass('comment-group-meta-inner');
-				element.removeClass('comment-group-meta-inner-fixed');
-				element.removeClass('comment-group-meta-inner-bottom');
-			} else if (offset && offset.top && scrollY >= offset.top && scrollY < (offset.top + height) - 275) {
-				element.addClass('comment-group-meta-inner-fixed');
-				element.removeClass('comment-group-meta-inner');
-				element.removeClass('comment-group-meta-inner-bottom');
-			} else {
-				element.addClass('comment-group-meta-inner-bottom');
-				element.removeClass('comment-group-meta-inner-fixed');
-				element.removeClass('comment-group-meta-inner');
-			}
 		});
 	},
 

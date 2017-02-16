@@ -46,7 +46,7 @@ export default class AvatarEditor extends React.Component {
 	}
 
 	handleSelectFile(event) {
-		this.upload.click();
+		// this.upload.click();
 	}
 
 	onDrop(acceptedFiles, rejectedFiles) {

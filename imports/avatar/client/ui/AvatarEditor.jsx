@@ -20,12 +20,12 @@ export default class AvatarEditor extends React.Component {
 		event.preventDefault();
 	}
 
-	uploadAvatar(event) {
+	onDrop(acceptedFiles, rejectedFiles) {
 	    let context = {type: 'user'};
 
 	    let uploader = new Slingshot.Upload("uploads", context);
 
-	    uploader.send(event.target.files[0], (error, downloadUrl) => {
+	    uploader.send(acceptedFiles[0], (error, downloadUrl) => {
 	      if (error) {
 	        // Log service detailed response
 	        console.error('Error uploading', uploader.xhr.response);
@@ -45,18 +45,9 @@ export default class AvatarEditor extends React.Component {
 	    });
 	}
 
-	handleSelectFile(event) {
-		// this.upload.click();
-	}
-
-	onDrop(acceptedFiles, rejectedFiles) {
-        console.log('Accepted files: ', acceptedFiles);
-        console.log('Rejected files: ', rejectedFiles);
-      }
-
 	render() {
 		return (
-			<DropZone onDrop={this.onDrop} multiple={false} accept={"image/*"}>
+			<DropZone className="dropzone" onDrop={this.onDrop} multiple={false} accept={"image/*"}>
 				<div className="user-profile-picture-container">
 					<div className="user-profile-picture">
 						<img alt="avatar" src={this.state.avatarUrl} />

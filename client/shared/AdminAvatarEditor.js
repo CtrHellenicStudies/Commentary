@@ -7,6 +7,19 @@ AutoForm.addInputType('adminAvatarEditor', {
 	},
 });
 
+AutoForm.hooks({
+  admin_insert: {
+    onSubmit: function (insertDoc, updateDoc, currentDoc) {
+    	Commenters.update({_id: insertDoc._id}, {
+    		$set: {
+    			avatar: Session.get("commenterAvatar")
+    		}
+    	});
+      return true;
+    }
+  }
+});
+
 // TODO: this should be passed in
 const defaultAvatarUrl = '/images/default_user.jpg';
 

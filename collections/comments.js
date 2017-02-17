@@ -82,6 +82,11 @@ Schemas.Comments = new SimpleSchema({
 		optional: true,
 	},
 
+	paragraphN: {
+		type: Number,
+		optional: true,
+	},
+
 	commentOrder: {
 		type: Number,
 		optional: true,
@@ -128,7 +133,6 @@ Schemas.Comments = new SimpleSchema({
 		optional: true,
 		blackbox: true,
 	},
-
 
 	discussionComments: {
 		type: [Object],

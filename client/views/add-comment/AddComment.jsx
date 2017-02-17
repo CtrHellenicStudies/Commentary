@@ -45,19 +45,22 @@ function _getSuggestionsFromComments(comments) {
 			// get the most recent revision
 			const revision = comment.revisions[comment.revisions.length - 1];
 
-			const suggestion = {};
+			const suggestion = {
+				// create suggestio name:
+				name: `"${revision.title}" -`,
 
-			// create suggestio name:
-			suggestion.name = `${revision.title} -`;
+				// set link for suggestion
+				link: `/commentary?_id=${comment._id}`,
+
+				// set id for suggestion
+				id: comment._id,
+			};
 
 			// loop through commenters and add them to suggestion name
 			comment.commenters.forEach((commenter, i) => {
 				if (i === 0) suggestion.name += ` ${commenter.name}`;
 				else suggestion.name += `, ${commenter.name}`;
 			});
-
-			// set link for suggestion
-			suggestion.link = `/commentary/?_id=${comment._id}`;
 
 			suggestions.push(suggestion);
 		});
@@ -293,7 +296,8 @@ AddComment = React.createClass({
 
 				// handle hashtag / commets cross reference mentions
 				if (entity.type === '#mention') {
-					return <a className="keyword-gloss" href={entity.data.mention.get('link')}>{originalText}</a>;
+					console.log('originalText', originalText)
+					return <a className="comment-cross-ref" href={entity.data.mention.get('link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
 				}
 			},
 		})(this.state.textEditorState.getCurrentContent());

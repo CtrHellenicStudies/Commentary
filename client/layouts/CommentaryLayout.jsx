@@ -16,38 +16,42 @@ CommentaryLayout = React.createClass({
 	},
 
 	componentDidUpdate() {
-		let queryParams = {};
+		const queryParams = {};
 		this.state.filters.forEach((filter) => {
+			console.log('filter', filter)
 			filter.values.forEach((value) => {
 				const getQueryParamValue = this.getQueryParamValue;
 				switch (filter.key) {
-					case 'works':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-						break;
-					case 'subworks':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
-						break;
-					case 'keyideas':
-					case 'keywords':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-						break;
-					case 'commenters':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-						break;
-					case 'lineFrom':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-						break;
-					case 'lineTo':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-						break;
-					case 'textsearch':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-						break;
-					case 'wordpressId':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-						break;
-					default:
-						break;
+				case 'works':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+					break;
+				case 'subworks':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+					break;
+				case 'keyideas':
+				case 'keywords':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+					break;
+				case 'commenters':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+					break;
+				case 'lineFrom':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				case 'lineTo':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				case 'textsearch':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				case 'wordpressId':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				case '_id':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				default:
+					break;
 				}
 			});
 		});
@@ -59,7 +63,7 @@ CommentaryLayout = React.createClass({
 	getQueryParamValue(queryParams, key, value) {
 		let queryParamValue = null;
 		if (queryParams[key]) {
-			queryParamValue = queryParams[key] + ',' + value;
+			queryParamValue = `${queryParams[key]},${value}`;
 		} else {
 			queryParamValue = value;
 		}

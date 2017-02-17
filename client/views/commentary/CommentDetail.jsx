@@ -153,10 +153,10 @@ CommentDetail = React.createClass({
 
 		workNamesSpace.forEach((workName) => {
 			// regex for range with dash
-			regex1 = new RegExp(`${workName.title} (\\d+).(\\d+)-(\\d+)`, 'g');
+			regex1 = new RegExp(`${workName.title} (\\d+).(\\d+)-(\\d+)(?!.*")`, 'g');
 
 			// regex for no range (and lookahead to ensure range isn't captured)
-			regex2 = new RegExp(`${workName.title} (\\d+).(?!\\d+-\\d+)(\\d+)`, 'g');
+			regex2 = new RegExp(`${workName.title} (\\d+).(?!\\d+-\\d+)(\\d+)(?!.*")`, 'g');
 
 			newHtml = newHtml.replace(regex1,
 				`<a
@@ -177,10 +177,10 @@ CommentDetail = React.createClass({
 
 		workNamesPeriod.forEach((workName) => {
 			// regex for range with dash
-			regex1 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(\\d+)-(\\d+)`, 'g');
+			regex1 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(\\d+)-(\\d+)(?!.*")`, 'g');
 
 			// regex for no range (and lookahead to ensure range isn't captured)
-			regex2 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(?!\\d+-\\d+)(\\d+)`, 'g');
+			regex2 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(?!\\d+-\\d+)(\\d+)(?!.*")`, 'g');
 			newHtml = newHtml.replace(regex1,
 				`$1<a
 					class='has-lemma-reference'

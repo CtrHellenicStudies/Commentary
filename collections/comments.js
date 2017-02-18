@@ -47,6 +47,12 @@ Schemas.Comments = new SimpleSchema({
 		 */
 	},
 
+	users: {
+		type: [Object],
+		optional: true,
+		blackbox: true,
+	},
+
 	work: {
 		type: Object,
 		optional: true,

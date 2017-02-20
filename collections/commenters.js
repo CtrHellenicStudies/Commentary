@@ -51,14 +51,20 @@ Schemas.Commenters = new SimpleSchema({
 	},
 
 	avatar: {
-		type: String,
 		optional: true,
 		label: 'Profile picture (avatar)',
+		type: afSlingshot.fileSchema,
 		autoform: {
-			afFieldInput: {
-				type: 'adminAvatarEditor',
+		  type: 'slingshot',
+			slingshot: {
+				downloadUrl: (data) => {
+					console.log(data);
+				},
+				directives: [{
+					name: "uploads"
+				}],
 			},
-		},
+		}
 	},
 
 	bio: {
@@ -71,6 +77,7 @@ Schemas.Commenters = new SimpleSchema({
 
 	isAuthor: {
 		type: Boolean,
+		optional: true,
 		autoValue: function() {
 			if (this.isInsert)
 				return false;

@@ -362,7 +362,13 @@ CommentDetail = React.createClass({
 									</div>
 									<div className="comment-author-image-wrap paper-shadow">
 										<a href={`/commenters/${commenter.slug}`}>
-											<AvatarIcon avatar={commenter.avatar} />
+											<AvatarIcon
+												avatar={
+													(commenter && 'avatar' in commenter) ?
+													commenter.avatar.src
+													: null
+												}
+											/>
 										</a>
 									</div>
 								</div>

@@ -19,12 +19,11 @@ CommenterDetail = React.createClass({
 		// FETCH DATA:
 		const commenter = Commenters.findOne({ slug: this.props.slug });
 		let avatarUrl = this.props.defaultAvatarUrl;
+
 		if (commenter != null && commenter.avatar != null) {
-			const avatar = commenter.avatar;
-			if (avatar) {
-				avatarUrl = avatar;
-			}
+			avatarUrl = commenter.avatar.src;
 		}
+
 		return { commenter, avatarUrl };
 	},
 

@@ -4,8 +4,9 @@ filters – queryParams relations explanation:
 “queryParams” represent state of truth
 “filters” are a friendly object representation of “queryParams” passed to children components
 
-To change the commentary filtering, call the “this._updateRoute(filters)”
-method with new “filters” object passed as first attribute.
+To change the commentary filtering,
+call the “this._updateRoute(filters)” method
+with new “filters” object passed as first attribute.
 
 */
 

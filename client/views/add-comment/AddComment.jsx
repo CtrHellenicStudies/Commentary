@@ -29,7 +29,6 @@ const keywordMentionPlugin = createMentionPlugin();
 // Comments Cross Reference Mentions
 const commentsMentionPlugin = createMentionPlugin({
 	mentionTrigger: '#',
-
 });
 
 function _getSuggestionsFromComments(comments) {

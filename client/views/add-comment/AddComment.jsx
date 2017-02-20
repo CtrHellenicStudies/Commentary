@@ -286,7 +286,6 @@ AddComment = React.createClass({
 
 		const textHtml = convertToHTML({
 			entityToHTML: (entity, originalText) => {
-				console.log('entity', entity)
 
 				// handle keyword mentions
 				if (entity.type === 'mention') {
@@ -295,13 +294,10 @@ AddComment = React.createClass({
 
 				// handle hashtag / commets cross reference mentions
 				if (entity.type === '#mention') {
-					console.log('originalText', originalText)
 					return <a className="comment-cross-ref" href={entity.data.mention.get('link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
 				}
 			},
 		})(this.state.textEditorState.getCurrentContent());
-
-		console.log('textHtml', textHtml)
 
 		if (!error.errors) {
 			this.props.submitForm(this.state, textHtml);

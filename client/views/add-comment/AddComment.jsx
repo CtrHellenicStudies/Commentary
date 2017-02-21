@@ -7,12 +7,10 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import Select from 'react-select';
 import { Creatable } from 'react-select';
-import RichTextEditor from 'react-rte';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
-import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
@@ -22,14 +20,55 @@ import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line i
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
 const { InlineToolbar } = inlineToolbarPlugin;
-const mentionPlugin = createMentionPlugin();
-const { MentionSuggestions } = mentionPlugin;
+
+// Keyword Mentions
+const keywordMentionPlugin = createMentionPlugin();
+
+// Comments Cross Reference Mentions
+const commentsMentionPlugin = createMentionPlugin({
+	mentionTrigger: '#',
+});
+
+function _getSuggestionsFromComments(comments) {
+	const suggestions = [];
+
+	// if there are comments:
+	if (comments.length) {
+
+		// loop through all comments
+		// add suggestion for each comment
+		comments.forEach((comment) => {
+
+			// get the most recent revision
+			const revision = comment.revisions[comment.revisions.length - 1];
+
+			const suggestion = {
+				// create suggestio name:
+				name: `"${revision.title}" -`,
+
+				// set link for suggestion
+				link: `/commentary?_id=${comment._id}`,
+
+				// set id for suggestion
+				id: comment._id,
+			};
+
+			// loop through commenters and add them to suggestion name
+			comment.commenters.forEach((commenter, i) => {
+				if (i === 0) suggestion.name += ` ${commenter.name}`;
+				else suggestion.name += `, ${commenter.name}`;
+			});
+
+			suggestions.push(suggestion);
+		});
+	}
+	return suggestions;
+}
 
 AddComment = React.createClass({
 
 	propTypes: {
 		selectedLineFrom: React.PropTypes.number,
-		selectedLineTo: React.PropTypes.number,
 		submitForm: React.PropTypes.func.isRequired,
 	},
 
@@ -38,6 +77,12 @@ AddComment = React.createClass({
 	},
 
 	mixins: [ReactMeteorData],
+
+	getDefaultProps() {
+		return {
+			selectedLineFrom: null,
+		};
+	},
 
 	getInitialState() {
 		return {
@@ -53,7 +98,8 @@ AddComment = React.createClass({
 
 			snackbarOpen: false,
 			snackbarMessage: '',
-			suggestions: fromJS([]),
+			keywordSuggestions: fromJS([]),
+			commentsSuggestions: fromJS([]),
 		};
 	},
 
@@ -62,7 +108,7 @@ AddComment = React.createClass({
 	},
 
 	getMeteorData() {
-		Meteor.subscribe('keywords.all', { tenantId: Session.get("tenantId") });
+		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {
@@ -153,7 +199,7 @@ AddComment = React.createClass({
 		};
 	},
 
-	onSearchChange({ value }) {
+	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
 		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
 		keywords.forEach((keyword) => {
@@ -164,17 +210,32 @@ AddComment = React.createClass({
 		});
 
 		this.setState({
-			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
+			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
 		});
+	},
+
+	_onCommentsSearchChange({ value }) {
+		// use Meteor call method, as comments are not available on clint app
+		Meteor.call('comments.getSuggestions', value, (err, res) => {
+			// handle error:
+			if (err) throw new Meteor.Error(err);
+
+			// handle response:
+			const commentsSuggestions = _getSuggestionsFromComments(res);
+
+			this.setState({
+				commentsSuggestions: fromJS(commentsSuggestions),
+			});
+		});
+
 	},
 
 	shouldKeyDownEventCreateNewOption(sig) {
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	},
 
 	isOptionUnique(newOption) {
@@ -225,16 +286,13 @@ AddComment = React.createClass({
 
 		this.showSnackBar(error);
 
-		const textHtml = convertToHTML({
-			entityToHTML: (entity, originalText) => {
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
-				}
-			},
-		})(this.state.textEditorState.getCurrentContent());
-
 		if (!error.errors) {
-			this.props.submitForm(this.state, textHtml);
+
+			const textHtml = null;
+
+			const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+		
+			this.props.submitForm(this.state, textHtml, textRaw);
 		}
 	},
 
@@ -282,21 +340,6 @@ AddComment = React.createClass({
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
 	render() {
-		const toolbarConfig = {
-			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
-			INLINE_STYLE_BUTTONS: [{
-				label: 'Italic',
-				style: 'ITALIC',
-			}, {
-				label: 'Underline',
-				style: 'UNDERLINE',
-			}],
-			BLOCK_TYPE_BUTTONS: [{
-				label: 'UL',
-				style: 'unordered-list-item',
-			}],
-		};
-
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -368,13 +411,22 @@ AddComment = React.createClass({
 								placeholder="Comment text..."
 								spellCheck
 								stripPastedStyles
-								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
 								ref={(element) => { this.editor = element; }}
 							/>
-							<MentionSuggestions
-								onSearchChange={this.onSearchChange}
-								suggestions={this.state.suggestions}
+
+							{/* mentions suggestions for keywords */}
+							<keywordMentionPlugin.MentionSuggestions
+								onSearchChange={this._onKeywordSearchChange}
+								suggestions={this.state.keywordSuggestions}
 							/>
+
+							{/* mentions suggestions for comments cross reference */}
+							<commentsMentionPlugin.MentionSuggestions
+								onSearchChange={this._onCommentsSearchChange}
+								suggestions={this.state.commentsSuggestions}
+							/>
+
 							<div className="comment-reference">
 								<Select
 									name="referenceWorks"
@@ -407,6 +459,9 @@ AddComment = React.createClass({
 						autoHideDuration={4000}
 					/>
 
+				</div>
+				<div className="inline-toolbar-wrap">
+					<InlineToolbar />
 				</div>
 			</div>
 		);

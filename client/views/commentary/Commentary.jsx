@@ -42,11 +42,6 @@ Commentary = React.createClass({
 		};
 	},
 
-	componentDidMount() {
-		window.addEventListener('resize', this.handleScroll);
-		window.addEventListener('scroll', this.handleScroll);
-	},
-
 	getMeteorData() {
 		let commentGroups = [];
 		const query = this.createQueryFromFilters(this.props.filters);
@@ -254,31 +249,6 @@ Commentary = React.createClass({
 		});
 	},
 
-	handleScroll() {
-		const scrollY = window.scrollY;
-		this.data.commentGroups.forEach((commentGroup, i) => {
-			const id = `#comment-group-${i}`;
-			const offset = $(id).offset();
-			const height = $(`${id} .comments`).height();
-			const element = $(id).find(
-				'.comment-group-meta-inner,.comment-group-meta-inner-fixed,.comment-group-meta-inner-bottom'
-			);
-			if (offset && offset.top && scrollY < offset.top) {
-				element.addClass('comment-group-meta-inner');
-				element.removeClass('comment-group-meta-inner-fixed');
-				element.removeClass('comment-group-meta-inner-bottom');
-			} else if (offset && offset.top && scrollY >= offset.top && scrollY < (offset.top + height) - 275) {
-				element.addClass('comment-group-meta-inner-fixed');
-				element.removeClass('comment-group-meta-inner');
-				element.removeClass('comment-group-meta-inner-bottom');
-			} else {
-				element.addClass('comment-group-meta-inner-bottom');
-				element.removeClass('comment-group-meta-inner-fixed');
-				element.removeClass('comment-group-meta-inner');
-			}
-		});
-	},
-
 	loadMoreComments() {
 		if (
 			!this.props.isOnHomeView
@@ -346,8 +316,8 @@ Commentary = React.createClass({
 	setPageTitleAndMeta() {
 		let title = '';
 		let values = [];
-		let work = 'Iliad';
-		let subwork = '1';
+		let work = 'Commentary';
+		let subwork = null;
 		let lineFrom = 0;
 		let lineTo = 0;
 		let metaSubject = 'Commentaries on Classical Texts';
@@ -381,13 +351,20 @@ Commentary = React.createClass({
 				break;
 			}
 		});
-		title = `${work} ${subwork}`;
+
+		const foundWork = Works.findOne({ slug: work });
+		const workTitle = foundWork ? foundWork.title : work;
+
+		title = `${workTitle}`;
+		if (subwork) title = `${title} ${subwork}`;
 		if (lineFrom) {
-			title = `${title} ${lineFrom}`;
+			if (lineTo) title = `${title} ${lineFrom}-${lineTo}`;
+			else title = `${title} ${lineFrom}`;
+		} else {
+			if (lineTo) title = `${title} ${lineTo}`;
+			else title = `${title}`;
 		}
-		if (lineTo) {
-			title = `${title}-${lineTo}`;
-		}
+
 		metaSubject = `${metaSubject}, ${title}, Philology`;
 
 		if (

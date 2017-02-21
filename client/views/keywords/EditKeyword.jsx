@@ -386,6 +386,9 @@ EditKeyword = React.createClass({
 					/>
 
 				</div>
+				<div className="inline-toolbar-wrap">
+					<InlineToolbar />
+				</div>
 			</div>
 		);
 	},

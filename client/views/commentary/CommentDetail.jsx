@@ -67,8 +67,8 @@ CommentDetail = React.createClass({
 		const baseRevision = this.data.selectedRevision;
 		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
 		const revisionDiff = document.createElement('comment-diff');
-		const baseRevisionText = this.stripHTMLFromText(this._getRevisionText(baseRevision));
-		const newRevisionText = this.stripHTMLFromText(this._getRevisionText(newRevision));
+		const baseRevisionText = this.stripHTMLFromText(Utils.getRevisionText(baseRevision));
+		const newRevisionText = this.stripHTMLFromText(Utils.getRevisionText(newRevision));
 		const diff = JsDiff.diffWordsWithSpace(baseRevisionText, newRevisionText);
 		diff.forEach((part) => {
 			// green for additions, red for deletions
@@ -155,11 +155,11 @@ CommentDetail = React.createClass({
 		let regex2;
 
 		workNamesSpace.forEach((workName) => {
-			// regex for range with dash
-			regex1 = new RegExp(`${workName.title} (\\d+).(\\d+)-(\\d+)(?!.*")`, 'g');
+			// regex for range with dash (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
+			regex1 = new RegExp(`${workName.title} (\\d+).(\\d+)-(\\d+)(?!.*&quot;)`, 'g');
 
-			// regex for no range (and lookahead to ensure range isn't captured)
-			regex2 = new RegExp(`${workName.title} (\\d+).(?!\\d+-\\d+)(\\d+)(?!.*")`, 'g');
+			// regex for no range (and lookahead to ensure range isn't captured) (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
+			regex2 = new RegExp(`${workName.title} (\\d+).(?!\\d+-\\d+)(\\d+)(?!.*&quot;)`, 'g');
 
 			newHtml = newHtml.replace(regex1,
 				`<a
@@ -179,11 +179,11 @@ CommentDetail = React.createClass({
 		});
 
 		workNamesPeriod.forEach((workName) => {
-			// regex for range with dash
-			regex1 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(\\d+)-(\\d+)(?!.*")`, 'g');
+			// regex for range with dash (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
+			regex1 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(\\d+)-(\\d+)(?!.*&quot;)`, 'g');
 
-			// regex for no range (and lookahead to ensure range isn't captured)
-			regex2 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(?!\\d+-\\d+)(\\d+)(?!.*")`, 'g');
+			// regex for no range (and lookahead to ensure range isn't captured) (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
+			regex2 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(?!\\d+-\\d+)(\\d+)(?!.*&quot;)`, 'g');
 			newHtml = newHtml.replace(regex1,
 				`$1<a
 					class='has-lemma-reference'
@@ -283,51 +283,6 @@ CommentDetail = React.createClass({
 		this.setState({
 			persistentIdentifierModalVisible: false,
 		});
-	},
-
-	_getEntityData(entity, key) {
-		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
-		return foundItem[1];
-	},
-
-	_getRevisionText(selectedRevision) {
-		// returns comment text in html form to be presented on page
-
-		if (selectedRevision.textRaw) {
-			// if textRaw filed is available in the revision:
-
-			// create contentState from textRaw
-			const contentState = convertFromRaw(selectedRevision.textRaw);
-
-			// create editorState from contentState
-			const editorState = EditorState.createWithContent(contentState);
-
-			// create html from editorState's content
-			const html = convertToHTML({
-
-				// performe necessary html transformations:
-				entityToHTML: (entity, originalText) => {
-
-					// handle keyword mentions
-					if (entity.type === 'mention') {
-						return <a className="keyword-gloss" data-link={this._getEntityData(entity, 'link')}>{originalText}</a>;
-					}
-
-					// handle hashtag / commets cross reference mentions
-					if (entity.type === '#mention') {
-						return <a className="comment-cross-ref" href={this._getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-					}
-				},
-			})(editorState.getCurrentContent());
-
-			return html;
-
-		} else if (selectedRevision.text) {
-			// if now text filed is available in revision:
-
-			return selectedRevision.text;
-		}
-		throw new Meteor.Error('missing filed text or textRaw in revision');
 	},
 
 	render() {
@@ -441,7 +396,7 @@ CommentDetail = React.createClass({
 						{selectedRevisionIndex === comment.revisions.length - 1 ?
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(this._getRevisionText(selectedRevision))}
+								dangerouslySetInnerHTML={this.createRevisionMarkup(Utils.getRevisionText(selectedRevision))}
 								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:

@@ -11,26 +11,26 @@ Comments.schema = new SimpleSchema({
 	},
 
 	tenantId: {
-			type: String,
-			label: "Tenant",
-			optional: true,
-			autoform: {
-				afFieldInput: {
-					type: "select",
-					options: function () {
-						var tenants = [];
-						_.map(Tenants.find().fetch(), function (tenant) {
+		type: String,
+		label: 'Tenant',
+		optional: true,
+		autoform: {
+			afFieldInput: {
+				type: 'select',
+				options() {
+					const tenants = [];
+					_.map(Tenants.find().fetch(), function (tenant) {
 
-							tenants.push({
-								label: tenant.subdomain,
-								value: tenant._id
-							});
-
+						tenants.push({
+							label: tenant.subdomain,
+							value: tenant._id
 						});
-						return tenants;
-					}
+
+					});
+					return tenants;
 				}
 			}
+		}
 	},
 
 	commenters: {

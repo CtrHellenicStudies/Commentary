@@ -4,15 +4,13 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Select from 'react-select';
 import { Creatable } from 'react-select';
-import { EditorState, ContentState, convertFromHTML } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { fromJS } from 'immutable';
-import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import Keywords from '/imports/collections/keywords';
@@ -22,8 +20,50 @@ import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line i
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
 const { InlineToolbar } = inlineToolbarPlugin;
-const mentionPlugin = createMentionPlugin();
-const { MentionSuggestions } = mentionPlugin;
+
+// Keyword Mentions
+const keywordMentionPlugin = createMentionPlugin();
+
+// Comments Cross Reference Mentions
+const commentsMentionPlugin = createMentionPlugin({
+	mentionTrigger: '#',
+});
+
+function _getSuggestionsFromComments(comments) {
+	const suggestions = [];
+
+	// if there are comments:
+	if (comments.length) {
+
+		// loop through all comments
+		// add suggestion for each comment
+		comments.forEach((comment) => {
+
+			// get the most recent revision
+			const revision = comment.revisions[comment.revisions.length - 1];
+
+			const suggestion = {
+				// create suggestio name:
+				name: `"${revision.title}" -`,
+
+				// set link for suggestion
+				link: `/commentary?_id=${comment._id}`,
+
+				// set id for suggestion
+				id: comment._id,
+			};
+
+			// loop through commenters and add them to suggestion name
+			comment.commenters.forEach((commenter, i) => {
+				if (i === 0) suggestion.name += ` ${commenter.name}`;
+				else suggestion.name += `, ${commenter.name}`;
+			});
+
+			suggestions.push(suggestion);
+		});
+	}
+	return suggestions;
+}
 
 AddRevision = React.createClass({
 
@@ -53,26 +93,19 @@ AddRevision = React.createClass({
 			});
 		}
 
-		const blocksFromHTML = convertFromHTML(revision.text);
-		const revisionEditorState = EditorState.createWithContent(
-				ContentState.createFromBlockArray(
-				  blocksFromHTML.contentBlocks,
-				  blocksFromHTML.entityMap
-				)
-			);
-
 		return {
 			revision,
 
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: revisionEditorState,
+			textEditorState: this._getRevisionEgitorState(revision),
 
 			titleValue: '',
 			textValue: '',
 
 			keywordsValue,
 			keyideasValue,
-			suggestions: fromJS([]),
+			keywordSuggestions: fromJS([]),
+			commentsSuggestions: fromJS([]),
 		};
 	},
 
@@ -80,14 +113,14 @@ AddRevision = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	mixins: [ReactMeteorData],
-
 	getMeteorData() {
-		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
+		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {
@@ -112,6 +145,21 @@ AddRevision = React.createClass({
 			keywordsOptions,
 			keyideasOptions,
 		};
+	},
+
+	_getRevisionEgitorState(revision) {
+		if (revision.textRaw) {
+			return EditorState.createWithContent(convertFromRaw(revision.textRaw));
+		} else if (revision.text) {
+			const blocksFromHTML = convertFromHTML(revision.text);
+			return EditorState.createWithContent(
+				ContentState.createFromBlockArray(
+					blocksFromHTML.contentBlocks,
+					blocksFromHTML.entityMap
+				)
+			);
+		}
+		throw new Meteor.Error('missing filed text or textRaw in revision');
 	},
 
 	onTitleChange(titleEditorState) {
@@ -151,7 +199,7 @@ AddRevision = React.createClass({
 		};
 	},
 
-	onSearchChange({ value }) {
+	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
 		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
 		keywords.forEach((keyword) => {
@@ -162,17 +210,32 @@ AddRevision = React.createClass({
 		});
 
 		this.setState({
-			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
+			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
 		});
+	},
+
+	_onCommentsSearchChange({ value }) {
+		// use Meteor call method, as comments are not available on clint app
+		Meteor.call('comments.getSuggestions', value, (err, res) => {
+			// handle error:
+			if (err) throw new Meteor.Error(err);
+
+			// handle response:
+			const commentsSuggestions = _getSuggestionsFromComments(res);
+
+			this.setState({
+				commentsSuggestions: fromJS(commentsSuggestions),
+			});
+		});
+
 	},
 
 	shouldKeyDownEventCreateNewOption(sig) {
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	},
 
 	isOptionUnique(newOption) {
@@ -203,15 +266,12 @@ AddRevision = React.createClass({
 	handleSubmit(event) {
 		// TODO: form validation
 		event.preventDefault();
-		const textHtml = convertToHTML({
-			entityToHTML: (entity, originalText) => {
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
-				}
-			},
-		})(this.state.textEditorState.getCurrentContent());
 
-		this.props.submitForm(this.state, textHtml);
+		const textHtml = null;
+
+		const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+
+		this.props.submitForm(this.state, textHtml, textRaw);
 	},
 
 	selectRevision(event) {
@@ -229,22 +289,6 @@ AddRevision = React.createClass({
 
 	render() {
 		const that = this;
-
-		const toolbarConfig = {
-			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
-			INLINE_STYLE_BUTTONS: [{
-				label: 'Italic',
-				style: 'ITALIC',
-			}, {
-				label: 'Underline',
-				style: 'UNDERLINE',
-			}],
-			BLOCK_TYPE_BUTTONS: [{
-				label: 'UL',
-				style: 'unordered-list-item',
-			}],
-		};
-
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -300,12 +344,20 @@ AddRevision = React.createClass({
 								placeholder="Comment text..."
 								spellCheck
 								stripPastedStyles
-								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								plugins={[commentsMentionPlugin, keywordMentionPlugin, inlineToolbarPlugin]}
 								ref={(element) => { this.editor = element; }}
 							/>
-							<MentionSuggestions
-								onSearchChange={this.onSearchChange}
-								suggestions={this.state.suggestions}
+
+							{/* mentions suggestions for keywords */}
+							<keywordMentionPlugin.MentionSuggestions
+								onSearchChange={this._onKeywordSearchChange}
+								suggestions={this.state.keywordSuggestions}
+							/>
+
+							{/* mentions suggestions for comments cross reference */}
+							<commentsMentionPlugin.MentionSuggestions
+								onSearchChange={this._onCommentsSearchChange}
+								suggestions={this.state.commentsSuggestions}
 							/>
 
 							<div className="comment-reference">

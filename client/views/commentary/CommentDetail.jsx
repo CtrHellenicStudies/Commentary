@@ -5,6 +5,9 @@ import { green100, green500, red100, red500, black, fullWhite } from 'material-u
 import JsDiff from 'diff';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
+import { EditorState, convertFromRaw } from 'draft-js';
+import { convertToHTML } from 'draft-convert';
+
 CommentDetail = React.createClass({
 
 	propTypes: {
@@ -64,8 +67,8 @@ CommentDetail = React.createClass({
 		const baseRevision = this.data.selectedRevision;
 		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
 		const revisionDiff = document.createElement('comment-diff');
-		const baseRevisionText = this.stripHTMLFromText(baseRevision.text);
-		const newRevisionText = this.stripHTMLFromText(newRevision.text);
+		const baseRevisionText = this.stripHTMLFromText(Utils.getRevisionText(baseRevision));
+		const newRevisionText = this.stripHTMLFromText(Utils.getRevisionText(newRevision));
 		const diff = JsDiff.diffWordsWithSpace(baseRevisionText, newRevisionText);
 		diff.forEach((part) => {
 			// green for additions, red for deletions
@@ -152,11 +155,11 @@ CommentDetail = React.createClass({
 		let regex2;
 
 		workNamesSpace.forEach((workName) => {
-			// regex for range with dash
-			regex1 = new RegExp(`${workName.title} (\\d+).(\\d+)-(\\d+)`, 'g');
+			// regex for range with dash (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
+			regex1 = new RegExp(`${workName.title} (\\d+).(\\d+)-(\\d+)(?!.*&quot;)`, 'g');
 
-			// regex for no range (and lookahead to ensure range isn't captured)
-			regex2 = new RegExp(`${workName.title} (\\d+).(?!\\d+-\\d+)(\\d+)`, 'g');
+			// regex for no range (and lookahead to ensure range isn't captured) (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
+			regex2 = new RegExp(`${workName.title} (\\d+).(?!\\d+-\\d+)(\\d+)(?!.*&quot;)`, 'g');
 
 			newHtml = newHtml.replace(regex1,
 				`<a
@@ -176,11 +179,11 @@ CommentDetail = React.createClass({
 		});
 
 		workNamesPeriod.forEach((workName) => {
-			// regex for range with dash
-			regex1 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(\\d+)-(\\d+)`, 'g');
+			// regex for range with dash (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
+			regex1 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(\\d+)-(\\d+)(?!.*&quot;)`, 'g');
 
-			// regex for no range (and lookahead to ensure range isn't captured)
-			regex2 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(?!\\d+-\\d+)(\\d+)`, 'g');
+			// regex for no range (and lookahead to ensure range isn't captured) (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
+			regex2 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(?!\\d+-\\d+)(\\d+)(?!.*&quot;)`, 'g');
 			newHtml = newHtml.replace(regex1,
 				`$1<a
 					class='has-lemma-reference'
@@ -235,7 +238,7 @@ CommentDetail = React.createClass({
 				keywordReferenceModalVisible: true,
 				referenceTop: $target.position().top - upperOffset,
 				referenceLeft: $target.position().left + 160,
-				keyword: keyword,
+				keyword,
 			});
 		}
 	},
@@ -318,9 +321,9 @@ CommentDetail = React.createClass({
 						 <span className="fixed-title-lemma-ellipsis">&hellip;</span>
 						 : "" */}
 
-						{comment.commenters.map((commenter, i) => (
+						{comment.commenters.map((commenter) => (
 							<a
-								key={i}
+								key={commenter._id}
 								href={`/commenters/${commenter.slug}`}
 							>
 								<span className="comment-author-name">
@@ -338,9 +341,9 @@ CommentDetail = React.createClass({
 						</div>
 
 						<div className="comment-upper-right">
-							{comment.commenters.map((commenter, i) => (
+							{comment.commenters.map((commenter) => (
 								<div
-									key={i}
+									key={commenter._id}
 									className="comment-author"
 								>
 									{userCommenterId.indexOf(commenter._id) > -1 ?
@@ -378,9 +381,9 @@ CommentDetail = React.createClass({
 					</div>
 					<div className="comment-keywords-container">
 						<div className="comment-keywords">
-							{comment.keywords.map((keyword, i) => (
+							{comment.keywords.map((keyword) => (
 								<RaisedButton
-									key={i}
+									key={keyword._id}
 									className="comment-keyword paper-shadow"
 									onClick={self.addSearchTerm.bind(null, keyword)}
 									data-id={keyword._id}
@@ -393,7 +396,7 @@ CommentDetail = React.createClass({
 						{selectedRevisionIndex === comment.revisions.length - 1 ?
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
+								dangerouslySetInnerHTML={this.createRevisionMarkup(Utils.getRevisionText(selectedRevision))}
 								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:
@@ -418,9 +421,9 @@ CommentDetail = React.createClass({
 											{comment.reference}
 										</a>
 									:
-									<span >
-										{comment.reference}
-									</span>
+										<span >
+											{comment.reference}
+										</span>
 								}
 								</p>
 							</div>

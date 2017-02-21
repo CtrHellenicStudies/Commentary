@@ -1,0 +1,21 @@
+{
+	"kind": "Service",
+	"apiVersion": "v1",
+	"metadata": {
+	"name": "ahcip-graphql-serv"
+	},
+	"spec": {
+		"ports": [
+			{
+				"name": "graphql",
+				"port": 80,
+				"targetPort": 4000
+			}
+		],
+		"selector": {
+			"name": "ahcip-app-pod"
+		},
+		"sessionAffinity": "ClientIP",
+		"type": "LoadBalancer"
+	}
+}

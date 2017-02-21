@@ -1,6 +1,9 @@
-this.Keywords = new Meteor.Collection('keywords');
 
-Schemas.Keywords = new SimpleSchema({
+import Tenants from '/imports/collections/tenants';
+
+const Keywords = new Meteor.Collection('keywords');
+
+Keywords.schema = new SimpleSchema({
 	_id: {
 		type: String,
 		optional: true,
@@ -100,7 +103,7 @@ Schemas.Keywords = new SimpleSchema({
 	},
 });
 
-Keywords.attachSchema(Schemas.Keywords);
+Keywords.attachSchema(Keywords.schema);
 Keywords.friendlySlugs('title');
 
 Keywords.attachBehaviour('timestampable', {
@@ -109,3 +112,5 @@ Keywords.attachBehaviour('timestampable', {
   updatedAt: 'updated',
   updatedBy: 'updatedBy'
 });
+
+export default Keywords;

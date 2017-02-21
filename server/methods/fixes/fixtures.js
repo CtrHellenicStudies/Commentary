@@ -1,54 +1,59 @@
 import { Meteor } from 'meteor/meteor';
+import Comments from '/imports/collections/comments';
+import Commenters from '/imports/collections/commenters';
+import DiscussionComments from '/imports/collections/discussionComments';
+import Keywords from '/imports/collections/keywords';
+import ReferenceWorks from '/imports/collections/referenceWorks';
+import Tenants from '/imports/collections/tenants';
+import TextNodes from '/imports/collections/textNodes';
+import Works from '/imports/collections/works';
 
 Meteor.startup(() => {
+	if (Tenants.find().count() === 0) {
+		const tenantId = Tenants.insert({
+			subdomain: 'homer',
+		});
 
-  if (Tenants.find().count() == 0) {
-    let tenantId = Tenants.insert({
-      subdomain: "homer"
-    });
+		Commenters.update({}, {
+			$set: {
+				tenantId,
+			},
+		});
 
-    Commenters.update({}, {
-      $set: {
-        tenantId: tenantId
-      }
-    });
+		Comments.update({}, {
+			$set: {
+				tenantId,
+			},
+		});
 
-    Comments.update({}, {
-      $set: {
-        tenantId: tenantId
-      }
-    });
+		DiscussionComments.update({}, {
+			$set: {
+				tenantId,
+			},
+		});
 
-    DiscussionComments.update({}, {
-      $set: {
-        tenantId: tenantId
-      }
-    });
+		Keywords.update({}, {
+			$set: {
+				tenantId,
+			},
+		});
 
-    Keywords.update({}, {
-      $set: {
-        tenantId: tenantId
-      }
-    });
+		ReferenceWorks.update({}, {
+			$set: {
+				tenantId,
+			},
+		});
 
-    ReferenceWorks.update({}, {
-      $set: {
-        tenantId: tenantId
-      }
-    });
+		TextNodes.update({}, {
+			$set: {
+				tenantId,
+			},
+		});
 
-    TextNodes.update({}, {
-      $set: {
-        tenantId: tenantId
-      }
-    });
-
-    Works.update({}, {
-      $set: {
-        tenantId: tenantId
-      }
-    });
-
-  }
-
+		Works.update({}, {
+			$set: {
+				tenantId,
+			},
+		});
+	}
 });

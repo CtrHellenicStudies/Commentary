@@ -1,6 +1,8 @@
-this.Settings = new Meteor.Collection('settings');
+import Tenants from '/imports/collections/tenants';
 
-Schemas.Settings = new SimpleSchema({
+const Settings = new Meteor.Collection('settings');
+
+Settings.schema = new SimpleSchema({
 	name: {
 		type: String,
 	},
@@ -65,6 +67,8 @@ Schemas.Settings = new SimpleSchema({
 	},
 });
 
-Settings.attachSchema(Schemas.Settings);
+Settings.attachSchema(Settings.schema);
 Settings.friendlySlugs('name');
 Settings.attachBehaviour('timestampable');
+
+export default Settings;

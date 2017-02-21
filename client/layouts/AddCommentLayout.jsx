@@ -18,15 +18,15 @@ AddCommentLayout = React.createClass({
 
 	// --- BEGNI PERMISSIONS HANDLE --- //
 
-	getMeteorData() {
-		const ready = Roles.subscription.ready();
-        return {
-        	ready,
-        };
-    },
-
 	componentWillUpdate() {
 		this.handlePermissions();
+	},
+
+	getMeteorData() {
+		const ready = Roles.subscription.ready();
+		return {
+			ready,
+		};
 	},
 
 	handlePermissions() {
@@ -114,7 +114,6 @@ AddCommentLayout = React.createClass({
 	// --- BEGNI ADD COMMENT --- //
 
 	addComment(formData, textValue) {
-
 		this.setState({
 			loading: true,
 		});
@@ -422,8 +421,8 @@ AddCommentLayout = React.createClass({
 								toggleSearchTerm={this.toggleSearchTerm}
 								handleChangeLineN={this.handleChangeLineN}
 								filters={this.state.filters}
-                initialSearchEnabled
-                addCommentPage
+				initialSearchEnabled
+				addCommentPage
 							/>
 
 							<main>

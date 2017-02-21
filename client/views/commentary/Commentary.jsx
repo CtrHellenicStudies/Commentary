@@ -1,7 +1,8 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
-import InfiniteScroll from '/imports/InfiniteScroll.jsx';
+import Comments from '/imports/collections/comments';
+import InfiniteScroll from '/imports/ui/components/InfiniteScroll.jsx';
 
 Commentary = React.createClass({
 

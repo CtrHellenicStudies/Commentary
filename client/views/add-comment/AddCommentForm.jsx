@@ -4,6 +4,7 @@ import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
+import Keywords from '/imports/collections/keywords';
 // import FlatButton from 'material-ui/FlatButton';
 
 // https://github.com/JedWatson/react-select

@@ -1,24 +1,9 @@
 // List of discussionComments
 DiscussionCommentsList = React.createClass({
 
-	// This mixin makes the getMeteorData method discussionComment
-	// mixins: [ReactMeteorData],
-
 	propTypes: {
 		discussionComments: React.PropTypes.array,
 	},
-
-	// Loads items from the discussionComments collection
-	// and puts them on this.data.discussionComments
-	/*
-	 getMeteorData() {
-	 let query = {};
-
-	 return {
-	 discussionComments: DiscussionComments.find(query, {sort: {author: 1, title: 1}}).fetch()
-	 };
-	 },
-	 */
 
 	render() {
 		return (

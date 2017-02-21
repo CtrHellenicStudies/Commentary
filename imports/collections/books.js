@@ -1,6 +1,6 @@
-this.Books = new Meteor.Collection('books');
+const Books = new Meteor.Collection('books');
 
-Schemas.Books = new SimpleSchema({
+Books.schema = new SimpleSchema({
   title: {
     type: String
   },
@@ -29,5 +29,7 @@ Schemas.Books = new SimpleSchema({
   }
 });
 
-Books.attachSchema(Schemas.Books);
+Books.attachSchema(Books.schema);
 Books.attachBehaviour('timestampable');
+
+export default Books;

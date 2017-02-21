@@ -1,3 +1,7 @@
+
+import Comments from '/imports/collections/comments';
+import Keywords from '/imports/collections/keywords';
+
 Meteor.method('commentsKeywordsFix', () => {
 	// ---
 	// FIX the keywords field in the comments collection - add keywords._id if doesn't exist

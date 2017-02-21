@@ -1,6 +1,9 @@
-this.Comments = new Meteor.Collection('comments');
+import Tenants from '/imports/collections/tenants';
 
-Schemas.Comments = new SimpleSchema({
+
+const Comments = new Meteor.Collection('comments');
+
+Comments.schema = new SimpleSchema({
 
 	wordpressId: {
 		type: Number,
@@ -66,7 +69,6 @@ Schemas.Comments = new SimpleSchema({
 		blackbox: true,
 
 	},
-
 
 	lineFrom: {
 		type: Number,
@@ -159,7 +161,7 @@ Schemas.Comments = new SimpleSchema({
 	},
 });
 
-Comments.attachSchema(Schemas.Comments);
+Comments.attachSchema(Comments.schema);
 
 Comments.attachBehaviour('timestampable', {
   createdAt: 'created',
@@ -167,6 +169,8 @@ Comments.attachBehaviour('timestampable', {
   updatedAt: 'updated',
   updatedBy: 'updatedBy'
 });
+
+export default Comments;
 
 /*
  Comments.helpers({

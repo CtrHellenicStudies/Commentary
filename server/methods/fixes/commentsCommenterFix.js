@@ -1,3 +1,6 @@
+
+import Comments from '/imports/collections/comments';
+
 Meteor.method('commentsCommenterFix', () => {
 	// ---
 	// FIX the commenter field in the comments collection

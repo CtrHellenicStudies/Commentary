@@ -1,6 +1,6 @@
-this.Subworks = new Meteor.Collection('subworks');
+const Subworks = new Meteor.Collection('subworks');
 
-Schemas.Subworks = new SimpleSchema({
+Subworks.schema = new SimpleSchema({
 	title: {
 		type: String,
 		max: 60,
@@ -26,6 +26,7 @@ Schemas.Subworks = new SimpleSchema({
 		min: 0,
 	},
 
+	/*
 	commentHeatmap: {
 		type: [Object],
 		optional: true,
@@ -36,9 +37,10 @@ Schemas.Subworks = new SimpleSchema({
 	'commentHeatmap.$.nComments': {
 		type: Number,
 	},
+	*/
 });
 
-Subworks.attachSchema(Schemas.Subworks);
+Subworks.attachSchema(Subworks.schema);
 Subworks.friendlySlugs('title');
 
 Subworks.attachBehaviour('timestampable', {
@@ -47,3 +49,5 @@ Subworks.attachBehaviour('timestampable', {
   updatedAt: 'updated',
   updatedBy: 'updatedBy'
 });
+
+export default Subworks;

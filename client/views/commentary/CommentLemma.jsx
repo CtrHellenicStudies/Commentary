@@ -2,6 +2,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 import { Sticky } from 'react-sticky';
+import TextNodes from '/imports/collections/textNodes';
 
 import CommentLemmaText from './CommentLemmaText.jsx';
 

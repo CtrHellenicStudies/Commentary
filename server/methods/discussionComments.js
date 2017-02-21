@@ -1,3 +1,6 @@
+import Comments from '/imports/collections/comments';
+import DiscussionComments from '/imports/collections/discussionComments';
+
 Meteor.methods({
 	'discussionComments.insert': function insertDiscussionComment(discussionCommentCandidate) {
 		check(discussionCommentCandidate, Object);

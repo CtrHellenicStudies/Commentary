@@ -1,3 +1,5 @@
+import DiscussionComments from '/imports/collections/discussionComments';
+
 Meteor.publish('user.discussionComments', function discussionComments(query, skip, limit) {
 	check(query, Object);
 	check(skip, Number);

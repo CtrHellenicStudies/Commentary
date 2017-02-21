@@ -7,7 +7,7 @@ Meteor.startup(() => {
 			console.log('Deleted role:', role.name);
 		} catch (err) {
 			if (err.error === 403) {
-				console.log(`Role \'${role.name}\' is in use.`);
+				console.log(`Role '${role.name}' is in use.`);
 			} else {
 				console.log(err);
 			}

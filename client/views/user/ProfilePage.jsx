@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
 import Toggle from 'material-ui/Toggle';
-import { Slingshot } from 'meteor/edgee:slingshot';
+import DiscussionComments from '/imports/collections/discussionComments';
 
 ProfilePage = React.createClass({
 

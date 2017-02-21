@@ -1,3 +1,5 @@
+import Keywords from '/imports/collections/keywords';
+
 Meteor.methods({
 	'keywords.insert': function insertKeywords(keywords) {
 		check(keywords, [Object]);

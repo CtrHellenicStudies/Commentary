@@ -1,4 +1,7 @@
-Meteor.method('texNodesWorkSlugFix', () => {
+
+import TextNodes from '/imports/collections/textNodes';
+
+Meteor.method('textNodesWorkSlugFix', () => {
 	// ---
 	// FIX the work.slug field in the textNodes collection - set work.slug to 'homeric-hymns'
 	// ---

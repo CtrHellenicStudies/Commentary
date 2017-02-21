@@ -1,6 +1,7 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
+import Comments from '/imports/collections/comments';
 
 CommentsRecent = React.createClass({
 

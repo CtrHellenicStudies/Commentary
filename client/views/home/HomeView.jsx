@@ -1,6 +1,7 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
+import Comments from '/imports/collections/comments';
 
 HomeView = React.createClass({
 

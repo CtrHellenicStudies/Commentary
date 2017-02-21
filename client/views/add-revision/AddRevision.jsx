@@ -15,6 +15,7 @@ import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import Keywords from '/imports/collections/keywords';
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 

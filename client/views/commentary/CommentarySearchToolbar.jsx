@@ -2,6 +2,10 @@ import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
+import Commenters from '/imports/collections/commenters';
+import Keywords from '/imports/collections/keywords';
+import ReferenceWorks from '/imports/collections/referenceWorks';
+import Works from '/imports/collections/works';
 
 CommentarySearchToolbar = React.createClass({
 

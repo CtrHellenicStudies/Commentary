@@ -1,3 +1,5 @@
+import Pages from '/imports/collections/pages';
+
 SinglePage = React.createClass({
 	propTypes: {
 		slug: React.PropTypes.string,

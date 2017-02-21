@@ -1,6 +1,7 @@
 import FlatButton from 'material-ui/FlatButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Settings from '/imports/collections/settings';
 
 
 Footer = React.createClass({

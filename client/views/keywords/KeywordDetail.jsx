@@ -2,6 +2,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import KeywordContext from '/imports/ui/components/KeywordContext.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
+import Keywords from '/imports/collections/keywords';
 
 KeywordDetail = React.createClass({
 

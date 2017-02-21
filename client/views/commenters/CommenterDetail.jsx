@@ -1,3 +1,5 @@
+import Commenters from '/imports/collections/commenters';
+
 CommenterDetail = React.createClass({
 
 	propTypes: {

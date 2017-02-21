@@ -1,7 +1,7 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextNodes from '/imports/collections/textNodes';
 
 LemmaReferenceModal = React.createClass({
 

@@ -3,6 +3,7 @@ import slugify from 'slugify';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Keywords from '/imports/collections/keywords';
 import 'mdi/css/materialdesignicons.css';
 
 EditKeywordLayout = React.createClass({

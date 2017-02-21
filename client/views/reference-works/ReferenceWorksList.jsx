@@ -1,4 +1,5 @@
 import Masonry from 'react-masonry-component/lib';
+import ReferenceWorks from '/imports/collections/referenceWorks';
 
 
 ReferenceWorksList = React.createClass({
@@ -7,10 +8,8 @@ ReferenceWorksList = React.createClass({
 		commenterId: React.PropTypes.string,
 	},
 
-	// This mixin makes the getMeteorData method referenceWork
 	mixins: [ReactMeteorData],
 
-	// Loads items from the referenceWorks collection and puts them on this.data.referenceWorks
 	getMeteorData() {
 		// SUBSCRIPTIONS:
 		const query = {};

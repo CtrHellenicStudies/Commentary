@@ -1,4 +1,5 @@
 import { Session } from 'meteor/session';
+import Keywords from '/imports/collections/keywords';
 
 KeywordsList = React.createClass({
 
@@ -7,10 +8,8 @@ KeywordsList = React.createClass({
 		limit: React.PropTypes.number,
 	},
 
-	// This mixin makes the getMeteorData method keyword
 	mixins: [ReactMeteorData],
 
-	// Loads items from the keywords collection and puts them on this.data.keywords
 	getMeteorData() {
 		const type = this.props.type;
 		const skip = 0;

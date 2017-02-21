@@ -1,5 +1,6 @@
-
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+import Commenters from '/imports/collections/commenters';
+import ReferenceWorks from '/imports/collections/referenceWorks';
 
 ReferenceWorkDetail = React.createClass({
 

@@ -1,3 +1,5 @@
+import Settings from '/imports/collections/settings';
+
 HomeLayout = React.createClass({
 	getInitialState() {
 		return {

@@ -1,3 +1,9 @@
+import Comments from '/imports/collections/comments';
+import Commenters from '/imports/collections/commenters';
+import Keywords from '/imports/collections/keywords';
+import Tenants from '/imports/collections/tenants';
+import Works from '/imports/collections/works';
+
 Meteor.method('keyword-webhook', (keywordCandidate) => {
 	check(keywordCandidate.wordpressId, Match.Maybe(Number));
 	check(keywordCandidate.slug, String);
@@ -10,7 +16,7 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 			`type must be word or idea; was ${keywordCandidate.type}`);
 	}
 
-	const tenant = Tenants.findOne({subdomain: keywordCandidate.subdomain});
+	const tenant = Tenants.findOne({ subdomain: keywordCandidate.subdomain });
 
 	if (!tenant) {
 		throw new Meteor.Error(
@@ -159,7 +165,6 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 			{ _id: commentCandidate._id },
 			{ $addToSet: { revisions: revision } });
 		// console.log('Update response:', upsertResponse);
-
 	} else {
 		let nLines = 1;
 		const commentOrder = 0;

@@ -1,3 +1,6 @@
+import Comments from '/imports/collections/comments';
+import Works from '/imports/collections/works';
+
 Meteor.method('commentary_cron', () => {
 	// console.log(' -- Starting cron: Commentary');
 
@@ -80,62 +83,6 @@ Meteor.method('commentary_cron', () => {
 			},
 		});
 	});
-
-	/*
-	// Get a array of all subworks into tableOfContents
-	let tableOfContents = [];
-	Meteor.call('getTableOfContents', (err, res) => {
-		if (err) {
-			console.log(err);
-		} else if (res) {
-			tableOfContents = res;
-		}
-	});
-
-	// Search for subworks which have not been commented on
-	// modify tableOfContents so only missing subworks are left
-	commentCounts.forEach((work) => {
-		const _work = tableOfContents.find((element) => element._id === work.slug);
-		work.subworks.forEach((subwork) => {
-			_work.subworks.forEach((n, k) => {
-				if (n === subwork.n) {
-					_work.subworks.splice(k, 1);
-				}
-			});
-		});
-	});
-
-	// Create missing works and subworks from textNodes which haven't been commented
-	tableOfContents.forEach((_work) => {
-		_work.subworks.forEach((n) => {
-			isInCommentCountsWorks = false;
-			commentCounts.forEach((work) => {
-				if (_work._id === work.slug) {
-					isInCommentCountsWorks = true;
-					work.subworks.push({
-						n,
-						title: n.toString(),
-						nComments: 0,
-						commentHeatmap: [],
-					});
-				}
-			});
-
-			if (!isInCommentCountsWorks) {
-				commentCounts.push({
-					slug: _work._id,
-					nComments: 0,
-					subworks: [{
-						n,
-						title: n.toString(),
-						nComments: 0,
-						commentHeatmap: [],
-					}],
-				});
-			}
-		});
-	});
-	*/
 
 	console.log(' -- Cron run complete: Commentary');
 

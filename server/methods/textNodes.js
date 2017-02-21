@@ -1,3 +1,5 @@
+import TextNodes from '/imports/collections/textNodes';
+
 Meteor.methods({
 	getMaxLine(workSlug, subworkN) {
 		check(workSlug, String);
@@ -18,7 +20,6 @@ Meteor.methods({
 				},
 			},
 		}]);
-		console.log(maxLine)
 
 		return maxLine[0].maxLine[0]; // granted that all text.editions have the same max line number
 	},

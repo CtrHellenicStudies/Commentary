@@ -22,7 +22,6 @@ WorksList = React.createClass({
 		};
 	},
 
-
 	renderWorks() {
 		if (this.data.works.length === 3) {
 			return this.data.works.map((work, i) => (

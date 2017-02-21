@@ -1,6 +1,12 @@
-/*
- * Replace these in the future as they will publish our entire collections.
- */
+import Comments from '/imports/collections/comments';
+import Commenters from '/imports/collections/commenters';
+import DiscussionComments from '/imports/collections/discussionComments';
+import Keywords from '/imports/collections/keywords';
+import Pages from '/imports/collections/pages';
+import ReferenceWorks from '/imports/collections/referenceWorks';
+import Tenants from '/imports/collections/tenants';
+import TextNodes from '/imports/collections/textNodes';
+import Works from '/imports/collections/works';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {
@@ -185,14 +191,6 @@ if (Meteor.isServer) {
 				title: 1,
 			},
 		});
-	});
-
-	Meteor.publish('revisions', () => {
-		Revisions.find();
-	});
-
-	Meteor.publish('subworks', () => {
-		Subworks.find();
 	});
 
 	Meteor.publish('works', (tenantId) => {

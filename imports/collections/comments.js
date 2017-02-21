@@ -70,7 +70,6 @@ Comments.schema = new SimpleSchema({
 
 	},
 
-
 	lineFrom: {
 		type: Number,
 		optional: true,

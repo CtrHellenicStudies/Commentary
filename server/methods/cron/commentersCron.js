@@ -1,3 +1,7 @@
+
+import Comments from '/imports/collections/comments';
+import Commenters from '/imports/collections/commenters';
+
 Meteor.method('commenters_cron', () => {
 	// console.log(' -- Starting cron: Commenters');
 

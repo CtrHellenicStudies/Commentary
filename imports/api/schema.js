@@ -1,6 +1,6 @@
 import SchemaBridge from 'meteor/kuip:schema-graphql-bridge';
-import Commenters from '/imports/collections/commenters';
 import Comments from '/imports/collections/comments';
+import Commenters from '/imports/collections/commenters';
 import DiscussionComments from '/imports/collections/discussionComments';
 import Keywords from '/imports/collections/keywords';
 import ReferenceWorks from '/imports/collections/referenceWorks';
@@ -67,6 +67,7 @@ scalar Date
 
 ${commentSchema.objects}
 type Comment {
+	_id: String
 	${commentSchema.fields}
 	commenters: JSON
 	users: JSON
@@ -79,6 +80,7 @@ type Comment {
 
 ${commenterSchema.objects}
 type Commenter {
+	_id: String
 	${commenterSchema.fields}
 	nCommentsWorks: JSON
 	nCommentsKeywords: JSON
@@ -86,12 +88,14 @@ type Commenter {
 
 ${discussionCommentSchema.objects}
 type DiscussionComment {
+	_id: String
 	${discussionCommentSchema.fields}
 	user: JSON
 }
 
 ${keywordSchema.objects}
 type Keyword {
+	_id: String
 	${keywordSchema.fields}
 	work: JSON
 	subwork: JSON
@@ -101,6 +105,7 @@ ${referenceWorkSchema}
 
 ${textNodeSchema.objects}
 type TextNode {
+	_id: String
 	${textNodeSchema.fields}
 	text: JSON
 	related_passages: JSON
@@ -108,18 +113,27 @@ type TextNode {
 
 ${workSchema.objects}
 type Work {
+	_id: String
 	${workSchema.fields}
 	subworks: JSON
 }
 
 type Query {
-  commenters(_id: String, name: String, slug: String): [Commenter]
-  comments(_id: String): [Comment]
-  discussionComments(_id: String): [DiscussionComment]
-  keywords(_id: String): [Keyword]
-  referenceWorks(_id: String): [ReferenceWork]
-  textNodes(_id: String): [TextNode]
-  works(_id: String, title: String): [Work]
+
+  commenters(_id: String, name: String, slug: String, tenantId: String, isAuthor: Boolean): [Commenter]
+
+  comments(_id: String, commenter: String, tenantId: String, work: String, subwork: String, lineFrom: Int, lineTo: Int, lineLetter: String, paragraphN: Int, reference: String, keyword: String, isAnnotation: Boolean): [Comment]
+
+  discussionComments(_id: String, user: String, content: String, parentId: String, commentId: String, votes: Int, voter: String): [DiscussionComment]
+
+  keywords(_id: String, title: String, slug: String, description: String, type: String, count: Int, work: String, subwork: String, lineFrom: Int, lineTo: Int, lineLetter: String, tenantId: String): [Keyword]
+
+  referenceWorks(_id: String, title: String, slug: String, tenantId: String, author: String, urnCode: String, description: String, citation: String): [ReferenceWork]
+
+  textNodes(_id: String, tenantId: String, work: String, subwork: String, lineFrom: Int, lineTo: Int, edition: String, text: String, relatedPassageWork: String, relatedPassageSubwork: String, relatedPassageLineFrom: Int, relatedPassageLineTo: Int, relatedPassageText: String): [TextNode]
+
+  works(_id: String, tenantId: String, title: String, slug: String): [Work]
+
 }
 
 schema {

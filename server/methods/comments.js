@@ -1,3 +1,5 @@
+import Comments from '/imports/collections/comments';
+
 Meteor.methods({
 	'comments.insert': function insertComment(comment) {
 		check(comment, Object);

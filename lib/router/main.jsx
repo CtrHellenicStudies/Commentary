@@ -28,6 +28,9 @@ FlowRouter.triggers.enter([(context) => {
 			subdomain = '';
 			FlowRouter.go("/404");
 		}
+		if (process.env.NODE_ENV === 'development') {
+			subdomain = 'pindar';
+		}
 		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenant) {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);

@@ -4,6 +4,8 @@ import 'mdi/css/materialdesignicons.css';
 
 AddCommentLayout = React.createClass({
 
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
 			filters: [],
@@ -14,19 +16,15 @@ AddCommentLayout = React.createClass({
 		};
 	},
 
-	mixins: [ReactMeteorData],
-
-	// --- BEGNI PERMISSIONS HANDLE --- //
+	componentWillUpdate() {
+		this.handlePermissions();
+	},
 
 	getMeteorData() {
 		const ready = Roles.subscription.ready();
-        return {
-        	ready,
-        };
-    },
-
-	componentWillUpdate() {
-		this.handlePermissions();
+		return {
+			ready,
+		};
 	},
 
 	handlePermissions() {
@@ -36,8 +34,6 @@ AddCommentLayout = React.createClass({
 			}
 		}
 	},
-
-	// --- END PERMISSIONS HANDLE --- //
 
 	// --- BEGNI LINE SELECTION --- //
 
@@ -160,15 +156,15 @@ AddCommentLayout = React.createClass({
 					name: commenter.name,
 					slug: commenter.slug,
 				}] : [{}],
-				keywords: keywords ? keywords : [{}],
+				keywords: keywords || [{}],
 				reference: referenceWorks ? referenceWorks.title : null,
 				referenceLink: referenceWorks ? referenceWorks.link : null,
-				tenantId: Session.get("tenantId"),
+				tenantId: Session.get('tenantId'),
 				created: new Date(),
 			};
 
 			Meteor.call('comments.insert', comment, (error, commentId) => {
-				FlowRouter.go(`/commentary`, {}, {_id: commentId});
+				FlowRouter.go('/commentary', {}, {_id: commentId});
 			});
 		});
 	},
@@ -203,7 +199,7 @@ AddCommentLayout = React.createClass({
 						title: keyword.label,
 						slug: slugify(keyword.label),
 						type,
-						tenantId: Session.get("tenantId")
+						tenantId: Session.get('tenantId')
 					};
 					newKeywordArray.push(newKeyword);
 				}
@@ -227,7 +223,7 @@ AddCommentLayout = React.createClass({
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'work') {
 				work = values[0];
-			};
+			}
 		});
 		if (!work) {
 			work = {
@@ -244,7 +240,7 @@ AddCommentLayout = React.createClass({
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'subwork') {
 				subwork = values[0];
-			};
+			}
 		});
 		if (!subwork) {
 			subwork = {
@@ -440,7 +436,6 @@ AddCommentLayout = React.createClass({
 										/>
 										<AddComment
 											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
 											submitForm={this.addComment}
 										/>
 										<ContextReader

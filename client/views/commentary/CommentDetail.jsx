@@ -119,7 +119,6 @@ CommentDetail = React.createClass({
 	},
 
 	createRevisionMarkup(html) {
-		console.log('html', html)
 		let newHtml = html;
 
 		const workNamesSpace = [{
@@ -239,7 +238,7 @@ CommentDetail = React.createClass({
 				keywordReferenceModalVisible: true,
 				referenceTop: $target.position().top - upperOffset,
 				referenceLeft: $target.position().left + 160,
-				keyword: keyword,
+				keyword,
 			});
 		}
 	},
@@ -367,9 +366,9 @@ CommentDetail = React.createClass({
 						 <span className="fixed-title-lemma-ellipsis">&hellip;</span>
 						 : "" */}
 
-						{comment.commenters.map((commenter, i) => (
+						{comment.commenters.map((commenter) => (
 							<a
-								key={i}
+								key={commenter._id}
 								href={`/commenters/${commenter.slug}`}
 							>
 								<span className="comment-author-name">
@@ -387,9 +386,9 @@ CommentDetail = React.createClass({
 						</div>
 
 						<div className="comment-upper-right">
-							{comment.commenters.map((commenter, i) => (
+							{comment.commenters.map((commenter) => (
 								<div
-									key={i}
+									key={commenter._id}
 									className="comment-author"
 								>
 									{userCommenterId.indexOf(commenter._id) > -1 ?
@@ -421,9 +420,9 @@ CommentDetail = React.createClass({
 					</div>
 					<div className="comment-keywords-container">
 						<div className="comment-keywords">
-							{comment.keywords.map((keyword, i) => (
+							{comment.keywords.map((keyword) => (
 								<RaisedButton
-									key={i}
+									key={keyword._id}
 									className="comment-keyword paper-shadow"
 									onClick={self.addSearchTerm.bind(null, keyword)}
 									data-id={keyword._id}
@@ -461,9 +460,9 @@ CommentDetail = React.createClass({
 											{comment.reference}
 										</a>
 									:
-									<span >
-										{comment.reference}
-									</span>
+										<span >
+											{comment.reference}
+										</span>
 								}
 								</p>
 							</div>

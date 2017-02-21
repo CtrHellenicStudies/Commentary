@@ -4,7 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Select from 'react-select';
 import { Creatable } from 'react-select';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
@@ -12,7 +11,6 @@ import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { fromJS } from 'immutable';
-import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
@@ -114,14 +112,14 @@ AddRevision = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	mixins: [ReactMeteorData],
-
 	getMeteorData() {
-		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
+		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {
@@ -235,9 +233,8 @@ AddRevision = React.createClass({
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	},
 
 	isOptionUnique(newOption) {

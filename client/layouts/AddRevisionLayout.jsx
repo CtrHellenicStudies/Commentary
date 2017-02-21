@@ -5,7 +5,7 @@ import 'mdi/css/materialdesignicons.css';
 AddRevisionLayout = React.createClass({
 
 	propTypes: {
-		commentId: React.PropTypes.string,
+		commentId: React.PropTypes.string.isRequired,
 	},
 
 	mixins: [ReactMeteorData],
@@ -26,7 +26,7 @@ AddRevisionLayout = React.createClass({
 	},
 
 	getMeteorData() {
-		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId, Session.get("tenantId"));
+		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId, Session.get('tenantId'));
 		const ready = Roles.subscription.ready() && commentsSub;
 		let comment = {};
 		if (ready) {
@@ -100,7 +100,7 @@ AddRevisionLayout = React.createClass({
 						title: keyword.label,
 						slug: slugify(keyword.label),
 						type,
-						tenantId: Session.get("tenantId")
+						tenantId: Session.get('tenantId')
 					};
 					newKeywordArray.push(newKeyword);
 				}

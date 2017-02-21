@@ -7,12 +7,10 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import Select from 'react-select';
 import { Creatable } from 'react-select';
-import RichTextEditor from 'react-rte';
 import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
-import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
@@ -71,7 +69,6 @@ AddComment = React.createClass({
 
 	propTypes: {
 		selectedLineFrom: React.PropTypes.number,
-		selectedLineTo: React.PropTypes.number,
 		submitForm: React.PropTypes.func.isRequired,
 	},
 
@@ -80,6 +77,12 @@ AddComment = React.createClass({
 	},
 
 	mixins: [ReactMeteorData],
+
+	getDefaultProps() {
+		return {
+			selectedLineFrom: null,
+		};
+	},
 
 	getInitialState() {
 		return {
@@ -105,7 +108,7 @@ AddComment = React.createClass({
 	},
 
 	getMeteorData() {
-		Meteor.subscribe('keywords.all', { tenantId: Session.get("tenantId") });
+		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {
@@ -231,9 +234,8 @@ AddComment = React.createClass({
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	},
 
 	isOptionUnique(newOption) {
@@ -338,21 +340,6 @@ AddComment = React.createClass({
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
 	render() {
-		const toolbarConfig = {
-			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
-			INLINE_STYLE_BUTTONS: [{
-				label: 'Italic',
-				style: 'ITALIC',
-			}, {
-				label: 'Underline',
-				style: 'UNDERLINE',
-			}],
-			BLOCK_TYPE_BUTTONS: [{
-				label: 'UL',
-				style: 'unordered-list-item',
-			}],
-		};
-
 
 		return (
 			<div className="comments lemma-panel-visible">

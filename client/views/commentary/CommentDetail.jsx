@@ -5,6 +5,9 @@ import { green100, green500, red100, red500, black, fullWhite } from 'material-u
 import JsDiff from 'diff';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
+import { EditorState, convertFromRaw } from 'draft-js';
+import { convertToHTML } from 'draft-convert';
+
 CommentDetail = React.createClass({
 
 	propTypes: {
@@ -64,8 +67,8 @@ CommentDetail = React.createClass({
 		const baseRevision = this.data.selectedRevision;
 		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
 		const revisionDiff = document.createElement('comment-diff');
-		const baseRevisionText = this.stripHTMLFromText(baseRevision.text);
-		const newRevisionText = this.stripHTMLFromText(newRevision.text);
+		const baseRevisionText = this.stripHTMLFromText(this._getRevisionText(baseRevision));
+		const newRevisionText = this.stripHTMLFromText(this._getRevisionText(newRevision));
 		const diff = JsDiff.diffWordsWithSpace(baseRevisionText, newRevisionText);
 		diff.forEach((part) => {
 			// green for additions, red for deletions
@@ -116,6 +119,7 @@ CommentDetail = React.createClass({
 	},
 
 	createRevisionMarkup(html) {
+		console.log('html', html)
 		let newHtml = html;
 
 		const workNamesSpace = [{
@@ -282,6 +286,51 @@ CommentDetail = React.createClass({
 		});
 	},
 
+	_getEntityData(entity, key) {
+		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
+		return foundItem[1];
+	},
+
+	_getRevisionText(selectedRevision) {
+		// returns comment text in html form to be presented on page
+
+		if (selectedRevision.textRaw) {
+			// if textRaw filed is available in the revision:
+
+			// create contentState from textRaw
+			const contentState = convertFromRaw(selectedRevision.textRaw);
+
+			// create editorState from contentState
+			const editorState = EditorState.createWithContent(contentState);
+
+			// create html from editorState's content
+			const html = convertToHTML({
+
+				// performe necessary html transformations:
+				entityToHTML: (entity, originalText) => {
+
+					// handle keyword mentions
+					if (entity.type === 'mention') {
+						return <a className="keyword-gloss" data-link={this._getEntityData(entity, 'link')}>{originalText}</a>;
+					}
+
+					// handle hashtag / commets cross reference mentions
+					if (entity.type === '#mention') {
+						return <a className="comment-cross-ref" href={this._getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
+					}
+				},
+			})(editorState.getCurrentContent());
+
+			return html;
+
+		} else if (selectedRevision.text) {
+			// if now text filed is available in revision:
+
+			return selectedRevision.text;
+		}
+		throw new Meteor.Error('missing filed text or textRaw in revision');
+	},
+
 	render() {
 		const self = this;
 		const comment = this.props.comment;
@@ -387,7 +436,7 @@ CommentDetail = React.createClass({
 						{selectedRevisionIndex === comment.revisions.length - 1 ?
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
+								dangerouslySetInnerHTML={this.createRevisionMarkup(this._getRevisionText(selectedRevision))}
 								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:

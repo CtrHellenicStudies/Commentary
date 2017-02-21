@@ -113,7 +113,7 @@ AddCommentLayout = React.createClass({
 
 	// --- BEGNI ADD COMMENT --- //
 
-	addComment(formData, textValue) {
+	addComment(formData, textValue, textRawValue) {
 
 		this.setState({
 			loading: true,
@@ -151,6 +151,7 @@ AddCommentLayout = React.createClass({
 				revisions: [{
 					title: formData.titleValue,
 					text: textValue,
+					textRaw: textRawValue,
 					created: referenceWorks ? referenceWorks.date : new Date(),
 					slug: slugify(formData.titleValue),
 				}],
@@ -422,8 +423,8 @@ AddCommentLayout = React.createClass({
 								toggleSearchTerm={this.toggleSearchTerm}
 								handleChangeLineN={this.handleChangeLineN}
 								filters={this.state.filters}
-                initialSearchEnabled
-                addCommentPage
+								initialSearchEnabled
+								addCommentPage
 							/>
 
 							<main>

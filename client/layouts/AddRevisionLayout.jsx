@@ -39,7 +39,7 @@ AddRevisionLayout = React.createClass({
 		};
 	},
 
-	addRevision(formData, textValue) {
+	addRevision(formData, textValue, textRawValue) {
 		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 
 			// get keywords after they were created:
@@ -48,6 +48,7 @@ AddRevisionLayout = React.createClass({
 			const revision = {
 				title: formData.titleValue,
 				text: textValue,
+				textRaw: textRawValue,
 				created: new Date(),
 				slug: slugify(formData.titleValue),
 			};

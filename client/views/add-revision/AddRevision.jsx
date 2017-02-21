@@ -6,7 +6,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
 import { Creatable } from 'react-select';
-import { EditorState, ContentState, convertFromHTML } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -94,19 +94,11 @@ AddRevision = React.createClass({
 			});
 		}
 
-		const blocksFromHTML = convertFromHTML(revision.text);
-		const revisionEditorState = EditorState.createWithContent(
-				ContentState.createFromBlockArray(
-					blocksFromHTML.contentBlocks,
-					blocksFromHTML.entityMap
-				)
-			);
-
 		return {
 			revision,
 
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: revisionEditorState,
+			textEditorState: this._getRevisionEgitorState(revision),
 
 			titleValue: '',
 			textValue: '',
@@ -154,6 +146,21 @@ AddRevision = React.createClass({
 			keywordsOptions,
 			keyideasOptions,
 		};
+	},
+
+	_getRevisionEgitorState(revision) {
+		if (revision.textRaw) {
+			return EditorState.createWithContent(convertFromRaw(revision.textRaw));
+		} else if (revision.text) {
+			const blocksFromHTML = convertFromHTML(revision.text);
+			return EditorState.createWithContent(
+				ContentState.createFromBlockArray(
+					blocksFromHTML.contentBlocks,
+					blocksFromHTML.entityMap
+				)
+			);
+		}
+		throw new Meteor.Error('missing filed text or textRaw in revision');
 	},
 
 	onTitleChange(titleEditorState) {
@@ -261,15 +268,12 @@ AddRevision = React.createClass({
 	handleSubmit(event) {
 		// TODO: form validation
 		event.preventDefault();
-		const textHtml = convertToHTML({
-			entityToHTML: (entity, originalText) => {
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
-				}
-			},
-		})(this.state.textEditorState.getCurrentContent());
 
-		this.props.submitForm(this.state, textHtml);
+		const textHtml = null;
+
+		const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+
+		this.props.submitForm(this.state, textHtml, textRaw);
 	},
 
 	selectRevision(event) {
@@ -287,22 +291,6 @@ AddRevision = React.createClass({
 
 	render() {
 		const that = this;
-
-		const toolbarConfig = {
-			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
-			INLINE_STYLE_BUTTONS: [{
-				label: 'Italic',
-				style: 'ITALIC',
-			}, {
-				label: 'Underline',
-				style: 'UNDERLINE',
-			}],
-			BLOCK_TYPE_BUTTONS: [{
-				label: 'UL',
-				style: 'unordered-list-item',
-			}],
-		};
-
 
 		return (
 			<div className="comments lemma-panel-visible">

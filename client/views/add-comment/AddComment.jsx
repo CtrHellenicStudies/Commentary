@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
 import { Creatable } from 'react-select';
 import RichTextEditor from 'react-rte';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
@@ -284,23 +284,13 @@ AddComment = React.createClass({
 
 		this.showSnackBar(error);
 
-		const textHtml = convertToHTML({
-			entityToHTML: (entity, originalText) => {
-
-				// handle keyword mentions
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
-				}
-
-				// handle hashtag / commets cross reference mentions
-				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={entity.data.mention.get('link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-				}
-			},
-		})(this.state.textEditorState.getCurrentContent());
-
 		if (!error.errors) {
-			this.props.submitForm(this.state, textHtml);
+
+			const textHtml = null;
+
+			const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+		
+			this.props.submitForm(this.state, textHtml, textRaw);
 		}
 	},
 

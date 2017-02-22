@@ -67,8 +67,8 @@ CommentDetail = React.createClass({
 		const baseRevision = this.data.selectedRevision;
 		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
 		const revisionDiff = document.createElement('comment-diff');
-		const baseRevisionText = this.stripHTMLFromText(Utils.getRevisionText(baseRevision));
-		const newRevisionText = this.stripHTMLFromText(Utils.getRevisionText(newRevision));
+		const baseRevisionText = this.stripHTMLFromText(baseRevision.text);
+		const newRevisionText = this.stripHTMLFromText(newRevision.text);
 		const diff = JsDiff.diffWordsWithSpace(baseRevisionText, newRevisionText);
 		diff.forEach((part) => {
 			// green for additions, red for deletions
@@ -396,7 +396,7 @@ CommentDetail = React.createClass({
 						{selectedRevisionIndex === comment.revisions.length - 1 ?
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(Utils.getRevisionText(selectedRevision))}
+								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
 								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:

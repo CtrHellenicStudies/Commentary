@@ -11,6 +11,7 @@ import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { fromJS } from 'immutable';
+import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import Keywords from '/imports/collections/keywords';
@@ -63,6 +64,13 @@ function _getSuggestionsFromComments(comments) {
 		});
 	}
 	return suggestions;
+}
+
+// define function for retriving entity data
+// workaround for bug with standared .get() method
+function getEntityData(entity, key) {
+	const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
+	return foundItem[1];
 }
 
 AddRevision = React.createClass({
@@ -264,12 +272,30 @@ AddRevision = React.createClass({
 	},
 
 	handleSubmit(event) {
+		const { textEditorState } = this.state;
+
 		// TODO: form validation
 		event.preventDefault();
 
-		const textHtml = null;
+		// create html from textEditorState's content
+		const textHtml = convertToHTML({
 
-		const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+			// performe necessary html transformations:
+			entityToHTML: (entity, originalText) => {
+
+				// handle keyword mentions
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" data-link={getEntityData(entity, 'link')}>{originalText}</a>;
+				}
+
+				// handle hashtag / commets cross reference mentions
+				if (entity.type === '#mention') {
+					return <a className="comment-cross-ref" href={getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
+				}
+			},
+		})(textEditorState.getCurrentContent());
+
+		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);
 	},

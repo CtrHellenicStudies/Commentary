@@ -2,6 +2,7 @@ import Comments from '/imports/collections/comments';
 import Commenters from '/imports/collections/commenters';
 import DiscussionComments from '/imports/collections/discussionComments';
 import Keywords from '/imports/collections/keywords';
+import LinkedDataSchemas from '/imports/collections/linkedDataSchemas';
 import Pages from '/imports/collections/pages';
 import ReferenceWorks from '/imports/collections/referenceWorks';
 import Tenants from '/imports/collections/tenants';
@@ -285,4 +286,6 @@ if (Meteor.isServer) {
 		check(tenantId, Match.Maybe(String));
 		return Settings.find({ tenantId });
 	});
+
+	Meteor.publish('linkedDataSchemas', () => LinkedDataSchemas.find());
 }

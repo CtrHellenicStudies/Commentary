@@ -76,6 +76,8 @@ type Comment {
 	keywords: JSON
 	revisions: JSON
 	discussionComments: JSON
+	limit: Int
+	offest: Int
 }
 
 ${commenterSchema.objects}
@@ -91,10 +93,13 @@ type DiscussionComment {
 	_id: String
 	${discussionCommentSchema.fields}
 	user: JSON
+	limit: Int
+	offest: Int
 }
 
 ${keywordSchema.objects}
 type Keyword {
+	context: JSON
 	_id: String
 	${keywordSchema.fields}
 	work: JSON
@@ -109,6 +114,8 @@ type TextNode {
 	${textNodeSchema.fields}
 	text: JSON
 	related_passages: JSON
+	limit: Int
+	offest: Int
 }
 
 ${workSchema.objects}

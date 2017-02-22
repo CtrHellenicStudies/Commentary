@@ -99,6 +99,7 @@ type DiscussionComment {
 
 ${keywordSchema.objects}
 type Keyword {
+	context: JSON
 	_id: String
 	${keywordSchema.fields}
 	work: JSON

@@ -1,5 +1,6 @@
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
+import jsonld from 'jsonld';
 import slugify from 'slugify';
 import Commenters from '/imports/collections/commenters';
 import Comments from '/imports/collections/comments';
@@ -143,6 +144,33 @@ export default resolvers = {
 			return DiscussionComments.find(args, {sort: {'users.username' : 1}, limit, skip }).fetch();
 		},
 		keywords(_, args){
+			let keywords = [];
+			const linkedDataSchema = LinkedDataSchemas.findOne({ collectionName: "Keywords" });
+			let context = null;
+
+			if (linkedDataSchema) {
+				context = {};
+
+				linkedDataSchema.terms.forEach((term) => {
+					if (
+							'resourceIdentifier' in term
+						&& term.resourceIdentifier
+						&& term.resourceIdentifier.length
+					) {
+						context[term.term] = term.resourceIdentifier;
+					} else if (
+						'metafields' in term
+						&& term.metafields
+						&& term.metafields.length
+					) {
+						context[term.term] = {};
+						term.metafields.forEach((metafield) => {
+								context[term.term][metafield.key] = metafield.value;
+						});
+					}
+				});
+			}
+
 			if ('title' in args) {
 				args.title = { $regex: args.title, $options: 'i'}
 			}
@@ -157,7 +185,16 @@ export default resolvers = {
 				args['subwork.n'] = parseInt(args.subwork);
 				delete args.subwork;
 			}
-			return Keywords.find(args, { sort: { title: 1 } }).fetch();
+
+			keywords = Keywords.find(args, { sort: { title: 1 } }).fetch();
+
+			if (context !== null) {
+				keywords.forEach((keyword) => {
+					keyword['context'] = context;
+				});
+			}
+
+			return keywords;
 		},
 		referenceWorks(_, args){
 			if ('description' in args) {

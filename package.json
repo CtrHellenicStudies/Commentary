@@ -33,6 +33,7 @@
     "install": "^0.8.2",
     "ion-rangeslider": "^2.1.4",
     "jsdifflib": "^1.1.0",
+    "jsonld": "^0.4.11",
     "linkifyjs": "^2.0.5",
     "material-ui": "^0.16.4",
     "mdi": "^1.6.50",

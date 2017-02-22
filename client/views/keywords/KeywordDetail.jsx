@@ -10,6 +10,15 @@ KeywordDetail = React.createClass({
 		slug: React.PropTypes.string.isRequired,
 	},
 
+	getInitialState() {
+		return {
+			keywordReferenceModalVisible: false,
+			referenceTop: 0,
+			referenceLeft: 0,
+			keyword: '',
+		};
+	},
+
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
@@ -43,6 +52,29 @@ KeywordDetail = React.createClass({
 			} else {
 				FlowRouter.go('/keywords');
 			}
+		});
+	},
+
+	_keywordDescriptionOnClick(e) {
+		const $target = $(e.target);
+		let upperOffset = 90;
+		if ($target.hasClass('keyword-gloss')) {
+			const keyword = $target.data().link.replace('/keywords/', '');
+			this.setState({
+				keywordReferenceModalVisible: true,
+				referenceTop: $target.offset().top - upperOffset,
+				referenceLeft: $target.offset().left + 160,
+				keyword,
+			});
+		}
+	},
+
+	_closeKeywordReference() {
+		this.setState({
+			keywordReferenceModalVisible: false,
+			referenceTop: 0,
+			referenceLeft: 0,
+			keyword: '',
 		});
 	},
 
@@ -102,7 +134,11 @@ KeywordDetail = React.createClass({
 							<KeywordContext keyword={keyword} />
 						: ''}
 						{keyword.description && keyword.description.length ?
-							<div className="keyword-description" dangerouslySetInnerHTML={{ __html: keyword.description }} />
+							<div
+								className="keyword-description"
+								dangerouslySetInnerHTML={{ __html: keyword.description }}
+								onClick={this._keywordDescriptionOnClick}
+							/>
 						:
 							<p className="no-description-available">
 								No description available.
@@ -111,6 +147,16 @@ KeywordDetail = React.createClass({
 					</section>
 
 					<CommentsRecent />
+
+					{this.state.keywordReferenceModalVisible ?
+						<KeywordReferenceModal
+							visible={this.state.keywordReferenceModalVisible}
+							top={this.state.referenceTop}
+							left={this.state.referenceLeft}
+							keyword={this.state.keyword}
+							close={this._closeKeywordReference}
+						/>
+					: ''}
 
 				</div>
 			</div>

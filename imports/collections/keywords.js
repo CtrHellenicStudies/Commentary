@@ -34,6 +34,12 @@ Keywords.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	descriptionRaw: {
+		type: Object,
+		optional: true,
+		blackbox: true,
+	},
+
 	type: {
 		type: String,
 		optional: true,

@@ -66,13 +66,6 @@ function _getSuggestionsFromComments(comments) {
 	return suggestions;
 }
 
-// define function for retriving entity data
-// workaround for bug with standared .get() method
-function getEntityData(entity, key) {
-	const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
-	return foundItem[1];
-}
-
 AddComment = React.createClass({
 
 	propTypes: {
@@ -306,12 +299,12 @@ AddComment = React.createClass({
 
 					// handle keyword mentions
 					if (entity.type === 'mention') {
-						return <a className="keyword-gloss" data-link={getEntityData(entity, 'link')}>{originalText}</a>;
+						return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
 					}
 
 					// handle hashtag / commets cross reference mentions
 					if (entity.type === '#mention') {
-						return <a className="comment-cross-ref" href={getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
+						return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
 					}
 				},
 			})(textEditorState.getCurrentContent());

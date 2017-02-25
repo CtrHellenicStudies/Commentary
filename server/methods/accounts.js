@@ -32,4 +32,7 @@ Meteor.methods({
 		}
 		return false;
 	},
+	currentUser() {
+		return Meteor.users.findOne({ _id: Meteor.userId() });
+	}
 });

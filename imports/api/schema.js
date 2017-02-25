@@ -60,6 +60,8 @@ const workSchema = SchemaBridge.schema(
 	}
 );
 
+console.log(keywordSchema.fields);
+
 export default typeDefs = [`
 
 scalar JSON
@@ -99,11 +101,11 @@ type DiscussionComment {
 
 ${keywordSchema.objects}
 type Keyword {
-	context: JSON
 	_id: String
 	${keywordSchema.fields}
 	work: JSON
 	subwork: JSON
+	jsonld: JSON
 }
 
 ${referenceWorkSchema}
@@ -133,7 +135,7 @@ type Query {
 
   discussionComments(_id: String, user: String, content: String, parentId: String, commentId: String, votes: Int, voter: String): [DiscussionComment]
 
-  keywords(_id: String, title: String, slug: String, description: String, type: String, count: Int, work: String, subwork: String, lineFrom: Int, lineTo: Int, lineLetter: String, tenantId: String): [Keyword]
+  keywords(_id: String, title: String, slug: String, description: String, type: String, count: Int, work: String, subwork: String, lineFrom: Int, lineTo: Int, lineLetter: String, tenantId: String, jsonld: Boolean, jsonldType: String): [Keyword]
 
   referenceWorks(_id: String, title: String, slug: String, tenantId: String, author: String, urnCode: String, description: String, citation: String): [ReferenceWork]
 

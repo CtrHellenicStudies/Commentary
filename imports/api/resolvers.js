@@ -1,6 +1,5 @@
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
-import jsonld from 'jsonld';
 import slugify from 'slugify';
 import Commenters from '/imports/collections/commenters';
 import Comments from '/imports/collections/comments';
@@ -147,10 +146,10 @@ export default resolvers = {
 			let keywords = [];
 			const linkedDataSchema = LinkedDataSchemas.findOne({ collectionName: "Keywords" });
 			let context = null;
+			let returnJSONLD = false;
 
 			if (linkedDataSchema) {
 				context = {};
-
 				linkedDataSchema.terms.forEach((term) => {
 					if (
 							'resourceIdentifier' in term
@@ -171,6 +170,11 @@ export default resolvers = {
 				});
 			}
 
+			if ('jsonld' in args) {
+				returnJSONLD = true;
+				delete args.jsonld;
+			}
+
 			if ('title' in args) {
 				args.title = { $regex: args.title, $options: 'i'}
 			}
@@ -186,15 +190,34 @@ export default resolvers = {
 				delete args.subwork;
 			}
 
+			const response = [];
 			keywords = Keywords.find(args, { sort: { title: 1 } }).fetch();
 
-			if (context !== null) {
-				keywords.forEach((keyword) => {
-					keyword['context'] = context;
-				});
+			if (returnJSONLD) {
+				if (context !== null) {
+					keywords.forEach((keyword) => {
+						let isInContext = false;
+						const contextKeys = [];
+
+						for (k in context) {
+							contextKeys.push(k);
+						}
+
+						for (key in keyword) {
+							if (!(~contextKeys.indexOf(key))){
+								delete keyword[key];
+							}
+						}
+
+						keyword['@context'] = context;
+						response.push({jsonld: keyword});
+					});
+				} else {
+				  throw new Error('JSONLD specified, but no available schema found');
+				}
 			}
 
-			return keywords;
+			return response;
 		},
 		referenceWorks(_, args){
 			if ('description' in args) {

@@ -6,4 +6,7 @@ Meteor.methods({
 		check(subdomain, String);
 		return Tenants.findOne({ subdomain });
 	},
+      tenants() {
+        return Tenants.find().fetch();
+      }
 });

@@ -158,8 +158,13 @@ Schemas.User = new SimpleSchema({
 		optional: true,
 	},
 	bookmarks: {
-		type: [String],
+		type: Array,
 		optional: true,
+	},
+	'bookmarks.$': {
+		type: Object,
+		optional: true,
+		blackbox: true,
 	},
 	highlightingPreference: {
 		type: Boolean,

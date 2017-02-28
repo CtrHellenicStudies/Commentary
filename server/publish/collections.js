@@ -7,6 +7,7 @@ import ReferenceWorks from '/imports/collections/referenceWorks';
 import Tenants from '/imports/collections/tenants';
 import TextNodes from '/imports/collections/textNodes';
 import Works from '/imports/collections/works';
+import Settings from '/imports/collections/settings';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {
@@ -280,6 +281,8 @@ if (Meteor.isServer) {
 	});
 
 	Meteor.publish('tenants', () => Tenants.find());
+
+	Meteor.publish('settings', () => Settings.find());
 
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));

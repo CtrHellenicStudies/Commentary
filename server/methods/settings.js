@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Settings } from '/imports/collections/settings.js';
+import Settings from '/imports/collections/settings.js';
 
 Meteor.methods({
   'settings.insert'(data) {

@@ -18,5 +18,10 @@ Meteor.methods({
       },
       tenantId: data.tenantId
     });
+  },
+  'settings.remove'(settingId) {
+    check(settingId, String);
+
+    Settings.remove({ _id: settingId });
   }
 });

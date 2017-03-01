@@ -125,6 +125,10 @@ Settings.schema = new SimpleSchema({
 		type: String,
 	},
 
+	webhooksToken: {
+		optional: true,
+		type: String,
+	}
 });
 
 Settings.attachSchema(Settings.schema);

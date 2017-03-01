@@ -16,7 +16,7 @@ Meteor.method('keyword-webhook', (keywordCandidate) => {
 	const tenant = Tenants.findOne({ subdomain: keywordCandidate.subdomain });
 	const settings = Settings.findOne({ tenantId: tenant._id });
 
-	if (settings.webhooksToken !== keywordCandidate.token) {
+	if (!settings || settings.webhooksToken !== keywordCandidate.token) {
 		throw new Meteor.Error('Webhook publishing not authorized');
 	}
 

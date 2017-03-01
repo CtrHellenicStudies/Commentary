@@ -2,6 +2,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import KeywordContext from '/imports/ui/components/KeywordContext.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
+import Keywords from '/imports/collections/keywords';
 
 KeywordDetail = React.createClass({
 
@@ -15,13 +16,24 @@ KeywordDetail = React.createClass({
 
 	mixins: [ReactMeteorData],
 
+	getInitialState() {
+		return {
+			keywordReferenceModalVisible: false,
+			referenceTop: 0,
+			referenceLeft: 0,
+			keyword: '',
+		};
+	},
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
-		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug, Session.get("tenantId"));
+		Meteor.subscribe('keywords.slug', this.props.slug, Session.get('tenantId'));
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
 
 		// FETCH DATA:
 		const query = {
@@ -31,6 +43,7 @@ KeywordDetail = React.createClass({
 
 		return {
 			keyword,
+			settings: settingsHandle.ready() ? Settings.findOne() : {}
 		};
 	},
 
@@ -38,21 +51,45 @@ KeywordDetail = React.createClass({
 		const keyword = this.data.keyword;
 		Meteor.call('keywords.delete', keyword._id, (error, keywordId) => {
 			if (error) {
-				console.log(error);
+				console.log(keywordId, error);
 			} else {
 				FlowRouter.go('/keywords');
 			}
 		});
 	},
 
+	_keywordDescriptionOnClick(e) {
+		const $target = $(e.target);
+		const upperOffset = 90;
+		if ($target.hasClass('keyword-gloss')) {
+			const keyword = $target.data().link.replace('/keywords/', '');
+			this.setState({
+				keywordReferenceModalVisible: true,
+				referenceTop: $target.offset().top - upperOffset,
+				referenceLeft: $target.offset().left + 160,
+				keyword,
+			});
+		}
+	},
+
+	_closeKeywordReference() {
+		this.setState({
+			keywordReferenceModalVisible: false,
+			referenceTop: 0,
+			referenceLeft: 0,
+			keyword: '',
+		});
+	},
+
 	render() {
 		const keyword = this.data.keyword;
+		const { settings } = this.data;
 
 		if (!keyword) {
 			return <div />;
 		}
 
-		Utils.setTitle(keyword.title);
+		Utils.setTitle(`${keyword.title} | ${settings.title}`);
 		if (keyword.description) {
 			Utils.setDescription(Utils.trunc(keyword.description, 150));
 		}
@@ -101,19 +138,32 @@ KeywordDetail = React.createClass({
 							<KeywordContext keyword={keyword} />
 						: ''}
 						{keyword.description && keyword.description.length ?
-							<div className="keyword-description" dangerouslySetInnerHTML={{ __html: keyword.description }} />
+							<div
+								className="keyword-description"
+								dangerouslySetInnerHTML={{ __html: keyword.description }}
+								onClick={this._keywordDescriptionOnClick}
+							/>
 						:
-							<p className="no-description-available">
-								No description available.
-							</p>
+								<p className="no-description-available">
+									No description available.
+								</p>
 						}
 					</section>
 
 					<CommentsRecent />
 
+					{this.state.keywordReferenceModalVisible ?
+						<KeywordReferenceModal
+							visible={this.state.keywordReferenceModalVisible}
+							top={this.state.referenceTop}
+							left={this.state.referenceLeft}
+							keyword={this.state.keyword}
+							close={this._closeKeywordReference}
+						/>
+					: ''}
+
 				</div>
 			</div>
 		);
 	},
-
 });

@@ -5,6 +5,7 @@ import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+import Tenants from '/imports/collections/tenants';
 
 injectTapEventPlugin();
 

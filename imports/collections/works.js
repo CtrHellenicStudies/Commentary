@@ -1,6 +1,10 @@
-this.Works = new Meteor.Collection('works');
 
-Schemas.Works = new SimpleSchema({
+import Subworks from '/imports/collections/subworks';
+import Tenants from '/imports/collections/tenants';
+
+const Works = new Meteor.Collection('works');
+
+Works.schema = new SimpleSchema({
 	title: {
 		type: String,
 		max: 60,
@@ -47,12 +51,12 @@ Schemas.Works = new SimpleSchema({
 	},
 
 	subworks: {
-		type: [Schemas.Subworks],
+		type: [Subworks.schema],
 		optional: true,
 	},
 });
 
-Works.attachSchema(Schemas.Works);
+Works.attachSchema(Works.schema);
 Works.friendlySlugs('title');
 
 Works.attachBehaviour('timestampable', {
@@ -61,3 +65,5 @@ Works.attachBehaviour('timestampable', {
   updatedAt: 'updated',
   updatedBy: 'updatedBy'
 });
+
+export default Works;

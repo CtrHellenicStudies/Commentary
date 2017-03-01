@@ -56,6 +56,7 @@ ecmascript@0.6.1
 ecmascript-runtime@0.3.15
 edgee:slingshot@0.7.1
 ejson@1.0.13
+elevatedevdesign:autoform-slingshot@0.0.6
 email@1.1.18
 es5-shim@4.6.15
 facebook@1.2.10
@@ -77,6 +78,7 @@ kadira:dochead@1.5.0
 kadira:flow-router@2.12.1
 kadira:login-state@1.3.1
 kadira:react-layout@1.5.3
+kuip:schema-graphql-bridge@1.0.3
 less@2.7.8
 livedata@1.0.18
 localstorage@1.0.12

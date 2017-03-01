@@ -2,6 +2,8 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IconButton from 'material-ui/IconButton';
+import Settings from '/imports/collections/settings';
+import Tenants from '/imports/collections/tenants';
 
 Header = React.createClass({
 

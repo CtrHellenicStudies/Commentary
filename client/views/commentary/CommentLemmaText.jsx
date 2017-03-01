@@ -2,13 +2,6 @@ import FlatButton from 'material-ui/FlatButton';
 
 export default class CommentLemmaText extends React.Component {
 
-	static propTypes = {
-		lines: React.PropTypes.arrayOf(React.PropTypes.shape({
-			html: React.PropTypes.string.isRequired,
-			n: React.PropTypes.number.isRequired,
-		})).isRequired,
-	}
-
 	constructor(props) {
 		super(props);
 
@@ -76,3 +69,11 @@ export default class CommentLemmaText extends React.Component {
 		);
 	}
 }
+
+CommentLemmaText.propTypes = {
+	lines: React.PropTypes.arrayOf(React.PropTypes.shape({
+		html: React.PropTypes.string.isRequired,
+		n: React.PropTypes.number.isRequired,
+	})).isRequired,
+}
+

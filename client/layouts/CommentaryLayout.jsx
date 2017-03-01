@@ -1,3 +1,15 @@
+/*
+
+filters – queryParams relations explanation:
+“queryParams” represent state of truth
+“filters” are a friendly object representation of “queryParams” passed to children components
+
+To change the commentary filtering,
+call the “this._updateRoute(filters)” method
+with new “filters” object passed as first attribute.
+
+*/
+
 CommentaryLayout = React.createClass({
 
 	propTypes: {
@@ -5,61 +17,15 @@ CommentaryLayout = React.createClass({
 	},
 
 	getInitialState() {
-		const filters = this.createFilterFromQueryParams(this.props.queryParams);
-		const selectedRevisionIndex = null;
-
 		return {
-			filters,
-			selectedRevisionIndex,
 			modalLoginLowered: false,
 		};
-	},
-
-	componentDidUpdate() {
-		let queryParams = {};
-		this.state.filters.forEach((filter) => {
-			filter.values.forEach((value) => {
-				const getQueryParamValue = this.getQueryParamValue;
-				switch (filter.key) {
-					case 'works':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-						break;
-					case 'subworks':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
-						break;
-					case 'keyideas':
-					case 'keywords':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-						break;
-					case 'commenters':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-						break;
-					case 'lineFrom':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-						break;
-					case 'lineTo':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-						break;
-					case 'textsearch':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-						break;
-					case 'wordpressId':
-						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-						break;
-					default:
-						break;
-				}
-			});
-		});
-		if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
-			FlowRouter.go('/commentary/', {}, queryParams);
-		}
 	},
 
 	getQueryParamValue(queryParams, key, value) {
 		let queryParamValue = null;
 		if (queryParams[key]) {
-			queryParamValue = queryParams[key] + ',' + value;
+			queryParamValue = `${queryParams[key]},${value}`;
 		} else {
 			queryParamValue = value;
 		}
@@ -78,7 +44,63 @@ CommentaryLayout = React.createClass({
 		return value;
 	},
 
-	createFilterFromQueryParams(queryParams) {
+	_updateRoute(filters) {
+		let queryParams = {};
+		if (filters) {
+			queryParams = this._createQueryParamsFromFilters(filters);
+		} else {
+			queryParams = this.props.queryParams;
+		}
+
+		// update route if queryParams have changed
+		if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
+			FlowRouter.go('/commentary/', {}, queryParams);
+		}
+	},
+
+	_createQueryParamsFromFilters(filters) {
+		const queryParams = {};
+		filters.forEach((filter) => {
+			filter.values.forEach((value) => {
+				const getQueryParamValue = this.getQueryParamValue;
+				switch (filter.key) {
+				case 'works':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+					break;
+				case 'subworks':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+					break;
+				case 'keyideas':
+				case 'keywords':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+					break;
+				case 'commenters':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+					break;
+				case 'lineFrom':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				case 'lineTo':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				case 'textsearch':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				case 'wordpressId':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				case '_id':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+					break;
+				default:
+					break;
+				}
+			});
+		});
+		return queryParams; 
+	},
+
+	_createFilterFromQueryParams(queryParams) {
 		const filters = [];
 
 		if ('_id' in queryParams) {
@@ -219,13 +241,17 @@ CommentaryLayout = React.createClass({
 		return filters;
 	},
 
-	toggleSearchTerm(key, value) {
-		const filters = this.state.filters;
+	_toggleSearchTerm(key, value) {
+		const { queryParams } = this.props;
+
 		let keyIsInFilter = false;
 		let valueIsInFilter = false;
 		let filterValueToRemove;
 		let filterToRemove;
 
+		const filters = this._createFilterFromQueryParams(queryParams);
+
+		// update filter based on the key and value
 		filters.forEach((filter, i) => {
 			if (filter.key === key) {
 				keyIsInFilter = true;
@@ -266,14 +292,14 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
-		this.setState({
-			filters,
-		});
+		this._updateRoute(filters);
 	},
 
-	handleChangeTextsearch(textsearch) {
-		const filters = this.state.filters;
+	_handleChangeTextsearch(textsearch) {
+		const { queryParams } = this.props;
+		const filters = this._createFilterFromQueryParams(queryParams);
 
+		// update filter based on the textsearch
 		if (textsearch && textsearch.length) {
 			let textsearchInFilters = false;
 
@@ -304,14 +330,14 @@ CommentaryLayout = React.createClass({
 			}
 		}
 
-		this.setState({
-			filters,
-		});
+		this._updateRoute(filters);
 	},
 
-	handleChangeLineN(e) {
-		const filters = this.state.filters;
+	_handleChangeLineN(e) {
+		const { queryParams } = this.props;
+		const filters = this._createFilterFromQueryParams(queryParams);
 
+		// update filter based on the 'e' attribute
 		if (e.from > 1) {
 			let lineFromInFilters = false;
 
@@ -372,10 +398,7 @@ CommentaryLayout = React.createClass({
 			}
 		}
 
-
-		this.setState({
-			filters,
-		});
+		this._updateRoute(filters);
 	},
 
 	showLoginModal() {
@@ -391,22 +414,26 @@ CommentaryLayout = React.createClass({
 	},
 
 	render() {
+		const { queryParams } = this.props;
+
+		// create filters object based on the queryParams
+		const filters = this._createFilterFromQueryParams(queryParams);
+
 		return (
 			<div>
 				<div className="chs-layout commentary-layout">
 
 					<Header
-						filters={this.state.filters}
-						toggleSearchTerm={this.toggleSearchTerm}
-						handleChangeLineN={this.handleChangeLineN}
-						handleChangeTextsearch={this.handleChangeTextsearch}
+						filters={filters}
+						toggleSearchTerm={this._toggleSearchTerm}
+						handleChangeLineN={this._handleChangeLineN}
+						handleChangeTextsearch={this._handleChangeTextsearch}
 						initialSearchEnabled
 					/>
 
 					<Commentary
-						filters={this.state.filters}
-						toggleSearchTerm={this.toggleSearchTerm}
-						loadMoreComments={this.loadMoreComments}
+						filters={filters}
+						toggleSearchTerm={this._toggleSearchTerm}
 						showLoginModal={this.showLoginModal}
 					/>
 

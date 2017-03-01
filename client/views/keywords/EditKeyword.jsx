@@ -5,10 +5,7 @@ import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
-import Select from 'react-select';
-import { Creatable } from 'react-select';
-import RichTextEditor from 'react-rte';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -16,10 +13,13 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import { convertToHTML } from 'draft-convert';
+import { fromJS } from 'immutable';
+import Commenters from '/imports/collections/commenters';
+import Keywords from '/imports/collections/keywords';
+import ReferenceWorks from '/imports/collections/referenceWorks';
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
-import { fromJS } from 'immutable';
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
 const { InlineToolbar } = inlineToolbarPlugin;
@@ -47,13 +47,7 @@ EditKeyword = React.createClass({
 
 		let description;
 		if ('description' in keyword && keyword.description) {
-			const blocksFromHTML = convertFromHTML(keyword.description);
-			description = EditorState.createWithContent(
-					ContentState.createFromBlockArray(
-					  blocksFromHTML.contentBlocks,
-					  blocksFromHTML.entityMap
-					)
-				);
+			description = this._getKeywordEditorState(keyword);
 		} else {
 			description = EditorState.createEmpty();
 		}
@@ -126,6 +120,21 @@ EditKeyword = React.createClass({
 			referenceWorksOptions,
 			commentersOptions,
 		};
+	},
+
+	_getKeywordEditorState(keyword) {
+		if (keyword.descriptionRaw) {
+			return EditorState.createWithContent(convertFromRaw(keyword.descriptionRaw));
+		} else if (keyword.description) {
+			const blocksFromHTML = convertFromHTML(keyword.description);
+			return EditorState.createWithContent(
+				ContentState.createFromBlockArray(
+					blocksFromHTML.contentBlocks,
+					blocksFromHTML.entityMap
+				)
+			);
+		}
+		throw new Meteor.Error('missing filed description or descriptionRaw in keyword');
 	},
 
 	onTitleChange(titleEditorState) {
@@ -233,22 +242,25 @@ EditKeyword = React.createClass({
 	},
 
 	handleSubmit(event) {
+		const { textEditorState } = this.state;
 		event.preventDefault();
 
 		const error = this.validateStateForSubmit();
 
 		this.showSnackBar(error);
 
-		const textHtml = convertToHTML({
+		const descriptionHtml = convertToHTML({
 			entityToHTML: (entity, originalText) => {
 				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
+					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
 				}
 			},
-		})(this.state.textEditorState.getCurrentContent());
+		})(textEditorState.getCurrentContent());
+
+		const descriptionRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		if (!error.errors) {
-			this.props.submitForm(this.state, textHtml);
+			this.props.submitForm(this.state, descriptionHtml, descriptionRaw);
 		}
 	},
 
@@ -385,6 +397,9 @@ EditKeyword = React.createClass({
 						autoHideDuration={4000}
 					/>
 
+				</div>
+				<div className="inline-toolbar-wrap">
+					<InlineToolbar />
 				</div>
 			</div>
 		);

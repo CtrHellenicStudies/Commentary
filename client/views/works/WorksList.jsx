@@ -1,5 +1,6 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Works from '/imports/collections/works';
 
 WorksList = React.createClass({
 
@@ -20,7 +21,6 @@ WorksList = React.createClass({
 			works,
 		};
 	},
-
 
 	renderWorks() {
 		if (this.data.works.length === 3) {

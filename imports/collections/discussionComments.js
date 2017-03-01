@@ -1,6 +1,9 @@
-this.DiscussionComments = new Meteor.Collection('discussionComments');
 
-Schemas.DiscussionComments = new SimpleSchema({
+import Tenants from '/imports/collections/tenants';
+
+const DiscussionComments = new Meteor.Collection('discussionComments');
+
+DiscussionComments.schema = new SimpleSchema({
 	user: {
 		type: Object,
 		// Come back to this after redefining the user schemas
@@ -27,7 +30,7 @@ Schemas.DiscussionComments = new SimpleSchema({
 		optional: true,
 	},
 	voters: {
-		type: [Schemas.User],
+		type: [String],
 		optional: true,
 	},
 	reported: {
@@ -62,7 +65,7 @@ Schemas.DiscussionComments = new SimpleSchema({
 	},
 });
 
-DiscussionComments.attachSchema(Schemas.DiscussionComments);
+DiscussionComments.attachSchema(DiscussionComments.schema);
 
 DiscussionComments.attachBehaviour('timestampable', {
   createdAt: 'created',
@@ -70,3 +73,5 @@ DiscussionComments.attachBehaviour('timestampable', {
   updatedAt: 'updated',
   updatedBy: 'updatedBy'
 });
+
+export default DiscussionComments;

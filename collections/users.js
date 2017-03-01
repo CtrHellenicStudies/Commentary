@@ -5,26 +5,24 @@ Schemas.UserProfile = new SimpleSchema({
 	},
 
 	tenantId: {
-	    type: String,
-	    label: "Tenant",
-	    optional: true,
-	    autoform: {
-	    	afFieldInput: {
-	    		type: "select",
-		      options: function () {
-		      	var tenants = [];
-		        _.map(Tenants.find().fetch(), function (tenant) {
-
-		          tenants.push({
-		            label: tenant.subdomain,
-		            value: tenant._id
-		          });
-
-		        });
-		        return tenants;
-		      }
-	    	}
-	    }
+		type: String,
+		label: 'Tenant',
+		optional: true,
+		autoform: {
+			afFieldInput: {
+				type: 'select',
+				options: () => {
+					const tenants = [];
+					_.map(Tenants.find().fetch(), (tenant) => {
+						tenants.push({
+							label: tenant.subdomain,
+							value: tenant._id,
+						});
+					});
+					return tenants;
+				},
+			},
+		},
 	},
 
 	birthday: {
@@ -60,7 +58,7 @@ Schemas.UserProfile = new SimpleSchema({
 	},
 	avatarUrl: {
 		type: String,
-		optional: true
+		optional: true,
 	},
 	location: {
 		type: String,
@@ -120,9 +118,10 @@ Schemas.User = new SimpleSchema({
 	},
 	isAnnotator: {
 		type: Boolean,
-		autoValue: function() {
-			if (this.isInsert)
+		autoValue: function () {
+			if (this.isInsert) {
 				return false;
+			}
 		},
 		autoform: {
 			type: 'hidden',
@@ -159,8 +158,13 @@ Schemas.User = new SimpleSchema({
 		optional: true,
 	},
 	bookmarks: {
-		type: [String],
+		type: Array,
 		optional: true,
+	},
+	'bookmarks.$': {
+		type: Object,
+		optional: true,
+		blackbox: true,
 	},
 	highlightingPreference: {
 		type: Boolean,
@@ -171,18 +175,19 @@ Schemas.User = new SimpleSchema({
 Meteor.users.attachSchema(Schemas.User);
 
 Meteor.users.attachBehaviour('timestampable', {
-  createdAt: 'created',
-  createdBy: 'createdBy',
-  updatedAt: 'updated',
-  updatedBy: 'updatedBy'
+	createdAt: 'created',
+	createdBy: 'createdBy',
+	updatedAt: 'updated',
+	updatedBy: 'updatedBy',
 });
 
 Meteor.users.allow({
-  update: function(userId, doc) {
-  	if (Meteor.userId() == userId)
-  		return true;
-    return false;
-  },
+	update: (userId) => {
+		if (Meteor.userId() === userId) {
+			return true;
+		}
+		return false;
+	},
 });
 
 this.StarterSchemas = Schemas;

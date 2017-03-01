@@ -2,6 +2,7 @@ import { Session } from 'meteor/session';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import DiscussionComments from '/imports/collections/discussionComments';
 
 DiscussionThread = React.createClass({
 

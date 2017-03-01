@@ -1,16 +1,30 @@
+import Comments from '/imports/collections/comments';
+import Commenters from '/imports/collections/commenters';
+import Keywords from '/imports/collections/keywords';
+import Tenants from '/imports/collections/tenants';
+import Works from '/imports/collections/works';
+
 Meteor.method('keyword-webhook', (keywordCandidate) => {
 	check(keywordCandidate.wordpressId, Match.Maybe(Number));
 	check(keywordCandidate.slug, String);
 	check(keywordCandidate.title, String);
 	check(keywordCandidate.type, String);
 	check(keywordCandidate.subdomain, String);
+	check(keywordCandidate.token, String);
+
+
+	const tenant = Tenants.findOne({ subdomain: keywordCandidate.subdomain });
+	const settings = Settings.findOne({ tenantId: tenant._id });
+
+	if (!settings || settings.webhooksToken !== keywordCandidate.token) {
+		throw new Meteor.Error('Webhook publishing not authorized');
+	}
 
 	if (keywordCandidate.type !== 'word' && keywordCandidate.type !== 'idea') {
 		throw new Meteor.Error(
 			`type must be word or idea; was ${keywordCandidate.type}`);
 	}
 
-	const tenant = Tenants.findOne({subdomain: keywordCandidate.subdomain});
 
 	if (!tenant) {
 		throw new Meteor.Error(
@@ -52,8 +66,14 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	check(commentCandidate.subdomain, String);
 	check(commentCandidate.comment_id, Match.Maybe(Number));
 	check(commentCandidate.title, String);
+	check(commentCandidate.token, String);
 
 	const tenant = Tenants.findOne({ subdomain: commentCandidate.subdomain });
+	const settings = Settings.findOne({ tenantId: tenant._id });
+
+	if (!settings || settings.webhooksToken !== commentCandidate.token) {
+		throw new Meteor.Error('Webhook publishing not authorized');
+	}
 
 	if (!tenant) {
 		throw new Meteor.Error(
@@ -159,7 +179,6 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 			{ _id: commentCandidate._id },
 			{ $addToSet: { revisions: revision } });
 		// console.log('Update response:', upsertResponse);
-
 	} else {
 		let nLines = 1;
 		const commentOrder = 0;

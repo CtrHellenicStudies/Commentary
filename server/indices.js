@@ -1,3 +1,7 @@
+import Comments from '/imports/collections/comments';
+import Commenters from '/imports/collections/commenters';
+import TextNodes from '/imports/collections/textNodes';
+
 Comments._ensureIndex({
 	'$**': 'text',
 });

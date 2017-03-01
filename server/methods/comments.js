@@ -1,3 +1,5 @@
+import Comments from '/imports/collections/comments';
+
 Meteor.methods({
 	'comments.insert': function insertComment(comment) {
 		check(comment, Object);
@@ -117,5 +119,11 @@ Meteor.methods({
 
 	users() {
 		console.log(Meteor.user());
+	},
+	'comments.getSuggestions': function getSuggestions(value) {
+		check(value, String);
+
+		if (!value.length) return Comments.find({}, { limit: 5, sort: { created: -1 } }).fetch();
+		return Comments.find({ $text: { $search: value } }, { limit: 5, sort: { created: -1 } }).fetch();
 	},
 });

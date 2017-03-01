@@ -2,6 +2,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import TextNodes from '/imports/collections/textNodes';
 
 CommentLemmaSelect = React.createClass({
 

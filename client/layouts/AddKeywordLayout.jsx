@@ -128,7 +128,7 @@ AddKeywordLayout = React.createClass({
 
 	// --- BEGNI ADD COMMENT --- //
 
-	addKeyword(formData, textValue) {
+	addKeyword(formData, textValue, textRawValue) {
 		this.setState({
 			loading: true,
 		});
@@ -157,6 +157,7 @@ AddKeywordLayout = React.createClass({
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
 			description: textValue,
+			descriptionRaw: textRawValue,
 			type: this.state.selectedType,
 			count: 1,
 			tenantId: Session.get("tenantId"),

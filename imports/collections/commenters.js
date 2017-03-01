@@ -1,6 +1,8 @@
-this.Commenters = new Meteor.Collection('commenters');
+import Tenants from '/imports/collections/tenants';
 
-Schemas.Commenters = new SimpleSchema({
+const Commenters = new Meteor.Collection('commenters');
+
+Commenters.schema = new SimpleSchema({
 	_id: {
 		type: String,
 		optional: true,
@@ -51,14 +53,20 @@ Schemas.Commenters = new SimpleSchema({
 	},
 
 	avatar: {
-		type: String,
 		optional: true,
 		label: 'Profile picture (avatar)',
+		type: afSlingshot.fileSchema,
 		autoform: {
-			afFieldInput: {
-				type: 'adminAvatarEditor',
+		  type: 'slingshot',
+			slingshot: {
+				downloadUrl: (data) => {
+					console.log(data);
+				},
+				directives: [{
+					name: "uploads"
+				}],
 			},
-		},
+		}
 	},
 
 	bio: {
@@ -71,6 +79,7 @@ Schemas.Commenters = new SimpleSchema({
 
 	isAuthor: {
 		type: Boolean,
+		optional: true,
 		autoValue: function() {
 			if (this.isInsert)
 				return false;
@@ -143,7 +152,7 @@ Schemas.Commenters = new SimpleSchema({
 	},
 });
 
-Commenters.attachSchema(Schemas.Commenters);
+Commenters.attachSchema(Commenters.schema);
 Commenters.friendlySlugs('name');
 
 Commenters.attachBehaviour('timestampable', {
@@ -159,6 +168,8 @@ Commenters.allow({
 	return true;
   },
 });
+
+export default Commenters;
 
 // // Manage Roles based to commenters:
 // // TODO: test all hooks

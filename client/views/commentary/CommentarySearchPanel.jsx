@@ -5,6 +5,10 @@ import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import debounce from 'throttle-debounce';
+import Commenters from '/imports/collections/commenters';
+import Keywords from '/imports/collections/keywords';
+import ReferenceWorks from '/imports/collections/referenceWorks';
+import Works from '/imports/collections/works';
 
 CommentarySearchPanel = React.createClass({
 

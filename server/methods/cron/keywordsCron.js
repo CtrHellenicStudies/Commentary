@@ -1,3 +1,7 @@
+
+import Comments from '/imports/collections/comments';
+import Keywords from '/imports/collections/keywords';
+
 Meteor.method('keyword_cron', () => {
 	// console.log(' -- Starting cron: Keywords');
 

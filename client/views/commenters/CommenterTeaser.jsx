@@ -18,17 +18,6 @@ CommenterTeaser = React.createClass({
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-
-		const commenter = this.props.commenter;
-
-		return {
-			commenter,
-		}
-	},
-
 	render() {
 		const commenter = this.props.commenter;
 		const commenterUrl = `/commenters/${commenter.slug}`;
@@ -40,7 +29,7 @@ CommenterTeaser = React.createClass({
 				<a href={commenterUrl}>
 					<div className="commenter-image paper-shadow">
 						{commenter && commenter.avatar ?
-							<AvatarIcon avatar={commenter.avatar} />
+							<AvatarIcon avatar={commenter.avatar.src} />
 						:
 							<img
 								src={commenter && commenter.avatar ? commenter.avatar : '/images/default_user.jpg'}

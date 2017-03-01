@@ -3,6 +3,7 @@ import slugify from 'slugify';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Keywords from '/imports/collections/keywords';
 import 'mdi/css/materialdesignicons.css';
 
 EditKeywordLayout = React.createClass({
@@ -128,7 +129,7 @@ EditKeywordLayout = React.createClass({
 		});
 	},
 
-	updateKeyword(formData, textValue) {
+	updateKeyword(formData, textValue, textRawValue) {
 		this.setState({
 			loading: true,
 		});
@@ -158,6 +159,7 @@ EditKeywordLayout = React.createClass({
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
 			description: textValue,
+			descriptionRaw: textRawValue,
 			type: this.state.selectedType,
 			count: 1,
 			created: new Date(),

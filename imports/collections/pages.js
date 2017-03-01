@@ -1,6 +1,9 @@
-Pages = new Meteor.Collection('pages');
+import Tenants from '/imports/collections/tenants';
 
-Schemas.Pages = new SimpleSchema({
+
+const Pages = new Meteor.Collection('pages');
+
+Pages.schema = new SimpleSchema({
 	title: {
 		type: String,
 	},
@@ -85,6 +88,7 @@ Schemas.Pages = new SimpleSchema({
 						onImageUpload(files) {
 							// upload image to server and create imgNode...
 							// console.log(this, this.id);
+							/*
 							const editorId = this.id;
 							const ONE_MB = 1024 * 100;
 							_.each(files, (file) => {
@@ -131,6 +135,7 @@ Schemas.Pages = new SimpleSchema({
 							// Meteor.call('uploadFiles', files, function(err, res){
 							//     console.log(res);
 							// });
+							*/
 						},
 					},
 				},
@@ -139,6 +144,8 @@ Schemas.Pages = new SimpleSchema({
 	},
 });
 
-Pages.attachSchema(Schemas.Pages);
+Pages.attachSchema(Pages.schema);
 Pages.friendlySlugs('title');
 Pages.attachBehaviour('timestampable');
+
+export default Pages;

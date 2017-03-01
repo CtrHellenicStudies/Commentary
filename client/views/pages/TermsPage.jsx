@@ -1,7 +1,16 @@
 TermsPage = React.createClass({
 
+	getMeteorData() {
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+		return {
+			settings: settingsHandle.ready() ? Settings.findOne() : {}
+		};
+	},
+
 	render() {
-		Utils.setTitle('Terms and Privacy');
+		const { settings } = this.data;
+		Utils.setTitle(`Terms and Privacy | ${settings.title}`);
 		Utils.setDescription('');
 		Utils.setMetaImage(`${location.origin}/images/greek-inscription.jpg`);
 		return (

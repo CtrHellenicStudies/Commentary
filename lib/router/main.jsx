@@ -2,14 +2,12 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import React from 'react';
 import { mount } from 'react-mounter';
-
 FlowRouter.notFound = {
   action() {
     // Render not found page here
     mount(NotFound);
   },
 };
-
 // Global subscription: user data is needed in almost all routes
 let tenantId;
 function subscriptions() {
@@ -18,7 +16,6 @@ function subscriptions() {
 	this.register('tenants', Meteor.subscribe('tenants'));
 }
 FlowRouter.subscriptions = subscriptions;
-
 // check tenant and set document meta
 FlowRouter.triggers.enter([(context) => {
 	if (!Session.get('tenantId')) {
@@ -31,12 +28,10 @@ FlowRouter.triggers.enter([(context) => {
 			subdomain = '';
 			FlowRouter.go("/404");
 		}
-
 		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenant) {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);
 				this.tenantId = tenant._id;
-
 				if (tenant.isAnnotation && !Meteor.userId()) {
 					FlowRouter.go("/sign-in");
 				}
@@ -45,48 +40,39 @@ FlowRouter.triggers.enter([(context) => {
 			}
 		});
 	}
-
 	if (Meteor.isClient) {
 		Utils.setBaseDocMeta();
 	}
-
 	if (Meteor.userId() && Session.get("tenantId")) {
 		let tenant = Tenants.findOne({ _id: Session.get("tenantId") });
-
 		if (tenant && tenant.isAnnotation && FlowRouter.current().path == "/")
 			FlowRouter.go("/profile");
 	}
-
 	this.tenantId = Session.get("tenantId");
 }]);
-
 /*
  * Route groups with permissions
  */
 loggedInGroup = FlowRouter.group({
 	triggersEnter: [AccountsTemplates.ensureSignedIn],
 });
-
 FlowRouter.route('/', {
 	name: 'home',
 	action: () => {
 		mount(HomeLayout);
 	},
 });
-
 FlowRouter.route('/commentary', {
 	name: 'commentary',
 	action: (params, queryParams) => {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
-
 FlowRouter.route('/keywords/add', {
 	action: (params) => {
 		mount(AddKeywordLayout);
 	},
 });
-
 FlowRouter.route('/keywords/:slug/edit', {
 	action: (params) => {
 		mount(MasterLayout, {
@@ -94,7 +80,6 @@ FlowRouter.route('/keywords/:slug/edit', {
 		});
 	},
 });
-
 FlowRouter.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
@@ -102,7 +87,6 @@ FlowRouter.route('/keywords/:slug', {
 		});
 	},
 });
-
 FlowRouter.route('/keywords', {
 	name: 'keywords',
 	action: () => {
@@ -111,7 +95,6 @@ FlowRouter.route('/keywords', {
 		});
 	},
 });
-
 FlowRouter.route('/keyideas', {
 	action: () => {
 		mount(MasterLayout, {
@@ -119,7 +102,6 @@ FlowRouter.route('/keyideas', {
 		});
 	},
 });
-
 FlowRouter.route('/referenceWorks/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
@@ -127,7 +109,6 @@ FlowRouter.route('/referenceWorks/:slug', {
 		});
 	},
 });
-
 FlowRouter.route('/referenceWorks', {
 	name: 'referenceWorks',
 	action: () => {
@@ -136,7 +117,6 @@ FlowRouter.route('/referenceWorks', {
 		});
 	},
 });
-
 FlowRouter.route('/commenters/:slug', {
 	name: 'CommentersDetail',
 	action: (params) => {
@@ -148,7 +128,6 @@ FlowRouter.route('/commenters/:slug', {
 		});
 	},
 });
-
 FlowRouter.route('/commenters', {
 	action: () => {
 		mount(MasterLayout, {
@@ -156,7 +135,6 @@ FlowRouter.route('/commenters', {
 		});
 	},
 });
-
 FlowRouter.route('/about', {
 	action: () => {
 		mount(MasterLayout, {
@@ -164,8 +142,6 @@ FlowRouter.route('/about', {
 		});
 	},
 });
-
-
 FlowRouter.route('/terms', {
 	action: () => {
 		mount(MasterLayout, {
@@ -173,13 +149,11 @@ FlowRouter.route('/terms', {
 		});
 	},
 });
-
 loggedInGroup.route('/commentary/add', {
 	action: () => {
 		mount(AddCommentLayout);
 	},
 });
-
 loggedInGroup.route('/commentary/:commentId/edit', {
 	action: (params) => {
 		mount(AddRevisionLayout, {
@@ -187,7 +161,6 @@ loggedInGroup.route('/commentary/:commentId/edit', {
 		});
 	},
 });
-
 loggedInGroup.route('/profile', {
 	action: () => {
 		mount(UserLayout, {
@@ -195,7 +168,6 @@ loggedInGroup.route('/profile', {
 		});
 	},
 });
-
 FlowRouter.route('/users/:userId', {
 	triggersEnter: [
 		(context, redirect) => {
@@ -212,7 +184,6 @@ FlowRouter.route('/users/:userId', {
 		});
 	},
 });
-
 FlowRouter.route('/users/:userId/:username', {
 	triggersEnter: [
 		(context, redirect) => {
@@ -229,7 +200,6 @@ FlowRouter.route('/users/:userId/:username', {
 		});
 	},
 });
-
 loggedInGroup.route('/account', {
 	action: () => {
 		mount(UserLayout, {
@@ -237,7 +207,6 @@ loggedInGroup.route('/account', {
 		});
 	},
 });
-
 loggedInGroup.route('/sign-out', {
 	triggersEnter: [
 		() => {
@@ -248,8 +217,6 @@ loggedInGroup.route('/sign-out', {
 		// Do nothing
 	},
 });
-
-
 /*
 * Single page view
 * 404 check is in the actual template

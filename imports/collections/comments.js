@@ -1,6 +1,9 @@
-this.Comments = new Meteor.Collection('comments');
+import Tenants from '/imports/collections/tenants';
 
-Schemas.Comments = new SimpleSchema({
+
+const Comments = new Meteor.Collection('comments');
+
+Comments.schema = new SimpleSchema({
 
 	wordpressId: {
 		type: Number,
@@ -8,26 +11,26 @@ Schemas.Comments = new SimpleSchema({
 	},
 
 	tenantId: {
-			type: String,
-			label: "Tenant",
-			optional: true,
-			autoform: {
-				afFieldInput: {
-					type: "select",
-					options: function () {
-						var tenants = [];
-						_.map(Tenants.find().fetch(), function (tenant) {
+		type: String,
+		label: 'Tenant',
+		optional: true,
+		autoform: {
+			afFieldInput: {
+				type: 'select',
+				options() {
+					const tenants = [];
+					_.map(Tenants.find().fetch(), function (tenant) {
 
-							tenants.push({
-								label: tenant.subdomain,
-								value: tenant._id
-							});
-
+						tenants.push({
+							label: tenant.subdomain,
+							value: tenant._id
 						});
-						return tenants;
-					}
+
+					});
+					return tenants;
 				}
 			}
+		}
 	},
 
 	commenters: {
@@ -47,6 +50,12 @@ Schemas.Comments = new SimpleSchema({
 		 */
 	},
 
+	users: {
+		type: [Object],
+		optional: true,
+		blackbox: true,
+	},
+
 	work: {
 		type: Object,
 		optional: true,
@@ -60,7 +69,6 @@ Schemas.Comments = new SimpleSchema({
 		blackbox: true,
 
 	},
-
 
 	lineFrom: {
 		type: Number,
@@ -78,6 +86,11 @@ Schemas.Comments = new SimpleSchema({
 	},
 
 	nLines: {
+		type: Number,
+		optional: true,
+	},
+
+	paragraphN: {
 		type: Number,
 		optional: true,
 	},
@@ -129,7 +142,6 @@ Schemas.Comments = new SimpleSchema({
 		blackbox: true,
 	},
 
-
 	discussionComments: {
 		type: [Object],
 		optional: true,
@@ -149,7 +161,7 @@ Schemas.Comments = new SimpleSchema({
 	},
 });
 
-Comments.attachSchema(Schemas.Comments);
+Comments.attachSchema(Comments.schema);
 
 Comments.attachBehaviour('timestampable', {
   createdAt: 'created',
@@ -157,6 +169,8 @@ Comments.attachBehaviour('timestampable', {
   updatedAt: 'updated',
   updatedBy: 'updatedBy'
 });
+
+export default Comments;
 
 /*
  Comments.helpers({

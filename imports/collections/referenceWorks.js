@@ -1,6 +1,11 @@
-this.ReferenceWorks = new Meteor.Collection('referenceWorks');
 
-Schemas.ReferenceWorks = new SimpleSchema({
+import Commenters from '/imports/collections/commenters';
+import Tenants from '/imports/collections/tenants';
+
+
+const ReferenceWorks = new Meteor.Collection('referenceWorks');
+
+ReferenceWorks.schema = new SimpleSchema({
 	title: {
 		type: String,
 		optional: true,
@@ -84,6 +89,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 						onImageUpload(files) {
 							// upload image to server and create imgNode...
 							// console.log(this, this.id);
+							/*
 							const editorId = this.id;
 							const ONE_MB = 1024 * 100;
 							_.each(files, (file) => {
@@ -132,6 +138,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 							// Meteor.call('uploadFiles', files, function(err, res){
 							//		 console.log(res);
 							// });
+							*/
 						},
 					},
 				},
@@ -152,6 +159,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 						onImageUpload(files) {
 							// upload image to server and create imgNode...
 							// console.log(this, this.id);
+							/*
 							const editorId = this.id;
 							const ONE_MB = 1024 * 100;
 							_.each(files, (file) => {
@@ -199,6 +207,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 							// Meteor.call('uploadFiles', files, function(err, res){
 							//		 console.log(res);
 							// });
+							*/
 						},
 					},
 				},
@@ -207,7 +216,7 @@ Schemas.ReferenceWorks = new SimpleSchema({
 	},
 });
 
-ReferenceWorks.attachSchema(Schemas.ReferenceWorks);
+ReferenceWorks.attachSchema(ReferenceWorks.schema);
 ReferenceWorks.friendlySlugs('title');
 
 ReferenceWorks.attachBehaviour('timestampable', {
@@ -216,3 +225,5 @@ ReferenceWorks.attachBehaviour('timestampable', {
   updatedAt: 'updated',
   updatedBy: 'updatedBy'
 });
+
+export default ReferenceWorks;

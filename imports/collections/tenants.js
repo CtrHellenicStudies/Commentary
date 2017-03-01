@@ -1,6 +1,6 @@
-this.Tenants = new Meteor.Collection('tenants');
+const Tenants = new Meteor.Collection('tenants');
 
-Schemas.Tenants = new SimpleSchema({
+Tenants.schema = new SimpleSchema({
   subdomain: {
     type: String
   },
@@ -13,4 +13,6 @@ Schemas.Tenants = new SimpleSchema({
   }
 });
 
-Tenants.attachSchema(Schemas.Tenants);
+Tenants.attachSchema(Tenants.schema);
+
+export default Tenants;

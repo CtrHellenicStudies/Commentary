@@ -2,6 +2,7 @@ import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
+import DiscussionComments from '/imports/collections/discussionComments';
 
 PublicProfilePage = React.createClass({
 

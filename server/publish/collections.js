@@ -1,3 +1,4 @@
+import Books from '/imports/collections/books';
 import Comments from '/imports/collections/comments';
 import Commenters from '/imports/collections/commenters';
 import DiscussionComments from '/imports/collections/discussionComments';
@@ -279,6 +280,10 @@ if (Meteor.isServer) {
 		}
 		return Pages.find(query);
 	});
+
+	Meteor.publish('works.all', () => Works.find());
+
+	Meteor.publish('books', () => Books.find());
 
 	Meteor.publish('tenants', () => Tenants.find());
 

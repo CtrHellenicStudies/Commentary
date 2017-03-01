@@ -4,7 +4,9 @@ SinglePage = React.createClass({
 	propTypes: {
 		slug: React.PropTypes.string,
 	},
+
 	mixins: [ReactMeteorData],
+
 	getMeteorData() {
 		// console.log(this);
 		const slug = this.props.slug;// FlowRouter.getParam('slug');
@@ -13,9 +15,9 @@ SinglePage = React.createClass({
 		let thumbnails = [];
 		const handle = Meteor.subscribe('pages', slug);
 		let loading = true;
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
 		if (handle.ready()) {
-			// console.log(tweets);
-			// TweetCollection = new Mongo.Collection("tweetCollection");
 			page = Pages.find({ slug }).fetch()[0];
 			const imageSub = Meteor.subscribe('pageImages', slug);
 			if (imageSub.ready()) {
@@ -32,8 +34,10 @@ SinglePage = React.createClass({
 			images,
 			thumbnails,
 			loading,
+			settings: settingsHandle.ready() ? Settings.findOne() : {},
 		};
 	},
+
 	backgroundImages() {
 		setTimeout(() => {
 			$('.background-image-holder').each(function appendImg() {
@@ -73,7 +77,8 @@ SinglePage = React.createClass({
 		}
 
 		if (page && page.title) {
-			Utils.setTitle(page.title);
+			const { settings } = this.data;
+			Utils.setTitle(`${page.title} | ${settings.title}`);
 		}
 		if (headerImageSource) {
 			Utils.setMetaImage(headerImageSource);

@@ -382,7 +382,7 @@ Commentary = React.createClass({
 			&& this.data.commentGroups[0].comments.length
 			&& this.data.commentGroups[0].comments[0].revisions.length
 		) {
-			description = Utils.trunc(this.data.commentGroups[0].comments[0].revisions[0].text, 120);
+			description = Utils.trunc(Utils.getRevisionText(this.data.commentGroups[0].comments[0].revisions[0]), 120);
 		}
 
 		Utils.setMetaTag('name', 'subject', 'content', metaSubject);

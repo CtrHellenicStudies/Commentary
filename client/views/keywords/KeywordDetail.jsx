@@ -10,6 +10,12 @@ KeywordDetail = React.createClass({
 		slug: React.PropTypes.string.isRequired,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
 			keywordReferenceModalVisible: false,
@@ -19,19 +25,15 @@ KeywordDetail = React.createClass({
 		};
 	},
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	mixins: [ReactMeteorData],
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
-		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug, Session.get("tenantId"));
+		Meteor.subscribe('keywords.slug', this.props.slug, Session.get('tenantId'));
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
 
 		// FETCH DATA:
 		const query = {
@@ -41,6 +43,7 @@ KeywordDetail = React.createClass({
 
 		return {
 			keyword,
+			settings: settingsHandle.ready() ? Settings.findOne() : {}
 		};
 	},
 
@@ -48,7 +51,7 @@ KeywordDetail = React.createClass({
 		const keyword = this.data.keyword;
 		Meteor.call('keywords.delete', keyword._id, (error, keywordId) => {
 			if (error) {
-				console.log(error);
+				console.log(keywordId, error);
 			} else {
 				FlowRouter.go('/keywords');
 			}
@@ -57,7 +60,7 @@ KeywordDetail = React.createClass({
 
 	_keywordDescriptionOnClick(e) {
 		const $target = $(e.target);
-		let upperOffset = 90;
+		const upperOffset = 90;
 		if ($target.hasClass('keyword-gloss')) {
 			const keyword = $target.data().link.replace('/keywords/', '');
 			this.setState({
@@ -80,12 +83,13 @@ KeywordDetail = React.createClass({
 
 	render() {
 		const keyword = this.data.keyword;
+		const { settings } = this.data;
 
 		if (!keyword) {
 			return <div />;
 		}
 
-		Utils.setTitle(keyword.title);
+		Utils.setTitle(`${keyword.title} | ${settings.title}`);
 		if (keyword.description) {
 			Utils.setDescription(Utils.trunc(keyword.description, 150));
 		}
@@ -140,9 +144,9 @@ KeywordDetail = React.createClass({
 								onClick={this._keywordDescriptionOnClick}
 							/>
 						:
-							<p className="no-description-available">
-								No description available.
-							</p>
+								<p className="no-description-available">
+									No description available.
+								</p>
 						}
 					</section>
 
@@ -162,5 +166,4 @@ KeywordDetail = React.createClass({
 			</div>
 		);
 	},
-
 });

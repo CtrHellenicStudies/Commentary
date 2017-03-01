@@ -68,10 +68,13 @@ Commentary = React.createClass({
 			isMoreComments = false;
 		}
 
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
 		return {
 			commentGroups,
 			isMoreComments,
 			loading: commentsSub.ready(),
+			settings: settingsHandle.ready() ? Settings.findOne() : {},
 		};
 	},
 
@@ -355,16 +358,22 @@ Commentary = React.createClass({
 
 		const foundWork = Works.findOne({ slug: work });
 		const workTitle = foundWork ? foundWork.title : work;
+		const { settings } = this.data;
 
-		title = `${workTitle}`;
+		title = workTitle;
 		if (subwork) title = `${title} ${subwork}`;
 		if (lineFrom) {
-			if (lineTo) title = `${title} ${lineFrom}-${lineTo}`;
-			else title = `${title} ${lineFrom}`;
+			if (lineTo) {
+				title = `${title} ${lineFrom}-${lineTo}`;
+			} else {
+				title = `${title} ${lineFrom}`;
+			}
+		} else if (lineTo) {
+			title = `${title} ${lineTo}`;
 		} else {
-			if (lineTo) title = `${title} ${lineTo}`;
-			else title = `${title}`;
+			title = `${title}`;
 		}
+		title = `${title} | ${settings.title}`;
 
 		metaSubject = `${metaSubject}, ${title}, Philology`;
 

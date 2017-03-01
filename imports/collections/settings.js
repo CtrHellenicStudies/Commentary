@@ -65,6 +65,66 @@ Settings.schema = new SimpleSchema({
 			},
 		},
 	},
+
+	homepageCover: {
+		optional: true,
+		label: 'Homepage Cover Image',
+		type: afSlingshot.fileSchema,
+		autoform: {
+		  type: 'slingshot',
+			slingshot: {
+				downloadUrl: (data) => {
+					console.log(data);
+				},
+				directives: [{
+					name: "uploads"
+				}],
+			},
+		}
+	},
+
+	homepageIntroductionTitle: {
+		optional: true,
+		type: String,
+	},
+
+	homepageIntroductionImage: {
+		optional: true,
+		label: 'Homepage Introduction Image',
+		type: afSlingshot.fileSchema,
+		autoform: {
+		  type: 'slingshot',
+			slingshot: {
+				downloadUrl: (data) => {
+					console.log(data);
+				},
+				directives: [{
+					name: "uploads"
+				}],
+			},
+		}
+	},
+
+	homepageIntroductionImageCaption: {
+		optional: true,
+		type: String,
+	},
+
+	homepageIntroductionText: {
+		optional: true,
+		type: String,
+	},
+
+	homepageIntroductionLink: {
+		optional: true,
+		type: String,
+	},
+
+	homepageIntroductionLinkText: {
+		optional: true,
+		type: String,
+	},
+
 });
 
 Settings.attachSchema(Settings.schema);

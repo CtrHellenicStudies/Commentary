@@ -1,5 +1,7 @@
 AboutPage = React.createClass({
 
+	mixins: [ReactMeteorData],
+
 	getMeteorData() {
 		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 

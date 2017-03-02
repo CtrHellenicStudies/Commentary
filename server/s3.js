@@ -23,6 +23,6 @@ Slingshot.createDirective('uploads', Slingshot.S3Storage, {
 	key: function (file) {
 		// Store file into a directory by the user's username.
 		const user = Meteor.users.findOne(this.userId);
-		return `${user._id} / ${file.name}`;
+		return `${user._id}/${file.name}`;
 	},
 });

@@ -1,6 +1,7 @@
 import Comments from '/imports/collections/comments';
 import Commenters from '/imports/collections/commenters';
 import Keywords from '/imports/collections/keywords';
+import Revisions from '/imports/collections/revisions';
 import Tenants from '/imports/collections/tenants';
 import Works from '/imports/collections/works';
 
@@ -24,24 +25,12 @@ Meteor.method('publishComments', (commentCandidate) => {
 	}
 
 	const commenters = [];
-
-	// console.log('Potential comment:', commentCandidate);
-	// if (commentCandidate.keywords && commentCandidate.keywords.length > 0) {
-	// 	console.log('keywords:', commentCandidate.keywords);
-	// }
-
-	/*
-	 comment_candidate.commenters.forEach(function(commenter_wordpress_id, i){
-	 commenters.push(Commenters.findOne({wordpressId: commenter_wordpress_id}));
-	 });
-	 */
 	let commenter = null;
 	if (commentCandidate.commenter) {
 		commenter = Commenters.findOne({ slug: commentCandidate.commenter });
 	}
 	if (!commenter) {
 		console.error(`Could not find commenter with slug:${commentCandidate.commenter}`);
-		// return false;
 	} else {
 		commenters.push(commenter);
 	}
@@ -60,7 +49,6 @@ Meteor.method('publishComments', (commentCandidate) => {
 
 	if (!subwork) {
 		console.error(`Could not find subwork with n:${commentCandidate.subwork} work:${work.slug}`);
-		// return false;
 		if (commentCandidate.subwork) {
 			const newSubwork = {
 				title: String(commentCandidate.subwork),
@@ -90,12 +78,6 @@ Meteor.method('publishComments', (commentCandidate) => {
 	}
 
 	let upsertResponse;
-	// console.log("Work:", work);
-	// console.log("Subwork:", subwork);
-	// console.log("Commenters:", commenters);
-	// console.log("Keywords:", keywords);
-	// console.log("Revision:", revision);
-	// console.log("Comment:", comment);
 
 	if (comment) {
 		let revisionExists = false;
@@ -121,7 +103,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 		upsertResponse = Comments.update(
 			{ _id: commentCandidate._id },
 			{ $addToSet: { revisions: revision } });
-		// console.log('Update response:', upsertResponse);
+
 	} else {
 		let nLines = 1;
 		const commentOrder = 0;
@@ -205,7 +187,6 @@ Meteor.method('publishComments', (commentCandidate) => {
 }, {
 	url: 'comments/webhook',
 	getArgsFromRequest(request) {
-		// Sometime soon do validation here
 		const content = request.body;
 		return [content];
 	},

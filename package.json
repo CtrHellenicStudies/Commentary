@@ -64,6 +64,7 @@
     "react-sticky": "^5.0.5",
     "react-tap-event-plugin": "^2.0.1",
     "shortcode-parser": "0.0.1",
+    "simple-git": "^1.66.0",
     "simple-react-form": "^1.8.1",
     "simple-react-form-material-ui": "^1.7.5",
     "slug": "^0.9.1",

@@ -6,6 +6,7 @@ export default function AvatarIcon(props) {
 	} else if (props.defaultUrl) {
 		url = prop.defaultUrl;
 	}
+	url = url.replace(/\s/g, '', 'X');
 
 	return <div className="avatar-icon" style={{backgroundImage: `url(${url})`}} alt="icon" />;
 }

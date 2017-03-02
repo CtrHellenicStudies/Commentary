@@ -7,7 +7,6 @@ CommenterTeaser = React.createClass({
 
 	propTypes: {
 		commenter: React.PropTypes.object.isRequired,
-		commenterAvatarUrl: React.PropTypes.string,
 	},
 
 	childContextTypes: {

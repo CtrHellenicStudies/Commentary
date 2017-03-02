@@ -121,11 +121,11 @@ CommenterDetail = React.createClass({
 							<br />
 							<br />
 
-							<CommenterReferenceWorks
-								commenter={commenter}
-							/>
-
 						</section>
+
+						<CommenterReferenceWorks
+							commenter={commenter}
+						/>
 
 						<CommentsRecent />
 					</div>

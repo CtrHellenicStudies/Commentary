@@ -151,7 +151,7 @@ HomeView = React.createClass({
 									<RaisedButton
 										className="cover-link dark "
 										href={settings.homepageIntroductionLink}
-										label={settings.homepageIntroductionText}
+										label={settings.homepageIntroductionLinkText}
 									/>
 
 								</div>

@@ -306,18 +306,6 @@ CommentDetail = React.createClass({
 				>
 					<div className="comment-fixed-title-wrap paper-shadow">
 						<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
-						{/* (commentGroup.selectedLemmaEdition.lines.length) ?
-						 <p
-						 className="comment-fixed-lemma lemma-text"
-						 dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
-						 .lines[0].html}}
-						 ></p>
-						 : ""*/}
-
-						{/* commentGroup.selectedLemmaEdition.lines.length > 1 ?
-						 <span className="fixed-title-lemma-ellipsis">&hellip;</span>
-						 : "" */}
-
 						{comment.commenters.map((commenter) => (
 							<a
 								key={commenter._id}
@@ -328,11 +316,9 @@ CommentDetail = React.createClass({
 								</span>
 							</a>
 						))}
-
 					</div>
 
 					<div className="comment-upper">
-
 						<div className="comment-upper-left">
 							<h1 className="comment-title">{selectedRevision.title}</h1>
 						</div>
@@ -393,7 +379,7 @@ CommentDetail = React.createClass({
 						{selectedRevisionIndex === comment.revisions.length - 1 ?
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision)}
+								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
 								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:

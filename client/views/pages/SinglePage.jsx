@@ -34,7 +34,7 @@ SinglePage = React.createClass({
 			images,
 			thumbnails,
 			loading,
-			settings: settingsHandle.ready() ? Settings.findOne() : {},
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
 		};
 	},
 

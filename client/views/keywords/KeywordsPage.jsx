@@ -5,11 +5,13 @@ KeywordsPage = React.createClass({
 		title: React.PropTypes.string.isRequired,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getMeteorData() {
 		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 		return {
-			settings: settingsHandle.ready() ? Settings.findOne() : {}
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
 		};
 	},
 

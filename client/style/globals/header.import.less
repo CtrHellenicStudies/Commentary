@@ -210,18 +210,19 @@ header {
 }
 
 
-
-
 .headroom {
 	.transition( transform 00ms linear );
 }
+
 .headroom--pinned {
 	.transition( transform 200ms linear );
 	transform: translateY(0%) translateZ(0);
 }
+
 .headroom--unpinned {
 	transform: translateY(-100%) translateZ(0);
 }
+
 .comment-index header {
   &.headroom--unpinned{
     transform: translateY(0%) translateZ(0);
@@ -286,6 +287,15 @@ header {
 			color:@light;
 		}
 
+	}
+}
+
+
+.home-layout {
+	header.headroom--top {
+		.header-home-link {
+			display:none;
+		}
 	}
 }
 

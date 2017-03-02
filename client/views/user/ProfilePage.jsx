@@ -43,7 +43,7 @@ ProfilePage = React.createClass({
 
 	getMeteorData() {
 		let discussionComments = [];
-
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 		const handle = Meteor.subscribe('user.discussionComments',
 			{tenantId: Session.get("tenantId")},
 			this.state.skip,
@@ -84,6 +84,7 @@ ProfilePage = React.createClass({
 
 		return {
 			discussionComments,
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' },
 		};
 	},
 
@@ -180,6 +181,7 @@ ProfilePage = React.createClass({
 
 	render() {
 		let currentUser = this.props.user;
+		const { settings } = this.data;
 		if (!currentUser) {
 			currentUser = { profile: {} };
 		}
@@ -192,6 +194,10 @@ ProfilePage = React.createClass({
 		const changePwdStyle = {
 			margin: '11px 0 0 0',
 		};
+
+		Utils.setTitle(`Profile Page | ${settings.title}`);
+		Utils.setDescription('');
+		Utils.setMetaImage('');
 
 		return (
 			(currentUser ?

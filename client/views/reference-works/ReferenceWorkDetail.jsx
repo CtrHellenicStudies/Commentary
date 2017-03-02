@@ -14,6 +14,7 @@ ReferenceWorkDetail = React.createClass({
 		// SUBSCRIPTIONS:
 		Meteor.subscribe('referenceWorks.slug', this.props.slug, Session.get("tenantId"));
 		Meteor.subscribe('commenters', Session.get("tenantId"));
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 		// FETCH DATA:
 		const query = {
@@ -31,6 +32,7 @@ ReferenceWorkDetail = React.createClass({
 		return {
 			referenceWork,
 			commenters,
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' },
 		};
 	},
 
@@ -47,8 +49,7 @@ ReferenceWorkDetail = React.createClass({
 	},
 
 	render() {
-		const referenceWork = this.data.referenceWork;
-		const commenters = this.data.commenters;
+		const { referenceWork, commenters, settings } = this.data;
 		const commentersNames = [];
 		commenters.forEach((commenter) => {
 			commentersNames.push(commenter.name);
@@ -58,7 +59,7 @@ ReferenceWorkDetail = React.createClass({
 			return <div />;
 		}
 
-		Utils.setTitle(`${referenceWork.title} ${commenters.join(', ')}`);
+		Utils.setTitle(`${referenceWork.title} ${commenters.join(', ')} | ${settings.title}`);
 		Utils.setDescription(Utils.trunc(referenceWork.description, 150));
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 

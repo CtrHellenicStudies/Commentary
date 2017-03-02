@@ -2,12 +2,14 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import React from 'react';
 import { mount } from 'react-mounter';
+
 FlowRouter.notFound = {
-  action() {
-    // Render not found page here
-    mount(NotFound);
-  },
+	action() {
+		// Render not found page here
+		mount(NotFound);
+	},
 };
+
 // Global subscription: user data is needed in almost all routes
 let tenantId;
 function subscriptions() {
@@ -16,6 +18,7 @@ function subscriptions() {
 	this.register('tenants', Meteor.subscribe('tenants'));
 }
 FlowRouter.subscriptions = subscriptions;
+
 // check tenant and set document meta
 FlowRouter.triggers.enter([(context) => {
 	if (!Session.get('tenantId')) {
@@ -221,15 +224,13 @@ loggedInGroup.route('/sign-out', {
 * Single page view
 * 404 check is in the actual template
 */
-// FlowRouter.route('/:slug', {
-// 	action(params) {
-// 		// console.log(params);
-// 		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
-// 		// console.log(reservedRoutes.indexOf(params.slug));
-// 		if (reservedRoutes.indexOf(params.slug) === -1) {
-// 			mount(MasterLayout, {
-// 				content: <SinglePage slug={params.slug} />,
-// 			});
-// 		}
-// 	},
-// });
+FlowRouter.route('/:slug', {
+	action(params) {
+		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
+		if (reservedRoutes.indexOf(params.slug) === -1) {
+			mount(MasterLayout, {
+				content: <SinglePage slug={params.slug} />,
+			});
+		}
+	},
+});

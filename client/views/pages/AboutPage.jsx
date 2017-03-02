@@ -34,12 +34,9 @@ AboutPage = React.createClass({
 
 						<div className="grid inner">
 							<div className="center-content">
-
 								<div className="page-title-wrap">
-									<h2 className="page-title ">About the Commentary</h2>
+									<h1 className="page-title ">About the Commentary</h1>
 								</div>
-
-
 							</div>
 						</div>
 					</div>

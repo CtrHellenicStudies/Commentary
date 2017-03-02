@@ -283,6 +283,8 @@ if (Meteor.isServer) {
 
 	Meteor.publish('works.all', () => Works.find());
 
+	Meteor.publish('commenters.all', () => Commenters.find());
+
 	Meteor.publish('books', () => Books.find());
 
 	Meteor.publish('tenants', () => Tenants.find());

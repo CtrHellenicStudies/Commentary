@@ -4,10 +4,22 @@ ReferenceWorksPage = React.createClass({
 		title: React.PropTypes.string.isRequired,
 	},
 
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+		return {
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		};
+	},
+
 	render() {
-		Utils.setTitle('Reference Works');
-		Utils.setDescription(`Reference Works for ${Config.title()}`);
+		const { settings } = this.data;
+		Utils.setTitle(`Reference Works | ${settings.title}`);
+		Utils.setDescription(`Reference Works for ${settings.title}`);
 		Utils.setMetaImage(`${location.origin}/images/achilles_2.jpg`);
+
 		return (
 			<div className="page reference-works-page">
 				<div className="content primary">

@@ -6,7 +6,7 @@ CommentersPage = React.createClass({
 		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 		return {
-			settings: settingsHandle.ready() ? Settings.findOne() : {}
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
 		};
 	},
 

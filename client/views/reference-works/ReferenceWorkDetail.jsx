@@ -108,10 +108,11 @@ ReferenceWorkDetail = React.createClass({
 									}
 
 									return (
-										<span>
+										<span
+											key={i}
+										>
 											<a
 												href={`/commenters/${commenter.slug}`}
-												key={i}
 											>
 												{commenter.name}
 											</a>{ending}

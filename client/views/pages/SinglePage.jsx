@@ -42,6 +42,7 @@ SinglePage = React.createClass({
 	},
 
 	backgroundImages() {
+		/*
 		setTimeout(() => {
 			$('.background-image-holder').each(function appendImg() {
 				const imgSrc = $(this).children('img').attr('src');
@@ -58,6 +59,7 @@ SinglePage = React.createClass({
 				});
 			}, 500);
 		}, 100);
+		*/
 	},
 
 	render() {
@@ -95,7 +97,7 @@ SinglePage = React.createClass({
 						/>
 					</div>
 
-					<div className="background-screen brown" />
+					<div className="block-screen brown" />
 
 					<div className="container v-align-transform">
 						<div className="grid inner">

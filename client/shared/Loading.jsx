@@ -3,6 +3,7 @@ Loading = React.createClass({
 		return (
 			<div className="loading">
 				<section className="block header header-page cover">
+					<div className="block-screen brown" />
 					<div className="container v-align-transform">
 						<div className="row">
 							<div className="col-sm-10 col-sm-offset-1 text-center">

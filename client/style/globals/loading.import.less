@@ -7,12 +7,15 @@
 	}
 	.page-content {
 		height:600px;
+		max-width:700px;
+		width:100%;
 	}
 }
 
 .loading-mock {
-		-webkit-animation: flash linear 1.2s infinite;
-		animation: flash linear 1.2s infinite;
+	border-radius:2px;
+	-webkit-animation: flash linear 1.2s infinite;
+	animation: flash linear 1.2s infinite;
 }
 
 .title-filler {
@@ -26,11 +29,14 @@
 }
 
 .content-filler {
-	background:#ccc;
+	background:#aaa;
 	height:30px;
 	width:100%;
-	max-width:700px;
-	margin:25px auto;
+	margin:25px 0;
+
+	&.content-filler-2 {
+		width:70%;
+	}
 }
 
 @-webkit-keyframes page-head-fade {

@@ -55,7 +55,8 @@ HomeView = React.createClass({
 		let introImageCaption = '';
 
 		if (
-			settings.homepageCover
+			settings
+			&& settings.homepageCover
 			&& settings.homepageCover.length
 		) {
 			imageUrl = settings.homepageCover;

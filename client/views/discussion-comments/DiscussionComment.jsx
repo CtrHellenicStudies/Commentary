@@ -277,7 +277,7 @@ DiscussionComment = React.createClass({
 							/>
 							: ''
 						}
-						<div className={`more-options share-options ${this.state.shareOptionsVisible ? 'more-options--visible' : ''}`}>
+						{/*}<div className={`more-options share-options ${this.state.shareOptionsVisible ? 'more-options--visible' : ''}`}>
 							<FlatButton
 								label="Facebook"
 								href="#"
@@ -301,7 +301,7 @@ DiscussionComment = React.createClass({
 								href="#"
 								className="discussion-comment-button"
 								icon={<FontIcon className="mdi mdi-email-outline" />}
-							/>
+							/>*/}
 						</div>
 					</div>
 

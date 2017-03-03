@@ -10,10 +10,10 @@ import Works from '/imports/collections/works';
 CommentarySearchToolbar = React.createClass({
 
 	propTypes: {
-		filters: React.PropTypes.array,
-		toggleSearchTerm: React.PropTypes.func,
-		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeLineN: React.PropTypes.func,
+		filters: React.PropTypes.array.isRequired,
+		toggleSearchTerm: React.PropTypes.func.isRequired,
+		handleChangeTextsearch: React.PropTypes.func.isRequired,
+		handleChangeLineN: React.PropTypes.func.isRequired,
 		addCommentPage: React.PropTypes.bool,
 	},
 
@@ -46,8 +46,8 @@ CommentarySearchToolbar = React.createClass({
 
 		if (!this.props.addCommentPage) {
 			Meteor.subscribe('commenters');
-			Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
-			Meteor.subscribe('referenceWorks', Session.get("tenantId"));
+			Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+			Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 		}
 		Meteor.subscribe('works');
 
@@ -106,6 +106,7 @@ CommentarySearchToolbar = React.createClass({
 	},
 
 	render() {
+		const self = this;
 		const filters = this.props.filters;
 
 		const styles = {
@@ -173,7 +174,7 @@ CommentarySearchToolbar = React.createClass({
 							return (
 								<SearchTermButton
 									key={i}
-									toggleSearchTerm={this.toggleSearchTerm}
+									toggleSearchTerm={self.toggleSearchTerm}
 									label={keyword.title}
 									searchTermKey="keywords"
 									value={keyword}
@@ -206,7 +207,7 @@ CommentarySearchToolbar = React.createClass({
 							return (
 								<SearchTermButton
 									key={i}
-									toggleSearchTerm={this.toggleSearchTerm}
+									toggleSearchTerm={self.toggleSearchTerm}
 									label={keyidea.title}
 									searchTermKey="keyideas"
 									value={keyidea}
@@ -238,7 +239,7 @@ CommentarySearchToolbar = React.createClass({
 							return (
 								<SearchTermButton
 									key={i}
-									toggleSearchTerm={this.toggleSearchTerm}
+									toggleSearchTerm={self.toggleSearchTerm}
 									label={commenter.name}
 									searchTermKey="commenters"
 									value={commenter}
@@ -260,7 +261,7 @@ CommentarySearchToolbar = React.createClass({
 							filters.forEach((filter) => {
 								if (filter.key === 'reference') {
 									filter.values.forEach((value) => {
-										if (reference.slug === value.slug) {
+										if (reference.title === value.title) {
 											active = true;
 										}
 									});
@@ -270,7 +271,7 @@ CommentarySearchToolbar = React.createClass({
 							return (
 								<SearchTermButton
 									key={i}
-									toggleSearchTerm={this.toggleSearchTerm}
+									toggleSearchTerm={self.toggleSearchTerm}
 									label={Utils.trunc(reference.title, 30)}
 									searchTermKey="reference"
 									value={reference}
@@ -301,7 +302,7 @@ CommentarySearchToolbar = React.createClass({
 						return (
 							<SearchTermButton
 								key={i}
-								toggleSearchTerm={this.toggleSearchTerm}
+								toggleSearchTerm={self.toggleSearchTerm}
 								label={work.title}
 								searchTermKey="works"
 								value={work}
@@ -349,7 +350,7 @@ CommentarySearchToolbar = React.createClass({
 								return (
 									<SearchTermButton
 										key={i}
-										toggleSearchTerm={this.toggleSearchTerm}
+										toggleSearchTerm={self.toggleSearchTerm}
 										label={`${work.title} ${subwork.title}`}
 										searchTermKey="subworks"
 										value={subwork}
@@ -408,7 +409,7 @@ CommentarySearchToolbar = React.createClass({
 								return (
 									<SearchTermButton
 										key={i}
-										toggleSearchTerm={this.toggleSearchTerm}
+										toggleSearchTerm={self.toggleSearchTerm}
 										label={keyword.title}
 										searchTermKey="keywords"
 										value={keyword}
@@ -438,7 +439,7 @@ CommentarySearchToolbar = React.createClass({
 								return (
 									<SearchTermButton
 										key={i}
-										toggleSearchTerm={this.toggleSearchTerm}
+										toggleSearchTerm={self.toggleSearchTerm}
 										label={keyidea.title}
 										searchTermKey="keyideas"
 										value={keyidea}
@@ -468,7 +469,7 @@ CommentarySearchToolbar = React.createClass({
 								return (
 									<SearchTermButton
 										key={i}
-										toggleSearchTerm={this.toggleSearchTerm}
+										toggleSearchTerm={self.toggleSearchTerm}
 										label={commenter.name}
 										searchTermKey="commenters"
 										value={commenter}
@@ -488,7 +489,7 @@ CommentarySearchToolbar = React.createClass({
 								filters.forEach((filter) => {
 									if (filter.key === 'reference') {
 										filter.values.forEach((value) => {
-											if (reference.slug === value.slug) {
+											if (reference.title === value.title) {
 												active = true;
 											}
 										});
@@ -498,7 +499,7 @@ CommentarySearchToolbar = React.createClass({
 								return (
 									<SearchTermButton
 										key={i}
-										toggleSearchTerm={this.toggleSearchTerm}
+										toggleSearchTerm={self.toggleSearchTerm}
 										label={Utils.trunc(reference.title, 30)}
 										searchTermKey="reference"
 										value={reference}

@@ -10,10 +10,10 @@ Header = React.createClass({
 	mixins: [ReactMeteorData],
 
 	propTypes: {
-		filters: React.PropTypes.array,
-		toggleSearchTerm: React.PropTypes.func,
-		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeLineN: React.PropTypes.func,
+		filters: React.PropTypes.array.isRequired,
+		toggleSearchTerm: React.PropTypes.func.isRequired,
+		handleChangeTextsearch: React.PropTypes.func.isRequired,
+		handleChangeLineN: React.PropTypes.func.isRequired,
 		initialSearchEnabled: React.PropTypes.bool,
 		addCommentPage: React.PropTypes.bool,
 
@@ -196,6 +196,7 @@ Header = React.createClass({
 					handleChangeLineN={this.props.handleChangeLineN}
 					open={this.state.rightMenuOpen}
 					closeRightMenu={this.closeRightMenu}
+					filters={filters}
 				/>
 				<header >
 					{!this.state.searchEnabled ?
@@ -327,7 +328,7 @@ Header = React.createClass({
 												handleChangeTextsearch={this.props.handleChangeTextsearch}
 												handleChangeLineN={this.props.handleChangeLineN}
 												filters={filters}
-												addCommentPage={this.props.addCommentPage ? true : false}
+												addCommentPage={this.props.addCommentPage}
 											/>
 											<div className="search-toggle">
 												<IconButton

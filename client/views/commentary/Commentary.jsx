@@ -373,7 +373,7 @@ Commentary = React.createClass({
 		} else {
 			title = `${title}`;
 		}
-		title = `${title} | ${settings.title}`;
+		title = `${title} | ${settings.title || ''}`;
 
 		metaSubject = `${metaSubject}, ${title}, Philology`;
 

@@ -13,10 +13,10 @@ import Works from '/imports/collections/works';
 CommentarySearchPanel = React.createClass({
 
 	propTypes: {
-		filters: React.PropTypes.array,
-		toggleSearchTerm: React.PropTypes.func,
-		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeLineN: React.PropTypes.func,
+		filters: React.PropTypes.array.isRequired,
+		toggleSearchTerm: React.PropTypes.func.isRequired,
+		handleChangeTextsearch: React.PropTypes.func.isRequired,
+		handleChangeLineN: React.PropTypes.func.isRequired,
 		open: React.PropTypes.bool,
 		closeRightMenu: React.PropTypes.func,
 	},
@@ -47,11 +47,11 @@ CommentarySearchPanel = React.createClass({
 		let referenceWorks = [];
 
 		if (!this.props.addCommentPage) {
-			Meteor.subscribe('commenters', Session.get("tenantId"));
-			Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
-			Meteor.subscribe('referenceWorks', Session.get("tenantId"));
+			Meteor.subscribe('commenters', Session.get('tenantId'));
+			Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+			Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 		}
-		Meteor.subscribe('works', Session.get("tenantId"));
+		Meteor.subscribe('works', Session.get('tenantId'));
 
 		// FETCH DATA:
 		keyideas = Keywords.find({ type: 'idea' }).fetch();
@@ -371,12 +371,12 @@ CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{this.data.referenceWorks.map((reference, i) => {
+						{self.data.referenceWorks.map((reference, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'reference') {
 									filter.values.forEach((value) => {
-										if (reference.slug === value.slug) {
+										if (reference.title === value.title) {
 											active = true;
 										}
 									});
@@ -386,7 +386,7 @@ CommentarySearchPanel = React.createClass({
 							return (
 								<SearchTermButtonPanel
 									key={i}
-									toggleSearchTerm={this.toggleSearchTerm}
+									toggleSearchTerm={self.toggleSearchTerm}
 									label={Utils.trunc(reference.title, 30)}
 									searchTermKey="reference"
 									value={reference}

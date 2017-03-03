@@ -28,9 +28,13 @@ HomeLayout = React.createClass({
 	render() {
 		return (
 			<div className="chs-layout home-layout">
-				<Header />
+				<Header
+					isOnHomeView
+				/>
 
-				<HomeView settings={this.data.settings} />
+				<HomeView
+					settings={this.data.settings}
+				/>
 
 				<Footer />
 

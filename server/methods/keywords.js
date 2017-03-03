@@ -4,7 +4,7 @@ Meteor.methods({
 	'keywords.insert': function insertKeywords(keywords) {
 		check(keywords, [Object]);
 		// Make sure the user is logged in before inserting
-		if (!this.userId) {
+		if (!Meteor.userId()) {
 			throw new Meteor.Error('not-authorized');
 		}
 		const keywordsIds = [];

@@ -1,3 +1,4 @@
+import Books from '/imports/collections/books';
 import Comments from '/imports/collections/comments';
 import Commenters from '/imports/collections/commenters';
 import DiscussionComments from '/imports/collections/discussionComments';
@@ -8,6 +9,7 @@ import ReferenceWorks from '/imports/collections/referenceWorks';
 import Tenants from '/imports/collections/tenants';
 import TextNodes from '/imports/collections/textNodes';
 import Works from '/imports/collections/works';
+import Settings from '/imports/collections/settings';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {
@@ -280,7 +282,17 @@ if (Meteor.isServer) {
 		return Pages.find(query);
 	});
 
+	Meteor.publish('works.all', () => Works.find());
+
+	Meteor.publish('referenceWorks.all', () => ReferenceWorks.find());
+
+	Meteor.publish('commenters.all', () => Commenters.find());
+
+	Meteor.publish('books', () => Books.find());
+
 	Meteor.publish('tenants', () => Tenants.find());
+
+	Meteor.publish('settings', () => Settings.find());
 
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));

@@ -28,23 +28,6 @@ Settings.schema = new SimpleSchema({
 	'emails.contact': {
 		type: String,
 	},
-	legal: {
-		type: Object,
-	},
-	'legal.address': {
-		type: String,
-		optional: true,
-	},
-	'legal.name': {
-		type: String,
-		optional: true,
-	},
-	'legal.url': {
-		type: String,
-		autoValue() {
-			if (this.isInsert) { return Meteor.absoluteUrl(); }
-		},
-	},
 	tenantId: {
 		type: String,
 		label: 'Tenant',

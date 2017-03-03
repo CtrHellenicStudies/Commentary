@@ -4,12 +4,12 @@
 # but you can also edit it by hand.
 
 # Packages from meteor-starter template application
-less@2.7.8
+less@2.7.9
 accounts-ui@1.1.9
-accounts-password@1.3.3
-accounts-facebook@1.0.11
-accounts-google@1.0.11
-accounts-twitter@1.1.12
+accounts-password@1.3.4
+accounts-facebook@1.1.0
+accounts-google@1.1.0
+accounts-twitter@1.2.0
 aldeed:collection2
 dburles:collection-helpers
 matb33:collection-hooks
@@ -30,12 +30,12 @@ natestrauser:animate-css
 timmyg:wow
 tsega:skrollr
 meteor-base@1.0.4
-mongo@1.1.14
+mongo@1.1.15
 blaze-html-templates@1.0.4
 session@1.1.7
 jquery@1.11.10
-tracker@1.1.1
-logging@1.1.16
+tracker@1.1.2
+logging@1.1.17
 reload@1.1.11
 random@1.0.10
 ejson@1.0.13
@@ -51,17 +51,17 @@ useraccounts:bootstrap
 useraccounts:flow-routing@1.14.3
 
 # Packages added for project
-http@1.2.10
+http@1.2.11
 react
-ecmascript@0.6.1
+ecmascript@0.6.3
 es5-shim@4.6.15
 archimedigital:core
 kadira:flow-router
 kadira:react-layout
 kadira:blaze-layout
 user-thumbs
-standard-minifier-css@1.3.2
-standard-minifier-js@1.2.1
+standard-minifier-css@1.3.3
+standard-minifier-js@1.2.2
 simple:rest
 dburles:google-maps
 todda00:friendly-slugs
@@ -83,7 +83,7 @@ jalik:ufs
 sach:flow-db-admin
 meteorhacks:ssr
 okgrow:router-autoscroll
-shell-server@0.2.1
+shell-server@0.2.2
 zimme:collection-timestampable
 kadira:dochead
 # kadira:flow-router-ssr
@@ -91,3 +91,6 @@ edgee:slingshot
 kadira:login-state
 elevatedevdesign:autoform-slingshot
 kuip:schema-graphql-bridge
+facebook-config-ui
+google-config-ui
+twitter-config-ui

@@ -233,8 +233,8 @@ CommentDetail = React.createClass({
 			const keyword = $target.data().link.replace('/keywords/', '');
 			this.setState({
 				keywordReferenceModalVisible: true,
-				referenceTop: $target.position().top - upperOffset,
-				referenceLeft: $target.position().left + 160,
+				keywordReferenceTop: $target.position().top - upperOffset,
+				keywordReferenceLeft: $target.position().left + 160,
 				keyword,
 			});
 		}
@@ -247,16 +247,16 @@ CommentDetail = React.createClass({
 			lemmaReferenceSubwork: 0,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,
-			referenceTop: 0,
-			referenceLeft: 0,
+			lemmaReferenceTop: 0,
+			lemmaReferenceLeft: 0,
 		});
 	},
 
 	closeKeywordReference() {
 		this.setState({
 			keywordReferenceModalVisible: false,
-			referenceTop: 0,
-			referenceLeft: 0,
+			keywordReferenceTop: 0,
+			keywordReferenceLeft: 0,
 			keyword: '',
 		});
 	},
@@ -299,7 +299,6 @@ CommentDetail = React.createClass({
 
 		return (
 			<div className={commentClass}>
-
 				<article
 					className="comment commentary-comment paper-shadow "
 					data-id={comment._id}
@@ -444,8 +443,8 @@ CommentDetail = React.createClass({
 				{self.state.lemmaReferenceModalVisible ?
 					<LemmaReferenceModal
 						visible={self.state.lemmaReferenceModalVisible}
-						top={self.state.referenceTop}
-						left={self.state.referenceLeft}
+						top={self.state.lemmaReferenceTop}
+						left={self.state.lemmaReferenceLeft}
 						work={self.state.lemmaReferenceWork}
 						subwork={self.state.lemmaReferenceSubwork}
 						lineFrom={self.state.lemmaReferenceLineFrom}
@@ -457,8 +456,8 @@ CommentDetail = React.createClass({
 				{self.state.keywordReferenceModalVisible ?
 					<KeywordReferenceModal
 						visible={self.state.keywordReferenceModalVisible}
-						top={self.state.referenceTop}
-						left={self.state.referenceLeft}
+						top={self.state.keywordReferenceTop}
+						left={self.state.keywordReferenceLeft}
 						keyword={self.state.keyword}
 						close={self.closeKeywordReference}
 					/>

@@ -231,18 +231,6 @@ DiscussionComment = React.createClass({
 						}
 						{this.state.readComment === false ?
 							<FlatButton
-								label=""
-								onClick={this.toggleShareOptions}
-								className="discussion-comment-button"
-								icon={<FontIcon className="mdi mdi-share" />}
-							>
-								<span className="md-tooltip">Share</span>
-							</FlatButton>
-							:
-							''
-						}
-						{this.state.readComment === false ?
-							<FlatButton
 								onClick={this.toggleMoreOptions}
 								label=""
 								className={`discussion-comment-button toggle-more-button ${(this.state.moreOptionsVisible) ? 'toggle-more-button--active' : ''}`}

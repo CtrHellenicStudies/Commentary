@@ -7,13 +7,13 @@ LemmaReferenceModal = React.createClass({
 
 	propTypes: {
 		visible: React.PropTypes.bool,
-		top: React.PropTypes.number,
-		left: React.PropTypes.number,
-		work: React.PropTypes.string,
-		subwork: React.PropTypes.number,
-		lineFrom: React.PropTypes.number,
+		top: React.PropTypes.number.isRequired,
+		left: React.PropTypes.number.isRequired,
+		work: React.PropTypes.string.isRequired,
+		subwork: React.PropTypes.number.isRequired,
+		lineFrom: React.PropTypes.number.isRequired,
 		lineTo: React.PropTypes.number,
-		closeLemmaReference: React.PropTypes.func,
+		closeLemmaReference: React.PropTypes.func.isRequired,
 	},
 
 	childContextTypes: {

@@ -306,9 +306,9 @@ CommentDetail = React.createClass({
 				>
 					<div className="comment-fixed-title-wrap paper-shadow">
 						<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
-						{comment.commenters.map((commenter) => (
+						{comment.commenters.map((commenter, i) => (
 							<a
-								key={commenter._id}
+								key={i}
 								href={`/commenters/${commenter.slug}`}
 							>
 								<span className="comment-author-name">
@@ -324,9 +324,9 @@ CommentDetail = React.createClass({
 						</div>
 
 						<div className="comment-upper-right">
-							{comment.commenters.map((commenter) => (
+							{comment.commenters.map((commenter, i) => (
 								<div
-									key={commenter._id}
+									key={i}
 									className="comment-author"
 								>
 									{userCommenterId.indexOf(commenter._id) > -1 ?
@@ -364,9 +364,9 @@ CommentDetail = React.createClass({
 					</div>
 					<div className="comment-keywords-container">
 						<div className="comment-keywords">
-							{comment.keywords.map((keyword) => (
+							{comment.keywords.map((keyword, i) => (
 								<RaisedButton
-									key={keyword._id}
+									key={i}
 									className="comment-keyword paper-shadow"
 									onClick={self.addSearchTerm.bind(null, keyword)}
 									data-id={keyword._id}

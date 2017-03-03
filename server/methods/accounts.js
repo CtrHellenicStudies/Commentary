@@ -32,7 +32,7 @@ Meteor.methods({
 		}
 		return false;
 	},
-	currentUser() {
-		return Meteor.users.findOne({ _id: Meteor.userId() });
+	currentAdminUser() {
+		return Meteor.users.findOne({ _id: Meteor.userId(), roles: {$in: ['admin']} });
 	}
 });

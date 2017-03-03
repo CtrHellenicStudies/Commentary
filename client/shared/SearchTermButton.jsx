@@ -25,9 +25,11 @@ SearchTermButton = React.createClass({
 
 	toggleSearchTerm() {
 		this.props.toggleSearchTerm(this.props.searchTermKey, this.props.value);
+		/*
 		if (this.props.switchSubworks) {
 			this.props.switchSubworks();
 		}
+		*/
 	},
 
 	render() {

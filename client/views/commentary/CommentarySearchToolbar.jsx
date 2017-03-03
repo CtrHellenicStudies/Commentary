@@ -306,11 +306,12 @@ CommentarySearchToolbar = React.createClass({
 								searchTermKey="works"
 								value={work}
 								activeWork={active}
+								/*
 								switchSubworks={
 									(work.title === 'Homeric Hymns') ?
 										this.switchToHymns
 									: this.switchToBooks
-								}
+								}*/
 							/>
 						);
 					})}

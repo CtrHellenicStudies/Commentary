@@ -118,6 +118,7 @@ Schemas.User = new SimpleSchema({
 	},
 	isAnnotator: {
 		type: Boolean,
+		optional: true,
 		autoValue: function () {
 			if (this.isInsert) {
 				return false;
@@ -168,6 +169,22 @@ Schemas.User = new SimpleSchema({
 	},
 	highlightingPreference: {
 		type: Boolean,
+		optional: true,
+	},
+	createdAt: {
+    type: Date,
+		optional: true,
+	},
+	createdBy: {
+    type: String,
+		optional: true,
+	},
+	updatedAt: {
+    type: Date,
+		optional: true,
+	},
+	updatedBy: {
+    type: String,
 		optional: true,
 	},
 });

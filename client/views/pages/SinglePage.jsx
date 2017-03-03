@@ -7,10 +7,6 @@ SinglePage = React.createClass({
 
 	mixins: [ReactMeteorData],
 
-	componentDidMount() {
-		this.backgroundImages();
-	},
-
 	getMeteorData() {
 		const slug = this.props.slug;
 		let page = {};
@@ -23,7 +19,7 @@ SinglePage = React.createClass({
 		if (handle.ready()) {
 			page = Pages.find({ slug }).fetch()[0];
 			const imageSub = Meteor.subscribe('pageImages', slug);
-			if (imageSub.ready()) {
+			if (page && imageSub.ready()) {
 				if (page.headerImage && Array.isArray(page.headerImage)) {
 					images = Images.find({ _id: { $in: page.headerImage } }).fetch();
 					thumbnails = Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch();
@@ -41,27 +37,6 @@ SinglePage = React.createClass({
 		};
 	},
 
-	backgroundImages() {
-		/*
-		setTimeout(() => {
-			$('.background-image-holder').each(function appendImg() {
-				const imgSrc = $(this).children('img').attr('src');
-				$(this).css('background', `url("${imgSrc}")`);
-				$(this).children('img').hide();
-				$(this).css('background-position', 'initial');
-				$(this).addClass('fadeIn');
-			});
-
-			// Fade in background images
-			setTimeout(() => {
-				$('.background-image-holder').each(function fadeImg() {
-					$(this).removeClass('blur');
-				});
-			}, 500);
-		}, 100);
-		*/
-	},
-
 	render() {
 		const { page, settings } = this.data;
 		const slug = this.props.slug;
@@ -73,7 +48,7 @@ SinglePage = React.createClass({
 			);
 		} else if (!this.data.loading && !this.data.page) {
 			return (
-				<PageNotFound />
+				<NotFound />
 			);
 		}
 

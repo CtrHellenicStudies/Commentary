@@ -1,9 +1,18 @@
 CommentersPage = React.createClass({
 
-	propTypes: {},
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+		return {
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		};
+	},
 
 	render() {
-		Utils.setTitle('Commenters');
+		const { settings } = this.data;
+		Utils.setTitle(`Commenters | ${settings.title}`);
 		Utils.setDescription(`Commenters for ${Config.title()}`);
 		Utils.setMetaImage(`${location.origin}/images/capitals.jpg`);
 		return (

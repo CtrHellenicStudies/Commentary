@@ -15,7 +15,7 @@ node {
 	//sh("npm install")
   //sh("meteor build . --architecture ${deployArch}")
 
-  sh('git describe --dirty --always --tags > build_tag.out')
+  sh('git describe --dirty --always > build_tag.out')
   def buildTag = readFile('build_tag.out').trim()
   def imageTag = "us.gcr.io/${project}/${appName}:${buildTag}"
 

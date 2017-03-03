@@ -4,7 +4,7 @@ import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -223,6 +223,8 @@ AddKeyword = React.createClass({
 	},
 
 	handleSubmit(event) {
+		const { textEditorState } = this.state;
+
 		event.preventDefault();
 
 		const error = this.validateStateForSubmit();
@@ -232,13 +234,15 @@ AddKeyword = React.createClass({
 		const textHtml = convertToHTML({
 			entityToHTML: (entity, originalText) => {
 				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={entity.data.mention.get('link')}>{originalText}</a>;
+					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
 				}
 			},
-		})(this.state.textEditorState.getCurrentContent());
+		})(textEditorState.getCurrentContent());
+
+		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		if (!error.errors) {
-			this.props.submitForm(this.state, textHtml);
+			this.props.submitForm(this.state, textHtml, textRaw);
 		}
 	},
 
@@ -277,21 +281,6 @@ AddKeyword = React.createClass({
 
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	render() {
-		const toolbarConfig = {
-			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
-			INLINE_STYLE_BUTTONS: [{
-				label: 'Italic',
-				style: 'ITALIC',
-			}, {
-				label: 'Underline',
-				style: 'UNDERLINE',
-			}],
-			BLOCK_TYPE_BUTTONS: [{
-				label: 'UL',
-				style: 'unordered-list-item',
-			}],
-		};
-
 		const styles = {
 			block: {
 				maxWidth: 250,

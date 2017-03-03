@@ -5,12 +5,23 @@ KeywordsPage = React.createClass({
 		title: React.PropTypes.string.isRequired,
 	},
 
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+		return {
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		};
+	},
+
 	render() {
 		const type = this.props.type;
+		const { settings } = this.data;
 		if (type === 'word') {
-			Utils.setTitle('Keywords');
+			Utils.setTitle(`Keywords | ${settings.title}`);
 		} else {
-			Utils.setTitle('Key Ideas');
+			Utils.setTitle(`Key Ideas | ${settings.title}`);
 		}
 		Utils.setDescription(`${Utils.capitalize(this.props.type)} for ${Config.title()}`);
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);

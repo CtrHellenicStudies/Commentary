@@ -76,6 +76,8 @@ type Comment {
 	keywords: JSON
 	revisions: JSON
 	discussionComments: JSON
+	limit: Int
+	offest: Int
 }
 
 ${commenterSchema.objects}
@@ -91,6 +93,8 @@ type DiscussionComment {
 	_id: String
 	${discussionCommentSchema.fields}
 	user: JSON
+	limit: Int
+	offest: Int
 }
 
 ${keywordSchema.objects}
@@ -99,6 +103,7 @@ type Keyword {
 	${keywordSchema.fields}
 	work: JSON
 	subwork: JSON
+	jsonld: JSON
 }
 
 ${referenceWorkSchema}
@@ -109,6 +114,8 @@ type TextNode {
 	${textNodeSchema.fields}
 	text: JSON
 	related_passages: JSON
+	limit: Int
+	offest: Int
 }
 
 ${workSchema.objects}
@@ -126,7 +133,7 @@ type Query {
 
   discussionComments(_id: String, user: String, content: String, parentId: String, commentId: String, votes: Int, voter: String): [DiscussionComment]
 
-  keywords(_id: String, title: String, slug: String, description: String, type: String, count: Int, work: String, subwork: String, lineFrom: Int, lineTo: Int, lineLetter: String, tenantId: String): [Keyword]
+  keywords(_id: String, title: String, slug: String, description: String, type: String, count: Int, work: String, subwork: String, lineFrom: Int, lineTo: Int, lineLetter: String, tenantId: String, jsonld: Boolean, jsonldType: String): [Keyword]
 
   referenceWorks(_id: String, title: String, slug: String, tenantId: String, author: String, urnCode: String, description: String, citation: String): [ReferenceWork]
 

@@ -42,15 +42,17 @@ export default resolvers = {
 			if ('slug' in args) {
 				args.slug = { $regex: args.slug, $options: 'i'}
 			}
-			return Commenters.find(args).fetch();
+			return Commenters.find(args, {sort: {name : 1}}).fetch();
 		},
 		comments(_, args){
+			let limit = 1000;
+			let skip = 0;
 			if ('work' in args) {
 				args['work.slug'] = slugify(args.work);
 				delete args.work;
 			}
 			if ('subwork' in args) {
-				args['subwork.n'] = slugify(args.subwork);
+				args['subwork.n'] = parseInt(args.subwork);
 				delete args.subwork;
 			}
 			if ('commenter' in args) {
@@ -96,9 +98,29 @@ export default resolvers = {
 				args['users.username'] = { $regex: args.user, $options: 'i'}
 				delete args.user;
 			}
-			return Comments.find(args).fetch();
+			if ('limit' in args) {
+				limit = args.limit
+				delete args.limit;
+			}
+			if ('skip' in args) {
+				skip = args.skip
+				delete args.skip;
+			}
+
+			return Comments.find(args, {
+				sort: {
+					'work.order': 1,
+					'subwork.n': 1,
+					lineFrom: 1,
+					nLines: -1,
+				},
+				skip,
+				limit,
+			}).fetch();
 		},
 		discussionComments(_, args){
+			let limit = 1000;
+			let skip = 0;
 			if ('user' in args) {
 				args['users.username'] = { $regex: args.user, $options: 'i'}
 				delete args.user;
@@ -110,9 +132,49 @@ export default resolvers = {
 				args.voters = args.voter;
 				delete args.voter;
 			}
-			return DiscussionComments.find(args).fetch();
+			if ('limit' in args) {
+				limit = args.limit
+				delete args.limit;
+			}
+			if ('skip' in args) {
+				skip = args.skip
+				delete args.skip;
+			}
+			return DiscussionComments.find(args, {sort: {'users.username' : 1}, limit, skip }).fetch();
 		},
 		keywords(_, args){
+			let keywords = [];
+			const linkedDataSchema = LinkedDataSchemas.findOne({ collectionName: "Keywords" });
+			let context = null;
+			let returnJSONLD = false;
+
+			if (linkedDataSchema) {
+				context = {};
+				linkedDataSchema.terms.forEach((term) => {
+					if (
+							'resourceIdentifier' in term
+						&& term.resourceIdentifier
+						&& term.resourceIdentifier.length
+					) {
+						context[term.term] = term.resourceIdentifier;
+					} else if (
+						'metafields' in term
+						&& term.metafields
+						&& term.metafields.length
+					) {
+						context[term.term] = {};
+						term.metafields.forEach((metafield) => {
+								context[term.term][metafield.key] = metafield.value;
+						});
+					}
+				});
+			}
+
+			if ('jsonld' in args) {
+				returnJSONLD = true;
+				delete args.jsonld;
+			}
+
 			if ('title' in args) {
 				args.title = { $regex: args.title, $options: 'i'}
 			}
@@ -124,10 +186,38 @@ export default resolvers = {
 				delete args.work;
 			}
 			if ('subwork' in args) {
-				args['subwork.n'] = slugify(args.subwork);
+				args['subwork.n'] = parseInt(args.subwork);
 				delete args.subwork;
 			}
-			return Keywords.find(args).fetch();
+
+			const response = [];
+			keywords = Keywords.find(args, { sort: { title: 1 } }).fetch();
+
+			if (returnJSONLD) {
+				if (context !== null) {
+					keywords.forEach((keyword) => {
+						let isInContext = false;
+						const contextKeys = [];
+
+						for (k in context) {
+							contextKeys.push(k);
+						}
+
+						for (key in keyword) {
+							if (!(~contextKeys.indexOf(key))){
+								delete keyword[key];
+							}
+						}
+
+						keyword['@context'] = context;
+						response.push({jsonld: keyword});
+					});
+				} else {
+				  throw new Error('JSONLD specified, but no available schema found');
+				}
+			}
+
+			return response;
 		},
 		referenceWorks(_, args){
 			if ('description' in args) {
@@ -136,9 +226,11 @@ export default resolvers = {
 			if ('citation' in args) {
 				args.citation = { $regex: args.citation, $options: 'i'}
 			}
-			return ReferenceWorks.find(args).fetch();
+			return ReferenceWorks.find(args, { sort: { title: 1 } }).fetch();
 		},
 		textNodes(_, args){
+			let limit = 1000;
+			let skip = 0;
 			if ('edition' in args) {
 				args['text.edition.slug'] = { $regex: slugify(args.edition), $options: 'i'}
 				delete args.edition;
@@ -164,7 +256,7 @@ export default resolvers = {
 				delete args.work;
 			}
 			if ('subwork' in args) {
-				args['subwork.n'] = slugify(args.subwork);
+				args['subwork.n'] = parseInt(args.subwork);
 				delete args.subwork;
 			}
 			if ('relatedPassageWork' in args) {
@@ -172,7 +264,7 @@ export default resolvers = {
 				delete args.relatedPassageWork;
 			}
 			if ('relatedPassageSubwork' in args) {
-				args['related_passages.subwork.n'] = args.relatedPassageSubwork;
+				args['related_passages.subwork.n'] = parseInt(args.relatedPassageSubwork);
 				delete args.relatedPassageSubwork;
 			}
 			if ('relatedPassageLineFrom' in args) {
@@ -187,8 +279,23 @@ export default resolvers = {
 				args['related_passages.text.text'] =  { $regex: args.relatedPassageText, $options: 'i' };
 				delete args.relatedPassageText;
 			}
+			if ('limit' in args) {
+				limit = args.limit
+				delete args.limit;
+			}
+			if ('skip' in args) {
+				skip = args.skip;
+				delete args.skip;
+			}
 
-			return TextNodes.find(args).fetch();
+			return TextNodes.find(args, {
+				sort: {
+					'work.slug': 1,
+					'text.n': 1,
+				},
+				limit,
+				skip,
+			}).fetch();
 		},
 		works(_, args){
 			if ('title' in args) {

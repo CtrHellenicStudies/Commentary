@@ -51,9 +51,9 @@ Header = React.createClass({
 
 	toggleSearchMode() {
 		if (
-          location.pathname.indexOf('/commentary') === 0 ||
-          this.props.addCommentPage
-        ) {
+					location.pathname.indexOf('/commentary') === 0 ||
+					this.props.addCommentPage
+				) {
 			this.setState({
 				searchEnabled: !this.state.searchEnabled,
 			});

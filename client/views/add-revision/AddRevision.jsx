@@ -11,6 +11,7 @@ import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { fromJS } from 'immutable';
+import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import Keywords from '/imports/collections/keywords';
@@ -97,7 +98,7 @@ AddRevision = React.createClass({
 			revision,
 
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: this._getRevisionEgitorState(revision),
+			textEditorState: this._getRevisionEditorState(revision),
 
 			titleValue: '',
 			textValue: '',
@@ -147,7 +148,7 @@ AddRevision = React.createClass({
 		};
 	},
 
-	_getRevisionEgitorState(revision) {
+	_getRevisionEditorState(revision) {
 		if (revision.textRaw) {
 			return EditorState.createWithContent(convertFromRaw(revision.textRaw));
 		} else if (revision.text) {
@@ -264,12 +265,30 @@ AddRevision = React.createClass({
 	},
 
 	handleSubmit(event) {
+		const { textEditorState } = this.state;
+
 		// TODO: form validation
 		event.preventDefault();
 
-		const textHtml = null;
+		// create html from textEditorState's content
+		const textHtml = convertToHTML({
 
-		const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+			// performe necessary html transformations:
+			entityToHTML: (entity, originalText) => {
+
+				// handle keyword mentions
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+				}
+
+				// handle hashtag / commets cross reference mentions
+				if (entity.type === '#mention') {
+					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
+				}
+			},
+		})(textEditorState.getCurrentContent());
+
+		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);
 	},

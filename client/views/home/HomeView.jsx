@@ -5,7 +5,9 @@ import Comments from '/imports/collections/comments';
 
 HomeView = React.createClass({
 
-	propTypes: {},
+	propTypes: {
+		settings: React.PropTypes.object,
+	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
@@ -47,9 +49,37 @@ HomeView = React.createClass({
 	},
 
 	render() {
-		Utils.setTitle('Home');
-		Utils.setDescription('An evolving, collaborative commentary based on the cumulative research of Milman Parry and Albert Lord, who created a new way of thinking about Homeric poetry');
-		Utils.setMetaImage(`${location.origin}/images/hector.jpg`);
+		const { settings } = this.props;
+		let imageUrl = `${location.origin}/images/hector.jpg`;
+		let introImage = '/images/ajax_achilles_3.jpg';
+		let introImageCaption = '';
+
+		if (
+			settings
+			&& settings.homepageCover
+			&& settings.homepageCover.length
+		) {
+			imageUrl = settings.homepageCover;
+		}
+
+		if (
+			settings.homepageIntroductionImage
+			&& settings.homepageIntroductionImage.length
+		) {
+			introImage = settings.homepageIntroductionImage;
+		}
+
+		if (
+			settings.homepageIntroductionImageCaption
+			&& settings.homepageIntroductionImageCaption.length
+		) {
+			introImageCaption = settings.homepageIntroductionImageCaption;
+		}
+
+		Utils.setTitle(`Home | ${settings.title}`);
+		Utils.setDescription(settings.subtitle);
+		Utils.setMetaImage(imageUrl);
+
 		return (
 			<div className="home">
 
@@ -57,7 +87,7 @@ HomeView = React.createClass({
 
 					<section className="header cover fullscreen parallax">
 						<div className="background-image-holder remove-blur blur-10">
-							<img className="background-image" src="/images/hector.jpg" role="presentation" />
+							<img className="background-image" src={imageUrl} role="presentation" />
 						</div>
 						<div className="block-screen brown" />
 
@@ -107,44 +137,38 @@ HomeView = React.createClass({
 					<section id="intro" className="intro">
 						<div className="container">
 							<div className="row">
-								<h2 >Quid faciat laetas segetes quo</h2>
+								<h2>
+									{settings.homepageIntroductionTitle}
+								</h2>
 
 								<div className="intro-col intro-col-text">
-
-									<div className="mb40 mb-xs-24l intro-block-text ">
-										<h5 className="uppercase intro-block-header">Sidere terram vertere</h5>
-										<span className="intro-block-desc">
-											Mycenas, ulmisque adiungere vites conveniat quae curum boum qui cultus
-											habendo sit pecori apibus quanta experientia parcis.
-										</span>
-									</div>
-
-									<div className="mb40 mb-xs-24 intro-block-text ">
-										<h5 className="uppercase intro-block-header">Hinc canere incipiam</h5>
-										<span className="intro-block-desc">
-											Vos, o agrestum praesentia numina fauni ferte simul faunique pedem dryadesque
-											puellae munera vestro cano.
-										</span>
-									</div>
+									<div
+										className="mb40 mb-xs-24l intro-block-text "
+										dangerouslySetInnerHTML={{
+											__html: settings.homepageIntroductionText,
+										}}
+									/>
 
 									<RaisedButton
 										className="cover-link dark "
-										href="/"
-										label="Troiae qui primus"
+										href={settings.homepageIntroductionLink}
+										label={settings.homepageIntroductionLinkText}
 									/>
 
 								</div>
 								<div className="intro-col intro-col-image image-wrap wow fadeIn">
 									<img
 										className="paper-shadow"
-										alt="Ajax and Achilles"
-										src="/images/ajax_achilles_3.jpg"
+										alt={introImageCaption}
+										src={introImage}
 									/>
 									<div className="caption">
-										<span className="caption-text">
-											"Quid faciat laetas segetes quo sidere", Terram Vertere. 1865. Oil on canvas.
-											Center for Hellenic Studies, Washington, DC.
-										</span>
+										<span
+											className="caption-text"
+											dangerouslySetInnerHTML={{
+												__html: introImageCaption
+											}}
+										/>
 									</div>
 								</div>
 							</div>
@@ -164,79 +188,20 @@ HomeView = React.createClass({
 						<div className="block-screen" />
 
 						<div className="container">
-
 							<h2 className="block-title">Commenters</h2>
-
-
 							<CommentersList
 								featureOnHomepage
 								defaultAvatarUrl='/images/default_user.jpg'
 								limit={3}
 							/>
-
 							<RaisedButton
 								href="/commenters"
 								className="cover-link light show-more "
 								label="Other Commenters"
 							/>
-
 						</div>
-
 					</section>
-				{/*	<section className="goals ">
-
-						<div className="background-image-holder blur-4--no-remove">
-							<img role="presentation" className="background-image" src="/images/mss_2.jpg" />
-						</div>
-						<div className="block-screen brown" />
-
-						<div className="container ">
-
-							<div className="goal hvr-grow wow fadeInUp">
-								<img className="goal-image" src="/images/svg-icons/pen.svg" role="presentation" />
-								<div className="goal-text">
-									<h3 className="goal-title">Collaborative commenting and editing</h3>
-									<span className="goal-desc">
-										Writing as a collaborative process between principal
-										authors and associate editors
-									</span>
-								</div>
-							</div>
-
-							<div className="goal hvr-grow wow fadeInUp" data-wow-delay="0.5s">
-								<img
-									className="goal-image"
-									src="/images/svg-icons/book-opened.svg"
-									role="presentation"
-								/>
-								<div className="goal-text">
-									<h3 className="goal-title">System and beauty</h3>
-									<span className="goal-desc">
-										Linguistic approach analyzing both synchronically and diachronically
-										the formulaic system of Homeric poetry
-									</span>
-								</div>
-							</div>
-
-							<div className="goal hvr-grow wow fadeInUp" data-wow-delay="1s">
-								<img className="goal-image" src="/images/svg-icons/bank.svg" role="presentation" />
-								<div className="goal-text">
-									<h3 className="goal-title">A growing effort of scholars still in progress</h3>
-									<span className="goal-desc">
-										The commentary constitutes work from a diverse team representing
-										three generations of researchers
-									</span>
-								</div>
-							</div>
-
-						</div>
-
-
-					</section> */}
-
 					<section id="visualizations" className="browse-commentary block-shadow">
-						{/* <h2 className="keyword-divider-title"></h2>*/}
-
 						<span className="visualizations-coaching-text">
 							The charts below visualize data about the number of comments per book or hymn,
 							but they are also an interface into the commentary itself.
@@ -245,27 +210,19 @@ HomeView = React.createClass({
 						</span>
 						<div className="container data-visualization-container">
 							<WorksList />
-
-							{/* <img src="/images/data_visualization_example.png"/>*/}
-
 						</div>
-
 					</section>
-
 
 					<section className="keywords">
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Keywords</h2>
 							<div className="underline" />
-
 							<KeywordsList type="word" title="Keywords" limit={5} />
-
 							<RaisedButton
 								href="/keywords"
 								className="cover-link show-more primary "
 								label="More Keywords"
 							/>
-
 						</div>
 					</section>
 
@@ -273,24 +230,18 @@ HomeView = React.createClass({
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Key Ideas</h2>
 							<div className="underline" />
-
 							<KeywordsList type="idea" title="Key Ideas" limit={5} />
-
 							<RaisedButton
 								href="/keyideas"
 								className="cover-link show-more primary "
 								label="More Key Ideas"
 							/>
-
 						</div>
 					</section>
 
 					<section className="get-started">
-
 						<h2 className="block-title">Get Started</h2>
-
 						<div className="get-started-comments">
-
 							{this.data.commentsReady ?
 								<Commentary
 									isOnHomeView
@@ -299,8 +250,8 @@ HomeView = React.createClass({
 									commentsReady={this.data.commentsReady}
 								/>
 								:
-								<Spinner /> }
-
+									<Spinner />
+							}
 							<div className="read-more-link">
 
 								<RaisedButton

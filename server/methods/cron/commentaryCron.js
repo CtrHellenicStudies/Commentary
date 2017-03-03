@@ -90,9 +90,7 @@ Meteor.method('commentary_cron', () => {
 }, {
 	url: 'commentary/cron',
 	getArgsFromRequest(request) {
-		// Sometime soon do validation here
 		const content = request.body;
-
 		return [content];
 	},
 });

@@ -1,8 +1,19 @@
 AboutPage = React.createClass({
 
+	mixins: [ReactMeteorData],
+
+	getMeteorData() {
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+		return {
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		};
+	},
+
 	render() {
-		Utils.setTitle('About');
-		Utils.setDescription('The intellectual goal of the original editors is simple and at the same time most ambitious: of all existing commentaries on Homeric poetry, this project is the first and only such commentary that is based squarely on the cumulative research of Milman Parry and his student, Albert Lord, who created a new way of thinking about Homeric poetry.')
+		const { settings } = this.data;
+		Utils.setTitle(`About | ${settings.title}`);
+		Utils.setDescription('The intellectual goal of the original editors is simple and at the same time most ambitious: of all existing commentaries on Homeric poetry, this project is the first and only such commentary that is based squarely on the cumulative research of Milman Parry and his student, Albert Lord, who created a new way of thinking about Homeric poetry.');
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
@@ -23,12 +34,9 @@ AboutPage = React.createClass({
 
 						<div className="grid inner">
 							<div className="center-content">
-
 								<div className="page-title-wrap">
-									<h2 className="page-title ">About the Commentary</h2>
+									<h1 className="page-title ">About the Commentary</h1>
 								</div>
-
-
 							</div>
 						</div>
 					</div>

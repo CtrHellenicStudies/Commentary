@@ -11,6 +11,7 @@ import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
+import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
@@ -280,6 +281,8 @@ AddComment = React.createClass({
 	// --- BEGIN SUBMIT / VALIDATION HANDLE --- //
 
 	handleSubmit(event) {
+		const { textEditorState } = this.state;
+
 		event.preventDefault();
 
 		const error = this.validateStateForSubmit();
@@ -288,9 +291,25 @@ AddComment = React.createClass({
 
 		if (!error.errors) {
 
-			const textHtml = null;
+			// create html from textEditorState's content
+			const textHtml = convertToHTML({
 
-			const textRaw = convertToRaw(this.state.textEditorState.getCurrentContent());
+				// performe necessary html transformations:
+				entityToHTML: (entity, originalText) => {
+
+					// handle keyword mentions
+					if (entity.type === 'mention') {
+						return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+					}
+
+					// handle hashtag / commets cross reference mentions
+					if (entity.type === '#mention') {
+						return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
+					}
+				},
+			})(textEditorState.getCurrentContent());
+
+			const textRaw = convertToRaw(textEditorState.getCurrentContent());
 		
 			this.props.submitForm(this.state, textHtml, textRaw);
 		}

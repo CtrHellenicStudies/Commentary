@@ -42,6 +42,7 @@ Works.schema = new SimpleSchema({
 	},
 	order: {
 		type: Number,
+    optional: true,
 	},
 
 	nComments: {

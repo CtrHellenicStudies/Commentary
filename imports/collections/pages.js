@@ -7,7 +7,7 @@ Pages.schema = new SimpleSchema({
 	title: {
 		type: String,
 	},
-	subTitle: {
+	subtitle: {
 		type: String,
 		optional: true,
 	},

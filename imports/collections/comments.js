@@ -5,6 +5,15 @@ const Comments = new Meteor.Collection('comments');
 
 Comments.schema = new SimpleSchema({
 
+	status: {
+		type: String,
+		optional: true,
+		autoValue: function() {
+			if (this.isInsert)
+				return 'publish';
+		},
+	},
+
 	wordpressId: {
 		type: Number,
 		optional: true,
@@ -37,17 +46,6 @@ Comments.schema = new SimpleSchema({
 		type: [Object],
 		optional: true,
 		blackbox: true,
-		/*autoform: {
-		 options: function() {
-		 return _.map(Commenters.find().fetch(), function(commenter) {
-		 return {
-		 label: commenter.name,
-		 value: commenter._id
-		 };
-		 });
-		 }
-		 }
-		 */
 	},
 
 	users: {
@@ -85,12 +83,17 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	nLines: {
-		type: Number,
+	bookChapterUrl: {
+		type: String,
 		optional: true,
 	},
 
 	paragraphN: {
+		type: Number,
+		optional: true,
+	},
+
+	nLines: {
 		type: Number,
 		optional: true,
 	},

@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { check, Match } from 'meteor/check';
 import Tenants from '/imports/collections/tenants';
 
 Meteor.methods({
@@ -6,17 +7,33 @@ Meteor.methods({
 		check(subdomain, String);
 		return Tenants.findOne({ subdomain });
 	},
-      tenants() {
-        return Tenants.find().fetch();
-      },
-      'tenants.insert'(data) {
-        check(data, Object);
+	tenants() {
+		return Tenants.find().fetch();
+	},
+	'tenants.insert': (tenant) => {
+		check(tenant, {
+			subdomain: String,
+			isAnnotation: Match.Maybe(Boolean),
+		});
 
-        return Tenants.insert(data);
-      },
-      'tenants.remove'(tenantId) {
-        check(tenantId, String);
+		return Tenants.insert(tenant);
+	},
+	'tenants.remove': (tenantId) => {
+		check(tenantId, String);
 
-        Tenants.remove(tenantId);
-      }
+		Tenants.remove(tenantId);
+	},
+	'tenants.update': (_id, tenant) => {
+		check(_id, String);
+		check(tenant, {
+			subdomain: String,
+			isAnnotation: Match.Maybe(Boolean),
+		});
+
+		Tenants.update({
+			_id
+		}, {
+			$set: tenant,
+		});
+	}
 });

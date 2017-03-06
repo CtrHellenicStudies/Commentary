@@ -28,3 +28,22 @@ Meteor.publish('allUsers', (userId) => {
 		},
 	});
 });
+
+Meteor.publish('users.all', () => {
+	const userId = Meteor.userId;
+
+	return Meteor.users.find({}, {
+		fields: {
+			username: 1,
+			emails: 1,
+			profile: 1,
+			services: 1,
+			roles: 1,
+			highlightingPreference: 1,
+		},
+		sort: {
+			username: 1,
+			'emails.address': 1,
+		},
+	});
+});

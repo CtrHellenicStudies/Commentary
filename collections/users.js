@@ -4,31 +4,11 @@ Schemas.UserProfile = new SimpleSchema({
 		optional: true,
 	},
 
-	tenantId: {
-		type: String,
-		label: 'Tenant',
-		optional: true,
-		autoform: {
-			afFieldInput: {
-				type: 'select',
-				options: () => {
-					const tenants = [];
-					_.map(Tenants.find().fetch(), (tenant) => {
-						tenants.push({
-							label: tenant.subdomain,
-							value: tenant._id,
-						});
-					});
-					return tenants;
-				},
-			},
-		},
-	},
-
 	birthday: {
 		type: Date,
 		optional: true,
 	},
+
 	biography: {
 		type: String,
 		optional: true,
@@ -36,7 +16,7 @@ Schemas.UserProfile = new SimpleSchema({
 			rows: 4,
 		},
 	},
-	publicEmailAdress: {
+	publicEmailAddress: {
 		type: String,
 		optional: true,
 	},

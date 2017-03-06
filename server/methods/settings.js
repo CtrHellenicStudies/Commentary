@@ -1,27 +1,59 @@
 import { Meteor } from 'meteor/meteor';
+import { check, Match } from 'meteor/check';
 
 import Settings from '/imports/collections/settings.js';
 
 Meteor.methods({
-  'settings.insert'(data) {
-    check(data, Object);
+	'settings.insert': (setting) => {
+		check(setting, {
+			name: String,
+			domain: String,
+			title: String,
+			footer: String,
+			emails: Object,
+			tenantId: Match.Maybe(String),
+			subtitle: Match.Maybe(String),
+			homepageCover: Match.Maybe(String),
+			homepageIntroductionTitle: Match.Maybe(String),
+			homepageIntroductionImage: Match.Maybe(String),
+			homepageIntroductionImageCaption: Match.Maybe(String),
+			homepageIntroductionText: Match.Maybe(String),
+			homepageIntroductionLink: Match.Maybe(String),
+			homepageIntroductionLinkText: Match.Maybe(String),
+			webhooksToken: String,
+		});
 
-    return Settings.insert({
-      name: data.name,
-      domain: data.domain,
-      title: data.title,
-      subtitle: data.subtitle,
-      footer: data.footer,
-      emails: {
-        from: data.fromEmail,
-        contact: data.contactEmail
-      },
-      tenantId: data.tenantId
-    });
-  },
-  'settings.remove'(settingId) {
-    check(settingId, String);
+		return Settings.insert(setting);
+	},
+	'settings.update': (_id, setting) => {
+		check(_id, String);
+		check(setting, {
+			name: String,
+			domain: String,
+			title: String,
+			footer: String,
+			emails: Object,
+			tenantId: Match.Maybe(String),
+			subtitle: Match.Maybe(String),
+			homepageCover: Match.Maybe(String),
+			homepageIntroductionTitle: Match.Maybe(String),
+			homepageIntroductionImage: Match.Maybe(String),
+			homepageIntroductionImageCaption: Match.Maybe(String),
+			homepageIntroductionText: Match.Maybe(String),
+			homepageIntroductionLink: Match.Maybe(String),
+			homepageIntroductionLinkText: Match.Maybe(String),
+			webhooksToken: String,
+		});
 
-    Settings.remove({ _id: settingId });
-  }
+		Settings.update({
+			_id
+		}, {
+			$set: setting,
+		});
+	},
+	'settings.remove': (settingId) => {
+		check(settingId, String);
+
+		Settings.remove({ _id: settingId });
+	}
 });

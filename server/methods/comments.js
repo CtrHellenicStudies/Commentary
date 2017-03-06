@@ -120,6 +120,7 @@ Meteor.methods({
 	users() {
 		console.log(Meteor.user());
 	},
+	
 	'comments.getSuggestions': function getSuggestions(value) {
 		check(value, String);
 

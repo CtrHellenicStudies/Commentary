@@ -60,15 +60,16 @@ if (Meteor.isServer) {
 	});
 
 
-	Meteor.publish('textNodes', (textQuery) => {
-		check(textQuery, Object);
+	Meteor.publish('textNodes', (textQuery, skip = 0, limit = 100) => {
+		check(textQuery, Match.Maybe(Object));
 		const query = textQuery || {};
 
 		return TextNodes.find(query, {
-			limit: 100,
 			sort: {
 				'text.n': 1,
 			},
+			limit,
+			skip,
 		});
 	});
 
@@ -282,22 +283,71 @@ if (Meteor.isServer) {
 		return Pages.find(query);
 	});
 
-	Meteor.publish('works.all', () => Works.find());
+	Meteor.publish('pages.all', () => Pages.find({}, { sort: { tenantId: 1, title: 1 }}));
 
-	Meteor.publish('referenceWorks.all', () => ReferenceWorks.find());
+	Meteor.publish('comments.all', (skip = 0, limit = 100) => {
+		check(skip, Number);
+		check(limit, Number);
 
-	Meteor.publish('commenters.all', () => Commenters.find());
+		return Comments.find({}, {
+			sort: {
+				tenantId: 1,
+				'work.order': 1,
+				'subwork.n': 1,
+				lineFrom: 1,
+				nLines: -1,
+			},
+			skip,
+			limit,
+		});
+	});
 
-	Meteor.publish('books', () => Books.find());
+	Meteor.publish('annotations.all', (skip = 0, limit = 100) => {
+		check(skip, Number);
+		check(limit, Number);
 
-	Meteor.publish('tenants', () => Tenants.find());
+		return Comments.find({ isAnnotation: true }, {
+			sort: {
+				tenantId: 1,
+				book: 1,
+				paragraphN: 1,
+				nLines: -1,
+			},
+			skip,
+			limit,
+		});
+	});
 
-	Meteor.publish('settings', () => Settings.find());
+	Meteor.publish('works.all', () => Works.find({}, {sort: {tenantId: 1, order: 1, title: 1}}));
+
+	Meteor.publish('referenceWorks.all', () => ReferenceWorks.find({}, { sort: { tenantId: 1, title: 1 }}));
+
+	Meteor.publish('commenters.all', () => Commenters.find({}, { sort: { tenantId: 1, name: 1 }}));
+
+	Meteor.publish('books', () => Books.find({}, { sort: { tenantId: 1, title: 1 }}));
+
+	Meteor.publish('tenants', () => Tenants.find({}, { sort: { subdomain: 1 } }));
+
+	Meteor.publish('settings', () => Settings.find({}, { sort: { tenantId: 1 }}));
 
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));
 		return Settings.find({ tenantId });
 	});
 
-	Meteor.publish('linkedDataSchemas', () => LinkedDataSchemas.find());
+	Meteor.publish('linkedDataSchemas', () => LinkedDataSchemas.find({}, { sort: { tenantId: 1, collectionName: 1 } }));
+
+	Meteor.publish('discussionComments.all', (skip = 0, limit = 100) => {
+		check(skip, Number);
+		check(limit, Number);
+
+		return DiscussionComments.find({}, {
+			sort: {
+				tenantId: 1,
+			},
+			skip,
+			limit,
+		});
+	});
+
 }

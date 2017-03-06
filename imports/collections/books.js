@@ -1,32 +1,65 @@
 const Books = new Meteor.Collection('books');
+import Tenants from '/imports/collections/tenants';
 
 Books.schema = new SimpleSchema({
   title: {
     type: String
   },
-  books: {
-    type: [Object]
-  },
-  "books.$.url": {
+	slug: {
+		type: String,
+		optional: true,
+	},
+  author: {
     type: String,
+		optional: true,
+  },
+  chapters: {
+    type: [Object],
+		optional: true,
+  },
+  "chapters.$.url": {
+    type: String,
+		optional: true,
     regEx: SimpleSchema.RegEx.Url
   },
-  commentarIds: {
-    type: [String],
+  "chapters.$.title": {
+    type: String,
+		optional: true,
+  },
+  "chapters.$.n": {
+    type: Number,
+		optional: true,
+  },
+  "chapters.$.slug": {
+    type: String,
+		optional: true,
+  },
+  coverImage: {
+    type: String,
+		optional: true,
+  },
+	tenantId: {
+    type: String,
+    label: "Tenant",
     optional: true,
     autoform: {
-      type: "select-multiple",
-      label: "Commentators",
-      options: function () {
-        let options = [];
-        let users = Meteor.users.find().fetch();
-        _.map(users, (user) => {
-          options.push({label: user.emails? user.emails[0].address : user.username, value: user._id});
-        });
-        return options;
-      }
+    	afFieldInput: {
+    		type: "select",
+	      options: function () {
+	      	var tenants = [];
+	        _.map(Tenants.find().fetch(), function (tenant) {
+
+	          tenants.push({
+	            label: tenant.subdomain,
+	            value: tenant._id
+	          });
+
+	        });
+	        return tenants;
+	      }
+    	}
     }
-  }
+	},
 });
 
 Books.attachSchema(Books.schema);

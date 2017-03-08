@@ -4,7 +4,8 @@ import { check, Match } from 'meteor/check';
 import Settings from '/imports/collections/settings.js';
 
 Meteor.methods({
-	'settings.insert': (setting) => {
+	'settings.insert': (token, setting) => {
+		check(token, String);
 		check(setting, {
 			name: String,
 			domain: String,
@@ -23,9 +24,18 @@ Meteor.methods({
 			webhooksToken: String,
 		});
 
-		return Settings.insert(setting);
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Settings.insert(setting);
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'settings.update': (_id, setting) => {
+	'settings.update': (token, _id, setting) => {
+		check(token, String);
 		check(_id, String);
 		check(setting, {
 			name: String,
@@ -45,15 +55,32 @@ Meteor.methods({
 			webhooksToken: String,
 		});
 
-		Settings.update({
-			_id
-		}, {
-			$set: setting,
-		});
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Settings.update({
+				_id
+			}, {
+				$set: setting,
+			});
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'settings.remove': (settingId) => {
+	'settings.remove': (token, settingId) => {
+		check(token, String);
 		check(settingId, String);
 
-		Settings.remove({ _id: settingId });
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Settings.remove({ _id: settingId });
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	}
 });

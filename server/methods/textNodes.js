@@ -39,4 +39,69 @@ Meteor.methods({
 
 		return tableOfContents;
 	},
+	'textNodes.insert'(token, data) {
+		check(token, String);
+		check(textNode, {
+			work: {
+				slug: String,
+			},
+			subwork: {
+				slug: String,
+				n: String,
+			},
+			text: Array,
+		});
+
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return TextNodes.insert(data);
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	},
+	'textNodes.remove'(token, textNodeId) {
+		check(token, String);
+		check(textNodeId, String);
+
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return TextNodes.remove(textNodeId);
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	},
+	'textNodes.update'(token, _id, textNode) {
+		check(token, String);
+		check(_id, String);
+		check(textNode, {
+			work: {
+				slug: String,
+			},
+			subwork: {
+				slug: String,
+				n: String,
+			},
+			text: Array,
+		});
+
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return TextNodes.update({
+				_id
+			}, {
+				$set: textNode,
+			});
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	}
 });

@@ -10,30 +10,57 @@ Meteor.methods({
 	tenants() {
 		return Tenants.find().fetch();
 	},
-	'tenants.insert': (tenant) => {
+	'tenants.insert': (token, tenant) => {
+		check(token, String);
 		check(tenant, {
 			subdomain: String,
 			isAnnotation: Match.Maybe(Boolean),
 		});
 
-		return Tenants.insert(tenant);
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Tenants.insert(tenant);
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'tenants.remove': (tenantId) => {
+	'tenants.remove': (token, tenantId) => {
+		check(token, String);
 		check(tenantId, String);
 
-		Tenants.remove(tenantId);
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Tenants.remove(tenantId);
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'tenants.update': (_id, tenant) => {
+	'tenants.update': (token, _id, tenant) => {
+		check(token, String);
 		check(_id, String);
 		check(tenant, {
 			subdomain: String,
 			isAnnotation: Match.Maybe(Boolean),
 		});
 
-		Tenants.update({
-			_id
-		}, {
-			$set: tenant,
-		});
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Tenants.update({
+				_id
+			}, {
+				$set: tenant,
+			});
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	}
 });

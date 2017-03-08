@@ -343,6 +343,7 @@ if (Meteor.isServer) {
 
 		return DiscussionComments.find({}, {
 			sort: {
+				created: 1,
 				tenantId: 1,
 			},
 			skip,

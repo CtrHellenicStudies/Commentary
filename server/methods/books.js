@@ -2,7 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import Books from '/imports/collections/books';
 
 Meteor.methods({
-	'books.insert': (book) => {
+	'books.insert': (token, book) => {
+		check(token, String);
 		check(book, {
 			title: String,
 			slug: String,
@@ -11,11 +12,18 @@ Meteor.methods({
 			coverImage: Match.Maybe(String),
 			tenantId: Match.Maybe(String),
 		});
-
-		return Books.insert(book);
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Books.insert(book);
+		}
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
 
-	'books.update': (_id, book) => {
+	'books.update': (token, _id, book) => {
+		check(token, String);
 		check(_id, String);
 		check(book, {
 			title: String,
@@ -26,16 +34,36 @@ Meteor.methods({
 			tenantId: Match.Maybe(String),
 		});
 
-		Books.update({
-			_id
-		}, {
-			$set: book,
-		});
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Books.update({
+				_id
+			}, {
+				$set: book,
+			});
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
 
-	'books.remove': (bookId) => {
+	'books.remove': (token, bookId) => {
+		check(token, String);
 		check(bookId, String);
+		console.log(this.userId);
+		console.log(Meteor.userId());
+		console.log(Meteor.user());
 
-		Books.remove(bookId);
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Books.remove(bookId);
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	}
 });

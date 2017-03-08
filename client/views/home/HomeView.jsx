@@ -89,7 +89,7 @@ HomeView = React.createClass({
 			}
 		}
 
-		Utils.setTitle(`Home | ${settings.title}`);
+		Utils.setTitle(`Home | ${settings ? settings.title : ''}`);
 		Utils.setDescription(settings.subtitle);
 		Utils.setMetaImage(imageUrl);
 

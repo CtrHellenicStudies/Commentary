@@ -1,50 +1,88 @@
 import Comments from '/imports/collections/comments';
 
 Meteor.methods({
-	'comments.insert': function insertComment(comment) {
+	'comments.insert': (token, comment) => {
+		check(token, String);
 		check(comment, Object);
 		const roles = ['developer', 'admin', 'commenter'];
-		let commentId = null;
-		if (Roles.userIsInRole(Meteor.user(), roles)) {
-			console.log('Method called: \'comment.insert\'');
-			console.log('Comment:', comment);
+		if ((
+				!Meteor.userId()
+				&& !Roles.userIsInRole(Meteor.user(), roles)
+			)
+			&& !Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})
+		) {
+			throw new Meteor.Error('comment-insert', 'not-authorized');
+		}
 
-			try {
-				commentId = Comments.insert(comment);
-				console.log('Comment', commentId, 'insert successful');
-			} catch (err) {
-				console.log(err);
-			}
-		} else {
-			console.log('Permission denied on method comments.insert, for user:', Meteor.userId());
+		let commentId;
+		console.log(comment);
+
+		try {
+			commentId = Comments.insert(comment);
+			console.log(commentId);
+		} catch (err) {
+			throw new Meteor.Error('comment-insert', err);
 		}
 
 		return commentId;
 	},
 
-	'comment.update': function updateComment(commentId, update) {
+	'comment.update': (token, commentId, update) => {
+		check(token, Match.Maybe(String));
 		check(commentId, String);
 		check(update, Object);
-		const roles = ['developer', 'admin', 'commenter'];
-		if (Roles.userIsInRole(Meteor.user(), roles)) {
-			console.log('Method called: \'comment.update\'');
-			console.log('commentId:', commentId);
-			console.log('Update:', update);
 
-			try {
-				Comments.update({ _id: commentId }, { $set: update });
-				console.log('Comment', commentId, 'update successful');
-			} catch (err) {
-				console.log(err);
-			}
-		} else {
-			console.log('Permission denied on method comments.update, for user:', Meteor.userId());
+		if ((
+				!Meteor.userId()
+				&& !Roles.userIsInRole(Meteor.user(), roles)
+			)
+			&& !Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
+			})
+		) {
+			throw new Meteor.Error('comment-update', 'not-authorized');
+		}
+
+		try {
+			Comments.update({ _id: commentId }, { $set: update });
+		} catch (err) {
+			throw new Meteor.Error('comment-update', err);
 		}
 
 		return commentId;
 	},
 
-	'comments.add.revision': function addRevision(commentId, revision) {
+	'comment.delete': (token, commentId) => {
+		check(token, String);
+		check(commentId, String);
+
+		const roles = ['developer', 'admin', 'commenter'];
+		if ((
+				!Meteor.userId()
+				&& !Roles.userIsInRole(Meteor.user(), roles)
+			)
+			&& !Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})
+		) {
+			throw new Meteor.Error('comment-delete', 'not-authorized');
+		}
+
+		try {
+			Comments.remove({ _id: commentId });
+		} catch (err) {
+			throw new Meteor.Error('comment-delete', err);
+		}
+
+		return commentId;
+	},
+
+	'comments.add.revision': (commentId, revision) => {
 		check(commentId, String);
 		check(revision, Object);
 		const comment = Comments.find({ _id: commentId }).fetch()[0];
@@ -81,7 +119,7 @@ Meteor.methods({
 		}
 	},
 
-	'comment.remove.revision': function removeRevision(commentId, revision) {
+	'comment.remove.revision': (commentId, revision) => {
 		check(commentId, String);
 		check(revision, Object);
 		const roles = ['developer'];
@@ -117,11 +155,7 @@ Meteor.methods({
 		}
 	},
 
-	users() {
-		console.log(Meteor.user());
-	},
-	
-	'comments.getSuggestions': function getSuggestions(value) {
+	'comments.getSuggestions': (value) => {
 		check(value, String);
 
 		if (!value.length) return Comments.find({}, { limit: 5, sort: { created: -1 } }).fetch();

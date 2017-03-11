@@ -8,10 +8,6 @@ Comments.schema = new SimpleSchema({
 	status: {
 		type: String,
 		optional: true,
-		autoValue: function() {
-			if (this.isInsert)
-				return 'publish';
-		},
 	},
 
 	wordpressId: {
@@ -153,10 +149,6 @@ Comments.schema = new SimpleSchema({
 
 	isAnnotation: {
 		type: Boolean,
-		autoValue: function() {
-			if (this.isInsert)
-				return false;
-		},
 		autoform: {
 			type: 'hidden',
 			label: false,

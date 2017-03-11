@@ -9,7 +9,7 @@ Meteor.methods({
 			slug: String,
 			tenantId: String,
 			bio: Match.Maybe(String),
-			tagLine: Match.Maybe(String),
+			tagline: Match.Maybe(String),
 		});
 
 		if (
@@ -30,7 +30,7 @@ Meteor.methods({
 			slug: String,
 			tenantId: String,
 			bio: Match.Maybe(String),
-			tagLine: Match.Maybe(String),
+			tagline: Match.Maybe(String),
 		});
 
 		if (

@@ -24,32 +24,8 @@ Pages.schema = new SimpleSchema({
 	},
 	slug: {
 		type: String,
-		/* autoValue: function () {
-		 console.log(this);
-		 var slug;
-		 if (this.isSet) {
-		 slug = this.value;
-		 } else {
-		 slug = slugify(this.siblingField('title').value);
-		 }
-		 var i = 0;
-		 var slugPages = Pages.find({_id: {$ne: this.docId},slug: {$regex: '^' + slug + '-?(\d+$)?'}},
-		 {sort: {slug: 1}});
-		 slugPages.forEach(function (page) {
-		 console.log(page.slug);
-		 if (page.slug === slug || page.slug === slug + '-' + i) {
-		 i++;
-		 }
-		 });
-		 if (i) {
-		 return slug + '-' + i;
-		 } else {
-		 return slug;
-		 }
-		 },*/
 		optional: true,
 		autoform: {
-			// placeholder: 'Calculated automatically'
 			type: 'hidden',
 			label: false,
 		},

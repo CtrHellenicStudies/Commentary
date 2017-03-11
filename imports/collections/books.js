@@ -20,7 +20,6 @@ Books.schema = new SimpleSchema({
   "chapters.$.url": {
     type: String,
 		optional: true,
-    regEx: SimpleSchema.RegEx.Url
   },
   "chapters.$.title": {
     type: String,

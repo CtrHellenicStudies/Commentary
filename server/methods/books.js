@@ -52,9 +52,6 @@ Meteor.methods({
 	'books.remove': (token, bookId) => {
 		check(token, String);
 		check(bookId, String);
-		console.log(this.userId);
-		console.log(Meteor.userId());
-		console.log(Meteor.user());
 
 		if (
 			Meteor.users.findOne({

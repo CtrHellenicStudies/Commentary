@@ -37,6 +37,18 @@ Books.schema = new SimpleSchema({
     type: String,
 		optional: true,
   },
+  year: {
+    type: Number,
+		optional: true,
+  },
+  publisher: {
+    type: String,
+		optional: true,
+  },
+  citation: {
+    type: String,
+		optional: true,
+  },
 	tenantId: {
     type: String,
     label: "Tenant",

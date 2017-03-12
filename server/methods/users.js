@@ -21,6 +21,8 @@ Meteor.methods({
 			},
 			services: Match.Maybe(Object),
 			roles: Match.Maybe(Array),
+			canEditCommenters: Match.Maybe(Array),
+			canAnnotateBooks: Match.Maybe(Array),
 			highlightingPreference: Match.Maybe(Boolean),
 		});
 
@@ -69,6 +71,8 @@ Meteor.methods({
 			},
 			services: Match.Maybe(Object),
 			roles: Match.Maybe(Array),
+			canEditCommenters: Match.Maybe(Array),
+			canAnnotateBooks: Match.Maybe(Array),
 			highlightingPreference: Match.Maybe(Boolean),
 		});
 

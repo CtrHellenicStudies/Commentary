@@ -18,11 +18,8 @@ Meteor.methods({
 		}
 
 		let commentId;
-		console.log(comment);
-
 		try {
 			commentId = Comments.insert(comment);
-			console.log(commentId);
 		} catch (err) {
 			throw new Meteor.Error('comment-insert', err);
 		}

@@ -11,6 +11,9 @@ Meteor.methods({
 			chapters: Match.Maybe(Array),
 			coverImage: Match.Maybe(String),
 			tenantId: Match.Maybe(String),
+			year: Match.Maybe(Number),
+			publisher: Match.Maybe(String),
+			citation: Match.Maybe(String),
 		});
 		if (
 			Meteor.users.findOne({
@@ -32,6 +35,9 @@ Meteor.methods({
 			chapters: Match.Maybe(Array),
 			coverImage: Match.Maybe(String),
 			tenantId: Match.Maybe(String),
+			year: Match.Maybe(Number),
+			publisher: Match.Maybe(String),
+			citation: Match.Maybe(String),
 		});
 
 		if (

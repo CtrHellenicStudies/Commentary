@@ -134,7 +134,7 @@ Schemas.User = new SimpleSchema({
 		blackbox: true,
 		optional: true,
 	},
-	commenterId: {
+	canEditCommenters: { 
 		type: [String],
 		optional: true,
 	},
@@ -147,24 +147,32 @@ Schemas.User = new SimpleSchema({
 		optional: true,
 		blackbox: true,
 	},
+	canAnnotateBooks: {
+		type: Array,
+		optional: true,
+	},
+	'canAnnotateBooks.$': {
+		type: String,
+		optional: true,
+	},
 	highlightingPreference: {
 		type: Boolean,
 		optional: true,
 	},
 	createdAt: {
-    type: Date,
+		type: Date,
 		optional: true,
 	},
 	createdBy: {
-    type: String,
+		type: String,
 		optional: true,
 	},
 	updatedAt: {
-    type: Date,
+		type: Date,
 		optional: true,
 	},
 	updatedBy: {
-    type: String,
+		type: String,
 		optional: true,
 	},
 });

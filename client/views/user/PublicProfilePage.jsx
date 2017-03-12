@@ -35,7 +35,7 @@ PublicProfilePage = React.createClass({
 		let user = {};
 		let discussionComments = [];
 		const userId = this.props.userId;
-		const usersHandle = Meteor.subscribe('allUsers', userId);
+		const usersHandle = Meteor.subscribe('users.id', userId);
 		const discussionCommentsHandle = Meteor.subscribe('userDiscussionComments', userId, Session.get("tenantId"));
 		if (usersHandle.ready()) {
 			user = Meteor.users.findOne({

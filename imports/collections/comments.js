@@ -45,9 +45,8 @@ Comments.schema = new SimpleSchema({
 	},
 
 	users: {
-		type: [Object],
+		type: [String],
 		optional: true,
-		blackbox: true,
 	},
 
 	work: {

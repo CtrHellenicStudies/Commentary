@@ -16,7 +16,7 @@ Meteor.publish('userData', function userData() {
 	return Meteor.users.find({ _id: this.userId });
 });
 
-Meteor.publish('allUsers', (userId) => {
+Meteor.publish('users.id', (userId) => {
 	check(userId, String);
 	return Meteor.users.find({
 		_id: userId,

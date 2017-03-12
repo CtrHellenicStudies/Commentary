@@ -34,5 +34,5 @@ Meteor.methods({
 	},
 	currentAdminUser() {
 		return Meteor.users.findOne({ _id: Meteor.userId(), roles: {$in: ['admin']} });
-	}
+	},
 });

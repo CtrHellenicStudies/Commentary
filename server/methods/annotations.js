@@ -1,3 +1,5 @@
+import { check, Match } from 'meteor/check';
+
 import Books from '/imports/collections/books';
 import Comments from '/imports/collections/comments';
 
@@ -10,6 +12,7 @@ Meteor.methods({
 			users: [String],
 			paragraphN: Number,
 			bookChapterUrl: String,
+			parentCommentId: Match.Maybe(String),
 			revisions: [{
 				tenantId: String,
 				title: Match.Maybe(String),
@@ -63,8 +66,26 @@ Meteor.methods({
 		revision.created = new Date();
 		revision.updated = new Date();
 
+		let user = Meteor.user();
+		if (!user) {
+			user = Meteor.users.findOne({
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			});
+		}
+		if (!user) {
+			throw new Meteor.Error('annotation-insert', 'not-logged-in');
+		}
+
+		// Ensure the user is approved to edit this comment
+		const comment = Comments.findOne({ _id: commentId, users: user._id });
+		if (!comment) {
+			throw new Meteor.Error('annotation-insert', 'not-authorized');
+		}
+
 		try {
-			Comments.update({ _id: commentId }, { $set: update });
+			Comments.update({ _id: commentId }, { $addToSet: {
+				revisions: revision
+			}});
 		} catch (err) {
 			throw new Meteor.Error('annotation-add-revision', err);
 		}
@@ -76,17 +97,14 @@ Meteor.methods({
 		check(token, String);
 		check(commentId, String);
 
-		const roles = ['developer', 'admin', 'commenter'];
-		if ((
-				!Meteor.userId()
-				&& !Roles.userIsInRole(Meteor.user(), roles)
-			)
-			&& !Meteor.users.findOne({
-				roles: 'admin',
+		let user = Meteor.user();
+		if (!user) {
+			user = Meteor.users.findOne({
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-			})
-		) {
-			throw new Meteor.Error('annotation-delete', 'not-authorized');
+			});
+		}
+		if (!user) {
+			throw new Meteor.Error('annotation-insert', 'not-logged-in');
 		}
 
 		try {

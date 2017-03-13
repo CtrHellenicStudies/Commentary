@@ -98,6 +98,11 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	parentCommentId: {
+		type: String,
+		optional: true,
+	},
+
 	reference: {
 		type: String,
 		optional: true,

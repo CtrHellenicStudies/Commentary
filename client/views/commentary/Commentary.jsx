@@ -84,39 +84,43 @@ Commentary = React.createClass({
 		let isInCommentGroup = false;
 		comments.forEach((comment) => {
 			isInCommentGroup = false;
-			commentGroups.forEach((commentGroup) => {
-				if (
-					comment.work.title === commentGroup.work.title
-					&& comment.subwork.n === commentGroup.subwork.n
-					&& comment.lineFrom === commentGroup.lineFrom
-					&& comment.lineTo === commentGroup.lineTo
-				) {
-					isInCommentGroup = true;
-					commentGroup.comments.push(comment);
-				}
-			});
-
-			if (!isInCommentGroup) {
-				let ref;
-
-				if (comment.work.title === 'Homeric Hymns') {
-					ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
-				} else {
-					ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
-				}
-
-				commentGroups.push({
-					ref,
-					selectedLemmaEdition: {
-						lines: [],
-					},
-					work: comment.work,
-					subwork: comment.subwork,
-					lineFrom: comment.lineFrom,
-					lineTo: comment.lineTo,
-					nLines: comment.nLines,
-					comments: [comment],
+			if ('work' in comment) {
+				commentGroups.forEach((commentGroup) => {
+					if (
+						comment.work.title === commentGroup.work.title
+						&& comment.subwork.n === commentGroup.subwork.n
+						&& comment.lineFrom === commentGroup.lineFrom
+						&& comment.lineTo === commentGroup.lineTo
+					) {
+						isInCommentGroup = true;
+						commentGroup.comments.push(comment);
+					}
 				});
+
+				if (!isInCommentGroup) {
+					let ref;
+
+					if (comment.work.title === 'Homeric Hymns') {
+						ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
+					} else {
+						ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
+					}
+
+					commentGroups.push({
+						ref,
+						selectedLemmaEdition: {
+							lines: [],
+						},
+						work: comment.work,
+						subwork: comment.subwork,
+						lineFrom: comment.lineFrom,
+						lineTo: comment.lineTo,
+						nLines: comment.nLines,
+						comments: [comment],
+					});
+				}
+			} else {
+				console.error(`Review comment ${comment._id} metadata`);
 			}
 		});
 

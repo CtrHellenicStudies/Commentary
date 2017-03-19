@@ -192,20 +192,6 @@ FlowRouter.route('/commenters', {
 		});
 	},
 });
-FlowRouter.route('/about', {
-	action: () => {
-		mount(MasterLayout, {
-			content: <AboutPage />,
-		});
-	},
-});
-FlowRouter.route('/terms', {
-	action: () => {
-		mount(MasterLayout, {
-			content: <TermsPage />,
-		});
-	},
-});
 loggedInGroup.route('/commentary/add', {
 	action: () => {
 		mount(AddCommentLayout);

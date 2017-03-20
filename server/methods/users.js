@@ -6,9 +6,10 @@ Meteor.methods({
 		check(token, String);
 		check(user, {
 			username: String,
-			emails: Match.Maybe(Array),
+			password: String,
+			emails: Array,
 			profile: {
-				name: Match.Maybe(String),
+				name: String,
 				biography: Match.Maybe(String),
 				publicEmailAddress: Match.Maybe(String),
 				academiaEdu: Match.Maybe(String),
@@ -31,7 +32,28 @@ Meteor.methods({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Meteor.users.insert(user);
+			try {
+				const userObject = {
+					username: user.username,
+					mail: user.emails[0].address,
+					password: user.password,
+				};
+
+				// Create a new user with Accounts
+				const newUserId = Accounts.createUser(userObject);
+
+				// remove password before updating user obj
+				delete user.password;
+
+				// Update user profile and other metadata
+				return Meteor.users.update({
+					_id: newUserId,
+				}, {
+					$set: user,
+				});
+			} catch (err) {
+				throw new Meteor.Error('meteor-ddp-admin', `Error with creating user: ${err}`);
+			}
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');

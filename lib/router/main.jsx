@@ -76,9 +76,9 @@ FlowRouter.triggers.enter([() => {
 				}
 
 				if (location.hostname.match(/.+.chs.harvard.edu/)) {
-					domain = 'http://*.chs.harvard.edu';
+					domain = '*.chs.harvard.edu';
 				} else if (location.hostname.match(/.+.orphe.us/)) {
-					domain = 'http://*.orphe.us';
+					domain = '*.orphe.us';
 				}
 
 				if (domain) {

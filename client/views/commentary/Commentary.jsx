@@ -120,7 +120,7 @@ Commentary = React.createClass({
 					});
 				}
 			} else {
-				console.error(`Review comment ${comment._id} metadata`);
+				console.log(`Review comment ${comment._id} metadata`);
 			}
 		});
 

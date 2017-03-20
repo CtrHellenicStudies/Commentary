@@ -36,6 +36,8 @@ Meteor.publish('users.all', () => {
 			services: 1,
 			roles: 1,
 			highlightingPreference: 1,
+			canAnnotateBooks: 1,
+			canEditCommenters: 1,
 		},
 		sort: {
 			username: 1,
@@ -61,6 +63,8 @@ Meteor.publish('users.token', (userId, token) => {
 			services: 1,
 			roles: 1,
 			highlightingPreference: 1,
+			canAnnotateBooks: 1,
+			canEditCommenters: 1,
 		},
 		sort: {
 			username: 1,
@@ -85,6 +89,8 @@ Meteor.publish('users.token.admin', (userId, token) => {
 			services: 1,
 			roles: 1,
 			highlightingPreference: 1,
+			canAnnotateBooks: 1,
+			canEditCommenters: 1,
 		},
 		sort: {
 			username: 1,

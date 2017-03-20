@@ -5,5 +5,5 @@ source "$SELF_DIR/config"
 $SELF_DIR/build_app
 $SELF_DIR/build_image
 gcloud docker push -- $DEFAULT_IMAGE_TAG
-gcloud container clusters get-credentials ahcip-cluster \
+gcloud container clusters get-credentials ahcip \
     --zone us-east1-b --project archimedes-01201

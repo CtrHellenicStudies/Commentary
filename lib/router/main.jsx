@@ -75,11 +75,13 @@ FlowRouter.triggers.enter([() => {
 					return false;
 				}
 
+				/*
 				if (location.hostname.match(/.+.chs.harvard.edu/)) {
 					domain = '*.chs.harvard.edu';
 				} else if (location.hostname.match(/.+.orphe.us/)) {
 					domain = '*.orphe.us';
 				}
+				*/
 
 				if (domain) {
 					cookie.save('userId', Meteor.userId(), { path, domain, });

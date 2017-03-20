@@ -99,7 +99,7 @@ NotFound = React.createClass({
 							Are you sure this is where you wanted to go?	If not, please return to the previous page with the back button.
 						</p>
 						<p>
-							If this is a persistent error, please send us an email at <a href="mailto:contact@chs.harvard.edu">contact@chs.harvard.edu</a> and lament your woes (hexameter preferred).
+							If this is a persistent error, please send us an email at <a href="mailto:muellner@chs.harvard.edu">muellner@chs.harvard.edu</a> and lament your woes (hexameter preferred).
 						</p>
 						<p>
 							Please include what paths you were wandering and what device you were using when you went astray.
@@ -108,7 +108,7 @@ NotFound = React.createClass({
 							Many thanks,
 						</p>
 						<p>
-							The CHS IT team.
+							The CHS IT team
 						</p>
 					</section>
 				</div>

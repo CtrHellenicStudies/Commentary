@@ -26,7 +26,6 @@ Subworks.schema = new SimpleSchema({
 		min: 0,
 	},
 
-	/*
 	commentHeatmap: {
 		type: [Object],
 		optional: true,
@@ -37,7 +36,6 @@ Subworks.schema = new SimpleSchema({
 	'commentHeatmap.$.nComments': {
 		type: Number,
 	},
-	*/
 });
 
 Subworks.attachSchema(Subworks.schema);

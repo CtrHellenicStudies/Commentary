@@ -10,7 +10,7 @@ Slingshot.createDirective('uploads', Slingshot.S3Storage, {
 	allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
 	maxSize: 10 * 1024 * 1024, // 10 MB (use null for unlimited)
 
-	authorize: function () {
+	authorize: function authorize() {
 		// Deny uploads if user is not logged in.
 		if (!this.userId) {
 			const message = 'Please login before posting files';
@@ -20,9 +20,12 @@ Slingshot.createDirective('uploads', Slingshot.S3Storage, {
 		return true;
 	},
 
-	key: function (file) {
+	key: function saveKey(file) {
 		// Store file into a directory by the user's username.
 		const user = Meteor.users.findOne(this.userId);
-		return `${user._id} / ${file.name}`;
+		let key = `${user._id}/${file.name}`;
+		key = key.replace(/\s/g, '', 'X');
+
+		return key;
 	},
 });

@@ -15,16 +15,18 @@ WorksList = React.createClass({
 	},
 
 	getMeteorData() {
-		const worksSub = Meteor.subscribe('works');
+		const worksSub = Meteor.subscribe('works', Session.get('tenantId'));
 		const works = Works.find().fetch();
 		return {
 			works,
+			ready: worksSub.ready(),
 		};
 	},
 
 	renderWorks() {
-		if (this.data.works.length === 3) {
-			return this.data.works.map((work, i) => (
+		const { works, ready } = this.data;
+		if (ready) {
+			return works.map((work, i) => (
 				<WorkVisualization
 					key={i}
 					work={work}

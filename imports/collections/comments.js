@@ -5,6 +5,11 @@ const Comments = new Meteor.Collection('comments');
 
 Comments.schema = new SimpleSchema({
 
+	status: {
+		type: String,
+		optional: true,
+	},
+
 	wordpressId: {
 		type: Number,
 		optional: true,
@@ -37,23 +42,11 @@ Comments.schema = new SimpleSchema({
 		type: [Object],
 		optional: true,
 		blackbox: true,
-		/*autoform: {
-		 options: function() {
-		 return _.map(Commenters.find().fetch(), function(commenter) {
-		 return {
-		 label: commenter.name,
-		 value: commenter._id
-		 };
-		 });
-		 }
-		 }
-		 */
 	},
 
 	users: {
-		type: [Object],
+		type: [String],
 		optional: true,
-		blackbox: true,
 	},
 
 	work: {
@@ -85,8 +78,8 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	nLines: {
-		type: Number,
+	bookChapterUrl: {
+		type: String,
 		optional: true,
 	},
 
@@ -95,8 +88,18 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	nLines: {
+		type: Number,
+		optional: true,
+	},
+
 	commentOrder: {
 		type: Number,
+		optional: true,
+	},
+
+	parentCommentId: {
+		type: String,
 		optional: true,
 	},
 
@@ -150,10 +153,6 @@ Comments.schema = new SimpleSchema({
 
 	isAnnotation: {
 		type: Boolean,
-		autoValue: function() {
-			if (this.isInsert)
-				return false;
-		},
 		autoform: {
 			type: 'hidden',
 			label: false,
@@ -171,42 +170,3 @@ Comments.attachBehaviour('timestampable', {
 });
 
 export default Comments;
-
-/*
- Comments.helpers({
- commenters: function() {
- var ref, ref1, ref2, user;
- commenter = Commenters.findOne(this.commenter);
- if (commenter != null) {
- return commenter.name;
- } else {
- return null;
- }
- }
- });
- */
-/*
- Comments.helpers({
- commentTitle: function(){
- var comment_title = "";
- console.log(this);
-
- if(this.work){
- comment_title += this.work.title + " ";
- }
- if(this.subwork){
- comment_title += this.subwork + ".";
- }
- if(this.lineFrom){
- comment_title += this.lineFrom;
- }
-
- if(this.lineTo){
- comment_title += "-" + this.lineTo;
-
- }
-
- return comment_title;
- }
- });
- */

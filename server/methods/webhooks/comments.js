@@ -1,67 +1,11 @@
 import Comments from '/imports/collections/comments';
 import Commenters from '/imports/collections/commenters';
 import Keywords from '/imports/collections/keywords';
+import Revisions from '/imports/collections/revisions';
 import Tenants from '/imports/collections/tenants';
 import Works from '/imports/collections/works';
 
-Meteor.method('keyword-webhook', (keywordCandidate) => {
-	check(keywordCandidate.wordpressId, Match.Maybe(Number));
-	check(keywordCandidate.slug, String);
-	check(keywordCandidate.title, String);
-	check(keywordCandidate.type, String);
-	check(keywordCandidate.subdomain, String);
-	check(keywordCandidate.token, String);
-
-
-	const tenant = Tenants.findOne({ subdomain: keywordCandidate.subdomain });
-	const settings = Settings.findOne({ tenantId: tenant._id });
-
-	if (!settings || settings.webhooksToken !== keywordCandidate.token) {
-		throw new Meteor.Error('Webhook publishing not authorized');
-	}
-
-	if (keywordCandidate.type !== 'word' && keywordCandidate.type !== 'idea') {
-		throw new Meteor.Error(
-			`type must be word or idea; was ${keywordCandidate.type}`);
-	}
-
-
-	if (!tenant) {
-		throw new Meteor.Error(
-			`could not find tenant for given subdomain; was ${keywordCandidate.subdomain}`);
-	}
-
-	const keywordDoc = {
-		tenantId: tenant._id,
-		title: keywordCandidate.title,
-		slug: keywordCandidate.slug,
-		type: keywordCandidate.type,
-	};
-
-	if (keywordCandidate.wordpressId) {
-		keywordDoc.wordpressId = keywordCandidate.wordpressId;
-	}
-
-	const upsertResult = Keywords.upsert(
-		{ slug: keywordCandidate.slug },
-		{ $set: keywordDoc });
-
-	/*
-	console.log('keyword upsert: numberAffected=',
-		upsertResult.numberAffected,
-		', insertedId=',
-		upsertResult.insertedId);
-	*/
-}, {
-	url: 'keyword/webhook',
-	getArgsFromRequest(request) {
-		// Sometime soon do validation here
-		const content = request.body;
-		return [content];
-	},
-});
-
-Meteor.method('commentary-webhook', (commentCandidate) => {
+Meteor.method('publishComments', (commentCandidate) => {
 	let valid = false;
 	check(commentCandidate.subdomain, String);
 	check(commentCandidate.comment_id, Match.Maybe(Number));
@@ -81,24 +25,12 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	}
 
 	const commenters = [];
-
-	// console.log('Potential comment:', commentCandidate);
-	// if (commentCandidate.keywords && commentCandidate.keywords.length > 0) {
-	// 	console.log('keywords:', commentCandidate.keywords);
-	// }
-
-	/*
-	 comment_candidate.commenters.forEach(function(commenter_wordpress_id, i){
-	 commenters.push(Commenters.findOne({wordpressId: commenter_wordpress_id}));
-	 });
-	 */
 	let commenter = null;
 	if (commentCandidate.commenter) {
 		commenter = Commenters.findOne({ slug: commentCandidate.commenter });
 	}
 	if (!commenter) {
 		console.error(`Could not find commenter with slug:${commentCandidate.commenter}`);
-		// return false;
 	} else {
 		commenters.push(commenter);
 	}
@@ -117,7 +49,6 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 
 	if (!subwork) {
 		console.error(`Could not find subwork with n:${commentCandidate.subwork} work:${work.slug}`);
-		// return false;
 		if (commentCandidate.subwork) {
 			const newSubwork = {
 				title: String(commentCandidate.subwork),
@@ -147,12 +78,6 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 	}
 
 	let upsertResponse;
-	// console.log("Work:", work);
-	// console.log("Subwork:", subwork);
-	// console.log("Commenters:", commenters);
-	// console.log("Keywords:", keywords);
-	// console.log("Revision:", revision);
-	// console.log("Comment:", comment);
 
 	if (comment) {
 		let revisionExists = false;
@@ -178,7 +103,7 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 		upsertResponse = Comments.update(
 			{ _id: commentCandidate._id },
 			{ $addToSet: { revisions: revision } });
-		// console.log('Update response:', upsertResponse);
+
 	} else {
 		let nLines = 1;
 		const commentOrder = 0;
@@ -260,9 +185,8 @@ Meteor.method('commentary-webhook', (commentCandidate) => {
 
 	return valid;
 }, {
-	url: 'commentary/webhook',
+	url: 'comments/webhook',
 	getArgsFromRequest(request) {
-		// Sometime soon do validation here
 		const content = request.body;
 		return [content];
 	},

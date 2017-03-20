@@ -1,52 +1,29 @@
 import { Meteor } from 'meteor/meteor';
-import { check, Match } from 'meteor/check';
-import Tenants from '/imports/collections/tenants';
+import LinkedDataSchemas from '/imports/collections/linkedDataSchemas';
 
 Meteor.methods({
-	findTenantBySubdomain(subdomain) {
-		check(subdomain, String);
-		return Tenants.findOne({ subdomain });
-	},
-	tenants() {
-		return Tenants.find().fetch();
-	},
-	'tenants.insert': (token, tenant) => {
+	'linkedDataSchemas.insert': (token, linkedDataSchema) => {
 		check(token, String);
-		check(tenant, {
-			subdomain: String,
-			isAnnotation: Match.Maybe(Boolean),
+		check(linkedDataSchema, {
+			collectionName: String,
+			tenantId: Match.Maybe(String),
 		});
-
 		if (
 			Meteor.users.findOne({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.insert(tenant);
+			return LinkedDataSchemas.insert(linkedDataSchema);
 		}
-
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'tenants.remove': (token, tenantId) => {
-		check(token, String);
-		check(tenantId, String);
 
-		if (
-			Meteor.users.findOne({
-				roles: 'admin',
-				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-			})) {
-			return Tenants.remove(tenantId);
-		}
-
-		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-	},
-	'tenants.update': (token, _id, tenant) => {
+	'linkedDataSchemas.update': (token, _id, linkedDataSchema) => {
 		check(token, String);
 		check(_id, String);
-		check(tenant, {
-			subdomain: String,
-			isAnnotation: Match.Maybe(Boolean),
+		check(linkedDataSchema, {
+			collectionName: String,
+			tenantId: Match.Maybe(String),
 		});
 
 		if (
@@ -54,11 +31,26 @@ Meteor.methods({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.update({
+			return LinkedDataSchemas.update({
 				_id
 			}, {
-				$set: tenant,
+				$set: linkedDataSchema,
 			});
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	},
+
+	'linkedDataSchemas.remove': (token, linkedDataSchemaId) => {
+		check(token, String);
+		check(linkedDataSchemaId, String);
+
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return LinkedDataSchemas.remove(linkedDataSchemaId);
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');

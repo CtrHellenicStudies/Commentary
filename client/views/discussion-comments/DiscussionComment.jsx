@@ -231,18 +231,6 @@ DiscussionComment = React.createClass({
 						}
 						{this.state.readComment === false ?
 							<FlatButton
-								label=""
-								onClick={this.toggleShareOptions}
-								className="discussion-comment-button"
-								icon={<FontIcon className="mdi mdi-share" />}
-							>
-								<span className="md-tooltip">Share</span>
-							</FlatButton>
-							:
-							''
-						}
-						{this.state.readComment === false ?
-							<FlatButton
 								onClick={this.toggleMoreOptions}
 								label=""
 								className={`discussion-comment-button toggle-more-button ${(this.state.moreOptionsVisible) ? 'toggle-more-button--active' : ''}`}
@@ -277,32 +265,6 @@ DiscussionComment = React.createClass({
 							/>
 							: ''
 						}
-						<div className={`more-options share-options ${this.state.shareOptionsVisible ? 'more-options--visible' : ''}`}>
-							<FlatButton
-								label="Facebook"
-								href="#"
-								className="discussion-comment-button"
-								icon={<FontIcon className="mdi mdi-facebook" />}
-							/>
-							<FlatButton
-								label="Twitter"
-								href="#"
-								className="discussion-comment-button"
-								icon={<FontIcon className="mdi mdi-twitter" />}
-							/>
-							<FlatButton
-								label="Google"
-								href="#"
-								className="discussion-comment-button"
-								icon={<FontIcon className="mdi mdi-google-plus" />}
-							/>
-							<FlatButton
-								label="Mail"
-								href="#"
-								className="discussion-comment-button"
-								icon={<FontIcon className="mdi mdi-email-outline" />}
-							/>
-						</div>
 					</div>
 
 

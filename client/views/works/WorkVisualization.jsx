@@ -678,7 +678,7 @@ WorkVisualization = React.createClass({
 						.style('opacity', 0);
 				})
 				.on('click', function(d) {
-					if(self.props.commenterSlug) {
+					if (self.props.commenterSlug) {
 						window.location = '/commentary/?works=' + workSlug + '&subworks=' + subworkN + '&lineFrom=' + ((d * 10) + 1) + '&lineTo=' + ((d + 1) * 10) + '&commenters=' + self.props.commenterSlug;
 					} else {
 						window.location = '/commentary/?works=' + workSlug + '&subworks=' + subworkN + '&lineFrom=' + ((d * 10) + 1) + '&lineTo=' + ((d + 1) * 10);
@@ -829,18 +829,22 @@ WorkVisualization = React.createClass({
 	},
 
 	render() {
-		const work = this.props.work;
+		const { work } = this.props;
 		const workUrl = `/commentary/?q=work.${work.slug}`;
 
-		return (
-			<div className={ `work-teaser work-teaser--${work.slug}` }>
-				<div className="commentary-text">
-					<a href={ workUrl }><h3 className="text-title">{ work.title }</h3></a>
-					<hr className="text-divider" />
-					<div className="text-meta" />
-					<div className={ `text-subworks text-subworks-visualization-${work.slug}` } />
+		if (work.subworks.length) {
+			return (
+				<div className={`work-teaser work-teaser--${work.slug}`}>
+					<div className="commentary-text">
+						<a href={workUrl}><h3 className="text-title">{work.title}</h3></a>
+						<hr className="text-divider" />
+						<div className="text-meta" />
+						<div className={`text-subworks text-subworks-visualization-${work.slug}`} />
+					</div>
 				</div>
-			</div>
 			);
+		}
+
+		return null;
 	},
 });

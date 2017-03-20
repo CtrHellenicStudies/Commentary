@@ -1,58 +1,114 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import React from 'react';
+import cookie from 'react-cookie';
 import { mount } from 'react-mounter';
+
 FlowRouter.notFound = {
-  action() {
-    // Render not found page here
-    mount(NotFound);
-  },
+	action() {
+		// Render not found page here
+		mount(NotFound);
+	},
 };
+
 // Global subscription: user data is needed in almost all routes
-let tenantId;
 function subscriptions() {
 	this.register('userData', Meteor.subscribe('userData'));
 	this.register('commenters', Meteor.subscribe('commenters', this.tenantId));
 	this.register('tenants', Meteor.subscribe('tenants'));
 }
 FlowRouter.subscriptions = subscriptions;
-// check tenant and set document meta
-FlowRouter.triggers.enter([(context) => {
+
+/*
+ * Perform necessary checks on entering any route
+ */
+FlowRouter.triggers.enter([() => {
+
+	/*
+	 * Check for and set the tenantId of the current subdomain
+	 */
 	if (!Session.get('tenantId')) {
-		let hostnameArray = document.location.hostname.split('.');
+		const hostnameArray = document.location.hostname.split('.');
 		if (process.env.NODE_ENV === 'development') {
 			subdomain = Meteor.settings.public.developmentSubdomain;
 		} else if (hostnameArray.length > 1) {
 			subdomain = hostnameArray[0];
 		} else {
 			subdomain = '';
-			FlowRouter.go("/404");
+			FlowRouter.go('/404');
 		}
-		if (process.env.NODE_ENV === 'development') {
-			subdomain = 'pindar';
-		}
-		Meteor.call('findTenantBySubdomain', subdomain, function(err, tenant) {
+		Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);
-				this.tenantId = tenant._id;
 				if (tenant.isAnnotation && !Meteor.userId()) {
-					FlowRouter.go("/sign-in");
+					FlowRouter.go('/sign-in');
 				}
 			} else {
-				FlowRouter.go("/404");
+				FlowRouter.go('/404');
 			}
 		});
 	}
+
+	/*
+	 * If the tenant is only for Annotations, then deny access to the homepage and
+	 * instead forward only to the user's profile
+	 */
+	if (Session.get('tenantId')) {
+		const tenant = Tenants.findOne({ _id: Session.get('tenantId') });
+		if (tenant && tenant.isAnnotation && FlowRouter.current().path === '/') {
+			FlowRouter.go('/profile');
+		}
+	}
+
+	/*
+	 * Check for multi-subdomain login cookie, if found, login user with Token
+	 * if user is logged in and no cookie is found, set cookie
+	 */
+	if (Meteor.userId()) {
+		if (!cookie.load('loginToken')) {
+			Meteor.call('getNewStampedToken', (_err, token) => {
+				const path = '/';
+				let domain;
+
+				if (_err) {
+					console.error(_err);
+					return false;
+				}
+
+				/*
+				if (location.hostname.match(/.+.chs.harvard.edu/)) {
+					domain = '*.chs.harvard.edu';
+				} else if (location.hostname.match(/.+.orphe.us/)) {
+					domain = '*.orphe.us';
+				}
+				*/
+
+				if (domain) {
+					cookie.save('userId', Meteor.userId(), { path, domain, });
+					cookie.save('loginToken', token, { path, domain });
+				} else {
+					cookie.save('userId', Meteor.userId(), { path });
+					cookie.save('loginToken', token, { path });
+				}
+			});
+		}
+	} else {
+		const loginToken = cookie.load('loginToken');
+		if (loginToken) {
+			Meteor.loginWithToken(loginToken);
+		}
+	}
+
+	/*
+	 * Set the base document metadata for the page
+	 */
 	if (Meteor.isClient) {
 		Utils.setBaseDocMeta();
 	}
-	if (Meteor.userId() && Session.get("tenantId")) {
-		let tenant = Tenants.findOne({ _id: Session.get("tenantId") });
-		if (tenant && tenant.isAnnotation && FlowRouter.current().path == "/")
-			FlowRouter.go("/profile");
-	}
-	this.tenantId = Session.get("tenantId");
+
+	this.tenantId = Session.get('tenantId');
 }]);
+
 /*
  * Route groups with permissions
  */
@@ -72,7 +128,7 @@ FlowRouter.route('/commentary', {
 	},
 });
 FlowRouter.route('/keywords/add', {
-	action: (params) => {
+	action: () => {
 		mount(AddKeywordLayout);
 	},
 });
@@ -138,20 +194,6 @@ FlowRouter.route('/commenters', {
 		});
 	},
 });
-FlowRouter.route('/about', {
-	action: () => {
-		mount(MasterLayout, {
-			content: <AboutPage />,
-		});
-	},
-});
-FlowRouter.route('/terms', {
-	action: () => {
-		mount(MasterLayout, {
-			content: <TermsPage />,
-		});
-	},
-});
 loggedInGroup.route('/commentary/add', {
 	action: () => {
 		mount(AddCommentLayout);
@@ -214,25 +256,26 @@ loggedInGroup.route('/sign-out', {
 	triggersEnter: [
 		() => {
 			AccountsTemplates.logout();
+			cookie.remove('userId');
+			cookie.remove('loginToken');
 		},
 	],
 	action: () => {
 		// Do nothing
 	},
 });
+
 /*
-* Single page view
-* 404 check is in the actual template
-*/
-// FlowRouter.route('/:slug', {
-// 	action(params) {
-// 		// console.log(params);
-// 		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
-// 		// console.log(reservedRoutes.indexOf(params.slug));
-// 		if (reservedRoutes.indexOf(params.slug) === -1) {
-// 			mount(MasterLayout, {
-// 				content: <SinglePage slug={params.slug} />,
-// 			});
-// 		}
-// 	},
-// });
+ * Single page view
+ * 404 check is in the actual template
+ */
+FlowRouter.route('/:slug', {
+	action(params) {
+		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
+		if (reservedRoutes.indexOf(params.slug) === -1) {
+			mount(MasterLayout, {
+				content: <SinglePage slug={params.slug} />,
+			});
+		}
+	},
+});

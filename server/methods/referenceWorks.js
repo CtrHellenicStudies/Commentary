@@ -1,20 +1,15 @@
 import { Meteor } from 'meteor/meteor';
-import { check, Match } from 'meteor/check';
-import Tenants from '/imports/collections/tenants';
+import ReferenceWorks from '/imports/collections/referenceWorks';
 
 Meteor.methods({
-	findTenantBySubdomain(subdomain) {
-		check(subdomain, String);
-		return Tenants.findOne({ subdomain });
-	},
-	tenants() {
-		return Tenants.find().fetch();
-	},
-	'tenants.insert': (token, tenant) => {
+	'referenceWorks.insert'(token, referenceWork) {
 		check(token, String);
-		check(tenant, {
-			subdomain: String,
-			isAnnotation: Match.Maybe(Boolean),
+		check(referenceWork, {
+			title: String,
+			slug: String,
+			tenantId: Match.Maybe(String),
+			authors: Match.Maybe(Array),
+			coverImage: Match.Maybe(String),
 		});
 
 		if (
@@ -22,31 +17,34 @@ Meteor.methods({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.insert(tenant);
+			return ReferenceWorks.insert(referenceWork);
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'tenants.remove': (token, tenantId) => {
+	'referenceWorks.remove'(token, referenceWorkId) {
 		check(token, String);
-		check(tenantId, String);
+		check(referenceWorkId, String);
 
 		if (
 			Meteor.users.findOne({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.remove(tenantId);
+			return ReferenceWorks.remove(referenceWorkId);
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'tenants.update': (token, _id, tenant) => {
+	'referenceWorks.update'(token, _id, referenceWork) {
 		check(token, String);
 		check(_id, String);
-		check(tenant, {
-			subdomain: String,
-			isAnnotation: Match.Maybe(Boolean),
+		check(referenceWork, {
+			title: String,
+			slug: String,
+			tenantId: Match.Maybe(String),
+			authors: Match.Maybe(Array),
+			coverImage: Match.Maybe(String),
 		});
 
 		if (
@@ -54,10 +52,10 @@ Meteor.methods({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.update({
+			return ReferenceWorks.update({
 				_id
 			}, {
-				$set: tenant,
+				$set: referenceWork,
 			});
 		}
 

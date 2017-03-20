@@ -1,63 +1,76 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
-import Tenants from '/imports/collections/tenants';
+import Works from '/imports/collections/works';
 
 Meteor.methods({
-	findTenantBySubdomain(subdomain) {
-		check(subdomain, String);
-		return Tenants.findOne({ subdomain });
-	},
-	tenants() {
-		return Tenants.find().fetch();
-	},
-	'tenants.insert': (token, tenant) => {
+	'works.insert': (token, work) => {
 		check(token, String);
-		check(tenant, {
-			subdomain: String,
-			isAnnotation: Match.Maybe(Boolean),
+		check(work, {
+			title: String,
+			tenantId: Match.Maybe(String),
+			order: Match.Maybe(Number),
+			subworks: Match.Maybe(Array)
 		});
 
-		if (
-			Meteor.users.findOne({
-				roles: 'admin',
-				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-			})) {
-			return Tenants.insert(tenant);
+		if ('subworks' in work) {
+			work.subworks.forEach((subwork) => {
+				check(subwork.title, String);
+				check(subwork.slug, String);
+				check(subwork.n, Number);
+			});
 		}
-
-		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-	},
-	'tenants.remove': (token, tenantId) => {
-		check(token, String);
-		check(tenantId, String);
 
 		if (
 			Meteor.users.findOne({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.remove(tenantId);
+			return Works.insert(work);
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'tenants.update': (token, _id, tenant) => {
+	'works.remove': (token, _id) => {
 		check(token, String);
 		check(_id, String);
-		check(tenant, {
-			subdomain: String,
-			isAnnotation: Match.Maybe(Boolean),
-		});
 
 		if (
 			Meteor.users.findOne({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.update({
+			return Works.remove(_id);
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	},
+	'works.update': (token, _id, work) => {
+		check(token, String);
+		check(_id, String);
+		check(work, {
+			title: String,
+			tenantId: Match.Maybe(String),
+			order: Match.Maybe(Number),
+			subworks: Match.Maybe(Array)
+		});
+
+		if ('subworks' in work) {
+			work.subworks.forEach((subwork) => {
+				check(subwork.title, String);
+				check(subwork.slug, String);
+				check(subwork.n, Number);
+			});
+		}
+
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Works.update({
 				_id
 			}, {
-				$set: tenant,
+				$set: work,
 			});
 		}
 

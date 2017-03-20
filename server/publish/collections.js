@@ -1,3 +1,4 @@
+import Books from '/imports/collections/books';
 import Comments from '/imports/collections/comments';
 import Commenters from '/imports/collections/commenters';
 import DiscussionComments from '/imports/collections/discussionComments';
@@ -8,6 +9,7 @@ import ReferenceWorks from '/imports/collections/referenceWorks';
 import Tenants from '/imports/collections/tenants';
 import TextNodes from '/imports/collections/textNodes';
 import Works from '/imports/collections/works';
+import Settings from '/imports/collections/settings';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {
@@ -58,15 +60,16 @@ if (Meteor.isServer) {
 	});
 
 
-	Meteor.publish('textNodes', (textQuery) => {
-		check(textQuery, Object);
+	Meteor.publish('textNodes', (textQuery, skip = 0, limit = 100) => {
+		check(textQuery, Match.Maybe(Object));
 		const query = textQuery || {};
 
 		return TextNodes.find(query, {
-			limit: 100,
 			sort: {
 				'text.n': 1,
 			},
+			limit,
+			skip,
 		});
 	});
 
@@ -140,7 +143,7 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('keywords.all', (query = {}, skip = 0, limit = 100) => {
+	Meteor.publish('keywords.all', (query = {}, skip = 0, limit = 1000) => {
 		check(query, Object);
 		check(skip, Number);
 		check(limit, Number);
@@ -280,12 +283,72 @@ if (Meteor.isServer) {
 		return Pages.find(query);
 	});
 
-	Meteor.publish('tenants', () => Tenants.find());
+	Meteor.publish('pages.all', () => Pages.find({}, { sort: { tenantId: 1, title: 1 }}));
+
+	Meteor.publish('comments.all', (skip = 0, limit = 100) => {
+		check(skip, Number);
+		check(limit, Number);
+
+		return Comments.find({}, {
+			sort: {
+				tenantId: 1,
+				'work.order': 1,
+				'subwork.n': 1,
+				lineFrom: 1,
+				nLines: -1,
+			},
+			skip,
+			limit,
+		});
+	});
+
+	Meteor.publish('annotations.all', (skip = 0, limit = 100) => {
+		check(skip, Number);
+		check(limit, Number);
+
+		return Comments.find({ isAnnotation: true }, {
+			sort: {
+				tenantId: 1,
+				book: 1,
+				paragraphN: 1,
+				nLines: -1,
+			},
+			skip,
+			limit,
+		});
+	});
+
+	Meteor.publish('works.all', () => Works.find({}, {sort: {tenantId: 1, order: 1, title: 1}}));
+
+	Meteor.publish('referenceWorks.all', () => ReferenceWorks.find({}, { sort: { tenantId: 1, title: 1 }}));
+
+	Meteor.publish('commenters.all', () => Commenters.find({}, { sort: { tenantId: 1, name: 1 }}));
+
+	Meteor.publish('books', () => Books.find({}, { sort: { tenantId: 1, title: 1 }}));
+
+	Meteor.publish('tenants', () => Tenants.find({}, { sort: { subdomain: 1 } }));
+
+	Meteor.publish('settings', () => Settings.find({}, { sort: { tenantId: 1 }}));
 
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));
 		return Settings.find({ tenantId });
 	});
 
-	Meteor.publish('linkedDataSchemas', () => LinkedDataSchemas.find());
+	Meteor.publish('linkedDataSchemas', () => LinkedDataSchemas.find({}, { sort: { tenantId: 1, collectionName: 1 } }));
+
+	Meteor.publish('discussionComments.all', (skip = 0, limit = 100) => {
+		check(skip, Number);
+		check(limit, Number);
+
+		return DiscussionComments.find({}, {
+			sort: {
+				created: 1,
+				tenantId: 1,
+			},
+			skip,
+			limit,
+		});
+	});
+
 }

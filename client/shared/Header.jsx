@@ -16,7 +16,7 @@ Header = React.createClass({
 		handleChangeLineN: React.PropTypes.func,
 		initialSearchEnabled: React.PropTypes.bool,
 		addCommentPage: React.PropTypes.bool,
-
+		isOnHomeView: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -51,9 +51,9 @@ Header = React.createClass({
 
 	toggleSearchMode() {
 		if (
-          location.pathname.indexOf('/commentary') === 0 ||
-          this.props.addCommentPage
-        ) {
+					location.pathname.indexOf('/commentary') === 0 ||
+					this.props.addCommentPage
+				) {
 			this.setState({
 				searchEnabled: !this.state.searchEnabled,
 			});
@@ -180,7 +180,7 @@ Header = React.createClass({
 		};
 
 		const userIsLoggedIn = Meteor.user();
-		const filters = this.props.filters;
+		const { filters, isOnHomeView } = this.props;
 
 		const { tenant } = this.data;
 
@@ -190,13 +190,17 @@ Header = React.createClass({
 					open={this.state.leftMenuOpen}
 					closeLeftMenu={this.closeLeftMenu}
 				/>
-				<CommentarySearchPanel
-					toggleSearchTerm={this.props.toggleSearchTerm}
-					handleChangeTextsearch={this.props.handleChangeTextsearch}
-					handleChangeLineN={this.props.handleChangeLineN}
-					open={this.state.rightMenuOpen}
-					closeRightMenu={this.closeRightMenu}
-				/>
+
+				{!isOnHomeView ?
+					<CommentarySearchPanel
+						toggleSearchTerm={this.props.toggleSearchTerm}
+						handleChangeTextsearch={this.props.handleChangeTextsearch}
+						handleChangeLineN={this.props.handleChangeLineN}
+						open={this.state.rightMenuOpen}
+						closeRightMenu={this.closeRightMenu}
+						filters={filters}
+					/>
+				: ''}
 				<header >
 					{!this.state.searchEnabled ?
 						<div className="md-menu-toolbar" >
@@ -321,22 +325,24 @@ Header = React.createClass({
 												iconClassName="mdi mdi-magnify"
 											/>
 										</div>
-										<div className="search-tools collapse">
-											<CommentarySearchToolbar
-												toggleSearchTerm={this.props.toggleSearchTerm}
-												handleChangeTextsearch={this.props.handleChangeTextsearch}
-												handleChangeLineN={this.props.handleChangeLineN}
-												filters={filters}
-												addCommentPage={this.props.addCommentPage ? true : false}
-											/>
-											<div className="search-toggle">
-												<IconButton
-													className="search-button"
-													onClick={this.toggleSearchMode}
-													iconClassName="mdi mdi-magnify"
+										{!isOnHomeView ?
+											<div className="search-tools collapse">
+												<CommentarySearchToolbar
+													toggleSearchTerm={this.props.toggleSearchTerm}
+													handleChangeTextsearch={this.props.handleChangeTextsearch}
+													handleChangeLineN={this.props.handleChangeLineN}
+													filters={filters}
+													addCommentPage={this.props.addCommentPage}
 												/>
+												<div className="search-toggle">
+													<IconButton
+														className="search-button"
+														onClick={this.toggleSearchMode}
+														iconClassName="mdi mdi-magnify"
+													/>
+												</div>
 											</div>
-										</div>
+										: ''}
 									</div>
 								</div>
 							}

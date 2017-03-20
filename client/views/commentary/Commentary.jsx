@@ -84,39 +84,43 @@ Commentary = React.createClass({
 		let isInCommentGroup = false;
 		comments.forEach((comment) => {
 			isInCommentGroup = false;
-			commentGroups.forEach((commentGroup) => {
-				if (
-					comment.work.title === commentGroup.work.title
-					&& comment.subwork.n === commentGroup.subwork.n
-					&& comment.lineFrom === commentGroup.lineFrom
-					&& comment.lineTo === commentGroup.lineTo
-				) {
-					isInCommentGroup = true;
-					commentGroup.comments.push(comment);
-				}
-			});
-
-			if (!isInCommentGroup) {
-				let ref;
-
-				if (comment.work.title === 'Homeric Hymns') {
-					ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
-				} else {
-					ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
-				}
-
-				commentGroups.push({
-					ref,
-					selectedLemmaEdition: {
-						lines: [],
-					},
-					work: comment.work,
-					subwork: comment.subwork,
-					lineFrom: comment.lineFrom,
-					lineTo: comment.lineTo,
-					nLines: comment.nLines,
-					comments: [comment],
+			if ('work' in comment) {
+				commentGroups.forEach((commentGroup) => {
+					if (
+						comment.work.title === commentGroup.work.title
+						&& comment.subwork.n === commentGroup.subwork.n
+						&& comment.lineFrom === commentGroup.lineFrom
+						&& comment.lineTo === commentGroup.lineTo
+					) {
+						isInCommentGroup = true;
+						commentGroup.comments.push(comment);
+					}
 				});
+
+				if (!isInCommentGroup) {
+					let ref;
+
+					if (comment.work.title === 'Homeric Hymns') {
+						ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
+					} else {
+						ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
+					}
+
+					commentGroups.push({
+						ref,
+						selectedLemmaEdition: {
+							lines: [],
+						},
+						work: comment.work,
+						subwork: comment.subwork,
+						lineFrom: comment.lineFrom,
+						lineTo: comment.lineTo,
+						nLines: comment.nLines,
+						comments: [comment],
+					});
+				}
+			} else {
+				console.log(`Review comment ${comment._id} metadata`);
 			}
 		});
 
@@ -373,7 +377,7 @@ Commentary = React.createClass({
 		} else {
 			title = `${title}`;
 		}
-		title = `${title} | ${settings.title}`;
+		title = `${title} | ${settings.title || ''}`;
 
 		metaSubject = `${metaSubject}, ${title}, Philology`;
 
@@ -382,7 +386,7 @@ Commentary = React.createClass({
 			&& this.data.commentGroups[0].comments.length
 			&& this.data.commentGroups[0].comments[0].revisions.length
 		) {
-			description = Utils.trunc(Utils.getRevisionText(this.data.commentGroups[0].comments[0].revisions[0]), 120);
+			description = Utils.trunc(this.data.commentGroups[0].comments[0].revisions[0].text, 120);
 		}
 
 		Utils.setMetaTag('name', 'subject', 'content', metaSubject);

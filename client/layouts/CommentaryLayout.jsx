@@ -89,6 +89,9 @@ CommentaryLayout = React.createClass({
 				case 'wordpressId':
 					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
 					break;
+				case 'reference':
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+					break;
 				case '_id':
 					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
 					break;
@@ -97,7 +100,7 @@ CommentaryLayout = React.createClass({
 				}
 			});
 		});
-		return queryParams; 
+		return queryParams;
 	},
 
 	_createFilterFromQueryParams(queryParams) {
@@ -165,6 +168,21 @@ CommentaryLayout = React.createClass({
 			filters.push({
 				key: 'commenters',
 				values: commenters,
+			});
+		}
+
+		if ('reference' in queryParams) {
+			const references = [];
+
+			this.props.queryParams.reference.split(',').forEach((reference) => {
+				references.push({
+					title: reference,
+				});
+			});
+
+			filters.push({
+				key: 'reference',
+				values: references,
 			});
 		}
 
@@ -243,7 +261,6 @@ CommentaryLayout = React.createClass({
 
 	_toggleSearchTerm(key, value) {
 		const { queryParams } = this.props;
-
 		let keyIsInFilter = false;
 		let valueIsInFilter = false;
 		let filterValueToRemove;

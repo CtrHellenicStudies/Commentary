@@ -21,16 +21,12 @@ HomeView = React.createClass({
 	},
 
 	componentDidMount() {
-		/*
-		 * Init wow animations on homepage
-		 */
 		new WOW().init();
 	},
 
 	getMeteorData() {
-
 		// SUBSCRIPTIONS:
-		var query = { tenantId: Session.get("tenantId") }
+		const query = { tenantId: Session.get('tenantId') };
 		const commentsSub = Meteor.subscribe('comments', query, 0, 10);
 
 		const comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
@@ -53,30 +49,48 @@ HomeView = React.createClass({
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
+		let introLinkText = '   ';
+		let introLink = '#';
 
-		if (
-			settings.homepageCover
-			&& settings.homepageCover.length
-		) {
-			imageUrl = settings.homepageCover;
+
+		if (settings) {
+			if (
+				settings.homepageCover
+				&& settings.homepageCover.length
+			) {
+				imageUrl = settings.homepageCover;
+			}
+
+			if (
+				settings.homepageIntroductionImage
+				&& settings.homepageIntroductionImage.length
+			) {
+				introImage = settings.homepageIntroductionImage;
+			}
+
+			if (
+				settings.homepageIntroductionImageCaption
+				&& settings.homepageIntroductionImageCaption.length
+			) {
+				introImageCaption = settings.homepageIntroductionImageCaption;
+			}
+
+			if (
+				settings.homepageIntroductionLinkText
+				&& settings.homepageIntroductionLinkText.length
+			) {
+				introLinkText = settings.homepageIntroductionLinkText;
+			}
+			if (
+				settings.homepageIntroductionLink
+				&& settings.homepageIntroductionLink.length
+			) {
+				introLink = settings.homepageIntroductionLink;
+			}
 		}
 
-		if (
-			settings.homepageIntroductionImage
-			&& settings.homepageIntroductionImage.length
-		) {
-			introImage = settings.homepageIntroductionImage;
-		}
-
-		if (
-			settings.homepageIntroductionImageCaption
-			&& settings.homepageIntroductionImageCaption.length
-		) {
-			introImageCaption = settings.homepageIntroductionImageCaption;
-		}
-
-		Utils.setTitle(`Home | ${settings.title}`);
-		Utils.setDescription(settings.subtitle);
+		Utils.setTitle(`Home | ${settings ? settings.title : ''}`);
+		Utils.setDescription((settings ? settings.subtitle : ''));
 		Utils.setMetaImage(imageUrl);
 
 		return (
@@ -149,9 +163,9 @@ HomeView = React.createClass({
 									/>
 
 									<RaisedButton
-										className="cover-link dark "
-										href={settings.homepageIntroductionLink}
-										label={settings.homepageIntroductionText}
+										className="cover-link dark"
+										href={introLink}
+										label={introLinkText}
 									/>
 
 								</div>

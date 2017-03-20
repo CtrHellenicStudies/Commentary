@@ -17,6 +17,7 @@ CommenterDetail = React.createClass({
 
 	getMeteorData() {
 		// SUBSCRIPTIONS:
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 		const commentersSub = Meteor.subscribe('commenters.slug', this.props.slug, Session.get("tenantId"));
 		// FETCH DATA:
 		const commenter = Commenters.findOne({ slug: this.props.slug });
@@ -26,7 +27,11 @@ CommenterDetail = React.createClass({
 			avatarUrl = commenter.avatar.src;
 		}
 
-		return { commenter, avatarUrl };
+		return {
+			commenter,
+			avatarUrl,
+			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		};
 	},
 
 	toggleReadMoreBio() {
@@ -42,6 +47,13 @@ CommenterDetail = React.createClass({
 	render() {
 		const self = this;
 		const commenter = this.data.commenter;
+		const { settings } = this.data;
+		if (commenter) {
+			Utils.setTitle(`${commenter.name} | ${settings.title}`);
+			Utils.setDescription(Utils.trunc(commenter.bio, 120));
+			Utils.setMetaImage(this.data.avatarUrl);
+		}
+
 		return (
 			(commenter ?
 				<div className="page page-commenter-detail">
@@ -121,11 +133,11 @@ CommenterDetail = React.createClass({
 							<br />
 							<br />
 
-							<CommenterReferenceWorks
-								commenter={commenter}
-							/>
-
 						</section>
+
+						<CommenterReferenceWorks
+							commenter={commenter}
+						/>
 
 						<CommentsRecent />
 					</div>

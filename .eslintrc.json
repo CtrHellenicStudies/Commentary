@@ -29,6 +29,9 @@
 			"error",
 			"tab"
 		],
+		"consistent-return": "off",
+		"object-shorthand": "off",
+		"no-param-reassign": "off",
 		"no-tabs": "off",
 		"no-underscore-dangle": "off",
 		"no-undef": "off",
@@ -55,10 +58,10 @@
 		"no-trailing-spaces": "off",
 		"space-before-function-paren": "off",
 		"prefer-arrow-callback": "off",
-        "max-len": "off",
-        "jsx-a11y/anchor-has-content": "off",
-        "no-bitwise": "off",
-        "padded-blocks": "off",
-        "import/extensions": "off"
+    "max-len": "off",
+    "jsx-a11y/anchor-has-content": "off",
+    "no-bitwise": "off",
+    "padded-blocks": "off",
+    "import/extensions": "off"
 	}
 }

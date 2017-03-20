@@ -60,8 +60,6 @@ const workSchema = SchemaBridge.schema(
 	}
 );
 
-console.log(keywordSchema.fields);
-
 export default typeDefs = [`
 
 scalar JSON

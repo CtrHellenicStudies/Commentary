@@ -233,8 +233,8 @@ CommentDetail = React.createClass({
 			const keyword = $target.data().link.replace('/keywords/', '');
 			this.setState({
 				keywordReferenceModalVisible: true,
-				referenceTop: $target.position().top - upperOffset,
-				referenceLeft: $target.position().left + 160,
+				keywordReferenceTop: $target.position().top - upperOffset,
+				keywordReferenceLeft: $target.position().left + 160,
 				keyword,
 			});
 		}
@@ -247,16 +247,16 @@ CommentDetail = React.createClass({
 			lemmaReferenceSubwork: 0,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,
-			referenceTop: 0,
-			referenceLeft: 0,
+			lemmaReferenceTop: 0,
+			lemmaReferenceLeft: 0,
 		});
 	},
 
 	closeKeywordReference() {
 		this.setState({
 			keywordReferenceModalVisible: false,
-			referenceTop: 0,
-			referenceLeft: 0,
+			keywordReferenceTop: 0,
+			keywordReferenceLeft: 0,
 			keyword: '',
 		});
 	},
@@ -299,28 +299,15 @@ CommentDetail = React.createClass({
 
 		return (
 			<div className={commentClass}>
-
 				<article
 					className="comment commentary-comment paper-shadow "
 					data-id={comment._id}
 				>
 					<div className="comment-fixed-title-wrap paper-shadow">
 						<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
-						{/* (commentGroup.selectedLemmaEdition.lines.length) ?
-						 <p
-						 className="comment-fixed-lemma lemma-text"
-						 dangerouslySetInnerHTML={{__html: commentGroup.selectedLemmaEdition
-						 .lines[0].html}}
-						 ></p>
-						 : ""*/}
-
-						{/* commentGroup.selectedLemmaEdition.lines.length > 1 ?
-						 <span className="fixed-title-lemma-ellipsis">&hellip;</span>
-						 : "" */}
-
-						{comment.commenters.map((commenter) => (
+						{comment.commenters.map((commenter, i) => (
 							<a
-								key={commenter._id}
+								key={i}
 								href={`/commenters/${commenter.slug}`}
 							>
 								<span className="comment-author-name">
@@ -328,19 +315,17 @@ CommentDetail = React.createClass({
 								</span>
 							</a>
 						))}
-
 					</div>
 
 					<div className="comment-upper">
-
 						<div className="comment-upper-left">
 							<h1 className="comment-title">{selectedRevision.title}</h1>
 						</div>
 
 						<div className="comment-upper-right">
-							{comment.commenters.map((commenter) => (
+							{comment.commenters.map((commenter, i) => (
 								<div
-									key={commenter._id}
+									key={i}
 									className="comment-author"
 								>
 									{userCommenterId.indexOf(commenter._id) > -1 ?
@@ -378,9 +363,9 @@ CommentDetail = React.createClass({
 					</div>
 					<div className="comment-keywords-container">
 						<div className="comment-keywords">
-							{comment.keywords.map((keyword) => (
+							{comment.keywords.map((keyword, i) => (
 								<RaisedButton
-									key={keyword._id}
+									key={i}
 									className="comment-keyword paper-shadow"
 									onClick={self.addSearchTerm.bind(null, keyword)}
 									data-id={keyword._id}
@@ -393,7 +378,7 @@ CommentDetail = React.createClass({
 						{selectedRevisionIndex === comment.revisions.length - 1 ?
 							<div
 								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision)}
+								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
 								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:
@@ -458,8 +443,8 @@ CommentDetail = React.createClass({
 				{self.state.lemmaReferenceModalVisible ?
 					<LemmaReferenceModal
 						visible={self.state.lemmaReferenceModalVisible}
-						top={self.state.referenceTop}
-						left={self.state.referenceLeft}
+						top={self.state.lemmaReferenceTop}
+						left={self.state.lemmaReferenceLeft}
 						work={self.state.lemmaReferenceWork}
 						subwork={self.state.lemmaReferenceSubwork}
 						lineFrom={self.state.lemmaReferenceLineFrom}
@@ -471,8 +456,8 @@ CommentDetail = React.createClass({
 				{self.state.keywordReferenceModalVisible ?
 					<KeywordReferenceModal
 						visible={self.state.keywordReferenceModalVisible}
-						top={self.state.referenceTop}
-						left={self.state.referenceLeft}
+						top={self.state.keywordReferenceTop}
+						left={self.state.keywordReferenceLeft}
 						keyword={self.state.keyword}
 						close={self.closeKeywordReference}
 					/>

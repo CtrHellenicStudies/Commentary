@@ -291,6 +291,8 @@ AddRevisionLayout = React.createClass({
 							toggleSearchTerm={this.toggleSearchTerm}
 							handleChangeLineN={this.handleChangeLineN}
 							filters={filters}
+							initialSearchEnabled
+							addCommentPage
 						/>
 
 						<main>

@@ -14,16 +14,18 @@ Meteor.method('keyword_cron', () => {
 	comments.forEach((comment, commentIndex) => {
 		comment.keywords.forEach((commentKeyword, commentKeywordIndex) => {
 			isInKeywords = false;
-			keywords.forEach((keyword, keywordIndex) => {
-				if (keyword.slug === commentKeyword.slug) {
-					isInKeywords = true;
-					keywords[keywordIndex].count++;
-				}
-			});
+			if (commentKeyword !== null) {
+				keywords.forEach((keyword, keywordIndex) => {
+					if (keyword.slug === commentKeyword.slug) {
+						isInKeywords = true;
+						keywords[keywordIndex].count++;
+					}
+				});
 
-			if (!isInKeywords) {
-				comments[commentIndex].keywords[commentKeywordIndex].count = 0;
-				keywords.push(commentKeyword);
+				if (!isInKeywords) {
+					comments[commentIndex].keywords[commentKeywordIndex].count = 0;
+					keywords.push(commentKeyword);
+				}
 			}
 		});
 	});

@@ -35,7 +35,6 @@ export default KeywordContext = React.createClass({
 		let lemmaText = [];
 		const context = {};
 
-		console.log('keyword', keyword);
 		if (keyword.work && keyword.subwork && keyword.lineFrom) {
 			const textNodesQuery = {
 				'work.slug': keyword.work.slug,

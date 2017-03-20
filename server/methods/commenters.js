@@ -1,20 +1,15 @@
 import { Meteor } from 'meteor/meteor';
-import { check, Match } from 'meteor/check';
-import Tenants from '/imports/collections/tenants';
+import Commenters from '/imports/collections/commenters';
 
 Meteor.methods({
-	findTenantBySubdomain(subdomain) {
-		check(subdomain, String);
-		return Tenants.findOne({ subdomain });
-	},
-	tenants() {
-		return Tenants.find().fetch();
-	},
-	'tenants.insert': (token, tenant) => {
+	'commenters.insert': (token, commenter) => {
 		check(token, String);
-		check(tenant, {
-			subdomain: String,
-			isAnnotation: Match.Maybe(Boolean),
+		check(commenter, {
+			name: String,
+			slug: String,
+			tenantId: String,
+			bio: Match.Maybe(String),
+			tagline: Match.Maybe(String),
 		});
 
 		if (
@@ -22,31 +17,20 @@ Meteor.methods({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.insert(tenant);
+			return Commenters.insert(commenter);
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 	},
-	'tenants.remove': (token, tenantId) => {
-		check(token, String);
-		check(tenantId, String);
-
-		if (
-			Meteor.users.findOne({
-				roles: 'admin',
-				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-			})) {
-			return Tenants.remove(tenantId);
-		}
-
-		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-	},
-	'tenants.update': (token, _id, tenant) => {
+	'commenters.update': (token, _id, commenter) => {
 		check(token, String);
 		check(_id, String);
-		check(tenant, {
-			subdomain: String,
-			isAnnotation: Match.Maybe(Boolean),
+		check(commenter, {
+			name: String,
+			slug: String,
+			tenantId: String,
+			bio: Match.Maybe(String),
+			tagline: Match.Maybe(String),
 		});
 
 		if (
@@ -54,11 +38,26 @@ Meteor.methods({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return Tenants.update({
+			return Commenters.update({
 				_id
 			}, {
-				$set: tenant,
+				$set: commenter,
 			});
+		}
+
+		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	},
+
+	'commenters.remove': (token, commenterId) => {
+		check(token, String);
+		check(commenterId, String);
+
+		if (
+			Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})) {
+			return Commenters.remove(commenterId);
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');

@@ -67,6 +67,11 @@ ReferenceWorks.schema = new SimpleSchema({
 
 	},
 
+	coverImage: {
+		type: String,
+		optional: true,
+	},
+
 	date: {
 		type: Date,
 		optional: true,
@@ -79,6 +84,7 @@ ReferenceWorks.schema = new SimpleSchema({
 
 	description: {
 		type: String,
+		optional: true,
 		autoform: {
 			afFieldInput: {
 				type: 'summernote',

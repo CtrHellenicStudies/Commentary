@@ -29,7 +29,7 @@ LeftMenu = React.createClass({
 	getMeteorData() {
 		return {
 			currentUser: Meteor.users.findOne({ _id: Meteor.userId() }),
-			tenant: Tenants.findOne({ _id: Session.get("tenantId") })
+			tenant: Tenants.findOne({ _id: Session.get('tenantId') })
 		};
 	},
 
@@ -63,21 +63,23 @@ LeftMenu = React.createClass({
 				>
 					<div className="sidenav-top">
 						{userIsLoggedIn ?
-							<div>
+							<a href="/profile">
 								<div className="user-image paper-shadow">
-									<AvatarIcon avatar={this.data.currentUser && this.data.currentUser.profile ? this.data.currentUser.profile.avatarUrl : "/images/default_user.jpg"} />
+									<AvatarIcon avatar={this.data.currentUser && this.data.currentUser.profile ? this.data.currentUser.profile.avatarUrl : '/images/default_user.jpg'} />
 								</div>
-							</div>
+							</a>
 							: ''
 						}
-						<span className="user-fullname">
-							{username}
-						</span>
+						<a href="/profile">
+							<span className="user-fullname">
+								{username}
+							</span>
+						</a>
 					</div>
 					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
 						<div>
 							<MenuItem
-								href="/admin"
+								href="http://ahcip-admin.chs.harvard.edu"
 								target="_blank"
 								primaryText="Admin"
 								onClick={this.props.closeLeftMenu}

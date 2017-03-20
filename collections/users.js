@@ -4,31 +4,11 @@ Schemas.UserProfile = new SimpleSchema({
 		optional: true,
 	},
 
-	tenantId: {
-		type: String,
-		label: 'Tenant',
-		optional: true,
-		autoform: {
-			afFieldInput: {
-				type: 'select',
-				options: () => {
-					const tenants = [];
-					_.map(Tenants.find().fetch(), (tenant) => {
-						tenants.push({
-							label: tenant.subdomain,
-							value: tenant._id,
-						});
-					});
-					return tenants;
-				},
-			},
-		},
-	},
-
 	birthday: {
 		type: Date,
 		optional: true,
 	},
+
 	biography: {
 		type: String,
 		optional: true,
@@ -36,7 +16,7 @@ Schemas.UserProfile = new SimpleSchema({
 			rows: 4,
 		},
 	},
-	publicEmailAdress: {
+	publicEmailAddress: {
 		type: String,
 		optional: true,
 	},
@@ -118,6 +98,7 @@ Schemas.User = new SimpleSchema({
 	},
 	isAnnotator: {
 		type: Boolean,
+		optional: true,
 		autoValue: function () {
 			if (this.isInsert) {
 				return false;
@@ -153,7 +134,7 @@ Schemas.User = new SimpleSchema({
 		blackbox: true,
 		optional: true,
 	},
-	commenterId: {
+	canEditCommenters: { 
 		type: [String],
 		optional: true,
 	},
@@ -166,8 +147,32 @@ Schemas.User = new SimpleSchema({
 		optional: true,
 		blackbox: true,
 	},
+	canAnnotateBooks: {
+		type: Array,
+		optional: true,
+	},
+	'canAnnotateBooks.$': {
+		type: String,
+		optional: true,
+	},
 	highlightingPreference: {
 		type: Boolean,
+		optional: true,
+	},
+	createdAt: {
+		type: Date,
+		optional: true,
+	},
+	createdBy: {
+		type: String,
+		optional: true,
+	},
+	updatedAt: {
+		type: Date,
+		optional: true,
+	},
+	updatedBy: {
+		type: String,
 		optional: true,
 	},
 });

@@ -80,10 +80,6 @@ Commenters.schema = new SimpleSchema({
 	isAuthor: {
 		type: Boolean,
 		optional: true,
-		autoValue: function() {
-			if (this.isInsert)
-				return false;
-		},
 		autoform: {
 			type: 'hidden',
 			label: false,

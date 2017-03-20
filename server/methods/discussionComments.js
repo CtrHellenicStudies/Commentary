@@ -2,6 +2,32 @@ import Comments from '/imports/collections/comments';
 import DiscussionComments from '/imports/collections/discussionComments';
 
 Meteor.methods({
+	'discussionComments.delete': (token, _id) => {
+		check(token, String);
+		check(_id, String);
+
+		const roles = ['developer', 'admin', 'commenter'];
+		if ((
+				!Meteor.userId()
+				&& !Roles.userIsInRole(Meteor.user(), roles)
+			)
+			&& !Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})
+		) {
+			throw new Meteor.Error('discussionComment-delete', 'not-authorized');
+		}
+
+		try {
+			DiscussionComments.remove({ _id });
+		} catch (err) {
+			throw new Meteor.Error('discussionComment-delete', err);
+		}
+
+		return _id;
+	},
+
 	'discussionComments.insert': function insertDiscussionComment(discussionCommentCandidate) {
 		check(discussionCommentCandidate, Object);
 		const discussionComment = discussionCommentCandidate;

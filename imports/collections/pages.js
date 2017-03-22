@@ -30,6 +30,14 @@ Pages.schema = new SimpleSchema({
 			label: false,
 		},
 	},
+	byline: {
+		type: String,
+		optional: true,
+		autoform: {
+			type: 'hidden',
+			label: false,
+		},
+	},
 	tenantId: {
 	    type: String,
 	    label: "Tenant",

@@ -82,7 +82,7 @@ SinglePage = React.createClass({
 										{page.title}
 									</h1>
 									<h2>
-										{page.subTitle}
+										{page.subtitle}
 									</h2>
 								</div>
 							</div>
@@ -91,6 +91,13 @@ SinglePage = React.createClass({
 				</section>
 
 				<section className="page-content container">
+						{page.byline ?
+							<div className="page-byline">
+								<h3>
+									{page.byline}
+								</h3>
+							</div>
+						: ''}
 					<div dangerouslySetInnerHTML={{ __html: page.content }} />
 				</section>
 			</div>

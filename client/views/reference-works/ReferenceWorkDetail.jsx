@@ -98,7 +98,7 @@ ReferenceWorkDetail = React.createClass({
 					<section className="page-content">
 
 						{commenters && commenters.length ?
-							<div className="reference-work-byline">
+							<div className="page-byline">
 								<h3>By {commenters.map((commenter, i) => {
 									let ending = '';
 

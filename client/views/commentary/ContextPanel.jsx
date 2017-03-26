@@ -256,6 +256,8 @@ ContextPanel = React.createClass({
 								key={i}
 							>
 
+								<div className="lemma-text" dangerouslySetInnerHTML={{ __html: line.html }} />
+
 								<div className="lemma-meta">
 									{(line.n % 5 === 0 || line.n === 1) ?
 										<span className="lemma-line-n">
@@ -265,9 +267,6 @@ ContextPanel = React.createClass({
 										''
 									}
 								</div>
-
-								<div className="lemma-text" dangerouslySetInnerHTML={{ __html: line.html }} />
-
 
 							</div>
 						);

@@ -40,6 +40,7 @@ Meteor.methods({
 		discussionComment.user = currentUser;
 		discussionComment.votes = 1;
 		discussionComment.voters = [currentUser._id];
+		discussionComment.status = 'pending';
 
 		// check(discussionComment.user, Schemas.User);
 		check(discussionComment.content, String);

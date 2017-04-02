@@ -29,47 +29,52 @@ Meteor.methods({
 	},
 
 	'discussionComments.insert': function insertDiscussionComment(discussionCommentCandidate) {
-		check(discussionCommentCandidate, Object);
+		check(discussionCommentCandidate, {
+			content: String,
+			tenantId: String,
+			commentId: String,
+		});
 		const discussionComment = discussionCommentCandidate;
+
 		// Make sure the user is logged in before inserting
 		if (!this.userId) {
 			throw new Meteor.Error('not-authorized');
 		}
 
 		const currentUser = Meteor.users.findOne({ _id: this.userId });
-		discussionComment.user = currentUser;
+		discussionComment.userId = currentUser._id;
 		discussionComment.votes = 1;
 		discussionComment.voters = [currentUser._id];
 		discussionComment.status = 'pending';
 
-		// check(discussionComment.user, Schemas.User);
 		check(discussionComment.content, String);
 		check(discussionComment.votes, Number);
 		check(discussionComment.commentId, String);
 
-		console.log('Inserting new comment', discussionComment);
 		try {
 			DiscussionComments.insert(discussionComment);
 		} catch (err) {
-			console.log(err);
+			throw new Meteor.Error(err);
 		}
 	},
 
-	'discussionComments.update': function updateDiscussionComment(discussionCommentData) {
-		check(discussionCommentData, Object);
-		console.log('Discussion comment update:', discussionCommentData);
+	'discussionComments.update': function updateDiscussionComment(discussionCommentId, discussionCommentData) {
+		check(discussionCommentId, String);
+		check(discussionCommentData, {
+			tenantId: String,
+			commentId: String,
+			content: String,
+		});
 
 		const discussionComment = DiscussionComments.findOne({
-			_id: discussionCommentData._id,
+			_id: discussionCommentId,
 		});
 
 		// Make sure the user has auth to edit
-		if (this.userId !== discussionComment.user._id) {
+		if (this.userId !== discussionComment.userId) {
 			throw new Meteor.Error('not-authorized');
 		}
 
-		check(discussionCommentData.content, String);
-		console.log('Updating comment', discussionComment);
 		try {
 			DiscussionComments.update({
 				_id: discussionComment._id,
@@ -79,13 +84,45 @@ Meteor.methods({
 				},
 			});
 		} catch (err) {
-			console.log(err);
+			throw new Meteor.Error(err);
+		}
+	},
+
+	'discussionComments.updateStatus': (token, discussionCommentId, discussionCommentData) => {
+		check(token, String);
+		check(discussionCommentId, String);
+		check(discussionCommentData, {
+			status: String,
+		});
+
+		const roles = ['admin'];
+		if ((
+				!Meteor.userId()
+				&& !Roles.userIsInRole(Meteor.user(), roles)
+			)
+			&& !Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})
+		) {
+			throw new Meteor.Error('discussionComment-updateStatus', 'not-authorized');
+		}
+
+		try {
+			DiscussionComments.update({
+				_id: discussionCommentId,
+			}, {
+				$set: {
+					status: discussionCommentData.status,
+				},
+			});
+		} catch (err) {
+			throw new Meteor.Error(err);
 		}
 	},
 
 	'discussionComments.upvote': function upvoteDiscussionComment(discussionCommentId) {
 		check(discussionCommentId, String);
-
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
 
 		// Make sure the user has not already upvoted
@@ -101,14 +138,12 @@ Meteor.methods({
 				$inc: { votes: 1 },
 			});
 		} catch (err) {
-			console.log(err);
+			throw new Meteor.Error(err);
 		}
 	},
 
 	'discussionComments.report': function reportDiscussionComment(discussionCommentId) {
-		check(discussionCommentId, String);
-		this.unblock();
-
+		check(discussionCommentId, String); this.unblock();
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
 		const comment = Comments.findOne(discussionComment.commentId);
 
@@ -162,7 +197,7 @@ Meteor.methods({
 		 * Send email notification that a discussion comment was flagged
 		 */
 		Email.send({
-			to: 'lukehollis@gmail.com',
+			to: ['muellner@chs.harvard.edu', 'lhollis@chs.harvard.edu'],
 			from: Config.emails.from(),
 			subject: `User comment flagged on ${Config.name}`,
 			html: `Dear Administrator,
@@ -195,7 +230,7 @@ Meteor.methods({
 				});
 			}
 		} catch (err) {
-			console.log(err);
+			throw new Meteor.Error(err);
 		}
 	},
 });

@@ -4,10 +4,9 @@ import Tenants from '/imports/collections/tenants';
 const DiscussionComments = new Meteor.Collection('discussionComments');
 
 DiscussionComments.schema = new SimpleSchema({
-	user: {
-		type: Object,
-		// Come back to this after redefining the user schemas
-		blackbox: true,
+	userId: {
+		type: String,
+		optional: true,
 	},
 	content: {
 		type: String,
@@ -42,26 +41,8 @@ DiscussionComments.schema = new SimpleSchema({
 		optional: true,
 	},
 	tenantId: {
-	    type: String,
-	    label: "Tenant",
-	    optional: true,
-	    autoform: {
-	    	afFieldInput: {
-	    		type: "select",
-		      options: function () {
-		      	var tenants = [];
-		        _.map(Tenants.find().fetch(), function (tenant) {
-
-		          tenants.push({
-		            label: tenant.subdomain,
-		            value: tenant._id
-		          });
-
-		        });
-		        return tenants;
-		      }
-	    	}
-	    }
+    type: String,
+    optional: true,
 	},
 });
 

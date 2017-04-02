@@ -122,27 +122,6 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('userDiscussionComments', (userId, tenantId, sortMethod = 'votes') => {
-		check(userId, String);
-		check(tenantId, Match.Maybe(String));
-
-		let sort = { votes: -1, updated: -1 };
-
-		if (sortMethod === 'recent') {
-			sort = {
-				updated: -1,
-				votes: -1,
-			};
-		}
-
-		return DiscussionComments.find({
-			'user._id': userId,
-			tenantId,
-		}, {
-			sort,
-		});
-	});
-
 	Meteor.publish('keywords.all', (query = {}, skip = 0, limit = 1000) => {
 		check(query, Object);
 		check(skip, Number);

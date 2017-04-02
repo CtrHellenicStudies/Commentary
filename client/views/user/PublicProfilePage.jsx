@@ -5,8 +5,6 @@ import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
 import DiscussionComments from '/imports/collections/discussionComments';
 
 PublicProfilePage = React.createClass({
-
-
 	propTypes: {
 		userId: React.PropTypes.string.isRequired,
 	},
@@ -94,13 +92,17 @@ PublicProfilePage = React.createClass({
 
 	render() {
 		const { user, discussionComments } = this.data;
+		let avatarUrl = '/images/default_user.jpg';
 
 		if (!user) {
-			return <Loading />
+			return <Loading />;
 		}
 
 		if (!user.profile) {
 			user.profile = {};
+		}
+		if ('avatarUrl' in user.profile) {
+			avatarUrl = user.profile.avatarUrl;
 		}
 
 		return (
@@ -119,10 +121,11 @@ PublicProfilePage = React.createClass({
 					<section className="page-content">
 						<div>
 							<div className="user-profile-section">
-								<AvatarEditor
-									defaultAvatarUrl="/images/default_user.jpg"
-									user={user}
-								/>
+								<div className="user-profile-picture-container">
+									<div className="user-profile-picture">
+										<img alt="avatar" src={avatarUrl} />
+									</div>
+								</div>
 							</div>
 							<br />
 							<div className="user-profile-textfields">

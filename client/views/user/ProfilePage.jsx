@@ -9,8 +9,6 @@ import Toggle from 'material-ui/Toggle';
 import DiscussionComments from '/imports/collections/discussionComments';
 
 ProfilePage = React.createClass({
-
-
 	propTypes: {
 		user: React.PropTypes.object,
 	},
@@ -51,8 +49,11 @@ ProfilePage = React.createClass({
 		}).fetch();
 
 		discussionComments.forEach((discussionComment, discussionCommentIndex) => {
-			const commentHandle =
-				Meteor.subscribe('comments', { _id: discussionComment.commentId, tenantId: Session.get('tenantId') }, 0, 1);
+			const commentHandle = Meteor.subscribe('comments', {
+				_id: discussionComment.commentId,
+				tenantId: Session.get('tenantId')
+			}, 0, 1);
+
 			if (commentHandle.ready()) {
 				const comments = Comments.find().fetch();
 				if (comments.length) {

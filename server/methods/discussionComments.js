@@ -37,12 +37,11 @@ Meteor.methods({
 		}
 
 		const currentUser = Meteor.users.findOne({ _id: this.userId });
-		discussionComment.user = currentUser;
+		discussionComment.userId = currentUser._id;
 		discussionComment.votes = 1;
 		discussionComment.voters = [currentUser._id];
 		discussionComment.status = 'pending';
 
-		// check(discussionComment.user, Schemas.User);
 		check(discussionComment.content, String);
 		check(discussionComment.votes, Number);
 		check(discussionComment.commentId, String);
@@ -84,8 +83,7 @@ Meteor.methods({
 	},
 
 	'discussionComments.upvote': function upvoteDiscussionComment(discussionCommentId) {
-		check(discussionCommentId, String);
-
+		heck(discussionCommentId, String);
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
 
 		// Make sure the user has not already upvoted
@@ -162,7 +160,7 @@ Meteor.methods({
 		 * Send email notification that a discussion comment was flagged
 		 */
 		Email.send({
-			to: 'lukehollis@gmail.com',
+			to: ['muellner@chs.harvard.edu', 'lhollis@chs.harvard.edu'],
 			from: Config.emails.from(),
 			subject: `User comment flagged on ${Config.name}`,
 			html: `Dear Administrator,

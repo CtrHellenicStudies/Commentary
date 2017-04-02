@@ -4,10 +4,9 @@ import Tenants from '/imports/collections/tenants';
 const DiscussionComments = new Meteor.Collection('discussionComments');
 
 DiscussionComments.schema = new SimpleSchema({
-	user: {
-		type: Object,
-		// Come back to this after redefining the user schemas
-		blackbox: true,
+	userId: {
+		type: String,
+		optional: true,
 	},
 	content: {
 		type: String,

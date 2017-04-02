@@ -10,12 +10,25 @@ DiscussionComment = React.createClass({
 		currentUser: React.PropTypes.object,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
 			editMode: false,
 			moreOptionsVisible: false,
 			shareOptionsVisible: false,
 			readComment: false,
+		};
+	},
+
+	getMeteorData() {
+		const { discussionComment } = this.props;
+		const handle = Meteor.subscribe('users.id', discussionComment.userId);
+		const user = Meteor.users.findOne({ _id: discussionComment.userId });
+
+		return {
+			user,
+			ready: handle.ready(),
 		};
 	},
 
@@ -97,25 +110,28 @@ DiscussionComment = React.createClass({
 	render() {
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
-		const discussionComment = this.props.discussionComment;
+		const { discussionComment } = this.props;
+		const { user } = this.data;
 		let userLink = '';
-		if (discussionComment.user.username) {
-			userLink = `/users/${discussionComment.user._id}/${discussionComment.user.username}`;
-		} else {
-			userLink = `/users/${discussionComment.user._id}`;
-		}
-		discussionComment.children = [];
 		let userUpvoted = false;
 		let userReported = false;
 		let username = '';
 
-		if (discussionComment.user.username) {
-			username = discussionComment.user.username;
-		} else if (
-			'emails' in discussionComment.user
-			&& discussionComment.user.emails.length
-		) {
-			username = discussionComment.user.emails[0].address.split('@')[0];
+		// Child discussion Comments
+		discussionComment.children = [];
+
+		// Make user link and user name
+		if (user) {
+			if (user.username) {
+				username = user.username;
+				userLink = `/users/${user._id}/${user.username}`;
+			} else if (
+				'emails' in user
+				&& user.emails.length
+			) {
+				userLink = `/users/${user._id}`;
+				username = user.emails[0].address.split('@')[0];
+			}
 		}
 
 		if (
@@ -142,8 +158,8 @@ DiscussionComment = React.createClass({
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
 							<a href={userLink}>
 								<img
-									src={discussionComment.user && discussionComment.user.profile ?
-										discussionComment.user.profile.avatarUrl : '/images/default_user.jpg'}
+									src={user && user.profile ?
+										user.profile.avatarUrl : '/images/default_user.jpg'}
 									alt={username}
 								/>
 							</a>
@@ -219,7 +235,8 @@ DiscussionComment = React.createClass({
 						{(
 								'currentUser' in self.props
 							&& self.props.currentUser
-							&& self.props.currentUser._id === discussionComment.user._id
+							&& user
+							&& self.props.currentUser._id === user._id
 						) ?
 							<FlatButton
 								label="Edit"

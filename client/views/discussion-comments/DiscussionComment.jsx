@@ -47,10 +47,10 @@ DiscussionComment = React.createClass({
 	updateDiscussionComment() {
 		const content = $(this.updateCommentForm).find('textarea').val();
 
-		Meteor.call('discussionComments.update', {
-			_id: this.props.discussionComment._id,
-			content,
-		});
+		Meteor.call('discussionComments.update',
+			this.props.discussionComment._id,
+			{ content },
+		);
 
 		this.setState({
 			editMode: false,
@@ -227,7 +227,6 @@ DiscussionComment = React.createClass({
 									:
 									''
 								}
-
 							</FlatButton>
 							:
 							''

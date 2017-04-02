@@ -116,6 +116,7 @@ DiscussionComment = React.createClass({
 		let userUpvoted = false;
 		let userReported = false;
 		let username = '';
+		let offsetLeft = 0;
 
 		// Child discussion Comments
 		discussionComment.children = [];
@@ -149,6 +150,10 @@ DiscussionComment = React.createClass({
 			discussionComment.usersReported.indexOf(this.props.currentUser._id) >= 0
 		) {
 			userReported = true;
+		}
+
+		if (this.state.moreOptionsVisible) {
+			offsetLeft = $('.toggle-more-button').position().left;
 		}
 
 		return (
@@ -208,10 +213,10 @@ DiscussionComment = React.createClass({
 									</div>
 								</form>
 								:
-								<div>{discussionComment.content}</div>
-
+								<div>
+									{discussionComment.content}
+								</div>
 							}
-
 						</div>
 					</div>
 					<div className="inner-comment-row">
@@ -221,6 +226,7 @@ DiscussionComment = React.createClass({
 								onClick={this.upvoteDiscussionComment}
 								className={`discussion-comment-button vote-up ${(userUpvoted) ? 'upvoted' : ''}`}
 								icon={<FontIcon className="mdi mdi-chevron-up" />}
+								disabled={userUpvoted}
 							>
 								{!userIsLoggedIn ?
 									<span className="md-tooltip">You must be signed in to vote.</span>
@@ -258,7 +264,12 @@ DiscussionComment = React.createClass({
 							''
 						}
 
-						<div className={`more-options ${this.state.moreOptionsVisible ? 'more-options--visible' : ''}`}>
+						<div
+							className={`more-options ${this.state.moreOptionsVisible ? 'more-options--visible' : ''}`}
+							style={{
+								left: offsetLeft,
+							}}
+						>
 							<FlatButton
 								label="Report"
 								onClick={this.reportDiscussionComment}

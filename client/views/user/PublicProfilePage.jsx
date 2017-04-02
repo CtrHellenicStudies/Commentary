@@ -43,6 +43,7 @@ PublicProfilePage = React.createClass({
 
 		discussionComments = DiscussionComments.find({
 			userId,
+			status: 'publish',
 		}).fetch();
 
 		discussionComments.forEach((discussionComment, discussionCommentIndex) => {
@@ -106,7 +107,7 @@ PublicProfilePage = React.createClass({
 		}
 
 		return (
-			<div className="page page-user-profile">
+			<div className="page page-user-profile page-user-profile--public">
 				<div className="content primary">
 					<section className="block header cover parallax">
 						<div className="background-image-holder blur-2--no-remove blur-10 remove-blur">

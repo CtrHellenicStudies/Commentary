@@ -1,4 +1,5 @@
 import Terms from '/imports/collections/terms';
+import MetaFields from '/imports/collections/metafields';
 
 const LinkedDataSchemas = new Meteor.Collection('linked_data_schemas');
 
@@ -8,30 +9,7 @@ LinkedDataSchemas.schema = new SimpleSchema({
 		optional: true,
   },
 	terms: {
-		// type: [Terms],
-		type: [Object],
-		optional: true,
-	},
-	'terms.$.term' : {
-    type: String,
-		optional: true,
-	},
-	'terms.$.resourceIdentifier' : {
-		type: String,
-		label: "Resource Identifier (IRI: see http://json-ld.org/spec/latest/json-ld/#iris)",
-		optional: true,
-	},
-	'terms.$.metafields' : {
-		type: [Object],
-		label: "Metafields to describe the term resource (such as @id or @type: see http://json-ld.org/spec/latest/json-ld/#specifying-the-type)",
-		optional: true,
-	},
-	'terms.$.metafields.$.key' : {
-    type: String,
-		optional: true,
-	},
-	'terms.$.metafields.$.value' : {
-    type: String,
+		type: [Terms.schema],
 		optional: true,
 	},
 });

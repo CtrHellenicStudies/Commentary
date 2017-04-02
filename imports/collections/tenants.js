@@ -6,10 +6,6 @@ Tenants.schema = new SimpleSchema({
   },
   isAnnotation: {
     type: Boolean,
-    autoform: {
-      type: "boolean-checkbox",
-      label: "isAnnotation"
-    }
   }
 });
 

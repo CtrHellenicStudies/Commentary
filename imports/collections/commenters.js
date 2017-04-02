@@ -14,26 +14,8 @@ Commenters.schema = new SimpleSchema({
 	},
 
 	tenantId: {
-	    type: String,
-	    label: "Tenant",
-	    optional: true,
-	    autoform: {
-	    	afFieldInput: {
-	    		type: "select",
-		      options: function () {
-		      	var tenants = [];
-		        _.map(Tenants.find().fetch(), function (tenant) {
-
-		          tenants.push({
-		            label: tenant.subdomain,
-		            value: tenant._id
-		          });
-
-		        });
-		        return tenants;
-		      }
-	    	}
-	    }
+    type: String,
+    optional: true,
 	},
 
 	name: {
@@ -46,44 +28,22 @@ Commenters.schema = new SimpleSchema({
 		type: String,
 		max: 200,
 		optional: true,
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
 	},
 
 	avatar: {
+		type: Object,
+		blackbox: true,
 		optional: true,
-		label: 'Profile picture (avatar)',
-		type: afSlingshot.fileSchema,
-		autoform: {
-		  type: 'slingshot',
-			slingshot: {
-				downloadUrl: (data) => {
-					console.log(data);
-				},
-				directives: [{
-					name: "uploads"
-				}],
-			},
-		}
 	},
 
 	bio: {
 		type: String,
 		optional: true,
-		autoform: {
-			rows: 5,
-		},
 	},
 
 	isAuthor: {
 		type: Boolean,
 		optional: true,
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
 	},
 
 	tagline: {
@@ -166,55 +126,3 @@ Commenters.allow({
 });
 
 export default Commenters;
-
-// // Manage Roles based to commenters:
-// // TODO: test all hooks
-// Commenters.after.insert((userId, commneter) => {
-//		 try {
-//				 Roles.createRole(commneter.slug);
-//				 console.log('Created role:', commneter.slug);
-//		 } catch (err) {
-//				 console.log(err);
-//		 };
-// });
-
-// Commenters.before.update((userId, commenter, fieldNames) => {
-//		 // check if slug was modified:
-//		 if (fieldNames.indexOf('slug') > -1) {
-//				 try {
-//						 Roles.deleteRole(commenter.slug);
-//						 console.log('Deleted role:', role.name);
-//				 } catch (err) {
-//						 if (err.error === 403) {
-//								 console.log('Role \'' + role.name + '\' is in use.');
-//						 } else {
-//								 console.log(err);
-//						 };
-//				 };
-//		 };
-// });
-
-// Commenters.after.update((userId, commenter, fieldNames) => {
-//		 // check if slug was modified
-//		 if (fieldNames.indexOf('slug') > -1) {
-//				 try {
-//						 Roles.createRole(commneter.slug);
-//						 console.log('Created role:', commneter.slug);
-//				 } catch (err) {
-//						 console.log(err);
-//				 };
-//		 };
-// });
-
-// Commenters.before.remove((userId, commenter) => {
-//		 try {
-//				 Roles.deleteRole(commenter.slug);
-//				 console.log('Deleted role:', role.name);
-//		 } catch (err) {
-//				 if (err.error === 403) {
-//						 console.log('Role \'' + role.name + '\' is in use.');
-//				 } else {
-//						 console.log(err);
-//				 };
-//		 };
-// });

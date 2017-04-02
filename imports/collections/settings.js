@@ -30,40 +30,11 @@ Settings.schema = new SimpleSchema({
 	},
 	tenantId: {
 		type: String,
-		label: 'Tenant',
-		optional: true,
-		autoform: {
-			afFieldInput: {
-				type: 'select',
-				options() {
-					const tenants = [];
-					_.map(Tenants.find().fetch(), (tenant) => {
-						tenants.push({
-							label: tenant.subdomain,
-							value: tenant._id,
-						});
-					});
-					return tenants;
-				},
-			},
-		},
 	},
 
 	homepageCover: {
 		optional: true,
-		label: 'Homepage Cover Image',
 		type: afSlingshot.fileSchema,
-		autoform: {
-		  type: 'slingshot',
-			slingshot: {
-				downloadUrl: (data) => {
-					console.log(data);
-				},
-				directives: [{
-					name: "uploads"
-				}],
-			},
-		}
 	},
 
 	homepageIntroductionTitle: {
@@ -73,19 +44,7 @@ Settings.schema = new SimpleSchema({
 
 	homepageIntroductionImage: {
 		optional: true,
-		label: 'Homepage Introduction Image',
 		type: afSlingshot.fileSchema,
-		autoform: {
-		  type: 'slingshot',
-			slingshot: {
-				downloadUrl: (data) => {
-					console.log(data);
-				},
-				directives: [{
-					name: "uploads"
-				}],
-			},
-		}
 	},
 
 	homepageIntroductionImageCaption: {

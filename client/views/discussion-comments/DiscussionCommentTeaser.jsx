@@ -34,10 +34,19 @@ DiscussionCommentTeaser = React.createClass({
 	},
 
 	render() {
-		const discussionComment = this.props.discussionComment;
+		const { discussionComment } = this.props;
 		const commentaryLink = `/commentary/?works=${discussionComment.comment.work.slug
 		}&subworks=${discussionComment.comment.subwork.title}&lineFrom=${discussionComment.comment.lineFrom}`;
 		const commentLink = `/commentary/?_id=${discussionComment.commentId}`;
+
+		let status;
+
+		if (discussionComment.status === 'pending') {
+			status = 'Pending approval';
+		} else if (discussionComment.status === 'trash') {
+			status = 'This comment was made private by an Administrator.';
+		}
+
 		return (
 			<Card
 				className="user-discussion-comment paper-shadow wow fadeInUp clearfix"
@@ -51,6 +60,11 @@ DiscussionCommentTeaser = React.createClass({
 						>
 							Comment on { discussionComment.comment.work.title } { discussionComment.comment.subwork.title}.{ discussionComment.comment.lineFrom }
 						</a>
+						{status ?
+							<span className="user-discussion-comment-status">
+								{status}
+							</span>
+						: ''}
 					</div>
 				</div>
 				<div className="card-content">
@@ -62,6 +76,12 @@ DiscussionCommentTeaser = React.createClass({
 						className="user-discussion-comment-replies"
 						href={commentLink}
 						icon={<FontIcon className="mdi mdi-comment" />}
+						style={{
+							height: 'auto',
+							maxHeight: 'none',
+							display: 'block',
+							margin: '10px 30px 30px',
+						}}
 					/>
 				</div>
 			</Card>);

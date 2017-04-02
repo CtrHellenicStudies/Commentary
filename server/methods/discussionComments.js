@@ -108,6 +108,9 @@ Meteor.methods({
 			throw new Meteor.Error('discussionComment-updateStatus', 'not-authorized');
 		}
 
+		/*
+		 * Update the discussion comment
+		 */
 		try {
 			DiscussionComments.update({
 				_id: discussionCommentId,
@@ -118,6 +121,52 @@ Meteor.methods({
 			});
 		} catch (err) {
 			throw new Meteor.Error(err);
+		}
+
+
+		/*
+		 * If status update was approval, send email notification that discussion
+		 * comment was approved
+		 */
+
+		if (discussionCommentData.status === 'publish') {
+			const discussionComment = DiscussionComments.findOne({ _id: discussionCommentId });
+			const comment = Comments.findOne({ _id: discussionComment.commentId });
+			const user = Meteor.users.findOne({ _id: discussionComment.userId });
+
+			let userFullName = '';
+			let userEmail;
+
+			if ('name' in user.profile) {
+				userFullName = user.profile.name;
+			} else {
+				userFullName = user.username;
+			}
+
+			const commentLink = `${Meteor.absoluteUrl()}commentary/?_id=${comment._id}`;
+			let commentTitle = '';
+			if (comment.revisions.length) {
+				comment.revisions.sort(Utils.sortRevisions);
+				commentTitle = comment.revisions[comment.revisions.length - 1].title;
+			}
+
+
+			Email.send({
+				to: ['lukehollis@gmail.com'],
+				from: Config.emails.from(),
+				subject: `Your comment has been approved at ${Config.name}`,
+				html: `Dear ${userFullName},
+				<br />
+				<br />
+				Your comment on ${commentTitle} has been approved! You may view the discussion by visiting the following link: <a href='${commentLink}'>${commentLink}</a>.
+				<br />
+				<br />
+				Thank you for your submission!
+				<br />
+				<br />
+				${Config.title()}
+				`,
+			});
 		}
 	},
 
@@ -184,10 +233,11 @@ Meteor.methods({
 		}
 
 		let userFullName = '';
-		if ('name' in discussionComment.user.profile) {
-			userFullName = discussionComment.user.profile.name;
+		const user = Meteor.users.findOne({ _id: discussionComment.userId });
+		if ('name' in user.profile) {
+			userFullName = user.profile.name;
 		} else {
-			userFullName = discussionComment.user.username;
+			userFullName = user.username;
 		}
 		const discussionCommentDate = discussionComment.updated || discussionComment.created;
 		const lastUpdated = discussionCommentDate.toISOString().replace('T', ' ').substr(0, 19);

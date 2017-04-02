@@ -208,15 +208,8 @@
   h2 {
     width: 100%;
     margin: 0 auto;
-    padding: 0px 0 30px !important;
     font-size: 24px;
     font-family: @font-title;
-    text-align: center !important;
-
-  }
-
-  span {
-    display: initial !important;
   }
 
   // Intentionally nested here because this is a special use-case for discussion comments
@@ -244,6 +237,16 @@
       }
     }
 
+		.user-discussion-comment-status {
+			display:block;
+			font-size:14px;
+			font-style: italic;
+      padding: 10px 0;
+      margin: 0 auto;
+      max-width: 710px;
+      color: #aaa;
+		}
+
     p {
       font-size: 20px;
       line-height: 1.5em;
@@ -256,8 +259,6 @@
     }
 
     .user-discussion-comment-replies {
-      display: block !important;
-      margin: 10px 30px 30px !important;
       float: left;
 
       &:hover {

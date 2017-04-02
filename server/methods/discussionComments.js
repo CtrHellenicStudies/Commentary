@@ -61,6 +61,8 @@ Meteor.methods({
 	'discussionComments.update': function updateDiscussionComment(discussionCommentId, discussionCommentData) {
 		check(discussionCommentId, String);
 		check(discussionCommentData, {
+			tenantId: String,
+			commentId: String,
 			content: String,
 		});
 
@@ -79,6 +81,39 @@ Meteor.methods({
 			}, {
 				$set: {
 					content: discussionCommentData.content,
+				},
+			});
+		} catch (err) {
+			throw new Meteor.Error(err);
+		}
+	},
+
+	'discussionComments.updateStatus': (token, discussionCommentId, discussionCommentData) => {
+		check(token, String);
+		check(discussionCommentId, String);
+		check(discussionCommentData, {
+			status: String,
+		});
+
+		const roles = ['admin'];
+		if ((
+				!Meteor.userId()
+				&& !Roles.userIsInRole(Meteor.user(), roles)
+			)
+			&& !Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})
+		) {
+			throw new Meteor.Error('discussionComment-updateStatus', 'not-authorized');
+		}
+
+		try {
+			DiscussionComments.update({
+				_id: discussionCommentId,
+			}, {
+				$set: {
+					status: discussionCommentData.status,
 				},
 			});
 		} catch (err) {

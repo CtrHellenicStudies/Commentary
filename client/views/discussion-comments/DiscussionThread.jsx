@@ -29,17 +29,19 @@ DiscussionThread = React.createClass({
 
 		let sort = {};
 		switch (this.state.sortMethod) {
-			case 'votes':
-				sort = { votes: -1, updated: -1 };
-				break;
-			case 'recent':
-				sort = { updated: -1, votes: -1 };
-				break;
+		case 'votes':
+			sort = { votes: -1, updated: -1 };
+			break;
+		case 'recent':
+			sort = { updated: -1, votes: -1 };
+			break;
+		default:
+			break;
 		}
 
-		const handle = Meteor.subscribe('discussionComments', this.props.comment._id, Session.get("tenantId"));
+		const handle = Meteor.subscribe('discussionComments', this.props.comment._id, Session.get('tenantId'));
 		if (handle.ready()) {
-			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id }, {sort}).fetch();
+			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id, status: 'publish' }, {sort}).fetch();
 			loaded = true;
 		}
 
@@ -62,7 +64,7 @@ DiscussionThread = React.createClass({
 
 		Meteor.call('discussionComments.insert', {
 			content,
-			tenantId: Session.get("tenantId"),
+			tenantId: Session.get('tenantId'),
 			commentId: this.props.comment._id,
 		});
 

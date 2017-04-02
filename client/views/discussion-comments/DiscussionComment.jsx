@@ -58,7 +58,8 @@ DiscussionComment = React.createClass({
 	},
 
 	upvoteDiscussionComment() {
-		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+		const { currentUser } = this.props;
+		if (currentUser) {
 			Meteor.call('discussionComments.upvote',
 				this.props.discussionComment._id
 			);
@@ -66,10 +67,11 @@ DiscussionComment = React.createClass({
 	},
 
 	reportDiscussionComment() {
-		this.setState({
-			moreOptionsVisible: false,
-		});
-		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+		const { currentUser } = this.props;
+		if (currentUser) {
+			this.setState({
+				moreOptionsVisible: false,
+			});
 			Meteor.call('discussionComments.report',
 				this.props.discussionComment._id
 			);
@@ -77,10 +79,11 @@ DiscussionComment = React.createClass({
 	},
 
 	unreportDiscussionComment() {
-		this.setState({
-			readComment: false,
-		});
-		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+		const { currentUser } = this.props;
+		if (currentUser) {
+			this.setState({
+				readComment: false,
+			});
 			Meteor.call('discussionComments.unreport',
 				this.props.discussionComment._id
 			);

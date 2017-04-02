@@ -4,7 +4,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 
-// discussionComment Teaser
 DiscussionCommentTeaser = React.createClass({
 
 	propTypes: {
@@ -15,16 +14,29 @@ DiscussionCommentTeaser = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getChildContext() {
 		return {
 			muiTheme: getMuiTheme(baseTheme),
 		};
 	},
 
+	getMeteorData() {
+		const { discussionComment } = this.props;
+		const handle = Meteor.subscribe('users.id', discussionComment.userId);
+		const user = Meteor.users.findOne({ _id: discussionComment.userId });
+
+		return {
+			user,
+			ready: handle.ready(),
+		};
+	},
+
 	render() {
 		const discussionComment = this.props.discussionComment;
 		const commentaryLink = `/commentary/?works=${discussionComment.comment.work.slug
-			}&subworks=${discussionComment.comment.subwork.title}`;
+		}&subworks=${discussionComment.comment.subwork.title}&lineFrom=${discussionComment.comment.lineFrom}`;
 		const commentLink = `/commentary/?_id=${discussionComment.commentId}`;
 		return (
 			<Card
@@ -37,8 +49,7 @@ DiscussionCommentTeaser = React.createClass({
 							className="user-discussion-comment-title"
 							href={commentaryLink}
 						>
-							Comment on { discussionComment.comment.work.title }
-							{ discussionComment.comment.subwork.title}.{ discussionComment.comment.lineFrom }
+							Comment on { discussionComment.comment.work.title } { discussionComment.comment.subwork.title}.{ discussionComment.comment.lineFrom }
 						</a>
 					</div>
 				</div>

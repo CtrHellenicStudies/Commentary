@@ -17,25 +17,6 @@ Comments.schema = new SimpleSchema({
 
 	tenantId: {
 		type: String,
-		label: 'Tenant',
-		optional: true,
-		autoform: {
-			afFieldInput: {
-				type: 'select',
-				options() {
-					const tenants = [];
-					_.map(Tenants.find().fetch(), function (tenant) {
-
-						tenants.push({
-							label: tenant.subdomain,
-							value: tenant._id
-						});
-
-					});
-					return tenants;
-				}
-			}
-		}
 	},
 
 	commenters: {
@@ -153,10 +134,6 @@ Comments.schema = new SimpleSchema({
 
 	isAnnotation: {
 		type: Boolean,
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
 	},
 });
 

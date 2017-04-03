@@ -120,6 +120,8 @@ DiscussionComment = React.createClass({
 		let userReported = false;
 		let username = '';
 		let offsetLeft = 0;
+		let status;
+
 
 		// Child discussion Comments
 		discussionComment.children = [];
@@ -159,8 +161,20 @@ DiscussionComment = React.createClass({
 			offsetLeft = $('.toggle-more-button').position().left;
 		}
 
+		// Make status message if applicable
+		if (discussionComment.status === 'pending') {
+			status = 'Pending approval';
+		} else if (discussionComment.status === 'trash') {
+			status = 'This comment was made private by an Administrator.';
+		}
+
 		return (
 			<div className={`discussion-comment paper-shadow ${(userReported && !this.state.readComment ? 'discussion-comment--user-reported' : '')}`}>
+				{status ?
+					<span className="discussion-comment-status">
+						{status}
+					</span>
+				: ''}
 				<div className="discussion-comment-content">
 					<div className="inner-comment-row">
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">

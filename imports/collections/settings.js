@@ -32,14 +32,19 @@ Settings.schema = new SimpleSchema({
 		type: String,
 	},
 
+	webhooksToken: {
+		optional: true,
+		type: String,
+	},
+
 	homepageCover: {
 		optional: true,
 		type: afSlingshot.fileSchema,
 	},
 
-	homepageIntroductionTitle: {
+	homepageIntroduction: {
 		optional: true,
-		type: String,
+		type: [Object],
 	},
 
 	homepageIntroductionImage: {
@@ -52,25 +57,26 @@ Settings.schema = new SimpleSchema({
 		type: String,
 	},
 
-	homepageIntroductionText: {
+	'introBlocks.$.title': {
 		optional: true,
 		type: String,
 	},
 
-	homepageIntroductionLink: {
+	'introBlocks.$.text': {
 		optional: true,
 		type: String,
 	},
 
-	homepageIntroductionLinkText: {
+	'introBlocks.$.linkURL': {
 		optional: true,
 		type: String,
 	},
 
-	webhooksToken: {
+	'introBlocks.$.linkText': {
 		optional: true,
 		type: String,
-	}
+	},
+
 });
 
 Settings.attachSchema(Settings.schema);

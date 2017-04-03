@@ -376,7 +376,7 @@
 
 .discussion-comment {
   background: @light;
-  padding: 40px 30px 20px;
+  padding: 0px;
   margin: 10px auto;
   position: relative;
 	text-align:left;
@@ -394,6 +394,26 @@
 			display:block;
 		}
 	}
+
+	.discussion-comment-content {
+		padding: 30px 20px;
+	}
+
+	.discussion-comment-status {
+		font-size: 12px;
+    color: @secondary-text;
+    text-transform: uppercase;
+		font-weight:bold;
+		font-family:@font-label;
+		display:block;
+		width:100%;
+		background: #eee;
+		border-top:1px solid #ddd;
+		border-right:1px solid #ddd;
+		border-left:1px solid #ddd; 
+		padding:5px 30px;
+	}
+
 
   .profile-picture {
     display: inline-block;
@@ -422,20 +442,18 @@
       }
 
     }
+
     .discussion-comment-date {
       font-size: 12px;
-      margin-top: 5px;
+      margin-top: 0px;
       color: @light-text;
       text-transform: uppercase;
       span {
         display: inline;
         font-size: 12px;
-        margin-top: 5px;
         color: @light-text;
         text-transform: uppercase;
-
       }
-
     }
 
   }

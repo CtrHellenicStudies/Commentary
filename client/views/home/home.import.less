@@ -348,24 +348,26 @@ section.intro {
 
   }
 
-  .intro-col {
-
-  }
-
-  a.md-button {
-    padding: 10px 15px;
+	.intro-block-link.cover-link.dark {
+    padding: 0;
+		margin-right: 0 !important;
     border: 2px solid @dark;
     color: @dark;
-  }
 
-	.intro-block-link.cover-link.dark {
+		span {
+			font-size: 12px !important;
+		}
+
+		a > div > div {
+			padding: 5px 10px !important;
+		}
+
 		&:hover {
 			background: @md-primary !important;
 			border: 2px solid @md-primary !important;
 	    color: @light !important;
 			a {
 				background: @md-primary !important;
-
 			}
 		}
 	}

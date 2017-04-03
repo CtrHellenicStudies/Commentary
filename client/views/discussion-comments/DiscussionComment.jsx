@@ -165,7 +165,7 @@ DiscussionComment = React.createClass({
 		if (discussionComment.status === 'pending') {
 			status = 'Pending approval';
 		} else if (discussionComment.status === 'trash') {
-			status = 'This comment was made private by an Administrator.';
+			status = 'This comment was made private by an Administrator';
 		}
 
 		return (

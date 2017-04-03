@@ -44,13 +44,12 @@ DiscussionCommentTeaser = React.createClass({
 		if (discussionComment.status === 'pending') {
 			status = 'Pending approval';
 		} else if (discussionComment.status === 'trash') {
-			status = 'This comment was made private by an Administrator.';
+			status = 'This comment was made private by an Administrator';
 		}
 
 		return (
 			<Card
-				className="user-discussion-comment paper-shadow wow fadeInUp clearfix"
-				data-wow-duration="0.2s"
+				className="user-discussion-comment paper-shadow clearfix"
 			>
 				<div className="card-title-outer">
 					<div className="card-title-text">

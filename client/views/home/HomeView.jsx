@@ -155,11 +155,15 @@ HomeView = React.createClass({
 												{block.text}
 											</span>
 											{block.linkURL && block.linkText ?
-												<RaisedButton
-													className="intro-block-link cover-link dark"
-													href={block.linkURL}
-													label={block.linkText}
-												/>
+												<div
+													style={{ marginTop: '20px' }}
+												>
+													<RaisedButton
+														className="intro-block-link cover-link dark"
+														href={block.linkURL}
+														label={block.linkText}
+													/>
+												</div>
 											: ''}
 										</div>
 									))}

@@ -358,7 +358,16 @@ section.intro {
     color: @dark;
   }
 
-	.intro-block-link {
+	.intro-block-link.cover-link.dark {
+		&:hover {
+			background: @md-primary !important;
+			border: 2px solid @md-primary !important;
+	    color: @light !important;
+			a {
+				background: @md-primary !important;
+
+			}
+		}
 	}
 
 	.intro-col-image {

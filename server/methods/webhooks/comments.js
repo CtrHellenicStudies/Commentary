@@ -2,15 +2,18 @@ import Comments from '/imports/collections/comments';
 import Commenters from '/imports/collections/commenters';
 import Keywords from '/imports/collections/keywords';
 import Revisions from '/imports/collections/revisions';
+import ReferenceWorks from '/imports/collections/referenceWorks';
 import Tenants from '/imports/collections/tenants';
 import Works from '/imports/collections/works';
 
 Meteor.method('publishComments', (commentCandidate) => {
 	let valid = false;
 	check(commentCandidate.subdomain, String);
-	check(commentCandidate.comment_id, Match.Maybe(Number));
+	check(commentCandidate.wordpressId, Match.Maybe(Number));
 	check(commentCandidate.title, String);
 	check(commentCandidate.token, String);
+	check(commentCandidate.created, Number);
+	check(commentCandidate.updated, Number);
 
 	const tenant = Tenants.findOne({ subdomain: commentCandidate.subdomain });
 	const settings = Settings.findOne({ tenantId: tenant._id });
@@ -73,12 +76,23 @@ Meteor.method('publishComments', (commentCandidate) => {
 		commentCandidate.text;
 
 	let comment = false;
-	if ('comment_id' in commentCandidate) {
-		comment = Comments.findOne(commentCandidate.comment_id);
+	if ('wordpressId' in commentCandidate) {
+		comment = Comments.findOne(commentCandidate.wordpressId);
+	}
+
+	let referenceWork;
+	if ('reference' in commentCandidate) {
+		referenceWork = ReferenceWorks.findOne({ title: commentCandidate.reference })
+	}
+	let originalDate = new Date(commentCandidate.updated * 1000);
+	// 1410643512 is the date of the primary ingest into the Wordpress database
+	if (referenceWork ) {
+		if( parseInt(commentCandidate.updated, 10) === 1410643512) {
+			originalDate = referenceWork.date;
+		}
 	}
 
 	let upsertResponse;
-
 	if (comment) {
 		let revisionExists = false;
 
@@ -93,6 +107,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 				title: commentCandidate.title,
 				text,
 				tenantId: tenant._id,
+				originalDate,
 			});
 
 			if (revision) {
@@ -112,6 +127,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 			title: commentCandidate.title,
 			text,
 			tenantId: tenant._id,
+			originalDate,
 		});
 
 		if (revision) {
@@ -128,7 +144,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 
 		const newComment = {
 			tenantId: tenant._id,
-			wordpressId: commentCandidate.comment_id,
+			wordpressId: commentCandidate.wordpressId,
 			commenters: [],
 			work: {
 				title: work.title,
@@ -144,18 +160,21 @@ Meteor.method('publishComments', (commentCandidate) => {
 			lineLetter: commentCandidate.line_letter,
 			nLines,
 			commentOrder,
+			originalDate,
 
 			keywords,
 			revisions: [revision],
 			discussionComments: [],
 
-			reference: commentCandidate.reference,
-			referenceLink: commentCandidate.referenceLink,
 			// referenceSection: null,
 			// referenceChapter: null,
 			// referenceTranslation: null,
 			// referenceNote: null,
 		};
+
+		if (referenceWork) {
+			newComment.referenceId = referenceWork._id;
+		}
 
 		let newCommenter;
 		if (commenters.length) {

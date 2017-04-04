@@ -57,7 +57,7 @@ CommentDetail = React.createClass({
 		const { comment } = this.props;
 		const selectedRevision = comment.revisions[this.state.selectedRevisionIndex];
 		const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-		const referenceWork = ReferenceWorks.findOne({ title: comment.reference });
+		const referenceWork = ReferenceWorks.findOne({ _id: comment.referenceId });
 
 		return {
 			selectedRevision,
@@ -294,21 +294,20 @@ CommentDetail = React.createClass({
 		const { comment } = this.props;
 		const { selectedRevision, referenceWork } = this.data;
 		const selectedRevisionIndex = this.state.selectedRevisionIndex;
-		let created;
+		let updated = selectedRevision.updated;
+		let format = 'D MMMM YYYY';
 		let commentClass = 'comment-outer has-discussion ';
 		let userCommenterId = [];
 		if (Meteor.user() && Meteor.user().commenterId) {
 			userCommenterId = Meteor.user().commenterId;
 		}
-
 		if (self.state.discussionVisible) {
 			commentClass += 'discussion--width discussion--visible';
+
 		}
 
-		if (referenceWork && comment.revisions.length === 1) {
-			created = referenceWork.date;
-		} else {
-			created = selectedRevision.created;
+		if (selectedRevision.originalDate) {
+			updated = selectedRevision.originalDate;
 		}
 
 		return (
@@ -356,7 +355,7 @@ CommentDetail = React.createClass({
 											<span className="comment-author-name">{commenter.name}</span>
 										</a>
 										<span className="comment-date">
-											{moment(created).format('D MMMM YYYY')}
+											{moment(updated).format(format)}
 										</span>
 									</div>
 									<div className="comment-author-image-wrap paper-shadow">
@@ -404,33 +403,28 @@ CommentDetail = React.createClass({
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}
-						{comment.reference ?
+						{referenceWork ?
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
 								<p>
-									{comment.referenceLink ?
-										<a
-											href={comment.referenceLink}
-											rel="noopener noreferrer"
-											target="_blank"
-										>
-											{comment.reference}
-										</a>
-									:
-										<span >
-											{comment.reference}
-										</span>
-								}
+									<a
+										href={`/referenceWorks/${referenceWork.slug}`}
+										rel="noopener noreferrer"
+										target="_blank"
+									>
+										{referenceWork.title}
+									</a>
 								</p>
 							</div>
 						: '' }
 					</div>
 					<div className="comment-revisions">
 						{comment.revisions.map((revision, i) => {
-							let created = revision.created;
+							let format = 'D MMMM YYYY';
+							let updated = revision.updated;
 
-							if (referenceWork && i === 0) {
-								created = referenceWork.date;
+							if (revision.originalDate) {
+								updated = revision.originalDate;
 							}
 
 							return (
@@ -440,13 +434,14 @@ CommentDetail = React.createClass({
 									data-id={revision.id}
 									className={`revision ${this.state.selectedRevisionIndex === i ? 'selected-revision' : ''}`}
 									onClick={self.selectRevision}
-									label={`Revision ${moment(created).format('D MMMM YYYY')}`}
+									label={`Revision ${moment(updated).format(format)}`}
 								/>
 							);
 						})}
 						<CommentCitation
 							componentClass="comment-citation"
 							title="Cite this comment"
+							referenceWork={referenceWork}
 							comment={comment}
 						/>
 					</div>

@@ -3,6 +3,11 @@ import Tenants from '/imports/collections/tenants';
 const Revisions = new Meteor.Collection('revisions');
 
 Revisions.schema = new SimpleSchema({
+	originalDate: {
+		type: Date,
+		optional: true,
+	},
+
 	title: {
 		type: String,
 		optional: true,

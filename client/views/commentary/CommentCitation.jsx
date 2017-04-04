@@ -9,6 +9,7 @@ CommentCitation = React.createClass({
 		componentClass: React.PropTypes.string,
 		title: React.PropTypes.string,
 		comment: React.PropTypes.object,
+		referenceWork: React.PropTypes.object,
 	},
 
 	getInitialState() {
@@ -35,7 +36,7 @@ CommentCitation = React.createClass({
 	},
 
 	render() {
-		const comment = this.props.comment;
+		const { comment, referenceWork } = this.props;
 		const title = this.props.title;
 		const componentClass = this.props.componentClass;
 
@@ -54,13 +55,22 @@ CommentCitation = React.createClass({
 					onRequestClose={this.handleRequestClose}
 				>
 					<Menu>
-						{comment.revisions.map((revision, i) => (
-							<MenuItem
-								key={i}
-								href={`/commentary/?_id=${comment._id}&revision=${i}`}
-								primaryText={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
-							/>
-						))}
+						{comment.revisions.map((revision, i) => {
+							let format = 'D MMMM YYYY';
+							let updated = revision.updated;
+
+							if (revision.originalDate) {
+								updated = revision.originalDate;
+							}
+
+							return (
+								<MenuItem
+									key={i}
+									href={`/commentary/?_id=${comment._id}&revision=${i}`}
+									primaryText={`Revision ${moment(updated).format(format)}`}
+								/>
+							);
+						})}
 						<MenuItem href={`/commentary/?_id=${comment._id}`} primaryText="Comment link" />
 					</Menu>
 				</Popover>

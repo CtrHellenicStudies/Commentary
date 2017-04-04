@@ -10,12 +10,25 @@ DiscussionComment = React.createClass({
 		currentUser: React.PropTypes.object,
 	},
 
+	mixins: [ReactMeteorData],
+
 	getInitialState() {
 		return {
 			editMode: false,
 			moreOptionsVisible: false,
 			shareOptionsVisible: false,
 			readComment: false,
+		};
+	},
+
+	getMeteorData() {
+		const { discussionComment } = this.props;
+		const handle = Meteor.subscribe('users.id', discussionComment.userId);
+		const user = Meteor.users.findOne({ _id: discussionComment.userId });
+
+		return {
+			user,
+			ready: handle.ready(),
 		};
 	},
 
@@ -34,10 +47,10 @@ DiscussionComment = React.createClass({
 	updateDiscussionComment() {
 		const content = $(this.updateCommentForm).find('textarea').val();
 
-		Meteor.call('discussionComments.update', {
-			_id: this.props.discussionComment._id,
-			content,
-		});
+		Meteor.call('discussionComments.update',
+			this.props.discussionComment._id,
+			{ content },
+		);
 
 		this.setState({
 			editMode: false,
@@ -45,7 +58,8 @@ DiscussionComment = React.createClass({
 	},
 
 	upvoteDiscussionComment() {
-		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+		const { currentUser } = this.props;
+		if (currentUser) {
 			Meteor.call('discussionComments.upvote',
 				this.props.discussionComment._id
 			);
@@ -53,10 +67,11 @@ DiscussionComment = React.createClass({
 	},
 
 	reportDiscussionComment() {
-		this.setState({
-			moreOptionsVisible: false,
-		});
-		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+		const { currentUser } = this.props;
+		if (currentUser) {
+			this.setState({
+				moreOptionsVisible: false,
+			});
 			Meteor.call('discussionComments.report',
 				this.props.discussionComment._id
 			);
@@ -64,10 +79,11 @@ DiscussionComment = React.createClass({
 	},
 
 	unreportDiscussionComment() {
-		this.setState({
-			readComment: false,
-		});
-		if (typeof this.props.currentUser !== 'undefined' || 'null') {
+		const { currentUser } = this.props;
+		if (currentUser) {
+			this.setState({
+				readComment: false,
+			});
 			Meteor.call('discussionComments.unreport',
 				this.props.discussionComment._id
 			);
@@ -97,25 +113,31 @@ DiscussionComment = React.createClass({
 	render() {
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
-		const discussionComment = this.props.discussionComment;
+		const { discussionComment } = this.props;
+		const { user } = this.data;
 		let userLink = '';
-		if (discussionComment.user.username) {
-			userLink = `/users/${discussionComment.user._id}/${discussionComment.user.username}`;
-		} else {
-			userLink = `/users/${discussionComment.user._id}`;
-		}
-		discussionComment.children = [];
 		let userUpvoted = false;
 		let userReported = false;
 		let username = '';
+		let offsetLeft = 0;
+		let status;
 
-		if (discussionComment.user.username) {
-			username = discussionComment.user.username;
-		} else if (
-			'emails' in discussionComment.user
-			&& discussionComment.user.emails.length
-		) {
-			username = discussionComment.user.emails[0].address.split('@')[0];
+
+		// Child discussion Comments
+		discussionComment.children = [];
+
+		// Make user link and user name
+		if (user) {
+			if (user.username) {
+				username = user.username;
+				userLink = `/users/${user._id}/${user.username}`;
+			} else if (
+				'emails' in user
+				&& user.emails.length
+			) {
+				userLink = `/users/${user._id}`;
+				username = user.emails[0].address.split('@')[0];
+			}
 		}
 
 		if (
@@ -135,15 +157,31 @@ DiscussionComment = React.createClass({
 			userReported = true;
 		}
 
+		if (this.state.moreOptionsVisible) {
+			offsetLeft = $('.toggle-more-button').position().left;
+		}
+
+		// Make status message if applicable
+		if (discussionComment.status === 'pending') {
+			status = 'Pending approval';
+		} else if (discussionComment.status === 'trash') {
+			status = 'This comment was made private by an Administrator';
+		}
+
 		return (
 			<div className={`discussion-comment paper-shadow ${(userReported && !this.state.readComment ? 'discussion-comment--user-reported' : '')}`}>
+				{status ?
+					<span className="discussion-comment-status">
+						{status}
+					</span>
+				: ''}
 				<div className="discussion-comment-content">
 					<div className="inner-comment-row">
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
 							<a href={userLink}>
 								<img
-									src={discussionComment.user && discussionComment.user.profile ?
-										discussionComment.user.profile.avatarUrl : '/images/default_user.jpg'}
+									src={user && user.profile ?
+										user.profile.avatarUrl : '/images/default_user.jpg'}
 									alt={username}
 								/>
 							</a>
@@ -192,10 +230,10 @@ DiscussionComment = React.createClass({
 									</div>
 								</form>
 								:
-								<div>{discussionComment.content}</div>
-
+								<div>
+									{discussionComment.content}
+								</div>
 							}
-
 						</div>
 					</div>
 					<div className="inner-comment-row">
@@ -205,13 +243,13 @@ DiscussionComment = React.createClass({
 								onClick={this.upvoteDiscussionComment}
 								className={`discussion-comment-button vote-up ${(userUpvoted) ? 'upvoted' : ''}`}
 								icon={<FontIcon className="mdi mdi-chevron-up" />}
+								disabled={userUpvoted}
 							>
 								{!userIsLoggedIn ?
 									<span className="md-tooltip">You must be signed in to vote.</span>
 									:
 									''
 								}
-
 							</FlatButton>
 							:
 							''
@@ -219,7 +257,8 @@ DiscussionComment = React.createClass({
 						{(
 								'currentUser' in self.props
 							&& self.props.currentUser
-							&& self.props.currentUser._id === discussionComment.user._id
+							&& user
+							&& self.props.currentUser._id === user._id
 						) ?
 							<FlatButton
 								label="Edit"
@@ -242,7 +281,12 @@ DiscussionComment = React.createClass({
 							''
 						}
 
-						<div className={`more-options ${this.state.moreOptionsVisible ? 'more-options--visible' : ''}`}>
+						<div
+							className={`more-options ${this.state.moreOptionsVisible ? 'more-options--visible' : ''}`}
+							style={{
+								left: offsetLeft,
+							}}
+						>
 							<FlatButton
 								label="Report"
 								onClick={this.reportDiscussionComment}

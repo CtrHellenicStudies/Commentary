@@ -1,15 +1,25 @@
 import DiscussionComments from '/imports/collections/discussionComments';
 
-Meteor.publish('user.discussionComments', function discussionComments(query, skip, limit) {
-	check(query, Object);
-	check(skip, Number);
-	check(limit, Number);
-	const newQuery = query;
-	if (this.userId) {
-		newQuery['user._id'] = this.userId;
-		return DiscussionComments.find(newQuery, { skip, limit, sort: { created: -1 } });
+Meteor.publish('user.discussionComments', (userId, tenantId, sortMethod = 'votes') => {
+	check(userId, String);
+	check(tenantId, String);
+	check(sortMethod, String);
+
+	let sort = { votes: -1, updated: -1 };
+
+	if (sortMethod === 'recent') {
+		sort = {
+			updated: -1,
+			votes: -1,
+		};
 	}
-	return [];
+
+	return DiscussionComments.find({
+		userId: userId,
+		tenantId,
+	}, {
+		sort,
+	});
 });
 
 Meteor.publish('userData', function userData() {

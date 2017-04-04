@@ -3,6 +3,11 @@ import Tenants from '/imports/collections/tenants';
 const Revisions = new Meteor.Collection('revisions');
 
 Revisions.schema = new SimpleSchema({
+	originalDate: {
+		type: Date,
+		optional: true,
+	},
+
 	title: {
 		type: String,
 		optional: true,
@@ -10,44 +15,17 @@ Revisions.schema = new SimpleSchema({
 
 	slug: {
 		type: String,
-		max: 200,
 		optional: true,
-		autoform: {
-			type: 'hidden',
-			label: false,
-		},
 	},
 
 	tenantId: {
-	    type: String,
-	    label: "Tenant",
-	    optional: true,
-	    autoform: {
-	    	afFieldInput: {
-	    		type: "select",
-		      options: function () {
-		      	var tenants = [];
-		        _.map(Tenants.find().fetch(), function (tenant) {
-
-		          tenants.push({
-		            label: tenant.subdomain,
-		            value: tenant._id
-		          });
-
-		        });
-		        return tenants;
-		      }
-	    	}
-	    }
+    type: String,
+    optional: true,
 	},
 
 	text: {
 		type: String,
 		optional: true,
-		autoform: {
-			rows: 5,
-		},
-
 	},
 });
 

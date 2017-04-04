@@ -4,6 +4,7 @@ import FontIcon from 'material-ui/FontIcon';
 import { green100, green500, red100, red500, black, fullWhite } from 'material-ui/styles/colors';
 import JsDiff from 'diff';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+import ReferenceWorks from '/imports/collections/referenceWorks';
 
 CommentDetail = React.createClass({
 
@@ -53,9 +54,15 @@ CommentDetail = React.createClass({
 	},
 
 	getMeteorData() {
-		const selectedRevision = this.props.comment.revisions[this.state.selectedRevisionIndex];
+		const { comment } = this.props;
+		const selectedRevision = comment.revisions[this.state.selectedRevisionIndex];
+		const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+		const referenceWork = ReferenceWorks.findOne({ _id: comment.referenceId });
+
 		return {
 			selectedRevision,
+			referenceWork,
+			ready: handle.ready(),
 		};
 	},
 
@@ -284,17 +291,23 @@ CommentDetail = React.createClass({
 
 	render() {
 		const self = this;
-		const comment = this.props.comment;
-		const selectedRevision = this.data.selectedRevision;
+		const { comment } = this.props;
+		const { selectedRevision, referenceWork } = this.data;
 		const selectedRevisionIndex = this.state.selectedRevisionIndex;
+		let updated = selectedRevision.updated;
+		let format = 'D MMMM YYYY';
 		let commentClass = 'comment-outer has-discussion ';
 		let userCommenterId = [];
 		if (Meteor.user() && Meteor.user().commenterId) {
 			userCommenterId = Meteor.user().commenterId;
 		}
-
 		if (self.state.discussionVisible) {
 			commentClass += 'discussion--width discussion--visible';
+
+		}
+
+		if (selectedRevision.originalDate) {
+			updated = selectedRevision.originalDate;
 		}
 
 		return (
@@ -342,7 +355,7 @@ CommentDetail = React.createClass({
 											<span className="comment-author-name">{commenter.name}</span>
 										</a>
 										<span className="comment-date">
-											{moment(selectedRevision.created).format('D MMMM YYYY')}
+											{moment(updated).format(format)}
 										</span>
 									</div>
 									<div className="comment-author-image-wrap paper-shadow">
@@ -390,41 +403,45 @@ CommentDetail = React.createClass({
 								onClick={this.checkIfToggleLemmaReferenceModal}
 							/>
 						}
-						{comment.reference ?
+						{referenceWork ?
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
 								<p>
-									{comment.referenceLink ?
-										<a
-											href={comment.referenceLink}
-											rel="noopener noreferrer"
-											target="_blank"
-										>
-											{comment.reference}
-										</a>
-									:
-										<span >
-											{comment.reference}
-										</span>
-								}
+									<a
+										href={`/referenceWorks/${referenceWork.slug}`}
+										rel="noopener noreferrer"
+										target="_blank"
+									>
+										{referenceWork.title}
+									</a>
 								</p>
 							</div>
 						: '' }
 					</div>
 					<div className="comment-revisions">
-						{comment.revisions.map((revision, i) => (
-							<FlatButton
-								key={i}
-								id={i}
-								data-id={revision.id}
-								className={`revision ${this.state.selectedRevisionIndex === i ? 'selected-revision' : ''}`}
-								onClick={self.selectRevision}
-								label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
-							/>
-						))}
+						{comment.revisions.map((revision, i) => {
+							let format = 'D MMMM YYYY';
+							let updated = revision.updated;
+
+							if (revision.originalDate) {
+								updated = revision.originalDate;
+							}
+
+							return (
+								<FlatButton
+									key={i}
+									id={i}
+									data-id={revision.id}
+									className={`revision ${this.state.selectedRevisionIndex === i ? 'selected-revision' : ''}`}
+									onClick={self.selectRevision}
+									label={`Revision ${moment(updated).format(format)}`}
+								/>
+							);
+						})}
 						<CommentCitation
 							componentClass="comment-citation"
 							title="Cite this comment"
+							referenceWork={referenceWork}
 							comment={comment}
 						/>
 					</div>

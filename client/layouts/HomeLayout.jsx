@@ -18,14 +18,21 @@ HomeLayout = React.createClass({
 	},
 
 	getMeteorData() {
-		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+		const handle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 		return {
-			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+			settings: Settings.findOne(),
+			ready: handle.ready(),
 		};
 	},
 
 	render() {
+		const { settings } = this.data;
+
+		if (!settings) {
+			return <Loading />;
+		}
+
 		return (
 			<div className="chs-layout home-layout">
 				<Header
@@ -33,7 +40,7 @@ HomeLayout = React.createClass({
 				/>
 
 				<HomeView
-					settings={this.data.settings}
+					settings={settings}
 				/>
 
 				<Footer />

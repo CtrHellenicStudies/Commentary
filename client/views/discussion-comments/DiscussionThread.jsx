@@ -25,27 +25,39 @@ DiscussionThread = React.createClass({
 
 	getMeteorData() {
 		let discussionComments = [];
-		let loaded = false;
+		let userDiscussionComments = [];
 
 		let sort = {};
 		switch (this.state.sortMethod) {
-			case 'votes':
-				sort = { votes: -1, updated: -1 };
-				break;
-			case 'recent':
-				sort = { updated: -1, votes: -1 };
-				break;
+		case 'votes':
+			sort = { votes: -1, updated: -1 };
+			break;
+		case 'recent':
+			sort = { updated: -1, votes: -1 };
+			break;
+		default:
+			break;
 		}
 
-		const handle = Meteor.subscribe('discussionComments', this.props.comment._id, Session.get("tenantId"));
-		if (handle.ready()) {
-			discussionComments = DiscussionComments.find({ commentId: this.props.comment._id }, {sort}).fetch();
-			loaded = true;
-		}
+		const handle = Meteor.subscribe('discussionComments', this.props.comment._id, Session.get('tenantId'));
+		discussionComments = DiscussionComments.find({
+			commentId: this.props.comment._id,
+			status: 'publish'
+		}, {
+			sort
+		}).fetch();
+		userDiscussionComments = DiscussionComments.find({
+			commentId: this.props.comment._id,
+			userId: Meteor.userId(),
+		}, {
+			sort
+		}).fetch();
+
+		discussionComments.push(...userDiscussionComments);
 
 		return {
 			discussionComments,
-			loaded,
+			ready: handle.ready(),
 		};
 	},
 
@@ -62,7 +74,7 @@ DiscussionThread = React.createClass({
 
 		Meteor.call('discussionComments.insert', {
 			content,
-			tenantId: Session.get("tenantId"),
+			tenantId: Session.get('tenantId'),
 			commentId: this.props.comment._id,
 		});
 
@@ -117,7 +129,7 @@ DiscussionThread = React.createClass({
 					</div>
 				</div>
 
-				{!this.data.loaded ?
+				{!this.data.ready ?
 					''
 					:
 					<div className="discussion-thread">

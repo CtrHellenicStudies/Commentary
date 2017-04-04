@@ -5,26 +5,8 @@ const TextNodes = new Meteor.Collection('textNodes');
 
 TextNodes.schema = new SimpleSchema({
 	tenantId: {
-	    type: String,
-	    label: "Tenant",
-	    optional: true,
-	    autoform: {
-	    	afFieldInput: {
-	    		type: "select",
-		      options: function () {
-		      	var tenants = [];
-		        _.map(Tenants.find().fetch(), function (tenant) {
-
-		          tenants.push({
-		            label: tenant.subdomain,
-		            value: tenant._id
-		          });
-
-		        });
-		        return tenants;
-		      }
-	    	}
-	    }
+    type: String,
+    optional: true,
 	},
 
 	text: {
@@ -47,7 +29,9 @@ TextNodes.schema = new SimpleSchema({
 	work: {
 		type: Object,
 	},
+
 	// 'work.id': { type: ObjectId }, // TODO: objectid type?
+
 	'work.slug': {
 		type: String,
 	},
@@ -73,6 +57,7 @@ TextNodes.schema = new SimpleSchema({
 	related_passages: {
 		type: [Object]
 	},
+
 	// "related_passages" : [
 	// 		{
 	// 			"text" : {

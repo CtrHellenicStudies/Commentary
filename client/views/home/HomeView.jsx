@@ -49,45 +49,33 @@ HomeView = React.createClass({
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
-		let introLinkText = '   ';
-		let introLink = '#';
 
-
-		if (settings) {
-			if (
-				settings.homepageCover
-				&& settings.homepageCover.length
-			) {
-				imageUrl = settings.homepageCover;
-			}
-
-			if (
-				settings.homepageIntroductionImage
-				&& settings.homepageIntroductionImage.length
-			) {
-				introImage = settings.homepageIntroductionImage;
-			}
-
-			if (
-				settings.homepageIntroductionImageCaption
-				&& settings.homepageIntroductionImageCaption.length
-			) {
-				introImageCaption = settings.homepageIntroductionImageCaption;
-			}
-
-			if (
-				settings.homepageIntroductionLinkText
-				&& settings.homepageIntroductionLinkText.length
-			) {
-				introLinkText = settings.homepageIntroductionLinkText;
-			}
-			if (
-				settings.homepageIntroductionLink
-				&& settings.homepageIntroductionLink.length
-			) {
-				introLink = settings.homepageIntroductionLink;
-			}
+		if (!settings) {
+			return <Loading />
 		}
+
+		if (
+			settings.homepageCover
+			&& settings.homepageCover.length
+		) {
+			imageUrl = settings.homepageCover;
+		}
+
+		if (
+			settings.homepageIntroductionImage
+			&& settings.homepageIntroductionImage.length
+		) {
+			introImage = settings.homepageIntroductionImage;
+		}
+
+		if (
+			settings.homepageIntroductionImageCaption
+			&& settings.homepageIntroductionImageCaption.length
+		) {
+			introImageCaption = settings.homepageIntroductionImageCaption;
+		}
+
+		console.log('settings', settings);
 
 		Utils.setTitle(`Home | ${settings ? settings.title : ''}`);
 		Utils.setDescription((settings ? settings.subtitle : ''));
@@ -114,9 +102,9 @@ HomeView = React.createClass({
 								<div className="center-content">
 
 									<div className="site-title-wrap">
-										<h2 className="site-title">{this.props.settings ? this.props.settings.name : undefined}</h2>
+										<h2 className="site-title">{settings.name}</h2>
 										<h3 className="site-subtitle">
-											{this.props.settings ? this.props.settings.subtitle : undefined}
+											{settings.subtitle}
 										</h3>
 									</div>
 
@@ -155,19 +143,30 @@ HomeView = React.createClass({
 								</h2>
 
 								<div className="intro-col intro-col-text">
-									<div
-										className="mb40 mb-xs-24l intro-block-text "
-										dangerouslySetInnerHTML={{
-											__html: settings.homepageIntroductionText,
-										}}
-									/>
-
-									<RaisedButton
-										className="cover-link dark"
-										href={introLink}
-										label={introLinkText}
-									/>
-
+									{settings.introBlocks.map((block, i) => (
+										<div
+											key={i}
+											className="mb40 mb-xs-24l intro-block-text"
+										>
+											<h5 className="uppercase intro-block-header">
+												{block.title}
+											</h5>
+											<span className="intro-block-desc">
+												{block.text}
+											</span>
+											{block.linkURL && block.linkText ?
+												<div
+													style={{ marginTop: '20px' }}
+												>
+													<RaisedButton
+														className="intro-block-link cover-link dark"
+														href={block.linkURL}
+														label={block.linkText}
+													/>
+												</div>
+											: ''}
+										</div>
+									))}
 								</div>
 								<div className="intro-col intro-col-image image-wrap wow fadeIn">
 									<img
@@ -175,14 +174,12 @@ HomeView = React.createClass({
 										alt={introImageCaption}
 										src={introImage}
 									/>
-									<div className="caption">
-										<span
-											className="caption-text"
-											dangerouslySetInnerHTML={{
-												__html: introImageCaption
-											}}
-										/>
-									</div>
+									<div
+										className="caption"
+										dangerouslySetInnerHTML={{
+											__html: introImageCaption
+										}}
+									/>
 								</div>
 							</div>
 							{/* <!--end of row-->*/}

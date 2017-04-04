@@ -348,15 +348,43 @@ section.intro {
 
   }
 
-  .intro-col {
-
-  }
-
-  a.md-button {
-    padding: 10px 15px;
+	.intro-block-link.cover-link.dark {
+    padding: 0;
+		margin-right: 0 !important;
     border: 2px solid @dark;
     color: @dark;
-  }
+
+		span {
+			font-size: 12px !important;
+		}
+
+		a > div > div {
+			padding: 5px 10px !important;
+		}
+
+		&:hover {
+			background: @md-primary !important;
+			border: 2px solid @md-primary !important;
+	    color: @light !important;
+			a {
+				background: @md-primary !important;
+			}
+		}
+	}
+
+	.intro-col-image {
+		.caption {
+			p {
+				padding:0;
+				margin:0;
+				font-size:14px;
+				color: @secondary-text;
+				font-family:@font-light;
+				width:100%;
+				max-width:none;
+			}
+		}
+	}
 
 }
 

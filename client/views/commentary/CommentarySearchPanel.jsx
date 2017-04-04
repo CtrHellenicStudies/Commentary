@@ -13,10 +13,10 @@ import Works from '/imports/collections/works';
 CommentarySearchPanel = React.createClass({
 
 	propTypes: {
-		filters: React.PropTypes.array.isRequired,
-		toggleSearchTerm: React.PropTypes.func.isRequired,
-		handleChangeTextsearch: React.PropTypes.func.isRequired,
-		handleChangeLineN: React.PropTypes.func.isRequired,
+		filters: React.PropTypes.array,
+		toggleSearchTerm: React.PropTypes.func,
+		handleChangeTextsearch: React.PropTypes.func,
+		handleChangeLineN: React.PropTypes.func,
 		open: React.PropTypes.bool,
 		closeRightMenu: React.PropTypes.func,
 	},

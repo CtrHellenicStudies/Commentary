@@ -8,8 +8,11 @@ Meteor.methods({
 			name: String,
 			slug: String,
 			tenantId: String,
-			bio: Match.Maybe(String),
-			tagline: Match.Maybe(String),
+			wordpressId: Match.Optional(Match.OneOf(Number, undefined, null)),
+			avatar: Match.Optional(Match.OneOf(Object, undefined, null)),
+			featuredOnHomepage: Match.Optional(Match.OneOf(Boolean, undefined, null)),
+			bio: Match.Optional(Match.OneOf(String, undefined, null)),
+			tagline: Match.Optional(Match.OneOf(String, undefined, null)),
 		});
 
 		if (
@@ -29,8 +32,11 @@ Meteor.methods({
 			name: String,
 			slug: String,
 			tenantId: String,
-			bio: Match.Maybe(String),
-			tagline: Match.Maybe(String),
+			wordpressId: Match.Optional(Match.OneOf(Number, undefined, null)),
+			avatar: Match.Optional(Match.OneOf(Object, undefined, null)),
+			featuredOnHomepage: Match.Optional(Match.OneOf(Boolean, undefined, null)),
+			bio: Match.Optional(Match.OneOf(String, undefined, null)),
+			tagline: Match.Optional(Match.OneOf(String, undefined, null)),
 		});
 
 		if (

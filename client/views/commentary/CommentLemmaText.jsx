@@ -23,7 +23,7 @@ export default class CommentLemmaText extends React.Component {
 		const { expanded } = this.state;
 
 		const textLenghtBound = 10;
-		const longText = lines.length >= textLenghtBound;
+		const longText = lines.length > textLenghtBound;
 
 		// if long text
 		if (longText) {
@@ -76,4 +76,3 @@ CommentLemmaText.propTypes = {
 		n: React.PropTypes.number.isRequired,
 	})).isRequired,
 }
-

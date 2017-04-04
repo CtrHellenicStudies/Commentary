@@ -188,7 +188,7 @@ CommentLemma = React.createClass({
 					/>
 					<div className="edition-tabs tabs">
 						{lemmaText.map((lemmaTextEdition, i) => {
-							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
 
 							return (<RaisedButton
 								key={i}

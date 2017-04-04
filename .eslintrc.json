@@ -49,7 +49,7 @@
 		"react/jsx-no-undef": "off",
 		"react/jsx-no-bind": "off",
 		"jsx-a11y/label-has-for": "off",
-		"new-cap": ["error", { "capIsNewExceptions": ["Match", "Maybe", "OpenSeadragon", "OneOf"] }],
+		"new-cap": "off", 
 		"import/no-extraneous-dependencies": "off",
 		"object-curly-spacing": "off",
 		"no-multiple-empty-lines": "off",

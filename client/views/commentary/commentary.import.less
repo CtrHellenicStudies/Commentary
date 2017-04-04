@@ -64,7 +64,7 @@ header .line-wrap {
   display: block;
   width: 100%;
   margin: 0 auto;
-  padding: 50px 25px;
+  padding: 15px 25px;
   clear: both;
   position: relative;
 
@@ -279,7 +279,7 @@ article.lemma-comment {
 
     span {
       text-transform: uppercase;
-      font-size: 14px;
+      font-size: 12px !important;
       color: @secondary-text;
       display: inline-block;
       vertical-align: top;
@@ -288,16 +288,18 @@ article.lemma-comment {
       padding-right: 3px;
       margin: 0px;
     }
-    i {
-      font-size: 18px;
+    .mdi {
       color: @secondary-text;
       display: inline-block;
       vertical-align: top;
       .transition(all 100ms ease-out);
+			margin-top: 2px;
       margin-right: 0px;
 
+			&:before {
+	      font-size: 18px;
+			}
     }
-
   }
 
   .context-tabs, .edition-tabs {
@@ -392,7 +394,7 @@ article.lemma-comment {
         padding: 0px 20px;
         display: block;
         font-family: @font-light;
-        font-size: 12px;
+        font-size: 12px !important;
         text-transform: uppercase;
         color: #999;
         border-right: 1px solid #ddd;
@@ -461,12 +463,12 @@ article.lemma-comment {
 
   button {
     padding: 5px 10px;
-    max-width: 200px;
+    max-width: none;
     text-overflow: ellipsis;
 
     span {
       //font-family:@font-label;
-      font-size: 14px;
+      font-size: 12px !important;
     }
 
   }
@@ -590,8 +592,7 @@ article.lemma-comment {
 
   span {
     color: @light !important;
-    font-size: @font-label;
-    font-size: 12px;
+    font-size: 12px !important;
     text-transform: uppercase;
 
   }
@@ -684,7 +685,7 @@ article.lemma-comment {
   }
 
   p {
-    margin: 7px;
+    margin: 4px 7px;
     width: auto;
     padding: 0;
   }

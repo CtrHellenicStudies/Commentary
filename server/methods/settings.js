@@ -7,21 +7,26 @@ Meteor.methods({
 	'settings.insert': (token, setting) => {
 		check(token, String);
 		check(setting, {
+			tenantId: String,
 			name: String,
 			domain: String,
 			title: String,
-			footer: String,
-			emails: Object,
-			tenantId: Match.Maybe(String),
 			subtitle: Match.Maybe(String),
-			homepageCover: Match.Maybe(String),
-			homepageIntroductionTitle: Match.Maybe(String),
-			homepageIntroductionImage: Match.Maybe(String),
-			homepageIntroductionImageCaption: Match.Maybe(String),
-			homepageIntroductionText: Match.Maybe(String),
-			homepageIntroductionLink: Match.Maybe(String),
-			homepageIntroductionLinkText: Match.Maybe(String),
+			footer: String,
+			emails: {
+				from: String,
+				contact: String,
+			},
 			webhooksToken: String,
+			homepageCover: Match.Maybe(Object),
+			homepageIntroductionImage: Match.Maybe(Object),
+			homepageIntroductionImageCaption: Match.Maybe(String),
+			introBlocks: [{
+				title: Match.Maybe(String),
+				text: Match.Maybe(String),
+				linkURL: Match.Maybe(String),
+				linkText: Match.Maybe(String),
+			}],
 		});
 
 		if (
@@ -38,21 +43,26 @@ Meteor.methods({
 		check(token, String);
 		check(_id, String);
 		check(setting, {
+			tenantId: String,
 			name: String,
 			domain: String,
 			title: String,
-			footer: String,
-			emails: Object,
-			tenantId: Match.Maybe(String),
 			subtitle: Match.Maybe(String),
-			homepageCover: Match.Maybe(String),
-			homepageIntroductionTitle: Match.Maybe(String),
-			homepageIntroductionImage: Match.Maybe(String),
-			homepageIntroductionImageCaption: Match.Maybe(String),
-			homepageIntroductionText: Match.Maybe(String),
-			homepageIntroductionLink: Match.Maybe(String),
-			homepageIntroductionLinkText: Match.Maybe(String),
+			footer: String,
+			emails: {
+				from: String,
+				contact: String,
+			},
 			webhooksToken: String,
+			homepageCover: Match.Maybe(Object),
+			homepageIntroductionImage: Match.Maybe(Object),
+			homepageIntroductionImageCaption: Match.Maybe(String),
+			introBlocks: [{
+				title: Match.Maybe(String),
+				text: Match.Maybe(String),
+				linkURL: Match.Maybe(String),
+				linkText: Match.Maybe(String),
+			}],
 		});
 
 		if (

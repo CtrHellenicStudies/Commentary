@@ -228,13 +228,13 @@ AddKeywordLayout = React.createClass({
 
 	getCommenter(formData) {
 		let commenter = null;
-		if (Meteor.user().commenterId.length > 1) {
+		if (Meteor.user().canEditCommenters.length > 1) {
 			commenter = Commenters.findOne({
 				_id: formData.commenterValue.value,
 			});
 		} else {
 			commenter = Commenters.find({
-				_id: Meteor.user().commenterId,
+				_id: Meteor.user().canEditCommenters,
 			});
 		}
 		return commenter;

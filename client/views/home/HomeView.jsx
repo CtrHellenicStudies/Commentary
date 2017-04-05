@@ -75,8 +75,6 @@ HomeView = React.createClass({
 			introImageCaption = settings.homepageIntroductionImageCaption;
 		}
 
-		console.log('settings', settings);
-
 		Utils.setTitle(`Home | ${settings ? settings.title : ''}`);
 		Utils.setDescription((settings ? settings.subtitle : ''));
 		Utils.setMetaImage(imageUrl);

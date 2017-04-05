@@ -87,7 +87,7 @@ Meteor.methods({
 		// var roles = ['developer', 'admin'];
 		comment.commenters.forEach((commenter) => {
 			// roles.push(commenter.slug);
-			allow = (Meteor.user().commenterId === commenter._id);
+			allow = (Meteor.user().canEditCommenters === commenter._id);
 		});
 
 		if (Roles.userIsInRole(Meteor.user(), ['developer', 'admin'])) {

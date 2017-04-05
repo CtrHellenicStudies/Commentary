@@ -12,7 +12,7 @@ CommentarySearchToolbar = React.createClass({
 	propTypes: {
 		filters: React.PropTypes.array.isRequired,
 		toggleSearchTerm: React.PropTypes.func.isRequired,
-		handleChangeTextsearch: React.PropTypes.func.isRequired,
+		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func.isRequired,
 		addCommentPage: React.PropTypes.bool,
 	},

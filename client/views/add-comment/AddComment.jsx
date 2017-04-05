@@ -143,8 +143,8 @@ AddComment = React.createClass({
 		Meteor.subscribe('commenters');
 		const commentersOptions = [];
 		let commenters = [];
-		if (Meteor.user() && Meteor.user().commenterId) {
-			commenters = Commenters.find({ _id: { $in: Meteor.user().commenterId } }).fetch();
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
 		}
 		commenters.forEach((commenter) => {
 			commentersOptions.push({
@@ -310,7 +310,7 @@ AddComment = React.createClass({
 			})(textEditorState.getCurrentContent());
 
 			const textRaw = convertToRaw(textEditorState.getCurrentContent());
-		
+
 			this.props.submitForm(this.state, textHtml, textRaw);
 		}
 	},

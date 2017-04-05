@@ -298,8 +298,8 @@ CommentDetail = React.createClass({
 		let format = 'D MMMM YYYY';
 		let commentClass = 'comment-outer has-discussion ';
 		let userCommenterId = [];
-		if (Meteor.user() && Meteor.user().commenterId) {
-			userCommenterId = Meteor.user().commenterId;
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			userCommenterId = Meteor.user().canEditCommenters;
 		}
 		if (self.state.discussionVisible) {
 			commentClass += 'discussion--width discussion--visible';

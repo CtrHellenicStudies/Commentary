@@ -170,8 +170,8 @@ AddKeyword = React.createClass({
 		Meteor.subscribe('commenters', Session.get('tenantId'));
 		const commentersOptions = [];
 		let commenters = [];
-		if (Meteor.user() && Meteor.user().commenterId) {
-			commenters = Commenters.find({ _id: { $in: Meteor.user().commenterId } }).fetch();
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
 		}
 		commenters.forEach((commenter) => {
 			commentersOptions.push({

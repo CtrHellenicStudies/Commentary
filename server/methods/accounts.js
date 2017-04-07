@@ -1,4 +1,18 @@
 Meteor.methods({
+	createAccount(user) {
+		check(user, {
+			email: String,
+			password: {
+				digest: String,
+				algorithm: String,
+			},
+		});
+
+		const userId = Accounts.createUser(user);
+		const stampedToken = Accounts._generateStampedLoginToken();
+		Accounts._insertLoginToken(userId, stampedToken);
+		return { userId, stampedToken };
+	},
 	updateAccount(field, value) {
 		if (!this.userId) {
 			throw new Meteor.Error('not-authorized');

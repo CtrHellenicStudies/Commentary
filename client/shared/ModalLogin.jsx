@@ -197,14 +197,12 @@ ModalLogin = React.createClass({
 								</div>
 								<div className="at-signup-link">
 									<p>
-										Don't have an account?
-										<a href="/sign-up" id="at-signUp" className="at-link at-signup">Register</a>
+										Don't have an account? <a href="/sign-up" id="at-signUp" className="at-link at-signup">Register.</a>
 									</p>
 								</div>
 								<div className="at-resend-verification-email-link at-wrap">
 									<p>
-										Verification email lost?
-										<a href="/send-again" id="at-resend-verification-email" className="at-link at-resend-verification-email">Send again</a>
+										Verification email lost? <a href="/send-again" id="at-resend-verification-email" className="at-link at-resend-verification-email">Send again.</a>
 									</p>
 								</div>
 							</div>

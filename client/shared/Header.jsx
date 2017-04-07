@@ -179,30 +179,30 @@ Header = React.createClass({
 
 		};
 
-		const userIsLoggedIn = Meteor.user();
-		const { filters, isOnHomeView } = this.props;
-
+		const { filters, isOnHomeView, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN } = this.props;
+		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalSignupLowered, modalLoginLowered } = this.state;
 		const { tenant } = this.data;
+		const userIsLoggedIn = Meteor.user();
 
 		return (
 			<div>
 				<LeftMenu
-					open={this.state.leftMenuOpen}
+					open={leftMenuOpen}
 					closeLeftMenu={this.closeLeftMenu}
 				/>
 
 				{!isOnHomeView ?
 					<CommentarySearchPanel
-						toggleSearchTerm={this.props.toggleSearchTerm}
-						handleChangeTextsearch={this.props.handleChangeTextsearch}
-						handleChangeLineN={this.props.handleChangeLineN}
-						open={this.state.rightMenuOpen}
+						toggleSearchTerm={toggleSearchTerm}
+						handleChangeTextsearch={handleChangeTextsearch}
+						handleChangeLineN={handleChangeLineN}
+						open={rightMenuOpen}
 						closeRightMenu={this.closeRightMenu}
 						filters={filters}
 					/>
 				: ''}
 				<header >
-					{!this.state.searchEnabled ?
+					{!searchEnabled ?
 						<div className="md-menu-toolbar" >
 							<div className="toolbar-tools">
 								<IconButton
@@ -282,14 +282,14 @@ Header = React.createClass({
 											<FlatButton
 												label="Login"
 												onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
-												href={tenant && tenant.isAnnotation ? "/sign-in" : ""}
+												href={tenant && tenant.isAnnotation ? '/sign-in' : ''}
 												style={styles.flatButton}
 												className="account-button account-button-login"
 											/>
 											<FlatButton
 												label="Join the Community"
 												onClick={tenant && !tenant.isAnnotation ? this.showSignupModal : undefined}
-												href={tenant && tenant.isAnnotation ? "/sign-up" : ""}
+												href={tenant && tenant.isAnnotation ? '/sign-up' : ''}
 												style={styles.flatButton}
 												className="account-button account-button-login"
 											/>
@@ -350,16 +350,16 @@ Header = React.createClass({
 					}
 				</header>
 
-				{this.state.modalLoginLowered ?
+				{!userIsLoggedIn && modalLoginLowered ?
 					<ModalLogin
-						lowered={this.state.modalLoginLowered}
+						lowered={modalLoginLowered}
 						closeModal={this.closeLoginModal}
 					/>
 					: ''
 				}
-				{this.state.modalSignupLowered ?
+				{!userIsLoggedIn && modalSignupLowered ?
 					<ModalSignup
-						lowered={this.state.modalSignupLowered}
+						lowered={modalSignupLowered}
 						closeModal={this.closeSignupModal}
 					/>
 					: ''

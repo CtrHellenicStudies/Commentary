@@ -18,6 +18,11 @@ ModalSignup = React.createClass({
 
 	render() {
 		const lowered = this.props.lowered;
+		const userIsLoggedIn = Meteor.userId();
+
+		if (userIsLoggedIn) {
+			return null;
+		}
 
 		return (
 			<div

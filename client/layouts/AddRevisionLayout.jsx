@@ -79,7 +79,7 @@ AddRevisionLayout = React.createClass({
 		if (keywords) {
 			keywords.forEach((keyword) => {
 				const foundKeyword = Keywords.findOne({
-					title: keyword.label,
+					title: keyword,
 				});
 				matchedKeywords.push(foundKeyword);
 			});

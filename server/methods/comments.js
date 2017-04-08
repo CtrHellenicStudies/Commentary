@@ -44,6 +44,8 @@ Meteor.methods({
 			throw new Meteor.Error('comment-update', 'not-authorized');
 		}
 
+		console.log('update', update);
+
 		try {
 			Comments.update({ _id: commentId }, { $set: update });
 		} catch (err) {
@@ -103,7 +105,7 @@ Meteor.methods({
 		}
 
 		const revisionId = new Meteor.Collection.ObjectID();
-		revision._id = revisionId._str;
+		revision._id = revisionId;
 
 		try {
 			Comments.update({

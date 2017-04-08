@@ -23,7 +23,7 @@ Meteor.methods({
 			lineLetter: Match.Maybe(String),
 		}]);
 
-		const roles = ['developer', 'admin', 'commenter'];
+		const roles = ['editor', 'admin', 'commenter'];
 		if ((
 				!Meteor.userId()
 				&& !Roles.userIsInRole(Meteor.user(), roles)
@@ -73,7 +73,7 @@ Meteor.methods({
 			lineLetter: Match.Maybe(String),
 		});
 
-		const roles = ['developer', 'admin', 'commenter'];
+		const roles = ['editor', 'admin', 'commenter'];
 		if ((
 				!Meteor.userId()
 				&& !Roles.userIsInRole(Meteor.user(), roles)
@@ -99,7 +99,7 @@ Meteor.methods({
 		check(token, String);
 		check(keywordId, String);
 
-		const roles = ['developer', 'admin', 'commenter'];
+		const roles = ['editor', 'admin', 'commenter'];
 		if ((
 				!Meteor.userId()
 				&& !Roles.userIsInRole(Meteor.user(), roles)

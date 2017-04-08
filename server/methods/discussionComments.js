@@ -6,7 +6,7 @@ Meteor.methods({
 		check(token, String);
 		check(_id, String);
 
-		const roles = ['developer', 'admin', 'commenter'];
+		const roles = ['editor', 'admin', 'commenter'];
 		if ((
 				!Meteor.userId()
 				&& !Roles.userIsInRole(Meteor.user(), roles)

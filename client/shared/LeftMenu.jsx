@@ -78,12 +78,14 @@ LeftMenu = React.createClass({
 					</div>
 					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 						<div>
-							<MenuItem
-								href="http://ahcip-admin.chs.harvard.edu"
-								target="_blank"
-								primaryText="Admin"
-								onClick={this.props.closeLeftMenu}
-							/>
+							{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['admin']) ?
+								<MenuItem
+									href="http://ahcip-admin.chs.harvard.edu"
+									target="_blank"
+									primaryText="Admin"
+									onClick={this.props.closeLeftMenu}
+								/>
+							: ''}
 							<MenuItem
 								href="/commentary/add"
 								primaryText="Add Comment"

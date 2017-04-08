@@ -1,7 +1,7 @@
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-import { green100, green500, red100, red500, black, fullWhite } from 'material-ui/styles/colors';
+import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
 import JsDiff from 'diff';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 import ReferenceWorks from '/imports/collections/referenceWorks';
@@ -71,28 +71,33 @@ CommentDetail = React.createClass({
 		const baseRevision = this.data.selectedRevision;
 		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
 		const revisionDiff = document.createElement('comment-diff');
-		const baseRevisionText = this.stripHTMLFromText(baseRevision);
-		const newRevisionText = this.stripHTMLFromText(newRevision);
+		const baseRevisionText = this.stripHTMLFromText(baseRevision.text);
+		const newRevisionText = this.stripHTMLFromText(newRevision.text);
 		const diff = JsDiff.diffWordsWithSpace(baseRevisionText, newRevisionText);
 		diff.forEach((part) => {
 			// green for additions, red for deletions
 			let color = black;
 			let background = fullWhite;
-			if (part.added) {
-				color = green500;
-				background = green100;
-			} else if (part.removed) {
-				color = red500;
-				background = red100;
-			}
 			const span = document.createElement('span');
+
+			if (part.added) {
+				color = blue800;
+				background = blue50;
+			} else if (part.removed) {
+				color = red800;
+				background = red50;
+				span.style.textDecoration = 'line-through';
+			}
+
 			span.style.color = color;
 			span.style.background = background;
 			span.style.padding = '0px';
+
 			span.appendChild(document
 				.createTextNode(part.value));
 			revisionDiff.appendChild(span);
 		});
+
 		return revisionDiff;
 	},
 
@@ -376,15 +381,20 @@ CommentDetail = React.createClass({
 					</div>
 					<div className="comment-keywords-container">
 						<div className="comment-keywords">
-							{comment.keywords.map((keyword, i) => (
-								<RaisedButton
-									key={i}
-									className="comment-keyword paper-shadow"
-									onClick={self.addSearchTerm.bind(null, keyword)}
-									data-id={keyword._id}
-									label={(keyword.title || keyword.wordpressId)}
-								/>
-							))}
+							{comment.keywords.map((keyword, i) => {
+								if (keyword) {
+									return (
+										<RaisedButton
+											key={i}
+											className="comment-keyword paper-shadow"
+											onClick={self.addSearchTerm.bind(null, keyword)}
+											data-id={keyword._id}
+											label={(keyword.title || keyword.wordpressId)}
+										/>
+									);
+								}
+								return '';
+							})}
 						</div>
 					</div>
 					<div className="comment-lower">

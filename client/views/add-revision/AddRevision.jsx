@@ -81,15 +81,17 @@ AddRevision = React.createClass({
 		const keyideasValue = [];
 		if (this.props.comment.keywords) {
 			this.props.comment.keywords.forEach((keyword) => {
-				switch (keyword.type) {
-				case 'word':
-					keywordsValue.push(keyword.title);
-					break;
-				case 'idea':
-					keyideasValue.push(keyword.title);
-					break;
-				default:
-					break;
+				if (keyword) {
+					switch (keyword.type) {
+					case 'word':
+						keywordsValue.push(keyword.title);
+						break;
+					case 'idea':
+						keyideasValue.push(keyword.title);
+						break;
+					default:
+						break;
+					}
 				}
 			});
 		}

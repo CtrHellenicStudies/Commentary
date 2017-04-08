@@ -30,10 +30,10 @@ DiscussionThread = React.createClass({
 		let sort = {};
 		switch (this.state.sortMethod) {
 		case 'votes':
-			sort = { votes: -1, updated: -1 };
+			sort = { votes: -1, updated: 1 };
 			break;
 		case 'recent':
-			sort = { updated: -1, votes: -1 };
+			sort = { updated: 1, votes: -1 };
 			break;
 		default:
 			break;

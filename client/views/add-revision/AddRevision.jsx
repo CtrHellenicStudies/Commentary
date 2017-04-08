@@ -121,6 +121,8 @@ AddRevision = React.createClass({
 	},
 
 	getMeteorData() {
+		const { comment } = this.props;
+
 		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
@@ -142,9 +144,15 @@ AddRevision = React.createClass({
 			});
 		});
 
+		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+		const referenceWorkOptions = ReferenceWorks.findOne({ _id: comment.referenceWorkOptions });
+		const referenceWork = ReferenceWorks.findOne({ _id: comment.referenceId });
+
 		return {
 			keywordsOptions,
 			keyideasOptions,
+			referenceWorkOptions,
+			referenceWork,
 		};
 	},
 
@@ -160,7 +168,7 @@ AddRevision = React.createClass({
 				)
 			);
 		}
-		throw new Meteor.Error('missing filed text or textRaw in revision');
+		console.error('missing filed text or textRaw in revision');
 	},
 
 	onTitleChange(titleEditorState) {
@@ -303,11 +311,21 @@ AddRevision = React.createClass({
 	},
 
 	removeRevision() { // TODO: delete
-		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision);
+		const self = this;
+		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision, (err) => {
+			if (err) {
+				throw new Meteor.Error('Error removing revision');
+			}
+
+			FlowRouter.go(`/commentary/${self.props.comment._id}/edit`);
+		});
 	},
 
 	render() {
-		const that = this;
+		const self = this;
+		const { comment } = this.props;
+		const { revision, titleEditorState, keywordsValue, keyideasValue, textEditorState } = this.state;
+		const { keywordsOptions, keyideasOptions, referenceWorkOptions, referenceWork } = this.data;
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -316,9 +334,18 @@ AddRevision = React.createClass({
 					<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
 
 						<div className="comment-upper">
+							<div className="view-in-commentary">
+								<FlatButton
+									className="go-to-commentary-link"
+									onClick={() => {
+										FlowRouter.go('/commentary/', {}, {_id: d});
+									}}
+									label="View in Commentary"
+								/>
+							</div>
 							<h1 className="add-comment-title">
 								<Editor
-									editorState={this.state.titleEditorState}
+									editorState={titleEditorState}
 									onChange={this.onTitleChange}
 									placeholder="Comment title..."
 									spellCheck
@@ -331,9 +358,9 @@ AddRevision = React.createClass({
 								name="keywords"
 								id="keywords"
 								required={false}
-								options={this.data.keywordsOptions}
+								options={keywordsOptions}
 								multi
-								value={this.state.keywordsValue}
+								value={keywordsValue}
 								onChange={this.onKeywordsValueChange}
 								newOptionCreator={this.onNewOptionCreator}
 								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
@@ -344,9 +371,9 @@ AddRevision = React.createClass({
 								name="keyideas"
 								id="keyideas"
 								required={false}
-								options={this.data.keyideasOptions}
+								options={keyideasOptions}
 								multi
-								value={this.state.keyideasValue}
+								value={keyideasValue}
 								onChange={this.onKeyideasValueChange}
 								newOptionCreator={this.onNewOptionCreator}
 								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
@@ -358,7 +385,7 @@ AddRevision = React.createClass({
 						</div>
 						<div className="comment-lower" style={{ paddingTop: 20 }}>
 							<Editor
-								editorState={this.state.textEditorState}
+								editorState={textEditorState}
 								onChange={this.onTextChange}
 								placeholder="Comment text..."
 								spellCheck
@@ -382,19 +409,11 @@ AddRevision = React.createClass({
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
 								<p>
-									{this.props.comment.referenceLink ?
-										<a
-											href={this.props.comment.referenceLink}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{this.props.comment.reference}
-										</a>
-										:
-										<span>
-											{this.props.comment.reference}
+									{referenceWork ?
+										<span className="reference-work-title reference-work-title--without-link">
+											{referenceWork.title}
 										</span>
-									}
+									: ''}
 								</p>
 							</div>
 
@@ -407,11 +426,11 @@ AddRevision = React.createClass({
 									icon={<FontIcon className="mdi mdi-plus" />}
 								/>
 							</div>
-							{Roles.userIsInRole(Meteor.user(), ['developer']) ? /* TODO: delete*/
+							{Roles.userIsInRole(Meteor.user(), ['editor', 'admin']) && comment.revisions.length > 1 ? /* TODO: delete*/
 								<div className="add-comment-button">
 									<RaisedButton
 										type="submit"
-										label="(developer only) Remove revision"
+										label="Remove revision"
 										labelPosition="after"
 										onClick={this.removeRevision}
 										icon={<FontIcon className="mdi mdi-minus" />}
@@ -424,12 +443,12 @@ AddRevision = React.createClass({
 						</div>
 
 						<div className="comment-revisions">
-							{this.props.comment.revisions.map((revision, i) => (
+							{comment.revisions.map((_revision, i) => (
 								<FlatButton
 									key={i}
 									id={i}
-									className="revision selected-revision"
-									onClick={that.selectRevision}
+									className={`revision ${revision._id === _revision._id ? 'selected-revision' : ''}`}
+									onClick={self.selectRevision}
 									label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
 								/>
 							))}

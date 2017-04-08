@@ -76,7 +76,7 @@ LeftMenu = React.createClass({
 							</span>
 						</a>
 					</div>
-					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 						<div>
 							<MenuItem
 								href="http://ahcip-admin.chs.harvard.edu"

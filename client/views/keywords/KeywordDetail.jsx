@@ -137,7 +137,11 @@ KeywordDetail = React.createClass({
 						{keyword.lineFrom ?
 							<KeywordContext keyword={keyword} />
 						: ''}
-						{keyword.description && keyword.description.length ?
+						{(
+							keyword.description
+							&& keyword.description.length
+							&& keyword.description !== '<p></p>'
+						) ?
 							<div
 								className="keyword-description"
 								dangerouslySetInnerHTML={{ __html: keyword.description }}

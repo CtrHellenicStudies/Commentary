@@ -117,24 +117,28 @@ ContextReader = React.createClass({
 		if (Object.keys(this.lines).length) {
 			if (this.props.selectedLineFrom === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i.toString() in this.lines && this.lines[i.toString()]) {
+					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
 						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
 			} else if (this.props.selectedLineTo === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i === this.props.selectedLineFrom) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-					} else if (i.toString() in this.lines) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
+						if (i === this.props.selectedLineFrom) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
+						} else if (i.toString() in this.lines) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+						}
 					}
 				}
 			} else {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-					} else if (i.toString() in this.lines) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
+						if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
+						} else if (i.toString() in this.lines) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+						}
 					}
 				}
 			}

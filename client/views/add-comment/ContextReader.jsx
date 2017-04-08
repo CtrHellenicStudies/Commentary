@@ -117,24 +117,28 @@ ContextReader = React.createClass({
 		if (Object.keys(this.lines).length) {
 			if (this.props.selectedLineFrom === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i.toString() in this.lines && this.lines[i.toString()]) {
+					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
 						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
 					}
 				}
 			} else if (this.props.selectedLineTo === 0) {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i === this.props.selectedLineFrom) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-					} else if (i.toString() in this.lines) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
+						if (i === this.props.selectedLineFrom) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
+						} else if (i.toString() in this.lines) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+						}
 					}
 				}
 			} else {
 				for (let i = lineFrom; i <= lineTo; i++) {
-					if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-					} else if (i.toString() in this.lines) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
+						if (i >= this.props.selectedLineFrom && i <= this.props.selectedLineTo) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
+						} else if (i.toString() in this.lines) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+						}
 					}
 				}
 			}
@@ -147,18 +151,19 @@ ContextReader = React.createClass({
 			Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
 				if (err) {
 					console.log(err);
-				} else if (res) {
-					const linePagination = [];
-					for (let i = 1; i <= res; i += 100) {
-						linePagination.push(i);
-					}
-					this.setState({
-						linePagination,
-						maxLine: res,
-						lineFrom: this.props.initialLineFrom,
-						lineTo: this.props.initialLineTo,
-					});
+					return;
 				}
+
+				const linePagination = [];
+				for (let i = 1; i <= res; i += 100) {
+					linePagination.push(i);
+				}
+				this.setState({
+					linePagination,
+					maxLine: res,
+					lineFrom: this.props.initialLineFrom,
+					lineTo: this.props.initialLineTo,
+				});
 			});
 		}
 	},
@@ -354,17 +359,6 @@ ContextReader = React.createClass({
 								const lineClass = 'lemma-line';
 								return (
 									<div className={lineClass} key={i}>
-
-										<div className="lemma-meta">
-											{(line.n % 5 === 0 || line.n === 1) ?
-												<span className="lemma-line-n">
-													{line.n}
-												</span>
-												:
-												''
-											}
-										</div>
-
 										<div
 											className="lemma-text"
 											id={line.n}
@@ -375,6 +369,13 @@ ContextReader = React.createClass({
 											onClick={self.handleLineClick}
 											style={{ cursor: 'pointer' }}
 										/>
+										<div className="lemma-meta">
+											{(line.n % 5 === 0 || line.n === 1) ?
+												<span className="lemma-line-n">
+													{line.n}
+												</span>
+											: '' }
+										</div>
 									</div>
 								);
 							})}

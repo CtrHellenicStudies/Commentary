@@ -240,8 +240,7 @@ AddComment = React.createClass({
 	},
 
 	isOptionUnique(newOption) {
-		const keywordsOptions = this.data.keywordsOptions;
-		const keyideasOptions = this.data.keyideasOptions;
+		const { keywordsOptions, keyideasOptions } = this.data;
 		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
 		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
 		const BreakException = {};
@@ -282,11 +281,8 @@ AddComment = React.createClass({
 
 	handleSubmit(event) {
 		const { textEditorState } = this.state;
-
 		event.preventDefault();
-
 		const error = this.validateStateForSubmit();
-
 		this.showSnackBar(error);
 
 		if (!error.errors) {
@@ -368,7 +364,7 @@ AddComment = React.createClass({
 						style={{ marginLeft: 0 }}
 					>
 						<div className="comment-upper">
-							{ this.data.commentersOptions.length > 1 ?
+							{ this.data.commentersOptions.length ?
 								<Select
 									name="commenter"
 									id="commenter"
@@ -458,7 +454,7 @@ AddComment = React.createClass({
 								/>
 							</div>
 
-							<div className="add-comment-button">
+							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
 									label="Add comment"

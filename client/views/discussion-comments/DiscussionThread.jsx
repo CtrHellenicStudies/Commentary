@@ -30,10 +30,10 @@ DiscussionThread = React.createClass({
 		let sort = {};
 		switch (this.state.sortMethod) {
 		case 'votes':
-			sort = { votes: -1, updated: -1 };
+			sort = { votes: -1, updated: 1 };
 			break;
 		case 'recent':
-			sort = { updated: -1, votes: -1 };
+			sort = { updated: 1, votes: -1 };
 			break;
 		default:
 			break;
@@ -103,6 +103,11 @@ DiscussionThread = React.createClass({
 			textareaPlaceholder = 'Please login to enter a comment.';
 		}
 
+		let avatarUrl = '/images/default_user.jpg';
+		if (currentUser && currentUser.profile && currentUser.profile.avatarUrl) {
+			avatarUrl = currentUser.profile.avatarUrl;
+		}
+
 		const sortSelectedLabelStyle = {
 			color: '#FFFFFF',
 		};
@@ -148,8 +153,7 @@ DiscussionThread = React.createClass({
 								<div className="add-comment-row-1">
 									<div className="profile-picture paper-shadow">
 										<img
-											src={currentUser && currentUser.profile ?
-												currentUser.profile.avatarUrl : '/images/default_user.jpg'}
+											src={avatarUrl}
 											alt="Commentary User"
 										/>
 									</div>

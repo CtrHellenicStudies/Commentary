@@ -113,7 +113,7 @@ KeywordDetail = React.createClass({
 								<div className="center-content">
 									<div className="page-title-wrap">
 										<h2 className="page-title ">{keyword.title}</h2>
-										{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+										{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 											<div>
 												<RaisedButton
 													href={`/keywords/${keyword.slug}/edit`}
@@ -137,7 +137,11 @@ KeywordDetail = React.createClass({
 						{keyword.lineFrom ?
 							<KeywordContext keyword={keyword} />
 						: ''}
-						{keyword.description && keyword.description.length ?
+						{(
+							keyword.description
+							&& keyword.description.length
+							&& keyword.description !== '<p></p>'
+						) ?
 							<div
 								className="keyword-description"
 								dangerouslySetInnerHTML={{ __html: keyword.description }}

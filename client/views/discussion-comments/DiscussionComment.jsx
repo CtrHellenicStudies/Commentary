@@ -46,10 +46,15 @@ DiscussionComment = React.createClass({
 
 	updateDiscussionComment() {
 		const content = $(this.updateCommentForm).find('textarea').val();
+		const { discussionComment } = this.props;
 
 		Meteor.call('discussionComments.update',
-			this.props.discussionComment._id,
-			{ content },
+			discussionComment._id,
+			{
+				commentId: discussionComment.commentId,
+				tenantId: discussionComment.tenantId,
+				content
+			},
 		);
 
 		this.setState({
@@ -168,6 +173,11 @@ DiscussionComment = React.createClass({
 			status = 'This comment was made private by an Administrator';
 		}
 
+		let avatarUrl = '/images/default_user.jpg';
+		if (user && user.profile && user.profile.avatarUrl) {
+			avatarUrl = user.profile.avatarUrl;
+		}
+
 		return (
 			<div className={`discussion-comment paper-shadow ${(userReported && !this.state.readComment ? 'discussion-comment--user-reported' : '')}`}>
 				{status ?
@@ -180,8 +190,7 @@ DiscussionComment = React.createClass({
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
 							<a href={userLink}>
 								<img
-									src={user && user.profile ?
-										user.profile.avatarUrl : '/images/default_user.jpg'}
+									src={avatarUrl}
 									alt={username}
 								/>
 							</a>

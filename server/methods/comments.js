@@ -4,13 +4,13 @@ Meteor.methods({
 	'comments.insert': (token, comment) => {
 		check(token, String);
 		check(comment, Object);
-		const roles = ['developer', 'admin', 'commenter'];
+		const roles = ['editor', 'admin', 'commenter'];
 		if ((
 				!Meteor.userId()
 				&& !Roles.userIsInRole(Meteor.user(), roles)
 			)
 			&& !Meteor.users.findOne({
-				roles: 'admin',
+				roles: roles,
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})
 		) {
@@ -44,6 +44,8 @@ Meteor.methods({
 			throw new Meteor.Error('comment-update', 'not-authorized');
 		}
 
+		console.log('update', update);
+
 		try {
 			Comments.update({ _id: commentId }, { $set: update });
 		} catch (err) {
@@ -57,7 +59,7 @@ Meteor.methods({
 		check(token, String);
 		check(commentId, String);
 
-		const roles = ['developer', 'admin', 'commenter'];
+		const roles = ['editor', 'admin', 'commenter'];
 		if ((
 				!Meteor.userId()
 				&& !Roles.userIsInRole(Meteor.user(), roles)
@@ -82,73 +84,63 @@ Meteor.methods({
 	'comments.add.revision': (commentId, revision) => {
 		check(commentId, String);
 		check(revision, Object);
-		const comment = Comments.find({ _id: commentId }).fetch()[0];
-		let allow = false;
-		// var roles = ['developer', 'admin'];
-		comment.commenters.forEach((commenter) => {
-			// roles.push(commenter.slug);
-			allow = (Meteor.user().canEditCommenters === commenter._id);
-		});
 
-		if (Roles.userIsInRole(Meteor.user(), ['developer', 'admin'])) {
-			allow = true;
+		const comment = Comments.find({ _id: commentId }).fetch()[0];
+
+		if (!Roles.userIsInRole(Meteor.user(), ['editor', 'admin', 'commenter'])) {
+			throw new Meteor.Error(`User ${Meteor.user()._id} attempted to add revision but was in an unauthorized role`);
 		}
 
-		if (allow) {
-			console.log('Method called: \'comment.add.revision\'');
-			console.log('Updated comment\'s id:', commentId);
-			console.log('Revision:', revision);
+		let allowedToEdit = false;
+		Meteor.user().canEditCommenters.forEach(commenterId => {
+			comment.commenters.forEach(commenter => {
+				if (commenterId === commenter._id) {
+					allowedToEdit = true;
+				}
+			});
+		});
 
-			try {
-				Comments.update({
-					_id: commentId,
-				}, {
-					$push: {
-						revisions: revision,
-					},
-				});
-				console.log('Comment', commentId, 'add revision successful');
-			} catch (err) {
-				console.log(err);
-			}
-		} else {
-			console.log('Permission denied on method comments.add.revision, for user:', Meteor.userId());
+		if (!allowedToEdit) {
+			throw new Meteor.Error(`User ${Meteor.user()._id} attempted to add revision but was unauthorized on the commenter`);
+		}
+
+		const revisionId = new Meteor.Collection.ObjectID();
+		revision._id = revisionId;
+
+		try {
+			Comments.update({
+				_id: commentId,
+			}, {
+				$push: {
+					revisions: revision,
+				},
+			});
+		} catch (err) {
+			throw new Meteor.Error(`Error adding revision to comment: ${err}`);
 		}
 	},
 
 	'comment.remove.revision': (commentId, revision) => {
 		check(commentId, String);
 		check(revision, Object);
-		const roles = ['developer'];
-		if (Roles.userIsInRole(Meteor.user(), roles)) {
-			console.log('Method called: \'comment.remove.revision\'');
-			console.log('commentId:', commentId);
-			console.log('revision:', revision);
+		const roles = ['editor', 'admin'];
 
-			try {
-				// Workaround for meteor $pull problem
-				// var comment = Comments.find({_id: commentId}).fetch()[0];
-				// console.log('comment', comment);
-				// comment.revisions = _.reject(comment.revisions, (el) => {
-				//     return el.created === revision.created;
-				// });
-				// console.log('comment', comment);
-				Comments.update({
-					_id: commentId,
-				}, {
-					$pull: {
-						revisions: revision,
-					},
-				}, {
-					getAutoValues: false,
-				});
-				console.log('Revision', revision, 'remove successful');
-			} catch (err) {
-				console.log(err);
-			}
-		} else {
-			console.log('Permission denied on method comment.remove.revision, for user:',
-				Meteor.userId());
+		if (!Roles.userIsInRole(Meteor.user(), roles)) {
+			throw new Meteor.Error(`Permission denied on method comment.remove.revision for user ${Meteor.userId()}`);
+		}
+
+		try {
+			Comments.update({
+				_id: commentId,
+			}, {
+				$pull: {
+					revisions: revision,
+				},
+			}, {
+				getAutoValues: false,
+			});
+		} catch (err) {
+			throw new Meteor.Error(`Error remove comment revision: ${err}`);
 		}
 	},
 

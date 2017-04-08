@@ -231,9 +231,7 @@ ContextPanel = React.createClass({
 								icon={<i className="mdi mdi-chevron-up" />}
 							/>
 						</div>
-						:
-						''
-					}
+					: '' }
 
 					{this.data.selectedLemmaEdition.lines.map((line, i) => {
 						let lineClass = 'lemma-line';
@@ -255,7 +253,6 @@ ContextPanel = React.createClass({
 								className={lineClass}
 								key={i}
 							>
-
 								<div className="lemma-text" dangerouslySetInnerHTML={{ __html: line.html }} />
 
 								<div className="lemma-meta">
@@ -263,11 +260,8 @@ ContextPanel = React.createClass({
 										<span className="lemma-line-n">
 											{line.n}
 										</span>
-										:
-										''
-									}
+									: '' }
 								</div>
-
 							</div>
 						);
 					})}
@@ -281,10 +275,7 @@ ContextPanel = React.createClass({
 								icon={<i className="mdi mdi-chevron-down" />}
 							/>
 						</div>
-						:
-						''
-					}
-
+					: '' }
 				</div>
 
 				<div className="lemma-panel-tabs">

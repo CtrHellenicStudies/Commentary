@@ -127,7 +127,7 @@ FlowRouter.route('/commentary', {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
-FlowRouter.route('/keywords/add', {
+FlowRouter.route('/keywords/create', {
 	action: () => {
 		mount(AddKeywordLayout);
 	},
@@ -194,7 +194,7 @@ FlowRouter.route('/commenters', {
 		});
 	},
 });
-loggedInGroup.route('/commentary/add', {
+loggedInGroup.route('/commentary/create', {
 	action: () => {
 		mount(AddCommentLayout);
 	},

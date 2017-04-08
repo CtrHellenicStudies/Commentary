@@ -172,6 +172,13 @@ Header = React.createClass({
 				minWidth: 'none',
 				height: '55px',
 			},
+			leftMenuToggle: {
+				padding: '5px 10px',
+				width: 'auto',
+				minWidth: 'none',
+				height: 'auto',
+				margin: '24px 20px',
+			},
 			lineSearch: {
 				width: 250,
 				padding: '10px 15px',
@@ -207,7 +214,7 @@ Header = React.createClass({
 							<div className="toolbar-tools">
 								<IconButton
 									className="left-drawer-toggle"
-									style={styles.flatIconButton}
+									style={styles.leftMenuToggle}
 									iconClassName="mdi mdi-menu"
 									onClick={this.toggleLeftMenu}
 								/>
@@ -241,7 +248,7 @@ Header = React.createClass({
 									}
 									{userIsLoggedIn ?
 										<div>
-											{Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+											{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 												<div className="user-header-links admin-header-links">
 													<FlatButton
 														href="/profile"
@@ -252,13 +259,13 @@ Header = React.createClass({
 													{tenant && !tenant.isAnnotation &&
 														<span>
 															<FlatButton
-																href="/commentary/add"
+																href="/commentary/create"
 																label="Add Comment"
 																className=""
 																style={styles.flatButton}
 															/>
 															<FlatButton
-																href="/keywords/add"
+																href="/keywords/create"
 																label="Add Keyword/Idea"
 																className=""
 																style={styles.flatButton}
@@ -314,7 +321,7 @@ Header = React.createClass({
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"
-											style={styles.flatIconButton}
+											style={styles.leftMenuToggle}
 											iconClassName="mdi mdi-menu"
 											onClick={this.toggleLeftMenu}
 										/>

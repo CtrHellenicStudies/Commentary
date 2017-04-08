@@ -87,12 +87,12 @@ LeftMenu = React.createClass({
 								/>
 							: ''}
 							<MenuItem
-								href="/commentary/add"
+								href="/commentary/create"
 								primaryText="Add Comment"
 								onClick={this.props.closeLeftMenu}
 							/>
 							<MenuItem
-								href="/keywords/add"
+								href="/keywords/create"
 								primaryText="Add Keyword/Idea"
 								onClick={this.props.closeLeftMenu}
 							/>

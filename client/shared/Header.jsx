@@ -259,13 +259,13 @@ Header = React.createClass({
 													{tenant && !tenant.isAnnotation &&
 														<span>
 															<FlatButton
-																href="/commentary/add"
+																href="/commentary/create"
 																label="Add Comment"
 																className=""
 																style={styles.flatButton}
 															/>
 															<FlatButton
-																href="/keywords/add"
+																href="/keywords/create"
 																label="Add Keyword/Idea"
 																className=""
 																style={styles.flatButton}

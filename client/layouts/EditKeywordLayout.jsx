@@ -55,7 +55,7 @@ EditKeywordLayout = React.createClass({
 
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'keyworder'])) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'keyworder'])) {
 				FlowRouter.go('/');
 			}
 		}

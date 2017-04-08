@@ -3,6 +3,7 @@ import slugify from 'slugify';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
 AddKeywordLayout = React.createClass({
@@ -46,7 +47,7 @@ AddKeywordLayout = React.createClass({
 
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
 				FlowRouter.go('/');
 			}
 		}

@@ -36,7 +36,7 @@ AddCommentLayout = React.createClass({
 
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
 				FlowRouter.go('/');
 			}
 		}

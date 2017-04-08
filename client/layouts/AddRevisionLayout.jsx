@@ -1,5 +1,6 @@
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
+import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
 AddRevisionLayout = React.createClass({
@@ -13,10 +14,6 @@ AddRevisionLayout = React.createClass({
 	getInitialState() {
 		return {
 			filters: [],
-
-			// selectedLineFrom: 0,
-			// selectedLineTo: 0,
-
 			contextReaderOpen: true,
 		};
 	},
@@ -41,9 +38,9 @@ AddRevisionLayout = React.createClass({
 
 	addRevision(formData, textValue, textRawValue) {
 		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
-
 			// get keywords after they were created:
 			const keywords = this.getKeywords(formData);
+			const authToken = cookie.load('loginToken');
 
 			const revision = {
 				title: formData.titleValue,
@@ -60,9 +57,17 @@ AddRevisionLayout = React.createClass({
 				};
 			}
 
-			Meteor.call('comments.add.revision', this.props.commentId, revision, () => {
-				Meteor.call('comment.update', this.props.commentId, update, () => {
-					FlowRouter.go('/commentary/', {}, {_id: this.data.comment._id});
+			Meteor.call('comments.add.revision', this.props.commentId, revision, (err) => {
+				if (err) {
+					console.error('Error adding revision');
+				}
+
+				Meteor.call('comment.update', authToken, this.props.commentId, update, (_err) => {
+					if (_err) {
+						console.error('Error updating comment after adding revision');
+					}
+
+					FlowRouter.go(`/commentary/${this.data.comment._id}/edit`);
 				});
 			});
 		});
@@ -144,7 +149,7 @@ AddRevisionLayout = React.createClass({
 
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
 				FlowRouter.go('/');
 			}
 		}

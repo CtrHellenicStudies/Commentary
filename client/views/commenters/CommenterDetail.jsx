@@ -62,7 +62,7 @@ CommenterDetail = React.createClass({
 							<div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
 								<img
 									className="background-image"
-									alt="A Homer Commentary in Progress - Commenter"
+									alt="A Homer Commentary in Progress - Commentator"
 									src="/images/capitals.jpg"
 								/>
 							</div>

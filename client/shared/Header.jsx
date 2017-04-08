@@ -172,6 +172,13 @@ Header = React.createClass({
 				minWidth: 'none',
 				height: '55px',
 			},
+			leftMenuToggle: {
+				padding: '5px 10px',
+				width: 'auto',
+				minWidth: 'none',
+				height: 'auto',
+				margin: '24px 20px',
+			},
 			lineSearch: {
 				width: 250,
 				padding: '10px 15px',
@@ -207,7 +214,7 @@ Header = React.createClass({
 							<div className="toolbar-tools">
 								<IconButton
 									className="left-drawer-toggle"
-									style={styles.flatIconButton}
+									style={styles.leftMenuToggle}
 									iconClassName="mdi mdi-menu"
 									onClick={this.toggleLeftMenu}
 								/>
@@ -314,7 +321,7 @@ Header = React.createClass({
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"
-											style={styles.flatIconButton}
+											style={styles.leftMenuToggle}
 											iconClassName="mdi mdi-menu"
 											onClick={this.toggleLeftMenu}
 										/>

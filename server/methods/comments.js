@@ -10,7 +10,7 @@ Meteor.methods({
 				&& !Roles.userIsInRole(Meteor.user(), roles)
 			)
 			&& !Meteor.users.findOne({
-				roles: 'admin',
+				roles: roles,
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})
 		) {

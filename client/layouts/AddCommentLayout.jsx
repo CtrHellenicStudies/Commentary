@@ -1,5 +1,6 @@
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
+import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
 AddCommentLayout = React.createClass({
@@ -128,6 +129,7 @@ AddCommentLayout = React.createClass({
 		const referenceWorks = this.getReferenceWorks(formData);
 		const commenter = this.getCommenter(formData);
 		const selectedLineTo = this.getSelectedLineTo();
+		const token = cookie.load('loginToken');
 
 		// need to add new keywords first, so keyword id can be added to comment:
 		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
@@ -169,7 +171,7 @@ AddCommentLayout = React.createClass({
 				created: new Date(),
 			};
 
-			Meteor.call('comments.insert', comment, (error, commentId) => {
+			Meteor.call('comments.insert', token, comment, (error, commentId) => {
 				FlowRouter.go('/commentary', {}, {_id: commentId});
 			});
 		});
@@ -199,7 +201,7 @@ AddCommentLayout = React.createClass({
 		if (keywords) {
 			const newKeywordArray = [];
 			keywords.forEach((keyword) => {
-				const foundKeyword = Keywords.findOne({title: keyword});
+				const foundKeyword = Keywords.findOne({title: keyword.label});
 				if (!foundKeyword) {
 					const newKeyword = {
 						title: keyword.label,
@@ -211,7 +213,8 @@ AddCommentLayout = React.createClass({
 				}
 			});
 			if (newKeywordArray.length > 0) {
-				return Meteor.call('keywords.insert', newKeywordArray, (err) => {
+				const token = cookie.load('loginToken');
+				return Meteor.call('keywords.insert', token, newKeywordArray, (err) => {
 					if (err) {
 						console.log(err);
 						return null;
@@ -274,16 +277,9 @@ AddCommentLayout = React.createClass({
 	},
 
 	getCommenter(formData) {
-		let commenter = null;
-		if (Meteor.user().canEditCommenters.length > 1) {
-			commenter = Commenters.findOne({
-				_id: formData.commenterValue.value,
-			});
-		} else {
-			commenter = Commenters.find({
-				_id: Meteor.user().canEditCommenters,
-			});
-		}
+		const commenter = Commenters.findOne({
+			_id: formData.commenterValue.value,
+		});
 		return commenter;
 	},
 

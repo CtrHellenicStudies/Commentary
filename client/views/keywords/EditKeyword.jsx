@@ -377,7 +377,7 @@ EditKeyword = React.createClass({
 								onSearchChange={this.onSearchChange}
 								suggestions={this.state.suggestions}
 							/>
-							<div className="add-comment-button">
+							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
 									label="Update Keyword"

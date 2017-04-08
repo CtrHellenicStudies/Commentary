@@ -15,12 +15,41 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import Commenters from '/imports/collections/commenters';
 import Keywords from '/imports/collections/keywords';
 import ReferenceWorks from '/imports/collections/referenceWorks';
-import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved, max-len
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved, max-len
+import {
+	ItalicButton,
+	BoldButton,
+	UnderlineButton,
+	CodeButton,
+	HeadlineOneButton,
+	HeadlineTwoButton,
+	HeadlineThreeButton,
+	UnorderedListButton,
+	OrderedListButton,
+	BlockquoteButton,
+	CodeBlockButton,
+} from 'draft-js-buttons'; // eslint-disable-line import/no-unresolved
+
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin({
+	structure: [
+		BoldButton,
+		ItalicButton,
+		UnderlineButton,
+		CodeButton,
+		Separator,
+		HeadlineOneButton,
+		HeadlineTwoButton,
+		HeadlineThreeButton,
+		UnorderedListButton,
+		OrderedListButton,
+		BlockquoteButton,
+		CodeBlockButton,
+	]
+});
 const { InlineToolbar } = inlineToolbarPlugin;
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
@@ -44,7 +73,6 @@ AddKeyword = React.createClass({
 		return {
 			titleEditorState: EditorState.createEmpty(),
 			textEditorState: EditorState.createEmpty(),
-			// textEditorState: RichTextEditor.createEmptyValue(),
 
 			commenterValue: null,
 			titleValue: '',
@@ -75,13 +103,6 @@ AddKeyword = React.createClass({
 	},
 
 	onTextChange(textEditorState) {
-		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-		/*
-		this.setState({
-			textEditorState,
-			textValue: textEditorState.toString('html'),
-		});
-		*/
 		let textHtml = '';
 		textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
 
@@ -192,9 +213,9 @@ AddKeyword = React.createClass({
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	},
 
 	isOptionUnique(newOption) {
@@ -247,6 +268,7 @@ AddKeyword = React.createClass({
 	},
 
 	showSnackBar(error) {
+		console.log(error);
 		this.setState({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
@@ -260,19 +282,17 @@ AddKeyword = React.createClass({
 
 	validateStateForSubmit() {
 		let errors = false;
-		let errorMessage = 'Missing comment data:';
+		let errorMessage = 'Missing keyword data:';
 		if (!this.state.titleValue) {
 			errors = true;
-			errorMessage += ' title,';
+			errorMessage += ' Keyword or Key Idea,';
 		}
-		if (this.state.textValue === '<p><br></p>' || this.state.textValue === '' || !this.state.textValue) {
-			errors = true;
-			errorMessage += ' comment text,';
-		}
+
 		if (errors === true) {
 			errorMessage = errorMessage.slice(0, -1);
 			errorMessage += '.';
 		}
+
 		return {
 			errors,
 			errorMessage,
@@ -354,7 +374,7 @@ AddKeyword = React.createClass({
 								onSearchChange={this.onSearchChange}
 								suggestions={this.state.suggestions}
 							/>
-							<div className="add-comment-button">
+							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
 									label="Add Keyword"

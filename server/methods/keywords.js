@@ -21,6 +21,9 @@ Meteor.methods({
 			lineFrom: Match.Maybe(Number),
 			lineTo: Match.Maybe(Number),
 			lineLetter: Match.Maybe(String),
+			description: Match.Maybe(String),
+			descriptionRaw: Match.Maybe(Object),
+			count: Match.Maybe(Number),
 		}]);
 
 		const roles = ['editor', 'admin', 'commenter'];
@@ -71,6 +74,9 @@ Meteor.methods({
 			lineFrom: Match.Maybe(Number),
 			lineTo: Match.Maybe(Number),
 			lineLetter: Match.Maybe(String),
+			description: Match.Maybe(String),
+			descriptionRaw: Match.Maybe(Object),
+			count: Match.Maybe(Number),
 		});
 
 		const roles = ['editor', 'admin', 'commenter'];

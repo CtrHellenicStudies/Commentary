@@ -1,12 +1,14 @@
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
-import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
 AddKeywordLayout = React.createClass({
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
 
 	mixins: [ReactMeteorData],
 
@@ -18,19 +20,12 @@ AddKeywordLayout = React.createClass({
 			selectedType: 'word',
 			contextReaderOpen: true,
 			loading: false,
-			snackbarOpen: false,
-			snackbarMessage: '',
 		};
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
 	},
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
-
 
 	componentWillUpdate() {
 		this.handlePermissions();
@@ -43,38 +38,76 @@ AddKeywordLayout = React.createClass({
 		};
 	},
 
-	// --- BEGNI PERMISSIONS HANDLE --- //
-
-	handlePermissions() {
-		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
+	getWork() {
+		let work = null;
+		this.state.filters.forEach((filter) => {
+			if (filter.key === 'work') {
+				work = values[0];
 			}
+		});
+		if (!work) {
+			work = {
+				title: 'Iliad',
+				slug: 'iliad',
+				order: 1,
+			};
 		}
+		return work;
 	},
 
-	// --- END PERMISSIONS HANDLE --- //
+	getSubwork() {
+		let subwork = null;
+		this.state.filters.forEach((filter) => {
+			if (filter.key === 'subwork') {
+				subwork = values[0];
+			}
+		});
+		if (!subwork) {
+			subwork = {
+				title: '1',
+				n: 1,
+			};
+		}
+		return subwork;
+	},
 
-	// --- BEGNI LINE SELECTION --- //
+	getLineLetter() {
+		let lineLetter = '';
+		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
+			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
+		}
+		return lineLetter;
+	},
 
-	updateSelectedLines(selectedLineFrom, selectedLineTo) {
-		if (selectedLineFrom === null) {
-			this.setState({
-				selectedLineTo,
-			});
-		} else if (selectedLineTo === null) {
-			this.setState({
-				selectedLineFrom,
-			});
-		} else if (selectedLineTo != null && selectedLineTo != null) {
-			this.setState({
-				selectedLineFrom,
-				selectedLineTo,
+	getCommenter(formData) {
+		let commenter = null;
+		if (Meteor.user().canEditCommenters.length > 1) {
+			commenter = Commenters.findOne({
+				_id: formData.commenterValue.value,
 			});
 		} else {
-			// do nothing
+			commenter = Commenters.find({
+				_id: Meteor.user().canEditCommenters,
+			});
 		}
+		return commenter;
 	},
+
+	getSelectedLineTo() {
+		let selectedLineTo = 0;
+		if (this.state.selectedLineTo === 0) {
+			selectedLineTo = this.state.selectedLineFrom;
+		} else {
+			selectedLineTo = this.state.selectedLineTo;
+		}
+		return selectedLineTo;
+	},
+
+	getType() {
+		return this.state.selectedType;
+	},
+
+	// --- BEGIN LINE SELECTION --- //
 
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
@@ -125,6 +158,25 @@ AddKeywordLayout = React.createClass({
 		});
 	},
 
+	updateSelectedLines(selectedLineFrom, selectedLineTo) {
+		if (selectedLineFrom === null) {
+			this.setState({
+				selectedLineTo,
+			});
+		} else if (selectedLineTo === null) {
+			this.setState({
+				selectedLineFrom,
+			});
+		} else if (selectedLineTo != null && selectedLineTo != null) {
+			this.setState({
+				selectedLineFrom,
+				selectedLineTo,
+			});
+		} else {
+			// do nothing
+		}
+	},
+
 	// --- END LINE SELECTION --- //
 
 	// --- BEGNI ADD COMMENT --- //
@@ -139,7 +191,7 @@ AddKeywordLayout = React.createClass({
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
-		const type = this.getType();
+		const token = cookie.load('loginToken');
 
 		// create keyword object to be inserted:
 		const keyword = {
@@ -161,11 +213,10 @@ AddKeywordLayout = React.createClass({
 			descriptionRaw: textRawValue,
 			type: this.state.selectedType,
 			count: 1,
-			tenantId: Session.get("tenantId"),
-			created: new Date(),
+			tenantId: Session.get('tenantId'),
 		};
 
-		Meteor.call('keywords.insert', [keyword], (error, keywordId) => {
+		Meteor.call('keywords.insert', token, [keyword], (error) => {
 			if (error) {
 				this.showSnackBar(error);
 			} else {
@@ -186,84 +237,28 @@ AddKeywordLayout = React.createClass({
 		}, 4000);
 	},
 
-	getWork() {
-		let work = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'work') {
-				work = values[0];
+	onTypeChange(type) {
+		this.setState({
+			selectedType: type,
+		});
+	},
+
+	// --- BEGNI PERMISSIONS HANDLE --- //
+
+	handlePermissions() {
+		if (Roles.subscription.ready()) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
+				FlowRouter.go('/');
 			}
-		});
-		if (!work) {
-			work = {
-				title: 'Iliad',
-				slug: 'iliad',
-				order: 1,
-			};
 		}
-		return work;
 	},
 
-	getSubwork() {
-		let subwork = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'subwork') {
-				subwork = values[0];
-			};
-		});
-		if (!subwork) {
-			subwork = {
-				title: '1',
-				n: 1,
-			};
-		}
-		return subwork;
-	},
+	// --- END PERMISSIONS HANDLE --- //
 
-	getLineLetter() {
-		let lineLetter = '';
-		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
-			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
-		}
-		return lineLetter;
-	},
-
-	getCommenter(formData) {
-		let commenter = null;
-		if (Meteor.user().canEditCommenters.length > 1) {
-			commenter = Commenters.findOne({
-				_id: formData.commenterValue.value,
-			});
-		} else {
-			commenter = Commenters.find({
-				_id: Meteor.user().canEditCommenters,
-			});
-		}
-		return commenter;
-	},
-
-	getSelectedLineTo() {
-		let selectedLineTo = 0;
-		if (this.state.selectedLineTo === 0) {
-			selectedLineTo = this.state.selectedLineFrom;
-		} else {
-			selectedLineTo = this.state.selectedLineTo;
-		}
-		return selectedLineTo;
-	},
-
-	getType() {
-		return this.state.selectedType;
-	},
 
 	lineLetterUpdate(value) {
 		this.setState({
 			lineLetter: value,
-		});
-	},
-
-	onTypeChange(type) {
-		this.setState({
-			selectedType: type,
 		});
 	},
 
@@ -337,7 +332,8 @@ AddKeywordLayout = React.createClass({
 	},
 
 	render() {
-		const filters = this.state.filters;
+		const { filters, loading } = this.state;
+		const { ready } = this.data;
 		let work;
 		let subwork;
 		let lineFrom;
@@ -357,13 +353,13 @@ AddKeywordLayout = React.createClass({
 
 		return (
 			<div>
-				{this.data.ready || this.state.loading ?
-					<div className="chs-layout add-comment-layout">
+				{ready || loading ?
+					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<div>
 							<Header
 								toggleSearchTerm={this.toggleSearchTerm}
 								handleChangeLineN={this.handleChangeLineN}
-								filters={this.state.filters}
+								filters={filters}
 								initialSearchEnabled
 								addCommentPage
 							/>
@@ -410,13 +406,6 @@ AddKeywordLayout = React.createClass({
 					:
 					<Spinner fullPage />
 				}
-
-				<Snackbar
-					className="add-comment-snackbar"
-					open={this.state.snackbarOpen}
-					message={this.state.snackbarMessage}
-					autoHideDuration={4000}
-				/>
 			</div>
 		);
 	},

@@ -419,7 +419,7 @@ AddCommentLayout = React.createClass({
 		return (
 			<div>
 				{this.data.ready || this.state.loading ?
-					<div className="chs-layout add-comment-layout">
+					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<div>
 							<Header
 								toggleSearchTerm={this.toggleSearchTerm}

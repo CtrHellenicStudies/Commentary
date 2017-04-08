@@ -3,6 +3,7 @@ import slugify from 'slugify';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import cookie from 'react-cookie';
 import Keywords from '/imports/collections/keywords';
 import 'mdi/css/materialdesignicons.css';
 
@@ -140,10 +141,11 @@ EditKeywordLayout = React.createClass({
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
 		const type = this.getType();
+		const token = cookie.load('loginToken');
+		const { keyword } = this.data;
 
 		// create keyword object to be inserted:
-		const keyword = {
-			_id: this.data.keyword._id,
+		const keywordCandidate = {
 			work: {
 				title: work.title,
 				slug: work.slug,
@@ -161,15 +163,15 @@ EditKeywordLayout = React.createClass({
 			description: textValue,
 			descriptionRaw: textRawValue,
 			type: this.state.selectedType,
+			tenantId: Session.get('tenantId'),
 			count: 1,
-			created: new Date(),
 		};
 
-		Meteor.call('keywords.update', keyword, (error, keywordId) => {
+		Meteor.call('keywords.update', token, keyword._id, keywordCandidate, (error) => {
 			if (error) {
 				this.showSnackBar(error);
 			} else {
-				FlowRouter.go(`/keywords/${keyword.slug}`);
+				FlowRouter.go(`/keywords/${keywordCandidate.slug}`);
 			}
 		});
 	},
@@ -342,7 +344,7 @@ EditKeywordLayout = React.createClass({
 		return (
 			<div>
 				{this.data.ready && this.data.keyword ?
-					<div className="chs-layout edit-keyword-layout">
+					<div className="chs-layout chs-editor-layout edit-keyword-layout">
 
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
@@ -395,12 +397,6 @@ EditKeywordLayout = React.createClass({
 					:
 					<Spinner fullPage />
 				}
-				<Snackbar
-					className="add-comment-snackbar"
-					open={this.state.snackbarOpen}
-					message={this.state.snackbarMessage}
-					autoHideDuration={4000}
-				/>
 			</div>
 		);
 	},

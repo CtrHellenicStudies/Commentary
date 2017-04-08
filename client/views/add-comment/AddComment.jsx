@@ -458,7 +458,7 @@ AddComment = React.createClass({
 								/>
 							</div>
 
-							<div className="add-comment-button">
+							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
 									label="Add comment"

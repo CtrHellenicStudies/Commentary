@@ -290,7 +290,7 @@ AddRevisionLayout = React.createClass({
 		return (
 			<div>
 				{this.data.ready && this.data.comment ?
-					<div className="chs-layout add-comment-layout">
+					<div className="chs-layout chs-editor-layout add-comment-layout">
 
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}

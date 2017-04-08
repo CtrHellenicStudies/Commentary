@@ -147,18 +147,19 @@ ContextReader = React.createClass({
 			Meteor.call('getMaxLine', this.props.workSlug, this.props.subworkN, (err, res) => {
 				if (err) {
 					console.log(err);
-				} else if (res) {
-					const linePagination = [];
-					for (let i = 1; i <= res; i += 100) {
-						linePagination.push(i);
-					}
-					this.setState({
-						linePagination,
-						maxLine: res,
-						lineFrom: this.props.initialLineFrom,
-						lineTo: this.props.initialLineTo,
-					});
+					return;
 				}
+
+				const linePagination = [];
+				for (let i = 1; i <= res; i += 100) {
+					linePagination.push(i);
+				}
+				this.setState({
+					linePagination,
+					maxLine: res,
+					lineFrom: this.props.initialLineFrom,
+					lineTo: this.props.initialLineTo,
+				});
 			});
 		}
 	},
@@ -354,17 +355,6 @@ ContextReader = React.createClass({
 								const lineClass = 'lemma-line';
 								return (
 									<div className={lineClass} key={i}>
-
-										<div className="lemma-meta">
-											{(line.n % 5 === 0 || line.n === 1) ?
-												<span className="lemma-line-n">
-													{line.n}
-												</span>
-												:
-												''
-											}
-										</div>
-
 										<div
 											className="lemma-text"
 											id={line.n}
@@ -375,6 +365,13 @@ ContextReader = React.createClass({
 											onClick={self.handleLineClick}
 											style={{ cursor: 'pointer' }}
 										/>
+										<div className="lemma-meta">
+											{(line.n % 5 === 0 || line.n === 1) ?
+												<span className="lemma-line-n">
+													{line.n}
+												</span>
+											: '' }
+										</div>
 									</div>
 								);
 							})}

@@ -340,6 +340,12 @@ AddRevision = React.createClass({
 									onClick={() => {
 										FlowRouter.go('/commentary/', {}, {_id: d});
 									}}
+									style={{
+										border: '1px solid #ddd',
+										maxHeight: 'none',
+										fontSize: '12px',
+										height: 'auto',
+									}}
 									label="View in Commentary"
 								/>
 							</div>
@@ -417,7 +423,7 @@ AddRevision = React.createClass({
 								</p>
 							</div>
 
-							<div className="add-comment-button">
+							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
 									label="Add revision"
@@ -426,8 +432,11 @@ AddRevision = React.createClass({
 									icon={<FontIcon className="mdi mdi-plus" />}
 								/>
 							</div>
-							{Roles.userIsInRole(Meteor.user(), ['editor', 'admin']) && comment.revisions.length > 1 ? /* TODO: delete*/
-								<div className="add-comment-button">
+							{(
+								Roles.userIsInRole(Meteor.user(), ['editor', 'admin'])
+								&& comment.revisions.length > 1
+							) ?
+								<div className="comment-edit-action-button comment-edit-action-button--remove">
 									<RaisedButton
 										type="submit"
 										label="Remove revision"
@@ -436,9 +445,7 @@ AddRevision = React.createClass({
 										icon={<FontIcon className="mdi mdi-minus" />}
 									/>
 								</div>
-								:
-								''
-							}
+							: '' }
 
 						</div>
 

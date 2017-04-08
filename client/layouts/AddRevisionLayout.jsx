@@ -24,11 +24,10 @@ AddRevisionLayout = React.createClass({
 
 	getMeteorData() {
 		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId, Session.get('tenantId'));
-		const ready = Roles.subscription.ready() && commentsSub;
+		const keywordsSub = Meteor.subscribe('keywords.all');
+		const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
 		let comment = {};
-		if (ready) {
-			comment = Comments.findOne();
-		}
+		comment = Comments.findOne();
 
 		return {
 			ready,
@@ -59,12 +58,12 @@ AddRevisionLayout = React.createClass({
 
 			Meteor.call('comments.add.revision', this.props.commentId, revision, (err) => {
 				if (err) {
-					console.error('Error adding revision');
+					console.error('Error adding revision', err);
 				}
 
 				Meteor.call('comment.update', authToken, this.props.commentId, update, (_err) => {
 					if (_err) {
-						console.error('Error updating comment after adding revision');
+						console.error('Error updating comment after adding revision', _err);
 					}
 
 					FlowRouter.go(`/commentary/${this.data.comment._id}/edit`);
@@ -97,6 +96,7 @@ AddRevisionLayout = React.createClass({
 	addNewKeywords(keywords, type, next) {
 		// TODO should be handled server-side
 		if (keywords) {
+			const token = cookie.load('loginToken');
 			const newKeywordArray = [];
 			keywords.forEach((keyword) => {
 				const foundKeyword = Keywords.findOne({title: keyword});
@@ -111,9 +111,9 @@ AddRevisionLayout = React.createClass({
 				}
 			});
 			if (newKeywordArray.length > 0) {
-				return Meteor.call('keywords.insert', newKeywordArray, (err) => {
+				return Meteor.call('keywords.insert', token, newKeywordArray, (err) => {
 					if (err) {
-						console.log(err);
+						console.log('Keywords insert error', err);
 						return null;
 					}
 					return next();

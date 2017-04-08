@@ -165,8 +165,7 @@ AddCommentLayout = React.createClass({
 					slug: commenter.slug,
 				}] : [{}],
 				keywords: keywords || [{}],
-				reference: referenceWorks ? referenceWorks.title : null,
-				referenceLink: referenceWorks ? referenceWorks.link : null,
+				referenceId: referenceWorks ? referenceWorks._id : null,
 				tenantId: Session.get('tenantId'),
 				created: new Date(),
 			};

@@ -338,7 +338,7 @@ AddRevision = React.createClass({
 								<FlatButton
 									className="go-to-commentary-link"
 									onClick={() => {
-										FlowRouter.go('/commentary/', {}, {_id: d});
+										FlowRouter.go('/commentary/', {}, {_id: comment._id});
 									}}
 									style={{
 										border: '1px solid #ddd',

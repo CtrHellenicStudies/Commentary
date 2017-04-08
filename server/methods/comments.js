@@ -90,19 +90,20 @@ Meteor.methods({
 		}
 
 		let allowedToEdit = false;
-		Meteor.user().canEditCommenters.forEach(commenter => {
-			comment.commenters.forEach(_commenter => {
-				if (commenter._id === _commenter._id) {
+		Meteor.user().canEditCommenters.forEach(commenterId => {
+			comment.commenters.forEach(commenter => {
+				if (commenterId === commenter._id) {
 					allowedToEdit = true;
 				}
 			});
 		});
+
 		if (!allowedToEdit) {
 			throw new Meteor.Error(`User ${Meteor.user()._id} attempted to add revision but was unauthorized on the commenter`);
 		}
 
 		const revisionId = new Meteor.Collection.ObjectID();
-		revision._id = revisionId;
+		revision._id = revisionId._str;
 
 		try {
 			Comments.update({

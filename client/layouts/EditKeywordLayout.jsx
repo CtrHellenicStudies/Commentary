@@ -1,6 +1,5 @@
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
-import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
@@ -11,6 +10,10 @@ EditKeywordLayout = React.createClass({
 
 	propTypes: {
 		slug: React.PropTypes.string,
+	},
+
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
 	},
 
 	mixins: [ReactMeteorData],
@@ -28,10 +31,6 @@ EditKeywordLayout = React.createClass({
 		};
 	},
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	},
@@ -41,7 +40,7 @@ EditKeywordLayout = React.createClass({
 	},
 
 	getMeteorData() {
-		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug, Session.get("tenantId"));
+		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug, Session.get('tenantId'));
 		const ready = Roles.subscription.ready() && keywordsSub;
 		let keyword = {};
 		if (ready) {
@@ -56,7 +55,7 @@ EditKeywordLayout = React.createClass({
 
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'keyworder'])) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
 				FlowRouter.go('/');
 			}
 		}

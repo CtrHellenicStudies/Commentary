@@ -24,14 +24,25 @@ AddRevisionLayout = React.createClass({
 
 	getMeteorData() {
 		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId, Session.get('tenantId'));
+		const commentersSub = Meteor.subscribe('commenters', Session.get('tenantId'));
 		const keywordsSub = Meteor.subscribe('keywords.all');
-		const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
-		let comment = {};
-		comment = Comments.findOne();
+
+		const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready() && commentersSub.ready();
+
+		const comment = Comments.findOne();
+		const commenters = [];
+		if (comment) {
+			comment.commenters.forEach((commenter) => {
+				commenters.push(Commenters.findOne({
+					slug: commenter.slug,
+				}));
+			});
+		}
 
 		return {
 			ready,
 			comment,
+			commenters,
 		};
 	},
 
@@ -148,16 +159,11 @@ AddRevisionLayout = React.createClass({
 	},
 
 	handlePermissions() {
-		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
-			}
-		}
-		if (this.data.comment && Object.keys(this.data.comment).length) {
+		if (this.data.comment && this.data.commenters.length) {
 			let isOwner = false;
-			this.data.comment.commenters.forEach((commenter) => {
+			this.data.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (Meteor.user().canEditCommenters.indexOf(commenter._id) > -1);
+					isOwner = (~Meteor.user().canEditCommenters.indexOf(commenter._id));
 				}
 			});
 			if (!isOwner) {

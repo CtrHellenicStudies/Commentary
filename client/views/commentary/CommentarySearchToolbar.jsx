@@ -220,7 +220,7 @@ CommentarySearchToolbar = React.createClass({
 				{!addCommentPage ?
 					<SearchToolDropdown
 						name="Commentator"
-						open={this.state.searchDropdownOpen === 'Commenter'}
+						open={this.state.searchDropdownOpen === 'Commentator'}
 						toggle={this.toggleSearchDropdown}
 						disabled={false}
 					>

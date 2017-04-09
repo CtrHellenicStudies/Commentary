@@ -74,13 +74,15 @@ AddRevision = React.createClass({
 	},
 
 	getInitialState() {
-		const revisionId = this.props.comment.revisions.length - 1;
-		const revision = this.props.comment.revisions[revisionId]; // get newest revision
+		const { comment } = this.props;
+		const revisionId = comment.revisions.length - 1;
+		const revision = comment.revisions[revisionId]; // get newest revision
 
 		const keywordsValue = [];
 		const keyideasValue = [];
-		if (this.props.comment.keywords) {
-			this.props.comment.keywords.forEach((keyword) => {
+		const referenceWorksValue = [];
+		if (comment.keywords) {
+			comment.keywords.forEach((keyword) => {
 				if (keyword) {
 					switch (keyword.type) {
 					case 'word':
@@ -96,6 +98,12 @@ AddRevision = React.createClass({
 			});
 		}
 
+		if (comment.referenceWorks) {
+			comment.referenceWorks.forEach(referenceWorkId => {
+				referenceWorksValue.push(referenceWorkId);
+			});
+		}
+
 		return {
 			revision,
 
@@ -107,6 +115,7 @@ AddRevision = React.createClass({
 
 			keywordsValue,
 			keyideasValue,
+			referenceWorksValue,
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 		};
@@ -148,13 +157,13 @@ AddRevision = React.createClass({
 
 		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 		const referenceWorkOptions = ReferenceWorks.findOne({ _id: comment.referenceWorkOptions });
-		const referenceWork = ReferenceWorks.findOne({ _id: comment.referenceId });
+		const referenceWorks = ReferenceWorks.find({ _id: comment.referenceWorks }).fetch();
 
 		return {
 			keywordsOptions,
 			keyideasOptions,
 			referenceWorkOptions,
-			referenceWork,
+			referenceWorks,
 		};
 	},
 
@@ -326,8 +335,8 @@ AddRevision = React.createClass({
 	render() {
 		const self = this;
 		const { comment } = this.props;
-		const { revision, titleEditorState, keywordsValue, keyideasValue, textEditorState } = this.state;
-		const { keywordsOptions, keyideasOptions, referenceWorkOptions, referenceWork } = this.data;
+		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorksValue, textEditorState } = this.state;
+		const { keywordsOptions, keyideasOptions, referenceWorkOptions, referenceWorks } = this.data;
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -452,15 +461,19 @@ AddRevision = React.createClass({
 						</div>
 
 						<div className="comment-revisions">
-							{comment.revisions.map((_revision, i) => (
-								<FlatButton
-									key={i}
-									id={i}
-									className={`revision ${revision._id === _revision._id ? 'selected-revision' : ''}`}
-									onClick={self.selectRevision}
-									label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
-								/>
-							))}
+							<Creatable
+								name="referenceWorks"
+								id="referenceWorks"
+								required={false}
+								options={referenceWorkOptions}
+								multi
+								value={keyideasValue}
+								onChange={this.onKeyideasValueChange}
+								newOptionCreator={this.onNewOptionCreator}
+								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+								isOptionUnique={this.isOptionUnique}
+								placeholder="Key Ideas..."
+							/>
 						</div>
 
 					</article>

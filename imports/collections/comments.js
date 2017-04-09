@@ -93,6 +93,12 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	referenceWorks: {
+		type: [String],
+		optional: true,
+	},
+
+	/*
 	referenceSection: {
 		type: Number,
 		optional: true,
@@ -112,6 +118,7 @@ Comments.schema = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
+	*/
 
 	keywords: {
 		type: [Object],

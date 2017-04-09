@@ -372,7 +372,7 @@ AddComment = React.createClass({
 									options={this.data.commentersOptions}
 									value={this.state.commenterValue}
 									onChange={this.onCommenterValueChange}
-									placeholder="Commenter..."
+									placeholder="Commentator..."
 								/>
 								:
 								''

@@ -41,11 +41,11 @@ Header = React.createClass({
 	},
 
 	getMeteorData() {
-		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get("tenantId"));
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 		return {
 			settings: settingsHandle.ready() ? Settings.findOne() : {},
-			tenant: Tenants.findOne({ _id: Session.get("tenantId") })
+			tenant: Tenants.findOne({ _id: Session.get('tenantId') })
 		};
 	},
 

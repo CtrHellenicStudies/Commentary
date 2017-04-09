@@ -177,7 +177,7 @@ FlowRouter.route('/referenceWorks', {
 	},
 });
 FlowRouter.route('/commenters/:slug', {
-	name: 'CommentersDetail',
+	name: 'CommentatorsDetail',
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <CommenterDetail

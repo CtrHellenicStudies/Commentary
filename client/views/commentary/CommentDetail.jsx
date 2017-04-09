@@ -69,7 +69,9 @@ CommentDetail = React.createClass({
 
 	getRevisionDiff() {
 		// build the diff view and return a DOM node
-		const baseRevision = this.data.selectedRevision;
+		const { comment } = this.props;
+		const { selectedRevisionIndex } = this.state;
+		const baseRevision = comment.revisions[selectedRevisionIndex];
 		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
 		const revisionDiff = document.createElement('comment-diff');
 		const baseRevisionText = this.stripHTMLFromText(baseRevision.text);

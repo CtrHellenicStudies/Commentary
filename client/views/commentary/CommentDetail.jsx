@@ -21,6 +21,8 @@ CommentDetail = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getInitialState() {
+		const { comment } = this.props;
+
 		let selectedRevisionIndex = null;
 		let foundRevision = null;
 		this.props.filters.forEach((filter) => {
@@ -28,11 +30,12 @@ CommentDetail = React.createClass({
 				foundRevision = filter.values[0];
 			}
 		});
+
 		if (foundRevision != null && foundRevision >= 0 &&
-			foundRevision < this.props.comment.revisions.length) {
+			foundRevision < comment.revisions.length) {
 			selectedRevisionIndex = foundRevision;
 		} else {
-			selectedRevisionIndex = this.props.comment.revisions.length - 1;
+			selectedRevisionIndex = comment.revisions.length - 1;
 		}
 
 		return {
@@ -55,12 +58,10 @@ CommentDetail = React.createClass({
 
 	getMeteorData() {
 		const { comment } = this.props;
-		const selectedRevision = comment.revisions[this.state.selectedRevisionIndex];
 		const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 		const referenceWork = ReferenceWorks.findOne({ _id: comment.referenceId });
 
 		return {
-			selectedRevision,
 			referenceWork,
 			ready: handle.ready(),
 		};
@@ -297,10 +298,16 @@ CommentDetail = React.createClass({
 	render() {
 		const self = this;
 		const { comment } = this.props;
-		const { selectedRevision, referenceWork } = this.data;
-		const selectedRevisionIndex = this.state.selectedRevisionIndex;
+		const { referenceWork, ready } = this.data;
+		const { selectedRevisionIndex } = this.state;
+		const selectedRevision = comment.revisions[selectedRevisionIndex];
+
+		if (!ready) {
+			return null;
+		}
+
 		let updated = selectedRevision.updated;
-		let format = 'D MMMM YYYY';
+		const format = 'D MMMM YYYY';
 		let commentClass = 'comment-outer has-discussion ';
 		let userCommenterId = [];
 		if (Meteor.user() && Meteor.user().canEditCommenters) {
@@ -308,7 +315,6 @@ CommentDetail = React.createClass({
 		}
 		if (self.state.discussionVisible) {
 			commentClass += 'discussion--width discussion--visible';
-
 		}
 
 		if (selectedRevision.originalDate) {
@@ -442,7 +448,7 @@ CommentDetail = React.createClass({
 									key={i}
 									id={i}
 									data-id={revision.id}
-									className={`revision ${this.state.selectedRevisionIndex === i ? 'selected-revision' : ''}`}
+									className={`revision ${selectedRevisionIndex === i ? 'selected-revision' : ''}`}
 									onClick={self.selectRevision}
 									label={`Revision ${moment(updated).format(format)}`}
 								/>

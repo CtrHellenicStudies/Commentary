@@ -23,7 +23,7 @@ import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import Keywords from '/imports/collections/keywords';
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/client/shared/ListDnD';
+import { ListGroupDnD, creatListGroupItemDnD } from '/imports/client/shared/ListDnD';  // eslint-disable-line import/no-unresolved
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
@@ -623,7 +623,7 @@ AddRevision = React.createClass({
 										label="Update without adding Revision"
 										labelPosition="after"
 										icon={<FontIcon className="mdi mdi-plus" />}
-										onClick={this.update}
+										onClick={this.handleUpdate}
 									/>
 								</div>
 							</div>

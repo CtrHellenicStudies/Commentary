@@ -77,6 +77,7 @@ AddRevisionLayout = React.createClass({
 					referenceWorks: formData.referenceWorks,
 				};
 			}
+			console.log(update);
 
 			Meteor.call('comment.update', authToken, this.props.commentId, update, (_err) => {
 				if (_err) {

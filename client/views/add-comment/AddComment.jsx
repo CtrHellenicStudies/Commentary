@@ -1,12 +1,19 @@
 import { Session } from 'meteor/session';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
-import Select from 'react-select';
-import { Creatable } from 'react-select';
+import Formsy from 'formsy-react';
+import {
+	FormGroup,
+	ControlLabel,
+} from 'react-bootstrap';
+import Select, { Creatable } from 'react-select';
 import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
@@ -15,6 +22,7 @@ import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import { ListGroupDnD, creatListGroupItemDnD } from '/imports/client/shared/ListDnD';  // eslint-disable-line import/no-unresolved
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
@@ -29,6 +37,8 @@ const keywordMentionPlugin = createMentionPlugin();
 const commentsMentionPlugin = createMentionPlugin({
 	mentionTrigger: '#',
 });
+
+const ListGroupItemDnD = creatListGroupItemDnD('referenceWorkBlocks');
 
 function _getSuggestionsFromComments(comments) {
 	const suggestions = [];
@@ -93,7 +103,7 @@ AddComment = React.createClass({
 			commenterValue: null,
 			titleValue: '',
 			textValue: '',
-			referenceWorksValue: null,
+			referenceWorks: [],
 			keywordsValue: null,
 			keyideasValue: null,
 
@@ -130,13 +140,14 @@ AddComment = React.createClass({
 			});
 		});
 
-		Meteor.subscribe('referenceWorks');
-		const referenceWorksOptions = [];
+		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 		const referenceWorks = ReferenceWorks.find().fetch();
-		referenceWorks.forEach((referenceWork) => {
-			referenceWorksOptions.push({
+		const referenceWorkOptions = [];
+		referenceWorks.forEach(referenceWork => {
+			referenceWorkOptions.push({
 				value: referenceWork._id,
 				label: referenceWork.title,
+				slug: referenceWork.slug,
 			});
 		});
 
@@ -156,9 +167,22 @@ AddComment = React.createClass({
 		return {
 			keywordsOptions,
 			keyideasOptions,
-			referenceWorksOptions,
+			referenceWorkOptions,
 			commentersOptions,
 		};
+	},
+
+
+	_enableButton() {
+		this.setState({
+			canSubmit: true,
+		});
+	},
+
+	_disableButton() {
+		this.setState({
+			canSubmit: false,
+		});
 	},
 
 	// --- BEGIN FORM HANDLE --- //
@@ -190,6 +214,15 @@ AddComment = React.createClass({
 	onKeyideasValueChange(keyidea) {
 		this.setState({
 			keyideasValue: keyidea,
+		});
+	},
+
+	onReferenceWorksValueChange(referenceWork) {
+		const referenceWorks = this.state.referenceWorks;
+		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
+
+		this.setState({
+			referenceWorks,
 		});
 	},
 
@@ -263,12 +296,6 @@ AddComment = React.createClass({
 		return true;
 	},
 
-	onReferenceWorksValueChange(referenceWork) {
-		this.setState({
-			referenceWorksValue: referenceWork,
-		});
-	},
-
 	onCommenterValueChange(comenter) {
 		this.setState({
 			commenterValue: comenter,
@@ -279,36 +306,34 @@ AddComment = React.createClass({
 
 	// --- BEGIN SUBMIT / VALIDATION HANDLE --- //
 
-	handleSubmit(event) {
+	handleSubmit() {
 		const { textEditorState } = this.state;
-		event.preventDefault();
-		const error = this.validateStateForSubmit();
-		this.showSnackBar(error);
 
-		if (!error.errors) {
+		// TODO: form validation
+		// TODO: Migrate to formsy components
+		// console.log(data);
 
-			// create html from textEditorState's content
-			const textHtml = convertToHTML({
+		// create html from textEditorState's content
+		const textHtml = convertToHTML({
 
-				// performe necessary html transformations:
-				entityToHTML: (entity, originalText) => {
+			// performe necessary html transformations:
+			entityToHTML: (entity, originalText) => {
 
-					// handle keyword mentions
-					if (entity.type === 'mention') {
-						return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
-					}
+				// handle keyword mentions
+				if (entity.type === 'mention') {
+					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+				}
 
-					// handle hashtag / commets cross reference mentions
-					if (entity.type === '#mention') {
-						return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-					}
-				},
-			})(textEditorState.getCurrentContent());
+				// handle hashtag / commets cross reference mentions
+				if (entity.type === '#mention') {
+					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
+				}
+			},
+		})(textEditorState.getCurrentContent());
 
-			const textRaw = convertToRaw(textEditorState.getCurrentContent());
+		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
-			this.props.submitForm(this.state, textHtml, textRaw);
-		}
+		this.props.submitForm(this.state, textHtml, textRaw);
 	},
 
 	showSnackBar(error) {
@@ -352,120 +377,247 @@ AddComment = React.createClass({
 		};
 	},
 
+	addReferenceWorkBlock() {
+		this.state.referenceWorks.push({ referenceWorkId: '0' });
+		this.setState({
+			referenceWorks: this.state.referenceWorks,
+		});
+	},
+
+	removeReferenceWorkBlock(i) {
+		this.setState({
+			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
+		});
+	},
+
+	moveReferenceWorkBlock(dragIndex, hoverIndex) {
+		const { introBlocks } = this.state;
+		const dragIntroBlock = introBlocks[dragIndex];
+
+		this.setState(update(this.state, {
+			referenceWorks: {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, dragIntroBlock],
+				],
+			},
+		}));
+	},
+
+
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
 	render() {
+		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorks, textEditorState } = this.state;
+		const { keywordsOptions, keyideasOptions, referenceWorkOptions } = this.data;
 
 		return (
 			<div className="comments lemma-panel-visible">
 				<div className={'comment-outer'}>
-					<article
-						className="comment commentary-comment paper-shadow "
-						style={{ marginLeft: 0 }}
+					<Formsy.Form
+						onValid={this._enableButton}
+						onInvalid={this._disableButton}
+						onValidSubmit={this.handleSubmit}
 					>
-						<div className="comment-upper">
-							{ this.data.commentersOptions.length ?
-								<Select
-									name="commenter"
-									id="commenter"
+						<article
+							className="comment commentary-comment paper-shadow "
+							style={{ marginLeft: 0 }}
+						>
+							<div className="comment-upper">
+								{ this.data.commentersOptions.length ?
+									<Select
+										name="commenter"
+										id="commenter"
+										required={false}
+										options={this.data.commentersOptions}
+										value={this.state.commenterValue}
+										onChange={this.onCommenterValueChange}
+										placeholder="Commentator..."
+									/>
+									:
+									''
+								}
+								<h1 className="add-comment-title">
+									<Editor
+										editorState={this.state.titleEditorState}
+										onChange={this.onTitleChange}
+										placeholder="Comment title..."
+										spellCheck
+										stripPastedStyles
+										plugins={[singleLinePlugin]}
+										blockRenderMap={singleLinePlugin.blockRenderMap}
+									/>
+								</h1>
+								<Creatable
+									name="keywords"
+									id="keywords"
 									required={false}
-									options={this.data.commentersOptions}
-									value={this.state.commenterValue}
-									onChange={this.onCommenterValueChange}
-									placeholder="Commentator..."
+									options={this.data.keywordsOptions}
+									multi
+									value={this.state.keywordsValue}
+									onChange={this.onKeywordsValueChange}
+									newOptionCreator={this.onNewOptionCreator}
+									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+									isOptionUnique={this.isOptionUnique}
+									placeholder="Keywords..."
 								/>
-								:
-								''
-							}
-							<h1 className="add-comment-title">
+								<Creatable
+									name="keyideas"
+									id="keyideas"
+									required={false}
+									options={this.data.keyideasOptions}
+									multi
+									value={this.state.keyideasValue}
+									onChange={this.onKeyideasValueChange}
+									newOptionCreator={this.onNewOptionCreator}
+									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+									isOptionUnique={this.isOptionUnique}
+									placeholder="Key ideas..."
+								/>
+
+							</div>
+							<div
+								className="comment-lower"
+								style={{ paddingTop: 20 }}
+							>
 								<Editor
-									editorState={this.state.titleEditorState}
-									onChange={this.onTitleChange}
-									placeholder="Comment title..."
+									editorState={this.state.textEditorState}
+									onChange={this.onTextChange}
+									placeholder="Comment text..."
 									spellCheck
 									stripPastedStyles
-									plugins={[singleLinePlugin]}
-									blockRenderMap={singleLinePlugin.blockRenderMap}
+									plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
+									ref={(element) => { this.editor = element; }}
 								/>
-							</h1>
-							<Creatable
-								name="keywords"
-								id="keywords"
-								required={false}
-								options={this.data.keywordsOptions}
-								multi
-								value={this.state.keywordsValue}
-								onChange={this.onKeywordsValueChange}
-								newOptionCreator={this.onNewOptionCreator}
-								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-								isOptionUnique={this.isOptionUnique}
-								placeholder="Keywords..."
-							/>
-							<Creatable
-								name="keyideas"
-								id="keyideas"
-								required={false}
-								options={this.data.keyideasOptions}
-								multi
-								value={this.state.keyideasValue}
-								onChange={this.onKeyideasValueChange}
-								newOptionCreator={this.onNewOptionCreator}
-								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-								isOptionUnique={this.isOptionUnique}
-								placeholder="Key ideas..."
-							/>
 
-						</div>
-						<div
-							className="comment-lower"
-							style={{ paddingTop: 20 }}
-						>
-							<Editor
-								editorState={this.state.textEditorState}
-								onChange={this.onTextChange}
-								placeholder="Comment text..."
-								spellCheck
-								stripPastedStyles
-								plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
-								ref={(element) => { this.editor = element; }}
-							/>
-
-							{/* mentions suggestions for keywords */}
-							<keywordMentionPlugin.MentionSuggestions
-								onSearchChange={this._onKeywordSearchChange}
-								suggestions={this.state.keywordSuggestions}
-							/>
-
-							{/* mentions suggestions for comments cross reference */}
-							<commentsMentionPlugin.MentionSuggestions
-								onSearchChange={this._onCommentsSearchChange}
-								suggestions={this.state.commentsSuggestions}
-							/>
-
-							<div className="comment-reference">
-								<Select
-									name="referenceWorks"
-									id="referenceWorks"
-									required={false}
-									options={this.data.referenceWorksOptions}
-									value={this.state.referenceWorksValue}
-									onChange={this.onReferenceWorksValueChange}
-									placeholder="Reference..."
+								{/* mentions suggestions for keywords */}
+								<keywordMentionPlugin.MentionSuggestions
+									onSearchChange={this._onKeywordSearchChange}
+									suggestions={this.state.keywordSuggestions}
 								/>
+
+								{/* mentions suggestions for comments cross reference */}
+								<commentsMentionPlugin.MentionSuggestions
+									onSearchChange={this._onCommentsSearchChange}
+									suggestions={this.state.commentsSuggestions}
+								/>
+
+								<div className="comment-reference">
+									<h4>Secondary Source(s):</h4>
+									<FormGroup
+										controlId="referenceWorks"
+										className="form-group--referenceWorks"
+									>
+										<ListGroupDnD>
+											{/*
+												DnD: add the ListGroupItemDnD component
+												IMPORTANT:
+												"key" prop must not be taken from the map function - has to be unique like _id
+												value passed to the "key" prop must not be then edited in a FormControl component
+													- will cause errors
+												"index" - pass the map functions index variable here
+											*/}
+											{referenceWorks.map((referenceWork, i) => {
+												const _referenceWorkOptions = [];
+												referenceWorkOptions.forEach(rW => {
+													_referenceWorkOptions.push({
+														value: rW.value,
+														label: rW.label,
+														slug: rW.slug,
+														i,
+													});
+												});
+
+												return (
+													<ListGroupItemDnD
+														key={referenceWork.referenceWorkId}
+														index={i}
+														className="form-subitem form-subitem--referenceWork"
+														moveListGroupItem={this.moveReferenceWorkBlock}
+													>
+														<div
+															className="reference-work-item"
+														>
+															<div
+																className="remove-reference-work-item"
+																onClick={this.removeReferenceWorkBlock.bind(this, i)}
+															>
+																<IconButton
+																	iconClassName="mdi mdi-close"
+																	style={{
+																		padding: '0',
+																		width: '32px',
+																		height: '32px',
+																		borderRadius: '100%',
+																		border: '1px solid #eee',
+																		color: '#666',
+																		margin: '0 auto',
+																		background: '#f6f6f6',
+																	}}
+																/>
+															</div>
+															<Creatable
+																name="referenceWorks"
+																id="referenceWorks"
+																required={false}
+																options={_referenceWorkOptions}
+																value={this.state.referenceWorks[i].referenceWorkId}
+																// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
+																onChange={this.onReferenceWorksValueChange}
+																newOptionCreator={this.onNewOptionCreator}
+																shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+																isOptionUnique={this.isOptionUnique}
+																placeholder="Reference Work . . ."
+															/>
+															<FormGroup>
+																<ControlLabel>Section Number: </ControlLabel>
+																<TextField
+																	hintText=". . ."
+																/>
+															</FormGroup>
+															<FormGroup>
+																<ControlLabel>Paragraph Number: </ControlLabel>
+																<TextField
+																	hintText=". . ."
+																/>
+															</FormGroup>
+															<FormGroup>
+																<ControlLabel>Translation Number: </ControlLabel>
+																<TextField
+																	hintText=". . ."
+																/>
+															</FormGroup>
+															<FormGroup>
+																<ControlLabel>Note Number: </ControlLabel>
+																<TextField
+																	hintText=". . ."
+																/>
+															</FormGroup>
+														</div>
+													</ListGroupItemDnD>
+												);
+											})}
+										</ListGroupDnD>
+										<RaisedButton
+											label="Add Reference Work"
+											onClick={this.addReferenceWorkBlock}
+										/>
+									</FormGroup>
+								</div>
+
+								<div className="comment-edit-action-button">
+									<RaisedButton
+										type="submit"
+										label="Add comment"
+										labelPosition="after"
+										onClick={this.handleSubmit}
+										icon={<FontIcon className="mdi mdi-plus" />}
+									/>
+								</div>
 							</div>
 
-							<div className="comment-edit-action-button">
-								<RaisedButton
-									type="submit"
-									label="Add comment"
-									labelPosition="after"
-									onClick={this.handleSubmit}
-									icon={<FontIcon className="mdi mdi-plus" />}
-								/>
-							</div>
-						</div>
-
-					</article>
+						</article>
+					</Formsy.Form>
 
 					<Snackbar
 						className="add-comment-snackbar"

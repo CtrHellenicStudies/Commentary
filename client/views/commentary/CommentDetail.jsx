@@ -44,7 +44,11 @@ CommentDetail = React.createClass({
 	getMeteorData() {
 		const { comment } = this.props;
 		const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-		const referenceWorks = ReferenceWorks.find({ _id: comment.referenceWorks }).fetch();
+		const referenceWorkIds = [];
+		comment.referenceWorks.forEach(referenceWork => {
+			referenceWorkIds.push(referenceWork.referenceWorkId);
+		});
+		const referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
 
 		return {
 			referenceWorks,
@@ -436,7 +440,9 @@ CommentDetail = React.createClass({
 										const isLast = (i === referenceWorks.length - 1);
 
 										return (
-											<span>
+											<span
+												key={i}
+											>
 												<a
 													href={`/referenceWorks/${referenceWork.slug}`}
 													rel="noopener noreferrer"
@@ -449,8 +455,6 @@ CommentDetail = React.createClass({
 										);
 									})}
 								</p>
-
-
 							</div>
 						: '' }
 					</div>

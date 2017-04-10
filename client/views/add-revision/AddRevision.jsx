@@ -10,6 +10,7 @@ import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Creatable } from 'react-select';
+import Formsy from 'formsy-react';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
@@ -78,6 +79,7 @@ AddRevision = React.createClass({
 
 	propTypes: {
 		submitForm: React.PropTypes.func.isRequired,
+		update: React.PropTypes.func.isRequired,
 		comment: React.PropTypes.object.isRequired,
 	},
 
@@ -88,7 +90,6 @@ AddRevision = React.createClass({
 
 		const keywordsValue = [];
 		const keyideasValue = [];
-		const referenceWorks = [];
 		if (comment.keywords) {
 			comment.keywords.forEach((keyword) => {
 				if (keyword) {
@@ -118,7 +119,7 @@ AddRevision = React.createClass({
 
 			keywordsValue,
 			keyideasValue,
-			referenceWorks: comment.referenceWorks,
+			referenceWorks: comment.referenceWorks || [],
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 		};
@@ -174,6 +175,18 @@ AddRevision = React.createClass({
 			keyideasOptions,
 			referenceWorkOptions,
 		};
+	},
+
+	_enableButton() {
+		this.setState({
+			canSubmit: true,
+		});
+	},
+
+	_disableButton() {
+		this.setState({
+			canSubmit: false,
+		});
 	},
 
 	_getRevisionEditorState(revision) {
@@ -301,11 +314,12 @@ AddRevision = React.createClass({
 		return true;
 	},
 
-	handleSubmit(event) {
+	handleSubmit() {
 		const { textEditorState } = this.state;
 
 		// TODO: form validation
-		event.preventDefault();
+		// TODO: Migrate to formsy components
+		// console.log(data);
 
 		// create html from textEditorState's content
 		const textHtml = convertToHTML({
@@ -328,6 +342,10 @@ AddRevision = React.createClass({
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);
+	},
+
+	handleUpdate() {
+		this.props.update(this.state);
 	},
 
 	selectRevision(event) {
@@ -380,227 +398,225 @@ AddRevision = React.createClass({
 	render() {
 		const self = this;
 		const { comment } = this.props;
-		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorksValue, textEditorState } = this.state;
+		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorks, textEditorState } = this.state;
 		const { keywordsOptions, keyideasOptions, referenceWorkOptions } = this.data;
 
 		return (
 			<div className="comments lemma-panel-visible">
 				<div className="comment-outer">
 
-					<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
+					<Formsy.Form
+						onValid={this._enableButton}
+						onInvalid={this._disableButton}
+						onValidSubmit={this.handleSubmit}
+					>
+						<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
 
-						<div className="comment-upper">
-							<div className="view-in-commentary">
-								<FlatButton
-									className="go-to-commentary-link"
-									onClick={() => {
-										FlowRouter.go('/commentary/', {}, {_id: comment._id});
-									}}
-									style={{
-										border: '1px solid #ddd',
-										maxHeight: 'none',
-										fontSize: '12px',
-										height: 'auto',
-									}}
-									label="View in Commentary"
-								/>
-							</div>
-							<h1 className="add-comment-title">
-								<Editor
-									editorState={titleEditorState}
-									onChange={this.onTitleChange}
-									placeholder="Comment title..."
-									spellCheck
-									stripPastedStyles
-									plugins={[singleLinePlugin]}
-									blockRenderMap={singleLinePlugin.blockRenderMap}
-								/>
-							</h1>
-							<Creatable
-								name="keywords"
-								id="keywords"
-								required={false}
-								options={keywordsOptions}
-								multi
-								value={keywordsValue}
-								onChange={this.onKeywordsValueChange}
-								newOptionCreator={this.onNewOptionCreator}
-								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-								isOptionUnique={this.isOptionUnique}
-								placeholder="Keywords..."
-							/>
-							<Creatable
-								name="keyideas"
-								id="keyideas"
-								required={false}
-								options={keyideasOptions}
-								multi
-								value={keyideasValue}
-								onChange={this.onKeyideasValueChange}
-								newOptionCreator={this.onNewOptionCreator}
-								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-								isOptionUnique={this.isOptionUnique}
-								placeholder="Key Ideas..."
-							/>
-							{/* TODO: this.props.comment.keyideas*/}
-
-						</div>
-						<div className="comment-lower" style={{ paddingTop: 20 }}>
-							<Editor
-								editorState={textEditorState}
-								onChange={this.onTextChange}
-								placeholder="Comment text..."
-								spellCheck
-								stripPastedStyles
-								plugins={[commentsMentionPlugin, keywordMentionPlugin, inlineToolbarPlugin]}
-								ref={(element) => { this.editor = element; }}
-							/>
-
-							{/* mentions suggestions for keywords */}
-							<keywordMentionPlugin.MentionSuggestions
-								onSearchChange={this._onKeywordSearchChange}
-								suggestions={this.state.keywordSuggestions}
-							/>
-
-							{/* mentions suggestions for comments cross reference */}
-							<commentsMentionPlugin.MentionSuggestions
-								onSearchChange={this._onCommentsSearchChange}
-								suggestions={this.state.commentsSuggestions}
-							/>
-
-
-							<div className="comment-reference">
-								<h4>Secondary Source(s):</h4>
-								<FormGroup
-									controlId="referenceWorks"
-									className="form-group--referenceWorks"
-								>
-									<ListGroupDnD>
-										{/*
-											DnD: add the ListGroupItemDnD component
-											IMPORTANT:
-											"key" prop must not be taken from the map function - has to be unique like _id
-											value passed to the "key" prop must not be then edited in a FormControl component
-												- will cause errors
-											"index" - pass the map functions index variable here
-										*/}
-										{comment.referenceWorks.map((referenceWork, i) => {
-											const _referenceWorkOptions = [];
-											referenceWorkOptions.forEach(rW => {
-												_referenceWorkOptions.push({
-													value: rW.value,
-													label: rW.label,
-													slug: rW.slug,
-													i,
-												});
-											});
-
-											return (
-												<ListGroupItemDnD
-													key={referenceWork.referenceWorkId}
-													index={i}
-													className="form-subitem form-subitem--referenceWork"
-													moveListGroupItem={this.moveReferenceWorkBlock}
-												>
-													<div
-														className="reference-work-item"
-													>
-														<Creatable
-															name="referenceWorks"
-															id="referenceWorks"
-															required={false}
-															options={_referenceWorkOptions}
-															value={this.state.referenceWorks[i].referenceWorkId}
-															// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
-															onChange={this.onReferenceWorksValueChange}
-															newOptionCreator={this.onNewOptionCreator}
-															shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-															isOptionUnique={this.isOptionUnique}
-															placeholder="Reference Work . . ."
-														/>
-														<FormGroup>
-															<ControlLabel>Section Number: </ControlLabel>
-															<TextField
-																hintText=". . ."
-															/>
-														</FormGroup>
-														<FormGroup>
-															<ControlLabel>Paragraph Number: </ControlLabel>
-															<TextField
-																hintText=". . ."
-															/>
-														</FormGroup>
-														<FormGroup>
-															<ControlLabel>Translation Number: </ControlLabel>
-															<TextField
-																hintText=". . ."
-															/>
-														</FormGroup>
-														<FormGroup>
-															<ControlLabel>Note Number: </ControlLabel>
-															<TextField
-																hintText=". . ."
-															/>
-														</FormGroup>
-													</div>
-												</ListGroupItemDnD>
-											);
-										})}
-									</ListGroupDnD>
-									<RaisedButton
-										label="Add Reference Work"
-										onClick={this.addReferenceWorkBlock}
-									/>
-								</FormGroup>
-							</div>
-
-							<div className="comment-edit-action-button">
-								<RaisedButton
-									type="submit"
-									label="Add revision"
-									labelPosition="after"
-									onClick={this.handleSubmit}
-									icon={<FontIcon className="mdi mdi-plus" />}
-								/>
-							</div>
-							{(
-								Roles.userIsInRole(Meteor.user(), ['editor', 'admin'])
-								&& comment.revisions.length > 1
-							) ?
-								<div className="comment-edit-action-button comment-edit-action-button--remove">
-									<RaisedButton
-										type="submit"
-										label="Remove revision"
-										labelPosition="after"
-										onClick={this.removeRevision}
-										icon={<FontIcon className="mdi mdi-minus" />}
+							<div className="comment-upper">
+								<div className="view-in-commentary">
+									<FlatButton
+										className="go-to-commentary-link"
+										onClick={() => {
+											FlowRouter.go('/commentary/', {}, {_id: comment._id});
+										}}
+										style={{
+											border: '1px solid #ddd',
+											maxHeight: 'none',
+											fontSize: '12px',
+											height: 'auto',
+										}}
+										label="View in Commentary"
 									/>
 								</div>
-							: '' }
-
-						</div>
-
-						<div className="comment-revisions">
-							{comment.revisions.map((_revision, i) => (
-								<FlatButton
-									key={i}
-									id={i}
-									className={`revision ${revision._id === _revision._id ? 'selected-revision' : ''}`}
-									onClick={self.selectRevision}
-									label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
+								<h1 className="add-comment-title">
+									<Editor
+										editorState={titleEditorState}
+										onChange={this.onTitleChange}
+										placeholder="Comment title..."
+										spellCheck
+										stripPastedStyles
+										plugins={[singleLinePlugin]}
+										blockRenderMap={singleLinePlugin.blockRenderMap}
+									/>
+								</h1>
+								<Creatable
+									name="keywords"
+									id="keywords"
+									required={false}
+									options={keywordsOptions}
+									multi
+									value={keywordsValue}
+									onChange={this.onKeywordsValueChange}
+									newOptionCreator={this.onNewOptionCreator}
+									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+									isOptionUnique={this.isOptionUnique}
+									placeholder="Keywords..."
 								/>
-							))}
-						</div>
+								<Creatable
+									name="keyideas"
+									id="keyideas"
+									required={false}
+									options={keyideasOptions}
+									multi
+									value={keyideasValue}
+									onChange={this.onKeyideasValueChange}
+									newOptionCreator={this.onNewOptionCreator}
+									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+									isOptionUnique={this.isOptionUnique}
+									placeholder="Key Ideas..."
+								/>
+								{/* TODO: this.props.comment.keyideas*/}
 
-					</article>
+							</div>
+							<div className="comment-lower" style={{ paddingTop: 20 }}>
+								<Editor
+									editorState={textEditorState}
+									onChange={this.onTextChange}
+									placeholder="Comment text..."
+									spellCheck
+									stripPastedStyles
+									plugins={[commentsMentionPlugin, keywordMentionPlugin, inlineToolbarPlugin]}
+									ref={(element) => { this.editor = element; }}
+								/>
 
+								{/* mentions suggestions for keywords */}
+								<keywordMentionPlugin.MentionSuggestions
+									onSearchChange={this._onKeywordSearchChange}
+									suggestions={this.state.keywordSuggestions}
+								/>
+
+								{/* mentions suggestions for comments cross reference */}
+								<commentsMentionPlugin.MentionSuggestions
+									onSearchChange={this._onCommentsSearchChange}
+									suggestions={this.state.commentsSuggestions}
+								/>
+
+								<div className="comment-edit-action-button">
+									<RaisedButton
+										type="submit"
+										label="Add revision"
+										labelPosition="after"
+										icon={<FontIcon className="mdi mdi-plus" />}
+									/>
+								</div>
+								{(
+									Roles.userIsInRole(Meteor.user(), ['editor', 'admin'])
+									&& comment.revisions.length > 1
+								) ?
+									<div className="comment-edit-action-button comment-edit-action-button--remove">
+										<RaisedButton
+											label="Remove revision"
+											labelPosition="after"
+											onClick={this.removeRevision}
+											icon={<FontIcon className="mdi mdi-minus" />}
+										/>
+									</div>
+								: '' }
+
+								<div className="comment-reference">
+									<h4>Secondary Source(s):</h4>
+									<FormGroup
+										controlId="referenceWorks"
+										className="form-group--referenceWorks"
+									>
+										<ListGroupDnD>
+											{/*
+												DnD: add the ListGroupItemDnD component
+												IMPORTANT:
+												"key" prop must not be taken from the map function - has to be unique like _id
+												value passed to the "key" prop must not be then edited in a FormControl component
+													- will cause errors
+												"index" - pass the map functions index variable here
+											*/}
+											{referenceWorks.map((referenceWork, i) => {
+												const _referenceWorkOptions = [];
+												referenceWorkOptions.forEach(rW => {
+													_referenceWorkOptions.push({
+														value: rW.value,
+														label: rW.label,
+														slug: rW.slug,
+														i,
+													});
+												});
+
+												return (
+													<ListGroupItemDnD
+														key={referenceWork.referenceWorkId}
+														index={i}
+														className="form-subitem form-subitem--referenceWork"
+														moveListGroupItem={this.moveReferenceWorkBlock}
+													>
+														<div
+															className="reference-work-item"
+														>
+															<Creatable
+																name="referenceWorks"
+																id="referenceWorks"
+																required={false}
+																options={_referenceWorkOptions}
+																value={this.state.referenceWorks[i].referenceWorkId}
+																// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
+																onChange={this.onReferenceWorksValueChange}
+																newOptionCreator={this.onNewOptionCreator}
+																shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+																isOptionUnique={this.isOptionUnique}
+																placeholder="Reference Work . . ."
+															/>
+															<FormGroup>
+																<ControlLabel>Section Number: </ControlLabel>
+																<TextField
+																	hintText=". . ."
+																/>
+															</FormGroup>
+															<FormGroup>
+																<ControlLabel>Paragraph Number: </ControlLabel>
+																<TextField
+																	hintText=". . ."
+																/>
+															</FormGroup>
+															<FormGroup>
+																<ControlLabel>Translation Number: </ControlLabel>
+																<TextField
+																	hintText=". . ."
+																/>
+															</FormGroup>
+															<FormGroup>
+																<ControlLabel>Note Number: </ControlLabel>
+																<TextField
+																	hintText=". . ."
+																/>
+															</FormGroup>
+														</div>
+													</ListGroupItemDnD>
+												);
+											})}
+										</ListGroupDnD>
+										<RaisedButton
+											label="Add Reference Work"
+											onClick={this.addReferenceWorkBlock}
+										/>
+									</FormGroup>
+								</div>
+							</div>
+
+							<div className="comment-revisions">
+								{comment.revisions.map((_revision, i) => (
+									<FlatButton
+										key={i}
+										id={i}
+										className={`revision ${revision._id === _revision._id ? 'selected-revision' : ''}`}
+										onClick={self.selectRevision}
+										label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
+									/>
+								))}
+							</div>
+						</article>
+					</Formsy.Form>
 				</div>
 				<div className="inline-toolbar-wrap">
 					<InlineToolbar />
 				</div>
-
 			</div>
-
 		);
 	},
 });

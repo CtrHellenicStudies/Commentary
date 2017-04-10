@@ -388,6 +388,9 @@ article.lemma-comment {
     .revision {
       display: inline-block;
       margin-right: -4px;
+      border-right: 1px solid #ddd !important;
+      border-bottom: 1px solid #ddd !important;
+			border-radius: 0 !important;
 
       span {
         padding: 0px 20px;
@@ -396,13 +399,14 @@ article.lemma-comment {
         font-size: 12px !important;
         text-transform: uppercase;
         color: #999;
-        border-right: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
 				font-weight:300 !important;
 
       }
 
       &.selected-revision {
+	      border-right: 1px solid @primary !important;
+	      border-bottom: 1px solid @primary !important;
+
         span {
           background: @primary;
           color: @light;
@@ -680,17 +684,17 @@ article.lemma-comment {
     border-bottom: 2px solid @primary;
     box-shadow: none;
     &:hover {
-      border-bottom: 2px solid @light;
+      border-bottom: 2px solid @md-primary-100;
     }
   }
 
   p {
     margin: 4px 7px;
     width: auto;
-    padding: 0;
+    padding: 3px 0;
 		span {
-			padding-top: 4px;
-			display: block;
+			margin: 5px 0;
+			line-height: 1.5em;
 		}
   }
 
@@ -728,9 +732,11 @@ article.lemma-comment {
 }
 
 .comment-citation {
-  position: absolute;
-  bottom: 80px;
-  right: 50px;
+  position: relative;
+  bottom: 0px;
+  right: 0px;
+	display: inline-block;
+	vertical-align: top;
 
   div {
     box-shadow: none !important;

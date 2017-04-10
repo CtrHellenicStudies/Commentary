@@ -23,23 +23,8 @@ CommentDetail = React.createClass({
 	getInitialState() {
 		const { comment } = this.props;
 
-		let selectedRevisionIndex = null;
-		let foundRevision = null;
-		this.props.filters.forEach((filter) => {
-			if (filter.key === 'revision') {
-				foundRevision = filter.values[0];
-			}
-		});
-
-		if (foundRevision != null && foundRevision >= 0 &&
-			foundRevision < comment.revisions.length) {
-			selectedRevisionIndex = foundRevision;
-		} else {
-			selectedRevisionIndex = comment.revisions.length - 1;
-		}
-
 		return {
-			selectedRevisionIndex,
+			selectedRevisionIndex: null,
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
 			keywordReferenceModalVisible: false,
@@ -59,10 +44,14 @@ CommentDetail = React.createClass({
 	getMeteorData() {
 		const { comment } = this.props;
 		const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-		const referenceWork = ReferenceWorks.findOne({ _id: comment.referenceId });
+		const referenceWorkIds = [];
+		comment.referenceWorks.forEach(referenceWork => {
+			referenceWorkIds.push(referenceWork.referenceWorkId);
+		});
+		const referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
 
 		return {
-			referenceWork,
+			referenceWorks,
 			ready: handle.ready(),
 		};
 	},
@@ -70,7 +59,7 @@ CommentDetail = React.createClass({
 	getRevisionDiff() {
 		// build the diff view and return a DOM node
 		const { comment } = this.props;
-		const { selectedRevisionIndex } = this.state;
+		const selectedRevisionIndex = this.getRevisionIndex();
 		const baseRevision = comment.revisions[selectedRevisionIndex];
 		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
 		const revisionDiff = document.createElement('comment-diff');
@@ -297,17 +286,38 @@ CommentDetail = React.createClass({
 		});
 	},
 
+	getRevisionIndex() {
+		const { comment, filters } = this.props;
+		let selectedRevisionIndex = this.state.selectedRevisionIndex;
+		if (selectedRevisionIndex === null) {
+			let foundRevision = null;
+			filters.forEach((filter) => {
+				if (filter.key === 'revision') {
+					foundRevision = filter.values[0];
+				}
+			});
+
+			if (foundRevision != null && foundRevision >= 0 &&
+				foundRevision < comment.revisions.length) {
+				selectedRevisionIndex = foundRevision;
+			} else {
+				selectedRevisionIndex = comment.revisions.length - 1;
+			}
+		}
+		return selectedRevisionIndex;
+	},
+
 	render() {
 		const self = this;
 		const { comment } = this.props;
-		const { referenceWork, ready } = this.data;
-		const { selectedRevisionIndex } = this.state;
-		const selectedRevision = comment.revisions[selectedRevisionIndex];
+		const { referenceWorks, ready } = this.data;
+		const selectedRevisionIndex = this.getRevisionIndex();
 
 		if (!ready) {
 			return null;
 		}
 
+		const selectedRevision = comment.revisions[selectedRevisionIndex];
 		let updated = selectedRevision.updated;
 		const format = 'D MMMM YYYY';
 		let commentClass = 'comment-outer has-discussion ';
@@ -413,26 +423,38 @@ CommentDetail = React.createClass({
 								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:
-							<div
-								id="comment-body"
-								className="comment-body"
-								dangerouslySetInnerHTML={comment ?
-									{ __html: this.getRevisionDiff().innerHTML } : ''}
-								onClick={this.checkIfToggleLemmaReferenceModal}
-							/>
+								<div
+									id="comment-body"
+									className="comment-body"
+									dangerouslySetInnerHTML={comment ?
+										{ __html: this.getRevisionDiff().innerHTML } : ''}
+									onClick={this.checkIfToggleLemmaReferenceModal}
+								/>
 						}
-						{referenceWork ?
+						{referenceWorks ?
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
-								<p>
-									<a
-										href={`/referenceWorks/${referenceWork.slug}`}
-										rel="noopener noreferrer"
-										target="_blank"
-									>
-										{referenceWork.title}
-									</a>
-								</p>
+								<span>
+									{referenceWorks.map((referenceWork, i) => {
+										const isLast = (i === referenceWorks.length - 1);
+
+										return (
+											<span
+												key={i}
+												className="referenceWork"
+											>
+												{isLast ? ' ' : ''}
+												<a
+													href={`/referenceWorks/${referenceWork.slug}`}
+													rel="noopener noreferrer"
+													target="_blank"
+												>
+													{referenceWork.title}{isLast ? '' : ','}
+												</a>
+											</span>
+										);
+									})}
+								</span>
 							</div>
 						: '' }
 					</div>
@@ -459,7 +481,6 @@ CommentDetail = React.createClass({
 						<CommentCitation
 							componentClass="comment-citation"
 							title="Cite this comment"
-							referenceWork={referenceWork}
 							comment={comment}
 						/>
 					</div>

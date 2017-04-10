@@ -93,22 +93,32 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	referenceSection: {
+	referenceWorks: {
+		type: [Object],
+		optional: true,
+	},
+
+	'referenceWorks.$.referenceWorkId': {
+		type: String,
+		optional: true,
+	},
+
+	'referenceWorks.$.section': {
 		type: Number,
 		optional: true,
 	},
 
-	referenceChapter: {
+	'referenceWorks.$.chapter': {
 		type: Number,
 		optional: true,
 	},
 
-	referenceTranslation: {
+	'referenceWorks.$.translation': {
 		type: Number,
 		optional: true,
 	},
 
-	referenceNote: {
+	'referenceWorks.$.note': {
 		type: Number,
 		optional: true,
 	},

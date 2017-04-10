@@ -47,41 +47,45 @@ AddRevisionLayout = React.createClass({
 	},
 
 	addRevision(formData, textValue, textRawValue) {
+		const self = this;
+		const revision = {
+			title: formData.titleValue,
+			text: textValue,
+			textRaw: textRawValue,
+			created: new Date(),
+			slug: slugify(formData.titleValue),
+		};
+		Meteor.call('comments.add.revision', this.props.commentId, revision, (err) => {
+			if (err) {
+				console.error('Error adding revision', err);
+			}
+			self.update(formData);
+		});
+		// TODO: handle behavior after comment added (add info about success)
+	},
+
+	update(formData) {
 		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 			// get keywords after they were created:
 			const keywords = this.getKeywords(formData);
 			const authToken = cookie.load('loginToken');
 
-			const revision = {
-				title: formData.titleValue,
-				text: textValue,
-				textRaw: textRawValue,
-				created: new Date(),
-				slug: slugify(formData.titleValue),
-			};
-
 			let update = [{}];
 			if (keywords) {
 				update = {
 					keywords,
+					referenceWorks: formData.referenceWorks,
 				};
 			}
 
-			Meteor.call('comments.add.revision', this.props.commentId, revision, (err) => {
-				if (err) {
-					console.error('Error adding revision', err);
+			Meteor.call('comment.update', authToken, this.props.commentId, update, (_err) => {
+				if (_err) {
+					console.error('Error updating comment after adding revision', _err);
 				}
 
-				Meteor.call('comment.update', authToken, this.props.commentId, update, (_err) => {
-					if (_err) {
-						console.error('Error updating comment after adding revision', _err);
-					}
-
-					FlowRouter.go(`/commentary/${this.data.comment._id}/edit`);
-				});
+				FlowRouter.go(`/commentary/${this.data.comment._id}/edit`);
 			});
 		});
-
 		// TODO: handle behavior after comment added (add info about success)
 	},
 
@@ -320,6 +324,7 @@ AddRevisionLayout = React.createClass({
 
 									<AddRevision
 										submitForm={this.addRevision}
+										update={this.update}
 										comment={comment}
 									/>
 

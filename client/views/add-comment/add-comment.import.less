@@ -35,6 +35,55 @@
 		}
 	}
 
+	.form-subitem--referenceWork {
+		display:block;
+		margin: 10px 0;
+
+		label {
+			padding-right: 10px;
+			font-size: 14px;
+		}
+	}
+
+	.form-group--referenceWorks {
+		background: #f6f6f6;
+		padding: 10px 10px 20px;
+		border-radius: 3px;
+		border: 1px solid #ddd;
+	}
+
+
+}
+
+.reference-work-item {
+	.remove-reference-work-item {
+		float: right;
+		display:block;
+		margin-bottom: 10px;
+		text-align: center;
+
+		button {
+			cursor:pointer;
+
+			&:hover {
+				color:@secondary-text;
+				background: #eee;
+			}
+
+		}
+
+		.mdi {
+			font-size: 18px !important;
+			padding: 0 9px;
+			&:before {
+				font-size: 18px;
+			}
+		}
+	}
+	.Select {
+		display:block;
+		clear:both;
+	}
 }
 
 .add-comment-title span {

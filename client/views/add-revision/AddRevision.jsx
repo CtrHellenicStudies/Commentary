@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Creatable } from 'react-select';
@@ -17,6 +18,7 @@ import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { fromJS } from 'immutable';
+import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
@@ -527,6 +529,24 @@ AddRevision = React.createClass({
 														<div
 															className="reference-work-item"
 														>
+															<div
+																className="remove-reference-work-item"
+																onClick={this.removeReferenceWorkBlock.bind(this, i)}
+															>
+																<IconButton
+																	iconClassName="mdi mdi-close"
+																	style={{
+																		padding: '0',
+																		width: '32px',
+																		height: '32px',
+																		borderRadius: '100%',
+																		border: '1px solid #eee',
+																		color: '#666',
+																		margin: '0 auto',
+																		background: '#f6f6f6',
+																	}}
+																/>
+															</div>
 															<Creatable
 																name="referenceWorks"
 																id="referenceWorks"

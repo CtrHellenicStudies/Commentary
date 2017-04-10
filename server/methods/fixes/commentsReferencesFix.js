@@ -4,7 +4,9 @@ const commentsReferenceWorkFix = () => {
 	const comments = Comments.find().fetch();
 	comments.forEach((comment) => {
 		if (comment.referenceId) {
-			const referenceWorks = [comment.referenceId];
+			const referenceWorks = [{
+				referenceWorkId: comment.referenceId,
+			}];
 			try {
 				Comments.update({
 					_id: comment._id,
@@ -25,6 +27,8 @@ const commentsReferenceWorkFix = () => {
 	console.log(' -- method commentsReferenceWorkFix run completed');
 };
 
+/*
 Meteor.startup(() => {
 	commentsReferenceWorkFix();
 });
+*/

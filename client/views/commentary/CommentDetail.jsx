@@ -430,6 +430,7 @@ CommentDetail = React.createClass({
 						{referenceWorks ?
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
+
 								<p>
 									{referenceWorks.map((referenceWork, i) => {
 										const isLast = (i === referenceWorks.length - 1);
@@ -448,6 +449,8 @@ CommentDetail = React.createClass({
 										);
 									})}
 								</p>
+
+
 							</div>
 						: '' }
 					</div>

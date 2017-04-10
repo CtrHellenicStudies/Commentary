@@ -1,5 +1,10 @@
 import { Session } from 'meteor/session';
+import {
+	FormGroup,
+	ControlLabel,
+} from 'react-bootstrap';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -15,6 +20,7 @@ import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import Keywords from '/imports/collections/keywords';
+import { ListGroupDnD, creatListGroupItemDnD } from '/imports/client/shared/ListDnD';
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
@@ -29,6 +35,8 @@ const keywordMentionPlugin = createMentionPlugin();
 const commentsMentionPlugin = createMentionPlugin({
 	mentionTrigger: '#',
 });
+
+const ListGroupItemDnD = creatListGroupItemDnD('referenceWorkBlocks');
 
 function _getSuggestionsFromComments(comments) {
 	const suggestions = [];
@@ -80,7 +88,7 @@ AddRevision = React.createClass({
 
 		const keywordsValue = [];
 		const keyideasValue = [];
-		const referenceWorksValue = [];
+		const referenceWorks = [];
 		if (comment.keywords) {
 			comment.keywords.forEach((keyword) => {
 				if (keyword) {
@@ -98,11 +106,6 @@ AddRevision = React.createClass({
 			});
 		}
 
-		if (comment.referenceWorks) {
-			comment.referenceWorks.forEach(referenceWorkId => {
-				referenceWorksValue.push(referenceWorkId);
-			});
-		}
 
 		return {
 			revision,
@@ -115,7 +118,7 @@ AddRevision = React.createClass({
 
 			keywordsValue,
 			keyideasValue,
-			referenceWorksValue,
+			referenceWorks: comment.referenceWorks,
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 		};
@@ -156,14 +159,20 @@ AddRevision = React.createClass({
 		});
 
 		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-		const referenceWorkOptions = ReferenceWorks.findOne({ _id: comment.referenceWorkOptions });
-		const referenceWorks = ReferenceWorks.find({ _id: comment.referenceWorks }).fetch();
+		const referenceWorks = ReferenceWorks.find().fetch();
+		const referenceWorkOptions = [];
+		referenceWorks.forEach(referenceWork => {
+			referenceWorkOptions.push({
+				value: referenceWork._id,
+				label: referenceWork.title,
+				slug: referenceWork.slug,
+			});
+		});
 
 		return {
 			keywordsOptions,
 			keyideasOptions,
 			referenceWorkOptions,
-			referenceWorks,
 		};
 	},
 
@@ -209,6 +218,15 @@ AddRevision = React.createClass({
 	onKeyideasValueChange(keyidea) {
 		this.setState({
 			keyideasValue: keyidea,
+		});
+	},
+
+	onReferenceWorksValueChange(referenceWork) {
+		const referenceWorks = this.state.referenceWorks;
+		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
+
+		this.setState({
+			referenceWorks,
 		});
 	},
 
@@ -332,15 +350,42 @@ AddRevision = React.createClass({
 		});
 	},
 
+	addReferenceWorkBlock() {
+		this.state.referenceWorks.push({ referenceWorkId: '0' });
+		this.setState({
+			referenceWorks: this.state.referenceWorks,
+		});
+	},
+
+	removeReferenceWorkBlock(i) {
+		this.setState({
+			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
+		});
+	},
+
+	moveReferenceWorkBlock(dragIndex, hoverIndex) {
+		const { introBlocks } = this.state;
+		const dragIntroBlock = introBlocks[dragIndex];
+
+		this.setState(update(this.state, {
+			referenceWorks: {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, dragIntroBlock],
+				],
+			},
+		}));
+	},
+
 	render() {
 		const self = this;
 		const { comment } = this.props;
 		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorksValue, textEditorState } = this.state;
-		const { keywordsOptions, keyideasOptions, referenceWorkOptions, referenceWorks } = this.data;
+		const { keywordsOptions, keyideasOptions, referenceWorkOptions } = this.data;
 
 		return (
 			<div className="comments lemma-panel-visible">
-				<div className={'comment-outer'}>
+				<div className="comment-outer">
 
 					<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
 
@@ -423,15 +468,90 @@ AddRevision = React.createClass({
 								suggestions={this.state.commentsSuggestions}
 							/>
 
+
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
-								<p>
-									{referenceWork ?
-										<span className="reference-work-title reference-work-title--without-link">
-											{referenceWork.title}
-										</span>
-									: ''}
-								</p>
+								<FormGroup
+									controlId="referenceWorks"
+									className="form-group--referenceWorks"
+								>
+									<ListGroupDnD>
+										{/*
+											DnD: add the ListGroupItemDnD component
+											IMPORTANT:
+											"key" prop must not be taken from the map function - has to be unique like _id
+											value passed to the "key" prop must not be then edited in a FormControl component
+												- will cause errors
+											"index" - pass the map functions index variable here
+										*/}
+										{comment.referenceWorks.map((referenceWork, i) => {
+											const _referenceWorkOptions = [];
+											referenceWorkOptions.forEach(rW => {
+												_referenceWorkOptions.push({
+													value: rW.value,
+													label: rW.label,
+													slug: rW.slug,
+													i,
+												});
+											});
+
+											return (
+												<ListGroupItemDnD
+													key={referenceWork.referenceWorkId}
+													index={i}
+													className="form-subitem form-subitem--referenceWork"
+													moveListGroupItem={this.moveReferenceWorkBlock}
+												>
+													<div
+														className="reference-work-item"
+													>
+														<Creatable
+															name="referenceWorks"
+															id="referenceWorks"
+															required={false}
+															options={_referenceWorkOptions}
+															value={this.state.referenceWorks[i].referenceWorkId}
+															// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
+															onChange={this.onReferenceWorksValueChange}
+															newOptionCreator={this.onNewOptionCreator}
+															shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
+															isOptionUnique={this.isOptionUnique}
+															placeholder="Reference Work . . ."
+														/>
+														<FormGroup>
+															<ControlLabel>Section Number: </ControlLabel>
+															<TextField
+																hintText=". . ."
+															/>
+														</FormGroup>
+														<FormGroup>
+															<ControlLabel>Paragraph Number: </ControlLabel>
+															<TextField
+																hintText=". . ."
+															/>
+														</FormGroup>
+														<FormGroup>
+															<ControlLabel>Translation Number: </ControlLabel>
+															<TextField
+																hintText=". . ."
+															/>
+														</FormGroup>
+														<FormGroup>
+															<ControlLabel>Note Number: </ControlLabel>
+															<TextField
+																hintText=". . ."
+															/>
+														</FormGroup>
+													</div>
+												</ListGroupItemDnD>
+											);
+										})}
+									</ListGroupDnD>
+									<RaisedButton
+										label="Add Reference Work"
+										onClick={this.addReferenceWorkBlock}
+									/>
+								</FormGroup>
 							</div>
 
 							<div className="comment-edit-action-button">
@@ -461,19 +581,15 @@ AddRevision = React.createClass({
 						</div>
 
 						<div className="comment-revisions">
-							<Creatable
-								name="referenceWorks"
-								id="referenceWorks"
-								required={false}
-								options={referenceWorkOptions}
-								multi
-								value={keyideasValue}
-								onChange={this.onKeyideasValueChange}
-								newOptionCreator={this.onNewOptionCreator}
-								shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-								isOptionUnique={this.isOptionUnique}
-								placeholder="Key Ideas..."
-							/>
+							{comment.revisions.map((_revision, i) => (
+								<FlatButton
+									key={i}
+									id={i}
+									className={`revision ${revision._id === _revision._id ? 'selected-revision' : ''}`}
+									onClick={self.selectRevision}
+									label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
+								/>
+							))}
 						</div>
 
 					</article>

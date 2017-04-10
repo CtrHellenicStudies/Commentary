@@ -45,10 +45,13 @@ CommentDetail = React.createClass({
 		const { comment } = this.props;
 		const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 		const referenceWorkIds = [];
-		comment.referenceWorks.forEach(referenceWork => {
-			referenceWorkIds.push(referenceWork.referenceWorkId);
-		});
-		const referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
+		let referenceWorks = [];
+		if ('referenceWorks' in comment) {
+			comment.referenceWorks.forEach(referenceWork => {
+				referenceWorkIds.push(referenceWork.referenceWorkId);
+			});
+			referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
+		}
 
 		return {
 			referenceWorks,

@@ -126,7 +126,7 @@ AddCommentLayout = React.createClass({
 		const work = this.getWork();
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
-		const referenceWorks = this.getReferenceWorks(formData);
+		const referenceWorks = formData.referenceWorks;
 		const commenter = this.getCommenter(formData);
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = cookie.load('loginToken');
@@ -165,7 +165,7 @@ AddCommentLayout = React.createClass({
 					slug: commenter.slug,
 				}] : [{}],
 				keywords: keywords || [{}],
-				referenceWorks: referenceWorks ? referenceWorks._id : null,
+				referenceWorks: referenceWorks,
 				tenantId: Session.get('tenantId'),
 				created: new Date(),
 			};

@@ -7,6 +7,7 @@ import { debounce } from 'throttle-debounce';
 import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
 import Toggle from 'material-ui/Toggle';
 import DiscussionComments from '/imports/collections/discussionComments';
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
 ProfilePage = React.createClass({
 	propTypes: {
@@ -203,14 +204,9 @@ ProfilePage = React.createClass({
 				<div className="content primary">
 
 					<section className="block header cover parallax">
-						<div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
-							<img
-								className="background-image"
-								src="/images/capitals.jpg"
-								role="presentation"
-							/>
-						</div>
-						<div className="block-screen brown" />
+						<BackgroundImageHolder
+							imgSrc="/images/capitals.jpg"
+						/>
 
 						<div className="container v-align-transform">
 

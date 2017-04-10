@@ -491,28 +491,6 @@ AddRevision = React.createClass({
 									suggestions={this.state.commentsSuggestions}
 								/>
 
-								<div className="comment-edit-action-button">
-									<RaisedButton
-										type="submit"
-										label="Add revision"
-										labelPosition="after"
-										icon={<FontIcon className="mdi mdi-plus" />}
-									/>
-								</div>
-								{(
-									Roles.userIsInRole(Meteor.user(), ['editor', 'admin'])
-									&& comment.revisions.length > 1
-								) ?
-									<div className="comment-edit-action-button comment-edit-action-button--remove">
-										<RaisedButton
-											label="Remove revision"
-											labelPosition="after"
-											onClick={this.removeRevision}
-											icon={<FontIcon className="mdi mdi-minus" />}
-										/>
-									</div>
-								: '' }
-
 								<div className="comment-reference">
 									<h4>Secondary Source(s):</h4>
 									<FormGroup
@@ -597,7 +575,39 @@ AddRevision = React.createClass({
 										/>
 									</FormGroup>
 								</div>
+
+
+								<div className="comment-edit-action-button">
+									<RaisedButton
+										type="submit"
+										label="Add revision"
+										labelPosition="after"
+										icon={<FontIcon className="mdi mdi-plus" />}
+									/>
+								</div>
+								{(
+									Roles.userIsInRole(Meteor.user(), ['editor', 'admin'])
+									&& comment.revisions.length > 1
+								) ?
+									<div className="comment-edit-action-button comment-edit-action-button--remove">
+										<RaisedButton
+											label="Remove revision"
+											labelPosition="after"
+											onClick={this.removeRevision}
+											icon={<FontIcon className="mdi mdi-minus" />}
+										/>
+									</div>
+								: '' }
+								<div className="comment-edit-action-button">
+									<RaisedButton
+										label="Update without adding Revision"
+										labelPosition="after"
+										icon={<FontIcon className="mdi mdi-plus" />}
+										onClick={this.update}
+									/>
+								</div>
 							</div>
+
 
 							<div className="comment-revisions">
 								{comment.revisions.map((_revision, i) => (

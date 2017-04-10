@@ -47,6 +47,7 @@ AddRevisionLayout = React.createClass({
 	},
 
 	addRevision(formData, textValue, textRawValue) {
+		const self = this;
 		const revision = {
 			title: formData.titleValue,
 			text: textValue,

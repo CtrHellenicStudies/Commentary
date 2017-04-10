@@ -434,27 +434,27 @@ CommentDetail = React.createClass({
 						{referenceWorks ?
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
-
-								<p>
+								<span>
 									{referenceWorks.map((referenceWork, i) => {
 										const isLast = (i === referenceWorks.length - 1);
 
 										return (
 											<span
 												key={i}
+												className="referenceWork"
 											>
+												{isLast ? ' ' : ''}
 												<a
 													href={`/referenceWorks/${referenceWork.slug}`}
 													rel="noopener noreferrer"
 													target="_blank"
 												>
-													{referenceWork.title}
+													{referenceWork.title}{isLast ? '' : ','}
 												</a>
-												{isLast ? '' : ', '}
 											</span>
 										);
 									})}
-								</p>
+								</span>
 							</div>
 						: '' }
 					</div>

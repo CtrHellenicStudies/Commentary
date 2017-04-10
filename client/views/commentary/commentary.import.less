@@ -664,40 +664,26 @@ article.lemma-comment {
     font-family: @font-label;
     font-size: 18px;
     text-transform: uppercase;
-    margin: 5px 0;
+    margin: 0;
     padding-right: 12px;
     color: @primary;
   }
-  h4, p, a {
+  h4, a {
     display: inline-block;
     vertical-align: top;
-
-  }
-  p, a {
-    font-weight: lighter;
-    font-family: @font-body;
-    font-size: 18px;
-
   }
 
   a {
+    font-weight: lighter;
+    font-family: @font-body;
+    font-size: 18px;
     border-bottom: 2px solid @primary;
     box-shadow: none;
+		padding:0 2px;
     &:hover {
       border-bottom: 2px solid @md-primary-100;
     }
   }
-
-  p {
-    margin: 4px 7px;
-    width: auto;
-    padding: 3px 0;
-		span {
-			margin: 5px 0;
-			line-height: 1.5em;
-		}
-  }
-
 }
 
 .comment-persistent-identifier {

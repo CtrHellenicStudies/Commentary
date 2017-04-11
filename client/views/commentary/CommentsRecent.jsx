@@ -19,7 +19,11 @@ CommentsRecent = React.createClass({
 		const handle = Meteor.subscribe('comments.recent', Session.get("tenantId"), 3);
 		let recentComments = [];
 		if (handle.ready()) {
-			recentComments = Comments.find().fetch();
+			recentComments = Comments.find({}, {
+				sort: {
+					updated: -1,
+				},
+			}).fetch();
 		}
 		return {
 			recentComments,

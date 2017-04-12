@@ -4,8 +4,31 @@ import FontIcon from 'material-ui/FontIcon';
 import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
 import JsDiff from 'diff';
 
-import ReferenceWorks from '/imports/collections/referenceWorks';
-import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';
+// api:
+import ReferenceWorks from '/imports/collections/referenceWorks';  // eslint-disable-line import/no-absolute-path
+
+// layouts:
+import CommentBody from '/imports/ui/layouts/commentary/CommentBody';  // eslint-disable-line import/no-absolute-path
+
+// components:
+import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';  // eslint-disable-line import/no-absolute-path
+import KeywordsContainer from '/imports/ui/components/commentary/comments/KeywordsContainer';  // eslint-disable-line import/no-absolute-path
+
+const getUpdateDate = (selectedRevision) => {
+	let updated = selectedRevision.updated;
+	if (selectedRevision.originalDate) {
+		updated = selectedRevision.originalDate;
+	}
+	const format = 'D MMMM YYYY';
+	return moment(updated).format(format);
+};
+
+const getUserCanEditCommenters = () => {
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		return Meteor.user().canEditCommenters;
+	}
+	return [];
+};
 
 CommentDetail = React.createClass({
 
@@ -60,49 +83,6 @@ CommentDetail = React.createClass({
 		};
 	},
 
-	getRevisionDiff() {
-		// build the diff view and return a DOM node
-		const { comment } = this.props;
-		const selectedRevisionIndex = this.getRevisionIndex();
-		const baseRevision = comment.revisions[selectedRevisionIndex];
-		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
-		const revisionDiff = document.createElement('comment-diff');
-		const baseRevisionText = this.stripHTMLFromText(baseRevision.text);
-		const newRevisionText = this.stripHTMLFromText(newRevision.text);
-		const diff = JsDiff.diffWordsWithSpace(baseRevisionText, newRevisionText);
-		diff.forEach((part) => {
-			// green for additions, red for deletions
-			let color = black;
-			let background = fullWhite;
-			const span = document.createElement('span');
-
-			if (part.added) {
-				color = blue800;
-				background = blue50;
-			} else if (part.removed) {
-				color = red800;
-				background = red50;
-				span.style.textDecoration = 'line-through';
-			}
-
-			span.style.color = color;
-			span.style.background = background;
-			span.style.padding = '0px';
-
-			span.appendChild(document
-				.createTextNode(part.value));
-			revisionDiff.appendChild(span);
-		});
-
-		return revisionDiff;
-	},
-
-	stripHTMLFromText(htmlText) {
-		const tempElem = document.createElement('div');
-		tempElem.innerHTML = htmlText;
-		return tempElem.textContent || tempElem.innerText || '';
-	},
-
 	addSearchTerm(keyword) {
 		if (!('isOnHomeView' in this.props) || this.props.isOnHomeView === false) {
 			this.props.toggleSearchTerm('keywords', keyword);
@@ -121,92 +101,6 @@ CommentDetail = React.createClass({
 		this.setState({
 			discussionVisible: false,
 		});
-	},
-
-	createRevisionMarkup(html) {
-		let newHtml = html;
-
-		const workNamesSpace = [{
-			title: 'Iliad',
-			slug: 'iliad',
-		}, {
-			title: 'Odyssey',
-			slug: 'odyssey',
-		}, {
-			title: 'Homeric Hymns',
-			slug: 'hymns',
-		}, {
-			title: 'Hymns',
-			slug: 'hymns',
-		}];
-		const workNamesPeriod = [{
-			title: 'Il',
-			slug: 'iliad',
-		}, {
-			title: 'Od',
-			slug: 'odyssey',
-		}, {
-			title: 'HH',
-			slug: 'hymns',
-		}, {
-			title: 'I',
-			slug: 'iliad',
-		}, {
-			title: 'O',
-			slug: 'odyssey',
-		}];
-
-		let regex1;
-		let regex2;
-
-		workNamesSpace.forEach((workName) => {
-			// regex for range with dash (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
-			regex1 = new RegExp(`${workName.title} (\\d+).(\\d+)-(\\d+)(?!.*&quot;)`, 'g');
-
-			// regex for no range (and lookahead to ensure range isn't captured) (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
-			regex2 = new RegExp(`${workName.title} (\\d+).(?!\\d+-\\d+)(\\d+)(?!.*&quot;)`, 'g');
-
-			newHtml = newHtml.replace(regex1,
-				`<a
-					class='has-lemma-reference'
-					data-work=${workName.slug}
-					data-subwork='$1'
-					data-lineFrom='$2'
-					data-lineTo='$3'
-				>${workName.title} $1.$2-$3</a>`);
-			newHtml = newHtml.replace(regex2,
-				`<a
-					class='has-lemma-reference'
-					data-work=${workName.slug}
-					data-subwork='$1'
-					data-lineFrom='$2'
-				>${workName.title} $1.$2</a>`);
-		});
-
-		workNamesPeriod.forEach((workName) => {
-			// regex for range with dash (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
-			regex1 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(\\d+)-(\\d+)(?!.*&quot;)`, 'g');
-
-			// regex for no range (and lookahead to ensure range isn't captured) (lookahead to ignore if surrounded by &quot; - required for comment cross reference)
-			regex2 = new RegExp(`([^\\w+])${workName.title}.(\\s*)(\\d+).(?!\\d+-\\d+)(\\d+)(?!.*&quot;)`, 'g');
-			newHtml = newHtml.replace(regex1,
-				`$1<a
-					class='has-lemma-reference'
-					data-work=${workName.slug}
-					data-subwork='$3'
-					data-lineFrom='$4'
-					data-lineTo='$5'
-				>${workName.title}.$2$3.$4-$5</a>`);
-			newHtml = newHtml.replace(regex2,
-				`$1<a
-					class='has-lemma-reference'
-					data-work=${workName.slug}
-					data-subwork='$3'
-					data-lineFrom='$4'
-				>${workName.title}.$2$3.$4</a>`);
-		});
-
-		return { __html: newHtml };
 	},
 
 	checkIfToggleReferenceModal(e) {
@@ -322,13 +216,7 @@ CommentDetail = React.createClass({
 		}
 
 		const selectedRevision = comment.revisions[selectedRevisionIndex];
-		let updated = selectedRevision.updated;
-		const format = 'D MMMM YYYY';
 		let commentClass = 'comment-outer has-discussion ';
-		let userCommenterId = [];
-		if (Meteor.user() && Meteor.user().canEditCommenters) {
-			userCommenterId = Meteor.user().canEditCommenters;
-		}
 		if (self.state.discussionVisible) {
 			commentClass += 'discussion--width discussion--visible';
 		}
@@ -344,89 +232,24 @@ CommentDetail = React.createClass({
 					data-id={comment._id}
 				>
 
-					{/*<div className="comment-upper">
-						<div className="comment-upper-left">
-							<h1 className="comment-title">{selectedRevision.title}</h1>
-						</div>
-
-						<div className="comment-upper-right">
-							{comment.commenters.map((commenter, i) => (
-								<div
-									key={i}
-									className="comment-author"
-								>
-									{userCommenterId.indexOf(commenter._id) > -1 ?
-										<FlatButton
-											label="Edit comment"
-											href={`/commentary/${comment._id}/edit`}
-											icon={<FontIcon className="mdi mdi-pen" />}
-										/>
-										:
-										''
-									}
-									<div className="comment-author-text">
-										<a href={`/commenters/${commenter.slug}`}>
-											<span className="comment-author-name">{commenter.name}</span>
-										</a>
-										<span className="comment-date">
-											{moment(updated).format(format)}
-										</span>
-									</div>
-									<div className="comment-author-image-wrap paper-shadow">
-										<a href={`/commenters/${commenter.slug}`}>
-											<AvatarIcon
-												avatar={
-													(commenter && 'avatar' in commenter) ?
-													commenter.avatar.src
-													: null
-												}
-											/>
-										</a>
-									</div>
-								</div>
-							))}
-						</div>
-
-					</div>*/}
-
 					<CommentUpper
-						comment={comment}
-						selectedRevisionIndex={selectedRevisionIndex}
+						title={selectedRevision.title}
+						commenters={comment.commenters}
+						updateDate={getUpdateDate(selectedRevision)}
+						userCanEditCommenters={getUserCanEditCommenters()}
 					/>
-					<div className="comment-keywords-container">
-						<div className="comment-keywords">
-							{comment.keywords.map((keyword, i) => {
-								if (keyword) {
-									return (
-										<RaisedButton
-											key={i}
-											className="comment-keyword paper-shadow"
-											onClick={self.addSearchTerm.bind(null, keyword)}
-											data-id={keyword._id}
-											label={(keyword.title || keyword.wordpressId)}
-										/>
-									);
-								}
-								return '';
-							})}
-						</div>
-					</div>
+
+					<KeywordsContainer
+						keywords={comment.keywords}
+						keywordOnClick={this.addSearchTerm}
+					/>
+
 					<div className="comment-lower">
-						{selectedRevisionIndex === comment.revisions.length - 1 ?
-							<div
-								className="comment-body"
-								dangerouslySetInnerHTML={this.createRevisionMarkup(selectedRevision.text)}
-								onClick={this.checkIfToggleReferenceModal}
-							/>
-							:
-								<div
-									id="comment-body"
-									className="comment-body"
-									dangerouslySetInnerHTML={comment ?
-										{ __html: this.getRevisionDiff().innerHTML } : ''}
-									onClick={this.checkIfToggleLemmaReferenceModal}
-								/>
-						}
+						<CommentBody
+							comment={comment}
+							revisionIndex={selectedRevisionIndex}
+							onTextClick={this.checkIfToggleReferenceModal}
+						/>
 						{referenceWorks ?
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>

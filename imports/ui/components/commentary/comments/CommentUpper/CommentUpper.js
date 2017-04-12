@@ -1,28 +1,7 @@
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';  // eslint-disable-line import/no-absolute-path
+import FontIcon from 'material-ui/FontIcon';
+
 import s from './CommentUpper.css';
-
-/*
-	helpers
-*/
-
-const getRevision = (comment, index) => (comment.revisions[index]);
-
-const getUserCommenterId = () => {
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		return Meteor.user().canEditCommenters;
-	}
-	return [];
-};
-
-const getUpdateDate = (selectedRevision) => {
-	let updated = selectedRevision.updated;
-	if (selectedRevision.originalDate) {
-		updated = selectedRevision.originalDate;
-	}
-	const format = 'D MMMM YYYY';
-	return moment(updated).format(format);
-};
-
 
 
 /*
@@ -47,12 +26,12 @@ CommentUpperLeft.propTypes = {
 */
 const CommentUpperRight = props => (
 	<div className={s['comment-upper-right']}>
-		{props.comment.commenters.map(commenter => (
+		{props.commenters.map(commenter => (
 			<div
 				key={commenter._id}
 				className="comment-author"
 			>
-				{getUserCommenterId().indexOf(commenter._id) > -1 ?
+				{props.userCanEditCommenters.indexOf(commenter._id) > -1 ?
 					<FlatButton
 						label="Edit comment"
 						href={`/commentary/${comment._id}/edit`}
@@ -85,8 +64,19 @@ const CommentUpperRight = props => (
 	</div>
 );
 CommentUpperRight.propTypes = {
-	comment: React.PropTypes.object.isRequired,
+	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
+		_id: React.PropTypes.string.isRequired,
+		slug: React.PropTypes.string.isRequired,
+		name: React.PropTypes.string.isRequired,
+		avatar: React.PropTypes.shape({
+			src: React.PropTypes.string.isRequired,
+		})
+	})).isRequired,
 	updateDate: React.PropTypes.string.isRequired,
+	userCanEditCommenters: React.PropTypes.arrayOf(React.PropTypes.string),
+};
+CommentUpperRight.defaultProps = {
+	userCanEditCommenters: [],
 };
 /*
 	END CommentUpperRight 
@@ -95,30 +85,45 @@ CommentUpperRight.propTypes = {
 
 
 /*
-	BEGIN CommentUpperRight 
+	BEGIN CommentUpper 
 */
 const CommentUpper = (props) => {
 
-	const revision = getRevision(props.comment, props.selectedRevisionIndex);
+	// const revision = getRevision(props.comment, props.selectedRevisionIndex);
 
 	return (
 		<div className={s['comment-upper']}>
 			<CommentUpperLeft
-				title={revision.title}
+				title={props.title}
 			/>
 			<CommentUpperRight
-				comment={props.comment}
-				updateDate={getUpdateDate(revision)}
+				commenters={props.commenters}
+				updateDate={props.updateDate}
 			/>
 		</div>
 	);
 };
 CommentUpper.propTypes = {
-	selectedRevisionIndex: React.PropTypes.number.isRequired,
-	comment: React.PropTypes.object.isRequired,
+	title: React.PropTypes.string.isRequired,
+	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
+		_id: React.PropTypes.string.isRequired,
+		slug: React.PropTypes.string.isRequired,
+		name: React.PropTypes.string.isRequired,
+		avatar: React.PropTypes.shape({
+			src: React.PropTypes.string.isRequired,
+		})
+	})).isRequired,
+	updateDate: React.PropTypes.string.isRequired,
+	userCanEditCommenters: React.PropTypes.arrayOf(React.PropTypes.string),
+
+	// selectedRevisionIndex: React.PropTypes.number.isRequired,
+	// comment: React.PropTypes.object.isRequired,
+};
+CommentUpper.defaultProps = {
+	userCanEditCommenters: [],
 };
 /*
-	END CommentUpperRight 
+	END CommentUpper 
 */
 
 export default CommentUpper;

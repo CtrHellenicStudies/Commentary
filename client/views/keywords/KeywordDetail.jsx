@@ -159,6 +159,10 @@ KeywordDetail = React.createClass({
 								</p>
 						}
 
+						<hr />
+
+						<h1>Related comments</h1>
+
 						<KeywordCommentList
 							keywordComments={keywordComments}
 						/>

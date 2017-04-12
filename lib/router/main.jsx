@@ -115,6 +115,7 @@ FlowRouter.triggers.enter([() => {
 loggedInGroup = FlowRouter.group({
 	triggersEnter: [AccountsTemplates.ensureSignedIn],
 });
+
 FlowRouter.route('/', {
 	name: 'home',
 	action: () => {
@@ -125,18 +126,6 @@ FlowRouter.route('/commentary', {
 	name: 'commentary',
 	action: (params, queryParams) => {
 		mount(CommentaryLayout, { params, queryParams });
-	},
-});
-FlowRouter.route('/keywords/add', {
-	action: () => {
-		mount(AddKeywordLayout);
-	},
-});
-FlowRouter.route('/keywords/:slug/edit', {
-	action: (params) => {
-		mount(MasterLayout, {
-			content: <EditKeywordLayout slug={params.slug} />,
-		});
 	},
 });
 FlowRouter.route('/keywords/:slug', {
@@ -177,7 +166,7 @@ FlowRouter.route('/referenceWorks', {
 	},
 });
 FlowRouter.route('/commenters/:slug', {
-	name: 'CommentersDetail',
+	name: 'CommentatorsDetail',
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <CommenterDetail
@@ -194,9 +183,17 @@ FlowRouter.route('/commenters', {
 		});
 	},
 });
-loggedInGroup.route('/commentary/add', {
+
+loggedInGroup.route('/keywords/:slug/edit', {
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <EditKeywordLayout slug={params.slug} />,
+		});
+	},
+});
+loggedInGroup.route('/keywords/create', {
 	action: () => {
-		mount(AddCommentLayout);
+		mount(AddKeywordLayout);
 	},
 });
 loggedInGroup.route('/commentary/:commentId/edit', {
@@ -206,6 +203,12 @@ loggedInGroup.route('/commentary/:commentId/edit', {
 		});
 	},
 });
+loggedInGroup.route('/commentary/create', {
+	action: () => {
+		mount(AddCommentLayout);
+	},
+});
+
 loggedInGroup.route('/profile', {
 	action: () => {
 		mount(UserLayout, {
@@ -213,6 +216,7 @@ loggedInGroup.route('/profile', {
 		});
 	},
 });
+
 FlowRouter.route('/users/:userId', {
 	triggersEnter: [
 		(context, redirect) => {
@@ -252,10 +256,14 @@ loggedInGroup.route('/account', {
 		});
 	},
 });
-loggedInGroup.route('/sign-out', {
+FlowRouter.route('/sign-out', {
 	triggersEnter: [
 		() => {
-			AccountsTemplates.logout();
+			try {
+				AccountsTemplates.logout();
+			} catch (err) {
+				console.log(err);
+			}
 			cookie.remove('userId');
 			cookie.remove('loginToken');
 		},

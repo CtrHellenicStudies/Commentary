@@ -17,7 +17,7 @@ const commentSchema = SchemaBridge.schema(
 );
 const commenterSchema = SchemaBridge.schema(
 	Commenters.schema,
-	'Commenter',
+	'Commentator',
 	{
 		wrap: false,
 		fields: ['tenantId', 'name', 'slug', 'avatar', 'bio', 'isAuthor', 'tagline', 'nCommentsTotal'],
@@ -81,7 +81,7 @@ type Comment {
 }
 
 ${commenterSchema.objects}
-type Commenter {
+type Commentator {
 	_id: String
 	${commenterSchema.fields}
 	nCommentsWorks: JSON
@@ -127,7 +127,7 @@ type Work {
 
 type Query {
 
-  commenters(_id: String, name: String, slug: String, tenantId: String, isAuthor: Boolean): [Commenter]
+  commenters(_id: String, name: String, slug: String, tenantId: String, isAuthor: Boolean): [Commentator]
 
   comments(_id: String, commenter: String, tenantId: String, work: String, subwork: String, lineFrom: Int, lineTo: Int, lineLetter: String, paragraphN: Int, reference: String, keyword: String, isAnnotation: Boolean): [Comment]
 

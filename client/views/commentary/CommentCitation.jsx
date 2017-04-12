@@ -9,7 +9,6 @@ CommentCitation = React.createClass({
 		componentClass: React.PropTypes.string,
 		title: React.PropTypes.string,
 		comment: React.PropTypes.object,
-		referenceWork: React.PropTypes.object,
 	},
 
 	getInitialState() {
@@ -36,7 +35,7 @@ CommentCitation = React.createClass({
 	},
 
 	render() {
-		const { comment, referenceWork } = this.props;
+		const { comment } = this.props;
 		const title = this.props.title;
 		const componentClass = this.props.componentClass;
 

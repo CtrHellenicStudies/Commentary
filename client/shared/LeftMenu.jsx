@@ -76,21 +76,23 @@ LeftMenu = React.createClass({
 							</span>
 						</a>
 					</div>
-					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter']) ?
+					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 						<div>
+							{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['admin']) ?
+								<MenuItem
+									href="http://ahcip-admin.chs.harvard.edu"
+									target="_blank"
+									primaryText="Admin"
+									onClick={this.props.closeLeftMenu}
+								/>
+							: ''}
 							<MenuItem
-								href="http://ahcip-admin.chs.harvard.edu"
-								target="_blank"
-								primaryText="Admin"
-								onClick={this.props.closeLeftMenu}
-							/>
-							<MenuItem
-								href="/commentary/add"
+								href="/commentary/create"
 								primaryText="Add Comment"
 								onClick={this.props.closeLeftMenu}
 							/>
 							<MenuItem
-								href="/keywords/add"
+								href="/keywords/create"
 								primaryText="Add Keyword/Idea"
 								onClick={this.props.closeLeftMenu}
 							/>
@@ -122,7 +124,7 @@ LeftMenu = React.createClass({
 							/>
 							<MenuItem
 								href="/commenters"
-								primaryText="Commenters"
+								primaryText="Commentators"
 								onClick={this.props.closeLeftMenu}
 							/>
 							<MenuItem

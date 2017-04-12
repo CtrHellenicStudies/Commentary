@@ -108,7 +108,7 @@ header .line-wrap {
   .comment-group-meta-inner {
     position: absolute;
     top: 115px;
-    left: 4%;
+    left: 3%;
   }
 
   .comment-group-meta-inner-fixed {
@@ -200,11 +200,9 @@ header .line-wrap {
 
       &:hover {
         .comment-author-name {
-          opacity: 1;
+          // opacity: 1;
         }
-
       }
-
     }
 
     .comment-author-name {
@@ -215,6 +213,7 @@ header .line-wrap {
       text-transform: uppercase;
       position: absolute;
       opacity: 0;
+			line-height:1.4em;
       .transition(all 300ms ease-out);
 
     }
@@ -389,6 +388,9 @@ article.lemma-comment {
     .revision {
       display: inline-block;
       margin-right: -4px;
+      border-right: 1px solid #ddd !important;
+      border-bottom: 1px solid #ddd !important;
+			border-radius: 0 !important;
 
       span {
         padding: 0px 20px;
@@ -397,12 +399,14 @@ article.lemma-comment {
         font-size: 12px !important;
         text-transform: uppercase;
         color: #999;
-        border-right: 1px solid #ddd;
 				font-weight:300 !important;
 
       }
 
       &.selected-revision {
+	      border-right: 1px solid @primary !important;
+	      border-bottom: 1px solid @primary !important;
+
         span {
           background: @primary;
           color: @light;
@@ -660,36 +664,26 @@ article.lemma-comment {
     font-family: @font-label;
     font-size: 18px;
     text-transform: uppercase;
-    margin: 5px 0;
+    margin: 0;
     padding-right: 12px;
     color: @primary;
   }
-  h4, p, a {
+  h4, a {
     display: inline-block;
     vertical-align: top;
-
-  }
-  p, a {
-    font-weight: lighter;
-    font-family: @font-body;
-    font-size: 18px;
-
   }
 
   a {
+    font-weight: lighter;
+    font-family: @font-body;
+    font-size: 18px;
     border-bottom: 2px solid @primary;
     box-shadow: none;
+		padding:0 2px;
     &:hover {
-      border-bottom: 2px solid @light;
+      border-bottom: 2px solid @md-primary-100;
     }
   }
-
-  p {
-    margin: 4px 7px;
-    width: auto;
-    padding: 0;
-  }
-
 }
 
 .comment-persistent-identifier {
@@ -724,9 +718,11 @@ article.lemma-comment {
 }
 
 .comment-citation {
-  position: absolute;
-  bottom: 80px;
-  right: 50px;
+  position: relative;
+  bottom: 0px;
+  right: 0px;
+	display: inline-block;
+	vertical-align: top;
 
   div {
     box-shadow: none !important;

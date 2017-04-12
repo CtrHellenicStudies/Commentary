@@ -233,9 +233,7 @@ section.keyword-single {
       padding: 19px 10px;
 
     }
-
   }
-
 }
 
 
@@ -251,16 +249,25 @@ section.keyword-single {
 
 }
 
-.keywords-detail-page .page-content {
-	min-height:600px;
-	.keyword-description {
-		min-height:220px;
+.keywords-detail-page {
+	.page-content {
+		min-height:600px;
+		.keyword-description {
+			min-height:220px;
+		}
+
+		.no-description-available {
+			padding:100px 0 200px;
+			color:@secondary-text;
+			text-align: center;
+		}
 	}
 
-	.no-description-available {
-		padding:100px 0 200px;
-		color:@secondary-text;
-		text-align: center;
+	article.lemma-comment {
+		margin:20px auto;
+		p.lemma-text {
+			padding: 2px 15px;
+		}
 	}
 }
 

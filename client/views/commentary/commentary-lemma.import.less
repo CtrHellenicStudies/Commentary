@@ -62,6 +62,7 @@
   .lemma-line {
     width: 100%;
     padding: 0;
+		position: relative;
 
     .lemma-text {
       display: inline-block;
@@ -72,21 +73,23 @@
 			padding:4px 5px;
 			.transition(all 300ms ease-in-out);
     }
+
     .lemma-meta {
       display: inline-block;
       vertical-align: top;
       width: 30px;
       text-align: right;
       padding: 0 10px 0 0;
+			position: absolute;
+			right: -26px;
+			top: 4px;
+			color: @secondary-text;
 
       span {
-        font-size: 14px;
+        font-size: 11px;
         text-align: right;
-
       }
-
     }
-
   }
 
   .md-button {

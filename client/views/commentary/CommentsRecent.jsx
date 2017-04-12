@@ -54,7 +54,7 @@ CommentsRecent = React.createClass({
 									>
 										<p
 											dangerouslySetInnerHTML={{
-												__html: comment.revisions[comment.revisions.length - 1].text,
+												__html: Utils.trunc(comment.revisions[comment.revisions.length - 1].text, 300),
 											}}
 										/>
 										<h4>

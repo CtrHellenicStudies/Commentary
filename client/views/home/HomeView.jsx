@@ -196,7 +196,7 @@ HomeView = React.createClass({
 						<div className="block-screen" />
 
 						<div className="container">
-							<h2 className="block-title">Commenters</h2>
+							<h2 className="block-title">Commentators</h2>
 							<CommentersList
 								featureOnHomepage
 								defaultAvatarUrl='/images/default_user.jpg'
@@ -205,7 +205,7 @@ HomeView = React.createClass({
 							<RaisedButton
 								href="/commenters"
 								className="cover-link light show-more "
-								label="Other Commenters"
+								label="Other Commentators"
 							/>
 						</div>
 					</section>

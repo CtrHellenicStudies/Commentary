@@ -1,5 +1,6 @@
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
+import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
 AddRevisionLayout = React.createClass({
@@ -13,10 +14,6 @@ AddRevisionLayout = React.createClass({
 	getInitialState() {
 		return {
 			filters: [],
-
-			// selectedLineFrom: 0,
-			// selectedLineTo: 0,
-
 			contextReaderOpen: true,
 		};
 	},
@@ -27,46 +24,69 @@ AddRevisionLayout = React.createClass({
 
 	getMeteorData() {
 		const commentsSub = Meteor.subscribe('comments.id', this.props.commentId, Session.get('tenantId'));
-		const ready = Roles.subscription.ready() && commentsSub;
-		let comment = {};
-		if (ready) {
-			comment = Comments.findOne();
+		const commentersSub = Meteor.subscribe('commenters', Session.get('tenantId'));
+		const keywordsSub = Meteor.subscribe('keywords.all');
+
+		const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready() && commentersSub.ready();
+
+		const comment = Comments.findOne();
+		const commenters = [];
+		if (comment) {
+			comment.commenters.forEach((commenter) => {
+				commenters.push(Commenters.findOne({
+					slug: commenter.slug,
+				}));
+			});
 		}
 
 		return {
 			ready,
 			comment,
+			commenters,
 		};
 	},
 
 	addRevision(formData, textValue, textRawValue) {
-		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
+		const self = this;
+		const revision = {
+			title: formData.titleValue,
+			text: textValue,
+			textRaw: textRawValue,
+			created: new Date(),
+			slug: slugify(formData.titleValue),
+		};
+		Meteor.call('comments.add.revision', this.props.commentId, revision, (err) => {
+			if (err) {
+				console.error('Error adding revision', err);
+			}
+			self.update(formData);
+		});
+		// TODO: handle behavior after comment added (add info about success)
+	},
 
+	update(formData) {
+		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 			// get keywords after they were created:
 			const keywords = this.getKeywords(formData);
-
-			const revision = {
-				title: formData.titleValue,
-				text: textValue,
-				textRaw: textRawValue,
-				created: new Date(),
-				slug: slugify(formData.titleValue),
-			};
+			const authToken = cookie.load('loginToken');
 
 			let update = [{}];
 			if (keywords) {
 				update = {
 					keywords,
+					referenceWorks: formData.referenceWorks,
 				};
 			}
+			console.log(update);
 
-			Meteor.call('comments.add.revision', this.props.commentId, revision, () => {
-				Meteor.call('comment.update', this.props.commentId, update, () => {
-					FlowRouter.go('/commentary/', {}, {_id: this.data.comment._id});
-				});
+			Meteor.call('comment.update', authToken, this.props.commentId, update, (_err) => {
+				if (_err) {
+					console.error('Error updating comment after adding revision', _err);
+				}
+
+				FlowRouter.go(`/commentary/${this.data.comment._id}/edit`);
 			});
 		});
-
 		// TODO: handle behavior after comment added (add info about success)
 	},
 
@@ -75,7 +95,7 @@ AddRevisionLayout = React.createClass({
 		if (keywords) {
 			keywords.forEach((keyword) => {
 				const foundKeyword = Keywords.findOne({
-					title: keyword.label,
+					title: keyword,
 				});
 				matchedKeywords.push(foundKeyword);
 			});
@@ -92,6 +112,7 @@ AddRevisionLayout = React.createClass({
 	addNewKeywords(keywords, type, next) {
 		// TODO should be handled server-side
 		if (keywords) {
+			const token = cookie.load('loginToken');
 			const newKeywordArray = [];
 			keywords.forEach((keyword) => {
 				const foundKeyword = Keywords.findOne({title: keyword});
@@ -106,9 +127,9 @@ AddRevisionLayout = React.createClass({
 				}
 			});
 			if (newKeywordArray.length > 0) {
-				return Meteor.call('keywords.insert', newKeywordArray, (err) => {
+				return Meteor.call('keywords.insert', token, newKeywordArray, (err) => {
 					if (err) {
-						console.log(err);
+						console.log('Keywords insert error', err);
 						return null;
 					}
 					return next();
@@ -143,16 +164,11 @@ AddRevisionLayout = React.createClass({
 	},
 
 	handlePermissions() {
-		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['developer', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
-			}
-		}
-		if (this.data.comment && Object.keys(this.data.comment).length) {
+		if (this.data.comment && this.data.commenters.length) {
 			let isOwner = false;
-			this.data.comment.commenters.forEach((commenter) => {
+			this.data.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (Meteor.user().canEditCommenters.indexOf(commenter._id) > -1);
+					isOwner = (~Meteor.user().canEditCommenters.indexOf(commenter._id));
 				}
 			});
 			if (!isOwner) {
@@ -285,7 +301,7 @@ AddRevisionLayout = React.createClass({
 		return (
 			<div>
 				{this.data.ready && this.data.comment ?
-					<div className="chs-layout add-comment-layout">
+					<div className="chs-layout chs-editor-layout add-comment-layout">
 
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
@@ -309,6 +325,7 @@ AddRevisionLayout = React.createClass({
 
 									<AddRevision
 										submitForm={this.addRevision}
+										update={this.update}
 										comment={comment}
 									/>
 

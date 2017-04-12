@@ -16,9 +16,74 @@
   }
 }
 
-.add-comment-layout {
+.chs-editor-layout {
   padding: 47px 0 0 0;
 
+	.DraftEditor-root {
+		span, .public-DraftEditorPlaceholder-inner {
+			font-family: @font-reading;
+			font-size:18px;
+			padding:8px 0;
+			display:block;
+			line-height:1.5em;
+			font-weight:100;
+			color:#222;
+
+		}
+		.public-DraftEditorPlaceholder-inner {
+			color:#666;
+		}
+	}
+
+	.form-subitem--referenceWork {
+		display:block;
+		margin: 10px 0;
+
+		label {
+			padding-right: 10px;
+			font-size: 14px;
+		}
+	}
+
+	.form-group--referenceWorks {
+		background: #f6f6f6;
+		padding: 10px 10px 20px;
+		border-radius: 3px;
+		border: 1px solid #ddd;
+	}
+
+
+}
+
+.reference-work-item {
+	.remove-reference-work-item {
+		float: right;
+		display:block;
+		margin-bottom: 10px;
+		text-align: center;
+
+		button {
+			cursor:pointer;
+
+			&:hover {
+				color:@secondary-text;
+				background: #eee;
+			}
+
+		}
+
+		.mdi {
+			font-size: 18px !important;
+			padding: 0 9px;
+			&:before {
+				font-size: 18px;
+			}
+		}
+	}
+	.Select {
+		display:block;
+		clear:both;
+	}
 }
 
 .add-comment-title span {
@@ -26,6 +91,17 @@
   font-size: 28px;
   color: rgba(0, 0, 0, 0.8);
 }
+
+.view-in-commentary {
+	text-align: right;
+
+	.go-to-commentary-link {
+		span {
+			font-size: 12px !important;
+		}
+	}
+}
+
 
 .add-comment-text, .RichTextEditor__editor___1QqIU {
   font-family: 'Merriweather', serif;
@@ -60,13 +136,22 @@
   }
 }
 
-.add-comment-button {
-  padding-top: 30px;
+.comment-edit-action-button {
+  margin-top: 30px;
+	margin-right: 20px;
+	display: inline-block;
+
   button {
     background: @md-primary !important;
     span {
       color: @light !important;
+			font-size: 12px !important;
     }
+		.mdi {
+			&:before {
+				font-size: 14px;
+			}
+		}
   }
 }
 

@@ -12,8 +12,8 @@ CommentersPage = React.createClass({
 
 	render() {
 		const { settings } = this.data;
-		Utils.setTitle(`Commenters | ${settings.title}`);
-		Utils.setDescription(`Commenters for ${Config.title()}`);
+		Utils.setTitle(`Commentators | ${settings.title}`);
+		Utils.setDescription(`Commentators for ${Config.title()}`);
 		Utils.setMetaImage(`${location.origin}/images/capitals.jpg`);
 		return (
 			<div className="page page-commenters">
@@ -23,7 +23,7 @@ CommentersPage = React.createClass({
 							<img
 								className="background-image"
 								src="/images/capitals.jpg"
-								alt="Commenter Page | A Homer Commentary in Progress"
+								alt="Commentator Page | A Homer Commentary in Progress"
 							/>
 						</div>
 						<div className="block-screen brown" />
@@ -32,7 +32,7 @@ CommentersPage = React.createClass({
 								<div className="center-content">
 									<div className="page-title-wrap">
 										<h2 className="page-title ">
-											Commenters
+											Commentators
 										</h2>
 									</div>
 								</div>

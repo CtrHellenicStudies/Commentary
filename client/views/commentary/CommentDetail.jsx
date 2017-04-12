@@ -1,7 +1,7 @@
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-import { green100, green500, red100, red500, black, fullWhite } from 'material-ui/styles/colors';
+import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
 import JsDiff from 'diff';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 import ReferenceWorks from '/imports/collections/referenceWorks';
@@ -21,22 +21,10 @@ CommentDetail = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getInitialState() {
-		let selectedRevisionIndex = null;
-		let foundRevision = null;
-		this.props.filters.forEach((filter) => {
-			if (filter.key === 'revision') {
-				foundRevision = filter.values[0];
-			}
-		});
-		if (foundRevision != null && foundRevision >= 0 &&
-			foundRevision < this.props.comment.revisions.length) {
-			selectedRevisionIndex = foundRevision;
-		} else {
-			selectedRevisionIndex = this.props.comment.revisions.length - 1;
-		}
+		const { comment } = this.props;
 
 		return {
-			selectedRevisionIndex,
+			selectedRevisionIndex: null,
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
 			keywordReferenceModalVisible: false,
@@ -55,44 +43,56 @@ CommentDetail = React.createClass({
 
 	getMeteorData() {
 		const { comment } = this.props;
-		const selectedRevision = comment.revisions[this.state.selectedRevisionIndex];
 		const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-		const referenceWork = ReferenceWorks.findOne({ _id: comment.referenceId });
+		const referenceWorkIds = [];
+		let referenceWorks = [];
+		if ('referenceWorks' in comment) {
+			comment.referenceWorks.forEach(referenceWork => {
+				referenceWorkIds.push(referenceWork.referenceWorkId);
+			});
+			referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
+		}
 
 		return {
-			selectedRevision,
-			referenceWork,
+			referenceWorks,
 			ready: handle.ready(),
 		};
 	},
 
 	getRevisionDiff() {
 		// build the diff view and return a DOM node
-		const baseRevision = this.data.selectedRevision;
+		const { comment } = this.props;
+		const selectedRevisionIndex = this.getRevisionIndex();
+		const baseRevision = comment.revisions[selectedRevisionIndex];
 		const newRevision = this.props.comment.revisions[this.props.comment.revisions.length - 1];
 		const revisionDiff = document.createElement('comment-diff');
-		const baseRevisionText = this.stripHTMLFromText(baseRevision);
-		const newRevisionText = this.stripHTMLFromText(newRevision);
+		const baseRevisionText = this.stripHTMLFromText(baseRevision.text);
+		const newRevisionText = this.stripHTMLFromText(newRevision.text);
 		const diff = JsDiff.diffWordsWithSpace(baseRevisionText, newRevisionText);
 		diff.forEach((part) => {
 			// green for additions, red for deletions
 			let color = black;
 			let background = fullWhite;
-			if (part.added) {
-				color = green500;
-				background = green100;
-			} else if (part.removed) {
-				color = red500;
-				background = red100;
-			}
 			const span = document.createElement('span');
+
+			if (part.added) {
+				color = blue800;
+				background = blue50;
+			} else if (part.removed) {
+				color = red800;
+				background = red50;
+				span.style.textDecoration = 'line-through';
+			}
+
 			span.style.color = color;
 			span.style.background = background;
 			span.style.padding = '0px';
+
 			span.appendChild(document
 				.createTextNode(part.value));
 			revisionDiff.appendChild(span);
 		});
+
 		return revisionDiff;
 	},
 
@@ -289,13 +289,40 @@ CommentDetail = React.createClass({
 		});
 	},
 
+	getRevisionIndex() {
+		const { comment, filters } = this.props;
+		let selectedRevisionIndex = this.state.selectedRevisionIndex;
+		if (selectedRevisionIndex === null) {
+			let foundRevision = null;
+			filters.forEach((filter) => {
+				if (filter.key === 'revision') {
+					foundRevision = filter.values[0];
+				}
+			});
+
+			if (foundRevision != null && foundRevision >= 0 &&
+				foundRevision < comment.revisions.length) {
+				selectedRevisionIndex = foundRevision;
+			} else {
+				selectedRevisionIndex = comment.revisions.length - 1;
+			}
+		}
+		return selectedRevisionIndex;
+	},
+
 	render() {
 		const self = this;
 		const { comment } = this.props;
-		const { selectedRevision, referenceWork } = this.data;
-		const selectedRevisionIndex = this.state.selectedRevisionIndex;
+		const { referenceWorks, ready } = this.data;
+		const selectedRevisionIndex = this.getRevisionIndex();
+
+		if (!ready) {
+			return null;
+		}
+
+		const selectedRevision = comment.revisions[selectedRevisionIndex];
 		let updated = selectedRevision.updated;
-		let format = 'D MMMM YYYY';
+		const format = 'D MMMM YYYY';
 		let commentClass = 'comment-outer has-discussion ';
 		let userCommenterId = [];
 		if (Meteor.user() && Meteor.user().canEditCommenters) {
@@ -303,7 +330,6 @@ CommentDetail = React.createClass({
 		}
 		if (self.state.discussionVisible) {
 			commentClass += 'discussion--width discussion--visible';
-
 		}
 
 		if (selectedRevision.originalDate) {
@@ -376,15 +402,20 @@ CommentDetail = React.createClass({
 					</div>
 					<div className="comment-keywords-container">
 						<div className="comment-keywords">
-							{comment.keywords.map((keyword, i) => (
-								<RaisedButton
-									key={i}
-									className="comment-keyword paper-shadow"
-									onClick={self.addSearchTerm.bind(null, keyword)}
-									data-id={keyword._id}
-									label={(keyword.title || keyword.wordpressId)}
-								/>
-							))}
+							{comment.keywords.map((keyword, i) => {
+								if (keyword) {
+									return (
+										<RaisedButton
+											key={i}
+											className="comment-keyword paper-shadow"
+											onClick={self.addSearchTerm.bind(null, keyword)}
+											data-id={keyword._id}
+											label={(keyword.title || keyword.wordpressId)}
+										/>
+									);
+								}
+								return '';
+							})}
 						</div>
 					</div>
 					<div className="comment-lower">
@@ -395,26 +426,38 @@ CommentDetail = React.createClass({
 								onClick={this.checkIfToggleReferenceModal}
 							/>
 							:
-							<div
-								id="comment-body"
-								className="comment-body"
-								dangerouslySetInnerHTML={comment ?
-									{ __html: this.getRevisionDiff().innerHTML } : ''}
-								onClick={this.checkIfToggleLemmaReferenceModal}
-							/>
+								<div
+									id="comment-body"
+									className="comment-body"
+									dangerouslySetInnerHTML={comment ?
+										{ __html: this.getRevisionDiff().innerHTML } : ''}
+									onClick={this.checkIfToggleLemmaReferenceModal}
+								/>
 						}
-						{referenceWork ?
+						{referenceWorks ?
 							<div className="comment-reference">
 								<h4>Secondary Source(s):</h4>
-								<p>
-									<a
-										href={`/referenceWorks/${referenceWork.slug}`}
-										rel="noopener noreferrer"
-										target="_blank"
-									>
-										{referenceWork.title}
-									</a>
-								</p>
+								<span>
+									{referenceWorks.map((referenceWork, i) => {
+										const isLast = (i === referenceWorks.length - 1);
+
+										return (
+											<span
+												key={i}
+												className="referenceWork"
+											>
+												{isLast ? ' ' : ''}
+												<a
+													href={`/referenceWorks/${referenceWork.slug}`}
+													rel="noopener noreferrer"
+													target="_blank"
+												>
+													{referenceWork.title}{isLast ? '' : ','}
+												</a>
+											</span>
+										);
+									})}
+								</span>
 							</div>
 						: '' }
 					</div>
@@ -432,7 +475,7 @@ CommentDetail = React.createClass({
 									key={i}
 									id={i}
 									data-id={revision.id}
-									className={`revision ${this.state.selectedRevisionIndex === i ? 'selected-revision' : ''}`}
+									className={`revision ${selectedRevisionIndex === i ? 'selected-revision' : ''}`}
 									onClick={self.selectRevision}
 									label={`Revision ${moment(updated).format(format)}`}
 								/>
@@ -441,7 +484,6 @@ CommentDetail = React.createClass({
 						<CommentCitation
 							componentClass="comment-citation"
 							title="Cite this comment"
-							referenceWork={referenceWork}
 							comment={comment}
 						/>
 					</div>

@@ -3,8 +3,9 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
 import JsDiff from 'diff';
-import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+
 import ReferenceWorks from '/imports/collections/referenceWorks';
+import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';
 
 CommentDetail = React.createClass({
 
@@ -342,21 +343,8 @@ CommentDetail = React.createClass({
 					className="comment commentary-comment paper-shadow "
 					data-id={comment._id}
 				>
-					<div className="comment-fixed-title-wrap paper-shadow">
-						<h3 className="comment-fixed-title">{selectedRevision.title}:</h3>
-						{comment.commenters.map((commenter, i) => (
-							<a
-								key={i}
-								href={`/commenters/${commenter.slug}`}
-							>
-								<span className="comment-author-name">
-									{commenter.name}
-								</span>
-							</a>
-						))}
-					</div>
 
-					<div className="comment-upper">
+					{/*<div className="comment-upper">
 						<div className="comment-upper-left">
 							<h1 className="comment-title">{selectedRevision.title}</h1>
 						</div>
@@ -399,7 +387,12 @@ CommentDetail = React.createClass({
 							))}
 						</div>
 
-					</div>
+					</div>*/}
+
+					<CommentUpper
+						comment={comment}
+						selectedRevisionIndex={selectedRevisionIndex}
+					/>
 					<div className="comment-keywords-container">
 						<div className="comment-keywords">
 							{comment.keywords.map((keyword, i) => {

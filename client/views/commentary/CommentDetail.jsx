@@ -1,9 +1,4 @@
-import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
-import JsDiff from 'diff';
-
 // api:
 import ReferenceWorks from '/imports/collections/referenceWorks';  // eslint-disable-line import/no-absolute-path
 
@@ -45,7 +40,6 @@ CommentDetail = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getInitialState() {
-		const { comment } = this.props;
 
 		return {
 			selectedRevisionIndex: null,

@@ -1,14 +1,12 @@
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';  // eslint-disable-line import/no-absolute-path
 import FontIcon from 'material-ui/FontIcon';
 
-import s from './CommentUpper.css';
-
 
 /*
 	BEGIN CommentUpperLeft 
 */
 const CommentUpperLeft = props => (
-	<div className={s['comment-upper-left']}>
+	<div className="comment-upper-left">
 		<h1>{props.title}</h1>
 	</div>
 );
@@ -25,7 +23,7 @@ CommentUpperLeft.propTypes = {
 	BEGIN CommentUpperRight 
 */
 const CommentUpperRight = props => (
-	<div className={s['comment-upper-right']}>
+	<div className="comment-upper-right">
 		{props.commenters.map(commenter => (
 			<div
 				key={commenter._id}
@@ -40,15 +38,15 @@ const CommentUpperRight = props => (
 					:
 					''
 				}
-				<div className={s['comment-author-text']}>
+				<div className={"comment-author-text"}>
 					<a href={`/commenters/${commenter.slug}`}>
-						<span className={s['comment-author-name']}>{commenter.name}</span>
+						<span className="comment-author-name">{commenter.name}</span>
 					</a>
 					<span>
 						{props.updateDate}
 					</span>
 				</div>
-				<div className={`${s['comment-author-image-wrap']} paper-shadow`}>
+				<div className="comment-author-image-wrap paper-shadow">
 					<a href={`/commenters/${commenter.slug}`}>
 						<AvatarIcon
 							avatar={
@@ -92,7 +90,7 @@ const CommentUpper = (props) => {
 	// const revision = getRevision(props.comment, props.selectedRevisionIndex);
 
 	return (
-		<div className={s['comment-upper']}>
+		<div className="comment-upper">
 			<CommentUpperLeft
 				title={props.title}
 			/>

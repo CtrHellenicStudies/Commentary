@@ -1,9 +1,7 @@
 import RaisedButton from 'material-ui/RaisedButton';
 
-import s from './KeywordsContainer.css';
-
 const KeywordsContainer = props => (
-	<div className={s['comment-keywords-container']}>
+	<div className="comment-keywords-container">
 		{props.keywords.map(keyword => (
 			<RaisedButton
 				key={keyword._id}

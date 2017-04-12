@@ -3,11 +3,11 @@ import FlatButton from 'material-ui/FlatButton';
 import ReferenceWorks from '/imports/collections/referenceWorks';  // eslint-disable-line import/no-absolute-path
 
 // layouts:
-import CommentBody from '/imports/ui/layouts/commentary/CommentBody';  // eslint-disable-line import/no-absolute-path
 
 // components:
 import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';  // eslint-disable-line import/no-absolute-path
 import KeywordsContainer from '/imports/ui/components/commentary/comments/KeywordsContainer';  // eslint-disable-line import/no-absolute-path
+import CommentBody from '/imports/ui/components/commentary/comments/CommentBody';  // eslint-disable-line import/no-absolute-path
 
 const getUpdateDate = (selectedRevision) => {
 	let updated = selectedRevision.updated;

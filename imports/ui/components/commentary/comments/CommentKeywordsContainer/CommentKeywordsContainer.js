@@ -1,6 +1,6 @@
 import RaisedButton from 'material-ui/RaisedButton';
 
-const KeywordsContainer = props => (
+const CommentKeywordsContainer = props => (
 	<div className="comment-keywords-container">
 		{props.keywords.map(keyword => (
 			<RaisedButton
@@ -13,7 +13,7 @@ const KeywordsContainer = props => (
 		))}
 	</div>
 );
-KeywordsContainer.propTypes = {
+CommentKeywordsContainer.propTypes = {
 	keywords: React.PropTypes.arrayOf(React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
 		title: React.PropTypes.string,
@@ -22,4 +22,4 @@ KeywordsContainer.propTypes = {
 	keywordOnClick: React.PropTypes.func.isRequired,
 };
 
-export default KeywordsContainer;
+export default CommentKeywordsContainer;

@@ -85,22 +85,17 @@ CommentUpperRight.defaultProps = {
 /*
 	BEGIN CommentUpper 
 */
-const CommentUpper = (props) => {
-
-	// const revision = getRevision(props.comment, props.selectedRevisionIndex);
-
-	return (
-		<div className="comment-upper">
-			<CommentUpperLeft
-				title={props.title}
-			/>
-			<CommentUpperRight
-				commenters={props.commenters}
-				updateDate={props.updateDate}
-			/>
-		</div>
-	);
-};
+const CommentUpper = (props) => (
+	<div className="comment-upper">
+		{!props.hideTitle && <CommentUpperLeft
+			title={props.title}
+		/>}
+		{!props.hideCommenters && <CommentUpperRight
+			commenters={props.commenters}
+			updateDate={props.updateDate}
+		/>}
+	</div>
+);
 CommentUpper.propTypes = {
 	title: React.PropTypes.string.isRequired,
 	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -113,12 +108,13 @@ CommentUpper.propTypes = {
 	})).isRequired,
 	updateDate: React.PropTypes.string.isRequired,
 	userCanEditCommenters: React.PropTypes.arrayOf(React.PropTypes.string),
-
-	// selectedRevisionIndex: React.PropTypes.number.isRequired,
-	// comment: React.PropTypes.object.isRequired,
+	hideTitle: React.PropTypes.bool,
+	hideCommenters: React.PropTypes.bool,
 };
 CommentUpper.defaultProps = {
 	userCanEditCommenters: [],
+	hideTitle: false,
+	hideCommenters: false,
 };
 /*
 	END CommentUpper 

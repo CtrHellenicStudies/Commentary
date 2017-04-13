@@ -6,8 +6,10 @@ import ReferenceWorks from '/imports/collections/referenceWorks';  // eslint-dis
 
 // components:
 import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';  // eslint-disable-line import/no-absolute-path
-import KeywordsContainer from '/imports/ui/components/commentary/comments/KeywordsContainer';  // eslint-disable-line import/no-absolute-path
-import CommentBody from '/imports/ui/components/commentary/comments/CommentBody';  // eslint-disable-line import/no-absolute-path
+import CommentKeywordsContainer from '/imports/ui/components/commentary/comments/CommentKeywordsContainer';  // eslint-disable-line import/no-absolute-path
+import CommentLower from '/imports/ui/components/commentary/comments/CommentLower';  // eslint-disable-line import/no-absolute-path
+import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';  // eslint-disable-line import/no-absolute-path
+
 
 const getUpdateDate = (selectedRevision) => {
 	let updated = selectedRevision.updated;
@@ -233,70 +235,24 @@ CommentDetail = React.createClass({
 						userCanEditCommenters={getUserCanEditCommenters()}
 					/>
 
-					<KeywordsContainer
+					<CommentKeywordsContainer
 						keywords={comment.keywords}
 						keywordOnClick={this.addSearchTerm}
 					/>
 
-					<div className="comment-lower">
-						<CommentBody
-							comment={comment}
-							revisionIndex={selectedRevisionIndex}
-							onTextClick={this.checkIfToggleReferenceModal}
-						/>
-						{referenceWorks ?
-							<div className="comment-reference">
-								<h4>Secondary Source(s):</h4>
-								<span>
-									{referenceWorks.map((referenceWork, i) => {
-										const isLast = (i === referenceWorks.length - 1);
+					<CommentLower
+						comment={comment}
+						revisionIndex={selectedRevisionIndex}
+						onTextClick={this.checkIfToggleReferenceModal}
+						referenceWorks={referenceWorks}
+					/>
 
-										return (
-											<span
-												key={i}
-												className="referenceWork"
-											>
-												{isLast ? ' ' : ''}
-												<a
-													href={`/referenceWorks/${referenceWork.slug}`}
-													rel="noopener noreferrer"
-													target="_blank"
-												>
-													{referenceWork.title}{isLast ? '' : ','}
-												</a>
-											</span>
-										);
-									})}
-								</span>
-							</div>
-						: '' }
-					</div>
-					<div className="comment-revisions">
-						{comment.revisions.map((revision, i) => {
-							let format = 'D MMMM YYYY';
-							let updated = revision.updated;
-
-							if (revision.originalDate) {
-								updated = revision.originalDate;
-							}
-
-							return (
-								<FlatButton
-									key={i}
-									id={i}
-									data-id={revision.id}
-									className={`revision ${selectedRevisionIndex === i ? 'selected-revision' : ''}`}
-									onClick={self.selectRevision}
-									label={`Revision ${moment(updated).format(format)}`}
-								/>
-							);
-						})}
-						<CommentCitation
-							componentClass="comment-citation"
-							title="Cite this comment"
-							comment={comment}
-						/>
-					</div>
+					<CommentRevisionSelect
+						commentId={comment._id}
+						revisions={comment.revisions}
+						selectedRevisionIndex={selectedRevisionIndex}
+						selectRevision={this.selectRevision.bind(this)}
+					/>
 
 				</article>
 

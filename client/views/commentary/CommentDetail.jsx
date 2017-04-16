@@ -12,12 +12,13 @@ import CommentRevisionSelect from '/imports/ui/components/commentary/comments/Co
 
 
 const getUpdateDate = (selectedRevision) => {
-	let updated = selectedRevision.updated;
+	let updated = selectedRevision.created;
 	if (selectedRevision.originalDate) {
 		updated = selectedRevision.originalDate;
+	} else if (selectedRevision.updated) {
+		updated = selectedRevision.originalDate;
 	}
-	const format = 'D MMMM YYYY';
-	return moment(updated).format(format);
+	return moment(updated).format('D MMMM YYYY');
 };
 
 const getUserCanEditCommenters = () => {
@@ -27,16 +28,55 @@ const getUserCanEditCommenters = () => {
 	return [];
 };
 
+const getCommentClass = (discussionVisible) => {
+	let commentClass = 'comment-outer has-discussion ';
+	if (discussionVisible) {
+		commentClass += 'discussion--width discussion--visible';
+	}
+	return commentClass;
+};
+
 CommentDetail = React.createClass({
 
 	propTypes: {
-		comment: React.PropTypes.object.isRequired,
-		commentGroup: React.PropTypes.object.isRequired,
-		filters: React.PropTypes.array,
+		comment: React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
+				_id: React.PropTypes.string.isRequired,
+				slug: React.PropTypes.string.isRequired,
+				name: React.PropTypes.string.isRequired,
+				avatar: React.PropTypes.shape({
+					src: React.PropTypes.string.isRequired,
+				}),
+			})),
+			referenceWorks: React.PropTypes.shape({
+				text: React.PropTypes.string.isRequired,
+				referenceWorkId: React.PropTypes.string.isRequired,
+			}),
+			revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
+				_id: React.PropTypes.string.isRequired,
+				created: React.PropTypes.instanceOf(Date).isRequired,
+				updated: React.PropTypes.instanceOf(Date),
+				originalDate: React.PropTypes.instanceOf(Date),
+			}))
+		}).isRequired,
+		filters: React.PropTypes.arrayOf(React.PropTypes.shape({
+			key: React.PropTypes.string.isRequired,
+			values: React.PropTypes.arrayOf(React.PropTypes.any).isRequired,
+		})),
 		toggleSearchTerm: React.PropTypes.func,
 		isOnHomeView: React.PropTypes.bool,
 		showLoginModal: React.PropTypes.func,
-		toggleLemma: React.PropTypes.func,
+		toggleLemma: React.PropTypes.func.isRequired,
+	},
+
+	getDefaultProps() {
+		return {
+			filters: null,
+			toggleSearchTerm: null,
+			isOnHomeView: false,
+			showLoginModal: null,
+		};
 	},
 
 	mixins: [ReactMeteorData],
@@ -165,21 +205,6 @@ CommentDetail = React.createClass({
 		});
 	},
 
-	togglePersistentIdentifierModal(e) {
-		const $target = $(e.target);
-		this.setState({
-			persistentIdentifierModalVisible: !this.state.persistentIdentifierModalVisible,
-			persistentIdentifierModalTop: $target.position().top - 34,
-			persistentIdentifierModalLeft: $target.position().left,
-		});
-	},
-
-	closePersistentIdentifierModal() {
-		this.setState({
-			persistentIdentifierModalVisible: false,
-		});
-	},
-
 	getRevisionIndex() {
 		const { comment, filters } = this.props;
 		let selectedRevisionIndex = this.state.selectedRevisionIndex;
@@ -202,29 +227,24 @@ CommentDetail = React.createClass({
 	},
 
 	render() {
-		const self = this;
+
 		const { comment } = this.props;
+		const { discussionVisible } = this.state;
 		const { referenceWorks, ready } = this.data;
-		const selectedRevisionIndex = this.getRevisionIndex();
 
 		if (!ready) {
 			return null;
 		}
 
+		const selectedRevisionIndex = this.getRevisionIndex();
 		const selectedRevision = comment.revisions[selectedRevisionIndex];
-		let commentClass = 'comment-outer has-discussion ';
-		if (self.state.discussionVisible) {
-			commentClass += 'discussion--width discussion--visible';
-		}
 
-		if (selectedRevision.originalDate) {
-			updated = selectedRevision.originalDate;
-		}
+		const commentClass = getCommentClass(discussionVisible);
 
 		return (
 			<div className={commentClass}>
 				<article
-					className="comment commentary-comment paper-shadow "
+					className="comment commentary-comment paper-shadow"
 					data-id={comment._id}
 				>
 
@@ -258,33 +278,33 @@ CommentDetail = React.createClass({
 
 				<DiscussionThread
 					comment={comment}
-					showDiscussionThread={self.showDiscussionThread}
-					hideDiscussionThread={self.hideDiscussionThread}
-					discussionVisible={self.state.discussionVisible}
+					showDiscussionThread={this.showDiscussionThread}
+					hideDiscussionThread={this.hideDiscussionThread}
+					discussionVisible={this.state.discussionVisible}
 					toggleLemma={this.props.toggleLemma}
 					showLoginModal={this.props.showLoginModal}
 				/>
 
-				{self.state.lemmaReferenceModalVisible ?
+				{this.state.lemmaReferenceModalVisible ?
 					<LemmaReferenceModal
-						visible={self.state.lemmaReferenceModalVisible}
-						top={self.state.lemmaReferenceTop}
-						left={self.state.lemmaReferenceLeft}
-						work={self.state.lemmaReferenceWork}
-						subwork={self.state.lemmaReferenceSubwork}
-						lineFrom={self.state.lemmaReferenceLineFrom}
-						lineTo={self.state.lemmaReferenceLineTo}
-						closeLemmaReference={self.closeLemmaReference}
+						visible={this.state.lemmaReferenceModalVisible}
+						top={this.state.lemmaReferenceTop}
+						left={this.state.lemmaReferenceLeft}
+						work={this.state.lemmaReferenceWork}
+						subwork={this.state.lemmaReferenceSubwork}
+						lineFrom={this.state.lemmaReferenceLineFrom}
+						lineTo={this.state.lemmaReferenceLineTo}
+						closeLemmaReference={this.closeLemmaReference}
 					/>
 				: ''}
 
-				{self.state.keywordReferenceModalVisible ?
+				{this.state.keywordReferenceModalVisible ?
 					<KeywordReferenceModal
-						visible={self.state.keywordReferenceModalVisible}
-						top={self.state.keywordReferenceTop}
-						left={self.state.keywordReferenceLeft}
-						keyword={self.state.keyword}
-						close={self.closeKeywordReference}
+						visible={this.state.keywordReferenceModalVisible}
+						top={this.state.keywordReferenceTop}
+						left={this.state.keywordReferenceLeft}
+						keyword={this.state.keyword}
+						close={this.closeKeywordReference}
 					/>
 				: ''}
 			</div>

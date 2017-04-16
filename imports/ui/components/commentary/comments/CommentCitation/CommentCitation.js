@@ -5,7 +5,8 @@ import MenuItem from 'material-ui/MenuItem';
 
 const getDateRevision = (revision) => {
 	if (revision.originalDate) return revision.originalDate;
-	return revision.updated;
+	else if (revision.updated) return revision.updated;
+	return revision.created;
 };
 
 class CommentCitation extends React.Component {
@@ -61,7 +62,7 @@ class CommentCitation extends React.Component {
 
 							return (
 								<MenuItem
-									key={revision.id}
+									key={revision._id}
 									href={`/commentary/?_id=${commentId}&revision=${i}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
 								/>
@@ -77,8 +78,9 @@ class CommentCitation extends React.Component {
 CommentCitation.propTypes = {
 	commentId: React.PropTypes.string.isRequired,
 	revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
-		id: React.PropTypes.string.isRequired,
-		updated: React.PropTypes.instanceOf(Date).isRequired,
+		_id: React.PropTypes.string.isRequired,
+		created: React.PropTypes.instanceOf(Date).isRequired,
+		updated: React.PropTypes.instanceOf(Date),
 		originalDate: React.PropTypes.instanceOf(Date),
 	})).isRequired,
 };

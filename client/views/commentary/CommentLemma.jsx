@@ -43,8 +43,6 @@ CommentLemma = React.createClass({
 			lemmaQuery['work.slug'] = 'hymns';
 		}
 
-		console.log('lemmaQuery', lemmaQuery);
-
 		const handle = Meteor.subscribe('textNodes', lemmaQuery);
 		const textNodes = TextNodes.find(lemmaQuery).fetch();
 		const editions = [];
@@ -53,28 +51,34 @@ CommentLemma = React.createClass({
 		textNodes.forEach((textNode) => {
 			textNode.text.forEach((text) => {
 				textIsInEdition = false;
-
+				
 				editions.forEach((edition) => {
 					if (text.edition.slug === edition.slug) {
-						edition.lines.push({
-							html: text.html,
-							n: text.n,
-						});
+						if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {
+							edition.lines.push({
+								html: text.html,
+								n: text.n,
+							});
+						}
 						textIsInEdition = true;
 					}
 				});
 
 				if (!textIsInEdition) {
-					editions.push({
+					const newEdition = {
 						title: text.edition.title,
 						slug: text.edition.slug,
-						lines: [
-							{
-								html: text.html,
-								n: text.n,
-							},
-						],
-					});
+						lines: [],
+					};
+
+					if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {
+						newEdition.lines.push({
+							html: text.html,
+							n: text.n,
+						});
+					}
+
+					editions.push(newEdition);
 				}
 			});
 		});
@@ -118,13 +122,12 @@ CommentLemma = React.createClass({
 		const { editions, ready } = this.data;
 
 		const selectedLemmaEdition = editions[this.state.selectedLemmaEditionIndex] || { lines: [] };
+		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
 		}
-
-		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
-		console.log('editions', editions);
 
 		return (
 			<div className="comment-outer comment-lemma-comment-outer">
@@ -181,10 +184,11 @@ CommentLemma = React.createClass({
 							<div className="lemma-loading-top" />
 							<div className="lemma-loading-bottom" />
 						</div>
-					: ''}
-					<CommentLemmaText
-						lines={selectedLemmaEdition.lines}
-					/>
+					:
+						<CommentLemmaText
+							lines={selectedLemmaEdition.lines}
+						/>
+					}
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);

@@ -53,9 +53,9 @@ CommentaryLayout = React.createClass({
 		}
 
 		// update route if queryParams have changed
-		if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
-			FlowRouter.go('/commentary/', {}, queryParams);
-		}
+		// if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
+		FlowRouter.go('/commentary/', {}, queryParams);
+		// }
 	},
 
 	_createQueryParamsFromFilters(filters) {
@@ -385,7 +385,7 @@ CommentaryLayout = React.createClass({
 			}
 		}
 
-		if (e.to < 2100) {
+		if (e.to < 1000) {
 			let lineToInFilters = false;
 
 			filters.forEach((filter, i) => {

@@ -11,6 +11,7 @@ Commentary = React.createClass({
 		filters: React.PropTypes.array.isRequired,
 		commentsReady: React.PropTypes.bool,
 		showLoginModal: React.PropTypes.func,
+		toggleSearchTerm: React.PropTypes.func,
 	},
 
 	childContextTypes: {
@@ -46,14 +47,14 @@ Commentary = React.createClass({
 	getMeteorData() {
 		let commentGroups = [];
 		const query = this.createQueryFromFilters(this.props.filters);
-		query['tenantId'] = Session.get("tenantId");
+		query.tenantId = Session.get('tenantId');
 
 		// SUBSCRIPTIONS:
 		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
 		let isMoreComments = true;
 
 		// FETCH DATA:
-		const comments = Comments.find({}, {
+		const comments = Comments.find(query, {
 			sort: {
 				'work.order': 1,
 				'subwork.n': 1,
@@ -64,9 +65,11 @@ Commentary = React.createClass({
 
 		commentGroups = this.parseCommentsToCommentGroups(comments);
 
+		/*
 		if (comments.length < this.state.limit) {
 			isMoreComments = false;
 		}
+		*/
 
 		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
@@ -396,13 +399,13 @@ Commentary = React.createClass({
 	},
 
 	renderNoCommentsOrLoading() {
+		const { isOnHomeView } = this.props;
+		const { isMoreComments, loading } = this.data;
+
 		if (
-				'isMoreComments' in this.data
-			&& typeof this.data.isMoreComments !== 'undefined'
-			&& this.data.isMoreComments
-			&& !this.props.isOnHomeView
+			isMoreComments && !isOnHomeView
 		) {
-			if (this.data.commentGroups.length === 0 && !this.data.loading) {
+			if (this.data.commentGroups.length === 0 && !loading) {
 				return (
 					<div className="no-commentary-wrap">
 						<p className="no-commentary no-results">

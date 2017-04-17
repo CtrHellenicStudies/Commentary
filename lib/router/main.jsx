@@ -128,6 +128,19 @@ FlowRouter.route('/commentary', {
 		mount(CommentaryLayout, { params, queryParams });
 	},
 });
+
+loggedInGroup.route('/keywords/:slug/edit', {
+	action: (params) => {
+		mount(MasterLayout, {
+			content: <EditKeywordLayout slug={params.slug} />,
+		});
+	},
+});
+loggedInGroup.route('/keywords/create', {
+	action: () => {
+		mount(AddKeywordLayout);
+	},
+});
 FlowRouter.route('/keywords/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
@@ -135,6 +148,7 @@ FlowRouter.route('/keywords/:slug', {
 		});
 	},
 });
+
 FlowRouter.route('/keywords', {
 	name: 'keywords',
 	action: () => {
@@ -184,18 +198,6 @@ FlowRouter.route('/commenters', {
 	},
 });
 
-loggedInGroup.route('/keywords/:slug/edit', {
-	action: (params) => {
-		mount(MasterLayout, {
-			content: <EditKeywordLayout slug={params.slug} />,
-		});
-	},
-});
-loggedInGroup.route('/keywords/create', {
-	action: () => {
-		mount(AddKeywordLayout);
-	},
-});
 loggedInGroup.route('/commentary/:commentId/edit', {
 	action: (params) => {
 		mount(AddRevisionLayout, {

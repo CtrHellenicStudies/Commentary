@@ -62,8 +62,6 @@ if (Meteor.isServer) {
 
 	Meteor.publish('textNodes', (query = {}, skip = 0, limit = 100) => {
 		check(query, Object);
-		console.log('query', query);
-
 		return TextNodes.find(query, {
 			limit,
 			skip,

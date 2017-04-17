@@ -34,11 +34,19 @@ export default class CommentLemmaText extends React.Component {
 			// number of lines depended on the expanded state
 			for (let i = 0; i < loops; i += 1) {
 				linesXML.push(
-					<p
+					<div
 						key={i}
-						className="lemma-text"
-						dangerouslySetInnerHTML={{ __html: lines[i].html }}
-					/>);
+						className="lemma-text-line"
+					>
+						<span className={`line-n ${(lines[i].n % 5) === 0 ? 'line-n--visible' : ''}`}>
+							{lines[i].n}
+						</span>
+						<p
+							className="lemma-text"
+							dangerouslySetInnerHTML={{ __html: lines[i].html }}
+						/>
+					</div>
+				);
 			}
 
 			return (

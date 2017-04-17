@@ -7,11 +7,14 @@ import InfiniteScroll from '/imports/ui/components/InfiniteScroll.jsx';
 Commentary = React.createClass({
 
 	propTypes: {
+		skip: React.PropTypes.number.isRequired,
+		limit: React.PropTypes.number.isRequired,
 		isOnHomeView: React.PropTypes.bool,
 		filters: React.PropTypes.array.isRequired,
 		commentsReady: React.PropTypes.bool,
 		showLoginModal: React.PropTypes.func,
 		toggleSearchTerm: React.PropTypes.func,
+		loadMoreComments: React.PropTypes.func,
 	},
 
 	childContextTypes: {
@@ -33,8 +36,6 @@ Commentary = React.createClass({
 			},
 			commentLemmaGroups: [],
 			commentGroups: [],
-			skip: 0,
-			limit: 10,
 		};
 	},
 
@@ -46,11 +47,13 @@ Commentary = React.createClass({
 
 	getMeteorData() {
 		let commentGroups = [];
-		const query = this.createQueryFromFilters(this.props.filters);
+		const { filters, skip, limit } = this.props;
+
+		const query = this.createQueryFromFilters(filters);
 		query.tenantId = Session.get('tenantId');
 
 		// SUBSCRIPTIONS:
-		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
+		const commentsSub = Meteor.subscribe('comments', query, skip, limit);
 		let isMoreComments = true;
 
 		// FETCH DATA:
@@ -65,11 +68,10 @@ Commentary = React.createClass({
 
 		commentGroups = this.parseCommentsToCommentGroups(comments);
 
-		/*
-		if (comments.length < this.state.limit) {
+		if (comments.length < limit) {
 			isMoreComments = false;
 		}
-		*/
+		console.log(comments.length, limit);
 
 		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
@@ -253,25 +255,6 @@ Commentary = React.createClass({
 		return query;
 	},
 
-	toggleSearchTerm(key, value) {
-		this.props.toggleSearchTerm(key, value);
-		this.setState({
-			skip: 0,
-		});
-	},
-
-	loadMoreComments() {
-		if (
-			!this.props.isOnHomeView
-		&& this.data.commentGroups.length
-		&& this.data.isMoreComments
-	) {
-			this.setState({
-				limit: this.state.limit + 10,
-			});
-		}
-	},
-
 	toggleLemmaEdition() {
 		this.setState({
 			selectedLemmaEdition: {},
@@ -398,6 +381,16 @@ Commentary = React.createClass({
 		Utils.setMetaImage();
 	},
 
+	loadMoreComments() {
+		if (
+				!this.isOnHomeView
+			&& this.data.commentGroups.length
+			&& this.data.isMoreComments
+		) {
+			this.props.loadMoreComments();
+		}
+	},
+
 	renderNoCommentsOrLoading() {
 		const { isOnHomeView } = this.props;
 		const { isMoreComments, loading } = this.data;
@@ -455,7 +448,7 @@ Commentary = React.createClass({
 								contextPanelOpen={this.state.contextPanelOpen}
 								showContextPanel={this.showContextPanel}
 								contextScrollPosition={this.contextScrollPosition}
-								toggleSearchTerm={this.toggleSearchTerm}
+								toggleSearchTerm={this.props.toggleSearchTerm}
 								showLoginModal={this.props.showLoginModal}
 								filters={this.props.filters}
 								isOnHomeView={this.props.isOnHomeView}
@@ -479,7 +472,7 @@ Commentary = React.createClass({
 				{!isOnHomeView ?
 					<FilterWidget
 						filters={this.props.filters}
-						toggleSearchTerm={this.toggleSearchTerm}
+						toggleSearchTerm={this.props.toggleSearchTerm}
 					/>
 					: ''}
 			</div>

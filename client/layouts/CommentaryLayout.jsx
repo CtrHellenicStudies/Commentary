@@ -313,7 +313,7 @@ CommentaryLayout = React.createClass({
 
 		this.setState({
 			skip: 0,
-			limit: 0,
+			limit: 10,
 		})
 
 		this._updateRoute(filters);
@@ -422,6 +422,10 @@ CommentaryLayout = React.createClass({
 			}
 		}
 
+		this.setState({
+			skip: 0,
+			limit: 10,
+		});
 		this._updateRoute(filters);
 	},
 

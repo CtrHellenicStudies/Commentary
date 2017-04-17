@@ -251,6 +251,8 @@ HomeView = React.createClass({
 									filters={[]}
 									comments={this.data.comments}
 									commentsReady={this.data.commentsReady}
+									skip={0}
+									limit={10}
 								/>
 								:
 									<Spinner />

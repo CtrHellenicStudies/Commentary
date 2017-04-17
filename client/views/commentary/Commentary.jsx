@@ -71,14 +71,13 @@ Commentary = React.createClass({
 		if (comments.length < limit) {
 			isMoreComments = false;
 		}
-		console.log(comments.length, limit);
 
 		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 		return {
 			commentGroups,
 			isMoreComments,
-			loading: commentsSub.ready(),
+			ready: commentsSub.ready(),
 			settings: settingsHandle.ready() ? Settings.findOne() : {},
 		};
 	},
@@ -393,12 +392,12 @@ Commentary = React.createClass({
 
 	renderNoCommentsOrLoading() {
 		const { isOnHomeView } = this.props;
-		const { isMoreComments, loading } = this.data;
+		const { isMoreComments, commentGroups, ready} = this.data;
 
 		if (
-			isMoreComments && !isOnHomeView
+			!isOnHomeView
 		) {
-			if (this.data.commentGroups.length === 0 && !loading) {
+			if (ready && commentGroups.length === 0) {
 				return (
 					<div className="no-commentary-wrap">
 						<p className="no-commentary no-results">
@@ -406,20 +405,22 @@ Commentary = React.createClass({
 						</p>
 					</div>
 				);
+			} else if (isMoreComments) {
+				return (
+					<div className="ahcip-spinner commentary-loading">
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
+					</div>
+				);
 			}
-
-			return (
-				<div className="ahcip-spinner commentary-loading">
-					<div className="double-bounce1" />
-					<div className="double-bounce2" />
-				</div>
-			);
 		}
 
 		return '';
 	},
 
 	render() {
+		const { commentGroups } = this.data;
+
 		let isOnHomeView;
 		if ('isOnHomeView' in this.props) {
 			isOnHomeView = this.props.isOnHomeView;
@@ -440,7 +441,7 @@ Commentary = React.createClass({
 					loadMore={debounce(1000, this.loadMoreComments)}
 				>
 					<div className="commentary-comments commentary-comment-groups">
-						{this.data.commentGroups.map((commentGroup, commentGroupIndex) => (
+						{commentGroups.map((commentGroup, commentGroupIndex) => (
 							<CommentGroup
 								key={commentGroupIndex}
 								commentGroupIndex={commentGroupIndex}

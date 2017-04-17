@@ -43,6 +43,8 @@ CommentLemma = React.createClass({
 			lemmaQuery['work.slug'] = 'hymns';
 		}
 
+		console.log('lemmaQuery', lemmaQuery);
+
 		const handle = Meteor.subscribe('textNodes', lemmaQuery);
 		const textNodes = TextNodes.find(lemmaQuery).fetch();
 		const editions = [];
@@ -122,6 +124,7 @@ CommentLemma = React.createClass({
 		}
 
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+		console.log('editions', editions);
 
 		return (
 			<div className="comment-outer comment-lemma-comment-outer">

@@ -371,12 +371,12 @@ Commentary = React.createClass({
 		if (subwork) title = `${title} ${subwork}`;
 		if (lineFrom) {
 			if (lineTo) {
-				title = `${title} ${lineFrom}-${lineTo}`;
+				title = `${title}.${lineFrom}-${lineTo}`;
 			} else {
-				title = `${title} ${lineFrom}`;
+				title = `${title}.${lineFrom}`;
 			}
 		} else if (lineTo) {
-			title = `${title} ${lineTo}`;
+			title = `${title}.${lineTo}`;
 		} else {
 			title = `${title}`;
 		}

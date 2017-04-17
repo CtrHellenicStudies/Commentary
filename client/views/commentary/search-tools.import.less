@@ -19,9 +19,7 @@
       background: @primary !important;
       span, i, .mdi {
         color: @light !important;
-
       }
-
     }
 
     > .dropdown-panel {
@@ -117,7 +115,13 @@
   &.search-term-button--active {
     background-color: @primary;
 
-    .search-term-button-icon, span {
+		&:hover {
+	    .search-term-button-label {
+	      color: @light;
+	    }
+		}
+
+    .search-term-button-label {
       color: @light;
     }
   }

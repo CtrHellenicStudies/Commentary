@@ -102,5 +102,8 @@
   "repository": {
     "type": "git",
     "url": "git@gitlab.archimedesdigital.io:archimedes/ahcip.git"
-  }
+  },
+  "cssModules": {
+    "ignorePaths": [ "node_modules" ]
+  } 
 }

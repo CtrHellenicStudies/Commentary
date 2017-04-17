@@ -1,0 +1,6 @@
+{
+  "name": "CommentBodyText",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./CommentBodyText.js"
+}

@@ -19,6 +19,8 @@ CommentaryLayout = React.createClass({
 	getInitialState() {
 		return {
 			modalLoginLowered: false,
+			skip: 0,
+			limit: 10,
 		};
 	},
 
@@ -53,9 +55,9 @@ CommentaryLayout = React.createClass({
 		}
 
 		// update route if queryParams have changed
-		if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
-			FlowRouter.go('/commentary/', {}, queryParams);
-		}
+		// if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
+		FlowRouter.go('/commentary/', {}, queryParams);
+		// }
 	},
 
 	_createQueryParamsFromFilters(filters) {
@@ -309,6 +311,11 @@ CommentaryLayout = React.createClass({
 			});
 		}
 
+		this.setState({
+			skip: 0,
+			limit: 10,
+		})
+
 		this._updateRoute(filters);
 	},
 
@@ -385,7 +392,7 @@ CommentaryLayout = React.createClass({
 			}
 		}
 
-		if (e.to < 2100) {
+		if (e.to < 1000) {
 			let lineToInFilters = false;
 
 			filters.forEach((filter, i) => {
@@ -415,7 +422,17 @@ CommentaryLayout = React.createClass({
 			}
 		}
 
+		this.setState({
+			skip: 0,
+			limit: 10,
+		});
 		this._updateRoute(filters);
+	},
+
+	loadMoreComments() {
+		this.setState({
+			limit: this.state.limit + 10,
+		});
 	},
 
 	showLoginModal() {
@@ -432,6 +449,7 @@ CommentaryLayout = React.createClass({
 
 	render() {
 		const { queryParams } = this.props;
+		const { skip, limit, modalLoginLowered } = this.state;
 
 		// create filters object based on the queryParams
 		const filters = this._createFilterFromQueryParams(queryParams);
@@ -452,12 +470,15 @@ CommentaryLayout = React.createClass({
 						filters={filters}
 						toggleSearchTerm={this._toggleSearchTerm}
 						showLoginModal={this.showLoginModal}
+						loadMoreComments={this.loadMoreComments}
+						skip={skip}
+						limit={limit}
 					/>
 
 				</div>
-				{this.state.modalLoginLowered ?
+				{modalLoginLowered ?
 					<ModalLogin
-						lowered={this.state.modalLoginLowered}
+						lowered={modalLoginLowered}
 						closeModal={this.closeLoginModal}
 					/>
 					: ''

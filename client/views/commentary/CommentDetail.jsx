@@ -42,17 +42,17 @@ CommentDetail = React.createClass({
 		comment: React.PropTypes.shape({
 			_id: React.PropTypes.string.isRequired,
 			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string.isRequired,
+				_id: React.PropTypes.string,
 				slug: React.PropTypes.string.isRequired,
 				name: React.PropTypes.string.isRequired,
 				avatar: React.PropTypes.shape({
 					src: React.PropTypes.string.isRequired,
 				}),
 			})),
-			referenceWorks: React.PropTypes.shape({
-				text: React.PropTypes.string.isRequired,
-				referenceWorkId: React.PropTypes.string.isRequired,
-			}),
+			referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
+				text: React.PropTypes.string,
+				referenceWorkId: React.PropTypes.string,
+			})),
 			revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
 				_id: React.PropTypes.string.isRequired,
 				created: React.PropTypes.instanceOf(Date).isRequired,
@@ -271,7 +271,7 @@ CommentDetail = React.createClass({
 						commentId={comment._id}
 						revisions={comment.revisions}
 						selectedRevisionIndex={selectedRevisionIndex}
-						selectRevision={this.selectRevision.bind(this)}
+						selectRevision={this.selectRevision}
 					/>
 
 				</article>

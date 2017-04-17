@@ -13,7 +13,7 @@ class CommentCitation extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			openMenu: false,
 			anchorEl: null,
@@ -41,6 +41,12 @@ class CommentCitation extends React.Component {
 		const { commentId, revisions } = this.props;
 		const { openMenu, anchorEl } = this.state;
 
+		const styles = {
+			menuItem: {
+				fontFamily: 'ProximaNW01-AltLightReg',
+			}
+		};
+
 		return (
 			<div className="comment-citation">
 				<RaisedButton
@@ -65,10 +71,15 @@ class CommentCitation extends React.Component {
 									key={revision._id}
 									href={`/commentary/?_id=${commentId}&revision=${i}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
+									style={styles.menuItem}
 								/>
 							);
 						})}
-						<MenuItem href={`/commentary/?_id=${commentId}`} primaryText="Comment link" />
+						<MenuItem
+							href={`/commentary/?_id=${commentId}`} 
+							primaryText="Comment link"
+							style={styles.menuItem}
+						/>
 					</Menu>
 				</Popover>
 			</div>

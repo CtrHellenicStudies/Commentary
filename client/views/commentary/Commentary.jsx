@@ -7,10 +7,14 @@ import InfiniteScroll from '/imports/ui/components/InfiniteScroll.jsx';
 Commentary = React.createClass({
 
 	propTypes: {
+		skip: React.PropTypes.number.isRequired,
+		limit: React.PropTypes.number.isRequired,
 		isOnHomeView: React.PropTypes.bool,
 		filters: React.PropTypes.array.isRequired,
 		commentsReady: React.PropTypes.bool,
 		showLoginModal: React.PropTypes.func,
+		toggleSearchTerm: React.PropTypes.func,
+		loadMoreComments: React.PropTypes.func,
 	},
 
 	childContextTypes: {
@@ -32,8 +36,6 @@ Commentary = React.createClass({
 			},
 			commentLemmaGroups: [],
 			commentGroups: [],
-			skip: 0,
-			limit: 10,
 		};
 	},
 
@@ -45,15 +47,17 @@ Commentary = React.createClass({
 
 	getMeteorData() {
 		let commentGroups = [];
-		const query = this.createQueryFromFilters(this.props.filters);
-		query['tenantId'] = Session.get("tenantId");
+		const { filters, skip, limit } = this.props;
+
+		const query = this.createQueryFromFilters(filters);
+		query.tenantId = Session.get('tenantId');
 
 		// SUBSCRIPTIONS:
-		const commentsSub = Meteor.subscribe('comments', query, this.state.skip, this.state.limit);
+		const commentsSub = Meteor.subscribe('comments', query, skip, limit);
 		let isMoreComments = true;
 
 		// FETCH DATA:
-		const comments = Comments.find({}, {
+		const comments = Comments.find(query, {
 			sort: {
 				'work.order': 1,
 				'subwork.n': 1,
@@ -64,7 +68,7 @@ Commentary = React.createClass({
 
 		commentGroups = this.parseCommentsToCommentGroups(comments);
 
-		if (comments.length < this.state.limit) {
+		if (comments.length < limit) {
 			isMoreComments = false;
 		}
 
@@ -73,7 +77,7 @@ Commentary = React.createClass({
 		return {
 			commentGroups,
 			isMoreComments,
-			loading: commentsSub.ready(),
+			ready: commentsSub.ready(),
 			settings: settingsHandle.ready() ? Settings.findOne() : {},
 		};
 	},
@@ -250,25 +254,6 @@ Commentary = React.createClass({
 		return query;
 	},
 
-	toggleSearchTerm(key, value) {
-		this.props.toggleSearchTerm(key, value);
-		this.setState({
-			skip: 0,
-		});
-	},
-
-	loadMoreComments() {
-		if (
-			!this.props.isOnHomeView
-		&& this.data.commentGroups.length
-		&& this.data.isMoreComments
-	) {
-			this.setState({
-				limit: this.state.limit + 10,
-			});
-		}
-	},
-
 	toggleLemmaEdition() {
 		this.setState({
 			selectedLemmaEdition: {},
@@ -368,12 +353,12 @@ Commentary = React.createClass({
 		if (subwork) title = `${title} ${subwork}`;
 		if (lineFrom) {
 			if (lineTo) {
-				title = `${title} ${lineFrom}-${lineTo}`;
+				title = `${title}.${lineFrom}-${lineTo}`;
 			} else {
-				title = `${title} ${lineFrom}`;
+				title = `${title}.${lineFrom}`;
 			}
 		} else if (lineTo) {
-			title = `${title} ${lineTo}`;
+			title = `${title}.${lineTo}`;
 		} else {
 			title = `${title}`;
 		}
@@ -395,14 +380,24 @@ Commentary = React.createClass({
 		Utils.setMetaImage();
 	},
 
-	renderNoCommentsOrLoading() {
+	loadMoreComments() {
 		if (
-				'isMoreComments' in this.data
-			&& typeof this.data.isMoreComments !== 'undefined'
+				!this.isOnHomeView
+			&& this.data.commentGroups.length
 			&& this.data.isMoreComments
-			&& !this.props.isOnHomeView
 		) {
-			if (this.data.commentGroups.length === 0 && !this.data.loading) {
+			this.props.loadMoreComments();
+		}
+	},
+
+	renderNoCommentsOrLoading() {
+		const { isOnHomeView } = this.props;
+		const { isMoreComments, commentGroups, ready} = this.data;
+
+		if (
+			!isOnHomeView
+		) {
+			if (ready && commentGroups.length === 0) {
 				return (
 					<div className="no-commentary-wrap">
 						<p className="no-commentary no-results">
@@ -410,20 +405,22 @@ Commentary = React.createClass({
 						</p>
 					</div>
 				);
+			} else if (isMoreComments) {
+				return (
+					<div className="ahcip-spinner commentary-loading">
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
+					</div>
+				);
 			}
-
-			return (
-				<div className="ahcip-spinner commentary-loading">
-					<div className="double-bounce1" />
-					<div className="double-bounce2" />
-				</div>
-			);
 		}
 
 		return '';
 	},
 
 	render() {
+		const { commentGroups } = this.data;
+
 		let isOnHomeView;
 		if ('isOnHomeView' in this.props) {
 			isOnHomeView = this.props.isOnHomeView;
@@ -444,7 +441,7 @@ Commentary = React.createClass({
 					loadMore={debounce(1000, this.loadMoreComments)}
 				>
 					<div className="commentary-comments commentary-comment-groups">
-						{this.data.commentGroups.map((commentGroup, commentGroupIndex) => (
+						{commentGroups.map((commentGroup, commentGroupIndex) => (
 							<CommentGroup
 								key={commentGroupIndex}
 								commentGroupIndex={commentGroupIndex}
@@ -452,7 +449,7 @@ Commentary = React.createClass({
 								contextPanelOpen={this.state.contextPanelOpen}
 								showContextPanel={this.showContextPanel}
 								contextScrollPosition={this.contextScrollPosition}
-								toggleSearchTerm={this.toggleSearchTerm}
+								toggleSearchTerm={this.props.toggleSearchTerm}
 								showLoginModal={this.props.showLoginModal}
 								filters={this.props.filters}
 								isOnHomeView={this.props.isOnHomeView}
@@ -476,7 +473,7 @@ Commentary = React.createClass({
 				{!isOnHomeView ?
 					<FilterWidget
 						filters={this.props.filters}
-						toggleSearchTerm={this.toggleSearchTerm}
+						toggleSearchTerm={this.props.toggleSearchTerm}
 					/>
 					: ''}
 			</div>

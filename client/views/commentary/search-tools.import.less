@@ -73,8 +73,7 @@
       text-align: left;
       overflow-y: scroll;
       max-height: 392px;
-      border-bottom: 1px solid #eee;
-
+      // border-bottom: 1px solid #eee;
     }
 
     li {
@@ -90,41 +89,50 @@
 
   }
 }
-button.search-term-button {
-  background: #f6f6f6;
-  padding: 2px 10px 4px !important;
-  text-align: left !important;
+.search-term-button {
+  background: #fefefe;
   width: 100%;
-	height: auto !important;
-  text-overflow: ellipsis;
+	height: 42px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: left;
+	padding: 2px 10px 4px;
+	border: 1px solid #f6f6f6;
+	box-radius: 2px;
+	outline:none;
+	.transition(all 100ms ease-in-out);
+
+	&:focus {
+		outline:none;
+	}
 
   &:hover {
-    background: #f0f0f0;
-    .mdi {
+    background: #fafafa;
+	  .search-term-button-label {
       color: @dark;
-
     }
   }
 
   &.search-term-button--active {
-    background-color: @primary !important;
+    background-color: @primary;
 
-    .mdi, span {
-      color: @light !important;
-
+    .search-term-button-icon, span {
+      color: @light;
     }
-
   }
 
-	.mdi {
+	.search-term-button-icon {
 		display:none !important;
 		&:before {
 			font-size:18px;
 		}
 	}
 
-  span {
-    font-family: @font-label( 14px );
+  .search-term-button-label {
+    font-family: @font-label( 12px );
+		font-weight: bold;
+		color: @secondary-text;
   }
 
 }
@@ -168,7 +176,8 @@ button.search-term-button {
   }
 
   span {
-    font-family: @font-label(14px);
+    font-family: @font-label;
+		font-size: 14px;
     color: @primary-dark;
 
   }

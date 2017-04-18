@@ -136,6 +136,7 @@ AddCommentLayout = React.createClass({
 
 			// get keywords after they were created:
 			const keywords = this.getKeywords(formData);
+			const revisionId = new Meteor.Collection.ObjectID();
 
 			// create comment object to be inserted:
 			const comment = {
@@ -153,6 +154,7 @@ AddCommentLayout = React.createClass({
 				lineLetter,
 				nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
 				revisions: [{
+					_id: revisionId.valueOf(), 
 					title: formData.titleValue,
 					text: textValue,
 					textRaw: textRawValue,

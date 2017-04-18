@@ -1,9 +1,10 @@
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';  // eslint-disable-line import/no-absolute-path
 import FontIcon from 'material-ui/FontIcon';
+import FlatButton from 'material-ui/FlatButton';
 
 
 /*
-	BEGIN CommentUpperLeft 
+	BEGIN CommentUpperLeft
 */
 const CommentUpperLeft = props => (
 	<div className="comment-upper-left">
@@ -14,13 +15,12 @@ CommentUpperLeft.propTypes = {
 	title: React.PropTypes.string.isRequired,
 };
 /*
-	END CommentUpperLeft 
+	END CommentUpperLeft
 */
 
 
-
 /*
-	BEGIN CommentUpperRight 
+	BEGIN CommentUpperRight
 */
 const CommentUpperRight = props => (
 	<div className="comment-upper-right">
@@ -32,7 +32,7 @@ const CommentUpperRight = props => (
 				{props.userCanEditCommenters.indexOf(commenter._id) > -1 ?
 					<FlatButton
 						label="Edit comment"
-						href={`/commentary/${comment._id}/edit`}
+						href={`/commentary/${props.commentId}/edit`}
 						icon={<FontIcon className="mdi mdi-pen" />}
 					/>
 					:
@@ -70,6 +70,7 @@ CommentUpperRight.propTypes = {
 			src: React.PropTypes.string.isRequired,
 		})
 	})).isRequired,
+	commentId: React.PropTypes.string.isRequired,
 	updateDate: React.PropTypes.string.isRequired,
 	userCanEditCommenters: React.PropTypes.arrayOf(React.PropTypes.string),
 };
@@ -77,13 +78,13 @@ CommentUpperRight.defaultProps = {
 	userCanEditCommenters: [],
 };
 /*
-	END CommentUpperRight 
+	END CommentUpperRight
 */
 
 
 
 /*
-	BEGIN CommentUpper 
+	BEGIN CommentUpper
 */
 const CommentUpper = (props) => (
 	<div className="comment-upper">
@@ -92,12 +93,15 @@ const CommentUpper = (props) => (
 		/>}
 		{!props.hideCommenters && <CommentUpperRight
 			commenters={props.commenters}
+			commentId={props.commentId}
 			updateDate={props.updateDate}
+			userCanEditCommenters={props.userCanEditCommenters}
 		/>}
 	</div>
 );
 CommentUpper.propTypes = {
 	title: React.PropTypes.string.isRequired,
+	commentId: React.PropTypes.string.isRequired,
 	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
 		slug: React.PropTypes.string.isRequired,
@@ -117,7 +121,7 @@ CommentUpper.defaultProps = {
 	hideCommenters: false,
 };
 /*
-	END CommentUpper 
+	END CommentUpper
 */
 
 export default CommentUpper;

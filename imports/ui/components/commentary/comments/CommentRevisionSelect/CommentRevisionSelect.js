@@ -43,7 +43,7 @@ CommentRevisionSelect.propTypes = {
 	commentId: React.PropTypes.string.isRequired,
 	revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
-		created: React.PropTypes.instanceOf(Date).isRequired,
+		created: React.PropTypes.instanceOf(Date),
 		updated: React.PropTypes.instanceOf(Date),
 		originalDate: React.PropTypes.instanceOf(Date),
 	})).isRequired,

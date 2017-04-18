@@ -42,7 +42,7 @@ CommentDetail = React.createClass({
 		comment: React.PropTypes.shape({
 			_id: React.PropTypes.string.isRequired,
 			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string,
+				_id: React.PropTypes.string.isRequired,
 				slug: React.PropTypes.string.isRequired,
 				name: React.PropTypes.string.isRequired,
 				avatar: React.PropTypes.shape({
@@ -55,7 +55,7 @@ CommentDetail = React.createClass({
 			})),
 			revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
 				_id: React.PropTypes.string.isRequired,
-				created: React.PropTypes.instanceOf(Date).isRequired,
+				created: React.PropTypes.instanceOf(Date),
 				updated: React.PropTypes.instanceOf(Date),
 				originalDate: React.PropTypes.instanceOf(Date),
 			}))
@@ -250,6 +250,7 @@ CommentDetail = React.createClass({
 
 					<CommentUpper
 						title={selectedRevision.title}
+						commentId={comment._id}
 						commenters={comment.commenters}
 						updateDate={getUpdateDate(selectedRevision)}
 						userCanEditCommenters={getUserCanEditCommenters()}

@@ -76,7 +76,7 @@ class CommentCitation extends React.Component {
 							);
 						})}
 						<MenuItem
-							href={`/commentary/?_id=${commentId}`} 
+							href={`/commentary/?_id=${commentId}`}
 							primaryText="Comment link"
 							style={styles.menuItem}
 						/>
@@ -90,7 +90,7 @@ CommentCitation.propTypes = {
 	commentId: React.PropTypes.string.isRequired,
 	revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
-		created: React.PropTypes.instanceOf(Date).isRequired,
+		created: React.PropTypes.instanceOf(Date),
 		updated: React.PropTypes.instanceOf(Date),
 		originalDate: React.PropTypes.instanceOf(Date),
 	})).isRequired,

@@ -27,8 +27,8 @@ const commentsReferenceWorkFix = () => {
 	console.log(' -- method commentsReferenceWorkFix run completed');
 };
 
-/*
-Meteor.startup(() => {
+Meteor.method('commentsReferenceWorkFix', () => {
 	commentsReferenceWorkFix();
+}, {
+	url: 'fix/comments/referenceWorks',
 });
-*/

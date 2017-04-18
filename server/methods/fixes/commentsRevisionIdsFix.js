@@ -29,8 +29,8 @@ const commentsRevisionIdsFix = () => {
 	console.log(' -- method commentsRevisionIdsFix run completed');
 };
 
-/*
-Meteor.startup(() => {
+Meteor.method('commentsRevisionIdsFix', () => {
 	commentsRevisionIdsFix();
+}, {
+	url: 'fix/comments/revisionIds',
 });
-*/

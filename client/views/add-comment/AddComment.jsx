@@ -334,9 +334,7 @@ AddComment = React.createClass({
 				}
 			},
 		})(textEditorState.getCurrentContent());
-
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
-
 		this.props.submitForm(this.state, textHtml, textRaw);
 	},
 
@@ -614,7 +612,6 @@ AddComment = React.createClass({
 										type="submit"
 										label="Add comment"
 										labelPosition="after"
-										onClick={this.handleSubmit}
 										icon={<FontIcon className="mdi mdi-plus" />}
 									/>
 								</div>

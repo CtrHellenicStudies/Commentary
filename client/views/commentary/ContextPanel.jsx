@@ -5,6 +5,9 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextNodes from '/imports/collections/textNodes';
 
+// components:
+import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText'; // eslint-disable-line import/no-absolute-path
+
 ContextPanel = React.createClass({
 
 	propTypes: {
@@ -219,6 +222,15 @@ ContextPanel = React.createClass({
 					onClick={this.props.closeContextPanel}
 					iconClassName="mdi mdi-close"
 				/>
+
+				{/*<ContextPanelText
+					onBeforeClicked={this.onBeforeClicked}
+					onAfterClicked={this.onAfterClicked}
+					selectedLemmaEdition={this.data.selectedLemmaEdition}
+					lineFrom={this.props.commentGroup.lineFrom}
+					lineTo={this.props.commentGroup.lineTo}
+					maxLine={this.state.maxLine}
+				/>*/}
 
 				<div className="lemma-text-wrap">
 

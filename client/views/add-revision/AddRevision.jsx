@@ -12,6 +12,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Creatable } from 'react-select';
 import Formsy from 'formsy-react';
+import { FormsyText } from 'formsy-material-ui/lib';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
@@ -347,6 +348,12 @@ AddRevision = React.createClass({
 	},
 
 	handleUpdate() {
+		const data = this.refs.form.getModel(); // eslint-disable-line
+		for (key in data) { // eslint-disable-line
+			const params = key.split('_');
+			params[0] = parseInt(params[0], 10);
+			this.state.referenceWorks[params[0]][params[1]] = data[key];
+		}
 		this.props.update(this.state);
 	},
 
@@ -408,6 +415,7 @@ AddRevision = React.createClass({
 				<div className="comment-outer">
 
 					<Formsy.Form
+						ref="form"
 						onValid={this._enableButton}
 						onInvalid={this._disableButton}
 						onValidSubmit={this.handleSubmit}
@@ -562,26 +570,30 @@ AddRevision = React.createClass({
 															/>
 															<FormGroup>
 																<ControlLabel>Section Number: </ControlLabel>
-																<TextField
-																	hintText=". . ."
+																<FormsyText
+																	name={`${i}_section`}
+																	defaultValue={referenceWork.section}
 																/>
 															</FormGroup>
 															<FormGroup>
-																<ControlLabel>Paragraph Number: </ControlLabel>
-																<TextField
-																	hintText=". . ."
+																<ControlLabel>Chapter Number: </ControlLabel>
+																<FormsyText
+																	name={`${i}_chapter`}
+																	defaultValue={referenceWork.chapter}
 																/>
 															</FormGroup>
 															<FormGroup>
 																<ControlLabel>Translation Number: </ControlLabel>
-																<TextField
-																	hintText=". . ."
+																<FormsyText
+																	name={`${i}_translation`}
+																	defaultValue={referenceWork.translation}
 																/>
 															</FormGroup>
 															<FormGroup>
 																<ControlLabel>Note Number: </ControlLabel>
-																<TextField
-																	hintText=". . ."
+																<FormsyText
+																	name={`${i}_note`}
+																	defaultValue={referenceWork.note}
 																/>
 															</FormGroup>
 														</div>

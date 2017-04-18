@@ -24,6 +24,7 @@
     "draft-js-side-toolbar-plugin": "^2.0.0-beta9",
     "draft-js-single-line-plugin": "0.0.1",
     "express": "^4.14.1",
+    "formsy-material-ui": "^0.6.0",
     "formsy-react": "^0.19.2",
     "gm": "^1.23.0",
     "graphql": "^0.9.1",
@@ -104,6 +105,8 @@
     "url": "git@gitlab.archimedesdigital.io:archimedes/ahcip.git"
   },
   "cssModules": {
-    "ignorePaths": [ "node_modules" ]
-  } 
+    "ignorePaths": [
+      "node_modules"
+    ]
+  }
 }

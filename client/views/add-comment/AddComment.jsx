@@ -1,4 +1,5 @@
 import { Session } from 'meteor/session';
+import { Random } from 'meteor/random';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
@@ -9,6 +10,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import Formsy from 'formsy-react';
+import { FormsyText } from 'formsy-material-ui/lib';
 import {
 	FormGroup,
 	ControlLabel,
@@ -18,6 +20,7 @@ import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
+import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
@@ -306,7 +309,7 @@ AddComment = React.createClass({
 
 	// --- BEGIN SUBMIT / VALIDATION HANDLE --- //
 
-	handleSubmit() {
+	handleSubmit(data) {
 		const { textEditorState } = this.state;
 
 		// TODO: form validation
@@ -335,6 +338,13 @@ AddComment = React.createClass({
 			},
 		})(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
+
+		for (key in data) { // eslint-disable-line
+			const params = key.split('_');
+			params[0] = parseInt(params[0], 10);
+			this.state.referenceWorks[params[0]][params[1]] = data[key];
+		}
+
 		this.props.submitForm(this.state, textHtml, textRaw);
 	},
 
@@ -380,7 +390,7 @@ AddComment = React.createClass({
 	},
 
 	addReferenceWorkBlock() {
-		this.state.referenceWorks.push({ referenceWorkId: '0' });
+		this.state.referenceWorks.push({ referenceWorkId: Random.id() });
 		this.setState({
 			referenceWorks: this.state.referenceWorks,
 		});
@@ -573,26 +583,26 @@ AddComment = React.createClass({
 															/>
 															<FormGroup>
 																<ControlLabel>Section Number: </ControlLabel>
-																<TextField
-																	hintText=". . ."
+																<FormsyText
+																	name={`${i}_section`}
 																/>
 															</FormGroup>
 															<FormGroup>
-																<ControlLabel>Paragraph Number: </ControlLabel>
-																<TextField
-																	hintText=". . ."
+																<ControlLabel>Chapter Number: </ControlLabel>
+																<FormsyText
+																	name={`${i}_chapter`}
 																/>
 															</FormGroup>
 															<FormGroup>
 																<ControlLabel>Translation Number: </ControlLabel>
-																<TextField
-																	hintText=". . ."
+																<FormsyText
+																	name={`${i}_translation`}
 																/>
 															</FormGroup>
 															<FormGroup>
 																<ControlLabel>Note Number: </ControlLabel>
-																<TextField
-																	hintText=". . ."
+																<FormsyText
+																	name={`${i}_note`}
 																/>
 															</FormGroup>
 														</div>

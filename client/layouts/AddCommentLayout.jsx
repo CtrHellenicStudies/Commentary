@@ -154,7 +154,7 @@ AddCommentLayout = React.createClass({
 				lineLetter,
 				nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
 				revisions: [{
-					_id: revisionId.valueOf(), 
+					_id: revisionId.valueOf(),
 					title: formData.titleValue,
 					text: textValue,
 					textRaw: textRawValue,

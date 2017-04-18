@@ -1,4 +1,5 @@
-import FlatButton from 'material-ui/FlatButton';
+import { createContainer } from 'meteor/react-meteor-data';
+
 // api:
 import ReferenceWorks from '/imports/collections/referenceWorks';  // eslint-disable-line import/no-absolute-path
 
@@ -11,6 +12,9 @@ import CommentLower from '/imports/ui/components/commentary/comments/CommentLowe
 import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';  // eslint-disable-line import/no-absolute-path
 
 
+/*
+	helpers
+*/
 const getUpdateDate = (selectedRevision) => {
 	let updated = selectedRevision.created;
 	if (selectedRevision.originalDate) {
@@ -36,9 +40,12 @@ const getCommentClass = (discussionVisible) => {
 	return commentClass;
 };
 
-CommentDetail = React.createClass({
 
-	propTypes: {
+/*
+	BEGIN CommentDetail
+*/
+class CommentDetail extends React.Component {
+	static propTypes = {
 		comment: React.PropTypes.shape({
 			_id: React.PropTypes.string.isRequired,
 			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -68,22 +75,28 @@ CommentDetail = React.createClass({
 		isOnHomeView: React.PropTypes.bool,
 		showLoginModal: React.PropTypes.func,
 		toggleLemma: React.PropTypes.func.isRequired,
-	},
 
-	getDefaultProps() {
-		return {
-			filters: null,
-			toggleSearchTerm: null,
-			isOnHomeView: false,
-			showLoginModal: null,
-		};
-	},
+		// from createContainer:
+		referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
+			title: React.PropTypes.string.isRequired,
+			slug: React.PropTypes.string.isRequired,
+		})),
+		ready: React.PropTypes.bool,
+	};
 
-	mixins: [ReactMeteorData],
+	static defaultProps = {
+		filters: null,
+		toggleSearchTerm: null,
+		isOnHomeView: false,
+		showLoginModal: null,
+		referenceWorks: null,
+		ready: false,
+	};
 
-	getInitialState() {
-
-		return {
+	constructor(props) {
+		super(props);
+		
+		this.state = {
 			selectedRevisionIndex: null,
 			discussionVisible: false,
 			lemmaReferenceModalVisible: false,
@@ -99,25 +112,39 @@ CommentDetail = React.createClass({
 			persistentIdentifierModalTop: 0,
 			persistentIdentifierModalLeft: 0,
 		};
-	},
 
-	getMeteorData() {
-		const { comment } = this.props;
-		const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-		const referenceWorkIds = [];
-		let referenceWorks = [];
-		if ('referenceWorks' in comment) {
-			comment.referenceWorks.forEach(referenceWork => {
-				referenceWorkIds.push(referenceWork.referenceWorkId);
+		// methods:
+		this.getRevisionIndex = this.getRevisionIndex.bind(this);
+		this.addSearchTerm = this.addSearchTerm.bind(this);
+		this.showDiscussionThread = this.showDiscussionThread.bind(this);
+		this.hideDiscussionThread = this.hideDiscussionThread.bind(this);
+		this.checkIfToggleReferenceModal = this.checkIfToggleReferenceModal.bind(this);
+		this.closeLemmaReference = this.closeLemmaReference.bind(this);
+		this.closeKeywordReference = this.closeKeywordReference.bind(this);
+		this.selectRevision = this.selectRevision.bind(this);
+		
+	}
+
+	getRevisionIndex() {
+		const { comment, filters } = this.props;
+		let selectedRevisionIndex = this.state.selectedRevisionIndex;
+		if (selectedRevisionIndex === null) {
+			let foundRevision = null;
+			filters.forEach((filter) => {
+				if (filter.key === 'revision') {
+					foundRevision = filter.values[0];
+				}
 			});
-			referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
-		}
 
-		return {
-			referenceWorks,
-			ready: handle.ready(),
-		};
-	},
+			if (foundRevision != null && foundRevision >= 0 &&
+				foundRevision < comment.revisions.length) {
+				selectedRevisionIndex = foundRevision;
+			} else {
+				selectedRevisionIndex = comment.revisions.length - 1;
+			}
+		}
+		return selectedRevisionIndex;
+	}
 
 	addSearchTerm(keyword) {
 		if (!('isOnHomeView' in this.props) || this.props.isOnHomeView === false) {
@@ -125,19 +152,19 @@ CommentDetail = React.createClass({
 		} else {
 			FlowRouter.go('/commentary/', {}, { keywords: keyword.slug });
 		}
-	},
+	}
 
 	showDiscussionThread() {
 		this.setState({
 			discussionVisible: true,
 		});
-	},
+	}
 
 	hideDiscussionThread() {
 		this.setState({
 			discussionVisible: false,
 		});
-	},
+	}
 
 	checkIfToggleReferenceModal(e) {
 		const $target = $(e.target);
@@ -176,7 +203,7 @@ CommentDetail = React.createClass({
 				keyword,
 			});
 		}
-	},
+	}
 
 	closeLemmaReference() {
 		this.setState({
@@ -188,7 +215,7 @@ CommentDetail = React.createClass({
 			lemmaReferenceTop: 0,
 			lemmaReferenceLeft: 0,
 		});
-	},
+	}
 
 	closeKeywordReference() {
 		this.setState({
@@ -197,40 +224,18 @@ CommentDetail = React.createClass({
 			keywordReferenceLeft: 0,
 			keyword: '',
 		});
-	},
+	}
 
 	selectRevision(event) {
 		this.setState({
 			selectedRevisionIndex: parseInt(event.currentTarget.id, 10),
 		});
-	},
-
-	getRevisionIndex() {
-		const { comment, filters } = this.props;
-		let selectedRevisionIndex = this.state.selectedRevisionIndex;
-		if (selectedRevisionIndex === null) {
-			let foundRevision = null;
-			filters.forEach((filter) => {
-				if (filter.key === 'revision') {
-					foundRevision = filter.values[0];
-				}
-			});
-
-			if (foundRevision != null && foundRevision >= 0 &&
-				foundRevision < comment.revisions.length) {
-				selectedRevisionIndex = foundRevision;
-			} else {
-				selectedRevisionIndex = comment.revisions.length - 1;
-			}
-		}
-		return selectedRevisionIndex;
-	},
+	}
 
 	render() {
 
-		const { comment } = this.props;
+		const { comment, referenceWorks, ready } = this.props;
 		const { discussionVisible } = this.state;
-		const { referenceWorks, ready } = this.data;
 
 		if (!ready) {
 			return null;
@@ -310,5 +315,28 @@ CommentDetail = React.createClass({
 				: ''}
 			</div>
 		);
-	},
-});
+	}
+}
+
+/*
+	END CommentDetail
+*/
+
+export default createContainer(({ comment }) => {
+
+	const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+
+	const referenceWorkIds = [];
+	let referenceWorks = [];
+	if ('referenceWorks' in comment) {
+		comment.referenceWorks.forEach((referenceWork) => {
+			referenceWorkIds.push(referenceWork.referenceWorkId);
+		});
+		referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
+	}
+
+	return {
+		referenceWorks,
+		ready: handle.ready(),
+	};
+}, CommentDetail);

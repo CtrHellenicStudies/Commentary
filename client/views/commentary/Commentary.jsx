@@ -1,8 +1,15 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
-import Comments from '/imports/collections/comments';
-import InfiniteScroll from '/imports/ui/components/InfiniteScroll.jsx';
+
+// api:
+import Comments from '/imports/collections/comments';// eslint-disable-line import/no-absolute-path
+
+// layouts:
+import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';  // eslint-disable-line import/no-absolute-path
+
+// components:
+import InfiniteScroll from '/imports/ui/components/InfiniteScroll.jsx';// eslint-disable-line import/no-absolute-path
 
 Commentary = React.createClass({
 

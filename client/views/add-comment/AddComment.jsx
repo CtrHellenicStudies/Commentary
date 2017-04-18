@@ -311,7 +311,11 @@ AddComment = React.createClass({
 
 		// TODO: form validation
 		// TODO: Migrate to formsy components
-		// console.log(data);
+		const error = this.validateStateForSubmit();
+		this.showSnackBar(error);
+		if (error.errors) {
+			return false;
+		}
 
 		// create html from textEditorState's content
 		const textHtml = convertToHTML({

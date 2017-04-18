@@ -2,6 +2,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import Comments from '/imports/collections/comments';
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
 HomeView = React.createClass({
 
@@ -85,10 +86,9 @@ HomeView = React.createClass({
 				<div className="content primary">
 
 					<section className="header cover fullscreen parallax">
-						<div className="background-image-holder remove-blur blur-10">
-							<img className="background-image" src={imageUrl} role="presentation" />
-						</div>
-						<div className="block-screen brown" />
+						<BackgroundImageHolder
+							imgSrc={imageUrl}
+						/>
 
 						<div
 							className="container v-align-transform wow fadeIn"
@@ -186,14 +186,9 @@ HomeView = React.createClass({
 					</section>
 
 					<section className="commentors">
-						<div className="background-image-holder blur-4--no-remove">
-							<img
-								className="background-image"
-								src="/images/school-athens.jpg"
-								role="presentation"
-							/>
-						</div>
-						<div className="block-screen" />
+						<BackgroundImageHolder
+							imgSrc="/images/school-athens.jpg"
+						/>
 
 						<div className="container">
 							<h2 className="block-title">Commentators</h2>
@@ -256,6 +251,8 @@ HomeView = React.createClass({
 									filters={[]}
 									comments={this.data.comments}
 									commentsReady={this.data.commentsReady}
+									skip={0}
+									limit={10}
 								/>
 								:
 									<Spinner />

@@ -1,6 +1,7 @@
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 import Commenters from '/imports/collections/commenters';
 import ReferenceWorks from '/imports/collections/referenceWorks';
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
 ReferenceWorkDetail = React.createClass({
 
@@ -67,14 +68,9 @@ ReferenceWorkDetail = React.createClass({
 			<div className="page reference-works-page reference-works-detail-page">
 				<div className="content primary">
 					<section className="block header header-page cover parallax">
-						<div className="background-image-holder blur-2--no-remove remove-blur blur-10">
-							<img
-								className="background-image"
-								src="/images/apotheosis_homer.jpg"
-								role="presentation"
-							/>
-						</div>
-						<div className="block-screen brown" />
+						<BackgroundImageHolder
+							imgSrc="/images/apotheosis_homer.jpg"
+						/>
 
 						<div className="container v-align-transform">
 							<div className="grid inner">

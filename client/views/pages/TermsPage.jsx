@@ -1,3 +1,5 @@
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+
 TermsPage = React.createClass({
 
 	mixins: [ReactMeteorData],
@@ -21,15 +23,9 @@ TermsPage = React.createClass({
 
 				<section className="page-head terms-header image-bg bg-dark">
 
-					<div className="background-image-holder blur">
-						<img
-							role="presentation"
-							className="background-image"
-							src="/images/greek-inscription.jpg"
-						/>
-					</div>
-
-					<div className="background-screen" />
+					<BackgroundImageHolder
+						imgSrc="/images/greek-inscription.jpg"
+					/>
 
 					<div className="container v-align-transform">
 						<div className="row">

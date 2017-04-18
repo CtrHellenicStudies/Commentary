@@ -3,6 +3,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import KeywordContext from '/imports/ui/components/KeywordContext.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import Keywords from '/imports/collections/keywords';
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import KeywordCommentList from '/imports/client/views/keywords/KeywordCommentList';
 
 KeywordDetail = React.createClass({
 
@@ -41,9 +43,18 @@ KeywordDetail = React.createClass({
 		};
 		const keyword = Keywords.findOne(query);
 
+		let keywordComments = null;
+		if (keyword) {
+			const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
+			Meteor.subscribe('comments', keywordCommentsQuery);
+
+			keywordComments = Comments.find(keywordCommentsQuery).fetch();
+		}
+
 		return {
 			keyword,
-			settings: settingsHandle.ready() ? Settings.findOne() : {}
+			settings: settingsHandle.ready() ? Settings.findOne() : {},
+			keywordComments,
 		};
 	},
 
@@ -83,7 +94,7 @@ KeywordDetail = React.createClass({
 
 	render() {
 		const keyword = this.data.keyword;
-		const { settings } = this.data;
+		const { settings, keywordComments } = this.data;
 
 		if (!keyword) {
 			return <div />;
@@ -99,14 +110,9 @@ KeywordDetail = React.createClass({
 			<div className="page keywords-page keywords-detail-page">
 				<div className="content primary">
 					<section className="block header header-page cover parallax">
-						<div className="background-image-holder blur-2--no-remove remove-blur blur-10">
-							<img
-								className="background-image"
-								src="/images/apotheosis_homer.jpg"
-								role="presentation"
-							/>
-						</div>
-						<div className="block-screen brown" />
+						<BackgroundImageHolder
+							imgSrc="/images/apotheosis_homer.jpg"
+						/>
 
 						<div className="container v-align-transform">
 							<div className="grid inner">
@@ -152,6 +158,15 @@ KeywordDetail = React.createClass({
 									No description available.
 								</p>
 						}
+
+						<hr />
+
+						<h1>Related comments</h1>
+
+						<KeywordCommentList
+							keywordComments={keywordComments}
+						/>
+
 					</section>
 
 					<CommentsRecent />

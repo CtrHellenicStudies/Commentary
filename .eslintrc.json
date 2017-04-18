@@ -58,10 +58,11 @@
 		"no-trailing-spaces": "off",
 		"space-before-function-paren": "off",
 		"prefer-arrow-callback": "off",
-    "max-len": "off",
-    "jsx-a11y/anchor-has-content": "off",
-    "no-bitwise": "off",
-    "padded-blocks": "off",
-    "import/extensions": "off"
+		"max-len": "off",
+		"jsx-a11y/anchor-has-content": "off",
+		"no-bitwise": "off",
+		"padded-blocks": "off",
+		"import/extensions": "off",
+		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
 	}
 }

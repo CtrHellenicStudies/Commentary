@@ -1,4 +1,5 @@
 import Pages from '/imports/collections/pages';
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
 SinglePage = React.createClass({
 	propTypes: {
@@ -64,15 +65,9 @@ SinglePage = React.createClass({
 			<div className={`page page-${slug} content primary`}>
 
 				<section className="block header header-page cover parallax">
-					<div className="background-image-holder blur-2--no-remove remove-blur	blur-10">
-						<img
-							role="presentation"
-							className="background-image"
-							src="/images/apotheosis_homer.jpg"
-						/>
-					</div>
-
-					<div className="block-screen brown" />
+					<BackgroundImageHolder
+						imgSrc="/images/apotheosis_homer.jpg"
+					/>
 
 					<div className="container v-align-transform">
 						<div className="grid inner">

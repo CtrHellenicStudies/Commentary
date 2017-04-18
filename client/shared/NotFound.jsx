@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
 NotFound = React.createClass({
 
@@ -11,36 +12,6 @@ NotFound = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
-	componentDidMount() {
-		this.backgroundImages();
-		setTimeout(() => {
-			const elem = document.querySelector('header');
-			if (elem) {
-				const headroom = new Headroom(elem);
-				headroom.init();
-			}
-		}, 300);
-	},
-
-	backgroundImages() {
-		setTimeout(() => {
-			$('.background-image-holder').each(function appendImg() {
-				const imgSrc = $(this).children('img').attr('src');
-				$(this).css('background', `url("${imgSrc}")`);
-				$(this).children('img').hide();
-				$(this).css('background-position', 'initial');
-				$(this).addClass('fadeIn');
-			});
-
-			// Fade in background images
-			setTimeout(() => {
-				$('.background-image-holder').each(function fadeImg() {
-					$(this).removeClass('blur');
-				});
-			}, 500);
-		}, 100);
 	},
 
 	render() {
@@ -69,15 +40,9 @@ NotFound = React.createClass({
 				<div className="page page-not-found content primary">
 
 				<section className="block header header-page	cover parallax">
-					<div className="background-image-holder blur-4--no-remove remove-blur	blur-10">
-							<img
-								className="background-image"
-								role="presentation"
-								src="/images/odysseus.jpg"
-							/>
-						</div>
-
-						<div className="block-screen brown" />
+						<BackgroundImageHolder
+							imgSrc="/images/odysseus.jpg"
+						/>
 
 						<div className="container v-align-transform">
 							<div className="grid inner">

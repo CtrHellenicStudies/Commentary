@@ -1,4 +1,5 @@
 import Commenters from '/imports/collections/commenters';
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
 CommenterDetail = React.createClass({
 
@@ -59,14 +60,9 @@ CommenterDetail = React.createClass({
 				<div className="page page-commenter-detail">
 					<div className="content primary">
 						<section className="block header cover parallax">
-							<div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
-								<img
-									className="background-image"
-									alt="A Homer Commentary in Progress - Commentator"
-									src="/images/capitals.jpg"
-								/>
-							</div>
-							<div className="block-screen brown" />
+							<BackgroundImageHolder
+								imgSrc="/images/capitals.jpg"
+							/>
 							<div className="container v-align-transform">
 								<div className="grid inner">
 									<div className="center-content">

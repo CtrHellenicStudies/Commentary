@@ -60,14 +60,9 @@ if (Meteor.isServer) {
 	});
 
 
-	Meteor.publish('textNodes', (textQuery, skip = 0, limit = 100) => {
-		check(textQuery, Match.Maybe(Object));
-		const query = textQuery || {};
-
+	Meteor.publish('textNodes', (query = {}, skip = 0, limit = 100) => {
+		check(query, Object);
 		return TextNodes.find(query, {
-			sort: {
-				'text.n': 1,
-			},
 			limit,
 			skip,
 		});

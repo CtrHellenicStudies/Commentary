@@ -33,7 +33,6 @@ CommentLemma = React.createClass({
 				$gte: commentGroup.lineFrom,
 			},
 		};
-		let lemmaText = [];
 
 		if (typeof commentGroup.lineTo !== 'undefined') {
 			lemmaQuery['text.n'].$lte = commentGroup.lineTo;
@@ -45,54 +44,60 @@ CommentLemma = React.createClass({
 		}
 
 		const handle = Meteor.subscribe('textNodes', lemmaQuery);
-		if (handle.ready()) {
-			const textNodes = TextNodes.find(lemmaQuery).fetch();
-			const editions = [];
+		const textNodes = TextNodes.find(lemmaQuery).fetch();
+		const editions = [];
 
-			let textIsInEdition = false;
-			textNodes.forEach((textNode) => {
-				textNode.text.forEach((text) => {
-					textIsInEdition = false;
-
-					editions.forEach((edition) => {
-						if (text.edition.slug === edition.slug) {
+		let textIsInEdition = false;
+		textNodes.forEach((textNode) => {
+			textNode.text.forEach((text) => {
+				textIsInEdition = false;
+				
+				editions.forEach((edition) => {
+					if (text.edition.slug === edition.slug) {
+						if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {
 							edition.lines.push({
 								html: text.html,
 								n: text.n,
 							});
-							textIsInEdition = true;
 						}
-					});
-
-					if (!textIsInEdition) {
-						editions.push({
-							title: text.edition.title,
-							slug: text.edition.slug,
-							lines: [
-								{
-									html: text.html,
-									n: text.n,
-								},
-							],
-						});
+						textIsInEdition = true;
 					}
 				});
-			});
 
-			lemmaText = editions;
-		}
+				if (!textIsInEdition) {
+					const newEdition = {
+						title: text.edition.title,
+						slug: text.edition.slug,
+						lines: [],
+					};
+
+					if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {
+						newEdition.lines.push({
+							html: text.html,
+							n: text.n,
+						});
+					}
+
+					editions.push(newEdition);
+				}
+			});
+		});
 
 		return {
-			lemmaText,
+			editions,
 			ready: handle.ready(),
 		};
 	},
 
 	toggleEdition(editionSlug) {
-		if (this.data.lemmaText.length) {
-			if (this.data.lemmaText[this.state.selectedLemmaEditionIndex].slug !== editionSlug) {
+		const { editions } = this.data;
+		const { selectedLemmaEditionIndex } = this.state;
+
+		if (editions && editions.length) {
+			if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
 				let newSelectedEditionIndex = 0;
-				this.data.lemmaText.forEach((edition, index) => {
+
+				editions.forEach((edition, index) => {
 					if (edition.slug === editionSlug) {
 						newSelectedEditionIndex = index;
 					}
@@ -113,26 +118,24 @@ CommentLemma = React.createClass({
 
 	render() {
 		const self = this;
-		const commentGroup = this.props.commentGroup;
-		const lemmaText =
-			this.data.lemmaText || [];
-		const selectedLemmaEdition =
-			this.data.lemmaText[this.state.selectedLemmaEditionIndex] || { lines: [] };
+		const { commentGroup, hideLemma } = this.props;
+		const { editions, ready } = this.data;
+
+		const selectedLemmaEdition = editions[this.state.selectedLemmaEditionIndex] || { lines: [] };
+		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
 		}
-		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 
 		return (
-
 			<div className="comment-outer comment-lemma-comment-outer">
-
 				<Sticky
 					bottomOffset={250}
 				>
 					<div className="comment-group-meta">
-						{this.props.hideLemma === false ?
+						{hideLemma === false ?
 							<div className="comment-group-meta-inner comment-group-meta-ref">
 								<div className="comment-group-ref">
 									<span className="comment-group-ref-above">
@@ -169,7 +172,6 @@ CommentLemma = React.createClass({
 											</a>
 										</div>
 									))}
-
 								</div>
 							</div>
 						: '' }
@@ -177,17 +179,18 @@ CommentLemma = React.createClass({
 				</Sticky>
 
 				<article className="comment lemma-comment paper-shadow">
-					{!this.data.ready ?
+					{!ready ?
 						<div className="lemma-loading">
 							<div className="lemma-loading-top" />
 							<div className="lemma-loading-bottom" />
 						</div>
-					: ''}
-					<CommentLemmaText
-						lines={selectedLemmaEdition.lines}
-					/>
+					:
+						<CommentLemmaText
+							lines={selectedLemmaEdition.lines}
+						/>
+					}
 					<div className="edition-tabs tabs">
-						{lemmaText.map((lemmaTextEdition, i) => {
+						{editions.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
 
 							return (<RaisedButton

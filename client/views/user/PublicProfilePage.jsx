@@ -3,6 +3,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
 import DiscussionComments from '/imports/collections/discussionComments';
+import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
 PublicProfilePage = React.createClass({
 	propTypes: {
@@ -110,14 +111,9 @@ PublicProfilePage = React.createClass({
 			<div className="page page-user-profile page-user-profile--public">
 				<div className="content primary">
 					<section className="block header cover parallax">
-						<div className="background-image-holder blur-2--no-remove blur-10 remove-blur">
-							<img
-								className="background-image"
-								src="/images/capitals.jpg"
-								role="presentation"
-							/>
-						</div>
-						<div className="block-screen brown" />
+						<BackgroundImageHolder
+							imgSrc="/images/capitals.jpg"
+						/>
 					</section>
 					<section className="page-content">
 						<div>

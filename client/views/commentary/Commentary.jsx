@@ -7,6 +7,7 @@ import Comments from '/imports/collections/comments';// eslint-disable-line impo
 
 // layouts:
 import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';  // eslint-disable-line import/no-absolute-path
+import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';  // eslint-disable-line import/no-absolute-path
 
 // components:
 import InfiniteScroll from '/imports/ui/components/InfiniteScroll.jsx';// eslint-disable-line import/no-absolute-path

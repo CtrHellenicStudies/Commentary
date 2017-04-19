@@ -14,7 +14,7 @@ const getLineClass = (lineFrom, lineTo, n) => {
 	return lineClass;
 };
 
-const ContextPanelText = ({ onBeforeClicked, selectedLemmaEdition, lineFrom, commetGroup, onAfterClicked, maxLine }) => (
+const ContextPanelText = ({ onBeforeClicked, selectedLemmaEdition, lineFrom, commentGroup, onAfterClicked, maxLine }) => (
 	<div className="lemma-text-wrap">
 		{lineFrom > 1 ?
 			<div className="before-link">
@@ -29,7 +29,7 @@ const ContextPanelText = ({ onBeforeClicked, selectedLemmaEdition, lineFrom, com
 
 		{selectedLemmaEdition.lines.map((line) => {
 			
-			const lineClass = getLineClass(commetGroup.lineFrom, commetGroup.lineTo, line.n);
+			const lineClass = getLineClass(commentGroup.lineFrom, commentGroup.lineTo, line.n);
 
 			return (
 				<div
@@ -71,7 +71,7 @@ ContextPanelText.propTypes = {
 			html: React.PropTypes.string.isRequired,
 		}))
 	}).isRequired,
-	commetGroup: React.PropTypes.shape({
+	commentGroup: React.PropTypes.shape({
 		lineFrom: React.PropTypes.number.isRequired,
 		lineTo: React.PropTypes.number,
 	}).isRequired,

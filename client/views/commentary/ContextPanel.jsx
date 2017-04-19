@@ -223,72 +223,14 @@ ContextPanel = React.createClass({
 					iconClassName="mdi mdi-close"
 				/>
 
-				{/*<ContextPanelText
+				<ContextPanelText
 					onBeforeClicked={this.onBeforeClicked}
 					onAfterClicked={this.onAfterClicked}
 					selectedLemmaEdition={this.data.selectedLemmaEdition}
-					lineFrom={this.props.commentGroup.lineFrom}
-					lineTo={this.props.commentGroup.lineTo}
+					lineFrom={this.state.lineFrom}
+					commentGroup={this.props.commentGroup}
 					maxLine={this.state.maxLine}
-				/>*/}
-
-				<div className="lemma-text-wrap">
-
-					{this.state.lineFrom > 1 ?
-						<div className="before-link">
-							<RaisedButton
-								className="light"
-								label="Previous"
-								onClick={this.onBeforeClicked}
-								icon={<i className="mdi mdi-chevron-up" />}
-							/>
-						</div>
-					: '' }
-
-					{this.data.selectedLemmaEdition.lines.map((line, i) => {
-						let lineClass = 'lemma-line';
-						const lineFrom = self.props.commentGroup.lineFrom;
-						let lineTo;
-
-						if (typeof self.props.commentGroup.lineTo !== 'undefined') {
-							lineTo = self.props.commentGroup.lineTo;
-						} else {
-							lineTo = self.props.commentGroup.lineFrom;
-						}
-
-						if (lineFrom <= line.n && line.n <= lineTo) {
-							lineClass += ' highlighted';
-						}
-
-						return (
-							<div
-								className={lineClass}
-								key={i}
-							>
-								<div className="lemma-text" dangerouslySetInnerHTML={{ __html: line.html }} />
-
-								<div className="lemma-meta">
-									{(line.n % 5 === 0 || line.n === 1) ?
-										<span className="lemma-line-n">
-											{line.n}
-										</span>
-									: '' }
-								</div>
-							</div>
-						);
-					})}
-
-					{this.state.lineFrom < this.state.maxLine ?
-						<div className="after-link">
-							<RaisedButton
-								className="light"
-								label="Next"
-								onClick={this.onAfterClicked}
-								icon={<i className="mdi mdi-chevron-down" />}
-							/>
-						</div>
-					: '' }
-				</div>
+				/>
 
 				<div className="lemma-panel-tabs">
 					<div className="edition-tabs tabs">

@@ -12,6 +12,7 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';  // esli
 
 // components:
 import InfiniteScroll from '/imports/ui/components/InfiniteScroll.jsx'; // eslint-disable-line import/no-absolute-path
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
 
 // helpers:
 import { createQueryFromFilters, parseCommentsToCommentGroups } from './helpers';

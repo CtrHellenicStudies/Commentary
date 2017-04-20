@@ -4,6 +4,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Comments from '/imports/collections/comments';
 import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
+// layouts:
+import Commentary from '/imports/ui/layouts/commentary/Commentary';  // eslint-disable-line import/no-absolute-path
+
+
 HomeView = React.createClass({
 
 	propTypes: {
@@ -250,7 +254,6 @@ HomeView = React.createClass({
 									isOnHomeView
 									filters={[]}
 									comments={this.data.comments}
-									commentsReady={this.data.commentsReady}
 									skip={0}
 									limit={10}
 								/>

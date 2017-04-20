@@ -25,10 +25,10 @@ class CommentGroup extends React.Component {
 				})
 			}))
 		}).isRequired,
-		commentGroupIndex: React.PropTypes.number.isRequired,
+		commentGroupIndex: React.PropTypes.string.isRequired,
 		contextPanelOpen: React.PropTypes.bool.isRequired,
 		showContextPanel: React.PropTypes.func.isRequired,
-		contextScrollPosition: React.PropTypes.func.isRequired,
+		setContextScrollPosition: React.PropTypes.func.isRequired,
 		toggleSearchTerm: React.PropTypes.func,
 		filters: React.PropTypes.arrayOf(React.PropTypes.shape({
 			key: React.PropTypes.string.isRequired,
@@ -64,7 +64,7 @@ class CommentGroup extends React.Component {
 
 	render() {
 		const { commentGroup, commentGroupIndex, contextPanelOpen, showLoginModal,
-			filters, showContextPanel, contextScrollPosition, toggleSearchTerm } = this.props;
+			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm } = this.props;
 		const { hideLemma } = this.state;
 		let isOnHomeView = false;
 
@@ -95,7 +95,7 @@ class CommentGroup extends React.Component {
 							index={commentGroupIndex}
 							commentGroup={commentGroup}
 							showContextPanel={showContextPanel}
-							scrollPosition={contextScrollPosition}
+							setScrollPosition={setContextScrollPosition}
 							hideLemma={hideLemma}
 						/>
 

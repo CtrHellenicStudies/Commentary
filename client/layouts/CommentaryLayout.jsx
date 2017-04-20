@@ -10,6 +10,10 @@ with new “filters” object passed as first attribute.
 
 */
 
+// layouts:
+import Commentary from '/imports/ui/layouts/commentary/Commentary';  // eslint-disable-line import/no-absolute-path
+
+
 CommentaryLayout = React.createClass({
 
 	propTypes: {

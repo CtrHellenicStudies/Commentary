@@ -33,8 +33,8 @@ class CommentLemma extends React.Component {
 			}))
 		}).isRequired,
 		showContextPanel: React.PropTypes.func.isRequired,
-		scrollPosition: React.PropTypes.func.isRequired,
-		index: React.PropTypes.number.isRequired,
+		setScrollPosition: React.PropTypes.func.isRequired,
+		index: React.PropTypes.string.isRequired,
 		hideLemma: React.PropTypes.bool.isRequired,
 
 		// from createContainer:
@@ -84,10 +84,9 @@ class CommentLemma extends React.Component {
 	}
 
 	showContextPanel(commentGroup) {
-		const { index, scrollPosition, showContextPanel } = this.props;
+		const { index, setScrollPosition, showContextPanel } = this.props;
 
-		const scroll = $(`#comment-group-${index}`).offset().top;
-		scrollPosition(scroll, index);
+		setScrollPosition(index);
 		showContextPanel(commentGroup);
 	}
 

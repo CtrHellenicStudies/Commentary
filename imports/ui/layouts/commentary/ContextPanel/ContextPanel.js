@@ -17,8 +17,7 @@ class ContextPanel extends React.Component {
 			ref: React.PropTypes.string.isRequired,
 		}).isRequired,
 		closeContextPanel: React.PropTypes.func.isRequired,
-		scrollPosition: React.PropTypes.number.isRequired,
-		commentLemmaIndex: React.PropTypes.number.isRequired,
+		commentLemmaIndex: React.PropTypes.string.isRequired,
 	}
 
 	constructor(props) {
@@ -112,7 +111,8 @@ class ContextPanel extends React.Component {
 		case 'close':
 			window.requestAnimationFrame(() => {
 				setTimeout(() => {
-					$(document).scrollTop(this.props.scrollPosition);
+					const scroll = $(`#comment-group-${this.props.commentLemmaIndex}`).offset().top;
+					$(document).scrollTop(scroll);
 				}, 1000);
 			});
 			break;

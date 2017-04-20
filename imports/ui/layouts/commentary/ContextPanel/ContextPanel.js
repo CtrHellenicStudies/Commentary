@@ -26,15 +26,15 @@ class ContextPanel extends React.Component {
 
 		const commentGroup = props.commentGroup;
 		const lineFrom = commentGroup.lineFrom;
-		const lineTo = lineFrom + 49;
-		
+
 		this.state = {
 			selectedLemmaEdition: '',
 			lineFrom,
-			lineTo,
 			maxLine: 0,
 			highlightingVisible: true,
 		};
+
+		this.setMaxLine();
 
 		// methods:
 		this.onAfterClicked = this.onAfterClicked.bind(this);
@@ -42,27 +42,11 @@ class ContextPanel extends React.Component {
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.toggleHighlighting = this.toggleHighlighting.bind(this);
 		this.scrollElement = this.scrollElement.bind(this);
+		this.setMaxLine = this.setMaxLine.bind(this);
 	}
 
 	componentDidMount() {
 		this.scrollElement('open');
-		Meteor.call('getMaxLine', this.props.commentGroup.work.slug,
-			this.props.commentGroup.subwork.n, (err, res) => {
-				if (err) {
-					console.log(err);
-				} else if (res) {
-					const linePagination = [];
-					for (let i = 1; i <= res; i += 100) {
-						linePagination.push(i);
-					}
-
-					this.setState({
-						linePagination,
-						maxLine: res,
-					});
-				}
-			}
-		);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -71,20 +55,12 @@ class ContextPanel extends React.Component {
 		if (!(isLemmaEditionChange || isHighlightingChange)) {
 			this.scrollElement('open');
 		}
-		const commentGroup = this.props.commentGroup;
-		if (commentGroup.ref !== prevProps.commentGroup.ref) {
-			this.setState({
-				lineFrom: commentGroup.lineFrom,
-				lineTo: commentGroup.lineFrom + 49,
-			});
-		}
 	}
 
 	onAfterClicked() {
-		if (this.state.lineTo <= this.state.maxLine) {
+		if ((this.state.lineFrom + 49) <= this.state.maxLine) {
 			this.setState({
 				lineFrom: this.state.lineFrom + 25,
-				lineTo: this.state.lineTo + 25,
 			});
 		}
 	}
@@ -93,9 +69,20 @@ class ContextPanel extends React.Component {
 		if (this.state.lineFrom !== 1) {
 			this.setState({
 				lineFrom: this.state.lineFrom - 25,
-				lineTo: this.state.lineTo - 25,
 			});
 		}
+	}
+
+	setMaxLine() {
+		const { commentGroup } = this.props;
+		Meteor.call('getMaxLine', commentGroup.work.slug,
+			commentGroup.subwork.n, (err, res) => {
+				if (err) throw new Meteor.Erorr(err);
+				this.setState({
+					maxLine: res,
+				});
+			}
+		);
 	}
 
 	toggleEdition(editionSlug) {

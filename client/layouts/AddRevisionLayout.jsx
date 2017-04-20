@@ -3,6 +3,9 @@ import slugify from 'slugify';
 import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
+// components:
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
+
 AddRevisionLayout = React.createClass({
 
 	propTypes: {
@@ -167,7 +170,7 @@ AddRevisionLayout = React.createClass({
 			let isOwner = false;
 			this.data.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (~Meteor.user().canEditCommenters.indexOf(commenter._id));
+					isOwner = (~Meteor.user().commenterId.indexOf(commenter._id));
 				}
 			});
 			if (!isOwner) {

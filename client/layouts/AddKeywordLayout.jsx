@@ -5,6 +5,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
+// components:
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
+
 AddKeywordLayout = React.createClass({
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,

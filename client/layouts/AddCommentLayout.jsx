@@ -3,6 +3,9 @@ import slugify from 'slugify';
 import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
+// components:
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
+
 AddCommentLayout = React.createClass({
 
 	mixins: [ReactMeteorData],

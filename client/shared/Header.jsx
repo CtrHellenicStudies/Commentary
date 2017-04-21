@@ -5,6 +5,9 @@ import IconButton from 'material-ui/IconButton';
 import Settings from '/imports/collections/settings';
 import Tenants from '/imports/collections/tenants';
 
+// layouts:
+import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';  // eslint-disable-line import/no-absolute-path
+
 Header = React.createClass({
 
 	mixins: [ReactMeteorData],

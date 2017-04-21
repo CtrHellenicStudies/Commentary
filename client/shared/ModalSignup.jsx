@@ -128,34 +128,11 @@ ModalSignup = React.createClass({
 						<span className="error-text">
 							{this.state.errorSocial}
 						</span>
-						<div className="at-oauth">
-							<button
-								className="btn at-social-btn"
-								id="at-facebook"
-								name="facebook"
-								onClick={this.handleSignupFacebook}
-							>
-								<i className="fa fa-facebook" /> Register with Facebook
-							</button>
-
-							<button
-								className="btn at-social-btn"
-								id="at-google"
-								name="google"
-								onClick={this.handleSignupGoogle}
-							>
-								<i className="fa fa-google" /> Register with Google
-							</button>
-
-							<button
-								className="btn at-social-btn"
-								id="at-twitter"
-								name="twitter"
-								onClick={this.handleSignupTwitter}
-							>
-								<i className="fa fa-twitter" /> Register with Twitter
-							</button>
-						</div>
+						<OAuthButtons
+							handleFacebook={this.handleSignupFacebook}
+							handleGoogle={this.handleSignupGoogle}
+							handleTwitter={this.handleSignupTwitter}
+						/>
 						<div className="at-sep">
 							<strong>OR</strong>
 						</div>

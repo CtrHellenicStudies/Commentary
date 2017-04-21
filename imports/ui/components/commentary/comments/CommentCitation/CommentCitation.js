@@ -52,7 +52,7 @@ class CommentCitation extends React.Component {
 				<RaisedButton
 					label="Cite this comment"
 					labelPosition="after"
-					onTouchTap={this.handleTouchTap.bind(this)}
+					onClick={this.handleTouchTap.bind(this)}
 				/>
 				<Popover
 					open={openMenu}

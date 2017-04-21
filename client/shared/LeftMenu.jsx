@@ -9,7 +9,23 @@ import Tenants from '/imports/collections/tenants';
 
 // components:
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+import SideNavTop from '/imports/ui/components/header/SideNavTop';  // eslint-disable-line import/no-absolute-path
 
+
+/*
+	helpers
+*/
+const getUsername = (currentUser) => {
+	let username = '';
+	if (Meteor.user()) {
+		if (currentUser.profile && currentUser.profile.name) {
+			username = currentUser.profile.name;
+		} else {
+			username = currentUser.username;
+		}
+	}
+	return username;
+};
 
 LeftMenu = React.createClass({
 
@@ -43,17 +59,10 @@ LeftMenu = React.createClass({
 	},
 
 	render() {
-		let username = '';
 		const userIsLoggedIn = Meteor.user();
 		const { tenant } = this.data;
 
-		if (userIsLoggedIn) {
-			if (this.data.currentUser.profile && this.data.currentUser.profile.name) {
-				username = this.data.currentUser.profile.name;
-			} else {
-				username = this.data.currentUser.username;
-			}
-		}
+		const username = getUsername(this.data.currentUser);
 
 		return (
 			<div>
@@ -63,21 +72,10 @@ LeftMenu = React.createClass({
 					onRequestChange={this.props.closeLeftMenu}
 					className="md-sidenav-left"
 				>
-					<div className="sidenav-top">
-						{userIsLoggedIn ?
-							<a href="/profile">
-								<div className="user-image paper-shadow">
-									<AvatarIcon avatar={this.data.currentUser && this.data.currentUser.profile ? this.data.currentUser.profile.avatarUrl : '/images/default_user.jpg'} />
-								</div>
-							</a>
-							: ''
-						}
-						<a href="/profile">
-							<span className="user-fullname">
-								{username}
-							</span>
-						</a>
-					</div>
+					<SideNavTop
+						currentUser={this.data.currentUser}
+						username={username}
+					/>
 					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 						<div>
 							{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['admin']) ?

@@ -26,8 +26,8 @@ const getUpdateDate = (selectedRevision) => {
 };
 
 const getUserCanEditCommenters = () => {
-	if (Meteor.user() && Meteor.user().commenterId) {
-		return Meteor.user().commenterId;
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		return Meteor.user().canEditCommenters;
 	}
 	return [];
 };

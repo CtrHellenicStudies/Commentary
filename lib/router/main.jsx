@@ -4,6 +4,12 @@ import React from 'react';
 import cookie from 'react-cookie';
 import { mount } from 'react-mounter';
 
+// onTouchTab init:
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
+
+
 FlowRouter.notFound = {
 	action() {
 		// Render not found page here

@@ -3,11 +3,13 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+
+// api:
 import Tenants from '/imports/collections/tenants';
 
-injectTapEventPlugin();
+// components:
+import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+
 
 LeftMenu = React.createClass({
 

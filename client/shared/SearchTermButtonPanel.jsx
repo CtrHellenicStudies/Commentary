@@ -51,7 +51,7 @@ SearchTermButtonPanel = React.createClass({
 		return (
 			<button
 				className={className}
-				onTouchTap={this.toggleSearchTerm}
+				onClick={this.toggleSearchTerm}
 			>
 				<span>{this.props.label}</span>
 			</button>

@@ -46,6 +46,7 @@ const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onB
 			selectedLemmaEdition={selectedLemmaEdition}
 			toggleEdition={toggleEdition}
 			toggleHighlighting={toggleHighlighting}
+			highlightingVisible={highlightingVisible}
 		/>
 
 	</div>

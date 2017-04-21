@@ -1,4 +1,3 @@
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
@@ -51,13 +50,15 @@ EditionTabs.propTypes = {
 /*
 	BEGIN MetaTabs
 */
-const MetaTabs = ({ toggleHighlighting }) => (
-	<div className="meta-tabs tabs">
+const MetaTabs = ({ toggleHighlighting, highlightingVisible }) => (
+	<div className="edition-tabs tabs">
 		{toggleHighlighting &&
-			<FlatButton
+			<RaisedButton
 				label="Highlighting"
 				className="edition-tab tab"
 				onClick={toggleHighlighting}
+				backgroundColor={highlightingVisible ? '#795548' : null}
+				labelStyle={highlightingVisible ? {color: '#ffffff'} : null}
 			/>}
 		{/*
 		<FlatButton
@@ -75,6 +76,7 @@ const MetaTabs = ({ toggleHighlighting }) => (
 );
 MetaTabs.propTypes = {
 	toggleHighlighting: React.PropTypes.func,
+	highlightingVisible: React.PropTypes.bool.isRequired,
 };
 MetaTabs.defaultProps = {
 	toggleHighlighting: null,
@@ -87,7 +89,7 @@ MetaTabs.defaultProps = {
 /*
 	BEGIN ContextPanelTabs
 */
-const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, toggleHighlighting }) => (
+const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, toggleHighlighting, highlightingVisible }) => (
 	<div className="lemma-panel-tabs">
 		
 		<EditionTabs
@@ -98,6 +100,7 @@ const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, togg
 
 		<MetaTabs
 			toggleHighlighting={toggleHighlighting}
+			highlightingVisible={highlightingVisible}
 		/>
 		
 	</div>
@@ -110,6 +113,7 @@ ContextPanelTabs.propTypes = {
 	selectedLemmaEdition: React.PropTypes.string.isRequired,
 	toggleEdition: React.PropTypes.func.isRequired,
 	toggleHighlighting: React.PropTypes.func.isRequired,
+	highlightingVisible: React.PropTypes.bool.isRequired,
 };
 /*
 	BEGIN ContextPanelTabs

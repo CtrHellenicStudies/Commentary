@@ -8,7 +8,6 @@ import Drawer from 'material-ui/Drawer';
 import Tenants from '/imports/collections/tenants';
 
 // components:
-import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 import SideNavTop from '/imports/ui/components/header/SideNavTop';  // eslint-disable-line import/no-absolute-path
 
 

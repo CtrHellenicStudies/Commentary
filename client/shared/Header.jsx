@@ -7,6 +7,7 @@ import Tenants from '/imports/collections/tenants';
 
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';  // eslint-disable-line import/no-absolute-path
+import LeftMenu from '/imports/ui/layouts/header/LeftMenu';  // eslint-disable-line import/no-absolute-path
 
 Header = React.createClass({
 

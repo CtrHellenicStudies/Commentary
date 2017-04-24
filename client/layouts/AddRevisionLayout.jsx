@@ -32,7 +32,7 @@ AddRevisionLayout = React.createClass({
 
 		const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready() && commentersSub.ready();
 
-		const comment = Comments.findOne();
+		const comment = Comments.findOne({_id: this.props.commentId});
 		const commenters = [];
 		if (comment) {
 			comment.commenters.forEach((commenter) => {

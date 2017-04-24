@@ -3,6 +3,7 @@ import {
 	FormGroup,
 	ControlLabel,
 } from 'react-bootstrap';
+import cookie from 'react-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
@@ -357,6 +358,19 @@ AddRevision = React.createClass({
 		this.props.update(this.state);
 	},
 
+	removeComment() {
+		const authToken = cookie.load('loginToken');
+
+		Meteor.call('comment.delete', authToken, this.props.comment._id, (err) => {
+			if (err) {
+				console.error(err);
+				return false;
+			}
+
+			FlowRouter.go('/commentary');
+		});
+	},
+
 	selectRevision(event) {
 		const revision = this.props.comment.revisions[event.currentTarget.id];
 		this.setState({
@@ -423,20 +437,35 @@ AddRevision = React.createClass({
 						<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
 
 							<div className="comment-upper">
-								<div className="view-in-commentary">
-									<FlatButton
-										className="go-to-commentary-link"
-										onClick={() => {
-											FlowRouter.go('/commentary/', {}, {_id: comment._id});
-										}}
-										style={{
-											border: '1px solid #ddd',
-											maxHeight: 'none',
-											fontSize: '12px',
-											height: 'auto',
-										}}
-										label="View in Commentary"
-									/>
+								<div className="comment-action-buttons">
+									<div className="comment-upper-action-button view-in-commentary">
+										<FlatButton
+											className="go-to-commentary-link"
+											onClick={() => {
+												FlowRouter.go('/commentary/', {}, {_id: comment._id});
+											}}
+											style={{
+												border: '1px solid #ddd',
+												maxHeight: 'none',
+												fontSize: '12px',
+												height: 'auto',
+											}}
+											label="View in Commentary"
+										/>
+									</div>
+									<div className="comment-upper-action-button">
+										<FlatButton
+											label="Remove Comment"
+											labelPosition="after"
+											onClick={this.removeComment}
+											style={{
+												border: '1px solid #ddd',
+												maxHeight: 'none',
+												fontSize: '12px',
+												height: 'auto',
+											}}
+										/>
+									</div>
 								</div>
 								<h1 className="add-comment-title">
 									<Editor

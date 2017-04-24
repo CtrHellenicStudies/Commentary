@@ -7,6 +7,7 @@ import Tenants from '/imports/collections/tenants';
 
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';  // eslint-disable-line import/no-absolute-path
+import ModalSignup from '/imports/ui/layouts/auth/ModalSignup';  // eslint-disable-line import/no-absolute-path
 import LeftMenu from '/imports/ui/layouts/header/LeftMenu';  // eslint-disable-line import/no-absolute-path
 
 Header = React.createClass({
@@ -106,8 +107,8 @@ Header = React.createClass({
 		this.props.toggleSearchTerm(key, value);
 	},
 
-	handleChangeTextsearch(event) {
-		this.props.handleChangeTextsearch(event.target.value);
+	handleChangeTextsearch(event, value) {
+		this.props.handleChangeTextsearch(value);
 	},
 
 	toggleWorkSearchTerm(key, value) {

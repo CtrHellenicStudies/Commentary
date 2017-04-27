@@ -31,7 +31,7 @@ CommentatorsDropdown.propTypes = {
 	...dropdownPropTypes,
 };
 CommentatorsDropdown.defaultProps = {
-	keyideas: [],
+	commenters: [],
 	...dropdownDefaultProps,
 };
 /*

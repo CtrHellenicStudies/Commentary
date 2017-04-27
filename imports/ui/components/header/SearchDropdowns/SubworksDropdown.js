@@ -42,7 +42,7 @@ SubworksDropdown.propTypes = {
 	...dropdownPropTypes,
 };
 SubworksDropdown.defaultProps = {
-	keyideas: [],
+	works: [],
 	...dropdownDefaultProps,
 };
 /*

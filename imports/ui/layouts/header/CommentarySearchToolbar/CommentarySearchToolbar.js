@@ -49,18 +49,6 @@ const getWorkInFilter = (filters) => {
 	return workInFilter;
 };
 
-const isActive = (filters, keyword, key, valueKey = 'slug') => {
-	filters.forEach((filter) => {
-		if (filter.key === key) {
-			filter.values.forEach((value) => {
-				if (keyword.slug === value[valueKey]) {
-					return true;
-				}
-			});
-		}
-	});
-	return false;
-};
 
 /*
 	BEGIN CommentarySearchToolbar
@@ -73,7 +61,45 @@ class CommentarySearchToolbar extends React.Component {
 		handleChangeTextsearch: React.PropTypes.func.isRequired,
 		handleChangeLineN: React.PropTypes.func.isRequired,
 		addCommentPage: React.PropTypes.bool.isRequired,
+
+		// from createContainer:
+		keywords: React.PropTypes.arrayOf(React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			title: React.PropTypes.string.isRequired,
+			slug: React.PropTypes.string.isRequired,
+		})),
+		keyideas: React.PropTypes.arrayOf(React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			title: React.PropTypes.string.isRequired,
+			slug: React.PropTypes.string.isRequired,
+		})),
+		commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			name: React.PropTypes.string.isRequired,
+			slug: React.PropTypes.string.isRequired,
+		})),
+		referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			title: React.PropTypes.string.isRequired,
+		})),
+		works: React.PropTypes.arrayOf(React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			title: React.PropTypes.string.isRequired,
+			slug: React.PropTypes.string.isRequired,
+			subworks: React.PropTypes.arrayOf(React.PropTypes.shape({
+				n: React.PropTypes.number.isRequired,
+				title: React.PropTypes.string.isRequired,
+			})),
+		})),
 	};
+
+	static defaultProps = {
+		keywords: [],
+		keyideas: [],
+		commenters: [],
+		referenceWorks: [],
+		works: [],
+	}
 
 	constructor(props) {
 		super(props);
@@ -225,77 +251,37 @@ class CommentarySearchToolbar extends React.Component {
 							/>
 						</div>
 
-						<SearchToolDropdown
-							name="Keywords"
-							open={searchDropdownOpen === 'Keywords'}
-							toggle={this.toggleSearchDropdown}
-							disabled={false}
-						>
-							{keywords.map(keyword => (
-								<SearchTermButton
-									key={keyword._id}
-									toggleSearchTerm={toggleSearchTerm}
-									label={keyword.title}
-									searchTermKey="keywords"
-									value={keyword}
-									active={isActive(filters, keyword, 'keywords')}
-								/>
-							))}
-						</SearchToolDropdown>
+						<KeywordsDropdown
+							keywords={keywords}
+							searchDropdownOpen={searchDropdownOpen}
+							toggleSearchDropdown={this.toggleSearchDropdown}
+							toggleSearchTerm={toggleSearchTerm}
+							filters={filters}
+						/>
 
-						<SearchToolDropdown
-							name="Key Ideas"
-							open={searchDropdownOpen === 'Key Ideas'}
-							toggle={this.toggleSearchDropdown}
-							disabled={false}
-						>
-							{keyideas.map(keyidea => (
-								<SearchTermButton
-									key={keyidea._id}
-									toggleSearchTerm={toggleSearchTerm}
-									label={keyidea.title}
-									searchTermKey="keyideas"
-									value={keyidea}
-									active={isActive(filters, keyidea, 'keyideas')}
-								/>
-							))}
-						</SearchToolDropdown>
+						<KeyideasDropdown
+							keyideas={keyideas}
+							searchDropdownOpen={searchDropdownOpen}
+							toggleSearchDropdown={this.toggleSearchDropdown}
+							toggleSearchTerm={toggleSearchTerm}
+							filters={filters}
+						/>
 
-						<SearchToolDropdown
-							name="Commentator"
-							open={searchDropdownOpen === 'Commentator'}
-							toggle={this.toggleSearchDropdown}
-							disabled={false}
-						>
-							{commenters.map(commenter => (
-								<SearchTermButton
-									key={commenter._id}
-									toggleSearchTerm={toggleSearchTerm}
-									label={commenter.name}
-									searchTermKey="commenters"
-									value={commenter}
-									active={isActive(filters, commenter, 'commenters')}
-								/>
-							))}
-						</SearchToolDropdown>
+						<CommentatorsDropdown
+							commenters={commenters}
+							searchDropdownOpen={searchDropdownOpen}
+							toggleSearchDropdown={this.toggleSearchDropdown}
+							toggleSearchTerm={toggleSearchTerm}
+							filters={filters}
+						/>
 
-						<SearchToolDropdown
-							name="reference"
-							open={searchDropdownOpen === 'reference'}
-							toggle={this.toggleSearchDropdown}
-							disabled={false}
-						>
-							{referenceWorks.map(reference => (
-								<SearchTermButton
-									key={reference._id}
-									toggleSearchTerm={toggleSearchTerm}
-									label={Utils.trunc(reference.title, 30)}
-									searchTermKey="reference"
-									value={reference}
-									active={isActive(filters, reference, 'reference', 'title')}
-								/>
-							))}
-						</SearchToolDropdown>
+						<ReferenceDropdown
+							reference={referenceWorks}
+							searchDropdownOpen={searchDropdownOpen}
+							toggleSearchDropdown={this.toggleSearchDropdown}
+							toggleSearchTerm={toggleSearchTerm}
+							filters={filters}
+						/>
 
 					</SearchToolDropdown>}
 

@@ -26,7 +26,7 @@ class LineRangeSlider extends React.Component {
 	}
 
 	render() {
-		return <div id={id} />;
+		return <input id={id} />;
 	}
 
 }

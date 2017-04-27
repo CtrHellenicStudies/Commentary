@@ -31,7 +31,7 @@ WorksDropdown.propTypes = {
 	...dropdownPropTypes,
 };
 WorksDropdown.defaultProps = {
-	keywords: [],
+	works: [],
 	...dropdownDefaultProps,
 };
 /*

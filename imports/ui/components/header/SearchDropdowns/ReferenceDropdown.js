@@ -30,7 +30,7 @@ ReferenceDropdown.propTypes = {
 	...dropdownPropTypes,
 };
 ReferenceDropdown.defaultProps = {
-	keyideas: [],
+	reference: [],
 	...dropdownDefaultProps,
 };
 /*

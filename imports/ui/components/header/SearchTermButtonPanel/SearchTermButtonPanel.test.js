@@ -8,7 +8,9 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { sinon } from 'meteor/practicalmeteor:sinon';
 import { brown800 } from 'material-ui/styles/colors';
 import Chip from 'material-ui/Chip';
-import SearchTermButtonPanel from './SearchTermButtonPanel.jsx';
+
+// components:
+import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel'; // eslint-disable-line import/no-absolute-path
 
 if (Meteor.isClient) {
 	describe('SearchTermButtonPanel', () => {

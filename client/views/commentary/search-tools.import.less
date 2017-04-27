@@ -113,7 +113,11 @@
   }
 
   &.search-term-button--active {
-    background-color: @primary;
+    background-color: @primary !important;
+
+    span {
+      color: @light !important;
+    }
 
 		&:hover {
 	    .search-term-button-label {

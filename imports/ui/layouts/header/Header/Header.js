@@ -11,6 +11,7 @@ import ModalLogin from '/imports/ui/layouts/auth/ModalLogin'; // eslint-disable-
 import ModalSignup from '/imports/ui/layouts/auth/ModalSignup'; // eslint-disable-line import/no-absolute-path
 import LeftMenu from '/imports/ui/layouts/header/LeftMenu'; // eslint-disable-line import/no-absolute-path
 import CommentarySearchToolbar from '/imports/ui/layouts/header/CommentarySearchToolbar'; // eslint-disable-line import/no-absolute-path
+import CommentarySearchPanel from '/imports/ui/layouts/header/CommentarySearchPanel'; // eslint-disable-line import/no-absolute-path
 
 /*
 	helpers

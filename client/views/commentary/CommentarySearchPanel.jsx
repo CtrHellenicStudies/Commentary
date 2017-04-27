@@ -6,10 +6,10 @@ import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
 // api:
-import Commenters from '/imports/collections/commenters';
-import Keywords from '/imports/collections/keywords';
-import ReferenceWorks from '/imports/collections/referenceWorks';
-import Works from '/imports/collections/works';
+import Commenters from '/imports/collections/commenters'; // eslint-disable-line import/no-absolute-path
+import Keywords from '/imports/collections/keywords'; // eslint-disable-line import/no-absolute-path
+import ReferenceWorks from '/imports/collections/referenceWorks'; // eslint-disable-line import/no-absolute-path
+import Works from '/imports/collections/works'; // eslint-disable-line import/no-absolute-path
 
 // components:
 import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider'; // eslint-disable-line import/no-absolute-path

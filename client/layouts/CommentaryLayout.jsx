@@ -9,10 +9,13 @@ call the “this._updateRoute(filters)” method
 with new “filters” object passed as first attribute.
 
 */
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';  // eslint-disable-line import/no-absolute-path
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';  // eslint-disable-line import/no-absolute-path
+import Header from '/imports/ui/layouts/header/Header';  // eslint-disable-line import/no-absolute-path
 
 
 CommentaryLayout = React.createClass({
@@ -21,12 +24,20 @@ CommentaryLayout = React.createClass({
 		queryParams: React.PropTypes.object,
 	},
 
+	childContextTypes: {
+		muiTheme: React.PropTypes.object.isRequired,
+	},
+
 	getInitialState() {
 		return {
 			modalLoginLowered: false,
 			skip: 0,
 			limit: 10,
 		};
+	},
+
+	getChildContext() {
+		return { muiTheme: getMuiTheme(baseTheme) };
 	},
 
 	getQueryParamValue(queryParams, key, value) {

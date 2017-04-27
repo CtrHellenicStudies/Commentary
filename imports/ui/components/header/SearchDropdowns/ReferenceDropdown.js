@@ -3,14 +3,14 @@ import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
 /*
 	BEGIN ReferenceDropdown
 */
-const ReferenceDropdown = ({ referenceWorks, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm }) => (
+const ReferenceDropdown = ({ reference, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, filters }) => (
 	<SearchToolDropdown
 		name="reference"
 		open={searchDropdownOpen === 'reference'}
 		toggle={toggleSearchDropdown}
 		disabled={false}
 	>
-		{referenceWorks.map(reference => (
+		{reference.map(reference => (
 			<SearchTermButton
 				key={reference._id}
 				toggleSearchTerm={toggleSearchTerm}
@@ -23,7 +23,7 @@ const ReferenceDropdown = ({ referenceWorks, searchDropdownOpen, toggleSearchDro
 	</SearchToolDropdown>
 );
 ReferenceDropdown.propTypes = {
-	reference: PropTypes.arrayOf(React.PropTypes.shape({
+	reference: React.PropTypes.arrayOf(React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
 		title: React.PropTypes.string.isRequired,
 	})),

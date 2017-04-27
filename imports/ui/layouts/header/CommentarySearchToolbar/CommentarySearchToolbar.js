@@ -9,7 +9,7 @@ import ReferenceWorks from '/imports/collections/referenceWorks'; // eslint-disa
 import Works from '/imports/collections/works'; // eslint-disable-line import/no-absolute-path
 
 // components:
-import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown } from '/imports/ui/components/header/SearchDropdowns'; // eslint-disable-line import/no-absolute-path
+import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns'; // eslint-disable-line import/no-absolute-path
 
 
 /*
@@ -150,6 +150,7 @@ class CommentarySearchToolbar extends React.Component {
 						searchDropdownOpen={searchDropdownOpen}
 						toggleSearchDropdown={this.toggleSearchDropdown}
 						toggleSearchTerm={toggleSearchTerm}
+						filters={filters}
 					/>}
 
 				{!addCommentPage &&
@@ -158,6 +159,7 @@ class CommentarySearchToolbar extends React.Component {
 						searchDropdownOpen={searchDropdownOpen}
 						toggleSearchDropdown={this.toggleSearchDropdown}
 						toggleSearchTerm={toggleSearchTerm}
+						filters={filters}
 					/>}
 
 				{!addCommentPage &&
@@ -166,6 +168,7 @@ class CommentarySearchToolbar extends React.Component {
 						searchDropdownOpen={searchDropdownOpen}
 						toggleSearchDropdown={this.toggleSearchDropdown}
 						toggleSearchTerm={toggleSearchTerm}
+						filters={filters}
 					/>}
 
 				{!addCommentPage &&
@@ -174,6 +177,7 @@ class CommentarySearchToolbar extends React.Component {
 						searchDropdownOpen={searchDropdownOpen}
 						toggleSearchDropdown={this.toggleSearchDropdown}
 						toggleSearchTerm={toggleSearchTerm}
+						filters={filters}
 					/>}
 
 				<WorksDropdown
@@ -181,32 +185,18 @@ class CommentarySearchToolbar extends React.Component {
 					searchDropdownOpen={searchDropdownOpen}
 					toggleSearchDropdown={this.toggleSearchDropdown}
 					toggleSearchTerm={toggleSearchTerm}
+					filters={filters}
 				/>
 
-				<SearchToolDropdown
-					name={selectedWork}
-					open={searchDropdownOpen === 'Book' || searchDropdownOpen === 'Hymn'}
-					toggle={this.toggleSearchDropdown}
-					disabled={workInFilter === false}
-				>
-					{works.map((work) => {
-						const workIsAvtive = isActive(filters, work, 'works');
-						if (workIsAvtive) {
-							const SearchTermButtons = work.subworks.map(subwork => (
-								<SearchTermButton
-									key={subwork.n}
-									toggleSearchTerm={toggleSearchTerm}
-									label={`${work.title} ${subwork.title}`}
-									searchTermKey="subworks"
-									value={subwork}
-									active={isActive(filters, subwork, 'subworks', 'n')}
-								/>
-							));
-							return SearchTermButtons;
-						}
-						return null;
-					})}
-				</SearchToolDropdown>
+				<SubworksDropdown
+					works={works}
+					searchDropdownOpen={searchDropdownOpen}
+					toggleSearchDropdown={this.toggleSearchDropdown}
+					toggleSearchTerm={toggleSearchTerm}
+					selectedWork={selectedWork}
+					workInFilter={workInFilter}
+					filters={filters}
+				/>
 
 				<div
 					style={{ width: 250, padding: '10px 20px' }}

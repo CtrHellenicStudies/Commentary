@@ -3,7 +3,7 @@ import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
 /*
 	BEGIN WorksDropdown
 */
-const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm }) => (
+const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, filters }) => (
 	<SearchToolDropdown
 		name="Work"
 		open={searchDropdownOpen === 'Work'}
@@ -23,7 +23,7 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggle
 	</SearchToolDropdown>
 );
 WorksDropdown.propTypes = {
-	works: PropTypes.arrayOf(React.PropTypes.shape({
+	works: React.PropTypes.arrayOf(React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
 		title: React.PropTypes.string.isRequired,
 		slug: React.PropTypes.string.isRequired,

@@ -1,6 +1,6 @@
 {
-  "name": "CommentarySearchPanel",
+  "name": "CommentarySearchToolbar",
   "version": "0.0.1",
   "private": true,
-  "main": "./CommentarySearchPanel.js"
+  "main": "./CommentarySearchToolbar.js"
 }

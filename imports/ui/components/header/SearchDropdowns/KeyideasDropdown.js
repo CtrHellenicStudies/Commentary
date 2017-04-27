@@ -3,7 +3,7 @@ import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
 /*
 	BEGIN KeyideasDropdown
 */
-const KeyideasDropdown = ({ keyideas, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm }) => (
+const KeyideasDropdown = ({ keyideas, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, filters }) => (
 	<SearchToolDropdown
 		name="Key Ideas"
 		open={searchDropdownOpen === 'Key Ideas'}
@@ -23,7 +23,7 @@ const KeyideasDropdown = ({ keyideas, searchDropdownOpen, toggleSearchDropdown, 
 	</SearchToolDropdown>
 );
 KeyideasDropdown.propTypes = {
-	keyideas: PropTypes.arrayOf(React.PropTypes.shape({
+	keyideas: React.PropTypes.arrayOf(React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
 		title: React.PropTypes.string.isRequired,
 		slug: React.PropTypes.string.isRequired,

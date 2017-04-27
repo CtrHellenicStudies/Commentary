@@ -9,6 +9,7 @@ import Tenants from '/imports/collections/tenants';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';  // eslint-disable-line import/no-absolute-path
 import ModalSignup from '/imports/ui/layouts/auth/ModalSignup';  // eslint-disable-line import/no-absolute-path
 import LeftMenu from '/imports/ui/layouts/header/LeftMenu';  // eslint-disable-line import/no-absolute-path
+import CommentarySearchToolbar from '/imports/ui/layouts/header/CommentarySearchToolbar';  // eslint-disable-line import/no-absolute-path
 
 Header = React.createClass({
 
@@ -22,6 +23,12 @@ Header = React.createClass({
 		initialSearchEnabled: React.PropTypes.bool,
 		addCommentPage: React.PropTypes.bool,
 		isOnHomeView: React.PropTypes.bool,
+	},
+
+	getDefaultProps() {
+		return {
+			addCommentPage: false,
+		};
 	},
 
 	childContextTypes: {

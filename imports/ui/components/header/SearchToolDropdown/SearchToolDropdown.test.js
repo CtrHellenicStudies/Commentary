@@ -8,6 +8,9 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import FlatButton from 'material-ui/FlatButton';
 import SearchToolDropdown from './SearchToolDropdown.jsx';
 
+// component:
+import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown'; // eslint-disable-line import/no-absolute-path
+
 if (Meteor.isClient) {
 	describe('SearchToolDropdown', () => {
 		it('should render', () => {
@@ -90,4 +93,3 @@ if (Meteor.isClient) {
 		});
 	});
 }
-

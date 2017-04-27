@@ -1,3 +1,4 @@
+import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown'; // eslint-disable-line import/no-absolute-path
 import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
 
 /*

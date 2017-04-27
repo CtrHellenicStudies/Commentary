@@ -9,6 +9,9 @@ import { sinon } from 'meteor/practicalmeteor:sinon';
 import FlatButton from 'material-ui/FlatButton';
 import SearchTermButton from './SearchTermButton.jsx';
 
+// component:
+import SearchTermButton from '/imports/ui/components/header/SearchTermButton'; // eslint-disable-line import/no-absolute-path
+
 if (Meteor.isClient) {
 	describe('SearchTermButton', () => {
 		it('should render', () => {

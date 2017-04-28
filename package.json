@@ -69,6 +69,7 @@
     "react-select": "^1.0.0-rc.1",
     "react-slick": "^0.12.2",
     "react-sticky": "^5.0.5",
+    "react-style-proptype": "^3.0.0",
     "react-tap-event-plugin": "^2.0.1",
     "shortcode-parser": "0.0.1",
     "simple-git": "^1.66.0",

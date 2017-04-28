@@ -76,8 +76,6 @@ dburles:factory
 mdg:validated-method
 meteorhacks:aggregate
 react-meteor-data
-practicalmeteor:chai
-practicalmeteor:sinon
 jalik:ufs-gridfs
 jalik:ufs
 sach:flow-db-admin

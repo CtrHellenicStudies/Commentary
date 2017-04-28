@@ -1,11 +1,12 @@
+import React from 'react';
 
 /*
 	helpers
 */
-const getClassName = (active) => {
+const getClassName = (active, activeWork) => {
 	let className = 'search-term-button';
 
-	if (active) className += ' search-term-button--active';
+	if (active || activeWork) className += ' search-term-button--active';
 
 	return className;
 };
@@ -14,9 +15,9 @@ const getClassName = (active) => {
 /*
 	BEGIN SearchTermButtonPanel
 */
-const SearchTermButtonPanel = ({ active, toggleSearchTerm, label, searchTermKey, value }) => (
+const SearchTermButtonPanel = ({ active, activeWork, toggleSearchTerm, label, searchTermKey, value }) => (
 	<button
-		className={getClassName(active)}
+		className={getClassName(active, activeWork)}
 		onClick={toggleSearchTerm.bind(null, searchTermKey, value)}
 	>
 		<span>{label}</span>
@@ -28,9 +29,11 @@ SearchTermButtonPanel.propTypes = {
 	searchTermKey: React.PropTypes.string.isRequired,
 	value: React.PropTypes.shape({}).isRequired,
 	active: React.PropTypes.bool,
+	activeWork: React.PropTypes.bool,
 };
 SearchTermButtonPanel.defaultProps = {
 	active: false,
+	activeWork: false,
 };
 /*
 	END SearchTermButtonPanel

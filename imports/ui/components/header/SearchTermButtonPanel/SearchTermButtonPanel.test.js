@@ -1,83 +1,82 @@
 /* eslint-env mocha */
 /* eslint-disable func-names, prefer-arrow-callback, import/no-extraneous-dependencies */
 
-import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { chai } from 'meteor/practicalmeteor:chai';
-import { sinon } from 'meteor/practicalmeteor:sinon';
+import chai from 'chai';
+import sinon from 'sinon';
 import { brown800 } from 'material-ui/styles/colors';
-import Chip from 'material-ui/Chip';
 
 // components:
-import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel'; // eslint-disable-line import/no-absolute-path
+import SearchTermButtonPanel from './SearchTermButtonPanel'; // eslint-disable-line import/no-absolute-path
 
-if (Meteor.isClient) {
-	describe('SearchTermButtonPanel', () => {
-		it('should render', () => {
-			const toggleSearchTerm = sinon.spy();
-			const wrapper = shallow(
-				<SearchTermButtonPanel
-					toggleSearchTerm={toggleSearchTerm}
-					label="TestSearchterm"
-					searchTermKey="TestKey"
-					value={{ key: 'value' }}
-				/>
-			);
-			const chip = wrapper.find(Chip);
-			chai.assert.ok(chip, 'should contain the Chip child');
-			chai.assert.equal(chip.childAt(1).text(), 'TestSearchterm');
-		});
-
-		it('should render with active prop set', () => {
-			const toggleSearchTerm = sinon.spy();
-			const wrapper = shallow(
-				<SearchTermButtonPanel
-					toggleSearchTerm={toggleSearchTerm}
-					label="TestSearchterm"
-					searchTermKey="TestKey"
-					value={{ key: 'value' }}
-					active
-				/>
-			);
-			const chip = wrapper.find(Chip);
-			chai.assert.ok(chip, 'should contain the Chip child');
-			chai.assert.equal(chip.childAt(1).text(), 'TestSearchterm');
-			chai.assert.include(chip.childAt(0).node.props.backgroundColor, brown800);
-		});
-
-		it('should render with activeWork prop set', () => {
-			const toggleSearchTerm = sinon.spy();
-			const wrapper = shallow(
-				<SearchTermButtonPanel
-					toggleSearchTerm={toggleSearchTerm}
-					label="TestSearchterm"
-					searchTermKey="TestKey"
-					value={{ key: 'value' }}
-					activeWork
-				/>
-			);
-			const chip = wrapper.find(Chip);
-			chai.assert.ok(chip, 'should contain the Chip child');
-			chai.assert.equal(chip.childAt(1).text(), 'TestSearchterm');
-			chai.assert.include(chip.childAt(0).node.props.backgroundColor, brown800);
-		});
-		it('should call parent callback with correct values', () => {
-			const toggleSearchTerm = sinon.spy();
-			const wrapper = shallow(
-				<SearchTermButtonPanel
-					toggleSearchTerm={toggleSearchTerm}
-					label="TestSearchterm"
-					searchTermKey="TestKey"
-					value={{ key: 'value' }}
-				/>
-			);
-			const chip = wrapper.find(Chip);
-			chip.simulate('touchTap');
-			sinon.assert.calledWith(toggleSearchTerm, 'TestKey', { key: 'value' });
-			chai.assert.ok(chip, 'should contain the Chip child');
-			chai.assert.equal(chip.childAt(1).text(), 'TestSearchterm');
-		});
+describe('SearchTermButtonPanel', () => {
+	it('should render', () => {
+		const toggleSearchTerm = sinon.spy();
+		const wrapper = shallow(
+			<SearchTermButtonPanel
+				toggleSearchTerm={toggleSearchTerm}
+				label="TestSearchterm"
+				searchTermKey="TestKey"
+				value={{ key: 'value' }}
+			/>
+		);
+		const span = wrapper.find('span');
+		chai.assert.ok(span, 'should contain the span child');
+		chai.assert.equal(span.text(), 'TestSearchterm');
 	});
-}
 
+	it('should render with active prop set', () => {
+		const toggleSearchTerm = sinon.spy();
+		const wrapper = shallow(
+			<SearchTermButtonPanel
+				toggleSearchTerm={toggleSearchTerm}
+				label="TestSearchterm"
+				searchTermKey="TestKey"
+				value={{ key: 'value' }}
+				active
+			/>
+		);
+		const span = wrapper.find('span');
+		chai.assert.ok(span, 'should contain the span child');
+		chai.assert.equal(span.text(), 'TestSearchterm');
+		const button = wrapper.find('button');
+		chai.assert.equal(button.hasClass('search-term-button--active'), true);
+	});
+
+	it('should render with activeWork prop set', () => {
+		const toggleSearchTerm = sinon.spy();
+		const wrapper = shallow(
+			<SearchTermButtonPanel
+				toggleSearchTerm={toggleSearchTerm}
+				label="TestSearchterm"
+				searchTermKey="TestKey"
+				value={{ key: 'value' }}
+				activeWork
+			/>
+		);
+		const span = wrapper.find('span');
+		chai.assert.ok(span, 'should contain the span child');
+		chai.assert.equal(span.text(), 'TestSearchterm');
+		const button = wrapper.find('button');
+		chai.assert.equal(button.hasClass('search-term-button--active'), true);
+	});
+	it('should call parent callback with correct values', () => {
+		const toggleSearchTerm = sinon.spy();
+		const wrapper = shallow(
+			<SearchTermButtonPanel
+				toggleSearchTerm={toggleSearchTerm}
+				label="TestSearchterm"
+				searchTermKey="TestKey"
+				value={{ key: 'value' }}
+			/>
+		);
+		const button = wrapper.find('button');
+		button.simulate('click');
+		sinon.assert.calledWith(toggleSearchTerm, 'TestKey', { key: 'value' });
+
+		const span = wrapper.find('span');
+		chai.assert.ok(span, 'should contain the span child');
+		chai.assert.equal(span.text(), 'TestSearchterm');
+	});
+});

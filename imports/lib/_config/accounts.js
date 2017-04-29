@@ -1,11 +1,11 @@
 import slug from 'slug';
+import AccountsLayout from '/imports/ui/layouts/accounts/AccountsLayout';
 import Config from './_config.js';
-import MainLayout from '../_component/MainLayout.jsx';
 
 
 AccountsTemplates.configure({
 	defaultLayoutType: 'blaze-to-react',
-	defaultLayout: MainLayout,
+	defaultLayout: AccountsLayout,
 	defaultContentRegion: 'content',
 	confirmPassword: true,
 	enablePasswordChange: true,

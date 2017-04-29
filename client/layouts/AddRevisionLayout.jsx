@@ -3,6 +3,7 @@ import slugify from 'slugify';
 import cookie from 'react-cookie';
 import 'mdi/css/materialdesignicons.css';
 
+import Commenters from '/imports/collections/commenters';
 // components:
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
 

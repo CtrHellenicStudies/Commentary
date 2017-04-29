@@ -3,6 +3,8 @@ import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
 import { createContainer } from 'meteor/react-meteor-data';
 
+import Utils from '/imports/lib/utils';
+
 // api:
 import TextNodes from '/imports/collections/textNodes'; // eslint-disable-line import/no-absolute-path
 
@@ -52,7 +54,7 @@ class CommentLemma extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			selectedLemmaEditionIndex: 0,
 		};
@@ -184,7 +186,7 @@ export default createContainer(({ commentGroup }) => {
 	textNodes.forEach((textNode) => {
 		textNode.text.forEach((text) => {
 			textIsInEdition = false;
-			
+
 			editions.forEach((edition) => {
 				if (text.edition.slug === edition.slug) {
 					if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {

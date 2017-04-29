@@ -15,7 +15,7 @@ CommentersPage = React.createClass({
 	render() {
 		const { settings } = this.data;
 		Utils.setTitle(`Commentators | ${settings.title}`);
-		Utils.setDescription(`Commentators for ${Config.title()}`);
+		Utils.setDescription(`Commentators for ${Config.title}`);
 		Utils.setMetaImage(`${location.origin}/images/capitals.jpg`);
 		return (
 			<div className="page page-commenters">

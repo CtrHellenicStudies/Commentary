@@ -1,4 +1,7 @@
 import slug from 'slug';
+import Config from './_config.js';
+import MainLayout from '../_component/MainLayout.jsx';
+
 
 AccountsTemplates.configure({
 	defaultLayoutType: 'blaze-to-react',

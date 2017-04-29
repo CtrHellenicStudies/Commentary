@@ -1,9 +1,11 @@
+import Config from '/imports/lib/_config/_config';
+
 /**
  * Account email template
  */
 
-Accounts.emailTemplates.siteName = Config.title();
-Accounts.emailTemplates.from = `${Config.title()} <no-reply@ahcip.chs.harvard.edu>`;
+Accounts.emailTemplates.siteName = Config.title;
+Accounts.emailTemplates.from = `${Config.title} <no-reply@ahcip.chs.harvard.edu>`;
 Accounts.emailTemplates.verifyEmail = {
 	subject() {
 		return 'Account Registration Confirmation';
@@ -23,7 +25,7 @@ Accounts.emailTemplates.verifyEmail = {
 
 			If you didn't request this email, you can ignore it.
 
-			${Config.title()}`;
+			${Config.title}`;
 	},
 	html(user, url) {
 		SSR.compileTemplate('verifyEmail', Assets.getText('verify_email.html'));

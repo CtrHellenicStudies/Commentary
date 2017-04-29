@@ -1,7 +1,6 @@
-import { EditorState, convertFromRaw } from 'draft-js';
-import { convertToHTML } from 'draft-convert';
+import Config from './_config/_config.js';
 
-this.Utils = {
+const Utils = {
 	isReady: (sub) => {
 		if (sub) {
 			return FlowRouter.subsReady(sub);
@@ -222,51 +221,6 @@ this.Utils = {
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
 		return foundItem[1];
 	},
-	// getRevisionText(selectedRevision) {
-
-	// 	// define function for retriving entity data
-	// 	// workaround for bug with standared .get() method
-	// 	function getEntityData(entity, key) {
-	// 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
-	// 		return foundItem[1];
-	// 	}
-
-	// 	// returns comment text in html form to be presented on page
-
-	// 	if (selectedRevision.textRaw) {
-	// 		// if textRaw filed is available in the revision:
-
-	// 		// create contentState from textRaw
-	// 		const contentState = convertFromRaw(selectedRevision.textRaw);
-
-	// 		// create editorState from contentState
-	// 		const editorState = EditorState.createWithContent(contentState);
-
-	// 		// create html from editorState's content
-	// 		const html = convertToHTML({
-
-	// 			// performe necessary html transformations:
-	// 			entityToHTML: (entity, originalText) => {
-
-	// 				// handle keyword mentions
-	// 				if (entity.type === 'mention') {
-	// 					return <a className="keyword-gloss" data-link={getEntityData(entity, 'link')}>{originalText}</a>;
-	// 				}
-
-	// 				// handle hashtag / commets cross reference mentions
-	// 				if (entity.type === '#mention') {
-	// 					return <a className="comment-cross-ref" href={getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-	// 				}
-	// 			},
-	// 		})(editorState.getCurrentContent());
-
-	// 		return html;
-
-	// 	} else if (selectedRevision.text) {
-	// 		// if now text filed is available in revision:
-
-	// 		return selectedRevision.text;
-	// 	}
-	// 	throw new Meteor.Error('missing filed text or textRaw in revision');
-	// },
 };
+
+export default Utils;

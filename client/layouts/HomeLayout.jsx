@@ -39,7 +39,7 @@ HomeLayout = React.createClass({
 					isOnHomeView
 				/>
 
-				<HomeView
+				<Home
 					settings={settings}
 				/>
 

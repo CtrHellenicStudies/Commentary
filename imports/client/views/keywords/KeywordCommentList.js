@@ -1,3 +1,4 @@
+import Commenters from '/imports/collections/commenters';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
 
 const createRevisionMarkup = (html) => {

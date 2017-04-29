@@ -5,6 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
 import Comments from '/imports/collections/comments';// eslint-disable-line import/no-absolute-path
+import Settings from '/imports/collections/settings';
 
 // layouts:
 import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';  // eslint-disable-line import/no-absolute-path
@@ -230,7 +231,7 @@ class Commentary extends React.Component {
 
 	loadMoreComments() {
 		if (
-			!this.isOnHomeView
+			!this.props.isOnHomeView
 			&& this.props.commentGroups.length
 			&& this.props.isMoreComments
 		) {

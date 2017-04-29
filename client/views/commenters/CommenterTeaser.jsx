@@ -1,6 +1,7 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+import Utils from '/imports/lib/utils';
 
 // commenter Teaser
 CommenterTeaser = React.createClass({

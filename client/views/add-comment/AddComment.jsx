@@ -1,8 +1,6 @@
 import { Session } from 'meteor/session';
 import { Random } from 'meteor/random';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
@@ -23,11 +21,12 @@ import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
-import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/client/shared/ListDnD';  // eslint-disable-line import/no-unresolved
-import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
-import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
+import Commenters from '/imports/collections/commenters';
+import { ListGroupDnD, creatListGroupItemDnD } from '/imports/client/shared/ListDnD.jsx';
+import 'draft-js-mention-plugin/lib/plugin.css';
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
 
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();

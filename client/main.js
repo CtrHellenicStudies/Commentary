@@ -3,10 +3,12 @@ import { Session } from 'meteor/session';
 import React from 'react';
 import cookie from 'react-cookie';
 import { mount } from 'react-mounter';
-
-// onTouchTab init:
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
+import Tenants from '/imports/collections/tenants';
+import Utils from '/imports/lib/utils';
+
+// onTouchTab init:
 injectTapEventPlugin();
 
 
@@ -118,7 +120,7 @@ FlowRouter.triggers.enter([() => {
 /*
  * Route groups with permissions
  */
-loggedInGroup = FlowRouter.group({
+const loggedInGroup = FlowRouter.group({
 	triggersEnter: [AccountsTemplates.ensureSignedIn],
 });
 

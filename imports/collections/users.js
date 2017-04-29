@@ -1,4 +1,6 @@
-Schemas.UserProfile = new SimpleSchema({
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+const UserProfile = new SimpleSchema({
 	name: {
 		type: String,
 		optional: true,
@@ -48,7 +50,7 @@ Schemas.UserProfile = new SimpleSchema({
 	},
 });
 
-Schemas.User = new SimpleSchema({
+const User = new SimpleSchema({
 	_id: {
 		type: String,
 	},
@@ -72,7 +74,7 @@ Schemas.User = new SimpleSchema({
 		type: Boolean,
 	},
 	profile: {
-		type: Schemas.UserProfile,
+		type: UserProfile,
 		optional: true,
 	},
 	services: {
@@ -128,7 +130,7 @@ Schemas.User = new SimpleSchema({
 	},
 });
 
-Meteor.users.attachSchema(Schemas.User);
+Meteor.users.attachSchema(User);
 
 Meteor.users.attachBehaviour('timestampable', {
 	createdAt: 'created',
@@ -145,5 +147,3 @@ Meteor.users.allow({
 		return false;
 	},
 });
-
-this.StarterSchemas = Schemas;

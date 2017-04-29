@@ -60,7 +60,7 @@ const workSchema = SchemaBridge.schema(
 	}
 );
 
-export default typeDefs = [`
+const typeDefs = [`
 
 scalar JSON
 scalar Date
@@ -147,3 +147,5 @@ schema {
   query: Query
 }
 `];
+
+export default typeDefs;

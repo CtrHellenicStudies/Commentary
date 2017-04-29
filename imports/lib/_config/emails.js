@@ -1,3 +1,5 @@
+import Config from './_config.js';
+
 let options;
 
 if (Meteor.isServer) {

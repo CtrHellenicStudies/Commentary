@@ -33,7 +33,7 @@ function parseJSONLiteral(ast) {
 }
 
 // create the resolve functions for the available GraphQL queries
-export default resolvers = {
+const resolvers = {
 	Query: {
 		commenters(_, args){
 			if ('name' in args) {
@@ -331,3 +331,5 @@ export default resolvers = {
 		__parseValue: value => value,
 	},
 };
+
+export default resolvers;

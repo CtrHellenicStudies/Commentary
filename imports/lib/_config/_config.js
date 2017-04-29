@@ -1,21 +1,16 @@
-this.Config = {
-	name: 'A Homer Commentary in Progress',
-	domain: 'ahcip.archimedes.digital',
-	title: () => {
-		const title = `${this.Config.name} | Center for Hellenic Studies`;
-		return title;
-	},
-	subtitle: '',
+const Config = {
+	name: 'Classical Commentaries',
+	domain: 'ahcip.chs.harvard.edu',
+	title: 'Classical Commentaries | Center for Hellenic Studies',
 	logo: '/images/logo-tower.png',
 	footer: () => {
 		const copyright = `Copyright ${new Date().getFullYear()}, Center for Hellenic Studies`;
 		return copyright;
 	},
 	emails: {
-		from: () => `no-reply@${this.Config.domain}`,
-		contact: () => `contact@${this.Config.domain}`,
+		from: 'no-reply@ahcip.chs.harvard.edu',
+		contact: 'contact@ahcip.chs.harvard.edu',
 	},
-	username: false,
 	defaultLanguage: 'en',
 	dateFormat: 'D/M/YYYY',
 	privacyUrl: `${Meteor.absoluteUrl()}/privacy`,
@@ -31,3 +26,5 @@ this.Config = {
 	publicRoutes: ['home'],
 	dashboardRoute: '/',
 };
+
+export default Config;

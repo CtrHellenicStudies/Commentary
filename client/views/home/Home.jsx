@@ -4,11 +4,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Comments from '/imports/collections/comments';
 import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
 
+import Utils from '/imports/lib/utils';
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';  // eslint-disable-line import/no-absolute-path
 
 
-HomeView = React.createClass({
+Home = React.createClass({
 
 	propTypes: {
 		settings: React.PropTypes.object,

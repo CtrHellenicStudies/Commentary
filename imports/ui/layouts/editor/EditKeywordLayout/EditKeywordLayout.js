@@ -1,12 +1,16 @@
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import Keywords from '/imports/collections/keywords';
 import 'mdi/css/materialdesignicons.css';
 
-EditKeywordLayout = React.createClass({
+// layouts
+import Header from '/imports/ui/layouts/header/Header';
+
+const EditKeywordLayout = React.createClass({
 
 	propTypes: {
 		slug: React.PropTypes.string,
@@ -341,7 +345,7 @@ EditKeywordLayout = React.createClass({
 		const keyword = this.data.keyword;
 
 		return (
-			<div>
+			<MuiThemeProvider>
 				{this.data.ready && this.data.keyword ?
 					<div className="chs-layout chs-editor-layout edit-keyword-layout">
 
@@ -396,7 +400,9 @@ EditKeywordLayout = React.createClass({
 					:
 					<Spinner fullPage />
 				}
-			</div>
+			</MuiThemeProvider>
 		);
 	},
 });
+
+export default EditKeywordLayout;

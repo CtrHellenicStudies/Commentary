@@ -1,6 +1,13 @@
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+// api
 import Settings from '/imports/collections/settings';
 
-HomeLayout = React.createClass({
+// layouts
+import Header from '/imports/ui/layouts/header/Header';
+import Footer from '/imports/ui/components/footer/Footer';
+
+const HomeLayout = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getInitialState() {
@@ -34,19 +41,23 @@ HomeLayout = React.createClass({
 		}
 
 		return (
-			<div className="chs-layout home-layout">
-				<Header
-					isOnHomeView
-				/>
+			<MuiThemeProvider>
+				<div className="chs-layout home-layout">
+					<Header
+						isOnHomeView
+					/>
 
-				<Home
-					settings={settings}
-				/>
+					<Home
+						settings={settings}
+					/>
 
-				<Footer />
+					<Footer />
 
-			</div>
+				</div>
+			</MuiThemeProvider>
 		);
 	},
 
 });
+
+export default HomeLayout;

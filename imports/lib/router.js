@@ -4,8 +4,21 @@ import React from 'react';
 import cookie from 'react-cookie';
 import { mount } from 'react-mounter';
 
-import Tenants from '/imports/collections/tenants';
+// lib
 import Utils from '/imports/lib/utils';
+
+// api
+import Tenants from '/imports/collections/tenants';
+
+// layouts
+import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
+import AddCommentLayout from '/imports/ui/layouts/editor/AddCommentLayout';
+import AddKeywordLayout from '/imports/ui/layouts/editor/AddKeywordLayout';
+import AddRevisionLayout from '/imports/ui/layouts/editor/AddRevisionLayout';
+import EditKeywordLayout from '/imports/ui/layouts/editor/EditKeywordLayout';
+import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
+import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
+import UserLayout from '/imports/ui/layouts/user/UserLayout';
 
 
 FlowRouter.notFound = {

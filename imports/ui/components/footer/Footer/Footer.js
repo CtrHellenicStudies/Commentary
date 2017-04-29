@@ -4,8 +4,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Settings from '/imports/collections/settings';
 
 
-Footer = React.createClass({
-
+const Footer = React.createClass({
 	mixins: [ReactMeteorData],
 
 	childContextTypes: {
@@ -17,7 +16,7 @@ Footer = React.createClass({
 	},
 
 	getMeteorData() {
-		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get("tenantId"));
+		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 		return {
 			settings: settingsHandle.ready() ? Settings.findOne() : {}
@@ -112,3 +111,5 @@ Footer = React.createClass({
 		);
 	},
 });
+
+export default Footer;

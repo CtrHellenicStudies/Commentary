@@ -1,12 +1,14 @@
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import cookie from 'react-cookie';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'mdi/css/materialdesignicons.css';
 
 // components:
-import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
+import Header from '/imports/ui/layouts/header/Header';
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 
-AddCommentLayout = React.createClass({
+const AddCommentLayout = React.createClass({
 
 	mixins: [ReactMeteorData],
 
@@ -417,7 +419,7 @@ AddCommentLayout = React.createClass({
 		});
 
 		return (
-			<div>
+			<MuiThemeProvider>
 				{this.data.ready || this.state.loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<div>
@@ -471,7 +473,10 @@ AddCommentLayout = React.createClass({
 					:
 					<Spinner fullPage />
 				}
-			</div>
+			</MuiThemeProvider>
 		);
 	},
 });
+
+
+export default AddCommentLayout;

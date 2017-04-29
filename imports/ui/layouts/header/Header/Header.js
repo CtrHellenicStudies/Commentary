@@ -3,15 +3,15 @@ import IconButton from 'material-ui/IconButton';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import Settings from '/imports/collections/settings'; // eslint-disable-line import/no-absolute-path
-import Tenants from '/imports/collections/tenants'; // eslint-disable-line import/no-absolute-path
+import Settings from '/imports/collections/settings';
+import Tenants from '/imports/collections/tenants';
 
 // layouts:
-import ModalLogin from '/imports/ui/layouts/auth/ModalLogin'; // eslint-disable-line import/no-absolute-path
-import ModalSignup from '/imports/ui/layouts/auth/ModalSignup'; // eslint-disable-line import/no-absolute-path
-import LeftMenu from '/imports/ui/layouts/header/LeftMenu'; // eslint-disable-line import/no-absolute-path
-import CommentarySearchToolbar from '/imports/ui/layouts/header/CommentarySearchToolbar'; // eslint-disable-line import/no-absolute-path
-import CommentarySearchPanel from '/imports/ui/layouts/header/CommentarySearchPanel'; // eslint-disable-line import/no-absolute-path
+import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
+import ModalSignup from '/imports/ui/layouts/auth/ModalSignup';
+import LeftMenu from '/imports/ui/layouts/header/LeftMenu';
+import CommentarySearchToolbar from '/imports/ui/layouts/header/CommentarySearchToolbar';
+import CommentarySearchPanel from '/imports/ui/layouts/header/CommentarySearchPanel';
 
 /*
 	helpers
@@ -49,9 +49,9 @@ const styles = {
 class Header extends React.Component {
 	static propTypes = {
 		filters: React.PropTypes.any, // eslint-disable-line react/forbid-prop-types
-		toggleSearchTerm: React.PropTypes.func.isRequired,
-		handleChangeTextsearch: React.PropTypes.func.isRequired,
-		handleChangeLineN: React.PropTypes.func.isRequired,
+		toggleSearchTerm: React.PropTypes.func,
+		handleChangeTextsearch: React.PropTypes.func,
+		handleChangeLineN: React.PropTypes.func,
 		initialSearchEnabled: React.PropTypes.bool,
 		addCommentPage: React.PropTypes.bool,
 		isOnHomeView: React.PropTypes.bool,
@@ -59,10 +59,11 @@ class Header extends React.Component {
 		// from creatContainer:
 		settings: React.PropTypes.shape({
 			name: React.PropTypes.string,
-		}).isRequired,
+		}),
 		tenant: React.PropTypes.shape({
-			isAnnotation: React.PropTypes.bool.isRequired,
-		}).isRequired,
+			subdomain: React.PropTypes.string,
+			isAnnotation: React.PropTypes.bool,
+		}),
 	};
 
 	static defaultProps = {
@@ -74,7 +75,7 @@ class Header extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			leftMenuOpen: false,
 			rightMenuOpen: false,
@@ -220,7 +221,11 @@ class Header extends React.Component {
 					closeLeftMenu={this.closeLeftMenu}
 				/>
 
-				{!isOnHomeView &&
+				{!isOnHomeView && (
+					toggleSearchTerm
+					&& handleChangeTextsearch
+					&& hangleChangeLineN
+				) ?
 					<CommentarySearchPanel
 						toggleSearchTerm={toggleSearchTerm}
 						handleChangeTextsearch={handleChangeTextsearch}
@@ -229,7 +234,7 @@ class Header extends React.Component {
 						closeRightMenu={this.closeRightMenu}
 						filters={filters}
 					/>
-				}
+				: ''}
 				<header >
 					{!searchEnabled ?
 						<div className="md-menu-toolbar" >
@@ -254,7 +259,7 @@ class Header extends React.Component {
 										/>
 									</div>
 								}
-								
+
 								<div className="header-section-wrap nav-wrap collapse" >
 									{tenant && !tenant.isAnnotation &&
 										<span>
@@ -356,7 +361,11 @@ class Header extends React.Component {
 												iconClassName="mdi mdi-magnify"
 											/>
 										</div>
-										{!isOnHomeView ?
+										{!isOnHomeView && (
+											toggleSearchTerm
+											&& handleChangeTextsearch
+											&& hangleChangeLineN
+										) ?
 											<div className="search-tools collapse">
 												<CommentarySearchToolbar
 													toggleSearchTerm={toggleSearchTerm}
@@ -406,8 +415,8 @@ export default createContainer(() => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : {},
-		tenant: Tenants.findOne({ _id: Session.get('tenantId') })
+		settings: Settings.findOne({}),
+		tenant: Tenants.findOne({ _id: Session.get('tenantId') }),
 	};
 
 }, Header);

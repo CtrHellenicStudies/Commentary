@@ -9,16 +9,17 @@ call the “this._updateRoute(filters)” method
 with new “filters” object passed as first attribute.
 
 */
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';  // eslint-disable-line import/no-absolute-path
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';  // eslint-disable-line import/no-absolute-path
-import Header from '/imports/ui/layouts/header/Header';  // eslint-disable-line import/no-absolute-path
+import Header from '/imports/ui/layouts/header/Header';
 
 
-CommentaryLayout = React.createClass({
+const CommentaryLayout = React.createClass({
 
 	propTypes: {
 		queryParams: React.PropTypes.object,
@@ -471,7 +472,7 @@ CommentaryLayout = React.createClass({
 		const filters = this._createFilterFromQueryParams(queryParams);
 
 		return (
-			<div>
+			<MuiThemeProvider>
 				<div className="chs-layout commentary-layout">
 
 					<Header
@@ -499,8 +500,11 @@ CommentaryLayout = React.createClass({
 					/>
 					: ''
 				}
-			</div>
+			</MuiThemeProvider>
 		);
 	},
 
 });
+
+
+export default CommentaryLayout;

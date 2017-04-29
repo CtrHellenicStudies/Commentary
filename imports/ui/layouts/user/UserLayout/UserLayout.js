@@ -1,10 +1,15 @@
 import React from 'react';
 import { SnackAttack } from '/imports/ui/components/SnackAttack.jsx';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'mdi/css/materialdesignicons.css';
 
-UserLayout = React.createClass({
+// layouts & components
+import Header from '/imports/ui/layouts/header/Header';
+import Footer from '/imports/ui/components/footer/Footer';
+
+const UserLayout = React.createClass({
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
@@ -29,21 +34,26 @@ UserLayout = React.createClass({
 
 	render() {
 		return (
-			<div className="chs-layout master-layout">
+			<MuiThemeProvider>
+				<div className="chs-layout master-layout">
 
-				<Header  />
+					<Header  />
 
-				<main>
-					{this.data.user ?
-						<ProfilePage user={this.data.user} />
-						:
-						<Loading />
-					}
-				</main>
-				<Footer  />
-				<SnackAttack />
-			</div>
+					<main>
+						{this.data.user ?
+							<ProfilePage user={this.data.user} />
+							:
+							<Loading />
+						}
+					</main>
+					<Footer  />
+					<SnackAttack />
+				</div>
+			</MuiThemeProvider>
 		);
 	},
 
 });
+
+
+export default UserLayout;

@@ -3,12 +3,14 @@ import slugify from 'slugify';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'mdi/css/materialdesignicons.css';
 
 // components:
-import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
+import Header from '/imports/ui/layouts/header/Header';
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 
-AddKeywordLayout = React.createClass({
+const AddKeywordLayout = React.createClass({
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
@@ -355,7 +357,7 @@ AddKeywordLayout = React.createClass({
 		});
 
 		return (
-			<div>
+			<MuiThemeProvider>
 				{ready || loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<div>
@@ -409,7 +411,10 @@ AddKeywordLayout = React.createClass({
 					:
 					<Spinner fullPage />
 				}
-			</div>
+			</MuiThemeProvider>
 		);
 	},
 });
+
+
+export default AddKeywordLayout;

@@ -1,3 +1,4 @@
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
@@ -6,7 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Utils from '/imports/lib/utils';
 
 // api:
-import TextNodes from '/imports/collections/textNodes'; // eslint-disable-line import/no-absolute-path
+import TextNodes from '/imports/api/collections/textNodes'; // eslint-disable-line import/no-absolute-path
 
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; // eslint-disable-line import/no-absolute-path

@@ -1,7 +1,7 @@
 import { check, Match } from 'meteor/check';
 
-import Books from '/imports/collections/books';
-import Comments from '/imports/collections/comments';
+import Books from '/imports/api/collections/books';
+import Comments from '/imports/api/collections/comments';
 
 Meteor.methods({
 	'annotations.insert': (token, comment) => {

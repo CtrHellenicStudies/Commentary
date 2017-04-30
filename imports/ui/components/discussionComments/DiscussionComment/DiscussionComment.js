@@ -1,9 +1,10 @@
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
-DiscussionComment = React.createClass({
+const DiscussionComment = React.createClass({
 
 	propTypes: {
 		discussionComment: React.PropTypes.object.isRequired,
@@ -427,3 +428,5 @@ DiscussionComment = React.createClass({
 	},
 
 });
+
+export default DiscussionComment;

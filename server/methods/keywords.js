@@ -1,4 +1,4 @@
-import Keywords from '/imports/collections/keywords';
+import Keywords from '/imports/api/collections/keywords';
 
 Meteor.methods({
 	'keywords.insert': (token, keywords) => {

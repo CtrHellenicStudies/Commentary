@@ -1,0 +1,6 @@
+{
+  "name": "AvatarIcon",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./AvatarIcon.js"
+}

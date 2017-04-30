@@ -1,3 +1,4 @@
+import React from 'react';
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';

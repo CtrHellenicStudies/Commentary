@@ -1,5 +1,7 @@
+import React from 'react';
+
 // components:
-import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx'; // eslint-disable-line import/no-absolute-path
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon'; // eslint-disable-line import/no-absolute-path
 
 const SideNavTop = ({ currentUser, username }) => (
 	<div className="sidenav-top">

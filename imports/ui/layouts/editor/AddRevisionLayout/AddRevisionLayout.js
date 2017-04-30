@@ -1,3 +1,4 @@
+import React from 'react';
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import cookie from 'react-cookie';
@@ -5,7 +6,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'mdi/css/materialdesignicons.css';
 
 // api
-import Commenters from '/imports/collections/commenters';
+import Commenters from '/imports/api/collections/commenters';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';

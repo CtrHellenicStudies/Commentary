@@ -1,4 +1,6 @@
-LoadingPage = React.createClass({
+import React from 'react';
+
+const LoadingPage = React.createClass({
 	render() {
 		return (
 			<div className="loading">
@@ -6,8 +8,7 @@ LoadingPage = React.createClass({
 					<div className="block-screen brown" />
 					<div className="container v-align-transform">
 						<div className="row">
-							<div className="col-sm-10 col-sm-offset-1 text-center">
-							</div>
+							<div className="col-sm-10 col-sm-offset-1 text-center" />
 						</div>
 					</div>
 				</section>
@@ -19,3 +20,5 @@ LoadingPage = React.createClass({
 		);
 	},
 });
+
+export default LoadingPage;

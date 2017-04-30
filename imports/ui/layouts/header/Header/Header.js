@@ -1,10 +1,11 @@
+import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import Settings from '/imports/collections/settings';
-import Tenants from '/imports/collections/tenants';
+import Settings from '/imports/api/collections/settings';
+import Tenants from '/imports/api/collections/tenants';
 
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';

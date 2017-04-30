@@ -1,3 +1,4 @@
+import React from 'react';
 
 const OAuthButtons = ({ handleFacebook, handleGoogle, handleTwitter }) => (
 	<div className="at-oauth">

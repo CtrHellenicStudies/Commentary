@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
 NotFound = React.createClass({
 

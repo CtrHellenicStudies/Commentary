@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import Books from '/imports/collections/books';
+import Books from '/imports/api/collections/books';
 
 Meteor.methods({
 	'books.insert': (token, book) => {

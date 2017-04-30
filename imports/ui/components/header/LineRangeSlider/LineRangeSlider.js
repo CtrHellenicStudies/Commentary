@@ -1,7 +1,5 @@
+import React from 'react';
 import { debounce } from 'throttle-debounce';
-import 'ion-rangeslider/js/ion.rangeSlider.js';
-import 'ion-rangeslider/css/ion.rangeSlider.css';
-import 'ion-rangeslider/css/ion.rangeSlider.skinFlat.css';
 
 const id = 'line-range';
 

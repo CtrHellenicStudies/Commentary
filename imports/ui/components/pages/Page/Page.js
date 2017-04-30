@@ -1,7 +1,8 @@
-import Pages from '/imports/collections/pages';
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import React from 'react';
+import Pages from '/imports/api/collections/pages';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
-Page = React.createClass({
+const Page = React.createClass({
 	propTypes: {
 		slug: React.PropTypes.string,
 	},
@@ -99,3 +100,5 @@ Page = React.createClass({
 		);
 	},
 });
+
+export default Page;

@@ -1,8 +1,8 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Keywords from '/imports/collections/keywords';
+import Keywords from '/imports/api/collections/keywords';
 
-KeywordReferenceModal = React.createClass({
+const KeywordReferenceModal = React.createClass({
 
 	propTypes: {
 		visible: React.PropTypes.bool,
@@ -86,3 +86,5 @@ KeywordReferenceModal = React.createClass({
 	},
 
 });
+
+export default KeywordRefernceModal;

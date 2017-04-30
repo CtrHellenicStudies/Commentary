@@ -1,4 +1,4 @@
-import Commenters from '/imports/collections/commenters';
+import Commenters from '/imports/api/collections/commenters';
 
 /*
 	helpers

@@ -1,10 +1,11 @@
+import React from 'react';
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
-import Keywords from '/imports/collections/keywords';
+import Keywords from '/imports/api/collections/keywords';
 import 'mdi/css/materialdesignicons.css';
 
 // layouts

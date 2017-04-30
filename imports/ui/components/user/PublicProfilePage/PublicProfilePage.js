@@ -1,11 +1,10 @@
 import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
-import DiscussionComments from '/imports/collections/discussionComments';
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import DiscussionComments from '/imports/api/collections/discussionComments';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
-PublicProfilePage = React.createClass({
+const PublicProfilePage = React.createClass({
 	propTypes: {
 		userId: React.PropTypes.string.isRequired,
 	},
@@ -257,3 +256,5 @@ PublicProfilePage = React.createClass({
 		);
 	},
 });
+
+export default PublicProfilePage;

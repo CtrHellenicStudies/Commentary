@@ -1,5 +1,5 @@
-import Comments from '/imports/collections/comments';
-import DiscussionComments from '/imports/collections/discussionComments';
+import Comments from '/imports/api/collections/comments';
+import DiscussionComments from '/imports/api/collections/discussionComments';
 
 Meteor.methods({
 	'discussionComments.delete': (token, _id) => {

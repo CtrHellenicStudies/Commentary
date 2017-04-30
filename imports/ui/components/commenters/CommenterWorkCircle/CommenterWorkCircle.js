@@ -1,4 +1,6 @@
-CommenterWorkCircle = React.createClass({
+import React from 'react';
+
+const CommenterWorkCircle = React.createClass({
 
 	propTypes: {
 		toggleVisibleWork: React.PropTypes.func.isRequired,
@@ -23,3 +25,5 @@ CommenterWorkCircle = React.createClass({
 		);
 	},
 });
+
+export default CommenterWorkCircle;

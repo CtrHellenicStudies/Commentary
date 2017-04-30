@@ -1,12 +1,13 @@
+import React from 'react';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import KeywordContext from '/imports/ui/components/KeywordContext.jsx';
+import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
 import RaisedButton from 'material-ui/RaisedButton';
-import Keywords from '/imports/collections/keywords';
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
-import KeywordCommentList from '/imports/client/views/keywords/KeywordCommentList';
+import Keywords from '/imports/api/collections/keywords';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import KeywordCommentList from '/imports/ui/components/keywords/KeywordCommentList';
 
-KeywordDetail = React.createClass({
+const KeywordDetail = React.createClass({
 
 	propTypes: {
 		slug: React.PropTypes.string.isRequired,
@@ -186,3 +187,5 @@ KeywordDetail = React.createClass({
 		);
 	},
 });
+
+export default KeywordDetail;

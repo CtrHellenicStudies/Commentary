@@ -1,3 +1,4 @@
+import React from 'react';
 import stylePropType from 'react-style-proptype'
 
 /*

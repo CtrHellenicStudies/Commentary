@@ -1,4 +1,5 @@
-import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx'; // eslint-disable-line import/no-absolute-path
+import React from 'react';
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon'; // eslint-disable-line import/no-absolute-path
 
 const getWorkTitle = (commentGroup) => {
 	let workTitle = commentGroup.work.title;

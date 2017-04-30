@@ -1,8 +1,9 @@
+import React from 'react';
 import IconButton from 'material-ui/IconButton';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import TextNodes from '/imports/collections/textNodes'; // eslint-disable-line import/no-absolute-path
+import TextNodes from '/imports/api/collections/textNodes'; // eslint-disable-line import/no-absolute-path
 
 // components:
 import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText'; // eslint-disable-line import/no-absolute-path

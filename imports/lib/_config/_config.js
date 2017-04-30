@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 const Config = {
 	name: 'Classical Commentaries',
 	domain: 'ahcip.chs.harvard.edu',

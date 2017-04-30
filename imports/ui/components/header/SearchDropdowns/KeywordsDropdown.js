@@ -1,3 +1,4 @@
+import React from 'react';
 
 // components:
 import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown'; // eslint-disable-line import/no-absolute-path

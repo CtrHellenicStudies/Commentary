@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import LinkedDataSchemas from '/imports/collections/linkedDataSchemas';
+import LinkedDataSchemas from '/imports/api/collections/linkedDataSchemas';
 
 Meteor.methods({
 	'linkedDataSchemas.insert': (token, linkedDataSchema) => {

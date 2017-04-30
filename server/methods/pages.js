@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 
-import Pages from '/imports/collections/pages.js';
+import Pages from '/imports/api/collections/pages.js';
 
 Meteor.methods({
 	'pages.insert': (token, page) => {

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 
-import Settings from '/imports/collections/settings.js';
+import Settings from '/imports/api/collections/settings.js';
 
 Meteor.methods({
 	'settings.insert': (token, setting) => {

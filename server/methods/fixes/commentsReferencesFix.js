@@ -1,4 +1,4 @@
-import Comments from '/imports/collections/comments';
+import Comments from '/imports/api/collections/comments';
 
 const commentsReferenceWorkFix = () => {
 	const comments = Comments.find().fetch();

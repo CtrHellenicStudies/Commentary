@@ -1,5 +1,7 @@
+import React from 'react';
+
 // List of discussionComments
-DiscussionCommentsList = React.createClass({
+const DiscussionCommentsList = React.createClass({
 
 	propTypes: {
 		discussionComments: React.PropTypes.array,
@@ -28,3 +30,6 @@ DiscussionCommentsList = React.createClass({
 
 
 });
+
+
+export default DiscussionCommentsList;

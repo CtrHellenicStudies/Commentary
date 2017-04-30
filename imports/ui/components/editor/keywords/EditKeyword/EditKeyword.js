@@ -1,3 +1,4 @@
+import React from 'react';
 import { Session } from 'meteor/session';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -14,9 +15,9 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
 import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
-import Commenters from '/imports/collections/commenters';
-import Keywords from '/imports/collections/keywords';
-import ReferenceWorks from '/imports/collections/referenceWorks';
+import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
 import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
 
@@ -26,7 +27,7 @@ const { InlineToolbar } = inlineToolbarPlugin;
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
 
-EditKeyword = React.createClass({
+const EditKeyword = React.createClass({
 
 	propTypes: {
 		submitForm: React.PropTypes.func.isRequired,
@@ -405,3 +406,5 @@ EditKeyword = React.createClass({
 		);
 	},
 });
+
+export default EditKeyword;

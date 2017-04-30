@@ -1,5 +1,5 @@
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-
 
 /*
 	helpers
@@ -50,7 +50,7 @@ const ContextPanelText = ({ onBeforeClicked, selectedLemmaEdition, lineFrom, com
 			: '' }
 
 			{selectedEditionText.lines.map((line) => {
-				
+
 				const lineClass = getLineClass(commentGroup.lineFrom, commentGroup.lineTo, line.n);
 
 				return (

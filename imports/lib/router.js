@@ -8,7 +8,7 @@ import { mount } from 'react-mounter';
 import Utils from '/imports/lib/utils';
 
 // api
-import Tenants from '/imports/collections/tenants';
+import Tenants from '/imports/api/collections/tenants';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -46,6 +46,8 @@ FlowRouter.triggers.enter([() => {
 	 */
 	if (!Session.get('tenantId')) {
 		const hostnameArray = document.location.hostname.split('.');
+		let subdomain;
+
 		if (process.env.NODE_ENV === 'development') {
 			subdomain = Meteor.settings.public.developmentSubdomain;
 		} else if (hostnameArray.length > 1) {
@@ -122,8 +124,6 @@ FlowRouter.triggers.enter([() => {
 	if (Meteor.isClient) {
 		Utils.setBaseDocMeta();
 	}
-
-	this.tenantId = Session.get('tenantId');
 }]);
 
 /*

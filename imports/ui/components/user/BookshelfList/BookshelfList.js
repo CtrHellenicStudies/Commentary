@@ -1,7 +1,7 @@
 import Masonry from 'react-masonry-component/lib';
-import Works from '/imports/collections/works';
+import Works from '/imports/api/collections/works';
 
-BookshelfList = React.createClass({
+const BookshelfList = React.createClass({
 
 	mixins: [ReactMeteorData],
 
@@ -91,3 +91,5 @@ BookshelfList = React.createClass({
 	},
 
 });
+
+export default BookshelfList;

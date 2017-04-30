@@ -1,10 +1,11 @@
+import React from 'react';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import Tenants from '/imports/collections/tenants'; // eslint-disable-line import/no-absolute-path
+import Tenants from '/imports/api/collections/tenants'; // eslint-disable-line import/no-absolute-path
 
 // components:
 import SideNavTop from '/imports/ui/components/header/SideNavTop'; // eslint-disable-line import/no-absolute-path

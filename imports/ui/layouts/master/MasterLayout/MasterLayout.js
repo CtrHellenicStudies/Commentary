@@ -1,3 +1,4 @@
+import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import 'mdi/css/materialdesignicons.css';

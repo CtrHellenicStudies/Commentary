@@ -1,4 +1,6 @@
-WorkVisualization = React.createClass({
+import React from 'react';
+
+const WorkVisualization = React.createClass({
 
 	propTypes: {
 		work: React.PropTypes.object.isRequired,
@@ -848,3 +850,5 @@ WorkVisualization = React.createClass({
 		return null;
 	},
 });
+
+export default WorkVisualization;

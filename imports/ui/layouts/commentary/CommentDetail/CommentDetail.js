@@ -1,15 +1,15 @@
+import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import ReferenceWorks from '/imports/collections/referenceWorks';  // eslint-disable-line import/no-absolute-path
-
-// layouts:
+import ReferenceWorks from '/imports/api/collections/referenceWorks';  // eslint-disable-line import/no-absolute-path
 
 // components:
-import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';  // eslint-disable-line import/no-absolute-path
-import CommentKeywordsContainer from '/imports/ui/components/commentary/comments/CommentKeywordsContainer';  // eslint-disable-line import/no-absolute-path
-import CommentLower from '/imports/ui/components/commentary/comments/CommentLower';  // eslint-disable-line import/no-absolute-path
-import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';  // eslint-disable-line import/no-absolute-path
+import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';
+import CommentKeywordsContainer from '/imports/ui/components/commentary/comments/CommentKeywordsContainer';
+import CommentLower from '/imports/ui/components/commentary/comments/CommentLower';
+import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
+import DiscussionThread from '/imports/ui/components/discussionComments/DiscussionThread';
 
 
 /*
@@ -95,7 +95,7 @@ class CommentDetail extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			selectedRevisionIndex: null,
 			discussionVisible: false,
@@ -122,7 +122,7 @@ class CommentDetail extends React.Component {
 		this.closeLemmaReference = this.closeLemmaReference.bind(this);
 		this.closeKeywordReference = this.closeKeywordReference.bind(this);
 		this.selectRevision = this.selectRevision.bind(this);
-		
+
 	}
 
 	getRevisionIndex() {

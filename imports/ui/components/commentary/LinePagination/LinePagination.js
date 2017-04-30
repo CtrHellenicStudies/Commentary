@@ -1,6 +1,7 @@
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-LinePagination = React.createClass({
+const LinePagination = React.createClass({
 	propTypes: {
 		linePagination: React.PropTypes.array.isRequired,
 		linePaginationClicked: React.PropTypes.func.isRequired,
@@ -24,3 +25,6 @@ LinePagination = React.createClass({
 		);
 	},
 });
+
+
+export default LinePagination;

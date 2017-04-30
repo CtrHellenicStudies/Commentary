@@ -1,3 +1,4 @@
+import React from 'react';
 import { StickyContainer } from 'react-sticky';
 
 // layouts:
@@ -47,7 +48,7 @@ class CommentGroup extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			hideLemma: false,
 		};

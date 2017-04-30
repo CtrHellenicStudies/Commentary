@@ -1,12 +1,13 @@
+import React from 'react';
 import { Session } from 'meteor/session';
 import TextField from 'material-ui/TextField';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import Commenters from '/imports/collections/commenters'; // eslint-disable-line import/no-absolute-path
-import Keywords from '/imports/collections/keywords'; // eslint-disable-line import/no-absolute-path
-import ReferenceWorks from '/imports/collections/referenceWorks'; // eslint-disable-line import/no-absolute-path
-import Works from '/imports/collections/works'; // eslint-disable-line import/no-absolute-path
+import Commenters from '/imports/api/collections/commenters'; // eslint-disable-line import/no-absolute-path
+import Keywords from '/imports/api/collections/keywords'; // eslint-disable-line import/no-absolute-path
+import ReferenceWorks from '/imports/api/collections/referenceWorks'; // eslint-disable-line import/no-absolute-path
+import Works from '/imports/api/collections/works'; // eslint-disable-line import/no-absolute-path
 
 // components:
 import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns'; // eslint-disable-line import/no-absolute-path
@@ -105,7 +106,7 @@ class CommentarySearchToolbar extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			searchDropdownOpen: '',
 			moreDropdownOpen: false,

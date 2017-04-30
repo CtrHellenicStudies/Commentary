@@ -1,26 +1,35 @@
+import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
-import Comments from '/imports/collections/comments';
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import Comments from '/imports/api/collections/comments';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
+// lib
 import Utils from '/imports/lib/utils';
+
+// components:
+import CommentersList from '/imports/ui/components/commenters/CommentersList';
+import WorksList from '/imports/ui/components/works/WorksList';
+import KeywordsList from '/imports/ui/components/keywords/KeywordsList';
+import Spinner from '/imports/ui/components/loading/Spinner';
+
 // layouts:
-import Commentary from '/imports/ui/layouts/commentary/Commentary';  // eslint-disable-line import/no-absolute-path
+import Commentary from '/imports/ui/layouts/commentary/Commentary';
 
 
-Home = React.createClass({
+const Home = React.createClass({
 
 	propTypes: {
 		settings: React.PropTypes.object,
+		comments: React.PropTypes.array,
+		ready: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-
-	mixins: [ReactMeteorData],
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
@@ -30,20 +39,6 @@ Home = React.createClass({
 		new WOW().init();
 	},
 
-	getMeteorData() {
-		// SUBSCRIPTIONS:
-		const query = { tenantId: Session.get('tenantId') };
-		const commentsSub = Meteor.subscribe('comments', query, 0, 10);
-
-		const comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
-
-		const commentsReady = commentsSub.ready();
-
-		return {
-			comments,
-			commentsReady,
-		};
-	},
 	scrollToIntro(e) {
 		$('html, body').animate({ scrollTop: $('#intro').offset().top - 100 }, 300);
 
@@ -51,7 +46,7 @@ Home = React.createClass({
 	},
 
 	render() {
-		const { settings } = this.props;
+		const { settings, comments, ready } = this.props;
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
@@ -250,11 +245,11 @@ Home = React.createClass({
 					<section className="get-started">
 						<h2 className="block-title">Get Started</h2>
 						<div className="get-started-comments">
-							{this.data.commentsReady ?
+							{ready ?
 								<Commentary
 									isOnHomeView
 									filters={[]}
-									comments={this.data.comments}
+									comments={comments}
 									skip={0}
 									limit={10}
 								/>
@@ -277,3 +272,15 @@ Home = React.createClass({
 		);
 	},
 });
+
+export default createContainer(() => {
+	const query = { tenantId: Session.get('tenantId') };
+	const commentsSub = Meteor.subscribe('comments', query, 0, 10);
+
+	const comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
+
+	return {
+		comments,
+		ready: commentsSub.ready(),
+	};
+}, Home);

@@ -1,5 +1,5 @@
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-
 
 /*
 	helpers
@@ -91,7 +91,7 @@ MetaTabs.defaultProps = {
 */
 const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, toggleHighlighting, highlightingVisible }) => (
 	<div className="lemma-panel-tabs">
-		
+
 		<EditionTabs
 			lemmaText={lemmaText}
 			selectedLemmaEdition={selectedLemmaEdition}
@@ -102,7 +102,7 @@ const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, togg
 			toggleHighlighting={toggleHighlighting}
 			highlightingVisible={highlightingVisible}
 		/>
-		
+
 	</div>
 );
 ContextPanelTabs.propTypes = {

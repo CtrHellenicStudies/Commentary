@@ -1,3 +1,4 @@
+import React from 'react';
 import { Session } from 'meteor/session';
 import slugify from 'slugify';
 import cookie from 'react-cookie';

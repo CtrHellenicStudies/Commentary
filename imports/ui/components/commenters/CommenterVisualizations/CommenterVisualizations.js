@@ -1,7 +1,8 @@
+import React from 'react';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-CommenterVisualizations = React.createClass({
+const CommenterVisualizations = React.createClass({
 
 	propTypes: {
 		commenter: React.PropTypes.object.isRequired,
@@ -113,3 +114,5 @@ CommenterVisualizations = React.createClass({
 		);
 	},
 });
+
+export default CommenterVisualizations;

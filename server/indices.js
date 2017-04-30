@@ -1,6 +1,6 @@
-import Comments from '/imports/collections/comments';
-import Commenters from '/imports/collections/commenters';
-import TextNodes from '/imports/collections/textNodes';
+import Comments from '/imports/api/collections/comments';
+import Commenters from '/imports/api/collections/commenters';
+import TextNodes from '/imports/api/collections/textNodes';
 
 Comments._ensureIndex({
 	'$**': 'text',

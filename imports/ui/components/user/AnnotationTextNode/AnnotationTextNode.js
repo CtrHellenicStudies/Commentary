@@ -1,7 +1,7 @@
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-AnnotationTextNode = React.createClass({
+const AnnotationTextNode = React.createClass({
 
 	propTypes: {
 		annotation: React.PropTypes.object.isRequired,
@@ -119,3 +119,5 @@ AnnotationTextNode = React.createClass({
 		);
 	},
 });
+
+export default AnnotationTextNode;

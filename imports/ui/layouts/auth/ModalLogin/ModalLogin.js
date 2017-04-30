@@ -1,3 +1,5 @@
+import React from 'react';
+
 // components:
 import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';  // eslint-disable-line import/no-absolute-path
 import PWDLoginForm from '/imports/ui/components/auth/PWDLoginForm';  // eslint-disable-line import/no-absolute-path
@@ -15,7 +17,7 @@ class ModalLogin extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			errorMsg: '',
 			errorSocial: '',
@@ -120,7 +122,7 @@ class ModalLogin extends React.Component {
 									login={this.handleLogin}
 									errorMsg={errorMsg}
 								/>
-								
+
 								<div className="at-signup-link">
 									<p>
 										Don't have an account? <a href="/sign-up" id="at-signUp" className="at-link at-signup">Register.</a>

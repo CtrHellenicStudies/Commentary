@@ -1,5 +1,5 @@
-import Comments from '/imports/collections/comments';
-import Commenters from '/imports/collections/commenters';
+import Comments from '/imports/api/collections/comments';
+import Commenters from '/imports/api/collections/commenters';
 
 const commentsCommentersIdsFix = () => {
 	const comments = Comments.find().fetch();

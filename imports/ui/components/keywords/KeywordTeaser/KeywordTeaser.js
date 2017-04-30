@@ -2,7 +2,7 @@ import React from 'react';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-KeywordTeaser = React.createClass({
+const KeywordTeaser = React.createClass({
 
 	propTypes: {
 		keyword: React.PropTypes.object.isRequired,
@@ -65,3 +65,5 @@ KeywordTeaser = React.createClass({
 	},
 
 });
+
+export default KeywordTeaser;

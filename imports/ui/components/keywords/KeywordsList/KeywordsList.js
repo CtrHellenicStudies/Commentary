@@ -1,47 +1,23 @@
+import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
-import Keywords from '/imports/collections/keywords';
 
-KeywordsList = React.createClass({
+// api
+import Keywords from '/imports/api/collections/keywords';
+
+// components
+import KeywordTeaser from '/imports/ui/components/keywords/KeywordTeaser';
+
+const KeywordsList = React.createClass({
 
 	propTypes: {
 		type: React.PropTypes.string.isRequired,
 		limit: React.PropTypes.number,
-	},
-
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-		const type = this.props.type;
-		const skip = 0;
-		let limit = 100;
-		if (this.props.limit) {
-			limit = this.props.limit;
-		}
-
-		const query = {
-			type,
-			tenantId: Session.get("tenantId"),
-			count: { $gte: 1 },
-		};
-
-		switch (type) {
-			case 'word':
-				Meteor.subscribe('keywords.keywords', query, skip, limit);
-				break;
-			case 'idea':
-				Meteor.subscribe('keywords.keyideas', query, skip, limit);
-				break;
-		}
-
-		const keywords = Keywords.find(query, {limit}).fetch();
-
-		return {
-			keywords,
-		};
+		keywords: React.PropTypes.array,
 	},
 
 	renderKeywords() {
-		return this.data.keywords.map((keyword, i) => (
+		return this.props.keywords.map((keyword, i) => (
 			<KeywordTeaser
 				key={i}
 				keyword={keyword}
@@ -58,3 +34,34 @@ KeywordsList = React.createClass({
 	},
 
 });
+
+export default createContainer(({ type, limit }) => {
+	const skip = 0;
+	let _limit = 100;
+	if (limit) {
+		_limit = limit;
+	}
+
+	const query = {
+		type,
+		tenantId: Session.get('tenantId'),
+		count: { $gte: 1 },
+	};
+
+	switch (type) {
+	case 'word':
+		Meteor.subscribe('keywords.keywords', query, skip, _limit);
+		break;
+	case 'idea':
+		Meteor.subscribe('keywords.keyideas', query, skip, _limit);
+		break;
+	default:
+		break;
+	}
+
+	const keywords = Keywords.find(query, { limit: _limit }).fetch();
+
+	return {
+		keywords,
+	};
+}, KeywordsList);

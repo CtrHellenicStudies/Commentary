@@ -9,6 +9,7 @@ call the “this._updateRoute(filters)” method
 with new “filters” object passed as first attribute.
 
 */
+import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';

@@ -1,6 +1,7 @@
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import React from 'react';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
-CommentersPage = React.createClass({
+const CommentersPage = React.createClass({
 
 	mixins: [ReactMeteorData],
 
@@ -49,3 +50,5 @@ CommentersPage = React.createClass({
 		);
 	},
 });
+
+export default CommentersPage;

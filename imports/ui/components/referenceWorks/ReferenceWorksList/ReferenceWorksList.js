@@ -1,8 +1,7 @@
 import Masonry from 'react-masonry-component/lib';
-import ReferenceWorks from '/imports/collections/referenceWorks';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
-
-ReferenceWorksList = React.createClass({
+const ReferenceWorksList = React.createClass({
 
 	propTypes: {
 		commenterId: React.PropTypes.string,
@@ -59,3 +58,5 @@ ReferenceWorksList = React.createClass({
 	},
 
 });
+
+export default ReferenceWorksList;

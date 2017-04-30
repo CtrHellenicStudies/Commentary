@@ -1,9 +1,9 @@
-import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
-import Commenters from '/imports/collections/commenters';
-import ReferenceWorks from '/imports/collections/referenceWorks';
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
+import Commenters from '/imports/api/collections/commenters';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
-ReferenceWorkDetail = React.createClass({
+const ReferenceWorkDetail = React.createClass({
 
 	propTypes: {
 		slug: React.PropTypes.string.isRequired,
@@ -132,3 +132,5 @@ ReferenceWorkDetail = React.createClass({
 	},
 
 });
+
+export default ReferenceWorkDetail;

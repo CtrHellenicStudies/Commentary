@@ -4,12 +4,12 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
-import AvatarEditor from '/imports/avatar/client/ui/AvatarEditor.jsx';
+import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import Toggle from 'material-ui/Toggle';
-import DiscussionComments from '/imports/collections/discussionComments';
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import DiscussionComments from '/imports/api/collections/discussionComments';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
-ProfilePage = React.createClass({
+const ProfilePage = React.createClass({
 	propTypes: {
 		user: React.PropTypes.object,
 	},
@@ -371,3 +371,5 @@ ProfilePage = React.createClass({
 		);
 	},
 });
+
+export default ProfilePage;

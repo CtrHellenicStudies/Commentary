@@ -1,18 +1,19 @@
+import React from 'react';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import Comments from '/imports/collections/comments';// eslint-disable-line import/no-absolute-path
-import Settings from '/imports/collections/settings';
+import Comments from '/imports/api/collections/comments';// eslint-disable-line import/no-absolute-path
+import Settings from '/imports/api/collections/settings';
 
 // layouts:
 import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';  // eslint-disable-line import/no-absolute-path
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';  // eslint-disable-line import/no-absolute-path
 
 // components:
-import InfiniteScroll from '/imports/ui/components/InfiniteScroll.jsx'; // eslint-disable-line import/no-absolute-path
+import InfiniteScroll from '/imports/ui/components/shared/InfiniteScroll'; // eslint-disable-line import/no-absolute-path
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
 
 // helpers:

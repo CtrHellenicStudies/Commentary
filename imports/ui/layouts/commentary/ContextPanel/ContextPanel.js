@@ -1,3 +1,5 @@
+import React from 'react';
+
 // private component:
 import ContextPanelContent from './ContextPanelContent';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SnackAttack } from '/imports/ui/components/SnackAttack.jsx';
+import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';

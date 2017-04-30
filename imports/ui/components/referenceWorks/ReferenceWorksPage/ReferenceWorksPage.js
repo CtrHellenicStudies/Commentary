@@ -1,6 +1,6 @@
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
-ReferenceWorksPage = React.createClass({
+const ReferenceWorksPage = React.createClass({
 
 	propTypes: {
 		title: React.PropTypes.string.isRequired,
@@ -51,3 +51,5 @@ ReferenceWorksPage = React.createClass({
 	},
 
 });
+
+export default ReferenceWorksPage;

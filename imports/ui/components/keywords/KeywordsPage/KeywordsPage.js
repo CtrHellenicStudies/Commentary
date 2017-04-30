@@ -1,6 +1,7 @@
-import BackgroundImageHolder from '/imports/client/shared/BackgroundImageHolder';
+import React from 'react';
+import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
-KeywordsPage = React.createClass({
+const KeywordsPage = React.createClass({
 
 	propTypes: {
 		type: React.PropTypes.string.isRequired,
@@ -56,3 +57,5 @@ KeywordsPage = React.createClass({
 	},
 
 });
+
+export default KeywordsPage;

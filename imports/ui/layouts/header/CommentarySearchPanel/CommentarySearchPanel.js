@@ -1,3 +1,5 @@
+import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -6,15 +8,15 @@ import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
 // api:
-import Commenters from '/imports/collections/commenters'; // eslint-disable-line import/no-absolute-path
-import Keywords from '/imports/collections/keywords'; // eslint-disable-line import/no-absolute-path
-import ReferenceWorks from '/imports/collections/referenceWorks'; // eslint-disable-line import/no-absolute-path
-import Works from '/imports/collections/works'; // eslint-disable-line import/no-absolute-path
+import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Works from '/imports/api/collections/works';
 
 // components:
-import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider'; // eslint-disable-line import/no-absolute-path
-import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel'; // eslint-disable-line import/no-absolute-path
-import { WorksCard } from '/imports/ui/components/header/SearchCards'; // eslint-disable-line import/no-absolute-path
+import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
+import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel';
+import { WorksCard } from '/imports/ui/components/header/SearchCards';
 
 
 const CommentarySearchPanel = React.createClass({
@@ -26,13 +28,16 @@ const CommentarySearchPanel = React.createClass({
 		handleChangeLineN: React.PropTypes.func,
 		open: React.PropTypes.bool,
 		closeRightMenu: React.PropTypes.func,
+		keyideas: React.PropTypes.array,
+		keywords: React.PropTypes.array,
+		commenters: React.PropTypes.array,
+		works: React.PropTypes.array,
+		referenceWorks: React.PropTypes.array,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -43,37 +48,6 @@ const CommentarySearchPanel = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
-	getMeteorData() {
-		// SUBSCRIPTIONS:
-		let works = [];
-		let keywords = [];
-		let keyideas = [];
-		let commenters = [];
-		let referenceWorks = [];
-
-		if (!this.props.addCommentPage) {
-			Meteor.subscribe('commenters', Session.get('tenantId'));
-			Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
-			Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-		}
-		Meteor.subscribe('works', Session.get('tenantId'));
-
-		// FETCH DATA:
-		keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keywords = Keywords.find({ type: 'word' }).fetch();
-		commenters = Commenters.find().fetch();
-		works = Works.find({}, { sort: { order: 1 } }).fetch();
-		referenceWorks = ReferenceWorks.find({}, { sort: { title: 1 } }).fetch();
-
-		return {
-			keyideas,
-			keywords,
-			commenters,
-			works,
-			referenceWorks,
-		};
 	},
 
 	toggleSearchTerm(key, value) {
@@ -117,6 +91,7 @@ const CommentarySearchPanel = React.createClass({
 
 	render() {
 		const self = this;
+		const { keyideas, keywords, commenters, works, referenceWorks } = this.props;
 		const filters = this.props.filters || [];
 
 		const styles = {
@@ -184,12 +159,12 @@ const CommentarySearchPanel = React.createClass({
 				</div>
 
 				<WorksCard
-					works={this.data.works}
+					works={works}
 					toggleWorkSearchTerm={this.toggleWorkSearchTerm}
 					styles={styles}
 					filters={filters}
 				/>
-				
+
 				<Card
 					className="search-tool-card"
 				>
@@ -255,7 +230,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{self.data.keywords.map((keyword, i) => {
+						{keywords.map((keyword, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'keywords') {
@@ -291,7 +266,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{self.data.keyideas.map((keyidea, i) => {
+						{keyideas.map((keyidea, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'keyideas') {
@@ -327,7 +302,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{self.data.commenters.map((commenter, i) => {
+						{commenters.map((commenter, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'commenters') {
@@ -363,7 +338,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{self.data.referenceWorks.map((reference, i) => {
+						{referenceWorks.map((reference, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'reference') {
@@ -393,4 +368,32 @@ const CommentarySearchPanel = React.createClass({
 	},
 });
 
-export default CommentarySearchPanel;
+export default createContainer(() => {
+	let works = [];
+	let keywords = [];
+	let keyideas = [];
+	let commenters = [];
+	let referenceWorks = [];
+
+	if (!this.props.addCommentPage) {
+		Meteor.subscribe('commenters', Session.get('tenantId'));
+		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+	}
+	Meteor.subscribe('works', Session.get('tenantId'));
+
+	// FETCH DATA:
+	keyideas = Keywords.find({ type: 'idea' }).fetch();
+	keywords = Keywords.find({ type: 'word' }).fetch();
+	commenters = Commenters.find().fetch();
+	works = Works.find({}, { sort: { order: 1 } }).fetch();
+	referenceWorks = ReferenceWorks.find({}, { sort: { title: 1 } }).fetch();
+
+	return {
+		keyideas,
+		keywords,
+		commenters,
+		works,
+		referenceWorks,
+	};
+}, CommentarySearchPanel);

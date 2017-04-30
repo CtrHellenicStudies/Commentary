@@ -1,4 +1,6 @@
-CommenterReferenceWorks = React.createClass({
+import React from 'react';
+
+const CommenterReferenceWorks = React.createClass({
 
 	propTypes: {
 		commenter: React.PropTypes.object.isRequired,
@@ -23,3 +25,6 @@ CommenterReferenceWorks = React.createClass({
 	},
 
 });
+
+
+export default CommentersReferenceWorks;

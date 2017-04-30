@@ -3,7 +3,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
-import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '../../api/api_utils.js';
+import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '../../api/utils.js';
 
 export default KeywordContext = React.createClass({
 

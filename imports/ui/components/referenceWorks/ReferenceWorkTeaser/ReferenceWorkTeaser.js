@@ -2,7 +2,7 @@ import React from 'react';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-ReferenceWorkTeaser = React.createClass({
+const ReferenceWorkTeaser = React.createClass({
 
 	propTypes: {
 		referenceWork: React.PropTypes.object.isRequired,
@@ -72,3 +72,5 @@ ReferenceWorkTeaser = React.createClass({
 	},
 
 });
+
+export default ReferenceWorkTeaser;

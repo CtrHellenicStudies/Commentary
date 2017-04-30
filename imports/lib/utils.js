@@ -111,7 +111,7 @@ const Utils = {
 		}
 		return cmp;
 	},
-	sortBy: function () {
+	sortBy: function sort() {
 		const fields = [];
 		const nFields = arguments.length;
 		let field;

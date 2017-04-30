@@ -1,3 +1,4 @@
+import React from 'react';
 import { Session } from 'meteor/session';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -12,9 +13,9 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved, max-len
-import Commenters from '/imports/collections/commenters';
-import Keywords from '/imports/collections/keywords';
-import ReferenceWorks from '/imports/collections/referenceWorks';
+import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved, max-len
 import {
 	ItalicButton,
@@ -54,7 +55,7 @@ const { InlineToolbar } = inlineToolbarPlugin;
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
 
-AddKeyword = React.createClass({
+const AddKeyword = React.createClass({
 
 	propTypes: {
 		selectedLineFrom: React.PropTypes.number,
@@ -401,3 +402,5 @@ AddKeyword = React.createClass({
 		);
 	},
 });
+
+export default AddKeyword;

@@ -1,4 +1,6 @@
-CommenterWorkVisualization = React.createClass({
+import React from 'react';
+
+const CommenterWorkVisualization = React.createClass({
 
 	propTypes: {
 		work: React.PropTypes.object.isRequired,
@@ -29,3 +31,6 @@ CommenterWorkVisualization = React.createClass({
 		);
 	},
 });
+
+
+export default CommenterWorkVisualization;

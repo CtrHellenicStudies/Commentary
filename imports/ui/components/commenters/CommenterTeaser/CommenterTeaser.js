@@ -1,10 +1,11 @@
+import React from 'react';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AvatarIcon from '/imports/avatar/client/ui/AvatarIcon.jsx';
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import Utils from '/imports/lib/utils';
 
 // commenter Teaser
-CommenterTeaser = React.createClass({
+const CommenterTeaser = React.createClass({
 
 	propTypes: {
 		commenter: React.PropTypes.object.isRequired,
@@ -55,3 +56,6 @@ CommenterTeaser = React.createClass({
 	},
 
 });
+
+
+export default CommenterTeaser;

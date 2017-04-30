@@ -1,3 +1,4 @@
+import React from 'react';
 
 const CommentReference = (props) => {
 	if (props.referenceWorks && props.referenceWorks.length) {

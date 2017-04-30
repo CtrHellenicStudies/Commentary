@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Accounts } from 'meteor/accounts-base';
 import cookie from 'react-cookie'; // eslint-disable-line import/no-unresolved
 
@@ -17,7 +19,7 @@ class ModalSignup extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			errorMsg: '',
 			errorSocial: '',
@@ -136,7 +138,7 @@ class ModalSignup extends React.Component {
 							handleSignup={this.handleSignup}
 							errorMsg={errorMsg}
 						/>
-						
+
 						<div className="at-signup-link">
 							<div className="at-resend-verification-email-link at-wrap">
 								<p>

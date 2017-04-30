@@ -1,7 +1,6 @@
+import TextNodes from '/imports/api/collections/textNodes';
 
-import TextNodes from '/imports/collections/textNodes';
-
-UserBookmarksList = React.createClass({
+const UserBookmarksList = React.createClass({
 
 	mixins: [ReactMeteorData],
 
@@ -60,3 +59,5 @@ UserBookmarksList = React.createClass({
 	},
 
 });
+
+export default UserBookmarksList;

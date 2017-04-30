@@ -1,3 +1,0 @@
-[submodule "packages/flow-db-admin"]
-	path = packages/flow-db-admin
-	url = https://github.com/suheb/flow-db-admin.git

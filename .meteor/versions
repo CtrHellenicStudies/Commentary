@@ -13,7 +13,6 @@ aldeed:collection2-core@1.2.0
 aldeed:schema-deny@1.1.0
 aldeed:schema-index@1.1.1
 aldeed:simple-schema@1.5.3
-aldeed:tabular@1.4.2
 aldeed:template-extension@3.4.3
 allow-deny@1.0.5
 archimedigital:core@0.1.1
@@ -40,7 +39,6 @@ check@1.2.5
 chuangbo:cookie@1.1.0
 cmather:handlebars-server@2.0.0
 coffeescript@1.0.17
-cosmos:browserify@0.8.4
 d3js:d3@3.5.8
 dburles:collection-helpers@1.1.0
 dburles:factory@1.1.0
@@ -65,7 +63,7 @@ fortawesome:fontawesome@4.5.0
 geojson-utils@1.0.10
 google-config-ui@1.0.0
 google-oauth@1.2.0
-gwendall:blaze-to-react@0.1.2
+gwendall:blaze-to-react@1.0.0
 handlebars@1.0.7
 hot-code-push@1.0.4
 html-tools@1.0.11
@@ -79,7 +77,7 @@ kadira:blaze-layout@2.3.0
 kadira:dochead@1.5.0
 kadira:flow-router@2.12.1
 kadira:login-state@1.3.1
-kadira:react-layout@1.5.3
+kadira:react-layout@1.3.0
 kuip:schema-graphql-bridge@1.0.3
 less@2.7.9
 livedata@1.0.18
@@ -92,11 +90,8 @@ meteor@1.6.1
 meteor-base@1.0.4
 meteorhacks:aggregate@1.3.0
 meteorhacks:collection-utils@1.2.0
-meteorhacks:meteorx@1.4.1
 meteorhacks:ssr@2.2.0
-meteorhacks:unblock@1.1.0
 meteorspark:util@0.2.0
-mfactory:admin-lte@0.0.2
 minifier-css@1.2.16
 minifier-js@1.2.17
 minimongo@1.0.20
@@ -129,16 +124,15 @@ raix:eventemitter@0.1.3
 raix:handlebar-helpers@0.2.5
 random@1.0.10
 rate-limit@1.0.6
-react@0.14.6
+react@15.0.1
 react-meteor-data@0.2.9
-react-runtime@0.14.5
+react-runtime@15.0.1
 reactive-dict@1.1.8
 reactive-var@1.0.11
 reload@1.1.11
 retry@1.0.9
 reywood:publish-composite@1.4.2
 routepolicy@1.0.12
-sach:flow-db-admin@1.1.5
 service-configuration@1.0.11
 session@1.1.7
 sha@1.0.9
@@ -180,6 +174,5 @@ yogiben:autoform-map@0.2.0
 yogiben:autoform-modals@0.3.8
 yogiben:helpers@0.0.6
 yogiben:pretty-email@0.0.7
-zimme:active-route@2.3.2
 zimme:collection-behaviours@1.1.3
 zimme:collection-timestampable@1.0.9

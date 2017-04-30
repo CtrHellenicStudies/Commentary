@@ -1,17 +1,10 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
 const CommentersPage = React.createClass({
-
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-		return {
-			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
-		};
-	},
 
 	render() {
 		const { settings } = this.data;
@@ -51,4 +44,13 @@ const CommentersPage = React.createClass({
 	},
 });
 
-export default CommentersPage;
+const commentersPageContainer = createContainer(() => {
+	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+	return {
+		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+	};
+}, CommentersPage);
+
+
+export default commentersPageContainer;

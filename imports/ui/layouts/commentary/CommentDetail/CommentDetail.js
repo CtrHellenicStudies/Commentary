@@ -1,4 +1,6 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
@@ -328,7 +330,7 @@ export default createContainer(({ comment }) => {
 
 	const referenceWorkIds = [];
 	let referenceWorks = [];
-	if ('referenceWorks' in comment) {
+	if (comment && 'referenceWorks' in comment) {
 		comment.referenceWorks.forEach((referenceWork) => {
 			referenceWorkIds.push(referenceWork.referenceWorkId);
 		});

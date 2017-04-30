@@ -1,10 +1,18 @@
 import React from 'react';
-import FlatButton from 'material-ui/FlatButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// layouts
+import Header from '/imports/ui/layouts/header/Header';
+
+// components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
-NotFound = React.createClass({
+const NotFound = React.createClass({
+
+	propTypes: {
+		isTest: React.PropTypes.bool,
+	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
@@ -31,15 +39,19 @@ NotFound = React.createClass({
 			'μὴ γένοιτο',
 			'οὐαί'
 		];
-		const randomExpression = expressionsOfWoe[Math.round(Math.random() * expressionsOfWoe.length)];
-		const userIsLoggedin = false;
+		let randomExpression = expressionsOfWoe[Math.round(Math.random() * expressionsOfWoe.length)];
+
+		// If this is just a test, set the same expression each time to not disrupt snapshot
+		if (this.props.isTest) {
+			randomExpression = 'ὦ Ζεῦ';
+		}
 
 		return (
 			<div className="chs-layout master-layout not-found-layout">
 				<Header />
 				<div className="page page-not-found content primary">
 
-				<section className="block header header-page	cover parallax">
+					<section className="block header header-page	cover parallax">
 						<BackgroundImageHolder
 							imgSrc="/images/odysseus.jpg"
 						/>
@@ -81,3 +93,5 @@ NotFound = React.createClass({
 		);
 	},
 });
+
+export default NotFound;

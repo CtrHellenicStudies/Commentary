@@ -1,3 +1,6 @@
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
 const ReferenceWorksPage = React.createClass({

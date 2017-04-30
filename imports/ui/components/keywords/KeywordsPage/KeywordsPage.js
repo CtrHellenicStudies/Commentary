@@ -1,4 +1,7 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
 const KeywordsPage = React.createClass({

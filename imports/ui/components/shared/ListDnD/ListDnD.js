@@ -1,3 +1,5 @@
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd'; // eslint-disable-line import/no-unresolved
 import HTML5Backend from 'react-dnd-html5-backend'; // eslint-disable-line import/no-unresolved
 import { ListGroup, ListGroupItem } from 'react-bootstrap'; // eslint-disable-line import/no-unresolved

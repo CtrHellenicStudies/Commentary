@@ -1,5 +1,6 @@
 import React from 'react';
 import IconButton from 'material-ui/IconButton';
+import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
@@ -87,17 +88,21 @@ ContextPanelContent.propTypes = {
 
 export default createContainer(({ commentGroup, lineFrom }) => {
 
-	const lemmaQuery = {
-		'work.slug': commentGroup.work.slug,
-		'subwork.n': commentGroup.subwork.n,
-		'text.n': {
-			$gte: lineFrom,
-			$lte: lineFrom + 49,
-		},
-	};
+	let lemmaQuery = {};
 
-	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-		lemmaQuery['work.slug'] = 'hymns';
+	if (commentGroup) {
+		lemmaQuery = {
+			'work.slug': commentGroup.work.slug,
+			'subwork.n': commentGroup.subwork.n,
+			'text.n': {
+				$gte: lineFrom,
+				$lte: lineFrom + 49,
+			},
+		};
+
+		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+			lemmaQuery['work.slug'] = 'hymns';
+		}
 	}
 
 	Meteor.subscribe('textNodes', lemmaQuery);

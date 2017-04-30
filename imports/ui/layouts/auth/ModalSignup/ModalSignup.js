@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import cookie from 'react-cookie'; // eslint-disable-line import/no-unresolved
 

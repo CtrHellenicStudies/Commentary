@@ -1,8 +1,9 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
-import { createContainer } from 'meteor/react-meteor-data';
 
 import Utils from '/imports/lib/utils';
 
@@ -162,21 +163,25 @@ class CommentLemma extends React.Component {
 
 export default createContainer(({ commentGroup }) => {
 
-	const lemmaQuery = {
-		'work.slug': commentGroup.work.slug,
-		'subwork.n': commentGroup.subwork.n,
-		'text.n': {
-			$gte: commentGroup.lineFrom,
-		},
-	};
+	let lemmaQuery = {};
 
-	if (typeof commentGroup.lineTo !== 'undefined') {
-		lemmaQuery['text.n'].$lte = commentGroup.lineTo;
-	} else {
-		lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
-	}
-	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-		lemmaQuery['work.slug'] = 'hymns';
+	if (commentGroup) {
+		lemmaQuery = {
+			'work.slug': commentGroup.work.slug,
+			'subwork.n': commentGroup.subwork.n,
+			'text.n': {
+				$gte: commentGroup.lineFrom,
+			},
+		};
+
+		if (typeof commentGroup.lineTo !== 'undefined') {
+			lemmaQuery['text.n'].$lte = commentGroup.lineTo;
+		} else {
+			lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
+		}
+		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+			lemmaQuery['work.slug'] = 'hymns';
+		}
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);

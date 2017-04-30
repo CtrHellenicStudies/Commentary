@@ -1,3 +1,7 @@
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
+
 import Masonry from 'react-masonry-component/lib';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
 

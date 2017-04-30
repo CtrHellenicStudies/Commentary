@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import TextField from 'material-ui/TextField';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -297,7 +298,7 @@ class CommentarySearchToolbar extends React.Component {
 */
 
 
-export default createContainer(({ addCommentPage }) => {
+const commentarySearchToolbarContainer = createContainer(({ addCommentPage }) => {
 
 	// SUBSCRIPTIONS:
 	if (!addCommentPage) {
@@ -316,3 +317,5 @@ export default createContainer(({ addCommentPage }) => {
 	};
 
 }, CommentarySearchToolbar);
+
+export default commentarySearchToolbarContainer;

@@ -1,5 +1,7 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';

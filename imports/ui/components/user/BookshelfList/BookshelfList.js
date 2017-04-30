@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 import Masonry from 'react-masonry-component/lib';
 import Works from '/imports/api/collections/works';
 

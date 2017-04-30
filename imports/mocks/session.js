@@ -1,3 +1,3 @@
-export const Session = function session() { // eslint-disable-line
-	this.get = () => {};
+export const Session = { // eslint-disable-line
+	get: () => {},
 };

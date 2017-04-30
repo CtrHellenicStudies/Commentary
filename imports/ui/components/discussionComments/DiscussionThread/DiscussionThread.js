@@ -1,6 +1,7 @@
 import React from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -226,21 +227,29 @@ const DiscussionThread = React.createClass({
 export default createContainer(({ comment }) => {
 	let discussionComments = [];
 	let userDiscussionComments = [];
+	let handle;
 
-	const handle = Meteor.subscribe('discussionComments', comment._id, Session.get('tenantId'));
-	discussionComments = DiscussionComments.find({
-		commentId: comment._id,
-		status: 'publish'
-	}).fetch();
-	userDiscussionComments = DiscussionComments.find({
-		commentId: comment._id,
-		userId: Meteor.userId(),
-	}).fetch();
+	if (comment) {
+		handle = Meteor.subscribe('discussionComments', comment._id, Session.get('tenantId'));
+		discussionComments = DiscussionComments.find({
+			commentId: comment._id,
+			status: 'publish'
+		}).fetch();
+		userDiscussionComments = DiscussionComments.find({
+			commentId: comment._id,
+			userId: Meteor.userId(),
+		}).fetch();
 
-	discussionComments.push(...userDiscussionComments);
+		discussionComments.push(...userDiscussionComments);
+
+		return {
+			discussionComments,
+			ready: handle.ready(),
+		};
+	}
 
 	return {
 		discussionComments,
-		ready: handle.ready(),
+		ready: null,
 	};
 }, DiscussionThread);

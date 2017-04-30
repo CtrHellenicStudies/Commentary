@@ -15,7 +15,7 @@ meteor npm install
 #	exit 1
 #fi
 
-echo "const buildTag='$BUILD_TAG'; console.log('buildTag', buildTag);" > ./build_tag.js
+echo "const buildTag='$BUILD_TAG'; console.log(buildTag);" > ./build_tag.js
 
 echo "Building to $BUILD_DEST for architecture $DEPLOY_ARCH"
 meteor build "$BUILD_DEST" --architecture $DEPLOY_ARCH

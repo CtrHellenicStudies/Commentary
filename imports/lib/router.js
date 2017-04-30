@@ -19,11 +19,13 @@ import EditKeywordLayout from '/imports/ui/layouts/editor/EditKeywordLayout';
 import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
 import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
 import UserLayout from '/imports/ui/layouts/user/UserLayout';
+import NotFound from '/imports/ui/layouts/notFound/NotFound';
 
+// components
+import Page from '/imports/ui/components/pages/Page';
 
 FlowRouter.notFound = {
 	action() {
-		// Render not found page here
 		mount(NotFound);
 	},
 };
@@ -301,7 +303,7 @@ FlowRouter.route('/:slug', {
 		const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
 		if (reservedRoutes.indexOf(params.slug) === -1) {
 			mount(MasterLayout, {
-				content: <SinglePage slug={params.slug} />,
+				content: <Page slug={params.slug} />,
 			});
 		}
 	},

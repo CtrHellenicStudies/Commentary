@@ -1,7 +1,9 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Session } from 'meteor/session';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
-import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
 import Settings from '/imports/api/collections/settings';

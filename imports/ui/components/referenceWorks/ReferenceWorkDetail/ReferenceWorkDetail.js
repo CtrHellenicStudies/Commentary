@@ -1,3 +1,6 @@
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import Commenters from '/imports/api/collections/commenters';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';

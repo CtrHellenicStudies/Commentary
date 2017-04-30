@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 
 // components:
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon'; // eslint-disable-line import/no-absolute-path

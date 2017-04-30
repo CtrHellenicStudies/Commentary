@@ -1,5 +1,7 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 	ControlLabel,

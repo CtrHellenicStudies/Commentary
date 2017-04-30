@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 
 // components:
 import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';  // eslint-disable-line import/no-absolute-path

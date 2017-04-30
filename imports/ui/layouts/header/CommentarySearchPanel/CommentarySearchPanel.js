@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -368,14 +369,14 @@ const CommentarySearchPanel = React.createClass({
 	},
 });
 
-export default createContainer(() => {
+export default createContainer(({ addCommentPage }) => {
 	let works = [];
 	let keywords = [];
 	let keyideas = [];
 	let commenters = [];
 	let referenceWorks = [];
 
-	if (!this.props.addCommentPage) {
+	if (!addCommentPage) {
 		Meteor.subscribe('commenters', Session.get('tenantId'));
 		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
 		Meteor.subscribe('referenceWorks', Session.get('tenantId'));

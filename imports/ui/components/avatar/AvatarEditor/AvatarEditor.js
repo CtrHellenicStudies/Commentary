@@ -12,7 +12,7 @@ export default class AvatarEditor extends React.Component {
 			avatarUrl: Meteor.user() && Meteor.user().profile && Meteor.user().profile.avatarUrl ? Meteor.user().profile.avatarUrl : props.defaultAvatarUrl,
 		};
 
-		//binding users
+		// binding users
 		autoBind(this);
 	}
 
@@ -21,33 +21,35 @@ export default class AvatarEditor extends React.Component {
 	}
 
 	onDrop(acceptedFiles, rejectedFiles) {
-	    let context = {type: 'user'};
+		const context = { type: 'user' };
+		const uploader = new Slingshot.Upload('uploads', context);
 
-	    let uploader = new Slingshot.Upload("uploads", context);
+		if (rejectedFiles && rejectedFiles.length) {
+			sendSnack('There was an error uploading your profile picture');
+		}
 
-	    uploader.send(acceptedFiles[0], (error, downloadUrl) => {
-	      if (error) {
-	        // Log service detailed response
-	        console.error('Error uploading', uploader.xhr.response);
-	        sendSnack(error);
-	      } else {
-	        Meteor.users.update({_id: Meteor.userId()}, {
-	          $set: {
-	            "profile.avatarUrl": downloadUrl
-	          }
-	        });
+		uploader.send(acceptedFiles[0], (error, downloadUrl) => {
+			if (error) {
+				// Log service detailed response
+				console.error('Error uploading', uploader.xhr.response);
+				sendSnack(error);
+			} else {
+				Meteor.users.update({_id: Meteor.userId()}, {
+					$set: {
+						'profile.avatarUrl': downloadUrl
+					}
+				});
 
-	        this.setState({ avatarUrl: downloadUrl });
+				this.setState({ avatarUrl: downloadUrl });
 
-       	  sendSnack('Profile pic has been uploaded');
-
-	      }
-	    });
+				sendSnack('Profile picture has been uploaded');
+			}
+		});
 	}
 
 	render() {
 		return (
-			<DropZone className="dropzone" onDrop={this.onDrop} multiple={false} accept={"image/*"}>
+			<DropZone className="dropzone" onDrop={this.onDrop} multiple={false} accept={'image/*'}>
 				<div className="user-profile-picture-container">
 					<div className="user-profile-picture">
 						<img alt="avatar" src={this.state.avatarUrl} />

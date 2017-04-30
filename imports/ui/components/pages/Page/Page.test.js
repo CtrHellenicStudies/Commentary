@@ -2,13 +2,13 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import HomeLayout from './HomeLayout';
+import Page from './Page';
 
-describe('HomeLayout', () => {
+describe('Page', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<HomeLayout />)
+			.create(<Page slug="__test__" />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

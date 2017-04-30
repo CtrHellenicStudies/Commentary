@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 
 // private component:
 import ContextPanelContent from './ContextPanelContent';

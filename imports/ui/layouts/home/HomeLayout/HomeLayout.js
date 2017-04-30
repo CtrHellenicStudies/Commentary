@@ -1,4 +1,6 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -35,7 +37,7 @@ const HomeLayout = React.createClass({
 	},
 
 	render() {
-		const { settings, ready } = this.props;
+		const { settings } = this.props;
 
 		if (!settings) {
 			return <LoadingHome />;
@@ -60,7 +62,7 @@ const HomeLayout = React.createClass({
 
 });
 
-export default createContainer(() => {
+const HomeLayoutContainer = createContainer(() => {
 	const handle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 	return {
@@ -68,3 +70,5 @@ export default createContainer(() => {
 		ready: handle.ready(),
 	};
 }, HomeLayout);
+
+export default HomeLayoutContainer;

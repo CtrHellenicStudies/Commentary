@@ -1,5 +1,5 @@
-import Comments from '/imports/collections/comments';
-import Works from '/imports/collections/works';
+import Comments from '/imports/api/collections/comments';
+import Works from '/imports/api/collections/works';
 
 Meteor.method('commentary_cron', () => {
 	// console.log(' -- Starting cron: Commentary');

@@ -1,5 +1,6 @@
-import CommentBody from '/imports/ui/components/commentary/comments/CommentBody';  // eslint-disable-line import/no-absolute-path
-import CommentReference from '/imports/ui/components/commentary/comments/CommentReference';  // eslint-disable-line import/no-absolute-path
+import React from 'react';
+import CommentBody from '/imports/ui/components/commentary/comments/CommentBody';
+import CommentReference from '/imports/ui/components/commentary/comments/CommentReference';
 
 const CommentLower = props => (
 	<div className="comment-lower">

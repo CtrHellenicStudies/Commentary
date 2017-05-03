@@ -1,5 +1,5 @@
-import Comments from '/imports/collections/comments';
-import DiscussionComments from '/imports/collections/discussionComments';
+import Comments from '/imports/api/collections/comments';
+import DiscussionComments from '/imports/api/collections/discussionComments';
 
 Meteor.methods({
 	'discussionComments.delete': (token, _id) => {
@@ -153,7 +153,7 @@ Meteor.methods({
 
 			Email.send({
 				to: ['lukehollis@gmail.com'],
-				from: Config.emails.from(),
+				from: Config.emails.from,
 				subject: `Your comment has been approved at ${Config.name}`,
 				html: `Dear ${userFullName},
 				<br />
@@ -164,7 +164,7 @@ Meteor.methods({
 				Thank you for your submission!
 				<br />
 				<br />
-				${Config.title()}
+				${Config.title}
 				`,
 			});
 		}
@@ -248,7 +248,7 @@ Meteor.methods({
 		 */
 		Email.send({
 			to: ['muellner@chs.harvard.edu', 'lhollis@chs.harvard.edu'],
-			from: Config.emails.from(),
+			from: Config.emails.from,
 			subject: `User comment flagged on ${Config.name}`,
 			html: `Dear Administrator,
 			<br />

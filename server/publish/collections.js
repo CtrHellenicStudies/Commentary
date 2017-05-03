@@ -1,15 +1,15 @@
-import Books from '/imports/collections/books';
-import Comments from '/imports/collections/comments';
-import Commenters from '/imports/collections/commenters';
-import DiscussionComments from '/imports/collections/discussionComments';
-import Keywords from '/imports/collections/keywords';
-import LinkedDataSchemas from '/imports/collections/linkedDataSchemas';
-import Pages from '/imports/collections/pages';
-import ReferenceWorks from '/imports/collections/referenceWorks';
-import Tenants from '/imports/collections/tenants';
-import TextNodes from '/imports/collections/textNodes';
-import Works from '/imports/collections/works';
-import Settings from '/imports/collections/settings';
+import Books from '/imports/api/collections/books';
+import Comments from '/imports/api/collections/comments';
+import Commenters from '/imports/api/collections/commenters';
+import DiscussionComments from '/imports/api/collections/discussionComments';
+import Keywords from '/imports/api/collections/keywords';
+import LinkedDataSchemas from '/imports/api/collections/linkedDataSchemas';
+import Pages from '/imports/api/collections/pages';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Tenants from '/imports/api/collections/tenants';
+import TextNodes from '/imports/api/collections/textNodes';
+import Works from '/imports/api/collections/works';
+import Settings from '/imports/api/collections/settings';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {

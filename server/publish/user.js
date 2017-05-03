@@ -1,4 +1,4 @@
-import DiscussionComments from '/imports/collections/discussionComments';
+import DiscussionComments from '/imports/api/collections/discussionComments';
 
 Meteor.publish('user.discussionComments', (userId, tenantId, sortMethod = 'votes') => {
 	check(userId, String);

@@ -1,6 +1,6 @@
 
-import Comments from '/imports/collections/comments';
-import Keywords from '/imports/collections/keywords';
+import Comments from '/imports/api/collections/comments';
+import Keywords from '/imports/api/collections/keywords';
 
 Meteor.method('commentsKeywordsFix', () => {
 	// ---

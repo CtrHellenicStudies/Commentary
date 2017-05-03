@@ -1,0 +1,6 @@
+{
+  "name": "CommenterWorkCircle",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./CommenterWorkCircle.js"
+}

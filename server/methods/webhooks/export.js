@@ -1,7 +1,7 @@
 import simpleGit from 'simple-git';
 import fs from 'fs';
-import Comments from '/imports/collections/comments';
-import Tenants from '/imports/collections/tenants';
+import Comments from '/imports/api/collections/comments';
+import Tenants from '/imports/api/collections/tenants';
 
 Meteor.method('exportToGit', (exportParams) => {
 	check(exportParams.subdomain, String);

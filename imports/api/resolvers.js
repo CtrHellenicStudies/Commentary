@@ -1,13 +1,13 @@
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
 import slugify from 'slugify';
-import Commenters from '/imports/collections/commenters';
-import Comments from '/imports/collections/comments';
-import DiscussionComments from '/imports/collections/discussionComments';
-import Keywords from '/imports/collections/keywords';
-import ReferenceWorks from '/imports/collections/referenceWorks';
-import TextNodes from '/imports/collections/textNodes';
-import Works from '/imports/collections/works';
+import Commenters from '/imports/api/collections/commenters';
+import Comments from '/imports/api/collections/comments';
+import DiscussionComments from '/imports/api/collections/discussionComments';
+import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import TextNodes from '/imports/api/collections/textNodes';
+import Works from '/imports/api/collections/works';
 
 function parseJSONLiteral(ast) {
 	switch (ast.kind) {
@@ -33,7 +33,7 @@ function parseJSONLiteral(ast) {
 }
 
 // create the resolve functions for the available GraphQL queries
-export default resolvers = {
+const resolvers = {
 	Query: {
 		commenters(_, args){
 			if ('name' in args) {
@@ -331,3 +331,5 @@ export default resolvers = {
 		__parseValue: value => value,
 	},
 };
+
+export default resolvers;

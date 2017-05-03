@@ -1,0 +1,6 @@
+{
+  "name": "CommentsRecent",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./CommentsRecent.js"
+}

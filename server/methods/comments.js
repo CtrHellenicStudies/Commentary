@@ -1,4 +1,4 @@
-import Comments from '/imports/collections/comments';
+import Comments from '/imports/api/collections/comments';
 
 Meteor.methods({
 	'comments.insert': (token, comment) => {

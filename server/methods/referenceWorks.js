@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import ReferenceWorks from '/imports/collections/referenceWorks';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 Meteor.methods({
 	'referenceWorks.insert'(token, referenceWork) {

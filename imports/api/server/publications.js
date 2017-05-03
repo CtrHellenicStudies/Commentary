@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check'
 import { Match } from 'meteor/check'
-import { queryCommentWithKeywordId } from '../api_utils.js';
+import { queryCommentWithKeywordId } from '../utils.js';
 
 Meteor.publish('comments.keyword_context', function (keyword_id, tenantId) {
 	check(keyword_id, String);

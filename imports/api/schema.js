@@ -1,11 +1,11 @@
 import SchemaBridge from 'meteor/kuip:schema-graphql-bridge';
-import Comments from '/imports/collections/comments';
-import Commenters from '/imports/collections/commenters';
-import DiscussionComments from '/imports/collections/discussionComments';
-import Keywords from '/imports/collections/keywords';
-import ReferenceWorks from '/imports/collections/referenceWorks';
-import TextNodes from '/imports/collections/textNodes';
-import Works from '/imports/collections/works';
+import Comments from '/imports/api/collections/comments';
+import Commenters from '/imports/api/collections/commenters';
+import DiscussionComments from '/imports/api/collections/discussionComments';
+import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import TextNodes from '/imports/api/collections/textNodes';
+import Works from '/imports/api/collections/works';
 
 const commentSchema = SchemaBridge.schema(
 	Comments.schema,
@@ -60,7 +60,7 @@ const workSchema = SchemaBridge.schema(
 	}
 );
 
-export default typeDefs = [`
+const typeDefs = [`
 
 scalar JSON
 scalar Date
@@ -147,3 +147,5 @@ schema {
   query: Query
 }
 `];
+
+export default typeDefs;

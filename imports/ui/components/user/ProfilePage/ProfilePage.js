@@ -14,6 +14,7 @@ import DiscussionComments from '/imports/api/collections/discussionComments';
 // components
 import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -206,7 +207,7 @@ const ProfilePage = React.createClass({
 		}
 
 		if (!user) {
-			return <Loading />;
+			return <LoadingPage />;
 		}
 
 		return (

@@ -9,6 +9,7 @@ import DiscussionComments from '/imports/api/collections/discussionComments';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -106,7 +107,7 @@ const PublicProfilePage = React.createClass({
 		let avatarUrl = '/images/default_user.jpg';
 
 		if (!user) {
-			return <Loading />;
+			return <LoadingPage />;
 		}
 
 		if (!user.profile) {

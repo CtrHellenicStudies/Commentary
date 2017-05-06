@@ -17,6 +17,7 @@ import CommentersList from '/imports/ui/components/commenters/CommentersList';
 import WorksList from '/imports/ui/components/works/WorksList';
 import KeywordsList from '/imports/ui/components/keywords/KeywordsList';
 import Spinner from '/imports/ui/components/loading/Spinner';
+import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
@@ -55,7 +56,7 @@ const Home = React.createClass({
 		let introImageCaption = '';
 
 		if (!settings) {
-			return <Loading />
+			return <LoadingHome />
 		}
 
 		if (

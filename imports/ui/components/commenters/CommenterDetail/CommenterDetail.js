@@ -8,6 +8,7 @@ import Commenters from '/imports/api/collections/commenters';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 const CommenterDetail = React.createClass({
 
@@ -132,7 +133,7 @@ const CommenterDetail = React.createClass({
 					</div>
 				</div>
 				:
-				<Loading />
+				<LoadingPage />
 			)
 		);
 	},

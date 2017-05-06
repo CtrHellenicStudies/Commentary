@@ -7,16 +7,20 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 
 // api:
-import Comments from '/imports/api/collections/comments';// eslint-disable-line import/no-absolute-path
+import Comments from '/imports/api/collections/comments';
 import Settings from '/imports/api/collections/settings';
+import Works from '/imports/api/collections/works';
 
 // layouts:
-import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';  // eslint-disable-line import/no-absolute-path
-import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';  // eslint-disable-line import/no-absolute-path
+import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';
+import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // components:
-import InfiniteScroll from '/imports/ui/components/shared/InfiniteScroll'; // eslint-disable-line import/no-absolute-path
-import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
+import InfiniteScroll from '/imports/ui/components/shared/InfiniteScroll';
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+
+// lib
+import Utils from '/imports/lib/utils';
 
 // helpers:
 import { createQueryFromFilters, parseCommentsToCommentGroups } from './helpers';

@@ -19,6 +19,9 @@ import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
 import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel';
 import { WorksCard } from '/imports/ui/components/header/SearchCards';
 
+// lib:
+import Utils from '/imports/lib/utils';
+
 
 const CommentarySearchPanel = React.createClass({
 
@@ -132,7 +135,7 @@ const CommentarySearchPanel = React.createClass({
 			},
 		};
 
-		drawerWidth = 400;
+		let drawerWidth = 400;
 		if (window.innerWidth < 500) {
 			drawerWidth = 300;
 		}

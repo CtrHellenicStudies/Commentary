@@ -227,7 +227,7 @@ class Header extends React.Component {
 				{!isOnHomeView && (
 					toggleSearchTerm
 					&& handleChangeTextsearch
-					&& hangleChangeLineN
+					&& handleChangeLineN
 				) ?
 					<CommentarySearchPanel
 						toggleSearchTerm={toggleSearchTerm}
@@ -367,7 +367,7 @@ class Header extends React.Component {
 										{!isOnHomeView && (
 											toggleSearchTerm
 											&& handleChangeTextsearch
-											&& hangleChangeLineN
+											&& handleChangeLineN
 										) ?
 											<div className="search-tools collapse">
 												<CommentarySearchToolbar

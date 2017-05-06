@@ -15,10 +15,12 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts:
-import Commentary from '/imports/ui/layouts/commentary/Commentary';  // eslint-disable-line import/no-absolute-path
-import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';  // eslint-disable-line import/no-absolute-path
+import Commentary from '/imports/ui/layouts/commentary/Commentary';
+import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
 
+// lib:
+import Utils from '/imports/lib/utils';
 
 const CommentaryLayout = React.createClass({
 
@@ -332,7 +334,7 @@ const CommentaryLayout = React.createClass({
 		this.setState({
 			skip: 0,
 			limit: 10,
-		})
+		});
 
 		this._updateRoute(filters);
 	},
@@ -474,33 +476,35 @@ const CommentaryLayout = React.createClass({
 
 		return (
 			<MuiThemeProvider>
-				<div className="chs-layout commentary-layout">
+				<div>
+					<div className="chs-layout commentary-layout">
 
-					<Header
-						filters={filters}
-						toggleSearchTerm={this._toggleSearchTerm}
-						handleChangeLineN={this._handleChangeLineN}
-						handleChangeTextsearch={this._handleChangeTextsearch}
-						initialSearchEnabled
-					/>
+						<Header
+							filters={filters}
+							toggleSearchTerm={this._toggleSearchTerm}
+							handleChangeLineN={this._handleChangeLineN}
+							handleChangeTextsearch={this._handleChangeTextsearch}
+							initialSearchEnabled
+						/>
 
-					<Commentary
-						filters={filters}
-						toggleSearchTerm={this._toggleSearchTerm}
-						showLoginModal={this.showLoginModal}
-						loadMoreComments={this.loadMoreComments}
-						skip={skip}
-						limit={limit}
-					/>
+						<Commentary
+							filters={filters}
+							toggleSearchTerm={this._toggleSearchTerm}
+							showLoginModal={this.showLoginModal}
+							loadMoreComments={this.loadMoreComments}
+							skip={skip}
+							limit={limit}
+						/>
 
+					</div>
+					{modalLoginLowered ?
+						<ModalLogin
+							lowered={modalLoginLowered}
+							closeModal={this.closeLoginModal}
+						/>
+						: ''
+					}
 				</div>
-				{modalLoginLowered ?
-					<ModalLogin
-						lowered={modalLoginLowered}
-						closeModal={this.closeLoginModal}
-					/>
-					: ''
-				}
 			</MuiThemeProvider>
 		);
 	},

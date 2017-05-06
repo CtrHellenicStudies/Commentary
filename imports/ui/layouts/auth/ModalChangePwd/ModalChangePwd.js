@@ -5,7 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
-ModalChangePwd = React.createClass({
+const ModalChangePwd = React.createClass({
 
 	propTypes: {
 		lowered: React.PropTypes.bool,
@@ -46,3 +46,5 @@ ModalChangePwd = React.createClass({
 		);
 	},
 });
+
+export default ModalChangePwd;

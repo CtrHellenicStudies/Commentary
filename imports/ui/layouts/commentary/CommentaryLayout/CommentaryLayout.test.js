@@ -2,7 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import HomeLayout from './CommentaryLayout';
+import CommentaryLayout from './CommentaryLayout';
 
 describe('CommentaryLayout', () => {
 	it('renders correctly', () => {

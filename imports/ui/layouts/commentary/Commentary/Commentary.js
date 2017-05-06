@@ -56,12 +56,12 @@ class Commentary extends React.Component {
 					src: React.PropTypes.string,
 				})
 			}))
-		})).isRequired,
-		isMoreComments: React.PropTypes.bool.isRequired,
-		ready: React.PropTypes.bool.isRequired,
+		})),
+		isMoreComments: React.PropTypes.bool,
+		ready: React.PropTypes.bool,
 		settings: React.PropTypes.shape({
 			title: React.PropTypes.string,
-		}).isRequired,
+		}),
 	};
 
 	static defaultProps = {
@@ -122,6 +122,10 @@ class Commentary extends React.Component {
 		let lineTo = 0;
 		let metaSubject = 'Commentaries on Classical Texts';
 		let description = '';
+
+		if (!settings) {
+			return null;
+		}
 
 		filters.forEach((filter) => {
 			values = [];
@@ -283,6 +287,9 @@ class Commentary extends React.Component {
 			this.setPageTitleAndMeta();
 		}
 
+		if (!commentGroups) {
+			return null;
+		}
 
 		return (
 			<div className="commentary-primary content ">

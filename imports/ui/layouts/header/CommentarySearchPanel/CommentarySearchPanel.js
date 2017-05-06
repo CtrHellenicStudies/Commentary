@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
+import _ from 'lodash';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
@@ -235,7 +236,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{keywords.map((keyword, i) => {
+						{keywords && keywords.map((keyword, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'keywords') {
@@ -271,7 +272,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{keyideas.map((keyidea, i) => {
+						{keyideas && keyideas.map((keyidea, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'keyideas') {
@@ -307,7 +308,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{commenters.map((commenter, i) => {
+						{commenters && commenters.map((commenter, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'commenters') {
@@ -343,7 +344,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{referenceWorks.map((reference, i) => {
+						{referenceWorks && referenceWorks.map((reference, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'reference') {

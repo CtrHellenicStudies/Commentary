@@ -128,6 +128,10 @@ const CommentaryLayout = React.createClass({
 	_createFilterFromQueryParams(queryParams) {
 		const filters = [];
 
+		if (!queryParams) {
+			return filters;
+		}
+
 		if ('_id' in queryParams) {
 			filters.push({
 				key: '_id',

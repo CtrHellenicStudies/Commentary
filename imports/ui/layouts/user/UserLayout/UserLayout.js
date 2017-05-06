@@ -1,11 +1,14 @@
 import React from 'react';
-import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts & components
 import Header from '/imports/ui/layouts/header/Header';
 import Footer from '/imports/ui/components/footer/Footer';
+import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
+import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -36,7 +39,7 @@ const UserLayout = React.createClass({
 						{user ?
 							<ProfilePage user={user} />
 							:
-							<Loading />
+							<LoadingPage />
 						}
 					</main>
 

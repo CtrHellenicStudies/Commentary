@@ -26,6 +26,7 @@ const CommentaryLayout = React.createClass({
 
 	propTypes: {
 		queryParams: React.PropTypes.object,
+		isTest: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -482,12 +483,12 @@ const CommentaryLayout = React.createClass({
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div>
 					<div className="chs-layout commentary-layout">
-
 						<Header
 							filters={filters}
 							toggleSearchTerm={this._toggleSearchTerm}
 							handleChangeLineN={this._handleChangeLineN}
 							handleChangeTextsearch={this._handleChangeTextsearch}
+							isTest={this.props.isTest}
 							initialSearchEnabled
 						/>
 

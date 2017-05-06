@@ -39,6 +39,7 @@ const CommentarySearchPanel = React.createClass({
 		commenters: React.PropTypes.array,
 		works: React.PropTypes.array,
 		referenceWorks: React.PropTypes.array,
+		isTest: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -97,7 +98,7 @@ const CommentarySearchPanel = React.createClass({
 
 	render() {
 		const self = this;
-		const { keyideas, keywords, commenters, works, referenceWorks } = this.props;
+		const { keyideas, keywords, commenters, works, referenceWorks, isTest } = this.props;
 		const filters = this.props.filters || [];
 
 		const styles = {
@@ -156,12 +157,14 @@ const CommentarySearchPanel = React.createClass({
 				style={styles.drawer}
 			>
 				<div className="search-tool text-search text-search--drawer">
-					<TextField
-						hintText=""
-						floatingLabelText="Search"
-						fullWidth
-						onChange={_.debounce(this.handleChangeTextsearch, 300)}
-					/>
+					{!isTest ?
+						<TextField
+							hintText=""
+							floatingLabelText="Search"
+							fullWidth
+							onChange={_.debounce(this.handleChangeTextsearch, 300)}
+						/>
+					: ''}
 				</div>
 
 				<WorksCard

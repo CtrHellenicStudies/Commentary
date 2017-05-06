@@ -65,6 +65,7 @@ class CommentarySearchToolbar extends React.Component {
 		handleChangeTextsearch: React.PropTypes.func.isRequired,
 		handleChangeLineN: React.PropTypes.func.isRequired,
 		addCommentPage: React.PropTypes.bool.isRequired,
+		isTest: React.PropTypes.bool,
 
 		// from createContainer:
 		keywords: React.PropTypes.arrayOf(React.PropTypes.shape({

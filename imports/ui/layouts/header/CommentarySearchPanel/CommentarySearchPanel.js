@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
@@ -21,6 +21,7 @@ import { WorksCard } from '/imports/ui/components/header/SearchCards';
 
 // lib:
 import Utils from '/imports/lib/utils';
+import muiTheme from '/imports/lib/muiTheme';
 
 
 const CommentarySearchPanel = React.createClass({
@@ -51,7 +52,7 @@ const CommentarySearchPanel = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	toggleSearchTerm(key, value) {

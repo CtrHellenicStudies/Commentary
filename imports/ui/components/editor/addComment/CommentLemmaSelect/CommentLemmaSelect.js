@@ -3,9 +3,14 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// api
 import TextNodes from '/imports/api/collections/textNodes';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 const CommentLemmaSelect = React.createClass({
 
@@ -30,7 +35,7 @@ const CommentLemmaSelect = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	onLineLetterValueChange(event) {

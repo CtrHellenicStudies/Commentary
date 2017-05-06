@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 
@@ -21,6 +21,7 @@ import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 
 // lib
 import Utils from '/imports/lib/utils';
+import muiTheme from '/imports/lib/muiTheme';
 
 // helpers:
 import { createQueryFromFilters, parseCommentsToCommentGroups } from './helpers';
@@ -106,7 +107,7 @@ class Commentary extends React.Component {
 	}
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	}
 
 	setPageTitleAndMeta() {

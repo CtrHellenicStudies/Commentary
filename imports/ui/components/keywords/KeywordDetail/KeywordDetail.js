@@ -2,13 +2,21 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
 import RaisedButton from 'material-ui/RaisedButton';
+
+// api
 import Keywords from '/imports/api/collections/keywords';
+
+// components
+import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import KeywordCommentList from '/imports/ui/components/keywords/KeywordCommentList';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const KeywordDetail = React.createClass({
 
@@ -32,7 +40,7 @@ const KeywordDetail = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getMeteorData() {

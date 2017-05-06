@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import Formsy from 'formsy-react';
@@ -26,10 +26,17 @@ import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
-import Commenters from '/imports/api/collections/commenters';
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import 'draft-js-mention-plugin/lib/plugin.css';
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
+
+// api
+import Commenters from '/imports/api/collections/commenters';
+
+// components
+import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
@@ -120,7 +127,7 @@ const AddComment = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getMeteorData() {

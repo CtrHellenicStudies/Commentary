@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import Comments from '/imports/api/collections/comments';
@@ -10,6 +10,7 @@ import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImage
 
 // lib
 import Utils from '/imports/lib/utils';
+import muiTheme from '/imports/lib/muiTheme';
 
 // components:
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
@@ -34,7 +35,7 @@ const Home = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	componentDidMount() {

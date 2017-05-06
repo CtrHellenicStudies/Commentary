@@ -5,7 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
@@ -14,11 +14,11 @@ import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved, max-len
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import Commenters from '/imports/api/collections/commenters';
 import Keywords from '/imports/api/collections/keywords';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved, max-len
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import {
 	ItalicButton,
 	BoldButton,
@@ -31,10 +31,10 @@ import {
 	OrderedListButton,
 	BlockquoteButton,
 	CodeBlockButton,
-} from 'draft-js-buttons'; // eslint-disable-line import/no-unresolved
+} from 'draft-js-buttons';
 
-import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
-import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+import 'draft-js-mention-plugin/lib/plugin.css';
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
 
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin({
@@ -92,7 +92,7 @@ const AddKeyword = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 

@@ -12,7 +12,6 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Creatable } from 'react-select';
 import Formsy from 'formsy-react';
@@ -25,12 +24,20 @@ import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
-import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
+import 'draft-js-mention-plugin/lib/plugin.css';
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
+
+// api
 import Keywords from '/imports/api/collections/keywords';
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';  // eslint-disable-line import/no-unresolved
-import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
-import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+
+// components
+import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
@@ -139,7 +146,7 @@ const AddRevision = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getMeteorData() {

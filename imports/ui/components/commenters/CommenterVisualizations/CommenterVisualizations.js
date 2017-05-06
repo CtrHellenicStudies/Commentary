@@ -1,6 +1,9 @@
 import React from 'react';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 const CommenterVisualizations = React.createClass({
 
@@ -19,7 +22,7 @@ const CommenterVisualizations = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	toggleVisibleWork(workToToggle) {

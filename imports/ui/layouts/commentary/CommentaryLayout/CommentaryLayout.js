@@ -11,7 +11,6 @@ with new “filters” object passed as first attribute.
 */
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts:
@@ -20,6 +19,7 @@ import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
 
 // lib:
+import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
 const CommentaryLayout = React.createClass({
@@ -41,7 +41,7 @@ const CommentaryLayout = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getQueryParamValue(queryParams, key, value) {
@@ -475,7 +475,7 @@ const CommentaryLayout = React.createClass({
 		const filters = this._createFilterFromQueryParams(queryParams);
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div>
 					<div className="chs-layout commentary-layout">
 

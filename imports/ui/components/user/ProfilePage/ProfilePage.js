@@ -2,15 +2,22 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
-import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import Toggle from 'material-ui/Toggle';
+
+// api
 import DiscussionComments from '/imports/api/collections/discussionComments';
+
+// components
+import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const ProfilePage = React.createClass({
 	propTypes: {
@@ -36,7 +43,7 @@ const ProfilePage = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	componentWillMount() {

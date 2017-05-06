@@ -1,8 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// api
 import Works from '/imports/api/collections/works';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
 
 const BookmarkedTextNode = React.createClass({
 
@@ -16,7 +21,7 @@ const BookmarkedTextNode = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	mixins: [ReactMeteorData],

@@ -1,6 +1,9 @@
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 const AnnotationTextNode = React.createClass({
 
@@ -14,7 +17,7 @@ const AnnotationTextNode = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	mixins: [ReactMeteorData],

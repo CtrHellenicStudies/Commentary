@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
 import Settings from '/imports/api/collections/settings';
@@ -14,6 +15,9 @@ import Footer from '/imports/ui/components/footer/Footer';
 // components
 import Home from '/imports/ui/components/home/Home';
 import LoadingHome from '/imports/ui/components/loading/LoadingHome';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
 
 
 const HomeLayout = React.createClass({
@@ -44,7 +48,7 @@ const HomeLayout = React.createClass({
 		}
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout home-layout">
 					<Header
 						isOnHomeView

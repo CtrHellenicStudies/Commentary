@@ -1,9 +1,12 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
 import Comments from '/imports/api/collections/comments';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 const CommentsRecent = React.createClass({
 
@@ -16,7 +19,7 @@ const CommentsRecent = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	render() {

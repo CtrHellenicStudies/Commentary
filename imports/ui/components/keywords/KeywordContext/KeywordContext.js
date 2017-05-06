@@ -2,11 +2,15 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
-import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '../../api/utils.js';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
+
 
 export default KeywordContext = React.createClass({
 
@@ -27,7 +31,7 @@ export default KeywordContext = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getMeteorData() {

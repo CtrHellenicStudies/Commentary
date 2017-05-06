@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import Keywords from '/imports/api/collections/keywords';
@@ -12,6 +12,10 @@ import 'mdi/css/materialdesignicons.css';
 
 // layouts
 import Header from '/imports/ui/layouts/header/Header';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const EditKeywordLayout = React.createClass({
 
@@ -39,7 +43,7 @@ const EditKeywordLayout = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	componentWillUpdate() {
@@ -348,7 +352,7 @@ const EditKeywordLayout = React.createClass({
 		const keyword = this.data.keyword;
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{this.data.ready && this.data.keyword ?
 					<div className="chs-layout chs-editor-layout edit-keyword-layout">
 

@@ -1,9 +1,12 @@
 import React from 'react';
 import Card from 'material-ui/Card';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 const DiscussionCommentTeaser = React.createClass({
 
@@ -19,7 +22,7 @@ const DiscussionCommentTeaser = React.createClass({
 
 	getChildContext() {
 		return {
-			muiTheme: getMuiTheme(baseTheme),
+			muiTheme: getMuiTheme(muiTheme),
 		};
 	},
 

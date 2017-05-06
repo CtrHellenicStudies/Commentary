@@ -5,6 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'mdi/css/materialdesignicons.css';
 
 // api
@@ -13,6 +14,10 @@ import Commenters from '/imports/api/collections/commenters';
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const AddRevisionLayout = React.createClass({
 
@@ -309,7 +314,7 @@ const AddRevisionLayout = React.createClass({
 		const comment = this.data.comment;
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{this.data.ready && this.data.comment ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 

@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -12,6 +12,10 @@ import 'mdi/css/materialdesignicons.css';
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const AddKeywordLayout = React.createClass({
 	childContextTypes: {
@@ -32,7 +36,7 @@ const AddKeywordLayout = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	componentWillUpdate() {
@@ -360,7 +364,7 @@ const AddKeywordLayout = React.createClass({
 		});
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{ready || loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<div>

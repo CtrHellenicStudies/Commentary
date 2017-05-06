@@ -1,7 +1,6 @@
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import 'mdi/css/materialdesignicons.css';
 
 // layouts
 import Header from '/imports/ui/layouts/header/Header';

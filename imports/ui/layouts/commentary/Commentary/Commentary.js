@@ -343,6 +343,16 @@ export default createContainer(({ filters, skip, limit }) => {
 	const commentsSub = Meteor.subscribe('comments', query, skip, limit);
 	let isMoreComments = true;
 
+	// Update textsearch in query for client minimongo
+	if ('$text' in query) {
+		const textsearch = new RegExp(query.$text, 'i');
+		query.$or = [
+			{ 'revisions.title': textsearch },
+			{ 'revisions.text': textsearch },
+		];
+		delete query.$text;
+	}
+
 	// FETCH DATA:
 	const comments = Comments.find(query, {
 		sort: {

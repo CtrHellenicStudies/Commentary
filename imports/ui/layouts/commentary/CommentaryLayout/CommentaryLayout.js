@@ -339,7 +339,7 @@ const CommentaryLayout = React.createClass({
 		this._updateRoute(filters);
 	},
 
-	_handleChangeTextsearch(textsearch) {
+	_handleChangeTextsearch(e, textsearch) {
 		const { queryParams } = this.props;
 		const filters = this._createFilterFromQueryParams(queryParams);
 

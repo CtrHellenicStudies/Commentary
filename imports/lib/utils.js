@@ -1,4 +1,4 @@
-import DocHead from 'meteor/kadira:dochead';
+import { DocHead } from 'meteor/kadira:dochead';
 
 // lib
 import Config from './_config/_config.js';

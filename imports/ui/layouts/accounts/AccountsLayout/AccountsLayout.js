@@ -11,7 +11,7 @@ class AccountsLayout extends React.Component {
 }
 
 AccountsLayout.propTypes = {
-	content: React.PropTypes.object.isRequired,
+	content: React.PropTypes.object,
 };
 
 export default AccountsLayout;

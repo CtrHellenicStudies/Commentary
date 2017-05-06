@@ -130,6 +130,7 @@
     ],
     "moduleNameMapper": {
       "^meteor/accounts-base": "<rootDir>/imports/mocks/accountsBase.js",
+      "^meteor/alanning:roles": "<rootDir>/imports/mocks/roles.js",
       "^meteor/aldeed:simple-schema": "<rootDir>/imports/mocks/simpleSchema.js",
       "^meteor/kadira:dochead": "<rootDir>/imports/mocks/docHead.js",
       "^meteor/meteor": "<rootDir>/imports/mocks/meteor.js",

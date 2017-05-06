@@ -1,9 +1,7 @@
 import React from 'react';
 import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import 'mdi/css/materialdesignicons.css';
 
 // layouts & components
 import Header from '/imports/ui/layouts/header/Header';
@@ -14,43 +12,35 @@ import muiTheme from '/imports/lib/muiTheme';
 
 
 const UserLayout = React.createClass({
+	propTypes: {
+		user: React.PropTypes.object,
+	},
+
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
-	getMeteorData() {
-		const user = Meteor.user();
-
-		if (user && !('profile' in user)) {
-			user.profile = {};
-		}
-		return {
-			user,
-		};
-	},
-
-
 	render() {
+		const { user } = this.props;
+
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout master-layout">
-
-					<Header  />
+					<Header />
 
 					<main>
-						{this.data.user ?
-							<ProfilePage user={this.data.user} />
+						{user ?
+							<ProfilePage user={user} />
 							:
 							<Loading />
 						}
 					</main>
-					<Footer  />
+
+					<Footer />
 					<SnackAttack />
 				</div>
 			</MuiThemeProvider>
@@ -60,4 +50,15 @@ const UserLayout = React.createClass({
 });
 
 
-export default UserLayout;
+const UserLayoutContainer = createContainer(() => {
+	const user = Meteor.user();
+
+	if (user && !('profile' in user)) {
+		user.profile = {};
+	}
+	return {
+		user,
+	};
+}, UserLayout);
+
+export default UserLayoutContainer;

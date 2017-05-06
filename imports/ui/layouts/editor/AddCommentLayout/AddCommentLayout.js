@@ -1,16 +1,17 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import 'mdi/css/materialdesignicons.css';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+import Spinner from '/imports/ui/components/loading/Spinner';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -18,7 +19,9 @@ import muiTheme from '/imports/lib/muiTheme';
 
 const AddCommentLayout = React.createClass({
 
-	mixins: [ReactMeteorData],
+	propTypes: {
+		ready: React.PropTypes.bool,
+	},
 
 	getInitialState() {
 		return {
@@ -32,20 +35,6 @@ const AddCommentLayout = React.createClass({
 
 	componentWillUpdate() {
 		this.handlePermissions();
-	},
-
-	getMeteorData() {
-		const ready = Roles.subscription.ready();
-		return {
-			ready,
-		};
-	},
-
-	getMeteorData() {
-		const ready = Roles.subscription.ready();
-		return {
-			ready,
-		};
 	},
 
 	handlePermissions() {
@@ -428,7 +417,7 @@ const AddCommentLayout = React.createClass({
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				{this.data.ready || this.state.loading ?
+				{this.props.ready || this.state.loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<div>
 							<Header
@@ -487,4 +476,11 @@ const AddCommentLayout = React.createClass({
 });
 
 
-export default AddCommentLayout;
+const AddCommentLayoutContainer = (() => {
+	const ready = Roles.subscription.ready();
+	return {
+		ready,
+	};
+}, AddCommentLayout);
+
+export default AddCommentLayoutContainer;

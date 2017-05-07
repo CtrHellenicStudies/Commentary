@@ -141,5 +141,6 @@
       "<rootDir>/imports/mocks/env.js"
     ],
 		"transform": {".*": "<rootDir>/node_modules/jest-css-modules"}
-  }
+  },
+	"pre-commit": "jest",
 }

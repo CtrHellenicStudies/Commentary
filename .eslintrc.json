@@ -65,6 +65,8 @@
 		"no-bitwise": "off",
 		"padded-blocks": "off",
 		"import/extensions": "off",
+		"react/prefer-es6-class": "off",
+		"no-unused-vars": "off",
 		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
 	}
 }

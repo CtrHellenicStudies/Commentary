@@ -106,14 +106,18 @@
     "jest-css-modules": "^1.1.0",
     "pre-commit": "^1.2.2",
     "react-test-renderer": "^15.5.4",
-    "sinon": "^2.1.0"
+    "sinon": "^2.1.0",
+    "stylelint": "^7.10.1",
+    "stylelint-config-standard": "^16.0.0"
   },
   "scripts": {
+    "lint:js": "eslint . --ext .js,.jsx",
+    "lint:css": "stylelint \"imports/**/*.{css,less,scss,sss}\"",
+    "lint:staged": "lint-staged",
+    "lint": "npm run lint:js",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx",
-    "lint-fix": "eslint . --ext .js,.jsx --fix",
-    "pretest": "npm run lint --silent",
-    "start": "export MONGO_URL=mongodb://localhost:27017/ahcip && meteor --settings production.json"
+    "test:watch": "npm run test -- --reporter min --watch",
+    "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings production.json"
   },
   "repository": {
     "type": "git",
@@ -145,6 +149,38 @@
       ".*": "<rootDir>/node_modules/jest-css-modules"
     }
   },
+  "lint-staged": {
+    "*.{md,sh,txt,xml,html,json}": [
+      "editorconfig-tools fix",
+      "git add"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+	"stylelint": {
+		"extends": "stylelint-config-standard",
+		"rules": {
+			"string-quotes": "single",
+			"property-no-unknown": [
+				true,
+				{
+					"ignoreProperties": [
+						"composes"
+					]
+				}
+			],
+			"selector-pseudo-class-no-unknown": [
+				true,
+				{
+					"ignorePseudoClasses": [
+						"global"
+					]
+				}
+			]
+		}
+	},
   "pre-commit": [
     "test"
   ]

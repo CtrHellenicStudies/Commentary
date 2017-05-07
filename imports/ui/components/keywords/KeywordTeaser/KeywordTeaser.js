@@ -34,7 +34,7 @@ const KeywordTeaser = React.createClass({
 	},
 
 	render() {
-		const keyword = this.props.keyword;
+		const { keyword } = this.props;
 		const keywordUrl = `/keywords/${keyword.slug}`;
 		let keywordClass = 'keyword-teaser clearfix wow fadeInUp ';
 		if (this.state.open) {

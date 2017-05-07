@@ -8,7 +8,12 @@ describe('KeywordsPage', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<KeywordsPage />)
+			.create(
+				<KeywordsPage
+					type="word"
+					title="Test"
+				/>
+			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

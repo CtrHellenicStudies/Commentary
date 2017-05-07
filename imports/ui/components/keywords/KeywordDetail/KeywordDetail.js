@@ -25,7 +25,6 @@ import Utils from '/imports/lib/utils';
 const KeywordDetail = React.createClass({
 
 	propTypes: {
-		slug: React.PropTypes.string.isRequired,
 		keyword: React.PropTypes.object,
 		settings: React.PropTypes.object,
 		keywordComments: React.PropTypes.array,

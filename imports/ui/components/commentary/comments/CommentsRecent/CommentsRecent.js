@@ -1,4 +1,6 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
@@ -36,6 +38,10 @@ const CommentsRecent = React.createClass({
 			slidesToShow: 1,
 			slidesToScroll: 1,
 		};
+
+		if (!comments) {
+			return null;
+		}
 
 		return (
 			<section className="background-gray recent-comments">

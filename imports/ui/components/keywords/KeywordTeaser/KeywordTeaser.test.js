@@ -8,7 +8,15 @@ describe('KeywordTeaser', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<KeywordTeaser />)
+			.create(
+				<KeywordTeaser
+					keyword={{
+						title: 'Test',
+						slug: 'test',
+						description: 'Test description',
+					}}
+				/>
+			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

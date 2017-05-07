@@ -25,6 +25,7 @@ const CommenterDetail = React.createClass({
 		commenter: React.PropTypes.object,
 		avatarUrl: React.PropTypes.string,
 		settings: React.PropTypes.object,
+		isTest: React.PropTypes.bool,
 	},
 
 	getInitialState() {
@@ -48,7 +49,7 @@ const CommenterDetail = React.createClass({
 
 	render() {
 		const self = this;
-		const { commenter, settings, avatarUrl } = this.props;
+		const { commenter, settings, avatarUrl, isTest } = this.props;
 
 		if (commenter) {
 			Utils.setTitle(`${commenter.name} | ${settings.title}`);
@@ -120,16 +121,13 @@ const CommenterDetail = React.createClass({
 
 							<CommenterVisualizations
 								commenter={commenter}
+								isTest={isTest}
 							/>
 
 							<br />
 							<br />
 							<br />
 							<hr />
-							<br />
-							<br />
-							<br />
-
 						</section>
 
 						<CommenterReferenceWorks

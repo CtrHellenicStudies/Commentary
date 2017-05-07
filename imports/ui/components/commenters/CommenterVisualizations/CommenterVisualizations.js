@@ -14,6 +14,7 @@ const CommenterVisualizations = React.createClass({
 
 	propTypes: {
 		commenter: React.PropTypes.object.isRequired,
+		isTest: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -43,13 +44,16 @@ const CommenterVisualizations = React.createClass({
 	},
 
 	renderWorks() {
-		if (this.props.commenter.nCommentsWorks) {
-			return this.props.commenter.nCommentsWorks.map((work, i) =>
+		const { commenter, isTest } = this.props;
+
+		if (commenter.nCommentsWorks) {
+			return commenter.nCommentsWorks.map((work, i) =>
 				<CommenterWorkVisualization
 					key={i}
 					toggleVisibleWork={this.toggleVisibleWork}
 					work={work}
-					commenterSlug={this.props.commenter.slug}
+					commenterSlug={commenter.slug}
+					isTest={isTest}
 				/>
 			);
 		}
@@ -57,7 +61,8 @@ const CommenterVisualizations = React.createClass({
 	},
 
 	render() {
-		const commenter = this.props.commenter;
+		const { commenter } = this.props;
+
 		let classes = 'commenter-visualizations';
 		if (this.state.visibleWork.length) {
 			classes += ` commenter-visualizations-${this.state.visibleWork}-visible`;

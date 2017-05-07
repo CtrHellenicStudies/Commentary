@@ -14,6 +14,7 @@ describe('CommenterReferenceWorks', () => {
 						name: 'Test Commenter',
 						slug: 'test-commenter'
 					}}
+					isTest
 				/>
 			)
 			.toJSON();

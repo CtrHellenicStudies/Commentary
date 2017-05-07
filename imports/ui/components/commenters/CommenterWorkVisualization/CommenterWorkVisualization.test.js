@@ -21,6 +21,7 @@ describe('CommenterWorkVisualization', () => {
 					}}
 					commenterSlug="test"
 					toggleVisibleWork={() => {}}
+					isTest
 				/>
 			)
 			.toJSON();

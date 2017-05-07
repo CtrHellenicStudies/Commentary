@@ -1,6 +1,8 @@
 /* eslint-disable */
 import React from 'react';
-import * as d3 from 'd3';
+
+// TODO: upgrade to d3v4
+// import * as d3 from 'd3';
 
 const WorkVisualization = React.createClass({
 
@@ -86,7 +88,7 @@ const WorkVisualization = React.createClass({
 		let barGraphBars;
 
 		// Color scale:
-		const color = d3.scaleLinear()
+		const color = d3.scale.linear()
 			.domain([0, d3.max(dataBarGraph, (d) => {
 				return d.nComments;
 			})])
@@ -97,9 +99,8 @@ const WorkVisualization = React.createClass({
 		 */
 		if (orientation === 'vertical') {
 			// --- BEGIN X-AXIS --- //
-			const x = d3.scaleBand()
-				.rangeRound([barGraphMargin.left, width])
-				.padding(0.4);
+			const x = d3.scale.ordinal()
+				.rangeRoundBands([barGraphMargin.left, width], 0.4);
 
 			/*
 			const xAxis = d3.svg.axis()
@@ -131,12 +132,13 @@ const WorkVisualization = React.createClass({
 				// --- END X-AXIS --- //
 
 			// --- BEGIN Y-AXIS --- //
-			const y = d3.scaleLinear()
+			const y = d3.scale.linear()
 				.range([height, 0]);
-			const yAxis = d3.axisBottom()
+			const yAxis = d3.svg.axis()
 				.scale(y)
 				.ticks(10)
-				.tickSize(-width);
+				.tickSize(-width)
+				.orient('left');
 			y.domain([0, d3.max(dataBarGraph, (d) => {
 				return d.nComments;
 			})]);
@@ -179,8 +181,8 @@ const WorkVisualization = React.createClass({
 				.attr('x_origin', (d) => {
 					return x(d.n);
 				})
-				.attr('width', x.bandwidth())
-				.attr('width_origin', x.bandwidth())
+				.attr('width', x.rangeBand())
+				.attr('width_origin', x.rangeBand())
 				.attr('y', (d) => {
 						return y(d.nComments) || 0;
 				})
@@ -218,7 +220,7 @@ const WorkVisualization = React.createClass({
 					return x(d.n) - footSize;
 				})
 				.attr('y', height - footSize)
-				.attr('width', x.bandwidth() + footSize * 2)
+				.attr('width', x.rangeBand() + footSize * 2)
 				.attr('height', footSize)
 				.attr('fill', (d) => {
 					return color(d.nComments);
@@ -230,7 +232,7 @@ const WorkVisualization = React.createClass({
 					return 'bargraph-bar-label-' + slug + '-' + d.n;
 				})
 				.attr('x', (d) => {
-					return x(d.n) + x.bandwidth() / 2;
+					return x(d.n) + x.rangeBand() / 2;
 				})
 				.attr('y', height + 35)
 				.style('text-anchor', 'middle')
@@ -244,10 +246,10 @@ const WorkVisualization = React.createClass({
 					return 'bargraph-bar-top-label-' + slug + '-' + d.n;
 				})
 				.attr('x', (d) => {
-					return x(d.n) + x.bandwidth() / 2;
+					return x(d.n) + x.rangeBand() / 2;
 				})
 				.attr('y', (d) => {
-						return (y(d.nComments) - x.bandwidth() / 2) || 0;
+						return (y(d.nComments) - x.rangeBand() / 2) || 0;
 				})
 				.style('text-anchor', 'middle')
 				.style('opacity', 0)
@@ -260,9 +262,8 @@ const WorkVisualization = React.createClass({
 			 * Orientation for a horizontal bar graph
 			 */
 			// --- BEGIN Y-AXIS --- //
-			const y = d3.scaleBand()
-				.rangeRound([0, height])
-				.padding(0.4);
+			const y = d3.scale.ordinal()
+				.rangeRoundBands([0, height], 0.4);
 			y.domain(dataBarGraph.map((d) =>
 				d.n
 			));
@@ -289,9 +290,9 @@ const WorkVisualization = React.createClass({
 			// --- END Y-AXIS --- //
 
 			// --- BEGIN X-AXIS --- //
-			const x = d3.scaleLinear()
+			const x = d3.scale.linear()
 				.range([0, width]);
-			const xAxis = d3.axisLeft()
+			const xAxis = d3.svg.axis()
 				.scale(x);
 			x.domain([0, d3.max(dataBarGraph, (d) => (d.nComments))]);
 			const barGraphXAxis = barGraph.append('g')
@@ -329,8 +330,8 @@ const WorkVisualization = React.createClass({
 					return y(d.n);
 				})
 				.attr('x', 16)
-				.attr('height', y.bandwidth())
-				.attr('height_origin', y.bandwidth())
+				.attr('height', y.rangeBand())
+				.attr('height_origin', y.rangeBand())
 				.attr('fill', (d) => {
 					return color(d.nComments);
 				})
@@ -354,7 +355,7 @@ const WorkVisualization = React.createClass({
 					return y(d.n) - footSize;
 				})
 				.attr('x', footSize + 10)
-				.attr('height', y.bandwidth() + footSize * 2)
+				.attr('height', y.rangeBand() + footSize * 2)
 				.attr('width', footSize)
 				.attr('fill', (d) => {
 					return color(d.nComments);
@@ -366,7 +367,7 @@ const WorkVisualization = React.createClass({
 					return 'bargraph-bar-label-' + slug + '-' + d.n;
 				})
 				.attr('y', (d) => {
-					return y(d.n) + y.bandwidth() / 2;
+					return y(d.n) + y.rangeBand() / 2;
 				})
 				.attr('x', 0)
 				.style('text-anchor', 'middle')
@@ -380,7 +381,7 @@ const WorkVisualization = React.createClass({
 					return 'bargraph-bar-top-label-' + slug + '-' + d.n;
 				})
 				.attr('y', (d) => {
-					return y(d.n) + y.bandwidth() / 2;
+					return y(d.n) + y.rangeBand() / 2;
 				})
 				.attr('x', (d) => {
 					return (x(d.nComments) + 40) || 0;
@@ -586,7 +587,7 @@ const WorkVisualization = React.createClass({
 			});
 
 			// Color scale:
-			const color = d3.scaleLinear()
+			const color = d3.scale.linear()
 				.domain([0, d3.max(dataHeatMap, function(d) {
 					return d.nComments;
 				})])
@@ -833,6 +834,7 @@ const WorkVisualization = React.createClass({
 	// --- END ANIMATION - CONTRACT BAR --- //
 	},
 
+
 	render() {
 		const { work } = this.props;
 		const workUrl = `/commentary/?q=work.${work.slug}`;
@@ -842,7 +844,7 @@ const WorkVisualization = React.createClass({
 				<div className={`work-teaser work-teaser--${work.slug}`}>
 					<div className="commentary-text">
 						<a href={workUrl}><h3 className="text-title">{work.title}</h3></a>
-						<hr className="text-divider" />
+						{/*<hr className="text-divider" />*/}
 						<div className="text-meta" />
 						<div className={`text-subworks text-subworks-visualization-${work.slug}`} />
 					</div>

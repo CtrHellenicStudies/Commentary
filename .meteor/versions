@@ -39,6 +39,7 @@ check@1.2.5
 chuangbo:cookie@1.1.0
 cmather:handlebars-server@2.0.0
 coffeescript@1.0.17
+d3js:d3@3.5.8
 dburles:collection-helpers@1.1.0
 dburles:factory@1.1.0
 dburles:google-maps@1.1.5

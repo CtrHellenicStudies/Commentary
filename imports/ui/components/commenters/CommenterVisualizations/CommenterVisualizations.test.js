@@ -15,6 +15,7 @@ describe('CommenterVisualizations', () => {
 						nCommentsOdyssey: 0,
 						nCommentsHymns: 0,
 					}}
+					isTest
 				/>
 			)
 			.toJSON();

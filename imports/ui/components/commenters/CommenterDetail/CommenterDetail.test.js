@@ -11,6 +11,7 @@ describe('CommenterDetail', () => {
 			.create(
 				<CommenterDetail
 					slug="test"
+					isTest
 				/>
 			)
 			.toJSON();

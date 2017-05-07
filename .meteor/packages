@@ -63,7 +63,7 @@ standard-minifier-js@1.2.2
 simple:rest
 dburles:google-maps
 todda00:friendly-slugs
-d3js:d3
+# d3js:d3
 buishi:autoform-ufs
 mpowaga:autoform-summernote
 reactive-var@1.0.11

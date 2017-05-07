@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommenterWorkVisualization renders correctly 1`] = `
+<div
+  className="commenter-work-visualization commenter-work-visualization--iliad"
+>
+  <i
+    className="close-visualization mdi mdi-close"
+    onClick={[Function]}
+  />
+  <div
+    className="work-teaser work-teaser--iliad"
+  >
+    <div
+      className="commentary-text"
+    >
+      <a
+        href="/commentary/?q=work.iliad"
+      >
+        <h3
+          className="text-title"
+        >
+          Iliad
+        </h3>
+      </a>
+      <hr
+        className="text-divider"
+      />
+      <div
+        className="text-meta"
+      />
+      <div
+        className="text-subworks text-subworks-visualization-iliad"
+      />
+    </div>
+  </div>
+</div>
+`;

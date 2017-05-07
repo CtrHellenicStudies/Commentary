@@ -9,6 +9,7 @@ import Commenters from '/imports/api/collections/commenters';
 // components
 import CommenterTeaser from '/imports/ui/components/commenters/CommenterTeaser';
 
+
 const CommentersList = React.createClass({
 
 	propTypes: {
@@ -19,7 +20,13 @@ const CommentersList = React.createClass({
 	},
 
 	renderCommenters() {
-		return this.props.commenters.map((commenter) =>
+		const { commenters } = this.props;
+
+		if (!commenters) {
+			return null;
+		}
+
+		return commenters.map((commenter) =>
 			<CommenterTeaser
 				key={commenter._id}
 				commenter={commenter}
@@ -53,10 +60,10 @@ export default createContainer(({ limit, featureOnHomepage }) => {
 			sort: {
 				name: 1,
 			},
-			limit,
+			_limit,
 		}).fetch();
 	} else {
-		Meteor.subscribe('commenters', _limit);
+		Meteor.subscribe('commenters', Session.get('tenantId'), _limit);
 		commenters = Commenters.find({}, { sort: { name: 1 }, _limit }).fetch();
 	}
 

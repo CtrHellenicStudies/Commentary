@@ -23,6 +23,8 @@ import NotFound from '/imports/ui/layouts/notFound/NotFound';
 
 // components
 import Page from '/imports/ui/components/pages/Page';
+import CommentersPage from '/imports/ui/components/commenters/CommentersPage';
+import CommenterDetail from '/imports/ui/components/commenters/CommenterDetail';
 import KeywordsPage from '/imports/ui/components/keywords/KeywordsPage';
 import KeywordDetail from '/imports/ui/components/keywords/KeywordDetail';
 

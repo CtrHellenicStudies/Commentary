@@ -1,5 +1,8 @@
 import React from 'react';
 
+import WorkVisualization from '/imports/ui/components/works/WorkVisualization';
+
+
 const CommenterWorkVisualization = React.createClass({
 
 	propTypes: {
@@ -14,7 +17,7 @@ const CommenterWorkVisualization = React.createClass({
 	},
 
 	render() {
-		const work = this.props.work;
+		const { work, commenterSlug } = this.props;
 
 		return (
 			<div className={`commenter-work-visualization commenter-work-visualization--${work.slug}`}>
@@ -25,7 +28,7 @@ const CommenterWorkVisualization = React.createClass({
 				<WorkVisualization
 					ref={(component) => { this.workVisualization = component; }}
 					work={work}
-					commenterSlug={this.props.commenterSlug}
+					commenterSlug={commenterSlug}
 				/>
 			</div>
 		);

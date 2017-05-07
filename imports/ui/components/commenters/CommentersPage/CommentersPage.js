@@ -2,14 +2,32 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+
+// components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import CommentersList from '/imports/ui/components/commenters/CommentersList';
+import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
+
+// api
+import Settings from '/imports/api/collections/settings';
+
+// lib
+import Utils from '/imports/lib/utils';
 
 const CommentersPage = React.createClass({
+	propTypes: {
+		settings: React.PropTypes.object,
+	},
 
 	render() {
-		const { settings } = this.data;
+		const { settings } = this.props;
+
+		if (!settings) {
+			return null;
+		}
+
 		Utils.setTitle(`Commentators | ${settings.title}`);
-		Utils.setDescription(`Commentators for ${Config.title}`);
+		Utils.setDescription(`Commentators for ${settings.title}`);
 		Utils.setMetaImage(`${location.origin}/images/capitals.jpg`);
 		return (
 			<div className="page page-commenters">
@@ -32,7 +50,7 @@ const CommentersPage = React.createClass({
 					</section>
 					<section className="page-content">
 
-						<CommentersList defaultAvatarUrl="/images/default_user.jpg" />
+						<CommentersList />
 
 					</section>
 

@@ -5,6 +5,11 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 
+// components
+import CommenterWorkCircle from '/imports/ui/components/commenters/CommenterWorkCircle';
+import CommenterWorkVisualization from '/imports/ui/components/commenters/CommenterWorkVisualization';
+
+
 const CommenterVisualizations = React.createClass({
 
 	propTypes: {

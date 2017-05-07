@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceWorksList';
+
 const CommenterReferenceWorks = React.createClass({
 
 	propTypes: {
@@ -7,7 +9,11 @@ const CommenterReferenceWorks = React.createClass({
 	},
 
 	render() {
-		const commenter = this.props.commenter;
+		const { commenter } = this.props;
+		if (!commenter) {
+			return null;
+		}
+		
 		return (
 			<div
 				className="commenter-reference-works"
@@ -27,4 +33,4 @@ const CommenterReferenceWorks = React.createClass({
 });
 
 
-export default CommentersReferenceWorks;
+export default CommenterReferenceWorks;

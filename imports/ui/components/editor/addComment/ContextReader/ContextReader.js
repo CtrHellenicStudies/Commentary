@@ -5,7 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
-// api 
+// api
 import TextNodes from '/imports/api/collections/textNodes';
 
 // lib:
@@ -117,7 +117,7 @@ const ContextReader = React.createClass({
 
 		// incase a subwork has less lines then initial this.state.lineTo
 		if (this.state.maxLine !== 0 && this.state.maxLine < this.state.lineTo) {
-			this.setState({
+			this.setState({ // eslint-disable-line
 				lineTo: this.state.maxLine,
 			});
 		}

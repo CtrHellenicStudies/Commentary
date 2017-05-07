@@ -1,17 +1,16 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check'
-import { Match } from 'meteor/check'
+import { check, Match } from 'meteor/check';
 import { queryCommentWithKeywordId } from '../utils.js';
 
-Meteor.publish('comments.keyword_context', function (keyword_id, tenantId) {
-	check(keyword_id, String);
+Meteor.publish('comments.keyword_context', (keywordId, tenantId) => {
+	check(keywordId, String);
 	check(tenantId, String);
 
-	return queryCommentWithKeywordId(keyword_id, tenantId);
+	return queryCommentWithKeywordId(keywordId, tenantId);
 });
 
-Meteor.publish('textnodes.keyword_context', function (lemma_query) {
-	check(lemma_query, {
+Meteor.publish('textnodes.keyword_context', (lemmaQuery) => {
+	check(lemmaQuery, {
 		'work.slug': String,
 		'subwork.n': Match.Integer,
 		'text.n': Match.Where((x) => {
@@ -21,10 +20,10 @@ Meteor.publish('textnodes.keyword_context', function (lemma_query) {
 		}),
 	});
 
-	return TextNodes.find(lemma_query, {
+	return TextNodes.find(lemmaQuery, {
 		limit: 50,
-		sort: { 'text.n':1 },
-		fields: { work:1, subwork:1, text:1 }
+		sort: { 'text.n': 1 },
+		fields: { work: 1, subwork: 1, text: 1 }
 	});
 
 });

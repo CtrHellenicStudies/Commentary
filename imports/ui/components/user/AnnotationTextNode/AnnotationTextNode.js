@@ -23,7 +23,7 @@ const AnnotationTextNode = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getMeteorData() {
-		let work = null;
+		const work = null;
 		/*
 		const query = { _id: text.work };
 		const handleWorks = Meteor.subscribe('works', query);
@@ -73,7 +73,7 @@ const AnnotationTextNode = React.createClass({
 
 
 	render() {
-		//const text = this.props.text;
+		// const text = this.props.text;
 		const annotation = this.props.annotation;
 		let textClasses = 'text-node bookmark-text-node annotation-text-node clearfix';
 		// const textLocation = this.getTextLocation();
@@ -98,7 +98,7 @@ const AnnotationTextNode = React.createClass({
 			<a
 				className={textClasses}
 				data-id={annotation._id}
-				//data-loc={textLocation.location}
+				// data-loc={textLocation.location}
 				href={link}
 			>
 				<div className="text-left-header">

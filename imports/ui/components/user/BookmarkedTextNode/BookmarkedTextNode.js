@@ -112,7 +112,7 @@ const BookmarkedTextNode = React.createClass({
 						return ref;
 					}}
 				>
-					{text.text && text.text .length ?
+					{text.text && text.text.length ?
 						<span>{Utils.trunc(text.text, 120)}</span>
 					:
 						<span>[ . . . ]</span>

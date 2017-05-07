@@ -20,14 +20,14 @@ const ReferenceDropdown = ({ reference, searchDropdownOpen, toggleSearchDropdown
 		toggle={toggleSearchDropdown}
 		disabled={false}
 	>
-		{reference.map(reference => (
+		{reference.map(_reference => (
 			<SearchTermButton
-				key={reference._id}
+				key={_reference._id}
 				toggleSearchTerm={toggleSearchTerm}
-				label={Utils.trunc(reference.title, 30)}
+				label={Utils.trunc(_reference.title, 30)}
 				searchTermKey="reference"
-				value={reference}
-				active={isActive(filters, reference, 'reference', 'title')}
+				value={_reference}
+				active={isActive(filters, _reference, 'reference', 'title')}
 			/>
 		))}
 	</SearchToolDropdown>

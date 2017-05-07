@@ -63,9 +63,8 @@ const KeywordContext = React.createClass({
 					return -1;
 				} else if (b.n < a.n) {
 					return 1;
-				} else {
-					return 0;
 				}
+				return 0;
 			});
 		}
 

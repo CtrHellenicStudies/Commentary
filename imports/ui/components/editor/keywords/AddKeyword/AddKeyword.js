@@ -357,7 +357,7 @@ const AddKeyword = React.createClass({
 							className="comment-lower"
 							style={{ paddingTop: 20 }}
 						>
-							{/*<RichTextEditor
+							{/* <RichTextEditor
 								className="keyword-editor"
 								placeholder="Keyword description . . ."
 								value={this.state.textEditorState}

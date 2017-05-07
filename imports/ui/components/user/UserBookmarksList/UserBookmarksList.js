@@ -47,16 +47,13 @@ const UserBookmarksList = React.createClass({
 		return (
 			<div className="collection with-header" style={styles.list}>
 				<div className="collection-header"> <h3>Bookmarks</h3></div>
-				{this.data.bookmarkedText.map((text, i) => {
-
-					return (
-						<BookmarkedTextNode
-							key={i}
-							isOdd={i % 2}
-							text={text}
-						/>
-					);
-				})}
+				{this.data.bookmarkedText.map((text, i) => (
+					<BookmarkedTextNode
+						key={i}
+						isOdd={i % 2}
+						text={text}
+					/>
+					))}
 			</div>
 		);
 	},

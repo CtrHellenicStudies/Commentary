@@ -67,6 +67,7 @@
 		"import/extensions": "off",
 		"react/prefer-es6-class": "off",
 		"no-unused-vars": "off",
+		"no-prototype-builtins": "off",
 		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
 	}
 }

@@ -31,7 +31,7 @@ const KeywordCommentList = (props) => {
 								</div>
 
 								<div className="comment-upper-right">
-									{comment.commenters.map((commenter, i) => {
+									{comment.commenters.map((commenter, _i) => {
 										const commenterRecord = Commenters.findOne({
 											slug: commenter.slug,
 										});
@@ -42,7 +42,7 @@ const KeywordCommentList = (props) => {
 
 										return (
 											<div
-												key={i}
+												key={_i}
 												className="comment-author"
 											>
 												<div className="comment-author-text">

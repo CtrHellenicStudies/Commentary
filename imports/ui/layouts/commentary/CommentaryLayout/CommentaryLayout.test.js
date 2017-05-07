@@ -8,7 +8,7 @@ describe('CommentaryLayout', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentaryLayout isTest/>)
+			.create(<CommentaryLayout isTest />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

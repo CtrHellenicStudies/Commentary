@@ -8,7 +8,7 @@ describe('NotFound', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<NotFound isTest/>)
+			.create(<NotFound isTest />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

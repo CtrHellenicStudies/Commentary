@@ -2,7 +2,7 @@ import React from 'react';
 import JsDiff from 'diff';
 import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
 
-import CommentBodyText from '/imports/ui/components/commentary/comments/CommentBodyText';  // eslint-disable-line import/no-absolute-path
+import CommentBodyText from '/imports/ui/components/commentary/comments/CommentBodyText';  
 
 /*
 	helpers

@@ -71,6 +71,7 @@
     "react-sticky": "^5.0.5",
     "react-style-proptype": "^3.0.0",
     "react-tap-event-plugin": "^2.0.1",
+    "reactcss": "^1.2.2",
     "shortcode-parser": "0.0.1",
     "simple-git": "^1.66.0",
     "simple-react-form": "^1.8.1",
@@ -112,9 +113,12 @@
   },
   "scripts": {
     "lint:js": "eslint . --ext .js,.jsx",
+    "lint:js:fix": "eslint . --ext .js,.jsx --fix",
     "lint:css": "stylelint \"imports/**/*.{css,less,scss,sss}\"",
+    "lint:css:fix": "stylelint \"imports/**/*.{css,less,scss,sss}\" --fix",
     "lint:staged": "lint-staged",
     "lint": "npm run lint:js",
+		"pretest": "lint",
     "test": "jest",
     "test:watch": "npm run test -- --reporter min --watch",
     "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings production.json"
@@ -159,28 +163,28 @@
       "git add"
     ]
   },
-	"stylelint": {
-		"extends": "stylelint-config-standard",
-		"rules": {
-			"string-quotes": "single",
-			"property-no-unknown": [
-				true,
-				{
-					"ignoreProperties": [
-						"composes"
-					]
-				}
-			],
-			"selector-pseudo-class-no-unknown": [
-				true,
-				{
-					"ignorePseudoClasses": [
-						"global"
-					]
-				}
-			]
-		}
-	},
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "string-quotes": "single",
+      "property-no-unknown": [
+        true,
+        {
+          "ignoreProperties": [
+            "composes"
+          ]
+        }
+      ],
+      "selector-pseudo-class-no-unknown": [
+        true,
+        {
+          "ignorePseudoClasses": [
+            "global"
+          ]
+        }
+      ]
+    }
+  },
   "pre-commit": [
     "test"
   ]

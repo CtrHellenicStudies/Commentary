@@ -82,12 +82,12 @@ Meteor.method('publishComments', (commentCandidate) => {
 
 	let referenceWork;
 	if ('reference' in commentCandidate) {
-		referenceWork = ReferenceWorks.findOne({ title: commentCandidate.reference })
+		referenceWork = ReferenceWorks.findOne({ title: commentCandidate.reference });
 	}
 	let originalDate = new Date(commentCandidate.updated * 1000);
 	// 1410643512 is the date of the primary ingest into the Wordpress database
-	if (referenceWork ) {
-		if( parseInt(commentCandidate.updated, 10) === 1410643512) {
+	if (referenceWork) {
+		if (parseInt(commentCandidate.updated, 10) === 1410643512) {
 			originalDate = referenceWork.date;
 		}
 	}

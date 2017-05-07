@@ -13,12 +13,12 @@ import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
-import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
 import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
-import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
-import 'draft-js-inline-toolbar-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+import 'draft-js-mention-plugin/lib/plugin.css';
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
 
 
 // api
@@ -215,9 +215,9 @@ const EditKeyword = React.createClass({
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
 			return true;
-		} else {
-			return false;
 		}
+		
+		return false;
 	},
 
 	isOptionUnique(newOption) {

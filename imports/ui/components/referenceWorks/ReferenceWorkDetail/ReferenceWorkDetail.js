@@ -43,9 +43,9 @@ const ReferenceWorkDetail = React.createClass({
 	createMarkup() {
 		let __html = '';
 		if (this.data.referenceWork) {
-			__html += '<p>'
+			__html += '<p>';
 			__html += this.data.referenceWork.description.replace('\n', '</p><p>');
-			__html += '</p>'
+			__html += '</p>';
 		}
 		return {
 			__html,

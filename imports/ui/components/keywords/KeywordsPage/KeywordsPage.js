@@ -27,7 +27,7 @@ const KeywordsPage = React.createClass({
 		const { title, type, settings } = this.props;
 
 		if (!settings) {
-			return <LoadingPage />
+			return <LoadingPage />;
 		}
 
 		if (type === 'word') {

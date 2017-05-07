@@ -208,7 +208,7 @@ const EditKeywordLayout = React.createClass({
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'subwork') {
 				subwork = values[0];
-			};
+			}
 		});
 		if (!subwork) {
 			subwork = {

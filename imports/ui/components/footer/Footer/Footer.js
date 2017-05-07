@@ -58,16 +58,16 @@ const Footer = React.createClass({
 								label="About"
 							/>
 							{ userIsLoggedin ? '' :
-								<div>
-									<FlatButton
-										href="/sign-in"
-										label="Login"
-									/>
-									<FlatButton
-										href="/sign-up"
-										label="Join the Community"
-									/>
-								</div>
+							<div>
+								<FlatButton
+									href="/sign-in"
+									label="Login"
+								/>
+								<FlatButton
+									href="/sign-up"
+									label="Join the Community"
+								/>
+							</div>
 							}
 						</div>
 					</div>

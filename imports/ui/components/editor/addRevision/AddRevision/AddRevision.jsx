@@ -439,7 +439,7 @@ const AddRevision = React.createClass({
 				<div className="comment-outer">
 
 					<Formsy.Form
-						ref="form"
+						ref="form" // eslint-disable-line
 						onValid={this._enableButton}
 						onInvalid={this._disableButton}
 						onValidSubmit={this.handleSubmit}

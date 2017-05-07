@@ -64,7 +64,8 @@ if (Meteor.isServer) {
 			user.emails.push({
 				address: user.services.google.email,
 				verified: true,
-			}); }
+			}); 
+		}
 		if ('twitter' in user.services) {
 			username = slug(user.services.twitter.screenName);
 		}

@@ -56,7 +56,7 @@ const Home = React.createClass({
 		let introImageCaption = '';
 
 		if (!settings) {
-			return <LoadingHome />
+			return <LoadingHome />;
 		}
 
 		if (
@@ -198,7 +198,7 @@ const Home = React.createClass({
 							<h2 className="block-title">Commentators</h2>
 							<CommentersList
 								featureOnHomepage
-								defaultAvatarUrl='/images/default_user.jpg'
+								defaultAvatarUrl="/images/default_user.jpg"
 								limit={3}
 							/>
 							<RaisedButton

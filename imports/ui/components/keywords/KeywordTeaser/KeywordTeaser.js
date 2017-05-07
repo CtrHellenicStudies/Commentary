@@ -4,6 +4,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
+
 
 const KeywordTeaser = React.createClass({
 

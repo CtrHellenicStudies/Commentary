@@ -7,28 +7,33 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
 // api
+import Comments from '/imports/api/collections/comments';
 import Keywords from '/imports/api/collections/keywords';
+import Settings from '/imports/api/collections/settings';
 
 // components
 import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import KeywordCommentList from '/imports/ui/components/keywords/KeywordCommentList';
+import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 
 const KeywordDetail = React.createClass({
 
 	propTypes: {
 		slug: React.PropTypes.string.isRequired,
+		keyword: React.PropTypes.object,
+		settings: React.PropTypes.object,
+		keywordComments: React.PropTypes.array,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -43,35 +48,8 @@ const KeywordDetail = React.createClass({
 		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
-	getMeteorData() {
-		// SUBSCRIPTIONS:
-		Meteor.subscribe('keywords.slug', this.props.slug, Session.get('tenantId'));
-		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-
-		// FETCH DATA:
-		const query = {
-			slug: this.props.slug,
-		};
-		const keyword = Keywords.findOne(query);
-
-		let keywordComments = null;
-		if (keyword) {
-			const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
-			Meteor.subscribe('comments', keywordCommentsQuery);
-
-			keywordComments = Comments.find(keywordCommentsQuery).fetch();
-		}
-
-		return {
-			keyword,
-			settings: settingsHandle.ready() ? Settings.findOne() : {},
-			keywordComments,
-		};
-	},
-
 	deleteKeyword() {
-		const keyword = this.data.keyword;
+		const { keyword } = this.props;
 		Meteor.call('keywords.delete', keyword._id, (error, keywordId) => {
 			if (error) {
 				console.log(keywordId, error);
@@ -105,8 +83,7 @@ const KeywordDetail = React.createClass({
 	},
 
 	render() {
-		const keyword = this.data.keyword;
-		const { settings, keywordComments } = this.data;
+		const { keyword, settings, keywordComments } = this.props;
 
 		if (!keyword) {
 			return <div />;
@@ -165,11 +142,7 @@ const KeywordDetail = React.createClass({
 								dangerouslySetInnerHTML={{ __html: keyword.description }}
 								onClick={this._keywordDescriptionOnClick}
 							/>
-						:
-								<p className="no-description-available">
-									No description available.
-								</p>
-						}
+						: ''}
 
 						<hr />
 
@@ -199,4 +172,31 @@ const KeywordDetail = React.createClass({
 	},
 });
 
-export default KeywordDetail;
+const KeywordDetailContainer = createContainer(({ slug }) => {
+	// SUBSCRIPTIONS:
+	Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
+	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+
+	// FETCH DATA:
+	const query = {
+		slug,
+	};
+	const keyword = Keywords.findOne(query);
+
+	let keywordComments = null;
+	if (keyword) {
+		const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
+		Meteor.subscribe('comments', keywordCommentsQuery);
+
+		keywordComments = Comments.find(keywordCommentsQuery).fetch();
+	}
+
+	return {
+		keyword,
+		settings: settingsHandle.ready() ? Settings.findOne() : {},
+		keywordComments,
+	};
+}, KeywordDetail);
+
+export default KeywordDetailContainer;

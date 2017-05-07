@@ -12,7 +12,7 @@ import muiTheme from '/imports/lib/muiTheme';
 import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
 
 
-export default KeywordContext = React.createClass({
+const KeywordContext = React.createClass({
 
 	propTypes: {
 		keyword: React.PropTypes.object,
@@ -67,7 +67,7 @@ export default KeywordContext = React.createClass({
 			}
 
 		} else {
-			const commentsSub = Meteor.subscribe('comments.keyword_context', this.props.keyword._id, Session.get("tenantId"));
+			const commentsSub = Meteor.subscribe('comments.keyword_context', this.props.keyword._id, Session.get('tenantId'));
 
 			if (commentsSub.ready()) {
 				const commentCursor = queryCommentWithKeywordId(this.props.keywordId);
@@ -119,14 +119,15 @@ export default KeywordContext = React.createClass({
 		});
 
 		// sort lines for each edition by line number
-		for (let i=0; i < editions.length; ++i) {
-			editions[i].lines.sort((a,b) => {
-				if (a.n < b.n)
+		for (let i = 0; i < editions.length; ++i) {
+			editions[i].lines.sort((a, b) => {
+				if (a.n < b.n) {
 					return -1;
-				else if (b.n < a.n)
+				} else if (b.n < a.n) {
 					return 1;
-				else
+				} else {
 					return 0;
+				}
 			});
 		}
 
@@ -151,7 +152,7 @@ export default KeywordContext = React.createClass({
 					:
 					<div>
 						<span className="lemma-comment-ref-header">
-							{keyword.work.title} {keyword.subwork.n}.{keyword.lineFrom}{(keyword.lineTo && keyword.lineFrom !== keyword.lineTo)? `-${keyword.lineTo}` : ''}
+							{keyword.work.title} {keyword.subwork.n}.{keyword.lineFrom}{(keyword.lineTo && keyword.lineFrom !== keyword.lineTo) ? `-${keyword.lineTo}` : ''}
 						</span>
 						{this.data.lemmaText[this.state.selectedLemma].lines.map((line, i) =>
 							<p
@@ -165,16 +166,17 @@ export default KeywordContext = React.createClass({
 				<div className="edition-tabs tabs">
 					{
 						this.data.lemmaText.map((lemmaTextEdition, i) => {
-							let lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
-							return <RaisedButton
-								key={i}
-								label={lemmaEditionTitle}
-								data-edition={lemmaTextEdition.title}
-								className={this.state.selectedLemma === i ? "edition-tab tab selected-edition-tab" : "edition-tab tab"}
-								onClick={this.toggleEdition.bind(null, i)}
-							>
-							</RaisedButton>
+							return (
+								<RaisedButton
+									key={i}
+									label={lemmaEditionTitle}
+									data-edition={lemmaTextEdition.title}
+									className={this.state.selectedLemma === i ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+									onClick={this.toggleEdition.bind(null, i)}
+								/>
+							);
 						})
 					}
 				</div>
@@ -193,3 +195,5 @@ export default KeywordContext = React.createClass({
 	},
 
 });
+
+export default KeywordContext;

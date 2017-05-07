@@ -80,7 +80,7 @@ const EditKeyword = React.createClass({
 	},
 
 	getMeteorData() {
-		Meteor.subscribe('keywords.all', {tenantId: Session.get("tenantId")});
+		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
 		const keywordsOptions = [];
 		const keywords = Keywords.find({ type: 'word' }).fetch();
 		keywords.forEach((keyword) => {
@@ -111,7 +111,7 @@ const EditKeyword = React.createClass({
 			});
 		});
 
-		Meteor.subscribe('commenters', Session.get("tenantId"));
+		Meteor.subscribe('commenters', Session.get('tenantId'));
 		const commentersOptions = [];
 		let commenters = [];
 		if (Meteor.user() && Meteor.user().canEditCommenters) {

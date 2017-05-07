@@ -104,6 +104,7 @@
     "eslint-plugin-react": "^6.2.0",
     "jest": "^19.0.2",
     "jest-css-modules": "^1.1.0",
+    "pre-commit": "^1.2.2",
     "react-test-renderer": "^15.5.4",
     "sinon": "^2.1.0"
   },
@@ -140,7 +141,11 @@
     "setupFiles": [
       "<rootDir>/imports/mocks/env.js"
     ],
-		"transform": {".*": "<rootDir>/node_modules/jest-css-modules"}
+    "transform": {
+      ".*": "<rootDir>/node_modules/jest-css-modules"
+    }
   },
-	"pre-commit": "jest",
+  "pre-commit": [
+    "test"
+  ]
 }

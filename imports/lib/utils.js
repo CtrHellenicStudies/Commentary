@@ -96,20 +96,20 @@ const Utils = {
 		}
 		return 0;
 	},
-	defaultCmp: function(a, b) {
-		if (a == b) return 0;
+	defaultCmp: function defaultCmp(a, b) {
+		if (a === b) return 0;
 		return a < b ? -1 : 1;
 	},
 	getCmpFunc: (primer, reverse) => {
-		let dfc = Utils.defaultCmp;
+		const dfc = Utils.defaultCmp;
 		let cmp = Utils.defaultCmp;
 		if (primer) {
-			cmp = (a, b) => {
+			cmp = (a, b) => { // eslint-disable-line
 				return dfc(primer(a), primer(b));
 			};
 		}
 		if (reverse) {
-			return (a, b) => {
+			return (a, b) => { // eslint-disable-line
 				return -1 * cmp(a, b);
 			};
 		}
@@ -120,12 +120,11 @@ const Utils = {
 		const nFields = arguments.length;
 		let field;
 		let name;
-		let reverse;
 		let cmp;
 
 		// preprocess sorting options
 		for (let i = 0; i < nFields; i++) {
-			field = arguments[i];
+			field = arguments[i]; // eslint-disable-line
 
 			if (typeof field === 'string') {
 				name = field;
@@ -142,9 +141,6 @@ const Utils = {
 
 		// final comparison function
 		return (A, B) => {
-			let a;
-			let b;
-			let name;
 			let result;
 
 			for (let i = 0; i < nFields; i++) {

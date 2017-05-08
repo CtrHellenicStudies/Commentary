@@ -1,8 +1,11 @@
 import React from 'react';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import Utils from '/imports/lib/utils';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 // commenter Teaser
 const CommenterTeaser = React.createClass({
@@ -16,7 +19,7 @@ const CommenterTeaser = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	render() {

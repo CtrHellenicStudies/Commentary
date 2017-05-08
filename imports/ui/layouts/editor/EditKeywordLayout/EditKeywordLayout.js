@@ -1,29 +1,35 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import Keywords from '/imports/api/collections/keywords';
-import 'mdi/css/materialdesignicons.css';
 
 // layouts
 import Header from '/imports/ui/layouts/header/Header';
+
+// components
+import Spinner from '/imports/ui/components/loading/Spinner';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const EditKeywordLayout = React.createClass({
 
 	propTypes: {
 		slug: React.PropTypes.string,
+		ready: React.PropTypes.bool,
+		keyword: React.PropTypes.object,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -39,25 +45,11 @@ const EditKeywordLayout = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	componentWillUpdate() {
-		if (this.data.ready) this.handlePermissions();
-	},
-
-	getMeteorData() {
-		const keywordsSub = Meteor.subscribe('keywords.slug', this.props.slug, Session.get('tenantId'));
-		const ready = Roles.subscription.ready() && keywordsSub;
-		let keyword = {};
-		if (ready) {
-			keyword = Keywords.findOne({ slug: this.props.slug });
-		}
-
-		return {
-			ready,
-			keyword,
-		};
+		if (this.props.ready) this.handlePermissions();
 	},
 
 	handlePermissions() {
@@ -148,7 +140,7 @@ const EditKeywordLayout = React.createClass({
 		const selectedLineTo = this.getSelectedLineTo();
 		const type = this.getType();
 		const token = cookie.load('loginToken');
-		const { keyword } = this.data;
+		const { keyword } = this.props;
 
 		// create keyword object to be inserted:
 		const keywordCandidate = {
@@ -161,8 +153,8 @@ const EditKeywordLayout = React.createClass({
 				title: subwork.title,
 				n: subwork.n,
 			},
-			lineFrom: this.state.selectedLineFrom || this.data.keyword.lineFrom,
-			lineTo: selectedLineTo || this.data.keyword.lineTo,
+			lineFrom: this.state.selectedLineFrom || this.props.keyword.lineFrom,
+			lineTo: selectedLineTo || this.props.keyword.lineTo,
 			lineLetter,
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
@@ -216,7 +208,7 @@ const EditKeywordLayout = React.createClass({
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'subwork') {
 				subwork = values[0];
-			};
+			}
 		});
 		if (!subwork) {
 			subwork = {
@@ -345,11 +337,11 @@ const EditKeywordLayout = React.createClass({
 
 	render() {
 		const filters = this.state.filters;
-		const keyword = this.data.keyword;
+		const { ready, keyword } = this.props;
 
 		return (
-			<MuiThemeProvider>
-				{this.data.ready && this.data.keyword ?
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				{ready && keyword ?
 					<div className="chs-layout chs-editor-layout edit-keyword-layout">
 
 						<Header
@@ -408,4 +400,18 @@ const EditKeywordLayout = React.createClass({
 	},
 });
 
-export default EditKeywordLayout;
+const EditKeywordLayoutContainer = createContainer(({ slug }) => {
+	const keywordsSub = Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
+	const ready = Roles.subscription.ready() && keywordsSub;
+	let keyword = {};
+	if (ready) {
+		keyword = Keywords.findOne({ slug });
+	}
+
+	return {
+		ready,
+		keyword,
+	};
+}, EditKeywordLayout);
+
+export default EditKeywordLayoutContainer;

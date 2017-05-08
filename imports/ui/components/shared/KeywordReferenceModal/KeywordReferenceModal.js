@@ -1,10 +1,13 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// api
 import Keywords from '/imports/api/collections/keywords';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
 
 const KeywordReferenceModal = React.createClass({
 
@@ -23,7 +26,7 @@ const KeywordReferenceModal = React.createClass({
 	mixins: [ReactMeteorData],
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getMeteorData() {

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReferenceWorksList renders correctly 1`] = `
+<div>
+  <p
+    className="no-results no-results-reference-works"
+  >
+    No reference works found.
+  </p>
+</div>
+`;

@@ -1,11 +1,15 @@
 import React from 'react';
 
+import WorkVisualization from '/imports/ui/components/works/WorkVisualization';
+
+
 const CommenterWorkVisualization = React.createClass({
 
 	propTypes: {
 		work: React.PropTypes.object.isRequired,
 		toggleVisibleWork: React.PropTypes.func.isRequired,
 		commenterSlug: React.PropTypes.string.isRequired,
+		isTest: React.PropTypes.bool,
 	},
 
 	toggleVisibleWork(workSlug) {
@@ -14,7 +18,7 @@ const CommenterWorkVisualization = React.createClass({
 	},
 
 	render() {
-		const work = this.props.work;
+		const { work, commenterSlug, isTest } = this.props;
 
 		return (
 			<div className={`commenter-work-visualization commenter-work-visualization--${work.slug}`}>
@@ -22,11 +26,13 @@ const CommenterWorkVisualization = React.createClass({
 					onClick={this.toggleVisibleWork.bind(null, work.slug)}
 					className="close-visualization mdi mdi-close"
 				/>
-				<WorkVisualization
-					ref={(component) => { this.workVisualization = component; }}
-					work={work}
-					commenterSlug={this.props.commenterSlug}
-				/>
+				{!isTest ?
+					<WorkVisualization
+						ref={(component) => { this.workVisualization = component; }}
+						work={work}
+						commenterSlug={commenterSlug}
+					/>
+				: ''}
 			</div>
 		);
 	},

@@ -5,18 +5,27 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
+import Settings from '/imports/api/collections/settings';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import CommenterReferenceWorks from '/imports/ui/components/commenters/CommenterReferenceWorks';
+import CommenterVisualizations from '/imports/ui/components/commenters/CommenterVisualizations';
+import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
+
+// lib
+import Utils from '/imports/lib/utils';
+
 
 const CommenterDetail = React.createClass({
 
 	propTypes: {
 		slug: React.PropTypes.string.isRequired,
-		defaultAvatarUrl: React.PropTypes.string.isRequired,
 		commenter: React.PropTypes.object,
 		avatarUrl: React.PropTypes.string,
 		settings: React.PropTypes.object,
+		isTest: React.PropTypes.bool,
 	},
 
 	getInitialState() {
@@ -40,7 +49,7 @@ const CommenterDetail = React.createClass({
 
 	render() {
 		const self = this;
-		const { commenter, settings, avatarUrl } = this.props;
+		const { commenter, settings, avatarUrl, isTest } = this.props;
 
 		if (commenter) {
 			Utils.setTitle(`${commenter.name} | ${settings.title}`);
@@ -112,16 +121,13 @@ const CommenterDetail = React.createClass({
 
 							<CommenterVisualizations
 								commenter={commenter}
+								isTest={isTest}
 							/>
 
 							<br />
 							<br />
 							<br />
 							<hr />
-							<br />
-							<br />
-							<br />
-
 						</section>
 
 						<CommenterReferenceWorks
@@ -132,20 +138,20 @@ const CommenterDetail = React.createClass({
 					</div>
 				</div>
 				:
-				<Loading />
+				<LoadingPage />
 			)
 		);
 	},
 });
 
-export default createContainer(() => {
+export default createContainer(({ slug }) => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	const commentersHandle = Meteor.subscribe('commenters.slug', this.props.slug, Session.get('tenantId'));
+	const commentersHandle = Meteor.subscribe('commenters.slug', slug, Session.get('tenantId'));
+	let avatarUrl;
 
-	const commenter = Commenters.findOne({ slug: this.props.slug });
-	let avatarUrl = this.props.defaultAvatarUrl;
+	const commenter = Commenters.findOne({ slug });
 
-	if (commenter != null && commenter.avatar != null) {
+	if (commenter && commenter.avatar) {
 		avatarUrl = commenter.avatar.src;
 	}
 
@@ -153,6 +159,6 @@ export default createContainer(() => {
 		commenter,
 		avatarUrl,
 		settings: Settings.findOne(),
-		ready: settingsHandle && commentersHandle,
+		ready: settingsHandle.ready() && commentersHandle.ready(),
 	};
 }, CommenterDetail);

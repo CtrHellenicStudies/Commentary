@@ -3,9 +3,14 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import FlatButton from 'material-ui/FlatButton';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// api
 import Settings from '/imports/api/collections/settings';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const Footer = React.createClass({
 
@@ -18,7 +23,7 @@ const Footer = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 
@@ -53,16 +58,16 @@ const Footer = React.createClass({
 								label="About"
 							/>
 							{ userIsLoggedin ? '' :
-								<div>
-									<FlatButton
-										href="/sign-in"
-										label="Login"
-									/>
-									<FlatButton
-										href="/sign-up"
-										label="Join the Community"
-									/>
-								</div>
+							<div>
+								<FlatButton
+									href="/sign-in"
+									label="Login"
+								/>
+								<FlatButton
+									href="/sign-up"
+									label="Join the Community"
+								/>
+							</div>
 							}
 						</div>
 					</div>

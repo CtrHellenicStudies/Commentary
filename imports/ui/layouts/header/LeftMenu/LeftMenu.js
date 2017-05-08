@@ -6,10 +6,10 @@ import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 
 // api:
-import Tenants from '/imports/api/collections/tenants'; // eslint-disable-line import/no-absolute-path
+import Tenants from '/imports/api/collections/tenants';
 
 // components:
-import SideNavTop from '/imports/ui/components/header/SideNavTop'; // eslint-disable-line import/no-absolute-path
+import SideNavTop from '/imports/ui/components/header/SideNavTop';
 import MenuItem from '/imports/ui/components/shared/MenuItem';
 
 

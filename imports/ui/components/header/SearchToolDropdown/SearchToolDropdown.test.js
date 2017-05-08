@@ -8,7 +8,7 @@ import sinon from 'sinon';
 import FlatButton from 'material-ui/FlatButton';
 
 // component:
-import SearchToolDropdown from './SearchToolDropdown'; // eslint-disable-line import/no-absolute-path
+import SearchToolDropdown from './SearchToolDropdown'; 
 
 describe('SearchToolDropdown', () => {
 	it('should render', () => {

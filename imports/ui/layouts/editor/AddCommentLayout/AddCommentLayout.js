@@ -1,19 +1,31 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import 'mdi/css/materialdesignicons.css';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+import Spinner from '/imports/ui/components/loading/Spinner';
+import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
+import AddComment from '/imports/ui/components/editor/addComment/AddComment';
+import ContextReader from '/imports/ui/components/editor/addComment/ContextReader';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const AddCommentLayout = React.createClass({
 
-	mixins: [ReactMeteorData],
+	propTypes: {
+		ready: React.PropTypes.bool,
+		isTest: React.PropTypes.bool,
+	},
 
 	getInitialState() {
 		return {
@@ -27,20 +39,6 @@ const AddCommentLayout = React.createClass({
 
 	componentWillUpdate() {
 		this.handlePermissions();
-	},
-
-	getMeteorData() {
-		const ready = Roles.subscription.ready();
-		return {
-			ready,
-		};
-	},
-
-	getMeteorData() {
-		const ready = Roles.subscription.ready();
-		return {
-			ready,
-		};
 	},
 
 	handlePermissions() {
@@ -403,7 +401,8 @@ const AddCommentLayout = React.createClass({
 	},
 
 	render() {
-		const filters = this.state.filters;
+		const { isTest } = this.props;
+		const { filters } = this.state;
 		let work;
 		let subwork;
 		let lineFrom;
@@ -422,8 +421,8 @@ const AddCommentLayout = React.createClass({
 		});
 
 		return (
-			<MuiThemeProvider>
-				{this.data.ready || this.state.loading ?
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				{!this.state.loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<div>
 							<Header
@@ -434,43 +433,40 @@ const AddCommentLayout = React.createClass({
 								addCommentPage
 							/>
 
-							<main>
-
-								<div className="commentary-comments">
-									<div className="comment-group">
-										<CommentLemmaSelect
-											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-										/>
-										<AddComment
-											selectedLineFrom={this.state.selectedLineFrom}
-											submitForm={this.addComment}
-										/>
-										<ContextReader
-											open={this.state.contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-											initialLineFrom={lineFrom || 1}
-											initialLineTo={lineTo || 100}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											updateSelectedLines={this.updateSelectedLines}
-										/>
+							{!isTest ?
+								<main>
+									<div className="commentary-comments">
+										<div className="comment-group">
+											<CommentLemmaSelect
+												ref={(component) => { this.commentLemmaSelect = component; }}
+												selectedLineFrom={this.state.selectedLineFrom}
+												selectedLineTo={this.state.selectedLineTo}
+												workSlug={work ? work.slug : 'iliad'}
+												subworkN={subwork ? subwork.n : 1}
+											/>
+											<AddComment
+												selectedLineFrom={this.state.selectedLineFrom}
+												submitForm={this.addComment}
+											/>
+											<ContextReader
+												open={this.state.contextReaderOpen}
+												workSlug={work ? work.slug : 'iliad'}
+												subworkN={subwork ? subwork.n : 1}
+												initialLineFrom={lineFrom || 1}
+												initialLineTo={lineTo || 100}
+												selectedLineFrom={this.state.selectedLineFrom}
+												selectedLineTo={this.state.selectedLineTo}
+												updateSelectedLines={this.updateSelectedLines}
+											/>
+										</div>
 									</div>
-								</div>
 
-								<FilterWidget
-									filters={filters}
-									toggleSearchTerm={this.toggleSearchTerm}
-								/>
-
-							</main>
-
-							{/* <Footer/> */}
-
+									<FilterWidget
+										filters={filters}
+										toggleSearchTerm={this.toggleSearchTerm}
+									/>
+								</main>
+							: ''}
 						</div>
 					</div>
 					:
@@ -482,4 +478,11 @@ const AddCommentLayout = React.createClass({
 });
 
 
-export default AddCommentLayout;
+const AddCommentLayoutContainer = (() => {
+	const ready = Roles.subscription.ready();
+	return {
+		ready,
+	};
+}, AddCommentLayout);
+
+export default AddCommentLayoutContainer;

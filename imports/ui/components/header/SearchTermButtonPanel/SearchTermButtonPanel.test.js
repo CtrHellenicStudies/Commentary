@@ -8,7 +8,7 @@ import sinon from 'sinon';
 import { brown800 } from 'material-ui/styles/colors';
 
 // components:
-import SearchTermButtonPanel from './SearchTermButtonPanel'; // eslint-disable-line import/no-absolute-path
+import SearchTermButtonPanel from './SearchTermButtonPanel'; 
 
 describe('SearchTermButtonPanel', () => {
 	it('should render', () => {

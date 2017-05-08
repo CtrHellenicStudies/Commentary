@@ -1,11 +1,14 @@
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import 'mdi/css/materialdesignicons.css';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts
 import Header from '/imports/ui/layouts/header/Header';
 import Footer from '/imports/ui/components/footer/Footer';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const MasterLayout = React.createClass({
 
@@ -15,7 +18,7 @@ const MasterLayout = React.createClass({
 
 	render() {
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout master-layout">
 					<Header />
 					<main>

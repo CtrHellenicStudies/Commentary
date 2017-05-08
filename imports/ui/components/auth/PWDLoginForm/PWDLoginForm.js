@@ -78,7 +78,7 @@ const PWDLoginForm = ({ errorMsg, login }) => {
 };
 PWDLoginForm.propTypes = {
 	errorMsg: React.PropTypes.string,
-	login: React.PropTypes.func.isRequired,
+	login: React.PropTypes.func,
 };
 PWDLoginForm.defaultProps = {
 	errorMsg: null,

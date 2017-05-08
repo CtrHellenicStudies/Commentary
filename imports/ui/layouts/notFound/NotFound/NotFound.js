@@ -1,5 +1,5 @@
 import React from 'react';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts
@@ -7,6 +7,9 @@ import Header from '/imports/ui/layouts/header/Header';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
 
 const NotFound = React.createClass({
 
@@ -19,7 +22,7 @@ const NotFound = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	render() {

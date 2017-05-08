@@ -1,5 +1,5 @@
 import React from 'react';
-import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';  // eslint-disable-line import/no-absolute-path
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';  
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -39,7 +39,7 @@ const CommentUpperRight = props => (
 					:
 					''
 				}
-				<div className={"comment-author-text"}>
+				<div className={'comment-author-text'}>
 					<a href={`/commenters/${commenter.slug}`}>
 						<span className="comment-author-name">{commenter.name}</span>
 					</a>

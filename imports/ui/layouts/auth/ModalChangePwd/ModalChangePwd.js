@@ -1,10 +1,11 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-ModalChangePwd = React.createClass({
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
+const ModalChangePwd = React.createClass({
 
 	propTypes: {
 		lowered: React.PropTypes.bool,
@@ -16,7 +17,7 @@ ModalChangePwd = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	render() {
@@ -45,3 +46,5 @@ ModalChangePwd = React.createClass({
 		);
 	},
 });
+
+export default ModalChangePwd;

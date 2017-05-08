@@ -1,6 +1,9 @@
 import React from 'react';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 const ReferenceWorkTeaser = React.createClass({
 
@@ -19,7 +22,7 @@ const ReferenceWorkTeaser = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	toggleOpen() {
@@ -35,9 +38,13 @@ const ReferenceWorkTeaser = React.createClass({
 	},
 
 	render() {
-		const referenceWork = this.props.referenceWork;
-		const referenceWorkUrl = `/referenceWorks/${referenceWork.slug}`;
+		const { referenceWork } = this.props;
 
+		if (!referenceWork) {
+			return null;
+		}
+
+		const referenceWorkUrl = `/referenceWorks/${referenceWork.slug}`;
 
 		return (
 			<div

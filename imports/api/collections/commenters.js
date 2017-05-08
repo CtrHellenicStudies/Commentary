@@ -113,17 +113,15 @@ Commenters.attachSchema(Commenters.schema);
 Commenters.friendlySlugs('name');
 
 Commenters.attachBehaviour('timestampable', {
-  createdAt: 'created',
-  createdBy: 'createdBy',
-  updatedAt: 'updated',
-  updatedBy: 'updatedBy'
+	createdAt: 'created',
+	createdBy: 'createdBy',
+	updatedAt: 'updated',
+	updatedBy: 'updatedBy'
 });
 
 
 Commenters.allow({
-  update: function(userId, doc) {
-	return true;
-  },
+	update: (userId, doc) => true 
 });
 
 export default Commenters;

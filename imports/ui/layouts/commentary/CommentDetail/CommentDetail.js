@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import ReferenceWorks from '/imports/api/collections/referenceWorks';  // eslint-disable-line import/no-absolute-path
+import ReferenceWorks from '/imports/api/collections/referenceWorks';  
 
 // components:
 import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
 // components:
-import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel'; // eslint-disable-line import/no-absolute-path
+import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel'; 
 
 // helpers:
 import { isActive, cardPropTypes, cardDefaultProps } from './helpers';

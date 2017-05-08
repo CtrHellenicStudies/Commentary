@@ -78,12 +78,12 @@ const Page = React.createClass({
 				</section>
 
 				<section className="page-content container">
-						{page.byline ?
-							<div className="page-byline">
-								<h3>
-									{page.byline}
-								</h3>
-							</div>
+					{page.byline ?
+						<div className="page-byline">
+							<h3>
+								{page.byline}
+							</h3>
+						</div>
 						: ''}
 					<div dangerouslySetInnerHTML={{ __html: page.content }} />
 				</section>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { DragDropContext, DragSource, DropTarget } from 'react-dnd'; // eslint-disable-line import/no-unresolved
-import HTML5Backend from 'react-dnd-html5-backend'; // eslint-disable-line import/no-unresolved
-import { ListGroup, ListGroupItem } from 'react-bootstrap'; // eslint-disable-line import/no-unresolved
-import { findDOMNode } from 'react-dom'; // eslint-disable-line import/no-unresolved
+import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { findDOMNode } from 'react-dom';
 
 /*
 This file exports two elements:
@@ -50,7 +50,7 @@ const listGroupItemTarget = {
 		}
 
 		// Determine rectangle on screen
-		const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+		const hoverBoundingRect = findDOMNode(component).getBoundingClientRect(); // eslint-disable-line
 
 		// Get vertical middle
 		const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;

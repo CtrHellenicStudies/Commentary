@@ -1,4 +1,8 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
+import { moment } from 'meteor/momentjs:moment';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
@@ -9,9 +13,8 @@ const DiscussionComment = React.createClass({
 	propTypes: {
 		discussionComment: React.PropTypes.object.isRequired,
 		currentUser: React.PropTypes.object,
+		user: React.PropTypes.object,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -19,17 +22,6 @@ const DiscussionComment = React.createClass({
 			moreOptionsVisible: false,
 			shareOptionsVisible: false,
 			readComment: false,
-		};
-	},
-
-	getMeteorData() {
-		const { discussionComment } = this.props;
-		const handle = Meteor.subscribe('users.id', discussionComment.userId);
-		const user = Meteor.users.findOne({ _id: discussionComment.userId });
-
-		return {
-			user,
-			ready: handle.ready(),
 		};
 	},
 
@@ -119,8 +111,7 @@ const DiscussionComment = React.createClass({
 	render() {
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
-		const { discussionComment } = this.props;
-		const { user } = this.data;
+		const { discussionComment, user } = this.props;
 		let userLink = '';
 		let userUpvoted = false;
 		let userReported = false;
@@ -128,6 +119,9 @@ const DiscussionComment = React.createClass({
 		let offsetLeft = 0;
 		let status;
 
+		if (!discussionComment) {
+			return null;
+		}
 
 		// Child discussion Comments
 		discussionComment.children = [];
@@ -429,4 +423,22 @@ const DiscussionComment = React.createClass({
 
 });
 
-export default DiscussionComment;
+const DiscussionCommentContainer = createContainer(({ discussionComment }) => {
+
+	let handle;
+	let user;
+
+	if (discussionComment) {
+		handle = Meteor.subscribe('users.id', discussionComment.userId);
+		user = Meteor.users.findOne({ _id: discussionComment.userId });
+	}
+
+	return {
+		user,
+		ready: handle && handle.ready(),
+		discussionComment,
+	};
+
+}, DiscussionComment);
+
+export default DiscussionCommentContainer;

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Spinner renders correctly 1`] = `
+<div
+  className="ahcip-spinner commentary-loading"
+>
+  <div
+    className="double-bounce1"
+  />
+  <div
+    className="double-bounce2"
+  />
+</div>
+`;

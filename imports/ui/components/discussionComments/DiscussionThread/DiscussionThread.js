@@ -5,8 +5,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+
+// api
 import DiscussionComments from '/imports/api/collections/discussionComments';
+
+// lib
 import Utils from '/imports/lib/utils';
+
+// components
+import DiscussionComment from '/imports/ui/components/discussionComments/DiscussionComment';
 
 const DiscussionThread = React.createClass({
 
@@ -55,7 +62,11 @@ const DiscussionThread = React.createClass({
 
 	render() {
 		const currentUser = Meteor.user();
-		const discussionComments = this.props.discussionComments.slice();
+		const { discussionComments } = this.props;
+
+		if (!discussionComments) {
+			return null;
+		}
 
 		let discussionWrapClass = 'discussion-wrap';
 

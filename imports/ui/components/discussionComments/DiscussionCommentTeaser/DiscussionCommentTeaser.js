@@ -1,4 +1,7 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import Card from 'material-ui/Card';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -18,27 +21,19 @@ const DiscussionCommentTeaser = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getChildContext() {
 		return {
 			muiTheme: getMuiTheme(muiTheme),
 		};
 	},
 
-	getMeteorData() {
-		const { discussionComment } = this.props;
-		const handle = Meteor.subscribe('users.id', discussionComment.userId);
-		const user = Meteor.users.findOne({ _id: discussionComment.userId });
-
-		return {
-			user,
-			ready: handle.ready(),
-		};
-	},
-
 	render() {
 		const { discussionComment } = this.props;
+
+		if (!discussionComment) {
+			return null;
+		}
+
 		const commentaryLink = `/commentary/?works=${discussionComment.comment.work.slug
 		}&subworks=${discussionComment.comment.subwork.title}&lineFrom=${discussionComment.comment.lineFrom}`;
 		const commentLink = `/commentary/?_id=${discussionComment.commentId}`;
@@ -92,4 +87,20 @@ const DiscussionCommentTeaser = React.createClass({
 
 });
 
-export default DiscussionCommentTeaser;
+const DiscussionCommentTeaserContainer = createContainer(({ discussionComment }) => {
+	let handle;
+	let user;
+
+	if (discussionComment) {
+		handle = Meteor.subscribe('users.id', discussionComment.userId);
+		user = Meteor.users.findOne({ _id: discussionComment.userId });
+	}
+
+	return {
+		user,
+		ready: handle && handle.ready(),
+		discussionComment,
+	};
+}, DiscussionCommentTeaser);
+
+export default DiscussionCommentTeaserContainer;

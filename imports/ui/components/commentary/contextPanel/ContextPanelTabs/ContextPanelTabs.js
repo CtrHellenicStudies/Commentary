@@ -1,6 +1,9 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
+// lib:
+import Utils from '/imports/lib/utils';
+
 /*
 	helpers
 */

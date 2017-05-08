@@ -21,15 +21,11 @@ const CommentersList = ({ commenters }) => (
 	</div>
 );
 CommentersList.propTypes = {
-	// limit: React.PropTypes.number,
-	// featureOnHomepage: React.PropTypes.bool,
 	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
 	}).isRequired),
 };
 CommentersList.defaultProps = {
-	// limit: null,
-	// featureOnHomepage: false,
 	commenters: [],
 };
 

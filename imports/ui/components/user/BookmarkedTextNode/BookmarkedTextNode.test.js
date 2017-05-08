@@ -2,13 +2,13 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import BackgroundImageHolder from './BackgroundImageHolder';
+import BookmarkedTextNode from './BookmarkedTextNode';
 
-describe('BackgroundImageHolder', () => {
+describe('BookmarkedTextNode', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<BackgroundImageHolder imgSrc="test" />)
+			.create(<BookmarkedTextNode />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

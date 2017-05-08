@@ -2,13 +2,13 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import BackgroundImageHolder from './BackgroundImageHolder';
+import AnnotationTextNode from './AnnotationTextNode';
 
-describe('BackgroundImageHolder', () => {
+describe('AnnotationTextNode', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<BackgroundImageHolder imgSrc="test" />)
+			.create(<AnnotationTextNode />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

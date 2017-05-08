@@ -2,13 +2,13 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import BackgroundImageHolder from './BackgroundImageHolder';
+import ProfilePage from './ProfilePage';
 
-describe('BackgroundImageHolder', () => {
+describe('ProfilePage', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<BackgroundImageHolder imgSrc="test" />)
+			.create(<ProfilePage />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { Session } from 'meteor/session';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -10,6 +10,7 @@ import Toggle from 'material-ui/Toggle';
 
 // api
 import DiscussionComments from '/imports/api/collections/discussionComments';
+import Settings from '/imports/api/collections/settings';
 
 // components
 import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
@@ -23,15 +24,22 @@ import muiTheme from '/imports/lib/muiTheme';
 const ProfilePage = React.createClass({
 	propTypes: {
 		user: React.PropTypes.object,
+		settings: React.PropTypes.object,
+		discussionComments: React.PropTypes.object,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getInitialState() {
+		let isPublicEmail = false;
+		const { user } = this.props;
+
+		if (user && user.profile.publicEmailAdress !== undefined) {
+			isPublicEmail = true;
+		}
+
 		return {
 			annotationCheckList: [],
 			skip: 0,
@@ -39,7 +47,7 @@ const ProfilePage = React.createClass({
 			usernameError: '',
 			emailError: '',
 			modalChangePwdLowered: false,
-			isPublicEmail: this.props.user.profile.publicEmailAdress !== undefined,
+			isPublicEmail,
 		};
 	},
 
@@ -49,50 +57,6 @@ const ProfilePage = React.createClass({
 
 	componentWillMount() {
 		this.handleChangeTextDebounced = debounce(1000, this.handleChangeTextDebounced);
-	},
-
-	getMeteorData() {
-		let discussionComments = [];
-		Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-		Meteor.subscribe('user.discussionComments', Meteor.userId(), Session.get('tenantId'));
-
-		discussionComments = DiscussionComments.find({
-			userId: Meteor.userId(),
-		}).fetch();
-
-		discussionComments.forEach((discussionComment, discussionCommentIndex) => {
-			const commentHandle = Meteor.subscribe('comments', {
-				_id: discussionComment.commentId,
-				tenantId: Session.get('tenantId')
-			}, 0, 1);
-
-			if (commentHandle.ready()) {
-				const comments = Comments.find().fetch();
-				if (comments.length) {
-					discussionComments[discussionCommentIndex].comment = comments[0];
-				} else {
-					discussionComments[discussionCommentIndex].comment = {
-						work: '',
-						subwork: '',
-						discussionComments: [],
-					};
-				}
-			} else {
-				discussionComments[discussionCommentIndex].comment = {
-					work: '',
-					subwork: '',
-					discussionComments: [],
-				};
-			}
-
-			discussionComments[discussionCommentIndex].otherCommentsCount =
-				DiscussionComments.find({ commentId: discussionComment.commentId }).count();
-		});
-
-		return {
-			discussionComments,
-			settings: Settings.findOne(),
-		};
 	},
 
 	loadMore() {
@@ -187,8 +151,7 @@ const ProfilePage = React.createClass({
 	},
 
 	render() {
-		const { user } = this.props;
-		const { settings, discussionComments } = this.data;
+		const { user, settings, discussionComments } = this.props;
 
 		const toggleStyle = {
 			style: {
@@ -383,4 +346,48 @@ const ProfilePage = React.createClass({
 	},
 });
 
-export default ProfilePage;
+const ProfilePageContainer = createContainer(() => {
+	let discussionComments = [];
+	Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	Meteor.subscribe('user.discussionComments', Meteor.userId(), Session.get('tenantId'));
+
+	discussionComments = DiscussionComments.find({
+		userId: Meteor.userId(),
+	}).fetch();
+
+	discussionComments.forEach((discussionComment, discussionCommentIndex) => {
+		const commentHandle = Meteor.subscribe('comments', {
+			_id: discussionComment.commentId,
+			tenantId: Session.get('tenantId')
+		}, 0, 1);
+
+		if (commentHandle.ready()) {
+			const comments = Comments.find().fetch();
+			if (comments.length) {
+				discussionComments[discussionCommentIndex].comment = comments[0];
+			} else {
+				discussionComments[discussionCommentIndex].comment = {
+					work: '',
+					subwork: '',
+					discussionComments: [],
+				};
+			}
+		} else {
+			discussionComments[discussionCommentIndex].comment = {
+				work: '',
+				subwork: '',
+				discussionComments: [],
+			};
+		}
+
+		discussionComments[discussionCommentIndex].otherCommentsCount =
+			DiscussionComments.find({ commentId: discussionComment.commentId }).count();
+	});
+
+	return {
+		discussionComments,
+		settings: Settings.findOne(),
+	};
+}, ProfilePage);
+
+export default ProfilePageContainer;

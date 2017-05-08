@@ -1,14 +1,18 @@
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-
+import { Session } from 'meteor/session';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 
+
 const AnnotationTextNode = React.createClass({
 
 	propTypes: {
-		annotation: React.PropTypes.object.isRequired,
+		annotation: React.PropTypes.object,
+		work: React.PropTypes.object,
 		isOdd: React.PropTypes.bool,
 	},
 
@@ -18,21 +22,6 @@ const AnnotationTextNode = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-		const work = null;
-		/*
-		const query = { _id: text.work };
-		const handleWorks = Meteor.subscribe('works', query);
-		work = Works.findOne(query);
-		*/
-
-		return {
-			work,
-		};
 	},
 
 	getTextLocation() {
@@ -74,16 +63,20 @@ const AnnotationTextNode = React.createClass({
 
 	render() {
 		// const text = this.props.text;
-		const annotation = this.props.annotation;
+		const { work, annotation } = this.props;
 		let textClasses = 'text-node bookmark-text-node annotation-text-node clearfix';
 		// const textLocation = this.getTextLocation();
 		const textLocation = '';
 		let workTitle = '';
 		let link = '';
 
-		if (this.data.work) {
-			workTitle = this.data.work.english_title;
-			link = `/works/${this.data.work._id}/${this.data.work.slug}?location=${textLocation.location}`;
+		if (!annotation) {
+			return null;
+		}
+
+		if (work) {
+			workTitle = work.english_title;
+			link = `/works/${work._id}/${work.slug}?location=${textLocation.location}`;
 		}
 
 		if (this.props.isOdd) {
@@ -124,4 +117,18 @@ const AnnotationTextNode = React.createClass({
 	},
 });
 
-export default AnnotationTextNode;
+const AnnotationTextNodeContainer = createContainer(({ text }) => {
+	let work = null;
+
+	if (text) {
+		const query = { _id: text.work };
+		const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
+		work = Works.findOne(query);
+	}
+
+	return {
+		work,
+	};
+}, AnnotationTextNode);
+
+export default AnnotationTextNodeContainer;

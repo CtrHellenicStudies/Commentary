@@ -17,14 +17,14 @@ import muiTheme from '/imports/lib/muiTheme';
 
 const PublicProfilePage = React.createClass({
 	propTypes: {
-		userId: React.PropTypes.string.isRequired,
+		userId: React.PropTypes.string,
+		user: React.PropTypes.object,
+		discussionComments: React.PropTypes.array,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -40,61 +40,6 @@ const PublicProfilePage = React.createClass({
 		};
 	},
 
-	getMeteorData() {
-		let user = {};
-		let discussionComments = [];
-		const userId = this.props.userId;
-
-		Meteor.subscribe('users.id', userId);
-		Meteor.subscribe('user.discussionComments', userId, Session.get('tenantId'));
-
-		user = Meteor.users.findOne({
-			_id: userId,
-		});
-
-		discussionComments = DiscussionComments.find({
-			userId,
-			status: 'publish',
-		}).fetch();
-
-		discussionComments.forEach((discussionComment, discussionCommentIndex) => {
-			const commentHandle = Meteor.subscribe('comments', {
-				_id: discussionComment.commentId,
-			}, 0, 1);
-			if (commentHandle.ready()) {
-				const comments = Comments.find().fetch();
-				if (comments.length) {
-					discussionComments[discussionCommentIndex].comment = comments[0];
-				} else {
-					discussionComments[discussionCommentIndex].comment = {
-						work: '',
-						subwork: '',
-						discussionComments: [],
-					};
-				}
-			} else {
-				discussionComments[discussionCommentIndex].comment = {
-					work: '',
-					subwork: '',
-					discussionComments: [],
-				};
-			}
-
-			discussionComments[discussionCommentIndex].otherCommentsCount = DiscussionComments.find({
-				commentId: discussionComment.commentId,
-			}).count();
-		});
-
-		if (user) {
-			this.checkUsername(user);
-		}
-
-		return {
-			user,
-			discussionComments,
-		};
-	},
-
 	checkUsername(user) {
 		if (user.username !== FlowRouter.getParam('username')) {
 			const route = `/users/${FlowRouter.getParam('userId')}`;
@@ -103,7 +48,7 @@ const PublicProfilePage = React.createClass({
 	},
 
 	render() {
-		const { user, discussionComments } = this.data;
+		const { user, discussionComments } = this.props;
 		let avatarUrl = '/images/default_user.jpg';
 
 		if (!user) {
@@ -268,4 +213,58 @@ const PublicProfilePage = React.createClass({
 	},
 });
 
-export default PublicProfilePage;
+const PublicProfilePageContainer = createContainer(({ userId }) => {
+	let user = {};
+	let discussionComments = [];
+
+	Meteor.subscribe('users.id', userId);
+	Meteor.subscribe('user.discussionComments', userId, Session.get('tenantId'));
+
+	user = Meteor.users.findOne({
+		_id: userId,
+	});
+
+	discussionComments = DiscussionComments.find({
+		userId,
+		status: 'publish',
+	}).fetch();
+
+	discussionComments.forEach((discussionComment, discussionCommentIndex) => {
+		const commentHandle = Meteor.subscribe('comments', {
+			_id: discussionComment.commentId,
+		}, 0, 1);
+		if (commentHandle.ready()) {
+			const comments = Comments.find().fetch();
+			if (comments.length) {
+				discussionComments[discussionCommentIndex].comment = comments[0];
+			} else {
+				discussionComments[discussionCommentIndex].comment = {
+					work: '',
+					subwork: '',
+					discussionComments: [],
+				};
+			}
+		} else {
+			discussionComments[discussionCommentIndex].comment = {
+				work: '',
+				subwork: '',
+				discussionComments: [],
+			};
+		}
+
+		discussionComments[discussionCommentIndex].otherCommentsCount = DiscussionComments.find({
+			commentId: discussionComment.commentId,
+		}).count();
+	});
+
+	if (user) {
+		this.checkUsername(user);
+	}
+
+	return {
+		user,
+		discussionComments,
+	};
+}, PublicProfilePage);
+
+export default PublicProfilePageContainer;

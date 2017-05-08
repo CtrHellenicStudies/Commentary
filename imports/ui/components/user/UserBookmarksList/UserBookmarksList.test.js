@@ -2,13 +2,13 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import BackgroundImageHolder from './BackgroundImageHolder';
+import UserBookmarksList from './UserBookmarksList';
 
-describe('BackgroundImageHolder', () => {
+describe('UserBookmarksList', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<BackgroundImageHolder imgSrc="test" />)
+			.create(<UserBookmarksList />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

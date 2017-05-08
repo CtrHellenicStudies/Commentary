@@ -1,11 +1,14 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
+
+// api
 import TextNodes from '/imports/api/collections/textNodes';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 LemmaReferenceModal = React.createClass({
 
@@ -34,7 +37,7 @@ LemmaReferenceModal = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getMeteorData() {

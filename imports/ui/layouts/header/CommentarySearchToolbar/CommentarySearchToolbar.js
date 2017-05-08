@@ -3,17 +3,18 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import TextField from 'material-ui/TextField';
 import { createContainer } from 'meteor/react-meteor-data';
+import _ from 'lodash';
 
 // api:
-import Commenters from '/imports/api/collections/commenters'; // eslint-disable-line import/no-absolute-path
-import Keywords from '/imports/api/collections/keywords'; // eslint-disable-line import/no-absolute-path
-import ReferenceWorks from '/imports/api/collections/referenceWorks'; // eslint-disable-line import/no-absolute-path
-import Works from '/imports/api/collections/works'; // eslint-disable-line import/no-absolute-path
+import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Works from '/imports/api/collections/works';
 
 // components:
-import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns'; // eslint-disable-line import/no-absolute-path
-import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider'; // eslint-disable-line import/no-absolute-path
-import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown'; // eslint-disable-line import/no-absolute-path
+import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns';
+import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
+import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
 
 
 /*
@@ -65,6 +66,7 @@ class CommentarySearchToolbar extends React.Component {
 		handleChangeTextsearch: React.PropTypes.func.isRequired,
 		handleChangeLineN: React.PropTypes.func.isRequired,
 		addCommentPage: React.PropTypes.bool.isRequired,
+		isTest: React.PropTypes.bool,
 
 		// from createContainer:
 		keywords: React.PropTypes.arrayOf(React.PropTypes.shape({

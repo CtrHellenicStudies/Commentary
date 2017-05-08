@@ -1,24 +1,36 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import 'mdi/css/materialdesignicons.css';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+import Spinner from '/imports/ui/components/loading/Spinner';
+import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
+import AddKeyword from '/imports/ui/components/editor/keywords/AddKeyword';
+import ContextReader from '/imports/ui/components/editor/addComment/ContextReader';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const AddKeywordLayout = React.createClass({
+
+	propTypes: {
+		ready: React.PropTypes.bool,
+		isTest: React.PropTypes.bool,
+	},
+
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -32,18 +44,11 @@ const AddKeywordLayout = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	componentWillUpdate() {
 		this.handlePermissions();
-	},
-
-	getMeteorData() {
-		const ready = Roles.subscription.ready();
-		return {
-			ready,
-		};
 	},
 
 	getWork() {
@@ -341,7 +346,7 @@ const AddKeywordLayout = React.createClass({
 
 	render() {
 		const { filters, loading } = this.state;
-		const { ready } = this.data;
+		const { ready, isTest } = this.props;
 		let work;
 		let subwork;
 		let lineFrom;
@@ -360,18 +365,18 @@ const AddKeywordLayout = React.createClass({
 		});
 
 		return (
-			<MuiThemeProvider>
-				{ready || loading ?
-					<div className="chs-layout chs-editor-layout add-comment-layout">
-						<div>
-							<Header
-								toggleSearchTerm={this.toggleSearchTerm}
-								handleChangeLineN={this.handleChangeLineN}
-								filters={filters}
-								initialSearchEnabled
-								addCommentPage
-							/>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className="chs-layout chs-editor-layout add-comment-layout">
+					<div>
+						<Header
+							toggleSearchTerm={this.toggleSearchTerm}
+							handleChangeLineN={this.handleChangeLineN}
+							filters={filters}
+							initialSearchEnabled
+							addCommentPage
+						/>
 
+						{!isTest ?
 							<main>
 
 								<div className="commentary-comments">
@@ -408,16 +413,19 @@ const AddKeywordLayout = React.createClass({
 								/>
 
 							</main>
-
-						</div>
+						: ''}
 					</div>
-					:
-					<Spinner fullPage />
-				}
+				</div>
 			</MuiThemeProvider>
 		);
 	},
 });
 
+const AddKeywordLayoutContainer = (() => {
+	const ready = Roles.subscription.ready();
+	return {
+		ready,
+	};
+}, AddKeywordLayout);
 
-export default AddKeywordLayout;
+export default AddKeywordLayoutContainer;

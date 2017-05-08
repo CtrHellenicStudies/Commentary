@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommenterVisualizations renders correctly 1`] = `
+<div
+  className="commenter-visualizations"
+>
+  <div
+    className="commenter-visualization-title"
+  >
+    <h2>
+      Comments
+    </h2>
+  </div>
+  <div
+    className="commenter-work-circles"
+  >
+    
+    
+    
+  </div>
+  <div
+    className="work-visualizations"
+  >
+    
+  </div>
+</div>
+`;

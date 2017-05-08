@@ -1,8 +1,11 @@
 import React from 'react';
 
 // components:
-import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown'; // eslint-disable-line import/no-absolute-path
-import SearchTermButton from '/imports/ui/components/header/SearchTermButton'; // eslint-disable-line import/no-absolute-path
+import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
+import SearchTermButton from '/imports/ui/components/header/SearchTermButton';
+
+// lib:
+import Utils from '/imports/lib/utils';
 
 // helpers:
 import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
@@ -17,14 +20,14 @@ const ReferenceDropdown = ({ reference, searchDropdownOpen, toggleSearchDropdown
 		toggle={toggleSearchDropdown}
 		disabled={false}
 	>
-		{reference.map(reference => (
+		{reference.map(_reference => (
 			<SearchTermButton
-				key={reference._id}
+				key={_reference._id}
 				toggleSearchTerm={toggleSearchTerm}
-				label={Utils.trunc(reference.title, 30)}
+				label={Utils.trunc(_reference.title, 30)}
 				searchTermKey="reference"
-				value={reference}
-				active={isActive(filters, reference, 'reference', 'title')}
+				value={_reference}
+				active={isActive(filters, _reference, 'reference', 'title')}
 			/>
 		))}
 	</SearchToolDropdown>

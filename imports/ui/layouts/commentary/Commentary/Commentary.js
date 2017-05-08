@@ -2,21 +2,26 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 
 // api:
-import Comments from '/imports/api/collections/comments';// eslint-disable-line import/no-absolute-path
+import Comments from '/imports/api/collections/comments';
 import Settings from '/imports/api/collections/settings';
+import Works from '/imports/api/collections/works';
 
 // layouts:
-import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';  // eslint-disable-line import/no-absolute-path
-import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';  // eslint-disable-line import/no-absolute-path
+import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';
+import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // components:
-import InfiniteScroll from '/imports/ui/components/shared/InfiniteScroll'; // eslint-disable-line import/no-absolute-path
-import FilterWidget from '/imports/ui/components/commentary/FilterWidget'; // eslint-disable-line import/no-absolute-path
+import InfiniteScroll from '/imports/ui/components/shared/InfiniteScroll';
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+
+// lib
+import Utils from '/imports/lib/utils';
+import muiTheme from '/imports/lib/muiTheme';
 
 // helpers:
 import { createQueryFromFilters, parseCommentsToCommentGroups } from './helpers';
@@ -51,12 +56,12 @@ class Commentary extends React.Component {
 					src: React.PropTypes.string,
 				})
 			}))
-		})).isRequired,
-		isMoreComments: React.PropTypes.bool.isRequired,
-		ready: React.PropTypes.bool.isRequired,
+		})),
+		isMoreComments: React.PropTypes.bool,
+		ready: React.PropTypes.bool,
 		settings: React.PropTypes.shape({
 			title: React.PropTypes.string,
-		}).isRequired,
+		}),
 	};
 
 	static defaultProps = {
@@ -102,7 +107,7 @@ class Commentary extends React.Component {
 	}
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	}
 
 	setPageTitleAndMeta() {
@@ -117,6 +122,10 @@ class Commentary extends React.Component {
 		let lineTo = 0;
 		let metaSubject = 'Commentaries on Classical Texts';
 		let description = '';
+
+		if (!settings) {
+			return null;
+		}
 
 		filters.forEach((filter) => {
 			values = [];
@@ -278,6 +287,9 @@ class Commentary extends React.Component {
 			this.setPageTitleAndMeta();
 		}
 
+		if (!commentGroups) {
+			return null;
+		}
 
 		return (
 			<div className="commentary-primary content ">
@@ -337,6 +349,16 @@ export default createContainer(({ filters, skip, limit }) => {
 	// SUBSCRIPTIONS:
 	const commentsSub = Meteor.subscribe('comments', query, skip, limit);
 	let isMoreComments = true;
+
+	// Update textsearch in query for client minimongo
+	if ('$text' in query) {
+		const textsearch = new RegExp(query.$text, 'i');
+		query.$or = [
+			{ 'revisions.title': textsearch },
+			{ 'revisions.text': textsearch },
+		];
+		delete query.$text;
+	}
 
 	// FETCH DATA:
 	const comments = Comments.find(query, {

@@ -1,26 +1,35 @@
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+
+// components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceWorksList';
+import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
+import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+
+// api
+import Settings from '/imports/api/collections/settings';
+
+// lib
+import Utils from '/imports/lib/utils';
+
 
 const ReferenceWorksPage = React.createClass({
 
 	propTypes: {
 		title: React.PropTypes.string.isRequired,
-	},
-
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-		const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-		return {
-			settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
-		};
+		settings: React.PropTypes.object,
 	},
 
 	render() {
-		const { settings } = this.data;
+		const { settings } = this.props;
+
+		if (!settings) {
+			return <LoadingPage />;
+		}
+
 		Utils.setTitle(`Reference Works | ${settings.title}`);
 		Utils.setDescription(`Reference Works for ${settings.title}`);
 		Utils.setMetaImage(`${location.origin}/images/achilles_2.jpg`);
@@ -55,4 +64,12 @@ const ReferenceWorksPage = React.createClass({
 
 });
 
-export default ReferenceWorksPage;
+const ReferenceWorksPageContainer = createContainer(() => {
+	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+	return {
+		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+	};
+}, ReferenceWorksPage);
+
+export default ReferenceWorksPageContainer;

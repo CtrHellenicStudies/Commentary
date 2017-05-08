@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
@@ -10,6 +10,10 @@ import Works from '/imports/api/collections/works';
 
 // components
 import WorkVisualization from '/imports/ui/components/works/WorkVisualization';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const WorksList = React.createClass({
 
@@ -23,7 +27,7 @@ const WorksList = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	renderWorks() {

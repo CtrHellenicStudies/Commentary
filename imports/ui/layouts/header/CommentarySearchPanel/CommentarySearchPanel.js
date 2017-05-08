@@ -2,7 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import _ from 'lodash';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
@@ -19,6 +20,10 @@ import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
 import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel';
 import { WorksCard } from '/imports/ui/components/header/SearchCards';
 
+// lib:
+import Utils from '/imports/lib/utils';
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const CommentarySearchPanel = React.createClass({
 
@@ -34,6 +39,7 @@ const CommentarySearchPanel = React.createClass({
 		commenters: React.PropTypes.array,
 		works: React.PropTypes.array,
 		referenceWorks: React.PropTypes.array,
+		isTest: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -48,7 +54,7 @@ const CommentarySearchPanel = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	toggleSearchTerm(key, value) {
@@ -92,7 +98,7 @@ const CommentarySearchPanel = React.createClass({
 
 	render() {
 		const self = this;
-		const { keyideas, keywords, commenters, works, referenceWorks } = this.props;
+		const { keyideas, keywords, commenters, works, referenceWorks, isTest } = this.props;
 		const filters = this.props.filters || [];
 
 		const styles = {
@@ -132,7 +138,7 @@ const CommentarySearchPanel = React.createClass({
 			},
 		};
 
-		drawerWidth = 400;
+		let drawerWidth = 400;
 		if (window.innerWidth < 500) {
 			drawerWidth = 300;
 		}
@@ -151,12 +157,14 @@ const CommentarySearchPanel = React.createClass({
 				style={styles.drawer}
 			>
 				<div className="search-tool text-search text-search--drawer">
-					<TextField
-						hintText=""
-						floatingLabelText="Search"
-						fullWidth
-						onChange={_.debounce(this.handleChangeTextsearch, 300)}
-					/>
+					{!isTest ?
+						<TextField
+							hintText=""
+							floatingLabelText="Search"
+							fullWidth
+							onChange={_.debounce(this.handleChangeTextsearch, 300)}
+						/>
+					: ''}
 				</div>
 
 				<WorksCard
@@ -231,7 +239,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{keywords.map((keyword, i) => {
+						{keywords && keywords.map((keyword, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'keywords') {
@@ -267,7 +275,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{keyideas.map((keyidea, i) => {
+						{keyideas && keyideas.map((keyidea, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'keyideas') {
@@ -303,7 +311,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{commenters.map((commenter, i) => {
+						{commenters && commenters.map((commenter, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'commenters') {
@@ -339,7 +347,7 @@ const CommentarySearchPanel = React.createClass({
 						className="card-header"
 					/>
 					<CardText expandable style={styles.wrapper}>
-						{referenceWorks.map((reference, i) => {
+						{referenceWorks && referenceWorks.map((reference, i) => {
 							let active = false;
 							filters.forEach((filter) => {
 								if (filter.key === 'reference') {

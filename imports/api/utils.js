@@ -1,6 +1,6 @@
-export function queryCommentWithKeywordId(keyword_id, tenantId) {
+export function queryCommentWithKeywordId(keywordId, tenantId) {
 	return Comments.find({
-		'keywords._id': keyword_id,
+		'keywords._id': keywordId,
 		tenantId: tenantId
 	}, {
 		limit: 1,

@@ -58,6 +58,7 @@ class Header extends React.Component {
 		initialSearchEnabled: React.PropTypes.bool,
 		addCommentPage: React.PropTypes.bool,
 		isOnHomeView: React.PropTypes.bool,
+		isTest: React.PropTypes.bool,
 
 		// from creatContainer:
 		settings: React.PropTypes.shape({
@@ -67,6 +68,7 @@ class Header extends React.Component {
 			subdomain: React.PropTypes.string,
 			isAnnotation: React.PropTypes.bool,
 		}),
+
 	};
 
 	static defaultProps = {
@@ -214,7 +216,7 @@ class Header extends React.Component {
 
 	render() {
 
-		const { filters, isOnHomeView, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage } = this.props;
+		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage } = this.props;
 		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalSignupLowered, modalLoginLowered } = this.state;
 
 		return (
@@ -227,7 +229,7 @@ class Header extends React.Component {
 				{!isOnHomeView && (
 					toggleSearchTerm
 					&& handleChangeTextsearch
-					&& hangleChangeLineN
+					&& handleChangeLineN
 				) ?
 					<CommentarySearchPanel
 						toggleSearchTerm={toggleSearchTerm}
@@ -236,6 +238,7 @@ class Header extends React.Component {
 						open={rightMenuOpen}
 						closeRightMenu={this.closeRightMenu}
 						filters={filters}
+						isTest={isTest}
 					/>
 				: ''}
 				<header >
@@ -367,7 +370,7 @@ class Header extends React.Component {
 										{!isOnHomeView && (
 											toggleSearchTerm
 											&& handleChangeTextsearch
-											&& hangleChangeLineN
+											&& handleChangeLineN
 										) ?
 											<div className="search-tools collapse">
 												<CommentarySearchToolbar
@@ -376,6 +379,7 @@ class Header extends React.Component {
 													handleChangeLineN={handleChangeLineN}
 													filters={filters}
 													addCommentPage={addCommentPage}
+													isTest={isTest}
 												/>
 												<div className="search-toggle">
 													<IconButton

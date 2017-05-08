@@ -1,6 +1,6 @@
 {
-  "name": "CommentersReferenceWorks",
+  "name": "CommenterReferenceWorks",
   "version": "0.0.1",
   "private": true,
-  "main": "./CommentersReferenceWorks.js"
+  "main": "./CommenterReferenceWorks.js"
 }

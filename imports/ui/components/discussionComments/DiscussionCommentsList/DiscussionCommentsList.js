@@ -1,4 +1,5 @@
 import React from 'react';
+import DiscussionCommentTeaser from '/imports/ui/components/discussionComments/DiscussionCommentTeaser';
 
 // List of discussionComments
 const DiscussionCommentsList = React.createClass({
@@ -8,27 +9,24 @@ const DiscussionCommentsList = React.createClass({
 	},
 
 	render() {
+		const { discussionComments } = this.props;
+
 		return (
 			<div className="discussion-comments-list">
-
-				{this.props.discussionComments.map((discussionComment, i) => (
+				{discussionComments.map((discussionComment, i) => (
 					<DiscussionCommentTeaser
 						key={i}
 						discussionComment={discussionComment}
 					/>
 				))}
-				{!this.props.discussionComments.length ?
+				{!discussionComments.length ?
 					<p className="no-results">No comments found.</p>
 					: ''
 				}
 
 			</div>
-
-
 		);
 	},
-
-
 });
 
 

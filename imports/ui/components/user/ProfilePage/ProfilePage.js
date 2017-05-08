@@ -1,29 +1,48 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import { Session } from 'meteor/session';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
-import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import Toggle from 'material-ui/Toggle';
+
+// api
+import Comments from '/imports/api/collections/comments';
 import DiscussionComments from '/imports/api/collections/discussionComments';
+import Settings from '/imports/api/collections/settings';
+
+// components
+import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
+
 
 const ProfilePage = React.createClass({
 	propTypes: {
 		user: React.PropTypes.object,
+		settings: React.PropTypes.object,
+		discussionComments: React.PropTypes.array,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getInitialState() {
+		let isPublicEmail = false;
+		const { user } = this.props;
+
+		if (user && user.profile.publicEmailAdress !== undefined) {
+			isPublicEmail = true;
+		}
+
 		return {
 			annotationCheckList: [],
 			skip: 0,
@@ -31,60 +50,16 @@ const ProfilePage = React.createClass({
 			usernameError: '',
 			emailError: '',
 			modalChangePwdLowered: false,
-			isPublicEmail: this.props.user.profile.publicEmailAdress !== undefined,
+			isPublicEmail,
 		};
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	componentWillMount() {
 		this.handleChangeTextDebounced = debounce(1000, this.handleChangeTextDebounced);
-	},
-
-	getMeteorData() {
-		let discussionComments = [];
-		Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-		Meteor.subscribe('user.discussionComments', Meteor.userId(), Session.get('tenantId'));
-
-		discussionComments = DiscussionComments.find({
-			userId: Meteor.userId(),
-		}).fetch();
-
-		discussionComments.forEach((discussionComment, discussionCommentIndex) => {
-			const commentHandle = Meteor.subscribe('comments', {
-				_id: discussionComment.commentId,
-				tenantId: Session.get('tenantId')
-			}, 0, 1);
-
-			if (commentHandle.ready()) {
-				const comments = Comments.find().fetch();
-				if (comments.length) {
-					discussionComments[discussionCommentIndex].comment = comments[0];
-				} else {
-					discussionComments[discussionCommentIndex].comment = {
-						work: '',
-						subwork: '',
-						discussionComments: [],
-					};
-				}
-			} else {
-				discussionComments[discussionCommentIndex].comment = {
-					work: '',
-					subwork: '',
-					discussionComments: [],
-				};
-			}
-
-			discussionComments[discussionCommentIndex].otherCommentsCount =
-				DiscussionComments.find({ commentId: discussionComment.commentId }).count();
-		});
-
-		return {
-			discussionComments,
-			settings: Settings.findOne(),
-		};
 	},
 
 	loadMore() {
@@ -101,7 +76,7 @@ const ProfilePage = React.createClass({
 	handleChangeTextDebounced(field, value) {
 		const user = this.props.user;
 		let emailValue = [];
-		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
 		switch (field) {
 		case 'username':
 			if (/^[a-z0-9A-Z_]{3,15}$/.test(value)) {
@@ -179,8 +154,7 @@ const ProfilePage = React.createClass({
 	},
 
 	render() {
-		const { user } = this.props;
-		const { settings, discussionComments } = this.data;
+		const { user, settings, discussionComments } = this.props;
 
 		const toggleStyle = {
 			style: {
@@ -199,7 +173,7 @@ const ProfilePage = React.createClass({
 		}
 
 		if (!user) {
-			return <Loading />;
+			return <LoadingPage />;
 		}
 
 		return (
@@ -375,4 +349,48 @@ const ProfilePage = React.createClass({
 	},
 });
 
-export default ProfilePage;
+const ProfilePageContainer = createContainer(() => {
+	let discussionComments = [];
+	Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	Meteor.subscribe('user.discussionComments', Meteor.userId(), Session.get('tenantId'));
+
+	discussionComments = DiscussionComments.find({
+		userId: Meteor.userId(),
+	}).fetch();
+
+	discussionComments.forEach((discussionComment, discussionCommentIndex) => {
+		const commentHandle = Meteor.subscribe('comments', {
+			_id: discussionComment.commentId,
+			tenantId: Session.get('tenantId')
+		}, 0, 1);
+
+		if (commentHandle.ready()) {
+			const comments = Comments.find().fetch();
+			if (comments.length) {
+				discussionComments[discussionCommentIndex].comment = comments[0];
+			} else {
+				discussionComments[discussionCommentIndex].comment = {
+					work: '',
+					subwork: '',
+					discussionComments: [],
+				};
+			}
+		} else {
+			discussionComments[discussionCommentIndex].comment = {
+				work: '',
+				subwork: '',
+				discussionComments: [],
+			};
+		}
+
+		discussionComments[discussionCommentIndex].otherCommentsCount =
+			DiscussionComments.find({ commentId: discussionComment.commentId }).count();
+	});
+
+	return {
+		discussionComments,
+		settings: Settings.findOne(),
+	};
+}, ProfilePage);
+
+export default ProfilePageContainer;

@@ -7,7 +7,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 
 // component:
-import SearchTermButton from './SearchTermButton'; // eslint-disable-line import/no-absolute-path
+import SearchTermButton from './SearchTermButton'; 
 
 describe('SearchTermButton', () => {
 	it('should render', () => {

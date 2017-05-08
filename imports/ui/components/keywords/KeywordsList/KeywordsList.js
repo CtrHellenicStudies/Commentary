@@ -18,7 +18,13 @@ const KeywordsList = React.createClass({
 	},
 
 	renderKeywords() {
-		return this.props.keywords.map((keyword, i) => (
+		const { keywords } = this.props;
+
+		if (!keywords) {
+			return null;
+		}
+
+		return keywords.map((keyword, i) => (
 			<KeywordTeaser
 				key={i}
 				keyword={keyword}
@@ -60,9 +66,10 @@ export default createContainer(({ type, limit }) => {
 		break;
 	}
 
-	const keywords = Keywords.find(query, { limit: _limit }).fetch();
+	const keywords = Keywords.find(query, { limit: _limit }).fetch() || [];
 
 	return {
 		keywords,
+		type,
 	};
 }, KeywordsList);

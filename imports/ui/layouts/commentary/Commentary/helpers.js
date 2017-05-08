@@ -154,7 +154,7 @@ const parseCommentsToCommentGroups = (comments) => {
 	commentGroups.forEach((commentGroup, commentGroupIndex) => {
 		// let isInCommenters = false;
 		const commenters = [];
-		// const commenterSubscription = Meteor.subscribe('commenters', Session.get("tenantId"));
+		// const commenterSubscription = Meteor.subscribe('commenters', Session.get('tenantId'));
 		commentGroup.comments.forEach((comment, commentIndex) => {
 			// isInCommenters = false;
 

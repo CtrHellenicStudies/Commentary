@@ -1,4 +1,8 @@
+/* eslint-disable */
 import React from 'react';
+
+// TODO: upgrade to d3v4
+// import * as d3 from 'd3';
 
 const WorkVisualization = React.createClass({
 
@@ -830,6 +834,7 @@ const WorkVisualization = React.createClass({
 	// --- END ANIMATION - CONTRACT BAR --- //
 	},
 
+
 	render() {
 		const { work } = this.props;
 		const workUrl = `/commentary/?q=work.${work.slug}`;
@@ -839,7 +844,7 @@ const WorkVisualization = React.createClass({
 				<div className={`work-teaser work-teaser--${work.slug}`}>
 					<div className="commentary-text">
 						<a href={workUrl}><h3 className="text-title">{work.title}</h3></a>
-						<hr className="text-divider" />
+						{/*<hr className="text-divider" />*/}
 						<div className="text-meta" />
 						<div className={`text-subworks text-subworks-visualization-${work.slug}`} />
 					</div>

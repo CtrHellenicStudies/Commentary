@@ -8,11 +8,11 @@ import { Sticky } from 'react-sticky';
 import Utils from '/imports/lib/utils';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes'; // eslint-disable-line import/no-absolute-path
+import TextNodes from '/imports/api/collections/textNodes'; 
 
 // components:
-import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; // eslint-disable-line import/no-absolute-path
-import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';  // eslint-disable-line import/no-absolute-path
+import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; 
+import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';  
 
 class CommentLemma extends React.Component {
 

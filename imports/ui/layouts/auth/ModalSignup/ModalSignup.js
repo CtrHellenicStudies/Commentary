@@ -1,16 +1,16 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import cookie from 'react-cookie'; // eslint-disable-line import/no-unresolved
+import cookie from 'react-cookie';
 
 // components:
-import OAuthButtons from '/imports/ui/components/auth/OAuthButtons'; // eslint-disable-line import/no-absolute-path
-import PWDSignupForm from '/imports/ui/components/auth/PWDSignupForm'; // eslint-disable-line import/no-absolute-path
+import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';
+import PWDSignupForm from '/imports/ui/components/auth/PWDSignupForm';
 
 class ModalSignup extends React.Component {
 	static propTypes = {
 		lowered: React.PropTypes.bool,
-		closeModal: React.PropTypes.func.isRequired,
+		closeModal: React.PropTypes.func,
 	};
 
 	static defaultProps = {

@@ -5,7 +5,7 @@ Meteor.method('commentary_cron', () => {
 	// console.log(' -- Starting cron: Commentary');
 
 	const commentCounts = [];
-	let isInCommentCountsWorks = false;
+	const isInCommentCountsWorks = false;
 	let isInCommentCountsSubworks = false;
 	let isInCommentCountsLines = false;
 

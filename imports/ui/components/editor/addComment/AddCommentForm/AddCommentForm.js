@@ -4,12 +4,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select from 'react-select';
 import Keywords from '/imports/api/collections/keywords';
-// import FlatButton from 'material-ui/FlatButton';
 
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
+
+// import FlatButton from 'material-ui/FlatButton';
 // https://github.com/JedWatson/react-select
 // import 'react-select/dist/react-select.css';
 
@@ -45,7 +48,7 @@ const AddCommentForm = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getMeteorData() {

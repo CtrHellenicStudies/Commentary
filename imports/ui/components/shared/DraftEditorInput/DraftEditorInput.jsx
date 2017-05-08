@@ -1,9 +1,9 @@
-import { HOC as formsyHOC } from 'formsy-react'; // eslint-disable-line import/no-unresolved
-import stylePropType from 'react-style-proptype'; // eslint-disable-line import/no-unresolved
+import { HOC as formsyHOC } from 'formsy-react';
+import stylePropType from 'react-style-proptype';
 import reactCSS from 'reactcss';
-import { EditorState, convertToRaw, convertFromRaw, convertFromHTML, ContentState } from 'draft-js'; // eslint-disable-line import/no-unresolved
-import Editor from 'draft-js-plugins-editor'; // eslint-disable-line import/no-unresolved
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin'; // eslint-disable-line import/no-unresolved
+import { EditorState, convertToRaw, convertFromRaw, convertFromHTML, ContentState } from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import { stateToHTML } from 'draft-js-export-html';
 import {
 	ItalicButton,
@@ -17,7 +17,7 @@ import {
 	OrderedListButton,
 	BlockquoteButton,
 	CodeBlockButton,
-} from 'draft-js-buttons'; // eslint-disable-line import/no-unresolved
+} from 'draft-js-buttons';
 
 
 class DraftEditorInput extends React.Component {

@@ -4,11 +4,11 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes'; // eslint-disable-line import/no-absolute-path
+import TextNodes from '/imports/api/collections/textNodes'; 
 
 // components:
-import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText'; // eslint-disable-line import/no-absolute-path
-import ContextPanelTabs from '/imports/ui/components/commentary/contextPanel/ContextPanelTabs'; // eslint-disable-line import/no-absolute-path
+import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText'; 
+import ContextPanelTabs from '/imports/ui/components/commentary/contextPanel/ContextPanelTabs'; 
 
 /*
 	helpers

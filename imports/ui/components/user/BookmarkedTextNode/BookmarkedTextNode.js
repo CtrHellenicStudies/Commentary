@@ -1,13 +1,21 @@
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import { Session } from 'meteor/session';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// api
 import Works from '/imports/api/collections/works';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const BookmarkedTextNode = React.createClass({
 
 	propTypes: {
-		text: React.PropTypes.object.isRequired,
+		text: React.PropTypes.object,
+		work: React.PropTypes.object,
 		isOdd: React.PropTypes.bool,
 	},
 
@@ -16,26 +24,20 @@ const BookmarkedTextNode = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
-	mixins: [ReactMeteorData],
-
-	getMeteorData() {
-		let work = null;
-		const query = { _id: this.props.text.work };
-		const handleWorks = Meteor.subscribe('works', query);
-		work = Works.findOne(query);
-
-		return {
-			work,
-		};
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	getTextLocation() {
 		const text = this.props.text;
 		let location = '';
 		let textN = '';
+
+		if (!text) {
+			return {
+				location,
+				textN,
+			};
+		}
 
 		if ('n_1' in text) {
 			location += text.n_1;
@@ -70,15 +72,19 @@ const BookmarkedTextNode = React.createClass({
 
 
 	render() {
-		const text = this.props.text;
+		const { text, work } = this.props;
 		let textClasses = 'text-node bookmark-text-node clearfix';
 		const textLocation = this.getTextLocation();
 		let workTitle = '';
 		let link = '';
 
-		if (this.data.work) {
-			workTitle = this.data.work.english_title;
-			link = `/works/${this.data.work._id}/${this.data.work.slug}?location=${textLocation.location}`;
+		if (!text) {
+			return null;
+		}
+
+		if (work) {
+			workTitle = work.english_title;
+			link = `/works/${work._id}/${work.slug}?location=${textLocation.location}`;
 		}
 
 		if (this.props.isOdd) {
@@ -107,7 +113,7 @@ const BookmarkedTextNode = React.createClass({
 						return ref;
 					}}
 				>
-					{text.text && text.text .length ?
+					{text.text && text.text.length ?
 						<span>{Utils.trunc(text.text, 120)}</span>
 					:
 						<span>[ . . . ]</span>
@@ -119,4 +125,17 @@ const BookmarkedTextNode = React.createClass({
 	},
 });
 
-export default BookmarkedTextNode;
+const BookmarkedTextNodeContainer = createContainer(({ text }) => {
+	let work = null;
+	if (text) {
+		const query = { _id: text.work };
+		const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
+		work = Works.findOne(query);
+	}
+
+	return {
+		work,
+	};
+}, BookmarkedTextNode);
+
+export default BookmarkedTextNodeContainer;

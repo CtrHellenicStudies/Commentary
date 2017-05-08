@@ -1,52 +1,50 @@
 import React from 'react';
-import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import 'mdi/css/materialdesignicons.css';
 
 // layouts & components
 import Header from '/imports/ui/layouts/header/Header';
 import Footer from '/imports/ui/components/footer/Footer';
+import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
+import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import ProfilePage from '/imports/ui/components/user/ProfilePage';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 
 const UserLayout = React.createClass({
+	propTypes: {
+		user: React.PropTypes.object,
+	},
+
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
-
-	getMeteorData() {
-		const user = Meteor.user();
-
-		if (user && !('profile' in user)) {
-			user.profile = {};
-		}
-		return {
-			user,
-		};
-	},
-
 
 	render() {
-		return (
-			<MuiThemeProvider>
-				<div className="chs-layout master-layout">
+		const { user } = this.props;
 
-					<Header  />
+		return (
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className="chs-layout master-layout">
+					<Header />
 
 					<main>
-						{this.data.user ?
-							<ProfilePage user={this.data.user} />
+						{user ?
+							<ProfilePage user={user} />
 							:
-							<Loading />
+							<LoadingPage />
 						}
 					</main>
-					<Footer  />
+
+					<Footer />
 					<SnackAttack />
 				</div>
 			</MuiThemeProvider>
@@ -56,4 +54,15 @@ const UserLayout = React.createClass({
 });
 
 
-export default UserLayout;
+const UserLayoutContainer = createContainer(() => {
+	const user = Meteor.user();
+
+	if (user && !('profile' in user)) {
+		user.profile = {};
+	}
+	return {
+		user,
+	};
+}, UserLayout);
+
+export default UserLayoutContainer;

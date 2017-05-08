@@ -1,9 +1,16 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
+
+// api
 import Comments from '/imports/api/collections/comments';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 const CommentsRecent = React.createClass({
 
@@ -16,7 +23,7 @@ const CommentsRecent = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	render() {
@@ -31,6 +38,10 @@ const CommentsRecent = React.createClass({
 			slidesToShow: 1,
 			slidesToScroll: 1,
 		};
+
+		if (!comments) {
+			return null;
+		}
 
 		return (
 			<section className="background-gray recent-comments">
@@ -76,15 +87,15 @@ const CommentsRecent = React.createClass({
 
 export default createContainer(() => {
 	const handle = Meteor.subscribe('comments.recent', Session.get('tenantId'), 3);
-	let recentComments = [];
+	let comments = [];
 	if (handle.ready()) {
-		recentComments = Comments.find({}, {
+		comments = Comments.find({}, {
 			sort: {
 				updated: -1,
 			},
 		}).fetch();
 	}
 	return {
-		recentComments,
+		comments,
 	};
 }, CommentsRecent);

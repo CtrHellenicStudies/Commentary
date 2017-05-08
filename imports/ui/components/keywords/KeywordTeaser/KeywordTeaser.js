@@ -1,6 +1,11 @@
 import React from 'react';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
+
 
 const KeywordTeaser = React.createClass({
 
@@ -19,7 +24,7 @@ const KeywordTeaser = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	toggleOpen() {
@@ -29,7 +34,7 @@ const KeywordTeaser = React.createClass({
 	},
 
 	render() {
-		const keyword = this.props.keyword;
+		const { keyword } = this.props;
 		const keywordUrl = `/keywords/${keyword.slug}`;
 		let keywordClass = 'keyword-teaser clearfix wow fadeInUp ';
 		if (this.state.open) {

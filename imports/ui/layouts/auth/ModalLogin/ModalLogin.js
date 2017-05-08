@@ -2,14 +2,14 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 
 // components:
-import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';  // eslint-disable-line import/no-absolute-path
-import PWDLoginForm from '/imports/ui/components/auth/PWDLoginForm';  // eslint-disable-line import/no-absolute-path
+import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';
+import PWDLoginForm from '/imports/ui/components/auth/PWDLoginForm';
 
 class ModalLogin extends React.Component {
 
 	static propTypes = {
 		lowered: React.PropTypes.bool,
-		closeModal: React.PropTypes.func.isRequired,
+		closeModal: React.PropTypes.func,
 	};
 
 	static defaultProps = {

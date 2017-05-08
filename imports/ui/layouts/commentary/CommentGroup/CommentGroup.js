@@ -2,8 +2,8 @@ import React from 'react';
 import { StickyContainer } from 'react-sticky';
 
 // layouts:
-import CommentDetail from '/imports/ui/layouts/commentary/CommentDetail';  // eslint-disable-line import/no-absolute-path
-import CommentLemma from '/imports/ui/layouts/commentary/CommentLemma';  // eslint-disable-line import/no-absolute-path
+import CommentDetail from '/imports/ui/layouts/commentary/CommentDetail';  
+import CommentLemma from '/imports/ui/layouts/commentary/CommentLemma';  
 
 class CommentGroup extends React.Component {
 	static propTypes = {

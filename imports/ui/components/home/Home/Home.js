@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import Comments from '/imports/api/collections/comments';
@@ -10,12 +10,14 @@ import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImage
 
 // lib
 import Utils from '/imports/lib/utils';
+import muiTheme from '/imports/lib/muiTheme';
 
 // components:
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
 import WorksList from '/imports/ui/components/works/WorksList';
 import KeywordsList from '/imports/ui/components/keywords/KeywordsList';
 import Spinner from '/imports/ui/components/loading/Spinner';
+import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
@@ -34,7 +36,7 @@ const Home = React.createClass({
 	},
 
 	getChildContext() {
-		return { muiTheme: getMuiTheme(baseTheme) };
+		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
 	componentDidMount() {
@@ -54,7 +56,7 @@ const Home = React.createClass({
 		let introImageCaption = '';
 
 		if (!settings) {
-			return <Loading />
+			return <LoadingHome />;
 		}
 
 		if (
@@ -196,7 +198,7 @@ const Home = React.createClass({
 							<h2 className="block-title">Commentators</h2>
 							<CommentersList
 								featureOnHomepage
-								defaultAvatarUrl='/images/default_user.jpg'
+								defaultAvatarUrl="/images/default_user.jpg"
 								limit={3}
 							/>
 							<RaisedButton

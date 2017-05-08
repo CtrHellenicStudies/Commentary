@@ -38,9 +38,13 @@ const ReferenceWorkTeaser = React.createClass({
 	},
 
 	render() {
-		const referenceWork = this.props.referenceWork;
-		const referenceWorkUrl = `/referenceWorks/${referenceWork.slug}`;
+		const { referenceWork } = this.props;
 
+		if (!referenceWork) {
+			return null;
+		}
+
+		const referenceWorkUrl = `/referenceWorks/${referenceWork.slug}`;
 
 		return (
 			<div

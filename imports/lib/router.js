@@ -27,6 +27,8 @@ import CommentersPage from '/imports/ui/components/commenters/CommentersPage';
 import CommenterDetail from '/imports/ui/components/commenters/CommenterDetail';
 import KeywordsPage from '/imports/ui/components/keywords/KeywordsPage';
 import KeywordDetail from '/imports/ui/components/keywords/KeywordDetail';
+import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
+import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
 
 FlowRouter.notFound = {
 	action() {

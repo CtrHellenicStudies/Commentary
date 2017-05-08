@@ -17,39 +17,47 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 // lib
 import Utils from '/imports/lib/utils';
 
-
-const CommenterDetail = React.createClass({
-
-	propTypes: {
-		slug: React.PropTypes.string.isRequired,
-		commenter: React.PropTypes.object,
+class CommenterDetail extends React.Component {
+	static propTypes = {
+		commenter: React.PropTypes.shape({
+			name: React.PropTypes.string.isRequired,
+			bio: React.PropTypes.string,
+		}),
 		avatarUrl: React.PropTypes.string,
-		settings: React.PropTypes.object,
+		settings: React.PropTypes.shape({
+			title: React.PropTypes.string.isRequired,
+		}).isRequired,
 		isTest: React.PropTypes.bool,
-	},
+	};
 
-	getInitialState() {
-		return {
+	static defaultProps = {
+		commenter: null,
+		avatarUrl: null,
+		isTest: false,
+	};
+
+	constructor(props) {
+		super(props);
+		
+		this.state = {
 			readMoreBio: false,
 		};
-	},
 
-	getMeteorData() {
-	},
+		// methods:
+		this.toggleReadMoreBio = this.toggleReadMoreBio.bind(this);
+	}
 
 	toggleReadMoreBio() {
-		let readMoreBio = true;
-		if (this.state.readMoreBio) {
-			readMoreBio = false;
-		}
+		const { readMoreBio } = this.state;
+
 		this.setState({
-			readMoreBio,
+			readMoreBio: !readMoreBio,
 		});
-	},
+	}
 
 	render() {
-		const self = this;
 		const { commenter, settings, avatarUrl, isTest } = this.props;
+		const { readMoreBio } = this.state;
 
 		if (commenter) {
 			Utils.setTitle(`${commenter.name} | ${settings.title}`);
@@ -83,7 +91,7 @@ const CommenterDetail = React.createClass({
 								<img src={avatarUrl} alt={commenter.name} />
 							</div>
 
-							<div className={`user-bio ${(self.state.readMoreBio ? 'user-bio--read-more' : '')}`}>
+							<div className={`user-bio ${(readMoreBio ? 'user-bio--read-more' : '')}`}>
 
 								{commenter.bio ?
 									<div dangerouslySetInnerHTML={{ __html: commenter.bio }} />
@@ -95,7 +103,7 @@ const CommenterDetail = React.createClass({
 							</div>
 							<div
 								className={`read-more-toggle
-								${(self.state.readMoreBio ? 'read-more-toggle-expanded' : '')}`}
+								${(readMoreBio ? 'read-more-toggle-expanded' : '')}`}
 							>
 								<hr />
 								{ commenter.bio && commenter.bio.length > 500 ?
@@ -104,7 +112,7 @@ const CommenterDetail = React.createClass({
 										className="read-more-button"
 										onClick={this.toggleReadMoreBio}
 									>
-										{this.state.readMoreBio ?
+										{readMoreBio ?
 											<span className="read-less-text">
 												Show Less
 											</span>
@@ -115,7 +123,7 @@ const CommenterDetail = React.createClass({
 										}
 									</div>
 									:
-									''
+									null
 								}
 							</div>
 
@@ -141,8 +149,8 @@ const CommenterDetail = React.createClass({
 				<LoadingPage />
 			)
 		);
-	},
-});
+	}
+}
 
 export default createContainer(({ slug }) => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));

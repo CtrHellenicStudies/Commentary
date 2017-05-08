@@ -10,38 +10,28 @@ import Commenters from '/imports/api/collections/commenters';
 import CommenterTeaser from '/imports/ui/components/commenters/CommenterTeaser';
 
 
-const CommentersList = React.createClass({
-
-	propTypes: {
-		limit: React.PropTypes.number,
-		featureOnHomepage: React.PropTypes.bool,
-		defaultAvatarUrl: React.PropTypes.string,
-		commenters: React.PropTypes.array,
-	},
-
-	renderCommenters() {
-		const { commenters } = this.props;
-
-		if (!commenters) {
-			return null;
-		}
-
-		return commenters.map((commenter) =>
+const CommentersList = ({ commenters }) => (
+	<div className="commenters-list">
+		{commenters.map(commenter =>
 			<CommenterTeaser
 				key={commenter._id}
 				commenter={commenter}
 			/>
-		);
-	},
-
-	render() {
-		return (
-			<div className="commenters-list">
-				{this.renderCommenters()}
-			</div>
-		);
-	},
-});
+		)}
+	</div>
+);
+CommentersList.propTypes = {
+	// limit: React.PropTypes.number,
+	// featureOnHomepage: React.PropTypes.bool,
+	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
+		_id: React.PropTypes.string.isRequired,
+	}).isRequired),
+};
+CommentersList.defaultProps = {
+	// limit: null,
+	// featureOnHomepage: false,
+	commenters: [],
+};
 
 
 export default createContainer(({ limit, featureOnHomepage }) => {

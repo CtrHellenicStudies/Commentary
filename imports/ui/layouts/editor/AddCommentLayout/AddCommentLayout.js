@@ -12,6 +12,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
+import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
+import AddComment from '/imports/ui/components/editor/addComment/AddComment';
+import ContextReader from '/imports/ui/components/editor/addComment/ContextReader';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -21,6 +24,7 @@ const AddCommentLayout = React.createClass({
 
 	propTypes: {
 		ready: React.PropTypes.bool,
+		isTest: React.PropTypes.bool,
 	},
 
 	getInitialState() {
@@ -397,7 +401,8 @@ const AddCommentLayout = React.createClass({
 	},
 
 	render() {
-		const filters = this.state.filters;
+		const { isTest } = this.props;
+		const { filters } = this.state;
 		let work;
 		let subwork;
 		let lineFrom;
@@ -417,7 +422,7 @@ const AddCommentLayout = React.createClass({
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				{this.props.ready || this.state.loading ?
+				{!this.state.loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<div>
 							<Header
@@ -428,43 +433,40 @@ const AddCommentLayout = React.createClass({
 								addCommentPage
 							/>
 
-							<main>
-
-								<div className="commentary-comments">
-									<div className="comment-group">
-										<CommentLemmaSelect
-											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-										/>
-										<AddComment
-											selectedLineFrom={this.state.selectedLineFrom}
-											submitForm={this.addComment}
-										/>
-										<ContextReader
-											open={this.state.contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-											initialLineFrom={lineFrom || 1}
-											initialLineTo={lineTo || 100}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											updateSelectedLines={this.updateSelectedLines}
-										/>
+							{!isTest ?
+								<main>
+									<div className="commentary-comments">
+										<div className="comment-group">
+											<CommentLemmaSelect
+												ref={(component) => { this.commentLemmaSelect = component; }}
+												selectedLineFrom={this.state.selectedLineFrom}
+												selectedLineTo={this.state.selectedLineTo}
+												workSlug={work ? work.slug : 'iliad'}
+												subworkN={subwork ? subwork.n : 1}
+											/>
+											<AddComment
+												selectedLineFrom={this.state.selectedLineFrom}
+												submitForm={this.addComment}
+											/>
+											<ContextReader
+												open={this.state.contextReaderOpen}
+												workSlug={work ? work.slug : 'iliad'}
+												subworkN={subwork ? subwork.n : 1}
+												initialLineFrom={lineFrom || 1}
+												initialLineTo={lineTo || 100}
+												selectedLineFrom={this.state.selectedLineFrom}
+												selectedLineTo={this.state.selectedLineTo}
+												updateSelectedLines={this.updateSelectedLines}
+											/>
+										</div>
 									</div>
-								</div>
 
-								<FilterWidget
-									filters={filters}
-									toggleSearchTerm={this.toggleSearchTerm}
-								/>
-
-							</main>
-
-							{/* <Footer/> */}
-
+									<FilterWidget
+										filters={filters}
+										toggleSearchTerm={this.toggleSearchTerm}
+									/>
+								</main>
+							: ''}
 						</div>
 					</div>
 					:

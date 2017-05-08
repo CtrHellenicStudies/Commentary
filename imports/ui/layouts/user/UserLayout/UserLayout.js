@@ -9,6 +9,7 @@ import Header from '/imports/ui/layouts/header/Header';
 import Footer from '/imports/ui/components/footer/Footer';
 import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import ProfilePage from '/imports/ui/components/user/ProfilePage';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';

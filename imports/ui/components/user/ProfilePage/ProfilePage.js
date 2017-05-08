@@ -9,6 +9,7 @@ import { debounce } from 'throttle-debounce';
 import Toggle from 'material-ui/Toggle';
 
 // api
+import Comments from '/imports/api/collections/comments';
 import DiscussionComments from '/imports/api/collections/discussionComments';
 import Settings from '/imports/api/collections/settings';
 
@@ -16,16 +17,18 @@ import Settings from '/imports/api/collections/settings';
 import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 
 const ProfilePage = React.createClass({
 	propTypes: {
 		user: React.PropTypes.object,
 		settings: React.PropTypes.object,
-		discussionComments: React.PropTypes.object,
+		discussionComments: React.PropTypes.array,
 	},
 
 	childContextTypes: {

@@ -5,11 +5,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
+// components
+import LinePagination from '/imports/ui/components/commentary/LinePagination';
+
 // api
 import TextNodes from '/imports/api/collections/textNodes';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 const ContextReader = React.createClass({
 
@@ -22,19 +26,18 @@ const ContextReader = React.createClass({
 		initialLineFrom: React.PropTypes.number,
 		initialLineTo: React.PropTypes.number,
 		disableEdit: React.PropTypes.bool,
+		ready: React.PropTypes.bool,
+		lemmaText: React.PropTypes.array,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getDefaultProps() {
 		return {
 			workSlug: 'iliad',
 			subworkN: 1,
-
 		};
 	},
 
@@ -52,7 +55,7 @@ const ContextReader = React.createClass({
 		return {
 			lineFrom,
 			lineTo,
-			selectedLemmaEdition: '',
+			selectedLemmaEditionSlug: '',
 			maxLine: 0,
 			linePagination: [],
 		};
@@ -194,88 +197,6 @@ const ContextReader = React.createClass({
 		}
 	},
 
-	getMeteorData() {
-		const self = this;
-		if (this.props.workSlug !== '' && this.props.subworkN !== 0) {
-			let lemmaText = [];
-			// var commentGroup = this.props.commentGroup;
-			let selectedLemmaEdition = {
-				lines: [],
-				slug: '',
-			};
-
-			const lemmaQuery = {
-				'work.slug': this.props.workSlug,
-				'subwork.n': this.props.subworkN,
-				'text.n': {
-					$gte: this.state.lineFrom,
-					$lte: this.state.lineTo,
-				},
-			};
-
-			if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-				lemmaQuery['work.slug'] = 'hymns';
-			}
-
-			const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
-			if (textNodesSubscription.ready()) {
-				// console.log("Context Panel lemmaQuery", lemmaQuery);
-				const textNodes = TextNodes.find(lemmaQuery, { sort: { 'text.n': 1 } }).fetch();
-				const editions = [];
-
-				let textIsInEdition = false;
-				textNodes.forEach((textNode) => {
-					textNode.text.forEach((text) => {
-						textIsInEdition = false;
-
-						editions.forEach((edition) => {
-							if (text.edition.slug === edition.slug) {
-								edition.lines.push({
-									html: text.html,
-									n: text.n,
-								});
-								textIsInEdition = true;
-							}
-						});
-
-						if (!textIsInEdition) {
-							editions.push({
-								title: text.edition.title,
-								slug: text.edition.slug,
-								lines: [{
-									html: text.html,
-									n: text.n,
-								}],
-							});
-						}
-					});
-				});
-
-				lemmaText = editions;
-				// console.log('lemmaText', lemmaText);
-
-				if (this.state.selectedLemmaEdition.length) {
-					lemmaText.forEach((edition) => {
-						if (edition.slug === self.state.selectedLemmaEdition) {
-							selectedLemmaEdition = edition;
-						}
-					});
-				} else {
-					selectedLemmaEdition = lemmaText[0];
-				}
-			}
-
-			return {
-				lemmaText,
-				selectedLemmaEdition,
-			};
-		}
-		return {
-			lemmaText: '',
-			selectedLemmaEdition: '',
-		};
-	},
-
 	lines: [],
 
 	linePaginationClicked(line) {
@@ -327,24 +248,31 @@ const ContextReader = React.createClass({
 
 	render() {
 		const self = this;
+		const { lemmaText } = this.props;
+		const { selectedLemmaEditionSlug } = this.state;
 		let contextPanelStyles = 'lemma-panel paper-shadow';
 		contextPanelStyles += ' extended';
+
+		let selectedLemmaEdition = {
+			lines: [],
+		};
+
+		if (selectedLemmaEditionSlug.length) {
+			lemmaText.forEach((edition) => {
+				if (edition.slug === selectedLemmaEditionSlug) {
+					selectedLemmaEdition = edition;
+				}
+			});
+		} else if (lemmaText && lemmaText.length) {
+			selectedLemmaEdition = lemmaText[0];
+		}
 
 
 		return (
 			<div>
-				{this.data.selectedLemmaEdition && 'lines' in this.data.selectedLemmaEdition ?
-
+				{selectedLemmaEdition.lines.length ?
 					<div className={contextPanelStyles}>
-
-						{/* <IconButton
-						 className="close-lemma-panel"
-						 onClick={this.props.closeContextPanel}
-						 iconClassName="mdi mdi-close"
-						 /> */}
-
 						<div className="lemma-text-wrap">
-
 							<LinePagination
 								linePagination={this.state.linePagination}
 								linePaginationClicked={this.linePaginationClicked}
@@ -363,7 +291,7 @@ const ContextReader = React.createClass({
 								''
 							}
 
-							{this.data.selectedLemmaEdition.lines.map((line, i) => {
+							{selectedLemmaEdition.lines.map((line, i) => {
 								const lineClass = 'lemma-line';
 								return (
 									<div className={lineClass} key={i}>
@@ -401,20 +329,17 @@ const ContextReader = React.createClass({
 								''
 							}
 
-							{this.data.selectedLemmaEdition.lines.length === 0 ?
+							{selectedLemmaEdition.lines.length === 0 ?
 								<div className="no-results">
 									<p>
 										No source text found for your query.
 									</p>
 								</div>
-								:
-								''
-							}
-
+							: ''}
 						</div>
 
 						<div className="edition-tabs tabs">
-							{this.data.lemmaText.map((lemmaTextEdition, i) => {
+							{this.props.lemmaText.map((lemmaTextEdition, i) => {
 								const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
 								return (
@@ -422,7 +347,7 @@ const ContextReader = React.createClass({
 										key={i}
 										label={lemmaEditionTitle}
 										data-edition={lemmaTextEdition.title}
-										className={self.data.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+										className={selectedLemmaEdition.slug === lemmaTextEdition.slug ?
 											'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 										onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 									/>
@@ -432,11 +357,6 @@ const ContextReader = React.createClass({
 					</div>
 					:
 					<div className={contextPanelStyles}>
-						{/* <IconButton
-						 className="close-lemma-panel"
-						 onClick={this.props.closeContextPanel}
-						 iconClassName="mdi mdi-close"
-						 />*/}
 						<div className="lemma-text-wrap">
 							<br />
 							<br />
@@ -450,4 +370,64 @@ const ContextReader = React.createClass({
 
 });
 
-export default ContextReader;
+const ContextReaderContainer = createContainer(({workSlug, subworkN, initialLineFrom, initialLineTo}) => {
+
+	if (!workSlug || !subworkN) {
+		return {
+			lemmaText: '',
+			selectedLemmaEdition: '',
+		};
+	}
+
+	const lemmaQuery = {
+		'work.slug': workSlug,
+		'subwork.n': subworkN,
+		'text.n': {
+			$gte: initialLineFrom,
+			$lte: initialLineTo,
+		},
+	};
+
+	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+		lemmaQuery['work.slug'] = 'hymns';
+	}
+
+	const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
+	const textNodes = TextNodes.find(lemmaQuery, { sort: { 'text.n': 1 } }).fetch();
+	const editions = [];
+
+	let textIsInEdition = false;
+	textNodes.forEach((textNode) => {
+		textNode.text.forEach((text) => {
+			textIsInEdition = false;
+
+			editions.forEach((edition) => {
+				if (text.edition.slug === edition.slug) {
+					edition.lines.push({
+						html: text.html,
+						n: text.n,
+					});
+					textIsInEdition = true;
+				}
+			});
+
+			if (!textIsInEdition) {
+				editions.push({
+					title: text.edition.title,
+					slug: text.edition.slug,
+					lines: [{
+						html: text.html,
+						n: text.n,
+					}],
+				});
+			}
+		});
+	});
+
+	return {
+		lemmaText: editions,
+		ready: textNodesSubscription.ready(),
+	};
+}, ContextReader);
+
+export default ContextReaderContainer;

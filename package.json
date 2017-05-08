@@ -147,7 +147,8 @@
       "^meteor/react-meteor-data": "<rootDir>/imports/mocks/reactMeteorData.js",
       "^meteor/session": "<rootDir>/imports/mocks/session.js",
       "^meteor/momentjs:moment": "<rootDir>/imports/mocks/moment.js",
-			"^meteor/edgee:slingshot": "<rootDir>/imports/mocks/slingshot.js"
+			"^meteor/edgee:slingshot": "<rootDir>/imports/mocks/slingshot.js",
+			"^meteor/random": "<rootDir>/imports/mocks/random.js"
     },
     "setupFiles": [
       "<rootDir>/imports/mocks/env.js"

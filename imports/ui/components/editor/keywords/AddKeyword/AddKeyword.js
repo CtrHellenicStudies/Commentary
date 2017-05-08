@@ -15,9 +15,15 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+
+// api
 import Commenters from '/imports/api/collections/commenters';
 import Keywords from '/imports/api/collections/keywords';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
+
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import {
 	ItalicButton,
@@ -32,9 +38,6 @@ import {
 	BlockquoteButton,
 	CodeBlockButton,
 } from 'draft-js-buttons';
-
-import 'draft-js-mention-plugin/lib/plugin.css';
-import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
 
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin({
@@ -53,6 +56,7 @@ const inlineToolbarPlugin = createInlineToolbarPlugin({
 		CodeBlockButton,
 	]
 });
+
 const { InlineToolbar } = inlineToolbarPlugin;
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
@@ -69,8 +73,6 @@ const AddKeyword = React.createClass({
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -157,59 +159,6 @@ const AddKeyword = React.createClass({
 		this.setState({
 			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
 		});
-	},
-
-	getMeteorData() {
-		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-		const keywordsOptions = [];
-		const keywords = Keywords.find({ type: 'word' }).fetch();
-		keywords.forEach((keyword) => {
-			keywordsOptions.push({
-				value: keyword.title,
-				label: keyword.title,
-				slug: keyword.slug,
-			});
-		});
-
-		const keyideasOptions = [];
-		const keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keyideas.forEach((keyidea) => {
-			keyideasOptions.push({
-				value: keyidea.title,
-				label: keyidea.title,
-				slug: keyidea.slug,
-			});
-		});
-
-		Meteor.subscribe('referenceWorks');
-		const referenceWorksOptions = [];
-		const referenceWorks = ReferenceWorks.find().fetch();
-		referenceWorks.forEach((referenceWork) => {
-			referenceWorksOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-			});
-		});
-
-		Meteor.subscribe('commenters', Session.get('tenantId'));
-		const commentersOptions = [];
-		let commenters = [];
-		if (Meteor.user() && Meteor.user().canEditCommenters) {
-			commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
-		}
-		commenters.forEach((commenter) => {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		});
-
-		return {
-			keywordsOptions,
-			keyideasOptions,
-			referenceWorksOptions,
-			commentersOptions,
-		};
 	},
 
 	shouldKeyDownEventCreateNewOption(sig) {
@@ -357,13 +306,15 @@ const AddKeyword = React.createClass({
 							className="comment-lower"
 							style={{ paddingTop: 20 }}
 						>
-							{/* <RichTextEditor
+							{/*
+							<RichTextEditor
 								className="keyword-editor"
 								placeholder="Keyword description . . ."
 								value={this.state.textEditorState}
 								onChange={this.onTextChange}
 								toolbarConfig={toolbarConfig}
-							/>*/}
+							/>
+							*/}
 							<Editor
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
@@ -405,4 +356,58 @@ const AddKeyword = React.createClass({
 	},
 });
 
-export default AddKeyword;
+const AddKeywordContainer = createContainer(() => {
+	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+	const keywordsOptions = [];
+	const keywords = Keywords.find({ type: 'word' }).fetch();
+	keywords.forEach((keyword) => {
+		keywordsOptions.push({
+			value: keyword.title,
+			label: keyword.title,
+			slug: keyword.slug,
+		});
+	});
+
+	const keyideasOptions = [];
+	const keyideas = Keywords.find({ type: 'idea' }).fetch();
+	keyideas.forEach((keyidea) => {
+		keyideasOptions.push({
+			value: keyidea.title,
+			label: keyidea.title,
+			slug: keyidea.slug,
+		});
+	});
+
+	Meteor.subscribe('referenceWorks');
+	const referenceWorksOptions = [];
+	const referenceWorks = ReferenceWorks.find().fetch();
+	referenceWorks.forEach((referenceWork) => {
+		referenceWorksOptions.push({
+			value: referenceWork._id,
+			label: referenceWork.title,
+		});
+	});
+
+	Meteor.subscribe('commenters', Session.get('tenantId'));
+	const commentersOptions = [];
+	let commenters = [];
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
+	}
+	commenters.forEach((commenter) => {
+		commentersOptions.push({
+			value: commenter._id,
+			label: commenter.name,
+		});
+	});
+
+	return {
+		keywordsOptions,
+		keyideasOptions,
+		referenceWorksOptions,
+		commentersOptions,
+	};
+
+}, AddKeyword);
+
+export default AddKeywordContainer;

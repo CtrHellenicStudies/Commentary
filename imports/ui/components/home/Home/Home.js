@@ -258,7 +258,7 @@ const Home = React.createClass({
 									limit={10}
 								/>
 								:
-								<Spinner />
+									<Spinner />
 							}
 							<div className="read-more-link">
 

@@ -19,6 +19,9 @@ import ContextReader from '/imports/ui/components/editor/addComment/ContextReade
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
+// api
+import Commenters from '/imports/api/collections/commenters';
+
 
 const AddCommentLayout = React.createClass({
 
@@ -270,7 +273,7 @@ const AddCommentLayout = React.createClass({
 	getLineLetter() {
 		let lineLetter = '';
 		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
-			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
+			lineLetter = this.commentLemmaSelect.state ? his.commentLemmaSelect.state.lineLetterValue : null;
 		}
 		return lineLetter;
 	},

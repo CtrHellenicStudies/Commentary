@@ -26,10 +26,26 @@ class ModalSignup extends React.Component {
 		};
 
 		// methids
+		this._handleKeyDown = this._handleKeyDown.bind(this);
 		this.handleSignup = this.handleSignup.bind(this);
 		this.handleSignupFacebook = this.handleSignupFacebook.bind(this);
 		this.handleSignupGoogle = this.handleSignupGoogle.bind(this);
 		this.handleSignupTwitter = this.handleSignupTwitter.bind(this);
+	}
+
+	componentWillMount() {
+		document.addEventListener('keydown', this._handleKeyDown);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this._handleKeyDown);
+	}
+
+	_handleKeyDown(event) {
+
+		const { closeModal } = this.props;
+		
+		if (event.keyCode === ESCAPE_KEY) closeModal();
 	}
 
 	handleSignup(email, password, passwordRepeat) {

@@ -18,7 +18,6 @@ import {
 } from 'react-bootstrap';
 import Select, { Creatable } from 'react-select';
 import { EditorState, convertToRaw, Modifier } from 'draft-js';
-import { stateFromHTML } from 'draft-js-import-html';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';

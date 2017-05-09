@@ -523,7 +523,6 @@ const AddRevision = React.createClass({
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellCheck
-									stripPastedStyles
 									plugins={[commentsMentionPlugin, keywordMentionPlugin, inlineToolbarPlugin]}
 									ref={(element) => { this.editor = element; }}
 								/>

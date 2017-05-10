@@ -15,6 +15,9 @@ import Commenters from '/imports/api/collections/commenters';
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
+import AddRevision from '/imports/ui/components/editor/addRevision/AddRevision';
+import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -323,15 +326,14 @@ const AddRevisionLayout = React.createClass({
 										comment={comment}
 									/>
 
-									<ContextReader
+									<ContextPanel
 										open={this.state.contextReaderOpen}
-										closeContextPanel={this.closeContextReader}
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
+										lineFrom={comment.lineFrom}
 										selectedLineFrom={comment.lineFrom}
 										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
-										initialLineFrom={comment.lineFrom}
-										initialLineTo={((comment.lineFrom + comment.nLines) - 1) + 50}
+										editor
 										disableEdit
 									/>
 								</div>

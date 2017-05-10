@@ -1,8 +1,44 @@
+
+/*
+	HOW TO USE:
+
+	1. Used to show selected lines for commentGroup:
+	- props to be set:
+
+
+	2. Used to select lines to be commented in editor:
+	- props to be set:
+		
+	
+*/
+
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 
 // private component:
 import ContextPanelContent from './ContextPanelContent';
+
+
+/*
+	helpers
+*/
+const getLineFrom = (props) => {
+	if (props.commentGroup) return props.commentGroup.lineFrom;
+	if (props.workSlug) return props.lineFrom;
+	throw new Meteor.Error('commentGroup or lineFrom missing in ContextPanel component - one of two is requierd');
+};
+const getWorkSlug = (props) => {
+	if (props.commentGroup) return props.commentGroup.work.slug;
+	if (props.workSlug) return props.workSlug;
+	throw new Meteor.Error('commentGroup or workSlug missing in ContextPanel component - one of two is requierd');
+};
+const getsubworkN = (props) => {
+	if (props.commentGroup) return props.commentGroup.subwork.n;
+	if (props.subworkN) return props.subworkN;
+	throw new Meteor.Error('commentGroup or subworkN missing in ContextPanel component - one of two is requierd');
+};
+
+const LINE_THRESHOLD = 25;
 
 
 class ContextPanel extends React.Component {
@@ -18,22 +54,45 @@ class ContextPanel extends React.Component {
 			lineFrom: React.PropTypes.number.isRequired,
 			lineTo: React.PropTypes.number,
 			ref: React.PropTypes.string.isRequired,
-		}).isRequired,
-		closeContextPanel: React.PropTypes.func.isRequired,
-		commentLemmaIndex: React.PropTypes.string.isRequired,
+		}),
+		closeContextPanel: React.PropTypes.func,
+		commentLemmaIndex: React.PropTypes.string,
+
+		// requiered if editor:
+		disableEdit: React.PropTypes.bool,
+		selectedLineFrom: React.PropTypes.number,
+		selectedLineTo: React.PropTypes.number,
+		updateSelectedLines: React.PropTypes.func,
+		workSlug: React.PropTypes.string,
+		subworkN: React.PropTypes.number,
+		editor: React.PropTypes.bool,
+	};
+
+	static defaultProps = {
+		commentGroup: null,
+		closeContextPanel: null,
+		commentLemmaIndex: null,
+
+		disableEdit: false,
+		selectedLineFrom: 0,
+		selectedLineTo: 0,
+		updateSelectedLines: null,
+		workSlug: null,
+		subworkN: null,
+		editor: false,
 	}
 
 	constructor(props) {
 		super(props);
 
-		const commentGroup = props.commentGroup;
-		const lineFrom = commentGroup.lineFrom;
-
 		this.state = {
 			selectedLemmaEdition: '',
-			lineFrom,
+			lineFrom: getLineFrom(props),
 			maxLine: 0,
 			highlightingVisible: true,
+
+			workSlug: getWorkSlug(props),
+			subworkN: getsubworkN(props),
 		};
 
 		this.setMaxLine();
@@ -62,29 +121,34 @@ class ContextPanel extends React.Component {
 	onAfterClicked() {
 		if ((this.state.lineFrom + 49) <= this.state.maxLine) {
 			this.setState({
-				lineFrom: this.state.lineFrom + 25,
+				lineFrom: this.state.lineFrom + LINE_THRESHOLD,
 			});
 		}
 	}
 
 	onBeforeClicked() {
-		if (this.state.lineFrom !== 1) {
+
+		const { lineFrom } = this.state;
+
+		if (lineFrom >= LINE_THRESHOLD) {
 			this.setState({
-				lineFrom: this.state.lineFrom - 25,
+				lineFrom: lineFrom - LINE_THRESHOLD,
+			});
+		} else if (lineFrom !== 1) {
+			this.setState({
+				lineFrom: 1,
 			});
 		}
 	}
 
 	setMaxLine() {
-		const { commentGroup } = this.props;
-		Meteor.call('getMaxLine', commentGroup.work.slug,
-			commentGroup.subwork.n, (err, res) => {
-				if (err) throw new Meteor.Erorr(err);
-				this.setState({
-					maxLine: res,
-				});
-			}
-		);
+		const { workSlug, subworkN } = this.state;
+		Meteor.call('getMaxLine', workSlug, subworkN, (err, res) => {
+			if (err) throw new Meteor.Erorr(err);
+			this.setState({
+				maxLine: res,
+			});
+		});
 	}
 
 	toggleEdition(editionSlug) {
@@ -102,37 +166,41 @@ class ContextPanel extends React.Component {
 	}
 
 	scrollElement(state) {
-		switch (state) {
-		case 'open':
-			window.requestAnimationFrame(() => {
-				setTimeout(() => {
-					const scroll = $(`#comment-group-${this.props.commentLemmaIndex}`).offset().top;
-					$(document).scrollTop(scroll);
-				}, 300);
-			});
-			break;
-		case 'close':
-			window.requestAnimationFrame(() => {
-				setTimeout(() => {
-					const scroll = $(`#comment-group-${this.props.commentLemmaIndex}`).offset().top;
-					$(document).scrollTop(scroll);
-				}, 1000);
-			});
-			break;
-		default:
-			break;
+		if (!this.props.editor) {
+			switch (state) {
+			case 'open':
+				window.requestAnimationFrame(() => {
+					setTimeout(() => {
+						const scroll = $(`#comment-group-${this.props.commentLemmaIndex}`).offset().top;
+						$(document).scrollTop(scroll);
+					}, 300);
+				});
+				break;
+			case 'close':
+				window.requestAnimationFrame(() => {
+					setTimeout(() => {
+						const scroll = $(`#comment-group-${this.props.commentLemmaIndex}`).offset().top;
+						$(document).scrollTop(scroll);
+					}, 1000);
+				});
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
 	render() {
 
-		const { open, closeContextPanel, commentGroup } = this.props;
-		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition } = this.state;
+		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
+		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition, workSlug, subworkN } = this.state;
 
 		return (
 			<ContextPanelContent
 				open={open}
 				closeContextPanel={closeContextPanel}
+				workSlug={workSlug}
+				subworkN={subworkN}
 				commentGroup={commentGroup}
 				highlightingVisible={highlightingVisible}
 				lineFrom={lineFrom}
@@ -142,6 +210,12 @@ class ContextPanel extends React.Component {
 				onAfterClicked={this.onAfterClicked}
 				toggleEdition={this.toggleEdition}
 				toggleHighlighting={this.toggleHighlighting}
+
+				disableEdit={disableEdit}
+				selectedLineFrom={selectedLineFrom}
+				selectedLineTo={selectedLineTo}
+				updateSelectedLines={updateSelectedLines}
+				editor={editor}
 			/>
 		);
 	}

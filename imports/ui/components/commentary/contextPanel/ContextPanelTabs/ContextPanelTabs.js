@@ -92,7 +92,7 @@ MetaTabs.defaultProps = {
 /*
 	BEGIN ContextPanelTabs
 */
-const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, toggleHighlighting, highlightingVisible }) => (
+const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, toggleHighlighting, highlightingVisible, editor }) => (
 	<div className="lemma-panel-tabs">
 
 		<EditionTabs
@@ -101,10 +101,12 @@ const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, togg
 			toggleEdition={toggleEdition}
 		/>
 
-		<MetaTabs
-			toggleHighlighting={toggleHighlighting}
-			highlightingVisible={highlightingVisible}
-		/>
+		{!editor &&
+			<MetaTabs
+				toggleHighlighting={toggleHighlighting}
+				highlightingVisible={highlightingVisible}
+			/>
+		}
 
 	</div>
 );
@@ -117,6 +119,12 @@ ContextPanelTabs.propTypes = {
 	toggleEdition: React.PropTypes.func.isRequired,
 	toggleHighlighting: React.PropTypes.func.isRequired,
 	highlightingVisible: React.PropTypes.bool.isRequired,
+
+	// requiered if editor:
+	editor: React.PropTypes.bool,
+};
+ContextPanelTabs.defaultProps = {
+	editor: false,
 };
 /*
 	BEGIN ContextPanelTabs

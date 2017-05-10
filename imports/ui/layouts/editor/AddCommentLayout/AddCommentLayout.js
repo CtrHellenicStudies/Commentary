@@ -14,7 +14,7 @@ import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
 import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
 import AddComment from '/imports/ui/components/editor/addComment/AddComment';
-import ContextReader from '/imports/ui/components/editor/addComment/ContextReader';
+import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -447,19 +447,21 @@ const AddCommentLayout = React.createClass({
 												workSlug={work ? work.slug : 'iliad'}
 												subworkN={subwork ? subwork.n : 1}
 											/>
+
 											<AddComment
 												selectedLineFrom={this.state.selectedLineFrom}
 												submitForm={this.addComment}
 											/>
-											<ContextReader
+
+											<ContextPanel
 												open={this.state.contextReaderOpen}
 												workSlug={work ? work.slug : 'iliad'}
 												subworkN={subwork ? subwork.n : 1}
-												initialLineFrom={lineFrom || 1}
-												initialLineTo={lineTo || 100}
+												lineFrom={lineFrom || 1}
 												selectedLineFrom={this.state.selectedLineFrom}
 												selectedLineTo={this.state.selectedLineTo}
 												updateSelectedLines={this.updateSelectedLines}
+												editor
 											/>
 										</div>
 									</div>

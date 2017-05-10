@@ -23,15 +23,31 @@ const getContextPanelStyles = (open, highlightingVisible) => {
 	}
 	return contextPanelStyles;
 };
+const getSortedEditions = (editions) => {
+	const sortedEditions = [];
+	editions.forEach((edition) => {
+		const newEdition = {
+			slug: edition.slug,
+			title: edition.title,
+			lines: _.sortBy(edition.lines, 'n')
+		};
+		sortedEditions.push(newEdition);
+	});
+	return sortedEditions;
+};
 
-const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaEdition, lemmaText, lineFrom, commentGroup, maxLine, toggleEdition, toggleHighlighting }) => (
+
+
+const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaEdition, lemmaText, lineFrom, lineTo, commentGroup, maxLine, toggleEdition, toggleHighlighting, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor }) => (
 	<div className={getContextPanelStyles(open, highlightingVisible)}>
 
-		<IconButton
-			className="close-lemma-panel"
-			onClick={closeContextPanel}
-			iconClassName="mdi mdi-close"
-		/>
+		{closeContextPanel &&
+			<IconButton
+				className="close-lemma-panel"
+				onClick={closeContextPanel}
+				iconClassName="mdi mdi-close"
+			/>
+		}
 
 		<ContextPanelText
 			onBeforeClicked={onBeforeClicked}
@@ -39,8 +55,15 @@ const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onB
 			selectedLemmaEdition={selectedLemmaEdition}
 			lemmaText={lemmaText}
 			lineFrom={lineFrom}
+			lineTo={lineTo}
 			commentGroup={commentGroup}
 			maxLine={maxLine}
+
+			disableEdit={disableEdit}
+			selectedLineFrom={selectedLineFrom}
+			selectedLineTo={selectedLineTo}
+			updateSelectedLines={updateSelectedLines}
+			editor={editor}
 		/>
 
 		<ContextPanelTabs
@@ -49,6 +72,8 @@ const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onB
 			toggleEdition={toggleEdition}
 			toggleHighlighting={toggleHighlighting}
 			highlightingVisible={highlightingVisible}
+			disableEdit={disableEdit}
+			editor={editor}
 		/>
 
 	</div>
@@ -65,8 +90,8 @@ ContextPanelContent.propTypes = {
 		lineFrom: React.PropTypes.number.isRequired,
 		lineTo: React.PropTypes.number,
 		ref: React.PropTypes.string.isRequired,
-	}).isRequired,
-	closeContextPanel: React.PropTypes.func.isRequired,
+	}),
+	closeContextPanel: React.PropTypes.func,
 	highlightingVisible: React.PropTypes.bool.isRequired,
 	onBeforeClicked: React.PropTypes.func.isRequired,
 	onAfterClicked: React.PropTypes.func.isRequired,
@@ -77,32 +102,50 @@ ContextPanelContent.propTypes = {
 		lines: React.PropTypes.arrayOf(React.PropTypes.shape({
 			n: React.PropTypes.number.isRequired,
 			html: React.PropTypes.string.isRequired,
-		}))
+		})).isRequired,
 	})).isRequired,
 	lineFrom: React.PropTypes.number.isRequired,
+	lineTo: React.PropTypes.number.isRequired,
 	maxLine: React.PropTypes.number.isRequired,
 	toggleEdition: React.PropTypes.func.isRequired,
 	toggleHighlighting: React.PropTypes.func.isRequired,
+	workSlug: React.PropTypes.string.isRequired,
+	subworkN:React.PropTypes.number.isRequired,
+
+	// requiered if editor:
+	disableEdit: React.PropTypes.bool,
+	selectedLineFrom: React.PropTypes.number,
+	selectedLineTo: React.PropTypes.number,
+	updateSelectedLines: React.PropTypes.func,
+	editor: React.PropTypes.bool,
+};
+ContextPanelContent.defaultProps = {
+	commentGroup: null,
+	closeContextPanel: null,
+
+	disableEdit: false,
+	selectedLineFrom: 0,
+	selectedLineTo: 0,
+	updateSelectedLines: null,
+	editor: false,
 };
 
 
-export default createContainer(({ commentGroup, lineFrom }) => {
+export default createContainer(({ lineFrom, workSlug, subworkN }) => {
 
-	let lemmaQuery = {};
+	const lineTo = lineFrom + 49;
 
-	if (commentGroup) {
-		lemmaQuery = {
-			'work.slug': commentGroup.work.slug,
-			'subwork.n': commentGroup.subwork.n,
-			'text.n': {
-				$gte: lineFrom,
-				$lte: lineFrom + 49,
-			},
-		};
+	const lemmaQuery = {
+		'work.slug': workSlug,
+		'subwork.n': subworkN,
+		'text.n': {
+			$gte: lineFrom,
+			$lte: lineTo,
+		},
+	};
 
-		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-			lemmaQuery['work.slug'] = 'hymns';
-		}
+	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+		lemmaQuery['work.slug'] = 'hymns';
 	}
 
 	Meteor.subscribe('textNodes', lemmaQuery);
@@ -139,8 +182,11 @@ export default createContainer(({ commentGroup, lineFrom }) => {
 		});
 	});
 
+	const sortedEditions = getSortedEditions(editions);
+
 	return {
-		lemmaText: editions,
+		lemmaText: sortedEditions,
+		lineTo,
 	};
 
 }, ContextPanelContent);

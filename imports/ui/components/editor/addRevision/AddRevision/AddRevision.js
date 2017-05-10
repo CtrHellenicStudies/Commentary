@@ -31,6 +31,7 @@ import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
 
 // api
 import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';

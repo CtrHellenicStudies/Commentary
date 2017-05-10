@@ -9,7 +9,47 @@ import FontIcon from 'material-ui/FontIcon';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
-import { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
+import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
+
+// api
+import TextNodes from '/imports/api/collections/textNodes';
+
+const textFromTextNodesGroupedByEdition = (nodesCursor) => {
+	const editions = [];
+	nodesCursor.forEach(node => {
+		node.text.forEach(text => {
+			let myEdition = editions.find((e) => text.edition.slug === e.slug);
+
+			if (!myEdition) {
+				myEdition = {
+					title: text.edition.title,
+					slug: text.edition.slug,
+					lines: [],
+				};
+				editions.push(myEdition);
+			}
+
+			myEdition.lines.push({
+				html: text.html,
+				n: text.n,
+			});
+		});
+	});
+
+	// sort lines for each edition by line number
+	for (let i = 0; i < editions.length; ++i) {
+		editions[i].lines.sort((a, b) => {
+			if (a.n < b.n) {
+				return -1;
+			} else if (b.n < a.n) {
+				return 1;
+			}
+			return 0;
+		});
+	}
+
+	return editions;
+};
 
 
 const KeywordContext = React.createClass({
@@ -32,43 +72,6 @@ const KeywordContext = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	textFromTextNodesGroupedByEdition(nodesCursor) {
-		const editions = [];
-		nodesCursor.forEach(node => {
-			node.text.forEach(text => {
-				let myEdition = editions.find((e) => text.edition.slug === e.slug);
-
-				if (!myEdition) {
-					myEdition = {
-						title: text.edition.title,
-						slug: text.edition.slug,
-						lines: [],
-					};
-					editions.push(myEdition);
-				}
-
-				myEdition.lines.push({
-					html: text.html,
-					n: text.n,
-				});
-			});
-		});
-
-		// sort lines for each edition by line number
-		for (let i = 0; i < editions.length; ++i) {
-			editions[i].lines.sort((a, b) => {
-				if (a.n < b.n) {
-					return -1;
-				} else if (b.n < a.n) {
-					return 1;
-				}
-				return 0;
-			});
-		}
-
-		return editions;
 	},
 
 	toggleEdition(newSelectedLemma) {
@@ -165,7 +168,7 @@ const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
 
 		if (textNodesSub.ready()) {
 			const textNodesCursor = TextNodes.find(textNodesQuery);
-			lemmaText = this.textFromTextNodesGroupedByEdition(textNodesCursor);
+			lemmaText = textFromTextNodesGroupedByEdition(textNodesCursor);
 		}
 
 	} else {
@@ -186,7 +189,7 @@ const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
 
 				if (textNodesSub.ready()) {
 					const textNodesCursor = TextNodes.find(textNodesQuery);
-					lemmaText = this.textFromTextNodesGroupedByEdition(textNodesCursor);
+					lemmaText = textFromTextNodesGroupedByEdition(textNodesCursor);
 				}
 			}
 		}

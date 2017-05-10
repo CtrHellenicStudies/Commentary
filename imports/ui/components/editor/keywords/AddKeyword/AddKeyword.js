@@ -68,6 +68,8 @@ const AddKeyword = React.createClass({
 		selectedLineTo: React.PropTypes.number,
 		submitForm: React.PropTypes.func.isRequired,
 		onTypeChange: React.PropTypes.func.isRequired,
+		keywordsOptions: React.PropTypes.array,
+		keyideasOptions: React.PropTypes.array,
 	},
 
 	childContextTypes: {
@@ -148,7 +150,7 @@ const AddKeyword = React.createClass({
 
 	onSearchChange({ value }) {
 		const keywordSuggestions = [];
-		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
@@ -171,8 +173,8 @@ const AddKeyword = React.createClass({
 	},
 
 	isOptionUnique(newOption) {
-		const keywordsOptions = this.data.keywordsOptions;
-		const keyideasOptions = this.data.keyideasOptions;
+		const keywordsOptions = this.props.keywordsOptions;
+		const keyideasOptions = this.props.keyideasOptions;
 		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
 		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
 		const BreakException = {};

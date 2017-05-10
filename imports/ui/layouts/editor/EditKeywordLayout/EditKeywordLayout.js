@@ -14,6 +14,10 @@ import Header from '/imports/ui/layouts/header/Header';
 
 // components
 import Spinner from '/imports/ui/components/loading/Spinner';
+import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
+import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
+import EditKeyword from '/imports/ui/components/editor/keywords/EditKeyword';
+import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -338,6 +342,22 @@ const EditKeywordLayout = React.createClass({
 	render() {
 		const filters = this.state.filters;
 		const { ready, keyword } = this.props;
+		let work;
+		let subwork;
+		let lineFrom;
+		let lineTo;
+
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			} else if (filter.key === 'subworks') {
+				subwork = filter.values[0];
+			} else if (filter.key === 'lineTo') {
+				lineTo = filter.values[0];
+			} else if (filter.key === 'lineFrom') {
+				lineFrom = filter.values[0];
+			}
+		});
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -372,16 +392,15 @@ const EditKeywordLayout = React.createClass({
 										keyword={keyword}
 									/>
 
-									<ContextReader
+									<ContextPanel
 										open={this.state.contextReaderOpen}
-										closeContextPanel={this.closeContextReader}
-										workSlug={'work' in keyword ? keyword.work.slug : 'iliad'}
-										subworkN={'subwork' in keyword ? keyword.subwork.n : 1}
-										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
-										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										initialLineFrom={keyword.lineFrom || 1}
-										initialLineTo={keyword.lineFrom ? keyword.lineFrom + 100 : 100}
+										workSlug={work ? work.slug : 'iliad'}
+										subworkN={subwork ? subwork.n : 1}
+										lineFrom={lineFrom || 1}
+										selectedLineFrom={this.state.selectedLineFrom}
+										selectedLineTo={this.state.selectedLineTo}
 										updateSelectedLines={this.updateSelectedLines}
+										editor
 									/>
 								</div>
 							</div>
@@ -402,7 +421,7 @@ const EditKeywordLayout = React.createClass({
 
 const EditKeywordLayoutContainer = createContainer(({ slug }) => {
 	const keywordsSub = Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
-	const ready = Roles.subscription.ready() && keywordsSub;
+	const ready = Roles.subscription.ready() && keywordsSub.ready();
 	let keyword = {};
 	if (ready) {
 		keyword = Keywords.findOne({ slug });

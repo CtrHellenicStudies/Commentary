@@ -1,4 +1,5 @@
 import React from 'react';
+import cookie from 'react-cookie';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -49,7 +50,7 @@ const KeywordDetail = React.createClass({
 
 	deleteKeyword() {
 		const { keyword } = this.props;
-		Meteor.call('keywords.delete', keyword._id, (error, keywordId) => {
+		Meteor.call('keywords.delete', cookie.load('loginToken'), keyword._id, (error, keywordId) => {
 			if (error) {
 				console.log(keywordId, error);
 			} else {

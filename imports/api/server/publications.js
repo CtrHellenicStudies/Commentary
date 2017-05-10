@@ -1,5 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
+
+// api
+import TextNodes from '/imports/api/collections/textNodes';
+
+// lib
 import { queryCommentWithKeywordId } from '../utils.js';
 
 Meteor.publish('comments.keyword_context', (keywordId, tenantId) => {

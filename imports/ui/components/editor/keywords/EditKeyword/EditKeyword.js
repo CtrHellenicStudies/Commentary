@@ -17,8 +17,6 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
 import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
-import 'draft-js-mention-plugin/lib/plugin.css';
-import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
 
 
 // api
@@ -216,7 +214,7 @@ const EditKeyword = React.createClass({
 			sig.keyCode === 188) {
 			return true;
 		}
-		
+
 		return false;
 	},
 

@@ -1,4 +1,4 @@
-import TextNodes from '/imports/collections/textNodes';
+import TextNodes from '/imports/api/collections/textNodes';
 
 Meteor.methods({
 	getMaxLine(workSlug, subworkN) {
@@ -39,7 +39,7 @@ Meteor.methods({
 
 		return tableOfContents;
 	},
-	'textNodes.insert'(token, data) {
+	'textNodes.insert'(token, textNode) {
 		check(token, String);
 		check(textNode, {
 			work: {
@@ -57,7 +57,7 @@ Meteor.methods({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-			return TextNodes.insert(data);
+			return TextNodes.insert(textNode);
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');

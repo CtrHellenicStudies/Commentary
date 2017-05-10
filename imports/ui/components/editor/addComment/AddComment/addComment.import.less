@@ -1,0 +1,254 @@
+.add-comment {
+  padding: 80px 80px;
+  background: #f6f6f6;
+
+  .add-comment-form {
+    padding: 0 5% 0 5%;
+
+    form {
+      background-color: #ffffff;
+    }
+
+    .form-element {
+      width: 90% !important;
+      margin: 0 5%;
+    }
+  }
+}
+
+.chs-editor-layout {
+  padding: 47px 0 0 0;
+
+	.DraftEditor-root {
+		span, .public-DraftEditorPlaceholder-inner {
+			font-family: @font-reading;
+			font-size:18px;
+			padding:8px 0;
+			line-height:1.5em;
+			font-weight:100;
+			color:#222;
+
+		}
+		.public-DraftEditorPlaceholder-inner {
+			color:#666;
+		}
+	}
+
+	.form-subitem--referenceWork {
+		display:block;
+		margin: 10px 0;
+
+		label {
+			padding-right: 10px;
+			font-size: 14px;
+		}
+	}
+
+	.form-group--referenceWorks {
+		background: #f6f6f6;
+		padding: 10px 10px 20px;
+		border-radius: 3px;
+		border: 1px solid #ddd;
+	}
+
+
+}
+
+.reference-work-item {
+	.remove-reference-work-item {
+		float: right;
+		display:block;
+		margin-bottom: 10px;
+		text-align: center;
+
+		button {
+			cursor:pointer;
+
+			&:hover {
+				color:@secondary-text;
+				background: #eee;
+			}
+
+		}
+
+		.mdi {
+			font-size: 18px !important;
+			padding: 0 9px;
+			&:before {
+				font-size: 18px;
+			}
+		}
+	}
+	.Select {
+		display:block;
+		clear:both;
+	}
+}
+
+.add-comment-title span {
+  font-family: 'Proxima N W01 At Smbd';
+  font-size: 28px;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.add-comment-text, .RichTextEditor__editor___1QqIU {
+  font-family: 'Merriweather', serif;
+  font-size: 18px;
+  line-height: 1.76em;
+  width: 100%;
+  margin: 0;
+  max-width: 1000px;
+  word-break: break-word;
+
+  a {
+    border-bottom: 2px solid #795548;
+    pointer-events: none;
+  }
+
+  span {
+    font-family: 'Merriweather', serif;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.76em;
+    width: 100%;
+    margin: 0;
+    max-width: 1000px;
+    word-break: break-word;
+  }
+
+  li {
+    list-style-type: none !important;
+    span {
+      font-size: 16px !important;
+    }
+  }
+}
+
+.comment-edit-action-button {
+  margin-top: 30px;
+	margin-right: 20px;
+	display: inline-block;
+
+  button {
+    background: @md-primary !important;
+    span {
+      color: @light !important;
+			font-size: 12px !important;
+    }
+		.mdi {
+			&:before {
+				font-size: 14px;
+			}
+		}
+  }
+}
+
+.add-comment-snackbar {
+  span {
+    color: #ffffff;
+  }
+}
+
+.before-link {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.after-link {
+  text-align: center;
+  margin: 20px 0;
+}
+
+article.lemma-comment p.lemma-text.no-lines-selected {
+  color: @text-secondary;
+}
+
+.line-pagination {
+  position: absolute;
+  top: 0;
+  padding-top: 82px;
+  left: 0;
+  width: 100%;
+  background: #f6f6f6;
+  border-bottom: 1px solid #eee;
+  display: none;
+
+  .line-page {
+    min-width: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-right: 1px solid #eee;
+
+    &:hover {
+      button > div > div {
+        background-color: @md-primary-300;
+
+      }
+
+    }
+
+    button {
+      height: auto !important;
+      box-shadow: none !important;
+      border-radius: 0px !important;
+
+      > div > div {
+        padding: 5px 10px !important;
+        height: auto !important;
+
+      }
+
+    }
+
+  }
+
+}
+
+.IconButton__isActive___2Ey8p {
+  background-color: #795548 !important;
+}
+
+.RichTextEditor__root___2QXK- {
+  border: none !important;
+
+  .EditorToolbar__root___3_Aqz {
+    border: none;
+
+    .InputPopover__input___264Za {
+      margin-bottom: 0px;
+    }
+  }
+}
+
+
+.inline-toolbar-wrap {
+	> div {
+		margin-top:-50px;
+	}
+}
+
+.comment-cross-ref {
+  background-color: rgba(215, 204, 200, 0.5);
+  background-clip: content-box;
+
+  &:hover {
+    background-color: rgb(215, 204, 200);
+    cursor: pointer;
+  }
+}
+
+
+.comment-action-buttons {
+	text-align: right;
+}
+
+.comment-upper-action-button {
+	display:inline-block;
+	vertical-align: top;
+	margin: 0 10px;
+
+	span {
+		font-size: 12px !important;
+	}
+}

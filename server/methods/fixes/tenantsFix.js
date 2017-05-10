@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import Tenants from '/imports/collections/tenants';
+import Tenants from '/imports/api/collections/tenants';
 
 Meteor.startup(() => {
 	const tenants = Tenants.find({ isAnnotation: { $exists: false } });

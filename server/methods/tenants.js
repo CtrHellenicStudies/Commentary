@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
-import Tenants from '/imports/collections/tenants';
+import Tenants from '/imports/api/collections/tenants';
 
 Meteor.methods({
 	findTenantBySubdomain(subdomain) {

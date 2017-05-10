@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReferenceWorkTeaser renders correctly 1`] = `
+<div
+  className="reference-work-teaser"
+  data-wow-duration="0.2s"
+  href="/referenceWorks/test-work"
+>
+  <a
+    className="reference-work-title-link"
+    href="/referenceWorks/test-work"
+  >
+    <h4
+      className="reference-work-title"
+    >
+      Test Work
+    </h4>
+  </a>
+  <hr />
+  <span
+    className="reference-work-description"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Quid faciat laetas segetes quo sidere terram vertere",
+      }
+    }
+  />
+  <a
+    className="reference-work-read-more-link"
+    href="/referenceWorks/test-work"
+  >
+    <span
+      className="reference-work-read-more"
+    >
+      READ MORE
+    </span>
+  </a>
+</div>
+`;

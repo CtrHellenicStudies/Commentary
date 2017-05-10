@@ -1,12 +1,12 @@
 import { Meteor } from 'meteor/meteor';
-import Comments from '/imports/collections/comments';
-import Commenters from '/imports/collections/commenters';
-import DiscussionComments from '/imports/collections/discussionComments';
-import Keywords from '/imports/collections/keywords';
-import ReferenceWorks from '/imports/collections/referenceWorks';
-import Tenants from '/imports/collections/tenants';
-import TextNodes from '/imports/collections/textNodes';
-import Works from '/imports/collections/works';
+import Comments from '/imports/api/collections/comments';
+import Commenters from '/imports/api/collections/commenters';
+import DiscussionComments from '/imports/api/collections/discussionComments';
+import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Tenants from '/imports/api/collections/tenants';
+import TextNodes from '/imports/api/collections/textNodes';
+import Works from '/imports/api/collections/works';
 
 Meteor.startup(() => {
 	if (Tenants.find().count() === 0) {

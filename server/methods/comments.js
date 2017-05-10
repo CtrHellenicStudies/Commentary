@@ -1,4 +1,4 @@
-import Comments from '/imports/collections/comments';
+import Comments from '/imports/api/collections/comments';
 
 Meteor.methods({
 	'comments.insert': (token, comment) => {
@@ -103,7 +103,7 @@ Meteor.methods({
 		}
 
 		const revisionId = new Meteor.Collection.ObjectID();
-		revision._id = revisionId;
+		revision._id = revisionId.valueOf();
 
 		try {
 			Comments.update({

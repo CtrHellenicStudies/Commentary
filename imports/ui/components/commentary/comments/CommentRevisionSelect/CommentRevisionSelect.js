@@ -1,5 +1,6 @@
+import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';  // eslint-disable-line import/no-absolute-path
+import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';  
 
 /*
 	helpers

@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import Commenters from '/imports/collections/commenters';
+import Commenters from '/imports/api/collections/commenters';
 
 Meteor.methods({
 	'commenters.insert': (token, commenter) => {

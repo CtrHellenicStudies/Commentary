@@ -1,3 +1,4 @@
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -52,7 +53,7 @@ class CommentCitation extends React.Component {
 				<RaisedButton
 					label="Cite this comment"
 					labelPosition="after"
-					onTouchTap={this.handleTouchTap.bind(this)}
+					onClick={this.handleTouchTap.bind(this)}
 				/>
 				<Popover
 					open={openMenu}

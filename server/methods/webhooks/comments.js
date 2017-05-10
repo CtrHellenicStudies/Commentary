@@ -1,10 +1,10 @@
-import Comments from '/imports/collections/comments';
-import Commenters from '/imports/collections/commenters';
-import Keywords from '/imports/collections/keywords';
-import Revisions from '/imports/collections/revisions';
-import ReferenceWorks from '/imports/collections/referenceWorks';
-import Tenants from '/imports/collections/tenants';
-import Works from '/imports/collections/works';
+import Comments from '/imports/api/collections/comments';
+import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
+import Revisions from '/imports/api/collections/revisions';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Tenants from '/imports/api/collections/tenants';
+import Works from '/imports/api/collections/works';
 
 Meteor.method('publishComments', (commentCandidate) => {
 	let valid = false;
@@ -82,12 +82,12 @@ Meteor.method('publishComments', (commentCandidate) => {
 
 	let referenceWork;
 	if ('reference' in commentCandidate) {
-		referenceWork = ReferenceWorks.findOne({ title: commentCandidate.reference })
+		referenceWork = ReferenceWorks.findOne({ title: commentCandidate.reference });
 	}
 	let originalDate = new Date(commentCandidate.updated * 1000);
 	// 1410643512 is the date of the primary ingest into the Wordpress database
-	if (referenceWork ) {
-		if( parseInt(commentCandidate.updated, 10) === 1410643512) {
+	if (referenceWork) {
+		if (parseInt(commentCandidate.updated, 10) === 1410643512) {
 			originalDate = referenceWork.date;
 		}
 	}

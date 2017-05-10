@@ -17,7 +17,7 @@ import {
 	ControlLabel,
 } from 'react-bootstrap';
 import Select, { Creatable } from 'react-select';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw, Modifier } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
@@ -87,6 +87,7 @@ function _getSuggestionsFromComments(comments) {
 	}
 	return suggestions;
 }
+
 
 const AddComment = React.createClass({
 
@@ -453,7 +454,6 @@ const AddComment = React.createClass({
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellCheck
-									stripPastedStyles
 									plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
 									ref={(element) => { this.editor = element; }}
 								/>

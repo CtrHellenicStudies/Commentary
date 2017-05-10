@@ -20,6 +20,21 @@ const ModalChangePwd = React.createClass({
 		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
+	componentWillMount() {
+		document.addEventListener('keydown', this._handleKeyDown);
+	},
+
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this._handleKeyDown);
+	},
+
+	_handleKeyDown(event) {
+
+		const { closeModal } = this.props;
+		
+		if (event.keyCode === ESCAPE_KEY) closeModal();
+	},
+
 	render() {
 		const lowered = this.props.lowered;
 

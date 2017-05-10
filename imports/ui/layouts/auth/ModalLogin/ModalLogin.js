@@ -5,6 +5,10 @@ import { Meteor } from 'meteor/meteor';
 import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';
 import PWDLoginForm from '/imports/ui/components/auth/PWDLoginForm';
 
+
+const ESCAPE_KEY = 27;
+
+
 class ModalLogin extends React.Component {
 
 	static propTypes = {
@@ -25,10 +29,26 @@ class ModalLogin extends React.Component {
 		};
 
 		// methods:
+		this._handleKeyDown = this._handleKeyDown.bind(this);
 		this.handleLogin = this.handleLogin.bind(this);
 		this.handleLoginFacebook = this.handleLoginFacebook.bind(this);
 		this.handleLoginGoogle = this.handleLoginGoogle.bind(this);
 		this.handleLoginTwitter = this.handleLoginTwitter.bind(this);
+	}
+
+	componentWillMount() {
+		document.addEventListener('keydown', this._handleKeyDown);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this._handleKeyDown);
+	}
+
+	_handleKeyDown(event) {
+
+		const { closeModal } = this.props;
+		
+		if (event.keyCode === ESCAPE_KEY) closeModal();
 	}
 
 	handleLogin(email, password) {

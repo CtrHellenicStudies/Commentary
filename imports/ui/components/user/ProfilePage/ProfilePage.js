@@ -18,6 +18,7 @@ import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
+import ModalChangePwd from '/imports/ui/layouts/auth/ModalChangePwd';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';

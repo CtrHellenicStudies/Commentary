@@ -31,8 +31,8 @@ const ModalChangePwd = React.createClass({
 	_handleKeyDown(event) {
 
 		const { closeModal } = this.props;
-		
-		if (event.keyCode === ESCAPE_KEY) closeModal();
+
+		if (event.keyCode === 'ESCAPE_KEY') closeModal();
 	},
 
 	render() {

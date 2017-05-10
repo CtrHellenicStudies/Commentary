@@ -4,11 +4,11 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes'; 
+import TextNodes from '/imports/api/collections/textNodes';
 
 // components:
-import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText'; 
-import ContextPanelTabs from '/imports/ui/components/commentary/contextPanel/ContextPanelTabs'; 
+import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText';
+import ContextPanelTabs from '/imports/ui/components/commentary/contextPanel/ContextPanelTabs';
 
 /*
 	helpers
@@ -110,7 +110,7 @@ ContextPanelContent.propTypes = {
 	toggleEdition: React.PropTypes.func.isRequired,
 	toggleHighlighting: React.PropTypes.func.isRequired,
 	workSlug: React.PropTypes.string.isRequired,
-	subworkN:React.PropTypes.number.isRequired,
+	subworkN: React.PropTypes.number.isRequired,
 
 	// requiered if editor:
 	disableEdit: React.PropTypes.bool,

@@ -26,8 +26,6 @@ import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
-import 'draft-js-mention-plugin/lib/plugin.css';
-import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
 
 // api
 import Keywords from '/imports/api/collections/keywords';
@@ -144,52 +142,8 @@ const AddRevision = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	getMeteorData() {
-		const { comment } = this.props;
-
-		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
-		const keywordsOptions = [];
-		const keywords = Keywords.find({ type: 'word' }).fetch();
-		keywords.forEach((keyword) => {
-			keywordsOptions.push({
-				value: keyword.title,
-				label: keyword.title,
-				slug: keyword.slug,
-			});
-		});
-
-		const keyideasOptions = [];
-		const keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keyideas.forEach((keyidea) => {
-			keyideasOptions.push({
-				value: keyidea.title,
-				label: keyidea.title,
-				slug: keyidea.slug,
-			});
-		});
-
-		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-		const referenceWorks = ReferenceWorks.find().fetch();
-		const referenceWorkOptions = [];
-		referenceWorks.forEach(referenceWork => {
-			referenceWorkOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-				slug: referenceWork.slug,
-			});
-		});
-
-		return {
-			keywordsOptions,
-			keyideasOptions,
-			referenceWorkOptions,
-		};
 	},
 
 	_enableButton() {
@@ -702,4 +656,45 @@ const AddRevision = React.createClass({
 	},
 });
 
-export default AddRevision;
+const AddRevisionContainer = createContainer(({ comment }) => {
+
+	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+	const keywordsOptions = [];
+	const keywords = Keywords.find({ type: 'word' }).fetch();
+	keywords.forEach((keyword) => {
+		keywordsOptions.push({
+			value: keyword.title,
+			label: keyword.title,
+			slug: keyword.slug,
+		});
+	});
+
+	const keyideasOptions = [];
+	const keyideas = Keywords.find({ type: 'idea' }).fetch();
+	keyideas.forEach((keyidea) => {
+		keyideasOptions.push({
+			value: keyidea.title,
+			label: keyidea.title,
+			slug: keyidea.slug,
+		});
+	});
+
+	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+	const referenceWorks = ReferenceWorks.find().fetch();
+	const referenceWorkOptions = [];
+	referenceWorks.forEach(referenceWork => {
+		referenceWorkOptions.push({
+			value: referenceWork._id,
+			label: referenceWork.title,
+			slug: referenceWork.slug,
+		});
+	});
+
+	return {
+		keywordsOptions,
+		keyideasOptions,
+		referenceWorkOptions,
+	};
+}, AddRevision);
+
+export default AddRevisionContainer;

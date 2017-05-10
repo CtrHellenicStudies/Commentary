@@ -63,6 +63,8 @@ const AddRevisionLayout = React.createClass({
 	},
 
 	update(formData) {
+		const { comment } = this.props;
+
 		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 			// get keywords after they were created:
 			const keywords = this.getKeywords(formData);

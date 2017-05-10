@@ -94,6 +94,9 @@ const AddRevision = React.createClass({
 		submitForm: React.PropTypes.func.isRequired,
 		update: React.PropTypes.func.isRequired,
 		comment: React.PropTypes.object.isRequired,
+		keywordsOptions: React.PropTypes.array,
+		keyideasOptions: React.PropTypes.array,
+		referenceWorkOptions: React.PropTypes.array,
 	},
 
 	getInitialState() {
@@ -221,7 +224,7 @@ const AddRevision = React.createClass({
 
 	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
-		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
@@ -259,8 +262,8 @@ const AddRevision = React.createClass({
 	},
 
 	isOptionUnique(newOption) {
-		const keywordsOptions = this.data.keywordsOptions;
-		const keyideasOptions = this.data.keyideasOptions;
+		const keywordsOptions = this.props.keywordsOptions;
+		const keyideasOptions = this.props.keyideasOptions;
 		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
 		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
 		const BreakException = {};
@@ -387,7 +390,7 @@ const AddRevision = React.createClass({
 		const self = this;
 		const { comment } = this.props;
 		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorks, textEditorState } = this.state;
-		const { keywordsOptions, keyideasOptions, referenceWorkOptions } = this.data;
+		const { keywordsOptions, keyideasOptions, referenceWorkOptions } = this.props;
 
 		return (
 			<div className="comments lemma-panel-visible">

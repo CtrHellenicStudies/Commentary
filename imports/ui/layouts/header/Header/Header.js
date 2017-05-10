@@ -367,12 +367,13 @@ class Header extends React.Component {
 												iconClassName="mdi mdi-magnify"
 											/>
 										</div>
+
 										{!isOnHomeView && (
 											toggleSearchTerm
-											&& handleChangeTextsearch
 											&& handleChangeLineN
 										) ?
 											<div className="search-tools collapse">
+
 												<CommentarySearchToolbar
 													toggleSearchTerm={toggleSearchTerm}
 													handleChangeTextsearch={handleChangeTextsearch}

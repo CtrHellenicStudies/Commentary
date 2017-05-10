@@ -63,7 +63,7 @@ class CommentarySearchToolbar extends React.Component {
 	static propTypes = {
 		filters: React.PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
 		toggleSearchTerm: React.PropTypes.func.isRequired,
-		handleChangeTextsearch: React.PropTypes.func.isRequired,
+		handleChangeTextsearch: React.PropTypes.func,
 		handleChangeLineN: React.PropTypes.func.isRequired,
 		addCommentPage: React.PropTypes.bool.isRequired,
 		isTest: React.PropTypes.bool,
@@ -105,6 +105,7 @@ class CommentarySearchToolbar extends React.Component {
 		commenters: [],
 		referenceWorks: [],
 		works: [],
+		handleChangeTextsearch: null,
 	}
 
 	constructor(props) {
@@ -118,7 +119,7 @@ class CommentarySearchToolbar extends React.Component {
 		};
 
 		// methods:
-		this.handleChangeTextsearch = _.debounce(props.handleChangeTextsearch, 300);
+		if (this.handleChangeTextsearch) this.handleChangeTextsearch = _.debounce(props.handleChangeTextsearch, 300);
 		this.toggleSearchDropdown = this.toggleSearchDropdown.bind(this);
 		this.toggleMoreDropdown = this.toggleMoreDropdown.bind(this);
 		this.switchToHymns = this.switchToHymns.bind(this);
@@ -302,13 +303,15 @@ class CommentarySearchToolbar extends React.Component {
 
 const commentarySearchToolbarContainer = createContainer(({ addCommentPage }) => {
 
+	const tenantId = Session.get('tenantId');
+
 	// SUBSCRIPTIONS:
 	if (!addCommentPage) {
 		Meteor.subscribe('commenters');
-		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
-		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+		Meteor.subscribe('keywords.all', {tenantId: tenantId});
+		Meteor.subscribe('referenceWorks', tenantId);
 	}
-	Meteor.subscribe('works');
+	Meteor.subscribe('works', tenantId);
 
 	return {
 		keyideas: Keywords.find({ type: 'idea' }).fetch(),

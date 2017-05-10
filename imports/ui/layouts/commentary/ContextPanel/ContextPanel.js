@@ -90,9 +90,6 @@ class ContextPanel extends React.Component {
 			lineFrom: getLineFrom(props),
 			maxLine: 0,
 			highlightingVisible: true,
-
-			workSlug: getWorkSlug(props),
-			subworkN: getsubworkN(props),
 		};
 
 		this.setMaxLine();
@@ -115,6 +112,11 @@ class ContextPanel extends React.Component {
 		const isHighlightingChange = prevState.highlightingVisible !== this.state.highlightingVisible;
 		if (!(isLemmaEditionChange || isHighlightingChange)) {
 			this.scrollElement('open');
+		}
+
+		// if work or subwork updated - update maxline
+		if (prevProps.workSlug !== this.props.workSlug || prevProps.subworkN !== this.props.subworkN) {
+			this.setMaxLine();
 		}
 	}
 
@@ -142,7 +144,10 @@ class ContextPanel extends React.Component {
 	}
 
 	setMaxLine() {
-		const { workSlug, subworkN } = this.state;
+
+		const workSlug = getWorkSlug(this.props);
+		const subworkN = getsubworkN(this.props);
+
 		Meteor.call('getMaxLine', workSlug, subworkN, (err, res) => {
 			if (err) throw new Meteor.Erorr(err);
 			this.setState({
@@ -193,7 +198,10 @@ class ContextPanel extends React.Component {
 	render() {
 
 		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
-		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition, workSlug, subworkN } = this.state;
+		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition } = this.state;
+
+		const workSlug = getWorkSlug(this.props);
+		const subworkN = getsubworkN(this.props);
 
 		return (
 			<ContextPanelContent

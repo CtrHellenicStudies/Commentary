@@ -427,52 +427,50 @@ const AddCommentLayout = React.createClass({
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{!this.state.loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
-						<div>
-							<Header
-								toggleSearchTerm={this.toggleSearchTerm}
-								handleChangeLineN={this.handleChangeLineN}
-								filters={this.state.filters}
-								initialSearchEnabled
-								addCommentPage
-							/>
+						<Header
+							toggleSearchTerm={this.toggleSearchTerm}
+							handleChangeLineN={this.handleChangeLineN}
+							filters={filters}
+							initialSearchEnabled
+							addCommentPage
+						/>
 
-							{!isTest ?
-								<main>
-									<div className="commentary-comments">
-										<div className="comment-group">
-											<CommentLemmaSelect
-												ref={(component) => { this.commentLemmaSelect = component; }}
-												selectedLineFrom={this.state.selectedLineFrom}
-												selectedLineTo={this.state.selectedLineTo}
-												workSlug={work ? work.slug : 'iliad'}
-												subworkN={subwork ? subwork.n : 1}
-											/>
+						{!isTest ?
+							<main>
+								<div className="commentary-comments">
+									<div className="comment-group">
+										<CommentLemmaSelect
+											ref={(component) => { this.commentLemmaSelect = component; }}
+											selectedLineFrom={this.state.selectedLineFrom}
+											selectedLineTo={this.state.selectedLineTo}
+											workSlug={work ? work.slug : 'iliad'}
+											subworkN={subwork ? subwork.n : 1}
+										/>
 
-											<AddComment
-												selectedLineFrom={this.state.selectedLineFrom}
-												submitForm={this.addComment}
-											/>
+										<AddComment
+											selectedLineFrom={this.state.selectedLineFrom}
+											submitForm={this.addComment}
+										/>
 
-											<ContextPanel
-												open={this.state.contextReaderOpen}
-												workSlug={work ? work.slug : 'iliad'}
-												subworkN={subwork ? subwork.n : 1}
-												lineFrom={lineFrom || 1}
-												selectedLineFrom={this.state.selectedLineFrom}
-												selectedLineTo={this.state.selectedLineTo}
-												updateSelectedLines={this.updateSelectedLines}
-												editor
-											/>
-										</div>
+										<ContextPanel
+											open={this.state.contextReaderOpen}
+											workSlug={work ? work.slug : 'iliad'}
+											subworkN={subwork ? subwork.n : 1}
+											lineFrom={lineFrom || 1}
+											selectedLineFrom={this.state.selectedLineFrom}
+											selectedLineTo={this.state.selectedLineTo}
+											updateSelectedLines={this.updateSelectedLines}
+											editor
+										/>
 									</div>
+								</div>
 
-									<FilterWidget
-										filters={filters}
-										toggleSearchTerm={this.toggleSearchTerm}
-									/>
-								</main>
-							: ''}
-						</div>
+								<FilterWidget
+									filters={filters}
+									toggleSearchTerm={this.toggleSearchTerm}
+								/>
+							</main>
+						: ''}
 					</div>
 					:
 					<Spinner fullPage />

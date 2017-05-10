@@ -21,6 +21,7 @@ import muiTheme from '/imports/lib/muiTheme';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
 
 
 const AddCommentLayout = React.createClass({
@@ -189,14 +190,22 @@ const AddCommentLayout = React.createClass({
 
 	matchKeywords(keywords) {
 		const matchedKeywords = [];
+
 		if (keywords) {
 			keywords.forEach((keyword) => {
+				let keywordTitle;
+				if (typeof keyword === 'object') {
+					keywordTitle = keyword.label;
+				} else {
+					keywordTitle = keyword;
+				}
 				const foundKeyword = Keywords.findOne({
-					title: keyword.label,
+					title: keywordTitle,
 				});
 				matchedKeywords.push(foundKeyword);
 			});
 		}
+
 		return matchedKeywords;
 	},
 
@@ -211,7 +220,7 @@ const AddCommentLayout = React.createClass({
 		if (keywords) {
 			const newKeywordArray = [];
 			keywords.forEach((keyword) => {
-				const foundKeyword = Keywords.findOne({title: keyword.label});
+				const foundKeyword = Keywords.findOne({slug: keyword.slug});
 				if (!foundKeyword) {
 					const newKeyword = {
 						title: keyword.label,
@@ -483,8 +492,13 @@ const AddCommentLayout = React.createClass({
 
 const AddCommentLayoutContainer = (() => {
 	const ready = Roles.subscription.ready();
+
+	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+	const keywords = Keywords.find().fetch();
+
 	return {
 		ready,
+		keywords,
 	};
 }, AddCommentLayout);
 

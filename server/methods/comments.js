@@ -103,7 +103,7 @@ Meteor.methods({
 		}
 
 		const revisionId = new Meteor.Collection.ObjectID();
-		revision._id = revisionId;
+		revision._id = revisionId.valueOf();
 
 		try {
 			Comments.update({

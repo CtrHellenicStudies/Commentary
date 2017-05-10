@@ -11,6 +11,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // api
 import Comments from '/imports/api/collections/comments';
 import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -29,6 +30,7 @@ const AddRevisionLayout = React.createClass({
 		ready: React.PropTypes.bool,
 		comment: React.PropTypes.object,
 		commenters: React.PropTypes.array,
+		keywords: React.PropTypes.array,
 	},
 
 	getInitialState() {
@@ -91,14 +93,22 @@ const AddRevisionLayout = React.createClass({
 
 	matchKeywords(keywords) {
 		const matchedKeywords = [];
+
 		if (keywords) {
 			keywords.forEach((keyword) => {
+				let keywordTitle;
+				if (typeof keyword === 'object') {
+					keywordTitle = keyword.label;
+				} else {
+					keywordTitle = keyword;
+				}
 				const foundKeyword = Keywords.findOne({
-					title: keyword,
+					title: keywordTitle,
 				});
 				matchedKeywords.push(foundKeyword);
 			});
 		}
+
 		return matchedKeywords;
 	},
 
@@ -147,6 +157,7 @@ const AddRevisionLayout = React.createClass({
 		this.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
 			keywords.push(matchedKeyword);
 		});
+
 		return keywords;
 	},
 
@@ -364,7 +375,7 @@ const AddRevisionLayout = React.createClass({
 const AddRevisionLayoutContainer = createContainer(({ commentId }) => {
 	const commentsSub = Meteor.subscribe('comments.id', commentId, Session.get('tenantId'));
 	const commentersSub = Meteor.subscribe('commenters', Session.get('tenantId'));
-	const keywordsSub = Meteor.subscribe('keywords.all');
+	const keywordsSub = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
 	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready() && commentersSub.ready();
 
@@ -377,11 +388,13 @@ const AddRevisionLayoutContainer = createContainer(({ commentId }) => {
 			}));
 		});
 	}
+	const keywords = Keywords.find().fetch();
 
 	return {
 		ready,
 		comment,
 		commenters,
+		keywords,
 	};
 }, AddRevisionLayout);
 

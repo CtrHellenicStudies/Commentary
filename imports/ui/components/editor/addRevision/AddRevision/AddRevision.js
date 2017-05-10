@@ -25,7 +25,15 @@ import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import {
+	ItalicButton,
+	BoldButton,
+	UnderlineButton,
+	UnorderedListButton,
+	OrderedListButton,
+	BlockquoteButton,
+} from 'draft-js-buttons';
 
 // api
 import Keywords from '/imports/api/collections/keywords';
@@ -38,8 +46,19 @@ import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shar
 import muiTheme from '/imports/lib/muiTheme';
 
 
+// Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin({
+	structure: [
+		BoldButton,
+		ItalicButton,
+		UnderlineButton,
+		Separator,
+		UnorderedListButton,
+		OrderedListButton,
+		BlockquoteButton,
+	]
+});
 const { InlineToolbar } = inlineToolbarPlugin;
 
 // Keyword Mentions
@@ -318,6 +337,8 @@ const AddRevision = React.createClass({
 
 	handleUpdate() {
 		const data = this.refs.form.getModel(); // eslint-disable-line
+		let key;
+		
 		for (key in data) { // eslint-disable-line
 			const params = key.split('_');
 			params[0] = parseInt(params[0], 10);

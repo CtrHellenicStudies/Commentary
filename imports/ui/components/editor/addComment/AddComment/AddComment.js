@@ -25,7 +25,15 @@ import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import {
+	ItalicButton,
+	BoldButton,
+	UnderlineButton,
+	UnorderedListButton,
+	OrderedListButton,
+	BlockquoteButton,
+} from 'draft-js-buttons';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -37,10 +45,23 @@ import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shar
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
+// Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin({
+	structure: [
+		BoldButton,
+		ItalicButton,
+		UnderlineButton,
+		Separator,
+		UnorderedListButton,
+		OrderedListButton,
+		BlockquoteButton,
+	]
+});
 const { InlineToolbar } = inlineToolbarPlugin;
+
 
 // Keyword Mentions
 const keywordMentionPlugin = createMentionPlugin();
@@ -296,6 +317,7 @@ const AddComment = React.createClass({
 		})(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
+		let key;
 		for (key in data) { // eslint-disable-line
 			const params = key.split('_');
 			params[0] = parseInt(params[0], 10);

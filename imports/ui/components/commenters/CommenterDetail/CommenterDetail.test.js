@@ -11,6 +11,9 @@ describe('CommenterDetail', () => {
 			.create(
 				<CommenterDetail
 					slug="test"
+					settings={{
+						title: 'Test Settings',
+					}}
 					isTest
 				/>
 			)

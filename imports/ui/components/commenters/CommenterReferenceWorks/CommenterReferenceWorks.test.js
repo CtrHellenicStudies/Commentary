@@ -11,8 +11,12 @@ describe('CommenterReferenceWorks', () => {
 			.create(
 				<CommenterReferenceWorks
 					commenter={{
+						_id: 'testId',
 						name: 'Test Commenter',
 						slug: 'test-commenter'
+					}}
+					settings={{
+						title: 'Test Settings',
 					}}
 					isTest
 				/>

@@ -5,3 +5,6 @@ import '/imports/startup/startup';
 
 // onTouchTab init:
 injectTapEventPlugin();
+
+// TODO: remove
+React.render = ReactDOM.render;

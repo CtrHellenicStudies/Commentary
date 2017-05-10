@@ -75,10 +75,8 @@ const CommentaryLayout = React.createClass({
 			queryParams = this.props.queryParams;
 		}
 
-		// update route if queryParams have changed
-		// if (FlowRouter.path('/commentary/', {}, queryParams) !== FlowRouter.current().path) {
+		// update route
 		FlowRouter.go('/commentary/', {}, queryParams);
-		// }
 	},
 
 	_createQueryParamsFromFilters(filters) {

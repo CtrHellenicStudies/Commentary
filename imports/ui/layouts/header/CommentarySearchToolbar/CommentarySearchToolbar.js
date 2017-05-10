@@ -119,7 +119,7 @@ class CommentarySearchToolbar extends React.Component {
 		};
 
 		// methods:
-		if (this.handleChangeTextsearch) this.handleChangeTextsearch = _.debounce(props.handleChangeTextsearch, 300);
+		if (props.handleChangeTextsearch) this.handleChangeTextsearch = _.debounce(props.handleChangeTextsearch, 300);
 		this.toggleSearchDropdown = this.toggleSearchDropdown.bind(this);
 		this.toggleMoreDropdown = this.toggleMoreDropdown.bind(this);
 		this.switchToHymns = this.switchToHymns.bind(this);

@@ -8,34 +8,33 @@ class CommunityMemberTeaser extends React.Component {
 
 	render() {
 		const { user } = this.props;
-		const commenterUrl = `/commenters/${commenter.slug}`;
-		const commenterExcerpt = commenter.tagline ? Utils.trunc(commenter.tagline, 120) : '';
+		const userUrl = `/users/${user.username}`;
+		const userExcerpt = user.profile.biography ? Utils.trunc(user.profile.biography, 120) : '';
 
 
 
 		return (
 			<div className="communityMemberTeaser hvr-grow wow fadeIn">
-				<a href={commenterUrl}>
-					<div className="commenter-image paper-shadow">
-						{commenter && commenter.avatar ?
-							<AvatarIcon avatar={commenter.avatar.src} />
+				<a href={userUrl}>
+					<div className="user-image paper-shadow">
+						{user && user.avatar ?
+							<AvatarIcon avatar={user.avatar.src} />
 						:
 							<img
-								src={commenter && commenter.avatar ? commenter.avatar : '/images/default_user.jpg'}
-								alt={commenter.name}
+								src={user && user.avatar ? user.avatar : '/images/default_user.jpg'}
+								alt={user.name}
 							/>
 						}
 					</div>
 				</a>
-				<div className="commenter-teaser-text">
-					<a href={commenterUrl}>
-						<h3>{commenter.name}</h3>
+				<div className="user-teaser-text">
+					<a href={userUrl}>
+						<h3>{user.name}</h3>
 					</a>
 					<hr />
-					<p className="commenter-description">
-						{commenterExcerpt}
+					<p className="user-description">
+						{userExcerpt}
 					</p>
-
 				</div>
 			</div>
 		);

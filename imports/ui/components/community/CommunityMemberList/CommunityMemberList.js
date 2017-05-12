@@ -10,11 +10,16 @@ class CommunityMemberList extends React.Component {
 	}
 
 	render() {
+		const { users } = this.props;
+
 		return (
 			<div className="CommunityMemberList">
-				<CommunityMemberTeaser
-					user={user}
-				/>
+				{users.map((user, i) => (
+					<CommunityMemberTeaser
+						key={i}
+						user={user}
+					/>
+				))}
 			</div>
 		);
 	}

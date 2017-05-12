@@ -7,10 +7,12 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
 import Settings from '/imports/api/collections/settings';
+import Tenant from '/imports/api/collections/tenants';
 
 // layouts
 import Header from '/imports/ui/layouts/header/Header';
 import Footer from '/imports/ui/components/footer/Footer';
+import CommunityLayout from '/imports/ui/layouts/community/CommunityLayout';
 
 // components
 import Home from '/imports/ui/components/home/Home';
@@ -24,6 +26,7 @@ const HomeLayout = React.createClass({
 	propTypes: {
 		settings: React.PropTypes.object,
 		ready: React.PropTypes.bool,
+		tenant: React.PropTypes.object,
 	},
 
 	getInitialState() {
@@ -41,10 +44,14 @@ const HomeLayout = React.createClass({
 	},
 
 	render() {
-		const { settings } = this.props;
+		const { settings, tenant } = this.props;
 
-		if (!settings) {
+		if (!settings || !tenant) {
 			return <LoadingHome />;
+		}
+
+		if (tenant.isAnnotation) {
+			return <CommunityLayout />;
 		}
 
 		return (
@@ -72,6 +79,7 @@ const HomeLayoutContainer = createContainer(() => {
 	return {
 		settings: Settings.findOne(),
 		ready: handle.ready(),
+		tenant: Tenant.findOne({_id: Session.get('tenantId')}),
 	};
 }, HomeLayout);
 

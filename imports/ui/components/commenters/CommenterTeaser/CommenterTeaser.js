@@ -23,7 +23,7 @@ const CommenterTeaser = React.createClass({
 	},
 
 	render() {
-		const commenter = this.props.commenter;
+		const { commenter } = this.props;
 		const commenterUrl = `/commenters/${commenter.slug}`;
 		const commenterExcerpt = commenter.tagline ? Utils.trunc(commenter.tagline, 120) : '';
 
@@ -53,8 +53,6 @@ const CommenterTeaser = React.createClass({
 
 				</div>
 			</div>
-
-
 		);
 	},
 

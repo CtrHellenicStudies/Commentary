@@ -18,29 +18,15 @@ import Settings from '/imports/api/collections/settings';
 import muiTheme from '/imports/lib/muiTheme';
 
 class CommunityDirectory extends React.Component {
-	static propTypes = {
-		users: React.PropTypes.array,
-	}
-
 	render() {
-		const { users } = this.props;
-
 		return (
-			<div>
-				adsf;lkjasdf;lksadj;dslakj
+			<div className="CommunityDirectory">
+				<h3>Community Directory</h3>
+				<CommunityMemberList />
 			</div>
 		);
 	}
 }
 
-const CommunityDirectoryContainer = createContainer(() => {
-	const foobar = true;
 
-	return {
-		users: [],
-	};
-
-
-}, CommunityDirectory);
-
-export default CommunityDirectoryContainer;
+export default CommunityDirectory;

@@ -3,7 +3,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
-import CommunityRecentActivity from '/imports/ui/components/community/CommunityRecentActivity';
+import RecentActivity from '/imports/ui/components/community/RecentActivity';
 import CommunityDirectory from '/imports/ui/components/community/CommunityDirectory';
 
 
@@ -32,7 +32,7 @@ class CommunityPage extends React.Component {
 				<section className="page-content container">
 					<Tabs>
 						<Tab label="Recent Activity">
-							<CommunityRecentActivity />
+							<RecentActivity />
 						</Tab>
 						<Tab label="Community Directory">
 							<CommunityDirectory />

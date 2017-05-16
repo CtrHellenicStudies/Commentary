@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OAuthButtons renders correctly 1`] = `
+<div
+  alt="icon"
+  className="avatar-icon"
+  style={
+    Object {
+      "backgroundImage": "url(/images/default_user.jpg)",
+    }
+  }
+/>
+`;

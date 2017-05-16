@@ -1,0 +1,175 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_accountsBase = require('meteor/accounts-base');
+var /* istanbul ignore next */_reactCookie = require('react-cookie'); /* istanbul ignore next */var _reactCookie2 = _interopRequireDefault(_reactCookie);
+
+
+var /* istanbul ignore next */_OAuthButtons = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/auth/OAuthButtons'); /* istanbul ignore next */var _OAuthButtons2 = _interopRequireDefault(_OAuthButtons);
+var /* istanbul ignore next */_PWDSignupForm = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/auth/PWDSignupForm'); /* istanbul ignore next */var _PWDSignupForm2 = _interopRequireDefault(_PWDSignupForm);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;} // components:
+var
+ModalSignup = function (_React$Component) {_inherits(ModalSignup, _React$Component);
+
+
+
+
+
+
+
+
+
+	function /* istanbul ignore next */ModalSignup(props) {/* istanbul ignore next */_classCallCheck(this, ModalSignup);var _this = _possibleConstructorReturn(this, (ModalSignup.__proto__ || Object.getPrototypeOf(ModalSignup)).call(this,
+		props));
+
+		/* istanbul ignore next */_this.state = {
+			errorMsg: '',
+			errorSocial: '' };
+
+
+		// methids
+		/* istanbul ignore next */_this._handleKeyDown = /* istanbul ignore next */_this._handleKeyDown.bind( /* istanbul ignore next */_this);
+		/* istanbul ignore next */_this.handleSignup = /* istanbul ignore next */_this.handleSignup.bind( /* istanbul ignore next */_this);
+		/* istanbul ignore next */_this.handleSignupFacebook = /* istanbul ignore next */_this.handleSignupFacebook.bind( /* istanbul ignore next */_this);
+		/* istanbul ignore next */_this.handleSignupGoogle = /* istanbul ignore next */_this.handleSignupGoogle.bind( /* istanbul ignore next */_this);
+		/* istanbul ignore next */_this.handleSignupTwitter = /* istanbul ignore next */_this.handleSignupTwitter.bind( /* istanbul ignore next */_this); /* istanbul ignore next */return _this;
+	}_createClass(ModalSignup, [{ key: 'componentWillMount', value: function componentWillMount()
+
+		{
+			document.addEventListener('keydown', this._handleKeyDown);
+		} }, { key: 'componentWillUnmount', value: function componentWillUnmount()
+
+		{
+			document.removeEventListener('keydown', this._handleKeyDown);
+		} }, { key: '_handleKeyDown', value: function _handleKeyDown(
+
+		event) {/* istanbul ignore next */var
+
+			closeModal = this.props.closeModal;
+
+			if (event.keyCode === ESCAPE_KEY) closeModal();
+		} }, { key: 'handleSignup', value: function handleSignup(
+
+		email, password, passwordRepeat) {/* istanbul ignore next */var _this2 = this;
+
+			if (password !== passwordRepeat) {
+				this.setState({
+					errorMsg: 'Passwords do not match.' });
+
+				throw new /* istanbul ignore next */_meteor.Meteor.Error('Passwords do not match');
+			}
+
+			var checkPassword = /* istanbul ignore next */_accountsBase.Accounts._hashPassword(password);
+
+			/* istanbul ignore next */_meteor.Meteor.call('createAccount', { email: email, checkPassword: checkPassword }, function (err, result) {
+				var path = '/';
+
+				if (!err) {
+					/* istanbul ignore next */_meteor.Meteor.loginWithToken(result.stampedToken.token, function (_err) {
+						if (_err) {
+							/* istanbul ignore next */_this2.setState({
+								errorMsg: 'Invalid email or password' });
+
+						}
+
+						/* istanbul ignore next */_reactCookie2.default.save('userId', result.userId, { path: path });
+						/* istanbul ignore next */_reactCookie2.default.save('loginToken', result.stampedToken.token, { path: path });
+						/* istanbul ignore next */_this2.props.closeModal();
+					});
+				} else {
+					/* istanbul ignore next */_this2.setState({
+						errorMsg: 'Invalid email or password' });
+
+				}
+			});
+		} }, { key: 'handleSignupFacebook', value: function handleSignupFacebook()
+
+		{/* istanbul ignore next */var _this3 = this;
+			/* istanbul ignore next */_meteor.Meteor.loginWithFacebook({}, function (err) {
+				if (!err) {
+					/* istanbul ignore next */_this3.props.closeModal();
+				} else {
+					/* istanbul ignore next */_this3.setState({
+						errorSocial: /* istanbul ignore next */'Error with signing in with Facebook: ' + err.reason });
+
+				}
+			});
+		} }, { key: 'handleSignupGoogle', value: function handleSignupGoogle()
+
+		{/* istanbul ignore next */var _this4 = this;
+			/* istanbul ignore next */_meteor.Meteor.loginWithGoogle({}, function (err) {
+				if (!err) {
+					/* istanbul ignore next */_this4.props.closeModal();
+				} else {
+					/* istanbul ignore next */_this4.setState({
+						errorSocial: /* istanbul ignore next */'Error with signing in with Google: ' + err.reason });
+
+				}
+			});
+		} }, { key: 'handleSignupTwitter', value: function handleSignupTwitter()
+
+		{/* istanbul ignore next */var _this5 = this;
+			/* istanbul ignore next */_meteor.Meteor.loginWithTwitter({}, function (err) {
+				if (!err) {
+					/* istanbul ignore next */_this5.props.closeModal();
+				} else {
+					/* istanbul ignore next */_this5.setState({
+						errorSocial: /* istanbul ignore next */'Error with signing in with Twitter: ' + err.reason });
+
+				}
+			});
+		} }, { key: 'render', value: function render()
+
+		{/* istanbul ignore next */var _props =
+			this.props,lowered = _props.lowered,closeModal = _props.closeModal; /* istanbul ignore next */var _state =
+			this.state,errorMsg = _state.errorMsg,errorSocial = _state.errorSocial;
+
+			return (
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+						className: /* istanbul ignore next */'ahcip-modal-signup ahcip-modal ahcip-login-signup\n\t\t\t\t\t' + (
+						lowered ? ' lowered' : '') },
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ // eslint-disable-line jsx-a11y/no-static-element-interactions
+							className: 'close-modal paper-shadow',
+							onClick: closeModal },
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'i', /* istanbul ignore next */{ className: 'mdi mdi-close' })),
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'modal-inner' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'at-form' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'at-title' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h3', /* istanbul ignore next */null, /* istanbul ignore next */'Create an Account')),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'error-text' },
+								errorSocial),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_OAuthButtons2.default, /* istanbul ignore next */{
+								handleFacebook: this.handleSignupFacebook,
+								handleGoogle: this.handleSignupGoogle,
+								handleTwitter: this.handleSignupTwitter }),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'at-sep' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'strong', /* istanbul ignore next */null, /* istanbul ignore next */'OR')),
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_PWDSignupForm2.default, /* istanbul ignore next */{
+								handleSignup: this.handleSignup,
+								errorMsg: errorMsg }),
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'at-signup-link' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'at-resend-verification-email-link at-wrap' },
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */null, /* istanbul ignore next */'By clicking register, you agree to our ',
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: '/terms', className: 'at-link at-link--terms at-resend-verification-email' }, /* istanbul ignore next */'Terms and Privacy Policy.'))),
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */null, /* istanbul ignore next */'Already have an account? ',
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: '/sign-in', id: 'at-signUp', className: 'at-link at-signup' }, /* istanbul ignore next */'Sign in.')))))));
+
+
+
+
+
+
+		} }]);return ModalSignup;}( /* istanbul ignore next */_react2.default.Component); /* istanbul ignore next */ModalSignup.propTypes = { lowered: /* istanbul ignore next */_react2.default.PropTypes.bool, closeModal: /* istanbul ignore next */_react2.default.PropTypes.func }; /* istanbul ignore next */ModalSignup.defaultProps = { lowered: false }; /* istanbul ignore next */exports.default =
+
+
+ModalSignup;

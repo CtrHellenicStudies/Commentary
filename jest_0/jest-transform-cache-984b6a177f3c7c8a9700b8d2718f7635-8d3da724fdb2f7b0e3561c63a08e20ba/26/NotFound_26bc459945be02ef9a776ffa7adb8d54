@@ -1,0 +1,100 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+
+var /* istanbul ignore next */_Header = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/layouts/header/Header'); /* istanbul ignore next */var _Header2 = _interopRequireDefault(_Header);
+
+
+var /* istanbul ignore next */_BackgroundImageHolder = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/shared/BackgroundImageHolder'); /* istanbul ignore next */var _BackgroundImageHolder2 = _interopRequireDefault(_BackgroundImageHolder);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // components
+
+var NotFound = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'NotFound',
+
+	propTypes: {
+		isTest: /* istanbul ignore next */_react2.default.PropTypes.bool },
+
+
+	childContextTypes: {
+		muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+
+	getChildContext: function getChildContext() {
+		return { muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+	}, /* istanbul ignore next */
+
+	render: function render() {
+		var expressionsOfWoe = [
+		'ἰὼ ἰώ',
+		'αἶ, αἶ',
+		'οἴμοι μοι',
+		'φεῦ φεῦ',
+		'ἰώ μοί μοι',
+		'ὦ Ζεῦ',
+		'βοᾷ βοᾷ',
+		'αἰαῖ αἰαῖ',
+		'ἔα ἔα',
+		'ὀττοτοτοτοτοῖ',
+		'ἄλγος ἄλγος βοᾷς',
+		'ἐλελεῦ',
+		'μὴ γένοιτο',
+		'οὐαί'];
+
+		var randomExpression = expressionsOfWoe[Math.round(Math.random() * expressionsOfWoe.length)];
+
+		// If this is just a test, set the same expression each time to not disrupt snapshot
+		if (this.props.isTest) {
+			randomExpression = 'ὦ Ζεῦ';
+		}
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'chs-layout master-layout not-found-layout' },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Header2.default, /* istanbul ignore next */null),
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'page page-not-found content primary' },
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'section', /* istanbul ignore next */{ className: 'block header header-page\tcover parallax' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_BackgroundImageHolder2.default, /* istanbul ignore next */{
+							imgSrc: '/images/odysseus.jpg' }),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'container v-align-transform' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'grid inner' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'center-content' },
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'page-title-wrap' },
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h1', /* istanbul ignore next */{ className: 'page-title' },
+											randomExpression, /* istanbul ignore next */', 404 Error!'),
+
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h2', /* istanbul ignore next */null, /* istanbul ignore next */'Viewing this page is against the will of the gods'),
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h4', /* istanbul ignore next */null, /* istanbul ignore next */'(Or there\'s an error somewhere).')))))),
+
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'section', /* istanbul ignore next */{ className: 'page-content container' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */null, /* istanbul ignore next */'Are you sure this is where you wanted to go? If not, please return to the previous page with the back button.'),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */null, /* istanbul ignore next */'If this is a persistent error, please send us an email at ',
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: 'mailto:muellner@chs.harvard.edu' }, /* istanbul ignore next */'muellner@chs.harvard.edu'), /* istanbul ignore next */' and lament your woes (hexameter preferred).'),
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */null, /* istanbul ignore next */'Please include what paths you were wandering and what device you were using when you went astray.'),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */null, /* istanbul ignore next */'Many thanks,'),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */null, /* istanbul ignore next */'The CHS IT team')))));
+
+
+
+
+
+
+	} }); // lib
+// layouts
+/* istanbul ignore next */exports.default =
+NotFound;

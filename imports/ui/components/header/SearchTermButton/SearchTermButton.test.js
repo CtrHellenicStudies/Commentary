@@ -5,6 +5,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import chai from 'chai';
 import sinon from 'sinon';
+import renderer from 'react-test-renderer';
 
 // component:
 import SearchTermButton from './SearchTermButton'; 
@@ -76,5 +77,19 @@ describe('SearchTermButton', () => {
 		sinon.assert.calledWith(toggleSearchTerm, 'TestKey', { key: 'value' });
 		chai.assert.ok(button, 'should contain the button child');
 		chai.assert.equal(props.label, 'TestSearchterm');
+	});
+	it('renders correctly', () => {
+		const toggleSearchTerm = sinon.spy();
+		const tree = renderer
+			.create(
+				<SearchTermButton
+					toggleSearchTerm={toggleSearchTerm}
+					label="TestSearchterm"
+					searchTermKey="TestKey"
+					value={{ key: 'value' }}
+				/>
+			)
+			.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
 });

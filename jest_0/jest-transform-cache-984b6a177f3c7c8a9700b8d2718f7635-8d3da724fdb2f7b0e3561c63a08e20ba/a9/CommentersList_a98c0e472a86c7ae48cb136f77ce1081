@@ -1,0 +1,59 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+
+
+var /* istanbul ignore next */_commenters = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/commenters'); /* istanbul ignore next */var _commenters2 = _interopRequireDefault(_commenters);
+
+
+var /* istanbul ignore next */_CommenterTeaser = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commenters/CommenterTeaser'); /* istanbul ignore next */var _CommenterTeaser2 = _interopRequireDefault(_CommenterTeaser);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // api
+
+
+var CommentersList = function CommentersList( /* istanbul ignore next */_ref) /* istanbul ignore next */{var commenters = _ref.commenters;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'commenters-list' },
+			commenters.map(function (commenter) /* istanbul ignore next */{return (
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommenterTeaser2.default, /* istanbul ignore next */{
+						key: commenter._id,
+						commenter: commenter }));})));}; // components
+
+
+
+
+CommentersList.propTypes = {
+	commenters: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		_id: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired }).
+	isRequired) };
+
+CommentersList.defaultProps = {
+	commenters: [] }; /* istanbul ignore next */exports.default =
+
+
+
+/* istanbul ignore next */(0, _reactMeteorData.createContainer)(function ( /* istanbul ignore next */_ref2) {/* istanbul ignore next */var limit = _ref2.limit,featureOnHomepage = _ref2.featureOnHomepage;
+	var commenters = [];
+	var _limit = 100;
+	if (limit) {
+		_limit = limit;
+	}
+
+	// SUBSCRIPTIONS:
+	if (featureOnHomepage) {
+		/* istanbul ignore next */_meteor.Meteor.subscribe('commenters.featureOnHomepage', /* istanbul ignore next */_session.Session.get('tenantId'), _limit);
+		commenters = /* istanbul ignore next */_commenters2.default.find({
+			featureOnHomepage: true },
+		{
+			sort: {
+				name: 1 },
+
+			_limit: _limit }).
+		fetch();
+	} else {
+		/* istanbul ignore next */_meteor.Meteor.subscribe('commenters', /* istanbul ignore next */_session.Session.get('tenantId'), _limit);
+		commenters = /* istanbul ignore next */_commenters2.default.find({}, { sort: { name: 1 }, _limit: _limit }).fetch();
+	}
+
+	return {
+		commenters: commenters };
+
+}, CommentersList);

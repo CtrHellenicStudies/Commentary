@@ -1,0 +1,32 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_meteor = require('meteor/meteor');
+
+var Config = {
+	name: 'Classical Commentaries',
+	domain: 'ahcip.chs.harvard.edu',
+	title: 'Classical Commentaries | Center for Hellenic Studies',
+	logo: '/images/logo-tower.png',
+	footer: function /* istanbul ignore next */footer() {
+		var copyright = /* istanbul ignore next */'Copyright ' + new Date().getFullYear() + ', Center for Hellenic Studies';
+		return copyright;
+	},
+	emails: {
+		from: 'no-reply@ahcip.chs.harvard.edu',
+		contact: 'contact@ahcip.chs.harvard.edu' },
+
+	defaultLanguage: 'en',
+	dateFormat: 'D/M/YYYY',
+	privacyUrl: /* istanbul ignore next */ /* istanbul ignore next */_meteor.Meteor.absoluteUrl() + '/privacy',
+	termsUrl: /* istanbul ignore next */ /* istanbul ignore next */_meteor.Meteor.absoluteUrl() + '/terms',
+	legal: {
+		address: '',
+		name: 'A Homer Commentary in Progress',
+		url: /* istanbul ignore next */_meteor.Meteor.absoluteUrl() },
+
+	about: /* istanbul ignore next */ /* istanbul ignore next */_meteor.Meteor.absoluteUrl() + '/about',
+	blog: /* istanbul ignore next */'' + /* istanbul ignore next */_meteor.Meteor.absoluteUrl(),
+	homeRoute: '/',
+	publicRoutes: ['home'],
+	dashboardRoute: '/' }; /* istanbul ignore next */exports.default =
+
+
+Config;

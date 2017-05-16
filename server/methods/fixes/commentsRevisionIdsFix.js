@@ -5,7 +5,7 @@ const commentsRevisionIdsFix = () => {
 	comments.forEach((comment) => {
 		const revisions = comment.revisions;
 
-		revisions.forEach(revision => {
+		revisions.forEach((revision) => {
 			if (!revision._id) {
 				const _id = new Meteor.Collection.ObjectID();
 				revision._id = _id.valueOf();

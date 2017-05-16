@@ -1,0 +1,3 @@
+/* istanbul ignore next */"use strict";Object.defineProperty(exports, "__esModule", { value: true });var Roles = /* istanbul ignore next */exports.Roles = { // eslint-disable-line
+	subscription: {
+		ready: function /* istanbul ignore next */ready() {} } };

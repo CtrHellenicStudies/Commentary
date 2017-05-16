@@ -1,0 +1,31 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var styles = {
+	menuItem: {
+		width: '100%',
+		display: 'block',
+		padding: '15px 15px',
+		fontSize: '16px' } };
+
+
+
+var MenuItem = function MenuItem( /* istanbul ignore next */_ref) /* istanbul ignore next */{var href = _ref.href,target = _ref.target,primaryText = _ref.primaryText,onClick = _ref.onClick;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{
+				className: 'menu-item',
+				href: href,
+				target: target,
+				onClick: onClick,
+				style: styles.menuItem },
+
+			primaryText));};
+
+
+
+MenuItem.propTypes = {
+	href: /* istanbul ignore next */_react2.default.PropTypes.string,
+	target: /* istanbul ignore next */_react2.default.PropTypes.string,
+	primaryText: /* istanbul ignore next */_react2.default.PropTypes.string,
+	onClick: /* istanbul ignore next */_react2.default.PropTypes.func }; /* istanbul ignore next */exports.default =
+
+
+MenuItem;

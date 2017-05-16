@@ -1,0 +1,16 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_aldeedSimpleSchema = require('meteor/aldeed:simple-schema');
+
+var Editions = new /* istanbul ignore next */_meteor.Meteor.Collection('editions');
+
+Editions.schema = new /* istanbul ignore next */_aldeedSimpleSchema.SimpleSchema({
+	title: {
+		type: String },
+
+	slug: {
+		type: String } });
+
+
+
+Editions.attachSchema(Editions.schema); /* istanbul ignore next */exports.default =
+Editions;

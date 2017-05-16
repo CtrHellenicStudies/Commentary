@@ -5,6 +5,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import chai from 'chai';
 import sinon from 'sinon';
+import renderer from 'react-test-renderer';
 import { brown800 } from 'material-ui/styles/colors';
 
 // components:
@@ -78,5 +79,19 @@ describe('SearchTermButtonPanel', () => {
 		const span = wrapper.find('span');
 		chai.assert.ok(span, 'should contain the span child');
 		chai.assert.equal(span.text(), 'TestSearchterm');
+	});
+	it('renders correctly', () => {
+
+		const toggleSearchTerm = sinon.spy();
+		const tree = renderer
+			.create(
+				<SearchTermButtonPanel
+					toggleSearchTerm={toggleSearchTerm}
+					label="TestSearchterm"
+					searchTermKey="TestKey"
+					value={{ key: 'value' }}
+				/>)
+			.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
 });

@@ -1,0 +1,444 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_momentjsMoment = require('meteor/momentjs:moment');
+var /* istanbul ignore next */_RaisedButton = require('material-ui/RaisedButton'); /* istanbul ignore next */var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+var /* istanbul ignore next */_FlatButton = require('material-ui/FlatButton'); /* istanbul ignore next */var _FlatButton2 = _interopRequireDefault(_FlatButton);
+var /* istanbul ignore next */_IconButton = require('material-ui/IconButton'); /* istanbul ignore next */var _IconButton2 = _interopRequireDefault(_IconButton);
+var /* istanbul ignore next */_FontIcon = require('material-ui/FontIcon'); /* istanbul ignore next */var _FontIcon2 = _interopRequireDefault(_FontIcon);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var DiscussionComment = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'DiscussionComment',
+
+	propTypes: {
+		discussionComment: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired,
+		currentUser: /* istanbul ignore next */_react2.default.PropTypes.object,
+		user: /* istanbul ignore next */_react2.default.PropTypes.object }, /* istanbul ignore next */
+
+
+	getInitialState: function getInitialState() {
+		return {
+			editMode: false,
+			moreOptionsVisible: false,
+			shareOptionsVisible: false,
+			readComment: false };
+
+	}, /* istanbul ignore next */
+
+	showEditMode: function showEditMode() {
+		this.setState({
+			editMode: true });
+
+	}, /* istanbul ignore next */
+
+	closeEditMode: function closeEditMode() {
+		this.setState({
+			editMode: false });
+
+	}, /* istanbul ignore next */
+
+	updateDiscussionComment: function updateDiscussionComment() {
+		var content = $(this.updateCommentForm).find('textarea').val(); /* istanbul ignore next */var
+		discussionComment = this.props.discussionComment;
+
+		/* istanbul ignore next */_meteor.Meteor.call('discussionComments.update',
+		discussionComment._id,
+		{
+			commentId: discussionComment.commentId,
+			tenantId: discussionComment.tenantId,
+			content: content });
+
+
+
+		this.setState({
+			editMode: false });
+
+	}, /* istanbul ignore next */
+
+	upvoteDiscussionComment: function upvoteDiscussionComment() {/* istanbul ignore next */var
+		currentUser = this.props.currentUser;
+		if (currentUser) {
+			/* istanbul ignore next */_meteor.Meteor.call('discussionComments.upvote',
+			this.props.discussionComment._id);
+
+		}
+	}, /* istanbul ignore next */
+
+	reportDiscussionComment: function reportDiscussionComment() {/* istanbul ignore next */var
+		currentUser = this.props.currentUser;
+		if (currentUser) {
+			this.setState({
+				moreOptionsVisible: false });
+
+			/* istanbul ignore next */_meteor.Meteor.call('discussionComments.report',
+			this.props.discussionComment._id);
+
+		}
+	}, /* istanbul ignore next */
+
+	unreportDiscussionComment: function unreportDiscussionComment() {/* istanbul ignore next */var
+		currentUser = this.props.currentUser;
+		if (currentUser) {
+			this.setState({
+				readComment: false });
+
+			/* istanbul ignore next */_meteor.Meteor.call('discussionComments.unreport',
+			this.props.discussionComment._id);
+
+		}
+	}, /* istanbul ignore next */
+
+	toggleMoreOptions: function toggleMoreOptions() {
+		this.setState({
+			moreOptionsVisible: !this.state.moreOptionsVisible,
+			shareOptionsVisible: false });
+
+	}, /* istanbul ignore next */
+
+	toggleShareOptions: function toggleShareOptions() {
+		this.setState({
+			shareOptionsVisible: !this.state.shareOptionsVisible,
+			moreOptionsVisible: false });
+
+	}, /* istanbul ignore next */
+
+	readDiscussionComment: function readDiscussionComment() {
+		this.setState({
+			readComment: true });
+
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var _this = this;
+		var self = this;
+		var userIsLoggedIn = /* istanbul ignore next */_meteor.Meteor.user(); /* istanbul ignore next */var _props =
+		this.props,discussionComment = _props.discussionComment,user = _props.user;
+		var userLink = '';
+		var userUpvoted = false;
+		var userReported = false;
+		var username = '';
+		var offsetLeft = 0;
+		var status = /* istanbul ignore next */void 0;
+
+		if (!discussionComment) {
+			return null;
+		}
+
+		// Child discussion Comments
+		discussionComment.children = [];
+
+		// Make user link and user name
+		if (user) {
+			if (user.username) {
+				username = user.username;
+				userLink = /* istanbul ignore next */'/users/' + user._id + '/' + user.username;
+			} else if (
+			'emails' in user &&
+			user.emails.length)
+			{
+				userLink = /* istanbul ignore next */'/users/' + user._id;
+				username = user.emails[0].address.split('@')[0];
+			}
+		}
+
+		if (
+		this.props.currentUser &&
+		discussionComment.voters &&
+		discussionComment.voters.indexOf(this.props.currentUser._id) >= 0)
+		{
+			userUpvoted = true;
+		}
+
+		if (
+		this.props.currentUser &&
+		discussionComment.usersReported &&
+		discussionComment.reported > 0 &&
+		discussionComment.usersReported.indexOf(this.props.currentUser._id) >= 0)
+		{
+			userReported = true;
+		}
+
+		if (this.state.moreOptionsVisible) {
+			offsetLeft = $('.toggle-more-button').position().left;
+		}
+
+		// Make status message if applicable
+		if (discussionComment.status === 'pending') {
+			status = 'Pending approval';
+		} else if (discussionComment.status === 'trash') {
+			status = 'This comment was made private by an Administrator';
+		}
+
+		var avatarUrl = '/images/default_user.jpg';
+		if (user && user.profile && user.profile.avatarUrl) {
+			avatarUrl = user.profile.avatarUrl;
+		}
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: /* istanbul ignore next */'discussion-comment paper-shadow ' + (userReported && !this.state.readComment ? 'discussion-comment--user-reported' : '') },
+				status ?
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'discussion-comment-status' },
+					status) :
+
+				'',
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-comment-content' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'inner-comment-row' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-commenter-profile-picture profile-picture paper-shadow' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: userLink },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'img', /* istanbul ignore next */{
+									src: avatarUrl,
+									alt: username }))),
+
+
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-commenter-meta' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: userLink },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'discussion-commenter-name' },
+									username)),
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'discussion-comment-date' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */null, discussionComment.updated ? 'Updated: ' : 'Created: '),
+								/* istanbul ignore next */(0, _momentjsMoment.moment)(discussionComment.updated ||
+								discussionComment.created).format('D MMMM YYYY')))),
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'inner-comment-row' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-comment-text' },
+
+
+
+							this.state.editMode ?
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'form', /* istanbul ignore next */{
+									className: 'update-comment-form clearfix',
+									name: 'update-comment-form',
+									ref: function /* istanbul ignore next */ref(component) {/* istanbul ignore next */_this.updateCommentForm = component;} },
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'textarea', /* istanbul ignore next */{
+									className: 'new-comment-text',
+									defaultValue: this.props.discussionComment.content }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-edit-buttons' },
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+										label: 'Update',
+										className: 'submit-comment-button paper-shadow',
+										onClick: this.updateDiscussionComment }),
+
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+										label: 'Close',
+										className: 'close-form-button',
+										onClick: this.closeEditMode }))) :
+
+
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+								discussionComment.content))),
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'inner-comment-row' },
+						this.state.readComment === false ?
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+								label: discussionComment.votes,
+								onClick: this.upvoteDiscussionComment,
+								className: /* istanbul ignore next */'discussion-comment-button vote-up ' + (userUpvoted ? 'upvoted' : ''),
+								icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-chevron-up' }),
+								disabled: userUpvoted },
+
+							!userIsLoggedIn ?
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'md-tooltip' }, /* istanbul ignore next */'You must be signed in to vote.') :
+
+							'') :
+
+
+
+						'',
+
+
+						'currentUser' in self.props &&
+						self.props.currentUser &&
+						user &&
+						self.props.currentUser._id === user._id ?
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+							label: 'Edit',
+							onClick: this.showEditMode,
+							className: 'discussion-comment-button edit' }) :
+
+
+						'',
+
+						this.state.readComment === false ?
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+								onClick: this.toggleMoreOptions,
+								label: '',
+								className: /* istanbul ignore next */'discussion-comment-button toggle-more-button ' + (this.state.moreOptionsVisible ? 'toggle-more-button--active' : ''),
+								icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-dots-horizontal' }) },
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'md-tooltip' }, /* istanbul ignore next */'Show more')) :
+
+
+						'',
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+								className: /* istanbul ignore next */'more-options ' + (this.state.moreOptionsVisible ? 'more-options--visible' : ''),
+								style: {
+									left: offsetLeft } },
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+									label: 'Report',
+									onClick: this.reportDiscussionComment,
+									className: /* istanbul ignore next */'discussion-comment-button report ' + (userReported ? 'reported' : ''),
+									icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-flag' }) },
+
+								!userIsLoggedIn ?
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'md-tooltip' }, /* istanbul ignore next */'You must be signed in to report a comment.') :
+
+
+
+								'')),
+
+
+
+						this.state.readComment === true ?
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+							label: 'Unreport',
+							onClick: this.unreportDiscussionComment }) :
+
+						''),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-comment-children' },
+
+						discussionComment.children.map(function (discussionCommentChild, j) /* istanbul ignore next */{return (
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+										key: j,
+										className: 'discussion-comment discussion-comment-child' },
+
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'inner-comment-row' },
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-commenter-profile-picture profile-picture paper-shadow' },
+											/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'img', /* istanbul ignore next */{ src: '/images/default_user.png', alt: username })),
+
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-commenter-meta' },
+											/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'discussion-commenter-name' },
+												discussionCommentChild.user.name),
+
+											/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'discussion-comment-date' },
+												discussionCommentChild.updated))),
+
+
+
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'inner-comment-row' },
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-comment-text' },
+											/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{
+												dangerouslySetInnerHTML: {
+													__html: discussionCommentChild.content } }))),
+
+
+
+
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'inner-comment-row' },
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+											label: discussionComment.votes,
+											onClick: /* istanbul ignore next */_this.upvoteDiscussionComment,
+											className: 'vote-up upvoted',
+											icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-chevron-up' }) }),
+
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+											label: 'Reply',
+											onClick: /* istanbul ignore next */_this.showReplyForm,
+											className: 'reply' }),
+
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+											label: 'Edit',
+											onClick: /* istanbul ignore next */_this.editDiscussionComment,
+											className: 'edit' }),
+
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+											label: 'Remove',
+											onClick: /* istanbul ignore next */_this.removeDiscussionComment,
+											className: 'remove' }))));}))),
+
+
+
+
+
+
+
+
+
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-comment-user-reported-message' }, /* istanbul ignore next */'You reported this comment.',
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+							label: 'Read',
+							onClick: this.readDiscussionComment }),
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+							label: 'Unreport',
+							onClick: this.unreportDiscussionComment })))));
+
+
+
+
+
+	} });
+
+
+
+var DiscussionCommentContainer = /* istanbul ignore next */(0, _reactMeteorData.createContainer)(function ( /* istanbul ignore next */_ref) {/* istanbul ignore next */var discussionComment = _ref.discussionComment;
+
+	var handle = /* istanbul ignore next */void 0;
+	var user = /* istanbul ignore next */void 0;
+
+	if (discussionComment) {
+		handle = /* istanbul ignore next */_meteor.Meteor.subscribe('users.id', discussionComment.userId);
+		user = /* istanbul ignore next */_meteor.Meteor.users.findOne({ _id: discussionComment.userId });
+	}
+
+	return {
+		user: user,
+		ready: handle && handle.ready(),
+		discussionComment: discussionComment };
+
+
+}, DiscussionComment); /* istanbul ignore next */exports.default =
+
+DiscussionCommentContainer;

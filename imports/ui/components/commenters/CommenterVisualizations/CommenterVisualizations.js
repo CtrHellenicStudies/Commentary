@@ -48,13 +48,13 @@ const CommenterVisualizations = React.createClass({
 
 		if (commenter.nCommentsWorks) {
 			return commenter.nCommentsWorks.map((work, i) =>
-				<CommenterWorkVisualization
+				(<CommenterWorkVisualization
 					key={i}
 					toggleVisibleWork={this.toggleVisibleWork}
 					work={work}
 					commenterSlug={commenter.slug}
 					isTest={isTest}
-				/>
+				/>)
 			);
 		}
 		return '';

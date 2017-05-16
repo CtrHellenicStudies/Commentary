@@ -163,21 +163,21 @@ const DiscussionThread = React.createClass({
 											onClick={this.addDiscussionComment}
 										/>
 										:
-											<div
-												className="new-comment-login"
-											>
-												<FlatButton
-													label="Login"
-													className="login-link"
-													onClick={this.props.showLoginModal}
-												/>
-												<FlatButton
-													label="Join"
-													className="join-link"
-													href="/sign-up"
-													target="_blank"
-												/>
-											</div>
+										<div
+											className="new-comment-login"
+										>
+											<FlatButton
+												label="Login"
+												className="login-link"
+												onClick={this.props.showLoginModal}
+											/>
+											<FlatButton
+												label="Join"
+												className="join-link"
+												href="/sign-up"
+												target="_blank"
+											/>
+										</div>
 									}
 								</div>
 							</form>
@@ -220,12 +220,12 @@ const DiscussionThread = React.createClass({
 							</div>
 						}
 						{this.props.discussionComments.map((discussionComment, i) =>
-							<DiscussionComment
+							(<DiscussionComment
 								key={i}
 								className="discussion-comment paper-shadow"
 								discussionComment={discussionComment}
 								currentUser={currentUser}
-							/>
+							/>)
 						)}
 					</div>
 				}

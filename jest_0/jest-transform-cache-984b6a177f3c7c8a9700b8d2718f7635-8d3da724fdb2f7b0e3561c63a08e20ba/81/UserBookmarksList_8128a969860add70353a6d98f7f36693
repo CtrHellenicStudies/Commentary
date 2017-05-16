@@ -1,0 +1,68 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_textNodes = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/textNodes'); /* istanbul ignore next */var _textNodes2 = _interopRequireDefault(_textNodes);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var UserBookmarksList = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'UserBookmarksList',
+	propTypes: {
+		bookmarkedText: /* istanbul ignore next */_react2.default.PropTypes.array }, /* istanbul ignore next */
+
+
+	render: function render() {/* istanbul ignore next */var
+		bookmarkedText = this.props.bookmarkedText;
+		var styles = {
+			listItem: {
+				overflow: 'hidden',
+				textOverflow: 'ellipsis',
+				whiteSpace: 'nowrap',
+				font: 'normal' },
+
+			list: {
+				marginTop: 0 } };
+
+
+
+		if (!bookmarkedText) {
+			return null;
+		}
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'collection with-header', style: styles.list },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'collection-header' }, /* istanbul ignore next */' ', /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h3', /* istanbul ignore next */null, /* istanbul ignore next */'Bookmarks')),
+				this.props.bookmarkedText.map(function (text, i) /* istanbul ignore next */{return (
+						/* istanbul ignore next */_react2.default.createElement(BookmarkedTextNode, /* istanbul ignore next */{
+							key: i,
+							isOdd: i % 2,
+							text: text }));})));
+
+
+
+
+	} });
+
+
+var UserBookmarksListContainer = /* istanbul ignore next */(0, _reactMeteorData.createContainer)(function () {
+	var bookmarkedText = [];
+	var handleBookmark = /* istanbul ignore next */_meteor.Meteor.subscribe('bookmark');
+	var bookmarkList = /* istanbul ignore next */_meteor.Meteor.users.findOne({}, { fields: { bookmarks: 1 } });
+
+	var bookmarks = [];
+
+	if (bookmarkList && bookmarkList.bookmarks && bookmarkList.bookmarks.length) {
+		bookmarkList.bookmarks.forEach(function (bookmark) {
+			bookmarks.push(new /* istanbul ignore next */_meteor.Meteor.Collection.ObjectID(bookmark));
+		});
+
+		var handleText = /* istanbul ignore next */_meteor.Meteor.subscribe('textNodes', { _id: { $in: bookmarks } });
+
+		if (handleText.ready()) {
+			bookmarkedText = /* istanbul ignore next */_textNodes2.default.find({ _id: { $in: bookmarks } }).fetch();
+		}
+	}
+
+	return {
+		bookmarkedText: bookmarkedText };
+
+}, UserBookmarksList); /* istanbul ignore next */exports.default =
+
+UserBookmarksListContainer;

@@ -1,0 +1,90 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+
+
+var /* istanbul ignore next */_commenters = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/commenters'); /* istanbul ignore next */var _commenters2 = _interopRequireDefault(_commenters);
+
+
+var /* istanbul ignore next */_AvatarIcon = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/avatar/AvatarIcon'); /* istanbul ignore next */var _AvatarIcon2 = _interopRequireDefault(_AvatarIcon);
+
+
+var /* istanbul ignore next */_createRevisionMarkup = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/createRevisionMarkup'); /* istanbul ignore next */var _createRevisionMarkup2 = _interopRequireDefault(_createRevisionMarkup);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // components
+
+var KeywordCommentList = function KeywordCommentList(props) {
+
+	if (props.keywordComments) {
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-outer has-discussion' },
+				props.keywordComments.map(function (comment, i) {
+					var selectedRevision = comment.revisions.pop();
+					var updated = selectedRevision.updated;
+					var format = 'D MMMM YYYY';
+
+					return (
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'article', /* istanbul ignore next */{
+								key: comment._id,
+								className: 'comment commentary-comment paper-shadow ' },
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-upper' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-upper-left' },
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h2', /* istanbul ignore next */{ className: 'comment-title', style: { margin: 0, padding: 0 } }, /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: /* istanbul ignore next */'/commentary?_id=' + comment._id }, selectedRevision.title))),
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-upper-right' },
+									comment.commenters.map(function (commenter, _i) {
+										var commenterRecord = /* istanbul ignore next */_commenters2.default.findOne({
+											slug: commenter.slug });
+
+
+										if (!commenterRecord) {
+											return null;
+										}
+
+										return (
+											/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+													key: _i,
+													className: 'comment-author' },
+
+												/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-author-text' },
+													/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: /* istanbul ignore next */'/commenters/' + commenterRecord.slug },
+														/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'comment-author-name', style: { margin: 0, textAlign: 'right' } }, commenterRecord.name)),
+
+													/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'comment-date', style: { margin: 0, textAlign: 'right' } },
+														moment(updated).format(format))),
+
+
+												/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-author-image-wrap paper-shadow' },
+													/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: /* istanbul ignore next */'/commenters/' + commenterRecord.slug },
+														/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_AvatarIcon2.default, /* istanbul ignore next */{
+															avatar:
+															commenterRecord && 'avatar' in commenterRecord ?
+															commenterRecord.avatar.src :
+															null })))));
+
+
+
+
+
+
+									}))),
+
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-lower' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+									className: 'comment-body',
+									dangerouslySetInnerHTML: /* istanbul ignore next */(0, _createRevisionMarkup2.default)(selectedRevision.text) }))));
+
+
+
+
+				})));
+
+	}
+	return null;
+}; // lib
+// api
+KeywordCommentList.propTypes = { keywordComments: /* istanbul ignore next */_react2.default.PropTypes.array }; /* istanbul ignore next */exports.default =
+
+
+KeywordCommentList;

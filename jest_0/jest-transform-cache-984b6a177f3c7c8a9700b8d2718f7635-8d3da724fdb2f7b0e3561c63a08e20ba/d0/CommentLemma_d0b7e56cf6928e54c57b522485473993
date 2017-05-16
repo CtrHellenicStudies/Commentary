@@ -1,0 +1,232 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_RaisedButton = require('material-ui/RaisedButton'); /* istanbul ignore next */var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+var /* istanbul ignore next */_FontIcon = require('material-ui/FontIcon'); /* istanbul ignore next */var _FontIcon2 = _interopRequireDefault(_FontIcon);
+var /* istanbul ignore next */_reactSticky = require('react-sticky');
+
+var /* istanbul ignore next */_utils = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/utils'); /* istanbul ignore next */var _utils2 = _interopRequireDefault(_utils);
+
+
+var /* istanbul ignore next */_textNodes = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/textNodes'); /* istanbul ignore next */var _textNodes2 = _interopRequireDefault(_textNodes);
+
+
+var /* istanbul ignore next */_CommentLemmaText = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commentary/commentGroups/CommentLemmaText'); /* istanbul ignore next */var _CommentLemmaText2 = _interopRequireDefault(_CommentLemmaText);
+var /* istanbul ignore next */_CommentGroupMeta = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commentary/commentGroups/CommentGroupMeta'); /* istanbul ignore next */var _CommentGroupMeta2 = _interopRequireDefault(_CommentGroupMeta);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;} // api:
+// components:
+var CommentLemma = function (_React$Component) {_inherits(CommentLemma, _React$Component);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	function /* istanbul ignore next */CommentLemma(props) {/* istanbul ignore next */_classCallCheck(this, CommentLemma);var _this = _possibleConstructorReturn(this, (CommentLemma.__proto__ || Object.getPrototypeOf(CommentLemma)).call(this,
+		props));
+
+		/* istanbul ignore next */_this.state = {
+			selectedLemmaEditionIndex: 0 };
+
+
+		// methods:
+		/* istanbul ignore next */_this.toggleEdition = /* istanbul ignore next */_this.toggleEdition.bind( /* istanbul ignore next */_this);
+		/* istanbul ignore next */_this.showContextPanel = /* istanbul ignore next */_this.showContextPanel.bind( /* istanbul ignore next */_this); /* istanbul ignore next */return _this;
+	}_createClass(CommentLemma, [{ key: 'toggleEdition', value: function toggleEdition(
+
+		editionSlug) {/* istanbul ignore next */var
+			editions = this.props.editions; /* istanbul ignore next */var
+			selectedLemmaEditionIndex = this.state.selectedLemmaEditionIndex;
+
+			if (editions && editions.length) {
+				if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
+					var newSelectedEditionIndex = 0;
+
+					editions.forEach(function (edition, index) {
+						if (edition.slug === editionSlug) {
+							newSelectedEditionIndex = index;
+						}
+					});
+
+					this.setState({
+						selectedLemmaEditionIndex: newSelectedEditionIndex });
+
+				}
+			}
+		} }, { key: 'showContextPanel', value: function showContextPanel(
+
+		commentGroup) {/* istanbul ignore next */var _props =
+			this.props,index = _props.index,setScrollPosition = _props.setScrollPosition,showContextPanel = _props.showContextPanel;
+
+			setScrollPosition(index);
+			showContextPanel(commentGroup);
+		} }, { key: 'render', value: function render()
+
+		{/* istanbul ignore next */var _this2 = this;var _props2 =
+			this.props,commentGroup = _props2.commentGroup,hideLemma = _props2.hideLemma,editions = _props2.editions,ready = _props2.ready; /* istanbul ignore next */var
+			selectedLemmaEditionIndex = this.state.selectedLemmaEditionIndex;
+
+			var selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
+			selectedLemmaEdition.lines.sort( /* istanbul ignore next */_utils2.default.sortBy('subwork.n', 'n'));
+
+			var workTitle = commentGroup.work.title;
+			if (workTitle === 'Homeric Hymns') {
+				workTitle = 'Hymns';
+			}
+
+			return (
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-outer comment-lemma-comment-outer' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_reactSticky.Sticky, /* istanbul ignore next */{
+							bottomOffset: 250 },
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommentGroupMeta2.default, /* istanbul ignore next */{
+							hideLemma: hideLemma,
+							commentGroup: commentGroup })),
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'article', /* istanbul ignore next */{ className: 'comment lemma-comment paper-shadow' },
+						!ready ?
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'lemma-loading' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'lemma-loading-top' }),
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'lemma-loading-bottom' })) :
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommentLemmaText2.default, /* istanbul ignore next */{
+							lines: selectedLemmaEdition.lines }),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'edition-tabs tabs' },
+							editions.map(function (lemmaTextEdition) {
+								var lemmaEditionTitle = /* istanbul ignore next */_utils2.default.trunc(lemmaTextEdition.title, 41);
+
+								return (/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+										key: lemmaTextEdition.slug,
+										label: lemmaEditionTitle,
+										/* istanbul ignore next */'data-edition': lemmaTextEdition.title,
+										className: selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+										'edition-tab tab selected-edition-tab' : 'edition-tab tab',
+										onClick: /* istanbul ignore next */_this2.toggleEdition.bind(null, lemmaTextEdition.slug) }));
+
+							})),
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'context-tabs tabs' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+								className: 'context-tab tab',
+								onClick: this.showContextPanel.bind(null, this.props.commentGroup),
+								label: 'Context',
+								labelPosition: 'before',
+								icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-chevron-right' }) }))),
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-wrap' })));
+
+
+
+
+		} }]);return CommentLemma;}( /* istanbul ignore next */_react2.default.Component); /* istanbul ignore next */CommentLemma.propTypes = { commentGroup: /* istanbul ignore next */_react2.default.PropTypes.shape({ work: /* istanbul ignore next */_react2.default.PropTypes.shape({ slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired, title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired }), subwork: /* istanbul ignore next */_react2.default.PropTypes.shape({ n: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired }), lineFrom: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired, lineTo: /* istanbul ignore next */_react2.default.PropTypes.number, commenters: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({ _id: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired, name: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired, slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired, avatar: /* istanbul ignore next */_react2.default.PropTypes.shape({ src: /* istanbul ignore next */_react2.default.PropTypes.string }) })) }).isRequired, showContextPanel: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired, setScrollPosition: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired, index: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired, hideLemma: /* istanbul ignore next */_react2.default.PropTypes.bool.isRequired, // from createContainer:
+	editions: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({ title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired, slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })), ready: /* istanbul ignore next */_react2.default.PropTypes.bool }; /* istanbul ignore next */CommentLemma.defaultProps = { editions: null, ready: false }; /* istanbul ignore next */exports.default =
+
+
+/* istanbul ignore next */(0, _reactMeteorData.createContainer)(function ( /* istanbul ignore next */_ref) {/* istanbul ignore next */var commentGroup = _ref.commentGroup;
+
+	var lemmaQuery = {};
+
+	if (commentGroup) {
+		lemmaQuery = {
+			'work.slug': commentGroup.work.slug,
+			'subwork.n': commentGroup.subwork.n,
+			'text.n': {
+				$gte: commentGroup.lineFrom } };
+
+
+
+		if (typeof commentGroup.lineTo !== 'undefined') {
+			lemmaQuery['text.n'].$lte = commentGroup.lineTo;
+		} else {
+			lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
+		}
+		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+			lemmaQuery['work.slug'] = 'hymns';
+		}
+	}
+
+	var handle = /* istanbul ignore next */_meteor.Meteor.subscribe('textNodes', lemmaQuery);
+	var textNodes = /* istanbul ignore next */_textNodes2.default.find(lemmaQuery).fetch();
+	var editions = [];
+
+	var textIsInEdition = false;
+	textNodes.forEach(function (textNode) {
+		textNode.text.forEach(function (text) {
+			textIsInEdition = false;
+
+			editions.forEach(function (edition) {
+				if (text.edition.slug === edition.slug) {
+					if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {
+						edition.lines.push({
+							html: text.html,
+							n: text.n });
+
+					}
+					textIsInEdition = true;
+				}
+			});
+
+			if (!textIsInEdition) {
+				var newEdition = {
+					title: text.edition.title,
+					slug: text.edition.slug,
+					lines: [] };
+
+
+				if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {
+					newEdition.lines.push({
+						html: text.html,
+						n: text.n });
+
+				}
+
+				editions.push(newEdition);
+			}
+		});
+	});
+
+	return {
+		editions: editions,
+		ready: handle.ready() };
+
+
+}, CommentLemma);

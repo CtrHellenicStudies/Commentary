@@ -1,0 +1,23 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var Spinner = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'Spinner',
+
+	propTypes: {
+		fullPage: /* istanbul ignore next */_react2.default.PropTypes.bool }, /* istanbul ignore next */
+
+
+	render: function render() {
+		var className = 'ahcip-spinner commentary-loading';
+		if (this.props.fullPage) {
+			className += ' full-page-spinner';
+		}
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: className },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'double-bounce1' }),
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'double-bounce2' })));
+
+
+	} }); /* istanbul ignore next */exports.default =
+
+
+Spinner;

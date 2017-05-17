@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AvatarEditor renders correctly 1`] = `
+<div
+  className="dropzone"
+  onClick={[Function]}
+  onDragEnter={[Function]}
+  onDragLeave={[Function]}
+  onDragOver={[Function]}
+  onDragStart={[Function]}
+  onDrop={[Function]}
+  style={Object {}}
+>
+  <div
+    className="user-profile-picture-container"
+  >
+    <div
+      className="user-profile-picture"
+    >
+      <img
+        alt="avatar"
+        src=""
+      />
+      <div
+        className="upload-profile-picture"
+        onClick={undefined}
+      >
+        <i
+          className="mdi mdi-image-area"
+        />
+        <span
+          className="help-text"
+        >
+          Select to upload or drag and drop image.
+        </span>
+      </div>
+    </div>
+  </div>
+  <input
+    accept="image/*"
+    multiple={false}
+    onChange={[Function]}
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+    type="file"
+  />
+</div>
+`;

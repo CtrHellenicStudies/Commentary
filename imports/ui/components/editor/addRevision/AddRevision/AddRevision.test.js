@@ -1,17 +1,17 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-// component:
-import CommentGroupMeta from './CommentGroupMeta';
+// component
+import AddRevision from './AddRevision';
 
-describe('CommentGroupMeta', () => {
+describe('AddRevision', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentGroupMeta />)
+			.create(<AddRevision />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
-// TODO Fix work property null error
+// TODO Fix TypeError: Cannot read property 'revisions' of undefined

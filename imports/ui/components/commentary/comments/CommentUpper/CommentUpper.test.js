@@ -2,16 +2,14 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import CommentGroupMeta from './CommentGroupMeta';
+import CommentUpper from './CommentUpper';
 
-describe('CommentGroupMeta', () => {
+describe('CommentUpper', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentGroupMeta />)
+			.create(<CommentUpper title="" commentId="" commenters={[]} updateDate="" />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
-
-// TODO Fix work property null error

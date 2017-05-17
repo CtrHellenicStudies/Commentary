@@ -2,16 +2,16 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import CommentGroupMeta from './CommentGroupMeta';
+import AddKeyword from './AddKeyword';
 
-describe('CommentGroupMeta', () => {
+describe('AddKeyword', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentGroupMeta />)
+			.create(<AddKeyword />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
-// TODO Fix work property null error
+// TODO Fix TypeError: Cannot read property 'checked' of null

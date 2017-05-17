@@ -2,16 +2,14 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import CommentGroupMeta from './CommentGroupMeta';
+import CommentLemmaText from './CommentLemmaText';
 
-describe('CommentGroupMeta', () => {
+describe('CommentLemmaText', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentGroupMeta />)
+			.create(<CommentLemmaText lines={[]} />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
-
-// TODO Fix work property null error

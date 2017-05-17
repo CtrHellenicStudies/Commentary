@@ -2,16 +2,16 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import CommentGroupMeta from './CommentGroupMeta';
+import CommentBody from './CommentBody';
 
-describe('CommentGroupMeta', () => {
+describe('CommentBody', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentGroupMeta />)
+			.create(<CommentBody comment={{}} revisionIndex={1} />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
-// TODO Fix work property null error
+// TODO Fix length undefined error

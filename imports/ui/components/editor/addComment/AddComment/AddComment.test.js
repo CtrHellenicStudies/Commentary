@@ -2,16 +2,16 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import CommentGroupMeta from './CommentGroupMeta';
+import AddComment from './AddComment';
 
-describe('CommentGroupMeta', () => {
+describe('AddComment', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentGroupMeta />)
+			.create(<AddComment submitForm={() => {}} />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
-// TODO Fix work property null error
+// TODO Fix Invariant Violation: Missing leafNode

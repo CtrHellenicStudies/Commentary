@@ -2,16 +2,16 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import CommentGroupMeta from './CommentGroupMeta';
+import EditKeyword from './EditKeyword';
 
-describe('CommentGroupMeta', () => {
+describe('EditKeyword', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentGroupMeta />)
+			.create(<EditKeyword submitForm="" onTypeChange="" />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
-// TODO Fix work property null error
+// TODO Fix ReferenceError: ReactMeteorData is not defined

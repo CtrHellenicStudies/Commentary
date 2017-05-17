@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContextPanelText renders correctly 1`] = `
+<div
+  className="lemma-text-wrap"
+>
+  
+  
+</div>
+`;

@@ -8,7 +8,14 @@ describe('CommentLower', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentLower comment={{}} revisionIndex={1} />)
+			.create(<CommentLower
+				comment={{
+					revisions: [
+						{text: 'testText'}
+					]
+				}}
+				revisionIndex={0}
+			/>)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

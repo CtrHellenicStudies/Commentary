@@ -14,9 +14,5 @@ describe('CommentCitation', () => {
 	});
 });
 
-// TODO Fix error:
-// Warning: Failed context type: The context `muiTheme` is marked as required in `RaisedButton`, but its value is `undefined`.
-// 	in RaisedButton (created by CommentCitation)
-// in div (created by CommentCitation)
-// in CommentCitation
+// TODO Fix Invariant Violation: CommentCitation.getChildContext(): childContextTypes must be defined in order to use getChildContext().
 

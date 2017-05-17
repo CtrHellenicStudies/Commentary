@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommentLower renders correctly 1`] = `
+<div
+  className="comment-lower"
+>
+  <div
+    className="comment-body"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "testText",
+      }
+    }
+    onClick={null}
+  />
+</div>
+`;

@@ -1,5 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // component:
 import KeywordsDropdown from './KeyideasDropdown';
@@ -8,11 +9,15 @@ describe('KeywordsDropdown', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<KeywordsDropdown
-				toggleSearchDropdown={() => {}}
-				toggleSearchTerm={() => {}}
-				toggle={() => {}}
-			/>)
+			.create(
+				<MuiThemeProvider>
+					<KeywordsDropdown
+						toggleSearchDropdown={() => {}}
+						toggleSearchTerm={() => {}}
+						toggle={() => {}}
+					/>
+				</MuiThemeProvider>
+			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

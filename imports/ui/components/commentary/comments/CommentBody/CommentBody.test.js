@@ -8,10 +8,17 @@ describe('CommentBody', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentBody comment={{}} revisionIndex={1} />)
+			.create(<CommentBody
+				comment={{
+					revisions: [
+						{
+							text: 'testText'
+						}
+					]
+				}}
+				revisionIndex={0}
+			/>)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
-
-// TODO Fix length undefined error

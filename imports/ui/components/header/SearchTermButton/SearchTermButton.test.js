@@ -6,6 +6,7 @@ import { shallow } from 'enzyme';
 import chai from 'chai';
 import sinon from 'sinon';
 import renderer from 'react-test-renderer';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // component:
 import SearchTermButton from './SearchTermButton'; 
@@ -82,12 +83,14 @@ describe('SearchTermButton', () => {
 		const toggleSearchTerm = sinon.spy();
 		const tree = renderer
 			.create(
-				<SearchTermButton
-					toggleSearchTerm={toggleSearchTerm}
-					label="TestSearchterm"
-					searchTermKey="TestKey"
-					value={{ key: 'value' }}
-				/>
+				<MuiThemeProvider>
+					<SearchTermButton
+						toggleSearchTerm={toggleSearchTerm}
+						label="TestSearchterm"
+						searchTermKey="TestKey"
+						value={{ key: 'value' }}
+					/>
+				</MuiThemeProvider>
 			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();

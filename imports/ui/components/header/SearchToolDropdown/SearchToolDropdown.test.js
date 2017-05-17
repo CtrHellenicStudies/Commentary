@@ -7,6 +7,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import FlatButton from 'material-ui/FlatButton';
 import renderer from 'react-test-renderer';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // component:
 import SearchToolDropdown from './SearchToolDropdown'; 
@@ -94,14 +95,16 @@ describe('SearchToolDropdown', () => {
 		const toggle = sinon.spy();
 		const tree = renderer
 			.create(
-				<SearchToolDropdown
-					name="TestDropdown"
-					toggle={toggle}
-					open={false}
-					disabled={false}
-				>
-					<p>"children"</p>
-				</SearchToolDropdown>
+				<MuiThemeProvider>
+					<SearchToolDropdown
+						name="TestDropdown"
+						toggle={toggle}
+						open={false}
+						disabled={false}
+					>
+						<p>"children"</p>
+					</SearchToolDropdown>
+				</MuiThemeProvider>
 			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuItem renders correctly 1`] = `
+<a
+  className="menu-item"
+  href={undefined}
+  onClick={undefined}
+  style={
+    Object {
+      "display": "block",
+      "fontSize": "16px",
+      "padding": "15px 15px",
+      "width": "100%",
+    }
+  }
+  target={undefined}
+/>
+`;

@@ -8,11 +8,15 @@ describe('WorkVisualization', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<WorkVisualization work={{}} />)
+			.create(
+				<WorkVisualization
+					work={{
+						subworks: []
+					}}
+				/>)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
-// TODO Fix WorkVisualization: React.createClass is deprecated and will be removed in version 16. Use plain JavaScript classes instead. If you're not yet ready to migrate, create-react-class is available on npm as a drop-in replacement.
-
+// TODO Fix various d3 errors

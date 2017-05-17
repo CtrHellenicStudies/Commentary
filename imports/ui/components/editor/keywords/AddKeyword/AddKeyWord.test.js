@@ -8,10 +8,15 @@ describe('AddKeyword', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<AddKeyword />)
+			.create(
+				<AddKeyword
+					submitForm={() => {}}
+					onTypeChange={() => {}}
+				/>
+			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
-// TODO Fix TypeError: Cannot read property 'checked' of null
+// TODO Fix TypeError: Cannot read property 'checked' of null (draft.js?)

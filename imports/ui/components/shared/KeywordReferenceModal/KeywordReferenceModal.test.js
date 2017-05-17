@@ -2,16 +2,17 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import Home from './Home';
+import KeywordReferenceModal from './KeywordReferenceModal';
 
-describe('Home', () => {
+describe('KeywordReferenceModal', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<Home />)
+			.create(<KeywordReferenceModal />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
-// TODO Fix wowjs issue (is the script tag in the html?)
+// TODO Fix ReferenceError: ReactMeteorData is not defined
+

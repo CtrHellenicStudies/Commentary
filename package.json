@@ -42,6 +42,7 @@
     "material-ui": "^0.16.4",
     "mdi": "^1.6.50",
     "meteor-node-stubs": "^0.2.3",
+    "moment": "^2.18.1",
     "npm": "^3.10.9",
     "prerender-node": "^2.7.0",
     "pseries": "^2.0.0",

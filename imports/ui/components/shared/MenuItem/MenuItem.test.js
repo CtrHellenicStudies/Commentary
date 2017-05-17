@@ -2,16 +2,14 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import Home from './Home';
+import MenuItem from './MenuItem';
 
-describe('Home', () => {
+describe('MenuItem', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<Home />)
+			.create(<MenuItem />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
-
-// TODO Fix wowjs issue (is the script tag in the html?)

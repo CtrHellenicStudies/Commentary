@@ -41,9 +41,13 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
+
+// helpers:
+import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
 
 
 // Create toolbar plugin for editor
@@ -57,6 +61,7 @@ const inlineToolbarPlugin = createInlineToolbarPlugin({
 		UnorderedListButton,
 		OrderedListButton,
 		BlockquoteButton,
+		LinkButton,
 	]
 });
 const { InlineToolbar } = inlineToolbarPlugin;
@@ -182,14 +187,15 @@ const AddRevision = React.createClass({
 
 	_getRevisionEditorState(revision) {
 		if (revision.textRaw) {
-			return EditorState.createWithContent(convertFromRaw(revision.textRaw));
+			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
 		} else if (revision.text) {
 			const blocksFromHTML = convertFromHTML(revision.text);
 			return EditorState.createWithContent(
 				ContentState.createFromBlockArray(
 					blocksFromHTML.contentBlocks,
 					blocksFromHTML.entityMap
-				)
+				),
+				linkDecorator
 			);
 		}
 		console.error('missing filed text or textRaw in revision');
@@ -205,11 +211,10 @@ const AddRevision = React.createClass({
 	},
 
 	onTextChange(textEditorState) {
-		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		const newTextEditorState = EditorState.set(textEditorState, {decorator: linkDecorator});
 
 		this.setState({
-			textEditorState,
-			textValue: textHtml,
+			textEditorState: newTextEditorState,
 		});
 	},
 
@@ -318,6 +323,11 @@ const AddRevision = React.createClass({
 			// performe necessary html transformations:
 			entityToHTML: (entity, originalText) => {
 
+				// handle LINK
+				if (entity.type === 'LINK') {
+					return <a href={entity.data.link}>{originalText}</a>;
+				}
+
 				// handle keyword mentions
 				if (entity.type === 'mention') {
 					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
@@ -365,7 +375,7 @@ const AddRevision = React.createClass({
 		this.setState({
 			revision,
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text), linkDecorator),
 		});
 	},
 

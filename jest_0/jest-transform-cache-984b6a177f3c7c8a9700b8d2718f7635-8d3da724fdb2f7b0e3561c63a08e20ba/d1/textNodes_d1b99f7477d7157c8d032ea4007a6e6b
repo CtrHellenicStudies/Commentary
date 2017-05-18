@@ -1,0 +1,137 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_aldeedSimpleSchema = require('meteor/aldeed:simple-schema');
+
+var /* istanbul ignore next */_editions = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/editions'); /* istanbul ignore next */var _editions2 = _interopRequireDefault(_editions);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var TextNodes = new /* istanbul ignore next */_meteor.Meteor.Collection('textNodes');
+
+TextNodes.schema = new /* istanbul ignore next */_aldeedSimpleSchema.SimpleSchema({
+	tenantId: {
+		type: String,
+		optional: true },
+
+
+	text: {
+		type: [Object] },
+
+
+	'text.$.n': {
+		type: Number },
+
+	'text.$.text': {
+		type: String },
+
+	'text.$.html': {
+		type: String },
+
+	'text.$.edition': {
+		type: [/* istanbul ignore next */_editions2.default.schema] },
+
+
+	work: {
+		type: Object },
+
+
+	// 'work.id': { type: ObjectId }, // TODO: objectid type?
+
+	'work.slug': {
+		type: String },
+
+
+	subwork: {
+		type: Object },
+
+	'subwork.title': {
+		type: String },
+
+	'subwork.n': {
+		type: Number },
+
+
+	// entities: [] // TODO:
+	// "commentary" : [ ],
+	// 	"scansion" : [ ],
+	// 	"media" : [ ],
+	// 	"definitions" : [ ],
+	// 	"translations" : [ ],
+	// 	"articles" : [ ],
+
+	related_passages: {
+		type: [Object] } });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TextNodes.attachSchema(TextNodes.schema); /* istanbul ignore next */exports.default =
+
+TextNodes;

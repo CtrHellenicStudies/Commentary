@@ -6,7 +6,7 @@ const commentsCommentersIdsFix = () => {
 	comments.forEach((comment) => {
 		const commenters = comment.commenters;
 
-		commenters.forEach(commenter => {
+		commenters.forEach((commenter) => {
 			if (!commenter._id) {
 				const _commenter = Commenters.findOne({ slug: commenter.slug });
 				commenter._id = _commenter._id;

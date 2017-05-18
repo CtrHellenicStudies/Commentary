@@ -1,0 +1,415 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_RaisedButton = require('material-ui/RaisedButton'); /* istanbul ignore next */var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+var /* istanbul ignore next */_FontIcon = require('material-ui/FontIcon'); /* istanbul ignore next */var _FontIcon2 = _interopRequireDefault(_FontIcon);
+var /* istanbul ignore next */_Snackbar = require('material-ui/Snackbar'); /* istanbul ignore next */var _Snackbar2 = _interopRequireDefault(_Snackbar);
+
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+var /* istanbul ignore next */_draftJs = require('draft-js');
+var /* istanbul ignore next */_draftJsPluginsEditor = require('draft-js-plugins-editor'); /* istanbul ignore next */var _draftJsPluginsEditor2 = _interopRequireDefault(_draftJsPluginsEditor);
+var /* istanbul ignore next */_draftJsExportHtml = require('draft-js-export-html');
+var /* istanbul ignore next */_draftJsSingleLinePlugin = require('draft-js-single-line-plugin'); /* istanbul ignore next */var _draftJsSingleLinePlugin2 = _interopRequireDefault(_draftJsSingleLinePlugin);
+var /* istanbul ignore next */_RadioButton = require('material-ui/RadioButton');
+var /* istanbul ignore next */_immutable = require('immutable');
+var /* istanbul ignore next */_draftConvert = require('draft-convert');
+var /* istanbul ignore next */_draftJsMentionPlugin = require('draft-js-mention-plugin'); /* istanbul ignore next */var _draftJsMentionPlugin2 = _interopRequireDefault(_draftJsMentionPlugin);
+
+
+var /* istanbul ignore next */_commenters = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/commenters'); /* istanbul ignore next */var _commenters2 = _interopRequireDefault(_commenters);
+var /* istanbul ignore next */_keywords = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/keywords'); /* istanbul ignore next */var _keywords2 = _interopRequireDefault(_keywords);
+var /* istanbul ignore next */_referenceWorks = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/referenceWorks'); /* istanbul ignore next */var _referenceWorks2 = _interopRequireDefault(_referenceWorks);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);
+
+var /* istanbul ignore next */_draftJsInlineToolbarPlugin = require('draft-js-inline-toolbar-plugin'); /* istanbul ignore next */var _draftJsInlineToolbarPlugin2 = _interopRequireDefault(_draftJsInlineToolbarPlugin);
+var /* istanbul ignore next */_draftJsButtons = require('draft-js-buttons'); /* istanbul ignore next */function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // api
+
+
+
+
+
+
+
+
+
+
+
+
+
+var singleLinePlugin = /* istanbul ignore next */(0, _draftJsSingleLinePlugin2.default)(); // lib
+var inlineToolbarPlugin = /* istanbul ignore next */(0, _draftJsInlineToolbarPlugin2.default)({
+	structure: [/* istanbul ignore next */_draftJsButtons.BoldButton, /* istanbul ignore next */_draftJsButtons.ItalicButton, /* istanbul ignore next */_draftJsButtons.UnderlineButton, /* istanbul ignore next */_draftJsButtons.CodeButton, /* istanbul ignore next */_draftJsInlineToolbarPlugin.Separator, /* istanbul ignore next */_draftJsButtons.HeadlineOneButton, /* istanbul ignore next */_draftJsButtons.HeadlineTwoButton, /* istanbul ignore next */_draftJsButtons.HeadlineThreeButton, /* istanbul ignore next */_draftJsButtons.UnorderedListButton, /* istanbul ignore next */_draftJsButtons.OrderedListButton, /* istanbul ignore next */_draftJsButtons.BlockquoteButton, /* istanbul ignore next */_draftJsButtons.CodeBlockButton] }); /* istanbul ignore next */var
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+InlineToolbar = inlineToolbarPlugin.InlineToolbar;
+var mentionPlugin = /* istanbul ignore next */(0, _draftJsMentionPlugin2.default)(); /* istanbul ignore next */var
+MentionSuggestions = mentionPlugin.MentionSuggestions;
+
+var AddKeyword = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'AddKeyword',
+
+	propTypes: {
+		selectedLineFrom: /* istanbul ignore next */_react2.default.PropTypes.number,
+		selectedLineTo: /* istanbul ignore next */_react2.default.PropTypes.number,
+		submitForm: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+		onTypeChange: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+		keywordsOptions: /* istanbul ignore next */_react2.default.PropTypes.array,
+		keyideasOptions: /* istanbul ignore next */_react2.default.PropTypes.array },
+
+
+	childContextTypes: {
+		muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+
+	getInitialState: function getInitialState() {
+		return {
+			titleEditorState: /* istanbul ignore next */_draftJs.EditorState.createEmpty(),
+			textEditorState: /* istanbul ignore next */_draftJs.EditorState.createEmpty(),
+
+			commenterValue: null,
+			titleValue: '',
+			textValue: '',
+			referenceWorksValue: null,
+			keywordsValue: null,
+			keyideasValue: null,
+
+			snackbarOpen: false,
+			snackbarMessage: '',
+
+			suggestions: /* istanbul ignore next */(0, _immutable.fromJS)([]) };
+
+	}, /* istanbul ignore next */
+
+	getChildContext: function getChildContext() {
+		return { muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+	}, /* istanbul ignore next */
+
+
+	onTitleChange: function onTitleChange(titleEditorState) {
+		var titleHtml = /* istanbul ignore next */(0, _draftJsExportHtml.stateToHTML)(this.state.titleEditorState.getCurrentContent());
+		var title = jQuery(titleHtml).text();
+		this.setState({
+			titleEditorState: titleEditorState,
+			titleValue: title });
+
+	}, /* istanbul ignore next */
+
+	onTextChange: function onTextChange(textEditorState) {
+		var textHtml = '';
+		textHtml = /* istanbul ignore next */(0, _draftJsExportHtml.stateToHTML)(this.state.textEditorState.getCurrentContent());
+
+		this.setState({
+			textEditorState: textEditorState,
+			textValue: textHtml });
+
+	}, /* istanbul ignore next */
+
+	onTypeChange: function onTypeChange(e, type) {
+		this.props.onTypeChange(type);
+	}, /* istanbul ignore next */
+
+	onKeywordsValueChange: function onKeywordsValueChange(keywords) {
+		this.setState({
+			keywordsValue: keywords });
+
+	}, /* istanbul ignore next */
+
+	onKeyideasValueChange: function onKeyideasValueChange(keyidea) {
+		this.setState({
+			keyideasValue: keyidea });
+
+	}, /* istanbul ignore next */
+
+	onNewOptionCreator: function onNewOptionCreator(newOption) {
+		return {
+			label: newOption.label,
+			value: newOption.label };
+
+	}, /* istanbul ignore next */
+
+	onCommenterValueChange: function onCommenterValueChange(comenter) {
+		this.setState({
+			commenterValue: comenter });
+
+	}, /* istanbul ignore next */
+
+	onSearchChange: function onSearchChange(_ref) {/* istanbul ignore next */var value = _ref.value;
+		var keywordSuggestions = [];
+		var keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
+		keywords.forEach(function (keyword) {
+			keywordSuggestions.push({
+				name: keyword.label,
+				link: /* istanbul ignore next */'/keywords/' + keyword.slug });
+
+		});
+
+		this.setState({
+			suggestions: /* istanbul ignore next */(0, _draftJsMentionPlugin.defaultSuggestionsFilter)(value, /* istanbul ignore next */(0, _immutable.fromJS)(keywordSuggestions)) });
+
+	}, /* istanbul ignore next */
+
+	shouldKeyDownEventCreateNewOption: function shouldKeyDownEventCreateNewOption(sig) {
+		if (sig.keyCode === 13 ||
+		sig.keyCode === 188) {
+			return true;
+		}
+
+		return false;
+	}, /* istanbul ignore next */
+
+	isOptionUnique: function isOptionUnique(newOption) {
+		var keywordsOptions = this.props.keywordsOptions;
+		var keyideasOptions = this.props.keyideasOptions;
+		var keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
+		var keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
+		var BreakException = {};
+		try {
+			keywordsOptions.forEach(function (keywordsOption) {
+				if (keywordsOption.label === newOption.option.label) throw BreakException;
+			});
+			keyideasOptions.forEach(function (keyideasOption) {
+				if (keyideasOption.label === newOption.option.label) throw BreakException;
+			});
+			keywordsValue.forEach(function (keywordValue) {
+				if (keywordValue.label === newOption.option.label) throw BreakException;
+			});
+			keyideasValue.forEach(function (keyideaValue) {
+				if (keyideaValue.label === newOption.option.label) throw BreakException;
+			});
+		} catch (e) {
+			if (e === BreakException) return false;
+		}
+		return true;
+	}, /* istanbul ignore next */
+
+	handleSubmit: function handleSubmit(event) {/* istanbul ignore next */var
+		textEditorState = this.state.textEditorState;
+
+		event.preventDefault();
+
+		var error = this.validateStateForSubmit();
+
+		this.showSnackBar(error);
+
+		var textHtml = /* istanbul ignore next */(0, _draftConvert.convertToHTML)({
+			entityToHTML: function /* istanbul ignore next */entityToHTML(entity, originalText) {
+				if (entity.type === 'mention') {
+					return (/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ className: 'keyword-gloss', /* istanbul ignore next */'data-link': Utils.getEntityData(entity, 'link') }, originalText));
+				}
+			} })(
+		textEditorState.getCurrentContent());
+
+		var textRaw = /* istanbul ignore next */(0, _draftJs.convertToRaw)(textEditorState.getCurrentContent());
+
+		if (!error.errors) {
+			this.props.submitForm(this.state, textHtml, textRaw);
+		}
+	}, /* istanbul ignore next */
+
+	showSnackBar: function showSnackBar(error) {/* istanbul ignore next */var _this = this;
+		console.log(error);
+		this.setState({
+			snackbarOpen: error.errors,
+			snackbarMessage: error.errorMessage });
+
+		setTimeout(function () {
+			/* istanbul ignore next */_this.setState({
+				snackbarOpen: false });
+
+		}, 4000);
+	}, /* istanbul ignore next */
+
+	validateStateForSubmit: function validateStateForSubmit() {
+		var errors = false;
+		var errorMessage = 'Missing keyword data:';
+		if (!this.state.titleValue) {
+			errors = true;
+			errorMessage += ' Keyword or Key Idea,';
+		}
+
+		if (errors === true) {
+			errorMessage = errorMessage.slice(0, -1);
+			errorMessage += '.';
+		}
+
+		return {
+			errors: errors,
+			errorMessage: errorMessage };
+
+	}, /* istanbul ignore next */
+
+	// --- END SUBMIT / VALIDATION HANDLE --- //
+	render: function render() {/* istanbul ignore next */var _this2 = this;
+		var styles = {
+			block: {
+				maxWidth: 250 },
+
+			radioButton: {
+				marginBottom: 16 } };
+
+
+
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comments lemma-panel-visible' },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-outer' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'article', /* istanbul ignore next */{
+							className: 'comment commentary-comment paper-shadow ',
+							style: { marginLeft: 0 } },
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-upper' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h1', /* istanbul ignore next */{ className: 'add-comment-title' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_draftJsPluginsEditor2.default, /* istanbul ignore next */{
+									editorState: this.state.titleEditorState,
+									onChange: this.onTitleChange,
+									placeholder: 'Key word or idea . . .',
+									spellCheck: /* istanbul ignore next */true,
+									stripPastedStyles: /* istanbul ignore next */true,
+									plugins: [singleLinePlugin],
+									blockRenderMap: singleLinePlugin.blockRenderMap })),
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RadioButton.RadioButtonGroup, /* istanbul ignore next */{
+									className: 'keyword-type-toggle',
+									name: 'type',
+									defaultSelected: 'word',
+									onChange: this.onTypeChange },
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RadioButton.RadioButton, /* istanbul ignore next */{
+									value: 'word',
+									label: 'Word',
+									style: styles.radioButton,
+									className: 'keyword-type-radio' }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RadioButton.RadioButton, /* istanbul ignore next */{
+									value: 'idea',
+									label: 'Idea',
+									style: styles.radioButton,
+									className: 'keyword-type-radio' }))),
+
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+								className: 'comment-lower',
+								style: { paddingTop: 20 } },
+
+
+
+
+
+
+
+
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_draftJsPluginsEditor2.default, /* istanbul ignore next */{
+								editorState: this.state.textEditorState,
+								onChange: this.onTextChange,
+								placeholder: 'Keyword description . . .',
+								spellCheck: /* istanbul ignore next */true,
+								stripPastedStyles: /* istanbul ignore next */true,
+								plugins: [mentionPlugin, inlineToolbarPlugin],
+								ref: function /* istanbul ignore next */ref(element) {/* istanbul ignore next */_this2.editor = element;} }),
+
+							/* istanbul ignore next */_react2.default.createElement(MentionSuggestions, /* istanbul ignore next */{
+								onSearchChange: this.onSearchChange,
+								suggestions: this.state.suggestions }),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-edit-action-button' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+									type: 'submit',
+									label: 'Add Keyword',
+									labelPosition: 'after',
+									onClick: this.handleSubmit,
+									icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-plus' }) })))),
+
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Snackbar2.default, /* istanbul ignore next */{
+						className: 'add-comment-snackbar',
+						open: this.state.snackbarOpen,
+						message: this.state.snackbarMessage,
+						autoHideDuration: 4000 })),
+
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'inline-toolbar-wrap' },
+					/* istanbul ignore next */_react2.default.createElement(InlineToolbar, /* istanbul ignore next */null))));
+
+
+
+	} });
+
+
+var AddKeywordContainer = /* istanbul ignore next */(0, _reactMeteorData.createContainer)(function () {
+	/* istanbul ignore next */_meteor.Meteor.subscribe('keywords.all', { tenantId: /* istanbul ignore next */_session.Session.get('tenantId') });
+	var keywordsOptions = [];
+	var keywords = /* istanbul ignore next */_keywords2.default.find({ type: 'word' }).fetch();
+	keywords.forEach(function (keyword) {
+		keywordsOptions.push({
+			value: keyword.title,
+			label: keyword.title,
+			slug: keyword.slug });
+
+	});
+
+	var keyideasOptions = [];
+	var keyideas = /* istanbul ignore next */_keywords2.default.find({ type: 'idea' }).fetch();
+	keyideas.forEach(function (keyidea) {
+		keyideasOptions.push({
+			value: keyidea.title,
+			label: keyidea.title,
+			slug: keyidea.slug });
+
+	});
+
+	/* istanbul ignore next */_meteor.Meteor.subscribe('referenceWorks');
+	var referenceWorksOptions = [];
+	var referenceWorks = /* istanbul ignore next */_referenceWorks2.default.find().fetch();
+	referenceWorks.forEach(function (referenceWork) {
+		referenceWorksOptions.push({
+			value: referenceWork._id,
+			label: referenceWork.title });
+
+	});
+
+	/* istanbul ignore next */_meteor.Meteor.subscribe('commenters', /* istanbul ignore next */_session.Session.get('tenantId'));
+	var commentersOptions = [];
+	var commenters = [];
+	if ( /* istanbul ignore next */_meteor.Meteor.user() && /* istanbul ignore next */_meteor.Meteor.user().canEditCommenters) {
+		commenters = /* istanbul ignore next */_commenters2.default.find({ _id: { $in: /* istanbul ignore next */_meteor.Meteor.user().canEditCommenters } }).fetch();
+	}
+	commenters.forEach(function (commenter) {
+		commentersOptions.push({
+			value: commenter._id,
+			label: commenter.name });
+
+	});
+
+	return {
+		keywordsOptions: keywordsOptions,
+		keyideasOptions: keyideasOptions,
+		referenceWorksOptions: referenceWorksOptions,
+		commentersOptions: commentersOptions };
+
+
+}, AddKeyword); /* istanbul ignore next */exports.default =
+
+AddKeywordContainer;

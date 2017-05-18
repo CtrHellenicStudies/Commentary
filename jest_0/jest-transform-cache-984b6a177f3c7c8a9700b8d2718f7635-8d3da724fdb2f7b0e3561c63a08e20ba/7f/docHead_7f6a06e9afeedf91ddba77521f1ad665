@@ -1,0 +1,5 @@
+/* istanbul ignore next */"use strict";Object.defineProperty(exports, "__esModule", { value: true });var DocHead = { // eslint-disable-line
+	addMeta: function /* istanbul ignore next */addMeta() {} }; /* istanbul ignore next */exports.default =
+
+
+DocHead;

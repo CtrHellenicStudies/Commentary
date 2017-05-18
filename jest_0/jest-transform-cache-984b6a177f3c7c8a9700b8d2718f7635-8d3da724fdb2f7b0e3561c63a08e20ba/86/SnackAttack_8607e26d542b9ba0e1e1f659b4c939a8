@@ -1,0 +1,73 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });exports.SnackAttack = undefined;var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();exports.
+
+
+
+
+sendSnack = sendSnack;var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);var /* istanbul ignore next */_Snackbar = require('material-ui/Snackbar'); /* istanbul ignore next */var _Snackbar2 = _interopRequireDefault(_Snackbar);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}var mountedAttacks = new Set();function sendSnack(msg) {
+	if (mountedAttacks.size > 1) {
+		console.warn('Too many SnackAttacks.', mountedAttacks);
+	} else if (mountedAttacks.size === 0) {
+		console.warn('Tried to send snack, but no SnackAttacks.', msg);
+	} /* istanbul ignore next */var _iteratorNormalCompletion = true;var _didIteratorError = false;var _iteratorError = undefined;try {
+
+		for ( /* istanbul ignore next */var _iterator = mountedAttacks[Symbol.iterator](), _step; /* istanbul ignore next */!(_iteratorNormalCompletion = (_step = _iterator.next()).done); /* istanbul ignore next */_iteratorNormalCompletion = true) {/* istanbul ignore next */var sa = _step.value;
+			sa.showSnack(msg);
+		}} catch (err) {_didIteratorError = true;_iteratorError = err;} finally {try {if (!_iteratorNormalCompletion && _iterator.return) {_iterator.return();}} finally {if (_didIteratorError) {throw _iteratorError;}}}
+} /* istanbul ignore next */var
+
+SnackAttack = exports.SnackAttack = function (_React$Component) {_inherits(SnackAttack, _React$Component);
+	function /* istanbul ignore next */SnackAttack(props) {/* istanbul ignore next */_classCallCheck(this, SnackAttack);var _this = _possibleConstructorReturn(this, (SnackAttack.__proto__ || Object.getPrototypeOf(SnackAttack)).call(this,
+		props));
+
+		/* istanbul ignore next */_this.state = {
+			open: false,
+			message: '',
+			actionLabel: null,
+			actionCallback: null };
+
+
+		/* istanbul ignore next */_this.handleRequestClose = /* istanbul ignore next */_this.handleRequestClose.bind( /* istanbul ignore next */_this); /* istanbul ignore next */return _this;
+	}_createClass(SnackAttack, [{ key: 'componentDidMount', value: function componentDidMount()
+
+		{
+			mountedAttacks.add(this);
+		} }, { key: 'componentWillUnmount', value: function componentWillUnmount()
+
+		{
+			mountedAttacks.delete(this);
+		} }, { key: 'showSnack', value: function showSnack(
+
+		message) {/* istanbul ignore next */var actionLabel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null; /* istanbul ignore next */var actionCallback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+			this.setState({
+				open: true,
+				message: message,
+				actionLabel: actionLabel,
+				actionCallback: actionCallback });
+
+		} }, { key: 'handleRequestClose', value: function handleRequestClose()
+
+		{
+			this.setState({ open: false });
+		} }, { key: 'render', value: function render()
+
+		{
+			return (
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Snackbar2.default, /* istanbul ignore next */{
+					className: 'snackAttack',
+					autoHideDuration: this.props.autoHideDuration,
+					open: this.state.open,
+					message: this.state.message,
+					onRequestClose: this.handleRequestClose,
+					action: this.state.actionLabel,
+					onActionTouchTap: this.state.actionCallback }));
+
+
+		} }]);return SnackAttack;}( /* istanbul ignore next */_react2.default.Component);
+
+
+SnackAttack.propTypes = {
+	autoHideDuration: /* istanbul ignore next */_react2.default.PropTypes.number };
+
+
+SnackAttack.defaultProps = {
+	autoHideDuration: 4000 };

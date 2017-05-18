@@ -59,7 +59,7 @@ const CommentaryLayout = React.createClass({
 	getFilterValue(filters, key) {
 		let value = {};
 		if (filters) {
-			const filterKey = filters.find((filter) => filter.key === key);
+			const filterKey = filters.find(filter => filter.key === key);
 			if (filterKey) {
 				value = filterKey.values[0];
 			}

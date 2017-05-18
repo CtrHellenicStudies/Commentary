@@ -1,0 +1,47 @@
+/* istanbul ignore next */"use strict";Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require("react"); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var OAuthButtons = function OAuthButtons( /* istanbul ignore next */_ref) /* istanbul ignore next */{var handleFacebook = _ref.handleFacebook,handleGoogle = _ref.handleGoogle,handleTwitter = _ref.handleTwitter;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */"div", /* istanbul ignore next */{ className: "at-oauth" },
+			handleFacebook &&
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */"button", /* istanbul ignore next */{
+					className: "btn at-social-btn",
+					id: "at-facebook",
+					name: "facebook",
+					onClick: handleFacebook },
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */"i", /* istanbul ignore next */{ className: "fa fa-facebook" }), /* istanbul ignore next */" Sign In with Facebook"),
+
+
+			handleGoogle &&
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */"button", /* istanbul ignore next */{
+					className: "btn at-social-btn",
+					id: "at-google",
+					name: "google",
+					onClick: handleGoogle },
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */"i", /* istanbul ignore next */{ className: "fa fa-google" }), /* istanbul ignore next */" Sign In with Google"),
+
+
+			handleTwitter &&
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */"button", /* istanbul ignore next */{
+					className: "btn at-social-btn",
+					id: "at-twitter",
+					name: "twitter",
+					onClick: handleTwitter },
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */"i", /* istanbul ignore next */{ className: "fa fa-twitter" }), /* istanbul ignore next */" Sign In with Twitter")));};
+
+
+
+OAuthButtons.propTypes = {
+	handleFacebook: /* istanbul ignore next */_react2.default.PropTypes.func,
+	handleGoogle: /* istanbul ignore next */_react2.default.PropTypes.func,
+	handleTwitter: /* istanbul ignore next */_react2.default.PropTypes.func };
+
+OAuthButtons.defaultProps = {
+	handleFacebook: null,
+	handleGoogle: null,
+	handleTwitter: null }; /* istanbul ignore next */exports.default =
+
+
+OAuthButtons;

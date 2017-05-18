@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommentUpper renders correctly 1`] = `
+<div
+  className="comment-upper"
+>
+  <div
+    className="comment-upper-left"
+  >
+    <h1>
+      
+    </h1>
+  </div>
+  <div
+    className="comment-upper-right"
+  />
+</div>
+`;

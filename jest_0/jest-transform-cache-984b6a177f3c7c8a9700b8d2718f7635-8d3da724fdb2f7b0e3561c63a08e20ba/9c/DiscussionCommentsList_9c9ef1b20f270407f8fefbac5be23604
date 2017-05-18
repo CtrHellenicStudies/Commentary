@@ -1,0 +1,33 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_DiscussionCommentTeaser = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/discussionComments/DiscussionCommentTeaser'); /* istanbul ignore next */var _DiscussionCommentTeaser2 = _interopRequireDefault(_DiscussionCommentTeaser);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+// List of discussionComments
+var DiscussionCommentsList = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'DiscussionCommentsList',
+
+	propTypes: {
+		discussionComments: /* istanbul ignore next */_react2.default.PropTypes.array }, /* istanbul ignore next */
+
+
+	render: function render() {/* istanbul ignore next */var
+		discussionComments = this.props.discussionComments;
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-comments-list' },
+				discussionComments.map(function (discussionComment, i) /* istanbul ignore next */{return (
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_DiscussionCommentTeaser2.default, /* istanbul ignore next */{
+							key: i,
+							discussionComment: discussionComment }));}),
+
+
+				!discussionComments.length ?
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{ className: 'no-results' }, /* istanbul ignore next */'No comments found.') :
+				''));
+
+
+
+
+	} }); /* istanbul ignore next */exports.default =
+
+
+
+DiscussionCommentsList;

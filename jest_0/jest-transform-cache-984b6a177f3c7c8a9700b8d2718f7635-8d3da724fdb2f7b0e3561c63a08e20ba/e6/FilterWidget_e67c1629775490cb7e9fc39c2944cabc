@@ -1,0 +1,59 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_RaisedButton = require('material-ui/RaisedButton'); /* istanbul ignore next */var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+var /* istanbul ignore next */_FontIcon = require('material-ui/FontIcon'); /* istanbul ignore next */var _FontIcon2 = _interopRequireDefault(_FontIcon);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+/*
+                                                                                                                                                                                                                                                      	helpers
+                                                                                                                                                                                                                                                      */
+var styles = {
+	iconStyle: {
+		fontSize: 18,
+		color: '#666' } };
+
+
+
+
+var FilterWidget = function FilterWidget( /* istanbul ignore next */_ref) /* istanbul ignore next */{var filters = _ref.filters,toggleSearchTerm = _ref.toggleSearchTerm;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'filters' },
+			filters.map(function (filter, i) /* istanbul ignore next */{return ['lineFrom', 'lineTo'].indexOf(filter.key) < 0 ?
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+						key: i,
+						className: 'filter ' },
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'filter-key paper-shadow' }, filter.key),
+					filter.values.map(function (val, j) {
+						// commenters query through URL fix:
+						if (filter.key === 'commenters' && !val.name && val.wordpressId) {
+							var foundCommenter = Commenters.findOne({ wordpressId: val.wordpressId });
+							if (foundCommenter) {
+								filters[i][j].name = foundCommenter.name;
+							}
+						}
+						return (
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+								key: j,
+								labelPosition: 'before',
+								className: 'filter-val ',
+								label: (val.title || val.name || val.slug || val.toString()).replace('-', ' '),
+								onClick: toggleSearchTerm.bind(null, filter.key, val),
+								icon:
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{
+									className: 'mdi mdi-close mdi-18px',
+									style: styles.iconStyle }) }));
+
+
+
+
+					})) :
+
+				'';})));};
+
+
+
+
+FilterWidget.propTypes = {
+	filters: /* istanbul ignore next */_react2.default.PropTypes.array.isRequired,
+	toggleSearchTerm: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired }; /* istanbul ignore next */exports.default =
+
+
+FilterWidget;

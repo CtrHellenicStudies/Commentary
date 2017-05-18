@@ -1,0 +1,436 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_alanningRoles = require('meteor/alanning:roles');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_slugify = require('slugify'); /* istanbul ignore next */var _slugify2 = _interopRequireDefault(_slugify);
+var /* istanbul ignore next */_MuiThemeProvider = require('material-ui/styles/MuiThemeProvider'); /* istanbul ignore next */var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+var /* istanbul ignore next */_reactCookie = require('react-cookie'); /* istanbul ignore next */var _reactCookie2 = _interopRequireDefault(_reactCookie);
+var /* istanbul ignore next */_keywords = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/keywords'); /* istanbul ignore next */var _keywords2 = _interopRequireDefault(_keywords);
+
+
+var /* istanbul ignore next */_Header = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/layouts/header/Header'); /* istanbul ignore next */var _Header2 = _interopRequireDefault(_Header);
+
+
+var /* istanbul ignore next */_Spinner = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/loading/Spinner'); /* istanbul ignore next */var _Spinner2 = _interopRequireDefault(_Spinner);
+var /* istanbul ignore next */_FilterWidget = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commentary/FilterWidget'); /* istanbul ignore next */var _FilterWidget2 = _interopRequireDefault(_FilterWidget);
+var /* istanbul ignore next */_CommentLemmaSelect = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/editor/addComment/CommentLemmaSelect'); /* istanbul ignore next */var _CommentLemmaSelect2 = _interopRequireDefault(_CommentLemmaSelect);
+var /* istanbul ignore next */_EditKeyword = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/editor/keywords/EditKeyword'); /* istanbul ignore next */var _EditKeyword2 = _interopRequireDefault(_EditKeyword);
+var /* istanbul ignore next */_ContextPanel = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/layouts/commentary/ContextPanel'); /* istanbul ignore next */var _ContextPanel2 = _interopRequireDefault(_ContextPanel);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // components
+
+
+var EditKeywordLayout = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'EditKeywordLayout',
+
+	propTypes: {
+		slug: /* istanbul ignore next */_react2.default.PropTypes.string,
+		ready: /* istanbul ignore next */_react2.default.PropTypes.bool,
+		keyword: /* istanbul ignore next */_react2.default.PropTypes.object },
+
+
+	childContextTypes: {
+		muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+
+	getInitialState: function getInitialState() {
+		return {
+			filters: [],
+			selectedLineFrom: 0,
+			selectedLineTo: 0,
+			selectedType: 'word',
+			loading: false,
+			snackbarOpen: false,
+			snackbarMessage: '',
+			contextReaderOpen: true };
+
+	}, /* istanbul ignore next */
+
+	getChildContext: function getChildContext() {
+		return { muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+	}, /* istanbul ignore next */
+
+	componentWillUpdate: function componentWillUpdate() {
+		if (this.props.ready) this.handlePermissions();
+	}, /* istanbul ignore next */
+
+	handlePermissions: function handlePermissions() {
+		if ( /* istanbul ignore next */_alanningRoles.Roles.subscription.ready()) {
+			if (! /* istanbul ignore next */_alanningRoles.Roles.userIsInRole( /* istanbul ignore next */_meteor.Meteor.userId(), ['editor', 'admin', 'commenter'])) {
+				FlowRouter.go('/');
+			}
+		}
+	}, /* istanbul ignore next */
+
+	updateSelectedLines: function updateSelectedLines(selectedLineFrom, selectedLineTo) {
+		if (selectedLineFrom === null) {
+			this.setState({
+				selectedLineTo: selectedLineTo });
+
+		} else if (selectedLineTo === null) {
+			this.setState({
+				selectedLineFrom: selectedLineFrom });
+
+		} else if (selectedLineTo != null && selectedLineTo != null) {
+			this.setState({
+				selectedLineFrom: selectedLineFrom,
+				selectedLineTo: selectedLineTo });
+
+		} else {
+			// do nothing
+		}
+	}, /* istanbul ignore next */
+
+	toggleSearchTerm: function toggleSearchTerm(key, value) {
+		var filters = this.state.filters;
+		var keyIsInFilter = false;
+		var valueIsInFilter = false;
+		var filterValueToRemove = /* istanbul ignore next */void 0;
+		var filterToRemove = /* istanbul ignore next */void 0;
+
+		filters.forEach(function (filter, i) {
+			if (filter.key === key) {
+				keyIsInFilter = true;
+
+				filter.values.forEach(function (filterValue, j) {
+					if (filterValue._id === value._id) {
+						valueIsInFilter = true;
+						filterValueToRemove = j;
+					}
+				});
+
+				if (valueIsInFilter) {
+					filter.values.splice(filterValueToRemove, 1);
+					if (filter.values.length === 0) {
+						filterToRemove = i;
+					}
+				} else if (key === 'works') {
+					filters[i].values = [value];
+				} else {
+					filter.values.push(value);
+				}
+			}
+		});
+
+
+		if (typeof filterToRemove !== 'undefined') {
+			filters.splice(filterToRemove, 1);
+		}
+
+		if (!keyIsInFilter) {
+			filters.push({
+				key: key,
+				values: [value] });
+
+		}
+
+		this.setState({
+			filters: filters,
+			skip: 0 });
+
+	}, /* istanbul ignore next */
+
+	updateKeyword: function updateKeyword(formData, textValue, textRawValue) {/* istanbul ignore next */var _this = this;
+		this.setState({
+			loading: true });
+
+
+		// get data for keyword :
+		var work = this.getWork();
+		var subwork = this.getSubwork();
+		var lineLetter = this.getLineLetter();
+		var selectedLineTo = this.getSelectedLineTo();
+		var type = this.getType();
+		var token = /* istanbul ignore next */_reactCookie2.default.load('loginToken'); /* istanbul ignore next */var
+		keyword = this.props.keyword;
+
+		// create keyword object to be inserted:
+		var keywordCandidate = {
+			work: {
+				title: work.title,
+				slug: work.slug,
+				order: work.order },
+
+			subwork: {
+				title: subwork.title,
+				n: subwork.n },
+
+			lineFrom: this.state.selectedLineFrom || this.props.keyword.lineFrom,
+			lineTo: selectedLineTo || this.props.keyword.lineTo,
+			lineLetter: lineLetter,
+			title: formData.titleValue,
+			slug: /* istanbul ignore next */(0, _slugify2.default)(formData.titleValue.toLowerCase()),
+			description: textValue,
+			descriptionRaw: textRawValue,
+			type: this.state.selectedType,
+			tenantId: /* istanbul ignore next */_session.Session.get('tenantId'),
+			count: 1 };
+
+
+		/* istanbul ignore next */_meteor.Meteor.call('keywords.update', token, keyword._id, keywordCandidate, function (error) {
+			if (error) {
+				/* istanbul ignore next */_this.showSnackBar(error);
+			} else {
+				FlowRouter.go( /* istanbul ignore next */'/keywords/' + keywordCandidate.slug);
+			}
+		});
+	}, /* istanbul ignore next */
+
+	showSnackBar: function showSnackBar(error) {/* istanbul ignore next */var _this2 = this;
+		this.setState({
+			snackbarOpen: error.errors,
+			snackbarMessage: error.errorMessage });
+
+		setTimeout(function () {
+			/* istanbul ignore next */_this2.setState({
+				snackbarOpen: false });
+
+		}, 4000);
+	}, /* istanbul ignore next */
+
+	getWork: function getWork() {
+		var work = null;
+		this.state.filters.forEach(function (filter) {
+			if (filter.key === 'work') {
+				work = values[0];
+			}
+		});
+		if (!work) {
+			work = {
+				title: 'Iliad',
+				slug: 'iliad',
+				order: 1 };
+
+		}
+		return work;
+	}, /* istanbul ignore next */
+
+	getSubwork: function getSubwork() {
+		var subwork = null;
+		this.state.filters.forEach(function (filter) {
+			if (filter.key === 'subwork') {
+				subwork = values[0];
+			}
+		});
+		if (!subwork) {
+			subwork = {
+				title: '1',
+				n: 1 };
+
+		}
+		return subwork;
+	}, /* istanbul ignore next */
+
+	getLineLetter: function getLineLetter() {
+		var lineLetter = '';
+		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
+			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
+		}
+		return lineLetter;
+	}, /* istanbul ignore next */
+
+	getCommenter: function getCommenter(formData) {
+		var commenter = null;
+		if ( /* istanbul ignore next */_meteor.Meteor.user().canEditCommenters.length > 1) {
+			commenter = Commenters.findOne({
+				_id: formData.commenterValue.value });
+
+		} else {
+			commenter = Commenters.find({
+				_id: /* istanbul ignore next */_meteor.Meteor.user().canEditCommenters });
+
+		}
+		return commenter;
+	}, /* istanbul ignore next */
+
+	getSelectedLineTo: function getSelectedLineTo() {
+		var selectedLineTo = 0;
+		if (this.state.selectedLineTo === 0) {
+			selectedLineTo = this.state.selectedLineFrom;
+		} else {
+			selectedLineTo = this.state.selectedLineTo;
+		}
+		return selectedLineTo;
+	}, /* istanbul ignore next */
+
+	getType: function getType() {
+		return this.state.selectedType;
+	}, /* istanbul ignore next */
+
+	lineLetterUpdate: function lineLetterUpdate(value) {
+		this.setState({
+			lineLetter: value });
+
+	}, /* istanbul ignore next */
+
+	onTypeChange: function onTypeChange(type) {
+		this.setState({
+			selectedType: type });
+
+	}, /* istanbul ignore next */
+
+	handleChangeLineN: function handleChangeLineN(e) {
+		var filters = this.state.filters;
+
+		if (e.from > 1) {
+			var lineFromInFilters = false;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineFrom') {
+					filters[i].values = [e.from];
+					lineFromInFilters = true;
+				}
+			});
+
+			if (!lineFromInFilters) {
+				filters.push({
+					key: 'lineFrom',
+					values: [e.from] });
+
+			}
+		} else {
+			var filterToRemove = /* istanbul ignore next */void 0;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineFrom') {
+					filterToRemove = i;
+				}
+			});
+
+			if (typeof filterToRemove !== 'undefined') {
+				filters.splice(filterToRemove, 1);
+			}
+		}
+
+		if (e.to < 2100) {
+			var lineToInFilters = false;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineTo') {
+					filters[i].values = [e.to];
+					lineToInFilters = true;
+				}
+			});
+
+			if (!lineToInFilters) {
+				filters.push({
+					key: 'lineTo',
+					values: [e.to] });
+
+			}
+		} else {
+			var _filterToRemove = /* istanbul ignore next */void 0;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineTo') {
+					_filterToRemove = i;
+				}
+			});
+
+			if (typeof _filterToRemove !== 'undefined') {
+				filters.splice(_filterToRemove, 1);
+			}
+		}
+
+		this.setState({
+			filters: filters });
+
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var _this3 = this;
+		var filters = this.state.filters; /* istanbul ignore next */var _props =
+		this.props,ready = _props.ready,keyword = _props.keyword;
+		var work = /* istanbul ignore next */void 0;
+		var subwork = /* istanbul ignore next */void 0;
+		var lineFrom = /* istanbul ignore next */void 0;
+		var lineTo = /* istanbul ignore next */void 0;
+
+		filters.forEach(function (filter) {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			} else if (filter.key === 'subworks') {
+				subwork = filter.values[0];
+			} else if (filter.key === 'lineTo') {
+				lineTo = filter.values[0];
+			} else if (filter.key === 'lineFrom') {
+				lineFrom = filter.values[0];
+			}
+		});
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_MuiThemeProvider2.default, /* istanbul ignore next */{ muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) },
+				ready && keyword ?
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'chs-layout chs-editor-layout edit-keyword-layout' },
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Header2.default, /* istanbul ignore next */{
+						toggleSearchTerm: this.toggleSearchTerm,
+						handleChangeLineN: this.handleChangeLineN,
+						filters: filters,
+						initialSearchEnabled: /* istanbul ignore next */true,
+						addCommentPage: /* istanbul ignore next */true }),
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'main', /* istanbul ignore next */null,
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'commentary-comments' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-group' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommentLemmaSelect2.default, /* istanbul ignore next */{
+									ref: function /* istanbul ignore next */ref(component) {/* istanbul ignore next */_this3.keywordLemmaSelect = component;},
+									selectedLineFrom: this.state.selectedLineFrom || keyword.lineFrom || 0,
+									selectedLineTo: this.state.selectedLineTo || keyword.lineTo || 0,
+									workSlug: 'work' in keyword ? keyword.work.slug : 'iliad',
+									subworkN: 'subwork' in keyword ? keyword.subwork.n : 1 }),
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_EditKeyword2.default, /* istanbul ignore next */{
+									selectedLineFrom: this.state.selectedLineFrom || keyword.lineFrom || null,
+									selectedLineTo: this.state.selectedLineTo || keyword.lineTo || null,
+									submitForm: this.updateKeyword,
+									onTypeChange: this.onTypeChange,
+									keyword: keyword }),
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_ContextPanel2.default, /* istanbul ignore next */{
+									open: this.state.contextReaderOpen,
+									workSlug: work ? work.slug : 'iliad',
+									subworkN: subwork ? subwork.n : 1,
+									lineFrom: lineFrom || 1,
+									selectedLineFrom: this.state.selectedLineFrom,
+									selectedLineTo: this.state.selectedLineTo,
+									updateSelectedLines: this.updateSelectedLines,
+									editor: /* istanbul ignore next */true })))),
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FilterWidget2.default, /* istanbul ignore next */{
+						filters: filters,
+						toggleSearchTerm: this.toggleSearchTerm })) :
+
+
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Spinner2.default, /* istanbul ignore next */{ fullPage: /* istanbul ignore next */true })));
+
+
+
+	} }); // lib
+// layouts
+
+var EditKeywordLayoutContainer = /* istanbul ignore next */(0, _reactMeteorData.createContainer)(function ( /* istanbul ignore next */_ref) {/* istanbul ignore next */var slug = _ref.slug;
+	var keywordsSub = /* istanbul ignore next */_meteor.Meteor.subscribe('keywords.slug', slug, /* istanbul ignore next */_session.Session.get('tenantId'));
+	var ready = /* istanbul ignore next */_alanningRoles.Roles.subscription.ready() && keywordsSub.ready();
+	var keyword = {};
+	if (ready) {
+		keyword = /* istanbul ignore next */_keywords2.default.findOne({ slug: slug });
+	}
+
+	return {
+		ready: ready,
+		keyword: keyword };
+
+}, EditKeywordLayout); /* istanbul ignore next */exports.default =
+
+EditKeywordLayoutContainer;

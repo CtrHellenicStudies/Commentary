@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import { Random } from 'meteor/random';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -564,7 +564,7 @@ class AddComment extends React.Component {
 											*/}
 											{referenceWorks.map((referenceWork, i) => {
 												const _referenceWorkOptions = [];
-												referenceWorkOptions.forEach(rW => {
+												referenceWorkOptions.forEach((rW) => {
 													_referenceWorkOptions.push({
 														value: rW.value,
 														label: rW.label,

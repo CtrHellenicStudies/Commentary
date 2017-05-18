@@ -16,9 +16,9 @@ import TextNodes from '/imports/api/collections/textNodes';
 
 const textFromTextNodesGroupedByEdition = (nodesCursor) => {
 	const editions = [];
-	nodesCursor.forEach(node => {
-		node.text.forEach(text => {
-			let myEdition = editions.find((e) => text.edition.slug === e.slug);
+	nodesCursor.forEach((node) => {
+		node.text.forEach((text) => {
+			let myEdition = editions.find(e => text.edition.slug === e.slug);
 
 			if (!myEdition) {
 				myEdition = {
@@ -96,11 +96,11 @@ const KeywordContext = React.createClass({
 						{keyword.work.title} {keyword.subwork.n}.{keyword.lineFrom}{(keyword.lineTo && keyword.lineFrom !== keyword.lineTo) ? `-${keyword.lineTo}` : ''}
 					</span>
 					{lemmaText[this.state.selectedLemma].lines.map((line, i) =>
-						<p
+						(<p
 							key={i}
 							className="lemma-text"
 							dangerouslySetInnerHTML={{ __html: line.html }}
-						/>
+						/>)
 					)}
 				</div>
 				<div className="edition-tabs tabs">

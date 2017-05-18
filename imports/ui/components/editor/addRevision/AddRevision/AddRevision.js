@@ -545,7 +545,7 @@ const AddRevision = React.createClass({
 											*/}
 											{referenceWorks.map((referenceWork, i) => {
 												const _referenceWorkOptions = [];
-												referenceWorkOptions.forEach(rW => {
+												referenceWorkOptions.forEach((rW) => {
 													_referenceWorkOptions.push({
 														value: rW.value,
 														label: rW.label,
@@ -716,7 +716,7 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
-	referenceWorks.forEach(referenceWork => {
+	referenceWorks.forEach((referenceWork) => {
 		referenceWorkOptions.push({
 			value: referenceWork._id,
 			label: referenceWork.title,

@@ -1,0 +1,266 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_IconButton = require('material-ui/IconButton'); /* istanbul ignore next */var _IconButton2 = _interopRequireDefault(_IconButton);
+var /* istanbul ignore next */_RaisedButton = require('material-ui/RaisedButton'); /* istanbul ignore next */var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+var /* istanbul ignore next */_FlatButton = require('material-ui/FlatButton'); /* istanbul ignore next */var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+
+var /* istanbul ignore next */_discussionComments2 = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/discussionComments'); /* istanbul ignore next */var _discussionComments3 = _interopRequireDefault(_discussionComments2);
+
+
+var /* istanbul ignore next */_utils = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/utils'); /* istanbul ignore next */var _utils2 = _interopRequireDefault(_utils);
+
+
+var /* istanbul ignore next */_DiscussionComment = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/discussionComments/DiscussionComment'); /* istanbul ignore next */var _DiscussionComment2 = _interopRequireDefault(_DiscussionComment);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;} else {return Array.from(arr);}} // api
+// lib
+// components
+var DiscussionThread = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'DiscussionThread',
+	propTypes: {
+		comment: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired,
+		discussionVisible: /* istanbul ignore next */_react2.default.PropTypes.bool.isRequired,
+		showDiscussionThread: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+		hideDiscussionThread: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+		toggleLemma: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+		showLoginModal: /* istanbul ignore next */_react2.default.PropTypes.func,
+		discussionComments: /* istanbul ignore next */_react2.default.PropTypes.array,
+		ready: /* istanbul ignore next */_react2.default.PropTypes.bool }, /* istanbul ignore next */
+
+
+	getInitialState: function getInitialState() {
+		return {
+			sortMethod: 'votes' };
+
+	}, /* istanbul ignore next */
+
+	showDiscussionThread: function showDiscussionThread() {
+		this.props.showDiscussionThread(this.props.comment);
+	}, /* istanbul ignore next */
+
+	hideDiscussionThread: function hideDiscussionThread() {
+		this.props.hideDiscussionThread();
+	}, /* istanbul ignore next */
+
+	addDiscussionComment: function addDiscussionComment() {
+		var content = $(this.newCommentForm).find('textarea').val();
+
+		/* istanbul ignore next */_meteor.Meteor.call('discussionComments.insert', {
+			content: content,
+			tenantId: /* istanbul ignore next */_session.Session.get('tenantId'),
+			commentId: this.props.comment._id });
+
+
+		$(this.newCommentForm).find('textarea').val('');
+	}, /* istanbul ignore next */
+
+	sortMethodSelect: function sortMethodSelect(value) {
+		this.setState({
+			sortMethod: value });
+
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var _this = this;
+		var currentUser = /* istanbul ignore next */_meteor.Meteor.user(); /* istanbul ignore next */var
+		discussionComments = this.props.discussionComments;
+
+		if (!discussionComments) {
+			return null;
+		}
+
+		var discussionWrapClass = 'discussion-wrap';
+
+		if (this.state.discussionVisible) {
+			discussionWrapClass += ' discussion-visible';
+		}
+
+		var textareaPlaceholder = '';
+		if (currentUser) {
+			textareaPlaceholder = 'Enter your comment here . . .';
+		} else {
+			textareaPlaceholder = 'Please login to enter a comment.';
+		}
+
+		var avatarUrl = '/images/default_user.jpg';
+		if (currentUser && currentUser.profile && currentUser.profile.avatarUrl) {
+			avatarUrl = currentUser.profile.avatarUrl;
+		}
+
+		var sortSelectedLabelStyle = {
+			color: '#FFFFFF' };
+
+
+		switch (this.state.sortMethod) {
+			case 'votes':
+				discussionComments.sort( /* istanbul ignore next */_utils2.default.sortBy('votes', 'updated'));
+				break;
+			case 'recent':
+				discussionComments.sort( /* istanbul ignore next */_utils2.default.sortBy('updated', 'votes'));
+				break;
+			default:
+				break;}
+
+
+		return (
+
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: discussionWrapClass },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+						onClick: this.showDiscussionThread,
+
+						className: 'continue-discussion' },
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h4', /* istanbul ignore next */{ className: 'continue-discussion-label' }, /* istanbul ignore next */'Discussion'),
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+							className: 'continue-discussion-icon',
+							onClick: this.props.toggleLemma },
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'i', /* istanbul ignore next */{ className: 'mdi mdi-comment' }),
+						this.props.discussionComments.length ?
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'continue-discussion-text' },
+							this.props.discussionComments.length) :
+
+						'')),
+
+
+
+				!this.props.ready ?
+				'' :
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'discussion-thread' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'add-comment-wrap paper-shadow ' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_IconButton2.default, /* istanbul ignore next */{
+							className: 'close-discussion paper-shadow',
+							iconClassName: 'mdi mdi-close',
+							onClick: function /* istanbul ignore next */onClick() {/* istanbul ignore next */_this.hideDiscussionThread(); /* istanbul ignore next */_this.props.toggleLemma();} }),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'form', /* istanbul ignore next */{
+								ref: function /* istanbul ignore next */ref(component) {/* istanbul ignore next */_this.newCommentForm = component;},
+								className: 'new-comment-form',
+								name: 'new-comment-form' },
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'add-comment-row-1' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'profile-picture paper-shadow' },
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'img', /* istanbul ignore next */{
+										src: avatarUrl,
+										alt: 'Commentary User' })),
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'textarea', /* istanbul ignore next */{
+									className: 'new-comment-text',
+									name: 'newCommentText',
+									placeholder: textareaPlaceholder })),
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'add-comment-row-2 add-comment-row' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'error-message' },
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'error-message-text' }, /* istanbul ignore next */'Please enter your text to submit.')),
+
+								currentUser ?
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+									label: 'Submit',
+									className: 'submit-comment-button paper-shadow',
+									onClick: this.addDiscussionComment }) :
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+										className: 'new-comment-login' },
+
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+										label: 'Login',
+										className: 'login-link',
+										onClick: this.props.showLoginModal }),
+
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+										label: 'Join',
+										className: 'join-link',
+										href: '/sign-up',
+										target: '_blank' }))))),
+
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+						className: 'sort-by-wrap' }),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					this.props.discussionComments.length === 0 ?
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'no-results-wrap' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'no-results-text' }, /* istanbul ignore next */'No discussion comments.')) :
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'sort-method-select' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+							label: 'Top votes',
+							labelStyle: this.state.sortMethod === 'votes' ? sortSelectedLabelStyle : {},
+							backgroundColor: this.state.sortMethod === 'votes' ? '#795548' : '',
+							onClick: this.sortMethodSelect.bind(null, 'votes') }),
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+							label: 'Recent',
+							labelStyle: this.state.sortMethod === 'recent' ? sortSelectedLabelStyle : {},
+							backgroundColor: this.state.sortMethod === 'recent' ? '#795548' : '',
+							onClick: this.sortMethodSelect.bind(null, 'recent') })),
+
+
+
+					this.props.discussionComments.map(function (discussionComment, i) /* istanbul ignore next */{return (
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_DiscussionComment2.default, /* istanbul ignore next */{
+								key: i,
+								className: 'discussion-comment paper-shadow',
+								discussionComment: discussionComment,
+								currentUser: currentUser }));}))));
+
+
+
+
+
+
+	} }); /* istanbul ignore next */exports.default =
+
+
+
+/* istanbul ignore next */(0, _reactMeteorData.createContainer)(function ( /* istanbul ignore next */_ref) {/* istanbul ignore next */var comment = _ref.comment;
+	var discussionComments = [];
+	var userDiscussionComments = [];
+	var handle = /* istanbul ignore next */void 0;
+
+	if (comment) {/* istanbul ignore next */var _discussionComments;
+		handle = /* istanbul ignore next */_meteor.Meteor.subscribe('discussionComments', comment._id, /* istanbul ignore next */_session.Session.get('tenantId'));
+		discussionComments = /* istanbul ignore next */_discussionComments3.default.find({
+			commentId: comment._id,
+			status: 'publish' }).
+		fetch();
+		userDiscussionComments = /* istanbul ignore next */_discussionComments3.default.find({
+			commentId: comment._id,
+			userId: /* istanbul ignore next */_meteor.Meteor.userId() }).
+		fetch();
+
+		/* istanbul ignore next */(_discussionComments = discussionComments).push. /* istanbul ignore next */apply( /* istanbul ignore next */_discussionComments, /* istanbul ignore next */_toConsumableArray(userDiscussionComments));
+
+		return {
+			discussionComments: discussionComments,
+			ready: handle.ready() };
+
+	}
+
+	return {
+		discussionComments: discussionComments,
+		ready: null };
+
+}, DiscussionThread);

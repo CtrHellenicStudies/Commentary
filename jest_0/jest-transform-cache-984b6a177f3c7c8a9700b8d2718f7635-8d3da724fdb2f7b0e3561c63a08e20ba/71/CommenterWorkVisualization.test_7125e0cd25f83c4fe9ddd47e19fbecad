@@ -1,0 +1,30 @@
+/* istanbul ignore next */'use strict';var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_reactTestRenderer = require('react-test-renderer'); /* istanbul ignore next */var _reactTestRenderer2 = _interopRequireDefault(_reactTestRenderer);
+
+
+var /* istanbul ignore next */_CommenterWorkVisualization = require('./CommenterWorkVisualization'); /* istanbul ignore next */var _CommenterWorkVisualization2 = _interopRequireDefault(_CommenterWorkVisualization);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('CommenterWorkVisualization', function () {
+	it('renders correctly', function () {
+
+		var tree = /* istanbul ignore next */_reactTestRenderer2.default.
+		create(
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommenterWorkVisualization2.default, /* istanbul ignore next */{
+			work: {
+				title: 'Iliad',
+				slug: 'iliad',
+				subworks: [{
+					title: '1',
+					slug: '1',
+					n: 1 }] },
+
+
+			commenterSlug: 'test',
+			toggleVisibleWork: function /* istanbul ignore next */toggleVisibleWork() {},
+			isTest: /* istanbul ignore next */true })).
+
+
+		toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+}); // component:

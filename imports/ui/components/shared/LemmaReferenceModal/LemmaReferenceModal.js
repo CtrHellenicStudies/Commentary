@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -10,7 +10,7 @@ import TextNodes from '/imports/api/collections/textNodes';
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 
-LemmaReferenceModal = React.createClass({
+const LemmaReferenceModal = React.createClass({
 
 	propTypes: {
 		visible: React.PropTypes.bool,

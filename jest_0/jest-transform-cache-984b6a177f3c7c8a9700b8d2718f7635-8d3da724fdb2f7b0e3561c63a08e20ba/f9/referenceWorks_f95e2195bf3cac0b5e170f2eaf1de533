@@ -1,0 +1,69 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_aldeedSimpleSchema = require('meteor/aldeed:simple-schema');
+
+var ReferenceWorks = new /* istanbul ignore next */_meteor.Meteor.Collection('referenceWorks');
+
+ReferenceWorks.schema = new /* istanbul ignore next */_aldeedSimpleSchema.SimpleSchema({
+	title: {
+		type: String,
+		optional: true },
+
+
+	slug: {
+		type: String,
+		max: 200,
+		optional: true },
+
+
+	tenantId: {
+		type: String,
+		optional: true },
+
+
+	link: {
+		type: String,
+		optional: true },
+
+
+	authors: {
+		type: [String],
+		optional: true },
+
+
+	coverImage: {
+		type: String,
+		optional: true },
+
+
+	date: {
+		type: Date,
+		optional: true },
+
+
+	urnCode: {
+		type: String,
+		optional: true },
+
+
+	description: {
+		type: String,
+		optional: true },
+
+
+	citation: {
+		type: String,
+		optional: true } });
+
+
+
+ReferenceWorks.attachSchema(ReferenceWorks.schema);
+ReferenceWorks.friendlySlugs('title');
+
+ReferenceWorks.attachBehaviour('timestampable', {
+	createdAt: 'created',
+	createdBy: 'createdBy',
+	updatedAt: 'updated',
+	updatedBy: 'updatedBy' }); /* istanbul ignore next */exports.default =
+
+
+ReferenceWorks;

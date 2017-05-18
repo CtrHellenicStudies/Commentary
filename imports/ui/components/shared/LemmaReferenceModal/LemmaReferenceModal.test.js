@@ -22,5 +22,6 @@ describe('LemmaReferenceModal', () => {
 	});
 });
 
-// TODO Fix ReferenceError: ReactMeteorData is not defined
+// TODO LemmaReference needs to be refactored: get rid of mix-ins and use container
+
 

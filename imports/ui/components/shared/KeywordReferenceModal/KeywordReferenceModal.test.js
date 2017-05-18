@@ -14,5 +14,4 @@ describe('KeywordReferenceModal', () => {
 	});
 });
 
-// TODO Fix ReferenceError: ReactMeteorData is not defined
-
+// TODO Refactor component to avoid mixins

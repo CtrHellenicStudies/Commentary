@@ -3,6 +3,7 @@
 # Application specific
 local
 private/settings/*.json
+production.json
 *.log
 .uploads
 node_modules

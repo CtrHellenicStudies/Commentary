@@ -1,5 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // component:
 import AddKeyword from './AddKeyword';
@@ -9,10 +10,12 @@ describe('AddKeyword', () => {
 
 		const tree = renderer
 			.create(
-				<AddKeyword
-					submitForm={() => {}}
-					onTypeChange={() => {}}
-				/>
+				<MuiThemeProvider>
+					<AddKeyword
+						submitForm={() => {}}
+						onTypeChange={() => {}}
+					/>
+				</MuiThemeProvider>
 			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`KeywordReferenceModal renders correctly 1`] = `
+<div
+  className="reference-modal"
+  style={
+    Object {
+      "left": undefined,
+      "top": undefined,
+    }
+  }
+>
+  <article
+    className="comment	lemma-comment paper-shadow "
+  >
+    <div
+      className="reference-text"
+    >
+      
+    </div>
+    <i
+      className="mdi mdi-close paper-shadow"
+      onClick={undefined}
+    />
+  </article>
+</div>
+`;

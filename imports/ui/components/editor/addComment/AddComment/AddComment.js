@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import { Random } from 'meteor/random';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -17,7 +17,7 @@ import {
 	ControlLabel,
 } from 'react-bootstrap';
 import Select, { Creatable } from 'react-select';
-import { EditorState, convertToRaw, Modifier } from 'draft-js';
+import { EditorState, convertToRaw, Modifier, CompositeDecorator } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
@@ -42,10 +42,16 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
+
+
+/*
+ *	helpers
+ */
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
@@ -58,6 +64,7 @@ const inlineToolbarPlugin = createInlineToolbarPlugin({
 		UnorderedListButton,
 		OrderedListButton,
 		BlockquoteButton,
+		LinkButton,
 	]
 });
 const { InlineToolbar } = inlineToolbarPlugin;
@@ -108,33 +115,78 @@ function _getSuggestionsFromComments(comments) {
 	}
 	return suggestions;
 }
+const onNewOptionCreator = (newOption) => {
+	return {
+		label: newOption.label,
+		value: newOption.label
+	};
+};
+const shouldKeyDownEventCreateNewOption = (sig) => {
+	if (sig.keyCode === 13 ||
+		sig.keyCode === 188) {
+		return true;
+	}
+	return false;
+};
+
+const Link = (props) => {
+	const {url} = props.contentState.getEntity(props.entityKey).getData();
+	return (
+		<a href={url} style={styles.link}>
+			{props.children}
+		</a>
+	);
+};
+
+function findLinkEntities(contentBlock, callback, contentState) {
+	contentBlock.findEntityRanges(
+		(character) => {
+			const entityKey = character.getEntity();
+			return (
+				entityKey !== null &&
+				contentState.getEntity(entityKey).getType() === 'LINK'
+			);
+		},
+		callback
+	);
+}
 
 
-const AddComment = React.createClass({
 
-	propTypes: {
+
+/*
+ *	BEGIN AddComment
+ */
+class AddComment extends React.Component {
+	static propTypes = {
 		selectedLineFrom: React.PropTypes.number,
 		submitForm: React.PropTypes.func.isRequired,
 		commentersOptions: React.PropTypes.array,
 		keywordsOptions: React.PropTypes.array,
 		keyideasOptions: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
-	},
+	};
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
+	static defaultProps = {
+		selectedLineFrom: null,
+		commentersOptions: [],
+		keywordsOptions: [],
+		keyideasOptions: [],
+		referenceWorkOptions: [],
+	};
 
-	getDefaultProps() {
-		return {
-			selectedLineFrom: null,
-		};
-	},
+	constructor(props) {
+		super(props);
 
-	getInitialState() {
-		return {
+		const decorator = new CompositeDecorator([{
+			strategy: findLinkEntities,
+			component: Link,
+		}]);
+
+		
+		this.state = {
 			titleEditorState: EditorState.createEmpty(),
-			textEditorState: EditorState.createEmpty(),
+			textEditorState: EditorState.createEmpty(decorator),
 
 			commenterValue: null,
 			titleValue: '',
@@ -148,23 +200,38 @@ const AddComment = React.createClass({
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 		};
-	},
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+		// methods:
+		this._enableButton = this._enableButton.bind(this);
+		this._disableButton = this._disableButton.bind(this);
+		this.onTitleChange = this.onTitleChange.bind(this);
+		this.onTextChange = this.onTextChange.bind(this);
+		this.onKeywordsValueChange = this.onKeywordsValueChange.bind(this);
+		this.onKeyideasValueChange = this.onKeyideasValueChange.bind(this);
+		this.onReferenceWorksValueChange = this.onReferenceWorksValueChange.bind(this);
+		this._onKeywordSearchChange = this._onKeywordSearchChange.bind(this);
+		this._onCommentsSearchChange = this._onCommentsSearchChange.bind(this);
+		this.isOptionUnique = this.isOptionUnique.bind(this);
+		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.showSnackBar = this.showSnackBar.bind(this);
+		this.validateStateForSubmit = this.validateStateForSubmit.bind(this);
+		this.addReferenceWorkBlock = this.addReferenceWorkBlock.bind(this);
+		this.removeReferenceWorkBlock = this.removeReferenceWorkBlock.bind(this);
+		this.moveReferenceWorkBlock = this.moveReferenceWorkBlock.bind(this);
+	}
 
 	_enableButton() {
 		this.setState({
 			canSubmit: true,
 		});
-	},
+	}
 
 	_disableButton() {
 		this.setState({
 			canSubmit: false,
 		});
-	},
+	}
 
 	// --- BEGIN FORM HANDLE --- //
 
@@ -175,7 +242,7 @@ const AddComment = React.createClass({
 			titleEditorState,
 			titleValue: title,
 		});
-	},
+	}
 
 	onTextChange(textEditorState) {
 		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
@@ -184,19 +251,19 @@ const AddComment = React.createClass({
 			textEditorState,
 			textValue: textHtml,
 		});
-	},
+	}
 
 	onKeywordsValueChange(keywords) {
 		this.setState({
 			keywordsValue: keywords,
 		});
-	},
+	}
 
 	onKeyideasValueChange(keyidea) {
 		this.setState({
 			keyideasValue: keyidea,
 		});
-	},
+	}
 
 	onReferenceWorksValueChange(referenceWork) {
 		const referenceWorks = this.state.referenceWorks;
@@ -205,14 +272,7 @@ const AddComment = React.createClass({
 		this.setState({
 			referenceWorks,
 		});
-	},
-
-	onNewOptionCreator(newOption) {
-		return {
-			label: newOption.label,
-			value: newOption.label
-		};
-	},
+	}
 
 	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
@@ -227,7 +287,7 @@ const AddComment = React.createClass({
 		this.setState({
 			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
 		});
-	},
+	}
 
 	_onCommentsSearchChange({ value }) {
 		// use Meteor call method, as comments are not available on clint app
@@ -242,16 +302,7 @@ const AddComment = React.createClass({
 				commentsSuggestions: fromJS(commentsSuggestions),
 			});
 		});
-
-	},
-
-	shouldKeyDownEventCreateNewOption(sig) {
-		if (sig.keyCode === 13 ||
-			sig.keyCode === 188) {
-			return true;
-		}
-		return false;
-	},
+	}
 
 	isOptionUnique(newOption) {
 		const { keywordsOptions, keyideasOptions } = this.props;
@@ -275,13 +326,13 @@ const AddComment = React.createClass({
 			if (e === BreakException) return false;
 		}
 		return true;
-	},
+	}
 
 	onCommenterValueChange(comenter) {
 		this.setState({
 			commenterValue: comenter,
 		});
-	},
+	}
 
 	// --- END FORM HANDLE --- //
 
@@ -304,6 +355,11 @@ const AddComment = React.createClass({
 			// performe necessary html transformations:
 			entityToHTML: (entity, originalText) => {
 
+				// handle LINK
+				if (entity.type === 'LINK') {
+					return <a href={entity.data.link}>{originalText}</a>;
+				}
+
 				// handle keyword mentions
 				if (entity.type === 'mention') {
 					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
@@ -325,7 +381,7 @@ const AddComment = React.createClass({
 		}
 
 		this.props.submitForm(this.state, textHtml, textRaw);
-	},
+	}
 
 	showSnackBar(error) {
 		this.setState({
@@ -337,7 +393,7 @@ const AddComment = React.createClass({
 				snackbarOpen: false,
 			});
 		}, 4000);
-	},
+	}
 
 	validateStateForSubmit() {
 		let errors = false;
@@ -366,20 +422,20 @@ const AddComment = React.createClass({
 			errors,
 			errorMessage,
 		};
-	},
+	}
 
 	addReferenceWorkBlock() {
 		this.state.referenceWorks.push({ referenceWorkId: Random.id() });
 		this.setState({
 			referenceWorks: this.state.referenceWorks,
 		});
-	},
+	}
 
 	removeReferenceWorkBlock(i) {
 		this.setState({
 			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
 		});
-	},
+	}
 
 	moveReferenceWorkBlock(dragIndex, hoverIndex) {
 		const { introBlocks } = this.state;
@@ -393,8 +449,7 @@ const AddComment = React.createClass({
 				],
 			},
 		}));
-	},
-
+	}
 
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
@@ -447,7 +502,7 @@ const AddComment = React.createClass({
 									multi
 									value={this.state.keywordsValue}
 									onChange={this.onKeywordsValueChange}
-									newOptionCreator={this.onNewOptionCreator}
+									newOptionCreator={onNewOptionCreator}
 									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 									isOptionUnique={this.isOptionUnique}
 									placeholder="Keywords..."
@@ -460,7 +515,7 @@ const AddComment = React.createClass({
 									multi
 									value={this.state.keyideasValue}
 									onChange={this.onKeyideasValueChange}
-									newOptionCreator={this.onNewOptionCreator}
+									newOptionCreator={onNewOptionCreator}
 									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 									isOptionUnique={this.isOptionUnique}
 									placeholder="Key ideas..."
@@ -509,7 +564,7 @@ const AddComment = React.createClass({
 											*/}
 											{referenceWorks.map((referenceWork, i) => {
 												const _referenceWorkOptions = [];
-												referenceWorkOptions.forEach(rW => {
+												referenceWorkOptions.forEach((rW) => {
 													_referenceWorkOptions.push({
 														value: rW.value,
 														label: rW.label,
@@ -554,7 +609,7 @@ const AddComment = React.createClass({
 																value={this.state.referenceWorks[i].referenceWorkId}
 																// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
 																onChange={this.onReferenceWorksValueChange}
-																newOptionCreator={this.onNewOptionCreator}
+																newOptionCreator={onNewOptionCreator}
 																shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 																isOptionUnique={this.isOptionUnique}
 																placeholder="Reference Work . . ."
@@ -621,8 +676,8 @@ const AddComment = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
 
 const AddCommentContainer = createContainer(() => {
 	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
@@ -649,7 +704,7 @@ const AddCommentContainer = createContainer(() => {
 	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
-	referenceWorks.forEach(referenceWork => {
+	referenceWorks.forEach((referenceWork) => {
 		referenceWorkOptions.push({
 			value: referenceWork._id,
 			label: referenceWork.title,
@@ -678,5 +733,9 @@ const AddCommentContainer = createContainer(() => {
 	};
 
 }, AddComment);
+/*
+ *	BEGIN AddComment
+ */
+
 
 export default AddCommentContainer;

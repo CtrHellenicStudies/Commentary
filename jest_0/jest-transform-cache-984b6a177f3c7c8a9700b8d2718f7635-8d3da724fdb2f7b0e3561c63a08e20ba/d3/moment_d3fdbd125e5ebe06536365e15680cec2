@@ -1,0 +1,5 @@
+/* istanbul ignore next */"use strict";Object.defineProperty(exports, "__esModule", { value: true });var moment = /* istanbul ignore next */exports.moment = function moment() {// eslint-disable-line
+	return {
+		format: function /* istanbul ignore next */format() {} };
+
+};

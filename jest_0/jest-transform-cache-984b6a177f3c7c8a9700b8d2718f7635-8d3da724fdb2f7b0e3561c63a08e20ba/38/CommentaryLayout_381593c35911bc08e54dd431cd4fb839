@@ -1,0 +1,518 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+
+
+
+
+
+
+
+var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_MuiThemeProvider = require('material-ui/styles/MuiThemeProvider'); /* istanbul ignore next */var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+
+var /* istanbul ignore next */_Commentary = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/layouts/commentary/Commentary'); /* istanbul ignore next */var _Commentary2 = _interopRequireDefault(_Commentary);
+var /* istanbul ignore next */_ModalLogin = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/layouts/auth/ModalLogin'); /* istanbul ignore next */var _ModalLogin2 = _interopRequireDefault(_ModalLogin);
+var /* istanbul ignore next */_Header = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/layouts/header/Header'); /* istanbul ignore next */var _Header2 = _interopRequireDefault(_Header);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);
+var /* istanbul ignore next */_utils = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/utils'); /* istanbul ignore next */var _utils2 = _interopRequireDefault(_utils);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // lib:
+/*
+
+filters – queryParams relations explanation:
+“queryParams” represent state of truth
+“filters” are a friendly object representation of “queryParams” passed to children components
+
+To change the commentary filtering,
+call the “this._updateRoute(filters)” method
+with new “filters” object passed as first attribute.
+
+*/var CommentaryLayout = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'CommentaryLayout', propTypes: { queryParams: /* istanbul ignore next */_react2.default.PropTypes.object, isTest: /* istanbul ignore next */_react2.default.PropTypes.bool }, childContextTypes: { muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+	getInitialState: function getInitialState() {
+		return {
+			modalLoginLowered: false,
+			skip: 0,
+			limit: 10 };
+
+	}, /* istanbul ignore next */
+
+	getChildContext: function getChildContext() {
+		return { muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+	}, /* istanbul ignore next */
+
+	getQueryParamValue: function getQueryParamValue(queryParams, key, value) {
+		var queryParamValue = null;
+		if (queryParams[key]) {
+			queryParamValue = /* istanbul ignore next */queryParams[key] + ',' + value;
+		} else {
+			queryParamValue = value;
+		}
+
+		return queryParamValue;
+	}, /* istanbul ignore next */
+
+	getFilterValue: function getFilterValue(filters, key) {
+		var value = {};
+		if (filters) {
+			var filterKey = filters.find(function (filter) /* istanbul ignore next */{return filter.key === key;});
+			if (filterKey) {
+				value = filterKey.values[0];
+			}
+		}
+		return value;
+	}, /* istanbul ignore next */
+
+	_updateRoute: function _updateRoute(filters) {
+		var queryParams = {};
+		if (filters) {
+			queryParams = this._createQueryParamsFromFilters(filters);
+		} else {
+			queryParams = this.props.queryParams;
+		}
+
+		// update route
+		FlowRouter.go('/commentary/', {}, queryParams);
+	}, /* istanbul ignore next */
+
+	_createQueryParamsFromFilters: function _createQueryParamsFromFilters(filters) {/* istanbul ignore next */var _this = this;
+		var queryParams = {};
+		filters.forEach(function (filter) {
+			filter.values.forEach(function (value) {
+				var getQueryParamValue = /* istanbul ignore next */_this.getQueryParamValue;
+				switch (filter.key) {
+					case 'works':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+						break;
+					case 'subworks':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+						break;
+					case 'keyideas':
+					case 'keywords':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+						break;
+					case 'commenters':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
+						break;
+					case 'lineFrom':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
+					case 'lineTo':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
+					case 'textsearch':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
+					case 'wordpressId':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
+					case 'reference':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+						break;
+					case '_id':
+						queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
+						break;
+					default:
+						break;}
+
+			});
+		});
+		return queryParams;
+	}, /* istanbul ignore next */
+
+	_createFilterFromQueryParams: function _createFilterFromQueryParams(queryParams) {
+		var filters = [];
+
+		if (!queryParams) {
+			return filters;
+		}
+
+		if ('_id' in queryParams) {
+			filters.push({
+				key: '_id',
+				values: [this.props.queryParams._id] });
+
+			if ('revision' in this.props.queryParams) {
+				filters.push({
+					key: 'revision',
+					values: [Number(this.props.queryParams.revision)] });
+
+			}
+		}
+
+		if ('textsearch' in this.props.queryParams) {
+			filters.push({
+				key: 'textsearch',
+				values: [this.props.queryParams.textsearch] });
+
+		}
+
+		if ('keyideas' in queryParams) {
+			var keyideas = [];
+
+			this.props.queryParams.keyideas.split(',').forEach(function (keyidea) {
+				keyideas.push({
+					slug: keyidea });
+
+			});
+
+			filters.push({
+				key: 'keyideas',
+				values: keyideas });
+
+		}
+
+		if ('keywords' in queryParams) {
+			var keywords = [];
+
+			this.props.queryParams.keywords.split(',').forEach(function (keyword) {
+				keywords.push({
+					slug: keyword });
+
+			});
+
+			filters.push({
+				key: 'keywords',
+				values: keywords });
+
+		}
+
+		if ('commenters' in queryParams) {
+			var commenters = [];
+
+			this.props.queryParams.commenters.split(',').forEach(function (commenter) {
+				commenters.push({
+					slug: commenter });
+
+			});
+
+			filters.push({
+				key: 'commenters',
+				values: commenters });
+
+		}
+
+		if ('reference' in queryParams) {
+			var references = [];
+
+			this.props.queryParams.reference.split(',').forEach(function (reference) {
+				references.push({
+					title: reference });
+
+			});
+
+			filters.push({
+				key: 'reference',
+				values: references });
+
+		}
+
+		if ('works' in queryParams) {
+			var works = [];
+
+			this.props.queryParams.works.split(',').forEach(function (work) {
+				works.push({
+					slug: work,
+					title: /* istanbul ignore next */_utils2.default.capitalize(work) });
+
+			});
+
+			filters.push({
+				key: 'works',
+				values: works });
+
+		}
+
+		if ('subworks' in queryParams) {
+			var subworks = [];
+
+			this.props.queryParams.subworks.split(',').forEach(function (subwork) {
+				var subworkNumber = parseInt(subwork, 10);
+
+				if (!Number.isNaN(subworkNumber)) {
+					subworks.push({
+						title: subwork,
+						n: subworkNumber });
+
+				}
+			});
+
+
+			filters.push({
+				key: 'subworks',
+				values: subworks });
+
+		}
+
+		if ('lineFrom' in this.props.queryParams) {
+			var lineFrom = parseInt(this.props.queryParams.lineFrom, 10);
+
+			if (!Number.isNaN(lineFrom)) {
+				filters.push({
+					key: 'lineFrom',
+					values: [lineFrom] });
+
+			}
+		}
+
+		if ('lineTo' in this.props.queryParams) {
+			var lineTo = parseInt(this.props.queryParams.lineTo, 10);
+
+			if (!Number.isNaN(lineTo)) {
+				filters.push({
+					key: 'lineTo',
+					values: [lineTo] });
+
+			}
+		}
+
+		if ('wordpressId' in this.props.queryParams) {
+			var wordpressId = parseInt(this.props.queryParams.wordpressId, 10);
+
+			if (!Number.isNaN(wordpressId)) {
+				filters.push({
+					key: 'wordpressId',
+					values: [wordpressId] });
+
+			}
+		}
+
+		return filters;
+	}, /* istanbul ignore next */
+
+	_toggleSearchTerm: function _toggleSearchTerm(key, value) {/* istanbul ignore next */var
+		queryParams = this.props.queryParams;
+		var keyIsInFilter = false;
+		var valueIsInFilter = false;
+		var filterValueToRemove = /* istanbul ignore next */void 0;
+		var filterToRemove = /* istanbul ignore next */void 0;
+
+		var filters = this._createFilterFromQueryParams(queryParams);
+
+		// update filter based on the key and value
+		filters.forEach(function (filter, i) {
+			if (filter.key === key) {
+				keyIsInFilter = true;
+				valueIsInFilter = false;
+
+				filter.values.forEach(function (filterValue, j) {
+					if (value._id && filterValue._id === value._id) {
+						valueIsInFilter = true;
+						filterValueToRemove = j;
+					} else if (filterValue.slug === value.slug) {
+						valueIsInFilter = true;
+						filterValueToRemove = j;
+					}
+				});
+
+				if (valueIsInFilter) {
+					filter.values.splice(filterValueToRemove, 1);
+					if (filter.values.length === 0) {
+						filterToRemove = i;
+					}
+				} else if (key === 'works') {
+					filters[i].values = [value];
+				} else {
+					filters[i].values.push(value);
+				}
+			}
+		});
+
+
+		if (typeof filterToRemove !== 'undefined') {
+			filters.splice(filterToRemove, 1);
+		}
+
+		if (!keyIsInFilter) {
+			filters.push({
+				key: key,
+				values: [value] });
+
+		}
+
+		this.setState({
+			skip: 0,
+			limit: 10 });
+
+
+		this._updateRoute(filters);
+	}, /* istanbul ignore next */
+
+	_handleChangeTextsearch: function _handleChangeTextsearch(e, textsearch) {/* istanbul ignore next */var
+		queryParams = this.props.queryParams;
+		var filters = this._createFilterFromQueryParams(queryParams);
+
+		// update filter based on the textsearch
+		if (textsearch && textsearch.length) {
+			var textsearchInFilters = false;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'textsearch') {
+					filters[i].values = [textsearch];
+					textsearchInFilters = true;
+				}
+			});
+
+			if (!textsearchInFilters) {
+				filters.push({
+					key: 'textsearch',
+					values: [textsearch] });
+
+			}
+		} else {
+			var filterToRemove = /* istanbul ignore next */void 0;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'textsearch') {
+					filterToRemove = i;
+				}
+			});
+
+			if (typeof filterToRemove !== 'undefined') {
+				filters.splice(filterToRemove, 1);
+			}
+		}
+
+		this._updateRoute(filters);
+	}, /* istanbul ignore next */
+
+	_handleChangeLineN: function _handleChangeLineN(e) {/* istanbul ignore next */var
+		queryParams = this.props.queryParams;
+		var filters = this._createFilterFromQueryParams(queryParams);
+
+		// update filter based on the 'e' attribute
+		if (e.from > 1) {
+			var lineFromInFilters = false;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineFrom') {
+					filters[i].values = [e.from];
+					lineFromInFilters = true;
+				}
+			});
+
+			if (!lineFromInFilters) {
+				filters.push({
+					key: 'lineFrom',
+					values: [e.from] });
+
+			}
+		} else {
+			var filterToRemove = /* istanbul ignore next */void 0;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineFrom') {
+					filterToRemove = i;
+				}
+			});
+
+			if (typeof filterToRemove !== 'undefined') {
+				filters.splice(filterToRemove, 1);
+			}
+		}
+
+		if (e.to < 1000) {
+			var lineToInFilters = false;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineTo') {
+					filters[i].values = [e.to];
+					lineToInFilters = true;
+				}
+			});
+
+			if (!lineToInFilters) {
+				filters.push({
+					key: 'lineTo',
+					values: [e.to] });
+
+			}
+		} else {
+			var _filterToRemove = /* istanbul ignore next */void 0;
+
+			filters.forEach(function (filter, i) {
+				if (filter.key === 'lineTo') {
+					_filterToRemove = i;
+				}
+			});
+
+			if (typeof _filterToRemove !== 'undefined') {
+				filters.splice(_filterToRemove, 1);
+			}
+		}
+
+		this.setState({
+			skip: 0,
+			limit: 10 });
+
+		this._updateRoute(filters);
+	}, /* istanbul ignore next */
+
+	loadMoreComments: function loadMoreComments() {
+		this.setState({
+			limit: this.state.limit + 10 });
+
+	}, /* istanbul ignore next */
+
+	showLoginModal: function showLoginModal() {
+		this.setState({
+			modalLoginLowered: true });
+
+	}, /* istanbul ignore next */
+
+	closeLoginModal: function closeLoginModal() {
+		this.setState({
+			modalLoginLowered: false });
+
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var
+		queryParams = this.props.queryParams; /* istanbul ignore next */var _state =
+		this.state,skip = _state.skip,limit = _state.limit,modalLoginLowered = _state.modalLoginLowered;
+
+		// create filters object based on the queryParams
+		var filters = this._createFilterFromQueryParams(queryParams);
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_MuiThemeProvider2.default, /* istanbul ignore next */{ muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'chs-layout commentary-layout' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Header2.default, /* istanbul ignore next */{
+							filters: filters,
+							toggleSearchTerm: this._toggleSearchTerm,
+							handleChangeLineN: this._handleChangeLineN,
+							handleChangeTextsearch: this._handleChangeTextsearch,
+							isTest: this.props.isTest,
+							initialSearchEnabled: /* istanbul ignore next */true }),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Commentary2.default, /* istanbul ignore next */{
+							filters: filters,
+							toggleSearchTerm: this._toggleSearchTerm,
+							showLoginModal: this.showLoginModal,
+							loadMoreComments: this.loadMoreComments,
+							skip: skip,
+							limit: limit })),
+
+
+
+					modalLoginLowered ?
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_ModalLogin2.default, /* istanbul ignore next */{
+						lowered: modalLoginLowered,
+						closeModal: this.closeLoginModal }) :
+
+					'')));
+
+
+
+
+	} }); // layouts:
+/* istanbul ignore next */exports.default =
+
+
+
+CommentaryLayout;

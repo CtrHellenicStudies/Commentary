@@ -90,8 +90,8 @@ Meteor.methods({
 		}
 
 		let allowedToEdit = false;
-		Meteor.user().canEditCommenters.forEach(commenterId => {
-			comment.commenters.forEach(commenter => {
+		Meteor.user().canEditCommenters.forEach((commenterId) => {
+			comment.commenters.forEach((commenter) => {
 				if (commenterId === commenter._id) {
 					allowedToEdit = true;
 				}

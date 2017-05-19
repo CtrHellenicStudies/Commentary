@@ -1,0 +1,26 @@
+/* istanbul ignore next */'use strict';var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_reactTestRenderer = require('react-test-renderer'); /* istanbul ignore next */var _reactTestRenderer2 = _interopRequireDefault(_reactTestRenderer);
+var /* istanbul ignore next */_MuiThemeProvider = require('material-ui/styles/MuiThemeProvider'); /* istanbul ignore next */var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+
+
+var /* istanbul ignore next */_CommentarySearchToolbar = require('./CommentarySearchToolbar'); /* istanbul ignore next */var _CommentarySearchToolbar2 = _interopRequireDefault(_CommentarySearchToolbar);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('CommentarySearchToolbar', function () {
+	it('renders correctly', function () {
+
+		var tree = /* istanbul ignore next */_reactTestRenderer2.default.
+		create(
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_MuiThemeProvider2.default, /* istanbul ignore next */null,
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommentarySearchToolbar2.default, /* istanbul ignore next */{
+				filters: [],
+				toggleSearchTerm: function /* istanbul ignore next */toggleSearchTerm() {},
+				handleChangeLineN: function /* istanbul ignore next */handleChangeLineN() {},
+				handleChangeTextsearch: function /* istanbul ignore next */handleChangeTextsearch() {},
+				addCommentPage: /* istanbul ignore next */true }))).
+
+
+
+		toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+}); // component:

@@ -1,6 +1,8 @@
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';  
+import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';
+
+import moment from 'moment';
 
 /*
 	helpers

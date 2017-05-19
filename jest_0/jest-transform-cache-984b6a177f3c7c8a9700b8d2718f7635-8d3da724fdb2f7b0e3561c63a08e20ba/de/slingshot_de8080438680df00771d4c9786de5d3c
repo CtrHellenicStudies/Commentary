@@ -1,0 +1,1 @@
+/* istanbul ignore next */"use strict";Object.defineProperty(exports, "__esModule", { value: true });var Slingshot = /* istanbul ignore next */exports.Slingshot = function Slingshot() {}; // eslint-disable-line

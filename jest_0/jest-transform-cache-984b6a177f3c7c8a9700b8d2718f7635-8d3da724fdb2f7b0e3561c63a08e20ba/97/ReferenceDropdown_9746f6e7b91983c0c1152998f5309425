@@ -1,0 +1,50 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _extends = Object.assign || function (target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i];for (var key in source) {if (Object.prototype.hasOwnProperty.call(source, key)) {target[key] = source[key];}}}return target;};
+
+// components:
+
+
+
+// lib:
+
+
+// helpers:
+var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);var /* istanbul ignore next */_SearchToolDropdown = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/header/SearchToolDropdown'); /* istanbul ignore next */var _SearchToolDropdown2 = _interopRequireDefault(_SearchToolDropdown);var /* istanbul ignore next */_SearchTermButton = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/header/SearchTermButton'); /* istanbul ignore next */var _SearchTermButton2 = _interopRequireDefault(_SearchTermButton);var /* istanbul ignore next */_utils = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/utils'); /* istanbul ignore next */var _utils2 = _interopRequireDefault(_utils);var /* istanbul ignore next */_helpers = require('./helpers'); /* istanbul ignore next */function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+/*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                	BEGIN ReferenceDropdown
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+var ReferenceDropdown = function ReferenceDropdown( /* istanbul ignore next */_ref) /* istanbul ignore next */{var reference = _ref.reference,searchDropdownOpen = _ref.searchDropdownOpen,toggleSearchDropdown = _ref.toggleSearchDropdown,toggleSearchTerm = _ref.toggleSearchTerm,filters = _ref.filters;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_SearchToolDropdown2.default, /* istanbul ignore next */{
+				name: 'reference',
+				open: searchDropdownOpen === 'reference',
+				toggle: toggleSearchDropdown,
+				disabled: false },
+
+			reference.map(function (_reference) /* istanbul ignore next */{return (
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_SearchTermButton2.default, /* istanbul ignore next */{
+						key: _reference._id,
+						toggleSearchTerm: toggleSearchTerm,
+						label: /* istanbul ignore next */_utils2.default.trunc(_reference.title, 30),
+						searchTermKey: 'reference',
+						value: _reference,
+						active: /* istanbul ignore next */(0, _helpers.isActive)(filters, _reference, 'reference', 'title') }));})));};
+
+
+
+
+ReferenceDropdown.propTypes = /* istanbul ignore next */_extends({
+	reference: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		_id: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })) }, _helpers.dropdownPropTypes);
+
+
+
+ReferenceDropdown.defaultProps = /* istanbul ignore next */_extends({
+	reference: [] }, _helpers.dropdownDefaultProps);
+
+
+/*
+                                                  	END ReferenceDropdown
+                                                  */ /* istanbul ignore next */exports.default =
+
+ReferenceDropdown;

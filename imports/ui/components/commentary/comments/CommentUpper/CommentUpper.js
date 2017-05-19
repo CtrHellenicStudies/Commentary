@@ -87,7 +87,7 @@ CommentUpperRight.defaultProps = {
 /*
 	BEGIN CommentUpper
 */
-const CommentUpper = (props) => (
+const CommentUpper = props => (
 	<div className="comment-upper">
 		{!props.hideTitle && <CommentUpperLeft
 			title={props.title}

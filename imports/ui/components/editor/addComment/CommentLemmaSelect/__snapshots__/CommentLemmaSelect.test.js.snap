@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommentLemmaSelect renders correctly 1`] = `
+<div
+  className="comments lemma-panel-visible"
+>
+  <div
+    className="comment-outer comment-lemma-comment-outer"
+  >
+    <article
+      className="comment lemma-comment paper-shadow"
+    >
+      <p
+        className="lemma-text no-lines-selected"
+      >
+        No line(s) selected
+      </p>
+    </article>
+  </div>
+</div>
+`;

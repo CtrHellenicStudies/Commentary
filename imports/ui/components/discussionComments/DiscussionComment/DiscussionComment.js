@@ -347,7 +347,7 @@ const DiscussionComment = React.createClass({
 					<div className="discussion-comment-children">
 
 						{discussionComment.children.map((discussionCommentChild, j) =>
-							<div
+							(<div
 								key={j}
 								className="discussion-comment discussion-comment-child"
 							>
@@ -398,7 +398,7 @@ const DiscussionComment = React.createClass({
 								</div>
 
 								{/* <!-- .discussion-comment-child --> */}
-							</div>
+							</div>)
 						)}
 						{/* <!-- .discussion-comment-children --> */}
 					</div>

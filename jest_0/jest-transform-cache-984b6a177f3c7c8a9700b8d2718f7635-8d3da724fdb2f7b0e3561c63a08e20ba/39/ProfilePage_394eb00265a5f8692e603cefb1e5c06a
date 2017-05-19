@@ -1,0 +1,397 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+var /* istanbul ignore next */_RaisedButton = require('material-ui/RaisedButton'); /* istanbul ignore next */var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+var /* istanbul ignore next */_TextField = require('material-ui/TextField'); /* istanbul ignore next */var _TextField2 = _interopRequireDefault(_TextField);
+var /* istanbul ignore next */_throttleDebounce = require('throttle-debounce');
+var /* istanbul ignore next */_Toggle = require('material-ui/Toggle'); /* istanbul ignore next */var _Toggle2 = _interopRequireDefault(_Toggle);
+
+
+var /* istanbul ignore next */_comments = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/comments'); /* istanbul ignore next */var _comments2 = _interopRequireDefault(_comments);
+var /* istanbul ignore next */_discussionComments = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/discussionComments'); /* istanbul ignore next */var _discussionComments2 = _interopRequireDefault(_discussionComments);
+var /* istanbul ignore next */_settings = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/settings'); /* istanbul ignore next */var _settings2 = _interopRequireDefault(_settings);
+
+
+var /* istanbul ignore next */_AvatarEditor = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/avatar/AvatarEditor'); /* istanbul ignore next */var _AvatarEditor2 = _interopRequireDefault(_AvatarEditor);
+var /* istanbul ignore next */_BackgroundImageHolder = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/shared/BackgroundImageHolder'); /* istanbul ignore next */var _BackgroundImageHolder2 = _interopRequireDefault(_BackgroundImageHolder);
+var /* istanbul ignore next */_LoadingPage = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/loading/LoadingPage'); /* istanbul ignore next */var _LoadingPage2 = _interopRequireDefault(_LoadingPage);
+var /* istanbul ignore next */_DiscussionCommentsList = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/discussionComments/DiscussionCommentsList'); /* istanbul ignore next */var _DiscussionCommentsList2 = _interopRequireDefault(_DiscussionCommentsList);
+var /* istanbul ignore next */_ModalChangePwd = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/layouts/auth/ModalChangePwd'); /* istanbul ignore next */var _ModalChangePwd2 = _interopRequireDefault(_ModalChangePwd);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);
+var /* istanbul ignore next */_utils = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/utils'); /* istanbul ignore next */var _utils2 = _interopRequireDefault(_utils);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // lib
+// api
+
+var ProfilePage = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'ProfilePage',
+	propTypes: {
+		user: /* istanbul ignore next */_react2.default.PropTypes.object,
+		settings: /* istanbul ignore next */_react2.default.PropTypes.object,
+		discussionComments: /* istanbul ignore next */_react2.default.PropTypes.array },
+
+
+	childContextTypes: {
+		muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+
+	getInitialState: function getInitialState() {
+		var isPublicEmail = false; /* istanbul ignore next */var
+		user = this.props.user;
+
+		if (user && user.profile.publicEmailAdress !== undefined) {
+			isPublicEmail = true;
+		}
+
+		return {
+			annotationCheckList: [],
+			skip: 0,
+			limit: 100,
+			usernameError: '',
+			emailError: '',
+			modalChangePwdLowered: false,
+			isPublicEmail: isPublicEmail };
+
+	}, /* istanbul ignore next */
+
+	getChildContext: function getChildContext() {
+		return { muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+	}, /* istanbul ignore next */
+
+	componentWillMount: function componentWillMount() {
+		this.handleChangeTextDebounced = /* istanbul ignore next */(0, _throttleDebounce.debounce)(1000, this.handleChangeTextDebounced);
+	}, /* istanbul ignore next */
+
+	loadMore: function loadMore() {
+		this.setState({
+			skip: this.state.skip + 10 });
+
+	}, /* istanbul ignore next */
+
+	handleChangeText: function handleChangeText(field, event) {
+		var value = event.target.value;
+		this.handleChangeTextDebounced(field, value);
+	}, /* istanbul ignore next */
+
+	handleChangeTextDebounced: function handleChangeTextDebounced(field, value) {
+		var user = this.props.user;
+		var emailValue = [];
+		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
+		switch (field) {
+			case 'username':
+				if (/^[a-z0-9A-Z_]{3,15}$/.test(value)) {
+					/* istanbul ignore next */_meteor.Meteor.call('updateAccount', field, value, function (err) {
+						if (err) {
+							console.error(err);
+						}
+					});
+				} else {
+					this.setState({
+						usernameError: 'Username has following the requirements: only letters and ' +
+						'numbers are aloud, no whitespaces, min. length: 3, max. length: 15' });
+
+				}
+				break;
+			case 'email':
+				if (re.test(value)) {
+					this.setState({
+						emailError: '' });
+
+					if (user.emails && user.emails.length > 0) {
+						emailValue = [{
+							address: value || user.emails[0].address,
+							verified: user.emails[0].verified }];
+
+					}
+					/* istanbul ignore next */_meteor.Meteor.call('updateAccount', field, emailValue, function (err) {
+						if (err) {
+							console.error(err);
+						}
+					});
+				} else {
+					this.setState({
+						emailError: 'Invalid email address' });
+
+				}
+				break;
+
+			default:
+				/* istanbul ignore next */_meteor.Meteor.call('updateAccount', /* istanbul ignore next */'profile.' + field, value, function (err) {
+					if (err) {
+						console.error(err);
+					}
+				});}
+
+	}, /* istanbul ignore next */
+
+	handlePublicEmailToggle: function handlePublicEmailToggle() {
+		var user = this.props.user;
+		var setPublic = !this.state.isPublicEmail;
+		this.setState({
+			isPublicEmail: setPublic });
+
+		var publicEmailAdress = '';
+		if (setPublic) {
+			publicEmailAdress = user.emails[0].address;
+		}
+		/* istanbul ignore next */_meteor.Meteor.call('updateAccount', 'profile.publicEmailAdress', publicEmailAdress, function (err) {
+			if (err) {
+				console.error(err);
+			}
+		});
+	}, /* istanbul ignore next */
+
+	showChangePwdModal: function showChangePwdModal() {
+		this.setState({
+			modalChangePwdLowered: true });
+
+	}, /* istanbul ignore next */
+
+	closeChangePwdModal: function closeChangePwdModal() {
+		this.setState({
+			modalChangePwdLowered: false });
+
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var _props =
+		this.props,user = _props.user,settings = _props.settings,discussionComments = _props.discussionComments;
+
+		var toggleStyle = {
+			style: {
+				margin: '20px 0 0 0' } };
+
+
+
+		var changePwdStyle = {
+			margin: '11px 0 0 0' };
+
+
+		if (settings) {
+			/* istanbul ignore next */_utils2.default.setTitle( /* istanbul ignore next */'Profile Page | ' + settings.title);
+			/* istanbul ignore next */_utils2.default.setDescription('');
+			/* istanbul ignore next */_utils2.default.setMetaImage('');
+		}
+
+		if (!user) {
+			return (/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_LoadingPage2.default, /* istanbul ignore next */null));
+		}
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'page page-user-profile' },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'content primary' },
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'section', /* istanbul ignore next */{ className: 'block header cover parallax' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_BackgroundImageHolder2.default, /* istanbul ignore next */{
+							imgSrc: '/images/capitals.jpg' }),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'container v-align-transform' },
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'grid inner' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'center-content' },
+
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'page-title-wrap' }))))),
+
+
+
+
+
+
+
+
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'section', /* istanbul ignore next */{ className: 'page-content' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'user-profile-section' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_AvatarEditor2.default, /* istanbul ignore next */{
+									defaultAvatarUrl: '/images/default_user.jpg' })),
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'user-profile-textfields' },
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+									fullWidth: /* istanbul ignore next */true,
+									floatingLabelText: 'Username',
+									defaultValue: user.username,
+									onChange: this.handleChangeText.bind(null, 'username'),
+									errorText: this.state.usernameError }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+									label: 'Change password',
+									style: changePwdStyle,
+									onClick: this.showChangePwdModal }),
+
+
+								user.emails ?
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+										fullWidth: /* istanbul ignore next */true,
+										floatingLabelText: 'Email',
+										defaultValue: user.emails[0].address,
+										onChange: this.handleChangeText.bind(null, 'emails'),
+										errorText: this.state.emailError }),
+
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Toggle2.default, /* istanbul ignore next */{
+										label: this.state.isPublicEmail ? 'Email public' : 'Email private',
+										labelPosition: 'right',
+										style: toggleStyle.style,
+										toggled: this.state.isPublicEmail,
+										onToggle: this.handlePublicEmailToggle })) :
+
+
+								'',
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+									fullWidth: /* istanbul ignore next */true,
+									floatingLabelText: 'Name',
+									defaultValue: user.profile.name,
+									onChange: this.handleChangeText.bind(null, 'name') }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+									multiLine: /* istanbul ignore next */true,
+									rows: 2,
+									rowsMax: 10,
+									fullWidth: /* istanbul ignore next */true,
+									floatingLabelText: 'Biography',
+									defaultValue: user.profile.biography,
+									onChange: this.handleChangeText.bind(null, 'biography') }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+									fullWidth: /* istanbul ignore next */true,
+									hintText: 'http://university.academia.edu/YourName',
+									floatingLabelText: 'Academia.edu',
+									defaultValue: user.profile.academiaEdu,
+									onChange: this.handleChangeText.bind(null, 'academiaEdu') }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+									fullWidth: /* istanbul ignore next */true,
+									hintText: 'https://twitter.com/@your_name',
+									floatingLabelText: 'Twitter',
+									defaultValue: user.profile.twitter,
+									onChange: this.handleChangeText.bind(null, 'twitter') }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+									fullWidth: /* istanbul ignore next */true,
+									hintText: 'https://facebook.com/your.name',
+									floatingLabelText: 'Facebook',
+									defaultValue: user.profile.facebook,
+									onChange: this.handleChangeText.bind(null, 'facebook') }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+									fullWidth: /* istanbul ignore next */true,
+									hintText: 'https://plus.google.com/+YourName',
+									floatingLabelText: 'Google Plus',
+									defaultValue: user.profile.google,
+									onChange: this.handleChangeText.bind(null, 'google') }),
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'br', /* istanbul ignore next */null),
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'form-save-help' }, /* istanbul ignore next */'(These values are saved automatically.)'))),
+
+
+
+
+
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'article-content' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ id: 'container1', className: 'data-visualization' }),
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ id: 'container2', className: 'data-visualization' })),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'hr', /* istanbul ignore next */{ className: 'user-divider' }),
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'user-discussion-comments' },
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h2', /* istanbul ignore next */null, /* istanbul ignore next */'Your Comments'),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_DiscussionCommentsList2.default, /* istanbul ignore next */{
+								discussionComments: discussionComments })))),
+
+
+
+
+
+
+
+
+				this.state.modalChangePwdLowered ?
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_ModalChangePwd2.default, /* istanbul ignore next */{
+					lowered: this.state.modalChangePwdLowered,
+					closeModal: this.closeChangePwdModal }) :
+
+				''));
+
+
+
+
+	} }); // components
+
+
+var ProfilePageContainer = /* istanbul ignore next */(0, _reactMeteorData.createContainer)(function () {
+	var discussionComments = [];
+	/* istanbul ignore next */_meteor.Meteor.subscribe('settings.tenant', /* istanbul ignore next */_session.Session.get('tenantId'));
+	/* istanbul ignore next */_meteor.Meteor.subscribe('user.discussionComments', /* istanbul ignore next */_meteor.Meteor.userId(), /* istanbul ignore next */_session.Session.get('tenantId'));
+
+	discussionComments = /* istanbul ignore next */_discussionComments2.default.find({
+		userId: /* istanbul ignore next */_meteor.Meteor.userId() }).
+	fetch();
+
+	discussionComments.forEach(function (discussionComment, discussionCommentIndex) {
+		var commentHandle = /* istanbul ignore next */_meteor.Meteor.subscribe('comments', {
+			_id: discussionComment.commentId,
+			tenantId: /* istanbul ignore next */_session.Session.get('tenantId') },
+		0, 1);
+
+		if (commentHandle.ready()) {
+			var comments = /* istanbul ignore next */_comments2.default.find().fetch();
+			if (comments.length) {
+				discussionComments[discussionCommentIndex].comment = comments[0];
+			} else {
+				discussionComments[discussionCommentIndex].comment = {
+					work: '',
+					subwork: '',
+					discussionComments: [] };
+
+			}
+		} else {
+			discussionComments[discussionCommentIndex].comment = {
+				work: '',
+				subwork: '',
+				discussionComments: [] };
+
+		}
+
+		discussionComments[discussionCommentIndex].otherCommentsCount =
+		/* istanbul ignore next */_discussionComments2.default.find({ commentId: discussionComment.commentId }).count();
+	});
+
+	return {
+		discussionComments: discussionComments,
+		settings: /* istanbul ignore next */_settings2.default.findOne() };
+
+}, ProfilePage); /* istanbul ignore next */exports.default =
+
+ProfilePageContainer;

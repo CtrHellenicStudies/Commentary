@@ -4,6 +4,8 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
+import moment from 'moment';
+
 const getDateRevision = (revision) => {
 	if (revision.originalDate) return revision.originalDate;
 	else if (revision.updated) return revision.updated;

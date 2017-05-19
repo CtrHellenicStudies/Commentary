@@ -2,7 +2,7 @@ import React from 'react';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon'; 
 
 const getWorkTitle = (commentGroup) => {
-	let workTitle = commentGroup.work.title;
+	let workTitle = commentGroup.subwork.title;
 	if (workTitle === 'Homeric Hymns') {
 		workTitle = 'Hymns';
 	}

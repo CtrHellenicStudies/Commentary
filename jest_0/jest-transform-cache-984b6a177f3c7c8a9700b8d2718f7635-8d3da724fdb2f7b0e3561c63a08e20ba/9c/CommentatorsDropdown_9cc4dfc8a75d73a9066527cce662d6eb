@@ -1,0 +1,48 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _extends = Object.assign || function (target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i];for (var key in source) {if (Object.prototype.hasOwnProperty.call(source, key)) {target[key] = source[key];}}}return target;};
+
+// components:
+
+
+
+// helpers:
+var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);var /* istanbul ignore next */_SearchToolDropdown = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/header/SearchToolDropdown'); /* istanbul ignore next */var _SearchToolDropdown2 = _interopRequireDefault(_SearchToolDropdown);var /* istanbul ignore next */_SearchTermButton = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/header/SearchTermButton'); /* istanbul ignore next */var _SearchTermButton2 = _interopRequireDefault(_SearchTermButton);var /* istanbul ignore next */_helpers = require('./helpers'); /* istanbul ignore next */function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+/*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   	BEGIN CommentatorsDropdown
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   */
+var CommentatorsDropdown = function CommentatorsDropdown( /* istanbul ignore next */_ref) /* istanbul ignore next */{var commenters = _ref.commenters,searchDropdownOpen = _ref.searchDropdownOpen,toggleSearchDropdown = _ref.toggleSearchDropdown,toggleSearchTerm = _ref.toggleSearchTerm,filters = _ref.filters;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_SearchToolDropdown2.default, /* istanbul ignore next */{
+				name: 'Commentator',
+				open: searchDropdownOpen === 'Commentator',
+				toggle: toggleSearchDropdown,
+				disabled: false },
+
+			commenters.map(function (commenter) /* istanbul ignore next */{return (
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_SearchTermButton2.default, /* istanbul ignore next */{
+						key: commenter._id,
+						toggleSearchTerm: toggleSearchTerm,
+						label: commenter.name,
+						searchTermKey: 'commenters',
+						value: commenter,
+						active: /* istanbul ignore next */(0, _helpers.isActive)(filters, commenter, 'commenters') }));})));};
+
+
+
+
+CommentatorsDropdown.propTypes = /* istanbul ignore next */_extends({
+	commenters: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		_id: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		name: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })) }, _helpers.dropdownPropTypes);
+
+
+
+CommentatorsDropdown.defaultProps = /* istanbul ignore next */_extends({
+	commenters: [] }, _helpers.dropdownDefaultProps);
+
+
+/*
+                                                   	END CommentatorsDropdown
+                                                   */ /* istanbul ignore next */exports.default =
+
+CommentatorsDropdown;

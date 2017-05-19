@@ -134,9 +134,12 @@ exports[`Header renders correctly 1`] = `
           onFocus={[Function]}
           onKeyDown={[Function]}
           onKeyUp={[Function]}
+          onMouseDown={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
           onMouseOut={[Function]}
+          onMouseUp={[Function]}
+          onTouchEnd={[Function]}
           onTouchStart={[Function]}
           onTouchTap={[Function]}
           style={
@@ -159,6 +162,7 @@ exports[`Header renders correctly 1`] = `
               "padding": "5px 10px",
               "position": "relative",
               "textDecoration": "none",
+              "transform": "translate(0, 0)",
               "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
               "verticalAlign": null,
               "width": "auto",
@@ -214,8 +218,11 @@ exports[`Header renders correctly 1`] = `
               onFocus={[Function]}
               onKeyDown={[Function]}
               onKeyUp={[Function]}
+              onMouseDown={[Function]}
               onMouseEnter={[Function]}
               onMouseLeave={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
               onTouchStart={[Function]}
               onTouchTap={[Function]}
               style={
@@ -242,6 +249,7 @@ exports[`Header renders correctly 1`] = `
                   "position": "relative",
                   "textAlign": "center",
                   "textDecoration": "none",
+                  "transform": "translate(0, 0)",
                   "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
                   "userSelect": "none",
                   "verticalAlign": null,
@@ -286,8 +294,11 @@ exports[`Header renders correctly 1`] = `
               onFocus={[Function]}
               onKeyDown={[Function]}
               onKeyUp={[Function]}
+              onMouseDown={[Function]}
               onMouseEnter={[Function]}
               onMouseLeave={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
               onTouchStart={[Function]}
               onTouchTap={[Function]}
               style={
@@ -314,6 +325,7 @@ exports[`Header renders correctly 1`] = `
                   "position": "relative",
                   "textAlign": "center",
                   "textDecoration": "none",
+                  "transform": "translate(0, 0)",
                   "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
                   "userSelect": "none",
                   "verticalAlign": null,

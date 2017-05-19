@@ -16,6 +16,7 @@ describe('LemmaReferenceModal', () => {
 					subwork={1}
 					lineFrom={1}
 					closeLemmaReference={() => {}}
+					lemmaText={[]}
 				/>)
 			.toJSON();
 		expect(tree).toMatchSnapshot();

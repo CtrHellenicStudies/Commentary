@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
+import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
@@ -42,13 +42,13 @@ const EditKeyword = React.createClass({
 		keyword: React.PropTypes.object,
 		selectedLineFrom: React.PropTypes.number,
 		selectedLineTo: React.PropTypes.number,
+		keywordsOptions: React.PropTypes.array,
+		keyideasOptions: React.PropTypes.array,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		const keyword = this.props.keyword;
@@ -75,59 +75,6 @@ const EditKeyword = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	getMeteorData() {
-		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
-		const keywordsOptions = [];
-		const keywords = Keywords.find({ type: 'word' }).fetch();
-		keywords.forEach((keyword) => {
-			keywordsOptions.push({
-				value: keyword.title,
-				label: keyword.title,
-				slug: keyword.slug,
-			});
-		});
-
-		const keyideasOptions = [];
-		const keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keyideas.forEach((keyidea) => {
-			keyideasOptions.push({
-				value: keyidea.title,
-				label: keyidea.title,
-				slug: keyidea.slug,
-			});
-		});
-
-		Meteor.subscribe('referenceWorks');
-		const referenceWorksOptions = [];
-		const referenceWorks = ReferenceWorks.find().fetch();
-		referenceWorks.forEach((referenceWork) => {
-			referenceWorksOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-			});
-		});
-
-		Meteor.subscribe('commenters', Session.get('tenantId'));
-		const commentersOptions = [];
-		let commenters = [];
-		if (Meteor.user() && Meteor.user().canEditCommenters) {
-			commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
-		}
-		commenters.forEach((commenter) => {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		});
-
-		return {
-			keywordsOptions,
-			keyideasOptions,
-			referenceWorksOptions,
-			commentersOptions,
-		};
 	},
 
 	_getKeywordEditorState(keyword) {
@@ -196,7 +143,7 @@ const EditKeyword = React.createClass({
 
 	onSearchChange({ value }) {
 		const keywordSuggestions = [];
-		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
@@ -219,8 +166,8 @@ const EditKeyword = React.createClass({
 	},
 
 	isOptionUnique(newOption) {
-		const keywordsOptions = this.data.keywordsOptions;
-		const keyideasOptions = this.data.keyideasOptions;
+		const keywordsOptions = this.props.keywordsOptions;
+		const keyideasOptions = this.props.keyideasOptions;
 		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
 		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
 		const BreakException = {};
@@ -414,4 +361,58 @@ const EditKeyword = React.createClass({
 	},
 });
 
-export default EditKeyword;
+
+const EditKeywordContainer = createContainer(() => {
+	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+	const keywordsOptions = [];
+	const keywords = Keywords.find({ type: 'word' }).fetch();
+	keywords.forEach((keyword) => {
+		keywordsOptions.push({
+			value: keyword.title,
+			label: keyword.title,
+			slug: keyword.slug,
+		});
+	});
+
+	const keyideasOptions = [];
+	const keyideas = Keywords.find({ type: 'idea' }).fetch();
+	keyideas.forEach((keyidea) => {
+		keyideasOptions.push({
+			value: keyidea.title,
+			label: keyidea.title,
+			slug: keyidea.slug,
+		});
+	});
+
+	Meteor.subscribe('referenceWorks');
+	const referenceWorksOptions = [];
+	const referenceWorks = ReferenceWorks.find().fetch();
+	referenceWorks.forEach((referenceWork) => {
+		referenceWorksOptions.push({
+			value: referenceWork._id,
+			label: referenceWork.title,
+		});
+	});
+
+	Meteor.subscribe('commenters', Session.get('tenantId'));
+	const commentersOptions = [];
+	let commenters = [];
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
+	}
+	commenters.forEach((commenter) => {
+		commentersOptions.push({
+			value: commenter._id,
+			label: commenter.name,
+		});
+	});
+
+	return {
+		keywordsOptions,
+		keyideasOptions,
+		referenceWorksOptions,
+		commentersOptions,
+	};
+}, EditKeyword);
+
+export default EditKeywordContainer;

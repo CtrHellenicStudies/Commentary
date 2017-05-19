@@ -21,13 +21,14 @@ const LemmaReferenceModal = React.createClass({
 		lineFrom: React.PropTypes.number.isRequired,
 		lineTo: React.PropTypes.number,
 		closeLemmaReference: React.PropTypes.func.isRequired,
+		lemmaText: React.PropTypes.array,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
+	// mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -40,70 +41,70 @@ const LemmaReferenceModal = React.createClass({
 		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
-	getMeteorData() {
-		const lemmaQuery = {
-			'work.slug': this.props.work,
-			'subwork.n': this.props.subwork,
-			'text.n': {
-				$gte: this.props.lineFrom,
-			},
-		};
-		let lemmaText = [];
-
-		if (this.props.lineTo) {
-			lemmaQuery['text.n'].$lte = this.props.lineTo;
-		} else {
-			lemmaQuery['text.n'].$lte = this.props.lineFrom;
-		}
-
-		const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
-		if (textHandle.ready()) {
-			const textNodes = TextNodes.find(lemmaQuery).fetch();
-			const editions = [];
-
-			let textIsInEdition = false;
-			textNodes.forEach((textNode) => {
-				textNode.text.forEach((text) => {
-					textIsInEdition = false;
-
-					editions.forEach((edition) => {
-						if (text.edition.slug === edition.slug) {
-							edition.lines.push({
-								html: text.html,
-								n: text.n,
-							});
-							textIsInEdition = true;
-						}
-					});
-
-					if (!textIsInEdition) {
-						editions.push({
-							title: text.edition.title,
-							slug: text.edition.slug,
-							lines: [
-								{
-									html: text.html,
-									n: text.n,
-								},
-							],
-						});
-					}
-				});
-			});
-
-			lemmaText = editions;
-		}
-
-		return {
-			lemmaText,
-		};
-	},
+	// getMeteorData() {
+	// 	const lemmaQuery = {
+	// 		'work.slug': this.props.work,
+	// 		'subwork.n': this.props.subwork,
+	// 		'text.n': {
+	// 			$gte: this.props.lineFrom,
+	// 		},
+	// 	};
+	// 	let lemmaText = [];
+	//
+	// 	if (this.props.lineTo) {
+	// 		lemmaQuery['text.n'].$lte = this.props.lineTo;
+	// 	} else {
+	// 		lemmaQuery['text.n'].$lte = this.props.lineFrom;
+	// 	}
+	//
+	// 	const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
+	// 	if (textHandle.ready()) {
+	// 		const textNodes = TextNodes.find(lemmaQuery).fetch();
+	// 		const editions = [];
+	//
+	// 		let textIsInEdition = false;
+	// 		textNodes.forEach((textNode) => {
+	// 			textNode.text.forEach((text) => {
+	// 				textIsInEdition = false;
+	//
+	// 				editions.forEach((edition) => {
+	// 					if (text.edition.slug === edition.slug) {
+	// 						edition.lines.push({
+	// 							html: text.html,
+	// 							n: text.n,
+	// 						});
+	// 						textIsInEdition = true;
+	// 					}
+	// 				});
+	//
+	// 				if (!textIsInEdition) {
+	// 					editions.push({
+	// 						title: text.edition.title,
+	// 						slug: text.edition.slug,
+	// 						lines: [
+	// 							{
+	// 								html: text.html,
+	// 								n: text.n,
+	// 							},
+	// 						],
+	// 					});
+	// 				}
+	// 			});
+	// 		});
+	//
+	// 		lemmaText = editions;
+	// 	}
+	//
+	// 	return {
+	// 		lemmaText,
+	// 	};
+	// },
 
 	toggleEdition(editionSlug) {
-		if (this.data.lemmaText.length) {
-			if (this.data.lemmaText[this.state.selectedLemmaEditionIndex].slug !== editionSlug) {
+		if (this.props.lemmaText.length) {
+			if (this.props.lemmaText[this.state.selectedLemmaEditionIndex].slug !== editionSlug) {
 				let newSelectedEditionIndex = 0;
-				this.data.lemmaText.forEach((edition, index) => {
+				this.props.lemmaText.forEach((edition, index) => {
 					if (edition.slug === editionSlug) {
 						newSelectedEditionIndex = index;
 					}
@@ -125,9 +126,9 @@ const LemmaReferenceModal = React.createClass({
 	render() {
 		const self = this;
 		const lemmaText =
-			this.data.lemmaText || [];
+			this.props.lemmaText || [];
 		const selectedLemmaEdition =
-			this.data.lemmaText[this.state.selectedLemmaEditionIndex] || { lines: [] };
+			this.props.lemmaText[this.state.selectedLemmaEditionIndex] || { lines: [] };
 		const styles = {
 			lemmaReferenceModal: {
 				top: this.props.top,
@@ -199,4 +200,63 @@ const LemmaReferenceModal = React.createClass({
 
 });
 
-export default LemmaReferenceModal;
+const LemmaReferenceModalContainer = createContainer(({workSlug, subworkN, lineFrom, lineTo}) => {
+	const lemmaQuery = {
+		'work.slug': workSlug,
+		'subwork.n': subworkN,
+		'text.n': {
+			$gte: lineFrom,
+		},
+	};
+	let lemmaText = [];
+
+	if (lineTo) {
+		lemmaQuery['text.n'].$lte = lineTo;
+	} else {
+		lemmaQuery['text.n'].$lte = lineFrom;
+	}
+
+	const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
+	if (textHandle.ready()) {
+		const textNodes = TextNodes.find(lemmaQuery).fetch();
+		const editions = [];
+
+		let textIsInEdition = false;
+		textNodes.forEach((textNode) => {
+			textNode.text.forEach((text) => {
+				textIsInEdition = false;
+
+				editions.forEach((edition) => {
+					if (text.edition.slug === edition.slug) {
+						edition.lines.push({
+							html: text.html,
+							n: text.n,
+						});
+						textIsInEdition = true;
+					}
+				});
+
+				if (!textIsInEdition) {
+					editions.push({
+						title: text.edition.title,
+						slug: text.edition.slug,
+						lines: [
+							{
+								html: text.html,
+								n: text.n,
+							},
+						],
+					});
+				}
+			});
+		});
+
+		lemmaText = editions;
+	}
+
+	return {
+		lemmaText,
+	};
+}, LemmaReferenceModal);
+
+export default LemmaReferenceModalContainer;

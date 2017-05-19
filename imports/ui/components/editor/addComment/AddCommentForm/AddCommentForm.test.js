@@ -12,9 +12,11 @@ describe('AddCommentForm', () => {
 			.create(
 				<MuiThemeProvider>
 					<AddCommentForm
-						selectedLineFrom=""
-						selectedLineTo=""
-						submitForm=""
+						selectedLineFrom={1}
+						selectedLineTo={1}
+						submitForm={() => {}}
+						keywordOptions={[]}
+						keyideasOptions={[]}
 					/>
 				</MuiThemeProvider>
 			)
@@ -22,5 +24,3 @@ describe('AddCommentForm', () => {
 		expect(tree).toMatchSnapshot();
 	});
 });
-
-// TODO Fix ReferenceError: ReactMeteorData is not defined

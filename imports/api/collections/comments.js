@@ -145,6 +145,11 @@ Comments.schema = new SimpleSchema({
 		type: Boolean,
 		optional: true,
 	},
+
+	discussionCommentsDisabled: {
+		type: Boolean,
+		optional: true,
+	}
 });
 
 Comments.attachSchema(Comments.schema);

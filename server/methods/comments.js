@@ -90,8 +90,8 @@ Meteor.methods({
 		}
 
 		let allowedToEdit = false;
-		Meteor.user().canEditCommenters.forEach((commenterId) => {
-			comment.commenters.forEach((commenter) => {
+		Meteor.user().canEditCommenters.forEach(commenterId => {
+			comment.commenters.forEach(commenter => {
 				if (commenterId === commenter._id) {
 					allowedToEdit = true;
 				}
@@ -147,5 +147,38 @@ Meteor.methods({
 
 		if (!value.length) return Comments.find({}, { limit: 5, sort: { created: -1 } }).fetch();
 		return Comments.find({ $text: { $search: value } }, { limit: 5, sort: { created: -1 } }).fetch();
+	},
+
+	'comments.toggleDiscussionComments': (token, _id) => {
+		check(_id, String);
+		check(token, Match.Maybe(String));
+
+		const roles = ['editor', 'admin', 'commenter'];
+		if ((
+				!Meteor.userId()
+				&& !Roles.userIsInRole(Meteor.user(), roles)
+			)
+			&& !Meteor.users.findOne({
+				roles: roles,
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})
+		) {
+			throw new Meteor.Error('comment-insert', 'not-authorized');
+		}
+
+		const comment = Comments.findOne({_id});
+
+		let updater = !comment.discussionCommentsDisabled;
+		if (typeof updater === 'undefined') updater = true;
+
+		if (comment) {
+			Comments.update({
+				_id
+			}, {
+				$set: {
+					discussionCommentsDisabled: updater,
+				},
+			});
+		}
 	},
 });

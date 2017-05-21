@@ -62,7 +62,7 @@ const DiscussionThread = React.createClass({
 
 	render() {
 		const currentUser = Meteor.user();
-		const { discussionComments } = this.props;
+		const { discussionComments, comment } = this.props;
 
 		if (!discussionComments) {
 			return null;
@@ -127,61 +127,66 @@ const DiscussionThread = React.createClass({
 					''
 					:
 					<div className="discussion-thread">
-						<div className="add-comment-wrap paper-shadow ">
-							<IconButton
-								className="close-discussion paper-shadow"
-								iconClassName="mdi mdi-close"
-								onClick={() => { this.hideDiscussionThread(); this.props.toggleLemma(); }}
-							/>
+						{comment.discussionCommentsDisabled ? 
+							<div className="no-results-wrap">
+								<span className="no-results-text">Discussion will be coming soon.</span>
+							</div> :
+							<div className="add-comment-wrap paper-shadow ">
+								<IconButton
+									className="close-discussion paper-shadow"
+									iconClassName="mdi mdi-close"
+									onClick={() => { this.hideDiscussionThread(); this.props.toggleLemma(); }}
+								/>
 
-							<form
-								ref={(component) => { this.newCommentForm = component; }}
-								className="new-comment-form"
-								name="new-comment-form"
-							>
-								<div className="add-comment-row-1">
-									<div className="profile-picture paper-shadow">
-										<img
-											src={avatarUrl}
-											alt="Commentary User"
-										/>
-									</div>
-									<textarea
-										className="new-comment-text"
-										name="newCommentText"
-										placeholder={textareaPlaceholder}
-									/>
-								</div>
-								<div className="add-comment-row-2 add-comment-row">
-									<div className="error-message">
-										<span className="error-message-text">Please enter your text to submit.</span>
-									</div>
-									{ currentUser ?
-										<RaisedButton
-											label="Submit"
-											className="submit-comment-button paper-shadow"
-											onClick={this.addDiscussionComment}
-										/>
-										:
-										<div
-											className="new-comment-login"
-										>
-											<FlatButton
-												label="Login"
-												className="login-link"
-												onClick={this.props.showLoginModal}
-											/>
-											<FlatButton
-												label="Join"
-												className="join-link"
-												href="/sign-up"
-												target="_blank"
+								<form
+									ref={(component) => { this.newCommentForm = component; }}
+									className="new-comment-form"
+									name="new-comment-form"
+								>
+									<div className="add-comment-row-1">
+										<div className="profile-picture paper-shadow">
+											<img
+												src={avatarUrl}
+												alt="Commentary User"
 											/>
 										</div>
-									}
-								</div>
-							</form>
-						</div>
+										<textarea
+											className="new-comment-text"
+											name="newCommentText"
+											placeholder={textareaPlaceholder}
+										/>
+									</div>
+									<div className="add-comment-row-2 add-comment-row">
+										<div className="error-message">
+											<span className="error-message-text">Please enter your text to submit.</span>
+										</div>
+										{ currentUser ?
+											<RaisedButton
+												label="Submit"
+												className="submit-comment-button paper-shadow"
+												onClick={this.addDiscussionComment}
+											/>
+											:
+												<div
+													className="new-comment-login"
+												>
+													<FlatButton
+														label="Login"
+														className="login-link"
+														onClick={this.props.showLoginModal}
+													/>
+													<FlatButton
+														label="Join"
+														className="join-link"
+														href="/sign-up"
+														target="_blank"
+													/>
+												</div>
+										}
+									</div>
+								</form>
+							</div>
+						}
 						<div
 							className="sort-by-wrap"
 						>

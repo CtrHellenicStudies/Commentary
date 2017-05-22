@@ -1,3 +1,4 @@
+import React from 'react';
 import { CompositeDecorator } from 'draft-js';
 
 const Link = (props) => {
@@ -11,6 +12,12 @@ const Link = (props) => {
 			{props.children}
 		</a>
 	);
+};
+
+Link.propTypes = {
+	contentState: React.PropTypes.object,
+	children: React.PropTypes.object,
+	entityKey: React.PropTypes.string,
 };
 
 function findLinkEntities(contentBlock, callback, contentState) {
@@ -31,7 +38,6 @@ const linkDecorator = new CompositeDecorator([{
 	strategy: findLinkEntities,
 	component: Link,
 }]);
-
 
 export default linkDecorator;
 export { Link, findLinkEntities };

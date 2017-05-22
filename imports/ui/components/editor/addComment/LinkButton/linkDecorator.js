@@ -12,6 +12,17 @@ const Link = (props) => {
 		</a>
 	);
 };
+Link.propTypes = {
+	contentState: React.PropTypes.shape({
+		getEntity: React.PropTypes.func.isRequired,
+	}).isRequired,
+	children: React.PropTypes.element,
+	entityKey: React.PropTypes.string,
+};
+Link.defaultProps = {
+	children: null,
+	entityKey: null,
+};
 
 function findLinkEntities(contentBlock, callback, contentState) {
 	contentBlock.findEntityRanges(

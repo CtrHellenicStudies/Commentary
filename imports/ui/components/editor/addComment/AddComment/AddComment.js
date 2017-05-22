@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
+import { createContainer } from 'meteor/react-meteor-data';
 import { Random } from 'meteor/random';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -48,6 +48,8 @@ import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
+// helpers:
+import linkDecorator from '/imports/ui/components//editor/addComment/LinkButton/linkDecorator';
 
 /*
  *	helpers
@@ -115,12 +117,10 @@ function _getSuggestionsFromComments(comments) {
 	}
 	return suggestions;
 }
-const onNewOptionCreator = (newOption) => {
-	return {
-		label: newOption.label,
-		value: newOption.label
-	};
-};
+const onNewOptionCreator = newOption => ({
+	label: newOption.label,
+	value: newOption.label
+});
 const shouldKeyDownEventCreateNewOption = (sig) => {
 	if (sig.keyCode === 13 ||
 		sig.keyCode === 188) {
@@ -128,29 +128,6 @@ const shouldKeyDownEventCreateNewOption = (sig) => {
 	}
 	return false;
 };
-
-const Link = (props) => {
-	const {url} = props.contentState.getEntity(props.entityKey).getData();
-	return (
-		<a href={url} style={styles.link}>
-			{props.children}
-		</a>
-	);
-};
-
-function findLinkEntities(contentBlock, callback, contentState) {
-	contentBlock.findEntityRanges(
-		(character) => {
-			const entityKey = character.getEntity();
-			return (
-				entityKey !== null &&
-				contentState.getEntity(entityKey).getType() === 'LINK'
-			);
-		},
-		callback
-	);
-}
-
 
 
 
@@ -177,16 +154,10 @@ class AddComment extends React.Component {
 
 	constructor(props) {
 		super(props);
-
-		const decorator = new CompositeDecorator([{
-			strategy: findLinkEntities,
-			component: Link,
-		}]);
-
 		
 		this.state = {
 			titleEditorState: EditorState.createEmpty(),
-			textEditorState: EditorState.createEmpty(decorator),
+			textEditorState: EditorState.createEmpty(linkDecorator),
 
 			commenterValue: null,
 			titleValue: '',
@@ -564,7 +535,7 @@ class AddComment extends React.Component {
 											*/}
 											{referenceWorks.map((referenceWork, i) => {
 												const _referenceWorkOptions = [];
-												referenceWorkOptions.forEach((rW) => {
+												referenceWorkOptions.forEach(rW => {
 													_referenceWorkOptions.push({
 														value: rW.value,
 														label: rW.label,

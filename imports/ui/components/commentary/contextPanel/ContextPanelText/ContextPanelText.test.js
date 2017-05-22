@@ -9,13 +9,11 @@ describe('ContextPanelText', () => {
 
 		const tree = renderer
 			.create(<ContextPanelText
-				lineFrom=""
-				lineTo=""
-				onBeforeClicked=""
-				onAfterClicked=""
-				selectedLemmaEdition=""
-				lemmaText=""
-				maxLine=""
+				lineFrom={1}
+				onBeforeClicked={() => {}}
+				onAfterClicked={() => {}}
+				selectedLemmaEdition="test"
+				lemmaText={[]}
 			/>)
 			.toJSON();
 		expect(tree).toMatchSnapshot();

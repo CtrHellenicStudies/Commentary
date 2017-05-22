@@ -8,7 +8,13 @@ describe('CommentLemmaSelect', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<CommentLemmaSelect />)
+			.create(
+				<CommentLemmaSelect
+					workSlug={'iliad'}
+					subworkN={1}
+					selectedLineFrom={1}
+				/>
+			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

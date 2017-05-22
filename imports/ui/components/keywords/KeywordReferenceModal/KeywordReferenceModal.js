@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
+import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
@@ -23,31 +23,15 @@ const KeywordReferenceModal = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
-	getMeteorData() {
-		const query = {
-			slug: this.props.keyword,
-		};
-		console.log(query);
-		const handle = Meteor.subscribe('keywords.all', query);
-		const keyword = Keywords.findOne(query);
-
-		return {
-			keyword,
-			ready: handle.ready(),
-		};
-	},
-
 	renderKeywordHTML() {
 		let html = '';
-		const keyword = this.data.keyword;
+		const { keyword } = this.props;
 
-		if ('description' in keyword && keyword.description.length) {
+		if (keyword && 'description' in keyword && keyword.description.length) {
 			html = `${Utils.trunc(keyword.description, 120)} <a href="/keywords/${keyword.slug}">Read more</a>`;
 		}
 
@@ -56,7 +40,7 @@ const KeywordReferenceModal = React.createClass({
 
 	render() {
 		const self = this;
-		const keyword = this.data.keyword;
+		const { keyword } = this.props;
 		const styles = {
 			modal: {
 				top: this.props.top,
@@ -64,6 +48,10 @@ const KeywordReferenceModal = React.createClass({
 			},
 
 		};
+
+		if (!keyword) {
+			return null;
+		}
 
 		return (
 			<div
@@ -94,4 +82,17 @@ const KeywordReferenceModal = React.createClass({
 
 });
 
-export default KeywordReferenceModal;
+const KeywordReferenceModalContainer = createContainer(({ keywordSlug }) => {
+	const query = {
+		slug: keywordSlug,
+	};
+	const handle = Meteor.subscribe('keywords.all', query);
+	const keyword = Keywords.findOne(query);
+
+	return {
+		keyword,
+		ready: handle.ready(),
+	};
+}, KeywordReferenceModal);
+
+export default KeywordReferenceModalContainer;

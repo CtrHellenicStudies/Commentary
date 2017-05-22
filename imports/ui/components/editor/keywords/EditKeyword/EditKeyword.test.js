@@ -8,7 +8,12 @@ describe('EditKeyword', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<EditKeyword submitForm="" onTypeChange="" />)
+			.create(
+				<EditKeyword
+					submitForm={() => {}}
+					onTypeChange={() => {}}
+				/>
+			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

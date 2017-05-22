@@ -68,7 +68,7 @@ class ContextPanelText extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.lines = [];
 
 		// methods:
@@ -253,7 +253,7 @@ class ContextPanelText extends React.Component {
 }
 ContextPanelText.propTypes = {
 	lineFrom: React.PropTypes.number.isRequired,
-	lineTo: React.PropTypes.number.isRequired,
+	lineTo: React.PropTypes.number,
 	onBeforeClicked: React.PropTypes.func.isRequired,
 	onAfterClicked: React.PropTypes.func.isRequired,
 	selectedLemmaEdition: React.PropTypes.string.isRequired,
@@ -269,7 +269,7 @@ ContextPanelText.propTypes = {
 		lineFrom: React.PropTypes.number.isRequired,
 		lineTo: React.PropTypes.number,
 	}),
-	maxLine: React.PropTypes.number.isRequired,
+	maxLine: React.PropTypes.number,
 
 	// requiered if editor:
 	disableEdit: React.PropTypes.bool,

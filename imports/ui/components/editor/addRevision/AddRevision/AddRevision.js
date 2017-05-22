@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
@@ -121,12 +122,14 @@ const AddRevision = React.createClass({
 		keywordsOptions: React.PropTypes.array,
 		keyideasOptions: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
+		isTest: React.PropTypes.bool,
 	},
 
 	getInitialState() {
 		const { comment } = this.props;
 		const revisionId = comment.revisions.length - 1;
 		const revision = comment.revisions[revisionId]; // get newest revision
+		let revisionTitle = '';
 
 		const keywordsValue = [];
 		const keyideasValue = [];
@@ -147,11 +150,14 @@ const AddRevision = React.createClass({
 			});
 		}
 
+		if (revision && revision.title) {
+			revisionTitle = revision.title;
+		}
 
 		return {
 			revision,
 
-			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
+			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revisionTitle)),
 			textEditorState: this._getRevisionEditorState(revision),
 
 			titleValue: '',
@@ -348,7 +354,7 @@ const AddRevision = React.createClass({
 	handleUpdate() {
 		const data = this.refs.form.getModel(); // eslint-disable-line
 		let key;
-		
+
 		for (key in data) { // eslint-disable-line
 			const params = key.split('_');
 			params[0] = parseInt(params[0], 10);
@@ -419,9 +425,13 @@ const AddRevision = React.createClass({
 
 	render() {
 		const self = this;
-		const { comment } = this.props;
+		const { comment, isTest } = this.props;
 		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorks, textEditorState } = this.state;
 		const { keywordsOptions, keyideasOptions, referenceWorkOptions } = this.props;
+
+		if (isTest) {
+			return null;
+		}
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -467,15 +477,17 @@ const AddRevision = React.createClass({
 									</div>
 								</div>
 								<h1 className="add-comment-title">
-									<Editor
-										editorState={titleEditorState}
-										onChange={this.onTitleChange}
-										placeholder="Comment title..."
-										spellCheck
-										stripPastedStyles
-										plugins={[singleLinePlugin]}
-										blockRenderMap={singleLinePlugin.blockRenderMap}
-									/>
+									{!isTest ?
+										<Editor
+											editorState={titleEditorState}
+											onChange={this.onTitleChange}
+											placeholder="Comment title..."
+											spellCheck
+											stripPastedStyles
+											plugins={[singleLinePlugin]}
+											blockRenderMap={singleLinePlugin.blockRenderMap}
+										/>
+									: ''}
 								</h1>
 								<Creatable
 									name="keywords"

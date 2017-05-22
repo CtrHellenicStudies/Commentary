@@ -8,7 +8,11 @@ describe('Home', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<Home />)
+			.create(
+				<Home
+					isTest
+				/>
+			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

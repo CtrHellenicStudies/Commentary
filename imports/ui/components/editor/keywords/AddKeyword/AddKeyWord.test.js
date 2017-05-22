@@ -14,6 +14,7 @@ describe('AddKeyword', () => {
 					<AddKeyword
 						submitForm={() => {}}
 						onTypeChange={() => {}}
+						isTest
 					/>
 				</MuiThemeProvider>
 			)

@@ -8,7 +8,11 @@ describe('KeywordReferenceModal', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<KeywordReferenceModal />)
+			.create(
+				<KeywordReferenceModal
+					keywordSlug="test"
+				/>
+			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

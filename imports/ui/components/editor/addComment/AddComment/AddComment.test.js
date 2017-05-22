@@ -13,6 +13,7 @@ describe('AddComment', () => {
 				<MuiThemeProvider>
 					<AddComment
 						submitForm={() => {}}
+						isTest
 					/>
 				</MuiThemeProvider>
 			)

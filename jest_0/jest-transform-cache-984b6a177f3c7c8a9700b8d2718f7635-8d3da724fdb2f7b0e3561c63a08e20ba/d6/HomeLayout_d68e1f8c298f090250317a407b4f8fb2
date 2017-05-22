@@ -1,0 +1,78 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_MuiThemeProvider = require('material-ui/styles/MuiThemeProvider'); /* istanbul ignore next */var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+
+var /* istanbul ignore next */_settings = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/settings'); /* istanbul ignore next */var _settings2 = _interopRequireDefault(_settings);
+
+
+var /* istanbul ignore next */_Header = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/layouts/header/Header'); /* istanbul ignore next */var _Header2 = _interopRequireDefault(_Header);
+var /* istanbul ignore next */_Footer = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/footer/Footer'); /* istanbul ignore next */var _Footer2 = _interopRequireDefault(_Footer);
+
+
+var /* istanbul ignore next */_Home = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/home/Home'); /* istanbul ignore next */var _Home2 = _interopRequireDefault(_Home);
+var /* istanbul ignore next */_LoadingHome = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/loading/LoadingHome'); /* istanbul ignore next */var _LoadingHome2 = _interopRequireDefault(_LoadingHome);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // api
+
+
+var HomeLayout = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'HomeLayout',
+	propTypes: {
+		settings: /* istanbul ignore next */_react2.default.PropTypes.object,
+		ready: /* istanbul ignore next */_react2.default.PropTypes.bool }, /* istanbul ignore next */
+
+
+	getInitialState: function getInitialState() {
+		return {
+			filters: [] };
+
+	}, /* istanbul ignore next */
+
+	componentDidMount: function componentDidMount() {
+		if (typeof location.hash !== 'undefined' && location.hash.length > 0) {
+			setTimeout(function () {
+				$('html, body').animate({ scrollTop: $(location.hash).offset().top - 100 }, 300);
+			}, 1000);
+		}
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var
+		settings = this.props.settings;
+
+		if (!settings) {
+			return (/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_LoadingHome2.default, /* istanbul ignore next */null));
+		}
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_MuiThemeProvider2.default, /* istanbul ignore next */{ muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'chs-layout home-layout' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Header2.default, /* istanbul ignore next */{
+						isOnHomeView: /* istanbul ignore next */true }),
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Home2.default, /* istanbul ignore next */{
+						settings: settings }),
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Footer2.default, /* istanbul ignore next */null))));
+
+
+
+	} }); // lib
+// components
+// layouts
+
+var HomeLayoutContainer = /* istanbul ignore next */(0, _reactMeteorData.createContainer)(function () {
+	var handle = /* istanbul ignore next */_meteor.Meteor.subscribe('settings.tenant', /* istanbul ignore next */_session.Session.get('tenantId'));
+
+	return {
+		settings: /* istanbul ignore next */_settings2.default.findOne(),
+		ready: handle.ready() };
+
+}, HomeLayout); /* istanbul ignore next */exports.default =
+
+HomeLayoutContainer;

@@ -1,0 +1,46 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_FlatButton = require('material-ui/FlatButton'); /* istanbul ignore next */var _FlatButton2 = _interopRequireDefault(_FlatButton);
+var /* istanbul ignore next */_FontIcon = require('material-ui/FontIcon'); /* istanbul ignore next */var _FontIcon2 = _interopRequireDefault(_FontIcon);
+var /* istanbul ignore next */_IconButton = require('material-ui/IconButton'); /* istanbul ignore next */var _IconButton2 = _interopRequireDefault(_IconButton);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var SearchToolDropdown = function SearchToolDropdown( /* istanbul ignore next */_ref) /* istanbul ignore next */{var name = _ref.name,children = _ref.children,open = _ref.open,toggle = _ref.toggle,disabled = _ref.disabled;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: /* istanbul ignore next */'dropdown search-dropdown search-dropdown--' + name.replace(' ', '') + ' ' + (open ? 'open' : '') },
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+				className: /* istanbul ignore next */'search-tool dropdown-toggle ' + (disabled ?
+				'search-tool-disabled' : ''),
+				label: name,
+				labelPosition: 'before',
+				icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-chevron-down' }),
+				onClick: function /* istanbul ignore next */onClick() {
+					toggle(name);
+				},
+				disabled: disabled }),
+
+
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'ul', /* istanbul ignore next */{ className: 'dropdown-menu' },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'dropdown-menu-inner' },
+					children),
+
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_IconButton2.default, /* istanbul ignore next */{
+					className: 'close-dropdown',
+					iconClassName: 'mdi mdi-close',
+					onClick: function /* istanbul ignore next */onClick() {
+						toggle(name);
+					} }))));};
+
+
+
+
+SearchToolDropdown.propTypes = {
+	name: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired, // name of the dropdown option
+	children: /* istanbul ignore next */_react2.default.PropTypes.node.isRequired, // content to show inside dropdown
+	open: /* istanbul ignore next */_react2.default.PropTypes.bool.isRequired, // whether dropdown is open or not
+	toggle: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired, // function to toggle the dropdown
+	disabled: /* istanbul ignore next */_react2.default.PropTypes.bool };
+
+SearchToolDropdown.defaultProps = {
+	disabled: false }; /* istanbul ignore next */exports.default =
+
+
+SearchToolDropdown;

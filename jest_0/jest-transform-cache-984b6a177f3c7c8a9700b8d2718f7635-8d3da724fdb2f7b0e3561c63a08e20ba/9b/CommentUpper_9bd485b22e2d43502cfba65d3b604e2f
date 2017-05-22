@@ -1,0 +1,129 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });exports.CommentUpperRight = exports.CommentUpperLeft = undefined;var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_AvatarIcon = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/avatar/AvatarIcon'); /* istanbul ignore next */var _AvatarIcon2 = _interopRequireDefault(_AvatarIcon);
+var /* istanbul ignore next */_FontIcon = require('material-ui/FontIcon'); /* istanbul ignore next */var _FontIcon2 = _interopRequireDefault(_FontIcon);
+var /* istanbul ignore next */_FlatButton = require('material-ui/FlatButton'); /* istanbul ignore next */var _FlatButton2 = _interopRequireDefault(_FlatButton);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+
+/*
+                                                                                                                                                                                                                                                              	BEGIN CommentUpperLeft
+                                                                                                                                                                                                                                                              */
+var CommentUpperLeft = function CommentUpperLeft(props) /* istanbul ignore next */{return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-upper-left' },
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h1', /* istanbul ignore next */null, props.title)));};
+
+
+CommentUpperLeft.propTypes = {
+	title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired };
+
+/*
+                                                                                 	END CommentUpperLeft
+                                                                                 */
+
+
+/*
+                                                                                    	BEGIN CommentUpperRight
+                                                                                    */
+var CommentUpperRight = function CommentUpperRight(props) /* istanbul ignore next */{return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-upper-right' },
+			props.commenters.map(function (commenter) /* istanbul ignore next */{return (
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+							key: commenter._id,
+							className: 'comment-author' },
+
+						props.userCanEditCommenters.indexOf(commenter._id) > -1 ?
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+							label: 'Edit comment',
+							href: /* istanbul ignore next */'/commentary/' + props.commentId + '/edit',
+							icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-pen' }) }) :
+
+
+						'',
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-author-text' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: /* istanbul ignore next */'/commenters/' + commenter.slug },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'comment-author-name' }, commenter.name)),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */null,
+								props.updateDate)),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-author-image-wrap paper-shadow' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: /* istanbul ignore next */'/commenters/' + commenter.slug },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_AvatarIcon2.default, /* istanbul ignore next */{
+									avatar:
+									commenter && 'avatar' in commenter ?
+									commenter.avatar.src :
+									null })))));})));};
+
+
+
+
+
+
+
+
+CommentUpperRight.propTypes = {
+	commenters: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		_id: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		name: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		avatar: /* istanbul ignore next */_react2.default.PropTypes.shape({
+			src: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired }) })).
+
+	isRequired,
+	commentId: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	updateDate: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	userCanEditCommenters: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.string) };
+
+CommentUpperRight.defaultProps = {
+	userCanEditCommenters: [] };
+
+/*
+                              	END CommentUpperRight
+                              */
+
+
+
+/*
+                                 	BEGIN CommentUpper
+                                 */
+var CommentUpper = function CommentUpper(props) /* istanbul ignore next */{return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-upper' },
+			!props.hideTitle && /* istanbul ignore next */_react2.default.createElement(CommentUpperLeft, /* istanbul ignore next */{
+				title: props.title }),
+
+			!props.hideCommenters && /* istanbul ignore next */_react2.default.createElement(CommentUpperRight, /* istanbul ignore next */{
+				commenters: props.commenters,
+				commentId: props.commentId,
+				updateDate: props.updateDate,
+				userCanEditCommenters: props.userCanEditCommenters })));};
+
+
+
+CommentUpper.propTypes = {
+	title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	commentId: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	commenters: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		_id: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		name: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		avatar: /* istanbul ignore next */_react2.default.PropTypes.shape({
+			src: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired }) })).
+
+	isRequired,
+	updateDate: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	userCanEditCommenters: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.string),
+	hideTitle: /* istanbul ignore next */_react2.default.PropTypes.bool,
+	hideCommenters: /* istanbul ignore next */_react2.default.PropTypes.bool };
+
+CommentUpper.defaultProps = {
+	userCanEditCommenters: [],
+	hideTitle: false,
+	hideCommenters: false };
+
+/*
+                          	END CommentUpper
+                          */ /* istanbul ignore next */exports.default =
+
+CommentUpper; /* istanbul ignore next */exports.
+CommentUpperLeft = CommentUpperLeft; /* istanbul ignore next */exports.CommentUpperRight = CommentUpperRight;

@@ -243,7 +243,7 @@ loggedInGroup.route('/commentary/create', {
 loggedInGroup.route('/profile', {
 	action: () => {
 		mount(UserLayout, {
-			content: < ProfilePage />,
+			content: <ProfilePage />,
 		});
 	},
 });
@@ -283,7 +283,7 @@ FlowRouter.route('/users/:userId/:username', {
 loggedInGroup.route('/account', {
 	action: () => {
 		mount(UserLayout, {
-			content: < AccountPage />,
+			content: <AccountPage />,
 		});
 	},
 });

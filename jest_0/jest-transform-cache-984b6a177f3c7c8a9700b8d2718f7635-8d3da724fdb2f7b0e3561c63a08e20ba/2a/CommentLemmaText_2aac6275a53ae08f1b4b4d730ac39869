@@ -1,0 +1,96 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_FlatButton = require('material-ui/FlatButton'); /* istanbul ignore next */var _FlatButton2 = _interopRequireDefault(_FlatButton);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}var
+
+CommentLemmaText = function (_React$Component) {_inherits(CommentLemmaText, _React$Component);
+
+	function /* istanbul ignore next */CommentLemmaText(props) {/* istanbul ignore next */_classCallCheck(this, CommentLemmaText);var _this = _possibleConstructorReturn(this, (CommentLemmaText.__proto__ || Object.getPrototypeOf(CommentLemmaText)).call(this,
+		props));
+
+		/* istanbul ignore next */_this.state = {
+			expanded: false }; /* istanbul ignore next */return _this;
+
+	}_createClass(CommentLemmaText, [{ key: '_toggleExpanded', value: function _toggleExpanded()
+
+		{/* istanbul ignore next */var
+			expanded = this.state.expanded;
+
+			this.setState({
+				expanded: !expanded });
+
+		} }, { key: 'render', value: function render()
+
+		{/* istanbul ignore next */var
+			lines = this.props.lines; /* istanbul ignore next */var
+			expanded = this.state.expanded;
+
+			var textLenghtBound = 10;
+			var longText = lines.length > textLenghtBound;
+
+			// if long text
+			if (longText) {
+				var loops = expanded ? lines.length : textLenghtBound;
+				var linesXML = [];
+
+				// construct the XML to be rendered
+				// number of lines depended on the expanded state
+				for (var i = 0; i < loops; i += 1) {
+					linesXML.push(
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+							key: i,
+							className: 'lemma-text-line' },
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: /* istanbul ignore next */'line-n ' + (lines[i].n % 5 === 0 ? 'line-n--visible' : '') },
+							lines[i].n),
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{
+							className: 'lemma-text',
+							dangerouslySetInnerHTML: { __html: lines[i].html } })));
+
+
+
+				}
+
+				return (
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+						linesXML,
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+								label: expanded ? 'Show less' : 'Show more',
+								icon: expanded ? /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'i', /* istanbul ignore next */{ className: 'mdi mdi-chevron-up' }) : /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'i', /* istanbul ignore next */{ className: 'mdi mdi-chevron-down' }),
+								onClick: this._toggleExpanded.bind(this) }))));
+
+
+
+
+			}
+
+			// if not longText
+			return (
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+					lines.map(function (line, i) /* istanbul ignore next */{return (
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+									key: i,
+									className: 'lemma-text-line' },
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: /* istanbul ignore next */'line-n ' + (line.n % 5 === 0 ? 'line-n--visible' : '') },
+									line.n),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{
+									className: 'lemma-text',
+									dangerouslySetInnerHTML: { __html: line.html } })));})));
+
+
+
+
+
+		} }]);return CommentLemmaText;}( /* istanbul ignore next */_react2.default.Component);
+
+
+CommentLemmaText.propTypes = {
+	lines: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		html: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		n: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired })).
+	isRequired }; /* istanbul ignore next */exports.default =
+
+
+CommentLemmaText;

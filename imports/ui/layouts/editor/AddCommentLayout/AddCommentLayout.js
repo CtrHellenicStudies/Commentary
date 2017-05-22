@@ -21,37 +21,149 @@ import muiTheme from '/imports/lib/muiTheme';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
 
 
-const AddCommentLayout = React.createClass({
+/*
+ *	helpers
+ */
+const handlePermissions = () => {
+	if (Roles.subscription.ready()) {
+		if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
+			FlowRouter.go('/');
+		}
+	}
+};
+const matchKeywords = (keywords) => {
+	const matchedKeywords = [];
+	if (keywords) {
+		keywords.forEach((keyword) => {
+			const foundKeyword = Keywords.findOne({
+				title: keyword.label,
+			});
+			matchedKeywords.push(foundKeyword);
+		});
+	}
+	return matchedKeywords;
+};
+const addNewKeywords = (keywords, type, next) => {
+	// TODO should be handled server-side
+	if (keywords) {
+		const newKeywordArray = [];
+		keywords.forEach((keyword) => {
+			const foundKeyword = Keywords.findOne({title: keyword.label});
+			if (!foundKeyword) {
+				const newKeyword = {
+					title: keyword.label,
+					slug: slugify(keyword.label),
+					type,
+					tenantId: Session.get('tenantId')
+				};
+				newKeywordArray.push(newKeyword);
+			}
+		});
+		if (newKeywordArray.length > 0) {
+			const token = cookie.load('loginToken');
+			return Meteor.call('keywords.insert', token, newKeywordArray, (err) => {
+				if (err) {
+					console.log(err);
+					return null;
+				}
+				return next();
+			});
+		}
+		return next();
+	}
+	return next();
+};
+const addNewKeywordsAndIdeas = (keywords, keyideas, next) => {
+	addNewKeywords(keywords, 'word', () => {
+		addNewKeywords(keyideas, 'idea', () => next());
+	});
+};
+const getReferenceWorks = (formData) => {
+	let referenceWorks = null;
+	if (formData.referenceWorksValue) {
+		referenceWorks = ReferenceWorks.findOne({_id: formData.referenceWorksValue.value});
+	}
+	return referenceWorks;
+};
+const getCommenter = (formData) => {
+	const commenter = Commenters.findOne({
+		_id: formData.commenterValue.value,
+	});
+	return commenter;
+};
+const getKeywords = (formData) => {
+	const keywords = [];
+	matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
+		keywords.push(matchedKeyword);
+	});
+	matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
+		keywords.push(matchedKeyword);
+	});
+	return keywords;
+};
+const getFilterValues = (filters) => {
+	const filterValues = {};
 
-	propTypes: {
+	filters.forEach((filter) => {
+		if (filter.key === 'works') {
+			filterValues.work = filter.values[0];
+		} else if (filter.key === 'subworks') {
+			filterValues.subwork = filter.values[0];
+		} else if (filter.key === 'lineTo') {
+			filterValues.lineTo = filter.values[0];
+		} else if (filter.key === 'lineFrom') {
+			filterValues.lineFrom = filter.values[0];
+		}
+	});
+
+	return filterValues;
+};
+
+
+/*
+ *	BEGIN AddCommentLayout
+ */
+class AddCommentLayout extends React.Component {
+	static propTypes = {
 		ready: React.PropTypes.bool,
 		isTest: React.PropTypes.bool,
-	},
+	};
 
-	getInitialState() {
-		return {
+	static defaultProps = {
+		ready: false,
+		isTest: false,
+	};
+	constructor(props) {
+		super(props);
+		
+		this.state = {
 			filters: [],
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
 		};
-	},
+
+		// methods:
+		this.updateSelectedLines = this.updateSelectedLines.bind(this);
+		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
+
+		this.addComment = this.addComment.bind(this);
+		this.getWork = this.getWork.bind(this);
+		this.getSubwork = this.getSubwork.bind(this);
+		this.getLineLetter = this.getLineLetter.bind(this);
+		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
+		this.closeContextReader = this.closeContextReader.bind(this);
+		this.openContextReader = this.openContextReader.bind(this);
+		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
+		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+	}
 
 	componentWillUpdate() {
-		this.handlePermissions();
-	},
-
-	handlePermissions() {
-		if (Roles.subscription.ready()) {
-			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
-			}
-		}
-	},
+		handlePermissions();
+	}
 
 	// --- BEGNI LINE SELECTION --- //
 
@@ -72,10 +184,11 @@ const AddCommentLayout = React.createClass({
 		} else {
 			// do nothing
 		}
-	},
+	}
 
 	toggleSearchTerm(key, value) {
-		const filters = this.state.filters;
+		const { filters } = this.state;
+
 		let keyIsInFilter = false;
 		let valueIsInFilter = false;
 		let filterValueToRemove;
@@ -121,9 +234,10 @@ const AddCommentLayout = React.createClass({
 			filters,
 			skip: 0,
 		});
-	},
+	}
 
 	// --- END LINE SELECTION --- //
+
 
 	// --- BEGNI ADD COMMENT --- //
 
@@ -137,15 +251,15 @@ const AddCommentLayout = React.createClass({
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const referenceWorks = formData.referenceWorks;
-		const commenter = this.getCommenter(formData);
+		const commenter = getCommenter(formData);
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = cookie.load('loginToken');
 
 		// need to add new keywords first, so keyword id can be added to comment:
-		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
+		addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 
 			// get keywords after they were created:
-			const keywords = this.getKeywords(formData);
+			const keywords = getKeywords(formData);
 			const revisionId = new Meteor.Collection.ObjectID();
 
 			// create comment object to be inserted:
@@ -186,65 +300,7 @@ const AddCommentLayout = React.createClass({
 				FlowRouter.go('/commentary', {}, {_id: commentId});
 			});
 		});
-	},
-
-	matchKeywords(keywords) {
-		const matchedKeywords = [];
-
-		if (keywords) {
-			keywords.forEach((keyword) => {
-				let keywordTitle;
-				if (typeof keyword === 'object') {
-					keywordTitle = keyword.label;
-				} else {
-					keywordTitle = keyword;
-				}
-				const foundKeyword = Keywords.findOne({
-					title: keywordTitle,
-				});
-				matchedKeywords.push(foundKeyword);
-			});
-		}
-
-		return matchedKeywords;
-	},
-
-	addNewKeywordsAndIdeas(keywords, keyideas, next) {
-		this.addNewKeywords(keywords, 'word', () => {
-			this.addNewKeywords(keyideas, 'idea', () => next());
-		});
-	},
-
-	addNewKeywords(keywords, type, next) {
-		// TODO should be handled server-side
-		if (keywords) {
-			const newKeywordArray = [];
-			keywords.forEach((keyword) => {
-				const foundKeyword = Keywords.findOne({slug: keyword.slug});
-				if (!foundKeyword) {
-					const newKeyword = {
-						title: keyword.label,
-						slug: slugify(keyword.label),
-						type,
-						tenantId: Session.get('tenantId')
-					};
-					newKeywordArray.push(newKeyword);
-				}
-			});
-			if (newKeywordArray.length > 0) {
-				const token = cookie.load('loginToken');
-				return Meteor.call('keywords.insert', token, newKeywordArray, (err) => {
-					if (err) {
-						console.log(err);
-						return null;
-					}
-					return next();
-				});
-			}
-			return next();
-		}
-		return next();
-	},
+	}
 
 	getWork() {
 		let work = null;
@@ -261,7 +317,7 @@ const AddCommentLayout = React.createClass({
 			};
 		}
 		return work;
-	},
+	}
 
 	getSubwork() {
 		let subwork = null;
@@ -277,51 +333,31 @@ const AddCommentLayout = React.createClass({
 			};
 		}
 		return subwork;
-	},
+	}
 
 	getLineLetter() {
+
+		const { selectedLineTo, selectedLineFrom } = this.state;
+
 		let lineLetter = '';
-		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
-			lineLetter = this.commentLemmaSelect.state ? his.commentLemmaSelect.state.lineLetterValue : null;
+		if (selectedLineTo === 0 && selectedLineFrom > 0) {
+			lineLetter = this.commentLemmaSelect.state ? this.commentLemmaSelect.state.lineLetterValue : null;
 		}
 		return lineLetter;
-	},
-
-	getReferenceWorks(formData) {
-		let referenceWorks = null;
-		if (formData.referenceWorksValue) {
-			referenceWorks = ReferenceWorks.findOne({_id: formData.referenceWorksValue.value});
-		}
-		return referenceWorks;
-	},
-
-	getCommenter(formData) {
-		const commenter = Commenters.findOne({
-			_id: formData.commenterValue.value,
-		});
-		return commenter;
-	},
+	}
 
 	getSelectedLineTo() {
-		let selectedLineTo = 0;
-		if (this.state.selectedLineTo === 0) {
-			selectedLineTo = this.state.selectedLineFrom;
-		} else {
-			selectedLineTo = this.state.selectedLineTo;
-		}
-		return selectedLineTo;
-	},
 
-	getKeywords(formData) {
-		const keywords = [];
-		this.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
-			keywords.push(matchedKeyword);
-		});
-		this.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
-			keywords.push(matchedKeyword);
-		});
-		return keywords;
-	},
+		const { selectedLineTo, selectedLineFrom } = this.state;
+
+		let newSelectedLineTo = 0;
+		if (selectedLineTo === 0) {
+			newSelectedLineTo = selectedLineFrom;
+		} else {
+			newSelectedLineTo = selectedLineTo;
+		}
+		return newSelectedLineTo;
+	}
 
 	// --- END ADD COMMENT --- //
 
@@ -329,22 +365,22 @@ const AddCommentLayout = React.createClass({
 		this.setState({
 			contextReaderOpen: false,
 		});
-	},
+	}
 
 	openContextReader() {
 		this.setState({
 			contextReaderOpen: true,
 		});
-	},
+	}
 
 	lineLetterUpdate(value) {
 		this.setState({
 			lineLetter: value,
 		});
-	},
+	}
 
 	handleChangeLineN(e) {
-		const filters = this.state.filters;
+		const { filters } = this.state;
 
 		if (e.from > 1) {
 			let lineFromInFilters = false;
@@ -410,31 +446,18 @@ const AddCommentLayout = React.createClass({
 		this.setState({
 			filters,
 		});
-	},
+	}
 
 	render() {
-		const { isTest } = this.props;
-		const { filters } = this.state;
-		let work;
-		let subwork;
-		let lineFrom;
-		let lineTo;
 
-		filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
-			} else if (filter.key === 'lineTo') {
-				lineTo = filter.values[0];
-			} else if (filter.key === 'lineFrom') {
-				lineFrom = filter.values[0];
-			}
-		});
+		const { isTest } = this.props;
+		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
+
+		const { work, subwork, lineFrom, lineTo } = getFilterValues(filters);
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				{!this.state.loading ?
+				{!loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
@@ -450,24 +473,24 @@ const AddCommentLayout = React.createClass({
 									<div className="comment-group">
 										<CommentLemmaSelect
 											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
+											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
 										/>
 
 										<AddComment
-											selectedLineFrom={this.state.selectedLineFrom}
+											selectedLineFrom={selectedLineFrom}
 											submitForm={this.addComment}
 										/>
 
 										<ContextPanel
-											open={this.state.contextReaderOpen}
+											open={contextReaderOpen}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
 											lineFrom={lineFrom || 1}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
+											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
 											updateSelectedLines={this.updateSelectedLines}
 											editor
 										/>
@@ -486,19 +509,16 @@ const AddCommentLayout = React.createClass({
 				}
 			</MuiThemeProvider>
 		);
-	},
-});
-
+	}
+}
+/*
+ *	END AddCommentLayout
+ */
 
 const AddCommentLayoutContainer = (() => {
 	const ready = Roles.subscription.ready();
-
-	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-	const keywords = Keywords.find().fetch();
-
 	return {
 		ready,
-		keywords,
 	};
 }, AddCommentLayout);
 

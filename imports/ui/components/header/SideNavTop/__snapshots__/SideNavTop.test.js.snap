@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SideTopNav renders correctly 1`] = `
+<div
+  className="sidenav-top"
+>
+  <a
+    href="/profile"
+  >
+    <span
+      className="user-fullname"
+    />
+  </a>
+</div>
+`;

@@ -1,0 +1,294 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_RaisedButton = require('material-ui/RaisedButton'); /* istanbul ignore next */var _RaisedButton2 = _interopRequireDefault(_RaisedButton);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}
+
+/*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              	BEGIN helpers
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              */
+var getSelectedEditionText = function getSelectedEditionText(lemmaText, selectedLemmaEdition) {
+	var selectedEditionText = { lines: [], slug: '', title: '' };
+	if (selectedLemmaEdition.length) {
+		lemmaText.forEach(function (edition) {
+			if (edition.slug === selectedLemmaEdition) {
+				selectedEditionText = edition;
+			}
+		});
+	} else if (lemmaText.length) {
+		selectedEditionText = lemmaText[0];
+	}
+	return selectedEditionText;
+};
+
+var getLineClass = function getLineClass(lineFrom, lineTo, n) {
+	var usedLineTo = lineFrom;
+
+	if (lineTo) {
+		usedLineTo = lineTo;
+	}
+
+	var lineClass = 'lemma-line';
+	if (lineFrom <= n && n <= usedLineTo) {
+		lineClass += ' highlighted';
+	}
+	return lineClass;
+};
+var getContextPanelTextState = function getContextPanelTextState(commentGroup, editor) {
+	if (commentGroup) return 'context for comment group';
+	if (editor) return 'editor';
+	return 'default';
+};
+/*
+   	END helpers
+   */
+
+
+/*
+      	BEGIN LineNumbering
+      */
+var LineNumbering = function LineNumbering( /* istanbul ignore next */_ref) /* istanbul ignore next */{var n = _ref.n;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'lemma-meta' },
+			n % 5 === 0 || n === 1 ?
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'lemma-line-n' },
+				n) :
+
+			''));};
+
+
+LineNumbering.propTypes = {
+	n: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired };
+
+/*
+                                                                             	END LineNumbering
+                                                                             */
+
+
+/*
+                                                                                	BEGIN ContextPanelText
+                                                                                */ /* istanbul ignore next */var
+ContextPanelText = function (_React$Component) {_inherits(ContextPanelText, _React$Component);
+
+	function /* istanbul ignore next */ContextPanelText(props) {/* istanbul ignore next */_classCallCheck(this, ContextPanelText);var _this = _possibleConstructorReturn(this, (ContextPanelText.__proto__ || Object.getPrototypeOf(ContextPanelText)).call(this,
+		props));
+
+		/* istanbul ignore next */_this.lines = [];
+
+		// methods:
+		/* istanbul ignore next */_this.handeLineMouseEnter = /* istanbul ignore next */_this.handeLineMouseEnter.bind( /* istanbul ignore next */_this);
+		/* istanbul ignore next */_this.handeLineMouseLeave = /* istanbul ignore next */_this.handeLineMouseLeave.bind( /* istanbul ignore next */_this);
+		/* istanbul ignore next */_this.handleLineClick = /* istanbul ignore next */_this.handleLineClick.bind( /* istanbul ignore next */_this); /* istanbul ignore next */return _this;
+	}_createClass(ContextPanelText, [{ key: 'componentDidUpdate', value: function componentDidUpdate(
+
+		prevProps, prevState) {/* istanbul ignore next */var _props =
+
+			this.props,selectedLineFrom = _props.selectedLineFrom,selectedLineTo = _props.selectedLineTo,lineFrom = _props.lineFrom,lineTo = _props.lineTo;
+
+			// hanlde highliting selected lines:
+			if (Object.keys(this.lines).length) {
+				if (selectedLineFrom === 0) {
+					for (var i = lineFrom; i <= lineTo; i += 1) {
+						if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
+							this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
+						}
+					}
+				} else if (selectedLineTo === 0) {
+					for (var _i = lineFrom; _i <= lineTo; _i += 1) {
+						if (_i.toString() in this.lines && this.lines[_i.toString()] && this.lines[_i.toString()].style) {
+							if (_i === selectedLineFrom) {
+								this.lines[_i.toString()].style.borderBottom = '2px solid #B2EBF2';
+							} else if (_i.toString() in this.lines) {
+								this.lines[_i.toString()].style.borderBottom = '2px solid #ffffff';
+							}
+						}
+					}
+				} else {
+					for (var _i2 = lineFrom; _i2 <= lineTo; _i2 += 1) {
+						if (_i2.toString() in this.lines && this.lines[_i2.toString()] && this.lines[_i2.toString()].style) {
+							if (_i2 >= selectedLineFrom && _i2 <= selectedLineTo) {
+								this.lines[_i2.toString()].style.borderBottom = '2px solid #B2EBF2';
+							} else if (_i2.toString() in this.lines) {
+								this.lines[_i2.toString()].style.borderBottom = '2px solid #ffffff';
+							}
+						}
+					}
+				}
+			}
+		}
+
+		/*
+    	BEGIN editor methods:
+    */ }, { key: 'handeLineMouseEnter', value: function handeLineMouseEnter(
+		event) {
+			if (!this.props.disableEdit) {
+				var style = event.target.style;
+				style.backgroundColor = '#E0F7FA';
+			}
+		} }, { key: 'handeLineMouseLeave', value: function handeLineMouseLeave(
+
+		event) {
+			if (!this.props.disableEdit) {
+				var style = event.target.style;
+				style.backgroundColor = '#ffffff';
+			}
+		} }, { key: 'handleLineClick', value: function handleLineClick(
+
+		event) {
+			if (!this.props.disableEdit) {/* istanbul ignore next */var _props2 =
+
+				this.props,selectedLineFrom = _props2.selectedLineFrom,selectedLineTo = _props2.selectedLineTo,updateSelectedLines = _props2.updateSelectedLines;
+
+				var target = event.target;
+				var id = parseInt(target.id, 10);
+				if (selectedLineFrom === 0) {
+					updateSelectedLines(id, null);
+				} else if (id === selectedLineFrom && selectedLineTo === 0) {
+					updateSelectedLines(0, null);
+				} else if (selectedLineTo === 0 && id > selectedLineFrom) {
+					updateSelectedLines(null, id);
+				} else if (selectedLineTo === 0 && id < selectedLineFrom) {
+					updateSelectedLines(id, selectedLineFrom);
+				} else {
+					updateSelectedLines(id, 0);
+				}
+			}
+		}
+		/*
+    	END editor methods:
+    */ }, { key: 'render', value: function render()
+
+		{/* istanbul ignore next */var _this2 = this;var _props3 =
+			this.props,onBeforeClicked = _props3.onBeforeClicked,selectedLemmaEdition = _props3.selectedLemmaEdition,lineFrom = _props3.lineFrom,commentGroup = _props3.commentGroup,onAfterClicked = _props3.onAfterClicked,maxLine = _props3.maxLine,lemmaText = _props3.lemmaText,disableEdit = _props3.disableEdit,selectedLineFrom = _props3.selectedLineFrom,selectedLineTo = _props3.selectedLineTo,updateSelectedLines = _props3.updateSelectedLines,editor = _props3.editor;
+
+			var selectedEditionText = getSelectedEditionText(lemmaText, selectedLemmaEdition);
+
+			var contextPanelTextState = getContextPanelTextState(commentGroup, editor);
+
+			return (
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'lemma-text-wrap' },
+					lineFrom > 1 ?
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'before-link' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+							className: 'light',
+							label: 'Previous',
+							onClick: onBeforeClicked,
+							icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'i', /* istanbul ignore next */{ className: 'mdi mdi-chevron-up' }) })) :
+
+
+					'',
+
+					function () {
+						switch (contextPanelTextState) {
+							case 'context for comment group':
+								return (
+									selectedEditionText.lines.map(function (line) {
+										var lineClass = getLineClass(commentGroup.lineFrom, commentGroup.lineTo, line.n);
+
+										return (
+											/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+													className: lineClass,
+													key: line.n },
+
+												/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+													className: 'lemma-text',
+													dangerouslySetInnerHTML: { __html: line.html } }),
+
+
+												/* istanbul ignore next */_react2.default.createElement(LineNumbering, /* istanbul ignore next */{ n: line.n })));
+
+
+									}));
+
+							case 'editor':
+								return (
+									selectedEditionText.lines.map(function (line) /* istanbul ignore next */{return (
+											/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+													className: 'lemma-line',
+													key: line.n },
+
+												/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+													className: 'lemma-text',
+													id: line.n,
+													ref: function /* istanbul ignore next */ref(component) {/* istanbul ignore next */_this2.lines[line.n.toString()] = component;},
+													dangerouslySetInnerHTML: { __html: line.html },
+													onMouseEnter: /* istanbul ignore next */_this2.handeLineMouseEnter,
+													onMouseLeave: /* istanbul ignore next */_this2.handeLineMouseLeave,
+													onClick: /* istanbul ignore next */_this2.handleLineClick,
+													style: !disableEdit ? { cursor: 'pointer' } : null }),
+
+
+												/* istanbul ignore next */_react2.default.createElement(LineNumbering, /* istanbul ignore next */{ n: line.n })));}));
+
+
+
+							default:
+								return (
+									selectedEditionText.lines.map(function (line) /* istanbul ignore next */{return (
+											/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+													className: 'lemma-line',
+													key: line.n },
+
+												/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+													className: 'lemma-text',
+													dangerouslySetInnerHTML: { __html: line.html } }),
+
+
+												/* istanbul ignore next */_react2.default.createElement(LineNumbering, /* istanbul ignore next */{ n: line.n })));}));}
+
+
+
+
+					}(),
+
+					lineFrom < maxLine ?
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'after-link' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+							className: 'light',
+							label: 'Next',
+							onClick: onAfterClicked,
+							icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'i', /* istanbul ignore next */{ className: 'mdi mdi-chevron-down' }) })) :
+
+
+					''));
+
+
+		} }]);return ContextPanelText;}( /* istanbul ignore next */_react2.default.Component);
+
+ContextPanelText.propTypes = {
+	lineFrom: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+	lineTo: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+	onBeforeClicked: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+	onAfterClicked: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+	selectedLemmaEdition: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	lemmaText: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		lines: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+			n: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+			html: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })) })).
+
+	isRequired,
+	commentGroup: /* istanbul ignore next */_react2.default.PropTypes.shape({
+		lineFrom: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+		lineTo: /* istanbul ignore next */_react2.default.PropTypes.number }),
+
+	maxLine: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+
+	// requiered if editor:
+	disableEdit: /* istanbul ignore next */_react2.default.PropTypes.bool,
+	selectedLineFrom: /* istanbul ignore next */_react2.default.PropTypes.number,
+	selectedLineTo: /* istanbul ignore next */_react2.default.PropTypes.number,
+	updateSelectedLines: /* istanbul ignore next */_react2.default.PropTypes.func,
+	editor: /* istanbul ignore next */_react2.default.PropTypes.bool };
+
+ContextPanelText.defaultProps = {
+	commentGroup: null,
+
+	disableEdit: false,
+	selectedLineFrom: 0,
+	selectedLineTo: 0,
+	updateSelectedLines: null,
+	editor: false };
+
+/*
+                  	END ContextPanelText
+                  */ /* istanbul ignore next */exports.default =
+
+ContextPanelText;

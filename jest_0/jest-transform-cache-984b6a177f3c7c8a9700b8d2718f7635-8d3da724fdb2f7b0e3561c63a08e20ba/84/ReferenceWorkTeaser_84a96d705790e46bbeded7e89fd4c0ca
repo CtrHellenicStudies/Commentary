@@ -1,0 +1,83 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);
+var /* istanbul ignore next */_utils = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/utils'); /* istanbul ignore next */var _utils2 = _interopRequireDefault(_utils);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // lib
+
+var ReferenceWorkTeaser = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'ReferenceWorkTeaser',
+
+	propTypes: {
+		referenceWork: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired },
+
+
+	childContextTypes: {
+		muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+
+	getInitialState: function getInitialState() {
+		return {
+			open: false };
+
+	}, /* istanbul ignore next */
+
+	getChildContext: function getChildContext() {
+		return { muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+	}, /* istanbul ignore next */
+
+	toggleOpen: function toggleOpen() {
+		this.setState({
+			open: !this.state.open });
+
+	}, /* istanbul ignore next */
+
+	createMarkup: function createMarkup() {
+		return {
+			__html: /* istanbul ignore next */_utils2.default.trunc(this.props.referenceWork.description.replace(/(<([^>]+)>)/ig, ''), 140) };
+
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var
+		referenceWork = this.props.referenceWork;
+
+		if (!referenceWork) {
+			return null;
+		}
+
+		var referenceWorkUrl = /* istanbul ignore next */'/referenceWorks/' + referenceWork.slug;
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+					className: 'reference-work-teaser',
+					/* istanbul ignore next */'data-wow-duration': '0.2s',
+					href: referenceWorkUrl },
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{
+						className: 'reference-work-title-link',
+						href: referenceWorkUrl },
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h4', /* istanbul ignore next */{ className: 'reference-work-title' },
+						referenceWork.title)),
+
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'hr', /* istanbul ignore next */null),
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{
+					className: 'reference-work-description',
+					dangerouslySetInnerHTML: this.createMarkup() }),
+
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{
+						className: 'reference-work-read-more-link',
+						href: referenceWorkUrl },
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'reference-work-read-more' }, /* istanbul ignore next */'READ MORE'))));
+
+
+
+
+
+	} }); /* istanbul ignore next */exports.default =
+
+
+
+ReferenceWorkTeaser;

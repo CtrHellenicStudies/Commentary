@@ -1,0 +1,23 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_colors = require('material-ui/styles/colors');
+
+
+
+
+var /* istanbul ignore next */_colorManipulator = require('material-ui/utils/colorManipulator'); /* istanbul ignore next */exports.default =
+
+{
+	palette: {
+		primary1Color: '#5D4037',
+		primary2Color: '#795548',
+		primary3Color: '#D7CCC8',
+		accent1Color: '#63232D',
+		accent2Color: '#56282F',
+		accent3Color: '#331310',
+		textColor: /* istanbul ignore next */_colors.darkBlack,
+		alternateTextColor: /* istanbul ignore next */_colors.white,
+		canvasColor: /* istanbul ignore next */_colors.white,
+		borderColor: /* istanbul ignore next */_colors.grey300,
+		disabledColor: /* istanbul ignore next */(0, _colorManipulator.fade)( /* istanbul ignore next */_colors.darkBlack, 0.3),
+		pickerHeaderColor: '#63232D',
+		clockCircleColor: /* istanbul ignore next */(0, _colorManipulator.fade)( /* istanbul ignore next */_colors.darkBlack, 0.07),
+		shadowColor: /* istanbul ignore next */_colors.fullBlack } };

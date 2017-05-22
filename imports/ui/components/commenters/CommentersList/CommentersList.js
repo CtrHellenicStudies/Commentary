@@ -13,10 +13,10 @@ import CommenterTeaser from '/imports/ui/components/commenters/CommenterTeaser';
 const CommentersList = ({ commenters }) => (
 	<div className="commenters-list">
 		{commenters.map(commenter =>
-			<CommenterTeaser
+			(<CommenterTeaser
 				key={commenter._id}
 				commenter={commenter}
-			/>
+			/>)
 		)}
 	</div>
 );

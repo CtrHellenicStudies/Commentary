@@ -1,3 +1,4 @@
+import React from 'react';
 import { HOC as formsyHOC } from 'formsy-react';
 import stylePropType from 'react-style-proptype';
 import reactCSS from 'reactcss';

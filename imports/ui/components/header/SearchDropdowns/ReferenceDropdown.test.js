@@ -11,7 +11,11 @@ describe('ReferenceDropdown', () => {
 		const tree = renderer
 			.create(
 				<MuiThemeProvider>
-					<ReferenceDropdown />
+					<ReferenceDropdown
+						toggleSearchDropdown={() => {}}
+						toggleSearchTerm={() => {}}
+						toggle={() => {}}
+					/>
 				</MuiThemeProvider>
 			)
 			.toJSON();

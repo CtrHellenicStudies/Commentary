@@ -70,6 +70,7 @@ const AddKeyword = React.createClass({
 		onTypeChange: React.PropTypes.func.isRequired,
 		keywordsOptions: React.PropTypes.array,
 		keyideasOptions: React.PropTypes.array,
+		isTest: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -255,6 +256,7 @@ const AddKeyword = React.createClass({
 
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	render() {
+		const { isTest } = this.props;
 		const styles = {
 			block: {
 				maxWidth: 250,
@@ -264,6 +266,10 @@ const AddKeyword = React.createClass({
 			},
 		};
 
+
+		if (isTest) {
+			return null;
+		}
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -308,15 +314,6 @@ const AddKeyword = React.createClass({
 							className="comment-lower"
 							style={{ paddingTop: 20 }}
 						>
-							{/*
-							<RichTextEditor
-								className="keyword-editor"
-								placeholder="Keyword description . . ."
-								value={this.state.textEditorState}
-								onChange={this.onTextChange}
-								toolbarConfig={toolbarConfig}
-							/>
-							*/}
 							<Editor
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}

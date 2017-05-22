@@ -12,9 +12,9 @@ describe('AddCommentForm', () => {
 			.create(
 				<MuiThemeProvider>
 					<AddCommentForm
-						selectedLineFrom=""
-						selectedLineTo=""
-						submitForm=""
+						selectedLineFrom={1}
+						submitForm={() => {}}
+						isTest
 					/>
 				</MuiThemeProvider>
 			)

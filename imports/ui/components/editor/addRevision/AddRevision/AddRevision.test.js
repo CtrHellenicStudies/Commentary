@@ -15,8 +15,12 @@ describe('AddRevision', () => {
 						submitForm={() => {}}
 						update={() => {}}
 						comment={{
-							revisions: ['testComment']
+							revisions: [{
+								title: 'testComment',
+								text: 'test comment text',
+							}],
 						}}
+						isTest
 					/>
 				</MuiThemeProvider>
 			)

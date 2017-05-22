@@ -20,7 +20,7 @@ const CommentLemmaSelect = React.createClass({
 		workSlug: React.PropTypes.string.isRequired,
 		subworkN: React.PropTypes.number.isRequired,
 		selectedLineFrom: React.PropTypes.number.isRequired,
-		selectedLineTo: React.PropTypes.number.isRequired,
+		selectedLineTo: React.PropTypes.number,
 		selectedLemmaEdition: React.PropTypes.object,
 		lemmaText: React.PropTypes.array,
 	},

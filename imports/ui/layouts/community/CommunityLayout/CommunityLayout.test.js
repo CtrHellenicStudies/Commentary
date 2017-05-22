@@ -2,16 +2,14 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import KeywordReferenceModal from './KeywordReferenceModal';
+import CommunityLayout from './CommunityLayout';
 
-describe('KeywordReferenceModal', () => {
+describe('CommunityLayout', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(<KeywordReferenceModal />)
+			.create(<CommunityLayout />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
-
-// TODO Refactor component to avoid mixins

@@ -13,6 +13,7 @@ describe('WorkVisualization', () => {
 					work={{
 						subworks: []
 					}}
+					isTest
 				/>)
 			.toJSON();
 		expect(tree).toMatchSnapshot();

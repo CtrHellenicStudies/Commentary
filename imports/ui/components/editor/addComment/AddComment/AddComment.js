@@ -117,10 +117,12 @@ function _getSuggestionsFromComments(comments) {
 	}
 	return suggestions;
 }
+
 const onNewOptionCreator = newOption => ({
 	label: newOption.label,
 	value: newOption.label
 });
+
 const shouldKeyDownEventCreateNewOption = (sig) => {
 	if (sig.keyCode === 13 ||
 		sig.keyCode === 188) {
@@ -128,7 +130,6 @@ const shouldKeyDownEventCreateNewOption = (sig) => {
 	}
 	return false;
 };
-
 
 
 /*
@@ -142,6 +143,7 @@ class AddComment extends React.Component {
 		keywordsOptions: React.PropTypes.array,
 		keyideasOptions: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
+		isTest: React.PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -426,7 +428,11 @@ class AddComment extends React.Component {
 
 	render() {
 		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorks, textEditorState } = this.state;
-		const { commentersOptions, keywordsOptions, keyideasOptions, referenceWorkOptions } = this.props;
+		const { commentersOptions, keywordsOptions, keyideasOptions, referenceWorkOptions, isTest } = this.props;
+
+		if (isTest) {
+			return null;
+		}
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -704,9 +710,5 @@ const AddCommentContainer = createContainer(() => {
 	};
 
 }, AddComment);
-/*
- *	BEGIN AddComment
- */
-
 
 export default AddCommentContainer;

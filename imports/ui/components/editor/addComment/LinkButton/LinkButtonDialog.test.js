@@ -3,16 +3,20 @@ import renderer from 'react-test-renderer';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // component:
-import AddComment from './AddComment';
+import LinkButtonDialog from './LinkButtonDialog';
 
-describe('AddComment', () => {
+describe('LinkButtonDialog', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
 			.create(
 				<MuiThemeProvider>
-					<AddComment
-						submitForm={() => {}}
+					<LinkButtonDialog
+						open={false}
+						handleClose={() => {}}
+						handleAddLink={() => {}}
+						handleRemoveLink={() => {}}
+						onValueChange={() => {}}
 					/>
 				</MuiThemeProvider>
 			)

@@ -34,7 +34,7 @@ const AddCommentForm = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
+	// mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {

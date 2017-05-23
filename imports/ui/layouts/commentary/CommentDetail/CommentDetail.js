@@ -12,6 +12,7 @@ import CommentKeywordsContainer from '/imports/ui/components/commentary/comments
 import CommentLower from '/imports/ui/components/commentary/comments/CommentLower';
 import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
 import DiscussionThread from '/imports/ui/components/discussionComments/DiscussionThread';
+import LemmaReferenceModal from '/imports/ui/components/shared/LemmaReferenceModal';
 
 
 /*

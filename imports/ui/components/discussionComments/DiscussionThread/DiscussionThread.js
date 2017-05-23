@@ -127,7 +127,7 @@ const DiscussionThread = React.createClass({
 					''
 					:
 					<div className="discussion-thread">
-						{comment.discussionCommentsDisabled ? 
+						{comment.discussionCommentsDisabled ?
 							<div className="no-results-wrap">
 								<span className="no-results-text">Discussion will be coming soon.</span>
 							</div> :
@@ -167,21 +167,21 @@ const DiscussionThread = React.createClass({
 												onClick={this.addDiscussionComment}
 											/>
 											:
-											<div
-												className="new-comment-login"
-											>
-												<FlatButton
-													label="Login"
-													className="login-link"
-													onClick={this.props.showLoginModal}
-												/>
-												<FlatButton
-													label="Join"
-													className="join-link"
-													href="/sign-up"
-													target="_blank"
-												/>
-											</div>
+												<div
+													className="new-comment-login"
+												>
+													<FlatButton
+														label="Login"
+														className="login-link"
+														onClick={this.props.showLoginModal}
+													/>
+													<FlatButton
+														label="Join"
+														className="join-link"
+														href="/sign-up"
+														target="_blank"
+													/>
+												</div>
 										}
 									</div>
 								</form>

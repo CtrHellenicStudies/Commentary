@@ -1,8 +1,11 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
+import moment from 'moment';
 
 import Commenters from '/imports/api/collections/commenters';
 import Utils from '/imports/lib/utils';
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 
 class RecentActivityTeaser extends React.Component {
 	static propTypes = {
@@ -20,27 +23,40 @@ class RecentActivityTeaser extends React.Component {
 		};
 		let title = '';
 		let excerpt = '';
+		let byline = '';
+		let avatarUrl = '';
 
 		const mostRecentRevision = comment.revisions[comment.revisions.length - 1];
 
 		title = mostRecentRevision.title;
-		if (mostRecentRevision.content) {
-			excerpt = Utils.trunc(mostRecentRevision.content.replace(/(<([^>]+)>)/ig, ''), 120);
+		if (mostRecentRevision.text) {
+			excerpt = Utils.trunc(mostRecentRevision.text.replace(/(<([^>]+)>)/ig, ''), 120);
 		}
 
+		if (commenters && commenters.length) {
+			byline = `By ${commenters[0].name} ${moment(comment.updated).fromNow()}`;
+			avatarUrl = commenters[0].avatar.src;
+		}
 
 		return (
-			<div className="recentActivityTeaser">
-				<div
-					className="commenterAvatar"
-					style={styles.commenterAvatar}
-				/>
-				<h3 className="recentActivityTitle">
-					{title}
-				</h3>
-				<p className="recentActivityExcerpt">
-					{excerpt}
-				</p>
+			<div className="recentActivityTeaser clearfix">
+				<div className="recentActivityTeaserLeft">
+					<AvatarIcon avatar={avatarUrl} />
+				</div>
+
+				<div className="recentActivityTeaserRight">
+					<a href={`/commentary?_id=${comment._id}`}>
+						<h4 className="recentActivityTitle">
+							{title}
+						</h4>
+					</a>
+					<span className="recentActivityByline">
+						{byline}
+					</span>
+					<p className="recentActivityExcerpt">
+						{excerpt}
+					</p>
+				</div>
 			</div>
 		);
 	}
@@ -48,16 +64,14 @@ class RecentActivityTeaser extends React.Component {
 
 const RecentActivityTeaserContainer = createContainer(({ comment }) => {
 
-	const handle = Meteor.subscribe('commenters', Session.get('tenantId'));
-	const commenters = Commenters.find().fetch();
+	const handle = Meteor.subscribe('commenters.all');
+	const commenterIds = [];
 
 	comment.commenters.forEach((commenter) => {
-		commenters.forEach((_commenter) => {
-			if (commenter._id === _commenter._id) {
-				commenters.push(commenter);
-			}
-		});
+		commenterIds.push(commenter._id);
 	});
+
+	const commenters = Commenters.find({_id: { $in: commenterIds } }).fetch();
 
 	return {
 		commenters,

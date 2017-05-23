@@ -13,7 +13,7 @@ class CommunityMemberList extends React.Component {
 		const { users } = this.props;
 
 		return (
-			<div className="CommunityMemberList">
+			<div className="communityMemberList">
 				{users.map((user, i) => (
 					<CommunityMemberTeaser
 						key={i}
@@ -26,7 +26,7 @@ class CommunityMemberList extends React.Component {
 }
 
 const CommunityMemberListContainer = createContainer(() => {
-	const handle = Meteor.subscribe('communityDirectory');
+	const handle = Meteor.subscribe('users.all');
 	const users = Meteor.users.find().fetch();
 
 	return {

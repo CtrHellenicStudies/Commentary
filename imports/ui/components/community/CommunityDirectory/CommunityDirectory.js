@@ -20,7 +20,7 @@ class CommunityDirectory extends React.Component {
 	render() {
 
 		return (
-			<div className="CommunityDirectory">
+			<div className="communityDirectory">
 				<h3>Community Directory</h3>
 				<CommunityMemberList />
 			</div>

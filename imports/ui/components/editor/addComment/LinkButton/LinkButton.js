@@ -202,11 +202,5 @@ class LinkButton extends Component {
 	}
 }
 
-LinkButton.propTypes = {
-	getEditorState: React.PropTypes.func,
-	setEditorState: React.PropTypes.func,
-	theme: React.PropTypes.object,
-};
-
 export default LinkButton;
 export { LinkButtonDialog };

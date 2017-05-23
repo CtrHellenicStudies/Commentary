@@ -25,12 +25,6 @@ Link.defaultProps = {
 	entityKey: null,
 };
 
-Link.propTypes = {
-	contentState: React.PropTypes.object,
-	children: React.PropTypes.object,
-	entityKey: React.PropTypes.string,
-};
-
 function findLinkEntities(contentBlock, callback, contentState) {
 	contentBlock.findEntityRanges(
 		(character) => {

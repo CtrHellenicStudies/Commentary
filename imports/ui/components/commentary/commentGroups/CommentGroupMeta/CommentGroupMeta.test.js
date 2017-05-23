@@ -10,6 +10,9 @@ describe('CommentGroupMeta', () => {
 		const tree = renderer
 			.create(<CommentGroupMeta
 				commentGroup={{
+					work: {
+						title: 'testTitle'
+					},
 					subwork: {
 						title: 'testTitle'
 					},

@@ -1,8 +1,8 @@
 import React from 'react';
-import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon'; 
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 
 const getWorkTitle = (commentGroup) => {
-	let workTitle = commentGroup.subwork.title;
+	let workTitle = commentGroup.work.title;
 	if (workTitle === 'Homeric Hymns') {
 		workTitle = 'Hymns';
 	}

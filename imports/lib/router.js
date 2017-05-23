@@ -28,6 +28,7 @@ import CommenterDetail from '/imports/ui/components/commenters/CommenterDetail';
 import KeywordsPage from '/imports/ui/components/keywords/KeywordsPage';
 import KeywordDetail from '/imports/ui/components/keywords/KeywordDetail';
 import ProfilePage from '/imports/ui/components/user/ProfilePage';
+import PublicProfilePage from '/imports/ui/components/user/PublicProfilePage';
 import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
 

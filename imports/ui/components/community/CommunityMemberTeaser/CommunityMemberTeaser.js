@@ -11,10 +11,10 @@ class CommunityMemberTeaser extends React.Component {
 
 	render() {
 		const { user } = this.props;
-		const userUrl = `/users/${user._id}/${user.username}`;
 		let userExcerpt = '';
 		let profilePicture = '';
-		let username = user.username;
+		let username = user.username || '';
+		const userUrl = `/users/${user._id}/${user.username || ''}`;
 
 		if (user.profile) {
 			userExcerpt = user.profile.biography ? Utils.trunc(user.profile.biography, 120) : '';

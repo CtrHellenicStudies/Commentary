@@ -66,12 +66,15 @@ const RecentActivityTeaserContainer = createContainer(({ comment }) => {
 
 	const handle = Meteor.subscribe('commenters.all');
 	const commenterIds = [];
+	let commenters = [];
 
-	comment.commenters.forEach((commenter) => {
-		commenterIds.push(commenter._id);
-	});
+	if (comment) {
+		comment.commenters.forEach((commenter) => {
+			commenterIds.push(commenter._id);
+		});
 
-	const commenters = Commenters.find({_id: { $in: commenterIds } }).fetch();
+		commenters = Commenters.find({_id: { $in: commenterIds } }).fetch();
+	}
 
 	return {
 		commenters,

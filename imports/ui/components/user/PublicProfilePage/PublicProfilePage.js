@@ -8,12 +8,19 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import DiscussionComments from '/imports/api/collections/discussionComments';
 
 // components
+import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
+const checkUsername = (user) => {
+	if (user.username !== FlowRouter.getParam('username')) {
+		const route = `/users/${FlowRouter.getParam('userId')}`;
+		FlowRouter.go(route);
+	}
+};
 
 const PublicProfilePage = React.createClass({
 	propTypes: {
@@ -38,13 +45,6 @@ const PublicProfilePage = React.createClass({
 		return {
 			muiTheme: getMuiTheme(muiTheme),
 		};
-	},
-
-	checkUsername(user) {
-		if (user.username !== FlowRouter.getParam('username')) {
-			const route = `/users/${FlowRouter.getParam('userId')}`;
-			FlowRouter.go(route);
-		}
 	},
 
 	render() {
@@ -103,7 +103,7 @@ const PublicProfilePage = React.createClass({
 											</div>
 											:
 											<div className="public-profile-name">
-												<h2>No name</h2>
+												<h2>There is no public profile name available for this user.</h2>
 												<br />
 											</div> }
 									</div>}
@@ -117,7 +117,7 @@ const PublicProfilePage = React.createClass({
 									:
 									<div className="public-profile-biography">
 										<p>
-											No biography.
+											There is no public biography available for this user.
 										</p>
 										<br />
 									</div> }
@@ -258,7 +258,7 @@ const PublicProfilePageContainer = createContainer(({ userId }) => {
 	});
 
 	if (user) {
-		this.checkUsername(user);
+		checkUsername(user);
 	}
 
 	return {

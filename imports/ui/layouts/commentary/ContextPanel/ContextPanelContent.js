@@ -5,10 +5,14 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
 import TextNodes from '/imports/api/collections/textNodes';
+import Editions from '/imports/api/collections/editions';
 
 // components:
 import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText';
 import ContextPanelTabs from '/imports/ui/components/commentary/contextPanel/ContextPanelTabs';
+
+// lib:
+import Utils from '/imports/lib/utils';
 
 /*
 	helpers
@@ -149,38 +153,9 @@ export default createContainer(({ lineFrom, workSlug, subworkN }) => {
 	}
 
 	Meteor.subscribe('textNodes', lemmaQuery);
-	const textNodes = TextNodes.find(lemmaQuery).fetch();
-	const editions = [];
-
-	let textIsInEdition = false;
-	textNodes.forEach((textNode) => {
-		textNode.text.forEach((text) => {
-			textIsInEdition = false;
-
-			editions.forEach((edition) => {
-				if (text.edition.slug === edition.slug) {
-					edition.lines.push({
-						html: text.html,
-						n: text.n,
-					});
-					textIsInEdition = true;
-				}
-			});
-
-			if (!textIsInEdition) {
-				editions.push({
-					title: text.edition.title,
-					slug: text.edition.slug,
-					lines: [
-						{
-							html: text.html,
-							n: text.n,
-						},
-					],
-				});
-			}
-		});
-	});
+	const editionsSubscription = Meteor.subscribe('editions');
+	const textNodesCursor = TextNodes.find(lemmaQuery);
+	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
 
 	const sortedEditions = getSortedEditions(editions);
 

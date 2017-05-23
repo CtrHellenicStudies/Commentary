@@ -221,6 +221,44 @@ const Utils = {
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
 		return foundItem[1];
 	},
+	textFromTextNodesGroupedByEdition(textNodesCursor, EditionsCollection) {
+		const editions = [];
+		textNodesCursor.forEach((textNode) => {
+			textNode.text.forEach((text) => {
+				let myEdition = editions.find(e => text.edition === e._id);
+
+				if (!myEdition) {
+					const foundEdition = EditionsCollection.findOne({ _id: text.edition });
+					myEdition = {
+						_id: foundEdition._id,
+						title: foundEdition.title,
+						slug: foundEdition.slug,
+						lines: [],
+					};
+					editions.push(myEdition);
+				}
+
+				myEdition.lines.push({
+					html: text.html,
+					n: text.n,
+				});
+			});
+		});
+
+		// sort lines for each edition by line number
+		for (let i = 0; i < editions.length; ++i) {
+			editions[i].lines.sort((a, b) => {
+				if (a.n < b.n) {
+					return -1;
+				} else if (b.n < a.n) {
+					return 1;
+				}
+				return 0;
+			});
+		}
+
+		return editions;
+	},
 };
 
 export default Utils;

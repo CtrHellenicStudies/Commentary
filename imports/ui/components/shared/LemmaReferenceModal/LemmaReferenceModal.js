@@ -59,39 +59,12 @@ const LemmaReferenceModal = React.createClass({
 		}
 
 		const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
-		if (textHandle.ready()) {
-			const textNodes = TextNodes.find(lemmaQuery).fetch();
-			const editions = [];
+		const editionsSubscription = Meteor.subscribe('editions');
 
-			let textIsInEdition = false;
-			textNodes.forEach((textNode) => {
-				textNode.text.forEach((text) => {
-					textIsInEdition = false;
+		if (textHandle.ready() && editionsSubscription.ready()) {
+			const textNodesCursor = TextNodes.find(lemmaQuery);
 
-					editions.forEach((edition) => {
-						if (text.edition.slug === edition.slug) {
-							edition.lines.push({
-								html: text.html,
-								n: text.n,
-							});
-							textIsInEdition = true;
-						}
-					});
-
-					if (!textIsInEdition) {
-						editions.push({
-							title: text.edition.title,
-							slug: text.edition.slug,
-							lines: [
-								{
-									html: text.html,
-									n: text.n,
-								},
-							],
-						});
-					}
-				});
-			});
+			const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
 
 			lemmaText = editions;
 		}

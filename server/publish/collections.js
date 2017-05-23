@@ -10,6 +10,7 @@ import Tenants from '/imports/api/collections/tenants';
 import TextNodes from '/imports/api/collections/textNodes';
 import Works from '/imports/api/collections/works';
 import Settings from '/imports/api/collections/settings';
+import Editions from '/imports/api/collections/editions';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {
@@ -67,6 +68,8 @@ if (Meteor.isServer) {
 			skip,
 		});
 	});
+
+	Meteor.publish('editions', () => Editions.find());
 
 	Meteor.publish('commenters', (tenantId, limit = 100) => {
 		check(tenantId, Match.Maybe(String));

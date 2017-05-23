@@ -5,14 +5,16 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
 
-import Utils from '/imports/lib/utils';
-
 // api:
 import TextNodes from '/imports/api/collections/textNodes'; 
+import Editions from '/imports/api/collections/editions';
 
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; 
 import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';  
+
+// lib:
+import Utils from '/imports/lib/utils';
 
 class CommentLemma extends React.Component {
 
@@ -185,44 +187,9 @@ export default createContainer(({ commentGroup }) => {
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
-	const textNodes = TextNodes.find(lemmaQuery).fetch();
-	const editions = [];
-
-	let textIsInEdition = false;
-	textNodes.forEach((textNode) => {
-		textNode.text.forEach((text) => {
-			textIsInEdition = false;
-
-			editions.forEach((edition) => {
-				if (text.edition.slug === edition.slug) {
-					if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {
-						edition.lines.push({
-							html: text.html,
-							n: text.n,
-						});
-					}
-					textIsInEdition = true;
-				}
-			});
-
-			if (!textIsInEdition) {
-				const newEdition = {
-					title: text.edition.title,
-					slug: text.edition.slug,
-					lines: [],
-				};
-
-				if (lemmaQuery['text.n'].$gte <= text.n && text.n <= lemmaQuery['text.n'].$lte) {
-					newEdition.lines.push({
-						html: text.html,
-						n: text.n,
-					});
-				}
-
-				editions.push(newEdition);
-			}
-		});
-	});
+	const editionsSubscription = Meteor.subscribe('editions');
+	const textNodesCursor = TextNodes.find(lemmaQuery);
+	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
 
 	return {
 		editions,

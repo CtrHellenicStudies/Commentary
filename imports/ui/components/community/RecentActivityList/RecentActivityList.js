@@ -31,7 +31,7 @@ class RecentActivityList extends React.Component {
 
 const RecentActivityListContainer = createContainer(() => {
 	let comments = [];
-	const handle = Meteor.subscribe('recentComments');
+	const handle = Meteor.subscribe('comments.recent', 0, 12);
 	comments = Comments.find().fetch();
 
 	return {

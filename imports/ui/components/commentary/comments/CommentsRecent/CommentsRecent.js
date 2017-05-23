@@ -98,7 +98,7 @@ CommentsRecent.defaultProps = {
 */
 
 export default createContainer(() => {
-	const handle = Meteor.subscribe('comments.recent', Session.get('tenantId'), 3);
+	const handle = Meteor.subscribe('comments.recent.tenant', Session.get('tenantId'), 3);
 	let comments = [];
 	if (handle.ready()) {
 		comments = Comments.find({}, {

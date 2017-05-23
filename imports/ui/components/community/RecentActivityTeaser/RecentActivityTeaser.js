@@ -1,13 +1,18 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
+import Commenters from '/imports/api/collections/commenters';
+import Utils from '/imports/lib/utils';
+
 class RecentActivityTeaser extends React.Component {
 	static propTypes = {
 		comment: React.PropTypes.object.isRequired,
-		commenter: React.PropTypes.object,
+		commenters: React.PropTypes.array,
 	}
 
 	render() {
+		const { comment, commenters } = this.props;
+
 		const styles = {
 			commenterAvatar: {
 				backgroundSize: 'cover',
@@ -16,14 +21,12 @@ class RecentActivityTeaser extends React.Component {
 		let title = '';
 		let excerpt = '';
 
-		if (!commenter) {
-			return null;
-		}
-
-		const mostRecentRevision = comment.revisions[comment.revision.length - 1];
+		const mostRecentRevision = comment.revisions[comment.revisions.length - 1];
 
 		title = mostRecentRevision.title;
-		excerpt = Utils.trunc(mostRecentRevision.content.replace(/(<([^>]+)>)/ig, ''), 120);
+		if (mostRecentRevision.content) {
+			excerpt = Utils.trunc(mostRecentRevision.content.replace(/(<([^>]+)>)/ig, ''), 120);
+		}
 
 
 		return (
@@ -43,10 +46,21 @@ class RecentActivityTeaser extends React.Component {
 	}
 }
 
-const RecentActivityTeaserContainer = createContainer(() => {
-	let commenter;
+const RecentActivityTeaserContainer = createContainer(({ comment }) => {
+
+	const handle = Meteor.subscribe('commenters', Session.get('tenantId'));
+	const commenters = Commenters.find().fetch();
+
+	comment.commenters.forEach((commenter) => {
+		commenters.forEach((_commenter) => {
+			if (commenter._id === _commenter._id) {
+				commenters.push(commenter);
+			}
+		});
+	});
+
 	return {
-		commenter,
+		commenters,
 	};
 }, RecentActivityTeaser);
 

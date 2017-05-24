@@ -13,6 +13,7 @@ import CommentLower from '/imports/ui/components/commentary/comments/CommentLowe
 import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
 import DiscussionThread from '/imports/ui/components/discussionComments/DiscussionThread';
 import LemmaReferenceModal from '/imports/ui/components/shared/LemmaReferenceModal';
+import KeywordReferenceModal from '/imports/ui/components/shared/KeywordReferenceModal/KeywordReferenceModal.js';
 
 
 /*
@@ -195,14 +196,14 @@ class CommentDetail extends React.Component {
 				lemmaReferenceLineFrom: lineFrom,
 				lemmaReferenceLineTo: lineTo,
 				lemmaReferenceTop: $target.position().top - upperOffset,
-				lemmaReferenceLeft: $target.position().left + 160,
+				lemmaReferenceLeft: $target.position().left + 0,
 			});
 		} else if ($target.hasClass('keyword-gloss')) {
 			const keyword = $target.data().link.replace('/keywords/', '');
 			this.setState({
 				keywordReferenceModalVisible: true,
 				keywordReferenceTop: $target.position().top - upperOffset,
-				keywordReferenceLeft: $target.position().left + 160,
+				keywordReferenceLeft: $target.position().left + 0,
 				keyword,
 			});
 		}

@@ -33,7 +33,36 @@ Commenters.schema = new SimpleSchema({
 
 	avatar: {
 		type: Object,
-		blackbox: true,
+		optional: true,
+	},
+
+	'avatar.src': {
+		type: String,
+		optional: true,
+	},
+
+	'avatar.filename': {
+		type: String,
+		optional: true,
+	},
+
+	'avatar.type': {
+		type: String,
+		optional: true,
+	},
+
+	'avatar.size': {
+		type: Number,
+		optional: true,
+	},
+
+	'avatar.directive': {
+		type: String,
+		optional: true,
+	},
+
+	'avatar.key': {
+		type: String,
 		optional: true,
 	},
 
@@ -67,9 +96,18 @@ Commenters.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	'nCommentsWorks.$': {
-		type: Object,
-		blackbox: true,
+	'nCommentsWorks.$.title': {
+		type: String,
+		optional: true,
+	},
+
+	'nCommentWorks.$.slug': {
+		type: String,
+		optional: true,
+	},
+
+	'nCommentWorks.$.subworks': {
+		type: [Object],
 		optional: true,
 	},
 

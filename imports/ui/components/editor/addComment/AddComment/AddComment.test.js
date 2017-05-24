@@ -21,5 +21,3 @@ describe('AddComment', () => {
 		expect(tree).toMatchSnapshot();
 	});
 });
-
-// TODO Fix Invariant Violation: Missing leafNode

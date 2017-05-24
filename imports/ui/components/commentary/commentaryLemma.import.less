@@ -181,6 +181,10 @@
   height: auto;
   display: none;
   z-index: 90;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
 
   &.reference-modal-visible {
     display: block;

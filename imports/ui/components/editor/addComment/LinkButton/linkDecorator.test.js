@@ -3,17 +3,15 @@ import renderer from 'react-test-renderer';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // component:
-import AddCommentForm from './AddCommentForm';
+import { Link } from './linkDecorator';
 
-describe('AddCommentForm', () => {
+describe('linkDecarator', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
 			.create(
 				<MuiThemeProvider>
-					<AddCommentForm
-						selectedLineFrom={1}
-					/>
+					<Link />
 				</MuiThemeProvider>
 			)
 			.toJSON();

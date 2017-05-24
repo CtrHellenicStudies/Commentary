@@ -2,18 +2,13 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 // component:
-import EditKeyword from './EditKeyword';
+import LinkButton from './LinkButton';
 
-describe('EditKeyword', () => {
+describe('LinkButton', () => {
 	it('renders correctly', () => {
 
 		const tree = renderer
-			.create(
-				<EditKeyword
-					submitForm={() => {}}
-					onTypeChange={() => {}}
-				/>
-			)
+			.create(<LinkButton />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});

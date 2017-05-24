@@ -41,7 +41,6 @@ Settings.schema = new SimpleSchema({
 	homepageCover: {
 		optional: true,
 		type: Object,
-		blackbox: true,
 	},
 
 	homepageIntroduction: {
@@ -52,7 +51,36 @@ Settings.schema = new SimpleSchema({
 	homepageIntroductionImage: {
 		optional: true,
 		type: Object,
-		blackbox: true,
+	},
+
+	'homepageIntroductionImage.$.src': {
+		type: String,
+		optional: true,
+	},
+
+	'homepageIntroductionImage.$.filename': {
+		type: String,
+		optional: true,
+	},
+
+	'homepageIntroductionImage.$.type': {
+		type: String,
+		optional: true,
+	},
+
+	'homepageIntroductionImage.$.size': {
+		type: Number,
+		optional: true,
+	},
+
+	'homepageIntroductionImage.$.directive': {
+		type: String,
+		optional: true,
+	},
+
+	'homepageIntroductionImage.$.key': {
+		type: String,
+		optional: true,
 	},
 
 	homepageIntroductionImageCaption: {

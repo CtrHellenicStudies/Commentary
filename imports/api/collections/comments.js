@@ -251,7 +251,7 @@ Comments.schema = new SimpleSchema({
 
 	'revisions.$.tenantId': {
 		type: String,
-		optional:true,
+		optional: true,
 	},
 
 	'revisions.$.originalDate': {

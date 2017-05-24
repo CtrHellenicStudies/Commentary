@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`linkDecarator renders correctly 1`] = `
+<a
+  href="http://test.url"
+  style={
+    Object {
+      "color": "#3b5998",
+      "textDecoration": "underline",
+    }
+  }
+/>
+`;

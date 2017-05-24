@@ -160,7 +160,7 @@ class CommentarySearchToolbar extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		if (this.props.filters) {
 			this.setState({
-				selectedWork: nextProps.filters[0]['values'][0]['slug'] === 'homeric-hymns' ? 'Hymn' : 'Book'
+				selectedWork: nextProps.filters[0].values[0].slug === 'homeric-hymns' ? 'Hymn' : 'Book'
 			});
 		}
 	}

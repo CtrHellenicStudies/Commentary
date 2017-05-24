@@ -11,7 +11,15 @@ describe('linkDecarator', () => {
 		const tree = renderer
 			.create(
 				<MuiThemeProvider>
-					<Link />
+					<Link
+						contentState={{
+							getEntity: () => ({
+								getData: () => ({
+									url: 'http://test.url'
+								}),
+							}),
+						}}
+					/>
 				</MuiThemeProvider>
 			)
 			.toJSON();

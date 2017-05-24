@@ -2,7 +2,7 @@ import React from 'react';
 import { CompositeDecorator } from 'draft-js';
 
 const Link = (props) => {
-	const {url} = props.contentState.getEntity(props.entityKey).getData();
+	const { url } = props.contentState.getEntity(props.entityKey).getData();
 	const style = {
 		color: '#3b5998',
 		textDecoration: 'underline',

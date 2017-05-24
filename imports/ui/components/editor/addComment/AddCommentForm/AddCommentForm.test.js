@@ -13,6 +13,7 @@ describe('AddCommentForm', () => {
 				<MuiThemeProvider>
 					<AddCommentForm
 						selectedLineFrom={1}
+						isTest
 					/>
 				</MuiThemeProvider>
 			)

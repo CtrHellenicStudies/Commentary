@@ -21,6 +21,7 @@ import muiTheme from '/imports/lib/muiTheme';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
 
 
 /*
@@ -137,7 +138,7 @@ class AddCommentLayout extends React.Component {
 	};
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			filters: [],
 			selectedLineFrom: 0,

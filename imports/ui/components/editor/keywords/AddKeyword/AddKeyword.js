@@ -15,6 +15,16 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import {
+	ItalicButton,
+	BoldButton,
+	UnderlineButton,
+	UnorderedListButton,
+	OrderedListButton,
+	BlockquoteButton,
+} from 'draft-js-buttons';
+
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -23,37 +33,20 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	CodeButton,
-	HeadlineOneButton,
-	HeadlineTwoButton,
-	HeadlineThreeButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-	CodeBlockButton,
-} from 'draft-js-buttons';
-
+// Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin({
 	structure: [
 		BoldButton,
 		ItalicButton,
 		UnderlineButton,
-		CodeButton,
 		Separator,
-		HeadlineOneButton,
-		HeadlineTwoButton,
-		HeadlineThreeButton,
 		UnorderedListButton,
 		OrderedListButton,
 		BlockquoteButton,
-		CodeBlockButton,
+		LinkButton,
 	]
 });
 

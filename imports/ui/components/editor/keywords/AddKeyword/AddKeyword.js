@@ -304,7 +304,7 @@ const AddKeyword = React.createClass({
 							</RadioButtonGroup>
 						</div>
 						<div
-							className="comment-lower"
+							className="comment-lower clearfix"
 							style={{ paddingTop: 20 }}
 						>
 							<Editor

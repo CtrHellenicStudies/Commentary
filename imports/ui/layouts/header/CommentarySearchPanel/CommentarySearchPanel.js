@@ -386,7 +386,7 @@ export default createContainer(({ addCommentPage }) => {
 
 	if (!addCommentPage) {
 		Meteor.subscribe('commenters', Session.get('tenantId'));
-		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	}
 	Meteor.subscribe('works', Session.get('tenantId'));

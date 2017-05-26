@@ -41,7 +41,7 @@ const emailFooter = `
 	Washington, DC 20008
 `;
 
-function sendDiscussionComment_Insert_Email(discussionComment) {
+function sendDiscussionCommentInsertEmail(discussionComment) {
 	const user = Meteor.users.findOne({ _id: discussionComment.userId });
 
 	Email.send({
@@ -66,7 +66,7 @@ function sendDiscussionComment_Insert_Email(discussionComment) {
 	});
 }
 
-function sendDiscussionComment_Reject_Email(discussionCommentId) {
+function sendDiscussionCommentRejectEmail(discussionCommentId) {
 	const discussionComment = DiscussionComments.findOne({ _id: discussionCommentId });
 	const user = Meteor.users.findOne({ _id: discussionComment.userId });
 
@@ -76,7 +76,7 @@ function sendDiscussionComment_Reject_Email(discussionCommentId) {
 		subject: `Your comment has been rejected at ${Config.name}`,
 		html: `
 		${getEmailHeader(user)}
-		Unfortunately, the moderator considers the comment that you posted on ${moment().format("MM-DD-YYYY")} to be inappropriate or insufficiently civil to the community of researchers and students who are working on AHCIP.
+		Unfortunately, the moderator considers the comment that you posted on ${moment().format('MM-DD-YYYY')} to be inappropriate or insufficiently civil to the community of researchers and students who are working on AHCIP.
 		<br />
 		<br />
 		We would appreciate your respecting this decision and taking to heart its purpose. If you wish to submit a revised version of your response, please do so.
@@ -84,7 +84,7 @@ function sendDiscussionComment_Reject_Email(discussionCommentId) {
 	});
 }
 
-function sendDiscussionComment_Publish_Email(discussionCommentId) {
+function sendDiscussionCommentPublishEmail(discussionCommentId) {
 	const discussionComment = DiscussionComments.findOne({ _id: discussionCommentId });
 	const comment = Comments.findOne({ _id: discussionComment.commentId });
 	const user = Meteor.users.findOne({ _id: discussionComment.userId });
@@ -108,4 +108,4 @@ function sendDiscussionComment_Publish_Email(discussionCommentId) {
 	});
 }
 
-export { sendDiscussionComment_Insert_Email, sendDiscussionComment_Reject_Email, sendDiscussionComment_Publish_Email };
+export { sendDiscussionCommentInsertEmail, sendDiscussionCommentRejectEmail, sendDiscussionCommentPublishEmail };

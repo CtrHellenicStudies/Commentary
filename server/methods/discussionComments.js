@@ -1,7 +1,7 @@
 import Comments from '/imports/api/collections/comments';
 import DiscussionComments from '/imports/api/collections/discussionComments';
 
-import { sendDiscussionComment_Insert_Email, sendDiscussionComment_Reject_Email, sendDiscussionComment_Publish_Email } from './emails';
+import { sendDiscussionCommentInsertEmail, sendDiscussionCommentRejectEmail, sendDiscussionCommentPublishEmail } from './emails';
 
 
 Meteor.methods({
@@ -64,7 +64,7 @@ Meteor.methods({
 			throw new Meteor.Error(err);
 		}
 
-		sendDiscussionComment_Insert_Email(discussionComment);
+		sendDiscussionCommentInsertEmail(discussionComment);
 	},
 
 	'discussionComments.update': function updateDiscussionComment(discussionCommentId, discussionCommentData) {
@@ -138,8 +138,8 @@ Meteor.methods({
 		 * comment was approved
 		 */
 
-		if (discussionCommentData.status === 'publish') sendDiscussionComment_Publish_Email(discussionCommentId);
-		else if (discussionCommentData.status === 'trash') sendDiscussionComment_Reject_Email(discussionCommentId);
+		if (discussionCommentData.status === 'publish') sendDiscussionCommentPublishEmail(discussionCommentId);
+		else if (discussionCommentData.status === 'trash') sendDiscussionCommentRejectEmail(discussionCommentId);
 	},
 
 	'discussionComments.upvote': function upvoteDiscussionComment(discussionCommentId) {

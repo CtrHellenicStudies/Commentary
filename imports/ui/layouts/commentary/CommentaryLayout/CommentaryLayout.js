@@ -486,8 +486,6 @@ const CommentaryLayout = React.createClass({
 		// create filters object based on the queryParams
 		const filters = this._createFilterFromQueryParams(queryParams);
 
-		console.log(filters);
-
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div>

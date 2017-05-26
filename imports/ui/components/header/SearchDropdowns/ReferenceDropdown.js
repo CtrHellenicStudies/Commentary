@@ -27,7 +27,7 @@ const ReferenceDropdown = ({ reference, searchDropdownOpen, toggleSearchDropdown
 				label={Utils.trunc(_reference.title, 30)}
 				searchTermKey="reference"
 				value={_reference}
-				active={isActive(filters, _reference, 'reference', 'title')}
+				active={isActive(filters, _reference, 'reference', '_id')}
 			/>
 		))}
 	</SearchToolDropdown>

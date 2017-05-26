@@ -91,8 +91,6 @@ const createQueryFromFilters = (filters) => {
 		});
 	}
 
-	console.log(query);
-
 	return query;
 };
 

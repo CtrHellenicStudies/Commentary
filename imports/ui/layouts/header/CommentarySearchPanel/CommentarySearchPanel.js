@@ -352,7 +352,7 @@ const CommentarySearchPanel = React.createClass({
 							filters.forEach((filter) => {
 								if (filter.key === 'reference') {
 									filter.values.forEach((value) => {
-										if (reference.title === value.title) {
+										if (reference._id === value._id) {
 											active = true;
 										}
 									});

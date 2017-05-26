@@ -50,7 +50,7 @@ function sendDiscussionCommentInsertEmail(discussionComment) {
 		subject: `Thank you for posting a comment at ${Config.name}`,
 		html: `
 		${getEmailHeader(user)}
-		The comment that you submitted on ${moment().format("MM-DD-YYYY")} to A Homer Commentary in Progress (AHCIP) for posting will be reviewed by a moderator before it is made public. It is our goal to review and post your comment within a day or two.
+		The comment that you submitted on ${moment().format('MM-DD-YYYY')} to A Homer Commentary in Progress (AHCIP) for posting will be reviewed by a moderator before it is made public. It is our goal to review and post your comment within a day or two.
 		<br />
 		<br />
 		For your information, the Center for Hellenic Studies (CHS), which publishes AHCIP, reserves the right to review comments and silently correct obvious typographic errors and misspellings before making them public. If there is an error whose correction is unclear, we will contact you.

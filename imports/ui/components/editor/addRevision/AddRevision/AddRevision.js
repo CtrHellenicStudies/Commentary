@@ -518,7 +518,7 @@ const AddRevision = React.createClass({
 								{/* TODO: this.props.comment.keyideas*/}
 
 							</div>
-							<div className="comment-lower" style={{ paddingTop: 20 }}>
+							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
 								<Editor
 									editorState={textEditorState}
 									onChange={this.onTextChange}

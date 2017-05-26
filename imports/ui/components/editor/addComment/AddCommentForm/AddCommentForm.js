@@ -121,7 +121,7 @@ const AddCommentForm = React.createClass({
 
 		return (
 
-			<div className="add-comment-form">
+			<div className="add-comment-form clearfix">
 
 				<form id="addCommentForm" onSubmit={this.handleSubmit}>
 

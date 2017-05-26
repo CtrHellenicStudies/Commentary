@@ -307,8 +307,8 @@ class AddCommentLayout extends React.Component {
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
-			if (filter.key === 'work') {
-				work = values[0];
+			if (filter.key === 'works') {
+				work = filter.values[0];
 			}
 		});
 		if (!work) {
@@ -324,8 +324,8 @@ class AddCommentLayout extends React.Component {
 	getSubwork() {
 		let subwork = null;
 		this.state.filters.forEach((filter) => {
-			if (filter.key === 'subwork') {
-				subwork = values[0];
+			if (filter.key === 'subworks') {
+				subwork = filter.values[0];
 			}
 		});
 		if (!subwork) {

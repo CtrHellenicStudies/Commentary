@@ -1,6 +1,9 @@
 import Comments from '/imports/api/collections/comments';
 import DiscussionComments from '/imports/api/collections/discussionComments';
 
+import { sendDiscussionCommentInsertEmail, sendDiscussionCommentRejectEmail, sendDiscussionCommentPublishEmail } from './emails';
+
+
 Meteor.methods({
 	'discussionComments.delete': (token, _id) => {
 		check(token, String);
@@ -52,7 +55,7 @@ Meteor.methods({
 		check(discussionComment.commentId, String);
 
 		// check if discussion comments for this comment have not been disabled:
-		const comment = Comments.fundOne({_id: discussionComment.commentId});
+		const comment = Comments.findOne({_id: discussionComment.commentId});
 		if (comment.discussionCommentsDisabled) throw new Meteor.Error('insert denied - discussionCommentsDisabled');
 
 		try {
@@ -60,6 +63,8 @@ Meteor.methods({
 		} catch (err) {
 			throw new Meteor.Error(err);
 		}
+
+		sendDiscussionCommentInsertEmail(discussionComment);
 	},
 
 	'discussionComments.update': function updateDiscussionComment(discussionCommentId, discussionCommentData) {
@@ -129,49 +134,12 @@ Meteor.methods({
 
 
 		/*
-		 * If status update was approval, send email notification that discussion
+		 * If status update was approval or trashed, send email notification that discussion
 		 * comment was approved
 		 */
 
-		if (discussionCommentData.status === 'publish') {
-			const discussionComment = DiscussionComments.findOne({ _id: discussionCommentId });
-			const comment = Comments.findOne({ _id: discussionComment.commentId });
-			const user = Meteor.users.findOne({ _id: discussionComment.userId });
-
-			let userFullName = '';
-			let userEmail;
-
-			if ('name' in user.profile) {
-				userFullName = user.profile.name;
-			} else {
-				userFullName = user.username;
-			}
-
-			const commentLink = `${Meteor.absoluteUrl()}commentary/?_id=${comment._id}`;
-			let commentTitle = '';
-			if (comment.revisions.length) {
-				comment.revisions.sort(Utils.sortRevisions);
-				commentTitle = comment.revisions[comment.revisions.length - 1].title;
-			}
-
-
-			Email.send({
-				to: ['lukehollis@gmail.com'],
-				from: Config.emails.from,
-				subject: `Your comment has been approved at ${Config.name}`,
-				html: `Dear ${userFullName},
-				<br />
-				<br />
-				Your comment on ${commentTitle} has been approved! You may view the discussion by visiting the following link: <a href='${commentLink}'>${commentLink}</a>.
-				<br />
-				<br />
-				Thank you for your submission!
-				<br />
-				<br />
-				${Config.title}
-				`,
-			});
-		}
+		if (discussionCommentData.status === 'publish') sendDiscussionCommentPublishEmail(discussionCommentId);
+		else if (discussionCommentData.status === 'trash') sendDiscussionCommentRejectEmail(discussionCommentId);
 	},
 
 	'discussionComments.upvote': function upvoteDiscussionComment(discussionCommentId) {

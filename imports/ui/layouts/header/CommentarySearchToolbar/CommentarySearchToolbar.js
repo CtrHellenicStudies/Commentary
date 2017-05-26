@@ -106,6 +106,7 @@ class CommentarySearchToolbar extends React.Component {
 		referenceWorks: [],
 		works: [],
 		handleChangeTextsearch: null,
+		selectedWork: 'Book'
 	}
 
 	constructor(props) {
@@ -115,7 +116,7 @@ class CommentarySearchToolbar extends React.Component {
 			searchDropdownOpen: '',
 			moreDropdownOpen: false,
 			activeWorkNew: null,
-			selectedWork: 'Book',
+			selectedWork: 'Book'
 		};
 
 		// methods:
@@ -155,6 +156,29 @@ class CommentarySearchToolbar extends React.Component {
 			selectedWork: 'Book',
 		});
 	}
+
+	componentWillReceiveProps(nextProps) {
+		let workFilter;
+
+		if (
+			this.props.filters
+			&& nextProps.filters
+			&& nextProps.filters.length
+		) {
+			nextProps.filters.forEach((filter) => {
+				if (filter.key === 'works') {
+					workFilter = filter;
+				}
+			});
+
+			if (workFilter && workFilter.values.length) {
+				this.setState({
+					selectedWork: workFilter.values[0].slug === 'homeric-hymns' ? 'Hymn' : 'Book'
+				});
+			}
+		}
+	}
+
 
 	render() {
 

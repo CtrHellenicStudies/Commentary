@@ -1,0 +1,192 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_IconButton = require('material-ui/IconButton'); /* istanbul ignore next */var _IconButton2 = _interopRequireDefault(_IconButton);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+
+
+var /* istanbul ignore next */_textNodes = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/textNodes'); /* istanbul ignore next */var _textNodes2 = _interopRequireDefault(_textNodes);
+
+
+var /* istanbul ignore next */_ContextPanelText = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commentary/contextPanel/ContextPanelText'); /* istanbul ignore next */var _ContextPanelText2 = _interopRequireDefault(_ContextPanelText);
+var /* istanbul ignore next */_ContextPanelTabs = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commentary/contextPanel/ContextPanelTabs'); /* istanbul ignore next */var _ContextPanelTabs2 = _interopRequireDefault(_ContextPanelTabs);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+/*
+                                                                                                                                                                                                                                                                                                                                                         	helpers
+                                                                                                                                                                                                                                                                                                                                                         */ // components:
+var getContextPanelStyles = function getContextPanelStyles(open, highlightingVisible) {
+	var contextPanelStyles = 'lemma-panel paper-shadow';
+	if (open) {
+		contextPanelStyles += ' extended';
+	}
+	if (highlightingVisible) {
+		contextPanelStyles += ' highlighting-visible';
+	}
+	return contextPanelStyles;
+}; // api:
+var getSortedEditions = function getSortedEditions(editions) {
+	var sortedEditions = [];
+	editions.forEach(function (edition) {
+		var newEdition = {
+			slug: edition.slug,
+			title: edition.title,
+			lines: _.sortBy(edition.lines, 'n') };
+
+		sortedEditions.push(newEdition);
+	});
+	return sortedEditions;
+};
+
+
+
+var ContextPanelContent = function ContextPanelContent( /* istanbul ignore next */_ref) /* istanbul ignore next */{var open = _ref.open,highlightingVisible = _ref.highlightingVisible,closeContextPanel = _ref.closeContextPanel,onBeforeClicked = _ref.onBeforeClicked,onAfterClicked = _ref.onAfterClicked,selectedLemmaEdition = _ref.selectedLemmaEdition,lemmaText = _ref.lemmaText,lineFrom = _ref.lineFrom,lineTo = _ref.lineTo,commentGroup = _ref.commentGroup,maxLine = _ref.maxLine,toggleEdition = _ref.toggleEdition,toggleHighlighting = _ref.toggleHighlighting,disableEdit = _ref.disableEdit,selectedLineFrom = _ref.selectedLineFrom,selectedLineTo = _ref.selectedLineTo,updateSelectedLines = _ref.updateSelectedLines,editor = _ref.editor;return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: getContextPanelStyles(open, highlightingVisible) },
+
+			closeContextPanel &&
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_IconButton2.default, /* istanbul ignore next */{
+				className: 'close-lemma-panel',
+				onClick: closeContextPanel,
+				iconClassName: 'mdi mdi-close' }),
+
+
+
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_ContextPanelText2.default, /* istanbul ignore next */{
+				onBeforeClicked: onBeforeClicked,
+				onAfterClicked: onAfterClicked,
+				selectedLemmaEdition: selectedLemmaEdition,
+				lemmaText: lemmaText,
+				lineFrom: lineFrom,
+				lineTo: lineTo,
+				commentGroup: commentGroup,
+				maxLine: maxLine,
+
+				disableEdit: disableEdit,
+				selectedLineFrom: selectedLineFrom,
+				selectedLineTo: selectedLineTo,
+				updateSelectedLines: updateSelectedLines,
+				editor: editor }),
+
+
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_ContextPanelTabs2.default, /* istanbul ignore next */{
+				lemmaText: lemmaText,
+				selectedLemmaEdition: selectedLemmaEdition,
+				toggleEdition: toggleEdition,
+				toggleHighlighting: toggleHighlighting,
+				highlightingVisible: highlightingVisible,
+				disableEdit: disableEdit,
+				editor: editor })));};
+
+
+
+
+ContextPanelContent.propTypes = {
+	open: /* istanbul ignore next */_react2.default.PropTypes.bool.isRequired,
+	commentGroup: /* istanbul ignore next */_react2.default.PropTypes.shape({
+		work: /* istanbul ignore next */_react2.default.PropTypes.shape({
+			slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired }),
+
+		subwork: /* istanbul ignore next */_react2.default.PropTypes.shape({
+			n: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired }),
+
+		lineFrom: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+		lineTo: /* istanbul ignore next */_react2.default.PropTypes.number,
+		ref: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired }),
+
+	closeContextPanel: /* istanbul ignore next */_react2.default.PropTypes.func,
+	highlightingVisible: /* istanbul ignore next */_react2.default.PropTypes.bool.isRequired,
+	onBeforeClicked: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+	onAfterClicked: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+	selectedLemmaEdition: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	lemmaText: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		lines: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+			n: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+			html: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })).
+		isRequired })).
+	isRequired,
+	lineFrom: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+	lineTo: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+	maxLine: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+	toggleEdition: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+	toggleHighlighting: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+	workSlug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	subworkN: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+
+	// requiered if editor:
+	disableEdit: /* istanbul ignore next */_react2.default.PropTypes.bool,
+	selectedLineFrom: /* istanbul ignore next */_react2.default.PropTypes.number,
+	selectedLineTo: /* istanbul ignore next */_react2.default.PropTypes.number,
+	updateSelectedLines: /* istanbul ignore next */_react2.default.PropTypes.func,
+	editor: /* istanbul ignore next */_react2.default.PropTypes.bool };
+
+ContextPanelContent.defaultProps = {
+	commentGroup: null,
+	closeContextPanel: null,
+
+	disableEdit: false,
+	selectedLineFrom: 0,
+	selectedLineTo: 0,
+	updateSelectedLines: null,
+	editor: false }; /* istanbul ignore next */exports.default =
+
+
+
+/* istanbul ignore next */(0, _reactMeteorData.createContainer)(function ( /* istanbul ignore next */_ref2) {/* istanbul ignore next */var lineFrom = _ref2.lineFrom,workSlug = _ref2.workSlug,subworkN = _ref2.subworkN;
+
+	var lineTo = lineFrom + 49;
+
+	var lemmaQuery = {
+		'work.slug': workSlug,
+		'subwork.n': subworkN,
+		'text.n': {
+			$gte: lineFrom,
+			$lte: lineTo } };
+
+
+
+	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+		lemmaQuery['work.slug'] = 'hymns';
+	}
+
+	/* istanbul ignore next */_meteor.Meteor.subscribe('textNodes', lemmaQuery);
+	var textNodes = /* istanbul ignore next */_textNodes2.default.find(lemmaQuery).fetch();
+	var editions = [];
+
+	var textIsInEdition = false;
+	textNodes.forEach(function (textNode) {
+		textNode.text.forEach(function (text) {
+			textIsInEdition = false;
+
+			editions.forEach(function (edition) {
+				if (text.edition.slug === edition.slug) {
+					edition.lines.push({
+						html: text.html,
+						n: text.n });
+
+					textIsInEdition = true;
+				}
+			});
+
+			if (!textIsInEdition) {
+				editions.push({
+					title: text.edition.title,
+					slug: text.edition.slug,
+					lines: [
+					{
+						html: text.html,
+						n: text.n }] });
+
+
+
+			}
+		});
+	});
+
+	var sortedEditions = getSortedEditions(editions);
+
+	return {
+		lemmaText: sortedEditions,
+		lineTo: lineTo };
+
+
+}, ContextPanelContent);

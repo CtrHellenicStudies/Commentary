@@ -161,7 +161,7 @@ const KeywordDetail = React.createClass({
 							visible={this.state.keywordReferenceModalVisible}
 							top={this.state.referenceTop}
 							left={this.state.referenceLeft}
-							keyword={this.state.keyword}
+							keywordSlug={this.state.keyword}
 							close={this._closeKeywordReference}
 						/>
 					: ''}

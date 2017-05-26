@@ -1,0 +1,61 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_FlatButton = require('material-ui/FlatButton'); /* istanbul ignore next */var _FlatButton2 = _interopRequireDefault(_FlatButton);
+var /* istanbul ignore next */_CommentCitation = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commentary/comments/CommentCitation'); /* istanbul ignore next */var _CommentCitation2 = _interopRequireDefault(_CommentCitation);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+/*
+                                                                                                                                                                                                                                                                                                                                                 	helpers
+                                                                                                                                                                                                                                                                                                                                                 */
+var getDateRevision = function getDateRevision(revision) {
+	if (revision.originalDate) return revision.originalDate;else
+	if (revision.updated) return revision.updated;
+	return revision.created;
+};
+
+var getClassName = function getClassName(selectedRevisionIndex, i) /* istanbul ignore next */{return 'revision ' + (selectedRevisionIndex === i ? 'selected-revision' : '');};
+
+
+/*
+                                                                                                                                                                               	BEGIN CommentRevisionSelect
+                                                                                                                                                                               */
+var CommentRevisionSelect = function CommentRevisionSelect(props) /* istanbul ignore next */{return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-revisions' },
+			props.revisions.map(function (revision, i) {
+
+				var updated = getDateRevision(revision);
+
+				return (
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+						key: revision._id,
+						id: i,
+						/* istanbul ignore next */'data-id': revision._id,
+						className: getClassName(props.selectedRevisionIndex, i),
+						onClick: props.selectRevision,
+						label: /* istanbul ignore next */'Revision ' + moment(updated).format('D MMMM YYYY') }));
+
+
+			}),
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommentCitation2.default, /* istanbul ignore next */{
+				commentId: props.commentId,
+				revisions: props.revisions })));};
+
+
+
+CommentRevisionSelect.propTypes = {
+	commentId: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+	revisions: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		_id: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		created: /* istanbul ignore next */_react2.default.PropTypes.instanceOf(Date),
+		updated: /* istanbul ignore next */_react2.default.PropTypes.instanceOf(Date),
+		originalDate: /* istanbul ignore next */_react2.default.PropTypes.instanceOf(Date) })).
+	isRequired,
+	selectedRevisionIndex: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+	selectRevision: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired };
+
+CommentRevisionSelect.defaultProps = {};
+
+
+/*
+                                         	END CommentRevisionSelect
+                                         */ /* istanbul ignore next */exports.default =
+
+CommentRevisionSelect;

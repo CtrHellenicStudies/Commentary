@@ -51,6 +51,10 @@ Meteor.methods({
 		check(discussionComment.votes, Number);
 		check(discussionComment.commentId, String);
 
+		// check if discussion comments for this comment have not been disabled:
+		const comment = Comments.fundOne({_id: discussionComment.commentId});
+		if (comment.discussionCommentsDisabled) throw new Meteor.Error('insert denied - discussionCommentsDisabled');
+
 		try {
 			DiscussionComments.insert(discussionComment);
 		} catch (err) {

@@ -1,0 +1,24 @@
+/* istanbul ignore next */'use strict';var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_reactTestRenderer = require('react-test-renderer'); /* istanbul ignore next */var _reactTestRenderer2 = _interopRequireDefault(_reactTestRenderer);
+
+
+var /* istanbul ignore next */_ReferenceWorkTeaser = require('./ReferenceWorkTeaser'); /* istanbul ignore next */var _ReferenceWorkTeaser2 = _interopRequireDefault(_ReferenceWorkTeaser);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('ReferenceWorkTeaser', function () {
+	it('renders correctly', function () {
+
+		var tree = /* istanbul ignore next */_reactTestRenderer2.default.
+		create(
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_ReferenceWorkTeaser2.default, /* istanbul ignore next */{
+			referenceWork: {
+				title: 'Test Work',
+				slug: 'test-work',
+				description: 'Quid faciat laetas segetes quo sidere terram vertere',
+				link: 'http://ahcip.chs.harvard.edu/' } })).
+
+
+
+		toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+}); // component:

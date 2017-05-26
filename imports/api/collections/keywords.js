@@ -36,7 +36,6 @@ Keywords.schema = new SimpleSchema({
 	descriptionRaw: {
 		type: Object,
 		optional: true,
-		blackbox: true,
 	},
 
 	type: {
@@ -53,14 +52,12 @@ Keywords.schema = new SimpleSchema({
 	work: {
 		type: Object,
 		blackbox: true,
-		optional: true,
 
 	},
 
 	subwork: {
 		type: Object,
 		blackbox: true,
-		optional: true,
 
 	},
 

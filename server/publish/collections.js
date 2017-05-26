@@ -29,7 +29,18 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('comments.recent', (tenantId, limit = 3) => {
+	Meteor.publish('comments.recent', (skip = 0, limit = 3) => {
+		check(skip, Number);
+		check(limit, Number);
+		return Comments.find({}, {
+			limit,
+			sort: {
+				updated: -1,
+			},
+		});
+	});
+
+	Meteor.publish('comments.recent.tenant', (tenantId, limit = 3) => {
 		check(limit, Number);
 		check(tenantId, Match.Maybe(String));
 		return Comments.find({
@@ -41,6 +52,7 @@ if (Meteor.isServer) {
 			},
 		});
 	});
+
 
 	Meteor.publish('comments.id', (_id, tenantId) => {
 		check(_id, String);
@@ -90,6 +102,17 @@ if (Meteor.isServer) {
 			sort: {
 				name: 1,
 			},
+		});
+	});
+
+	Meteor.publish('commenters._id', (_id, tenantId) => {
+		check(_id, String);
+		check(tenantId, Match.Maybe(String));
+		return Commenters.find({
+			_id,
+			tenantId,
+		}, {
+			limit: 1,
 		});
 	});
 

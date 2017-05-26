@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Draggable from 'react-draggable';
 
 // api
 import Keywords from '/imports/api/collections/keywords';
@@ -23,24 +24,8 @@ const KeywordReferenceModal = React.createClass({
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	getMeteorData() {
-		const query = {
-			slug: this.props.keyword,
-		};
-		console.log(query);
-		const handle = Meteor.subscribe('keywords.all', query);
-		const keyword = Keywords.findOne(query);
-
-		return {
-			keyword,
-			ready: handle.ready(),
-		};
 	},
 
 	renderKeywordHTML() {
@@ -56,7 +41,7 @@ const KeywordReferenceModal = React.createClass({
 
 	render() {
 		const self = this;
-		const keyword = this.data.keyword;
+		const { keyword } = this.props;
 		const styles = {
 			modal: {
 				top: this.props.top,
@@ -66,32 +51,47 @@ const KeywordReferenceModal = React.createClass({
 		};
 
 		return (
-			<div
-				className={`reference-modal${(this.props.visible) ?
-					' reference-modal-visible' : ''}`}
-				style={styles.modal}
-			>
-				<article className="comment	lemma-comment paper-shadow ">
-					<div className="reference-text">
-						{keyword ?
-							<p
-								className="lemma-text"
-								dangerouslySetInnerHTML={this.renderKeywordHTML()}
-							/>
-						: ''}
-					</div>
+			<Draggable>
+				<div
+					className={`reference-modal${(this.props.visible) ?
+						' reference-modal-visible' : ''}`}
+					style={styles.modal}
+				>
+					<article className="comment	lemma-comment paper-shadow ">
+						<div className="reference-text">
+							{keyword ?
+								<p
+									className="lemma-text"
+									dangerouslySetInnerHTML={this.renderKeywordHTML()}
+								/>
+							: ''}
+						</div>
 
-					<i
-						className="mdi mdi-close paper-shadow"
-						onClick={this.props.close}
-					/>
-				</article>
+						<i
+							className="mdi mdi-close paper-shadow"
+							onClick={this.props.close}
+						/>
+					</article>
 
-			</div>
-
+				</div>
+			</Draggable>
 		);
 	},
 
 });
 
-export default KeywordRefernceModal;
+const KeywordReferenceModalContainer = createContainer(({ keywordSlug }) => {
+	const query = {
+		slug: keywordSlug,
+	};
+
+	const handle = Meteor.subscribe('keywords.all', query);
+	const keyword = Keywords.findOne(query);
+
+	return {
+		keyword,
+		ready: handle.ready(),
+	};
+}, KeywordReferenceModal);
+
+export default KeywordReferenceModalContainer;

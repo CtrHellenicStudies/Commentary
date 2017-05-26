@@ -97,7 +97,6 @@ Meteor.methods({
 			canAnnotateBooks: Match.Maybe(Array),
 			highlightingPreference: Match.Maybe(Boolean),
 		});
-		console.log(token);
 
 		if (
 			Meteor.users.findOne({

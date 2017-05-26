@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
@@ -41,9 +42,13 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
+
+// helpers:
+import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
 
 
 // Create toolbar plugin for editor
@@ -57,6 +62,7 @@ const inlineToolbarPlugin = createInlineToolbarPlugin({
 		UnorderedListButton,
 		OrderedListButton,
 		BlockquoteButton,
+		LinkButton,
 	]
 });
 const { InlineToolbar } = inlineToolbarPlugin;
@@ -116,12 +122,14 @@ const AddRevision = React.createClass({
 		keywordsOptions: React.PropTypes.array,
 		keyideasOptions: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
+		isTest: React.PropTypes.bool,
 	},
 
 	getInitialState() {
 		const { comment } = this.props;
 		const revisionId = comment.revisions.length - 1;
 		const revision = comment.revisions[revisionId]; // get newest revision
+		let revisionTitle = '';
 
 		const keywordsValue = [];
 		const keyideasValue = [];
@@ -142,11 +150,14 @@ const AddRevision = React.createClass({
 			});
 		}
 
+		if (revision && revision.title) {
+			revisionTitle = revision.title;
+		}
 
 		return {
 			revision,
 
-			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
+			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revisionTitle)),
 			textEditorState: this._getRevisionEditorState(revision),
 
 			titleValue: '',
@@ -182,14 +193,15 @@ const AddRevision = React.createClass({
 
 	_getRevisionEditorState(revision) {
 		if (revision.textRaw) {
-			return EditorState.createWithContent(convertFromRaw(revision.textRaw));
+			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
 		} else if (revision.text) {
 			const blocksFromHTML = convertFromHTML(revision.text);
 			return EditorState.createWithContent(
 				ContentState.createFromBlockArray(
 					blocksFromHTML.contentBlocks,
 					blocksFromHTML.entityMap
-				)
+				),
+				linkDecorator
 			);
 		}
 		console.error('missing filed text or textRaw in revision');
@@ -205,11 +217,10 @@ const AddRevision = React.createClass({
 	},
 
 	onTextChange(textEditorState) {
-		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+		const newTextEditorState = EditorState.set(textEditorState, {decorator: linkDecorator});
 
 		this.setState({
-			textEditorState,
-			textValue: textHtml,
+			textEditorState: newTextEditorState,
 		});
 	},
 
@@ -318,6 +329,11 @@ const AddRevision = React.createClass({
 			// performe necessary html transformations:
 			entityToHTML: (entity, originalText) => {
 
+				// handle LINK
+				if (entity.type === 'LINK') {
+					return <a href={entity.data.link}>{originalText}</a>;
+				}
+
 				// handle keyword mentions
 				if (entity.type === 'mention') {
 					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
@@ -338,7 +354,7 @@ const AddRevision = React.createClass({
 	handleUpdate() {
 		const data = this.refs.form.getModel(); // eslint-disable-line
 		let key;
-		
+
 		for (key in data) { // eslint-disable-line
 			const params = key.split('_');
 			params[0] = parseInt(params[0], 10);
@@ -365,7 +381,7 @@ const AddRevision = React.createClass({
 		this.setState({
 			revision,
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text)),
+			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text), linkDecorator),
 		});
 	},
 
@@ -409,9 +425,13 @@ const AddRevision = React.createClass({
 
 	render() {
 		const self = this;
-		const { comment } = this.props;
+		const { comment, isTest } = this.props;
 		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorks, textEditorState } = this.state;
 		const { keywordsOptions, keyideasOptions, referenceWorkOptions } = this.props;
+
+		if (isTest) {
+			return null;
+		}
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -457,15 +477,17 @@ const AddRevision = React.createClass({
 									</div>
 								</div>
 								<h1 className="add-comment-title">
-									<Editor
-										editorState={titleEditorState}
-										onChange={this.onTitleChange}
-										placeholder="Comment title..."
-										spellCheck
-										stripPastedStyles
-										plugins={[singleLinePlugin]}
-										blockRenderMap={singleLinePlugin.blockRenderMap}
-									/>
+									{!isTest ?
+										<Editor
+											editorState={titleEditorState}
+											onChange={this.onTitleChange}
+											placeholder="Comment title..."
+											spellCheck
+											stripPastedStyles
+											plugins={[singleLinePlugin]}
+											blockRenderMap={singleLinePlugin.blockRenderMap}
+										/>
+									: ''}
 								</h1>
 								<Creatable
 									name="keywords"
@@ -496,7 +518,7 @@ const AddRevision = React.createClass({
 								{/* TODO: this.props.comment.keyideas*/}
 
 							</div>
-							<div className="comment-lower" style={{ paddingTop: 20 }}>
+							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
 								<Editor
 									editorState={textEditorState}
 									onChange={this.onTextChange}
@@ -535,7 +557,7 @@ const AddRevision = React.createClass({
 											*/}
 											{referenceWorks.map((referenceWork, i) => {
 												const _referenceWorkOptions = [];
-												referenceWorkOptions.forEach(rW => {
+												referenceWorkOptions.forEach((rW) => {
 													_referenceWorkOptions.push({
 														value: rW.value,
 														label: rW.label,
@@ -706,7 +728,7 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
-	referenceWorks.forEach(referenceWork => {
+	referenceWorks.forEach((referenceWork) => {
 		referenceWorkOptions.push({
 			value: referenceWork._id,
 			label: referenceWork.title,

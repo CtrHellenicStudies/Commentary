@@ -20,7 +20,7 @@ const DiscussionCommentsList = React.createClass({
 					/>
 				))}
 				{!discussionComments.length ?
-					<p className="no-results">No comments found.</p>
+					<p className="no-results">This user has not published any public comments.</p>
 					: ''
 				}
 

@@ -1,0 +1,126 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_FlatButton = require('material-ui/FlatButton'); /* istanbul ignore next */var _FlatButton2 = _interopRequireDefault(_FlatButton);
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+
+var /* istanbul ignore next */_settings = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/settings'); /* istanbul ignore next */var _settings2 = _interopRequireDefault(_settings);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // api
+
+
+var Footer = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'Footer',
+
+	propTypes: {
+		settings: /* istanbul ignore next */_react2.default.PropTypes.object },
+
+
+	childContextTypes: {
+		muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+
+	getChildContext: function getChildContext() {
+		return { muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+	}, /* istanbul ignore next */
+
+
+	render: function render() {/* istanbul ignore next */var
+		settings = this.props.settings;
+		var userIsLoggedin = false;
+
+		return (
+
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'footer', /* istanbul ignore next */{ className: 'block-shadow' },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'container' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'row footer-nav-row' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'footer-nav-links', role: 'navigation' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+								href: '/commentary',
+								label: 'Commentary' }),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+								href: '/commenters',
+								label: 'Commentators' }),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+								href: '/keywords',
+								label: 'Keywords' }),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+								href: '/keyideas',
+								label: 'Key Ideas' }),
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+								href: '/about',
+								label: 'About' }),
+
+							userIsLoggedin ? '' :
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+									href: '/sign-in',
+									label: 'Login' }),
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+									href: '/sign-up',
+									label: 'Join the Community' })))),
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'row mb64 mb-sm-32' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'col-md-5 text-right text-left-xs' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h1', /* istanbul ignore next */{ className: 'logo' }, settings ? settings.name : undefined)),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'col-md-2 hidden-sm hidden-xs text-center' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: 'http://chs.harvard.edu', target: '_blank', rel: 'noopener noreferrer' },
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'img', /* istanbul ignore next */{ className: 'site-logo', src: '/images/logo-tower.png', role: 'presentation' }))),
+
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'col-md-5 col-sm-6 more-info-column' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{ className: 'lead' }, /* istanbul ignore next */'For more information about the Commentary or general media inquiries, please contact \xA0',
+
+
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: settings && settings.emails ? /* istanbul ignore next */'mailto:' + settings.emails.contact : '' },
+									settings && settings.emails ? settings.emails.contact : ''), /* istanbul ignore next */'.'),
+
+
+
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{ className: 'lead' }, /* istanbul ignore next */'This website is provided by ',
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: 'http://chs.harvard.edu', target: '_blank', rel: 'noopener noreferrer' }, /* istanbul ignore next */'The Center for Hellenic Studies'), /* istanbul ignore next */'.'))),
+
+
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'row' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center' },
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{ className: 'fade-1-4 copyright' },
+								settings ? settings.footer : undefined, /* istanbul ignore next */'. See our ',
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{ href: '/terms' }, /* istanbul ignore next */'terms and privacy policy')))))));
+
+
+
+
+
+
+
+
+
+	} }); // lib:
+/* istanbul ignore next */exports.default =
+
+/* istanbul ignore next */(0, _reactMeteorData.createContainer)(function () {
+	var settingsHandle = /* istanbul ignore next */_meteor.Meteor.subscribe('settings.tenant', /* istanbul ignore next */_session.Session.get('tenantId'));
+
+	return {
+		settings: settingsHandle.ready() ? /* istanbul ignore next */_settings2.default.findOne() : {} };
+
+}, Footer);

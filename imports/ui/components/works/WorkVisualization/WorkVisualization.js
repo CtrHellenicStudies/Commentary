@@ -29,7 +29,13 @@ const WorkVisualization = React.createClass({
 
 	componentDidMount() {
 		const self = this;
-		const slug = self.props.work.slug;
+		const { work, isTest } = this.props;
+		const slug = work.slug;
+
+		if (isTest) {
+			return false;
+		}
+		
 		let orientation = 'vertical';
 		let width = window.innerWidth * 0.9;
 

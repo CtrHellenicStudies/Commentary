@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
@@ -15,6 +15,16 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import {
+	ItalicButton,
+	BoldButton,
+	UnderlineButton,
+	UnorderedListButton,
+	OrderedListButton,
+	BlockquoteButton,
+} from 'draft-js-buttons';
+
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -23,37 +33,20 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	CodeButton,
-	HeadlineOneButton,
-	HeadlineTwoButton,
-	HeadlineThreeButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-	CodeBlockButton,
-} from 'draft-js-buttons';
-
+// Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin({
 	structure: [
 		BoldButton,
 		ItalicButton,
 		UnderlineButton,
-		CodeButton,
 		Separator,
-		HeadlineOneButton,
-		HeadlineTwoButton,
-		HeadlineThreeButton,
 		UnorderedListButton,
 		OrderedListButton,
 		BlockquoteButton,
-		CodeBlockButton,
+		LinkButton,
 	]
 });
 
@@ -70,6 +63,7 @@ const AddKeyword = React.createClass({
 		onTypeChange: React.PropTypes.func.isRequired,
 		keywordsOptions: React.PropTypes.array,
 		keyideasOptions: React.PropTypes.array,
+		isTest: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -255,6 +249,7 @@ const AddKeyword = React.createClass({
 
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	render() {
+		const { isTest } = this.props;
 		const styles = {
 			block: {
 				maxWidth: 250,
@@ -264,6 +259,10 @@ const AddKeyword = React.createClass({
 			},
 		};
 
+
+		if (isTest) {
+			return null;
+		}
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -305,18 +304,9 @@ const AddKeyword = React.createClass({
 							</RadioButtonGroup>
 						</div>
 						<div
-							className="comment-lower"
+							className="comment-lower clearfix"
 							style={{ paddingTop: 20 }}
 						>
-							{/*
-							<RichTextEditor
-								className="keyword-editor"
-								placeholder="Keyword description . . ."
-								value={this.state.textEditorState}
-								onChange={this.onTextChange}
-								toolbarConfig={toolbarConfig}
-							/>
-							*/}
 							<Editor
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}

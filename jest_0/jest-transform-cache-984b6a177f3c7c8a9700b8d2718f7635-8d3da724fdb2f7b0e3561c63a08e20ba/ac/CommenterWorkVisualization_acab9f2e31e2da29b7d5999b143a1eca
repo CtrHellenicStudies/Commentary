@@ -1,0 +1,42 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+
+var /* istanbul ignore next */_WorkVisualization = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/works/WorkVisualization'); /* istanbul ignore next */var _WorkVisualization2 = _interopRequireDefault(_WorkVisualization);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+
+var CommenterWorkVisualization = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'CommenterWorkVisualization',
+
+	propTypes: {
+		work: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired,
+		toggleVisibleWork: /* istanbul ignore next */_react2.default.PropTypes.func.isRequired,
+		commenterSlug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		isTest: /* istanbul ignore next */_react2.default.PropTypes.bool }, /* istanbul ignore next */
+
+
+	toggleVisibleWork: function toggleVisibleWork(workSlug) {
+		this.props.toggleVisibleWork(workSlug);
+		this.workVisualization.close();
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var _this = this;var _props =
+		this.props,work = _props.work,commenterSlug = _props.commenterSlug,isTest = _props.isTest;
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: /* istanbul ignore next */'commenter-work-visualization commenter-work-visualization--' + work.slug },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'i', /* istanbul ignore next */{
+					onClick: this.toggleVisibleWork.bind(null, work.slug),
+					className: 'close-visualization mdi mdi-close' }),
+
+				!isTest ?
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_WorkVisualization2.default, /* istanbul ignore next */{
+					ref: function /* istanbul ignore next */ref(component) {/* istanbul ignore next */_this.workVisualization = component;},
+					work: work,
+					commenterSlug: commenterSlug }) :
+
+				''));
+
+
+	} }); /* istanbul ignore next */exports.default =
+
+
+
+CommenterWorkVisualization;

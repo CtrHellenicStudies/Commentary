@@ -28,6 +28,7 @@ import CommenterDetail from '/imports/ui/components/commenters/CommenterDetail';
 import KeywordsPage from '/imports/ui/components/keywords/KeywordsPage';
 import KeywordDetail from '/imports/ui/components/keywords/KeywordDetail';
 import ProfilePage from '/imports/ui/components/user/ProfilePage';
+import PublicProfilePage from '/imports/ui/components/user/PublicProfilePage';
 import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
 
@@ -65,6 +66,7 @@ FlowRouter.triggers.enter([() => {
 			subdomain = '';
 			FlowRouter.go('/404');
 		}
+
 		Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);
@@ -81,12 +83,14 @@ FlowRouter.triggers.enter([() => {
 	 * If the tenant is only for Annotations, then deny access to the homepage and
 	 * instead forward only to the user's profile
 	 */
+ /*
 	if (Session.get('tenantId')) {
 		const tenant = Tenants.findOne({ _id: Session.get('tenantId') });
 		if (tenant && tenant.isAnnotation && FlowRouter.current().path === '/') {
 			FlowRouter.go('/profile');
 		}
 	}
+	*/
 
 	/*
 	 * Check for multi-subdomain login cookie, if found, login user with Token
@@ -240,7 +244,7 @@ loggedInGroup.route('/commentary/create', {
 loggedInGroup.route('/profile', {
 	action: () => {
 		mount(UserLayout, {
-			content: < ProfilePage />,
+			content: <ProfilePage />,
 		});
 	},
 });
@@ -280,7 +284,7 @@ FlowRouter.route('/users/:userId/:username', {
 loggedInGroup.route('/account', {
 	action: () => {
 		mount(UserLayout, {
-			content: < AccountPage />,
+			content: <AccountPage />,
 		});
 	},
 });

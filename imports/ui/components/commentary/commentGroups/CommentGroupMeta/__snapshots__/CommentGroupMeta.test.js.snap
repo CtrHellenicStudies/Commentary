@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommentGroupMeta renders correctly 1`] = `
+<div
+  className="comment-group-meta"
+>
+  <div
+    className="comment-group-meta-inner comment-group-meta-ref"
+  >
+    <div
+      className="comment-group-ref"
+    >
+      <span
+        className="comment-group-ref-above"
+      >
+        testTitle
+         
+        testTitle
+      </span>
+      <h2
+        className="comment-group-ref-below"
+      >
+        1
+        -2
+      </h2>
+    </div>
+    <div
+      className="comment-group-commenters"
+    >
+      <div
+        className="comment-author"
+        data-commenter-id="testId"
+      >
+        <span
+          className="comment-author-name"
+        >
+          testName
+        </span>
+        <a
+          className="comment-author-image-wrap paper-shadow"
+          href="/commenters/testName"
+        >
+          <div
+            alt="icon"
+            className="avatar-icon"
+            style={
+              Object {
+                "backgroundImage": "url(testSrc)",
+              }
+            }
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

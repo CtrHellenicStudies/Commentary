@@ -13,10 +13,19 @@ import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
 import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import {
+	ItalicButton,
+	BoldButton,
+	UnderlineButton,
+	UnorderedListButton,
+	OrderedListButton,
+	BlockquoteButton,
+} from 'draft-js-buttons';
+
 
 
 // api
@@ -24,12 +33,26 @@ import Commenters from '/imports/api/collections/commenters';
 import Keywords from '/imports/api/collections/keywords';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
-// lib:
+// lib
 import muiTheme from '/imports/lib/muiTheme';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
-
+// Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin({
+	structure: [
+		BoldButton,
+		ItalicButton,
+		UnderlineButton,
+		Separator,
+		UnorderedListButton,
+		OrderedListButton,
+		BlockquoteButton,
+		LinkButton,
+	]
+});
+
+
 const { InlineToolbar } = inlineToolbarPlugin;
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
@@ -42,30 +65,39 @@ const EditKeyword = React.createClass({
 		keyword: React.PropTypes.object,
 		selectedLineFrom: React.PropTypes.number,
 		selectedLineTo: React.PropTypes.number,
+		keywordsOptions: React.PropTypes.array,
+		keyideasOptions: React.PropTypes.array,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
 
-	mixins: [ReactMeteorData],
-
 	getInitialState() {
 		const keyword = this.props.keyword;
+		let keywordTitle = '';
+		let keywordDescription = '';
+		let description = '';
 
-		let description;
-		if ('description' in keyword && keyword.description) {
-			description = this._getKeywordEditorState(keyword);
-		} else {
-			description = EditorState.createEmpty();
+		if (keyword) {
+			if (keyword && keyword.title) {
+				keywordTitle = keyword.title;
+			}
+
+			if (keyword && keyword.description) {
+				keywordDescription = keyword.description;
+				description = this._getKeywordEditorState(keyword);
+			} else {
+				description = EditorState.createEmpty();
+			}
 		}
 
 		return {
-			titleEditorState: EditorState.createWithContent(ContentState.createFromText(keyword.title)),
+			titleEditorState: EditorState.createWithContent(ContentState.createFromText(keywordTitle)),
 			textEditorState: description,
 
-			titleValue: keyword.title,
-			textValue: keyword.description,
+			titleValue: keywordTitle,
+			textValue: keywordDescription,
 
 			snackbarOpen: false,
 			snackbarMessage: '',
@@ -75,59 +107,6 @@ const EditKeyword = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	getMeteorData() {
-		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
-		const keywordsOptions = [];
-		const keywords = Keywords.find({ type: 'word' }).fetch();
-		keywords.forEach((keyword) => {
-			keywordsOptions.push({
-				value: keyword.title,
-				label: keyword.title,
-				slug: keyword.slug,
-			});
-		});
-
-		const keyideasOptions = [];
-		const keyideas = Keywords.find({ type: 'idea' }).fetch();
-		keyideas.forEach((keyidea) => {
-			keyideasOptions.push({
-				value: keyidea.title,
-				label: keyidea.title,
-				slug: keyidea.slug,
-			});
-		});
-
-		Meteor.subscribe('referenceWorks');
-		const referenceWorksOptions = [];
-		const referenceWorks = ReferenceWorks.find().fetch();
-		referenceWorks.forEach((referenceWork) => {
-			referenceWorksOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-			});
-		});
-
-		Meteor.subscribe('commenters', Session.get('tenantId'));
-		const commentersOptions = [];
-		let commenters = [];
-		if (Meteor.user() && Meteor.user().canEditCommenters) {
-			commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
-		}
-		commenters.forEach((commenter) => {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		});
-
-		return {
-			keywordsOptions,
-			keyideasOptions,
-			referenceWorksOptions,
-			commentersOptions,
-		};
 	},
 
 	_getKeywordEditorState(keyword) {
@@ -196,7 +175,7 @@ const EditKeyword = React.createClass({
 
 	onSearchChange({ value }) {
 		const keywordSuggestions = [];
-		const keywords = this.data.keywordsOptions.concat(this.data.keyideasOptions);
+		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
@@ -219,8 +198,8 @@ const EditKeyword = React.createClass({
 	},
 
 	isOptionUnique(newOption) {
-		const keywordsOptions = this.data.keywordsOptions;
-		const keyideasOptions = this.data.keyideasOptions;
+		const keywordsOptions = this.props.keywordsOptions;
+		const keyideasOptions = this.props.keyideasOptions;
 		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
 		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
 		const BreakException = {};
@@ -304,6 +283,7 @@ const EditKeyword = React.createClass({
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
 	render() {
+		const { keyword } = this.props;
 		const toolbarConfig = {
 			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
 			INLINE_STYLE_BUTTONS: [{
@@ -328,6 +308,9 @@ const EditKeyword = React.createClass({
 			},
 		};
 
+		if (!keyword) {
+			return null;
+		}
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -369,7 +352,7 @@ const EditKeyword = React.createClass({
 							</RadioButtonGroup>
 						</div>
 						<div
-							className="comment-lower"
+							className="comment-lower clearfix"
 							style={{ paddingTop: 20 }}
 						>
 							<Editor
@@ -414,4 +397,57 @@ const EditKeyword = React.createClass({
 	},
 });
 
-export default EditKeyword;
+const EditKeywordContainer = createContainer(() => {
+	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+	const keywordsOptions = [];
+	const keywords = Keywords.find({ type: 'word' }).fetch();
+	keywords.forEach((keyword) => {
+		keywordsOptions.push({
+			value: keyword.title,
+			label: keyword.title,
+			slug: keyword.slug,
+		});
+	});
+
+	const keyideasOptions = [];
+	const keyideas = Keywords.find({ type: 'idea' }).fetch();
+	keyideas.forEach((keyidea) => {
+		keyideasOptions.push({
+			value: keyidea.title,
+			label: keyidea.title,
+			slug: keyidea.slug,
+		});
+	});
+
+	Meteor.subscribe('referenceWorks');
+	const referenceWorksOptions = [];
+	const referenceWorks = ReferenceWorks.find().fetch();
+	referenceWorks.forEach((referenceWork) => {
+		referenceWorksOptions.push({
+			value: referenceWork._id,
+			label: referenceWork.title,
+		});
+	});
+
+	Meteor.subscribe('commenters', Session.get('tenantId'));
+	const commentersOptions = [];
+	let commenters = [];
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
+	}
+	commenters.forEach((commenter) => {
+		commentersOptions.push({
+			value: commenter._id,
+			label: commenter.name,
+		});
+	});
+
+	return {
+		keywordsOptions,
+		keyideasOptions,
+		referenceWorksOptions,
+		commentersOptions,
+	};
+}, EditKeyword);
+
+export default EditKeywordContainer;

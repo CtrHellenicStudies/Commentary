@@ -24,7 +24,7 @@ const SubworksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, tog
 					<SearchTermButton
 						key={subwork.n}
 						toggleSearchTerm={toggleSearchTerm}
-						label={`${work.title} ${subwork.title}`}
+						label={work.title === 'Homeric Hymns' ? `Hymn ${subwork.title}` : `${work.title} ${subwork.title}`}
 						searchTermKey="subworks"
 						value={subwork}
 						active={isActive(filters, subwork, 'subworks', 'n')}

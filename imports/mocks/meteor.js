@@ -16,7 +16,11 @@ export const Meteor = { // eslint-disable-line
 	absoluteUrl: () => {},
 	users: {
 		findOne: () => {},
-		find: () => {},
+		find: () => { // eslint-disable-line
+			return {
+				fetch: () => [],
+			};
+		},
 	},
 	user: () => {},
 	userId: () => {},

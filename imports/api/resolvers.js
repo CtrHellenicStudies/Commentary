@@ -5,6 +5,7 @@ import Commenters from '/imports/api/collections/commenters';
 import Comments from '/imports/api/collections/comments';
 import DiscussionComments from '/imports/api/collections/discussionComments';
 import Keywords from '/imports/api/collections/keywords';
+import LinkedDataSchemas from '/imports/api/collections/linkedDataSchemas';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
 import TextNodes from '/imports/api/collections/textNodes';
 import Works from '/imports/api/collections/works';

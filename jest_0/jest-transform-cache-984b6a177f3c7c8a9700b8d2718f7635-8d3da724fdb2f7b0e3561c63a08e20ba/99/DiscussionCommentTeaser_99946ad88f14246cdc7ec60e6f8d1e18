@@ -1,0 +1,106 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_Card = require('material-ui/Card'); /* istanbul ignore next */var _Card2 = _interopRequireDefault(_Card);
+
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+var /* istanbul ignore next */_FlatButton = require('material-ui/FlatButton'); /* istanbul ignore next */var _FlatButton2 = _interopRequireDefault(_FlatButton);
+var /* istanbul ignore next */_FontIcon = require('material-ui/FontIcon'); /* istanbul ignore next */var _FontIcon2 = _interopRequireDefault(_FontIcon);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var DiscussionCommentTeaser = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'DiscussionCommentTeaser',
+
+	propTypes: {
+		discussionComment: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired },
+
+
+	childContextTypes: {
+		muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+
+	getChildContext: function getChildContext() {
+		return {
+			muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+
+	}, /* istanbul ignore next */
+
+	render: function render() {/* istanbul ignore next */var
+		discussionComment = this.props.discussionComment;
+
+		if (!discussionComment) {
+			return null;
+		}
+
+		var commentaryLink = /* istanbul ignore next */'/commentary/?works=' + discussionComment.comment.work.slug + '&subworks=' +
+		discussionComment.comment.subwork.title + '&lineFrom=' + discussionComment.comment.lineFrom;
+		var commentLink = /* istanbul ignore next */'/commentary/?_id=' + discussionComment.commentId;
+
+		var status = /* istanbul ignore next */void 0;
+
+		if (discussionComment.status === 'pending') {
+			status = 'Pending approval';
+		} else if (discussionComment.status === 'trash') {
+			status = 'This comment was made private by an Administrator';
+		}
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_Card2.default, /* istanbul ignore next */{
+					className: 'user-discussion-comment paper-shadow clearfix' },
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'card-title-outer' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'card-title-text' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'a', /* istanbul ignore next */{
+								className: 'user-discussion-comment-title',
+								href: commentaryLink }, /* istanbul ignore next */'Comment on ',
+
+							discussionComment.comment.work.title, /* istanbul ignore next */' ', discussionComment.comment.subwork.title, /* istanbul ignore next */'.', discussionComment.comment.lineFrom),
+
+						status ?
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'span', /* istanbul ignore next */{ className: 'user-discussion-comment-status' },
+							status) :
+
+						'')),
+
+
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'card-content' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */null,
+						discussionComment.content),
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FlatButton2.default, /* istanbul ignore next */{
+						label: /* istanbul ignore next */'Context (' + discussionComment.otherCommentsCount + ')',
+						className: 'user-discussion-comment-replies',
+						href: commentLink,
+						icon: /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_FontIcon2.default, /* istanbul ignore next */{ className: 'mdi mdi-comment' }),
+						style: {
+							height: 'auto',
+							maxHeight: 'none',
+							display: 'block',
+							margin: '10px 30px 30px' } }))));
+
+
+
+
+	} }); // lib:
+
+
+
+var DiscussionCommentTeaserContainer = /* istanbul ignore next */(0, _reactMeteorData.createContainer)(function ( /* istanbul ignore next */_ref) {/* istanbul ignore next */var discussionComment = _ref.discussionComment;
+	var handle = /* istanbul ignore next */void 0;
+	var user = /* istanbul ignore next */void 0;
+
+	if (discussionComment) {
+		handle = /* istanbul ignore next */_meteor.Meteor.subscribe('users.id', discussionComment.userId);
+		user = /* istanbul ignore next */_meteor.Meteor.users.findOne({ _id: discussionComment.userId });
+	}
+
+	return {
+		user: user,
+		ready: handle && handle.ready(),
+		discussionComment: discussionComment };
+
+}, DiscussionCommentTeaser); /* istanbul ignore next */exports.default =
+
+DiscussionCommentTeaserContainer;

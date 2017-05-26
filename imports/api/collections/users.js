@@ -81,11 +81,21 @@ const User = new SimpleSchema({
 	services: {
 		type: Object,
 		optional: true,
-		blackbox: true,
+	},
+	'services.password.bcrypt': {
+		type: String,
+		optional: true,
+	},
+	'services.resume.loginTokens': {
+		type: [Object],
+		optional: true,
+	},
+	'services.email.verificationTokens': {
+		type: [Object],
+		optional: true,
 	},
 	roles: {
 		type: [String],
-		blackbox: true,
 		optional: true,
 	},
 	canEditCommenters: {
@@ -99,7 +109,6 @@ const User = new SimpleSchema({
 	'bookmarks.$': {
 		type: Object,
 		optional: true,
-		blackbox: true,
 	},
 	canAnnotateBooks: {
 		type: Array,

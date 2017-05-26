@@ -7,6 +7,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
 import Settings from '/imports/api/collections/settings';
+import Tenants from '/imports/api/collections/tenants';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -16,6 +17,7 @@ const Footer = React.createClass({
 
 	propTypes: {
 		settings: React.PropTypes.object,
+		tenant: React.PropTypes.object,
 	},
 
 	childContextTypes: {
@@ -28,7 +30,7 @@ const Footer = React.createClass({
 
 
 	render() {
-		const { settings } = this.props;
+		const { settings, tenant } = this.props;
 		const userIsLoggedin = false;
 
 		return (
@@ -37,26 +39,30 @@ const Footer = React.createClass({
 				<div className="container">
 					<div className="row footer-nav-row">
 						<div className="footer-nav-links" role="navigation">
-							<FlatButton
-								href="/commentary"
-								label="Commentary"
-							/>
-							<FlatButton
-								href="/commenters"
-								label="Commentators"
-							/>
-							<FlatButton
-								href="/keywords"
-								label="Keywords"
-							/>
-							<FlatButton
-								href="/keyideas"
-								label="Key Ideas"
-							/>
-							<FlatButton
-								href="/about"
-								label="About"
-							/>
+							{tenant && !tenant.isAnnotation ?
+								<div>
+									<FlatButton
+										href="/commentary"
+										label="Commentary"
+									/>
+									<FlatButton
+										href="/commenters"
+										label="Commentators"
+									/>
+									<FlatButton
+										href="/keywords"
+										label="Keywords"
+									/>
+									<FlatButton
+										href="/keyideas"
+										label="Key Ideas"
+									/>
+									<FlatButton
+										href="/about"
+										label="About"
+									/>
+								</div>
+							: ''}
 							{ userIsLoggedin ? '' :
 							<div>
 								<FlatButton
@@ -121,6 +127,7 @@ export default createContainer(() => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : {}
+		settings: settingsHandle.ready() ? Settings.findOne() : {},
+		tenant: Tenants.findOne({ _id: Session.get('tenantId') })
 	};
 }, Footer);

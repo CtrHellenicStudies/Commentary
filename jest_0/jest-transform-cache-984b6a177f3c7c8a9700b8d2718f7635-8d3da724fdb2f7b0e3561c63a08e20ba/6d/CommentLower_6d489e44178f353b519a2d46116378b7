@@ -1,0 +1,39 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_CommentBody = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commentary/comments/CommentBody'); /* istanbul ignore next */var _CommentBody2 = _interopRequireDefault(_CommentBody);
+var /* istanbul ignore next */_CommentReference = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/ui/components/commentary/comments/CommentReference'); /* istanbul ignore next */var _CommentReference2 = _interopRequireDefault(_CommentReference);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var CommentLower = function CommentLower(props) /* istanbul ignore next */{return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-lower' },
+			!props.hideBody && /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommentBody2.default, /* istanbul ignore next */{
+				comment: props.comment,
+				revisionIndex: props.revisionIndex,
+				onTextClick: props.onTextClick }),
+
+			!props.hideReference && /* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_CommentReference2.default, /* istanbul ignore next */{
+				referenceWorks: props.referenceWorks })));};
+
+
+
+CommentLower.propTypes = {
+	comment: /* istanbul ignore next */_react2.default.PropTypes.shape({
+		revisions: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+			text: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })) }).
+
+	isRequired,
+	revisionIndex: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+	onTextClick: /* istanbul ignore next */_react2.default.PropTypes.func,
+	referenceWorks: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		slug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })),
+
+	hideBody: /* istanbul ignore next */_react2.default.PropTypes.bool,
+	hideReference: /* istanbul ignore next */_react2.default.PropTypes.bool };
+
+CommentLower.defaultProps = {
+	onTextClick: null,
+	referenceWorks: null,
+	hideBody: false,
+	hideReference: false }; /* istanbul ignore next */exports.default =
+
+
+CommentLower;

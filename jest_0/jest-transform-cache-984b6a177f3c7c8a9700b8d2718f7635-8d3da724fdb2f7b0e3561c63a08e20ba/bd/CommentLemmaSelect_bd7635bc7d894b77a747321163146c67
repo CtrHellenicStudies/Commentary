@@ -1,0 +1,210 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_RaisedButton = require('material-ui/RaisedButton'); /* istanbul ignore next */var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+var /* istanbul ignore next */_TextField = require('material-ui/TextField'); /* istanbul ignore next */var _TextField2 = _interopRequireDefault(_TextField);
+
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+
+var /* istanbul ignore next */_textNodes = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/textNodes'); /* istanbul ignore next */var _textNodes2 = _interopRequireDefault(_textNodes);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);
+var /* istanbul ignore next */_utils = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/utils'); /* istanbul ignore next */var _utils2 = _interopRequireDefault(_utils);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // lib:
+
+
+var CommentLemmaSelect = /* istanbul ignore next */_react2.default.createClass({ /* istanbul ignore next */displayName: 'CommentLemmaSelect',
+
+	propTypes: {
+		workSlug: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		subworkN: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+		selectedLineFrom: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+		selectedLineTo: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+		selectedLemmaEdition: /* istanbul ignore next */_react2.default.PropTypes.object,
+		lemmaText: /* istanbul ignore next */_react2.default.PropTypes.array },
+
+
+	childContextTypes: {
+		muiTheme: /* istanbul ignore next */_react2.default.PropTypes.object.isRequired }, /* istanbul ignore next */
+
+
+	getInitialState: function getInitialState() {
+		return {
+			selectedLemmaEdition: '',
+			lineLetterValue: '' };
+
+	}, /* istanbul ignore next */
+
+	getChildContext: function getChildContext() {
+		return { muiTheme: /* istanbul ignore next */(0, _getMuiTheme2.default)( /* istanbul ignore next */_muiTheme2.default) };
+	}, /* istanbul ignore next */
+
+	onLineLetterValueChange: function onLineLetterValueChange(event) {
+		this.setState({
+			lineLetterValue: event.target.value });
+
+	}, /* istanbul ignore next */
+
+	toggleEdition: function toggleEdition(editionSlug) {
+		if (this.state.selectedLemmaEdition !== editionSlug) {
+			this.setState({
+				selectedLemmaEdition: editionSlug });
+
+		}
+	}, /* istanbul ignore next */
+
+	render: function render() {
+		var self = this;
+
+		return (
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comments lemma-panel-visible' },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'comment-outer comment-lemma-comment-outer' },
+
+					this.props.selectedLineFrom > 0 &&
+					this.props.selectedLemmaEdition &&
+					'lines' in this.props.selectedLemmaEdition ?
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'article', /* istanbul ignore next */{ className: 'comment lemma-comment paper-shadow' },
+
+						this.props.selectedLemmaEdition.lines.map(function (line, i) /* istanbul ignore next */{return (
+								/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{
+									key: i,
+									className: 'lemma-text',
+									dangerouslySetInnerHTML: { __html: line.html } }));}),
+
+
+
+						self.props.selectedLineTo === 0 ?
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */null,
+							/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_TextField2.default, /* istanbul ignore next */{
+								name: 'lineLetter',
+								id: 'lineLetter',
+								required: false,
+								floatingLabelText: 'Line letter...',
+								value: this.state.lineLetterValue,
+								onChange: this.onLineLetterValueChange })) :
+
+
+
+						'',
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'edition-tabs tabs' },
+							this.props.lemmaText.map(function (lemmaTextEdition, i) {
+								var lemmaEditionTitle = /* istanbul ignore next */_utils2.default.trunc(lemmaTextEdition.title, 20);
+
+								return (/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_RaisedButton2.default, /* istanbul ignore next */{
+										key: i,
+										label: lemmaEditionTitle,
+										/* istanbul ignore next */'data-edition': lemmaTextEdition.title,
+										className: self.props.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+										'edition-tab tab selected-edition-tab' : 'edition-tab tab',
+										onClick: self.toggleEdition.bind(null, lemmaTextEdition.slug) }));
+
+							})),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'context-tabs tabs' })) :
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'article', /* istanbul ignore next */{ className: 'comment lemma-comment paper-shadow' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{ className: 'lemma-text no-lines-selected' }, /* istanbul ignore next */'No line(s) selected')))));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	} }); // api
+
+
+var CommentLemmaSelectContainer = /* istanbul ignore next */(0, _reactMeteorData.createContainer)(function ( /* istanbul ignore next */_ref) {/* istanbul ignore next */var selectedLineFrom = _ref.selectedLineFrom,selectedLineTo = _ref.selectedLineTo,workSlug = _ref.workSlug,subworkN = _ref.subworkN;
+	var lemmaText = [];
+	// var commentGroup = this.props.commentGroup;
+	var selectedLemmaEdition = {
+		lines: [],
+		slug: '' };
+
+	var lemmaQuery = {};
+	if (selectedLineFrom <= selectedLineTo) {
+		lemmaQuery = {
+			'work.slug': workSlug,
+			'subwork.n': subworkN,
+			'text.n': {
+				$gte: selectedLineFrom,
+				$lte: selectedLineTo } };
+
+
+	} else {
+		lemmaQuery = {
+			'work.slug': workSlug,
+			'subwork.n': subworkN,
+			'text.n': {
+				$gte: selectedLineFrom,
+				$lte: selectedLineFrom } };
+
+
+	}
+
+	var textNodesSubscription = /* istanbul ignore next */_meteor.Meteor.subscribe('textNodes', lemmaQuery);
+	var textNodes = /* istanbul ignore next */_textNodes2.default.find(lemmaQuery).fetch();
+	var editions = [];
+
+	var textIsInEdition = false;
+	textNodes.forEach(function (textNode) {
+		textNode.text.forEach(function (text) {
+			textIsInEdition = false;
+
+			editions.forEach(function (edition) {
+				if (text.edition.slug === edition.slug) {
+					edition.lines.push({
+						html: text.html,
+						n: text.n });
+
+					textIsInEdition = true;
+				}
+			});
+
+			if (!textIsInEdition) {
+				editions.push({
+					title: text.edition.title,
+					slug: text.edition.slug,
+					lines: [{
+						html: text.html,
+						n: text.n }] });
+
+
+			}
+		});
+	});
+
+	return {
+		lemmaText: editions,
+		selectedLemmaEdition: editions[0],
+		ready: textNodesSubscription.ready() };
+
+}, CommentLemmaSelect); /* istanbul ignore next */exports.default =
+
+CommentLemmaSelectContainer;

@@ -29,6 +29,7 @@ const Home = React.createClass({
 		settings: React.PropTypes.object,
 		comments: React.PropTypes.array,
 		ready: React.PropTypes.bool,
+		isTest: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
@@ -40,7 +41,11 @@ const Home = React.createClass({
 	},
 
 	componentDidMount() {
-		new WOW().init();
+		const { isTest } = this.props;
+
+		if (!isTest) {
+			new WOW().init();
+		}
 	},
 
 	scrollToIntro(e) {

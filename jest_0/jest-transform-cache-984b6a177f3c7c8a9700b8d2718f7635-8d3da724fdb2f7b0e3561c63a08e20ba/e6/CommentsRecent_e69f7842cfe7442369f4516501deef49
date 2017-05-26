@@ -1,0 +1,113 @@
+/* istanbul ignore next */'use strict';Object.defineProperty(exports, "__esModule", { value: true });var /* istanbul ignore next */_react = require('react'); /* istanbul ignore next */var _react2 = _interopRequireDefault(_react);
+var /* istanbul ignore next */_meteor = require('meteor/meteor');
+var /* istanbul ignore next */_session = require('meteor/session');
+var /* istanbul ignore next */_reactMeteorData = require('meteor/react-meteor-data');
+var /* istanbul ignore next */_getMuiTheme = require('material-ui/styles/getMuiTheme'); /* istanbul ignore next */var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+var /* istanbul ignore next */_reactSlick = require('react-slick'); /* istanbul ignore next */var _reactSlick2 = _interopRequireDefault(_reactSlick);
+
+
+var /* istanbul ignore next */_comments = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/api/collections/comments'); /* istanbul ignore next */var _comments2 = _interopRequireDefault(_comments);
+
+
+var /* istanbul ignore next */_muiTheme = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/muiTheme'); /* istanbul ignore next */var _muiTheme2 = _interopRequireDefault(_muiTheme);
+var /* istanbul ignore next */_utils = require('/Users/Tyler/Desktop/AHCIP/ahcip/imports/lib/utils'); /* istanbul ignore next */var _utils2 = _interopRequireDefault(_utils);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+
+/*
+                                                                                                                                                                                                                                                                           	helpers
+                                                                                                                                                                                                                                                                           */ // lib:
+var settings = {
+	dots: true,
+	arrows: false,
+	infinite: true,
+	autoplay: true,
+	speed: 300,
+	autoplaySpeed: 10000,
+	slidesToShow: 1,
+	slidesToScroll: 1 };
+
+
+/*
+                      	BEGIN CommentsRecent
+                      */ // api
+var CommentsRecent = function CommentsRecent( /* istanbul ignore next */_ref) {/* istanbul ignore next */var comments = _ref.comments;
+	if (!comments) {
+		return null;
+	}
+	return (
+		/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'section', /* istanbul ignore next */{ className: 'background-gray recent-comments' },
+			/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'container' },
+				/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'row' },
+					/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{ className: 'col-sm-8 col-sm-offset-2 text-center' },
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h3', /* istanbul ignore next */{ className: ' uppercase' }, /* istanbul ignore next */'Recently from the Commentary'),
+
+
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'i', /* istanbul ignore next */{ className: 'mdi mdi-format-quote quote-icon' }),
+						/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */_reactSlick2.default, settings,
+							comments.map(function (comment) /* istanbul ignore next */{return (
+									/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'div', /* istanbul ignore next */{
+											key: comment._id },
+
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'p', /* istanbul ignore next */{
+											dangerouslySetInnerHTML: {
+												__html: /* istanbul ignore next */_utils2.default.trunc(comment.revisions[comment.revisions.length - 1].text, 300) } }),
+
+
+										/* istanbul ignore next */_react2.default.createElement( /* istanbul ignore next */'h4', /* istanbul ignore next */null, /* istanbul ignore next */'-',
+
+											comment.commenters.map(function (commenter) /* istanbul ignore next */{return ' ' +
+												commenter.name + ',';}), /* istanbul ignore next */' ' +
+
+											comment.work.title + ' ' +
+											comment.subwork.title + '.' + comment.lineFrom + '-' + (
+											comment.lineFrom + comment.nLines))));})))))));
+
+
+
+
+
+
+
+
+
+};
+CommentsRecent.propTypes = {
+	comments: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+		_id: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired,
+		revisions: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+			text: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })).
+		isRequired,
+		commenters: /* istanbul ignore next */_react2.default.PropTypes.arrayOf( /* istanbul ignore next */_react2.default.PropTypes.shape({
+			name: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired })).
+		isRequired,
+		work: /* istanbul ignore next */_react2.default.PropTypes.shape({
+			title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired }).
+		isRequired,
+		subwork: /* istanbul ignore next */_react2.default.PropTypes.shape({
+			title: /* istanbul ignore next */_react2.default.PropTypes.string.isRequired }).
+		isRequired,
+		lineFrom: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired,
+		nLines: /* istanbul ignore next */_react2.default.PropTypes.number.isRequired })) };
+
+
+CommentsRecent.defaultProps = {
+	comments: null };
+
+/*
+                   	END CommentsRecent
+                   */ /* istanbul ignore next */exports.default =
+
+/* istanbul ignore next */(0, _reactMeteorData.createContainer)(function () {
+	var handle = /* istanbul ignore next */_meteor.Meteor.subscribe('comments.recent', /* istanbul ignore next */_session.Session.get('tenantId'), 3);
+	var comments = [];
+	if (handle.ready()) {
+		comments = /* istanbul ignore next */_comments2.default.find({}, {
+			sort: {
+				updated: -1 } }).
+
+		fetch();
+	}
+	return {
+		comments: comments };
+
+}, CommentsRecent);

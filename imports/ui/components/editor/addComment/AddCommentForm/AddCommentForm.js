@@ -20,8 +20,11 @@ const AddCommentForm = React.createClass({
 
 	propTypes: {
 		selectedLineFrom: React.PropTypes.number.isRequired,
-		selectedLineTo: React.PropTypes.number.isRequired,
+		selectedLineTo: React.PropTypes.number,
 		submitForm: React.PropTypes.func.isRequired,
+		keywordsOptions: React.PropTypes.array,
+		keyideasOptions: React.PropTypes.array,
+		isTest: React.PropTypes.bool,
 		// titleValue: React.PropTypes.string.isRequired,
 		// textValue: React.PropTypes.string.isRequired,
 		// referenceValue: React.PropTypes.string.isRequired,
@@ -33,8 +36,6 @@ const AddCommentForm = React.createClass({
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -49,25 +50,6 @@ const AddCommentForm = React.createClass({
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	getMeteorData() {
-		const keywordsOptions = [];
-		const keywords = Keywords.find().fetch();
-		keywords.forEach((word) => {
-			keywordsOptions.push({
-				value: word.slug,
-				label: word.title,
-			});
-		});
-
-		// TODO: key ideas
-		const keyideasOptions = [];
-
-		return {
-			keywordsOptions,
-			keyideasOptions,
-		};
 	},
 
 	handleSubmit(event) {
@@ -131,17 +113,15 @@ const AddCommentForm = React.createClass({
 	},
 
 	render() {
-		/*
-		const keyideasOptions = [
-			// TODO: pull keyideasOptions from collection in getMeteorData
-			{ value: 'one', label: 'One' },
-			{ value: 'two', label: 'Two' },
-		];
-		*/
+		const { isTest } = this.props;
+
+		if (isTest) {
+			return null;
+		}
 
 		return (
 
-			<div className="add-comment-form">
+			<div className="add-comment-form clearfix">
 
 				<form id="addCommentForm" onSubmit={this.handleSubmit}>
 
@@ -193,7 +173,7 @@ const AddCommentForm = React.createClass({
 						id="keywords"
 						className="form-element"
 						required={false}
-						options={this.data.keywordsOptions}
+						options={this.props.keywordsOptions}
 						multi
 						allowCreate
 						value={this.state.keywordValue}
@@ -207,7 +187,7 @@ const AddCommentForm = React.createClass({
 						id="keyideas"
 						className="form-element"
 						required={false}
-						options={this.data.keyideasOptions}
+						options={this.props.keyideasOptions}
 						multi
 						allowCreate
 						value={this.state.keyideasValue}
@@ -231,4 +211,24 @@ const AddCommentForm = React.createClass({
 	},
 });
 
-export default AddCommentForm;
+
+const AddCommentFormContainer = createContainer(() => {
+	const keywordsOptions = [];
+	const keywords = Keywords.find().fetch();
+	keywords.forEach((word) => {
+		keywordsOptions.push({
+			value: word.slug,
+			label: word.title,
+		});
+	});
+
+	// TODO: key ideas
+	const keyideasOptions = [];
+
+	return {
+		keywordsOptions,
+		keyideasOptions,
+	};
+}, AddCommentForm);
+
+export default AddCommentFormContainer;

@@ -156,7 +156,7 @@ class AddComment extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			titleEditorState: EditorState.createEmpty(),
 			textEditorState: EditorState.createEmpty(linkDecorator),
@@ -435,7 +435,7 @@ class AddComment extends React.Component {
 		}
 
 		return (
-			<div className="comments lemma-panel-visible">
+			<div className="comments lemma-panel-visible ">
 				<div className={'comment-outer'}>
 					<Formsy.Form
 						onValid={this._enableButton}
@@ -500,7 +500,7 @@ class AddComment extends React.Component {
 
 							</div>
 							<div
-								className="comment-lower"
+								className="comment-lower clearfix"
 								style={{ paddingTop: 20 }}
 							>
 								<Editor

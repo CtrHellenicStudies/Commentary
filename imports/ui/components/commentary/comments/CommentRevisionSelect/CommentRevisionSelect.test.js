@@ -18,6 +18,7 @@ describe('CommentRevisionSelect', () => {
 						]}
 						selectedRevisionIndex={0}
 						selectRevision={() => {}}
+						isTest
 					/>
 				</MuiThemeProvider>
 			)

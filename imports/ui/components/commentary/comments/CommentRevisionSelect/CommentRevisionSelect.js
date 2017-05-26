@@ -21,7 +21,8 @@ const getClassName = (selectedRevisionIndex, i) => (`revision ${selectedRevision
 */
 const CommentRevisionSelect = props => (
 	<div className="comment-revisions">
-		{props.revisions.map((revision, i) => {
+
+		{!props.isTest && props.revisions.map((revision, i) => {
 
 			const updated = getDateRevision(revision);
 
@@ -52,6 +53,7 @@ CommentRevisionSelect.propTypes = {
 	})).isRequired,
 	selectedRevisionIndex: React.PropTypes.number.isRequired,
 	selectRevision: React.PropTypes.func.isRequired,
+	isTest: React.PropTypes.bool,
 };
 CommentRevisionSelect.defaultProps = {
 

@@ -331,7 +331,7 @@ const AddRevision = React.createClass({
 
 				// handle LINK
 				if (entity.type === 'LINK') {
-					return <a href={entity.data.link}>{originalText}</a>;
+					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
 				}
 
 				// handle keyword mentions

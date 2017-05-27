@@ -2,6 +2,8 @@ import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
+import Utils from '/imports/lib/utils';
+
 /*
 	helpers
 */
@@ -34,7 +36,7 @@ const FilterWidget = ({ filters, toggleSearchTerm }) => (
 							key={j}
 							labelPosition="before"
 							className="filter-val "
-							label={(val.title || val.name || val.slug || val.toString()).replace('-', ' ')}
+							label={Utils.trunc((val.title || val.name || val.slug || val.toString()).replace('-', ' '), 30)}
 							onClick={toggleSearchTerm.bind(null, filter.key, val)}
 							icon={
 								<FontIcon

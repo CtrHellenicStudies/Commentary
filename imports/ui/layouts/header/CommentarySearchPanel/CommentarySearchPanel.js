@@ -352,7 +352,7 @@ const CommentarySearchPanel = React.createClass({
 							filters.forEach((filter) => {
 								if (filter.key === 'reference') {
 									filter.values.forEach((value) => {
-										if (reference.title === value.title) {
+										if (reference._id === value._id) {
 											active = true;
 										}
 									});
@@ -386,7 +386,7 @@ export default createContainer(({ addCommentPage }) => {
 
 	if (!addCommentPage) {
 		Meteor.subscribe('commenters', Session.get('tenantId'));
-		Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	}
 	Meteor.subscribe('works', Session.get('tenantId'));

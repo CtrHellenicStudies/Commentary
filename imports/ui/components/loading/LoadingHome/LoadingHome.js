@@ -3,19 +3,32 @@ import React from 'react';
 const LoadingHome = React.createClass({
 	render() {
 		return (
-			<div className="loading">
-				<section className="block header header-page cover">
-					<div className="block-screen brown" />
-					<div className="container v-align-transform">
-						<div className="row">
-							<div className="col-sm-10 col-sm-offset-1 text-center" />
+			<div className="loading home">
+				<div className="loading-mock home-filler home-filler-header" />
+				<div className="content primary">
+					<section className="header cover fullscreen parallax">
+						<div
+							className="container v-align-transform wow fadeIn"
+							data-wow-duration="1s"
+							data-wow-delay="0.1s"
+						>
+							<div className="grid inner">
+								<div className="center-content">
+									<div className="site-title-wrap">
+										<div className="loading-mock home-filler home-filler-1" />
+										<div className="loading-mock home-filler home-filler-1" />
+										<div className="loading-mock home-filler home-filler-2" />
+										<div>
+											<div className="loading-mock home-filler home-filler-3" />
+											<div className="loading-mock home-filler home-filler-3" />
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
-				</section>
-				<section className="page-content">
-					<div className="loading-mock content-filler content-filler-1" />
-					<div className="loading-mock content-filler content-filler-2" />
-				</section>
+					</section>
+				</div>
+				<div className="loading-mock home-filler home-filler-scroll-down" />
 			</div>
 		);
 	},

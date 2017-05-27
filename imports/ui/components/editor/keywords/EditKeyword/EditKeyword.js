@@ -238,8 +238,19 @@ const EditKeyword = React.createClass({
 
 		const descriptionHtml = convertToHTML({
 			entityToHTML: (entity, originalText) => {
+				// handle LINK
+				if (entity.type === 'LINK') {
+					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
+				}
+
+				// handle keyword mentions
 				if (entity.type === 'mention') {
 					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+				}
+
+				// handle hashtag / commets cross reference mentions
+				if (entity.type === '#mention') {
+					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
 				}
 			},
 		})(textEditorState.getCurrentContent());

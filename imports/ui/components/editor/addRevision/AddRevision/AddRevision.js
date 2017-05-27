@@ -321,7 +321,6 @@ const AddRevision = React.createClass({
 
 		// TODO: form validation
 		// TODO: Migrate to formsy components
-		// console.log(data);
 
 		// create html from textEditorState's content
 		const textHtml = convertToHTML({
@@ -385,7 +384,7 @@ const AddRevision = React.createClass({
 		});
 	},
 
-	removeRevision() { // TODO: delete
+	removeRevision() {
 		const self = this;
 		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision, (err) => {
 			if (err) {

@@ -7,6 +7,7 @@ import slugify from 'slugify';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Snackbar from 'material-ui/Snackbar';
 
 // api
 import Comments from '/imports/api/collections/comments';
@@ -37,6 +38,8 @@ const AddRevisionLayout = React.createClass({
 		return {
 			filters: [],
 			contextReaderOpen: true,
+			snackbarOpen: false,
+			snackbarMessage: '',
 		};
 	},
 
@@ -58,6 +61,9 @@ const AddRevisionLayout = React.createClass({
 		Meteor.call('comments.add.revision', comment._id, revision, (err) => {
 			if (err) {
 				console.error('Error adding revision', err);
+				this.showSnackBar(_err.error);
+			} else {
+				this.showSnackBar('Revision added');
 			}
 			self.update(formData);
 		});
@@ -70,6 +76,7 @@ const AddRevisionLayout = React.createClass({
 		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 			// get keywords after they were created:
 			const keywords = this.getKeywords(formData);
+			console.log(keywords);
 			const authToken = cookie.load('loginToken');
 
 			let update = [{}];
@@ -83,6 +90,9 @@ const AddRevisionLayout = React.createClass({
 			Meteor.call('comment.update', authToken, comment._id, update, (_err) => {
 				if (_err) {
 					console.error('Error updating comment after adding revision', _err);
+					this.showSnackBar(_err.error);
+				} else {
+					this.showSnackBar('Comment updated');
 				}
 
 				FlowRouter.go(`/commentary/${comment._id}/edit`);
@@ -304,6 +314,18 @@ const AddRevisionLayout = React.createClass({
 		});
 	},
 
+	showSnackBar(message) {
+		this.setState({
+			snackbarOpen: true,
+			snackbarMessage: message,
+		});
+		setTimeout(() => {
+			this.setState({
+				snackbarOpen: false,
+			});
+		}, 4000);
+	},
+
 	render() {
 		const filters = this.state.filters;
 		const { ready, comment } = this.props;
@@ -359,6 +381,12 @@ const AddRevisionLayout = React.createClass({
 							filters={filters}
 							toggleSearchTerm={this.toggleSearchTerm}
 						/>
+						<Snackbar
+							className="add-comment-snackbar"
+							open={this.state.snackbarOpen}
+							message={this.state.snackbarMessage}
+							autoHideDuration={4000}
+						/>
 
 					</div>
 					:
@@ -367,6 +395,7 @@ const AddRevisionLayout = React.createClass({
 						<div className="double-bounce2" />
 					</div>
 				}
+
 			</MuiThemeProvider>
 		);
 	},

@@ -76,7 +76,6 @@ const AddRevisionLayout = React.createClass({
 		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
 			// get keywords after they were created:
 			const keywords = this.getKeywords(formData);
-			console.log(keywords);
 			const authToken = cookie.load('loginToken');
 
 			let update = [{}];
@@ -134,13 +133,20 @@ const AddRevisionLayout = React.createClass({
 			const token = cookie.load('loginToken');
 			const newKeywordArray = [];
 			keywords.forEach((keyword) => {
-				const foundKeyword = Keywords.findOne({title: keyword});
+				let foundKeyword;
+
+				if (typeof keyword === 'object' && 'slug' in keyword) {
+					foundKeyword = Keywords.findOne({ slug: keyword.slug });
+				} else {
+					foundKeyword = Keywords.findOne({ title: keyword });
+				}
+
 				if (!foundKeyword) {
 					const newKeyword = {
 						title: keyword.label,
 						slug: slugify(keyword.label),
 						type,
-						tenantId: Session.get('tenantId')
+						tenantId: Session.get('tenantId'),
 					};
 					newKeywordArray.push(newKeyword);
 				}
@@ -148,7 +154,8 @@ const AddRevisionLayout = React.createClass({
 			if (newKeywordArray.length > 0) {
 				return Meteor.call('keywords.insert', token, newKeywordArray, (err) => {
 					if (err) {
-						console.log('Keywords insert error', err);
+						console.error('Keywords insert error', err);
+						this.showSnackBar(err.error);
 						return null;
 					}
 					return next();

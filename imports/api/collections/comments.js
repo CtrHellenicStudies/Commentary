@@ -28,6 +28,11 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'commenters.$._id': {
+		type: String,
+		optional: true,
+	},
+
 	'commenters.$.name': {
 		type: String,
 		optional: true,

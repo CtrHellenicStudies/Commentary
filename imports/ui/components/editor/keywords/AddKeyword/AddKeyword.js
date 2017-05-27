@@ -227,7 +227,6 @@ const AddKeyword = React.createClass({
 	},
 
 	showSnackBar(error) {
-		console.log(error);
 		this.setState({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,

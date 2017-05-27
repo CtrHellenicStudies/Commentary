@@ -110,7 +110,7 @@ const EditKeyword = React.createClass({
 	},
 
 	_getKeywordEditorState(keyword) {
-		if (keyword.descriptionRaw) {
+		if (keyword.descriptionRaw && Object.keys(keyword.descriptionRaw).length) {
 			return EditorState.createWithContent(convertFromRaw(keyword.descriptionRaw));
 		} else if (keyword.description) {
 			const blocksFromHTML = convertFromHTML(keyword.description);

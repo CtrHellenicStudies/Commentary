@@ -108,7 +108,7 @@ class CommentDetail extends React.Component {
 			referenceTop: 0,
 			referenceLeft: 0,
 			lemmaReferenceWork: 'iliad',
-			lemmaReferenceSubwork: 0,
+			lemmaReferenceSubwork: 1,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,
 			keyword: '',
@@ -273,7 +273,7 @@ class CommentDetail extends React.Component {
 					<CommentLower
 						comment={comment}
 						revisionIndex={selectedRevisionIndex}
-						onTextClick={this.checkIfToggleReferenceModal}
+						onTextClick={this.checkIfToggleReferenceModal.bind(this)}
 						referenceWorks={referenceWorks}
 					/>
 

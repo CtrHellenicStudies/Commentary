@@ -195,6 +195,14 @@ class ContextPanel extends React.Component {
 		}
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (this.props.lineFrom !== nextProps.lineFrom) {
+			this.setState({
+				lineFrom: nextProps.lineFrom
+			});
+		}
+	}
+
 	render() {
 
 		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;

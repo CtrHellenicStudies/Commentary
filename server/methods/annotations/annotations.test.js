@@ -10,7 +10,7 @@ import Books from '/imports/api/collections/books';
 import Comments from '/imports/api/collections/comments';
 
 // tested module:
-import { annotationsInsert, testError } from './annotations';
+import { annotationsInsert, annotationsAddRevision, annotationsDelete } from './annotations';
 
 
 describe('Annotations methods API', () => {
@@ -91,6 +91,122 @@ describe('Annotations methods API', () => {
 				test(`successful annotation insert`, () => {
 
 					expect(annotationsInsert(token, comment)).toBe(commentInserId);
+				});
+			});
+		});
+	});
+
+	describe('annotations.addRevision', () => {
+		[
+			{
+				id: 1,
+				token: faker.random.uuid(),
+				commentId: faker.random.uuid(),
+				revision: {
+					tenantId: faker.random.uuid(),
+					title: faker.name.title(),
+					text: faker.lorem.text(),
+					textRaw: {},
+				}
+			}
+		].forEach((testCase, index) => {
+
+			const { id, token, commentId, revision } = testCase;
+
+			const userId = faker.random.uuid();
+
+			beforeEach(() => {
+				const bookId = faker.random.uuid();
+
+				stub(Meteor, 'user').callsFake(() => ({
+					_id: userId,
+					canAnnotateBooks: [bookId],
+				}));
+
+				stub(Comments, 'findOne').callsFake(() => ({
+					_id: bookId,
+				}));
+				Comments.update = () => {};
+				stub(Comments, 'update').callsFake((comment) => 1);
+			});
+
+			afterEach(() => {
+				Meteor.user.restore();
+				Comments.findOne.restore();
+				Comments.update.restore();
+			});
+
+			describe(`Test Case ${id}`, () => {
+
+				test(`user is not logged in, should return error`, () => {
+
+					Meteor.user.restore();
+					stub(Meteor, 'user').callsFake(() => null);
+
+					expect(annotationsAddRevision.bind(null, token, commentId, revision)).toThrow();
+				});
+
+				test(`user is not an owner of the comment, should return error`, () => {
+
+					Comments.findOne.restore();
+					stub(Comments, 'findOne').callsFake(() => null);
+
+					expect(annotationsAddRevision.bind(null, token, commentId, revision)).toThrow();
+				});
+
+				test(`successful annotation update`, () => {
+
+					expect(annotationsAddRevision(token, commentId, revision)).toBe(commentId);
+				});
+			});
+		});
+	});
+
+
+
+	describe('annotations.delete', () => {
+		[
+			{
+				id: 1,
+				token: faker.random.uuid(),
+				commentId: faker.random.uuid(),
+			}
+		].forEach((testCase, index) => {
+
+			const { id, token, commentId } = testCase;
+
+			const userId = faker.random.uuid();
+
+			beforeEach(() => {
+				const bookId = faker.random.uuid();
+
+				stub(Meteor, 'user').callsFake(() => ({
+					_id: userId,
+					canAnnotateBooks: [bookId],
+				}));
+
+				Comments.remove = () => {};
+				stub(Comments, 'remove').callsFake((comment) => 1);
+			});
+
+			afterEach(() => {
+				Meteor.user.restore();
+				Comments.remove.restore();
+			});
+
+			describe(`Test Case ${id}`, () => {
+
+				test(`user is not logged in, should return error`, () => {
+
+					Meteor.user.restore();
+					stub(Meteor, 'user').callsFake(() => null);
+
+					expect(annotationsDelete.bind(null, token, commentId)).toThrow();
+				});
+
+				test(`successful annotation remove`, () => {
+
+					expect(annotationsDelete(token, commentId)).toBe(commentId);
 				});
 			});
 		});

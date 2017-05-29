@@ -6,7 +6,7 @@ import Books from '/imports/api/collections/books';
 import Comments from '/imports/api/collections/comments';
 
 
-function annotationsInsert(token, comment) {
+const annotationsInsert = (token, comment) => {
 	check(token, String);
 	check(comment, {
 		tenantId: String,
@@ -55,72 +55,76 @@ function annotationsInsert(token, comment) {
 	return commentId;
 }
 
+const annotationsAddRevision = (token, commentId, revision) => {
+	check(token, Match.Maybe(String));
+	check(commentId, String);
+	check(revision, {
+		tenantId: String,
+		title: Match.Maybe(String),
+		text: String,
+		textRaw: Match.Maybe(Object),
+	});
+
+	revision.created = new Date();
+	revision.updated = new Date();
+
+	let user = Meteor.user();
+	if (!user) {
+		user = Meteor.users.findOne({
+			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+		});
+	}
+	if (!user) {
+		throw new Meteor.Error('annotation-insert', 'not-logged-in');
+	}
+
+	// Ensure the user is approved to edit this comment
+	const comment = Comments.findOne({ _id: commentId, users: user._id });
+	if (!comment) {
+		throw new Meteor.Error('annotation-insert', 'not-authorized');
+	}
+	try {
+		Comments.update({ _id: commentId }, { $addToSet: {
+			revisions: revision
+		}});
+	} catch (err) {
+		throw new Meteor.Error('annotation-add-revision', err);
+	}
+
+	return commentId;
+}
+
+const annotationsDelete = (token, commentId) => {
+	check(token, String);
+	check(commentId, String);
+
+	let user = Meteor.user();
+	if (!user) {
+		user = Meteor.users.findOne({
+			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+		});
+	}
+	if (!user) {
+		throw new Meteor.Error('annotation-insert', 'not-logged-in');
+	}
+
+	try {
+		Comments.remove({ _id: commentId });
+	} catch (err) {
+		throw new Meteor.Error('annotation-delete', err);
+	}
+
+	return commentId;
+}
+
 
 Meteor.methods({
 	'annotations.insert': annotationsInsert,
 
-	'annotations.addRevision': (token, commentId, revision) => {
-		check(token, Match.Maybe(String));
-		check(commentId, String);
-		check(revision, {
-			tenantId: String,
-			title: Match.Maybe(String),
-			text: String,
-			textRaw: Match.Maybe(Object),
-		});
+	'annotations.addRevision': annotationsAddRevision,
 
-		revision.created = new Date();
-		revision.updated = new Date();
-
-		let user = Meteor.user();
-		if (!user) {
-			user = Meteor.users.findOne({
-				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-			});
-		}
-		if (!user) {
-			throw new Meteor.Error('annotation-insert', 'not-logged-in');
-		}
-
-		// Ensure the user is approved to edit this comment
-		const comment = Comments.findOne({ _id: commentId, users: user._id });
-		if (!comment) {
-			throw new Meteor.Error('annotation-insert', 'not-authorized');
-		}
-		try {
-			Comments.update({ _id: commentId }, { $addToSet: {
-				revisions: revision
-			}});
-		} catch (err) {
-			throw new Meteor.Error('annotation-add-revision', err);
-		}
-
-		return commentId;
-	},
-
-	'annotations.delete': (token, commentId) => {
-		check(token, String);
-		check(commentId, String);
-
-		let user = Meteor.user();
-		if (!user) {
-			user = Meteor.users.findOne({
-				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-			});
-		}
-		if (!user) {
-			throw new Meteor.Error('annotation-insert', 'not-logged-in');
-		}
-
-		try {
-			Comments.remove({ _id: commentId });
-		} catch (err) {
-			throw new Meteor.Error('annotation-delete', err);
-		}
-
-		return commentId;
-	},
+	'annotations.delete': annotationsDelete,
 
 });
 
-export { annotationsInsert };
+export { annotationsInsert, annotationsAddRevision, annotationsDelete };

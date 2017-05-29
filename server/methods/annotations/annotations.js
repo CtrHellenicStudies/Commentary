@@ -1,57 +1,63 @@
 import { check, Match } from 'meteor/check';
+import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
 
 import Books from '/imports/api/collections/books';
 import Comments from '/imports/api/collections/comments';
 
-Meteor.methods({
-	'annotations.insert': (token, comment) => {
-		check(token, String);
-		check(comment, {
+
+function annotationsInsert(token, comment) {
+	check(token, String);
+	check(comment, {
+		tenantId: String,
+		isAnnotation: Boolean,
+		users: [String],
+		paragraphN: Number,
+		bookChapterUrl: String,
+		parentCommentId: Match.Maybe(String),
+		revisions: [{
 			tenantId: String,
-			isAnnotation: Boolean,
-			users: [String],
-			paragraphN: Number,
-			bookChapterUrl: String,
-			parentCommentId: Match.Maybe(String),
-			revisions: [{
-				tenantId: String,
-				title: Match.Maybe(String),
-				text: String,
-				textRaw: Match.Maybe(Object),
-			}],
+			title: Match.Maybe(String),
+			text: String,
+			textRaw: Match.Maybe(Object),
+		}],
+	});
+
+	comment.revisions[0].created = new Date();
+	comment.revisions[0].updated = new Date();
+
+	let user = Meteor.user();
+	if (!user) {
+		user = Meteor.users.findOne({
+			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 		});
+	}
+	if (!user) {
+		throw new Meteor.Error('annotation-insert222', 'not-logged-in');
+	}
 
-		comment.revisions[0].created = new Date();
-		comment.revisions[0].updated = new Date();
+	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
+	const authorizedBooks = user.canAnnotateBooks || [];
 
-		let user = Meteor.user();
-		if (!user) {
-			user = Meteor.users.findOne({
-				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-			});
-		}
-		if (!user) {
-			throw new Meteor.Error('annotation-insert', 'not-logged-in');
-		}
+	if (!book || !~authorizedBooks.indexOf(book._id)) {
+		throw new Meteor.Error('annotation-insert3333', 'not-authorized');
+	}
 
-		const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
-		const authorizedBooks = user.canAnnotateBooks || [];
+	let commentId;
 
-		if (!book || !~authorizedBooks.indexOf(book._id)) {
-			throw new Meteor.Error('annotation-insert', 'not-authorized');
-		}
+	try {
+		commentId = Comments.insert(comment);
+		console.log('Annotation created', commentId);
+	} catch (err) {
+		throw new Meteor.Error('annotation-insert', err);
+	}
 
-		let commentId;
-		console.log(book, comment);
-		try {
-			commentId = Comments.insert(comment);
-			console.log('Annotation created', commentId);
-		} catch (err) {
-			throw new Meteor.Error('annotation-insert', err);
-		}
+	return commentId;
+}
 
-		return commentId;
-	},
+
+Meteor.methods({
+	'annotations.insert': annotationsInsert,
 
 	'annotations.addRevision': (token, commentId, revision) => {
 		check(token, Match.Maybe(String));
@@ -81,7 +87,6 @@ Meteor.methods({
 		if (!comment) {
 			throw new Meteor.Error('annotation-insert', 'not-authorized');
 		}
-
 		try {
 			Comments.update({ _id: commentId }, { $addToSet: {
 				revisions: revision
@@ -117,3 +122,5 @@ Meteor.methods({
 	},
 
 });
+
+export { annotationsInsert };

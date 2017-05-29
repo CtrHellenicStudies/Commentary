@@ -1,3 +1,6 @@
+import slug from 'slug';
+import { Meteor } from 'meteor/meteor';
+
 Meteor.methods({
 	createAccount(user) {
 		check(user, {
@@ -11,6 +14,20 @@ Meteor.methods({
 		const userId = Accounts.createUser(user);
 		const stampedToken = Accounts._generateStampedLoginToken();
 		Accounts._insertLoginToken(userId, stampedToken);
+		return { userId, stampedToken };
+	},
+	createAccountHTTPS(user) {
+		check(user, {
+			email: String,
+			password: String,
+		});
+
+		user.username = user.email; 
+
+		const userId = Accounts.createUser(user);
+		const stampedToken = Accounts._generateStampedLoginToken();
+		Accounts._insertLoginToken(userId, stampedToken);
+
 		return { userId, stampedToken };
 	},
 	updateAccount(field, value) {

@@ -196,9 +196,9 @@ class ContextPanel extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.commentGroup.lineFrom !== nextProps.commentGroup.lineFrom) {
+		if (this.props.lineFrom) {
 			this.setState({
-				lineFrom: nextProps.commentGroup.lineFrom
+				lineFrom: nextProps.lineFrom
 			});
 		}
 	}

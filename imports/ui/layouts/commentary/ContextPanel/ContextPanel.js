@@ -8,8 +8,8 @@
 
 	2. Used to select lines to be commented in editor:
 	- props to be set:
-		
-	
+
+
 */
 
 import React from 'react';
@@ -196,9 +196,9 @@ class ContextPanel extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.lineFrom !== nextProps.lineFrom) {
+		if (this.props.commentGroup.lineFrom !== nextProps.commentGroup.lineFrom) {
 			this.setState({
-				lineFrom: nextProps.lineFrom
+				lineFrom: nextProps.commentGroup.lineFrom
 			});
 		}
 	}

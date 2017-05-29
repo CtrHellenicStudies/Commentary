@@ -140,6 +140,7 @@ const User = new SimpleSchema({
 	},
 });
 
+Meteor.users.schema = User;
 Meteor.users.attachSchema(User);
 
 Meteor.users.attachBehaviour('timestampable', {

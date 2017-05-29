@@ -483,6 +483,7 @@ class AddCommentLayout extends React.Component {
 
 										<AddComment
 											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
 											submitForm={this.addComment}
 										/>
 

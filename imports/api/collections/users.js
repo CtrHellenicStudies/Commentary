@@ -122,6 +122,34 @@ const User = new SimpleSchema({
 		type: Boolean,
 		optional: true,
 	},
+	recentPositions: {
+		type: Array,
+		optional: true,
+	},
+	'recentPositions.$': {
+		type: Object,
+		optional: true,
+	},
+	'recentPositions.$.author': {
+		type: String,
+		optional: true,
+	},
+	'recentPositions.$.title': {
+		type: String,
+		optional: true,
+	},
+	'recentPositions.$.subtitle': {
+		type: String,
+		optional: true,
+	},
+	'recentPositions.$.link': {
+		type: Number,
+		optional: true,
+	},
+	'recentPositions.$.activeElem': {
+		type: Number,
+		optional: true,
+	},
 	createdAt: {
 		type: Date,
 		optional: true,

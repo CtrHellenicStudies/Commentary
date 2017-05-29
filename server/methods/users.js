@@ -111,5 +111,56 @@ Meteor.methods({
 		}
 
 		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-	}
+	},
+	updatePosition: (token, _id, position) => {
+		check(token, String);
+		check(_id, String);
+		check(position, {
+			author: String,
+			title: String,
+			subtitle: String,
+			link: String,
+			activeElem: Number,
+		});
+
+		let user = Meteor.user();
+		if (!user) {
+			user = Meteor.users.findOne({
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+				_id,
+			});
+		}
+
+		if (!user) {
+			throw new Meteor.Error('recent-position-update', 'not-logged-in');
+		}
+
+		let recentPositions = user.recentPositions || [];
+		let positionLinkIsInRecentPositions = false;
+
+		recentPositions.forEach((recentPosition) => {
+			if (recentPosition.link === position.link) {
+				recentPosition.activeElem = position.activeElem;
+				recentPosition.title = position.title;
+				recentPosition.subtitle = position.subtitle;
+				recentPosition.author = position.author;
+				positionLinkIsInRecentPositions = true;
+			}
+		});
+
+		if (!positionLinkIsInRecentPositions) {
+			if (recentPositions.length > 100) {
+				recentPositions = recentPositions.slice(1);
+			}
+			recentPositions.push(position);
+		}
+
+		return Meteor.users.update({
+			_id
+		}, {
+			$set: {
+				recentPositions,
+			},
+		});
+	},
 });

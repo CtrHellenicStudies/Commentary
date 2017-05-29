@@ -48,6 +48,7 @@ Meteor.publish('users.all', () => {
 			highlightingPreference: 1,
 			canAnnotateBooks: 1,
 			canEditCommenters: 1,
+			recentPositions: 1,
 		},
 		sort: {
 			username: 1,
@@ -75,6 +76,7 @@ Meteor.publish('users.token', (userId, token) => {
 			highlightingPreference: 1,
 			canAnnotateBooks: 1,
 			canEditCommenters: 1,
+			recentPositions: 1,
 		},
 		sort: {
 			username: 1,
@@ -101,6 +103,7 @@ Meteor.publish('users.token.admin', (userId, token) => {
 			highlightingPreference: 1,
 			canAnnotateBooks: 1,
 			canEditCommenters: 1,
+			recentPositions: 1,
 		},
 		sort: {
 			username: 1,

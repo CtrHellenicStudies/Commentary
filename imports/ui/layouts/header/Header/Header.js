@@ -59,6 +59,7 @@ class Header extends React.Component {
 		addCommentPage: React.PropTypes.bool,
 		isOnHomeView: React.PropTypes.bool,
 		isTest: React.PropTypes.bool,
+		selectedWork: React.PropTypes.object,
 
 		// from creatContainer:
 		settings: React.PropTypes.shape({

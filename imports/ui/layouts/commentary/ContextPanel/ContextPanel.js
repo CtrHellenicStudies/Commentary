@@ -66,6 +66,7 @@ class ContextPanel extends React.Component {
 		workSlug: React.PropTypes.string,
 		subworkN: React.PropTypes.number,
 		editor: React.PropTypes.bool,
+		lineFrom: React.PropTypes.number,
 	};
 
 	static defaultProps = {

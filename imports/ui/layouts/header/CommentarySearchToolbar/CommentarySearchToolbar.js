@@ -67,6 +67,7 @@ class CommentarySearchToolbar extends React.Component {
 		handleChangeLineN: React.PropTypes.func.isRequired,
 		addCommentPage: React.PropTypes.bool.isRequired,
 		isTest: React.PropTypes.bool,
+		selectedWork: React.PropTypes.object,
 
 		// from createContainer:
 		keywords: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -182,14 +183,14 @@ class CommentarySearchToolbar extends React.Component {
 		if (this.props.selectedWork) {
 			this.setState({
 				subworksTitle: nextProps.selectedWork.slug === 'homeric-hymns' ? 'Hymn' : 'Book'
-			})
+			});
 		}
 	}
 
 
 	render() {
 
-		const { toggleSearchTerm, filters, addCommentPage, keywords, keyideas, commenters, referenceWorks, works, handleChangeLineN, selectedWork } = this.props;
+		const { toggleSearchTerm, filters, addCommentPage, keywords, keyideas, commenters, referenceWorks, works, handleChangeLineN } = this.props;
 		const { searchDropdownOpen, moreDropdownOpen, subworksTitle } = this.state;
 
 		const lineFrom = getLineFrom(filters);

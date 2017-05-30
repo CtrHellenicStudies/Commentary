@@ -17,6 +17,8 @@ export const Meteor = { // eslint-disable-line
 	users: {
 		findOne: () => {},
 		find: () => {},
+		update: () => {},
+		remove: () => {},
 	},
 	user: () => ({}),
 	userId: () => {},

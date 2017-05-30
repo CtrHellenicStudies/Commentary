@@ -17,7 +17,6 @@ describe('Annotations methods API', () => {
 	describe('annotations.insert', () => {
 		[
 			{
-				id: 1,
 				token: faker.random.uuid(),
 				comment: {
 					tenantId: faker.random.uuid(),
@@ -36,31 +35,31 @@ describe('Annotations methods API', () => {
 			}
 		].forEach((testCase, index) => {
 
-			const { id, token, comment } = testCase;
+			const { token, comment } = testCase;
 
 			const commentInserId = faker.random.uuid();
 
-			beforeEach(() => {
-				const bookId = faker.random.uuid();
+			describe(`Test Case ${index}`, () => {
 
-				stub(Meteor, 'user').callsFake(() => ({
-					canAnnotateBooks: [bookId],
-				}));
+				beforeEach(() => {
+					const bookId = faker.random.uuid();
 
-				stub(Books, 'findOne').callsFake(() => ({
-					_id: bookId,
-				}));
-				Comments.insert = () => {};
-				stub(Comments, 'insert').callsFake((comment) => commentInserId);
-			});
+					stub(Meteor, 'user').callsFake(() => ({
+						canAnnotateBooks: [bookId],
+					}));
 
-			afterEach(() => {
-				Meteor.user.restore();
-				Books.findOne.restore();
-				Comments.insert.restore();
-			});
+					stub(Books, 'findOne').callsFake(() => ({
+						_id: bookId,
+					}));
+					Comments.insert = () => {};
+					stub(Comments, 'insert').callsFake((comment) => commentInserId);
+				});
 
-			describe(`Test Case ${id}`, () => {
+				afterEach(() => {
+					Meteor.user.restore();
+					Books.findOne.restore();
+					Comments.insert.restore();
+				});
 
 				test(`user is not logged in, should return error`, () => {
 
@@ -99,7 +98,6 @@ describe('Annotations methods API', () => {
 	describe('annotations.addRevision', () => {
 		[
 			{
-				id: 1,
 				token: faker.random.uuid(),
 				commentId: faker.random.uuid(),
 				revision: {
@@ -111,32 +109,32 @@ describe('Annotations methods API', () => {
 			}
 		].forEach((testCase, index) => {
 
-			const { id, token, commentId, revision } = testCase;
+			const { token, commentId, revision } = testCase;
 
 			const userId = faker.random.uuid();
 
-			beforeEach(() => {
-				const bookId = faker.random.uuid();
+			describe(`Test Case ${index}`, () => {
 
-				stub(Meteor, 'user').callsFake(() => ({
-					_id: userId,
-					canAnnotateBooks: [bookId],
-				}));
+				beforeEach(() => {
+					const bookId = faker.random.uuid();
 
-				stub(Comments, 'findOne').callsFake(() => ({
-					_id: bookId,
-				}));
-				Comments.update = () => {};
-				stub(Comments, 'update').callsFake((comment) => 1);
-			});
+					stub(Meteor, 'user').callsFake(() => ({
+						_id: userId,
+						canAnnotateBooks: [bookId],
+					}));
 
-			afterEach(() => {
-				Meteor.user.restore();
-				Comments.findOne.restore();
-				Comments.update.restore();
-			});
+					stub(Comments, 'findOne').callsFake(() => ({
+						_id: bookId,
+					}));
+					Comments.update = () => {};
+					stub(Comments, 'update').callsFake((comment) => 1);
+				});
 
-			describe(`Test Case ${id}`, () => {
+				afterEach(() => {
+					Meteor.user.restore();
+					Comments.findOne.restore();
+					Comments.update.restore();
+				});
 
 				test(`user is not logged in, should return error`, () => {
 
@@ -167,34 +165,33 @@ describe('Annotations methods API', () => {
 	describe('annotations.delete', () => {
 		[
 			{
-				id: 1,
 				token: faker.random.uuid(),
 				commentId: faker.random.uuid(),
 			}
 		].forEach((testCase, index) => {
 
-			const { id, token, commentId } = testCase;
+			const { token, commentId } = testCase;
 
-			const userId = faker.random.uuid();
+			describe(`Test Case ${index}`, () => {
 
-			beforeEach(() => {
-				const bookId = faker.random.uuid();
+				const userId = faker.random.uuid();
 
-				stub(Meteor, 'user').callsFake(() => ({
-					_id: userId,
-					canAnnotateBooks: [bookId],
-				}));
+				beforeEach(() => {
+					const bookId = faker.random.uuid();
 
-				Comments.remove = () => {};
-				stub(Comments, 'remove').callsFake((comment) => 1);
-			});
+					stub(Meteor, 'user').callsFake(() => ({
+						_id: userId,
+						canAnnotateBooks: [bookId],
+					}));
 
-			afterEach(() => {
-				Meteor.user.restore();
-				Comments.remove.restore();
-			});
+					Comments.remove = () => {};
+					stub(Comments, 'remove').callsFake((comment) => 1);
+				});
 
-			describe(`Test Case ${id}`, () => {
+				afterEach(() => {
+					Meteor.user.restore();
+					Comments.remove.restore();
+				});
 
 				test(`user is not logged in, should return error`, () => {
 

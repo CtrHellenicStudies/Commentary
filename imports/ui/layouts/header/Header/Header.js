@@ -216,7 +216,7 @@ class Header extends React.Component {
 
 	render() {
 
-		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage } = this.props;
+		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage, selectedWork } = this.props;
 		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalSignupLowered, modalLoginLowered } = this.state;
 
 		return (
@@ -381,6 +381,7 @@ class Header extends React.Component {
 													filters={filters}
 													addCommentPage={addCommentPage}
 													isTest={isTest}
+													selectedWork={selectedWork}
 												/>
 												<div className="search-toggle">
 													<IconButton

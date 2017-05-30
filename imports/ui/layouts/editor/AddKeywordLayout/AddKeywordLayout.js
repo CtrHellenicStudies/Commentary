@@ -374,6 +374,7 @@ const AddKeywordLayout = React.createClass({
 							filters={filters}
 							initialSearchEnabled
 							addCommentPage
+							selectedWork={this.getWork(filters)}
 						/>
 
 						{!isTest ?

@@ -106,7 +106,6 @@ class CommentarySearchToolbar extends React.Component {
 		referenceWorks: [],
 		works: [],
 		handleChangeTextsearch: null,
-		selectedWork: 'Book'
 	}
 
 	constructor(props) {
@@ -116,7 +115,7 @@ class CommentarySearchToolbar extends React.Component {
 			searchDropdownOpen: '',
 			moreDropdownOpen: false,
 			activeWorkNew: null,
-			selectedWork: 'Book'
+			subworksTitle: 'Book'
 		};
 
 		// methods:
@@ -157,6 +156,8 @@ class CommentarySearchToolbar extends React.Component {
 		});
 	}
 
+
+
 	componentWillReceiveProps(nextProps) {
 		let workFilter;
 
@@ -173,17 +174,23 @@ class CommentarySearchToolbar extends React.Component {
 
 			if (workFilter && workFilter.values.length) {
 				this.setState({
-					selectedWork: workFilter.values[0].slug === 'homeric-hymns' ? 'Hymn' : 'Book'
+					subworksTitle: workFilter.values[0].slug === 'homeric-hymns' ? 'Hymn' : 'Book'
 				});
 			}
+		}
+
+		if (this.props.selectedWork) {
+			this.setState({
+				subworksTitle: nextProps.selectedWork.slug === 'homeric-hymns' ? 'Hymn' : 'Book'
+			})
 		}
 	}
 
 
 	render() {
 
-		const { toggleSearchTerm, filters, addCommentPage, keywords, keyideas, commenters, referenceWorks, works, handleChangeLineN } = this.props;
-		const { searchDropdownOpen, moreDropdownOpen, selectedWork } = this.state;
+		const { toggleSearchTerm, filters, addCommentPage, keywords, keyideas, commenters, referenceWorks, works, handleChangeLineN, selectedWork } = this.props;
+		const { searchDropdownOpen, moreDropdownOpen, subworksTitle } = this.state;
 
 		const lineFrom = getLineFrom(filters);
 		const lineTo = getLineTo(filters);
@@ -250,7 +257,7 @@ class CommentarySearchToolbar extends React.Component {
 					searchDropdownOpen={searchDropdownOpen}
 					toggleSearchDropdown={this.toggleSearchDropdown}
 					toggleSearchTerm={toggleSearchTerm}
-					selectedWork={selectedWork}
+					selectedWork={subworksTitle}
 					workInFilter={workInFilter}
 					filters={filters}
 				/>

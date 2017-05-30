@@ -146,6 +146,7 @@ class AddCommentLayout extends React.Component {
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
+			selectedWork: ''
 		};
 
 		// methods:
@@ -467,6 +468,7 @@ class AddCommentLayout extends React.Component {
 							filters={filters}
 							initialSearchEnabled
 							addCommentPage
+							selectedWork={this.getWork(filters)}
 						/>
 
 						{!isTest ?

@@ -25,6 +25,7 @@ const DiscussionThread = React.createClass({
 		toggleLemma: React.PropTypes.func.isRequired,
 		showLoginModal: React.PropTypes.func,
 		discussionComments: React.PropTypes.array,
+		discussionCommentsDisabled: React.PropTypes.bool,
 		ready: React.PropTypes.bool,
 	},
 
@@ -62,7 +63,7 @@ const DiscussionThread = React.createClass({
 
 	render() {
 		const currentUser = Meteor.user();
-		const { discussionComments, comment } = this.props;
+		const { discussionComments, comment, discussionCommentsDisabled } = this.props;
 
 		if (!discussionComments) {
 			return null;
@@ -127,7 +128,7 @@ const DiscussionThread = React.createClass({
 					''
 					:
 					<div className="discussion-thread">
-						{comment.discussionCommentsDisabled ?
+						{comment.discussionCommentsDisabled || discussionCommentsDisabled?
 							<div className="no-results-wrap">
 								<span className="no-results-text">Discussion will be coming soon.</span>
 							</div> :
@@ -167,21 +168,21 @@ const DiscussionThread = React.createClass({
 												onClick={this.addDiscussionComment}
 											/>
 											:
-											<div
-												className="new-comment-login"
-											>
-												<FlatButton
-													label="Login"
-													className="login-link"
-													onClick={this.props.showLoginModal}
-												/>
-												<FlatButton
-													label="Join"
-													className="join-link"
-													href="/sign-up"
-													target="_blank"
-												/>
-											</div>
+												<div
+													className="new-comment-login"
+												>
+													<FlatButton
+														label="Login"
+														className="login-link"
+														onClick={this.props.showLoginModal}
+													/>
+													<FlatButton
+														label="Join"
+														className="join-link"
+														href="/sign-up"
+														target="_blank"
+													/>
+												</div>
 										}
 									</div>
 								</form>

@@ -25,15 +25,15 @@ class LinkButton extends Component {
 		getEditorState: React.PropTypes.func.isRequired,
 		setEditorState: React.PropTypes.func.isRequired,
 		theme: React.PropTypes.shape({
-			button: stylePropType,
-			active: stylePropType,
-			buttonWrapper: stylePropType
+			button: React.PropTypes.string,
+			active: React.PropTypes.string,
+			buttonWrapper: React.PropTypes.string
 		}).isRequired,
 	}
 
 	constructor(props) {
 		super(props);
-
+		
 		this.state = {
 			linkModalOpen: false,
 			linkValue: null,

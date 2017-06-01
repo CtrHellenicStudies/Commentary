@@ -10,6 +10,9 @@ with new “filters” object passed as first attribute.
 
 */
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -17,6 +20,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -26,6 +30,7 @@ const CommentaryLayout = React.createClass({
 
 	propTypes: {
 		queryParams: React.PropTypes.object,
+		referenceWorks: React.PropTypes.array,
 		isTest: React.PropTypes.bool,
 	},
 
@@ -111,7 +116,7 @@ const CommentaryLayout = React.createClass({
 					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
 					break;
 				case 'reference':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
+					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value._id);
 					break;
 				case '_id':
 					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
@@ -121,6 +126,7 @@ const CommentaryLayout = React.createClass({
 				}
 			});
 		});
+
 		return queryParams;
 	},
 
@@ -198,10 +204,13 @@ const CommentaryLayout = React.createClass({
 
 		if ('reference' in queryParams) {
 			const references = [];
+			const { referenceWorks } = this.props;
 
-			this.props.queryParams.reference.split(',').forEach((reference) => {
-				references.push({
-					title: reference,
+			this.props.queryParams.reference.split(',').forEach((referenceId) => {
+				referenceWorks.forEach((referenceWork) => {
+					if (referenceWork._id === referenceId) {
+						references.push(referenceWork);
+					}
 				});
 			});
 
@@ -515,4 +524,13 @@ const CommentaryLayout = React.createClass({
 });
 
 
-export default CommentaryLayout;
+const CommentaryLayoutContainer = createContainer(() => {
+	const handle = Meteor.subscribe('referenceWorks.all', Session.get('tenantId'));
+	const referenceWorks = ReferenceWorks.find().fetch();
+
+	return {
+		referenceWorks,
+	};
+}, CommentaryLayout);
+
+export default CommentaryLayoutContainer;

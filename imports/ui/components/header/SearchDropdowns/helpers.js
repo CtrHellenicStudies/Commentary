@@ -8,7 +8,7 @@ const isActive = (filters, element, key, valueKey = 'slug') => {
 	filters.forEach((filter) => {
 		if (filter.key === key) {
 			filter.values.forEach((value) => {
-				if (element.slug === value[valueKey]) {
+				if (element[valueKey] === value[valueKey]) {
 					isActiveVar = true;
 				}
 			});

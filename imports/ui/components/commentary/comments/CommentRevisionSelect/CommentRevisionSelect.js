@@ -15,13 +15,16 @@ const getDateRevision = (revision) => {
 
 const getClassName = (selectedRevisionIndex, i) => (`revision ${selectedRevisionIndex === i ? 'selected-revision' : ''}`);
 
+const sortRevisions = (revisions) => (_.sortBy(revisions, 'created'));
+
 
 /*
 	BEGIN CommentRevisionSelect
 */
 const CommentRevisionSelect = props => (
 	<div className="comment-revisions">
-		{props.revisions.map((revision, i) => {
+
+		{!props.isTest && sortRevisions(props.revisions).map((revision, i) => {
 
 			const updated = getDateRevision(revision);
 
@@ -52,6 +55,7 @@ CommentRevisionSelect.propTypes = {
 	})).isRequired,
 	selectedRevisionIndex: React.PropTypes.number.isRequired,
 	selectRevision: React.PropTypes.func.isRequired,
+	isTest: React.PropTypes.bool,
 };
 CommentRevisionSelect.defaultProps = {
 

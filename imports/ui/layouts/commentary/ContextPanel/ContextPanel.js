@@ -8,8 +8,8 @@
 
 	2. Used to select lines to be commented in editor:
 	- props to be set:
-		
-	
+
+
 */
 
 import React from 'react';
@@ -66,6 +66,7 @@ class ContextPanel extends React.Component {
 		workSlug: React.PropTypes.string,
 		subworkN: React.PropTypes.number,
 		editor: React.PropTypes.bool,
+		lineFrom: React.PropTypes.number,
 	};
 
 	static defaultProps = {
@@ -192,6 +193,14 @@ class ContextPanel extends React.Component {
 			default:
 				break;
 			}
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.lineFrom) {
+			this.setState({
+				lineFrom: nextProps.lineFrom
+			});
 		}
 	}
 

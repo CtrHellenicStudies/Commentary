@@ -15,6 +15,14 @@ class RecentActivityList extends React.Component {
 		loadMore: React.PropTypes.func,
 	}
 
+	constructor(props) {
+		super(props);
+		this.state = {
+			skip: 0,
+			limit: 12,
+		};
+	}
+
 	render() {
 		const { comments, loadMore } = this.props;
 
@@ -38,9 +46,9 @@ class RecentActivityList extends React.Component {
 	}
 }
 
-const RecentActivityListContainer = createContainer(() => {
+const RecentActivityListContainer = createContainer(({ skip, limit }) => {
 	let comments = [];
-	const handle = Meteor.subscribe('comments.recent', 0, 12);
+	const handle = Meteor.subscribe('comments.recent', skip, limit);
 	comments = Comments.find({}, { sort: { updated: -1 } }).fetch();
 
 	return {

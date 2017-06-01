@@ -13,10 +13,19 @@ import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
 import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import {
+	ItalicButton,
+	BoldButton,
+	UnderlineButton,
+	UnorderedListButton,
+	OrderedListButton,
+	BlockquoteButton,
+} from 'draft-js-buttons';
+
 
 
 // api
@@ -24,12 +33,26 @@ import Commenters from '/imports/api/collections/commenters';
 import Keywords from '/imports/api/collections/keywords';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
-// lib:
+// lib
 import muiTheme from '/imports/lib/muiTheme';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
-
+// Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin({
+	structure: [
+		BoldButton,
+		ItalicButton,
+		UnderlineButton,
+		Separator,
+		UnorderedListButton,
+		OrderedListButton,
+		BlockquoteButton,
+		LinkButton,
+	]
+});
+
+
 const { InlineToolbar } = inlineToolbarPlugin;
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
@@ -87,7 +110,7 @@ const EditKeyword = React.createClass({
 	},
 
 	_getKeywordEditorState(keyword) {
-		if (keyword.descriptionRaw) {
+		if (keyword.descriptionRaw && Object.keys(keyword.descriptionRaw).length) {
 			return EditorState.createWithContent(convertFromRaw(keyword.descriptionRaw));
 		} else if (keyword.description) {
 			const blocksFromHTML = convertFromHTML(keyword.description);
@@ -215,8 +238,19 @@ const EditKeyword = React.createClass({
 
 		const descriptionHtml = convertToHTML({
 			entityToHTML: (entity, originalText) => {
+				// handle LINK
+				if (entity.type === 'LINK') {
+					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
+				}
+
+				// handle keyword mentions
 				if (entity.type === 'mention') {
 					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+				}
+
+				// handle hashtag / commets cross reference mentions
+				if (entity.type === '#mention') {
+					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
 				}
 			},
 		})(textEditorState.getCurrentContent());
@@ -329,7 +363,7 @@ const EditKeyword = React.createClass({
 							</RadioButtonGroup>
 						</div>
 						<div
-							className="comment-lower"
+							className="comment-lower clearfix"
 							style={{ paddingTop: 20 }}
 						>
 							<Editor

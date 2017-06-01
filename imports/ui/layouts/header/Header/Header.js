@@ -59,6 +59,7 @@ class Header extends React.Component {
 		addCommentPage: React.PropTypes.bool,
 		isOnHomeView: React.PropTypes.bool,
 		isTest: React.PropTypes.bool,
+		selectedWork: React.PropTypes.object,
 
 		// from creatContainer:
 		settings: React.PropTypes.shape({
@@ -216,7 +217,7 @@ class Header extends React.Component {
 
 	render() {
 
-		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage } = this.props;
+		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage, selectedWork } = this.props;
 		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalSignupLowered, modalLoginLowered } = this.state;
 
 		return (
@@ -381,6 +382,7 @@ class Header extends React.Component {
 													filters={filters}
 													addCommentPage={addCommentPage}
 													isTest={isTest}
+													selectedWork={selectedWork}
 												/>
 												<div className="search-toggle">
 													<IconButton

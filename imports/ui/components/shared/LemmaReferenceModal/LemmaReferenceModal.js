@@ -24,13 +24,12 @@ const LemmaReferenceModal = React.createClass({
 		lineTo: React.PropTypes.number,
 		closeLemmaReference: React.PropTypes.func.isRequired,
 		lemmaText: React.PropTypes.array,
+		ready: React.PropTypes.bool,
 	},
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
 	},
-
-	// mixins: [ReactMeteorData],
 
 	getInitialState() {
 		return {
@@ -149,15 +148,22 @@ const LemmaReferenceModal = React.createClass({
 				>
 					<article className="comment	lemma-comment paper-shadow ">
 
-						<div className="reference-text">
-							{selectedLemmaEdition.lines.map((line, i) => (
-								<p
-									key={i}
-									className="lemma-text"
-									dangerouslySetInnerHTML={{ __html: line.html }}
-								/>
-							))}
-						</div>
+						{this.props.ready ?
+							<div className="reference-text">
+								{selectedLemmaEdition.lines.map((line, i) => (
+									<p
+										key={i}
+										className="lemma-text"
+										dangerouslySetInnerHTML={{ __html: line.html }}
+									/>
+								))}
+							</div>
+							:
+							<div className="reference-text">
+								<div className="loading-mock lemma-filler lemma-filler-1" />
+								<div className="loading-mock lemma-filler lemma-filler-2" />
+							</div>
+						}
 
 						<div className="edition-tabs tabs">
 							{lemmaText.map((lemmaTextEdition, i) => {
@@ -203,10 +209,10 @@ const LemmaReferenceModal = React.createClass({
 
 });
 
-const LemmaReferenceModalContainer = createContainer(({workSlug, subworkN, lineFrom, lineTo}) => {
+const LemmaReferenceModalContainer = createContainer(({work, subwork, lineFrom, lineTo}) => {
 	const lemmaQuery = {
-		'work.slug': workSlug,
-		'subwork.n': subworkN,
+		'work.slug': work,
+		'subwork.n': subwork,
 		'text.n': {
 			$gte: lineFrom,
 		},
@@ -259,6 +265,7 @@ const LemmaReferenceModalContainer = createContainer(({workSlug, subworkN, lineF
 
 	return {
 		lemmaText,
+		ready: textHandle.ready(),
 	};
 }, LemmaReferenceModal);
 

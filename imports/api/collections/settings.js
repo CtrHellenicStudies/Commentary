@@ -108,6 +108,11 @@ Settings.schema = new SimpleSchema({
 		type: String,
 	},
 
+	discussionCommentsDisabled: {
+		type: Boolean,
+		optional: true,
+	}
+
 });
 
 Settings.attachSchema(Settings.schema);

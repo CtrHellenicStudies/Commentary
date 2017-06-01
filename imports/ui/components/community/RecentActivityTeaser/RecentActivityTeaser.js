@@ -4,17 +4,21 @@ import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 
 import Commenters from '/imports/api/collections/commenters';
+import Tenants from '/imports/api/collections/tenants';
+import Settings from '/imports/api/collections/settings';
 import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 
 class RecentActivityTeaser extends React.Component {
 	static propTypes = {
 		comment: React.PropTypes.object.isRequired,
+		tenant: React.PropTypes.object,
+		settings: React.PropTypes.object,
 		commenters: React.PropTypes.array,
 	}
 
 	render() {
-		const { comment, commenters } = this.props;
+		const { comment, commenters, tenant, settings } = this.props;
 
 		const styles = {
 			commenterAvatar: {
@@ -25,6 +29,7 @@ class RecentActivityTeaser extends React.Component {
 		let excerpt = '';
 		let byline = '';
 		let avatarUrl = '';
+		let commentUrl = `/commentary?_id=${comment._id}`;
 
 		const mostRecentRevision = comment.revisions[comment.revisions.length - 1];
 
@@ -38,6 +43,10 @@ class RecentActivityTeaser extends React.Component {
 			avatarUrl = commenters[0].avatar.src;
 		}
 
+		if (settings) {
+			commentUrl = `https://${settings.domain}${commentUrl}`;
+		}
+
 		return (
 			<div className="recentActivityTeaser clearfix">
 				<div className="recentActivityTeaserLeft">
@@ -45,7 +54,7 @@ class RecentActivityTeaser extends React.Component {
 				</div>
 
 				<div className="recentActivityTeaserRight">
-					<a href={`/commentary?_id=${comment._id}`}>
+					<a href={commentUrl} target="_blank" rel="noopener noreferrer">
 						<h4 className="recentActivityTitle">
 							{title}
 						</h4>
@@ -65,19 +74,28 @@ class RecentActivityTeaser extends React.Component {
 const RecentActivityTeaserContainer = createContainer(({ comment }) => {
 
 	const handle = Meteor.subscribe('commenters.all');
+	const tenantsHandle = Meteor.subscribe('tenants');
 	const commenterIds = [];
 	let commenters = [];
+	let tenant;
+	let settings;
 
 	if (comment) {
+		const settingsHandle = Meteor.subscribe('settings.tenant', comment.tenantId);
+
 		comment.commenters.forEach((commenter) => {
 			commenterIds.push(commenter._id);
 		});
 
-		commenters = Commenters.find({_id: { $in: commenterIds } }).fetch();
+		commenters = Commenters.find({ _id: { $in: commenterIds } }).fetch();
+		tenant = Tenants.findOne({ _id: comment.tenantId });
+		settings = Settings.findOne({ tenantId: comment.tenantId });
 	}
 
 	return {
 		commenters,
+		tenant,
+		settings,
 	};
 }, RecentActivityTeaser);
 

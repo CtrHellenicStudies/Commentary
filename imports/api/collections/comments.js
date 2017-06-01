@@ -28,6 +28,11 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'commenters.$._id': {
+		type: String,
+		optional: true,
+	},
+
 	'commenters.$.name': {
 		type: String,
 		optional: true,
@@ -169,6 +174,11 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'keywords.$._id': {
+		type: String,
+		optional: true,
+	},
+
 	'keywords.$.wordpressId': {
 		type: Number,
 		optional: true,
@@ -236,6 +246,11 @@ Comments.schema = new SimpleSchema({
 
 	revisions: {
 		type: [Object],
+		optional: true,
+	},
+
+	'revisions.$._id': {
+		type: String,
 		optional: true,
 	},
 

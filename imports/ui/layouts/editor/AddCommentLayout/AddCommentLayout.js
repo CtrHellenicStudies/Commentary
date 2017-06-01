@@ -21,6 +21,8 @@ import muiTheme from '/imports/lib/muiTheme';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
+import Keywords from '/imports/api/collections/keywords';
+import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 
 /*
@@ -137,13 +139,14 @@ class AddCommentLayout extends React.Component {
 	};
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			filters: [],
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
+			selectedWork: ''
 		};
 
 		// methods:
@@ -305,8 +308,8 @@ class AddCommentLayout extends React.Component {
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
-			if (filter.key === 'work') {
-				work = values[0];
+			if (filter.key === 'works') {
+				work = filter.values[0];
 			}
 		});
 		if (!work) {
@@ -322,8 +325,8 @@ class AddCommentLayout extends React.Component {
 	getSubwork() {
 		let subwork = null;
 		this.state.filters.forEach((filter) => {
-			if (filter.key === 'subwork') {
-				subwork = values[0];
+			if (filter.key === 'subworks') {
+				subwork = filter.values[0];
 			}
 		});
 		if (!subwork) {
@@ -465,6 +468,7 @@ class AddCommentLayout extends React.Component {
 							filters={filters}
 							initialSearchEnabled
 							addCommentPage
+							selectedWork={this.getWork(filters)}
 						/>
 
 						{!isTest ?
@@ -481,6 +485,7 @@ class AddCommentLayout extends React.Component {
 
 										<AddComment
 											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
 											submitForm={this.addComment}
 										/>
 

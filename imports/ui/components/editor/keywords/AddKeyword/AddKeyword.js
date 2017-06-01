@@ -15,6 +15,16 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import {
+	ItalicButton,
+	BoldButton,
+	UnderlineButton,
+	UnorderedListButton,
+	OrderedListButton,
+	BlockquoteButton,
+} from 'draft-js-buttons';
+
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -23,37 +33,20 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	CodeButton,
-	HeadlineOneButton,
-	HeadlineTwoButton,
-	HeadlineThreeButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-	CodeBlockButton,
-} from 'draft-js-buttons';
-
+// Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin({
 	structure: [
 		BoldButton,
 		ItalicButton,
 		UnderlineButton,
-		CodeButton,
 		Separator,
-		HeadlineOneButton,
-		HeadlineTwoButton,
-		HeadlineThreeButton,
 		UnorderedListButton,
 		OrderedListButton,
 		BlockquoteButton,
-		CodeBlockButton,
+		LinkButton,
 	]
 });
 
@@ -209,8 +202,19 @@ const AddKeyword = React.createClass({
 
 		const textHtml = convertToHTML({
 			entityToHTML: (entity, originalText) => {
+				// handle LINK
+				if (entity.type === 'LINK') {
+					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
+				}
+
+				// handle keyword mentions
 				if (entity.type === 'mention') {
 					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+				}
+
+				// handle hashtag / commets cross reference mentions
+				if (entity.type === '#mention') {
+					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
 				}
 			},
 		})(textEditorState.getCurrentContent());
@@ -223,7 +227,6 @@ const AddKeyword = React.createClass({
 	},
 
 	showSnackBar(error) {
-		console.log(error);
 		this.setState({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
@@ -311,7 +314,7 @@ const AddKeyword = React.createClass({
 							</RadioButtonGroup>
 						</div>
 						<div
-							className="comment-lower"
+							className="comment-lower clearfix"
 							style={{ paddingTop: 20 }}
 						>
 							<Editor

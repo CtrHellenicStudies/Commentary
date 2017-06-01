@@ -17,6 +17,20 @@ const accountsMethods = {
 		Accounts._insertLoginToken(userId, stampedToken);
 		return { userId, stampedToken };
 	},
+	createAccountHTTPS(user) {
+		check(user, {
+			email: String,
+			password: String,
+		});
+
+		user.username = user.email; 
+
+		const userId = Accounts.createUser(user);
+		const stampedToken = Accounts._generateStampedLoginToken();
+		Accounts._insertLoginToken(userId, stampedToken);
+
+		return { userId, stampedToken };
+	},
 	updateAccount(field, value) {
 		if (!Meteor.userId()) {
 			throw new Meteor.Error('not-authorized');

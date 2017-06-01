@@ -67,6 +67,7 @@ class CommentarySearchToolbar extends React.Component {
 		handleChangeLineN: React.PropTypes.func.isRequired,
 		addCommentPage: React.PropTypes.bool.isRequired,
 		isTest: React.PropTypes.bool,
+		selectedWork: React.PropTypes.object,
 
 		// from createContainer:
 		keywords: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -106,7 +107,6 @@ class CommentarySearchToolbar extends React.Component {
 		referenceWorks: [],
 		works: [],
 		handleChangeTextsearch: null,
-		selectedWork: 'Book'
 	}
 
 	constructor(props) {
@@ -116,7 +116,7 @@ class CommentarySearchToolbar extends React.Component {
 			searchDropdownOpen: '',
 			moreDropdownOpen: false,
 			activeWorkNew: null,
-			selectedWork: 'Book'
+			subworksTitle: 'Book'
 		};
 
 		// methods:
@@ -157,10 +157,32 @@ class CommentarySearchToolbar extends React.Component {
 		});
 	}
 
+
+
 	componentWillReceiveProps(nextProps) {
-		if (this.props.filters) {
+		let workFilter;
+
+		if (
+			this.props.filters
+			&& nextProps.filters
+			&& nextProps.filters.length
+		) {
+			nextProps.filters.forEach((filter) => {
+				if (filter.key === 'works') {
+					workFilter = filter;
+				}
+			});
+
+			if (workFilter && workFilter.values.length) {
+				this.setState({
+					subworksTitle: workFilter.values[0].slug === 'homeric-hymns' ? 'Hymn' : 'Book'
+				});
+			}
+		}
+
+		if (this.props.selectedWork) {
 			this.setState({
-				selectedWork: nextProps.filters[0].values[0].slug === 'homeric-hymns' ? 'Hymn' : 'Book'
+				subworksTitle: nextProps.selectedWork.slug === 'homeric-hymns' ? 'Hymn' : 'Book'
 			});
 		}
 	}
@@ -169,7 +191,7 @@ class CommentarySearchToolbar extends React.Component {
 	render() {
 
 		const { toggleSearchTerm, filters, addCommentPage, keywords, keyideas, commenters, referenceWorks, works, handleChangeLineN } = this.props;
-		const { searchDropdownOpen, moreDropdownOpen, selectedWork } = this.state;
+		const { searchDropdownOpen, moreDropdownOpen, subworksTitle } = this.state;
 
 		const lineFrom = getLineFrom(filters);
 		const lineTo = getLineTo(filters);
@@ -236,7 +258,7 @@ class CommentarySearchToolbar extends React.Component {
 					searchDropdownOpen={searchDropdownOpen}
 					toggleSearchDropdown={this.toggleSearchDropdown}
 					toggleSearchTerm={toggleSearchTerm}
-					selectedWork={selectedWork}
+					selectedWork={subworksTitle}
 					workInFilter={workInFilter}
 					filters={filters}
 				/>

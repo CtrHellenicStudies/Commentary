@@ -41,9 +41,9 @@ const createQueryFromFilters = (filters) => {
 			case 'reference':
 				values = [];
 				filter.values.forEach((value) => {
-					values.push(value.title);
+					values.push(value._id);
 				});
-				query.reference = {
+				query['referenceWorks.referenceWorkId'] = {
 					$in: values,
 				};
 				break;

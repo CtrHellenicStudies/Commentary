@@ -239,17 +239,7 @@ class AddComment extends React.Component {
 		});
 	}
 
-	onCreateNewReferenceWork(referenceWork) {
-		const newRefWork = {
-			label: referenceWork.label,
-			value: referenceWork.label,
-			referenceWorkId: referenceWork.label
-		};
-		this.state.referenceWorks.push(newRefWork)
-	}
-
 	onReferenceWorksValueChange(referenceWork) {
-		// referenceWorks[referenceWork.i] && _.has(referenceWorks[referenceWork.i], 'referenceWorks[referenceWork.i]'
 		const referenceWorks = this.state.referenceWorks;
 		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
 
@@ -590,17 +580,13 @@ class AddComment extends React.Component {
 																	}}
 																/>
 															</div>
-															<Creatable
+															<Select
 																name="referenceWorks"
 																id="referenceWorks"
 																required={false}
 																options={_referenceWorkOptions}
 																value={this.state.referenceWorks[i].referenceWorkId}
-																// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
 																onChange={this.onReferenceWorksValueChange}
-																newOptionCreator={this.onCreateNewReferenceWork}
-																shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-																isOptionUnique={this.isOptionUnique}
 																placeholder="Reference Work . . ."
 															/>
 															<FormGroup>

@@ -232,7 +232,7 @@ const CommentarySearchPanel = React.createClass({
 					className="search-tool-card"
 				>
 					<CardHeader
-						title="Keywords"
+						title="Words"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton
@@ -268,7 +268,7 @@ const CommentarySearchPanel = React.createClass({
 					className="search-tool-card"
 				>
 					<CardHeader
-						title="Key Ideas"
+						title="Ideas"
 						style={styles.cardHeader}
 						actAsExpander
 						showExpandableButton

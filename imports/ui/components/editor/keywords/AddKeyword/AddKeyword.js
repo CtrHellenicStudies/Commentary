@@ -333,7 +333,7 @@ const AddKeyword = React.createClass({
 							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
-									label="Add Keyword"
+									label="Add Word"
 									labelPosition="after"
 									onClick={this.handleSubmit}
 									icon={<FontIcon className="mdi mdi-plus" />}

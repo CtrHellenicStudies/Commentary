@@ -286,7 +286,7 @@ const AddKeyword = React.createClass({
 								<Editor
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
-									placeholder="Key word or idea . . ."
+									placeholder="Tag . . ."
 									spellCheck
 									stripPastedStyles
 									plugins={[singleLinePlugin]}
@@ -320,7 +320,7 @@ const AddKeyword = React.createClass({
 							<Editor
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
-								placeholder="Keyword description . . ."
+								placeholder="Tag description . . ."
 								spellCheck
 								stripPastedStyles
 								plugins={[mentionPlugin, inlineToolbarPlugin]}
@@ -333,7 +333,7 @@ const AddKeyword = React.createClass({
 							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
-									label="Add Keyword"
+									label="Add Tag"
 									labelPosition="after"
 									onClick={this.handleSubmit}
 									icon={<FontIcon className="mdi mdi-plus" />}

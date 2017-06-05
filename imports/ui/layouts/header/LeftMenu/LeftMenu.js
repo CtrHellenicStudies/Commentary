@@ -60,7 +60,7 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser }) => (
 				/>
 				<MenuItem
 					href="/keywords/create"
-					primaryText="Add Keyword/Idea"
+					primaryText="Add Tag"
 					onClick={closeLeftMenu}
 				/>
 				<Divider />
@@ -81,12 +81,12 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser }) => (
 				/>
 				<MenuItem
 					href="/keywords"
-					primaryText="Keywords"
+					primaryText="Words"
 					onClick={closeLeftMenu}
 				/>
 				<MenuItem
 					href="/keyideas"
-					primaryText="Key Ideas"
+					primaryText="Ideas"
 					onClick={closeLeftMenu}
 				/>
 				<MenuItem

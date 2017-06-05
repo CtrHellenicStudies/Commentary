@@ -227,26 +227,26 @@ const Home = React.createClass({
 
 					<section className="keywords">
 						<div className="grid inner">
-							<h2 className="keyword-divider-title">Keywords</h2>
+							<h2 className="keyword-divider-title">Words</h2>
 							<div className="underline" />
 							<KeywordsList type="word" title="Keywords" limit={5} />
 							<RaisedButton
 								href="/keywords"
 								className="cover-link show-more primary "
-								label="More Keywords"
+								label="More Words"
 							/>
 						</div>
 					</section>
 
 					<section className="keywords keyideas">
 						<div className="grid inner">
-							<h2 className="keyword-divider-title">Key Ideas</h2>
+							<h2 className="keyword-divider-title">Ideas</h2>
 							<div className="underline" />
 							<KeywordsList type="idea" title="Key Ideas" limit={5} />
 							<RaisedButton
 								href="/keyideas"
 								className="cover-link show-more primary "
-								label="More Key Ideas"
+								label="More Ideas"
 							/>
 						</div>
 					</section>

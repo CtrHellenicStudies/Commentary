@@ -299,6 +299,16 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'revisions.$.updated': {
+		type: Date,
+		optional: true,
+	},
+
+	'revisions.$.updatedBy': {
+		type: String,
+		optional: true,
+	},
+
 	discussionComments: {
 		type: [Object],
 		optional: true,

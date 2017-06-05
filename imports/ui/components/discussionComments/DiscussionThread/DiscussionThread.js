@@ -128,7 +128,7 @@ const DiscussionThread = React.createClass({
 					''
 					:
 					<div className="discussion-thread">
-						{comment.discussionCommentsDisabled || discussionCommentsDisabled?
+						{comment.discussionCommentsDisabled || discussionCommentsDisabled ?
 							<div className="no-results-wrap">
 								<span className="no-results-text">Discussion will be coming soon.</span>
 							</div> :

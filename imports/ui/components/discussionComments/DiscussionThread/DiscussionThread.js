@@ -207,7 +207,9 @@ const DiscussionThread = React.createClass({
 						</div>
 						{this.props.discussionComments.length === 0 ?
 							<div className="no-results-wrap">
-								<span className="no-results-text">No discussion comments.</span>
+								{!comment.discussionCommentsDisabled && !discussionCommentsDisabled ?
+									<span className="no-results-text">No discussion comments.</span>
+								: ''}
 							</div>
 							:
 							<div className="sort-method-select">

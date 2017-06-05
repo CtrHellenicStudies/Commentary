@@ -20,9 +20,11 @@ Meteor.methods({
 				textRaw: Match.Maybe(Object),
 			}],
 		});
+		const now = new Date();
 
-		comment.revisions[0].created = new Date();
-		comment.revisions[0].updated = new Date();
+		comment.revisions[0].created = now;
+		comment.revisions[0].updated = now;
+		// comment.created = now;
 
 		let user = Meteor.user();
 		if (!user) {
@@ -42,10 +44,18 @@ Meteor.methods({
 		}
 
 		let commentId;
-		console.log(book, comment);
 		try {
 			commentId = Comments.insert(comment);
 			console.log('Annotation created', commentId);
+
+			/*
+			 * TODO: Fix createable preventing comment creation
+			 */
+			Comments.update({_id: commentId}, {
+				$set: {
+					updated: now,
+				}
+			});
 		} catch (err) {
 			throw new Meteor.Error('annotation-insert', err);
 		}

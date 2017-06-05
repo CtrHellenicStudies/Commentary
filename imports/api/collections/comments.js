@@ -322,7 +322,17 @@ Comments.schema = new SimpleSchema({
 	discussionCommentsDisabled: {
 		type: Boolean,
 		optional: true,
-	}
+	},
+
+	created: {
+		type: Date,
+		optional: true,
+	},
+
+	updated: {
+		type: Date,
+		optional: true,
+	},
 });
 
 Comments.attachSchema(Comments.schema);

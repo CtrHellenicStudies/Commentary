@@ -114,7 +114,7 @@ const RecentActivityTeaserContainer = createContainer(({ comment }) => {
 	const booksHandle = Meteor.subscribe('books');
 	const tenantsHandle = Meteor.subscribe('tenants');
 	const commenterIds = [];
-	const userIds = comment.users || [];
+	let userIds = [];
 	let commenters = [];
 	let users = [];
 	let tenant;
@@ -128,6 +128,10 @@ const RecentActivityTeaserContainer = createContainer(({ comment }) => {
 			comment.commenters.forEach((commenter) => {
 				commenterIds.push(commenter._id);
 			});
+		}
+
+		if (comment.users) {
+			userIds = comment.users;
 		}
 
 		commenters = Commenters.find({ _id: { $in: commenterIds } }).fetch();

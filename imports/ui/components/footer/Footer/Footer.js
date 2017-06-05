@@ -51,11 +51,11 @@ const Footer = React.createClass({
 									/>
 									<FlatButton
 										href="/keywords"
-										label="Keywords"
+										label="Words"
 									/>
 									<FlatButton
 										href="/keyideas"
-										label="Key Ideas"
+										label="Ideas"
 									/>
 									<FlatButton
 										href="/about"

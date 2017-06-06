@@ -1,1 +1,0 @@
-/* istanbul ignore next */"use strict";Object.defineProperty(exports, "__esModule", { value: true });var SimpleSchema = /* istanbul ignore next */exports.SimpleSchema = function SimpleSchema() {}; // eslint-disable-line

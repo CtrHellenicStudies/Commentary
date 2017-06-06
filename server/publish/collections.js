@@ -29,7 +29,7 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('comments.recent', (skip = 0, limit = 3) => {
+	Meteor.publish('comments.recent', (skip = 0, limit = 12) => {
 		check(skip, Number);
 		check(limit, Number);
 		return Comments.find({}, {

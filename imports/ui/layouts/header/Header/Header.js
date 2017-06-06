@@ -253,9 +253,15 @@ class Header extends React.Component {
 									onClick={this.toggleLeftMenu}
 								/>
 
-								<a href="/" className="header-home-link" >
-									<h3 className="logo">{settings ? settings.name : undefined}</h3>
-								</a>
+								{tenant && tenant.isAnnotation ?
+									<a href="//chs.harvard.edu" className="header-home-link" >
+										<h3 className="logo">{settings ? settings.name : undefined}</h3>
+									</a>
+								:
+									<a href="/" className="header-home-link" >
+										<h3 className="logo">{settings ? settings.name : undefined}</h3>
+									</a>
+								}
 
 								{tenant && !tenant.isAnnotation &&
 									<div className="search-toggle">
@@ -302,7 +308,7 @@ class Header extends React.Component {
 															/>
 															<FlatButton
 																href="/keywords/create"
-																label="Add Keyword/Idea"
+																label="Add Tag"
 																className=""
 																style={styles.flatButton}
 															/>

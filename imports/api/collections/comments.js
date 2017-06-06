@@ -299,6 +299,16 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'revisions.$.updated': {
+		type: Date,
+		optional: true,
+	},
+
+	'revisions.$.updatedBy': {
+		type: String,
+		optional: true,
+	},
+
 	discussionComments: {
 		type: [Object],
 		optional: true,
@@ -312,7 +322,17 @@ Comments.schema = new SimpleSchema({
 	discussionCommentsDisabled: {
 		type: Boolean,
 		optional: true,
-	}
+	},
+
+	created: {
+		type: Date,
+		optional: true,
+	},
+
+	updated: {
+		type: Date,
+		optional: true,
+	},
 });
 
 Comments.attachSchema(Comments.schema);

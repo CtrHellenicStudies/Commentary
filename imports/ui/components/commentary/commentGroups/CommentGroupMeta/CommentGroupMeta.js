@@ -9,6 +9,13 @@ const getWorkTitle = (commentGroup) => {
 	return workTitle;
 };
 
+const getLineTo = (commentGroup) => {
+	if (commentGroup.lineTo === commentGroup.lineFrom || !commentGroup.lineTo) {
+		return '';
+	}
+	return `- ${commentGroup.lineTo}`;
+};
+
 const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 	<div className="comment-group-meta">
 		{hideLemma === false ?
@@ -18,7 +25,7 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 						{getWorkTitle(commentGroup)} {commentGroup.subwork.title}
 					</span>
 					<h2 className="comment-group-ref-below">
-						{commentGroup.lineFrom}{commentGroup.lineTo ? `-${commentGroup.lineTo}` : '' }
+						{commentGroup.lineFrom}{getLineTo(commentGroup)}
 					</h2>
 
 				</div>

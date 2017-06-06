@@ -484,7 +484,7 @@ class AddComment extends React.Component {
 									newOptionCreator={onNewOptionCreator}
 									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 									isOptionUnique={this.isOptionUnique}
-									placeholder="Keywords..."
+									placeholder="Words..."
 								/>
 								<Creatable
 									name="keyideas"
@@ -497,7 +497,7 @@ class AddComment extends React.Component {
 									newOptionCreator={onNewOptionCreator}
 									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 									isOptionUnique={this.isOptionUnique}
-									placeholder="Key ideas..."
+									placeholder="Ideas..."
 								/>
 
 							</div>

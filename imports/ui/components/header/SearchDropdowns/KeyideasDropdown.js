@@ -12,8 +12,8 @@ import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
 */
 const KeyideasDropdown = ({ keyideas, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, filters }) => (
 	<SearchToolDropdown
-		name="Key Ideas"
-		open={searchDropdownOpen === 'Key Ideas'}
+		name="Ideas"
+		open={searchDropdownOpen === 'Ideas'}
 		toggle={toggleSearchDropdown}
 		disabled={false}
 	>

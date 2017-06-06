@@ -166,7 +166,7 @@ const AddCommentForm = React.createClass({
 						onChange={this.referenceLinkValueChange}
 					/>
 
-					<h5>Keywords:</h5>
+					<h5>Words:</h5>
 
 					<Select
 						name="keywords"
@@ -180,7 +180,7 @@ const AddCommentForm = React.createClass({
 						onChange={this.keywordsValueChange}
 					/>
 
-					<h5>Key Ideas:</h5>
+					<h5>Ideas:</h5>
 
 					<Select
 						name="keyideas"

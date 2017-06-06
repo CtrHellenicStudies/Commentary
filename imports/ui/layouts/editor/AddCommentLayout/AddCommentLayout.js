@@ -179,7 +179,7 @@ class AddCommentLayout extends React.Component {
 			this.setState({
 				selectedLineFrom,
 			});
-		} else if (selectedLineTo != null && selectedLineTo != null) {
+		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,

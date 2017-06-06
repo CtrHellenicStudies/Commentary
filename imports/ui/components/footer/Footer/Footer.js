@@ -84,7 +84,12 @@ const Footer = React.createClass({
 
 						<div className="col-md-2 hidden-sm hidden-xs text-center">
 							<a href="http://chs.harvard.edu" target="_blank" rel="noopener noreferrer">
-								<img className="site-logo" src="/images/logo-tower.png" role="presentation" />
+								<img
+									className="site-logo"
+									src="/images/center_for_hellenic_studies_lighthouse.png"
+									role="presentation"
+									alt="The Center for Hellenic Studies"
+								/>
 							</a>
 						</div>
 

@@ -1,3 +1,8 @@
+// TODO fix handle permissions
+// TODO fix line handling
+// TODO handle post method
+
+
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
@@ -88,6 +93,7 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	componentWillUpdate() {
+		// TODO handlePermisions
 		// handlePermissions();
 	}
 
@@ -338,7 +344,6 @@ class AddTranslationLayout extends React.Component {
 										<AddTranslation
 											selectedLineFrom={selectedLineFrom}
 											selectedLineTo={selectedLineTo}
-											submitForm={this.addComment}
 										/>
 
 										<ContextPanel

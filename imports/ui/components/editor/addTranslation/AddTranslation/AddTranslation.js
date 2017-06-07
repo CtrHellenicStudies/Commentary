@@ -1,3 +1,7 @@
+// TODO finish post method
+// TODO position editor box correctly
+
+
 import React from 'react';
 import PropTypes from 'prop-types'
 import { Meteor } from 'meteor/meteor';
@@ -5,6 +9,7 @@ import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Editor, EditorState } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -15,37 +20,92 @@ import muiTheme from '/imports/lib/muiTheme';
 // Create toolbar plugin for editor
 
 class AddTranslation extends React.Component {
-	//noinspection JSAnnotator
+
 	static propTypes: {
-		//noinspection JSAnnotator
-		selectedLineFrom: React.PropTypes.number,
-		//noinspection JSAnnotator
-		selectedLineTo: React.PropTypes.number,
-		//noinspection JSAnnotator
-		submitForm: React.PropTypes.func.isRequired,
-		//noinspection JSAnnotator
-		onTypeChange: React.PropTypes.func.isRequired,
-		//noinspection JSAnnotator
-		isTest: React.PropTypes.bool,
+		selectedLineFrom: PropTypes.number,
+		selectedLineTo: PropTypes.number,
+		submitForm: PropTypes.func.isRequired,
+		onTypeChange: PropTypes.func.isRequired,
+		isTest: PropTypes.bool,
 	}
 
 	constructor(props) {
 		super(props);
 		this.onChange = (editorState) => this.setState({editorState});
 		this.state = {
-			titleEditorState: EditorState.createEmpty(),
 			textEditorState: EditorState.createEmpty(),
-			editorState: EditorState.createEmpty(),
 		}
 	}
-
-
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
 
+	onTextChange(textEditorState) {
+		let textHtml = '';
+		textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+
+		this.setState({
+			textEditorState,
+			textValue: textHtml,
+		});
+	}
+
+	shouldKeyDownEventCreateNewOption(sig) {
+		if (sig.keyCode === 13 ||
+			sig.keyCode === 188) {
+			return true;
+		}
+
+		return false;
+	}
+
+	handleSubmit(event) {
+		const { textEditorState } = this.state;
+
+		event.preventDefault();
+
+		// TODO write validateStateForSubmit
+		const error = this.validateStateForSubmit();
+
+		this.showSnackBar(error);
+
+		const textRaw = convertToRaw(textEditorState.getCurrentContent());
+
+		if (!error.errors) {
+			this.props.submitForm(this.state, textRaw)
+		}
+	}
+
+	showSnackBar(error) {
+		this.setState({
+			snackbarOpen: error.errors,
+			snackbarMessage: error.errorMessage,
+		});
+		setTimeout(() => {
+			this.setState({
+				snackbarOpen: false,
+			});
+		}, 4000);
+	}
+
+	validateStateForSubmit() {
+		let errors = false;
+		let errorMessage = 'Missing translation data:';
+
+		if (errors === true) {
+			errorMessage = errorMessage.slice(0, -1);
+			errorMessage += '.';
+		}
+
+		return {
+			errors,
+			errorMessage,
+		};
+	}
+
 	render() {
+		const { textEditorState } = this.state;
 		const { isTest } = this.props;
 
 		if (isTest) {
@@ -60,12 +120,12 @@ class AddTranslation extends React.Component {
 						style={{ marginLeft: 0 }}
 					>
 						<div
-							className="comment-lower"
+							className="comment-lower clearfix"
 							style={{ paddingTop: 20, paddingBottom: 20 }}
 						>
 							<Editor
-								editorState={this.state.editorState}
-								onChange={this.onChange}
+								editorState={this.state.textEditorState}
+								onChange={this.onTextChange()}
 								placeholder="Translation . . ."
 								spellCheck
 								stripPastedStyles

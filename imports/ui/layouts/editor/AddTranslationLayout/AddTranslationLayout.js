@@ -14,11 +14,14 @@ import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
 import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
-import AddComment from '/imports/ui/components/editor/addComment/AddComment';
+import AddTranslation from '/imports/ui/components/editor/addTranslation/AddTranslation';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+
+// api
+import Commenters from '/imports/api/collections/commenters';
 
 // helpers
 const handlePermissions = () => {
@@ -85,7 +88,7 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	componentWillUpdate() {
-		handlePermissions();
+		// handlePermissions();
 	}
 
 	// line selection

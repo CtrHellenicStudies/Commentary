@@ -9,7 +9,6 @@ import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';

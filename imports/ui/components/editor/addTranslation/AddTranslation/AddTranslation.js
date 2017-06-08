@@ -8,7 +8,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { Editor, EditorState } from 'draft-js';
+import { Editor, EditorState, convertToRaw } from 'draft-js';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
@@ -69,17 +69,15 @@ class AddTranslation extends React.Component {
 		return false;
 	}
 
-	handleSubmit(event) {
-		const { EditorState } = this.state;
+	handleSubmit() {
 
-		event.preventDefault();
 
 		// TODO write validateStateForSubmit
 		const error = this.validateStateForSubmit();
 
 		this.showSnackBar(error);
-
-		const textRaw = convertToRaw(EditorState.getCurrentContent());
+		console.log(this.state.editorState);
+		const textRaw = convertToRaw(this.state.editorState.getCurrentContent());
 
 		if (!error.errors) {
 			this.props.submitForm(this.state, textRaw)

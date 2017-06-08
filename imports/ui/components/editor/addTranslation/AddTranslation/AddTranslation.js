@@ -1,11 +1,5 @@
-// TODO finish post method
-// TODO position editor box correctly
-
-
 import React from 'react';
 import PropTypes from 'prop-types'
-import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Editor, EditorState, convertToRaw } from 'draft-js';
@@ -13,15 +7,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
 
-// api
-import Commenters from '/imports/api/collections/commenters';
-
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
 // Create toolbar plugin for editor
 
-class AddTranslation extends React.Component {
+export default class AddTranslation extends React.Component {
 
 	static propTypes: {
 		selectedLineFrom: PropTypes.number,
@@ -60,23 +51,11 @@ class AddTranslation extends React.Component {
 		});
 	}
 
-	shouldKeyDownEventCreateNewOption(sig) {
-		if (sig.keyCode === 13 ||
-			sig.keyCode === 188) {
-			return true;
-		}
-
-		return false;
-	}
-
 	handleSubmit() {
-
-
-		// TODO write validateStateForSubmit
 		const error = this.validateStateForSubmit();
 
 		this.showSnackBar(error);
-		console.log(this.state.editorState);
+
 		const textRaw = convertToRaw(this.state.editorState.getCurrentContent());
 
 		if (!error.errors) {
@@ -112,7 +91,6 @@ class AddTranslation extends React.Component {
 	}
 
 	render() {
-		const { editorState } = this.state;
 		const { isTest } = this.props;
 
 		if (isTest) {
@@ -161,28 +139,7 @@ class AddTranslation extends React.Component {
 
 AddTranslation.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
-}
+};
 
-const AddTranslationContainer = createContainer(() => {
-	Meteor.subscribe('commenters', Session.get('tenantId'));
-	const commentersOptions = [];
-	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
-	}
-	commenters.forEach((commenter) => {
-		commentersOptions.push({
-			value: commenter._id,
-			label: commenter.name,
-		});
-	});
-
-	return {
-		commentersOptions,
-	};
-
-}, AddTranslation);
-
-export default AddTranslationContainer;
 
 

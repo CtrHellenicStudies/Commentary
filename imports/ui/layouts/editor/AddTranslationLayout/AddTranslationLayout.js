@@ -1,14 +1,8 @@
-// TODO fix handle permissions
-// TODO fix line handling
-// TODO handle post method
-
-
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
-import slugify from 'slugify';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -23,9 +17,6 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
-
-// api
-import Commenters from '/imports/api/collections/commenters';
 
 // helpers
 const handlePermissions = () => {
@@ -94,8 +85,7 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	componentWillUpdate() {
-		// TODO handlePermisions
-		// handlePermissions();
+		handlePermissions();
 	}
 
 	// line selection
@@ -308,7 +298,7 @@ class AddTranslationLayout extends React.Component {
 		});
 	}
 
-	addTranslation(formData, textValue, textRawValue) {
+	addTranslation(textValue, textRawValue) {
 		this.setState({
 			loading: true,
 		})
@@ -357,7 +347,7 @@ class AddTranslationLayout extends React.Component {
 		const { isTest } = this.props;
 		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
 
-		const { work, subwork, lineFrom, lineTo } = getFilterValues(filters);
+		const { work, subwork, lineFrom } = getFilterValues(filters);
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

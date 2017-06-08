@@ -82,6 +82,7 @@ class AddTranslationLayout extends React.Component {
 		this.updateSelectedLines = this.updateSelectedLines.bind(this);
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
 
+		this.addTranslation = this.addTranslation.bind(this);
 		this.getWork = this.getWork.bind(this);
 		this.getSubwork = this.getSubwork.bind(this);
 		this.getLineLetter = this.getLineLetter.bind(this);
@@ -396,6 +397,7 @@ class AddTranslationLayout extends React.Component {
 										<AddTranslation
 											selectedLineFrom={selectedLineFrom}
 											selectedLineTo={selectedLineTo}
+											submitForm={this.addTranslation}
 										/>
 
 										<ContextPanel

@@ -11,6 +11,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Editor, EditorState } from 'draft-js';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
+import Formsy from 'formsy-react';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -30,14 +31,33 @@ class AddTranslation extends React.Component {
 		isTest: PropTypes.bool,
 	}
 
+	getChildContext() {
+		return { muiTheme: getMuiTheme(muiTheme) };
+	}
+
 	constructor(props) {
 		super(props);
 		this.state = {editorState: EditorState.createEmpty()};
 		this.onChange = (editorState) => this.setState({editorState});
+
+		// methods
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.showSnackBar = this.showSnackBar.bind(this);
+		this.validateStateForSubmit = this.validateStateForSubmit.bind(this);
+		this._enableButton = this._enableButton.bind(this);
+		this._disableButton = this._disableButton.bind(this);
 	}
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
+	_enableButton() {
+		this.setState({
+			canSubmit: true,
+		});
+	}
+
+	_disableButton() {
+		this.setState({
+			canSubmit: false,
+		});
 	}
 
 	shouldKeyDownEventCreateNewOption(sig) {
@@ -104,31 +124,37 @@ class AddTranslation extends React.Component {
 		return (
 			<div className="comments lemma-panel-visible">
 				<div className={'comment-outer'}>
-					<article
-						className="comment commentary-comment paper-shadow "
-						style={{ marginLeft: 0 }}
+					<Formsy.Form
+						onValid={this._enableButton}
+						onInvalid={this._disableButton}
+						onValidSubmit={this.handleSubmit}
 					>
-						<div className="comment-upper" />
-						<div
-							className="comment-lower clearfix"
-							style={{ paddingTop: 20, paddingBottom: 20 }}
+						<article
+							className="comment commentary-comment paper-shadow "
+							style={{ marginLeft: 0 }}
 						>
-							<Editor
-								editorState={this.state.editorState}
-								onChange={this.onChange}
-								placeholder="Translation . . ."
-								spellCheck
-								stripPastedStyles
+							<div className="comment-upper" />
+							<div
+								className="comment-lower clearfix"
+								style={{ paddingTop: 20, paddingBottom: 20 }}
+							>
+								<Editor
+									editorState={this.state.editorState}
+									onChange={this.onChange}
+									placeholder="Translation . . ."
+									spellCheck
+									stripPastedStyles
+								/>
+							</div>
+							<div className="comment-edit-action-button" />
+							<RaisedButton
+								type="submit"
+								label="Add translation"
+								labelPosition="after"
+								icon={<FontIcon className="mdi mdi-plus" />}
 							/>
-						</div>
-						<div className="comment-edit-action-button" />
-						<RaisedButton
-							type="submit"
-							label="Add translation"
-							labelPosition="after"
-							icon={<FontIcon className="mdi mdi-plus" />}
-						/>
-					</article>
+						</article>
+					</Formsy.Form>
 				</div>
 			</div>
 		);

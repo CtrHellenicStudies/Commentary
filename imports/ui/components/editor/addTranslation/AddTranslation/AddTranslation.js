@@ -9,6 +9,8 @@ import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Editor, EditorState } from 'draft-js';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -106,7 +108,7 @@ class AddTranslation extends React.Component {
 						className="comment commentary-comment paper-shadow "
 						style={{ marginLeft: 0 }}
 					>
-						<div className="comment-upper"></div>
+						<div className="comment-upper" />
 						<div
 							className="comment-lower clearfix"
 							style={{ paddingTop: 20, paddingBottom: 20 }}
@@ -119,6 +121,13 @@ class AddTranslation extends React.Component {
 								stripPastedStyles
 							/>
 						</div>
+						<div className="comment-edit-action-button" />
+						<RaisedButton
+							type="submit"
+							label="Add translation"
+							labelPosition="after"
+							icon={<FontIcon className="mdi mdi-plus" />}
+						/>
 					</article>
 				</div>
 			</div>

@@ -9,7 +9,6 @@ import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Editor, EditorState } from 'draft-js';
-import { stateToHTML } from 'draft-js-export-html';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -31,24 +30,12 @@ class AddTranslation extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {editorState: EditorState.createEmpty()};
 		this.onChange = (editorState) => this.setState({editorState});
-		this.state = {
-			textEditorState: EditorState.createEmpty(),
-		}
 	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	}
-
-	onTextChange(textEditorState) {
-		let textHtml = '';
-		textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-
-		this.setState({
-			textEditorState,
-			textValue: textHtml,
-		});
 	}
 
 	shouldKeyDownEventCreateNewOption(sig) {
@@ -105,7 +92,7 @@ class AddTranslation extends React.Component {
 	}
 
 	render() {
-		const { textEditorState } = this.state;
+		const { editorState } = this.state;
 		const { isTest } = this.props;
 
 		if (isTest) {
@@ -124,8 +111,8 @@ class AddTranslation extends React.Component {
 							style={{ paddingTop: 20, paddingBottom: 20 }}
 						>
 							<Editor
-								editorState={this.state.textEditorState}
-								onChange={this.onTextChange()}
+								editorState={this.state.editorState}
+								onChange={this.onChange}
 								placeholder="Translation . . ."
 								spellCheck
 								stripPastedStyles

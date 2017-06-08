@@ -10,6 +10,7 @@ import Tenants from '/imports/api/collections/tenants';
 import TextNodes from '/imports/api/collections/textNodes';
 import Works from '/imports/api/collections/works';
 import Settings from '/imports/api/collections/settings';
+import Translations from '/imports/api/collections/translations';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {
@@ -326,6 +327,8 @@ if (Meteor.isServer) {
 	Meteor.publish('tenants', () => Tenants.find({}, { sort: { subdomain: 1 } }));
 
 	Meteor.publish('settings', () => Settings.find({}, { sort: { tenantId: 1 }}));
+
+	Meteor.publish('translations', () => Translations.find({}, { sort: { tenantId: 1 }}));
 
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));

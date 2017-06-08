@@ -48,7 +48,7 @@ class AddTranslation extends React.Component {
 	}
 
 	handleSubmit(event) {
-		const { textEditorState } = this.state;
+		const { EditorState } = this.state;
 
 		event.preventDefault();
 
@@ -57,7 +57,7 @@ class AddTranslation extends React.Component {
 
 		this.showSnackBar(error);
 
-		const textRaw = convertToRaw(textEditorState.getCurrentContent());
+		const textRaw = convertToRaw(EditorState.getCurrentContent());
 
 		if (!error.errors) {
 			this.props.submitForm(this.state, textRaw)
@@ -106,6 +106,7 @@ class AddTranslation extends React.Component {
 						className="comment commentary-comment paper-shadow "
 						style={{ marginLeft: 0 }}
 					>
+						<div className="comment-upper"></div>
 						<div
 							className="comment-lower clearfix"
 							style={{ paddingTop: 20, paddingBottom: 20 }}

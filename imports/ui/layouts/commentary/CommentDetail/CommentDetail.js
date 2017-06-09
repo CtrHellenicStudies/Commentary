@@ -5,6 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Settings from '/imports/api/collections/settings';
 
 // components:
 import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';
@@ -85,6 +86,9 @@ class CommentDetail extends React.Component {
 			title: React.PropTypes.string.isRequired,
 			slug: React.PropTypes.string.isRequired,
 		})),
+		settings: React.PropTypes.shape({
+			discussionCommentsDisabled: React.PropTypes.bool,
+		}).isRequired,
 		ready: React.PropTypes.bool,
 	};
 
@@ -293,6 +297,7 @@ class CommentDetail extends React.Component {
 					discussionVisible={this.state.discussionVisible}
 					toggleLemma={this.props.toggleLemma}
 					showLoginModal={this.props.showLoginModal}
+					discussionCommentsDisabled={this.props.settings.discussionCommentsDisabled}
 				/>
 
 				{this.state.lemmaReferenceModalVisible ?
@@ -328,7 +333,10 @@ class CommentDetail extends React.Component {
 
 export default createContainer(({ comment }) => {
 
-	const handle = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+	const tenantId = Session.get('tenantId');
+
+	const handleReferenceWorks = Meteor.subscribe('referenceWorks', tenantId);
+	const handleSettings = Meteor.subscribe('settings.tenant', tenantId);
 
 	const referenceWorkIds = [];
 	let referenceWorks = [];
@@ -339,8 +347,11 @@ export default createContainer(({ comment }) => {
 		referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
 	}
 
+	const settings = Settings.findOne({ tenantId });
+
 	return {
 		referenceWorks,
-		ready: handle.ready(),
+		settings,
+		ready: handleReferenceWorks.ready() && handleSettings.ready(),
 	};
 }, CommentDetail);

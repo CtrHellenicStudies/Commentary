@@ -123,6 +123,7 @@ const onNewOptionCreator = newOption => ({
 	value: newOption.label
 });
 
+
 const shouldKeyDownEventCreateNewOption = (sig) => {
 	if (sig.keyCode === 13 ||
 		sig.keyCode === 188) {
@@ -245,6 +246,7 @@ class AddComment extends React.Component {
 		this.setState({
 			referenceWorks,
 		});
+
 	}
 
 	_onKeywordSearchChange({ value }) {
@@ -482,7 +484,7 @@ class AddComment extends React.Component {
 									newOptionCreator={onNewOptionCreator}
 									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 									isOptionUnique={this.isOptionUnique}
-									placeholder="Keywords..."
+									placeholder="Words..."
 								/>
 								<Creatable
 									name="keyideas"
@@ -495,7 +497,7 @@ class AddComment extends React.Component {
 									newOptionCreator={onNewOptionCreator}
 									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
 									isOptionUnique={this.isOptionUnique}
-									placeholder="Key ideas..."
+									placeholder="Ideas..."
 								/>
 
 							</div>
@@ -578,17 +580,13 @@ class AddComment extends React.Component {
 																	}}
 																/>
 															</div>
-															<Creatable
+															<Select
 																name="referenceWorks"
 																id="referenceWorks"
 																required={false}
 																options={_referenceWorkOptions}
 																value={this.state.referenceWorks[i].referenceWorkId}
-																// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
 																onChange={this.onReferenceWorksValueChange}
-																newOptionCreator={onNewOptionCreator}
-																shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-																isOptionUnique={this.isOptionUnique}
 																placeholder="Reference Work . . ."
 															/>
 															<FormGroup>

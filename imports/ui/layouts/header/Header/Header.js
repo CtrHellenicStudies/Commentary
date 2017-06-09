@@ -59,6 +59,7 @@ class Header extends React.Component {
 		addCommentPage: React.PropTypes.bool,
 		isOnHomeView: React.PropTypes.bool,
 		isTest: React.PropTypes.bool,
+		selectedWork: React.PropTypes.object,
 
 		// from creatContainer:
 		settings: React.PropTypes.shape({
@@ -216,7 +217,7 @@ class Header extends React.Component {
 
 	render() {
 
-		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage } = this.props;
+		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage, selectedWork } = this.props;
 		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalSignupLowered, modalLoginLowered } = this.state;
 
 		return (
@@ -252,9 +253,15 @@ class Header extends React.Component {
 									onClick={this.toggleLeftMenu}
 								/>
 
-								<a href="/" className="header-home-link" >
-									<h3 className="logo">{settings ? settings.name : undefined}</h3>
-								</a>
+								{tenant && tenant.isAnnotation ?
+									<a href="//chs.harvard.edu" className="header-home-link" >
+										<h3 className="logo">{settings ? settings.name : undefined}</h3>
+									</a>
+								:
+									<a href="/" className="header-home-link" >
+										<h3 className="logo">{settings ? settings.name : undefined}</h3>
+									</a>
+								}
 
 								{tenant && !tenant.isAnnotation &&
 									<div className="search-toggle">
@@ -301,7 +308,7 @@ class Header extends React.Component {
 															/>
 															<FlatButton
 																href="/keywords/create"
-																label="Add Keyword/Idea"
+																label="Add Tag"
 																className=""
 																style={styles.flatButton}
 															/>
@@ -381,6 +388,7 @@ class Header extends React.Component {
 													filters={filters}
 													addCommentPage={addCommentPage}
 													isTest={isTest}
+													selectedWork={selectedWork}
 												/>
 												<div className="search-toggle">
 													<IconButton

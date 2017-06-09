@@ -146,6 +146,7 @@ class AddCommentLayout extends React.Component {
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
+			selectedWork: ''
 		};
 
 		// methods:
@@ -178,7 +179,7 @@ class AddCommentLayout extends React.Component {
 			this.setState({
 				selectedLineFrom,
 			});
-		} else if (selectedLineTo != null && selectedLineTo != null) {
+		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
@@ -467,6 +468,7 @@ class AddCommentLayout extends React.Component {
 							filters={filters}
 							initialSearchEnabled
 							addCommentPage
+							selectedWork={this.getWork(filters)}
 						/>
 
 						{!isTest ?
@@ -483,6 +485,7 @@ class AddCommentLayout extends React.Component {
 
 										<AddComment
 											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
 											submitForm={this.addComment}
 										/>
 

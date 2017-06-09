@@ -202,8 +202,19 @@ const AddKeyword = React.createClass({
 
 		const textHtml = convertToHTML({
 			entityToHTML: (entity, originalText) => {
+				// handle LINK
+				if (entity.type === 'LINK') {
+					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
+				}
+
+				// handle keyword mentions
 				if (entity.type === 'mention') {
 					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+				}
+
+				// handle hashtag / commets cross reference mentions
+				if (entity.type === '#mention') {
+					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
 				}
 			},
 		})(textEditorState.getCurrentContent());
@@ -216,7 +227,6 @@ const AddKeyword = React.createClass({
 	},
 
 	showSnackBar(error) {
-		console.log(error);
 		this.setState({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
@@ -276,7 +286,7 @@ const AddKeyword = React.createClass({
 								<Editor
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
-									placeholder="Key word or idea . . ."
+									placeholder="Tag . . ."
 									spellCheck
 									stripPastedStyles
 									plugins={[singleLinePlugin]}
@@ -310,7 +320,7 @@ const AddKeyword = React.createClass({
 							<Editor
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
-								placeholder="Keyword description . . ."
+								placeholder="Tag description . . ."
 								spellCheck
 								stripPastedStyles
 								plugins={[mentionPlugin, inlineToolbarPlugin]}
@@ -323,7 +333,7 @@ const AddKeyword = React.createClass({
 							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
-									label="Add Keyword"
+									label="Add Tag"
 									labelPosition="after"
 									onClick={this.handleSubmit}
 									icon={<FontIcon className="mdi mdi-plus" />}

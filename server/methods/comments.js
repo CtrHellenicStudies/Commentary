@@ -1,4 +1,5 @@
 import Comments from '/imports/api/collections/comments';
+import Commenters from '/imports/api/collections/commenters';
 
 Meteor.methods({
 	'comments.insert': (token, comment) => {
@@ -32,16 +33,33 @@ Meteor.methods({
 		check(commentId, String);
 		check(update, Object);
 
-		if ((
-				!Meteor.userId()
-				&& !Roles.userIsInRole(Meteor.user(), roles)
-			)
-			&& !Meteor.users.findOne({
-				roles: 'admin',
-				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
-			})
-		) {
-			throw new Meteor.Error('comment-update', 'not-authorized');
+		const user = Meteor.user() || Meteor.users.findOne({
+			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
+		});
+
+		const comment = Comments.find({ _id: commentId }).fetch()[0];
+		const commenters = Commenters.find().fetch();
+
+		if (!Roles.userIsInRole(user, ['editor', 'admin', 'commenter'])) {
+			throw new Meteor.Error(`User ${user._id} attempted to update comment but was in an unauthorized role`);
+		}
+
+		let allowedToEdit = false;
+		user.canEditCommenters.forEach(commenterId => {
+			comment.commenters.forEach(commenter => {
+				commenters.forEach(_commenter => {
+					if (
+							commenter.slug === _commenter.slug
+						&& _commenter._id === commenterId
+					) {
+						allowedToEdit = true;
+					}
+				});
+			});
+		});
+
+		if (!allowedToEdit) {
+			throw new Meteor.Error(`User ${user._id} attempted to update comment but was unauthorized on the commenter`);
 		}
 
 		try {
@@ -84,6 +102,7 @@ Meteor.methods({
 		check(revision, Object);
 
 		const comment = Comments.find({ _id: commentId }).fetch()[0];
+		const commenters = Commenters.find().fetch();
 
 		if (!Roles.userIsInRole(Meteor.user(), ['editor', 'admin', 'commenter'])) {
 			throw new Meteor.Error(`User ${Meteor.user()._id} attempted to add revision but was in an unauthorized role`);
@@ -92,9 +111,14 @@ Meteor.methods({
 		let allowedToEdit = false;
 		Meteor.user().canEditCommenters.forEach(commenterId => {
 			comment.commenters.forEach(commenter => {
-				if (commenterId === commenter._id) {
-					allowedToEdit = true;
-				}
+				commenters.forEach(_commenter => {
+					if (
+							commenter.slug === _commenter.slug
+						&& _commenter._id === commenterId
+					) {
+						allowedToEdit = true;
+					}
+				});
 			});
 		});
 

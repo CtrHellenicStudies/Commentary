@@ -321,7 +321,6 @@ const AddRevision = React.createClass({
 
 		// TODO: form validation
 		// TODO: Migrate to formsy components
-		// console.log(data);
 
 		// create html from textEditorState's content
 		const textHtml = convertToHTML({
@@ -331,7 +330,7 @@ const AddRevision = React.createClass({
 
 				// handle LINK
 				if (entity.type === 'LINK') {
-					return <a href={entity.data.link}>{originalText}</a>;
+					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
 				}
 
 				// handle keyword mentions
@@ -385,7 +384,7 @@ const AddRevision = React.createClass({
 		});
 	},
 
-	removeRevision() { // TODO: delete
+	removeRevision() {
 		const self = this;
 		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision, (err) => {
 			if (err) {

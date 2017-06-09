@@ -556,9 +556,10 @@ exports[`MasterLayout renders correctly 1`] = `
             target="_blank"
           >
             <img
+              alt="The Center for Hellenic Studies"
               className="site-logo"
               role="presentation"
-              src="/images/logo-tower.png"
+              src="/images/center_for_hellenic_studies_lighthouse.png"
             />
           </a>
         </div>

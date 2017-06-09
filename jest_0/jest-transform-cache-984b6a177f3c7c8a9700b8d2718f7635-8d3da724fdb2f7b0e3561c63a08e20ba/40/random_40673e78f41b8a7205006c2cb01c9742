@@ -1,2 +1,0 @@
-/* istanbul ignore next */"use strict";Object.defineProperty(exports, "__esModule", { value: true });var Random = /* istanbul ignore next */exports.Random = { // eslint-disable-line
-	id: function /* istanbul ignore next */id() {} };

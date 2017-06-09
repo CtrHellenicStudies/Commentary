@@ -21,7 +21,7 @@ exports[`CommentGroupMeta renders correctly 1`] = `
         className="comment-group-ref-below"
       >
         1
-        -2
+        - 2
       </h2>
     </div>
     <div

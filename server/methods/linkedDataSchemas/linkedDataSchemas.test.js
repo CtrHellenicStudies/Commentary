@@ -8,111 +8,28 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Keywords from '/imports/api/collections/keywords';
+import LinkedDataSchemas from '/imports/api/collections/linkedDataSchemas';
 
 // tested module:
-import { keywordsInsert, keywordsUpdate, keywordsDelete } from './keywords';
+import { linkedDataSchemasInsert, linkedDataSchemasUpdate, linkedDataSchemasRemove } from './linkedDataSchemas';
 
-function checkRole(roles, checkRoles) {
-	return roles.$elemMatch.$in.find(role => (checkRoles.indexOf(role) > -1));
-}
+describe('LinkedDataSchemas methods API', () => {
 
-function getKeywordIds(keywords) {
-	const keywordsIds = [];
-	keywords.forEach((keyword) => {
-		keywordsIds.push(keyword.testId);
-	});
-	return keywordsIds;
-}
-
-describe('Keywords methods API', () => {
-
-	describe('keywords.insert', () => {
+	describe('linkedDataSchemas.insert', () => {
 		[
 			{
 				token: faker.random.uuid(),
-				keywords: [{
-					testId: faker.random.uuid(),
-					title: faker.lorem.word(),
-					slug: faker.helpers.slugify(faker.lorem.word()),
-					tenantId: faker.random.uuid(),
-					type: faker.lorem.word(),
-				}, {
-					testId: faker.random.uuid(),
-					title: faker.lorem.word(),
-					slug: faker.helpers.slugify(faker.lorem.word()),
-					tenantId: faker.random.uuid(),
-					type: faker.lorem.word(),
-				}],
-			}
-		].forEach((testCase, index) => {
-
-			const { token, keywords } = testCase;
-
-			const hashedLoginToken = faker.random.uuid();
-
-			const keywordsIds = getKeywordIds(keywords);
-
-			const roles = ['editor', 'admin', 'commenter'];
-			describe(`Test Case ${index}`, () => {
-
-				beforeEach(() => {
-
-					stub(Meteor.users, 'findOne').callsFake((attr) => {
-						if (checkRole(attr.roles, roles)
-							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true; 
-						}
-						return false;
-					});
-
-					stub(Accounts, '_hashLoginToken').callsFake(() => hashedLoginToken);
-
-					Keywords.insert = () => {};
-					stub(Keywords, 'insert').callsFake(keyword => keyword.testId);
-
-				});
-
-				afterEach(() => {
-					Meteor.users.findOne.restore();
-					Keywords.insert.restore();
-					Accounts._hashLoginToken.restore();
-				});
-
-				test('user with correct privileges not found, should return error', () => {
-
-					Accounts._hashLoginToken.restore();
-					stub(Accounts, '_hashLoginToken').callsFake(() => null);
-
-					expect(keywordsInsert.bind(null, token, keywords)).toThrow();
-				});
-
-				test('successful keywords insert', () => {
-
-					expect(keywordsInsert(token, keywords)).toEqual(keywordsIds);
-				});
-			});
-		});
-	});
-
-	describe('keywords.update', () => {
-		[
-			{
-				token: faker.random.uuid(),
-				id: faker.random.uuid(),
-				keywordCandidate: {
-					testId: faker.random.uuid(),
-					title: faker.lorem.word(),
-					slug: faker.helpers.slugify(faker.lorem.word()),
-					tenantId: faker.random.uuid(),
-					type: faker.lorem.word(),
+				linkedDataSchema: {
+					collectionName: faker.lorem.word(),
 				},
 			}
 		].forEach((testCase, index) => {
 
-			const { token, id, keywordCandidate } = testCase;
+			const { token, linkedDataSchema } = testCase;
 
 			const hashedLoginToken = faker.random.uuid();
+
+			const linkedDataSchemasId = faker.random.uuid();
 
 			const roles = ['editor', 'admin', 'commenter'];
 			describe(`Test Case ${index}`, () => {
@@ -120,7 +37,7 @@ describe('Keywords methods API', () => {
 				beforeEach(() => {
 
 					stub(Meteor.users, 'findOne').callsFake((attr) => {
-						if (checkRole(attr.roles, roles)
+						if (attr.roles === 'admin'
 							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
 							return true; 
 						}
@@ -129,14 +46,14 @@ describe('Keywords methods API', () => {
 
 					stub(Accounts, '_hashLoginToken').callsFake(() => hashedLoginToken);
 
-					Keywords.update = () => {};
-					stub(Keywords, 'update').callsFake(() => 1);
+					LinkedDataSchemas.insert = () => {};
+					stub(LinkedDataSchemas, 'insert').callsFake(() => linkedDataSchemasId);
 
 				});
 
 				afterEach(() => {
 					Meteor.users.findOne.restore();
-					Keywords.update.restore();
+					LinkedDataSchemas.insert.restore();
 					Accounts._hashLoginToken.restore();
 				});
 
@@ -145,26 +62,29 @@ describe('Keywords methods API', () => {
 					Accounts._hashLoginToken.restore();
 					stub(Accounts, '_hashLoginToken').callsFake(() => null);
 
-					expect(keywordsUpdate.bind(null, token, id, keywordCandidate)).toThrow();
+					expect(linkedDataSchemasInsert.bind(null, token, linkedDataSchema)).toThrow();
 				});
 
-				test('successful keywords update', () => {
+				test('successful LinkedDataSchemas insert', () => {
 
-					expect(keywordsUpdate(token, id, keywordCandidate)).toEqual(id);
+					expect(linkedDataSchemasInsert(token, linkedDataSchema)).toEqual(linkedDataSchemasId);
 				});
 			});
 		});
 	});
 
-	describe('keywords.delete', () => {
+	describe('linkedDataSchemas.update', () => {
 		[
 			{
 				token: faker.random.uuid(),
-				keywordId: faker.random.uuid(),
+				_id: faker.random.uuid(),
+				linkedDataSchema: {
+					collectionName: faker.lorem.word(),
+				},
 			}
 		].forEach((testCase, index) => {
 
-			const { token, keywordId } = testCase;
+			const { token, linkedDataSchema } = testCase;
 
 			const hashedLoginToken = faker.random.uuid();
 
@@ -174,7 +94,7 @@ describe('Keywords methods API', () => {
 				beforeEach(() => {
 
 					stub(Meteor.users, 'findOne').callsFake((attr) => {
-						if (checkRole(attr.roles, roles)
+						if (attr.roles === 'admin'
 							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
 							return true; 
 						}
@@ -183,14 +103,14 @@ describe('Keywords methods API', () => {
 
 					stub(Accounts, '_hashLoginToken').callsFake(() => hashedLoginToken);
 
-					Keywords.remove = () => {};
-					stub(Keywords, 'remove').callsFake(() => 1);
+					LinkedDataSchemas.update = () => {};
+					stub(LinkedDataSchemas, 'update').callsFake(() => 1);
 
 				});
 
 				afterEach(() => {
 					Meteor.users.findOne.restore();
-					Keywords.remove.restore();
+					LinkedDataSchemas.update.restore();
 					Accounts._hashLoginToken.restore();
 				});
 
@@ -199,12 +119,66 @@ describe('Keywords methods API', () => {
 					Accounts._hashLoginToken.restore();
 					stub(Accounts, '_hashLoginToken').callsFake(() => null);
 
-					expect(keywordsDelete.bind(null, token, keywordId)).toThrow();
+					expect(linkedDataSchemasUpdate.bind(null, token, linkedDataSchema)).toThrow();
 				});
 
-				test('successful keywords remove', () => {
+				test('successful LinkedDataSchemas update', () => {
 
-					expect(keywordsDelete(token, keywordId)).toEqual(keywordId);
+					expect(linkedDataSchemasUpdate(token, linkedDataSchema)).toEqual(1);
+				});
+			});
+		});
+	});
+
+	describe('linkedDataSchemas.remove', () => {
+		[
+			{
+				token: faker.random.uuid(),
+				linkedDataSchemaId: faker.random.uuid(),
+			}
+		].forEach((testCase, index) => {
+
+			const { token, linkedDataSchemaId } = testCase;
+
+			const hashedLoginToken = faker.random.uuid();
+
+			const roles = ['editor', 'admin', 'commenter'];
+			describe(`Test Case ${index}`, () => {
+
+				beforeEach(() => {
+
+					stub(Meteor.users, 'findOne').callsFake((attr) => {
+						if (attr.roles === 'admin'
+							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
+							return true; 
+						}
+						return false;
+					});
+
+					stub(Accounts, '_hashLoginToken').callsFake(() => hashedLoginToken);
+
+					LinkedDataSchemas.remove = () => {};
+					stub(LinkedDataSchemas, 'remove').callsFake(() => 1);
+
+				});
+
+				afterEach(() => {
+					Meteor.users.findOne.restore();
+					LinkedDataSchemas.remove.restore();
+					Accounts._hashLoginToken.restore();
+				});
+
+				test('user with correct privileges not found, should return error', () => {
+
+					Accounts._hashLoginToken.restore();
+					stub(Accounts, '_hashLoginToken').callsFake(() => null);
+
+					expect(linkedDataSchemasRemove.bind(null, token, linkedDataSchemaId)).toThrow();
+				});
+
+				test('successful LinkedDataSchemas remove', () => {
+
+					expect(linkedDataSchemasRemove(token, linkedDataSchemaId)).toEqual(1);
 				});
 			});
 		});

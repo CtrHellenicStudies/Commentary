@@ -659,32 +659,44 @@ const AddCommentContainer = createContainer(() => {
 	const keywordsOptions = [];
 	const keywords = Keywords.find({ type: 'word' }).fetch();
 	keywords.forEach((keyword) => {
-		keywordsOptions.push({
-			value: keyword.title,
-			label: keyword.title,
-			slug: keyword.slug,
-		});
+		if (!keywordsOptions.some((val) => (
+			keyword.title === val.value
+		))) {
+			keywordsOptions.push({
+				value: keyword.title,
+				label: keyword.title,
+				slug: keyword.slug,
+			});
+		}
 	});
 
 	const keyideasOptions = [];
 	const keyideas = Keywords.find({ type: 'idea' }).fetch();
 	keyideas.forEach((keyidea) => {
-		keyideasOptions.push({
-			value: keyidea.title,
-			label: keyidea.title,
-			slug: keyidea.slug,
-		});
+		if (!keyideasOptions.some((val) => (
+			keyidea.title === val.value
+		))) {
+			keyideasOptions.push({
+				value: keyidea.title,
+				label: keyidea.title,
+				slug: keyidea.slug,
+			});
+		}
 	});
 
 	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
-		referenceWorkOptions.push({
-			value: referenceWork._id,
-			label: referenceWork.title,
-			slug: referenceWork.slug,
-		});
+		if (!referenceWorkOptions.some((val) => (
+			referenceWork.slug === val.slug
+		))) {
+			referenceWorkOptions.push({
+				value: referenceWork._id,
+				label: referenceWork.title,
+				slug: referenceWork.slug,
+			});
+		}
 	});
 
 	Meteor.subscribe('commenters', Session.get('tenantId'));
@@ -694,10 +706,14 @@ const AddCommentContainer = createContainer(() => {
 		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
 	}
 	commenters.forEach((commenter) => {
-		commentersOptions.push({
-			value: commenter._id,
-			label: commenter.name,
-		});
+		if (!commentersOptions.some((val) => (
+			commenter._id === val.value
+		))) {
+			commentersOptions.push({
+				value: commenter._id,
+				label: commenter.name,
+			});
+		}
 	});
 
 	return {

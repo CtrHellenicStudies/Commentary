@@ -216,10 +216,15 @@ const AddCommentFormContainer = createContainer(() => {
 	const keywordsOptions = [];
 	const keywords = Keywords.find().fetch();
 	keywords.forEach((word) => {
-		keywordsOptions.push({
-			value: word.slug,
-			label: word.title,
-		});
+		if (!keywords.some((val) => (
+			word.slug === val.value
+		))) {
+			console.log(word.slug);
+			keywordsOptions.push({
+				value: word.slug,
+				label: word.title,
+			});
+		}
 	});
 
 	// TODO: key ideas

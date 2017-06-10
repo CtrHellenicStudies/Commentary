@@ -85,7 +85,7 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	componentWillUpdate() {
-		handlePermissions();
+		// handlePermissions();
 	}
 
 	// line selection
@@ -299,46 +299,14 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	addTranslation(textValue, textRawValue) {
-		this.setState({
-			loading: true,
-		})
 
-		// get data for translation:
-		const work = this.getWork();
-		const subwork = this.getSubwork();
-		const lineLetter = this.getLineLetter();
-		const selectedLineTo = this.getSelectedLineTo();
-		const token = cookie.load('loginToken');
-
-		const revisionId = new Meteor.Collection.ObjectID();
-
-		// create translation object to be inserted:
 		const translation = {
-			work: {
-				title: work.title,
-				slug: work.slug,
-				order: work.order,
-			},
-			subwork: {
-				title: subwork.title,
-				n: subwork.n,
-			},
-			lineFrom: this.state.selectedLineFrom,
-			lineTo: selectedLineTo,
-			lineLetter,
-			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
-			revisions: [{
-				_id: revisionId.valueOf(),
-				text: textValue,
-				textRaw: textRawValue,
-				created: new Date(),
-			}],
-			tenantId: Session.get('tenantID'),
-			created: new Date(),
-		};
+			textValue: textValue,
+			textRawValue: textRawValue,
+		}
 
-		Meteor.call('translation.insert', token, translation, (error, translationId) => {
-			FlowRouter.go('/commentary', {}, {_id: translationId});
+		Meteor.call('translation.insert', translation  => {
+			FlowRouter.go('/commentary', {});
 		});
 	}
 

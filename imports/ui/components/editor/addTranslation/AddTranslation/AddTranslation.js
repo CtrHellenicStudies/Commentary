@@ -6,21 +6,19 @@ import { Editor, EditorState, convertToRaw } from 'draft-js';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
-
+import Toggle from 'material-ui/Toggle';
+import TextField from 'material-ui/TextField';
+import { WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns';
+import Select, { Creatable } from 'react-select';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import Works from '/imports/api/collections/works';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
 // Create toolbar plugin for editor
 
-export default class AddTranslation extends React.Component {
-
-	static propTypes: {
-		selectedLineFrom: PropTypes.number,
-		selectedLineTo: PropTypes.number,
-		submitForm: PropTypes.func.isRequired,
-		onTypeChange: PropTypes.func.isRequired,
-		isTest: PropTypes.bool,
-	}
+class AddTranslation extends React.Component {
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
@@ -28,8 +26,12 @@ export default class AddTranslation extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {editorState: EditorState.createEmpty()};
+		this.state = {
+			editorState: EditorState.createEmpty(),
+			inputLines: false,
+		};
 		this.onChange = (editorState) => this.setState({editorState});
+
 
 		// methods
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -91,7 +93,14 @@ export default class AddTranslation extends React.Component {
 	}
 
 	render() {
-		const { isTest } = this.props;
+		const { isTest, worksOptions } = this.props;
+
+		const toggleStyle = {
+			style: {
+				margin: '20px 0 0 0',
+				paddingLeft: 15,
+			},
+		};
 
 		if (isTest) {
 			return null;
@@ -123,6 +132,58 @@ export default class AddTranslation extends React.Component {
 								/>
 							</div>
 							<div className="comment-edit-action-button" />
+							{this.state.inputLines ?
+								<div style={{paddingLeft: 45}}>
+									<div>
+										<h5>Line From</h5>
+										<Creatable
+											name="works"
+											id="works"
+											required={true}
+											options={worksOptions}
+											placeholder="Work"
+										/>
+										<Creatable
+											name="subworks"
+											id="subworks"
+											required={true}
+											options={worksOptions}
+											placeholder="Subwork"
+										/>
+										<TextField
+											floatingLabelText="Line From"
+										/>
+									</div>
+									<div>
+										<h5>Line to</h5>
+										<Creatable
+											name="works"
+											id="works"
+											required={true}
+											options={worksOptions}
+											placeholder="Work"
+										/>
+										<Creatable
+											name="subworks"
+											id="subworks"
+											required={true}
+											options={worksOptions}
+											placeholder="Subwork"
+										/>
+										<TextField
+											floatingLabelText="Line to"
+										/>
+									</div>
+								</div>
+								: ''
+							}
+							<Toggle
+								label={this.state.inputLines ? 'Input Lines' : 'Select Lines'}
+								labelPosition="right"
+								style={toggleStyle.style}
+								toggled={this.state.inputLines}
+								onToggle={(e) => this.setState({inputLines: !this.state.inputLines})}
+							/>
 							<RaisedButton
 								type="submit"
 								label="Add translation"
@@ -141,5 +202,21 @@ AddTranslation.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
+const AddTranslationContainer = createContainer(() => {
+	Meteor.subscribe('works', Session.get('tenantId'));
+	const works = Works.find().fetch();
+	const worksOptions = [];
+	works.forEach((work) => {
+		worksOptions.push({
+			value: work._id,
+			label: work.title,
+			slug: work.slug,
+		});
+	});
+	return {
+		worksOptions
+	};
+}, AddTranslation);
 
+export default AddTranslationContainer
 

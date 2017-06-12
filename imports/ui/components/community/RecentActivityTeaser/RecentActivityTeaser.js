@@ -61,6 +61,10 @@ class RecentActivityTeaser extends React.Component {
 			// TODO: support multiple user annotations
 			user = users[0];
 
+			if (!user) {
+				return null;
+			}
+
 			if ('profile' in user && user.profile.name) {
 				username = user.profile.name;
 			} else if (user.username) {
@@ -81,7 +85,7 @@ class RecentActivityTeaser extends React.Component {
 				});
 			}
 
-			commentUrl = `https://chs.harvard.edu${comment.bookChapterUrl}`;
+			commentUrl = `http://chs-dev.orphe.us${comment.bookChapterUrl}?paragraph=${comment.paragraphN}`;
 		}
 
 		return (

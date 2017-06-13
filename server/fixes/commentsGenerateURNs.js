@@ -27,12 +27,4 @@ const commentsGenerateURNs = (regenerate = false) => {
 	});
 };
 
-const commentsGenerateURNs2 = (regenerate = false) => {
-	Comments.find().forEach((comment) => {
-		if (regenerate || !comment.urn) {
-			const success = Comments.update({_id: comment._id}, {$set: {urn: getURN(comment)}});
-		}
-	});
-};
-
 export default commentsGenerateURNs;

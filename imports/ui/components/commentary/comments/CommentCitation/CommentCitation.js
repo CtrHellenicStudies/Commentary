@@ -3,7 +3,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-
 import moment from 'moment';
 
 const getDateRevision = (revision) => {
@@ -41,7 +40,7 @@ class CommentCitation extends React.Component {
 
 	render() {
 
-		const { commentId, revisions } = this.props;
+		const { comment } = this.props;
 		const { openMenu, anchorEl } = this.state;
 
 		const styles = {
@@ -65,22 +64,22 @@ class CommentCitation extends React.Component {
 					onRequestClose={this.handleRequestClose.bind(this)}
 				>
 					<Menu>
-						{revisions.map((revision, i) => {
+						{comment && comment.revisions.map((revision, i) => {
 
 							const updated = getDateRevision(revision);
 
 							return (
 								<MenuItem
 									key={revision._id}
-									href={`/commentary/?_id=${commentId}&revision=${i}`}
+									href={`/commentary/?_id=${comment._id}&revision=${i}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
 									style={styles.menuItem}
 								/>
 							);
 						})}
 						<MenuItem
-							href={`/commentary/?_id=${commentId}`}
-							primaryText="Comment link"
+							href={`/commentary/?_id=${comment.urn}`}
+							primaryText={comment.urn}
 							style={styles.menuItem}
 						/>
 					</Menu>
@@ -90,13 +89,16 @@ class CommentCitation extends React.Component {
 	}
 }
 CommentCitation.propTypes = {
-	commentId: React.PropTypes.string.isRequired,
-	revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
+	comment: React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
-		created: React.PropTypes.instanceOf(Date),
-		updated: React.PropTypes.instanceOf(Date),
-		originalDate: React.PropTypes.instanceOf(Date),
-	})).isRequired,
+		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			created: React.PropTypes.instanceOf(Date),
+			updated: React.PropTypes.instanceOf(Date),
+			originalDate: React.PropTypes.instanceOf(Date),
+		})).isRequired,
+		urn: React.PropTypes.string.isRequired,
+	}),
 };
 
 export default CommentCitation;

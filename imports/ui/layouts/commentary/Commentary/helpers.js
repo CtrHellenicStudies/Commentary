@@ -1,8 +1,11 @@
+// api:
 import Commenters from '/imports/api/collections/commenters';
+import Comments from '/imports/api/collections/comments';
 
 /*
 	helpers
 */
+
 const createQueryFromFilters = (filters) => {
 	const query = {};
 	let values = [];
@@ -10,7 +13,8 @@ const createQueryFromFilters = (filters) => {
 		filters.forEach((filter) => {
 			switch (filter.key) {
 			case '_id':
-				query._id = filter.values[0];
+				// query._id = filter.values[0];
+				query.$or = [{_id: filter.values[0]}, {urn: filter.values[0]}];
 				break;
 			case 'textsearch':
 				query.$text = {

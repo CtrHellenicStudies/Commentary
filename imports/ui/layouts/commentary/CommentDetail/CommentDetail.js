@@ -284,6 +284,7 @@ class CommentDetail extends React.Component {
 					<CommentRevisionSelect
 						commentId={comment._id}
 						revisions={comment.revisions}
+						comment={comment}
 						selectedRevisionIndex={selectedRevisionIndex}
 						selectRevision={this.selectRevision}
 					/>

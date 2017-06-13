@@ -144,6 +144,16 @@ Translations.schema = new SimpleSchema({
 		type: Date,
 		optional: true,
 	},
+
+	textValue: {
+		type: Object,
+		optional: true
+	},
+
+	textRawValue: {
+		type: Object,
+		optional: true
+	},
 });
 
 Translations.attachSchema(Translations.schema);

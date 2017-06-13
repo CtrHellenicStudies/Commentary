@@ -3,7 +3,7 @@ import Translations from '/imports/api/collections/translations';
 
 Meteor.methods({
 	'translations.insert': (translation) => {
-		translationId = Translations.insert(translation);
-		return translationId;
+		console.log("hi this is the server speaking. everything looks good here so far capitan. youre cleared for lift off")
+		return Translations.insert(translation);
 	},
 });

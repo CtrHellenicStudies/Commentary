@@ -305,8 +305,13 @@ class AddTranslationLayout extends React.Component {
 			textRawValue: textRawValue,
 		}
 
-		Meteor.call('translation.insert', translation  => {
-			FlowRouter.go('/commentary', {});
+		Meteor.call('translations.insert', translation, (error)  => {
+			if (error) {
+				console.log("uh oh");
+				console.log(error);
+			} else {
+				console.log("it worked!")
+			}
 		});
 	}
 

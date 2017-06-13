@@ -50,6 +50,8 @@ class AddTranslation extends React.Component {
 		this.onLineToSubworkChange = this.onLineToSubworkChange.bind(this);
 	}
 
+
+
 	onLineFromWorkChange(lineFromWork) {
 		this.setState({
 			lineFromWork: lineFromWork
@@ -128,6 +130,18 @@ class AddTranslation extends React.Component {
 	render() {
 		const { isTest, worksOptions } = this.props;
 
+		const getSubworks = () => {
+			const  subworks = [];
+			this.state.lineFromWork.subworks.forEach((subwork) => {
+				subworks.push({
+					value: subwork.n,
+					label: subwork.title,
+					slug: subwork.slug,
+				})
+			})
+			return subworks
+		}
+
 		const toggleStyle = {
 			style: {
 				margin: '20px 0 0 0',
@@ -182,7 +196,7 @@ class AddTranslation extends React.Component {
 											name="subworks"
 											id="subworks"
 											required={true}
-											options={this.state.lineFromWork !== '' ? worksOptions[this.state.lineFromWork].subworks  : ''}
+											options={this.state.lineFromWork !== '' ? getSubworks() : ''}
 											placeholder="Subwork"
 											value={this.state.lineFromSubwork}
 											onChange={this.onLineFromSubworkChange}
@@ -197,7 +211,7 @@ class AddTranslation extends React.Component {
 											name="subworks"
 											id="subworks"
 											required={true}
-											options={worksOptions}
+											options={this.state.lineFromWork !== '' ? getSubworks() : ''}
 											placeholder="Subwork"
 											value={this.state.lineToSubwork}
 											onChange={this.onLineToSubworkChange}

@@ -9,7 +9,7 @@ import Formsy from 'formsy-react';
 import Toggle from 'material-ui/Toggle';
 import TextField from 'material-ui/TextField';
 import { WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns';
-import Select, { Creatable } from 'react-select';
+import { Creatable } from 'react-select';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import Works from '/imports/api/collections/works';
@@ -29,6 +29,12 @@ class AddTranslation extends React.Component {
 		this.state = {
 			editorState: EditorState.createEmpty(),
 			inputLines: false,
+			lineFromWork: '',
+			lineFromSubwork: '',
+			lineToWork: '',
+			lineToSubwork: '',
+			lineTo: '',
+			lineFrom: ''
 		};
 		this.onChange = (editorState) => this.setState({editorState});
 
@@ -39,6 +45,34 @@ class AddTranslation extends React.Component {
 		this.validateStateForSubmit = this.validateStateForSubmit.bind(this);
 		this._enableButton = this._enableButton.bind(this);
 		this._disableButton = this._disableButton.bind(this);
+		this.onLineFromWorkChange = this.onLineFromWorkChange.bind(this);
+		this.onLineFromSubworkChange = this.onLineFromSubworkChange.bind(this);
+		this.onLineToWorkChange = this.onLineToWorkChange.bind(this);
+		this.onLineToSubworkChange = this.onLineToSubworkChange.bind(this);
+	}
+
+	onLineFromWorkChange(lineFromWork) {
+		this.setState({
+			lineFromWork: lineFromWork
+		})
+	}
+
+	onLineFromSubworkChange(lineFromSubwork) {
+		this.setState({
+			lineFromSubwork: lineFromSubwork
+		})
+	}
+
+	onLineToWorkChange(lineToWork) {
+		this.setState({
+			lineToWork: lineToWork
+		})
+	}
+
+	onLineToSubworkChange(lineToSubwork) {
+		this.setState({
+			lineToSubwork: lineToSubwork
+		})
 	}
 
 	_enableButton() {
@@ -142,6 +176,8 @@ class AddTranslation extends React.Component {
 											required={true}
 											options={worksOptions}
 											placeholder="Work"
+											value={this.state.lineFromWork}
+											onChange={this.onLineFromWorkChange}
 										/>
 										<Creatable
 											name="subworks"
@@ -149,6 +185,8 @@ class AddTranslation extends React.Component {
 											required={true}
 											options={worksOptions}
 											placeholder="Subwork"
+											value={this.state.lineFromSubwork}
+											onChange={this.onLineFromSubworkChange}
 										/>
 										<TextField
 											floatingLabelText="Line From"
@@ -162,6 +200,8 @@ class AddTranslation extends React.Component {
 											required={true}
 											options={worksOptions}
 											placeholder="Work"
+											value={this.state.lineToWork}
+											onChange={this.onLineToWorkChange}
 										/>
 										<Creatable
 											name="subworks"
@@ -169,6 +209,8 @@ class AddTranslation extends React.Component {
 											required={true}
 											options={worksOptions}
 											placeholder="Subwork"
+											value={this.state.lineToSubwork}
+											onChange={this.onLineToSubworkChange}
 										/>
 										<TextField
 											floatingLabelText="Line to"

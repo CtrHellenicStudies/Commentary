@@ -31,7 +31,6 @@ class AddTranslation extends React.Component {
 			inputLines: false,
 			lineFromWork: '',
 			lineFromSubwork: '',
-			lineToWork: '',
 			lineToSubwork: '',
 			lineTo: '',
 			lineFrom: ''
@@ -183,7 +182,7 @@ class AddTranslation extends React.Component {
 											name="subworks"
 											id="subworks"
 											required={true}
-											options={worksOptions}
+											options={this.state.lineFromWork !== '' ? worksOptions[this.state.lineFromWork].subworks  : ''}
 											placeholder="Subwork"
 											value={this.state.lineFromSubwork}
 											onChange={this.onLineFromSubworkChange}
@@ -194,15 +193,6 @@ class AddTranslation extends React.Component {
 									</div>
 									<div>
 										<h5>Line to</h5>
-										<Creatable
-											name="works"
-											id="works"
-											required={true}
-											options={worksOptions}
-											placeholder="Work"
-											value={this.state.lineToWork}
-											onChange={this.onLineToWorkChange}
-										/>
 										<Creatable
 											name="subworks"
 											id="subworks"
@@ -253,6 +243,7 @@ const AddTranslationContainer = createContainer(() => {
 			value: work._id,
 			label: work.title,
 			slug: work.slug,
+			subworks: work.subworks
 		});
 	});
 	return {

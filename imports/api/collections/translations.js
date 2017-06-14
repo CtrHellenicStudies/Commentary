@@ -20,7 +20,27 @@ Translations.schema = new SimpleSchema({
 	},
 
 	commenters: {
-		type: Object,
+		type: [Object],
+		optional: true,
+	},
+
+	'commenters.$._id': {
+		type: String,
+		optional: true,
+	},
+
+	'commenters.$.name': {
+		type: String,
+		optional: true,
+	},
+
+	'commenters.$.slug': {
+		type: String,
+		optional: true,
+	},
+
+	'commenters.$.wordpressId': {
+		type: Number,
 		optional: true,
 	},
 
@@ -110,8 +130,8 @@ Translations.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	'revisions.$.text': {
-		type: String,
+	'revisions.text': {
+		type: [Object],
 		optional: true,
 	},
 

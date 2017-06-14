@@ -90,6 +90,7 @@ const getReferenceWorks = (formData) => {
 	return referenceWorks;
 };
 const getCommenter = (formData) => {
+	console.log(formData)
 	const commenter = Commenters.findOne({
 		_id: formData.commenterValue.value,
 	});

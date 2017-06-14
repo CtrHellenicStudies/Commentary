@@ -24,6 +24,10 @@ class AddTranslation extends React.Component {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
 
+	static defaultProps = {
+		commentersOptions: []
+	}
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -33,7 +37,8 @@ class AddTranslation extends React.Component {
 			lineFromSubwork: '',
 			lineToSubwork: '',
 			lineTo: '',
-			lineFrom: ''
+			lineFrom: '',
+			commenterValue: {value: "hey"},
 		};
 		this.onChange = (editorState) => this.setState({editorState});
 
@@ -48,9 +53,15 @@ class AddTranslation extends React.Component {
 		this.onLineFromSubworkChange = this.onLineFromSubworkChange.bind(this);
 		this.onLineToWorkChange = this.onLineToWorkChange.bind(this);
 		this.onLineToSubworkChange = this.onLineToSubworkChange.bind(this);
+		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
 	}
 
 
+	onCommenterValueChange(comenter) {
+		this.setState({
+			commenterValue: comenter,
+		});
+	}
 
 	onLineFromWorkChange(lineFromWork) {
 		this.setState({
@@ -128,7 +139,7 @@ class AddTranslation extends React.Component {
 	}
 
 	render() {
-		const { isTest, worksOptions } = this.props;
+		const { isTest, worksOptions, commentersOptions } = this.props;
 
 		const getSubworks = () => {
 			const  subworks = [];
@@ -165,7 +176,21 @@ class AddTranslation extends React.Component {
 							className="comment commentary-comment paper-shadow "
 							style={{ marginLeft: 0 }}
 						>
-							<div className="comment-upper" />
+							<div className="comment-upper">
+								{commentersOptions && commentersOptions.length ?
+									<Select
+										name="commenter"
+										id="commenter"
+										required={false}
+										options={commentersOptions}
+										value={this.state.commenterValue}
+										onChange={this.onCommenterValueChange}
+										placeholder="Commentator..."
+									/>
+									:
+									''
+								}
+							</div>
 							<div
 								className="comment-lower clearfix"
 								style={{ paddingTop: 20, paddingBottom: 20 }}
@@ -260,8 +285,22 @@ const AddTranslationContainer = createContainer(() => {
 			subworks: work.subworks
 		});
 	});
+
+	Meteor.subscribe('commenters', Session.get('tenantId'));
+	const commentersOptions = [];
+	let commenters = [];
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
+	}
+	commenters.forEach((commenter) => {
+		commentersOptions.push({
+			value: commenter._id,
+			label: commenter.name,
+		});
+	});
 	return {
-		worksOptions
+		worksOptions,
+		commentersOptions,
 	};
 }, AddTranslation);
 

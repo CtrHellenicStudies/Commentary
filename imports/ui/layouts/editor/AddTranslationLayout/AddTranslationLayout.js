@@ -6,6 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Commenters from '/imports/api/collections/commenters';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -25,6 +26,13 @@ const handlePermissions = () => {
 			FlowRouter.go('/')
 		}
 	}
+};
+const getCommenter = (formData) => {
+	console.log(formData);
+	const commenter = Commenters.findOne({
+		_id: formData.commenterValue.value,
+	});
+	return commenter;
 };
 
 const getFilterValues = (filters) => {
@@ -298,19 +306,56 @@ class AddTranslationLayout extends React.Component {
 		});
 	}
 
-	addTranslation(textValue, textRawValue) {
+	addTranslation(formData, textValue, textRawValue) {
+
+		this.setState({
+			loading: true,
+		});
+
+		// get data for translation
+		const work = this.getWork();
+		const subwork = this.getSubwork();
+		const lineLetter = this.getLineLetter();
+		const commenter = getCommenter(formData);
+		const selectedLineTo = this.getSelectedLineTo();
+		const token = cookie.load('loginToken');
+		const revisionId = new Meteor.Collection.ObjectID();
 
 		const translation = {
-			textValue: textValue,
-			textRawValue: textRawValue,
+			work: {
+				title: work.title,
+				slug: work.slug,
+				order: work.order,
+			},
+			subwork: {
+				title: subwork.title,
+				n: subwork.n,
+			},
+			lineFrom: this.state.selectedLineFrom,
+			lineTo: selectedLineTo,
+			lineLetter,
+			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
+			revisions: [{
+				_id: revisionId.valueOf(),
+				text: textValue,
+				textRaw: textRawValue,
+			}],
+			commenters: commenter ? [{
+				_id: commenter._id,
+				name: commenter.name,
+				slug: commenter.slug,
+			}] : [{}],
+			tenantId: Session.get('tenantId'),
+			created: new Date(),
 		}
 
-		Meteor.call('translations.insert', translation, (error)  => {
+		Meteor.call('translations.insert', token, translation, (error)  => {
 			if (error) {
 				console.log("uh oh");
 				console.log(error);
 			} else {
-				console.log("it worked!")
+				console.log("it worked!");
+				FlowRouter.go('/commentary', {});
 			}
 		});
 	}

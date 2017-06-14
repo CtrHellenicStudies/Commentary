@@ -4,11 +4,6 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 const Translations = new Meteor.Collection('translations');
 
 Translations.schema = new SimpleSchema({
-	originalDate: {
-		type: Date,
-		optional: true,
-	},
-
 	status: {
 		type: String,
 		optional: true,
@@ -49,10 +44,6 @@ Translations.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	users: {
-		type: [String],
-		optional: true,
-	},
 
 	work: {
 		type: Object,
@@ -154,6 +145,72 @@ Translations.schema = new SimpleSchema({
 		type: Object,
 		optional: true
 	},
+
+	revisions: {
+		type: [Object],
+		optional: true,
+	},
+
+	'revisions.$._id': {
+		type: String,
+		optional: true,
+	},
+
+	'revisions.$.title': {
+		type: String,
+		optional: true,
+	},
+
+	'revisions.$.text': {
+		type: String,
+		optional: true,
+	},
+
+	'revisions.$.tenantId': {
+		type: String,
+		optional: true,
+	},
+
+	'revisions.$.originalDate': {
+		type: Date,
+		optional: true,
+	},
+
+	// 'revisions.$.friendlySlugs.slug.base': {
+	// 	type: String,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.friendlySlugs.slug.index': {
+	// 	type: Number,
+	// 	optional: Number,
+	// },
+
+	'revisions.$.slug': {
+		type: String,
+		optional: true,
+	},
+
+	'revisions.$.created': {
+		type: Date,
+		optional: true,
+	},
+
+	'revisions.$.createdBy': {
+		type: String,
+		optional: true,
+	},
+
+	'revisions.$.updated': {
+		type: Date,
+		optional: true,
+	},
+
+	'revisions.$.updatedBy': {
+		type: String,
+		optional: true,
+	},
+
 });
 
 Translations.attachSchema(Translations.schema);

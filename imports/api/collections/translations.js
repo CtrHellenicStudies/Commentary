@@ -20,68 +20,17 @@ Translations.schema = new SimpleSchema({
 	},
 
 	commenters: {
-		type: [Object],
+		type: Object,
 		optional: true,
 	},
-
-	'commenters.$._id': {
-		type: String,
-		optional: true,
-	},
-
-	'commenters.$.name': {
-		type: String,
-		optional: true,
-	},
-
-	'commenters.$.slug': {
-		type: String,
-		optional: true,
-	},
-
-	'commenters.$.wordpressId': {
-		type: Number,
-		optional: true,
-	},
-
 
 	work: {
 		type: Object,
 		optional: true,
 	},
 
-	'work.title': {
-		type: String,
-		optional: true,
-	},
-
-	'work.slug': {
-		type: String,
-		optional: true,
-	},
-
-	'work.order': {
-		type: Number,
-		optional: true,
-	},
-
 	subwork: {
 		type: Object,
-		optional: true,
-	},
-
-	'subwork.title': {
-		type: String,
-		optional: true,
-	},
-
-	'subwork.slug': {
-		type: String,
-		optional: true,
-	},
-
-	'subwork.n': {
-		type: Number,
 		optional: true,
 	},
 
@@ -148,66 +97,6 @@ Translations.schema = new SimpleSchema({
 
 	revisions: {
 		type: [Object],
-		optional: true,
-	},
-
-	'revisions.$._id': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.title': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.text': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.tenantId': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.originalDate': {
-		type: Date,
-		optional: true,
-	},
-
-	// 'revisions.$.friendlySlugs.slug.base': {
-	// 	type: String,
-	// 	optional: true,
-	// },
-	//
-	// 'revisions.$.friendlySlugs.slug.index': {
-	// 	type: Number,
-	// 	optional: Number,
-	// },
-
-	'revisions.$.slug': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.created': {
-		type: Date,
-		optional: true,
-	},
-
-	'revisions.$.createdBy': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.updated': {
-		type: Date,
-		optional: true,
-	},
-
-	'revisions.$.updatedBy': {
-		type: String,
 		optional: true,
 	},
 

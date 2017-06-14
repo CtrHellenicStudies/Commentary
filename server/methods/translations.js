@@ -4,7 +4,7 @@ import Translations from '/imports/api/collections/translations';
 Meteor.methods({
 	'translations.insert': (token, translation) => {
 		console.log("all clear for take off");
-		console.log(translation)
+		console.log(translation);
 		check(token, String);
 		check(translation, Object);
 		const roles = ['editor', 'admin', 'commenter'];
@@ -19,12 +19,12 @@ Meteor.methods({
 		) {
 			throw new Meteor.Error('translation-insert', 'not-authorized');
 		}
-		let translationId;
-		try {
-			translationId = Translations.insert(translation);
-		} catch (err) {
-			throw new Meteor.Error('translation-insert')
-		}
-		return translationId;
+		// let translationId;
+		// try {
+		// 	translationId = Translations.insert(translation);
+		// } catch (err) {
+		// 	throw new Meteor.Error('translation-insert')
+		// }
+		return Translations.insert(translation);
 	},
 });

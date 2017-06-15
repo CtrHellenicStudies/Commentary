@@ -390,6 +390,7 @@ class AddTranslationLayout extends React.Component {
 							<main>
 								<div className="commentary-comments">
 									<div className="comment-group">
+										{!toggleInputLinesIsToggled ?
 										<CommentLemmaSelect
 											ref={(component) => {
 												this.commentLemmaSelect = component;
@@ -398,7 +399,7 @@ class AddTranslationLayout extends React.Component {
 											selectedLineTo={selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
-										/>
+										/> : ''}
 
 										<AddTranslation
 											selectedLineFrom={selectedLineFrom}
@@ -408,7 +409,7 @@ class AddTranslationLayout extends React.Component {
 											toggleInputLinesIsToggled={toggleInputLinesIsToggled}
 											toggleInputLinesLabel={toggleInputLinesIsToggled ? 'Select Lines' : 'Input Lines'}
 										/>
-
+										{!toggleInputLinesIsToggled ?
 										<ContextPanel
 											open={contextReaderOpen}
 											workSlug={work ? work.slug : 'iliad'}
@@ -418,14 +419,14 @@ class AddTranslationLayout extends React.Component {
 											selectedLineTo={selectedLineTo}
 											updateSelectedLines={this.updateSelectedLines}
 											editor
-										/>
+										/> : ''}
 									</div>
 								</div>
-
+								{!toggleInputLinesIsToggled ?
 								<FilterWidget
 									filters={filters}
 									toggleSearchTerm={this.toggleSearchTerm}
-								/>
+								/> : ''}
 							</main>
 							: ''}
 					</div>

@@ -27,6 +27,7 @@ class AddTranslation extends React.Component {
 	}
 
 	static defaultProps = {
+
 		commentersOptions: []
 	}
 
@@ -34,7 +35,6 @@ class AddTranslation extends React.Component {
 		super(props);
 		this.state = {
 			editorState: EditorState.createEmpty(),
-			inputLines: false,
 			lineFromWork: '',
 			lineFromSubwork: '',
 			lineToSubwork: '',
@@ -56,8 +56,12 @@ class AddTranslation extends React.Component {
 		this.onLineToWorkChange = this.onLineToWorkChange.bind(this);
 		this.onLineToSubworkChange = this.onLineToSubworkChange.bind(this);
 		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
+		this.toggleInputLines = this.toggleInputLines.bind(this);
 	}
 
+	toggleInputLines() {
+		this.props.onToggleInputLinesChange()
+	}
 
 	onCommenterValueChange(comenter) {
 		this.setState({
@@ -141,7 +145,7 @@ class AddTranslation extends React.Component {
 	}
 
 	render() {
-		const { isTest, worksOptions, commentersOptions } = this.props;
+		const { isTest, worksOptions, commentersOptions, toggleInputLines, toggleInputLinesLabel, toggleInputLinesIsToggled } = this.props;
 
 		const getSubworks = () => {
 			const  subworks = [];
@@ -206,7 +210,7 @@ class AddTranslation extends React.Component {
 								/>
 							</div>
 							<div className="comment-edit-action-button" />
-							{this.state.inputLines ?
+							{toggleInputLinesIsToggled ?
 								<div style={{paddingLeft: 45}}>
 									<div>
 										<h5>Line From</h5>
@@ -251,11 +255,11 @@ class AddTranslation extends React.Component {
 								: ''
 							}
 							<Toggle
-								label={this.state.inputLines ? 'Input Lines' : 'Select Lines'}
+								label={toggleInputLinesLabel}
 								labelPosition="right"
 								style={toggleStyle.style}
-								toggled={this.state.inputLines}
-								onToggle={(e) => this.setState({inputLines: !this.state.inputLines})}
+								toggled={toggleInputLinesIsToggled}
+								onToggle={toggleInputLines}
 							/>
 							<RaisedButton
 								type="submit"

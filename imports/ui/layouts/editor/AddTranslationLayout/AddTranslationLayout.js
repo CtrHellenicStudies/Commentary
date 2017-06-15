@@ -74,7 +74,8 @@ class AddTranslationLayout extends React.Component {
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
-			selectedWork: ''
+			selectedWork: '',
+			toggleInputLinesIsToggled: false,
 		};
 
 		// methods:
@@ -90,11 +91,16 @@ class AddTranslationLayout extends React.Component {
 		this.openContextReader = this.openContextReader.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
 		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.toggleInputLines = this.toggleInputLines.bind(this);
 	}
 
-	componentWillUpdate() {
-		// handlePermissions();
+	toggleInputLines() {
+		this.setState({
+			toggleInputLinesIsToggled: !this.state.toggleInputLinesIsToggled,
+		});
 	}
+
+
 
 	// line selection
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
@@ -363,7 +369,7 @@ class AddTranslationLayout extends React.Component {
 	render() {
 
 		const { isTest } = this.props;
-		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
+		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen, toggleInputLinesIsToggled } = this.state;
 
 		const { work, subwork, lineFrom } = getFilterValues(filters);
 
@@ -398,6 +404,9 @@ class AddTranslationLayout extends React.Component {
 											selectedLineFrom={selectedLineFrom}
 											selectedLineTo={selectedLineTo}
 											submitForm={this.addTranslation}
+											toggleInputLines={this.toggleInputLines}
+											toggleInputLinesIsToggled={toggleInputLinesIsToggled}
+											toggleInputLinesLabel={toggleInputLinesIsToggled ? 'Select Lines' : 'Input Lines'}
 										/>
 
 										<ContextPanel

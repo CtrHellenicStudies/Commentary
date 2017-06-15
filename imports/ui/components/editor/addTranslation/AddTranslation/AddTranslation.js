@@ -12,11 +12,13 @@ import { WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/S
 import { Creatable } from 'react-select';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+
+// api
 import Works from '/imports/api/collections/works';
+
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
-// Create toolbar plugin for editor
 
 class AddTranslation extends React.Component {
 

@@ -70,6 +70,9 @@ class AddTranslationLayout extends React.Component {
 
 		this.state = {
 			filters: [],
+			work: '',
+			subwork1: '',
+			subwork2: '',
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
 			contextReaderOpen: true,

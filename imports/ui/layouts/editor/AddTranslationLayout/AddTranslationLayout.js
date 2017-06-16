@@ -319,12 +319,15 @@ class AddTranslationLayout extends React.Component {
 		const subworkFrom = this.getSubwork();
 		const subworkTo = this.getSubwork();
 		const commenter = Meteor.user();
-		const selectedLineTo = this.getSelectedLineTo();
 		const token = cookie.load('loginToken');
 		const revisionId = new Meteor.Collection.ObjectID();
 		const lineFrom = this.state.selectedLineFrom;
-		const lineTo = selectedLineTo;
+		const lineTo = this.getSelectedLineTo();
 		const slug = slugify(`${work.title} ${subworkFrom.n} ${lineFrom} ${subworkTo.n} ${lineTo} ${commenter.username}`);
+		const text = textValue["blocks"][0]["text"];
+		const tenantId = Session.get('tenantId');
+		const nLines = (lineTo - lineFrom) + 1;
+		const date = new Date();
 
 
 		console.log('slug: ', slug);
@@ -348,12 +351,12 @@ class AddTranslationLayout extends React.Component {
 			},
 			lineFrom: lineFrom,
 			lineTo: lineTo,
-			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
+			nLines: nLines,
 			revisions: [{
 				_id: revisionId.valueOf(),
-				text: textValue["blocks"][0]["text"],
-				tenantId: Session.get('tenantId'),
-				originalDate: new Date(),
+				text: text,
+				tenantId: tenantId,
+				originalDate: date,
 				slug: slug
 			}],
 			commenters: commenter ? [{
@@ -361,9 +364,9 @@ class AddTranslationLayout extends React.Component {
 				name: commenter.username,
 				slug: commenter.slug,
 			}] : [{}],
-			tenantId: Session.get('tenantId'),
-			created: new Date(),
-		}
+			tenantId: tenantId,
+			created: date,
+		};
 
 		Meteor.call('translations.insert', token, translation, (error)  => {
 			if (error) {

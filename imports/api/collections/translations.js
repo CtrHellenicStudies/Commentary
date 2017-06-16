@@ -131,7 +131,7 @@ Translations.schema = new SimpleSchema({
 	},
 
 	'revisions.text': {
-		type: [Object],
+		type: String,
 		optional: true,
 	},
 

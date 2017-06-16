@@ -28,7 +28,6 @@ const handlePermissions = () => {
 	}
 };
 const getCommenter = (formData) => {
-	console.log(formData);
 	const commenter = Commenters.findOne({
 		_id: formData.commenterValue.value,
 	});
@@ -346,8 +345,7 @@ class AddTranslationLayout extends React.Component {
 			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
 			revisions: [{
 				_id: revisionId.valueOf(),
-				text: textValue,
-				textRaw: textRawValue,
+				text: textValue["blocks"][0]["text"],
 			}],
 			commenters: commenter ? [{
 				_id: commenter._id,

@@ -190,7 +190,7 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	getSubwork() {
-		if (this.state.toggleInputLinesIsToggled) {
+		if (!this.state.toggleInputLinesIsToggled) {
 			let subwork = null;
 			this.state.filters.forEach((filter) => {
 				if (filter.key === 'subworks') {

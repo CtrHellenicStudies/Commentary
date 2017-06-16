@@ -7,6 +7,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Commenters from '/imports/api/collections/commenters';
+import slugify from 'slugify';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -87,7 +88,6 @@ class AddTranslationLayout extends React.Component {
 		this.addTranslation = this.addTranslation.bind(this);
 		this.getWork = this.getWork.bind(this);
 		this.getSubwork = this.getSubwork.bind(this);
-		this.getLineLetter = this.getLineLetter.bind(this);
 		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
 		this.closeContextReader = this.closeContextReader.bind(this);
 		this.openContextReader = this.openContextReader.bind(this);
@@ -190,29 +190,23 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	getSubwork() {
-		let subwork = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'subworks') {
-				subwork = filter.values[0];
+		if (this.state.toggleInputLinesIsToggled) {
+			let subwork = null;
+			this.state.filters.forEach((filter) => {
+				if (filter.key === 'subworks') {
+					subwork = filter.values[0];
+				}
+			});
+			if (!subwork) {
+				subwork = {
+					title: '1',
+					n: 1,
+				};
 			}
-		});
-		if (!subwork) {
-			subwork = {
-				title: '1',
-				n: 1,
-			};
+			return subwork;
+		} else {
+			return {title: "test", n: 1}
 		}
-		return subwork;
-	}
-
-	getLineLetter() {
-		const { selectedLineTo, selectedLineFrom } = this.state;
-
-		let lineLetter = '';
-		if (selectedLineTo === 0 && selectedLineFrom > 0) {
-			lineLetter = this.commentLemmaSelect.state ? this.commentLemmaSelect.state.lineLetterVale: null;
-		}
-		return lineLetter;
 	}
 
 	getSelectedLineTo() {
@@ -314,7 +308,7 @@ class AddTranslationLayout extends React.Component {
 		});
 	}
 
-	addTranslation(formData, textValue, textRawValue) {
+	addTranslation(formData, textValue) {
 
 		this.setState({
 			loading: true,
@@ -322,12 +316,19 @@ class AddTranslationLayout extends React.Component {
 
 		// get data for translation
 		const work = this.getWork();
-		const subwork = this.getSubwork();
-		const lineLetter = this.getLineLetter();
-		const commenter = getCommenter(formData);
+		const subworkFrom = this.getSubwork();
+		const subworkTo = this.getSubwork();
+		const commenter = Meteor.user();
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = cookie.load('loginToken');
 		const revisionId = new Meteor.Collection.ObjectID();
+		const lineFrom = this.state.selectedLineFrom;
+		const lineTo = selectedLineTo;
+		const slug = slugify(`${work.title} ${subworkFrom.n} ${lineFrom} ${subworkTo.n} ${lineTo} ${commenter.username}`);
+
+
+		console.log('slug: ', slug);
+		console.log(commenter);
 
 		const translation = {
 			work: {
@@ -335,21 +336,29 @@ class AddTranslationLayout extends React.Component {
 				slug: work.slug,
 				order: work.order,
 			},
-			subwork: {
-				title: subwork.title,
-				n: subwork.n,
+			subworkFrom: {
+				title: subworkFrom.title,
+				slug: subworkFrom.slug,
+				n: subworkFrom.n,
 			},
-			lineFrom: this.state.selectedLineFrom,
-			lineTo: selectedLineTo,
-			lineLetter,
+			subworkTo: {
+				title: subworkTo.title,
+				slug: subworkTo.slug,
+				n: subworkTo.n,
+			},
+			lineFrom: lineFrom,
+			lineTo: lineTo,
 			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
 			revisions: [{
 				_id: revisionId.valueOf(),
 				text: textValue["blocks"][0]["text"],
+				tenantId: Session.get('tenantId'),
+				originalDate: new Date(),
+				slug: slug
 			}],
 			commenters: commenter ? [{
 				_id: commenter._id,
-				name: commenter.name,
+				name: commenter.username,
 				slug: commenter.slug,
 			}] : [{}],
 			tenantId: Session.get('tenantId'),

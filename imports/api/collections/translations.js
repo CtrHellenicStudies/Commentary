@@ -49,8 +49,58 @@ Translations.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	subwork: {
+	'work.title': {
+		type: String,
+		optional: true,
+	},
+
+	'work.slug': {
+		type: String,
+		optional: true,
+	},
+
+	'work.order': {
+		type: Number,
+		optional: true,
+	},
+
+	subworkFrom: {
 		type: Object,
+		optional: true,
+	},
+
+	'subworkFrom.title': {
+		type: String,
+		optional: true,
+	},
+
+	'subworkFrom.slug': {
+		type: String,
+		optional: true,
+	},
+
+	'subworkFrom.n': {
+		type: Number,
+		optional: true,
+	},
+
+	subworkTo: {
+		type: Object,
+		optional: true,
+	},
+
+	'subworkTo.title': {
+		type: String,
+		optional: true,
+	},
+
+	'subworkTo.slug': {
+		type: String,
+		optional: true,
+	},
+
+	'subworkTo.n': {
+		type: Number,
 		optional: true,
 	},
 
@@ -60,21 +110,6 @@ Translations.schema = new SimpleSchema({
 	},
 
 	lineTo: {
-		type: Number,
-		optional: true,
-	},
-
-	lineLetter: {
-		type: String,
-		optional: true,
-	},
-
-	bookChapterUrl: {
-		type: String,
-		optional: true,
-	},
-
-	paragraphN: {
 		type: Number,
 		optional: true,
 	},
@@ -105,16 +140,6 @@ Translations.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	textValue: {
-		type: Object,
-		optional: true
-	},
-
-	textRawValue: {
-		type: Object,
-		optional: true
-	},
-
 	revisions: {
 		type: [Object],
 		optional: true,
@@ -125,10 +150,6 @@ Translations.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	'revisions.$.title': {
-		type: String,
-		optional: true,
-	},
 
 	'revisions.text': {
 		type: String,
@@ -143,16 +164,6 @@ Translations.schema = new SimpleSchema({
 	'revisions.$.originalDate': {
 		type: Date,
 		optional: true,
-	},
-
-	'revisions.friendlySlugs.slug.base': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.friendlySlugs.slug.index': {
-		type: Number,
-		optional: Number,
 	},
 
 	'revisions.$.slug': {

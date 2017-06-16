@@ -40,9 +40,9 @@ class AddTranslation extends React.Component {
 			lineToSubwork: '',
 			lineTo: '',
 			lineFrom: '',
-			commenterValue: {value: "hey"},
+			commenterValue: {value: "test"},
 		};
-		this.onChange = (editorState) => this.setState({editorState});
+		// this.onChange = (editorState) => this.setState({editorState});
 
 
 		// methods
@@ -57,6 +57,13 @@ class AddTranslation extends React.Component {
 		this.onLineToSubworkChange = this.onLineToSubworkChange.bind(this);
 		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
 		this.toggleInputLines = this.toggleInputLines.bind(this);
+		this.onEditorChange = this.onEditorChange.bind(this);
+	}
+
+	onEditorChange(editorState) {
+		this.setState({
+			editorState: editorState
+		})
 	}
 
 	toggleInputLines() {
@@ -183,19 +190,6 @@ class AddTranslation extends React.Component {
 							style={{ marginLeft: 0 }}
 						>
 							<div className="comment-upper">
-								{commentersOptions && commentersOptions.length ?
-									<Select
-										name="commenter"
-										id="commenter"
-										required={false}
-										options={commentersOptions}
-										value={this.state.commenterValue}
-										onChange={this.onCommenterValueChange}
-										placeholder="Commentator..."
-									/>
-									:
-									''
-								}
 							</div>
 							<div
 								className="comment-lower clearfix"
@@ -203,7 +197,7 @@ class AddTranslation extends React.Component {
 							>
 								<Editor
 									editorState={this.state.editorState}
-									onChange={this.onChange}
+									onChange={this.onEditorChange}
 									placeholder="Translation . . ."
 									spellCheck
 									stripPastedStyles

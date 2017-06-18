@@ -151,8 +151,8 @@ Translations.schema = new SimpleSchema({
 	},
 
 
-	'revisions.text': {
-		type: String,
+	'revisions.$.text': {
+		type: Object,
 		optional: true,
 	},
 

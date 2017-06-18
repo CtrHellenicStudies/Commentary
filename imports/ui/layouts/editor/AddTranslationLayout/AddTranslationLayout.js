@@ -8,6 +8,7 @@ import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Commenters from '/imports/api/collections/commenters';
 import slugify from 'slugify';
+import { convertToRaw } from 'draft-js';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -94,12 +95,24 @@ class AddTranslationLayout extends React.Component {
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
 		this.handleChangeLineN = this.handleChangeLineN.bind(this);
 		this.toggleInputLines = this.toggleInputLines.bind(this);
+		this.getText = this.getText.bind(this);
 	}
 
 	toggleInputLines() {
 		this.setState({
 			toggleInputLinesIsToggled: !this.state.toggleInputLinesIsToggled,
 		});
+	}
+
+	getText(textValue) {
+		console.log('textValue: ', textValue);
+		const text = [];
+		textValue["blocks"].forEach(textObject => {
+			text.push({
+				line: textValue["blocks"].findIndex(textObject),
+				text: textObject["text"]
+			})
+		})
 	}
 
 
@@ -324,14 +337,13 @@ class AddTranslationLayout extends React.Component {
 		const lineFrom = this.state.selectedLineFrom;
 		const lineTo = this.getSelectedLineTo();
 		const slug = slugify(`${work.title} ${subworkFrom.n} ${lineFrom} ${subworkTo.n} ${lineTo} ${commenter.username}`);
-		const text = textValue["blocks"][0]["text"];
 		const tenantId = Session.get('tenantId');
 		const nLines = (lineTo - lineFrom) + 1;
 		const date = new Date();
+		const text = textValue;
 
 
-		console.log('slug: ', slug);
-		console.log(commenter);
+		console.log('editor stuff: ', text);
 
 		const translation = {
 			work: {
@@ -374,6 +386,7 @@ class AddTranslationLayout extends React.Component {
 				console.log(error);
 			} else {
 				console.log("it worked!");
+				console.log("here's the translation: ", translation);
 				FlowRouter.go('/commentary', {});
 			}
 		});

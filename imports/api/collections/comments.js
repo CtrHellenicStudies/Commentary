@@ -244,6 +244,11 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'keywords.$.isMentionedInLemma': {
+		type: Boolean,
+		optional: true,
+	},
+
 	revisions: {
 		type: [Object],
 		optional: true,

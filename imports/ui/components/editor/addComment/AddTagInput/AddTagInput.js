@@ -24,6 +24,8 @@ class AddTagInput extends React.Component {
 		tags: React.PropTypes.arrayOf(React.PropTypes.shape({})),
 
 		addTagBlock: React.PropTypes.func.isRequired,
+		removeTagBlock: React.PropTypes.func.isRequired,
+		moveTagBlock: React.PropTypes.func.isRequired,
 		onTagValueChange: React.PropTypes.func.isRequired,
 		onIsMentionedInLemmaChange: React.PropTypes.func.isRequired,
 	};
@@ -33,19 +35,8 @@ class AddTagInput extends React.Component {
 		tags: [],
 	};
 
-	constructor(props) {
-		super(props);
-
-		// methods:
-		this.moveTagBlock = this.moveTagBlock.bind(this);
-		this.removeTagBlock = this.removeTagBlock.bind(this);
-	}
-
-	moveTagBlock() {}
-	removeTagBlock() {}
-
 	render () {
-		const { tagsValue, tags, addTagBlock, onTagValueChange, onIsMentionedInLemmaChange } = this.props;
+		const { tagsValue, tags, addTagBlock, removeTagBlock, moveTagBlock, onTagValueChange, onIsMentionedInLemmaChange } = this.props;
 
 		return (
 			<div className="comment-reference comment-tags">
@@ -80,14 +71,14 @@ class AddTagInput extends React.Component {
 									key={tag.tagId}
 									index={i}
 									className="form-subitem form-subitem--referenceWork"
-									moveListGroupItem={this.moveTagBlock}
+									moveListGroupItem={moveTagBlock}
 								>
 									<div
 										className="reference-work-item"
 									>
 										<div
 											className="remove-reference-work-item"
-											onClick={this.removeTagBlock}
+											onClick={removeTagBlock.bind(this, i)}
 										>
 											<IconButton
 												iconClassName="mdi mdi-close"

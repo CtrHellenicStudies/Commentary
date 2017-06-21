@@ -350,8 +350,8 @@ const AddRevision = React.createClass({
 	},
 
 	moveReferenceWorkBlock(dragIndex, hoverIndex) {
-		const { introBlocks } = this.state;
-		const dragIntroBlock = introBlocks[dragIndex];
+		const { referenceWorks } = this.state;
+		const dragIntroBlock = referenceWorks[dragIndex];
 
 		this.setState(update(this.state, {
 			referenceWorks: {
@@ -372,6 +372,26 @@ const AddRevision = React.createClass({
 		this.setState({
 			tagsValue: this.state.tagsValue,
 		});
+	},
+
+	removeTagBlock(i) {
+		this.setState({
+			tagsValue: update(this.state.tagsValue, { $splice: [[i, 1]] }),
+		});
+	},
+
+	moveTagBlock(dragIndex, hoverIndex) {
+		const { tagsValue } = this.state;
+		const dragIntroBlock = tagsValue[dragIndex];
+
+		this.setState(update(this.state, {
+			tagsValue: {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, dragIntroBlock],
+				],
+			},
+		}));
 	},
 
 	onTagValueChange(tag) {
@@ -467,6 +487,8 @@ const AddRevision = React.createClass({
 									tagsValue={tagsValue}
 									tags={tags}
 									addTagBlock={this.addTagBlock}
+									removeTagBlock={this.removeTagBlock}
+									moveTagBlock={this.moveTagBlock}
 									onTagValueChange={this.onTagValueChange}
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
 								/>

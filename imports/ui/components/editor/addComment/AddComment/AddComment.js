@@ -176,6 +176,8 @@ class AddComment extends React.Component {
 		this.removeReferenceWorkBlock = this.removeReferenceWorkBlock.bind(this);
 		this.moveReferenceWorkBlock = this.moveReferenceWorkBlock.bind(this);
 		this.addTagBlock = this.addTagBlock.bind(this);
+		this.removeTagBlock = this.removeTagBlock.bind(this);
+		this.moveTagBlock = this.moveTagBlock.bind(this);
 		this.onTagValueChange = this.onTagValueChange.bind(this);
 		this.onIsMentionedInLemmaChange = this.onIsMentionedInLemmaChange.bind(this);
 	}
@@ -362,8 +364,8 @@ class AddComment extends React.Component {
 	}
 
 	moveReferenceWorkBlock(dragIndex, hoverIndex) {
-		const { introBlocks } = this.state;
-		const dragIntroBlock = introBlocks[dragIndex];
+		const { referenceWorks } = this.state;
+		const dragIntroBlock = referenceWorks[dragIndex];
 
 		this.setState(update(this.state, {
 			referenceWorks: {
@@ -384,6 +386,26 @@ class AddComment extends React.Component {
 		this.setState({
 			tagsValue: this.state.tagsValue,
 		});
+	}
+
+	removeTagBlock(i) {
+		this.setState({
+			tagsValue: update(this.state.tagsValue, { $splice: [[i, 1]] }),
+		});
+	}
+
+	moveTagBlock(dragIndex, hoverIndex) {
+		const { tagsValue } = this.state;
+		const dragIntroBlock = tagsValue[dragIndex];
+
+		this.setState(update(this.state, {
+			tagsValue: {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, dragIntroBlock],
+				],
+			},
+		}));
 	}
 
 	onTagValueChange(tag) {
@@ -460,6 +482,8 @@ class AddComment extends React.Component {
 									tagsValue={tagsValue}
 									tags={tags}
 									addTagBlock={this.addTagBlock}
+									removeTagBlock={this.removeTagBlock}
+									moveTagBlock={this.moveTagBlock}
 									onTagValueChange={this.onTagValueChange}
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
 								/>

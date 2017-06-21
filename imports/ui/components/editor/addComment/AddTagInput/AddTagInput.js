@@ -39,12 +39,10 @@ class AddTagInput extends React.Component {
 		// methods:
 		this.moveTagBlock = this.moveTagBlock.bind(this);
 		this.removeTagBlock = this.removeTagBlock.bind(this);
-		this.onTagValueChange = this.onTagValueChange.bind(this);
 	}
 
 	moveTagBlock() {}
 	removeTagBlock() {}
-	onTagValueChange() {}
 
 	render () {
 		const { tagsValue, tags, addTagBlock, onTagValueChange, onIsMentionedInLemmaChange } = this.props;
@@ -134,7 +132,7 @@ class AddTagInput extends React.Component {
 						})}
 					</ListGroupDnD>
 					<RaisedButton
-						label="Add Reference Work"
+						label="Add Tag"
 						onClick={addTagBlock}
 					/>
 				</FormGroup>

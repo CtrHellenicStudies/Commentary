@@ -19,6 +19,7 @@ Meteor.methods({
 				text: String,
 				textRaw: Match.Maybe(Object),
 			}],
+			status: String,
 		});
 		const now = new Date();
 

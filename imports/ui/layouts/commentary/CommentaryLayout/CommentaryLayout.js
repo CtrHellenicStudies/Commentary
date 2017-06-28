@@ -20,6 +20,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
+
+// api
+import Works from '/imports/api/collections/works';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // lib:
@@ -32,7 +35,8 @@ import {
 	createQueryParamsFromFilters,
 	updateFilterOnChangeLineEvent,
 	updateFilterOnChangeTextSearchEvent,
-	updateFilterOnCKeyAndValueChangeEvent
+	updateFilterOnCKeyAndValueChangeEvent,
+	createFilterFromURL
 } from './helpers';
 
 
@@ -41,6 +45,7 @@ const CommentaryLayout = React.createClass({
 
 	propTypes: {
 		queryParams: React.PropTypes.object,
+		params: React.PropTypes.object,
 		referenceWorks: React.PropTypes.array,
 		isTest: React.PropTypes.bool,
 	},
@@ -143,11 +148,11 @@ const CommentaryLayout = React.createClass({
 	},
 
 	render() {
-		const { queryParams } = this.props;
+		const { queryParams, params, works } = this.props;
 		const { skip, limit, modalLoginLowered } = this.state;
 
-		// create filters object based on the queryParams
-		const filters = createFilterFromQueryParams(queryParams);
+		// create filters object based on the queryParams or params
+		const filters = createFilterFromURL(params, queryParams, works);
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -189,10 +194,14 @@ const CommentaryLayout = React.createClass({
 
 const CommentaryLayoutContainer = createContainer(() => {
 	const handle = Meteor.subscribe('referenceWorks.all', Session.get('tenantId'));
+	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
+
 	const referenceWorks = ReferenceWorks.find().fetch();
+	const works = Works.find().fetch();
 
 	return {
 		referenceWorks,
+		works,
 	};
 }, CommentaryLayout);
 

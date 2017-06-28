@@ -191,4 +191,8 @@ const parseCommentsToCommentGroups = (comments) => {
 	return commentGroups;
 };
 
-export { createQueryFromFilters, parseCommentsToCommentGroups, getCommentGroupId };
+export {
+	createQueryFromFilters,
+	parseCommentsToCommentGroups,
+	getCommentGroupId
+};

@@ -1,3 +1,11 @@
+import { check } from 'meteor/check';
+
+// api
+import Works from '/imports/api/collections/works';
+
+// lib
+import Utils from '/imports/lib/utils';
+
 const _createFilterFromQueryParams = (queryParams) => {
 	const filters = [];
 
@@ -370,10 +378,107 @@ const _updateFilterOnCKeyAndValueChangeEvent = (oldFilters, key, value) => {
 	return filters;
 };
 
+const _splitUrnIsOk = (splitURN) => {
+	if (splitURN instanceof Array) {
+		if (splitURN[0] === 'urn'
+			&& splitURN[1] === 'cts'
+			&& splitURN[2] === 'greekLit'
+			) {
+			// check(splitURN[3], String); // artist
+			// check(splitURN[4], String); // work
+			// check(splitURN[5], String); // subwork
+			// check(splitURN[6], String); // line / lines
+			// check(splitURN[7], String); // comment id
+			// check(splitURN[8], String); // revision
+			return true;
+		}
+	}
+	return false;
+};
+
+const _getUrnFilters = (urn, works) => {
+	const splitURN = urn.split(/[:.]/);
+
+	const urnFilters = [];
+
+	if (_splitUrnIsOk(splitURN)) {
+
+		const filterValues = {};
+
+		if (splitURN[4]) {
+			const workTlg = splitURN[4];
+			const _work = works.find(work => work.tlg === workTlg);
+			if (_work) filterValues.works = _work;
+		}
+		if (splitURN[5] && filterValues.works) {
+			const subworkTlg = splitURN[5];
+			filterValues.subworks = {
+				n: Number(splitURN[5]),
+				title: Number(splitURN[5]).toString(),
+			};
+		}
+		if (splitURN[6]) {
+			const lines = splitURN[6].split('-');
+			if (lines.length === 2) {
+				filterValues.lineFrom = Number(lines[0]);
+				filterValues.lineTo = Number(lines[1]);
+			} else if (lines.length === 1) {
+				filterValues.lineFrom = Number(lines[0]);
+				filterValues.lineTo = 909;
+			}
+		}
+		if (splitURN[7]) {
+			const _id = splitURN[7];
+			filterValues._id = _id;
+		}
+		if (splitURN[8]) {
+			const revision = splitURN[8];
+			filterValues.revision = revision;
+		}
+		Object.keys(filterValues).forEach(key => urnFilters.push({
+			key,
+			values: [filterValues[key]],
+		}));
+	}
+
+	return urnFilters;
+};
+
+const _createFilterFromParams = (params, works) => {
+	const filters = [];
+
+	if (!params) {
+		return filters;
+	}
+
+	if ('urn' in params) {
+
+		const urnFilters = _getUrnFilters(params.urn, works);
+
+		if (urnFilters.length) {
+			urnFilters.forEach((urnFilter) => {
+				filters.push(urnFilter);
+			});
+		}
+	}
+	return filters;
+};
+
+const _createFilterFromURL = (params, queryParams, works) => {
+	let filters = [];
+	if (!_.isEmpty(params)) {
+		filters = _createFilterFromParams(params, works);
+	} else if (queryParams) {
+		filters = _createFilterFromQueryParams(queryParams);
+	}
+	return filters;
+};
+
 export { 
 	_createFilterFromQueryParams as createFilterFromQueryParams,
 	_createQueryParamsFromFilters as createQueryParamsFromFilters,
-	_updateFilterOnChangeLineEventa as updateFilterOnChangeLineEvent
-	_updateFilterOnChangeTextSearchEvent as updateFilterOnChangeTextSearchEvent
-	_updateFilterOnCKeyAndValueChangeEvent as updateFilterOnCKeyAndValueChangeEvent
+	_updateFilterOnChangeLineEvent as updateFilterOnChangeLineEvent,
+	_updateFilterOnChangeTextSearchEvent as updateFilterOnChangeTextSearchEvent,
+	_updateFilterOnCKeyAndValueChangeEvent as updateFilterOnCKeyAndValueChangeEvent,
+	_createFilterFromURL as createFilterFromURL
 };

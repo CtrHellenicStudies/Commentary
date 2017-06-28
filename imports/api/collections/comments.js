@@ -4,6 +4,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 const Comments = new Meteor.Collection('comments');
 
 Comments.schema = new SimpleSchema({
+	urn: {
+		type: String,
+		optional: true,
+	},
+
 	originalDate: {
 		type: Date,
 		optional: true,
@@ -349,4 +354,24 @@ Comments.attachBehaviour('timestampable', {
 	updatedBy: 'updatedBy'
 });
 
+const COMMENT_ID_LENGTH = 4;
+
+function getURN(comment) {
+	if (comment.commenters && comment.commenters.length) {
+		return `${comment.work.slug}-${comment.subwork.title}-${comment.lineFrom}-${comment.commenters[0].slug}-${comment._id.slice(-COMMENT_ID_LENGTH)}`;
+	} else {
+		return `${comment.work.slug}-${comment.subwork.title}-${comment.lineFrom}-${comment._id.slice(-COMMENT_ID_LENGTH)}`;
+	}
+}
+
+// hooks:
+Comments.before.insert((userId, doc) => {
+	doc.urn = getURN(doc);
+});
+
+Comments.before.update((userId, doc, fieldNames, modifier, options) => {
+	modifier.$set.urn = getURN(doc);
+});
+
 export default Comments;
+export { getURN };

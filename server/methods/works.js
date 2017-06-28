@@ -7,6 +7,7 @@ Meteor.methods({
 		check(token, String);
 		check(work, {
 			title: String,
+			tlg: String,
 			tenantId: Match.Maybe(String),
 			order: Match.Maybe(Number),
 			subworks: Match.Maybe(Array)
@@ -49,6 +50,7 @@ Meteor.methods({
 		check(_id, String);
 		check(work, {
 			title: String,
+			tlg: Match.Maybe(String),
 			tenantId: Match.Maybe(String),
 			order: Match.Maybe(Number),
 			subworks: Match.Maybe(Array)

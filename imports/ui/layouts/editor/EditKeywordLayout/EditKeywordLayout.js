@@ -173,7 +173,7 @@ const EditKeywordLayout = React.createClass({
 			if (error) {
 				this.showSnackBar(error);
 			} else {
-				FlowRouter.go(`/keywords/${keywordCandidate.slug}`);
+				FlowRouter.go(`/tags/${keywordCandidate.slug}`);
 			}
 		});
 	},

@@ -203,7 +203,7 @@ class CommentDetail extends React.Component {
 				lemmaReferenceLeft: $target.position().left + 0,
 			});
 		} else if ($target.hasClass('keyword-gloss')) {
-			const keyword = $target.data().link.replace('/keywords/', '');
+			const keyword = $target.data().link.replace('/tags/', '');
 			this.setState({
 				keywordReferenceModalVisible: true,
 				keywordReferenceTop: $target.position().top - upperOffset,

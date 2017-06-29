@@ -233,7 +233,7 @@ const AddKeywordLayout = React.createClass({
 			if (error) {
 				this.showSnackBar(error);
 			} else {
-				FlowRouter.go(`/keywords/${keyword.slug}`);
+				FlowRouter.go(`/tags/${keyword.slug}`);
 			}
 		});
 	},

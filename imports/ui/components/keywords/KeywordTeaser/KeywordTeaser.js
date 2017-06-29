@@ -35,7 +35,7 @@ const KeywordTeaser = React.createClass({
 
 	render() {
 		const { keyword } = this.props;
-		const keywordUrl = `/keywords/${keyword.slug}`;
+		const keywordUrl = `/tags/${keyword.slug}`;
 		let keywordClass = 'keyword-teaser clearfix wow fadeInUp ';
 		if (this.state.open) {
 			keywordClass += 'keyword-open';

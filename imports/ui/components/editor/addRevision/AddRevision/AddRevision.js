@@ -130,7 +130,7 @@ const AddRevision = React.createClass({
 		const revisionId = comment.revisions.length - 1;
 		const revision = comment.revisions[revisionId]; // get newest revision
 		let revisionTitle = '';
-		
+
 		const tagsValue = [];
 		if (comment.keywords) {
 			comment.keywords.forEach((keyword) => {
@@ -232,7 +232,7 @@ const AddRevision = React.createClass({
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
-				link: `/keywords/${keyword.slug}`,
+				link: `/tags/${keyword.slug}`,
 			});
 		});
 
@@ -410,7 +410,7 @@ const AddRevision = React.createClass({
 		const tagsValue = this.state.tagsValue;
 
 		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
-		
+
 		this.setState({
 			tagsValue,
 		});

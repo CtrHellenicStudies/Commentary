@@ -33,7 +33,7 @@ exports[`KeywordTeaser renders correctly 1`] = `
   </span>
   <a
     className="keyword-read-more"
-    href="/keywords/test"
+    href="/tags/test"
   >
     Read more
   </a>

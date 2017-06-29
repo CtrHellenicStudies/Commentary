@@ -53,7 +53,7 @@ Meteor.method('publishKeywords', (keywordCandidate) => {
 		upsertResult.insertedId);
 	*/
 }, {
-	url: 'keywords/webhook',
+	url: 'tags/webhook',
 	getArgsFromRequest(request) {
 		// Sometime soon do validation here
 		const content = request.body;

@@ -63,7 +63,7 @@ const KeywordDetail = React.createClass({
 		const $target = $(e.target);
 		const upperOffset = 90;
 		if ($target.hasClass('keyword-gloss')) {
-			const keyword = $target.data().link.replace('/keywords/', '');
+			const keyword = $target.data().link.replace('/tags/', '');
 			this.setState({
 				keywordReferenceModalVisible: true,
 				referenceTop: $target.offset().top - upperOffset,
@@ -111,7 +111,7 @@ const KeywordDetail = React.createClass({
 										{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 											<div>
 												<RaisedButton
-													href={`/keywords/${keyword.slug}/edit`}
+													href={`/tags/${keyword.slug}/edit`}
 													className="cover-link light"
 													label="Edit"
 												/>

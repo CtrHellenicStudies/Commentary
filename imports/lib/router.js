@@ -159,19 +159,19 @@ FlowRouter.route('/commentary', {
 	},
 });
 
-loggedInGroup.route('/keywords/:slug/edit', {
+loggedInGroup.route('/tags/:slug/edit', {
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <EditKeywordLayout slug={params.slug} />,
 		});
 	},
 });
-loggedInGroup.route('/keywords/create', {
+loggedInGroup.route('/tags/create', {
 	action: () => {
 		mount(AddKeywordLayout);
 	},
 });
-FlowRouter.route('/keywords/:slug', {
+FlowRouter.route('/tags/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <KeywordDetail slug={params.slug} />,
@@ -179,15 +179,15 @@ FlowRouter.route('/keywords/:slug', {
 	},
 });
 
-FlowRouter.route('/keywords', {
-	name: 'keywords',
+FlowRouter.route('/tags/words', {
+	name: 'tagwords',
 	action: () => {
 		mount(MasterLayout, {
 			content: <KeywordsPage type="word" title="Keywords" />,
 		});
 	},
 });
-FlowRouter.route('/keyideas', {
+FlowRouter.route('/tags/ideas', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <KeywordsPage type="idea" title="Key Ideas" />,

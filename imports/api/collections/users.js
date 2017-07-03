@@ -118,6 +118,14 @@ const User = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
+	authorOfBooks: {
+		type: Array,
+		optional: true,
+	},
+	'authorOfBooks.$': {
+		type: String,
+		optional: true,
+	},
 	highlightingPreference: {
 		type: Boolean,
 		optional: true,

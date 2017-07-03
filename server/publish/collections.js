@@ -18,6 +18,8 @@ if (Meteor.isServer) {
 		check(skip, Number);
 		check(limit, Number);
 
+		query.status = 'publish';
+
 		return Comments.find(query, {
 			skip,
 			limit,
@@ -33,7 +35,9 @@ if (Meteor.isServer) {
 	Meteor.publish('comments.recent', (skip = 0, limit = 12) => {
 		check(skip, Number);
 		check(limit, Number);
-		return Comments.find({}, {
+		return Comments.find({
+			status: 'publish',
+		}, {
 			limit,
 			sort: {
 				updated: -1,
@@ -45,6 +49,7 @@ if (Meteor.isServer) {
 		check(limit, Number);
 		check(tenantId, Match.Maybe(String));
 		return Comments.find({
+			status: 'publish',
 			tenantId,
 		}, {
 			limit,
@@ -300,11 +305,32 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('annotations.publish', (skip = 0, limit = 100) => {
+		check(skip, Number);
+		check(limit, Number);
+
+		return Comments.find({
+			status: 'publish',
+			isAnnotation: true,
+		}, {
+			sort: {
+				tenantId: 1,
+				book: 1,
+				paragraphN: 1,
+				nLines: -1,
+			},
+			skip,
+			limit,
+		});
+	});
+
 	Meteor.publish('annotations.all', (skip = 0, limit = 100) => {
 		check(skip, Number);
 		check(limit, Number);
 
-		return Comments.find({ isAnnotation: true }, {
+		return Comments.find({
+			isAnnotation: true
+		}, {
 			sort: {
 				tenantId: 1,
 				book: 1,

@@ -27,7 +27,12 @@ class CommunityMemberList extends React.Component {
 
 const CommunityMemberListContainer = createContainer(() => {
 	const handle = Meteor.subscribe('users.all');
-	const users = Meteor.users.find().fetch();
+	const users = Meteor.users.find({}, {
+		sort: {
+			'profile.name': 1,
+			username: 1,
+		}
+	}).fetch();
 
 	return {
 		users: users || [],

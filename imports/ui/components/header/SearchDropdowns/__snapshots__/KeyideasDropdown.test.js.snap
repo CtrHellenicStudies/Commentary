@@ -2,7 +2,7 @@
 
 exports[`KeyideasDropdown renders correctly 1`] = `
 <div
-  className="dropdown search-dropdown search-dropdown--KeyIdeas "
+  className="dropdown search-dropdown search-dropdown--Ideas "
 >
   <button
     className="search-tool dropdown-toggle "
@@ -75,7 +75,7 @@ exports[`KeyideasDropdown renders correctly 1`] = `
           }
         }
       >
-        Key Ideas
+        Ideas
       </span>
       <span
         className="mdi mdi-chevron-down"

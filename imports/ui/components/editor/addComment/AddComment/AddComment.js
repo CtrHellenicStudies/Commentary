@@ -16,7 +16,7 @@ import {
 	FormGroup,
 	ControlLabel,
 } from 'react-bootstrap';
-import Select, { Creatable } from 'react-select';
+import Select from 'react-select';
 import { EditorState, convertToRaw, Modifier, CompositeDecorator } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
@@ -43,6 +43,7 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import AddTagInput from '/imports/ui/components/editor/addComment/AddTagInput';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -118,20 +119,6 @@ function _getSuggestionsFromComments(comments) {
 	return suggestions;
 }
 
-const onNewOptionCreator = newOption => ({
-	label: newOption.label,
-	value: newOption.label
-});
-
-
-const shouldKeyDownEventCreateNewOption = (sig) => {
-	if (sig.keyCode === 13 ||
-		sig.keyCode === 188) {
-		return true;
-	}
-	return false;
-};
-
 
 /*
  *	BEGIN AddComment
@@ -141,8 +128,7 @@ class AddComment extends React.Component {
 		selectedLineFrom: React.PropTypes.number,
 		submitForm: React.PropTypes.func.isRequired,
 		commentersOptions: React.PropTypes.array,
-		keywordsOptions: React.PropTypes.array,
-		keyideasOptions: React.PropTypes.array,
+		tags: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
 		isTest: React.PropTypes.bool,
 	};
@@ -150,8 +136,7 @@ class AddComment extends React.Component {
 	static defaultProps = {
 		selectedLineFrom: null,
 		commentersOptions: [],
-		keywordsOptions: [],
-		keyideasOptions: [],
+		tags: [],
 		referenceWorkOptions: [],
 	};
 
@@ -166,8 +151,8 @@ class AddComment extends React.Component {
 			titleValue: '',
 			textValue: '',
 			referenceWorks: [],
-			keywordsValue: null,
-			keyideasValue: null,
+
+			tagsValue: [],
 
 			snackbarOpen: false,
 			snackbarMessage: '',
@@ -180,12 +165,9 @@ class AddComment extends React.Component {
 		this._disableButton = this._disableButton.bind(this);
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onTextChange = this.onTextChange.bind(this);
-		this.onKeywordsValueChange = this.onKeywordsValueChange.bind(this);
-		this.onKeyideasValueChange = this.onKeyideasValueChange.bind(this);
 		this.onReferenceWorksValueChange = this.onReferenceWorksValueChange.bind(this);
 		this._onKeywordSearchChange = this._onKeywordSearchChange.bind(this);
 		this._onCommentsSearchChange = this._onCommentsSearchChange.bind(this);
-		this.isOptionUnique = this.isOptionUnique.bind(this);
 		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.showSnackBar = this.showSnackBar.bind(this);
@@ -193,6 +175,11 @@ class AddComment extends React.Component {
 		this.addReferenceWorkBlock = this.addReferenceWorkBlock.bind(this);
 		this.removeReferenceWorkBlock = this.removeReferenceWorkBlock.bind(this);
 		this.moveReferenceWorkBlock = this.moveReferenceWorkBlock.bind(this);
+		this.addTagBlock = this.addTagBlock.bind(this);
+		this.removeTagBlock = this.removeTagBlock.bind(this);
+		this.moveTagBlock = this.moveTagBlock.bind(this);
+		this.onTagValueChange = this.onTagValueChange.bind(this);
+		this.onIsMentionedInLemmaChange = this.onIsMentionedInLemmaChange.bind(this);
 	}
 
 	_enableButton() {
@@ -227,18 +214,6 @@ class AddComment extends React.Component {
 		});
 	}
 
-	onKeywordsValueChange(keywords) {
-		this.setState({
-			keywordsValue: keywords,
-		});
-	}
-
-	onKeyideasValueChange(keyidea) {
-		this.setState({
-			keyideasValue: keyidea,
-		});
-	}
-
 	onReferenceWorksValueChange(referenceWork) {
 		const referenceWorks = this.state.referenceWorks;
 		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
@@ -251,10 +226,10 @@ class AddComment extends React.Component {
 
 	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
-		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
+		const keywords = this.props.tags;
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
-				name: keyword.label,
+				name: keyword.title,
 				link: `/keywords/${keyword.slug}`,
 			});
 		});
@@ -277,30 +252,6 @@ class AddComment extends React.Component {
 				commentsSuggestions: fromJS(commentsSuggestions),
 			});
 		});
-	}
-
-	isOptionUnique(newOption) {
-		const { keywordsOptions, keyideasOptions } = this.props;
-		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
-		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
-		const BreakException = {};
-		try {
-			keywordsOptions.forEach((keywordsOption) => {
-				if (keywordsOption.label === newOption.option.label) throw BreakException;
-			});
-			keyideasOptions.forEach((keyideasOption) => {
-				if (keyideasOption.label === newOption.option.label) throw BreakException;
-			});
-			keywordsValue.forEach((keywordValue) => {
-				if (keywordValue.label === newOption.option.label) throw BreakException;
-			});
-			keyideasValue.forEach((keyideaValue) => {
-				if (keyideaValue.label === newOption.option.label) throw BreakException;
-			});
-		} catch (e) {
-			if (e === BreakException) return false;
-		}
-		return true;
 	}
 
 	onCommenterValueChange(comenter) {
@@ -413,8 +364,8 @@ class AddComment extends React.Component {
 	}
 
 	moveReferenceWorkBlock(dragIndex, hoverIndex) {
-		const { introBlocks } = this.state;
-		const dragIntroBlock = introBlocks[dragIndex];
+		const { referenceWorks } = this.state;
+		const dragIntroBlock = referenceWorks[dragIndex];
 
 		this.setState(update(this.state, {
 			referenceWorks: {
@@ -426,11 +377,64 @@ class AddComment extends React.Component {
 		}));
 	}
 
+	addTagBlock() {
+		this.state.tagsValue.push({
+			tagId: Random.id(),
+			isMentionedInLemma: true,
+			isSet: false,
+		});
+		this.setState({
+			tagsValue: this.state.tagsValue,
+		});
+	}
+
+	removeTagBlock(i) {
+		this.setState({
+			tagsValue: update(this.state.tagsValue, { $splice: [[i, 1]] }),
+		});
+	}
+
+	moveTagBlock(dragIndex, hoverIndex) {
+		const { tagsValue } = this.state;
+		const dragIntroBlock = tagsValue[dragIndex];
+
+		this.setState(update(this.state, {
+			tagsValue: {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, dragIntroBlock],
+				],
+			},
+		}));
+	}
+
+	onTagValueChange(tag) {
+		const tagsValue = this.state.tagsValue;
+
+		tagsValue[tag.i].tagId = tag.value;
+		tagsValue[tag.i].keyword = Keywords.findOne({_id: tag.value});
+		tagsValue[tag.i].isSet = true;
+
+		this.setState({
+			tagsValue,
+		});
+	}
+
+	onIsMentionedInLemmaChange(tag, i) {
+		const tagsValue = this.state.tagsValue;
+
+		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
+		
+		this.setState({
+			tagsValue,
+		});
+	}
+
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
 	render() {
-		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorks, textEditorState } = this.state;
-		const { commentersOptions, keywordsOptions, keyideasOptions, referenceWorkOptions, isTest } = this.props;
+		const { revision, titleEditorState, keyideasValue, referenceWorks, textEditorState, tagsValue } = this.state;
+		const { commentersOptions, tags, referenceWorkOptions, isTest } = this.props;
 
 		if (isTest) {
 			return null;
@@ -473,31 +477,15 @@ class AddComment extends React.Component {
 										blockRenderMap={singleLinePlugin.blockRenderMap}
 									/>
 								</h1>
-								<Creatable
-									name="keywords"
-									id="keywords"
-									required={false}
-									options={keywordsOptions}
-									multi
-									value={this.state.keywordsValue}
-									onChange={this.onKeywordsValueChange}
-									newOptionCreator={onNewOptionCreator}
-									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-									isOptionUnique={this.isOptionUnique}
-									placeholder="Words..."
-								/>
-								<Creatable
-									name="keyideas"
-									id="keyideas"
-									required={false}
-									options={keyideasOptions}
-									multi
-									value={this.state.keyideasValue}
-									onChange={this.onKeyideasValueChange}
-									newOptionCreator={onNewOptionCreator}
-									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-									isOptionUnique={this.isOptionUnique}
-									placeholder="Ideas..."
+
+								<AddTagInput
+									tagsValue={tagsValue}
+									tags={tags}
+									addTagBlock={this.addTagBlock}
+									removeTagBlock={this.removeTagBlock}
+									moveTagBlock={this.moveTagBlock}
+									onTagValueChange={this.onTagValueChange}
+									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
 								/>
 
 							</div>
@@ -656,35 +644,22 @@ class AddComment extends React.Component {
 
 const AddCommentContainer = createContainer(() => {
 	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-	const keywordsOptions = [];
-	const keywords = Keywords.find({ type: 'word' }).fetch();
-	keywords.forEach((keyword) => {
-		keywordsOptions.push({
-			value: keyword.title,
-			label: keyword.title,
-			slug: keyword.slug,
-		});
-	});
 
-	const keyideasOptions = [];
-	const keyideas = Keywords.find({ type: 'idea' }).fetch();
-	keyideas.forEach((keyidea) => {
-		keyideasOptions.push({
-			value: keyidea.title,
-			label: keyidea.title,
-			slug: keyidea.slug,
-		});
-	});
+	const tags = Keywords.find().fetch();
 
 	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
-		referenceWorkOptions.push({
-			value: referenceWork._id,
-			label: referenceWork.title,
-			slug: referenceWork.slug,
-		});
+		if (!referenceWorkOptions.some((val) => (
+			referenceWork.slug === val.slug
+		))) {
+			referenceWorkOptions.push({
+				value: referenceWork._id,
+				label: referenceWork.title,
+				slug: referenceWork.slug,
+			});
+		}
 	});
 
 	Meteor.subscribe('commenters', Session.get('tenantId'));
@@ -694,15 +669,18 @@ const AddCommentContainer = createContainer(() => {
 		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
 	}
 	commenters.forEach((commenter) => {
-		commentersOptions.push({
-			value: commenter._id,
-			label: commenter.name,
-		});
+		if (!commentersOptions.some((val) => (
+			commenter._id === val.value
+		))) {
+			commentersOptions.push({
+				value: commenter._id,
+				label: commenter.name,
+			});
+		}
 	});
 
 	return {
-		keywordsOptions,
-		keyideasOptions,
+		tags,
 		referenceWorkOptions,
 		commentersOptions,
 	};

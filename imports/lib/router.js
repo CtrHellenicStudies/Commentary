@@ -255,6 +255,12 @@ loggedInGroup.route('/profile', {
 		});
 	},
 });
+FlowRouter.route('/commentary/:urn', {
+	name: 'commentaryURN',
+	action: (params, queryParams) => {
+		mount(CommentaryLayout, { params, queryParams });
+	},
+});
 
 FlowRouter.route('/users/:userId', {
 	triggersEnter: [

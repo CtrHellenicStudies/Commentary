@@ -128,17 +128,13 @@ class CommentLemma extends React.Component {
 				</Sticky>
 
 				<article className="comment lemma-comment paper-shadow">
-					{!ready ?
-						<LoadingLemma />
-					:
+					<LoadingLemma ready={ready} />
+					{ready && !showTranslation ?
 						<CommentLemmaText
 							lines={selectedLemmaEdition.lines}
 						/>
-					}
-					{showTranslation ?
-						<Translation />
 						:
-						''
+						<Translation />
 					}
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {

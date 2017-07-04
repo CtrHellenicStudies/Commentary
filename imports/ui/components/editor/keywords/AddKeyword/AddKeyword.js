@@ -148,7 +148,7 @@ const AddKeyword = React.createClass({
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
-				link: `/keywords/${keyword.slug}`,
+				link: `/tags/${keyword.slug}`,
 			});
 		});
 

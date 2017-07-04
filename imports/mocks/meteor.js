@@ -4,6 +4,10 @@ export const Meteor = { // eslint-disable-line
 		this.friendlySlugs = () => {};
 		this.attachBehaviour = () => {};
 		this.allow = () => {};
+		this.before = {
+			insert: () => {},
+			update: () => {},
+		};
 		this.find = () => {
 			const results = {
 				fetch: () => [],

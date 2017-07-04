@@ -43,6 +43,10 @@ class CommentCitation extends React.Component {
 		const { comment } = this.props;
 		const { openMenu, anchorEl } = this.state;
 
+		if (!comment) {
+			return null;
+		}
+
 		const styles = {
 			menuItem: {
 				fontFamily: 'ProximaNW01-AltLightReg',

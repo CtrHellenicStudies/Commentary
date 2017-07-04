@@ -359,9 +359,8 @@ const COMMENT_ID_LENGTH = 4;
 function getURN(comment) {
 	if (comment.commenters && comment.commenters.length) {
 		return `${comment.work.slug}-${comment.subwork.title}-${comment.lineFrom}-${comment.commenters[0].slug}-${comment._id.slice(-COMMENT_ID_LENGTH)}`;
-	} else {
-		return `${comment.work.slug}-${comment.subwork.title}-${comment.lineFrom}-${comment._id.slice(-COMMENT_ID_LENGTH)}`;
 	}
+	return `${comment.work.slug}-${comment.subwork.title}-${comment.lineFrom}-${comment._id.slice(-COMMENT_ID_LENGTH)}`;
 }
 
 // hooks:

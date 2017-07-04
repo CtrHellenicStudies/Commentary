@@ -12,7 +12,8 @@ import TextNodes from '/imports/api/collections/textNodes';
 
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; 
-import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';  
+import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta'; 
+import Translation from '/imports/ui/components/commentary/commentGroups/Translation'; 
 
 class CommentLemma extends React.Component {
 
@@ -59,11 +60,13 @@ class CommentLemma extends React.Component {
 
 		this.state = {
 			selectedLemmaEditionIndex: 0,
+			showTranslation: false,
 		};
 
 		// methods:
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.showContextPanel = this.showContextPanel.bind(this);
+		this.showTranslation = this.showTranslation.bind(this);
 	}
 
 	toggleEdition(editionSlug) {
@@ -94,9 +97,15 @@ class CommentLemma extends React.Component {
 		showContextPanel(commentGroup);
 	}
 
+	showTranslation() {
+		this.setState({
+			showTranslation: !this.state.showTranslation,
+		});
+	}
+
 	render() {
 		const { commentGroup, hideLemma, editions, ready } = this.props;
-		const { selectedLemmaEditionIndex } = this.state;
+		const { selectedLemmaEditionIndex, showTranslation } = this.state;
 
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
@@ -128,6 +137,11 @@ class CommentLemma extends React.Component {
 							lines={selectedLemmaEdition.lines}
 						/>
 					}
+					{showTranslation ?
+						<Translation />
+						:
+						''
+					}
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
@@ -154,7 +168,7 @@ class CommentLemma extends React.Component {
 					<div className="context-tabs tabs">
 						<RaisedButton
 							className="context-tab tab"
-							onClick={() => console.log('show translation clicked')}
+							onClick={() => this.showTranslation()}
 							label="Translation"
 							labelPosition="before"
 							icon={<FontIcon className="mdi mdi-chevron-right" />}

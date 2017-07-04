@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 import Keywords from '/imports/api/collections/keywords';
 
 // layouts
@@ -143,7 +143,7 @@ const EditKeywordLayout = React.createClass({
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
 		const type = this.getType();
-		const token = cookie.load('loginToken');
+		const token = Cookies.get('loginToken');
 		const { keyword } = this.props;
 
 		// create keyword object to be inserted:

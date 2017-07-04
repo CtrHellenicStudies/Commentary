@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import React from 'react';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { mount } from 'react-mounter';
 
 // lib
@@ -81,65 +81,32 @@ FlowRouter.triggers.enter([() => {
 	}
 
 	/*
-	 * If the tenant is only for Annotations, then deny access to the homepage and
-	 * instead forward only to the user's profile
-	 */
- /*
-	if (Session.get('tenantId')) {
-		const tenant = Tenants.findOne({ _id: Session.get('tenantId') });
-		if (tenant && tenant.isAnnotation && FlowRouter.current().path === '/') {
-			FlowRouter.go('/profile');
-		}
-	}
-	*/
-
-	/*
 	 * Check for multi-subdomain login cookie, if found, login user with Token
 	 * if user is logged in and no cookie is found, set cookie
 	 */
-	console.log(document.cookie);
+
 	if (Meteor.userId()) {
-		console.log('cookielogintoken', cookie.load('loginToken'));
-		if (!cookie.load('loginToken')) {
+		if (!Cookies.get('loginToken')) {
 			Meteor.call('getNewStampedToken', (_err, token) => {
-				const path = '/';
-				let domain;
 
 				if (_err) {
 					console.error(_err);
 					return false;
 				}
 
-				if (location.hostname.match(/\w+.chs.harvard.edu/)) {
-					domain = '*.chs.harvard.edu';
-				} else if (location.hostname.match(/\w+.orphe.us/)) {
-					domain = '*.orphe.us';
-				} else if (location.hostname.match(/\w+.localhost/)) {
-					domain = '*.localhost';
-				}
-				console.log('domain', domain);
+				const domain = Utils.setCookieDomain();
 
-				/*
 				if (domain) {
-					cookie.save('userId', Meteor.userId(), { path, domain, });
-					cookie.save('loginToken', token, { path, domain });
+					Cookies.set('userId', Meteor.userId(), { domain });
+					Cookies.set('loginToken', token, { domain });
 				} else {
-					cookie.save('userId', Meteor.userId(), { path });
-					cookie.save('loginToken', token, { path });
+					Cookies.set('userId', Meteor.userId());
+					Cookies.set('loginToken', token);
 				}
-				*/
-				if (domain) {
-					Cookies.set('userId', Meteor.userId(), { path, domain, });
-					Cookies.set('loginToken', token, { path, domain });
-				} else {
-					Cookies.set('userId', Meteor.userId(), { path });
-					Cookies.set('loginToken', token, { path });
-				}
-				console.log(document.cookie);
 			});
 		}
 	} else {
-		const loginToken = cookie.load('loginToken');
+		const loginToken = Cookies.get('loginToken');
 		if (loginToken) {
 			Meteor.loginWithToken(loginToken);
 		}

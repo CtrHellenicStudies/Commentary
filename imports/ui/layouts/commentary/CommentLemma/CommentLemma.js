@@ -151,6 +151,15 @@ class CommentLemma extends React.Component {
 							icon={<FontIcon className="mdi mdi-chevron-right" />}
 						/>
 					</div>
+					<div className="context-tabs tabs">
+						<RaisedButton
+							className="context-tab tab"
+							onClick={() => console.log('show translation clicked')}
+							label="Translation"
+							labelPosition="before"
+							icon={<FontIcon className="mdi mdi-chevron-right" />}
+						/>
+					</div>
 				</article>
 				<div className="discussion-wrap" />
 			</div>

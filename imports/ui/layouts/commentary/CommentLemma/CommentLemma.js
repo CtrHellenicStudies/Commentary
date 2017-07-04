@@ -14,6 +14,7 @@ import TextNodes from '/imports/api/collections/textNodes';
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; 
 import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta'; 
 import Translation from '/imports/ui/components/commentary/commentGroups/Translation'; 
+import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
 
 class CommentLemma extends React.Component {
 
@@ -128,10 +129,7 @@ class CommentLemma extends React.Component {
 
 				<article className="comment lemma-comment paper-shadow">
 					{!ready ?
-						<div className="lemma-loading">
-							<div className="lemma-loading-top" />
-							<div className="lemma-loading-bottom" />
-						</div>
+						<LoadingLemma />
 					:
 						<CommentLemmaText
 							lines={selectedLemmaEdition.lines}

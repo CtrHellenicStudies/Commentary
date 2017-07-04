@@ -47,6 +47,7 @@ const CommentaryLayout = React.createClass({
 		queryParams: React.PropTypes.object,
 		params: React.PropTypes.object,
 		referenceWorks: React.PropTypes.array,
+		works: React.PropTypes.array,
 		isTest: React.PropTypes.bool,
 	},
 

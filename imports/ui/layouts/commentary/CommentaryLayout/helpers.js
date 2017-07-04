@@ -1,4 +1,5 @@
 import { check } from 'meteor/check';
+import _ from 'underscore';
 
 // api
 import Works from '/imports/api/collections/works';
@@ -329,7 +330,7 @@ const _updateFilterOnChangeTextSearchEvent = (oldFilters, e) => {
 
 const _updateFilterOnCKeyAndValueChangeEvent = (oldFilters, key, value) => {
 	const filters = oldFilters;
-	
+
 	let keyIsInFilter = false;
 	let valueIsInFilter = false;
 	let filterValueToRemove;
@@ -474,7 +475,7 @@ const _createFilterFromURL = (params, queryParams, works) => {
 	return filters;
 };
 
-export { 
+export {
 	_createFilterFromQueryParams as createFilterFromQueryParams,
 	_createQueryParamsFromFilters as createQueryParamsFromFilters,
 	_updateFilterOnChangeLineEvent as updateFilterOnChangeLineEvent,

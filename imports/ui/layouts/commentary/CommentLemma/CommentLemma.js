@@ -134,7 +134,9 @@ class CommentLemma extends React.Component {
 							lines={selectedLemmaEdition.lines}
 						/>
 						:
-						<Translation />
+						<Translation
+							lines={selectedLemmaEdition.lines}
+						/>
 					}
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {

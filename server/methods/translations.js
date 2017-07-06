@@ -3,7 +3,7 @@ import Translations from '/imports/api/collections/translations';
 
 Meteor.methods({
 	'translations.insert': (token, translation) => {
-		console.log("all clear for take off");
+		console.log('all clear for take off');
 		console.log(translation);
 		check(token, String);
 		check(translation, Object);

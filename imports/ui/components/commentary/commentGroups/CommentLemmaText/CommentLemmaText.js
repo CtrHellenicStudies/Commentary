@@ -38,11 +38,12 @@ class CommentLemmaText extends React.Component {
 					<div
 						key={i}
 						className="lemma-text-line"
+						style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
 					>
 						<span className={`line-n ${(lines[i].n % 5) === 0 ? 'line-n--visible' : ''}`}>
 							{lines[i].n}
 						</span>
-						<p
+						<p								
 							className="lemma-text"
 							dangerouslySetInnerHTML={{ __html: lines[i].html }}
 						/>
@@ -51,7 +52,7 @@ class CommentLemmaText extends React.Component {
 			}
 
 			return (
-				<div>
+				<div style={{float: 'left'}}>
 					{linesXML}
 					<div>
 						<FlatButton
@@ -71,6 +72,7 @@ class CommentLemmaText extends React.Component {
 					<div
 						key={i}
 						className="lemma-text-line"
+						style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
 					>
 						<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
 							{line.n}

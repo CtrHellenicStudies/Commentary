@@ -5,12 +5,12 @@ import Translation from '/imports/ui/components/commentary/commentGroups/Transla
 
 const TranslationLayout = (props) =>
 	<div className="row">
-		<div className="col-md-5">
+		<div className="col-md-6">
 			{props.children}
 		</div>
-		<div className="col-md-7">
+		<div className="col-md-6">
 			<Translation 
-				commentGroup={commentGroup}
+				commentGroup={props.commentGroup}
 			/>
 		</div>
 	</div>;

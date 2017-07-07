@@ -9,7 +9,9 @@ const TranslationLayout = (props) =>
 			{props.children}
 		</div>
 		<div className="col-md-7">
-			<Translation />
+			<Translation 
+				commentGroup={commentGroup}
+			/>
 		</div>
 	</div>;
 

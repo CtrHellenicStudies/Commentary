@@ -130,7 +130,7 @@ class CommentLemma extends React.Component {
 				<article className="comment lemma-comment paper-shadow">
 					<LoadingLemma ready={ready} />
 					{showTranslation ?
-						<TranslationLayout lines={selectedLemmaEdition.lines}>
+						<TranslationLayout commentGroup={commentGroup}>
 							<CommentLemmaText
 								lines={selectedLemmaEdition.lines}
 							/>

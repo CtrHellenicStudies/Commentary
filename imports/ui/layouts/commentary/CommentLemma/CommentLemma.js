@@ -132,6 +132,7 @@ class CommentLemma extends React.Component {
 					{showTranslation ?
 						<TranslationLayout commentGroup={commentGroup}>
 							<CommentLemmaText
+
 								lines={selectedLemmaEdition.lines}
 							/>
 						</TranslationLayout>

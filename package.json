@@ -128,7 +128,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.archimedesdigital.io:archimedes/ahcip.git"
+    "url": "git@github.com:CtrHellenicStudies/Commentary.git"
   },
   "cssModules": {
     "ignorePaths": [

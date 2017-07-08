@@ -12,7 +12,7 @@ Works.schema = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
-	creatorTlg: {
+	tlgCreator: {
 		type: String,
 		optional: true,
 	},

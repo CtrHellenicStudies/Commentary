@@ -75,17 +75,19 @@ class CommentCitation extends React.Component {
 							return (
 								<MenuItem
 									key={revision._id}
-									href={`/commentary/?_id=${comment._id}&revision=${i}`}
+									href={`/commentary/?urn=${comment.urn}&revision=${comment.revisions.length - i}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
 									style={styles.menuItem}
 								/>
 							);
 						})}
+						{/*
 						<MenuItem
 							href={`/commentary/?_id=${comment._id}`}
 							primaryText={comment._id}
 							style={styles.menuItem}
 						/>
+						 */}
 					</Menu>
 				</Popover>
 			</div>

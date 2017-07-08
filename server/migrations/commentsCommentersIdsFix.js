@@ -28,8 +28,4 @@ const commentsCommentersIdsFix = () => {
 	console.log(' -- method commentsCommentersIdsFix run completed');
 };
 
-Meteor.method('commentsCommentersIdsFix', () => {
-	commentsCommentersIdsFix();
-}, {
-	url: 'fix/comments/commentersIds',
-});
+export default commentsCommentersIdsFix;

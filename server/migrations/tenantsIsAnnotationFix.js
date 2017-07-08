@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import Tenants from '/imports/api/collections/tenants';
 
-Meteor.startup(() => {
+const tenantsIsAnnotationFix = () => {
 	const tenants = Tenants.find({ isAnnotation: { $exists: false } });
 	if (tenants.count() > 0) {
 		_.map(tenants.fetch(), (tenant) => {
@@ -12,4 +12,6 @@ Meteor.startup(() => {
 			});
 		});
 	}
-});
+};
+
+export default tenantsIsAnnotationFix;

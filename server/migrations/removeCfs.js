@@ -1,6 +1,6 @@
 import Commenters from '/imports/api/collections/commenters';
 
-Meteor.method('removeCfs', () => {
+const removeCfs = () => {
 	const db = Meteor.users.rawDatabase();
 
 	const dropCollection = (collectionName) => {
@@ -43,4 +43,6 @@ Meteor.method('removeCfs', () => {
 			}
 		}
 	);
-});
+};
+
+export default removeCfs;

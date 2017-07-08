@@ -27,4 +27,10 @@ const commentsGenerateURNs = (regenerate = false) => {
 	});
 };
 
+Meteor.method('commentsURNsFix', () => {
+	commentsURNsFix();
+}, {
+	url: 'fix/comments/urns',
+});
+
 export default commentsGenerateURNs;

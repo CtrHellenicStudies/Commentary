@@ -1,7 +1,6 @@
-
 import TextNodes from '/imports/api/collections/textNodes';
 
-Meteor.method('textNodesWorkSlugFix', () => {
+const textNodesWorkSlugFix = () => {
 	// ---
 	// FIX the work.slug field in the textNodes collection - set work.slug to 'homeric-hymns'
 	// ---
@@ -17,6 +16,6 @@ Meteor.method('textNodesWorkSlugFix', () => {
 	console.log(' -- method texNodesWorkSlugFix run completed');
 
 	return 1;
-}, {
-	url: 'fix/texNodes/workSlug',
-});
+};
+
+export default textNodesWorkSlugFix;

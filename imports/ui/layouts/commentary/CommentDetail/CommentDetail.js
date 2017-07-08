@@ -70,7 +70,8 @@ class CommentDetail extends React.Component {
 				created: React.PropTypes.instanceOf(Date),
 				updated: React.PropTypes.instanceOf(Date),
 				originalDate: React.PropTypes.instanceOf(Date),
-			}))
+			})),
+			urn: React.PropTypes.string,
 		}).isRequired,
 		filters: React.PropTypes.arrayOf(React.PropTypes.shape({
 			key: React.PropTypes.string.isRequired,
@@ -260,7 +261,6 @@ class CommentDetail extends React.Component {
 					className="comment commentary-comment paper-shadow"
 					data-id={comment._id}
 				>
-
 					<CommentUpper
 						title={selectedRevision.title}
 						commentId={comment._id}

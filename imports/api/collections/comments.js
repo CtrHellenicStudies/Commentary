@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import Work from './works';
+
 const Comments = new Meteor.Collection('comments');
 
 Comments.schema = new SimpleSchema({
@@ -354,13 +356,21 @@ Comments.attachBehaviour('timestampable', {
 	updatedBy: 'updatedBy'
 });
 
-const COMMENT_ID_LENGTH = 4;
+const COMMENT_ID_LENGTH = 6;
 
 function getURN(comment) {
-	if (comment.commenters && comment.commenters.length) {
-		return `${comment.work.slug}-${comment.subwork.title}-${comment.lineFrom}-${comment.commenters[0].slug}-${comment._id.slice(-COMMENT_ID_LENGTH)}`;
+	const work = Works.findOne({ slug: comment.work.slug });
+	const urnPrefix = 'urn:cts:greekLit';
+	const urnTLG = `${work.creatorTlg}.${work.tlg}`;
+	let urnComment = `${comment.subwork.title}.${comment.lineFrom}:`;
+
+	if (typeof comment.lineTo !== 'undefined') {
+		urnComment += `-${comment.lineTo}`;
 	}
-	return `${comment.work.slug}-${comment.subwork.title}-${comment.lineFrom}-${comment._id.slice(-COMMENT_ID_LENGTH)}`;
+
+	const urnCommentHash = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
+
+	return `${urnPrefix}:${urnTLG}:${urnComment}:${urnCommentHash}`;
 }
 
 // hooks:

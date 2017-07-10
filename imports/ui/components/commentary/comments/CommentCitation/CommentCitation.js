@@ -81,13 +81,6 @@ class CommentCitation extends React.Component {
 								/>
 							);
 						})}
-						{/*
-						<MenuItem
-							href={`/commentary/?_id=${comment._id}`}
-							primaryText={comment._id}
-							style={styles.menuItem}
-						/>
-						 */}
 					</Menu>
 				</Popover>
 			</div>

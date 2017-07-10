@@ -89,6 +89,11 @@ const createQueryFromFilters = (filters) => {
 				query.wordpressId = filter.values[0];
 				break;
 
+			case 'urn':
+				// Values will always be an array with a length of one
+				query.urn = filter.values[0];
+				break;
+
 			default:
 				break;
 			}
@@ -150,7 +155,9 @@ const parseCommentsToCommentGroups = (comments) => {
 				});
 			}
 		} else {
-			console.log(`Review comment ${comment._id} metadata`);
+			if (process.env.NODE_ENV === 'development') {
+				console.error(`Review comment ${comment._id} metadata`);
+			}
 		}
 	});
 

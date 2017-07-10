@@ -4,193 +4,102 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 const Translations = new Meteor.Collection('translations');
 
 Translations.schema = new SimpleSchema({
-	status: {
-		type: String,
-		optional: true,
-	},
-
-	wordpressId: {
-		type: Number,
-		optional: true,
-	},
-
 	tenantId: {
 		type: String,
-		optional: true,
+		optional: true
 	},
-
-	commenters: {
-		type: [Object],
-		optional: true,
-	},
-
-	'commenters.$._id': {
-		type: String,
-		optional: true,
-	},
-
-	'commenters.$.name': {
-		type: String,
-		optional: true,
-	},
-
-	'commenters.$.slug': {
-		type: String,
-		optional: true,
-	},
-
-	'commenters.$.wordpressId': {
+	wordpressId: {
 		type: Number,
-		optional: true,
+		optional: true
 	},
-
+	author: {
+		type: String,
+		optional: true
+	},
 	work: {
 		type: Object,
-		optional: true,
+		optional: true
 	},
-
 	'work.title': {
 		type: String,
-		optional: true,
+		optional: true
 	},
-
 	'work.slug': {
 		type: String,
-		optional: true,
+		optional: true
 	},
-
 	'work.order': {
 		type: Number,
-		optional: true,
+		optional: true
 	},
-
 	subworkFrom: {
 		type: Object,
-		optional: true,
+		optional: true
 	},
-
 	'subworkFrom.title': {
-		type: String,
-		optional: true,
+		type: Number,
+		optional: true
 	},
-
 	'subworkFrom.slug': {
-		type: String,
-		optional: true,
+		type: Number,
+		optional: true
 	},
-
 	'subworkFrom.n': {
 		type: Number,
-		optional: true,
+		optional: true
 	},
-
 	subworkTo: {
 		type: Object,
-		optional: true,
+		optional: true
 	},
-
 	'subworkTo.title': {
-		type: String,
-		optional: true,
+		type: Number,
+		optional: true
 	},
-
 	'subworkTo.slug': {
-		type: String,
-		optional: true,
+		type: Number,
+		optional: true
 	},
-
 	'subworkTo.n': {
 		type: Number,
-		optional: true,
+		optional: true
 	},
-
 	lineFrom: {
 		type: Number,
-		optional: true,
+		optional: true
 	},
-
 	lineTo: {
 		type: Number,
-		optional: true,
+		optional: true
 	},
-
 	nLines: {
 		type: Number,
-		optional: true,
+		optional: true
 	},
-
-
-	isAnnotation: {
-		type: Boolean,
-		optional: true,
-	},
-
-	discussionCommentsDisabled: {
-		type: Boolean,
-		optional: true,
-	},
-
 	created: {
 		type: Date,
-		optional: true,
+		optional: true
 	},
-
-	updated: {
-		type: Date,
-		optional: true,
-	},
-
 	revisions: {
 		type: [Object],
-		optional: true,
+		optional: true
 	},
-
-	'revisions.$._id': {
-		type: String,
-		optional: true,
-	},
-
-
-	'revisions.$.text': {
-		type: Object,
-		optional: true,
-	},
-
 	'revisions.$.tenantId': {
 		type: String,
-		optional: true,
+		optional: true
 	},
-
-	'revisions.$.originalDate': {
-		type: Date,
-		optional: true,
+	'revisions.$.text': {
+		type: [String],
+		optional: true
 	},
-
-	'revisions.$.slug': {
-		type: String,
-		optional: true,
-	},
-
 	'revisions.$.created': {
 		type: Date,
-		optional: true,
+		optional: true
 	},
-
-	'revisions.$.createdBy': {
+	'revisions.$.slug': {
 		type: String,
-		optional: true,
-	},
-
-	'revisions.$.updated': {
-		type: Date,
-		optional: true,
-	},
-
-	'revisions.$.updatedBy': {
-		type: String,
-		optional: true,
-	},
-
+		optional: true
+	}
 });
 
 Translations.attachSchema(Translations.schema);

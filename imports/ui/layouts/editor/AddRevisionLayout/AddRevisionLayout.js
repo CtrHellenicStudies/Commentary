@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
@@ -74,7 +74,7 @@ const AddRevisionLayout = React.createClass({
 		const { comment } = this.props;
 
 		const keywords = this.getKeywords(formData);
-		const authToken = cookie.load('loginToken');
+		const authToken = Cookies.get('loginToken');
 
 		let update = [{}];
 		if (keywords) {

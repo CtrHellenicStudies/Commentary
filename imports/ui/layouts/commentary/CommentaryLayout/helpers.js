@@ -1,4 +1,5 @@
 import { check } from 'meteor/check';
+import _ from 'underscore';
 
 // api
 import Works from '/imports/api/collections/works';
@@ -166,6 +167,24 @@ const _createFilterFromQueryParams = (queryParams) => {
 		}
 	}
 
+	if ('revision' in queryParams) {
+		const revision = parseInt(queryParams.revision, 10);
+
+		if (!Number.isNaN(revision)) {
+			filters.push({
+				key: 'revision',
+				values: [revision],
+			});
+		}
+	}
+
+	if ('urn' in queryParams) {
+		filters.push({
+			key: 'urn',
+			values: [queryParams.urn],
+		});
+	}
+
 	return filters;
 };
 
@@ -216,11 +235,15 @@ const _createQueryParamsFromFilters = (filters) => {
 			case '_id':
 				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
 				break;
+			case 'urn':
+				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
+				break;
 			default:
 				break;
 			}
 		});
 	});
+	console.log(queryParams);
 
 	return queryParams;
 };
@@ -329,7 +352,7 @@ const _updateFilterOnChangeTextSearchEvent = (oldFilters, e) => {
 
 const _updateFilterOnCKeyAndValueChangeEvent = (oldFilters, key, value) => {
 	const filters = oldFilters;
-	
+
 	let keyIsInFilter = false;
 	let valueIsInFilter = false;
 	let filterValueToRemove;
@@ -398,6 +421,7 @@ const _splitUrnIsOk = (splitURN) => {
 
 const _getUrnFilters = (urn, works) => {
 	const splitURN = urn.split(/[:.]/);
+	// console.log('splitURN', splitURN);
 
 	const urnFilters = [];
 
@@ -452,7 +476,6 @@ const _createFilterFromParams = (params, works) => {
 	}
 
 	if ('urn' in params) {
-
 		const urnFilters = _getUrnFilters(params.urn, works);
 
 		if (urnFilters.length) {
@@ -474,7 +497,7 @@ const _createFilterFromURL = (params, queryParams, works) => {
 	return filters;
 };
 
-export { 
+export {
 	_createFilterFromQueryParams as createFilterFromQueryParams,
 	_createQueryParamsFromFilters as createQueryParamsFromFilters,
 	_updateFilterOnChangeLineEvent as updateFilterOnChangeLineEvent,

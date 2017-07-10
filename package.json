@@ -35,6 +35,7 @@
     "immutable": "^3.8.1",
     "install": "^0.8.2",
     "ion-rangeslider": "^2.1.4",
+    "js-cookie": "^2.1.4",
     "jsdifflib": "^1.1.0",
     "jsonld": "^0.4.11",
     "linkifyjs": "^2.0.5",
@@ -57,7 +58,6 @@
     "react-addons-update": "^15.0.2",
     "react-autobind": "^1.0.6",
     "react-bootstrap": "^0.30.8",
-    "react-cookie": "^1.0.4",
     "react-dnd": "^2.3.0",
     "react-dnd-html5-backend": "^2.3.0",
     "react-dom": "^15.4.0",
@@ -125,11 +125,11 @@
     "pretest": "npm run lint",
     "test": "jest",
     "test:watch": "npm run test -- --reporter min --watch",
-    "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings production.json"
+    "start": "MONGO_URL=mongodb://localhost/ahcip meteor --settings ./private/settings/production.json"
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.archimedesdigital.io:archimedes/ahcip.git"
+    "url": "git@github.com:CtrHellenicStudies/Commentary.git"
   },
   "cssModules": {
     "ignorePaths": [
@@ -145,6 +145,7 @@
       "^meteor/accounts-base": "<rootDir>/imports/mocks/accountsBase.js",
       "^meteor/alanning:roles": "<rootDir>/imports/mocks/roles.js",
       "^meteor/aldeed:simple-schema": "<rootDir>/imports/mocks/simpleSchema.js",
+      "^meteor/check": "<rootDir>/imports/mocks/check.js",
       "^meteor/kadira:dochead": "<rootDir>/imports/mocks/docHead.js",
       "^meteor/meteor": "<rootDir>/imports/mocks/meteor.js",
       "^meteor/react-meteor-data": "<rootDir>/imports/mocks/reactMeteorData.js",

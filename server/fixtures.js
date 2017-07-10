@@ -11,7 +11,7 @@ import Works from '/imports/api/collections/works';
 Meteor.startup(() => {
 	if (Tenants.find().count() === 0) {
 		const tenantId = Tenants.insert({
-			subdomain: 'homer',
+			subdomain: 'ahcip',
 		});
 
 		Commenters.update({}, {

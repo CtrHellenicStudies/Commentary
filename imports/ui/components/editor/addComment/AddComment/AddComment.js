@@ -230,7 +230,7 @@ class AddComment extends React.Component {
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.title,
-				link: `/keywords/${keyword.slug}`,
+				link: `/tags/${keyword.slug}`,
 			});
 		});
 
@@ -424,7 +424,7 @@ class AddComment extends React.Component {
 		const tagsValue = this.state.tagsValue;
 
 		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
-		
+
 		this.setState({
 			tagsValue,
 		});

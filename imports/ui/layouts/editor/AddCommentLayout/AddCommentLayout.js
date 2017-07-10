@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -210,7 +210,7 @@ class AddCommentLayout extends React.Component {
 		const referenceWorks = formData.referenceWorks;
 		const commenter = getCommenter(formData);
 		const selectedLineTo = this.getSelectedLineTo();
-		const token = cookie.load('loginToken');
+		const token = Cookies.get('loginToken');
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);

@@ -17,27 +17,19 @@ export default createContainer(({ commentGroup }) => {
 
 	if (commentGroup) {
 		translationQuery = {
-			'work.slug': commentGroup.work.slug,
-			'subwork.n': commentGroup.subwork.n,
-			'text.n': {
-				$gte: commentGroup.lineFrom,
-			},
+			linesFrom: commentGroup.lineFrom,
+			linesTo: commentGroup.lineTo,
+			nLines: commentGroup.nLines,
+			'subworkFrom.n': commentGroup.subwork.n,
+			'work.slug': commentGroup.work.slug
 		};
 
-		if (typeof commentGroup.lineTo !== 'undefined') {
-			translationQuery['text.n'].$lte = commentGroup.lineTo;
-		} else {
-			translationQuery['text.n'].$lte = commentGroup.lineFrom;
-		}
-		if (translationQuery['work.slug'] === 'homeric-hymns') {
-			translationQuery['work.slug'] = 'hymns';
-		}
 	}
-
+	console.log('commentGroup: ', commentGroup);
 	console.log('translationQuery: ', translationQuery);
 
 	const handle = Meteor.subscribe('translations', translationQuery);
-	const translation = translations.find(translationQuery).fetch();
+	const translation = Translations.find(translationQuery).fetch();
 	const lines = [];
 
 	// TODO: loop through lines in revisions and push to lines array

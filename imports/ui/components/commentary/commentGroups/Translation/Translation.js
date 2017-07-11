@@ -34,14 +34,24 @@ export default createContainer(({ commentGroup }) => {
 
 	const translation = Translations.find(translationQuery).fetch();
 
-	console.log('found translation: ', translation);
+	const linesFrom = commentGroup.linesFrom;
+	const linesTo = commentGroup.linesTo;
 
-	const lines = [];
+	if (translation[0]) {
+		const text = translation[0].revisions[0].text;
+
+		const lines = text.slice(0, 15);
+
+		console.log('found translation: ', translation);
+		console.log('lines: ', lines);
+	}
+	
+
+	
 
 	// TODO: loop through lines in revisions and push to lines array
 
 	return {
-		lines,
 		ready: handle.ready(),
 	};
 }, Translation);

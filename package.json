@@ -125,7 +125,7 @@
     "pretest": "npm run lint",
     "test": "jest",
     "test:watch": "npm run test -- --reporter min --watch",
-    "start": "MONGO_URL=mongodb://localhost/ahcip meteor --settings ./private/settings/production.json"
+    "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings ./private/settings/production.json"
   },
   "repository": {
     "type": "git",

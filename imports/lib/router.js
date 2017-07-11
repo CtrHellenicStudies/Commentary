@@ -59,10 +59,10 @@ FlowRouter.triggers.enter([() => {
 		const hostnameArray = document.location.hostname.split('.');
 		let subdomain;
 
-		// if (process.env.NODE_ENV === 'development') {
-		//	subdomain = Meteor.settings.public.developmentSubdomain;
-		// } else if (hostnameArray.length > 1) {
-		if (hostnameArray.length > 1) {
+		if (process.env.NODE_ENV === 'development') {
+			subdomain = Meteor.settings.public.developmentSubdomain;
+		} else if (hostnameArray.length > 1) {
+		// if (hostnameArray.length > 1) {
 			subdomain = hostnameArray[0];
 		} else {
 			subdomain = '';

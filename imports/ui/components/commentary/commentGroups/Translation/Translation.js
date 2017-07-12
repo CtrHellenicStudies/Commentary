@@ -8,10 +8,14 @@ import Translations from '/imports/api/collections/translations';
 
 class Translation extends React.Component {
 	render() {
-		const { commentGroup } = this.props;
+		const { commentGroup, lines } = this.props;
 		console.log('commentGroup: ', commentGroup);
 		return (
-			<p>Hey now</p>
+			<div>
+				{lines.map(function(line) {
+					return <p key={line.n}>{line.text}</p>;
+				})}
+			</div>
 		);
 	}
 }
@@ -33,7 +37,7 @@ export default createContainer(({ commentGroup }) => {
 
 	const translation = Translations.find(translationQuery).fetch();
 
-	const lines = [];
+	let lines = [];
 
 	if (translation[0]) {
 		const lineFrom = commentGroup.lineFrom;
@@ -41,11 +45,7 @@ export default createContainer(({ commentGroup }) => {
 
 		const text = translation[0].revisions[0].text;
 
-		const lineObjs = text.slice(lineFrom - 1, lineTo);
-
-		for (const lineObj of lineObjs) {
-			lines.push(lineObj.text);
-		}
+		lines = text.slice(lineFrom - 1, lineTo);
 	}
 
 	return {

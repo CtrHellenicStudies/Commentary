@@ -25,7 +25,6 @@ export default createContainer(({ commentGroup }) => {
 			subworkFrom: commentGroup.subwork.title,
 			work: commentGroup.work.slug
 		};
-
 	}
 	console.log('commentGroup: ', commentGroup);
 	console.log('translationQuery: ', translationQuery);
@@ -34,24 +33,23 @@ export default createContainer(({ commentGroup }) => {
 
 	const translation = Translations.find(translationQuery).fetch();
 
-	const linesFrom = commentGroup.linesFrom;
-	const linesTo = commentGroup.linesTo;
+	const lines = [];
 
 	if (translation[0]) {
+		const lineFrom = commentGroup.lineFrom;
+		const lineTo = commentGroup.lineTo;
+
 		const text = translation[0].revisions[0].text;
 
-		const lines = text.slice(0, 15);
+		const lineObjs = text.slice(lineFrom - 1, lineTo);
 
-		console.log('found translation: ', translation);
-		console.log('lines: ', lines);
+		for (const lineObj of lineObjs) {
+			lines.push(lineObj.text);
+		}
 	}
-	
-
-	
-
-	// TODO: loop through lines in revisions and push to lines array
 
 	return {
+		lines,
 		ready: handle.ready(),
 	};
 }, Translation);

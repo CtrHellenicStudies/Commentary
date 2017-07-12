@@ -12,9 +12,7 @@ class Translation extends React.Component {
 		console.log('commentGroup: ', commentGroup);
 		return (
 			<div>
-				{lines.map(function(line) {
-					return <p key={line.n}>{line.text}</p>;
-				})}
+				{lines.map(line => <p key={line.n}>{line.text}</p>)}
 			</div>
 		);
 	}

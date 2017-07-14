@@ -11,6 +11,8 @@ const getDateRevision = (revision) => {
 	return revision.created;
 };
 
+const sortRevisions = (revisions) => (_.sortBy(revisions, 'created'));
+
 class CommentCitation extends React.Component {
 
 	constructor(props) {
@@ -53,6 +55,7 @@ class CommentCitation extends React.Component {
 			}
 		};
 
+
 		return (
 			<div className="comment-citation">
 				<RaisedButton
@@ -68,14 +71,14 @@ class CommentCitation extends React.Component {
 					onRequestClose={this.handleRequestClose.bind(this)}
 				>
 					<Menu>
-						{comment && comment.revisions.map((revision, i) => {
+						{sortRevisions(comment.revisions).reverse().map((revision, i) => {
 
 							const updated = getDateRevision(revision);
 
 							return (
 								<MenuItem
 									key={revision._id}
-									href={`/commentary/?urn=${comment.urn}&revision=${comment.revisions.length - i}`}
+									href={`/commentary/?urn=${comment.urn}&revision=${comment.revisions.length - i - 1}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
 									style={styles.menuItem}
 								/>

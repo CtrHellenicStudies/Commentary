@@ -13,6 +13,7 @@ import Tenant from '/imports/api/collections/tenants';
 import Header from '/imports/ui/layouts/header/Header';
 import Footer from '/imports/ui/components/footer/Footer';
 import CommunityLayout from '/imports/ui/layouts/community/CommunityLayout';
+import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 
 // components
 import Home from '/imports/ui/components/home/Home';
@@ -48,6 +49,10 @@ const HomeLayout = React.createClass({
 
 		if (!settings || !tenant) {
 			return <LoadingHome />;
+		}
+
+		if (tenant.subdomain === 'nrs') {
+			return <NameResolutionServiceLayout />;
 		}
 
 		if (tenant.isAnnotation) {

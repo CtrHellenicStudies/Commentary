@@ -7,16 +7,22 @@ import { createContainer } from 'meteor/react-meteor-data';
 class NameResolutionServiceLayout extends React.Component {
 
 	resolve() {
-		window.location = this.props.resolveLink;
-	}
-
-	render() {
 		const { doi, urn } = this.props;
 
 		if (!doi || !urn) {
 			return (
 				<div>
-					Supply Digital Object Identifier (DOI) or Uniform Resource Name (URN) to resolve.
+					<img
+						className="site-logo"
+						src="/images/CHS_Logo.png"
+						role="presentation"
+						alt="The Center for Hellenic Studies"
+					/>
+					<h1 className="title">Center for Hellenic Studies Commentaries | Name Resolution Service</h1>
+
+					<div className="message">
+						Supply Digital Object Identifier (DOI) or Uniform Resource Name (URN) to resolve.
+					</div>
 				</div>
 			)
 		}
@@ -30,9 +36,13 @@ class NameResolutionServiceLayout extends React.Component {
 				</div>
 			)
 		}
+		window.location = this.props.resolveLink;
+	}
+
+	render() {
 
 		return (
-			<div>
+			<div className="nameResolutionServiceLayout">
 				{this.resolve()}
 			</div>
 		)

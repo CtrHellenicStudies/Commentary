@@ -1,0 +1,6 @@
+{
+  "name": "NameResolutionServiceLayout",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./NameResolutionServiceLayout.js"
+}

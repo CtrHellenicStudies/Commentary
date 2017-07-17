@@ -8,8 +8,8 @@ Translations.schema = new SimpleSchema({
 		type: String,
 		optional: true
 	},
-	wordpressId: {
-		type: Number,
+	created: {
+		type: Date,
 		optional: true
 	},
 	author: {
@@ -17,50 +17,10 @@ Translations.schema = new SimpleSchema({
 		optional: true
 	},
 	work: {
-		type: Object,
-		optional: true
-	},
-	'work.title': {
 		type: String,
 		optional: true
 	},
-	'work.slug': {
-		type: String,
-		optional: true
-	},
-	'work.order': {
-		type: Number,
-		optional: true
-	},
-	subworkFrom: {
-		type: Object,
-		optional: true
-	},
-	'subworkFrom.title': {
-		type: Number,
-		optional: true
-	},
-	'subworkFrom.slug': {
-		type: Number,
-		optional: true
-	},
-	'subworkFrom.n': {
-		type: Number,
-		optional: true
-	},
-	subworkTo: {
-		type: Object,
-		optional: true
-	},
-	'subworkTo.title': {
-		type: Number,
-		optional: true
-	},
-	'subworkTo.slug': {
-		type: Number,
-		optional: true
-	},
-	'subworkTo.n': {
+	subwork: {
 		type: Number,
 		optional: true
 	},
@@ -76,39 +36,17 @@ Translations.schema = new SimpleSchema({
 		type: Number,
 		optional: true
 	},
-	created: {
-		type: Date,
-		optional: true
-	},
-	revisions: {
-		type: [Object],
-		optional: true
-	},
-	'revisions.$.tenantId': {
-		type: String,
-		optional: true
-	},
-	'revisions.$.text': {
-		type: [String],
-		optional: true
-	},
-	'revisions.$.created': {
-		type: Date,
-		optional: true
-	},
-	'revisions.$.slug': {
-		type: String,
-		optional: true
-	}
+	// revisions: {
+	// 	type: [Object],
+	// 	optional: true
+	// }
 });
 
 Translations.attachSchema(Translations.schema);
 
 Translations.attachBehaviour('timestamable', {
 	createdAt: 'created',
-	createdBy: 'createdBy',
 	updatedAt: 'updated',
-	updatedBy: 'updatedBy'
 });
 
 export default Translations;

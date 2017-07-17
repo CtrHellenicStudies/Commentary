@@ -24,8 +24,8 @@ export default createContainer(({ commentGroup }) => {
 	if (commentGroup) {
 		translationQuery = {
 			author: 'CHS',
-			subworkFrom: commentGroup.subwork.title,
-			work: commentGroup.work.slug
+			subwork: Number(commentGroup.subwork.title),
+			work: commentGroup.work.slug,
 		};
 	}
 	console.log('commentGroup: ', commentGroup);
@@ -33,11 +33,15 @@ export default createContainer(({ commentGroup }) => {
 
 	const handle = Meteor.subscribe('translations', Session.get('tenantId'));
 
+	console.log('Found ', Translations.find().fetch().length, ' translations.');
+	console.log('Sample translation record: ', Translations.find().fetch()[0]);
+
 	const translation = Translations.find(translationQuery).fetch();
 
 	let lines = [];
 
 	if (translation[0]) {
+		console.log('Translation found.');
 		const lineFrom = commentGroup.lineFrom;
 		const lineTo = commentGroup.lineTo;
 
@@ -45,6 +49,8 @@ export default createContainer(({ commentGroup }) => {
 
 		lines = text.slice(lineFrom - 1, lineTo);
 	}
+
+	console.log('Translation not found.');
 
 	return {
 		lines,

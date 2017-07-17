@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 
-const NameResolutionServiceLayout = props => {
+class NameResolutionServiceLayout extends React.Component {
 
 	resolve() {
 		window.location = this.props.resolveLink;
@@ -37,7 +37,7 @@ const NameResolutionServiceLayout = props => {
 			</div>
 		)
 	}
-};
+}
 
 const nameResolutionServiceLayoutContainer = createContainer(props => {
 	let urn;

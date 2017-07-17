@@ -19,6 +19,7 @@ import EditKeywordLayout from '/imports/ui/layouts/editor/EditKeywordLayout';
 import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
 import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
 import UserLayout from '/imports/ui/layouts/user/UserLayout';
+import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
 
 // components
@@ -289,6 +290,54 @@ FlowRouter.route('/sign-out', {
 	],
 	action: () => {
 		// Do nothing
+	},
+});
+
+FlowRouter.route('/v1/urn:urn', {
+	action(params) {
+		if (process.env.NODE_ENV === 'development') {
+			subdomain = Meteor.settings.public.developmentSubdomain;
+		} else if (hostnameArray.length > 1) {
+			subdomain = hostnameArray[0];
+		} else {
+			subdomain = '';
+			FlowRouter.go('/404');
+		}
+
+		if (subdomain !== 'nrs') {
+			subdomain = '';
+			FlowRouter.go('/404');
+		}
+
+		mount(MasterLayout, {
+			content: <NameResolutionServiceLayout
+				urn={urn}
+			/>,
+		});
+	},
+});
+
+FlowRouter.route('/v1/doi:doi', {
+	action(params) {
+		if (process.env.NODE_ENV === 'development') {
+			subdomain = Meteor.settings.public.developmentSubdomain;
+		} else if (hostnameArray.length > 1) {
+			subdomain = hostnameArray[0];
+		} else {
+			subdomain = '';
+			FlowRouter.go('/404');
+		}
+
+		if (subdomain !== 'nrs') {
+			subdomain = '';
+			FlowRouter.go('/404');
+		}
+
+		mount(MasterLayout, {
+			content: <NameResolutionServiceLayout
+				doi={doi}
+			/>,
+		});
 	},
 });
 

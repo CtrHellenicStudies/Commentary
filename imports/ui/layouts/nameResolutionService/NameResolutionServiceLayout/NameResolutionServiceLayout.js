@@ -12,6 +12,10 @@ const resolveV1 = props => {
 	let tenant;
 	let comment;
 
+	if (!props.doi && !props.urn) {
+		return resolveURL;
+	}
+
 	let urnParams = props.urn.split(':revision.');
 	const urn = `urn${urnParams[0]}`;
 	const revision = urnParams[1];

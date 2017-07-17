@@ -16,6 +16,11 @@ Subworks.schema = new SimpleSchema({
 		type: Number,
 	},
 
+	tlgNumber: {
+		type: String,
+		optional: true,
+	},
+
 	nComments: {
 		type: Number,
 		optional: true,

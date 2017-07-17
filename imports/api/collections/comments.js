@@ -361,7 +361,24 @@ const COMMENT_ID_LENGTH = 7;
 function getURN(comment) {
 	const work = Works.findOne({ slug: comment.work.slug });
 	const urnPrefix = 'urn:cts:greekLit';
-	const urnTLG = `${work.tlgCreator}.${work.tlg}`;
+
+	// Use work tlg if it exists, otherwise, search for subwork tlg number
+	// Failing either, just use creator
+	let urnTLG = work.tlgCreator;
+	if (work.tlg && work.tlg.length) {
+		urnTLG += `.${work.tlg}`;
+	} else {
+		work.subworks.forEach((subwork) => {
+			if (
+					subwork.n === comment.subwork.n
+				&& subwork.tlgNumber
+				&& subwork.tlgNumber.length
+			) {
+				urnTLG += `.${subwork.tlgNumber}`;
+			}
+		});
+	}
+
 	let urnComment = `${comment.subwork.title}.${comment.lineFrom}`;
 
 	if (typeof comment.lineTo !== 'undefined') {

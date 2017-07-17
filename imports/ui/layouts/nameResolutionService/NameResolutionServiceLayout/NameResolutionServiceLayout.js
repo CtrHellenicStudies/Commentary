@@ -12,8 +12,12 @@ const resolveV1 = props => {
 	let tenant;
 	let comment;
 
-	const commentHandle = Meteor.subscribe('comments', { urn: props.urn }, 0);
-	comment = Comments.findOne({ urn: props.urn });
+	let urnParams = props.urn.split(':revision.');
+	const urn = `urn${urnParams[0]}`;
+	const revision = urnParams[1];
+
+	const commentHandle = Meteor.subscribe('comments', { urn }, 0);
+	comment = Comments.findOne({ urn });
 
 	if (comment) {
 		const tenantsHandle = Meteor.subscribe('tenants')
@@ -21,20 +25,25 @@ const resolveV1 = props => {
 	}
 
 	if (comment && tenant) {
-		resolveURL = `//${tenant.subdomain}.${Utils.setCookieDomain()}/?urn=${props.urn}`;
+		resolveURL = `//${tenant.subdomain}.${Utils.setCookieDomain()}/commentary/?urn=${urn}&revision=${revision}`;
 	}
 
 	return resolveURL;
 };
 
 
-
 class NameResolutionServiceLayout extends React.Component {
 
-	resolve() {
-		const { doi, urn } = this.props;
+	static propTypes: {
+		urn: PropTypes.string,
+		doi: PropTypes.string,
+		resolveURL: PropTypes.string,
+	}
 
-		if (!doi || !urn) {
+	resolve() {
+		const { doi, urn, resolveURL } = this.props;
+
+		if (!doi && !urn) {
 			return (
 				<div>
 					<img
@@ -57,13 +66,22 @@ class NameResolutionServiceLayout extends React.Component {
 		if (!resolveURL) {
 			return (
 				<div>
-					Could not resolve Persistent Identifier {identifier}. Please consult a systems administrator if you feel that this is in error.
+					<img
+						className="site-logo"
+						src="/images/CHS_Logo.png"
+						role="presentation"
+						alt="The Center for Hellenic Studies"
+					/>
+					<h1 className="title">Center for Hellenic Studies Commentaries | Name Resolution Service</h1>
+
+					<div className="message">
+						Could not resolve Persistent Identifier {identifier}. Please consult a systems administrator if you feel that this is in error.
+					</div>
 				</div>
 			)
 		}
 
-		// window.location = this.props.resolveURL;
-		console.log(this.props.resolveURL);
+		window.location = resolveURL;
 	}
 
 	render() {
@@ -77,10 +95,7 @@ class NameResolutionServiceLayout extends React.Component {
 }
 
 const nameResolutionServiceLayoutContainer = createContainer(props => {
-	let urn;
-	let doi;
 	let resolveURL;
-
 
 	switch(props.version) {
 		case '1.0':

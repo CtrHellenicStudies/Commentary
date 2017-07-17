@@ -59,9 +59,7 @@ FlowRouter.triggers.enter([() => {
 		const hostnameArray = document.location.hostname.split('.');
 		let subdomain;
 
-		if (process.env.NODE_ENV === 'development') {
-			subdomain = Meteor.settings.public.developmentSubdomain;
-		} else if (hostnameArray.length > 1) {
+		if (hostnameArray.length > 1) {
 			subdomain = hostnameArray[0];
 		} else {
 			subdomain = '';
@@ -294,9 +292,10 @@ FlowRouter.route('/sign-out', {
 
 FlowRouter.route('/v1/urn:urn', {
 	action(params) {
-		if (process.env.NODE_ENV === 'development') {
-			subdomain = Meteor.settings.public.developmentSubdomain;
-		} else if (hostnameArray.length > 1) {
+		const hostnameArray = document.location.hostname.split('.');
+		let subdomain;
+
+		if (hostnameArray.length > 1) {
 			subdomain = hostnameArray[0];
 		} else {
 			subdomain = '';
@@ -310,7 +309,7 @@ FlowRouter.route('/v1/urn:urn', {
 
 		mount(MasterLayout, {
 			content: <NameResolutionServiceLayout
-				urn={urn}
+				urn={params.urn}
 				version="1.0"
 			/>,
 		});
@@ -319,9 +318,10 @@ FlowRouter.route('/v1/urn:urn', {
 
 FlowRouter.route('/v1/doi:doi', {
 	action(params) {
-		if (process.env.NODE_ENV === 'development') {
-			subdomain = Meteor.settings.public.developmentSubdomain;
-		} else if (hostnameArray.length > 1) {
+		const hostnameArray = document.location.hostname.split('.');
+		let subdomain;
+
+		if (hostnameArray.length > 1) {
 			subdomain = hostnameArray[0];
 		} else {
 			subdomain = '';
@@ -335,7 +335,7 @@ FlowRouter.route('/v1/doi:doi', {
 
 		mount(MasterLayout, {
 			content: <NameResolutionServiceLayout
-				doi={doi}
+				doi={params.doi}
 				version="1.0"
 			/>,
 		});

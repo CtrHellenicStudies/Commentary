@@ -311,6 +311,7 @@ FlowRouter.route('/v1/urn:urn', {
 		mount(MasterLayout, {
 			content: <NameResolutionServiceLayout
 				urn={urn}
+				version="1.0"
 			/>,
 		});
 	},
@@ -335,6 +336,7 @@ FlowRouter.route('/v1/doi:doi', {
 		mount(MasterLayout, {
 			content: <NameResolutionServiceLayout
 				doi={doi}
+				version="1.0"
 			/>,
 		});
 	},

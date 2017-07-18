@@ -129,17 +129,14 @@ class CommentLemma extends React.Component {
 
 				<article className="comment lemma-comment paper-shadow">
 					<LoadingLemma ready={ready} />
-					{showTranslation ?
-						<TranslationLayout commentGroup={commentGroup}>
-							<CommentLemmaText
-
-								lines={selectedLemmaEdition.lines}
-							/>
-						</TranslationLayout>
-					:
-						<CommentLemmaText
+					{ready ?
+						<TranslationLayout
+							commentGroup={commentGroup}
+							showTranslation={showTranslation}
 							lines={selectedLemmaEdition.lines}
 						/>
+						:
+						''
 					}
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {

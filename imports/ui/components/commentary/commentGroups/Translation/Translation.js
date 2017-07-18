@@ -1,24 +1,55 @@
-import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-
-// api
+import React from 'react';
+import FlatButton from 'material-ui/FlatButton';
 import Translations from '/imports/api/collections/translations';
+import _ from 'lodash';
 
 class Translation extends React.Component {
+
 	render() {
-		const { commentGroup, lines } = this.props;
-		console.log('commentGroup: ', commentGroup);
+		const { lines, commentGroup, LinesWithTranslation } = this.props;
+		const nLines = commentGroup.nLines;
+
 		return (
 			<div>
-				{lines.map(line => <p key={line.n}>{line.text}</p>)}
+				{LinesWithTranslation.map(line => (
+					<div className="row">
+						<div className="col-md-7">
+							<div
+								key={line.n}
+								className="lemma-text-line"
+								style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
+							>
+								<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
+									{line.n}
+								</span>
+								<p								
+									className="lemma-text"
+									dangerouslySetInnerHTML={{ __html: line.html }}
+								/>
+							</div>
+						</div>
+						<div className="col-md-5">
+							<div
+								key={line.n}
+								className="lemma-text-line"
+								style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
+							>
+								<p className="lemma-text">{line.english}</p>
+							</div>
+						</div>
+					</div>
+				))
+					
+				}
 			</div>
 		);
 	}
 }
 
-export default createContainer(({ commentGroup }) => {
+export default createContainer(({ commentGroup, lines }) => {
 	let translationQuery = {};
 
 	if (commentGroup) {
@@ -38,7 +69,7 @@ export default createContainer(({ commentGroup }) => {
 
 	const translation = Translations.find(translationQuery).fetch();
 
-	let lines = [];
+	const translationLines = [];
 
 	if (translation[0]) {
 		console.log('Translation found.');
@@ -47,13 +78,29 @@ export default createContainer(({ commentGroup }) => {
 
 		const text = translation[0].revisions[0].text;
 
-		lines = text.slice(lineFrom - 1, lineTo);
+		const translationObjects = text.slice(lineFrom - 1, lineTo);
+		for (const object of translationObjects) {
+			translationLines.push(object.text);
+		}
 	}
+	
+	const LinesWithTranslation = _.zipWith(lines, translationLines, function(item, value) {
+		return _.defaults({ english: value }, item);
+	});
 
-	console.log('Translation not found.');
+	console.log('lines with translations: ', LinesWithTranslation);
 
 	return {
-		lines,
+		LinesWithTranslation,
 		ready: handle.ready(),
 	};
 }, Translation);
+
+Translation.propTypes = {
+	lines: React.PropTypes.arrayOf(React.PropTypes.shape({
+		html: React.PropTypes.string.isRequired,
+		n: React.PropTypes.number.isRequired,
+	})).isRequired,
+};
+
+

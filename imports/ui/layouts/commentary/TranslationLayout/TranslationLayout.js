@@ -4,10 +4,6 @@ import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/Co
 import Translation from '/imports/ui/components/commentary/commentGroups/Translation'; 
 
 class TranslationLayout extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		const { commentGroup, showTranslation, lines } = this.props;
 

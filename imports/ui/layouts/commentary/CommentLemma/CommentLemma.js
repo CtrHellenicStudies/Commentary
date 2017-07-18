@@ -4,11 +4,14 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 import Utils from '/imports/lib/utils';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes'; 
+import TextNodes from '/imports/api/collections/textNodes';
+import Translations from '/imports/api/collections/translations'; 
 
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; 
@@ -105,7 +108,7 @@ class CommentLemma extends React.Component {
 	}
 
 	render() {
-		const { commentGroup, hideLemma, editions, ready } = this.props;
+		const { commentGroup, hideLemma, editions, ready, translationAuthors } = this.props;
 		const { selectedLemmaEditionIndex, showTranslation } = this.state;
 
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
@@ -152,23 +155,29 @@ class CommentLemma extends React.Component {
 							/>);
 						})}
 					</div>
-					<div className="context-tabs tabs">
-						<RaisedButton
-							className="context-tab tab"
-							onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
-							label="Context"
-							labelPosition="before"
-							icon={<FontIcon className="mdi mdi-chevron-right" />}
-						/>
-					</div>
-					<div className="context-tabs tabs">
-						<RaisedButton
-							className="context-tab tab"
-							onClick={() => this.showTranslation()}
-							label="Translation"
-							labelPosition="before"
-							icon={<FontIcon className="mdi mdi-chevron-right" />}
-						/>
+					<div className="row">
+						<div className="context-tabs tabs">
+							<RaisedButton
+								className="context-tab tab"
+								onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
+								label="Context"
+								labelPosition="before"
+								icon={<FontIcon className="mdi mdi-chevron-right" />}
+							/>
+						</div>
+						<div className="context-tabs tabs">
+							{translationAuthors.length > 0 ?
+								<DropDownMenu
+									value={translationAuthors}
+								>
+									{translationAuthors.map((author, i) => (
+										<MenuItem key={i} primaryText={author} />
+									))} 
+								</DropDownMenu>
+							:
+							''
+							}
+						</div>
 					</div>
 				</article>
 				<div className="discussion-wrap" />
@@ -243,7 +252,21 @@ export default createContainer(({ commentGroup }) => {
 		});
 	});
 
+	const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
+
+	const translationQuery = {
+		work: commentGroup.work.slug,
+		subwork: Number(commentGroup.subwork.title),
+		lineTo: {$gte: commentGroup.lineTo},
+		lineFrom: {$lte: commentGroup.lineFrom},
+	};
+
+	const translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
+
+	console.log('matched authors: ', translationAuthors);
+
 	return {
+		translationAuthors,
 		editions,
 		ready: handle.ready(),
 	};

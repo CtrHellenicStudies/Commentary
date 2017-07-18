@@ -37,7 +37,7 @@ class Translation extends React.Component {
 								className="lemma-text-line"
 								style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
 							>
-								<p className="lemma-text">{line.english}</p>
+								<p className="lemma-text" style={{fontSize: '16px', color: '#a9a9a9'}}>{line.english}</p>
 							</div>
 						</div>
 					</div>
@@ -59,20 +59,14 @@ export default createContainer(({ commentGroup, lines }) => {
 			work: commentGroup.work.slug,
 		};
 	}
-	console.log('commentGroup: ', commentGroup);
-	console.log('translationQuery: ', translationQuery);
 
 	const handle = Meteor.subscribe('translations', Session.get('tenantId'));
-
-	console.log('Found ', Translations.find().fetch().length, ' translations.');
-	console.log('Sample translation record: ', Translations.find().fetch()[0]);
 
 	const translation = Translations.find(translationQuery).fetch();
 
 	const translationLines = [];
 
 	if (translation[0]) {
-		console.log('Translation found.');
 		const lineFrom = commentGroup.lineFrom;
 		const lineTo = commentGroup.lineTo;
 
@@ -87,8 +81,6 @@ export default createContainer(({ commentGroup, lines }) => {
 	const LinesWithTranslation = _.zipWith(lines, translationLines, function(item, value) {
 		return _.defaults({ english: value }, item);
 	});
-
-	console.log('lines with translations: ', LinesWithTranslation);
 
 	return {
 		LinesWithTranslation,

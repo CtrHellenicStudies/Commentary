@@ -67,6 +67,7 @@ class AddTranslation extends React.Component {
 	}
 
 	toggleInputLines() {
+		console.log('toggle state: ', this.props.toggleInputLines);
 		this.props.onToggleInputLinesChange()
 	}
 

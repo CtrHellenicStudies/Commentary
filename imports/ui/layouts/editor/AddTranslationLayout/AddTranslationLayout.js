@@ -380,7 +380,7 @@ class AddTranslationLayout extends React.Component {
 			created: date,
 		};
 
-		Meteor.call('translations.insert', token, translation, (error)  => {
+		Meteor.call('translations.insert', token, translation, (error) => {
 			if (error) {
 				console.log("uh oh");
 				console.log(error);
@@ -472,54 +472,3 @@ const AddTranslationLayoutContainer = (() => {
 }, AddTranslationLayout);
 
 export default AddTranslationLayoutContainer;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

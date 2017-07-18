@@ -70,7 +70,7 @@ class CommentLemma extends React.Component {
 		// methods:
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.showContextPanel = this.showContextPanel.bind(this);
-		this.showTranslation = this.showTranslation.bind(this);
+		this.handleAuthorChange = this.handleAuthorChange.bind(this);
 	}
 
 	toggleEdition(editionSlug) {
@@ -101,15 +101,28 @@ class CommentLemma extends React.Component {
 		showContextPanel(commentGroup);
 	}
 
-	showTranslation() {
-		this.setState({
-			showTranslation: !this.state.showTranslation,
-		});
+	handleAuthorChange(event, index, value) {
+		const { selectedAuthor, showTranslation } = this.state;
+		if (!selectedAuthor) {
+			this.setState({
+				selectedAuthor: value,
+				showTranslation: true
+			});
+		} else if (selectedAuthor === value) {
+			this.setState({
+				showTranslation: !showTranslation
+			});
+		} else if (selectedAuthor != value){
+			this.setState({
+				selectedAuthor: value,
+				showTranslation: true
+			});
+		}
 	}
 
 	render() {
 		const { commentGroup, hideLemma, editions, ready, translationAuthors } = this.props;
-		const { selectedLemmaEditionIndex, showTranslation } = this.state;
+		const { selectedLemmaEditionIndex, selectedAuthor, showTranslation } = this.state;
 
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
@@ -137,6 +150,7 @@ class CommentLemma extends React.Component {
 							commentGroup={commentGroup}
 							showTranslation={showTranslation}
 							lines={selectedLemmaEdition.lines}
+							author={selectedAuthor}
 						/>
 						:
 						''
@@ -155,7 +169,10 @@ class CommentLemma extends React.Component {
 							/>);
 						})}
 					</div>
-					<div className="row">
+					<div 
+						className="row"
+						style={{justifyContent: 'center', alignItems: 'center'}}
+					>
 						<div className="context-tabs tabs">
 							<RaisedButton
 								className="context-tab tab"
@@ -168,10 +185,15 @@ class CommentLemma extends React.Component {
 						<div className="context-tabs tabs">
 							{translationAuthors.length > 0 ?
 								<DropDownMenu
-									value={translationAuthors}
+									value={selectedAuthor}
+									onChange={this.handleAuthorChange}
 								>
 									{translationAuthors.map((author, i) => (
-										<MenuItem key={i} primaryText={author} />
+										<MenuItem 
+											key={i}
+											value={author}
+											primaryText={author} 
+										/>
 									))} 
 								</DropDownMenu>
 							:

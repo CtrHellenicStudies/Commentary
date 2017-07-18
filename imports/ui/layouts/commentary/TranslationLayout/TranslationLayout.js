@@ -5,7 +5,7 @@ import Translation from '/imports/ui/components/commentary/commentGroups/Transla
 
 class TranslationLayout extends React.Component {
 	render() {
-		const { commentGroup, showTranslation, lines } = this.props;
+		const { commentGroup, showTranslation, lines, author } = this.props;
 
 		return (
 			<div>
@@ -13,6 +13,7 @@ class TranslationLayout extends React.Component {
 					<Translation 
 						commentGroup={commentGroup}
 						lines={lines}
+						author={author}
 					/>
 					:
 					<CommentLemmaText lines={lines} />

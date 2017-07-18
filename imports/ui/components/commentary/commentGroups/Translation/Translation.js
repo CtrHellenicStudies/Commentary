@@ -9,7 +9,7 @@ import _ from 'lodash';
 class Translation extends React.Component {
 
 	render() {
-		const { lines, commentGroup, LinesWithTranslation } = this.props;
+		const { lines, commentGroup, LinesWithTranslation, author } = this.props;
 		const nLines = commentGroup.nLines;
 
 		return (
@@ -49,12 +49,12 @@ class Translation extends React.Component {
 	}
 }
 
-export default createContainer(({ commentGroup, lines }) => {
+export default createContainer(({ commentGroup, lines, author }) => {
 	let translationQuery = {};
 
 	if (commentGroup) {
 		translationQuery = {
-			author: 'CHS',
+			author: author,
 			subwork: Number(commentGroup.subwork.title),
 			work: commentGroup.work.slug,
 		};

@@ -329,58 +329,52 @@ class AddTranslationLayout extends React.Component {
 
 		// get data for translation
 		const work = this.getWork();
-		const subworkFrom = this.getSubwork();
-		const subworkTo = this.getSubwork();
-		const commenter = Meteor.user();
-		const token = cookie.load('loginToken');
+		const subwork = this.getSubwork();
+		const author = Meteor.user();
 		const revisionId = new Meteor.Collection.ObjectID();
 		const lineFrom = this.state.selectedLineFrom;
 		const lineTo = this.getSelectedLineTo();
-		const slug = slugify(`${work.title} ${subworkFrom.n} ${lineFrom} ${subworkTo.n} ${lineTo} ${commenter.username}`);
+		const slug = slugify('hey');
 		const tenantId = Session.get('tenantId');
 		const nLines = (lineTo - lineFrom) + 1;
-		const date = new Date();
-		const text = textValue;
+		const created = new Date();
+		const text = [];
 
+		for (let i = lineFrom, j = 0; j < textValue.blocks.length; i++, j++) {
+			text.push({
+				text: textValue.blocks[j].text,
+				n: i
+			});
+		}
+		
+		console.log('work: ', work);
+		console.log('subwork: ', subwork);
+		console.log('author: ', author);
 
 		console.log('editor stuff: ', text);
 
 		const translation = {
-			work: {
-				title: work.title,
-				slug: work.slug,
-				order: work.order,
-			},
-			subworkFrom: {
-				title: subworkFrom.title,
-				slug: subworkFrom.slug,
-				n: subworkFrom.n,
-			},
-			subworkTo: {
-				title: subworkTo.title,
-				slug: subworkTo.slug,
-				n: subworkTo.n,
-			},
+			tenantId: tenantId,
+			created: created,
+			author: author.profile.name,
+			work: work.slug,
+			subwork: subwork.n,
 			lineFrom: lineFrom,
 			lineTo: lineTo,
 			nLines: nLines,
-			revisions: [{
-				_id: revisionId.valueOf(),
-				text: text,
-				tenantId: tenantId,
-				originalDate: date,
-				slug: slug
-			}],
-			commenters: commenter ? [{
-				_id: commenter._id,
-				name: commenter.username,
-				slug: commenter.slug,
-			}] : [{}],
-			tenantId: tenantId,
-			created: date,
+			revisions: [
+				{
+					tenantId: tenantId,
+					text: text,
+					creted: created,
+					slug: slug
+				}
+			]
 		};
 
-		Meteor.call('translations.insert', token, translation, (error) => {
+		console.log('translation to be inserted: ', translation);
+
+		Meteor.call('translations.insert', translation, (error) => {
 			if (error) {
 				console.log("uh oh");
 				console.log(error);

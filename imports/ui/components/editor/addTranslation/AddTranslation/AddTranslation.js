@@ -56,19 +56,13 @@ class AddTranslation extends React.Component {
 		this.onLineToWorkChange = this.onLineToWorkChange.bind(this);
 		this.onLineToSubworkChange = this.onLineToSubworkChange.bind(this);
 		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
-		this.toggleInputLines = this.toggleInputLines.bind(this);
 		this.onEditorChange = this.onEditorChange.bind(this);
 	}
 
 	onEditorChange(editorState) {
 		this.setState({
 			editorState: editorState
-		})
-	}
-
-	toggleInputLines() {
-		console.log('toggle state: ', this.props.toggleInputLines);
-		this.props.onToggleInputLinesChange()
+		});
 	}
 
 	onCommenterValueChange(comenter) {
@@ -153,7 +147,7 @@ class AddTranslation extends React.Component {
 	}
 
 	render() {
-		const { isTest, worksOptions, commentersOptions, toggleInputLines, toggleInputLinesLabel, toggleInputLinesIsToggled } = this.props;
+		const { isTest, worksOptions, commentersOptions } = this.props;
 
 		const getSubworks = () => {
 			const  subworks = [];
@@ -205,57 +199,6 @@ class AddTranslation extends React.Component {
 								/>
 							</div>
 							<div className="comment-edit-action-button" />
-							{toggleInputLinesIsToggled ?
-								<div style={{paddingLeft: 45}}>
-									<div>
-										<h5>Line From</h5>
-										<Creatable
-											name="works"
-											id="works"
-											required={true}
-											options={worksOptions}
-											placeholder="Work"
-											value={this.state.lineFromWork}
-											onChange={this.onLineFromWorkChange}
-										/>
-										<Creatable
-											name="subworks"
-											id="subworks"
-											required={true}
-											options={this.state.lineFromWork !== '' ? getSubworks() : ''}
-											placeholder="Subwork"
-											value={this.state.lineFromSubwork}
-											onChange={this.onLineFromSubworkChange}
-										/>
-										<TextField
-											floatingLabelText="Line From"
-										/>
-									</div>
-									<div>
-										<h5>Line to</h5>
-										<Creatable
-											name="subworks"
-											id="subworks"
-											required={true}
-											options={this.state.lineFromWork !== '' ? getSubworks() : ''}
-											placeholder="Subwork"
-											value={this.state.lineToSubwork}
-											onChange={this.onLineToSubworkChange}
-										/>
-										<TextField
-											floatingLabelText="Line to"
-										/>
-									</div>
-								</div>
-								: ''
-							}
-							<Toggle
-								label={toggleInputLinesLabel}
-								labelPosition="right"
-								style={toggleStyle.style}
-								toggled={toggleInputLinesIsToggled}
-								onToggle={toggleInputLines}
-							/>
 							<RaisedButton
 								type="submit"
 								label="Add translation"

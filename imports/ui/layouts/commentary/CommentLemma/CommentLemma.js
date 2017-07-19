@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
-import DropDownMenu from 'material-ui/DropDownMenu';
+import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 
 import Utils from '/imports/lib/utils';
@@ -71,6 +71,7 @@ class CommentLemma extends React.Component {
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.showContextPanel = this.showContextPanel.bind(this);
 		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+		this.handleOpenTranslationMenu = this.handleOpenTranslationMenu.bind(this);
 	}
 
 	toggleEdition(editionSlug) {
@@ -101,23 +102,39 @@ class CommentLemma extends React.Component {
 		showContextPanel(commentGroup);
 	}
 
-	handleAuthorChange(event, index, value) {
+	handleAuthorChange(event, value) {
 		const { selectedAuthor, showTranslation } = this.state;
+
+		console.log('handleAuthorChange fired. current state: ', selectedAuthor);
+
 		if (!selectedAuthor) {
 			this.setState({
 				selectedAuthor: value,
-				showTranslation: true
+				showTranslation: true,
+				openTranslationMenu: false
 			});
 		} else if (selectedAuthor === value) {
 			this.setState({
-				showTranslation: !showTranslation
+				showTranslation: !showTranslation,
+				openTranslationMenu: false
 			});
-		} else if (selectedAuthor != value){
+		} else if (selectedAuthor !== value) {
 			this.setState({
 				selectedAuthor: value,
-				showTranslation: true
+				showTranslation: true,
+				openTranslationMenu: false
 			});
 		}
+	}
+
+	handleOpenTranslationMenu() {
+
+		const { openTranslationMenu } = this.state;
+
+
+		this.setState({
+			openTranslationMenu: !openTranslationMenu
+		});
 	}
 
 	render() {
@@ -169,23 +186,24 @@ class CommentLemma extends React.Component {
 							/>);
 						})}
 					</div>
-					<div 
-						className="row"
-						style={{justifyContent: 'center', alignItems: 'center'}}
-					>
-						<div className="context-tabs tabs">
-							<RaisedButton
-								className="context-tab tab"
-								onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
-								label="Context"
-								labelPosition="before"
-								icon={<FontIcon className="mdi mdi-chevron-right" />}
-							/>
-						</div>
-						<div className="context-tabs tabs">
-							{translationAuthors.length > 0 ?
-								<DropDownMenu
-									value={selectedAuthor}
+					<div className="context-tabs tabs">
+						<RaisedButton
+							className="context-tab tab"
+							onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
+							label="Context"
+							labelPosition="before"
+							icon={<FontIcon className="mdi mdi-chevron-right" />}
+						/>
+						{translationAuthors.length > 0 ?
+							<div>
+								<RaisedButton
+									className="context-tab tab"
+									onClick={this.handleOpenTranslationMenu}
+									label="Translations"
+								/>
+								<IconMenu
+									iconButtonElement={<FontIcon className="mdi mdi-chevron-right" />}
+									open={this.state.openTranslationMenu}
 									onChange={this.handleAuthorChange}
 								>
 									{translationAuthors.map((author, i) => (
@@ -195,11 +213,11 @@ class CommentLemma extends React.Component {
 											primaryText={author} 
 										/>
 									))} 
-								</DropDownMenu>
-							:
-							''
-							}
-						</div>
+								</IconMenu>
+							</div>
+						:
+						''
+						}
 					</div>
 				</article>
 				<div className="discussion-wrap" />

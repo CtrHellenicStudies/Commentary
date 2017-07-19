@@ -346,12 +346,6 @@ class AddTranslationLayout extends React.Component {
 				n: i
 			});
 		}
-		
-		console.log('work: ', work);
-		console.log('subwork: ', subwork);
-		console.log('author: ', author);
-
-		console.log('editor stuff: ', text);
 
 		const translation = {
 			tenantId: tenantId,
@@ -372,15 +366,10 @@ class AddTranslationLayout extends React.Component {
 			]
 		};
 
-		console.log('translation to be inserted: ', translation);
-
 		Meteor.call('translations.insert', translation, (error) => {
 			if (error) {
-				console.log("uh oh");
 				console.log(error);
 			} else {
-				console.log("it worked!");
-				console.log("here's the translation: ", translation);
 				FlowRouter.go('/commentary', {});
 			}
 		});

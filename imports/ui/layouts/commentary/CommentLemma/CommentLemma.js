@@ -4,15 +4,20 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 import Utils from '/imports/lib/utils';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes'; 
+import TextNodes from '/imports/api/collections/textNodes';
+import Translations from '/imports/api/collections/translations'; 
 
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; 
-import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';  
+import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';
+import TranslationLayout from '/imports/ui/layouts/commentary/TranslationLayout';
+import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
 
 class CommentLemma extends React.Component {
 
@@ -59,11 +64,14 @@ class CommentLemma extends React.Component {
 
 		this.state = {
 			selectedLemmaEditionIndex: 0,
+			showTranslation: false,
 		};
 
 		// methods:
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.showContextPanel = this.showContextPanel.bind(this);
+		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+		this.handleOpenTranslationMenu = this.handleOpenTranslationMenu.bind(this);
 	}
 
 	toggleEdition(editionSlug) {
@@ -94,9 +102,44 @@ class CommentLemma extends React.Component {
 		showContextPanel(commentGroup);
 	}
 
+	handleAuthorChange(event, value) {
+		const { selectedAuthor, showTranslation } = this.state;
+
+		console.log('handleAuthorChange fired. current state: ', selectedAuthor);
+
+		if (!selectedAuthor) {
+			this.setState({
+				selectedAuthor: value,
+				showTranslation: true,
+				openTranslationMenu: false
+			});
+		} else if (selectedAuthor === value) {
+			this.setState({
+				showTranslation: !showTranslation,
+				openTranslationMenu: false
+			});
+		} else if (selectedAuthor !== value) {
+			this.setState({
+				selectedAuthor: value,
+				showTranslation: true,
+				openTranslationMenu: false
+			});
+		}
+	}
+
+	handleOpenTranslationMenu() {
+
+		const { openTranslationMenu } = this.state;
+
+
+		this.setState({
+			openTranslationMenu: !openTranslationMenu
+		});
+	}
+
 	render() {
-		const { commentGroup, hideLemma, editions, ready } = this.props;
-		const { selectedLemmaEditionIndex } = this.state;
+		const { commentGroup, hideLemma, editions, ready, translationAuthors } = this.props;
+		const { selectedLemmaEditionIndex, selectedAuthor, showTranslation } = this.state;
 
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
@@ -118,15 +161,16 @@ class CommentLemma extends React.Component {
 				</Sticky>
 
 				<article className="comment lemma-comment paper-shadow">
-					{!ready ?
-						<div className="lemma-loading">
-							<div className="lemma-loading-top" />
-							<div className="lemma-loading-bottom" />
-						</div>
-					:
-						<CommentLemmaText
+					<LoadingLemma ready={ready} />
+					{ready ?
+						<TranslationLayout
+							commentGroup={commentGroup}
+							showTranslation={showTranslation}
 							lines={selectedLemmaEdition.lines}
+							author={selectedAuthor}
 						/>
+						:
+						''
 					}
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {
@@ -150,6 +194,30 @@ class CommentLemma extends React.Component {
 							labelPosition="before"
 							icon={<FontIcon className="mdi mdi-chevron-right" />}
 						/>
+						{translationAuthors.length > 0 ?
+							<div>
+								<RaisedButton
+									className="context-tab tab"
+									onClick={this.handleOpenTranslationMenu}
+									label="Translations"
+								/>
+								<IconMenu
+									iconButtonElement={<FontIcon className="mdi mdi-chevron-right" />}
+									open={this.state.openTranslationMenu}
+									onChange={this.handleAuthorChange}
+								>
+									{translationAuthors.map((author, i) => (
+										<MenuItem 
+											key={i}
+											value={author}
+											primaryText={author} 
+										/>
+									))} 
+								</IconMenu>
+							</div>
+						:
+						''
+						}
 					</div>
 				</article>
 				<div className="discussion-wrap" />
@@ -224,7 +292,21 @@ export default createContainer(({ commentGroup }) => {
 		});
 	});
 
+	const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
+
+	const translationQuery = {
+		work: commentGroup.work.slug,
+		subwork: Number(commentGroup.subwork.title),
+		lineTo: {$gte: commentGroup.lineTo},
+		lineFrom: {$lte: commentGroup.lineFrom},
+	};
+
+	const translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
+
+	console.log('matched authors: ', translationAuthors);
+
 	return {
+		translationAuthors,
 		editions,
 		ready: handle.ready(),
 	};

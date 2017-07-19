@@ -312,6 +312,12 @@ class Header extends React.Component {
 																className=""
 																style={styles.flatButton}
 															/>
+															<FlatButton
+																href="/translation/create"
+																label="Add Translation"
+																className=""
+																style={styles.flatButton}
+															/>
 														</span>
 													}
 												</div>

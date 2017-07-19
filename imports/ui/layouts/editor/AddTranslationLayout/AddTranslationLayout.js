@@ -3,62 +3,39 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
-import slugify from 'slugify';
-import Cookies from 'js-cookie';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import cookie from 'react-cookie';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Commenters from '/imports/api/collections/commenters';
+import slugify from 'slugify';
+import { convertToRaw } from 'draft-js';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
 import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
-import AddComment from '/imports/ui/components/editor/addComment/AddComment';
+import AddTranslation from '/imports/ui/components/editor/addTranslation/AddTranslation';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
-// api
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
-
-
-/*
- *	helpers
- */
+// helpers
 const handlePermissions = () => {
-	if (Roles.subscription.ready()) {
+	if (Roles.subscription.read()) {
 		if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-			FlowRouter.go('/');
+			FlowRouter.go('/')
 		}
 	}
 };
-const getReferenceWorks = (formData) => {
-	let referenceWorks = null;
-	if (formData.referenceWorksValue) {
-		referenceWorks = ReferenceWorks.findOne({_id: formData.referenceWorksValue.value});
-	}
-	return referenceWorks;
-};
 const getCommenter = (formData) => {
-	console.log(formData)
 	const commenter = Commenters.findOne({
 		_id: formData.commenterValue.value,
 	});
 	return commenter;
 };
-const getKeywords = (formData) => {
-	const keywords = [];
 
-	formData.tagsValue.forEach((tag) => {
-		const keyword = tag.keyword;
-		keyword.isMentionedInLemma = tag.isMentionedInLemma;
-		keywords.push(keyword);
-	});
-	return keywords;
-};
 const getFilterValues = (filters) => {
 	const filterValues = {};
 
@@ -78,10 +55,7 @@ const getFilterValues = (filters) => {
 };
 
 
-/*
- *	BEGIN AddCommentLayout
- */
-class AddCommentLayout extends React.Component {
+class AddTranslationLayout extends React.Component {
 	static propTypes = {
 		ready: React.PropTypes.bool,
 		isTest: React.PropTypes.bool,
@@ -91,39 +65,59 @@ class AddCommentLayout extends React.Component {
 		ready: false,
 		isTest: false,
 	};
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			filters: [],
+			work: '',
+			subwork1: '',
+			subwork2: '',
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
-			selectedWork: ''
+			selectedWork: '',
+			toggleInputLinesIsToggled: false,
 		};
 
 		// methods:
 		this.updateSelectedLines = this.updateSelectedLines.bind(this);
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
 
-		this.addComment = this.addComment.bind(this);
+		this.addTranslation = this.addTranslation.bind(this);
 		this.getWork = this.getWork.bind(this);
 		this.getSubwork = this.getSubwork.bind(this);
-		this.getLineLetter = this.getLineLetter.bind(this);
 		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
 		this.closeContextReader = this.closeContextReader.bind(this);
 		this.openContextReader = this.openContextReader.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
 		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.toggleInputLines = this.toggleInputLines.bind(this);
+		this.getText = this.getText.bind(this);
 	}
 
-	componentWillUpdate() {
-		handlePermissions();
+	toggleInputLines() {
+		this.setState({
+			toggleInputLinesIsToggled: !this.state.toggleInputLinesIsToggled,
+		});
 	}
 
-	// --- BEGNI LINE SELECTION --- //
+	getText(textValue) {
+		console.log('textValue: ', textValue);
+		const text = [];
+		textValue["blocks"].forEach(textObject => {
+			text.push({
+				line: textValue["blocks"].findIndex(textObject),
+				text: textObject["text"]
+			})
+		})
+	}
 
+
+
+	// line selection
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
 		if (selectedLineFrom === null) {
 			this.setState({
@@ -138,13 +132,11 @@ class AddCommentLayout extends React.Component {
 				selectedLineFrom,
 				selectedLineTo,
 			});
-		} else {
-			// do nothing
-		}
+		} else {}
 	}
 
 	toggleSearchTerm(key, value) {
-		const { filters } = this.state;
+		const {filters} = this.state;
 
 		let keyIsInFilter = false;
 		let valueIsInFilter = false;
@@ -170,11 +162,10 @@ class AddCommentLayout extends React.Component {
 				} else if (key === 'works') {
 					filters[i].values = [value];
 				} else {
-					filters[i].values.push(value);
+					filters[i].values.push(value)
 				}
 			}
 		});
-
 
 		if (typeof filterToRemove !== 'undefined') {
 			filters.splice(filterToRemove, 1);
@@ -193,68 +184,7 @@ class AddCommentLayout extends React.Component {
 		});
 	}
 
-	// --- END LINE SELECTION --- //
-
-
-	// --- BEGNI ADD COMMENT --- //
-
-	addComment(formData, textValue, textRawValue) {
-		this.setState({
-			loading: true,
-		});
-
-		// get data for comment:
-		const work = this.getWork();
-		const subwork = this.getSubwork();
-		const lineLetter = this.getLineLetter();
-		const referenceWorks = formData.referenceWorks;
-		const commenter = getCommenter(formData);
-		const selectedLineTo = this.getSelectedLineTo();
-		const token = Cookies.get('loginToken');
-
-		// get keywords after they were created:
-		const keywords = getKeywords(formData);
-		const revisionId = new Meteor.Collection.ObjectID();
-
-		// create comment object to be inserted:
-		const comment = {
-			work: {
-				title: work.title,
-				slug: work.slug,
-				order: work.order,
-			},
-			subwork: {
-				title: subwork.title,
-				n: subwork.n,
-			},
-			lineFrom: this.state.selectedLineFrom,
-			lineTo: selectedLineTo,
-			lineLetter,
-			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
-			revisions: [{
-				_id: revisionId.valueOf(),
-				title: formData.titleValue,
-				text: textValue,
-				textRaw: textRawValue,
-				created: referenceWorks ? referenceWorks.date : new Date(),
-				slug: slugify(formData.titleValue),
-			}],
-			commenters: commenter ? [{
-				_id: commenter._id,
-				name: commenter.name,
-				slug: commenter.slug,
-			}] : [{}],
-			keywords: keywords || [{}],
-			referenceWorks: referenceWorks,
-			tenantId: Session.get('tenantId'),
-			created: new Date(),
-		};
-
-		Meteor.call('comments.insert', token, comment, (error, commentId) => {
-			FlowRouter.go('/commentary', {}, {_id: commentId});
-		});
-	}
-
+	// get work/subwork/line letter/selected line to
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
@@ -273,47 +203,38 @@ class AddCommentLayout extends React.Component {
 	}
 
 	getSubwork() {
-		let subwork = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'subworks') {
-				subwork = filter.values[0];
+		if (!this.state.toggleInputLinesIsToggled) {
+			let subwork = null;
+			this.state.filters.forEach((filter) => {
+				if (filter.key === 'subworks') {
+					subwork = filter.values[0];
+				}
+			});
+			if (!subwork) {
+				subwork = {
+					title: '1',
+					n: 1,
+				};
 			}
-		});
-		if (!subwork) {
-			subwork = {
-				title: '1',
-				n: 1,
-			};
+			return subwork;
+		} else {
+			return {title: "test", n: 1}
 		}
-		return subwork;
-	}
-
-	getLineLetter() {
-
-		const { selectedLineTo, selectedLineFrom } = this.state;
-
-		let lineLetter = '';
-		if (selectedLineTo === 0 && selectedLineFrom > 0) {
-			lineLetter = this.commentLemmaSelect.state ? this.commentLemmaSelect.state.lineLetterValue : null;
-		}
-		return lineLetter;
 	}
 
 	getSelectedLineTo() {
-
 		const { selectedLineTo, selectedLineFrom } = this.state;
 
 		let newSelectedLineTo = 0;
 		if (selectedLineTo === 0) {
-			newSelectedLineTo = selectedLineFrom;
+			newSelectedLineTo = selectedLineFrom
 		} else {
 			newSelectedLineTo = selectedLineTo;
 		}
 		return newSelectedLineTo;
 	}
 
-	// --- END ADD COMMENT --- //
-
+	// context reader/line change
 	closeContextReader() {
 		this.setState({
 			contextReaderOpen: false,
@@ -395,18 +316,71 @@ class AddCommentLayout extends React.Component {
 			}
 		}
 
-
 		this.setState({
 			filters,
+		});
+	}
+
+	addTranslation(formData, textValue) {
+
+		this.setState({
+			loading: true,
+		});
+
+		// get data for translation
+		const work = this.getWork();
+		const subwork = this.getSubwork();
+		const author = Meteor.user();
+		const revisionId = new Meteor.Collection.ObjectID();
+		const lineFrom = this.state.selectedLineFrom;
+		const lineTo = this.getSelectedLineTo();
+		const slug = slugify('hey');
+		const tenantId = Session.get('tenantId');
+		const nLines = (lineTo - lineFrom) + 1;
+		const created = new Date();
+		const text = [];
+
+		for (let i = lineFrom, j = 0; j < textValue.blocks.length; i++, j++) {
+			text.push({
+				text: textValue.blocks[j].text,
+				n: i
+			});
+		}
+
+		const translation = {
+			tenantId: tenantId,
+			created: created,
+			author: author.profile.name,
+			work: work.slug,
+			subwork: subwork.n,
+			lineFrom: lineFrom,
+			lineTo: lineTo,
+			nLines: nLines,
+			revisions: [
+				{
+					tenantId: tenantId,
+					text: text,
+					creted: created,
+					slug: slug
+				}
+			]
+		};
+
+		Meteor.call('translations.insert', translation, (error) => {
+			if (error) {
+				console.log(error);
+			} else {
+				FlowRouter.go('/commentary', {});
+			}
 		});
 	}
 
 	render() {
 
 		const { isTest } = this.props;
-		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
+		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen, toggleInputLinesIsToggled } = this.state;
 
-		const { work, subwork, lineFrom, lineTo } = getFilterValues(filters);
+		const { work, subwork, lineFrom } = getFilterValues(filters);
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -425,20 +399,26 @@ class AddCommentLayout extends React.Component {
 							<main>
 								<div className="commentary-comments">
 									<div className="comment-group">
+										{!toggleInputLinesIsToggled ?
 										<CommentLemmaSelect
-											ref={(component) => { this.commentLemmaSelect = component; }}
+											ref={(component) => {
+												this.commentLemmaSelect = component;
+											}}
 											selectedLineFrom={selectedLineFrom}
 											selectedLineTo={selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
-										/>
+										/> : ''}
 
-										<AddComment
+										<AddTranslation
 											selectedLineFrom={selectedLineFrom}
 											selectedLineTo={selectedLineTo}
-											submitForm={this.addComment}
+											submitForm={this.addTranslation}
+											toggleInputLines={this.toggleInputLines}
+											toggleInputLinesIsToggled={toggleInputLinesIsToggled}
+											toggleInputLinesLabel={toggleInputLinesIsToggled ? 'Select Lines' : 'Input Lines'}
 										/>
-
+										{!toggleInputLinesIsToggled ?
 										<ContextPanel
 											open={contextReaderOpen}
 											workSlug={work ? work.slug : 'iliad'}
@@ -448,33 +428,30 @@ class AddCommentLayout extends React.Component {
 											selectedLineTo={selectedLineTo}
 											updateSelectedLines={this.updateSelectedLines}
 											editor
-										/>
+										/> : ''}
 									</div>
 								</div>
-
+								{!toggleInputLinesIsToggled ?
 								<FilterWidget
 									filters={filters}
 									toggleSearchTerm={this.toggleSearchTerm}
-								/>
+								/> : ''}
 							</main>
-						: ''}
+							: ''}
 					</div>
 					:
-					<Spinner fullPage />
+					<Spinner fullPage/>
 				}
 			</MuiThemeProvider>
 		);
 	}
 }
-/*
- *	END AddCommentLayout
- */
 
-const AddCommentLayoutContainer = (() => {
+const AddTranslationLayoutContainer = (() => {
 	const ready = Roles.subscription.ready();
 	return {
 		ready,
 	};
-}, AddCommentLayout);
+}, AddTranslationLayout);
 
-export default AddCommentLayoutContainer;
+export default AddTranslationLayoutContainer;

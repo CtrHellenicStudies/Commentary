@@ -4,6 +4,7 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import moment from 'moment';
+import Utils from '/imports/lib/utils';
 
 const getDateRevision = (revision) => {
 	if (revision.originalDate) return revision.originalDate;
@@ -78,7 +79,7 @@ class CommentCitation extends React.Component {
 							return (
 								<MenuItem
 									key={revision._id}
-									href={`/commentary/?urn=${comment.urn}&revision=${comment.revisions.length - i - 1}`}
+									href={`//nrs.${Utils.setCookieDomain()}/v1/${comment.urn}:revision.${comment.revisions.length - i - 1}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
 									style={styles.menuItem}
 								/>

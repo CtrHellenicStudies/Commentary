@@ -229,7 +229,7 @@ const Utils = {
 		} else if (location.hostname.match(/\w+.orphe.us/)) {
 			domain = 'orphe.us';
 		} else if (location.hostname.match(/\w+.localhost.dev/)) {
-			domain = 'localhost.dev';
+			domain = 'localhost.dev:5000';
 		}
 
 		return domain;

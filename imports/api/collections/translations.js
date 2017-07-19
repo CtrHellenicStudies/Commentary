@@ -36,8 +36,34 @@ Translations.schema = new SimpleSchema({
 		type: Number,
 		optional: true
 	},
-	// revisions: {
+	revisions: {
+		type: [Object],
+		optional: true,
+		blackbox: true
+	},
+	'revisions.$.tenantId': {
+		type: String,
+		optional: true
+	},
+	'revisions.$.created': {
+		type: Date,
+		optional: true,
+	},
+	'revisions.$.slug': {
+		type: String,
+		optional: true
+	},
+	// 'revisions.$.text': {
 	// 	type: [Object],
+	// 	optional: true,
+	// 	blackbox: true
+	// },
+	// 'revisions.$.text.$.n': {
+	// 	type: Number,
+	// 	optional: true
+	// },
+	// 'revisions.$.text.$.text': {
+	// 	type: String,
 	// 	optional: true
 	// }
 });

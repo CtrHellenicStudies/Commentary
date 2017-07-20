@@ -14,7 +14,18 @@ class Translation extends React.Component {
 
 		return (
 			<div>
+				<div className="row">
+					<div className="col-md-7" />
+					<div className="col-md-5">
+						<p
+							style={{ fontSize: '14px' }}
+						>
+							Translated by {author}
+						</p>
+					</div>
+				</div>
 				{LinesWithTranslation.map(line => (
+
 					<div className="row">
 						<div className="col-md-7">
 							<div
@@ -37,7 +48,7 @@ class Translation extends React.Component {
 								className="lemma-text-line"
 								style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
 							>
-								<p className="lemma-text" style={{fontSize: '16px', color: '#a9a9a9'}}>{line.english}</p>
+								<p style={{fontSize: '14px', color: '#a9a9a9', fontFamily: 'sans-serif'}}>{line.english}</p>
 							</div>
 						</div>
 					</div>

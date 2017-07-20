@@ -6,6 +6,8 @@ import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import TextField from 'material-ui/TextField';
 
 import Utils from '/imports/lib/utils';
 
@@ -74,6 +76,7 @@ class CommentLemma extends React.Component {
 		this.handleOpenTranslationMenu = this.handleOpenTranslationMenu.bind(this);
 	}
 
+
 	toggleEdition(editionSlug) {
 		const { editions } = this.props;
 		const { selectedLemmaEditionIndex } = this.state;
@@ -128,14 +131,22 @@ class CommentLemma extends React.Component {
 	}
 
 	handleOpenTranslationMenu() {
-
 		const { openTranslationMenu } = this.state;
-
 
 		this.setState({
 			openTranslationMenu: !openTranslationMenu
 		});
 	}
+
+	handleOpenEditionMenu() {
+		const { openEditionMenu } = this.state;
+
+		this.setState({
+			openEditionMenu: !openEditionMenu
+		});
+
+	}
+
 
 	render() {
 		const { commentGroup, hideLemma, editions, ready, translationAuthors } = this.props;
@@ -172,6 +183,19 @@ class CommentLemma extends React.Component {
 						:
 						''
 					}
+					{translationAuthors.length > 0 && !showTranslation ?
+						<div>
+							<i 
+								className="fa fa-exclamation-circle" 
+								aria-hidden="true"
+								style={{color: '#727272', font: 'Proxima Nova A W07 Light'}}
+							>
+								&#160; A commenter has translated this passage
+							</i>
+						</div>
+					:
+						''
+					}
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
@@ -185,24 +209,21 @@ class CommentLemma extends React.Component {
 								onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
 							/>);
 						})}
-					</div>
-					<div className="context-tabs tabs">
-						<RaisedButton
-							className="context-tab tab"
-							onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
-							label="Context"
-							labelPosition="before"
-							icon={<FontIcon className="mdi mdi-chevron-right" />}
-						/>
-						{translationAuthors.length > 0 ?
-							<div>
-								<RaisedButton
-									className="context-tab tab"
-									onClick={this.handleOpenTranslationMenu}
-									label="Translations"
-								/>
+						
+					</div> 
+					{translationAuthors.length > 0 ? 
+						<div>
+							<RaisedButton
+								onClick={this.handleOpenTranslationMenu}
+								label="Translations"
+								labelPosition="before"
+							>
 								<IconMenu
-									iconButtonElement={<FontIcon className="mdi mdi-chevron-right" />}
+									iconButtonElement={
+										<FontIcon 
+											className="mdi mdi-chevron-down"
+											style={{ fontSize: '18px'}}
+										/>}
 									open={this.state.openTranslationMenu}
 									onChange={this.handleAuthorChange}
 								>
@@ -214,10 +235,19 @@ class CommentLemma extends React.Component {
 										/>
 									))} 
 								</IconMenu>
-							</div>
-						:
-						''
-						}
+							</RaisedButton>
+						</div>
+					:
+					''
+					}
+					<div className="context-tabs tabs">
+						<RaisedButton
+							className="context-tab tab"
+							onClick={this.showContextPanel.bind(null, this.props.commentGroup)}
+							label="Context"
+							labelPosition="before"
+							icon={<FontIcon className="mdi mdi-chevron-right" />}
+						/>
 					</div>
 				</article>
 				<div className="discussion-wrap" />
@@ -302,8 +332,6 @@ export default createContainer(({ commentGroup }) => {
 	};
 
 	const translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
-
-	console.log('matched authors: ', translationAuthors);
 
 	return {
 		translationAuthors,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -273,6 +274,7 @@ class CommentLemma extends React.Component {
 export default createContainer(({ commentGroup }) => {
 
 	let lemmaQuery = {};
+	let translationAuthors = [];
 
 	if (commentGroup) {
 		lemmaQuery = {
@@ -291,6 +293,18 @@ export default createContainer(({ commentGroup }) => {
 		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
 			lemmaQuery['work.slug'] = 'hymns';
 		}
+
+		const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
+
+		const translationQuery = {
+			work: commentGroup.work.slug,
+			subwork: Number(commentGroup.subwork.title),
+			lineTo: {$gte: commentGroup.lineTo},
+			lineFrom: {$lte: commentGroup.lineFrom},
+		};
+
+		translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
+
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
@@ -332,17 +346,6 @@ export default createContainer(({ commentGroup }) => {
 			}
 		});
 	});
-
-	const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
-
-	const translationQuery = {
-		work: commentGroup.work.slug,
-		subwork: Number(commentGroup.subwork.title),
-		lineTo: {$gte: commentGroup.lineTo},
-		lineFrom: {$lte: commentGroup.lineFrom},
-	};
-
-	const translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
 
 	return {
 		translationAuthors,

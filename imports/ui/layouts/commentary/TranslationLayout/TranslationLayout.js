@@ -25,9 +25,9 @@ class TranslationLayout extends React.Component {
 
 TranslationLayout.propTypes = {
 	commentGroup: PropTypes.object,
-	showTranslation: PropTypes.func,
+	showTranslation: PropTypes.bool,
 	lines: PropTypes.array,
-	author: PropTypes.object,
+	author: PropTypes.string,
 };
 
 export default TranslationLayout;

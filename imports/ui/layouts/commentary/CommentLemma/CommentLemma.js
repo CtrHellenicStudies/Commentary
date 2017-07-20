@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -25,36 +26,37 @@ import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
 class CommentLemma extends React.Component {
 
 	static propTypes = {
-		commentGroup: React.PropTypes.shape({
-			work: React.PropTypes.shape({
-				slug: React.PropTypes.string.isRequired,
-				title: React.PropTypes.string.isRequired,
+		commentGroup: PropTypes.shape({
+			work: PropTypes.shape({
+				slug: PropTypes.string.isRequired,
+				title: PropTypes.string.isRequired,
 			}),
-			subwork: React.PropTypes.shape({
-				n: React.PropTypes.number.isRequired,
+			subwork: PropTypes.shape({
+				n: PropTypes.number.isRequired,
 			}),
-			lineFrom: React.PropTypes.number.isRequired,
-			lineTo: React.PropTypes.number,
-			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string.isRequired,
-				name: React.PropTypes.string.isRequired,
-				slug: React.PropTypes.string.isRequired,
-				avatar: React.PropTypes.shape({
-					src: React.PropTypes.string,
+			lineFrom: PropTypes.number.isRequired,
+			lineTo: PropTypes.number,
+			commenters: PropTypes.arrayOf(PropTypes.shape({
+				_id: PropTypes.string.isRequired,
+				name: PropTypes.string.isRequired,
+				slug: PropTypes.string.isRequired,
+				avatar: PropTypes.shape({
+					src: PropTypes.string,
 				})
 			}))
 		}).isRequired,
-		showContextPanel: React.PropTypes.func.isRequired,
-		setScrollPosition: React.PropTypes.func.isRequired,
-		index: React.PropTypes.string.isRequired,
-		hideLemma: React.PropTypes.bool.isRequired,
+		showContextPanel: PropTypes.func.isRequired,
+		setScrollPosition: PropTypes.func.isRequired,
+		index: PropTypes.string.isRequired,
+		hideLemma: PropTypes.bool.isRequired,
+		translationAuthors: PropTypes.array,
 
 		// from createContainer:
-		editions: React.PropTypes.arrayOf(React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
-			slug: React.PropTypes.string.isRequired,
+		editions: PropTypes.arrayOf(PropTypes.shape({
+			title: PropTypes.string.isRequired,
+			slug: PropTypes.string.isRequired,
 		})),
-		ready: React.PropTypes.bool,
+		ready: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -130,9 +132,9 @@ class CommentLemma extends React.Component {
 		}
 	}
 
-  handleOpenTranslationMenu(event) {
+	handleOpenTranslationMenu(event) {
     // This prevents ghost click.
-    event.preventDefault();
+		event.preventDefault();
 
 		const { translationsMenuOpen } = this.state;
 
@@ -140,7 +142,7 @@ class CommentLemma extends React.Component {
 			translationsMenuOpen: !translationsMenuOpen,
 			anchorEl: event.currentTarget,
 		});
-  }
+	}
 
 	handleOpenEditionMenu() {
 		const { openEditionMenu } = this.state;
@@ -180,7 +182,7 @@ class CommentLemma extends React.Component {
 							<i className="mdi mdi-comment-alert" />
 							<label className="translation-available-label">
 								{translationAuthors.length === 1 ?
-									`A commentator has translated this passage`
+									'A commentator has translated this passage'
 								:
 									`${translationAuthors.length} commentators have translated this passage`
 								}

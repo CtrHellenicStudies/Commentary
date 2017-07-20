@@ -9,7 +9,7 @@ import _ from 'lodash';
 class CommentLemmaTextWithTranslation extends React.Component {
 
 	render() {
-		const { lines, commentGroup, linesWithTranslation, author } = this.props;
+		const { commentGroup, linesWithTranslation, author } = this.props;
 		const nLines = commentGroup.nLines;
 
 		return (
@@ -48,10 +48,13 @@ class CommentLemmaTextWithTranslation extends React.Component {
 }
 
 CommentLemmaTextWithTranslation.propTypes = {
-	lines: React.PropTypes.arrayOf(React.PropTypes.shape({
-		html: React.PropTypes.string.isRequired,
+	linesWithTranslation: React.PropTypes.arrayOf(React.PropTypes.shape({
+		html: React.PropTypes.string,
+		english: React.PropTypes.string,
 		n: React.PropTypes.number.isRequired,
 	})).isRequired,
+	commentGroup: React.PropTypes.object,
+	author: React.PropTypes.string,
 };
 
 export default createContainer(({ commentGroup, lines, author }) => {

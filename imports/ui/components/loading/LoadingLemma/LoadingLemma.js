@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+
 const LoadingLemma = ({ ready }) => {
 	if (!ready) {
 		return (
@@ -8,6 +12,10 @@ const LoadingLemma = ({ ready }) => {
 		);
 	}
 	return null;
+};
+
+LoadingLemma.propTypes = {
+	ready: PropTypes.bool,
 };
 
 export default LoadingLemma;

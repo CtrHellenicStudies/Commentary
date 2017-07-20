@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';
 import CommentLemmaTextWithTranslation from '/imports/ui/components/commentary/commentGroups/CommentLemmaTextWithTranslation';
 
@@ -16,11 +16,18 @@ class TranslationLayout extends React.Component {
 						author={author}
 					/>
 					:
-					<CommentLemmaText lines={lines} />
+						<CommentLemmaText lines={lines} />
 				}
 			</div>
 		);
 	}
 }
+
+TranslationLayout.propTypes = {
+	commentGroup: PropTypes.object,
+	showTranslation: PropTypes.func,
+	lines: PropTypes.array,
+	author: PropTypes.object,
+};
 
 export default TranslationLayout;

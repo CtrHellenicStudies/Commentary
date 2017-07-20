@@ -14,7 +14,7 @@ import Tenants from '/imports/api/collections/tenants';
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
 import AddCommentLayout from '/imports/ui/layouts/editor/AddCommentLayout';
 import AddKeywordLayout from '/imports/ui/layouts/editor/AddKeywordLayout';
-import AddTranslationLayout from '/imports/ui/layouts/editor/AddTranslationLayout'
+import AddTranslationLayout from '/imports/ui/layouts/editor/AddTranslationLayout';
 import AddRevisionLayout from '/imports/ui/layouts/editor/AddRevisionLayout';
 import EditKeywordLayout from '/imports/ui/layouts/editor/EditKeywordLayout';
 import HomeLayout from '/imports/ui/layouts/home/HomeLayout';

@@ -154,10 +154,8 @@ const parseCommentsToCommentGroups = (comments) => {
 					comments: [comment],
 				});
 			}
-		} else {
-			if (process.env.NODE_ENV === 'development') {
-				console.error(`Review comment ${comment._id} metadata`);
-			}
+		} else if (process.env.NODE_ENV === 'development') {
+			console.error(`Review comment ${comment._id} metadata`);
 		}
 	});
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Editor, EditorState, convertToRaw } from 'draft-js';
@@ -40,7 +40,7 @@ class AddTranslation extends React.Component {
 			lineToSubwork: '',
 			lineTo: '',
 			lineFrom: '',
-			commenterValue: {value: "test"},
+			commenterValue: {value: 'test'},
 		};
 		// this.onChange = (editorState) => this.setState({editorState});
 
@@ -74,25 +74,25 @@ class AddTranslation extends React.Component {
 	onLineFromWorkChange(lineFromWork) {
 		this.setState({
 			lineFromWork: lineFromWork
-		})
+		});
 	}
 
 	onLineFromSubworkChange(lineFromSubwork) {
 		this.setState({
 			lineFromSubwork: lineFromSubwork
-		})
+		});
 	}
 
 	onLineToWorkChange(lineToWork) {
 		this.setState({
 			lineToWork: lineToWork
-		})
+		});
 	}
 
 	onLineToSubworkChange(lineToSubwork) {
 		this.setState({
 			lineToSubwork: lineToSubwork
-		})
+		});
 	}
 
 	_enableButton() {
@@ -115,7 +115,7 @@ class AddTranslation extends React.Component {
 		const textRaw = convertToRaw(this.state.editorState.getCurrentContent());
 
 		if (!error.errors) {
-			this.props.submitForm(this.state, textRaw)
+			this.props.submitForm(this.state, textRaw);
 		}
 	}
 
@@ -132,7 +132,7 @@ class AddTranslation extends React.Component {
 	}
 
 	validateStateForSubmit() {
-		let errors = false;
+		const errors = false;
 		let errorMessage = 'Missing translation data:';
 
 		if (errors === true) {
@@ -150,16 +150,16 @@ class AddTranslation extends React.Component {
 		const { isTest, worksOptions, commentersOptions } = this.props;
 
 		const getSubworks = () => {
-			const  subworks = [];
+			const subworks = [];
 			this.state.lineFromWork.subworks.forEach((subwork) => {
 				subworks.push({
 					value: subwork.n,
 					label: subwork.title,
 					slug: subwork.slug,
-				})
-			})
-			return subworks
-		}
+				});
+			});
+			return subworks;
+		};
 
 		const toggleStyle = {
 			style: {
@@ -184,8 +184,7 @@ class AddTranslation extends React.Component {
 							className="comment commentary-comment paper-shadow "
 							style={{ marginLeft: 0 }}
 						>
-							<div className="comment-upper">
-							</div>
+							<div className="comment-upper" />
 							<div
 								className="comment-lower clearfix"
 								style={{ paddingTop: 20, paddingBottom: 20 }}
@@ -215,6 +214,13 @@ class AddTranslation extends React.Component {
 
 AddTranslation.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
+};
+
+AddTranslation.propTypes = {
+	submitForm: PropTypes.func,
+	isTest: PropTypes.bool,
+	worksOptions: PropTypes.array,
+	commentersOptions: PropTypes.array,
 };
 
 const AddTranslationContainer = createContainer(() => {
@@ -248,5 +254,4 @@ const AddTranslationContainer = createContainer(() => {
 	};
 }, AddTranslation);
 
-export default AddTranslationContainer
-
+export default AddTranslationContainer;

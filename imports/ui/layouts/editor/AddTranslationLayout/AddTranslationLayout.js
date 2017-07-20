@@ -25,7 +25,7 @@ import muiTheme from '/imports/lib/muiTheme';
 const handlePermissions = () => {
 	if (Roles.subscription.read()) {
 		if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-			FlowRouter.go('/')
+			FlowRouter.go('/');
 		}
 	}
 };
@@ -107,12 +107,12 @@ class AddTranslationLayout extends React.Component {
 	getText(textValue) {
 		console.log('textValue: ', textValue);
 		const text = [];
-		textValue["blocks"].forEach(textObject => {
+		textValue.blocks.forEach(textObject => {
 			text.push({
-				line: textValue["blocks"].findIndex(textObject),
-				text: textObject["text"]
-			})
-		})
+				line: textValue.blocks.findIndex(textObject),
+				text: textObject.text
+			});
+		});
 	}
 
 
@@ -132,7 +132,7 @@ class AddTranslationLayout extends React.Component {
 				selectedLineFrom,
 				selectedLineTo,
 			});
-		} else {}
+		}
 	}
 
 	toggleSearchTerm(key, value) {
@@ -162,7 +162,7 @@ class AddTranslationLayout extends React.Component {
 				} else if (key === 'works') {
 					filters[i].values = [value];
 				} else {
-					filters[i].values.push(value)
+					filters[i].values.push(value);
 				}
 			}
 		});
@@ -217,9 +217,12 @@ class AddTranslationLayout extends React.Component {
 				};
 			}
 			return subwork;
-		} else {
-			return {title: "test", n: 1}
 		}
+
+		return {
+			title: 'test',
+			n: 1,
+		};
 	}
 
 	getSelectedLineTo() {
@@ -227,7 +230,7 @@ class AddTranslationLayout extends React.Component {
 
 		let newSelectedLineTo = 0;
 		if (selectedLineTo === 0) {
-			newSelectedLineTo = selectedLineFrom
+			newSelectedLineTo = selectedLineFrom;
 		} else {
 			newSelectedLineTo = selectedLineTo;
 		}
@@ -400,15 +403,15 @@ class AddTranslationLayout extends React.Component {
 								<div className="commentary-comments">
 									<div className="comment-group">
 										{!toggleInputLinesIsToggled ?
-										<CommentLemmaSelect
-											ref={(component) => {
-												this.commentLemmaSelect = component;
-											}}
-											selectedLineFrom={selectedLineFrom}
-											selectedLineTo={selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-										/> : ''}
+											<CommentLemmaSelect
+												ref={(component) => {
+													this.commentLemmaSelect = component;
+												}}
+												selectedLineFrom={selectedLineFrom}
+												selectedLineTo={selectedLineTo}
+												workSlug={work ? work.slug : 'iliad'}
+												subworkN={subwork ? subwork.n : 1}
+											/> : ''}
 
 										<AddTranslation
 											selectedLineFrom={selectedLineFrom}
@@ -419,28 +422,28 @@ class AddTranslationLayout extends React.Component {
 											toggleInputLinesLabel={toggleInputLinesIsToggled ? 'Select Lines' : 'Input Lines'}
 										/>
 										{!toggleInputLinesIsToggled ?
-										<ContextPanel
-											open={contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-											lineFrom={lineFrom || 1}
-											selectedLineFrom={selectedLineFrom}
-											selectedLineTo={selectedLineTo}
-											updateSelectedLines={this.updateSelectedLines}
-											editor
-										/> : ''}
+											<ContextPanel
+												open={contextReaderOpen}
+												workSlug={work ? work.slug : 'iliad'}
+												subworkN={subwork ? subwork.n : 1}
+												lineFrom={lineFrom || 1}
+												selectedLineFrom={selectedLineFrom}
+												selectedLineTo={selectedLineTo}
+												updateSelectedLines={this.updateSelectedLines}
+												editor
+											/> : ''}
 									</div>
 								</div>
 								{!toggleInputLinesIsToggled ?
-								<FilterWidget
-									filters={filters}
-									toggleSearchTerm={this.toggleSearchTerm}
-								/> : ''}
+									<FilterWidget
+										filters={filters}
+										toggleSearchTerm={this.toggleSearchTerm}
+									/> : ''}
 							</main>
 							: ''}
 					</div>
 					:
-					<Spinner fullPage/>
+					<Spinner fullPage />
 				}
 			</MuiThemeProvider>
 		);

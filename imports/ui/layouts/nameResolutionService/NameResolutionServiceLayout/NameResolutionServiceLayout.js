@@ -10,21 +10,20 @@ import Utils from '/imports/lib/utils';
 const resolveV1 = props => {
 	let resolveURL;
 	let tenant;
-	let comment;
 
 	if (!props.doi && !props.urn) {
 		return resolveURL;
 	}
 
-	let urnParams = props.urn.split(':revision.');
+	const urnParams = props.urn.split(':revision.');
 	const urn = `urn${urnParams[0]}`;
 	const revision = urnParams[1];
 
 	const commentHandle = Meteor.subscribe('comments', { urn }, 0);
-	comment = Comments.findOne({ urn });
+	const comment = Comments.findOne({ urn });
 
 	if (comment) {
-		const tenantsHandle = Meteor.subscribe('tenants')
+		const tenantsHandle = Meteor.subscribe('tenants');
 		tenant = Tenants.findOne({_id: comment.tenantId});
 	}
 
@@ -38,7 +37,7 @@ const resolveV1 = props => {
 
 class NameResolutionServiceLayout extends React.Component {
 
-	static propTypes: {
+	static propTypes = {
 		urn: PropTypes.string,
 		doi: PropTypes.string,
 		resolveURL: PropTypes.string,
@@ -62,7 +61,7 @@ class NameResolutionServiceLayout extends React.Component {
 						Supply Digital Object Identifier (DOI) or Uniform Resource Name (URN) to resolve.
 					</div>
 				</div>
-			)
+			);
 		}
 
 		const identifier = doi || urn;
@@ -82,7 +81,7 @@ class NameResolutionServiceLayout extends React.Component {
 						Could not resolve Persistent Identifier {identifier}. Please consult a systems administrator if you feel that this is in error.
 					</div>
 				</div>
-			)
+			);
 		}
 
 		window.location = resolveURL;
@@ -94,20 +93,20 @@ class NameResolutionServiceLayout extends React.Component {
 			<div className="nameResolutionServiceLayout">
 				{this.resolve()}
 			</div>
-		)
+		);
 	}
 }
 
 const nameResolutionServiceLayoutContainer = createContainer(props => {
 	let resolveURL;
 
-	switch(props.version) {
-		case '1.0':
-			resolveURL = resolveV1(props);
-			break;
-		default:
-			resolveURL = resolveV1(props);
-			break;
+	switch (props.version) {
+	case '1.0':
+		resolveURL = resolveV1(props);
+		break;
+	default:
+		resolveURL = resolveV1(props);
+		break;
 	}
 
 	return {

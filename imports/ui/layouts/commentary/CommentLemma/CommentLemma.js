@@ -13,10 +13,10 @@ import Utils from '/imports/lib/utils';
 
 // api:
 import TextNodes from '/imports/api/collections/textNodes';
-import Translations from '/imports/api/collections/translations'; 
+import Translations from '/imports/api/collections/translations';
 
 // components:
-import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; 
+import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';
 import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';
 import TranslationLayout from '/imports/ui/layouts/commentary/TranslationLayout';
 import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
@@ -184,14 +184,15 @@ class CommentLemma extends React.Component {
 						''
 					}
 					{translationAuthors.length > 0 && !showTranslation ?
-						<div>
-							<i 
-								className="fa fa-exclamation-circle" 
-								aria-hidden="true"
-								style={{color: '#727272', font: 'Proxima Nova A W07 Light'}}
-							>
-								&#160; A commenter has translated this passage
-							</i>
+						<div className="translation-available-flag">
+							<i className="mdi mdi-comment-alert" />
+							<span className="translation-available-label">
+								{translationAuthors.length === 1 ?
+									`A commentator has translated this passage`
+								:
+									`${translationAuthors.length} commentators have translated this passage`
+								}
+							</span>
 						</div>
 					:
 						''
@@ -209,32 +210,27 @@ class CommentLemma extends React.Component {
 								onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
 							/>);
 						})}
-						
-					</div> 
-					{translationAuthors.length > 0 ? 
+
+					</div>
+					{translationAuthors.length > 0 ?
 						<div>
 							<RaisedButton
 								onClick={this.handleOpenTranslationMenu}
 								label="Translations"
 								labelPosition="before"
 							>
-								<IconMenu
-									iconButtonElement={
-										<FontIcon 
-											className="mdi mdi-chevron-down"
-											style={{ fontSize: '18px'}}
-										/>}
-									open={this.state.openTranslationMenu}
-									onChange={this.handleAuthorChange}
+								<div
+									// open={this.state.openTranslationMenu}
+									// onChange={this.handleAuthorChange}
 								>
 									{translationAuthors.map((author, i) => (
-										<MenuItem 
+										<MenuItem
 											key={i}
 											value={author}
-											primaryText={author} 
+											primaryText={author}
 										/>
-									))} 
-								</IconMenu>
+									))}
+								</div>
 							</RaisedButton>
 						</div>
 					:

@@ -17,9 +17,7 @@ class Translation extends React.Component {
 				<div className="row">
 					<div className="col-md-7" />
 					<div className="col-md-5">
-						<p
-							style={{ fontSize: '14px' }}
-						>
+						<p className="translated-by-label">
 							Translated by {author}
 						</p>
 					</div>
@@ -30,13 +28,12 @@ class Translation extends React.Component {
 						<div className="col-md-7">
 							<div
 								key={line.n}
-								className="lemma-text-line"
-								style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
+								className="lemma-text-line lemma-text-line--source"
 							>
 								<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
 									{line.n}
 								</span>
-								<p								
+								<p
 									className="lemma-text"
 									dangerouslySetInnerHTML={{ __html: line.html }}
 								/>
@@ -45,15 +42,14 @@ class Translation extends React.Component {
 						<div className="col-md-5">
 							<div
 								key={line.n}
-								className="lemma-text-line"
-								style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
+								className="lemma-text-line lemma-text-line--translation"
 							>
-								<p style={{fontSize: '14px', color: '#a9a9a9', fontFamily: 'sans-serif'}}>{line.english}</p>
+								<p>{line.english}</p>
 							</div>
 						</div>
 					</div>
 				))
-					
+
 				}
 			</div>
 		);
@@ -88,7 +84,7 @@ export default createContainer(({ commentGroup, lines, author }) => {
 			translationLines.push(object.text);
 		}
 	}
-	
+
 	const LinesWithTranslation = _.zipWith(lines, translationLines, function(item, value) {
 		return _.defaults({ english: value }, item);
 	});
@@ -105,5 +101,3 @@ Translation.propTypes = {
 		n: React.PropTypes.number.isRequired,
 	})).isRequired,
 };
-
-

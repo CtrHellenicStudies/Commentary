@@ -70,7 +70,7 @@ Translations.schema = new SimpleSchema({
 
 Translations.attachSchema(Translations.schema);
 
-Translations.attachBehaviour('timestamable', {
+Translations.attachBehaviour('timestampable', {
 	createdAt: 'created',
 	updatedAt: 'updated',
 });

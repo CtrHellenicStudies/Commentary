@@ -49,8 +49,8 @@
     &::-webkit-scrollbar-thumb {
       -webkit-border-radius: 2px;
       border-radius: 2px;
-      background: @third-text;
-      -webkit-box-shadow: inset 0 0 6px @secondary-text;
+      background: @text-gray;
+      -webkit-box-shadow: inset 0 0 6px @text-secondary;
     }
     &::-webkit-scrollbar-thumb:window-inactive {
       background: #999;
@@ -83,7 +83,7 @@
 			position: absolute;
 			right: -26px;
 			top: 4px;
-			color: @secondary-text;
+			color: @text-secondary;
 
       span {
         font-size: 11px;
@@ -252,6 +252,92 @@
 		}
 	}
 }
+
+article.lemma-comment {
+  border-top: 2px solid @primary;
+  padding: 50px 40px;
+
+	.lemma-text-line {
+		&:hover {
+			.line-n {
+				opacity: 1;
+			}
+		}
+	}
+
+	.line-n {
+		display: inline-block;
+		vertical-align: top;
+		font-size: 12px;
+		color: @text-secondary;
+		padding: 5px 0;
+		width: 5%;
+		min-width: 22px;
+		opacity: 0;
+		.transition(opacity 100ms ease-in-out);
+
+		&.line-n--visible {
+			opacity: 1;
+		}
+	}
+
+  p.lemma-text {
+		display: inline-block;
+		vertical-align: top;
+    font-size: 20px;
+    font-weight: normal;
+    color: @text-primary;
+    padding: 5px 10px;
+    margin: 0;
+		width: 94%;
+  }
+
+  .context-tab {
+
+    box-shadow: none !important;
+
+    &:hover {
+      i {
+        margin-right: -4px;
+      }
+    }
+
+    span {
+      text-transform: uppercase;
+      font-size: 12px !important;
+      color: @text-secondary;
+      display: inline-block;
+      vertical-align: top;
+      padding-top: 1px;
+      .transition(all 100ms ease-out);
+      padding-right: 3px;
+      margin: 0px;
+    }
+    .mdi {
+      color: @text-secondary;
+      display: inline-block;
+      vertical-align: top;
+      .transition(all 100ms ease-out);
+			margin-top: 2px;
+      margin-right: 0px;
+
+			&:before {
+	      font-size: 18px;
+			}
+    }
+  }
+
+  .context-tabs, .edition-tabs {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 30px;
+  }
+
+  .context-tabs {
+    float: right;
+  }
+}
+
 
 .lemma-loading {
 

@@ -4,9 +4,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
-import IconMenu from 'material-ui/IconMenu';
+import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
 import TextField from 'material-ui/TextField';
 
 import Utils from '/imports/lib/utils';
@@ -67,6 +67,7 @@ class CommentLemma extends React.Component {
 		this.state = {
 			selectedLemmaEditionIndex: 0,
 			showTranslation: false,
+			translationMenuOpen: false,
 		};
 
 		// methods:
@@ -108,35 +109,37 @@ class CommentLemma extends React.Component {
 	handleAuthorChange(event, value) {
 		const { selectedAuthor, showTranslation } = this.state;
 
-		console.log('handleAuthorChange fired. current state: ', selectedAuthor);
-
 		if (!selectedAuthor) {
 			this.setState({
 				selectedAuthor: value,
 				showTranslation: true,
-				openTranslationMenu: false
+				translationsMenuOpen: false,
 			});
 		} else if (selectedAuthor === value) {
 			this.setState({
 				showTranslation: !showTranslation,
-				openTranslationMenu: false
+				translationsMenuOpen: false,
 			});
 		} else if (selectedAuthor !== value) {
 			this.setState({
 				selectedAuthor: value,
 				showTranslation: true,
-				openTranslationMenu: false
+				translationsMenuOpen: false,
 			});
 		}
 	}
 
-	handleOpenTranslationMenu() {
-		const { openTranslationMenu } = this.state;
+  handleOpenTranslationMenu(event) {
+    // This prevents ghost click.
+    event.preventDefault();
+
+		const { translationsMenuOpen } = this.state;
 
 		this.setState({
-			openTranslationMenu: !openTranslationMenu
+			translationsMenuOpen: !translationsMenuOpen,
+			anchorEl: event.currentTarget,
 		});
-	}
+  }
 
 	handleOpenEditionMenu() {
 		const { openEditionMenu } = this.state;
@@ -144,7 +147,6 @@ class CommentLemma extends React.Component {
 		this.setState({
 			openEditionMenu: !openEditionMenu
 		});
-
 	}
 
 
@@ -172,6 +174,20 @@ class CommentLemma extends React.Component {
 				</Sticky>
 
 				<article className="comment lemma-comment paper-shadow">
+					{translationAuthors.length > 0 && !showTranslation ?
+						<div className="translation-available-flag">
+							<i className="mdi mdi-comment-alert" />
+							<label className="translation-available-label">
+								{translationAuthors.length === 1 ?
+									`A commentator has translated this passage`
+								:
+									`${translationAuthors.length} commentators have translated this passage`
+								}
+							</label>
+						</div>
+					:
+						''
+					}
 					<LoadingLemma ready={ready} />
 					{ready ?
 						<TranslationLayout
@@ -181,20 +197,6 @@ class CommentLemma extends React.Component {
 							author={selectedAuthor}
 						/>
 						:
-						''
-					}
-					{translationAuthors.length > 0 && !showTranslation ?
-						<div className="translation-available-flag">
-							<i className="mdi mdi-comment-alert" />
-							<span className="translation-available-label">
-								{translationAuthors.length === 1 ?
-									`A commentator has translated this passage`
-								:
-									`${translationAuthors.length} commentators have translated this passage`
-								}
-							</span>
-						</div>
-					:
 						''
 					}
 					<div className="edition-tabs tabs">
@@ -211,31 +213,46 @@ class CommentLemma extends React.Component {
 							/>);
 						})}
 
-					</div>
-					{translationAuthors.length > 0 ?
-						<div>
+						{translationAuthors.length > 0 ?
 							<RaisedButton
-								onClick={this.handleOpenTranslationMenu}
-								label="Translations"
-								labelPosition="before"
+								onTouchTap={this.handleOpenTranslationMenu}
+								label="Translation"
+								className={`edition-tab tab translation-tab ${showTranslation} ? 'translation-tab--active' : ''}`}
+							/>
+						: ''}
+						<Popover
+							open={this.state.translationsMenuOpen}
+							anchorEl={this.state.anchorEl}
+							anchorOrigin={{
+								horizontal: 'left',
+								vertical: 'bottom',
+							}}
+							targetOrigin={{
+								horizontal: 'left',
+								vertical: 'top',
+							}}
+							onRequestClose={this.handleRequestClose}
+							animation={PopoverAnimationVertical}
+						>
+							<Menu
+								onChange={this.handleAuthorChange}
+								className="translation-author-menu"
 							>
-								<div
-									// open={this.state.openTranslationMenu}
-									// onChange={this.handleAuthorChange}
-								>
-									{translationAuthors.map((author, i) => (
-										<MenuItem
-											key={i}
-											value={author}
-											primaryText={author}
-										/>
-									))}
-								</div>
-							</RaisedButton>
-						</div>
-					:
-					''
-					}
+								{translationAuthors.map((author, i) => (
+									<MenuItem
+										key={`${author}-${i}`}
+										value={author}
+										primaryText={author}
+										className="translation-author-menu-item"
+										style={{
+											fontFamily: '"Proxima Nova A W07 Light", sans-serif',
+											fontSize: '12px',
+										}}
+									/>
+								))}
+							</Menu>
+						</Popover>
+					</div>
 					<div className="context-tabs tabs">
 						<RaisedButton
 							className="context-tab tab"
@@ -248,8 +265,6 @@ class CommentLemma extends React.Component {
 				</article>
 				<div className="discussion-wrap" />
 			</div>
-
-
 		);
 	}
 

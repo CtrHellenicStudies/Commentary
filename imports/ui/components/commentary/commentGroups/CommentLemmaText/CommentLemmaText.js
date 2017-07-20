@@ -29,21 +29,20 @@ class CommentLemmaText extends React.Component {
 		// if long text
 		if (longText) {
 			const loops = expanded ? lines.length : textLenghtBound;
-			const linesXML = [];
+			const linesHTML = [];
 
-			// construct the XML to be rendered
+			// construct the HTML to be rendered
 			// number of lines depended on the expanded state
 			for (let i = 0; i < loops; i += 1) {
-				linesXML.push(
+				linesHTML.push(
 					<div
 						key={i}
 						className="lemma-text-line"
-						style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
 					>
 						<span className={`line-n ${(lines[i].n % 5) === 0 ? 'line-n--visible' : ''}`}>
 							{lines[i].n}
 						</span>
-						<p								
+						<p
 							className="lemma-text"
 							dangerouslySetInnerHTML={{ __html: lines[i].html }}
 						/>
@@ -52,8 +51,8 @@ class CommentLemmaText extends React.Component {
 			}
 
 			return (
-				<div style={{float: 'left'}}>
-					{linesXML}
+				<div className="comment-lemma-text">
+					{linesHTML}
 					<div>
 						<FlatButton
 							label={expanded ? 'Show less' : 'Show more'}
@@ -67,7 +66,7 @@ class CommentLemmaText extends React.Component {
 
 		// if not longText
 		return (
-			<div>
+			<div className="comment-lemma-text">
 				{lines.map((line, i) => (
 					<div
 						key={i}

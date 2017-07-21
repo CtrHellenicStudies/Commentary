@@ -221,7 +221,7 @@ const Utils = {
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
 		return foundItem[1];
 	},
-	setCookieDomain() {
+	getEnvDomain() {
 		let domain;
 
 		if (location.hostname.match(/\w+.chs.harvard.edu/)) {

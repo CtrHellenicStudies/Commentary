@@ -73,7 +73,7 @@ class ModalSignup extends React.Component {
 						return false;
 					}
 
-					const domain = Utils.setCookieDomain();
+					const domain = Utils.getEnvDomain();
 
 					if (domain) {
 						Cookies.set('userId', Meteor.userId(), { domain });

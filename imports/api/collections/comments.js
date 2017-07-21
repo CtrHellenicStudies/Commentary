@@ -1,7 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import _ from 'underscore';
 
 import Works from './works';
+import Books from './books';
 
 const Comments = new Meteor.Collection('comments');
 
@@ -293,7 +295,7 @@ Comments.schema = new SimpleSchema({
 
 	'revisions.$.friendlySlugs.slug.index': {
 		type: Number,
-		optional: Number,
+		optional: true,
 	},
 
 	'revisions.$.slug': {
@@ -358,7 +360,7 @@ Comments.attachBehaviour('timestampable', {
 
 const COMMENT_ID_LENGTH = 7;
 
-function getURN(comment) {
+const _getCommentURN = (comment) => {
 	const work = Works.findOne({ slug: comment.work.slug });
 	const urnPrefix = 'urn:cts:greekLit';
 
@@ -388,6 +390,27 @@ function getURN(comment) {
 	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
 
 	return `${urnPrefix}:${urnTLG}:${urnComment}:comment.${urnCommentId}`;
+};
+
+const _getAnnotationURN = (comment) => {
+	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
+	const chapter = _.find(book.chapters, (c) => c.url === comment.bookChapterUrl);
+	const urnPrefix = 'urn:cts:chsAnnotations';
+
+	const urnBook = `${book.author}.${book.slug}`;
+	const urnComment = `${chapter.n}.${comment.paragraphN}`;
+
+	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
+
+	return `${urnPrefix}:${urnBook}:${urnComment}:${urnCommentId}`;
+};
+
+function getURN(comment) {
+	if (comment.isAnnotation) {
+		return _getAnnotationURN(comment);
+	}
+
+	return _getCommentURN(comment);
 }
 
 // hooks:

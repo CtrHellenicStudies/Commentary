@@ -28,7 +28,7 @@ const resolveV1 = props => {
 	}
 
 	if (comment && tenant) {
-		resolveURL = `//${tenant.subdomain}.${Utils.setCookieDomain()}/commentary/?urn=${urn}&revision=${revision}`;
+		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}/commentary/?urn=${urn}&revision=${revision}`;
 	}
 
 	return resolveURL;

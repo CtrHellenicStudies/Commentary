@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -13,20 +13,12 @@ import Tenants from '/imports/api/collections/tenants';
 import muiTheme from '/imports/lib/muiTheme';
 
 
-const Footer = React.createClass({
+class Footer extends Component {
 
-	propTypes: {
-		settings: React.PropTypes.object,
-		tenant: React.PropTypes.object,
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 
 	render() {
@@ -125,8 +117,18 @@ const Footer = React.createClass({
 			</footer>
 
 		);
-	},
-});
+	}
+}
+
+
+Footer.propTypes = {
+	settings: React.PropTypes.object,
+	tenant: React.PropTypes.object,
+};
+
+Footer.childContextTypes = {
+	muiTheme: React.PropTypes.object.isRequired,
+};
 
 export default createContainer(() => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));

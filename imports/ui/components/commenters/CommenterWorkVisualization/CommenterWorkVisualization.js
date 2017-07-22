@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import WorkVisualization from '/imports/ui/components/works/WorkVisualization';
 
 
-const CommenterWorkVisualization = React.createClass({
+class CommenterWorkVisualization extends Component {
 
-	propTypes: {
-		work: React.PropTypes.object.isRequired,
-		toggleVisibleWork: React.PropTypes.func.isRequired,
-		commenterSlug: React.PropTypes.string.isRequired,
-		isTest: React.PropTypes.bool,
-	},
+	constructor(props) {
+		super(props);
+
+
+		this.toggleVisibleWork = this.toggleVisibleWork.bind(this);
+	}
 
 	toggleVisibleWork(workSlug) {
 		this.props.toggleVisibleWork(workSlug);
 		this.workVisualization.close();
-	},
+	}
 
 	render() {
 		const { work, commenterSlug, isTest } = this.props;
@@ -23,7 +23,7 @@ const CommenterWorkVisualization = React.createClass({
 		return (
 			<div className={`commenter-work-visualization commenter-work-visualization--${work.slug}`}>
 				<i
-					onClick={this.toggleVisibleWork.bind(null, work.slug)}
+					onClick={this.toggleVisibleWork}
 					className="close-visualization mdi mdi-close"
 				/>
 				{!isTest ?
@@ -35,8 +35,14 @@ const CommenterWorkVisualization = React.createClass({
 				: ''}
 			</div>
 		);
-	},
-});
+	}
+}
 
+CommenterWorkVisualization.propTypes = {
+	work: React.PropTypes.object.isRequired,
+	toggleVisibleWork: React.PropTypes.func.isRequired,
+	commenterSlug: React.PropTypes.string.isRequired,
+	isTest: React.PropTypes.bool,
+};
 
 export default CommenterWorkVisualization;

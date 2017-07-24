@@ -41,31 +41,51 @@ import {
 
 
 
-const CommentaryLayout = React.createClass({
+class CommentaryLayout extends React.Component {
 
-	propTypes: {
+	constructor(props) {
+		super(props);
+
+		this.setState({
+			modalLoginLowered: false,
+			skip: 0,
+			limit: 10,
+		});
+
+		this.getChildContext = this.getChildContext.bind(this);
+		this.getFilterValue = this.getFilterValue.bind(this);
+		this._updateRoute = this._updateRoute.bind(this);
+		this._toggleSearchTerm = this._toggleSearchTerm.bind(this);
+		this._handleChangeTextsearch = this._handleChangeTextsearch.bind(this);
+		this._handleChangeLineN = this._handleChangeLineN.bind(this);
+		this.loadMoreComments = this.loadMoreComments.bind(this);
+		this.showLoginModal = this.showLoginModal.bind(this);
+		this.closeLoginModal = this.closeLoginModal.bind(this);
+	}
+
+	static propTypes = {
 		queryParams: React.PropTypes.object,
 		params: React.PropTypes.object,
 		referenceWorks: React.PropTypes.array,
 		works: React.PropTypes.array,
 		isTest: React.PropTypes.bool,
-	},
+	};
 
-	childContextTypes: {
+	static childContextTypes = {
 		muiTheme: React.PropTypes.object.isRequired,
-	},
+	};
 
-	getInitialState() {
-		return {
-			modalLoginLowered: false,
-			skip: 0,
-			limit: 10,
-		};
-	},
-
+	static defaultProps = {
+		queryParams: {
+			lineTo: 611,
+			work: 'iliad',
+			subworks: '1'
+		}
+	};
+	
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	getFilterValue(filters, key) {
 		let value = {};
@@ -76,7 +96,7 @@ const CommentaryLayout = React.createClass({
 			}
 		}
 		return value;
-	},
+	}
 
 	_updateRoute(filters) {
 		let queryParams = {};
@@ -88,7 +108,7 @@ const CommentaryLayout = React.createClass({
 
 		// update route
 		FlowRouter.go('/commentary/', {}, queryParams);
-	},
+	}
 
 	_toggleSearchTerm(key, value) {
 		const { queryParams } = this.props;
@@ -104,7 +124,7 @@ const CommentaryLayout = React.createClass({
 		});
 
 		this._updateRoute(filters);
-	},
+	}
 
 	_handleChangeTextsearch(e, textsearch) {
 		const { queryParams } = this.props;
@@ -114,7 +134,7 @@ const CommentaryLayout = React.createClass({
 		const filters = updateFilterOnChangeTextSearchEvent(oldFilters, e);
 
 		this._updateRoute(filters);
-	},
+	}
 
 	_handleChangeLineN(e) {
 		const { queryParams } = this.props;
@@ -128,25 +148,25 @@ const CommentaryLayout = React.createClass({
 			limit: 10,
 		});
 		this._updateRoute(filters);
-	},
+	}
 
 	loadMoreComments() {
 		this.setState({
 			limit: this.state.limit + 10,
 		});
-	},
+	}
 
 	showLoginModal() {
 		this.setState({
 			modalLoginLowered: true,
 		});
-	},
+	}
 
 	closeLoginModal() {
 		this.setState({
 			modalLoginLowered: false,
 		});
-	},
+	}
 
 	render() {
 		const { queryParams, params, works } = this.props;
@@ -188,12 +208,10 @@ const CommentaryLayout = React.createClass({
 				</div>
 			</MuiThemeProvider>
 		);
-	},
+	}
+}
 
-});
-
-
-const CommentaryLayoutContainer = createContainer(() => {
+export default createContainer(() => {
 	const handle = Meteor.subscribe('referenceWorks.all', Session.get('tenantId'));
 	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
 
@@ -205,5 +223,3 @@ const CommentaryLayoutContainer = createContainer(() => {
 		works,
 	};
 }, CommentaryLayout);
-
-export default CommentaryLayoutContainer;

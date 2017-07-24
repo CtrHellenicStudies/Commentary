@@ -362,7 +362,7 @@ const COMMENT_ID_LENGTH = 7;
 
 const _getCommentURN = (comment) => {
 	const work = Works.findOne({ slug: comment.work.slug });
-	const urnPrefix = 'urn:cts:greekLit';
+	const urnPrefix = 'urn:cts:CHS.Commentary';
 
 	// Use work tlg if it exists, otherwise, search for subwork tlg number
 	// Failing either, just use creator
@@ -398,7 +398,7 @@ const _getCommentURN = (comment) => {
 const _getAnnotationURN = (comment) => {
 	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
 	const chapter = _.find(book.chapters, (c) => c.url === comment.bookChapterUrl);
-	const urnPrefix = 'urn:cts:chsAnnotations';
+	const urnPrefix = 'urn:cts:CHS.Annotations';
 
 	const urnBook = `${book.author}.${book.slug}`;
 	const urnComment = `${chapter.n}.${comment.paragraphN}`;

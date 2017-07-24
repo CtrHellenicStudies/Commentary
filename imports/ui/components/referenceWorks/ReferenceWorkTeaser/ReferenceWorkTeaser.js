@@ -5,37 +5,17 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
-const ReferenceWorkTeaser = React.createClass({
-
-	propTypes: {
-		referenceWork: React.PropTypes.object.isRequired,
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
-			open: false,
-		};
-	},
+class ReferenceWorkTeaser extends React.Component {
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	toggleOpen() {
-		this.setState({
-			open: !this.state.open,
-		});
-	},
+	}
 
 	createMarkup() {
 		return {
 			__html: Utils.trunc(this.props.referenceWork.description.replace(/(<([^>]+)>)/ig, ''), 140),
 		};
-	},
+	}
 
 	render() {
 		const { referenceWork } = this.props;
@@ -76,8 +56,18 @@ const ReferenceWorkTeaser = React.createClass({
 				</a>
 			</div>
 		);
-	},
+	}
 
-});
+}
+
+
+ReferenceWorkTeaser.propTypes = {
+	referenceWork: React.PropTypes.object.isRequired,
+};
+
+ReferenceWorkTeaser.childContextTypes = {
+	muiTheme: React.PropTypes.object.isRequired,
+};
+
 
 export default ReferenceWorkTeaser;

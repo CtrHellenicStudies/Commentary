@@ -381,15 +381,18 @@ const _getCommentURN = (comment) => {
 		});
 	}
 
+	//
+	urnTLG += '.chsCommentary';
+
 	let urnComment = `${comment.subwork.title}.${comment.lineFrom}`;
 
-	if (typeof comment.lineTo !== 'undefined') {
-		urnComment += `-${comment.lineTo}`;
+	if (typeof comment.lineTo !== 'undefined' && comment.lineFrom !== comment.lineTo) {
+		urnComment += `-${comment.subwork.title}.${comment.lineTo}`;
 	}
 
 	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
 
-	return `${urnPrefix}:${urnTLG}:${urnComment}:comment.${urnCommentId}`;
+	return `${urnPrefix}:${urnTLG}:${urnComment}.${urnCommentId}`;
 };
 
 const _getAnnotationURN = (comment) => {

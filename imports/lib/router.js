@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import React from 'react';
 import Cookies from 'js-cookie';
 import { mount } from 'react-mounter';
@@ -70,9 +71,6 @@ FlowRouter.triggers.enter([() => {
 		Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);
-				if (tenant.isAnnotation && !Meteor.userId()) {
-					FlowRouter.go('/sign-in');
-				}
 			} else {
 				FlowRouter.go('/404');
 			}
@@ -297,54 +295,28 @@ FlowRouter.route('/sign-out', {
 	},
 });
 
+FlowRouter.route('/v1/', {
+	action(params) {
+		mount(NameResolutionServiceLayout, {
+			version: 1,
+		});
+	},
+});
+
 FlowRouter.route('/v1/urn:urn', {
 	action(params) {
-		const hostnameArray = document.location.hostname.split('.');
-		let subdomain;
-
-		if (hostnameArray.length > 1) {
-			subdomain = hostnameArray[0];
-		} else {
-			subdomain = '';
-			FlowRouter.go('/404');
-		}
-
-		if (subdomain !== 'nrs') {
-			subdomain = '';
-			FlowRouter.go('/404');
-		}
-
-		mount(MasterLayout, {
-			content: <NameResolutionServiceLayout
-				urn={params.urn}
-				version="1.0"
-			/>,
+		mount(NameResolutionServiceLayout, {
+			urn: params.urn,
+			version: 1,
 		});
 	},
 });
 
 FlowRouter.route('/v1/doi:doi', {
 	action(params) {
-		const hostnameArray = document.location.hostname.split('.');
-		let subdomain;
-
-		if (hostnameArray.length > 1) {
-			subdomain = hostnameArray[0];
-		} else {
-			subdomain = '';
-			FlowRouter.go('/404');
-		}
-
-		if (subdomain !== 'nrs') {
-			subdomain = '';
-			FlowRouter.go('/404');
-		}
-
-		mount(MasterLayout, {
-			content: <NameResolutionServiceLayout
-				doi={params.doi}
-				version="1.0"
-			/>,
+		mount(NameResolutionServiceLayout, {
+			doi: params.doi,
+			version: 1,
 		});
 	},
 });

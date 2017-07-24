@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
-
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import Comments from '/imports/api/collections/comments';
 import Tenants from '/imports/api/collections/tenants';
 import Utils from '/imports/lib/utils';
@@ -15,9 +15,9 @@ const resolveV1 = props => {
 		return resolveURL;
 	}
 
-	const urnParams = props.urn.split(':revision.');
-	const urn = `urn${urnParams[0]}`;
-	const revision = urnParams[1];
+	const urnParams = props.urn.split('.');
+	const revision = urnParams.splice(-1);
+	const urn = `urn${urnParams.join('.')}`;
 
 	const commentHandle = Meteor.subscribe('comments', { urn }, 0);
 	const comment = Comments.findOne({ urn });
@@ -64,7 +64,13 @@ class NameResolutionServiceLayout extends React.Component {
 			);
 		}
 
-		const identifier = doi || urn;
+		let identifier = doi || urn;
+
+		if (doi) {
+			identifier = `doi${identifier}`;
+		} else if (urn) {
+			identifier = `urn${identifier}`;
+		}
 
 		if (!resolveURL) {
 			return (
@@ -85,6 +91,7 @@ class NameResolutionServiceLayout extends React.Component {
 		}
 
 		window.location = resolveURL;
+		return <div />;
 	}
 
 	render() {
@@ -101,7 +108,7 @@ const nameResolutionServiceLayoutContainer = createContainer(props => {
 	let resolveURL;
 
 	switch (props.version) {
-	case '1.0':
+	case 1:
 		resolveURL = resolveV1(props);
 		break;
 	default:

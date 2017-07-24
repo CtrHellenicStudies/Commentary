@@ -79,7 +79,7 @@ class CommentCitation extends React.Component {
 							return (
 								<MenuItem
 									key={revision._id}
-									href={`//nrs.${Utils.getEnvDomain()}/v1/${comment.urn}:revision.${comment.revisions.length - i - 1}`}
+									href={`//nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
 									style={styles.menuItem}
 								/>

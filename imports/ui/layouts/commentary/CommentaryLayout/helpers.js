@@ -243,7 +243,6 @@ const _createQueryParamsFromFilters = (filters) => {
 			}
 		});
 	});
-	console.log(queryParams);
 
 	return queryParams;
 };

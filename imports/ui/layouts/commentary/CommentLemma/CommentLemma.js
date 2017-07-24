@@ -1,52 +1,62 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
+import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
 
 import Utils from '/imports/lib/utils';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes'; 
+import TextNodes from '/imports/api/collections/textNodes';
+import Translations from '/imports/api/collections/translations';
 
 // components:
-import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText'; 
-import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';  
+import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';
+import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';
+import TranslationLayout from '/imports/ui/layouts/commentary/TranslationLayout';
+import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
 
 class CommentLemma extends React.Component {
 
 	static propTypes = {
-		commentGroup: React.PropTypes.shape({
-			work: React.PropTypes.shape({
-				slug: React.PropTypes.string.isRequired,
-				title: React.PropTypes.string.isRequired,
+		commentGroup: PropTypes.shape({
+			work: PropTypes.shape({
+				slug: PropTypes.string.isRequired,
+				title: PropTypes.string.isRequired,
 			}),
-			subwork: React.PropTypes.shape({
-				n: React.PropTypes.number.isRequired,
+			subwork: PropTypes.shape({
+				n: PropTypes.number.isRequired,
 			}),
-			lineFrom: React.PropTypes.number.isRequired,
-			lineTo: React.PropTypes.number,
-			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string.isRequired,
-				name: React.PropTypes.string.isRequired,
-				slug: React.PropTypes.string.isRequired,
-				avatar: React.PropTypes.shape({
-					src: React.PropTypes.string,
+			lineFrom: PropTypes.number.isRequired,
+			lineTo: PropTypes.number,
+			commenters: PropTypes.arrayOf(PropTypes.shape({
+				_id: PropTypes.string.isRequired,
+				name: PropTypes.string.isRequired,
+				slug: PropTypes.string.isRequired,
+				avatar: PropTypes.shape({
+					src: PropTypes.string,
 				})
 			}))
 		}).isRequired,
-		showContextPanel: React.PropTypes.func.isRequired,
-		setScrollPosition: React.PropTypes.func.isRequired,
-		index: React.PropTypes.string.isRequired,
-		hideLemma: React.PropTypes.bool.isRequired,
+		showContextPanel: PropTypes.func.isRequired,
+		setScrollPosition: PropTypes.func.isRequired,
+		index: PropTypes.string.isRequired,
+		hideLemma: PropTypes.bool.isRequired,
+		translationAuthors: PropTypes.array,
 
 		// from createContainer:
-		editions: React.PropTypes.arrayOf(React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
-			slug: React.PropTypes.string.isRequired,
+		editions: PropTypes.arrayOf(PropTypes.shape({
+			title: PropTypes.string.isRequired,
+			slug: PropTypes.string.isRequired,
 		})),
-		ready: React.PropTypes.bool,
+		ready: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -59,12 +69,17 @@ class CommentLemma extends React.Component {
 
 		this.state = {
 			selectedLemmaEditionIndex: 0,
+			showTranslation: false,
+			translationMenuOpen: false,
 		};
 
 		// methods:
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.showContextPanel = this.showContextPanel.bind(this);
+		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+		this.handleOpenTranslationMenu = this.handleOpenTranslationMenu.bind(this);
 	}
+
 
 	toggleEdition(editionSlug) {
 		const { editions } = this.props;
@@ -94,9 +109,53 @@ class CommentLemma extends React.Component {
 		showContextPanel(commentGroup);
 	}
 
+	handleAuthorChange(event, value) {
+		const { selectedAuthor, showTranslation } = this.state;
+
+		if (!selectedAuthor) {
+			this.setState({
+				selectedAuthor: value,
+				showTranslation: true,
+				translationsMenuOpen: false,
+			});
+		} else if (selectedAuthor === value) {
+			this.setState({
+				showTranslation: !showTranslation,
+				translationsMenuOpen: false,
+			});
+		} else if (selectedAuthor !== value) {
+			this.setState({
+				selectedAuthor: value,
+				showTranslation: true,
+				translationsMenuOpen: false,
+			});
+		}
+	}
+
+	handleOpenTranslationMenu(event) {
+    // This prevents ghost click.
+		event.preventDefault();
+
+		const { translationsMenuOpen } = this.state;
+
+		this.setState({
+			translationsMenuOpen: !translationsMenuOpen,
+			anchorEl: event.currentTarget,
+		});
+	}
+
+	handleOpenEditionMenu() {
+		const { openEditionMenu } = this.state;
+
+		this.setState({
+			openEditionMenu: !openEditionMenu
+		});
+	}
+
+
 	render() {
-		const { commentGroup, hideLemma, editions, ready } = this.props;
-		const { selectedLemmaEditionIndex } = this.state;
+		const { commentGroup, hideLemma, editions, ready, translationAuthors } = this.props;
+		const { selectedLemmaEditionIndex, selectedAuthor, showTranslation } = this.state;
 
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
@@ -118,15 +177,30 @@ class CommentLemma extends React.Component {
 				</Sticky>
 
 				<article className="comment lemma-comment paper-shadow">
-					{!ready ?
-						<div className="lemma-loading">
-							<div className="lemma-loading-top" />
-							<div className="lemma-loading-bottom" />
+					{translationAuthors.length > 0 && !showTranslation ?
+						<div className="translation-available-flag">
+							<i className="mdi mdi-comment-alert" />
+							<label className="translation-available-label">
+								{translationAuthors.length === 1 ?
+									'A commentator has translated this passage'
+								:
+									`${translationAuthors.length} commentators have translated this passage`
+								}
+							</label>
 						</div>
 					:
-						<CommentLemmaText
+						''
+					}
+					<LoadingLemma ready={ready} />
+					{ready ?
+						<TranslationLayout
+							commentGroup={commentGroup}
+							showTranslation={showTranslation}
 							lines={selectedLemmaEdition.lines}
+							author={selectedAuthor}
 						/>
+						:
+						''
 					}
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {
@@ -141,6 +215,46 @@ class CommentLemma extends React.Component {
 								onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
 							/>);
 						})}
+
+						{translationAuthors.length > 0 ?
+							<RaisedButton
+								onTouchTap={this.handleOpenTranslationMenu}
+								label="Translation"
+								className={`edition-tab tab translation-tab ${showTranslation} ? 'translation-tab--active' : ''}`}
+							/>
+						: ''}
+						<Popover
+							open={this.state.translationsMenuOpen}
+							anchorEl={this.state.anchorEl}
+							anchorOrigin={{
+								horizontal: 'left',
+								vertical: 'bottom',
+							}}
+							targetOrigin={{
+								horizontal: 'left',
+								vertical: 'top',
+							}}
+							onRequestClose={this.handleRequestClose}
+							animation={PopoverAnimationVertical}
+						>
+							<Menu
+								onChange={this.handleAuthorChange}
+								className="translation-author-menu"
+							>
+								{translationAuthors.map((author, i) => (
+									<MenuItem
+										key={`${author}-${i}`}
+										value={author}
+										primaryText={author}
+										className="translation-author-menu-item"
+										style={{
+											fontFamily: '"Proxima Nova A W07 Light", sans-serif',
+											fontSize: '12px',
+										}}
+									/>
+								))}
+							</Menu>
+						</Popover>
 					</div>
 					<div className="context-tabs tabs">
 						<RaisedButton
@@ -154,8 +268,6 @@ class CommentLemma extends React.Component {
 				</article>
 				<div className="discussion-wrap" />
 			</div>
-
-
 		);
 	}
 
@@ -164,6 +276,7 @@ class CommentLemma extends React.Component {
 export default createContainer(({ commentGroup }) => {
 
 	let lemmaQuery = {};
+	let translationAuthors = [];
 
 	if (commentGroup) {
 		lemmaQuery = {
@@ -182,6 +295,18 @@ export default createContainer(({ commentGroup }) => {
 		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
 			lemmaQuery['work.slug'] = 'hymns';
 		}
+
+		const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
+
+		const translationQuery = {
+			work: commentGroup.work.slug,
+			subwork: Number(commentGroup.subwork.title),
+			lineTo: {$gte: commentGroup.lineTo},
+			lineFrom: {$lte: commentGroup.lineFrom},
+		};
+
+		translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
+
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
@@ -225,6 +350,7 @@ export default createContainer(({ commentGroup }) => {
 	});
 
 	return {
+		translationAuthors,
 		editions,
 		ready: handle.ready(),
 	};

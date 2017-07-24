@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
@@ -73,108 +73,38 @@ const AddRevisionLayout = React.createClass({
 	update(formData) {
 		const { comment } = this.props;
 
-		this.addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
-			// get keywords after they were created:
-			const keywords = this.getKeywords(formData);
-			const authToken = cookie.load('loginToken');
+		const keywords = this.getKeywords(formData);
+		const authToken = Cookies.get('loginToken');
 
-			let update = [{}];
-			if (keywords) {
-				update = {
-					keywords,
-					referenceWorks: formData.referenceWorks,
-				};
+		let update = [{}];
+		if (keywords) {
+			update = {
+				keywords,
+				referenceWorks: formData.referenceWorks,
+			};
+		}
+
+		Meteor.call('comment.update', authToken, comment._id, update, (_err) => {
+			if (_err) {
+				console.error('Error updating comment after adding revision', _err);
+				this.showSnackBar(_err.error);
+			} else {
+				this.showSnackBar('Comment updated');
 			}
 
-			Meteor.call('comment.update', authToken, comment._id, update, (_err) => {
-				if (_err) {
-					console.error('Error updating comment after adding revision', _err);
-					this.showSnackBar(_err.error);
-				} else {
-					this.showSnackBar('Comment updated');
-				}
-
-				FlowRouter.go(`/commentary/${comment._id}/edit`);
-			});
+			FlowRouter.go(`/commentary/${comment._id}/edit`);
 		});
 		// TODO: handle behavior after comment added (add info about success)
 	},
 
-	matchKeywords(keywords) {
-		const matchedKeywords = [];
-
-		if (keywords) {
-			keywords.forEach((keyword) => {
-				let keywordTitle;
-				if (typeof keyword === 'object') {
-					keywordTitle = keyword.label;
-				} else {
-					keywordTitle = keyword;
-				}
-				const foundKeyword = Keywords.findOne({
-					title: keywordTitle,
-				});
-				matchedKeywords.push(foundKeyword);
-			});
-		}
-
-		return matchedKeywords;
-	},
-
-	addNewKeywordsAndIdeas(keywords, keyideas, next) {
-		this.addNewKeywords(keywords, 'word', () => {
-			this.addNewKeywords(keyideas, 'idea', () => next());
-		});
-	},
-
-	addNewKeywords(keywords, type, next) {
-		// TODO should be handled server-side
-		if (keywords) {
-			const token = cookie.load('loginToken');
-			const newKeywordArray = [];
-			keywords.forEach((keyword) => {
-				let foundKeyword;
-
-				if (typeof keyword === 'object' && 'slug' in keyword) {
-					foundKeyword = Keywords.findOne({ slug: keyword.slug });
-				} else {
-					foundKeyword = Keywords.findOne({ title: keyword });
-				}
-
-				if (!foundKeyword) {
-					const newKeyword = {
-						title: keyword.label,
-						slug: slugify(keyword.label),
-						type,
-						tenantId: Session.get('tenantId'),
-					};
-					newKeywordArray.push(newKeyword);
-				}
-			});
-			if (newKeywordArray.length > 0) {
-				return Meteor.call('keywords.insert', token, newKeywordArray, (err) => {
-					if (err) {
-						console.error('Keywords insert error', err);
-						this.showSnackBar(err.error);
-						return null;
-					}
-					return next();
-				});
-			}
-			return next();
-		}
-		return next();
-	},
-
 	getKeywords(formData) {
 		const keywords = [];
-		this.matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
-			keywords.push(matchedKeyword);
-		});
-		this.matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
-			keywords.push(matchedKeyword);
-		});
 
+		formData.tagsValue.forEach((tag) => {
+			const keyword = tag.keyword;
+			keyword.isMentionedInLemma = tag.isMentionedInLemma;
+			keywords.push(keyword);
+		});
 		return keywords;
 	},
 

@@ -33,7 +33,7 @@ const KeywordReferenceModal = React.createClass({
 		const keyword = this.data.keyword;
 
 		if ('description' in keyword && keyword.description.length) {
-			html = `${Utils.trunc(keyword.description, 120)} <a href="/keywords/${keyword.slug}">Read more</a>`;
+			html = `${Utils.trunc(keyword.description, 120)} <a href="/tags/${keyword.slug}">Read more</a>`;
 		}
 
 		return { __html: html };

@@ -6,6 +6,7 @@ import Keywords from '/imports/api/collections/keywords';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
 import TextNodes from '/imports/api/collections/textNodes';
 import Works from '/imports/api/collections/works';
+import Translations from '/imports/api/collections/translations';
 
 const commentSchema = SchemaBridge.schema(
 	Comments.schema,
@@ -42,6 +43,10 @@ const keywordSchema = SchemaBridge.schema(
 const referenceWorkSchema = SchemaBridge.schema(
 	ReferenceWorks.schema,
 	'ReferenceWork'
+);
+const translationSchema = SchemaBridge.schema(
+	Translations.schema,
+	'Translation'
 );
 const textNodeSchema = SchemaBridge.schema(
 	TextNodes.schema,
@@ -107,6 +112,8 @@ type Keyword {
 }
 
 ${referenceWorkSchema}
+
+${translationSchema}
 
 ${textNodeSchema.objects}
 type TextNode {

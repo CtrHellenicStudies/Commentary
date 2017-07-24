@@ -20,46 +20,71 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
+
+// api
+import Works from '/imports/api/collections/works';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
-const CommentaryLayout = React.createClass({
+// helpers:
+import {
+	createFilterFromQueryParams,
+	createQueryParamsFromFilters,
+	updateFilterOnChangeLineEvent,
+	updateFilterOnChangeTextSearchEvent,
+	updateFilterOnCKeyAndValueChangeEvent,
+	createFilterFromURL
+} from './helpers';
 
-	propTypes: {
+
+class CommentaryLayout extends React.Component {
+
+	static propTypes = {
 		queryParams: React.PropTypes.object,
+		params: React.PropTypes.object,
 		referenceWorks: React.PropTypes.array,
+		works: React.PropTypes.array,
 		isTest: React.PropTypes.bool,
-	},
+	};
 
-	childContextTypes: {
+	static childContextTypes = {
 		muiTheme: React.PropTypes.object.isRequired,
-	},
+	};
 
-	getInitialState() {
-		return {
+	static defaultProps = {
+		queryParams: {
+			lineTo: 611,
+			work: 'iliad',
+			subworks: '1'
+		}
+	};
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
 			modalLoginLowered: false,
 			skip: 0,
 			limit: 10,
 		};
-	},
+
+		this.getChildContext = this.getChildContext.bind(this);
+		this.getFilterValue = this.getFilterValue.bind(this);
+		this._updateRoute = this._updateRoute.bind(this);
+		this._toggleSearchTerm = this._toggleSearchTerm.bind(this);
+		this._handleChangeTextsearch = this._handleChangeTextsearch.bind(this);
+		this._handleChangeLineN = this._handleChangeLineN.bind(this);
+		this.loadMoreComments = this.loadMoreComments.bind(this);
+		this.showLoginModal = this.showLoginModal.bind(this);
+		this.closeLoginModal = this.closeLoginModal.bind(this);
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-	getQueryParamValue(queryParams, key, value) {
-		let queryParamValue = null;
-		if (queryParams[key]) {
-			queryParamValue = `${queryParams[key]},${value}`;
-		} else {
-			queryParamValue = value;
-		}
-
-		return queryParamValue;
-	},
+	}
 
 	getFilterValue(filters, key) {
 		let value = {};
@@ -70,278 +95,27 @@ const CommentaryLayout = React.createClass({
 			}
 		}
 		return value;
-	},
+	}
 
 	_updateRoute(filters) {
 		let queryParams = {};
 		if (filters) {
-			queryParams = this._createQueryParamsFromFilters(filters);
+			queryParams = createQueryParamsFromFilters(filters);
 		} else {
 			queryParams = this.props.queryParams;
 		}
 
 		// update route
 		FlowRouter.go('/commentary/', {}, queryParams);
-	},
-
-	_createQueryParamsFromFilters(filters) {
-		const queryParams = {};
-		filters.forEach((filter) => {
-			filter.values.forEach((value) => {
-				const getQueryParamValue = this.getQueryParamValue;
-				switch (filter.key) {
-				case 'works':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-					break;
-				case 'subworks':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.title);
-					break;
-				case 'keyideas':
-				case 'keywords':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-					break;
-				case 'commenters':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value.slug);
-					break;
-				case 'lineFrom':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-					break;
-				case 'lineTo':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-					break;
-				case 'textsearch':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-					break;
-				case 'wordpressId':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-					break;
-				case 'reference':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value._id);
-					break;
-				case '_id':
-					queryParams[filter.key] = getQueryParamValue(queryParams, filter.key, value);
-					break;
-				default:
-					break;
-				}
-			});
-		});
-
-		return queryParams;
-	},
-
-	_createFilterFromQueryParams(queryParams) {
-		const filters = [];
-
-		if (!queryParams) {
-			return filters;
-		}
-
-		if ('_id' in queryParams) {
-			filters.push({
-				key: '_id',
-				values: [this.props.queryParams._id],
-			});
-			if ('revision' in this.props.queryParams) {
-				filters.push({
-					key: 'revision',
-					values: [Number(this.props.queryParams.revision)],
-				});
-			}
-		}
-
-		if ('textsearch' in this.props.queryParams) {
-			filters.push({
-				key: 'textsearch',
-				values: [this.props.queryParams.textsearch],
-			});
-		}
-
-		if ('keyideas' in queryParams) {
-			const keyideas = [];
-
-			this.props.queryParams.keyideas.split(',').forEach((keyidea) => {
-				keyideas.push({
-					slug: keyidea,
-				});
-			});
-
-			filters.push({
-				key: 'keyideas',
-				values: keyideas,
-			});
-		}
-
-		if ('keywords' in queryParams) {
-			const keywords = [];
-
-			this.props.queryParams.keywords.split(',').forEach((keyword) => {
-				keywords.push({
-					slug: keyword,
-				});
-			});
-
-			filters.push({
-				key: 'keywords',
-				values: keywords,
-			});
-		}
-
-		if ('commenters' in queryParams) {
-			const commenters = [];
-
-			this.props.queryParams.commenters.split(',').forEach((commenter) => {
-				commenters.push({
-					slug: commenter,
-				});
-			});
-
-			filters.push({
-				key: 'commenters',
-				values: commenters,
-			});
-		}
-
-		if ('reference' in queryParams) {
-			const references = [];
-			const { referenceWorks } = this.props;
-
-			this.props.queryParams.reference.split(',').forEach((referenceId) => {
-				referenceWorks.forEach((referenceWork) => {
-					if (referenceWork._id === referenceId) {
-						references.push(referenceWork);
-					}
-				});
-			});
-
-			filters.push({
-				key: 'reference',
-				values: references,
-			});
-		}
-
-		if ('works' in queryParams) {
-			const works = [];
-
-			this.props.queryParams.works.split(',').forEach((work) => {
-				works.push({
-					slug: work,
-					title: Utils.capitalize(work),
-				});
-			});
-
-			filters.push({
-				key: 'works',
-				values: works,
-			});
-		}
-
-		if ('subworks' in queryParams) {
-			const subworks = [];
-
-			this.props.queryParams.subworks.split(',').forEach((subwork) => {
-				const subworkNumber = parseInt(subwork, 10);
-
-				if (!Number.isNaN(subworkNumber)) {
-					subworks.push({
-						title: subwork,
-						n: subworkNumber,
-					});
-				}
-			});
-
-
-			filters.push({
-				key: 'subworks',
-				values: subworks,
-			});
-		}
-
-		if ('lineFrom' in this.props.queryParams) {
-			const lineFrom = parseInt(this.props.queryParams.lineFrom, 10);
-
-			if (!Number.isNaN(lineFrom)) {
-				filters.push({
-					key: 'lineFrom',
-					values: [lineFrom],
-				});
-			}
-		}
-
-		if ('lineTo' in this.props.queryParams) {
-			const lineTo = parseInt(this.props.queryParams.lineTo, 10);
-
-			if (!Number.isNaN(lineTo)) {
-				filters.push({
-					key: 'lineTo',
-					values: [lineTo],
-				});
-			}
-		}
-
-		if ('wordpressId' in this.props.queryParams) {
-			const wordpressId = parseInt(this.props.queryParams.wordpressId, 10);
-
-			if (!Number.isNaN(wordpressId)) {
-				filters.push({
-					key: 'wordpressId',
-					values: [wordpressId],
-				});
-			}
-		}
-
-		return filters;
-	},
+	}
 
 	_toggleSearchTerm(key, value) {
 		const { queryParams } = this.props;
-		let keyIsInFilter = false;
-		let valueIsInFilter = false;
-		let filterValueToRemove;
-		let filterToRemove;
 
-		const filters = this._createFilterFromQueryParams(queryParams);
+		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the key and value
-		filters.forEach((filter, i) => {
-			if (filter.key === key) {
-				keyIsInFilter = true;
-				valueIsInFilter = false;
-
-				filter.values.forEach((filterValue, j) => {
-					if (value._id && filterValue._id === value._id) {
-						valueIsInFilter = true;
-						filterValueToRemove = j;
-					} else if (filterValue.slug === value.slug) {
-						valueIsInFilter = true;
-						filterValueToRemove = j;
-					}
-				});
-
-				if (valueIsInFilter) {
-					filter.values.splice(filterValueToRemove, 1);
-					if (filter.values.length === 0) {
-						filterToRemove = i;
-					}
-				} else if (key === 'works') {
-					filters[i].values = [value];
-				} else {
-					filters[i].values.push(value);
-				}
-			}
-		});
-
-
-		if (typeof filterToRemove !== 'undefined') {
-			filters.splice(filterToRemove, 1);
-		}
-
-		if (!keyIsInFilter) {
-			filters.push({
-				key,
-				values: [value],
-			});
-		}
+		const filters = updateFilterOnCKeyAndValueChangeEvent(oldFilters, key, value);
 
 		this.setState({
 			skip: 0,
@@ -349,142 +123,56 @@ const CommentaryLayout = React.createClass({
 		});
 
 		this._updateRoute(filters);
-	},
+	}
 
 	_handleChangeTextsearch(e, textsearch) {
 		const { queryParams } = this.props;
-		const filters = this._createFilterFromQueryParams(queryParams);
+		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the textsearch
-		if (textsearch && textsearch.length) {
-			let textsearchInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'textsearch') {
-					filters[i].values = [textsearch];
-					textsearchInFilters = true;
-				}
-			});
-
-			if (!textsearchInFilters) {
-				filters.push({
-					key: 'textsearch',
-					values: [textsearch],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'textsearch') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
+		const filters = updateFilterOnChangeTextSearchEvent(oldFilters, e);
 
 		this._updateRoute(filters);
-	},
+	}
 
 	_handleChangeLineN(e) {
 		const { queryParams } = this.props;
-		const filters = this._createFilterFromQueryParams(queryParams);
+		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the 'e' attribute
-		if (e.from > 1) {
-			let lineFromInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineFrom') {
-					filters[i].values = [e.from];
-					lineFromInFilters = true;
-				}
-			});
-
-			if (!lineFromInFilters) {
-				filters.push({
-					key: 'lineFrom',
-					values: [e.from],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineFrom') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
-
-		if (e.to < 1000) {
-			let lineToInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineTo') {
-					filters[i].values = [e.to];
-					lineToInFilters = true;
-				}
-			});
-
-			if (!lineToInFilters) {
-				filters.push({
-					key: 'lineTo',
-					values: [e.to],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineTo') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
+		const filters = updateFilterOnChangeLineEvent(oldFilters, e);
 
 		this.setState({
 			skip: 0,
 			limit: 10,
 		});
 		this._updateRoute(filters);
-	},
+	}
 
 	loadMoreComments() {
 		this.setState({
 			limit: this.state.limit + 10,
 		});
-	},
+	}
 
 	showLoginModal() {
 		this.setState({
 			modalLoginLowered: true,
 		});
-	},
+	}
 
 	closeLoginModal() {
 		this.setState({
 			modalLoginLowered: false,
 		});
-	},
+	}
 
 	render() {
-		const { queryParams } = this.props;
+		const { queryParams, params, works } = this.props;
 		const { skip, limit, modalLoginLowered } = this.state;
 
-		// create filters object based on the queryParams
-		const filters = this._createFilterFromQueryParams(queryParams);
+		// create filters object based on the queryParams or params
+		const filters = createFilterFromURL(params, queryParams, works);
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -519,18 +207,18 @@ const CommentaryLayout = React.createClass({
 				</div>
 			</MuiThemeProvider>
 		);
-	},
+	}
+}
 
-});
-
-
-const CommentaryLayoutContainer = createContainer(() => {
+export default createContainer(() => {
 	const handle = Meteor.subscribe('referenceWorks.all', Session.get('tenantId'));
+	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
+
 	const referenceWorks = ReferenceWorks.find().fetch();
+	const works = Works.find().fetch();
 
 	return {
 		referenceWorks,
+		works,
 	};
 }, CommentaryLayout);
-
-export default CommentaryLayoutContainer;

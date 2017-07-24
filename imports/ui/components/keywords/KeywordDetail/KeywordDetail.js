@@ -1,9 +1,8 @@
 import React from 'react';
-import cookie from 'react-cookie';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-
+import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -50,7 +49,7 @@ const KeywordDetail = React.createClass({
 
 	deleteKeyword() {
 		const { keyword } = this.props;
-		Meteor.call('keywords.delete', cookie.load('loginToken'), keyword._id, (error, keywordId) => {
+		Meteor.call('keywords.delete', Cookies.get('loginToken'), keyword._id, (error, keywordId) => {
 			if (error) {
 				console.log(keywordId, error);
 			} else {
@@ -63,7 +62,7 @@ const KeywordDetail = React.createClass({
 		const $target = $(e.target);
 		const upperOffset = 90;
 		if ($target.hasClass('keyword-gloss')) {
-			const keyword = $target.data().link.replace('/keywords/', '');
+			const keyword = $target.data().link.replace('/tags/', '');
 			this.setState({
 				keywordReferenceModalVisible: true,
 				referenceTop: $target.offset().top - upperOffset,
@@ -111,7 +110,7 @@ const KeywordDetail = React.createClass({
 										{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 											<div>
 												<RaisedButton
-													href={`/keywords/${keyword.slug}/edit`}
+													href={`/tags/${keyword.slug}/edit`}
 													className="cover-link light"
 													label="Edit"
 												/>

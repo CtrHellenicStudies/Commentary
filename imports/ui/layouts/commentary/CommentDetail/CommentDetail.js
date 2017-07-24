@@ -70,7 +70,8 @@ class CommentDetail extends React.Component {
 				created: React.PropTypes.instanceOf(Date),
 				updated: React.PropTypes.instanceOf(Date),
 				originalDate: React.PropTypes.instanceOf(Date),
-			}))
+			})),
+			urn: React.PropTypes.string,
 		}).isRequired,
 		filters: React.PropTypes.arrayOf(React.PropTypes.shape({
 			key: React.PropTypes.string.isRequired,
@@ -88,7 +89,7 @@ class CommentDetail extends React.Component {
 		})),
 		settings: React.PropTypes.shape({
 			discussionCommentsDisabled: React.PropTypes.bool,
-		}).isRequired,
+		}),
 		ready: React.PropTypes.bool,
 	};
 
@@ -203,7 +204,7 @@ class CommentDetail extends React.Component {
 				lemmaReferenceLeft: $target.position().left + 0,
 			});
 		} else if ($target.hasClass('keyword-gloss')) {
-			const keyword = $target.data().link.replace('/keywords/', '');
+			const keyword = $target.data().link.replace('/tags/', '');
 			this.setState({
 				keywordReferenceModalVisible: true,
 				keywordReferenceTop: $target.position().top - upperOffset,
@@ -260,7 +261,6 @@ class CommentDetail extends React.Component {
 					className="comment commentary-comment paper-shadow"
 					data-id={comment._id}
 				>
-
 					<CommentUpper
 						title={selectedRevision.title}
 						commentId={comment._id}
@@ -284,6 +284,7 @@ class CommentDetail extends React.Component {
 					<CommentRevisionSelect
 						commentId={comment._id}
 						revisions={comment.revisions}
+						comment={comment}
 						selectedRevisionIndex={selectedRevisionIndex}
 						selectRevision={this.selectRevision}
 					/>

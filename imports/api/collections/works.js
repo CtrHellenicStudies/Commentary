@@ -12,6 +12,14 @@ Works.schema = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
+	tlgCreator: {
+		type: String,
+		optional: true,
+	},
+	tlg: {
+		type: String,
+		optional: true,
+	},
 	slug: {
 		type: String,
 		optional: true,

@@ -1,5 +1,4 @@
 import { check, Match } from 'meteor/check';
-
 import Books from '/imports/api/collections/books';
 import Comments from '/imports/api/collections/comments';
 
@@ -19,12 +18,12 @@ Meteor.methods({
 				text: String,
 				textRaw: Match.Maybe(Object),
 			}],
+			status: String,
 		});
 		const now = new Date();
 
 		comment.revisions[0].created = now;
 		comment.revisions[0].updated = now;
-		// comment.created = now;
 
 		let user = Meteor.user();
 		if (!user) {

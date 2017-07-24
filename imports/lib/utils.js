@@ -221,6 +221,19 @@ const Utils = {
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
 		return foundItem[1];
 	},
+	getEnvDomain() {
+		let domain;
+
+		if (location.hostname.match(/\w+.chs.harvard.edu/)) {
+			domain = 'chs.harvard.edu';
+		} else if (location.hostname.match(/\w+.orphe.us/)) {
+			domain = 'orphe.us';
+		} else if (location.hostname.match(/\w+.localhost.dev/)) {
+			domain = 'localhost.dev';
+		}
+
+		return domain;
+	},
 };
 
 export default Utils;

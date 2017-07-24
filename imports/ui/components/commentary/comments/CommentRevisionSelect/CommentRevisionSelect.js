@@ -24,7 +24,7 @@ const sortRevisions = (revisions) => (_.sortBy(revisions, 'created'));
 const CommentRevisionSelect = props => (
 	<div className="comment-revisions">
 
-		{!props.isTest && sortRevisions(props.revisions).map((revision, i) => {
+		{!props.isTest && sortRevisions(props.comment.revisions).map((revision, i) => {
 
 			const updated = getDateRevision(revision);
 
@@ -40,19 +40,21 @@ const CommentRevisionSelect = props => (
 			);
 		})}
 		<CommentCitation
-			commentId={props.commentId}
-			revisions={props.revisions}
+			comment={props.comment}
 		/>
 	</div>
 );
 CommentRevisionSelect.propTypes = {
-	commentId: React.PropTypes.string.isRequired,
-	revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
+	comment: React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
-		created: React.PropTypes.instanceOf(Date),
-		updated: React.PropTypes.instanceOf(Date),
-		originalDate: React.PropTypes.instanceOf(Date),
-	})).isRequired,
+		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			created: React.PropTypes.instanceOf(Date),
+			updated: React.PropTypes.instanceOf(Date),
+			originalDate: React.PropTypes.instanceOf(Date),
+		})).isRequired,
+		urn: React.PropTypes.string.isRequired,
+	}),
 	selectedRevisionIndex: React.PropTypes.number.isRequired,
 	selectRevision: React.PropTypes.func.isRequired,
 	isTest: React.PropTypes.bool,

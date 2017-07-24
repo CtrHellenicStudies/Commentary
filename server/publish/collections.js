@@ -10,12 +10,15 @@ import Tenants from '/imports/api/collections/tenants';
 import TextNodes from '/imports/api/collections/textNodes';
 import Works from '/imports/api/collections/works';
 import Settings from '/imports/api/collections/settings';
+import Translations from '/imports/api/collections/translations';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {
 		check(query, Object);
 		check(skip, Number);
 		check(limit, Number);
+
+		query.status = 'publish';
 
 		return Comments.find(query, {
 			skip,
@@ -32,7 +35,9 @@ if (Meteor.isServer) {
 	Meteor.publish('comments.recent', (skip = 0, limit = 12) => {
 		check(skip, Number);
 		check(limit, Number);
-		return Comments.find({}, {
+		return Comments.find({
+			status: 'publish',
+		}, {
 			limit,
 			sort: {
 				updated: -1,
@@ -44,6 +49,7 @@ if (Meteor.isServer) {
 		check(limit, Number);
 		check(tenantId, Match.Maybe(String));
 		return Comments.find({
+			status: 'publish',
 			tenantId,
 		}, {
 			limit,
@@ -299,11 +305,32 @@ if (Meteor.isServer) {
 		});
 	});
 
+	Meteor.publish('annotations.publish', (skip = 0, limit = 100) => {
+		check(skip, Number);
+		check(limit, Number);
+
+		return Comments.find({
+			status: 'publish',
+			isAnnotation: true,
+		}, {
+			sort: {
+				tenantId: 1,
+				book: 1,
+				paragraphN: 1,
+				nLines: -1,
+			},
+			skip,
+			limit,
+		});
+	});
+
 	Meteor.publish('annotations.all', (skip = 0, limit = 100) => {
 		check(skip, Number);
 		check(limit, Number);
 
-		return Comments.find({ isAnnotation: true }, {
+		return Comments.find({
+			isAnnotation: true
+		}, {
 			sort: {
 				tenantId: 1,
 				book: 1,
@@ -326,6 +353,8 @@ if (Meteor.isServer) {
 	Meteor.publish('tenants', () => Tenants.find({}, { sort: { subdomain: 1 } }));
 
 	Meteor.publish('settings', () => Settings.find({}, { sort: { tenantId: 1 }}));
+
+	Meteor.publish('translations', () => Translations.find({}, { sort: { tenantId: 1 }}));
 
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));

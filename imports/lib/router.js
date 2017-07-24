@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import React from 'react';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 import { mount } from 'react-mounter';
 
 // lib
@@ -14,11 +15,13 @@ import Tenants from '/imports/api/collections/tenants';
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
 import AddCommentLayout from '/imports/ui/layouts/editor/AddCommentLayout';
 import AddKeywordLayout from '/imports/ui/layouts/editor/AddKeywordLayout';
+import AddTranslationLayout from '/imports/ui/layouts/editor/AddTranslationLayout';
 import AddRevisionLayout from '/imports/ui/layouts/editor/AddRevisionLayout';
 import EditKeywordLayout from '/imports/ui/layouts/editor/EditKeywordLayout';
 import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
 import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
 import UserLayout from '/imports/ui/layouts/user/UserLayout';
+import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
 
 // components
@@ -58,9 +61,7 @@ FlowRouter.triggers.enter([() => {
 		const hostnameArray = document.location.hostname.split('.');
 		let subdomain;
 
-		if (process.env.NODE_ENV === 'development') {
-			subdomain = Meteor.settings.public.developmentSubdomain;
-		} else if (hostnameArray.length > 1) {
+		if (hostnameArray.length > 1) {
 			subdomain = hostnameArray[0];
 		} else {
 			subdomain = '';
@@ -70,9 +71,6 @@ FlowRouter.triggers.enter([() => {
 		Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);
-				if (tenant.isAnnotation && !Meteor.userId()) {
-					FlowRouter.go('/sign-in');
-				}
 			} else {
 				FlowRouter.go('/404');
 			}
@@ -80,52 +78,32 @@ FlowRouter.triggers.enter([() => {
 	}
 
 	/*
-	 * If the tenant is only for Annotations, then deny access to the homepage and
-	 * instead forward only to the user's profile
-	 */
- /*
-	if (Session.get('tenantId')) {
-		const tenant = Tenants.findOne({ _id: Session.get('tenantId') });
-		if (tenant && tenant.isAnnotation && FlowRouter.current().path === '/') {
-			FlowRouter.go('/profile');
-		}
-	}
-	*/
-
-	/*
 	 * Check for multi-subdomain login cookie, if found, login user with Token
 	 * if user is logged in and no cookie is found, set cookie
 	 */
+
 	if (Meteor.userId()) {
-		if (!cookie.load('loginToken')) {
+		if (!Cookies.get('loginToken')) {
 			Meteor.call('getNewStampedToken', (_err, token) => {
-				const path = '/';
-				let domain;
 
 				if (_err) {
 					console.error(_err);
 					return false;
 				}
 
-				/*
-				if (location.hostname.match(/.+.chs.harvard.edu/)) {
-					domain = '*.chs.harvard.edu';
-				} else if (location.hostname.match(/.+.orphe.us/)) {
-					domain = '*.orphe.us';
-				}
-				*/
+				const domain = Utils.getEnvDomain();
 
 				if (domain) {
-					cookie.save('userId', Meteor.userId(), { path, domain, });
-					cookie.save('loginToken', token, { path, domain });
+					Cookies.set('userId', Meteor.userId(), { domain });
+					Cookies.set('loginToken', token, { domain });
 				} else {
-					cookie.save('userId', Meteor.userId(), { path });
-					cookie.save('loginToken', token, { path });
+					Cookies.set('userId', Meteor.userId());
+					Cookies.set('loginToken', token);
 				}
 			});
 		}
 	} else {
-		const loginToken = cookie.load('loginToken');
+		const loginToken = Cookies.get('loginToken');
 		if (loginToken) {
 			Meteor.loginWithToken(loginToken);
 		}
@@ -159,19 +137,19 @@ FlowRouter.route('/commentary', {
 	},
 });
 
-loggedInGroup.route('/keywords/:slug/edit', {
+loggedInGroup.route('/tags/:slug/edit', {
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <EditKeywordLayout slug={params.slug} />,
 		});
 	},
 });
-loggedInGroup.route('/keywords/create', {
+loggedInGroup.route('/tags/create', {
 	action: () => {
 		mount(AddKeywordLayout);
 	},
 });
-FlowRouter.route('/keywords/:slug', {
+FlowRouter.route('/tags/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
 			content: <KeywordDetail slug={params.slug} />,
@@ -179,15 +157,15 @@ FlowRouter.route('/keywords/:slug', {
 	},
 });
 
-FlowRouter.route('/keywords', {
-	name: 'keywords',
+FlowRouter.route('/tags/words', {
+	name: 'tagwords',
 	action: () => {
 		mount(MasterLayout, {
 			content: <KeywordsPage type="word" title="Keywords" />,
 		});
 	},
 });
-FlowRouter.route('/keyideas', {
+FlowRouter.route('/tags/ideas', {
 	action: () => {
 		mount(MasterLayout, {
 			content: <KeywordsPage type="idea" title="Key Ideas" />,
@@ -241,11 +219,23 @@ loggedInGroup.route('/commentary/create', {
 	},
 });
 
+loggedInGroup.route('/translation/create', {
+	action: () => {
+		mount(AddTranslationLayout);
+	}
+});
+
 loggedInGroup.route('/profile', {
 	action: () => {
 		mount(UserLayout, {
 			content: <ProfilePage />,
 		});
+	},
+});
+FlowRouter.route('/commentary/:urn', {
+	name: 'commentaryURN',
+	action: (params, queryParams) => {
+		mount(CommentaryLayout, { params, queryParams });
 	},
 });
 
@@ -302,6 +292,32 @@ FlowRouter.route('/sign-out', {
 	],
 	action: () => {
 		// Do nothing
+	},
+});
+
+FlowRouter.route('/v1/', {
+	action(params) {
+		mount(NameResolutionServiceLayout, {
+			version: 1,
+		});
+	},
+});
+
+FlowRouter.route('/v1/urn:urn', {
+	action(params) {
+		mount(NameResolutionServiceLayout, {
+			urn: params.urn,
+			version: 1,
+		});
+	},
+});
+
+FlowRouter.route('/v1/doi:doi', {
+	action(params) {
+		mount(NameResolutionServiceLayout, {
+			doi: params.doi,
+			version: 1,
+		});
 	},
 });
 

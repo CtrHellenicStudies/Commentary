@@ -56,7 +56,7 @@ Meteor.method('keyword_cron', () => {
 
 	return 1;
 }, {
-	url: 'keywords/cron',
+	url: 'tags/cron',
 	getArgsFromRequest(request) {
 		// Sometime soon do validation here
 		const content = request.body;

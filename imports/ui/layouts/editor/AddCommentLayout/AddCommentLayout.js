@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -35,53 +35,6 @@ const handlePermissions = () => {
 		}
 	}
 };
-const matchKeywords = (keywords) => {
-	const matchedKeywords = [];
-	if (keywords) {
-		keywords.forEach((keyword) => {
-			const foundKeyword = Keywords.findOne({
-				title: keyword.label,
-			});
-			matchedKeywords.push(foundKeyword);
-		});
-	}
-	return matchedKeywords;
-};
-const addNewKeywords = (keywords, type, next) => {
-	// TODO should be handled server-side
-	if (keywords) {
-		const newKeywordArray = [];
-		keywords.forEach((keyword) => {
-			const foundKeyword = Keywords.findOne({title: keyword.label});
-			if (!foundKeyword) {
-				const newKeyword = {
-					title: keyword.label,
-					slug: slugify(keyword.label),
-					type,
-					tenantId: Session.get('tenantId')
-				};
-				newKeywordArray.push(newKeyword);
-			}
-		});
-		if (newKeywordArray.length > 0) {
-			const token = cookie.load('loginToken');
-			return Meteor.call('keywords.insert', token, newKeywordArray, (err) => {
-				if (err) {
-					console.log(err);
-					return null;
-				}
-				return next();
-			});
-		}
-		return next();
-	}
-	return next();
-};
-const addNewKeywordsAndIdeas = (keywords, keyideas, next) => {
-	addNewKeywords(keywords, 'word', () => {
-		addNewKeywords(keyideas, 'idea', () => next());
-	});
-};
 const getReferenceWorks = (formData) => {
 	let referenceWorks = null;
 	if (formData.referenceWorksValue) {
@@ -90,6 +43,7 @@ const getReferenceWorks = (formData) => {
 	return referenceWorks;
 };
 const getCommenter = (formData) => {
+	console.log(formData);
 	const commenter = Commenters.findOne({
 		_id: formData.commenterValue.value,
 	});
@@ -97,11 +51,11 @@ const getCommenter = (formData) => {
 };
 const getKeywords = (formData) => {
 	const keywords = [];
-	matchKeywords(formData.keywordsValue).forEach((matchedKeyword) => {
-		keywords.push(matchedKeyword);
-	});
-	matchKeywords(formData.keyideasValue).forEach((matchedKeyword) => {
-		keywords.push(matchedKeyword);
+
+	formData.tagsValue.forEach((tag) => {
+		const keyword = tag.keyword;
+		keyword.isMentionedInLemma = tag.isMentionedInLemma;
+		keywords.push(keyword);
 	});
 	return keywords;
 };
@@ -256,52 +210,48 @@ class AddCommentLayout extends React.Component {
 		const referenceWorks = formData.referenceWorks;
 		const commenter = getCommenter(formData);
 		const selectedLineTo = this.getSelectedLineTo();
-		const token = cookie.load('loginToken');
+		const token = Cookies.get('loginToken');
 
-		// need to add new keywords first, so keyword id can be added to comment:
-		addNewKeywordsAndIdeas(formData.keywordsValue, formData.keyideasValue, () => {
+		// get keywords after they were created:
+		const keywords = getKeywords(formData);
+		const revisionId = new Meteor.Collection.ObjectID();
 
-			// get keywords after they were created:
-			const keywords = getKeywords(formData);
-			const revisionId = new Meteor.Collection.ObjectID();
+		// create comment object to be inserted:
+		const comment = {
+			work: {
+				title: work.title,
+				slug: work.slug,
+				order: work.order,
+			},
+			subwork: {
+				title: subwork.title,
+				n: subwork.n,
+			},
+			lineFrom: this.state.selectedLineFrom,
+			lineTo: selectedLineTo,
+			lineLetter,
+			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
+			revisions: [{
+				_id: revisionId.valueOf(),
+				title: formData.titleValue,
+				text: textValue,
+				textRaw: textRawValue,
+				created: referenceWorks ? referenceWorks.date : new Date(),
+				slug: slugify(formData.titleValue),
+			}],
+			commenters: commenter ? [{
+				_id: commenter._id,
+				name: commenter.name,
+				slug: commenter.slug,
+			}] : [{}],
+			keywords: keywords || [{}],
+			referenceWorks: referenceWorks,
+			tenantId: Session.get('tenantId'),
+			created: new Date(),
+		};
 
-			// create comment object to be inserted:
-			const comment = {
-				work: {
-					title: work.title,
-					slug: work.slug,
-					order: work.order,
-				},
-				subwork: {
-					title: subwork.title,
-					n: subwork.n,
-				},
-				lineFrom: this.state.selectedLineFrom,
-				lineTo: selectedLineTo,
-				lineLetter,
-				nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
-				revisions: [{
-					_id: revisionId.valueOf(),
-					title: formData.titleValue,
-					text: textValue,
-					textRaw: textRawValue,
-					created: referenceWorks ? referenceWorks.date : new Date(),
-					slug: slugify(formData.titleValue),
-				}],
-				commenters: commenter ? [{
-					_id: commenter._id,
-					name: commenter.name,
-					slug: commenter.slug,
-				}] : [{}],
-				keywords: keywords || [{}],
-				referenceWorks: referenceWorks,
-				tenantId: Session.get('tenantId'),
-				created: new Date(),
-			};
-
-			Meteor.call('comments.insert', token, comment, (error, commentId) => {
-				FlowRouter.go('/commentary', {}, {_id: commentId});
-			});
+		Meteor.call('comments.insert', token, comment, (error, commentId) => {
+			FlowRouter.go('/commentary', {}, {_id: commentId});
 		});
 	}
 

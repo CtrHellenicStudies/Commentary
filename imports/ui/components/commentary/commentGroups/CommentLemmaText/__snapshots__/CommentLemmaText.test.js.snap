@@ -1,3 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CommentLemmaText renders correctly 1`] = `<div />`;
+exports[`CommentLemmaText renders correctly 1`] = `
+<div
+  className="comment-lemma-text"
+/>
+`;

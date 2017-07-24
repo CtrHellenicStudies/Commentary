@@ -24,6 +24,7 @@ Meteor.methods({
 			roles: Match.Maybe(Array),
 			canEditCommenters: Match.Maybe(Array),
 			canAnnotateBooks: Match.Maybe(Array),
+			authorOfBooks: Match.Maybe(Array),
 			highlightingPreference: Match.Maybe(Boolean),
 		});
 
@@ -95,6 +96,7 @@ Meteor.methods({
 			roles: Match.Maybe(Array),
 			canEditCommenters: Match.Maybe(Array),
 			canAnnotateBooks: Match.Maybe(Array),
+			authorOfBooks: Match.Maybe(Array),
 			highlightingPreference: Match.Maybe(Boolean),
 		});
 

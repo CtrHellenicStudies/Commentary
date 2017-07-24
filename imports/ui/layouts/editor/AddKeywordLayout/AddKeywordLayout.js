@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components:
@@ -204,7 +204,7 @@ const AddKeywordLayout = React.createClass({
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
-		const token = cookie.load('loginToken');
+		const token = Cookies.get('loginToken');
 
 		// create keyword object to be inserted:
 		const keyword = {
@@ -233,7 +233,7 @@ const AddKeywordLayout = React.createClass({
 			if (error) {
 				this.showSnackBar(error);
 			} else {
-				FlowRouter.go(`/keywords/${keyword.slug}`);
+				FlowRouter.go(`/tags/${keyword.slug}`);
 			}
 		});
 	},

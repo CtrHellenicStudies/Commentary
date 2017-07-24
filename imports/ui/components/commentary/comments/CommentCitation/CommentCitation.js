@@ -3,14 +3,16 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-
 import moment from 'moment';
+import Utils from '/imports/lib/utils';
 
 const getDateRevision = (revision) => {
 	if (revision.originalDate) return revision.originalDate;
 	else if (revision.updated) return revision.updated;
 	return revision.created;
 };
+
+const sortRevisions = (revisions) => (_.sortBy(revisions, 'created'));
 
 class CommentCitation extends React.Component {
 
@@ -41,14 +43,19 @@ class CommentCitation extends React.Component {
 
 	render() {
 
-		const { commentId, revisions } = this.props;
+		const { comment } = this.props;
 		const { openMenu, anchorEl } = this.state;
+
+		if (!comment) {
+			return null;
+		}
 
 		const styles = {
 			menuItem: {
 				fontFamily: 'ProximaNW01-AltLightReg',
 			}
 		};
+
 
 		return (
 			<div className="comment-citation">
@@ -65,24 +72,19 @@ class CommentCitation extends React.Component {
 					onRequestClose={this.handleRequestClose.bind(this)}
 				>
 					<Menu>
-						{revisions.map((revision, i) => {
+						{sortRevisions(comment.revisions).reverse().map((revision, i) => {
 
 							const updated = getDateRevision(revision);
 
 							return (
 								<MenuItem
 									key={revision._id}
-									href={`/commentary/?_id=${commentId}&revision=${i}`}
+									href={`//nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
 									style={styles.menuItem}
 								/>
 							);
 						})}
-						<MenuItem
-							href={`/commentary/?_id=${commentId}`}
-							primaryText="Comment link"
-							style={styles.menuItem}
-						/>
 					</Menu>
 				</Popover>
 			</div>
@@ -90,13 +92,16 @@ class CommentCitation extends React.Component {
 	}
 }
 CommentCitation.propTypes = {
-	commentId: React.PropTypes.string.isRequired,
-	revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
+	comment: React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,
-		created: React.PropTypes.instanceOf(Date),
-		updated: React.PropTypes.instanceOf(Date),
-		originalDate: React.PropTypes.instanceOf(Date),
-	})).isRequired,
+		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
+			_id: React.PropTypes.string.isRequired,
+			created: React.PropTypes.instanceOf(Date),
+			updated: React.PropTypes.instanceOf(Date),
+			originalDate: React.PropTypes.instanceOf(Date),
+		})).isRequired,
+		urn: React.PropTypes.string.isRequired,
+	}),
 };
 
 export default CommentCitation;

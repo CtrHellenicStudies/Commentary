@@ -148,9 +148,22 @@
 	.search-tool.line-search {
 	  display:none;
 	}
+
 	.user-header-links {
 		display:none;
 	}
+
+	.translation-lemma-text-line-outer {
+		.lemma-text-line {
+			&.lemma-text-line--source {
+				width: 50%;
+			}
+			&.lemma-text-line--translation {
+				width: 40%;
+			}
+		}
+	}
+
 }
 
 @media (max-width:1100px){
@@ -179,6 +192,29 @@
 		font-size:21px;
 		line-height:16px;
 
+	}
+
+	.translated-by-label {
+		margin: 0;
+		text-align: right;
+		width: 100%;
+	}
+
+	.translation-lemma-text-line-outer {
+		.lemma-text-line {
+			&.lemma-text-line--source {
+				width: 100%;
+				margin: 0;
+			}
+			&.lemma-text-line--translation {
+				width: 100%;
+				margin: 0 0 8px;
+				p.translation-text {
+					width: 92%;
+					margin-left: 7%;
+				}
+			}
+		}
 	}
 }
 
@@ -753,7 +789,7 @@
 		width:90%;
 	}
 
-	.header-block h1.primary-title, .header-block h5.secondary-text, .header-block a.header-link {
+	.header-block h1.primary-title, .header-block h5.text-secondary, .header-block a.header-link {
 		top:50px;
 	}
 	.demo-block .demo-lines>.line {
@@ -895,7 +931,7 @@
 		margin:10px 0%;
 	}
 
-	.header-block h5.secondary-text {
+	.header-block h5.text-secondary {
 		font-size:20px;
 		width:90%;
 	}

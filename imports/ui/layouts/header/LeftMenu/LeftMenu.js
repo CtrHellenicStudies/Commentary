@@ -59,8 +59,13 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser }) => (
 					onClick={closeLeftMenu}
 				/>
 				<MenuItem
-					href="/keywords/create"
+					href="/tags/create"
 					primaryText="Add Tag"
+					onClick={closeLeftMenu}
+				/>
+				<MenuItem
+					href="/translation/create"
+					primaryText="Add Translation"
 					onClick={closeLeftMenu}
 				/>
 				<Divider />

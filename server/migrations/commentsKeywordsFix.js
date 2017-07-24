@@ -1,8 +1,7 @@
-
 import Comments from '/imports/api/collections/comments';
 import Keywords from '/imports/api/collections/keywords';
 
-Meteor.method('commentsKeywordsFix', () => {
+const commentsKeywordsFix = () => {
 	// ---
 	// FIX the keywords field in the comments collection - add keywords._id if doesn't exist
 	// ---
@@ -29,6 +28,6 @@ Meteor.method('commentsKeywordsFix', () => {
 	console.log(' -- method commentsKeywordsFix run completed');
 
 	return 1;
-}, {
-	url: 'fix/comments/keywords',
-});
+};
+
+export default commentsKeywordsFix;

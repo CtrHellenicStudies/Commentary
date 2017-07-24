@@ -1,9 +1,10 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 
 // components:
+import Utils from '/imports/lib/utils';
 import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';
 import PWDSignupForm from '/imports/ui/components/auth/PWDSignupForm';
 
@@ -44,7 +45,7 @@ class ModalSignup extends React.Component {
 	_handleKeyDown(event) {
 
 		const { closeModal } = this.props;
-		
+
 		if (event.keyCode === ESCAPE_KEY) closeModal();
 	}
 
@@ -68,10 +69,19 @@ class ModalSignup extends React.Component {
 						this.setState({
 							errorMsg: 'Invalid email or password',
 						});
+
+						return false;
 					}
 
-					cookie.save('userId', result.userId, { path });
-					cookie.save('loginToken', result.stampedToken.token, { path });
+					const domain = Utils.getEnvDomain();
+
+					if (domain) {
+						Cookies.set('userId', Meteor.userId(), { domain });
+						Cookies.set('loginToken', token, { domain });
+					} else {
+						Cookies.set('userId', Meteor.userId());
+						Cookies.set('loginToken', token);
+					}
 					this.props.closeModal();
 				});
 			} else {

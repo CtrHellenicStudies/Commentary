@@ -18,6 +18,8 @@ Meteor.methods({
 			throw new Meteor.Error('comment-insert', 'not-authorized');
 		}
 
+		comment.status = 'publish';
+
 		let commentId;
 		try {
 			commentId = Comments.insert(comment);
@@ -203,6 +205,41 @@ Meteor.methods({
 					discussionCommentsDisabled: updater,
 				},
 			});
+		}
+	},
+	'comments.updateStatus': (token, commentId, commentData) => {
+		check(token, String);
+		check(commentId, String);
+		check(commentData, {
+			status: String,
+		});
+
+		const roles = ['admin'];
+		if ((
+				!Meteor.userId()
+				&& !Roles.userIsInRole(Meteor.user(), roles)
+			)
+			&& !Meteor.users.findOne({
+				roles: 'admin',
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+			})
+		) {
+			throw new Meteor.Error('comment-updateStatus', 'not-authorized');
+		}
+
+		/*
+		 * Update the discussion comment
+		 */
+		try {
+			Comments.update({
+				_id: commentId,
+			}, {
+				$set: {
+					status: commentData.status,
+				},
+			});
+		} catch (err) {
+			throw new Meteor.Error(err);
 		}
 	},
 });

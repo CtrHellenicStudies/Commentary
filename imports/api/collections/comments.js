@@ -1,9 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import _ from 'underscore';
+
+import Works from './works';
+import Books from './books';
 
 const Comments = new Meteor.Collection('comments');
 
 Comments.schema = new SimpleSchema({
+	urn: {
+		type: String,
+		optional: true,
+	},
+
 	originalDate: {
 		type: Date,
 		optional: true,
@@ -244,6 +253,11 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'keywords.$.isMentionedInLemma': {
+		type: Boolean,
+		optional: true,
+	},
+
 	revisions: {
 		type: [Object],
 		optional: true,
@@ -281,7 +295,7 @@ Comments.schema = new SimpleSchema({
 
 	'revisions.$.friendlySlugs.slug.index': {
 		type: Number,
-		optional: Number,
+		optional: true,
 	},
 
 	'revisions.$.slug': {
@@ -344,4 +358,72 @@ Comments.attachBehaviour('timestampable', {
 	updatedBy: 'updatedBy'
 });
 
+const COMMENT_ID_LENGTH = 7;
+
+const _getCommentURN = (comment) => {
+	const work = Works.findOne({ slug: comment.work.slug });
+	const urnPrefix = 'urn:cts:greekLit';
+
+	// Use work tlg if it exists, otherwise, search for subwork tlg number
+	// Failing either, just use creator
+	let urnTLG = work.tlgCreator;
+	if (work.tlg && work.tlg.length) {
+		urnTLG += `.${work.tlg}`;
+	} else {
+		work.subworks.forEach((subwork) => {
+			if (
+					subwork.n === comment.subwork.n
+				&& subwork.tlgNumber
+				&& subwork.tlgNumber.length
+			) {
+				urnTLG += `.${subwork.tlgNumber}`;
+			}
+		});
+	}
+
+	//
+	urnTLG += '.chsCommentary';
+
+	let urnComment = `${comment.subwork.title}.${comment.lineFrom}`;
+
+	if (typeof comment.lineTo !== 'undefined' && comment.lineFrom !== comment.lineTo) {
+		urnComment += `-${comment.subwork.title}.${comment.lineTo}`;
+	}
+
+	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
+
+	return `${urnPrefix}:${urnTLG}:${urnComment}.${urnCommentId}`;
+};
+
+const _getAnnotationURN = (comment) => {
+	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
+	const chapter = _.find(book.chapters, (c) => c.url === comment.bookChapterUrl);
+	const urnPrefix = 'urn:cts:chsAnnotations';
+
+	const urnBook = `${book.author}.${book.slug}`;
+	const urnComment = `${chapter.n}.${comment.paragraphN}`;
+
+	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
+
+	return `${urnPrefix}:${urnBook}:${urnComment}:${urnCommentId}`;
+};
+
+function getURN(comment) {
+	if (comment.isAnnotation) {
+		return _getAnnotationURN(comment);
+	}
+
+	return _getCommentURN(comment);
+}
+
+// hooks:
+Comments.before.insert((userId, doc) => {
+	doc.urn = getURN(doc);
+});
+
+Comments.before.update((userId, doc, fieldNames, modifier, options) => {
+	modifier.$set.urn = getURN(doc);
+});
+
 export default Comments;
+export { getURN };

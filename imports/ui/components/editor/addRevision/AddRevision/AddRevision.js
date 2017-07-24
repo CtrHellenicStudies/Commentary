@@ -43,6 +43,7 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import AddTagInput from '/imports/ui/components/editor/addComment/AddTagInput';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -119,8 +120,7 @@ const AddRevision = React.createClass({
 		submitForm: React.PropTypes.func.isRequired,
 		update: React.PropTypes.func.isRequired,
 		comment: React.PropTypes.object.isRequired,
-		keywordsOptions: React.PropTypes.array,
-		keyideasOptions: React.PropTypes.array,
+		tags: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
 		isTest: React.PropTypes.bool,
 	},
@@ -131,22 +131,15 @@ const AddRevision = React.createClass({
 		const revision = comment.revisions[revisionId]; // get newest revision
 		let revisionTitle = '';
 
-		const keywordsValue = [];
-		const keyideasValue = [];
+		const tagsValue = [];
 		if (comment.keywords) {
 			comment.keywords.forEach((keyword) => {
-				if (keyword) {
-					switch (keyword.type) {
-					case 'word':
-						keywordsValue.push(keyword.title);
-						break;
-					case 'idea':
-						keyideasValue.push(keyword.title);
-						break;
-					default:
-						break;
-					}
-				}
+				tagsValue.push({
+					isSet: true,
+					keyword,
+					tagId: keyword._id,
+					isMentionedInLemma: keyword.isMentionedInLemma,
+				});
 			});
 		}
 
@@ -163,8 +156,8 @@ const AddRevision = React.createClass({
 			titleValue: '',
 			textValue: '',
 
-			keywordsValue,
-			keyideasValue,
+			tagsValue,
+
 			referenceWorks: comment.referenceWorks || [],
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
@@ -224,18 +217,6 @@ const AddRevision = React.createClass({
 		});
 	},
 
-	onKeywordsValueChange(keywords) {
-		this.setState({
-			keywordsValue: keywords,
-		});
-	},
-
-	onKeyideasValueChange(keyidea) {
-		this.setState({
-			keyideasValue: keyidea,
-		});
-	},
-
 	onReferenceWorksValueChange(referenceWork) {
 		const referenceWorks = this.state.referenceWorks;
 		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
@@ -245,20 +226,13 @@ const AddRevision = React.createClass({
 		});
 	},
 
-	onNewOptionCreator(newOption) {
-		return {
-			label: newOption.label,
-			value: newOption.label
-		};
-	},
-
 	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
-		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
+		const keywords = this.props.tags;
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
-				link: `/keywords/${keyword.slug}`,
+				link: `/tags/${keyword.slug}`,
 			});
 		});
 
@@ -281,39 +255,6 @@ const AddRevision = React.createClass({
 			});
 		});
 
-	},
-
-	shouldKeyDownEventCreateNewOption(sig) {
-		if (sig.keyCode === 13 ||
-			sig.keyCode === 188) {
-			return true;
-		}
-		return false;
-	},
-
-	isOptionUnique(newOption) {
-		const keywordsOptions = this.props.keywordsOptions;
-		const keyideasOptions = this.props.keyideasOptions;
-		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
-		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
-		const BreakException = {};
-		try {
-			keywordsOptions.forEach((keywordsOption) => {
-				if (keywordsOption.label === newOption.option.label) throw BreakException;
-			});
-			keyideasOptions.forEach((keyideasOption) => {
-				if (keyideasOption.label === newOption.option.label) throw BreakException;
-			});
-			keywordsValue.forEach((keywordValue) => {
-				if (keywordValue.label === newOption.option.label) throw BreakException;
-			});
-			keyideasValue.forEach((keyideaValue) => {
-				if (keyideaValue.label === newOption.option.label) throw BreakException;
-			});
-		} catch (e) {
-			if (e === BreakException) return false;
-		}
-		return true;
 	},
 
 	handleSubmit() {
@@ -409,8 +350,8 @@ const AddRevision = React.createClass({
 	},
 
 	moveReferenceWorkBlock(dragIndex, hoverIndex) {
-		const { introBlocks } = this.state;
-		const dragIntroBlock = introBlocks[dragIndex];
+		const { referenceWorks } = this.state;
+		const dragIntroBlock = referenceWorks[dragIndex];
 
 		this.setState(update(this.state, {
 			referenceWorks: {
@@ -422,11 +363,64 @@ const AddRevision = React.createClass({
 		}));
 	},
 
+	addTagBlock() {
+		this.state.tagsValue.push({
+			tagId: Random.id(),
+			isMentionedInLemma: true,
+			isSet: false,
+		});
+		this.setState({
+			tagsValue: this.state.tagsValue,
+		});
+	},
+
+	removeTagBlock(i) {
+		this.setState({
+			tagsValue: update(this.state.tagsValue, { $splice: [[i, 1]] }),
+		});
+	},
+
+	moveTagBlock(dragIndex, hoverIndex) {
+		const { tagsValue } = this.state;
+		const dragIntroBlock = tagsValue[dragIndex];
+
+		this.setState(update(this.state, {
+			tagsValue: {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, dragIntroBlock],
+				],
+			},
+		}));
+	},
+
+	onTagValueChange(tag) {
+		const tagsValue = this.state.tagsValue;
+
+		tagsValue[tag.i].tagId = tag.value;
+		tagsValue[tag.i].keyword = Keywords.findOne({_id: tag.value});
+		tagsValue[tag.i].isSet = true;
+
+		this.setState({
+			tagsValue,
+		});
+	},
+
+	onIsMentionedInLemmaChange(tag, i) {
+		const tagsValue = this.state.tagsValue;
+
+		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
+
+		this.setState({
+			tagsValue,
+		});
+	},
+
 	render() {
 		const self = this;
 		const { comment, isTest } = this.props;
-		const { revision, titleEditorState, keywordsValue, keyideasValue, referenceWorks, textEditorState } = this.state;
-		const { keywordsOptions, keyideasOptions, referenceWorkOptions } = this.props;
+		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
+		const { referenceWorkOptions, tags } = this.props;
 
 		if (isTest) {
 			return null;
@@ -488,33 +482,16 @@ const AddRevision = React.createClass({
 										/>
 									: ''}
 								</h1>
-								<Creatable
-									name="keywords"
-									id="keywords"
-									required={false}
-									options={keywordsOptions}
-									multi
-									value={keywordsValue}
-									onChange={this.onKeywordsValueChange}
-									newOptionCreator={this.onNewOptionCreator}
-									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-									isOptionUnique={this.isOptionUnique}
-									placeholder="Keywords..."
+
+								<AddTagInput
+									tagsValue={tagsValue}
+									tags={tags}
+									addTagBlock={this.addTagBlock}
+									removeTagBlock={this.removeTagBlock}
+									moveTagBlock={this.moveTagBlock}
+									onTagValueChange={this.onTagValueChange}
+									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
 								/>
-								<Creatable
-									name="keyideas"
-									id="keyideas"
-									required={false}
-									options={keyideasOptions}
-									multi
-									value={keyideasValue}
-									onChange={this.onKeyideasValueChange}
-									newOptionCreator={this.onNewOptionCreator}
-									shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-									isOptionUnique={this.isOptionUnique}
-									placeholder="Key Ideas..."
-								/>
-								{/* TODO: this.props.comment.keyideas*/}
 
 							</div>
 							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
@@ -601,9 +578,6 @@ const AddRevision = React.createClass({
 																value={this.state.referenceWorks[i].referenceWorkId}
 																// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
 																onChange={this.onReferenceWorksValueChange}
-																newOptionCreator={this.onNewOptionCreator}
-																shouldKeyDownEventCreateNewOption={this.shouldKeyDownEventCreateNewOption}
-																isOptionUnique={this.isOptionUnique}
 																placeholder="Reference Work . . ."
 															/>
 															<FormGroup>
@@ -704,40 +678,26 @@ const AddRevision = React.createClass({
 const AddRevisionContainer = createContainer(({ comment }) => {
 
 	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
-	const keywordsOptions = [];
-	const keywords = Keywords.find({ type: 'word' }).fetch();
-	keywords.forEach((keyword) => {
-		keywordsOptions.push({
-			value: keyword.title,
-			label: keyword.title,
-			slug: keyword.slug,
-		});
-	});
 
-	const keyideasOptions = [];
-	const keyideas = Keywords.find({ type: 'idea' }).fetch();
-	keyideas.forEach((keyidea) => {
-		keyideasOptions.push({
-			value: keyidea.title,
-			label: keyidea.title,
-			slug: keyidea.slug,
-		});
-	});
+	const tags = Keywords.find().fetch();
 
 	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
-		referenceWorkOptions.push({
-			value: referenceWork._id,
-			label: referenceWork.title,
-			slug: referenceWork.slug,
-		});
+		if (!referenceWorkOptions.some((val) => (
+			referenceWork.slug === val.slug
+		))) {
+			referenceWorkOptions.push({
+				value: referenceWork._id,
+				label: referenceWork.title,
+				slug: referenceWork.slug,
+			});
+		}
 	});
 
 	return {
-		keywordsOptions,
-		keyideasOptions,
+		tags,
 		referenceWorkOptions,
 	};
 }, AddRevision);

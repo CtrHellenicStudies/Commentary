@@ -1,36 +1,68 @@
+/******************************************************************************
+
+						  ___ _  _ ___
+						 / __| || / __|
+						| (__| __ \__ \
+						 \___|_||_|___/
+
+  		The Center for Hellenic Studies
+
+
+ |  Style Variables for A Homer Commentary in Progress and CHS Annotations
+ |
+ |   1. Colors
+ |   2. Typography
+ |   3. Mixins
+
+
+******************************************************************************/
+
+
+/******************************************************************************
+
+1. Colors
+
+******************************************************************************/
+
+/******************************************************************************
+
+1.1 Base Colors
+
+******************************************************************************/
 @grey: #555;
 @light: #fff;
-@dark: #222;
-
-// colors
-@primary: #aaa;
-@primary-dark: #455A64;
-@light-2: #f0f0f0;
-@light-1: #ddd;
-@dark-1: rgba(0, 0, 0, 0.6);
-@dark-2: rgba(0, 0, 0, 0.8);
-
-// AHCIP colors
-@light: #fff;
 @dark: #1e1e1e;
-@blue-gray: #03435e;
-@terracotta: rgb(151, 100, 76);
-@terracotta: #bc5500;
-@dark-brown: #352721;
-@gray: #555;
-@light-gray: #eee;
-@marble: #f7f5f2;
-@white: #fff;
-@font-gray: rgba(0, 0, 0, 0.7);
-@background-gray: #f6f6f6;
-@black: #000000;
-@text-dark: #212121;
-@text-secondary: #727272;
 @divider: #CCCCCC;
 @divider-light: #eee;
 @divider-dark: #666;
 @divider-transparent: rgba(204, 204, 204, 0.4);
+@dark-1: rgba(0, 0, 0, 0.6);
+@dark-2: rgba(0, 0, 0, 0.8);
+@light-1: #ddd;
+@light-2: #f0f0f0;
+@gray: #555;
+@light-gray: #eee;
 @background-gray: #f6f6f6;
+
+/******************************************************************************
+
+1.2 Brand Colors
+
+******************************************************************************/
+@blue-gray: #03435e;
+@terracotta: #bc5500;
+@dark-brown: #352721;
+@marble: #f7f5f2;
+@tan1: #b6ae97;
+@tan2: #d7d1c0;
+@tan3: #efebde;
+@tan4: #fbf8ec;
+
+@keywords: #a02f19;
+@ahcip-red: @keywords;
+@ahcip-red: @md-primary-700;
+@commenters: #4994c9;
+@ahcip-blue: @commenters;
 
 // Material browns
 @md-primary-100: #D7CCC8;
@@ -46,7 +78,7 @@
 @md-primary-light: @md-primary-100;
 @md-primary-dark: @md-primary-800;
 
-// Extra browns
+// Extra Primary colors
 @md-primary-500-60: rgba(121, 85, 72, 0.6);
 @md-primary-500-40: rgba(121, 85, 72, 0.4);
 @md-primary-800-80: rgba(78, 52, 46, 0.8);
@@ -82,6 +114,12 @@
 @md-accent-500-60: rgba(244, 67, 54, 0.6);
 @md-accent-500-40: rgba(244, 67, 54, 0.4);
 
+// General help colors
+@trans-light-9: rgba(255, 255, 255, .9);
+@trans-light-8: rgba(255, 255, 255, .8);
+@opaque-dark-1: rgba(100, 100, 100, 1);
+@opaque-dark-2: rgba(50, 50, 50, 1);
+
 // Naming regularization
 @primary: @md-primary-500;
 @primary-dark: @md-primary-700;
@@ -92,38 +130,33 @@
 @accent-dark-2: @md-accent-900;
 @accent-light: #BBDEFB;
 
-// Text colors
-@primary-text: #212121;
-@secondary-text: #727272;
-@light-text: #999;
-@reading-text: rgba(0, 0, 0, 0.8);
-@third-text: #ddd;
-@divider-color: #b6b6b6;
+/******************************************************************************
 
-// General help colors
-@trans-light-9: rgba(255, 255, 255, .9);
-@trans-light-8: rgba(255, 255, 255, .8);
-@opaque-dark-1: rgba(100, 100, 100, 1);
-@opaque-dark-2: rgba(50, 50, 50, 1);
+1.3 Text Colors
 
-// Update design colors
-@tan1: #b6ae97;
-@tan2: #d7d1c0;
-@tan3: #efebde;
-@tan4: #fbf8ec;
-@keywords: #a02f19;
-@ahcip-red: @keywords;
-@ahcip-red: @md-primary-700;
-@commenters: #4994c9;
-@ahcip-blue: @commenters;
-@rollover: #d59518;
-@ahcip-yellow: @rollover;
-@ahcip-yellow: @tan1;
+******************************************************************************/
+@text-primary: #212121;
+@text-secondary: #727272;
+@text-gray: #999;
+@text-gray-light: #ddd;
+@text-reading: rgba(0, 0, 0, 0.8);
 
-/*
- * Fonts
+/******************************************************************************
 
-// Fonts are currently loaded from fonts.com
+2. Typography
+
+Available Fonts:
+
+=================================
+Google Fonts
+=================================
+font-family: 'Gentium Basic', serif;
+font-family: 'Merriweather', serif;
+
+
+=================================
+Fonts.com
+=================================
 font-family:'Museo Sans W01_900';
 font-family:'ProximaNW01-AltLightReg';
 font-family:'Proxima N W01 At Smbd';
@@ -136,8 +169,50 @@ font-family:'Proxima Nova W07 Bold';
 font-family:'Proxima Nova W07 Extrabold';
 font-family:'Proxima Nova W07 Black';
 
- *
- */
+=================================
+Material Design Icons
+=================================
+font-family: "Material Design Icons";
+
+******************************************************************************/
+
+/******************************************************************************
+
+2.1 Base Fonts
+
+******************************************************************************/
+@font-body: 'Proxima Nova A W07 Light', sans-serif;
+@font-label: 'Proxima N W01 At Smbd', sans-serif;
+@font-accent: 'Museo Sans W01_900', sans-serif;
+@font-light: @font-body;
+@font-logo: @font-accent;
+@font-family-default-starter: @font-light;
+@font-family-default-regular: @font-light;
+@font-family-default-regular-alt: @font-label;
+@font-family-default: @font-light;
+
+/******************************************************************************
+
+2.2 Title Fonts
+
+******************************************************************************/
+@font-title: 'Proxima Nova W08 Reg', sans-serif;
+
+/******************************************************************************
+
+2.3 Reading Environment Fonts
+
+******************************************************************************/
+@font-commentary: 'Merriweather', serif;
+@font-reading: @font-commentary;
+@font-lemma: 'Gentium Basic', 'Merriweather', Georgia, Times New Roman, serif;
+
+
+/******************************************************************************
+
+2.4 Material Design Icons
+
+******************************************************************************/
 
 @font-face {
   font-family: "Material Design Icons";
@@ -147,19 +222,12 @@ font-family:'Proxima Nova W07 Black';
   font-style: normal;
 }
 
-@font-body: 'Proxima Nova A W07 Light', sans-serif;
-@font-commentary: 'Merriweather', serif;
-@font-reading: @font-commentary;
-@font-label: 'Proxima N W01 At Smbd', sans-serif;
-@font-title: 'Proxima Nova W08 Reg', sans-serif;
-@font-accent: 'Museo Sans W01_900', sans-serif;
-@font-lemma: 'Gentium Basic', 'Merriweather', Georgia, Times New Roman, serif;
-@font-light: @font-body;
-@font-logo: @font-accent;
-@font-family-default-starter: @font-light;
-@font-family-default-regular: @font-light;
-@font-family-default-regular-alt: @font-label;
-@font-family-default: @font-light;
+/******************************************************************************
+
+3. Mixins
+
+******************************************************************************/
+
 
 .text-shadow (@string: 0 1px 3px rgba(0, 0, 0, 0.25)) {
   text-shadow: @string;

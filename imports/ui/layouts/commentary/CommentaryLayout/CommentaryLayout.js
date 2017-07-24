@@ -40,28 +40,7 @@ import {
 } from './helpers';
 
 
-
 class CommentaryLayout extends React.Component {
-
-	constructor(props) {
-		super(props);
-
-		this.setState({
-			modalLoginLowered: false,
-			skip: 0,
-			limit: 10,
-		});
-
-		this.getChildContext = this.getChildContext.bind(this);
-		this.getFilterValue = this.getFilterValue.bind(this);
-		this._updateRoute = this._updateRoute.bind(this);
-		this._toggleSearchTerm = this._toggleSearchTerm.bind(this);
-		this._handleChangeTextsearch = this._handleChangeTextsearch.bind(this);
-		this._handleChangeLineN = this._handleChangeLineN.bind(this);
-		this.loadMoreComments = this.loadMoreComments.bind(this);
-		this.showLoginModal = this.showLoginModal.bind(this);
-		this.closeLoginModal = this.closeLoginModal.bind(this);
-	}
 
 	static propTypes = {
 		queryParams: React.PropTypes.object,
@@ -82,7 +61,27 @@ class CommentaryLayout extends React.Component {
 			subworks: '1'
 		}
 	};
-	
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			modalLoginLowered: false,
+			skip: 0,
+			limit: 10,
+		};
+
+		this.getChildContext = this.getChildContext.bind(this);
+		this.getFilterValue = this.getFilterValue.bind(this);
+		this._updateRoute = this._updateRoute.bind(this);
+		this._toggleSearchTerm = this._toggleSearchTerm.bind(this);
+		this._handleChangeTextsearch = this._handleChangeTextsearch.bind(this);
+		this._handleChangeLineN = this._handleChangeLineN.bind(this);
+		this.loadMoreComments = this.loadMoreComments.bind(this);
+		this.showLoginModal = this.showLoginModal.bind(this);
+		this.closeLoginModal = this.closeLoginModal.bind(this);
+	}
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}

@@ -71,9 +71,6 @@ FlowRouter.triggers.enter([() => {
 		Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
 			if (tenant) {
 				Session.set('tenantId', tenant._id);
-				if (tenant.isAnnotation && !Meteor.userId()) {
-					FlowRouter.go('/sign-in');
-				}
 			} else {
 				FlowRouter.go('/404');
 			}

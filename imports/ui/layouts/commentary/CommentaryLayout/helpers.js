@@ -114,9 +114,10 @@ const _createFilterFromQueryParams = (queryParams) => {
 	}
 
 	if ('subworks' in queryParams) {
+		console.log('current query params: ', queryParams);
 		const subworks = [];
 
-		queryParams.subworks.split(',').forEach((subwork) => {
+		new Set(queryParams.subworks.split(',')).forEach((subwork) => {
 			const subworkNumber = parseInt(subwork, 10);
 
 			if (!Number.isNaN(subworkNumber)) {

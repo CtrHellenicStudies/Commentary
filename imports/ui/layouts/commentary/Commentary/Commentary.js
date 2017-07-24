@@ -116,7 +116,7 @@ class Commentary extends React.Component {
 
 		let title = '';
 		let values = [];
-		let work = 'Commentary';
+		let work = 'Iliad';
 		let subwork = null;
 		let lineFrom = 0;
 		let lineTo = 0;

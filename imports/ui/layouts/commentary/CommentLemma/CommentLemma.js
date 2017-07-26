@@ -299,7 +299,7 @@ export default createContainer(({ commentGroup }) => {
 		const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
 
 		if (!commentGroup.lineTo) {
-			console.log('Didn\'t find a lineTo!');
+			// console.log('Didn\'t find a lineTo!');
 			commentGroup.lineTo = commentGroup.lineFrom;
 		}
 

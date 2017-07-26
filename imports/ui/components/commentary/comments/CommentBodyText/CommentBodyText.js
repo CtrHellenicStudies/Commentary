@@ -1,4 +1,5 @@
 import React from 'react';
+import TextHighlight from 'react-text-highlight';
 
 // lib
 import createRevisionMarkup from '/imports/lib/createRevisionMarkup';
@@ -9,9 +10,15 @@ import createRevisionMarkup from '/imports/lib/createRevisionMarkup';
 const CommentBodyText = props => (
 	<div
 		className="comment-body"
-		dangerouslySetInnerHTML={props.createRevisionMarkup ? createRevisionMarkup(props.text) : { __html: props.text }}
 		onClick={props.onTextClick}
-	/>
+	>
+		<div>
+			<TextHighlight
+				highlight="ago"
+				text={props.text}
+			/>
+		</div>
+	</div>
 );
 CommentBodyText.propTypes = {
 	text: React.PropTypes.string.isRequired,

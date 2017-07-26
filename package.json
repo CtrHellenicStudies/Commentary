@@ -75,6 +75,7 @@
     "react-sticky": "^5.0.5",
     "react-style-proptype": "^3.0.0",
     "react-tap-event-plugin": "^2.0.1",
+    "react-text-highlight": "^0.2.0",
     "reactcss": "^1.2.2",
     "shortcode-parser": "0.0.1",
     "simple-git": "^1.66.0",

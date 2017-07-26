@@ -243,7 +243,7 @@ class CommentDetail extends React.Component {
 
 	render() {
 
-		const { comment, referenceWorks, ready } = this.props;
+		const { comment, referenceWorks, ready, filters, textSearch } = this.props;
 		const { discussionVisible } = this.state;
 
 		if (!ready) {
@@ -252,6 +252,14 @@ class CommentDetail extends React.Component {
 
 		const selectedRevisionIndex = this.getRevisionIndex();
 		const selectedRevision = comment.revisions[selectedRevisionIndex];
+
+		const textSearch = filters.find((filter) => filter.textsearch)
+
+		if (textSearch) {
+			console.log('Found ', textSearch)
+		} else {
+			console.log('didnt find anything')
+		}
 
 		const commentClass = getCommentClass(discussionVisible);
 
@@ -279,6 +287,7 @@ class CommentDetail extends React.Component {
 						revisionIndex={selectedRevisionIndex}
 						onTextClick={this.checkIfToggleReferenceModal}
 						referenceWorks={referenceWorks}
+						textSearch={textSearch}
 					/>
 
 					<CommentRevisionSelect

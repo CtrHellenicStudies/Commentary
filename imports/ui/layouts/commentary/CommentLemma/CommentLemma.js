@@ -311,7 +311,6 @@ export default createContainer(({ commentGroup }) => {
 		};
 
 		translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
-
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);

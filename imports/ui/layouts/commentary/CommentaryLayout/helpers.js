@@ -314,7 +314,7 @@ const _updateFilterOnChangeLineEvent = (oldFilters, e) => {
 	return filters;
 };
 
-const _updateFilterOnChangeTextSearchEvent = (oldFilters, e) => {
+const _updateFilterOnChangeTextSearchEvent = (oldFilters, e, textsearch) => {
 	const filters = oldFilters;
 
 	if (textsearch && textsearch.length) {

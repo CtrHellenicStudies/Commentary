@@ -144,11 +144,13 @@ loggedInGroup.route('/tags/:slug/edit', {
 		});
 	},
 });
+
 loggedInGroup.route('/tags/create', {
 	action: () => {
 		mount(AddKeywordLayout);
 	},
 });
+
 FlowRouter.route('/tags/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {
@@ -157,21 +159,22 @@ FlowRouter.route('/tags/:slug', {
 	},
 });
 
-FlowRouter.route('/tags/words', {
-	name: 'tagwords',
+FlowRouter.route('/words', {
 	action: () => {
 		mount(MasterLayout, {
-			content: <KeywordsPage type="word" title="Keywords" />,
+			content: <KeywordsPage type="word" title="Words" />,
 		});
 	},
 });
-FlowRouter.route('/tags/ideas', {
+
+FlowRouter.route('/ideas', {
 	action: () => {
 		mount(MasterLayout, {
-			content: <KeywordsPage type="idea" title="Key Ideas" />,
+			content: <KeywordsPage type="idea" title="Ideas" />,
 		});
 	},
 });
+
 FlowRouter.route('/referenceWorks/:slug', {
 	action: (params) => {
 		mount(MasterLayout, {

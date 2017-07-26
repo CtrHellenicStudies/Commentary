@@ -299,7 +299,7 @@ export default createContainer(({ commentGroup }) => {
 		const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
 
 		if (!commentGroup.lineTo) {
-			console.log('Didn\'t find a lineTo!');
+			// console.log('Didn\'t find a lineTo!');
 			commentGroup.lineTo = commentGroup.lineFrom;
 		}
 
@@ -311,7 +311,6 @@ export default createContainer(({ commentGroup }) => {
 		};
 
 		translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
-
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);

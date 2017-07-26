@@ -35,7 +35,7 @@ const WorkVisualization = React.createClass({
 		if (isTest) {
 			return false;
 		}
-		
+
 		let orientation = 'vertical';
 		let width = window.innerWidth * 0.9;
 
@@ -61,7 +61,7 @@ const WorkVisualization = React.createClass({
 		};
 
 		// Data preporation:
-		const dataBarGraph = this.props.work.subworks;
+		const dataBarGraph = work.subworks || [];
 		dataBarGraph.sort((a, b) => {
 			if (a.n < b.n) {
 				return -1;
@@ -845,7 +845,7 @@ const WorkVisualization = React.createClass({
 		const { work } = this.props;
 		const workUrl = `/commentary/?q=work.${work.slug}`;
 
-		if (work.subworks.length) {
+		if ('subworks' in work && work.subworks.length) {
 			return (
 				<div className={`work-teaser work-teaser--${work.slug}`}>
 					<div className="commentary-text">

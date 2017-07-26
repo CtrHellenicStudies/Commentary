@@ -114,7 +114,7 @@ const _createFilterFromQueryParams = (queryParams) => {
 	}
 
 	if ('subworks' in queryParams) {
-		console.log('current query params: ', queryParams);
+		// console.log('current query params: ', queryParams);
 		const subworks = [];
 
 		new Set(queryParams.subworks.split(',')).forEach((subwork) => {
@@ -314,7 +314,7 @@ const _updateFilterOnChangeLineEvent = (oldFilters, e) => {
 	return filters;
 };
 
-const _updateFilterOnChangeTextSearchEvent = (oldFilters, e) => {
+const _updateFilterOnChangeTextSearchEvent = (oldFilters, e, textsearch) => {
 	const filters = oldFilters;
 
 	if (textsearch && textsearch.length) {

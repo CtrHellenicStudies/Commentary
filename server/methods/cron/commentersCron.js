@@ -16,7 +16,9 @@ const commentersCron = () => {
 
 			comment.commenters.forEach((commentCommenter, commentCommenterIndex) => {
 				isInCommenters = false;
+
 				commenters.forEach((commenter, commenterIndex) => {
+
 					if (commenter.slug === commentCommenter.slug) {
 						isInCommenters = true;
 						commenters[commenterIndex].nCommentsTotal++;
@@ -37,6 +39,7 @@ const commentersCron = () => {
 						default:
 							break;
 						}
+
 						commenter.nCommentsWorks.forEach((work, workIndex) => {
 							if (comment.work.slug === work.slug) {
 								work.subworks.forEach((subwork, subworkIndex) => {

@@ -153,7 +153,7 @@ const commentersCron = () => {
 	});
 
 	winston.info(' -- Cron run complete: Commenters');
-}
+};
 
 Meteor.method('commenters_cron', () => {
 	commentersCron();

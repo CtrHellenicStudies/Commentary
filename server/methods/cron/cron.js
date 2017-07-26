@@ -3,12 +3,12 @@ import winston from 'winston';
 
 
 const runCron = () => {
-  winston.info('Running Cron Methods:');
+	winston.info('Running Cron Methods:');
 	Meteor.call('keyword_cron');
 	Meteor.call('commenters_cron');
 	Meteor.call('commentary_cron');
-  winston.info('Cron Complete');
-}
+	winston.info('Cron Complete');
+};
 
 Meteor.method('cron', () => {
 	runCron();

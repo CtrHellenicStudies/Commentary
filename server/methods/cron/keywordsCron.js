@@ -38,7 +38,7 @@ const keywordCron = () => {
 	});
 
 	winston.info(' -- Cron run complete: Keywords');
-}
+};
 
 Meteor.method('keyword_cron', () => {
 	keywordCron();

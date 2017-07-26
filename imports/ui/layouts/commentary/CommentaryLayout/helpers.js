@@ -114,7 +114,7 @@ const _createFilterFromQueryParams = (queryParams) => {
 	}
 
 	if ('subworks' in queryParams) {
-		console.log('current query params: ', queryParams);
+		// console.log('current query params: ', queryParams);
 		const subworks = [];
 
 		new Set(queryParams.subworks.split(',')).forEach((subwork) => {

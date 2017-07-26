@@ -86,7 +86,7 @@ const commentaryCron = () => {
 	});
 
 	winston.info(' -- Cron run complete: Commentary');
-}
+};
 
 Meteor.method('commentary_cron', () => {
 	commentaryCron();

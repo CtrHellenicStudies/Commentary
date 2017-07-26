@@ -85,7 +85,8 @@
     "spawn-sync": "^1.0.15",
     "throttle-debounce": "^1.0.1",
     "try-thread-sleep": "^1.0.0",
-    "unicode": "^0.6.1"
+    "unicode": "^0.6.1",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

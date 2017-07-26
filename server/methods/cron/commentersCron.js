@@ -1,10 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+import winston from 'winston';
 
 import Comments from '/imports/api/collections/comments';
 import Commenters from '/imports/api/collections/commenters';
 
-Meteor.method('commenters_cron', () => {
-	// console.log(' -- Starting cron: Commenters');
-
+const commentersCron = () => {
 	const comments = Comments.find().fetch();
 	const commenters = [];
 
@@ -16,7 +16,9 @@ Meteor.method('commenters_cron', () => {
 
 			comment.commenters.forEach((commentCommenter, commentCommenterIndex) => {
 				isInCommenters = false;
+
 				commenters.forEach((commenter, commenterIndex) => {
+
 					if (commenter.slug === commentCommenter.slug) {
 						isInCommenters = true;
 						commenters[commenterIndex].nCommentsTotal++;
@@ -37,6 +39,7 @@ Meteor.method('commenters_cron', () => {
 						default:
 							break;
 						}
+
 						commenter.nCommentsWorks.forEach((work, workIndex) => {
 							if (comment.work.slug === work.slug) {
 								work.subworks.forEach((subwork, subworkIndex) => {
@@ -136,7 +139,6 @@ Meteor.method('commenters_cron', () => {
 	}); // comments.forEach
 
 	commenters.forEach((commenter) => {
-		// console.log(' -- -- ', commenter.name, commenter.nCommentsTotal);
 		Commenters.update({
 			slug: commenter.slug,
 		}, {
@@ -150,14 +152,17 @@ Meteor.method('commenters_cron', () => {
 		});
 	});
 
-	console.log(' -- Cron run complete: Commenters');
-	return 1;
+	winston.info(' -- Cron run complete: Commenters');
+};
+
+Meteor.method('commenters_cron', () => {
+	commentersCron();
 }, {
 	url: 'commenters/cron',
 	getArgsFromRequest: (request) => {
-		// Sometime soon do validation here
 		const content = request.body;
-
 		return [content];
 	},
 });
+
+export default commentersCron;

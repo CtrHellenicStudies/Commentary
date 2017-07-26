@@ -1,9 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+import winston from 'winston';
+
 import Comments from '/imports/api/collections/comments';
 import Works from '/imports/api/collections/works';
 
-Meteor.method('commentary_cron', () => {
-	// console.log(' -- Starting cron: Commentary');
-
+const commentaryCron = () => {
 	const commentCounts = [];
 	const isInCommentCountsWorks = false;
 	let isInCommentCountsSubworks = false;
@@ -25,7 +26,7 @@ Meteor.method('commentary_cron', () => {
 	// For each work, get all comments in work and count the subwork comments and heatmap
 	Works.find().forEach((work) => {
 		// create work comment counts
-		workCommentCounts = {
+		const workCommentCounts = {
 			slug: work.slug,
 			nComments: 0,
 			subworks: [],
@@ -84,9 +85,11 @@ Meteor.method('commentary_cron', () => {
 		});
 	});
 
-	console.log(' -- Cron run complete: Commentary');
+	winston.info(' -- Cron run complete: Commentary');
+};
 
-	return 1;
+Meteor.method('commentary_cron', () => {
+	commentaryCron();
 }, {
 	url: 'commentary/cron',
 	getArgsFromRequest(request) {
@@ -94,3 +97,5 @@ Meteor.method('commentary_cron', () => {
 		return [content];
 	},
 });
+
+export default commentaryCron;

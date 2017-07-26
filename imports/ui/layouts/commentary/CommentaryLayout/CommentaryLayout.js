@@ -130,7 +130,7 @@ class CommentaryLayout extends React.Component {
 		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the textsearch
-		const filters = updateFilterOnChangeTextSearchEvent(oldFilters, e);
+		const filters = updateFilterOnChangeTextSearchEvent(oldFilters, e, textsearch);
 
 		this._updateRoute(filters);
 	}

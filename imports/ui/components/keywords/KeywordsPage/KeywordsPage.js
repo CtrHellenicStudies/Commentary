@@ -31,9 +31,9 @@ const KeywordsPage = React.createClass({
 		}
 
 		if (type === 'word') {
-			Utils.setTitle(`Keywords | ${settings.title}`);
+			Utils.setTitle(`Words | ${settings.title}`);
 		} else {
-			Utils.setTitle(`Key Ideas | ${settings.title}`);
+			Utils.setTitle(`Ideas | ${settings.title}`);
 		}
 		Utils.setDescription(`${Utils.capitalize(this.props.type)} for ${settings.title}`);
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);

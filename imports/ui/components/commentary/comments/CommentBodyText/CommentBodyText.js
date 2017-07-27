@@ -1,5 +1,5 @@
 import React from 'react';
-import TextHighlight from 'react-text-highlight';
+import Highlighter from 'react-highlight-words';
 
 // lib
 import createRevisionMarkup from '/imports/lib/createRevisionMarkup';
@@ -7,15 +7,18 @@ import createRevisionMarkup from '/imports/lib/createRevisionMarkup';
 /*
 	BEGIN CommentBodyText
 */
+
+
+
 const CommentBodyText = props => (
 	<div
 		className="comment-body"
 		onClick={props.onTextClick}
 	>
 		<div>
-			<TextHighlight
-				highlight="ago"
-				text={props.text}
+			<Highlighter
+				searchWords={props.searchTerm.values}
+				textToHighlight={props.text}
 			/>
 		</div>
 	</div>

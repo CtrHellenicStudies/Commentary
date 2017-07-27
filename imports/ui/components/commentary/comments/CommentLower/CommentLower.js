@@ -8,6 +8,7 @@ const CommentLower = props => (
 			comment={props.comment}
 			revisionIndex={props.revisionIndex}
 			onTextClick={props.onTextClick}
+			searchTerm={props.searchTerm}
 		/>}
 		{!props.hideReference && <CommentReference
 			referenceWorks={props.referenceWorks}

@@ -51,7 +51,10 @@ const HomeLayout = React.createClass({
 			return <LoadingHome />;
 		}
 
-		if (tenant.subdomain === 'nrs') {
+		if (
+				tenant.subdomain === 'nrs'
+			|| tenant.subdomain === 'nrs2'
+		) {
 			return <NameResolutionServiceLayout />;
 		}
 

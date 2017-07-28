@@ -1,39 +1,55 @@
 import React from 'react';
-import Highlighter from 'react-highlight-words';
 
 // lib
 import createRevisionMarkup from '/imports/lib/createRevisionMarkup';
 
-/*
-	BEGIN CommentBodyText
-*/
+
+class CommentBodyText extends React.Component {
+
+	constructor(props) {
+		super(props);
+
+		this.highlightText = this.highlightText.bind(this);
+	}
+
+	static defaultProps = {
+		onTextClick: null,
+		createRevisionMarkup: false,
+	}
+
+	static propTypes = {
+		text: React.PropTypes.string.isRequired,
+		onTextClick: React.PropTypes.func,
+		createRevisionMarkup: React.PropTypes.bool,
+		searchTerm: React.PropTypes.string
+	}
 
 
+	highlightText(text) {
+		const { searchTerm } = this.props;
 
-const CommentBodyText = props => (
-	<div
-		className="comment-body"
-		onClick={props.onTextClick}
-	>
-		<div>
-			<Highlighter
-				searchWords={props.searchTerm.values}
-				textToHighlight={props.text}
+		const termToHighlightRegEx = new RegExp(searchTerm, 'ig');
+		const termToHighlight = text.match(termToHighlightRegEx)[0];
+
+		const highlightTag = `<mark class="highlighted">${termToHighlight}</mark>`;
+
+		return text.replace(termToHighlight, highlightTag);
+	}
+
+
+	render() {
+		const { text, onTextClick, searchTerm } = this.props;
+
+		console.log(this.highlightText(text));
+
+		return (
+			<div
+				className="comment-body"
+				dangerouslySetInnerHTML={{__html: this.highlightText(text) }}
+				onClick={onTextClick}
 			/>
-		</div>
-	</div>
-);
-CommentBodyText.propTypes = {
-	text: React.PropTypes.string.isRequired,
-	onTextClick: React.PropTypes.func,
-	createRevisionMarkup: React.PropTypes.bool,
-};
-CommentBodyText.defaultProps = {
-	onTextClick: null,
-	createRevisionMarkup: false,
-};
-/*
-	END CommentBodyText
-*/
+		);
+	}
+}
 
 export default CommentBodyText;

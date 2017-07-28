@@ -8,6 +8,7 @@ const CommentLower = props => (
 			comment={props.comment}
 			revisionIndex={props.revisionIndex}
 			onTextClick={props.onTextClick}
+			searchTerm={props.searchTerm}
 		/>}
 		{!props.hideReference && <CommentReference
 			referenceWorks={props.referenceWorks}
@@ -28,6 +29,7 @@ CommentLower.propTypes = {
 	})),
 	hideBody: React.PropTypes.bool,
 	hideReference: React.PropTypes.bool,
+	searchTerm: React.PropTypes.string
 };
 CommentLower.defaultProps = {
 	onTextClick: null,

@@ -1,7 +1,8 @@
-import slug from 'slug';
+import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
 
-Meteor.methods({
+const accountsMethods = {
 	createAccount(user) {
 		check(user, {
 			email: String,
@@ -31,7 +32,7 @@ Meteor.methods({
 		return { userId, stampedToken };
 	},
 	updateAccount(field, value) {
-		if (!this.userId) {
+		if (!Meteor.userId()) {
 			throw new Meteor.Error('not-authorized');
 		}
 
@@ -43,25 +44,24 @@ Meteor.methods({
 		try {
 			result = Meteor.users.update(
 				{
-					_id: this.userId,
+					_id: Meteor.userId(),
 
 				}, setModifier
 			);
 		} catch (err) {
-			console.error(err);
-			return false;
+			throw new Meteor.Error('user update failed');
 		}
 		return result;
 	},
 	deleteAccount(userId) {
 		check(userId, String);
 
-		if (this.userId === userId) {
+		if (Meteor.userId() === userId) {
 			return Meteor.users.remove({
-				_id: this.userId,
+				_id: Meteor.userId(),
 			});
 		}
-		return false;
+		throw new Meteor.Error('not-authorized');
 	},
 	currentAdminUser() {
 		return Meteor.users.findOne({ _id: Meteor.userId(), roles: {$in: ['admin']} });
@@ -87,4 +87,8 @@ Meteor.methods({
 
 		return stampedToken.token;
 	},
-});
+};
+
+Meteor.methods(accountsMethods);
+
+export default accountsMethods;

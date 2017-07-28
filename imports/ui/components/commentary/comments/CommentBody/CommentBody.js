@@ -85,6 +85,7 @@ CommentBody.propTypes = {
 	}).isRequired,
 	revisionIndex: React.PropTypes.number.isRequired,
 	onTextClick: React.PropTypes.func,
+	searchTerm: React.PropTypes.string
 };
 CommentBody.defaultProps = {
 	onTextClick: null,

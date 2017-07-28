@@ -40,8 +40,6 @@ class CommentBodyText extends React.Component {
 	render() {
 		const { text, onTextClick, searchTerm } = this.props;
 
-		console.log(this.highlightText(text));
-
 		return (
 			<div
 				className="comment-body"

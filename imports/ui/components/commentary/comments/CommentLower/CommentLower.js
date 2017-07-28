@@ -29,6 +29,7 @@ CommentLower.propTypes = {
 	})),
 	hideBody: React.PropTypes.bool,
 	hideReference: React.PropTypes.bool,
+	searchTerm: React.PropTypes.string
 };
 CommentLower.defaultProps = {
 	onTextClick: null,

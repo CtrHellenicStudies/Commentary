@@ -140,7 +140,6 @@ class CommentDetail extends React.Component {
 		const { searchTerm } = this.state;
 
 		if (filters.find((filter) => filter.key === 'textsearch') !== searchTerm && filters) {
-			const searchTermsObject = nextProps.filters.find((filter) => filter.key === 'textsearch')
 			this.setState({
 				searchTerm: searchTermsObject.values[0]
 			});

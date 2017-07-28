@@ -28,12 +28,18 @@ class CommentBodyText extends React.Component {
 	highlightText(text) {
 		const { searchTerm } = this.props;
 
-		const termToHighlightRegEx = new RegExp(searchTerm, 'ig');
-		const termToHighlight = text.match(termToHighlightRegEx)[0];
+		if (searchTerm) {
+			const termToHighlightRegEx = new RegExp(searchTerm, 'ig');
+			const termToHighlight = text.match(termToHighlightRegEx)[0];
 
-		const highlightTag = `<mark class="highlighted">${termToHighlight}</mark>`;
+			const highlightTag = `<mark class="highlighted">${termToHighlight}</mark>`;
 
-		return text.replace(termToHighlight, highlightTag);
+			return text.replace(termToHighlight, highlightTag);
+
+		}
+
+		return text;
+		
 	}
 
 
@@ -43,7 +49,7 @@ class CommentBodyText extends React.Component {
 		return (
 			<div
 				className="comment-body"
-				dangerouslySetInnerHTML={{__html: this.highlightText(text) }}
+				dangerouslySetInnerHTML={{__html: this.highlightText(text)}}
 				onClick={onTextClick}
 			/>
 		);

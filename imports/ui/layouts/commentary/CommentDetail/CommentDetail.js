@@ -162,7 +162,7 @@ class CommentDetail extends React.Component {
 				foundRevision < comment.revisions.length) {
 				selectedRevisionIndex = foundRevision;
 			} else {
-				selectedRevisionIndex = comment.revisions.length - 1;
+				selectedRevisionIndex = 0;
 			}
 		}
 		return selectedRevisionIndex;

@@ -1,8 +1,5 @@
 import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
-import { Session } from 'meteor/session';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -12,15 +9,15 @@ import Toggle from 'material-ui/Toggle';
 
 // api
 import Comments from '/imports/api/collections/comments';
-import DiscussionComments from '/imports/api/collections/discussionComments';
 import Settings from '/imports/api/collections/settings';
 
 // components
 import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
-import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
 import ModalChangePwd from '/imports/ui/layouts/auth/ModalChangePwd';
+import Notifications from '/imports/ui/components/user/ProfilePage/Notifications';
+import Discussions from '/imports/ui/components/user/ProfilePage/Discussions';
 
 // lib
 import Utils from '/imports/lib/utils';
@@ -39,7 +36,6 @@ const ProfilePage = React.createClass({
 	propTypes: {
 		user: React.PropTypes.object,
 		settings: React.PropTypes.object,
-		discussionComments: React.PropTypes.array,
 	},
 
 	childContextTypes: {
@@ -165,7 +161,7 @@ const ProfilePage = React.createClass({
 	},
 
 	render() {
-		const { user, settings, discussionComments } = this.props;
+		const { user, settings } = this.props;
 
 		const toggleStyle = {
 			style: {
@@ -202,14 +198,9 @@ const ProfilePage = React.createClass({
 								<div className="center-content">
 
 									<div className="page-title-wrap">
-										{
-											/*
-											 <h2 className="page-title ">{user.nicename}</h2>
-											 <h3 className="page-subtitle"></h3>
-											 */
-										}
+										<h2 className="page-title ">{user.nicename}</h2>
+										{/* <h3 className="page-subtitle" /> */}
 									</div>
-
 								</div>
 							</div>
 						</div>
@@ -228,42 +219,24 @@ const ProfilePage = React.createClass({
 								<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 									<Tabs>
 										<Tab label="Notifications (2)">
-											<h2>Your Notifications</h2>
-
-											<hr className="user-divider" />
-
-											<div className="user-discussion-comments">
-											</div>
+											<Notifications />
 										</Tab>
 										<Tab label="Discussions">
-											<h2>Your Comments</h2>
-
-											<hr className="user-divider" />
-
-											<div className="user-discussion-comments">
-
-
-												<DiscussionCommentsList
-													discussionComments={discussionComments}
-												/>
-
-											</div>
+											
 										</Tab>
 										<Tab label="Annotations">
 											<h2>Your Annotations</h2>
 
 											<hr className="user-divider" />
 
-											<div className="user-discussion-comments">
-											</div>
+											<div className="user-discussion-comments" />
 										</Tab>
 										<Tab label="Bookmarks">
 											<h2>Your Bookmarks</h2>
 
 											<hr className="user-divider" />
 
-											<div className="user-discussion-comments">
-											</div>
+											<div className="user-discussion-comments" />
 										</Tab>
 										<Tab label="Account">
 											<div className="user-profile-textfields">
@@ -361,7 +334,7 @@ const ProfilePage = React.createClass({
 												<br />
 												<br />
 
-												<RaisedButton label="Saved" disabled={true} />
+												<RaisedButton label="Saved" disabled />
 											</div>
 										</Tab>
 									</Tabs>
@@ -383,50 +356,4 @@ const ProfilePage = React.createClass({
 	},
 });
 
-const ProfilePageContainer = createContainer(() => {
-	let discussionComments = [];
-	Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	Meteor.subscribe('user.discussionComments', Meteor.userId());
-	Meteor.subscribe('user.annotations', Meteor.userId());
-	Meteor.subscribe('user.bookmarks', Meteor.userId());
-
-	discussionComments = DiscussionComments.find({
-		userId: Meteor.userId(),
-	}).fetch();
-
-	discussionComments.forEach((discussionComment, discussionCommentIndex) => {
-		const commentHandle = Meteor.subscribe('comments', {
-			_id: discussionComment.commentId,
-			tenantId: Session.get('tenantId')
-		}, 0, 1);
-
-		if (commentHandle.ready()) {
-			const comments = Comments.find().fetch();
-			if (comments.length) {
-				discussionComments[discussionCommentIndex].comment = comments[0];
-			} else {
-				discussionComments[discussionCommentIndex].comment = {
-					work: '',
-					subwork: '',
-					discussionComments: [],
-				};
-			}
-		} else {
-			discussionComments[discussionCommentIndex].comment = {
-				work: '',
-				subwork: '',
-				discussionComments: [],
-			};
-		}
-
-		discussionComments[discussionCommentIndex].otherCommentsCount =
-			DiscussionComments.find({ commentId: discussionComment.commentId }).count();
-	});
-
-	return {
-		discussionComments,
-		settings: Settings.findOne(),
-	};
-}, ProfilePage);
-
-export default ProfilePageContainer;
+export default ProfilePage;

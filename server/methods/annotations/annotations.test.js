@@ -61,7 +61,7 @@ describe('Annotations methods API', () => {
 					Comments.insert.restore();
 				});
 
-				test(`user is not logged in, should return error`, () => {
+				test('user is not logged in, should return error', () => {
 
 					Meteor.user.restore();
 					stub(Meteor, 'user').callsFake(() => null);
@@ -69,7 +69,7 @@ describe('Annotations methods API', () => {
 					expect(annotationsInsert.bind(null, token, comment)).toThrow();
 				});
 
-				test(`book not found by bookChpterUrl in comment, should return error`, () => {
+				test('book not found by bookChpterUrl in comment, should return error', () => {
 
 					Books.findOne.restore();
 					stub(Books, 'findOne').callsFake(() => null);
@@ -77,7 +77,7 @@ describe('Annotations methods API', () => {
 					expect(annotationsInsert.bind(null, token, comment)).toThrow();
 				});
 
-				test(`user not authorized to annotate book, should return error`, () => {
+				test('user not authorized to annotate book, should return error', () => {
 
 					Meteor.user.restore();
 					stub(Meteor, 'user').callsFake(() => ({
@@ -87,7 +87,7 @@ describe('Annotations methods API', () => {
 					expect(annotationsInsert.bind(null, token, comment)).toThrow();
 				});
 
-				test(`successful annotation insert`, () => {
+				test('successful annotation insert', () => {
 
 					expect(annotationsInsert(token, comment)).toBe(commentInserId);
 				});
@@ -136,7 +136,7 @@ describe('Annotations methods API', () => {
 					Comments.update.restore();
 				});
 
-				test(`user is not logged in, should return error`, () => {
+				test('user is not logged in, should return error', () => {
 
 					Meteor.user.restore();
 					stub(Meteor, 'user').callsFake(() => null);
@@ -144,7 +144,7 @@ describe('Annotations methods API', () => {
 					expect(annotationsAddRevision.bind(null, token, commentId, revision)).toThrow();
 				});
 
-				test(`user is not an owner of the comment, should return error`, () => {
+				test('user is not an owner of the comment, should return error', () => {
 
 					Comments.findOne.restore();
 					stub(Comments, 'findOne').callsFake(() => null);
@@ -152,7 +152,7 @@ describe('Annotations methods API', () => {
 					expect(annotationsAddRevision.bind(null, token, commentId, revision)).toThrow();
 				});
 
-				test(`successful annotation update`, () => {
+				test('successful annotation update', () => {
 
 					expect(annotationsAddRevision(token, commentId, revision)).toBe(commentId);
 				});
@@ -193,7 +193,7 @@ describe('Annotations methods API', () => {
 					Comments.remove.restore();
 				});
 
-				test(`user is not logged in, should return error`, () => {
+				test('user is not logged in, should return error', () => {
 
 					Meteor.user.restore();
 					stub(Meteor, 'user').callsFake(() => null);
@@ -201,7 +201,7 @@ describe('Annotations methods API', () => {
 					expect(annotationsDelete.bind(null, token, commentId)).toThrow();
 				});
 
-				test(`successful annotation remove`, () => {
+				test('successful annotation remove', () => {
 
 					expect(annotationsDelete(token, commentId)).toBe(commentId);
 				});

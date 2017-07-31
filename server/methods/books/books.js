@@ -24,7 +24,7 @@ const bookInsert = (token, book) => {
 		return Books.insert(book);
 	}
 	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-}
+};
 
 const bookUpdate = (token, _id, book) => {
 	check(token, String);
@@ -54,7 +54,7 @@ const bookUpdate = (token, _id, book) => {
 	}
 
 	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-}
+};
 
 const bookRemove = (token, bookId) => {
 	check(token, String);
@@ -69,7 +69,7 @@ const bookRemove = (token, bookId) => {
 	}
 
 	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-}
+};
 
 Meteor.methods({
 	'books.insert': bookInsert,

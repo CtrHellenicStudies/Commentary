@@ -36,7 +36,7 @@ const ProfileAvatarButton = props => {
 			: ''}
 		</div>
 	);
-}
+};
 
 
 export default ProfileAvatarButton;

@@ -35,7 +35,7 @@ describe('Bookmarks methods API', () => {
 
 				});
 
-				test(`user is not logged in, should return error`, () => {
+				test('user is not logged in, should return error', () => {
 
 					Meteor.userId.restore();
 					stub(Meteor, 'userId').callsFake(() => null);
@@ -43,15 +43,15 @@ describe('Bookmarks methods API', () => {
 					expect(bookmarkInsert.bind(null, textNodeId)).toThrow();
 				});
 
-				test(`user update fail, should return error`, () => {
+				test('user update fail, should return error', () => {
 
 					Meteor.users.update.restore();
-					stub(Meteor.users, 'update').callsFake(() => {throw new Error()});
+					stub(Meteor.users, 'update').callsFake(() => { throw new Error(); });
 
 					expect(bookmarkInsert.bind(this, textNodeId)).toThrow();
 				});
 
-				test(`successfully update user with bookmark`, () => {
+				test('successfully update user with bookmark', () => {
 
 					expect(bookmarkInsert(textNodeId)).toBeTruthy();
 				});
@@ -84,7 +84,7 @@ describe('Bookmarks methods API', () => {
 
 				});
 
-				test(`user is not logged in, should return error`, () => {
+				test('user is not logged in, should return error', () => {
 
 					Meteor.userId.restore();
 					stub(Meteor, 'userId').callsFake(() => null);
@@ -92,15 +92,15 @@ describe('Bookmarks methods API', () => {
 					expect(bookmarkRemove.bind(null, textNodeId)).toThrow();
 				});
 
-				test(`user update fail, should return error`, () => {
+				test('user update fail, should return error', () => {
 
 					Meteor.users.update.restore();
-					stub(Meteor.users, 'update').callsFake(() => {throw new Error()});
+					stub(Meteor.users, 'update').callsFake(() => { throw new Error(); });
 
 					expect(bookmarkRemove.bind(this, textNodeId)).toThrow();
 				});
 
-				test(`successfully update user with bookmark`, () => {
+				test('successfully update user with bookmark', () => {
 
 					expect(bookmarkRemove(textNodeId)).toBeTruthy();
 				});

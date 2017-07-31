@@ -1,6 +1,6 @@
 {
-  "name": "ProfilePage",
+  "name": "Account",
   "version": "0.0.1",
   "private": true,
-  "main": "./ProfilePage.js"
+  "main": "./Account.js"
 }

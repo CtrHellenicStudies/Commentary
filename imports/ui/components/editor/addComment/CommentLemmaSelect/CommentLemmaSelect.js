@@ -8,6 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
 import TextNodes from '/imports/api/collections/textNodes';
+import Editions from '/imports/api/collections/editions';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -20,7 +21,7 @@ const CommentLemmaSelect = React.createClass({
 		workSlug: React.PropTypes.string.isRequired,
 		subworkN: React.PropTypes.number.isRequired,
 		selectedLineFrom: React.PropTypes.number.isRequired,
-		selectedLineTo: React.PropTypes.number,
+		selectedLineTo: React.PropTypes.number.isRequired,
 		selectedLemmaEdition: React.PropTypes.object,
 		lemmaText: React.PropTypes.array,
 	},
@@ -169,41 +170,15 @@ const CommentLemmaSelectContainer = createContainer(({ selectedLineFrom, selecte
 	}
 
 	const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
-	const textNodes = TextNodes.find(lemmaQuery).fetch();
-	const editions = [];
+	const textNodesCursor = TextNodes.find(lemmaQuery);
 
-	let textIsInEdition = false;
-	textNodes.forEach((textNode) => {
-		textNode.text.forEach((text) => {
-			textIsInEdition = false;
-
-			editions.forEach((edition) => {
-				if (text.edition.slug === edition.slug) {
-					edition.lines.push({
-						html: text.html,
-						n: text.n,
-					});
-					textIsInEdition = true;
-				}
-			});
-
-			if (!textIsInEdition) {
-				editions.push({
-					title: text.edition.title,
-					slug: text.edition.slug,
-					lines: [{
-						html: text.html,
-						n: text.n,
-					}],
-				});
-			}
-		});
-	});
+	const editionsSubscription = Meteor.subscribe('editions');
+	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
 
 	return {
 		lemmaText: editions,
 		selectedLemmaEdition: editions[0],
-		ready: textNodesSubscription.ready(),
+		ready: textNodesSubscription.ready() && editionsSubscription.ready(),
 	};
 }, CommentLemmaSelect);
 

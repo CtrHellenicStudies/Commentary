@@ -1,4 +1,9 @@
 import React from 'react';
+import Meteor from 'meteor/meteor';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import Toggle from 'material-ui/Toggle';
+import { debounce } from 'throttle-debounce';
 
 class Account extends React.Component {
 	constructor(props) {
@@ -11,6 +16,7 @@ class Account extends React.Component {
 			modalChangePwdLowered: false
 		};
 
+		this.handleChangeTextDebounced = this.handleChangeTextDebounced.bind(this);
 		this.handleChangeText = this.handleChangeText.bind(this);
 		this.showChangePwdModal = this.showChangePwdModal.bind(this);
 		this.closeChangePwdModal = this.closeChangePwdModal.bind(this);
@@ -18,6 +24,61 @@ class Account extends React.Component {
 
 	static propTypes = {
 		user: React.PropTypes.object
+	}
+
+	componentWillMount() {
+		this.handleChangeTextDebounced = debounce(1000, this.handleChangeTextDebounced);
+	}
+
+	handleChangeTextDebounced(field, value) {
+		const user = this.props.user;
+		let emailValue = [];
+		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
+		switch (field) {
+		case 'username':
+			if (/^[a-z0-9A-Z_]{3,15}$/.test(value)) {
+				Meteor.call('updateAccount', field, value, (err) => {
+					if (err) {
+						console.error(err);
+					}
+				});
+			} else {
+				this.setState({
+					usernameError: 'Username has following the requirements: only letters and ' +
+					'numbers are aloud, no whitespaces, min. length: 3, max. length: 15',
+				});
+			}
+			break;
+		case 'email':
+			if (re.test(value)) {
+				this.setState({
+					emailError: '',
+				});
+				if (user.emails && user.emails.length > 0) {
+					emailValue = [{
+						address: value || user.emails[0].address,
+						verified: user.emails[0].verified,
+					}];
+				}
+				Meteor.call('updateAccount', field, emailValue, (err) => {
+					if (err) {
+						console.error(err);
+					}
+				});
+			} else {
+				this.setState({
+					emailError: 'Invalid email address',
+				});
+			}
+			break;
+
+		default:
+			Meteor.call('updateAccount', `profile.${field}`, value, (err) => {
+				if (err) {
+					console.error(err);
+				}
+			});
+		}
 	}
 
 	handleChangeText(field, event) {

@@ -7,10 +7,6 @@ import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import Toggle from 'material-ui/Toggle';
 
-// api
-import Comments from '/imports/api/collections/comments';
-import Settings from '/imports/api/collections/settings';
-
 // components
 import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
@@ -18,6 +14,9 @@ import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 import ModalChangePwd from '/imports/ui/layouts/auth/ModalChangePwd';
 import Notifications from '/imports/ui/components/user/ProfilePage/Notifications';
 import Discussions from '/imports/ui/components/user/ProfilePage/Discussions';
+import Annotations from '/imports/ui/components/user/ProfilePage/Annotations';
+import Bookmarks from '/imports/ui/components/user/ProfilePage/Bookmarks';
+
 
 // lib
 import Utils from '/imports/lib/utils';
@@ -225,18 +224,10 @@ const ProfilePage = React.createClass({
 											<Discussions />
 										</Tab>
 										<Tab label="Annotations">
-											<h2>Your Annotations</h2>
-
-											<hr className="user-divider" />
-
-											<div className="user-discussion-comments" />
+											<Annotations />
 										</Tab>
 										<Tab label="Bookmarks">
-											<h2>Your Bookmarks</h2>
-
-											<hr className="user-divider" />
-
-											<div className="user-discussion-comments" />
+											<Bookmarks />
 										</Tab>
 										<Tab label="Account">
 											<div className="user-profile-textfields">

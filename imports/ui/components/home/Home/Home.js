@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -23,22 +23,15 @@ import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
 
 
-const Home = React.createClass({
-
-	propTypes: {
-		settings: React.PropTypes.object,
-		comments: React.PropTypes.array,
-		ready: React.PropTypes.bool,
-		isTest: React.PropTypes.bool,
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
+class Home extends Component {
+	constructor(props) {
+		super(props);
+		this.scrollToIntro = this.scrollToIntro.bind(this);
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	componentDidMount() {
 		const { isTest } = this.props;
@@ -46,13 +39,13 @@ const Home = React.createClass({
 		if (!isTest) {
 			new WOW().init();
 		}
-	},
+	}
 
 	scrollToIntro(e) {
 		$('html, body').animate({ scrollTop: $('#intro').offset().top - 100 }, 300);
 
 		e.preventDefault();
-	},
+	}
 
 	render() {
 		const { settings, comments, ready } = this.props;
@@ -263,7 +256,7 @@ const Home = React.createClass({
 									limit={10}
 								/>
 								:
-									<Spinner />
+								<Spinner />
 							}
 							<div className="read-more-link">
 
@@ -279,8 +272,21 @@ const Home = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
+
+
+Home.propTypes = {
+	settings: React.PropTypes.object,
+	comments: React.PropTypes.array,
+	ready: React.PropTypes.bool,
+	isTest: React.PropTypes.bool,
+};
+
+Home.childContextTypes = {
+	muiTheme: React.PropTypes.object.isRequired,
+};
+
 
 export default createContainer(() => {
 	const query = { tenantId: Session.get('tenantId') };

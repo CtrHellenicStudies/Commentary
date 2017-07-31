@@ -16,7 +16,7 @@ class TranslationLayout extends React.Component {
 						author={author}
 					/>
 					:
-						<CommentLemmaText lines={lines} />
+					<CommentLemmaText lines={lines} />
 				}
 			</div>
 		);

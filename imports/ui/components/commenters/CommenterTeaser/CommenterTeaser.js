@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
@@ -8,19 +8,11 @@ import Utils from '/imports/lib/utils';
 import muiTheme from '/imports/lib/muiTheme';
 
 // commenter Teaser
-const CommenterTeaser = React.createClass({
-
-	propTypes: {
-		commenter: React.PropTypes.object.isRequired,
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
+class CommenterTeaser extends Component {
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	render() {
 		const { commenter } = this.props;
@@ -54,9 +46,16 @@ const CommenterTeaser = React.createClass({
 				</div>
 			</div>
 		);
-	},
+	}
+}
 
-});
 
+CommenterTeaser.propTypes = {
+	commenter: React.PropTypes.object
+};
+
+CommenterTeaser.childContextTypes = {
+	muiTheme: React.PropTypes.object
+};
 
 export default CommenterTeaser;

@@ -363,7 +363,6 @@ const COMMENT_ID_LENGTH = 7;
 const _getCommentURN = (comment) => {
 	const work = Works.findOne({ slug: comment.work.slug });
 	const urnPrefix = 'urn:cts:CHS.Commentary';
-
 	// Use work tlg if it exists, otherwise, search for subwork tlg number
 	// Failing either, just use creator
 	let urnTLG = work.tlgCreator;
@@ -384,7 +383,7 @@ const _getCommentURN = (comment) => {
 	//
 	urnTLG += '.chsCommentary';
 
-	let urnComment = `${comment.subwork.title}.${comment.lineFrom}`;
+	let urnComment = `${comment.work.title}.${comment.subwork.title}.${comment.lineFrom}`;
 
 	if (typeof comment.lineTo !== 'undefined' && comment.lineFrom !== comment.lineTo) {
 		urnComment += `-${comment.subwork.title}.${comment.lineTo}`;
@@ -392,7 +391,7 @@ const _getCommentURN = (comment) => {
 
 	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
 
-	return `${urnPrefix}:${urnTLG}:${urnComment}.${urnCommentId}`;
+	return `${urnPrefix}:${urnComment}.${urnCommentId}`;
 };
 
 const _getAnnotationURN = (comment) => {

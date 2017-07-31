@@ -26,7 +26,7 @@ class CommenterDetail extends React.Component {
 		avatarUrl: React.PropTypes.string,
 		settings: React.PropTypes.shape({
 			title: React.PropTypes.string.isRequired,
-		}).isRequired,
+		}),
 		isTest: React.PropTypes.bool,
 	};
 
@@ -38,7 +38,7 @@ class CommenterDetail extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			readMoreBio: false,
 		};

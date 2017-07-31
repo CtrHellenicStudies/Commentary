@@ -114,9 +114,10 @@ const _createFilterFromQueryParams = (queryParams) => {
 	}
 
 	if ('subworks' in queryParams) {
+		// console.log('current query params: ', queryParams);
 		const subworks = [];
 
-		queryParams.subworks.split(',').forEach((subwork) => {
+		new Set(queryParams.subworks.split(',')).forEach((subwork) => {
 			const subworkNumber = parseInt(subwork, 10);
 
 			if (!Number.isNaN(subworkNumber)) {
@@ -313,7 +314,7 @@ const _updateFilterOnChangeLineEvent = (oldFilters, e) => {
 	return filters;
 };
 
-const _updateFilterOnChangeTextSearchEvent = (oldFilters, e) => {
+const _updateFilterOnChangeTextSearchEvent = (oldFilters, e, textsearch) => {
 	const filters = oldFilters;
 
 	if (textsearch && textsearch.length) {

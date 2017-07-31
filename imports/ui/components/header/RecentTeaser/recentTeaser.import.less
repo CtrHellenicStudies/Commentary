@@ -1,0 +1,33 @@
+// @import "compass/css3/transition";
+
+.recentTeaser {
+	display: block;
+	padding: 0;
+	width: 100%;
+	padding: 5px 20px;
+	cursor: pointer;
+	background: #fff;
+	// @include transition(background, 100ms);
+
+	&:hover {
+		background: #f6f6f6;
+		text-decoration: none;
+
+	}
+}
+
+.recentTeaserTitle {
+	display: block;
+	font-family: @font-body;
+	font-size: 14px;
+	padding: 5px 0;
+	color: $text;
+}
+
+.recentTeaserChapter {
+	display: block;
+	font-family: @font-body;
+	font-size: 13px;
+	padding: 5px;
+	color: #666;
+}

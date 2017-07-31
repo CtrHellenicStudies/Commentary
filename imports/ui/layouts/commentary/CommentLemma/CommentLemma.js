@@ -298,6 +298,10 @@ export default createContainer(({ commentGroup }) => {
 
 		const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
 
+		if (!commentGroup.lineTo) {
+			commentGroup.lineTo = commentGroup.lineFrom;
+		}
+
 		const translationQuery = {
 			work: commentGroup.work.slug,
 			subwork: Number(commentGroup.subwork.title),
@@ -306,7 +310,6 @@ export default createContainer(({ commentGroup }) => {
 		};
 
 		translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
-
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);

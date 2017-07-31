@@ -94,21 +94,7 @@ Commenters.schema = new SimpleSchema({
 	nCommentsWorks: {
 		type: [Object],
 		optional: true,
-	},
-
-	'nCommentsWorks.$.title': {
-		type: String,
-		optional: true,
-	},
-
-	'nCommentWorks.$.slug': {
-		type: String,
-		optional: true,
-	},
-
-	'nCommentWorks.$.subworks': {
-		type: [Object],
-		optional: true,
+		blackbox: true,
 	},
 
 	nCommentsIliad: {
@@ -159,7 +145,7 @@ Commenters.attachBehaviour('timestampable', {
 
 
 Commenters.allow({
-	update: (userId, doc) => true 
+	update: (userId, doc) => true
 });
 
 export default Commenters;

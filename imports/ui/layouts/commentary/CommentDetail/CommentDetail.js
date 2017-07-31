@@ -120,6 +120,7 @@ class CommentDetail extends React.Component {
 			persistentIdentifierModalVisible: false,
 			persistentIdentifierModalTop: 0,
 			persistentIdentifierModalLeft: 0,
+			searchTerm: ''
 		};
 
 		// methods:
@@ -132,6 +133,18 @@ class CommentDetail extends React.Component {
 		this.closeKeywordReference = this.closeKeywordReference.bind(this);
 		this.selectRevision = this.selectRevision.bind(this);
 
+	}
+
+	componentWillReceiveProps(nextProps) {
+		const { filters } = this.props;
+		const { searchTerm } = this.state;
+
+		if (filters.find((filter) => filter.key === 'textsearch') !== searchTerm && filters && filters.find((filter) => filter.key === 'textsearch')) {
+			const searchTermsObject = filters.find((filter) => filter.key === 'textsearch');
+			this.setState({
+				searchTerm: searchTermsObject.values[0]
+			});
+		}
 	}
 
 	getRevisionIndex() {
@@ -149,7 +162,7 @@ class CommentDetail extends React.Component {
 				foundRevision < comment.revisions.length) {
 				selectedRevisionIndex = foundRevision;
 			} else {
-				selectedRevisionIndex = comment.revisions.length - 1;
+				selectedRevisionIndex = 0;
 			}
 		}
 		return selectedRevisionIndex;
@@ -243,8 +256,8 @@ class CommentDetail extends React.Component {
 
 	render() {
 
-		const { comment, referenceWorks, ready } = this.props;
-		const { discussionVisible } = this.state;
+		const { comment, referenceWorks, ready, filters } = this.props;
+		const { discussionVisible, searchTerm } = this.state;
 
 		if (!ready) {
 			return null;
@@ -279,6 +292,7 @@ class CommentDetail extends React.Component {
 						revisionIndex={selectedRevisionIndex}
 						onTextClick={this.checkIfToggleReferenceModal}
 						referenceWorks={referenceWorks}
+						searchTerm={searchTerm}
 					/>
 
 					<CommentRevisionSelect

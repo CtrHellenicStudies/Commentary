@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -10,26 +10,21 @@ import CommenterWorkCircle from '/imports/ui/components/commenters/CommenterWork
 import CommenterWorkVisualization from '/imports/ui/components/commenters/CommenterWorkVisualization';
 
 
-const CommenterVisualizations = React.createClass({
+class CommenterVisualizations extends Component {
 
-	propTypes: {
-		commenter: React.PropTypes.object.isRequired,
-		isTest: React.PropTypes.bool,
-	},
+	constructor(props) {
+		super(props);
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+		this.state = {
 			visibleWork: '',
 		};
-	},
+
+		this.toggleVisibleWork = this.toggleVisibleWork.bind(this);
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	toggleVisibleWork(workToToggle) {
 		if (this.state.visibleWork === workToToggle) {
@@ -41,7 +36,7 @@ const CommenterVisualizations = React.createClass({
 				visibleWork: workToToggle,
 			});
 		}
-	},
+	}
 
 	renderWorks() {
 		const { commenter, isTest } = this.props;
@@ -58,7 +53,7 @@ const CommenterVisualizations = React.createClass({
 			);
 		}
 		return '';
-	},
+	}
 
 	render() {
 		const { commenter } = this.props;
@@ -125,7 +120,18 @@ const CommenterVisualizations = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
+
+
+CommenterVisualizations.propTypes = {
+	commenter: React.PropTypes.object.isRequired,
+	isTest: React.PropTypes.bool,
+};
+
+CommenterVisualizations.childContextTypes = {
+	muiTheme: React.PropTypes.object.isRequired
+};
+
 
 export default CommenterVisualizations;

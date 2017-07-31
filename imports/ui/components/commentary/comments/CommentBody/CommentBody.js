@@ -65,6 +65,7 @@ const CommentBody = (props) => {
 				text={props.comment.revisions[props.revisionIndex].text}
 				onTextClick={props.onTextClick}
 				createRevisionMarkup
+				searchTerm={props.searchTerm}
 			/>
 		);
 	}
@@ -72,6 +73,7 @@ const CommentBody = (props) => {
 	return (
 		<CommentBodyText
 			text={getRevisionDiff(props.comment, props.revisionIndex).innerHTML}
+			searchTerm={props.searchTerm}
 		/>
 	);
 };
@@ -83,6 +85,7 @@ CommentBody.propTypes = {
 	}).isRequired,
 	revisionIndex: React.PropTypes.number.isRequired,
 	onTextClick: React.PropTypes.func,
+	searchTerm: React.PropTypes.string
 };
 CommentBody.defaultProps = {
 	onTextClick: null,

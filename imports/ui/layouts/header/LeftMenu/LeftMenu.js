@@ -85,12 +85,12 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser }) => (
 					onClick={closeLeftMenu}
 				/>
 				<MenuItem
-					href="/keywords"
+					href="/words"
 					primaryText="Words"
 					onClick={closeLeftMenu}
 				/>
 				<MenuItem
-					href="/keyideas"
+					href="/ideas"
 					primaryText="Ideas"
 					onClick={closeLeftMenu}
 				/>

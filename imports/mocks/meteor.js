@@ -20,13 +20,11 @@ export const Meteor = { // eslint-disable-line
 	absoluteUrl: () => {},
 	users: {
 		findOne: () => {},
-		find: () => { // eslint-disable-line
-			return {
-				fetch: () => [],
-			};
-		},
+		find: () => {},
+		update: () => {},
+		remove: () => {},
 	},
-	user: () => {},
+	user: () => ({}),
 	userId: () => {},
 	subscribe: () => {
 		const handle = {
@@ -34,4 +32,6 @@ export const Meteor = { // eslint-disable-line
 		};
 		return handle;
 	},
+	methods: () => {},
+	Error: Error,
 };

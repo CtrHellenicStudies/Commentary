@@ -1,7 +1,9 @@
 import React from 'react';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -21,9 +23,17 @@ import DiscussionCommentsList from '/imports/ui/components/discussionComments/Di
 import ModalChangePwd from '/imports/ui/layouts/auth/ModalChangePwd';
 
 // lib
-import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
+// Mui theme for tabs
+const muiTheme = {
+	palette: {
+		primary1Color: 'transparent',
+		accent1Color: '#795548',
+		textColor: '#444444',
+		alternateTextColor: '#444444',
+	},
+};
 
 const ProfilePage = React.createClass({
 	propTypes: {
@@ -214,127 +224,151 @@ const ProfilePage = React.createClass({
 							</div>
 							<br />
 
-							<div className="user-profile-textfields">
+							<div className="user-profile-tabs">
+								<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+									<Tabs>
+										<Tab label="Notifications (2)">
+											<h2>Your Notifications</h2>
 
-								<TextField
-									fullWidth
-									floatingLabelText="Username"
-									defaultValue={user.username}
-									onChange={this.handleChangeText.bind(null, 'username')}
-									errorText={this.state.usernameError}
-								/>
-								<br />
+											<hr className="user-divider" />
 
-								<RaisedButton
-									label="Change password"
-									style={changePwdStyle}
-									onClick={this.showChangePwdModal}
-								/>
+											<div className="user-discussion-comments">
+											</div>
+										</Tab>
+										<Tab label="Discussions">
+											<h2>Your Comments</h2>
 
-								{user.emails ?
-									<div>
-										<TextField
-											fullWidth
-											floatingLabelText="Email"
-											defaultValue={user.emails[0].address}
-											onChange={this.handleChangeText.bind(null, 'emails')}
-											errorText={this.state.emailError}
-										/>
-										<Toggle
-											label={this.state.isPublicEmail ? 'Email public' : 'Email private'}
-											labelPosition="right"
-											style={toggleStyle.style}
-											toggled={this.state.isPublicEmail}
-											onToggle={this.handlePublicEmailToggle}
-										/>
-									</div>
-									: ''
-								}
+											<hr className="user-divider" />
 
-								<TextField
-									fullWidth
-									floatingLabelText="Name"
-									defaultValue={user.profile.name}
-									onChange={this.handleChangeText.bind(null, 'name')}
-								/>
-								<br />
+											<div className="user-discussion-comments">
 
-								<TextField
-									multiLine
-									rows={2}
-									rowsMax={10}
-									fullWidth
-									floatingLabelText="Biography"
-									defaultValue={user.profile.biography}
-									onChange={this.handleChangeText.bind(null, 'biography')}
-								/>
-								<br />
 
-								<TextField
-									fullWidth
-									hintText="http://university.academia.edu/YourName"
-									floatingLabelText="Academia.edu"
-									defaultValue={user.profile.academiaEdu}
-									onChange={this.handleChangeText.bind(null, 'academiaEdu')}
-								/>
-								<br />
+												<DiscussionCommentsList
+													discussionComments={discussionComments}
+												/>
 
-								<TextField
-									fullWidth
-									hintText="https://twitter.com/@your_name"
-									floatingLabelText="Twitter"
-									defaultValue={user.profile.twitter}
-									onChange={this.handleChangeText.bind(null, 'twitter')}
-								/>
-								<br />
+											</div>
+										</Tab>
+										<Tab label="Annotations">
+											<h2>Your Annotations</h2>
 
-								<TextField
-									fullWidth
-									hintText="https://facebook.com/your.name"
-									floatingLabelText="Facebook"
-									defaultValue={user.profile.facebook}
-									onChange={this.handleChangeText.bind(null, 'facebook')}
-								/>
-								<br />
+											<hr className="user-divider" />
 
-								<TextField
-									fullWidth
-									hintText="https://plus.google.com/+YourName"
-									floatingLabelText="Google Plus"
-									defaultValue={user.profile.google}
-									onChange={this.handleChangeText.bind(null, 'google')}
-								/>
+											<div className="user-discussion-comments">
+											</div>
+										</Tab>
+										<Tab label="Bookmarks">
+											<h2>Your Bookmarks</h2>
 
-								<br />
-								<br />
-								<br />
-								<span className="form-save-help">
-									(These values are saved automatically.)
-								</span>
+											<hr className="user-divider" />
 
+											<div className="user-discussion-comments">
+											</div>
+										</Tab>
+										<Tab label="Account">
+											<div className="user-profile-textfields">
+
+												<TextField
+													fullWidth
+													floatingLabelText="Username"
+													defaultValue={user.username}
+													onChange={this.handleChangeText.bind(null, 'username')}
+													errorText={this.state.usernameError}
+												/>
+												<br />
+
+												<RaisedButton
+													label="Change password"
+													style={changePwdStyle}
+													onClick={this.showChangePwdModal}
+												/>
+
+												{user.emails ?
+													<div>
+														<TextField
+															fullWidth
+															floatingLabelText="Email"
+															defaultValue={user.emails[0].address}
+															onChange={this.handleChangeText.bind(null, 'emails')}
+															errorText={this.state.emailError}
+														/>
+														<Toggle
+															label={this.state.isPublicEmail ? 'Email public' : 'Email private'}
+															labelPosition="right"
+															style={toggleStyle.style}
+															toggled={this.state.isPublicEmail}
+															onToggle={this.handlePublicEmailToggle}
+														/>
+													</div>
+													: ''
+												}
+
+												<TextField
+													fullWidth
+													floatingLabelText="Name"
+													defaultValue={user.profile.name}
+													onChange={this.handleChangeText.bind(null, 'name')}
+												/>
+												<br />
+
+												<TextField
+													multiLine
+													rows={2}
+													rowsMax={10}
+													fullWidth
+													floatingLabelText="Biography"
+													defaultValue={user.profile.biography}
+													onChange={this.handleChangeText.bind(null, 'biography')}
+												/>
+												<br />
+
+												<TextField
+													fullWidth
+													hintText="http://university.academia.edu/YourName"
+													floatingLabelText="Academia.edu"
+													defaultValue={user.profile.academiaEdu}
+													onChange={this.handleChangeText.bind(null, 'academiaEdu')}
+												/>
+												<br />
+
+												<TextField
+													fullWidth
+													hintText="https://twitter.com/@your_name"
+													floatingLabelText="Twitter"
+													defaultValue={user.profile.twitter}
+													onChange={this.handleChangeText.bind(null, 'twitter')}
+												/>
+												<br />
+
+												<TextField
+													fullWidth
+													hintText="https://facebook.com/your.name"
+													floatingLabelText="Facebook"
+													defaultValue={user.profile.facebook}
+													onChange={this.handleChangeText.bind(null, 'facebook')}
+												/>
+												<br />
+
+												<TextField
+													fullWidth
+													hintText="https://plus.google.com/+YourName"
+													floatingLabelText="Google Plus"
+													defaultValue={user.profile.google}
+													onChange={this.handleChangeText.bind(null, 'google')}
+												/>
+
+												<br />
+												<br />
+												<br />
+
+												<RaisedButton label="Saved" disabled={true} />
+											</div>
+										</Tab>
+									</Tabs>
+								</MuiThemeProvider>
 							</div>
-
 						</div>
-
-						<div className="article-content">
-							<div id="container1" className="data-visualization" />
-							<div id="container2" className="data-visualization" />
-						</div>
-
-						<hr className="user-divider" />
-
-						<div className="user-discussion-comments">
-
-							<h2>Your Comments</h2>
-
-							<DiscussionCommentsList
-								discussionComments={discussionComments}
-							/>
-
-						</div>
-
 					</section>
-
 				</div>
 
 				{this.state.modalChangePwdLowered ?
@@ -344,7 +378,6 @@ const ProfilePage = React.createClass({
 					/>
 					: ''
 				}
-
 			</div>
 		);
 	},
@@ -353,7 +386,9 @@ const ProfilePage = React.createClass({
 const ProfilePageContainer = createContainer(() => {
 	let discussionComments = [];
 	Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	Meteor.subscribe('user.discussionComments', Meteor.userId(), Session.get('tenantId'));
+	Meteor.subscribe('user.discussionComments', Meteor.userId());
+	Meteor.subscribe('user.annotations', Meteor.userId());
+	Meteor.subscribe('user.bookmarks', Meteor.userId());
 
 	discussionComments = DiscussionComments.find({
 		userId: Meteor.userId(),

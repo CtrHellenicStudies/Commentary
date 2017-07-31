@@ -218,7 +218,7 @@ const PublicProfilePageContainer = createContainer(({ userId }) => {
 	let discussionComments = [];
 
 	Meteor.subscribe('users.id', userId);
-	Meteor.subscribe('user.discussionComments', userId, Session.get('tenantId'));
+	Meteor.subscribe('user.discussionComments', userId);
 
 	user = Meteor.users.findOne({
 		_id: userId,

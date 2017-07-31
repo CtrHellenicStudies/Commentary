@@ -5,6 +5,8 @@ import { Session } from 'meteor/session';
 
 // api
 import DiscussionComments from '/imports/api/collections/discussionComments';
+import Comments from '/imports/api/collections/comments';
+import Settings from '/imports/api/collections/settings';
 
 // components
 import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
@@ -16,6 +18,8 @@ class Discussions extends React.Component {
 	}
 
 	render() {
+		const { discussionComments } = this.props;
+
 		return (
 			<div>
 				<h2>Your Comments</h2>

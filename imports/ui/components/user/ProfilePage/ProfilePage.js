@@ -222,7 +222,7 @@ const ProfilePage = React.createClass({
 											<Notifications />
 										</Tab>
 										<Tab label="Discussions">
-											
+											<Discussions />
 										</Tab>
 										<Tab label="Annotations">
 											<h2>Your Annotations</h2>

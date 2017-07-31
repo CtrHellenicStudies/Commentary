@@ -58,6 +58,11 @@ const CommentUpperRight = props => (
 						/>
 					</a>
 				</div>
+				<div>
+					<FlatButton
+						label="Subscribe"
+					/>
+				</div>
 			</div>
 		))}
 	</div>

@@ -1,9 +1,11 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
+import Dialog from 'material-ui/Dialog';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import moment from 'moment';
+import ContentLink from 'material-ui/svg-icons/content/link';
 import Utils from '/imports/lib/utils';
 
 const getDateRevision = (revision) => {
@@ -64,13 +66,14 @@ class CommentCitation extends React.Component {
 					labelPosition="after"
 					onClick={this.handleTouchTap.bind(this)}
 				/>
-				<Popover
+				<Dialog
 					open={openMenu}
-					anchorEl={anchorEl}
-					anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-					targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+					modal
+					title="Cite this comment"
 					onRequestClose={this.handleRequestClose.bind(this)}
+					autoScrollBodyContent
 				>
+
 					<Menu>
 						{sortRevisions(comment.revisions).reverse().map((revision, i) => {
 
@@ -82,11 +85,12 @@ class CommentCitation extends React.Component {
 									href={`//nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
 									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
 									style={styles.menuItem}
+									leftIcon={<ContentLink />}
 								/>
 							);
 						})}
 					</Menu>
-				</Popover>
+				</Dialog>
 			</div>
 		);
 	}

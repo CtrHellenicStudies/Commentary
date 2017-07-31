@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CommenterWorkCircle = (props) => (
+const CommenterWorkCircle = props => (
 
 	<div className="commenter-work-circle">
 		<div

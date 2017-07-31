@@ -531,7 +531,7 @@ class AddComment extends React.Component {
 											*/}
 											{referenceWorks.map((referenceWork, i) => {
 												const _referenceWorkOptions = [];
-												referenceWorkOptions.forEach(rW => {
+												referenceWorkOptions.forEach((rW) => {
 													_referenceWorkOptions.push({
 														value: rW.value,
 														label: rW.label,
@@ -651,7 +651,7 @@ const AddCommentContainer = createContainer(() => {
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
-		if (!referenceWorkOptions.some((val) => (
+		if (!referenceWorkOptions.some(val => (
 			referenceWork.slug === val.slug
 		))) {
 			referenceWorkOptions.push({
@@ -669,7 +669,7 @@ const AddCommentContainer = createContainer(() => {
 		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
 	}
 	commenters.forEach((commenter) => {
-		if (!commentersOptions.some((val) => (
+		if (!commentersOptions.some(val => (
 			commenter._id === val.value
 		))) {
 			commentersOptions.push({

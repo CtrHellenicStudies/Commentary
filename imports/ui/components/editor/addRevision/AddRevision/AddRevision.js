@@ -685,7 +685,7 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
-		if (!referenceWorkOptions.some((val) => (
+		if (!referenceWorkOptions.some(val => (
 			referenceWork.slug === val.slug
 		))) {
 			referenceWorkOptions.push({

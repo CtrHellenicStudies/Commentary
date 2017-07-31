@@ -52,7 +52,7 @@ describe('Annotations methods API', () => {
 						_id: bookId,
 					}));
 					Comments.insert = () => {};
-					stub(Comments, 'insert').callsFake((comment) => commentInserId);
+					stub(Comments, 'insert').callsFake(comment => commentInserId);
 				});
 
 				afterEach(() => {
@@ -127,7 +127,7 @@ describe('Annotations methods API', () => {
 						_id: bookId,
 					}));
 					Comments.update = () => {};
-					stub(Comments, 'update').callsFake((comment) => 1);
+					stub(Comments, 'update').callsFake(comment => 1);
 				});
 
 				afterEach(() => {
@@ -185,7 +185,7 @@ describe('Annotations methods API', () => {
 					}));
 
 					Comments.remove = () => {};
-					stub(Comments, 'remove').callsFake((comment) => 1);
+					stub(Comments, 'remove').callsFake(comment => 1);
 				});
 
 				afterEach(() => {

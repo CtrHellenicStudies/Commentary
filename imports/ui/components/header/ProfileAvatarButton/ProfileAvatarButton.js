@@ -4,7 +4,7 @@ import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import UserDropdown from '../UserDropdown';
 
-const ProfileAvatarButton = props => {
+const ProfileAvatarButton = (props) => {
 	const loggedInUser = Meteor.user();
 	const showUserDropdown = false;
 

@@ -7,7 +7,7 @@ import Tenants from '/imports/api/collections/tenants';
 import Utils from '/imports/lib/utils';
 
 
-const resolveV1 = props => {
+const resolveV1 = (props) => {
 	let resolveURL;
 	let tenant;
 
@@ -104,7 +104,7 @@ class NameResolutionServiceLayout extends React.Component {
 	}
 }
 
-const nameResolutionServiceLayoutContainer = createContainer(props => {
+const nameResolutionServiceLayoutContainer = createContainer((props) => {
 	let resolveURL;
 
 	switch (props.version) {

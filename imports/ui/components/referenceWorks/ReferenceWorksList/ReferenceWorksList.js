@@ -15,12 +15,7 @@ import ReferenceWorkTeaser from '/imports/ui/components/referenceWorks/Reference
 import Utils from '/imports/lib/utils';
 
 
-const ReferenceWorksList = React.createClass({
-
-	propTypes: {
-		commenterId: React.PropTypes.string,
-		referenceWorks: React.PropTypes.array,
-	},
+class ReferenceWorksList extends React.Component {
 
 	renderReferenceWorks() {
 		return this.props.referenceWorks.map((referenceWork, i) => (
@@ -29,7 +24,7 @@ const ReferenceWorksList = React.createClass({
 				referenceWork={referenceWork}
 			/>
 		));
-	},
+	}
 
 	render() {
 		const { referenceWorks } = this.props;
@@ -56,9 +51,14 @@ const ReferenceWorksList = React.createClass({
 				}
 			</div>
 		);
-	},
+	}
 
-});
+}
+
+ReferenceWorksList.propTypes = {
+	commenterId: React.PropTypes.string,
+	referenceWorks: React.PropTypes.array,
+};
 
 const ReferenceWorksListContainer = createContainer(({ commenterId }) => {
 	// SUBSCRIPTIONS:

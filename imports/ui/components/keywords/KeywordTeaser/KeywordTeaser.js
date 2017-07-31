@@ -7,31 +7,27 @@ import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
 
-const KeywordTeaser = React.createClass({
+class KeywordTeaser extends React.Component {
 
-	propTypes: {
-		keyword: React.PropTypes.object.isRequired,
-	},
+	constructor(props) {
+		super(props);
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
-			open: false,
+		this.state = {
+			open: false
 		};
-	},
+
+		this.toggleOpen = this.toggleOpen.bind(this);
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	toggleOpen() {
 		this.setState({
 			open: !this.state.open,
 		});
-	},
+	}
 
 	render() {
 		const { keyword } = this.props;
@@ -67,8 +63,17 @@ const KeywordTeaser = React.createClass({
 				Read more
 			</a>
 		</div>);
-	},
+	}
 
-});
+}
+
+
+KeywordTeaser.propTypes = {
+	keyword: React.PropTypes.object.isRequired,
+};
+
+KeywordTeaser.childContextTypes = {
+	muiTheme: React.PropTypes.object.isRequired,
+};
 
 export default KeywordTeaser;

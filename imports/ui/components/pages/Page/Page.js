@@ -18,16 +18,7 @@ import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImage
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 
-const Page = React.createClass({
-	propTypes: {
-		slug: React.PropTypes.string,
-		page: React.PropTypes.object,
-		ready: React.PropTypes.bool,
-		images: React.PropTypes.array,
-		thumbnails: React.PropTypes.array,
-		loading: React.PropTypes.bool,
-		settings: React.PropTypes.object,
-	},
+class Page extends React.Component {
 
 	render() {
 		const { page, settings, slug, loading } = this.props;
@@ -89,8 +80,19 @@ const Page = React.createClass({
 				</section>
 			</div>
 		);
-	},
-});
+	}
+}
+
+Page.propTypes = {
+	slug: React.PropTypes.string,
+	page: React.PropTypes.object,
+	ready: React.PropTypes.bool,
+	images: React.PropTypes.array,
+	thumbnails: React.PropTypes.array,
+	loading: React.PropTypes.bool,
+	settings: React.PropTypes.object,
+};
+
 
 const pageContainer = createContainer(({ slug }) => {
 	let page = {};

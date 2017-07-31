@@ -19,14 +19,7 @@ import Commenters from '/imports/api/collections/commenters';
 import Utils from '/imports/lib/utils';
 
 
-const ReferenceWorkDetail = React.createClass({
-
-	propTypes: {
-		slug: React.PropTypes.string.isRequired,
-		referenceWork: React.PropTypes.object,
-		settings: React.PropTypes.object,
-		commenters: React.PropTypes.array,
-	},
+class ReferenceWorkDetail extends React.Component {
 
 	createMarkup() {
 		let __html = '';
@@ -38,7 +31,7 @@ const ReferenceWorkDetail = React.createClass({
 		return {
 			__html,
 		};
-	},
+	}
 
 	render() {
 		const { referenceWork, commenters, settings } = this.props;
@@ -128,9 +121,17 @@ const ReferenceWorkDetail = React.createClass({
 				</div>
 			</div>
 		);
-	},
+	}
 
-});
+}
+
+ReferenceWorkDetail.propTypes = {
+	slug: React.PropTypes.string.isRequired,
+	referenceWork: React.PropTypes.object,
+	settings: React.PropTypes.object,
+	commenters: React.PropTypes.array,
+};
+
 
 const ReferenceWorkDetailContainer = createContainer(({ slug }) => {
 	// SUBSCRIPTIONS:

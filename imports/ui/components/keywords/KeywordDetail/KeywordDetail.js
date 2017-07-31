@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -22,30 +22,22 @@ import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
 
-const KeywordDetail = React.createClass({
+class KeywordDetail extends Component {
 
-	propTypes: {
-		keyword: React.PropTypes.object,
-		settings: React.PropTypes.object,
-		keywordComments: React.PropTypes.array,
-	},
+	constructor(props) {
+		super(props);
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+		this.state = {
 			keywordReferenceModalVisible: false,
 			referenceTop: 0,
 			referenceLeft: 0,
-			keyword: '',
+			keyword: ''
 		};
-	},
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	deleteKeyword() {
 		const { keyword } = this.props;
@@ -56,7 +48,7 @@ const KeywordDetail = React.createClass({
 				FlowRouter.go('/keywords');
 			}
 		});
-	},
+	}
 
 	_keywordDescriptionOnClick(e) {
 		const $target = $(e.target);
@@ -70,7 +62,7 @@ const KeywordDetail = React.createClass({
 				keyword,
 			});
 		}
-	},
+	}
 
 	_closeKeywordReference() {
 		this.setState({
@@ -79,7 +71,7 @@ const KeywordDetail = React.createClass({
 			referenceLeft: 0,
 			keyword: '',
 		});
-	},
+	}
 
 	render() {
 		const { keyword, settings, keywordComments } = this.props;
@@ -168,8 +160,20 @@ const KeywordDetail = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
+
+
+KeywordDetail.propTypes = {
+	keyword: React.PropTypes.object,
+	settings: React.PropTypes.object,
+	keywordComments: React.PropTypes.array,
+};
+
+KeywordDetail.childContextTypes = {
+	muiTheme: React.PropTypes.object.isRequired,
+};
+
 
 const KeywordDetailContainer = createContainer(({ slug }) => {
 	// SUBSCRIPTIONS:

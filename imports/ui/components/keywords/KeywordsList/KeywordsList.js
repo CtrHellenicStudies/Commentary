@@ -9,13 +9,7 @@ import Keywords from '/imports/api/collections/keywords';
 // components
 import KeywordTeaser from '/imports/ui/components/keywords/KeywordTeaser';
 
-const KeywordsList = React.createClass({
-
-	propTypes: {
-		type: React.PropTypes.string.isRequired,
-		limit: React.PropTypes.number,
-		keywords: React.PropTypes.array,
-	},
+class KeywordsList extends React.Component {
 
 	renderKeywords() {
 		const { keywords } = this.props;
@@ -30,7 +24,7 @@ const KeywordsList = React.createClass({
 				keyword={keyword}
 			/>
 		));
-	},
+	}
 
 	render() {
 		return (
@@ -38,9 +32,14 @@ const KeywordsList = React.createClass({
 				{this.renderKeywords()}
 			</div>
 		);
-	},
+	}
+}
 
-});
+KeywordsList.propTypes = {
+	type: React.PropTypes.string.isRequired,
+	limit: React.PropTypes.number,
+	keywords: React.PropTypes.array,
+};
 
 export default createContainer(({ type, limit }) => {
 	const skip = 0;

@@ -1,0 +1,6 @@
+{
+  "name": "RecentList",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./RecentList.js"
+}

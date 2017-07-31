@@ -15,6 +15,7 @@ import ModalSignup from '/imports/ui/layouts/auth/ModalSignup';
 import LeftMenu from '/imports/ui/layouts/header/LeftMenu';
 import CommentarySearchToolbar from '/imports/ui/layouts/header/CommentarySearchToolbar';
 import CommentarySearchPanel from '/imports/ui/layouts/header/CommentarySearchPanel';
+import ProfileAvatarButton from '/imports/ui/components/header/ProfileAvatarButton';
 
 /*
 	helpers
@@ -292,12 +293,6 @@ class Header extends React.Component {
 										<div>
 											{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 												<div className="user-header-links admin-header-links">
-													<FlatButton
-														href="/profile"
-														label="Profile"
-														className=""
-														style={styles.flatButton}
-													/>
 													{tenant && !tenant.isAnnotation &&
 														<span>
 															<FlatButton
@@ -320,14 +315,16 @@ class Header extends React.Component {
 															/>
 														</span>
 													}
+													<ProfileAvatarButton
+														showUserDropdown={this.showUserDropdown}
+														hideUserDropdown={this.hideUserDropdown}
+													/>
 												</div>
 												:
 												<div className="user-header-links">
-													<FlatButton
-														href="/profile"
-														label="Profile"
-														className=""
-														style={styles.flatButton}
+													<ProfileAvatarButton
+														showUserDropdown={this.showUserDropdown}
+														hideUserDropdown={this.hideUserDropdown}
 													/>
 												</div>
 											}

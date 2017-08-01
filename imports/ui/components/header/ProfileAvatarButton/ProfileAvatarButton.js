@@ -20,9 +20,9 @@ const ProfileAvatarButton = (props) => {
 				<a
 					href="/profile"
 				>
-					<span className="profileButtonHeader profileButtonNotificationBadge notificationBadge">
+					{/*<span className="profileButtonHeader profileButtonNotificationBadge notificationBadge">
 						2
-					</span>
+					</span>*/}
 					<AvatarIcon
 						className="avatarIcon"
 						avatar={'profile' in loggedInUser ? loggedInUser.profile.avatarUrl : ''}

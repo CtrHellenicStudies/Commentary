@@ -76,7 +76,7 @@ Meteor.publish('users.all', () => {
 			recentPositions: 1,
 		},
 		sort: {
-			username: 1,
+			'profile.name': 1,
 			'emails.address': 1,
 		},
 		skip,

@@ -11,8 +11,8 @@ class Notifications extends React.Component {
 		const { subscriptions } = this.props;
 		
 		return (
-			<div className="content primary">
-				<h2>Your Notifications</h2>
+			<div>
+				<h2>Recent Activity</h2>
 				<hr className="user-divider" />
 				<h2>Subscriptions</h2>
 				{subscriptions ?

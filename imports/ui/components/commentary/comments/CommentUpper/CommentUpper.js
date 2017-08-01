@@ -34,8 +34,12 @@ class CommentUpperRight extends React.Component {
 	}
 
 	componentWillMount() {
+		const { commenters } = this.props;
+		const subscriptions = Meteor.user().subscriptions;
+
 		this.setState({
-			loggedIn: Meteor.user()
+			loggedIn: Meteor.user(),
+			subscribed: _.includes(subscriptions, commenters[0])
 		});
 	}
 
@@ -65,16 +69,18 @@ class CommentUpperRight extends React.Component {
 
 		if (!_.includes(subscriptions, commenter)) {
 			Meteor.users.update({_id: Meteor.userId()}, {
-				$set: {
-					'subcriptions.commenter': commenter
+				$push: {
+					'subscriptions.commenters': commenter
 				}
 			});
+		} else {
+			// unsubscribe
 		}
 	}
 
 	render() {
-		const {commenters, userCanEditCommenters, commentId, updateDate} = this.props;
-		const {loggedIn} = this.state;
+		const { commenters, userCanEditCommenters, commentId, updateDate } = this.props;
+		const { loggedIn, subscribed } = this.state;
 
 		return (
 			<div className="comment-upper-right">
@@ -114,7 +120,7 @@ class CommentUpperRight extends React.Component {
 						{loggedIn ?
 							<div>
 								<FlatButton
-									label="Subscribe"
+									label={subscribed ? 'Unsubscribe' : 'Subscribe'}
 									onTouchTap={this.subscribe}
 								/>
 							</div>

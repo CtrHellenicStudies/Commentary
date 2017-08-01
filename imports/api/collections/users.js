@@ -51,17 +51,17 @@ const UserProfile = new SimpleSchema({
 	},
 });
 
-const Subcriptions = new SimpleSchema({
+const UserSubscriptions = new SimpleSchema({
 	commenters: {
-		type: [Object],
+		type: Array,
 		optional: true
 	},
 	users: {
-		type: [Object],
+		type: Array,
 		optional: true
 	},
 	texts: {
-		type: [Object],
+		type: Array,
 		optional: true
 	}
 });
@@ -109,8 +109,8 @@ const User = new SimpleSchema({
 		type: [Object],
 		optional: true,
 	},
-	subcriptions: {
-		type: Subcriptions,
+	subscriptions: {
+		type: UserSubscriptions,
 		optional: true
 	},
 	roles: {

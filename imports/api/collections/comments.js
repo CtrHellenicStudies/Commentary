@@ -382,8 +382,9 @@ const _getCommentURN = (comment) => {
 
 	//
 	urnTLG += '.chsCommentary';
+	const workTitle = comment.work.title.replace(' ', '');
 
-	let urnComment = `${comment.work.title}.${comment.subwork.title}.${comment.lineFrom}`;
+	let urnComment = `${workTitle}.${comment.subwork.title}.${comment.lineFrom}`;
 
 	if (typeof comment.lineTo !== 'undefined' && comment.lineFrom !== comment.lineTo) {
 		urnComment += `-${comment.subwork.title}.${comment.lineTo}`;
@@ -399,7 +400,7 @@ const _getAnnotationURN = (comment) => {
 	const chapter = _.find(book.chapters, c => c.url === comment.bookChapterUrl);
 	const urnPrefix = 'urn:cts:CHS.Annotations';
 
-	const urnBook = `${book.author}.${book.slug}`;
+	const urnBook = `${book.authorURN}.${book.slug}`;
 	const urnComment = `${chapter.n}.${comment.paragraphN}`;
 
 	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;

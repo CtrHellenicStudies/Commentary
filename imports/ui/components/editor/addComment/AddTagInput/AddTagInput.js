@@ -109,7 +109,7 @@ class AddTagInput extends React.Component {
 											{tagsValue[i].keyword && tagsValue[i].keyword.type ? tagsValue[i].keyword.type : 'no tag selected'}
 										</FormGroup>
 										<FormGroup>
-											<ControlLabel>Is Mentioned in Lemma: </ControlLabel>
+											<ControlLabel>Is Not Mentioned in Lemma: </ControlLabel>
 											<Checkbox
 												name={`${i}_isMentionedInLemma`}
 												checked={tagsValue[i].isMentionedInLemma}

@@ -15,6 +15,10 @@ Books.schema = new SimpleSchema({
 		type: String,
 		optional: true,
 	},
+	authorURN: {
+		type: String,
+		optional: true,
+	},
 	chapters: {
 		type: [Object],
 		optional: true,

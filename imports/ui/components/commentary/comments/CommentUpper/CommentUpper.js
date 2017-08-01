@@ -3,6 +3,8 @@ import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import { Meteor } from 'meteor/meteor';
+import _ from 'lodash';
+import { sendSnack } from '/imports/ui/components/shared/SnackAttack';
 
 
 /*
@@ -25,6 +27,12 @@ CommentUpperLeft.propTypes = {
 	BEGIN CommentUpperRight
 */
 class CommentUpperRight extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.subscribe = this.subscribe.bind(this);
+	}
+
 	componentWillMount() {
 		this.setState({
 			loggedIn: Meteor.user()
@@ -47,6 +55,21 @@ class CommentUpperRight extends React.Component {
 
 	static defaultProps = {
 		userCanEditCommenters: []
+	}
+
+	subscribe() {
+		const { commenters } = this.props;
+		const commenter = commenters[0];
+
+		const subscriptions = Meteor.user().subscriptions;
+
+		if (!_.includes(subscriptions, commenter)) {
+			Meteor.users.update({_id: Meteor.userId()}, {
+				$set: {
+					'subcriptions.commenter': commenter
+				}
+			});
+		}
 	}
 
 	render() {
@@ -92,6 +115,7 @@ class CommentUpperRight extends React.Component {
 							<div>
 								<FlatButton
 									label="Subscribe"
+									onTouchTap={this.subscribe}
 								/>
 							</div>
 						:

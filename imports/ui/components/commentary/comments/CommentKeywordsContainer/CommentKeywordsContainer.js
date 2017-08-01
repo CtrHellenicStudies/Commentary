@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const getLabel = (keyword) => {
 	let label = keyword.title || keyword.wordpressId;
-	if (!keyword.isMentionedInLemma) label = `[ ${label} ]`;
+	if (keyword.isMentionedInLemma) label = `[ ${label} ]`;
 	return label;
 };
 

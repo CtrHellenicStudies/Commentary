@@ -254,9 +254,13 @@ class CommentDetail extends React.Component {
 		});
 	}
 
+	subscribe() {
+
+	}
+
 	render() {
 
-		const { comment, referenceWorks, ready, filters } = this.props;
+		const { comment, referenceWorks, ready, filters, user } = this.props;
 		const { discussionVisible, searchTerm } = this.state;
 
 		if (!ready) {
@@ -364,7 +368,10 @@ export default createContainer(({ comment }) => {
 
 	const settings = Settings.findOne({ tenantId });
 
+	const user = Meteor.user();
+
 	return {
+		user,
 		referenceWorks,
 		settings,
 		ready: handleReferenceWorks.ready() && handleSettings.ready(),

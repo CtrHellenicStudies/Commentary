@@ -12,4 +12,12 @@ class Notifications extends React.Component {
 	}
 }
 
-export default Notifications;
+const NotificationsContainer = createContainer(() => {
+	const subscriptions = Meteor.user().subscriptions;
+
+	return {
+		subscriptions
+	};
+}, Notifications);
+
+export default NotificationsContainer;

@@ -102,7 +102,7 @@ const usersUpdate = (token, _id, user) => {
 		return Meteor.users.update({
 			_id
 		}, {
-			$set: user,
+			$set: {},
 		});
 	}
 

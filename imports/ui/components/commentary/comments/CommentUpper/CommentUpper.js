@@ -6,10 +6,6 @@ import { Meteor } from 'meteor/meteor';
 import _ from 'lodash';
 import { sendSnack } from '/imports/ui/components/shared/SnackAttack';
 
-
-/*
-	BEGIN CommentUpperLeft
-*/
 const CommentUpperLeft = props => (
 	<div className="comment-upper-left">
 		<h1>{props.title}</h1>
@@ -18,29 +14,12 @@ const CommentUpperLeft = props => (
 CommentUpperLeft.propTypes = {
 	title: React.PropTypes.string.isRequired,
 };
-/*
-	END CommentUpperLeft
-*/
 
-
-/*
-	BEGIN CommentUpperRight
-*/
 class CommentUpperRight extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.subscribe = this.subscribe.bind(this);
-	}
-
-	componentWillMount() {
-		const { commenters } = this.props;
-		const subscriptions = Meteor.user().subscriptions;
-
-		this.setState({
-			loggedIn: Meteor.user(),
-			subscribed: _.includes(subscriptions, commenters[0])
-		});
 	}
 
 	static propTypes = {
@@ -61,20 +40,37 @@ class CommentUpperRight extends React.Component {
 		userCanEditCommenters: []
 	}
 
+	componentWillMount() {
+		const { commenters } = this.props;
+		const subscriptions = Meteor.user().subscriptions.commenters;
+
+		this.setState({
+			loggedIn: Meteor.user(),
+			subscribed: subscriptions.filter((sub) => sub._id === commenters[0]._id).length > 0
+		});
+	}
+
 	subscribe() {
+		const { subscribed } = this.state;
 		const { commenters } = this.props;
 		const commenter = commenters[0];
 
-		const subscriptions = Meteor.user().subscriptions;
+		const subscriptions = Meteor.user().subscriptions.commenters;
 
-		if (!_.includes(subscriptions, commenter)) {
+		if (subscriptions.filter((sub) => sub._id === commenters[0]._id).length > 0 && !subscribed) {
 			Meteor.users.update({_id: Meteor.userId()}, {
 				$push: {
 					'subscriptions.commenters': commenter
 				}
 			});
+			this.setState({
+				subscribed: !subscribed
+			});
 		} else {
 			// unsubscribe
+			this.setState({
+				subscribed: !subscribed
+			});
 		}
 	}
 
@@ -134,9 +130,6 @@ class CommentUpperRight extends React.Component {
 	}
 }
 
-/*
-	BEGIN CommentUpper
-*/
 const CommentUpper = props => (
 	<div className="comment-upper">
 		{!props.hideTitle && <CommentUpperLeft
@@ -171,9 +164,6 @@ CommentUpper.defaultProps = {
 	hideTitle: false,
 	hideCommenters: false,
 };
-/*
-	END CommentUpper
-*/
 
 export default CommentUpper;
 export { CommentUpperLeft, CommentUpperRight };

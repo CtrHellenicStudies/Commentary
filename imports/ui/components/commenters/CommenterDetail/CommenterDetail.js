@@ -52,11 +52,17 @@ class CommenterDetail extends React.Component {
 
 	componentWillMount() {
 		const { commenter } = this.props;
-		const subscriptions = Meteor.user().subscriptions.commenters;
+		const subscriptions = Meteor.user().subscriptions;
 
-		this.setState({
-			subscribed: subscriptions.filter((sub) => sub._id === commenter._id).length > 0
-		});
+		if (subscriptions) {
+			this.setState({
+				subscribed: subscriptions.commenters.filter((sub) => sub._id === commenter._id).length > 0
+			});
+		} else {
+			this.setState({
+				subscribed: false
+			});
+		}
 	}
 
 	toggleReadMoreBio() {
@@ -71,12 +77,21 @@ class CommenterDetail extends React.Component {
 		const { subscribed } = this.state;
 		const { commenter } = this.props;
 
-		const subscriptions = Meteor.user().subscriptions.commenters;
+		const commenterObj = {
+			_id: commenter._id,
+			name: commenter.name,
+			bio: commenter.bio,
+			tagline: commenter.tagline,
+			updated: commenter.updated,
+			slug: commenter.slug,
+			avatar: {src: commenter.avatar.src},
+			subscribedOn: new Date()
+		};
 
 		if (!subscribed) {
 			Meteor.users.update({_id: Meteor.userId()}, {
 				$push: {
-					'subscriptions.commenters': commenter
+					'subscriptions.commenters': commenterObj
 				}
 			});
 			this.setState({
@@ -85,7 +100,7 @@ class CommenterDetail extends React.Component {
 		} else {
 			Meteor.users.update({_id: Meteor.userId()}, {
 				$pull: {
-					'subscriptions.commenters': commenter
+					'subscriptions.commenters': {_id: commenterObj._id}
 				}
 			});
 			this.setState({

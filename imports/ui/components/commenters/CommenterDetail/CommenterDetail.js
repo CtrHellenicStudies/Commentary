@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import FlatButton from 'material-ui/FlatButton';
 
 // api
 import Commenters from '/imports/api/collections/commenters';
@@ -41,10 +42,21 @@ class CommenterDetail extends React.Component {
 
 		this.state = {
 			readMoreBio: false,
+			loggedIn: Meteor.user(),
 		};
 
 		// methods:
 		this.toggleReadMoreBio = this.toggleReadMoreBio.bind(this);
+		this.subscribe = this.subscribe.bind(this);
+	}
+
+	componentWillMount() {
+		const { commenter } = this.props;
+		const subscriptions = Meteor.user().subscriptions.commenters;
+
+		this.setState({
+			subscribed: subscriptions.filter((sub) => sub._id === commenter._id).length > 0
+		});
 	}
 
 	toggleReadMoreBio() {
@@ -55,9 +67,36 @@ class CommenterDetail extends React.Component {
 		});
 	}
 
+	subscribe() {
+		const { subscribed } = this.state;
+		const { commenter } = this.props;
+
+		const subscriptions = Meteor.user().subscriptions.commenters;
+
+		if (!subscribed) {
+			Meteor.users.update({_id: Meteor.userId()}, {
+				$push: {
+					'subscriptions.commenters': commenter
+				}
+			});
+			this.setState({
+				subscribed: !subscribed
+			});
+		} else {
+			Meteor.users.update({_id: Meteor.userId()}, {
+				$pull: {
+					'subscriptions.commenters': commenter
+				}
+			});
+			this.setState({
+				subscribed: !subscribed
+			});
+		}
+	}
+
 	render() {
 		const { commenter, settings, avatarUrl, isTest } = this.props;
-		const { readMoreBio } = this.state;
+		const { readMoreBio, subscribed, loggedIn } = this.state;
 
 		if (commenter) {
 			Utils.setTitle(`${commenter.name} | ${settings.title}`);
@@ -126,6 +165,17 @@ class CommenterDetail extends React.Component {
 									null
 								}
 							</div>
+
+							{loggedIn ?
+								<div>
+									<FlatButton
+										label={subscribed ? `Unsubscribe from ${commenter.name}` : `Subscribe to ${commenter.name}`}
+										onTouchTap={this.subscribe}
+									/>
+								</div>
+						:
+							''
+						}
 
 							<CommenterVisualizations
 								commenter={commenter}

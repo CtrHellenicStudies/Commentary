@@ -57,7 +57,7 @@ class CommentUpperRight extends React.Component {
 
 		const subscriptions = Meteor.user().subscriptions.commenters;
 
-		if (subscriptions.filter((sub) => sub._id === commenters[0]._id).length > 0 && !subscribed) {
+		if (!subscribed) {
 			Meteor.users.update({_id: Meteor.userId()}, {
 				$push: {
 					'subscriptions.commenters': commenter
@@ -67,7 +67,11 @@ class CommentUpperRight extends React.Component {
 				subscribed: !subscribed
 			});
 		} else {
-			// unsubscribe
+			Meteor.users.update({_id: Meteor.userId()}, {
+				$pull: {
+					'subscriptions.commenters': commenter
+				}
+			});
 			this.setState({
 				subscribed: !subscribed
 			});

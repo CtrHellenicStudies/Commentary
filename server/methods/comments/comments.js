@@ -53,6 +53,8 @@ const commentsUpdate = (token, commentId, update) => {
 		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
 	});
 
+	console.log(user)
+
 	if (!user) {
 		throw new Meteor.Error('comment-update', 'not-authorized');
 	}

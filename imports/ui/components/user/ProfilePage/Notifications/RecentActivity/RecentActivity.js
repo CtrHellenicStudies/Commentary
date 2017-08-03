@@ -15,7 +15,7 @@ class RecentActivity extends React.Component {
 	}
 
 	render() {
-		const {subscriptions} = this.props;
+		const { subscriptions } = this.props;
 		return (
 			<div>
 				<h2>Recent Activity</h2>

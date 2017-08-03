@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import SubcriptionsFeed from '/imports/ui/components/user/ProfilePage/Notifications/SubscriptionsFeed';
+import RecentActivity from '/imports/ui/components/user/ProfilePage/Notifications/RecentActivity';
 
 class Notifications extends React.Component {
 	static propTypes = {
@@ -14,13 +15,13 @@ class Notifications extends React.Component {
 		
 		return (
 			<div>
-				<h2>Recent Activity</h2>
-				<hr className="user-divider" />
-				<h2>Subscriptions</h2>
 				{subscriptions ?
-					<SubcriptionsFeed subscriptions={subscriptions} />
+					<div>
+						<RecentActivity />
+						<SubcriptionsFeed subscriptions={subscriptions} />
+					</div>
 					:
-					<h3>You have no subscriptions</h3>
+					<h3>You have no subscriptions. Subscribe to commenters, users, and texts to recieve notifications.</h3>
 				}
 			</div>
 		);

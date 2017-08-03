@@ -3,6 +3,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 
 const SubscriptionsFeed = props => (
 	<div>
+		<h2>Subscriptions</h2>
 		{props.subscriptions.commenters.map(commenter => (
 			<Card key={commenter._id}>
 				<a href={`/commenters/${commenter.slug}`}>

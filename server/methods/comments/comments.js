@@ -12,6 +12,8 @@ const commentsInsert = (token, comment) => {
 	check(token, String);
 	check(comment, Object);
 
+
+	// check roles
 	const roles = ['editor', 'admin', 'commenter'];
 	if (!Meteor.users.findOne({
 		roles: { $elemMatch: { $in: roles } },
@@ -21,12 +23,20 @@ const commentsInsert = (token, comment) => {
 		throw new Meteor.Error('comment-insert', 'not-authorized');
 	}
 
+	// add comment to db
 	let commentId;
 	try {
 		commentId = Comments.insert(comment);
 	} catch (err) {
 		throw new Meteor.Error('comment-insert', err);
 	}
+
+	// update subscribed users
+	const commenterId = comment.commenters[0]._id;
+	const subscribedUsers = Meteor.users.findAll({
+		'subscriptions.commenters': {_id: commenterId}
+	});
+	console.log(subscribedUsers);
 
 	return commentId;
 };

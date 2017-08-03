@@ -250,6 +250,9 @@ class AddCommentLayout extends React.Component {
 		};
 
 		Meteor.call('comments.insert', token, comment, (error, commentId) => {
+			if (error) {
+				console.log(error);
+			}
 			FlowRouter.go('/commentary', {}, {_id: commentId});
 		});
 	}

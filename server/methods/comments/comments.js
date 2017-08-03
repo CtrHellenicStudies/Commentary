@@ -17,7 +17,7 @@ const commentsInsert = (token, comment) => {
 	const roles = ['editor', 'admin', 'commenter'];
 	if (!Meteor.users.findOne({
 		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+		// 'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 	})
 	) {
 		throw new Meteor.Error('comment-insert', 'not-authorized');
@@ -31,12 +31,14 @@ const commentsInsert = (token, comment) => {
 		throw new Meteor.Error('comment-insert', err);
 	}
 
-	// update subscribed users
+	// // update subscribed users
 	const commenterId = comment.commenters[0]._id;
-	const subscribedUsers = Meteor.users.findAll({
+	console.log(commenterId);
+	console.log(commenters);
+	const subscribedUsers = Meteor.users.findOne({
 		'subscriptions.commenters': {_id: commenterId}
 	});
-	console.log(subscribedUsers);
+	if (subscribedUsers) { console.log(subscribedUsers[0]); }
 
 	return commentId;
 };
@@ -53,7 +55,7 @@ const commentsUpdate = (token, commentId, update) => {
 		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
 	});
 
-	console.log(user)
+	console.log(user);
 
 	if (!user) {
 		throw new Meteor.Error('comment-update', 'not-authorized');

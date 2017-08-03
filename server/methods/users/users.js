@@ -21,11 +21,6 @@ const usersInsert = (token, user) => {
 			country: Match.Maybe(String),
 		},
 		services: Match.Maybe(Object),
-		subscriptions: {
-			commenters: Match.Maybe(Array),
-			users: Match.Maybe(Array),
-			texts: Match.Maybe(Array)
-		},
 		roles: Match.Maybe(Array),
 		canEditCommenters: Match.Maybe(Array),
 		canAnnotateBooks: Match.Maybe(Array),
@@ -81,11 +76,6 @@ const usersUpdate = (token, _id, user) => {
 			avatarUrl: Match.Maybe(String),
 			location: Match.Maybe(String),
 			country: Match.Maybe(String),
-		},
-		subscriptions: {
-			commenters: Match.Maybe(Array),
-			users: Match.Maybe(Array),
-			texts: Match.Maybe(Array)
 		},
 		services: Match.Maybe(Object),
 		roles: Match.Maybe(Array),

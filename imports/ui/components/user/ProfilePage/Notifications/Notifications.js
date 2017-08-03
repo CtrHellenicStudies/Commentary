@@ -17,7 +17,7 @@ class Notifications extends React.Component {
 			<div>
 				{subscriptions ?
 					<div>
-						<RecentActivity />
+						<RecentActivity subscriptions={subscriptions} />
 						<SubcriptionsFeed subscriptions={subscriptions} />
 					</div>
 					:

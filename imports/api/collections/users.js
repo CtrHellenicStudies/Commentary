@@ -63,6 +63,10 @@ const UserSubscriptions = new SimpleSchema({
 	texts: {
 		type: Array,
 		optional: true
+	},
+	notifications: {
+		type: Array,
+		optional: true
 	}
 });
 

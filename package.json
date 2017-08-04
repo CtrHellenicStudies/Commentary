@@ -24,6 +24,7 @@
     "draft-js-side-toolbar-plugin": "^2.0.0-beta9",
     "draft-js-single-line-plugin": "0.0.1",
     "express": "^4.14.1",
+    "form-data-to-object": "^0.2.0",
     "formsy-material-ui": "^0.6.0",
     "formsy-react": "^0.19.2",
     "gm": "^1.23.0",
@@ -63,6 +64,7 @@
     "react-dom": "^15.4.0",
     "react-draggable": "^2.2.6",
     "react-dropzone": "^3.10.0",
+    "react-input-autosize": "^1.1.4",
     "react-list": "^0.7.18",
     "react-masonry-component": "^4.2.2",
     "react-mounter": "^1.2.0",
@@ -129,7 +131,7 @@
     "pretest": "npm run lint",
     "test": "jest",
     "test:watch": "npm run test -- --reporter min --watch",
-    "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings ./private/settings/production.json"
+    "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings ./private/settings/production.json --port=5000"
   },
   "repository": {
     "type": "git",

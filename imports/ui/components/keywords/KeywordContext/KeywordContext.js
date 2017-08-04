@@ -99,11 +99,11 @@ const KeywordContext = React.createClass({
 						{keyword.work.title} {keyword.subwork.n}.{keyword.lineFrom}{(keyword.lineTo && keyword.lineFrom !== keyword.lineTo) ? `-${keyword.lineTo}` : ''}
 					</span>
 					{lemmaText[this.state.selectedLemma].lines.map((line, i) =>
-						<p
+						(<p
 							key={i}
 							className="lemma-text"
 							dangerouslySetInnerHTML={{ __html: line.html }}
-						/>
+						/>)
 					)}
 				</div>
 				<div className="edition-tabs tabs">

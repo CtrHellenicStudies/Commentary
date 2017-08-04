@@ -12,21 +12,45 @@ const commentsInsert = (token, comment) => {
 	check(token, String);
 	check(comment, Object);
 
+
+	// check roles
 	const roles = ['editor', 'admin', 'commenter'];
 	if (!Meteor.users.findOne({
 		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+		// 'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 	})
 	) {
 		throw new Meteor.Error('comment-insert', 'not-authorized');
 	}
 
+	// add comment to db
 	let commentId;
 	try {
 		commentId = Comments.insert(comment);
 	} catch (err) {
 		throw new Meteor.Error('comment-insert', err);
 	}
+
+	// // update subscribed users
+	const commenterId = comment.commenters[0]._id;
+
+	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
+
+	const options = { multi: true };
+
+	const avatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
+
+	const notification = {
+		message: `New comment by ${comment.commenters[0].name}`,
+		avatar: {src: avatar.avatar.src},
+		seen: false,
+		created: new Date(),
+		id: commentId
+	};
+
+	const update = { $push: { 'subscriptions.notifications': notification } };
+
+	const subscribedUsers = Meteor.users.update(query, update, notification);
 
 	return commentId;
 };
@@ -42,6 +66,8 @@ const commentsUpdate = (token, commentId, update) => {
 		roles: { $elemMatch: { $in: roles } },
 		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
 	});
+
+	console.log(user);
 
 	if (!user) {
 		throw new Meteor.Error('comment-update', 'not-authorized');
@@ -73,6 +99,13 @@ const commentsUpdate = (token, commentId, update) => {
 	} catch (err) {
 		throw new Meteor.Error('comment-update', err);
 	}
+
+	// update subscribed users
+	const commenterId = comment.commenters[0]._id;
+	const subscribedUsers = Meteor.users.findAll({
+		'subscriptions.commenters': {_id: commenterId}
+	});
+	console.log(subscribedUsers);
 
 	return commentId;
 };

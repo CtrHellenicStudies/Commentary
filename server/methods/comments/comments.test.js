@@ -73,6 +73,11 @@ describe('Comments methods API', () => {
 
 					expect(commentMethods.commentsInsert(token, comment)).toBe(commentId);
 				});
+
+				test('update subscibed users with new notification', () => {
+					
+				});
+
 			});
 		});
 	});

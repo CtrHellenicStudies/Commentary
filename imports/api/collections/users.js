@@ -51,6 +51,25 @@ const UserProfile = new SimpleSchema({
 	},
 });
 
+const UserSubscriptions = new SimpleSchema({
+	commenters: {
+		type: Array,
+		optional: true
+	},
+	users: {
+		type: Array,
+		optional: true
+	},
+	texts: {
+		type: Array,
+		optional: true
+	},
+	notifications: {
+		type: Array,
+		optional: true
+	}
+});
+
 const User = new SimpleSchema({
 	_id: {
 		type: String,
@@ -93,6 +112,10 @@ const User = new SimpleSchema({
 	'services.email.verificationTokens': {
 		type: [Object],
 		optional: true,
+	},
+	subscriptions: {
+		type: UserSubscriptions,
+		optional: true
 	},
 	roles: {
 		type: [String],

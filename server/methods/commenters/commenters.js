@@ -26,7 +26,7 @@ const commentersInsert = (token, commenter) => {
 	}
 
 	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-}
+};
 
 const commentersUpdate = (token, _id, commenter) => {
 	check(token, String);
@@ -55,7 +55,7 @@ const commentersUpdate = (token, _id, commenter) => {
 	}
 
 	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-}
+};
 
 const commentersRemove = (token, commenterId) => {
 	check(token, String);
@@ -70,7 +70,7 @@ const commentersRemove = (token, commenterId) => {
 	}
 
 	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
-}
+};
 
 
 Meteor.methods({

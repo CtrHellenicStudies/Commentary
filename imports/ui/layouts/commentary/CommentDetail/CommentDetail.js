@@ -139,8 +139,8 @@ class CommentDetail extends React.Component {
 		const { filters } = this.props;
 		const { searchTerm } = this.state;
 
-		if (filters.find((filter) => filter.key === 'textsearch') !== searchTerm && filters && filters.find((filter) => filter.key === 'textsearch')) {
-			const searchTermsObject = filters.find((filter) => filter.key === 'textsearch');
+		if (filters.find(filter => filter.key === 'textsearch') !== searchTerm && filters && filters.find(filter => filter.key === 'textsearch')) {
+			const searchTermsObject = filters.find(filter => filter.key === 'textsearch');
 			this.setState({
 				searchTerm: searchTermsObject.values[0]
 			});
@@ -254,9 +254,13 @@ class CommentDetail extends React.Component {
 		});
 	}
 
+	subscribe() {
+
+	}
+
 	render() {
 
-		const { comment, referenceWorks, ready, filters } = this.props;
+		const { comment, referenceWorks, ready, filters, user } = this.props;
 		const { discussionVisible, searchTerm } = this.state;
 
 		if (!ready) {
@@ -364,7 +368,10 @@ export default createContainer(({ comment }) => {
 
 	const settings = Settings.findOne({ tenantId });
 
+	const user = Meteor.user();
+
 	return {
+		user,
 		referenceWorks,
 		settings,
 		ready: handleReferenceWorks.ready() && handleSettings.ready(),

@@ -57,7 +57,7 @@ describe('Commenters methods API', () => {
 					Accounts._hashLoginToken.restore();
 				});
 
-				test(`user with correct privileges not found, should return error`, () => {
+				test('user with correct privileges not found, should return error', () => {
 
 					Accounts._hashLoginToken.restore();
 					stub(Accounts, '_hashLoginToken').callsFake(() => null);
@@ -65,7 +65,7 @@ describe('Commenters methods API', () => {
 					expect(commentersInsert.bind(null, token, commenter)).toThrow();
 				});
 
-				test(`successful commenter insert`, () => {
+				test('successful commenter insert', () => {
 
 					expect(commentersInsert(token, commenter)).toBe(commenterkId);
 				});
@@ -115,7 +115,7 @@ describe('Commenters methods API', () => {
 					Accounts._hashLoginToken.restore();
 				});
 
-				test(`user with correct privileges not found, should return error`, () => {
+				test('user with correct privileges not found, should return error', () => {
 
 					Accounts._hashLoginToken.restore();
 					stub(Accounts, '_hashLoginToken').callsFake(() => null);
@@ -123,7 +123,7 @@ describe('Commenters methods API', () => {
 					expect(commentersUpdate.bind(null, token, _id, commenter)).toThrow();
 				});
 
-				test(`successful commenter update`, () => {
+				test('successful commenter update', () => {
 
 					expect(commentersUpdate(token, _id, commenter)).toBe(1);
 				});
@@ -168,7 +168,7 @@ describe('Commenters methods API', () => {
 					Accounts._hashLoginToken.restore();
 				});
 
-				test(`user with correct privileges not found, should return error`, () => {
+				test('user with correct privileges not found, should return error', () => {
 
 					Accounts._hashLoginToken.restore();
 					stub(Accounts, '_hashLoginToken').callsFake(() => null);
@@ -176,7 +176,7 @@ describe('Commenters methods API', () => {
 					expect(commentersRemove.bind(null, token, commenterId)).toThrow();
 				});
 
-				test(`successful commenter remove`, () => {
+				test('successful commenter remove', () => {
 
 					expect(commentersRemove(token, commenterId)).toBe(1);
 				});

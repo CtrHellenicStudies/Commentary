@@ -397,7 +397,7 @@ const _getCommentURN = (comment) => {
 
 const _getAnnotationURN = (comment) => {
 	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
-	const chapter = _.find(book.chapters, (c) => c.url === comment.bookChapterUrl);
+	const chapter = _.find(book.chapters, c => c.url === comment.bookChapterUrl);
 	const urnPrefix = 'urn:cts:CHS.Annotations';
 
 	const urnBook = `${book.authorURN}.${book.slug}`;

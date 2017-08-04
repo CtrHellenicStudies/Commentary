@@ -15,7 +15,7 @@ const getDateRevision = (revision) => {
 	return revision.created;
 };
 
-const sortRevisions = (revisions) => (_.sortBy(revisions, 'created'));
+const sortRevisions = revisions => (_.sortBy(revisions, 'created'));
 
 class CommentCitation extends React.Component {
 

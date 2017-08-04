@@ -53,7 +53,7 @@ const annotationsInsert = (token, comment) => {
 	}
 
 	return commentId;
-}
+};
 
 const annotationsAddRevision = (token, commentId, revision) => {
 	check(token, Match.Maybe(String));
@@ -92,7 +92,7 @@ const annotationsAddRevision = (token, commentId, revision) => {
 	}
 
 	return commentId;
-}
+};
 
 const annotationsDelete = (token, commentId) => {
 	check(token, String);
@@ -115,7 +115,7 @@ const annotationsDelete = (token, commentId) => {
 	}
 
 	return commentId;
-}
+};
 
 
 Meteor.methods({

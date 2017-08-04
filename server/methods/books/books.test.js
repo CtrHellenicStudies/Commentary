@@ -63,7 +63,7 @@ describe('Books methods API', () => {
 					Accounts._hashLoginToken.restore();
 				});
 
-				test(`user with correct privileges not found, should return error`, () => {
+				test('user with correct privileges not found, should return error', () => {
 
 					Accounts._hashLoginToken.restore();
 					stub(Accounts, '_hashLoginToken').callsFake(() => null);
@@ -71,7 +71,7 @@ describe('Books methods API', () => {
 					expect(bookInsert.bind(null, token, book)).toThrow();
 				});
 
-				test(`successful book insert`, () => {
+				test('successful book insert', () => {
 
 					expect(bookInsert(token, book)).toBe(bookId);
 				});
@@ -127,7 +127,7 @@ describe('Books methods API', () => {
 					Accounts._hashLoginToken.restore();
 				});
 
-				test(`user with correct privileges not found, should return error`, () => {
+				test('user with correct privileges not found, should return error', () => {
 
 					Accounts._hashLoginToken.restore();
 					stub(Accounts, '_hashLoginToken').callsFake(() => null);
@@ -135,7 +135,7 @@ describe('Books methods API', () => {
 					expect(bookUpdate.bind(null, token, _id, book)).toThrow();
 				});
 
-				test(`successful book update`, () => {
+				test('successful book update', () => {
 
 					expect(bookUpdate(token, _id, book)).toBe(1);
 				});
@@ -180,7 +180,7 @@ describe('Books methods API', () => {
 					Accounts._hashLoginToken.restore();
 				});
 
-				test(`user with correct privileges not found, should return error`, () => {
+				test('user with correct privileges not found, should return error', () => {
 
 					Accounts._hashLoginToken.restore();
 					stub(Accounts, '_hashLoginToken').callsFake(() => null);
@@ -188,7 +188,7 @@ describe('Books methods API', () => {
 					expect(bookRemove.bind(null, token, bookId)).toThrow();
 				});
 
-				test(`successful book remove`, () => {
+				test('successful book remove', () => {
 
 					expect(bookRemove(token, bookId)).toBe(1);
 				});

@@ -25,9 +25,9 @@ describe('Accounts methods API', () => {
 
 			describe(`Test Case ${index}`, () => {
 
-				test(`create user, generate stampedToken and return { userId, stampedToken }`, () => {
+				test('create user, generate stampedToken and return { userId, stampedToken }', () => {
 
-					expect(accountsMethods.createAccount(user)).toMatchObject( { userId: 'userId', stampedToken: 'stampedToken' } );
+					expect(accountsMethods.createAccount(user)).toMatchObject({ userId: 'userId', stampedToken: 'stampedToken' });
 				});
 			});
 		});
@@ -58,7 +58,7 @@ describe('Accounts methods API', () => {
 					Meteor.users.update.restore();
 				});
 
-				test(`user is not logged in, should return error`, () => {
+				test('user is not logged in, should return error', () => {
 
 					Meteor.userId.restore();
 					stub(Meteor, 'userId').callsFake(() => null);
@@ -66,15 +66,15 @@ describe('Accounts methods API', () => {
 					expect(accountsMethods.updateAccount.bind(null, field, value)).toThrow();
 				});
 
-				test(`user update fail, should return error`, () => {
+				test('user update fail, should return error', () => {
 
 					Meteor.users.update.restore();
-					stub(Meteor.users, 'update').callsFake(() => {throw new Error()});
+					stub(Meteor.users, 'update').callsFake(() => { throw new Error(); });
 
 					expect(accountsMethods.updateAccount.bind(this, field, value)).toThrow();
 				});
 
-				test(`create user, generate stampedToken and return { userId, stampedToken }`, () => {
+				test('create user, generate stampedToken and return { userId, stampedToken }', () => {
 
 					expect(accountsMethods.updateAccount(field, value)).toBeTruthy();
 				});
@@ -103,7 +103,7 @@ describe('Accounts methods API', () => {
 					Meteor.users.remove.restore();
 				});
 
-				test(`privided userId is different than logged in userId, should return error`, () => {
+				test('privided userId is different than logged in userId, should return error', () => {
 
 					Meteor.userId.restore();
 					stub(Meteor, 'userId').callsFake(() => null);
@@ -111,7 +111,7 @@ describe('Accounts methods API', () => {
 					expect(accountsMethods.deleteAccount.bind(null, userId)).toThrow();
 				});
 
-				test(`successful user delete`, () => {
+				test('successful user delete', () => {
 
 					expect(accountsMethods.deleteAccount(userId)).toBeTruthy();
 				});
@@ -131,7 +131,7 @@ describe('Accounts methods API', () => {
 	describe('getNewStampedToken', () => {
 		[{}].forEach((testCase, index) => {
 
-			const {  } = testCase;
+			const { } = testCase;
 
 			describe(`Test Case ${index}`, () => {
 
@@ -143,7 +143,7 @@ describe('Accounts methods API', () => {
 					Meteor.userId.restore();
 				});
 
-				test(`user is not logged in, should return error`, () => {
+				test('user is not logged in, should return error', () => {
 
 					Meteor.userId.restore();
 					stub(Meteor, 'userId').callsFake(() => null);

@@ -57,6 +57,7 @@
     "react-autobind": "^1.0.6",
     "react-bootstrap": "^0.30.8",
     "react-cookie": "^2.0.8",
+    "react-copy-to-clipboard": "^5.0.0",
     "react-dnd": "^2.3.0",
     "react-dnd-html5-backend": "^2.3.0",
     "react-dom": "^15.4.0",
@@ -157,7 +158,6 @@
       "^meteor/momentjs:moment": "<rootDir>/imports/mocks/moment.js",
       "^meteor/edgee:slingshot": "<rootDir>/imports/mocks/slingshot.js",
       "^meteor/random": "<rootDir>/imports/mocks/random.js",
-      "^meteor/check": "<rootDir>/imports/mocks/check.js",
       "^meteor/email": "<rootDir>/imports/mocks/email.js"
     },
     "setupFiles": [

@@ -3,6 +3,7 @@ import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
+import { ObjectID } from 'bson';
 
 import Comments from '/imports/api/collections/comments';
 import Commenters from '/imports/api/collections/commenters';
@@ -45,7 +46,8 @@ const commentsInsert = (token, comment) => {
 		avatar: {src: avatar.avatar.src},
 		seen: false,
 		created: new Date(),
-		id: commentId
+		_id: new ObjectId(),
+		slugId: commenterId
 	};
 
 	const update = { $push: { 'subscriptions.notifications': notification } };

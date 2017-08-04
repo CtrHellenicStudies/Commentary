@@ -6,6 +6,22 @@ const DiscussionCommentsList = React.createClass({
 
 	propTypes: {
 		discussionComments: React.PropTypes.array,
+		isForLoggedInUser: React.PropTypes.bool,
+	},
+
+	renderNoCommentsMessage() {
+		const { isForLoggedInUser } = this.props;
+		let message = 'This user has not published any public comments.';
+
+		if (isForLoggedInUser) {
+			message = 'You have not created any discussion comments.';
+		}
+
+		return (
+			<p className="no-results">
+				{message}
+			</p>
+		);
 	},
 
 	render() {
@@ -20,10 +36,9 @@ const DiscussionCommentsList = React.createClass({
 					/>
 				))}
 				{!discussionComments.length ?
-					<p className="no-results">This user has not published any public comments.</p>
+					this.renderNoCommentsMessage()
 					: ''
 				}
-
 			</div>
 		);
 	},

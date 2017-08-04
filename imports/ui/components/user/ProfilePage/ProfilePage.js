@@ -15,10 +15,11 @@ import Bookmarks from '/imports/ui/components/user/ProfilePage/Bookmarks';
 import Account from '/imports/ui/components/user/ProfilePage/Account';
 
 // lib
+import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
 // Mui theme for tabs
-const muiTheme = {
+const tabMuiTheme = {
 	palette: {
 		primary1Color: 'transparent',
 		accent1Color: '#795548',
@@ -102,6 +103,13 @@ class ProfilePage extends React.Component {
 			return <LoadingPage />;
 		}
 
+
+		let showTabs = false;
+		if (window.innerWidth > 800) {
+			showTabs = true;
+		}
+
+
 		return (
 			<div className="page page-user-profile">
 				<div className="content primary">
@@ -131,9 +139,9 @@ class ProfilePage extends React.Component {
 							</div>
 							<br />
 							<div className="user-profile-tabs">
-								<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+								<MuiThemeProvider muiTheme={getMuiTheme(tabMuiTheme)}>
 									<Tabs>
-										<Tab label="Notifications (2)">
+										<Tab label="Notifications">
 											<Notifications />
 										</Tab>
 										<Tab label="Discussions">
@@ -146,7 +154,9 @@ class ProfilePage extends React.Component {
 											<Bookmarks />
 										</Tab>
 										<Tab label="Account">
-											<Account user={user} />
+											<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+												<Account user={user} />
+											</MuiThemeProvider>
 										</Tab>
 									</Tabs>
 								</MuiThemeProvider>

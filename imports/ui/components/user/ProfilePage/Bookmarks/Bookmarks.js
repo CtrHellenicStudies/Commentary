@@ -7,6 +7,9 @@ class Bookmarks extends React.Component {
 				<h2>Your Bookmarks</h2>
 				<hr className="user-divider" />
 				<div className="user-discussion-comments" />
+				<p className="no-results">
+					You have not created any bookmarks.
+				</p>
 			</div>
 		);
 	}

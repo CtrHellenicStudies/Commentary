@@ -22,11 +22,12 @@ class Discussions extends React.Component {
 
 		return (
 			<div>
-				<h2>Your Comments</h2>
+				<h2>Your Discussion Comments</h2>
 				<hr className="user-divider" />
 				<div className="user-discussion-comments">
 					<DiscussionCommentsList
 						discussionComments={discussionComments}
+						isForLoggedInUser
 					/>
 				</div>
 			</div>
@@ -75,7 +76,7 @@ const DiscussionsContainer = createContainer(() => {
 	});
 
 	return {
-		discussionComments,
+		discussionComments: [],
 		settings: Settings.findOne(),
 	};
 }, Discussions);

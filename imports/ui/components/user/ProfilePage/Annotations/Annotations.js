@@ -7,6 +7,9 @@ class Annotations extends React.Component {
 				<h2>Your Annotations</h2>
 				<hr className="user-divider" />
 				<div className="user-discussion-comments" />
+				<p className="no-results">
+					You have not created any annotations.
+				</p>
 			</div>
 		);
 	}

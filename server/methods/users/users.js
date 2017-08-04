@@ -24,6 +24,7 @@ const usersInsert = (token, user) => {
 		roles: Match.Maybe(Array),
 		canEditCommenters: Match.Maybe(Array),
 		canAnnotateBooks: Match.Maybe(Array),
+		authorOfBooks: Match.Maybe(Array),
 		highlightingPreference: Match.Maybe(Boolean),
 	});
 
@@ -81,6 +82,7 @@ const usersUpdate = (token, _id, user) => {
 		roles: Match.Maybe(Array),
 		canEditCommenters: Match.Maybe(Array),
 		canAnnotateBooks: Match.Maybe(Array),
+		authorOfBooks: Match.Maybe(Array),
 		highlightingPreference: Match.Maybe(Boolean),
 	});
 

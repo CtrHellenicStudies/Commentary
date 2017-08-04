@@ -247,12 +247,20 @@ class AddCommentLayout extends React.Component {
 			referenceWorks: referenceWorks,
 			tenantId: Session.get('tenantId'),
 			created: new Date(),
+			status: 'publish',
 		};
 
 		Meteor.call('comments.insert', token, comment, (error, commentId) => {
 			if (error) {
+<<<<<<< HEAD
 				console.log(error);
 			}
+=======
+				console.error(error);
+				return null;
+			}
+
+>>>>>>> ee1d5a93bdbacd1199705d979fae22c03b9b7fe0
 			FlowRouter.go('/commentary', {}, {_id: commentId});
 		});
 	}

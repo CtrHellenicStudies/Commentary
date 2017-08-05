@@ -46,7 +46,7 @@ const commentsInsert = (token, comment) => {
 		avatar: {src: avatar.avatar.src},
 		seen: false,
 		created: new Date(),
-		_id: new ObjectId(),
+		_id: new ObjectID().toString(),
 		slugId: commenterId
 	};
 

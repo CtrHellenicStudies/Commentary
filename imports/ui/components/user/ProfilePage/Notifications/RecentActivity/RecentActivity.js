@@ -6,11 +6,15 @@ class RecentActivity extends React.Component {
 	constructor(props) {
 		super(props);
 
+		
+
+		this.removeNotification = this.removeNotification.bind(this);
+	}
+
+	componentWillMount() {
 		this.state = {
 			notifications: this.props.subscriptions.notifications
 		};
-
-		this.removeNotification = this.removeNotification.bind(this);
 	}
 
 	static propTypes = {
@@ -19,7 +23,20 @@ class RecentActivity extends React.Component {
 
 	removeNotification(notification) {
 		const { notifications } = this.state;
-		console.log(notifications);
+
+		const notificationID = notification._id;
+
+		Meteor.users.update({_id: Meteor.userId()}, {
+			$pull: {
+				'subscriptions.notifications': {_id: notificationID}
+			}
+		});
+
+		const notificationIndex = notifications.indexOf(notification);
+
+		this.setState({
+			notifications: notifications.splice(notificationIndex, 1)
+		});
 	}
 
 	render() {
@@ -39,7 +56,7 @@ class RecentActivity extends React.Component {
 								</a>
 								<FlatButton
 									label="Remove Notification"
-									onTouchTap={this.removeNotification(notification)}
+									onClick={this.removeNotification(notification)}
 								/>
 							</Card>
 						))}

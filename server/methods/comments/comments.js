@@ -44,7 +44,6 @@ const commentsInsert = (token, comment) => {
 	const notification = {
 		message: `New comment by ${comment.commenters[0].name}`,
 		avatar: {src: avatar.avatar.src},
-		seen: false,
 		created: new Date(),
 		_id: new ObjectID().toString(),
 		slugId: commenterId
@@ -66,10 +65,9 @@ const commentsUpdate = (token, commentId, update) => {
 
 	const user = Meteor.users.findOne({
 		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
+		// 'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
 	});
 
-	console.log(user);
 
 	if (!user) {
 		throw new Meteor.Error('comment-update', 'not-authorized');
@@ -112,9 +110,8 @@ const commentsUpdate = (token, commentId, update) => {
 	const avatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
 
 	const notification = {
-		message: `New comment by ${comment.commenters[0].name}`,
+		message: `Comment updated by ${comment.commenters[0].name}`,
 		avatar: {src: avatar.avatar.src},
-		seen: false,
 		created: new Date(),
 		_id: new ObjectID().toString(),
 		slugId: commenterId

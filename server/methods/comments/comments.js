@@ -32,7 +32,7 @@ const commentsInsert = (token, comment) => {
 		throw new Meteor.Error('comment-insert', err);
 	}
 
-	// // update subscribed users
+	// update subscribed users
 	const commenterId = comment.commenters[0]._id;
 
 	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
@@ -104,10 +104,25 @@ const commentsUpdate = (token, commentId, update) => {
 
 	// update subscribed users
 	const commenterId = comment.commenters[0]._id;
-	const subscribedUsers = Meteor.users.findAll({
-		'subscriptions.commenters': {_id: commenterId}
-	});
-	console.log(subscribedUsers);
+
+	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
+
+	const options = { multi: true };
+
+	const avatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
+
+	const notification = {
+		message: `New comment by ${comment.commenters[0].name}`,
+		avatar: {src: avatar.avatar.src},
+		seen: false,
+		created: new Date(),
+		_id: new ObjectID().toString(),
+		slugId: commenterId
+	};
+
+	const updateSubscribers = { $push: { 'subscriptions.notifications': notification } };
+
+	const subscribedUsers = Meteor.users.update(query, updateSubscribers, notification);
 
 	return commentId;
 };

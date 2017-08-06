@@ -6,15 +6,11 @@ class RecentActivity extends React.Component {
 	constructor(props) {
 		super(props);
 
-		
-
-		this.removeNotification = this.removeNotification.bind(this);
-	}
-
-	componentWillMount() {
 		this.state = {
 			notifications: this.props.subscriptions.notifications
 		};
+
+		this.removeNotification = this.removeNotification.bind(this);
 	}
 
 	static propTypes = {
@@ -44,7 +40,7 @@ class RecentActivity extends React.Component {
 		return (
 			<div>
 				<h2>Recent Activity</h2>
-				{notifications && notifications.length > 0 ?
+				{notifications.length > 0 ?
 					<div>
 						{notifications.map((notification) => (
 							<Card key={notification._id}>
@@ -56,7 +52,7 @@ class RecentActivity extends React.Component {
 								</a>
 								<FlatButton
 									label="Remove Notification"
-									onClick={this.removeNotification(notification)}
+									onClick={() => this.removeNotification(notification)}
 								/>
 							</Card>
 						))}

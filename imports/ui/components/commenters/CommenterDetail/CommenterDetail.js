@@ -19,6 +19,19 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 import Utils from '/imports/lib/utils';
 
 class CommenterDetail extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			readMoreBio: false,
+			loggedIn: Meteor.user(),
+		};
+
+		// methods:
+		this.toggleReadMoreBio = this.toggleReadMoreBio.bind(this);
+		this.subscribe = this.subscribe.bind(this);
+	}
+
 	static propTypes = {
 		commenter: React.PropTypes.shape({
 			name: React.PropTypes.string.isRequired,
@@ -36,19 +49,6 @@ class CommenterDetail extends React.Component {
 		avatarUrl: null,
 		isTest: false,
 	};
-
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			readMoreBio: false,
-			loggedIn: Meteor.user(),
-		};
-
-		// methods:
-		this.toggleReadMoreBio = this.toggleReadMoreBio.bind(this);
-		this.subscribe = this.subscribe.bind(this);
-	}
 
 	componentWillMount() {
 		const { commenter } = this.props;
@@ -94,19 +94,16 @@ class CommenterDetail extends React.Component {
 					'subscriptions.commenters': commenterObj
 				}
 			});
-			this.setState({
-				subscribed: !subscribed
-			});
 		} else {
 			Meteor.users.update({_id: Meteor.userId()}, {
 				$pull: {
 					'subscriptions.commenters': {_id: commenterObj._id}
 				}
 			});
-			this.setState({
-				subscribed: !subscribed
-			});
 		}
+		this.setState({
+			subscribed: !subscribed
+		});
 	}
 
 	render() {

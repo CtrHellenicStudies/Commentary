@@ -25,8 +25,8 @@ class Bookmarks extends React.Component {
 		const {toggleBookmarksForm} = this.state;
 		return (
 			<div>
-				<hr className="user-divider" />
 				<h2>Your Bookmarks</h2>
+				<hr className="user-divider" />
 				<h3>You have no bookmarks.</h3>
 				<div style={{justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
 					<FlatButton

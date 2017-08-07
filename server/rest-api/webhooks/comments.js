@@ -4,6 +4,7 @@ import Keywords from '/imports/api/collections/keywords';
 import Revisions from '/imports/api/collections/revisions';
 import ReferenceWorks from '/imports/api/collections/referenceWorks';
 import Tenants from '/imports/api/collections/tenants';
+import Settings from '/imports/api/collections/settings';
 import Works from '/imports/api/collections/works';
 
 Meteor.method('publishComments', (commentCandidate) => {
@@ -77,7 +78,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 
 	let comment = false;
 	if ('wordpressId' in commentCandidate) {
-		comment = Comments.findOne(commentCandidate.wordpressId);
+		comment = Comments.findOne({ wordpressId: commentCandidate.wordpressId });
 	}
 
 	let referenceWork;
@@ -195,6 +196,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 		if ('line_to' in commentCandidate && !isNaN(commentCandidate.line_to)) {
 			newComment.lineTo = parseInt(commentCandidate.line_to, 10);
 		}
+		console.log(newComment);
 
 		const insertResponse = Comments.insert(newComment);
 		if (insertResponse) {

@@ -102,7 +102,7 @@ const commentsUpdate = (token, commentId, update) => {
 
 	// update subscribed users
 	const commenterId = comment.commenters[0]._id;
-	const subscribedUsers = Meteor.users.findAll({
+	const subscribedUsers = Meteor.users.find({
 		'subscriptions.commenters': {_id: commenterId}
 	});
 	console.log(subscribedUsers);

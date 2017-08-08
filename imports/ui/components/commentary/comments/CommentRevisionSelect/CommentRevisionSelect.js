@@ -1,9 +1,9 @@
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';
-
 import moment from 'moment';
+import _ from 'underscore';
 
+import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';
 
 class CommentRevisionSelect extends React.Component {
 	constructor(props) {
@@ -62,9 +62,11 @@ class CommentRevisionSelect extends React.Component {
 		const { showMoreRevisions } = this.state;
 		const { comment, selectedRevisionIndex, selectRevision } = this.props;
 
-		const fullRevisionsList = this.sortRevisions(comment.revisions);
-		const truncatedRevisionsList = this.sortRevisions(comment.revisions).slice(0, 3);
-		
+		const revisions = comment ? comment.revisions : [];
+
+		const fullRevisionsList = this.sortRevisions(revisions);
+		const truncatedRevisionsList = this.sortRevisions(revisions).slice(0, 3);
+
 		return (
 			<div className="comment-revisions">
 				{ showMoreRevisions ?

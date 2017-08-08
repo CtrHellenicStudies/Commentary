@@ -18,7 +18,7 @@ const commentsInsert = (token, comment) => {
 	const roles = ['editor', 'admin', 'commenter'];
 	if (!Meteor.users.findOne({
 		roles: { $elemMatch: { $in: roles } },
-		// 'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 	})
 	) {
 		throw new Meteor.Error('comment-insert', 'not-authorized');
@@ -32,7 +32,21 @@ const commentsInsert = (token, comment) => {
 		throw new Meteor.Error('comment-insert', err);
 	}
 
+<<<<<<< HEAD
 	// add notification
+=======
+	// If no commenters were selected for this comment, do not update subscribed
+	// users for commenters
+	if (!comment.commenters || !comment.commenters.length) {
+		return commentId;
+	}
+
+	// // update subscribed users
+	let commenterId = comment.commenters[0]._id;
+
+	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
+
+>>>>>>> cb5992120c63c9e72295f54b50a8c0f535bc7472
 	const options = { multi: true };
 
 	const commenterId = comment.commenters[0]._id;
@@ -120,6 +134,7 @@ const commentsUpdate = (token, commentId, update) => {
 	const options = { multi: true };
 
 	const commenterId = comment.commenters[0]._id;
+<<<<<<< HEAD
 	const userAvatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
 
 	const avatar = userAvatar ? userAvatar.avatar.src : '/images/default_user.jpg';
@@ -155,6 +170,12 @@ const commentsUpdate = (token, commentId, update) => {
 
 	const subscribedUsers = Meteor.users.update(query, updateUser, notification, options);
 	
+=======
+	const subscribedUsers = Meteor.users.find({
+		'subscriptions.commenters': {_id: commenterId}
+	});
+	console.log(subscribedUsers);
+>>>>>>> cb5992120c63c9e72295f54b50a8c0f535bc7472
 
 	return commentId;
 };

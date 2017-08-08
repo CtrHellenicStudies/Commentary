@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Meteor } from 'meteor/meteor';
 import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import UserDropdown from '../UserDropdown';

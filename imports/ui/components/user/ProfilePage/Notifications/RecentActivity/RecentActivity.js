@@ -42,7 +42,7 @@ class RecentActivity extends React.Component {
 					<div>
 						{notifications.map((notification) => (
 							<Card key={notification._id}>
-								<a>
+								<a href={`/commentary?_id=${notification.slug}`}>
 									<CardHeader
 										title={`New notification from ${moment(notification.created).format('D/M/YYYY')}`}
 										subtitle={notification.message}

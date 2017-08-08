@@ -62,7 +62,7 @@ const commentsInsert = (token, comment) => {
 		avatar: {src: avatar},
 		created: new Date(),
 		_id: new ObjectID().toString(),
-		slug: comment._id
+		slug: commentId
 	};
 
 	const update = { $push: {'subscriptions.notifications': notification} };
@@ -148,7 +148,7 @@ const commentsUpdate = (token, commentId, update) => {
 		avatar: {src: avatar},
 		created: new Date(),
 		_id: new ObjectID().toString(),
-		slug: comment._id
+		slug: commentId
 	};
 
 	const updateUser = { $push: {'subscriptions.notifications': notification} };

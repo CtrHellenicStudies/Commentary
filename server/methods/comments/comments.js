@@ -141,8 +141,10 @@ const commentsUpdate = (token, commentId, update) => {
 		]
 	};
 
+	const lines = lineTo !== lineFrom ? `lines ${comment.lineFrom} - ${comment.lineTo}` : `${comment.lineTo}`;
+
 	const notification = {
-		message: `${comment.commenters[0].name} updated a comment on ${comment.work.title} ${comment.subwork.title}, lines ${comment.lineFrom} - ${comment.lineTo}`,
+		message: `${comment.commenters[0].name} updated a comment on ${comment.work.title} ${comment.subwork.title}, ${lines}`,
 		avatar: {src: avatar},
 		created: new Date(),
 		_id: new ObjectID().toString(),

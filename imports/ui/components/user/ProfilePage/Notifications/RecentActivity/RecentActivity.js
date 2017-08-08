@@ -27,11 +27,9 @@ class RecentActivity extends React.Component {
 				'subscriptions.notifications': {_id: notificationID}
 			}
 		});
-
-		const notificationIndex = notifications.indexOf(notification);
-
+		
 		this.setState({
-			notifications: notifications.splice(notificationIndex, 1)
+			notifications: notifications.filter(notificationToFilter => notificationToFilter._id !== notificationID)
 		});
 	}
 

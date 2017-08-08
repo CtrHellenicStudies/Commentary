@@ -100,15 +100,15 @@ const commentsUpdate = (token, commentId, update) => {
 		throw new Meteor.Error('comment-update', err);
 	}
 
+	// update notifications
+	const options = { multi: true };
+
 	// update subscribed users
 	const commenterId = comment.commenters[0]._id;
 
 	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
-
-	const options = { multi: true };
-
+	
 	const avatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
-
 	const notification = {
 		message: `Comment updated by ${comment.commenters[0].name}`,
 		avatar: {src: avatar.avatar.src},
@@ -116,10 +116,33 @@ const commentsUpdate = (token, commentId, update) => {
 		_id: new ObjectID().toString(),
 		slugId: commenterId
 	};
-
 	const updateSubscribers = { $push: { 'subscriptions.notifications': notification } };
 
-	const subscribedUsers = Meteor.users.update(query, updateSubscribers, notification);
+	const subscribedUsers = Meteor.users.update(query, updateSubscribers, notification, options);
+
+	// update bookmarks
+	const bookmarkQuery = {
+		$and: 
+		[
+			{'subscriptions.bookmarks.work.slug': comment.work.slug},
+			{'subscriptions.bookmarks.subwork': comment.subwork.slug},
+			{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+			{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+		]
+	};
+
+	// TODO ADD IMAGE FOR WORKS
+	// TODO MAKE LINES DYNAMIC
+	const bookmarkNotification = {
+		message: `${comment.commenter[0].name} commented on ${comment.work.slug} ${comment.subwork.slug}, lines ${lineFrom} to ${linesTo}`,
+		created: new Date(),
+		_id: new ObjectID().toString(),
+		slugId: `${comment.work.slug}-${comment.subwork.slug}-${comment.lineFrom}-${comment.lineTo}`
+	};
+
+	const updateSubscribersBookmark = { $push: { 'subscriptions.notifications': bookmarkNotification} };
+
+	const subscribedBookmarks = Meteor.users.update(bookmarkQuery, updateSubscribersBookmark, bookmarkNotification, options);
 
 	return commentId;
 };

@@ -68,8 +68,8 @@ class BookmarksForm extends React.Component {
 		const bookmark = {
 			work: selectedWork,
 			subwork: selectedSubwork,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo,
+			lineFrom: Number(selectedLineFrom),
+			lineTo: Number(selectedLineTo),
 			subscribedOn: new Date(),
 			_id: new ObjectID().toString()
 		};

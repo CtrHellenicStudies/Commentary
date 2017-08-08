@@ -77,7 +77,7 @@ class Bookmarks extends React.Component {
 								<a>
 									<CardHeader
 										title={`${bookmark.work.title} ${bookmark.subwork}, lines ${bookmark.lineFrom} to ${bookmark.lineTo}`}
-										subtitle={`Subscribed on ${bookmark.subscribedOn}`}
+										subtitle={`Subscribed on ${moment(bookmark.subscribedOn).format('D/M/YYYY')}`}
 									/>
 								</a>
 								<FlatButton 

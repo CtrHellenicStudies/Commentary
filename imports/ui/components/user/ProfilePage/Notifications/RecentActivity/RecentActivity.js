@@ -44,6 +44,7 @@ class RecentActivity extends React.Component {
 							<Card key={notification._id}>
 								<a>
 									<CardHeader
+										title={`New notification from ${moment(notification.created).format('D/M/YYYY')}`}
 										subtitle={notification.message}
 										avatar={notification.avatar.src}
 									/>

@@ -14,6 +14,7 @@ const annotationsInsert = (token, comment) => {
 		users: [String],
 		paragraphN: Number,
 		bookChapterUrl: String,
+		status: String,
 		parentCommentId: Match.Maybe(String),
 		revisions: [{
 			tenantId: String,

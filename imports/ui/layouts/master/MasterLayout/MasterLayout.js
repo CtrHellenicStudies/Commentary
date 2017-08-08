@@ -10,11 +10,7 @@ import Footer from '/imports/ui/components/footer/Footer';
 import muiTheme from '/imports/lib/muiTheme';
 
 
-const MasterLayout = React.createClass({
-
-	propTypes: {
-		content: React.PropTypes.object,
-	},
+class MasterLayout extends React.Component {
 
 	render() {
 		return (
@@ -28,8 +24,12 @@ const MasterLayout = React.createClass({
 				</div>
 			</MuiThemeProvider>
 		);
-	},
-});
+	}
+}
 
+
+MasterLayout.propTypes = {
+	content: React.PropTypes.object,
+};
 
 export default MasterLayout;

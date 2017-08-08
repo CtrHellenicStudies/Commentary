@@ -7,6 +7,23 @@ exports[`SideTopNav renders correctly 1`] = `
   <a
     href="/profile"
   >
+    <div
+      className="user-image paper-shadow"
+    >
+      <div
+        alt="icon"
+        className="avatar-icon"
+        style={
+          Object {
+            "backgroundImage": "url(/images/default_user.jpg)",
+          }
+        }
+      />
+    </div>
+  </a>
+  <a
+    href="/profile"
+  >
     <span
       className="user-fullname"
     />

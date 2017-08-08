@@ -1,10 +1,13 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
+import Dialog from 'material-ui/Dialog';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import moment from 'moment';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import Utils from '/imports/lib/utils';
+import FlatButton from 'material-ui/FlatButton';
 
 const getDateRevision = (revision) => {
 	if (revision.originalDate) return revision.originalDate;
@@ -12,7 +15,7 @@ const getDateRevision = (revision) => {
 	return revision.created;
 };
 
-const sortRevisions = (revisions) => (_.sortBy(revisions, 'created'));
+const sortRevisions = revisions => (_.sortBy(revisions, 'created'));
 
 class CommentCitation extends React.Component {
 
@@ -22,6 +25,7 @@ class CommentCitation extends React.Component {
 		this.state = {
 			openMenu: false,
 			anchorEl: null,
+			copied: false,
 		};
 	}
 
@@ -56,6 +60,13 @@ class CommentCitation extends React.Component {
 			}
 		};
 
+		const actions = [
+				<FlatButton
+					label="Cancel"
+					onTouchTap={this.handleRequestClose.bind(this)}
+				/>,
+			];
+
 
 		return (
 			<div className="comment-citation">
@@ -64,33 +75,52 @@ class CommentCitation extends React.Component {
 					labelPosition="after"
 					onClick={this.handleTouchTap.bind(this)}
 				/>
-				<Popover
+				<Dialog
 					open={openMenu}
-					anchorEl={anchorEl}
-					anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-					targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+					title="Cite this comment"
 					onRequestClose={this.handleRequestClose.bind(this)}
+					actions={actions}
+					autoScrollBodyContent
 				>
-					<Menu>
+					<p className="comment-citation-help">
+						You may cite this comment's revisions with the URNs below:
+					</p>
+					<div className="comment-citation-urns">
 						{sortRevisions(comment.revisions).reverse().map((revision, i) => {
-
 							const updated = getDateRevision(revision);
-
 							return (
-								<MenuItem
-									key={revision._id}
-									href={`//nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
-									primaryText={`Revision ${moment(updated).format('D MMMM YYYY')}`}
-									style={styles.menuItem}
-								/>
+								<div
+									key={`${updated}-${i}`}
+									className="comment-citation-urn"
+								>
+									<label>
+										Revision {moment(updated).format('D MMMM YYYY')}
+									</label>
+									<span className="urn">
+										<a
+											href={`//nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
+										>
+											nrs.chs.harvard.edu/v1/{comment.urn}.{comment.revisions.length - i - 1}
+										</a>
+									</span>
+									<CopyToClipboard
+										text={`https://nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
+										onCopy={() => this.setState({copied: true})}
+									>
+										<span className="copy-to-clipboard">
+											Copy to clipboard
+										</span>
+									</CopyToClipboard>
+								</div>
 							);
 						})}
-					</Menu>
-				</Popover>
+					</div>
+				</Dialog>
 			</div>
 		);
 	}
 }
+
 CommentCitation.propTypes = {
 	comment: React.PropTypes.shape({
 		_id: React.PropTypes.string.isRequired,

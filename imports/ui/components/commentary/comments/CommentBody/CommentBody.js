@@ -2,7 +2,7 @@ import React from 'react';
 import JsDiff from 'diff';
 import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
 
-import CommentBodyText from '/imports/ui/components/commentary/comments/CommentBodyText';  
+import CommentBodyText from '/imports/ui/components/commentary/comments/CommentBodyText';
 
 /*
 	helpers
@@ -59,12 +59,13 @@ const getRevisionDiff = (comment, revisionIndex) => {
 */
 const CommentBody = (props) => {
 
-	if (props.revisionIndex === props.comment.revisions.length - 1) {
+	if (props.revisionIndex === 0) {
 		return (
 			<CommentBodyText
 				text={props.comment.revisions[props.revisionIndex].text}
 				onTextClick={props.onTextClick}
 				createRevisionMarkup
+				searchTerm={props.searchTerm}
 			/>
 		);
 	}
@@ -72,6 +73,7 @@ const CommentBody = (props) => {
 	return (
 		<CommentBodyText
 			text={getRevisionDiff(props.comment, props.revisionIndex).innerHTML}
+			searchTerm={props.searchTerm}
 		/>
 	);
 };
@@ -83,6 +85,7 @@ CommentBody.propTypes = {
 	}).isRequired,
 	revisionIndex: React.PropTypes.number.isRequired,
 	onTextClick: React.PropTypes.func,
+	searchTerm: React.PropTypes.string
 };
 CommentBody.defaultProps = {
 	onTextClick: null,

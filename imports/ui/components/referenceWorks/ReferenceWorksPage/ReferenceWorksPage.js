@@ -16,12 +16,7 @@ import Settings from '/imports/api/collections/settings';
 import Utils from '/imports/lib/utils';
 
 
-const ReferenceWorksPage = React.createClass({
-
-	propTypes: {
-		title: React.PropTypes.string.isRequired,
-		settings: React.PropTypes.object,
-	},
+class ReferenceWorksPage extends React.Component {
 
 	render() {
 		const { settings } = this.props;
@@ -60,9 +55,15 @@ const ReferenceWorksPage = React.createClass({
 				</div>
 			</div>
 		);
-	},
+	}
 
-});
+}
+
+
+ReferenceWorksPage.propTypes = {
+	title: React.PropTypes.string.isRequired,
+	settings: React.PropTypes.object,
+};
 
 const ReferenceWorksPageContainer = createContainer(() => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));

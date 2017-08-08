@@ -115,11 +115,6 @@ exports[`DiscussionComment renders correctly 1`] = `
           onTouchStart={[Function]}
         >
           <span
-            className="md-tooltip"
-          >
-            You must be signed in to vote.
-          </span>
-          <span
             className="mdi mdi-chevron-up"
             color="rgba(0, 0, 0, 0.87)"
             onMouseEnter={[Function]}
@@ -289,11 +284,6 @@ exports[`DiscussionComment renders correctly 1`] = `
             onTouchEnd={[Function]}
             onTouchStart={[Function]}
           >
-            <span
-              className="md-tooltip"
-            >
-              You must be signed in to report a comment.
-            </span>
             <span
               className="mdi mdi-flag"
               color="rgba(0, 0, 0, 0.87)"

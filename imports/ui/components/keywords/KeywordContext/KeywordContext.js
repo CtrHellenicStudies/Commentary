@@ -13,43 +13,46 @@ import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } 
 
 // api
 import TextNodes from '/imports/api/collections/textNodes';
+import Editions from '/imports/api/collections/editions';
 
-const textFromTextNodesGroupedByEdition = (nodesCursor) => {
-	const editions = [];
-	nodesCursor.forEach((node) => {
-		node.text.forEach((text) => {
-			let myEdition = editions.find(e => text.edition.slug === e.slug);
+// const textFromTextNodesGroupedByEdition = (nodesCursor) => {
+// 	const editions = [];
+// 	nodesCursor.forEach((node) => {
+// 		node.text.forEach((text) => {
+// 			let myEdition = editions.find(e => text.edition === e._id);
 
-			if (!myEdition) {
-				myEdition = {
-					title: text.edition.title,
-					slug: text.edition.slug,
-					lines: [],
-				};
-				editions.push(myEdition);
-			}
+// 			if (!myEdition) {
+// 				const foundEdition = Editions.findOne({ _id: text.edition });
+// 				myEdition = {
+// 					_id: foundEdition._id,
+// 					title: foundEdition.title,
+// 					slug: foundEdition.slug,
+// 					lines: [],
+// 				};
+// 				editions.push(myEdition);
+// 			}
 
-			myEdition.lines.push({
-				html: text.html,
-				n: text.n,
-			});
-		});
-	});
+// 			myEdition.lines.push({
+// 				html: text.html,
+// 				n: text.n,
+// 			});
+// 		});
+// 	});
 
-	// sort lines for each edition by line number
-	for (let i = 0; i < editions.length; ++i) {
-		editions[i].lines.sort((a, b) => {
-			if (a.n < b.n) {
-				return -1;
-			} else if (b.n < a.n) {
-				return 1;
-			}
-			return 0;
-		});
-	}
+// 	// sort lines for each edition by line number
+// 	for (let i = 0; i < editions.length; ++i) {
+// 		editions[i].lines.sort((a, b) => {
+// 			if (a.n < b.n) {
+// 				return -1;
+// 			} else if (b.n < a.n) {
+// 				return 1;
+// 			}
+// 			return 0;
+// 		});
+// 	}
 
-	return editions;
-};
+// 	return editions;
+// };
 
 
 const KeywordContext = React.createClass({
@@ -140,6 +143,8 @@ const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
 	let lemmaText = [];
 	const context = {};
 
+	const editionsSubscription = Meteor.subscribe('editions');
+
 	if (!keyword) {
 		return {
 			lemmaText,
@@ -168,7 +173,7 @@ const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
 
 		if (textNodesSub.ready()) {
 			const textNodesCursor = TextNodes.find(textNodesQuery);
-			lemmaText = textFromTextNodesGroupedByEdition(textNodesCursor);
+			lemmaText = editionsSubscription ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
 		}
 
 	} else {
@@ -189,7 +194,7 @@ const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
 
 				if (textNodesSub.ready()) {
 					const textNodesCursor = TextNodes.find(textNodesQuery);
-					lemmaText = textFromTextNodesGroupedByEdition(textNodesCursor);
+					lemmaText = editionsSubscription ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
 				}
 			}
 		}

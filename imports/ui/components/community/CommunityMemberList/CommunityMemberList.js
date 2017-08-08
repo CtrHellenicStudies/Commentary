@@ -30,7 +30,7 @@ const CommunityMemberListContainer = createContainer(() => {
 	const users = Meteor.users.find({}, {
 		sort: {
 			'profile.name': 1,
-			username: 1,
+			'emails.address': 1,
 		}
 	}).fetch();
 

@@ -363,8 +363,28 @@ const COMMENT_ID_LENGTH = 7;
 const _getCommentURN = (comment) => {
 	const work = Works.findOne({ slug: comment.work.slug });
 	const urnPrefix = 'urn:cts:CHS.Commentary';
+	// Use work tlg if it exists, otherwise, search for subwork tlg number
+	// Failing either, just use creator
+	let urnTLG = work.tlgCreator;
+	if (work.tlg && work.tlg.length) {
+		urnTLG += `.${work.tlg}`;
+	} else {
+		work.subworks.forEach((subwork) => {
+			if (
+					subwork.n === comment.subwork.n
+				&& subwork.tlgNumber
+				&& subwork.tlgNumber.length
+			) {
+				urnTLG += `.${subwork.tlgNumber}`;
+			}
+		});
+	}
 
-	let urnComment = `${comment.work.title}.${comment.subwork.title}.${comment.lineFrom}`;
+	//
+	urnTLG += '.chsCommentary';
+	const workTitle = comment.work.title.replace(' ', '');
+
+	let urnComment = `${workTitle}.${comment.subwork.title}.${comment.lineFrom}`;
 
 	if (typeof comment.lineTo !== 'undefined' && comment.lineFrom !== comment.lineTo) {
 		urnComment += `-${comment.subwork.title}.${comment.lineTo}`;
@@ -377,10 +397,10 @@ const _getCommentURN = (comment) => {
 
 const _getAnnotationURN = (comment) => {
 	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
-	const chapter = _.find(book.chapters, (c) => c.url === comment.bookChapterUrl);
+	const chapter = _.find(book.chapters, c => c.url === comment.bookChapterUrl);
 	const urnPrefix = 'urn:cts:CHS.Annotations';
 
-	const urnBook = `${book.author}.${book.slug}`;
+	const urnBook = `${book.authorURN}.${book.slug}`;
 	const urnComment = `${chapter.n}.${comment.paragraphN}`;
 
 	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;

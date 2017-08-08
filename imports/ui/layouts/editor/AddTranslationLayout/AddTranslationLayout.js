@@ -105,9 +105,8 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	getText(textValue) {
-		console.log('textValue: ', textValue);
 		const text = [];
-		textValue.blocks.forEach(textObject => {
+		textValue.blocks.forEach((textObject) => {
 			text.push({
 				line: textValue.blocks.findIndex(textObject),
 				text: textObject.text

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -23,18 +23,15 @@ import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 import muiTheme from '/imports/lib/muiTheme';
 
 
-const HomeLayout = React.createClass({
-	propTypes: {
-		settings: React.PropTypes.object,
-		ready: React.PropTypes.bool,
-		tenant: React.PropTypes.object,
-	},
+class HomeLayout extends Component {
 
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+
+		this.state = {
 			filters: [],
 		};
-	},
+	}
 
 	componentDidMount() {
 		if (typeof location.hash !== 'undefined' && location.hash.length > 0) {
@@ -42,7 +39,7 @@ const HomeLayout = React.createClass({
 				$('html, body').animate({ scrollTop: $(location.hash).offset().top - 100 }, 300);
 			}, 1000);
 		}
-	},
+	}
 
 	render() {
 		const { settings, tenant } = this.props;
@@ -51,7 +48,10 @@ const HomeLayout = React.createClass({
 			return <LoadingHome />;
 		}
 
-		if (tenant.subdomain === 'nrs') {
+		if (
+				tenant.subdomain === 'nrs'
+			|| tenant.subdomain === 'nrs2'
+		) {
 			return <NameResolutionServiceLayout />;
 		}
 
@@ -74,9 +74,15 @@ const HomeLayout = React.createClass({
 				</div>
 			</MuiThemeProvider>
 		);
-	},
+	}
 
-});
+}
+
+HomeLayout.propTypes = {
+	settings: React.PropTypes.object,
+	ready: React.PropTypes.bool,
+	tenant: React.PropTypes.object,
+};
 
 const HomeLayoutContainer = createContainer(() => {
 	const handle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));

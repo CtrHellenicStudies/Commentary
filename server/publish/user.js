@@ -1,8 +1,11 @@
 import DiscussionComments from '/imports/api/collections/discussionComments';
+import TextNodes from '/imports/api/collections/textNodes';
+import Books from '/imports/api/collections/books';
+import Comments from '/imports/api/collections/comments';
+import Tenants from '/imports/api/collections/tenants';
 
-Meteor.publish('user.discussionComments', (userId, tenantId, sortMethod = 'votes') => {
+Meteor.publish('user.discussionComments', (userId, sortMethod = 'votes') => {
 	check(userId, String);
-	check(tenantId, String);
 	check(sortMethod, String);
 
 	let sort = { votes: -1, updated: -1 };
@@ -16,9 +19,30 @@ Meteor.publish('user.discussionComments', (userId, tenantId, sortMethod = 'votes
 
 	return DiscussionComments.find({
 		userId: userId,
-		tenantId,
 	}, {
 		sort,
+	});
+});
+
+Meteor.publish('user.bookmarks', (userId) => {
+	check(userId, String);
+
+	const user = Meteor.users.find({ _id: userId });
+
+	if (!user.bookmarks) {
+		return [];
+	}
+
+	return TextNodes.find({
+		_id: user.bookmarks,
+	});
+});
+
+Meteor.publish('user.annotations', (userId) => {
+	check(userId, String);
+
+	return Comments.find({
+		userId: userId,
 	});
 });
 
@@ -44,6 +68,7 @@ Meteor.publish('users.all', () => {
 			emails: 1,
 			profile: 1,
 			services: 1,
+			subscriptions: 1,
 			roles: 1,
 			highlightingPreference: 1,
 			canAnnotateBooks: 1,
@@ -52,7 +77,7 @@ Meteor.publish('users.all', () => {
 			recentPositions: 1,
 		},
 		sort: {
-			username: 1,
+			'profile.name': 1,
 			'emails.address': 1,
 		},
 		skip,
@@ -73,6 +98,7 @@ Meteor.publish('users.token', (userId, token) => {
 			emails: 1,
 			profile: 1,
 			services: 1,
+			subscriptions: 1,
 			roles: 1,
 			highlightingPreference: 1,
 			canAnnotateBooks: 1,

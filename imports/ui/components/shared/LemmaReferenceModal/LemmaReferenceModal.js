@@ -7,6 +7,7 @@ import Draggable from 'react-draggable';
 
 // api
 import TextNodes from '/imports/api/collections/textNodes';
+import Editions from '/imports/api/collections/editions';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -42,64 +43,6 @@ const LemmaReferenceModal = React.createClass({
 		return { muiTheme: getMuiTheme(muiTheme) };
 	},
 
-	// getMeteorData() {
-	// 	const lemmaQuery = {
-	// 		'work.slug': this.props.work,
-	// 		'subwork.n': this.props.subwork,
-	// 		'text.n': {
-	// 			$gte: this.props.lineFrom,
-	// 		},
-	// 	};
-	// 	let lemmaText = [];
-	//
-	// 	if (this.props.lineTo) {
-	// 		lemmaQuery['text.n'].$lte = this.props.lineTo;
-	// 	} else {
-	// 		lemmaQuery['text.n'].$lte = this.props.lineFrom;
-	// 	}
-	//
-	// 	const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
-	// 	if (textHandle.ready()) {
-	// 		const textNodes = TextNodes.find(lemmaQuery).fetch();
-	// 		const editions = [];
-	//
-	// 		let textIsInEdition = false;
-	// 		textNodes.forEach((textNode) => {
-	// 			textNode.text.forEach((text) => {
-	// 				textIsInEdition = false;
-	//
-	// 				editions.forEach((edition) => {
-	// 					if (text.edition.slug === edition.slug) {
-	// 						edition.lines.push({
-	// 							html: text.html,
-	// 							n: text.n,
-	// 						});
-	// 						textIsInEdition = true;
-	// 					}
-	// 				});
-	//
-	// 				if (!textIsInEdition) {
-	// 					editions.push({
-	// 						title: text.edition.title,
-	// 						slug: text.edition.slug,
-	// 						lines: [
-	// 							{
-	// 								html: text.html,
-	// 								n: text.n,
-	// 							},
-	// 						],
-	// 					});
-	// 				}
-	// 			});
-	// 		});
-	//
-	// 		lemmaText = editions;
-	// 	}
-	//
-	// 	return {
-	// 		lemmaText,
-	// 	};
-	// },
 
 	toggleEdition(editionSlug) {
 		if (this.props.lemmaText.length) {

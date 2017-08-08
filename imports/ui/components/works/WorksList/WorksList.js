@@ -15,20 +15,11 @@ import WorkVisualization from '/imports/ui/components/works/WorkVisualization';
 import muiTheme from '/imports/lib/muiTheme';
 
 
-const WorksList = React.createClass({
-
-	propTypes: {
-		works: React.PropTypes.array,
-		ready: React.PropTypes.bool,
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
+class WorksList extends React.Component {
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	renderWorks() {
 		const { works, ready } = this.props;
@@ -41,7 +32,7 @@ const WorksList = React.createClass({
 			));
 		}
 		return '';
-	},
+	}
 
 	render() {
 		return (
@@ -49,9 +40,19 @@ const WorksList = React.createClass({
 				{this.renderWorks()}
 			</div>
 		);
-	},
+	}
 
-});
+}
+
+WorksList.propTypes = {
+	works: React.PropTypes.array,
+	ready: React.PropTypes.bool,
+};
+
+WorksList.childContextTypes = {
+	muiTheme: React.PropTypes.object.isRequired,
+};
+
 
 export default createContainer(() => {
 	const worksSub = Meteor.subscribe('works', Session.get('tenantId'));

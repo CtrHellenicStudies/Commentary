@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -14,10 +14,7 @@ import Settings from '/imports/api/collections/settings';
 // lib
 import Utils from '/imports/lib/utils';
 
-const CommentersPage = React.createClass({
-	propTypes: {
-		settings: React.PropTypes.object,
-	},
+class CommentersPage extends Component {
 
 	render() {
 		const { settings } = this.props;
@@ -59,8 +56,12 @@ const CommentersPage = React.createClass({
 
 			</div>
 		);
-	},
-});
+	}
+}
+
+CommentersPage.propTypes = {
+	settings: React.PropTypes.object
+};
 
 const commentersPageContainer = createContainer(() => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));

@@ -25,7 +25,8 @@ TextNodes.schema = new SimpleSchema({
 		type: String,
 	},
 	'text.$.edition': {
-		type: [Editions.schema],
+		type: String,
+		// type: [Editions.schema],
 	},
 
 	work: {

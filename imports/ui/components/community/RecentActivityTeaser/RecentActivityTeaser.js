@@ -49,7 +49,9 @@ class RecentActivityTeaser extends React.Component {
 			commenter = commenters[0];
 
 			byline = `By ${commenter.name} ${moment(comment.updated).fromNow()}`;
-			avatarUrl = commenter.avatar.src;
+			if ('avatar' in commenter) {
+				avatarUrl = commenter.avatar.src;
+			}
 		}
 
 		if (settings) {

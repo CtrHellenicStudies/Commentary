@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-export const Check = { // eslint-disable-line
-};
-=======
 const check = () => {};
 const Match = {
 	Maybe: () => {},
@@ -10,4 +6,3 @@ const Match = {
 };
 
 export { check, Match };
->>>>>>> feature/meteor-methods-tests

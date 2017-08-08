@@ -64,6 +64,23 @@ exports[`CommentaryLayout renders correctly 1`] = `
             <a
               href="/profile"
             >
+              <div
+                className="user-image paper-shadow"
+              >
+                <div
+                  alt="icon"
+                  className="avatar-icon"
+                  style={
+                    Object {
+                      "backgroundImage": "url(/images/default_user.jpg)",
+                    }
+                  }
+                />
+              </div>
+            </a>
+            <a
+              href="/profile"
+            >
               <span
                 className="user-fullname"
               >
@@ -104,7 +121,7 @@ exports[`CommentaryLayout renders correctly 1`] = `
           <div>
             <a
               className="menu-item"
-              href="/sign-in"
+              href="/profile"
               onClick={[Function]}
               style={
                 Object {
@@ -116,7 +133,23 @@ exports[`CommentaryLayout renders correctly 1`] = `
               }
               target={undefined}
             >
-              Sign in
+              Profile
+            </a>
+            <a
+              className="menu-item"
+              href="/sign-out"
+              onClick={[Function]}
+              style={
+                Object {
+                  "display": "block",
+                  "fontSize": "16px",
+                  "padding": "15px 15px",
+                  "width": "100%",
+                }
+              }
+              target={undefined}
+            >
+              Sign out
             </a>
           </div>
         </div>
@@ -268,9 +301,12 @@ exports[`CommentaryLayout renders correctly 1`] = `
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
+                  onMouseDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   onMouseOut={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
                   onTouchStart={[Function]}
                   onTouchTap={[Function]}
                   style={
@@ -295,6 +331,7 @@ exports[`CommentaryLayout renders correctly 1`] = `
                       "right": 4,
                       "textDecoration": "none",
                       "top": 0,
+                      "transform": "translate(0, 0)",
                       "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
                       "verticalAlign": null,
                       "width": 48,
@@ -577,9 +614,12 @@ exports[`CommentaryLayout renders correctly 1`] = `
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
+                  onMouseDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   onMouseOut={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
                   onTouchStart={[Function]}
                   onTouchTap={[Function]}
                   style={
@@ -604,6 +644,7 @@ exports[`CommentaryLayout renders correctly 1`] = `
                       "right": 4,
                       "textDecoration": "none",
                       "top": 0,
+                      "transform": "translate(0, 0)",
                       "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
                       "verticalAlign": null,
                       "width": 48,
@@ -730,9 +771,12 @@ exports[`CommentaryLayout renders correctly 1`] = `
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
+                  onMouseDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   onMouseOut={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
                   onTouchStart={[Function]}
                   onTouchTap={[Function]}
                   style={
@@ -757,6 +801,7 @@ exports[`CommentaryLayout renders correctly 1`] = `
                       "right": 4,
                       "textDecoration": "none",
                       "top": 0,
+                      "transform": "translate(0, 0)",
                       "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
                       "verticalAlign": null,
                       "width": 48,
@@ -883,9 +928,12 @@ exports[`CommentaryLayout renders correctly 1`] = `
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
+                  onMouseDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   onMouseOut={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
                   onTouchStart={[Function]}
                   onTouchTap={[Function]}
                   style={
@@ -910,6 +958,7 @@ exports[`CommentaryLayout renders correctly 1`] = `
                       "right": 4,
                       "textDecoration": "none",
                       "top": 0,
+                      "transform": "translate(0, 0)",
                       "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
                       "verticalAlign": null,
                       "width": 48,
@@ -1036,9 +1085,12 @@ exports[`CommentaryLayout renders correctly 1`] = `
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
+                  onMouseDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   onMouseOut={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
                   onTouchStart={[Function]}
                   onTouchTap={[Function]}
                   style={
@@ -1063,6 +1115,7 @@ exports[`CommentaryLayout renders correctly 1`] = `
                       "right": 4,
                       "textDecoration": "none",
                       "top": 0,
+                      "transform": "translate(0, 0)",
                       "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
                       "verticalAlign": null,
                       "width": 48,

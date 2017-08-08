@@ -3,5 +3,7 @@
 exports[`CommentRevisionSelect renders correctly 1`] = `
 <div
   className="comment-revisions"
-/>
+>
+  
+</div>
 `;

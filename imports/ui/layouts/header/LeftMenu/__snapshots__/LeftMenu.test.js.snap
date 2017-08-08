@@ -59,6 +59,23 @@ exports[`LeftMenu renders correctly 1`] = `
       <a
         href="/profile"
       >
+        <div
+          className="user-image paper-shadow"
+        >
+          <div
+            alt="icon"
+            className="avatar-icon"
+            style={
+              Object {
+                "backgroundImage": "url(/images/default_user.jpg)",
+              }
+            }
+          />
+        </div>
+      </a>
+      <a
+        href="/profile"
+      >
         <span
           className="user-fullname"
         >
@@ -99,7 +116,7 @@ exports[`LeftMenu renders correctly 1`] = `
     <div>
       <a
         className="menu-item"
-        href="/sign-in"
+        href="/profile"
         onClick={[Function]}
         style={
           Object {
@@ -111,7 +128,23 @@ exports[`LeftMenu renders correctly 1`] = `
         }
         target={undefined}
       >
-        Sign in
+        Profile
+      </a>
+      <a
+        className="menu-item"
+        href="/sign-out"
+        onClick={[Function]}
+        style={
+          Object {
+            "display": "block",
+            "fontSize": "16px",
+            "padding": "15px 15px",
+            "width": "100%",
+          }
+        }
+        target={undefined}
+      >
+        Sign out
       </a>
     </div>
   </div>

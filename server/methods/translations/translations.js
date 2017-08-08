@@ -12,3 +12,5 @@ const translationsInsert = (translation) => {
 Meteor.methods({
 	'translations.insert': translationsInsert
 });
+
+export { translationsInsert };

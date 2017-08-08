@@ -17,7 +17,7 @@ const commentsInsert = (token, comment) => {
 	const roles = ['editor', 'admin', 'commenter'];
 	if (!Meteor.users.findOne({
 		roles: { $elemMatch: { $in: roles } },
-		// 'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 	})
 	) {
 		throw new Meteor.Error('comment-insert', 'not-authorized');
@@ -31,8 +31,14 @@ const commentsInsert = (token, comment) => {
 		throw new Meteor.Error('comment-insert', err);
 	}
 
+	// If no commenters were selected for this comment, do not update subscribed
+	// users for commenters
+	if (!comment.commenters || !comment.commenters.length) {
+		return commentId;
+	}
+
 	// // update subscribed users
-	const commenterId = comment.commenters[0]._id;
+	let commenterId = comment.commenters[0]._id;
 
 	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
 

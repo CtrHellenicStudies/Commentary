@@ -20,7 +20,7 @@ export const Meteor = { // eslint-disable-line
 	absoluteUrl: () => {},
 	users: {
 		findOne: () => {},
-		find: () => {},
+		find: () => { return { fetch: () => {}}},
 		update: () => {},
 		remove: () => {},
 	},

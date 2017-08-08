@@ -18,7 +18,7 @@ import MenuItem from '/imports/ui/components/shared/MenuItem';
 */
 const getUsername = (currentUser) => {
 	let username = '';
-	if (Meteor.user()) {
+	if (currentUser) {
 		if (currentUser.profile && currentUser.profile.name) {
 			username = currentUser.profile.name;
 		} else {

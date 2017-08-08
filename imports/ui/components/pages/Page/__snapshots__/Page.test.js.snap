@@ -63,6 +63,23 @@ exports[`Page renders correctly 1`] = `
           <a
             href="/profile"
           >
+            <div
+              className="user-image paper-shadow"
+            >
+              <div
+                alt="icon"
+                className="avatar-icon"
+                style={
+                  Object {
+                    "backgroundImage": "url(/images/default_user.jpg)",
+                  }
+                }
+              />
+            </div>
+          </a>
+          <a
+            href="/profile"
+          >
             <span
               className="user-fullname"
             >
@@ -103,7 +120,7 @@ exports[`Page renders correctly 1`] = `
         <div>
           <a
             className="menu-item"
-            href="/sign-in"
+            href="/profile"
             onClick={[Function]}
             style={
               Object {
@@ -115,7 +132,23 @@ exports[`Page renders correctly 1`] = `
             }
             target={undefined}
           >
-            Sign in
+            Profile
+          </a>
+          <a
+            className="menu-item"
+            href="/sign-out"
+            onClick={[Function]}
+            style={
+              Object {
+                "display": "block",
+                "fontSize": "16px",
+                "padding": "15px 15px",
+                "width": "100%",
+              }
+            }
+            target={undefined}
+          >
+            Sign out
           </a>
         </div>
       </div>
@@ -137,9 +170,12 @@ exports[`Page renders correctly 1`] = `
             onFocus={[Function]}
             onKeyDown={[Function]}
             onKeyUp={[Function]}
+            onMouseDown={[Function]}
             onMouseEnter={[Function]}
             onMouseLeave={[Function]}
             onMouseOut={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
             onTouchStart={[Function]}
             onTouchTap={[Function]}
             style={
@@ -162,6 +198,7 @@ exports[`Page renders correctly 1`] = `
                 "padding": "5px 10px",
                 "position": "relative",
                 "textDecoration": "none",
+                "transform": "translate(0, 0)",
                 "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
                 "verticalAlign": null,
                 "width": "auto",
@@ -208,150 +245,34 @@ exports[`Page renders correctly 1`] = `
             className="header-section-wrap nav-wrap collapse"
           >
             <div>
-              <button
-                className="account-button account-button-login"
-                disabled={false}
-                href=""
-                onBlur={[Function]}
-                onClick={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                onKeyUp={[Function]}
-                onMouseEnter={[Function]}
-                onMouseLeave={[Function]}
-                onTouchStart={[Function]}
-                onTouchTap={[Function]}
-                style={
-                  Object {
-                    "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                    "backgroundColor": "rgba(0, 0, 0, 0)",
-                    "border": 10,
-                    "borderRadius": 2,
-                    "boxSizing": "border-box",
-                    "color": "rgba(0, 0, 0, 0.87)",
-                    "cursor": "pointer",
-                    "display": "inline-block",
-                    "fontFamily": "Roboto, sans-serif",
-                    "fontSize": "inherit",
-                    "fontWeight": "inherit",
-                    "height": "80px",
-                    "lineHeight": "36px",
-                    "margin": 0,
-                    "minWidth": "none",
-                    "muiPrepared": true,
-                    "outline": "none",
-                    "overflow": "hidden",
-                    "padding": "25px 5px",
-                    "position": "relative",
-                    "textAlign": "center",
-                    "textDecoration": "none",
-                    "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                    "userSelect": "none",
-                    "verticalAlign": null,
-                    "width": "auto",
-                  }
-                }
-                tabIndex={0}
-                type="button"
+              <div
+                className="user-header-links"
               >
                 <div
-                  onMouseDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseUp={[Function]}
-                  onTouchEnd={[Function]}
-                  onTouchStart={[Function]}
+                  className="profileButton"
+                  onMouseLeave={undefined}
+                  onMouseOver={undefined}
                 >
-                  <span
-                    style={
-                      Object {
-                        "fontSize": 14,
-                        "fontWeight": 500,
-                        "letterSpacing": 0,
-                        "muiPrepared": true,
-                        "paddingLeft": 16,
-                        "paddingRight": 16,
-                        "position": "relative",
-                        "textTransform": "uppercase",
-                        "verticalAlign": "middle",
-                      }
-                    }
+                  <div
+                    className="profileButtonAvatar"
                   >
-                    Login
-                  </span>
+                    <a
+                      href="/profile"
+                    >
+                      <div
+                        alt="icon"
+                        className="avatar-icon"
+                        style={
+                          Object {
+                            "backgroundImage": "url(/images/default_user.jpg)",
+                          }
+                        }
+                      />
+                    </a>
+                  </div>
+                  
                 </div>
-              </button>
-              <button
-                className="account-button account-button-login"
-                disabled={false}
-                href=""
-                onBlur={[Function]}
-                onClick={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                onKeyUp={[Function]}
-                onMouseEnter={[Function]}
-                onMouseLeave={[Function]}
-                onTouchStart={[Function]}
-                onTouchTap={[Function]}
-                style={
-                  Object {
-                    "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                    "backgroundColor": "rgba(0, 0, 0, 0)",
-                    "border": 10,
-                    "borderRadius": 2,
-                    "boxSizing": "border-box",
-                    "color": "rgba(0, 0, 0, 0.87)",
-                    "cursor": "pointer",
-                    "display": "inline-block",
-                    "fontFamily": "Roboto, sans-serif",
-                    "fontSize": "inherit",
-                    "fontWeight": "inherit",
-                    "height": "80px",
-                    "lineHeight": "36px",
-                    "margin": 0,
-                    "minWidth": "none",
-                    "muiPrepared": true,
-                    "outline": "none",
-                    "overflow": "hidden",
-                    "padding": "25px 5px",
-                    "position": "relative",
-                    "textAlign": "center",
-                    "textDecoration": "none",
-                    "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                    "userSelect": "none",
-                    "verticalAlign": null,
-                    "width": "auto",
-                  }
-                }
-                tabIndex={0}
-                type="button"
-              >
-                <div
-                  onMouseDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseUp={[Function]}
-                  onTouchEnd={[Function]}
-                  onTouchStart={[Function]}
-                >
-                  <span
-                    style={
-                      Object {
-                        "fontSize": 14,
-                        "fontWeight": 500,
-                        "letterSpacing": 0,
-                        "muiPrepared": true,
-                        "paddingLeft": 16,
-                        "paddingRight": 16,
-                        "position": "relative",
-                        "textTransform": "uppercase",
-                        "verticalAlign": "middle",
-                      }
-                    }
-                  >
-                    Join the Community
-                  </span>
-                </div>
-              </button>
+              </div>
             </div>
           </div>
         </div>

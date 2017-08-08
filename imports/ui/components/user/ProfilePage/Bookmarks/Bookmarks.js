@@ -1,6 +1,7 @@
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import { createContainer } from 'meteor/react-meteor-data';
+import { Card, CardHeader } from 'material-ui/Card';
 
 import BookmarksForm from '/imports/ui/components/user/ProfilePage/Bookmarks/BookmarksForm';
 
@@ -16,7 +17,7 @@ class Bookmarks extends React.Component {
 	}
 
 	static propTypes = {
-		subscriptions: React.PropTypes.array
+		subscriptions: React.PropTypes.object
 	}
 
 	toggleBookmarksForm() {
@@ -30,14 +31,21 @@ class Bookmarks extends React.Component {
 		const { toggleBookmarksForm } = this.state;
 		const { subscriptions } = this.props;
 
-		console.log(subscriptions)
-
 		return (
 			<div>
 				<h2>Your Bookmarks</h2>
 				{subscriptions.bookmarks ?
 					<div>
-						hey
+						{subscriptions.bookmarks.map(bookmark => (
+							<Card key={bookmark._id}>
+								<a>
+									<CardHeader
+										title={`${bookmark.work.title} ${bookmark.subwork}, lines ${bookmark.lineFrom} to ${bookmark.lineTo}`}
+										subtitle={`Subscribed on ${bookmark.subscribedOn}`}
+									/>
+								</a>
+							</Card>
+					))}
 					</div>
 					:
 					<h3>You have no notifications.</h3>

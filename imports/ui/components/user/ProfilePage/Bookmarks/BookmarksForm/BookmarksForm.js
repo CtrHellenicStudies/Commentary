@@ -19,8 +19,8 @@ class BookmarksForm extends React.Component {
 		this.state = {
 			selectedWork: null,
 			selectedSubwork: null,
-			selectedLineFrom: null,
-			selectedLineTo: null
+			selectedLineFrom: '',
+			selectedLineTo: ''
 		};
 
 		this.submit = this.submit.bind(this);
@@ -61,27 +61,15 @@ class BookmarksForm extends React.Component {
 		});
 	}
 
-	getLineTo(event, newValue) {
-		this.setState({
-			selectedLineTo: newValue
-		});
-	}
-
-	getLineFrom(event, newValue) {
-		this.setState({
-			selectedLineFrom: newValue
-		});
-	}
-
 	submit() {
-		const { selectedWork, selectedSubwork, selectedineFrom, selectedLineTo } = this.state;
+		const { selectedWork, selectedSubwork, selectedLineFrom, selectedLineTo } = this.state;
 		const { toggleBookmarksForm } = this.props;
 
 		const bookmark = {
 			work: selectedWork,
-			selectedSubwork: selectedSubwork,
-			selectedLineFrom: selectedineFrom,
-			selectedLineTo: selectedLineTo,
+			subwork: selectedSubwork,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo,
 			subscribedOn: new Date(),
 			_id: new ObjectID().toString()
 		};
@@ -96,8 +84,8 @@ class BookmarksForm extends React.Component {
 	}
 
 	render() {
-		const {works} = this.props;
-		const {selectedWork, selectedSubwork, subworks} = this.state;
+		const { works } = this.props;
+		const { selectedWork, selectedSubwork, subworks, selectedLineFrom, selectedLineTo } = this.state;
 
 		if (!selectedWork || !works) { return <div><h2 style={{textAlign: 'center'}}>loading...</h2></div>; }
 
@@ -136,11 +124,15 @@ class BookmarksForm extends React.Component {
 				<div>
 					<TextField 
 						floatingLabelText="Line From"
+						value={selectedLineFrom}
+						onChange={(e, newValue) => this.setState({ selectedLineFrom: newValue })}
 					/>
 				</div>
 				<div>
 					<TextField
 						floatingLabelText="Line To"
+						value={selectedLineTo}
+						onChange={(e, newValue) => this.setState({ selectedLineTo: newValue })}
 					/>
 				</div>
 				<div>

@@ -10,10 +10,20 @@ class Bookmarks extends React.Component {
 		super(props);
 
 		this.state = {
-			toggleBookmarksForm: false
+			toggleBookmarksForm: false,
+			bookmarks: this.props.subscriptions.bookmarks
 		};
 
 		this.toggleBookmarksForm = this.toggleBookmarksForm.bind(this);
+		this.removeBookmark = this.removeBookmark.bind(this);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.subscriptions !== nextProps.subscriptions) {
+			this.setState({
+				bookmarks: nextProps.subscriptions.bookmarks
+			});
+		}
 	}
 
 	static propTypes = {
@@ -27,16 +37,42 @@ class Bookmarks extends React.Component {
 		});
 	}
 
+	removeBookmark(bookmark) {
+		const { bookmarks } = this.state;
+
+		const bookmarkID = bookmark._id;
+
+		console.log('id to remove: ', bookmarkID)
+
+		console.log('filtered bookmarks: ', bookmarks.filter(bookmarkToRemove => bookmarkToRemove._id === bookmarkID))
+
+		this.setState({
+			bookmarks: bookmarks.filter(bookmarkToRemove => bookmarkToRemove._id !== bookmarkID)
+		});
+
+		console.log('new state: ', bookmarks)
+
+		Meteor.users.update({_id: Meteor.userId()}, {
+			$pull: {
+				'subscriptions.bookmarks': {_id: bookmarkID}
+			}
+		});
+
+		console.log('bookmark in collection: ', this.props.subscriptions.bookmarks)
+		console.log('bookmarks after update: ', bookmarks)
+		
+	}
+
 	render() {
-		const { toggleBookmarksForm } = this.state;
+		const { toggleBookmarksForm, bookmarks } = this.state;
 		const { subscriptions } = this.props;
 
 		return (
 			<div>
 				<h2>Your Bookmarks</h2>
-				{subscriptions.bookmarks ?
+				{bookmarks ?
 					<div>
-						{subscriptions.bookmarks.map(bookmark => (
+						{bookmarks.map(bookmark => (
 							<Card key={bookmark._id}>
 								<a>
 									<CardHeader
@@ -44,6 +80,10 @@ class Bookmarks extends React.Component {
 										subtitle={`Subscribed on ${bookmark.subscribedOn}`}
 									/>
 								</a>
+								<FlatButton 
+									label="Remove Bookmark"
+									onTouchTap={() => this.removeBookmark(bookmark)}
+								/>
 							</Card>
 					))}
 					</div>

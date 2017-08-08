@@ -32,26 +32,42 @@ const commentsInsert = (token, comment) => {
 		throw new Meteor.Error('comment-insert', err);
 	}
 
-	// update subscribed users
-	const commenterId = comment.commenters[0]._id;
-
-	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
-
+	// add notification
 	const options = { multi: true };
 
-	const avatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
+	const commenterId = comment.commenters[0]._id;
+	const userAvatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
 
-	const notification = {
-		message: `New comment by ${comment.commenters[0].name}`,
-		avatar: {src: avatar.avatar.src},
-		created: new Date(),
-		_id: new ObjectID().toString(),
-		slugId: commenterId
+	const avatar = userAvatar ? userAvatar.avatar.src : '/images/default_user.jpg';
+
+	const query = {
+		$or: [
+			{
+				$and: 
+				[
+					{'subscriptions.bookmarks.work.slug': comment.work.slug},
+					{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
+					{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+					{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+				]
+			},
+			{
+				'subscriptions.commenters': { $elemMatch: {_id: commenterId} }
+			}
+		]
 	};
 
-	const update = { $push: { 'subscriptions.notifications': notification } };
+	const notification = {
+		message: `${comment.commenters[0].name} commented on ${comment.work.title} ${comment.subwork.title}, lines ${comment.lineFrom} - ${comment.lineTo}`,
+		avatar: {src: avatar},
+		created: new Date(),
+		_id: new ObjectID().toString(),
+		slug: comment._id
+	};
 
-	const subscribedUsers = Meteor.users.update(query, update, notification);
+	const update = { $push: {'subscriptions.notifications': notification} };
+
+	const subscribedUsers = Meteor.users.update(query, update, notification, options);
 
 	return commentId;
 };
@@ -100,49 +116,43 @@ const commentsUpdate = (token, commentId, update) => {
 		throw new Meteor.Error('comment-update', err);
 	}
 
-	// update notifications
+	// add notification
 	const options = { multi: true };
 
-	// update subscribed users
 	const commenterId = comment.commenters[0]._id;
+	const userAvatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
 
-	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
-	
-	const avatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
-	const notification = {
-		message: `Comment updated by ${comment.commenters[0].name}`,
-		avatar: {src: avatar.avatar.src},
-		created: new Date(),
-		_id: new ObjectID().toString(),
-		slugId: commenterId
-	};
-	const updateSubscribers = { $push: { 'subscriptions.notifications': notification } };
+	const avatar = userAvatar ? userAvatar.avatar.src : '/images/default_user.jpg';
 
-	const subscribedUsers = Meteor.users.update(query, updateSubscribers, notification, options);
-
-	// update bookmarks
-	const bookmarkQuery = {
-		$and: 
-		[
-			{'subscriptions.bookmarks.work.slug': comment.work.slug},
-			{'subscriptions.bookmarks.subwork': comment.subwork.slug},
-			{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
-			{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+	const query = {
+		$or: [
+			{
+				$and: 
+				[
+					{'subscriptions.bookmarks.work.slug': comment.work.slug},
+					{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
+					{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+					{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+				]
+			},
+			{
+				'subscriptions.commenters': { $elemMatch: {_id: commenterId} }
+			}
 		]
 	};
 
-	// TODO ADD IMAGE FOR WORKS
-	// TODO MAKE LINES DYNAMIC
-	const bookmarkNotification = {
-		message: `${comment.commenter[0].name} commented on ${comment.work.slug} ${comment.subwork.slug}, lines ${lineFrom} to ${linesTo}`,
+	const notification = {
+		message: `${comment.commenters[0].name} updated a comment on ${comment.work.title} ${comment.subwork.title}, lines ${comment.lineFrom} - ${comment.lineTo}`,
+		avatar: {src: avatar},
 		created: new Date(),
 		_id: new ObjectID().toString(),
-		slugId: `${comment.work.slug}-${comment.subwork.slug}-${comment.lineFrom}-${comment.lineTo}`
+		slug: comment._id
 	};
 
-	const updateSubscribersBookmark = { $push: { 'subscriptions.notifications': bookmarkNotification} };
+	const updateUser = { $push: {'subscriptions.notifications': notification} };
 
-	const subscribedBookmarks = Meteor.users.update(bookmarkQuery, updateSubscribersBookmark, bookmarkNotification, options);
+	const subscribedUsers = Meteor.users.update(query, updateUser, notification, options);
+	
 
 	return commentId;
 };

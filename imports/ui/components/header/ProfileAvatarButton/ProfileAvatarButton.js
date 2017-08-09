@@ -44,8 +44,14 @@ const ProfileAvatarButton = (props) => {
 	);
 };
 
+ProfileAvatarButton.propTypes = {
+	notifications: React.PropTypes.array,
+	showUserDropdown: React.PropTypes.func,
+	hideUserDropdown: React.PropTypes.func
+};
+
 const ProfileAvatarButtonContainer = createContainer(() => {
-	const notifications = Meteor.user().subscriptionsl;
+	const notifications = Meteor.user().subscriptions;
 
 	return { 
 		notifications

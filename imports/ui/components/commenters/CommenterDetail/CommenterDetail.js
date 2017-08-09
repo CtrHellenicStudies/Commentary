@@ -37,6 +37,7 @@ class CommenterDetail extends React.Component {
 		commenter: React.PropTypes.shape({
 			name: React.PropTypes.string.isRequired,
 			bio: React.PropTypes.string,
+			_id: React.PropTypes.string
 		}),
 		avatarUrl: React.PropTypes.string,
 		settings: React.PropTypes.shape({
@@ -54,8 +55,6 @@ class CommenterDetail extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		const { commenter } = this.props;
 		const { subscriptions } = this.state;
-
-		console.log('commenter: ', commenter, '\nsubscriptions: ', subscriptions)
 
 		if (commenter !== nextProps.commenter) {
 			this.setState({
@@ -118,8 +117,6 @@ class CommenterDetail extends React.Component {
 			Utils.setDescription(Utils.trunc(commenter.bio, 120));
 			Utils.setMetaImage(avatarUrl);
 		}
-
-		console.log(commenter)
 
 		return (
 			(commenter ?

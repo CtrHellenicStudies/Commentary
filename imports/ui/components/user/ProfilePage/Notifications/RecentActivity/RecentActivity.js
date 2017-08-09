@@ -40,7 +40,7 @@ class RecentActivity extends React.Component {
 				<h2>Recent Activity</h2>
 				{notifications.length > 0 ?
 					<div>
-						{reverse(notifications).map((notification) => (
+						{notifications.map((notification) => (
 							<Card key={notification._id}>
 								<a href={`/commentary?_id=${notification.slug}`}>
 									<CardHeader

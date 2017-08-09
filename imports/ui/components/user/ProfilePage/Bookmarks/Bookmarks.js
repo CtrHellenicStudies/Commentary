@@ -42,15 +42,15 @@ class Bookmarks extends React.Component {
 
 		const bookmarkID = bookmark._id;
 
-		console.log('id to remove: ', bookmarkID)
+		console.log('id to remove: ', bookmarkID);
 
-		console.log('filtered bookmarks: ', bookmarks.filter(bookmarkToRemove => bookmarkToRemove._id === bookmarkID))
+		console.log('filtered bookmarks: ', bookmarks.filter(bookmarkToRemove => bookmarkToRemove._id === bookmarkID));
 
 		this.setState({
 			bookmarks: bookmarks.filter(bookmarkToRemove => bookmarkToRemove._id !== bookmarkID)
 		});
 
-		console.log('new state: ', bookmarks)
+		console.log('new state: ', bookmarks);
 
 		Meteor.users.update({_id: Meteor.userId()}, {
 			$pull: {
@@ -58,8 +58,8 @@ class Bookmarks extends React.Component {
 			}
 		});
 
-		console.log('bookmark in collection: ', this.props.subscriptions.bookmarks)
-		console.log('bookmarks after update: ', bookmarks)
+		console.log('bookmark in collection: ', this.props.subscriptions.bookmarks);
+		console.log('bookmarks after update: ', bookmarks);
 		
 	}
 

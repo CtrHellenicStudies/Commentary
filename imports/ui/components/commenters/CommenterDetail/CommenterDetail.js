@@ -25,6 +25,7 @@ class CommenterDetail extends React.Component {
 		this.state = {
 			readMoreBio: false,
 			loggedIn: Meteor.user(),
+			subscriptions: Meteor.user() && Meteor.user().subscriptions
 		};
 
 		// methods:
@@ -50,13 +51,15 @@ class CommenterDetail extends React.Component {
 		isTest: false,
 	};
 
-	componentWillMount() {
+	componentWillReceiveProps(nextProps) {
 		const { commenter } = this.props;
-		const subscriptions = Meteor.user().subscriptions;
+		const { subscriptions } = this.state;
 
-		if (subscriptions) {
+		console.log('commenter: ', commenter, '\nsubscriptions: ', subscriptions)
+
+		if (commenter !== nextProps.commenter) {
 			this.setState({
-				subscribed: subscriptions.commenters.filter((sub) => sub._id === commenter._id).length > 0
+				subscribed: subscriptions.commenters.filter((sub) => sub._id === nextProps.commenter._id).length > 0
 			});
 		} else {
 			this.setState({
@@ -115,6 +118,8 @@ class CommenterDetail extends React.Component {
 			Utils.setDescription(Utils.trunc(commenter.bio, 120));
 			Utils.setMetaImage(avatarUrl);
 		}
+
+		console.log(commenter)
 
 		return (
 			(commenter ?
@@ -217,6 +222,7 @@ class CommenterDetail extends React.Component {
 export default createContainer(({ slug }) => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 	const commentersHandle = Meteor.subscribe('commenters.slug', slug, Session.get('tenantId'));
+
 	let avatarUrl;
 
 	const commenter = Commenters.findOne({ slug });

@@ -10,7 +10,7 @@ import DiscussionComments from '/imports/api/collections/discussionComments';
 
 function getEmailHeader(user) {
 	let userFullName = '';
-	if ('name' in user.profile) {
+	if (user.profile && 'name' in user.profile) {
 		userFullName = user.profile.name;
 	} else {
 		userFullName = user.username;

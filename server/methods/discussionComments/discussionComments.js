@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Email } from 'meteor/email';
+import { ObjectID } from 'bson';
 
 import Utils from '/imports/lib/utils';
 import Config from '/imports/lib/_config/_config.js';
@@ -135,9 +136,25 @@ const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentD
 	 * If status update was approval or trashed, send email notification that discussion
 	 * comment was approved
 	 */
+	const discussionComment = DiscussionComments.findOne(discussionCommentId);
+	const user = Meteor.users.find({ _id: discussionComment.userId });
+	const avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg';
 
-	if (discussionCommentData.status === 'publish') sendDiscussionCommentPublishEmail(discussionCommentId);
-	else if (discussionCommentData.status === 'trash') sendDiscussionCommentRejectEmail(discussionCommentId);
+	const notification = {
+		message: discussionCommentData.status === 'publish' ? 'Your comment has been approved.' : 'Your comment has been rejected',
+		avatar: {src: avatar},
+		created: new Date(),
+		_id: new ObjectID().toString(),
+		slug: discussionComment.commentId
+	};
+
+	if (discussionCommentData.status === 'publish') {
+		sendDiscussionCommentPublishEmail(discussionCommentId);
+	} else if (discussionCommentData.status === 'trash') {
+		sendDiscussionCommentRejectEmail(discussionCommentId);
+	}
+	
+	const updateUser = Meteor.users.update({_id: discussionComment.userId}, {$push: {'subscriptions.notifications': notification}});
 };
 
 function upvoteDiscussionComment(discussionCommentId) {

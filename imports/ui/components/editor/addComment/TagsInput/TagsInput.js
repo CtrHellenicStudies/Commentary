@@ -17,7 +17,7 @@ import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shar
 
 const ListGroupItemDnD = creatListGroupItemDnD('tagBlocks');
 
-class AddTagInput extends React.Component {
+class TagsInput extends React.Component {
 
 	static propTypes = {
 		tagsValue: React.PropTypes.arrayOf(React.PropTypes.shape({})),
@@ -34,6 +34,50 @@ class AddTagInput extends React.Component {
 		tagsValue: [],
 		tags: [],
 	};
+
+	addTagBlock() {
+		this.state.tagsValue.push({
+			tagId: Random.id(),
+			isMentionedInLemma: true,
+			isSet: false,
+		});
+		this.setState({
+			tagsValue: this.state.tagsValue,
+		});
+	}
+
+	removeTagBlock(i) {
+		this.setState({
+			tagsValue: update(this.state.tagsValue, { $splice: [[i, 1]] }),
+		});
+	}
+
+	moveTagBlock(dragIndex, hoverIndex) {
+		const { tagsValue } = this.state;
+		const dragIntroBlock = tagsValue[dragIndex];
+
+		this.setState(update(this.state, {
+			tagsValue: {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, dragIntroBlock],
+				],
+			},
+		}));
+	}
+
+	onTagValueChange(tag) {
+		const tagsValue = this.state.tagsValue;
+
+		tagsValue[tag.i].tagId = tag.value;
+		tagsValue[tag.i].keyword = Keywords.findOne({_id: tag.value});
+		tagsValue[tag.i].isSet = true;
+
+		this.setState({
+			tagsValue,
+		});
+	}
+
 
 	render () {
 		const { tagsValue, tags, addTagBlock, removeTagBlock, moveTagBlock, onTagValueChange, onIsMentionedInLemmaChange } = this.props;
@@ -132,4 +176,4 @@ class AddTagInput extends React.Component {
 	}
 }
 
-export default AddTagInput;
+export default TagsInput;

@@ -43,7 +43,8 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import AddTagInput from '/imports/ui/components/editor/addComment/AddTagInput';
+import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -114,7 +115,7 @@ function _getSuggestionsFromComments(comments) {
 	return suggestions;
 }
 
-const AddRevision = React.createClass({
+class AddRevision extends React.Component {
 
 	propTypes: {
 		submitForm: React.PropTypes.func.isRequired,
@@ -123,7 +124,7 @@ const AddRevision = React.createClass({
 		tags: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
 		isTest: React.PropTypes.bool,
-	},
+	}
 
 	getInitialState() {
 		const { comment } = this.props;
@@ -150,6 +151,7 @@ const AddRevision = React.createClass({
 		return {
 			revision,
 
+			selectedRevisionIndex: null,
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revisionTitle)),
 			textEditorState: this._getRevisionEditorState(revision),
 
@@ -162,27 +164,27 @@ const AddRevision = React.createClass({
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 		};
-	},
+	}
 
 	childContextTypes: {
 		muiTheme: React.PropTypes.object.isRequired,
-	},
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	_enableButton() {
 		this.setState({
 			canSubmit: true,
 		});
-	},
+	}
 
 	_disableButton() {
 		this.setState({
 			canSubmit: false,
 		});
-	},
+	}
 
 	_getRevisionEditorState(revision) {
 		if (revision.textRaw) {
@@ -198,7 +200,7 @@ const AddRevision = React.createClass({
 			);
 		}
 		console.error('missing filed text or textRaw in revision');
-	},
+	}
 
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
@@ -207,7 +209,7 @@ const AddRevision = React.createClass({
 			titleEditorState,
 			titleValue: title,
 		});
-	},
+	}
 
 	onTextChange(textEditorState) {
 		const newTextEditorState = EditorState.set(textEditorState, {decorator: linkDecorator});
@@ -215,7 +217,7 @@ const AddRevision = React.createClass({
 		this.setState({
 			textEditorState: newTextEditorState,
 		});
-	},
+	}
 
 	onReferenceWorksValueChange(referenceWork) {
 		const referenceWorks = this.state.referenceWorks;
@@ -224,7 +226,7 @@ const AddRevision = React.createClass({
 		this.setState({
 			referenceWorks,
 		});
-	},
+	}
 
 	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
@@ -239,7 +241,7 @@ const AddRevision = React.createClass({
 		this.setState({
 			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
 		});
-	},
+	}
 
 	_onCommentsSearchChange({ value }) {
 		// use Meteor call method, as comments are not available on clint app
@@ -254,8 +256,7 @@ const AddRevision = React.createClass({
 				commentsSuggestions: fromJS(commentsSuggestions),
 			});
 		});
-
-	},
+	}
 
 	handleSubmit() {
 		const { textEditorState } = this.state;
@@ -289,7 +290,7 @@ const AddRevision = React.createClass({
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);
-	},
+	}
 
 	handleUpdate() {
 		const data = this.refs.form.getModel(); // eslint-disable-line
@@ -301,29 +302,34 @@ const AddRevision = React.createClass({
 			this.state.referenceWorks[params[0]][params[1]] = data[key];
 		}
 		this.props.update(this.state);
-	},
+	}
 
-	removeComment() {
-		const authToken = cookie.load('loginToken');
+	getRevisionIndex() {
+		const { comment, filters } = this.props;
+		let selectedRevisionIndex = this.state.selectedRevisionIndex;
+		if (selectedRevisionIndex === null) {
+			let foundRevision = null;
+			filters.forEach((filter) => {
+				if (filter.key === 'revision') {
+					foundRevision = filter.values[0];
+				}
+			});
 
-		Meteor.call('comment.delete', authToken, this.props.comment._id, (err) => {
-			if (err) {
-				console.error(err);
-				return false;
+			if (foundRevision != null && foundRevision >= 0 &&
+				foundRevision < comment.revisions.length) {
+				selectedRevisionIndex = foundRevision;
+			} else {
+				selectedRevisionIndex = 0;
 			}
-
-			FlowRouter.go('/commentary');
-		});
-	},
+		}
+		return selectedRevisionIndex;
+	}
 
 	selectRevision(event) {
-		const revision = this.props.comment.revisions[event.currentTarget.id];
 		this.setState({
-			revision,
-			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text), linkDecorator),
+			selectedRevisionIndex: parseInt(event.currentTarget.id, 10),
 		});
-	},
+	}
 
 	removeRevision() {
 		const self = this;
@@ -334,20 +340,20 @@ const AddRevision = React.createClass({
 
 			FlowRouter.go(`/commentary/${self.props.comment._id}/edit`);
 		});
-	},
+	}
 
 	addReferenceWorkBlock() {
 		this.state.referenceWorks.push({ referenceWorkId: '0' });
 		this.setState({
 			referenceWorks: this.state.referenceWorks,
 		});
-	},
+	}
 
 	removeReferenceWorkBlock(i) {
 		this.setState({
 			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
 		});
-	},
+	}
 
 	moveReferenceWorkBlock(dragIndex, hoverIndex) {
 		const { referenceWorks } = this.state;
@@ -361,50 +367,7 @@ const AddRevision = React.createClass({
 				],
 			},
 		}));
-	},
-
-	addTagBlock() {
-		this.state.tagsValue.push({
-			tagId: Random.id(),
-			isMentionedInLemma: true,
-			isSet: false,
-		});
-		this.setState({
-			tagsValue: this.state.tagsValue,
-		});
-	},
-
-	removeTagBlock(i) {
-		this.setState({
-			tagsValue: update(this.state.tagsValue, { $splice: [[i, 1]] }),
-		});
-	},
-
-	moveTagBlock(dragIndex, hoverIndex) {
-		const { tagsValue } = this.state;
-		const dragIntroBlock = tagsValue[dragIndex];
-
-		this.setState(update(this.state, {
-			tagsValue: {
-				$splice: [
-					[dragIndex, 1],
-					[hoverIndex, 0, dragIntroBlock],
-				],
-			},
-		}));
-	},
-
-	onTagValueChange(tag) {
-		const tagsValue = this.state.tagsValue;
-
-		tagsValue[tag.i].tagId = tag.value;
-		tagsValue[tag.i].keyword = Keywords.findOne({_id: tag.value});
-		tagsValue[tag.i].isSet = true;
-
-		this.setState({
-			tagsValue,
-		});
-	},
+	}
 
 	onIsMentionedInLemmaChange(tag, i) {
 		const tagsValue = this.state.tagsValue;
@@ -414,17 +377,20 @@ const AddRevision = React.createClass({
 		this.setState({
 			tagsValue,
 		});
-	},
+	}
 
 	render() {
 		const self = this;
-		const { comment, isTest } = this.props;
+		const { comment } = this.props;
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 
 		if (isTest) {
 			return null;
 		}
+
+		const selectedRevisionIndex = this.getRevisionIndex();
+		const selectedRevision = comment.revisions[selectedRevisionIndex];
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -437,53 +403,16 @@ const AddRevision = React.createClass({
 						onValidSubmit={this.handleSubmit}
 					>
 						<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
-
 							<div className="comment-upper">
-								<div className="comment-action-buttons">
-									<div className="comment-upper-action-button view-in-commentary">
-										<FlatButton
-											className="go-to-commentary-link"
-											onClick={() => {
-												FlowRouter.go('/commentary/', {}, {_id: comment._id});
-											}}
-											style={{
-												border: '1px solid #ddd',
-												maxHeight: 'none',
-												fontSize: '12px',
-												height: 'auto',
-											}}
-											label="View in Commentary"
-										/>
-									</div>
-									<div className="comment-upper-action-button">
-										<FlatButton
-											label="Remove Comment"
-											labelPosition="after"
-											onClick={this.removeComment}
-											style={{
-												border: '1px solid #ddd',
-												maxHeight: 'none',
-												fontSize: '12px',
-												height: 'auto',
-											}}
-										/>
-									</div>
-								</div>
-								<h1 className="add-comment-title">
-									{!isTest ?
-										<Editor
-											editorState={titleEditorState}
-											onChange={this.onTitleChange}
-											placeholder="Comment title..."
-											spellCheck
-											stripPastedStyles
-											plugins={[singleLinePlugin]}
-											blockRenderMap={singleLinePlugin.blockRenderMap}
-										/>
-									: ''}
-								</h1>
+								<CommentActionButtons
+									comment={comment}
+								/>
 
-								<AddTagInput
+								<TitleInput
+									placeholder="Comment title . . ."
+								/>
+
+								<TagsInput
 									tagsValue={tagsValue}
 									tags={tags}
 									addTagBlock={this.addTagBlock}
@@ -492,28 +421,11 @@ const AddRevision = React.createClass({
 									onTagValueChange={this.onTagValueChange}
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
 								/>
-
 							</div>
+
 							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
-								<Editor
-									editorState={textEditorState}
-									onChange={this.onTextChange}
-									placeholder="Comment text..."
-									spellCheck
-									plugins={[commentsMentionPlugin, keywordMentionPlugin, inlineToolbarPlugin]}
-									ref={(element) => { this.editor = element; }}
-								/>
 
-								{/* mentions suggestions for keywords */}
-								<keywordMentionPlugin.MentionSuggestions
-									onSearchChange={this._onKeywordSearchChange}
-									suggestions={this.state.keywordSuggestions}
-								/>
-
-								{/* mentions suggestions for comments cross reference */}
-								<commentsMentionPlugin.MentionSuggestions
-									onSearchChange={this._onCommentsSearchChange}
-									suggestions={this.state.commentsSuggestions}
+								<CommentContentInput
 								/>
 
 								<div className="comment-reference">
@@ -653,17 +565,13 @@ const AddRevision = React.createClass({
 							</div>
 
 
-							<div className="comment-revisions">
-								{comment.revisions.map((_revision, i) => (
-									<FlatButton
-										key={i}
-										id={i}
-										className={`revision ${revision._id === _revision._id ? 'selected-revision' : ''}`}
-										onClick={self.selectRevision}
-										label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
-									/>
-								))}
-							</div>
+					<CommentRevisionSelect
+						commentId={comment._id}
+						revisions={comment.revisions}
+						comment={comment}
+						selectedRevisionIndex={selectedRevisionIndex}
+						selectRevision={this.selectRevision}
+					/>
 						</article>
 					</Formsy.Form>
 				</div>
@@ -672,8 +580,8 @@ const AddRevision = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
 
 const AddRevisionContainer = createContainer(({ comment }) => {
 

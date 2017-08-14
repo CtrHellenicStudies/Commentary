@@ -43,7 +43,7 @@ import ReferenceWorks from '/imports/api/collections/referenceWorks';
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import AddTagInput from '/imports/ui/components/editor/addComment/AddTagInput';
+import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -478,7 +478,7 @@ class AddComment extends React.Component {
 									/>
 								</h1>
 
-								<AddTagInput
+								<TagsInput
 									tagsValue={tagsValue}
 									tags={tags}
 									addTagBlock={this.addTagBlock}

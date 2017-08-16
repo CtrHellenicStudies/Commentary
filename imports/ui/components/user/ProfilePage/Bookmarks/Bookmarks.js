@@ -11,7 +11,7 @@ class Bookmarks extends React.Component {
 
 		this.state = {
 			toggleBookmarksForm: false,
-			bookmarks: this.props.subscriptions.bookmarks
+			bookmarks: []
 		};
 
 		this.toggleBookmarksForm = this.toggleBookmarksForm.bind(this);
@@ -42,15 +42,9 @@ class Bookmarks extends React.Component {
 
 		const bookmarkID = bookmark._id;
 
-		console.log('id to remove: ', bookmarkID);
-
-		console.log('filtered bookmarks: ', bookmarks.filter(bookmarkToRemove => bookmarkToRemove._id === bookmarkID));
-
 		this.setState({
 			bookmarks: bookmarks.filter(bookmarkToRemove => bookmarkToRemove._id !== bookmarkID)
 		});
-
-		console.log('new state: ', bookmarks);
 
 		Meteor.users.update({_id: Meteor.userId()}, {
 			$pull: {

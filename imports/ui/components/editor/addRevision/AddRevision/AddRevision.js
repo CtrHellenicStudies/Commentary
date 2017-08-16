@@ -123,7 +123,6 @@ class AddRevision extends React.Component {
 		comment: React.PropTypes.object.isRequired,
 		tags: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
-		isTest: React.PropTypes.bool,
 	}
 
 	getInitialState() {
@@ -385,17 +384,12 @@ class AddRevision extends React.Component {
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 
-		if (isTest) {
-			return null;
-		}
-
 		const selectedRevisionIndex = this.getRevisionIndex();
 		const selectedRevision = comment.revisions[selectedRevisionIndex];
 
 		return (
 			<div className="comments lemma-panel-visible">
 				<div className="comment-outer">
-
 					<Formsy.Form
 						ref="form" // eslint-disable-line
 						onValid={this._enableButton}
@@ -407,176 +401,29 @@ class AddRevision extends React.Component {
 								<CommentActionButtons
 									comment={comment}
 								/>
-
 								<TitleInput
 									placeholder="Comment title . . ."
 								/>
-
-								<TagsInput
-									tagsValue={tagsValue}
-									tags={tags}
-									addTagBlock={this.addTagBlock}
-									removeTagBlock={this.removeTagBlock}
-									moveTagBlock={this.moveTagBlock}
-									onTagValueChange={this.onTagValueChange}
-									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
-								/>
+								<TagsInput />
 							</div>
 
 							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
-
-								<CommentContentInput
-								/>
-
-								<div className="comment-reference">
-									<h4>Secondary Source(s):</h4>
-									<FormGroup
-										controlId="referenceWorks"
-										className="form-group--referenceWorks"
-									>
-										<ListGroupDnD>
-											{/*
-												DnD: add the ListGroupItemDnD component
-												IMPORTANT:
-												"key" prop must not be taken from the map function - has to be unique like _id
-												value passed to the "key" prop must not be then edited in a FormControl component
-													- will cause errors
-												"index" - pass the map functions index variable here
-											*/}
-											{referenceWorks.map((referenceWork, i) => {
-												const _referenceWorkOptions = [];
-												referenceWorkOptions.forEach((rW) => {
-													_referenceWorkOptions.push({
-														value: rW.value,
-														label: rW.label,
-														slug: rW.slug,
-														i,
-													});
-												});
-
-												return (
-													<ListGroupItemDnD
-														key={referenceWork.referenceWorkId}
-														index={i}
-														className="form-subitem form-subitem--referenceWork"
-														moveListGroupItem={this.moveReferenceWorkBlock}
-													>
-														<div
-															className="reference-work-item"
-														>
-															<div
-																className="remove-reference-work-item"
-																onClick={this.removeReferenceWorkBlock.bind(this, i)}
-															>
-																<IconButton
-																	iconClassName="mdi mdi-close"
-																	style={{
-																		padding: '0',
-																		width: '32px',
-																		height: '32px',
-																		borderRadius: '100%',
-																		border: '1px solid #eee',
-																		color: '#666',
-																		margin: '0 auto',
-																		background: '#f6f6f6',
-																	}}
-																/>
-															</div>
-															<Creatable
-																name="referenceWorks"
-																id="referenceWorks"
-																required={false}
-																options={_referenceWorkOptions}
-																value={this.state.referenceWorks[i].referenceWorkId}
-																// onChange={this.onReferenceWorksValueChange.bind(this, referenceWork, i)}
-																onChange={this.onReferenceWorksValueChange}
-																placeholder="Reference Work . . ."
-															/>
-															<FormGroup>
-																<ControlLabel>Section Number: </ControlLabel>
-																<FormsyText
-																	name={`${i}_section`}
-																	defaultValue={referenceWork.section}
-																/>
-															</FormGroup>
-															<FormGroup>
-																<ControlLabel>Chapter Number: </ControlLabel>
-																<FormsyText
-																	name={`${i}_chapter`}
-																	defaultValue={referenceWork.chapter}
-																/>
-															</FormGroup>
-															<FormGroup>
-																<ControlLabel>Translation Number: </ControlLabel>
-																<FormsyText
-																	name={`${i}_translation`}
-																	defaultValue={referenceWork.translation}
-																/>
-															</FormGroup>
-															<FormGroup>
-																<ControlLabel>Note Number: </ControlLabel>
-																<FormsyText
-																	name={`${i}_note`}
-																	defaultValue={referenceWork.note}
-																/>
-															</FormGroup>
-														</div>
-													</ListGroupItemDnD>
-												);
-											})}
-										</ListGroupDnD>
-										<RaisedButton
-											label="Add Reference Work"
-											onClick={this.addReferenceWorkBlock}
-										/>
-									</FormGroup>
-								</div>
-
-
-								<div className="comment-edit-action-button">
-									<RaisedButton
-										type="submit"
-										label="Add revision"
-										labelPosition="after"
-										icon={<FontIcon className="mdi mdi-plus" />}
-									/>
-								</div>
-								{(
-									Roles.userIsInRole(Meteor.user(), ['editor', 'admin'])
-									&& comment.revisions.length > 1
-								) ?
-									<div className="comment-edit-action-button comment-edit-action-button--remove">
-										<RaisedButton
-											label="Remove revision"
-											labelPosition="after"
-											onClick={this.removeRevision}
-											icon={<FontIcon className="mdi mdi-minus" />}
-										/>
-									</div>
-								: '' }
-								<div className="comment-edit-action-button">
-									<RaisedButton
-										label="Update without adding Revision"
-										labelPosition="after"
-										icon={<FontIcon className="mdi mdi-plus" />}
-										onClick={this.handleUpdate}
-									/>
-								</div>
+								<CommentContentInput />
+								<ReferenceWorksInput />
+								<AddRevisionButton />
+								<RemoveRevisionButton />
+								<UpdateRevisionButton />
 							</div>
 
-
-					<CommentRevisionSelect
-						commentId={comment._id}
-						revisions={comment.revisions}
-						comment={comment}
-						selectedRevisionIndex={selectedRevisionIndex}
-						selectRevision={this.selectRevision}
-					/>
+							<CommentRevisionSelect
+								commentId={comment._id}
+								revisions={comment.revisions}
+								comment={comment}
+								selectedRevisionIndex={selectedRevisionIndex}
+								selectRevision={this.selectRevision}
+							/>
 						</article>
 					</Formsy.Form>
-				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
 				</div>
 			</div>
 		);

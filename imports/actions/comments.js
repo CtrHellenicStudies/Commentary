@@ -7,3 +7,17 @@ export const addComment = ({ comment }) => {
 		comment: comment,
   };
 }
+
+export const updateComment = ({ comment }) => {
+  return {
+    type: UPDATE_COMMENT,
+		comment: comment,
+  };
+}
+
+export const removeComment = ({ comment }) => {
+  return {
+    type: REMOVE_COMMENT,
+		comment: comment,
+  };
+}

@@ -6,33 +6,61 @@ class RecentActivity extends React.Component {
 	constructor(props) {
 		super(props);
 
+		this.state = {
+			notifications: this.props.subscriptions.notifications
+		};
+
 		this.removeNotification = this.removeNotification.bind(this);
 	}
 
+	static propTypes = {
+		subscriptions: React.PropTypes.object
+	}
 
-	removeNotification() {
-		console.log('remove me!');
+	removeNotification(notification) {
+		const { notifications } = this.state;
+
+		const notificationID = notification._id;
+
+		Meteor.users.update({_id: Meteor.userId()}, {
+			$pull: {
+				'subscriptions.notifications': {_id: notificationID}
+			}
+		});
+		
+		this.setState({
+			notifications: notifications.filter(notificationToFilter => notificationToFilter._id !== notificationID)
+		});
 	}
 
 	render() {
-		const { subscriptions } = this.props;
+		const { notifications } = this.state;
 		return (
 			<div>
 				<h2>Recent Activity</h2>
-				{subscriptions.notifications.map((notification) => (
-					<Card key={notification._id}>
-						<a>
-							<CardHeader
-								subtitle={notification.message}
-								avatar={notification.avatar.src}
-							/>
-						</a>
-						<FlatButton
-							label="Remove Notification"
-							onTouchTap={this.removeNotification}
-						/>
-					</Card>
-				))}
+				{notifications.length > 0 ?
+					<div>
+						{notifications.map((notification) => (
+							<Card key={notification._id}>
+								<a href={`/commentary?_id=${notification.slug}`}>
+									<CardHeader
+										title={`New notification from ${moment(notification.created).format('D/M/YYYY')}`}
+										subtitle={notification.message}
+										avatar={notification.avatar.src}
+									/>
+								</a>
+								<FlatButton
+									label="Remove Notification"
+									onClick={() => this.removeNotification(notification)}
+								/>
+							</Card>
+						))}
+					</div>
+				:
+					<div>
+						<h3>You have no new notifications.</h3>
+					</div>
+				}
 			</div>
 		);
 	}

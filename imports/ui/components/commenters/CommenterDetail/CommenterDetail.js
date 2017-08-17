@@ -19,10 +19,25 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 import Utils from '/imports/lib/utils';
 
 class CommenterDetail extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			readMoreBio: false,
+			loggedIn: Meteor.user(),
+			subscriptions: Meteor.user() && Meteor.user().subscriptions
+		};
+
+		// methods:
+		this.toggleReadMoreBio = this.toggleReadMoreBio.bind(this);
+		this.subscribe = this.subscribe.bind(this);
+	}
+
 	static propTypes = {
 		commenter: React.PropTypes.shape({
 			name: React.PropTypes.string.isRequired,
 			bio: React.PropTypes.string,
+			_id: React.PropTypes.string
 		}),
 		avatarUrl: React.PropTypes.string,
 		settings: React.PropTypes.shape({
@@ -37,26 +52,13 @@ class CommenterDetail extends React.Component {
 		isTest: false,
 	};
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			readMoreBio: false,
-			loggedIn: Meteor.user(),
-		};
-
-		// methods:
-		this.toggleReadMoreBio = this.toggleReadMoreBio.bind(this);
-		this.subscribe = this.subscribe.bind(this);
-	}
-
-	componentWillMount() {
+	componentWillReceiveProps(nextProps) {
 		const { commenter } = this.props;
-		const subscriptions = Meteor.user().subscriptions;
+		const { subscriptions } = this.state;
 
-		if (subscriptions) {
+		if (commenter !== nextProps.commenter) {
 			this.setState({
-				subscribed: subscriptions.commenters.filter((sub) => sub._id === commenter._id).length > 0
+				subscribed: subscriptions.commenters.filter((sub) => sub._id === nextProps.commenter._id).length > 0
 			});
 		} else {
 			this.setState({
@@ -94,19 +96,16 @@ class CommenterDetail extends React.Component {
 					'subscriptions.commenters': commenterObj
 				}
 			});
-			this.setState({
-				subscribed: !subscribed
-			});
 		} else {
 			Meteor.users.update({_id: Meteor.userId()}, {
 				$pull: {
 					'subscriptions.commenters': {_id: commenterObj._id}
 				}
 			});
-			this.setState({
-				subscribed: !subscribed
-			});
 		}
+		this.setState({
+			subscribed: !subscribed
+		});
 	}
 
 	render() {
@@ -220,6 +219,7 @@ class CommenterDetail extends React.Component {
 export default createContainer(({ slug }) => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 	const commentersHandle = Meteor.subscribe('commenters.slug', slug, Session.get('tenantId'));
+
 	let avatarUrl;
 
 	const commenter = Commenters.findOne({ slug });

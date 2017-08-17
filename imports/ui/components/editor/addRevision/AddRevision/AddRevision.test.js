@@ -20,7 +20,6 @@ describe('AddRevision', () => {
 								text: 'test comment text',
 							}],
 						}}
-						isTest
 					/>
 				</MuiThemeProvider>
 			)

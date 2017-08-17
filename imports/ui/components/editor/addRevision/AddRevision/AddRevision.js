@@ -165,10 +165,6 @@ class AddRevision extends React.Component {
 		};
 	}
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	}
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
@@ -305,7 +301,7 @@ class AddRevision extends React.Component {
 
 	getRevisionIndex() {
 		const { comment, filters } = this.props;
-		let selectedRevisionIndex = this.state.selectedRevisionIndex;
+		let selectedRevisionIndex = 0; // this.state.selectedRevisionIndex;
 		if (selectedRevisionIndex === null) {
 			let foundRevision = null;
 			filters.forEach((filter) => {
@@ -379,9 +375,8 @@ class AddRevision extends React.Component {
 	}
 
 	render() {
-		const self = this;
 		const { comment } = this.props;
-		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
+		// const { titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 
 		const selectedRevisionIndex = this.getRevisionIndex();
@@ -389,6 +384,7 @@ class AddRevision extends React.Component {
 
 		return (
 			<div className="comments lemma-panel-visible">
+				{/*
 				<div className="comment-outer">
 					<Formsy.Form
 						ref="form" // eslint-disable-line
@@ -424,7 +420,7 @@ class AddRevision extends React.Component {
 							/>
 						</article>
 					</Formsy.Form>
-				</div>
+				</div>*/}
 			</div>
 		);
 	}
@@ -456,5 +452,10 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 		referenceWorkOptions,
 	};
 }, AddRevision);
+
+
+AddRevisionContainer.childContextTypes = {
+	muiTheme: React.PropTypes.object.isRequired,
+};
 
 export default AddRevisionContainer;

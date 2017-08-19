@@ -125,46 +125,6 @@ class AddRevision extends React.Component {
 		referenceWorkOptions: React.PropTypes.array,
 	}
 
-	getInitialState() {
-		const { comment } = this.props;
-		const revisionId = comment.revisions.length - 1;
-		const revision = comment.revisions[revisionId]; // get newest revision
-		let revisionTitle = '';
-
-		const tagsValue = [];
-		if (comment.keywords) {
-			comment.keywords.forEach((keyword) => {
-				tagsValue.push({
-					isSet: true,
-					keyword,
-					tagId: keyword._id,
-					isMentionedInLemma: keyword.isMentionedInLemma,
-				});
-			});
-		}
-
-		if (revision && revision.title) {
-			revisionTitle = revision.title;
-		}
-
-		return {
-			revision,
-
-			selectedRevisionIndex: null,
-			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revisionTitle)),
-			textEditorState: this._getRevisionEditorState(revision),
-
-			titleValue: '',
-			textValue: '',
-
-			tagsValue,
-
-			referenceWorks: comment.referenceWorks || [],
-			keywordSuggestions: fromJS([]),
-			commentsSuggestions: fromJS([]),
-		};
-	}
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
@@ -178,78 +138,6 @@ class AddRevision extends React.Component {
 	_disableButton() {
 		this.setState({
 			canSubmit: false,
-		});
-	}
-
-	_getRevisionEditorState(revision) {
-		if (revision.textRaw) {
-			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
-		} else if (revision.text) {
-			const blocksFromHTML = convertFromHTML(revision.text);
-			return EditorState.createWithContent(
-				ContentState.createFromBlockArray(
-					blocksFromHTML.contentBlocks,
-					blocksFromHTML.entityMap
-				),
-				linkDecorator
-			);
-		}
-		console.error('missing filed text or textRaw in revision');
-	}
-
-	onTitleChange(titleEditorState) {
-		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-		const title = jQuery(titleHtml).text();
-		this.setState({
-			titleEditorState,
-			titleValue: title,
-		});
-	}
-
-	onTextChange(textEditorState) {
-		const newTextEditorState = EditorState.set(textEditorState, {decorator: linkDecorator});
-
-		this.setState({
-			textEditorState: newTextEditorState,
-		});
-	}
-
-	onReferenceWorksValueChange(referenceWork) {
-		const referenceWorks = this.state.referenceWorks;
-		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
-
-		this.setState({
-			referenceWorks,
-		});
-	}
-
-	_onKeywordSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.tags;
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.label,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	}
-
-	_onCommentsSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
-			const commentsSuggestions = _getSuggestionsFromComments(res);
-
-			this.setState({
-				commentsSuggestions: fromJS(commentsSuggestions),
-			});
 		});
 	}
 
@@ -287,96 +175,8 @@ class AddRevision extends React.Component {
 		this.props.submitForm(this.state, textHtml, textRaw);
 	}
 
-	handleUpdate() {
-		const data = this.refs.form.getModel(); // eslint-disable-line
-		let key;
-
-		for (key in data) { // eslint-disable-line
-			const params = key.split('_');
-			params[0] = parseInt(params[0], 10);
-			this.state.referenceWorks[params[0]][params[1]] = data[key];
-		}
-		this.props.update(this.state);
-	}
-
-	getRevisionIndex() {
-		const { comment, filters } = this.props;
-		let selectedRevisionIndex = 0; // this.state.selectedRevisionIndex;
-		if (selectedRevisionIndex === null) {
-			let foundRevision = null;
-			filters.forEach((filter) => {
-				if (filter.key === 'revision') {
-					foundRevision = filter.values[0];
-				}
-			});
-
-			if (foundRevision != null && foundRevision >= 0 &&
-				foundRevision < comment.revisions.length) {
-				selectedRevisionIndex = foundRevision;
-			} else {
-				selectedRevisionIndex = 0;
-			}
-		}
-		return selectedRevisionIndex;
-	}
-
-	selectRevision(event) {
-		this.setState({
-			selectedRevisionIndex: parseInt(event.currentTarget.id, 10),
-		});
-	}
-
-	removeRevision() {
-		const self = this;
-		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision, (err) => {
-			if (err) {
-				throw new Meteor.Error('Error removing revision');
-			}
-
-			FlowRouter.go(`/commentary/${self.props.comment._id}/edit`);
-		});
-	}
-
-	addReferenceWorkBlock() {
-		this.state.referenceWorks.push({ referenceWorkId: '0' });
-		this.setState({
-			referenceWorks: this.state.referenceWorks,
-		});
-	}
-
-	removeReferenceWorkBlock(i) {
-		this.setState({
-			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
-		});
-	}
-
-	moveReferenceWorkBlock(dragIndex, hoverIndex) {
-		const { referenceWorks } = this.state;
-		const dragIntroBlock = referenceWorks[dragIndex];
-
-		this.setState(update(this.state, {
-			referenceWorks: {
-				$splice: [
-					[dragIndex, 1],
-					[hoverIndex, 0, dragIntroBlock],
-				],
-			},
-		}));
-	}
-
-	onIsMentionedInLemmaChange(tag, i) {
-		const tagsValue = this.state.tagsValue;
-
-		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
-
-		this.setState({
-			tagsValue,
-		});
-	}
-
 	render() {
 		const { comment } = this.props;
-		// const { titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 
 		const selectedRevisionIndex = this.getRevisionIndex();
@@ -384,7 +184,6 @@ class AddRevision extends React.Component {
 
 		return (
 			<div className="comments lemma-panel-visible">
-				{/*
 				<div className="comment-outer">
 					<Formsy.Form
 						ref="form" // eslint-disable-line
@@ -420,7 +219,7 @@ class AddRevision extends React.Component {
 							/>
 						</article>
 					</Formsy.Form>
-				</div>*/}
+				</div>
 			</div>
 		);
 	}

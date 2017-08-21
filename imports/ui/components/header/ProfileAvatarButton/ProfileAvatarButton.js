@@ -51,11 +51,11 @@ ProfileAvatarButton.propTypes = {
 };
 
 const ProfileAvatarButtonContainer = createContainer(() => {
-	const notifications = Meteor.user().subscriptions.notifications;
+	if (Meteor.user().subscriptions && Meteor.user().subscriptions.notifications) {
+		return Meteor.user().subscriptions.notifications;
+	}
 
-	return { 
-		notifications
-	};
+	return {};
 }, ProfileAvatarButton);
 
 export default ProfileAvatarButtonContainer;

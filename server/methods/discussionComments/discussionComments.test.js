@@ -12,8 +12,8 @@ import Utils from '/imports/lib/utils';
 import Config from '/imports/lib/_config/_config.js';
 
 // api:
-import Comments from '/imports/api/collections/comments';
-import DiscussionComments from '/imports/api/collections/discussionComments';
+import Comments from '/imports/models/comments';
+import DiscussionComments from '/imports/models/discussionComments';
 import * as emailMethods from './emails';
 
 // tested module:

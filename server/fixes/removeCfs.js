@@ -1,4 +1,4 @@
-import Commenters from '/imports/api/collections/commenters';
+import Commenters from '/imports/models/commenters';
 
 Meteor.method('removeCfs', () => {
 	const db = Meteor.users.rawDatabase();

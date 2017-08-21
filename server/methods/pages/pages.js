@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 
-import Pages from '/imports/api/collections/pages.js';
+import Pages from '/imports/models/pages.js';
 
 const pagesInsert = (token, page) => {
 	check(token, String);

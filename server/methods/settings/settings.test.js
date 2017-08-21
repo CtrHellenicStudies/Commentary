@@ -8,7 +8,7 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Settings from '/imports/api/collections/settings.js';
+import Settings from '/imports/models/settings.js';
 
 // tested module:
 import { settingsInsert, settingsUpdate, settingsRemove } from './settings';

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 
-import LinkedDataSchemas from '/imports/api/collections/linkedDataSchemas';
+import LinkedDataSchemas from '/imports/models/linkedDataSchemas';
 
 const linkedDataSchemasInsert = (token, linkedDataSchema) => {
 	check(token, String);

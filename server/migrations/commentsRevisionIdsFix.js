@@ -1,4 +1,4 @@
-import Comments from '/imports/api/collections/comments';
+import Comments from '/imports/models/comments';
 
 const commentsRevisionIdsFix = () => {
 	const comments = Comments.find().fetch();

@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import winston from 'winston';
 
-import Comments from '/imports/api/collections/comments';
-import Works from '/imports/api/collections/works';
+import Comments from '/imports/models/comments';
+import Works from '/imports/models/works';
 
 const commentaryCron = () => {
 	const commentCounts = [];

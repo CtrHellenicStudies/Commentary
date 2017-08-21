@@ -8,7 +8,7 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Keywords from '/imports/api/collections/keywords';
+import Keywords from '/imports/models/keywords';
 
 // tested module:
 import { keywordsInsert, keywordsUpdate, keywordsDelete } from './keywords';

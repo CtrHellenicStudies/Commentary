@@ -1,12 +1,12 @@
 import { sitemaps } from 'meteor/gadicohen:sitemaps';
 
 // api
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
-import Pages from '/imports/api/collections/pages';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
-import Tenants from '/imports/api/collections/tenants';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
+import Keywords from '/imports/models/keywords';
+import Pages from '/imports/models/pages';
+import ReferenceWorks from '/imports/models/referenceWorks';
+import Tenants from '/imports/models/tenants';
 
 
 sitemaps.add('/sitemap.xml', (req) => {

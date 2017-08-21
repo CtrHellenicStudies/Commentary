@@ -8,7 +8,7 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes';
+import TextNodes from '/imports/models/textNodes';
 
 // tested module:
 import { textNodesInsert, textNodesUpdate, textNodesRemove } from './textNodes';

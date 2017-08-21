@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 
-import Keywords from '/imports/api/collections/keywords';
+import Keywords from '/imports/models/keywords';
 
 
 const keywordsInsert = (token, keywords) => {

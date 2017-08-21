@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import Subworks from '/imports/api/collections/subworks';
+import Subworks from '/imports/models/subworks';
 
 const Works = new Meteor.Collection('works');
 

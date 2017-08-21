@@ -10,7 +10,7 @@ import { ObjectID } from 'bson';
 
 
 // api
-import Works from '/imports/api/collections/works';
+import Works from '/imports/models/works';
 
 class BookmarksForm extends React.Component {
 	constructor(props) {

@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Masonry from 'react-masonry-component/lib';
 
 // api
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
 import ReferenceWorkTeaser from '/imports/ui/components/referenceWorks/ReferenceWorkTeaser';

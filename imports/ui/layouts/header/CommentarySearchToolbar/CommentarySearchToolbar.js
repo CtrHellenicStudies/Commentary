@@ -6,10 +6,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 import _ from 'lodash';
 
 // api:
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
-import Works from '/imports/api/collections/works';
+import Commenters from '/imports/models/commenters';
+import Keywords from '/imports/models/keywords';
+import ReferenceWorks from '/imports/models/referenceWorks';
+import Works from '/imports/models/works';
 
 // components:
 import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns';

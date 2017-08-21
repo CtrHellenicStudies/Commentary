@@ -5,7 +5,6 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 
 const settings = Meteor.settings.public;
 
-console.log( `${settings.REACT_APP_GRAPHQL_SERVER}/${settings.REACT_APP_GRAPHQL_URI}`);
 const networkInterface = createNetworkInterface({
 	uri: `${settings.REACT_APP_GRAPHQL_SERVER}/${settings.REACT_APP_GRAPHQL_URI}`,
 });

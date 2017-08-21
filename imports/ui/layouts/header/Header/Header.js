@@ -7,8 +7,8 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 
 // api:
-import Settings from '/imports/api/collections/settings';
-import Tenants from '/imports/api/collections/tenants';
+import Settings from '/imports/models/settings';
+import Tenants from '/imports/models/tenants';
 
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';

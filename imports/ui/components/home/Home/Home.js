@@ -5,7 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
-import Comments from '/imports/api/collections/comments';
+import Comments from '/imports/models/comments';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 
 // lib

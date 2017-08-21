@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 
 // api
-import Comments from '/imports/api/collections/comments';
+import Comments from '/imports/models/comments';
 
 // components
 import RecentActivityTeaser from '../RecentActivityTeaser';

@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api
-import Commenters from '/imports/api/collections/commenters';
+import Commenters from '/imports/models/commenters';
 
 // components
 import CommenterTeaser from '/imports/ui/components/commenters/CommenterTeaser';

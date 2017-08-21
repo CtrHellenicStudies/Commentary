@@ -1,7 +1,7 @@
 import React from 'react';
 
 // api
-import Commenters from '/imports/api/collections/commenters';
+import Commenters from '/imports/models/commenters';
 
 // components
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';

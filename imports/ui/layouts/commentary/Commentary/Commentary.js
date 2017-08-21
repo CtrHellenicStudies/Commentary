@@ -7,9 +7,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 
 // api:
-import Comments from '/imports/api/collections/comments';
-import Settings from '/imports/api/collections/settings';
-import Works from '/imports/api/collections/works';
+import Comments from '/imports/models/comments';
+import Settings from '/imports/models/settings';
+import Works from '/imports/models/works';
 
 // layouts:
 import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';

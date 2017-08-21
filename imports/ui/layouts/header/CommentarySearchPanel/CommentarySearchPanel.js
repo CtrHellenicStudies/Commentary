@@ -10,10 +10,10 @@ import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
 // api:
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
-import Works from '/imports/api/collections/works';
+import Commenters from '/imports/models/commenters';
+import Keywords from '/imports/models/keywords';
+import ReferenceWorks from '/imports/models/referenceWorks';
+import Works from '/imports/models/works';
 
 // components:
 import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';

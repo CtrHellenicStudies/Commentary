@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
 // api
-import DiscussionComments from '/imports/api/collections/discussionComments';
+import DiscussionComments from '/imports/models/discussionComments';
 
 // lib
 import Utils from '/imports/lib/utils';

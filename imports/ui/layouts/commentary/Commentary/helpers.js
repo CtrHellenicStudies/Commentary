@@ -1,6 +1,6 @@
 // api:
-import Commenters from '/imports/api/collections/commenters';
-import Comments from '/imports/api/collections/comments';
+import Commenters from '/imports/models/commenters';
+import Comments from '/imports/models/comments';
 
 /*
 	helpers

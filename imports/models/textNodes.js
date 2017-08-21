@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import Editions from '/imports/api/collections/editions';
+import Editions from '/imports/models/editions';
 
 const TextNodes = new Meteor.Collection('textNodes');
 

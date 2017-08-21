@@ -6,7 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
 
 // api
-import Comments from '/imports/api/collections/comments';
+import Comments from '/imports/models/comments';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';

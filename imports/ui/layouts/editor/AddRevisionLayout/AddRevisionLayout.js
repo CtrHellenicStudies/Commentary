@@ -12,9 +12,9 @@ import { ApolloProvider } from 'react-apollo';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 // api
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
+import Keywords from '/imports/models/keywords';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';

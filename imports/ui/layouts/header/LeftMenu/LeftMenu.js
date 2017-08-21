@@ -6,7 +6,7 @@ import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 
 // api:
-import Tenants from '/imports/api/collections/tenants';
+import Tenants from '/imports/models/tenants';
 
 // components:
 import SideNavTop from '/imports/ui/components/header/SideNavTop';

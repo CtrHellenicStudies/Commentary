@@ -22,8 +22,8 @@ import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
 
 // api
-import Works from '/imports/api/collections/works';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Works from '/imports/models/works';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';

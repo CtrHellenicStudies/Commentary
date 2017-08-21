@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { SyncedCron } from 'meteor/percolate:synced-cron';
 import Comments from '/imports/api/collections/comments';
 import Commenters from '/imports/api/collections/commenters';
 import DiscussionComments from '/imports/api/collections/discussionComments';
@@ -9,6 +10,9 @@ import TextNodes from '/imports/api/collections/textNodes';
 import Works from '/imports/api/collections/works';
 
 Meteor.startup(() => {
+	// start cron tasks
+	SyncedCron.start();
+
 	if (Tenants.find().count() === 0) {
 		const tenantId = Tenants.insert({
 			subdomain: 'ahcip',

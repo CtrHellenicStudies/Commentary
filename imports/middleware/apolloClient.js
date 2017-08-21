@@ -1,12 +1,13 @@
+import { Meteor } from 'meteor/meteor';
 import { ApolloClient, createNetworkInterface } from 'react-apollo';
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 
 
+const settings = Meteor.settings.public;
+
+console.log( `${settings.REACT_APP_GRAPHQL_SERVER}/${settings.REACT_APP_GRAPHQL_URI}`);
 const networkInterface = createNetworkInterface({
-	uri: `${process.env.REACT_APP_GRAPHQL_SERVER}/${process.env.REACT_APP_GRAPHQL_URI}`,
-	// opts: {
-	// 	credentials: 'include',
-	// }
+	uri: `${settings.REACT_APP_GRAPHQL_SERVER}/${settings.REACT_APP_GRAPHQL_URI}`,
 });
 
 networkInterface.use([{
@@ -23,7 +24,7 @@ const connectionParams = () => {
 	return { authToken: localStorage.getItem('token') ? localStorage.getItem('token') : null };
 };
 
-const wsClient = new SubscriptionClient(`${process.env.REACT_APP_WS_SERVER}/${process.env.REACT_APP_WS_SERVER_URI}`, {
+const wsClient = new SubscriptionClient(`${settings.REACT_APP_WS_SERVER}/${settings.REACT_APP_WS_SERVER_URI}`, {
 	reconnect: true,
 	connectionParams,
 });

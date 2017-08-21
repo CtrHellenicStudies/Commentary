@@ -8,6 +8,8 @@ import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
+import { ApolloProvider } from 'react-apollo';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 // api
 import Comments from '/imports/api/collections/comments';
@@ -23,6 +25,12 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import client from '/imports/middleware/apolloClient';
+import configureStore from '/imports/store/configureStore';
+
+// redux integration for layout
+const store = configureStore();
+const history = syncHistoryWithStore(browserHistory, store);
 
 
 const AddRevisionLayout = React.createClass({
@@ -269,70 +277,69 @@ const AddRevisionLayout = React.createClass({
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				{ready && comment ?
-					<div className="chs-layout chs-editor-layout add-comment-layout">
+				<ApolloProvider
+					client={client}
+					store={store}
+				>
+					<div>
+						{ready && comment ?
+							<div className="chs-layout chs-editor-layout add-comment-layout">
+								<Header
+									toggleSearchTerm={this.toggleSearchTerm}
+									handleChangeLineN={this.handleChangeLineN}
+									filters={filters}
+									initialSearchEnabled
+									addCommentPage
+								/>
+								<main>
+									<div className="commentary-comments">
+										<div className="comment-group">
+											<CommentLemmaSelect
+												ref={(component) => { this.commentLemmaSelect = component; }}
+												selectedLineFrom={comment.lineFrom}
+												selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+												workSlug={comment.work.slug}
+												subworkN={comment.subwork.n}
+											/>
 
-						<Header
-							toggleSearchTerm={this.toggleSearchTerm}
-							handleChangeLineN={this.handleChangeLineN}
-							filters={filters}
-							initialSearchEnabled
-							addCommentPage
-						/>
+											<AddRevision
+												submitForm={this.addRevision}
+												update={this.update}
+												comment={comment}
+											/>
 
-						<main>
-
-							<div className="commentary-comments">
-								<div className="comment-group">
-									<CommentLemmaSelect
-										ref={(component) => { this.commentLemmaSelect = component; }}
-										selectedLineFrom={comment.lineFrom}
-										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
-										workSlug={comment.work.slug}
-										subworkN={comment.subwork.n}
-									/>
-
-									<AddRevision
-										submitForm={this.addRevision}
-										update={this.update}
-										comment={comment}
-									/>
-
-									<ContextPanel
-										open={this.state.contextReaderOpen}
-										workSlug={comment.work.slug}
-										subworkN={comment.subwork.n}
-										lineFrom={comment.lineFrom}
-										selectedLineFrom={comment.lineFrom}
-										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
-										editor
-										disableEdit
-									/>
-								</div>
+											<ContextPanel
+												open={this.state.contextReaderOpen}
+												workSlug={comment.work.slug}
+												subworkN={comment.subwork.n}
+												lineFrom={comment.lineFrom}
+												selectedLineFrom={comment.lineFrom}
+												selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+												editor
+												disableEdit
+											/>
+										</div>
+									</div>
+								</main>
+								<FilterWidget
+									filters={filters}
+									toggleSearchTerm={this.toggleSearchTerm}
+								/>
+								<Snackbar
+									className="add-comment-snackbar"
+									open={this.state.snackbarOpen}
+									message={this.state.snackbarMessage}
+									autoHideDuration={4000}
+								/>
 							</div>
-
-
-						</main>
-
-						<FilterWidget
-							filters={filters}
-							toggleSearchTerm={this.toggleSearchTerm}
-						/>
-						<Snackbar
-							className="add-comment-snackbar"
-							open={this.state.snackbarOpen}
-							message={this.state.snackbarMessage}
-							autoHideDuration={4000}
-						/>
-
+							:
+							<div className="ahcip-spinner commentary-loading full-page-spinner">
+								<div className="double-bounce1" />
+								<div className="double-bounce2" />
+							</div>
+						}
 					</div>
-					:
-					<div className="ahcip-spinner commentary-loading full-page-spinner">
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
-					</div>
-				}
-
+				</ApolloProvider>
 			</MuiThemeProvider>
 		);
 	},

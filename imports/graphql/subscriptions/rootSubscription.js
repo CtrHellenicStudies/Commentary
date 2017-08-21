@@ -2,7 +2,7 @@ import { GraphQLObjectType } from 'graphql';
 import { Meteor } from 'meteor/meteor';
 
 // types
-import commentType from '/imports/types/models/comments';
+import commentsType from '/imports/graphql/types/models/comment';
 
 // models
 import Comments from '/imports/models/comments';
@@ -19,7 +19,7 @@ const RootSubscription = new GraphQLObjectType({
 		commentsNew: {
 			type: commentsType,
 			description: 'Informs about new comments',
-			subscribe: () => Comments.find({}, { sort: { updated: 1 }}),
+			subscribe: () => Comments.find({}, { sort: { updated: 1 }, limit: 10 }),
 		}
 	},
 });

@@ -1,40 +1,43 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
-import ProjectType from '../types/models/project';
+import CommentType from '/imports/graphql/types/models/comment';
 
 // models
-import Project from '../../models/project';
+import Comments from '/imports/models/comments';
 
 // errors
-import { AuthenticationError } from '../../errors';
+import { AuthenticationError } from '/imports/errors';
 
-const projectMutationFileds = {
-
-	projectCreate: {
-		type: ProjectType,
-		description: 'Create new project',
+const commentMutationFileds = {
+	commentCreate: {
+		type: CommentType,
+		description: 'Create new comment',
 		args: {
 			title: {
 				type: new GraphQLNonNull(GraphQLString),
 			},
-			description: {
-				type: GraphQLString,
+			content: {
+				type: new GraphQLNonNull(GraphQLString),
+			},
+			commenter: {
+				type: new GraphQLNonNull(GraphQLString),
 			},
 		},
-		resolve(parent, { title, description }, { user, tenant }) {
+		resolve(parent, { title, content }, { user, tenant }) {
 
 			// only a logged in user and coming from the admin page, can create new project
 			if (user && tenant.adminPage) {
-				const otherFields = {
+				return Comments.insert({
+					tenantId: tenant._id,
 					title,
 					description,
-				};
-				return Project.createByOwner(user._id, otherFields);
+				});
 			}
+
 			throw AuthenticationError();
 		}
 	}
 };
 
-export default projectMutationFileds;
+export default commentMutationFileds;

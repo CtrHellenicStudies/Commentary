@@ -4,9 +4,12 @@ import { makeExecutableSchema } from 'graphql-tools';
 import { apolloExpress } from 'apollo-server';
 import proxyMiddleware from 'http-proxy-middleware';
 import { graphiqlExpress } from 'graphql-server-express';
+import { GraphQLSchema } from 'graphql';
+
+// graphql resources
 import RootQuery from '/imports/graphql/queries/rootQuery';
-import RootMutation from '/imports/graphql/queries/rootMutation';
-import RootSubscription from '/imports/graphql/queries/RootSubscription';
+import RootMutation from '/imports/graphql/mutations/rootMutation';
+import RootSubscription from '/imports/graphql/subscriptions/rootSubscription';
 
 
 /**

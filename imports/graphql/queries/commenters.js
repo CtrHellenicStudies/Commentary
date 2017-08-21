@@ -1,28 +1,32 @@
 import { GraphQLID, GraphQLNonNull } from 'graphql';
 
 // types
-import ProjectType from '../types/models/project';
+import CommenterType from '/imports/graphql/types/models/commenter';
 
 // models
-import Project from '../../models/project';
+import Commenters from '/imports/models/commenters';
 
-const projectQueryFields = {
+
+const commenterQueryFields = {
 	commenters: {
 		type: CommenterType,
-		description: 'Get list of commenters',
+		description: 'Get list of all commenters',
 		args: {
-			_id: {
-				type: new GraphQLNonNull(GraphQLID),
+			tenantId: {
+				type: GraphQLID,
 			},
 		},
-		resolve(tenant, { _id }, context) {
-			if ('name' in args) {
-				args.name = { $regex: args.name, $options: 'i'};
+		resolve({ tenantId }, context) {
+			const args = {};
+			if (tenantId) {
+				args.tenantId = tenantId;
 			}
-			if ('slug' in args) {
-				args.slug = { $regex: args.slug, $options: 'i'};
-			}
-			return Commenters.find(args, {sort: {name: 1}}).fetch();
+
+			return Commenters.find(args, {
+				sort: {
+					slug: 1
+				}
+			}).fetch();
 		}
 	},
 };

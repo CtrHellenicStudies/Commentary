@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
@@ -7,6 +8,7 @@ import { ObjectID } from 'bson';
 
 import Comments from '/imports/api/collections/comments';
 import Commenters from '/imports/api/collections/commenters';
+
 
 
 const commentsInsert = (token, comment) => {
@@ -73,6 +75,62 @@ const commentsInsert = (token, comment) => {
 	const update = { $push: {'subscriptions.notifications': notification} };
 
 	const subscribedUsers = Meteor.users.update(query, update, notification, options);
+
+	// send notification email
+	const emailListQuery = {
+		$and: [ 
+			{
+				$or: [
+					{
+						$and: 
+						[
+							{'subscriptions.bookmarks.work.slug': comment.work.slug},
+							{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
+							{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+							{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+						]
+					},
+					{
+						'subscriptions.commenters': { $elemMatch: {_id: commenterId} }
+					}
+				]
+			},
+			{
+				batchNotification: 'immediately'
+			},
+			{
+				emails: { $exists: true }
+			}
+		]
+	};
+
+	const emailList = Meteor.users.find(emailListQuery);
+
+	emailList.forEach(user => {
+
+		let username = 'Commentary User';
+		if (user.profile.name) {
+			username = user.profile.name;
+		} else if (user.username) {
+			username = user.username;
+		}
+
+		const from = 'no-reply@ahcip.chs.harvard.edu';
+		const to = user.emails[0].address;
+		const subject = 'New Notification';
+		const text = `
+		Dear ${username},
+
+		${comment.commenters[0].name} has published a new comment on ${comment.work.title}.
+
+		Please review your notification at ahcip.chs.harvard.edu.
+
+		You can change how often you receive these emails in your account settings.
+		`;
+
+		Email.send({ from, to, subject, text });
+
+	});
 
 	return commentId;
 };
@@ -159,8 +217,63 @@ const commentsUpdate = (token, commentId, update) => {
 	const updateUser = { $push: {'subscriptions.notifications': notification} };
 
 	const subscribedUsers = Meteor.users.update(query, updateUser, notification, options);
-	
 
+	// send notification email
+	const emailListQuery = {
+		$and: [ 
+			{
+				$or: [
+					{
+						$and: 
+						[
+							{'subscriptions.bookmarks.work.slug': comment.work.slug},
+							{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
+							{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+							{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+						]
+					},
+					{
+						'subscriptions.commenters': { $elemMatch: {_id: commenterId} }
+					}
+				]
+			},
+			{
+				batchNotification: 'immediately'
+			},
+			{
+				emails: { $exists: true }
+			}
+		]
+	};
+
+	const emailList = Meteor.users.find(emailListQuery);
+
+	emailList.forEach(subscribedUser => {
+
+		let username = 'Commentary User';
+		if (subscribedUser.profile.name) {
+			username = subscribedUser.profile.name;
+		} else if (subscribedUser.username) {
+			username = subscribedUser.username;
+		}
+
+		const from = 'no-reply@ahcip.chs.harvard.edu';
+		const to = user.emails[0].address;
+		const subject = 'New Notification';
+		const text = `
+		Dear ${username},
+
+		${comment.commenters[0].name} has updated a comment on ${comment.work.title}.
+
+		Please review your notification at ahcip.chs.harvard.edu.
+
+		You can change how often you receive these emails in your account settings.
+		`;
+
+		Email.send({ from, to, subject, text });
+
+	});
+	
 	return commentId;
 };
 

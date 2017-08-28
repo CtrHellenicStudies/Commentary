@@ -10,6 +10,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
 import { ApolloProvider } from 'react-apollo';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { browserHistory } from 'react-router';
+import { createBrowserHistory } from 'history';
 
 // api
 import Comments from '/imports/models/comments';
@@ -30,7 +32,7 @@ import configureStore from '/imports/store/configureStore';
 
 // redux integration for layout
 const store = configureStore();
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(createBrowserHistory(), store);
 
 
 const AddRevisionLayout = React.createClass({

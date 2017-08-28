@@ -1,4 +1,4 @@
-import * as types from '../actions/bricks';
+import * as types from '../actions/comments';
 
 export default (state = [], action) => {
   switch (action.type) {

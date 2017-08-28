@@ -9,6 +9,7 @@ const networkInterface = createNetworkInterface({
 	uri: `${settings.REACT_APP_GRAPHQL_SERVER}/${settings.REACT_APP_GRAPHQL_URI}`,
 });
 
+/*
 networkInterface.use([{
 	applyMiddleware(req, next) {
 		if (!req.options.headers) {
@@ -32,9 +33,10 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 	networkInterface,
 	wsClient
 );
+*/
 
 const client = new ApolloClient({
-	networkInterface: networkInterfaceWithSubscriptions,
+	networkInterface,
 });
 
 export default client;

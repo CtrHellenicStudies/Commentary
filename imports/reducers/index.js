@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
   errorMessage,
   apollo: client.reducer(), // graphql data
   routing: routerReducer,
-	bricks,
+	comments,
 });
 
 export default rootReducer;

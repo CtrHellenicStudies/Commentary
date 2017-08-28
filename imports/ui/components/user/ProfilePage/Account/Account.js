@@ -1,8 +1,9 @@
 import React from 'react';
-import Meteor from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { debounce } from 'throttle-debounce';
 
 class Account extends React.Component {
@@ -18,6 +19,7 @@ class Account extends React.Component {
 
 		this.handleChangeTextDebounced = this.handleChangeTextDebounced.bind(this);
 		this.handleChangeText = this.handleChangeText.bind(this);
+		this.handleBatchNotification = this.handleBatchNotification.bind(this);
 		this.showChangePwdModal = this.showChangePwdModal.bind(this);
 		this.closeChangePwdModal = this.closeChangePwdModal.bind(this);
 	}
@@ -84,6 +86,15 @@ class Account extends React.Component {
 	handleChangeText(field, event) {
 		const value = event.target.value;
 		this.handleChangeTextDebounced(field, value);
+	}
+
+	handleBatchNotification(event, value) {
+		const updateBatch = Meteor.users.update({_id: Meteor.userId()}, {
+			$set: {
+				batchNotification: value
+			}
+		});
+		return updateBatch;
 	}
 
 	showChangePwdModal() {
@@ -203,12 +214,42 @@ class Account extends React.Component {
 					defaultValue={user.profile.google}
 					onChange={this.handleChangeText.bind(null, 'google')}
 				/>
-
-				<br />
-				<br />
 				<br />
 
-				<RaisedButton label="Saved" disabled />
+				<div>
+					<h3>How often would you like to receive email updates?</h3>
+					<RadioButtonGroup 
+						name="batchNotifications"
+						defaultSelected="never"
+						onChange={this.handleBatchNotification}
+					>
+						<RadioButton
+							label="Never"
+							value="never" 
+						/>
+						<RadioButton
+							label="Immediately"
+							value="immediately"
+						/>
+						<RadioButton
+							label="Daily" 
+							value="daily"
+						/>
+						<RadioButton
+							label="Weekly"
+							value="weekly" 
+						/>
+						<RadioButton
+							label="Monthly"
+							value="monthly" 
+						/>
+					</RadioButtonGroup>
+				</div>
+				<br />
+				<br />
+				<br />
+
+				<RaisedButton label="Saved" />
 			</div>
 		);
 	}

@@ -25,10 +25,11 @@ const commenterQueryFields = {
 			return Commenters.find(args, {
 				sort: {
 					slug: 1
-				}
+				},
 			}).fetch();
-		}
+		},
 	},
 };
+
 
 export default commenterQueryFields;

@@ -1,18 +1,98 @@
-import { GraphQLList, GraphQLID } from 'graphql';
-import SchemaBridge from 'meteor/kuip:schema-graphql-bridge';
+import {
+	GraphQLObjectType,
+	GraphQLString,
+	GraphQLInt,
+	GraphQLBoolean,
+	GraphQLList
+} from 'graphql';
+import GraphQLJSON from 'graphql-type-json';
+import GraphQLDate from 'graphql-date';
 
-// models
-import Comments from '/imports/models/comments';
 
-
-const CommentType = SchemaBridge.schema(
-	Comments.schema,
-	'Comment',
-	{
-		wrap: false,
-		fields: ['tenantId', 'lineFrom', 'lineTo', 'lineLetter', 'nLines', 'paragraphN', 'commentOrder', 'reference', 'referenceLink', 'referenceSection', 'referenceChapter', 'referenceTranslation', 'referenceNote', 'isAnnotation'],
-	}
-);
+const CommentType = new GraphQLObjectType({
+	name: 'CommentType',
+	description: 'A comment in the commentary',
+	fields: {
+		_id: {
+			type: GraphQLString,
+		},
+		urn: {
+			type: GraphQLString,
+		},
+		originalDate: {
+			type: GraphQLDate,
+		},
+		status: {
+			type: GraphQLString,
+		},
+		tenantId: {
+			type: GraphQLString,
+		},
+		commenters: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+		users: {
+			type: new GraphQLList(GraphQLString),
+		},
+		work: {
+			type: GraphQLJSON
+		},
+		subwork: {
+			type: GraphQLJSON
+		},
+		lineFrom: {
+			type: GraphQLInt,
+		},
+		lineTo: {
+			type: GraphQLInt,
+		},
+		lineLetter: {
+			type: GraphQLString,
+		},
+		bookChapterUrl: {
+			type: GraphQLString,
+		},
+		paragraphN: {
+			type: GraphQLInt,
+		},
+		nLines: {
+			type: GraphQLInt,
+		},
+		commentOrder: {
+			type: GraphQLInt,
+		},
+		parentCommentId: {
+			type: GraphQLString,
+		},
+		referenceId: {
+			type: GraphQLString,
+		},
+		referenceWorks: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+		keywords: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+		revisions: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+		discussionComments: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+		isAnnotation: {
+			type: GraphQLBoolean,
+		},
+		discussionCommentsDisabled: {
+			type: GraphQLBoolean,
+		},
+		created: {
+			type: GraphQLDate,
+		},
+		updated: {
+			type: GraphQLDate, 
+		},
+	},
+});
 
 
 export default CommentType;

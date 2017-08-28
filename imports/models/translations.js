@@ -12,6 +12,10 @@ Translations.schema = new SimpleSchema({
 		type: Date,
 		optional: true
 	},
+	updated: {
+		type: Date,
+		optional: true
+	},
 	author: {
 		type: String,
 		optional: true
@@ -53,19 +57,6 @@ Translations.schema = new SimpleSchema({
 		type: String,
 		optional: true
 	},
-	// 'revisions.$.text': {
-	// 	type: [Object],
-	// 	optional: true,
-	// 	blackbox: true
-	// },
-	// 'revisions.$.text.$.n': {
-	// 	type: Number,
-	// 	optional: true
-	// },
-	// 'revisions.$.text.$.text': {
-	// 	type: String,
-	// 	optional: true
-	// }
 });
 
 Translations.attachSchema(Translations.schema);

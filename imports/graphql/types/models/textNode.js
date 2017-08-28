@@ -1,18 +1,34 @@
-import { GraphQLList, GraphQLID } from 'graphql';
-import SchemaBridge from 'meteor/kuip:schema-graphql-bridge';
+import {
+	GraphQLObjectType,
+	GraphQLString,
+	GraphQLInt,
+	GraphQLBoolean,
+	GraphQLList
+} from 'graphql';
+import GraphQLJSON from 'graphql-type-json';
+import GraphQLDate from 'graphql-date';
 
-// models
-import TextNodes from '/imports/models/textNodes';
 
-
-const TextNodeType = SchemaBridge.schema(
-	TextNodes.schema,
-	'TextNode',
-	{
-		wrap: false,
-		fields: ['tenantId', 'work', 'subwork']
-	}
-);
-
+const TextNodeType = new GraphQLObjectType({
+	name: 'TextNodeType',
+	description: 'A node of text from a primary source of the commentary',
+	fields: {
+		tenantId: {
+			type: GraphQLString,
+		},
+		text: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+		work: {
+			type: GraphQLJSON,
+		},
+		subwork: {
+			type: GraphQLJSON,
+		},
+		relatedPassages: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+	},
+});
 
 export default TextNodeType;

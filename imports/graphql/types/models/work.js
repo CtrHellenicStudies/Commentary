@@ -1,18 +1,44 @@
-import { GraphQLList, GraphQLID } from 'graphql';
-import SchemaBridge from 'meteor/kuip:schema-graphql-bridge';
+import {
+	GraphQLObjectType,
+	GraphQLString,
+	GraphQLInt,
+	GraphQLBoolean,
+	GraphQLList
+} from 'graphql';
+import GraphQLJSON from 'graphql-type-json';
+import GraphQLDate from 'graphql-date';
 
-// models
-import Works from '/imports/models/works';
 
-
-const WorkType = SchemaBridge.schema(
-	Works.schema,
-	'Work',
-	{
-		wrap: false,
-		fields: ['tenantId', 'title', 'slug', 'order', 'nComments'],
-	}
-);
+const WorkType = new GraphQLObjectType({
+	name: 'WorkType',
+	description: 'A primary work in the commentary that the comments are created about',
+	fields: {
+		title: {
+			type: GraphQLString,
+		},
+		tenantId: {
+			type: GraphQLString,
+		},
+		tlgCreator: {
+			type: GraphQLString,
+		},
+		tlg: {
+			type: GraphQLString,
+		},
+		slug: {
+			type: GraphQLString,
+		},
+		order: {
+			type: GraphQLInt,
+		},
+		nComments: {
+			type: GraphQLInt,
+		},
+		subworks: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+	},
+});
 
 
 export default WorkType;

@@ -1,15 +1,49 @@
-import { GraphQLList, GraphQLID } from 'graphql';
-import SchemaBridge from 'meteor/kuip:schema-graphql-bridge';
+import {
+	GraphQLObjectType,
+	GraphQLString,
+	GraphQLInt,
+	GraphQLBoolean,
+	GraphQLList
+} from 'graphql';
+import GraphQLJSON from 'graphql-type-json';
+import GraphQLDate from 'graphql-date';
 
-// models
-import TextNodes from '/imports/models/textNodes';
-import Works from '/imports/models/works';
-import Translations from '/imports/models/translations';
 
-
-const TranslationType = SchemaBridge.schema(
-	Translations.schema,
-	'Translation'
-);
+const TranslationType = new GraphQLObjectType({
+	name: 'TranslationType',
+	description: 'A translation of a textnode in the commentary',
+	fields: {
+		tenantId: {
+			type: GraphQLString,
+		},
+		created: {
+			type: GraphQLDate,
+		},
+		updated: {
+			type: GraphQLDate,
+		},
+		author: {
+			type: GraphQLString,
+		},
+		work: {
+			type: GraphQLString,
+		},
+		subwork: {
+			type: GraphQLInt,
+		},
+		lineFrom: {
+			type: GraphQLInt,
+		},
+		lineTo: {
+			type: GraphQLInt,
+		},
+		nLines: {
+			type: GraphQLInt,
+		},
+		revisions: {
+			type: new GraphQLList(GraphQLJSON),
+		},
+	},
+});
 
 export default TranslationType;

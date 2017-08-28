@@ -5,6 +5,8 @@ import { apolloExpress } from 'apollo-server';
 import proxyMiddleware from 'http-proxy-middleware';
 import { graphiqlExpress } from 'graphql-server-express';
 import { GraphQLSchema } from 'graphql';
+import { maskErrors } from 'graphql-errors';
+import { formatError } from 'apollo-errors';
 
 // graphql resources
 import RootQuery from '/imports/graphql/queries/rootQuery';
@@ -32,7 +34,6 @@ const graphQLServer = express();
 
 graphQLServer.use('/graphql', bodyParser.json(), apolloExpress({
 	schema: RootSchema,
-	context: getGraphglContext(req),
 	formatError,
 }));
 graphQLServer.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));

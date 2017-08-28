@@ -28,13 +28,11 @@ Works.schema = new SimpleSchema({
 		type: Number,
 		optional: true,
 	},
-
 	nComments: {
 		type: Number,
 		optional: true,
 		min: 0,
 	},
-
 	subworks: {
 		type: [Subworks.schema],
 		optional: true,

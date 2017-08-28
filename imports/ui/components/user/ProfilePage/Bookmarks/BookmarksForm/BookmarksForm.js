@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import { ObjectID } from 'bson';
+import { Mongo } from 'meteor/mongo'
 
 
 // api
@@ -71,7 +71,7 @@ class BookmarksForm extends React.Component {
 			lineFrom: Number(selectedLineFrom),
 			lineTo: Number(selectedLineTo),
 			subscribedOn: new Date(),
-			_id: new ObjectID().toString()
+			_id: new Mongo.ObjectID().valueOf()
 		};
 
 		Meteor.users.update({_id: Meteor.userId()}, {
@@ -79,7 +79,7 @@ class BookmarksForm extends React.Component {
 				'subscriptions.bookmarks': bookmark
 			}
 		});
-		
+
 		toggleBookmarksForm();
 	}
 
@@ -92,37 +92,37 @@ class BookmarksForm extends React.Component {
 		return (
 			<div style={{ alignItems: 'center', justifyItems: 'center', display: 'flex', flexDirection: 'column' }}>
 				<div>
-					<SelectField 
+					<SelectField
 						floatingLabelText="Select Work"
 						value={selectedWork}
 						onChange={this.getWork}
 					>
-						{works.map(work => 
-							<MenuItem 
+						{works.map(work =>
+							<MenuItem
 								key={work.slug}
-								value={work} 
-								primaryText={work.title} 
+								value={work}
+								primaryText={work.title}
 							/>
 						)}
 					</SelectField>
 				</div>
 				<div>
-					<SelectField 
+					<SelectField
 						floatingLabelText="Select Subwork"
 						value={selectedSubwork}
 						onChange={this.getSubwork}
 					>
-						{selectedWork.subworks.map(subwork => 
-							<MenuItem 
+						{selectedWork.subworks.map(subwork =>
+							<MenuItem
 								key={subwork.slug}
-								value={subwork.slug} 
-								primaryText={subwork.title} 
+								value={subwork.slug}
+								primaryText={subwork.title}
 							/>
 						)}
 					</SelectField>
 				</div>
 				<div>
-					<TextField 
+					<TextField
 						floatingLabelText="Line From"
 						value={selectedLineFrom}
 						onChange={(e, newValue) => this.setState({ selectedLineFrom: newValue })}
@@ -136,7 +136,7 @@ class BookmarksForm extends React.Component {
 					/>
 				</div>
 				<div>
-					<FlatButton 
+					<FlatButton
 						label="Submit"
 						onTouchTap={this.submit}
 					/>

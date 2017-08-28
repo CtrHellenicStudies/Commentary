@@ -1,4 +1,6 @@
 import React from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
 
 
 const AddRevisionButton = props => {

@@ -16,9 +16,16 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
-import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
 import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
+import LinkButton from '../../addComment/LinkButton';
+import TagsInput from '../../addComment/TagsInput';
+import TitleInput from '../../addComment/TitleInput';
+import ReferenceWorksInput from '../../addComment/ReferenceWorksInput';
+import CommentContentInput from '../../addComment/CommentContentInput';
+import CommentActionButtons from '../CommentActionButtons';
+import AddRevisionButton from '../AddRevisionButton';
+import RemoveRevisionButton from '../RemoveRevisionButton';
+import UpdateRevisionButton from '../UpdateRevisionButton';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -27,12 +34,20 @@ import muiTheme from '/imports/lib/muiTheme';
 
 class AddRevision extends React.Component {
 
-	propTypes: {
+	static propTypes = {
 		submitForm: React.PropTypes.func.isRequired,
 		update: React.PropTypes.func.isRequired,
 		comment: React.PropTypes.object.isRequired,
 		tags: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
+	}
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			selectedRevisionIndex: null,
+		};
 	}
 
 	getChildContext() {
@@ -48,6 +63,21 @@ class AddRevision extends React.Component {
 	_disableButton() {
 		this.setState({
 			canSubmit: false,
+		});
+	}
+
+	getRevisionIndex() {
+		const { comment, filters } = this.props;
+		let selectedRevisionIndex = this.state.selectedRevisionIndex;
+		if (selectedRevisionIndex === null) {
+			selectedRevisionIndex = 0;
+		}
+		return selectedRevisionIndex;
+	}
+
+	selectRevision(event) {
+		this.setState({
+			selectedRevisionIndex: parseInt(event.currentTarget.id, 10),
 		});
 	}
 
@@ -96,7 +126,7 @@ class AddRevision extends React.Component {
 						<article className="comment commentary-comment paper-shadow">
 							<div className="comment-upper">
 								<CommentActionButtons
-									comment={comment}
+									commentId={comment._id}
 								/>
 								<TitleInput
 									placeholder="Comment title . . ."
@@ -108,8 +138,11 @@ class AddRevision extends React.Component {
 								<CommentContentInput />
 								<ReferenceWorksInput />
 								<AddRevisionButton />
-								<RemoveRevisionButton />
-								<UpdateRevisionButton />
+								<RemoveRevisionButton
+									commentId={comment._id}
+								/>
+								<UpdateRevisionButton
+								/>
 							</div>
 
 							<div className="comment-revisions-outer">
@@ -132,9 +165,6 @@ class AddRevision extends React.Component {
 /*
  * Make the redux form
  */
-const AddRevisionForm = reduxForm({
-  form: 'addRevision'
-})(AddRevision)
 
 
 const AddRevisionContainer = createContainer(({ comment }) => {
@@ -162,11 +192,16 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 		tags,
 		referenceWorkOptions,
 	};
-}, AddRevisionForm);
+}, AddRevision);
 
 
-AddRevisionContainer.childContextTypes = {
+AddRevision.childContextTypes = {
 	muiTheme: React.PropTypes.object.isRequired,
 };
 
-export default AddRevisionContainer;
+const AddRevisionForm = reduxForm({
+  form: 'addRevision'
+})(AddRevisionContainer)
+
+
+export default AddRevisionForm;

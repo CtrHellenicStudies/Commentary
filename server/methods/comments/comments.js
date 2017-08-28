@@ -121,7 +121,7 @@ const commentsInsert = (token, comment) => {
 		const text = `
 		Dear ${username},
 
-		${comment.commenters[0].name} has published a new comment on ${comment.work.title}.
+		${comment.commenters[0].name} has published a new comment on the ${comment.work.title}.
 
 		Please review your notification at ahcip.chs.harvard.edu.
 
@@ -263,7 +263,7 @@ const commentsUpdate = (token, commentId, update) => {
 		const text = `
 		Dear ${username},
 
-		${comment.commenters[0].name} has updated a comment on ${comment.work.title}.
+		${comment.commenters[0].name} has updated a comment on the ${comment.work.title}.
 
 		Please review your notification at ahcip.chs.harvard.edu.
 

@@ -23,11 +23,11 @@ class TagsInput extends React.Component {
 		tagsValue: React.PropTypes.arrayOf(React.PropTypes.shape({})),
 		tags: React.PropTypes.arrayOf(React.PropTypes.shape({})),
 
-		addTagBlock: React.PropTypes.func.isRequired,
-		removeTagBlock: React.PropTypes.func.isRequired,
-		moveTagBlock: React.PropTypes.func.isRequired,
-		onTagValueChange: React.PropTypes.func.isRequired,
-		onIsMentionedInLemmaChange: React.PropTypes.func.isRequired,
+		addTagBlock: React.PropTypes.func,
+		removeTagBlock: React.PropTypes.func,
+		moveTagBlock: React.PropTypes.func,
+		onTagValueChange: React.PropTypes.func,
+		onIsMentionedInLemmaChange: React.PropTypes.func,
 	};
 
 	static defaultProps = {

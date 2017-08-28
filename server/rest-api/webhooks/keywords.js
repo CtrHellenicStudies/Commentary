@@ -1,8 +1,8 @@
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
-import Tenants from '/imports/api/collections/tenants';
-import Works from '/imports/api/collections/works';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
+import Keywords from '/imports/models/keywords';
+import Tenants from '/imports/models/tenants';
+import Works from '/imports/models/works';
 
 Meteor.method('publishKeywords', (keywordCandidate) => {
 	check(keywordCandidate.wordpressId, Match.Maybe(Number));

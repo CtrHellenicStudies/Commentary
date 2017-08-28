@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 
-import Tenants from '/imports/api/collections/tenants';
+import Tenants from '/imports/models/tenants';
 
 const tenantsInsert = (token, tenant) => {
 	check(token, String);

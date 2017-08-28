@@ -5,7 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Draggable from 'react-draggable';
 
 // api
-import Keywords from '/imports/api/collections/keywords';
+import Keywords from '/imports/models/keywords';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';

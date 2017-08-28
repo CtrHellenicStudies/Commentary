@@ -8,7 +8,7 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Works from '/imports/api/collections/works';
+import Works from '/imports/models/works';
 
 // tested module:
 import { worksInsert, worksUpdate, worksRemove } from './works';

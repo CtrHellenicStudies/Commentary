@@ -7,7 +7,7 @@ import { stub } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Commenters from '/imports/api/collections/commenters';
+import Commenters from '/imports/models/commenters';
 
 // tested module:
 import { commentersInsert, commentersUpdate, commentersRemove } from './commenters';

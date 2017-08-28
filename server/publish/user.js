@@ -1,8 +1,8 @@
-import DiscussionComments from '/imports/api/collections/discussionComments';
-import TextNodes from '/imports/api/collections/textNodes';
-import Books from '/imports/api/collections/books';
-import Comments from '/imports/api/collections/comments';
-import Tenants from '/imports/api/collections/tenants';
+import DiscussionComments from '/imports/models/discussionComments';
+import TextNodes from '/imports/models/textNodes';
+import Books from '/imports/models/books';
+import Comments from '/imports/models/comments';
+import Tenants from '/imports/models/tenants';
 
 Meteor.publish('user.discussionComments', (userId, sortMethod = 'votes') => {
 	check(userId, String);

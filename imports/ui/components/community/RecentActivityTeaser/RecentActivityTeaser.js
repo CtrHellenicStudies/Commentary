@@ -3,10 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 
-import Books from '/imports/api/collections/books';
-import Commenters from '/imports/api/collections/commenters';
-import Tenants from '/imports/api/collections/tenants';
-import Settings from '/imports/api/collections/settings';
+import Books from '/imports/models/books';
+import Commenters from '/imports/models/commenters';
+import Tenants from '/imports/models/tenants';
+import Settings from '/imports/models/settings';
 import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 

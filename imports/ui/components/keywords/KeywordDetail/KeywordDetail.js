@@ -7,9 +7,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
 // api
-import Comments from '/imports/api/collections/comments';
-import Keywords from '/imports/api/collections/keywords';
-import Settings from '/imports/api/collections/settings';
+import Comments from '/imports/models/comments';
+import Keywords from '/imports/models/keywords';
+import Settings from '/imports/models/settings';
 
 // components
 import KeywordContext from '/imports/ui/components/keywords/KeywordContext';

@@ -9,7 +9,7 @@ import { mount } from 'react-mounter';
 import Utils from '/imports/lib/utils';
 
 // api
-import Tenants from '/imports/api/collections/tenants';
+import Tenants from '/imports/models/tenants';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';

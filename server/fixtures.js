@@ -1,13 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { SyncedCron } from 'meteor/percolate:synced-cron';
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
-import DiscussionComments from '/imports/api/collections/discussionComments';
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
-import Tenants from '/imports/api/collections/tenants';
-import TextNodes from '/imports/api/collections/textNodes';
-import Works from '/imports/api/collections/works';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
+import DiscussionComments from '/imports/models/discussionComments';
+import Keywords from '/imports/models/keywords';
+import ReferenceWorks from '/imports/models/referenceWorks';
+import Tenants from '/imports/models/tenants';
+import TextNodes from '/imports/models/textNodes';
+import Works from '/imports/models/works';
 
 Meteor.startup(() => {
 	// start cron tasks

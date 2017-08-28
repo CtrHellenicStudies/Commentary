@@ -7,8 +7,8 @@ import { Session } from 'meteor/session';
 import Utils from '/imports/lib/utils';
 
 // api
-import Pages from '/imports/api/collections/pages';
-import Settings from '/imports/api/collections/settings';
+import Pages from '/imports/models/pages';
+import Settings from '/imports/models/settings';
 
 // layouts
 import NotFound from '/imports/ui/layouts/notFound/NotFound';

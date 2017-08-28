@@ -1,17 +1,17 @@
-import Books from '/imports/api/collections/books';
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
-import DiscussionComments from '/imports/api/collections/discussionComments';
-import Keywords from '/imports/api/collections/keywords';
-import LinkedDataSchemas from '/imports/api/collections/linkedDataSchemas';
-import Pages from '/imports/api/collections/pages';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
-import Tenants from '/imports/api/collections/tenants';
-import TextNodes from '/imports/api/collections/textNodes';
-import Works from '/imports/api/collections/works';
-import Settings from '/imports/api/collections/settings';
-import Translations from '/imports/api/collections/translations';
-import Editions from '/imports/api/collections/editions';
+import Books from '/imports/models/books';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
+import DiscussionComments from '/imports/models/discussionComments';
+import Keywords from '/imports/models/keywords';
+import LinkedDataSchemas from '/imports/models/linkedDataSchemas';
+import Pages from '/imports/models/pages';
+import ReferenceWorks from '/imports/models/referenceWorks';
+import Tenants from '/imports/models/tenants';
+import TextNodes from '/imports/models/textNodes';
+import Works from '/imports/models/works';
+import Settings from '/imports/models/settings';
+import Translations from '/imports/models/translations';
+import Editions from '/imports/models/editions';
 
 if (Meteor.isServer) {
 	Meteor.publish('comments', (query, skip = 0, limit = 10) => {

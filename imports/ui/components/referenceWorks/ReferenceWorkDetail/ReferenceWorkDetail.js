@@ -11,9 +11,9 @@ import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 // api
-import Settings from '/imports/api/collections/settings';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
-import Commenters from '/imports/api/collections/commenters';
+import Settings from '/imports/models/settings';
+import ReferenceWorks from '/imports/models/referenceWorks';
+import Commenters from '/imports/models/commenters';
 
 // lib
 import Utils from '/imports/lib/utils';

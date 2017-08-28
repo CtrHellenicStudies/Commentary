@@ -3,7 +3,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import Translations from '/imports/api/collections/translations';
+import Translations from '/imports/models/translations';
 import _ from 'lodash';
 
 class CommentLemmaTextWithTranslation extends React.Component {

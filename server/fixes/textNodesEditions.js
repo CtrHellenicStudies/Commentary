@@ -1,5 +1,5 @@
-import TextNodes from '/imports/api/collections/textNodes';
-import Editions from '/imports/api/collections/editions';
+import TextNodes from '/imports/models/textNodes';
+import Editions from '/imports/models/editions';
 
 function checkIfEditionUnique(edition) {
 	const foundEdition = Editions.findOne({ slug: edition.slug });

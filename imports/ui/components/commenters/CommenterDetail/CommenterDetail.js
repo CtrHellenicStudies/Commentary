@@ -5,8 +5,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
 
 // api
-import Commenters from '/imports/api/collections/commenters';
-import Settings from '/imports/api/collections/settings';
+import Commenters from '/imports/models/commenters';
+import Settings from '/imports/models/settings';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';

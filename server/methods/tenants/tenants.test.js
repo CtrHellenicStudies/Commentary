@@ -8,7 +8,7 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Tenants from '/imports/api/collections/tenants';
+import Tenants from '/imports/models/tenants';
 
 // tested module:
 import { tenantsInsert, tenantsUpdate, tenantsRemove } from './tenants';

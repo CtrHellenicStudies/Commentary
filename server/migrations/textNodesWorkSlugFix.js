@@ -1,4 +1,4 @@
-import TextNodes from '/imports/api/collections/textNodes';
+import TextNodes from '/imports/models/textNodes';
 
 const textNodesWorkSlugFix = () => {
 	// ---

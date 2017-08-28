@@ -6,8 +6,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
-import Settings from '/imports/api/collections/settings';
-import Tenant from '/imports/api/collections/tenants';
+import Settings from '/imports/models/settings';
+import Tenant from '/imports/models/tenants';
 
 // layouts
 import Header from '/imports/ui/layouts/header/Header';

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import Metafields from '/imports/api/collections/metafields';
+import Metafields from '/imports/models/metafields';
 
 const Terms = new Meteor.Collection('terms');
 

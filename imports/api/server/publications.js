@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 
 // api
-import TextNodes from '/imports/api/collections/textNodes';
+import TextNodes from '/imports/models/textNodes';
 
 // lib
 import { queryCommentWithKeywordId } from '../utils.js';

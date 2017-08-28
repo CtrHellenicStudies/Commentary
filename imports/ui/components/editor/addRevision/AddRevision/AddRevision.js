@@ -3,121 +3,38 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import {
-	FormGroup,
-	ControlLabel,
-} from 'react-bootstrap';
+import { Field, reduxForm } from 'redux-form'
 import cookie from 'react-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { Creatable } from 'react-select';
-import Formsy from 'formsy-react';
-import { FormsyText } from 'formsy-material-ui/lib';
-import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
-import { stateToHTML } from 'draft-js-export-html';
-import { stateFromHTML } from 'draft-js-import-html';
-import createSingleLinePlugin from 'draft-js-single-line-plugin';
-import { fromJS } from 'immutable';
-import update from 'immutability-helper';
-import { convertToHTML } from 'draft-convert';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 
 // api
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Keywords from '/imports/models/keywords';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
-import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
 import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
+import LinkButton from '../../addComment/LinkButton';
+import TagsInput from '../../addComment/TagsInput';
+import TitleInput from '../../addComment/TitleInput';
+import ReferenceWorksInput from '../../addComment/ReferenceWorksInput';
+import CommentContentInput from '../../addComment/CommentContentInput';
+import CommentActionButtons from '../CommentActionButtons';
+import AddRevisionButton from '../AddRevisionButton';
+import RemoveRevisionButton from '../RemoveRevisionButton';
+import UpdateRevisionButton from '../UpdateRevisionButton';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 
-// helpers:
-import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
 
-
-// Create toolbar plugin for editor
-const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
-const { InlineToolbar } = inlineToolbarPlugin;
-
-// Keyword Mentions
-const keywordMentionPlugin = createMentionPlugin();
-
-// Comments Cross Reference Mentions
-const commentsMentionPlugin = createMentionPlugin({
-	mentionTrigger: '#',
-});
-
-const ListGroupItemDnD = creatListGroupItemDnD('referenceWorkBlocks');
-
-function _getSuggestionsFromComments(comments) {
-	const suggestions = [];
-
-	// if there are comments:
-	if (comments.length) {
-
-		// loop through all comments
-		// add suggestion for each comment
-		comments.forEach((comment) => {
-
-			// get the most recent revision
-			const revision = comment.revisions[comment.revisions.length - 1];
-
-			const suggestion = {
-				// create suggestio name:
-				name: `"${revision.title}" -`,
-
-				// set link for suggestion
-				link: `/commentary?_id=${comment._id}`,
-
-				// set id for suggestion
-				id: comment._id,
-			};
-
-			// loop through commenters and add them to suggestion name
-			comment.commenters.forEach((commenter, i) => {
-				if (i === 0) suggestion.name += ` ${commenter.name}`;
-				else suggestion.name += `, ${commenter.name}`;
-			});
-
-			suggestions.push(suggestion);
-		});
-	}
-	return suggestions;
-}
 
 class AddRevision extends React.Component {
 
-	propTypes: {
+	static propTypes = {
 		submitForm: React.PropTypes.func.isRequired,
 		update: React.PropTypes.func.isRequired,
 		comment: React.PropTypes.object.isRequired,
@@ -125,43 +42,11 @@ class AddRevision extends React.Component {
 		referenceWorkOptions: React.PropTypes.array,
 	}
 
-	getInitialState() {
-		const { comment } = this.props;
-		const revisionId = comment.revisions.length - 1;
-		const revision = comment.revisions[revisionId]; // get newest revision
-		let revisionTitle = '';
+	constructor(props) {
+		super(props);
 
-		const tagsValue = [];
-		if (comment.keywords) {
-			comment.keywords.forEach((keyword) => {
-				tagsValue.push({
-					isSet: true,
-					keyword,
-					tagId: keyword._id,
-					isMentionedInLemma: keyword.isMentionedInLemma,
-				});
-			});
-		}
-
-		if (revision && revision.title) {
-			revisionTitle = revision.title;
-		}
-
-		return {
-			revision,
-
+		this.state = {
 			selectedRevisionIndex: null,
-			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revisionTitle)),
-			textEditorState: this._getRevisionEditorState(revision),
-
-			titleValue: '',
-			textValue: '',
-
-			tagsValue,
-
-			referenceWorks: comment.referenceWorks || [],
-			keywordSuggestions: fromJS([]),
-			commentsSuggestions: fromJS([]),
 		};
 	}
 
@@ -181,83 +66,23 @@ class AddRevision extends React.Component {
 		});
 	}
 
-	_getRevisionEditorState(revision) {
-		if (revision.textRaw) {
-			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
-		} else if (revision.text) {
-			const blocksFromHTML = convertFromHTML(revision.text);
-			return EditorState.createWithContent(
-				ContentState.createFromBlockArray(
-					blocksFromHTML.contentBlocks,
-					blocksFromHTML.entityMap
-				),
-				linkDecorator
-			);
+	getRevisionIndex() {
+		const { comment, filters } = this.props;
+		let selectedRevisionIndex = this.state.selectedRevisionIndex;
+		if (selectedRevisionIndex === null) {
+			selectedRevisionIndex = 0;
 		}
-		console.error('missing filed text or textRaw in revision');
+		return selectedRevisionIndex;
 	}
 
-	onTitleChange(titleEditorState) {
-		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-		const title = jQuery(titleHtml).text();
+	selectRevision(event) {
 		this.setState({
-			titleEditorState,
-			titleValue: title,
-		});
-	}
-
-	onTextChange(textEditorState) {
-		const newTextEditorState = EditorState.set(textEditorState, {decorator: linkDecorator});
-
-		this.setState({
-			textEditorState: newTextEditorState,
-		});
-	}
-
-	onReferenceWorksValueChange(referenceWork) {
-		const referenceWorks = this.state.referenceWorks;
-		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
-
-		this.setState({
-			referenceWorks,
-		});
-	}
-
-	_onKeywordSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.tags;
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.label,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	}
-
-	_onCommentsSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
-			const commentsSuggestions = _getSuggestionsFromComments(res);
-
-			this.setState({
-				commentsSuggestions: fromJS(commentsSuggestions),
-			});
+			selectedRevisionIndex: parseInt(event.currentTarget.id, 10),
 		});
 	}
 
 	handleSubmit() {
 		const { textEditorState } = this.state;
-
-		// TODO: form validation
-		// TODO: Migrate to formsy components
 
 		// create html from textEditorState's content
 		const textHtml = convertToHTML({
@@ -287,115 +112,21 @@ class AddRevision extends React.Component {
 		this.props.submitForm(this.state, textHtml, textRaw);
 	}
 
-	handleUpdate() {
-		const data = this.refs.form.getModel(); // eslint-disable-line
-		let key;
-
-		for (key in data) { // eslint-disable-line
-			const params = key.split('_');
-			params[0] = parseInt(params[0], 10);
-			this.state.referenceWorks[params[0]][params[1]] = data[key];
-		}
-		this.props.update(this.state);
-	}
-
-	getRevisionIndex() {
-		const { comment, filters } = this.props;
-		let selectedRevisionIndex = 0; // this.state.selectedRevisionIndex;
-		if (selectedRevisionIndex === null) {
-			let foundRevision = null;
-			filters.forEach((filter) => {
-				if (filter.key === 'revision') {
-					foundRevision = filter.values[0];
-				}
-			});
-
-			if (foundRevision != null && foundRevision >= 0 &&
-				foundRevision < comment.revisions.length) {
-				selectedRevisionIndex = foundRevision;
-			} else {
-				selectedRevisionIndex = 0;
-			}
-		}
-		return selectedRevisionIndex;
-	}
-
-	selectRevision(event) {
-		this.setState({
-			selectedRevisionIndex: parseInt(event.currentTarget.id, 10),
-		});
-	}
-
-	removeRevision() {
-		const self = this;
-		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision, (err) => {
-			if (err) {
-				throw new Meteor.Error('Error removing revision');
-			}
-
-			FlowRouter.go(`/commentary/${self.props.comment._id}/edit`);
-		});
-	}
-
-	addReferenceWorkBlock() {
-		this.state.referenceWorks.push({ referenceWorkId: '0' });
-		this.setState({
-			referenceWorks: this.state.referenceWorks,
-		});
-	}
-
-	removeReferenceWorkBlock(i) {
-		this.setState({
-			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
-		});
-	}
-
-	moveReferenceWorkBlock(dragIndex, hoverIndex) {
-		const { referenceWorks } = this.state;
-		const dragIntroBlock = referenceWorks[dragIndex];
-
-		this.setState(update(this.state, {
-			referenceWorks: {
-				$splice: [
-					[dragIndex, 1],
-					[hoverIndex, 0, dragIntroBlock],
-				],
-			},
-		}));
-	}
-
-	onIsMentionedInLemmaChange(tag, i) {
-		const tagsValue = this.state.tagsValue;
-
-		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
-
-		this.setState({
-			tagsValue,
-		});
-	}
-
 	render() {
 		const { comment } = this.props;
-		// const { titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 
 		const selectedRevisionIndex = this.getRevisionIndex();
 		const selectedRevision = comment.revisions[selectedRevisionIndex];
 
 		return (
-			<div className="comments lemma-panel-visible">
-				{/*
-				<div className="comment-outer">
-					<Formsy.Form
-						ref="form" // eslint-disable-line
-						onValid={this._enableButton}
-						onInvalid={this._disableButton}
-						onValidSubmit={this.handleSubmit}
-					>
-						<article className="comment commentary-comment paper-shadow " style={{ marginLeft: 0 }}>
+			<form onSubmit={this.handleSubmit} >
+				<div className="comments lemma-panel-visible">
+					<div className="comment-outer">
+						<article className="comment commentary-comment paper-shadow">
 							<div className="comment-upper">
 								<CommentActionButtons
-									comment={comment}
+									commentId={comment._id}
 								/>
 								<TitleInput
 									placeholder="Comment title . . ."
@@ -403,28 +134,38 @@ class AddRevision extends React.Component {
 								<TagsInput />
 							</div>
 
-							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
+							<div className="comment-lower clearfix">
 								<CommentContentInput />
 								<ReferenceWorksInput />
 								<AddRevisionButton />
-								<RemoveRevisionButton />
-								<UpdateRevisionButton />
+								<RemoveRevisionButton
+									commentId={comment._id}
+								/>
+								<UpdateRevisionButton
+								/>
 							</div>
 
-							<CommentRevisionSelect
-								commentId={comment._id}
-								revisions={comment.revisions}
-								comment={comment}
-								selectedRevisionIndex={selectedRevisionIndex}
-								selectRevision={this.selectRevision}
-							/>
+							<div className="comment-revisions-outer">
+								<CommentRevisionSelect
+									commentId={comment._id}
+									revisions={comment.revisions}
+									comment={comment}
+									selectedRevisionIndex={selectedRevisionIndex}
+									selectRevision={this.selectRevision}
+								/>
+							</div>
 						</article>
-					</Formsy.Form>
-				</div>*/}
-			</div>
+					</div>
+				</div>
+			</form>
 		);
 	}
 }
+
+/*
+ * Make the redux form
+ */
+
 
 const AddRevisionContainer = createContainer(({ comment }) => {
 
@@ -454,8 +195,13 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 }, AddRevision);
 
 
-AddRevisionContainer.childContextTypes = {
+AddRevision.childContextTypes = {
 	muiTheme: React.PropTypes.object.isRequired,
 };
 
-export default AddRevisionContainer;
+const AddRevisionForm = reduxForm({
+  form: 'addRevision'
+})(AddRevisionContainer)
+
+
+export default AddRevisionForm;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-import TextNodes from '/imports/api/collections/textNodes';
+import TextNodes from '/imports/models/textNodes';
 
 const UserBookmarksList = React.createClass({
 	propTypes: {

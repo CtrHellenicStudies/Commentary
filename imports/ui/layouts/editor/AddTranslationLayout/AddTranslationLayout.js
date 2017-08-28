@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Commenters from '/imports/api/collections/commenters';
+import Commenters from '/imports/models/commenters';
 import slugify from 'slugify';
 import { convertToRaw } from 'draft-js';
 

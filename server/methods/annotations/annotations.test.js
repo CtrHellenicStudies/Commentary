@@ -6,8 +6,8 @@ import { stub } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Books from '/imports/api/collections/books';
-import Comments from '/imports/api/collections/comments';
+import Books from '/imports/models/books';
+import Comments from '/imports/models/comments';
 
 // tested module:
 import { annotationsInsert, annotationsAddRevision, annotationsDelete } from './annotations';

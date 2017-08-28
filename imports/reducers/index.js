@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
+
+import client from '/imports/middleware/apolloClient';
 import comments from './comments';
-import client from '../middleware/apolloClient';
 
 
-import * as ActionTypes from '../actions';
+import * as ActionTypes from '/imports/actions';
 
 
 const errorMessage = (state = null, action) => {
@@ -25,7 +26,7 @@ const rootReducer = combineReducers({
   errorMessage,
   apollo: client.reducer(), // graphql data
   routing: routerReducer,
-	bricks,
+	comments,
 });
 
 export default rootReducer;

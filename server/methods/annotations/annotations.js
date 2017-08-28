@@ -2,8 +2,8 @@ import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 
-import Books from '/imports/api/collections/books';
-import Comments from '/imports/api/collections/comments';
+import Books from '/imports/models/books';
+import Comments from '/imports/models/comments';
 
 
 const annotationsInsert = (token, comment) => {

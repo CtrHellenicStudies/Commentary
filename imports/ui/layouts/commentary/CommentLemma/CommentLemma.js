@@ -12,9 +12,9 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes';
-import Translations from '/imports/api/collections/translations';
-import Editions from '/imports/api/collections/editions';
+import TextNodes from '/imports/models/textNodes';
+import Translations from '/imports/models/translations';
+import Editions from '/imports/models/editions';
 
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';

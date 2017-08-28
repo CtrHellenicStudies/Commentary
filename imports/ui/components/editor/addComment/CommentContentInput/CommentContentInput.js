@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+// import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -18,10 +18,12 @@ import {
 	OrderedListButton,
 	BlockquoteButton,
 } from 'draft-js-buttons';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 // api
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Keywords from '/imports/models/keywords';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
 import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -64,12 +66,27 @@ const commentsMentionPlugin = createMentionPlugin({
 
 class CommentContentInput extends React.Component {
 
+	constructor(props) {
+		super(props);
+		const revisionContent = '';
+
+		this.state = {
+			contentEditorState: EditorState.createWithContent(ContentState.createFromText(revisionContent)),
+			keywordSuggestions: fromJS([]),
+			commentsSuggestions: fromJS([]),
+		};
+	}
+
+	onTextChange() {
+
+	}
+
 
 	render() {
 		return (
 			<div className="commentContentInput">
 				<Editor
-					editorState={textEditorState}
+					editorState={this.state.contentEditorState}
 					onChange={this.onTextChange}
 					placeholder="Comment text..."
 					spellCheck
@@ -92,3 +109,6 @@ class CommentContentInput extends React.Component {
 		);
 	}
 }
+
+
+export default CommentContentInput;

@@ -9,8 +9,8 @@ import { stub } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
 
 // tested module:
 import * as commentMethods from './comments';

@@ -14,7 +14,7 @@ import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 import CommunityPage from '/imports/ui/components/community/CommunityPage';
 
 // api
-import Settings from '/imports/api/collections/settings';
+import Settings from '/imports/models/settings';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';

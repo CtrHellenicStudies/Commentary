@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-
+import FlatButton from 'material-ui/FlatButton';
 
 class RemoveCommentButton extends React.Component {
 

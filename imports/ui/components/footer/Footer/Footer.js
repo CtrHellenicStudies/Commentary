@@ -6,8 +6,8 @@ import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
-import Settings from '/imports/api/collections/settings';
-import Tenants from '/imports/api/collections/tenants';
+import Settings from '/imports/models/settings';
+import Tenants from '/imports/models/tenants';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';

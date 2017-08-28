@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 const referenceWorksInsert = (token, referenceWork) => {
 	check(token, String);

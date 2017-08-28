@@ -2,7 +2,7 @@ import { check } from 'meteor/check';
 import _ from 'underscore';
 
 // api
-import Works from '/imports/api/collections/works';
+import Works from '/imports/models/works';
 
 // lib
 import Utils from '/imports/lib/utils';

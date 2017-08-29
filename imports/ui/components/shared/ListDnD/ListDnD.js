@@ -11,7 +11,7 @@ This file exports two elements:
 "ListGroupDnD" - react component used the same as ListGroup from react-bootstrap.
 Required for DnD functionality to work.
 
-"creatListGroupItemDnD" - function which creates ListGroupItemDnD react compoent.
+"createListGroupItemDnD" - function which creates ListGroupItemDnD react compoent.
 Use the same as ListGroupItem from react-bootstrap, but with DnD functionality.
 */
 
@@ -135,17 +135,17 @@ class _ListGroupItemDnD extends React.Component {
 
 // use this function to create ListGroupItemDnD
 // with specified
-function creatListGroupItemDnD (ItemType) {
+function createListGroupItemDnD (ItemType) {
 	if (ItemType && typeof ItemType === 'string') {
 		const dragSource = DragSource(ItemType, listGroupItemSource, collectSource)(_ListGroupItemDnD);
 		const ListGroupItemDnD = DropTarget(ItemType, listGroupItemTarget, collectTarget)(dragSource);
 		return ListGroupItemDnD;
 	}
-	throw new Meteor.Error('Incorrect ItemType provided to functoin creatListGroupItemDnD');
+	throw new Meteor.Error('Incorrect ItemType provided to function createListGroupItemDnD');
 }
 
 /*
 	ListGroupItemDnD END
 */
 
-export {ListGroupDnD, creatListGroupItemDnD};
+export {ListGroupDnD, createListGroupItemDnD};

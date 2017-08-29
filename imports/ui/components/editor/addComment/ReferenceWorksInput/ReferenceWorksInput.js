@@ -1,6 +1,6 @@
 import React from 'react';
 import Formsy from 'formsy-react';
-import { FormsyText } from 'formsy-material-ui/lib';
+import { Field } from 'redux-form'
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -11,12 +11,15 @@ import {
 	ControlLabel,
 } from 'react-bootstrap';
 import Select from 'react-select';
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import { Creatable } from 'react-select';
 
 // models
 import ReferenceWorks from '/imports/models/referenceWorks';
 
+// components
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+
+const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
 class ReferenceWorksInput extends React.Component {
 
@@ -26,6 +29,10 @@ class ReferenceWorksInput extends React.Component {
 		this.state = {
 			referenceWorks: [],
 		};
+
+		this.addReferenceWorkBlock = this.addReferenceWorkBlock.bind(this);
+		this.removeReferenceWorkBlock = this.removeReferenceWorkBlock.bind(this);
+		this.moveReferenceWorkBlock = this.moveReferenceWorkBlock.bind(this);
 	}
 
 	addReferenceWorkBlock() {
@@ -126,29 +133,33 @@ class ReferenceWorksInput extends React.Component {
 										/>
 										<FormGroup>
 											<ControlLabel>Section Number: </ControlLabel>
-											<FormsyText
+											<Field
 												name={`${i}_section`}
+												component="input"
 												defaultValue={referenceWork.section}
 											/>
 										</FormGroup>
 										<FormGroup>
 											<ControlLabel>Chapter Number: </ControlLabel>
-											<FormsyText
+											<Field
 												name={`${i}_chapter`}
+												component="input"
 												defaultValue={referenceWork.chapter}
 											/>
 										</FormGroup>
 										<FormGroup>
 											<ControlLabel>Translation Number: </ControlLabel>
-											<FormsyText
+											<Field
 												name={`${i}_translation`}
+												component="input"
 												defaultValue={referenceWork.translation}
 											/>
 										</FormGroup>
 										<FormGroup>
 											<ControlLabel>Note Number: </ControlLabel>
-											<FormsyText
+											<Field
 												name={`${i}_note`}
+												component="input"
 												defaultValue={referenceWork.note}
 											/>
 										</FormGroup>

@@ -15,7 +15,7 @@ import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
 import LinkButton from '../../addComment/LinkButton';
 import TagsInput from '../../addComment/TagsInput';
@@ -137,11 +137,14 @@ class AddRevision extends React.Component {
 							<div className="comment-lower clearfix">
 								<CommentContentInput />
 								<ReferenceWorksInput />
-								<AddRevisionButton />
+								<AddRevisionButton
+									commentId={comment._id}
+								/>
 								<RemoveRevisionButton
 									commentId={comment._id}
 								/>
 								<UpdateRevisionButton
+									commentId={comment._id}
 								/>
 							</div>
 

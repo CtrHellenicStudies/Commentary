@@ -11,7 +11,7 @@ import {
 	FormGroup,
 	ControlLabel,
 } from 'react-bootstrap';
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 
 
 // api:

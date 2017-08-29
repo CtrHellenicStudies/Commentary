@@ -23,7 +23,7 @@ class RemoveCommentButton extends React.Component {
 
 	render() {
 		return (
-			<div className="comment-upper-action-button">
+			<div className="comment-action-button">
 				<FlatButton
 					label="Remove Comment"
 					labelPosition="after"

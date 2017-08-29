@@ -9,7 +9,7 @@ import Comments from '/imports/models/comments';
 // errors
 import { AuthenticationError } from '/imports/errors';
 
-const commentMutationFileds = {
+const commentMutationFields = {
 	commentCreate: {
 		type: CommentType,
 		description: 'Create new comment',
@@ -40,4 +40,4 @@ const commentMutationFileds = {
 	}
 };
 
-export default commentMutationFileds;
+export default commentMutationFields;

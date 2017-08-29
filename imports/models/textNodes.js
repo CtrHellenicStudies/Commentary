@@ -35,13 +35,13 @@ TextNodes.schema = new SimpleSchema({
 		type: Object,
 	},
 	'subwork.title': {
-		type: String
+		type: String,
 	},
 	'subwork.n': {
-		type: Number
+		type: Number,
 	},
 	relatedPassages: {
-		type: [Object]
+		type: [Object],
 	},
 });
 

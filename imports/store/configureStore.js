@@ -1,13 +1,22 @@
-import { Tracker } from 'meteor/tracker';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import { createLogger } from 'redux-logger';
+import rootReducer from '../reducers';
+import client from '../middleware/apolloClient';
 
-import reducers from '/imports/reducers';
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export default () => {
-  const store = createStore(reducers, applyMiddleware(thunk));
+const configureStore = (preloadedState) => {
+	const store = createStore(
+		rootReducer,
+		preloadedState,
+		composeEnhancers(
+			applyMiddleware(thunk, createLogger(), client.middleware()),
+		)
+	);
 
 	/*
+	TODO: Implement tracker for pushing out notifications
   Tracker.autorun(() => {
     store.dispatch({
       type: 'SET_MESSAGES',
@@ -16,5 +25,7 @@ export default () => {
   });
 	*/
 
-  return store;
+	return store;
 };
+
+export default configureStore;

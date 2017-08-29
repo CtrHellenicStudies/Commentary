@@ -1,28 +1,29 @@
 import React from 'react';
-
-import Formsy from 'formsy-react';
-import { FormsyText } from 'formsy-material-ui/lib';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { createContainer } from 'meteor/react-meteor-data';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
-import {
-	FormGroup,
-	ControlLabel,
-} from 'react-bootstrap';
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import { FormGroup } from 'react-bootstrap';
 
+// actions
+import * as textNodesActions from '/imports/actions/textNodes';
 
 // api:
 import TextNodes from '/imports/models/textNodes';
 import Editions from '/imports/models/editions';
+import Works from '/imports/models/works';
 
 // lib:
 import Utils from '/imports/lib/utils';
 
 // components
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import TextNodeInput from '../TextNodeInput';
+
 
 /*
 	helpers
@@ -37,6 +38,7 @@ const getContextPanelStyles = (open, highlightingVisible) => {
 	}
 	return contextPanelStyles;
 };
+
 const getSortedEditions = (editions) => {
 	const sortedEditions = [];
 	editions.forEach((edition) => {
@@ -184,14 +186,12 @@ class TextNodesEditor extends React.Component {
 
 const TextNodesEditorContainer = createContainer(({ lineFrom, workSlug, subworkN }) => {
 
-	const lineTo = lineFrom + 49;
-
 	const lemmaQuery = {
 		'work.slug': workSlug,
 		'subwork.n': subworkN,
 		'text.n': {
 			$gte: lineFrom,
-			$lte: lineTo,
+			$lte: lineFrom + 49,
 		},
 	};
 
@@ -201,16 +201,27 @@ const TextNodesEditorContainer = createContainer(({ lineFrom, workSlug, subworkN
 
 	Meteor.subscribe('textNodes', lemmaQuery);
 	const editionsSubscription = Meteor.subscribe('editions');
+	const editions = Editions.find().fetch();
 	const textNodesCursor = TextNodes.find(lemmaQuery);
-	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
-
-	const sortedEditions = getSortedEditions(editions);
+	const editionsRaw = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+	const editionsSorted = getSortedEditions(editionsRaw);
 
 	return {
-		lemmaText: sortedEditions,
-		lineTo,
+		lemmaText: editionsSorted,
+		editions,
 	};
 
 }, TextNodesEditor);
 
-export default TextNodesEditorContainer;
+const mapStateToProps = (state, props) => ({
+	textNodes: state.textNodes.textNodes,
+	work: state.textNodes.work,
+	subwork: state.textNodes.subwork,
+	edition: state.textNodes.edition,
+});
+
+const mapDispatchToProps = dispatch => ({
+	actions: bindActionCreators(textNodesActions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TextNodesEditorContainer);

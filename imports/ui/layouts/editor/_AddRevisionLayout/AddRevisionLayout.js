@@ -60,6 +60,7 @@ const AddRevisionLayout = React.createClass({
 	addRevision(formData, textValue, textRawValue) {
 		const self = this;
 		const { comment } = this.props;
+		const token = Cookies.get('loginToken');
 		const revision = {
 			title: formData.titleValue,
 			text: textValue,
@@ -68,16 +69,15 @@ const AddRevisionLayout = React.createClass({
 			slug: slugify(formData.titleValue),
 		};
 
-		Meteor.call('comments.add.revision', comment._id, revision, (err) => {
+		Meteor.call('comments.add.revision', token, comment._id, revision, (err) => {
 			if (err) {
 				console.error('Error adding revision', err);
-				this.showSnackBar(_err.error);
+				this.showSnackBar(err.error);
 			} else {
 				this.showSnackBar('Revision added');
 			}
 			self.update(formData);
 		});
-		// TODO: handle behavior after comment added (add info about success)
 	},
 
 	update(formData) {

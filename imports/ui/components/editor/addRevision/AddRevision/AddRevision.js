@@ -35,6 +35,7 @@ import {
 	OrderedListButton,
 	BlockquoteButton,
 } from 'draft-js-buttons';
+import _ from 'underscore';
 
 // api
 import Keywords from '/imports/models/keywords';
@@ -304,7 +305,7 @@ const AddRevision = React.createClass({
 	},
 
 	removeComment() {
-		const authToken = Cookies.load('loginToken');
+		const authToken = Cookies.get('loginToken');
 
 		Meteor.call('comment.delete', authToken, this.props.comment._id, (err) => {
 			if (err) {
@@ -422,9 +423,7 @@ const AddRevision = React.createClass({
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 
-		if (isTest) {
-			return null;
-		}
+		const revisions = _.sortBy(comment.revisions, 'created').reverse();
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -654,7 +653,7 @@ const AddRevision = React.createClass({
 
 
 							<div className="comment-revisions">
-								{comment.revisions.map((_revision, i) => (
+								{revisions.map((_revision, i) => (
 									<FlatButton
 										key={i}
 										id={i}

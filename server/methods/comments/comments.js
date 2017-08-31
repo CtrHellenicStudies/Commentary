@@ -50,7 +50,7 @@ const commentsInsert = (token, comment) => {
 	const query = {
 		$or: [
 			{
-				$and: 
+				$and:
 				[
 					{'subscriptions.bookmarks.work.slug': comment.work.slug},
 					{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
@@ -78,11 +78,11 @@ const commentsInsert = (token, comment) => {
 
 	// send notification email
 	const emailListQuery = {
-		$and: [ 
+		$and: [
 			{
 				$or: [
 					{
-						$and: 
+						$and:
 						[
 							{'subscriptions.bookmarks.work.slug': comment.work.slug},
 							{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
@@ -190,7 +190,7 @@ const commentsUpdate = (token, commentId, update) => {
 	const query = {
 		$or: [
 			{
-				$and: 
+				$and:
 				[
 					{'subscriptions.bookmarks.work.slug': comment.work.slug},
 					{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
@@ -204,7 +204,7 @@ const commentsUpdate = (token, commentId, update) => {
 		]
 	};
 
-	const lines = lineTo !== lineFrom ? `lines ${comment.lineFrom} - ${comment.lineTo}` : `${comment.lineTo}`;
+	const lines = comment.lineTo !== comment.lineFrom ? `lines ${comment.lineFrom} - ${comment.lineTo}` : `${comment.lineTo}`;
 
 	const notification = {
 		message: `${comment.commenters[0].name} updated a comment on ${comment.work.title} ${comment.subwork.title}, ${lines}`,
@@ -220,11 +220,11 @@ const commentsUpdate = (token, commentId, update) => {
 
 	// send notification email
 	const emailListQuery = {
-		$and: [ 
+		$and: [
 			{
 				$or: [
 					{
-						$and: 
+						$and:
 						[
 							{'subscriptions.bookmarks.work.slug': comment.work.slug},
 							{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
@@ -273,7 +273,7 @@ const commentsUpdate = (token, commentId, update) => {
 		Email.send({ from, to, subject, text });
 
 	});
-	
+
 	return commentId;
 };
 
@@ -298,7 +298,8 @@ const commentsRemove = (token, commentId) => {
 	return commentId;
 };
 
-const commentsAddRevision = (commentId, revision) => {
+const commentsAddRevision = (token, commentId, revision) => {
+	check(token, String);
 	check(commentId, String);
 	check(revision, Object);
 
@@ -306,15 +307,13 @@ const commentsAddRevision = (commentId, revision) => {
 	const commenters = Commenters.find().fetch();
 
 	const roles = ['editor', 'admin', 'commenter'];
-
-	const user = Meteor.user();
+	const user = Meteor.users.findOne({
+		roles: { $elemMatch: { $in: roles } },
+		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+	});
 
 	if (!user) {
-		throw new Meteor.Error('comment-update', 'not-authorized');
-	}
-
-	if (!Roles.userIsInRole(user, roles)) {
-		throw new Meteor.Error(`User ${user._id} attempted to add revision but was in an unauthorized role`);
+		throw new Meteor.Error('User is not authorized to add revision to comment');
 	}
 
 	let allowedToEdit = false;

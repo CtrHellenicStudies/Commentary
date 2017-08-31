@@ -296,8 +296,8 @@ FlowRouter.route('/sign-out', {
 			} catch (err) {
 				console.log(err);
 			}
-			cookie.remove('userId');
-			cookie.remove('loginToken');
+			Cookies.remove('userId');
+			Cookies.remove('loginToken');
 		},
 	],
 	action: () => {

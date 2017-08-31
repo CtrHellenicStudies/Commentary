@@ -62,7 +62,7 @@ const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onB
 			lineTo={lineTo}
 			commentGroup={commentGroup}
 			maxLine={maxLine}
-
+			highlightingVisible={highlightingVisible}
 			disableEdit={disableEdit}
 			selectedLineFrom={selectedLineFrom}
 			selectedLineTo={selectedLineTo}

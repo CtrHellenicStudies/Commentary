@@ -18,7 +18,7 @@ const getSelectedEditionText = (lemmaText, selectedLemmaEdition) => {
 	return selectedEditionText;
 };
 
-const getLineClass = (lineFrom, lineTo, n) => {
+const getLineClass = (lineFrom, lineTo, n, highlightingVisible) => {
 	let usedLineTo = lineFrom;
 
 	if (lineTo) {
@@ -26,11 +26,12 @@ const getLineClass = (lineFrom, lineTo, n) => {
 	}
 
 	let lineClass = 'lemma-line';
-	if (lineFrom <= n && n <= usedLineTo) {
+	if (lineFrom <= n && n <= usedLineTo && highlightingVisible) {
 		lineClass += ' highlighted';
 	}
 	return lineClass;
 };
+
 const getContextPanelTextState = (commentGroup, editor) => {
 	if (commentGroup) return 'context for comment group';
 	if (editor) return 'editor';
@@ -53,6 +54,7 @@ const LineNumbering = ({ n }) => (
 		: '' }
 	</div>
 );
+
 LineNumbering.propTypes = {
 	n: React.PropTypes.number.isRequired,
 };
@@ -155,7 +157,7 @@ class ContextPanelText extends React.Component {
 	*/
 
 	render() {
-		const { onBeforeClicked, selectedLemmaEdition, lineFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
+		const { onBeforeClicked, selectedLemmaEdition, highlightingVisible, lineFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
 
 		const selectedEditionText = getSelectedEditionText(lemmaText, selectedLemmaEdition);
 
@@ -179,7 +181,7 @@ class ContextPanelText extends React.Component {
 					case 'context for comment group':
 						return (
 							selectedEditionText.lines.map((line) => {
-								const lineClass = getLineClass(commentGroup.lineFrom, commentGroup.lineTo, line.n);
+								const lineClass = getLineClass(commentGroup.lineFrom, commentGroup.lineTo, line.n, highlightingVisible);
 
 								return (
 									<div

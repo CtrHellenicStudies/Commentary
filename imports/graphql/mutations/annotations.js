@@ -1,7 +1,8 @@
-import { GraphQLString, GraphQLNonNull } from 'graphql';
+import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 import {Meteor} from 'meteor/meteor';
 // types
 import CommentType, {CommentInputType} from '/imports/graphql/types/models/comment';
+import { RemoveType } from '/imports/graphql/types/index';
 
 // models
 import Comments from '/imports/models/comments';
@@ -31,7 +32,7 @@ const annotationMutationFields = {
 		},
 		resolve(parent, { comment }, token2) {
 
-			const token = 'testtoken';
+			const token = 'testtoken'; // TODO: change that to the actual token
 
 			// workaround to store revisions, caused probably by simple-schema
 
@@ -52,6 +53,23 @@ const annotationMutationFields = {
 			}
 
 			throw AuthenticationError();
+		}
+	},
+	annotationDelete: {
+		type: RemoveType,
+		description: 'Remove annotation',
+		args: {
+			annotationId: {
+				type: new GraphQLNonNull(GraphQLID)
+			}
+		},
+		async resolve(parent, { annotationId }, token2) {
+			const token = 'testtoken'; // TODO: change that to the actual token
+
+			const annotation = Comments.findOne(annotationId);
+			if (hasAnnotationPermission(token, annotation.bookChapterUrl)) {
+				return await Comments.remove({_id: annotationId});
+			}
 		}
 	}
 };

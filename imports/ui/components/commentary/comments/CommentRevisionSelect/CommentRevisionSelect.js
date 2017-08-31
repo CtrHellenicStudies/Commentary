@@ -61,9 +61,7 @@ class CommentRevisionSelect extends React.Component {
 	render() {
 		const { showMoreRevisions } = this.state;
 		const { comment, selectedRevisionIndex, selectRevision } = this.props;
-
 		const revisions = comment ? comment.revisions : [];
-
 		const fullRevisionsList = this.sortRevisions(revisions);
 		const truncatedRevisionsList = this.sortRevisions(revisions).slice(0, 3);
 
@@ -101,7 +99,7 @@ class CommentRevisionSelect extends React.Component {
 				{ truncatedRevisionsList.length < fullRevisionsList.length ?
 					<FlatButton
 						className={'revision'}
-						label={'Show More Revisions'}
+						label={this.state.showMoreRevisions ? 'Hide Older Revisions' : 'Show More Revisions'}
 						onClick={this.toggleMoreRevisions}
 					/>
 					:

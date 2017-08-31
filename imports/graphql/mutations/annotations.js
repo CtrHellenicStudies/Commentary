@@ -10,6 +10,16 @@ import Books from '/imports/models/books';
 // errors
 import { AuthenticationError } from '/imports/errors';
 
+function hasAnnotationPermission(token, chapterUrl) {
+	const user = Meteor.users.findOne({
+		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+	});
+
+	const book = Books.findOne({ 'chapters.url': chapterUrl });
+	const authorizedBooks = user.canAnnotateBooks || [];
+	return user && (book || ~authorizedBooks.indexOf(book._id))
+}
+
 const annotationMutationFields = {
 	annotationCreate: {
 		type: CommentType,
@@ -22,12 +32,6 @@ const annotationMutationFields = {
 		resolve(parent, { comment }, token2) {
 
 			const token = 'testtoken';
-			const user = Meteor.users.findOne({
-				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-			});
-
-			const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
-			const authorizedBooks = user.canAnnotateBooks || [];
 
 			// workaround to store revisions, caused probably by simple-schema
 
@@ -42,7 +46,7 @@ const annotationMutationFields = {
 				});
 			});
 
-			if (user && (book || ~authorizedBooks.indexOf(book._id))) {
+			if (hasAnnotationPermission(token, comment.bookChapterUrl)) {
 				const commentId = Comments.insert({...comment});
 				return Comments.findOne(commentId);
 			}

@@ -4,8 +4,8 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
-import Settings from '/imports/api/collections/settings';
+import ReferenceWorks from '/imports/models/referenceWorks';
+import Settings from '/imports/models/settings';
 
 // components:
 import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';

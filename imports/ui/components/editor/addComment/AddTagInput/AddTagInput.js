@@ -13,9 +13,9 @@ import {
 import Select from 'react-select';
 
 // components
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 
-const ListGroupItemDnD = creatListGroupItemDnD('tagBlocks');
+const ListGroupItemDnD = createListGroupItemDnD('tagBlocks');
 
 class AddTagInput extends React.Component {
 

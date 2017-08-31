@@ -9,7 +9,7 @@ import { mount } from 'react-mounter';
 import Utils from '/imports/lib/utils';
 
 // api
-import Tenants from '/imports/api/collections/tenants';
+import Tenants from '/imports/models/tenants';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -18,6 +18,7 @@ import AddKeywordLayout from '/imports/ui/layouts/editor/AddKeywordLayout';
 import AddTranslationLayout from '/imports/ui/layouts/editor/AddTranslationLayout';
 import AddRevisionLayout from '/imports/ui/layouts/editor/AddRevisionLayout';
 import EditKeywordLayout from '/imports/ui/layouts/editor/EditKeywordLayout';
+import TextNodesEditorLayout from '/imports/ui/layouts/editor/TextNodesEditorLayout';
 import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
 import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
 import UserLayout from '/imports/ui/layouts/user/UserLayout';
@@ -225,6 +226,12 @@ loggedInGroup.route('/commentary/create', {
 loggedInGroup.route('/translation/create', {
 	action: () => {
 		mount(AddTranslationLayout);
+	}
+});
+
+loggedInGroup.route('/textNodes/create', {
+	action: () => {
+		mount(TextNodesEditorLayout);
 	}
 });
 

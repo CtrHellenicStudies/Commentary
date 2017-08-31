@@ -1,7 +1,8 @@
 import React from 'react';
 import Cookies from 'js-cookie';
-import RecentList from '../RecentList';
 import Utils from '/imports/lib/utils';
+import RecentList from '../RecentList';
+
 
 class UserDropdown extends React.Component {
 

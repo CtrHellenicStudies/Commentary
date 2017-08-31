@@ -4,13 +4,13 @@ import Config from '/imports/lib/_config/_config';
 import Utils from '/imports/lib/utils';
 
 // api:
-import Comments from '/imports/api/collections/comments';
-import DiscussionComments from '/imports/api/collections/discussionComments';
+import Comments from '/imports/models/comments';
+import DiscussionComments from '/imports/models/discussionComments';
 
 
 function getEmailHeader(user) {
 	let userFullName = '';
-	if ('name' in user.profile) {
+	if (user.profile && 'name' in user.profile) {
 		userFullName = user.profile.name;
 	} else {
 		userFullName = user.username;

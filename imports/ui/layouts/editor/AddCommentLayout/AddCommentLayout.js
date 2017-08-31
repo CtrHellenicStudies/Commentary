@@ -20,9 +20,9 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 import muiTheme from '/imports/lib/muiTheme';
 
 // api
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Commenters from '/imports/models/commenters';
+import Keywords from '/imports/models/keywords';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 
 /*

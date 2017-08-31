@@ -3,6 +3,9 @@ import { DocHead } from 'meteor/kadira:dochead';
 // lib
 import Config from './_config/_config.js';
 
+// models
+import Editions from '/imports/models/editions';
+
 
 const Utils = {
 	isReady: (sub) => {
@@ -234,14 +237,14 @@ const Utils = {
 
 		return domain;
 	},
-	textFromTextNodesGroupedByEdition(textNodesCursor, EditionsCollection) {
+	textFromTextNodesGroupedByEdition(textNodesCursor) {
 		const editions = [];
 		textNodesCursor.forEach((textNode) => {
 			textNode.text.forEach((text) => {
 				let myEdition = editions.find(e => text.edition === e._id);
 
 				if (!myEdition) {
-					const foundEdition = EditionsCollection.findOne({ _id: text.edition });
+					const foundEdition = Editions.findOne({ _id: text.edition });
 					myEdition = {
 						_id: foundEdition._id,
 						title: foundEdition.title,

@@ -7,7 +7,7 @@ import { stub } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Books from '/imports/api/collections/books';
+import Books from '/imports/models/books';
 
 // tested module:
 import { bookInsert, bookUpdate, bookRemove } from './books';

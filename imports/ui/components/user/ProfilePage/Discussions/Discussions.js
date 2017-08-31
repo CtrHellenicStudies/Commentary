@@ -4,9 +4,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
 // api
-import DiscussionComments from '/imports/api/collections/discussionComments';
-import Comments from '/imports/api/collections/comments';
-import Settings from '/imports/api/collections/settings';
+import DiscussionComments from '/imports/models/discussionComments';
+import Comments from '/imports/models/comments';
+import Settings from '/imports/models/settings';
 
 // components
 import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';

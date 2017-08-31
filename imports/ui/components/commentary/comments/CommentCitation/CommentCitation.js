@@ -61,11 +61,11 @@ class CommentCitation extends React.Component {
 		};
 
 		const actions = [
-				<FlatButton
-					label="Cancel"
-					onTouchTap={this.handleRequestClose.bind(this)}
-				/>,
-			];
+			<FlatButton
+				label="Cancel"
+				onTouchTap={this.handleRequestClose.bind(this)}
+			/>,
+		];
 
 
 		return (

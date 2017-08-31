@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
 // api
-import Comments from '/imports/api/collections/comments';
-import Keywords from '/imports/api/collections/keywords';
-import Settings from '/imports/api/collections/settings';
+import Comments from '/imports/models/comments';
+import Keywords from '/imports/models/keywords';
+import Settings from '/imports/models/settings';
 
 // components
 import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
@@ -45,7 +46,7 @@ class KeywordDetail extends Component {
 			if (error) {
 				console.log(keywordId, error);
 			} else {
-				FlowRouter.go('/keywords');
+				FlowRouter.go('/words');
 			}
 		});
 	}
@@ -107,7 +108,7 @@ class KeywordDetail extends Component {
 													label="Edit"
 												/>
 												<RaisedButton
-													onClick={this.deleteKeyword}
+													onClick={this.deleteKeyword.bind(this)}
 													className="cover-link light"
 													label="Delete"
 												/>

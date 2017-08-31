@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 
-import Settings from '/imports/api/collections/settings.js';
+import Settings from '/imports/models/settings.js';
 
 const settingsInsert = (token, setting) => {
 	check(token, String);

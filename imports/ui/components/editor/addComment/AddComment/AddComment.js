@@ -36,14 +36,14 @@ import {
 } from 'draft-js-buttons';
 
 // api
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Commenters from '/imports/models/commenters';
+import Keywords from '/imports/models/keywords';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import AddTagInput from '/imports/ui/components/editor/addComment/AddTagInput';
+import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -81,7 +81,7 @@ const commentsMentionPlugin = createMentionPlugin({
 	mentionTrigger: '#',
 });
 
-const ListGroupItemDnD = creatListGroupItemDnD('referenceWorkBlocks');
+const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
 function _getSuggestionsFromComments(comments) {
 	const suggestions = [];
@@ -478,7 +478,7 @@ class AddComment extends React.Component {
 									/>
 								</h1>
 
-								<AddTagInput
+								<TagsInput
 									tagsValue={tagsValue}
 									tags={tags}
 									addTagBlock={this.addTagBlock}

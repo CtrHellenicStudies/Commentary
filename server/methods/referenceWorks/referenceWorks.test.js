@@ -8,7 +8,7 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 // tested module:
 import { referenceWorksInsert, referenceWorksUpdate, referenceWorksRemove } from './referenceWorks';

@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
 // api
-import Keywords from '/imports/api/collections/keywords';
+import Keywords from '/imports/models/keywords';
 
 // components
 import KeywordTeaser from '/imports/ui/components/keywords/KeywordTeaser';

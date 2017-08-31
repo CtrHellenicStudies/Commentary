@@ -8,7 +8,7 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Pages from '/imports/api/collections/pages.js';
+import Pages from '/imports/models/pages.js';
 
 // tested module:
 import { pagesInsert, pagesUpdate, pagesRemove } from './pages';

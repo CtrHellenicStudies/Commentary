@@ -53,7 +53,9 @@ class CommentLemmaText extends React.Component {
 			return (
 				<div className="comment-lemma-text">
 					{linesHTML}
-					<div>
+					<div
+						className="commentary-lemma-show-more-button"
+					>
 						<FlatButton
 							label={expanded ? 'Show less' : 'Show more'}
 							icon={expanded ? <i className="mdi mdi-chevron-up" /> : <i className="mdi mdi-chevron-down" />}

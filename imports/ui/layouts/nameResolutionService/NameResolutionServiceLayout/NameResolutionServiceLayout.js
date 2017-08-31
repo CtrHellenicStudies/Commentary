@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import Comments from '/imports/api/collections/comments';
-import Tenants from '/imports/api/collections/tenants';
+import Comments from '/imports/models/comments';
+import Tenants from '/imports/models/tenants';
 import Utils from '/imports/lib/utils';
 
 

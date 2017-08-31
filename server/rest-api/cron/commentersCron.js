@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import winston from 'winston';
 
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
 
 const commentersCron = () => {
 	const comments = Comments.find().fetch();

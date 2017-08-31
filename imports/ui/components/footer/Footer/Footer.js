@@ -6,8 +6,8 @@ import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
-import Settings from '/imports/api/collections/settings';
-import Tenants from '/imports/api/collections/tenants';
+import Settings from '/imports/models/settings';
+import Tenants from '/imports/models/tenants';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -23,7 +23,6 @@ class Footer extends Component {
 
 	render() {
 		const { settings, tenant } = this.props;
-		const userIsLoggedin = false;
 
 		return (
 
@@ -42,11 +41,11 @@ class Footer extends Component {
 										label="Commentators"
 									/>
 									<FlatButton
-										href="/keywords"
+										href="/words"
 										label="Words"
 									/>
 									<FlatButton
-										href="/keyideas"
+										href="/ideas"
 										label="Ideas"
 									/>
 									<FlatButton
@@ -55,18 +54,6 @@ class Footer extends Component {
 									/>
 								</div>
 							: ''}
-							{ userIsLoggedin ? '' :
-							<div>
-								<FlatButton
-									href="/sign-in"
-									label="Login"
-								/>
-								<FlatButton
-									href="/sign-up"
-									label="Join the Community"
-								/>
-							</div>
-							}
 						</div>
 					</div>
 					<div className="row mb64 mb-sm-32">

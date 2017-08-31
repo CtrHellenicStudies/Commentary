@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
-import Commenters from '/imports/api/collections/commenters';
+import Commenters from '/imports/models/commenters';
 
 
 const commentersInsert = (token, commenter) => {

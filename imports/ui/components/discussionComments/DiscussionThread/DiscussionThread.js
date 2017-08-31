@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
 // api
-import DiscussionComments from '/imports/api/collections/discussionComments';
+import DiscussionComments from '/imports/models/discussionComments';
 
 // lib
 import Utils from '/imports/lib/utils';
@@ -130,7 +130,7 @@ const DiscussionThread = React.createClass({
 					<div className="discussion-thread">
 						{comment.discussionCommentsDisabled || discussionCommentsDisabled ?
 							<div className="no-results-wrap">
-								<span className="no-results-text">Discussion will be coming soon.</span>
+								<span className="no-results-text">The discussion comments are currently disabled for this commentary.</span>
 							</div> :
 							<div className="add-comment-wrap paper-shadow ">
 								<IconButton

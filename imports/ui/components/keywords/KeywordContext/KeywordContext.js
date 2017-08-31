@@ -12,8 +12,8 @@ import muiTheme from '/imports/lib/muiTheme';
 import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
 
 // api
-import TextNodes from '/imports/api/collections/textNodes';
-import Editions from '/imports/api/collections/editions';
+import TextNodes from '/imports/models/textNodes';
+import Editions from '/imports/models/editions';
 
 // const textFromTextNodesGroupedByEdition = (nodesCursor) => {
 // 	const editions = [];

@@ -4,8 +4,8 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // api:
-import TextNodes from '/imports/api/collections/textNodes';
-import Editions from '/imports/api/collections/editions';
+import TextNodes from '/imports/models/textNodes';
+import Editions from '/imports/models/editions';
 
 // components:
 import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText';
@@ -62,7 +62,7 @@ const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onB
 			lineTo={lineTo}
 			commentGroup={commentGroup}
 			maxLine={maxLine}
-
+			highlightingVisible={highlightingVisible}
 			disableEdit={disableEdit}
 			selectedLineFrom={selectedLineFrom}
 			selectedLineTo={selectedLineTo}

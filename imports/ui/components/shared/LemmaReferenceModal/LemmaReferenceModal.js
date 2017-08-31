@@ -6,8 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Draggable from 'react-draggable';
 
 // api
-import TextNodes from '/imports/api/collections/textNodes';
-import Editions from '/imports/api/collections/editions';
+import TextNodes from '/imports/models/textNodes';
+import Editions from '/imports/models/editions';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';

@@ -141,18 +141,18 @@ class ProfilePage extends React.Component {
 							<div className="user-profile-tabs">
 								<MuiThemeProvider muiTheme={getMuiTheme(tabMuiTheme)}>
 									<Tabs>
-										<Tab label="Notifications">
+										{/*}<Tab label="Notifications">
 											<Notifications />
-										</Tab>
+										</Tab>*/}
 										<Tab label="Discussions">
 											<Discussions />
 										</Tab>
 										<Tab label="Annotations">
 											<Annotations />
 										</Tab>
-										<Tab label="Bookmarks">
+										{/*}<Tab label="Bookmarks">
 											<Bookmarks />
-										</Tab>
+										</Tab>*/}
 										<Tab label="Account">
 											<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 												<Account user={user} />

@@ -7,7 +7,7 @@ import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Cookies from 'js-cookie';
-import Keywords from '/imports/api/collections/keywords';
+import Keywords from '/imports/models/keywords';
 
 // layouts
 import Header from '/imports/ui/layouts/header/Header';

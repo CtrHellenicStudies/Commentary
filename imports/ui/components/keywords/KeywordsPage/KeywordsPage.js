@@ -7,7 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Utils from '/imports/lib/utils';
 
 // api
-import Settings from '/imports/api/collections/settings';
+import Settings from '/imports/models/settings';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';

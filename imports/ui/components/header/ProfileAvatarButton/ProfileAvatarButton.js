@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import UserDropdown from '../UserDropdown';
@@ -7,6 +8,7 @@ import UserDropdown from '../UserDropdown';
 const ProfileAvatarButton = (props) => {
 	const loggedInUser = Meteor.user();
 	const showUserDropdown = false;
+	const numberOfNotifications = props.notifications ? props.notifications.length : 0;
 
 	return (
 		<div
@@ -20,9 +22,13 @@ const ProfileAvatarButton = (props) => {
 				<a
 					href="/profile"
 				>
-					{/*<span className="profileButtonHeader profileButtonNotificationBadge notificationBadge">
-						2
-					</span>*/}
+					{numberOfNotifications > 0 ?
+						<span className="profileButtonHeader profileButtonNotificationBadge notificationBadge">
+							{numberOfNotifications}
+						</span>
+						:
+						''
+					}
 					<AvatarIcon
 						className="avatarIcon"
 						avatar={'profile' in loggedInUser ? loggedInUser.profile.avatarUrl : ''}
@@ -38,5 +44,22 @@ const ProfileAvatarButton = (props) => {
 	);
 };
 
+ProfileAvatarButton.propTypes = {
+	notifications: React.PropTypes.array,
+	showUserDropdown: React.PropTypes.func,
+	hideUserDropdown: React.PropTypes.func
+};
 
-export default ProfileAvatarButton;
+const ProfileAvatarButtonContainer = createContainer(() => {
+	let notifications = [];
+
+	if (Meteor.user() && Meteor.user().subscriptions) {
+		notifications =  Meteor.user().subscriptions.notifications;
+	}
+
+	return {
+		notifications
+	};
+}, ProfileAvatarButton);
+
+export default ProfileAvatarButtonContainer;

@@ -1,11 +1,14 @@
 import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
+import { ObjectID } from 'bson';
 
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
+
 
 
 const commentsInsert = (token, comment) => {
@@ -25,38 +28,109 @@ const commentsInsert = (token, comment) => {
 
 	// add comment to db
 	let commentId;
+
 	try {
 		commentId = Comments.insert(comment);
 	} catch (err) {
 		throw new Meteor.Error('comment-insert', err);
 	}
 
-	// If no commenters were selected for this comment, do not update subscribed
-	// users for commenters
 	if (!comment.commenters || !comment.commenters.length) {
 		return commentId;
 	}
 
-	// // update subscribed users
-	let commenterId = comment.commenters[0]._id;
-
-	const query = { 'subscriptions.commenters': { $elemMatch: {_id: commenterId} } };
-
+	// add notification
 	const options = { multi: true };
 
-	const avatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
+	const commenterId = comment.commenters[0]._id;
+	const userAvatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
 
-	const notification = {
-		message: `New comment by ${comment.commenters[0].name}`,
-		avatar: {src: avatar.avatar.src},
-		seen: false,
-		created: new Date(),
-		id: commentId
+	const avatar = userAvatar ? userAvatar.avatar.src : '/images/default_user.jpg';
+
+	const query = {
+		$or: [
+			{
+				$and:
+				[
+					{'subscriptions.bookmarks.work.slug': comment.work.slug},
+					{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
+					{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+					{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+				]
+			},
+			{
+				'subscriptions.commenters': { $elemMatch: {_id: commenterId} }
+			}
+		]
 	};
 
-	const update = { $push: { 'subscriptions.notifications': notification } };
+	const notification = {
+		message: `${comment.commenters[0].name} commented on ${comment.work.title} ${comment.subwork.title}, lines ${comment.lineFrom} - ${comment.lineTo}`,
+		avatar: {src: avatar},
+		created: new Date(),
+		_id: new ObjectID().toString(),
+		slug: commentId
+	};
 
-	const subscribedUsers = Meteor.users.update(query, update, notification);
+	const update = { $push: {'subscriptions.notifications': notification} };
+
+	const subscribedUsers = Meteor.users.update(query, update, notification, options);
+
+	// send notification email
+	const emailListQuery = {
+		$and: [
+			{
+				$or: [
+					{
+						$and:
+						[
+							{'subscriptions.bookmarks.work.slug': comment.work.slug},
+							{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
+							{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+							{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+						]
+					},
+					{
+						'subscriptions.commenters': { $elemMatch: {_id: commenterId} }
+					}
+				]
+			},
+			{
+				batchNotification: 'immediately'
+			},
+			{
+				emails: { $exists: true }
+			}
+		]
+	};
+
+	const emailList = Meteor.users.find(emailListQuery);
+
+	emailList.forEach(user => {
+
+		let username = 'Commentary User';
+		if (user.profile.name) {
+			username = user.profile.name;
+		} else if (user.username) {
+			username = user.username;
+		}
+
+		const from = 'no-reply@ahcip.chs.harvard.edu';
+		const to = user.emails[0].address;
+		const subject = 'New Notification';
+		const text = `
+		Dear ${username},
+
+		${comment.commenters[0].name} has published a new comment on the ${comment.work.title}.
+
+		Please review your notification at ahcip.chs.harvard.edu.
+
+		You can change how often you receive these emails in your account settings.
+		`;
+
+		Email.send({ from, to, subject, text });
+
+	});
 
 	return commentId;
 };
@@ -70,10 +144,9 @@ const commentsUpdate = (token, commentId, update) => {
 
 	const user = Meteor.users.findOne({
 		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
+		// 'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
 	});
 
-	console.log(user);
 
 	if (!user) {
 		throw new Meteor.Error('comment-update', 'not-authorized');
@@ -106,12 +179,100 @@ const commentsUpdate = (token, commentId, update) => {
 		throw new Meteor.Error('comment-update', err);
 	}
 
-	// update subscribed users
+	// add notification
+	const options = { multi: true };
+
 	const commenterId = comment.commenters[0]._id;
-	const subscribedUsers = Meteor.users.find({
-		'subscriptions.commenters': {_id: commenterId}
+	const userAvatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
+
+	const avatar = userAvatar ? userAvatar.avatar.src : '/images/default_user.jpg';
+
+	const query = {
+		$or: [
+			{
+				$and:
+				[
+					{'subscriptions.bookmarks.work.slug': comment.work.slug},
+					{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
+					{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+					{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+				]
+			},
+			{
+				'subscriptions.commenters': { $elemMatch: {_id: commenterId} }
+			}
+		]
+	};
+
+	const lines = comment.lineTo !== comment.lineFrom ? `lines ${comment.lineFrom} - ${comment.lineTo}` : `${comment.lineTo}`;
+
+	const notification = {
+		message: `${comment.commenters[0].name} updated a comment on ${comment.work.title} ${comment.subwork.title}, ${lines}`,
+		avatar: {src: avatar},
+		created: new Date(),
+		_id: new ObjectID().toString(),
+		slug: commentId
+	};
+
+	const updateUser = { $push: {'subscriptions.notifications': notification} };
+
+	const subscribedUsers = Meteor.users.update(query, updateUser, notification, options);
+
+	// send notification email
+	const emailListQuery = {
+		$and: [
+			{
+				$or: [
+					{
+						$and:
+						[
+							{'subscriptions.bookmarks.work.slug': comment.work.slug},
+							{'subscriptions.bookmarks.subwork.slug': comment.subwork.slug},
+							{'subscriptions.bookmarks.lineFrom': {$gte: comment.lineFrom}},
+							{'subscriptions.bookmarks.lineTo': {$lte: comment.lineTo}}
+						]
+					},
+					{
+						'subscriptions.commenters': { $elemMatch: {_id: commenterId} }
+					}
+				]
+			},
+			{
+				batchNotification: 'immediately'
+			},
+			{
+				emails: { $exists: true }
+			}
+		]
+	};
+
+	const emailList = Meteor.users.find(emailListQuery);
+
+	emailList.forEach(subscribedUser => {
+
+		let username = 'Commentary User';
+		if (subscribedUser.profile.name) {
+			username = subscribedUser.profile.name;
+		} else if (subscribedUser.username) {
+			username = subscribedUser.username;
+		}
+
+		const from = 'no-reply@ahcip.chs.harvard.edu';
+		const to = user.emails[0].address;
+		const subject = 'New Notification';
+		const text = `
+		Dear ${username},
+
+		${comment.commenters[0].name} has updated a comment on the ${comment.work.title}.
+
+		Please review your notification at ahcip.chs.harvard.edu.
+
+		You can change how often you receive these emails in your account settings.
+		`;
+
+		Email.send({ from, to, subject, text });
+
 	});
-	console.log(subscribedUsers);
 
 	return commentId;
 };
@@ -137,7 +298,8 @@ const commentsRemove = (token, commentId) => {
 	return commentId;
 };
 
-const commentsAddRevision = (commentId, revision) => {
+const commentsAddRevision = (token, commentId, revision) => {
+	check(token, String);
 	check(commentId, String);
 	check(revision, Object);
 
@@ -145,15 +307,13 @@ const commentsAddRevision = (commentId, revision) => {
 	const commenters = Commenters.find().fetch();
 
 	const roles = ['editor', 'admin', 'commenter'];
-
-	const user = Meteor.user();
+	const user = Meteor.users.findOne({
+		roles: { $elemMatch: { $in: roles } },
+		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+	});
 
 	if (!user) {
-		throw new Meteor.Error('comment-update', 'not-authorized');
-	}
-
-	if (!Roles.userIsInRole(user, roles)) {
-		throw new Meteor.Error(`User ${user._id} attempted to add revision but was in an unauthorized role`);
+		throw new Meteor.Error('User is not authorized to add revision to comment');
 	}
 
 	let allowedToEdit = false;

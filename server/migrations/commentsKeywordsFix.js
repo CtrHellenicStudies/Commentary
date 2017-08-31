@@ -1,5 +1,5 @@
-import Comments from '/imports/api/collections/comments';
-import Keywords from '/imports/api/collections/keywords';
+import Comments from '/imports/models/comments';
+import Keywords from '/imports/models/keywords';
 
 const commentsKeywordsFix = () => {
 	// ---

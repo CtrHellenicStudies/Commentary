@@ -8,7 +8,7 @@ import { stub, mock } from 'sinon';
 import faker from 'faker';
 
 // api:
-import LinkedDataSchemas from '/imports/api/collections/linkedDataSchemas';
+import LinkedDataSchemas from '/imports/models/linkedDataSchemas';
 
 // tested module:
 import { linkedDataSchemasInsert, linkedDataSchemasUpdate, linkedDataSchemasRemove } from './linkedDataSchemas';

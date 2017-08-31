@@ -10,9 +10,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
 
 // api
-import Comments from '/imports/api/collections/comments';
-import Commenters from '/imports/api/collections/commenters';
-import Keywords from '/imports/api/collections/keywords';
+import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
+import Keywords from '/imports/models/keywords';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -50,6 +50,7 @@ const AddRevisionLayout = React.createClass({
 	addRevision(formData, textValue, textRawValue) {
 		const self = this;
 		const { comment } = this.props;
+		const token = Cookies.get('loginToken');
 		const revision = {
 			title: formData.titleValue,
 			text: textValue,
@@ -58,10 +59,10 @@ const AddRevisionLayout = React.createClass({
 			slug: slugify(formData.titleValue),
 		};
 
-		Meteor.call('comments.add.revision', comment._id, revision, (err) => {
+		Meteor.call('comments.add.revision', token, comment._id, revision, (err) => {
 			if (err) {
 				console.error('Error adding revision', err);
-				this.showSnackBar(_err.error);
+				this.showSnackBar(err.error);
 			} else {
 				this.showSnackBar('Revision added');
 			}

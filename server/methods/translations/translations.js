@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 
-import Translations from '/imports/api/collections/translations';
+import Translations from '/imports/models/translations';
 
 const translationsInsert = (translation) => {
 	check(translation, Object);

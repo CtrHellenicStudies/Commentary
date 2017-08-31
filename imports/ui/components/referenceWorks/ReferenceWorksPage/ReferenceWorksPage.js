@@ -10,7 +10,7 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 // api
-import Settings from '/imports/api/collections/settings';
+import Settings from '/imports/models/settings';
 
 // lib
 import Utils from '/imports/lib/utils';

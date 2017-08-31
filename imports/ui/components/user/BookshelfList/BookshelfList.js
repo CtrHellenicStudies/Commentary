@@ -5,7 +5,7 @@ import { Session } from 'meteor/session';
 import Masonry from 'react-masonry-component/lib';
 
 // api
-import Works from '/imports/api/collections/works';
+import Works from '/imports/models/works';
 
 const BookshelfList = React.createClass({
 	propTypes: {

@@ -6,7 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Tabs, Tab} from 'material-ui/Tabs';
 
 // api
-import Settings from '/imports/api/collections/settings';
+import Settings from '/imports/models/settings';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';

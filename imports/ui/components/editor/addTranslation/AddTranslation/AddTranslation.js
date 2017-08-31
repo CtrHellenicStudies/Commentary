@@ -14,8 +14,8 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 
 // api
-import Works from '/imports/api/collections/works';
-import Commenters from '/imports/api/collections/commenters';
+import Works from '/imports/models/works';
+import Commenters from '/imports/models/commenters';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
-import Books from '/imports/api/collections/books';
+import Books from '/imports/models/books';
 
 const bookInsert = (token, book) => {
 	check(token, String);

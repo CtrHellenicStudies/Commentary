@@ -7,7 +7,7 @@ import {
 	FormGroup,
 	ControlLabel,
 } from 'react-bootstrap';
-import cookie from 'react-cookie';
+import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
@@ -35,13 +35,14 @@ import {
 	OrderedListButton,
 	BlockquoteButton,
 } from 'draft-js-buttons';
+import _ from 'underscore';
 
 // api
-import Keywords from '/imports/api/collections/keywords';
-import ReferenceWorks from '/imports/api/collections/referenceWorks';
+import Keywords from '/imports/models/keywords';
+import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import AddTagInput from '/imports/ui/components/editor/addComment/AddTagInput';
 
@@ -76,7 +77,7 @@ const commentsMentionPlugin = createMentionPlugin({
 	mentionTrigger: '#',
 });
 
-const ListGroupItemDnD = creatListGroupItemDnD('referenceWorkBlocks');
+const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
 function _getSuggestionsFromComments(comments) {
 	const suggestions = [];
@@ -304,7 +305,7 @@ const AddRevision = React.createClass({
 	},
 
 	removeComment() {
-		const authToken = cookie.load('loginToken');
+		const authToken = Cookies.get('loginToken');
 
 		Meteor.call('comment.delete', authToken, this.props.comment._id, (err) => {
 			if (err) {
@@ -422,9 +423,7 @@ const AddRevision = React.createClass({
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 
-		if (isTest) {
-			return null;
-		}
+		const revisions = _.sortBy(comment.revisions, 'created').reverse();
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -654,7 +653,7 @@ const AddRevision = React.createClass({
 
 
 							<div className="comment-revisions">
-								{comment.revisions.map((_revision, i) => (
+								{revisions.map((_revision, i) => (
 									<FlatButton
 										key={i}
 										id={i}

@@ -5,7 +5,7 @@ import { Session } from 'meteor/session';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // api
-import Works from '/imports/api/collections/works';
+import Works from '/imports/models/works';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';

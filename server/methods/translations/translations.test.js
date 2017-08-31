@@ -10,7 +10,7 @@ import { stub } from 'sinon';
 import faker from 'faker';
 
 // api:
-import Translations from '/imports/api/collections/translations';
+import Translations from '/imports/models/translations';
 
 // tested module:
 import * as translationMethods from './translations';

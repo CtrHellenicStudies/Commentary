@@ -1,5 +1,5 @@
 // api:
-import Comments, { getURN } from '/imports/api/collections/comments';
+import Comments, { getURN } from '/imports/models/comments';
 
 const commentsGenerateURNs = (regenerate = false) => {
 	// set regenerate flag to true, to recreate all urn's for all comments

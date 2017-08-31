@@ -81,13 +81,25 @@ if (Meteor.isServer) {
 
 	Meteor.publish('textNodes', (query = {}, skip = 0, limit = 100) => {
 		check(query, Object);
+		check(skip, Number);
+		check(limit, Number);
+
 		return TextNodes.find(query, {
-			limit,
 			skip,
+			limit,
 		});
 	});
 
-	Meteor.publish('editions', () => Editions.find());
+	Meteor.publish('editions', (tenantId) => {
+		check(tenantId, Match.Maybe(String));
+
+		const query = {};
+		if (tenantId) {
+			query.tenantId = tenantId;
+		}
+
+		return Editions.find(query);
+	});
 
 	Meteor.publish('commenters', (tenantId, limit = 100) => {
 		check(tenantId, Match.Maybe(String));

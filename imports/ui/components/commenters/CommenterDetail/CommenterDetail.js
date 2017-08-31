@@ -54,6 +54,7 @@ class CommenterDetail extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		const { commenter } = this.props;
+		/*
 		const { subscriptions } = this.state;
 
 		if (commenter !== nextProps.commenter) {
@@ -65,6 +66,7 @@ class CommenterDetail extends React.Component {
 				subscribed: false
 			});
 		}
+		*/
 	}
 
 	toggleReadMoreBio() {

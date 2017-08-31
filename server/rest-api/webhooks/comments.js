@@ -1,7 +1,8 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
-import Revisions from '/imports/models/revisions';
 import ReferenceWorks from '/imports/models/referenceWorks';
 import Tenants from '/imports/models/tenants';
 import Settings from '/imports/models/settings';
@@ -35,8 +36,6 @@ Meteor.method('publishComments', (commentCandidate) => {
 	}
 	if (!commenter) {
 		console.error(`Could not find commenter with slug:${commentCandidate.commenter}`);
-	} else {
-		commenters.push(commenter);
 	}
 
 	const work = Works.findOne({ slug: commentCandidate.work });
@@ -67,8 +66,13 @@ Meteor.method('publishComments', (commentCandidate) => {
 
 	const keywords = [];
 	if ('keywords' in commentCandidate) {
-		commentCandidate.keywords.forEach((keywordWordpressId) => {
-			keywords.push(Keywords.findOne({ wordpressId: keywordWordpressId }));
+		commentCandidate.keywords.forEach((keywordSlug) => {
+			let _keyword = Keywords.findOne({ slug: keywordSlug });
+			if (_keyword) {
+				keywords.push(_keyword);
+			} else {
+				console.error(`Could not find keyword with wordpressId: ${keywordWordpressId}. Not creating comment or revision`);
+			}
 		});
 	}
 
@@ -104,16 +108,14 @@ Meteor.method('publishComments', (commentCandidate) => {
 		});
 
 		if (!revisionExists) {
-			let revision = Revisions.insert({
+			let revisionId = new Mongo.ObjectID();
+			let revision = {
 				title: commentCandidate.title,
 				text,
 				tenantId: tenant._id,
 				originalDate,
-			});
-
-			if (revision) {
-				revision = Revisions.findOne({ _id: revision });
-			}
+				_id: revisionId.valueOf(),
+			};
 		}
 
 		upsertResponse = Comments.update(
@@ -124,16 +126,14 @@ Meteor.method('publishComments', (commentCandidate) => {
 		let nLines = 1;
 		const commentOrder = 0;
 
-		let revision = Revisions.insert({
+		let revisionId = new Mongo.ObjectID();
+		let revision = {
 			title: commentCandidate.title,
 			text,
 			tenantId: tenant._id,
 			originalDate,
-		});
-
-		if (revision) {
-			revision = Revisions.findOne({ _id: revision });
-		}
+			_id: revisionId.valueOf(),
+		};
 
 		if ('line_to' in commentCandidate
 			&& !isNaN(parseInt(commentCandidate.line_to, 10))
@@ -162,6 +162,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 			nLines,
 			commentOrder,
 			originalDate,
+			status: 'publish',
 
 			keywords,
 			revisions: [revision],
@@ -178,25 +179,18 @@ Meteor.method('publishComments', (commentCandidate) => {
 		}
 
 		let newCommenter;
-		if (commenters.length) {
-			commenters.forEach((_commenter) => {
-				newCommenter = {
-					name: _commenter.name,
-					slug: _commenter.slug,
-				};
-
-				if ('wordpressId' in _commenter) {
-					newCommenter.wordpressId = _commenter.wordpressId;
-				}
-
-				newComment.commenters.push(newCommenter);
+		if (commenter) {
+			newComment.commenters.push({
+				_id: commenter._id,
+				name: commenter.name,
+				slug: commenter.slug,
+				wordpressId: commenter.wordpressId,
 			});
 		}
 
 		if ('line_to' in commentCandidate && !isNaN(commentCandidate.line_to)) {
 			newComment.lineTo = parseInt(commentCandidate.line_to, 10);
 		}
-		console.log(newComment);
 
 		const insertResponse = Comments.insert(newComment);
 		if (insertResponse) {

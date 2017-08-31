@@ -1,6 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
+import Settings from '/imports/models/settings';
 import Tenants from '/imports/models/tenants';
 import Works from '/imports/models/works';
 

@@ -23,7 +23,6 @@ class Footer extends Component {
 
 	render() {
 		const { settings, tenant } = this.props;
-		const userIsLoggedin = false;
 
 		return (
 
@@ -55,18 +54,6 @@ class Footer extends Component {
 									/>
 								</div>
 							: ''}
-							{ userIsLoggedin ? '' :
-							<div>
-								<FlatButton
-									href="/sign-in"
-									label="Login"
-								/>
-								<FlatButton
-									href="/sign-up"
-									label="Join the Community"
-								/>
-							</div>
-							}
 						</div>
 					</div>
 					<div className="row mb64 mb-sm-32">

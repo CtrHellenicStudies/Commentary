@@ -100,7 +100,7 @@ class CommentaryLayout extends React.Component {
 	_updateRoute(filters) {
 		let queryParams = {};
 		if (filters) {
-			queryParams = createQueryParamsFromFilters(filters);
+			queryParams = createQueryParamsFromFilters(filters, this.props.referenceWorks);
 		} else {
 			queryParams = this.props.queryParams;
 		}
@@ -168,11 +168,11 @@ class CommentaryLayout extends React.Component {
 	}
 
 	render() {
-		const { queryParams, params, works } = this.props;
+		const { queryParams, params, works, referenceWorks } = this.props;
 		const { skip, limit, modalLoginLowered } = this.state;
 
 		// create filters object based on the queryParams or params
-		const filters = createFilterFromURL(params, queryParams, works);
+		const filters = createFilterFromURL(params, queryParams, works, referenceWorks);
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -211,7 +211,7 @@ class CommentaryLayout extends React.Component {
 }
 
 export default createContainer(() => {
-	const handle = Meteor.subscribe('referenceWorks.all', Session.get('tenantId'));
+	const handleReference = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
 
 	const referenceWorks = ReferenceWorks.find().fetch();
@@ -220,5 +220,6 @@ export default createContainer(() => {
 	return {
 		referenceWorks,
 		works,
+		ready: handleReference.ready() && handleWorks.ready(),
 	};
 }, CommentaryLayout);

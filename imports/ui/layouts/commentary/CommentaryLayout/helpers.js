@@ -7,7 +7,7 @@ import Works from '/imports/models/works';
 // lib
 import Utils from '/imports/lib/utils';
 
-const _createFilterFromQueryParams = (queryParams) => {
+const _createFilterFromQueryParams = (queryParams, referenceWorks = []) => {
 	const filters = [];
 
 	if (!queryParams) {
@@ -81,7 +81,6 @@ const _createFilterFromQueryParams = (queryParams) => {
 
 	if ('reference' in queryParams) {
 		const references = [];
-		const { referenceWorks } = this.props;
 
 		queryParams.reference.split(',').forEach((referenceId) => {
 			referenceWorks.forEach((referenceWork) => {
@@ -487,12 +486,12 @@ const _createFilterFromParams = (params, works) => {
 	return filters;
 };
 
-const _createFilterFromURL = (params, queryParams, works) => {
+const _createFilterFromURL = (params, queryParams, works, referenceWorks) => {
 	let filters = [];
 	if (!_.isEmpty(params)) {
 		filters = _createFilterFromParams(params, works);
 	} else if (queryParams) {
-		filters = _createFilterFromQueryParams(queryParams);
+		filters = _createFilterFromQueryParams(queryParams, referenceWorks);
 	}
 	return filters;
 };

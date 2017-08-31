@@ -25,9 +25,7 @@ import Utils from '/imports/lib/utils';
 
 // components
 import TextNodesInput from '../TextNodesInput';
-import WorkInput from '../WorkInput';
-import SubworkInput from '../SubworkInput';
-import EditionInput from '../EditionInput';
+import EditWorkDialog from '../EditWorkDialog';
 
 
 class TextNodesEditor extends React.Component {
@@ -48,6 +46,9 @@ class TextNodesEditor extends React.Component {
 			selectedSubwork,
 			startAtLine,
 			limit,
+			editWorkDialogOpen: false,
+			editEditionDialogOpen: false,
+			editSubworkDialogOpen: false,
 		};
 
 		autoBind(this);
@@ -81,9 +82,39 @@ class TextNodesEditor extends React.Component {
 		});
 	}
 
-	showNewWorkModal() {
+	showEditWorkDialog() {
 		this.setState({
-			newWorkModalVisible: true,
+			editWorkDialogOpen: true,
+		});
+	}
+
+	showEditEditionDialog() {
+		this.setState({
+			editWorkDialogOpen: true,
+		});
+	}
+
+	showEditSubworkDialog() {
+		this.setState({
+			editSubworkDialogOpen: true,
+		});
+	}
+
+	handleCloseEditWorkDialog() {
+		this.setState({
+			editWorkDialogOpen: false,
+		});
+	}
+
+	handleCloseEditEditionDialog() {
+		this.setState({
+			editEditionDialogOpen: false,
+		});
+	}
+
+	handleCloseEditSubworkDialog() {
+		this.setState({
+			editSubworkDialogOpen: false,
 		});
 	}
 
@@ -146,6 +177,27 @@ class TextNodesEditor extends React.Component {
 		const { works, editions } = this.props;
 		const { subworks, selectedWork, selectedEdition, selectedSubwork, startAtLine } = this.state;
 
+		let _selectedWork;
+		let _selectedEdition;
+		let _selectedSubwork;
+
+		works.forEach(work => {
+			if (work._id === selectedWork) {
+				_selectedWork = work;
+				_selectedWork.subworks.forEach(subwork => {
+					if (subwork.n === selectedSubwork) {
+						_selectedSubwork = subwork;
+					}
+				});
+			}
+		});
+
+		editions.forEach(edition => {
+			if (edition._id === selectedEdition) {
+				_selectedEdition = edition;
+			}
+		});
+
 		const workOptions = [];
 		works.map(work => {
 			workOptions.push({
@@ -183,10 +235,17 @@ class TextNodesEditor extends React.Component {
 								onChange={this.selectWork}
 							/>
 							<button
-								onClick={this.showNewWorkModal}
+								onClick={this.showEditWorkDialog}
 							>
 								Add new work
 							</button>
+							{selectedWork ?
+								<button
+									onClick={this.showEditWorkDialog}
+								>
+									Edit {_selectedWork.title}
+								</button>
+							: ''}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input edition-input">
@@ -233,6 +292,11 @@ class TextNodesEditor extends React.Component {
 					</div>
 				</div>
 				{this.renderTextNodesInput()}
+				<EditWorkDialog
+					open={this.state.editWorkDialogOpen}
+					handleClose={this.handleCloseEditWorkDialog}
+					work={_selectedWork}
+				/>
 			</div>
 		);
 	}

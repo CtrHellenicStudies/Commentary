@@ -73,8 +73,6 @@ class TextNodesEditorLayout extends React.Component {
 							toggleSearchTerm={() => {}}
 							handleChangeLineN={() => {}}
 							filters={[]}
-							initialSearchEnabled
-							addCommentPage
 							selectedWork={{ slug: 'iliad' }}
 						/>
 						<main>

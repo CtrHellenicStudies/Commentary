@@ -258,70 +258,70 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	revisions: {
-		type: [Object],
-		optional: true,
-	},
+	// revisions: {
+	// 	type: [Object],
+	// 	optional: true,
+	// },
 
-	'revisions.$._id': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.title': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.text': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.tenantId': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.originalDate': {
-		type: Date,
-		optional: true,
-	},
-
-	'revisions.$.friendlySlugs.slug.base': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.friendlySlugs.slug.index': {
-		type: Number,
-		optional: true,
-	},
-
-	'revisions.$.slug': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.created': {
-		type: Date,
-		optional: true,
-	},
-
-	'revisions.$.createdBy': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.updated': {
-		type: Date,
-		optional: true,
-	},
-
-	'revisions.$.updatedBy': {
-		type: String,
-		optional: true,
-	},
+	// 'revisions.$._id': {
+	// 	type: String,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.title': {
+	// 	type: String,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.text': {
+	// 	type: String,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.tenantId': {
+	// 	type: String,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.originalDate': {
+	// 	type: Date,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.friendlySlugs.slug.base': {
+	// 	type: String,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.friendlySlugs.slug.index': {
+	// 	type: Number,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.slug': {
+	// 	type: String,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.created': {
+	// 	type: Date,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.createdBy': {
+	// 	type: String,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.updated': {
+	// 	type: Date,
+	// 	optional: true,
+	// },
+	//
+	// 'revisions.$.updatedBy': {
+	// 	type: String,
+	// 	optional: true,
+	// },
 
 	discussionComments: {
 		type: [Object],

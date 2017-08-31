@@ -21,9 +21,6 @@ const annotationMutationFields = {
 		},
 		resolve(parent, { comment }, token2) {
 
-			// comment.revisions[0].created = new Date();
-			// comment.revisions[0].updated = new Date();
-
 			const token = 'testtoken';
 			const user = Meteor.users.findOne({
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
@@ -32,8 +29,22 @@ const annotationMutationFields = {
 			const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
 			const authorizedBooks = user.canAnnotateBooks || [];
 
+			// workaround to store revisions, caused probably by simple-schema
+
+			const revisions = comment.revisions;
+			comment.revisions = [];
+			revisions.map(revision => {
+				comment.revisions.push({
+					tenantId: revision.tenantId,
+					text: revision.text,
+					created: new Date(),
+					updated: new Date()
+				});
+			});
+
 			if (user && (book || ~authorizedBooks.indexOf(book._id))) {
-				return Comments.insert({...comment});
+				const commentId = Comments.insert({...comment});
+				return Comments.findOne(commentId);
 			}
 
 			throw AuthenticationError();

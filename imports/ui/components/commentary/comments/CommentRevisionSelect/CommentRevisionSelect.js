@@ -36,9 +36,12 @@ class CommentRevisionSelect extends React.Component {
 	}
 
 	getDateRevision(revision) {
+		const { comment } = this.props;
 		if (revision.originalDate) return revision.originalDate;
 		else if (revision.updated) return revision.updated;
-		return revision.created;
+		else if (revision.created) return revision.created;
+		else if (comment.updated) return comment.updated;
+		return comment.created;
 	}
 
 	getClassName(selectedRevisionIndex, i) {
@@ -63,7 +66,7 @@ class CommentRevisionSelect extends React.Component {
 		const { comment, selectedRevisionIndex, selectRevision } = this.props;
 		const revisions = comment ? comment.revisions : [];
 		const fullRevisionsList = this.sortRevisions(revisions);
-		const truncatedRevisionsList = this.sortRevisions(revisions).slice(0, 3);
+		const truncatedRevisionsList = fullRevisionsList.slice(0, 3);
 
 		return (
 			<div className="comment-revisions">
@@ -98,7 +101,7 @@ class CommentRevisionSelect extends React.Component {
 				}
 				{ truncatedRevisionsList.length < fullRevisionsList.length ?
 					<FlatButton
-						className={'revision'}
+						className="revision"
 						label={this.state.showMoreRevisions ? 'Hide Older Revisions' : 'Show More Revisions'}
 						onClick={this.toggleMoreRevisions}
 					/>

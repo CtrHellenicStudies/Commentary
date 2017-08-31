@@ -41,7 +41,7 @@ import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
 
@@ -81,7 +81,7 @@ const commentsMentionPlugin = createMentionPlugin({
 	mentionTrigger: '#',
 });
 
-const ListGroupItemDnD = creatListGroupItemDnD('referenceWorkBlocks');
+const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
 function _getSuggestionsFromComments(comments) {
 	const suggestions = [];

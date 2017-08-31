@@ -3,7 +3,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 
 const ViewInCommentaryButton = props => (
-	<div className="comment-upper-action-button view-in-commentary">
+	<div className="comment-action-button view-in-commentary">
 		<FlatButton
 			className="go-to-commentary-link"
 			onClick={() => {

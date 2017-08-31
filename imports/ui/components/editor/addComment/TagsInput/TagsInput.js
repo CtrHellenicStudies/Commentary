@@ -1,39 +1,34 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-
+import autoBind from 'react-autobind';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
-
+import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 	ControlLabel,
 } from 'react-bootstrap';
-
 import Select from 'react-select';
 
-// components
-import { ListGroupDnD, creatListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+// api
+import Keywords from '/imports/models/keywords';
 
-const ListGroupItemDnD = creatListGroupItemDnD('tagBlocks');
+// components
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+
+const ListGroupItemDnD = createListGroupItemDnD('tagBlocks');
 
 class TagsInput extends React.Component {
 
-	static propTypes = {
-		tagsValue: React.PropTypes.arrayOf(React.PropTypes.shape({})),
-		tags: React.PropTypes.arrayOf(React.PropTypes.shape({})),
+	constructor(props) {
+		super(props);
+		autoBind(this);
 
-		addTagBlock: React.PropTypes.func,
-		removeTagBlock: React.PropTypes.func,
-		moveTagBlock: React.PropTypes.func,
-		onTagValueChange: React.PropTypes.func,
-		onIsMentionedInLemmaChange: React.PropTypes.func,
-	};
-
-	static defaultProps = {
-		tagsValue: [],
-		tags: [],
-	};
+		this.state = {
+			tagsValue: [],
+		};
+	}
 
 	addTagBlock() {
 		this.state.tagsValue.push({
@@ -78,9 +73,20 @@ class TagsInput extends React.Component {
 		});
 	}
 
+	onIsMentionedInLemmaChange(tag, i) {
+		const tagsValue = this.state.tagsValue;
+
+		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
+
+		this.setState({
+			tagsValue,
+		});
+	}
+
 
 	render () {
-		const { tagsValue, tags, addTagBlock, removeTagBlock, moveTagBlock, onTagValueChange, onIsMentionedInLemmaChange } = this.props;
+		const { tags } = this.props;
+		const { tagsValue } = this.state;
 
 		return (
 			<div className="comment-reference comment-tags">
@@ -115,14 +121,14 @@ class TagsInput extends React.Component {
 									key={tag.tagId}
 									index={i}
 									className="form-subitem form-subitem--referenceWork"
-									moveListGroupItem={moveTagBlock}
+									moveListGroupItem={this.moveTagBlock}
 								>
 									<div
 										className="reference-work-item"
 									>
 										<div
 											className="remove-reference-work-item"
-											onClick={removeTagBlock.bind(this, i)}
+											onClick={this.removeTagBlock.bind(this, i)}
 										>
 											<IconButton
 												iconClassName="mdi mdi-close"
@@ -145,7 +151,7 @@ class TagsInput extends React.Component {
 											options={_tagsOptions}
 											defaultValue={tagsValue[i].tagId}
 											value={tagsValue[i].tagId}
-											onChange={onTagValueChange}
+											onChange={this.onTagValueChange}
 											placeholder="Tags . . ."
 										/>
 										<FormGroup>
@@ -157,7 +163,7 @@ class TagsInput extends React.Component {
 											<Checkbox
 												name={`${i}_isMentionedInLemma`}
 												checked={tagsValue[i].isMentionedInLemma}
-												onCheck={onIsMentionedInLemmaChange.bind(null, tag, i)}
+												onCheck={this.onIsMentionedInLemmaChange.bind(null, tag, i)}
 												style={{position: 'absolute', display: 'inline'}}
 											/>
 										</FormGroup>
@@ -168,7 +174,7 @@ class TagsInput extends React.Component {
 					</ListGroupDnD>
 					<RaisedButton
 						label="Add Tag"
-						onClick={addTagBlock}
+						onClick={this.addTagBlock}
 					/>
 				</FormGroup>
 			</div>
@@ -176,4 +182,14 @@ class TagsInput extends React.Component {
 	}
 }
 
-export default TagsInput;
+const TagsInputContainer = createContainer(() => {
+	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+	const tags = Keywords.find().fetch();
+
+	return {
+		tags,
+	};
+
+}, TagsInput);
+
+export default TagsInputContainer;

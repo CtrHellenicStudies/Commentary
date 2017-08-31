@@ -41,10 +41,17 @@ class TitleInput extends React.Component {
 		this.state = {
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revisionTitle)),
 		};
+
+		this.onTitleChange = this.onTitleChange.bind(this);
 	}
 
-	onTitleChange() {
-
+	onTitleChange(titleEditorState) {
+		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
+		const title = jQuery(titleHtml).text();
+		this.setState({
+			titleEditorState,
+			titleValue: title,
+		});
 	}
 
 	render() {

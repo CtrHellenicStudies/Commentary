@@ -4,6 +4,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import client from '/imports/middleware/apolloClient';
 import comments from './comments';
+import textNodes from './textNodes';
 
 
 import * as ActionTypes from '/imports/actions';
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   apollo: client.reducer(), // graphql data
   routing: routerReducer,
 	comments,
+	textNodes,
 });
 
 export default rootReducer;

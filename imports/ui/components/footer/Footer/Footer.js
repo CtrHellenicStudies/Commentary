@@ -42,11 +42,11 @@ class Footer extends Component {
 										label="Commentators"
 									/>
 									<FlatButton
-										href="/keywords"
+										href="/words"
 										label="Words"
 									/>
 									<FlatButton
-										href="/keyideas"
+										href="/ideas"
 										label="Ideas"
 									/>
 									<FlatButton

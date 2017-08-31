@@ -1,0 +1,6 @@
+{
+  "name": "EditSubworkDialog",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./EditSubworkDialog.js"
+}

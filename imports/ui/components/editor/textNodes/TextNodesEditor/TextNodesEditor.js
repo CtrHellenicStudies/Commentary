@@ -26,6 +26,8 @@ import Utils from '/imports/lib/utils';
 // components
 import TextNodesInput from '../TextNodesInput';
 import EditWorkDialog from '../EditWorkDialog';
+import EditEditionDialog from '../EditEditionDialog';
+import EditSubworkDialog from '../EditSubworkDialog';
 
 
 class TextNodesEditor extends React.Component {
@@ -90,7 +92,7 @@ class TextNodesEditor extends React.Component {
 
 	showEditEditionDialog() {
 		this.setState({
-			editWorkDialogOpen: true,
+			editEditionDialogOpen: true,
 		});
 	}
 
@@ -222,6 +224,7 @@ class TextNodesEditor extends React.Component {
 			});
 		});
 
+
 		return (
 			<div className="text-nodes-editor paper-shadow">
 				<div className="text-nodes-editor-meta-inputs">
@@ -258,15 +261,22 @@ class TextNodesEditor extends React.Component {
 								onChange={this.selectEdition}
 							/>
 							<button
-								onClick={this.showNewEditionModal}
+								onClick={this.showEditEditionDialog}
 							>
 								Add new edition
 							</button>
+							{selectedEdition ?
+								<button
+									onClick={this.showEditEditionDialog}
+								>
+									Edit {Utils.trunc(_selectedEdition.title, 30)}
+								</button>
+							: ''}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input subwork-input">
 						<FormGroup controlId="formControlsSelect">
-							<ControlLabel>Subwork</ControlLabel>
+							<ControlLabel>Subwork (Book/Poem/Rhapsody/etc)</ControlLabel>
 							<Select
 								name="subwork-select"
 								value={selectedSubwork}
@@ -274,10 +284,17 @@ class TextNodesEditor extends React.Component {
 								onChange={this.selectSubwork}
 							/>
 							<button
-								onClick={this.showNewSubworkModal}
+								onClick={this.showEditSubworkDialog}
 							>
 								Add new subwork
 							</button>
+							{selectedSubwork ?
+								<button
+									onClick={this.showEditSubworkDialog}
+								>
+									Edit {_selectedSubwork.title}
+								</button>
+							: ''}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input line-from-input">
@@ -296,6 +313,16 @@ class TextNodesEditor extends React.Component {
 					open={this.state.editWorkDialogOpen}
 					handleClose={this.handleCloseEditWorkDialog}
 					work={_selectedWork}
+				/>
+				<EditEditionDialog
+					open={this.state.editEditionDialogOpen}
+					handleClose={this.handleCloseEditEditionDialog}
+					edition={_selectedEdition}
+				/>
+				<EditSubworkDialog
+					open={this.state.editSubworkDialogOpen}
+					handleClose={this.handleCloseEditSubworkDialog}
+					subwork={_selectedSubwork}
 				/>
 			</div>
 		);

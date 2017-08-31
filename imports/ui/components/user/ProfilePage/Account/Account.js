@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
@@ -216,40 +217,46 @@ class Account extends React.Component {
 				/>
 				<br />
 
+				{/*
 				<div>
 					<h3>How often would you like to receive email updates?</h3>
-					<RadioButtonGroup 
+					<RadioButtonGroup
 						name="batchNotifications"
 						defaultSelected="never"
 						onChange={this.handleBatchNotification}
 					>
 						<RadioButton
 							label="Never"
-							value="never" 
+							value="never"
 						/>
 						<RadioButton
 							label="Immediately"
 							value="immediately"
 						/>
 						<RadioButton
-							label="Daily" 
+							label="Daily"
 							value="daily"
 						/>
 						<RadioButton
 							label="Weekly"
-							value="weekly" 
+							value="weekly"
 						/>
 						<RadioButton
 							label="Monthly"
-							value="monthly" 
+							value="monthly"
 						/>
 					</RadioButtonGroup>
 				</div>
+				*/}
+				
 				<br />
 				<br />
 				<br />
 
-				<RaisedButton label="Saved" />
+				<RaisedButton
+					label="Saved"
+					disabled
+				/>
 			</div>
 		);
 	}

@@ -12,6 +12,9 @@ import Books from '/imports/models/books';
 // errors
 import { AuthenticationError } from '/imports/errors';
 
+//bll
+import AnnotationService from '../bll/annotations';
+
 function hasAnnotationPermission(token, chapterUrl) {
 	const user = Meteor.users.findOne({
 		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
@@ -39,29 +42,9 @@ const annotationMutationFields = {
 				type: CommentInputType
 			}
 		},
-		resolve(parent, { comment }, token2) {
-
-			const token = 'testtoken'; // TODO: change that to the actual token
-
-			// workaround to store revisions, caused probably by simple-schema
-
-			const revisions = comment.revisions;
-			comment.revisions = [];
-			revisions.map(revision => {
-				comment.revisions.push({
-					tenantId: revision.tenantId,
-					text: revision.text,
-					created: new Date(),
-					updated: new Date()
-				});
-			});
-
-			if (hasAnnotationPermission(token, comment.bookChapterUrl)) {
-				const commentId = Comments.insert({...comment});
-				return Comments.findOne(commentId);
-			}
-
-			throw AuthenticationError();
+		async resolve(parent, { comment }, {token}) {
+			const annotationService = new AnnotationService({token});
+			return await annotationService.createAnnotation(comment);
 		}
 	},
 	annotationDelete: {
@@ -72,14 +55,10 @@ const annotationMutationFields = {
 				type: new GraphQLNonNull(GraphQLID)
 			}
 		},
-		async resolve(parent, { annotationId }, token2) {
-			const token = 'testtoken'; // TODO: change that to the actual token
+		async resolve(parent, { annotationId }, {token}) {
 
-			const annotation = Comments.findOne(annotationId);
-			if (hasAnnotationPermission(token, annotation.bookChapterUrl)) {
-				return await Comments.remove({_id: annotationId});
-			}
-
+			const annotationService = new AnnotationService({token});
+			return await annotationService.deleteAnnotation(annotationId);
 		}
 	},
 	annotationAddRevision: {
@@ -93,22 +72,9 @@ const annotationMutationFields = {
 				type: new GraphQLNonNull(RevisionInputType)
 			}
 		},
-		async resolve(parent, {annotationId, revision}, token2) {
-			const token = 'testtoken'; // TODO: change that to the actual token
-
-			const newRevision = {
-				tenantId: revision.tenantId,
-				text: revision.text,
-				created: new Date(),
-				updated: new Date()
-			};
-			if (hasAnnotationRevisionPermission(token, annotationId)) {
-				return await Comments.update({_id: annotationId}, {
-					$addToSet: {
-						revisions: newRevision
-					}
-				});
-			}
+		async resolve(parent, {annotationId, revision}, {token}) {
+			const annotationService = new AnnotationService({token});
+			return await annotationService.addRevision(annotationId, revision);
 		}
 	}
 };

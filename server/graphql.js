@@ -19,11 +19,11 @@ import RootSubscription from '/imports/graphql/subscriptions/rootSubscription';
  * @type {GraphQLSchema}
  */
 
-const getGraphglContext = req => {
-	return ({
-		token: req.body.token,
-	});
-};
+const getGraphglContext = req => ({
+		// token: req.body.token,
+		// TODO: change that to the actual token
+	token: 'testtoken'
+});
 
 const RootSchema = new GraphQLSchema({
 	query: RootQuery,

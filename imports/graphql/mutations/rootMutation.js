@@ -2,6 +2,7 @@ import { GraphQLObjectType } from 'graphql';
 
 import commentMutationFileds from './comments';
 import annotationMutationFields from './annotations';
+import bookMutationFields from './books';
 
 /**
  * Root mutations
@@ -13,6 +14,7 @@ const RootMutations = new GraphQLObjectType({
 	fields: {
 		...commentMutationFileds,
 		...annotationMutationFields,
+		...bookMutationFields
 	},
 });
 

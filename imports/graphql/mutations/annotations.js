@@ -15,24 +15,6 @@ import { AuthenticationError } from '/imports/errors';
 //bll
 import AnnotationService from '../bll/annotations';
 
-function hasAnnotationPermission(token, chapterUrl) {
-	const user = Meteor.users.findOne({
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-	});
-
-	const book = Books.findOne({ 'chapters.url': chapterUrl });
-	const authorizedBooks = user.canAnnotateBooks || [];
-	return user && (book || ~authorizedBooks.indexOf(book._id));
-}
-
-function hasAnnotationRevisionPermission(token, annotationId) {
-	const user = Meteor.users.findOne({
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-	});
-	const comment = Comments.findOne({_id: annotationId, users: user._id});
-	return !!comment;
-}
-
 const annotationMutationFields = {
 	annotationCreate: {
 		type: CommentType,

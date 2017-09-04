@@ -12,7 +12,7 @@ import Books from '/imports/models/books';
 // errors
 import { AuthenticationError } from '/imports/errors';
 
-//bll
+// bll
 import AnnotationService from '../bll/annotations';
 
 const annotationMutationFields = {

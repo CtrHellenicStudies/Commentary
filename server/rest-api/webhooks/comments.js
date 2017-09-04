@@ -71,7 +71,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 			if (_keyword) {
 				keywords.push(_keyword);
 			} else {
-				console.error(`Could not find keyword with wordpressId: ${keywordWordpressId}. Not creating comment or revision`);
+				console.error(`Could not find keyword with wordpressId: ${keywordSlug}. Not creating comment or revision`);
 			}
 		});
 	}
@@ -116,11 +116,10 @@ Meteor.method('publishComments', (commentCandidate) => {
 				originalDate,
 				_id: revisionId.valueOf(),
 			};
+			upsertResponse = Comments.update(
+				{ _id: commentCandidate._id },
+				{ $addToSet: { revisions: revision } });
 		}
-
-		upsertResponse = Comments.update(
-			{ _id: commentCandidate._id },
-			{ $addToSet: { revisions: revision } });
 
 	} else {
 		let nLines = 1;

@@ -64,6 +64,12 @@
     padding: 0;
 		position: relative;
 
+		&:hover {
+			.lemma-meta .lemma-line-n {
+				opacity: 1;
+			}
+		}
+
     .lemma-text {
       display: inline-block;
       vertical-align: top;
@@ -89,6 +95,13 @@
         font-size: 11px;
         text-align: right;
       }
+			.lemma-line-n {
+				opacity: 0;
+				.transition(all 100ms ease-out);
+				&.lemma-line-n--displayed {
+					opacity: 1;
+				}
+			}
     }
   }
 

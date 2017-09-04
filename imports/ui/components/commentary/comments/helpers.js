@@ -3,26 +3,11 @@ import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/st
 
 
 const sortRevisions = (revisions) => {
-	return _.sortBy(revisions, 'originalDate', 'created').reverse();
+	return _.sortBy(revisions, 'created').reverse();
 };
 
-const getRevisionDate = (revision, comment) => {
-	if (revision.originalDate) {
-		return revision.originalDate;
-	} else if (revision.updated) {
-		return revision.updated;
-	} else if (revision.created) {
-		return revision.created;
-	} else if (comment) {
-		if (comment.updated) {
-			return comment.updated;
-		} else {
-			return comment.created;
-		}
-	}
-
-	console.error("No date information available for revision", revision._id);
-	return null;
+const getRevisionDate = (revision) => {
+	return revision.created;
 };
 
 const stripHTMLFromText = (htmlText) => {

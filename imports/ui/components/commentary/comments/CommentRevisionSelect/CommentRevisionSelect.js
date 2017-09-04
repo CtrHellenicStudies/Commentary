@@ -7,7 +7,8 @@ import FlatButton from 'material-ui/FlatButton';
 // components
 import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';
 
-import { getRevisionDate } from '../helpers';
+// helpers
+import { sortRevisions, getRevisionDate } from '../helpers';
 
 
 class CommentRevisionSelect extends React.Component {
@@ -38,7 +39,7 @@ class CommentRevisionSelect extends React.Component {
 	render() {
 		const { showMoreRevisions } = this.state;
 		const { comment, selectedRevisionIndex, selectRevision } = this.props;
-		const revisions = comment ? comment.revisions : [];
+		const revisions = comment ? sortRevisions(comment.revisions) : [];
 		const fullRevisionsList = revisions;
 		const truncatedRevisionsList = fullRevisionsList.slice(0, 3);
 

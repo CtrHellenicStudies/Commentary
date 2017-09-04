@@ -257,20 +257,17 @@ class CommentDetail extends React.Component {
 	}
 
 	render() {
-
 		const { comment, referenceWorks, ready, filters, user } = this.props;
 		const { discussionVisible, searchTerm } = this.state;
 
 		if (!ready) {
+			// TODO: handle loading for component
 			return null;
 		}
 
 		const selectedRevisionIndex = this.getRevisionIndex();
-		console.log(selectedRevisionIndex)
 		const revisions = sortRevisions(comment.revisions);
-		console.log(revisions);
 		const selectedRevision = revisions[selectedRevisionIndex];
-		console.log(selectedRevision);
 		const commentClass = getCommentClass(discussionVisible);
 
 		return (

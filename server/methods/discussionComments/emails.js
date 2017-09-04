@@ -7,6 +7,9 @@ import Utils from '/imports/lib/utils';
 import Comments from '/imports/models/comments';
 import DiscussionComments from '/imports/models/discussionComments';
 
+// helpers
+import { sortRevisions } from '/imports/ui/components/commentary/comments/helpers';
+
 
 function getEmailHeader(user) {
 	let userFullName = '';
@@ -88,13 +91,12 @@ function sendDiscussionCommentPublishEmail(discussionCommentId) {
 	const discussionComment = DiscussionComments.findOne({ _id: discussionCommentId });
 	const comment = Comments.findOne({ _id: discussionComment.commentId });
 	const user = Meteor.users.findOne({ _id: discussionComment.userId });
-
 	const commentLink = `${Meteor.absoluteUrl()}commentary/?_id=${comment._id}`;
 
 	let commentTitle = '';
 	if (comment.revisions.length) {
-		comment.revisions.sort(Utils.sortRevisions);
-		commentTitle = comment.revisions[comment.revisions.length - 1].title;
+		const revisions = sortRevsions(comment.revisions);
+		commentTitle = revisions[0].title;
 	}
 
 	Email.send({

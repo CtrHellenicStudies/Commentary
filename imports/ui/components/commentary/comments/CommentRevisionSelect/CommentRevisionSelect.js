@@ -1,9 +1,14 @@
 import React from 'react';
-import FlatButton from 'material-ui/FlatButton';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import _ from 'underscore';
+import FlatButton from 'material-ui/FlatButton';
 
+// components
 import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';
+
+import { sortRevisions, getDateRevision } from '../helpers';
+
 
 class CommentRevisionSelect extends React.Component {
 	constructor(props) {
@@ -13,43 +18,12 @@ class CommentRevisionSelect extends React.Component {
 			showMoreRevisions: false
 		};
 
-		this.getDateRevision = this.getDateRevision.bind(this);
 		this.getClassName = this.getClassName.bind(this);
-		this.sortRevisions = this.sortRevisions.bind(this);
 		this.toggleMoreRevisions = this.toggleMoreRevisions.bind(this);
-	}
-
-	static propTypes = {
-		comment: React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string.isRequired,
-				created: React.PropTypes.instanceOf(Date),
-				updated: React.PropTypes.instanceOf(Date),
-				originalDate: React.PropTypes.instanceOf(Date),
-			})).isRequired,
-			urn: React.PropTypes.string.isRequired,
-		}),
-		selectedRevisionIndex: React.PropTypes.number.isRequired,
-		selectRevision: React.PropTypes.func.isRequired,
-		isTest: React.PropTypes.bool,
-	}
-
-	getDateRevision(revision) {
-		const { comment } = this.props;
-		if (revision.originalDate) return revision.originalDate;
-		else if (revision.updated) return revision.updated;
-		else if (revision.created) return revision.created;
-		else if (comment.updated) return comment.updated;
-		return comment.created;
 	}
 
 	getClassName(selectedRevisionIndex, i) {
 		return `revision ${selectedRevisionIndex === i ? 'selected-revision' : ''}`;
-	}
-
-	sortRevisions(revisions) {
-		return _.sortBy(revisions, 'created').reverse();
 	}
 
 	toggleMoreRevisions() {
@@ -65,14 +39,14 @@ class CommentRevisionSelect extends React.Component {
 		const { showMoreRevisions } = this.state;
 		const { comment, selectedRevisionIndex, selectRevision } = this.props;
 		const revisions = comment ? comment.revisions : [];
-		const fullRevisionsList = this.sortRevisions(revisions);
+		const fullRevisionsList = sortRevisions(revisions);
 		const truncatedRevisionsList = fullRevisionsList.slice(0, 3);
 
 		return (
 			<div className="comment-revisions">
 				{ showMoreRevisions ?
 					fullRevisionsList.map((revision, i) => {
-						const updated = this.getDateRevision(revision);
+						const updated = getDateRevision(revision);
 						return (
 							<FlatButton
 								key={revision._id}
@@ -86,7 +60,7 @@ class CommentRevisionSelect extends React.Component {
 					})
 					:
 					truncatedRevisionsList.map((revision, i) => {
-						const updated = this.getDateRevision(revision);
+						const updated = getDateRevision(revision);
 						return (
 							<FlatButton
 								key={revision._id}
@@ -115,5 +89,21 @@ class CommentRevisionSelect extends React.Component {
 		);
 	}
 }
+
+CommentRevisionSelect.propTypes = {
+	comment: PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		revisions: PropTypes.arrayOf(PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			created: PropTypes.instanceOf(Date),
+			updated: PropTypes.instanceOf(Date),
+			originalDate: PropTypes.instanceOf(Date),
+		})).isRequired,
+		urn: PropTypes.string.isRequired,
+	}),
+	selectedRevisionIndex: PropTypes.number.isRequired,
+	selectRevision: PropTypes.func.isRequired,
+};
+
 
 export default CommentRevisionSelect;

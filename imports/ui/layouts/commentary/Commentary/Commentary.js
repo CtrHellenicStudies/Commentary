@@ -12,7 +12,7 @@ import Settings from '/imports/models/settings';
 import Works from '/imports/models/works';
 
 // layouts:
-import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';
+import CommentGroup from '/imports/ui/components/commentary/commentGroups/CommentGroup';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // components:

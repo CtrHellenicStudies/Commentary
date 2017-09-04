@@ -45,7 +45,7 @@ const commentsInsert = (token, comment) => {
 	const commenterId = comment.commenters[0]._id;
 	const userAvatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
 
-	const avatar = userAvatar ? userAvatar.avatar.src : '/images/default_user.jpg';
+	const avatar = userAvatar && userAvatar.avatar ? userAvatar.avatar.src : '/images/default_user.jpg';
 
 	const query = {
 		$or: [

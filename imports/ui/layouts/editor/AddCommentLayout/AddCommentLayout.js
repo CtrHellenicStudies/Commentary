@@ -35,6 +35,7 @@ const handlePermissions = () => {
 		}
 	}
 };
+
 const getReferenceWorks = (formData) => {
 	let referenceWorks = null;
 	if (formData.referenceWorksValue) {
@@ -42,12 +43,14 @@ const getReferenceWorks = (formData) => {
 	}
 	return referenceWorks;
 };
+
 const getCommenter = (formData) => {
 	const commenter = Commenters.findOne({
 		_id: formData.commenterValue.value,
 	});
 	return commenter;
 };
+
 const getKeywords = (formData) => {
 	const keywords = [];
 
@@ -58,6 +61,7 @@ const getKeywords = (formData) => {
 	});
 	return keywords;
 };
+
 const getFilterValues = (filters) => {
 	const filterValues = {};
 
@@ -213,6 +217,8 @@ class AddCommentLayout extends React.Component {
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);
+		console.log(keywords);
+		console.log(formData);
 		const revisionId = new Meteor.Collection.ObjectID();
 
 		// create comment object to be inserted:

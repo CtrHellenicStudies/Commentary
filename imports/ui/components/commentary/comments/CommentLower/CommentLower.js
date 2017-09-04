@@ -7,6 +7,7 @@ const CommentLower = props => (
 		{!props.hideBody && <CommentBody
 			comment={props.comment}
 			revisionIndex={props.revisionIndex}
+			selectedRevision={props.selectedRevision}
 			onTextClick={props.onTextClick}
 			searchTerm={props.searchTerm}
 		/>}
@@ -15,12 +16,14 @@ const CommentLower = props => (
 		/>}
 	</div>
 );
+
 CommentLower.propTypes = {
 	comment: React.PropTypes.shape({
 		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
 			text: React.PropTypes.string.isRequired,
 		})),
 	}).isRequired,
+	selectedRevision: React.PropTypes.object.isRequired,
 	revisionIndex: React.PropTypes.number.isRequired,
 	onTextClick: React.PropTypes.func,
 	referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -31,6 +34,7 @@ CommentLower.propTypes = {
 	hideReference: React.PropTypes.bool,
 	searchTerm: React.PropTypes.string
 };
+
 CommentLower.defaultProps = {
 	onTextClick: null,
 	referenceWorks: null,

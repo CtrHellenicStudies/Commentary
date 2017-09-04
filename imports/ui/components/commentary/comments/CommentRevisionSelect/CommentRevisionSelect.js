@@ -46,7 +46,7 @@ class CommentRevisionSelect extends React.Component {
 			<div className="comment-revisions">
 				{ showMoreRevisions ?
 					fullRevisionsList.map((revision, i) => {
-						const updated = getRevisionDate(revision);
+						const updated = getRevisionDate(revision, comment);
 						return (
 							<FlatButton
 								key={revision._id}
@@ -60,7 +60,7 @@ class CommentRevisionSelect extends React.Component {
 					})
 					:
 					truncatedRevisionsList.map((revision, i) => {
-						const updated = getRevisionDate(revision);
+						const updated = getRevisionDate(revision, comment);
 						return (
 							<FlatButton
 								key={revision._id}

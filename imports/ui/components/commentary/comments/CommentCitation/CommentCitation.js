@@ -81,7 +81,7 @@ class CommentCitation extends React.Component {
 					</p>
 					<div className="comment-citation-urns">
 						{sortRevisions(comment.revisions).map((revision, i) => {
-							const updated = getRevisionDate(revision, comment);
+							const updated = getRevisionDate(revision);
 							return (
 								<div
 									key={`${updated}-${i}`}

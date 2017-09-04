@@ -7,17 +7,7 @@ const sortRevisions = (revisions) => {
 };
 
 const getRevisionDate = (revision) => {
-	let date;
-
-	if (revision.originalDate) {
-		date = revision.originalDate;
-	} else if (revision.created) {
-		date = revision.created;
-	} else if (process.env.NODE_ENV !== 'production') {
-		console.error("No date information available for revision", revision._id);
-	}
-
-	return date;
+	return revision.created;
 };
 
 const stripHTMLFromText = (htmlText) => {

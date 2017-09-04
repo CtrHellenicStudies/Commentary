@@ -261,7 +261,7 @@ class CommentDetail extends React.Component {
 		const { discussionVisible, searchTerm } = this.state;
 
 		if (!ready) {
-			// TODO: handle loading
+			// TODO: handle loading for component
 			return null;
 		}
 

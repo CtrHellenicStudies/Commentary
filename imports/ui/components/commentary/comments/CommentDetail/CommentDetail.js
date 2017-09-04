@@ -266,8 +266,11 @@ class CommentDetail extends React.Component {
 		}
 
 		const selectedRevisionIndex = this.getRevisionIndex();
+		console.log(selectedRevisionIndex)
 		const revisions = sortRevisions(comment.revisions);
+		console.log(revisions);
 		const selectedRevision = revisions[selectedRevisionIndex];
+		console.log(selectedRevision);
 		const commentClass = getCommentClass(discussionVisible);
 
 		return (
@@ -292,6 +295,7 @@ class CommentDetail extends React.Component {
 					<CommentLower
 						comment={comment}
 						revisionIndex={selectedRevisionIndex}
+						selectedRevision={selectedRevision}
 						onTextClick={this.checkIfToggleReferenceModal}
 						referenceWorks={referenceWorks}
 						searchTerm={searchTerm}
@@ -299,7 +303,7 @@ class CommentDetail extends React.Component {
 
 					<CommentRevisionSelect
 						commentId={comment._id}
-						revisions={comment.revisions}
+						revisions={revisions}
 						comment={comment}
 						selectedRevisionIndex={selectedRevisionIndex}
 						selectRevision={this.selectRevision}

@@ -7,7 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 // components
 import CommentCitation from '/imports/ui/components/commentary/comments/CommentCitation';
 
-import { sortRevisions, getDateRevision } from '../helpers';
+import { getRevisionDate } from '../helpers';
 
 
 class CommentRevisionSelect extends React.Component {
@@ -39,14 +39,14 @@ class CommentRevisionSelect extends React.Component {
 		const { showMoreRevisions } = this.state;
 		const { comment, selectedRevisionIndex, selectRevision } = this.props;
 		const revisions = comment ? comment.revisions : [];
-		const fullRevisionsList = sortRevisions(revisions);
+		const fullRevisionsList = revisions;
 		const truncatedRevisionsList = fullRevisionsList.slice(0, 3);
 
 		return (
 			<div className="comment-revisions">
 				{ showMoreRevisions ?
 					fullRevisionsList.map((revision, i) => {
-						const updated = getDateRevision(revision);
+						const updated = getRevisionDate(revision);
 						return (
 							<FlatButton
 								key={revision._id}
@@ -60,7 +60,7 @@ class CommentRevisionSelect extends React.Component {
 					})
 					:
 					truncatedRevisionsList.map((revision, i) => {
-						const updated = getDateRevision(revision);
+						const updated = getRevisionDate(revision);
 						return (
 							<FlatButton
 								key={revision._id}

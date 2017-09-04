@@ -9,7 +9,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import Utils from '/imports/lib/utils';
 import FlatButton from 'material-ui/FlatButton';
 
-import { sortRevisions, getDateRevision } from '../helpers';
+import { sortRevisions, getRevisionDate } from '../helpers';
 
 class CommentCitation extends React.Component {
 
@@ -81,7 +81,7 @@ class CommentCitation extends React.Component {
 					</p>
 					<div className="comment-citation-urns">
 						{sortRevisions(comment.revisions).map((revision, i) => {
-							const updated = getDateRevision(revision);
+							const updated = getRevisionDate(revision);
 							return (
 								<div
 									key={`${updated}-${i}`}

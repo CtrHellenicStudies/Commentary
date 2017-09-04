@@ -1,68 +1,18 @@
 import React from 'react';
-import JsDiff from 'diff';
-import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
 
+// components
 import CommentBodyText from '/imports/ui/components/commentary/comments/CommentBodyText';
 
-/*
-	helpers
-*/
-
-const stripHTMLFromText = (htmlText) => {
-	const tempElem = document.createElement('div');
-	tempElem.innerHTML = htmlText;
-	return tempElem.textContent || tempElem.innerText || '';
-};
-
-const getRevisionDiff = (comment, revisionIndex) => {
-	// build the diff view and return a DOM node
-	const baseRevision = comment.revisions[revisionIndex];
-	const newRevision = comment.revisions[comment.revisions.length - 1];
-
-	const revisionDiff = document.createElement('comment-diff');
-
-	const baseRevisionText = stripHTMLFromText(baseRevision.text);
-	const newRevisionText = stripHTMLFromText(newRevision.text);
-
-	const diff = JsDiff.diffWordsWithSpace(baseRevisionText, newRevisionText);
-
-	diff.forEach((part) => {
-		// green for additions, red for deletions
-		let color = black;
-		let background = fullWhite;
-		const span = document.createElement('span');
-
-		if (part.added) {
-			color = blue800;
-			background = blue50;
-		} else if (part.removed) {
-			color = red800;
-			background = red50;
-			span.style.textDecoration = 'line-through';
-		}
-
-		span.style.color = color;
-		span.style.background = background;
-		span.style.padding = '0px';
-
-		span.appendChild(document
-			.createTextNode(part.value));
-		revisionDiff.appendChild(span);
-	});
-
-	return revisionDiff;
-};
+// helpers
+import { getRevisionDiff } from '../helpers';
 
 
-/*
-	BEGIN CommentBody
-*/
 const CommentBody = (props) => {
 
 	if (props.revisionIndex === 0) {
 		return (
 			<CommentBodyText
-				text={props.comment.revisions[props.revisionIndex].text}
+				text={props.selectedRevision.text}
 				onTextClick={props.onTextClick}
 				createRevisionMarkup
 				searchTerm={props.searchTerm}
@@ -77,6 +27,7 @@ const CommentBody = (props) => {
 		/>
 	);
 };
+
 CommentBody.propTypes = {
 	comment: React.PropTypes.shape({
 		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -84,15 +35,14 @@ CommentBody.propTypes = {
 		})),
 	}).isRequired,
 	revisionIndex: React.PropTypes.number.isRequired,
+	selectedRevision: React.PropTypes.object.isRequired,
 	onTextClick: React.PropTypes.func,
 	searchTerm: React.PropTypes.string
 };
+
 CommentBody.defaultProps = {
 	onTextClick: null,
 };
-/*
-	END CommentBody
-*/
 
 
 export default CommentBody;

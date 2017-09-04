@@ -10,6 +10,7 @@ import {
 	ControlLabel,
 } from 'react-bootstrap';
 import Select from 'react-select';
+import update from 'immutability-helper';
 
 // api
 import Keywords from '/imports/models/keywords';
@@ -33,7 +34,7 @@ class TagsInput extends React.Component {
 	addTagBlock() {
 		this.state.tagsValue.push({
 			tagId: Random.id(),
-			isMentionedInLemma: true,
+			isNotMentionedInLemma: false,
 			isSet: false,
 		});
 		this.setState({
@@ -76,7 +77,7 @@ class TagsInput extends React.Component {
 	onIsMentionedInLemmaChange(tag, i) {
 		const tagsValue = this.state.tagsValue;
 
-		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
+		tagsValue[i].isNotMentionedInLemma = !tag.isNotMentionedInLemma;
 
 		this.setState({
 			tagsValue,
@@ -161,10 +162,14 @@ class TagsInput extends React.Component {
 										<FormGroup>
 											<ControlLabel>Is Not Mentioned in Lemma: </ControlLabel>
 											<Checkbox
-												name={`${i}_isMentionedInLemma`}
-												checked={tagsValue[i].isMentionedInLemma}
+												name={`${i}_isNotMentionedInLemma`}
+												checked={tagsValue[i].isNotMentionedInLemma}
 												onCheck={this.onIsMentionedInLemmaChange.bind(null, tag, i)}
-												style={{position: 'absolute', display: 'inline'}}
+												style={{
+													display: 'inline-block',
+													verticalAlign: 'top',
+													width: 'auto',
+												}}
 											/>
 										</FormGroup>
 									</div>

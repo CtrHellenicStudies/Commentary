@@ -39,7 +39,21 @@ const bookMutationFields = {
 			const bookService = new BookService({token});
 			return await bookService.bookUpdate(_id, book);
 		}
-	}
+	},
+	bookRemove: {
+		type: RemoveType,
+		description: 'Remove book',
+		args: {
+			bookId: {
+				type: new GraphQLNonNull(GraphQLID)
+			}
+		},
+		async resolve(parent, { bookId }, {token}) {
+
+			const bookService = new BookService({token});
+			return await bookService.bookRemove(bookId);
+		}
+	},
 };
 
 export default bookMutationFields;

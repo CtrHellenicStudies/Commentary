@@ -35,9 +35,7 @@ export default class BookService extends AdminService {
 			const bookId = Books.insert({...newBook});
 			return Books.findOne(bookId);
 		}
-		else {
-			return new Error('Not authorized');
-		}
+		return new Error('Not authorized');
 	}
 
 	bookUpdate(_id, book) {
@@ -46,12 +44,13 @@ export default class BookService extends AdminService {
 			newBook.chapters = this.rewriteChapter(book.chapters);
 			Books.update({_id}, {$set: newBook});
 		}
-		else {
-			return new Error('Not authorized');
-		}
-
-
+		return new Error('Not authorized');
 	}
 
-
+	bookRemove(_id) {
+		if (this.userIsAdmin) {
+			return Books.remove(_id);
+		}
+		return new Error('Not authorized');
+	}
 }

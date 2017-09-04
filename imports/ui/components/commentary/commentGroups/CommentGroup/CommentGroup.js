@@ -2,8 +2,9 @@ import React from 'react';
 import { StickyContainer } from 'react-sticky';
 
 // layouts:
-import CommentDetail from '/imports/ui/layouts/commentary/CommentDetail';  
-import CommentLemma from '/imports/ui/layouts/commentary/CommentLemma';  
+import CommentDetail from '/imports/ui/components/commentary/comments/CommentDetail';
+import CommentLemma from '/imports/ui/components/commentary/commentGroups/CommentLemma';
+
 
 class CommentGroup extends React.Component {
 	static propTypes = {

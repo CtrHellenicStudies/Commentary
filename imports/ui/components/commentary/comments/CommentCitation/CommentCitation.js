@@ -9,13 +9,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import Utils from '/imports/lib/utils';
 import FlatButton from 'material-ui/FlatButton';
 
-const getDateRevision = (revision) => {
-	if (revision.originalDate) return revision.originalDate;
-	else if (revision.updated) return revision.updated;
-	return revision.created;
-};
-
-const sortRevisions = revisions => (_.sortBy(revisions, 'created'));
+import { sortRevisions, getRevisionDate } from '../helpers';
 
 class CommentCitation extends React.Component {
 
@@ -86,8 +80,8 @@ class CommentCitation extends React.Component {
 						You may cite this comment's revisions with the URNs below:
 					</p>
 					<div className="comment-citation-urns">
-						{sortRevisions(comment.revisions).reverse().map((revision, i) => {
-							const updated = getDateRevision(revision);
+						{sortRevisions(comment.revisions).map((revision, i) => {
+							const updated = getRevisionDate(revision);
 							return (
 								<div
 									key={`${updated}-${i}`}

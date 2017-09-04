@@ -20,6 +20,7 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 // helpers
 const handlePermissions = () => {
@@ -378,11 +379,12 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	render() {
-
-		const { isTest } = this.props;
-		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen, toggleInputLinesIsToggled } = this.state;
-
+		const {
+			filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen,
+			toggleInputLinesIsToggled
+		} = this.state;
 		const { work, subwork, lineFrom } = getFilterValues(filters);
+		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

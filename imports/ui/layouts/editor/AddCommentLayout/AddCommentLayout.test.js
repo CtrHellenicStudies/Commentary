@@ -11,7 +11,7 @@ describe('AddCommentLayout', () => {
 		const tree = renderer
 			.create(
 				<MuiThemeProvider>
-					<AddCommentLayout isTest />
+					<AddCommentLayout />
 				</MuiThemeProvider>
 			)
 			.toJSON();

@@ -130,7 +130,6 @@ class AddComment extends React.Component {
 		commentersOptions: React.PropTypes.array,
 		tags: React.PropTypes.array,
 		referenceWorkOptions: React.PropTypes.array,
-		isTest: React.PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -378,13 +377,14 @@ class AddComment extends React.Component {
 	}
 
 	addTagBlock() {
-		this.state.tagsValue.push({
+		const newTagBlock = {
 			tagId: Random.id(),
-			isMentionedInLemma: true,
+			isNotMentionedInLemma: false,
 			isSet: false,
-		});
+		};
+
 		this.setState({
-			tagsValue: this.state.tagsValue,
+			tagsValue: [...this.state.tagsValue, newTagBlock],
 		});
 	}
 
@@ -409,21 +409,31 @@ class AddComment extends React.Component {
 	}
 
 	onTagValueChange(tag) {
-		const tagsValue = this.state.tagsValue;
+		const { tags } = this.props;
+		const { tagsValue } = this.state;
+
+		let _selectedKeyword;
+
+		tags.forEach(_tag => {
+			if (_tag._id == tag.value) {
+				_selectedKeyword = _tag;
+			}
+		});
+
 
 		tagsValue[tag.i].tagId = tag.value;
-		tagsValue[tag.i].keyword = Keywords.findOne({_id: tag.value});
+		tagsValue[tag.i].keyword = _selectedKeyword
 		tagsValue[tag.i].isSet = true;
 
 		this.setState({
-			tagsValue,
+			tagsValue: [...tagsValue],
 		});
 	}
 
 	onIsMentionedInLemmaChange(tag, i) {
 		const tagsValue = this.state.tagsValue;
 
-		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
+		tagsValue[i].isNotMentionedInLemma = !tag.isNotMentionedInLemma;
 
 		this.setState({
 			tagsValue,
@@ -434,11 +444,7 @@ class AddComment extends React.Component {
 
 	render() {
 		const { revision, titleEditorState, keyideasValue, referenceWorks, textEditorState, tagsValue } = this.state;
-		const { commentersOptions, tags, referenceWorkOptions, isTest } = this.props;
-
-		if (isTest) {
-			return null;
-		}
+		const { commentersOptions, tags, referenceWorkOptions } = this.props;
 
 		return (
 			<div className="comments lemma-panel-visible ">
@@ -480,7 +486,6 @@ class AddComment extends React.Component {
 
 								<TagsInput
 									tagsValue={tagsValue}
-									tags={tags}
 									addTagBlock={this.addTagBlock}
 									removeTagBlock={this.removeTagBlock}
 									moveTagBlock={this.moveTagBlock}

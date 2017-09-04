@@ -18,6 +18,7 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 // api
 import Commenters from '/imports/models/commenters';
@@ -35,6 +36,7 @@ const handlePermissions = () => {
 		}
 	}
 };
+
 const getReferenceWorks = (formData) => {
 	let referenceWorks = null;
 	if (formData.referenceWorksValue) {
@@ -42,12 +44,14 @@ const getReferenceWorks = (formData) => {
 	}
 	return referenceWorks;
 };
+
 const getCommenter = (formData) => {
 	const commenter = Commenters.findOne({
 		_id: formData.commenterValue.value,
 	});
 	return commenter;
 };
+
 const getKeywords = (formData) => {
 	const keywords = [];
 
@@ -58,6 +62,7 @@ const getKeywords = (formData) => {
 	});
 	return keywords;
 };
+
 const getFilterValues = (filters) => {
 	const filterValues = {};
 
@@ -83,12 +88,10 @@ const getFilterValues = (filters) => {
 class AddCommentLayout extends React.Component {
 	static propTypes = {
 		ready: React.PropTypes.bool,
-		isTest: React.PropTypes.bool,
 	};
 
 	static defaultProps = {
 		ready: false,
-		isTest: false,
 	};
 	constructor(props) {
 		super(props);
@@ -213,6 +216,8 @@ class AddCommentLayout extends React.Component {
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);
+		console.log(keywords);
+		console.log(formData);
 		const revisionId = new Meteor.Collection.ObjectID();
 
 		// create comment object to be inserted:
@@ -408,10 +413,10 @@ class AddCommentLayout extends React.Component {
 
 	render() {
 
-		const { isTest } = this.props;
 		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
-
 		const { work, subwork, lineFrom, lineTo } = getFilterValues(filters);
+
+		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -420,49 +425,46 @@ class AddCommentLayout extends React.Component {
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
 							handleChangeLineN={this.handleChangeLineN}
+							selectedWork={this.getWork(filters)}
 							filters={filters}
 							initialSearchEnabled
 							addCommentPage
-							selectedWork={this.getWork(filters)}
 						/>
+						<main>
+							<div className="commentary-comments">
+								<div className="comment-group">
+									<CommentLemmaSelect
+										ref={(component) => { this.commentLemmaSelect = component; }}
+										selectedLineFrom={selectedLineFrom}
+										selectedLineTo={selectedLineTo}
+										workSlug={work ? work.slug : 'iliad'}
+										subworkN={subwork ? subwork.n : 1}
+									/>
 
-						{!isTest ?
-							<main>
-								<div className="commentary-comments">
-									<div className="comment-group">
-										<CommentLemmaSelect
-											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={selectedLineFrom}
-											selectedLineTo={selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-										/>
+									<AddComment
+										selectedLineFrom={selectedLineFrom}
+										selectedLineTo={selectedLineTo}
+										submitForm={this.addComment}
+									/>
 
-										<AddComment
-											selectedLineFrom={selectedLineFrom}
-											selectedLineTo={selectedLineTo}
-											submitForm={this.addComment}
-										/>
-
-										<ContextPanel
-											open={contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-											lineFrom={lineFrom || 1}
-											selectedLineFrom={selectedLineFrom}
-											selectedLineTo={selectedLineTo}
-											updateSelectedLines={this.updateSelectedLines}
-											editor
-										/>
-									</div>
+									<ContextPanel
+										open={contextReaderOpen}
+										workSlug={work ? work.slug : 'iliad'}
+										subworkN={subwork ? subwork.n : 1}
+										lineFrom={lineFrom || 1}
+										selectedLineFrom={selectedLineFrom}
+										selectedLineTo={selectedLineTo}
+										updateSelectedLines={this.updateSelectedLines}
+										editor
+									/>
 								</div>
+							</div>
 
-								<FilterWidget
-									filters={filters}
-									toggleSearchTerm={this.toggleSearchTerm}
-								/>
-							</main>
-						: ''}
+							<FilterWidget
+								filters={filters}
+								toggleSearchTerm={this.toggleSearchTerm}
+							/>
+						</main>
 					</div>
 					:
 					<Spinner fullPage />

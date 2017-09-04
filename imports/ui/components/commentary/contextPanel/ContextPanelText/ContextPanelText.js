@@ -47,11 +47,11 @@ const getContextPanelTextState = (commentGroup, editor) => {
 */
 const LineNumbering = ({ n }) => (
 	<div className="lemma-meta">
-		{(n % 5 === 0 || n === 1) ?
-			<span className="lemma-line-n">
-				{n}
-			</span>
-		: '' }
+		<span className={`lemma-line-n ${
+			(n % 5 === 0 || n === 1) ? 'lemma-line-n--displayed' : ''
+		}`}>
+			{n}
+		</span>
 	</div>
 );
 
@@ -180,13 +180,13 @@ class ContextPanelText extends React.Component {
 					switch (contextPanelTextState) {
 					case 'context for comment group':
 						return (
-							selectedEditionText.lines.map((line) => {
+							selectedEditionText.lines.map((line, i) => {
 								const lineClass = getLineClass(commentGroup.lineFrom, commentGroup.lineTo, line.n, highlightingVisible);
 
 								return (
 									<div
 										className={lineClass}
-										key={line.n}
+									key={`${line.n}-${i}`}
 									>
 										<div
 											className="lemma-text"
@@ -200,10 +200,10 @@ class ContextPanelText extends React.Component {
 						);
 					case 'editor':
 						return (
-							selectedEditionText.lines.map(line => (
+							selectedEditionText.lines.map((line, i) => (
 								<div
 									className="lemma-line"
-									key={line.n}
+									key={`${line.n}-${i}`}
 								>
 									<div
 										className="lemma-text"
@@ -222,10 +222,10 @@ class ContextPanelText extends React.Component {
 						);
 					default:
 						return (
-							selectedEditionText.lines.map(line => (
+							selectedEditionText.lines.map((line, i) => (
 								<div
 									className="lemma-line"
-									key={line.n}
+									key={`${line.n}-${i}`}
 								>
 									<div
 										className="lemma-text"

@@ -18,6 +18,13 @@ import RootSubscription from '/imports/graphql/subscriptions/rootSubscription';
  * Root schema
  * @type {GraphQLSchema}
  */
+
+const getGraphglContext = req => ({
+		// token: req.body.token,
+		// TODO: change that to the actual token
+	token: 'testtoken'
+});
+
 const RootSchema = new GraphQLSchema({
 	query: RootQuery,
 	mutation: RootMutation,
@@ -32,10 +39,11 @@ const GRAPHQL_PORT = 4000;
 
 const graphQLServer = express();
 
-graphQLServer.use('/graphql', bodyParser.json(), apolloExpress({
+graphQLServer.use('/graphql', bodyParser.json(), apolloExpress(req => ({
 	schema: RootSchema,
 	formatError,
-}));
+	context: getGraphglContext(req),
+})));
 graphQLServer.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 graphQLServer.listen(GRAPHQL_PORT);

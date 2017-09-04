@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import autoBind from 'react-autobind';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
@@ -44,7 +46,7 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import AddTagInput from '/imports/ui/components/editor/addComment/AddTagInput';
+import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -115,18 +117,11 @@ function _getSuggestionsFromComments(comments) {
 	return suggestions;
 }
 
-const AddRevision = React.createClass({
+class AddRevision extends React.Component {
 
-	propTypes: {
-		submitForm: React.PropTypes.func.isRequired,
-		update: React.PropTypes.func.isRequired,
-		comment: React.PropTypes.object.isRequired,
-		tags: React.PropTypes.array,
-		referenceWorkOptions: React.PropTypes.array,
-		isTest: React.PropTypes.bool,
-	},
+	constructor(props) {
+		super(props);
 
-	getInitialState() {
 		const { comment } = this.props;
 		const revisionId = comment.revisions.length - 1;
 		const revision = comment.revisions[revisionId]; // get newest revision
@@ -148,7 +143,7 @@ const AddRevision = React.createClass({
 			revisionTitle = revision.title;
 		}
 
-		return {
+		this.state = {
 			revision,
 
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revisionTitle)),
@@ -163,27 +158,25 @@ const AddRevision = React.createClass({
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 		};
-	},
 
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
+		autoBind(this);
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+	}
 
 	_enableButton() {
 		this.setState({
 			canSubmit: true,
 		});
-	},
+	}
 
 	_disableButton() {
 		this.setState({
 			canSubmit: false,
 		});
-	},
+	}
 
 	_getRevisionEditorState(revision) {
 		if (revision.textRaw) {
@@ -199,7 +192,7 @@ const AddRevision = React.createClass({
 			);
 		}
 		console.error('missing filed text or textRaw in revision');
-	},
+	}
 
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
@@ -208,7 +201,7 @@ const AddRevision = React.createClass({
 			titleEditorState,
 			titleValue: title,
 		});
-	},
+	}
 
 	onTextChange(textEditorState) {
 		const newTextEditorState = EditorState.set(textEditorState, {decorator: linkDecorator});
@@ -216,7 +209,7 @@ const AddRevision = React.createClass({
 		this.setState({
 			textEditorState: newTextEditorState,
 		});
-	},
+	}
 
 	onReferenceWorksValueChange(referenceWork) {
 		const referenceWorks = this.state.referenceWorks;
@@ -225,7 +218,7 @@ const AddRevision = React.createClass({
 		this.setState({
 			referenceWorks,
 		});
-	},
+	}
 
 	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
@@ -240,7 +233,7 @@ const AddRevision = React.createClass({
 		this.setState({
 			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
 		});
-	},
+	}
 
 	_onCommentsSearchChange({ value }) {
 		// use Meteor call method, as comments are not available on clint app
@@ -255,8 +248,7 @@ const AddRevision = React.createClass({
 				commentsSuggestions: fromJS(commentsSuggestions),
 			});
 		});
-
-	},
+	}
 
 	handleSubmit() {
 		const { textEditorState } = this.state;
@@ -290,7 +282,7 @@ const AddRevision = React.createClass({
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);
-	},
+	}
 
 	handleUpdate() {
 		const data = this.refs.form.getModel(); // eslint-disable-line
@@ -302,7 +294,7 @@ const AddRevision = React.createClass({
 			this.state.referenceWorks[params[0]][params[1]] = data[key];
 		}
 		this.props.update(this.state);
-	},
+	}
 
 	removeComment() {
 		const authToken = Cookies.get('loginToken');
@@ -315,16 +307,19 @@ const AddRevision = React.createClass({
 
 			FlowRouter.go('/commentary');
 		});
-	},
+	}
 
 	selectRevision(event) {
-		const revision = this.props.comment.revisions[event.currentTarget.id];
+		const revisions = _.sortBy(this.props.comment.revisions, 'created');
+		const revision = revisions[event.currentTarget.id];
+		console.log('selectRevision revisions', revisions);
+
 		this.setState({
 			revision,
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
 			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text), linkDecorator),
 		});
-	},
+	}
 
 	removeRevision() {
 		const self = this;
@@ -335,20 +330,20 @@ const AddRevision = React.createClass({
 
 			FlowRouter.go(`/commentary/${self.props.comment._id}/edit`);
 		});
-	},
+	}
 
 	addReferenceWorkBlock() {
-		this.state.referenceWorks.push({ referenceWorkId: '0' });
+		const newReferenceWork = { referenceWorkId: '0' };
 		this.setState({
-			referenceWorks: this.state.referenceWorks,
+			referenceWorks: [...this.state.referenceWorks, newReferenceWork],
 		});
-	},
+	}
 
 	removeReferenceWorkBlock(i) {
 		this.setState({
 			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
 		});
-	},
+	}
 
 	moveReferenceWorkBlock(dragIndex, hoverIndex) {
 		const { referenceWorks } = this.state;
@@ -362,24 +357,25 @@ const AddRevision = React.createClass({
 				],
 			},
 		}));
-	},
+	}
 
 	addTagBlock() {
-		this.state.tagsValue.push({
+		const newTagBlock = {
 			tagId: Random.id(),
-			isMentionedInLemma: true,
+			isNotMentionedInLemma: false,
 			isSet: false,
-		});
+		};
+
 		this.setState({
-			tagsValue: this.state.tagsValue,
+			tagsValue: [...this.state.tagsValue, newTagBlock],
 		});
-	},
+	}
 
 	removeTagBlock(i) {
 		this.setState({
 			tagsValue: update(this.state.tagsValue, { $splice: [[i, 1]] }),
 		});
-	},
+	}
 
 	moveTagBlock(dragIndex, hoverIndex) {
 		const { tagsValue } = this.state;
@@ -393,37 +389,47 @@ const AddRevision = React.createClass({
 				],
 			},
 		}));
-	},
+	}
 
 	onTagValueChange(tag) {
-		const tagsValue = this.state.tagsValue;
+		const { tags } = this.props;
+		const { tagsValue } = this.state;
+
+		let _selectedKeyword;
+
+		tags.forEach(_tag => {
+			if (_tag._id == tag.value) {
+				_selectedKeyword = _tag;
+			}
+		});
+
 
 		tagsValue[tag.i].tagId = tag.value;
-		tagsValue[tag.i].keyword = Keywords.findOne({_id: tag.value});
+		tagsValue[tag.i].keyword = _selectedKeyword
 		tagsValue[tag.i].isSet = true;
 
 		this.setState({
-			tagsValue,
+			tagsValue: [...tagsValue],
 		});
-	},
+	}
 
 	onIsMentionedInLemmaChange(tag, i) {
 		const tagsValue = this.state.tagsValue;
 
-		tagsValue[i].isMentionedInLemma = !tag.isMentionedInLemma;
+		tagsValue[i].isNotMentionedInLemma = !tag.isNotMentionedInLemma;
 
 		this.setState({
 			tagsValue,
 		});
-	},
+	}
 
 	render() {
-		const self = this;
-		const { comment, isTest } = this.props;
+		const { comment } = this.props;
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 
-		const revisions = _.sortBy(comment.revisions, 'created').reverse();
+		const revisions = _.sortBy(comment.revisions, 'created');
+		console.log('render revisions', revisions);
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -469,22 +475,19 @@ const AddRevision = React.createClass({
 									</div>
 								</div>
 								<h1 className="add-comment-title">
-									{!isTest ?
-										<Editor
-											editorState={titleEditorState}
-											onChange={this.onTitleChange}
-											placeholder="Comment title..."
-											spellCheck
-											stripPastedStyles
-											plugins={[singleLinePlugin]}
-											blockRenderMap={singleLinePlugin.blockRenderMap}
-										/>
-									: ''}
+									<Editor
+										editorState={titleEditorState}
+										onChange={this.onTitleChange}
+										placeholder="Comment title..."
+										spellCheck
+										stripPastedStyles
+										plugins={[singleLinePlugin]}
+										blockRenderMap={singleLinePlugin.blockRenderMap}
+									/>
 								</h1>
 
-								<AddTagInput
+								<TagsInput
 									tagsValue={tagsValue}
-									tags={tags}
 									addTagBlock={this.addTagBlock}
 									removeTagBlock={this.removeTagBlock}
 									moveTagBlock={this.moveTagBlock}
@@ -658,7 +661,7 @@ const AddRevision = React.createClass({
 										key={i}
 										id={i}
 										className={`revision ${revision._id === _revision._id ? 'selected-revision' : ''}`}
-										onClick={self.selectRevision}
+										onClick={this.selectRevision}
 										label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
 									/>
 								))}
@@ -671,8 +674,21 @@ const AddRevision = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
+
+
+AddRevision.propTypes = {
+	submitForm: PropTypes.func.isRequired,
+	update: PropTypes.func.isRequired,
+	comment: PropTypes.object.isRequired,
+	tags: PropTypes.array,
+	referenceWorkOptions: PropTypes.array,
+};
+
+AddRevision.childContextTypes = {
+	muiTheme: PropTypes.object.isRequired,
+};
 
 const AddRevisionContainer = createContainer(({ comment }) => {
 

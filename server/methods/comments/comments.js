@@ -23,16 +23,15 @@ const commentsInsert = (token, comment) => {
 		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 	})
 	) {
-		throw new Meteor.Error('comment-insert', 'not-authorized');
+		throw new Meteor.Error('Commenter is not authorized to create comment.');
 	}
 
 	// add comment to db
 	let commentId;
-
 	try {
 		commentId = Comments.insert(comment);
 	} catch (err) {
-		throw new Meteor.Error('comment-insert', err);
+		throw new Meteor.Error(err);
 	}
 
 	if (!comment.commenters || !comment.commenters.length) {
@@ -41,10 +40,8 @@ const commentsInsert = (token, comment) => {
 
 	// add notification
 	const options = { multi: true };
-
 	const commenterId = comment.commenters[0]._id;
 	const userAvatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
-
 	const avatar = userAvatar && userAvatar.avatar ? userAvatar.avatar.src : '/images/default_user.jpg';
 
 	const query = {
@@ -73,7 +70,6 @@ const commentsInsert = (token, comment) => {
 	};
 
 	const update = { $push: {'subscriptions.notifications': notification} };
-
 	const subscribedUsers = Meteor.users.update(query, update, notification, options);
 
 	// send notification email
@@ -123,7 +119,7 @@ const commentsInsert = (token, comment) => {
 
 		${comment.commenters[0].name} has published a new comment on the ${comment.work.title}.
 
-		Please review your notification at ahcip.chs.harvard.edu.
+		Please review your notification at A Homer Commentary in Progress (http://ahcip.chs.harvard.edu).
 
 		You can change how often you receive these emails in your account settings.
 		`;
@@ -144,12 +140,12 @@ const commentsUpdate = (token, commentId, update) => {
 
 	const user = Meteor.users.findOne({
 		roles: { $elemMatch: { $in: roles } },
-		// 'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
+		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
 	});
 
 
 	if (!user) {
-		throw new Meteor.Error('comment-update', 'not-authorized');
+		throw new Meteor.Error('User is not authorized to edit comments');
 	}
 
 	const comment = Comments.findOne({ _id: commentId });
@@ -170,13 +166,13 @@ const commentsUpdate = (token, commentId, update) => {
 	});
 
 	if (!allowedToEdit) {
-		throw new Meteor.Error('comment-update', 'not-authorized');
+		throw new Meteor.Error('User is not authorized to edit comments for this commentator');
 	}
 
 	try {
 		Comments.update({ _id: commentId }, { $set: update });
 	} catch (err) {
-		throw new Meteor.Error('comment-update', err);
+		throw new Meteor.Error(`comment-update ${err}`);
 	}
 
 	// add notification
@@ -185,7 +181,7 @@ const commentsUpdate = (token, commentId, update) => {
 	const commenterId = comment.commenters[0]._id;
 	const userAvatar = Commenters.findOne({_id: commenterId}, {'avatar.src': 1});
 
-	const avatar = userAvatar ? userAvatar.avatar.src : '/images/default_user.jpg';
+	const avatar = userAvatar && userAvatar.avatar ? userAvatar.avatar.src : '/images/default_user.jpg';
 
 	const query = {
 		$or: [
@@ -265,7 +261,7 @@ const commentsUpdate = (token, commentId, update) => {
 
 		${comment.commenters[0].name} has updated a comment on the ${comment.work.title}.
 
-		Please review your notification at ahcip.chs.harvard.edu.
+		Please review your notification at A Homer Commentary in Progress (http://ahcip.chs.harvard.edu).
 
 		You can change how often you receive these emails in your account settings.
 		`;
@@ -360,7 +356,7 @@ const commentsRemoveRevision = (commentId, revision) => {
 	const user = Meteor.user();
 
 	if (!user) {
-		throw new Meteor.Error('comment-update', 'not-authorized');
+		throw new Meteor.Error('User was not authorized to remove revision.');
 	}
 
 	if (!Roles.userIsInRole(user, roles)) {
@@ -399,7 +395,7 @@ const commentsToggleDiscussionComments = (token, _id) => {
 		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 	})
 	) {
-		throw new Meteor.Error('comment-toggle-discussion-comment', 'not-authorized');
+		throw new Meteor.Error('comment-toggle-discussion-comment: User is not authorized');
 	}
 
 	const comment = Comments.findOne({_id});
@@ -417,7 +413,7 @@ const commentsToggleDiscussionComments = (token, _id) => {
 				},
 			});
 		} catch (err) {
-			throw new Meteor.Error('comment-toggle-discussion-comment', err);
+			throw new Meteor.Error(`comment-toggle-discussion-comment: ${err}`);
 		}
 	}
 };

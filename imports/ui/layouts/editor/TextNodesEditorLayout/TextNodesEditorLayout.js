@@ -25,6 +25,7 @@ import TextNodesEditor from '/imports/ui/components/editor/textNodes/TextNodesEd
 import muiTheme from '/imports/lib/muiTheme';
 import client from '/imports/middleware/apolloClient';
 import configureStore from '/imports/store/configureStore';
+import Utils from '/imports/lib/utils';
 
 // redux integration for layout
 const store = configureStore();
@@ -62,6 +63,8 @@ class TextNodesEditorLayout extends React.Component {
 	}
 
 	render() {
+		Utils.setTitle('Edit Source Text | The Center for Hellenic Studies Commentaries');
+
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<ApolloProvider

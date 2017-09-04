@@ -138,7 +138,7 @@ class KeywordDetail extends Component {
 
 						<hr />
 
-						<h1>Related comments</h1>
+						<h2>Related comments</h2>
 
 						<KeywordCommentList
 							keywordComments={keywordComments}

@@ -19,6 +19,7 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 
 const AddKeywordLayout = React.createClass({
@@ -351,6 +352,8 @@ const AddKeywordLayout = React.createClass({
 		let subwork;
 		let lineFrom;
 		let lineTo;
+
+		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
 
 		filters.forEach((filter) => {
 			if (filter.key === 'works') {

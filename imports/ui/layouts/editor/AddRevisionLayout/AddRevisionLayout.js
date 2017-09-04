@@ -23,6 +23,7 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
 
 const AddRevisionLayout = React.createClass({
@@ -267,6 +268,8 @@ const AddRevisionLayout = React.createClass({
 	render() {
 		const filters = this.state.filters;
 		const { ready, comment } = this.props;
+
+		Utils.setTitle('Add Revision | The Center for Hellenic Studies Commentaries');
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

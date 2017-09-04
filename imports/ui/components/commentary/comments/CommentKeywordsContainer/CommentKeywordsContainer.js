@@ -9,9 +9,9 @@ const getLabel = (keyword) => {
 
 const CommentKeywordsContainer = props => (
 	<div className="comment-keywords-container">
-		{props.keywords.map(keyword => (
+		{props.keywords.map((keyword, i) => (
 			<RaisedButton
-				key={keyword._id}
+				key={`${i}-${keyword._id}`}
 				className="comment-keyword paper-shadow"
 				onClick={props.keywordOnClick.bind(null, keyword)}
 				data-id={keyword._id}

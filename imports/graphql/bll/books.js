@@ -40,5 +40,18 @@ export default class BookService extends AdminService {
 		}
 	}
 
+	bookUpdate(_id, book) {
+		if (this.userIsAdmin) {
+			const newBook = book;
+			newBook.chapters = this.rewriteChapter(book.chapters);
+			Books.update({_id}, {$set: newBook});
+		}
+		else {
+			return new Error('Not authorized');
+		}
+
+
+	}
+
 
 }

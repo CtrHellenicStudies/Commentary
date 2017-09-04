@@ -13,7 +13,7 @@ import BookService from '../bll/books';
 const bookMutationFields = {
 	bookCreate: {
 		type: BookType,
-		description: 'Create new annotation',
+		description: 'Create new book',
 		args: {
 			book: {
 				type: BookInputType
@@ -22,6 +22,22 @@ const bookMutationFields = {
 		async resolve(parent, { book }, {token}) {
 			const bookService = new BookService({token});
 			return await bookService.bookInsert(book);
+		}
+	},
+	bookUpdate: {
+		type: BookType,
+		description: 'Update book',
+		args: {
+			_id: {
+				type: new GraphQLNonNull(GraphQLID)
+			},
+			book: {
+				type: new GraphQLNonNull(BookInputType)
+			}
+		},
+		async resolve(parent, { _id, book }, {token}) {
+			const bookService = new BookService({token});
+			return await bookService.bookUpdate(_id, book);
 		}
 	}
 };

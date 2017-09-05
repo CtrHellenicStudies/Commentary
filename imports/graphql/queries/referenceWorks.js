@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLNonNull } from 'graphql';
+import {GraphQLID, GraphQLNonNull, GraphQLList} from 'graphql';
 
 // types
 import ReferenceWorkType from '/imports/graphql/types/models/referenceWork';
@@ -9,20 +9,19 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 
 const referenceWorkQueryFields = {
 	referenceWorks: {
-		type: ReferenceWorkType,
+		type: new GraphQLList(ReferenceWorkType),
 		description: 'Get list of reference works',
 		args: {
 			tenantId: {
 				type: GraphQLID,
 			},
 		},
-		resolve({ tenantId }, context) {
+		resolve(parent, { tenantId }, context) {
 			const args = {};
 
 			if (tenantId) {
 				args.tenantId = tenantId;
 			}
-
 
 			return ReferenceWorks.find(args, {
 				sort: {

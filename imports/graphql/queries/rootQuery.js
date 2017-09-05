@@ -6,7 +6,7 @@ import keywordQueryFields from './keywords';
 import referenceWorkQueryFields from './referenceWorks';
 import textNodeQueryFields from './textNodes';
 import workQueryFields from './works';
-
+import tenantQueryFields from './tenants';
 /**
  * Root Queries
  * @type {GraphQLObjectType}
@@ -21,6 +21,7 @@ const RootQuery = new GraphQLObjectType({
 		...referenceWorkQueryFields,
 		...textNodeQueryFields,
 		...workQueryFields,
+		...tenantQueryFields
 	},
 });
 

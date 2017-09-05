@@ -7,6 +7,7 @@ import { graphiqlExpress } from 'graphql-server-express';
 import { GraphQLSchema } from 'graphql';
 import { maskErrors } from 'graphql-errors';
 import { formatError } from 'apollo-errors';
+import cors from 'cors';
 
 // graphql resources
 import RootQuery from '/imports/graphql/queries/rootQuery';
@@ -38,6 +39,19 @@ maskErrors(RootSchema);
 const GRAPHQL_PORT = 4000;
 
 const graphQLServer = express();
+
+const whitelist = [
+	'http://localhost:3000',
+	'http://admin.localhost.dev:3000'
+];
+const corsOptions = {
+	origin: (origin, callback) => {
+		const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+		callback(null, originIsWhitelisted);
+	},
+	credentials: true
+};
+graphQLServer.use(cors(corsOptions));
 
 graphQLServer.use('/graphql', bodyParser.json(), apolloExpress(req => ({
 	schema: RootSchema,

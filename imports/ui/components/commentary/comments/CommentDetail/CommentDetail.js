@@ -20,6 +20,8 @@ import KeywordReferenceModal from '/imports/ui/components/shared/KeywordReferenc
 /*
 	helpers
 */
+import { sortRevisions } from '../helpers';
+
 const getUpdateDate = (selectedRevision) => {
 	let updated = selectedRevision.created;
 	if (selectedRevision.originalDate) {
@@ -254,22 +256,18 @@ class CommentDetail extends React.Component {
 		});
 	}
 
-	subscribe() {
-
-	}
-
 	render() {
-
 		const { comment, referenceWorks, ready, filters, user } = this.props;
 		const { discussionVisible, searchTerm } = this.state;
 
 		if (!ready) {
+			// TODO: handle loading for component
 			return null;
 		}
 
 		const selectedRevisionIndex = this.getRevisionIndex();
-		const selectedRevision = comment.revisions[selectedRevisionIndex];
-
+		const revisions = sortRevisions(comment.revisions);
+		const selectedRevision = revisions[selectedRevisionIndex];
 		const commentClass = getCommentClass(discussionVisible);
 
 		return (
@@ -294,6 +292,7 @@ class CommentDetail extends React.Component {
 					<CommentLower
 						comment={comment}
 						revisionIndex={selectedRevisionIndex}
+						selectedRevision={selectedRevision}
 						onTextClick={this.checkIfToggleReferenceModal}
 						referenceWorks={referenceWorks}
 						searchTerm={searchTerm}
@@ -301,7 +300,7 @@ class CommentDetail extends React.Component {
 
 					<CommentRevisionSelect
 						commentId={comment._id}
-						revisions={comment.revisions}
+						revisions={revisions}
 						comment={comment}
 						selectedRevisionIndex={selectedRevisionIndex}
 						selectRevision={this.selectRevision}

@@ -88,17 +88,6 @@ const Utils = {
 		const capitalized = str.charAt(0).toUpperCase() + str.slice(1);
 		return capitalized;
 	},
-	sortRevisions: (a, b) => {
-		if (a.updated && b.updated) {
-			if (a.updated < b.updated) {
-				return -1;
-			} else if (a.updated > b.updated) {
-				return 1;
-			}
-			return 0;
-		}
-		return 0;
-	},
 	defaultCmp: function defaultCmp(a, b) {
 		if (a === b) return 0;
 		return a < b ? -1 : 1;

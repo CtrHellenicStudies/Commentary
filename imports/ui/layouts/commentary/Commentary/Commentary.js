@@ -12,7 +12,7 @@ import Settings from '/imports/models/settings';
 import Works from '/imports/models/works';
 
 // layouts:
-import CommentGroup from '/imports/ui/layouts/commentary/CommentGroup';
+import CommentGroup from '/imports/ui/components/commentary/commentGroups/CommentGroup';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // components:
@@ -116,7 +116,8 @@ class Commentary extends React.Component {
 
 		let title = '';
 		let values = [];
-		let work = 'Iliad';
+		let work = '';
+		let workDefault = 'Commentary';
 		let subwork = null;
 		let lineFrom = 0;
 		let lineTo = 0;
@@ -157,9 +158,12 @@ class Commentary extends React.Component {
 		});
 
 		const foundWork = Works.findOne({ slug: work });
-		const workTitle = foundWork ? foundWork.title : work;
+		if (foundWork) {
+			title = foundWork.title;
+		} else {
+			title = workDefault;
+		}
 
-		title = workTitle;
 		if (subwork) title = `${title} ${subwork}`;
 		if (lineFrom) {
 			if (lineTo) {

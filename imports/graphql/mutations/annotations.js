@@ -44,8 +44,8 @@ const annotationMutationFields = {
 		}
 	},
 	annotationAddRevision: {
-		type: RemoveType,
-		description: 'Remove annotation',
+		type: CommentType,
+		description: 'Add annotation revision',
 		args: {
 			annotationId: {
 				type: new GraphQLNonNull(GraphQLID)

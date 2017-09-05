@@ -1,7 +1,7 @@
 import { GraphQLID, GraphQLNonNull } from 'graphql';
 
 // types
-import WorkType from '/imports/graphql/types/models/work';
+import { WorkType } from '/imports/graphql/types/models/work';
 
 // models
 import Works from '/imports/models/works';

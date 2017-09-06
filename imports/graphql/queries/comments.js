@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLNonNull, GraphQLInt, GraphQLString } from 'graphql';
+import { GraphQLID, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList } from 'graphql';
 import slugify from 'slugify';
 
 // types
@@ -10,7 +10,7 @@ import Comments from '/imports/models/comments';
 
 const commentQueryFields = {
 	comments: {
-		type: CommentType,
+		type: new GraphQLList(CommentType),
 		description: 'Get list of all comments',
 		args: {
 			tenantId: {
@@ -35,7 +35,7 @@ const commentQueryFields = {
 				type: GraphQLInt,
 			},
 		},
-		resolve({ tenantId, limit, skip, workSlug, subworkN, }, context) {
+		resolve(parent, { tenantId, limit, skip, workSlug, subworkN, }, context) {
 			const args = {};
 
 			const options = {
@@ -46,7 +46,6 @@ const commentQueryFields = {
 					nLines: -1,
 				},
 			};
-
 			if ('work' in args) {
 				args['work.slug'] = slugify(workSlug);
 			}

@@ -59,5 +59,4 @@ const SubworkInput = new GraphQLInputObjectType({
 	},
 });
 
-console.log("Subwork LOG", Subwork);
 export { Subwork, SubworkInput };

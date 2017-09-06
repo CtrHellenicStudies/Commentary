@@ -10,8 +10,6 @@ import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
 import {Subwork, SubworkInput} from './subworks';
 
-console.log("Subwork LOG", Subwork);
-
 const WorkType = new GraphQLObjectType({
 	name: 'WorkType',
 	description: 'A primary work in the commentary that the comments are created about',

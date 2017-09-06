@@ -19,5 +19,3 @@ export default class TenantsService extends AdminService {
 		return new Error('Not authorized');
 	}
 }
-
-

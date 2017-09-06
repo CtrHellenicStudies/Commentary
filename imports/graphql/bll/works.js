@@ -28,4 +28,21 @@ export default class WorksService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	worksGet(tenantId) {
+		if (this.userIsAdmin) {
+			const args = {};
+
+			if (tenantId) {
+				args.tenantId = tenantId;
+			}
+
+			return Works.find(args, {
+				sort: {
+					slug: 1
+				}
+			}).fetch();
+		}
+		return new Error('Not authorized');
+	}
 }

@@ -1,32 +1,23 @@
-import { GraphQLID, GraphQLNonNull } from 'graphql';
+import { GraphQLID, GraphQLList } from 'graphql';
 
 // types
 import CommenterType from '/imports/graphql/types/models/commenter';
 
-// models
-import Commenters from '/imports/models/commenters';
-
+// bll
+import CommentersService from '../bll/commenters';
 
 const commenterQueryFields = {
 	commenters: {
-		type: CommenterType,
+		type: new GraphQLList(CommenterType),
 		description: 'Get list of all commenters',
 		args: {
 			tenantId: {
 				type: GraphQLID,
 			},
 		},
-		resolve({ tenantId }, context) {
-			const args = {};
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
-
-			return Commenters.find(args, {
-				sort: {
-					slug: 1
-				},
-			}).fetch();
+		async resolve(parent, { tenantId }, {token}) {
+			const commentersService = new CommentersService({token});
+			return await commentersService.commentersGet(tenantId);
 		},
 	},
 };

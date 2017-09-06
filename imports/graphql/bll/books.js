@@ -53,4 +53,25 @@ export default class BookService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+	booksGet(_id, chapterUrl) {
+		if (this.userIsAdmin) {
+			const args = {};
+
+			if (_id) {
+				args._id = _id;
+			}
+
+			if (chapterUrl) {
+				args['chapters.url'] = chapterUrl;
+			}
+
+			return Books.find(args, {
+				sort: {
+					slug: 1,
+					title: 1
+				},
+			}).fetch();
+		}
+		return new Error('Not authorized');
+	}
 }

@@ -10,7 +10,7 @@ import GraphQLDate from 'graphql-date';
 
 
 const KeywordType = new GraphQLObjectType({
-	name: 'DiscussionCommentType',
+	name: 'KeywordType',
 	description: 'A tag of a word or idea in the commentary',
 	fields: {
 		_id: {

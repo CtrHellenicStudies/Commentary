@@ -3,8 +3,8 @@ import {GraphQLID, GraphQLList} from 'graphql';
 // types
 import { TenantType } from '/imports/graphql/types/models/tenants';
 
-// models
-import Tenants from '/imports/models/tenants';
+// bll
+import TenantsService from '../bll/tenants';
 
 
 const tenantsQueryFields = {
@@ -16,14 +16,9 @@ const tenantsQueryFields = {
 				type: GraphQLID,
 			},
 		},
-		resolve(parent, { _id }, context) {
-			const args = {};
-
-			if (_id) {
-				args._id = _id;
-			}
-
-			return Tenants.find(args).fetch();
+		async resolve(parent, { _id }, {token}) {
+			const tenantsService = new TenantsService({token});
+			return await tenantsService.tenantsGet(_id);
 		}
 	},
 };

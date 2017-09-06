@@ -8,6 +8,7 @@ import textNodeQueryFields from './textNodes';
 import workQueryFields from './works';
 import tenantQueryFields from './tenants';
 import bookQueryFields from './books';
+import discussionCommentQueryFields from './discussionComments';
 
 /**
  * Root Queries
@@ -24,7 +25,8 @@ const RootQuery = new GraphQLObjectType({
 		...textNodeQueryFields,
 		...workQueryFields,
 		...tenantQueryFields,
-		...bookQueryFields
+		...bookQueryFields,
+		...discussionCommentQueryFields
 	},
 });
 

@@ -2,11 +2,8 @@ import {
 	GraphQLObjectType,
 	GraphQLString,
 	GraphQLInt,
-	GraphQLBoolean,
 	GraphQLList
 } from 'graphql';
-import GraphQLJSON from 'graphql-type-json';
-import GraphQLDate from 'graphql-date';
 
 
 const DiscussionCommentType = new GraphQLObjectType({
@@ -47,4 +44,4 @@ const DiscussionCommentType = new GraphQLObjectType({
 });
 
 
-export default DiscussionCommentType;
+export {DiscussionCommentType};

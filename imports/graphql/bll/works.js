@@ -29,12 +29,16 @@ export default class WorksService extends AdminService {
 		return new Error('Not authorized');
 	}
 
-	worksGet(tenantId) {
+	worksGet(_id, tenantId) {
 		if (this.userIsAdmin) {
 			const args = {};
 
 			if (tenantId) {
 				args.tenantId = tenantId;
+			}
+
+			if (_id) {
+				args._id = _id;
 			}
 
 			return Works.find(args, {

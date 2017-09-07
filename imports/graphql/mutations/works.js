@@ -24,6 +24,22 @@ const worksMutationFields = {
 			return await worksService.workInsert(work);
 		}
 	},
+	workUpdate: {
+		type: WorkType,
+		description: 'Update a work',
+		args: {
+			_id: {
+				type: GraphQLString
+			},
+			work: {
+				type: WorkInputType
+			}
+		},
+		async resolve(parent, { _id, work }, {token}) {
+			const worksService = new WorksService({token});
+			return await worksService.workUpdate(_id, work);
+		}
+	},
 	// annotationDelete: {
 	// 	type: RemoveType,
 	// 	description: 'Remove annotation',

@@ -29,6 +29,16 @@ export default class WorksService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	workUpdate(_id, work) {
+		if (this.userIsAdmin) {
+			const newWork = work;
+			newWork.subworks = this.rewriteSubworks(work.subworks);
+
+			return Works.update(_id, {$set: newWork});
+		}
+		return new Error('Not authorized');
+	}
+
 	worksGet(_id, tenantId) {
 		if (this.userIsAdmin) {
 			const args = {};

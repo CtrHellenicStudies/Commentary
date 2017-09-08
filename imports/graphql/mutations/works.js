@@ -42,7 +42,7 @@ const worksMutationFields = {
 	},
 	workRemove: {
 		type: RemoveType,
-		description: 'Remove single work',
+		description: 'Remove a single work',
 		args: {
 			workId: {
 				type: new GraphQLNonNull(GraphQLString)

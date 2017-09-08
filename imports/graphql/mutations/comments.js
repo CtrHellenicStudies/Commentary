@@ -2,9 +2,13 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
 import CommentType from '/imports/graphql/types/models/comment';
+import { RemoveType } from '/imports/graphql/types/index';
 
 // models
 import Comments from '/imports/models/comments';
+
+// bll
+import CommentsService from '../bll/comments';
 
 // errors
 import { AuthenticationError } from '/imports/errors';
@@ -36,6 +40,19 @@ const commentMutationFields = {
 			}
 
 			throw AuthenticationError();
+		}
+	},
+	commentRemove: {
+		type: RemoveType,
+		description: 'Remove a single comment',
+		args: {
+			commentId: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {commentId}, {token}) {
+			const commentsService = new CommentsService({token});
+			return await commentsService.commentRemove(commentId);
 		}
 	}
 };

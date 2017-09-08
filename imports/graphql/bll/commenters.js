@@ -21,4 +21,11 @@ export default class CommentService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	commenterRemove(commenterId) {
+		if (this.userIsAdmin) {
+			return Commenters.remove({_id: commenterId});
+		}
+		return new Error('Not authorized');
+	}
 }

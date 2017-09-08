@@ -59,4 +59,11 @@ export default class WorksService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	workRemove(id) {
+		if (this.userIsAdmin) {
+			return Works.remove({_id: id});
+		}
+		return new Error('Not authorized');
+	}
 }

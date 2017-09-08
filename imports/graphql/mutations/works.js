@@ -40,36 +40,19 @@ const worksMutationFields = {
 			return await worksService.workUpdate(_id, work);
 		}
 	},
-	// annotationDelete: {
-	// 	type: RemoveType,
-	// 	description: 'Remove annotation',
-	// 	args: {
-	// 		annotationId: {
-	// 			type: new GraphQLNonNull(GraphQLID)
-	// 		}
-	// 	},
-	// 	async resolve(parent, { annotationId }, {token}) {
-	//
-	// 		const annotationService = new AnnotationService({token});
-	// 		return await annotationService.deleteAnnotation(annotationId);
-	// 	}
-	// },
-	// annotationAddRevision: {
-	// 	type: RemoveType,
-	// 	description: 'Remove annotation',
-	// 	args: {
-	// 		annotationId: {
-	// 			type: new GraphQLNonNull(GraphQLID)
-	// 		},
-	// 		revision: {
-	// 			type: new GraphQLNonNull(RevisionInputType)
-	// 		}
-	// 	},
-	// 	async resolve(parent, {annotationId, revision}, {token}) {
-	// 		const annotationService = new AnnotationService({token});
-	// 		return await annotationService.addRevision(annotationId, revision);
-	// 	}
-	// }
+	workRemove: {
+		type: RemoveType,
+		description: 'Remove single work',
+		args: {
+			workId: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {workId}, {token}) {
+			const worksService = new WorksService({token});
+			return await worksService.workRemove(workId);
+		}
+	}
 };
 
 export default worksMutationFields;

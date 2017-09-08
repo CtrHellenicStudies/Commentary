@@ -6,9 +6,13 @@ export default class CommentService extends AdminService {
 		super(props);
 	}
 
-	commentersGet(tenantId) {
+	commentersGet(_id, tenantId) {
 		if (this.userIsAdmin) {
 			const args = {};
+
+			if (_id) {
+				args._id = _id;
+			}
 			if (tenantId) {
 				args.tenantId = tenantId;
 			}
@@ -18,6 +22,13 @@ export default class CommentService extends AdminService {
 					slug: 1
 				},
 			}).fetch();
+		}
+		return new Error('Not authorized');
+	}
+
+	commenterUpdate(_id, commenter) {
+		if (this.userIsAdmin) {
+			return Commenters.update(_id, {$set: commenter});
 		}
 		return new Error('Not authorized');
 	}

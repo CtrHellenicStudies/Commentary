@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
-import CommenterType from '/imports/graphql/types/models/commenter';
+import { CommenterType, CommenterInputType } from '/imports/graphql/types/models/commenter';
 import { RemoveType } from '/imports/graphql/types/index';
 
 // bll
@@ -20,6 +20,23 @@ const commenterMutationFields = {
 		async resolve(parent, {commenterId}, {token}) {
 			const commentersService = new CommentersService({token});
 			return await commentersService.commenterRemove(commenterId);
+		}
+	},
+	commenterUpdate: {
+		type: CommenterType,
+		description: 'Update a commenter',
+		args: {
+			commenterId: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			commenter: {
+				type: CommenterInputType
+			}
+
+		},
+		async resolve(parent, {commenterId,commenter}, {token}) {
+			const commentersService = new CommentersService({token});
+			return await commentersService.commenterUpdate(commenterId, commenter);
 		}
 	}
 };

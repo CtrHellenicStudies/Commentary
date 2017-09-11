@@ -1,7 +1,7 @@
-import { GraphQLID, GraphQLList } from 'graphql';
+import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 
 // types
-import KeywordType from '/imports/graphql/types/models/keyword';
+import {KeywordType} from '/imports/graphql/types/models/keyword';
 
 // bll
 import KeywordsService from '../bll/keywords';
@@ -14,10 +14,13 @@ const keywordQueryFields = {
 			tenantId: {
 				type: GraphQLID,
 			},
+			id: {
+				type: GraphQLString,
+			},
 		},
-		async resolve(parent, { tenantId }, {token}) {
+		async resolve(parent, { tenantId, id }, {token}) {
 			const keywordsService = new KeywordsService({token});
-			return await keywordsService.keywordsGet(tenantId);
+			return await keywordsService.keywordsGet(id, tenantId);
 
 			/*
 			 * TODO: reinstate the linked data api schema

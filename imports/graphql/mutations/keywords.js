@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 import {Meteor} from 'meteor/meteor';
 // types
-import { KeywordType} from '/imports/graphql/types/models/keyword';
+import { KeywordType, KeywordInputType} from '/imports/graphql/types/models/keyword';
 import { RemoveType } from '/imports/graphql/types/index';
 
 // models
@@ -22,6 +22,22 @@ const keywordsMutationFields = {
 		async resolve(parent, {keywordId}, {token}) {
 			const keywordService = new KeywordService({token});
 			return await keywordService.keywordRemove(keywordId);
+		}
+	},
+	keywordUpdate: {
+		type: KeywordType,
+		description: 'Update a single keyword',
+		args: {
+			keywordId: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			keyword: {
+				type: new GraphQLNonNull(KeywordInputType)
+			}
+		},
+		async resolve(parent, {keywordId, keyword}, {token}) {
+			const keywordService = new KeywordService({token});
+			return await keywordService.keywordUpdate(keywordId, keyword);
 		}
 	}
 };

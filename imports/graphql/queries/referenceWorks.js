@@ -1,4 +1,4 @@
-import {GraphQLID, GraphQLList} from 'graphql';
+import {GraphQLString, GraphQLList} from 'graphql';
 
 // types
 import {ReferenceWorkType} from '/imports/graphql/types/models/referenceWork';
@@ -13,8 +13,11 @@ const referenceWorkQueryFields = {
 		description: 'Get list of reference works',
 		args: {
 			tenantId: {
-				type: GraphQLID,
+				type: GraphQLString,
 			},
+			id: {
+				type: GraphQLString,
+			}
 		},
 		async resolve(parent, { tenantId, id }, {token}) {
 			const referenceWorksService = new ReferenceWorksService({token});

@@ -21,4 +21,11 @@ export default class KeywordsService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	keywordRemove(keywordId) {
+		if (this.userIsAdmin) {
+			return Keywords.remove({_id: keywordId});
+		}
+		return new Error('Not authorized');
+	}
 }

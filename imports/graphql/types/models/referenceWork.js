@@ -13,6 +13,9 @@ const ReferenceWorkType = new GraphQLObjectType({
 	name: 'ReferenceWorkType',
 	description: 'A work referenced in the commentary as a secondary source',
 	fields: {
+		_id: {
+			type: GraphQLString,
+		},
 		title: {
 			type: GraphQLString,
 		},
@@ -40,13 +43,10 @@ const ReferenceWorkType = new GraphQLObjectType({
 		description: {
 			type: GraphQLString,
 		},
-		description: {
-			type: GraphQLString,
-		},
 		citation: {
 			type: GraphQLString,
 		},
 	},
 });
 
-export default ReferenceWorkType;
+export {ReferenceWorkType};

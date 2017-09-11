@@ -1,7 +1,7 @@
 import {GraphQLID, GraphQLList} from 'graphql';
 
 // types
-import ReferenceWorkType from '/imports/graphql/types/models/referenceWork';
+import {ReferenceWorkType} from '/imports/graphql/types/models/referenceWork';
 
 // bll
 import ReferenceWorksService from '../bll/referenceWorks';
@@ -16,9 +16,9 @@ const referenceWorkQueryFields = {
 				type: GraphQLID,
 			},
 		},
-		async resolve(parent, { tenantId }, {token}) {
+		async resolve(parent, { tenantId, id }, {token}) {
 			const referenceWorksService = new ReferenceWorksService({token});
-			return await referenceWorksService.referenceWorksGet(tenantId);
+			return await referenceWorksService.referenceWorksGet(id, tenantId);
 		}
 	},
 };

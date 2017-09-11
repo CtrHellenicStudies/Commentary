@@ -32,11 +32,23 @@ const commenterMutationFields = {
 			commenter: {
 				type: CommenterInputType
 			}
-
 		},
 		async resolve(parent, {commenterId,commenter}, {token}) {
 			const commentersService = new CommentersService({token});
 			return await commentersService.commenterUpdate(commenterId, commenter);
+		}
+	},
+	commenterCreate: {
+		type: CommenterType,
+		description: 'Create a commenter',
+		args: {
+			commenter: {
+				type: CommenterInputType
+			}
+		},
+		async resolve(parent, {commenter}, {token}) {
+			const commentersService = new CommentersService({token});
+			return await commentersService.commenterCreate(commenter);
 		}
 	}
 };

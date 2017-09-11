@@ -39,4 +39,12 @@ export default class CommentService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	commenterCreate(commenter) {
+		if (this.userIsAdmin) {
+			const commenterId = Commenters.insert({...commenter});
+			return Commenters.findOne(commenterId);
+		}
+		return new Error('Not authorized');
+	}
 }

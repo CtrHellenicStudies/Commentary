@@ -32,4 +32,11 @@ export default class ReferenceWorksService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	referenceWorkUpdate(referenceWorkId, referenceWork) {
+		if (this.userIsAdmin) {
+			return ReferenceWorks.update(referenceWorkId, {$set: referenceWork});
+		}
+		return new Error('Not authorized');
+	}
 }

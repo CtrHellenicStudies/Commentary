@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
+import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
@@ -9,7 +10,6 @@ import {
 	FormGroup,
 	ControlLabel,
 } from 'react-bootstrap';
-import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
@@ -312,7 +312,6 @@ class AddRevision extends React.Component {
 	selectRevision(event) {
 		const revisions = _.sortBy(this.props.comment.revisions, 'created');
 		const revision = revisions[event.currentTarget.id];
-		console.log('selectRevision revisions', revisions);
 
 		this.setState({
 			revision,
@@ -323,7 +322,8 @@ class AddRevision extends React.Component {
 
 	removeRevision() {
 		const self = this;
-		Meteor.call('comment.remove.revision', this.props.comment._id, this.state.revision, (err) => {
+		const authToken = Cookies.get('loginToken');
+		Meteor.call('comment.remove.revision', authToken, this.props.comment._id, this.state.revision, (err) => {
 			if (err) {
 				throw new Meteor.Error('Error removing revision');
 			}
@@ -427,9 +427,7 @@ class AddRevision extends React.Component {
 		const { comment } = this.props;
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
-
 		const revisions = _.sortBy(comment.revisions, 'created');
-		console.log('render revisions', revisions);
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -662,7 +660,7 @@ class AddRevision extends React.Component {
 										id={i}
 										className={`revision ${revision._id === _revision._id ? 'selected-revision' : ''}`}
 										onClick={this.selectRevision}
-										label={`Revision ${moment(revision.created).format('D MMMM YYYY')}`}
+										label={`Revision ${moment(_revision.created).format('D MMMM YYYY')}`}
 									/>
 								))}
 							</div>

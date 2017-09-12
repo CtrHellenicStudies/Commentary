@@ -10,21 +10,41 @@ import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 
 
+/*
+ * Get user by token or native Meteor user method
+ * (Workaround until graphql Auth Service is completed)
+ * @param  {string} token User auth token
+ * @param  {Array} array of role names
+ * @return {Object} User object
+ */
+const getAuthorizedUser = (roles, token) => {
+	let user;
+	if (token) {
+		user = Meteor.users.findOne({
+			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+		});
+	} else {
+		user = Meteor.user();
+	}
+
+	if (!user) {
+		throw new Meteor.Error('Could not find logged in user');
+	}
+
+	if (!Roles.userIsInRole(user, roles)) {
+		throw new Meteor.Error(`User ${user._id} attempted action in an unauthorized role`);
+	}
+
+	return user;
+};
+
 
 const commentsInsert = (token, comment) => {
-	check(token, String);
+	check(token, Match.Maybe(String));
 	check(comment, Object);
 
-
-	// check roles
 	const roles = ['editor', 'admin', 'commenter'];
-	if (!Meteor.users.findOne({
-		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-	})
-	) {
-		throw new Meteor.Error('Commenter is not authorized to create comment.');
-	}
+	const user = getAuthorizedUser(roles, token);
 
 	// add comment to db
 	let commentId;
@@ -124,7 +144,8 @@ const commentsInsert = (token, comment) => {
 		You can change how often you receive these emails in your account settings.
 		`;
 
-		Email.send({ from, to, subject, text });
+		// TODO: Send email with batching
+		// Email.send({ from, to, subject, text });
 
 	});
 
@@ -137,17 +158,7 @@ const commentsUpdate = (token, commentId, update) => {
 	check(update, Object);
 
 	const roles = ['editor', 'admin', 'commenter'];
-
-	const user = Meteor.users.findOne({
-		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken((token || '')),
-	});
-
-
-	if (!user) {
-		throw new Meteor.Error('User is not authorized to edit comments');
-	}
-
+	const user = getAuthorizedUser(roles, token);
 	const comment = Comments.findOne({ _id: commentId });
 	const commenters = Commenters.find().fetch();
 
@@ -274,16 +285,11 @@ const commentsUpdate = (token, commentId, update) => {
 };
 
 const commentsRemove = (token, commentId) => {
-	check(token, String);
+	check(token, Match.Maybe(String));
 	check(commentId, String);
 
 	const roles = ['editor', 'admin', 'commenter'];
-	if (!Meteor.users.findOne({
-		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-	})) {
-		throw new Meteor.Error('comment-delete', 'not-authorized');
-	}
+	const user = getAuthorizedUser(roles, token);
 
 	try {
 		Comments.remove({ _id: commentId });
@@ -295,7 +301,7 @@ const commentsRemove = (token, commentId) => {
 };
 
 const commentsAddRevision = (token, commentId, revision) => {
-	check(token, String);
+	check(token, Match.Maybe(String));
 	check(commentId, String);
 	check(revision, Object);
 
@@ -303,14 +309,7 @@ const commentsAddRevision = (token, commentId, revision) => {
 	const commenters = Commenters.find().fetch();
 
 	const roles = ['editor', 'admin', 'commenter'];
-	const user = Meteor.users.findOne({
-		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-	});
-
-	if (!user) {
-		throw new Meteor.Error('User is not authorized to add revision to comment');
-	}
+	const user = getAuthorizedUser(roles, token);
 
 	let allowedToEdit = false;
 	user.canEditCommenters.forEach((commenterId) => {
@@ -347,21 +346,13 @@ const commentsAddRevision = (token, commentId, revision) => {
 	return revisionId;
 };
 
-const commentsRemoveRevision = (commentId, revision) => {
+const commentsRemoveRevision = (token, commentId, revision) => {
+	check(token, Match.Maybe(String));
 	check(commentId, String);
 	check(revision, Object);
 
 	const roles = ['editor', 'admin'];
-
-	const user = Meteor.user();
-
-	if (!user) {
-		throw new Meteor.Error('User was not authorized to remove revision.');
-	}
-
-	if (!Roles.userIsInRole(user, roles)) {
-		throw new Meteor.Error(`User ${user._id} attempted to remove revision but was in an unauthorized role`);
-	}
+	const user = getAuthorizedUser(roles, token);
 
 	try {
 		Comments.update({
@@ -390,13 +381,7 @@ const commentsToggleDiscussionComments = (token, _id) => {
 	check(token, Match.Maybe(String));
 
 	const roles = ['editor', 'admin', 'commenter'];
-	if (!Meteor.users.findOne({
-		roles: { $elemMatch: { $in: roles } },
-		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-	})
-	) {
-		throw new Meteor.Error('comment-toggle-discussion-comment: User is not authorized');
-	}
+	const user = getAuthorizedUser(roles, token);
 
 	const comment = Comments.findOne({_id});
 

@@ -39,4 +39,12 @@ export default class ReferenceWorksService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	referenceWorkCreate(referenceWork) {
+		if (this.userIsAdmin) {
+			const referenceWorkId = ReferenceWorks.insert({...referenceWork});
+			return ReferenceWorks.findOne(referenceWorkId);
+		}
+		return new Error('Not authorized');
+	}
 }

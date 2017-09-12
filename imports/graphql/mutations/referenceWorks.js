@@ -35,6 +35,19 @@ const referenceWorksMutationFields = {
 			const referenceWorksService = new ReferenceWorksService({token});
 			return await referenceWorksService.referenceWorkUpdate(referenceWorkId, referenceWork);
 		}
+	},
+	referenceWorkCreate: {
+		type: ReferenceWorkType,
+		description: 'Create a referenceWork',
+		args: {
+			referenceWork: {
+				type: ReferenceWorkInputType
+			}
+		},
+		async resolve(parent, {referenceWork}, {token}) {
+			const referenceWorksService = new ReferenceWorksService({token});
+			return await referenceWorksService.referenceWorkCreate(referenceWork);
+		}
 	}
 };
 

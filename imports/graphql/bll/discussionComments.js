@@ -18,4 +18,19 @@ export default class DiscussionCommentService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	discussionCommentUpdateStatus(discussionCommentId, discussionComment) {
+		if (this.userIsAdmin) {
+			DiscussionComments.update({
+				_id: discussionCommentId,
+			}, {
+				$set: {
+					status: discussionComment.status,
+				},
+			});
+			return DiscussionComments.findOne(discussionCommentId);
+		}
+		return new Error('Not authorized');
+	}
 }
+

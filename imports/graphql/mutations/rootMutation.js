@@ -8,6 +8,7 @@ import commenterMutationFields from './commenters';
 import keywordsMutationFields from './keywords';
 import referenceWorksMutationFields from './referenceWorks';
 import pagesMutationFields from './pages';
+import discussionCommentsMutationFields from './discussionComments';
 
 /**
  * Root mutations
@@ -25,6 +26,7 @@ const RootMutations = new GraphQLObjectType({
 		...keywordsMutationFields,
 		...referenceWorksMutationFields,
 		...pagesMutationFields,
+		...discussionCommentsMutationFields,
 	},
 });
 

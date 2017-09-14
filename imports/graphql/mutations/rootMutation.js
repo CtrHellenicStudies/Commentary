@@ -13,6 +13,7 @@ import usersMutationFields from './users';
 import textNodeMutationFields from './textNodes';
 import linkedDataSchemaMutationFields from './linkedDataSchema';
 import tenantsMutationFields from './tenants';
+import settingsMutationFields from './settings';
 
 /**
  * Root mutations
@@ -34,7 +35,8 @@ const RootMutations = new GraphQLObjectType({
 		...usersMutationFields,
 		...textNodeMutationFields,
 		...linkedDataSchemaMutationFields,
-		...tenantsMutationFields
+		...tenantsMutationFields,
+		...settingsMutationFields,
 	},
 });
 

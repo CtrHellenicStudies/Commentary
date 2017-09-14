@@ -1,11 +1,7 @@
-import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
-import {Meteor} from 'meteor/meteor';
+import { GraphQLNonNull, GraphQLID } from 'graphql';
 // types
 import {BookType, BookInputType} from '/imports/graphql/types/models/book';
 import { RemoveType } from '/imports/graphql/types/index';
-
-// errors
-import { AuthenticationError } from '/imports/errors';
 
 // bll
 import BookService from '../bll/books';

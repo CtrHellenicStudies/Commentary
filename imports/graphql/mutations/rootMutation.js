@@ -11,6 +11,8 @@ import pagesMutationFields from './pages';
 import discussionCommentsMutationFields from './discussionComments';
 import usersMutationFields from './users';
 import textNodeMutationFields from './textNodes';
+import linkedDataSchemaMutationFields from './linkedDataSchema';
+import tenantsMutationFields from './tenants';
 
 /**
  * Root mutations
@@ -30,7 +32,9 @@ const RootMutations = new GraphQLObjectType({
 		...pagesMutationFields,
 		...discussionCommentsMutationFields,
 		...usersMutationFields,
-		...textNodeMutationFields
+		...textNodeMutationFields,
+		...linkedDataSchemaMutationFields,
+		...tenantsMutationFields
 	},
 });
 

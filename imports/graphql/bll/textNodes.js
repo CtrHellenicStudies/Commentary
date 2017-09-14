@@ -6,6 +6,13 @@ export default class TextNodesService extends AdminService {
 		super(props);
 	}
 
+	textNodeCreate(textNode) {
+		if (this.userIsAdmin) {
+			return TextNodes.insert(textNode);
+		}
+		return new Error('Not authorized');
+	}
+
 	textNodesGet(tenantId, limit, skip, workSlug, subworkN, editionSlug, lineFrom, lineTo) {
 		if (this.userIsAdmin) {
 			const args = {};
@@ -51,6 +58,14 @@ export default class TextNodesService extends AdminService {
 			}
 
 			return TextNodes.find(args, options).fetch();
+		}
+		return new Error('Not authorized');
+	}
+
+	textNodeRemove(id) {
+		if (this.userIsAdmin) {
+			const remove = TextNodes.remove({_id: id});
+			return remove
 		}
 		return new Error('Not authorized');
 	}

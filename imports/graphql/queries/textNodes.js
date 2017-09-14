@@ -1,7 +1,7 @@
 import { GraphQLID, GraphQLList, GraphQLInt, GraphQLString, } from 'graphql';
 
 // types
-import TextNodeType from '/imports/graphql/types/models/textNode';
+import {TextNodeType} from '/imports/graphql/types/models/textNode';
 
 // bll
 import TextNodesService from '../bll/textNodes';

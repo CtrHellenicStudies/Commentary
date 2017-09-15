@@ -25,6 +25,12 @@ const TagsInput = ({
 		onTagValueChange, onIsMentionedInLemmaChange
 	}) => {
 
+	if (!tags) {
+		return (
+			<div className="comment-reference comment-tags" />
+		)
+	}
+
 	return (
 		<div className="comment-reference comment-tags">
 			<h4>Tag(s):</h4>

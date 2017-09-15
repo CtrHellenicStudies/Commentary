@@ -1,13 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
-
 import Translations from '/imports/models/translations';
+import { getAuthorizedUser } from '../helpers';
 
 const translationsInsert = (token, translation) => {
 	check(token, String);
 	check(translation, Object);
 
-	console.log(token, translation);
+	const roles = ['editor', 'admin', 'commenter'];
+	const user = getAuthorizedUser(roles, token);
 
 	return Translations.insert(translation);
 };
@@ -17,7 +18,8 @@ const translationsUpdate = (token, translationId, update) => {
 	check(translationId, String);
 	check(update, Object);
 
-	console.log(token, translationId, update);
+	const roles = ['editor', 'admin', 'commenter'];
+	const user = getAuthorizedUser(roles, token);
 
 	return Translations.update({
 		_id: translationId

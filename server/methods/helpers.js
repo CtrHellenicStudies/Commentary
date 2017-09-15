@@ -11,7 +11,7 @@ import { Roles } from 'meteor/alanning:roles';
  * @param  {Array} array of role names
  * @return {Object} User object
  */
-const getAuthorizedUser = (roles, token) => {
+export const getAuthorizedUser = (roles, token) => {
 	let user;
 	if (token) {
 		user = Meteor.users.findOne({
@@ -31,6 +31,3 @@ const getAuthorizedUser = (roles, token) => {
 
 	return user;
 };
-
-
-export default getAuthorizedUser;

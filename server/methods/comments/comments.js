@@ -6,9 +6,9 @@ import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 import { ObjectID } from 'bson';
 
-import getAuthorizedUser from '../helpers';
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
+import { getAuthorizedUser } from '../helpers';
 
 
 const commentsInsert = (token, comment) => {

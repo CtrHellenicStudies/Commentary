@@ -161,14 +161,10 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('keywords.all', (query = {}, skip = 0, limit = 1000) => {
+	Meteor.publish('keywords.all', (query = {}) => {
 		check(query, Object);
-		check(skip, Number);
-		check(limit, Number);
 
 		return Keywords.find(query, {
-			skip,
-			limit,
 			sort: {
 				title: 1,
 			},

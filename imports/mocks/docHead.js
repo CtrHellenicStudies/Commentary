@@ -1,5 +1,4 @@
-const DocHead = { // eslint-disable-line
+export const DocHead = { // eslint-disable-line
 	addMeta: () => {},
+	setTitle: () => {},
 };
-
-export default DocHead;

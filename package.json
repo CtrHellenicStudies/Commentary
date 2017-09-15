@@ -170,6 +170,7 @@
       "^meteor/kadira:dochead": "<rootDir>/imports/mocks/docHead.js",
       "^meteor/kadira:flow-router": "<rootDir>/imports/mocks/flowRouter.js",
       "^meteor/meteor": "<rootDir>/imports/mocks/meteor.js",
+      "^meteor/mongo": "<rootDir>/imports/mocks/mongo.js",
       "^meteor/react-meteor-data": "<rootDir>/imports/mocks/reactMeteorData.js",
       "^meteor/session": "<rootDir>/imports/mocks/session.js",
       "^meteor/momentjs:moment": "<rootDir>/imports/mocks/moment.js",

@@ -63,23 +63,19 @@ export default createContainer(({ commentGroup, lines, author }) => {
 	if (commentGroup) {
 		translationQuery = {
 			author: author,
-			subwork: Number(commentGroup.subwork.title),
+			subwork: commentGroup.subwork.n,
 			work: commentGroup.work.slug,
 		};
 	}
 
 	const handle = Meteor.subscribe('translations', Session.get('tenantId'));
-
 	const translation = Translations.find(translationQuery).fetch();
-
 	const translationLines = [];
 
 	if (translation[0]) {
 		const lineFrom = commentGroup.lineFrom;
 		const lineTo = commentGroup.lineTo;
-
 		const text = translation[0].revisions[0].text;
-
 		const translationObjects = text.slice(lineFrom - 1, lineTo);
 		for (const object of translationObjects) {
 			translationLines.push(object.text);

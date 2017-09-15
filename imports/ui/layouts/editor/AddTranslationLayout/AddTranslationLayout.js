@@ -9,6 +9,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Commenters from '/imports/models/commenters';
 import slugify from 'slugify';
 import { convertToRaw } from 'draft-js';
+import Cookies from 'js-cookie';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -111,8 +112,6 @@ class AddTranslationLayout extends React.Component {
 			});
 		});
 	}
-
-
 
 	// line selection
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
@@ -328,13 +327,13 @@ class AddTranslationLayout extends React.Component {
 		});
 
 		// get data for translation
+		const token = Cookies.get('loginToken');
 		const work = this.getWork();
 		const subwork = this.getSubwork();
 		const author = Meteor.user();
 		const revisionId = new Meteor.Collection.ObjectID();
 		const lineFrom = this.state.selectedLineFrom;
 		const lineTo = this.getSelectedLineTo();
-		const slug = slugify('hey');
 		const tenantId = Session.get('tenantId');
 		const nLines = (lineTo - lineFrom) + 1;
 		const created = new Date();
@@ -343,30 +342,28 @@ class AddTranslationLayout extends React.Component {
 		for (let i = lineFrom, j = 0; j < textValue.blocks.length; i++, j++) {
 			text.push({
 				text: textValue.blocks[j].text,
-				n: i
+				n: i,
 			});
 		}
 
 		const translation = {
-			tenantId: tenantId,
-			created: created,
+			tenantId,
+			created,
 			author: author.profile.name,
 			work: work.slug,
 			subwork: subwork.n,
-			lineFrom: lineFrom,
-			lineTo: lineTo,
-			nLines: nLines,
+			lineFrom,
+			lineTo,
+			nLines,
 			revisions: [
 				{
-					tenantId: tenantId,
 					text: text,
-					creted: created,
-					slug: slug
-				}
-			]
+					created: created,
+				},
+			],
 		};
 
-		Meteor.call('translations.insert', translation, (error) => {
+		Meteor.call('translations.insert', token, translation, (error) => {
 			if (error) {
 				console.log(error);
 			} else {

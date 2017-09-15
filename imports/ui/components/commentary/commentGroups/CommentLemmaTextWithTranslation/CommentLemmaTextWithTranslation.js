@@ -63,7 +63,7 @@ export default createContainer(({ commentGroup, lines, author }) => {
 	if (commentGroup) {
 		translationQuery = {
 			author: author,
-			subwork: Number(commentGroup.subwork.title),
+			subwork: commentGroup.subwork.n,
 			work: commentGroup.work.slug,
 		};
 	}
@@ -77,7 +77,6 @@ export default createContainer(({ commentGroup, lines, author }) => {
 	if (translation[0]) {
 		const lineFrom = commentGroup.lineFrom;
 		const lineTo = commentGroup.lineTo;
-
 		const text = translation[0].revisions[0].text;
 
 		const translationObjects = text.slice(lineFrom - 1, lineTo);

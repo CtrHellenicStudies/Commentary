@@ -46,8 +46,8 @@ class TextNodesInput extends React.Component {
 			snackbarMessage: '',
 		};
 
-		this.onChangeN = debounce(500, this.onChangeN.bind(this));
-		this.onChangeText = debounce(500, this.onChangeText.bind(this));
+		this.onChangeN = this.onChangeN.bind(this);
+		this.onChangeText = this.onChangeText.bind(this);
 		this.addTextNodeBlock = this.addTextNodeBlock.bind(this);
 		this.removeTextNodeBlock = this.removeTextNodeBlock.bind(this);
 		this.moveTextNodeBlock = this.moveTextNodeBlock.bind(this);
@@ -151,17 +151,19 @@ class TextNodesInput extends React.Component {
 			editedTextNodeId = editedTextNodeId.valueOf();
 		}
 
-		// Call update method on meteor backend
-		Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
-			editionId, newValue, editedTextNode.n,
-		(err, res) => {
-			if (err) {
-				console.error('Error editing text', err);
-				this.showSnackBar(err.message);
-			} else {
-				this.showSnackBar('Updated');
-			}
-		});
+		debounce(500, () => {
+			// Call update method on meteor backend
+			Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
+				editionId, newValue, editedTextNode.n,
+			(err, res) => {
+				if (err) {
+					console.error('Error editing text', err);
+					this.showSnackBar(err.message);
+				} else {
+					this.showSnackBar('Updated');
+				}
+			});
+		})();
 	}
 
 	showSnackBar(message) {
@@ -234,6 +236,7 @@ class TextNodesInput extends React.Component {
 												margin: '0 10px',
 											}}
 											onChange={this.onChangeN}
+											disabled
 										/>
 									</FormGroup>
 									<FormGroup className="text-node-text-input">

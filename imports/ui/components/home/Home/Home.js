@@ -222,9 +222,9 @@ class Home extends Component {
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Words</h2>
 							<div className="underline" />
-							<KeywordsList type="word" title="Keywords" limit={5} />
+							<KeywordsList type="word" title="Words" limit={5} />
 							<RaisedButton
-								href="/keywords"
+								href="/words"
 								className="cover-link show-more primary "
 								label="More Words"
 							/>
@@ -235,9 +235,9 @@ class Home extends Component {
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Ideas</h2>
 							<div className="underline" />
-							<KeywordsList type="idea" title="Key Ideas" limit={5} />
+							<KeywordsList type="idea" title="Ideas" limit={5} />
 							<RaisedButton
-								href="/keyideas"
+								href="/ideas"
 								className="cover-link show-more primary "
 								label="More Ideas"
 							/>

@@ -244,6 +244,7 @@ const Utils = {
 				}
 
 				myEdition.lines.push({
+					_id: textNode._id,
 					html: text.html,
 					n: text.n,
 				});

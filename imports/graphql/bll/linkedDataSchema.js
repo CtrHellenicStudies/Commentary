@@ -36,4 +36,12 @@ export default class LinkedDataSchemaService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	linkedDataSchemaCreate(linkedDataSchema) {
+		if (this.userIsAdmin) {
+			const linkedDataSchemaId = LinkedDataSchema.insert({...linkedDataSchema});
+			return LinkedDataSchema.findOne(linkedDataSchemaId);
+		}
+		return new Error('Not authorized');
+	}
 }

@@ -32,5 +32,12 @@ export default class DiscussionCommentService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	discussionCommentRemove(discussionCommentId) {
+		if (this.userIsAdmin) {
+			return DiscussionComments.remove({_id: discussionCommentId});
+		}
+		return new Error('Not authorized');
+	}
 }
 

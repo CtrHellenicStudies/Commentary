@@ -26,6 +26,19 @@ const discussionCommentsMutationFields = {
 			const discussionCommentsService = new DiscussionCommentsService({token});
 			return await discussionCommentsService.discussionCommentUpdateStatus(discussionCommentId, discussionComment);
 		}
+	},
+	discussionCommentRemove: {
+		type: RemoveType,
+		description: 'Remove a single discussionComment',
+		args: {
+			discussionCommentId: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {discussionCommentId}, {token}) {
+			const discussionCommentsService = new TenantsService({token});
+			return await discussionCommentsService.discussionCommentRemove(discussionCommentId);
+		}
 	}
 };
 

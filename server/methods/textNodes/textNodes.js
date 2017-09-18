@@ -20,13 +20,9 @@ const textNodesInsert = (token, textNode) => {
 		text: Array,
 	});
 
-	if (
-		!Meteor.users.findOne({
-			roles: ['editor', 'commenter', 'admin'],
-			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-		})
-	) {
-		throw new Meteor.Error('User is not authorized to edit this text');
+	const roles = ['editor', 'admin', 'commenter'];
+	if (!getAuthorizedUser(roles, token)) {
+		throw new Meteor.Error('text-editor', 'User is not authorized to edit this text');
 	}
 
 	return TextNodes.insert(textNode);
@@ -46,13 +42,9 @@ const textNodesUpdate = (token, _id, textNode) => {
 		text: Array,
 	});
 
-	if (
-		!Meteor.users.findOne({
-			roles: ['editor', 'commenter', 'admin'],
-			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-		})
-	) {
-		throw new Meteor.Error('User is not authorized to edit this text');
+	const roles = ['editor', 'admin', 'commenter'];
+	if (!getAuthorizedUser(roles, token)) {
+		throw new Meteor.Error('text-editor', 'User is not authorized to edit this text');
 	}
 
 	return TextNodes.update({
@@ -62,11 +54,12 @@ const textNodesUpdate = (token, _id, textNode) => {
 	});
 };
 
-const textNodesUpdateTextForEdition = (token, _id, editionId, updatedText) => {
+const textNodesUpdateTextForEdition = (token, _id, editionId, updatedText, updatedTextN) => {
 	check(token, String);
 	check(_id, String);
-	check(updatedText, String);
 	check(editionId, String);
+	check(updatedText, String);
+	check(updatedTextN, Number);
 
 	const roles = ['editor', 'admin', 'commenter'];
 	if (!getAuthorizedUser(roles, token)) {
@@ -82,6 +75,7 @@ const textNodesUpdateTextForEdition = (token, _id, editionId, updatedText) => {
 	textNodeTextValues.forEach(textValue => {
 		if (textValue.edition === editionId) {
 			textValue.html = updatedText;
+			textValue.n = updatedTextN;
 			textValue.text = stripTags(updatedText);
 		}
 	});
@@ -99,13 +93,9 @@ const textNodesRemove = (token, textNodeId) => {
 	check(token, String);
 	check(textNodeId, String);
 
-	if (
-		Meteor.users.findOne({
-			roles: ['editor', 'commenter', 'admin'],
-			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
-		})
-	) {
-		throw new Meteor.Error('User is not authorized to edit this text');
+	const roles = ['editor', 'admin', 'commenter'];
+	if (!getAuthorizedUser(roles, token)) {
+		throw new Meteor.Error('text-editor', 'User is not authorized to edit this text');
 	}
 
 	return TextNodes.remove(textNodeId);

@@ -330,7 +330,7 @@ const AddRevisionLayout = React.createClass({
 									toggleSearchTerm={this.toggleSearchTerm}
 								/>
 								<Snackbar
-									className="add-comment-snackbar"
+									className="editor-snackbar"
 									open={this.state.snackbarOpen}
 									message={this.state.snackbarMessage}
 									autoHideDuration={4000}

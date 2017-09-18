@@ -1,8 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
+import { Mongo } from 'meteor/mongo';
+import { stripTags } from 'underscore.string';
 
 import TextNodes from '/imports/models/textNodes';
+import { getAuthorizedUser } from '../helpers';
 
 const textNodesInsert = (token, textNode) => {
 	check(token, String);
@@ -19,11 +22,11 @@ const textNodesInsert = (token, textNode) => {
 
 	if (
 		!Meteor.users.findOne({
-			roles: 'admin',
+			roles: ['editor', 'commenter', 'admin'],
 			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 		})
 	) {
-		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+		throw new Meteor.Error('User is not authorized to edit this text');
 	}
 
 	return TextNodes.insert(textNode);
@@ -45,11 +48,11 @@ const textNodesUpdate = (token, _id, textNode) => {
 
 	if (
 		!Meteor.users.findOne({
-			roles: 'admin',
+			roles: ['editor', 'commenter', 'admin'],
 			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 		})
 	) {
-		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+		throw new Meteor.Error('User is not authorized to edit this text');
 	}
 
 	return TextNodes.update({
@@ -59,17 +62,50 @@ const textNodesUpdate = (token, _id, textNode) => {
 	});
 };
 
+const textNodesUpdateTextForEdition = (token, _id, editionId, updatedText) => {
+	check(token, String);
+	check(_id, String);
+	check(updatedText, String);
+	check(editionId, String);
+
+	const roles = ['editor', 'admin', 'commenter'];
+	if (!getAuthorizedUser(roles, token)) {
+		throw new Meteor.Error('text-editor', 'User is not authorized to edit this text');
+	}
+
+	const textNode = TextNodes.findOne({ _id: new Mongo.ObjectID(_id) });
+	if (!textNode) {
+		throw new Meteor.Error('text-editor', 'Unable to update text for provided text node ID');
+	}
+
+	const textNodeTextValues = textNode.text.slice();
+	textNodeTextValues.forEach(textValue => {
+		if (textValue.edition === editionId) {
+			textValue.html = updatedText;
+			textValue.text = stripTags(updatedText);
+		}
+	});
+
+	return TextNodes.update({
+		_id: new Mongo.ObjectID(_id),
+	}, {
+		$set: {
+			text: textNodeTextValues,
+		},
+	});
+};
+
 const textNodesRemove = (token, textNodeId) => {
 	check(token, String);
 	check(textNodeId, String);
 
 	if (
 		Meteor.users.findOne({
-			roles: 'admin',
+			roles: ['editor', 'commenter', 'admin'],
 			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 		})
 	) {
-		throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+		throw new Meteor.Error('User is not authorized to edit this text');
 	}
 
 	return TextNodes.remove(textNodeId);
@@ -124,6 +160,7 @@ const getTableOfContents = () => {
 Meteor.methods({
 	'textNodes.insert': textNodesInsert,
 	'textNodes.update': textNodesUpdate,
+	'textNodes.updateTextForEdition': textNodesUpdateTextForEdition,
 	'textNodes.remove': textNodesRemove,
 	getMaxLine,
 	getTableOfContents,

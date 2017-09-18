@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import autoBind from 'react-autobind';
+import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
@@ -13,6 +14,7 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
+import Cookies from 'js-cookie';
 
 // api:
 import Editions from '/imports/models/editions';
@@ -39,6 +41,8 @@ class TextNodesInput extends React.Component {
 
 		this.state = {
 			textNodes: [],
+			snackbarOpen: false,
+			snackbarMessage: '',
 		};
 		autoBind(this);
 	}
@@ -99,6 +103,46 @@ class TextNodesInput extends React.Component {
 		}));
 	}
 
+	onChangeN(e, newValue) {
+
+	}
+
+	onChangeText(e, newValue) {
+		const { editionId } = this.props;
+		const { textNodes } = this.state;
+		const textElemIndex = parseInt(e.target.name.replace('_text', ''), 10);
+		const editedTextNode = textNodes[textElemIndex];
+
+		let editedTextNodeId = editedTextNode._id;
+		if (typeof editedTextNodeId === "object") {
+			editedTextNodeId = editedTextNodeId.valueOf();
+		}
+
+		// Call update method on meteor backend
+		Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
+			editionId, newValue,
+		(err, res) => {
+			if (err) {
+				console.error('Error editing text', err);
+				this.showSnackBar(err.message);
+			} else {
+				this.showSnackBar('Updated');
+			}
+		});
+	}
+
+	showSnackBar(message) {
+		this.setState({
+			snackbarOpen: true,
+			snackbarMessage: message,
+		});
+		setTimeout(() => {
+			this.setState({
+				snackbarOpen: false,
+			});
+		}, 4000);
+	}
+
 	render() {
 		const { textNodes } = this.state;
 
@@ -154,6 +198,7 @@ class TextNodesInput extends React.Component {
 												width: '40px',
 												margin: '0 10px',
 											}}
+											onChange={this.onChangeN}
 										/>
 									</FormGroup>
 									<FormGroup className="text-node-text-input">
@@ -164,6 +209,7 @@ class TextNodesInput extends React.Component {
 												width: '700px',
 												margin: '0 10px',
 											}}
+											onChange={this.onChangeText}
 										/>
 									</FormGroup>
 								</div>
@@ -180,6 +226,12 @@ class TextNodesInput extends React.Component {
 					label="Add line of text"
 					className="text-nodes-input-action-button"
 					onClick={this.addTextNodeBlock}
+				/>
+				<Snackbar
+					className="editor-snackbar"
+					open={this.state.snackbarOpen}
+					message={this.state.snackbarMessage}
+					autoHideDuration={4000}
 				/>
 			</FormGroup>
 		);

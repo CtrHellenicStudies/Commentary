@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInt, GraphQLString, GraphQLList } from 'graphql';
+import { GraphQLID, GraphQLInt, GraphQLString, GraphQLList, GraphQLBoolean } from 'graphql';
 
 // types
 import CommentType from '/imports/graphql/types/models/comment';
@@ -32,6 +32,9 @@ const commentQueryFields = {
 			lineTo: {
 				type: GraphQLInt,
 			},
+			isAnnotation: {
+				type: GraphQLBoolean,
+			}
 		},
 		async resolve(parent, { tenantId, limit, skip, workSlug, subworkN }, {token}) {
 			const commentService = new CommentService({token});

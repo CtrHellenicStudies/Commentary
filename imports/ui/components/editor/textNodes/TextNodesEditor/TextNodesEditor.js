@@ -237,6 +237,7 @@ class TextNodesEditor extends React.Component {
 								options={workOptions}
 								onChange={this.selectWork}
 							/>
+							{/*
 							<button
 								onClick={this.showEditWorkDialog}
 							>
@@ -249,6 +250,7 @@ class TextNodesEditor extends React.Component {
 									Edit {_selectedWork.title}
 								</button>
 							: ''}
+							*/}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input edition-input">
@@ -260,6 +262,7 @@ class TextNodesEditor extends React.Component {
 								options={editionOptions}
 								onChange={this.selectEdition}
 							/>
+							{/*
 							<button
 								onClick={this.showEditEditionDialog}
 							>
@@ -272,6 +275,7 @@ class TextNodesEditor extends React.Component {
 									Edit {Utils.trunc(_selectedEdition.title, 30)}
 								</button>
 							: ''}
+							*/}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input subwork-input">
@@ -283,6 +287,7 @@ class TextNodesEditor extends React.Component {
 								options={subworkOptions}
 								onChange={this.selectSubwork}
 							/>
+							{/*
 							<button
 								onClick={this.showEditSubworkDialog}
 							>
@@ -295,6 +300,7 @@ class TextNodesEditor extends React.Component {
 									Edit {_selectedSubwork.title}
 								</button>
 							: ''}
+							*/}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input line-from-input">

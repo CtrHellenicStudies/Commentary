@@ -23,6 +23,8 @@ class Footer extends Component {
 
 	render() {
 		const { settings, tenant } = this.props;
+		const now = new Date();
+		const year = now.getFullYear();
 
 		return (
 
@@ -93,7 +95,7 @@ class Footer extends Component {
 					<div className="row">
 						<div className="col-md-8 col-md-offset-2 col-sm-9 col-sm-offset-1 text-center">
 							<p className="fade-1-4 copyright">
-								{settings ? settings.footer : undefined}.
+								Copyright {year} The Center for Hellenic Studies.
 								See our <a href="/terms">terms and privacy policy</a>
 							</p>
 						</div>

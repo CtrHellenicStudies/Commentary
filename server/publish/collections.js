@@ -262,39 +262,35 @@ if (Meteor.isServer) {
 		});
 	});
 
-	Meteor.publish('pageImages', function pageImages(pageSlug) {
-		check(pageSlug, String);
+	Meteor.publish('pageImages', (tenantId, slug) => {
+		check(slug, String);
 		const page = Pages.findOne({
-			slug: pageSlug,
+			tenantId,
+			slug,
 		});
+
 		if (page) {
 			const imageArray = page.headerImage;
 			if (imageArray && Array.isArray(imageArray)) {
-				return [
-					Images.find({
+				return Images.find({
 						_id: {
 							$in: imageArray,
 						},
-					}),
-					/*Thumbnails.find({
-					 originalId: { $in: imageArray },
-					 }),*/
-				];
+					});
 			}
 		}
-		return this.ready();
+
+		return null;
 	});
-	Meteor.publish('pages', (slug) => {
+
+	Meteor.publish('pages', (tenantId, slug) => {
+		check(tenantId, String);
 		check(slug, String);
-		let query;
-		if (slug) {
-			query = {
-				slug,
-			};
-		} else {
-			query = {};
-		}
-		return Pages.find(query);
+
+		return Pages.find({
+			tenantId,
+			slug,
+		});
 	});
 
 	Meteor.publish('pages.all', () => Pages.find({}, { sort: { tenantId: 1, title: 1 }}));

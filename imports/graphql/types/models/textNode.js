@@ -1,6 +1,7 @@
 import {
 	GraphQLObjectType,
 	GraphQLString,
+	GraphQLID,
 	GraphQLInt,
 	GraphQLBoolean,
 	GraphQLList,
@@ -15,7 +16,7 @@ const TextNodeType = new GraphQLObjectType({
 	description: 'A node of text from a primary source of the commentary',
 	fields: {
 		_id: {
-			type: GraphQLString,
+			type: GraphQLID,
 		},
 		tenantId: {
 			type: GraphQLString,

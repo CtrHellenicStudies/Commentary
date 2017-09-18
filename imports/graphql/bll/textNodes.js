@@ -1,5 +1,6 @@
 import TextNodes from '/imports/models/textNodes';
 import AdminService from './adminService';
+import { Mongo } from 'meteor/mongo';
 
 export default class TextNodesService extends AdminService {
 	constructor(props) {
@@ -13,7 +14,7 @@ export default class TextNodesService extends AdminService {
 		return new Error('Not authorized');
 	}
 
-	textNodesGet(tenantId, limit, skip, workSlug, subworkN, editionSlug, lineFrom, lineTo) {
+	textNodesGet(_id, tenantId, limit, skip, workSlug, subworkN, editionSlug, lineFrom, lineTo) {
 		if (this.userIsAdmin) {
 			const args = {};
 			const options = {
@@ -23,6 +24,9 @@ export default class TextNodesService extends AdminService {
 				},
 			};
 
+			if (_id) {
+				args._id = new Mongo.ObjectID(_id);
+			}
 			if (editionSlug) {
 				args['text.edition.slug'] = { $regex: slugify(editionSlug), $options: 'i'};
 			}
@@ -64,8 +68,8 @@ export default class TextNodesService extends AdminService {
 
 	textNodeRemove(id) {
 		if (this.userIsAdmin) {
-			const remove = TextNodes.remove({_id: id});
-			return remove
+			const removeId = new Mongo.ObjectID(id);
+			return TextNodes.remove({_id: removeId});
 		}
 		return new Error('Not authorized');
 	}

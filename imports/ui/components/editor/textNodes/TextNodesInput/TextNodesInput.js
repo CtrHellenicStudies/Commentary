@@ -15,6 +15,7 @@ import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import Cookies from 'js-cookie';
+import { debounce } from 'throttle-debounce';
 
 // api:
 import Editions from '/imports/models/editions';
@@ -44,7 +45,13 @@ class TextNodesInput extends React.Component {
 			snackbarOpen: false,
 			snackbarMessage: '',
 		};
-		autoBind(this);
+
+		this.onChangeN = debounce(500, this.onChangeN.bind(this));
+		this.onChangeText = debounce(500, this.onChangeText.bind(this));
+		this.addTextNodeBlock = this.addTextNodeBlock.bind(this);
+		this.removeTextNodeBlock = this.removeTextNodeBlock.bind(this);
+		this.moveTextNodeBlock = this.moveTextNodeBlock.bind(this);
+		this.showSnackBar = this.showSnackBar.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -104,7 +111,33 @@ class TextNodesInput extends React.Component {
 	}
 
 	onChangeN(e, newValue) {
+		const { editionId } = this.props;
+		const { textNodes } = this.state;
 
+		// persist event for debounced function
+		e.persist();
+
+		// get index of text node that is being edited
+		const textElemIndex = parseInt(e.target.name.replace('_number', ''), 10);
+		const editedTextNode = textNodes[textElemIndex];
+
+		// regularize type of text node id
+		let editedTextNodeId = editedTextNode._id;
+		if (typeof editedTextNodeId === "object") {
+			editedTextNodeId = editedTextNodeId.valueOf();
+		}
+
+		// Call update method on meteor backend
+		Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
+			editionId, editedTextNode.text, newValue,
+		(err, res) => {
+			if (err) {
+				console.error('Error editing text', err);
+				this.showSnackBar(err.message);
+			} else {
+				this.showSnackBar('Updated');
+			}
+		});
 	}
 
 	onChangeText(e, newValue) {
@@ -120,7 +153,7 @@ class TextNodesInput extends React.Component {
 
 		// Call update method on meteor backend
 		Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
-			editionId, newValue,
+			editionId, newValue, editedTextNode.n,
 		(err, res) => {
 			if (err) {
 				console.error('Error editing text', err);
@@ -171,6 +204,7 @@ class TextNodesInput extends React.Component {
 								<div
 									className="reference-work-item"
 								>
+									{/*
 									<div
 										className="remove-reference-work-item"
 										onClick={this.removeTextNodeBlock.bind(this, i)}
@@ -189,6 +223,7 @@ class TextNodesInput extends React.Component {
 											}}
 										/>
 									</div>
+									*/}
 									<FormGroup className="text-node-number-input">
 										<TextField
 											name={`${i}_number`}
@@ -222,11 +257,13 @@ class TextNodesInput extends React.Component {
 					className="text-nodes-input-action-button"
 					onClick={this.props.loadMore}
 				/>
+				{/*
 				<RaisedButton
 					label="Add line of text"
 					className="text-nodes-input-action-button"
 					onClick={this.addTextNodeBlock}
 				/>
+				*/}
 				<Snackbar
 					className="editor-snackbar"
 					open={this.state.snackbarOpen}

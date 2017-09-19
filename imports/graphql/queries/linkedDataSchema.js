@@ -11,13 +11,13 @@ const linkedDataSchemaFields = {
 		type: new GraphQLList(LinkedDataSchemaType),
 		description: 'Get linked data schema',
 		args: {
-			collectionName: {
+			_id: {
 				type: GraphQLString,
 			}
 		},
-		async resolve(parent, { collectionName }, {token}) {
+		async resolve(parent, { _id }, {token}) {
 			const linkedDataSchemaService = new LinkedDataSchemaService({token});
-			return await linkedDataSchemaService.linkedDataSchemaGet(collectionName);
+			return await linkedDataSchemaService.linkedDataSchemaGet(_id);
 		}
 	}
 };

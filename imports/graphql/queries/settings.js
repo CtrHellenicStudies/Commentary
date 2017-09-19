@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLList } from 'graphql';
+import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 
 // types
 import { SettingsType } from '/imports/graphql/types/models/settings';
@@ -13,11 +13,14 @@ const settingsQueryFields = {
 		args: {
 			tenantId: {
 				type: GraphQLID,
+			},
+			_id: {
+				type: GraphQLString
 			}
 		},
-		async resolve(parent, { tenantId }, {token}) {
+		async resolve(parent, { _id, tenantId }, {token}) {
 			const settingsService = new SettingsService({token});
-			return await settingsService.settingsGet(tenantId);
+			return await settingsService.settingsGet(_id, tenantId);
 		}
 	},
 };

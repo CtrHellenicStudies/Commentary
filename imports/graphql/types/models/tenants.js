@@ -25,4 +25,17 @@ const TenantType = new GraphQLObjectType({
 	},
 });
 
-export {TenantType};
+const TenantInputType = new GraphQLInputObjectType({
+	name: 'TenantInputType',
+	description: 'Tenant db record',
+	fields: {
+		subdomain: {
+			type: GraphQLString
+		},
+		isAnnotation: {
+			type: GraphQLBoolean,
+		}
+	},
+});
+
+export {TenantType,TenantInputType};

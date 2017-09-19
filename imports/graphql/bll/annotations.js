@@ -3,8 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import Comments from '/imports/models/comments';
 import Books from '/imports/models/books';
 
-export default class AnnotationService {
+import AdminService from './adminService';
+
+export default class AnnotationService extends AdminService {
 	constructor(props) {
+		super(props);
 		this.token = props.token;
 		this.user = Meteor.users.findOne({
 			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(props.token),
@@ -14,7 +17,10 @@ export default class AnnotationService {
 	hasAnnotationPermission(chapterUrl) {
 		const book = Books.findOne({'chapters.url': chapterUrl});
 		const authorizedBooks = this.user.canAnnotateBooks || [];
-		return !!(this.user && (book || ~authorizedBooks.indexOf(book._id)));
+		if (book) {
+			return !!(this.user && ~authorizedBooks.indexOf(book._id));
+		} 
+		return false;
 	}
 
 	hasAnnotationRevisionPermission(annotationId) {
@@ -47,7 +53,7 @@ export default class AnnotationService {
 		const newAnnotation = annotation;
 		newAnnotation.revisions = this.rewriteRevision(annotation.revisions);
 
-		if (this.hasAnnotationPermission(annotation.bookChapterUrl)) {
+		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
 			const commentId = Comments.insert({...newAnnotation});
 			return Comments.findOne(commentId);
 		}
@@ -56,7 +62,7 @@ export default class AnnotationService {
 
 	deleteAnnotation(annotationId) {
 		const annotation = Comments.findOne(annotationId);
-		if (this.hasAnnotationPermission(annotation.bookChapterUrl)) {
+		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
 			return Comments.remove({_id: annotationId});
 		}
 		return new Error('Not authorized');
@@ -64,7 +70,7 @@ export default class AnnotationService {
 
 	addRevision(annotationId, revision) {
 		const newRevision = this.rewriteRevision(revision);
-		if (this.hasAnnotationRevisionPermission(annotationId)) {
+		if (this.hasAnnotationRevisionPermission(annotationId) || this.userIsAdmin) {
 			return Comments.update({_id: annotationId}, {
 				$addToSet: {
 					revisions: newRevision

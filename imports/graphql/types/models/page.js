@@ -1,7 +1,8 @@
 import {
 	GraphQLObjectType,
 	GraphQLString,
-	GraphQLList
+	GraphQLList,
+	GraphQLInputObjectType
 } from 'graphql';
 
 const PageType = new GraphQLObjectType({
@@ -35,4 +36,32 @@ const PageType = new GraphQLObjectType({
 	},
 });
 
-export {PageType};
+const PageInputType = new GraphQLInputObjectType({
+	name: 'PageInputType',
+	description: 'A single page database entry',
+	fields: {
+		title: {
+			type: GraphQLString,
+		},
+		subtitle: {
+			type: GraphQLString,
+		},
+		headerImage: {
+			type: new GraphQLList(GraphQLString),
+		},
+		slug: {
+			type: GraphQLString,
+		},
+		byline: {
+			type: GraphQLString,
+		},
+		tenantId: {
+			type: GraphQLString,
+		},
+		content: {
+			type: GraphQLString,
+		},
+	},
+});
+
+export {PageType, PageInputType};

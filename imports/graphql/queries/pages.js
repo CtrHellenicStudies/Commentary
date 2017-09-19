@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLList } from 'graphql';
+import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 
 // types
 import { PageType } from '/imports/graphql/types/models/page';
@@ -13,11 +13,14 @@ const pagesQueryFields = {
 		args: {
 			tenantId: {
 				type: GraphQLID,
+			},
+			_id: {
+				type: GraphQLString
 			}
 		},
-		async resolve(parent, { tenantId }, {token}) {
+		async resolve(parent, { _id, tenantId }, {token}) {
 			const pageService = new PageService({token});
-			return await pageService.pagesGet(tenantId);
+			return await pageService.pagesGet(_id, tenantId);
 		}
 	},
 };

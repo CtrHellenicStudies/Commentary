@@ -1,7 +1,7 @@
 import { GraphQLID, GraphQLList, GraphQLInt, GraphQLString, } from 'graphql';
 
 // types
-import TextNodeType from '/imports/graphql/types/models/textNode';
+import {TextNodeType} from '/imports/graphql/types/models/textNode';
 
 // bll
 import TextNodesService from '../bll/textNodes';
@@ -12,6 +12,9 @@ const textNodeQueryFields = {
 		type: new GraphQLList(TextNodeType),
 		description: 'List textNodes for reading environment',
 		args: {
+			_id: {
+				type: GraphQLID,
+			},
 			tenantId: {
 				type: GraphQLID,
 			},
@@ -37,9 +40,9 @@ const textNodeQueryFields = {
 				type: GraphQLString,
 			},
 		},
-		async resolve(parent, { tenantId, limit, skip, workSlug, subworkN, editionSlug, lineFrom, lineTo }, {token}) {
+		async resolve(parent, { _id, tenantId, limit, skip, workSlug, subworkN, editionSlug, lineFrom, lineTo }, {token}) {
 			const textNodesService = new TextNodesService({token});
-			return await textNodesService.textNodesGet(tenantId, limit, skip, workSlug, subworkN, editionSlug);
+			return await textNodesService.textNodesGet(_id, tenantId, limit, skip, workSlug, subworkN, editionSlug);
 		}
 	},
 };

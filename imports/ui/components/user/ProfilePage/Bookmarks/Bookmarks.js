@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import FlatButton from 'material-ui/FlatButton';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Card, CardHeader } from 'material-ui/Card';
@@ -54,7 +55,7 @@ class Bookmarks extends React.Component {
 
 		console.log('bookmark in collection: ', this.props.subscriptions.bookmarks);
 		console.log('bookmarks after update: ', bookmarks);
-		
+
 	}
 
 	render() {
@@ -74,7 +75,7 @@ class Bookmarks extends React.Component {
 										subtitle={`Subscribed on ${moment(bookmark.subscribedOn).format('D/M/YYYY')}`}
 									/>
 								</a>
-								<FlatButton 
+								<FlatButton
 									label="Remove Bookmark"
 									onTouchTap={() => this.removeBookmark(bookmark)}
 								/>

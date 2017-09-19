@@ -1,3 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`KeywordCommentList renders correctly 1`] = `null`;
+exports[`KeywordCommentList renders correctly 1`] = `
+<div
+  className="comment-outer has-discussion"
+>
+  <div
+    className="no-results"
+  >
+    This tag has no comments associated with it yet.
+  </div>
+</div>
+`;

@@ -34,4 +34,10 @@ export const Meteor = { // eslint-disable-line
 	},
 	methods: () => {},
 	Error: Error,
+	call: () => {},
+	settings: {
+		public: {
+
+		},
+	},
 };

@@ -36,7 +36,7 @@ Translations.schema = new SimpleSchema({
 		type: Number,
 		optional: true
 	},
-	nLines: {
+	lineN: {
 		type: Number,
 		optional: true
 	},
@@ -45,17 +45,13 @@ Translations.schema = new SimpleSchema({
 		optional: true,
 		blackbox: true
 	},
-	'revisions.$.tenantId': {
+	'revisions.$.text': {
 		type: String,
 		optional: true
 	},
 	'revisions.$.created': {
 		type: Date,
 		optional: true,
-	},
-	'revisions.$.slug': {
-		type: String,
-		optional: true
 	},
 });
 

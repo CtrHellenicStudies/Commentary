@@ -107,7 +107,6 @@ const DiscussionThread = React.createClass({
 			<div className={discussionWrapClass}>
 				<div
 					onClick={this.showDiscussionThread}
-
 					className="continue-discussion"
 				>
 					<h4 className="continue-discussion-label">Discussion</h4>
@@ -129,9 +128,17 @@ const DiscussionThread = React.createClass({
 					:
 					<div className="discussion-thread">
 						{comment.discussionCommentsDisabled || discussionCommentsDisabled ?
-							<div className="no-results-wrap">
-								<span className="no-results-text">The discussion comments are currently disabled for this commentary.</span>
-							</div> :
+							<div className="add-comment-wrap paper-shadow">
+								<IconButton
+									className="close-discussion paper-shadow"
+									iconClassName="mdi mdi-close"
+									onClick={() => { this.hideDiscussionThread(); this.props.toggleLemma(); }}
+								/>
+								<div className="no-results-wrap">
+									<span className="no-results-text">The discussion comments are currently disabled for this commentary.</span>
+								</div>
+							</div>
+						:
 							<div className="add-comment-wrap paper-shadow ">
 								<IconButton
 									className="close-discussion paper-shadow"

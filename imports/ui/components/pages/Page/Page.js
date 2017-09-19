@@ -21,14 +21,14 @@ import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 class Page extends React.Component {
 
 	render() {
-		const { page, settings, slug, loading } = this.props;
+		const { page, settings, slug, ready } = this.props;
 		const headerImageUrl = '/images/apotheosis_homer.jpg';
 
-		if (loading) {
+		if (!ready) {
 			return (
 				<LoadingPage />
 			);
-		} else if (!loading && !page) {
+		} else if (ready && !page) {
 			return (
 				<NotFound
 					isTest={slug === '__test__'}
@@ -89,37 +89,35 @@ Page.propTypes = {
 	ready: React.PropTypes.bool,
 	images: React.PropTypes.array,
 	thumbnails: React.PropTypes.array,
-	loading: React.PropTypes.bool,
+	ready: React.PropTypes.bool,
 	settings: React.PropTypes.object,
 };
 
 
 const pageContainer = createContainer(({ slug }) => {
-	let page = {};
+	let page;
 	let images = [];
 	let thumbnails = [];
-	const handle = Meteor.subscribe('pages', slug);
-	let loading = true;
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
-	if (handle.ready()) {
-		page = Pages.find({ slug }).fetch()[0];
-		const imageSub = Meteor.subscribe('pageImages', slug);
-		if (page && imageSub.ready()) {
-			if (page.headerImage && Array.isArray(page.headerImage)) {
-				images = Images.find({ _id: { $in: page.headerImage } }).fetch();
-				thumbnails = Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch();
-			}
+	const tenantId = Session.get('tenantId');
+	const pageHandle = Meteor.subscribe('pages', tenantId, slug);
+	const settingsHandle = Meteor.subscribe('settings.tenant', tenantId);
+
+	page = Pages.findOne({ slug, tenantId });
+
+	const imageHandle = Meteor.subscribe('pageImages', tenantId, slug);
+	if (page) {
+		if (page.headerImage && Array.isArray(page.headerImage)) {
+			images = Images.find({ _id: { $in: page.headerImage } }).fetch();
+			thumbnails = Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch();
 		}
-		loading = false;
 	}
 
 	return {
 		page,
-		ready: handle.ready(),
+		ready: pageHandle.ready(),
 		images,
 		thumbnails,
-		loading,
 		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
 	};
 }, Page);

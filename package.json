@@ -102,6 +102,7 @@
     "subscriptions-transport-ws": "^0.8.2",
     "throttle-debounce": "^1.0.1",
     "try-thread-sleep": "^1.0.0",
+    "underscore.string": "^3.3.4",
     "unicode": "^0.6.1",
     "winston": "^2.3.1"
   },
@@ -171,6 +172,7 @@
       "^meteor/kadira:dochead": "<rootDir>/imports/mocks/docHead.js",
       "^meteor/kadira:flow-router": "<rootDir>/imports/mocks/flowRouter.js",
       "^meteor/meteor": "<rootDir>/imports/mocks/meteor.js",
+      "^meteor/mongo": "<rootDir>/imports/mocks/mongo.js",
       "^meteor/react-meteor-data": "<rootDir>/imports/mocks/reactMeteorData.js",
       "^meteor/session": "<rootDir>/imports/mocks/session.js",
       "^meteor/momentjs:moment": "<rootDir>/imports/mocks/moment.js",

@@ -9,6 +9,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Commenters from '/imports/models/commenters';
 import slugify from 'slugify';
 import { convertToRaw } from 'draft-js';
+import Cookies from 'js-cookie';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -59,12 +60,10 @@ const getFilterValues = (filters) => {
 class AddTranslationLayout extends React.Component {
 	static propTypes = {
 		ready: React.PropTypes.bool,
-		isTest: React.PropTypes.bool,
 	};
 
 	static defaultProps = {
 		ready: false,
-		isTest: false,
 	};
 
 	constructor(props) {
@@ -80,7 +79,6 @@ class AddTranslationLayout extends React.Component {
 			contextReaderOpen: true,
 			loading: false,
 			selectedWork: '',
-			toggleInputLinesIsToggled: false,
 		};
 
 		// methods:
@@ -114,8 +112,6 @@ class AddTranslationLayout extends React.Component {
 			});
 		});
 	}
-
-
 
 	// line selection
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
@@ -331,13 +327,13 @@ class AddTranslationLayout extends React.Component {
 		});
 
 		// get data for translation
+		const token = Cookies.get('loginToken');
 		const work = this.getWork();
 		const subwork = this.getSubwork();
 		const author = Meteor.user();
 		const revisionId = new Meteor.Collection.ObjectID();
 		const lineFrom = this.state.selectedLineFrom;
 		const lineTo = this.getSelectedLineTo();
-		const slug = slugify('hey');
 		const tenantId = Session.get('tenantId');
 		const nLines = (lineTo - lineFrom) + 1;
 		const created = new Date();
@@ -346,30 +342,28 @@ class AddTranslationLayout extends React.Component {
 		for (let i = lineFrom, j = 0; j < textValue.blocks.length; i++, j++) {
 			text.push({
 				text: textValue.blocks[j].text,
-				n: i
+				n: i,
 			});
 		}
 
 		const translation = {
-			tenantId: tenantId,
-			created: created,
+			tenantId,
+			created,
 			author: author.profile.name,
 			work: work.slug,
 			subwork: subwork.n,
-			lineFrom: lineFrom,
-			lineTo: lineTo,
-			nLines: nLines,
+			lineFrom,
+			lineTo,
+			nLines,
 			revisions: [
 				{
-					tenantId: tenantId,
 					text: text,
-					creted: created,
-					slug: slug
-				}
-			]
+					created: created,
+				},
+			],
 		};
 
-		Meteor.call('translations.insert', translation, (error) => {
+		Meteor.call('translations.insert', token, translation, (error) => {
 			if (error) {
 				console.log(error);
 			} else {
@@ -399,49 +393,47 @@ class AddTranslationLayout extends React.Component {
 							selectedWork={this.getWork(filters)}
 						/>
 
-						{!isTest ?
-							<main>
-								<div className="commentary-comments">
-									<div className="comment-group">
-										{!toggleInputLinesIsToggled ?
-											<CommentLemmaSelect
-												ref={(component) => {
-													this.commentLemmaSelect = component;
-												}}
-												selectedLineFrom={selectedLineFrom}
-												selectedLineTo={selectedLineTo}
-												workSlug={work ? work.slug : 'iliad'}
-												subworkN={subwork ? subwork.n : 1}
-											/> : ''}
-
-										<AddTranslation
+						<main>
+							<div className="commentary-comments">
+								<div className="comment-group">
+									{!toggleInputLinesIsToggled ?
+										<CommentLemmaSelect
+											ref={(component) => {
+												this.commentLemmaSelect = component;
+											}}
 											selectedLineFrom={selectedLineFrom}
 											selectedLineTo={selectedLineTo}
-											submitForm={this.addTranslation}
-											toggleInputLines={this.toggleInputLines}
-											toggleInputLinesIsToggled={toggleInputLinesIsToggled}
-											toggleInputLinesLabel={toggleInputLinesIsToggled ? 'Select Lines' : 'Input Lines'}
-										/>
-										{!toggleInputLinesIsToggled ?
-											<ContextPanel
-												open={contextReaderOpen}
-												workSlug={work ? work.slug : 'iliad'}
-												subworkN={subwork ? subwork.n : 1}
-												lineFrom={lineFrom || 1}
-												selectedLineFrom={selectedLineFrom}
-												selectedLineTo={selectedLineTo}
-												updateSelectedLines={this.updateSelectedLines}
-												editor
-											/> : ''}
-									</div>
+											workSlug={work ? work.slug : 'iliad'}
+											subworkN={subwork ? subwork.n : 1}
+										/> : ''}
+
+									<AddTranslation
+										selectedLineFrom={selectedLineFrom}
+										selectedLineTo={selectedLineTo}
+										submitForm={this.addTranslation}
+										toggleInputLines={this.toggleInputLines}
+										toggleInputLinesIsToggled={toggleInputLinesIsToggled}
+										toggleInputLinesLabel={toggleInputLinesIsToggled ? 'Select Lines' : 'Input Lines'}
+									/>
+									{!toggleInputLinesIsToggled ?
+										<ContextPanel
+											open={contextReaderOpen}
+											workSlug={work ? work.slug : 'iliad'}
+											subworkN={subwork ? subwork.n : 1}
+											lineFrom={lineFrom || 1}
+											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
+											updateSelectedLines={this.updateSelectedLines}
+											editor
+										/> : ''}
 								</div>
-								{!toggleInputLinesIsToggled ?
-									<FilterWidget
-										filters={filters}
-										toggleSearchTerm={this.toggleSearchTerm}
-									/> : ''}
-							</main>
-							: ''}
+							</div>
+							{!toggleInputLinesIsToggled ?
+								<FilterWidget
+									filters={filters}
+									toggleSearchTerm={this.toggleSearchTerm}
+								/> : ''}
+						</main>
 					</div>
 					:
 					<Spinner fullPage />

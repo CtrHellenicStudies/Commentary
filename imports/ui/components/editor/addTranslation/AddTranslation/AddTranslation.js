@@ -174,22 +174,16 @@ class AddTranslation extends React.Component {
 		}
 
 		return (
-			<div className="comments lemma-panel-visible">
-				<div className={'comment-outer'}>
+			<div className="comments lemma-panel-visible comments--add-translation">
+				<div className="comment-outer comment-outer--add-translation">
 					<Formsy.Form
 						onValid={this._enableButton}
 						onInvalid={this._disableButton}
 						onValidSubmit={this.handleSubmit}
 					>
-						<article
-							className="comment commentary-comment paper-shadow "
-							style={{ marginLeft: 0 }}
-						>
+						<article className="comment commentary-comment paper-shadow">
 							<div className="comment-upper" />
-							<div
-								className="comment-lower clearfix"
-								style={{ paddingTop: 20, paddingBottom: 20 }}
-							>
+							<div className="comment-lower clearfix">
 								<Editor
 									editorState={this.state.editorState}
 									onChange={this.onEditorChange}
@@ -197,14 +191,15 @@ class AddTranslation extends React.Component {
 									spellCheck
 									stripPastedStyles
 								/>
+								<div className="comment-edit-action-button">
+									<RaisedButton
+										type="submit"
+										label="Add translation"
+										labelPosition="after"
+										icon={<FontIcon className="mdi mdi-plus" />}
+									/>
+								</div>
 							</div>
-							<div className="comment-edit-action-button" />
-							<RaisedButton
-								type="submit"
-								label="Add translation"
-								labelPosition="after"
-								icon={<FontIcon className="mdi mdi-plus" />}
-							/>
 						</article>
 					</Formsy.Form>
 				</div>

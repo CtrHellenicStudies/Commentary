@@ -14,6 +14,7 @@ import pagesQueryFields from './pages';
 import settingsQueryFields from './settings';
 import translationsQueryFields from './translation';
 import editionsQueryFields from './editions';
+import usersQueryFields from './users';
 
 /**
  * Root Queries
@@ -37,6 +38,7 @@ const RootQuery = new GraphQLObjectType({
 		...settingsQueryFields,
 		...translationsQueryFields,
 		...editionsQueryFields,
+		...usersQueryFields,
 	},
 });
 

@@ -15,10 +15,13 @@ const workQueryFields = {
 			tenantId: {
 				type: GraphQLID,
 			},
+			_id: {
+				type: GraphQLID,
+			},
 		},
-		async resolve(parent, { tenantId }, {token}) {
+		async resolve(parent, { _id, tenantId }, {token}) {
 			const worksService = new WorksService({token});
-			return await worksService.worksGet(tenantId);
+			return await worksService.worksGet(_id, tenantId);
 		}
 	},
 };

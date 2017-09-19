@@ -10,7 +10,7 @@ import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
 
 const BookInputType = new GraphQLInputObjectType({
-	name: 'BookInput',
+	name: 'BookInputType',
 	description: 'A book input type',
 	fields: {
 		title: {

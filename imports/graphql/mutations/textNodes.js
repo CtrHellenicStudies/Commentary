@@ -6,50 +6,42 @@ import {
 	GraphQLNonNull,
 	GraphQLList
 } from 'graphql';
-import { Meteor } from 'meteor/meteor';
+import GraphQLJSON from 'graphql-type-json';
 
 // types
-import TextNodeType from '/imports/graphql/types/models/textNode';
+import { TextNodeType, TextNodeInputType } from '/imports/graphql/types/models/textNode';
+import { RemoveType } from '/imports/graphql/types/index';
 
-// models
-import TextNodes from '/imports/models/textNodes';
-import Tenants from '/imports/models/tenants';
-
-// errors
-import { AuthenticationError } from '/imports/errors';
+// bll
+import TextNodeService from '../bll/textNodes';
 
 const textNodeMutationFields = {
 	textNodeCreate: {
 		type: TextNodeType,
 		description: 'Create new textNode',
 		args: {
-			text: {
-				type: new GraphQLNonNull(GraphQLJSON),
-			},
-			work: {
-				type: new GraphQLNonNull(GraphQLJSON),
-			},
-			subwork: {
-				type: new GraphQLNonNull(GraphQLJSON),
+			textNode: {
+				type: new GraphQLNonNull(TextNodeInputType),
 			},
 		},
-		resolve(parent, { text, work, subwork, edition}, { userId, tenantId }) {
-			const user = Meteor.users.findOne({ _id: userId });
-			const tenant = Tenants.findOne({ _id: tenantId });
-
-			if (!user || !tenant) {
-				throw AuthenticationError();
-			}
-
-			return TextNodes.insert({
-				tenantId,
-				text,
-				work,
-				subwork,
-				relatedPassages,
-			});
+		async resolve(parent, { textNode }, { token }) {
+			const textNodeService = new TextNodeService({token});
+			return await textNodeService.textNodeCreate(textNode);
 		}
-	}
+	},
+	textNodeRemove: {
+		type: RemoveType,
+		description: 'Remove a single text node',
+		args: {
+			textNodeId: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {textNodeId}, {token}) {
+			const textNodeService = new TextNodeService({token});
+			return await textNodeService.textNodeRemove(textNodeId);
+		}
+	},
 };
 
 export default textNodeMutationFields;

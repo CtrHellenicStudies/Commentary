@@ -1,4 +1,4 @@
-import {GraphQLID, GraphQLList} from 'graphql';
+import {GraphQLString, GraphQLList} from 'graphql';
 
 // types
 import { TenantType } from '/imports/graphql/types/models/tenants';
@@ -13,12 +13,12 @@ const tenantsQueryFields = {
 		description: 'Get list of tenants',
 		args: {
 			tenantId: {
-				type: GraphQLID,
+				type: GraphQLString,
 			},
 		},
-		async resolve(parent, { _id }, {token}) {
+		async resolve(parent, { tenantId }, {token}) {
 			const tenantsService = new TenantsService({token});
-			return await tenantsService.tenantsGet(_id);
+			return await tenantsService.tenantsGet(tenantId);
 		}
 	},
 };

@@ -29,7 +29,17 @@ export default class WorksService extends AdminService {
 		return new Error('Not authorized');
 	}
 
-	worksGet(tenantId) {
+	workUpdate(_id, work) {
+		if (this.userIsAdmin) {
+			const newWork = work;
+			newWork.subworks = this.rewriteSubworks(work.subworks);
+
+			return Works.update(_id, {$set: newWork});
+		}
+		return new Error('Not authorized');
+	}
+
+	worksGet(_id, tenantId) {
 		if (this.userIsAdmin) {
 			const args = {};
 
@@ -37,11 +47,22 @@ export default class WorksService extends AdminService {
 				args.tenantId = tenantId;
 			}
 
+			if (_id) {
+				args._id = _id;
+			}
+
 			return Works.find(args, {
 				sort: {
 					slug: 1
 				}
 			}).fetch();
+		}
+		return new Error('Not authorized');
+	}
+
+	workRemove(id) {
+		if (this.userIsAdmin) {
+			return Works.remove({_id: id});
 		}
 		return new Error('Not authorized');
 	}

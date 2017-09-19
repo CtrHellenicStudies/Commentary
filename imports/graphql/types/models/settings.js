@@ -52,6 +52,9 @@ const SettingsType = new GraphQLObjectType({
 		},
 		discussionCommentsDisabled: {
 			type: GraphQLBoolean,
+		},
+		introBlocks: {
+			type: new GraphQLList(GraphQLJSON),
 		}
 	},
 });
@@ -97,6 +100,9 @@ const SettingsInputType = new GraphQLInputObjectType({
 		},
 		discussionCommentsDisabled: {
 			type: GraphQLBoolean,
+		},
+		introBlocks: {
+			type: new GraphQLList(GraphQLJSON),
 		}
 	},
 });

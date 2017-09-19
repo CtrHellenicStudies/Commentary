@@ -6,12 +6,16 @@ export default class SettingsService extends AdminService {
 		super(props);
 	}
 
-	settingsGet(tenantId) {
+	settingsGet(_id, tenantId) {
 		if (this.userIsAdmin) {
 			const args = {};
 
 			if (tenantId) {
 				args.tenantId = tenantId;
+			}
+
+			if (_id) {
+				args._id = _id;
 			}
 
 			return Settings.find(args).fetch();

@@ -14,9 +14,34 @@ export default class UserService extends AdminService {
 				args._id = _id;
 			}
 
-			return Meteor.users.find(args).fetch();
+			return Meteor.users.find(
+				args,
+				{
+					fields: {
+						username: 1,
+						emails: 1,
+						profile: 1,
+						services: 1,
+						subscriptions: 1,
+						roles: 1,
+						highlightingPreference: 1,
+						canAnnotateBooks: 1,
+						authorOfBooks: 1,
+						canEditCommenters: 1,
+						recentPositions: 1,
+					},
+					sort: {
+						'profile.name': 1,
+						'emails.address': 1,
+						'username': 1,
+					},
+				}
+			).fetch();
 		}
-		return new Error('Not authorized');
+
+		// TODO: determine best handling for users that aren't administrators
+		// return new Error('Not authorized');
+		return [];
 	}
 
 	userUpdate(_id, user) {

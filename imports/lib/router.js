@@ -229,7 +229,7 @@ loggedInGroup.route('/translation/create', {
 	}
 });
 
-loggedInGroup.route('/textNodes/create', {
+loggedInGroup.route('/textNodes/edit', {
 	action: () => {
 		mount(TextNodesEditorLayout);
 	}

@@ -69,7 +69,7 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser }) => (
 					onClick={closeLeftMenu}
 				/>
 				<MenuItem
-					href="/textNodes/create"
+					href="/textNodes/edit"
 					primaryText="Edit Source Text"
 					onClick={closeLeftMenu}
 				/>

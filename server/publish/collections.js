@@ -284,7 +284,7 @@ if (Meteor.isServer) {
 	});
 
 	Meteor.publish('pages', (tenantId, slug) => {
-		check(tenantId, String);
+		check(tenantId, Match.Maybe(String));
 		check(slug, String);
 
 		return Pages.find({

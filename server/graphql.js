@@ -39,15 +39,14 @@ const GRAPHQL_PORT = 4000;
 const graphQLServer = express();
 
 const whitelist = [
-	'http://localhost:3000',
-	'http://admin.localhost.dev:3000'
+	/\.chs\.local$/,
+	/\.orphe\.us$/,
+	/\.chs\.harvard\.edu$/,
 ];
+
 const corsOptions = {
-	origin: (origin, callback) => {
-		const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-		callback(null, originIsWhitelisted);
-	},
-	credentials: true
+	origin: whitelist,
+	credentials: true,
 };
 graphQLServer.use(cors(corsOptions));
 

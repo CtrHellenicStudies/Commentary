@@ -8,10 +8,27 @@ import AdminService from './adminService';
 export default class AnnotationService extends AdminService {
 	constructor(props) {
 		super(props);
-		this.token = props.token;
-		this.user = Meteor.users.findOne({
-			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(props.token),
-		});
+		if (props.token) {
+			this.token = props.token;
+			this.user = Meteor.users.findOne({
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(props.token),
+			});
+		}
+	}
+
+	annotationsGet(bookChapterUrl) {
+		const args = {
+			bookChapterUrl,
+			isAnnotation: true,
+		};
+
+		const options = {
+			sort: {
+				paragraphN: 1,
+			},
+		};
+
+		return Comments.find(args, options).fetch();
 	}
 
 	hasAnnotationPermission(chapterUrl) {
@@ -19,7 +36,7 @@ export default class AnnotationService extends AdminService {
 		const authorizedBooks = this.user.canAnnotateBooks || [];
 		if (book) {
 			return !!(this.user && ~authorizedBooks.indexOf(book._id));
-		} 
+		}
 		return false;
 	}
 

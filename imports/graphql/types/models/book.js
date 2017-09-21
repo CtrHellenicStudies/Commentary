@@ -8,6 +8,10 @@ import {
 } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
+import { Meteor } from 'meteor/meteor';
+
+import CommentType from './comment';
+import Comments from '../../../models/comments';
 
 const BookInputType = new GraphQLInputObjectType({
 	name: 'BookInputType',
@@ -76,7 +80,25 @@ const BookType = new GraphQLObjectType({
 		},
 		tenantId: {
 			type: GraphQLString
+		},
+		/**
+		// TODO: Debug why Meteor is not able to resolve queries on graphql types
+		// due to a node fibers issue
+		annotations: {
+			type: new GraphQLList(CommentType),
+			args: {
+				chapterUrl: { type: GraphQLString }
+			},
+			resolve: ( _, { chapterUrl }, context ) => {
+				const getComments = Meteor.bindEnvironment(_chapterUrl => {
+					return Comments.find({
+						bookChapterUrl: _chapterUrl,
+					});
+				});
+				return getComments(chapterUrl);
+			}
 		}
+		*/
 	}
 });
 

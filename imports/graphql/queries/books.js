@@ -23,6 +23,19 @@ const bookQueryFields = {
 			return await bookService.booksGet(bookId, chapterUrl);
 		}
 	},
+	bookByChapter: {
+		type: BookType,
+		description: 'Get a book by the chapterUrl',
+		args: {
+			chapterUrl: {
+				type: GraphQLString
+			}
+		},
+		async resolve(parent, { chapterUrl }, { token }) {
+			const bookService = new BookService({token});
+			return await bookService.bookByChapter(chapterUrl);
+		}
+	},
 };
 
 

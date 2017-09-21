@@ -1,5 +1,6 @@
 import { GraphQLObjectType } from 'graphql';
 
+import annotationQueryFields from './annotations';
 import commenterQueryFields from './commenters';
 import commentQueryFields from './comments';
 import keywordQueryFields from './keywords';
@@ -24,6 +25,7 @@ const RootQuery = new GraphQLObjectType({
 	name: 'RootQueryType',
 	description: 'Root query object type',
 	fields: {
+		...annotationQueryFields,
 		...commenterQueryFields,
 		...commentQueryFields,
 		...keywordQueryFields,

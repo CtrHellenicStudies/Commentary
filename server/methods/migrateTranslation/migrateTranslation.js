@@ -14,7 +14,7 @@ Meteor.methods({
 		) {
 			throw new Meteor.Error('keyword-insert', 'not-authorized');
 		}
-		const translations = Translations.distinct('_id');
+		const translations = Translations.find().map((translation) => translation._id);
 
 		translations.forEach((translationId) => {
 			const translationObject = Translations.findOne(translationId);
@@ -30,10 +30,13 @@ Meteor.methods({
 			}
 			const translationNodes = [];
 			translationObject.revisions[0].text.forEach((translation) => {
-				const newNode = Object.assign({translationNode}, translation);
+				const newNode = Object.assign(translationNode, translation);
 				translationNodes.push(newNode);
 			});
-			TranslationNodes.insert(translationNodes);
+
+			translationNodes.forEach((translationNode) => {
+				TranslationNodes.insert(translationNode);
+			});
 		});
 	}
 });

@@ -39,13 +39,16 @@ const GRAPHQL_PORT = 4000;
 const graphQLServer = express();
 
 const whitelist = [
-	/\.chs\.local$/,
+	/chs\.local:\d+$/,
+	/\.chs\.local:\d+$/,
+	/orphe\.us$/,
 	/\.orphe\.us$/,
+	/chs\.harvard\.edu$/,
 	/\.chs\.harvard\.edu$/,
 ];
 
 const corsOptions = {
-	origin: whitelist,
+	origin: (origin, callback) => { callback(null, true) }, // Disable CORs for the moment while development environment is changing
 	credentials: true,
 };
 graphQLServer.use(cors(corsOptions));

@@ -21,6 +21,12 @@ export default class TenantsService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	tenantBySubdomainGet(subdomain) {
+		return Tenants.findOne({
+			subdomain,
+		});
+	}
+
 	tenantUpdate(_id, tenant) {
 		if (this.userIsAdmin) {
 			Tenants.update(_id, {$set: tenant});

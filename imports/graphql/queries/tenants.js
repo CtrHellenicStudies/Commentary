@@ -21,6 +21,19 @@ const tenantsQueryFields = {
 			return await tenantsService.tenantsGet(tenantId);
 		}
 	},
+	tenantBySubdomain: {
+		type: new GraphQLList(TenantType),
+		description: 'Get tenant by subdomain',
+		args: {
+			subdomain: {
+				type: GraphQLString,
+			},
+		},
+		async resolve(parent, { tenantId }, {token}) {
+			const tenantsService = new TenantsService({token});
+			return await tenantsService.tenantBySubdomainGet(tenantId);
+		}
+	},
 };
 
 export default tenantsQueryFields;

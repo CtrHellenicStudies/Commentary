@@ -1,12 +1,10 @@
 import {Meteor} from 'meteor/meteor';
 import Translations from '/imports/models/translations';
+import TranslationNodes from '/imports/models/translationNodes';
 
 Meteor.methods({
-	migrateTranslation: (token, id) => {
+	migrateTranslation: (token) => {
 		check(token, String);
-		check(id, String);
-
-		console.log('Accounts._hashLoginToken(token) LOG', Accounts._hashLoginToken(token));
 
 		const roles = ['admin'];
 		if (!Meteor.users.findOne({
@@ -19,7 +17,7 @@ Meteor.methods({
 		const translations = Translations.distinct('_id');
 
 		translations.forEach((translationId) => {
-			const translationObject = Translations.findOne(id);
+			const translationObject = Translations.findOne(translationId);
 
 			const translationNode = {
 				tenantId: translationObject.tenantId,
@@ -35,6 +33,7 @@ Meteor.methods({
 				const newNode = Object.assign({translationNode}, translation);
 				translationNodes.push(newNode);
 			});
+			TranslationNodes.insert(translationNodes);
 		});
 	}
 });

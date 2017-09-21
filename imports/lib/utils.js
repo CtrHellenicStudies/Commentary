@@ -220,8 +220,8 @@ const Utils = {
 			domain = 'chs.harvard.edu';
 		} else if (location.hostname.match(/\w+.orphe.us/)) {
 			domain = 'orphe.us';
-		} else if (location.hostname.match(/\w+.localhost.dev/)) {
-			domain = 'localhost.dev';
+		} else if (location.hostname.match(/\w+.chs.local/)) {
+			domain = 'chs.local';
 		}
 
 		return domain;

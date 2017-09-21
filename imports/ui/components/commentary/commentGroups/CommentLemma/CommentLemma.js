@@ -193,7 +193,6 @@ class CommentLemma extends React.Component {
 					:
 						''
 					}
-					<LoadingLemma ready={ready} />
 					{ready ?
 						<TranslationLayout
 							commentGroup={commentGroup}
@@ -202,8 +201,11 @@ class CommentLemma extends React.Component {
 							author={selectedAuthor}
 						/>
 						:
-						''
+						<LoadingLemma />
 					}
+
+					<div className="edition-tabs tabs">
+					</div>
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);

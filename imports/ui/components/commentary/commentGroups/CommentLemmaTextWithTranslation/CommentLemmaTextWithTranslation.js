@@ -4,6 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Translations from '/imports/models/translations';
+import TranslationNodes from '/imports/models/translationNodes';
 import _ from 'lodash';
 
 class CommentLemmaTextWithTranslation extends React.Component {
@@ -59,6 +60,8 @@ CommentLemmaTextWithTranslation.propTypes = {
 
 export default createContainer(({ commentGroup, lines, author }) => {
 	let translationQuery = {};
+	let translationNodesQuery = {};
+	const linesWithTranslation = [];
 
 	if (commentGroup) {
 		translationQuery = {
@@ -66,12 +69,20 @@ export default createContainer(({ commentGroup, lines, author }) => {
 			subwork: commentGroup.subwork.n,
 			work: commentGroup.work.slug,
 		};
+		translationNodesQuery = {
+			author: author,
+			subwork: commentGroup.subwork.n,
+			work: commentGroup.work.slug,
+			$and: [{n: {$gte: commentGroup.lineFrom}}, {n: {$lte: commentGroup.lineTo}}],
+		};
 	}
 
 	const handle = Meteor.subscribe('translations', Session.get('tenantId'));
-	const translation = Translations.find(translationQuery).fetch();
-	const translationLines = [];
+	const handleNodes = Meteor.subscribe('translationNodes', Session.get('tenantId'));
 
+	const translation = Translations.find(translationQuery).fetch();
+	const translationNodes = TranslationNodes.find(translationNodesQuery).fetch();
+	const translationLines = [];
 	if (translation[0]) {
 		const lineFrom = commentGroup.lineFrom;
 		const lineTo = commentGroup.lineTo;
@@ -81,12 +92,20 @@ export default createContainer(({ commentGroup, lines, author }) => {
 			translationLines.push(object.text);
 		}
 	}
-
-	const linesWithTranslation = _.zipWith(lines, translationLines, (item, value) => (
-		_.defaults({
-			english: value,
-		}, item)
-	));
+	for (let i = 0; i < commentGroup.lineTo ; i++) {
+		const newLine = {
+			n: i + 1,
+			html: lines[i].html
+		};
+		linesWithTranslation.push(newLine);
+	}
+	translationNodes.forEach((node) => {
+		const arrIndex = node.n - 1;
+		linesWithTranslation[arrIndex]._id = node._id;
+		linesWithTranslation[arrIndex]._id = node._id;
+		linesWithTranslation[arrIndex].n = node.n;
+		linesWithTranslation[arrIndex].english = node.text;
+	});
 
 	return {
 		linesWithTranslation,

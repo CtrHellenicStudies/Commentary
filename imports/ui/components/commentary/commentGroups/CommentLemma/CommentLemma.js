@@ -10,10 +10,12 @@ import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import _ from 'underscore';
 
 // api:
 import TextNodes from '/imports/models/textNodes';
 import Translations from '/imports/models/translations';
+import TranslationNodes from '/imports/models/translationNodes';
 import Editions from '/imports/models/editions';
 
 // components:
@@ -204,8 +206,7 @@ class CommentLemma extends React.Component {
 						<LoadingLemma />
 					}
 
-					<div className="edition-tabs tabs">
-					</div>
+					<div className="edition-tabs tabs" />
 					<div className="edition-tabs tabs">
 						{editions.map((lemmaTextEdition) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
@@ -278,10 +279,9 @@ class CommentLemma extends React.Component {
 }
 
 export default createContainer(({ commentGroup }) => {
-
 	let lemmaQuery = {};
 	let translationAuthors = [];
-
+	const translationNodesHandle = Meteor.subscribe('translationNodes', Session.get('tenantId'));
 	if (commentGroup) {
 		lemmaQuery = {
 			'work.slug': commentGroup.work.slug,
@@ -300,31 +300,26 @@ export default createContainer(({ commentGroup }) => {
 			lemmaQuery['work.slug'] = 'hymns';
 		}
 
-		const translationHandle = Meteor.subscribe('translations', Session.get('tenantId'));
-
 		if (!commentGroup.lineTo) {
 			commentGroup.lineTo = commentGroup.lineFrom;
 		}
 
-		const translationQuery = {
+		const translationNodesQuery = {
 			work: commentGroup.work.slug,
 			subwork: Number(commentGroup.subwork.title),
-			lineTo: {$gte: commentGroup.lineTo},
-			lineFrom: {$lte: commentGroup.lineFrom},
+			$and: [{n: {$gte: commentGroup.lineFrom}}, {n: {$lte: commentGroup.lineTo}}],
 		};
-
-		translationAuthors = Translations.find(translationQuery).fetch().map(translation => translation.author);
+		translationAuthors = _.uniq(TranslationNodes.find(translationNodesQuery).fetch().map(translation => translation.author));
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
 	const editionsSubscription = Meteor.subscribe('editions');
 	const textNodesCursor = TextNodes.find(lemmaQuery);
 	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
-
 	return {
 		translationAuthors,
 		editions,
-		ready: handle.ready(),
+		ready: handle.ready() && translationNodesHandle.ready(),
 	};
 
 }, CommentLemma);

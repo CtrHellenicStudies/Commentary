@@ -10,6 +10,7 @@ import Tenants from '/imports/models/tenants';
 import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';
 import Settings from '/imports/models/settings';
+import TranslationNodes from '/imports/models/translationNodes';
 import Translations from '/imports/models/translations';
 import Editions from '/imports/models/editions';
 
@@ -363,6 +364,8 @@ if (Meteor.isServer) {
 
 	Meteor.publish('translations', () => Translations.find({}, { sort: { tenantId: 1 }}));
 
+	Meteor.publish('translationNodes', () => TranslationNodes.find({}, { sort: { tenantId: 1 }}));
+	
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));
 		return Settings.find({ tenantId });

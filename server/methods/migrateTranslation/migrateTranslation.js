@@ -30,7 +30,7 @@ Meteor.methods({
 			}
 			const translationNodes = [];
 			translationObject.revisions[0].text.forEach((translation) => {
-				const newNode = Object.assign(translationNode, translation);
+				const newNode = Object.assign({}, translationNode, translation);
 				translationNodes.push(newNode);
 			});
 

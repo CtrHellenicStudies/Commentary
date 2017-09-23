@@ -45,16 +45,12 @@ export default class SettingsService extends AdminService {
 	}
 
 	settingGetPublic(tenantId) {
-		const args = {};
-
-		if (tenantId) {
-			args.tenantId = tenantId;
-		}
+		const args = { tenantId };
 
 		return Settings.findOne(args, {
 			fields: {
 				webhooksToken: 0,
-			},
+			}
 		});
 	}
 }

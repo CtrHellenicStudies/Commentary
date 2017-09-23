@@ -20,6 +20,27 @@ const usersQueryFields = {
 			return await userService.usersGet(_id);
 		}
 	},
+	getAuthedUser: {
+		type: UserType,
+		description: 'Return a single users account by their login token',
+		async resolve(parent, { }, { token }) {
+			const userService = new UserService({token});
+			return await userService.getAuthedUser();
+		}
+	},
+	userGetPublicById: {
+		type: UserType,
+		description: 'Return public information about a single user by their user Id',
+		args: {
+			_id: {
+				type: GraphQLString,
+			},
+		},
+		async resolve(parent, { _id }, {token}) {
+			const userService = new UserService({token});
+			return await userService.userGetPublicById(_id);
+		}
+	},
 };
 
 export default usersQueryFields;

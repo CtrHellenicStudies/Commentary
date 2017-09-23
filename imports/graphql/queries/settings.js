@@ -23,7 +23,7 @@ const settingsQueryFields = {
 			return await settingsService.settingsGet(_id, tenantId);
 		}
 	},
-	settingGetPublic: {
+	settingPublic: {
 		type: SettingsType,
 		description: 'Get a public setting document for a supplied tenantId',
 		args: {

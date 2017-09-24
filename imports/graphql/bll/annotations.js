@@ -50,7 +50,6 @@ export default class AnnotationService extends AdminService {
 			const newRevision = [];
 			revision.map(singleRevision => {
 				newRevision.push({
-					tenantId: singleRevision.tenantId,
 					text: singleRevision.text,
 					created: new Date(),
 					updated: new Date()
@@ -58,23 +57,21 @@ export default class AnnotationService extends AdminService {
 			});
 			return newRevision;
 		}
-		return {
-			tenantId: revision.tenantId,
+		return [{
 			text: revision.text,
 			created: new Date(),
 			updated: new Date()
-		};
+		}];
 	}
 
 	createAnnotation(annotation) {
-		const newAnnotation = annotation;
-		newAnnotation.revisions = this.rewriteRevision(annotation.revisions);
-
+		console.log(annotation);
 		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
-			const commentId = Comments.insert({...newAnnotation});
+			const commentId = Comments.insert({ ...annotation });
 			return Comments.findOne(commentId);
 		}
-		return new Error('Not authorized');
+
+		return new Error('Not authorized to create annotation');
 	}
 
 	deleteAnnotation(annotationId) {
@@ -82,7 +79,7 @@ export default class AnnotationService extends AdminService {
 		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
 			return Comments.remove({_id: annotationId});
 		}
-		return new Error('Not authorized');
+		return new Error('Not authorized to delete annotation');
 	}
 
 	addRevision(annotationId, revision) {
@@ -94,6 +91,6 @@ export default class AnnotationService extends AdminService {
 				}
 			});
 		}
-		return new Error('Not authorized');
+		return new Error('Not authorized to add revision to annotation');
 	}
 }

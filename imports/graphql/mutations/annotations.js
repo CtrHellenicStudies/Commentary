@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 // types
-import CommentType, {CommentInputType} from '/imports/graphql/types/models/comment';
+import CommentType, { CommentInputType } from '/imports/graphql/types/models/comment';
 import { RemoveType } from '/imports/graphql/types/index';
 import { RevisionInputType } from '/imports/graphql/types/models/revision';
 
@@ -20,13 +20,13 @@ const annotationMutationFields = {
 		type: CommentType,
 		description: 'Create new annotation',
 		args: {
-			comment: {
+			annotation: {
 				type: CommentInputType
 			}
 		},
-		async resolve(parent, { comment }, {token}) {
+		async resolve(parent, { annotation }, {token}) {
 			const annotationService = new AnnotationService({token});
-			return await annotationService.createAnnotation(comment);
+			return await annotationService.createAnnotation(annotation);
 		}
 	},
 	annotationDelete: {

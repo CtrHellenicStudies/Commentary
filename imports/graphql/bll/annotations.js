@@ -65,7 +65,6 @@ export default class AnnotationService extends AdminService {
 	}
 
 	createAnnotation(annotation) {
-		console.log(annotation);
 		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
 			const commentId = Comments.insert({ ...annotation });
 			return Comments.findOne(commentId);

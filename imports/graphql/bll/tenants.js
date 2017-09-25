@@ -20,7 +20,6 @@ export default class TenantsService extends AdminService {
 	}
 
 	tenantBySubdomainGet(subdomain) {
-		console.log(subdomain);
 		return Tenants.findOne({
 			subdomain,
 		});

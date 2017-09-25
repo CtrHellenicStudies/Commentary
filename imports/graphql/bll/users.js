@@ -88,7 +88,7 @@ export default class UserService extends AdminService {
 		return this.user;
 	}
 
-	userGetPublicById(id) {
+	userGetPublicById(_id) {
 		return Meteor.users.findOne(
 			{
 				_id,

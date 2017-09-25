@@ -10,11 +10,9 @@ export default class TenantsService extends AdminService {
 		if (this.userIsAdmin) {
 			const args = {};
 
-
 			if (_id) {
 				args._id = _id;
 			}
-
 
 			return Tenants.find(args).fetch();
 		}

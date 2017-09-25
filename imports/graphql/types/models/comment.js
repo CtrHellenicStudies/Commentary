@@ -11,7 +11,7 @@ import GraphQLDate from 'graphql-date';
 
 
 const CommentInputType = new GraphQLInputObjectType({
-	name: 'CommentInput',
+	name: 'CommentInputType',
 	description: 'A comment in the commentary',
 	fields: {
 		_id: {
@@ -90,7 +90,7 @@ const CommentInputType = new GraphQLInputObjectType({
 			type: GraphQLDate,
 		},
 		updated: {
-			type: GraphQLDate, 
+			type: GraphQLDate,
 		},
 	},
 });
@@ -180,5 +180,5 @@ const CommentType = new GraphQLObjectType({
 	},
 });
 
-export {CommentInputType};
+export { CommentInputType };
 export default CommentType;

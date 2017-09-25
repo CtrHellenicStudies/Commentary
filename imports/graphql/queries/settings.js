@@ -23,6 +23,19 @@ const settingsQueryFields = {
 			return await settingsService.settingsGet(_id, tenantId);
 		}
 	},
+	settingPublic: {
+		type: SettingsType,
+		description: 'Get a public setting document for a supplied tenantId',
+		args: {
+			tenantId: {
+				type: GraphQLID,
+			},
+		},
+		async resolve(parent, { tenantId }, {token}) {
+			const settingsService = new SettingsService({token});
+			return await settingsService.settingGetPublic(tenantId);
+		}
+	},
 };
 
 export default settingsQueryFields;

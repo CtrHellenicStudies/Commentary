@@ -43,4 +43,14 @@ export default class SettingsService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
+
+	settingGetPublic(tenantId) {
+		const args = { tenantId };
+
+		return Settings.findOne(args, {
+			fields: {
+				webhooksToken: 0,
+			}
+		});
+	}
 }

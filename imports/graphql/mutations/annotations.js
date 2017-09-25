@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 // types
-import CommentType, {CommentInputType} from '/imports/graphql/types/models/comment';
+import CommentType, { CommentInputType } from '/imports/graphql/types/models/comment';
 import { RemoveType } from '/imports/graphql/types/index';
 import { RevisionInputType } from '/imports/graphql/types/models/revision';
 
@@ -20,43 +20,43 @@ const annotationMutationFields = {
 		type: CommentType,
 		description: 'Create new annotation',
 		args: {
-			comment: {
+			annotation: {
 				type: CommentInputType
 			}
 		},
-		async resolve(parent, { comment }, {token}) {
+		async resolve(parent, { annotation }, {token}) {
 			const annotationService = new AnnotationService({token});
-			return await annotationService.createAnnotation(comment);
+			return await annotationService.createAnnotation(annotation);
 		}
 	},
-	annotationDelete: {
+	annotationRemove: {
 		type: RemoveType,
 		description: 'Remove annotation',
 		args: {
-			annotationId: {
-				type: new GraphQLNonNull(GraphQLID)
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
 			}
 		},
-		async resolve(parent, { annotationId }, {token}) {
+		async resolve(parent, { id }, {token}) {
 
 			const annotationService = new AnnotationService({token});
-			return await annotationService.deleteAnnotation(annotationId);
+			return await annotationService.deleteAnnotation(id);
 		}
 	},
 	annotationAddRevision: {
 		type: CommentType,
 		description: 'Add annotation revision',
 		args: {
-			annotationId: {
-				type: new GraphQLNonNull(GraphQLID)
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
 			},
 			revision: {
 				type: new GraphQLNonNull(RevisionInputType)
 			}
 		},
-		async resolve(parent, {annotationId, revision}, {token}) {
+		async resolve(parent, {id, revision}, {token}) {
 			const annotationService = new AnnotationService({token});
-			return await annotationService.addRevision(annotationId, revision);
+			return await annotationService.addRevision(id, revision);
 		}
 	}
 };

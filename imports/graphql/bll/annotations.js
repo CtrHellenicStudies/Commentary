@@ -45,55 +45,37 @@ export default class AnnotationService extends AdminService {
 		return !!comment;
 	}
 
-	rewriteRevision(revision) {
-		if (revision instanceof Array) {
-			const newRevision = [];
-			revision.map(singleRevision => {
-				newRevision.push({
-					tenantId: singleRevision.tenantId,
-					text: singleRevision.text,
-					created: new Date(),
-					updated: new Date()
-				});
-			});
-			return newRevision;
-		}
-		return {
-			tenantId: revision.tenantId,
-			text: revision.text,
-			created: new Date(),
-			updated: new Date()
-		};
-	}
-
 	createAnnotation(annotation) {
-		const newAnnotation = annotation;
-		newAnnotation.revisions = this.rewriteRevision(annotation.revisions);
-
 		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
-			const commentId = Comments.insert({...newAnnotation});
+			const commentId = Comments.insert({ ...annotation });
 			return Comments.findOne(commentId);
 		}
-		return new Error('Not authorized');
+
+		return new Error('Not authorized to create annotation');
 	}
 
-	deleteAnnotation(annotationId) {
-		const annotation = Comments.findOne(annotationId);
+	deleteAnnotation(_id) {
+		const annotation = Comments.findOne({ _id });
 		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
-			return Comments.remove({_id: annotationId});
+			return Comments.remove({ _id });
 		}
-		return new Error('Not authorized');
+		return new Error('Not authorized to delete annotation');
 	}
 
-	addRevision(annotationId, revision) {
-		const newRevision = this.rewriteRevision(revision);
-		if (this.hasAnnotationRevisionPermission(annotationId) || this.userIsAdmin) {
-			return Comments.update({_id: annotationId}, {
+	addRevision(_id, revision) {
+		if (this.hasAnnotationRevisionPermission(_id) || this.userIsAdmin) {
+			const newRevision = {
+				title: revision.title,
+				text: revision.text,
+				created: new Date(),
+			};
+
+			return Comments.update({ _id }, {
 				$addToSet: {
-					revisions: newRevision
-				}
+					revisions: newRevision,
+				},
 			});
 		}
-		return new Error('Not authorized');
+		return new Error('Not authorized to add revision to annotation');
 	}
 }

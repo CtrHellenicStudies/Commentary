@@ -22,16 +22,16 @@ const tenantsQueryFields = {
 		}
 	},
 	tenantBySubdomain: {
-		type: new GraphQLList(TenantType),
+		type: TenantType,
 		description: 'Get tenant by subdomain',
 		args: {
 			subdomain: {
 				type: GraphQLString,
 			},
 		},
-		async resolve(parent, { tenantId }, {token}) {
+		async resolve(parent, { subdomain }, {token}) {
 			const tenantsService = new TenantsService({token});
-			return await tenantsService.tenantBySubdomainGet(tenantId);
+			return await tenantsService.tenantBySubdomainGet(subdomain);
 		}
 	},
 };

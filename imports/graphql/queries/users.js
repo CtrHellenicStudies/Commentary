@@ -41,6 +41,19 @@ const usersQueryFields = {
 			return await userService.userGetPublicById(_id);
 		}
 	},
+	usersGetPublicById: {
+		type: new GraphQLList(UserType),
+		description: 'Return public information about a single user by their user Id',
+		args: {
+			userIds: {
+				type: new GraphQLList(GraphQLString),
+			},
+		},
+		async resolve(parent, { userIds }, { token }) {
+			const userService = new UserService({ token });
+			return await userService.usersGetPublicById(userIds);
+		}
+	},
 };
 
 export default usersQueryFields;

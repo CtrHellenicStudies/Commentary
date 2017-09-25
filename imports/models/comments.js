@@ -303,18 +303,8 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	'revisions.$.createdBy': {
-		type: String,
-		optional: true,
-	},
-
 	'revisions.$.updated': {
 		type: Date,
-		optional: true,
-	},
-
-	'revisions.$.updatedBy': {
-		type: String,
 		optional: true,
 	},
 

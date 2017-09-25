@@ -29,34 +29,34 @@ const annotationMutationFields = {
 			return await annotationService.createAnnotation(annotation);
 		}
 	},
-	annotationDelete: {
+	annotationRemove: {
 		type: RemoveType,
 		description: 'Remove annotation',
 		args: {
-			annotationId: {
-				type: new GraphQLNonNull(GraphQLID)
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
 			}
 		},
-		async resolve(parent, { annotationId }, {token}) {
+		async resolve(parent, { id }, {token}) {
 
 			const annotationService = new AnnotationService({token});
-			return await annotationService.deleteAnnotation(annotationId);
+			return await annotationService.deleteAnnotation(id);
 		}
 	},
 	annotationAddRevision: {
 		type: CommentType,
 		description: 'Add annotation revision',
 		args: {
-			annotationId: {
-				type: new GraphQLNonNull(GraphQLID)
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
 			},
 			revision: {
 				type: new GraphQLNonNull(RevisionInputType)
 			}
 		},
-		async resolve(parent, {annotationId, revision}, {token}) {
+		async resolve(parent, {id, revision}, {token}) {
 			const annotationService = new AnnotationService({token});
-			return await annotationService.addRevision(annotationId, revision);
+			return await annotationService.addRevision(id, revision);
 		}
 	}
 };

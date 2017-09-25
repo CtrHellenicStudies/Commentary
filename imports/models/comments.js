@@ -263,11 +263,6 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
-	'revisions.$._id': {
-		type: String,
-		optional: true,
-	},
-
 	'revisions.$.title': {
 		type: String,
 		optional: true,
@@ -278,32 +273,18 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'revisions.$.textRaw': {
+		type: Object,
+		optional: true,
+		blackbox: true,
+	},
+
 	'revisions.$.originalDate': {
 		type: Date,
 		optional: true,
 	},
 
-	'revisions.$.friendlySlugs.slug.base': {
-		type: String,
-		optional: true,
-	},
-
-	'revisions.$.friendlySlugs.slug.index': {
-		type: Number,
-		optional: true,
-	},
-
-	'revisions.$.slug': {
-		type: String,
-		optional: true,
-	},
-
 	'revisions.$.created': {
-		type: Date,
-		optional: true,
-	},
-
-	'revisions.$.updated': {
 		type: Date,
 		optional: true,
 	},

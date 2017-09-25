@@ -114,4 +114,34 @@ export default class UserService extends AdminService {
 			}
 		);
 	}
-}
+
+	usersGetPublicById(userIds) {
+		return Meteor.users.find(
+			{
+				_id: {
+					$in: userIds,
+				},
+			},
+			{
+				fields: {
+					username: 1,
+					profile: 1,
+					services: 1,
+					subscriptions: 1,
+					roles: 1,
+					highlightingPreference: 1,
+					canAnnotateBooks: 1,
+					authorOfBooks: 1,
+					canEditCommenters: 1,
+					recentPositions: 1,
+				},
+				sort: {
+					'profile.name': 1,
+					'emails.address': 1,
+					'username': 1,
+				},
+			}
+		).fetch();
+	}
+
+};

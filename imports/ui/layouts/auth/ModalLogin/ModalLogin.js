@@ -1,5 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import Utils from '/imports/lib/utils';
+import Cookies from 'js-cookie';
 
 // components:
 import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';
@@ -53,9 +55,11 @@ class ModalLogin extends React.Component {
 
 	handleLogin(email, password) {
 		Meteor.loginWithPassword(email, password, (err) => {
+			const domain = Utils.getEnvDomain();
 			if (!err) {
 				this.props.closeModal();
-
+				Cookies.set('userId', Meteor.userId(), { domain });
+				Cookies.set('loginToken', localStorage['Meteor.loginToken'], { domain });
 			} else {
 				this.setState({
 					errorMsg: 'Invalid email or password',

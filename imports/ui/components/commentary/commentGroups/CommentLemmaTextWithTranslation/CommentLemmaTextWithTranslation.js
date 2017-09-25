@@ -72,19 +72,17 @@ export default createContainer(({ commentGroup, lines, author }) => {
 	}
 
 	const handleNodes = Meteor.subscribe('translationNodes', Session.get('tenantId'));
-
 	const translationNodes = TranslationNodes.find(translationNodesQuery).fetch();
 
-	for (let i = 0; i < commentGroup.lineTo ; i++) {
+	for (let i = 0; i < commentGroup.nLines; i++) {
 		const newLine = {
-			n: i + 1,
+			n: lines[i].n,
 			html: lines[i].html
 		};
 		linesWithTranslation.push(newLine);
 	}
 	translationNodes.forEach((node) => {
-		const arrIndex = node.n - 1;
-		linesWithTranslation[arrIndex]._id = node._id;
+		const arrIndex = _.findIndex(linesWithTranslation, (line) => line.n === node.n);
 		linesWithTranslation[arrIndex]._id = node._id;
 		linesWithTranslation[arrIndex].n = node.n;
 		linesWithTranslation[arrIndex].english = node.text;

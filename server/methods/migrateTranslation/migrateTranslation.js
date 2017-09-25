@@ -1,6 +1,7 @@
 import {Meteor} from 'meteor/meteor';
 import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
+import { Accounts } from 'meteor/accounts-base';
 
 Meteor.methods({
 	migrateTranslation: (token) => {
@@ -30,8 +31,10 @@ Meteor.methods({
 			}
 			const translationNodes = [];
 			translationObject.revisions[0].text.forEach((translation) => {
-				const newNode = Object.assign({}, translationNode, translation);
-				translationNodes.push(newNode);
+				if (translation.text) {
+					const newNode = Object.assign({}, translationNode, translation);
+					translationNodes.push(newNode);
+				}
 			});
 
 			translationNodes.forEach((translationNode) => {

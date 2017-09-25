@@ -1,14 +1,14 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
+import {Meteor} from 'meteor/meteor';
+import {Session} from 'meteor/session';
+import {Roles} from 'meteor/alanning:roles';
+import {createContainer} from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Commenters from '/imports/models/commenters';
 import slugify from 'slugify';
-import { convertToRaw } from 'draft-js';
+import {convertToRaw} from 'draft-js';
 import Cookies from 'js-cookie';
 
 // components:
@@ -222,7 +222,7 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	getSelectedLineTo() {
-		const { selectedLineTo, selectedLineFrom } = this.state;
+		const {selectedLineTo, selectedLineFrom} = this.state;
 
 		let newSelectedLineTo = 0;
 		if (selectedLineTo === 0) {
@@ -253,7 +253,7 @@ class AddTranslationLayout extends React.Component {
 	}
 
 	handleChangeLineN(e) {
-		const { filters } = this.state;
+		const {filters} = this.state;
 
 		if (e.from > 1) {
 			let lineFromInFilters = false;
@@ -331,45 +331,28 @@ class AddTranslationLayout extends React.Component {
 		const work = this.getWork();
 		const subwork = this.getSubwork();
 		const author = Meteor.user();
-		const revisionId = new Meteor.Collection.ObjectID();
 		const lineFrom = this.state.selectedLineFrom;
-		const lineTo = this.getSelectedLineTo();
 		const tenantId = Session.get('tenantId');
-		const nLines = (lineTo - lineFrom) + 1;
 		const created = new Date();
-		const text = [];
 
 		for (let i = lineFrom, j = 0; j < textValue.blocks.length; i++, j++) {
-			text.push({
-				text: textValue.blocks[j].text,
+			const currentNode = {
+				tenantId,
+				author: author.profile.name ? author.profile.name : author.username,
+				created,
+				work: work.slug,
+				subwork: subwork.n,
 				n: i,
+				text: textValue.blocks[j].text,
+			};
+			Meteor.call('translationNode.insert', token, currentNode, (error) => {
+				if (error) {
+					console.log(error);
+				} else {
+					FlowRouter.go('/commentary', {});
+				}
 			});
 		}
-
-		const translation = {
-			tenantId,
-			created,
-			author: author.profile.name,
-			work: work.slug,
-			subwork: subwork.n,
-			lineFrom,
-			lineTo,
-			nLines,
-			revisions: [
-				{
-					text: text,
-					created: created,
-				},
-			],
-		};
-
-		Meteor.call('translations.insert', token, translation, (error) => {
-			if (error) {
-				console.log(error);
-			} else {
-				FlowRouter.go('/commentary', {});
-			}
-		});
 	}
 
 	render() {

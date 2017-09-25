@@ -4,6 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Translations from '/imports/models/translations';
+import TranslationNodes from '/imports/models/translationNodes';
 import _ from 'lodash';
 
 class CommentLemmaTextWithTranslation extends React.Component {
@@ -58,38 +59,37 @@ CommentLemmaTextWithTranslation.propTypes = {
 };
 
 export default createContainer(({ commentGroup, lines, author }) => {
-	let translationQuery = {};
+	let translationNodesQuery = {};
+	const linesWithTranslation = [];
 
 	if (commentGroup) {
-		translationQuery = {
+		translationNodesQuery = {
 			author: author,
 			subwork: commentGroup.subwork.n,
 			work: commentGroup.work.slug,
+			$and: [{n: {$gte: commentGroup.lineFrom}}, {n: {$lte: commentGroup.lineTo}}],
 		};
 	}
 
-	const handle = Meteor.subscribe('translations', Session.get('tenantId'));
-	const translation = Translations.find(translationQuery).fetch();
-	const translationLines = [];
+	const handleNodes = Meteor.subscribe('translationNodes', Session.get('tenantId'));
+	const translationNodes = TranslationNodes.find(translationNodesQuery).fetch();
 
-	if (translation[0]) {
-		const lineFrom = commentGroup.lineFrom;
-		const lineTo = commentGroup.lineTo;
-		const text = translation[0].revisions[0].text;
-		const translationObjects = text.slice(lineFrom - 1, lineTo);
-		for (const object of translationObjects) {
-			translationLines.push(object.text);
-		}
+	for (let i = 0; i < commentGroup.nLines; i++) {
+		const newLine = {
+			n: lines[i].n,
+			html: lines[i].html
+		};
+		linesWithTranslation.push(newLine);
 	}
-
-	const linesWithTranslation = _.zipWith(lines, translationLines, (item, value) => (
-		_.defaults({
-			english: value,
-		}, item)
-	));
+	translationNodes.forEach((node) => {
+		const arrIndex = _.findIndex(linesWithTranslation, (line) => line.n === node.n);
+		linesWithTranslation[arrIndex]._id = node._id;
+		linesWithTranslation[arrIndex].n = node.n;
+		linesWithTranslation[arrIndex].english = node.text;
+	});
 
 	return {
 		linesWithTranslation,
-		ready: handle.ready(),
+		ready: handleNodes.ready(),
 	};
 }, CommentLemmaTextWithTranslation);

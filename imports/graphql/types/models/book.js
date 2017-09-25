@@ -26,6 +26,9 @@ const BookInputType = new GraphQLInputObjectType({
 		author: {
 			type: GraphQLString
 		},
+		authorURN: {
+			type: GraphQLString
+		},
 		chapters: {
 			type: new GraphQLList(GraphQLJSON)
 		},

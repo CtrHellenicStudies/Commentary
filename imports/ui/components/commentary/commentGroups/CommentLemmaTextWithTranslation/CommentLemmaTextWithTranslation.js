@@ -59,16 +59,10 @@ CommentLemmaTextWithTranslation.propTypes = {
 };
 
 export default createContainer(({ commentGroup, lines, author }) => {
-	let translationQuery = {};
 	let translationNodesQuery = {};
 	const linesWithTranslation = [];
 
 	if (commentGroup) {
-		translationQuery = {
-			author: author,
-			subwork: commentGroup.subwork.n,
-			work: commentGroup.work.slug,
-		};
 		translationNodesQuery = {
 			author: author,
 			subwork: commentGroup.subwork.n,
@@ -77,21 +71,10 @@ export default createContainer(({ commentGroup, lines, author }) => {
 		};
 	}
 
-	const handle = Meteor.subscribe('translations', Session.get('tenantId'));
 	const handleNodes = Meteor.subscribe('translationNodes', Session.get('tenantId'));
 
-	const translation = Translations.find(translationQuery).fetch();
 	const translationNodes = TranslationNodes.find(translationNodesQuery).fetch();
-	const translationLines = [];
-	if (translation[0]) {
-		const lineFrom = commentGroup.lineFrom;
-		const lineTo = commentGroup.lineTo;
-		const text = translation[0].revisions[0].text;
-		const translationObjects = text.slice(lineFrom - 1, lineTo);
-		for (const object of translationObjects) {
-			translationLines.push(object.text);
-		}
-	}
+
 	for (let i = 0; i < commentGroup.lineTo ; i++) {
 		const newLine = {
 			n: i + 1,
@@ -109,6 +92,6 @@ export default createContainer(({ commentGroup, lines, author }) => {
 
 	return {
 		linesWithTranslation,
-		ready: handle.ready(),
+		ready: handleNodes.ready(),
 	};
 }, CommentLemmaTextWithTranslation);

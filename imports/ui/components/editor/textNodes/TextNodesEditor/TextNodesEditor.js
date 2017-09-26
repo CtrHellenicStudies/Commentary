@@ -29,6 +29,7 @@ import EditWorkDialog from '../EditWorkDialog';
 import EditEditionDialog from '../EditEditionDialog';
 import EditSubworkDialog from '../EditSubworkDialog';
 import TranslationSelect from "../TranslationSelect/TranslationSelect";
+import TranslationNodeInput from "../TranslationNodeInput/TranslationNodeInput";
 
 
 class TextNodesEditor extends React.Component {
@@ -89,7 +90,7 @@ class TextNodesEditor extends React.Component {
 
 	selectTranslation(selectedTranslation) {
 		this.setState({
-			selectedTranslation: selectedTranslation.value
+			selectedTranslation: selectedTranslation
 		});
 	}
 
@@ -182,6 +183,25 @@ class TextNodesEditor extends React.Component {
 				loadMore={this.loadMoreText}
 			/>
 		)
+	}
+
+	renderTranslationNodesInput() {
+		const { selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation } = this.state;
+
+		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
+			return null;
+		}
+		console.log("after if LOG");
+		return (
+			<TranslationNodeInput
+				selectedWork={selectedWork}
+				selectedSubwork={selectedSubwork}
+				startAtLine={startAtLine}
+				limit={limit}
+				selectedTranslation={selectedTranslation}
+				loadMore={this.loadMoreText}
+			/>
+		);
 	}
 
 	render() {
@@ -331,6 +351,7 @@ class TextNodesEditor extends React.Component {
 
 				</div>
 				{this.renderTextNodesInput()}
+				{this.renderTranslationNodesInput()}
 				<EditWorkDialog
 					open={this.state.editWorkDialogOpen}
 					handleClose={this.handleCloseEditWorkDialog}

@@ -366,6 +366,20 @@ if (Meteor.isServer) {
 
 	Meteor.publish('translationNodes', () => TranslationNodes.find({}, { sort: { tenantId: 1 }}));
 
+	Meteor.publish('translationNodes.work', (tenantId, workId, subwork, author, skip = 0, limit = 100) => {
+		check(tenantId, String);
+		check(workId, String);
+		check(parseInt(subwork), Number);
+		check(author, String);
+		check(parseInt(skip), Number);
+		check(parseInt(limit), Number);
+		
+		const work = Works.findOne(workId).slug;
+
+		const result = TranslationNodes.find({work, subwork, tenantId, author}, {sort: {tenantId: 1}, skip: parseInt(skip)-1, limit: parseInt(limit)});
+		return result;
+	});
+
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));
 		return Settings.find({ tenantId });

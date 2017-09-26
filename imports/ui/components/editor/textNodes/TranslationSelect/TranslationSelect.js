@@ -52,7 +52,7 @@ class TranslationSelect extends React.Component {
 }
 
 const TranslationSelectContainer = createContainer(props => {
-	const translationOptions = Session.get('translationOptions');
+	const translationOptions = Session.get('translationOptions') ? Session.get('translationOptions') : [];
 
 	if (props.selectedWork && props.selectedSubwork) {
 		Meteor.call('translationNodes.getAuthors', Session.get('tenantId'), props.selectedWork, props.selectedSubwork, (err, result) => {

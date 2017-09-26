@@ -1,0 +1,6 @@
+{
+  "name": "TranslationNodeInput",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./TranslationNodeInput.js"
+}

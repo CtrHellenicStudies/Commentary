@@ -28,6 +28,8 @@ import TextNodesInput from '../TextNodesInput';
 import EditWorkDialog from '../EditWorkDialog';
 import EditEditionDialog from '../EditEditionDialog';
 import EditSubworkDialog from '../EditSubworkDialog';
+import EditTranslationDialog from '../EditTranslationDialog';
+import TranslationSelect from "../TranslationSelect/TranslationSelect";
 
 
 class TextNodesEditor extends React.Component {
@@ -37,6 +39,7 @@ class TextNodesEditor extends React.Component {
 		const selectedWork = null;
 		const selectedEdition = null;
 		const selectedSubwork = null;
+		const selectedTranslation = null;
 		const subworks = [];
 		const startAtLine = null;
 		const limit = 50;
@@ -46,6 +49,7 @@ class TextNodesEditor extends React.Component {
 			selectedWork,
 			selectedEdition,
 			selectedSubwork,
+			selectedTranslation,
 			startAtLine,
 			limit,
 			editWorkDialogOpen: false,
@@ -84,6 +88,12 @@ class TextNodesEditor extends React.Component {
 		});
 	}
 
+	selectTranslation(selectedTranslation) {
+		this.setState({
+			selectedTranslation: selectedTranslation.value
+		});
+	}
+
 	showEditWorkDialog() {
 		this.setState({
 			editWorkDialogOpen: true,
@@ -117,6 +127,12 @@ class TextNodesEditor extends React.Component {
 	handleCloseEditSubworkDialog() {
 		this.setState({
 			editSubworkDialogOpen: false,
+		});
+	}
+
+	handleCloseEditTranslationDialog() {
+		this.setState({
+			editTranslationDialogOpen: false,
 		});
 	}
 
@@ -224,6 +240,11 @@ class TextNodesEditor extends React.Component {
 			});
 		});
 
+		const translationOptions = {
+			selectedWork,
+			selectedSubwork,
+		};
+
 
 		return (
 			<div className="text-nodes-editor paper-shadow">
@@ -313,6 +334,8 @@ class TextNodesEditor extends React.Component {
 					    />
 						</FormGroup>
 					</div>
+					<TranslationSelect {...translationOptions} />
+
 				</div>
 				{this.renderTextNodesInput()}
 				<EditWorkDialog

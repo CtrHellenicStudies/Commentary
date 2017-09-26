@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import TranslationNodes from '/imports/models/translationNodes';
+import Works from '/imports/models/works';
 import { getAuthorizedUser } from '../helpers';
 
 const translationsNodeInsert = (token, translationNode) => {
@@ -13,10 +14,27 @@ const translationsNodeInsert = (token, translationNode) => {
 	return TranslationNodes.insert(translationNode);
 };
 
+const getTranslationNodesAuthors = (tenantId, workId, subwork) => {
+	check(workId, String);
+	check(tenantId, String);
+	check(subwork, Number);
+
+	const workSlug = Works.findOne(workId).slug;
+
+	const translationNodesRaw = TranslationNodes.rawCollection();
+	const distinct = Meteor.wrapAsync(translationNodesRaw.distinct, translationNodesRaw);
+
+	const result = distinct('author', {work: workSlug, subwork, tenantId});
+	console.log("result LOG", result);
+	return result
+};
+
 Meteor.methods({
 	'translationNode.insert': translationsNodeInsert,
+	'translationNodes.getAuthors': getTranslationNodesAuthors,
 });
 
 export {
 	translationsNodeInsert,
+	getTranslationNodesAuthors,
 };

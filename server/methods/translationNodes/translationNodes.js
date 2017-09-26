@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { check, Match } from 'meteor/check';
+import { check } from 'meteor/check';
 import TranslationNodes from '/imports/models/translationNodes';
 import Works from '/imports/models/works';
 import { getAuthorizedUser } from '../helpers';
@@ -25,7 +25,6 @@ const getTranslationNodesAuthors = (tenantId, workId, subwork) => {
 	const distinct = Meteor.wrapAsync(translationNodesRaw.distinct, translationNodesRaw);
 
 	const result = distinct('author', {work: workSlug, subwork, tenantId});
-	console.log("result LOG", result);
 	return result
 };
 

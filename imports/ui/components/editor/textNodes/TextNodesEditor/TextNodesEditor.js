@@ -28,7 +28,6 @@ import TextNodesInput from '../TextNodesInput';
 import EditWorkDialog from '../EditWorkDialog';
 import EditEditionDialog from '../EditEditionDialog';
 import EditSubworkDialog from '../EditSubworkDialog';
-import EditTranslationDialog from '../EditTranslationDialog';
 import TranslationSelect from "../TranslationSelect/TranslationSelect";
 
 

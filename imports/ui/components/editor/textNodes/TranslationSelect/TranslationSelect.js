@@ -21,8 +21,9 @@ class TranslationSelect extends React.Component {
 	}
 
 	selectTranslation(event) {
+		const setValue = event ? event.value : '';
 		this.setState({
-			selectedTranslation: event.value
+			selectedTranslation: setValue
 		});
 	}
 
@@ -56,13 +57,15 @@ class TranslationSelect extends React.Component {
 const TranslationSelectContainer = createContainer(props => {
 	const translationOptions = Session.get('translationOptions');
 
-	Meteor.call('translationNodes.getAuthors', Session.get('tenantId'), props.selectedWork, props.selectedSubwork, (err, result) => {
-		if (!err) {
-			Session.set('translationOptions', result);
-		}		else {
-			throw new Error(err);
-		}
-	});
+	if (props.selectedWork && props.selectedSubwork) {
+		Meteor.call('translationNodes.getAuthors', Session.get('tenantId'), props.selectedWork, props.selectedSubwork, (err, result) => {
+			if (!err) {
+				Session.set('translationOptions', result);
+			}		else {
+				throw new Error(err);
+			}
+		});
+	}
 
 	return {
 		translationOptions,

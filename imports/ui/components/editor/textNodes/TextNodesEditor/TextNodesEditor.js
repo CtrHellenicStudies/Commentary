@@ -129,12 +129,6 @@ class TextNodesEditor extends React.Component {
 		});
 	}
 
-	handleCloseEditTranslationDialog() {
-		this.setState({
-			editTranslationDialogOpen: false,
-		});
-	}
-
 	updateStartAtLine(e, newValue) {
 		this.setState({
 			startAtLine: newValue,
@@ -333,7 +327,7 @@ class TextNodesEditor extends React.Component {
 					    />
 						</FormGroup>
 					</div>
-					<TranslationSelect {...translationOptions} />
+					<TranslationSelect {...translationOptions} selectTranslation={this.selectTranslation} />
 
 				</div>
 				{this.renderTextNodesInput()}

@@ -6,10 +6,6 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { Session } from 'meteor/session';
-import { ReactiveVar } from 'meteor/reactive-var';
-
-import TranslationNodes from '/imports/models/translationNodes';
-
 
 class TranslationSelect extends React.Component {
 	constructor(props) {
@@ -25,6 +21,7 @@ class TranslationSelect extends React.Component {
 		this.setState({
 			selectedTranslation: setValue
 		});
+		this.props.selectTranslation(setValue);
 	}
 
 	render() {

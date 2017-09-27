@@ -28,8 +28,8 @@ import TextNodesInput from '../TextNodesInput';
 import EditWorkDialog from '../EditWorkDialog';
 import EditEditionDialog from '../EditEditionDialog';
 import EditSubworkDialog from '../EditSubworkDialog';
-import TranslationSelect from "../TranslationSelect/TranslationSelect";
-import TranslationNodeInput from "../TranslationNodeInput/TranslationNodeInput";
+import TranslationSelect from '../TranslationSelect/TranslationSelect';
+import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
 
 
 class TextNodesEditor extends React.Component {
@@ -182,7 +182,7 @@ class TextNodesEditor extends React.Component {
 				limit={limit}
 				loadMore={this.loadMoreText}
 			/>
-		)
+		);
 	}
 
 	renderTranslationNodesInput() {
@@ -191,7 +191,6 @@ class TextNodesEditor extends React.Component {
 		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
 			return null;
 		}
-		console.log("after if LOG");
 		return (
 			<TranslationNodeInput
 				selectedWork={selectedWork}
@@ -350,8 +349,15 @@ class TextNodesEditor extends React.Component {
 					<TranslationSelect {...translationOptions} selectTranslation={this.selectTranslation} />
 
 				</div>
-				{this.renderTextNodesInput()}
-				{this.renderTranslationNodesInput()}
+
+				{
+					this.state.selectedTranslation ? (
+						<div className="row">
+							<div className="col-lg-6">{this.renderTextNodesInput()}</div>
+							<div className="col-lg-6">{this.renderTranslationNodesInput()}</div>
+						</div>) : this.renderTextNodesInput()
+				}
+
 				<EditWorkDialog
 					open={this.state.editWorkDialogOpen}
 					handleClose={this.handleCloseEditWorkDialog}

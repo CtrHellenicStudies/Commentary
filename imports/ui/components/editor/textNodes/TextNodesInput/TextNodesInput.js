@@ -41,7 +41,7 @@ class TextNodesInput extends React.Component {
 		super(props);
 
 		this.state = {
-			textNodes: [],
+			textNodes: this.props.textNodes,
 			snackbarOpen: false,
 			snackbarMessage: '',
 		};
@@ -55,11 +55,10 @@ class TextNodesInput extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.textNodes.length !== this.props.textNodes.length) {
-			this.setState({
-				textNodes: nextProps.textNodes,
-			});
-		}
+		this.setState({
+			textNodes: nextProps.textNodes,
+		});
+
 	}
 
 	addTextNodeBlock() {
@@ -180,6 +179,11 @@ class TextNodesInput extends React.Component {
 
 	render() {
 		const { textNodes } = this.state;
+		
+
+		if (!this.props.ready) {
+			return null
+		}
 
 		return (
 			<FormGroup
@@ -299,17 +303,13 @@ const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, 
 	const lemmaQuery = {
 		'work.slug': workSlug,
 		'subwork.n': subworkN,
-		'text.n': {
-			$gte: parseInt(lineFrom, 10),
-			$lte: parseInt(lineFrom, 10) + limit,
-		},
-		'text.edition': editionId,
+		$and: [{'text.n': {$gte: parseInt(lineFrom, 10)}}, {'text.n': {$lte: parseInt(lineFrom, 10) + limit}}],
+		'text.edition': editionId
 	};
 
 	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
 		lemmaQuery['work.slug'] = 'hymns';
 	}
-
 	const textNodeSubscription = Meteor.subscribe('textNodes', lemmaQuery, 0, limit);
 	const editionsSubscription = Meteor.subscribe('editions');
 	const ready = textNodeSubscription.ready() && editionsSubscription.ready();

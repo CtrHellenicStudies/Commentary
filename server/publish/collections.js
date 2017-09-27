@@ -375,8 +375,13 @@ if (Meteor.isServer) {
 		check(parseInt(limit), Number);
 		
 		const work = Works.findOne(workId).slug;
-
-		const result = TranslationNodes.find({work, subwork, tenantId, author}, {sort: {tenantId: 1}, skip: parseInt(skip)-1, limit: parseInt(limit)});
+		const result = TranslationNodes.find({
+			work,
+			subwork,
+			tenantId,
+			author,
+			$and: [{n: {$gte: parseInt(skip)}}, {n: {$lte: parseInt(skip) + parseInt(limit) - 1}}]
+		}, {sort: {tenantId: 1}});
 		return result;
 	});
 

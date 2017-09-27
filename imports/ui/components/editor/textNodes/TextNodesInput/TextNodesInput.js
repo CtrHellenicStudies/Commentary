@@ -24,6 +24,7 @@ import Works from '/imports/models/works';
 
 // lib:
 import Utils from '/imports/lib/utils';
+import _ from 'lodash';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -331,9 +332,19 @@ const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, 
 		}
 	}
 
+	const assignedTextNodes = [];
+
+	for (let i = 0; i < limit; i++) {
+		let newLine;
+		const arrIndex = _.findIndex(selectedEdition.lines, (line) => line.n === i + parseInt(lineFrom));
+		if (arrIndex >= 0) {
+			newLine = selectedEdition.lines[arrIndex];
+		}
+		assignedTextNodes.push(newLine);
+	}
 
 	return {
-		textNodes: selectedEdition.lines,
+		textNodes: assignedTextNodes,
 		ready,
 	};
 

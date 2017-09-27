@@ -124,26 +124,6 @@ class TranslationNodeInput extends React.Component {
 								<div
 									className="reference-work-item"
 								>
-									{/*
-									 <div
-									 className="remove-reference-work-item"
-									 onClick={this.removeTextNodeBlock.bind(this, i)}
-									 >
-									 <IconButton
-									 iconClassName="mdi mdi-close"
-									 style={{
-									 padding: '0',
-									 width: '32px',
-									 height: '32px',
-									 borderRadius: '100%',
-									 border: '1px solid #eee',
-									 color: '#666',
-									 margin: '0 auto',
-									 background: '#f6f6f6',
-									 }}
-									 />
-									 </div>
-									 */}
 									<FormGroup className="text-node-number-input">
 										<TextField
 											name={`${i}_number`}
@@ -205,7 +185,7 @@ const TranslationInputContainer = createContainer(({selectedWork, selectedSubwor
 		}
 		else {
 			newLine = {
-				n: i + startAtLine,
+				n: i + parseInt(startAtLine),
 				text: '',
 				tenantId: tenantId,
 				work: selectedWork,

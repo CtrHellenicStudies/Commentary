@@ -60,31 +60,35 @@ class TextNodesEditor extends React.Component {
 		autoBind(this);
 	}
 
-	selectWork(selectedWork) {
+	selectWork(event) {
+		const setValue = event ? event.value : '';
+
 		const { works } = this.props;
 		let _selectedWork;
 
 		works.forEach(work => {
-			if (work._id === selectedWork.value) {
+			if (work._id === setValue) {
 				_selectedWork = work;
 			}
 		});
 
 		this.setState({
-			selectedWork: selectedWork.value,
-			subworks: _selectedWork.subworks.sort(Utils.sortBy('n')),
+			selectedWork: setValue,
+			subworks: _selectedWork ? _selectedWork.subworks.sort(Utils.sortBy('n')) : [],
 		});
 	}
 
-	selectEdition(selectedEdition) {
+	selectEdition(event) {
+		const setValue = event ? event.value : '';
 		this.setState({
-			selectedEdition: selectedEdition.value,
+			selectedEdition: setValue
 		});
 	}
 
-	selectSubwork(selectedSubwork) {
+	selectSubwork(event) {
+		const setValue = event ? event.value : '';
 		this.setState({
-			selectedSubwork: selectedSubwork.value,
+			selectedSubwork: setValue
 		});
 	}
 

@@ -24,6 +24,10 @@ class TranslationSelect extends React.Component {
 		this.props.selectTranslation(setValue);
 	}
 
+	componentWillUnmount() {
+		delete Session.keys['translationOptions'];
+	}
+
 	render() {
 		const { selectedTranslation } = this.state;
 

@@ -1,9 +1,7 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
-	ControlLabel,
 	FormGroup,
-	FormControl,
 } from 'react-bootstrap';
 import TranslationNodes from '/imports/models/translationNodes';
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -30,13 +28,10 @@ class TranslationNodeInput extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		console.log('nextProps LOG', nextProps);
 		this.setState({
 			translationNodes: nextProps.translationNodes,
 		});
-	}
-
-	handleChange(event, newValue) {
-		const index = parseInt(event.target.name.replace('_text', ''), 10);
 	}
 
 	onChangeText(event, newValue) {
@@ -46,7 +41,7 @@ class TranslationNodeInput extends React.Component {
 
 		currentTranslationNode.text = newValue;
 
-		if (translationNodeId) {
+		if (translationNodeId && newValue) {
 			debounce(500, () => {
 				// Call update method on meteor backend
 				Meteor.call('translationNode.update', Cookies.get('loginToken'), translationNodeId, currentTranslationNode,
@@ -59,8 +54,19 @@ class TranslationNodeInput extends React.Component {
 						}
 					});
 			})();
-		}
-		else {
+		} else if (translationNodeId && !newValue) {
+			debounce(500, () => {
+				// Call update method on meteor backend
+				Meteor.call('translationNode.remove', Cookies.get('loginToken'), translationNodeId, (err, res) => {
+					if (err) {
+						console.error('Error removing text', err);
+						this.showSnackBar(err.message);
+					} else {
+						this.showSnackBar('Deleted');
+					}
+				});
+			})();
+		} else {
 			debounce(500, () => {
 				// Call update method on meteor backend
 				Meteor.call('translationNode.insert', Cookies.get('loginToken'), currentTranslationNode,
@@ -96,7 +102,7 @@ class TranslationNodeInput extends React.Component {
 		const {translationNodes} = this.state;
 
 		if (!this.props.ready) {
-			return null
+			return null;
 		}
 
 		return (
@@ -113,46 +119,43 @@ class TranslationNodeInput extends React.Component {
 					 - will cause errors
 					 "index" - pass the map functions index variable here
 					 */}
-					{translationNodes.map((translationNode, i) => {
-						return (
-							<ListGroupItemDnD
-								key={translationNode.n}
-								index={i}
-								className="form-subitem form-subitem--textNode text-node-input"
-								moveListGroupItem={this.moveTextNodeBlock}
+					{translationNodes.map((translationNode, i) => (
+						<ListGroupItemDnD
+							key={`${translationNode.author.replace(' ', '')}${i}`}
+							index={i}
+							className="form-subitem form-subitem--textNode text-node-input"
+							moveListGroupItem={this.moveTextNodeBlock}
+						>
+							<div
+								className="reference-work-item"
 							>
-								<div
-									className="reference-work-item"
-								>
-									<FormGroup className="text-node-number-input">
-										<TextField
-											name={`${i}_number`}
-											hintText="0"
-											defaultValue={translationNode.n}
-											style={{
-												width: '40px',
-												margin: '0 10px',
-											}}
-											onChange={this.onChangeN}
-											disabled
-										/>
-									</FormGroup>
-									<FormGroup className="text-node-text-input">
-										<TextField
-											name={`${i}_text`}
-											defaultValue={translationNode.text}
-											style={{
-												width: '700px',
-												margin: '0 10px',
-											}}
-											onChange={this.onChangeText}
-											onBlur={this.handleChange}
-										/>
-									</FormGroup>
-								</div>
-							</ListGroupItemDnD>
-						);
-					})}
+								<FormGroup className="text-node-number-input">
+									<TextField
+										name={`${i}_number`}
+										hintText="0"
+										defaultValue={translationNode.n}
+										style={{
+											width: '40px',
+											margin: '0 10px',
+										}}
+										onChange={this.onChangeN}
+										disabled
+									/>
+								</FormGroup>
+								<FormGroup className="text-node-text-input">
+									<TextField
+										name={`${i}_text`}
+										defaultValue={translationNode.text}
+										style={{
+											width: '700px',
+											margin: '0 10px',
+										}}
+										onChange={this.onChangeText}
+									/>
+								</FormGroup>
+							</div>
+						</ListGroupItemDnD>
+						))}
 				</ListGroupDnD>
 				<Snackbar
 					className="editor-snackbar"
@@ -182,8 +185,7 @@ const TranslationInputContainer = createContainer(({selectedWork, selectedSubwor
 
 		if (arrIndex >= 0) {
 			newLine = translation[arrIndex];
-		}
-		else {
+		}		else {
 			newLine = {
 				n: i + parseInt(startAtLine),
 				text: '',
@@ -196,6 +198,8 @@ const TranslationInputContainer = createContainer(({selectedWork, selectedSubwor
 
 		translationNodes.push(newLine);
 	}
+	
+	console.log('translationNodes LOG', translationNodes);
 
 	return {
 		ready,

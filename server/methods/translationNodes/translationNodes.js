@@ -40,6 +40,17 @@ const translationsNodeRemove = (token, translationNodeId) => {
 	return TranslationNodes.remove(translationNodeId);
 };
 
+const addTranslationAuthor = (token, workDetails, authorName) => {
+	check(authorName, String);
+
+	const roles = ['editor', 'admin', 'commenter'];
+	const user = getAuthorizedUser(roles, token);
+
+	const newAuthor = Object.assign({}, workDetails, {autor: authorName});
+
+	return TranslationNodes.insert(newAuthor);
+};
+
 const getTranslationNodesAuthors = (tenantId, workId, subwork) => {
 	check(workId, String);
 	check(tenantId, String);
@@ -59,10 +70,12 @@ Meteor.methods({
 	'translationNode.update': translationsNodeUpdate,
 	'translationNode.remove': translationsNodeRemove,
 	'translationNodes.getAuthors': getTranslationNodesAuthors,
+	'translationNodes.addAuthor': addTranslationAuthor,
 });
 
 export {
 	translationsNodeInsert,
 	translationsNodeUpdate,
 	getTranslationNodesAuthors,
+	addTranslationAuthor,
 };

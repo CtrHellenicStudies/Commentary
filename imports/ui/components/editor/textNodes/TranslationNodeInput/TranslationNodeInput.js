@@ -21,6 +21,7 @@ class TranslationNodeInput extends React.Component {
 			translationNodes: this.props.translationNodes,
 			snackbarOpen: false,
 			snackbarMessage: '',
+			inserting: false,
 		};
 		this.onChangeText = this.onChangeText.bind(this);
 		this.showSnackBar = this.showSnackBar.bind(this);
@@ -28,7 +29,6 @@ class TranslationNodeInput extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log('nextProps LOG', nextProps);
 		this.setState({
 			translationNodes: nextProps.translationNodes,
 		});
@@ -41,7 +41,10 @@ class TranslationNodeInput extends React.Component {
 
 		currentTranslationNode.text = newValue;
 
-		if (translationNodeId && newValue) {
+		if (translationNodeId && newValue && !this.state.inserting) {
+			this.setState({
+				inserting: true
+			});
 			debounce(500, () => {
 				// Call update method on meteor backend
 				Meteor.call('translationNode.update', Cookies.get('loginToken'), translationNodeId, currentTranslationNode,
@@ -51,10 +54,13 @@ class TranslationNodeInput extends React.Component {
 							this.showSnackBar(err.message);
 						} else {
 							this.showSnackBar('Updated');
+							this.setState({
+								inserting: false
+							});
 						}
 					});
 			})();
-		} else if (translationNodeId && !newValue) {
+		} else if (translationNodeId && !newValue && !this.state.inserting) {
 			debounce(500, () => {
 				// Call update method on meteor backend
 				Meteor.call('translationNode.remove', Cookies.get('loginToken'), translationNodeId, (err, res) => {
@@ -63,20 +69,41 @@ class TranslationNodeInput extends React.Component {
 						this.showSnackBar(err.message);
 					} else {
 						this.showSnackBar('Deleted');
+						this.setState({
+							inserting: false
+						});
 					}
 				});
 			})();
-		} else {
+		} else if (!this.state.inserting) {
+			this.setState({
+				inserting: true
+			});
 			debounce(500, () => {
+
 				// Call update method on meteor backend
-				Meteor.call('translationNode.insert', Cookies.get('loginToken'), currentTranslationNode,
+				const insertTranslationNode = currentTranslationNode;
+				insertTranslationNode._id = new Mongo.ObjectID().valueOf();
+
+				const currentTranslationNodes = this.state.translationNodes;
+				currentTranslationNodes[index] = insertTranslationNode;
+
+				this.setState({
+					translationNodes: currentTranslationNodes
+				});
+
+				Meteor.call('translationNode.insert', Cookies.get('loginToken'), insertTranslationNode,
 					(err, res) => {
 						if (err) {
 							console.error('Error editing text', err);
 							this.showSnackBar(err.message);
 						} else {
 							this.showSnackBar('Updated');
+							this.setState({
+								inserting: false
+							});
 						}
+
 					});
 			})();
 		}
@@ -198,8 +225,6 @@ const TranslationInputContainer = createContainer(({selectedWork, selectedSubwor
 
 		translationNodes.push(newLine);
 	}
-	
-	console.log('translationNodes LOG', translationNodes);
 
 	return {
 		ready,

@@ -34,6 +34,7 @@ TranslationNodes.schema = new SimpleSchema({
 	},
 	text: {
 		type: String,
+		optional: true
 	}
 });
 

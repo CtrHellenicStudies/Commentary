@@ -46,7 +46,10 @@ const addTranslationAuthor = (token, workDetails, authorName) => {
 	const roles = ['editor', 'admin', 'commenter'];
 	const user = getAuthorizedUser(roles, token);
 
-	const newAuthor = Object.assign({}, workDetails, {autor: authorName});
+	//TODO: remove this after changing to workId instead of a slug
+	const workSlug = Works.findOne(workDetails.work).slug;
+
+	const newAuthor = Object.assign({}, workDetails, {author: authorName, work: workSlug});
 
 	return TranslationNodes.insert(newAuthor);
 };
@@ -61,8 +64,7 @@ const getTranslationNodesAuthors = (tenantId, workId, subwork) => {
 	const translationNodesRaw = TranslationNodes.rawCollection();
 	const distinct = Meteor.wrapAsync(translationNodesRaw.distinct, translationNodesRaw);
 
-	const result = distinct('author', {work: workSlug, subwork, tenantId});
-	return result
+	return distinct('author', {work: workSlug, subwork, tenantId});
 };
 
 Meteor.methods({

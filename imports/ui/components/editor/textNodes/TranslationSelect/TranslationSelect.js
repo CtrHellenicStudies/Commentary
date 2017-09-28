@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import {Session} from 'meteor/session';
-import EditTranslationAuthorDialog from "../EditTranslationAuthorDialog/EditTranslationAuthorDialog";
+import EditTranslationAuthorDialog from '../EditTranslationAuthorDialog/EditTranslationAuthorDialog';
 
 class TranslationSelect extends React.Component {
 	constructor(props) {
@@ -78,10 +78,10 @@ class TranslationSelect extends React.Component {
 						onChange={this.selectTranslation}
 					/>
 
-					{ this.props.workDetails ?
-					<button
-						onClick={this.showEditDialog}
-					>
+					{ this.props.workDetails && !this.state.selectedTranslation ?
+						<button
+							onClick={this.showEditDialog}
+						>
 						Add new author
 					</button> : ''
 					}

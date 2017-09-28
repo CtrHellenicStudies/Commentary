@@ -14,8 +14,8 @@ class EditTranslationAuthorDialog extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.setValue = this.setValue.bind(this);
 		this.state = {
-			authorName: this.props.selectedTranslation
-		}
+			authorName: this.props.translation
+		};
 	}
 	setValue(event) {
 		this.setState({
@@ -23,8 +23,18 @@ class EditTranslationAuthorDialog extends React.Component {
 		});
 	}
 	handleSubmit() {
-		if (this.state.authorName) {
+		if (this.state.authorName && !this.props.translation) {
 			Meteor.call('translationNodes.addAuthor', Cookies.get('loginToken'), this.props.workDetails, this.state.authorName, (err, result) => {
+				if (!err) {
+					this.props.addNewAuthor(this.state.authorName);
+					this.props.handleClose();
+				} else {
+					throw new Error(err);
+				}
+			});
+		}
+		else if (this.state.authorName) {
+			Meteor.call('translationNodes.updateAuthor', Cookies.get('loginToken'), this.props.workDetails, this.props.translation, this.state.authorName, (err, result) => {
 				if (!err) {
 					this.props.addNewAuthor(this.state.authorName);
 					this.props.handleClose();
@@ -36,18 +46,18 @@ class EditTranslationAuthorDialog extends React.Component {
 	}
 
 	render() {
-		const { translation } = this.state;
+		const { translation } = this.props;
 
 		const actions = [
 			<FlatButton
 				label="Cancel"
-				primary={true}
+				primary
 				onClick={this.props.handleClose}
 			/>,
 			<FlatButton
 				label="Submit"
-				primary={true}
-				keyboardFocused={true}
+				primary
+				keyboardFocused
 				onClick={this.handleSubmit}
 			/>,
 		];
@@ -71,7 +81,7 @@ class EditTranslationAuthorDialog extends React.Component {
 						</label>
 						<TextField
 							name="translation_author"
-							defaultValue={translation ? translation : ''}
+							defaultValue={translation || ''}
 							onChange={this.setValue}
 							fullWidth
 						/>

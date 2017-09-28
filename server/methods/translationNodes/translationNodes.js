@@ -54,6 +54,22 @@ const addTranslationAuthor = (token, workDetails, authorName) => {
 	return TranslationNodes.insert(newAuthor);
 };
 
+const updateTranslationAuthor = (token, workDetails, prevAuthorName, newAuthorName) => {
+	check(newAuthorName, String);
+	check(prevAuthorName, String);
+
+	const roles = ['editor', 'admin', 'commenter'];
+	const user = getAuthorizedUser(roles, token);
+
+	//TODO: remove this after changing to workId instead of a slug
+	const workSlug = Works.findOne(workDetails.work).slug;
+	const queryParams = workDetails;
+	queryParams.work = workSlug;
+	queryParams.author = prevAuthorName;
+	
+	return TranslationNodes.update(queryParams, {$set: {author: newAuthorName}}, {multi: true});
+};
+
 const getTranslationNodesAuthors = (tenantId, workId, subwork) => {
 	check(workId, String);
 	check(tenantId, String);
@@ -73,6 +89,7 @@ Meteor.methods({
 	'translationNode.remove': translationsNodeRemove,
 	'translationNodes.getAuthors': getTranslationNodesAuthors,
 	'translationNodes.addAuthor': addTranslationAuthor,
+	'translationNodes.updateAuthor': updateTranslationAuthor,
 });
 
 export {

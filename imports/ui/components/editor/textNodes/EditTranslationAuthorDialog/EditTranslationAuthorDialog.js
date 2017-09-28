@@ -32,8 +32,7 @@ class EditTranslationAuthorDialog extends React.Component {
 					throw new Error(err);
 				}
 			});
-		}
-		else if (this.state.authorName) {
+		}		else if (this.state.authorName) {
 			Meteor.call('translationNodes.updateAuthor', Cookies.get('loginToken'), this.props.workDetails, this.props.translation, this.state.authorName, (err, result) => {
 				if (!err) {
 					this.props.addNewAuthor(this.state.authorName);

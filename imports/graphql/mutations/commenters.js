@@ -33,7 +33,7 @@ const commenterMutationFields = {
 				type: CommenterInputType
 			}
 		},
-		async resolve(parent, {commenterId,commenter}, {token}) {
+		async resolve(parent, {commenterId, commenter}, {token}) {
 			const commentersService = new CommentersService({token});
 			return await commentersService.commenterUpdate(commenterId, commenter);
 		}

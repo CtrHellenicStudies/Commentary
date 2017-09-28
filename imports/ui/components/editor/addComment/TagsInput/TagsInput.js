@@ -29,7 +29,7 @@ const TagsInput = ({
 	if (!tags) {
 		return (
 			<div className="comment-reference comment-tags" />
-		)
+		);
 	}
 
 	return (
@@ -127,7 +127,7 @@ const TagsInput = ({
 			</FormGroup>
 		</div>
 	);
-}
+};
 
 const TagsInputContainer = createContainer(() => {
 	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });

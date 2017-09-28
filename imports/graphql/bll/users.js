@@ -33,7 +33,7 @@ export default class UserService extends AdminService {
 					sort: {
 						'profile.name': 1,
 						'emails.address': 1,
-						'username': 1,
+						username: 1,
 					},
 				}
 			).fetch();
@@ -109,7 +109,7 @@ export default class UserService extends AdminService {
 				sort: {
 					'profile.name': 1,
 					'emails.address': 1,
-					'username': 1,
+					username: 1,
 				},
 			}
 		);
@@ -138,10 +138,10 @@ export default class UserService extends AdminService {
 				sort: {
 					'profile.name': 1,
 					'emails.address': 1,
-					'username': 1,
+					username: 1,
 				},
 			}
 		).fetch();
 	}
 
-};
+}

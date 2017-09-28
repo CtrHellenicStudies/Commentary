@@ -33,7 +33,7 @@ const linkedDataSchemaMutationFields = {
 				type: LinkedDataSchemaInputType
 			}
 		},
-		async resolve(parent, {linkedDataSchemaId,linkedDataSchema}, {token}) {
+		async resolve(parent, {linkedDataSchemaId, linkedDataSchema}, {token}) {
 			const linkedDataSchemaService = new LinkedDataSchemaService({token});
 			return await linkedDataSchemaService.linkedDataSchemaUpdate(linkedDataSchemaId, linkedDataSchema);
 		}

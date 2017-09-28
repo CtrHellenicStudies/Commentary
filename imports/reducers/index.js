@@ -11,22 +11,22 @@ import * as ActionTypes from '/imports/actions';
 
 
 const errorMessage = (state = null, action) => {
-  const {type, error} = action;
+	const {type, error} = action;
 
-  if (type === ActionTypes.RESET_ERROR_MESSAGE) {
-    return null;
-  } else if (error) {
-    return error;
-  }
+	if (type === ActionTypes.RESET_ERROR_MESSAGE) {
+		return null;
+	} else if (error) {
+		return error;
+	}
 
-  return state;
+	return state;
 };
 
 const rootReducer = combineReducers({
-  form: formReducer,
-  errorMessage,
-  apollo: client.reducer(), // graphql data
-  routing: routerReducer,
+	form: formReducer,
+	errorMessage,
+	apollo: client.reducer(), // graphql data
+	routing: routerReducer,
 	comments,
 	textNodes,
 });

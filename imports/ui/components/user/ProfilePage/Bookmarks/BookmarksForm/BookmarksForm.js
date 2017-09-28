@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Mongo } from 'meteor/mongo'
+import { Mongo } from 'meteor/mongo';
 
 
 // api

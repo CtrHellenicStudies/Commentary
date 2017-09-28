@@ -106,4 +106,4 @@ const SettingsInputType = new GraphQLInputObjectType({
 		}
 	},
 });
-export {SettingsType, SettingsInputType}
+export {SettingsType, SettingsInputType};

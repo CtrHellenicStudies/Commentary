@@ -274,10 +274,10 @@ if (Meteor.isServer) {
 			const imageArray = page.headerImage;
 			if (imageArray && Array.isArray(imageArray)) {
 				return Images.find({
-						_id: {
-							$in: imageArray,
-						},
-					});
+					_id: {
+						$in: imageArray,
+					},
+				});
 			}
 		}
 

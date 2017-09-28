@@ -33,7 +33,7 @@ const settingsMutationFields = {
 				type: SettingsInputType
 			}
 		},
-		async resolve(parent, {settingsId,settings}, {token}) {
+		async resolve(parent, {settingsId, settings}, {token}) {
 			const settingsService = new SettingsService({token});
 			return await settingsService.settingsUpdate(settingsId, settings);
 		}

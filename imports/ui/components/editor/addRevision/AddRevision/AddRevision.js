@@ -405,7 +405,7 @@ class AddRevision extends React.Component {
 
 
 		tagsValue[tag.i].tagId = tag.value;
-		tagsValue[tag.i].keyword = _selectedKeyword
+		tagsValue[tag.i].keyword = _selectedKeyword;
 		tagsValue[tag.i].isSet = true;
 
 		this.setState({

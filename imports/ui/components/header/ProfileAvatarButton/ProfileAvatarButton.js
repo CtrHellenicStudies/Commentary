@@ -54,7 +54,7 @@ const ProfileAvatarButtonContainer = createContainer(() => {
 	let notifications = [];
 
 	if (Meteor.user() && Meteor.user().subscriptions) {
-		notifications =  Meteor.user().subscriptions.notifications;
+		notifications = Meteor.user().subscriptions.notifications;
 	}
 
 	return {

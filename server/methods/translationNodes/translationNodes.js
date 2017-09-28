@@ -11,7 +11,7 @@ const translationsNodeInsert = (token, translationNode) => {
 	const roles = ['editor', 'admin', 'commenter'];
 	const user = getAuthorizedUser(roles, token);
 
-	//TODO: remove this after changing to workId instead of a slug
+	// TODO: remove this after changing to workId instead of a slug
 	const newTranslationNode = translationNode;
 	const workSlug = Works.findOne(translationNode.work).slug;
 	newTranslationNode.work = workSlug;
@@ -46,7 +46,7 @@ const addTranslationAuthor = (token, workDetails, authorName) => {
 	const roles = ['editor', 'admin', 'commenter'];
 	const user = getAuthorizedUser(roles, token);
 
-	//TODO: remove this after changing to workId instead of a slug
+	// TODO: remove this after changing to workId instead of a slug
 	const workSlug = Works.findOne(workDetails.work).slug;
 
 	const newAuthor = Object.assign({}, workDetails, {author: authorName, work: workSlug});
@@ -61,7 +61,7 @@ const updateTranslationAuthor = (token, workDetails, prevAuthorName, newAuthorNa
 	const roles = ['editor', 'admin', 'commenter'];
 	const user = getAuthorizedUser(roles, token);
 
-	//TODO: remove this after changing to workId instead of a slug
+	// TODO: remove this after changing to workId instead of a slug
 	const workSlug = Works.findOne(workDetails.work).slug;
 	const queryParams = workDetails;
 	queryParams.work = workSlug;

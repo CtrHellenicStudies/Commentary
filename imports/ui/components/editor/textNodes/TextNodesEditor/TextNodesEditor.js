@@ -344,10 +344,10 @@ class TextNodesEditor extends React.Component {
 						<FormGroup controlId="formControlsSelect">
 							<ControlLabel>Start at line</ControlLabel>
 							<br />
-					    <TextField
-					      hintText="0"
+							<TextField
+								hintText="0"
 								onChange={this.updateStartAtLine}
-					    />
+							/>
 						</FormGroup>
 					</div>
 					<TranslationSelect {...translationOptions} selectTranslation={this.selectTranslation} />

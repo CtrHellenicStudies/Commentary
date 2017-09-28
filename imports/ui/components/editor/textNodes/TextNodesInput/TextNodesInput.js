@@ -65,7 +65,7 @@ class TextNodesInput extends React.Component {
 	addTextNodeBlock() {
 		const { workId, workSlug, editionId, subworkN, subworkTitle, lineFrom, defaultTextNodes } = this.props;
 		const { textNodes } = this.state;
-		let defaultN = 1;
+		const defaultN = 1;
 
 		this.state.textNodes.push({
 			_id: Random.id(),
@@ -123,7 +123,7 @@ class TextNodesInput extends React.Component {
 
 		// regularize type of text node id
 		let editedTextNodeId = editedTextNode._id;
-		if (typeof editedTextNodeId === "object") {
+		if (typeof editedTextNodeId === 'object') {
 			editedTextNodeId = editedTextNodeId.valueOf();
 		}
 
@@ -147,7 +147,7 @@ class TextNodesInput extends React.Component {
 		const editedTextNode = textNodes[textElemIndex];
 
 		let editedTextNodeId = editedTextNode._id;
-		if (typeof editedTextNodeId === "object") {
+		if (typeof editedTextNodeId === 'object') {
 			editedTextNodeId = editedTextNodeId.valueOf();
 		}
 
@@ -183,7 +183,7 @@ class TextNodesInput extends React.Component {
 		
 
 		if (!this.props.ready) {
-			return null
+			return null;
 		}
 
 		return (
@@ -200,18 +200,17 @@ class TextNodesInput extends React.Component {
 							- will cause errors
 						"index" - pass the map functions index variable here
 					*/}
-					{textNodes.map((textNode, i) => {
-						return (
-							<ListGroupItemDnD
-								key={textNode.n}
-								index={i}
-								className="form-subitem form-subitem--textNode text-node-input"
-								moveListGroupItem={this.moveTextNodeBlock}
+					{textNodes.map((textNode, i) => (
+						<ListGroupItemDnD
+							key={textNode.n}
+							index={i}
+							className="form-subitem form-subitem--textNode text-node-input"
+							moveListGroupItem={this.moveTextNodeBlock}
+						>
+							<div
+								className="reference-work-item"
 							>
-								<div
-									className="reference-work-item"
-								>
-									{/*
+								{/*
 									<div
 										className="remove-reference-work-item"
 										onClick={this.removeTextNodeBlock.bind(this, i)}
@@ -231,34 +230,33 @@ class TextNodesInput extends React.Component {
 										/>
 									</div>
 									*/}
-									<FormGroup className="text-node-number-input">
-										<TextField
-											name={`${i}_number`}
-											hintText="0"
-											defaultValue={textNode.n}
-											style={{
-												width: '40px',
-												margin: '0 10px',
-											}}
-											onChange={this.onChangeN}
-											disabled
-										/>
-									</FormGroup>
-									<FormGroup className="text-node-text-input">
-										<TextField
-											name={`${i}_text`}
-											defaultValue={textNode.html}
-											style={{
-												width: '700px',
-												margin: '0 10px',
-											}}
-											onChange={this.onChangeText}
-										/>
-									</FormGroup>
-								</div>
-							</ListGroupItemDnD>
-						);
-					})}
+								<FormGroup className="text-node-number-input">
+									<TextField
+										name={`${i}_number`}
+										hintText="0"
+										defaultValue={textNode.n}
+										style={{
+											width: '40px',
+											margin: '0 10px',
+										}}
+										onChange={this.onChangeN}
+										disabled
+									/>
+								</FormGroup>
+								<FormGroup className="text-node-text-input">
+									<TextField
+										name={`${i}_text`}
+										defaultValue={textNode.html}
+										style={{
+											width: '700px',
+											margin: '0 10px',
+										}}
+										onChange={this.onChangeText}
+									/>
+								</FormGroup>
+							</div>
+						</ListGroupItemDnD>
+						))}
 				</ListGroupDnD>
 				<RaisedButton
 					label="Show more"

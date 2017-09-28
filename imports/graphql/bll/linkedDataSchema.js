@@ -32,7 +32,7 @@ export default class LinkedDataSchemaService extends AdminService {
 	linkedDataSchemaUpdate(linkedDataSchemaId, linkedDataSchema) {
 		if (this.userIsAdmin) {
 			LinkedDataSchema.update(linkedDataSchemaId, {$set: linkedDataSchema});
-			return LinkedDataSchema.findOne(linkedDataSchemaId)
+			return LinkedDataSchema.findOne(linkedDataSchemaId);
 		}
 		return new Error('Not authorized');
 	}

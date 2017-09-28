@@ -67,7 +67,7 @@ Meteor.method('publishComments', (commentCandidate) => {
 	const keywords = [];
 	if ('keywords' in commentCandidate) {
 		commentCandidate.keywords.forEach((keywordSlug) => {
-			let _keyword = Keywords.findOne({ slug: keywordSlug });
+			const _keyword = Keywords.findOne({ slug: keywordSlug });
 			if (_keyword) {
 				keywords.push(_keyword);
 			} else {
@@ -108,8 +108,8 @@ Meteor.method('publishComments', (commentCandidate) => {
 		});
 
 		if (!revisionExists) {
-			let revisionId = new Mongo.ObjectID();
-			let revision = {
+			const revisionId = new Mongo.ObjectID();
+			const revision = {
 				title: commentCandidate.title,
 				text,
 				tenantId: tenant._id,
@@ -125,8 +125,8 @@ Meteor.method('publishComments', (commentCandidate) => {
 		let nLines = 1;
 		const commentOrder = 0;
 
-		let revisionId = new Mongo.ObjectID();
-		let revision = {
+		const revisionId = new Mongo.ObjectID();
+		const revision = {
 			title: commentCandidate.title,
 			text,
 			tenantId: tenant._id,

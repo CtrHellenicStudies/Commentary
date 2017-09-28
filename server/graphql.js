@@ -20,9 +20,7 @@ import RootSubscription from '/imports/graphql/subscriptions/rootSubscription';
  * @type {GraphQLSchema}
  */
 
-const getGraphglContext = req => {
-	return {token: req.headers.authorization};
-};
+const getGraphglContext = req => ({token: req.headers.authorization});
 
 const RootSchema = new GraphQLSchema({
 	query: RootQuery,
@@ -48,7 +46,7 @@ const whitelist = [
 ];
 
 const corsOptions = {
-	origin: (origin, callback) => { callback(null, true) }, // Disable CORs for the moment while development environment is changing
+	origin: (origin, callback) => { callback(null, true); }, // Disable CORs for the moment while development environment is changing
 	credentials: true,
 };
 graphQLServer.use(cors(corsOptions));

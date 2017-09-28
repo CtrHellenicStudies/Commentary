@@ -2,13 +2,9 @@ import JsDiff from 'diff';
 import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
 
 
-const sortRevisions = (revisions) => {
-	return _.sortBy(revisions, 'created').reverse();
-};
+const sortRevisions = (revisions) => _.sortBy(revisions, 'created').reverse();
 
-const getRevisionDate = (revision) => {
-	return revision.created;
-};
+const getRevisionDate = (revision) => revision.created;
 
 const stripHTMLFromText = (htmlText) => {
 	const tempElem = document.createElement('div');

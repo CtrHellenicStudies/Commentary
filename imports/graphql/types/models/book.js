@@ -105,4 +105,4 @@ const BookType = new GraphQLObjectType({
 	}
 });
 
-export { BookInputType, BookType }
+export { BookInputType, BookType };

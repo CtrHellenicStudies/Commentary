@@ -38,4 +38,4 @@ const TenantInputType = new GraphQLInputObjectType({
 	},
 });
 
-export {TenantType,TenantInputType};
+export {TenantType, TenantInputType};

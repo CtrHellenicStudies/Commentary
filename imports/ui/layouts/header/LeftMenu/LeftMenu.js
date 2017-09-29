@@ -7,6 +7,7 @@ import Drawer from 'material-ui/Drawer';
 
 // api:
 import Tenants from '/imports/models/tenants';
+import Settings from '/imports/models/settings';
 
 // components:
 import SideNavTop from '/imports/ui/components/header/SideNavTop';
@@ -32,7 +33,7 @@ const getUsername = (currentUser) => {
 /*
 	BEGIN LeftMenu
 */
-const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser }) => (
+const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser, settings }) => (
 	<Drawer
 		open={open}
 		docked={false}
@@ -170,9 +171,11 @@ LeftMenu.defaultProps = {
 */
 
 
-export default createContainer(() => (
-	{
-		currentUser: Meteor.users.findOne({ _id: Meteor.userId() }),
-		tenant: Tenants.findOne({ _id: Session.get('tenantId') })
+export default createContainer(() => {
+	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	return {
+		settings: Settings.findOne({}),
+		currentUser: Meteor.users.findOne({_id: Meteor.userId()}),
+		tenant: Tenants.findOne({_id: Session.get('tenantId')})
 	}
-), LeftMenu);
+}, LeftMenu);

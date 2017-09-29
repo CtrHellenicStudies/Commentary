@@ -37,17 +37,17 @@ class TranslationNodeInput extends React.Component {
 	onChangeText(event, newValue) {
 		const index = parseInt(event.target.name.replace('_text', ''), 10);
 		const currentTranslationNode = this.state.translationNodes[index];
-		const translationNodeId = currentTranslationNode._id ? currentTranslationNode._id : '';
 
 		currentTranslationNode.text = newValue;
 
-		if (translationNodeId && newValue && !this.state.inserting) {
+		if (newValue && !this.state.inserting) {
 			this.setState({
 				inserting: true
 			});
+
 			debounce(500, () => {
 				// Call update method on meteor backend
-				Meteor.call('translationNode.update', Cookies.get('loginToken'), translationNodeId, currentTranslationNode,
+				Meteor.call('translationNode.update', Cookies.get('loginToken'), currentTranslationNode,
 					(err, res) => {
 						if (err) {
 							console.error('Error editing text', err);
@@ -60,10 +60,13 @@ class TranslationNodeInput extends React.Component {
 						}
 					});
 			})();
-		} else if (translationNodeId && !newValue && !this.state.inserting) {
+		} else if (!newValue && !this.state.inserting) {
+			this.setState({
+				inserting: true
+			});
 			debounce(500, () => {
 				// Call update method on meteor backend
-				Meteor.call('translationNode.remove', Cookies.get('loginToken'), translationNodeId, (err, res) => {
+				Meteor.call('translationNode.remove', Cookies.get('loginToken'), currentTranslationNode._id, (err, res) => {
 					if (err) {
 						console.error('Error removing text', err);
 						this.showSnackBar(err.message);
@@ -74,37 +77,6 @@ class TranslationNodeInput extends React.Component {
 						});
 					}
 				});
-			})();
-		} else if (!this.state.inserting) {
-			this.setState({
-				inserting: true
-			});
-			debounce(500, () => {
-
-				// Call update method on meteor backend
-				const insertTranslationNode = currentTranslationNode;
-				insertTranslationNode._id = new Mongo.ObjectID().valueOf();
-
-				const currentTranslationNodes = this.state.translationNodes;
-				currentTranslationNodes[index] = insertTranslationNode;
-
-				this.setState({
-					translationNodes: currentTranslationNodes
-				});
-
-				Meteor.call('translationNode.insert', Cookies.get('loginToken'), insertTranslationNode,
-					(err, res) => {
-						if (err) {
-							console.error('Error editing text', err);
-							this.showSnackBar(err.message);
-						} else {
-							this.showSnackBar('Updated');
-							this.setState({
-								inserting: false
-							});
-						}
-
-					});
 			})();
 		}
 	}

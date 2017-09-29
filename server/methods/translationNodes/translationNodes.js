@@ -19,15 +19,21 @@ const translationsNodeInsert = (token, translationNode) => {
 	return TranslationNodes.insert(newTranslationNode);
 };
 
-const translationsNodeUpdate = (token, translationNodeId, translationNode) => {
+const translationsNodeUpdate = (token, translationNode) => {
 	check(token, String);
 	check(translationNode, Object);
-	check(translationNodeId, String);
+
+	const query = {
+		author: translationNode.author,
+		n: translationNode.n,
+		subwork: translationNode.subwork,
+		work: translationNode.subwork
+	};
 
 	const roles = ['editor', 'admin', 'commenter'];
 	const user = getAuthorizedUser(roles, token);
 
-	return TranslationNodes.update(translationNodeId, {$set: translationNode});
+	return TranslationNodes.upsert(query, {$set: translationNode});
 };
 
 const translationsNodeRemove = (token, translationNodeId) => {

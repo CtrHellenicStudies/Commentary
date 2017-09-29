@@ -110,7 +110,7 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser }) => (
 					onClick={closeLeftMenu}
 				/>
 				<MenuItem
-					href="/about"
+					href={settings && settings.aboutURL ? settings.aboutURL : '/about'}
 					primaryText="About"
 					onClick={closeLeftMenu}
 				/>

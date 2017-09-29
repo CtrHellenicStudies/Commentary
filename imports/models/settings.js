@@ -131,7 +131,12 @@ Settings.schema = new SimpleSchema({
 	discussionCommentsDisabled: {
 		type: Boolean,
 		optional: true,
-	}
+	},
+
+	aboutURL: {
+		type: String,
+		optional: true,
+	},
 
 });
 

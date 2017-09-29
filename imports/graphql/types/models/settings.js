@@ -38,6 +38,9 @@ const SettingsType = new GraphQLObjectType({
 		webhooksToken: {
 			type: GraphQLString,
 		},
+		aboutURL: {
+			type: GraphQLString,
+		},
 		homepageCover: {
 			type: GraphQLJSON,
 		},
@@ -84,6 +87,9 @@ const SettingsInputType = new GraphQLInputObjectType({
 			type: GraphQLString,
 		},
 		webhooksToken: {
+			type: GraphQLString,
+		},
+		aboutURL: {
 			type: GraphQLString,
 		},
 		homepageCover: {

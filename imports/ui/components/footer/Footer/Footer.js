@@ -51,7 +51,7 @@ class Footer extends Component {
 										label="Ideas"
 									/>
 									<FlatButton
-										href="/about"
+										href={settings && settings.aboutURL ? settings.aboutURL : '/about'}
 										label="About"
 									/>
 								</div>

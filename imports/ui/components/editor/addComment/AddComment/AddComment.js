@@ -253,9 +253,9 @@ class AddComment extends React.Component {
 		});
 	}
 
-	onCommenterValueChange(comenter) {
+	onCommenterValueChange(commenter) {
 		this.setState({
-			commenterValue: comenter,
+			commenterValue: commenter,
 		});
 	}
 
@@ -468,6 +468,7 @@ class AddComment extends React.Component {
 										value={this.state.commenterValue}
 										onChange={this.onCommenterValueChange}
 										placeholder="Commentator..."
+										multi={true}
 									/>
 									:
 									''

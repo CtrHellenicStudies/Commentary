@@ -285,7 +285,7 @@ class Header extends React.Component {
 											/>
 											<FlatButton
 												label="About"
-												href="/about"
+												href={settings && settings.aboutURL ? settings.aboutURL : '/about'}
 												style={styles.flatButton}
 											/>
 										</span>

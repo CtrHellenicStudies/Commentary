@@ -47,7 +47,7 @@ const whitelist = [
 
 const corsOptions = {
 	origin: (origin, callback) => { callback(null, true); }, // Disable CORs for the moment while development environment is changing
-	credentials: true,
+	// credentials: true,
 };
 graphQLServer.use(cors(corsOptions));
 

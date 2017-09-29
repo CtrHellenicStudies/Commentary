@@ -309,7 +309,7 @@ class Header extends React.Component {
 																style={styles.flatButton}
 															/>
 															<FlatButton
-																href="/translation/create"
+																href="/textNodes/edit"
 																label="Add Translation"
 																className=""
 																style={styles.flatButton}

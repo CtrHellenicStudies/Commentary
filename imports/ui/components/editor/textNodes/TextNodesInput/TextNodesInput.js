@@ -337,8 +337,8 @@ const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, 
 		const arrIndex = _.findIndex(selectedEdition.lines, (line) => line.n === i + parseInt(lineFrom));
 		if (arrIndex >= 0) {
 			newLine = selectedEdition.lines[arrIndex];
+			assignedTextNodes.push(newLine);
 		}
-		assignedTextNodes.push(newLine);
 	}
 
 	return {

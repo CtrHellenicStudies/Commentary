@@ -238,6 +238,7 @@ const Utils = {
 						_id: foundEdition._id,
 						title: foundEdition.title,
 						slug: foundEdition.slug,
+						multiLine: foundEdition.multiLine,
 						lines: [],
 					};
 					editions.push(myEdition);

@@ -244,4 +244,49 @@ const UserInputType = new GraphQLInputObjectType({
 	},
 });
 
-export {UserType, UserInputType};
+const PositionType = new GraphQLObjectType({
+	name: 'PositionType',
+	description: 'A recent position where the user has been reading',
+	fields: {
+		title: {
+			type: GraphQLString,
+		},
+		author: {
+			type: GraphQLString,
+		},
+		link: {
+			type: GraphQLString,
+		},
+		subtitle: {
+			type: GraphQLString,
+		},
+		activeElem: {
+			type: GraphQLInt,
+		},
+	},
+});
+
+
+const PositionInputType = new GraphQLInputObjectType({
+	name: 'PositionInputType',
+	description: 'A recent position where the user has been reading',
+	fields: {
+		title: {
+			type: GraphQLString,
+		},
+		author: {
+			type: GraphQLString,
+		},
+		link: {
+			type: GraphQLString,
+		},
+		subtitle: {
+			type: GraphQLString,
+		},
+		activeElem: {
+			type: GraphQLInt,
+		},
+	},
+});
+
+export { UserType, UserInputType, PositionInputType };

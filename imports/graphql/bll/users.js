@@ -144,4 +144,31 @@ export default class UserService extends AdminService {
 		).fetch();
 	}
 
+	userUpdatePosition(position) {
+		if (!this.user) {
+			throw new Meteor.Error('recent-position-update', 'not-logged-in');
+		}
+
+		let recentPositions = this.user.recentPositions || [];
+		let positionLinkIsInRecentPositions = false;
+
+		if (recentPositions.length > 10) {
+			recentPositions = recentPositions.slice(1);
+		}
+		recentPositions.push(position);
+
+		console.log(recentPositions);
+
+		Meteor.users.update({
+			_id: this.user._id,
+		}, {
+			$set: {
+				recentPositions,
+			},
+		});
+
+		return Meteor.users.findOne({
+			_id: this.user._id,
+		});
+	}
 }

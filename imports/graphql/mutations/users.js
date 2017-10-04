@@ -1,7 +1,8 @@
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
+
 // types
-import { UserType, UserInputType } from '/imports/graphql/types/models/user';
+import { UserType, UserInputType, PositionInputType } from '/imports/graphql/types/models/user';
 import { RemoveType } from '/imports/graphql/types/index';
 
 // bll
@@ -49,7 +50,20 @@ const usersMutationFields = {
 			const usersService = new UsersService({token});
 			return await usersService.userRemove(userId);
 		}
-	}
+	},
+	userUpdatePosition: {
+		type: UserType,
+		description: 'Update the recent positions array of a user',
+		args: {
+			position: {
+				type: PositionInputType,
+			}
+		},
+		async resolve(parent, { position }, { token }) {
+			const usersService = new UsersService({ token });
+			return await usersService.userUpdatePosition(position);
+		}
+	},
 };
 
 export default usersMutationFields;

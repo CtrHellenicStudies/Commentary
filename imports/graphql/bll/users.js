@@ -157,8 +157,6 @@ export default class UserService extends AdminService {
 		}
 		recentPositions.push(position);
 
-		console.log(recentPositions);
-
 		Meteor.users.update({
 			_id: this.user._id,
 		}, {

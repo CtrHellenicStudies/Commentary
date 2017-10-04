@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-
+import Parser from 'simple-text-parser';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 
@@ -91,7 +91,7 @@ class Commentary extends React.Component {
 			},
 			commentLemmaGroups: [],
 			commentGroups: this.props.commentGroups,
-			multiLine: null
+			multiline: null
 		};
 
 		// methods:
@@ -218,10 +218,9 @@ class Commentary extends React.Component {
 		}
 	}
 
-	selectMultiLine(multiLine) {
-		console.log("multiLine LOG", multiLine);
+	selectMultiLine(multiline) {
 		this.setState({
-			multiLine: multiLine
+			multiline: multiline
 		});
 	}
 
@@ -339,6 +338,7 @@ class Commentary extends React.Component {
 						closeContextPanel={this.closeContextPanel}
 						commentGroup={contextCommentGroupSelected}
 						commentLemmaIndex={commentLemmaIndex}
+						multiline={this.state.multiline}
 					/>
 					: ''}
 				{!isOnHomeView ?

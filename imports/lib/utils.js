@@ -1,5 +1,5 @@
 import { DocHead } from 'meteor/kadira:dochead';
-
+import Parser from 'simple-text-parser';
 // lib
 import Config from './_config/_config.js';
 
@@ -266,6 +266,49 @@ const Utils = {
 
 		return editions;
 	},
+	parseMultilineEdition(editions, multiline) {
+		const parsedEditions = [];
+
+		editions.forEach((edition, index) => {
+			const joinedText = edition.lines.map(line => line.html).join(' ');
+
+			const tag = new RegExp(`<lb ed="${multiline}" id="\\d+" \/>`, 'ig');
+			const id = /id="\d+"/ig;
+
+			const textArray = joinedText.split(tag);
+			const parser = new Parser();
+
+			const lineArray = [];
+			parser.addRule(/id="\d+"/ig, (arg1) => {
+				lineArray.push(arg1);
+			});
+			parser.render(joinedText);
+
+			const numberArray = lineArray.map((line) => parseInt(line.substr(4, line.length - 2)));
+
+			if (numberArray.length) {
+				numberArray.unshift(numberArray[0] - 1);
+			}
+
+			const result = [];
+
+			if (textArray.length === numberArray.length) {
+				for (let i = 0; i < textArray.length; i++) {
+					const currentLine = {
+						html: textArray[i],
+						n: numberArray[i]
+					};
+					result.push(currentLine);
+				}
+			} else {
+				return new Error('Parsing error');
+			}
+			const currentEdition = edition;
+			currentEdition.lines = result;
+			parsedEditions.push(currentEdition);
+		});
+		return parsedEditions;
+	}
 };
 
 export default Utils;

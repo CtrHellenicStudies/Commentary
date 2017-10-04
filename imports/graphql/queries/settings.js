@@ -28,7 +28,7 @@ const settingsQueryFields = {
 		description: 'Get a public setting document for a supplied tenantId',
 		args: {
 			tenantId: {
-				type: GraphQLID,
+				type: GraphQLString,
 			},
 		},
 		async resolve(parent, { tenantId }, {token}) {

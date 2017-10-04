@@ -77,6 +77,7 @@ class CommentLemma extends React.Component {
 			showTranslation: false,
 			translationMenuOpen: false,
 			multilineMenuOpen: false,
+			multiline: null
 		};
 
 		// methods:
@@ -261,6 +262,7 @@ class CommentLemma extends React.Component {
 							/>) : '';
 
 							const popover = (<Popover
+								key={`${lemmaTextEdition.slug}-popover`}
 								open={this.state.multilineMenuOpen}
 								anchorEl={this.state.multilineAnchorEl}
 								anchorOrigin={{
@@ -278,6 +280,16 @@ class CommentLemma extends React.Component {
 									onChange={this.handleMultilineSelect}
 									className="translation-author-menu"
 								>
+									<MenuItem
+										key={'regular'}
+										value={null}
+										primaryText="Regular"
+										className="translation-author-menu-item"
+										style={{
+											fontFamily: '"Proxima Nova A W07 Light", sans-serif',
+											fontSize: '12px',
+										}}
+									/>
 									{multiLineList.map((author, i) => (
 										<MenuItem
 											key={`${author}-${i}`}
@@ -352,7 +364,7 @@ class CommentLemma extends React.Component {
 
 }
 
-export default createContainer(({ commentGroup }) => {
+export default createContainer(({ commentGroup, multiline }) => {
 	let lemmaQuery = {};
 	let translationAuthors = [];
 	const translationNodesHandle = Meteor.subscribe('translationNodes', Session.get('tenantId'));
@@ -389,7 +401,10 @@ export default createContainer(({ commentGroup }) => {
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
 	const editionsSubscription = Meteor.subscribe('editions');
 	const textNodesCursor = TextNodes.find(lemmaQuery);
-	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+	let editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+
+	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
+
 	return {
 		translationAuthors,
 		editions,

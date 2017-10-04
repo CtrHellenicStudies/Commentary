@@ -324,6 +324,7 @@ class Commentary extends React.Component {
 								filters={filters}
 								isOnHomeView={isOnHomeView}
 								selectMultiLine={this.selectMultiLine}
+								multiline={this.state.multiline}
 							/>
 						))}
 					</div>

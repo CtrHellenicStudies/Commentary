@@ -101,6 +101,7 @@ class CommentGroup extends React.Component {
 							setScrollPosition={setContextScrollPosition}
 							hideLemma={hideLemma}
 							selectMultiLine={selectMultiLine}
+							multiline={this.props.multiline}
 						/>
 
 						{commentGroup.comments.map(comment => (

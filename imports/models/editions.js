@@ -9,7 +9,10 @@ Editions.schema = new SimpleSchema({
 	},
 	slug: {
 		type: String
-	}
+	},
+	multiLine: {
+		type: [String]
+	},
 });
 
 Editions.attachSchema(Editions.schema);

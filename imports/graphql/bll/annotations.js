@@ -3,18 +3,41 @@ import { Meteor } from 'meteor/meteor';
 import Comments from '/imports/models/comments';
 import Books from '/imports/models/books';
 
-export default class AnnotationService {
+import AdminService from './adminService';
+
+export default class AnnotationService extends AdminService {
 	constructor(props) {
-		this.token = props.token;
-		this.user = Meteor.users.findOne({
-			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(props.token),
-		});
+		super(props);
+		if (props.token) {
+			this.token = props.token;
+			this.user = Meteor.users.findOne({
+				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(props.token),
+			});
+		}
+	}
+
+	annotationsGet(bookChapterUrl) {
+		const args = {
+			bookChapterUrl,
+			isAnnotation: true,
+		};
+
+		const options = {
+			sort: {
+				paragraphN: 1,
+			},
+		};
+
+		return Comments.find(args, options).fetch();
 	}
 
 	hasAnnotationPermission(chapterUrl) {
 		const book = Books.findOne({'chapters.url': chapterUrl});
 		const authorizedBooks = this.user.canAnnotateBooks || [];
-		return !!(this.user && (book || ~authorizedBooks.indexOf(book._id)));
+		if (book) {
+			return !!(this.user && ~authorizedBooks.indexOf(book._id));
+		}
+		return false;
 	}
 
 	hasAnnotationRevisionPermission(annotationId) {
@@ -22,55 +45,37 @@ export default class AnnotationService {
 		return !!comment;
 	}
 
-	rewriteRevision(revision) {
-		if (revision instanceof Array) {
-			const newRevision = [];
-			revision.map(singleRevision => {
-				newRevision.push({
-					tenantId: singleRevision.tenantId,
-					text: singleRevision.text,
-					created: new Date(),
-					updated: new Date()
-				});
-			});
-			return newRevision;
-		}
-		return {
-			tenantId: revision.tenantId,
-			text: revision.text,
-			created: new Date(),
-			updated: new Date()
-		};
-	}
-
 	createAnnotation(annotation) {
-		const newAnnotation = annotation;
-		newAnnotation.revisions = this.rewriteRevision(annotation.revisions);
-
-		if (this.hasAnnotationPermission(annotation.bookChapterUrl)) {
-			const commentId = Comments.insert({...newAnnotation});
+		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
+			const commentId = Comments.insert({ ...annotation });
 			return Comments.findOne(commentId);
 		}
-		return new Error('Not authorized');
+
+		return new Error('Not authorized to create annotation');
 	}
 
-	deleteAnnotation(annotationId) {
-		const annotation = Comments.findOne(annotationId);
-		if (this.hasAnnotationPermission(annotation.bookChapterUrl)) {
-			return Comments.remove({_id: annotationId});
+	deleteAnnotation(_id) {
+		const annotation = Comments.findOne({ _id });
+		if (this.hasAnnotationPermission(annotation.bookChapterUrl) || this.userIsAdmin) {
+			return Comments.remove({ _id });
 		}
-		return new Error('Not authorized');
+		return new Error('Not authorized to delete annotation');
 	}
 
-	addRevision(annotationId, revision) {
-		const newRevision = this.rewriteRevision(revision);
-		if (this.hasAnnotationRevisionPermission(annotationId)) {
-			return Comments.update({_id: annotationId}, {
+	addRevision(_id, revision) {
+		if (this.hasAnnotationRevisionPermission(_id) || this.userIsAdmin) {
+			const newRevision = {
+				title: revision.title,
+				text: revision.text,
+				created: new Date(),
+			};
+
+			return Comments.update({ _id }, {
 				$addToSet: {
-					revisions: newRevision
-				}
+					revisions: newRevision,
+				},
 			});
 		}
-		return new Error('Not authorized');
+		return new Error('Not authorized to add revision to annotation');
 	}
 }

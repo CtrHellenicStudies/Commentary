@@ -182,7 +182,7 @@ class CommenterDetail extends React.Component {
 								}
 							</div>
 
-							{/*loggedIn ?
+							{/* loggedIn ?
 								<div>
 									<FlatButton
 										label={subscribed ? `Unsubscribe from ${commenter.name}` : `Subscribe to ${commenter.name}`}

@@ -43,6 +43,7 @@ export default class BookService extends AdminService {
 			const newBook = book;
 			newBook.chapters = this.rewriteChapter(book.chapters);
 			Books.update({_id}, {$set: newBook});
+			return Books.findOne(_id);
 		}
 		return new Error('Not authorized');
 	}
@@ -52,5 +53,34 @@ export default class BookService extends AdminService {
 			return Books.remove(_id);
 		}
 		return new Error('Not authorized');
+	}
+	bookByChapter(chapterUrl) {
+		const args = {
+			'chapters.url': chapterUrl,
+		};
+
+		return Books.findOne(args, {
+			sort: {
+				slug: 1,
+			},
+		});
+	}
+	booksGet(_id, chapterUrl) {
+		const args = {};
+
+		if (_id) {
+			args._id = _id;
+		}
+
+		if (chapterUrl) {
+			args['chapters.url'] = chapterUrl;
+		}
+
+		return Books.find(args, {
+			sort: {
+				slug: 1,
+				title: 1
+			},
+		}).fetch();
 	}
 }

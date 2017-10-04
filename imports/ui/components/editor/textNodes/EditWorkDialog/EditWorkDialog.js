@@ -27,32 +27,32 @@ class EditWorkDialog extends React.Component {
 	render() {
 		const { work } = this.state;
 
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onClick={this.props.handleClose}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        keyboardFocused={true}
-        onClick={this.props.handleClose}
-      />,
-    ];
+		const actions = [
+			<FlatButton
+				label="Cancel"
+				primary
+				onClick={this.props.handleClose}
+			/>,
+			<FlatButton
+				label="Submit"
+				primary
+				keyboardFocused
+				onClick={this.props.handleClose}
+			/>,
+		];
 
 		return (
-      <Dialog
-        title={
+			<Dialog
+				title={
 					work && '_id' in work
 					? 'Edit Work'
 					: 'Create Work'
 				}
-        actions={actions}
-        modal={false}
-        open={this.props.open}
-        onRequestClose={this.props.handleClose}
-      >
+				actions={actions}
+				modal={false}
+				open={this.props.open}
+				onRequestClose={this.props.handleClose}
+			>
 				<div className="text-node-editor-meta-form edit-work-form">
 					<div className="edit-form-input">
 						<label>
@@ -65,7 +65,7 @@ class EditWorkDialog extends React.Component {
 						/>
 					</div>
 				</div>
-      </Dialog>
+			</Dialog>
 		);
 	}
 }

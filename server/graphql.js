@@ -7,6 +7,7 @@ import { graphiqlExpress } from 'graphql-server-express';
 import { GraphQLSchema } from 'graphql';
 import { maskErrors } from 'graphql-errors';
 import { formatError } from 'apollo-errors';
+import cors from 'cors';
 
 // graphql resources
 import RootQuery from '/imports/graphql/queries/rootQuery';
@@ -19,11 +20,7 @@ import RootSubscription from '/imports/graphql/subscriptions/rootSubscription';
  * @type {GraphQLSchema}
  */
 
-const getGraphglContext = req => ({
-		// token: req.body.token,
-		// TODO: change that to the actual token
-	token: 'testtoken'
-});
+const getGraphglContext = req => ({token: req.headers.authorization});
 
 const RootSchema = new GraphQLSchema({
 	query: RootQuery,
@@ -38,6 +35,21 @@ maskErrors(RootSchema);
 const GRAPHQL_PORT = 4000;
 
 const graphQLServer = express();
+
+const whitelist = [
+	/chs\.local:\d+$/,
+	/\.chs\.local:\d+$/,
+	/orphe\.us$/,
+	/\.orphe\.us$/,
+	/chs\.harvard\.edu$/,
+	/\.chs\.harvard\.edu$/,
+];
+
+const corsOptions = {
+	origin: (origin, callback) => { callback(null, true); }, // Disable CORs for the moment while development environment is changing
+	// credentials: true,
+};
+graphQLServer.use(cors(corsOptions));
 
 graphQLServer.use('/graphql', bodyParser.json(), apolloExpress(req => ({
 	schema: RootSchema,

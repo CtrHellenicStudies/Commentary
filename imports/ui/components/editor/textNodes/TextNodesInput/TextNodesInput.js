@@ -24,6 +24,7 @@ import Works from '/imports/models/works';
 
 // lib:
 import Utils from '/imports/lib/utils';
+import _ from 'lodash';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -41,7 +42,7 @@ class TextNodesInput extends React.Component {
 		super(props);
 
 		this.state = {
-			textNodes: [],
+			textNodes: this.props.textNodes,
 			snackbarOpen: false,
 			snackbarMessage: '',
 		};
@@ -55,17 +56,16 @@ class TextNodesInput extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.textNodes.length !== this.props.textNodes.length) {
-			this.setState({
-				textNodes: nextProps.textNodes,
-			});
-		}
+		this.setState({
+			textNodes: nextProps.textNodes,
+		});
+
 	}
 
 	addTextNodeBlock() {
 		const { workId, workSlug, editionId, subworkN, subworkTitle, lineFrom, defaultTextNodes } = this.props;
 		const { textNodes } = this.state;
-		let defaultN = 1;
+		const defaultN = 1;
 
 		this.state.textNodes.push({
 			_id: Random.id(),
@@ -123,7 +123,7 @@ class TextNodesInput extends React.Component {
 
 		// regularize type of text node id
 		let editedTextNodeId = editedTextNode._id;
-		if (typeof editedTextNodeId === "object") {
+		if (typeof editedTextNodeId === 'object') {
 			editedTextNodeId = editedTextNodeId.valueOf();
 		}
 
@@ -147,7 +147,7 @@ class TextNodesInput extends React.Component {
 		const editedTextNode = textNodes[textElemIndex];
 
 		let editedTextNodeId = editedTextNode._id;
-		if (typeof editedTextNodeId === "object") {
+		if (typeof editedTextNodeId === 'object') {
 			editedTextNodeId = editedTextNodeId.valueOf();
 		}
 
@@ -180,6 +180,11 @@ class TextNodesInput extends React.Component {
 
 	render() {
 		const { textNodes } = this.state;
+		
+
+		if (!this.props.ready) {
+			return null;
+		}
 
 		return (
 			<FormGroup
@@ -195,18 +200,17 @@ class TextNodesInput extends React.Component {
 							- will cause errors
 						"index" - pass the map functions index variable here
 					*/}
-					{textNodes.map((textNode, i) => {
-						return (
-							<ListGroupItemDnD
-								key={textNode.n}
-								index={i}
-								className="form-subitem form-subitem--textNode text-node-input"
-								moveListGroupItem={this.moveTextNodeBlock}
+					{textNodes.map((textNode, i) => (
+						<ListGroupItemDnD
+							key={textNode.n}
+							index={i}
+							className="form-subitem form-subitem--textNode text-node-input"
+							moveListGroupItem={this.moveTextNodeBlock}
+						>
+							<div
+								className="reference-work-item"
 							>
-								<div
-									className="reference-work-item"
-								>
-									{/*
+								{/*
 									<div
 										className="remove-reference-work-item"
 										onClick={this.removeTextNodeBlock.bind(this, i)}
@@ -226,34 +230,33 @@ class TextNodesInput extends React.Component {
 										/>
 									</div>
 									*/}
-									<FormGroup className="text-node-number-input">
-										<TextField
-											name={`${i}_number`}
-											hintText="0"
-											defaultValue={textNode.n}
-											style={{
-												width: '40px',
-												margin: '0 10px',
-											}}
-											onChange={this.onChangeN}
-											disabled
-										/>
-									</FormGroup>
-									<FormGroup className="text-node-text-input">
-										<TextField
-											name={`${i}_text`}
-											defaultValue={textNode.html}
-											style={{
-												width: '700px',
-												margin: '0 10px',
-											}}
-											onChange={this.onChangeText}
-										/>
-									</FormGroup>
-								</div>
-							</ListGroupItemDnD>
-						);
-					})}
+								<FormGroup className="text-node-number-input">
+									<TextField
+										name={`${i}_number`}
+										hintText="0"
+										defaultValue={textNode.n}
+										style={{
+											width: '40px',
+											margin: '0 10px',
+										}}
+										onChange={this.onChangeN}
+										disabled
+									/>
+								</FormGroup>
+								<FormGroup className="text-node-text-input">
+									<TextField
+										name={`${i}_text`}
+										defaultValue={textNode.html}
+										style={{
+											width: '700px',
+											margin: '0 10px',
+										}}
+										onChange={this.onChangeText}
+									/>
+								</FormGroup>
+							</div>
+						</ListGroupItemDnD>
+						))}
 				</ListGroupDnD>
 				<RaisedButton
 					label="Show more"
@@ -299,17 +302,13 @@ const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, 
 	const lemmaQuery = {
 		'work.slug': workSlug,
 		'subwork.n': subworkN,
-		'text.n': {
-			$gte: parseInt(lineFrom, 10),
-			$lte: parseInt(lineFrom, 10) + limit,
-		},
-		'text.edition': editionId,
+		$and: [{'text.n': {$gte: parseInt(lineFrom, 10)}}, {'text.n': {$lte: parseInt(lineFrom, 10) + limit}}],
+		'text.edition': editionId
 	};
 
 	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
 		lemmaQuery['work.slug'] = 'hymns';
 	}
-
 	const textNodeSubscription = Meteor.subscribe('textNodes', lemmaQuery, 0, limit);
 	const editionsSubscription = Meteor.subscribe('editions');
 	const ready = textNodeSubscription.ready() && editionsSubscription.ready();
@@ -331,9 +330,19 @@ const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, 
 		}
 	}
 
+	const assignedTextNodes = [];
+
+	for (let i = 0; i < limit; i++) {
+		let newLine;
+		const arrIndex = _.findIndex(selectedEdition.lines, (line) => line.n === i + parseInt(lineFrom));
+		if (arrIndex >= 0) {
+			newLine = selectedEdition.lines[arrIndex];
+			assignedTextNodes.push(newLine);
+		}
+	}
 
 	return {
-		textNodes: selectedEdition.lines,
+		textNodes: assignedTextNodes,
 		ready,
 	};
 

@@ -382,7 +382,7 @@ const EditKeyword = React.createClass({
 							<div className="comment-edit-action-button">
 								<RaisedButton
 									type="submit"
-									label="Update Keyword"
+									label="Update Tag"
 									labelPosition="after"
 									onClick={this.handleSubmit}
 									icon={<FontIcon className="mdi mdi-plus" />}

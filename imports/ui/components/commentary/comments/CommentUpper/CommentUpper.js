@@ -2,7 +2,7 @@ import React from 'react';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';  
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
-
+import _ from 'lodash';
 
 /*
 	BEGIN CommentUpperLeft
@@ -25,20 +25,20 @@ CommentUpperLeft.propTypes = {
 */
 const CommentUpperRight = props => (
 	<div className="comment-upper-right">
+		{_.every(props.commenters, commenter => props.userCanEditCommenters.indexOf(commenter._id) > -1) ?
+			<FlatButton
+				label="Edit comment"
+				href={`/commentary/${props.commentId}/edit`}
+				icon={<FontIcon className="mdi mdi-pen" />}
+			/>
+			:
+			''
+		}
 		{props.commenters.map(commenter => (
 			<div
 				key={commenter._id}
 				className="comment-author"
 			>
-				{props.userCanEditCommenters.indexOf(commenter._id) > -1 ?
-					<FlatButton
-						label="Edit comment"
-						href={`/commentary/${props.commentId}/edit`}
-						icon={<FontIcon className="mdi mdi-pen" />}
-					/>
-					:
-					''
-				}
 				<div className={'comment-author-text'}>
 					<a href={`/commenters/${commenter.slug}`}>
 						<span className="comment-author-name">{commenter.name}</span>

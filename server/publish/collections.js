@@ -10,6 +10,7 @@ import Tenants from '/imports/models/tenants';
 import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';
 import Settings from '/imports/models/settings';
+import TranslationNodes from '/imports/models/translationNodes';
 import Translations from '/imports/models/translations';
 import Editions from '/imports/models/editions';
 
@@ -273,10 +274,10 @@ if (Meteor.isServer) {
 			const imageArray = page.headerImage;
 			if (imageArray && Array.isArray(imageArray)) {
 				return Images.find({
-						_id: {
-							$in: imageArray,
-						},
-					});
+					_id: {
+						$in: imageArray,
+					},
+				});
 			}
 		}
 
@@ -284,7 +285,7 @@ if (Meteor.isServer) {
 	});
 
 	Meteor.publish('pages', (tenantId, slug) => {
-		check(tenantId, String);
+		check(tenantId, Match.Maybe(String));
 		check(slug, String);
 
 		return Pages.find({
@@ -362,6 +363,27 @@ if (Meteor.isServer) {
 	Meteor.publish('settings', () => Settings.find({}, { sort: { tenantId: 1 }}));
 
 	Meteor.publish('translations', () => Translations.find({}, { sort: { tenantId: 1 }}));
+
+	Meteor.publish('translationNodes', () => TranslationNodes.find({}, { sort: { tenantId: 1 }}));
+
+	Meteor.publish('translationNodes.work', (tenantId, workId, subwork, author, skip = 0, limit = 100) => {
+		check(tenantId, String);
+		check(workId, String);
+		check(parseInt(subwork), Number);
+		check(author, String);
+		check(parseInt(skip), Number);
+		check(parseInt(limit), Number);
+		
+		const work = Works.findOne(workId).slug;
+		const result = TranslationNodes.find({
+			work,
+			subwork,
+			tenantId,
+			author,
+			$and: [{n: {$gte: parseInt(skip)}}, {n: {$lte: parseInt(skip) + parseInt(limit) - 1}}]
+		}, {sort: {tenantId: 1}});
+		return result;
+	});
 
 	Meteor.publish('settings.tenant', (tenantId) => {
 		check(tenantId, Match.Maybe(String));

@@ -28,6 +28,8 @@ import TextNodesInput from '../TextNodesInput';
 import EditWorkDialog from '../EditWorkDialog';
 import EditEditionDialog from '../EditEditionDialog';
 import EditSubworkDialog from '../EditSubworkDialog';
+import TranslationSelect from '../TranslationSelect/TranslationSelect';
+import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
 
 
 class TextNodesEditor extends React.Component {
@@ -37,6 +39,7 @@ class TextNodesEditor extends React.Component {
 		const selectedWork = null;
 		const selectedEdition = null;
 		const selectedSubwork = null;
+		const selectedTranslation = null;
 		const subworks = [];
 		const startAtLine = null;
 		const limit = 50;
@@ -46,6 +49,7 @@ class TextNodesEditor extends React.Component {
 			selectedWork,
 			selectedEdition,
 			selectedSubwork,
+			selectedTranslation,
 			startAtLine,
 			limit,
 			editWorkDialogOpen: false,
@@ -56,31 +60,41 @@ class TextNodesEditor extends React.Component {
 		autoBind(this);
 	}
 
-	selectWork(selectedWork) {
+	selectWork(event) {
+		const setValue = event ? event.value : '';
+
 		const { works } = this.props;
 		let _selectedWork;
 
 		works.forEach(work => {
-			if (work._id === selectedWork.value) {
+			if (work._id === setValue) {
 				_selectedWork = work;
 			}
 		});
 
 		this.setState({
-			selectedWork: selectedWork.value,
-			subworks: _selectedWork.subworks.sort(Utils.sortBy('n')),
+			selectedWork: setValue,
+			subworks: _selectedWork ? _selectedWork.subworks.sort(Utils.sortBy('n')) : [],
 		});
 	}
 
-	selectEdition(selectedEdition) {
+	selectEdition(event) {
+		const setValue = event ? event.value : '';
 		this.setState({
-			selectedEdition: selectedEdition.value,
+			selectedEdition: setValue
 		});
 	}
 
-	selectSubwork(selectedSubwork) {
+	selectSubwork(event) {
+		const setValue = event ? event.value : '';
 		this.setState({
-			selectedSubwork: selectedSubwork.value,
+			selectedSubwork: setValue
+		});
+	}
+
+	selectTranslation(selectedTranslation) {
+		this.setState({
+			selectedTranslation: selectedTranslation
 		});
 	}
 
@@ -172,7 +186,25 @@ class TextNodesEditor extends React.Component {
 				limit={limit}
 				loadMore={this.loadMoreText}
 			/>
-		)
+		);
+	}
+
+	renderTranslationNodesInput() {
+		const { selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation } = this.state;
+
+		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
+			return null;
+		}
+		return (
+			<TranslationNodeInput
+				selectedWork={selectedWork}
+				selectedSubwork={selectedSubwork}
+				startAtLine={startAtLine}
+				limit={limit}
+				selectedTranslation={selectedTranslation}
+				loadMore={this.loadMoreText}
+			/>
+		);
 	}
 
 	render() {
@@ -223,6 +255,11 @@ class TextNodesEditor extends React.Component {
 				label: subwork.title,
 			});
 		});
+
+		const translationOptions = {
+			selectedWork,
+			selectedSubwork,
+		};
 
 
 		return (
@@ -307,14 +344,24 @@ class TextNodesEditor extends React.Component {
 						<FormGroup controlId="formControlsSelect">
 							<ControlLabel>Start at line</ControlLabel>
 							<br />
-					    <TextField
-					      hintText="0"
+							<TextField
+								hintText="0"
 								onChange={this.updateStartAtLine}
-					    />
+							/>
 						</FormGroup>
 					</div>
+					<TranslationSelect {...translationOptions} selectTranslation={this.selectTranslation} />
+
 				</div>
-				{this.renderTextNodesInput()}
+
+				{
+					this.state.selectedTranslation ? (
+						<div className="row">
+							<div className="col-lg-6">{this.renderTextNodesInput()}</div>
+							<div className="col-lg-6">{this.renderTranslationNodesInput()}</div>
+						</div>) : this.renderTextNodesInput()
+				}
+
 				<EditWorkDialog
 					open={this.state.editWorkDialogOpen}
 					handleClose={this.handleCloseEditWorkDialog}

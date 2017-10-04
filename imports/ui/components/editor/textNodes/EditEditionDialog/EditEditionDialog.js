@@ -27,32 +27,32 @@ class EditEditionDialog extends React.Component {
 	render() {
 		const { edition } = this.state;
 
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onClick={this.props.handleClose}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        keyboardFocused={true}
-        onClick={this.props.handleClose}
-      />,
-    ];
+		const actions = [
+			<FlatButton
+				label="Cancel"
+				primary
+				onClick={this.props.handleClose}
+			/>,
+			<FlatButton
+				label="Submit"
+				primary
+				keyboardFocused
+				onClick={this.props.handleClose}
+			/>,
+		];
 
 		return (
-      <Dialog
-        title={
+			<Dialog
+				title={
 					edition && '_id' in edition
 					? 'Edit Edition'
 					: 'Create Edition'
 				}
-        actions={actions}
-        modal={false}
-        open={this.props.open}
-        onRequestClose={this.props.handleClose}
-      >
+				actions={actions}
+				modal={false}
+				open={this.props.open}
+				onRequestClose={this.props.handleClose}
+			>
 				<div className="text-node-editor-meta-form edit-edition-form">
 					<div className="edit-form-input">
 						<label>
@@ -65,7 +65,7 @@ class EditEditionDialog extends React.Component {
 						/>
 					</div>
 				</div>
-      </Dialog>
+			</Dialog>
 		);
 	}
 }

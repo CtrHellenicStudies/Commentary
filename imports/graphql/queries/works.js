@@ -1,34 +1,27 @@
-import { GraphQLID, GraphQLNonNull } from 'graphql';
+import { GraphQLID, GraphQLList } from 'graphql';
 
 // types
-import WorkType from '/imports/graphql/types/models/work';
+import { WorkType } from '/imports/graphql/types/models/work';
 
-// models
-import Works from '/imports/models/works';
+// bll
+import WorksService from '../bll/works';
 
 
 const workQueryFields = {
 	works: {
-		type: WorkType,
+		type: new GraphQLList(WorkType),
 		description: 'Get list of works',
 		args: {
 			tenantId: {
 				type: GraphQLID,
 			},
+			_id: {
+				type: GraphQLID,
+			},
 		},
-		resolve({ tenantId }, context) {
-			const args = {};
-
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
-
-
-			return Works.find(args, {
-				sort: {
-					slug: 1
-				}
-			}).fetch();
+		async resolve(parent, { _id, tenantId }, {token}) {
+			const worksService = new WorksService({token});
+			return await worksService.worksGet(_id, tenantId);
 		}
 	},
 };

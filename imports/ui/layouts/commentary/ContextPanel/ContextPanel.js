@@ -90,7 +90,7 @@ class ContextPanel extends React.Component {
 			selectedLemmaEdition: '',
 			lineFrom: getLineFrom(props),
 			maxLine: 0,
-			highlightingVisible: true,
+			highlightingVisible: false,
 		};
 
 		this.setMaxLine();

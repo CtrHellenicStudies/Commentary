@@ -27,7 +27,7 @@ class WorkInput extends React.Component {
 	}
 }
 
-const WorkInputContainer = createContainer( props => {
+const WorkInputContainer = createContainer(props => {
 	Meteor.subscribe('works', Session.get('tenantId'));
 	const works = Works.find().fetch();
 

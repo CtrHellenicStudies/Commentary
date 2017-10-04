@@ -253,9 +253,9 @@ class AddComment extends React.Component {
 		});
 	}
 
-	onCommenterValueChange(comenter) {
+	onCommenterValueChange(commenter) {
 		this.setState({
-			commenterValue: comenter,
+			commenterValue: commenter,
 		});
 	}
 
@@ -422,7 +422,7 @@ class AddComment extends React.Component {
 
 
 		tagsValue[tag.i].tagId = tag.value;
-		tagsValue[tag.i].keyword = _selectedKeyword
+		tagsValue[tag.i].keyword = _selectedKeyword;
 		tagsValue[tag.i].isSet = true;
 
 		this.setState({
@@ -468,6 +468,7 @@ class AddComment extends React.Component {
 										value={this.state.commenterValue}
 										onChange={this.onCommenterValueChange}
 										placeholder="Commentator..."
+										multi={true}
 									/>
 									:
 									''

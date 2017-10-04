@@ -1,6 +1,6 @@
 import React from 'react';
 import Formsy from 'formsy-react';
-import { Field } from 'redux-form'
+import { Field } from 'redux-form';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';

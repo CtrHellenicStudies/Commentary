@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm } from 'redux-form';
 import cookie from 'react-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -202,8 +202,8 @@ AddRevision.childContextTypes = {
  * Make the redux form
  */
 const AddRevisionForm = reduxForm({
-  form: 'addRevision'
-})(AddRevisionContainer)
+	form: 'addRevision'
+})(AddRevisionContainer);
 
 
 export default AddRevisionForm;

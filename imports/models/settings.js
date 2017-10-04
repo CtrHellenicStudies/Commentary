@@ -43,6 +43,26 @@ Settings.schema = new SimpleSchema({
 		type: Object,
 	},
 
+	'homepageCover.filename': {
+		type: String,
+		optional: true,
+	},
+
+	'homepageCover.src': {
+		type: String,
+		optional: true,
+	},
+
+	'homepageCover.type': {
+		type: String,
+		optional: true,
+	},
+
+	'homepageCover.size': {
+		type: Number,
+		optional: true,
+	},
+
 	homepageIntroduction: {
 		optional: true,
 		type: [Object],
@@ -53,32 +73,32 @@ Settings.schema = new SimpleSchema({
 		type: Object,
 	},
 
-	'homepageIntroductionImage.$.src': {
+	'homepageIntroductionImage.src': {
 		type: String,
 		optional: true,
 	},
 
-	'homepageIntroductionImage.$.filename': {
+	'homepageIntroductionImage.filename': {
 		type: String,
 		optional: true,
 	},
 
-	'homepageIntroductionImage.$.type': {
+	'homepageIntroductionImage.type': {
 		type: String,
 		optional: true,
 	},
 
-	'homepageIntroductionImage.$.size': {
+	'homepageIntroductionImage.size': {
 		type: Number,
 		optional: true,
 	},
 
-	'homepageIntroductionImage.$.directive': {
+	'homepageIntroductionImage.directive': {
 		type: String,
 		optional: true,
 	},
 
-	'homepageIntroductionImage.$.key': {
+	'homepageIntroductionImage.key': {
 		type: String,
 		optional: true,
 	},
@@ -111,7 +131,12 @@ Settings.schema = new SimpleSchema({
 	discussionCommentsDisabled: {
 		type: Boolean,
 		optional: true,
-	}
+	},
+
+	aboutURL: {
+		type: String,
+		optional: true,
+	},
 
 });
 

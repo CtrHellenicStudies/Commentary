@@ -47,9 +47,11 @@ const getContextPanelTextState = (commentGroup, editor) => {
 */
 const LineNumbering = ({ n }) => (
 	<div className="lemma-meta">
-		<span className={`lemma-line-n ${
+		<span
+			className={`lemma-line-n ${
 			(n % 5 === 0 || n === 1) ? 'lemma-line-n--displayed' : ''
-		}`}>
+		}`}
+		>
 			{n}
 		</span>
 	</div>
@@ -186,7 +188,7 @@ class ContextPanelText extends React.Component {
 								return (
 									<div
 										className={lineClass}
-									key={`${line.n}-${i}`}
+										key={`${line.n}-${i}`}
 									>
 										<div
 											className="lemma-text"

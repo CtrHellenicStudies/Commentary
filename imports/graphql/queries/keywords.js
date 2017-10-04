@@ -1,26 +1,26 @@
-import { GraphQLID, GraphQLNonNull } from 'graphql';
+import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 
 // types
-import KeywordType from '/imports/graphql/types/models/keyword';
+import {KeywordType} from '/imports/graphql/types/models/keyword';
 
-// models
-import Keywords from '/imports/models/keywords';
+// bll
+import KeywordsService from '../bll/keywords';
 
 const keywordQueryFields = {
 	keywords: {
-		type: KeywordType,
+		type: new GraphQLList(KeywordType),
 		description: 'Get list of keywords (tags)',
 		args: {
 			tenantId: {
 				type: GraphQLID,
 			},
+			id: {
+				type: GraphQLString,
+			},
 		},
-		resolve({ tenantId }, context) {
-			const args = {};
-
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
+		async resolve(parent, { tenantId, id }, {token}) {
+			const keywordsService = new KeywordsService({token});
+			return await keywordsService.keywordsGet(id, tenantId);
 
 			/*
 			 * TODO: reinstate the linked data api schema
@@ -101,11 +101,6 @@ const keywordQueryFields = {
 
 			*/
 
-			return Keywords.find(args, {
-				sort: {
-					slug: 1,
-				},
-			});
 		}
 	},
 };

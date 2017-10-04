@@ -1,34 +1,27 @@
-import { GraphQLID, GraphQLNonNull } from 'graphql';
+import {GraphQLString, GraphQLList} from 'graphql';
 
 // types
-import ReferenceWorkType from '/imports/graphql/types/models/referenceWork';
+import {ReferenceWorkType} from '/imports/graphql/types/models/referenceWork';
 
-// models
-import ReferenceWorks from '/imports/models/referenceWorks';
+// bll
+import ReferenceWorksService from '../bll/referenceWorks';
 
 
 const referenceWorkQueryFields = {
 	referenceWorks: {
-		type: ReferenceWorkType,
+		type: new GraphQLList(ReferenceWorkType),
 		description: 'Get list of reference works',
 		args: {
 			tenantId: {
-				type: GraphQLID,
+				type: GraphQLString,
 			},
-		},
-		resolve({ tenantId }, context) {
-			const args = {};
-
-			if (tenantId) {
-				args.tenantId = tenantId;
+			id: {
+				type: GraphQLString,
 			}
-
-
-			return ReferenceWorks.find(args, {
-				sort: {
-					slug: 1
-				}
-			}).fetch();
+		},
+		async resolve(parent, { tenantId, id }, {token}) {
+			const referenceWorksService = new ReferenceWorksService({token});
+			return await referenceWorksService.referenceWorksGet(id, tenantId);
 		}
 	},
 };

@@ -2,7 +2,6 @@ import {
 	GraphQLObjectType,
 	GraphQLString,
 	GraphQLInt,
-	GraphQLBoolean,
 	GraphQLList
 } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
@@ -46,4 +45,4 @@ const TranslationType = new GraphQLObjectType({
 	},
 });
 
-export default TranslationType;
+export {TranslationType};

@@ -52,6 +52,20 @@ const getCommenter = (formData) => {
 	return commenter;
 };
 
+const getCommenters = (formData) => {
+
+	const commentersList = [];
+
+	formData.forEach(commenter => {
+		const currentCommenter = Commenters.findOne({
+			_id: commenter.value,
+		}, {fields: {_id: 1, slug: 1, name: 1}});
+		commentersList.push(currentCommenter);
+	});
+
+	return commentersList;
+};
+
 const getKeywords = (formData) => {
 	const keywords = [];
 
@@ -210,7 +224,7 @@ class AddCommentLayout extends React.Component {
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const referenceWorks = formData.referenceWorks;
-		const commenter = getCommenter(formData);
+		const commenters = getCommenters(formData.commenterValue);
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = Cookies.get('loginToken');
 
@@ -243,11 +257,7 @@ class AddCommentLayout extends React.Component {
 				created: referenceWorks ? referenceWorks.date : new Date(),
 				slug: slugify(formData.titleValue),
 			}],
-			commenters: commenter ? [{
-				_id: commenter._id,
-				name: commenter.name,
-				slug: commenter.slug,
-			}] : [{}],
+			commenters: commenters.length ? commenters : [{}],
 			keywords: keywords || [{}],
 			referenceWorks: referenceWorks,
 			tenantId: Session.get('tenantId'),

@@ -16,6 +16,7 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Select from 'react-select';
 import { Creatable } from 'react-select';
 import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
@@ -30,6 +31,7 @@ import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import CommentersEditorDialog from '../CommentersEditorDialog/CommentersEditorDialog';
+import Commenters from '/imports/models/commenters';
 
 import {
 	ItalicButton,
@@ -160,6 +162,7 @@ class AddRevision extends React.Component {
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 			commentersEditorDialogOpen: false,
+			commenterValue: comment.commenters ? comment.commenters.map((commenter) => ({value: commenter._id, label: commenter.name})) : [],
 		};
 
 		autoBind(this);
@@ -437,9 +440,21 @@ class AddRevision extends React.Component {
 			commentersEditorDialogOpen: false
 		});
 	}
+	
+	setCommenters(commenters) {
+		this.setState({
+			commenters: commenters
+		});
+	}
+
+	onCommenterValueChange(commenter) {
+		this.setState({
+			commenterValue: commenter,
+		});
+	}
 
 	render() {
-		const { comment } = this.props;
+		const { comment, commentersOptions } = this.props;
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { referenceWorkOptions, tags } = this.props;
 		const revisions = _.sortBy(comment.revisions, 'created');
@@ -486,19 +501,19 @@ class AddRevision extends React.Component {
 											}}
 										/>
 									</div>
-									<div className="comment-upper-action-button">
-										<FlatButton
-											label="Edit Authors"
-											labelPosition="after"
-											onClick={this.openCommentersEditorDialog}
-											style={{
-												border: '1px solid #ddd',
-												maxHeight: 'none',
-												fontSize: '12px',
-												height: 'auto',
-											}}
-										/>
-									</div>
+									{/*<div className="comment-upper-action-button">*/}
+										{/*<FlatButton*/}
+											{/*label="Edit Authors"*/}
+											{/*labelPosition="after"*/}
+											{/*onClick={this.openCommentersEditorDialog}*/}
+											{/*style={{*/}
+												{/*border: '1px solid #ddd',*/}
+												{/*maxHeight: 'none',*/}
+												{/*fontSize: '12px',*/}
+												{/*height: 'auto',*/}
+											{/*}}*/}
+										{/*/>*/}
+									{/*</div>*/}
 								</div>
 								<h1 className="add-comment-title">
 									<Editor
@@ -648,11 +663,27 @@ class AddRevision extends React.Component {
 									</FormGroup>
 								</div>
 
-								<CommentersEditorDialog
-									open={this.state.commentersEditorDialogOpen}
-									handleClose={this.handleCloseCommentersEditorDialog}
-									commenters={comment.commenters}
-								/>
+								{/*<CommentersEditorDialog*/}
+									{/*open={this.state.commentersEditorDialogOpen}*/}
+									{/*handleClose={this.handleCloseCommentersEditorDialog}*/}
+									{/*commenters={this.state.commenters}*/}
+									{/*setCommenters={this.setCommenters}*/}
+								{/*/>*/}
+
+								{commentersOptions && commentersOptions.length ?
+									<Select
+										name="commenter"
+										id="commenter"
+										required={false}
+										options={commentersOptions}
+										value={this.state.commenterValue}
+										onChange={this.onCommenterValueChange}
+										placeholder="Commentator..."
+										multi={true}
+									/>
+									:
+									''
+								}
 
 								<div className="comment-edit-action-button">
 									<RaisedButton
@@ -742,9 +773,26 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 		}
 	});
 
+	const commentersOptions = [];
+	let commenters = [];
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
+	}
+	commenters.forEach((commenter) => {
+		if (!commentersOptions.some(val => (
+				commenter._id === val.value
+			))) {
+			commentersOptions.push({
+				value: commenter._id,
+				label: commenter.name,
+			});
+		}
+	});
+
 	return {
 		tags,
 		referenceWorkOptions,
+		commentersOptions,
 	};
 }, AddRevision);
 

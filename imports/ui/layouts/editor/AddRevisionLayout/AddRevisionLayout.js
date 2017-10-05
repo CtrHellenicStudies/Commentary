@@ -25,20 +25,6 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
-const getCommenters = (formData) => {
-
-	const commentersList = [];
-
-	formData.forEach(commenter => {
-		const currentCommenter = Commenters.findOne({
-			_id: commenter.value,
-		}, {fields: {_id: 1, slug: 1, name: 1}});
-		commentersList.push(currentCommenter);
-	});
-
-	return commentersList;
-};
-
 const AddRevisionLayout = React.createClass({
 
 	propTypes: {
@@ -96,7 +82,7 @@ const AddRevisionLayout = React.createClass({
 			update = {
 				keywords,
 				referenceWorks: formData.referenceWorks,
-				commenters: getCommenters(formData.commenterValue)
+				commenters: Utils.getCommenters(formData.commenterValue)
 			};
 		}
 

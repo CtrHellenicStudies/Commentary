@@ -35,20 +35,6 @@ import Utils from '/imports/lib/utils';
 const store = configureStore();
 const history = syncHistoryWithStore(createBrowserHistory(), store);
 
-const getCommenters = (formData) => {
-
-	const commentersList = [];
-
-	formData.forEach(commenter => {
-		const currentCommenter = Commenters.findOne({
-			_id: commenter.value,
-		}, {fields: {_id: 1, slug: 1, name: 1}});
-		commentersList.push(currentCommenter);
-	});
-
-	return commentersList;
-};
-
 const AddRevisionLayout = React.createClass({
 
 	propTypes: {
@@ -103,7 +89,7 @@ const AddRevisionLayout = React.createClass({
 		let update = [{}];
 		if (keywords) {
 			update = {
-				commenters: getCommenters(formData.commenterValue),
+				commenters: Utils.getCommenters(formData.commenterValue),
 				keywords,
 				referenceWorks: formData.referenceWorks,
 			};

@@ -9,6 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 	ControlLabel,
+	FormControl,
 } from 'react-bootstrap';
 import Select from 'react-select';
 import update from 'immutability-helper';
@@ -23,7 +24,7 @@ const ListGroupItemDnD = createListGroupItemDnD('tagBlocks');
 
 const TagsInput = ({
 		tags, tagsValue, addTagBlock, removeTagBlock, moveTagBlock,
-		onTagValueChange, onIsMentionedInLemmaChange
+		onTagValueChange, onIsMentionedInLemmaChange, selectTagType, addNewTag
 	}) => {
 
 	if (!tags) {
@@ -88,7 +89,7 @@ const TagsInput = ({
 											}}
 										/>
 									</div>
-									<Select
+									<Select.Creatable
 										name="tags"
 										id="tags"
 										required={false}
@@ -97,11 +98,17 @@ const TagsInput = ({
 										value={tagsValue[i].tagId}
 										onChange={onTagValueChange}
 										placeholder="Tags . . ."
+										onNewOptionClick={addNewTag}
 									/>
-									<FormGroup>
-										<ControlLabel>Tag type: </ControlLabel>
-										{tagsValue[i].keyword && tagsValue[i].keyword.type ? tagsValue[i].keyword.type : 'no tag selected'}
-									</FormGroup>
+									{tagsValue[i].keyword && tagsValue[i].keyword.type ?
+										<FormGroup>
+											<ControlLabel>Tag type</ControlLabel>
+											<FormControl onChange={(event) => { selectTagType(tagsValue[i].tagId, event, i); }} value={tagsValue[i].keyword.type} componentClass="select" placeholder="select">
+												<option value="word">word</option>
+												<option value="idea">idea</option>
+											</FormControl>
+										</FormGroup> : ''
+									}
 									<FormGroup>
 										<ControlLabel>Is Not Mentioned in Lemma: </ControlLabel>
 										<Checkbox

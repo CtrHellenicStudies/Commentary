@@ -442,6 +442,7 @@ class AddCommentLayout extends React.Component {
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}
 										submitForm={this.addComment}
+										work={work}
 									/>
 
 									<ContextPanel

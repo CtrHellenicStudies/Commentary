@@ -35,9 +35,8 @@ class CommentersEditorDialog extends React.Component {
 	deleteCommenter(index) {
 		const currentCommenters = this.state.commenters;
 		currentCommenters.splice(index, 1);
-		this.setState({
-			commenters: currentCommenters
-		});
+
+		this.props.setCommenters(currentCommenters);
 	}
 
 	changeSearchTextValue(value) {
@@ -50,9 +49,9 @@ class CommentersEditorDialog extends React.Component {
 		if (commenter.name) {
 			const currentCommenters = this.state.commenters;
 			currentCommenters.push(commenter);
-			this.setState({
-				commenters: currentCommenters
-			});
+
+			this.props.setCommenters(currentCommenters);
+
 			this.setState({
 				searchText: ''
 			});

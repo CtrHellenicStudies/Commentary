@@ -29,6 +29,8 @@ import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import CommentersEditorDialog from '../CommentersEditorDialog/CommentersEditorDialog';
+
 import {
 	ItalicButton,
 	BoldButton,
@@ -157,6 +159,7 @@ class AddRevision extends React.Component {
 			referenceWorks: comment.referenceWorks || [],
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
+			commentersEditorDialogOpen: false,
 		};
 
 		autoBind(this);
@@ -423,6 +426,18 @@ class AddRevision extends React.Component {
 		});
 	}
 
+	openCommentersEditorDialog() {
+		this.setState({
+			commentersEditorDialogOpen: true
+		});
+	}
+
+	handleCloseCommentersEditorDialog() {
+		this.setState({
+			commentersEditorDialogOpen: false
+		});
+	}
+
 	render() {
 		const { comment } = this.props;
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
@@ -463,6 +478,19 @@ class AddRevision extends React.Component {
 											label="Remove Comment"
 											labelPosition="after"
 											onClick={this.removeComment}
+											style={{
+												border: '1px solid #ddd',
+												maxHeight: 'none',
+												fontSize: '12px',
+												height: 'auto',
+											}}
+										/>
+									</div>
+									<div className="comment-upper-action-button">
+										<FlatButton
+											label="Edit Authors"
+											labelPosition="after"
+											onClick={this.openCommentersEditorDialog}
 											style={{
 												border: '1px solid #ddd',
 												maxHeight: 'none',
@@ -620,6 +648,11 @@ class AddRevision extends React.Component {
 									</FormGroup>
 								</div>
 
+								<CommentersEditorDialog
+									open={this.state.commentersEditorDialogOpen}
+									handleClose={this.handleCloseCommentersEditorDialog}
+									commenters={comment.commenters}
+								/>
 
 								<div className="comment-edit-action-button">
 									<RaisedButton

@@ -312,10 +312,10 @@ class AddComment extends React.Component {
 		this.props.submitForm(this.state, textHtml, textRaw);
 	}
 
-	showSnackBar(error) {
+	showSnackBar(message) {
 		this.setState({
-			snackbarOpen: error.errors,
-			snackbarMessage: error.errorMessage,
+			snackbarOpen: true,
+			snackbarMessage: message,
 		});
 		setTimeout(() => {
 			this.setState({
@@ -451,7 +451,13 @@ class AddComment extends React.Component {
 			tagsValue: currentTags
 		});
 
-		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value);
+		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value, (err) => {
+			if (err) {
+				this.showSnackBar(err);
+			}			else {
+				this.showSnackBar('Keyword type changed');
+			}
+		});
 	}
 	
 	addNewTag(tag) {
@@ -464,7 +470,13 @@ class AddComment extends React.Component {
 			tenantId: Session.get('tenantId'),
 		}];
 
-		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword);
+		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
+			if (err) {
+				this.showSnackBar(err);
+			}			else {
+				this.showSnackBar('Tag added');
+			}
+		});
 	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 

@@ -85,7 +85,7 @@ class MultilineDialog extends React.Component {
 				<div className="text-node-editor-meta-form edit-subwork-form">
 					<div className="edit-form-input">
 
-						{edition.multiLine.length ?
+						{edition.multiline && edition.multiLine.length ?
 							<div>
 								<label>
 									Current editions:

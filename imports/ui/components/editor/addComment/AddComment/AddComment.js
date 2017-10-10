@@ -273,8 +273,8 @@ class AddComment extends React.Component {
 		// TODO: form validation
 		// TODO: Migrate to formsy components
 		const error = this.validateStateForSubmit();
-		this.showSnackBar(error);
-		if (error.errors) {
+		if (error) {
+			this.showSnackBar(error);
 			return false;
 		}
 
@@ -312,10 +312,10 @@ class AddComment extends React.Component {
 		this.props.submitForm(this.state, textHtml, textRaw);
 	}
 
-	showSnackBar(message) {
+	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: true,
-			snackbarMessage: message,
+			snackbarMessage: error.message,
 		});
 		setTimeout(() => {
 			this.setState({
@@ -326,7 +326,7 @@ class AddComment extends React.Component {
 
 	validateStateForSubmit() {
 		let errors = false;
-		let errorMessage = 'Missing comment data:';
+		let errorMessage = '';
 		if (!this.state.titleValue) {
 			errors = true;
 			errorMessage += ' title,';
@@ -345,12 +345,9 @@ class AddComment extends React.Component {
 		}
 		if (errors === true) {
 			errorMessage = errorMessage.slice(0, -1);
-			errorMessage += '.';
+			errorMessage = new Meteor.Error('data-missing', 'Missing comment data:'.concat(errorMessage, '.'));
 		}
-		return {
-			errors,
-			errorMessage,
-		};
+		return errorMessage;
 	}
 
 	addReferenceWorkBlock() {

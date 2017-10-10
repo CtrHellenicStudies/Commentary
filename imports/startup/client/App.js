@@ -16,11 +16,6 @@ import UserLayout from '/imports/ui/layouts/user/UserLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
 
-const test = () => {
-	console.log('test fired LOG');
-};
-
-
 if (!Session.get('tenantId')) {
 	const hostnameArray = document.location.hostname.split('.');
 	let subdomain;
@@ -49,6 +44,7 @@ const App = () => (
 	<BrowserRouter>
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
+			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 		</Switch>
 	</BrowserRouter>
 );

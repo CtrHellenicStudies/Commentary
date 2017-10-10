@@ -15,6 +15,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import qs from 'qs-lite';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
@@ -210,14 +211,19 @@ class CommentaryLayout extends React.Component {
 	}
 }
 
-export default createContainer(() => {
+export default createContainer(({match}) => {
+
 	const handleReference = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
+	const queryParams = qs.parse(window.location.search.substr(1));
+	const params = match.params;
 
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const works = Works.find().fetch();
 
 	return {
+		params,
+		queryParams,
 		referenceWorks,
 		works,
 		ready: handleReference.ready() && handleWorks.ready(),

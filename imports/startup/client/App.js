@@ -44,6 +44,7 @@ const App = () => (
 	<BrowserRouter>
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
+			<Route exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<Route exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
 		</Switch>

@@ -52,6 +52,7 @@
     "moment": "^2.18.1",
     "prerender-node": "^2.7.0",
     "pseries": "^2.0.0",
+    "qs-lite": "0.0.1",
     "react": "^15.6.1",
     "react-addons-create-fragment": "^15.0.2",
     "react-addons-css-transition-group": "^15.0.2",

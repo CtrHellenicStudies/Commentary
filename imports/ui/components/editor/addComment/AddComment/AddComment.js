@@ -313,6 +313,7 @@ class AddComment extends React.Component {
 	}
 
 	showSnackBar(error) {
+		console.log("error LOG", error);
 		this.setState({
 			snackbarOpen: true,
 			snackbarMessage: error.message,
@@ -452,7 +453,7 @@ class AddComment extends React.Component {
 			if (err) {
 				this.showSnackBar(err);
 			}			else {
-				this.showSnackBar('Keyword type changed');
+				this.showSnackBar({message: 'Keyword type changed'});
 			}
 		});
 	}
@@ -471,7 +472,7 @@ class AddComment extends React.Component {
 			if (err) {
 				this.showSnackBar(err);
 			}			else {
-				this.showSnackBar('Tag added');
+				this.showSnackBar({message: 'Tag added'});
 			}
 		});
 	}

@@ -292,12 +292,16 @@ FlowRouter.route('/sign-out', {
 	triggersEnter: [
 		() => {
 			try {
-				AccountsTemplates.logout();
+				Meteor.logout(() => {
+					const domain = Utils.getEnvDomain();
+					Cookies.remove('userId', { domain });
+					Cookies.remove('loginToken', { domain });
+					FlowRouter.go('/');
+				});
 			} catch (err) {
 				console.log(err);
 			}
-			Cookies.remove('userId');
-			Cookies.remove('loginToken');
+
 		},
 	],
 	action: () => {

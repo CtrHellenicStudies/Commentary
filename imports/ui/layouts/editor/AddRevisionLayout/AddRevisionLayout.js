@@ -342,7 +342,8 @@ const AddRevisionLayout = React.createClass({
 	},
 });
 
-const AddRevisionLayoutContainer = createContainer(({ commentId }) => {
+const AddRevisionLayoutContainer = createContainer(({match}) => {
+	const commentId = match.params.commentId;
 	const commentsSub = Meteor.subscribe('comments.id', commentId, Session.get('tenantId'));
 	const commentersSub = Meteor.subscribe('commenters', Session.get('tenantId'));
 	const keywordsSub = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });

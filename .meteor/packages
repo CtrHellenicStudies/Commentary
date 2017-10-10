@@ -53,7 +53,6 @@ react-meteor-data
 ecmascript@0.8.1
 es5-shim@4.6.15
 archimedigital:core
-kadira:flow-router
 kadira:react-layout
 kadira:blaze-layout
 gwendall:blaze-to-react

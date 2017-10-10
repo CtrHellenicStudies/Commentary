@@ -86,10 +86,11 @@ HomeLayout.propTypes = {
 
 const HomeLayoutContainer = createContainer(() => {
 	const handle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	const handleTenants = Meteor.subscribe('tenants');
 
 	return {
 		settings: Settings.findOne(),
-		ready: handle.ready(),
+		ready: handle.ready() && handleTenants.ready(),
 		tenant: Tenant.findOne({_id: Session.get('tenantId')}),
 	};
 }, HomeLayout);

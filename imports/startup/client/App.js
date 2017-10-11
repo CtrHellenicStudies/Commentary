@@ -106,6 +106,7 @@ const App = () => (
 			<PrivateRoute exact path="/tags/:slug/edit" component={EditKeywordLayout} />
 			<Route exact path="/tags/:slug" component={KeywordDetail} />
 			<PrivateRoute exact path="/tags/create" component={AddKeywordLayout} />
+			<Route path="/words" render={() => <KeywordsPage type="word" title="Words" />} />
 			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>

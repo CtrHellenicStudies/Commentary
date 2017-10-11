@@ -433,6 +433,7 @@ class Header extends React.Component {
 export default createContainer(() => {
 
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	const handleTenants = Meteor.subscribe('tenants');
 
 	return {
 		settings: Settings.findOne({}),

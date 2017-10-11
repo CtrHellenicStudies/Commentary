@@ -30,28 +30,6 @@ import PublicProfilePage from '/imports/ui/components/user/PublicProfilePage';
 import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
 
-if (!Session.get('tenantId')) {
-	const hostnameArray = document.location.hostname.split('.');
-	let subdomain;
-
-	if (hostnameArray.length > 1) {
-		subdomain = hostnameArray[0];
-	} else {
-		subdomain = '';
-		// TODO: add route to 404
-		// FlowRouter.go('/404');
-	}
-
-	Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
-		if (tenant) {
-			Session.set('tenantId', tenant._id);
-		} else {
-			// TODO: add route to 404
-			// FlowRouter.go('/404');
-		}
-	});
-}
-
 if (Meteor.userId()) {
 	if (!Cookies.get('loginToken')) {
 		Meteor.call('getNewStampedToken', (_err, token) => {
@@ -101,7 +79,33 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 const App = () => (
 	<BrowserRouter>
 		<Switch>
-			<Route exact path="/" component={HomeLayout} />
+			<Route
+				exact path="/" render={() => {
+					if (!Session.get('tenantId')) {
+						const hostnameArray = document.location.hostname.split('.');
+						let subdomain;
+
+						if (hostnameArray.length > 2) {
+							subdomain = hostnameArray[0];
+						} else {
+							subdomain = '';
+							return <NotFound />;
+						}
+						Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
+							if (tenant) {
+								Session.set('tenantId', tenant._id);
+							} else {
+								Session.set('noTenant', true);
+							}
+						});
+					}
+					if (Session.get('noTenant')) {
+						return <NotFound />;
+					} 
+					return <HomeLayout />;
+					
+				}}
+			/>
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />

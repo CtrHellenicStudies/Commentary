@@ -112,6 +112,9 @@ const App = () => (
 			<Route exact path="/referenceWorks" render={() => <ReferenceWorksPage title="ReferenceWorks" />} />
 			<Route path="/commenters/:slug" render={(props) => <CommenterDetail {...props} defaultAvatarUrl="/images/default_user.jpg" />} />
 			<Route exact path="/commenters" component={CommentersPage} />
+			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
+			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
+
 			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>

@@ -133,7 +133,8 @@ ReferenceWorkDetail.propTypes = {
 };
 
 
-const ReferenceWorkDetailContainer = createContainer(({ slug }) => {
+const ReferenceWorkDetailContainer = createContainer(({ match }) => {
+	const slug = match.params.slug;
 	// SUBSCRIPTIONS:
 	Meteor.subscribe('referenceWorks.slug', slug, Session.get('tenantId'));
 	Meteor.subscribe('commenters', Session.get('tenantId'));
@@ -153,6 +154,7 @@ const ReferenceWorkDetailContainer = createContainer(({ slug }) => {
 	}
 
 	return {
+		slug,
 		referenceWork,
 		commenters,
 		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' },

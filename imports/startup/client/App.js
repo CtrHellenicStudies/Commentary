@@ -78,7 +78,9 @@ if (Meteor.userId()) {
 		Meteor.loginWithToken(loginToken);
 	}
 }
-
+if (Meteor.isClient) {
+	Utils.setBaseDocMeta();
+}
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
 		{...rest} render={props => (
@@ -134,6 +136,15 @@ const App = () => (
 						});
 					} catch (err) {
 						console.log(err);
+					}
+					return <Redirect to="/" />;
+				}}
+			/>
+			<Route
+				path="/:slug" render={(params) => {
+					const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
+					if (reservedRoutes.indexOf(params.slug) === -1) {
+						return <Page slug={params.match.params.slug} />;
 					}
 					return <Redirect to="/" />;
 				}}

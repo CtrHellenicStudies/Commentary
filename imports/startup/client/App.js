@@ -17,6 +17,18 @@ import UserLayout from '/imports/ui/layouts/user/UserLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
 
+//pages
+
+import Page from '/imports/ui/components/pages/Page';
+import CommentersPage from '/imports/ui/components/commenters/CommentersPage';
+import CommenterDetail from '/imports/ui/components/commenters/CommenterDetail';
+import KeywordsPage from '/imports/ui/components/keywords/KeywordsPage';
+import KeywordDetail from '/imports/ui/components/keywords/KeywordDetail';
+import ProfilePage from '/imports/ui/components/user/ProfilePage';
+import PublicProfilePage from '/imports/ui/components/user/PublicProfilePage';
+import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
+import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
+
 if (!Session.get('tenantId')) {
 	const hostnameArray = document.location.hostname.split('.');
 	let subdomain;
@@ -90,6 +102,8 @@ const App = () => (
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
+			<Route exact path="/commenters" component={CommentersPage} />
+			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>
 );

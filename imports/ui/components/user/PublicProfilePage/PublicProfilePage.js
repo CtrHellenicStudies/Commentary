@@ -15,13 +15,6 @@ import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
-const checkUsername = (user) => {
-	if (user.username !== FlowRouter.getParam('username')) {
-		const route = `/users/${FlowRouter.getParam('userId')}`;
-		FlowRouter.go(route);
-	}
-};
-
 const PublicProfilePage = React.createClass({
 	propTypes: {
 		userId: React.PropTypes.string,
@@ -256,10 +249,6 @@ const PublicProfilePageContainer = createContainer(({ userId }) => {
 			commentId: discussionComment.commentId,
 		}).count();
 	});
-
-	if (user) {
-		checkUsername(user);
-	}
 
 	return {
 		user,

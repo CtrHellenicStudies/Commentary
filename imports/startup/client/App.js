@@ -115,6 +115,14 @@ const App = () => (
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
 			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
+			<Route
+				path="/users/:userId" render={(params) => {
+					if (Meteor.userId() && Meteor.userId() === params.match.params.userId) {
+						return <Redirect to="/profile" />;
+					}
+					return <PublicProfilePage userId={params.match.params.userId} />;
+				}}
+			/>
 			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>

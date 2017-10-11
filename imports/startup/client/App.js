@@ -97,16 +97,17 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 const App = () => (
 	<BrowserRouter>
-		<Switch>
+		<div>
 			<Route exact path="/" component={HomeLayout} />
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
 			<Route exact path="/commenters" component={CommentersPage} />
 			<PrivateRoute exact path="/tags/:slug/edit" component={EditKeywordLayout} />
+			<Route exact path="/tags/:slug" component={KeywordDetail} />
 			<PrivateRoute exact path="/tags/create" component={AddKeywordLayout} />
 			<Route component={NotFound} />
-		</Switch>
+		</div>
 	</BrowserRouter>
 );
 

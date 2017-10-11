@@ -6,6 +6,7 @@ import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
+import { Link } from 'react-router-dom';
 
 // api
 import Comments from '/imports/models/comments';
@@ -102,11 +103,14 @@ class KeywordDetail extends Component {
 										<h2 className="page-title ">{keyword.title}</h2>
 										{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 											<div>
-												<RaisedButton
-													href={`/tags/${keyword.slug}/edit`}
-													className="cover-link light"
-													label="Edit"
-												/>
+												<Link to={`/tags/${keyword.slug}/edit`}>
+													<RaisedButton
+														// href={`/tags/${keyword.slug}/edit`}
+														className="cover-link light"
+														label="Edit"
+													/>
+												</Link>
+												<Link to={`/tags/${keyword.slug}/edit`}>Test Link</Link>
 												<RaisedButton
 													onClick={this.deleteKeyword.bind(this)}
 													className="cover-link light"
@@ -176,7 +180,8 @@ KeywordDetail.childContextTypes = {
 };
 
 
-const KeywordDetailContainer = createContainer(({ slug }) => {
+const KeywordDetailContainer = createContainer(({ match }) => {
+	const slug = match.params.slug;
 	// SUBSCRIPTIONS:
 	Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));

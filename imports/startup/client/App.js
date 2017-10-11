@@ -104,6 +104,7 @@ const App = () => (
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
 			<Route exact path="/commenters" component={CommentersPage} />
 			<PrivateRoute exact path="/tags/:slug/edit" component={EditKeywordLayout} />
+			<PrivateRoute exact path="/tags/create" component={AddKeywordLayout} />
 			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>

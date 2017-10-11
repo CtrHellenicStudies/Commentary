@@ -114,7 +114,7 @@ const App = () => (
 			<Route exact path="/commenters" component={CommentersPage} />
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
 			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
-
+			<PrivateRoute exact path="/profile" component={ProfilePage} />
 			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>

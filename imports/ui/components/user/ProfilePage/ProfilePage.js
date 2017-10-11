@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { createContainer } from 'meteor/react-meteor-data';
 
 // components
 import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
@@ -13,6 +14,9 @@ import Discussions from '/imports/ui/components/user/ProfilePage/Discussions';
 import Annotations from '/imports/ui/components/user/ProfilePage/Annotations';
 import Bookmarks from '/imports/ui/components/user/ProfilePage/Bookmarks';
 import Account from '/imports/ui/components/user/ProfilePage/Account';
+
+//api
+import Settings from '/imports/models/settings';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -176,4 +180,12 @@ class ProfilePage extends React.Component {
 	}
 }
 
-export default ProfilePage;
+export default createContainer(() => {
+	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+
+	return {
+		user: Meteor.user(),
+		settings: Settings.findOne(),
+		ready: settingsHandle.ready(),
+	};
+}, ProfilePage);

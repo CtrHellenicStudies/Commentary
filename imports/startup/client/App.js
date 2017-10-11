@@ -110,7 +110,8 @@ const App = () => (
 			<Route path="/ideas" render={() => <KeywordsPage type="idea" title="Ideas" />} />
 			<Route exact path="/referenceWorks/:slug" component={ReferenceWorkDetail} />
 			<Route exact path="/referenceWorks" render={() => <ReferenceWorksPage title="ReferenceWorks" />} />
-
+			<Route path="/commenters/:slug" render={(props) => <CommenterDetail {...props} defaultAvatarUrl="/images/default_user.jpg" />} />
+			<Route exact path="/commenters" component={CommentersPage} />
 			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>

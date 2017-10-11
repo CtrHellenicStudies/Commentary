@@ -218,7 +218,8 @@ class CommenterDetail extends React.Component {
 	}
 }
 
-export default createContainer(({ slug }) => {
+export default createContainer(({match}) => {
+	const slug = match.params.slug;
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 	const commentersHandle = Meteor.subscribe('commenters.slug', slug, Session.get('tenantId'));
 

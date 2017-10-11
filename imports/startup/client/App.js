@@ -1,6 +1,7 @@
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import React from 'react';
 import {Session} from 'meteor/session';
+import Cookies from 'js-cookie';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -38,15 +39,57 @@ if (!Session.get('tenantId')) {
 	});
 }
 
-console.log('App LOG');
+if (Meteor.userId()) {
+	if (!Cookies.get('loginToken')) {
+		Meteor.call('getNewStampedToken', (_err, token) => {
+
+			if (_err) {
+				console.error(_err);
+				return false;
+			}
+
+			const domain = Utils.getEnvDomain();
+
+			if (domain) {
+				Cookies.set('userId', Meteor.userId(), { domain });
+				Cookies.set('loginToken', token, { domain });
+			} else {
+				Cookies.set('userId', Meteor.userId());
+				Cookies.set('loginToken', token);
+			}
+		});
+	}
+} else {
+	const loginToken = Cookies.get('loginToken');
+	if (loginToken) {
+		Meteor.loginWithToken(loginToken);
+	}
+}
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+	<Route
+		{...rest} render={props => (
+		Meteor.userId() ? (
+			<Component {...props} />
+		) : (
+			<Redirect
+				to={{
+					pathname: '/login',
+					state: { from: props.location }
+				}}
+			/>
+		)
+	)}
+	/>
+);
 
 const App = () => (
 	<BrowserRouter>
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
-			<Route exact path="/commentary/create" component={AddCommentLayout} />
+			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
-			<Route exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
+			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
 		</Switch>
 	</BrowserRouter>
 );

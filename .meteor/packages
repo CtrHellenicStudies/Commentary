@@ -44,7 +44,6 @@ yogiben:autoform-map
 check@1.2.5
 useraccounts:core
 useraccounts:bootstrap
-useraccounts:flow-routing@1.14.3
 
 # Packages added for project
 http@1.2.12

@@ -2,6 +2,7 @@ import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import React from 'react';
 import {Session} from 'meteor/session';
 import Cookies from 'js-cookie';
+import Utils from '/imports/lib/utils';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -121,6 +122,20 @@ const App = () => (
 						return <Redirect to="/profile" />;
 					}
 					return <PublicProfilePage userId={params.match.params.userId} />;
+				}}
+			/>
+			<Route
+				path="/sign-out" render={() => {
+					try {
+						Meteor.logout(() => {
+							const domain = Utils.getEnvDomain();
+							Cookies.remove('userId', {domain});
+							Cookies.remove('loginToken', {domain});
+						});
+					} catch (err) {
+						console.log(err);
+					}
+					return <Redirect to="/" />;
 				}}
 			/>
 			<Route component={NotFound} />

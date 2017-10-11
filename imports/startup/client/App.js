@@ -17,7 +17,7 @@ import UserLayout from '/imports/ui/layouts/user/UserLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
 
-//pages
+// pages
 
 import Page from '/imports/ui/components/pages/Page';
 import CommentersPage from '/imports/ui/components/commenters/CommentersPage';
@@ -103,6 +103,7 @@ const App = () => (
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
 			<Route exact path="/commenters" component={CommentersPage} />
+			<PrivateRoute exact path="/tags/:slug/edit" component={EditKeywordLayout} />
 			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>

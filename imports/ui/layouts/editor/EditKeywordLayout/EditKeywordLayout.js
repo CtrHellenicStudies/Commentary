@@ -422,7 +422,8 @@ const EditKeywordLayout = React.createClass({
 	},
 });
 
-const EditKeywordLayoutContainer = createContainer(({ slug }) => {
+const EditKeywordLayoutContainer = createContainer(({ match }) => {
+	const slug = match.params.slug;
 	const keywordsSub = Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
 	const ready = Roles.subscription.ready() && keywordsSub.ready();
 	let keyword = {};

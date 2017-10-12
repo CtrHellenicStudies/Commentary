@@ -140,6 +140,13 @@ const routes = (props) => {
 					return <Redirect to="/" />;
 				}}
 			/>
+			<Route exact path="/v1/" component={NameResolutionServiceLayout} />
+			<Route
+				exact path="/v1/urn:urn" render={(params) => <NameResolutionServiceLayout version={1} urn={params.match.params.urn} />}
+			/>
+			<Route
+				exact path="/v1/doi:doi" render={(params) => <NameResolutionServiceLayout version={1} doi={params.match.params.doi} />}
+			/>
 			<Route
 				path="/:slug" render={(params) => {
 					const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
@@ -149,7 +156,6 @@ const routes = (props) => {
 					return <Redirect to="/" />;
 				}}
 			/>
-
 			<Route component={NotFound} />
 		</Switch>
 	);

@@ -169,45 +169,13 @@ const LemmaReferenceModalContainer = createContainer(({work, subwork, lineFrom, 
 	}
 
 	const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
-	if (textHandle.ready()) {
-		const textNodes = TextNodes.find(lemmaQuery).fetch();
-		const editions = [];
-
-		let textIsInEdition = false;
-		textNodes.forEach((textNode) => {
-			textNode.text.forEach((text) => {
-				textIsInEdition = false;
-
-				editions.forEach((edition) => {
-					if (text.edition.slug === edition.slug) {
-						edition.lines.push({
-							html: text.html,
-							n: text.n,
-						});
-						textIsInEdition = true;
-					}
-				});
-
-				if (!textIsInEdition) {
-					editions.push({
-						title: text.edition.title,
-						slug: text.edition.slug,
-						lines: [
-							{
-								html: text.html,
-								n: text.n,
-							},
-						],
-					});
-				}
-			});
-		});
-
-		lemmaText = editions;
-	}
+	const handle = Meteor.subscribe('textNodes', lemmaQuery);
+	const editionsSubscription = Meteor.subscribe('editions');
+	const textNodesCursor = TextNodes.find(lemmaQuery);
+	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
 
 	return {
-		lemmaText,
+		lemmaText: editions,
 		ready: textHandle.ready(),
 	};
 }, LemmaReferenceModal);

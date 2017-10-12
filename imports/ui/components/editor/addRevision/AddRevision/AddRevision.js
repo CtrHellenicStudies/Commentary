@@ -440,7 +440,7 @@ class AddRevision extends React.Component {
 			commentersEditorDialogOpen: false
 		});
 	}
-	
+
 	setCommenters(commenters) {
 		this.setState({
 			commenters: commenters
@@ -515,6 +515,27 @@ class AddRevision extends React.Component {
 										{/*/>*/}
 									{/*</div>*/}
 								</div>
+
+								{/*<CommentersEditorDialog*/}
+									{/*open={this.state.commentersEditorDialogOpen}*/}
+									{/*handleClose={this.handleCloseCommentersEditorDialog}*/}
+									{/*commenters={this.state.commenters}*/}
+									{/*setCommenters={this.setCommenters}*/}
+								{/*/>*/}
+
+								<br />
+								{commentersOptions && commentersOptions.length ?
+									<Select
+										name="commenter"
+										id="commenter"
+										required={false}
+										options={commentersOptions}
+										value={this.state.commenterValue}
+										onChange={this.onCommenterValueChange}
+										placeholder="Commentator..."
+										multi={true}
+									/>
+								: ''}
 								<h1 className="add-comment-title">
 									<Editor
 										editorState={titleEditorState}
@@ -662,28 +683,6 @@ class AddRevision extends React.Component {
 										/>
 									</FormGroup>
 								</div>
-
-								{/*<CommentersEditorDialog*/}
-									{/*open={this.state.commentersEditorDialogOpen}*/}
-									{/*handleClose={this.handleCloseCommentersEditorDialog}*/}
-									{/*commenters={this.state.commenters}*/}
-									{/*setCommenters={this.setCommenters}*/}
-								{/*/>*/}
-
-								{commentersOptions && commentersOptions.length ?
-									<Select
-										name="commenter"
-										id="commenter"
-										required={false}
-										options={commentersOptions}
-										value={this.state.commenterValue}
-										onChange={this.onCommenterValueChange}
-										placeholder="Commentator..."
-										multi={true}
-									/>
-									:
-									''
-								}
 
 								<div className="comment-edit-action-button">
 									<RaisedButton

@@ -3,7 +3,7 @@ import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import _ from 'lodash';
-
+import { Link } from 'react-router-dom';
 /*
 	BEGIN CommentUpperLeft
 */
@@ -26,11 +26,12 @@ CommentUpperLeft.propTypes = {
 const CommentUpperRight = props => (
 	<div className="comment-upper-right">
 		{_.every(props.commenters, commenter => props.userCanEditCommenters.indexOf(commenter._id) > -1) ?
-			<FlatButton
-				label="Edit comment"
-				href={`/commentary/${props.commentId}/edit`}
-				icon={<FontIcon className="mdi mdi-pen" />}
-			/>
+			<Link to={`/commentary/${props.commentId}/edit`}>
+				<FlatButton
+					label="Edit comment"
+					icon={<FontIcon className="mdi mdi-pen"/>}
+				/>
+			</Link>
 			:
 			''
 		}

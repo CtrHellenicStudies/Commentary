@@ -57,7 +57,7 @@ class TextNodesEditorLayout extends React.Component {
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
 			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	}

@@ -107,7 +107,7 @@ class CommentaryLayout extends React.Component {
 		}
 
 		// update route
-		FlowRouter.go('/commentary/', {}, queryParams);
+		this.props.history.push('/commentary/', {}, queryParams);
 	}
 
 	_toggleSearchTerm(key, value) {
@@ -193,6 +193,7 @@ class CommentaryLayout extends React.Component {
 							toggleSearchTerm={this._toggleSearchTerm}
 							showLoginModal={this.showLoginModal}
 							loadMoreComments={this.loadMoreComments}
+							history={this.props.history}
 							skip={skip}
 							limit={limit}
 						/>

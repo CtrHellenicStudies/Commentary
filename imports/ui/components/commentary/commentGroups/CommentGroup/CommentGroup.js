@@ -112,6 +112,7 @@ class CommentGroup extends React.Component {
 									filters={filters}
 									toggleLemma={this.toggleLemma}
 									showLoginModal={showLoginModal}
+									history={this.props.history}
 								/>
 							</div>
 						))}

@@ -32,7 +32,7 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 const handlePermissions = () => {
 	if (Roles.subscription.ready()) {
 		if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-			FlowRouter.go('/');
+			this.props.history.push('/');
 		}
 	}
 };
@@ -258,7 +258,7 @@ class AddCommentLayout extends React.Component {
 				return null;
 			}
 
-			FlowRouter.go('/commentary', {}, {_id: commentId});
+			this.props.history.push('/commentary', {}, {_id: commentId});
 		});
 	}
 

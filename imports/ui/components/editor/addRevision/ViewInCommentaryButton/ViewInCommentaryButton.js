@@ -7,7 +7,7 @@ const ViewInCommentaryButton = props => (
 		<FlatButton
 			className="go-to-commentary-link"
 			onClick={() => {
-				FlowRouter.go('/commentary/', {}, {_id: commentId});
+				this.props.history.push('/commentary/', {}, {_id: commentId});
 			}}
 			style={{
 				border: '1px solid #ddd',

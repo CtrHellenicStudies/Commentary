@@ -234,7 +234,7 @@ const AddKeywordLayout = React.createClass({
 			if (error) {
 				this.showSnackBar(error);
 			} else {
-				FlowRouter.go(`/tags/${keyword.slug}`);
+				this.props.history.push(`/tags/${keyword.slug}`);
 			}
 		});
 	},
@@ -262,7 +262,7 @@ const AddKeywordLayout = React.createClass({
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
 			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	},

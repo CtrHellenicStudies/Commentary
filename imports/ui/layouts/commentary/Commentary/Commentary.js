@@ -315,6 +315,7 @@ class Commentary extends React.Component {
 								showLoginModal={showLoginModal}
 								filters={filters}
 								isOnHomeView={isOnHomeView}
+								history={this.props.history}
 							/>
 						))}
 					</div>

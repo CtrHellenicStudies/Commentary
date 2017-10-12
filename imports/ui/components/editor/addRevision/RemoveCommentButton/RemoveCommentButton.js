@@ -15,7 +15,7 @@ class RemoveCommentButton extends React.Component {
 				return false;
 			}
 
-			// FlowRouter.go('/commentary');
+			// this.props.history.push('/commentary');
 		});
 	}
 

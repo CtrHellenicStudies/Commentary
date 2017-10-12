@@ -94,7 +94,7 @@ const AddRevisionLayout = React.createClass({
 				this.showSnackBar('Comment updated');
 			}
 
-			FlowRouter.go(`/commentary/${comment._id}/edit`);
+			this.props.history.push(`/commentary/${comment._id}/edit`);
 		});
 		// TODO: handle behavior after comment added (add info about success)
 	},
@@ -131,7 +131,7 @@ const AddRevisionLayout = React.createClass({
 				}
 			});
 			if (!isOwner) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	},

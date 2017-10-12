@@ -691,7 +691,6 @@ const AddCommentContainer = createContainer(() => {
 	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
 	const tags = Keywords.find().fetch();
-
 	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];

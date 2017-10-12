@@ -27,7 +27,7 @@ import Utils from '/imports/lib/utils';
 const handlePermissions = () => {
 	if (Roles.subscription.read()) {
 		if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-			FlowRouter.go('/');
+			this.props.history.push('/');
 		}
 	}
 };
@@ -349,7 +349,7 @@ class AddTranslationLayout extends React.Component {
 				if (error) {
 					console.log(error);
 				} else {
-					FlowRouter.go('/commentary', {});
+					this.props.history.push('/commentary', {});
 				}
 			});
 		}

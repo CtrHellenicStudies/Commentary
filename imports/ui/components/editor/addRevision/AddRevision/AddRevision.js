@@ -311,7 +311,7 @@ class AddRevision extends React.Component {
 				return false;
 			}
 
-			FlowRouter.go('/commentary');
+			this.props.history.push('/commentary');
 		});
 	}
 
@@ -334,7 +334,7 @@ class AddRevision extends React.Component {
 				throw new Meteor.Error('Error removing revision');
 			}
 
-			FlowRouter.go(`/commentary/${self.props.comment._id}/edit`);
+			this.props.history.push(`/commentary/${self.props.comment._id}/edit`);
 		});
 	}
 
@@ -755,6 +755,7 @@ AddRevision.childContextTypes = {
 const AddRevisionContainer = createContainer(({ comment }) => {
 
 	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+	Meteor.subscribe('commenters', Session.get('tenantId'));
 
 	const tags = Keywords.find().fetch();
 
@@ -788,7 +789,6 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 			});
 		}
 	});
-
 	return {
 		tags,
 		referenceWorkOptions,

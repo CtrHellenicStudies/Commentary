@@ -47,7 +47,7 @@ class KeywordDetail extends Component {
 			if (error) {
 				console.log(keywordId, error);
 			} else {
-				FlowRouter.go('/words');
+				this.props.history.push('/words');
 			}
 		});
 	}

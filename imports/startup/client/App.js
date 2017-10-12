@@ -3,6 +3,7 @@ import React from 'react';
 import {Session} from 'meteor/session';
 import Cookies from 'js-cookie';
 import Utils from '/imports/lib/utils';
+import { Meteor } from 'meteor/meteor';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -31,6 +32,7 @@ import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceW
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
 
 if (Meteor.userId()) {
+	Meteor.subscribe('users.id', Meteor.userId());
 	if (!Cookies.get('loginToken')) {
 		Meteor.call('getNewStampedToken', (_err, token) => {
 

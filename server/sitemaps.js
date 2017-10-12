@@ -22,7 +22,7 @@ sitemaps.add('/sitemap.xml', (req) => {
 		subdomain = hostnameArray[0];
 	} else {
 		subdomain = '';
-		FlowRouter.go('/404');
+		window.location.assign("/404");
 	}
 
 	const sitemap = [];

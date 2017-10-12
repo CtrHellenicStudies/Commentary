@@ -5,6 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
+import { Link } from 'react-router-dom';
 
 // api:
 import Settings from '/imports/models/settings';
@@ -260,9 +261,9 @@ class Header extends React.Component {
 										<h3 className="logo">{settings ? settings.name : undefined}</h3>
 									</a>
 								:
-									<a href="/" className="header-home-link" >
+									<Link to="/" className="header-home-link">
 										<h3 className="logo">{settings ? settings.name : undefined}</h3>
-									</a>
+									</Link>
 								}
 
 								{tenant && !tenant.isAnnotation &&
@@ -278,16 +279,18 @@ class Header extends React.Component {
 								<div className="header-section-wrap nav-wrap collapse" >
 									{tenant && !tenant.isAnnotation &&
 										<span>
-											<FlatButton
-												label="Commentary"
-												href="/commentary"
-												style={styles.flatButton}
-											/>
-											<FlatButton
-												label="About"
-												href={settings && settings.aboutURL ? settings.aboutURL : '/about'}
-												style={styles.flatButton}
-											/>
+											<Link to="/commentary">
+												<FlatButton
+													label="Commentary"
+													style={styles.flatButton}
+												/>
+											</Link>
+											<Link to={settings && settings.aboutURL ? settings.aboutURL : '/about'}>
+												<FlatButton
+													label="About"
+													style={styles.flatButton}
+												/>
+											</Link>
 										</span>
 									}
 									{Meteor.user() ?
@@ -296,24 +299,27 @@ class Header extends React.Component {
 												<div className="user-header-links admin-header-links">
 													{tenant && !tenant.isAnnotation &&
 														<span>
-															<FlatButton
-																href="/commentary/create"
-																label="Add Comment"
-																className=""
-																style={styles.flatButton}
-															/>
-															<FlatButton
-																href="/tags/create"
-																label="Add Tag"
-																className=""
-																style={styles.flatButton}
-															/>
-															<FlatButton
-																href="/textNodes/edit"
-																label="Add Translation"
-																className=""
-																style={styles.flatButton}
-															/>
+															<Link to="/commentary/create">
+																<FlatButton
+																	label="Add Comment"
+																	className=""
+																	style={styles.flatButton}
+																/>
+															</Link>
+															<Link to="/tags/create">
+																<FlatButton
+																	label="Add Tag"
+																	className=""
+																	style={styles.flatButton}
+																/>
+															</Link>
+															<Link to="/textNodes/edit">
+																<FlatButton
+																	label="Add Translation"
+																	className=""
+																	style={styles.flatButton}
+																/>
+															</Link>
 														</span>
 													}
 													<ProfileAvatarButton
@@ -332,20 +338,22 @@ class Header extends React.Component {
 										</div>
 									:
 										<div>
-											<FlatButton
-												label="Login"
-												onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
-												href={tenant && tenant.isAnnotation ? '/sign-in' : ''}
-												style={styles.flatButton}
-												className="account-button account-button-login"
-											/>
-											<FlatButton
-												label="Join the Community"
-												onClick={tenant && !tenant.isAnnotation ? this.showSignupModal : undefined}
-												href={tenant && tenant.isAnnotation ? '/sign-up' : ''}
-												style={styles.flatButton}
-												className="account-button account-button-login"
-											/>
+											<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
+												<FlatButton
+													label="Login"
+													onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
+													style={styles.flatButton}
+													className="account-button account-button-login"
+												/>
+											</Link>
+											<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
+												<FlatButton
+													label="Join the Community"
+													onClick={tenant && !tenant.isAnnotation ? this.showSignupModal : undefined}
+													style={styles.flatButton}
+													className="account-button account-button-login"
+												/>
+											</Link>
 										</div>
 									}
 									{tenant && !tenant.isAnnotation &&

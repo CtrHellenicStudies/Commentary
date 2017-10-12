@@ -75,37 +75,31 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	)}
 	/>
 );
+const routes = (props) => {
+	if (!Session.get('tenantId')) {
+		const hostnameArray = document.location.hostname.split('.');
+		let subdomain;
 
-const App = () => (
-	<BrowserRouter>
+		if (hostnameArray.length > 2) {
+			subdomain = hostnameArray[0];
+		} else {
+			subdomain = '';
+			return <Route component={NotFound} />;
+		}
+		Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
+			if (tenant) {
+				Session.set('tenantId', tenant._id);
+			} else {
+				Session.set('noTenant', true);
+			}
+		});
+	}
+	if (Session.get('noTenant')) {
+		return <Route component={NotFound} />;
+	}
+	return (
 		<Switch>
-			<Route
-				exact path="/" render={() => {
-					if (!Session.get('tenantId')) {
-						const hostnameArray = document.location.hostname.split('.');
-						let subdomain;
-
-						if (hostnameArray.length > 2) {
-							subdomain = hostnameArray[0];
-						} else {
-							subdomain = '';
-							return <NotFound />;
-						}
-						Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
-							if (tenant) {
-								Session.set('tenantId', tenant._id);
-							} else {
-								Session.set('noTenant', true);
-							}
-						});
-					}
-					if (Session.get('noTenant')) {
-						return <NotFound />;
-					} 
-					return <HomeLayout />;
-					
-				}}
-			/>
+			<Route exact path="/" />
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
@@ -155,6 +149,11 @@ const App = () => (
 			/>
 			<Route component={NotFound} />
 		</Switch>
+	);
+};
+const App = () => (
+	<BrowserRouter>
+		{routes()}
 	</BrowserRouter>
 );
 

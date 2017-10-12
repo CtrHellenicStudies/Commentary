@@ -116,7 +116,6 @@ class Home extends Component {
 									/>
 									<Link to="/commentary">
 										<RaisedButton
-											href="/commentary/"
 											className="cover-link go-to-commentary"
 											label="Go to Commentary"
 										/>
@@ -201,7 +200,6 @@ class Home extends Component {
 							/>
 							<Link to="/commenters">
 								<RaisedButton
-									href="/commenters"
 									className="cover-link light show-more "
 									label="Other Commentators"
 								/>

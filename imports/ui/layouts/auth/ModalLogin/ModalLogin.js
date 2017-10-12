@@ -36,6 +36,7 @@ class ModalLogin extends React.Component {
 		this.handleLoginFacebook = this.handleLoginFacebook.bind(this);
 		this.handleLoginGoogle = this.handleLoginGoogle.bind(this);
 		this.handleLoginTwitter = this.handleLoginTwitter.bind(this);
+		this.signup = this.signup.bind(this);
 	}
 
 	componentWillMount() {
@@ -103,6 +104,10 @@ class ModalLogin extends React.Component {
 			}
 		});
 	}
+	signup() {
+		this.props.closeModal();
+		this.props.signupModal();
+	}
 
 	render() {
 
@@ -150,7 +155,7 @@ class ModalLogin extends React.Component {
 
 								<div className="at-signup-link">
 									<p>
-										Don't have an account? <a href="/sign-up" id="at-signUp" className="at-link at-signup">Register.</a>
+										Don't have an account? <a href="#signup" id="at-signUp" onClick={this.signup} className="at-link at-signup">Register.</a>
 									</p>
 								</div>
 								<div className="at-resend-verification-email-link at-wrap">

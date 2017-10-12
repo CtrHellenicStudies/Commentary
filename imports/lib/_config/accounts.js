@@ -41,37 +41,37 @@
 // AccountsTemplates.configureRoute('resendVerificationEmail');
 //
 //
-// if (Meteor.isServer) {
-// 	Accounts.onCreateUser((options, user) => {
-// 		let username = '';
-// 		if (!('emails' in user)) {
-// 			user.emails = [];
-// 		}
-//
-// 		if (user.emails.length) {
-// 			username = slug(user.emails[0].address.split('@')[0]);
-// 		}
-//
-// 		if ('facebook' in user.services) {
-// 			username = slug(user.services.facebook.name);
-// 			user.emails.push({
-// 				address: user.services.facebook.email,
-// 				verified: true,
-// 			});
-// 		}
-// 		if ('google' in user.services) {
-// 			username = slug(user.services.google.name);
-// 			user.emails.push({
-// 				address: user.services.google.email,
-// 				verified: true,
-// 			});
-// 		}
-// 		if ('twitter' in user.services) {
-// 			username = slug(user.services.twitter.screenName);
-// 		}
-//
-// 		user.username = username;
-// 		check(user, Schemas.User);
-// 		return user;
-// 	});
-// }
+if (Meteor.isServer) {
+	Accounts.onCreateUser((options, user) => {
+		let username = '';
+		if (!('emails' in user)) {
+			user.emails = [];
+		}
+
+		if (user.emails.length) {
+			username = slug(user.emails[0].address.split('@')[0]);
+		}
+
+		if ('facebook' in user.services) {
+			username = slug(user.services.facebook.name);
+			user.emails.push({
+				address: user.services.facebook.email,
+				verified: true,
+			});
+		}
+		if ('google' in user.services) {
+			username = slug(user.services.google.name);
+			user.emails.push({
+				address: user.services.google.email,
+				verified: true,
+			});
+		}
+		if ('twitter' in user.services) {
+			username = slug(user.services.twitter.screenName);
+		}
+
+		user.username = username;
+		check(user, Schemas.User);
+		return user;
+	});
+}

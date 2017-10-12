@@ -93,7 +93,7 @@ class Header extends React.Component {
 			subworks: [],
 			activeWork: '',
 			modalLoginLowered: false,
-			modalSignupLowered: false,
+			modalSignupLowered: !!props.showSignup,
 		};
 
 		// methods:
@@ -213,6 +213,9 @@ class Header extends React.Component {
 	}
 
 	closeSignupModal() {
+		if (this.props.showSignup) {
+			this.props.history.push('/');
+		}
 		this.setState({
 			modalSignupLowered: false,
 		});
@@ -221,8 +224,8 @@ class Header extends React.Component {
 	render() {
 
 		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage, selectedWork } = this.props;
-		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalSignupLowered, modalLoginLowered } = this.state;
-
+		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered } = this.state;
+		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;
 		return (
 			<div>
 				<LeftMenu
@@ -422,6 +425,7 @@ class Header extends React.Component {
 					<ModalLogin
 						lowered={modalLoginLowered}
 						closeModal={this.closeLoginModal}
+						signupModal={this.showSignupModal}
 					/>
 				}
 				{!Meteor.user() && modalSignupLowered &&

@@ -30,6 +30,7 @@ import ProfilePage from '/imports/ui/components/user/ProfilePage';
 import PublicProfilePage from '/imports/ui/components/user/PublicProfilePage';
 import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
+import ModalSignup from "../../ui/layouts/auth/ModalSignup/ModalSignup";
 
 if (Meteor.userId()) {
 	Meteor.subscribe('users.id', Meteor.userId());
@@ -102,6 +103,9 @@ const routes = (props) => {
 	return (
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
+			<Route
+				exact path="/sign-in" render={(props) => <HomeLayout {...props} signup={true} />}
+			/>
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />

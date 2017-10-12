@@ -64,6 +64,8 @@ class HomeLayout extends Component {
 				<div className="chs-layout home-layout">
 					<Header
 						isOnHomeView
+						showSignup={this.props.signup}
+						history={this.props.history}
 					/>
 
 					<Home

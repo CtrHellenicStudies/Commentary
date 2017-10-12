@@ -63,7 +63,6 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser, settings }) => (
 				</Link>
 				<Link to="/tags/create">
 					<MenuItem
-						href="/tags/create"
 						primaryText="Add Tag"
 						onClick={closeLeftMenu}
 					/>
@@ -85,11 +84,12 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser, settings }) => (
 			</div>
 			:
 			'' }
-		<MenuItem
-			href="/"
-			primaryText="Home"
-			onClick={closeLeftMenu}
-		/>
+		<Link to="/">
+			<MenuItem
+				primaryText="Home"
+				onClick={closeLeftMenu}
+			/>
+		</Link>
 		{tenant && !tenant.isAnnotation &&
 			<span>
 				<Link to="/commentary">

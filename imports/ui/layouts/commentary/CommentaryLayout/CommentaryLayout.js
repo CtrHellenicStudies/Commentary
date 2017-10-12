@@ -107,7 +107,9 @@ class CommentaryLayout extends React.Component {
 		}
 
 		// update route
-		this.props.history.push('/commentary/', {}, queryParams);
+		const urlParams = qs.stringify(queryParams);
+
+		this.props.history.push(`/commentary/?${urlParams}`);
 	}
 
 	_toggleSearchTerm(key, value) {

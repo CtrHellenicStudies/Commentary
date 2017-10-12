@@ -60,7 +60,7 @@ const EditKeywordLayout = React.createClass({
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
 			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	},
@@ -174,7 +174,7 @@ const EditKeywordLayout = React.createClass({
 			if (error) {
 				this.showSnackBar(error);
 			} else {
-				FlowRouter.go(`/tags/${keywordCandidate.slug}`);
+				this.props.history.push(`/tags/${keywordCandidate.slug}`);
 			}
 		});
 	},

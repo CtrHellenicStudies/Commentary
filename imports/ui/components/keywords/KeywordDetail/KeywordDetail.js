@@ -110,7 +110,6 @@ class KeywordDetail extends Component {
 														label="Edit"
 													/>
 												</Link>
-												<Link to={`/tags/${keyword.slug}/edit`}>Test Link</Link>
 												<RaisedButton
 													onClick={this.deleteKeyword.bind(this)}
 													className="cover-link light"

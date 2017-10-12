@@ -7,6 +7,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import Comments from '/imports/models/comments';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import { Link } from 'react-router-dom';
 
 // lib
 import Utils from '/imports/lib/utils';
@@ -107,21 +108,19 @@ class Home extends Component {
 											{settings.subtitle}
 										</h3>
 									</div>
-
 									<RaisedButton
 										href="#intro"
 										className="cover-link learn-more"
 										label="Learn More"
 										onClick={this.scrollToIntro}
 									/>
-
-									<RaisedButton
-										href="/commentary/"
-										className="cover-link go-to-commentary"
-										label="Go to Commentary"
-									/>
-
-
+									<Link to="/commentary">
+										<RaisedButton
+											href="/commentary/"
+											className="cover-link go-to-commentary"
+											label="Go to Commentary"
+										/>
+									</Link>
 								</div>
 							</div>
 						</div>
@@ -158,11 +157,12 @@ class Home extends Component {
 												<div
 													style={{ marginTop: '20px' }}
 												>
-													<RaisedButton
-														className="intro-block-link cover-link dark"
-														href={block.linkURL}
-														label={block.linkText}
-													/>
+													<Link to={block.linkURL}>
+														<RaisedButton
+															className="intro-block-link cover-link dark"
+															label={block.linkText}
+														/>
+													</Link>
 												</div>
 											: ''}
 										</div>
@@ -199,11 +199,13 @@ class Home extends Component {
 								defaultAvatarUrl="/images/default_user.jpg"
 								limit={3}
 							/>
-							<RaisedButton
-								href="/commenters"
-								className="cover-link light show-more "
-								label="Other Commentators"
-							/>
+							<Link to="/commenters">
+								<RaisedButton
+									href="/commenters"
+									className="cover-link light show-more "
+									label="Other Commentators"
+								/>
+							</Link>
 						</div>
 					</section>
 					<section id="visualizations" className="browse-commentary block-shadow">
@@ -223,11 +225,12 @@ class Home extends Component {
 							<h2 className="keyword-divider-title">Words</h2>
 							<div className="underline" />
 							<KeywordsList type="word" title="Words" limit={5} />
-							<RaisedButton
-								href="/words"
-								className="cover-link show-more primary "
-								label="More Words"
-							/>
+							<Link to="/words">
+								<RaisedButton
+									className="cover-link show-more primary "
+									label="More Words"
+								/>
+							</Link>
 						</div>
 					</section>
 
@@ -236,11 +239,12 @@ class Home extends Component {
 							<h2 className="keyword-divider-title">Ideas</h2>
 							<div className="underline" />
 							<KeywordsList type="idea" title="Ideas" limit={5} />
-							<RaisedButton
-								href="/ideas"
-								className="cover-link show-more primary "
-								label="More Ideas"
-							/>
+							<Link to="/ideas">
+								<RaisedButton
+									className="cover-link show-more primary "
+									label="More Ideas"
+								/>
+							</Link>
 						</div>
 					</section>
 
@@ -259,12 +263,12 @@ class Home extends Component {
 								<Spinner />
 							}
 							<div className="read-more-link">
-
-								<RaisedButton
-									href="/commentary"
-									className="cover-link light show-more "
-									label="Read More"
-								/>
+								<Link to="/commentary">
+									<RaisedButton
+										className="cover-link light show-more "
+										label="Read More"
+									/>
+								</Link>
 
 							</div>
 						</div>

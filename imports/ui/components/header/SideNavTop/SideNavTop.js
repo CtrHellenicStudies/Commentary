@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Link } from 'react-router-dom';
 
 // components:
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon'; 
@@ -7,16 +8,16 @@ import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 const SideNavTop = ({ currentUser, username }) => (
 	<div className="sidenav-top">
 		{Meteor.user() &&
-			<a href="/profile">
+			<Link to="/profile">
 				<div className="user-image paper-shadow">
 					<AvatarIcon avatar={currentUser && currentUser.profile ? currentUser.profile.avatarUrl : '/images/default_user.jpg'} />
 				</div>
-			</a>}
-		<a href="/profile">
+			</Link>}
+		<Link to="/profile">
 			<span className="user-fullname">
 				{username}
 			</span>
-		</a>
+		</Link>
 	</div>
 );
 SideNavTop.propTypes = {

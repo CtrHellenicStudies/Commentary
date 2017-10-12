@@ -107,8 +107,8 @@ const routes = (props) => {
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
 			<Route exact path="/commenters" component={CommentersPage} />
 			<PrivateRoute exact path="/tags/:slug/edit" component={EditKeywordLayout} />
-			<Route exact path="/tags/:slug" component={KeywordDetail} />
 			<PrivateRoute exact path="/tags/create" component={AddKeywordLayout} />
+			<Route exact path="/tags/:slug" component={KeywordDetail} />
 			<Route path="/words" render={() => <KeywordsPage type="word" title="Words" />} />
 			<Route path="/ideas" render={() => <KeywordsPage type="idea" title="Ideas" />} />
 			<Route exact path="/referenceWorks/:slug" component={ReferenceWorkDetail} />

@@ -313,7 +313,6 @@ class AddComment extends React.Component {
 	}
 
 	showSnackBar(error) {
-		console.log("error LOG", error);
 		this.setState({
 			snackbarOpen: true,
 			snackbarMessage: error.message,

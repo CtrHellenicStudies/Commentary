@@ -25,7 +25,6 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
-
 const AddRevisionLayout = React.createClass({
 
 	propTypes: {
@@ -83,6 +82,7 @@ const AddRevisionLayout = React.createClass({
 			update = {
 				keywords,
 				referenceWorks: formData.referenceWorks,
+				commenters: Utils.getCommenters(formData.commenterValue)
 			};
 		}
 

@@ -119,6 +119,28 @@ const keywordsDelete = (token, keywordId) => {
 	return keywordId;
 };
 
+const keywordsChangeType = (token, id, newType) => {
+	check(token, String);
+	check(id, String);
+	check(newType, String);
+
+	const roles = ['editor', 'admin', 'commenter'];
+	if (!Meteor.users.findOne({
+		roles: { $elemMatch: { $in: roles } },
+		'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
+	})
+	) {
+		throw new Meteor.Error('keyword-delete', 'not-authorized');
+	}
+
+	try {
+		Keywords.update({ _id: id }, {$set: {type: newType}});
+	} catch (err) {
+		throw new Meteor.Error('keyword-changeType', err);
+	}
+
+	return id;
+};
 
 Meteor.methods({
 	'keywords.insert': keywordsInsert,
@@ -126,6 +148,9 @@ Meteor.methods({
 	'keywords.update': keywordsUpdate,
 
 	'keywords.delete': keywordsDelete,
+
+	'keywords.changeType': keywordsChangeType,
+
 });
 
-export { keywordsInsert, keywordsUpdate, keywordsDelete };
+export { keywordsInsert, keywordsUpdate, keywordsDelete, keywordsChangeType };

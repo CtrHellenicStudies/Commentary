@@ -35,7 +35,6 @@ import Utils from '/imports/lib/utils';
 const store = configureStore();
 const history = syncHistoryWithStore(createBrowserHistory(), store);
 
-
 const AddRevisionLayout = React.createClass({
 
 	propTypes: {
@@ -90,6 +89,7 @@ const AddRevisionLayout = React.createClass({
 		let update = [{}];
 		if (keywords) {
 			update = {
+				commenters: Utils.getCommenters(formData.commenterValue),
 				keywords,
 				referenceWorks: formData.referenceWorks,
 			};

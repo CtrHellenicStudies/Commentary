@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
+import _ from 'lodash';
 
 const usersInsert = (token, user) => {
 	check(token, String);
@@ -168,13 +169,31 @@ const updatePosition = (token, _id, position) => {
 		},
 	});
 };
+const userAfterLogout = (token) => {
 
+	if (token) {
+		const hashedToken = Accounts._hashLoginToken(token);
+		const user = Meteor.users.findOne({
+			'services.resume.loginTokens.hashedToken': hashedToken
+		});
+		const currentTokens = user.services.resume.loginTokens;
+		const tokenIndex = _.findIndex(currentTokens, singleToken => singleToken.hashedToken === hashedToken);
+		currentTokens.splice(tokenIndex, 1);
+
+		Meteor.users.update(user._id, {$set: {'services.resume.loginTokens': currentTokens}}, (err) => {
+			if (err) {
+				throw new Error(err);
+			}
+		});
+	}
+};
 
 Meteor.methods({
 	'users.insert': usersInsert,
 	'users.update': usersUpdate,
 	'users.remove': usersRemove,
 	updatePosition: updatePosition,
+	'users.afterLogout': userAfterLogout,
 });
 
 export { usersInsert, usersUpdate, usersRemove, updatePosition };

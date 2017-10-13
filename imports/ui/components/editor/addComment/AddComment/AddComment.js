@@ -7,6 +7,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
+import Cookies from 'js-cookie';
+import slugify from 'slugify';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
@@ -179,6 +181,8 @@ class AddComment extends React.Component {
 		this.moveTagBlock = this.moveTagBlock.bind(this);
 		this.onTagValueChange = this.onTagValueChange.bind(this);
 		this.onIsMentionedInLemmaChange = this.onIsMentionedInLemmaChange.bind(this);
+		this.selectTagType = this.selectTagType.bind(this);
+		this.addNewTag = this.addNewTag.bind(this);
 	}
 
 	_enableButton() {
@@ -269,8 +273,8 @@ class AddComment extends React.Component {
 		// TODO: form validation
 		// TODO: Migrate to formsy components
 		const error = this.validateStateForSubmit();
-		this.showSnackBar(error);
-		if (error.errors) {
+		if (error) {
+			this.showSnackBar(error);
 			return false;
 		}
 
@@ -309,9 +313,10 @@ class AddComment extends React.Component {
 	}
 
 	showSnackBar(error) {
+		console.log("error LOG", error);
 		this.setState({
-			snackbarOpen: error.errors,
-			snackbarMessage: error.errorMessage,
+			snackbarOpen: true,
+			snackbarMessage: error.message,
 		});
 		setTimeout(() => {
 			this.setState({
@@ -322,7 +327,7 @@ class AddComment extends React.Component {
 
 	validateStateForSubmit() {
 		let errors = false;
-		let errorMessage = 'Missing comment data:';
+		let errorMessage = '';
 		if (!this.state.titleValue) {
 			errors = true;
 			errorMessage += ' title,';
@@ -341,12 +346,9 @@ class AddComment extends React.Component {
 		}
 		if (errors === true) {
 			errorMessage = errorMessage.slice(0, -1);
-			errorMessage += '.';
+			errorMessage = new Meteor.Error('data-missing', 'Missing comment data:'.concat(errorMessage, '.'));
 		}
-		return {
-			errors,
-			errorMessage,
-		};
+		return errorMessage;
 	}
 
 	addReferenceWorkBlock() {
@@ -440,6 +442,40 @@ class AddComment extends React.Component {
 		});
 	}
 
+	selectTagType(tagId, event, index) {
+		const currentTags = this.state.tagsValue;
+		currentTags[index].keyword.type = event.target.value;
+		this.setState({
+			tagsValue: currentTags
+		});
+
+		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value, (err) => {
+			if (err) {
+				this.showSnackBar(err);
+			}			else {
+				this.showSnackBar({message: 'Keyword type changed'});
+			}
+		});
+	}
+	
+	addNewTag(tag) {
+
+		const keyword = [{
+			title: tag.value,
+			slug: slugify(tag.value.toLowerCase()),
+			type: 'word',
+			count: 1,
+			tenantId: Session.get('tenantId'),
+		}];
+
+		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
+			if (err) {
+				this.showSnackBar(err);
+			}			else {
+				this.showSnackBar({message: 'Tag added'});
+			}
+		});
+	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
 	render() {
@@ -468,7 +504,7 @@ class AddComment extends React.Component {
 										value={this.state.commenterValue}
 										onChange={this.onCommenterValueChange}
 										placeholder="Commentator..."
-										multi={true}
+										multi
 									/>
 									:
 									''
@@ -492,6 +528,8 @@ class AddComment extends React.Component {
 									moveTagBlock={this.moveTagBlock}
 									onTagValueChange={this.onTagValueChange}
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
+									selectTagType={this.selectTagType}
+									addNewTag={this.addNewTag}
 								/>
 
 							</div>
@@ -542,6 +580,7 @@ class AddComment extends React.Component {
 														value: rW.value,
 														label: rW.label,
 														slug: rW.slug,
+														type: rW.type,
 														i,
 													});
 												});

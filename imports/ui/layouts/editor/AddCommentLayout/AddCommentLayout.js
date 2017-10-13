@@ -52,19 +52,6 @@ const getCommenter = (formData) => {
 	return commenter;
 };
 
-const getCommenters = (formData) => {
-
-	const commentersList = [];
-
-	formData.forEach(commenter => {
-		const currentCommenter = Commenters.findOne({
-			_id: commenter.value,
-		}, {fields: {_id: 1, slug: 1, name: 1}});
-		commentersList.push(currentCommenter);
-	});
-
-	return commentersList;
-};
 
 const getKeywords = (formData) => {
 	const keywords = [];
@@ -224,7 +211,7 @@ class AddCommentLayout extends React.Component {
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const referenceWorks = formData.referenceWorks;
-		const commenters = getCommenters(formData.commenterValue);
+		const commenters = Utils.getCommenters(formData.commenterValue);
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = Cookies.get('loginToken');
 
@@ -455,6 +442,7 @@ class AddCommentLayout extends React.Component {
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}
 										submitForm={this.addComment}
+										work={work}
 									/>
 
 									<ContextPanel

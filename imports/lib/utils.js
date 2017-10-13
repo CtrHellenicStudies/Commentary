@@ -5,6 +5,7 @@ import Config from './_config/_config.js';
 
 // models
 import Editions from '/imports/models/editions';
+import Commenters from '/imports/models/commenters';
 
 
 const Utils = {
@@ -265,6 +266,19 @@ const Utils = {
 
 		return editions;
 	},
+	getCommenters(commenterData) {
+
+		const commentersList = [];
+
+		commenterData.forEach(commenter => {
+			const currentCommenter = Commenters.findOne({
+				_id: commenter.value,
+			}, {fields: {_id: 1, slug: 1, name: 1}});
+			commentersList.push(currentCommenter);
+		});
+
+		return commentersList;
+	}
 };
 
 export default Utils;

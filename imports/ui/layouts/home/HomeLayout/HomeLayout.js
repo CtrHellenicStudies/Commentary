@@ -42,9 +42,8 @@ class HomeLayout extends Component {
 	}
 
 	render() {
-		const { settings, tenant } = this.props;
-
-		if (!settings || !tenant) {
+		const { settings, tenant, ready } = this.props;
+		if (!ready) {
 			return <LoadingHome />;
 		}
 
@@ -88,11 +87,9 @@ HomeLayout.propTypes = {
 
 const HomeLayoutContainer = createContainer(() => {
 	const handle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	const handleTenants = Meteor.subscribe('tenants');
-
 	return {
 		settings: Settings.findOne(),
-		ready: handle.ready() && handleTenants.ready(),
+		ready: handle.ready(),
 		tenant: Tenant.findOne({_id: Session.get('tenantId')}),
 	};
 }, HomeLayout);

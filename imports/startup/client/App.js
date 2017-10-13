@@ -4,6 +4,7 @@ import {Session} from 'meteor/session';
 import Cookies from 'js-cookie';
 import Utils from '/imports/lib/utils';
 import { Meteor } from 'meteor/meteor';
+import Tenants from '/imports/models/tenants';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -30,7 +31,7 @@ import ProfilePage from '/imports/ui/components/user/ProfilePage';
 import PublicProfilePage from '/imports/ui/components/user/PublicProfilePage';
 import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
-import ModalSignup from "../../ui/layouts/auth/ModalSignup/ModalSignup";
+import ModalSignup from '../../ui/layouts/auth/ModalSignup/ModalSignup';
 
 if (Meteor.userId()) {
 	Meteor.subscribe('users.id', Meteor.userId());
@@ -62,6 +63,11 @@ if (Meteor.userId()) {
 if (Meteor.isClient) {
 	Utils.setBaseDocMeta();
 }
+
+if (!Tenants.findOne()) {
+	Meteor.subscribe('tenants');
+}
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
 		{...rest} render={props => (
@@ -104,7 +110,7 @@ const routes = (props) => {
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
 			<Route
-				exact path="/sign-in" render={(props) => <HomeLayout {...props} signup={true} />}
+				exact path="/sign-in" render={(props) => <HomeLayout {...props} signup />}
 			/>
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
@@ -140,8 +146,9 @@ const routes = (props) => {
 						});
 					} catch (err) {
 						console.log(err);
+					} finally {
+						return <Redirect to="/" />;
 					}
-					return <Redirect to="/" />;
 				}}
 			/>
 			<Route exact path="/v1/" component={NameResolutionServiceLayout} />

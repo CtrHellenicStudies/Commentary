@@ -32,6 +32,8 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import CommentersEditorDialog from '../CommentersEditorDialog/CommentersEditorDialog';
 import Commenters from '/imports/models/commenters';
+import Snackbar from 'material-ui/Snackbar';
+import slugify from 'slugify';
 
 import {
 	ItalicButton,
@@ -163,6 +165,8 @@ class AddRevision extends React.Component {
 			commentsSuggestions: fromJS([]),
 			commentersEditorDialogOpen: false,
 			commenterValue: comment.commenters ? comment.commenters.map((commenter) => ({value: commenter._id, label: commenter.name})) : [],
+			snackbarOpen: false,
+
 		};
 
 		autoBind(this);
@@ -453,6 +457,54 @@ class AddRevision extends React.Component {
 		});
 	}
 
+	showSnackBar(error) {
+		this.setState({
+			snackbarOpen: true,
+			snackbarMessage: error.message,
+		});
+		setTimeout(() => {
+			this.setState({
+				snackbarOpen: false,
+				snackbarMessage: ''
+			});
+		}, 4000);
+	}
+
+	selectTagType(tagId, event, index) {
+		const currentTags = this.state.tagsValue;
+		currentTags[index].keyword.type = event.target.value;
+		this.setState({
+			tagsValue: currentTags
+		});
+
+		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value, (err) => {
+			if (err) {
+				this.showSnackBar(err);
+			}			else {
+				this.showSnackBar({message: 'Keyword type changed'});
+			}
+		});
+	}
+
+	addNewTag(tag) {
+
+		const keyword = [{
+			title: tag.value,
+			slug: slugify(tag.value.toLowerCase()),
+			type: 'word',
+			count: 1,
+			tenantId: Session.get('tenantId'),
+		}];
+
+		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
+			if (err) {
+				this.showSnackBar(err);
+			}			else {
+				this.showSnackBar({message: 'Tag added'});
+			}
+		});
+	}
+
 	render() {
 		const { comment, commentersOptions } = this.props;
 		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
@@ -555,6 +607,8 @@ class AddRevision extends React.Component {
 									moveTagBlock={this.moveTagBlock}
 									onTagValueChange={this.onTagValueChange}
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
+									selectTagType={this.selectTagType}
+									addNewTag={this.addNewTag}
 								/>
 
 							</div>
@@ -729,6 +783,12 @@ class AddRevision extends React.Component {
 							</div>
 						</article>
 					</Formsy.Form>
+					<Snackbar
+						className="editor-snackbar"
+						open={this.state.snackbarOpen}
+						message={this.state.snackbarMessage}
+						autoHideDuration={4000}
+					/>
 				</div>
 				<div className="inline-toolbar-wrap">
 					<InlineToolbar />

@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import Utils from '/imports/lib/utils';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 // components:
 import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';
@@ -37,6 +38,7 @@ class ModalLogin extends React.Component {
 		this.handleLoginGoogle = this.handleLoginGoogle.bind(this);
 		this.handleLoginTwitter = this.handleLoginTwitter.bind(this);
 		this.signup = this.signup.bind(this);
+		this.forgot = this.forgot.bind(this);
 	}
 
 	componentWillMount() {
@@ -108,6 +110,11 @@ class ModalLogin extends React.Component {
 		this.props.closeModal();
 		this.props.signupModal();
 	}
+	forgot(event) {
+		event.preventDefault();
+		this.props.closeModal();
+		this.props.history.push("/forgot-password");
+	}
 
 	render() {
 
@@ -151,6 +158,8 @@ class ModalLogin extends React.Component {
 								<PWDLoginForm
 									login={this.handleLogin}
 									errorMsg={errorMsg}
+									closeModal={closeModal}
+									history={this.props.history}
 								/>
 
 								<div className="at-signup-link">
@@ -160,7 +169,7 @@ class ModalLogin extends React.Component {
 								</div>
 								<div className="at-resend-verification-email-link at-wrap">
 									<p>
-										Verification email lost? <a href="/send-again" id="at-resend-verification-email" className="at-link at-resend-verification-email">Send again.</a>
+										Verification email lost? <a href="" onClick={this.forgot} id="at-resend-verification-email" className="at-link at-resend-verification-email">Send again.</a>
 									</p>
 								</div>
 							</div>

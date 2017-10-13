@@ -14,6 +14,7 @@ import Tenants from '/imports/models/tenants';
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import ModalSignup from '/imports/ui/layouts/auth/ModalSignup';
+import ModalForgotPwd from '/imports/ui/layouts/auth/ModalForgotPwd';
 import LeftMenu from '/imports/ui/layouts/header/LeftMenu';
 import CommentarySearchToolbar from '/imports/ui/layouts/header/CommentarySearchToolbar';
 import CommentarySearchPanel from '/imports/ui/layouts/header/CommentarySearchPanel';
@@ -94,6 +95,7 @@ class Header extends React.Component {
 			activeWork: '',
 			modalLoginLowered: false,
 			modalSignupLowered: !!props.showSignup,
+			modalForgotPwdLowered: !!props.showForgotPwd,
 		};
 
 		// methods:
@@ -108,6 +110,7 @@ class Header extends React.Component {
 		this.showSignupModal = this.showSignupModal.bind(this);
 		this.closeLoginModal = this.closeLoginModal.bind(this);
 		this.closeSignupModal = this.closeSignupModal.bind(this);
+		this.closeForgotPwdModal = this.closeForgotPwdModal.bind(this);
 	}
 
 	toggleSearchMode() {
@@ -221,11 +224,21 @@ class Header extends React.Component {
 		});
 	}
 
+	closeForgotPwdModal() {
+		if (this.props.showForgotPwd) {
+			this.props.history.push('/');
+		}
+		this.setState({
+			modalForgotPwdLowered: false,
+		});
+	}
+
 	render() {
 
 		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage, selectedWork } = this.props;
 		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered } = this.state;
 		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;
+		const modalForgotPwdLowered = this.state.modalForgotPwdLowered || this.props.showForgotPwd;
 		return (
 			<div>
 				<LeftMenu
@@ -426,6 +439,7 @@ class Header extends React.Component {
 						lowered={modalLoginLowered}
 						closeModal={this.closeLoginModal}
 						signupModal={this.showSignupModal}
+						history={this.props.history}
 					/>
 				}
 				{!this.props.user && modalSignupLowered &&
@@ -433,6 +447,13 @@ class Header extends React.Component {
 						lowered={modalSignupLowered}
 						closeModal={this.closeSignupModal}
 					/>
+				}
+				{!this.props.user && modalForgotPwdLowered &&
+				<ModalForgotPwd
+					lowered={modalForgotPwdLowered}
+					signupModal={this.showSignupModal}
+					closeModal={this.closeForgotPwdModal}
+				/>
 				}
 			</div>
 		);

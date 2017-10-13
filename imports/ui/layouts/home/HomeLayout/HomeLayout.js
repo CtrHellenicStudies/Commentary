@@ -64,6 +64,7 @@ class HomeLayout extends Component {
 					<Header
 						isOnHomeView
 						showSignup={this.props.signup}
+						showForgotPwd={this.props.showForgotPwd}
 						history={this.props.history}
 					/>
 

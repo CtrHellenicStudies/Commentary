@@ -110,7 +110,7 @@ const routes = (props) => {
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
 			<Route
-				exact path="/sign-in" render={(props) => <HomeLayout {...props} signup />}
+				exact path="/sign-in" render={(params) => <HomeLayout {...params} signup />}
 			/>
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
@@ -150,6 +150,9 @@ const routes = (props) => {
 						return <Redirect to="/" />;
 					}
 				}}
+			/>
+			<Route
+				exact path="/forgot-password" render={(params) => <HomeLayout {...params} showForgotPwd />}
 			/>
 			<Route exact path="/v1/" component={NameResolutionServiceLayout} />
 			<Route

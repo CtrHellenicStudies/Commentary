@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const PWDLoginForm = ({ errorMsg, login }) => {
+const PWDLoginForm = ({ errorMsg, login, closeModal, history }) => {
 
 	const handleLogin = (e) => {
 		e.preventDefault();
@@ -8,6 +9,12 @@ const PWDLoginForm = ({ errorMsg, login }) => {
 		const password = $('.sign-in-input--password').val();
 
 		login(email, password);
+	};
+
+	const forgotPassword = (event) => {
+		event.preventDefault();
+		closeModal();
+		history.push('/forgot-password');
 	};
 
 	return (
@@ -65,7 +72,7 @@ const PWDLoginForm = ({ errorMsg, login }) => {
 					</span>
 					<div className="at-pwd-link">
 						<p>
-							<a href="/forgot-password" id="at-forgotPwd" className="at-link at-pwd">Forgot your password?</a>
+							<a href="" id="at-forgotPwd" className="at-link at-pwd" onClick={forgotPassword}>Forgot your password?</a>
 						</p>
 					</div>
 					<button type="submit" className="at-btn submit btn btn-lg btn-block btn-default" id="at-btn">
@@ -79,6 +86,7 @@ const PWDLoginForm = ({ errorMsg, login }) => {
 PWDLoginForm.propTypes = {
 	errorMsg: React.PropTypes.string,
 	login: React.PropTypes.func,
+	close: React.PropTypes.func,
 };
 PWDLoginForm.defaultProps = {
 	errorMsg: null,

@@ -87,6 +87,10 @@ const accountsMethods = {
 
 		return stampedToken.token;
 	},
+	sendPasswordReminder(email) {
+		const currentUser = Meteor.users.findOne({"emails.address": email});
+		Accounts.sendResetPasswordEmail(currentUser._id, email);
+	}
 };
 
 Meteor.methods(accountsMethods);

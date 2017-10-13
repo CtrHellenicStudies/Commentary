@@ -296,7 +296,7 @@ class Header extends React.Component {
 											</Link>
 										</span>
 									}
-									{Meteor.user() ?
+									{this.props.user ?
 										<div>
 											{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 												<div className="user-header-links admin-header-links">
@@ -421,14 +421,14 @@ class Header extends React.Component {
 					}
 				</header>
 
-				{!Meteor.user() && modalLoginLowered &&
+				{!this.props.user && modalLoginLowered &&
 					<ModalLogin
 						lowered={modalLoginLowered}
 						closeModal={this.closeLoginModal}
 						signupModal={this.showSignupModal}
 					/>
 				}
-				{!Meteor.user() && modalSignupLowered &&
+				{!this.props.user && modalSignupLowered &&
 					<ModalSignup
 						lowered={modalSignupLowered}
 						closeModal={this.closeSignupModal}
@@ -450,6 +450,7 @@ export default createContainer(() => {
 	return {
 		settings: Settings.findOne({}),
 		tenant: Tenants.findOne({ _id: Session.get('tenantId') }),
+		user: Meteor.user()
 	};
 
 }, Header);

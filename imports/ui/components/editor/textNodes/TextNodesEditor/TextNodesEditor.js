@@ -28,6 +28,7 @@ import TextNodesInput from '../TextNodesInput';
 import EditWorkDialog from '../EditWorkDialog';
 import EditEditionDialog from '../EditEditionDialog';
 import EditSubworkDialog from '../EditSubworkDialog';
+import MultilineDialog from '../MultilineDialog';
 import TranslationSelect from '../TranslationSelect/TranslationSelect';
 import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
 
@@ -55,6 +56,7 @@ class TextNodesEditor extends React.Component {
 			editWorkDialogOpen: false,
 			editEditionDialogOpen: false,
 			editSubworkDialogOpen: false,
+			multiLineDialogOpen: false
 		};
 
 		autoBind(this);
@@ -116,6 +118,12 @@ class TextNodesEditor extends React.Component {
 		});
 	}
 
+	showMultilineDialog() {
+		this.setState({
+			multiLineDialogOpen: true,
+		});
+	}
+
 	handleCloseEditWorkDialog() {
 		this.setState({
 			editWorkDialogOpen: false,
@@ -131,6 +139,12 @@ class TextNodesEditor extends React.Component {
 	handleCloseEditSubworkDialog() {
 		this.setState({
 			editSubworkDialogOpen: false,
+		});
+	}
+
+	handleCloseMultilineDialog() {
+		this.setState({
+			multiLineDialogOpen: false,
 		});
 	}
 
@@ -351,7 +365,16 @@ class TextNodesEditor extends React.Component {
 						</FormGroup>
 					</div>
 					<TranslationSelect {...translationOptions} selectTranslation={this.selectTranslation} />
-
+					{_selectedEdition ?
+						<div className="text-nodes-editor-meta-input">
+							<FormGroup controlId="multiLineButton">
+								<ControlLabel>Multiline</ControlLabel>
+								<br />
+								<button onClick={this.showMultilineDialog}>
+								Manage multiline
+							</button>
+							</FormGroup>
+						</div> : ''}
 				</div>
 
 				{
@@ -377,6 +400,12 @@ class TextNodesEditor extends React.Component {
 					handleClose={this.handleCloseEditSubworkDialog}
 					subwork={_selectedSubwork}
 				/>
+				{_selectedEdition ?
+					<MultilineDialog
+						open={this.state.multiLineDialogOpen}
+						handleClose={this.handleCloseMultilineDialog}
+						edition={_selectedEdition}
+					/> : ''}
 			</div>
 		);
 	}

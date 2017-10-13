@@ -31,6 +31,7 @@ class CommentGroup extends React.Component {
 		contextPanelOpen: React.PropTypes.bool.isRequired,
 		showContextPanel: React.PropTypes.func.isRequired,
 		setContextScrollPosition: React.PropTypes.func.isRequired,
+		selectMultiLine: React.PropTypes.func.isRequired,
 		toggleSearchTerm: React.PropTypes.func,
 		filters: React.PropTypes.arrayOf(React.PropTypes.shape({
 			key: React.PropTypes.string.isRequired,
@@ -66,7 +67,7 @@ class CommentGroup extends React.Component {
 
 	render() {
 		const { commentGroup, commentGroupIndex, contextPanelOpen, showLoginModal,
-			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm } = this.props;
+			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm, selectMultiLine } = this.props;
 		const { hideLemma } = this.state;
 		let isOnHomeView = false;
 
@@ -99,6 +100,8 @@ class CommentGroup extends React.Component {
 							showContextPanel={showContextPanel}
 							setScrollPosition={setContextScrollPosition}
 							hideLemma={hideLemma}
+							selectMultiLine={selectMultiLine}
+							multiline={this.props.multiline}
 						/>
 
 						{commentGroup.comments.map(comment => (

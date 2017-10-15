@@ -4,6 +4,12 @@ import winston from 'winston';
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 
+
+/**
+ * Cron functions for commenters, generating counts / metadata for data
+ * visualizations
+ */
+
 const commentersCron = () => {
 	const comments = Comments.find().fetch();
 	const commenters = [];

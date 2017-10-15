@@ -8,6 +8,9 @@ import Tenants from '/imports/models/tenants';
 import Settings from '/imports/models/settings';
 import Works from '/imports/models/works';
 
+/**
+ * Webhook publishing of comments from previous iteration of project with SQL db
+ */
 Meteor.method('publishComments', (commentCandidate) => {
 	let valid = false;
 	check(commentCandidate.subdomain, String);

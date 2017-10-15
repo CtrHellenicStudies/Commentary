@@ -11,6 +11,10 @@ import Commenters from '/imports/models/commenters';
 import { getAuthorizedUser } from '../helpers';
 
 
+/**
+ * Comment methods - either replaced or to be replaced with the graphql api
+ */
+
 const commentsInsert = (token, comment) => {
 	check(token, Match.Maybe(String));
 	check(comment, Object);

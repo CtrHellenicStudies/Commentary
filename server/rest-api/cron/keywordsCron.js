@@ -4,6 +4,9 @@ import Comments from '/imports/models/comments';
 import Keywords from '/imports/models/keywords';
 
 
+/**
+ * Cron function for keywords, updating counts and other metadata
+ */
 const keywordCron = () => {
 	const comments = Comments.find().fetch();
 	const keywords = [];

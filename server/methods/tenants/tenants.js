@@ -4,6 +4,11 @@ import { Accounts } from 'meteor/accounts-base';
 
 import Tenants from '/imports/models/tenants';
 
+
+/**
+ * Tenants methods - either replaced or to be replaced with the graphql api
+ */
+
 const tenantsInsert = (token, tenant) => {
 	check(token, String);
 	check(tenant, {

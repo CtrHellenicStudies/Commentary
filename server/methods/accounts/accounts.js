@@ -2,6 +2,10 @@ import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 
+/**
+ * Accounts methods - either replaced or to be replaced with the graphql api
+ */
+
 const accountsMethods = {
 	createAccount(user) {
 		check(user, {
@@ -23,7 +27,7 @@ const accountsMethods = {
 			password: String,
 		});
 
-		user.username = user.email; 
+		user.username = user.email;
 
 		const userId = Accounts.createUser(user);
 		const stampedToken = Accounts._generateStampedLoginToken();

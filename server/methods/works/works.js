@@ -4,6 +4,11 @@ import { Accounts } from 'meteor/accounts-base';
 
 import Works from '/imports/models/works';
 
+
+/**
+ * Works methods - either replaced or to be replaced with the graphql api
+ */
+
 const worksInsert = (token, work) => {
 	check(token, String);
 	check(work, {

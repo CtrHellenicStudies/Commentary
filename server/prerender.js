@@ -1,3 +1,7 @@
+/**
+ * Configure prerender for SEO
+ */
+
 Meteor.startup(() => {
 	const prerenderio = Npm.require('prerender-node');
 	const settings = Meteor.settings.PrerenderIO;

@@ -3,6 +3,11 @@ import fs from 'fs';
 import Comments from '/imports/models/comments';
 import Tenants from '/imports/models/tenants';
 
+
+/**
+ * Prototype functionality of exporting all records to a git repository 
+ */
+
 Meteor.method('exportToGit', (exportParams) => {
 	check(exportParams.subdomain, String);
 	check(exportParams.token, String);

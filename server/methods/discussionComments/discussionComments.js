@@ -13,6 +13,10 @@ import DiscussionComments from '/imports/models/discussionComments';
 import { sendDiscussionCommentInsertEmail, sendDiscussionCommentRejectEmail, sendDiscussionCommentPublishEmail } from './emails';
 
 
+/**
+ * Discussion Comment methods - either replaced or to be replaced with the graphql api
+ */
+
 const deleteDiscussionComments = (token, _id) => {
 	check(token, String);
 	check(_id, String);
@@ -153,7 +157,7 @@ const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentD
 	} else if (discussionCommentData.status === 'trash') {
 		sendDiscussionCommentRejectEmail(discussionCommentId);
 	}
-	
+
 	const updateUser = Meteor.users.update({_id: discussionComment.userId}, {$push: {'subscriptions.notifications': notification}});
 };
 

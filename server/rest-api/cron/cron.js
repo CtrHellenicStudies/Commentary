@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import winston from 'winston';
 
+/**
+ * Primary cron function to run all cron methods
+ */
 
 const runCron = () => {
 	winston.info('Running Cron Methods:');

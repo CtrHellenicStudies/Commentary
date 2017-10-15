@@ -5,7 +5,7 @@ import { Accounts } from 'meteor/accounts-base';
 Meteor.methods({
 	renameMentioned: (token) => {
 		check(token, String);
-		console.log("Accounts._hashLoginToken(token) LOG", Accounts._hashLoginToken(token));
+
 		const roles = ['admin'];
 		if (!Meteor.users.findOne({
 			roles: {$elemMatch: {$in: roles}},
@@ -14,6 +14,7 @@ Meteor.methods({
 		) {
 			throw new Meteor.Error('renameMentioned', 'not-authorized');
 		}
+
 		Comments.find({'keywords.isMentionedInLemma': true}).forEach((comment) => {
 			const updatedKeywords = comment.keywords.map(keyword => {
 				const thisKeyword = keyword;
@@ -23,6 +24,7 @@ Meteor.methods({
 				}
 				return thisKeyword;
 			});
+
 			if (comment._id === "2QLDAGDCostJoZsPa") {
 				console.log("updatedKeywords LOG", updatedKeywords);
 			}

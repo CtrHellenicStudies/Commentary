@@ -1,6 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 
+/**
+ * bookmark methods - either replaced or to be replaced with the graphql api
+ */
+
 function bookmarkInsert(textNodeId) {
 	// Make sure the user is logged in before inserting
 	check(textNodeId, String);

@@ -7,6 +7,10 @@ import Settings from '/imports/models/settings';
 import Tenants from '/imports/models/tenants';
 import Works from '/imports/models/works';
 
+
+/**
+ * Webhook publishing of keywords from previous iteration of project with SQL db
+ */
 Meteor.method('publishKeywords', (keywordCandidate) => {
 	check(keywordCandidate.wordpressId, Match.Maybe(Number));
 	check(keywordCandidate.slug, String);

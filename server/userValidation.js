@@ -1,3 +1,7 @@
+/**
+ * Validate user login attempts and determine if account is suspended
+ */
+
 Meteor.startup(() => {
 	Accounts.validateLoginAttempt((attempt) => {
 		if (attempt.user && attempt.user.roles && attempt.user.roles.indexOf('suspended') > -1) {

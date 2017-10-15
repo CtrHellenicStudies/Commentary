@@ -1,3 +1,7 @@
+/**
+ * Use slingshot for application file uploads to s3
+ */
+
 import { Slingshot } from 'meteor/edgee:slingshot';
 
 Slingshot.createDirective('uploads', Slingshot.S3Storage, {
@@ -16,7 +20,6 @@ Slingshot.createDirective('uploads', Slingshot.S3Storage, {
 			const message = 'Please login before posting files';
 			throw new Meteor.Error('Login Required', message);
 		}
-
 		return true;
 	},
 
@@ -25,7 +28,6 @@ Slingshot.createDirective('uploads', Slingshot.S3Storage, {
 		const user = Meteor.users.findOne(this.userId);
 		let key = `${user._id}/${file.name}`;
 		key = key.replace(/\s/g, '', 'X');
-
 		return key;
 	},
 });

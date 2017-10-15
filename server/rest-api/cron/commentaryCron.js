@@ -4,6 +4,10 @@ import winston from 'winston';
 import Comments from '/imports/models/comments';
 import Works from '/imports/models/works';
 
+/**
+ * Cron functionality for the comments in the commentary, counting and refereshing
+ * metadata
+ */
 const commentaryCron = () => {
 	const commentCounts = [];
 	const isInCommentCountsWorks = false;

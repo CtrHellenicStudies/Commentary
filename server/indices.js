@@ -1,3 +1,7 @@
+/**
+ * Add mongo indices to collections
+ */
+
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 import TextNodes from '/imports/models/textNodes';

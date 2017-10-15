@@ -1,3 +1,7 @@
+/**
+ * Setup smtp email server connection Meteor settings
+ */
+
 import { Meteor } from 'meteor/meteor';
 
 if (Meteor.isServer) {

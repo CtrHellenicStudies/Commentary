@@ -3,6 +3,11 @@ import { check, Match } from 'meteor/check';
 import Translations from '/imports/models/translations';
 import { getAuthorizedUser } from '../helpers';
 
+/**
+ * DEPRECATED
+ * Translation methods - either replaced or to be replaced with the graphql api
+ */
+
 const translationsInsert = (token, translation) => {
 	check(token, String);
 	check(translation, Object);

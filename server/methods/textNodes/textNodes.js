@@ -7,6 +7,11 @@ import { stripTags } from 'underscore.string';
 import TextNodes from '/imports/models/textNodes';
 import { getAuthorizedUser } from '../helpers';
 
+
+/**
+ * Text node methods - either replaced or to be replaced with the graphql api
+ */
+
 const textNodesInsert = (token, textNode) => {
 	check(token, String);
 	check(textNode, {

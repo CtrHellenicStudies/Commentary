@@ -5,6 +5,10 @@ import { Accounts } from 'meteor/accounts-base';
 import Keywords from '/imports/models/keywords';
 
 
+/**
+ * Tags/Keywords methods - either replaced or to be replaced with the graphql api
+ */
+
 const keywordsInsert = (token, keywords) => {
 	check(token, String);
 	check(keywords, [{

@@ -4,7 +4,7 @@ import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
 
 
-/*
+/**
  * Get user by token or native Meteor user method
  * (Workaround until graphql Auth Service is completed)
  * @param  {string} token User auth token

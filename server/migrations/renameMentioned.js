@@ -20,13 +20,13 @@ Meteor.methods({
 				const thisKeyword = keyword;
 				if ('isMentionedInLemma' in keyword) {
 					thisKeyword.isNotMentionedInLemma = !keyword.isMentionedInLemma;
-					delete thisKeyword.isMentionedInLemma
+					delete thisKeyword.isMentionedInLemma;
 				}
 				return thisKeyword;
 			});
 
-			if (comment._id === "2QLDAGDCostJoZsPa") {
-				console.log("updatedKeywords LOG", updatedKeywords);
+			if (comment._id === '2QLDAGDCostJoZsPa') {
+				console.log('updatedKeywords LOG', updatedKeywords);
 			}
 			// Comments.update(comment._id, {$set: {keywords: updatedKeywords}});
 		});

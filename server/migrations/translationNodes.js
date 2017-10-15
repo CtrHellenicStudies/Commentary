@@ -31,7 +31,7 @@ const translationNodes = () => {
 			TranslationNodes.insert(translationNode);
 		});
 	});
-}
+};
 
 /*
 // Method for running migration

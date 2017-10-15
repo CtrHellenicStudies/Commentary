@@ -1,0 +1,35 @@
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+
+stages:
+  - test
+  # - package
+  # - deploy
+
+test:
+  stage: test
+  image: node:4.6.1
+  before_script:
+  - npm i
+  script:
+  - npm run test
+
+# docker-build:
+#  stage: package
+#  script:
+#    - docker build -t us.gcr.io/archimedes-01201/chs-app:test .
+
+# k8s-deploy:
+#  image: geertjohan/google-cloud-sdk-with-docker
+#  stage: deploy
+#  script:
+#    - echo "$GOOGLE_KEY" > key.json # Google Cloud service account key
+#    - gcloud auth activate-service-account --key-file key.json
+#    - gcloud config set compute/zone us-east1-b
+#    - gcloud config set project archimedes-01201
+#    - gcloud config set container/use_client_certificate True
+#    - gcloud container clusters get-credentials chs-cluster

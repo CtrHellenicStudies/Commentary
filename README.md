@@ -24,7 +24,7 @@ The application supports three commentaries and two annotation platforms:
 
 [The Center for Hellenic Studies Community](https://profile.chs.harvard.edu) - CHS Community Platform
 
-[Canonical Text Services URN Name Resolution Service](https://nrs.chs.harvard.edu) - Resolving persistent identifiers such as created in the CITE architecture
+[Canonical Text Services URN Name Resolution Service](https://nrs.chs.harvard.edu) - Resolving persistent identifiers such as created in the [CITE architecture](https://github.com/cite-architecture/)
 
 [GraphQL API to all commentaries and annotations with Linked Data support](https://api.chs.harvard.edu/graphiql) - All public data in the commentaries is surfaced through a GraphQL API endpoint with UI explorer
 

@@ -1,10 +1,10 @@
 import Settings from '/imports/models/settings';
 import AdminService from './adminService';
 
+/**
+ * Logic-layer service for dealing with settings
+ */
 export default class SettingsService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
 	settingsGet(_id, tenantId) {
 		if (this.userIsAdmin) {

@@ -1,11 +1,16 @@
 import Editions from '/imports/models/editions';
 import AdminService from './adminService';
 
+/**
+ * Logic-layer service for dealing with editions
+ */
 export default class EditionsService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
+	/**
+	 * Get editions
+	 * @param {string} editionId - id of edition
+	 * @returns {Object[]} array of editions
+	 */
 	editionsGet(editionId) {
 		if (this.userIsAdmin) {
 			const args = {};

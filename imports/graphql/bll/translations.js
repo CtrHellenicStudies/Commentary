@@ -1,10 +1,10 @@
 import Translation from '/imports/models/translations';
 import AdminService from './adminService';
 
+/**
+ * Logic-layer service for dealing with translations
+ */
 export default class TranslationsService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
 	translationGet(tenantId) {
 		if (this.userIsAdmin) {

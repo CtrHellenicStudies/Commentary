@@ -1,11 +1,20 @@
 import AdminService from './adminService';
 import Comments from '/imports/models/comments';
 
+/**
+ * Logic-layer service for dealing with comments
+ */
 export default class CommentService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
+	/**
+	 * Get comments for admin interface
+	 * @param {string} tenantId - id of current tenant
+	 * @param {number} limit - mongo orm limit
+	 * @param {number} skip - mongo orm skip
+	 * @param {string} workSlug - slug for work
+	 * @param {string} subworkN - number of subwork
+	 * @returns {Object[]} array of comments
+	 */
 	commentsGet(tenantId, limit, skip, workSlug, subworkN) {
 		if (this.userIsAdmin) {
 			const args = {};
@@ -49,10 +58,14 @@ export default class CommentService extends AdminService {
 		return new Error('Not authorized');
 	}
 
-	commentRemove(id) {
+	/**
+	 * Remove a comment
+	 * @param {string} _id - comment id to remove
+	 * @returns {boolean} result of mongo orm remove 
+	 */
+	commentRemove(_id) {
 		if (this.userIsAdmin) {
-			return Comments.remove({_id: id});
-
+			return Comments.remove({ _id });
 		}
 		return new Error('Not authorized');
 	}

@@ -1,10 +1,10 @@
 import ReferenceWorks from '/imports/models/referenceWorks';
 import AdminService from './adminService';
 
+/**
+ * Logic-layer service for dealing with reference works
+ */
 export default class ReferenceWorksService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
 	referenceWorksGet(id, tenantId) {
 		if (this.userIsAdmin) {

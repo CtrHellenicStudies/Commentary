@@ -2,10 +2,10 @@ import TextNodes from '/imports/models/textNodes';
 import AdminService from './adminService';
 import { Mongo } from 'meteor/mongo';
 
+/**
+ * Logic-layer service for dealing with textNodes
+ */
 export default class TextNodesService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
 	textNodeCreate(textNode) {
 		if (this.userIsAdmin) {

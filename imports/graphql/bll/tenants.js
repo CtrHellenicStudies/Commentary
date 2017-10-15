@@ -1,10 +1,10 @@
 import Tenants from '/imports/models/tenants';
 import AdminService from './adminService';
 
+/**
+ * Logic-layer service for dealing with tenants
+ */
 export default class TenantsService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
 	tenantsGet(_id) {
 		if (this.userIsAdmin) {

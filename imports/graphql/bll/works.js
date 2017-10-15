@@ -1,10 +1,10 @@
 import Works from '/imports/models/works';
 import AdminService from './adminService';
 
+/**
+ * Logic-layer service for dealing with works
+ */
 export default class WorksService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
 	rewriteSubworks(subworks) {
 		const newSubworks = [];

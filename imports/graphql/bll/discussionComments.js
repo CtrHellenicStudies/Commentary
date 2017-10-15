@@ -1,11 +1,16 @@
 import DiscussionComments from '/imports/models/discussionComments';
 import AdminService from './adminService';
 
+/**
+ * Logic-layer service for dealing with discussion comments
+ */
 export default class DiscussionCommentService extends AdminService {
-	constructor(props) {
-		super(props);
-	}
 
+	/**
+	 * Get discussion comments
+	 * @param {string} tenantId - the id of the current tenant
+	 * @returns {Object[]} array of discussion comments
+	 */
 	discussionCommentsGet(tenantId) {
 		if (this.userIsAdmin) {
 
@@ -19,6 +24,12 @@ export default class DiscussionCommentService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	/**
+	 * Update the status of a given discussion comment
+	 * @param {string} discussionCommentId - id of dicussion comment to update
+	 * @param {Object} discussionComment - discussion comment update candidate
+	 * @returns {Object} updated discussion comment
+	 */
 	discussionCommentUpdateStatus(discussionCommentId, discussionComment) {
 		if (this.userIsAdmin) {
 			DiscussionComments.update({
@@ -33,6 +44,11 @@ export default class DiscussionCommentService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	/**
+	 * Remove a discussion comment
+	 * @param {string} discussionCommentId - id of dicussion comment to remove
+	 * @returns {boolean} result of mongo orm remove
+	 */
 	discussionCommentRemove(discussionCommentId) {
 		if (this.userIsAdmin) {
 			return DiscussionComments.remove({_id: discussionCommentId});
@@ -40,4 +56,3 @@ export default class DiscussionCommentService extends AdminService {
 		return new Error('Not authorized');
 	}
 }
-

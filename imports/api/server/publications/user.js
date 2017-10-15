@@ -1,9 +1,20 @@
+/**
+ * User publications from Meteor
+ */
+
+// models
 import DiscussionComments from '/imports/models/discussionComments';
 import TextNodes from '/imports/models/textNodes';
 import Books from '/imports/models/books';
 import Comments from '/imports/models/comments';
 import Tenants from '/imports/models/tenants';
 
+/**
+ * Get all discussion comments for a user
+ * @param {string} userId - id of user
+ * @param {string} sortMethod - method to sort the discussion comments
+ * @returns {Object[]} Cursor of discussion comments
+ */
 Meteor.publish('user.discussionComments', (userId, sortMethod = 'votes') => {
 	check(userId, String);
 	check(sortMethod, String);
@@ -24,6 +35,11 @@ Meteor.publish('user.discussionComments', (userId, sortMethod = 'votes') => {
 	});
 });
 
+/**
+ * Get all textNodes bookmarked by a user
+ * @param {string} userId - id of user
+ * @returns {Object[]} Cursor of textNodes
+ */
 Meteor.publish('user.bookmarks', (userId) => {
 	check(userId, String);
 
@@ -38,6 +54,11 @@ Meteor.publish('user.bookmarks', (userId) => {
 	});
 });
 
+/**
+ * Get all comment annotations created by a user
+ * @param {string} userId - id of user
+ * @returns {Object[]} Cursor of comments
+ */
 Meteor.publish('user.annotations', (userId) => {
 	check(userId, String);
 
@@ -46,10 +67,19 @@ Meteor.publish('user.annotations', (userId) => {
 	});
 });
 
+/**
+ * Get the user record for the currently authenticated user
+ * @returns {Object[]} Cursor of users
+ */
 Meteor.publish('userData', function userData() {
 	return Meteor.users.find({ _id: this.userId });
 });
 
+/**
+ * Get the user record for the supplied user Id
+ * @param {string} userId - id of user
+ * @returns {Object[]} Cursor of users
+ */
 Meteor.publish('users.id', (userId) => {
 	check(userId, String);
 	return Meteor.users.find({
@@ -57,6 +87,10 @@ Meteor.publish('users.id', (userId) => {
 	});
 });
 
+/**
+ * Gets all users in the commentaries
+ * @returns {Object[]} Cursor of users
+ */
 Meteor.publish('users.all', () => {
 	// query all users;
 	const skip = 0;
@@ -85,6 +119,12 @@ Meteor.publish('users.all', () => {
 	});
 });
 
+/**
+ * Gets a user referenced by a user id and auth token
+ * @param {string} userId - id of user
+ * @param {string} token - authentication token for user
+ * @returns {Object[]} Cursor of users
+ */
 Meteor.publish('users.token', (userId, token) => {
 	check(userId, String);
 	check(token, String);
@@ -113,6 +153,12 @@ Meteor.publish('users.token', (userId, token) => {
 	});
 });
 
+/**
+ * Gets a user referenced by a user id and auth token with admin role
+ * @param {string} userId - id of user
+ * @param {string} token - authentication token for user
+ * @returns {Object[]} Cursor of users
+ */
 Meteor.publish('users.token.admin', (userId, token) => {
 	check(userId, String);
 	check(token, String);

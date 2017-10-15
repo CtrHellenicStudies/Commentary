@@ -325,4 +325,49 @@ const Utils = {
 	}
 };
 
+/**
+ * Get all comments for a supplied keyword by the keywordId
+ * @param {number} keywordId - Mongo skip
+ * @param {number} tenantId - Mongo limit
+ * @returns {Object[]} Cursor of comments
+ */
+export function queryCommentWithKeywordId(keywordId, tenantId) {
+	return Comments.find({
+		'keywords._id': keywordId,
+		tenantId: tenantId
+	}, {
+		limit: 1,
+		fields: {
+			'work.slug': 1,
+			'subwork.n': 1,
+			'keywords.slug': 1,
+			'keywords._id': 1,
+			lineFrom: 1,
+			lineTo: 1,
+			nLines: 1,
+		}
+	});
+}
+
+export function makeKeywordContextQueryFromComment(comment, maxLines) {
+	let lineTo = comment.lineFrom;
+	if (comment.hasOwnProperty('lineTo')) {
+		lineTo = comment.lineFrom + Math.min(
+				maxLines,
+				comment.lineTo - comment.lineFrom
+			);
+	} else if (comment.hasOwnProperty('nLines')) {
+		lineTo = comment.lineFrom + Math.min(maxLines, comment.nLines);
+	}
+
+	return {
+		'work.slug': comment.work.slug,
+		'subwork.n': comment.subwork.n,
+		'text.n': {
+			$gte: comment.lineFrom,
+			$lte: lineTo,
+		},
+	};
+}
+
 export default Utils;

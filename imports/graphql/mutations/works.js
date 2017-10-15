@@ -1,5 +1,10 @@
+/**
+ * Mutations for works
+ */
+
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
+
 // types
 import { WorkType, WorkInputType } from '/imports/graphql/types/models/work';
 import { RemoveType } from '/imports/graphql/types/index';

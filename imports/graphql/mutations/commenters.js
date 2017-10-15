@@ -1,3 +1,7 @@
+/**
+ * Mutations for commenters 
+ */
+
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types

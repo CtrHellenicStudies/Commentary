@@ -1,3 +1,7 @@
+/**
+ * Queries for annotations
+ */
+
 import { GraphQLID, GraphQLInt, GraphQLString, GraphQLList, GraphQLBoolean } from 'graphql';
 
 // types

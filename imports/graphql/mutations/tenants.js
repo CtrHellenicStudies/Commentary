@@ -1,4 +1,9 @@
+/**
+ * Mutations for tenants
+ */
+
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
+
 // types
 import { TenantType, TenantInputType } from '/imports/graphql/types/models/tenants';
 import { RemoveType } from '/imports/graphql/types/index';

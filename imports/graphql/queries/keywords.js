@@ -1,3 +1,7 @@
+/**
+ * Queries for keywords
+ */
+
 import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 
 // types

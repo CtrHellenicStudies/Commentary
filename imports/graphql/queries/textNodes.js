@@ -1,3 +1,6 @@
+/**
+ * Queries for textNodes
+ */
 import { GraphQLID, GraphQLList, GraphQLInt, GraphQLString, } from 'graphql';
 
 // types

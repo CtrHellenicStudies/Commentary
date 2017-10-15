@@ -3,6 +3,9 @@ import AccountsLayout from '/imports/ui/layouts/accounts/AccountsLayout';
 import Config from './_config.js';
 
 
+/**
+ * Configure accounts templates settings for meteor
+ */
 AccountsTemplates.configure({
 	defaultLayoutType: 'blaze-to-react',
 	defaultLayout: AccountsLayout,
@@ -28,10 +31,9 @@ AccountsTemplates.configure({
 	termsUrl: Config.termsUrl || null,
 });
 
-/*
+/**
  * Account routes
  */
-
 AccountsTemplates.configureRoute('changePwd');
 AccountsTemplates.configureRoute('forgotPwd');
 AccountsTemplates.configureRoute('resetPwd');
@@ -42,6 +44,9 @@ AccountsTemplates.configureRoute('resendVerificationEmail');
 
 
 if (Meteor.isServer) {
+	/**
+	 * When a user account is created, ensure username is generated properly
+	 */
 	Accounts.onCreateUser((options, user) => {
 		let username = '';
 		if (!('emails' in user)) {
@@ -64,7 +69,7 @@ if (Meteor.isServer) {
 			user.emails.push({
 				address: user.services.google.email,
 				verified: true,
-			}); 
+			});
 		}
 		if ('twitter' in user.services) {
 			username = slug(user.services.twitter.screenName);

@@ -5,6 +5,11 @@ import {
 import GraphQLDate from 'graphql-date';
 import GraphQLJSON from 'graphql-type-json';
 
+
+/**
+ * Revision input type
+ * @type {GraphQLInputObjectType}
+ */
 const RevisionInputType = new GraphQLInputObjectType({
 	name: 'RevisionInputType',
 	description: 'A revision of a comment (or annotation)',

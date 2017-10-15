@@ -1,5 +1,10 @@
+/**
+ * Mutations for annotations on the CHS reading interfaces
+ */
+
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 import { Meteor } from 'meteor/meteor';
+
 // types
 import CommentType, { CommentInputType } from '/imports/graphql/types/models/comment';
 import { RemoveType } from '/imports/graphql/types/index';

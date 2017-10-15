@@ -1,5 +1,10 @@
+/**
+ * Mutations for discussion comments
+ */
+
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
+
 // types
 import { DiscussionCommentType, DiscussionCommentInputType} from '/imports/graphql/types/models/discussionComment';
 import { RemoveType } from '/imports/graphql/types/index';

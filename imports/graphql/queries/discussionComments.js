@@ -1,3 +1,7 @@
+/**
+ * Queries for discussion comments
+ */
+
 import { GraphQLID, GraphQLList } from 'graphql';
 
 // types

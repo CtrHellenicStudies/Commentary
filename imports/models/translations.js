@@ -1,8 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * DEPRECATED
+ *
+ * @type {Meteor.Collection}
+ */
 const Translations = new Meteor.Collection('translations');
 
+/**
+ * Translations schema
+ * @type {SimpleSchema}
+ */
 Translations.schema = new SimpleSchema({
 	tenantId: {
 		type: String,

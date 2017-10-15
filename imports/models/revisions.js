@@ -1,8 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Revisions are used in comments to track the history of the changes made to a
+ * comment body and title over time
+ * @type {Meteor.Collection}
+ */
 const Revisions = new Meteor.Collection('revisions');
 
+/**
+ * Revisions schema
+ * @type {SimpleSchema}
+ */
 Revisions.schema = new SimpleSchema({
 	originalDate: {
 		type: Date,

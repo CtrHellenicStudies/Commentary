@@ -1,3 +1,7 @@
+/**
+ * Mutations for users
+ */
+ 
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 import { Meteor } from 'meteor/meteor';
 

@@ -1,3 +1,7 @@
+/**
+ * Queries for editions
+ */
+
 import { GraphQLID, GraphQLList } from 'graphql';
 
 // types

@@ -1,3 +1,7 @@
+/**
+ * Queries for pages
+ */
+
 import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 
 // types

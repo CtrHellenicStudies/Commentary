@@ -1,4 +1,9 @@
+/**
+ * Mutations for pages 
+ */
+
 import { GraphQLString, GraphQLNonNull } from 'graphql';
+
 // types
 import { PageType, PageInputType} from '/imports/graphql/types/models/page';
 import { RemoveType } from '/imports/graphql/types/index';

@@ -1,3 +1,6 @@
+/**
+ * Queries for translations
+ */
 import { GraphQLID, GraphQLList } from 'graphql';
 
 // types

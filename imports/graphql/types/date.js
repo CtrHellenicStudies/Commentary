@@ -1,5 +1,9 @@
 import { GraphQLScalarType } from 'graphql';
 
+/**
+ * Date type
+ * @type {GraphQLScalarType}
+ */
 const DateType = new GraphQLScalarType({
 		name: 'Date',
 		description: 'Date custom scalar type',

@@ -1,3 +1,7 @@
+/**
+ * Queries for linked data schemas
+ */
+
 import { GraphQLString, GraphQLList } from 'graphql';
 
 // types

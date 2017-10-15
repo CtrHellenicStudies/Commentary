@@ -1,3 +1,6 @@
+/**
+ * Configure the Material UI global theme settings 
+ */
 import {
   grey300,
   white, darkBlack, fullBlack,

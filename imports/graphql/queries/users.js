@@ -1,3 +1,6 @@
+/**
+ * Queries for users
+ */
 import { GraphQLString, GraphQLList } from 'graphql';
 
 // types

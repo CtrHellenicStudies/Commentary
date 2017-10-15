@@ -1,8 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Pages provide basic information about the commentaries, such as About and
+ * privacy/terms information
+ * @type {Meteor.Collection}
+ */
 const Pages = new Meteor.Collection('pages');
 
+/**
+ * Pages schema
+ * @type {SimpleSchema}
+ */
 Pages.schema = new SimpleSchema({
 	title: {
 		type: String,

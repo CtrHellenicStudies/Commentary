@@ -1,3 +1,7 @@
+/**
+ * Mutations for linked data schemas 
+ */
+
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types

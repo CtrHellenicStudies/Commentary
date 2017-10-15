@@ -6,6 +6,10 @@ import {
 } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
 
+/**
+ * Keyword type
+ * @type {GraphQLObjectType}
+ */
 const KeywordType = new GraphQLObjectType({
 	name: 'KeywordType',
 	description: 'A tag of a word or idea in the commentary',
@@ -55,6 +59,10 @@ const KeywordType = new GraphQLObjectType({
 	},
 });
 
+/**
+ * Keyword input type
+ * @type {GraphQLInputObjectType}
+ */
 const KeywordInputType = new GraphQLInputObjectType({
 	name: 'KeywordInputType',
 	description: 'A tag of a word or idea in the commentary',

@@ -1,3 +1,7 @@
+/**
+ * Queries for commenters
+ */
+
 import { GraphQLString, GraphQLID, GraphQLList } from 'graphql';
 
 // types

@@ -1,3 +1,7 @@
+/**
+ * Mutations for text nodes
+ */
+
 import {
 	GraphQLString,
 	GraphQLObjectType,

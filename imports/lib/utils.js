@@ -1,13 +1,17 @@
 import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
-// lib
-import Config from './_config/_config.js';
 
 // models
 import Editions from '/imports/models/editions';
 import Commenters from '/imports/models/commenters';
 
+// lib
+import Config from './_config/_config';
 
+
+/**
+ * General application specific utility / helper functions
+ */
 const Utils = {
 	isReady: (sub) => {
 		if (sub) {
@@ -327,8 +331,8 @@ const Utils = {
 
 /**
  * Get all comments for a supplied keyword by the keywordId
- * @param {number} keywordId - Mongo skip
- * @param {number} tenantId - Mongo limit
+ * @param {number} keywordId - id of keyword
+ * @param {number} tenantId - id of current tenant
  * @returns {Object[]} Cursor of comments
  */
 export function queryCommentWithKeywordId(keywordId, tenantId) {
@@ -349,6 +353,12 @@ export function queryCommentWithKeywordId(keywordId, tenantId) {
 	});
 }
 
+/**
+ * Return information about a comment for a keyword
+ * @param {Object} comment - the input comment  
+ * @param {number} maxLines - maximum amount of lines to limit the query to
+ * @returns {Object} comment information for making keyword query
+ */
 export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	let lineTo = comment.lineFrom;
 	if (comment.hasOwnProperty('lineTo')) {

@@ -1,5 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
+/**
+ * Global configuration settings for the application across tenants
+ */
 const Config = {
 	name: 'Classical Commentaries',
 	domain: 'ahcip.chs.harvard.edu',

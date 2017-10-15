@@ -1,3 +1,7 @@
+/**
+ * Queries for books
+ */
+
 import { GraphQLID, GraphQLString, GraphQLList } from 'graphql';
 
 // types

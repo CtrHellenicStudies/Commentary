@@ -1,8 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Settings are used for each tenant to store tenant-specific site title and
+ * other parameters
+ * @type {Meteor.Collection}
+ */
 const Settings = new Meteor.Collection('settings');
 
+/**
+ * Settings schema
+ * @type {SimpleSchema}
+ */
 Settings.schema = new SimpleSchema({
 	name: {
 		type: String,

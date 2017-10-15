@@ -1,8 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * TODO: rename all references to keywords/ideas as Tags
+ * Keywords (tags on the frontend) are associated with comments and used for
+ * organizing the comments around themes
+ * @type {Meteor.Collection}
+ */
 const Keywords = new Meteor.Collection('keywords');
 
+/**
+ * Keywords schema
+ * @type {SimpleSchema}
+ */
 Keywords.schema = new SimpleSchema({
 	_id: {
 		type: String,

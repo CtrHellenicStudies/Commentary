@@ -1,3 +1,8 @@
+/**
+ * Create revision markup with cross references in the commentary
+ * @param {string} html - an html input string
+ * @returns {Object} an object with the processed html output string
+ */
 const createRevisionMarkup = (html) => {
 	let newHtml = html;
 

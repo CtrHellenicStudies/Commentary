@@ -49,12 +49,6 @@ Meteor.method('publishKeywords', (keywordCandidate) => {
 		{ slug: keywordCandidate.slug },
 		{ $set: keywordDoc });
 
-	/*
-	console.log('keyword upsert: numberAffected=',
-		upsertResult.numberAffected,
-		', insertedId=',
-		upsertResult.insertedId);
-	*/
 }, {
 	url: 'tags/webhook',
 	getArgsFromRequest(request) {

@@ -1,4 +1,4 @@
-// api:
+// models 
 import Comments, { getURN } from '/imports/models/comments';
 
 const commentsGenerateURNs = (regenerate = false) => {

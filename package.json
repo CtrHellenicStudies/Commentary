@@ -1,6 +1,6 @@
 {
   "name": "ahcip",
-  "version": "0.2.14",
+  "version": "1.0.1",
   "description": "A Homer Commentary in Progress",
   "main": "main.js",
   "license": "BSD-3-Clause",

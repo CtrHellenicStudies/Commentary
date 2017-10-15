@@ -3,8 +3,8 @@ import { GraphQLID, GraphQLInt, GraphQLString, GraphQLList, GraphQLBoolean } fro
 // types
 import CommentType from '/imports/graphql/types/models/comment';
 
-// bll
-import AnnotationService from '../bll/annotations';
+// logic
+import AnnotationService from '../logic/annotations';
 
 const annotationQueryFields = {
 	annotations: {

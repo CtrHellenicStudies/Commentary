@@ -3,8 +3,8 @@ import { GraphQLString, GraphQLList } from 'graphql';
 // types
 import { LinkedDataSchemaType } from '/imports/graphql/types/models/linkedDataSchema';
 
-// bll
-import LinkedDataSchemaService from '../bll/linkedDataSchema';
+// logic
+import LinkedDataSchemaService from '../logic/linkedDataSchema';
 
 const linkedDataSchemaFields = {
 	linkedDataSchema: {

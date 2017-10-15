@@ -7,8 +7,8 @@ import { RemoveType } from '/imports/graphql/types/index';
 // models
 import Works from '/imports/models/works';
 
-// bll
-import WorksService from '../bll/works';
+// logic
+import WorksService from '../logic/works';
 
 const worksMutationFields = {
 	workCreate: {

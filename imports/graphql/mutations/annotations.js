@@ -12,8 +12,8 @@ import Books from '/imports/models/books';
 // errors
 import { AuthenticationError } from '/imports/errors';
 
-// bll
-import AnnotationService from '../bll/annotations';
+// logic
+import AnnotationService from '../logic/annotations';
 
 const annotationMutationFields = {
 	annotationCreate: {

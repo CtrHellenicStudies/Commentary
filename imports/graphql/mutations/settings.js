@@ -4,8 +4,8 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { SettingsType, SettingsInputType } from '/imports/graphql/types/models/settings';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import SettingsService from '../bll/settings';
+// logic
+import SettingsService from '../logic/settings';
 
 const settingsMutationFields = {
 

@@ -3,8 +3,8 @@ import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 // types
 import { SettingsType } from '/imports/graphql/types/models/settings';
 
-// bll
-import SettingsService from '../bll/settings';
+// logic
+import SettingsService from '../logic/settings';
 
 const settingsQueryFields = {
 	settings: {

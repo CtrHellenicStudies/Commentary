@@ -7,8 +7,8 @@ import { RemoveType } from '/imports/graphql/types/index';
 // models
 import Comments from '/imports/models/comments';
 
-// bll
-import CommentsService from '../bll/comments';
+// logic
+import CommentsService from '../logic/comments';
 
 // errors
 import { AuthenticationError } from '/imports/errors';

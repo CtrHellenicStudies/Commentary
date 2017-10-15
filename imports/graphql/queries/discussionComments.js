@@ -3,8 +3,8 @@ import { GraphQLID, GraphQLList } from 'graphql';
 // types
 import {DiscussionCommentType} from '/imports/graphql/types/models/discussionComment';
 
-// bll
-import DiscussionCommentService from '../bll/discussionComments';
+// logic
+import DiscussionCommentService from '../logic/discussionComments';
 
 const discussionCommentQueryFields = {
 	discussionComments: {

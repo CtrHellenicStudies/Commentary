@@ -3,8 +3,8 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { PageType, PageInputType} from '/imports/graphql/types/models/page';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import PagesService from '../bll/pages';
+// logic
+import PagesService from '../logic/pages';
 
 const pagesMutationFields = {
 	pageRemove: {

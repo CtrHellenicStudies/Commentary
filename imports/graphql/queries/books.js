@@ -3,8 +3,8 @@ import { GraphQLID, GraphQLString, GraphQLList } from 'graphql';
 // types
 import { BookType } from '/imports/graphql/types/models/book';
 
-// bll
-import BookService from '../bll/books';
+// logic
+import BookService from '../logic/books';
 
 const bookQueryFields = {
 	books: {

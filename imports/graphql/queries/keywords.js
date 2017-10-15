@@ -3,8 +3,8 @@ import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 // types
 import {KeywordType} from '/imports/graphql/types/models/keyword';
 
-// bll
-import KeywordsService from '../bll/keywords';
+// logic
+import KeywordsService from '../logic/keywords';
 
 const keywordQueryFields = {
 	keywords: {

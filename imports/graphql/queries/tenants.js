@@ -3,8 +3,8 @@ import {GraphQLString, GraphQLList} from 'graphql';
 // types
 import { TenantType } from '/imports/graphql/types/models/tenants';
 
-// bll
-import TenantsService from '../bll/tenants';
+// logic
+import TenantsService from '../logic/tenants';
 
 
 const tenantsQueryFields = {

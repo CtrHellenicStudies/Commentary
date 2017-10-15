@@ -3,8 +3,8 @@ import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 import { TenantType, TenantInputType } from '/imports/graphql/types/models/tenants';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import TenantsService from '../bll/tenants';
+// logic
+import TenantsService from '../logic/tenants';
 
 const tenantsMutationFields = {
 	tenantCreate: {

@@ -3,8 +3,8 @@ import { GraphQLString, GraphQLList } from 'graphql';
 // types
 import { UserType } from '/imports/graphql/types/models/user';
 
-// bll
-import UserService from '../bll/users';
+// logic
+import UserService from '../logic/users';
 
 const usersQueryFields = {
 	users: {

@@ -7,8 +7,8 @@ import { RemoveType } from '/imports/graphql/types/index';
 // models
 import Keywords from '/imports/models/keywords';
 
-// bll
-import KeywordService from '../bll/keywords';
+// logic
+import KeywordService from '../logic/keywords';
 
 const keywordsMutationFields = {
 	keywordRemove: {

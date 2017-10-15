@@ -3,8 +3,8 @@ import { GraphQLID, GraphQLInt, GraphQLString, GraphQLList, GraphQLBoolean } fro
 // types
 import CommentType from '/imports/graphql/types/models/comment';
 
-// bll
-import CommentService from '../bll/comments';
+// logic
+import CommentService from '../logic/comments';
 
 const commentQueryFields = {
 	comments: {

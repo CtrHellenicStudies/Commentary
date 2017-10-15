@@ -3,8 +3,8 @@ import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 // types
 import { PageType } from '/imports/graphql/types/models/page';
 
-// bll
-import PageService from '../bll/pages';
+// logic
+import PageService from '../logic/pages';
 
 const pagesQueryFields = {
 	pages: {

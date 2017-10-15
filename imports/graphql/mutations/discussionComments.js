@@ -7,8 +7,8 @@ import { RemoveType } from '/imports/graphql/types/index';
 // models
 import Keywords from '/imports/models/keywords';
 
-// bll
-import DiscussionCommentsService from '../bll/discussionComments';
+// logic
+import DiscussionCommentsService from '../logic/discussionComments';
 
 const discussionCommentsMutationFields = {
 	discussionCommentUpdateStatus: {

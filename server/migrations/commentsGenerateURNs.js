@@ -27,10 +27,12 @@ const commentsGenerateURNs = (regenerate = false) => {
 	});
 };
 
+/*
 Meteor.method('commentsGenerateURNs', () => {
 	commentsGenerateURNs(true);
 }, {
 	url: 'fix/comments/urns',
 });
+*/
 
 export default commentsGenerateURNs;

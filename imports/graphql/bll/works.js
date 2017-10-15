@@ -6,6 +6,11 @@ import AdminService from './adminService';
  */
 export default class WorksService extends AdminService {
 
+	/**
+	 * Rewrite subworks for modifiying works
+	 * @param {(Object|Array)} subworks
+	 * @returns {(Object|Array)} the new subwork
+	 */
 	rewriteSubworks(subworks) {
 		const newSubworks = [];
 		subworks.map(singleSubwork => {
@@ -18,6 +23,11 @@ export default class WorksService extends AdminService {
 		return newSubworks;
 	}
 
+	/**
+	 * Create a work
+	 * @param {Object} work - candidate work to create
+	 * @returns {Object} newly created work
+	 */
 	workInsert(work) {
 		if (this.userIsAdmin) {
 			const newWork = work;
@@ -29,6 +39,12 @@ export default class WorksService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	/**
+	 * Update a work
+	 * @param {string} _id - id of work
+	 * @param {Object} work - work to update
+	 * @returns {boolean} result from mongo orm update
+	 */
 	workUpdate(_id, work) {
 		if (this.userIsAdmin) {
 			const newWork = work;
@@ -39,6 +55,12 @@ export default class WorksService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	/**
+	 * Get works
+	 * @param {string} _id - id of work
+	 * @param {string} tenantId - id of current tenant
+	 * @returns {Object[]} array of works
+	 */
 	worksGet(_id, tenantId) {
 		if (this.userIsAdmin) {
 			const args = {};
@@ -60,9 +82,14 @@ export default class WorksService extends AdminService {
 		return new Error('Not authorized');
 	}
 
-	workRemove(id) {
+	/**
+	 * Remove a work
+	 * @param {string} _id - id of work
+	 * @returns {boolean} result from mongo orm remove
+	 */
+	workRemove(_id) {
 		if (this.userIsAdmin) {
-			return Works.remove({_id: id});
+			return Works.remove({ _id });
 		}
 		return new Error('Not authorized');
 	}

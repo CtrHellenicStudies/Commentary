@@ -6,6 +6,11 @@ import AdminService from './adminService';
  */
 export default class UserService extends AdminService {
 
+	/**
+	 * Get users (admin method)
+	 * @param {string} _id - id of user
+	 * @returns {Object[]} array of users
+	 */
 	usersGet(_id) {
 		if (this.userIsAdmin) {
 			const args = {};
@@ -44,6 +49,12 @@ export default class UserService extends AdminService {
 		return [];
 	}
 
+	/**
+	 * Update a user
+	 * @param {string} _id - id of user
+	 * @param {Object} user - user to update
+	 * @returns {Object} updated user record
+	 */
 	userUpdate(_id, user) {
 		if (this.userIsAdmin) {
 			Meteor.users.update(_id, {$set: user});
@@ -52,6 +63,11 @@ export default class UserService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	/**
+	 * Remove a user
+	 * @param {string} userId - id of user
+	 * @returns {boolean} result from mongo orm remove
+	 */
 	userRemove(userId) {
 		if (this.userIsAdmin) {
 			return Meteor.users.remove({_id: userId});
@@ -59,6 +75,11 @@ export default class UserService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	/**
+	 * Create a user
+	 * @param {Object} user - candidate user to create
+	 * @returns {Object} newly created user
+	 */
 	userCreate(user) {
 		if (this.userIsAdmin) {
 
@@ -84,10 +105,19 @@ export default class UserService extends AdminService {
 		return new Error('Not authorized');
 	}
 
+	/**
+	 * Get the user information of the user currently logged in to Meteor
+	 * @returns {Object} the user data for the currently logged in user
+	 */
 	getAuthedUser() {
 		return this.user;
 	}
 
+	/**
+	 * Get a user's public information by their id
+	 * @param {string} _id - id of user
+	 * @returns {Object} the user data
+	 */
 	userGetPublicById(_id) {
 		return Meteor.users.findOne(
 			{
@@ -115,6 +145,11 @@ export default class UserService extends AdminService {
 		);
 	}
 
+	/**
+	 * Get multiple users' public information by their id
+	 * @param {string[]} userIds - an array of user ids
+	 * @returns {Object[]} array of user data
+	 */
 	usersGetPublicById(userIds) {
 		return Meteor.users.find(
 			{
@@ -144,6 +179,12 @@ export default class UserService extends AdminService {
 		).fetch();
 	}
 
+	/**
+	 * Update the most recent position of given users
+	 * @param {Object} position - position information about where a user was most
+	 *    recently reading
+	 * @returns {Object} updated user record
+	 */
 	userUpdatePosition(position) {
 		if (!this.user) {
 			throw new Meteor.Error('recent-position-update', 'not-logged-in');

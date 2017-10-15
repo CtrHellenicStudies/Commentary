@@ -6,6 +6,12 @@ import AdminService from './adminService';
  */
 export default class TranslationsService extends AdminService {
 
+	/**
+	 * DEPRECATED
+	 * Get translations
+	 * @param {string} tenantId - id of current tenant
+	 * @returns {Object[]} array of translations 
+	 */
 	translationGet(tenantId) {
 		if (this.userIsAdmin) {
 			const args = {};

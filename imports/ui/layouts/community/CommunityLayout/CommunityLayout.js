@@ -13,7 +13,7 @@ import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
 import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 import CommunityPage from '/imports/ui/components/community/CommunityPage';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 
 // lib

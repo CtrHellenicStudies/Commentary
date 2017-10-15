@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 import Settings from '/imports/models/settings';
 

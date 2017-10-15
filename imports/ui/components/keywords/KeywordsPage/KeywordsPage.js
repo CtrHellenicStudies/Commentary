@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // lib
 import Utils from '/imports/lib/utils';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 
 // components

@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import { createContainer } from 'meteor/react-meteor-data';
 import _ from 'lodash';
 
-// api:
+// models:
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';

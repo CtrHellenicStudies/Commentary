@@ -10,7 +10,7 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 import ReferenceWorks from '/imports/models/referenceWorks';
 import Commenters from '/imports/models/commenters';

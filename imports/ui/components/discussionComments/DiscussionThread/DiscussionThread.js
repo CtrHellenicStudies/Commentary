@@ -6,7 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
-// api
+// models
 import DiscussionComments from '/imports/models/discussionComments';
 
 // lib

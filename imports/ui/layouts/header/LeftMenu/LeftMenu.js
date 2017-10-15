@@ -5,7 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 
-// api:
+// models:
 import Tenants from '/imports/models/tenants';
 import Settings from '/imports/models/settings';
 
@@ -177,5 +177,5 @@ export default createContainer(() => {
 		settings: Settings.findOne({}),
 		currentUser: Meteor.users.findOne({_id: Meteor.userId()}),
 		tenant: Tenants.findOne({_id: Session.get('tenantId')})
-	}
+	};
 }, LeftMenu);

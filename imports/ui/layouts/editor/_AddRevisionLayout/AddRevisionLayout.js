@@ -13,7 +13,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import { createBrowserHistory } from 'history';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';

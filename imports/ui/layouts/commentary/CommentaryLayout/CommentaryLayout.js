@@ -21,7 +21,7 @@ import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
 
-// api
+// models
 import Works from '/imports/models/works';
 import ReferenceWorks from '/imports/models/referenceWorks';
 

@@ -16,8 +16,7 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Select from 'react-select';
-import { Creatable } from 'react-select';
+import Select, { Createable } from 'react-select';
 import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
@@ -30,11 +29,8 @@ import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import CommentersEditorDialog from '../CommentersEditorDialog/CommentersEditorDialog';
-import Commenters from '/imports/models/commenters';
 import Snackbar from 'material-ui/Snackbar';
 import slugify from 'slugify';
-
 import {
 	ItalicButton,
 	BoldButton,
@@ -45,20 +41,22 @@ import {
 } from 'draft-js-buttons';
 import _ from 'underscore';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
-
-// components
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
-import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import Commenters from '/imports/models/commenters';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 
 // helpers:
 import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
+
+// components
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import CommentersEditorDialog from '../CommentersEditorDialog/CommentersEditorDialog';
 
 
 // Create toolbar plugin for editor
@@ -408,7 +406,7 @@ class AddRevision extends React.Component {
 		let _selectedKeyword;
 
 		tags.forEach(_tag => {
-			if (_tag._id == tag.value) {
+			if (_tag._id === tag.value) {
 				_selectedKeyword = _tag;
 			}
 		});
@@ -553,27 +551,27 @@ class AddRevision extends React.Component {
 											}}
 										/>
 									</div>
-									{/*<div className="comment-upper-action-button">*/}
-										{/*<FlatButton*/}
-											{/*label="Edit Authors"*/}
-											{/*labelPosition="after"*/}
-											{/*onClick={this.openCommentersEditorDialog}*/}
-											{/*style={{*/}
-												{/*border: '1px solid #ddd',*/}
-												{/*maxHeight: 'none',*/}
-												{/*fontSize: '12px',*/}
-												{/*height: 'auto',*/}
-											{/*}}*/}
-										{/*/>*/}
-									{/*</div>*/}
+									{/* <div className="comment-upper-action-button">*/}
+									{/* <FlatButton*/}
+									{/* label="Edit Authors"*/}
+									{/* labelPosition="after"*/}
+									{/* onClick={this.openCommentersEditorDialog}*/}
+									{/* style={{*/}
+									{/* border: '1px solid #ddd',*/}
+									{/* maxHeight: 'none',*/}
+									{/* fontSize: '12px',*/}
+									{/* height: 'auto',*/}
+									{/* }}*/}
+									{/* />*/}
+									{/* </div>*/}
 								</div>
 
-								{/*<CommentersEditorDialog*/}
-									{/*open={this.state.commentersEditorDialogOpen}*/}
-									{/*handleClose={this.handleCloseCommentersEditorDialog}*/}
-									{/*commenters={this.state.commenters}*/}
-									{/*setCommenters={this.setCommenters}*/}
-								{/*/>*/}
+								{/* <CommentersEditorDialog*/}
+								{/* open={this.state.commentersEditorDialogOpen}*/}
+								{/* handleClose={this.handleCloseCommentersEditorDialog}*/}
+								{/* commenters={this.state.commenters}*/}
+								{/* setCommenters={this.setCommenters}*/}
+								{/* />*/}
 
 								<br />
 								{commentersOptions && commentersOptions.length ?
@@ -585,7 +583,7 @@ class AddRevision extends React.Component {
 										value={this.state.commenterValue}
 										onChange={this.onCommenterValueChange}
 										placeholder="Commentator..."
-										multi={true}
+										multi
 									/>
 								: ''}
 								<h1 className="add-comment-title">

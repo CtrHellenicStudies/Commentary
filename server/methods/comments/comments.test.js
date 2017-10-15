@@ -8,7 +8,7 @@ import { Random } from 'meteor/random';
 import { stub } from 'sinon';
 import faker from 'faker';
 
-// api:
+// models:
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 

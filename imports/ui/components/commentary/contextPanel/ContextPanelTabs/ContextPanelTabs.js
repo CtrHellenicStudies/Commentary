@@ -37,6 +37,7 @@ const EditionTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition }) => (
 
 	</div>
 );
+
 EditionTabs.propTypes = {
 	lemmaText: React.PropTypes.arrayOf(React.PropTypes.shape({
 		title: React.PropTypes.string.isRequired,
@@ -45,6 +46,11 @@ EditionTabs.propTypes = {
 	selectedLemmaEdition: React.PropTypes.string.isRequired,
 	toggleEdition: React.PropTypes.func.isRequired,
 };
+
+EditionTabs.defaultProps = {
+	lemmaText: [],
+};
+
 /*
 	END EditionTabs
 */

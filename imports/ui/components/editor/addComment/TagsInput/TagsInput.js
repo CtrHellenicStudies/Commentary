@@ -14,7 +14,7 @@ import {
 import Select from 'react-select';
 import update from 'immutability-helper';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 
 // components

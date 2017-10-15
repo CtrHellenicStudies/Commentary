@@ -5,7 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import Draggable from 'react-draggable';
 
-// api
+// models
 import TextNodes from '/imports/models/textNodes';
 import Editions from '/imports/models/editions';
 
@@ -160,7 +160,7 @@ const LemmaReferenceModalContainer = createContainer(({work, subwork, lineFrom, 
 			$gte: lineFrom,
 		},
 	};
-	let lemmaText = [];
+	const lemmaText = [];
 
 	if (lineTo) {
 		lemmaQuery['text.n'].$lte = lineTo;

@@ -6,7 +6,7 @@ import Parser from 'simple-text-parser';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 
-// api:
+// models:
 import Comments from '/imports/models/comments';
 import Settings from '/imports/models/settings';
 import Works from '/imports/models/works';

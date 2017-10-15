@@ -191,7 +191,7 @@ export default class UserService extends AdminService {
 		}
 
 		let recentPositions = this.user.recentPositions || [];
-		let positionLinkIsInRecentPositions = false;
+		const positionLinkIsInRecentPositions = false;
 
 		if (recentPositions.length > 10) {
 			recentPositions = recentPositions.slice(1);

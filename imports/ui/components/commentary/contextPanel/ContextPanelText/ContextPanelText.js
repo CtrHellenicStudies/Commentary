@@ -6,13 +6,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 */
 const getSelectedEditionText = (lemmaText, selectedLemmaEdition) => {
 	let selectedEditionText = { lines: [], slug: '', title: '' };
-	if (selectedLemmaEdition.length) {
+	if (selectedLemmaEdition && selectedLemmaEdition.length) {
 		lemmaText.forEach((edition) => {
 			if (edition.slug === selectedLemmaEdition) {
 				selectedEditionText = edition;
 			}
 		});
-	} else if (lemmaText.length) {
+	} else if (lemmaText && lemmaText.length) {
 		selectedEditionText = lemmaText[0];
 	}
 	return selectedEditionText;
@@ -255,6 +255,7 @@ class ContextPanelText extends React.Component {
 		);
 	}
 }
+
 ContextPanelText.propTypes = {
 	lineFrom: React.PropTypes.number.isRequired,
 	lineTo: React.PropTypes.number,
@@ -282,6 +283,7 @@ ContextPanelText.propTypes = {
 	updateSelectedLines: React.PropTypes.func,
 	editor: React.PropTypes.bool,
 };
+
 ContextPanelText.defaultProps = {
 	commentGroup: null,
 

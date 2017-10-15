@@ -28,7 +28,7 @@ import {
 
 
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';

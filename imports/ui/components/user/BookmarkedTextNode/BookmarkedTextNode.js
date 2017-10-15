@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// api
+// models
 import Works from '/imports/models/works';
 
 // lib

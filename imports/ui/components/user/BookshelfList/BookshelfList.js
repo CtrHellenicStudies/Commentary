@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import Masonry from 'react-masonry-component/lib';
 
-// api
+// models
 import Works from '/imports/models/works';
 
 const BookshelfList = React.createClass({

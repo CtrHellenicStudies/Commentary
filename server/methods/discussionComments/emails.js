@@ -3,7 +3,7 @@ import Config from '/imports/lib/_config/_config';
 // lib:
 import Utils from '/imports/lib/utils';
 
-// api:
+// models:
 import Comments from '/imports/models/comments';
 import DiscussionComments from '/imports/models/discussionComments';
 

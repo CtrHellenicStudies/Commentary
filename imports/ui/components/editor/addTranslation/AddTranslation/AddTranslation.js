@@ -13,7 +13,7 @@ import { Creatable } from 'react-select';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 
-// api
+// models
 import Works from '/imports/models/works';
 import Commenters from '/imports/models/commenters';
 

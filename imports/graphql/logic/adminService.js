@@ -7,7 +7,7 @@ import { Accounts } from 'meteor/accounts-base';
 
 class AdminService {
 	constructor({ token }) {
-		this.token = token ? token : '';
+		this.token = token || '';
 		this.user = Meteor.users.findOne({
 			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(this.token),
 		});

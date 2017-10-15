@@ -5,7 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import Masonry from 'react-masonry-component/lib';
 
-// api
+// models
 import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components

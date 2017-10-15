@@ -7,7 +7,7 @@ import { Email } from 'meteor/email';
 import { stub, mock } from 'sinon';
 import faker from 'faker';
 
-// api:
+// models:
 import Keywords from '/imports/models/keywords';
 
 // tested module:

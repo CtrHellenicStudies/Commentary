@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Draggable from 'react-draggable';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 
 // lib

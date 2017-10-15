@@ -1,4 +1,4 @@
-// api:
+// models:
 import Commenters from '/imports/models/commenters';
 import Comments from '/imports/models/comments';
 

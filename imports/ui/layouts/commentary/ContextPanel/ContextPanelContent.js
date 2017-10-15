@@ -3,7 +3,7 @@ import IconButton from 'material-ui/IconButton';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// api:
+// models:
 import TextNodes from '/imports/models/textNodes';
 import Editions from '/imports/models/editions';
 

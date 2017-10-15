@@ -9,7 +9,7 @@ import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceW
 import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 
 // lib

@@ -9,7 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Mongo } from 'meteor/mongo';
 
 
-// api
+// models
 import Works from '/imports/models/works';
 
 class BookmarksForm extends React.Component {

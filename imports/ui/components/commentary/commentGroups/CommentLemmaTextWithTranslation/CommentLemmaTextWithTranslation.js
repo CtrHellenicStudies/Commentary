@@ -11,7 +11,11 @@ class CommentLemmaTextWithTranslation extends React.Component {
 
 	render() {
 		const { commentGroup, linesWithTranslation, author } = this.props;
-		const nLines = commentGroup.nLines;
+		let nLines = 0;
+
+		if (commentGroup) {
+			nLines = commentGroup.nLines;
+		}
 
 		return (
 			<div className="comment-lemma-text comment-lemma-text--with-translation">
@@ -74,7 +78,13 @@ export default createContainer(({ commentGroup, lines, author }) => {
 	const handleNodes = Meteor.subscribe('translationNodes', Session.get('tenantId'));
 	const translationNodes = TranslationNodes.find(translationNodesQuery).fetch();
 
-	for (let i = 0; i < commentGroup.nLines; i++) {
+	let nLines = 0;
+
+	if (commentGroup) {
+		nLines = commentGroup.nLines;
+	}
+
+	for (let i = 0; i < nLines; i++) {
 		const newLine = {
 			n: lines[i].n,
 			html: lines[i].html

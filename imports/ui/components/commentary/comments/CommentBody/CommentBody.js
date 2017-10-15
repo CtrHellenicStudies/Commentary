@@ -12,7 +12,7 @@ const CommentBody = (props) => {
 	if (props.revisionIndex === 0) {
 		return (
 			<CommentBodyText
-				text={props.selectedRevision.text}
+				text={props.selectedRevision ? props.selectedRevision.text : ''}
 				onTextClick={props.onTextClick}
 				createRevisionMarkup
 				searchTerm={props.searchTerm}

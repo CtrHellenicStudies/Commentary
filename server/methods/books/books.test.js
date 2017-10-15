@@ -6,7 +6,7 @@ import { Accounts } from 'meteor/accounts-base';
 import { stub } from 'sinon';
 import faker from 'faker';
 
-// api:
+// models:
 import Books from '/imports/models/books';
 
 // tested module:

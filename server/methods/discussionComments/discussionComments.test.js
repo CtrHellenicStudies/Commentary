@@ -11,7 +11,7 @@ import faker from 'faker';
 import Utils from '/imports/lib/utils';
 import Config from '/imports/lib/_config/_config.js';
 
-// api:
+// models:
 import Comments from '/imports/models/comments';
 import DiscussionComments from '/imports/models/discussionComments';
 import * as emailMethods from './emails';

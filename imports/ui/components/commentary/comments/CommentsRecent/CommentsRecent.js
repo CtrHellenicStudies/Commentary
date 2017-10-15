@@ -5,7 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 
 // lib:

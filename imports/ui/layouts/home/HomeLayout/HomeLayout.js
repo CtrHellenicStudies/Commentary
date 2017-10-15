@@ -5,7 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 import Tenant from '/imports/models/tenants';
 
@@ -89,8 +89,8 @@ const HomeLayoutContainer = createContainer(() => {
 
 	return {
 		settings: Settings.findOne(),
-		ready: handle.ready(),
 		tenant: Tenant.findOne({_id: Session.get('tenantId')}),
+		ready: handle.ready(),
 	};
 }, HomeLayout);
 

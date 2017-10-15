@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// api
+// models
 import TextNodes from '/imports/models/textNodes';
 import Editions from '/imports/models/editions';
 

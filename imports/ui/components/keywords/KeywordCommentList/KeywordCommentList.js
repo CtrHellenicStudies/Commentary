@@ -1,6 +1,6 @@
 import React from 'react';
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 
 // components

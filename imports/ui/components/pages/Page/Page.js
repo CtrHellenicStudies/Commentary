@@ -6,7 +6,7 @@ import { Session } from 'meteor/session';
 // lib
 import Utils from '/imports/lib/utils';
 
-// api
+// models
 import Pages from '/imports/models/pages';
 import Settings from '/imports/models/settings';
 

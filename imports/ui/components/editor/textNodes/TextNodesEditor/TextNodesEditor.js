@@ -15,7 +15,7 @@ import TextField from 'material-ui/TextField';
 // actions
 import * as textNodesActions from '/imports/actions/textNodes';
 
-// api:
+// models:
 import Editions from '/imports/models/editions';
 import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';

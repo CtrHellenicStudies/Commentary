@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import { stub } from 'sinon';
 import faker from 'faker';
 
-// api:
+// models:
 import Books from '/imports/models/books';
 import Comments from '/imports/models/comments';
 

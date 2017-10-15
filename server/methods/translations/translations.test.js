@@ -9,7 +9,7 @@ import { Random } from 'meteor/random';
 import { stub } from 'sinon';
 import faker from 'faker';
 
-// api:
+// models:
 import Translations from '/imports/models/translations';
 
 // tested module:

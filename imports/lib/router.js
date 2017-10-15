@@ -8,7 +8,7 @@ import { mount } from 'react-mounter';
 // lib
 import Utils from '/imports/lib/utils';
 
-// api
+// models
 import Tenants from '/imports/models/tenants';
 
 // layouts

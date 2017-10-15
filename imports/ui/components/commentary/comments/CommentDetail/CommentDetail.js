@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// api:
+// models:
 import ReferenceWorks from '/imports/models/referenceWorks';
 import Settings from '/imports/models/settings';
 

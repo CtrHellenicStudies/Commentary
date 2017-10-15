@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 
 // components

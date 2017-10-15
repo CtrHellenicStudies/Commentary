@@ -1,9 +1,10 @@
 import React from 'react';
-import { sendSnack } from '/imports/ui/components/shared/SnackAttack';
 import autoBind from 'react-autobind';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import DropZone from 'react-dropzone';
 import { Meteor } from 'meteor/meteor';
+
+import { sendSnack } from '/imports/ui/components/shared/SnackAttack';
 
 export default class AvatarEditor extends React.Component {
 	constructor(props) {

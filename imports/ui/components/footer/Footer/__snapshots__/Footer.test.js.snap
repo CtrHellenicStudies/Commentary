@@ -81,7 +81,9 @@ exports[`Footer renders correctly 1`] = `
         <p
           className="fade-1-4 copyright"
         >
-          . See our 
+          Copyright 
+          2017
+           The Center for Hellenic Studies. See our 
           <a
             href="/terms"
           >

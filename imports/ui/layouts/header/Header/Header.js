@@ -6,7 +6,7 @@ import { Session } from 'meteor/session';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 
-// api:
+// models:
 import Settings from '/imports/models/settings';
 import Tenants from '/imports/models/tenants';
 

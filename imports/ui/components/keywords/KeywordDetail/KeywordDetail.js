@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 import Keywords from '/imports/models/keywords';
 import Settings from '/imports/models/settings';

@@ -17,7 +17,7 @@ import TextField from 'material-ui/TextField';
 import Cookies from 'js-cookie';
 import { debounce } from 'throttle-debounce';
 
-// api:
+// models:
 import Editions from '/imports/models/editions';
 import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';

@@ -5,7 +5,7 @@ exports[`CommentBody renders correctly 1`] = `
   className="comment-body"
   dangerouslySetInnerHTML={
     Object {
-      "__html": "testText",
+      "__html": "",
     }
   }
   onClick={null}

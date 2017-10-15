@@ -11,7 +11,7 @@ import FontIcon from 'material-ui/FontIcon';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
 
-// api
+// models
 import TextNodes from '/imports/models/textNodes';
 import Editions from '/imports/models/editions';
 

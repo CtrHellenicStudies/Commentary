@@ -3,7 +3,7 @@ import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
 import { Accounts } from 'meteor/accounts-base';
 
-const translationNodes = () => {
+const fixTranslationNodes = () => {
 
 	const translations = Translations.find().map((translation) => translation._id);
 
@@ -27,8 +27,8 @@ const translationNodes = () => {
 			}
 		});
 
-		translationNodes.forEach((translationNode) => {
-			TranslationNodes.insert(translationNode);
+		translationNodes.forEach((_translationNode) => {
+			TranslationNodes.insert(_translationNode);
 		});
 	});
 };

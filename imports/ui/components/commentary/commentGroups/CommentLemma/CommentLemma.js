@@ -55,7 +55,9 @@ class CommentLemma extends React.Component {
 		index: PropTypes.string.isRequired,
 		hideLemma: PropTypes.bool.isRequired,
 		translationAuthors: PropTypes.array,
-
+		multiline: PropTypes.bool,
+		selectMultiLine: PropTypes.func,
+		
 		// from createContainer:
 		editions: PropTypes.arrayOf(PropTypes.shape({
 			title: PropTypes.string.isRequired,

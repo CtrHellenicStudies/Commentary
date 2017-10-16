@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
@@ -144,14 +145,20 @@ class CommentersEditorDialog extends React.Component {
 		);
 	}
 }
+
+CommentersEditorDialog.propTypes = {
+	currentCommenters: PropTypes.array,
+	setCommenters: PropTypes.func,
+	allCommenters: PropTypes.array,
+	commentersIds: PropTypes.array,
+	handleClose: PropTypes.func,
+	open: PropTypes.bool,
+};
+
 const CommentersEditorDialogContainer = createContainer(({ commenters }) => {
-
 	Meteor.subscribe('commenters.all', {tenantId: Session.get('tenantId')});
-
 	const commentersIds = commenters.map(commenter => commenter._id);
-
 	const allCommenters = Commenters.find().fetch();
-	console.log('commentersIds LOG', commentersIds);
 	const currentCommenters = Commenters.find({_id: {$in: commentersIds}}).fetch();
 
 	return {

@@ -11,11 +11,12 @@ import { RemoveType } from '/imports/graphql/types/index';
 // models
 import Comments from '/imports/models/comments';
 
+// errors
+import { AuthenticationError } from '/imports/errors';
+
 // logic
 import CommentsService from '../logic/comments';
 
-// errors
-import { AuthenticationError } from '/imports/errors';
 
 const commentMutationFields = {
 	commentCreate: {

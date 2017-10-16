@@ -290,7 +290,7 @@ const Utils = {
 		editions.forEach((edition, index) => {
 			const joinedText = edition.lines.map(line => line.html).join(' ');
 
-			const tag = new RegExp(`<lb ed="${multiline}" id="\\d+" \/>`, 'ig');
+			const tag = new RegExp(`<lb ed="${multiline}" id="\\d+" />`, 'ig');
 			const id = /id="\d+"/ig;
 
 			const textArray = joinedText.split(tag);
@@ -355,7 +355,7 @@ export function queryCommentWithKeywordId(keywordId, tenantId) {
 
 /**
  * Return information about a comment for a keyword
- * @param {Object} comment - the input comment  
+ * @param {Object} comment - the input comment
  * @param {number} maxLines - maximum amount of lines to limit the query to
  * @returns {Object} comment information for making keyword query
  */

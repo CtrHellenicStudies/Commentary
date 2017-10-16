@@ -546,6 +546,7 @@ Meteor.publish('referenceWorks.slug', (slug, tenantId) => {
  * @returns {Object[]} Cursor of images
  */
 Meteor.publish('pageImages', (tenantId, slug) => {
+	check(tenantId, String);
 	check(slug, String);
 	const page = Pages.findOne({
 		tenantId,
@@ -645,6 +646,7 @@ Meteor.publish('translationNodes.work', (tenantId, workId, subwork, author, skip
 	check(workId, String);
 	check(parseInt(subwork), Number);
 	check(author, String);
+	check(subwork, Number);
 	check(parseInt(skip), Number);
 	check(parseInt(limit), Number);
 

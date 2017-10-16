@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
@@ -186,6 +187,10 @@ class CommentContentInput extends React.Component {
 		);
 	}
 }
+
+CommentContentInput.propTypes = {
+	tags: PropTypes.array,
+};
 
 const CommentContentInputContainer = createContainer(() => {
 	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });

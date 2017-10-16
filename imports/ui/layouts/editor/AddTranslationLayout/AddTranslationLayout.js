@@ -1,14 +1,15 @@
 import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {Session} from 'meteor/session';
-import {Roles} from 'meteor/alanning:roles';
-import {createContainer} from 'meteor/react-meteor-data';
+import PropTypes from 'prop-types';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { Roles } from 'meteor/alanning:roles';
+import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Commenters from '/imports/models/commenters';
 import slugify from 'slugify';
-import {convertToRaw} from 'draft-js';
+import { convertToRaw } from 'draft-js';
 import Cookies from 'js-cookie';
 
 // components:
@@ -345,7 +346,7 @@ class AddTranslationLayout extends React.Component {
 				n: i,
 				text: textValue.blocks[j].text,
 			};
-			Meteor.call('translationNode.insert', token, currentNode, (error) => {
+			Meteor.call('translationNode.insert', token, currentNode, (error) => { // eslint-disable-line
 				if (error) {
 					console.log(error);
 				} else {

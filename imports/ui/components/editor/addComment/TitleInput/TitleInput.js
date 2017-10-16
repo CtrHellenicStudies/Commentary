@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
@@ -19,17 +20,6 @@ import {
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 
 const singleLinePlugin = createSingleLinePlugin();
-
-/*
-onTitleChange(titleEditorState) {
-	const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-	const title = jQuery(titleHtml).text();
-	this.setState({
-		titleEditorState,
-		titleValue: title,
-	});
-}
-*/
 
 
 class TitleInput extends React.Component {
@@ -70,6 +60,10 @@ class TitleInput extends React.Component {
 		);
 	}
 }
+
+TitleInput.propTypes = {
+	placeholder: PropTypes.string,
+};
 
 TitleInput.defaultProps = {
 	placeholder: 'Title . . .',

@@ -1,5 +1,5 @@
-import AdminService from './adminService';
 import Comments from '/imports/models/comments';
+import AdminService from './adminService';
 
 /**
  * Logic-layer service for dealing with comments
@@ -61,7 +61,7 @@ export default class CommentService extends AdminService {
 	/**
 	 * Remove a comment
 	 * @param {string} _id - comment id to remove
-	 * @returns {boolean} result of mongo orm remove 
+	 * @returns {boolean} result of mongo orm remove
 	 */
 	commentRemove(_id) {
 		if (this.userIsAdmin) {

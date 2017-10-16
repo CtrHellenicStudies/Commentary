@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
@@ -14,6 +15,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
+
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
@@ -27,19 +31,18 @@ import AddRevisionButton from '../AddRevisionButton';
 import RemoveRevisionButton from '../RemoveRevisionButton';
 import UpdateRevisionButton from '../UpdateRevisionButton';
 
-// lib:
-import muiTheme from '/imports/lib/muiTheme';
 
 
 
 class AddRevision extends React.Component {
 
 	static propTypes = {
-		submitForm: React.PropTypes.func.isRequired,
-		update: React.PropTypes.func.isRequired,
-		comment: React.PropTypes.object.isRequired,
-		tags: React.PropTypes.array,
-		referenceWorkOptions: React.PropTypes.array,
+		submitForm: PropTypes.func.isRequired,
+		update: PropTypes.func.isRequired,
+		comment: PropTypes.object.isRequired,
+		tags: PropTypes.array,
+		referenceWorkOptions: PropTypes.array,
+		filters: PropTypes.array,
 	}
 
 	constructor(props) {
@@ -195,7 +198,7 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 
 
 AddRevision.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 /*

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -69,5 +70,11 @@ class EditWorkDialog extends React.Component {
 		);
 	}
 }
+
+EditWorkDialog.propTypes = {
+	work: PropTypes.object,
+	handleClose: PropTypes.func,
+	open: PropTypes.bool,
+};
 
 export default EditWorkDialog;

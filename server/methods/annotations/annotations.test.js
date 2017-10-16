@@ -37,7 +37,7 @@ describe('Annotations methods API', () => {
 
 			const { token, comment } = testCase;
 
-			const commentInserId = faker.random.uuid();
+			const commentInsertId = faker.random.uuid();
 
 			describe(`Test Case ${index}`, () => {
 
@@ -52,7 +52,7 @@ describe('Annotations methods API', () => {
 						_id: bookId,
 					}));
 					Comments.insert = () => {};
-					stub(Comments, 'insert').callsFake(comment => commentInserId);
+					stub(Comments, 'insert').callsFake(_comment => commentInsertId);
 				});
 
 				afterEach(() => {
@@ -89,7 +89,7 @@ describe('Annotations methods API', () => {
 
 				test('successful annotation insert', () => {
 
-					expect(annotationsInsert(token, comment)).toBe(commentInserId);
+					expect(annotationsInsert(token, comment)).toBe(commentInsertId);
 				});
 			});
 		});

@@ -416,7 +416,7 @@ class AddComment extends React.Component {
 		let _selectedKeyword;
 
 		tags.forEach(_tag => {
-			if (_tag._id == tag.value) {
+			if (_tag._id === tag.value) {
 				_selectedKeyword = _tag;
 			}
 		});
@@ -456,7 +456,7 @@ class AddComment extends React.Component {
 			}
 		});
 	}
-	
+
 	addNewTag(tag) {
 
 		const keyword = [{

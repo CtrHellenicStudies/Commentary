@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 
 /*
@@ -58,7 +59,7 @@ const LineNumbering = ({ n }) => (
 );
 
 LineNumbering.propTypes = {
-	n: React.PropTypes.number.isRequired,
+	n: PropTypes.number.isRequired,
 };
 /*
 	END LineNumbering
@@ -257,31 +258,32 @@ class ContextPanelText extends React.Component {
 }
 
 ContextPanelText.propTypes = {
-	lineFrom: React.PropTypes.number.isRequired,
-	lineTo: React.PropTypes.number,
-	onBeforeClicked: React.PropTypes.func.isRequired,
-	onAfterClicked: React.PropTypes.func.isRequired,
-	selectedLemmaEdition: React.PropTypes.string.isRequired,
-	lemmaText: React.PropTypes.arrayOf(React.PropTypes.shape({
-		title: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
-		lines: React.PropTypes.arrayOf(React.PropTypes.shape({
-			n: React.PropTypes.number.isRequired,
-			html: React.PropTypes.string.isRequired,
+	lineFrom: PropTypes.number.isRequired,
+	lineTo: PropTypes.number,
+	onBeforeClicked: PropTypes.func.isRequired,
+	onAfterClicked: PropTypes.func.isRequired,
+	selectedLemmaEdition: PropTypes.string.isRequired,
+	lemmaText: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
+		lines: PropTypes.arrayOf(PropTypes.shape({
+			n: PropTypes.number.isRequired,
+			html: PropTypes.string.isRequired,
 		}))
 	})).isRequired,
-	commentGroup: React.PropTypes.shape({
-		lineFrom: React.PropTypes.number.isRequired,
-		lineTo: React.PropTypes.number,
+	commentGroup: PropTypes.shape({
+		lineFrom: PropTypes.number.isRequired,
+		lineTo: PropTypes.number,
 	}),
-	maxLine: React.PropTypes.number,
+	maxLine: PropTypes.number,
+	highlightingVisible: PropTypes.bool,
 
 	// requiered if editor:
-	disableEdit: React.PropTypes.bool,
-	selectedLineFrom: React.PropTypes.number,
-	selectedLineTo: React.PropTypes.number,
-	updateSelectedLines: React.PropTypes.func,
-	editor: React.PropTypes.bool,
+	disableEdit: PropTypes.bool,
+	selectedLineFrom: PropTypes.number,
+	selectedLineTo: PropTypes.number,
+	updateSelectedLines: PropTypes.func,
+	editor: PropTypes.bool,
 };
 
 ContextPanelText.defaultProps = {

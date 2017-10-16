@@ -1,16 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/MenuItem';
-import {grey400} from 'material-ui/styles/colors';
+import { grey400 } from 'material-ui/styles/colors';
 import _ from 'underscore';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 import Cookies from 'js-cookie';
 
 class MultilineDialog extends React.Component {
@@ -123,5 +124,12 @@ class MultilineDialog extends React.Component {
 		);
 	}
 }
+
+MultilineDialog.propTypes = {
+	edition: PropTypes.object,
+	handleClose: PropTypes.func,
+	open: PropTypes.bool,
+};
+
 
 export default MultilineDialog;

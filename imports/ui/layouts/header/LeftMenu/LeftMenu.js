@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -149,19 +150,21 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser, settings }) => (
 	</Drawer>
 );
 LeftMenu.propTypes = {
-	open: React.PropTypes.bool.isRequired,
-	closeLeftMenu: React.PropTypes.func.isRequired,
-	tenant: React.PropTypes.shape({
-		isAnnotation: React.PropTypes.bool.isRequired,
+	open: PropTypes.bool.isRequired,
+	closeLeftMenu: PropTypes.func.isRequired,
+	tenant: PropTypes.shape({
+		isAnnotation: PropTypes.bool.isRequired,
 	}),
-	currentUser: React.PropTypes.shape({
-		profile: React.PropTypes.shape({
-			avatarUrl: React.PropTypes.string,
-			name: React.PropTypes.string,
+	currentUser: PropTypes.shape({
+		profile: PropTypes.shape({
+			avatarUrl: PropTypes.string,
+			name: PropTypes.string,
 		}),
-		username: React.PropTypes.string,
+		username: PropTypes.string,
 	}),
+	settings: PropTypes.object,
 };
+
 LeftMenu.defaultProps = {
 	tenant: null,
 	currentUser: null,

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -89,13 +90,11 @@ Page.propTypes = {
 	ready: React.PropTypes.bool,
 	images: React.PropTypes.array,
 	thumbnails: React.PropTypes.array,
-	ready: React.PropTypes.bool,
 	settings: React.PropTypes.object,
 };
 
 
 const pageContainer = createContainer(({ slug }) => {
-	let page;
 	let images = [];
 	let thumbnails = [];
 
@@ -103,7 +102,7 @@ const pageContainer = createContainer(({ slug }) => {
 	const pageHandle = Meteor.subscribe('pages', tenantId, slug);
 	const settingsHandle = Meteor.subscribe('settings.tenant', tenantId);
 
-	page = Pages.findOne({ slug, tenantId });
+	const page = Pages.findOne({ slug, tenantId });
 
 	const imageHandle = Meteor.subscribe('pageImages', tenantId, slug);
 	if (page) {

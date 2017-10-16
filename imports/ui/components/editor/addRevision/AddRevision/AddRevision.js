@@ -56,8 +56,7 @@ import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/l
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
-import CommentersEditorDialog from '../CommentersEditorDialog/CommentersEditorDialog';
-
+import CommentersEditorDialog from '../CommentersEditorDialog';
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
@@ -803,6 +802,7 @@ AddRevision.propTypes = {
 	comment: PropTypes.object.isRequired,
 	tags: PropTypes.array,
 	referenceWorkOptions: PropTypes.array,
+	commentersOptions: PropTypes.array,
 };
 
 AddRevision.childContextTypes = {

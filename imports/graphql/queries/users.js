@@ -26,7 +26,7 @@ const usersQueryFields = {
 	getAuthedUser: {
 		type: UserType,
 		description: 'Return a single users account by their login token',
-		async resolve(parent, { }, { token }) {
+		async resolve(parent, {}, { token }) {
 			const userService = new UserService({token});
 			return await userService.getAuthedUser();
 		}

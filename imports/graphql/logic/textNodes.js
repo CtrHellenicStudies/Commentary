@@ -1,6 +1,6 @@
+import { Mongo } from 'meteor/mongo';
 import TextNodes from '/imports/models/textNodes';
 import AdminService from './adminService';
-import { Mongo } from 'meteor/mongo';
 
 /**
  * Logic-layer service for dealing with textNodes

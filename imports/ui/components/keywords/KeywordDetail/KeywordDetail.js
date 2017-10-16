@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -166,13 +167,13 @@ class KeywordDetail extends Component {
 
 
 KeywordDetail.propTypes = {
-	keyword: React.PropTypes.object,
-	settings: React.PropTypes.object,
-	keywordComments: React.PropTypes.array,
+	keyword: PropTypes.object,
+	settings: PropTypes.object,
+	keywordComments: PropTypes.array,
 };
 
 KeywordDetail.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 

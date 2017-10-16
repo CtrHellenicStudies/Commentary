@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import Utils from '/imports/lib/utils';
 import Cookies from 'js-cookie';
@@ -14,8 +15,8 @@ const ESCAPE_KEY = 27;
 class ModalLogin extends React.Component {
 
 	static propTypes = {
-		lowered: React.PropTypes.bool,
-		closeModal: React.PropTypes.func,
+		lowered: PropTypes.bool,
+		closeModal: PropTypes.func,
 	};
 
 	static defaultProps = {
@@ -49,7 +50,7 @@ class ModalLogin extends React.Component {
 	_handleKeyDown(event) {
 
 		const { closeModal } = this.props;
-		
+
 		if (event.keyCode === ESCAPE_KEY) closeModal();
 	}
 

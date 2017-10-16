@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -13,8 +14,8 @@ import DiscussionCommentsList from '/imports/ui/components/discussionComments/Di
 
 class Discussions extends React.Component {
 	static propTypes = {
-		discussionComments: React.PropTypes.array,
-		settings: React.PropTypes.object,
+		discussionComments: PropTypes.array,
+		settings: PropTypes.object,
 	}
 
 	render() {

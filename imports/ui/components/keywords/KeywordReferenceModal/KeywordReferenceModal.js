@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -12,15 +13,15 @@ import muiTheme from '/imports/lib/muiTheme';
 const KeywordReferenceModal = React.createClass({
 
 	propTypes: {
-		visible: React.PropTypes.bool,
-		top: React.PropTypes.number,
-		left: React.PropTypes.number,
-		keyword: React.PropTypes.string,
-		close: React.PropTypes.func,
+		visible: PropTypes.bool,
+		top: PropTypes.number,
+		left: PropTypes.number,
+		keyword: PropTypes.string,
+		close: PropTypes.func,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getChildContext() {

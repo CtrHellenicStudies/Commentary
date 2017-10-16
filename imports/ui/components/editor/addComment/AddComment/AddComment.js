@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -127,11 +128,11 @@ function _getSuggestionsFromComments(comments) {
  */
 class AddComment extends React.Component {
 	static propTypes = {
-		selectedLineFrom: React.PropTypes.number,
-		submitForm: React.PropTypes.func.isRequired,
-		commentersOptions: React.PropTypes.array,
-		tags: React.PropTypes.array,
-		referenceWorkOptions: React.PropTypes.array,
+		selectedLineFrom: PropTypes.number,
+		submitForm: PropTypes.func.isRequired,
+		commentersOptions: PropTypes.array,
+		tags: PropTypes.array,
+		referenceWorkOptions: PropTypes.array,
 	};
 
 	static defaultProps = {

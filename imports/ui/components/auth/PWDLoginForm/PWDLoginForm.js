@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const PWDLoginForm = ({ errorMsg, login }) => {
 
@@ -77,8 +78,8 @@ const PWDLoginForm = ({ errorMsg, login }) => {
 	);
 };
 PWDLoginForm.propTypes = {
-	errorMsg: React.PropTypes.string,
-	login: React.PropTypes.func,
+	errorMsg: PropTypes.string,
+	login: PropTypes.func,
 };
 PWDLoginForm.defaultProps = {
 	errorMsg: null,

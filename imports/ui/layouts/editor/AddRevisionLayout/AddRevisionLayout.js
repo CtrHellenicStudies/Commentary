@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -28,10 +29,10 @@ import Utils from '/imports/lib/utils';
 const AddRevisionLayout = React.createClass({
 
 	propTypes: {
-		ready: React.PropTypes.bool,
-		comment: React.PropTypes.object,
-		commenters: React.PropTypes.array,
-		keywords: React.PropTypes.array,
+		ready: PropTypes.bool,
+		comment: PropTypes.object,
+		commenters: PropTypes.array,
+		keywords: PropTypes.array,
 	},
 
 	getInitialState() {

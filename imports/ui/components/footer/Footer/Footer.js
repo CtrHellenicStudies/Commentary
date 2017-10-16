@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -111,12 +112,12 @@ class Footer extends Component {
 
 
 Footer.propTypes = {
-	settings: React.PropTypes.object,
-	tenant: React.PropTypes.object,
+	settings: PropTypes.object,
+	tenant: PropTypes.object,
 };
 
 Footer.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 export default createContainer(() => {

@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // components:
-import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown'; 
-import SearchTermButton from '/imports/ui/components/header/SearchTermButton'; 
+import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
+import SearchTermButton from '/imports/ui/components/header/SearchTermButton';
 
 // helpers:
 import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
@@ -30,10 +31,10 @@ const KeyideasDropdown = ({ keyideas, searchDropdownOpen, toggleSearchDropdown, 
 	</SearchToolDropdown>
 );
 KeyideasDropdown.propTypes = {
-	keyideas: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		title: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
+	keyideas: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
 	})),
 	...dropdownPropTypes,
 };

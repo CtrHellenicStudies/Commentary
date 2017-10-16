@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -93,12 +94,12 @@ class TextNodesEditorLayout extends React.Component {
 }
 
 TextNodesEditorLayout.propTypes = {
-	ready: React.PropTypes.bool,
-	isTest: React.PropTypes.bool,
+	ready: PropTypes.bool,
+	isTest: PropTypes.bool,
 };
 
 TextNodesEditorLayout.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -14,13 +15,13 @@ import muiTheme from '/imports/lib/muiTheme';
 const BookmarkedTextNode = React.createClass({
 
 	propTypes: {
-		text: React.PropTypes.object,
-		work: React.PropTypes.object,
-		isOdd: React.PropTypes.bool,
+		text: PropTypes.object,
+		work: PropTypes.object,
+		isOdd: PropTypes.bool,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getChildContext() {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import WorkVisualization from '/imports/ui/components/works/WorkVisualization';
 
@@ -39,10 +40,10 @@ class CommenterWorkVisualization extends Component {
 }
 
 CommenterWorkVisualization.propTypes = {
-	work: React.PropTypes.object.isRequired,
-	toggleVisibleWork: React.PropTypes.func.isRequired,
-	commenterSlug: React.PropTypes.string.isRequired,
-	isTest: React.PropTypes.bool,
+	work: PropTypes.object.isRequired,
+	toggleVisibleWork: PropTypes.func.isRequired,
+	commenterSlug: PropTypes.string.isRequired,
+	isTest: PropTypes.bool,
 };
 
 export default CommenterWorkVisualization;

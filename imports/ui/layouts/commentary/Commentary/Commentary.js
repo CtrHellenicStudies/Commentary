@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -29,38 +30,38 @@ import { createQueryFromFilters, parseCommentsToCommentGroups } from './helpers'
 
 class Commentary extends React.Component {
 	static propTypes = {
-		skip: React.PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
-		limit: React.PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
-		isOnHomeView: React.PropTypes.bool,
-		filters: React.PropTypes.array,
-		showLoginModal: React.PropTypes.func,
-		toggleSearchTerm: React.PropTypes.func,
-		loadMoreComments: React.PropTypes.func,
+		skip: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
+		limit: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
+		isOnHomeView: PropTypes.bool,
+		filters: PropTypes.array,
+		showLoginModal: PropTypes.func,
+		toggleSearchTerm: PropTypes.func,
+		loadMoreComments: PropTypes.func,
 
 		// from createContainer:
-		commentGroups: React.PropTypes.arrayOf(React.PropTypes.shape({
-			work: React.PropTypes.shape({
-				slug: React.PropTypes.string.isRequired,
-				title: React.PropTypes.string.isRequired,
+		commentGroups: PropTypes.arrayOf(PropTypes.shape({
+			work: PropTypes.shape({
+				slug: PropTypes.string.isRequired,
+				title: PropTypes.string.isRequired,
 			}),
-			subwork: React.PropTypes.shape({
-				n: React.PropTypes.number.isRequired,
+			subwork: PropTypes.shape({
+				n: PropTypes.number.isRequired,
 			}),
-			lineFrom: React.PropTypes.number.isRequired,
-			lineTo: React.PropTypes.number,
-			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string.isRequired,
-				name: React.PropTypes.string.isRequired,
-				slug: React.PropTypes.string.isRequired,
-				avatar: React.PropTypes.shape({
-					src: React.PropTypes.string,
+			lineFrom: PropTypes.number.isRequired,
+			lineTo: PropTypes.number,
+			commenters: PropTypes.arrayOf(PropTypes.shape({
+				_id: PropTypes.string.isRequired,
+				name: PropTypes.string.isRequired,
+				slug: PropTypes.string.isRequired,
+				avatar: PropTypes.shape({
+					src: PropTypes.string,
 				})
 			}))
 		})),
-		isMoreComments: React.PropTypes.bool,
-		ready: React.PropTypes.bool,
-		settings: React.PropTypes.shape({
-			title: React.PropTypes.string,
+		isMoreComments: PropTypes.bool,
+		ready: PropTypes.bool,
+		settings: PropTypes.shape({
+			title: PropTypes.string,
 		}),
 	};
 
@@ -73,7 +74,7 @@ class Commentary extends React.Component {
 	};
 
 	static childContextTypes = {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	};
 
 	constructor(props) {

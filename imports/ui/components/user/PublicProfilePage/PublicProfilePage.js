@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -24,13 +25,13 @@ const checkUsername = (user) => {
 
 const PublicProfilePage = React.createClass({
 	propTypes: {
-		userId: React.PropTypes.string,
-		user: React.PropTypes.object,
-		discussionComments: React.PropTypes.array,
+		userId: PropTypes.string,
+		user: PropTypes.object,
+		discussionComments: PropTypes.array,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {

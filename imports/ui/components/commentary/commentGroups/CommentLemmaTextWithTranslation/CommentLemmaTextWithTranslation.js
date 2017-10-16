@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import React from 'react';
@@ -53,13 +54,13 @@ class CommentLemmaTextWithTranslation extends React.Component {
 }
 
 CommentLemmaTextWithTranslation.propTypes = {
-	linesWithTranslation: React.PropTypes.arrayOf(React.PropTypes.shape({
-		html: React.PropTypes.string,
-		english: React.PropTypes.string,
-		n: React.PropTypes.number.isRequired,
+	linesWithTranslation: PropTypes.arrayOf(PropTypes.shape({
+		html: PropTypes.string,
+		english: PropTypes.string,
+		n: PropTypes.number.isRequired,
 	})).isRequired,
-	commentGroup: React.PropTypes.object,
-	author: React.PropTypes.string,
+	commentGroup: PropTypes.object,
+	author: PropTypes.string,
 };
 
 export default createContainer(({ commentGroup, lines, author }) => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -16,20 +17,20 @@ import Utils from '/imports/lib/utils';
 const LemmaReferenceModal = React.createClass({
 
 	propTypes: {
-		visible: React.PropTypes.bool,
-		top: React.PropTypes.number.isRequired,
-		left: React.PropTypes.number.isRequired,
-		work: React.PropTypes.string.isRequired,
-		subwork: React.PropTypes.number.isRequired,
-		lineFrom: React.PropTypes.number.isRequired,
-		lineTo: React.PropTypes.number,
-		closeLemmaReference: React.PropTypes.func.isRequired,
-		lemmaText: React.PropTypes.array,
-		ready: React.PropTypes.bool,
+		visible: PropTypes.bool,
+		top: PropTypes.number.isRequired,
+		left: PropTypes.number.isRequired,
+		work: PropTypes.string.isRequired,
+		subwork: PropTypes.number.isRequired,
+		lineFrom: PropTypes.number.isRequired,
+		lineTo: PropTypes.number,
+		closeLemmaReference: PropTypes.func.isRequired,
+		lemmaText: PropTypes.array,
+		ready: PropTypes.bool,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {

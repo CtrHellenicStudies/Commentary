@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import TextField from 'material-ui/TextField';
@@ -61,41 +62,41 @@ const getWorkInFilter = (filters) => {
 class CommentarySearchToolbar extends React.Component {
 
 	static propTypes = {
-		filters: React.PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
-		toggleSearchTerm: React.PropTypes.func.isRequired,
-		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeLineN: React.PropTypes.func.isRequired,
-		addCommentPage: React.PropTypes.bool.isRequired,
-		isTest: React.PropTypes.bool,
-		selectedWork: React.PropTypes.object,
+		filters: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
+		toggleSearchTerm: PropTypes.func.isRequired,
+		handleChangeTextsearch: PropTypes.func,
+		handleChangeLineN: PropTypes.func.isRequired,
+		addCommentPage: PropTypes.bool.isRequired,
+		isTest: PropTypes.bool,
+		selectedWork: PropTypes.object,
 
 		// from createContainer:
-		keywords: React.PropTypes.arrayOf(React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			title: React.PropTypes.string.isRequired,
-			slug: React.PropTypes.string.isRequired,
+		keywords: PropTypes.arrayOf(PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			title: PropTypes.string.isRequired,
+			slug: PropTypes.string.isRequired,
 		})),
-		keyideas: React.PropTypes.arrayOf(React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			title: React.PropTypes.string.isRequired,
-			slug: React.PropTypes.string.isRequired,
+		keyideas: PropTypes.arrayOf(PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			title: PropTypes.string.isRequired,
+			slug: PropTypes.string.isRequired,
 		})),
-		commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			name: React.PropTypes.string.isRequired,
-			slug: React.PropTypes.string.isRequired,
+		commenters: PropTypes.arrayOf(PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+			slug: PropTypes.string.isRequired,
 		})),
-		referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			title: React.PropTypes.string.isRequired,
+		referenceWorks: PropTypes.arrayOf(PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			title: PropTypes.string.isRequired,
 		})),
-		works: React.PropTypes.arrayOf(React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			title: React.PropTypes.string.isRequired,
-			slug: React.PropTypes.string.isRequired,
-			subworks: React.PropTypes.arrayOf(React.PropTypes.shape({
-				n: React.PropTypes.number.isRequired,
-				title: React.PropTypes.string.isRequired,
+		works: PropTypes.arrayOf(PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			title: PropTypes.string.isRequired,
+			slug: PropTypes.string.isRequired,
+			subworks: PropTypes.arrayOf(PropTypes.shape({
+				n: PropTypes.number.isRequired,
+				title: PropTypes.string.isRequired,
 			})),
 		})),
 	};

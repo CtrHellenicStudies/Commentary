@@ -85,12 +85,12 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-	slug: React.PropTypes.string,
-	page: React.PropTypes.object,
-	ready: React.PropTypes.bool,
-	images: React.PropTypes.array,
-	thumbnails: React.PropTypes.array,
-	settings: React.PropTypes.object,
+	slug: PropTypes.string,
+	page: PropTypes.object,
+	ready: PropTypes.bool,
+	images: PropTypes.array,
+	thumbnails: PropTypes.array,
+	settings: PropTypes.object,
 };
 
 

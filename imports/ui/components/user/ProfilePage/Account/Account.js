@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -26,7 +27,7 @@ class Account extends React.Component {
 	}
 
 	static propTypes = {
-		user: React.PropTypes.object
+		user: PropTypes.object
 	}
 
 	componentWillMount() {
@@ -248,7 +249,7 @@ class Account extends React.Component {
 					</RadioButtonGroup>
 				</div>
 				*/}
-				
+
 				<br />
 				<br />
 				<br />

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -34,16 +35,16 @@ class CommenterDetail extends React.Component {
 	}
 
 	static propTypes = {
-		commenter: React.PropTypes.shape({
-			name: React.PropTypes.string.isRequired,
-			bio: React.PropTypes.string,
-			_id: React.PropTypes.string
+		commenter: PropTypes.shape({
+			name: PropTypes.string.isRequired,
+			bio: PropTypes.string,
+			_id: PropTypes.string
 		}),
-		avatarUrl: React.PropTypes.string,
-		settings: React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
+		avatarUrl: PropTypes.string,
+		settings: PropTypes.shape({
+			title: PropTypes.string.isRequired,
 		}),
-		isTest: React.PropTypes.bool,
+		isTest: PropTypes.bool,
 	};
 
 	static defaultProps = {

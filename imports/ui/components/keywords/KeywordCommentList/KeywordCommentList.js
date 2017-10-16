@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -95,7 +96,7 @@ const KeywordCommentList = (props) => {
 	);
 };
 KeywordCommentList.propTypes = {
-	keywordComments: React.PropTypes.array,
+	keywordComments: PropTypes.array,
 };
 
 export default KeywordCommentList;

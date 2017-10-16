@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import DropZone from 'react-dropzone';
@@ -73,7 +74,7 @@ export default class AvatarEditor extends React.Component {
 }
 
 AvatarEditor.propTypes = {
-	defaultAvatarUrl: React.PropTypes.string.isRequired
+	defaultAvatarUrl: PropTypes.string.isRequired
 };
 
 AvatarEditor.defaultProps = {

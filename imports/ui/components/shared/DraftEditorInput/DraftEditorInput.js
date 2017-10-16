@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { HOC as formsyHOC } from 'formsy-react';
 import stylePropType from 'react-style-proptype';
 import reactCSS from 'reactcss';
@@ -25,19 +26,19 @@ class DraftEditorInput extends React.Component {
 
 	static propTypes = {
 		// props recieved from formsy HOC:
-		setValue: React.PropTypes.func.isRequired,
-		// getValue: React.PropTypes.func.isRequired,
-		getErrorMessage: React.PropTypes.func.isRequired,
-		// showRequired: React.PropTypes.func.isRequired,
-		// showError: React.PropTypes.func.isRequired,
-		label: React.PropTypes.string.isRequired,
+		setValue: PropTypes.func.isRequired,
+		// getValue: PropTypes.func.isRequired,
+		getErrorMessage: PropTypes.func.isRequired,
+		// showRequired: PropTypes.func.isRequired,
+		// showError: PropTypes.func.isRequired,
+		label: PropTypes.string.isRequired,
 
 		style: stylePropType,
-		value: React.PropTypes.object,
-		defaultValue: React.PropTypes.object,
-		defaultHTML: React.PropTypes.func,
-		placeholder: React.PropTypes.string,
-		returnHTML: React.PropTypes.bool,
+		value: PropTypes.object,
+		defaultValue: PropTypes.object,
+		defaultHTML: PropTypes.func,
+		placeholder: PropTypes.string,
+		returnHTML: PropTypes.bool,
 	};
 
 	static defaultProps = {

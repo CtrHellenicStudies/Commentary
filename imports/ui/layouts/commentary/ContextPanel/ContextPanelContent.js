@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -83,45 +84,45 @@ const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onB
 	</div>
 );
 ContextPanelContent.propTypes = {
-	open: React.PropTypes.bool.isRequired,
-	commentGroup: React.PropTypes.shape({
-		work: React.PropTypes.shape({
-			slug: React.PropTypes.string.isRequired,
+	open: PropTypes.bool.isRequired,
+	commentGroup: PropTypes.shape({
+		work: PropTypes.shape({
+			slug: PropTypes.string.isRequired,
 		}),
-		subwork: React.PropTypes.shape({
-			n: React.PropTypes.number.isRequired,
+		subwork: PropTypes.shape({
+			n: PropTypes.number.isRequired,
 		}),
-		lineFrom: React.PropTypes.number.isRequired,
-		lineTo: React.PropTypes.number,
-		ref: React.PropTypes.string.isRequired,
+		lineFrom: PropTypes.number.isRequired,
+		lineTo: PropTypes.number,
+		ref: PropTypes.string.isRequired,
 	}),
-	closeContextPanel: React.PropTypes.func,
-	highlightingVisible: React.PropTypes.bool.isRequired,
-	onBeforeClicked: React.PropTypes.func.isRequired,
-	onAfterClicked: React.PropTypes.func.isRequired,
-	selectedLemmaEdition: React.PropTypes.string.isRequired,
-	lemmaText: React.PropTypes.arrayOf(React.PropTypes.shape({
-		title: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
-		lines: React.PropTypes.arrayOf(React.PropTypes.shape({
-			n: React.PropTypes.number.isRequired,
-			html: React.PropTypes.string.isRequired,
+	closeContextPanel: PropTypes.func,
+	highlightingVisible: PropTypes.bool.isRequired,
+	onBeforeClicked: PropTypes.func.isRequired,
+	onAfterClicked: PropTypes.func.isRequired,
+	selectedLemmaEdition: PropTypes.string.isRequired,
+	lemmaText: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
+		lines: PropTypes.arrayOf(PropTypes.shape({
+			n: PropTypes.number.isRequired,
+			html: PropTypes.string.isRequired,
 		})).isRequired,
 	})).isRequired,
-	lineFrom: React.PropTypes.number.isRequired,
-	lineTo: React.PropTypes.number.isRequired,
-	maxLine: React.PropTypes.number.isRequired,
-	toggleEdition: React.PropTypes.func.isRequired,
-	toggleHighlighting: React.PropTypes.func.isRequired,
-	workSlug: React.PropTypes.string.isRequired,
-	subworkN: React.PropTypes.number.isRequired,
+	lineFrom: PropTypes.number.isRequired,
+	lineTo: PropTypes.number.isRequired,
+	maxLine: PropTypes.number.isRequired,
+	toggleEdition: PropTypes.func.isRequired,
+	toggleHighlighting: PropTypes.func.isRequired,
+	workSlug: PropTypes.string.isRequired,
+	subworkN: PropTypes.number.isRequired,
 
 	// requiered if editor:
-	disableEdit: React.PropTypes.bool,
-	selectedLineFrom: React.PropTypes.number,
-	selectedLineTo: React.PropTypes.number,
-	updateSelectedLines: React.PropTypes.func,
-	editor: React.PropTypes.bool,
+	disableEdit: PropTypes.bool,
+	selectedLineFrom: PropTypes.number,
+	selectedLineTo: PropTypes.number,
+	updateSelectedLines: PropTypes.func,
+	editor: PropTypes.bool,
 };
 ContextPanelContent.defaultProps = {
 	commentGroup: null,

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -7,12 +8,12 @@ import RecentActivity from '/imports/ui/components/user/ProfilePage/Notification
 
 class Notifications extends React.Component {
 	static propTypes = {
-		subscriptions: React.PropTypes.object
+		subscriptions: PropTypes.object
 	}
 
 	render () {
 		const { subscriptions } = this.props;
-		
+
 		return (
 			<div>
 				{subscriptions ?

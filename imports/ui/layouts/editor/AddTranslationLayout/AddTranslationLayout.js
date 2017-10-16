@@ -60,7 +60,7 @@ const getFilterValues = (filters) => {
 
 class AddTranslationLayout extends React.Component {
 	static propTypes = {
-		ready: React.PropTypes.bool,
+		ready: PropTypes.bool,
 	};
 
 	static defaultProps = {

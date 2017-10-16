@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // components
 import CommentBodyText from '/imports/ui/components/commentary/comments/CommentBodyText';
@@ -29,15 +30,15 @@ const CommentBody = (props) => {
 };
 
 CommentBody.propTypes = {
-	comment: React.PropTypes.shape({
-		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
-			text: React.PropTypes.string.isRequired,
+	comment: PropTypes.shape({
+		revisions: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
 		})),
 	}).isRequired,
-	revisionIndex: React.PropTypes.number.isRequired,
-	selectedRevision: React.PropTypes.object.isRequired,
-	onTextClick: React.PropTypes.func,
-	searchTerm: React.PropTypes.string
+	revisionIndex: PropTypes.number.isRequired,
+	selectedRevision: PropTypes.object.isRequired,
+	onTextClick: PropTypes.func,
+	searchTerm: PropTypes.string
 };
 
 CommentBody.defaultProps = {

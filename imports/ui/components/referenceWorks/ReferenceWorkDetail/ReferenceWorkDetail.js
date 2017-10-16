@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -126,10 +127,10 @@ class ReferenceWorkDetail extends React.Component {
 }
 
 ReferenceWorkDetail.propTypes = {
-	slug: React.PropTypes.string.isRequired,
-	referenceWork: React.PropTypes.object,
-	settings: React.PropTypes.object,
-	commenters: React.PropTypes.array,
+	slug: PropTypes.string.isRequired,
+	referenceWork: PropTypes.object,
+	settings: PropTypes.object,
+	commenters: PropTypes.array,
 };
 
 

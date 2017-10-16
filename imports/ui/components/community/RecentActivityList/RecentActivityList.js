@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -11,8 +12,8 @@ import RecentActivityTeaser from '../RecentActivityTeaser';
 
 class RecentActivityList extends React.Component {
 	static propTypes = {
-		comments: React.PropTypes.array,
-		loadMore: React.PropTypes.func,
+		comments: PropTypes.array,
+		loadMore: PropTypes.func,
 	}
 
 	constructor(props) {

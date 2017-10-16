@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /*
 	helpers
@@ -18,10 +19,10 @@ const isActive = (filters, element, key, valueKey = 'slug') => {
 };
 
 const dropdownPropTypes = {
-	searchDropdownOpen: React.PropTypes.string,
-	toggleSearchDropdown: React.PropTypes.func.isRequired,
-	toggleSearchTerm: React.PropTypes.func.isRequired,
-	filters: React.PropTypes.any,
+	searchDropdownOpen: PropTypes.string,
+	toggleSearchDropdown: PropTypes.func.isRequired,
+	toggleSearchTerm: PropTypes.func.isRequired,
+	filters: PropTypes.any,
 };
 
 const dropdownDefaultProps = {

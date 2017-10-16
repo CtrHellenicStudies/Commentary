@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
@@ -57,17 +58,17 @@ const { MentionSuggestions } = mentionPlugin;
 const AddKeyword = React.createClass({
 
 	propTypes: {
-		selectedLineFrom: React.PropTypes.number,
-		selectedLineTo: React.PropTypes.number,
-		submitForm: React.PropTypes.func.isRequired,
-		onTypeChange: React.PropTypes.func.isRequired,
-		keywordsOptions: React.PropTypes.array,
-		keyideasOptions: React.PropTypes.array,
-		isTest: React.PropTypes.bool,
+		selectedLineFrom: PropTypes.number,
+		selectedLineTo: PropTypes.number,
+		submitForm: PropTypes.func.isRequired,
+		onTypeChange: PropTypes.func.isRequired,
+		keywordsOptions: PropTypes.array,
+		keyideasOptions: PropTypes.array,
+		isTest: PropTypes.bool,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -45,12 +46,12 @@ class WorksList extends React.Component {
 }
 
 WorksList.propTypes = {
-	works: React.PropTypes.array,
-	ready: React.PropTypes.bool,
+	works: PropTypes.array,
+	ready: PropTypes.bool,
 };
 
 WorksList.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 

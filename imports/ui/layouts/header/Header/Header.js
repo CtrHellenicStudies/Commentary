@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -53,23 +54,23 @@ const styles = {
 */
 class Header extends React.Component {
 	static propTypes = {
-		filters: React.PropTypes.any, // eslint-disable-line react/forbid-prop-types
-		toggleSearchTerm: React.PropTypes.func,
-		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeLineN: React.PropTypes.func,
-		initialSearchEnabled: React.PropTypes.bool,
-		addCommentPage: React.PropTypes.bool,
-		isOnHomeView: React.PropTypes.bool,
-		isTest: React.PropTypes.bool,
-		selectedWork: React.PropTypes.object,
+		filters: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+		toggleSearchTerm: PropTypes.func,
+		handleChangeTextsearch: PropTypes.func,
+		handleChangeLineN: PropTypes.func,
+		initialSearchEnabled: PropTypes.bool,
+		addCommentPage: PropTypes.bool,
+		isOnHomeView: PropTypes.bool,
+		isTest: PropTypes.bool,
+		selectedWork: PropTypes.object,
 
 		// from creatContainer:
-		settings: React.PropTypes.shape({
-			name: React.PropTypes.string,
+		settings: PropTypes.shape({
+			name: PropTypes.string,
 		}),
-		tenant: React.PropTypes.shape({
-			subdomain: React.PropTypes.string,
-			isAnnotation: React.PropTypes.bool,
+		tenant: PropTypes.shape({
+			subdomain: PropTypes.string,
+			isAnnotation: PropTypes.bool,
 		}),
 
 	};

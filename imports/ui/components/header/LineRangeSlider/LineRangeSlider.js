@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { debounce } from 'throttle-debounce';
 
 const id = 'line-range';
@@ -29,9 +30,9 @@ class LineRangeSlider extends React.Component {
 
 }
 LineRangeSlider.propTypes = {
-	handleChangeLineN: React.PropTypes.func.isRequired,
-	lineFrom: React.PropTypes.number,
-	lineTo: React.PropTypes.number,
+	handleChangeLineN: PropTypes.func.isRequired,
+	lineFrom: PropTypes.number,
+	lineTo: PropTypes.number,
 };
 LineRangeSlider.defaultProps = {
 	lineFrom: null,

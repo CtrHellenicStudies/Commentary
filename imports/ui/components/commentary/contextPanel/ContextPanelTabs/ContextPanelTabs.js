@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 
 // lib:
@@ -39,12 +40,12 @@ const EditionTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition }) => (
 );
 
 EditionTabs.propTypes = {
-	lemmaText: React.PropTypes.arrayOf(React.PropTypes.shape({
-		title: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
+	lemmaText: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
 	})).isRequired,
-	selectedLemmaEdition: React.PropTypes.string.isRequired,
-	toggleEdition: React.PropTypes.func.isRequired,
+	selectedLemmaEdition: PropTypes.string.isRequired,
+	toggleEdition: PropTypes.func.isRequired,
 };
 
 EditionTabs.defaultProps = {
@@ -84,8 +85,8 @@ const MetaTabs = ({ toggleHighlighting, highlightingVisible }) => (
 	</div>
 );
 MetaTabs.propTypes = {
-	toggleHighlighting: React.PropTypes.func,
-	highlightingVisible: React.PropTypes.bool.isRequired,
+	toggleHighlighting: PropTypes.func,
+	highlightingVisible: PropTypes.bool.isRequired,
 };
 MetaTabs.defaultProps = {
 	toggleHighlighting: null,
@@ -117,17 +118,17 @@ const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, togg
 	</div>
 );
 ContextPanelTabs.propTypes = {
-	lemmaText: React.PropTypes.arrayOf(React.PropTypes.shape({
-		title: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
+	lemmaText: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
 	})).isRequired,
-	selectedLemmaEdition: React.PropTypes.string.isRequired,
-	toggleEdition: React.PropTypes.func.isRequired,
-	toggleHighlighting: React.PropTypes.func.isRequired,
-	highlightingVisible: React.PropTypes.bool.isRequired,
+	selectedLemmaEdition: PropTypes.string.isRequired,
+	toggleEdition: PropTypes.func.isRequired,
+	toggleHighlighting: PropTypes.func.isRequired,
+	highlightingVisible: PropTypes.bool.isRequired,
 
 	// requiered if editor:
-	editor: React.PropTypes.bool,
+	editor: PropTypes.bool,
 };
 ContextPanelTabs.defaultProps = {
 	editor: false,

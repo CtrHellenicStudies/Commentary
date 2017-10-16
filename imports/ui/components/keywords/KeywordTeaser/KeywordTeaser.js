@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -69,11 +70,11 @@ class KeywordTeaser extends React.Component {
 
 
 KeywordTeaser.propTypes = {
-	keyword: React.PropTypes.object.isRequired,
+	keyword: PropTypes.object.isRequired,
 };
 
 KeywordTeaser.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 export default KeywordTeaser;

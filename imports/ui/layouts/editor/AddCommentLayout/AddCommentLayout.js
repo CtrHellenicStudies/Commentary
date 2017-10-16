@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -88,7 +89,7 @@ const getFilterValues = (filters) => {
  */
 class AddCommentLayout extends React.Component {
 	static propTypes = {
-		ready: React.PropTypes.bool,
+		ready: PropTypes.bool,
 	};
 
 	static defaultProps = {

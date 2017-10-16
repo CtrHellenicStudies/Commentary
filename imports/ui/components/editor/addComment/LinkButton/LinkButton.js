@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { RichUtils, EditorState, Modifier, CompositeDecorator } from 'draft-js';
 import unionClassNames from 'union-class-names';
 import { debounce } from 'throttle-debounce';
@@ -22,18 +23,18 @@ const preventBubblingUp = (event) => { event.preventDefault(); };
 class LinkButton extends Component {
 
 	static propTypes = {
-		getEditorState: React.PropTypes.func.isRequired,
-		setEditorState: React.PropTypes.func.isRequired,
-		theme: React.PropTypes.shape({
-			button: React.PropTypes.string,
-			active: React.PropTypes.string,
-			buttonWrapper: React.PropTypes.string
+		getEditorState: PropTypes.func.isRequired,
+		setEditorState: PropTypes.func.isRequired,
+		theme: PropTypes.shape({
+			button: PropTypes.string,
+			active: PropTypes.string,
+			buttonWrapper: PropTypes.string
 		}).isRequired,
 	}
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			linkModalOpen: false,
 			linkValue: null,

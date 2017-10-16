@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
 // components:
-import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel'; 
+import SearchTermButtonPanel from '/imports/ui/components/header/SearchTermButtonPanel';
 
 // helpers:
 import { isActive, cardPropTypes, cardDefaultProps } from './helpers';
@@ -37,10 +38,10 @@ const WorksCard = ({ works, toggleWorkSearchTerm, styles, filters }) => (
 	</Card>
 );
 WorksCard.propTypes = {
-	works: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		title: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
+	works: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
 	})),
 	...cardPropTypes,
 };

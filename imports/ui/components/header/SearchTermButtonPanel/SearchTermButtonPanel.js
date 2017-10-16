@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /*
 	helpers
@@ -24,12 +25,12 @@ const SearchTermButtonPanel = ({ active, activeWork, toggleSearchTerm, label, se
 	</button>
 );
 SearchTermButtonPanel.propTypes = {
-	toggleSearchTerm: React.PropTypes.func.isRequired,
-	label: React.PropTypes.string.isRequired,
-	searchTermKey: React.PropTypes.string.isRequired,
-	value: React.PropTypes.shape({}).isRequired,
-	active: React.PropTypes.bool,
-	activeWork: React.PropTypes.bool,
+	toggleSearchTerm: PropTypes.func.isRequired,
+	label: PropTypes.string.isRequired,
+	searchTermKey: PropTypes.string.isRequired,
+	value: PropTypes.shape({}).isRequired,
+	active: PropTypes.bool,
+	activeWork: PropTypes.bool,
 };
 SearchTermButtonPanel.defaultProps = {
 	active: false,

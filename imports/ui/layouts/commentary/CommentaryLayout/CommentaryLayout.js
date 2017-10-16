@@ -10,6 +10,7 @@ with new “filters” object passed as first attribute.
 
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -43,15 +44,15 @@ import {
 class CommentaryLayout extends React.Component {
 
 	static propTypes = {
-		queryParams: React.PropTypes.object,
-		params: React.PropTypes.object,
-		referenceWorks: React.PropTypes.array,
-		works: React.PropTypes.array,
-		isTest: React.PropTypes.bool,
+		queryParams: PropTypes.object,
+		params: PropTypes.object,
+		referenceWorks: PropTypes.array,
+		works: PropTypes.array,
+		isTest: PropTypes.bool,
 	};
 
 	static childContextTypes = {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	};
 
 	static defaultProps = {

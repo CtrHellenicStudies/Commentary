@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import Utils from '/imports/lib/utils';
@@ -45,9 +46,9 @@ const ProfileAvatarButton = (props) => {
 };
 
 ProfileAvatarButton.propTypes = {
-	notifications: React.PropTypes.array,
-	showUserDropdown: React.PropTypes.func,
-	hideUserDropdown: React.PropTypes.func
+	notifications: PropTypes.array,
+	showUserDropdown: PropTypes.func,
+	hideUserDropdown: PropTypes.func
 };
 
 const ProfileAvatarButtonContainer = createContainer(() => {

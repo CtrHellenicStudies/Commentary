@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -56,8 +57,8 @@ class ReferenceWorksList extends React.Component {
 }
 
 ReferenceWorksList.propTypes = {
-	commenterId: React.PropTypes.string,
-	referenceWorks: React.PropTypes.array,
+	commenterId: PropTypes.string,
+	referenceWorks: PropTypes.array,
 };
 
 const ReferenceWorksListContainer = createContainer(({ commenterId }) => {

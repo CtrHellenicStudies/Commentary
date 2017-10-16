@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const CommentReference = (props) => {
 	if (props.referenceWorks && props.referenceWorks.length) {
@@ -32,9 +33,9 @@ const CommentReference = (props) => {
 	return null;
 };
 CommentReference.propTypes = {
-	referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
-		title: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
+	referenceWorks: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
 	})),
 };
 CommentReference.defaultProps = {

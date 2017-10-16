@@ -27,7 +27,7 @@ const SubscriptionsFeed = props => (
 );
 
 SubscriptionsFeed.propTypes = {
-	subscriptions: React.PropTypes.object
+	subscriptions: PropTypes.object
 };
 
 export default SubscriptionsFeed;

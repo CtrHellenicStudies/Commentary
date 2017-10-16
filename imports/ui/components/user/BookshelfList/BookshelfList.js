@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -9,7 +10,7 @@ import Works from '/imports/models/works';
 
 const BookshelfList = React.createClass({
 	propTypes: {
-		works: React.PropTypes.array,
+		works: PropTypes.array,
 	},
 
 	render() {

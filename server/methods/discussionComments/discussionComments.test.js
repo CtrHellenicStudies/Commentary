@@ -57,7 +57,7 @@ describe('DiscussionComments methods API', () => {
 					stub(Meteor.users, 'findOne').callsFake((attr) => {
 						if (attr.roles === 'admin'
 							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true; 
+							return true;
 						}
 						return false;
 					});
@@ -171,7 +171,7 @@ describe('DiscussionComments methods API', () => {
 					stub(Meteor.users, 'findOne').callsFake((attr) => {
 						if (attr.roles === 'admin'
 							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true; 
+							return true;
 						}
 						return false;
 					});
@@ -323,7 +323,6 @@ describe('DiscussionComments methods API', () => {
 					Comments.findOne.restore();
 					DiscussionComments.findOne.restore();
 					DiscussionComments.update.restore();
-					Utils.sortRevisions.restore();
 				});
 
 				test('user not logged in, should return error', () => {

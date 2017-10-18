@@ -7,19 +7,6 @@ import { EditorState, convertToRaw, convertFromRaw, convertFromHTML, ContentStat
 import Editor from 'draft-js-plugins-editor';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import { stateToHTML } from 'draft-js-export-html';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	CodeButton,
-	HeadlineOneButton,
-	HeadlineTwoButton,
-	HeadlineThreeButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-	CodeBlockButton,
-} from 'draft-js-buttons';
 
 
 class DraftEditorInput extends React.Component {
@@ -27,53 +14,18 @@ class DraftEditorInput extends React.Component {
 	static propTypes = {
 		// props recieved from formsy HOC:
 		onChange: PropTypes.func.isRequired,
-		// getValue: PropTypes.func.isRequired,
-		// showRequired: PropTypes.func.isRequired,
-		// showError: PropTypes.func.isRequired,
-		label: PropTypes.string.isRequired,
-
 		style: stylePropType,
-		value: PropTypes.object,
-		defaultValue: PropTypes.object,
-		defaultHTML: PropTypes.func,
 		placeholder: PropTypes.string,
 		returnHTML: PropTypes.bool,
-		editorState: PropTypes.object.isRequired
+		editorState: PropTypes.object.isRequired,
+		InlineToolbar : PropTypes.func //Remember that if you want use InlineToolbar, you also need plugin for it
 	};
-	constructor(props){
-		super(props);
-		this.inlineToolbarPlugin = createInlineToolbarPlugin({
-			structure: [
-				BoldButton,
-				ItalicButton,
-				UnderlineButton,
-				CodeButton,
-				Separator,
-				HeadlineOneButton,
-				HeadlineTwoButton,
-				HeadlineThreeButton,
-				UnorderedListButton,
-				OrderedListButton,
-				BlockquoteButton,
-				CodeBlockButton,
-			]
-		});
-		this.plugins = this.props.plugins.concat([this.inlineToolbarPlugin]);
-
-		this.InlineToolbar = this.inlineToolbarPlugin.InlineToolbar;
-
-	}
 
 	_onEditorChange(editorState) {
-		const { setValue, returnHTML } = this.props;
 		this.setState({
 			editorState
 		});
-		if (returnHTML) {
-			this.props.onChange(editorState);
-		} else {
-			this.props.onChange(editorState);
-		}
+		this.props.onChange(editorState);
 	}
 
 	render() {
@@ -94,23 +46,25 @@ class DraftEditorInput extends React.Component {
 				}
 			},
 		});
-		const InlineToolbar = this.InlineToolbar;
+		const InlineToolbar = this.props.InlineToolbar;
 		return (
 			<div className="draft-editor-input">
-				<div style={styles.label}>{this.props.label}</div>
+				{this.props.label !== undefined ? (<div style={styles.label}>{this.props.label}</div>) : ''}
 				<div style={styles.editor}>
 					<Editor
 						editorState={this.props.editorState}
 						onChange={this._onEditorChange.bind(this)}
 						plugins={this.props.plugin}
 						placeholder={this.props.placeholder}
-						plugins={this.plugins}
+						plugins={this.props.plugins}
 						blockRenderMap={this.props.blockRenderMap}
 					/>
 				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
-				</div>
+				{ InlineToolbar !== undefined ?
+					(<div className="inline-toolbar-wrap">
+						<InlineToolbar />
+					</div>) : ''
+				}
 			</div>
 		);
 	}

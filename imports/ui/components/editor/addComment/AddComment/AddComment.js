@@ -511,9 +511,8 @@ class AddComment extends React.Component {
 									''
 								}
 								<h1 className="add-comment-title">
-									<Editor
-										name="editor2"
-										label="editor2"
+									<DraftEditorInput
+										name="comment_title"
 										editorState={this.state.titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
@@ -540,12 +539,12 @@ class AddComment extends React.Component {
 								style={{ paddingTop: 20 }}
 							>
 								<DraftEditorInput
-									name="draft"
-									label="draft"
+									name="comment_text"
 									editorState={this.state.textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
+									InlineToolbar={inlineToolbarPlugin.InlineToolbar}
 									ref={(element) => { this.editor = element; }}
 								/>
 								{/* mentions suggestions for keywords */}

@@ -21,6 +21,7 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { EditorState, convertToRaw, Modifier, CompositeDecorator } from 'draft-js';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
@@ -511,10 +512,11 @@ class AddComment extends React.Component {
 								}
 								<h1 className="add-comment-title">
 									<Editor
+										name="editor2"
+										label="editor2"
 										editorState={this.state.titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
-										spellCheck
 										stripPastedStyles
 										plugins={[singleLinePlugin]}
 										blockRenderMap={singleLinePlugin.blockRenderMap}
@@ -537,15 +539,15 @@ class AddComment extends React.Component {
 								className="comment-lower clearfix"
 								style={{ paddingTop: 20 }}
 							>
-								<Editor
+								<DraftEditorInput
+									name="draft"
+									label="draft"
 									editorState={this.state.textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
-									spellCheck
 									plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
 									ref={(element) => { this.editor = element; }}
 								/>
-
 								{/* mentions suggestions for keywords */}
 								<keywordMentionPlugin.MentionSuggestions
 									onSearchChange={this._onKeywordSearchChange}

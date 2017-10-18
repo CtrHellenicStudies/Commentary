@@ -26,9 +26,8 @@ class DraftEditorInput extends React.Component {
 
 	static propTypes = {
 		// props recieved from formsy HOC:
-		setValue: PropTypes.func.isRequired,
+		onChange: PropTypes.func.isRequired,
 		// getValue: PropTypes.func.isRequired,
-		getErrorMessage: PropTypes.func.isRequired,
 		// showRequired: PropTypes.func.isRequired,
 		// showError: PropTypes.func.isRequired,
 		label: PropTypes.string.isRequired,
@@ -39,33 +38,10 @@ class DraftEditorInput extends React.Component {
 		defaultHTML: PropTypes.func,
 		placeholder: PropTypes.string,
 		returnHTML: PropTypes.bool,
+		editorState: PropTypes.object.isRequired
 	};
-
-	static defaultProps = {
-		style: {},
-		value: convertToRaw(ContentState.createFromText('')),
-		defaultValue: null,
-		placeholder: null,
-	};
-
-	constructor(props) {
+	constructor(props){
 		super(props);
-
-		const { value, defaultValue, defaultHTML } = props;
-		// defaultValue dominance over value prop:
-		const contentStateRaw = defaultValue || value;
-		let editorState;
-
-		if (defaultHTML) {
-			const blocksFromHTML = convertFromHTML(defaultHTML());
-			const state = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
-			editorState = EditorState.createWithContent(state);
-		} else {
-			editorState = EditorState.createWithContent(convertFromRaw(contentStateRaw));
-		}
-
-		// this._onEditorChange = debounce(500, this._onEditorChange);
-
 		this.inlineToolbarPlugin = createInlineToolbarPlugin({
 			structure: [
 				BoldButton,
@@ -82,20 +58,10 @@ class DraftEditorInput extends React.Component {
 				CodeBlockButton,
 			]
 		});
+		this.plugins = this.props.plugins.concat([this.inlineToolbarPlugin]);
 
 		this.InlineToolbar = this.inlineToolbarPlugin.InlineToolbar;
 
-		this.state = {
-			editorState,
-		};
-	}
-
-	componentDidMount() {
-		const { defaultValue, setValue } = this.props;
-
-		// if defaultValue is and value is not provided,
-		// set the formsy element value to defaultValue;
-		if (defaultValue) setValue(defaultValue);
 	}
 
 	_onEditorChange(editorState) {
@@ -104,17 +70,13 @@ class DraftEditorInput extends React.Component {
 			editorState
 		});
 		if (returnHTML) {
-			setValue(stateToHTML(editorState.getCurrentContent()));
+			this.props.onChange(editorState);
 		} else {
-			setValue(convertToRaw(editorState.getCurrentContent()));
+			this.props.onChange(editorState);
 		}
 	}
 
 	render() {
-		const { getErrorMessage, style, label, placeholder } = this.props;
-		const { editorState } = this.state;
-
-		const errorMessage = getErrorMessage();
 
 		const styles = reactCSS({
 			default: {
@@ -132,21 +94,20 @@ class DraftEditorInput extends React.Component {
 				}
 			},
 		});
-
 		const InlineToolbar = this.InlineToolbar;
-
 		return (
-			<div style={style} className="draft-editor-input">
-				<div style={styles.label}>{label}</div>
+			<div className="draft-editor-input">
+				<div style={styles.label}>{this.props.label}</div>
 				<div style={styles.editor}>
 					<Editor
-						editorState={editorState}
+						editorState={this.props.editorState}
 						onChange={this._onEditorChange.bind(this)}
-						plugins={[this.inlineToolbarPlugin]}
-						placeholder={placeholder}
+						plugins={this.props.plugin}
+						placeholder={this.props.placeholder}
+						plugins={this.plugins}
+						blockRenderMap={this.props.blockRenderMap}
 					/>
 				</div>
-				<span>{errorMessage}</span>
 				<div className="inline-toolbar-wrap">
 					<InlineToolbar />
 				</div>

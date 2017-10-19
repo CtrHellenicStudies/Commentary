@@ -269,7 +269,7 @@ class AddComment extends React.Component {
 
 	// --- BEGIN SUBMIT / VALIDATION HANDLE --- //
 
-	handleSubmit(data) {
+	handleSubmit() {
 		const { textEditorState } = this.state;
 
 		// TODO: form validation
@@ -304,13 +304,6 @@ class AddComment extends React.Component {
 		})(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
-		let key;
-		for (key in data) { // eslint-disable-line
-			const params = key.split('_');
-			params[0] = parseInt(params[0], 10);
-			this.state.referenceWorks[params[0]][params[1]] = data[key];
-		}
-
 		this.props.submitForm(this.state, textHtml, textRaw);
 	}
 
@@ -319,7 +312,7 @@ class AddComment extends React.Component {
 			snackbarOpen: true,
 			snackbarMessage: error.message,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});
@@ -478,7 +471,10 @@ class AddComment extends React.Component {
 		});
 	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
-
+	componentWillUnmount(){
+		if(this.timeout)
+			clearTimeout(this.timeout);
+	}
 	render() {
 		const { revision, titleEditorState, keyideasValue, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { commentersOptions, tags, referenceWorkOptions } = this.props;

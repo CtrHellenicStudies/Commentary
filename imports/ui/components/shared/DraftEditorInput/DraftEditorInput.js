@@ -5,7 +5,7 @@ import stylePropType from 'react-style-proptype';
 import reactCSS from 'reactcss';
 import { EditorState, convertToRaw, convertFromRaw, convertFromHTML, ContentState } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
+import { Separator } from 'draft-js-inline-toolbar-plugin';
 import { stateToHTML } from 'draft-js-export-html';
 
 
@@ -20,40 +20,23 @@ class DraftEditorInput extends React.Component {
 		editorState: PropTypes.object.isRequired,
 		InlineToolbar : PropTypes.func //Remember that if you want use InlineToolbar, you also need plugin for it
 	};
-
-	_onEditorChange(editorState) {
-		this.setState({
-			editorState
-		});
+	constructor(props){
+		super(props);
+		this.onEditorChange = this.onEditorChange.bind(this);
+	}
+	onEditorChange(editorState) {
 		this.props.onChange(editorState);
 	}
 
 	render() {
-
-		const styles = reactCSS({
-			default: {
-				label: {
-					paddingBottom: 6,
-				},
-				editor: {
-					boxSizing: 'border-box',
-					border: '1px solid #ddd',
-					cursor: 'text',
-					padding: '16px',
-					borderRadius: 2,
-					boxShadow: 'inset 0 1px 8px -3px #ccc',
-					background: '#fff',
-				}
-			},
-		});
 		const InlineToolbar = this.props.InlineToolbar;
 		return (
 			<div className="draft-editor-input">
-				{this.props.label !== undefined ? (<div style={styles.label}>{this.props.label}</div>) : ''}
-				<div style={styles.editor}>
+				{this.props.label !== undefined ? (<div >{this.props.label}</div>) : ''}
+				<div>
 					<Editor
 						editorState={this.props.editorState}
-						onChange={this._onEditorChange.bind(this)}
+						onChange={this.onEditorChange}
 						plugins={this.props.plugin}
 						placeholder={this.props.placeholder}
 						plugins={this.props.plugins}

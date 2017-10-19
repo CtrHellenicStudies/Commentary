@@ -139,7 +139,7 @@ const TagsInput = ({
 
 TagsInput.propTypes = {
 	tags: PropTypes.array,
-	tagsValue: PropTypes.string,
+	tagsValue: PropTypes.array,
 	addTagBlock: PropTypes.func,
 	removeTagBlock: PropTypes.func,
 	moveTagBlock: PropTypes.func,

@@ -24,10 +24,8 @@ import { EditorState, convertToRaw, Modifier, CompositeDecorator } from 'draft-j
 import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { stateToHTML } from 'draft-js-export-html';
-import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -53,52 +51,7 @@ import linkDecorator from '/imports/ui/components//editor/addComment/LinkButton/
 const singleLinePlugin = createSingleLinePlugin();
 
 
-// Keyword Mentions
-const keywordMentionPlugin = createMentionPlugin();
-
-// Comments Cross Reference Mentions
-const commentsMentionPlugin = createMentionPlugin({
-	mentionTrigger: '#',
-});
-
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
-
-function _getSuggestionsFromComments(comments) {
-	const suggestions = [];
-
-	// if there are comments:
-	if (comments.length) {
-
-		// loop through all comments
-		// add suggestion for each comment
-		comments.forEach((comment) => {
-
-			// get the most recent revision
-			const revision = comment.revisions[comment.revisions.length - 1];
-
-			const suggestion = {
-				// create suggestio name:
-				name: `"${revision.title}" -`,
-
-				// set link for suggestion
-				link: `/commentary?_id=${comment._id}`,
-
-				// set id for suggestion
-				id: comment._id,
-			};
-
-			// loop through commenters and add them to suggestion name
-			comment.commenters.forEach((commenter, i) => {
-				if (i === 0) suggestion.name += ` ${commenter.name}`;
-				else suggestion.name += `, ${commenter.name}`;
-			});
-
-			suggestions.push(suggestion);
-		});
-	}
-	return suggestions;
-}
-
 
 /*
  *	BEGIN AddComment
@@ -134,9 +87,7 @@ class AddComment extends React.Component {
 			tagsValue: [],
 
 			snackbarOpen: false,
-			snackbarMessage: '',
-			keywordSuggestions: fromJS([]),
-			commentsSuggestions: fromJS([]),
+			snackbarMessage: ''
 		};
 
 		// methods:
@@ -145,8 +96,6 @@ class AddComment extends React.Component {
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onTextChange = this.onTextChange.bind(this);
 		this.onReferenceWorksValueChange = this.onReferenceWorksValueChange.bind(this);
-		this._onKeywordSearchChange = this._onKeywordSearchChange.bind(this);
-		this._onCommentsSearchChange = this._onCommentsSearchChange.bind(this);
 		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.showSnackBar = this.showSnackBar.bind(this);
@@ -203,36 +152,6 @@ class AddComment extends React.Component {
 			referenceWorks,
 		});
 
-	}
-
-	_onKeywordSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.tags;
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.title,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	}
-
-	_onCommentsSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
-			const commentsSuggestions = _getSuggestionsFromComments(res);
-
-			this.setState({
-				commentsSuggestions: fromJS(commentsSuggestions),
-			});
-		});
 	}
 
 	onCommenterValueChange(commenter) {
@@ -517,19 +436,8 @@ class AddComment extends React.Component {
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellcheck={true}
-									plugins={[keywordMentionPlugin, commentsMentionPlugin]}
+									tags={this.props.tags}
 									ref={(element) => { this.editor = element; }}
-								/>
-								{/* mentions suggestions for keywords */}
-								<keywordMentionPlugin.MentionSuggestions
-									onSearchChange={this._onKeywordSearchChange}
-									suggestions={this.state.keywordSuggestions}
-								/>
-
-								{/* mentions suggestions for comments cross reference */}
-								<commentsMentionPlugin.MentionSuggestions
-									onSearchChange={this._onCommentsSearchChange}
-									suggestions={this.state.commentsSuggestions}
 								/>
 
 								<div className="comment-reference">

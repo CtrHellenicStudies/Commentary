@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { Editor, EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
@@ -184,12 +185,12 @@ class AddTranslation extends React.Component {
 						<article className="comment commentary-comment paper-shadow">
 							<div className="comment-upper" />
 							<div className="comment-lower clearfix">
-								<Editor
+								<DraftEditorInput
 									editorState={this.state.editorState}
 									onChange={this.onEditorChange}
 									placeholder="Translation . . ."
-									spellCheck
-									stripPastedStyles
+									spellcheck = {true}
+									stripPastedStyles = {true}
 								/>
 								<div className="comment-edit-action-button">
 									<RaisedButton

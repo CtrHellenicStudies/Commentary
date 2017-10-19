@@ -20,7 +20,7 @@ import Select, { Createable } from 'react-select';
 import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -28,17 +28,8 @@ import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import Snackbar from 'material-ui/Snackbar';
 import slugify from 'slugify';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 import _ from 'underscore';
 
 // models
@@ -60,19 +51,6 @@ import CommentersEditorDialog from '../CommentersEditorDialog';
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
-const { InlineToolbar } = inlineToolbarPlugin;
 
 // Keyword Mentions
 const keywordMentionPlugin = createMentionPlugin();
@@ -586,12 +564,12 @@ class AddRevision extends React.Component {
 									/>
 								: ''}
 								<h1 className="add-comment-title">
-									<Editor
+									<DraftEditorInput
 										editorState={titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
-										spellCheck
-										stripPastedStyles
+										spellcheck = {true}
+										stripPastedStyles = {true}
 										plugins={[singleLinePlugin]}
 										blockRenderMap={singleLinePlugin.blockRenderMap}
 									/>
@@ -610,12 +588,12 @@ class AddRevision extends React.Component {
 
 							</div>
 							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
-								<Editor
+								<DraftEditorInput
 									editorState={textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
-									spellCheck
-									plugins={[commentsMentionPlugin, keywordMentionPlugin, inlineToolbarPlugin]}
+									spellcheck = {true}
+									plugins={[commentsMentionPlugin, keywordMentionPlugin]}
 									ref={(element) => { this.editor = element; }}
 								/>
 
@@ -786,9 +764,6 @@ class AddRevision extends React.Component {
 						message={this.state.snackbarMessage}
 						autoHideDuration={4000}
 					/>
-				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
 				</div>
 			</div>
 		);

@@ -22,22 +22,12 @@ import {
 import Select from 'react-select';
 import { EditorState, convertToRaw, Modifier, CompositeDecorator } from 'draft-js';
 import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
-import Editor from 'draft-js-plugins-editor';
+import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { stateToHTML } from 'draft-js-export-html';
 import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
-import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -59,22 +49,8 @@ import linkDecorator from '/imports/ui/components//editor/addComment/LinkButton/
 /*
  *	helpers
  */
-
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
-const { InlineToolbar } = inlineToolbarPlugin;
 
 
 // Keyword Mentions
@@ -512,8 +488,9 @@ class AddComment extends React.Component {
 										editorState={this.state.titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
-										stripPastedStyles
-										plugins={[singleLinePlugin]}
+										spellcheck={true}
+										stripPastedStyles = {true}
+										singleLine = {true}
 										blockRenderMap={singleLinePlugin.blockRenderMap}
 									/>
 								</h1>
@@ -539,8 +516,8 @@ class AddComment extends React.Component {
 									editorState={this.state.textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
-									plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
-									InlineToolbar={inlineToolbarPlugin.InlineToolbar}
+									spellcheck={true}
+									plugins={[keywordMentionPlugin, commentsMentionPlugin]}
 									ref={(element) => { this.editor = element; }}
 								/>
 								{/* mentions suggestions for keywords */}
@@ -675,9 +652,6 @@ class AddComment extends React.Component {
 						autoHideDuration={4000}
 					/>
 
-				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
 				</div>
 			</div>
 		);

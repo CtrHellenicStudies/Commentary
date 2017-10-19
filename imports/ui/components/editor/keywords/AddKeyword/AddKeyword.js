@@ -9,22 +9,13 @@ import Snackbar from 'material-ui/Snackbar';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 
 
 // models
@@ -38,20 +29,7 @@ import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
 
-const { InlineToolbar } = inlineToolbarPlugin;
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
 
@@ -284,12 +262,13 @@ const AddKeyword = React.createClass({
 					>
 						<div className="comment-upper">
 							<h1 className="add-comment-title">
-								<Editor
+								<DraftEditorInput
+									name="draft_editor_tag_title"
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
 									placeholder="Tag . . ."
-									spellCheck
-									stripPastedStyles
+									spellcheck={true}
+									stripPastedStyles={true}
 									plugins={[singleLinePlugin]}
 									blockRenderMap={singleLinePlugin.blockRenderMap}
 								/>
@@ -318,13 +297,14 @@ const AddKeyword = React.createClass({
 							className="comment-lower clearfix"
 							style={{ paddingTop: 20 }}
 						>
-							<Editor
+							<DraftEditorInput
+								name="draft_editor_tag_desc"
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
 								placeholder="Tag description . . ."
-								spellCheck
-								stripPastedStyles
-								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								spellcheck={true}
+								stripPastedStyles={true}
+								plugins={[mentionPlugin]}
 								ref={(element) => { this.editor = element; }}
 							/>
 							<MentionSuggestions
@@ -350,9 +330,6 @@ const AddKeyword = React.createClass({
 						message={this.state.snackbarMessage}
 						autoHideDuration={4000}
 					/>
-				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
 				</div>
 			</div>
 		);

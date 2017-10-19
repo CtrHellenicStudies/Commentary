@@ -186,6 +186,7 @@ class AddTranslation extends React.Component {
 							<div className="comment-upper" />
 							<div className="comment-lower clearfix">
 								<DraftEditorInput
+									name="draft_input_translation"
 									editorState={this.state.editorState}
 									onChange={this.onEditorChange}
 									placeholder="Translation . . ."

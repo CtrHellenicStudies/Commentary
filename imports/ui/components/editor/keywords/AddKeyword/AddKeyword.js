@@ -5,6 +5,7 @@ import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
+import Formsy from 'formsy-react';
 import Snackbar from 'material-ui/Snackbar';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -260,6 +261,9 @@ const AddKeyword = React.createClass({
 						className="comment commentary-comment paper-shadow "
 						style={{ marginLeft: 0 }}
 					>
+					<Formsy.Form
+						onValidSubmit={this.handleSubmit}
+					>
 						<div className="comment-upper">
 							<h1 className="add-comment-title">
 								<DraftEditorInput
@@ -321,7 +325,7 @@ const AddKeyword = React.createClass({
 								/>
 							</div>
 						</div>
-
+					</Formsy.Form>
 					</article>
 
 					<Snackbar

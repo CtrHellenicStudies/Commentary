@@ -326,6 +326,11 @@ const Utils = {
 			parsedEditions.push(currentEdition);
 		});
 		return parsedEditions;
+	},
+	decodeHtml(html) {
+		var txt = document.createElement("textarea");
+		txt.innerHTML = html;
+		return txt.value;
 	}
 };
 

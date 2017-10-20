@@ -39,7 +39,6 @@ class DraftEditorInput extends Component {
 		spellcheck: PropTypes.bool,
 		placeholder: PropTypes.string.isRequired,
 		keywordsMention: PropTypes.bool,
-		tags: PropTypes.array,
 		singleLine: PropTypes.bool,
 		stripPastedStyles: PropTypes.bool,
 		editorState: PropTypes.object.isRequired,
@@ -68,6 +67,9 @@ class DraftEditorInput extends Component {
 			spellCheck : this.props.spellcheck == true ?  true : false,
 			stripPastedStyles : this.props.stripPastedStyles === true ? true : false
 		}
+		if(this.props.singleLine){
+			ret.blockRenderMap = singleLinePlugin.blockRenderMap;
+		}
 		return ret;
 	}
 	render() {
@@ -84,10 +86,9 @@ class DraftEditorInput extends Component {
 						plugins = {plugins}
 						{...plainAttributes}
 						placeholder={this.props.placeholder}
-						blockRenderMap={this.props.blockRenderMap}
 						{...this.props.ref !== undefined ? (ref = this.props.ref) : ''}
 					/>
-					<Suggestions tags={this.props.tags} 
+					<Suggestions
 						mentionPlugin={this.mentionPlugin}
 						keywordPlugin={this.keywordPlugin}
 						/>

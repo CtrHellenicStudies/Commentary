@@ -569,9 +569,9 @@ class AddRevision extends React.Component {
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
 										spellcheck = {true}
+										disableMentions={true}
 										stripPastedStyles = {true}
-										plugins={[singleLinePlugin]}
-										blockRenderMap={singleLinePlugin.blockRenderMap}
+										singleLine = {true}
 									/>
 								</h1>
 
@@ -593,20 +593,7 @@ class AddRevision extends React.Component {
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellcheck = {true}
-									plugins={[commentsMentionPlugin, keywordMentionPlugin]}
 									ref={(element) => { this.editor = element; }}
-								/>
-
-								{/* mentions suggestions for keywords */}
-								<keywordMentionPlugin.MentionSuggestions
-									onSearchChange={this._onKeywordSearchChange}
-									suggestions={this.state.keywordSuggestions}
-								/>
-
-								{/* mentions suggestions for comments cross reference */}
-								<commentsMentionPlugin.MentionSuggestions
-									onSearchChange={this._onCommentsSearchChange}
-									suggestions={this.state.commentsSuggestions}
 								/>
 
 								<div className="comment-reference">

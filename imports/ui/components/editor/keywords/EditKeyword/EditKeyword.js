@@ -149,22 +149,6 @@ const EditKeyword = React.createClass({
 			value: newOption.label
 		};
 	},
-
-	onSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.label,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	},
-
 	shouldKeyDownEventCreateNewOption(sig) {
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
@@ -313,6 +297,7 @@ const EditKeyword = React.createClass({
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
 									placeholder="Key word or idea . . ."
+									disableMentions={true}
 									spellcheck={true}
 									stripPastedStyles={true}
 									singleLinePlugin={true}
@@ -349,12 +334,7 @@ const EditKeyword = React.createClass({
 								placeholder="Keyword description . . ."
 								spellcheck={true}
 								stripPastedStyles={true}
-								plugins={[mentionPlugin]}
 								ref={(element) => { this.editor = element; }}
-							/>
-							<MentionSuggestions
-								onSearchChange={this.onSearchChange}
-								suggestions={this.state.suggestions}
 							/>
 							<div className="comment-edit-action-button">
 								<RaisedButton

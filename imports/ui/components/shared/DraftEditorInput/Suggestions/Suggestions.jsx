@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { HOC as formsyHOC } from 'formsy-react';
 import Editor from 'draft-js-plugins-editor';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import { createContainer } from 'meteor/react-meteor-data';
+import Keywords from '/imports/models/keywords';
 import { fromJS } from 'immutable';
 
 function _getSuggestionsFromComments(comments) {
@@ -40,7 +42,7 @@ function _getSuggestionsFromComments(comments) {
 	}
 	return suggestions;
 }
-export default class Suggestions extends Component {
+class Suggestions extends Component {
 
 	constructor(props){
 		super(props);
@@ -99,3 +101,11 @@ export default class Suggestions extends Component {
 		);
 	}
 }
+export default createContainer(() => {
+	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+
+	const tags = Keywords.find().fetch();
+	return {
+		tags
+	}
+}, Suggestions);

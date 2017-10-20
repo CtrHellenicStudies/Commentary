@@ -407,10 +407,10 @@ class AddComment extends React.Component {
 										editorState={this.state.titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
+										disableMentions={true}
 										spellcheck={true}
 										stripPastedStyles = {true}
 										singleLine = {true}
-										blockRenderMap={singleLinePlugin.blockRenderMap}
 									/>
 								</h1>
 

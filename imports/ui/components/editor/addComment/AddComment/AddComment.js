@@ -188,12 +188,12 @@ class AddComment extends React.Component {
 
 				// handle keyword mentions
 				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{Utils.decodeHtml(originalText)}</a>;
 				}
 
 				// handle hashtag / commets cross reference mentions
 				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
+					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}>{Utils.decodeHtml(originalText)}</a>;
 				}
 			},
 		})(textEditorState.getCurrentContent());

@@ -91,7 +91,6 @@ class Commentary extends React.Component {
 				lines: [],
 			},
 			commentLemmaGroups: [],
-			commentGroups: this.props.commentGroups,
 			multiline: null
 		};
 
@@ -257,7 +256,7 @@ class Commentary extends React.Component {
 	loadMoreComments() {
 		if (
 			!this.props.isOnHomeView
-			&& this.state.commentGroups.length
+			&& this.props.commentGroups.length
 			&& this.props.isMoreComments
 		) {
 			this.props.loadMoreComments();
@@ -293,8 +292,8 @@ class Commentary extends React.Component {
 
 	render() {
 
-		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
-		const { commentGroups, contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
+		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, commentGroups } = this.props;
+		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
 
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();

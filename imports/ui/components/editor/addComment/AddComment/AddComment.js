@@ -206,7 +206,7 @@ class AddComment extends React.Component {
 					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
 				}
 				if(entity.type === 'draft-js-video-plugin-video'){
-					return <iframe width="320" height="200" src={entity.data.src}></iframe>
+					return <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>
 				}
 			},
 		})(textEditorState.getCurrentContent());

@@ -5,11 +5,13 @@ import stylePropType from 'react-style-proptype';
 import reactCSS from 'reactcss';
 import { EditorState} from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
-import VideoAdd from './VideoAdd/VideoAdd';
+import VideoAdd from './AddButton/VideoAdd';
+import ImageAdd from './AddButton/ImageAdd';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createVideoPlugin from 'draft-js-video-plugin';
+import createImagePlugin from 'draft-js-image-plugin';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import {
 	ItalicButton,
@@ -53,6 +55,7 @@ class DraftEditorInput extends Component {
 		this.mentionPlugin = createMentionPlugin();
 		this.keywordPlugin = createMentionPlugin({mentionPrefix: '#', mentionTrigger: '#'});
 		this.videoPlugin = createVideoPlugin();
+		this.imagePlugin = createImagePlugin();
 		this.onEditorChange = this.onEditorChange.bind(this);
 	}
 	onEditorChange(editorState) {
@@ -63,8 +66,7 @@ class DraftEditorInput extends Component {
 		if(this.props.plugins)
 			ret = ret.concat(this.props.plugins);
 		ret = !this.props.InlineToolbar ? [inlineToolbarPlugin].concat(ret) : ret; //Is there any custom InlineToolbar
-		ret = this.props.singleLine === true ? ret.concat([singleLinePlugin]) : ret;
-		ret = this.props.singleLine !== true ?  ret.concat([this.videoPlugin]) : ret;
+		ret = this.props.singleLine === true ? ret.concat([singleLinePlugin]) : ret.concat([this.videoPlugin, this.imagePlugin]);
 		return ret;
 	}
 	getPlainAttributes(){
@@ -102,11 +104,20 @@ class DraftEditorInput extends Component {
 					</div>) : ''
 				}
 				{ this.props.singleLine !== true ?
-					(<VideoAdd
-						editorState={this.props.editorState}
-						onChange={this.onEditorChange}
-						modifier={this.videoPlugin.addVideo}
-					/>) : ''
+					(<div className="draft-button-container">
+						<ImageAdd
+							editorState={this.props.editorState}
+							onChange={this.onEditorChange}
+							label="Add image"
+							modifier={this.imagePlugin.addImage}
+						/>
+						<VideoAdd
+							editorState={this.props.editorState}
+							onChange={this.onEditorChange}
+							label="Add video"
+							modifier={this.videoPlugin.addVideo}
+						/>
+					</div>) : ''
 				}
 			</div>
 		);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export default class VideoAdd extends Component {
   // Start the popover closed
@@ -58,7 +58,7 @@ export default class VideoAdd extends Component {
       'draftAddVideoClosedPopover';
     return (
       <div>
-        <Button className="draft-add-video-button" onMouseUp={this.openPopover}>Add video</Button>
+        <RaisedButton className="draft-add-video-button" onMouseUp={this.openPopover}>{this.props.label}</RaisedButton>
         <div className={popoverClassName} onClick={this.onPopoverClick}>
           <input
             type="text"
@@ -66,7 +66,7 @@ export default class VideoAdd extends Component {
             onChange={this.changeUrl}
             value={this.state.url}
           />
-          <Button className="draft-add-video-confirm-button" onClick={this.addVideo}>Add</Button>
+          <RaisedButton className="draft-add-video-confirm-button" onClick={this.addVideo}>Add</RaisedButton>
         </div>
       </div>
     );

@@ -53,23 +53,6 @@ class CommenterDetail extends React.Component {
 		isTest: false,
 	};
 
-	componentWillReceiveProps(nextProps) {
-		const { commenter } = this.props;
-		/*
-		const { subscriptions } = this.state;
-
-		if (commenter !== nextProps.commenter) {
-			this.setState({
-				subscribed: subscriptions.commenters.filter((sub) => sub._id === nextProps.commenter._id).length > 0
-			});
-		} else {
-			this.setState({
-				subscribed: false
-			});
-		}
-		*/
-	}
-
 	toggleReadMoreBio() {
 		const { readMoreBio } = this.state;
 
@@ -182,17 +165,6 @@ class CommenterDetail extends React.Component {
 									null
 								}
 							</div>
-
-							{/* loggedIn ?
-								<div>
-									<FlatButton
-										label={subscribed ? `Unsubscribe from ${commenter.name}` : `Subscribe to ${commenter.name}`}
-										onTouchTap={this.subscribe}
-									/>
-								</div>
-							:
-								''
-							*/}
 
 							<CommenterVisualizations
 								commenter={commenter}

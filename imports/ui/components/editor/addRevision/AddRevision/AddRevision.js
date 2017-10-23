@@ -15,6 +15,7 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
+import Utils from '/imports/lib/utils';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Select, { Createable } from 'react-select';
 import Formsy from 'formsy-react';
@@ -49,54 +50,8 @@ import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
 import CommentersEditorDialog from '../CommentersEditorDialog';
 
-// Create toolbar plugin for editor
-const singleLinePlugin = createSingleLinePlugin();
-
-// Keyword Mentions
-const keywordMentionPlugin = createMentionPlugin();
-
-// Comments Cross Reference Mentions
-const commentsMentionPlugin = createMentionPlugin({
-	mentionTrigger: '#',
-});
-
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
-function _getSuggestionsFromComments(comments) {
-	const suggestions = [];
-
-	// if there are comments:
-	if (comments.length) {
-
-		// loop through all comments
-		// add suggestion for each comment
-		comments.forEach((comment) => {
-
-			// get the most recent revision
-			const revision = comment.revisions[comment.revisions.length - 1];
-
-			const suggestion = {
-				// create suggestio name:
-				name: `"${revision.title}" -`,
-
-				// set link for suggestion
-				link: `/commentary?_id=${comment._id}`,
-
-				// set id for suggestion
-				id: comment._id,
-			};
-
-			// loop through commenters and add them to suggestion name
-			comment.commenters.forEach((commenter, i) => {
-				if (i === 0) suggestion.name += ` ${commenter.name}`;
-				else suggestion.name += `, ${commenter.name}`;
-			});
-
-			suggestions.push(suggestion);
-		});
-	}
-	return suggestions;
-}
 
 class AddRevision extends React.Component {
 
@@ -220,21 +175,6 @@ class AddRevision extends React.Component {
 		});
 	}
 
-	_onCommentsSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
-			const commentsSuggestions = _getSuggestionsFromComments(res);
-
-			this.setState({
-				commentsSuggestions: fromJS(commentsSuggestions),
-			});
-		});
-	}
-
 	handleSubmit() {
 		const { textEditorState } = this.state;
 
@@ -242,27 +182,7 @@ class AddRevision extends React.Component {
 		// TODO: Migrate to formsy components
 
 		// create html from textEditorState's content
-		const textHtml = convertToHTML({
-
-			// performe necessary html transformations:
-			entityToHTML: (entity, originalText) => {
-
-				// handle LINK
-				if (entity.type === 'LINK') {
-					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
-				}
-
-				// handle keyword mentions
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
-				}
-
-				// handle hashtag / commets cross reference mentions
-				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-				}
-			},
-		})(textEditorState.getCurrentContent());
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
@@ -528,27 +448,7 @@ class AddRevision extends React.Component {
 											}}
 										/>
 									</div>
-									{/* <div className="comment-upper-action-button">*/}
-									{/* <FlatButton*/}
-									{/* label="Edit Authors"*/}
-									{/* labelPosition="after"*/}
-									{/* onClick={this.openCommentersEditorDialog}*/}
-									{/* style={{*/}
-									{/* border: '1px solid #ddd',*/}
-									{/* maxHeight: 'none',*/}
-									{/* fontSize: '12px',*/}
-									{/* height: 'auto',*/}
-									{/* }}*/}
-									{/* />*/}
-									{/* </div>*/}
 								</div>
-
-								{/* <CommentersEditorDialog*/}
-								{/* open={this.state.commentersEditorDialogOpen}*/}
-								{/* handleClose={this.handleCloseCommentersEditorDialog}*/}
-								{/* commenters={this.state.commenters}*/}
-								{/* setCommenters={this.setCommenters}*/}
-								{/* />*/}
 
 								<br />
 								{commentersOptions && commentersOptions.length ?
@@ -565,13 +465,13 @@ class AddRevision extends React.Component {
 								: ''}
 								<h1 className="add-comment-title">
 									<DraftEditorInput
+										name="draft_comment_title"
 										editorState={titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
 										spellcheck = {true}
 										stripPastedStyles = {true}
-										plugins={[singleLinePlugin]}
-										blockRenderMap={singleLinePlugin.blockRenderMap}
+										singleLine={true}
 									/>
 								</h1>
 
@@ -589,24 +489,12 @@ class AddRevision extends React.Component {
 							</div>
 							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
 								<DraftEditorInput
+									name="draft_comment_text"
 									editorState={textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellcheck = {true}
-									plugins={[commentsMentionPlugin, keywordMentionPlugin]}
 									ref={(element) => { this.editor = element; }}
-								/>
-
-								{/* mentions suggestions for keywords */}
-								<keywordMentionPlugin.MentionSuggestions
-									onSearchChange={this._onKeywordSearchChange}
-									suggestions={this.state.keywordSuggestions}
-								/>
-
-								{/* mentions suggestions for comments cross reference */}
-								<commentsMentionPlugin.MentionSuggestions
-									onSearchChange={this._onCommentsSearchChange}
-									suggestions={this.state.commentsSuggestions}
 								/>
 
 								<div className="comment-reference">

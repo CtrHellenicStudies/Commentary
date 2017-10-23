@@ -1,5 +1,6 @@
 import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
+import { convertToHTML } from 'draft-convert';
 
 // models
 import Editions from '/imports/models/editions';
@@ -326,6 +327,42 @@ const Utils = {
 			parsedEditions.push(currentEdition);
 		});
 		return parsedEditions;
+	},
+	getHtmlFromContext(context){
+		return convertToHTML({
+			
+						// performe necessary html transformations:
+						blockToHTML: (block) => {
+							const type = block.type;
+							if (type === 'atomic') {
+							  return {start: '<span>', end: '</span>'};
+							}
+							if (type === 'unstyled') {
+							  return <p />;
+							}
+							return <span/>;
+						  },
+						entityToHTML: (entity, originalText) => {
+			
+							// handle LINK
+							if (entity.type === 'LINK') {
+								return <a href={entity.data.link}>{originalText}</a>;
+							}
+			
+							// handle keyword mentions
+							if (entity.type === 'mention') {
+								return <a className="keyword-gloss" data-link={this.getEntityData(entity, 'link')}>{originalText}</a>;
+							}
+			
+							// handle hashtag / commets cross reference mentions
+							if (entity.type === '#mention') {
+								return <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{originalText}</a>;
+							}
+							if(entity.type === 'draft-js-video-plugin-video'){
+								return <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>
+							}
+						},
+					})(context);
 	}
 };
 

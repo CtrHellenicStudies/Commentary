@@ -176,40 +176,7 @@ class AddComment extends React.Component {
 		}
 
 		// create html from textEditorState's content
-		const textHtml = convertToHTML({
-
-			// performe necessary html transformations:
-			blockToHTML: (block) => {
-				const type = block.type;
-				if (type === 'atomic') {
-				  return {start: '<span>', end: '</span>'};
-				}
-				if (type === 'unstyled') {
-				  return <p />;
-				}
-				return <span/>;
-			  },
-			entityToHTML: (entity, originalText) => {
-
-				// handle LINK
-				if (entity.type === 'LINK') {
-					return <a href={entity.data.link}>{originalText}</a>;
-				}
-
-				// handle keyword mentions
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
-				}
-
-				// handle hashtag / commets cross reference mentions
-				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
-				}
-				if(entity.type === 'draft-js-video-plugin-video'){
-					return <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>
-				}
-			},
-		})(textEditorState.getCurrentContent());
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);

@@ -13,6 +13,7 @@ class ModalSignup extends React.Component {
 	static propTypes = {
 		lowered: React.PropTypes.bool,
 		closeModal: React.PropTypes.func,
+		loginModal: React.PropTypes.func,
 	};
 
 	static defaultProps = {
@@ -134,7 +135,7 @@ class ModalSignup extends React.Component {
 		event.preventDefault();
 		this.props.closeModal();
 		this.props.loginModal();
-	};
+	}
 
 	render() {
 		const { lowered, closeModal } = this.props;

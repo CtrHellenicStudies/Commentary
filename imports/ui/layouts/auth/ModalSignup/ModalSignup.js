@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 // components:
 import Utils from '/imports/lib/utils';
@@ -32,6 +33,7 @@ class ModalSignup extends React.Component {
 		this.handleSignupFacebook = this.handleSignupFacebook.bind(this);
 		this.handleSignupGoogle = this.handleSignupGoogle.bind(this);
 		this.handleSignupTwitter = this.handleSignupTwitter.bind(this);
+		this.goToSigIn = this.goToSigIn.bind(this);
 	}
 
 	componentWillMount() {
@@ -127,6 +129,12 @@ class ModalSignup extends React.Component {
 			}
 		});
 	}
+	
+	goToSigIn(event) {
+		event.preventDefault();
+		this.props.closeModal();
+		this.props.loginModal();
+	};
 
 	render() {
 		const { lowered, closeModal } = this.props;
@@ -168,11 +176,11 @@ class ModalSignup extends React.Component {
 						<div className="at-signup-link">
 							<div className="at-resend-verification-email-link at-wrap">
 								<p>
-									By clicking register, you agree to our <a href="/terms" className="at-link at-link--terms at-resend-verification-email">Terms and Privacy Policy.</a>
+									By clicking register, you agree to our <Link to="/terms" className="at-link at-link--terms at-resend-verification-email">Terms and Privacy Policy.</Link>
 								</p>
 							</div>
 							<p>
-								Already have an account? <a href="/sign-in" id="at-signUp" className="at-link at-signup">Sign in.</a>
+								Already have an account? <a href="" onClick={this.goToSigIn} id="at-signUp" className="at-link at-signup">Sign in.</a>
 							</p>
 						</div>
 					</div>

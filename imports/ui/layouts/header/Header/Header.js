@@ -446,6 +446,7 @@ class Header extends React.Component {
 					<ModalSignup
 						lowered={modalSignupLowered}
 						closeModal={this.closeSignupModal}
+						loginModal={this.showLoginModal}
 					/>
 				}
 				{!this.props.user && modalForgotPwdLowered &&

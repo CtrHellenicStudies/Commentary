@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import { Link } from 'react-router-dom';
 
 class RecentActivity extends React.Component {
 	constructor(props) {
@@ -42,13 +43,13 @@ class RecentActivity extends React.Component {
 					<div>
 						{notifications.map((notification) => (
 							<Card key={notification._id}>
-								<a href={`/commentary?_id=${notification.slug}`}>
+								<Link to={`/commentary?_id=${notification.slug}`}>
 									<CardHeader
 										title={`New notification from ${moment(notification.created).format('D/M/YYYY')}`}
 										subtitle={notification.message}
 										avatar={notification.avatar.src}
 									/>
-								</a>
+								</Link>
 								<FlatButton
 									label="Remove Notification"
 									onClick={() => this.removeNotification(notification)}

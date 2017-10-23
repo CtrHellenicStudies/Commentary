@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import { Link } from 'react-router-dom';
 
 const DiscussionComment = React.createClass({
 
@@ -183,20 +184,20 @@ const DiscussionComment = React.createClass({
 				<div className="discussion-comment-content">
 					<div className="inner-comment-row">
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
-							<a href={userLink}>
+							<Link to={userLink}>
 								<img
 									src={avatarUrl}
 									alt={username}
 								/>
-							</a>
+							</Link>
 						</div>
 
 						<div className="discussion-commenter-meta">
-							<a href={userLink}>
+							<Link to={userLink}>
 								<span className="discussion-commenter-name">
 									{username}
 								</span>
-							</a>
+							</Link>
 							<span className="discussion-comment-date">
 								<span>{discussionComment.updated ? 'Updated: ' : 'Created: '}</span>
 								{moment(discussionComment.updated ||

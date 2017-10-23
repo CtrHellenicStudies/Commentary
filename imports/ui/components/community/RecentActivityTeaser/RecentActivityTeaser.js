@@ -9,6 +9,7 @@ import Tenants from '/imports/models/tenants';
 import Settings from '/imports/models/settings';
 import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
+import { Link } from 'react-router-dom';
 
 class RecentActivityTeaser extends React.Component {
 	static propTypes = {
@@ -97,11 +98,11 @@ class RecentActivityTeaser extends React.Component {
 				</div>
 
 				<div className="recentActivityTeaserRight">
-					<a href={commentUrl} target="_blank" rel="noopener noreferrer">
+					<Link to={commentUrl} target="_blank" rel="noopener noreferrer">
 						<h4 className="recentActivityTitle">
 							{title}
 						</h4>
-					</a>
+					</Link>
 					<span className="recentActivityByline">
 						{byline}
 					</span>

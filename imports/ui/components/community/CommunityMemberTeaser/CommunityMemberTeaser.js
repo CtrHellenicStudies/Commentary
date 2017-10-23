@@ -1,5 +1,6 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
+import { Link } from 'react-router-dom';
 
 import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
@@ -36,15 +37,15 @@ class CommunityMemberTeaser extends React.Component {
 
 		return (
 			<div className="communityMemberTeaser hvr-grow wow fadeIn">
-				<a href={userUrl}>
+				<Link to={userUrl}>
 					<div className="user-image paper-shadow">
 						<AvatarIcon avatar={profilePicture} />
 					</div>
-				</a>
+				</Link>
 				<div className="user-teaser-text">
-					<a href={userUrl}>
+					<Link to={userUrl}>
 						<h4>{username}</h4>
-					</a>
+					</Link>
 				</div>
 			</div>
 		);

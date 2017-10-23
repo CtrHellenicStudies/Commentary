@@ -41,15 +41,15 @@ const CommentUpperRight = props => (
 				className="comment-author"
 			>
 				<div className={'comment-author-text'}>
-					<a href={`/commenters/${commenter.slug}`}>
+					<Link to={`/commenters/${commenter.slug}`}>
 						<span className="comment-author-name">{commenter.name}</span>
-					</a>
+					</Link>
 					<span>
 						{props.updateDate}
 					</span>
 				</div>
 				<div className="comment-author-image-wrap paper-shadow">
-					<a href={`/commenters/${commenter.slug}`}>
+					<Link to={`/commenters/${commenter.slug}`}>
 						<AvatarIcon
 							avatar={
 								(commenter && 'avatar' in commenter) ?
@@ -57,7 +57,7 @@ const CommentUpperRight = props => (
 								: null
 							}
 						/>
-					</a>
+					</Link>
 				</div>
 			</div>
 		))}

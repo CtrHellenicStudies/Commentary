@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // api
 import Commenters from '/imports/models/commenters';
@@ -39,7 +40,7 @@ const KeywordCommentList = (props) => {
 
 						<div className="comment-upper">
 							<div className="comment-upper-left">
-								<h2 className="comment-title" style={{margin: 0, padding: 0}}><a href={`/commentary?_id=${comment._id}`}>{selectedRevision.title}</a></h2>
+								<h2 className="comment-title" style={{margin: 0, padding: 0}}><Link to={`/commentary?_id=${comment._id}`}>{selectedRevision.title}</Link></h2>
 							</div>
 
 							<div className="comment-upper-right">
@@ -58,15 +59,15 @@ const KeywordCommentList = (props) => {
 											className="comment-author"
 										>
 											<div className="comment-author-text">
-												<a href={`/commenters/${commenterRecord.slug}`}>
+												<Link to={`/commenters/${commenterRecord.slug}`}>
 													<span className="comment-author-name" style={{margin: 0, textAlign: 'right'}}>{commenterRecord.name}</span>
-												</a>
+												</Link>
 												<span className="comment-date" style={{margin: 0, textAlign: 'right'}}>
 													{moment(updated).format(format)}
 												</span>
 											</div>
 											<div className="comment-author-image-wrap paper-shadow">
-												<a href={`/commenters/${commenterRecord.slug}`}>
+												<Link to={`/commenters/${commenterRecord.slug}`}>
 													<AvatarIcon
 														avatar={
 															(commenterRecord && 'avatar' in commenterRecord) ?
@@ -74,7 +75,7 @@ const KeywordCommentList = (props) => {
 															: null
 														}
 													/>
-												</a>
+												</Link>
 											</div>
 										</div>
 									);

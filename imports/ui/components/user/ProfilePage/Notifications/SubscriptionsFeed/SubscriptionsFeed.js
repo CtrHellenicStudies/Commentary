@@ -1,5 +1,6 @@
 import React from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import { Link } from 'react-router-dom';
 
 const SubscriptionsFeed = props => (
 	<div>
@@ -8,13 +9,13 @@ const SubscriptionsFeed = props => (
 			<div>
 				{props.subscriptions.commenters.map(commenter => (
 					<Card key={commenter._id}>
-						<a href={`/commenters/${commenter.slug}`}>
+						<Link to={`/commenters/${commenter.slug}`}>
 							<CardHeader
 								title={commenter.name}
 								subtitle={commenter.tagline}
 								avatar={commenter.avatar.src}
 							/>
-						</a>
+						</Link>
 					</Card>
 			))}
 			</div>

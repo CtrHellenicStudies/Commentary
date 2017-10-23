@@ -5,9 +5,11 @@ import stylePropType from 'react-style-proptype';
 import reactCSS from 'reactcss';
 import { EditorState} from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
+import VideoAdd from './VideoAdd/VideoAdd';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
+import createVideoPlugin from 'draft-js-video-plugin';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import {
 	ItalicButton,
@@ -50,6 +52,7 @@ class DraftEditorInput extends Component {
 
 		this.mentionPlugin = createMentionPlugin();
 		this.keywordPlugin = createMentionPlugin({mentionPrefix: '#', mentionTrigger: '#'});
+		this.videoPlugin = createVideoPlugin();
 		this.onEditorChange = this.onEditorChange.bind(this);
 	}
 	onEditorChange(editorState) {
@@ -61,6 +64,7 @@ class DraftEditorInput extends Component {
 			ret = ret.concat(this.props.plugins);
 		ret = !this.props.InlineToolbar ? [inlineToolbarPlugin].concat(ret) : ret; //Is there any custom InlineToolbar
 		ret = this.props.singleLine === true ? ret.concat([singleLinePlugin]) : ret;
+		ret = this.props.singleLine !== true ?  ret.concat([this.videoPlugin]) : ret;
 		return ret;
 	}
 	getPlainAttributes(){
@@ -75,9 +79,9 @@ class DraftEditorInput extends Component {
 		const InlineToolbar = this.props.singleLine ? undefined : (this.props.InlineToolbar || inlineToolbarPlugin.InlineToolbar);
 		const plainAttributes = this.getPlainAttributes();
 		return (
-			<div className="draft-editor-input">
+			<div>
 				{this.props.label !== undefined ? (<div >{this.props.label}</div>) : ''}
-				<div>
+				<div className="draft-editor-input">
 					<Editor
 						editorState={this.props.editorState}
 						onChange={this.onEditorChange}
@@ -96,6 +100,13 @@ class DraftEditorInput extends Component {
 					(<div className="inline-toolbar-wrap">
 						<InlineToolbar />
 					</div>) : ''
+				}
+				{ this.props.singleLine !== true ?
+					(<VideoAdd
+						editorState={this.props.editorState}
+						onChange={this.onEditorChange}
+						modifier={this.videoPlugin.addVideo}
+					/>) : ''
 				}
 			</div>
 		);

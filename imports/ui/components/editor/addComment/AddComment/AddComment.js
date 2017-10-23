@@ -179,6 +179,16 @@ class AddComment extends React.Component {
 		const textHtml = convertToHTML({
 
 			// performe necessary html transformations:
+			blockToHTML: (block) => {
+				const type = block.type;
+				if (type === 'atomic') {
+				  return {start: '<span>', end: '</span>'};
+				}
+				if (type === 'unstyled') {
+				  return <p />;
+				}
+				return <span/>;
+			  },
 			entityToHTML: (entity, originalText) => {
 
 				// handle LINK
@@ -193,7 +203,10 @@ class AddComment extends React.Component {
 
 				// handle hashtag / commets cross reference mentions
 				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
+					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
+				}
+				if(entity.type === 'draft-js-video-plugin-video'){
+					return <iframe width="320" height="200" src={entity.data.src}></iframe>
 				}
 			},
 		})(textEditorState.getCurrentContent());

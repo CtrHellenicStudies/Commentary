@@ -48,24 +48,22 @@ class ModalSignup extends React.Component {
 	_handleKeyDown(event) {
 
 		const { closeModal } = this.props;
-
-		if (event.keyCode === ESCAPE_KEY) closeModal();
+		if (event.keyCode === 27) closeModal();
 	}
 
-	handleSignup(email, password, passwordRepeat) {
+	handleSignup(email, checkPassword, passwordRepeat) {
 
-		if (password !== passwordRepeat) {
+		if (checkPassword !== passwordRepeat) {
 			this.setState({
 				errorMsg: 'Passwords do not match.',
 			});
 			throw new Meteor.Error('Passwords do not match');
 		}
 
-		const checkPassword = Accounts._hashPassword(password);
+		const password = Accounts._hashPassword(checkPassword);
 
-		Meteor.call('createAccount', { email, checkPassword }, (err, result) => {
+		Meteor.call('createAccount', { email, password }, (err, result) => {
 			const path = '/';
-
 			if (!err) {
 				Meteor.loginWithToken(result.stampedToken.token, (_err) => {
 					if (_err) {
@@ -80,10 +78,10 @@ class ModalSignup extends React.Component {
 
 					if (domain) {
 						Cookies.set('userId', Meteor.userId(), { domain });
-						Cookies.set('loginToken', token, { domain });
+						Cookies.set('loginToken', result.stampedToken.token, { domain });
 					} else {
 						Cookies.set('userId', Meteor.userId());
-						Cookies.set('loginToken', token);
+						Cookies.set('loginToken', result.stampedToken.token);
 					}
 					this.props.closeModal();
 				});
@@ -170,7 +168,7 @@ class ModalSignup extends React.Component {
 						</div>
 
 						<PWDSignupForm
-							handleSignup={this.handleSignup}
+							signup={this.handleSignup}
 							errorMsg={errorMsg}
 						/>
 

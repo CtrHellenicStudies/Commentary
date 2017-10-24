@@ -343,24 +343,27 @@ const Utils = {
 							return <span/>;
 						  },
 						entityToHTML: (entity, originalText) => {
-			
-							// handle LINK
-							if (entity.type === 'LINK') {
-								return <a href={entity.data.link}>{originalText}</a>;
+							let ret = originalText;
+							switch(entity.type){
+								case 'LINK':
+									ret = <a href={entity.data.link}>{originalText}</a>;
+									break;
+								case 'mention':
+									ret = <a className="keyword-gloss" data-link={this.getEntityData(entity, 'link')}>{originalText}</a>;
+									break;
+								case '#mention':
+									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{originalText}</a>;
+									break;
+								case 'draft-js-video-plugin-video':
+									ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>;
+									break;
+								case 'image':
+									ret = '<img src="'+entity.data.src+'" alt="draft js image error"/>';
+									break;
+								default:
+									break;
 							}
-			
-							// handle keyword mentions
-							if (entity.type === 'mention') {
-								return <a className="keyword-gloss" data-link={this.getEntityData(entity, 'link')}>{originalText}</a>;
-							}
-			
-							// handle hashtag / commets cross reference mentions
-							if (entity.type === '#mention') {
-								return <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{originalText}</a>;
-							}
-							if(entity.type === 'draft-js-video-plugin-video'){
-								return <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>
-							}
+							return ret;
 						},
 					})(context);
 	}

@@ -470,6 +470,7 @@ class AddRevision extends React.Component {
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
 										spellcheck = {true}
+										disableMentions={true}
 										stripPastedStyles = {true}
 										singleLine={true}
 									/>

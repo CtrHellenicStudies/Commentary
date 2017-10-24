@@ -189,6 +189,7 @@ class AddTranslation extends React.Component {
 									name="draft_input_translation"
 									editorState={this.state.editorState}
 									onChange={this.onEditorChange}
+									disableMentions={true}
 									placeholder="Translation . . ."
 									spellcheck = {true}
 									stripPastedStyles = {true}

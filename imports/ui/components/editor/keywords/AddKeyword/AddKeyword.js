@@ -6,7 +6,9 @@ import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
+import {stateFromHTML} from 'draft-js-import-html';
 import Snackbar from 'material-ui/Snackbar';
+import Utils from '../../../../../lib/utils';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
@@ -16,7 +18,6 @@ import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 
 
 // models
@@ -28,11 +29,6 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 import muiTheme from '/imports/lib/muiTheme';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
-// Create toolbar plugin for editor
-const singleLinePlugin = createSingleLinePlugin();
-
-const mentionPlugin = createMentionPlugin();
-const { MentionSuggestions } = mentionPlugin;
 
 const AddKeyword = React.createClass({
 
@@ -64,8 +60,6 @@ const AddKeyword = React.createClass({
 
 			snackbarOpen: false,
 			snackbarMessage: '',
-
-			suggestions: fromJS([]),
 		};
 	},
 
@@ -121,22 +115,6 @@ const AddKeyword = React.createClass({
 			commenterValue: comenter,
 		});
 	},
-
-	onSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.label,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	},
-
 	shouldKeyDownEventCreateNewOption(sig) {
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
@@ -179,7 +157,6 @@ const AddKeyword = React.createClass({
 		const error = this.validateStateForSubmit();
 
 		this.showSnackBar(error);
-
 		const textHtml = getHtmlFromContext(textEditorState.getCurrentContent());
 
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
@@ -253,11 +230,11 @@ const AddKeyword = React.createClass({
 									name="draft_editor_tag_title"
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
+									disableMentions={true}
 									placeholder="Tag . . ."
 									spellcheck={true}
 									stripPastedStyles={true}
-									plugins={[singleLinePlugin]}
-									blockRenderMap={singleLinePlugin.blockRenderMap}
+									singleLine = {true}
 								/>
 							</h1>
 							<RadioButtonGroup
@@ -291,12 +268,7 @@ const AddKeyword = React.createClass({
 								placeholder="Tag description . . ."
 								spellcheck={true}
 								stripPastedStyles={true}
-								plugins={[mentionPlugin]}
 								ref={(element) => { this.editor = element; }}
-							/>
-							<MentionSuggestions
-								onSearchChange={this.onSearchChange}
-								suggestions={this.state.suggestions}
 							/>
 							<div className="comment-edit-action-button">
 								<RaisedButton

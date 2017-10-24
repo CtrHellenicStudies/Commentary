@@ -23,7 +23,8 @@ class MultilineDialog extends React.Component {
 		this.deleteMultiline = this.deleteMultiline.bind(this);
 		this.state = {
 			edition: this.props.edition,
-			error: ''
+			error: '',
+			multiline: ''
 		};
 	}
 
@@ -35,18 +36,27 @@ class MultilineDialog extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		Meteor.call('multiline.insert', Cookies.get('loginToken'), this.state.edition, this.state.multiline, (err) => {
-			if (err) {
-				this.setState({
-					error: err
-				});
-				throw new Error(err);
-			} else {
-				this.setState({
-					multiline: ''
-				});
-			}
-		});
+		if (this.state.multiline === '') {
+			this.setState({
+				error: {
+					message: "Edition can't be empty!"
+				}
+			});
+
+		} else {
+			Meteor.call('multiline.insert', Cookies.get('loginToken'), this.state.edition, this.state.multiline, (err) => {
+				if (err) {
+					this.setState({
+						error: err
+					});
+					throw new Error(err);
+				} else {
+					this.setState({
+						multiline: ''
+					});
+				}
+			});
+		}
 	}
 
 	deleteMultiline(multiline) {
@@ -129,13 +139,13 @@ class MultilineDialog extends React.Component {
 							Add new
 						</label>
 						<form onSubmit={this.handleSubmit}>
-						<TextField
-							name="multiline"
-							value={this.state.multiline}
-							onChange={this.setValue}
-							fullWidth
-							errorText={error}
-						/>
+							<TextField
+								name="multiline"
+								value={this.state.multiline}
+								onChange={this.setValue}
+								fullWidth
+								errorText={error}
+							/>
 						</form>
 					</div>
 

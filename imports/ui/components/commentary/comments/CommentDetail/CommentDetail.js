@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import qs from 'qs-lite';
 
 // models:
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -177,7 +178,8 @@ class CommentDetail extends React.Component {
 		if (!('isOnHomeView' in this.props) || this.props.isOnHomeView === false) {
 			this.props.toggleSearchTerm('keywords', keyword);
 		} else {
-			this.props.history.push('/commentary/', {}, { keywords: keyword.slug });
+			const urlParams = qs.stringify({ keywords: keyword.slug });
+			this.props.history.push(`/commentary/${urlParams}`);
 		}
 	}
 

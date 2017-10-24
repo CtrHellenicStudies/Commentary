@@ -350,7 +350,7 @@ class AddTranslationLayout extends React.Component {
 				if (error) {
 					console.log(error);
 				} else {
-					this.props.history.push('/commentary', {});
+					this.props.history.push('/commentary');
 				}
 			});
 		}

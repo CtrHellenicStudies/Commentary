@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-
+import Parser from 'simple-text-parser';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 
@@ -90,7 +90,8 @@ class Commentary extends React.Component {
 				lines: [],
 			},
 			commentLemmaGroups: [],
-			commentGroups: [],
+			commentGroups: this.props.commentGroups,
+			multiline: null
 		};
 
 		// methods:
@@ -104,6 +105,7 @@ class Commentary extends React.Component {
 		this.setPageTitleAndMeta = this.setPageTitleAndMeta.bind(this);
 		this.loadMoreComments = this.loadMoreComments.bind(this);
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
+		this.selectMultiLine = this.selectMultiLine.bind(this);
 	}
 
 	getChildContext() {
@@ -216,6 +218,12 @@ class Commentary extends React.Component {
 		}
 	}
 
+	selectMultiLine(multiline) {
+		this.setState({
+			multiline: multiline
+		});
+	}
+
 	searchReferenceLemma() {
 		this.setState({
 			referenceLemma: [],
@@ -248,7 +256,7 @@ class Commentary extends React.Component {
 	loadMoreComments() {
 		if (
 			!this.props.isOnHomeView
-			&& this.props.commentGroups.length
+			&& this.state.commentGroups.length
 			&& this.props.isMoreComments
 		) {
 			this.props.loadMoreComments();
@@ -284,8 +292,8 @@ class Commentary extends React.Component {
 
 	render() {
 
-		const { commentGroups, isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
-		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
+		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
+		const { commentGroups, contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
 
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
@@ -316,6 +324,8 @@ class Commentary extends React.Component {
 								filters={filters}
 								isOnHomeView={isOnHomeView}
 								history={this.props.history}
+								selectMultiLine={this.selectMultiLine}
+								multiline={this.state.multiline}
 							/>
 						))}
 					</div>
@@ -330,6 +340,7 @@ class Commentary extends React.Component {
 						closeContextPanel={this.closeContextPanel}
 						commentGroup={contextCommentGroupSelected}
 						commentLemmaIndex={commentLemmaIndex}
+						multiline={this.state.multiline}
 					/>
 					: ''}
 				{!isOnHomeView ?

@@ -67,6 +67,7 @@ class ContextPanel extends React.Component {
 		subworkN: React.PropTypes.number,
 		editor: React.PropTypes.bool,
 		lineFrom: React.PropTypes.number,
+		multiline: React.PropTypes.string,
 	};
 
 	static defaultProps = {
@@ -206,7 +207,7 @@ class ContextPanel extends React.Component {
 
 	render() {
 
-		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
+		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline } = this.props;
 		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition } = this.state;
 
 		const workSlug = getWorkSlug(this.props);
@@ -233,6 +234,7 @@ class ContextPanel extends React.Component {
 				selectedLineTo={selectedLineTo}
 				updateSelectedLines={updateSelectedLines}
 				editor={editor}
+				multiline={multiline}
 			/>
 		);
 	}

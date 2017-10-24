@@ -32,6 +32,8 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import CommentersEditorDialog from '../CommentersEditorDialog/CommentersEditorDialog';
 import Commenters from '/imports/models/commenters';
+import Snackbar from 'material-ui/Snackbar';
+import slugify from 'slugify';
 
 import {
 	ItalicButton,
@@ -163,6 +165,8 @@ class AddRevision extends React.Component {
 			commentsSuggestions: fromJS([]),
 			commentersEditorDialogOpen: false,
 			commenterValue: comment.commenters ? comment.commenters.map((commenter) => ({value: commenter._id, label: commenter.name})) : [],
+			snackbarOpen: false,
+
 		};
 
 		autoBind(this);
@@ -440,7 +444,7 @@ class AddRevision extends React.Component {
 			commentersEditorDialogOpen: false
 		});
 	}
-	
+
 	setCommenters(commenters) {
 		this.setState({
 			commenters: commenters
@@ -450,6 +454,54 @@ class AddRevision extends React.Component {
 	onCommenterValueChange(commenter) {
 		this.setState({
 			commenterValue: commenter,
+		});
+	}
+
+	showSnackBar(error) {
+		this.setState({
+			snackbarOpen: true,
+			snackbarMessage: error.message,
+		});
+		setTimeout(() => {
+			this.setState({
+				snackbarOpen: false,
+				snackbarMessage: ''
+			});
+		}, 4000);
+	}
+
+	selectTagType(tagId, event, index) {
+		const currentTags = this.state.tagsValue;
+		currentTags[index].keyword.type = event.target.value;
+		this.setState({
+			tagsValue: currentTags
+		});
+
+		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value, (err) => {
+			if (err) {
+				this.showSnackBar(err);
+			}			else {
+				this.showSnackBar({message: 'Keyword type changed'});
+			}
+		});
+	}
+
+	addNewTag(tag) {
+
+		const keyword = [{
+			title: tag.value,
+			slug: slugify(tag.value.toLowerCase()),
+			type: 'word',
+			count: 1,
+			tenantId: Session.get('tenantId'),
+		}];
+
+		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
+			if (err) {
+				this.showSnackBar(err);
+			}			else {
+				this.showSnackBar({message: 'Tag added'});
+			}
 		});
 	}
 
@@ -515,6 +567,27 @@ class AddRevision extends React.Component {
 										{/*/>*/}
 									{/*</div>*/}
 								</div>
+
+								{/*<CommentersEditorDialog*/}
+									{/*open={this.state.commentersEditorDialogOpen}*/}
+									{/*handleClose={this.handleCloseCommentersEditorDialog}*/}
+									{/*commenters={this.state.commenters}*/}
+									{/*setCommenters={this.setCommenters}*/}
+								{/*/>*/}
+
+								<br />
+								{commentersOptions && commentersOptions.length ?
+									<Select
+										name="commenter"
+										id="commenter"
+										required={false}
+										options={commentersOptions}
+										value={this.state.commenterValue}
+										onChange={this.onCommenterValueChange}
+										placeholder="Commentator..."
+										multi={true}
+									/>
+								: ''}
 								<h1 className="add-comment-title">
 									<Editor
 										editorState={titleEditorState}
@@ -534,6 +607,8 @@ class AddRevision extends React.Component {
 									moveTagBlock={this.moveTagBlock}
 									onTagValueChange={this.onTagValueChange}
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
+									selectTagType={this.selectTagType}
+									addNewTag={this.addNewTag}
 								/>
 
 							</div>
@@ -663,28 +738,6 @@ class AddRevision extends React.Component {
 									</FormGroup>
 								</div>
 
-								{/*<CommentersEditorDialog*/}
-									{/*open={this.state.commentersEditorDialogOpen}*/}
-									{/*handleClose={this.handleCloseCommentersEditorDialog}*/}
-									{/*commenters={this.state.commenters}*/}
-									{/*setCommenters={this.setCommenters}*/}
-								{/*/>*/}
-
-								{commentersOptions && commentersOptions.length ?
-									<Select
-										name="commenter"
-										id="commenter"
-										required={false}
-										options={commentersOptions}
-										value={this.state.commenterValue}
-										onChange={this.onCommenterValueChange}
-										placeholder="Commentator..."
-										multi={true}
-									/>
-									:
-									''
-								}
-
 								<div className="comment-edit-action-button">
 									<RaisedButton
 										type="submit"
@@ -730,6 +783,12 @@ class AddRevision extends React.Component {
 							</div>
 						</article>
 					</Formsy.Form>
+					<Snackbar
+						className="editor-snackbar"
+						open={this.state.snackbarOpen}
+						message={this.state.snackbarMessage}
+						autoHideDuration={4000}
+					/>
 				</div>
 				<div className="inline-toolbar-wrap">
 					<InlineToolbar />

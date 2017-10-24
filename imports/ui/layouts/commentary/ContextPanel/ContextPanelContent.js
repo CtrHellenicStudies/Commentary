@@ -135,7 +135,7 @@ ContextPanelContent.defaultProps = {
 };
 
 
-export default createContainer(({ lineFrom, workSlug, subworkN }) => {
+export default createContainer(({ lineFrom, workSlug, subworkN, multiline }) => {
 
 	const lineTo = lineFrom + 49;
 
@@ -157,7 +157,14 @@ export default createContainer(({ lineFrom, workSlug, subworkN }) => {
 	const textNodesCursor = TextNodes.find(lemmaQuery);
 	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
 
-	const sortedEditions = getSortedEditions(editions);
+	let sortedEditions;
+
+	if (multiline) {
+		const parsedEditions = Utils.parseMultilineEdition(editions, multiline);
+		sortedEditions = getSortedEditions(parsedEditions);
+	} else {
+		sortedEditions = getSortedEditions(editions);
+	}
 
 	return {
 		lemmaText: sortedEditions,

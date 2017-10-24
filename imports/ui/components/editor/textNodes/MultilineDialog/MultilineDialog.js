@@ -22,7 +22,8 @@ class MultilineDialog extends React.Component {
 		this.setValue = this.setValue.bind(this);
 		this.deleteMultiline = this.deleteMultiline.bind(this);
 		this.state = {
-			edition: this.props.edition
+			edition: this.props.edition,
+			error: ''
 		};
 	}
 
@@ -32,10 +33,18 @@ class MultilineDialog extends React.Component {
 		});
 	}
 
-	handleSubmit() {
+	handleSubmit(event) {
+		event.preventDefault();
 		Meteor.call('multiline.insert', Cookies.get('loginToken'), this.state.edition, this.state.multiline, (err) => {
 			if (err) {
+				this.setState({
+					error: err
+				});
 				throw new Error(err);
+			} else {
+				this.setState({
+					multiline: ''
+				});
 			}
 		});
 	}
@@ -43,7 +52,14 @@ class MultilineDialog extends React.Component {
 	deleteMultiline(multiline) {
 		Meteor.call('multiline.delete', Cookies.get('loginToken'), this.state.edition, multiline, (err) => {
 			if (err) {
+				this.setState({
+					error: err
+				});
 				throw new Error(err);
+			} else {
+				this.setState({
+					multiline: ''
+				});
 			}
 		});
 	}
@@ -74,6 +90,7 @@ class MultilineDialog extends React.Component {
 			</IconButton>
 		);
 
+		const error = this.state.error ? <div>{this.state.error.message}</div> : null;
 		return (
 			<Dialog
 				title="Text editions"
@@ -86,7 +103,7 @@ class MultilineDialog extends React.Component {
 				<div className="text-node-editor-meta-form edit-subwork-form">
 					<div className="edit-form-input">
 
-						{edition.multiline && edition.multiLine.length ?
+						{edition.multiLine && edition.multiLine.length ?
 							<div>
 								<label>
 									Current editions:
@@ -111,12 +128,15 @@ class MultilineDialog extends React.Component {
 						<label>
 							Add new
 						</label>
+						<form onSubmit={this.handleSubmit}>
 						<TextField
 							name="multiline"
-							defaultValue={this.state.multiline}
+							value={this.state.multiline}
 							onChange={this.setValue}
 							fullWidth
+							errorText={error}
 						/>
+						</form>
 					</div>
 
 				</div>

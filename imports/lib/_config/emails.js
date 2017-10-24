@@ -1,8 +1,10 @@
 import Config from './_config.js';
 
 let options;
-
 if (Meteor.isServer) {
+	/**
+	 * Configure options for PrettyEmail email package with Meteor
+	 */
 	options = {
 		siteName: Config.name,
 	};

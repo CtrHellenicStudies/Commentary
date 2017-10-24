@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import Cookies from 'js-cookie';
@@ -11,9 +12,9 @@ import PWDSignupForm from '/imports/ui/components/auth/PWDSignupForm';
 
 class ModalSignup extends React.Component {
 	static propTypes = {
-		lowered: React.PropTypes.bool,
-		closeModal: React.PropTypes.func,
-		loginModal: React.PropTypes.func,
+		lowered: PropTypes.bool,
+		closeModal: PropTypes.func,
+		loginModal: PropTypes.func,
 	};
 
 	static defaultProps = {
@@ -128,7 +129,7 @@ class ModalSignup extends React.Component {
 			}
 		});
 	}
-	
+
 	goToSigIn(event) {
 		event.preventDefault();
 		this.props.closeModal();

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -17,11 +18,11 @@ import muiTheme from '/imports/lib/muiTheme';
 
 const UserLayout = React.createClass({
 	propTypes: {
-		user: React.PropTypes.object,
+		user: PropTypes.object,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getChildContext() {

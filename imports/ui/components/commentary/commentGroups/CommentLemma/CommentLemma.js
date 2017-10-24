@@ -13,7 +13,7 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 
-// api:
+// models:
 import TextNodes from '/imports/models/textNodes';
 import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
@@ -55,7 +55,9 @@ class CommentLemma extends React.Component {
 		index: PropTypes.string.isRequired,
 		hideLemma: PropTypes.bool.isRequired,
 		translationAuthors: PropTypes.array,
-
+		multiline: PropTypes.bool,
+		selectMultiLine: PropTypes.func,
+		
 		// from createContainer:
 		editions: PropTypes.arrayOf(PropTypes.shape({
 			title: PropTypes.string.isRequired,

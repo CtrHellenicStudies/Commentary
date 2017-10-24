@@ -1,3 +1,7 @@
+/**
+ * Mutations for text nodes
+ */
+
 import {
 	GraphQLString,
 	GraphQLObjectType,
@@ -12,8 +16,8 @@ import GraphQLJSON from 'graphql-type-json';
 import { TextNodeType, TextNodeInputType } from '/imports/graphql/types/models/textNode';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import TextNodeService from '../bll/textNodes';
+// logic
+import TextNodeService from '../logic/textNodes';
 
 const textNodeMutationFields = {
 	textNodeCreate: {

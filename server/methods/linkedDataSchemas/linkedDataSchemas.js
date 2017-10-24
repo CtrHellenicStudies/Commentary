@@ -4,6 +4,11 @@ import { Accounts } from 'meteor/accounts-base';
 
 import LinkedDataSchemas from '/imports/models/linkedDataSchemas';
 
+
+/**
+ * Linked data schemas methods - either replaced or to be replaced with the graphql api
+ */
+
 const linkedDataSchemasInsert = (token, linkedDataSchema) => {
 	check(token, String);
 	check(linkedDataSchema, {

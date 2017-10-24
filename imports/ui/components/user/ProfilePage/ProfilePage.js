@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -53,12 +54,12 @@ class ProfilePage extends React.Component {
 	}
 
 	static propTypes = {
-		user: React.PropTypes.object,
-		settings: React.PropTypes.object,
+		user: PropTypes.object,
+		settings: PropTypes.object,
 	}
 
 	static childContextTypes = {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	}
 
 

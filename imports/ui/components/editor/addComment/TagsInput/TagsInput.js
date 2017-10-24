@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import autoBind from 'react-autobind';
@@ -14,7 +15,7 @@ import {
 import Select from 'react-select';
 import update from 'immutability-helper';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 
 // components
@@ -134,6 +135,18 @@ const TagsInput = ({
 			</FormGroup>
 		</div>
 	);
+};
+
+TagsInput.propTypes = {
+	tags: PropTypes.array,
+	tagsValue: PropTypes.array,
+	addTagBlock: PropTypes.func,
+	removeTagBlock: PropTypes.func,
+	moveTagBlock: PropTypes.func,
+	onTagValueChange: PropTypes.func,
+	onIsMentionedInLemmaChange: PropTypes.func,
+	selectTagType: PropTypes.func,
+	addNewTag: PropTypes.func,
 };
 
 const TagsInputContainer = createContainer(() => {

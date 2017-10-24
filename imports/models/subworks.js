@@ -1,8 +1,16 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Subworks represent individual books, poems, or chapters in works
+ * @type {Meteor.Collection}
+ */
 const Subworks = new Meteor.Collection('subworks');
 
+/**
+ * Subworks schema
+ * @type {SimpleSchema}
+ */
 Subworks.schema = new SimpleSchema({
 	title: {
 		type: String,

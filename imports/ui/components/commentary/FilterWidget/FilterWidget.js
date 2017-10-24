@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
@@ -54,8 +55,8 @@ const FilterWidget = ({ filters, toggleSearchTerm }) => (
 	</div>
 );
 FilterWidget.propTypes = {
-	filters: React.PropTypes.array.isRequired,
-	toggleSearchTerm: React.PropTypes.func.isRequired,
+	filters: PropTypes.array.isRequired,
+	toggleSearchTerm: PropTypes.func.isRequired,
 };
 
 export default FilterWidget;

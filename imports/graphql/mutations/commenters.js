@@ -1,11 +1,15 @@
+/**
+ * Mutations for commenters 
+ */
+
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
 import { CommenterType, CommenterInputType } from '/imports/graphql/types/models/commenter';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import CommentersService from '../bll/commenters';
+// logic
+import CommentersService from '../logic/commenters';
 
 const commenterMutationFields = {
 

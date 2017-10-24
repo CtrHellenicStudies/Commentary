@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import React from 'react';
@@ -11,7 +12,11 @@ class CommentLemmaTextWithTranslation extends React.Component {
 
 	render() {
 		const { commentGroup, linesWithTranslation, author } = this.props;
-		const nLines = commentGroup.nLines;
+		let nLines = 0;
+
+		if (commentGroup) {
+			nLines = commentGroup.nLines;
+		}
 
 		return (
 			<div className="comment-lemma-text comment-lemma-text--with-translation">
@@ -49,13 +54,13 @@ class CommentLemmaTextWithTranslation extends React.Component {
 }
 
 CommentLemmaTextWithTranslation.propTypes = {
-	linesWithTranslation: React.PropTypes.arrayOf(React.PropTypes.shape({
-		html: React.PropTypes.string,
-		english: React.PropTypes.string,
-		n: React.PropTypes.number.isRequired,
+	linesWithTranslation: PropTypes.arrayOf(PropTypes.shape({
+		html: PropTypes.string,
+		english: PropTypes.string,
+		n: PropTypes.number.isRequired,
 	})).isRequired,
-	commentGroup: React.PropTypes.object,
-	author: React.PropTypes.string,
+	commentGroup: PropTypes.object,
+	author: PropTypes.string,
 };
 
 export default createContainer(({ commentGroup, lines, author }) => {
@@ -74,7 +79,13 @@ export default createContainer(({ commentGroup, lines, author }) => {
 	const handleNodes = Meteor.subscribe('translationNodes', Session.get('tenantId'));
 	const translationNodes = TranslationNodes.find(translationNodesQuery).fetch();
 
-	for (let i = 0; i < commentGroup.nLines; i++) {
+	let nLines = 0;
+
+	if (commentGroup) {
+		nLines = commentGroup.nLines;
+	}
+
+	for (let i = 0; i < nLines; i++) {
 		const newLine = {
 			n: lines[i].n,
 			html: lines[i].html

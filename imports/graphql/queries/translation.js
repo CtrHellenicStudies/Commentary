@@ -1,10 +1,13 @@
+/**
+ * Queries for translations
+ */
 import { GraphQLID, GraphQLList } from 'graphql';
 
 // types
 import { TranslationType } from '/imports/graphql/types/models/translation';
 
-// bll
-import TranslationService from '../bll/translations';
+// logic
+import TranslationService from '../logic/translations';
 
 const translationsQueryFields = {
 	translations: {

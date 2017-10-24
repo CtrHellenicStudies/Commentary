@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -279,14 +280,14 @@ class Home extends Component {
 
 
 Home.propTypes = {
-	settings: React.PropTypes.object,
-	comments: React.PropTypes.array,
-	ready: React.PropTypes.bool,
-	isTest: React.PropTypes.bool,
+	settings: PropTypes.object,
+	comments: PropTypes.array,
+	ready: PropTypes.bool,
+	isTest: PropTypes.bool,
 };
 
 Home.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 

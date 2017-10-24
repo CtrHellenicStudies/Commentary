@@ -1,10 +1,14 @@
+/**
+ * Queries for commenters
+ */
+
 import { GraphQLString, GraphQLID, GraphQLList } from 'graphql';
 
 // types
 import { CommenterType } from '/imports/graphql/types/models/commenter';
 
-// bll
-import CommentersService from '../bll/commenters';
+// logic
+import CommentersService from '../logic/commenters';
 
 const commenterQueryFields = {
 	commenters: {

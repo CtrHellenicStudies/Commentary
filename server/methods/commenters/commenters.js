@@ -4,6 +4,10 @@ import { Accounts } from 'meteor/accounts-base';
 import Commenters from '/imports/models/commenters';
 
 
+/**
+ * Commenter methods - either replaced or to be replaced with the graphql api
+ */
+
 const commentersInsert = (token, commenter) => {
 	check(token, String);
 	check(commenter, {

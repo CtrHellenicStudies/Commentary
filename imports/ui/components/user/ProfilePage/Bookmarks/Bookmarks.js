@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import FlatButton from 'material-ui/FlatButton';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -28,7 +29,7 @@ class Bookmarks extends React.Component {
 	}
 
 	static propTypes = {
-		subscriptions: React.PropTypes.object
+		subscriptions: PropTypes.object
 	}
 
 	toggleBookmarksForm() {

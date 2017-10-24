@@ -4,6 +4,11 @@ import { Accounts } from 'meteor/accounts-base';
 
 import Pages from '/imports/models/pages.js';
 
+
+/**
+ * Pages methods - either replaced or to be replaced with the graphql api
+ */
+
 const pagesInsert = (token, page) => {
 	check(token, String);
 	check(page, {

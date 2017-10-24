@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class AccountsLayout extends React.Component {
 	render() {
@@ -11,7 +12,7 @@ class AccountsLayout extends React.Component {
 }
 
 AccountsLayout.propTypes = {
-	content: React.PropTypes.object,
+	content: PropTypes.object,
 };
 
 export default AccountsLayout;

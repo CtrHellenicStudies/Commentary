@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import autoBind from 'react-autobind';
@@ -17,7 +18,7 @@ import TextField from 'material-ui/TextField';
 import Cookies from 'js-cookie';
 import { debounce } from 'throttle-debounce';
 
-// api:
+// models:
 import Editions from '/imports/models/editions';
 import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';
@@ -180,7 +181,7 @@ class TextNodesInput extends React.Component {
 
 	render() {
 		const { textNodes } = this.state;
-		
+
 
 		if (!this.props.ready) {
 			return null;
@@ -281,17 +282,21 @@ class TextNodesInput extends React.Component {
 	}
 }
 
-/*
-const mapStateToProps = (state, props) => ({
-	textNodes: state.textNodes.textNodes,
-});
+TextNodesInput.propTypes = {
+	textNodes: PropTypes.array,
+	workId: PropTypes.string,
+	workSlug: PropTypes.string,
+	subworkTitle: PropTypes.string,
+	subworkN: PropTypes.number,
+	lineFrom: PropTypes.number,
+	defaultTextNodes: PropTypes.array,
+	editionId: PropTypes.string,
+	handleClose: PropTypes.func,
+	open: PropTypes.bool,
+	ready: PropTypes.bool,
+	loadMore: PropTypes.func,
+};
 
-const mapDispatchToProps = dispatch => ({
-	actions: bindActionCreators(textNodesActions, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TextNodesInput);
-*/
 
 const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, subworkN, lineFrom, limit }) => {
 	let textNodes;

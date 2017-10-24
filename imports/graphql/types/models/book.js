@@ -13,6 +13,10 @@ import { Meteor } from 'meteor/meteor';
 import CommentType from './comment';
 import Comments from '../../../models/comments';
 
+/**
+ * Book input type for creating books
+ * @type {GraphQLInputObjectType}
+ */
 const BookInputType = new GraphQLInputObjectType({
 	name: 'BookInputType',
 	description: 'A book input type',
@@ -50,6 +54,10 @@ const BookInputType = new GraphQLInputObjectType({
 	}
 });
 
+/**
+ * Book model type
+ * @type {GraphQLObjectType}
+ */
 const BookType = new GraphQLObjectType({
 	name: 'BookType',
 	description: 'A single book',
@@ -84,6 +92,7 @@ const BookType = new GraphQLObjectType({
 		tenantId: {
 			type: GraphQLString
 		},
+
 		/**
 		// TODO: Debug why Meteor is not able to resolve queries on graphql types
 		// due to a node fibers issue
@@ -102,6 +111,7 @@ const BookType = new GraphQLObjectType({
 			}
 		}
 		*/
+		
 	}
 });
 

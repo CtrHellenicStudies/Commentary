@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// api:
+// models:
 import ReferenceWorks from '/imports/models/referenceWorks';
 import Settings from '/imports/models/settings';
 
@@ -53,46 +54,48 @@ const getCommentClass = (discussionVisible) => {
 */
 class CommentDetail extends React.Component {
 	static propTypes = {
-		comment: React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string.isRequired,
-				slug: React.PropTypes.string.isRequired,
-				name: React.PropTypes.string.isRequired,
-				avatar: React.PropTypes.shape({
-					src: React.PropTypes.string.isRequired,
+		comment: PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			commenters: PropTypes.arrayOf(PropTypes.shape({
+				_id: PropTypes.string.isRequired,
+				slug: PropTypes.string.isRequired,
+				name: PropTypes.string.isRequired,
+				avatar: PropTypes.shape({
+					src: PropTypes.string.isRequired,
 				}),
 			})),
-			referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
-				text: React.PropTypes.string,
-				referenceWorkId: React.PropTypes.string,
+			referenceWorks: PropTypes.arrayOf(PropTypes.shape({
+				text: PropTypes.string,
+				referenceWorkId: PropTypes.string,
 			})),
-			revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string.isRequired,
-				created: React.PropTypes.instanceOf(Date),
-				updated: React.PropTypes.instanceOf(Date),
-				originalDate: React.PropTypes.instanceOf(Date),
+			revisions: PropTypes.arrayOf(PropTypes.shape({
+				_id: PropTypes.string.isRequired,
+				created: PropTypes.instanceOf(Date),
+				updated: PropTypes.instanceOf(Date),
+				originalDate: PropTypes.instanceOf(Date),
 			})),
-			urn: React.PropTypes.string,
+			urn: PropTypes.string,
 		}).isRequired,
-		filters: React.PropTypes.arrayOf(React.PropTypes.shape({
-			key: React.PropTypes.string.isRequired,
-			values: React.PropTypes.arrayOf(React.PropTypes.any).isRequired,
+		filters: PropTypes.arrayOf(PropTypes.shape({
+			key: PropTypes.string.isRequired,
+			values: PropTypes.arrayOf(PropTypes.any).isRequired,
 		})),
-		toggleSearchTerm: React.PropTypes.func,
-		isOnHomeView: React.PropTypes.bool,
-		showLoginModal: React.PropTypes.func,
-		toggleLemma: React.PropTypes.func.isRequired,
+		toggleSearchTerm: PropTypes.func,
+		isOnHomeView: PropTypes.bool,
+		showLoginModal: PropTypes.func,
+		toggleLemma: PropTypes.func.isRequired,
+		user: PropTypes.object,
+
 
 		// from createContainer:
-		referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
-			slug: React.PropTypes.string.isRequired,
+		referenceWorks: PropTypes.arrayOf(PropTypes.shape({
+			title: PropTypes.string.isRequired,
+			slug: PropTypes.string.isRequired,
 		})),
-		settings: React.PropTypes.shape({
-			discussionCommentsDisabled: React.PropTypes.bool,
+		settings: PropTypes.shape({
+			discussionCommentsDisabled: PropTypes.bool,
 		}),
-		ready: React.PropTypes.bool,
+		ready: PropTypes.bool,
 	};
 
 	static defaultProps = {

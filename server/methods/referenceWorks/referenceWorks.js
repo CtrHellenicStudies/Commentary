@@ -4,6 +4,11 @@ import { Accounts } from 'meteor/accounts-base';
 
 import ReferenceWorks from '/imports/models/referenceWorks';
 
+
+/**
+ * Reference Works methods - either replaced or to be replaced with the graphql api
+ */
+
 const referenceWorksInsert = (token, referenceWork) => {
 	check(token, String);
 	check(referenceWork, {

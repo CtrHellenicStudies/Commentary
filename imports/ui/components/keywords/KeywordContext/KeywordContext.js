@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -11,7 +12,7 @@ import FontIcon from 'material-ui/FontIcon';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
 
-// api
+// models
 import TextNodes from '/imports/models/textNodes';
 import Editions from '/imports/models/editions';
 
@@ -58,13 +59,13 @@ import Editions from '/imports/models/editions';
 const KeywordContext = React.createClass({
 
 	propTypes: {
-		keyword: React.PropTypes.object,
-		lemmaText: React.PropTypes.array,
-		context: React.PropTypes.object,
+		keyword: PropTypes.object,
+		lemmaText: PropTypes.array,
+		context: PropTypes.object,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {

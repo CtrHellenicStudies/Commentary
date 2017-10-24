@@ -1,3 +1,6 @@
+/**
+ * Load oauth service params from Meteor settings file 
+ */
 if (Meteor.isServer) {
 	Meteor.startup(() => {
 		if (Meteor.settings && Meteor.settings.serviceConfigurations) {

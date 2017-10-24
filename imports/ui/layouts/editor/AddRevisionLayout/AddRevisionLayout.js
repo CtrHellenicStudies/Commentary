@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -9,7 +10,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
@@ -28,10 +29,10 @@ import Utils from '/imports/lib/utils';
 const AddRevisionLayout = React.createClass({
 
 	propTypes: {
-		ready: React.PropTypes.bool,
-		comment: React.PropTypes.object,
-		commenters: React.PropTypes.array,
-		keywords: React.PropTypes.array,
+		ready: PropTypes.bool,
+		comment: PropTypes.object,
+		commenters: PropTypes.array,
+		keywords: PropTypes.array,
 	},
 
 	getInitialState() {

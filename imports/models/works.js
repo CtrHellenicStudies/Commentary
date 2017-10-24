@@ -2,8 +2,16 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import Subworks from '/imports/models/subworks';
 
+/**
+ * Works represent source text works, such as Iliad, Odyssey, Pindar's Odes, etc
+ * @type {Meteor.Collection}
+ */
 const Works = new Meteor.Collection('works');
 
+/**
+ * Works schema
+ * @type {SimpleSchema}
+ */
 Works.schema = new SimpleSchema({
 	title: {
 		type: String,

@@ -1,3 +1,6 @@
+/**
+ * Configure roles on startup
+ */
 Meteor.startup(() => {
 	// Delete all roles not in use:
 	const roles = Roles.getAllRoles().fetch();
@@ -19,22 +22,10 @@ Meteor.startup(() => {
 	startUpRoles.forEach((role) => {
 		try {
 			Roles.createRole(role);
-			console.log('Created role:', role);
 		} catch (err) {
-			// console.log(err);
+			console.log(err);
 		}
 	});
-
-	// Create role for each commenter:
-	// var commenters = Commenters.find().fetch();
-	// commenters.forEach((commenter) => {
-	//		 try {
-	//				 Roles.createRole(commenter.slug);
-	//				 console.log('Created role:', commenter.slug);
-	//		 } catch (err) {
-	//				 // console.log(err);
-	//		 };
-	// });
 
 	return console.log('Roles generator finished.');
 });

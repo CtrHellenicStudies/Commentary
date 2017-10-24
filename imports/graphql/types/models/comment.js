@@ -10,6 +10,10 @@ import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
 
 
+/**
+ * Comment input type
+ * @type {GraphQLInputObjectType}
+ */
 const CommentInputType = new GraphQLInputObjectType({
 	name: 'CommentInputType',
 	description: 'A comment in the commentary',
@@ -95,6 +99,10 @@ const CommentInputType = new GraphQLInputObjectType({
 	},
 });
 
+/**
+ * Comment model type
+ * @type {GraphQLObjectType}
+ */
 const CommentType = new GraphQLObjectType({
 	name: 'CommentType',
 	description: 'A comment in the commentary',

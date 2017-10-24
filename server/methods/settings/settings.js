@@ -4,6 +4,11 @@ import { Accounts } from 'meteor/accounts-base';
 
 import Settings from '/imports/models/settings.js';
 
+
+/**
+ * Settings methods - either replaced or to be replaced with the graphql api
+ */
+
 const settingsInsert = (token, setting) => {
 	check(token, String);
 	check(setting, {

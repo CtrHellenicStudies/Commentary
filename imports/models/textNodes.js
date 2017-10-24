@@ -3,8 +3,17 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import Editions from '/imports/models/editions';
 
+/**
+ * TextNodes are the source text of the commentary that the comments are created
+ * about. Will be replaced with an external textserver in the future.
+ * @type {Meteor.Collection}
+ */
 const TextNodes = new Meteor.Collection('textNodes');
 
+/**
+ * TextNodes schema
+ * @type {SimpleSchema}
+ */
 TextNodes.schema = new SimpleSchema({
 	tenantId: {
 		type: String,

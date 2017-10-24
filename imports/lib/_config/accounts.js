@@ -42,6 +42,9 @@
 //
 //
 if (Meteor.isServer) {
+	/**
+	 * When a user account is created, ensure username is generated properly
+	 */
 	Accounts.onCreateUser((options, user) => {
 		let username = '';
 		if (!('emails' in user)) {

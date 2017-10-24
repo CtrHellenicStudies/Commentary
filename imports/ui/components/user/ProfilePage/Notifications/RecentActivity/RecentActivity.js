@@ -1,5 +1,6 @@
 import React from 'react';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import PropTypes from 'prop-types';
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ class RecentActivity extends React.Component {
 	}
 
 	static propTypes = {
-		subscriptions: React.PropTypes.object
+		subscriptions: PropTypes.object
 	}
 
 	removeNotification(notification) {
@@ -28,7 +29,7 @@ class RecentActivity extends React.Component {
 				'subscriptions.notifications': {_id: notificationID}
 			}
 		});
-		
+
 		this.setState({
 			notifications: notifications.filter(notificationToFilter => notificationToFilter._id !== notificationID)
 		});

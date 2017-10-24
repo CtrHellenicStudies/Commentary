@@ -5,8 +5,18 @@ import _ from 'underscore';
 import Works from './works';
 import Books from './books';
 
+/**
+ * Comments are the primary data type of the commentaries. They represent
+ * thoughts from commentators on the source text (such as a comment on a specific
+ * line of Homer). They are also used for annotations on the CHS websites
+ * @type {Meteor.Collection}
+ */
 const Comments = new Meteor.Collection('comments');
 
+/**
+ * Comments schema
+ * @type {SimpleSchema}
+ */
 Comments.schema = new SimpleSchema({
 	urn: {
 		type: String,

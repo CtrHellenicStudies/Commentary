@@ -1,10 +1,15 @@
+/**
+ * Mutations for books
+ */
+ 
 import { GraphQLNonNull, GraphQLID } from 'graphql';
+
 // types
 import {BookType, BookInputType} from '/imports/graphql/types/models/book';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import BookService from '../bll/books';
+// logic
+import BookService from '../logic/books';
 
 const bookMutationFields = {
 	bookCreate: {

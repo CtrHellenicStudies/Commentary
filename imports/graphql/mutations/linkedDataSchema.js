@@ -1,11 +1,15 @@
+/**
+ * Mutations for linked data schemas 
+ */
+
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
 import { LinkedDataSchemaType, LinkedDataSchemaInputType } from '/imports/graphql/types/models/linkedDataSchema';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import LinkedDataSchemaService from '../bll/linkedDataSchema';
+// logic
+import LinkedDataSchemaService from '../logic/linkedDataSchema';
 
 const linkedDataSchemaMutationFields = {
 

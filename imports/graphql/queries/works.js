@@ -1,10 +1,13 @@
+/**
+ * Queries for works
+ */
 import { GraphQLID, GraphQLList } from 'graphql';
 
 // types
 import { WorkType } from '/imports/graphql/types/models/work';
 
-// bll
-import WorksService from '../bll/works';
+// logic
+import WorksService from '../logic/works';
 
 
 const workQueryFields = {

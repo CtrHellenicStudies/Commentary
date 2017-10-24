@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -6,7 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // lib
 import Utils from '/imports/lib/utils';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 
 // components
@@ -18,9 +19,9 @@ import KeywordsList from '/imports/ui/components/keywords/KeywordsList';
 const KeywordsPage = React.createClass({
 
 	propTypes: {
-		type: React.PropTypes.string.isRequired,
-		title: React.PropTypes.string.isRequired,
-		settings: React.PropTypes.object,
+		type: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		settings: PropTypes.object,
 	},
 
 	render() {

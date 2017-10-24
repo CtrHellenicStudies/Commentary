@@ -1,27 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
+import DraftInputEditor from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
-import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 // import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 
@@ -36,23 +28,6 @@ import muiTheme from '/imports/lib/muiTheme';
 
 // helpers:
 import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
-
-
-// Create toolbar plugin for editor
-const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
-const { InlineToolbar } = inlineToolbarPlugin;
 
 // Keyword Mentions
 const keywordMentionPlugin = createMentionPlugin();
@@ -162,12 +137,12 @@ class CommentContentInput extends React.Component {
 	render() {
 		return (
 			<div className="commentContentInput">
-				<Editor
+				<DraftInputEditor
 					editorState={this.state.contentEditorState}
 					onChange={this.onTextChange}
 					placeholder="Comment text..."
-					spellCheck
-					plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
+					spellcheck={true}
+					plugins={[keywordMentionPlugin, commentsMentionPlugin]}
 					ref={(element) => { this.editor = element; }}
 				/>
 
@@ -186,6 +161,10 @@ class CommentContentInput extends React.Component {
 		);
 	}
 }
+
+CommentContentInput.propTypes = {
+	tags: PropTypes.array,
+};
 
 const CommentContentInputContainer = createContainer(() => {
 	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });

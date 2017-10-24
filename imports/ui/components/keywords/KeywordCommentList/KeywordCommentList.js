@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 
 // components
@@ -96,7 +97,7 @@ const KeywordCommentList = (props) => {
 	);
 };
 KeywordCommentList.propTypes = {
-	keywordComments: React.PropTypes.array,
+	keywordComments: PropTypes.array,
 };
 
 export default KeywordCommentList;

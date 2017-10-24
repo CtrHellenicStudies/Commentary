@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 // TODO: upgrade to d3v4
 // import * as d3 from 'd3';
@@ -8,8 +9,8 @@ import { Link } from 'react-router-dom';
 const WorkVisualization = React.createClass({
 
 	propTypes: {
-		work: React.PropTypes.object.isRequired,
-		commenterSlug: React.PropTypes.string,
+		work: PropTypes.object.isRequired,
+		commenterSlug: PropTypes.string,
 	},
 
 	getInitialState() {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -9,7 +10,7 @@ import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceW
 import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 
 // lib
@@ -61,8 +62,8 @@ class ReferenceWorksPage extends React.Component {
 
 
 ReferenceWorksPage.propTypes = {
-	title: React.PropTypes.string.isRequired,
-	settings: React.PropTypes.object,
+	title: PropTypes.string.isRequired,
+	settings: PropTypes.object,
 };
 
 const ReferenceWorksPageContainer = createContainer(() => {

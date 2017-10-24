@@ -1,6 +1,10 @@
+/**
+ * Configure sitemap to be generated for the application
+ */
+
 import { sitemaps } from 'meteor/gadicohen:sitemaps';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';

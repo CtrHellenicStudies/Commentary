@@ -1,12 +1,16 @@
+/**
+ * Send batched notification emails 
+ */
+
 import { Meteor } from 'meteor/meteor';
 import { Email } from 'meteor/email';
 import { SyncedCron } from 'meteor/percolate:synced-cron';
 
 function sendBatchNotificationEmails(routine) {
 	const subscribedUsers = Meteor.users.find(
-		{$and: 
+		{$and:
 		[
-			{batchNotification: routine}, 
+			{batchNotification: routine},
 			{'subscriptions.notifications.0': {$exists: true}},
 			{emails: {$exists: true}}
 		]
@@ -15,7 +19,7 @@ function sendBatchNotificationEmails(routine) {
 
 	subscribedUsers.forEach(user => {
 		const numberOfNotifications = user.subscriptions.notifications.length;
-		
+
 		let username = 'Commentary User';
 		if (user.profile.name) {
 			username = user.profile.name;

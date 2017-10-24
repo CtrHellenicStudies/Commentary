@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -14,11 +15,11 @@ import muiTheme from '/imports/lib/muiTheme';
 const NotFound = React.createClass({
 
 	propTypes: {
-		isTest: React.PropTypes.bool,
+		isTest: PropTypes.bool,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getChildContext() {

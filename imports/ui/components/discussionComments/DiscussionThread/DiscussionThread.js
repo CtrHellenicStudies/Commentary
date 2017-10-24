@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -6,7 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
-// api
+// models
 import DiscussionComments from '/imports/models/discussionComments';
 
 // lib
@@ -18,15 +19,15 @@ import DiscussionComment from '/imports/ui/components/discussionComments/Discuss
 const DiscussionThread = React.createClass({
 
 	propTypes: {
-		comment: React.PropTypes.object.isRequired,
-		discussionVisible: React.PropTypes.bool.isRequired,
-		showDiscussionThread: React.PropTypes.func.isRequired,
-		hideDiscussionThread: React.PropTypes.func.isRequired,
-		toggleLemma: React.PropTypes.func.isRequired,
-		showLoginModal: React.PropTypes.func,
-		discussionComments: React.PropTypes.array,
-		discussionCommentsDisabled: React.PropTypes.bool,
-		ready: React.PropTypes.bool,
+		comment: PropTypes.object.isRequired,
+		discussionVisible: PropTypes.bool.isRequired,
+		showDiscussionThread: PropTypes.func.isRequired,
+		hideDiscussionThread: PropTypes.func.isRequired,
+		toggleLemma: PropTypes.func.isRequired,
+		showLoginModal: PropTypes.func,
+		discussionComments: PropTypes.array,
+		discussionCommentsDisabled: PropTypes.bool,
+		ready: PropTypes.bool,
 	},
 
 	getInitialState() {

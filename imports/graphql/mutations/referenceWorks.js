@@ -1,10 +1,14 @@
+/**
+ * Mutations for reference works 
+ */
 import { GraphQLString, GraphQLNonNull } from 'graphql';
+
 // types
 import { ReferenceWorkType, ReferenceWorkInputType} from '/imports/graphql/types/models/referenceWork';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import ReferenceWorksService from '../bll/referenceWorks';
+// logic
+import ReferenceWorksService from '../logic/referenceWorks';
 
 const referenceWorksMutationFields = {
 	referenceWorkRemove: {

@@ -1,5 +1,6 @@
 import React from 'react';
-import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';  
+import PropTypes from 'prop-types';
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import _ from 'lodash';
@@ -13,7 +14,7 @@ const CommentUpperLeft = props => (
 	</div>
 );
 CommentUpperLeft.propTypes = {
-	title: React.PropTypes.string.isRequired,
+	title: PropTypes.string.isRequired,
 };
 /*
 	END CommentUpperLeft
@@ -64,17 +65,17 @@ const CommentUpperRight = props => (
 	</div>
 );
 CommentUpperRight.propTypes = {
-	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
-		name: React.PropTypes.string.isRequired,
-		avatar: React.PropTypes.shape({
-			src: React.PropTypes.string.isRequired,
+	commenters: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
+		name: PropTypes.string.isRequired,
+		avatar: PropTypes.shape({
+			src: PropTypes.string.isRequired,
 		})
 	})).isRequired,
-	commentId: React.PropTypes.string.isRequired,
-	updateDate: React.PropTypes.string.isRequired,
-	userCanEditCommenters: React.PropTypes.arrayOf(React.PropTypes.string),
+	commentId: PropTypes.string.isRequired,
+	updateDate: PropTypes.string.isRequired,
+	userCanEditCommenters: PropTypes.arrayOf(PropTypes.string),
 };
 CommentUpperRight.defaultProps = {
 	userCanEditCommenters: [],
@@ -102,20 +103,20 @@ const CommentUpper = props => (
 	</div>
 );
 CommentUpper.propTypes = {
-	title: React.PropTypes.string.isRequired,
-	commentId: React.PropTypes.string.isRequired,
-	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
-		name: React.PropTypes.string.isRequired,
-		avatar: React.PropTypes.shape({
-			src: React.PropTypes.string.isRequired,
+	title: PropTypes.string.isRequired,
+	commentId: PropTypes.string.isRequired,
+	commenters: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
+		name: PropTypes.string.isRequired,
+		avatar: PropTypes.shape({
+			src: PropTypes.string.isRequired,
 		})
 	})).isRequired,
-	updateDate: React.PropTypes.string.isRequired,
-	userCanEditCommenters: React.PropTypes.arrayOf(React.PropTypes.string),
-	hideTitle: React.PropTypes.bool,
-	hideCommenters: React.PropTypes.bool,
+	updateDate: PropTypes.string.isRequired,
+	userCanEditCommenters: PropTypes.arrayOf(PropTypes.string),
+	hideTitle: PropTypes.bool,
+	hideCommenters: PropTypes.bool,
 };
 CommentUpper.defaultProps = {
 	userCanEditCommenters: [],

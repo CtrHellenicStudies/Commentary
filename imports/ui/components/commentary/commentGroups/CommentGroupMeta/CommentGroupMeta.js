@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 
 const getWorkTitle = (commentGroup) => {
@@ -60,19 +61,19 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 	</div>
 );
 CommentGroupMeta.propTypes = {
-	hideLemma: React.PropTypes.bool,
-	commentGroup: React.PropTypes.shape({
-		subwork: React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
+	hideLemma: PropTypes.bool,
+	commentGroup: PropTypes.shape({
+		subwork: PropTypes.shape({
+			title: PropTypes.string.isRequired,
 		}),
-		lineFrom: React.PropTypes.number.isRequired,
-		lineTo: React.PropTypes.number,
-		commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			name: React.PropTypes.string.isRequired,
-			slug: React.PropTypes.string.isRequired,
-			avatar: React.PropTypes.shape({
-				src: React.PropTypes.string,
+		lineFrom: PropTypes.number.isRequired,
+		lineTo: PropTypes.number,
+		commenters: PropTypes.arrayOf(PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+			slug: PropTypes.string.isRequired,
+			avatar: PropTypes.shape({
+				src: PropTypes.string,
 			})
 		}))
 	}),

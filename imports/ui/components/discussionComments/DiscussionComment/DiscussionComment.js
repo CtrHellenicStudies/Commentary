@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -12,9 +13,9 @@ import { Link } from 'react-router-dom';
 const DiscussionComment = React.createClass({
 
 	propTypes: {
-		discussionComment: React.PropTypes.object.isRequired,
-		currentUser: React.PropTypes.object,
-		user: React.PropTypes.object,
+		discussionComment: PropTypes.object.isRequired,
+		currentUser: PropTypes.object,
+		user: PropTypes.object,
 	},
 
 	getInitialState() {

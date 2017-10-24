@@ -1,5 +1,8 @@
 import Config from './_config.js';
 
+/**
+ * Set default language for internationalization
+ */
 Meteor.startup(() => {
 	if (Meteor.isClient) {
 		if (Config.defaultLanguage) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -10,7 +11,7 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 import ReferenceWorks from '/imports/models/referenceWorks';
 import Commenters from '/imports/models/commenters';
@@ -126,10 +127,10 @@ class ReferenceWorkDetail extends React.Component {
 }
 
 ReferenceWorkDetail.propTypes = {
-	slug: React.PropTypes.string.isRequired,
-	referenceWork: React.PropTypes.object,
-	settings: React.PropTypes.object,
-	commenters: React.PropTypes.array,
+	slug: PropTypes.string.isRequired,
+	referenceWork: PropTypes.object,
+	settings: PropTypes.object,
+	commenters: PropTypes.array,
 };
 
 

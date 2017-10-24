@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const PWDLoginForm = ({ errorMsg, login, closeModal, history }) => {
@@ -84,9 +85,9 @@ const PWDLoginForm = ({ errorMsg, login, closeModal, history }) => {
 	);
 };
 PWDLoginForm.propTypes = {
-	errorMsg: React.PropTypes.string,
-	login: React.PropTypes.func,
-	close: React.PropTypes.func,
+	errorMsg: PropTypes.string,
+	login: PropTypes.func,
+	close: PropTypes.func,
 };
 PWDLoginForm.defaultProps = {
 	errorMsg: null,

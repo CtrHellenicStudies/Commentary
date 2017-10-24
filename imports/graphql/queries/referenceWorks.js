@@ -1,10 +1,14 @@
-import {GraphQLString, GraphQLList} from 'graphql';
+/**
+ * Queries for reference works
+ */
+
+import { GraphQLString, GraphQLList } from 'graphql';
 
 // types
-import {ReferenceWorkType} from '/imports/graphql/types/models/referenceWork';
+import { ReferenceWorkType } from '/imports/graphql/types/models/referenceWork';
 
-// bll
-import ReferenceWorksService from '../bll/referenceWorks';
+// logic
+import ReferenceWorksService from '../logic/referenceWorks';
 
 
 const referenceWorkQueryFields = {

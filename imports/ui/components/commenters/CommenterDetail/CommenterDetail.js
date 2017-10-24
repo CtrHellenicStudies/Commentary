@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 import Settings from '/imports/models/settings';
 
@@ -34,16 +35,16 @@ class CommenterDetail extends React.Component {
 	}
 
 	static propTypes = {
-		commenter: React.PropTypes.shape({
-			name: React.PropTypes.string.isRequired,
-			bio: React.PropTypes.string,
-			_id: React.PropTypes.string
+		commenter: PropTypes.shape({
+			name: PropTypes.string.isRequired,
+			bio: PropTypes.string,
+			_id: PropTypes.string
 		}),
-		avatarUrl: React.PropTypes.string,
-		settings: React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
+		avatarUrl: PropTypes.string,
+		settings: PropTypes.shape({
+			title: PropTypes.string.isRequired,
 		}),
-		isTest: React.PropTypes.bool,
+		isTest: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -51,23 +52,6 @@ class CommenterDetail extends React.Component {
 		avatarUrl: null,
 		isTest: false,
 	};
-
-	componentWillReceiveProps(nextProps) {
-		const { commenter } = this.props;
-		/*
-		const { subscriptions } = this.state;
-
-		if (commenter !== nextProps.commenter) {
-			this.setState({
-				subscribed: subscriptions.commenters.filter((sub) => sub._id === nextProps.commenter._id).length > 0
-			});
-		} else {
-			this.setState({
-				subscribed: false
-			});
-		}
-		*/
-	}
 
 	toggleReadMoreBio() {
 		const { readMoreBio } = this.state;
@@ -181,17 +165,6 @@ class CommenterDetail extends React.Component {
 									null
 								}
 							</div>
-
-							{/* loggedIn ?
-								<div>
-									<FlatButton
-										label={subscribed ? `Unsubscribe from ${commenter.name}` : `Subscribe to ${commenter.name}`}
-										onTouchTap={this.subscribe}
-									/>
-								</div>
-							:
-								''
-							*/}
 
 							<CommenterVisualizations
 								commenter={commenter}

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -29,7 +30,7 @@ class MasterLayout extends React.Component {
 
 
 MasterLayout.propTypes = {
-	content: React.PropTypes.object,
+	content: PropTypes.object,
 };
 
 export default MasterLayout;

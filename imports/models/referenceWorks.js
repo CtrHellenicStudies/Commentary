@@ -1,8 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Reference works are the books, articles, and websites that the comments in
+ * the commentary are drawn from
+ * @type {Meteor.Collection}
+ */
 const ReferenceWorks = new Meteor.Collection('referenceWorks');
 
+/**
+ * Reference works schema
+ * @type {SimpleSchema}
+ */
 ReferenceWorks.schema = new SimpleSchema({
 	title: {
 		type: String,

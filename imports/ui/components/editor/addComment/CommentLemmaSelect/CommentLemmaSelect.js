@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -6,7 +7,7 @@ import TextField from 'material-ui/TextField';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// api
+// models
 import TextNodes from '/imports/models/textNodes';
 import Editions from '/imports/models/editions';
 
@@ -18,16 +19,16 @@ import Utils from '/imports/lib/utils';
 const CommentLemmaSelect = React.createClass({
 
 	propTypes: {
-		workSlug: React.PropTypes.string.isRequired,
-		subworkN: React.PropTypes.number.isRequired,
-		selectedLineFrom: React.PropTypes.number.isRequired,
-		selectedLineTo: React.PropTypes.number.isRequired,
-		selectedLemmaEdition: React.PropTypes.object,
-		lemmaText: React.PropTypes.array,
+		workSlug: PropTypes.string.isRequired,
+		subworkN: PropTypes.number.isRequired,
+		selectedLineFrom: PropTypes.number.isRequired,
+		selectedLineTo: PropTypes.number.isRequired,
+		selectedLemmaEdition: PropTypes.object,
+		lemmaText: PropTypes.array,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {

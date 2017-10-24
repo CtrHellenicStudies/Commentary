@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -14,11 +15,11 @@ import muiTheme from '/imports/lib/muiTheme';
 const DiscussionCommentTeaser = React.createClass({
 
 	propTypes: {
-		discussionComment: React.PropTypes.object.isRequired,
+		discussionComment: PropTypes.object.isRequired,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getChildContext() {

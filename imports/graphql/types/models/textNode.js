@@ -11,6 +11,10 @@ import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
 
 
+/**
+ * Text node model type
+ * @type {GraphQLObjectType}
+ */
 const TextNodeType = new GraphQLObjectType({
 	name: 'TextNodeType',
 	description: 'A node of text from a primary source of the commentary',
@@ -36,6 +40,10 @@ const TextNodeType = new GraphQLObjectType({
 	},
 });
 
+/**
+ * Text node input type
+ * @type {GraphQLInputObjectType}
+ */
 const TextNodeInputType = new GraphQLInputObjectType({
 	name: 'TextNodeInputType',
 	description: 'A node of text from a primary source of the commentary',
@@ -58,4 +66,4 @@ const TextNodeInputType = new GraphQLInputObjectType({
 	},
 });
 
-export {TextNodeType, TextNodeInputType};
+export { TextNodeType, TextNodeInputType };

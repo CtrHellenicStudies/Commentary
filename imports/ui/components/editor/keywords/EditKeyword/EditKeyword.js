@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -9,26 +10,15 @@ import Snackbar from 'material-ui/Snackbar';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 
-
-
-// api
+// models
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -39,38 +29,25 @@ import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
 
 
-const { InlineToolbar } = inlineToolbarPlugin;
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
 
 const EditKeyword = React.createClass({
 
 	propTypes: {
-		submitForm: React.PropTypes.func.isRequired,
-		onTypeChange: React.PropTypes.func.isRequired,
-		keyword: React.PropTypes.object,
-		selectedLineFrom: React.PropTypes.number,
-		selectedLineTo: React.PropTypes.number,
-		keywordsOptions: React.PropTypes.array,
-		keyideasOptions: React.PropTypes.array,
+		submitForm: PropTypes.func.isRequired,
+		onTypeChange: PropTypes.func.isRequired,
+		keyword: PropTypes.object,
+		selectedLineFrom: PropTypes.number,
+		selectedLineTo: PropTypes.number,
+		keywordsOptions: PropTypes.array,
+		keyideasOptions: PropTypes.array,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {
@@ -172,22 +149,6 @@ const EditKeyword = React.createClass({
 			value: newOption.label
 		};
 	},
-
-	onSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.label,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	},
-
 	shouldKeyDownEventCreateNewOption(sig) {
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
@@ -332,13 +293,14 @@ const EditKeyword = React.createClass({
 					>
 						<div className="comment-upper">
 							<h1 className="add-comment-title">
-								<Editor
+								<DraftEditorInput
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
 									placeholder="Key word or idea . . ."
-									spellCheck
-									stripPastedStyles
-									plugins={[singleLinePlugin]}
+									disableMentions={true}
+									spellcheck={true}
+									stripPastedStyles={true}
+									singleLinePlugin={true}
 									blockRenderMap={singleLinePlugin.blockRenderMap}
 								/>
 							</h1>
@@ -366,18 +328,13 @@ const EditKeyword = React.createClass({
 							className="comment-lower clearfix"
 							style={{ paddingTop: 20 }}
 						>
-							<Editor
+							<DraftEditorInput
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
 								placeholder="Keyword description . . ."
-								spellCheck
-								stripPastedStyles
-								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								spellcheck={true}
+								stripPastedStyles={true}
 								ref={(element) => { this.editor = element; }}
-							/>
-							<MentionSuggestions
-								onSearchChange={this.onSearchChange}
-								suggestions={this.state.suggestions}
 							/>
 							<div className="comment-edit-action-button">
 								<RaisedButton
@@ -399,9 +356,6 @@ const EditKeyword = React.createClass({
 						autoHideDuration={4000}
 					/>
 
-				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
 				</div>
 			</div>
 		);

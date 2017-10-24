@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
@@ -51,11 +52,11 @@ class CommenterTeaser extends Component {
 
 
 CommenterTeaser.propTypes = {
-	commenter: React.PropTypes.object
+	commenter: PropTypes.object
 };
 
 CommenterTeaser.childContextTypes = {
-	muiTheme: React.PropTypes.object
+	muiTheme: PropTypes.object
 };
 
 export default CommenterTeaser;

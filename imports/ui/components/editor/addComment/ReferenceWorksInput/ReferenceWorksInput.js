@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import { Field } from 'redux-form';
 import { Meteor } from 'meteor/meteor';
@@ -12,8 +13,7 @@ import {
 	FormGroup,
 	ControlLabel,
 } from 'react-bootstrap';
-import Select from 'react-select';
-import { Creatable } from 'react-select';
+import Select, { Creatable } from 'react-select';
 
 // models
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -179,6 +179,11 @@ class ReferenceWorksInput extends React.Component {
 		);
 	}
 }
+
+ReferenceWorksInput.propTypes = {
+	referenceWorkOptions: PropTypes.array,
+};
+
 
 const ReferenceWorksInputContainer = createContainer(() => {
 

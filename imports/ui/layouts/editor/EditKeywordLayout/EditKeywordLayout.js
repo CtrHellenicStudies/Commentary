@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -27,13 +28,13 @@ import Utils from '/imports/lib/utils';
 const EditKeywordLayout = React.createClass({
 
 	propTypes: {
-		slug: React.PropTypes.string,
-		ready: React.PropTypes.bool,
-		keyword: React.PropTypes.object,
+		slug: PropTypes.string,
+		ready: PropTypes.bool,
+		keyword: PropTypes.object,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {

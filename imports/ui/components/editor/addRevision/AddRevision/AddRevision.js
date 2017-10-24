@@ -15,13 +15,13 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
+import Utils from '/imports/lib/utils';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Select from 'react-select';
-import { Creatable } from 'react-select';
+import Select, { Createable } from 'react-select';
 import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -29,30 +29,14 @@ import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import CommentersEditorDialog from '../CommentersEditorDialog/CommentersEditorDialog';
-import Commenters from '/imports/models/commenters';
 import Snackbar from 'material-ui/Snackbar';
 import slugify from 'slugify';
-
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 import _ from 'underscore';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
-
-// components
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
-import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import Commenters from '/imports/models/commenters';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -60,68 +44,14 @@ import muiTheme from '/imports/lib/muiTheme';
 // helpers:
 import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
 
-
-// Create toolbar plugin for editor
-const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
-const { InlineToolbar } = inlineToolbarPlugin;
-
-// Keyword Mentions
-const keywordMentionPlugin = createMentionPlugin();
-
-// Comments Cross Reference Mentions
-const commentsMentionPlugin = createMentionPlugin({
-	mentionTrigger: '#',
-});
+// components
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import CommentersEditorDialog from '../CommentersEditorDialog';
 
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
-function _getSuggestionsFromComments(comments) {
-	const suggestions = [];
-
-	// if there are comments:
-	if (comments.length) {
-
-		// loop through all comments
-		// add suggestion for each comment
-		comments.forEach((comment) => {
-
-			// get the most recent revision
-			const revision = comment.revisions[comment.revisions.length - 1];
-
-			const suggestion = {
-				// create suggestio name:
-				name: `"${revision.title}" -`,
-
-				// set link for suggestion
-				link: `/commentary?_id=${comment._id}`,
-
-				// set id for suggestion
-				id: comment._id,
-			};
-
-			// loop through commenters and add them to suggestion name
-			comment.commenters.forEach((commenter, i) => {
-				if (i === 0) suggestion.name += ` ${commenter.name}`;
-				else suggestion.name += `, ${commenter.name}`;
-			});
-
-			suggestions.push(suggestion);
-		});
-	}
-	return suggestions;
-}
 
 class AddRevision extends React.Component {
 
@@ -245,21 +175,6 @@ class AddRevision extends React.Component {
 		});
 	}
 
-	_onCommentsSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
-			const commentsSuggestions = _getSuggestionsFromComments(res);
-
-			this.setState({
-				commentsSuggestions: fromJS(commentsSuggestions),
-			});
-		});
-	}
-
 	handleSubmit() {
 		const { textEditorState } = this.state;
 
@@ -267,27 +182,7 @@ class AddRevision extends React.Component {
 		// TODO: Migrate to formsy components
 
 		// create html from textEditorState's content
-		const textHtml = convertToHTML({
-
-			// performe necessary html transformations:
-			entityToHTML: (entity, originalText) => {
-
-				// handle LINK
-				if (entity.type === 'LINK') {
-					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
-				}
-
-				// handle keyword mentions
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
-				}
-
-				// handle hashtag / commets cross reference mentions
-				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-				}
-			},
-		})(textEditorState.getCurrentContent());
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
@@ -408,7 +303,7 @@ class AddRevision extends React.Component {
 		let _selectedKeyword;
 
 		tags.forEach(_tag => {
-			if (_tag._id == tag.value) {
+			if (_tag._id === tag.value) {
 				_selectedKeyword = _tag;
 			}
 		});
@@ -553,27 +448,7 @@ class AddRevision extends React.Component {
 											}}
 										/>
 									</div>
-									{/*<div className="comment-upper-action-button">*/}
-										{/*<FlatButton*/}
-											{/*label="Edit Authors"*/}
-											{/*labelPosition="after"*/}
-											{/*onClick={this.openCommentersEditorDialog}*/}
-											{/*style={{*/}
-												{/*border: '1px solid #ddd',*/}
-												{/*maxHeight: 'none',*/}
-												{/*fontSize: '12px',*/}
-												{/*height: 'auto',*/}
-											{/*}}*/}
-										{/*/>*/}
-									{/*</div>*/}
 								</div>
-
-								{/*<CommentersEditorDialog*/}
-									{/*open={this.state.commentersEditorDialogOpen}*/}
-									{/*handleClose={this.handleCloseCommentersEditorDialog}*/}
-									{/*commenters={this.state.commenters}*/}
-									{/*setCommenters={this.setCommenters}*/}
-								{/*/>*/}
 
 								<br />
 								{commentersOptions && commentersOptions.length ?
@@ -585,18 +460,19 @@ class AddRevision extends React.Component {
 										value={this.state.commenterValue}
 										onChange={this.onCommenterValueChange}
 										placeholder="Commentator..."
-										multi={true}
+										multi
 									/>
 								: ''}
 								<h1 className="add-comment-title">
-									<Editor
+									<DraftEditorInput
+										name="draft_comment_title"
 										editorState={titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
-										spellCheck
-										stripPastedStyles
-										plugins={[singleLinePlugin]}
-										blockRenderMap={singleLinePlugin.blockRenderMap}
+										spellcheck = {true}
+										disableMentions={true}
+										stripPastedStyles = {true}
+										singleLine={true}
 									/>
 								</h1>
 
@@ -613,25 +489,13 @@ class AddRevision extends React.Component {
 
 							</div>
 							<div className="comment-lower clearfix" style={{ paddingTop: 20 }}>
-								<Editor
+								<DraftEditorInput
+									name="draft_comment_text"
 									editorState={textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
-									spellCheck
-									plugins={[commentsMentionPlugin, keywordMentionPlugin, inlineToolbarPlugin]}
+									spellcheck = {true}
 									ref={(element) => { this.editor = element; }}
-								/>
-
-								{/* mentions suggestions for keywords */}
-								<keywordMentionPlugin.MentionSuggestions
-									onSearchChange={this._onKeywordSearchChange}
-									suggestions={this.state.keywordSuggestions}
-								/>
-
-								{/* mentions suggestions for comments cross reference */}
-								<commentsMentionPlugin.MentionSuggestions
-									onSearchChange={this._onCommentsSearchChange}
-									suggestions={this.state.commentsSuggestions}
 								/>
 
 								<div className="comment-reference">
@@ -790,9 +654,6 @@ class AddRevision extends React.Component {
 						autoHideDuration={4000}
 					/>
 				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
-				</div>
 			</div>
 		);
 	}
@@ -805,6 +666,7 @@ AddRevision.propTypes = {
 	comment: PropTypes.object.isRequired,
 	tags: PropTypes.array,
 	referenceWorkOptions: PropTypes.array,
+	commentersOptions: PropTypes.array,
 };
 
 AddRevision.childContextTypes = {

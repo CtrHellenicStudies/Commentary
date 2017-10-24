@@ -1,8 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Translation nodes (formerly Translations) are like textNodes but represent
+ * translations of text nodes by commentators
+ * @type {Meteor.Collection}
+ */
 const TranslationNodes = new Meteor.Collection('translationNodes');
 
+/**
+ * Translation Nodes schema
+ * @type {SimpleSchema}
+ */
 TranslationNodes.schema = new SimpleSchema({
 	tenantId: {
 		type: String,

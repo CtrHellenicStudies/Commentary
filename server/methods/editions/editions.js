@@ -2,6 +2,11 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import Editions from '/imports/models/editions';
 
+
+/**
+ * Edition methods - either replaced or to be replaced with the graphql api
+ */
+
 const multilineInsert = (token, edition, multiline) => {
 	const roles = ['editor', 'admin', 'commenter'];
 	if (!Meteor.users.findOne({

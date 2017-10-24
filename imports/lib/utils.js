@@ -1,13 +1,18 @@
 import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
-// lib
-import Config from './_config/_config.js';
+import { convertToHTML } from 'draft-convert';
 
 // models
 import Editions from '/imports/models/editions';
 import Commenters from '/imports/models/commenters';
 
+// lib
+import Config from './_config/_config';
 
+
+/**
+ * General application specific utility / helper functions
+ */
 const Utils = {
 	isReady: (sub) => {
 		if (sub) {
@@ -286,7 +291,7 @@ const Utils = {
 		editions.forEach((edition, index) => {
 			const joinedText = edition.lines.map(line => line.html).join(' ');
 
-			const tag = new RegExp(`<lb ed="${multiline}" id="\\d+" \/>`, 'ig');
+			const tag = new RegExp(`<lb ed="${multiline}" id="\\d+" />`, 'ig');
 			const id = /id="\d+"/ig;
 
 			const textArray = joinedText.split(tag);
@@ -322,7 +327,97 @@ const Utils = {
 			parsedEditions.push(currentEdition);
 		});
 		return parsedEditions;
+	},
+	getHtmlFromContext(context){
+		return convertToHTML({
+			
+						// performe necessary html transformations:
+						blockToHTML: (block) => {
+							const type = block.type;
+							if (type === 'atomic') {
+							  return {start: '<span>', end: '</span>'};
+							}
+							if (type === 'unstyled') {
+							  return <p />;
+							}
+							return <span/>;
+						  },
+						entityToHTML: (entity, originalText) => {
+							let ret = originalText;
+							switch(entity.type){
+								case 'LINK':
+									ret = <a href={entity.data.link}>{originalText}</a>;
+									break;
+								case 'mention':
+									ret = <a className="keyword-gloss" data-link={this.getEntityData(entity, 'link')}>{originalText}</a>;
+									break;
+								case '#mention':
+									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{originalText}</a>;
+									break;
+								case 'draft-js-video-plugin-video':
+									ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>;
+									break;
+								case 'image':
+									ret = '<img src="'+entity.data.src+'" alt="draft js image error"/>';
+									break;
+								default:
+									break;
+							}
+							return ret;
+						},
+					})(context);
 	}
 };
+
+/**
+ * Get all comments for a supplied keyword by the keywordId
+ * @param {number} keywordId - id of keyword
+ * @param {number} tenantId - id of current tenant
+ * @returns {Object[]} Cursor of comments
+ */
+export function queryCommentWithKeywordId(keywordId, tenantId) {
+	return Comments.find({
+		'keywords._id': keywordId,
+		tenantId: tenantId
+	}, {
+		limit: 1,
+		fields: {
+			'work.slug': 1,
+			'subwork.n': 1,
+			'keywords.slug': 1,
+			'keywords._id': 1,
+			lineFrom: 1,
+			lineTo: 1,
+			nLines: 1,
+		}
+	});
+}
+
+/**
+ * Return information about a comment for a keyword
+ * @param {Object} comment - the input comment
+ * @param {number} maxLines - maximum amount of lines to limit the query to
+ * @returns {Object} comment information for making keyword query
+ */
+export function makeKeywordContextQueryFromComment(comment, maxLines) {
+	let lineTo = comment.lineFrom;
+	if (comment.hasOwnProperty('lineTo')) {
+		lineTo = comment.lineFrom + Math.min(
+				maxLines,
+				comment.lineTo - comment.lineFrom
+			);
+	} else if (comment.hasOwnProperty('nLines')) {
+		lineTo = comment.lineFrom + Math.min(maxLines, comment.nLines);
+	}
+
+	return {
+		'work.slug': comment.work.slug,
+		'subwork.n': comment.subwork.n,
+		'text.n': {
+			$gte: comment.lineFrom,
+			$lte: lineTo,
+		},
+	};
+}
 
 export default Utils;

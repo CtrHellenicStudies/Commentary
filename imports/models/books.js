@@ -1,8 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Books represent books on the CHS main website (https://chs.harvard.edu) and
+ * contain an array of chapters that have titles and URLs
+ * @type {Meteor.Collection}
+ */
 const Books = new Meteor.Collection('books');
 
+/**
+ * Books schema 
+ * @type {SimpleSchema}
+ */
 Books.schema = new SimpleSchema({
 	title: {
 		type: String

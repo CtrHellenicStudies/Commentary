@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
@@ -167,6 +168,10 @@ class TranslationNodeInput extends React.Component {
 	}
 }
 
+TranslationNodeInput.propTypes = {
+	translationNodes: PropTypes.array,
+	ready: PropTypes.bool,
+};
 
 const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation}) => {
 

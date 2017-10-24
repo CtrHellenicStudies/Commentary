@@ -5,7 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Tabs, Tab} from 'material-ui/Tabs';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 
 // lib

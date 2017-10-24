@@ -7,6 +7,10 @@ import {
 } from 'graphql';
 
 
+/**
+ * Discussion comment type
+ * @type {GraphQLObjectType}
+ */
 const DiscussionCommentType = new GraphQLObjectType({
 	name: 'DiscussionCommentType',
 	description: 'A discussion comment in the commentary',
@@ -42,10 +46,15 @@ const DiscussionCommentType = new GraphQLObjectType({
 			type: new GraphQLList(GraphQLString),
 		},
 		tenantId: {
-			type: GraphQLString, 
+			type: GraphQLString,
 		},
 	},
 });
+
+/**
+ * Discussion comment input type
+ * @type {GraphQLInputObjectType}
+ */
 const DiscussionCommentInputType = new GraphQLInputObjectType({
 	name: 'DiscussionCommentInputType',
 	description: 'A discussion comment in the commentary',
@@ -84,4 +93,4 @@ const DiscussionCommentInputType = new GraphQLInputObjectType({
 });
 
 
-export {DiscussionCommentType, DiscussionCommentInputType};
+export { DiscussionCommentType, DiscussionCommentInputType };

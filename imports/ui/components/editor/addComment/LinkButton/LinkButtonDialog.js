@@ -1,7 +1,8 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import React from 'react';
 
 const LinkButtonDialog = ({ open, linkValue, handleClose, handleAddLink, handleRemoveLink, onValueChange }) => {
 	const actions = [
@@ -39,12 +40,12 @@ const LinkButtonDialog = ({ open, linkValue, handleClose, handleAddLink, handleR
 	);
 };
 LinkButtonDialog.propTypes = {
-	open: React.PropTypes.bool.isRequired,
-	linkValue: React.PropTypes.string,
-	handleClose: React.PropTypes.func.isRequired,
-	handleAddLink: React.PropTypes.func.isRequired,
-	handleRemoveLink: React.PropTypes.func.isRequired,
-	onValueChange: React.PropTypes.func.isRequired,
+	open: PropTypes.bool.isRequired,
+	linkValue: PropTypes.string,
+	handleClose: PropTypes.func.isRequired,
+	handleAddLink: PropTypes.func.isRequired,
+	handleRemoveLink: PropTypes.func.isRequired,
+	onValueChange: PropTypes.func.isRequired,
 };
 LinkButtonDialog.defaultProps = {
 	linkValue: '',

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const LinePagination = ({ linePagination, linePaginationClicked }) => (
@@ -14,8 +15,8 @@ const LinePagination = ({ linePagination, linePaginationClicked }) => (
 	</div>
 );
 LinePagination.propTypes = {
-	linePagination: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-	linePaginationClicked: React.PropTypes.func.isRequired,
+	linePagination: PropTypes.arrayOf(PropTypes.number).isRequired,
+	linePaginationClicked: PropTypes.func.isRequired,
 };
 
 export default LinePagination;

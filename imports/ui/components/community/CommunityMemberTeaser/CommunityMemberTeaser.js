@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
 
@@ -7,7 +8,7 @@ import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 
 class CommunityMemberTeaser extends React.Component {
 	static propTypes = {
-		user: React.PropTypes.object,
+		user: PropTypes.object,
 	}
 
 	render() {

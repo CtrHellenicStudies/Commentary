@@ -11,6 +11,10 @@ import Commenters from '/imports/models/commenters';
 import { getAuthorizedUser } from '../helpers';
 
 
+/**
+ * Comment methods - either replaced or to be replaced with the graphql api
+ */
+
 const commentsInsert = (token, comment) => {
 	check(token, Match.Maybe(String));
 	check(comment, Object);
@@ -94,17 +98,17 @@ const commentsInsert = (token, comment) => {
 
 	const emailList = Meteor.users.find(emailListQuery);
 
-	emailList.forEach(user => {
+	emailList.forEach(_user => {
 
 		let username = 'Commentary User';
-		if (user.profile.name) {
-			username = user.profile.name;
-		} else if (user.username) {
-			username = user.username;
+		if (_user.profile.name) {
+			username = _user.profile.name;
+		} else if (_user.username) {
+			username = _user.username;
 		}
 
 		const from = 'no-reply@ahcip.chs.harvard.edu';
-		const to = user.emails[0].address;
+		const to = _user.emails[0].address;
 		const subject = 'New Notification';
 		const text = `
 		Dear ${username},
@@ -118,7 +122,6 @@ const commentsInsert = (token, comment) => {
 
 		// TODO: Send email with batching
 		// Email.send({ from, to, subject, text });
-
 	});
 
 	return commentId;

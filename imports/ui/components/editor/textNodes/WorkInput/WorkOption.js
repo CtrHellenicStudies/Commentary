@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -18,6 +19,12 @@ class WorkOption extends React.Component {
 		);
 	}
 }
+
+WorkOption.propTypes = {
+	_id: PropTypes.string,
+	title: PropTypes.string,
+	actions: PropTypes.array,
+};
 
 const mapStateToProps = (state, props) => ({
 	selectedWork: state.textNodes.work,

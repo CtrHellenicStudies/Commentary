@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -6,7 +7,7 @@ import { Session } from 'meteor/session';
 // lib
 import Utils from '/imports/lib/utils';
 
-// api
+// models
 import Pages from '/imports/models/pages';
 import Settings from '/imports/models/settings';
 
@@ -84,18 +85,16 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-	slug: React.PropTypes.string,
-	page: React.PropTypes.object,
-	ready: React.PropTypes.bool,
-	images: React.PropTypes.array,
-	thumbnails: React.PropTypes.array,
-	ready: React.PropTypes.bool,
-	settings: React.PropTypes.object,
+	slug: PropTypes.string,
+	page: PropTypes.object,
+	ready: PropTypes.bool,
+	images: PropTypes.array,
+	thumbnails: PropTypes.array,
+	settings: PropTypes.object,
 };
 
 
 const pageContainer = createContainer(({ slug }) => {
-	let page;
 	let images = [];
 	let thumbnails = [];
 
@@ -103,7 +102,7 @@ const pageContainer = createContainer(({ slug }) => {
 	const pageHandle = Meteor.subscribe('pages', tenantId, slug);
 	const settingsHandle = Meteor.subscribe('settings.tenant', tenantId);
 
-	page = Pages.findOne({ slug, tenantId });
+	const page = Pages.findOne({ slug, tenantId });
 
 	const imageHandle = Meteor.subscribe('pageImages', tenantId, slug);
 	if (page) {

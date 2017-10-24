@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StickyContainer } from 'react-sticky';
 
 // layouts:
@@ -8,37 +9,38 @@ import CommentLemma from '/imports/ui/components/commentary/commentGroups/Commen
 
 class CommentGroup extends React.Component {
 	static propTypes = {
-		commentGroup: React.PropTypes.shape({
-			work: React.PropTypes.shape({
-				slug: React.PropTypes.string.isRequired,
-				title: React.PropTypes.string.isRequired,
+		commentGroup: PropTypes.shape({
+			work: PropTypes.shape({
+				slug: PropTypes.string.isRequired,
+				title: PropTypes.string.isRequired,
 			}),
-			subwork: React.PropTypes.shape({
-				n: React.PropTypes.number.isRequired,
+			subwork: PropTypes.shape({
+				n: PropTypes.number.isRequired,
 			}),
-			lineFrom: React.PropTypes.number.isRequired,
-			lineTo: React.PropTypes.number,
-			commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-				_id: React.PropTypes.string.isRequired,
-				name: React.PropTypes.string.isRequired,
-				slug: React.PropTypes.string.isRequired,
-				avatar: React.PropTypes.shape({
-					src: React.PropTypes.string,
+			lineFrom: PropTypes.number.isRequired,
+			lineTo: PropTypes.number,
+			commenters: PropTypes.arrayOf(PropTypes.shape({
+				_id: PropTypes.string.isRequired,
+				name: PropTypes.string.isRequired,
+				slug: PropTypes.string.isRequired,
+				avatar: PropTypes.shape({
+					src: PropTypes.string,
 				})
 			}))
 		}).isRequired,
-		commentGroupIndex: React.PropTypes.string.isRequired,
-		contextPanelOpen: React.PropTypes.bool.isRequired,
-		showContextPanel: React.PropTypes.func.isRequired,
-		setContextScrollPosition: React.PropTypes.func.isRequired,
-		selectMultiLine: React.PropTypes.func.isRequired,
-		toggleSearchTerm: React.PropTypes.func,
-		filters: React.PropTypes.arrayOf(React.PropTypes.shape({
-			key: React.PropTypes.string.isRequired,
-			values: React.PropTypes.arrayOf(React.PropTypes.any).isRequired,
+		commentGroupIndex: PropTypes.string.isRequired,
+		contextPanelOpen: PropTypes.bool.isRequired,
+		showContextPanel: PropTypes.func.isRequired,
+		setContextScrollPosition: PropTypes.func.isRequired,
+		selectMultiLine: PropTypes.func.isRequired,
+		toggleSearchTerm: PropTypes.func,
+		filters: PropTypes.arrayOf(PropTypes.shape({
+			key: PropTypes.string.isRequired,
+			values: PropTypes.arrayOf(PropTypes.any).isRequired,
 		})),
-		showLoginModal: React.PropTypes.func,
-		isOnHomeView: React.PropTypes.bool,
+		showLoginModal: PropTypes.func,
+		isOnHomeView: PropTypes.bool,
+		multiline: PropTypes.bool,
 	};
 
 	static defaultProps = {

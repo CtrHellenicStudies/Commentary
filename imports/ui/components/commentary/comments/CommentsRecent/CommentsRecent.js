@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 
 // lib:
@@ -72,22 +73,22 @@ const CommentsRecent = ({ comments }) => {
 	);
 };
 CommentsRecent.propTypes = {
-	comments: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
-			text: React.PropTypes.string.isRequired,
+	comments: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		revisions: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
 		})).isRequired,
-		commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-			name: React.PropTypes.string.isRequired,
+		commenters: PropTypes.arrayOf(PropTypes.shape({
+			name: PropTypes.string.isRequired,
 		})).isRequired,
-		work: React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
+		work: PropTypes.shape({
+			title: PropTypes.string.isRequired,
 		}).isRequired,
-		subwork: React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
+		subwork: PropTypes.shape({
+			title: PropTypes.string.isRequired,
 		}).isRequired,
-		lineFrom: React.PropTypes.number.isRequired,
-		nLines: React.PropTypes.number.isRequired,
+		lineFrom: PropTypes.number.isRequired,
+		nLines: PropTypes.number.isRequired,
 	})),
 };
 CommentsRecent.defaultProps = {

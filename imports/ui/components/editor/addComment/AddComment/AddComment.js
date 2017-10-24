@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -20,24 +21,13 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { EditorState, convertToRaw, Modifier, CompositeDecorator } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
+import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { stateToHTML } from 'draft-js-export-html';
-import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
-import createSingleLinePlugin from 'draft-js-single-line-plugin';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -57,81 +47,22 @@ import linkDecorator from '/imports/ui/components//editor/addComment/LinkButton/
 /*
  *	helpers
  */
-
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
-const { InlineToolbar } = inlineToolbarPlugin;
 
-
-// Keyword Mentions
-const keywordMentionPlugin = createMentionPlugin();
-
-// Comments Cross Reference Mentions
-const commentsMentionPlugin = createMentionPlugin({
-	mentionTrigger: '#',
-});
 
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
-
-function _getSuggestionsFromComments(comments) {
-	const suggestions = [];
-
-	// if there are comments:
-	if (comments.length) {
-
-		// loop through all comments
-		// add suggestion for each comment
-		comments.forEach((comment) => {
-
-			// get the most recent revision
-			const revision = comment.revisions[comment.revisions.length - 1];
-
-			const suggestion = {
-				// create suggestio name:
-				name: `"${revision.title}" -`,
-
-				// set link for suggestion
-				link: `/commentary?_id=${comment._id}`,
-
-				// set id for suggestion
-				id: comment._id,
-			};
-
-			// loop through commenters and add them to suggestion name
-			comment.commenters.forEach((commenter, i) => {
-				if (i === 0) suggestion.name += ` ${commenter.name}`;
-				else suggestion.name += `, ${commenter.name}`;
-			});
-
-			suggestions.push(suggestion);
-		});
-	}
-	return suggestions;
-}
-
 
 /*
  *	BEGIN AddComment
  */
 class AddComment extends React.Component {
 	static propTypes = {
-		selectedLineFrom: React.PropTypes.number,
-		submitForm: React.PropTypes.func.isRequired,
-		commentersOptions: React.PropTypes.array,
-		tags: React.PropTypes.array,
-		referenceWorkOptions: React.PropTypes.array,
+		selectedLineFrom: PropTypes.number,
+		submitForm: PropTypes.func.isRequired,
+		commentersOptions: PropTypes.array,
+		tags: PropTypes.array,
+		referenceWorkOptions: PropTypes.array,
 	};
 
 	static defaultProps = {
@@ -156,9 +87,7 @@ class AddComment extends React.Component {
 			tagsValue: [],
 
 			snackbarOpen: false,
-			snackbarMessage: '',
-			keywordSuggestions: fromJS([]),
-			commentsSuggestions: fromJS([]),
+			snackbarMessage: ''
 		};
 
 		// methods:
@@ -167,8 +96,6 @@ class AddComment extends React.Component {
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onTextChange = this.onTextChange.bind(this);
 		this.onReferenceWorksValueChange = this.onReferenceWorksValueChange.bind(this);
-		this._onKeywordSearchChange = this._onKeywordSearchChange.bind(this);
-		this._onCommentsSearchChange = this._onCommentsSearchChange.bind(this);
 		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.showSnackBar = this.showSnackBar.bind(this);
@@ -227,36 +154,6 @@ class AddComment extends React.Component {
 
 	}
 
-	_onKeywordSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.tags;
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.title,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	}
-
-	_onCommentsSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
-			const commentsSuggestions = _getSuggestionsFromComments(res);
-
-			this.setState({
-				commentsSuggestions: fromJS(commentsSuggestions),
-			});
-		});
-	}
-
 	onCommenterValueChange(commenter) {
 		this.setState({
 			commenterValue: commenter,
@@ -267,7 +164,7 @@ class AddComment extends React.Component {
 
 	// --- BEGIN SUBMIT / VALIDATION HANDLE --- //
 
-	handleSubmit(data) {
+	handleSubmit() {
 		const { textEditorState } = this.state;
 
 		// TODO: form validation
@@ -279,35 +176,8 @@ class AddComment extends React.Component {
 		}
 
 		// create html from textEditorState's content
-		const textHtml = convertToHTML({
-
-			// performe necessary html transformations:
-			entityToHTML: (entity, originalText) => {
-
-				// handle LINK
-				if (entity.type === 'LINK') {
-					return <a href={entity.data.link}>{originalText}</a>;
-				}
-
-				// handle keyword mentions
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
-				}
-
-				// handle hashtag / commets cross reference mentions
-				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-				}
-			},
-		})(textEditorState.getCurrentContent());
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
-
-		let key;
-		for (key in data) { // eslint-disable-line
-			const params = key.split('_');
-			params[0] = parseInt(params[0], 10);
-			this.state.referenceWorks[params[0]][params[1]] = data[key];
-		}
 
 		this.props.submitForm(this.state, textHtml, textRaw);
 	}
@@ -317,7 +187,7 @@ class AddComment extends React.Component {
 			snackbarOpen: true,
 			snackbarMessage: error.message,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});
@@ -416,7 +286,7 @@ class AddComment extends React.Component {
 		let _selectedKeyword;
 
 		tags.forEach(_tag => {
-			if (_tag._id == tag.value) {
+			if (_tag._id === tag.value) {
 				_selectedKeyword = _tag;
 			}
 		});
@@ -456,7 +326,7 @@ class AddComment extends React.Component {
 			}
 		});
 	}
-	
+
 	addNewTag(tag) {
 
 		const keyword = [{
@@ -476,7 +346,10 @@ class AddComment extends React.Component {
 		});
 	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
-
+	componentWillUnmount(){
+		if(this.timeout)
+			clearTimeout(this.timeout);
+	}
 	render() {
 		const { revision, titleEditorState, keyideasValue, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { commentersOptions, tags, referenceWorkOptions } = this.props;
@@ -509,14 +382,15 @@ class AddComment extends React.Component {
 									''
 								}
 								<h1 className="add-comment-title">
-									<Editor
+									<DraftEditorInput
+										name="comment_title"
 										editorState={this.state.titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
-										spellCheck
-										stripPastedStyles
-										plugins={[singleLinePlugin]}
-										blockRenderMap={singleLinePlugin.blockRenderMap}
+										disableMentions={true}
+										spellcheck={true}
+										stripPastedStyles = {true}
+										singleLine = {true}
 									/>
 								</h1>
 
@@ -536,25 +410,15 @@ class AddComment extends React.Component {
 								className="comment-lower clearfix"
 								style={{ paddingTop: 20 }}
 							>
-								<Editor
+								<DraftEditorInput
+									name="comment_text"
 									editorState={this.state.textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
-									spellCheck
-									plugins={[keywordMentionPlugin, commentsMentionPlugin, inlineToolbarPlugin]}
+									spellcheck={true}
+									tags={this.props.tags}
 									ref={(element) => { this.editor = element; }}
-								/>
-
-								{/* mentions suggestions for keywords */}
-								<keywordMentionPlugin.MentionSuggestions
-									onSearchChange={this._onKeywordSearchChange}
-									suggestions={this.state.keywordSuggestions}
-								/>
-
-								{/* mentions suggestions for comments cross reference */}
-								<commentsMentionPlugin.MentionSuggestions
-									onSearchChange={this._onCommentsSearchChange}
-									suggestions={this.state.commentsSuggestions}
+									mediaOn={true}
 								/>
 
 								<div className="comment-reference">
@@ -677,9 +541,6 @@ class AddComment extends React.Component {
 						autoHideDuration={4000}
 					/>
 
-				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
 				</div>
 			</div>
 		);

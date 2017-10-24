@@ -13,6 +13,7 @@
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
 // private component:
@@ -43,31 +44,31 @@ const LINE_THRESHOLD = 25;
 
 class ContextPanel extends React.Component {
 	static propTypes = {
-		open: React.PropTypes.bool.isRequired,
-		commentGroup: React.PropTypes.shape({
-			work: React.PropTypes.shape({
-				slug: React.PropTypes.string.isRequired,
+		open: PropTypes.bool.isRequired,
+		commentGroup: PropTypes.shape({
+			work: PropTypes.shape({
+				slug: PropTypes.string.isRequired,
 			}),
-			subwork: React.PropTypes.shape({
-				n: React.PropTypes.number.isRequired,
+			subwork: PropTypes.shape({
+				n: PropTypes.number.isRequired,
 			}),
-			lineFrom: React.PropTypes.number.isRequired,
-			lineTo: React.PropTypes.number,
-			ref: React.PropTypes.string.isRequired,
+			lineFrom: PropTypes.number.isRequired,
+			lineTo: PropTypes.number,
+			ref: PropTypes.string.isRequired,
 		}),
-		closeContextPanel: React.PropTypes.func,
-		commentLemmaIndex: React.PropTypes.string,
+		closeContextPanel: PropTypes.func,
+		commentLemmaIndex: PropTypes.string,
 
 		// requiered if editor:
-		disableEdit: React.PropTypes.bool,
-		selectedLineFrom: React.PropTypes.number,
-		selectedLineTo: React.PropTypes.number,
-		updateSelectedLines: React.PropTypes.func,
-		workSlug: React.PropTypes.string,
-		subworkN: React.PropTypes.number,
-		editor: React.PropTypes.bool,
-		lineFrom: React.PropTypes.number,
-		multiline: React.PropTypes.string,
+		disableEdit: PropTypes.bool,
+		selectedLineFrom: PropTypes.number,
+		selectedLineTo: PropTypes.number,
+		updateSelectedLines: PropTypes.func,
+		workSlug: PropTypes.string,
+		subworkN: PropTypes.number,
+		editor: PropTypes.bool,
+		lineFrom: PropTypes.number,
+		multiline: PropTypes.string,
 	};
 
 	static defaultProps = {

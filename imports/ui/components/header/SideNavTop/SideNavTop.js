@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Link } from 'react-router-dom';
 
 // components:
-import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon'; 
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 
 const SideNavTop = ({ currentUser, username }) => (
 	<div className="sidenav-top">
@@ -21,12 +22,12 @@ const SideNavTop = ({ currentUser, username }) => (
 	</div>
 );
 SideNavTop.propTypes = {
-	currentUser: React.PropTypes.shape({
-		profile: React.PropTypes.shape({
-			avatarUrl: React.PropTypes.string,
+	currentUser: PropTypes.shape({
+		profile: PropTypes.shape({
+			avatarUrl: PropTypes.string,
 		}),
 	}),
-	username: React.PropTypes.string,
+	username: PropTypes.string,
 };
 SideNavTop.defaultProps = {
 	currentUser: null,

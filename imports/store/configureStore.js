@@ -6,6 +6,9 @@ import client from '../middleware/apolloClient';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+/**
+ * data store for redux and react-graphql
+ */
 const configureStore = (preloadedState) => {
 	const store = createStore(
 		rootReducer,

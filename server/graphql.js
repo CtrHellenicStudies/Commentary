@@ -19,9 +19,6 @@ import RootSubscription from '/imports/graphql/subscriptions/rootSubscription';
  * Root schema
  * @type {GraphQLSchema}
  */
-
-const getGraphglContext = req => ({token: req.headers.authorization});
-
 const RootSchema = new GraphQLSchema({
 	query: RootQuery,
 	mutation: RootMutation,
@@ -32,9 +29,16 @@ const RootSchema = new GraphQLSchema({
 maskErrors(RootSchema);
 
 
+/**
+ * Create graphql express server
+ */
 const GRAPHQL_PORT = 4000;
-
 const graphQLServer = express();
+
+/**
+ * Pass auth token into context
+ */
+const getGraphglContext = req => ({token: req.headers.authorization});
 
 const whitelist = [
 	/chs\.local:\d+$/,
@@ -45,10 +49,13 @@ const whitelist = [
 	/\.chs\.harvard\.edu$/,
 ];
 
+/**
+ * Set cors options
+ */
 const corsOptions = {
 	origin: (origin, callback) => { callback(null, true); }, // Disable CORs for the moment while development environment is changing
-	// credentials: true,
 };
+
 graphQLServer.use(cors(corsOptions));
 
 graphQLServer.use('/graphql', bodyParser.json(), apolloExpress(req => ({
@@ -56,6 +63,7 @@ graphQLServer.use('/graphql', bodyParser.json(), apolloExpress(req => ({
 	formatError,
 	context: getGraphglContext(req),
 })));
+
 graphQLServer.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 graphQLServer.listen(GRAPHQL_PORT);

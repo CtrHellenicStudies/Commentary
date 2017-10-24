@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -8,7 +9,7 @@ import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImage
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
 import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 
 // lib
@@ -60,7 +61,7 @@ class CommentersPage extends Component {
 }
 
 CommentersPage.propTypes = {
-	settings: React.PropTypes.object
+	settings: PropTypes.object
 };
 
 const commentersPageContainer = createContainer(() => {

@@ -1,3 +1,7 @@
+/**
+ * Resolvers for modifing textNodes 
+ */
+
 import * as types from '../actions/textNodes';
 
 export default (state = [], action) => {

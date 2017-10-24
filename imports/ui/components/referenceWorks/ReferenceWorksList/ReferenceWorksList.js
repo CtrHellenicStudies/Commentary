@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import Masonry from 'react-masonry-component/lib';
 
-// api
+// models
 import ReferenceWorks from '/imports/models/referenceWorks';
 
 // components
@@ -56,8 +57,8 @@ class ReferenceWorksList extends React.Component {
 }
 
 ReferenceWorksList.propTypes = {
-	commenterId: React.PropTypes.string,
-	referenceWorks: React.PropTypes.array,
+	commenterId: PropTypes.string,
+	referenceWorks: PropTypes.array,
 };
 
 const ReferenceWorksListContainer = createContainer(({ commenterId }) => {

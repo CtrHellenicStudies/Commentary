@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 
 // components
@@ -21,8 +22,8 @@ const CommentersList = ({ commenters }) => (
 	</div>
 );
 CommentersList.propTypes = {
-	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
+	commenters: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
 	}).isRequired),
 };
 CommentersList.defaultProps = {

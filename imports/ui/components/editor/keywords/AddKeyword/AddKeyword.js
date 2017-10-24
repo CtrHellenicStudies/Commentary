@@ -1,32 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
+import Formsy from 'formsy-react';
+import {stateFromHTML} from 'draft-js-import-html';
 import Snackbar from 'material-ui/Snackbar';
+import Utils from '../../../../../lib/utils';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
 
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -35,39 +29,21 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 import muiTheme from '/imports/lib/muiTheme';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 
-// Create toolbar plugin for editor
-const singleLinePlugin = createSingleLinePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin({
-	structure: [
-		BoldButton,
-		ItalicButton,
-		UnderlineButton,
-		Separator,
-		UnorderedListButton,
-		OrderedListButton,
-		BlockquoteButton,
-		LinkButton,
-	]
-});
-
-const { InlineToolbar } = inlineToolbarPlugin;
-const mentionPlugin = createMentionPlugin();
-const { MentionSuggestions } = mentionPlugin;
 
 const AddKeyword = React.createClass({
 
 	propTypes: {
-		selectedLineFrom: React.PropTypes.number,
-		selectedLineTo: React.PropTypes.number,
-		submitForm: React.PropTypes.func.isRequired,
-		onTypeChange: React.PropTypes.func.isRequired,
-		keywordsOptions: React.PropTypes.array,
-		keyideasOptions: React.PropTypes.array,
-		isTest: React.PropTypes.bool,
+		selectedLineFrom: PropTypes.number,
+		selectedLineTo: PropTypes.number,
+		submitForm: PropTypes.func.isRequired,
+		onTypeChange: PropTypes.func.isRequired,
+		keywordsOptions: PropTypes.array,
+		keyideasOptions: PropTypes.array,
+		isTest: PropTypes.bool,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {
@@ -84,8 +60,6 @@ const AddKeyword = React.createClass({
 
 			snackbarOpen: false,
 			snackbarMessage: '',
-
-			suggestions: fromJS([]),
 		};
 	},
 
@@ -141,22 +115,6 @@ const AddKeyword = React.createClass({
 			commenterValue: comenter,
 		});
 	},
-
-	onSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.keywordsOptions.concat(this.props.keyideasOptions);
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.label,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			suggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	},
-
 	shouldKeyDownEventCreateNewOption(sig) {
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
@@ -199,25 +157,7 @@ const AddKeyword = React.createClass({
 		const error = this.validateStateForSubmit();
 
 		this.showSnackBar(error);
-
-		const textHtml = convertToHTML({
-			entityToHTML: (entity, originalText) => {
-				// handle LINK
-				if (entity.type === 'LINK') {
-					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
-				}
-
-				// handle keyword mentions
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
-				}
-
-				// handle hashtag / commets cross reference mentions
-				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-				}
-			},
-		})(textEditorState.getCurrentContent());
+		const textHtml = getHtmlFromContext(textEditorState.getCurrentContent());
 
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
@@ -281,16 +221,20 @@ const AddKeyword = React.createClass({
 						className="comment commentary-comment paper-shadow "
 						style={{ marginLeft: 0 }}
 					>
+					<Formsy.Form
+						onValidSubmit={this.handleSubmit}
+					>
 						<div className="comment-upper">
 							<h1 className="add-comment-title">
-								<Editor
+								<DraftEditorInput
+									name="draft_editor_tag_title"
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
+									disableMentions={true}
 									placeholder="Tag . . ."
-									spellCheck
-									stripPastedStyles
-									plugins={[singleLinePlugin]}
-									blockRenderMap={singleLinePlugin.blockRenderMap}
+									spellcheck={true}
+									stripPastedStyles={true}
+									singleLine = {true}
 								/>
 							</h1>
 							<RadioButtonGroup
@@ -317,18 +261,14 @@ const AddKeyword = React.createClass({
 							className="comment-lower clearfix"
 							style={{ paddingTop: 20 }}
 						>
-							<Editor
+							<DraftEditorInput
+								name="draft_editor_tag_desc"
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
 								placeholder="Tag description . . ."
-								spellCheck
-								stripPastedStyles
-								plugins={[mentionPlugin, inlineToolbarPlugin]}
+								spellcheck={true}
+								stripPastedStyles={true}
 								ref={(element) => { this.editor = element; }}
-							/>
-							<MentionSuggestions
-								onSearchChange={this.onSearchChange}
-								suggestions={this.state.suggestions}
 							/>
 							<div className="comment-edit-action-button">
 								<RaisedButton
@@ -340,7 +280,7 @@ const AddKeyword = React.createClass({
 								/>
 							</div>
 						</div>
-
+					</Formsy.Form>
 					</article>
 
 					<Snackbar
@@ -349,9 +289,6 @@ const AddKeyword = React.createClass({
 						message={this.state.snackbarMessage}
 						autoHideDuration={4000}
 					/>
-				</div>
-				<div className="inline-toolbar-wrap">
-					<InlineToolbar />
 				</div>
 			</div>
 		);

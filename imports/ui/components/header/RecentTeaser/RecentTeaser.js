@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Utils from '/imports/lib/utils';
 
 class RecentTeaser extends React.Component {
 	static propTypes = {
-		recentItem: React.PropTypes.object.isRequired,
+		recentItem: PropTypes.object.isRequired,
 	}
 
 	render() {

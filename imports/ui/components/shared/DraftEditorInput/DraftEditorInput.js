@@ -46,6 +46,7 @@ class DraftEditorInput extends Component {
 		tags: PropTypes.array,
 		singleLine: PropTypes.bool,
 		stripPastedStyles: PropTypes.bool,
+		mediaOn: PropTypes.bool,
 		editorState: PropTypes.object.isRequired,
 		InlineToolbar : PropTypes.func //Remember that if you want use InlineToolbar, you also need plugin for it
 	};
@@ -66,7 +67,8 @@ class DraftEditorInput extends Component {
 		if(this.props.plugins)
 			ret = ret.concat(this.props.plugins);
 		ret = !this.props.InlineToolbar ? [inlineToolbarPlugin].concat(ret) : ret; //Is there any custom InlineToolbar
-		ret = this.props.singleLine === true ? ret.concat([singleLinePlugin]) : ret.concat([this.videoPlugin, this.imagePlugin]);
+		ret = this.props.singleLine ? ret.concat([singleLinePlugin]) : ret;
+		ret = this.props.mediaOn ? ret.concat([this.videoPlugin, this.imagePlugin]): ret;
 		return ret;
 	}
 	getPlainAttributes(){
@@ -103,7 +105,7 @@ class DraftEditorInput extends Component {
 						<InlineToolbar />
 					</div>) : ''
 				}
-				{ this.props.singleLine !== true ?
+				{ this.props.mediaOn ?
 					(<div className="draft-button-container">
 						<ImageAdd
 							editorState={this.props.editorState}

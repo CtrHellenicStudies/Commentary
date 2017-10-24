@@ -418,6 +418,7 @@ class AddComment extends React.Component {
 									spellcheck={true}
 									tags={this.props.tags}
 									ref={(element) => { this.editor = element; }}
+									mediaOn={true}
 								/>
 
 								<div className="comment-reference">

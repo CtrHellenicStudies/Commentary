@@ -8,6 +8,7 @@ import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import qs from 'qs-lite';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -258,8 +259,9 @@ class AddCommentLayout extends React.Component {
 				console.error(error);
 				return null;
 			}
+			const urlParams = qs.stringify({_id: commentId});
 
-			this.props.history.push('/commentary', {}, {_id: commentId});
+			this.props.history.push(`/commentary?${urlParams}`);
 		});
 	}
 

@@ -353,7 +353,9 @@ class AddComment extends React.Component {
 	render() {
 		const { revision, titleEditorState, keyideasValue, referenceWorks, textEditorState, tagsValue } = this.state;
 		const { commentersOptions, tags, referenceWorkOptions } = this.props;
-
+		if (!this.props.ready) {
+		    return null;
+		}
 		return (
 			<div className="comments lemma-panel-visible ">
 				<div className={'comment-outer'}>
@@ -544,14 +546,15 @@ class AddComment extends React.Component {
 				</div>
 			</div>
 		);
+
 	}
 }
 
 const AddCommentContainer = createContainer(() => {
-	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
 	const tags = Keywords.find().fetch();
-	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+	const handleWorks = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
@@ -566,7 +569,7 @@ const AddCommentContainer = createContainer(() => {
 		}
 	});
 
-	Meteor.subscribe('commenters', Session.get('tenantId'));
+	const handleCommenters = Meteor.subscribe('commenters', Session.get('tenantId'));
 	const commentersOptions = [];
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
@@ -584,6 +587,7 @@ const AddCommentContainer = createContainer(() => {
 	});
 
 	return {
+		ready: handleKeywords.ready() && handleWorks.ready() && handleCommenters.ready(),
 		tags,
 		referenceWorkOptions,
 		commentersOptions,

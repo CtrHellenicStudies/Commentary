@@ -114,7 +114,7 @@ Settings.schema = new SimpleSchema({
 
 	homepageIntroductionImageCaption: {
 		optional: true,
-		type: String,
+		type: Object,
 	},
 
 	'introBlocks.$.title': {

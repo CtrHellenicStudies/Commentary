@@ -29,49 +29,6 @@ import muiTheme from '/imports/lib/muiTheme';
 // helpers:
 import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
 
-// Keyword Mentions
-const keywordMentionPlugin = createMentionPlugin();
-
-// Comments Cross Reference Mentions
-const commentsMentionPlugin = createMentionPlugin({
-	mentionTrigger: '#',
-});
-
-function _getSuggestionsFromComments(comments) {
-	const suggestions = [];
-
-	// if there are comments:
-	if (comments.length) {
-
-		// loop through all comments
-		// add suggestion for each comment
-		comments.forEach((comment) => {
-
-			// get the most recent revision
-			const revision = comment.revisions[comment.revisions.length - 1];
-
-			const suggestion = {
-				// create suggestio name:
-				name: `"${revision.title}" -`,
-
-				// set link for suggestion
-				link: `/commentary?_id=${comment._id}`,
-
-				// set id for suggestion
-				id: comment._id,
-			};
-
-			// loop through commenters and add them to suggestion name
-			comment.commenters.forEach((commenter, i) => {
-				if (i === 0) suggestion.name += ` ${commenter.name}`;
-				else suggestion.name += `, ${commenter.name}`;
-			});
-
-			suggestions.push(suggestion);
-		});
-	}
-	return suggestions;
-}
 
 
 
@@ -88,9 +45,6 @@ class CommentContentInput extends React.Component {
 			commentsSuggestions: fromJS([]),
 			textValue: '',
 		};
-
-		this._onKeywordSearchChange = this._onKeywordSearchChange.bind(this);
-		this._onCommentsSearchChange = this._onCommentsSearchChange.bind(this);
 		this.onTextChange = this.onTextChange.bind(this);
 	}
 
@@ -103,36 +57,6 @@ class CommentContentInput extends React.Component {
 		});
 	}
 
-	_onKeywordSearchChange({ value }) {
-		const keywordSuggestions = [];
-		const keywords = this.props.tags;
-		keywords.forEach((keyword) => {
-			keywordSuggestions.push({
-				name: keyword.title,
-				link: `/tags/${keyword.slug}`,
-			});
-		});
-
-		this.setState({
-			keywordSuggestions: defaultSuggestionsFilter(value, fromJS(keywordSuggestions)),
-		});
-	}
-
-	_onCommentsSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
-			const commentsSuggestions = _getSuggestionsFromComments(res);
-
-			this.setState({
-				commentsSuggestions: fromJS(commentsSuggestions),
-			});
-		});
-	}
-
 
 	render() {
 		return (
@@ -142,20 +66,7 @@ class CommentContentInput extends React.Component {
 					onChange={this.onTextChange}
 					placeholder="Comment text..."
 					spellcheck={true}
-					plugins={[keywordMentionPlugin, commentsMentionPlugin]}
 					ref={(element) => { this.editor = element; }}
-				/>
-
-				{/* mentions suggestions for keywords */}
-				<keywordMentionPlugin.MentionSuggestions
-					onSearchChange={this._onKeywordSearchChange}
-					suggestions={this.state.keywordSuggestions}
-				/>
-
-				{/* mentions suggestions for comments cross reference */}
-				<commentsMentionPlugin.MentionSuggestions
-					onSearchChange={this._onCommentsSearchChange}
-					suggestions={this.state.commentsSuggestions}
 				/>
 			</div>
 		);

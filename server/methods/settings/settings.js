@@ -26,7 +26,7 @@ const settingsInsert = (token, setting) => {
 		discussionCommentsDisabled: Boolean,
 		homepageCover: Match.Maybe(Match.OneOf(Object, undefined)),
 		homepageIntroductionImage: Match.Maybe(Match.OneOf(Object, undefined)),
-		homepageIntroductionImageCaption: Match.Maybe(Match.OneOf(String, undefined)),
+		homepageIntroductionImageCaption: Match.Maybe(Match.OneOf(Object, undefined)),
 		introBlocks: [{
 			title: Match.Maybe(String),
 			text: Match.Maybe(String),
@@ -64,7 +64,7 @@ const settingsUpdate = (token, _id, setting) => {
 		discussionCommentsDisabled: Boolean,
 		homepageCover: Match.Maybe(Match.OneOf(Object, undefined)),
 		homepageIntroductionImage: Match.Maybe(Match.OneOf(Object, undefined)),
-		homepageIntroductionImageCaption: Match.Maybe(Match.OneOf(String, undefined)),
+		homepageIntroductionImageCaption: Match.Maybe(Match.OneOf(Object, undefined)),
 		introBlocks: [{
 			title: Match.Maybe(String),
 			text: Match.Maybe(String),

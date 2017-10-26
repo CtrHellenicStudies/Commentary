@@ -26,7 +26,7 @@ const settingsInsert = (token, setting) => {
 		discussionCommentsDisabled: Boolean,
 		homepageCover: Match.Maybe(Match.OneOf(Object, undefined)),
 		homepageIntroductionImage: Match.Maybe(Match.OneOf(Object, undefined)),
-		homepageIntroductionImageCaption: Match.Maybe(Match.OneOf(Object, undefined)),
+		homepageIntroductionImageCaption: Match.Maybe(Match.OneOf(String, undefined)),
 		introBlocks: [{
 			title: Match.Maybe(String),
 			text: Match.Maybe(String),
@@ -34,13 +34,14 @@ const settingsInsert = (token, setting) => {
 			linkText: Match.Maybe(String),
 		}],
 	});
-
+	let ret;
 	if (
 			Meteor.users.findOne({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-		return Settings.insert(setting);
+		ret = Settings.insert(setting);
+		return ret;
 	}
 
 	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
@@ -64,7 +65,7 @@ const settingsUpdate = (token, _id, setting) => {
 		discussionCommentsDisabled: Boolean,
 		homepageCover: Match.Maybe(Match.OneOf(Object, undefined)),
 		homepageIntroductionImage: Match.Maybe(Match.OneOf(Object, undefined)),
-		homepageIntroductionImageCaption: Match.Maybe(Match.OneOf(Object, undefined)),
+		homepageIntroductionImageCaption: Match.Maybe(Match.OneOf(String, undefined)),
 		introBlocks: [{
 			title: Match.Maybe(String),
 			text: Match.Maybe(String),

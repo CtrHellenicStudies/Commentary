@@ -343,16 +343,16 @@ const Utils = {
 							return <span/>;
 						  },
 						entityToHTML: (entity, originalText) => {
-							let ret = originalText;
+							let ret = this.decodeHtml(originalText);
 							switch(entity.type){
 								case 'LINK':
-									ret = <a href={entity.data.link}>{originalText}</a>;
+									ret = <a href={entity.data.link}>{ret}</a>;
 									break;
 								case 'mention':
-									ret = <a className="keyword-gloss" data-link={this.getEntityData(entity, 'link')}>{originalText}</a>;
+									ret = <a className="keyword-gloss" data-link={this.getEntityData(entity, 'link')}>{ret}</a>;
 									break;
 								case '#mention':
-									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{originalText}</a>;
+									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;
 									break;
 								case 'draft-js-video-plugin-video':
 									ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>;
@@ -367,6 +367,12 @@ const Utils = {
 						},
 					})(context);
 	},
+	decodeHtml(html) {
+		let txt = document.createElement('textarea');
+		txt.innerHTML = html;
+		return txt.value;
+	},
+
 	getSuggestionsFromComments(comments) {
 		const suggestions = [];
 	

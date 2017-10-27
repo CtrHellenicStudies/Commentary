@@ -12,6 +12,7 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import createVideoPlugin from 'draft-js-video-plugin';
 import createImagePlugin from 'draft-js-image-plugin';
+import Utils from '/imports/lib/utils';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import {
 	ItalicButton,

@@ -216,6 +216,9 @@ const Utils = {
 		return str.toString();
 	},
 	getEntityData(entity, key) {
+		if(key === 'link' && !entity.data.mention){
+			return entity.data.href;
+		}
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
 		return foundItem[1];
 	},
@@ -344,12 +347,13 @@ const Utils = {
 						  },
 						entityToHTML: (entity, originalText) => {
 							let ret = this.decodeHtml(originalText);
+							console.log(this.getEntityData(entity, 'link'));
 							switch(entity.type){
 								case 'LINK':
 									ret = <a href={entity.data.link}>{ret}</a>;
 									break;
 								case 'mention':
-									ret = <a className="keyword-gloss" data-link={this.getEntityData(entity, 'link')}>{ret}</a>;
+									ret = <a className="keyword-gloss" href={this.getEntityData(entity, 'link')}>{ret}</a>;
 									break;
 								case '#mention':
 									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;

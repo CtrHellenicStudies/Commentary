@@ -63,7 +63,7 @@ class DraftEditorInput extends Component {
 		this.props.onChange(editorState);
 	}
 	getPlugins(){
-		let ret = [this.mentionPlugin, this.keywordPlugin];
+		let ret = this.props.disableMentions ? [] : [this.mentionPlugin, this.keywordPlugin];
 		if(this.props.plugins)
 			ret = ret.concat(this.props.plugins);
 		ret = !this.props.InlineToolbar ? [inlineToolbarPlugin].concat(ret) : ret; //Is there any custom InlineToolbar
@@ -97,10 +97,12 @@ class DraftEditorInput extends Component {
 						placeholder={this.props.placeholder}
 						{...this.props.ref !== undefined ? (ref = this.props.ref) : ''}
 					/>
-					<Suggestions
+					{ this.props.disableMentions === true ? '' :
+					(<Suggestions
 						mentionPlugin={this.mentionPlugin}
 						keywordPlugin={this.keywordPlugin}
-						/>
+						/>)
+					}
 				</div>
 				{ InlineToolbar !== undefined ?
 					(<div className="inline-toolbar-wrap">
@@ -128,4 +130,4 @@ class DraftEditorInput extends Component {
 	}
 }
 
-export default formsyHOC(DraftEditorInput);
+export default DraftEditorInput;

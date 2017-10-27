@@ -12,8 +12,6 @@ class Suggestions extends Component {
 
 	constructor(props){
 		super(props);
-		this.onMentionSearchChange = this.onMentionSearchChange.bind(this);
-		this.onKeywordSearchChange = this.onKeywordSearchChange.bind(this);
 		this.state = {
 			mentions: fromJS([]),
 			keywords: fromJS([])
@@ -21,7 +19,7 @@ class Suggestions extends Component {
 	}
 	onMentionSearchChange({ value }) {
 		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', value, (err, res) => {
+		Meteor.call('comments.getSuggestions', undefined, value, (err, res) => {
 			// handle error:
 			if (err) throw new Meteor.Error(err);
 
@@ -53,12 +51,12 @@ class Suggestions extends Component {
 				<div>
 					{this.props.tags !== undefined ? (
 						<div>
-							<MentionSuggestions
-							onSearchChange={this.onMentionSearchChange}
+							<this.props.mentionPlugin.MentionSuggestions
+							onSearchChange={this.onMentionSearchChange.bind(this)}
 							suggestions={this.state.mentions}
 								/>
-							<KeywordsSuggestions
-							onSearchChange={this.onKeywordSearchChange}
+							<this.props.keywordPlugin.MentionSuggestions
+							onSearchChange={this.onKeywordSearchChange.bind(this)}
 							suggestions={this.state.keywords}
 							/>
 						</div>) : ''

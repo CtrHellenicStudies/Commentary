@@ -157,7 +157,7 @@ const AddKeyword = React.createClass({
 		const error = this.validateStateForSubmit();
 
 		this.showSnackBar(error);
-		const textHtml = getHtmlFromContext(textEditorState.getCurrentContent());
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 

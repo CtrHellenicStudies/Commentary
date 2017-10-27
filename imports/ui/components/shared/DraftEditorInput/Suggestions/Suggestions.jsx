@@ -71,6 +71,7 @@ export default createContainer(() => {
 	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
 	const tags = Keywords.find().fetch();
+
 	return {
 		tags
 	}

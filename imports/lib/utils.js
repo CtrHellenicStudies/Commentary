@@ -1,6 +1,7 @@
 import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
+import {convertFromRaw, EditorState, ContentState} from 'draft-js';
 
 // models
 import Editions from '/imports/models/editions';
@@ -331,6 +332,12 @@ const Utils = {
 		});
 		return parsedEditions;
 	},
+	getEditorState(content) {
+		let _content = content || '';
+		_content = JSON.parse(_content);
+		const constState = convertFromRaw(_content);
+		return EditorState.createWithContent(constState);
+	},
 	getHtmlFromContext(context){
 		return convertToHTML({
 			
@@ -347,7 +354,6 @@ const Utils = {
 						  },
 						entityToHTML: (entity, originalText) => {
 							let ret = this.decodeHtml(originalText);
-							console.log(this.getEntityData(entity, 'link'));
 							switch(entity.type){
 								case 'LINK':
 									ret = <a href={entity.data.link}>{ret}</a>;
@@ -375,6 +381,14 @@ const Utils = {
 		let txt = document.createElement('textarea');
 		txt.innerHTML = html;
 		return txt.value;
+	},
+	isJson(str) {
+		try {
+			JSON.parse(str);
+		} catch (e) {
+			return false;
+		}
+		return true;
 	},
 
 	getSuggestionsFromComments(comments) {

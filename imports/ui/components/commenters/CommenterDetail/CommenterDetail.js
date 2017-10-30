@@ -93,7 +93,11 @@ class CommenterDetail extends React.Component {
 			subscribed: !subscribed
 		});
 	}
-
+	getBiographyHTML(biography){
+		if(Utils.isJson(biography))
+			return JSON.parse(biography).html;
+		return biography;
+	}
 	render() {
 		const { commenter, settings, avatarUrl, isTest } = this.props;
 		const { readMoreBio, subscribed, loggedIn } = this.state;
@@ -133,7 +137,7 @@ class CommenterDetail extends React.Component {
 							<div className={`user-bio ${(readMoreBio ? 'user-bio--read-more' : '')}`}>
 
 								{commenter.bio ?
-									<div dangerouslySetInnerHTML={{ __html: commenter.bio }} />
+									<div dangerouslySetInnerHTML={{ __html: this.getBiographyHTML(commenter.bio) }} />
 									:
 									<p>There is no biography information for this user yet.</p>
 								}

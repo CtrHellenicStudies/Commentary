@@ -9,13 +9,24 @@
 }
 .draftAddVideoPopover {
     width: 100%;
-    height: inherit;
+    height: 150px;
     background: white;
     box-shadow: 0 0 10px;
     position: absolute;
     z-index: 1000;
     margin-top: 0;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.draft-image-from-url{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.draft-image-from-url > input{
+    margin-bottom: 0 !important;
 }
 .draftAddVideoClosedPopover {
     display: none;

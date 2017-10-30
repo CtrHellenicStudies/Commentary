@@ -6,17 +6,27 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
+import Utils from '/imports/lib/utils.js';
 import { debounce } from 'throttle-debounce';
 
 class Account extends React.Component {
 	constructor(props) {
 		super(props);
-
+		let biography;
+		if(!this.props.user.profile){
+			biography = EditorState.createEmpty();
+		}
+		else{
+			biography = Utils.getEditorState(this.props.user.profile.biography);
+		}
 		this.state = {
 			isPublicEmail: false,
 			sernameError: '',
 			emailError: '',
-			modalChangePwdLowered: false
+			modalChangePwdLowered: false,
+			editorState: biography
 		};
 
 		this.handleChangeTextDebounced = this.handleChangeTextDebounced.bind(this);
@@ -89,6 +99,15 @@ class Account extends React.Component {
 		const value = event.target.value;
 		this.handleChangeTextDebounced(field, value);
 	}
+	handleDraftChange(editorState){
+		let value = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
+		Meteor.call('updateAccount', `profile.biography`, value, (err) => {
+			if (err) {
+				console.error(err);
+			}
+		});
+		this.setState({editorState: editorState});
+	}
 
 	handleBatchNotification(event, value) {
 		const updateBatch = Meteor.users.update({_id: Meteor.userId()}, {
@@ -110,7 +129,6 @@ class Account extends React.Component {
 			modalChangePwdLowered: false,
 		});
 	}
-
 	render() {
 		const { user } = this.props;
 		const { usernameError, emailError, isPublicEmail } = this.state;
@@ -166,19 +184,16 @@ class Account extends React.Component {
 				<TextField
 					fullWidth
 					floatingLabelText="Name"
-					defaultValue={user.profile.name}
+					defaultValue={user.profile ? user.profile.name : ''}
 					onChange={this.handleChangeText.bind(null, 'name')}
 				/>
 				<br />
 
-				<TextField
-					multiLine
-					rows={2}
-					rowsMax={10}
-					fullWidth
-					floatingLabelText="Biography"
-					defaultValue={user.profile.biography}
-					onChange={this.handleChangeText.bind(null, 'biography')}
+				<DraftEditorInput
+					editorState={this.state.editorState}
+					onChange={this.handleDraftChange.bind(this)}
+					placeholder="Biography..."
+					mediaOn={true}
 				/>
 				<br />
 
@@ -186,7 +201,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="http://university.academia.edu/YourName"
 					floatingLabelText="Academia.edu"
-					defaultValue={user.profile.academiaEdu}
+					defaultValue={user.profile ? user.profile.academiaEdu: ''}
 					onChange={this.handleChangeText.bind(null, 'academiaEdu')}
 				/>
 				<br />
@@ -195,7 +210,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://twitter.com/@your_name"
 					floatingLabelText="Twitter"
-					defaultValue={user.profile.twitter}
+					defaultValue={user.profile ? user.profile.twitter: ''}
 					onChange={this.handleChangeText.bind(null, 'twitter')}
 				/>
 				<br />
@@ -204,7 +219,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://facebook.com/your.name"
 					floatingLabelText="Facebook"
-					defaultValue={user.profile.facebook}
+					defaultValue={user.profile ? user.profile.facebook: ''}
 					onChange={this.handleChangeText.bind(null, 'facebook')}
 				/>
 				<br />
@@ -213,42 +228,10 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://plus.google.com/+YourName"
 					floatingLabelText="Google Plus"
-					defaultValue={user.profile.google}
+					defaultValue={user.profile ? user.profile.google: ''}
 					onChange={this.handleChangeText.bind(null, 'google')}
 				/>
 				<br />
-
-				{/*
-				<div>
-					<h3>How often would you like to receive email updates?</h3>
-					<RadioButtonGroup
-						name="batchNotifications"
-						defaultSelected="never"
-						onChange={this.handleBatchNotification}
-					>
-						<RadioButton
-							label="Never"
-							value="never"
-						/>
-						<RadioButton
-							label="Immediately"
-							value="immediately"
-						/>
-						<RadioButton
-							label="Daily"
-							value="daily"
-						/>
-						<RadioButton
-							label="Weekly"
-							value="weekly"
-						/>
-						<RadioButton
-							label="Monthly"
-							value="monthly"
-						/>
-					</RadioButtonGroup>
-				</div>
-				*/}
 
 				<br />
 				<br />

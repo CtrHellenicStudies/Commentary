@@ -89,7 +89,7 @@ const AddKeywordLayout = React.createClass({
 	getLineLetter() {
 		let lineLetter = '';
 		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
-			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
+			lineLetter = this.state.lineLetterValue;
 		}
 		return lineLetter;
 	},

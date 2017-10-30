@@ -119,6 +119,7 @@ class AddRevision extends React.Component {
 	}
 
 	_getRevisionEditorState(revision) {
+		console.log(revision);
 		if (revision.textRaw) {
 			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
 		} else if (revision.text) {
@@ -144,10 +145,9 @@ class AddRevision extends React.Component {
 	}
 
 	onTextChange(textEditorState) {
-		const newTextEditorState = EditorState.set(textEditorState, {decorator: linkDecorator});
 
 		this.setState({
-			textEditorState: newTextEditorState,
+			textEditorState: textEditorState,
 		});
 	}
 
@@ -494,6 +494,7 @@ class AddRevision extends React.Component {
 									editorState={textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
+									disableMentions={true}
 									spellcheck = {true}
 									ref={(element) => { this.editor = element; }}
 								/>
@@ -647,12 +648,12 @@ class AddRevision extends React.Component {
 							</div>
 						</article>
 					</Formsy.Form>
-					<Snackbar
+					{/* <Snackbar
 						className="editor-snackbar"
 						open={this.state.snackbarOpen}
 						message={this.state.snackbarMessage}
 						autoHideDuration={4000}
-					/>
+					/> */}
 				</div>
 			</div>
 		);

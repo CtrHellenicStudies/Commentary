@@ -344,9 +344,8 @@ const commentsRemoveRevision = (token, commentId, revision) => {
 	}
 };
 
-const commentsGetSuggestions = (value) => {
+const commentsGetSuggestions = (token, value) => {
 	check(value, String);
-
 	if (!value.length) return Comments.find({}, { limit: 5, sort: { created: -1 } }).fetch();
 	return Comments.find({ $text: { $search: value } }, { limit: 5, sort: { created: -1 } }).fetch();
 };

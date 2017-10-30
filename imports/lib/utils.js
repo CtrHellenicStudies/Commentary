@@ -1,6 +1,7 @@
 import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
+import {convertFromRaw, EditorState, ContentState} from 'draft-js';
 
 // models
 import Editions from '/imports/models/editions';
@@ -216,6 +217,9 @@ const Utils = {
 		return str.toString();
 	},
 	getEntityData(entity, key) {
+		if(key === 'link' && !entity.data.mention){
+			return entity.data.href;
+		}
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
 		return foundItem[1];
 	},
@@ -328,6 +332,12 @@ const Utils = {
 		});
 		return parsedEditions;
 	},
+	getEditorState(content) {
+		let _content = content || '';
+		_content = JSON.parse(_content);
+		const constState = convertFromRaw(_content);
+		return EditorState.createWithContent(constState);
+	},
 	getHtmlFromContext(context){
 		return convertToHTML({
 			
@@ -343,16 +353,16 @@ const Utils = {
 							return <span/>;
 						  },
 						entityToHTML: (entity, originalText) => {
-							let ret = originalText;
+							let ret = this.decodeHtml(originalText);
 							switch(entity.type){
 								case 'LINK':
-									ret = <a href={entity.data.link}>{originalText}</a>;
+									ret = <a href={entity.data.link}>{ret}</a>;
 									break;
 								case 'mention':
-									ret = <a className="keyword-gloss" data-link={this.getEntityData(entity, 'link')}>{originalText}</a>;
+									ret = <a className="keyword-gloss" href={this.getEntityData(entity, 'link')}>{ret}</a>;
 									break;
 								case '#mention':
-									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{originalText}</a>;
+									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;
 									break;
 								case 'draft-js-video-plugin-video':
 									ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>;
@@ -366,6 +376,55 @@ const Utils = {
 							return ret;
 						},
 					})(context);
+	},
+	decodeHtml(html) {
+		let txt = document.createElement('textarea');
+		txt.innerHTML = html;
+		return txt.value;
+	},
+	isJson(str) {
+		try {
+			JSON.parse(str);
+		} catch (e) {
+			return false;
+		}
+		return true;
+	},
+
+	getSuggestionsFromComments(comments) {
+		const suggestions = [];
+	
+		// if there are comments:
+		if (comments.length) {
+	
+			// loop through all comments
+			// add suggestion for each comment
+			comments.forEach((comment) => {
+	
+				// get the most recent revision
+				const revision = comment.revisions[comment.revisions.length - 1];
+	
+				const suggestion = {
+					// create suggestio name:
+					name: `"${revision.title}" -`,
+	
+					// set link for suggestion
+					link: `/commentary?_id=${comment._id}`,
+	
+					// set id for suggestion
+					id: comment._id,
+				};
+	
+				// loop through commenters and add them to suggestion name
+				comment.commenters.forEach((commenter, i) => {
+					if (i === 0) suggestion.name += ` ${commenter.name}`;
+					else suggestion.name += `, ${commenter.name}`;
+				});
+	
+				suggestions.push(suggestion);
+			});
+		}
+		return suggestions;
 	}
 };
 

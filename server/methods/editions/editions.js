@@ -22,9 +22,12 @@ const multilineInsert = (token, edition, multiline) => {
 	const currentEdition = Editions.findOne(edition._id);
 	const currentMultiline = currentEdition.multiLine && currentEdition.multiLine.length ? currentEdition.multiLine : [];
 
-	currentMultiline.push(multiline);
-
-	Editions.update(edition._id, {$set: {multiLine: currentMultiline}});
+	if (currentMultiline.indexOf(multiline) === -1) {
+		currentMultiline.push(multiline);
+		Editions.update(edition._id, {$set: {multiLine: currentMultiline}});
+	} else {
+		throw new Error('Multiline edition already exists!');
+	}
 };
 
 const multilineDelete = (token, edition, multiline) => {

@@ -184,7 +184,7 @@ class Account extends React.Component {
 				<TextField
 					fullWidth
 					floatingLabelText="Name"
-					defaultValue={user.profile.name}
+					defaultValue={user.profile ? user.profile.name : ''}
 					onChange={this.handleChangeText.bind(null, 'name')}
 				/>
 				<br />
@@ -201,7 +201,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="http://university.academia.edu/YourName"
 					floatingLabelText="Academia.edu"
-					defaultValue={user.profile.academiaEdu}
+					defaultValue={user.profile ? user.profile.academiaEdu: ''}
 					onChange={this.handleChangeText.bind(null, 'academiaEdu')}
 				/>
 				<br />
@@ -210,7 +210,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://twitter.com/@your_name"
 					floatingLabelText="Twitter"
-					defaultValue={user.profile.twitter}
+					defaultValue={user.profile ? user.profile.twitter: ''}
 					onChange={this.handleChangeText.bind(null, 'twitter')}
 				/>
 				<br />
@@ -219,7 +219,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://facebook.com/your.name"
 					floatingLabelText="Facebook"
-					defaultValue={user.profile.facebook}
+					defaultValue={user.profile ? user.profile.facebook: ''}
 					onChange={this.handleChangeText.bind(null, 'facebook')}
 				/>
 				<br />
@@ -228,7 +228,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://plus.google.com/+YourName"
 					floatingLabelText="Google Plus"
-					defaultValue={user.profile.google}
+					defaultValue={user.profile ? user.profile.google: ''}
 					onChange={this.handleChangeText.bind(null, 'google')}
 				/>
 				<br />

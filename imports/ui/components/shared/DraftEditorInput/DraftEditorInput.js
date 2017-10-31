@@ -95,7 +95,6 @@ class DraftEditorInput extends Component {
 						plugins = {plugins}
 						{...plainAttributes}
 						placeholder={this.props.placeholder}
-						{...this.props.ref !== undefined ? (ref = this.props.ref) : ''}
 					/>
 					{ this.props.disableMentions === true ? '' :
 					(<Suggestions

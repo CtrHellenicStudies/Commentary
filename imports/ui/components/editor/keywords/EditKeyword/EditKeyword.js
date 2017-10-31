@@ -318,7 +318,6 @@ const EditKeyword = React.createClass({
 								placeholder="Keyword description . . ."
 								spellcheck={true}
 								stripPastedStyles={true}
-								ref={(element) => { this.editor = element; }}
 							/>
 							<div className="comment-edit-action-button">
 								<RaisedButton

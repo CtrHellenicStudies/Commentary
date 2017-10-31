@@ -496,7 +496,6 @@ class AddRevision extends React.Component {
 									placeholder="Comment text..."
 									disableMentions={true}
 									spellcheck = {true}
-									ref={(element) => { this.editor = element; }}
 								/>
 
 								<div className="comment-reference">

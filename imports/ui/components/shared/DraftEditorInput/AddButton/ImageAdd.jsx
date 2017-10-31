@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import UploadImages from './UploadImage';
 
-export default class VideoAdd extends Component {
+export default class ImageAdd extends Component {
   // Start the popover closed
   state = {
     url: '',
@@ -57,7 +57,7 @@ export default class VideoAdd extends Component {
 
   render() {
     const popoverClassName = this.state.open ?
-      'draftAddVideoPopover' :
+      'draftAddImagePopover' :
       'draftAddVideoClosedPopover';
     return (
       <div>

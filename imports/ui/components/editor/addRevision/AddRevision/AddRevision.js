@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
+import {Creatable} from 'react-select';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,

@@ -57,36 +57,36 @@ class KeywordsPage extends Component{
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-			<div className="page keywords-page">
-				<div className="content primary">
-					<section className="block header header-page cover parallax">
-						<BackgroundImageHolder
-							imgSrc="/images/apotheosis_homer.jpg"
-						/>
+				<div className="page keywords-page">
+					<div className="content primary">
+						<section className="block header header-page cover parallax">
+							<BackgroundImageHolder
+								imgSrc="/images/apotheosis_homer.jpg"
+							/>
 
-						<div className="container v-align-transform">
-							<div className="grid inner">
-								<div className="center-content">
-									<div className="page-title-wrap">
-										<h2 className="page-title ">{title}</h2>
+							<div className="container v-align-transform">
+								<div className="grid inner">
+									<div className="center-content">
+										<div className="page-title-wrap">
+											<h2 className="page-title ">{title}</h2>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</section>
+						</section>
 
-					<section className="page-content">
-						<KeywordsList type={type} limit={this.state.limit * this.state.portion} />
-						<div className="read-more-link">
-								<RaisedButton
-									onClick={this.raiseLimit.bind(this)}
-									className="cover-link show-more "
-									label="Read More"
-								/>
-							</div>
-					</section>
+						<section className="page-content">
+							<KeywordsList type={type} limit={this.state.limit * this.state.portion} />
+							<div className="read-more-link">
+									<RaisedButton
+										onClick={this.raiseLimit.bind(this)}
+										className="cover-link show-more "
+										label="Read More"
+									/>
+								</div>
+						</section>
+					</div>
 				</div>
-			</div>
 			</MuiThemeProvider>
 		);
 	}

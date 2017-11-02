@@ -36,6 +36,7 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import ReferenceWork from './referenceWork/ReferenceWork';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -69,7 +70,6 @@ class AddComment extends React.Component {
 		selectedLineFrom: null,
 		commentersOptions: [],
 		tags: [],
-		referenceWorkOptions: [],
 	};
 
 	constructor(props) {
@@ -95,14 +95,10 @@ class AddComment extends React.Component {
 		this._disableButton = this._disableButton.bind(this);
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onTextChange = this.onTextChange.bind(this);
-		this.onReferenceWorksValueChange = this.onReferenceWorksValueChange.bind(this);
 		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.showSnackBar = this.showSnackBar.bind(this);
 		this.validateStateForSubmit = this.validateStateForSubmit.bind(this);
-		this.addReferenceWorkBlock = this.addReferenceWorkBlock.bind(this);
-		this.removeReferenceWorkBlock = this.removeReferenceWorkBlock.bind(this);
-		this.moveReferenceWorkBlock = this.moveReferenceWorkBlock.bind(this);
 		this.addTagBlock = this.addTagBlock.bind(this);
 		this.removeTagBlock = this.removeTagBlock.bind(this);
 		this.moveTagBlock = this.moveTagBlock.bind(this);
@@ -110,6 +106,7 @@ class AddComment extends React.Component {
 		this.onIsMentionedInLemmaChange = this.onIsMentionedInLemmaChange.bind(this);
 		this.selectTagType = this.selectTagType.bind(this);
 		this.addNewTag = this.addNewTag.bind(this);
+		this.updateReferenceWorks = this.updateReferenceWorks.bind(this);
 	}
 
 	_enableButton() {
@@ -123,7 +120,11 @@ class AddComment extends React.Component {
 			canSubmit: false,
 		});
 	}
-
+	updateReferenceWorks(referenceWorks){
+		this.setState({
+			referenceWorks:referenceWorks
+		});
+	}
 	// --- BEGIN FORM HANDLE --- //
 
 	onTitleChange(titleEditorState) {
@@ -143,17 +144,6 @@ class AddComment extends React.Component {
 			textValue: textHtml,
 		});
 	}
-
-	onReferenceWorksValueChange(referenceWork) {
-		const referenceWorks = this.state.referenceWorks;
-		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
-
-		this.setState({
-			referenceWorks,
-		});
-
-	}
-
 	onCommenterValueChange(commenter) {
 		this.setState({
 			commenterValue: commenter,
@@ -218,33 +208,6 @@ class AddComment extends React.Component {
 			errorMessage = new Meteor.Error('data-missing', 'Missing comment data:'.concat(errorMessage, '.'));
 		}
 		return errorMessage;
-	}
-
-	addReferenceWorkBlock() {
-		this.state.referenceWorks.push({ referenceWorkId: Random.id() });
-		this.setState({
-			referenceWorks: this.state.referenceWorks,
-		});
-	}
-
-	removeReferenceWorkBlock(i) {
-		this.setState({
-			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
-		});
-	}
-
-	moveReferenceWorkBlock(dragIndex, hoverIndex) {
-		const { referenceWorks } = this.state;
-		const dragIntroBlock = referenceWorks[dragIndex];
-
-		this.setState(update(this.state, {
-			referenceWorks: {
-				$splice: [
-					[dragIndex, 1],
-					[hoverIndex, 0, dragIntroBlock],
-				],
-			},
-		}));
 	}
 
 	addTagBlock() {
@@ -351,8 +314,8 @@ class AddComment extends React.Component {
 			clearTimeout(this.timeout);
 	}
 	render() {
-		const { revision, titleEditorState, keyideasValue, referenceWorks, textEditorState, tagsValue } = this.state;
-		const { commentersOptions, tags, referenceWorkOptions } = this.props;
+		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
+		const { commentersOptions, tags } = this.props;
 		if (!this.props.ready) {
 		    return null;
 		}
@@ -422,105 +385,7 @@ class AddComment extends React.Component {
 									mediaOn={true}
 								/>
 
-								<div className="comment-reference">
-									<h4>Secondary Source(s):</h4>
-									<FormGroup
-										controlId="referenceWorks"
-										className="form-group--referenceWorks"
-									>
-										<ListGroupDnD>
-											{/*
-												DnD: add the ListGroupItemDnD component
-												IMPORTANT:
-												"key" prop must not be taken from the map function - has to be unique like _id
-												value passed to the "key" prop must not be then edited in a FormControl component
-													- will cause errors
-												"index" - pass the map functions index variable here
-											*/}
-											{referenceWorks.map((referenceWork, i) => {
-												const _referenceWorkOptions = [];
-												referenceWorkOptions.forEach((rW) => {
-													_referenceWorkOptions.push({
-														value: rW.value,
-														label: rW.label,
-														slug: rW.slug,
-														type: rW.type,
-														i,
-													});
-												});
-
-												return (
-													<ListGroupItemDnD
-														key={referenceWork.referenceWorkId}
-														index={i}
-														className="form-subitem form-subitem--referenceWork"
-														moveListGroupItem={this.moveReferenceWorkBlock}
-													>
-														<div
-															className="reference-work-item"
-														>
-															<div
-																className="remove-reference-work-item"
-																onClick={this.removeReferenceWorkBlock.bind(this, i)}
-															>
-																<IconButton
-																	iconClassName="mdi mdi-close"
-																	style={{
-																		padding: '0',
-																		width: '32px',
-																		height: '32px',
-																		borderRadius: '100%',
-																		border: '1px solid #eee',
-																		color: '#666',
-																		margin: '0 auto',
-																		background: '#f6f6f6',
-																	}}
-																/>
-															</div>
-															<Select
-																name="referenceWorks"
-																id="referenceWorks"
-																required={false}
-																options={_referenceWorkOptions}
-																value={this.state.referenceWorks[i].referenceWorkId}
-																onChange={this.onReferenceWorksValueChange}
-																placeholder="Reference Work . . ."
-															/>
-															<FormGroup>
-																<ControlLabel>Section Number: </ControlLabel>
-																<FormsyText
-																	name={`${i}_section`}
-																/>
-															</FormGroup>
-															<FormGroup>
-																<ControlLabel>Chapter Number: </ControlLabel>
-																<FormsyText
-																	name={`${i}_chapter`}
-																/>
-															</FormGroup>
-															<FormGroup>
-																<ControlLabel>Translation Number: </ControlLabel>
-																<FormsyText
-																	name={`${i}_translation`}
-																/>
-															</FormGroup>
-															<FormGroup>
-																<ControlLabel>Note Number: </ControlLabel>
-																<FormsyText
-																	name={`${i}_note`}
-																/>
-															</FormGroup>
-														</div>
-													</ListGroupItemDnD>
-												);
-											})}
-										</ListGroupDnD>
-										<RaisedButton
-											label="Add Reference Work"
-											onClick={this.addReferenceWorkBlock}
-										/>
-									</FormGroup>
-								</div>
+								<ReferenceWork update={this.updateReferenceWorks} referenceWorkOptions={this.props.referenceWorkOptions} ready={this.props.ready} />
 
 								<div className="comment-edit-action-button">
 									<RaisedButton

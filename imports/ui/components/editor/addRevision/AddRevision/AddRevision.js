@@ -4,6 +4,7 @@ import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
+import { Creatable } from 'react-select';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
@@ -647,12 +648,6 @@ class AddRevision extends React.Component {
 							</div>
 						</article>
 					</Formsy.Form>
-					{/* <Snackbar
-						className="editor-snackbar"
-						open={this.state.snackbarOpen}
-						message={this.state.snackbarMessage}
-						autoHideDuration={4000}
-					/> */}
 				</div>
 			</div>
 		);

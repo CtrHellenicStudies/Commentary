@@ -43,17 +43,59 @@ export default class ReferenceWork extends React.Component {
 
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			referenceWorks: [],
-		};
+        if(this.props.referenceWorks){
+            this.state = {
+                referenceWorks: this.props.referenceWorks,
+            };
+        }
+        else{
+            this.state = {
+                referenceWorks: []
+            }
+        }
 
 		// methods:
 		this.onReferenceWorksValueChange = this.onReferenceWorksValueChange.bind(this);
 		this.addReferenceWorkBlock = this.addReferenceWorkBlock.bind(this);
 		this.removeReferenceWorkBlock = this.removeReferenceWorkBlock.bind(this);
         this.moveReferenceWorkBlock = this.moveReferenceWorkBlock.bind(this);
-	}
+        this.changeChapter = this.changeChapter.bind(this);
+        this.changeNote = this.changeNote.bind(this);
+        this.changeSection = this.changeSection.bind(this);
+        this.changeTranslation = this.changeTranslation.bind(this);
+    }
+    componentWillReceiveProps(newProps){
+        if(newProps.referenceWorks)
+            this.setState({referenceWorks: newProps.referenceWorks});
+    }
+    changeNote(event, value, i){
+        const _referenceWorks = this.state.referenceWorks;
+        _referenceWorks[i].note = value;
+        this.setState({
+            referenceWorks: _referenceWorks
+        });
+    }
+    changeSection(event, value, i){
+        const _referenceWorks = this.state.referenceWorks;
+        _referenceWorks[i].section = value
+        this.setState({
+            referenceWorks: _referenceWorks
+        });
+    }
+    changeTranslation(event, value, i){
+        const _referenceWorks = this.state.referenceWorks;
+        _referenceWorks[i].translation = value;
+        this.setState({
+            referenceWorks: _referenceWorks
+        });
+    }
+    changeChapter(event, value, i){
+        const _referenceWorks = this.state.referenceWorks;
+        _referenceWorks[i].chapter = value;
+        this.setState({
+            referenceWorks: _referenceWorks
+        });
+    }
 	onReferenceWorksValueChange(referenceWork) {
 		const referenceWorks = this.state.referenceWorks;
 		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
@@ -168,24 +210,32 @@ export default class ReferenceWork extends React.Component {
                                             <ControlLabel>Section Number: </ControlLabel>
                                             <FormsyText
                                                 name={`${i}_section`}
+                                                value={this.state.referenceWorks[i].section}
+                                                onChange={(x,y) => this.changeSection(x,y,i)}
                                             />
                                         </FormGroup>
                                         <FormGroup>
                                             <ControlLabel>Chapter Number: </ControlLabel>
                                             <FormsyText
                                                 name={`${i}_chapter`}
+                                                value={this.state.referenceWorks[i].chapter}
+                                                onChange={(x,y) => this.changeChapter(x,y,i)}
                                             />
                                         </FormGroup>
                                         <FormGroup>
                                             <ControlLabel>Translation Number: </ControlLabel>
                                             <FormsyText
                                                 name={`${i}_translation`}
+                                                value={this.state.referenceWorks[i].translation}
+                                                onChange={(x,y) => this.changeTranslation(x,y,i)}
                                             />
                                         </FormGroup>
                                         <FormGroup>
                                             <ControlLabel>Note Number: </ControlLabel>
                                             <FormsyText
                                                 name={`${i}_note`}
+                                                value={this.state.referenceWorks[i].note}
+                                                onChange={(x,y) => this.changeNote(x,y, i)}
                                             />
                                         </FormGroup>
                                     </div>

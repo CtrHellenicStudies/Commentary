@@ -87,7 +87,7 @@ class AddComment extends React.Component {
 			tagsValue: [],
 
 			snackbarOpen: false,
-			snackbarMessage: ''
+			snackbarMessage: '',
 		};
 
 		// methods:
@@ -136,12 +136,12 @@ class AddComment extends React.Component {
 		});
 	}
 
-	onTextChange(textEditorState) {
+	onTextChange(textEditorState, urlsCollection) {
 		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-
 		this.setState({
 			textEditorState,
 			textValue: textHtml,
+			urlsCollection: urlsCollection
 		});
 	}
 	onCommenterValueChange(commenter) {
@@ -166,7 +166,7 @@ class AddComment extends React.Component {
 		}
 
 		// create html from textEditorState's content
-		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent(), this.state.urlsCollection);
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);

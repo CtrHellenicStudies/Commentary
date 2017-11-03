@@ -179,7 +179,7 @@ class AddRevision extends React.Component {
 		// TODO: Migrate to formsy components
 
 		// create html from textEditorState's content
-		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent(), undefined);
 
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 

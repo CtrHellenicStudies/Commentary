@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { HOC as formsyHOC } from 'formsy-react';
 import stylePropType from 'react-style-proptype';
 import reactCSS from 'reactcss';
-import { EditorState} from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import VideoAdd from './AddButton/VideoAdd';
 import ImageAdd from './AddButton/ImageAdd';
@@ -58,8 +58,19 @@ class DraftEditorInput extends Component {
 		this.videoPlugin = createVideoPlugin();
 		this.imagePlugin = createImagePlugin();
 		this.onEditorChange = this.onEditorChange.bind(this);
+		this.state = {
+			urlsCollection: []
+		}
 	}
-	onEditorChange(editorState) {
+	onEditorChange(editorState, url) {
+		if(typeof (url) === "string"){
+			let urlsCollection = this.state.urlsCollection;
+			urlsCollection.push(url);
+			this.setState({
+				urlsCollection: urlsCollection
+			});
+			this.props.onChange(editorState, urlsCollection);
+		}
 		this.props.onChange(editorState);
 	}
 	getPlugins(){

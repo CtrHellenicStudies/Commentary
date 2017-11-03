@@ -144,6 +144,7 @@
     "stylelint-config-standard": "^16.0.0"
   },
   "scripts": {
+		"jsdoc": "jsdoc client server -r -c .jsdoc.json -d docs",
     "lint:js": "eslint . --ext .js,.jsx",
     "lint:js:fix": "eslint . --ext .js,.jsx --fix",
     "lint:css": "stylelint \"imports/**/*.{css,less,scss,sss}\"",
@@ -151,9 +152,9 @@
     "lint:staged": "lint-staged",
     "lint": "npm run lint:js",
     "pretest": "npm run lint",
+    "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings ./private/settings/production.json --port=5000",
     "test": "jest",
-    "test:watch": "npm run test -- --reporter min --watch",
-    "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings ./private/settings/production.json --port=5000"
+    "test:watch": "npm run test -- --reporter min --watch"
   },
   "repository": {
     "type": "git",

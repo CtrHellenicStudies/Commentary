@@ -59,6 +59,31 @@ export default class CommentService extends AdminService {
 	}
 
 	/**
+	 * Get comments via a start URN and end URN
+	 * @param {string} urnStart - urn start range
+	 * @param {string} urnEnd - urn end range
+	 * @param {number} limit - mongo orm limit
+	 * @param {number} skip - mongo orm skip
+	 * @returns {Object[]} array of comments
+	 */
+	commentsGetURN(urnStart, urnEnd, limit = 20, skip = 0) {
+		const args = {};
+
+		const options = {
+			sort: {
+				'work.order': 1,
+				'subwork.n': 1,
+				lineFrom: 1,
+				nLines: -1,
+			},
+			skip,
+			limit,
+		};
+
+		return Comments.find(args, options).fetch();
+	}
+
+	/**
 	 * Remove a comment
 	 * @param {string} _id - comment id to remove
 	 * @returns {boolean} result of mongo orm remove

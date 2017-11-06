@@ -338,8 +338,7 @@ const Utils = {
 		const constState = convertFromRaw(_content);
 		return EditorState.createWithContent(constState);
 	},
-	getHtmlFromContext(context, urlsCollection){
-		let i = 0;
+	getHtmlFromContext(context){
 		return convertToHTML({		
 						// performe necessary html transformations:
 						blockToHTML: (block) => {
@@ -365,11 +364,7 @@ const Utils = {
 									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;
 									break;
 								case 'draft-js-video-plugin-video':
-									if(urlsCollection !== undefined)
-										ret = <iframe width="320" height="200" src={urlsCollection[i]} allowFullScreen></iframe>;
-									else
-										ret = '';
-									i++;
+									ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>;
 									break;
 								case 'image':
 									ret = '<img src="'+entity.data.src+'" alt="draft js image error"/>';

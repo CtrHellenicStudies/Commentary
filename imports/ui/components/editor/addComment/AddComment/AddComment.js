@@ -136,12 +136,11 @@ class AddComment extends React.Component {
 		});
 	}
 
-	onTextChange(textEditorState, urlsCollection) {
+	onTextChange(textEditorState) {
 		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
 		this.setState({
 			textEditorState,
 			textValue: textHtml,
-			urlsCollection: urlsCollection
 		});
 	}
 	onCommenterValueChange(commenter) {
@@ -166,7 +165,7 @@ class AddComment extends React.Component {
 		}
 
 		// create html from textEditorState's content
-		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent(), this.state.urlsCollection);
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);

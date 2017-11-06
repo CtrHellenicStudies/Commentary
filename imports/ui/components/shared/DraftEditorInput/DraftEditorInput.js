@@ -58,19 +58,8 @@ class DraftEditorInput extends Component {
 		this.videoPlugin = createVideoPlugin();
 		this.imagePlugin = createImagePlugin();
 		this.onEditorChange = this.onEditorChange.bind(this);
-		this.state = {
-			urlsCollection: []
-		}
 	}
-	onEditorChange(editorState, url) {
-		if(typeof (url) === "string"){
-			let urlsCollection = this.state.urlsCollection;
-			urlsCollection.push(url);
-			this.setState({
-				urlsCollection: urlsCollection
-			});
-			this.props.onChange(editorState, urlsCollection);
-		}
+	onEditorChange(editorState) {
 		this.props.onChange(editorState);
 	}
 	getPlugins(){

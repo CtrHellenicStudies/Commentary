@@ -111,14 +111,6 @@ class TranslationNodeInput extends React.Component {
 				className="text-nodes-editor-text-input"
 			>
 				<ListGroupDnD>
-					{/*
-					 DnD: add the ListGroupItemDnD component
-					 IMPORTANT:
-					 "key" prop must not be taken from the map function - has to be unique like _id
-					 value passed to the "key" prop must not be then edited in a FormControl component
-					 - will cause errors
-					 "index" - pass the map functions index variable here
-					 */}
 					{translationNodes.map((translationNode, i) => (
 						<ListGroupItemDnD
 							key={`${translationNode.author.replace(' ', '')}${i}`}
@@ -174,10 +166,9 @@ TranslationNodeInput.propTypes = {
 };
 
 const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation}) => {
-
 	const tenantId = Session.get('tenantId');
 
-	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork, selectedSubwork, selectedTranslation, startAtLine, limit);
+	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtLine, limit);
 	const ready = translationNodeSubscription.ready();
 
 	const translation = TranslationNodes.find().fetch();
@@ -194,7 +185,7 @@ const TranslationInputContainer = createContainer(({selectedWork, selectedSubwor
 				n: i + parseInt(startAtLine),
 				text: '',
 				tenantId: tenantId,
-				work: selectedWork,
+				work: selectedWork.slug,
 				subwork: selectedSubwork,
 				author: selectedTranslation,
 			};

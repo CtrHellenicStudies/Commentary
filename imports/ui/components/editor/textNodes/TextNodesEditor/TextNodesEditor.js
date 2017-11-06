@@ -151,7 +151,7 @@ class TextNodesEditor extends React.Component {
 
 	updateStartAtLine(e, newValue) {
 		this.setState({
-			startAtLine: newValue,
+			startAtLine: parseInt(newValue),
 		});
 	}
 
@@ -206,13 +206,18 @@ class TextNodesEditor extends React.Component {
 
 	renderTranslationNodesInput() {
 		const { selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation } = this.state;
-
+		let _selectedWork;
 		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
 			return null;
 		}
+		this.props.works.forEach(work => {
+			if (work._id === selectedWork) {
+				_selectedWork = work;
+			}
+		});
 		return (
 			<TranslationNodeInput
-				selectedWork={selectedWork}
+				selectedWork={_selectedWork}
 				selectedSubwork={selectedSubwork}
 				startAtLine={startAtLine}
 				limit={limit}
@@ -289,20 +294,6 @@ class TextNodesEditor extends React.Component {
 								options={workOptions}
 								onChange={this.selectWork}
 							/>
-							{/*
-							<button
-								onClick={this.showEditWorkDialog}
-							>
-								Add new work
-							</button>
-							{selectedWork ?
-								<button
-									onClick={this.showEditWorkDialog}
-								>
-									Edit {_selectedWork.title}
-								</button>
-							: ''}
-							*/}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input edition-input">
@@ -314,20 +305,6 @@ class TextNodesEditor extends React.Component {
 								options={editionOptions}
 								onChange={this.selectEdition}
 							/>
-							{/*
-							<button
-								onClick={this.showEditEditionDialog}
-							>
-								Add new edition
-							</button>
-							{selectedEdition ?
-								<button
-									onClick={this.showEditEditionDialog}
-								>
-									Edit {Utils.trunc(_selectedEdition.title, 30)}
-								</button>
-							: ''}
-							*/}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input subwork-input">
@@ -339,20 +316,6 @@ class TextNodesEditor extends React.Component {
 								options={subworkOptions}
 								onChange={this.selectSubwork}
 							/>
-							{/*
-							<button
-								onClick={this.showEditSubworkDialog}
-							>
-								Add new subwork
-							</button>
-							{selectedSubwork ?
-								<button
-									onClick={this.showEditSubworkDialog}
-								>
-									Edit {_selectedSubwork.title}
-								</button>
-							: ''}
-							*/}
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input line-from-input">
@@ -433,20 +396,5 @@ const TextNodesEditorContainer = createContainer(props => {
 	};
 
 }, TextNodesEditor);
-
-/*
-const mapStateToProps = (state, props) => ({
-	textNodes: state.textNodes.textNodes,
-	work: state.textNodes.work,
-	subwork: state.textNodes.subwork,
-	edition: state.textNodes.edition,
-});
-
-const mapDispatchToProps = dispatch => ({
-	actions: bindActionCreators(textNodesActions, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TextNodesEditorContainer);
-*/
 
 export default TextNodesEditorContainer;

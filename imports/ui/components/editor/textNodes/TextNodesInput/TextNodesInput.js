@@ -41,7 +41,6 @@ class TextNodesInput extends React.Component {
 
 	constructor(props) {
 		super(props);
-
 		this.state = {
 			textNodes: this.props.textNodes,
 			snackbarOpen: false,
@@ -193,14 +192,6 @@ class TextNodesInput extends React.Component {
 				className="text-nodes-editor-text-input"
 			>
 				<ListGroupDnD>
-					{/*
-						DnD: add the ListGroupItemDnD component
-						IMPORTANT:
-						"key" prop must not be taken from the map function - has to be unique like _id
-						value passed to the "key" prop must not be then edited in a FormControl component
-							- will cause errors
-						"index" - pass the map functions index variable here
-					*/}
 					{textNodes.map((textNode, i) => (
 						<ListGroupItemDnD
 							key={textNode.n}
@@ -210,27 +201,7 @@ class TextNodesInput extends React.Component {
 						>
 							<div
 								className="reference-work-item"
-							>
-								{/*
-									<div
-										className="remove-reference-work-item"
-										onClick={this.removeTextNodeBlock.bind(this, i)}
-									>
-										<IconButton
-											iconClassName="mdi mdi-close"
-											style={{
-												padding: '0',
-												width: '32px',
-												height: '32px',
-												borderRadius: '100%',
-												border: '1px solid #eee',
-												color: '#666',
-												margin: '0 auto',
-												background: '#f6f6f6',
-											}}
-										/>
-									</div>
-									*/}
+							>							
 								<FormGroup className="text-node-number-input">
 									<TextField
 										name={`${i}_number`}
@@ -264,13 +235,6 @@ class TextNodesInput extends React.Component {
 					className="text-nodes-input-action-button"
 					onClick={this.props.loadMore}
 				/>
-				{/*
-				<RaisedButton
-					label="Add line of text"
-					className="text-nodes-input-action-button"
-					onClick={this.addTextNodeBlock}
-				/>
-				*/}
 				<Snackbar
 					className="editor-snackbar"
 					open={this.state.snackbarOpen}

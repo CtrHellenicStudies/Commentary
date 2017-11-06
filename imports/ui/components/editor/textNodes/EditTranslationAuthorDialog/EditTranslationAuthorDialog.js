@@ -94,7 +94,6 @@ class EditTranslationAuthorDialog extends React.Component {
 }
 
 EditTranslationAuthorDialog.propTypes = {
-	translation: PropTypes.object,
 	workDetails: PropTypes.object,
 	addNewAuthor: PropTypes.func,
 	handleClose: PropTypes.func,

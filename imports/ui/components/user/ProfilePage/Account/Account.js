@@ -25,7 +25,6 @@ class Account extends React.Component {
 			isPublicEmail: false,
 			sernameError: '',
 			emailError: '',
-			modalChangePwdLowered: false,
 			editorState: biography
 		};
 
@@ -33,7 +32,6 @@ class Account extends React.Component {
 		this.handleChangeText = this.handleChangeText.bind(this);
 		this.handleBatchNotification = this.handleBatchNotification.bind(this);
 		this.showChangePwdModal = this.showChangePwdModal.bind(this);
-		this.closeChangePwdModal = this.closeChangePwdModal.bind(this);
 	}
 
 	static propTypes = {
@@ -119,16 +117,9 @@ class Account extends React.Component {
 	}
 
 	showChangePwdModal() {
-		this.setState({
-			modalChangePwdLowered: true,
-		});
+		this.props.turnOnPassChange();
 	}
 
-	closeChangePwdModal() {
-		this.setState({
-			modalChangePwdLowered: false,
-		});
-	}
 	render() {
 		const { user } = this.props;
 		const { usernameError, emailError, isPublicEmail } = this.state;

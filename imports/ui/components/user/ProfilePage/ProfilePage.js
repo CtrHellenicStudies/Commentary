@@ -146,21 +146,15 @@ class ProfilePage extends React.Component {
 							<div className="user-profile-tabs">
 								<MuiThemeProvider muiTheme={getMuiTheme(tabMuiTheme)}>
 									<Tabs>
-										{/* }<Tab label="Notifications">
-											<Notifications />
-										</Tab>*/}
 										<Tab label="Discussions">
 											<Discussions />
 										</Tab>
 										<Tab label="Annotations">
 											<Annotations />
 										</Tab>
-										{/* }<Tab label="Bookmarks">
-											<Bookmarks />
-										</Tab>*/}
 										<Tab label="Account">
 											<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-												<Account user={user} />
+												<Account user={user} turnOnPassChange={this.showChangePwdModal} />
 											</MuiThemeProvider>
 										</Tab>
 									</Tabs>
@@ -171,7 +165,7 @@ class ProfilePage extends React.Component {
 				</div>
 				{this.state.modalChangePwdLowered ?
 					<ModalChangePwd
-						lowered={modalChangePwdLowered}
+						lowered={this.state.modalChangePwdLowered}
 						closeModal={this.closeChangePwdModal}
 					/>
 					: ''

@@ -3,12 +3,12 @@
 // import Config from './_config.js';
 //
 //
-// AccountsTemplates.configure({
+ AccountsTemplates.configure({
 // 	defaultLayoutType: 'blaze-to-react',
 // 	defaultLayout: AccountsLayout,
 // 	defaultContentRegion: 'content',
 // 	confirmPassword: true,
-// 	enablePasswordChange: true,
+ 	enablePasswordChange: true,
 // 	forbidClientAccountCreation: false,
 // 	overrideLoginErrors: true,
 // 	sendVerificationEmail: true,
@@ -26,7 +26,7 @@
 // 	showValidating: true,
 // 	privacyUrl: Config.privacyUrl || null,
 // 	termsUrl: Config.termsUrl || null,
-// });
+});
 //
 // /*
 //  * Account routes

@@ -262,13 +262,16 @@ const AddRevisionLayout = React.createClass({
 			filters,
 		});
 	},
-
+	componentWillUnmount(){
+		if(this.timeout)
+			clearTimeout(this.timeout);
+	},
 	showSnackBar(message) {
 		this.setState({
 			snackbarOpen: true,
 			snackbarMessage: message,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});

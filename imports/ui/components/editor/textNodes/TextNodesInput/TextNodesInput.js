@@ -171,13 +171,16 @@ class TextNodesInput extends React.Component {
 			snackbarOpen: true,
 			snackbarMessage: message,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});
 		}, 4000);
 	}
-
+	componentWillUnmount(){
+		if(this.timeout)
+			clearTimeout(this.timeout);
+	}
 	render() {
 		const { textNodes } = this.state;
 

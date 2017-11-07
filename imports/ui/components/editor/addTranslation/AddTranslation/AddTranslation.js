@@ -126,13 +126,16 @@ class AddTranslation extends React.Component {
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});
 		}, 4000);
 	}
-
+	componentWillUnmount(){
+		if(this.timeout)
+			clearTimeout(this.timeout);
+	}
 	validateStateForSubmit() {
 		const errors = false;
 		let errorMessage = 'Missing translation data:';

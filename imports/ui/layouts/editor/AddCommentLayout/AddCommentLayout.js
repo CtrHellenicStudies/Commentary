@@ -219,8 +219,6 @@ class AddCommentLayout extends React.Component {
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);
-		console.log(keywords);
-		console.log(formData);
 		const revisionId = new Meteor.Collection.ObjectID();
 
 		// create comment object to be inserted:

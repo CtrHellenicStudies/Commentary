@@ -57,7 +57,10 @@ const EditKeywordLayout = React.createClass({
 	componentWillUpdate() {
 		if (this.props.ready) this.handlePermissions();
 	},
-
+	componentWillUnmount(){
+		if(this.timeout)
+			clearTimeout(this.timeout);
+	},
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
 			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
@@ -179,13 +182,12 @@ const EditKeywordLayout = React.createClass({
 			}
 		});
 	},
-
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});

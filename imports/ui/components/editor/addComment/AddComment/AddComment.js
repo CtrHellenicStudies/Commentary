@@ -169,8 +169,7 @@ class AddComment extends React.Component {
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);
-	}
-
+	} 
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: true,
@@ -302,7 +301,7 @@ class AddComment extends React.Component {
 		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
 			if (err) {
 				this.showSnackBar(err);
-			}			else {
+			} else {
 				this.showSnackBar({message: 'Tag added'});
 			}
 		});

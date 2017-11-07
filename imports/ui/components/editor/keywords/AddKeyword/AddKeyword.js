@@ -171,13 +171,16 @@ const AddKeyword = React.createClass({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});
 		}, 4000);
 	},
-
+	componentWillUnmount(){
+		if(this.timeout)
+			clearTimeout(this.timeout);
+	},
 	validateStateForSubmit() {
 		let errors = false;
 		let errorMessage = 'Missing keyword data:';

@@ -125,7 +125,7 @@ class AddRevision extends React.Component {
 	}
 
 	_getRevisionEditorState(revision) {
-		console.log(revision);
+		(revision);
 		if (revision.textRaw) {
 			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
 		} else if (revision.text) {
@@ -327,14 +327,17 @@ class AddRevision extends React.Component {
 			snackbarOpen: true,
 			snackbarMessage: error.message,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 				snackbarMessage: ''
 			});
 		}, 4000);
 	}
-
+	componentWillUnmount(){
+		if(this.timeout)
+			clearTimeout(this.timeout);
+	}
 	selectTagType(tagId, event, index) {
 		const currentTags = this.state.tagsValue;
 		currentTags[index].keyword.type = event.target.value;
@@ -466,6 +469,7 @@ class AddRevision extends React.Component {
 									placeholder="Comment text..."
 									disableMentions={true}
 									spellcheck = {true}
+									mediaOn={true}
 								/>
 								<ReferenceWork referenceWorks={this.props.comment.referenceWorks} update={this.updateReferenceWorks} referenceWorkOptions={this.props.referenceWorkOptions} ready={this.props.ready} />
 

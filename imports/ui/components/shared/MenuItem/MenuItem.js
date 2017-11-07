@@ -11,15 +11,26 @@ const styles = {
 };
 
 const MenuItem = ({ href, target, primaryText, onClick }) => (
-	<a
+	{...href ? 
+		(<a
+			className="menu-item"
+			href={href}
+			target={target}
+			onClick={onClick}
+			style={styles.menuItem}
+		>
+			{primaryText}
+		</a>)
+		 :
+	(<span
 		className="menu-item"
-		href={href}
 		target={target}
 		onClick={onClick}
 		style={styles.menuItem}
 	>
 		{primaryText}
-	</a>
+	</span>)
+	}
 );
 
 MenuItem.propTypes = {

@@ -23,6 +23,9 @@ class Page extends React.Component {
 
 	render() {
 		const { page, settings, slug, ready } = this.props;
+		let content;
+		if(page)
+			content = Utils.getHtmlFromContext(Utils.getEditorState(page.content).getCurrentContent());
 		const headerImageUrl = '/images/apotheosis_homer.jpg';
 
 		if (!ready) {
@@ -77,7 +80,7 @@ class Page extends React.Component {
 							</h3>
 						</div>
 						: ''}
-					<div dangerouslySetInnerHTML={{ __html: page.content }} />
+					<div dangerouslySetInnerHTML={{ __html: content }} />
 				</section>
 			</div>
 		);

@@ -306,6 +306,21 @@ class AddComment extends React.Component {
 			}
 		});
 	}
+	addNewReferenceWork(reference){
+		const _reference = [{
+			title: reference.value,
+			slug: slugify(reference.value.toLowerCase()),
+			tenantId: Session.get('tenantId')
+		}];
+		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
+			if(err){
+				this.showSnackBar(err);
+			}
+			else{
+				this.showSnackBar({message: 'Reference work added'});
+			}
+		})
+	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	componentWillUnmount(){
 		if(this.timeout)

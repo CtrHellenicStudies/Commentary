@@ -197,7 +197,7 @@ export default class ReferenceWork extends React.Component {
                                                 }}
                                             />
                                         </div>
-                                        <Select
+                                        <Select.Creatable
                                             name="referenceWorks"
                                             id="referenceWorks"
                                             required={false}
@@ -205,6 +205,7 @@ export default class ReferenceWork extends React.Component {
                                             value={this.state.referenceWorks[i].referenceWorkId}
                                             onChange={this.onReferenceWorksValueChange}
                                             placeholder="Reference Work . . ."
+                                            onNewOptionClick={this.props.addNew}
                                         />
                                         <FormGroup>
                                             <ControlLabel>Section Number: </ControlLabel>

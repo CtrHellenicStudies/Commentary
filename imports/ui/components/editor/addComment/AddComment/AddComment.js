@@ -106,6 +106,7 @@ class AddComment extends React.Component {
 		this.onIsMentionedInLemmaChange = this.onIsMentionedInLemmaChange.bind(this);
 		this.selectTagType = this.selectTagType.bind(this);
 		this.addNewTag = this.addNewTag.bind(this);
+		this.addNewReferenceWork = this.addNewReferenceWork.bind(this);
 		this.updateReferenceWorks = this.updateReferenceWorks.bind(this);
 	}
 
@@ -307,11 +308,11 @@ class AddComment extends React.Component {
 		});
 	}
 	addNewReferenceWork(reference){
-		const _reference = [{
+		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
 			tenantId: Session.get('tenantId')
-		}];
+		};
 		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
 			if(err){
 				this.showSnackBar(err);
@@ -398,7 +399,11 @@ class AddComment extends React.Component {
 									mediaOn={true}
 								/>
 
-								<ReferenceWork update={this.updateReferenceWorks} referenceWorkOptions={this.props.referenceWorkOptions} ready={this.props.ready} />
+								<ReferenceWork 
+									update={this.updateReferenceWorks} 
+									referenceWorkOptions={this.props.referenceWorkOptions} 
+									ready={this.props.ready}
+									addNew={this.addNewReferenceWork} />
 
 								<div className="comment-edit-action-button">
 									<RaisedButton

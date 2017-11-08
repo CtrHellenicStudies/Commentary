@@ -402,6 +402,7 @@ class AddComment extends React.Component {
 								<ReferenceWork 
 									update={this.updateReferenceWorks} 
 									referenceWorkOptions={this.props.referenceWorkOptions} 
+									referenceWorks={this.state.referenceWorks}
 									ready={this.props.ready}
 									addNew={this.addNewReferenceWork} />
 

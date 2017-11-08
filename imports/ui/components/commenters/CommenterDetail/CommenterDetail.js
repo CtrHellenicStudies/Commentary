@@ -4,6 +4,10 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
+import muiTheme from '/imports/lib/muiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Header from '/imports/ui/layouts/header/Header';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -110,84 +114,87 @@ class CommenterDetail extends React.Component {
 
 		return (
 			(commenter ?
-				<div className="page page-commenter-detail">
-					<div className="content primary">
-						<section className="block header cover parallax">
-							<BackgroundImageHolder
-								imgSrc="/images/capitals.jpg"
-							/>
-							<div className="container v-align-transform">
-								<div className="grid inner">
-									<div className="center-content">
-										<div className="page-title-wrap">
-											<h2 className="page-title ">
-												{commenter.name}
-											</h2>
+				<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+					<div className="page page-commenter-detail">
+						<Header />
+						<div className="content primary">
+							<section className="block header cover parallax">
+								<BackgroundImageHolder
+									imgSrc="/images/capitals.jpg"
+								/>
+								<div className="container v-align-transform">
+									<div className="grid inner">
+										<div className="center-content">
+											<div className="page-title-wrap">
+												<h2 className="page-title ">
+													{commenter.name}
+												</h2>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</section>
-						<section className="page-content">
+							</section>
+							<section className="page-content">
 
-							<div className="commenter-image">
-								<img src={avatarUrl} alt={commenter.name} />
-							</div>
+								<div className="commenter-image">
+									<img src={avatarUrl} alt={commenter.name} />
+								</div>
 
-							<div className={`user-bio ${(readMoreBio ? 'user-bio--read-more' : '')}`}>
+								<div className={`user-bio ${(readMoreBio ? 'user-bio--read-more' : '')}`}>
 
-								{commenter.bio ?
-									<div dangerouslySetInnerHTML={{ __html: this.getBiographyHTML(commenter.bio) }} />
-									:
-									<p>There is no biography information for this user yet.</p>
-								}
+									{commenter.bio ?
+										<div dangerouslySetInnerHTML={{ __html: this.getBiographyHTML(commenter.bio) }} />
+										:
+										<p>There is no biography information for this user yet.</p>
+									}
 
 
-							</div>
-							<div
-								className={`read-more-toggle
-								${(readMoreBio ? 'read-more-toggle-expanded' : '')}`}
-							>
+								</div>
+								<div
+									className={`read-more-toggle
+									${(readMoreBio ? 'read-more-toggle-expanded' : '')}`}
+								>
+									<hr />
+									{ commenter.bio && commenter.bio.length > 500 ?
+
+										<div
+											className="read-more-button"
+											onClick={this.toggleReadMoreBio}
+										>
+											{readMoreBio ?
+												<span className="read-less-text">
+													Show Less
+												</span>
+												:
+												<span className="read-more-text">
+													Read More
+												</span>
+											}
+										</div>
+										:
+										null
+									}
+								</div>
+
+								<CommenterVisualizations
+									commenter={commenter}
+									isTest={isTest}
+								/>
+
+								<br />
+								<br />
+								<br />
 								<hr />
-								{ commenter.bio && commenter.bio.length > 500 ?
+							</section>
 
-									<div
-										className="read-more-button"
-										onClick={this.toggleReadMoreBio}
-									>
-										{readMoreBio ?
-											<span className="read-less-text">
-												Show Less
-											</span>
-											:
-											<span className="read-more-text">
-												Read More
-											</span>
-										}
-									</div>
-									:
-									null
-								}
-							</div>
-
-							<CommenterVisualizations
+							<CommenterReferenceWorks
 								commenter={commenter}
-								isTest={isTest}
 							/>
 
-							<br />
-							<br />
-							<br />
-							<hr />
-						</section>
-
-						<CommenterReferenceWorks
-							commenter={commenter}
-						/>
-
-						<CommentsRecent />
+							<CommentsRecent />
+						</div>
 					</div>
-				</div>
+				</MuiThemeProvider>
 				:
 				<LoadingPage />
 			)

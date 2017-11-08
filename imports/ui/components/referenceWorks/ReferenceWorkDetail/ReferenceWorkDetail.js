@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import muiTheme from '/imports/lib/muiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Header from '/imports/ui/layouts/header/Header';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
@@ -57,71 +61,74 @@ class ReferenceWorkDetail extends React.Component {
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
-			<div className="page reference-works-page reference-works-detail-page">
-				<div className="content primary">
-					<section className="block header header-page cover parallax">
-						<BackgroundImageHolder
-							imgSrc="/images/apotheosis_homer.jpg"
-						/>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className="page reference-works-page reference-works-detail-page">
+					<Header />
+					<div className="content primary">
+						<section className="block header header-page cover parallax">
+							<BackgroundImageHolder
+								imgSrc="/images/apotheosis_homer.jpg"
+							/>
 
-						<div className="container v-align-transform">
-							<div className="grid inner">
-								<div className="center-content">
-									<div className="page-title-wrap">
-										<h2 className="page-title ">{referenceWork.title}</h2>
-										{referenceWork.link ?
-											<a
-												className="read-online-link"
-												href={referenceWork.link}
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												Read Online <i className="mdi mdi-open-in-new" />
-											</a>
-										: ''}
+							<div className="container v-align-transform">
+								<div className="grid inner">
+									<div className="center-content">
+										<div className="page-title-wrap">
+											<h2 className="page-title ">{referenceWork.title}</h2>
+											{referenceWork.link ?
+												<a
+													className="read-online-link"
+													href={referenceWork.link}
+													target="_blank"
+													rel="noopener noreferrer"
+												>
+													Read Online <i className="mdi mdi-open-in-new" />
+												</a>
+											: ''}
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</section>
+						</section>
 
-					<section className="page-content">
+						<section className="page-content">
 
-						{commenters && commenters.length ?
-							<div className="page-byline">
-								<h3>By {commenters.map((commenter, i) => {
-									let ending = '';
+							{commenters && commenters.length ?
+								<div className="page-byline">
+									<h3>By {commenters.map((commenter, i) => {
+										let ending = '';
 
-									if (i < commenters.length - 2) {
-										ending = ', ';
-									} else if (i < commenters.length - 1) {
-										ending = ' and ';
-									}
+										if (i < commenters.length - 2) {
+											ending = ', ';
+										} else if (i < commenters.length - 1) {
+											ending = ' and ';
+										}
 
-									return (
-										<span
-											key={i}
-										>
-											<a
-												href={`/commenters/${commenter.slug}`}
+										return (
+											<span
+												key={i}
 											>
-												{commenter.name}
-											</a>{ending}
-										</span>
-									);
-								})}
-								</h3>
-							</div>
-						: ''}
+												<a
+													href={`/commenters/${commenter.slug}`}
+												>
+													{commenter.name}
+												</a>{ending}
+											</span>
+										);
+									})}
+									</h3>
+								</div>
+							: ''}
 
-						<div
-							dangerouslySetInnerHTML={this.createMarkup()}
-						/>
-					</section>
+							<div
+								dangerouslySetInnerHTML={this.createMarkup()}
+							/>
+						</section>
 
-					<CommentsRecent />
+						<CommentsRecent />
+					</div>
 				</div>
-			</div>
+			</MuiThemeProvider>
 		);
 	}
 

@@ -15,6 +15,7 @@ import Discussions from '/imports/ui/components/user/ProfilePage/Discussions';
 import Annotations from '/imports/ui/components/user/ProfilePage/Annotations';
 import Bookmarks from '/imports/ui/components/user/ProfilePage/Bookmarks';
 import Account from '/imports/ui/components/user/ProfilePage/Account';
+import Header from '/imports/ui/layouts/header/Header';
 
 //api
 import Settings from '/imports/models/settings';
@@ -116,61 +117,64 @@ class ProfilePage extends React.Component {
 
 
 		return (
-			<div className="page page-user-profile">
-				<div className="content primary">
-					<section className="block header cover parallax">
-						<BackgroundImageHolder
-							imgSrc="/images/capitals.jpg"
-						/>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className="page page-user-profile">
+					<Header />
+					<div className="content primary">
+						<section className="block header cover parallax">
+							<BackgroundImageHolder
+								imgSrc="/images/capitals.jpg"
+							/>
 
-						<div className="container v-align-transform">
+							<div className="container v-align-transform">
 
-							<div className="grid inner">
-								<div className="center-content">
+								<div className="grid inner">
+									<div className="center-content">
 
-									<div className="page-title-wrap">
-										<h2 className="page-title ">{user.nicename}</h2>
+										<div className="page-title-wrap">
+											<h2 className="page-title ">{user.nicename}</h2>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</section>
-					<section className="page-content">
-						<div>
-							<div className="user-profile-section">
-								<AvatarEditor
-									defaultAvatarUrl="/images/default_user.jpg"
-								/>
+						</section>
+						<section className="page-content">
+							<div>
+								<div className="user-profile-section">
+									<AvatarEditor
+										defaultAvatarUrl="/images/default_user.jpg"
+									/>
+								</div>
+								<br />
+								<div className="user-profile-tabs">
+									<MuiThemeProvider muiTheme={getMuiTheme(tabMuiTheme)}>
+										<Tabs>
+											<Tab label="Discussions">
+												<Discussions />
+											</Tab>
+											<Tab label="Annotations">
+												<Annotations />
+											</Tab>
+											<Tab label="Account">
+												<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+													<Account user={user} turnOnPassChange={this.showChangePwdModal} />
+												</MuiThemeProvider>
+											</Tab>
+										</Tabs>
+									</MuiThemeProvider>
+								</div>
 							</div>
-							<br />
-							<div className="user-profile-tabs">
-								<MuiThemeProvider muiTheme={getMuiTheme(tabMuiTheme)}>
-									<Tabs>
-										<Tab label="Discussions">
-											<Discussions />
-										</Tab>
-										<Tab label="Annotations">
-											<Annotations />
-										</Tab>
-										<Tab label="Account">
-											<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-												<Account user={user} turnOnPassChange={this.showChangePwdModal} />
-											</MuiThemeProvider>
-										</Tab>
-									</Tabs>
-								</MuiThemeProvider>
-							</div>
-						</div>
-					</section>
+						</section>
+					</div>
+					{this.state.modalChangePwdLowered ?
+						<ModalChangePwd
+							lowered={this.state.modalChangePwdLowered}
+							closeModal={this.closeChangePwdModal}
+						/>
+						: ''
+					}
 				</div>
-				{this.state.modalChangePwdLowered ?
-					<ModalChangePwd
-						lowered={this.state.modalChangePwdLowered}
-						closeModal={this.closeChangePwdModal}
-					/>
-					: ''
-				}
-			</div>
+			</MuiThemeProvider>
 		);
 	}
 }

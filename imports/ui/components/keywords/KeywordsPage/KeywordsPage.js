@@ -18,6 +18,7 @@ import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 import KeywordsList from '/imports/ui/components/keywords/KeywordsList';
 import muiTheme from '/imports/lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 
@@ -58,6 +59,8 @@ class KeywordsPage extends Component{
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page keywords-page">
+					<Header
+						/>
 					<div className="content primary">
 						<section className="block header header-page cover parallax">
 							<BackgroundImageHolder

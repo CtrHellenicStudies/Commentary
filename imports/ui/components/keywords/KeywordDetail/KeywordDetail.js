@@ -8,6 +8,8 @@ import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Header from '/imports/ui/layouts/header/Header';
 
 // models
 import Comments from '/imports/models/comments';
@@ -90,80 +92,83 @@ class KeywordDetail extends Component {
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
-			<div className="page keywords-page keywords-detail-page">
-				<div className="content primary">
-					<section className="block header header-page cover parallax">
-						<BackgroundImageHolder
-							imgSrc="/images/apotheosis_homer.jpg"
-						/>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className="page keywords-page keywords-detail-page">
+					<Header />
+					<div className="content primary">
+						<section className="block header header-page cover parallax">
+							<BackgroundImageHolder
+								imgSrc="/images/apotheosis_homer.jpg"
+							/>
 
-						<div className="container v-align-transform">
-							<div className="grid inner">
-								<div className="center-content">
-									<div className="page-title-wrap">
-										<h2 className="page-title ">{keyword.title}</h2>
-										{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
-											<div>
-												<Link to={`/tags/${keyword.slug}/edit`}>
+							<div className="container v-align-transform">
+								<div className="grid inner">
+									<div className="center-content">
+										<div className="page-title-wrap">
+											<h2 className="page-title ">{keyword.title}</h2>
+											{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
+												<div>
+													<Link to={`/tags/${keyword.slug}/edit`}>
+														<RaisedButton
+															// href={`/tags/${keyword.slug}/edit`}
+															className="cover-link light"
+															label="Edit"
+														/>
+													</Link>
 													<RaisedButton
-														// href={`/tags/${keyword.slug}/edit`}
+														onClick={this.deleteKeyword.bind(this)}
 														className="cover-link light"
-														label="Edit"
+														label="Delete"
 													/>
-												</Link>
-												<RaisedButton
-													onClick={this.deleteKeyword.bind(this)}
-													className="cover-link light"
-													label="Delete"
-												/>
-											</div>
-										: ''}
+												</div>
+											: ''}
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</section>
+						</section>
 
-					<section className="page-content">
-						{keyword.lineFrom ?
-							<KeywordContext keyword={keyword} />
-						: ''}
-						{(
-							keyword.description
-							&& keyword.description.length
-							&& keyword.description !== '<p></p>'
-						) ?
-							<div
-								className="keyword-description"
-								dangerouslySetInnerHTML={{ __html: keyword.description }}
-								onClick={this._keywordDescriptionOnClick}
+						<section className="page-content">
+							{keyword.lineFrom ?
+								<KeywordContext keyword={keyword} />
+							: ''}
+							{(
+								keyword.description
+								&& keyword.description.length
+								&& keyword.description !== '<p></p>'
+							) ?
+								<div
+									className="keyword-description"
+									dangerouslySetInnerHTML={{ __html: keyword.description }}
+									onClick={this._keywordDescriptionOnClick}
+								/>
+							: ''}
+
+							<hr />
+
+							<h2>Related comments</h2>
+
+							<KeywordCommentList
+								keywordComments={keywordComments}
+							/>
+
+						</section>
+
+						<CommentsRecent />
+
+						{this.state.keywordReferenceModalVisible ?
+							<KeywordReferenceModal
+								visible={this.state.keywordReferenceModalVisible}
+								top={this.state.referenceTop}
+								left={this.state.referenceLeft}
+								keywordSlug={this.state.keyword}
+								close={this._closeKeywordReference}
 							/>
 						: ''}
 
-						<hr />
-
-						<h2>Related comments</h2>
-
-						<KeywordCommentList
-							keywordComments={keywordComments}
-						/>
-
-					</section>
-
-					<CommentsRecent />
-
-					{this.state.keywordReferenceModalVisible ?
-						<KeywordReferenceModal
-							visible={this.state.keywordReferenceModalVisible}
-							top={this.state.referenceTop}
-							left={this.state.referenceLeft}
-							keywordSlug={this.state.keyword}
-							close={this._closeKeywordReference}
-						/>
-					: ''}
-
+					</div>
 				</div>
-			</div>
+			</MuiThemeProvider>
 		);
 	}
 }

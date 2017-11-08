@@ -13,6 +13,10 @@ import Settings from '/imports/models/settings';
 
 // layouts
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
+import muiTheme from '/imports/lib/muiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Header from '/imports/ui/layouts/header/Header';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
@@ -48,41 +52,42 @@ class Page extends React.Component {
 		}
 
 		return (
-			// todo: return 404 if !page.length
-			<div className={`page page-${slug} content primary`}>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className={`page page-${slug} content primary page-custom`}>
+					<Header />
+					<section className="block header header-page cover parallax">
+						<BackgroundImageHolder
+							imgSrc="/images/apotheosis_homer.jpg"
+						/>
 
-				<section className="block header header-page cover parallax">
-					<BackgroundImageHolder
-						imgSrc="/images/apotheosis_homer.jpg"
-					/>
-
-					<div className="container v-align-transform">
-						<div className="grid inner">
-							<div className="center-content">
-								<div className="page-title-wrap">
-									<h1 className="page-title">
-										{page.title}
-									</h1>
-									<h2>
-										{page.subtitle}
-									</h2>
+						<div className="container v-align-transform">
+							<div className="grid inner">
+								<div className="center-content">
+									<div className="page-title-wrap">
+										<h1 className="page-title">
+											{page.title}
+										</h1>
+										<h2>
+											{page.subtitle}
+										</h2>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</section>
+					</section>
 
-				<section className="page-content container">
-					{page.byline ?
-						<div className="page-byline">
-							<h3>
-								{page.byline}
-							</h3>
-						</div>
-						: ''}
-					<div dangerouslySetInnerHTML={{ __html: content }} />
-				</section>
-			</div>
+					<section className="page-content container">
+						{page.byline ?
+							<div className="page-byline">
+								<h3>
+									{page.byline}
+								</h3>
+							</div>
+							: ''}
+						<div dangerouslySetInnerHTML={{ __html: content }} />
+					</section>
+				</div>
+			</MuiThemeProvider>
 		);
 	}
 }

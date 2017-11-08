@@ -103,22 +103,19 @@ export default class ReferenceWork extends React.Component {
         else{
             referenceWorks[i].referenceWorkId = undefined;
         }
-        this.props.update(referenceWorks);
+        this.setState({
+            referenceWorks
+        })
 
 	}
 	addReferenceWorkBlock() {
 		this.state.referenceWorks.push({ referenceWorkId: Random.id() });
-		this.setState({
-			referenceWorks: this.state.referenceWorks,
-        });
         this.props.update(this.state.referenceWorks);
 	}
 
 	removeReferenceWorkBlock(i) {
-		this.setState({
-			referenceWorks: update(this.state.referenceWorks, { $splice: [[i, 1]] }),
-        });
-        this.props.update(this.state.referenceWorks);
+        let _referenceWorks = update(this.state.referenceWorks, { $splice: [[i, 1]] });
+        this.props.update(_referenceWorks);
 	}
 
 	moveReferenceWorkBlock(dragIndex, hoverIndex) {

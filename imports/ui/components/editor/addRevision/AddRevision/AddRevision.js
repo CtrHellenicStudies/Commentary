@@ -487,7 +487,7 @@ class AddRevision extends React.Component {
 									mediaOn={true}
 								/>
 								<ReferenceWork 
-									referenceWorks={this.props.comment.referenceWorks}
+									referenceWorks={this.state.referenceWorks}
 									update={this.updateReferenceWorks}
 									referenceWorkOptions={this.props.referenceWorkOptions} 
 									ready={this.props.ready}

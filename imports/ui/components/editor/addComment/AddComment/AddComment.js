@@ -241,22 +241,22 @@ class AddComment extends React.Component {
 		}));
 	}
 
-	onTagValueChange(tag) {
+	onTagValueChange(tag, i) {
 		const { tags } = this.props;
 		const { tagsValue } = this.state;
 
 		let _selectedKeyword;
+		if(tag)
+			tags.forEach(_tag => {
+				if (_tag._id === tag.value) {
+					_selectedKeyword = _tag;
+				}
+			});
 
-		tags.forEach(_tag => {
-			if (_tag._id === tag.value) {
-				_selectedKeyword = _tag;
-			}
-		});
 
-
-		tagsValue[tag.i].tagId = tag.value;
-		tagsValue[tag.i].keyword = _selectedKeyword;
-		tagsValue[tag.i].isSet = true;
+		tagsValue[i].tagId = tag ? tag.value : undefined;
+		tagsValue[i].keyword = _selectedKeyword;
+		tagsValue[i].isSet = tag ? true : false;
 
 		this.setState({
 			tagsValue: [...tagsValue],

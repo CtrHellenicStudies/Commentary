@@ -55,7 +55,6 @@ export default class ReferenceWork extends React.Component {
         }
 
 		// methods:
-		this.onReferenceWorksValueChange = this.onReferenceWorksValueChange.bind(this);
 		this.addReferenceWorkBlock = this.addReferenceWorkBlock.bind(this);
 		this.removeReferenceWorkBlock = this.removeReferenceWorkBlock.bind(this);
         this.moveReferenceWorkBlock = this.moveReferenceWorkBlock.bind(this);
@@ -96,13 +95,15 @@ export default class ReferenceWork extends React.Component {
             referenceWorks: _referenceWorks
         });
     }
-	onReferenceWorksValueChange(referenceWork) {
-		const referenceWorks = this.state.referenceWorks;
-		referenceWorks[referenceWork.i].referenceWorkId = referenceWork.value;
-
-		this.setState({
-			referenceWorks,
-		});
+	onReferenceWorksValueChange(referenceWork, i) {
+        const referenceWorks = this.state.referenceWorks;
+        if(referenceWork){
+            referenceWorks[i].referenceWorkId = referenceWork.value;
+        }
+        else{
+            referenceWorks[i].referenceWorkId = undefined;
+        }
+        this.props.update(referenceWorks);
 
 	}
 	addReferenceWorkBlock() {
@@ -203,7 +204,7 @@ export default class ReferenceWork extends React.Component {
                                             required={false}
                                             options={_referenceWorkOptions}
                                             value={this.state.referenceWorks[i].referenceWorkId}
-                                            onChange={this.onReferenceWorksValueChange}
+                                            onChange={(x) => this.onReferenceWorksValueChange(x, i)}
                                             placeholder="Reference Work . . ."
                                             onNewOptionClick={this.props.addNew}
                                         />

@@ -81,6 +81,7 @@ class AddRevision extends React.Component {
 			revisionTitle = revision.title;
 		}
 		this.updateReferenceWorks = this.updateReferenceWorks.bind(this);
+		this.addNewReferenceWork = this.addNewReferenceWork.bind(this);
 		this.state = {
 			revision,
 
@@ -233,7 +234,21 @@ class AddRevision extends React.Component {
 			this.props.history.push(`/commentary/${self.props.comment._id}/edit`);
 		});
 	}
-
+	addNewReferenceWork(reference){
+		const _reference = {
+			title: reference.value,
+			slug: slugify(reference.value.toLowerCase()),
+			tenantId: Session.get('tenantId')
+		};
+		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
+			if(err){
+				this.showSnackBar(err);
+			}
+			else{
+				this.showSnackBar({message: 'Reference work added'});
+			}
+		})
+	}
 	addTagBlock() {
 		const newTagBlock = {
 			tagId: Random.id(),
@@ -266,22 +281,22 @@ class AddRevision extends React.Component {
 		}));
 	}
 
-	onTagValueChange(tag) {
+	onTagValueChange(tag, i) {
 		const { tags } = this.props;
 		const { tagsValue } = this.state;
 
 		let _selectedKeyword;
+		if(tag)
+			tags.forEach(_tag => {
+				if (_tag._id === tag.value) {
+					_selectedKeyword = _tag;
+				}
+			});
 
-		tags.forEach(_tag => {
-			if (_tag._id === tag.value) {
-				_selectedKeyword = _tag;
-			}
-		});
 
-
-		tagsValue[tag.i].tagId = tag.value;
-		tagsValue[tag.i].keyword = _selectedKeyword;
-		tagsValue[tag.i].isSet = true;
+		tagsValue[i].tagId = tag ? tag.value : undefined;
+		tagsValue[i].keyword = _selectedKeyword;
+		tagsValue[i].isSet = tag ? true : false;
 
 		this.setState({
 			tagsValue: [...tagsValue],
@@ -471,7 +486,12 @@ class AddRevision extends React.Component {
 									spellcheck = {true}
 									mediaOn={true}
 								/>
-								<ReferenceWork referenceWorks={this.props.comment.referenceWorks} update={this.updateReferenceWorks} referenceWorkOptions={this.props.referenceWorkOptions} ready={this.props.ready} />
+								<ReferenceWork 
+									referenceWorks={this.props.comment.referenceWorks}
+									update={this.updateReferenceWorks}
+									referenceWorkOptions={this.props.referenceWorkOptions} 
+									ready={this.props.ready}
+									addNew={this.addNewReferenceWork} />
 
 								<div className="comment-edit-action-button">
 									<RaisedButton

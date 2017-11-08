@@ -97,7 +97,7 @@ const TagsInput = ({
 										options={_tagsOptions}
 										defaultValue={tagsValue[i].tagId}
 										value={tagsValue[i].tagId}
-										onChange={onTagValueChange}
+										onChange={(x) => onTagValueChange(x, i)}
 										placeholder="Tags . . ."
 										onNewOptionClick={addNewTag}
 									/>

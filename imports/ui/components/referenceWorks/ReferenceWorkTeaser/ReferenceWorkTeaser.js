@@ -13,8 +13,9 @@ class ReferenceWorkTeaser extends React.Component {
 	}
 
 	createMarkup() {
+		let { desc } = this.props;
 		return {
-			__html: Utils.trunc(this.props.referenceWork.description.replace(/(<([^>]+)>)/ig, ''), 140),
+			__html: desc ? Utils.trunc(desc.replace(/(<([^>]+)>)/ig, ''), 140) : '',
 		};
 	}
 

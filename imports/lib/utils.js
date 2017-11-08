@@ -53,6 +53,8 @@ const Utils = {
 		return 'just now';
 	},
 	trunc: (str, length) => {
+		if(!str)
+			return '';
 		const ending = ' ...';
 		let trimLen = length;
 		str = str.replace(/<(?:.|\n)*?>/gm, '');

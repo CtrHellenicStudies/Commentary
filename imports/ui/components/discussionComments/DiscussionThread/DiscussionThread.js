@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 // models
 import DiscussionComments from '/imports/models/discussionComments';
+import Commenters from '/imports/models/commenters';
 
 // lib
 import Utils from '/imports/lib/utils';
@@ -26,6 +27,7 @@ const DiscussionThread = React.createClass({
 		toggleLemma: PropTypes.func.isRequired,
 		showLoginModal: PropTypes.func,
 		discussionComments: PropTypes.array,
+		commenters: PropTypes.array,
 		discussionCommentsDisabled: PropTypes.bool,
 		ready: PropTypes.bool,
 	},
@@ -46,6 +48,7 @@ const DiscussionThread = React.createClass({
 
 	addDiscussionComment() {
 		const content = $(this.newCommentForm).find('textarea').val();
+		let that = this;
 
 		Meteor.call('discussionComments.insert', {
 			content,
@@ -199,19 +202,6 @@ const DiscussionThread = React.createClass({
 						<div
 							className="sort-by-wrap"
 						>
-							{/*
-							 <span className="sort-by-label">Sort by:</span>
-							 <RaisedButton
-							 label="Top"
-							 className="sort-by-option selected-sort sort-by-top"
-							 onClick={this.toggleSort}>
-							 </RaisedButton>
-							 <RaisedButton
-							 label="Newest"
-							 className="sort-by-option sort-by-new"
-							 onClick={this.toggleSort}>
-							 </RaisedButton>
-							 */}
 						</div>
 						{this.props.discussionComments.length === 0 ?
 							<div className="no-results-wrap">
@@ -252,12 +242,16 @@ const DiscussionThread = React.createClass({
 
 
 export default createContainer(({ comment }) => {
-	let discussionComments = [];
-	let userDiscussionComments = [];
-	let handle;
+	let discussionComments = [],
+	userDiscussionComments = [],
+	handleUsers, handleDiscuss,
+	users = [];
+
+	handleUsers = Meteor.subscribe('users.all', Session.get('tenantId'));
+	users = Meteor.users.find({}).fetch();
 
 	if (comment) {
-		handle = Meteor.subscribe('discussionComments', comment._id, Session.get('tenantId'));
+		handleDiscuss = Meteor.subscribe('discussionComments', comment._id, Session.get('tenantId'));
 		discussionComments = DiscussionComments.find({
 			commentId: comment._id,
 			status: 'publish'
@@ -271,12 +265,14 @@ export default createContainer(({ comment }) => {
 
 		return {
 			discussionComments,
-			ready: handle.ready(),
+			users,
+			ready: handleDiscuss.ready() && handleUsers.ready()
 		};
 	}
 
 	return {
 		discussionComments,
+		users,
 		ready: null,
 	};
 }, DiscussionThread);

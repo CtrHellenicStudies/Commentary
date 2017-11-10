@@ -3,6 +3,7 @@ import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Email } from 'meteor/email';
 import { ObjectID } from 'bson';
+import { sendBatchNotificationEmailsForComment } from '../../notificationEmails';
 
 import Utils from '/imports/lib/utils';
 import Config from '/imports/lib/_config/_config.js';
@@ -37,15 +38,19 @@ const deleteDiscussionComments = (token, _id) => {
 
 	return _id;
 };
-
 function insertDiscussionComment(discussionCommentCandidate) {
 	check(discussionCommentCandidate, {
 		content: String,
 		tenantId: String,
 		commentId: String,
 	});
-	const discussionComment = discussionCommentCandidate;
-
+	const discussionComment = discussionCommentCandidate,
+	commentsInDiscussion = DiscussionComments.find({commentId: discussionComment.commentId}).fetch(),
+	notification = {
+		created: new Date(),
+		_id: new ObjectID().toString(),
+		commentId: discussionComment.commentId
+	};
 	// Make sure the user is logged in before inserting
 	if (!Meteor.user()) {
 		throw new Meteor.Error('not-authorized');
@@ -70,7 +75,6 @@ function insertDiscussionComment(discussionCommentCandidate) {
 		throw new Meteor.Error(err);
 	}
 
-	sendDiscussionCommentInsertEmail(discussionComment);
 }
 
 function updateDiscussionComment(discussionCommentId, discussionCommentData) {
@@ -104,7 +108,43 @@ function updateDiscussionComment(discussionCommentId, discussionCommentData) {
 		throw new Meteor.Error(err);
 	}
 }
+function notifyAfterPublishRejection(id, status){
 
+	let discussionComment = DiscussionComments.findOne(id),
+	discussionComments = DiscussionComments.find({commentId: discussionComment.commentId}),
+	user = Meteor.users.find({ _id: discussionComment.userId }),
+	avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg';
+
+	const notification = {
+		message: status === 'publish' ? 'Your comment has been approved.' : 'Your comment has been rejected',
+		avatar: {src: avatar},
+		created: new Date(),
+		_id: new ObjectID().toString(),
+		slug: discussionComment.commentId
+	};
+
+	if (status === 'publish') {
+		console.log(discussionComment.userId);
+		console.log('published!');
+		sendDiscussionCommentPublishEmail(id);
+		Meteor.users.update(
+			{ $and : [
+				{ _id: {$in : discussionComments}},
+				{ _id: {$ne: discussionComment.userId}}
+			]}, {
+				$push: {'subscriptions.notifications': notification
+			}
+		}, function(){
+			sendBatchNotificationEmailsForComment(id, discussionComment.userId);
+		});
+	} else if (status === 'trash') {
+		console.log('removed!');
+		sendDiscussionCommentRejectEmail(discussionCommentId);
+	}
+
+	const updateUser = Meteor.users.update({_id: discussionComment.userId}, {$push: {'subscriptions.notifications': notification}});
+
+}
 const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentData) => {
 	check(token, String);
 	check(discussionCommentId, String);
@@ -141,6 +181,7 @@ const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentD
 	 * comment was approved
 	 */
 	const discussionComment = DiscussionComments.findOne(discussionCommentId);
+	let discussionComments = DiscussionComments.find({commentId: discussionComment.commentId});
 	const user = Meteor.users.find({ _id: discussionComment.userId });
 	const avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg';
 
@@ -153,8 +194,21 @@ const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentD
 	};
 
 	if (discussionCommentData.status === 'publish') {
+		console.log('published!');
 		sendDiscussionCommentPublishEmail(discussionCommentId);
+		console.log(discussionComments);
+		Meteor.users.update(
+			{ $and : [
+				{ _id: {$in : discussionComments.userId}},
+				{ _id: {$ne: Meteor.userId()}}
+			]}, {
+				$push: {'subscriptions.notifications': notification
+			}
+		}, function(){
+			sendBatchNotificationEmailsForComment(discussionComment.commentId, Meteor.userId());
+		});
 	} else if (discussionCommentData.status === 'trash') {
+		console.log('removed!');
 		sendDiscussionCommentRejectEmail(discussionCommentId);
 	}
 
@@ -258,7 +312,16 @@ function reportDiscussionComment(discussionCommentId) {
 		`,
 	});
 }
+function sendNotification(configurationObj){
+	console.log(configurationObj.to);
+	Email.send({
+		to: 'aniutka.pop@gmail.com',
+		from: Config.emails.from,
+		subject: 'Answer to your comment',
+		html: configurationObj.text
+	});
 
+}
 function unreportDiscussionComment(discussionCommentId) {
 	check(discussionCommentId, String);
 
@@ -279,7 +342,13 @@ function unreportDiscussionComment(discussionCommentId) {
 		throw new Meteor.Error(err);
 	}
 }
-
+DiscussionComments.find().observeChanges({
+	changed: function(id, fields){
+		if(!fields['status'])
+			return;
+		notifyAfterPublishRejection(id, fields['status']);
+	}
+});
 
 Meteor.methods({
 	'discussionComments.delete': deleteDiscussionComments,
@@ -295,6 +364,7 @@ Meteor.methods({
 	'discussionComments.report': reportDiscussionComment,
 
 	'discussionComments.unreport': unreportDiscussionComment,
+
 });
 
 

@@ -95,19 +95,20 @@ function sendDiscussionCommentPublishEmail(discussionCommentId) {
 
 	let commentTitle = '';
 	if (comment.revisions.length) {
-		const revisions = sortRevsions(comment.revisions);
+		const revisions = comment.revisions;
 		commentTitle = revisions[0].title;
 	}
 
-	Email.send({
+	let help = {
 		to: [user.emails[0].address],
 		from: Config.emails.from,
-		subject: `Your comment has been rejected at ${Config.name}`,
+		subject: `Your comment has been published at ${Config.name}`,
 		html: `
 		${getEmailHeader(user)}
 		Your comment on ${commentTitle} has been approved! You may view the discussion by visiting the following link: <a href='${commentLink}'>${commentLink}</a>.
 		${emailFooter}`,
-	});
+	};
+	//Email.send(help);
 }
 
 export { sendDiscussionCommentInsertEmail, sendDiscussionCommentRejectEmail, sendDiscussionCommentPublishEmail };

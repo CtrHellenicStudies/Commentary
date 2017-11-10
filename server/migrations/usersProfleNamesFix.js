@@ -1,8 +1,7 @@
-import Users from '/imports/models/users';
+import { Meteor } from 'meteor/meteor';
 
 const usersProfileNamesFix = () => {
-    const users = Users.find().fetch();
-    console.log(users);
+    const users = Meteor.users.find().fetch();
 	users.forEach((user) => {
         if(!user.profile)
             user.profile = {};
@@ -10,7 +9,7 @@ const usersProfileNamesFix = () => {
             user.profile.name = user.username ? user.username : user.emails[0].address;
 
 		try {
-			Users.update({
+			Meteor.users.update({
 				_id: user._id,
 			}, {
 				$set: {

@@ -6,7 +6,28 @@ import { Meteor } from 'meteor/meteor';
 import { Email } from 'meteor/email';
 import { SyncedCron } from 'meteor/percolate:synced-cron';
 
-function sendBatchNotificationEmails(routine) {
+function generateEmailDatas(user){
+	let username = user.profile.name,
+	numberOfNotifications = user.subscriptions.notifications.length,
+	ret = {};
+	ret.from = 'no-reply@ahcip.chs.harvard.edu';
+	ret.to = user.emails[0].address;
+	ret.subject = 'Notifications';
+	ret.text = generateNotificationText(numberOfNotifications, username);
+	return ret;
+}
+function generateNotificationText(numberOfNotifications, username){
+	let text = `
+	Dear ${username},
+
+	You have ${numberOfNotifications} ${numberOfNotifications > 1 ? 'notifications' : 'notification'}.
+	Please review your notifications at ahcip.chs.harvard.edu.
+
+	You can change how often you receive these emails in your account settings.
+	`;
+	return text;
+}
+export function sendBatchNotificationEmails(routine) {
 	const subscribedUsers = Meteor.users.find(
 		{$and:
 		[
@@ -18,28 +39,32 @@ function sendBatchNotificationEmails(routine) {
 	).fetch();
 
 	subscribedUsers.forEach(user => {
-		const numberOfNotifications = user.subscriptions.notifications.length;
+		console.log(generateEmailDatas(user));
+		Email.send(generateEmailDatas(user));
+	}
+);
 
-		let username = 'Commentary User';
-		if (user.profile.name) {
-			username = user.profile.name;
-		} else if (user.username) {
-			username = user.username;
+}
+export function sendBatchNotificationEmailsForComment(commentId, userId) {
+	console.log(commentId);
+	const subscribedUsers = Meteor.users.find(
+		{ $and:
+			[
+				{"subscriptions.notifications": {
+					$elemMatch: {
+						commentId: commentId
+					}
+				}
+				},
+				{emails: {$exists: true}},
+				{_id: {$ne: userId}}
+			]
 		}
-
-		const from = 'no-reply@ahcip.chs.harvard.edu';
-		const to = user.emails[0].address;
-		const subject = 'Notifications';
-		const text = `
-		Dear ${username},
-
-		You have ${numberOfNotifications} ${numberOfNotifications > 1 ? 'notifications' : 'notification'}.
-		Please review your notifications at ahcip.chs.harvard.edu.
-
-		You can change how often you receive these emails in your account settings.
-		`;
-
-		Email.send({from, to, subject, text});
+	).fetch();
+	console.log(subscribedUsers);
+	subscribedUsers.forEach(user => {
+		console.log(generateEmailDatas(user));
+		Email.send(generateEmailDatas(user));
 	}
 );
 

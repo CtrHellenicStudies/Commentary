@@ -15,7 +15,8 @@ const accountsMethods = {
 				algorithm: String,
 			},
 		});
-
+		user.profile = {};
+		user.profile.name = user.email;
 		const userId = Accounts.createUser(user);
 		const stampedToken = Accounts._generateStampedLoginToken();
 		Accounts._insertLoginToken(userId, stampedToken);

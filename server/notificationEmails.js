@@ -46,13 +46,12 @@ export function sendBatchNotificationEmails(routine) {
 
 }
 export function sendBatchNotificationEmailsForComment(commentId, userId) {
-	console.log(commentId);
 	const subscribedUsers = Meteor.users.find(
 		{ $and:
 			[
 				{"subscriptions.notifications": {
 					$elemMatch: {
-						commentId: commentId
+						slug: commentId
 					}
 				}
 				},
@@ -61,9 +60,7 @@ export function sendBatchNotificationEmailsForComment(commentId, userId) {
 			]
 		}
 	).fetch();
-	console.log(subscribedUsers);
 	subscribedUsers.forEach(user => {
-		console.log(generateEmailDatas(user));
 		Email.send(generateEmailDatas(user));
 	}
 );

@@ -111,9 +111,10 @@ function updateDiscussionComment(discussionCommentId, discussionCommentData) {
 function notifyAfterPublishRejection(id, status){
 
 	let discussionComment = DiscussionComments.findOne(id),
-	discussionComments = DiscussionComments.find({commentId: discussionComment.commentId}),
-	user = Meteor.users.find({ _id: discussionComment.userId }),
-	avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg';
+	discussionComments = {},
+	user = Meteor.users.findOne({ _id: discussionComment.userId }),
+	avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg',
+	discussionCommentsArray = [];
 
 	const notification = {
 		message: status === 'publish' ? 'Your comment has been approved.' : 'Your comment has been rejected',
@@ -124,18 +125,22 @@ function notifyAfterPublishRejection(id, status){
 	};
 
 	if (status === 'publish') {
-		console.log(discussionComment.userId);
-		console.log('published!');
 		sendDiscussionCommentPublishEmail(id);
-		Meteor.users.update(
-			{ $and : [
-				{ _id: {$in : discussionComments}},
-				{ _id: {$ne: discussionComment.userId}}
-			]}, {
+		DiscussionComments.find().map((disscuss) => {
+			if(disscuss.commentId === discussionComment.commentId && disscuss.userId !== user._id){
+				discussionComments[disscuss.userId] = true;
+			}
+		});
+		for(const [key, value] of Object.entries(discussionComments)){
+			discussionCommentsArray.push(key);
+		}
+		Meteor.users.update({ 
+			_id: {$in: discussionCommentsArray}
+			}, {
 				$push: {'subscriptions.notifications': notification
 			}
 		}, function(){
-			sendBatchNotificationEmailsForComment(id, discussionComment.userId);
+			sendBatchNotificationEmailsForComment(discussionComment.commentId, user._id);
 		});
 	} else if (status === 'trash') {
 		console.log('removed!');
@@ -181,7 +186,7 @@ const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentD
 	 * comment was approved
 	 */
 	const discussionComment = DiscussionComments.findOne(discussionCommentId);
-	let discussionComments = DiscussionComments.find({commentId: discussionComment.commentId});
+	let discussionComments = {}, discussionCommentsArray = [];
 	const user = Meteor.users.find({ _id: discussionComment.userId });
 	const avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg';
 
@@ -194,14 +199,21 @@ const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentD
 	};
 
 	if (discussionCommentData.status === 'publish') {
-		console.log('published!');
 		sendDiscussionCommentPublishEmail(discussionCommentId);
+		DiscussionComments.map((disscuss) => {
+			if(disscuss.commentId === discussionComment.commentId && disscuss.userId !== Meteor.userId()){
+				discussionComments[disscuss.userId] = true;
+			}
+		});
+		console.log('Found disscusion comments: ');
 		console.log(discussionComments);
-		Meteor.users.update(
-			{ $and : [
-				{ _id: {$in : discussionComments.userId}},
-				{ _id: {$ne: Meteor.userId()}}
-			]}, {
+		for(const [key, value] of Object.entries(discussionComments)){
+			discussionCommentsArray.push(key);
+		}
+		console.log(discussionCommentsArray);
+		Meteor.users.update({ 
+			_id: {$in: discussionCommentsArray}
+			}, {
 				$push: {'subscriptions.notifications': notification
 			}
 		}, function(){

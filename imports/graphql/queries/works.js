@@ -23,6 +23,9 @@ const workQueryFields = {
 			},
 		},
 		async resolve(parent, { _id, tenantId }, {token}) {
+			console.log(tenantId);
+			console.log(_id);
+			console.log(token);
 			const worksService = new WorksService({token});
 			return await worksService.worksGet(_id, tenantId);
 		}

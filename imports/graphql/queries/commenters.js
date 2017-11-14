@@ -23,6 +23,9 @@ const commenterQueryFields = {
 			},
 		},
 		async resolve(parent, { _id, tenantId }, {token}) {
+			console.log(tenantId);
+			console.log(_id);
+			console.log(token);
 			const commentersService = new CommentersService({token});
 			return await commentersService.commentersGet(_id, tenantId);
 		},

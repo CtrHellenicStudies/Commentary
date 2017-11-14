@@ -50,9 +50,31 @@ export default class DiscussionCommentService extends AdminService {
 	 * @returns {boolean} result of mongo orm remove
 	 */
 	discussionCommentRemove(discussionCommentId) {
+		console.log(this);
 		if (this.userIsAdmin) {
 			return DiscussionComments.remove({_id: discussionCommentId});
 		}
 		return new Error('Not authorized');
+	}
+	/**
+	 * Update discussion comment content
+	 * @param {number} discussionCommentId - id of discussion comment to update
+	 * @param {object} discussionComment - discussion comment object with content
+	 */
+	discussionCommentUpdate(discussionCommentId, discussionComment){
+		if (!this.userIsAdmin) 
+			return new Error('Not authorized');
+		try {
+			DiscussionComments.update({_id: discussionCommentId},
+				{$set: {
+					content: discussionComment.content
+				}
+			});
+		}
+		catch(e){
+			throw new Error(e);
+		}
+
+		
 	}
 }

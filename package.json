@@ -5,9 +5,10 @@
   "main": "main.js",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "apollo-client": "^0.8.7",
+    "apollo-client": "^1.9.2",
     "apollo-errors": "^1.4.0",
     "apollo-server": "^0.3.3",
+    "apollo-server-express": "^1.2.0",
     "babel-runtime": "^6.22.0",
     "bcrypt": "^0.8.7",
     "body-parser": "^1.16.1",
@@ -64,7 +65,7 @@
     "react-addons-test-utils": "^15.0.2",
     "react-addons-transition-group": "^15.0.2",
     "react-addons-update": "^15.0.2",
-    "react-apollo": "^1.4.14",
+    "react-apollo": "^1.4.16",
     "react-autobind": "^1.0.6",
     "react-bootstrap": "^0.30.8",
     "react-cookie": "^2.0.8",
@@ -144,7 +145,7 @@
     "stylelint-config-standard": "^16.0.0"
   },
   "scripts": {
-		"jsdoc": "jsdoc client server -r -c .jsdoc.json -d docs",
+    "jsdoc": "jsdoc client server -r -c .jsdoc.json -d docs",
     "lint:js": "eslint . --ext .js,.jsx",
     "lint:js:fix": "eslint . --ext .js,.jsx --fix",
     "lint:css": "stylelint \"imports/**/*.{css,less,scss,sss}\"",

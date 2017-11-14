@@ -8,6 +8,7 @@ import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { ApolloProvider } from 'react-apollo';
 import qs from 'qs-lite';
 
 // components:
@@ -20,6 +21,8 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import client from '/imports/middleware/apolloClient';
+import configureStore from '/imports/store/configureStore';
 import Utils from '/imports/lib/utils';
 
 // models
@@ -28,6 +31,7 @@ import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 
 
+const store = configureStore();
 /*
  *	helpers
  */
@@ -418,56 +422,61 @@ class AddCommentLayout extends React.Component {
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				{!loading ?
-					<div className="chs-layout chs-editor-layout add-comment-layout">
-						<Header
-							toggleSearchTerm={this.toggleSearchTerm}
-							handleChangeLineN={this.handleChangeLineN}
-							selectedWork={this.getWork(filters)}
-							filters={filters}
-							initialSearchEnabled
-							addCommentPage
-						/>
-						<main>
-							<div className="commentary-comments">
-								<div className="comment-group">
-									<CommentLemmaSelect
-										ref={(component) => { this.commentLemmaSelect = component; }}
-										selectedLineFrom={selectedLineFrom}
-										selectedLineTo={selectedLineTo}
-										workSlug={work ? work.slug : 'iliad'}
-										subworkN={subwork ? subwork.n : 1}
-									/>
-
-									<AddComment
-										selectedLineFrom={selectedLineFrom}
-										selectedLineTo={selectedLineTo}
-										submitForm={this.addComment}
-										work={work}
-									/>
-
-									<ContextPanel
-										open={contextReaderOpen}
-										workSlug={work ? work.slug : 'iliad'}
-										subworkN={subwork ? subwork.n : 1}
-										lineFrom={lineFrom || 1}
-										selectedLineFrom={selectedLineFrom}
-										selectedLineTo={selectedLineTo}
-										updateSelectedLines={this.updateSelectedLines}
-										editor
-									/>
-								</div>
-							</div>
-
-							<FilterWidget
-								filters={filters}
+				<ApolloProvider
+					client={client}
+					store={store}
+				>
+					{!loading ?
+						<div className="chs-layout chs-editor-layout add-comment-layout">
+							<Header
 								toggleSearchTerm={this.toggleSearchTerm}
+								handleChangeLineN={this.handleChangeLineN}
+								selectedWork={this.getWork(filters)}
+								filters={filters}
+								initialSearchEnabled
+								addCommentPage
 							/>
-						</main>
-					</div>
-					:
-					<Spinner fullPage />
-				}
+							<main>
+								<div className="commentary-comments">
+									<div className="comment-group">
+										<CommentLemmaSelect
+											ref={(component) => { this.commentLemmaSelect = component; }}
+											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
+											workSlug={work ? work.slug : 'iliad'}
+											subworkN={subwork ? subwork.n : 1}
+										/>
+
+										<AddComment
+											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
+											submitForm={this.addComment}
+											work={work}
+										/>
+
+										<ContextPanel
+											open={contextReaderOpen}
+											workSlug={work ? work.slug : 'iliad'}
+											subworkN={subwork ? subwork.n : 1}
+											lineFrom={lineFrom || 1}
+											selectedLineFrom={selectedLineFrom}
+											selectedLineTo={selectedLineTo}
+											updateSelectedLines={this.updateSelectedLines}
+											editor
+										/>
+									</div>
+								</div>
+
+								<FilterWidget
+									filters={filters}
+									toggleSearchTerm={this.toggleSearchTerm}
+								/>
+							</main>
+						</div>
+						:
+						<Spinner fullPage />
+					}
+				</ApolloProvider>
 			</MuiThemeProvider>
 		);
 	}

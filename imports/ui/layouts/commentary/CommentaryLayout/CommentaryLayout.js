@@ -16,11 +16,13 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { ApolloProvider, createNetworkInterface } from 'react-apollo';
 import qs from 'qs-lite';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
+import configureStore from '/imports/store/configureStore';
 import Header from '/imports/ui/layouts/header/Header';
 
 // models
@@ -40,8 +42,16 @@ import {
 	updateFilterOnCKeyAndValueChangeEvent,
 	createFilterFromURL
 } from './helpers';
-
-
+import ApolloClient from 'apollo-client';
+console.log(Meteor.settings.public.graphql);
+const networkInterface = createNetworkInterface({
+	uri: Meteor.settings.public.graphql,
+});
+console.log(networkInterface);
+const client = new ApolloClient({
+	networkInterface
+});
+console.log(client);
 class CommentaryLayout extends React.Component {
 
 	static propTypes = {
@@ -177,9 +187,10 @@ class CommentaryLayout extends React.Component {
 
 		// create filters object based on the queryParams or params
 		const filters = createFilterFromURL(params, queryParams, works, referenceWorks);
-
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+			<ApolloProvider
+				client={client}>
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header
@@ -210,6 +221,7 @@ class CommentaryLayout extends React.Component {
 						: ''
 					}
 				</div>
+			</ApolloProvider>
 			</MuiThemeProvider>
 		);
 	}

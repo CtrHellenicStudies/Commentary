@@ -32,6 +32,22 @@ const discussionCommentsMutationFields = {
 			return await discussionCommentsService.discussionCommentUpdateStatus(discussionCommentId, discussionComment);
 		}
 	},
+	discussionCommentUpdate:{
+		type: DiscussionCommentType,
+		description: 'Update a discussion comment content',
+		args:{
+			discussionCommentId: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			discussionComment: {
+				type: new GraphQLNonNull(DiscussionCommentInputType)
+			}
+		},
+		async resolve(parent, {discussionCommentId, discussionComment}, {token}){
+			const discussionCommentsService = new DiscussionCommentsService({token});
+			return await discussionCommentsService.discussionCommentUpdate(discussionCommentId,discussionComment);
+		}
+	},
 	discussionCommentRemove: {
 		type: RemoveType,
 		description: 'Remove a single discussionComment',

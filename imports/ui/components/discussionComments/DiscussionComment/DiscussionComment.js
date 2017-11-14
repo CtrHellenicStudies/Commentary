@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
@@ -9,54 +9,50 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Link } from 'react-router-dom';
+import { compose } from 'react-apollo';
+import { 
+	discussionCommentUpdateMutation,
+	discussionCommentsQuery } 
+	from '/imports/graphql/methods/discussionComments';
 
-const DiscussionComment = React.createClass({
+class DiscussionComment extends Component{
 
-	propTypes: {
-		discussionComment: PropTypes.object.isRequired,
-		currentUser: PropTypes.object,
-		user: PropTypes.object,
-	},
-
-	getInitialState() {
-		return {
+	constructor(props){
+		super(props);
+		this.state = {
 			editMode: false,
 			moreOptionsVisible: false,
 			shareOptionsVisible: false,
 			readComment: false,
 		};
-	},
-
+		this.showEditMode = this.showEditMode.bind(this);
+		this.closeEditMode = this.closeEditMode.bind(this);
+		this.updateDiscussionComment = this.updateDiscussionComment.bind(this);
+		this.upvoteDiscussionComment = this.upvoteDiscussionComment.bind(this);
+		this.reportDiscussionComment = this.reportDiscussionComment.bind(this);
+		this.unreportDiscussionComment = this.unreportDiscussionComment.bind(this);
+		this.toggleMoreOptions = this.toggleMoreOptions.bind(this);
+		this.toggleShareOptions = this.toggleShareOptions.bind(this);
+		this.readDiscussionComment = this.readDiscussionComment.bind(this);
+	}
 	showEditMode() {
 		this.setState({
 			editMode: true,
 		});
-	},
-
+	}
 	closeEditMode() {
 		this.setState({
 			editMode: false,
 		});
-	},
-
+	}
 	updateDiscussionComment() {
 		const content = $(this.updateCommentForm).find('textarea').val();
 		const { discussionComment } = this.props;
 
-		Meteor.call('discussionComments.update',
-			discussionComment._id,
-			{
-				commentId: discussionComment.commentId,
-				tenantId: discussionComment.tenantId,
-				content
-			},
-		);
-
 		this.setState({
 			editMode: false,
 		});
-	},
-
+	}
 	upvoteDiscussionComment() {
 		const { currentUser } = this.props;
 		if (currentUser) {
@@ -64,8 +60,7 @@ const DiscussionComment = React.createClass({
 				this.props.discussionComment._id
 			);
 		}
-	},
-
+	}
 	reportDiscussionComment() {
 		const { currentUser } = this.props;
 		if (currentUser) {
@@ -76,8 +71,7 @@ const DiscussionComment = React.createClass({
 				this.props.discussionComment._id
 			);
 		}
-	},
-
+	}
 	unreportDiscussionComment() {
 		const { currentUser } = this.props;
 		if (currentUser) {
@@ -88,28 +82,24 @@ const DiscussionComment = React.createClass({
 				this.props.discussionComment._id
 			);
 		}
-	},
-
+	}
 	toggleMoreOptions() {
 		this.setState({
 			moreOptionsVisible: !this.state.moreOptionsVisible,
 			shareOptionsVisible: false,
 		});
-	},
-
+	}
 	toggleShareOptions() {
 		this.setState({
 			shareOptionsVisible: !this.state.shareOptionsVisible,
 			moreOptionsVisible: false,
 		});
-	},
-
+	}
 	readDiscussionComment() {
 		this.setState({
 			readComment: true,
 		});
-	},
-
+	}
 	render() {
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
@@ -209,9 +199,6 @@ const DiscussionComment = React.createClass({
 					</div>
 					<div className="inner-comment-row">
 						<div className="discussion-comment-text">
-							{/* <div
-							 dangerouslySetInnerHTML={{ __html: discussionComment.content}}
-							 ></div> */}
 							{this.state.editMode ?
 								<form
 									className="update-comment-form clearfix"
@@ -317,35 +304,6 @@ const DiscussionComment = React.createClass({
 						}
 					</div>
 
-
-					{/* false ?
-						<div className="reply-create-form">
-							<div className="add-comment-wrap">
-								<form
-									className="new-comment-form"
-									name="new-comment-form"
-								>
-									<div className="add-comment-row-1">
-										<textarea
-											className="new-comment-text"
-											placeholder="Enter your reply here . . . "
-										/>
-										<RaisedButton
-											label="Submit"
-											type="submit"
-											className="submit-comment-button paper-shadow"
-										/>
-										<RaisedButton
-											label="Close Reply"
-											className="close-form-button"
-											onClick={this.closeReply}
-										/>
-									</div>
-								</form>
-							</div>
-						</div>
-						: '' */}
-
 					<div className="discussion-comment-children">
 
 						{discussionComment.children.map((discussionCommentChild, j) =>
@@ -421,26 +379,28 @@ const DiscussionComment = React.createClass({
 				</div>
 			</div>
 		);
-	},
+	}
 
-});
-
-const DiscussionCommentContainer = createContainer(({ discussionComment }) => {
+};
+DiscussionComment.propTypes ={
+	discussionComment: PropTypes.object.isRequired,
+	currentUser: PropTypes.object,
+	user: PropTypes.object,
+}
+const cont = createContainer(({ discussionComment }) => {
 
 	let handle;
 	let user;
 
 	if (discussionComment) {
-		handle = Meteor.subscribe('users.id', discussionComment.userId);
 		user = Meteor.users.findOne({ _id: discussionComment.userId });
 	}
 
 	return {
-		user,
-		ready: handle && handle.ready(),
-		discussionComment,
+		user
 	};
 
 }, DiscussionComment);
-
-export default DiscussionCommentContainer;
+//export default DiscussionComment;
+// console.log(compose(discussionCommentUpdate)(DiscussionComment));
+ export default compose(discussionCommentUpdateMutation, discussionCommentsQuery)(cont);

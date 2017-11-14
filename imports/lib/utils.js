@@ -426,23 +426,7 @@ const Utils = {
 			});
 		}
 		return suggestions;
-	},
-	// sendNotificationEmails(disscusion, users, content){
-	// 	let listOfEmails = {}, 
-	// 	to = [],
-	// 	text = '<h3>Someone answered to comment in your discussion:</h3>' + '<i>"'+ content+ '"</i>';
-	// 	disscusion.map((discuss) => {
-	// 		users.map((user) => {
-	// 			if(user._id === discuss.userId && user._id !== Meteor.userId()){
-	// 				listOfEmails[user._id] = user.emails[0].address;
-	// 			}
-	// 		});
-	// 	});
-	// 	for (const [key, value] of Object.entries(listOfEmails)) {
-	// 		to.push(value);
-	// 	}
-	// 	Meteor.call('disscusionComments.sendNotification', {to: to, text: text});
-	// }
+	}
 };
 
 /**

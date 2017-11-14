@@ -85,6 +85,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	/>
 );
 const routes = (props) => {
+	console.log(props);
 	if (!Session.get('tenantId')) {
 		const hostnameArray = document.location.hostname.split('.');
 		let subdomain;

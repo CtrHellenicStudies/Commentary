@@ -338,7 +338,7 @@ const COMMENT_ID_LENGTH = 7;
 
 const _getCommentURN = (comment) => {
 	const work = Works.findOne({ slug: comment.work.slug });
-	const urnPrefix = 'urn:cts:CHS.Commentary';
+	const urnPrefix = 'urn:cts:CHS:Commentaries.AHCIP';
 	// Use work tlg if it exists, otherwise, search for subwork tlg number
 	// Failing either, just use creator
 	let urnTLG = work.tlgCreator;
@@ -374,7 +374,7 @@ const _getCommentURN = (comment) => {
 const _getAnnotationURN = (comment) => {
 	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
 	const chapter = _.find(book.chapters, c => c.url === comment.bookChapterUrl);
-	const urnPrefix = 'urn:cts:CHS.Annotations';
+	const urnPrefix = 'urn:cts:CHS:Annotations.AHCIP';
 
 	const urnBook = `${book.authorURN}.${book.slug}`;
 	const urnComment = `${chapter.n}.${comment.paragraphN}`;

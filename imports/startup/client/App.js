@@ -158,6 +158,9 @@ const routes = (props) => {
 			<Route
 				exact path="/v1/urn:urn" render={(params) => <NameResolutionServiceLayout version={1} urn={params.match.params.urn} />}
 			/>
+			<Route 
+				exact path="/v2/urn:urn" render={(params) => <NameResolutionServiceLayout version={2} urn={params.match.params.urn} />}
+			/>
 			<Route
 				exact path="/v1/doi:doi" render={(params) => <NameResolutionServiceLayout version={1} doi={params.match.params.doi} />}
 			/>
@@ -165,7 +168,8 @@ const routes = (props) => {
 				path="/:slug" render={(params) => {
 					const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
 					if (reservedRoutes.indexOf(params.slug) === -1) {
-						return <Page slug={params.match.params.slug} />;
+						//console.log(params);
+						//return <Page slug={params.match.params.slug} />;
 					}
 					return <Redirect to="/" />;
 				}}

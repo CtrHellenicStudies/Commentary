@@ -32,6 +32,34 @@ const resolveV1 = (props) => {
 
 	return resolveURL;
 };
+const resolveV2 = (props) => {
+	console.log('v2');
+	console.log(props);
+	let resolveURL;
+	let tenant;
+
+	if (!props.doi && !props.urn) {
+		return resolveURL;
+	}
+
+	const urnParams = props.urn.split('.');
+	const revision = urnParams.splice(-1);
+	const urn = `urn${urnParams.join('.')}`;
+
+	const commentHandle = Meteor.subscribe('comments', { urn }, 0);
+	const comment = Comments.findOne({ urn });
+
+	if (comment) {
+		const tenantsHandle = Meteor.subscribe('tenants');
+		tenant = Tenants.findOne({_id: comment.tenantId});
+	}
+
+	if (comment && tenant) {//TODO
+		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}:3000/commentary/?urn=${urn}&revision=${revision}`;
+	}
+
+	return resolveURL;
+};
 
 
 class NameResolutionServiceLayout extends React.Component {
@@ -109,6 +137,9 @@ const nameResolutionServiceLayoutContainer = createContainer((props) => {
 	switch (props.version) {
 	case 1:
 		resolveURL = resolveV1(props);
+		break;
+	case 2:
+		resolveURL = resolveV2(props);
 		break;
 	default:
 		resolveURL = resolveV1(props);

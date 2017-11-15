@@ -50,7 +50,6 @@ export default class DiscussionCommentService extends AdminService {
 	 * @returns {boolean} result of mongo orm remove
 	 */
 	discussionCommentRemove(discussionCommentId) {
-		console.log(this);
 		if (this.userIsAdmin) {
 			return DiscussionComments.remove({_id: discussionCommentId});
 		}
@@ -58,16 +57,16 @@ export default class DiscussionCommentService extends AdminService {
 	}
 	/**
 	 * Update discussion comment content
-	 * @param {number} discussionCommentId - id of discussion comment to update
-	 * @param {object} discussionComment - discussion comment object with content
+	 * @param {string} discussionCommentId - id of discussion comment to update
+	 * @param {string} discussionContent - contentr of disscusion comment
 	 */
-	discussionCommentUpdate(discussionCommentId, discussionComment){
+	discussionCommentUpdate(discussionCommentId, discussionContent){
 		if (!this.userIsAdmin) 
 			return new Error('Not authorized');
 		try {
 			DiscussionComments.update({_id: discussionCommentId},
 				{$set: {
-					content: discussionComment.content
+					content: discussionContent
 				}
 			});
 		}

@@ -48,7 +48,9 @@ class DiscussionComment extends Component{
 	updateDiscussionComment() {
 		const content = $(this.updateCommentForm).find('textarea').val();
 		const { discussionComment } = this.props;
-
+		this.props.discussionCommentUpdate(discussionComment._id, content).catch((e) => {
+			console.log(e)
+		});
 		this.setState({
 			editMode: false,
 		});
@@ -401,6 +403,4 @@ const cont = createContainer(({ discussionComment }) => {
 	};
 
 }, DiscussionComment);
-//export default DiscussionComment;
-// console.log(compose(discussionCommentUpdate)(DiscussionComment));
  export default compose(discussionCommentUpdateMutation, discussionCommentsQuery)(cont);

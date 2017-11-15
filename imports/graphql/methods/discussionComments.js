@@ -35,10 +35,10 @@ const discussionCommentUpdateStatus = gql`
 }
  `;
  const discussionCommentUpdate = gql`
- mutation discussionCommentUpdate($id: String! $discussionComment: DiscussionCommentInputType!) {
-	discussionCommentUpdate(discussionCommentId: $id discussionComment: $discussionComment) {
+ mutation discussionCommentUpdate($id: String! $discussionContent: String!) {
+	discussionCommentUpdate(discussionCommentId: $id discussionContent: $discussionContent) {
 	 _id
-	 comment
+	 content
  }
 }
 `;
@@ -58,7 +58,7 @@ const discussionCommentUpdateStatusMutation = graphql(discussionCommentUpdateSta
 });
 const discussionCommentUpdateMutation = graphql(discussionCommentUpdate, {
 	props: (params) => ({
-		discussionCommentUpdate: (id, discussionComment) => params.discussionCommentUpdate({variables: {id, discussionComment}}),
+		discussionCommentUpdate: (id, discussionContent) => params.discussionCommentUpdate({variables: {id, discussionContent}}),
 	}),
 	name: 'discussionCommentUpdate',
 	options: {

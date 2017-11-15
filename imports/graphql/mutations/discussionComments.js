@@ -13,7 +13,7 @@ import { RemoveType } from '/imports/graphql/types/index';
 import Keywords from '/imports/models/keywords';
 
 // logic
-import DiscussionCommentsService from '../logic/discussionComments';
+import DiscussionCommentService from '../logic/discussionComments';
 
 const discussionCommentsMutationFields = {
 	discussionCommentUpdateStatus: {
@@ -28,7 +28,7 @@ const discussionCommentsMutationFields = {
 			}
 		},
 		async resolve(parent, {discussionCommentId, discussionComment}, {token}) {
-			const discussionCommentsService = new DiscussionCommentsService({token});
+			const discussionCommentsService = new DiscussionCommentService({token});
 			return await discussionCommentsService.discussionCommentUpdateStatus(discussionCommentId, discussionComment);
 		}
 	},
@@ -39,13 +39,13 @@ const discussionCommentsMutationFields = {
 			discussionCommentId: {
 				type: new GraphQLNonNull(GraphQLString)
 			},
-			discussionComment: {
-				type: new GraphQLNonNull(DiscussionCommentInputType)
+			discussionContent: {
+				type: new GraphQLNonNull(GraphQLString)
 			}
 		},
-		async resolve(parent, {discussionCommentId, discussionComment}, {token}){
-			const discussionCommentsService = new DiscussionCommentsService({token});
-			return await discussionCommentsService.discussionCommentUpdate(discussionCommentId,discussionComment);
+		async resolve(parent, {discussionCommentId, discussionContent}, {token}){
+			const discussionCommentsService = new DiscussionCommentService({token});
+			return await discussionCommentsService.discussionCommentUpdate(discussionCommentId,discussionContent);
 		}
 	},
 	discussionCommentRemove: {

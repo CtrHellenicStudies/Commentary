@@ -20,8 +20,6 @@ const discussionCommentQueryFields = {
 			},
 		},
 		async resolve(parent, { tenantId }, {token}) {
-			console.log(tenantId);
-			console.log(token);
 			const discussionCommentService = new DiscussionCommentService({token});
 			return await discussionCommentService.discussionCommentsGet(tenantId);
 		},

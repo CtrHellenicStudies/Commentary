@@ -18,6 +18,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { ApolloProvider, createNetworkInterface } from 'react-apollo';
 import qs from 'qs-lite';
+import Cookies from 'js-cookie';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
@@ -51,7 +52,16 @@ console.log(networkInterface);
 const client = new ApolloClient({
 	networkInterface
 });
-console.log(client);
+networkInterface.use([{
+	applyMiddleware(req, next) {
+		if (!req.options.headers) {
+			req.options.headers = {};
+		}
+		const token = Cookies.get('loginToken');
+		req.options.headers.authorization = token ? token : null;
+		next();
+	}
+}]);
 class CommentaryLayout extends React.Component {
 
 	static propTypes = {

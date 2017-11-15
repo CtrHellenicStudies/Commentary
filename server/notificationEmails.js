@@ -6,18 +6,18 @@ import { Meteor } from 'meteor/meteor';
 import { Email } from 'meteor/email';
 import { SyncedCron } from 'meteor/percolate:synced-cron';
 
-function generateEmailDatas(user){
+function generateEmailDatas(user) {
 	let username = user.profile.name,
-	numberOfNotifications = user.subscriptions.notifications.length,
-	ret = {};
+		numberOfNotifications = user.subscriptions.notifications.length,
+		ret = {};
 	ret.from = 'no-reply@ahcip.chs.harvard.edu';
 	ret.to = user.emails[0].address;
 	ret.subject = 'Notifications';
 	ret.text = generateNotificationText(numberOfNotifications, username);
 	return ret;
 }
-function generateNotificationText(numberOfNotifications, username){
-	let text = `
+function generateNotificationText(numberOfNotifications, username) {
+	const text = `
 	Dear ${username},
 
 	You have ${numberOfNotifications} ${numberOfNotifications > 1 ? 'notifications' : 'notification'}.
@@ -48,16 +48,16 @@ export function sendBatchNotificationEmails(routine) {
 export function sendBatchNotificationEmailsForComment(commentId, userId) {
 	const subscribedUsers = Meteor.users.find(
 		{ $and:
-			[
-				{"subscriptions.notifications": {
-					$elemMatch: {
-						slug: commentId
-					}
+		[
+			{'subscriptions.notifications': {
+				$elemMatch: {
+					slug: commentId
 				}
-				},
+			}
+			},
 				{emails: {$exists: true}},
 				{_id: {$ne: userId}}
-			]
+		]
 		}
 	).fetch();
 	subscribedUsers.forEach(user => {

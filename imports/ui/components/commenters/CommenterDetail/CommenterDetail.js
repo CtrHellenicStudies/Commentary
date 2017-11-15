@@ -97,9 +97,8 @@ class CommenterDetail extends React.Component {
 			subscribed: !subscribed
 		});
 	}
-	getBiographyHTML(biography){
-		if(Utils.isJson(biography))
-			return JSON.parse(biography).html;
+	getBiographyHTML(biography) {
+		if (Utils.isJson(biography))			{ return JSON.parse(biography).html; }
 		return biography;
 	}
 	render() {

@@ -65,7 +65,7 @@ class CommentContentInput extends React.Component {
 					editorState={this.state.contentEditorState}
 					onChange={this.onTextChange}
 					placeholder="Comment text..."
-					spellcheck={true}
+					spellcheck
 					ref={(element) => { this.editor = element; }}
 				/>
 			</div>

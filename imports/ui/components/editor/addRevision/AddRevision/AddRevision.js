@@ -108,9 +108,9 @@ class AddRevision extends React.Component {
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
-	updateReferenceWorks(referenceWorks){
+	updateReferenceWorks(referenceWorks) {
 		this.setState({
-			referenceWorks:referenceWorks
+			referenceWorks: referenceWorks
 		});
 	}
 	_enableButton() {
@@ -234,20 +234,19 @@ class AddRevision extends React.Component {
 			this.props.history.push(`/commentary/${self.props.comment._id}/edit`);
 		});
 	}
-	addNewReferenceWork(reference){
+	addNewReferenceWork(reference) {
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
 			tenantId: Session.get('tenantId')
 		};
 		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
-			if(err){
+			if (err) {
 				this.showSnackBar(err);
-			}
-			else{
+			}			else {
 				this.showSnackBar({message: 'Reference work added'});
 			}
-		})
+		});
 	}
 	addTagBlock() {
 		const newTagBlock = {
@@ -286,17 +285,18 @@ class AddRevision extends React.Component {
 		const { tagsValue } = this.state;
 
 		let _selectedKeyword;
-		if(tag)
+		if (tag)			{
 			tags.forEach(_tag => {
 				if (_tag._id === tag.value) {
 					_selectedKeyword = _tag;
 				}
 			});
+		}
 
 
 		tagsValue[i].tagId = tag ? tag.value : undefined;
 		tagsValue[i].keyword = _selectedKeyword;
-		tagsValue[i].isSet = tag ? true : false;
+		tagsValue[i].isSet = !!tag;
 
 		this.setState({
 			tagsValue: [...tagsValue],
@@ -349,9 +349,8 @@ class AddRevision extends React.Component {
 			});
 		}, 4000);
 	}
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	selectTagType(tagId, event, index) {
 		const currentTags = this.state.tagsValue;
@@ -457,10 +456,10 @@ class AddRevision extends React.Component {
 										editorState={titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
-										spellcheck = {true}
-										disableMentions={true}
-										stripPastedStyles = {true}
-										singleLine={true}
+										spellcheck
+										disableMentions
+										stripPastedStyles
+										singleLine
 									/>
 								</h1>
 
@@ -482,16 +481,17 @@ class AddRevision extends React.Component {
 									editorState={textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
-									disableMentions={true}
-									spellcheck = {true}
-									mediaOn={true}
+									disableMentions
+									spellcheck
+									mediaOn
 								/>
 								<ReferenceWork 
 									referenceWorks={this.state.referenceWorks}
 									update={this.updateReferenceWorks}
 									referenceWorkOptions={this.props.referenceWorkOptions} 
 									ready={this.props.ready}
-									addNew={this.addNewReferenceWork} />
+									addNew={this.addNewReferenceWork}
+								/>
 
 								<div className="comment-edit-action-button">
 									<RaisedButton

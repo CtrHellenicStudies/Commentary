@@ -15,10 +15,9 @@ class Account extends React.Component {
 	constructor(props) {
 		super(props);
 		let biography;
-		if(!this.props.user.profile || !this.props.user.profile.biography){
+		if (!this.props.user.profile || !this.props.user.profile.biography) {
 			biography = EditorState.createEmpty();
-		}
-		else{
+		}		else {
 			biography = Utils.getEditorState(this.props.user.profile.biography);
 		}
 		this.state = {
@@ -97,9 +96,9 @@ class Account extends React.Component {
 		const value = event.target.value;
 		this.handleChangeTextDebounced(field, value);
 	}
-	handleDraftChange(editorState){
-		let value = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
-		Meteor.call('updateAccount', `profile.biography`, value, (err) => {
+	handleDraftChange(editorState) {
+		const value = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
+		Meteor.call('updateAccount', 'profile.biography', value, (err) => {
 			if (err) {
 				console.error(err);
 			}
@@ -184,7 +183,7 @@ class Account extends React.Component {
 					editorState={this.state.editorState}
 					onChange={this.handleDraftChange.bind(this)}
 					placeholder="Biography..."
-					mediaOn={true}
+					mediaOn
 				/>
 				<br />
 
@@ -192,7 +191,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="http://university.academia.edu/YourName"
 					floatingLabelText="Academia.edu"
-					defaultValue={user.profile ? user.profile.academiaEdu: ''}
+					defaultValue={user.profile ? user.profile.academiaEdu : ''}
 					onChange={this.handleChangeText.bind(null, 'academiaEdu')}
 				/>
 				<br />
@@ -201,7 +200,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://twitter.com/@your_name"
 					floatingLabelText="Twitter"
-					defaultValue={user.profile ? user.profile.twitter: ''}
+					defaultValue={user.profile ? user.profile.twitter : ''}
 					onChange={this.handleChangeText.bind(null, 'twitter')}
 				/>
 				<br />
@@ -210,7 +209,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://facebook.com/your.name"
 					floatingLabelText="Facebook"
-					defaultValue={user.profile ? user.profile.facebook: ''}
+					defaultValue={user.profile ? user.profile.facebook : ''}
 					onChange={this.handleChangeText.bind(null, 'facebook')}
 				/>
 				<br />
@@ -219,7 +218,7 @@ class Account extends React.Component {
 					fullWidth
 					hintText="https://plus.google.com/+YourName"
 					floatingLabelText="Google Plus"
-					defaultValue={user.profile ? user.profile.google: ''}
+					defaultValue={user.profile ? user.profile.google : ''}
 					onChange={this.handleChangeText.bind(null, 'google')}
 				/>
 				<br />

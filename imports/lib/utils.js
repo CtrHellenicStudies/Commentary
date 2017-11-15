@@ -53,8 +53,7 @@ const Utils = {
 		return 'just now';
 	},
 	trunc: (str, length) => {
-		if(!str)
-			return '';
+		if (!str)			{ return ''; }
 		const ending = ' ...';
 		let trimLen = length;
 		str = str.replace(/<(?:.|\n)*?>/gm, '');
@@ -219,7 +218,7 @@ const Utils = {
 		return str.toString();
 	},
 	getEntityData(entity, key) {
-		if(key === 'link' && !entity.data.mention){
+		if (key === 'link' && !entity.data.mention) {
 			return entity.data.href;
 		}
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
@@ -340,46 +339,46 @@ const Utils = {
 		const constState = convertFromRaw(_content);
 		return EditorState.createWithContent(constState);
 	},
-	getHtmlFromContext(context){
+	getHtmlFromContext(context) {
 		return convertToHTML({
 						// performe necessary html transformations:
-						blockToHTML: (block) => {
-							const type = block.type;
-							if (type === 'atomic') {
+			blockToHTML: (block) => {
+				const type = block.type;
+				if (type === 'atomic') {
 							  return {start: '<span>', end: '</span>'};
-							}
-							if (type === 'unstyled') {
+				}
+				if (type === 'unstyled') {
 							  return <p />;
-							}
-							return <span/>;
+				}
+				return <span />;
 						  },
-						entityToHTML: (entity, originalText) => {
-							let ret = this.decodeHtml(originalText);
-							switch(entity.type){
-								case 'LINK':
-									ret = <a href={entity.data.link}>{ret}</a>;
-									break;
-								case 'mention':
-									ret = <a className="keyword-gloss" href={this.getEntityData(entity, 'link')}>{ret}</a>;
-									break;
-								case '#mention':
-									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;
-									break;
-								case 'draft-js-video-plugin-video':
-									ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>;
-									break;
-								case 'image':
-									ret = '<img src="'+entity.data.src+'" alt="draft js image error"/>';
-									break;
-								default:
-									break;
-							}
-							return ret;
-						},
-					})(context);
+			entityToHTML: (entity, originalText) => {
+				let ret = this.decodeHtml(originalText);
+				switch (entity.type) {
+				case 'LINK':
+					ret = <a href={entity.data.link}>{ret}</a>;
+					break;
+				case 'mention':
+					ret = <a className="keyword-gloss" href={this.getEntityData(entity, 'link')}>{ret}</a>;
+					break;
+				case '#mention':
+					ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;
+					break;
+				case 'draft-js-video-plugin-video':
+					ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen />;
+					break;
+				case 'image':
+					ret = `<img src="${entity.data.src}" alt="draft js image error"/>`;
+					break;
+				default:
+					break;
+				}
+				return ret;
+			},
+		})(context);
 	},
 	decodeHtml(html) {
-		let txt = document.createElement('textarea');
+		const txt = document.createElement('textarea');
 		txt.innerHTML = html;
 		return txt.value;
 	},

@@ -45,12 +45,12 @@ function insertDiscussionComment(discussionCommentCandidate) {
 		commentId: String,
 	});
 	const discussionComment = discussionCommentCandidate,
-	commentsInDiscussion = DiscussionComments.find({commentId: discussionComment.commentId}).fetch(),
-	notification = {
-		created: new Date(),
-		_id: new ObjectID().toString(),
-		commentId: discussionComment.commentId
-	};
+		commentsInDiscussion = DiscussionComments.find({commentId: discussionComment.commentId}).fetch(),
+		notification = {
+			created: new Date(),
+			_id: new ObjectID().toString(),
+			commentId: discussionComment.commentId
+		};
 	// Make sure the user is logged in before inserting
 	if (!Meteor.user()) {
 		throw new Meteor.Error('not-authorized');
@@ -108,13 +108,13 @@ function updateDiscussionComment(discussionCommentId, discussionCommentData) {
 		throw new Meteor.Error(err);
 	}
 }
-function notifyAfterPublishRejection(id, status){
+function notifyAfterPublishRejection(id, status) {
 
 	let discussionComment = DiscussionComments.findOne(id),
-	discussionComments = {},
-	user = Meteor.users.findOne({ _id: discussionComment.userId }),
-	avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg',
-	discussionCommentsArray = [];
+		discussionComments = {},
+		user = Meteor.users.findOne({ _id: discussionComment.userId }),
+		avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg',
+		discussionCommentsArray = [];
 
 	const notification = {
 		message: status === 'publish' ? 'Your comment has been approved.' : 'Your comment has been rejected',
@@ -127,19 +127,19 @@ function notifyAfterPublishRejection(id, status){
 	if (status === 'publish') {
 		sendDiscussionCommentPublishEmail(id);
 		DiscussionComments.find().map((disscuss) => {
-			if(disscuss.commentId === discussionComment.commentId && disscuss.userId !== user._id){
+			if (disscuss.commentId === discussionComment.commentId && disscuss.userId !== user._id) {
 				discussionComments[disscuss.userId] = true;
 			}
 		});
-		for(const [key, value] of Object.entries(discussionComments)){
+		for (const [key, value] of Object.entries(discussionComments)) {
 			discussionCommentsArray.push(key);
 		}
 		Meteor.users.update({ 
 			_id: {$in: discussionCommentsArray}
-			}, {
-				$push: {'subscriptions.notifications': notification
+		}, {
+			$push: {'subscriptions.notifications': notification
 			}
-		}, function(){
+		}, function() {
 			sendBatchNotificationEmailsForComment(discussionComment.commentId, user._id);
 		});
 	} else if (status === 'trash') {
@@ -186,7 +186,8 @@ const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentD
 	 * comment was approved
 	 */
 	const discussionComment = DiscussionComments.findOne(discussionCommentId);
-	let discussionComments = {}, discussionCommentsArray = [];
+	let discussionComments = {}, 
+		discussionCommentsArray = [];
 	const user = Meteor.users.find({ _id: discussionComment.userId });
 	const avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg';
 
@@ -201,22 +202,22 @@ const discussionCommentsUpdate = (token, discussionCommentId, discussionCommentD
 	if (discussionCommentData.status === 'publish') {
 		sendDiscussionCommentPublishEmail(discussionCommentId);
 		DiscussionComments.map((disscuss) => {
-			if(disscuss.commentId === discussionComment.commentId && disscuss.userId !== Meteor.userId()){
+			if (disscuss.commentId === discussionComment.commentId && disscuss.userId !== Meteor.userId()) {
 				discussionComments[disscuss.userId] = true;
 			}
 		});
 		console.log('Found disscusion comments: ');
 		console.log(discussionComments);
-		for(const [key, value] of Object.entries(discussionComments)){
+		for (const [key, value] of Object.entries(discussionComments)) {
 			discussionCommentsArray.push(key);
 		}
 		console.log(discussionCommentsArray);
 		Meteor.users.update({ 
 			_id: {$in: discussionCommentsArray}
-			}, {
-				$push: {'subscriptions.notifications': notification
+		}, {
+			$push: {'subscriptions.notifications': notification
 			}
-		}, function(){
+		}, function() {
 			sendBatchNotificationEmailsForComment(discussionComment.commentId, Meteor.userId());
 		});
 	} else if (discussionCommentData.status === 'trash') {
@@ -324,7 +325,7 @@ function reportDiscussionComment(discussionCommentId) {
 		`,
 	});
 }
-function sendNotification(configurationObj){
+function sendNotification(configurationObj) {
 	console.log(configurationObj.to);
 	Email.send({
 		to: 'aniutka.pop@gmail.com',
@@ -355,10 +356,9 @@ function unreportDiscussionComment(discussionCommentId) {
 	}
 }
 DiscussionComments.find().observeChanges({
-	changed: function(id, fields){
-		if(!fields['status'])
-			return;
-		notifyAfterPublishRejection(id, fields['status']);
+	changed: function(id, fields) {
+		if (!fields.status)			{ return; }
+		notifyAfterPublishRejection(id, fields.status);
 	}
 });
 

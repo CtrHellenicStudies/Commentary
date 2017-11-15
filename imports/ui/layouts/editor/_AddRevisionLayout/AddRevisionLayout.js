@@ -262,9 +262,8 @@ const AddRevisionLayout = React.createClass({
 			filters,
 		});
 	},
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	},
 	showSnackBar(message) {
 		this.setState({

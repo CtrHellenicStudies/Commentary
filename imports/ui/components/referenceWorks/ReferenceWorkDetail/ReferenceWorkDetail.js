@@ -28,10 +28,10 @@ class ReferenceWorkDetail extends React.Component {
 
 	createMarkup() {
 		let __html = '';
-		let { desc } = this.props;
+		const { desc } = this.props;
 		if (this.props.referenceWork) {
 			__html += '<p>';
-			__html += desc ? desc.replace('\n', '</p><p>'): '';
+			__html += desc ? desc.replace('\n', '</p><p>') : '';
 			__html += '</p>';
 		}
 		return {

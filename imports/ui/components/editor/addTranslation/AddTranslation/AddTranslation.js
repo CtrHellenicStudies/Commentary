@@ -132,9 +132,8 @@ class AddTranslation extends React.Component {
 			});
 		}, 4000);
 	}
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	validateStateForSubmit() {
 		const errors = false;
@@ -192,10 +191,10 @@ class AddTranslation extends React.Component {
 									name="draft_input_translation"
 									editorState={this.state.editorState}
 									onChange={this.onEditorChange}
-									disableMentions={true}
+									disableMentions
 									placeholder="Translation . . ."
-									spellcheck = {true}
-									stripPastedStyles = {true}
+									spellcheck
+									stripPastedStyles
 								/>
 								<div className="comment-edit-action-button">
 									<RaisedButton

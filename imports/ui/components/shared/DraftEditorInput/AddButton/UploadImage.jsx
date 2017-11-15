@@ -38,7 +38,7 @@ export default class AvatarEditor extends React.Component {
 				console.error('Error uploading', uploader.xhr.response);
 				sendSnack(error);
 			} else {
-                this.props.uploadedUrl(downloadUrl);
+				this.props.uploadedUrl(downloadUrl);
 			}
 		});
 	}

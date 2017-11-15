@@ -10,7 +10,7 @@ import Utils from '/imports/lib/utils';
 
 class Suggestions extends Component {
 
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.state = {
 			mentions: fromJS([]),
@@ -27,7 +27,7 @@ class Suggestions extends Component {
 			const _mentions = Utils.getSuggestionsFromComments(res);
 
 			this.setState({
-				mentions: defaultSuggestionsFilter(value,fromJS(_mentions))
+				mentions: defaultSuggestionsFilter(value, fromJS(_mentions))
 			});
 		});
 	}
@@ -48,18 +48,18 @@ class Suggestions extends Component {
 		const { MentionSuggestions } = this.props.mentionPlugin;
 		const KeywordsSuggestions = this.props.keywordPlugin.MentionSuggestions;
 		return (
-				<div>
-					{this.props.tags !== undefined ? (
-						<div>
-							<this.props.mentionPlugin.MentionSuggestions
+			<div>
+				{this.props.tags !== undefined ? (
+					<div>
+						<this.props.mentionPlugin.MentionSuggestions
 							onSearchChange={this.onMentionSearchChange.bind(this)}
 							suggestions={this.state.mentions}
-								/>
-							<this.props.keywordPlugin.MentionSuggestions
+						/>
+						<this.props.keywordPlugin.MentionSuggestions
 							onSearchChange={this.onKeywordSearchChange.bind(this)}
 							suggestions={this.state.keywords}
-							/>
-						</div>) : ''
+						/>
+					</div>) : ''
 					}
 			</div>
 		);
@@ -72,5 +72,5 @@ export default createContainer(() => {
 
 	return {
 		tags
-	}
+	};
 }, Suggestions);

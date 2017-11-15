@@ -230,8 +230,8 @@ const Utils = {
 
 		if (location.hostname.match(/\w+.chs.harvard.edu/)) {
 			domain = 'chs.harvard.edu';
-		} else if (location.hostname.match(/\w+.orphe.us/)) {
-			domain = 'orphe.us';
+		} else if (location.hostname.match(/\w+.chs.orphe.us/)) {
+			domain = 'chs.orphe.us';
 		} else if (location.hostname.match(/\w+.chs.local/)) {
 			domain = 'chs.local';
 		}
@@ -341,7 +341,7 @@ const Utils = {
 		return EditorState.createWithContent(constState);
 	},
 	getHtmlFromContext(context){
-		return convertToHTML({		
+		return convertToHTML({
 						// performe necessary html transformations:
 						blockToHTML: (block) => {
 							const type = block.type;
@@ -394,41 +394,41 @@ const Utils = {
 
 	getSuggestionsFromComments(comments) {
 		const suggestions = [];
-	
+
 		// if there are comments:
 		if (comments.length) {
-	
+
 			// loop through all comments
 			// add suggestion for each comment
 			comments.forEach((comment) => {
-	
+
 				// get the most recent revision
 				const revision = comment.revisions[comment.revisions.length - 1];
-	
+
 				const suggestion = {
 					// create suggestio name:
 					name: `"${revision.title}" -`,
-	
+
 					// set link for suggestion
 					link: `/commentary?_id=${comment._id}`,
-	
+
 					// set id for suggestion
 					id: comment._id,
 				};
-	
+
 				// loop through commenters and add them to suggestion name
 				comment.commenters.forEach((commenter, i) => {
 					if (i === 0) suggestion.name += ` ${commenter.name}`;
 					else suggestion.name += `, ${commenter.name}`;
 				});
-	
+
 				suggestions.push(suggestion);
 			});
 		}
 		return suggestions;
 	},
 	// sendNotificationEmails(disscusion, users, content){
-	// 	let listOfEmails = {}, 
+	// 	let listOfEmails = {},
 	// 	to = [],
 	// 	text = '<h3>Someone answered to comment in your discussion:</h3>' + '<i>"'+ content+ '"</i>';
 	// 	disscusion.map((discuss) => {

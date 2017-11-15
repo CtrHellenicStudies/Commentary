@@ -89,7 +89,7 @@ class RecentActivityTeaser extends React.Component {
 				});
 			}
 
-			commentUrl = `http://chs-dev.orphe.us${comment.bookChapterUrl}?paragraph=${comment.paragraphN}`;
+			commentUrl = `http://chs.harvard.edu/${comment.bookChapterUrl}?paragraph=${comment.paragraphN}`;
 		}
 
 		return (

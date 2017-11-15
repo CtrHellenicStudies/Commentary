@@ -1,10 +1,16 @@
 import Comments from '/imports/models/comments';
+import Tenants from '/imports/models/tenants';
 
 const commentsURNsFix = () => {
 	const comments = Comments.find().fetch();
+	const tenants = Tenants.find().fetch();
+
 	comments.forEach((comment) => {
-		let urn = comment.urn;
-		urn = urn.replace('Commentary','Commentaries.AHCIP');
+		let urn = comment.urn,
+		tenant = Tenants.findOne({_id: comment.tenantId}),
+		urns = [];
+		urns.push(urn);
+		urns.push(urn.replace('Commentary','Commentaries.'+ tenant.subdomain.toUpperCase()));
 		try {
 			Comments.update({
 				_id: comment._id,

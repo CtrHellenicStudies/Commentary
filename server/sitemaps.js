@@ -22,11 +22,18 @@ sitemaps.add('/sitemap.xml', (req) => {
 
 	if (process.env.NODE_ENV === 'development') {
 		subdomain = Meteor.settings.public.developmentSubdomain;
+		console.log('sitemap - development');
+		console.log(Meteor.settings.public);
 	} else if (hostnameArray.length > 1) {
 		subdomain = hostnameArray[0];
+		console.log('sitemap - Not development');
+		console.log(process.env);
+		console.log(hostnameArray);
 	} else {
 		subdomain = '';
 		window.location.assign("/404");
+		console.log('sitemap - 404');
+		console.log(process.env);
 	}
 
 	const sitemap = [];

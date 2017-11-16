@@ -16,7 +16,7 @@ export default class CommentService extends AdminService {
 	 * @returns {Object[]} array of comments
 	 */
 	commentsGet(tenantId, limit, skip, workSlug, subworkN) {
-	//	if (this.userIsAdmin) {
+		if (this.userIsAdmin) {
 			let comments;
 			const args = {};
 
@@ -51,7 +51,7 @@ export default class CommentService extends AdminService {
 				}
 				options.limit = limit;
 			} else {
-				options.limit = 1000;
+				options.limit = 30;
 			}
 
 			comments = Comments.find(args, options).fetch();
@@ -64,8 +64,8 @@ export default class CommentService extends AdminService {
 				}
 			});
 			return comments;
-		//}
-	//	return new Error('Not authorized');
+		}
+		return new Error('Not authorized');
 	}
 
 	/**

@@ -16,10 +16,10 @@ const resolveV1 = (props) => {
 
 	const urnParams = props.urn.split('.');
 	const revision = urnParams.splice(-1);
-	const urn = `urn${urnParams.join('.')}`;
+	const urn = `${urnParams.join('.')}`;
 
-	const commentHandle = Meteor.subscribe('comments', { urn }, 0);
-	const comment = Comments.findOne({ urn });
+	const commentHandle = Meteor.subscribe('comments', {_id: props.commentId}, 0);
+	const comment = Comments.findOne({ _id: props.commentId });
 
 	if (comment) {
 		const tenantsHandle = Meteor.subscribe('tenants');
@@ -33,21 +33,17 @@ const resolveV1 = (props) => {
 	return resolveURL;
 };
 const resolveV2 = (props) => {
-	console.log('v2');
-	console.log(props);
 	let resolveURL;
 	let tenant;
-
 	if (!props.doi && !props.urn) {
 		return resolveURL;
 	}
-
 	const urnParams = props.urn.split('.');
 	const revision = urnParams.splice(-1);
-	const urn = `urn${urnParams.join('.')}`;
+	const urn = `${urnParams.join('.')}`;
 
-	const commentHandle = Meteor.subscribe('comments', { urn }, 0);
-	const comment = Comments.findOne({ urn });
+	const commentHandle = Meteor.subscribe('comments', {_id: props.commentId});
+	const comment = Comments.findOne({ _id: props.commentId });
 
 	if (comment) {
 		const tenantsHandle = Meteor.subscribe('tenants');
@@ -55,7 +51,7 @@ const resolveV2 = (props) => {
 	}
 
 	if (comment && tenant) {//TODO
-		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}:3000/commentary/?urn=${urn}&revision=${revision}`;
+		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}/commentary/?urn=${urn}&revision=${revision}`;
 	}
 
 	return resolveURL;

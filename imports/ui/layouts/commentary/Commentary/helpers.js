@@ -91,7 +91,10 @@ const createQueryFromFilters = (filters) => {
 
 			case 'urn':
 				// Values will always be an array with a length of one
-				query.urn = filter.values[0];
+				if(!query.$or)
+					query.$or = [{"urn.v2": filter.values[0]}, {"urn.v1": filter.values[0]}];
+				else
+					query.$or.push({$and:[{"urn.v2": filter.values[0]}, {"urn.v1": filter.values[0]}]});
 				break;
 
 			default:

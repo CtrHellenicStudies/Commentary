@@ -64,8 +64,6 @@ const commentQueryFields = {
 			},
 		},
 		async resolve(parent, { urnStart, urnEnd, limit, skip }, { token }) {
-			console.log(urnStart);
-			console.log(urnEnd);
 			const commentService = new CommentService({ token });
 			return await commentService.commentsGetURN(urnStart, urnEnd, limit, skip);
 		}
@@ -89,8 +87,6 @@ const commentQueryFields = {
 			},
 		},
 		async resolve(parent, { urnStart, urnEnd, limit, skip }, { token }) {
-			console.log(urnStart);
-			console.log(urnEnd);
 			const commentService = new CommentService({ token });
 			return await commentService.commentsGetURN(urnStart, urnEnd, limit, skip);
 		}

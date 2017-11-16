@@ -6,17 +6,14 @@ const commentsURNsFix = () => {
 	const tenants = Tenants.find().fetch();
 
 	comments.forEach((comment) => {
-		let urn = comment.urn,
-		tenant = Tenants.findOne({_id: comment.tenantId}),
-		urns = [];
-		urns.push(urn);
-		urns.push(urn.replace('Commentary','Commentaries.'+ tenant.subdomain.toUpperCase()));
+		let urn = {};
+		
 		try {
 			Comments.update({
 				_id: comment._id,
 			}, {
 				$set: {
-					urn,
+					urn
 				},
 			});
 		} catch (err) {

@@ -369,10 +369,15 @@ export default createContainer(({ filters, skip, limit }) => {
 	// Update textsearch in query for client minimongo
 	if ('$text' in query) {
 		const textsearch = new RegExp(query.$text, 'i');
-		query.$or = [
-			{ 'revisions.title': textsearch },
-			{ 'revisions.text': textsearch },
-		];
+		if(!query.$or)
+			query.$or = [
+				{ 'revisions.title': textsearch },
+				{ 'revisions.text': textsearch },
+			];
+		else
+			query.$or.push({$and:[			
+				{ 'revisions.title': textsearch },
+				{ 'revisions.text': textsearch },]});
 		delete query.$text;
 	}
 

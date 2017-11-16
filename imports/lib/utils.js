@@ -27,6 +27,20 @@ const Utils = {
 		}
 		return moment(date).format('D/M/YYYY');
 	},
+	resolveUrn(urn){
+		let ret = urn;
+		try{
+			if(urn.v2)
+				ret = urn.v2;
+			else
+				ret = urn.v1;
+				
+		}
+		catch(error){
+			console.log('Old urn exists in database.');
+		}
+		return ret;
+	},
 	timeSince: (date) => {
 		let interval;
 		const seconds = Math.floor((new Date() - date) / 1000);

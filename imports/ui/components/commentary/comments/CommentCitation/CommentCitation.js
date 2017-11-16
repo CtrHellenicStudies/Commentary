@@ -48,7 +48,7 @@ class CommentCitation extends React.Component {
 		if (!comment) {
 			return null;
 		}
-
+		const urn = Utils.resolveUrn(comment.urn);
 		const styles = {
 			menuItem: {
 				fontFamily: 'ProximaNW01-AltLightReg',
@@ -92,14 +92,14 @@ class CommentCitation extends React.Component {
 										Revision {moment(updated).format('D MMMM YYYY')}
 									</label>
 									<span className="urn">
-										<a
-											href={`//nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
+										<a //TODO
+											href={`//nrs.${Utils.getEnvDomain()}/v2/${urn}.${comment.revisions.length - i - 1}/${comment._id}`}
 										>
-											nrs.chs.harvard.edu/v1/{comment.urn}.{comment.revisions.length - i - 1}
+											nrs.chs.harvard.edu/v2/{urn}.{comment.revisions.length - i - 1}
 										</a>
 									</span>
 									<CopyToClipboard
-										text={`https://nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
+										text={`https://nrs.${Utils.getEnvDomain()}/v2/${urn}.${comment.revisions.length - i - 1}`}
 										onCopy={() => this.setState({copied: true})}
 									>
 										<span className="copy-to-clipboard">

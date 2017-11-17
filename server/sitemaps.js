@@ -20,6 +20,12 @@ sitemaps.add('/sitemap.xml', (req) => {
 	const hostnameArray = req.headers.host.split('.');
 	let subdomain;
 
+	console.log("process enviroment");
+	console.log(process.env);
+	console.log("meteor settings");
+	console.log(process.env.METEOR_SETTINGS);
+	console.log("public");
+	console.log(process.env.METEOR_SETTINGS.public);
 	if (process.env.NODE_ENV === 'development') {
 		subdomain = Meteor.settings.public.developmentSubdomain;
 		console.log('sitemap - development');

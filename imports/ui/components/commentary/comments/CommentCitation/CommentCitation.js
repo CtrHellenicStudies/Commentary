@@ -125,7 +125,7 @@ CommentCitation.propTypes = {
 			updated: PropTypes.instanceOf(Date),
 			originalDate: PropTypes.instanceOf(Date),
 		})).isRequired,
-		urn: PropTypes.string.isRequired,
+		urn: PropTypes.object.isRequired,
 	}),
 };
 

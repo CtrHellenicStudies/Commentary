@@ -3,7 +3,7 @@
 // import Config from './_config.js';
 //
 //
- AccountsTemplates.configure({
+AccountsTemplates.configure({
 // 	defaultLayoutType: 'blaze-to-react',
 // 	defaultLayout: AccountsLayout,
 // 	defaultContentRegion: 'content',

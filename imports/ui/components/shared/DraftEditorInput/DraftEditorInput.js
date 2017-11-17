@@ -48,9 +48,9 @@ class DraftEditorInput extends Component {
 		stripPastedStyles: PropTypes.bool,
 		mediaOn: PropTypes.bool,
 		editorState: PropTypes.object.isRequired,
-		InlineToolbar : PropTypes.func //Remember that if you want use InlineToolbar, you also need plugin for it
+		InlineToolbar: PropTypes.func // Remember that if you want use InlineToolbar, you also need plugin for it
 	};
-	constructor(props){
+	constructor(props) {
 		super(props);
 
 		this.mentionPlugin = createMentionPlugin();
@@ -62,27 +62,26 @@ class DraftEditorInput extends Component {
 	onEditorChange(editorState) {
 		this.props.onChange(editorState);
 	}
-	getPlugins(){
+	getPlugins() {
 		let ret = this.props.disableMentions ? [] : [this.mentionPlugin, this.keywordPlugin];
-		if(this.props.plugins)
-			ret = ret.concat(this.props.plugins);
-		ret = !this.props.InlineToolbar ? [inlineToolbarPlugin].concat(ret) : ret; //Is there any custom InlineToolbar
+		if (this.props.plugins)			{ ret = ret.concat(this.props.plugins); }
+		ret = !this.props.InlineToolbar ? [inlineToolbarPlugin].concat(ret) : ret; // Is there any custom InlineToolbar
 		ret = this.props.singleLine ? ret.concat([singleLinePlugin]) : ret;
-		ret = this.props.mediaOn ? ret.concat([this.videoPlugin, this.imagePlugin]): ret;
+		ret = this.props.mediaOn ? ret.concat([this.videoPlugin, this.imagePlugin]) : ret;
 		return ret;
 	}
-	getPlainAttributes(){
-		let ret = {
-			spellCheck : this.props.spellcheck == true ?  true : false,
-			stripPastedStyles : this.props.stripPastedStyles === true ? true : false
-		}
-		if(this.props.singleLine){
+	getPlainAttributes() {
+		const ret = {
+			spellCheck: this.props.spellcheck == true,
+			stripPastedStyles: this.props.stripPastedStyles === true
+		};
+		if (this.props.singleLine) {
 			ret.blockRenderMap = singleLinePlugin.blockRenderMap;
 		}
 		return ret;
 	}
 	render() {
-		let plugins = this.getPlugins();
+		const plugins = this.getPlugins();
 		const InlineToolbar = this.props.singleLine ? undefined : (this.props.InlineToolbar || inlineToolbarPlugin.InlineToolbar);
 		const plainAttributes = this.getPlainAttributes();
 		return (
@@ -92,7 +91,7 @@ class DraftEditorInput extends Component {
 					<Editor
 						editorState={this.props.editorState}
 						onChange={this.onEditorChange}
-						plugins = {plugins}
+						plugins={plugins}
 						{...plainAttributes}
 						placeholder={this.props.placeholder}
 					/>
@@ -100,7 +99,7 @@ class DraftEditorInput extends Component {
 					(<Suggestions
 						mentionPlugin={this.mentionPlugin}
 						keywordPlugin={this.keywordPlugin}
-						/>)
+					/>)
 					}
 				</div>
 				{ InlineToolbar !== undefined ?

@@ -74,7 +74,7 @@ const DiscussionCommentTeaser = React.createClass({
 						<FlatButton
 							label={`Context (${discussionComment.otherCommentsCount})`}
 							className="user-discussion-comment-replies"
-							icon={<FontIcon className="mdi mdi-comment"/>}
+							icon={<FontIcon className="mdi mdi-comment" />}
 							style={{
 								height: 'auto',
 								maxHeight: 'none',

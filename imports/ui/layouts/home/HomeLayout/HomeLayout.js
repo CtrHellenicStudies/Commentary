@@ -44,7 +44,7 @@ class HomeLayout extends Component {
 
 	render() {
 		const { settings, tenant, ready } = this.props;
-		if (!ready) {
+		if (!ready || !tenant) {
 			return <LoadingHome />;
 		}
 

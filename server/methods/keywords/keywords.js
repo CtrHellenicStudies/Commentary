@@ -127,7 +127,7 @@ const keywordsGetAll = (token, value) => {
 	console.log(Keywords.find({}, { limit: 5, sort: { created: -1 } }).fetch());
 	if (!value.length) return Keywords.find({}, { limit: 5, sort: { created: -1 } }).fetch();
 	return Keywords.find({ $text: { $search: value } }, { limit: 5, sort: { created: -1 } }).fetch();
-}
+};
 const keywordsChangeType = (token, id, newType) => {
 	check(token, String);
 	check(id, String);

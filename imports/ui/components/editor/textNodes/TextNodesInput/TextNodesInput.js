@@ -177,9 +177,8 @@ class TextNodesInput extends React.Component {
 			});
 		}, 4000);
 	}
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	render() {
 		const { textNodes } = this.state;

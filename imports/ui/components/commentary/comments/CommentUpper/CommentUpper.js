@@ -30,7 +30,7 @@ const CommentUpperRight = props => (
 			<Link to={`/commentary/${props.commentId}/edit`}>
 				<FlatButton
 					label="Edit comment"
-					icon={<FontIcon className="mdi mdi-pen"/>}
+					icon={<FontIcon className="mdi mdi-pen" />}
 				/>
 			</Link>
 			:

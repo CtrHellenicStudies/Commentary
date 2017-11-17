@@ -48,7 +48,7 @@ const DiscussionThread = React.createClass({
 
 	addDiscussionComment() {
 		const content = $(this.newCommentForm).find('textarea').val();
-		let that = this;
+		const that = this;
 
 		Meteor.call('discussionComments.insert', {
 			content,
@@ -201,8 +201,7 @@ const DiscussionThread = React.createClass({
 						}
 						<div
 							className="sort-by-wrap"
-						>
-						</div>
+						/>
 						{this.props.discussionComments.length === 0 ?
 							<div className="no-results-wrap">
 								{!comment.discussionCommentsDisabled && !discussionCommentsDisabled ?
@@ -243,9 +242,10 @@ const DiscussionThread = React.createClass({
 
 export default createContainer(({ comment }) => {
 	let discussionComments = [],
-	userDiscussionComments = [],
-	handleUsers, handleDiscuss,
-	users = [];
+		userDiscussionComments = [],
+		handleUsers, 
+		handleDiscuss,
+		users = [];
 
 	handleUsers = Meteor.subscribe('users.all', Session.get('tenantId'));
 	users = Meteor.users.find({}).fetch();

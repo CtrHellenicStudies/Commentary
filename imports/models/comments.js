@@ -274,6 +274,11 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'revisions.$._id': {
+		type: String,
+		optional: true,
+	},
+
 	'revisions.$.title': {
 		type: String,
 		optional: true,
@@ -370,7 +375,7 @@ const _getCommentURN = (comment) => {
 	}
 
 	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
-	return { 
+	return {
 		 'v1': `${urnPrefixV1}:${urnComment}.${urnCommentId}`,
 		 'v2': `${urnPrefixV2}:${urnComment}.${urnCommentId}`};
 };
@@ -384,8 +389,8 @@ const _getAnnotationURN = (comment) => {
 	urnBook = `${book.authorURN}.${book.slug}`,
 	urnComment = `${chapter.n}.${comment.paragraphN}`,
 	urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
-	
-	return { 
+
+	return {
 		'v1': `${urnPrefixV1}:${urnComment}.${urnCommentId}`,
 	 	'v2': `${urnPrefixV2}:${urnComment}.${urnCommentId}`};
 };

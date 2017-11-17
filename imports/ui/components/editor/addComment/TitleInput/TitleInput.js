@@ -42,9 +42,9 @@ class TitleInput extends React.Component {
 					editorState={this.state.titleEditorState}
 					onChange={this.onTitleChange}
 					placeholder={this.props.placeholder}
-					disableMentions={true}
-					spellcheck = {true}
-					stripPastedStyles = {true}
+					disableMentions
+					spellcheck
+					stripPastedStyles
 					plugins={[singleLinePlugin]}
 					blockRenderMap={singleLinePlugin.blockRenderMap}
 				/>

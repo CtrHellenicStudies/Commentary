@@ -32,7 +32,7 @@ sitemaps.add('/sitemap.xml', (req) => {
 		console.log(hostnameArray);
 	} else {
 		subdomain = '';
-		window.location.assign("/404");
+		window.location.assign('/404');
 		console.log('sitemap - 404');
 		console.log(process.env);
 	}

@@ -114,7 +114,7 @@ class ModalLogin extends React.Component {
 	forgot(event) {
 		event.preventDefault();
 		this.props.closeModal();
-		this.props.history.push("/forgot-password");
+		this.props.history.push('/forgot-password');
 	}
 
 	render() {

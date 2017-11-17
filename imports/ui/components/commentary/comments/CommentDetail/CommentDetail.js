@@ -75,7 +75,7 @@ class CommentDetail extends React.Component {
 				updated: PropTypes.instanceOf(Date),
 				originalDate: PropTypes.instanceOf(Date),
 			})),
-			urn: PropTypes.string,
+			urn: PropTypes.object,
 		}).isRequired,
 		filters: PropTypes.arrayOf(PropTypes.shape({
 			key: PropTypes.string.isRequired,

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -6,8 +7,11 @@ import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
+import { Link } from 'react-router-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Header from '/imports/ui/layouts/header/Header';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 import Keywords from '/imports/models/keywords';
 import Settings from '/imports/models/settings';
@@ -46,7 +50,7 @@ class KeywordDetail extends Component {
 			if (error) {
 				console.log(keywordId, error);
 			} else {
-				FlowRouter.go('/words');
+				this.props.history.push('/words');
 			}
 		});
 	}
@@ -88,95 +92,101 @@ class KeywordDetail extends Component {
 		Utils.setMetaImage(`${location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
-			<div className="page keywords-page keywords-detail-page">
-				<div className="content primary">
-					<section className="block header header-page cover parallax">
-						<BackgroundImageHolder
-							imgSrc="/images/apotheosis_homer.jpg"
-						/>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className="page keywords-page keywords-detail-page">
+					<Header />
+					<div className="content primary">
+						<section className="block header header-page cover parallax">
+							<BackgroundImageHolder
+								imgSrc="/images/apotheosis_homer.jpg"
+							/>
 
-						<div className="container v-align-transform">
-							<div className="grid inner">
-								<div className="center-content">
-									<div className="page-title-wrap">
-										<h2 className="page-title ">{keyword.title}</h2>
-										{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
-											<div>
-												<RaisedButton
-													href={`/tags/${keyword.slug}/edit`}
-													className="cover-link light"
-													label="Edit"
-												/>
-												<RaisedButton
-													onClick={this.deleteKeyword.bind(this)}
-													className="cover-link light"
-													label="Delete"
-												/>
-											</div>
-										: ''}
+							<div className="container v-align-transform">
+								<div className="grid inner">
+									<div className="center-content">
+										<div className="page-title-wrap">
+											<h2 className="page-title ">{keyword.title}</h2>
+											{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
+												<div>
+													<Link to={`/tags/${keyword.slug}/edit`}>
+														<RaisedButton
+															// href={`/tags/${keyword.slug}/edit`}
+															className="cover-link light"
+															label="Edit"
+														/>
+													</Link>
+													<RaisedButton
+														onClick={this.deleteKeyword.bind(this)}
+														className="cover-link light"
+														label="Delete"
+													/>
+												</div>
+											: ''}
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</section>
+						</section>
 
-					<section className="page-content">
-						{keyword.lineFrom ?
-							<KeywordContext keyword={keyword} />
-						: ''}
-						{(
-							keyword.description
-							&& keyword.description.length
-							&& keyword.description !== '<p></p>'
-						) ?
-							<div
-								className="keyword-description"
-								dangerouslySetInnerHTML={{ __html: keyword.description }}
-								onClick={this._keywordDescriptionOnClick}
+						<section className="page-content">
+							{keyword.lineFrom ?
+								<KeywordContext keyword={keyword} />
+							: ''}
+							{(
+								keyword.description
+								&& keyword.description.length
+								&& keyword.description !== '<p></p>'
+							) ?
+								<div
+									className="keyword-description"
+									dangerouslySetInnerHTML={{ __html: keyword.description }}
+									onClick={this._keywordDescriptionOnClick}
+								/>
+							: ''}
+
+							<hr />
+
+							<h2>Related comments</h2>
+
+							<KeywordCommentList
+								keywordComments={keywordComments}
+							/>
+
+						</section>
+
+						<CommentsRecent />
+
+						{this.state.keywordReferenceModalVisible ?
+							<KeywordReferenceModal
+								visible={this.state.keywordReferenceModalVisible}
+								top={this.state.referenceTop}
+								left={this.state.referenceLeft}
+								keywordSlug={this.state.keyword}
+								close={this._closeKeywordReference}
 							/>
 						: ''}
 
-						<hr />
-
-						<h2>Related comments</h2>
-
-						<KeywordCommentList
-							keywordComments={keywordComments}
-						/>
-
-					</section>
-
-					<CommentsRecent />
-
-					{this.state.keywordReferenceModalVisible ?
-						<KeywordReferenceModal
-							visible={this.state.keywordReferenceModalVisible}
-							top={this.state.referenceTop}
-							left={this.state.referenceLeft}
-							keywordSlug={this.state.keyword}
-							close={this._closeKeywordReference}
-						/>
-					: ''}
-
+					</div>
 				</div>
-			</div>
+			</MuiThemeProvider>
 		);
 	}
 }
 
 
 KeywordDetail.propTypes = {
-	keyword: React.PropTypes.object,
-	settings: React.PropTypes.object,
-	keywordComments: React.PropTypes.array,
+	keyword: PropTypes.object,
+	settings: PropTypes.object,
+	keywordComments: PropTypes.array,
 };
 
 KeywordDetail.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 
-const KeywordDetailContainer = createContainer(({ slug }) => {
+const KeywordDetailContainer = createContainer(({ match }) => {
+	const slug = match.params.slug;
 	// SUBSCRIPTIONS:
 	Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));

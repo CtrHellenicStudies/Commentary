@@ -1,10 +1,13 @@
+/**
+ * Queries for textNodes
+ */
 import { GraphQLID, GraphQLList, GraphQLInt, GraphQLString, } from 'graphql';
 
 // types
 import {TextNodeType} from '/imports/graphql/types/models/textNode';
 
-// bll
-import TextNodesService from '../bll/textNodes';
+// logic
+import TextNodesService from '../logic/textNodes';
 
 
 const textNodeQueryFields = {

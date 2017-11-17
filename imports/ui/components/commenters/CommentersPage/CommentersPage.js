@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import muiTheme from '/imports/lib/muiTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
 import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
+import Header from '/imports/ui/layouts/header/Header';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 
 // lib
@@ -27,40 +32,43 @@ class CommentersPage extends Component {
 		Utils.setDescription(`Commentators for ${settings.title}`);
 		Utils.setMetaImage(`${location.origin}/images/capitals.jpg`);
 		return (
-			<div className="page page-commenters">
-				<div className="content primary">
-					<section className="block header cover parallax">
-						<BackgroundImageHolder
-							imgSrc="/images/capitals.jpg"
-						/>
-						<div className="container v-align-transform">
-							<div className="grid inner">
-								<div className="center-content">
-									<div className="page-title-wrap">
-										<h2 className="page-title ">
-											Commentators
-										</h2>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className="page page-commenters">
+					<Header />
+					<div className="content primary">
+						<section className="block header cover parallax">
+							<BackgroundImageHolder
+								imgSrc="/images/capitals.jpg"
+							/>
+							<div className="container v-align-transform">
+								<div className="grid inner">
+									<div className="center-content">
+										<div className="page-title-wrap">
+											<h2 className="page-title ">
+												Commentators
+											</h2>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</section>
-					<section className="page-content">
+						</section>
+						<section className="page-content">
 
-						<CommentersList />
+							<CommentersList />
 
-					</section>
+						</section>
 
-					<CommentsRecent />
+						<CommentsRecent />
+					</div>
+
 				</div>
-
-			</div>
+			</MuiThemeProvider>
 		);
 	}
 }
 
 CommentersPage.propTypes = {
-	settings: React.PropTypes.object
+	settings: PropTypes.object
 };
 
 const commentersPageContainer = createContainer(() => {

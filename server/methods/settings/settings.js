@@ -4,6 +4,11 @@ import { Accounts } from 'meteor/accounts-base';
 
 import Settings from '/imports/models/settings.js';
 
+
+/**
+ * Settings methods - either replaced or to be replaced with the graphql api
+ */
+
 const settingsInsert = (token, setting) => {
 	check(token, String);
 	check(setting, {
@@ -29,13 +34,14 @@ const settingsInsert = (token, setting) => {
 			linkText: Match.Maybe(String),
 		}],
 	});
-
+	let ret;
 	if (
 			Meteor.users.findOne({
 				roles: 'admin',
 				'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 			})) {
-		return Settings.insert(setting);
+		ret = Settings.insert(setting);
+		return ret;
 	}
 
 	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');

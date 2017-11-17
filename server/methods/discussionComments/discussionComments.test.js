@@ -11,7 +11,7 @@ import faker from 'faker';
 import Utils from '/imports/lib/utils';
 import Config from '/imports/lib/_config/_config.js';
 
-// api:
+// models:
 import Comments from '/imports/models/comments';
 import DiscussionComments from '/imports/models/discussionComments';
 import * as emailMethods from './emails';
@@ -57,7 +57,7 @@ describe('DiscussionComments methods API', () => {
 					stub(Meteor.users, 'findOne').callsFake((attr) => {
 						if (attr.roles === 'admin'
 							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true; 
+							return true;
 						}
 						return false;
 					});
@@ -171,7 +171,7 @@ describe('DiscussionComments methods API', () => {
 					stub(Meteor.users, 'findOne').callsFake((attr) => {
 						if (attr.roles === 'admin'
 							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true; 
+							return true;
 						}
 						return false;
 					});
@@ -323,7 +323,6 @@ describe('DiscussionComments methods API', () => {
 					Comments.findOne.restore();
 					DiscussionComments.findOne.restore();
 					DiscussionComments.update.restore();
-					Utils.sortRevisions.restore();
 				});
 
 				test('user not logged in, should return error', () => {

@@ -58,10 +58,12 @@ const revisionsTimestampFix = () => {
 /*
  * Add method for deploying migration
  */
+/*
 Meteor.method('revisionsTimestampFix', () => {
 	revisionsTimestampFix(true);
 }, {
 	url: 'fix/revisions/timestamps',
 });
+*/
 
 export default revisionsTimestampFix;

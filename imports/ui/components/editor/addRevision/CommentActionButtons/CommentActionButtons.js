@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ViewInCommentaryButton from '../ViewInCommentaryButton';
 import RemoveCommentButton from '../RemoveCommentButton';
 
@@ -12,5 +13,9 @@ const CommentActionButtons = props => (
 		/>
 	</div>
 );
+
+CommentActionButtons.propTypes = {
+	commentId: PropTypes.string,
+};
 
 export default CommentActionButtons;

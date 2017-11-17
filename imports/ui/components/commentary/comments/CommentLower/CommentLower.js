@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import CommentBody from '/imports/ui/components/commentary/comments/CommentBody';
 import CommentReference from '/imports/ui/components/commentary/comments/CommentReference';
 
@@ -18,21 +19,21 @@ const CommentLower = props => (
 );
 
 CommentLower.propTypes = {
-	comment: React.PropTypes.shape({
-		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
-			text: React.PropTypes.string.isRequired,
+	comment: PropTypes.shape({
+		revisions: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
 		})),
 	}).isRequired,
-	selectedRevision: React.PropTypes.object.isRequired,
-	revisionIndex: React.PropTypes.number.isRequired,
-	onTextClick: React.PropTypes.func,
-	referenceWorks: React.PropTypes.arrayOf(React.PropTypes.shape({
-		title: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
+	selectedRevision: PropTypes.object.isRequired,
+	revisionIndex: PropTypes.number.isRequired,
+	onTextClick: PropTypes.func,
+	referenceWorks: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
 	})),
-	hideBody: React.PropTypes.bool,
-	hideReference: React.PropTypes.bool,
-	searchTerm: React.PropTypes.string
+	hideBody: PropTypes.bool,
+	hideReference: PropTypes.bool,
+	searchTerm: PropTypes.string
 };
 
 CommentLower.defaultProps = {

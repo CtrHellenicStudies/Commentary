@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import stylePropType from 'react-style-proptype';
 
 /*
@@ -19,12 +20,12 @@ const isActive = (filters, element, key, valueKey = 'slug') => {
 };
 
 const dropdownPropTypes = {
-	toggleWorkSearchTerm: React.PropTypes.func.isRequired,
-	styles: React.PropTypes.shape({
+	toggleWorkSearchTerm: PropTypes.func.isRequired,
+	styles: PropTypes.shape({
 		cardHeader: stylePropType.isRequired,
 		wrapper: stylePropType.isRequired,
 	}).isRequired,
-	filters: React.PropTypes.any,
+	filters: PropTypes.any,
 };
 
 const dropdownDefaultProps = {

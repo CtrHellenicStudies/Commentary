@@ -1,4 +1,4 @@
-// api:
+// models 
 import Comments, { getURN } from '/imports/models/comments';
 
 const commentsGenerateURNs = (regenerate = false) => {
@@ -27,10 +27,12 @@ const commentsGenerateURNs = (regenerate = false) => {
 	});
 };
 
+/*
 Meteor.method('commentsGenerateURNs', () => {
 	commentsGenerateURNs(true);
 }, {
 	url: 'fix/comments/urns',
 });
+*/
 
 export default commentsGenerateURNs;

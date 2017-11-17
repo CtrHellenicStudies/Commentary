@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const CommenterWorkCircle = props => (
 
@@ -16,11 +17,11 @@ const CommenterWorkCircle = props => (
 
 
 CommenterWorkCircle.propTypes = {
-	toggleVisibleWork: React.PropTypes.func.isRequired,
-	workTitle: React.PropTypes.string.isRequired,
-	workSlug: React.PropTypes.string.isRequired,
-	workLevel: React.PropTypes.number.isRequired,
-	nComments: React.PropTypes.number.isRequired,
+	toggleVisibleWork: PropTypes.func.isRequired,
+	workTitle: PropTypes.string.isRequired,
+	workSlug: PropTypes.string.isRequired,
+	workLevel: PropTypes.number.isRequired,
+	nComments: PropTypes.number.isRequired,
 };
 
 export default CommenterWorkCircle;

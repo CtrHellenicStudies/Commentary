@@ -4,17 +4,22 @@ import TranslationNodes from '/imports/models/translationNodes';
 import Works from '/imports/models/works';
 import { getAuthorizedUser } from '../helpers';
 
+
+/**
+ * Translation node methods - either replaced or to be replaced with the graphql api
+ */
+
 const translationsNodeUpdate = (token, translationNode) => {
 	check(token, String);
 	check(translationNode, Object);
-
+	if (!translationNode.n)		{ return; }
 	const query = {
 		author: translationNode.author,
 		n: translationNode.n,
 		subwork: translationNode.subwork,
-		work: translationNode.subwork
+		work: translationNode.work
 	};
-
+	delete translationNode._id;
 	const roles = ['editor', 'admin', 'commenter'];
 	const user = getAuthorizedUser(roles, token);
 
@@ -57,7 +62,7 @@ const updateTranslationAuthor = (token, workDetails, prevAuthorName, newAuthorNa
 	const queryParams = workDetails;
 	queryParams.work = workSlug;
 	queryParams.author = prevAuthorName;
-	
+
 	return TranslationNodes.update(queryParams, {$set: {author: newAuthorName}}, {multi: true});
 };
 

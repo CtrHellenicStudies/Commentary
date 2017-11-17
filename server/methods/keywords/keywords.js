@@ -5,6 +5,10 @@ import { Accounts } from 'meteor/accounts-base';
 import Keywords from '/imports/models/keywords';
 
 
+/**
+ * Tags/Keywords methods - either replaced or to be replaced with the graphql api
+ */
+
 const keywordsInsert = (token, keywords) => {
 	check(token, String);
 	check(keywords, [{
@@ -118,7 +122,12 @@ const keywordsDelete = (token, keywordId) => {
 
 	return keywordId;
 };
-
+const keywordsGetAll = (token, value) => {
+	check(value, String);
+	console.log(Keywords.find({}, { limit: 5, sort: { created: -1 } }).fetch());
+	if (!value.length) return Keywords.find({}, { limit: 5, sort: { created: -1 } }).fetch();
+	return Keywords.find({ $text: { $search: value } }, { limit: 5, sort: { created: -1 } }).fetch();
+};
 const keywordsChangeType = (token, id, newType) => {
 	check(token, String);
 	check(id, String);
@@ -150,6 +159,7 @@ Meteor.methods({
 	'keywords.delete': keywordsDelete,
 
 	'keywords.changeType': keywordsChangeType,
+	'keywords.getAll': keywordsGetAll
 
 });
 

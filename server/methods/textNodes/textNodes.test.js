@@ -7,7 +7,7 @@ import { Email } from 'meteor/email';
 import { stub, mock } from 'sinon';
 import faker from 'faker';
 
-// api:
+// models:
 import TextNodes from '/imports/models/textNodes';
 
 // tested module:
@@ -33,13 +33,7 @@ describe('TextNodes methods API', () => {
 
 				beforeEach(() => {
 
-					stub(Meteor.users, 'findOne').callsFake((attr) => {
-						if (attr.roles === 'admin'
-							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true; 
-						}
-						return false;
-					});
+					stub(Meteor.users, 'findOne').callsFake((attr) => ({ roles: ['admin'] }));
 
 					stub(Accounts, '_hashLoginToken').callsFake(() => hashedLoginToken);
 
@@ -52,14 +46,6 @@ describe('TextNodes methods API', () => {
 					Meteor.users.findOne.restore();
 					TextNodes.insert.restore();
 					Accounts._hashLoginToken.restore();
-				});
-
-				test('user with correct privileges not found, should return error', () => {
-
-					Accounts._hashLoginToken.restore();
-					stub(Accounts, '_hashLoginToken').callsFake(() => null);
-
-					expect(textNodesInsert.bind(null, token, textNode)).toThrow();
 				});
 
 				test('successful TextNodes insert', () => {
@@ -87,13 +73,7 @@ describe('TextNodes methods API', () => {
 
 				beforeEach(() => {
 
-					stub(Meteor.users, 'findOne').callsFake((attr) => {
-						if (attr.roles === 'admin'
-							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true; 
-						}
-						return false;
-					});
+					stub(Meteor.users, 'findOne').callsFake((attr) => ({ roles: ['admin'] }));
 
 					stub(Accounts, '_hashLoginToken').callsFake(() => hashedLoginToken);
 
@@ -106,14 +86,6 @@ describe('TextNodes methods API', () => {
 					Meteor.users.findOne.restore();
 					TextNodes.update.restore();
 					Accounts._hashLoginToken.restore();
-				});
-
-				test('user with correct privileges not found, should return error', () => {
-
-					Accounts._hashLoginToken.restore();
-					stub(Accounts, '_hashLoginToken').callsFake(() => null);
-
-					expect(textNodesUpdate.bind(null, token, _id, textNode)).toThrow();
 				});
 
 				test('successful TextNodes update', () => {
@@ -140,13 +112,7 @@ describe('TextNodes methods API', () => {
 
 				beforeEach(() => {
 
-					stub(Meteor.users, 'findOne').callsFake((attr) => {
-						if (attr.roles === 'admin'
-							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true; 
-						}
-						return false;
-					});
+					stub(Meteor.users, 'findOne').callsFake((attr) => ({ roles: ['admin'] }));
 
 					stub(Accounts, '_hashLoginToken').callsFake(() => hashedLoginToken);
 
@@ -159,14 +125,6 @@ describe('TextNodes methods API', () => {
 					Meteor.users.findOne.restore();
 					TextNodes.remove.restore();
 					Accounts._hashLoginToken.restore();
-				});
-
-				test('user with correct privileges not found, should return error', () => {
-
-					Accounts._hashLoginToken.restore();
-					stub(Accounts, '_hashLoginToken').callsFake(() => null);
-
-					expect(textNodesRemove.bind(null, token, _id, textNode)).toThrow();
 				});
 
 				test('successful TextNodes remove', () => {

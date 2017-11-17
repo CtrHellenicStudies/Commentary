@@ -1,13 +1,19 @@
 import { DocHead } from 'meteor/kadira:dochead';
-
-// lib
-import Config from './_config/_config.js';
+import Parser from 'simple-text-parser';
+import { convertToHTML } from 'draft-convert';
+import {convertFromRaw, EditorState, ContentState} from 'draft-js';
 
 // models
 import Editions from '/imports/models/editions';
 import Commenters from '/imports/models/commenters';
 
+// lib
+import Config from './_config/_config';
 
+
+/**
+ * General application specific utility / helper functions
+ */
 const Utils = {
 	isReady: (sub) => {
 		if (sub) {
@@ -20,6 +26,20 @@ const Utils = {
 			return moment(date).format(Config.dateFormat);
 		}
 		return moment(date).format('D/M/YYYY');
+	},
+	resolveUrn(urn){
+		let ret = urn;
+		try{
+			if(urn.v2)
+				ret = urn.v2;
+			else
+				ret = urn.v1;
+				
+		}
+		catch(error){
+			console.log('Old urn exists in database.');
+		}
+		return ret;
 	},
 	timeSince: (date) => {
 		let interval;
@@ -47,6 +67,7 @@ const Utils = {
 		return 'just now';
 	},
 	trunc: (str, length) => {
+		if (!str)			{ return ''; }
 		const ending = ' ...';
 		let trimLen = length;
 		str = str.replace(/<(?:.|\n)*?>/gm, '');
@@ -211,6 +232,9 @@ const Utils = {
 		return str.toString();
 	},
 	getEntityData(entity, key) {
+		if (key === 'link' && !entity.data.mention) {
+			return entity.data.href;
+		}
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
 		return foundItem[1];
 	},
@@ -219,8 +243,8 @@ const Utils = {
 
 		if (location.hostname.match(/\w+.chs.harvard.edu/)) {
 			domain = 'chs.harvard.edu';
-		} else if (location.hostname.match(/\w+.orphe.us/)) {
-			domain = 'orphe.us';
+		} else if (location.hostname.match(/\w+.chs.orphe.us/)) {
+			domain = 'chs.orphe.us';
 		} else if (location.hostname.match(/\w+.chs.local/)) {
 			domain = 'chs.local';
 		}
@@ -239,6 +263,7 @@ const Utils = {
 						_id: foundEdition._id,
 						title: foundEdition.title,
 						slug: foundEdition.slug,
+						multiLine: foundEdition.multiLine,
 						lines: [],
 					};
 					editions.push(myEdition);
@@ -278,7 +303,210 @@ const Utils = {
 		});
 
 		return commentersList;
-	}
+	},
+	parseMultilineEdition(editions, multiline) {
+		const parsedEditions = [];
+
+		editions.forEach((edition, index) => {
+			const joinedText = edition.lines.map(line => line.html).join(' ');
+
+			const tag = new RegExp(`<lb ed="${multiline}" id="\\d+" />`, 'ig');
+			const id = /id="\d+"/ig;
+
+			const textArray = joinedText.split(tag);
+			const parser = new Parser();
+
+			const lineArray = [];
+			parser.addRule(/id="\d+"/ig, (arg1) => {
+				lineArray.push(arg1);
+			});
+			parser.render(joinedText);
+
+			const numberArray = lineArray.map((line) => parseInt(line.substr(4, line.length - 2)));
+
+			if (numberArray.length) {
+				numberArray.unshift(numberArray[0] - 1);
+			}
+
+			const result = [];
+
+			if (textArray.length === numberArray.length) {
+				for (let i = 0; i < textArray.length; i++) {
+					const currentLine = {
+						html: textArray[i],
+						n: numberArray[i]
+					};
+					result.push(currentLine);
+				}
+			} else {
+				return new Error('Parsing error');
+			}
+			const currentEdition = edition;
+			currentEdition.lines = result;
+			parsedEditions.push(currentEdition);
+		});
+		return parsedEditions;
+	},
+	getEditorState(content) {
+		let _content = content || '';
+		_content = JSON.parse(_content);
+		const constState = convertFromRaw(_content);
+		return EditorState.createWithContent(constState);
+	},
+	getHtmlFromContext(context) {
+		return convertToHTML({
+						// performe necessary html transformations:
+			blockToHTML: (block) => {
+				const type = block.type;
+				if (type === 'atomic') {
+							  return {start: '<span>', end: '</span>'};
+				}
+				if (type === 'unstyled') {
+							  return <p />;
+				}
+				return <span />;
+						  },
+			entityToHTML: (entity, originalText) => {
+				let ret = this.decodeHtml(originalText);
+				switch (entity.type) {
+				case 'LINK':
+					ret = <a href={entity.data.link}>{ret}</a>;
+					break;
+				case 'mention':
+					ret = <a className="keyword-gloss" href={this.getEntityData(entity, 'link')}>{ret}</a>;
+					break;
+				case '#mention':
+					ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;
+					break;
+				case 'draft-js-video-plugin-video':
+					ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen />;
+					break;
+				case 'image':
+					ret = `<img src="${entity.data.src}" alt="draft js image error"/>`;
+					break;
+				default:
+					break;
+				}
+				return ret;
+			},
+		})(context);
+	},
+	decodeHtml(html) {
+		const txt = document.createElement('textarea');
+		txt.innerHTML = html;
+		return txt.value;
+	},
+	isJson(str) {
+		try {
+			JSON.parse(str);
+		} catch (e) {
+			return false;
+		}
+		return true;
+	},
+
+	getSuggestionsFromComments(comments) {
+		const suggestions = [];
+
+		// if there are comments:
+		if (comments.length) {
+
+			// loop through all comments
+			// add suggestion for each comment
+			comments.forEach((comment) => {
+
+				// get the most recent revision
+				const revision = comment.revisions[comment.revisions.length - 1];
+
+				const suggestion = {
+					// create suggestio name:
+					name: `"${revision.title}" -`,
+
+					// set link for suggestion
+					link: `/commentary?_id=${comment._id}`,
+
+					// set id for suggestion
+					id: comment._id,
+				};
+
+				// loop through commenters and add them to suggestion name
+				comment.commenters.forEach((commenter, i) => {
+					if (i === 0) suggestion.name += ` ${commenter.name}`;
+					else suggestion.name += `, ${commenter.name}`;
+				});
+
+				suggestions.push(suggestion);
+			});
+		}
+		return suggestions;
+	},
+	// sendNotificationEmails(disscusion, users, content){
+	// 	let listOfEmails = {},
+	// 	to = [],
+	// 	text = '<h3>Someone answered to comment in your discussion:</h3>' + '<i>"'+ content+ '"</i>';
+	// 	disscusion.map((discuss) => {
+	// 		users.map((user) => {
+	// 			if(user._id === discuss.userId && user._id !== Meteor.userId()){
+	// 				listOfEmails[user._id] = user.emails[0].address;
+	// 			}
+	// 		});
+	// 	});
+	// 	for (const [key, value] of Object.entries(listOfEmails)) {
+	// 		to.push(value);
+	// 	}
+	// 	Meteor.call('disscusionComments.sendNotification', {to: to, text: text});
+	// }
 };
+
+/**
+ * Get all comments for a supplied keyword by the keywordId
+ * @param {number} keywordId - id of keyword
+ * @param {number} tenantId - id of current tenant
+ * @returns {Object[]} Cursor of comments
+ */
+export function queryCommentWithKeywordId(keywordId, tenantId) {
+	return Comments.find({
+		'keywords._id': keywordId,
+		tenantId: tenantId
+	}, {
+		limit: 1,
+		fields: {
+			'work.slug': 1,
+			'subwork.n': 1,
+			'keywords.slug': 1,
+			'keywords._id': 1,
+			lineFrom: 1,
+			lineTo: 1,
+			nLines: 1,
+		}
+	});
+}
+
+/**
+ * Return information about a comment for a keyword
+ * @param {Object} comment - the input comment
+ * @param {number} maxLines - maximum amount of lines to limit the query to
+ * @returns {Object} comment information for making keyword query
+ */
+export function makeKeywordContextQueryFromComment(comment, maxLines) {
+	let lineTo = comment.lineFrom;
+	if (comment.hasOwnProperty('lineTo')) {
+		lineTo = comment.lineFrom + Math.min(
+				maxLines,
+				comment.lineTo - comment.lineFrom
+			);
+	} else if (comment.hasOwnProperty('nLines')) {
+		lineTo = comment.lineFrom + Math.min(maxLines, comment.nLines);
+	}
+
+	return {
+		'work.slug': comment.work.slug,
+		'subwork.n': comment.subwork.n,
+		'text.n': {
+			$gte: comment.lineFrom,
+			$lte: lineTo,
+		},
+	};
+}
 
 export default Utils;

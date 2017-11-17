@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -9,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Mongo } from 'meteor/mongo';
 
 
-// api
+// models
 import Works from '/imports/models/works';
 
 class BookmarksForm extends React.Component {
@@ -29,8 +30,8 @@ class BookmarksForm extends React.Component {
 	}
 
 	static propTypes = {
-		works: React.PropTypes.array,
-		toggleBookmarksForm: React.PropTypes.func
+		works: PropTypes.array,
+		toggleBookmarksForm: PropTypes.func
 	}
 
 	static deafultProps = {

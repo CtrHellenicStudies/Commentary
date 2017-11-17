@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -6,7 +7,7 @@ import CommunityMemberTeaser from '../CommunityMemberTeaser';
 
 class CommunityMemberList extends React.Component {
 	static propTypes = {
-		users: React.PropTypes.array,
+		users: PropTypes.array,
 	}
 
 	render() {

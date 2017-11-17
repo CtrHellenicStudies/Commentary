@@ -7,4 +7,4 @@ import '/imports/startup/startup';
 injectTapEventPlugin();
 
 // TODO: remove
-React.render = ReactDOM.render; // eslint-disable-line
+// React.render = ReactDOM.render; // eslint-disable-line

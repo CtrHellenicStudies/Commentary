@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Session } from 'meteor/session';
@@ -8,11 +9,15 @@ import cookie from 'react-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
+import Utils from '/imports/lib/utils';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
+
+// lib:
+import muiTheme from '/imports/lib/muiTheme';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -27,19 +32,18 @@ import AddRevisionButton from '../AddRevisionButton';
 import RemoveRevisionButton from '../RemoveRevisionButton';
 import UpdateRevisionButton from '../UpdateRevisionButton';
 
-// lib:
-import muiTheme from '/imports/lib/muiTheme';
 
 
 
 class AddRevision extends React.Component {
 
 	static propTypes = {
-		submitForm: React.PropTypes.func.isRequired,
-		update: React.PropTypes.func.isRequired,
-		comment: React.PropTypes.object.isRequired,
-		tags: React.PropTypes.array,
-		referenceWorkOptions: React.PropTypes.array,
+		submitForm: PropTypes.func.isRequired,
+		update: PropTypes.func.isRequired,
+		comment: PropTypes.object.isRequired,
+		tags: PropTypes.array,
+		referenceWorkOptions: PropTypes.array,
+		filters: PropTypes.array,
 	}
 
 	constructor(props) {
@@ -85,27 +89,7 @@ class AddRevision extends React.Component {
 		const { textEditorState } = this.state;
 
 		// create html from textEditorState's content
-		const textHtml = convertToHTML({
-
-			// performe necessary html transformations:
-			entityToHTML: (entity, originalText) => {
-
-				// handle LINK
-				if (entity.type === 'LINK') {
-					return <a href={entity.data.link} target="_blank" rel="noopener noreferrer">{originalText}</a>;
-				}
-
-				// handle keyword mentions
-				if (entity.type === 'mention') {
-					return <a className="keyword-gloss" data-link={Utils.getEntityData(entity, 'link')}>{originalText}</a>;
-				}
-
-				// handle hashtag / commets cross reference mentions
-				if (entity.type === '#mention') {
-					return <a className="comment-cross-ref" href={Utils.getEntityData(entity, 'link')}><div dangerouslySetInnerHTML={{ __html: originalText }} /></a>;
-				}
-			},
-		})(textEditorState.getCurrentContent());
+		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
@@ -195,7 +179,7 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 
 
 AddRevision.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 /*

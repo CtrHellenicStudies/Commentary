@@ -1,9 +1,10 @@
 import React from 'react';
-import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';  
+import PropTypes from 'prop-types';
+import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import _ from 'lodash';
-
+import { Link } from 'react-router-dom';
 /*
 	BEGIN CommentUpperLeft
 */
@@ -13,7 +14,7 @@ const CommentUpperLeft = props => (
 	</div>
 );
 CommentUpperLeft.propTypes = {
-	title: React.PropTypes.string.isRequired,
+	title: PropTypes.string.isRequired,
 };
 /*
 	END CommentUpperLeft
@@ -26,11 +27,12 @@ CommentUpperLeft.propTypes = {
 const CommentUpperRight = props => (
 	<div className="comment-upper-right">
 		{_.every(props.commenters, commenter => props.userCanEditCommenters.indexOf(commenter._id) > -1) ?
-			<FlatButton
-				label="Edit comment"
-				href={`/commentary/${props.commentId}/edit`}
-				icon={<FontIcon className="mdi mdi-pen" />}
-			/>
+			<Link to={`/commentary/${props.commentId}/edit`}>
+				<FlatButton
+					label="Edit comment"
+					icon={<FontIcon className="mdi mdi-pen" />}
+				/>
+			</Link>
 			:
 			''
 		}
@@ -40,15 +42,15 @@ const CommentUpperRight = props => (
 				className="comment-author"
 			>
 				<div className={'comment-author-text'}>
-					<a href={`/commenters/${commenter.slug}`}>
+					<Link to={`/commenters/${commenter.slug}`}>
 						<span className="comment-author-name">{commenter.name}</span>
-					</a>
+					</Link>
 					<span>
 						{props.updateDate}
 					</span>
 				</div>
 				<div className="comment-author-image-wrap paper-shadow">
-					<a href={`/commenters/${commenter.slug}`}>
+					<Link to={`/commenters/${commenter.slug}`}>
 						<AvatarIcon
 							avatar={
 								(commenter && 'avatar' in commenter) ?
@@ -56,24 +58,24 @@ const CommentUpperRight = props => (
 								: null
 							}
 						/>
-					</a>
+					</Link>
 				</div>
 			</div>
 		))}
 	</div>
 );
 CommentUpperRight.propTypes = {
-	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
-		name: React.PropTypes.string.isRequired,
-		avatar: React.PropTypes.shape({
-			src: React.PropTypes.string.isRequired,
+	commenters: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
+		name: PropTypes.string.isRequired,
+		avatar: PropTypes.shape({
+			src: PropTypes.string.isRequired,
 		})
 	})).isRequired,
-	commentId: React.PropTypes.string.isRequired,
-	updateDate: React.PropTypes.string.isRequired,
-	userCanEditCommenters: React.PropTypes.arrayOf(React.PropTypes.string),
+	commentId: PropTypes.string.isRequired,
+	updateDate: PropTypes.string.isRequired,
+	userCanEditCommenters: PropTypes.arrayOf(PropTypes.string),
 };
 CommentUpperRight.defaultProps = {
 	userCanEditCommenters: [],
@@ -101,20 +103,20 @@ const CommentUpper = props => (
 	</div>
 );
 CommentUpper.propTypes = {
-	title: React.PropTypes.string.isRequired,
-	commentId: React.PropTypes.string.isRequired,
-	commenters: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		slug: React.PropTypes.string.isRequired,
-		name: React.PropTypes.string.isRequired,
-		avatar: React.PropTypes.shape({
-			src: React.PropTypes.string.isRequired,
+	title: PropTypes.string.isRequired,
+	commentId: PropTypes.string.isRequired,
+	commenters: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
+		name: PropTypes.string.isRequired,
+		avatar: PropTypes.shape({
+			src: PropTypes.string.isRequired,
 		})
 	})).isRequired,
-	updateDate: React.PropTypes.string.isRequired,
-	userCanEditCommenters: React.PropTypes.arrayOf(React.PropTypes.string),
-	hideTitle: React.PropTypes.bool,
-	hideCommenters: React.PropTypes.bool,
+	updateDate: PropTypes.string.isRequired,
+	userCanEditCommenters: PropTypes.arrayOf(PropTypes.string),
+	hideTitle: PropTypes.bool,
+	hideCommenters: PropTypes.bool,
 };
 CommentUpper.defaultProps = {
 	userCanEditCommenters: [],

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // lib
@@ -12,8 +13,9 @@ class ReferenceWorkTeaser extends React.Component {
 	}
 
 	createMarkup() {
+		const { desc } = this.props;
 		return {
-			__html: Utils.trunc(this.props.referenceWork.description.replace(/(<([^>]+)>)/ig, ''), 140),
+			__html: desc ? Utils.trunc(desc.replace(/(<([^>]+)>)/ig, ''), 140) : '',
 		};
 	}
 
@@ -62,11 +64,11 @@ class ReferenceWorkTeaser extends React.Component {
 
 
 ReferenceWorkTeaser.propTypes = {
-	referenceWork: React.PropTypes.object.isRequired,
+	referenceWork: PropTypes.object.isRequired,
 };
 
 ReferenceWorkTeaser.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 

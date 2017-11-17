@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
@@ -33,11 +34,11 @@ const SearchToolDropdown = ({ name, children, open, toggle, disabled }) => (
 	</div>
 );
 SearchToolDropdown.propTypes = {
-	name: React.PropTypes.string.isRequired, // name of the dropdown option
-	children: React.PropTypes.node.isRequired, // content to show inside dropdown
-	open: React.PropTypes.bool.isRequired, // whether dropdown is open or not
-	toggle: React.PropTypes.func.isRequired, // function to toggle the dropdown
-	disabled: React.PropTypes.bool, // whether dropdown is disabled or not
+	name: PropTypes.string.isRequired, // name of the dropdown option
+	children: PropTypes.node.isRequired, // content to show inside dropdown
+	open: PropTypes.bool.isRequired, // whether dropdown is open or not
+	toggle: PropTypes.func.isRequired, // function to toggle the dropdown
+	disabled: PropTypes.bool, // whether dropdown is disabled or not
 };
 SearchToolDropdown.defaultProps = {
 	disabled: false,

@@ -1,5 +1,7 @@
 /* eslint-disable */
 import React from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 // TODO: upgrade to d3v4
 // import * as d3 from 'd3';
@@ -7,8 +9,8 @@ import React from 'react';
 const WorkVisualization = React.createClass({
 
 	propTypes: {
-		work: React.PropTypes.object.isRequired,
-		commenterSlug: React.PropTypes.string,
+		work: PropTypes.object.isRequired,
+		commenterSlug: PropTypes.string,
 	},
 
 	getInitialState() {
@@ -849,7 +851,7 @@ const WorkVisualization = React.createClass({
 			return (
 				<div className={`work-teaser work-teaser--${work.slug}`}>
 					<div className="commentary-text">
-						<a href={workUrl}><h3 className="text-title">{work.title}</h3></a>
+						<Link to={workUrl}><h3 className="text-title">{work.title}</h3></Link>
 						{/*<hr className="text-divider" />*/}
 						<div className="text-meta" />
 						<div className={`text-subworks text-subworks-visualization-${work.slug}`} />

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -9,7 +10,7 @@ import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
-// api:
+// models:
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -28,22 +29,22 @@ import muiTheme from '/imports/lib/muiTheme';
 const CommentarySearchPanel = React.createClass({
 
 	propTypes: {
-		filters: React.PropTypes.array,
-		toggleSearchTerm: React.PropTypes.func,
-		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeLineN: React.PropTypes.func,
-		open: React.PropTypes.bool,
-		closeRightMenu: React.PropTypes.func,
-		keyideas: React.PropTypes.array,
-		keywords: React.PropTypes.array,
-		commenters: React.PropTypes.array,
-		works: React.PropTypes.array,
-		referenceWorks: React.PropTypes.array,
-		isTest: React.PropTypes.bool,
+		filters: PropTypes.array,
+		toggleSearchTerm: PropTypes.func,
+		handleChangeTextsearch: PropTypes.func,
+		handleChangeLineN: PropTypes.func,
+		open: PropTypes.bool,
+		closeRightMenu: PropTypes.func,
+		keyideas: PropTypes.array,
+		keywords: PropTypes.array,
+		commenters: PropTypes.array,
+		works: PropTypes.array,
+		referenceWorks: PropTypes.array,
+		isTest: PropTypes.bool,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {

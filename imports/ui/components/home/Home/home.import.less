@@ -634,8 +634,39 @@ section.commentors {
   }
 
 }
+section.page-content {
+  .cover-link.show-more {
+    background: @ahcip-blue;
+    border: 2px solid @ahcip-blue;
+    color: @light;
+    button, a {
+      background-color: @ahcip-blue !important;
 
-section.get-started {
+      span {
+        color: @light !important;
+
+      }
+
+    }
+
+    &:hover {
+      background: transparent !important;
+      border: 2px solid @light !important;
+      color: @light !important;
+
+      button, a {
+        background-color: transparent !important;
+
+        span {
+          color: @light !important;
+
+        }
+
+      }
+    }
+  }
+}
+section.get-started{
   background: @background-gray;
 
   h2.block-title {
@@ -662,7 +693,6 @@ section.get-started {
     background: @ahcip-blue;
     border: 2px solid @ahcip-blue;
     color: @light;
-
     button, a {
       background-color: @ahcip-blue !important;
 

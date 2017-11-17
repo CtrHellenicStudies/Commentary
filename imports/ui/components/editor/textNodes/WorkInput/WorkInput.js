@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// api
+// models
 import Works from '/imports/models/works';
 
 // components
@@ -26,6 +27,10 @@ class WorkInput extends React.Component {
 		);
 	}
 }
+
+WorkInput.propTypes = {
+	works: PropTypes.array,
+};
 
 const WorkInputContainer = createContainer(props => {
 	Meteor.subscribe('works', Session.get('tenantId'));

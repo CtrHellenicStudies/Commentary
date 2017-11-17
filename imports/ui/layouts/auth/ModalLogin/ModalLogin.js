@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import Utils from '/imports/lib/utils';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 // components:
 import OAuthButtons from '/imports/ui/components/auth/OAuthButtons';
@@ -14,8 +16,8 @@ const ESCAPE_KEY = 27;
 class ModalLogin extends React.Component {
 
 	static propTypes = {
-		lowered: React.PropTypes.bool,
-		closeModal: React.PropTypes.func,
+		lowered: PropTypes.bool,
+		closeModal: PropTypes.func,
 	};
 
 	static defaultProps = {
@@ -36,6 +38,8 @@ class ModalLogin extends React.Component {
 		this.handleLoginFacebook = this.handleLoginFacebook.bind(this);
 		this.handleLoginGoogle = this.handleLoginGoogle.bind(this);
 		this.handleLoginTwitter = this.handleLoginTwitter.bind(this);
+		this.signup = this.signup.bind(this);
+		this.forgot = this.forgot.bind(this);
 	}
 
 	componentWillMount() {
@@ -49,7 +53,7 @@ class ModalLogin extends React.Component {
 	_handleKeyDown(event) {
 
 		const { closeModal } = this.props;
-		
+
 		if (event.keyCode === ESCAPE_KEY) closeModal();
 	}
 
@@ -103,6 +107,15 @@ class ModalLogin extends React.Component {
 			}
 		});
 	}
+	signup() {
+		this.props.closeModal();
+		this.props.signupModal();
+	}
+	forgot(event) {
+		event.preventDefault();
+		this.props.closeModal();
+		this.props.history.push('/forgot-password');
+	}
 
 	render() {
 
@@ -146,16 +159,18 @@ class ModalLogin extends React.Component {
 								<PWDLoginForm
 									login={this.handleLogin}
 									errorMsg={errorMsg}
+									closeModal={closeModal}
+									history={this.props.history}
 								/>
 
 								<div className="at-signup-link">
 									<p>
-										Don't have an account? <a href="/sign-up" id="at-signUp" className="at-link at-signup">Register.</a>
+										Don't have an account? <a href="#signup" id="at-signUp" onClick={this.signup} className="at-link at-signup">Register.</a>
 									</p>
 								</div>
 								<div className="at-resend-verification-email-link at-wrap">
 									<p>
-										Verification email lost? <a href="/send-again" id="at-resend-verification-email" className="at-link at-resend-verification-email">Send again.</a>
+										Verification email lost? <a href="" onClick={this.forgot} id="at-resend-verification-email" className="at-link at-resend-verification-email">Send again.</a>
 									</p>
 								</div>
 							</div>

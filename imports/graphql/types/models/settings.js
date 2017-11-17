@@ -7,6 +7,10 @@ import {
 } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
 
+/**
+ * Settings model type
+ * @type {GraphQLObjectType}
+ */
 const SettingsType = new GraphQLObjectType({
 	name: 'SettingsType',
 	description: 'Settings',
@@ -61,6 +65,11 @@ const SettingsType = new GraphQLObjectType({
 		}
 	},
 });
+
+/**
+ * Settings input type
+ * @type {GraphQLInputObjectType}
+ */
 const SettingsInputType = new GraphQLInputObjectType({
 	name: 'SettingsInputType',
 	description: 'Settings',
@@ -112,4 +121,5 @@ const SettingsInputType = new GraphQLInputObjectType({
 		}
 	},
 });
-export {SettingsType, SettingsInputType};
+
+export { SettingsType, SettingsInputType };

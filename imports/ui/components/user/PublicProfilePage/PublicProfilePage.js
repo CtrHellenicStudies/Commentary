@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// api
+// models
 import DiscussionComments from '/imports/models/discussionComments';
 
 // components
@@ -15,22 +16,15 @@ import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
-const checkUsername = (user) => {
-	if (user.username !== FlowRouter.getParam('username')) {
-		const route = `/users/${FlowRouter.getParam('userId')}`;
-		FlowRouter.go(route);
-	}
-};
-
 const PublicProfilePage = React.createClass({
 	propTypes: {
-		userId: React.PropTypes.string,
-		user: React.PropTypes.object,
-		discussionComments: React.PropTypes.array,
+		userId: PropTypes.string,
+		user: PropTypes.object,
+		discussionComments: PropTypes.array,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {
@@ -256,10 +250,6 @@ const PublicProfilePageContainer = createContainer(({ userId }) => {
 			commentId: discussionComment.commentId,
 		}).count();
 	});
-
-	if (user) {
-		checkUsername(user);
-	}
 
 	return {
 		user,

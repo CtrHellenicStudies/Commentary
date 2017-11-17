@@ -1,3 +1,7 @@
+/**
+ * Mutations for comments
+ */
+
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
@@ -7,11 +11,12 @@ import { RemoveType } from '/imports/graphql/types/index';
 // models
 import Comments from '/imports/models/comments';
 
-// bll
-import CommentsService from '../bll/comments';
-
 // errors
 import { AuthenticationError } from '/imports/errors';
+
+// logic
+import CommentsService from '../logic/comments';
+
 
 const commentMutationFields = {
 	commentCreate: {

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 import Comments from '/imports/models/comments';
 import Tenants from '/imports/models/tenants';
 import Utils from '/imports/lib/utils';
@@ -17,10 +16,10 @@ const resolveV1 = (props) => {
 
 	const urnParams = props.urn.split('.');
 	const revision = urnParams.splice(-1);
-	const urn = `urn${urnParams.join('.')}`;
+	const urn = `${urnParams.join('.')}`;
 
-	const commentHandle = Meteor.subscribe('comments', { urn }, 0);
-	const comment = Comments.findOne({ urn });
+	const commentHandle = Meteor.subscribe('comments', {_id: props.commentId}, 0);
+	const comment = Comments.findOne({ _id: props.commentId });
 
 	if (comment) {
 		const tenantsHandle = Meteor.subscribe('tenants');
@@ -28,6 +27,30 @@ const resolveV1 = (props) => {
 	}
 
 	if (comment && tenant) {
+		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}/commentary/?urn=${urn}&revision=${revision}`;
+	}
+
+	return resolveURL;
+};
+const resolveV2 = (props) => {
+	let resolveURL;
+	let tenant;
+	if (!props.doi && !props.urn) {
+		return resolveURL;
+	}
+	const urnParams = props.urn.split('.');
+	const revision = urnParams.splice(-1);
+	const urn = `${urnParams.join('.')}`;
+
+	const commentHandle = Meteor.subscribe('comments', {_id: props.commentId});
+	const comment = Comments.findOne({ _id: props.commentId });
+
+	if (comment) {
+		const tenantsHandle = Meteor.subscribe('tenants');
+		tenant = Tenants.findOne({_id: comment.tenantId});
+	}
+
+	if (comment && tenant) {//TODO
 		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}/commentary/?urn=${urn}&revision=${revision}`;
 	}
 
@@ -110,6 +133,9 @@ const nameResolutionServiceLayoutContainer = createContainer((props) => {
 	switch (props.version) {
 	case 1:
 		resolveURL = resolveV1(props);
+		break;
+	case 2:
+		resolveURL = resolveV2(props);
 		break;
 	default:
 		resolveURL = resolveV1(props);

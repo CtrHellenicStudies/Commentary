@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
+import DropDownMenu from 'material-ui/DropDownMenu';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
 import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
@@ -12,7 +13,7 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 
-// api:
+// models:
 import TextNodes from '/imports/models/textNodes';
 import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
@@ -54,6 +55,8 @@ class CommentLemma extends React.Component {
 		index: PropTypes.string.isRequired,
 		hideLemma: PropTypes.bool.isRequired,
 		translationAuthors: PropTypes.array,
+		multiline: PropTypes.bool,
+		selectMultiLine: PropTypes.func,
 
 		// from createContainer:
 		editions: PropTypes.arrayOf(PropTypes.shape({
@@ -75,6 +78,8 @@ class CommentLemma extends React.Component {
 			selectedLemmaEditionIndex: 0,
 			showTranslation: false,
 			translationMenuOpen: false,
+			multilineMenuOpen: false,
+			multiline: null
 		};
 
 		// methods:
@@ -82,6 +87,9 @@ class CommentLemma extends React.Component {
 		this.showContextPanel = this.showContextPanel.bind(this);
 		this.handleAuthorChange = this.handleAuthorChange.bind(this);
 		this.handleOpenTranslationMenu = this.handleOpenTranslationMenu.bind(this);
+		this.handleOpenMultilineMenu = this.handleOpenMultilineMenu.bind(this);
+		this.handleCloseMultilineMenu = this.handleCloseMultilineMenu.bind(this);
+		this.handleMultilineSelect = this.handleMultilineSelect.bind(this);
 	}
 
 
@@ -136,6 +144,14 @@ class CommentLemma extends React.Component {
 		}
 	}
 
+	handleMultilineSelect(event, value) {
+		this.props.selectMultiLine(value);
+
+		this.setState({
+			multilineMenuOpen: false,
+		});
+	}
+
 	handleOpenTranslationMenu(event) {
     // This prevents ghost click.
 		event.preventDefault();
@@ -145,6 +161,26 @@ class CommentLemma extends React.Component {
 		this.setState({
 			translationsMenuOpen: !translationsMenuOpen,
 			anchorEl: event.currentTarget,
+		});
+	}
+
+	handleOpenMultilineMenu(event) {
+		// This prevents ghost click.
+		event.preventDefault();
+
+		const { multilineMenuOpen } = this.state;
+
+		this.setState({
+			multilineMenuOpen: !multilineMenuOpen,
+			multilineAnchorEl: event.currentTarget,
+		});
+	}
+	handleCloseMultilineMenu() {
+		// This prevents ghost click.
+		event.preventDefault();
+
+		this.setState({
+			multilineMenuOpen: false,
 		});
 	}
 
@@ -208,17 +244,85 @@ class CommentLemma extends React.Component {
 
 					<div className="edition-tabs tabs" />
 					<div className="edition-tabs tabs">
-						{editions.map((lemmaTextEdition) => {
+						{editions.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
+							const multiLineList = lemmaTextEdition.multiLine && lemmaTextEdition.multiLine.length ? lemmaTextEdition.multiLine : [];
 
-							return (<RaisedButton
-								key={lemmaTextEdition.slug}
-								label={lemmaEditionTitle}
-								data-edition={lemmaTextEdition.title}
-								className={selectedLemmaEdition.slug === lemmaTextEdition.slug ?
-									'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-								onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
-							/>);
+							const editionButton = (
+								<RaisedButton
+									key={`${lemmaTextEdition.slug}-${i}`}
+									label={lemmaEditionTitle}
+									data-edition={lemmaTextEdition.title}
+									className={selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+										'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+									onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
+								/>
+							);
+							const multiLine = multiLineList.length ? (
+								<RaisedButton
+									key={`${lemmaTextEdition.slug}-multi-${i}`}
+									icon={<FontIcon className="mdi mdi-chevron-down" />}
+									className="edition-multiline"
+									onClick={this.handleOpenMultilineMenu}
+								/>
+							) : '';
+
+							const popover = (
+								<Popover
+									key={`${lemmaTextEdition.slug}-popover-${i}`}
+									open={this.state.multilineMenuOpen}
+									anchorEl={this.state.multilineAnchorEl}
+									anchorOrigin={{
+										horizontal: 'left',
+										vertical: 'bottom',
+									}}
+									targetOrigin={{
+										horizontal: 'left',
+										vertical: 'top',
+									}}
+									onRequestClose={this.handleRequestClose}
+									animation={PopoverAnimationVertical}
+								>
+									<Menu
+										onChange={this.handleMultilineSelect}
+										className="translation-author-menu"
+									>
+										<MenuItem
+											key={'regular'}
+											value={null}
+											primaryText="Regular"
+											className="translation-author-menu-item"
+											style={{
+												fontFamily: '"Proxima Nova A W07 Light", sans-serif',
+												fontSize: '12px',
+											}}
+										/>
+										{multiLineList.map((author, i) => (
+											<MenuItem
+												key={`${author}-${i}`}
+												value={author}
+												primaryText={author}
+												className="translation-author-menu-item"
+												style={{
+													fontFamily: '"Proxima Nova A W07 Light", sans-serif',
+													fontSize: '12px',
+												}}
+											/>
+										))}
+									</Menu>
+								</Popover>
+							);
+
+							return (
+								<div
+									key={`${lemmaTextEdition.slug}-${i}`}
+									className="edition-tab-outer"
+								>
+									{editionButton}
+									{multiLine}
+									{popover}
+								</div>
+							);
 						})}
 
 						{translationAuthors.length > 0 ?
@@ -278,7 +382,7 @@ class CommentLemma extends React.Component {
 
 }
 
-export default createContainer(({ commentGroup }) => {
+export default createContainer(({ commentGroup, multiline }) => {
 	let lemmaQuery = {};
 	let translationAuthors = [];
 	const translationNodesHandle = Meteor.subscribe('translationNodes', Session.get('tenantId'));
@@ -309,13 +413,21 @@ export default createContainer(({ commentGroup }) => {
 			subwork: Number(commentGroup.subwork.title),
 			$and: [{n: {$gte: commentGroup.lineFrom}}, {n: {$lte: commentGroup.lineTo}}],
 		};
-		translationAuthors = _.uniq(TranslationNodes.find(translationNodesQuery).fetch().map(translation => translation.author));
+
+		translationAuthors = _.uniq(
+			TranslationNodes.find(translationNodesQuery)
+				.fetch()
+				.map(translation => translation.author)
+			);
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
 	const editionsSubscription = Meteor.subscribe('editions');
 	const textNodesCursor = TextNodes.find(lemmaQuery);
-	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+	let editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+
+	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
+
 	return {
 		translationAuthors,
 		editions,

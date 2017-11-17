@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
-// api
+// models
 import Keywords from '/imports/models/keywords';
 
 // components
@@ -36,9 +37,9 @@ class KeywordsList extends React.Component {
 }
 
 KeywordsList.propTypes = {
-	type: React.PropTypes.string.isRequired,
-	limit: React.PropTypes.number,
-	keywords: React.PropTypes.array,
+	type: PropTypes.string.isRequired,
+	limit: PropTypes.number,
+	keywords: PropTypes.array,
 };
 
 export default createContainer(({ type, limit }) => {

@@ -2,6 +2,10 @@ import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 
+/**
+ * Accounts methods - either replaced or to be replaced with the graphql api
+ */
+
 const accountsMethods = {
 	createAccount(user) {
 		check(user, {
@@ -11,7 +15,8 @@ const accountsMethods = {
 				algorithm: String,
 			},
 		});
-
+		user.profile = {};
+		user.profile.name = user.email;
 		const userId = Accounts.createUser(user);
 		const stampedToken = Accounts._generateStampedLoginToken();
 		Accounts._insertLoginToken(userId, stampedToken);
@@ -23,7 +28,7 @@ const accountsMethods = {
 			password: String,
 		});
 
-		user.username = user.email; 
+		user.username = user.email;
 
 		const userId = Accounts.createUser(user);
 		const stampedToken = Accounts._generateStampedLoginToken();
@@ -87,6 +92,10 @@ const accountsMethods = {
 
 		return stampedToken.token;
 	},
+	sendPasswordReminder(email) {
+		const currentUser = Meteor.users.findOne({'emails.address': email});
+		Accounts.sendResetPasswordEmail(currentUser._id, email);
+	}
 };
 
 Meteor.methods(accountsMethods);

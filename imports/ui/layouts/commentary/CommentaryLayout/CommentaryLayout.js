@@ -10,18 +10,20 @@ with new “filters” object passed as first attribute.
 
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import qs from 'qs-lite';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
 
-// api
+// models
 import Works from '/imports/models/works';
 import ReferenceWorks from '/imports/models/referenceWorks';
 
@@ -43,15 +45,15 @@ import {
 class CommentaryLayout extends React.Component {
 
 	static propTypes = {
-		queryParams: React.PropTypes.object,
-		params: React.PropTypes.object,
-		referenceWorks: React.PropTypes.array,
-		works: React.PropTypes.array,
-		isTest: React.PropTypes.bool,
+		queryParams: PropTypes.object,
+		params: PropTypes.object,
+		referenceWorks: PropTypes.array,
+		works: PropTypes.array,
+		isTest: PropTypes.bool,
 	};
 
 	static childContextTypes = {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	};
 
 	static defaultProps = {
@@ -106,7 +108,9 @@ class CommentaryLayout extends React.Component {
 		}
 
 		// update route
-		FlowRouter.go('/commentary/', {}, queryParams);
+		const urlParams = qs.stringify(queryParams);
+
+		this.props.history.push(`/commentary/?${urlParams}`);
 	}
 
 	_toggleSearchTerm(key, value) {
@@ -192,6 +196,7 @@ class CommentaryLayout extends React.Component {
 							toggleSearchTerm={this._toggleSearchTerm}
 							showLoginModal={this.showLoginModal}
 							loadMoreComments={this.loadMoreComments}
+							history={this.props.history}
 							skip={skip}
 							limit={limit}
 						/>
@@ -210,14 +215,19 @@ class CommentaryLayout extends React.Component {
 	}
 }
 
-export default createContainer(() => {
+export default createContainer(({match}) => {
+
 	const handleReference = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
+	const queryParams = qs.parse(window.location.search.substr(1));
+	const params = match.params;
 
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const works = Works.find().fetch();
 
 	return {
+		params,
+		queryParams,
 		referenceWorks,
 		works,
 		ready: handleReference.ready() && handleWorks.ready(),

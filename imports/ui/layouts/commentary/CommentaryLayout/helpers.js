@@ -1,7 +1,7 @@
 import { check } from 'meteor/check';
 import _ from 'underscore';
 
-// api
+// models
 import Works from '/imports/models/works';
 
 // lib
@@ -488,7 +488,7 @@ const _createFilterFromParams = (params, works) => {
 
 const _createFilterFromURL = (params, queryParams, works, referenceWorks) => {
 	let filters = [];
-	if (!_.isEmpty(params)) {
+	if (params.urn) {
 		filters = _createFilterFromParams(params, works);
 	} else if (queryParams) {
 		filters = _createFilterFromQueryParams(queryParams, referenceWorks);

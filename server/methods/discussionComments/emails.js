@@ -3,7 +3,7 @@ import Config from '/imports/lib/_config/_config';
 // lib:
 import Utils from '/imports/lib/utils';
 
-// api:
+// models:
 import Comments from '/imports/models/comments';
 import DiscussionComments from '/imports/models/discussionComments';
 
@@ -95,19 +95,20 @@ function sendDiscussionCommentPublishEmail(discussionCommentId) {
 
 	let commentTitle = '';
 	if (comment.revisions.length) {
-		const revisions = sortRevsions(comment.revisions);
+		const revisions = comment.revisions;
 		commentTitle = revisions[0].title;
 	}
 
-	Email.send({
+	const help = {
 		to: [user.emails[0].address],
 		from: Config.emails.from,
-		subject: `Your comment has been rejected at ${Config.name}`,
+		subject: `Your comment has been published at ${Config.name}`,
 		html: `
 		${getEmailHeader(user)}
 		Your comment on ${commentTitle} has been approved! You may view the discussion by visiting the following link: <a href='${commentLink}'>${commentLink}</a>.
 		${emailFooter}`,
-	});
+	};
+	// Email.send(help);
 }
 
 export { sendDiscussionCommentInsertEmail, sendDiscussionCommentRejectEmail, sendDiscussionCommentPublishEmail };

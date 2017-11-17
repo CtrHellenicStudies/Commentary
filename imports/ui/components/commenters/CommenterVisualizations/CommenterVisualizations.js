@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -125,12 +126,12 @@ class CommenterVisualizations extends Component {
 
 
 CommenterVisualizations.propTypes = {
-	commenter: React.PropTypes.object.isRequired,
-	isTest: React.PropTypes.bool,
+	commenter: PropTypes.object.isRequired,
+	isTest: PropTypes.bool,
 };
 
 CommenterVisualizations.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired
+	muiTheme: PropTypes.object.isRequired
 };
 
 

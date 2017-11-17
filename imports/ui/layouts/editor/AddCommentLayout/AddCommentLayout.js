@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -7,6 +8,7 @@ import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import qs from 'qs-lite';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -20,7 +22,7 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -32,7 +34,7 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 const handlePermissions = () => {
 	if (Roles.subscription.ready()) {
 		if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-			FlowRouter.go('/');
+			this.props.history.push('/');
 		}
 	}
 };
@@ -88,7 +90,7 @@ const getFilterValues = (filters) => {
  */
 class AddCommentLayout extends React.Component {
 	static propTypes = {
-		ready: React.PropTypes.bool,
+		ready: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -217,8 +219,6 @@ class AddCommentLayout extends React.Component {
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);
-		console.log(keywords);
-		console.log(formData);
 		const revisionId = new Meteor.Collection.ObjectID();
 
 		// create comment object to be inserted:
@@ -257,8 +257,9 @@ class AddCommentLayout extends React.Component {
 				console.error(error);
 				return null;
 			}
+			const urlParams = qs.stringify({_id: commentId});
 
-			FlowRouter.go('/commentary', {}, {_id: commentId});
+			this.props.history.push(`/commentary?${urlParams}`);
 		});
 	}
 

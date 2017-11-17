@@ -8,8 +8,12 @@ import {
 } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
-import {Subwork, SubworkInput} from './subworks';
+import { Subwork, SubworkInput } from './subworks';
 
+/**
+ * Work model type
+ * @type {GraphQLObjectType}
+ */
 const WorkType = new GraphQLObjectType({
 	name: 'WorkType',
 	description: 'A primary work in the commentary that the comments are created about',
@@ -43,6 +47,11 @@ const WorkType = new GraphQLObjectType({
 		},
 	},
 });
+
+/**
+ * Work input model type
+ * @type {GraphQLInputObjectType}
+ */
 const WorkInputType = new GraphQLInputObjectType({
 	name: 'WorkInputType',
 	description: 'A primary work in the commentary that the comments are created about',
@@ -73,4 +82,5 @@ const WorkInputType = new GraphQLInputObjectType({
 		},
 	}
 });
+
 export { WorkType, WorkInputType };

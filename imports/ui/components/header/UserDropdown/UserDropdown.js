@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import Utils from '/imports/lib/utils';
 import RecentList from '../RecentList';
@@ -15,7 +16,7 @@ class UserDropdown extends React.Component {
 	}
 
 	static propTypes = {
-		user: React.PropTypes.object.isRequired,
+		user: PropTypes.object.isRequired,
 	}
 
 	signOut() {

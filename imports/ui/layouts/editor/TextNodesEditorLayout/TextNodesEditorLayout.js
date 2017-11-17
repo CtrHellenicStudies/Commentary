@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -40,13 +41,15 @@ class TextNodesEditorLayout extends React.Component {
 	componentWillUpdate() {
 		this.handlePermissions();
 	}
-
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
+	}
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});
@@ -57,7 +60,7 @@ class TextNodesEditorLayout extends React.Component {
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
 			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	}
@@ -93,12 +96,12 @@ class TextNodesEditorLayout extends React.Component {
 }
 
 TextNodesEditorLayout.propTypes = {
-	ready: React.PropTypes.bool,
-	isTest: React.PropTypes.bool,
+	ready: PropTypes.bool,
+	isTest: PropTypes.bool,
 };
 
 TextNodesEditorLayout.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 

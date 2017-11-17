@@ -3,6 +3,10 @@ import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import Books from '/imports/models/books';
 
+/**
+ * Book methods - either replaced or to be replaced with the graphql api
+ */
+
 const bookInsert = (token, book) => {
 	check(token, String);
 	check(book, {

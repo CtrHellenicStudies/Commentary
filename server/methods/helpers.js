@@ -2,9 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
+import _ from 'underscore';
 
 
-/*
+/**
  * Get user by token or native Meteor user method
  * (Workaround until graphql Auth Service is completed)
  * @param  {string} token User auth token
@@ -25,7 +26,7 @@ export const getAuthorizedUser = (roles, token) => {
 		throw new Meteor.Error('Could not find logged in user');
 	}
 
-	if (!Roles.userIsInRole(user, roles)) {
+	if (!(_.intersection(roles, user.roles).length)) {
 		throw new Meteor.Error(`User ${user._id} attempted action in an unauthorized role`);
 	}
 

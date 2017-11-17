@@ -3,6 +3,11 @@ import { check, Match } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import _ from 'lodash';
 
+
+/**
+ * User methods - either replaced or to be replaced with the graphql api
+ */
+
 const usersInsert = (token, user) => {
 	check(token, String);
 	check(user, {

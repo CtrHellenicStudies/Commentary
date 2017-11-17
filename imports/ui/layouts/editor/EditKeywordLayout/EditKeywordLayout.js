@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -27,13 +28,13 @@ import Utils from '/imports/lib/utils';
 const EditKeywordLayout = React.createClass({
 
 	propTypes: {
-		slug: React.PropTypes.string,
-		ready: React.PropTypes.bool,
-		keyword: React.PropTypes.object,
+		slug: PropTypes.string,
+		ready: PropTypes.bool,
+		keyword: PropTypes.object,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {
@@ -56,11 +57,13 @@ const EditKeywordLayout = React.createClass({
 	componentWillUpdate() {
 		if (this.props.ready) this.handlePermissions();
 	},
-
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
+	},
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
 			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	},
@@ -174,17 +177,16 @@ const EditKeywordLayout = React.createClass({
 			if (error) {
 				this.showSnackBar(error);
 			} else {
-				FlowRouter.go(`/tags/${keywordCandidate.slug}`);
+				this.props.history.push(`/tags/${keywordCandidate.slug}`);
 			}
 		});
 	},
-
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});
@@ -422,7 +424,8 @@ const EditKeywordLayout = React.createClass({
 	},
 });
 
-const EditKeywordLayoutContainer = createContainer(({ slug }) => {
+const EditKeywordLayoutContainer = createContainer(({ match }) => {
+	const slug = match.params.slug;
 	const keywordsSub = Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
 	const ready = Roles.subscription.ready() && keywordsSub.ready();
 	let keyword = {};

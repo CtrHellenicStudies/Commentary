@@ -1,3 +1,7 @@
+/**
+ * Mutations for users
+ */
+ 
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 import { Meteor } from 'meteor/meteor';
 
@@ -5,8 +9,8 @@ import { Meteor } from 'meteor/meteor';
 import { UserType, UserInputType, PositionInputType } from '/imports/graphql/types/models/user';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// bll
-import UsersService from '../bll/users';
+// logic
+import UsersService from '../logic/users';
 
 const usersMutationFields = {
 	userCreate: {

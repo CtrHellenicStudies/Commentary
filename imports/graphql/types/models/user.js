@@ -9,6 +9,10 @@ import {
 import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
 
+/**
+ * User profile model type
+ * @type {GraphQLObjectType}
+ */
 const UserProfileType = new GraphQLObjectType({
 	name: 'UserProfileType',
 	description: 'User type',
@@ -49,6 +53,11 @@ const UserProfileType = new GraphQLObjectType({
 	}
 });
 
+
+/**
+ * User profile input type
+ * @type {GraphQLInputObjectType}
+ */
 const UserProfileInputType = new GraphQLInputObjectType({
 	name: 'UserProfileInputType',
 	description: 'User type',
@@ -89,6 +98,10 @@ const UserProfileInputType = new GraphQLInputObjectType({
 	}
 });
 
+/**
+ * User model type
+ * @type {GraphQLObjectType}
+ */
 const UserType = new GraphQLObjectType({
 	name: 'UserType',
 	description: 'A single user',
@@ -166,6 +179,10 @@ const UserType = new GraphQLObjectType({
 	},
 });
 
+/**
+ * User input type
+ * @type {GraphQLInputObjectType}
+ */
 const UserInputType = new GraphQLInputObjectType({
 	name: 'UserInputType',
 	description: 'A single user',
@@ -244,6 +261,10 @@ const UserInputType = new GraphQLInputObjectType({
 	},
 });
 
+/**
+ * Position model type
+ * @type {GraphQLObjectType}
+ */
 const PositionType = new GraphQLObjectType({
 	name: 'PositionType',
 	description: 'A recent position where the user has been reading',
@@ -266,7 +287,10 @@ const PositionType = new GraphQLObjectType({
 	},
 });
 
-
+/**
+ * Position input model type
+ * @type {GraphQLInputObjectType}
+ */
 const PositionInputType = new GraphQLInputObjectType({
 	name: 'PositionInputType',
 	description: 'A recent position where the user has been reading',

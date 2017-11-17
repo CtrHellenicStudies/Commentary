@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // lib
 import createRevisionMarkup from '/imports/lib/createRevisionMarkup';
@@ -18,10 +19,10 @@ class CommentBodyText extends React.Component {
 	}
 
 	static propTypes = {
-		text: React.PropTypes.string.isRequired,
-		onTextClick: React.PropTypes.func,
-		createRevisionMarkup: React.PropTypes.bool,
-		searchTerm: React.PropTypes.string
+		text: PropTypes.string.isRequired,
+		onTextClick: PropTypes.func,
+		createRevisionMarkup: PropTypes.bool,
+		searchTerm: PropTypes.string
 	}
 
 
@@ -37,7 +38,7 @@ class CommentBodyText extends React.Component {
 
 	renderHTML(text) {
 		const { searchTerm } = this.props;
- 		let html = text;
+		let html = text;
 
 		if (searchTerm) {
 			html = this.highlightText(html);
@@ -45,7 +46,7 @@ class CommentBodyText extends React.Component {
 
 
 		if (this.props.createRevisionMarkup) {
-		 return createRevisionMarkup(html);
+			return createRevisionMarkup(html);
 		}
 
 		return { __html: html };

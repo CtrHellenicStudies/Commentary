@@ -1,3 +1,8 @@
+/**
+ * Actions for modifing textNodes with textNode Editor 
+ */
+
+
 export const ADD_TEXTNODE = 'ADD_TEXTNODE';
 export const UPDATE_TEXTNODE = 'UPDATE_TEXTNODE';
 

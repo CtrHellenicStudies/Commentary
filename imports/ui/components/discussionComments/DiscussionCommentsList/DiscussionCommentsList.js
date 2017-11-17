@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DiscussionCommentTeaser from '/imports/ui/components/discussionComments/DiscussionCommentTeaser';
 
 // List of discussionComments
 const DiscussionCommentsList = React.createClass({
 
 	propTypes: {
-		discussionComments: React.PropTypes.array,
-		isForLoggedInUser: React.PropTypes.bool,
+		discussionComments: PropTypes.array,
+		isForLoggedInUser: PropTypes.bool,
 	},
 
 	renderNoCommentsMessage() {

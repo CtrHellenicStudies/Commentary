@@ -1,5 +1,7 @@
 import React from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const SubscriptionsFeed = props => (
 	<div>
@@ -8,25 +10,25 @@ const SubscriptionsFeed = props => (
 			<div>
 				{props.subscriptions.commenters.map(commenter => (
 					<Card key={commenter._id}>
-						<a href={`/commenters/${commenter.slug}`}>
+						<Link to={`/commenters/${commenter.slug}`}>
 							<CardHeader
 								title={commenter.name}
 								subtitle={commenter.tagline}
 								avatar={commenter.avatar.src}
 							/>
-						</a>
+						</Link>
 					</Card>
 			))}
 			</div>
 			:
 			<h3>You have no subscriptions. Visit a commenter's page to subscribe.</h3>
 		}
-		
+
 	</div>
 );
 
-SubscriptionsFeed.propsType = {
-	subscriptions: React.PropTypes.object
+SubscriptionsFeed.propTypes = {
+	subscriptions: PropTypes.object
 };
 
 export default SubscriptionsFeed;

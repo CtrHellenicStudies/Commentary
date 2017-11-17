@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { Link } from 'react-router-dom';
 
-// api
+// models
 import Settings from '/imports/models/settings';
 import Tenants from '/imports/models/tenants';
 
@@ -34,26 +36,31 @@ class Footer extends Component {
 						<div className="footer-nav-links" role="navigation">
 							{tenant && !tenant.isAnnotation ?
 								<div>
-									<FlatButton
-										href="/commentary"
-										label="Commentary"
-									/>
-									<FlatButton
-										href="/commenters"
-										label="Commentators"
-									/>
-									<FlatButton
-										href="/words"
-										label="Words"
-									/>
-									<FlatButton
-										href="/ideas"
-										label="Ideas"
-									/>
-									<FlatButton
-										href={settings && settings.aboutURL ? settings.aboutURL : '/about'}
-										label="About"
-									/>
+									<Link to="/commentary">
+										<FlatButton
+											label="Commentary"
+										/>
+									</Link>
+									<Link to="/commenters">
+										<FlatButton
+											label="Commentators"
+										/>
+									</Link>
+									<Link to="/words">
+										<FlatButton
+											label="Words"
+										/>
+									</Link>
+									<Link to="/ideas">
+										<FlatButton
+											label="Ideas"
+										/>
+									</Link>
+									<Link to={settings && settings.aboutURL ? settings.aboutURL : '/about'}>
+										<FlatButton
+											label="About"
+										/>
+									</Link>
 								</div>
 							: ''}
 						</div>
@@ -111,12 +118,12 @@ class Footer extends Component {
 
 
 Footer.propTypes = {
-	settings: React.PropTypes.object,
-	tenant: React.PropTypes.object,
+	settings: PropTypes.object,
+	tenant: PropTypes.object,
 };
 
 Footer.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
 
 export default createContainer(() => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function AvatarIcon(props) {
 	let url = '/images/default_user.jpg';
@@ -14,6 +15,6 @@ export default function AvatarIcon(props) {
 }
 
 AvatarIcon.propTypes = {
-	defaultUrl: React.PropTypes.string,
-	avatar: React.PropTypes.string,
+	defaultUrl: PropTypes.string,
+	avatar: PropTypes.string,
 };

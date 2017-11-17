@@ -9,6 +9,10 @@ import Tenants from '/imports/models/tenants';
 import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';
 
+/**
+ * Startup function to ensure db has at least one tenant and that collections
+ * have tenantId included on each record
+ */
 Meteor.startup(() => {
 	// start cron tasks
 	SyncedCron.start();

@@ -1,6 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Native Meteor user accounts
+ */
+
+/**
+ * User profile schema
+ * @type {SimpleSchema}
+ */
 const UserProfile = new SimpleSchema({
 	name: {
 		type: String,
@@ -70,6 +78,10 @@ const UserSubscriptions = new SimpleSchema({
 	}
 });
 
+/**
+ * User schema
+ * @type {SimpleSchema}
+ */
 const User = new SimpleSchema({
 	_id: {
 		type: String,

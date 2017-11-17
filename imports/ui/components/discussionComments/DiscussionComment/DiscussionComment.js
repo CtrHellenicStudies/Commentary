@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -7,13 +8,14 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import { Link } from 'react-router-dom';
 
 const DiscussionComment = React.createClass({
 
 	propTypes: {
-		discussionComment: React.PropTypes.object.isRequired,
-		currentUser: React.PropTypes.object,
-		user: React.PropTypes.object,
+		discussionComment: PropTypes.object.isRequired,
+		currentUser: PropTypes.object,
+		user: PropTypes.object,
 	},
 
 	getInitialState() {
@@ -183,20 +185,20 @@ const DiscussionComment = React.createClass({
 				<div className="discussion-comment-content">
 					<div className="inner-comment-row">
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
-							<a href={userLink}>
+							<Link to={userLink}>
 								<img
 									src={avatarUrl}
 									alt={username}
 								/>
-							</a>
+							</Link>
 						</div>
 
 						<div className="discussion-commenter-meta">
-							<a href={userLink}>
+							<Link to={userLink}>
 								<span className="discussion-commenter-name">
 									{username}
 								</span>
-							</a>
+							</Link>
 							<span className="discussion-comment-date">
 								<span>{discussionComment.updated ? 'Updated: ' : 'Created: '}</span>
 								{moment(discussionComment.updated ||

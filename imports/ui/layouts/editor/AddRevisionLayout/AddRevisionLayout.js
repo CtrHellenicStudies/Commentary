@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -9,7 +10,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
@@ -28,10 +29,10 @@ import Utils from '/imports/lib/utils';
 const AddRevisionLayout = React.createClass({
 
 	propTypes: {
-		ready: React.PropTypes.bool,
-		comment: React.PropTypes.object,
-		commenters: React.PropTypes.array,
-		keywords: React.PropTypes.array,
+		ready: PropTypes.bool,
+		comment: PropTypes.object,
+		commenters: PropTypes.array,
+		keywords: PropTypes.array,
 	},
 
 	getInitialState() {
@@ -94,7 +95,7 @@ const AddRevisionLayout = React.createClass({
 				this.showSnackBar('Comment updated');
 			}
 
-			FlowRouter.go(`/commentary/${comment._id}/edit`);
+			this.props.history.push(`/commentary/${comment._id}/edit`);
 		});
 		// TODO: handle behavior after comment added (add info about success)
 	},
@@ -131,7 +132,7 @@ const AddRevisionLayout = React.createClass({
 				}
 			});
 			if (!isOwner) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	},
@@ -258,13 +259,15 @@ const AddRevisionLayout = React.createClass({
 			snackbarOpen: true,
 			snackbarMessage: message,
 		});
-		setTimeout(() => {
-			this.setState({
+		this.timeout = setTimeout(() => {
+			this.timeout = this.setState({
 				snackbarOpen: false,
 			});
 		}, 4000);
 	},
-
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
+	},
 	render() {
 		const filters = this.state.filters;
 		const { ready, comment } = this.props;
@@ -342,7 +345,8 @@ const AddRevisionLayout = React.createClass({
 	},
 });
 
-const AddRevisionLayoutContainer = createContainer(({ commentId }) => {
+const AddRevisionLayoutContainer = createContainer(({match}) => {
+	const commentId = match.params.commentId;
 	const commentsSub = Meteor.subscribe('comments.id', commentId, Session.get('tenantId'));
 	const commentersSub = Meteor.subscribe('commenters', Session.get('tenantId'));
 	const keywordsSub = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });

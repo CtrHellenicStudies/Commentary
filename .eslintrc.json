@@ -68,6 +68,11 @@
 		"react/prefer-es6-class": "off",
 		"no-unused-vars": "off",
 		"no-prototype-builtins": "off",
+		"radix": "off",
+		"no-mixed-operators": "off",
+		"import/prefer-default-export": "off",
+		"array-callback-return": "off",
+		"no-empty-pattern": "off",
 		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
 	}
 }

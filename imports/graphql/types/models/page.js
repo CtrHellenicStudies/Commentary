@@ -5,6 +5,10 @@ import {
 	GraphQLInputObjectType
 } from 'graphql';
 
+/**
+ * Page model type
+ * @type {GraphQLObjectType}
+ */
 const PageType = new GraphQLObjectType({
 	name: 'PageType',
 	description: 'A single page database entry',
@@ -36,6 +40,10 @@ const PageType = new GraphQLObjectType({
 	},
 });
 
+/**
+ * Page input type
+ * @type {GraphQLInputObjectType}
+ */
 const PageInputType = new GraphQLInputObjectType({
 	name: 'PageInputType',
 	description: 'A single page database entry',

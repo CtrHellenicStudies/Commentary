@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // components:
 import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
@@ -33,9 +34,9 @@ const ReferenceDropdown = ({ reference, searchDropdownOpen, toggleSearchDropdown
 	</SearchToolDropdown>
 );
 ReferenceDropdown.propTypes = {
-	reference: React.PropTypes.arrayOf(React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		title: React.PropTypes.string.isRequired,
+	reference: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
 	})),
 	...dropdownPropTypes,
 };

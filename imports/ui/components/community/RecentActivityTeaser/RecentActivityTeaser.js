@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
@@ -9,15 +10,16 @@ import Tenants from '/imports/models/tenants';
 import Settings from '/imports/models/settings';
 import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
+import { Link } from 'react-router-dom';
 
 class RecentActivityTeaser extends React.Component {
 	static propTypes = {
-		comment: React.PropTypes.object.isRequired,
-		tenant: React.PropTypes.object,
-		settings: React.PropTypes.object,
-		book: React.PropTypes.object,
-		commenters: React.PropTypes.array,
-		users: React.PropTypes.array,
+		comment: PropTypes.object.isRequired,
+		tenant: PropTypes.object,
+		settings: PropTypes.object,
+		book: PropTypes.object,
+		commenters: PropTypes.array,
+		users: PropTypes.array,
 	}
 
 	render() {
@@ -87,7 +89,7 @@ class RecentActivityTeaser extends React.Component {
 				});
 			}
 
-			commentUrl = `http://chs-dev.orphe.us${comment.bookChapterUrl}?paragraph=${comment.paragraphN}`;
+			commentUrl = `http://chs.harvard.edu/${comment.bookChapterUrl}?paragraph=${comment.paragraphN}`;
 		}
 
 		return (
@@ -97,11 +99,11 @@ class RecentActivityTeaser extends React.Component {
 				</div>
 
 				<div className="recentActivityTeaserRight">
-					<a href={commentUrl} target="_blank" rel="noopener noreferrer">
+					<Link to={commentUrl} target="_blank" rel="noopener noreferrer">
 						<h4 className="recentActivityTitle">
 							{title}
 						</h4>
-					</a>
+					</Link>
 					<span className="recentActivityByline">
 						{byline}
 					</span>

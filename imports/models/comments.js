@@ -4,12 +4,23 @@ import _ from 'underscore';
 
 import Works from './works';
 import Books from './books';
+import Tenants from './tenants';
 
+/**
+ * Comments are the primary data type of the commentaries. They represent
+ * thoughts from commentators on the source text (such as a comment on a specific
+ * line of Homer). They are also used for annotations on the CHS websites
+ * @type {Meteor.Collection}
+ */
 const Comments = new Meteor.Collection('comments');
 
+/**
+ * Comments schema
+ * @type {SimpleSchema}
+ */
 Comments.schema = new SimpleSchema({
 	urn: {
-		type: String,
+		type: Object,
 		optional: true,
 	},
 
@@ -263,6 +274,11 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	'revisions.$._id': {
+		type: String,
+		optional: true,
+	},
+
 	'revisions.$.title': {
 		type: String,
 		optional: true,
@@ -327,8 +343,10 @@ Comments.attachBehaviour('timestampable', {
 const COMMENT_ID_LENGTH = 7;
 
 const _getCommentURN = (comment) => {
-	const work = Works.findOne({ slug: comment.work.slug });
-	const urnPrefix = 'urn:cts:CHS.Commentary';
+	const work = Works.findOne({ slug: comment.work.slug }),
+	tenant = Tenants.findOne({_id: comment.tenantId}),
+	urnPrefixV1 = 'urn:cts:CHS.Commentary',
+	urnPrefixV2 = 'urn:cts:CHS:Commentaries.' + tenant.subdomain.toUpperCase();
 	// Use work tlg if it exists, otherwise, search for subwork tlg number
 	// Failing either, just use creator
 	let urnTLG = work.tlgCreator;
@@ -357,21 +375,24 @@ const _getCommentURN = (comment) => {
 	}
 
 	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
-
-	return `${urnPrefix}:${urnComment}.${urnCommentId}`;
+	return {
+		 'v1': `${urnPrefixV1}:${urnComment}.${urnCommentId}`,
+		 'v2': `${urnPrefixV2}:${urnComment}.${urnCommentId}`};
 };
 
 const _getAnnotationURN = (comment) => {
-	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl });
-	const chapter = _.find(book.chapters, c => c.url === comment.bookChapterUrl);
-	const urnPrefix = 'urn:cts:CHS.Annotations';
+	const book = Books.findOne({ 'chapters.url': comment.bookChapterUrl }),
+	chapter = _.find(book.chapters, c => c.url === comment.bookChapterUrl),
+	tenant = Tenants.findOne({_id: comment.tenantId}),
+	urnPrefixV1 = 'urn:cts:CHS.Annotations',
+	urnPrefixV2 = 'urn:cts:CHS:Annotations.' + tenant.subdomain.toUpperCase(),
+	urnBook = `${book.authorURN}.${book.slug}`,
+	urnComment = `${chapter.n}.${comment.paragraphN}`,
+	urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
 
-	const urnBook = `${book.authorURN}.${book.slug}`;
-	const urnComment = `${chapter.n}.${comment.paragraphN}`;
-
-	const urnCommentId = `${comment._id.slice(-COMMENT_ID_LENGTH)}`;
-
-	return `${urnPrefix}:${urnBook}:${urnComment}:${urnCommentId}`;
+	return {
+		'v1': `${urnPrefixV1}:${urnComment}.${urnCommentId}`,
+	 	'v2': `${urnPrefixV2}:${urnComment}.${urnCommentId}`};
 };
 
 function getURN(comment) {

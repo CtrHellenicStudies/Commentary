@@ -1,10 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
+import muiTheme from '/imports/lib/muiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Header from '/imports/ui/layouts/header/Header';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// api
+// models
 import Commenters from '/imports/models/commenters';
 import Settings from '/imports/models/settings';
 
@@ -34,16 +39,16 @@ class CommenterDetail extends React.Component {
 	}
 
 	static propTypes = {
-		commenter: React.PropTypes.shape({
-			name: React.PropTypes.string.isRequired,
-			bio: React.PropTypes.string,
-			_id: React.PropTypes.string
+		commenter: PropTypes.shape({
+			name: PropTypes.string.isRequired,
+			bio: PropTypes.string,
+			_id: PropTypes.string
 		}),
-		avatarUrl: React.PropTypes.string,
-		settings: React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
+		avatarUrl: PropTypes.string,
+		settings: PropTypes.shape({
+			title: PropTypes.string.isRequired,
 		}),
-		isTest: React.PropTypes.bool,
+		isTest: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -51,23 +56,6 @@ class CommenterDetail extends React.Component {
 		avatarUrl: null,
 		isTest: false,
 	};
-
-	componentWillReceiveProps(nextProps) {
-		const { commenter } = this.props;
-		/*
-		const { subscriptions } = this.state;
-
-		if (commenter !== nextProps.commenter) {
-			this.setState({
-				subscribed: subscriptions.commenters.filter((sub) => sub._id === nextProps.commenter._id).length > 0
-			});
-		} else {
-			this.setState({
-				subscribed: false
-			});
-		}
-		*/
-	}
 
 	toggleReadMoreBio() {
 		const { readMoreBio } = this.state;
@@ -109,7 +97,10 @@ class CommenterDetail extends React.Component {
 			subscribed: !subscribed
 		});
 	}
-
+	getBiographyHTML(biography) {
+		if (Utils.isJson(biography))			{ return JSON.parse(biography).html; }
+		return biography;
+	}
 	render() {
 		const { commenter, settings, avatarUrl, isTest } = this.props;
 		const { readMoreBio, subscribed, loggedIn } = this.state;
@@ -122,95 +113,87 @@ class CommenterDetail extends React.Component {
 
 		return (
 			(commenter ?
-				<div className="page page-commenter-detail">
-					<div className="content primary">
-						<section className="block header cover parallax">
-							<BackgroundImageHolder
-								imgSrc="/images/capitals.jpg"
-							/>
-							<div className="container v-align-transform">
-								<div className="grid inner">
-									<div className="center-content">
-										<div className="page-title-wrap">
-											<h2 className="page-title ">
-												{commenter.name}
-											</h2>
+				<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+					<div className="page page-commenter-detail">
+						<Header />
+						<div className="content primary">
+							<section className="block header cover parallax">
+								<BackgroundImageHolder
+									imgSrc="/images/capitals.jpg"
+								/>
+								<div className="container v-align-transform">
+									<div className="grid inner">
+										<div className="center-content">
+											<div className="page-title-wrap">
+												<h2 className="page-title ">
+													{commenter.name}
+												</h2>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</section>
-						<section className="page-content">
+							</section>
+							<section className="page-content">
 
-							<div className="commenter-image">
-								<img src={avatarUrl} alt={commenter.name} />
-							</div>
-
-							<div className={`user-bio ${(readMoreBio ? 'user-bio--read-more' : '')}`}>
-
-								{commenter.bio ?
-									<div dangerouslySetInnerHTML={{ __html: commenter.bio }} />
-									:
-									<p>There is no biography information for this user yet.</p>
-								}
-
-
-							</div>
-							<div
-								className={`read-more-toggle
-								${(readMoreBio ? 'read-more-toggle-expanded' : '')}`}
-							>
-								<hr />
-								{ commenter.bio && commenter.bio.length > 500 ?
-
-									<div
-										className="read-more-button"
-										onClick={this.toggleReadMoreBio}
-									>
-										{readMoreBio ?
-											<span className="read-less-text">
-												Show Less
-											</span>
-											:
-											<span className="read-more-text">
-												Read More
-											</span>
-										}
-									</div>
-									:
-									null
-								}
-							</div>
-
-							{/* loggedIn ?
-								<div>
-									<FlatButton
-										label={subscribed ? `Unsubscribe from ${commenter.name}` : `Subscribe to ${commenter.name}`}
-										onTouchTap={this.subscribe}
-									/>
+								<div className="commenter-image">
+									<img src={avatarUrl} alt={commenter.name} />
 								</div>
-							:
-								''
-							*/}
 
-							<CommenterVisualizations
+								<div className={`user-bio ${(readMoreBio ? 'user-bio--read-more' : '')}`}>
+
+									{commenter.bio ?
+										<div dangerouslySetInnerHTML={{ __html: this.getBiographyHTML(commenter.bio) }} />
+										:
+										<p>There is no biography information for this user yet.</p>
+									}
+
+
+								</div>
+								<div
+									className={`read-more-toggle
+									${(readMoreBio ? 'read-more-toggle-expanded' : '')}`}
+								>
+									<hr />
+									{ commenter.bio && commenter.bio.length > 500 ?
+
+										<div
+											className="read-more-button"
+											onClick={this.toggleReadMoreBio}
+										>
+											{readMoreBio ?
+												<span className="read-less-text">
+													Show Less
+												</span>
+												:
+												<span className="read-more-text">
+													Read More
+												</span>
+											}
+										</div>
+										:
+										null
+									}
+								</div>
+
+								<CommenterVisualizations
+									commenter={commenter}
+									isTest={isTest}
+								/>
+
+								<br />
+								<br />
+								<br />
+								<hr />
+							</section>
+
+							<CommenterReferenceWorks
 								commenter={commenter}
-								isTest={isTest}
 							/>
 
-							<br />
-							<br />
-							<br />
-							<hr />
-						</section>
-
-						<CommenterReferenceWorks
-							commenter={commenter}
-						/>
-
-						<CommentsRecent />
+							<CommentsRecent />
+						</div>
 					</div>
-				</div>
+				</MuiThemeProvider>
 				:
 				<LoadingPage />
 			)
@@ -218,7 +201,8 @@ class CommenterDetail extends React.Component {
 	}
 }
 
-export default createContainer(({ slug }) => {
+export default createContainer(({match}) => {
+	const slug = match.params.slug;
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 	const commentersHandle = Meteor.subscribe('commenters.slug', slug, Session.get('tenantId'));
 

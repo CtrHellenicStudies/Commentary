@@ -9,6 +9,11 @@ import {
 import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
 
+
+/**
+ * Subwork model type
+ * @type {GraphQLObjectType}
+ */
 const Subwork = new GraphQLObjectType({
 	name: 'Subwork',
 	description: 'Subwork - part of a single work type',
@@ -34,6 +39,10 @@ const Subwork = new GraphQLObjectType({
 	},
 });
 
+/**
+ * Subwork input type
+ * @type {GraphQLInputObjectType}
+ */
 const SubworkInput = new GraphQLInputObjectType({
 	name: 'SubworkInput',
 	description: 'Subwork - part of a single work type',

@@ -9,6 +9,10 @@ import {
 import GraphQLJSON from 'graphql-type-json';
 import GraphQLDate from 'graphql-date';
 
+/**
+ * Tenant model type
+ * @type {GraphQLObjectType}
+ */
 const TenantType = new GraphQLObjectType({
 	name: 'Tenant',
 	description: 'Tenant db record',
@@ -25,6 +29,10 @@ const TenantType = new GraphQLObjectType({
 	},
 });
 
+/**
+ * Tenant input type
+ * @type {GraphQLInputObjectType}
+ */
 const TenantInputType = new GraphQLInputObjectType({
 	name: 'TenantInputType',
 	description: 'Tenant db record',

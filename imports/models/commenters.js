@@ -1,8 +1,21 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * TODO: migrate all mentions of commenters to commentators
+ *
+ * Commenters (or commentators now on the frontend) represent the individuals
+ * who are creating the comments in the commentaries. They are separate from user
+ * accounts, which may be given permission to edit comments for specific
+ * commenters
+ * @type {Meteor.Collection}
+ */
 const Commenters = new Meteor.Collection('commenters');
 
+/**
+ * Commenters schema
+ * @type {SimpleSchema}
+ */
 Commenters.schema = new SimpleSchema({
 	_id: {
 		type: String,

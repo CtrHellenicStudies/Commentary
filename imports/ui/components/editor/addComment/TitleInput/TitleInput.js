@@ -1,35 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
-import {
-	ItalicButton,
-	BoldButton,
-	UnderlineButton,
-	UnorderedListButton,
-	OrderedListButton,
-	BlockquoteButton,
-} from 'draft-js-buttons';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 
 const singleLinePlugin = createSingleLinePlugin();
-
-/*
-onTitleChange(titleEditorState) {
-	const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
-	const title = jQuery(titleHtml).text();
-	this.setState({
-		titleEditorState,
-		titleValue: title,
-	});
-}
-*/
 
 
 class TitleInput extends React.Component {
@@ -57,11 +38,12 @@ class TitleInput extends React.Component {
 	render() {
 		return (
 			<h1 className="title-input">
-				<Editor
+				<DraftEditorInput
 					editorState={this.state.titleEditorState}
 					onChange={this.onTitleChange}
 					placeholder={this.props.placeholder}
-					spellCheck
+					disableMentions
+					spellcheck
 					stripPastedStyles
 					plugins={[singleLinePlugin]}
 					blockRenderMap={singleLinePlugin.blockRenderMap}
@@ -70,6 +52,10 @@ class TitleInput extends React.Component {
 		);
 	}
 }
+
+TitleInput.propTypes = {
+	placeholder: PropTypes.string,
+};
 
 TitleInput.defaultProps = {
 	placeholder: 'Title . . .',

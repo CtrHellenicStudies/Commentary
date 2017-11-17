@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -13,7 +14,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import { createBrowserHistory } from 'history';
 
-// api
+// models
 import Comments from '/imports/models/comments';
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
@@ -38,10 +39,10 @@ const history = syncHistoryWithStore(createBrowserHistory(), store);
 const AddRevisionLayout = React.createClass({
 
 	propTypes: {
-		ready: React.PropTypes.bool,
-		comment: React.PropTypes.object,
-		commenters: React.PropTypes.array,
-		keywords: React.PropTypes.array,
+		ready: PropTypes.bool,
+		comment: PropTypes.object,
+		commenters: PropTypes.array,
+		keywords: PropTypes.array,
 	},
 
 	getInitialState() {
@@ -103,7 +104,7 @@ const AddRevisionLayout = React.createClass({
 				this.showSnackBar('Comment updated');
 			}
 
-			FlowRouter.go(`/commentary/${comment._id}/edit`);
+			this.props.history.push(`/commentary/${comment._id}/edit`);
 		});
 		// TODO: handle behavior after comment added (add info about success)
 	},
@@ -140,7 +141,7 @@ const AddRevisionLayout = React.createClass({
 				}
 			});
 			if (!isOwner) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	},
@@ -261,13 +262,15 @@ const AddRevisionLayout = React.createClass({
 			filters,
 		});
 	},
-
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
+	},
 	showSnackBar(message) {
 		this.setState({
 			snackbarOpen: true,
 			snackbarMessage: message,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});

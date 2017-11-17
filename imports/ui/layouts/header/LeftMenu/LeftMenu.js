@@ -1,13 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 
-// api:
+// models:
 import Tenants from '/imports/models/tenants';
 import Settings from '/imports/models/settings';
+import { Link } from 'react-router-dom';
 
 // components:
 import SideNavTop from '/imports/ui/components/header/SideNavTop';
@@ -54,114 +56,133 @@ const LeftMenu = ({ open, closeLeftMenu, tenant, currentUser, settings }) => (
 						onClick={closeLeftMenu}
 					/>
 				: ''}
-				<MenuItem
-					href="/commentary/create"
-					primaryText="Add Comment"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/tags/create"
-					primaryText="Add Tag"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/textNodes/edit"
-					primaryText="Add Translation"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/textNodes/edit"
-					primaryText="Edit Source Text"
-					onClick={closeLeftMenu}
-				/>
+				<Link to="/commentary/create">
+					<MenuItem
+						primaryText="Add Comment"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/tags/create">
+					<MenuItem
+						primaryText="Add Tag"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/textNodes/edit">
+					<MenuItem
+						primaryText="Add Translation"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/textNodes/edit">
+					<MenuItem
+						primaryText="Edit Source Text"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+
 				<Divider />
 			</div>
 			:
 			'' }
-		<MenuItem
-			href="/"
-			primaryText="Home"
-			onClick={closeLeftMenu}
-		/>
+		<Link to="/">
+			<MenuItem
+				primaryText="Home"
+				onClick={closeLeftMenu}
+			/>
+		</Link>
 		{tenant && !tenant.isAnnotation &&
 			<span>
-				<MenuItem
-					href="/commentary"
-					primaryText="Commentary"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/words"
-					primaryText="Words"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/ideas"
-					primaryText="Ideas"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/commenters"
-					primaryText="Commentators"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/referenceWorks"
-					primaryText="Reference Works"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href={settings && settings.aboutURL ? settings.aboutURL : '/about'}
-					primaryText="About"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/#visualizations"
-					primaryText="Visualizations"
-					onClick={closeLeftMenu}
-				/>
+				<Link to="/commentary">
+					<MenuItem
+						primaryText="Commentary"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/words">
+					<MenuItem
+						primaryText="Words"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/ideas">
+					<MenuItem
+						primaryText="Ideas"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/commenters">
+					<MenuItem
+						primaryText="Commentators"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/referenceWorks">
+					<MenuItem
+						primaryText="Reference Works"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to={settings && settings.aboutURL ? settings.aboutURL : '/about'}>
+					<MenuItem
+						primaryText="About"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/#visualizations">
+					<MenuItem
+						primaryText="Visualizations"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+
 			</span>
 		}
 		<Divider />
 
 		{Meteor.user() ?
 			<div>
-				<MenuItem
-					href="/profile"
-					primaryText="Profile"
-					onClick={closeLeftMenu}
-				/>
-				<MenuItem
-					href="/sign-out"
-					primaryText="Sign out"
-					onClick={closeLeftMenu}
-				/>
+				<Link to="/profile">
+					<MenuItem
+						primaryText="Profile"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				<Link to="/sign-out">
+					<MenuItem
+						primaryText="Sign out"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
 			</div>
 			:
 			<div>
-				<MenuItem
-					href="/sign-in"
-					primaryText="Sign in"
-					onClick={closeLeftMenu}
-				/>
+				<Link to="/sign-in">
+					<MenuItem
+						primaryText="Sign in"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
 			</div>
 		}
 	</Drawer>
 );
 LeftMenu.propTypes = {
-	open: React.PropTypes.bool.isRequired,
-	closeLeftMenu: React.PropTypes.func.isRequired,
-	tenant: React.PropTypes.shape({
-		isAnnotation: React.PropTypes.bool.isRequired,
+	open: PropTypes.bool.isRequired,
+	closeLeftMenu: PropTypes.func.isRequired,
+	tenant: PropTypes.shape({
+		isAnnotation: PropTypes.bool.isRequired,
 	}),
-	currentUser: React.PropTypes.shape({
-		profile: React.PropTypes.shape({
-			avatarUrl: React.PropTypes.string,
-			name: React.PropTypes.string,
+	currentUser: PropTypes.shape({
+		profile: PropTypes.shape({
+			avatarUrl: PropTypes.string,
+			name: PropTypes.string,
 		}),
-		username: React.PropTypes.string,
+		username: PropTypes.string,
 	}),
+	settings: PropTypes.object,
 };
+
 LeftMenu.defaultProps = {
 	tenant: null,
 	currentUser: null,
@@ -177,5 +198,5 @@ export default createContainer(() => {
 		settings: Settings.findOne({}),
 		currentUser: Meteor.users.findOne({_id: Meteor.userId()}),
 		tenant: Tenants.findOne({_id: Session.get('tenantId')})
-	}
+	};
 }, LeftMenu);

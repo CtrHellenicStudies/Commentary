@@ -6,6 +6,10 @@ import Books from '/imports/models/books';
 import Comments from '/imports/models/comments';
 
 
+/**
+ * Annotation methods - either replaced or to be replaced with the graphql api
+ */
+
 const annotationsInsert = (token, comment) => {
 	check(token, String);
 	check(comment, {

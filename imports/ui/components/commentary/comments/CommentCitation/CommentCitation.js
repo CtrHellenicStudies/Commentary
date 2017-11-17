@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Dialog from 'material-ui/Dialog';
@@ -47,7 +48,7 @@ class CommentCitation extends React.Component {
 		if (!comment) {
 			return null;
 		}
-
+		const urn = Utils.resolveUrn(comment.urn);
 		const styles = {
 			menuItem: {
 				fontFamily: 'ProximaNW01-AltLightReg',
@@ -91,14 +92,14 @@ class CommentCitation extends React.Component {
 										Revision {moment(updated).format('D MMMM YYYY')}
 									</label>
 									<span className="urn">
-										<a
-											href={`//nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
+										<a //TODO
+											href={`//nrs.${Utils.getEnvDomain()}/v2/${urn}.${comment.revisions.length - i - 1}/${comment._id}`}
 										>
-											nrs.chs.harvard.edu/v1/{comment.urn}.{comment.revisions.length - i - 1}
+											nrs.chs.harvard.edu/v2/{urn}.{comment.revisions.length - i - 1}
 										</a>
 									</span>
 									<CopyToClipboard
-										text={`https://nrs.${Utils.getEnvDomain()}/v1/${comment.urn}.${comment.revisions.length - i - 1}`}
+										text={`https://nrs.${Utils.getEnvDomain()}/v2/${urn}.${comment.revisions.length - i - 1}`}
 										onCopy={() => this.setState({copied: true})}
 									>
 										<span className="copy-to-clipboard">
@@ -116,15 +117,15 @@ class CommentCitation extends React.Component {
 }
 
 CommentCitation.propTypes = {
-	comment: React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
-		revisions: React.PropTypes.arrayOf(React.PropTypes.shape({
-			_id: React.PropTypes.string.isRequired,
-			created: React.PropTypes.instanceOf(Date),
-			updated: React.PropTypes.instanceOf(Date),
-			originalDate: React.PropTypes.instanceOf(Date),
+	comment: PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		revisions: PropTypes.arrayOf(PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			created: PropTypes.instanceOf(Date),
+			updated: PropTypes.instanceOf(Date),
+			originalDate: PropTypes.instanceOf(Date),
 		})).isRequired,
-		urn: React.PropTypes.string.isRequired,
+		urn: PropTypes.object.isRequired,
 	}),
 };
 

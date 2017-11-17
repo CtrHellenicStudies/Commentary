@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Spinner = React.createClass({
 
 	propTypes: {
-		fullPage: React.PropTypes.bool,
+		fullPage: PropTypes.bool,
 	},
 
 	render() {

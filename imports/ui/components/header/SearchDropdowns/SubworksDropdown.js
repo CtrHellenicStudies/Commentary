@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // components:
-import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown'; 
-import SearchTermButton from '/imports/ui/components/header/SearchTermButton'; 
+import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
+import SearchTermButton from '/imports/ui/components/header/SearchTermButton';
 
 // helpers:
 import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
@@ -37,15 +38,15 @@ const SubworksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, tog
 	</SearchToolDropdown>
 );
 SubworksDropdown.propTypes = {
-	works: React.PropTypes.arrayOf(React.PropTypes.shape({
-		title: React.PropTypes.string.isRequired,
-		subworks: React.PropTypes.arrayOf(React.PropTypes.shape({
-			n: React.PropTypes.number.isRequired,
-			title: React.PropTypes.string.isRequired,
+	works: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		subworks: PropTypes.arrayOf(PropTypes.shape({
+			n: PropTypes.number.isRequired,
+			title: PropTypes.string.isRequired,
 		})),
 	})),
-	selectedWork: React.PropTypes.string.isRequired,
-	workInFilter: React.PropTypes.bool.isRequired,
+	selectedWork: PropTypes.string.isRequired,
+	workInFilter: PropTypes.bool.isRequired,
 	...dropdownPropTypes,
 };
 SubworksDropdown.defaultProps = {

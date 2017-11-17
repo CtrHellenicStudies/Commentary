@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
@@ -6,12 +7,16 @@ import { Session } from 'meteor/session';
 // lib
 import Utils from '/imports/lib/utils';
 
-// api
+// models
 import Pages from '/imports/models/pages';
 import Settings from '/imports/models/settings';
 
 // layouts
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
+import muiTheme from '/imports/lib/muiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Header from '/imports/ui/layouts/header/Header';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
@@ -22,6 +27,8 @@ class Page extends React.Component {
 
 	render() {
 		const { page, settings, slug, ready } = this.props;
+		let content;
+		if (page)			{ content = Utils.getHtmlFromContext(Utils.getEditorState(page.content).getCurrentContent()); }
 		const headerImageUrl = '/images/apotheosis_homer.jpg';
 
 		if (!ready) {
@@ -44,58 +51,57 @@ class Page extends React.Component {
 		}
 
 		return (
-			// todo: return 404 if !page.length
-			<div className={`page page-${slug} content primary`}>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+				<div className={`page page-${slug} content primary page-custom`}>
+					<Header />
+					<section className="block header header-page cover parallax">
+						<BackgroundImageHolder
+							imgSrc="/images/apotheosis_homer.jpg"
+						/>
 
-				<section className="block header header-page cover parallax">
-					<BackgroundImageHolder
-						imgSrc="/images/apotheosis_homer.jpg"
-					/>
-
-					<div className="container v-align-transform">
-						<div className="grid inner">
-							<div className="center-content">
-								<div className="page-title-wrap">
-									<h1 className="page-title">
-										{page.title}
-									</h1>
-									<h2>
-										{page.subtitle}
-									</h2>
+						<div className="container v-align-transform">
+							<div className="grid inner">
+								<div className="center-content">
+									<div className="page-title-wrap">
+										<h1 className="page-title">
+											{page.title}
+										</h1>
+										<h2>
+											{page.subtitle}
+										</h2>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</section>
+					</section>
 
-				<section className="page-content container">
-					{page.byline ?
-						<div className="page-byline">
-							<h3>
-								{page.byline}
-							</h3>
-						</div>
-						: ''}
-					<div dangerouslySetInnerHTML={{ __html: page.content }} />
-				</section>
-			</div>
+					<section className="page-content container">
+						{page.byline ?
+							<div className="page-byline">
+								<h3>
+									{page.byline}
+								</h3>
+							</div>
+							: ''}
+						<div dangerouslySetInnerHTML={{ __html: content }} />
+					</section>
+				</div>
+			</MuiThemeProvider>
 		);
 	}
 }
 
 Page.propTypes = {
-	slug: React.PropTypes.string,
-	page: React.PropTypes.object,
-	ready: React.PropTypes.bool,
-	images: React.PropTypes.array,
-	thumbnails: React.PropTypes.array,
-	ready: React.PropTypes.bool,
-	settings: React.PropTypes.object,
+	slug: PropTypes.string,
+	page: PropTypes.object,
+	ready: PropTypes.bool,
+	images: PropTypes.array,
+	thumbnails: PropTypes.array,
+	settings: PropTypes.object,
 };
 
 
 const pageContainer = createContainer(({ slug }) => {
-	let page;
 	let images = [];
 	let thumbnails = [];
 
@@ -103,7 +109,7 @@ const pageContainer = createContainer(({ slug }) => {
 	const pageHandle = Meteor.subscribe('pages', tenantId, slug);
 	const settingsHandle = Meteor.subscribe('settings.tenant', tenantId);
 
-	page = Pages.findOne({ slug, tenantId });
+	const page = Pages.findOne({ slug, tenantId });
 
 	const imageHandle = Meteor.subscribe('pageImages', tenantId, slug);
 	if (page) {

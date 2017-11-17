@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const styles = {
 	menuItem: {
@@ -10,22 +11,33 @@ const styles = {
 };
 
 const MenuItem = ({ href, target, primaryText, onClick }) => (
-	<a
+	{...href ? 
+		(<a
+			className="menu-item"
+			href={href}
+			target={target}
+			onClick={onClick}
+			style={styles.menuItem}
+		>
+			{primaryText}
+		</a>)
+		 :
+	(<span
 		className="menu-item"
-		href={href}
 		target={target}
 		onClick={onClick}
 		style={styles.menuItem}
 	>
 		{primaryText}
-	</a>
+	</span>)
+	}
 );
 
 MenuItem.propTypes = {
-	href: React.PropTypes.string,
-	target: React.PropTypes.string,
-	primaryText: React.PropTypes.string,
-	onClick: React.PropTypes.func,
+	href: PropTypes.string,
+	target: PropTypes.string,
+	primaryText: PropTypes.string,
+	onClick: PropTypes.func,
 };
 
 export default MenuItem;

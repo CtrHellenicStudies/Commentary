@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { CompositeDecorator } from 'draft-js';
 
 const Link = (props) => {
@@ -14,11 +15,11 @@ const Link = (props) => {
 	);
 };
 Link.propTypes = {
-	contentState: React.PropTypes.shape({
-		getEntity: React.PropTypes.func.isRequired,
+	contentState: PropTypes.shape({
+		getEntity: PropTypes.func.isRequired,
 	}).isRequired,
-	children: React.PropTypes.element,
-	entityKey: React.PropTypes.string,
+	children: PropTypes.element,
+	entityKey: PropTypes.string,
 };
 Link.defaultProps = {
 	children: null,

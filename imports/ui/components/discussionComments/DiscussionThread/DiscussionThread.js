@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -6,8 +7,9 @@ import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
-// api
+// models
 import DiscussionComments from '/imports/models/discussionComments';
+import Commenters from '/imports/models/commenters';
 
 // lib
 import Utils from '/imports/lib/utils';
@@ -18,15 +20,16 @@ import DiscussionComment from '/imports/ui/components/discussionComments/Discuss
 const DiscussionThread = React.createClass({
 
 	propTypes: {
-		comment: React.PropTypes.object.isRequired,
-		discussionVisible: React.PropTypes.bool.isRequired,
-		showDiscussionThread: React.PropTypes.func.isRequired,
-		hideDiscussionThread: React.PropTypes.func.isRequired,
-		toggleLemma: React.PropTypes.func.isRequired,
-		showLoginModal: React.PropTypes.func,
-		discussionComments: React.PropTypes.array,
-		discussionCommentsDisabled: React.PropTypes.bool,
-		ready: React.PropTypes.bool,
+		comment: PropTypes.object.isRequired,
+		discussionVisible: PropTypes.bool.isRequired,
+		showDiscussionThread: PropTypes.func.isRequired,
+		hideDiscussionThread: PropTypes.func.isRequired,
+		toggleLemma: PropTypes.func.isRequired,
+		showLoginModal: PropTypes.func,
+		discussionComments: PropTypes.array,
+		commenters: PropTypes.array,
+		discussionCommentsDisabled: PropTypes.bool,
+		ready: PropTypes.bool,
 	},
 
 	getInitialState() {
@@ -45,6 +48,7 @@ const DiscussionThread = React.createClass({
 
 	addDiscussionComment() {
 		const content = $(this.newCommentForm).find('textarea').val();
+		const that = this;
 
 		Meteor.call('discussionComments.insert', {
 			content,
@@ -197,21 +201,7 @@ const DiscussionThread = React.createClass({
 						}
 						<div
 							className="sort-by-wrap"
-						>
-							{/*
-							 <span className="sort-by-label">Sort by:</span>
-							 <RaisedButton
-							 label="Top"
-							 className="sort-by-option selected-sort sort-by-top"
-							 onClick={this.toggleSort}>
-							 </RaisedButton>
-							 <RaisedButton
-							 label="Newest"
-							 className="sort-by-option sort-by-new"
-							 onClick={this.toggleSort}>
-							 </RaisedButton>
-							 */}
-						</div>
+						/>
 						{this.props.discussionComments.length === 0 ?
 							<div className="no-results-wrap">
 								{!comment.discussionCommentsDisabled && !discussionCommentsDisabled ?
@@ -251,12 +241,17 @@ const DiscussionThread = React.createClass({
 
 
 export default createContainer(({ comment }) => {
-	let discussionComments = [];
-	let userDiscussionComments = [];
-	let handle;
+	let discussionComments = [],
+		userDiscussionComments = [],
+		handleUsers, 
+		handleDiscuss,
+		users = [];
+
+	handleUsers = Meteor.subscribe('users.all', Session.get('tenantId'));
+	users = Meteor.users.find({}).fetch();
 
 	if (comment) {
-		handle = Meteor.subscribe('discussionComments', comment._id, Session.get('tenantId'));
+		handleDiscuss = Meteor.subscribe('discussionComments', comment._id, Session.get('tenantId'));
 		discussionComments = DiscussionComments.find({
 			commentId: comment._id,
 			status: 'publish'
@@ -270,12 +265,14 @@ export default createContainer(({ comment }) => {
 
 		return {
 			discussionComments,
-			ready: handle.ready(),
+			users,
+			ready: handleDiscuss.ready() && handleUsers.ready()
 		};
 	}
 
 	return {
 		discussionComments,
+		users,
 		ready: null,
 	};
 }, DiscussionThread);

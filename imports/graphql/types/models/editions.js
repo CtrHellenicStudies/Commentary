@@ -3,6 +3,10 @@ import {
 	GraphQLString,
 } from 'graphql';
 
+/**
+ * Edition type
+ * @type {GraphQLObjectType}
+ */
 const EditionsType = new GraphQLObjectType({
 	name: 'EditionsType',
 	description: 'An edition',
@@ -19,4 +23,4 @@ const EditionsType = new GraphQLObjectType({
 	}
 });
 
-export {EditionsType};
+export { EditionsType };

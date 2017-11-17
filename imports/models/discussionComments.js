@@ -1,8 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Discussion comments are used for public users to add their own comments on
+ * the primary comments in the commentaries
+ * @type {Meteor.Collection}
+ */
 const DiscussionComments = new Meteor.Collection('discussionComments');
 
+/**
+ * Discussion comments schema
+ * @type {SimpleSchema}
+ */
 DiscussionComments.schema = new SimpleSchema({
 	userId: {
 		type: String,

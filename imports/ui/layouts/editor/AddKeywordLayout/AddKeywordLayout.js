@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
@@ -25,12 +26,12 @@ import Utils from '/imports/lib/utils';
 const AddKeywordLayout = React.createClass({
 
 	propTypes: {
-		ready: React.PropTypes.bool,
-		isTest: React.PropTypes.bool,
+		ready: PropTypes.bool,
+		isTest: PropTypes.bool,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getInitialState() {
@@ -88,7 +89,7 @@ const AddKeywordLayout = React.createClass({
 	getLineLetter() {
 		let lineLetter = '';
 		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
-			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
+			lineLetter = this.state.lineLetterValue;
 		}
 		return lineLetter;
 	},
@@ -234,7 +235,7 @@ const AddKeywordLayout = React.createClass({
 			if (error) {
 				this.showSnackBar(error);
 			} else {
-				FlowRouter.go(`/tags/${keyword.slug}`);
+				this.props.history.push(`/tags/${keyword.slug}`);
 			}
 		});
 	},
@@ -244,13 +245,15 @@ const AddKeywordLayout = React.createClass({
 			snackbarOpen: error.errors,
 			snackbarMessage: error.errorMessage,
 		});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({
 				snackbarOpen: false,
 			});
 		}, 4000);
 	},
-
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
+	},
 	onTypeChange(type) {
 		this.setState({
 			selectedType: type,
@@ -262,7 +265,7 @@ const AddKeywordLayout = React.createClass({
 	handlePermissions() {
 		if (Roles.subscription.ready()) {
 			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-				FlowRouter.go('/');
+				this.props.history.push('/');
 			}
 		}
 	},

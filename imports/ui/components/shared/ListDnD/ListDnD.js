@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -100,12 +101,12 @@ function collectTarget(connect) {
 }
 
 const reactDnDPropTypes = {
-	index: React.PropTypes.number.isRequired,
-	moveListGroupItem: React.PropTypes.func.isRequired,
-	connectDragSource: React.PropTypes.func.isRequired,
-	connectDropTarget: React.PropTypes.func.isRequired,
-	// connectDragPreview: React.PropTypes.func.isRequired,
-	isDragging: React.PropTypes.bool.isRequired,
+	index: PropTypes.number.isRequired,
+	moveListGroupItem: PropTypes.func.isRequired,
+	connectDragSource: PropTypes.func.isRequired,
+	connectDropTarget: PropTypes.func.isRequired,
+	// connectDragPreview: PropTypes.func.isRequired,
+	isDragging: PropTypes.bool.isRequired,
 };
 
 class _ListGroupItemDnD extends React.Component {

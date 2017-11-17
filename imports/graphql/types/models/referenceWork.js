@@ -6,7 +6,10 @@ import {
 } from 'graphql';
 import GraphQLDate from 'graphql-date';
 
-
+/**
+ * Reference Work model type
+ * @type {GraphQLObjectType}
+ */
 const ReferenceWorkType = new GraphQLObjectType({
 	name: 'ReferenceWorkType',
 	description: 'A work referenced in the commentary as a secondary source',
@@ -47,6 +50,10 @@ const ReferenceWorkType = new GraphQLObjectType({
 	},
 });
 
+/**
+ * Reference work input type
+ * @type {GraphQLInputObjectType}
+ */
 const ReferenceWorkInputType = new GraphQLInputObjectType({
 	name: 'ReferenceWorkInputType',
 	description: 'A work referenced in the commentary as a secondary source',

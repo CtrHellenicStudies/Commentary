@@ -8,6 +8,10 @@ import {
 } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
 
+/**
+ * Commenter model type
+ * @type {GraphQLObjectType}
+ */
 const CommenterType = new GraphQLObjectType({
 	name: 'CommenterType',
 	description: 'A commenter in the commentary',
@@ -60,6 +64,10 @@ const CommenterType = new GraphQLObjectType({
 	},
 });
 
+/**
+ * Commenter input type
+ * @type {GraphQLInputObjectType}
+ */
 const CommenterInputType = new GraphQLInputObjectType({
 	name: 'CommenterInputType',
 	description: 'A commenter in the commentary',

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -7,18 +8,18 @@ import Card from 'material-ui/Card';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-
+import { Link } from 'react-router-dom';
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 
 const DiscussionCommentTeaser = React.createClass({
 
 	propTypes: {
-		discussionComment: React.PropTypes.object.isRequired,
+		discussionComment: PropTypes.object.isRequired,
 	},
 
 	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
+		muiTheme: PropTypes.object.isRequired,
 	},
 
 	getChildContext() {
@@ -69,18 +70,19 @@ const DiscussionCommentTeaser = React.createClass({
 					<p>
 						{ discussionComment.content }
 					</p>
-					<FlatButton
-						label={`Context (${discussionComment.otherCommentsCount})`}
-						className="user-discussion-comment-replies"
-						href={commentLink}
-						icon={<FontIcon className="mdi mdi-comment" />}
-						style={{
-							height: 'auto',
-							maxHeight: 'none',
-							display: 'block',
-							margin: '10px 30px 30px',
-						}}
-					/>
+					<Link to={commentLink}>
+						<FlatButton
+							label={`Context (${discussionComment.otherCommentsCount})`}
+							className="user-discussion-comment-replies"
+							icon={<FontIcon className="mdi mdi-comment" />}
+							style={{
+								height: 'auto',
+								maxHeight: 'none',
+								display: 'block',
+								margin: '10px 30px 30px',
+							}}
+						/>
+					</Link>
 				</div>
 			</Card>);
 	},

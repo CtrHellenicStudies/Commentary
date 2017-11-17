@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceWorksList';
 
@@ -17,8 +18,8 @@ const CommenterReferenceWorks = ({ commenter }) => (
 	</div>
 );
 CommenterReferenceWorks.propTypes = {
-	commenter: React.PropTypes.shape({
-		_id: React.PropTypes.string.isRequired,
+	commenter: PropTypes.shape({
+		_id: PropTypes.string.isRequired,
 	}).isRequired,
 };
 

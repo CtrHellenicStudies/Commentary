@@ -1,18 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
+import { Link } from 'react-router-dom';
 
-// api:
+// models:
 import Settings from '/imports/models/settings';
 import Tenants from '/imports/models/tenants';
 
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import ModalSignup from '/imports/ui/layouts/auth/ModalSignup';
+import ModalForgotPwd from '/imports/ui/layouts/auth/ModalForgotPwd';
 import LeftMenu from '/imports/ui/layouts/header/LeftMenu';
 import CommentarySearchToolbar from '/imports/ui/layouts/header/CommentarySearchToolbar';
 import CommentarySearchPanel from '/imports/ui/layouts/header/CommentarySearchPanel';
@@ -53,23 +56,23 @@ const styles = {
 */
 class Header extends React.Component {
 	static propTypes = {
-		filters: React.PropTypes.any, // eslint-disable-line react/forbid-prop-types
-		toggleSearchTerm: React.PropTypes.func,
-		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeLineN: React.PropTypes.func,
-		initialSearchEnabled: React.PropTypes.bool,
-		addCommentPage: React.PropTypes.bool,
-		isOnHomeView: React.PropTypes.bool,
-		isTest: React.PropTypes.bool,
-		selectedWork: React.PropTypes.object,
+		filters: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+		toggleSearchTerm: PropTypes.func,
+		handleChangeTextsearch: PropTypes.func,
+		handleChangeLineN: PropTypes.func,
+		initialSearchEnabled: PropTypes.bool,
+		addCommentPage: PropTypes.bool,
+		isOnHomeView: PropTypes.bool,
+		isTest: PropTypes.bool,
+		selectedWork: PropTypes.object,
 
 		// from creatContainer:
-		settings: React.PropTypes.shape({
-			name: React.PropTypes.string,
+		settings: PropTypes.shape({
+			name: PropTypes.string,
 		}),
-		tenant: React.PropTypes.shape({
-			subdomain: React.PropTypes.string,
-			isAnnotation: React.PropTypes.bool,
+		tenant: PropTypes.shape({
+			subdomain: PropTypes.string,
+			isAnnotation: PropTypes.bool,
 		}),
 
 	};
@@ -92,7 +95,8 @@ class Header extends React.Component {
 			subworks: [],
 			activeWork: '',
 			modalLoginLowered: false,
-			modalSignupLowered: false,
+			modalSignupLowered: !!props.showSignup,
+			modalForgotPwdLowered: !!props.showForgotPwd,
 		};
 
 		// methods:
@@ -107,6 +111,7 @@ class Header extends React.Component {
 		this.showSignupModal = this.showSignupModal.bind(this);
 		this.closeLoginModal = this.closeLoginModal.bind(this);
 		this.closeSignupModal = this.closeSignupModal.bind(this);
+		this.closeForgotPwdModal = this.closeForgotPwdModal.bind(this);
 	}
 
 	toggleSearchMode() {
@@ -212,16 +217,29 @@ class Header extends React.Component {
 	}
 
 	closeSignupModal() {
+		if (this.props.showSignup) {
+			this.props.history.push('/');
+		}
 		this.setState({
 			modalSignupLowered: false,
+		});
+	}
+
+	closeForgotPwdModal() {
+		if (this.props.showForgotPwd) {
+			this.props.history.push('/');
+		}
+		this.setState({
+			modalForgotPwdLowered: false,
 		});
 	}
 
 	render() {
 
 		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage, selectedWork } = this.props;
-		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalSignupLowered, modalLoginLowered } = this.state;
-
+		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered } = this.state;
+		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;
+		const modalForgotPwdLowered = this.state.modalForgotPwdLowered || this.props.showForgotPwd;
 		return (
 			<div>
 				<LeftMenu
@@ -260,9 +278,9 @@ class Header extends React.Component {
 										<h3 className="logo">{settings ? settings.name : undefined}</h3>
 									</a>
 								:
-									<a href="/" className="header-home-link" >
+									<Link to="/" className="header-home-link">
 										<h3 className="logo">{settings ? settings.name : undefined}</h3>
-									</a>
+									</Link>
 								}
 
 								{tenant && !tenant.isAnnotation &&
@@ -278,42 +296,47 @@ class Header extends React.Component {
 								<div className="header-section-wrap nav-wrap collapse" >
 									{tenant && !tenant.isAnnotation &&
 										<span>
-											<FlatButton
-												label="Commentary"
-												href="/commentary"
-												style={styles.flatButton}
-											/>
-											<FlatButton
-												label="About"
-												href={settings && settings.aboutURL ? settings.aboutURL : '/about'}
-												style={styles.flatButton}
-											/>
+											<Link to="/commentary">
+												<FlatButton
+													label="Commentary"
+													style={styles.flatButton}
+												/>
+											</Link>
+											<Link to={settings && settings.aboutURL ? settings.aboutURL : '/about'}>
+												<FlatButton
+													label="About"
+													style={styles.flatButton}
+												/>
+											</Link>
 										</span>
 									}
-									{Meteor.user() ?
+									{this.props.user ?
 										<div>
 											{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 												<div className="user-header-links admin-header-links">
 													{tenant && !tenant.isAnnotation &&
 														<span>
-															<FlatButton
-																href="/commentary/create"
-																label="Add Comment"
-																className=""
-																style={styles.flatButton}
-															/>
-															<FlatButton
-																href="/tags/create"
-																label="Add Tag"
-																className=""
-																style={styles.flatButton}
-															/>
-															<FlatButton
-																href="/textNodes/edit"
-																label="Add Translation"
-																className=""
-																style={styles.flatButton}
-															/>
+															<Link to="/commentary/create">
+																<FlatButton
+																	label="Add Comment"
+																	className=""
+																	style={styles.flatButton}
+																/>
+															</Link>
+															<Link to="/tags/create">
+																<FlatButton
+																	label="Add Tag"
+																	className=""
+																	style={styles.flatButton}
+																/>
+															</Link>
+															<Link to="/textNodes/edit">
+																<FlatButton
+																	label="Add Translation"
+																	className=""
+																	style={styles.flatButton}
+																/>
+															</Link>
 														</span>
 													}
 													<ProfileAvatarButton
@@ -332,20 +355,22 @@ class Header extends React.Component {
 										</div>
 									:
 										<div>
-											<FlatButton
-												label="Login"
-												onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
-												href={tenant && tenant.isAnnotation ? '/sign-in' : ''}
-												style={styles.flatButton}
-												className="account-button account-button-login"
-											/>
-											<FlatButton
-												label="Join the Community"
-												onClick={tenant && !tenant.isAnnotation ? this.showSignupModal : undefined}
-												href={tenant && tenant.isAnnotation ? '/sign-up' : ''}
-												style={styles.flatButton}
-												className="account-button account-button-login"
-											/>
+											<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
+												<FlatButton
+													label="Login"
+													onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
+													style={styles.flatButton}
+													className="account-button account-button-login"
+												/>
+											</Link>
+											<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
+												<FlatButton
+													label="Join the Community"
+													onClick={tenant && !tenant.isAnnotation ? this.showSignupModal : undefined}
+													style={styles.flatButton}
+													className="account-button account-button-login"
+												/>
+											</Link>
 										</div>
 									}
 									{tenant && !tenant.isAnnotation &&
@@ -410,17 +435,27 @@ class Header extends React.Component {
 					}
 				</header>
 
-				{!Meteor.user() && modalLoginLowered &&
+				{!this.props.user && modalLoginLowered &&
 					<ModalLogin
 						lowered={modalLoginLowered}
 						closeModal={this.closeLoginModal}
+						signupModal={this.showSignupModal}
+						history={this.props.history}
 					/>
 				}
-				{!Meteor.user() && modalSignupLowered &&
+				{!this.props.user && modalSignupLowered &&
 					<ModalSignup
 						lowered={modalSignupLowered}
 						closeModal={this.closeSignupModal}
+						loginModal={this.showLoginModal}
 					/>
+				}
+				{!this.props.user && modalForgotPwdLowered &&
+				<ModalForgotPwd
+					lowered={modalForgotPwdLowered}
+					signupModal={this.showSignupModal}
+					closeModal={this.closeForgotPwdModal}
+				/>
 				}
 			</div>
 		);
@@ -433,10 +468,12 @@ class Header extends React.Component {
 export default createContainer(() => {
 
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	const handleTenants = Meteor.subscribe('tenants');
 
 	return {
 		settings: Settings.findOne({}),
 		tenant: Tenants.findOne({ _id: Session.get('tenantId') }),
+		user: Meteor.user()
 	};
 
 }, Header);

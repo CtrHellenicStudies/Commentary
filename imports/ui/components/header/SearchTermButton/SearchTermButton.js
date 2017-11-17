@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
 
 /*
@@ -31,12 +32,12 @@ const SearchTermButton = ({ toggleSearchTerm, label, searchTermKey, value, activ
 	</li>
 );
 SearchTermButton.propTypes = {
-	toggleSearchTerm: React.PropTypes.func.isRequired,
-	label: React.PropTypes.string.isRequired,
-	searchTermKey: React.PropTypes.string.isRequired,
-	value: React.PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
-	activeWork: React.PropTypes.bool,
-	active: React.PropTypes.bool,
+	toggleSearchTerm: PropTypes.func.isRequired,
+	label: PropTypes.string.isRequired,
+	searchTermKey: PropTypes.string.isRequired,
+	value: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
+	activeWork: PropTypes.bool,
+	active: PropTypes.bool,
 };
 SearchTermButton.defaultProps = {
 	activeWork: false,

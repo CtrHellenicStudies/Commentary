@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 
 class CommentLemmaText extends React.Component {
@@ -90,9 +91,9 @@ class CommentLemmaText extends React.Component {
 }
 
 CommentLemmaText.propTypes = {
-	lines: React.PropTypes.arrayOf(React.PropTypes.shape({
-		html: React.PropTypes.string.isRequired,
-		n: React.PropTypes.number.isRequired,
+	lines: PropTypes.arrayOf(PropTypes.shape({
+		html: PropTypes.string.isRequired,
+		n: PropTypes.number.isRequired,
 	})).isRequired,
 };
 

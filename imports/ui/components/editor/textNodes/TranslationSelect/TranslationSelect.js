@@ -1,11 +1,12 @@
 import React from 'react';
-import {createContainer} from 'meteor/react-meteor-data';
+import PropTypes from 'prop-types';
+import { createContainer } from 'meteor/react-meteor-data';
 import {
 	ControlLabel,
 	FormGroup,
 } from 'react-bootstrap';
 import Select from 'react-select';
-import {Session} from 'meteor/session';
+import { Session } from 'meteor/session';
 import EditTranslationAuthorDialog from '../EditTranslationAuthorDialog/EditTranslationAuthorDialog';
 
 class TranslationSelect extends React.Component {
@@ -106,6 +107,12 @@ class TranslationSelect extends React.Component {
 		);
 	}
 }
+
+TranslationSelect.propTypes = {
+	selectTranslation: PropTypes.func,
+	workDetails: PropTypes.object,
+	translationOptions: PropTypes.array,
+};
 
 const TranslationSelectContainer = createContainer(props => {
 	const translationOptions = Session.get('translationOptions') ? Session.get('translationOptions') : [];

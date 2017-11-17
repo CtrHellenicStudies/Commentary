@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 // components:
 import Utils from '/imports/lib/utils';
@@ -10,8 +12,9 @@ import PWDSignupForm from '/imports/ui/components/auth/PWDSignupForm';
 
 class ModalSignup extends React.Component {
 	static propTypes = {
-		lowered: React.PropTypes.bool,
-		closeModal: React.PropTypes.func,
+		lowered: PropTypes.bool,
+		closeModal: PropTypes.func,
+		loginModal: PropTypes.func,
 	};
 
 	static defaultProps = {
@@ -32,6 +35,7 @@ class ModalSignup extends React.Component {
 		this.handleSignupFacebook = this.handleSignupFacebook.bind(this);
 		this.handleSignupGoogle = this.handleSignupGoogle.bind(this);
 		this.handleSignupTwitter = this.handleSignupTwitter.bind(this);
+		this.goToSigIn = this.goToSigIn.bind(this);
 	}
 
 	componentWillMount() {
@@ -45,24 +49,22 @@ class ModalSignup extends React.Component {
 	_handleKeyDown(event) {
 
 		const { closeModal } = this.props;
-
-		if (event.keyCode === ESCAPE_KEY) closeModal();
+		if (event.keyCode === 27) closeModal();
 	}
 
-	handleSignup(email, password, passwordRepeat) {
+	handleSignup(email, checkPassword, passwordRepeat) {
 
-		if (password !== passwordRepeat) {
+		if (checkPassword !== passwordRepeat) {
 			this.setState({
 				errorMsg: 'Passwords do not match.',
 			});
 			throw new Meteor.Error('Passwords do not match');
 		}
 
-		const checkPassword = Accounts._hashPassword(password);
+		const password = Accounts._hashPassword(checkPassword);
 
-		Meteor.call('createAccount', { email, checkPassword }, (err, result) => {
+		Meteor.call('createAccount', { email, password }, (err, result) => {
 			const path = '/';
-
 			if (!err) {
 				Meteor.loginWithToken(result.stampedToken.token, (_err) => {
 					if (_err) {
@@ -77,10 +79,10 @@ class ModalSignup extends React.Component {
 
 					if (domain) {
 						Cookies.set('userId', Meteor.userId(), { domain });
-						Cookies.set('loginToken', token, { domain });
+						Cookies.set('loginToken', result.stampedToken.token, { domain });
 					} else {
 						Cookies.set('userId', Meteor.userId());
-						Cookies.set('loginToken', token);
+						Cookies.set('loginToken', result.stampedToken.token);
 					}
 					this.props.closeModal();
 				});
@@ -128,6 +130,12 @@ class ModalSignup extends React.Component {
 		});
 	}
 
+	goToSigIn(event) {
+		event.preventDefault();
+		this.props.closeModal();
+		this.props.loginModal();
+	}
+
 	render() {
 		const { lowered, closeModal } = this.props;
 		const { errorMsg, errorSocial } = this.state;
@@ -161,18 +169,18 @@ class ModalSignup extends React.Component {
 						</div>
 
 						<PWDSignupForm
-							handleSignup={this.handleSignup}
+							signup={this.handleSignup}
 							errorMsg={errorMsg}
 						/>
 
 						<div className="at-signup-link">
 							<div className="at-resend-verification-email-link at-wrap">
 								<p>
-									By clicking register, you agree to our <a href="/terms" className="at-link at-link--terms at-resend-verification-email">Terms and Privacy Policy.</a>
+									By clicking register, you agree to our <Link to="/terms" className="at-link at-link--terms at-resend-verification-email">Terms and Privacy Policy.</Link>
 								</p>
 							</div>
 							<p>
-								Already have an account? <a href="/sign-in" id="at-signUp" className="at-link at-signup">Sign in.</a>
+								Already have an account? <a href="" onClick={this.goToSigIn} id="at-signUp" className="at-link at-signup">Sign in.</a>
 							</p>
 						</div>
 					</div>

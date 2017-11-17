@@ -24,9 +24,10 @@ sitemaps.add('/sitemap.xml', (req) => {
 		subdomain = Meteor.settings.public.developmentSubdomain;
 		console.log('sitemap - development');
 		console.log(Meteor.settings.public);
-	} else if (hostnameArray.length > 1) {
-		subdomain = hostnameArray[0];
+	} else if (hostnameArray.length > 1 && process.env.METEOR_SETTINGS.public.developmentSubdomain !== undefined) {
+		subdomain = process.env.METEOR_SETTINGS.public.developmentSubdomain;
 		console.log('sitemap - Not development');
+		console.log(subdomain);
 		console.log(process.env);
 		console.log(hostnameArray);
 	} else {

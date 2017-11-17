@@ -11,8 +11,11 @@ import FontIcon from 'material-ui/FontIcon';
 import { Link } from 'react-router-dom';
 import { compose } from 'react-apollo';
 import { 
-	discussionCommentUpdateMutation,
-	discussionCommentsQuery } 
+	discussionCommentUpdateMutation, 
+	discussionCommentReportMutation,
+	discussionCommentsQuery,
+	discussionCommentUpvoteMutation,
+	discussionCommentUnreportMutation} 
 	from '/imports/graphql/methods/discussionComments';
 
 class DiscussionComment extends Component{
@@ -56,33 +59,33 @@ class DiscussionComment extends Component{
 		});
 	}
 	upvoteDiscussionComment() {
-		const { currentUser } = this.props;
-		if (currentUser) {
-			Meteor.call('discussionComments.upvote',
-				this.props.discussionComment._id
-			);
+		const { currentUser, discussionComment } = this.props;
+		if(currentUser){
+			this.props.discussionCommentUpvote(discussionComment._id).catch((e) => {
+				console.log(e)
+			});
 		}
 	}
 	reportDiscussionComment() {
-		const { currentUser } = this.props;
+		const { currentUser, discussionComment } = this.props;
 		if (currentUser) {
 			this.setState({
 				moreOptionsVisible: false,
 			});
-			Meteor.call('discussionComments.report',
-				this.props.discussionComment._id
-			);
+			this.props.discussionCommentReport(discussionComment._id).catch((e) => {
+				console.log(e);
+			});
 		}
 	}
 	unreportDiscussionComment() {
-		const { currentUser } = this.props;
+		const { currentUser, discussionComment } = this.props;
 		if (currentUser) {
 			this.setState({
 				readComment: false,
 			});
-			Meteor.call('discussionComments.unreport',
-				this.props.discussionComment._id
-			);
+			this.props.discussionCommentUnreport(discussionComment._id).catch((e) => {
+				console.log(e);
+			});
 		}
 	}
 	toggleMoreOptions() {
@@ -403,4 +406,9 @@ const cont = createContainer(({ discussionComment }) => {
 	};
 
 }, DiscussionComment);
- export default compose(discussionCommentUpdateMutation, discussionCommentsQuery)(cont);
+ export default compose(
+	 discussionCommentUpdateMutation, 
+	 discussionCommentReportMutation,
+	 discussionCommentsQuery,
+	 discussionCommentUpvoteMutation,
+	 discussionCommentUnreportMutation)(cont);

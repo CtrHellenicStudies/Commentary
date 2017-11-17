@@ -13,7 +13,7 @@ import { RemoveType } from '/imports/graphql/types/index';
 import Keywords from '/imports/models/keywords';
 
 // logic
-import DiscussionCommentService from '../logic/discussionComments';
+import DiscussionCommentService from '../logic/DiscussionComments/discussionComments';
 
 const discussionCommentsMutationFields = {
 	discussionCommentUpdateStatus: {
@@ -59,6 +59,45 @@ const discussionCommentsMutationFields = {
 		async resolve(parent, {discussionCommentId}, {token}) {
 			const discussionCommentsService = new TenantsService({token});
 			return await discussionCommentsService.discussionCommentRemove(discussionCommentId);
+		}
+	},
+	discussionCommentReport:{
+		type: DiscussionCommentType,
+		description: 'Report discussionComment',
+		args: {
+			discussionCommentId: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {discussionCommentId}, {token}) {
+			const discussionCommentsService = new DiscussionCommentService({token});
+			return await discussionCommentsService.discussionCommentReport(discussionCommentId);
+		}
+	},
+	discussionCommentUnreport:{
+		type: DiscussionCommentType,
+		description: 'Undo your report',
+		args: {
+			discussionCommentId: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {discussionCommentId}, {token}) {
+			const discussionCommentsService = new DiscussionCommentService({token});
+			return await discussionCommentsService.discussionCommentUnreport(discussionCommentId);
+		}
+	},
+	discussionCommentUpvote:{
+		type: DiscussionCommentType,
+		description: 'Vote for this discussionComment',
+		args: {
+			discussionCommentId: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {discussionCommentId}, {token}) {
+			const discussionCommentsService = new DiscussionCommentService({token});
+			return await discussionCommentsService.discussionCommentUpvote(discussionCommentId);
 		}
 	}
 };

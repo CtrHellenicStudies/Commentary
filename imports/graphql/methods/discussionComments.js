@@ -25,6 +25,27 @@ const discussionCommentRemove = gql`
 	}
 }
  `;
+ const discussionCommentReport = gql`
+ 	mutation discussionCommentReport($id: String!) {
+ 	discussionCommentReport(discussionCommentId: $id) {
+	 	_id
+ 	}
+}
+`;
+const discussionCommentUnreport = gql`
+	mutation discussionCommentUnreport($id: String!) {
+	discussionCommentUnreport(discussionCommentId: $id) {
+		_id
+	}
+}
+`;
+const discussionCommentUpvote = gql`
+	mutation discussionCommentUpvote($id: String!) {
+	discussionCommentUpvote(discussionCommentId: $id) {
+		_id
+	}
+}
+`;
 
 const discussionCommentUpdateStatus = gql`
 	mutation discussionCommentUpdateStatus($id: String! $discussionComment: DiscussionCommentInputType!) {
@@ -76,4 +97,38 @@ const discussionCommentRemoveMutation = graphql(discussionCommentRemove, {
 	}
 });
 
-export {discussionCommentsQuery, discussionCommentUpdateStatusMutation, discussionCommentRemoveMutation, discussionCommentUpdateMutation}
+const discussionCommentReportMutation = graphql(discussionCommentReport, {
+	props: (params) => ({
+		discussionCommentReport: (id) => params.discussionCommentReportMutation({variables: {id}}),
+	}),
+	name: 'discussionCommentReportMutation',
+	options: {
+		refetchQueries: ['discussionCommentsQuery']
+	}
+});
+const discussionCommentUnreportMutation = graphql(discussionCommentUnreport, {
+	props: (params) => ({
+		discussionCommentUnreport: (id) => params.discussionCommentUnreportMutation({variables: {id}}),
+	}),
+	name: 'discussionCommentUnreportMutation',
+	options: {
+		refetchQueries: ['discussionCommentsQuery']
+	}
+});
+const discussionCommentUpvoteMutation = graphql(discussionCommentUpvote, {
+	props: (params) => ({
+		discussionCommentUpvote: (id) => params.discussionCommentUpvoteMutation({variables: {id}}),
+	}),
+	name: 'discussionCommentUpvoteMutation',
+	options: {
+		refetchQueries: ['discussionCommentsQuery']
+	}
+});
+
+export {discussionCommentsQuery,
+	 	discussionCommentUpdateStatusMutation,
+		discussionCommentRemoveMutation,
+		discussionCommentUpdateMutation,
+		discussionCommentReportMutation,
+		discussionCommentUnreportMutation,
+		discussionCommentUpvoteMutation}

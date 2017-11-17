@@ -19,6 +19,7 @@ import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
 import UserLayout from '/imports/ui/layouts/user/UserLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
+import { ApolloProvider, createNetworkInterface } from 'react-apollo';
 
 // pages
 
@@ -33,6 +34,23 @@ import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceW
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
 import ModalSignup from '../../ui/layouts/auth/ModalSignup/ModalSignup';
 
+import ApolloClient from 'apollo-client';
+const networkInterface = createNetworkInterface({
+	uri: Meteor.settings.public.graphql,
+});
+const client = new ApolloClient({
+	networkInterface
+});
+networkInterface.use([{
+	applyMiddleware(req, next) {
+		if (!req.options.headers) {
+			req.options.headers = {};
+		}
+		const token = Cookies.get('loginToken');
+		req.options.headers.authorization = token ? token : null;
+		next();
+	}
+}]);
 if (Meteor.userId()) {
 	Meteor.subscribe('users.id', Meteor.userId());
 	if (!Cookies.get('loginToken')) {
@@ -85,7 +103,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	/>
 );
 const routes = (props) => {
-	console.log(props);
 	if (!Session.get('tenantId')) {
 		const hostnameArray = document.location.hostname.split('.');
 		let subdomain;
@@ -108,6 +125,8 @@ const routes = (props) => {
 		return <Route component={NotFound} />;
 	}
 	return (
+		<ApolloProvider
+		client={client}>
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
 			<Route
@@ -173,6 +192,7 @@ const routes = (props) => {
 			/>
 			<Route component={NotFound} />
 		</Switch>
+		</ApolloProvider>
 	);
 };
 const App = () => (

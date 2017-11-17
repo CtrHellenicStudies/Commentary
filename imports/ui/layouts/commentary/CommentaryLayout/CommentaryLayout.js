@@ -43,25 +43,7 @@ import {
 	updateFilterOnCKeyAndValueChangeEvent,
 	createFilterFromURL
 } from './helpers';
-import ApolloClient from 'apollo-client';
-console.log(Meteor.settings.public.graphql);
-const networkInterface = createNetworkInterface({
-	uri: Meteor.settings.public.graphql,
-});
-console.log(networkInterface);
-const client = new ApolloClient({
-	networkInterface
-});
-networkInterface.use([{
-	applyMiddleware(req, next) {
-		if (!req.options.headers) {
-			req.options.headers = {};
-		}
-		const token = Cookies.get('loginToken');
-		req.options.headers.authorization = token ? token : null;
-		next();
-	}
-}]);
+
 class CommentaryLayout extends React.Component {
 
 	static propTypes = {
@@ -199,8 +181,6 @@ class CommentaryLayout extends React.Component {
 		const filters = createFilterFromURL(params, queryParams, works, referenceWorks);
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-			<ApolloProvider
-				client={client}>
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header
@@ -231,7 +211,6 @@ class CommentaryLayout extends React.Component {
 						: ''
 					}
 				</div>
-			</ApolloProvider>
 			</MuiThemeProvider>
 		);
 	}

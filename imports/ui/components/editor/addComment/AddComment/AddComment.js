@@ -121,9 +121,9 @@ class AddComment extends React.Component {
 			canSubmit: false,
 		});
 	}
-	updateReferenceWorks(referenceWorks){
+	updateReferenceWorks(referenceWorks) {
 		this.setState({
-			referenceWorks:referenceWorks
+			referenceWorks: referenceWorks
 		});
 	}
 	// --- BEGIN FORM HANDLE --- //
@@ -246,17 +246,18 @@ class AddComment extends React.Component {
 		const { tagsValue } = this.state;
 
 		let _selectedKeyword;
-		if(tag)
+		if (tag)			{
 			tags.forEach(_tag => {
 				if (_tag._id === tag.value) {
 					_selectedKeyword = _tag;
 				}
-			});
+			}); 
+		}
 
 
 		tagsValue[i].tagId = tag ? tag.value : undefined;
 		tagsValue[i].keyword = _selectedKeyword;
-		tagsValue[i].isSet = tag ? true : false;
+		tagsValue[i].isSet = !!tag;
 
 		this.setState({
 			tagsValue: [...tagsValue],
@@ -307,25 +308,23 @@ class AddComment extends React.Component {
 			}
 		});
 	}
-	addNewReferenceWork(reference){
+	addNewReferenceWork(reference) {
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
 			tenantId: Session.get('tenantId')
 		};
 		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
-			if(err){
+			if (err) {
 				this.showSnackBar(err);
-			}
-			else{
+			}			else {
 				this.showSnackBar({message: 'Reference work added'});
 			}
-		})
+		});
 	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	render() {
 		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
@@ -366,10 +365,10 @@ class AddComment extends React.Component {
 										editorState={this.state.titleEditorState}
 										onChange={this.onTitleChange}
 										placeholder="Comment title..."
-										disableMentions={true}
-										spellcheck={true}
-										stripPastedStyles = {true}
-										singleLine = {true}
+										disableMentions
+										spellcheck
+										stripPastedStyles
+										singleLine
 									/>
 								</h1>
 
@@ -394,9 +393,9 @@ class AddComment extends React.Component {
 									editorState={this.state.textEditorState}
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
-									spellcheck={true}
+									spellcheck
 									tags={this.props.tags}
-									mediaOn={true}
+									mediaOn
 								/>
 
 								<ReferenceWork 
@@ -404,7 +403,8 @@ class AddComment extends React.Component {
 									referenceWorkOptions={this.props.referenceWorkOptions} 
 									referenceWorks={this.state.referenceWorks}
 									ready={this.props.ready}
-									addNew={this.addNewReferenceWork} />
+									addNew={this.addNewReferenceWork}
+								/>
 
 								<div className="comment-edit-action-button">
 									<RaisedButton

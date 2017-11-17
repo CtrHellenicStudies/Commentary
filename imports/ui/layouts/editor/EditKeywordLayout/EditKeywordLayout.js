@@ -57,9 +57,8 @@ const EditKeywordLayout = React.createClass({
 	componentWillUpdate() {
 		if (this.props.ready) this.handlePermissions();
 	},
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	},
 	handlePermissions() {
 		if (Roles.subscription.ready()) {

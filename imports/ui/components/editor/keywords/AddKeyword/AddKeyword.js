@@ -177,9 +177,8 @@ const AddKeyword = React.createClass({
 			});
 		}, 4000);
 	},
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	},
 	validateStateForSubmit() {
 		let errors = false;
@@ -224,65 +223,65 @@ const AddKeyword = React.createClass({
 						className="comment commentary-comment paper-shadow "
 						style={{ marginLeft: 0 }}
 					>
-					<Formsy.Form
-						onValidSubmit={this.handleSubmit}
-					>
-						<div className="comment-upper">
-							<h1 className="add-comment-title">
-								<DraftEditorInput
-									name="draft_editor_tag_title"
-									editorState={this.state.titleEditorState}
-									onChange={this.onTitleChange}
-									disableMentions={true}
-									placeholder="Tag . . ."
-									spellcheck={true}
-									stripPastedStyles={true}
-									singleLine = {true}
-								/>
-							</h1>
-							<RadioButtonGroup
-								className="keyword-type-toggle"
-								name="type"
-								defaultSelected="word"
-								onChange={this.onTypeChange}
-							>
-								<RadioButton
-									value="word"
-									label="Word"
-									style={styles.radioButton}
-									className="keyword-type-radio"
-								/>
-								<RadioButton
-									value="idea"
-									label="Idea"
-									style={styles.radioButton}
-									className="keyword-type-radio"
-								/>
-							</RadioButtonGroup>
-						</div>
-						<div
-							className="comment-lower clearfix"
-							style={{ paddingTop: 20 }}
+						<Formsy.Form
+							onValidSubmit={this.handleSubmit}
 						>
-							<DraftEditorInput
-								name="draft_editor_tag_desc"
-								editorState={this.state.textEditorState}
-								onChange={this.onTextChange}
-								placeholder="Tag description . . ."
-								spellcheck={true}
-								stripPastedStyles={true}
-							/>
-							<div className="comment-edit-action-button">
-								<RaisedButton
-									type="submit"
-									label="Add Tag"
-									labelPosition="after"
-									onClick={this.handleSubmit}
-									icon={<FontIcon className="mdi mdi-plus" />}
-								/>
+							<div className="comment-upper">
+								<h1 className="add-comment-title">
+									<DraftEditorInput
+										name="draft_editor_tag_title"
+										editorState={this.state.titleEditorState}
+										onChange={this.onTitleChange}
+										disableMentions
+										placeholder="Tag . . ."
+										spellcheck
+										stripPastedStyles
+										singleLine
+									/>
+								</h1>
+								<RadioButtonGroup
+									className="keyword-type-toggle"
+									name="type"
+									defaultSelected="word"
+									onChange={this.onTypeChange}
+								>
+									<RadioButton
+										value="word"
+										label="Word"
+										style={styles.radioButton}
+										className="keyword-type-radio"
+									/>
+									<RadioButton
+										value="idea"
+										label="Idea"
+										style={styles.radioButton}
+										className="keyword-type-radio"
+									/>
+								</RadioButtonGroup>
 							</div>
-						</div>
-					</Formsy.Form>
+							<div
+								className="comment-lower clearfix"
+								style={{ paddingTop: 20 }}
+							>
+								<DraftEditorInput
+									name="draft_editor_tag_desc"
+									editorState={this.state.textEditorState}
+									onChange={this.onTextChange}
+									placeholder="Tag description . . ."
+									spellcheck
+									stripPastedStyles
+								/>
+								<div className="comment-edit-action-button">
+									<RaisedButton
+										type="submit"
+										label="Add Tag"
+										labelPosition="after"
+										onClick={this.handleSubmit}
+										icon={<FontIcon className="mdi mdi-plus" />}
+									/>
+								</div>
+							</div>
+						</Formsy.Form>
 					</article>
 
 					<Snackbar

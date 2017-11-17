@@ -57,7 +57,7 @@ class CommentLemma extends React.Component {
 		translationAuthors: PropTypes.array,
 		multiline: PropTypes.bool,
 		selectMultiLine: PropTypes.func,
-		
+
 		// from createContainer:
 		editions: PropTypes.arrayOf(PropTypes.shape({
 			title: PropTypes.string.isRequired,
@@ -244,69 +244,85 @@ class CommentLemma extends React.Component {
 
 					<div className="edition-tabs tabs" />
 					<div className="edition-tabs tabs">
-						{editions.map((lemmaTextEdition) => {
+						{editions.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
 							const multiLineList = lemmaTextEdition.multiLine && lemmaTextEdition.multiLine.length ? lemmaTextEdition.multiLine : [];
 
-							const editionButton = (<RaisedButton
-								key={lemmaTextEdition.slug}
-								label={lemmaEditionTitle}
-								data-edition={lemmaTextEdition.title}
-								className={selectedLemmaEdition.slug === lemmaTextEdition.slug ?
-									'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-								onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
-							/>);
-							const multiLine = multiLineList.length ? (<RaisedButton
-								key={`${lemmaTextEdition.slug}-multi`}
-								icon={<FontIcon className="mdi mdi-chevron-down" />}
-								className="edition-multiline"
-								onClick={this.handleOpenMultilineMenu}
-							/>) : '';
+							const editionButton = (
+								<RaisedButton
+									key={`${lemmaTextEdition.slug}-${i}`}
+									label={lemmaEditionTitle}
+									data-edition={lemmaTextEdition.title}
+									className={selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+										'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+									onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
+								/>
+							);
+							const multiLine = multiLineList.length ? (
+								<RaisedButton
+									key={`${lemmaTextEdition.slug}-multi-${i}`}
+									icon={<FontIcon className="mdi mdi-chevron-down" />}
+									className="edition-multiline"
+									onClick={this.handleOpenMultilineMenu}
+								/>
+							) : '';
 
-							const popover = (<Popover
-								key={`${lemmaTextEdition.slug}-popover`}
-								open={this.state.multilineMenuOpen}
-								anchorEl={this.state.multilineAnchorEl}
-								anchorOrigin={{
-									horizontal: 'left',
-									vertical: 'bottom',
-								}}
-								targetOrigin={{
-									horizontal: 'left',
-									vertical: 'top',
-								}}
-								onRequestClose={this.handleRequestClose}
-								animation={PopoverAnimationVertical}
-							>
-								<Menu
-									onChange={this.handleMultilineSelect}
-									className="translation-author-menu"
+							const popover = (
+								<Popover
+									key={`${lemmaTextEdition.slug}-popover-${i}`}
+									open={this.state.multilineMenuOpen}
+									anchorEl={this.state.multilineAnchorEl}
+									anchorOrigin={{
+										horizontal: 'left',
+										vertical: 'bottom',
+									}}
+									targetOrigin={{
+										horizontal: 'left',
+										vertical: 'top',
+									}}
+									onRequestClose={this.handleRequestClose}
+									animation={PopoverAnimationVertical}
 								>
-									<MenuItem
-										key={'regular'}
-										value={null}
-										primaryText="Regular"
-										className="translation-author-menu-item"
-										style={{
-											fontFamily: '"Proxima Nova A W07 Light", sans-serif',
-											fontSize: '12px',
-										}}
-									/>
-									{multiLineList.map((author, i) => (
+									<Menu
+										onChange={this.handleMultilineSelect}
+										className="translation-author-menu"
+									>
 										<MenuItem
-											key={`${author}-${i}`}
-											value={author}
-											primaryText={author}
+											key={'regular'}
+											value={null}
+											primaryText="Regular"
 											className="translation-author-menu-item"
 											style={{
 												fontFamily: '"Proxima Nova A W07 Light", sans-serif',
 												fontSize: '12px',
 											}}
 										/>
-									))}
-								</Menu>
-							</Popover>);
-							return <div>{editionButton}{multiLine}{popover}</div>;
+										{multiLineList.map((author, i) => (
+											<MenuItem
+												key={`${author}-${i}`}
+												value={author}
+												primaryText={author}
+												className="translation-author-menu-item"
+												style={{
+													fontFamily: '"Proxima Nova A W07 Light", sans-serif',
+													fontSize: '12px',
+												}}
+											/>
+										))}
+									</Menu>
+								</Popover>
+							);
+
+							return (
+								<div
+									key={`${lemmaTextEdition.slug}-${i}`}
+									className="edition-tab-outer"
+								>
+									{editionButton}
+									{multiLine}
+									{popover}
+								</div>
+							);
 						})}
 
 						{translationAuthors.length > 0 ?
@@ -397,7 +413,12 @@ export default createContainer(({ commentGroup, multiline }) => {
 			subwork: Number(commentGroup.subwork.title),
 			$and: [{n: {$gte: commentGroup.lineFrom}}, {n: {$lte: commentGroup.lineTo}}],
 		};
-		translationAuthors = _.uniq(TranslationNodes.find(translationNodesQuery).fetch().map(translation => translation.author));
+
+		translationAuthors = _.uniq(
+			TranslationNodes.find(translationNodesQuery)
+				.fetch()
+				.map(translation => translation.author)
+			);
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);

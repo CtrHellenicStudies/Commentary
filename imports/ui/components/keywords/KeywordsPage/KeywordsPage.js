@@ -22,24 +22,24 @@ import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 
-class KeywordsPage extends Component{
+class KeywordsPage extends Component {
 
 	static propTypes = {
 		type: PropTypes.string.isRequired,
 		title: PropTypes.string.isRequired,
 		settings: PropTypes.object,
 	};
-	raiseLimit(){
+	raiseLimit() {
 		this.setState({
 			limit: this.state.limit + 1
 		});
 	}
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.state = {
 			portion: 20,
 			limit: 1
-		}
+		};
 	}
 	render() {
 		const { title, type, settings } = this.props;
@@ -59,8 +59,7 @@ class KeywordsPage extends Component{
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page keywords-page">
-					<Header
-						/>
+					<Header />
 					<div className="content primary">
 						<section className="block header header-page cover parallax">
 							<BackgroundImageHolder
@@ -81,12 +80,12 @@ class KeywordsPage extends Component{
 						<section className="page-content">
 							<KeywordsList type={type} limit={this.state.limit * this.state.portion} />
 							<div className="read-more-link">
-									<RaisedButton
-										onClick={this.raiseLimit.bind(this)}
-										className="cover-link show-more "
-										label="Read More"
-									/>
-								</div>
+								<RaisedButton
+									onClick={this.raiseLimit.bind(this)}
+									className="cover-link show-more "
+									label="Read More"
+								/>
+							</div>
 						</section>
 					</div>
 				</div>

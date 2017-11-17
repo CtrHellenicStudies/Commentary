@@ -12,15 +12,14 @@ import { getAuthorizedUser } from '../helpers';
 const translationsNodeUpdate = (token, translationNode) => {
 	check(token, String);
 	check(translationNode, Object);
-	if(!translationNode.n)
-		return;
+	if (!translationNode.n)		{ return; }
 	const query = {
 		author: translationNode.author,
 		n: translationNode.n,
 		subwork: translationNode.subwork,
 		work: translationNode.work
 	};
-	delete translationNode['_id'];
+	delete translationNode._id;
 	const roles = ['editor', 'admin', 'commenter'];
 	const user = getAuthorizedUser(roles, token);
 

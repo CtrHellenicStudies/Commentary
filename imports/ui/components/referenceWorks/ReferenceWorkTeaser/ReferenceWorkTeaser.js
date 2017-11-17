@@ -13,7 +13,7 @@ class ReferenceWorkTeaser extends React.Component {
 	}
 
 	createMarkup() {
-		let { desc } = this.props;
+		const { desc } = this.props;
 		return {
 			__html: desc ? Utils.trunc(desc.replace(/(<([^>]+)>)/ig, ''), 140) : '',
 		};

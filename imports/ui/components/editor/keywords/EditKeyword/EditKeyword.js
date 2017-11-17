@@ -218,9 +218,8 @@ const EditKeyword = React.createClass({
 			});
 		}, 4000);
 	},
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	},
 	validateStateForSubmit() {
 		let errors = false;
@@ -284,10 +283,10 @@ const EditKeyword = React.createClass({
 									editorState={this.state.titleEditorState}
 									onChange={this.onTitleChange}
 									placeholder="Key word or idea . . ."
-									disableMentions={true}
-									spellcheck={true}
-									stripPastedStyles={true}
-									singleLinePlugin={true}
+									disableMentions
+									spellcheck
+									stripPastedStyles
+									singleLinePlugin
 									blockRenderMap={singleLinePlugin.blockRenderMap}
 								/>
 							</h1>
@@ -319,8 +318,8 @@ const EditKeyword = React.createClass({
 								editorState={this.state.textEditorState}
 								onChange={this.onTextChange}
 								placeholder="Keyword description . . ."
-								spellcheck={true}
-								stripPastedStyles={true}
+								spellcheck
+								stripPastedStyles
 							/>
 							<div className="comment-edit-action-button">
 								<RaisedButton

@@ -17,7 +17,7 @@ import Bookmarks from '/imports/ui/components/user/ProfilePage/Bookmarks';
 import Account from '/imports/ui/components/user/ProfilePage/Account';
 import Header from '/imports/ui/layouts/header/Header';
 
-//api
+// api
 import Settings from '/imports/models/settings';
 
 // lib

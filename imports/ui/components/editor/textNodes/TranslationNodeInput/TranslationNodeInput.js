@@ -97,9 +97,8 @@ class TranslationNodeInput extends React.Component {
 			});
 		}, 4000);
 	}
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	render() {
 		const {translationNodes} = this.state;

@@ -99,7 +99,7 @@ function sendDiscussionCommentPublishEmail(discussionCommentId) {
 		commentTitle = revisions[0].title;
 	}
 
-	let help = {
+	const help = {
 		to: [user.emails[0].address],
 		from: Config.emails.from,
 		subject: `Your comment has been published at ${Config.name}`,
@@ -108,7 +108,7 @@ function sendDiscussionCommentPublishEmail(discussionCommentId) {
 		Your comment on ${commentTitle} has been approved! You may view the discussion by visiting the following link: <a href='${commentLink}'>${commentLink}</a>.
 		${emailFooter}`,
 	};
-	//Email.send(help);
+	// Email.send(help);
 }
 
 export { sendDiscussionCommentInsertEmail, sendDiscussionCommentRejectEmail, sendDiscussionCommentPublishEmail };

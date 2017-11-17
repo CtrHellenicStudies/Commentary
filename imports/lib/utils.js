@@ -27,6 +27,20 @@ const Utils = {
 		}
 		return moment(date).format('D/M/YYYY');
 	},
+	resolveUrn(urn){
+		let ret = urn;
+		try{
+			if(urn.v2)
+				ret = urn.v2;
+			else
+				ret = urn.v1;
+				
+		}
+		catch(error){
+			console.log('Old urn exists in database.');
+		}
+		return ret;
+	},
 	timeSince: (date) => {
 		let interval;
 		const seconds = Math.floor((new Date() - date) / 1000);
@@ -53,8 +67,7 @@ const Utils = {
 		return 'just now';
 	},
 	trunc: (str, length) => {
-		if(!str)
-			return '';
+		if (!str)			{ return ''; }
 		const ending = ' ...';
 		let trimLen = length;
 		str = str.replace(/<(?:.|\n)*?>/gm, '');
@@ -219,7 +232,7 @@ const Utils = {
 		return str.toString();
 	},
 	getEntityData(entity, key) {
-		if(key === 'link' && !entity.data.mention){
+		if (key === 'link' && !entity.data.mention) {
 			return entity.data.href;
 		}
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
@@ -230,8 +243,8 @@ const Utils = {
 
 		if (location.hostname.match(/\w+.chs.harvard.edu/)) {
 			domain = 'chs.harvard.edu';
-		} else if (location.hostname.match(/\w+.orphe.us/)) {
-			domain = 'orphe.us';
+		} else if (location.hostname.match(/\w+.chs.orphe.us/)) {
+			domain = 'chs.orphe.us';
 		} else if (location.hostname.match(/\w+.chs.local/)) {
 			domain = 'chs.local';
 		}
@@ -340,46 +353,46 @@ const Utils = {
 		const constState = convertFromRaw(_content);
 		return EditorState.createWithContent(constState);
 	},
-	getHtmlFromContext(context){
-		return convertToHTML({		
+	getHtmlFromContext(context) {
+		return convertToHTML({
 						// performe necessary html transformations:
-						blockToHTML: (block) => {
-							const type = block.type;
-							if (type === 'atomic') {
+			blockToHTML: (block) => {
+				const type = block.type;
+				if (type === 'atomic') {
 							  return {start: '<span>', end: '</span>'};
-							}
-							if (type === 'unstyled') {
+				}
+				if (type === 'unstyled') {
 							  return <p />;
-							}
-							return <span/>;
+				}
+				return <span />;
 						  },
-						entityToHTML: (entity, originalText) => {
-							let ret = this.decodeHtml(originalText);
-							switch(entity.type){
-								case 'LINK':
-									ret = <a href={entity.data.link}>{ret}</a>;
-									break;
-								case 'mention':
-									ret = <a className="keyword-gloss" href={this.getEntityData(entity, 'link')}>{ret}</a>;
-									break;
-								case '#mention':
-									ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;
-									break;
-								case 'draft-js-video-plugin-video':
-									ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen></iframe>;
-									break;
-								case 'image':
-									ret = '<img src="'+entity.data.src+'" alt="draft js image error"/>';
-									break;
-								default:
-									break;
-							}
-							return ret;
-						},
-					})(context);
+			entityToHTML: (entity, originalText) => {
+				let ret = this.decodeHtml(originalText);
+				switch (entity.type) {
+				case 'LINK':
+					ret = <a href={entity.data.link}>{ret}</a>;
+					break;
+				case 'mention':
+					ret = <a className="keyword-gloss" href={this.getEntityData(entity, 'link')}>{ret}</a>;
+					break;
+				case '#mention':
+					ret = <a className="comment-cross-ref" href={this.getEntityData(entity, 'link')}>{ret}</a>;
+					break;
+				case 'draft-js-video-plugin-video':
+					ret = <iframe width="320" height="200" src={entity.data.src} allowFullScreen />;
+					break;
+				case 'image':
+					ret = `<img src="${entity.data.src}" alt="draft js image error"/>`;
+					break;
+				default:
+					break;
+				}
+				return ret;
+			},
+		})(context);
 	},
 	decodeHtml(html) {
-		let txt = document.createElement('textarea');
+		const txt = document.createElement('textarea');
 		txt.innerHTML = html;
 		return txt.value;
 	},
@@ -394,34 +407,34 @@ const Utils = {
 
 	getSuggestionsFromComments(comments) {
 		const suggestions = [];
-	
+
 		// if there are comments:
 		if (comments.length) {
-	
+
 			// loop through all comments
 			// add suggestion for each comment
 			comments.forEach((comment) => {
-	
+
 				// get the most recent revision
 				const revision = comment.revisions[comment.revisions.length - 1];
-	
+
 				const suggestion = {
 					// create suggestio name:
 					name: `"${revision.title}" -`,
-	
+
 					// set link for suggestion
 					link: `/commentary?_id=${comment._id}`,
-	
+
 					// set id for suggestion
 					id: comment._id,
 				};
-	
+
 				// loop through commenters and add them to suggestion name
 				comment.commenters.forEach((commenter, i) => {
 					if (i === 0) suggestion.name += ` ${commenter.name}`;
 					else suggestion.name += `, ${commenter.name}`;
 				});
-	
+
 				suggestions.push(suggestion);
 			});
 		}

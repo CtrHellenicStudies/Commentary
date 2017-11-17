@@ -251,9 +251,8 @@ const AddKeywordLayout = React.createClass({
 			});
 		}, 4000);
 	},
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	},
 	onTypeChange(type) {
 		this.setState({

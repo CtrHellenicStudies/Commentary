@@ -17,6 +17,7 @@ export default class CommentService extends AdminService {
 	 */
 	commentsGet(tenantId, limit, skip, workSlug, subworkN) {
 		if (this.userIsAdmin) {
+			let comments;
 			const args = {};
 
 			const options = {
@@ -53,7 +54,16 @@ export default class CommentService extends AdminService {
 				options.limit = 30;
 			}
 
-			return Comments.find(args, options).fetch();
+			comments = Comments.find(args, options).fetch();
+			comments.map((comment) => {
+				try{
+					comment.urn = comment.urn;
+				}
+				catch(e){
+					console.log(e);
+				}
+			});
+			return comments;
 		}
 		return new Error('Not authorized');
 	}
@@ -68,7 +78,7 @@ export default class CommentService extends AdminService {
 	 */
 	commentsGetURN(urnStart, urnEnd, limit = 20, skip = 0) {
 		const args = {};
-
+		let comments;
 		const options = {
 			sort: {
 				'work.order': 1,
@@ -80,7 +90,14 @@ export default class CommentService extends AdminService {
 			limit,
 		};
 
-		return Comments.find(args, options).fetch();
+		comments = Comments.find(args, options).fetch();
+		comments.map((comment) => {
+			try{
+				comment.urn = JSON.parse(comment.urn);
+			}
+			catch(e){}
+		});
+		return comments;
 	}
 
 	/**

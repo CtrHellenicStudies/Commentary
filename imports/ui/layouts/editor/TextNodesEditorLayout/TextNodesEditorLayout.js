@@ -41,9 +41,8 @@ class TextNodesEditorLayout extends React.Component {
 	componentWillUpdate() {
 		this.handlePermissions();
 	}
-	componentWillUnmount(){
-		if(this.timeout)
-			clearTimeout(this.timeout);
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	showSnackBar(error) {
 		this.setState({

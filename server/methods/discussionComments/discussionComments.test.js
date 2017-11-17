@@ -17,7 +17,7 @@ import DiscussionComments from '/imports/models/discussionComments';
 import * as emailMethods from './emails';
 
 // tested module:
-import { deleteDiscussionComments, insertDiscussionComment, updateDiscussionComment, discussionCommentsUpdate, upvoteDiscussionComment, reportDiscussionComment, unreportDiscussionComment } from './discussionComments';
+import { insertDiscussionComment, updateDiscussionComment, discussionCommentsUpdate, upvoteDiscussionComment, reportDiscussionComment, unreportDiscussionComment } from './discussionComments';
 
 
 describe('DiscussionComments methods API', () => {
@@ -36,59 +36,6 @@ describe('DiscussionComments methods API', () => {
 		emailMethods.sendDiscussionCommentRejectEmail.findOne.restore();
 		emailMethods.sendDiscussionCommentPublishEmail.findOne.restore();
 
-	});
-
-	describe('discussionComments.delete', () => {
-		[
-			{
-				token: faker.random.uuid(),
-				_id: faker.random.uuid(),
-			}
-		].forEach((testCase, index) => {
-
-			const { token, _id } = testCase;
-
-			const hashedLoginToken = faker.random.uuid();
-
-			describe(`Test Case ${index}`, () => {
-
-				beforeEach(() => {
-
-					stub(Meteor.users, 'findOne').callsFake((attr) => {
-						if (attr.roles === 'admin'
-							&& attr['services.resume.loginTokens.hashedToken'] === hashedLoginToken) {
-							return true;
-						}
-						return false;
-					});
-
-					DiscussionComments.remove = () => {};
-					stub(DiscussionComments, 'remove').callsFake(() => 1);
-
-					stub(Accounts, '_hashLoginToken').callsFake(() => hashedLoginToken);
-
-				});
-
-				afterEach(() => {
-					Meteor.users.findOne.restore();
-					DiscussionComments.remove.restore();
-					Accounts._hashLoginToken.restore();
-				});
-
-				test('user with correct privileges not found, should return error', () => {
-
-					Accounts._hashLoginToken.restore();
-					stub(Accounts, '_hashLoginToken').callsFake(() => null);
-
-					expect(deleteDiscussionComments.bind(null, token, _id)).toThrow();
-				});
-
-				test('successful discussion comments remove', () => {
-
-					expect(deleteDiscussionComments(token, _id)).toBe(_id);
-				});
-			});
-		});
 	});
 
 	describe('discussionComments.insert', () => {

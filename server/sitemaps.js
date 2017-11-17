@@ -19,28 +19,15 @@ sitemaps.add('/sitemap.xml', (req) => {
 
 	const hostnameArray = req.headers.host.split('.');
 	let subdomain;
-
-	console.log("process enviroment");
-	console.log(process.env);
-	console.log("meteor settings");
-	console.log(process.env.METEOR_SETTINGS);
-	console.log("public");
-	console.log(process.env.METEOR_SETTINGS.public);
+	let settingsJSON;
 	if (process.env.NODE_ENV === 'development') {
 		subdomain = Meteor.settings.public.developmentSubdomain;
-		console.log('sitemap - development');
-		console.log(Meteor.settings.public);
-	} else if (hostnameArray.length > 1 && process.env.METEOR_SETTINGS.public.developmentSubdomain !== undefined) {
-		subdomain = process.env.METEOR_SETTINGS.public.developmentSubdomain;
-		console.log('sitemap - Not development');
-		console.log(subdomain);
-		console.log(process.env);
-		console.log(hostnameArray);
+	} else if (hostnameArray.length > 1 && process.env && process.env.METEOR_SETTINGS) {
+		settingsJSON = JSON.parse(process.env.METEOR_SETTINGS);
+		subdomain = settingsJSON.public.developmentSubdomain;
 	} else {
 		subdomain = '';
 		window.location.assign('/404');
-		console.log('sitemap - 404');
-		console.log(process.env);
 	}
 
 	const sitemap = [];

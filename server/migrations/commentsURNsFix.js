@@ -7,7 +7,7 @@ const commentsURNsFix = () => {
 
 	comments.forEach((comment) => {
 		let urn = {};
-		
+
 		try {
 			Comments.update({
 				_id: comment._id,

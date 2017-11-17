@@ -314,7 +314,10 @@ class CommentLemma extends React.Component {
 							);
 
 							return (
-								<div key={`${lemmaTextEdition.slug}-${i}`}>
+								<div
+									key={`${lemmaTextEdition.slug}-${i}`}
+									className="edition-tab-outer"
+								>
 									{editionButton}
 									{multiLine}
 									{popover}

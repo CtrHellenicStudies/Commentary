@@ -100,7 +100,7 @@ CommentRevisionSelect.propTypes = {
 			updated: PropTypes.instanceOf(Date),
 			originalDate: PropTypes.instanceOf(Date),
 		})).isRequired,
-		urn: PropTypes.string.isRequired,
+		urn: PropTypes.object.isRequired,
 	}),
 	selectedRevisionIndex: PropTypes.number.isRequired,
 	selectRevision: PropTypes.func.isRequired,

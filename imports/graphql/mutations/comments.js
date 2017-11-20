@@ -15,7 +15,7 @@ import Comments from '/imports/models/comments';
 import { AuthenticationError } from '/imports/errors';
 
 // logic
-import CommentsService from '../logic/comments';
+import CommentsService from '../logic/Comments/comments';
 
 
 const commentMutationFields = {

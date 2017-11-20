@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
@@ -6,6 +6,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Parser from 'simple-text-parser';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
+import { compose } from 'react-apollo';
+
+import { commentsQuery } from '/imports/graphql/methods/comments';
+
 
 // models:
 import Comments from '/imports/models/comments';
@@ -28,7 +32,7 @@ import muiTheme from '/imports/lib/muiTheme';
 import { createQueryFromFilters, parseCommentsToCommentGroups } from './helpers';
 
 
-class Commentary extends React.Component {
+class Commentary extends Component {
 	static propTypes = {
 		skip: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
 		limit: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
@@ -37,27 +41,8 @@ class Commentary extends React.Component {
 		showLoginModal: PropTypes.func,
 		toggleSearchTerm: PropTypes.func,
 		loadMoreComments: PropTypes.func,
-
-		// from createContainer:
-		commentGroups: PropTypes.arrayOf(PropTypes.shape({
-			work: PropTypes.shape({
-				slug: PropTypes.string.isRequired,
-				title: PropTypes.string.isRequired,
-			}),
-			subwork: PropTypes.shape({
-				n: PropTypes.number.isRequired,
-			}),
-			lineFrom: PropTypes.number.isRequired,
-			lineTo: PropTypes.number,
-			commenters: PropTypes.arrayOf(PropTypes.shape({
-				_id: PropTypes.string.isRequired,
-				name: PropTypes.string.isRequired,
-				slug: PropTypes.string.isRequired,
-				avatar: PropTypes.shape({
-					src: PropTypes.string,
-				})
-			}))
-		})),
+		history: PropTypes.object,
+		commentsQuery: PropTypes.object,
 		isMoreComments: PropTypes.bool,
 		ready: PropTypes.bool,
 		settings: PropTypes.shape({
@@ -114,7 +99,8 @@ class Commentary extends React.Component {
 
 	setPageTitleAndMeta() {
 
-		const { filters, settings, commentGroups } = this.props;
+		const { filters, settings } = this.props;
+		const commentGroups = this.props.commentsQuery ? [] : parseCommentsToCommentGroups(this.props.commentsQuery.comments);
 
 		let title = '';
 		let values = [];
@@ -256,7 +242,7 @@ class Commentary extends React.Component {
 	loadMoreComments() {
 		if (
 			!this.props.isOnHomeView
-			&& this.props.commentGroups.length
+			&& this.state.commentGroups.length
 			&& this.props.isMoreComments
 		) {
 			this.props.loadMoreComments();
@@ -264,7 +250,8 @@ class Commentary extends React.Component {
 	}
 
 	renderNoCommentsOrLoading() {
-		const { isOnHomeView, isMoreComments, commentGroups, ready } = this.props;
+		const { isOnHomeView, isMoreComments, ready } = this.props;
+		const { commentGroups } = this.state;
 
 		if (
 			!isOnHomeView
@@ -292,9 +279,9 @@ class Commentary extends React.Component {
 
 	render() {
 
-		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, commentGroups } = this.props;
+		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
 		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
-
+		const commentGroups = this.props.commentsQuery.loading ? [] : parseCommentsToCommentGroups(this.props.commentsQuery.comments);
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
 		}
@@ -354,56 +341,51 @@ class Commentary extends React.Component {
 	}
 }
 
+export default compose(commentsQuery)(Commentary);
 
-export default createContainer(({ filters, skip, limit }) => {
+// export default createContainer(({ filters, skip, limit, queryCom }) => {
 
-	let commentGroups = [];
+	// let commentGroups = [];
 
-	const query = createQueryFromFilters(filters);
-	query.tenantId = Session.get('tenantId');
+	// const query = createQueryFromFilters(filters);
+	// query.tenantId = Session.get('tenantId');
 
 	// SUBSCRIPTIONS:
-	const commentsSub = Meteor.subscribe('comments', query, skip, limit);
-	let isMoreComments = true;
+//	const commentsSub = commentsQuery(query, skip, limit);
+	// let isMoreComments = true;
 
 	// Update textsearch in query for client minimongo
-	if ('$text' in query) {
-		const textsearch = new RegExp(query.$text, 'i');
-		if(!query.$or)
-			query.$or = [
-				{ 'revisions.title': textsearch },
-				{ 'revisions.text': textsearch },
-			];
-		else
-			query.$or.push({$and:[			
-				{ 'revisions.title': textsearch },
-				{ 'revisions.text': textsearch },]});
-		delete query.$text;
-	}
+	// if ('$text' in query) {
+	// 	const textsearch = new RegExp(query.$text, 'i');
+	// 	if (!query.$or) {
+	// 		query.$or = [
+	// 			{ 'revisions.title': textsearch },
+	// 			{ 'revisions.text': textsearch },
+	// 		];
+	// 	} else {
+	// 		query.$or.push({$and: [			
+	// 			{ 'revisions.title': textsearch },
+	// 			{ 'revisions.text': textsearch }]});
+	// 	}
+	// 	delete query.$text;
+	// }
 
 	// FETCH DATA:
-	const comments = Comments.find(query, {
-		sort: {
-			'work.order': 1,
-			'subwork.n': 1,
-			lineFrom: 1,
-			nLines: -1,
-		},
-	}).fetch();
+	// const comments = commentsQuery();
 
-	commentGroups = parseCommentsToCommentGroups(comments);
+	// commentGroups = parseCommentsToCommentGroups(comments);
 
-	if (comments.length < limit) {
-		isMoreComments = false;
-	}
+	// if (comments.length < limit) {
+	// 	isMoreComments = false;
+	// }
 
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	// const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
-	return {
-		commentGroups,
-		isMoreComments,
-		ready: commentsSub.ready(),
-		settings: settingsHandle.ready() ? Settings.findOne() : {},
-	};
+// 	return {
+// 		commentGroups,
+// 		isMoreComments,
+// 		ready: commentsSub.ready(),
+// 		settings: settingsHandle.ready() ? Settings.findOne() : {},
+// 	};
 
-}, Commentary);
+// }, grapphQlComponent);

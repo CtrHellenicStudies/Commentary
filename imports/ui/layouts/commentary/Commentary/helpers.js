@@ -91,10 +91,11 @@ const createQueryFromFilters = (filters) => {
 
 			case 'urn':
 				// Values will always be an array with a length of one
-				if(!query.$or)
-					query.$or = [{"urn.v2": filter.values[0]}, {"urn.v1": filter.values[0]}];
-				else
-					query.$or.push({$and:[{"urn.v2": filter.values[0]}, {"urn.v1": filter.values[0]}]});
+				if (!query.$or) {
+					query.$or = [{'urn.v2': filter.values[0]}, {'urn.v1': filter.values[0]}];
+				} else {
+					query.$or.push({$and: [{ 'urn.v2': filter.values[0] }, {'urn.v1': filter.values[0]}]});
+				}
 				break;
 
 			default:
@@ -109,29 +110,39 @@ const createQueryFromFilters = (filters) => {
 
 const getCommentGroupId = (commentGroup) => {
 	let id = '';
-	commentGroup.comments.forEach((comment) => {
+	let container = commentGroup.comments;
+	if (!commentGroup.comments) {
+		container = commentGroup;
+	}
+	container.forEach((comment) => {
 		id += `-${comment._id}`;
 	});
 	return id.slice(1);
 };
 
-
+function isFromCommentGroup(comment, commentGroup) {
+	return comment.work.title === commentGroup.work.title
+		&& comment.subwork.n === commentGroup.subwork.n
+		&& comment.lineFrom === commentGroup.lineFrom
+		&& comment.lineTo === commentGroup.lineTo;
+}
 const parseCommentsToCommentGroups = (comments) => {
 	const commentGroups = [];
 	// Make comment groups from comments
 	let isInCommentGroup = false;
-	comments.forEach((comment) => {
+	comments.map((comment) => {
 		isInCommentGroup = false;
-		if ('work' in comment) {
-			commentGroups.forEach((commentGroup) => {
-				if (
-					comment.work.title === commentGroup.work.title
-					&& comment.subwork.n === commentGroup.subwork.n
-					&& comment.lineFrom === commentGroup.lineFrom
-					&& comment.lineTo === commentGroup.lineTo
-				) {
+		if (comment.work) {
+			commentGroups.map((commentGroup) => {
+				if (isFromCommentGroup(comment, commentGroup)) {
 					isInCommentGroup = true;
-					commentGroup.comments.push(comment);
+					console.log(comment.commenters);
+					const commenter = Commenters.findOne({
+						slug: comment.commenters[0].slug,
+					});
+					commentGroup.comments.push({comment: comment,
+						commenter: commenter});
+					commentGroup.commenters.push(commenter);
 				}
 			});
 
@@ -143,7 +154,9 @@ const parseCommentsToCommentGroups = (comments) => {
 				} else {
 					ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
 				}
-
+				const commenter = Commenters.findOne({
+					slug: comment.commenters[0].slug
+				});
 				commentGroups.push({
 					ref,
 					selectedLemmaEdition: {
@@ -155,45 +168,13 @@ const parseCommentsToCommentGroups = (comments) => {
 					lineTo: comment.lineTo,
 					nLines: comment.nLines,
 					comments: [comment],
+					commenters: [commenter],
+					_id: getCommentGroupId([comment])
 				});
 			}
 		} else if (process.env.NODE_ENV === 'development') {
 			console.error(`Review comment ${comment._id} metadata`);
 		}
-	});
-
-	// Unique commenters for each comment group
-	commentGroups.forEach((commentGroup, commentGroupIndex) => {
-		// let isInCommenters = false;
-		const commenters = [];
-		// const commenterSubscription = Meteor.subscribe('commenters', Session.get('tenantId'));
-		commentGroup.comments.forEach((comment, commentIndex) => {
-			// isInCommenters = false;
-
-			comment.commenters.forEach((commenter, i) => {
-				const commenterRecord = Commenters.findOne({
-					slug: commenter.slug,
-				});
-				if (commenterRecord) {
-					commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
-
-					// get commenter avatar
-					if (commenterRecord.avatar) {
-						commenterRecord.avatar = commenterRecord.avatar;
-					}
-
-					// add to the unique commenter set
-					if (commenters.some(c => c.slug === commenter.slug)) {
-						// isInCommenters = true;
-					} else {
-						commenters.push(commenterRecord);
-					}
-				}
-			});
-		});
-		commentGroups[commentGroupIndex].commenters = commenters;
-
-		commentGroup._id = getCommentGroupId(commentGroup);
 	});
 
 	return commentGroups;

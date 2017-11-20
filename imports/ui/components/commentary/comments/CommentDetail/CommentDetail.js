@@ -81,6 +81,7 @@ class CommentDetail extends React.Component {
 			key: PropTypes.string.isRequired,
 			values: PropTypes.arrayOf(PropTypes.any).isRequired,
 		})),
+		history: PropTypes.object,
 		toggleSearchTerm: PropTypes.func,
 		isOnHomeView: PropTypes.bool,
 		showLoginModal: PropTypes.func,
@@ -364,7 +365,7 @@ export default createContainer(({ comment }) => {
 
 	const referenceWorkIds = [];
 	let referenceWorks = [];
-	if (comment && 'referenceWorks' in comment) {
+	if (comment && comment.referenceWorks) {
 		comment.referenceWorks.forEach((referenceWork) => {
 			referenceWorkIds.push(referenceWork.referenceWorkId);
 		});

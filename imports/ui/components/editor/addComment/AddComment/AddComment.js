@@ -21,7 +21,6 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { EditorState, convertToRaw, Modifier, CompositeDecorator } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { stateToHTML } from 'draft-js-export-html';
 import update from 'immutability-helper';
@@ -31,19 +30,19 @@ import { convertToHTML } from 'draft-convert';
 import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
-
-// components
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
-import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
-import ReferenceWork from './referenceWork/ReferenceWork';
-
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
 // helpers:
 import linkDecorator from '/imports/ui/components//editor/addComment/LinkButton/linkDecorator';
+
+// components
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
+import ReferenceWork from './referenceWork/ReferenceWork';
 
 /*
  *	helpers
@@ -64,6 +63,7 @@ class AddComment extends React.Component {
 		commentersOptions: PropTypes.array,
 		tags: PropTypes.array,
 		referenceWorkOptions: PropTypes.array,
+		ready: PropTypes.bool
 	};
 
 	static defaultProps = {
@@ -330,7 +330,7 @@ class AddComment extends React.Component {
 		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
 		const { commentersOptions, tags } = this.props;
 		if (!this.props.ready) {
-		    return null;
+			return null;
 		}
 		return (
 			<div className="comments lemma-panel-visible ">

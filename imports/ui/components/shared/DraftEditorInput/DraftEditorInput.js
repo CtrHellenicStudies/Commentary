@@ -5,8 +5,6 @@ import stylePropType from 'react-style-proptype';
 import reactCSS from 'reactcss';
 import { EditorState, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
-import VideoAdd from './AddButton/VideoAdd';
-import ImageAdd from './AddButton/ImageAdd';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -14,6 +12,7 @@ import createVideoPlugin from 'draft-js-video-plugin';
 import createImagePlugin from 'draft-js-image-plugin';
 import Utils from '/imports/lib/utils';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+
 import {
 	ItalicButton,
 	BoldButton,
@@ -22,7 +21,11 @@ import {
 	OrderedListButton,
 	BlockquoteButton,
 } from 'draft-js-buttons';
+
+import VideoAdd from './AddButton/VideoAdd';
+import ImageAdd from './AddButton/ImageAdd';
 import Suggestions from './Suggestions/Suggestions';
+
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin({
 	structure: [
@@ -47,6 +50,9 @@ class DraftEditorInput extends Component {
 		singleLine: PropTypes.bool,
 		stripPastedStyles: PropTypes.bool,
 		mediaOn: PropTypes.bool,
+		disableMentions: PropTypes.bool,
+		plugins: PropTypes.array,
+		label: PropTypes.string,
 		editorState: PropTypes.object.isRequired,
 		InlineToolbar: PropTypes.func // Remember that if you want use InlineToolbar, you also need plugin for it
 	};
@@ -72,7 +78,7 @@ class DraftEditorInput extends Component {
 	}
 	getPlainAttributes() {
 		const ret = {
-			spellCheck: this.props.spellcheck == true,
+			spellCheck: this.props.spellcheck === true,
 			stripPastedStyles: this.props.stripPastedStyles === true
 		};
 		if (this.props.singleLine) {

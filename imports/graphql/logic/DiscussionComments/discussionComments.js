@@ -14,7 +14,6 @@ export default class DiscussionCommentService extends AdminService {
 	 * @returns {Object[]} array of discussion comments
 	 */
 	discussionCommentsGet(tenantId) {
-		// if (this.userIsCommenter) {
 
 		const args = {};
 		if (tenantId) {
@@ -22,28 +21,24 @@ export default class DiscussionCommentService extends AdminService {
 		}
 
 		return DiscussionComments.find(args).fetch();
-		// }
-		// return new Error('Not authorized');
 	}
-
 	/**
 	 * Update the status of a given discussion comment
 	 * @param {string} discussionCommentId - id of dicussion comment to update
-	 * @param {Object} discussionComment - discussion comment update candidate
+	 * @param {Object} discussionCommentStatus - discussion comment update candidate
 	 * @returns {Object} updated discussion comment
 	 */
-	discussionCommentUpdateStatus(discussionCommentId, discussionComment) {
-
-		if (this.userIsNobody) {
+	discussionCommentUpdateStatus(discussionCommentId, discussionCommentStatus) {
+		console.log(discussionCommentStatus);
+		if (!this.userIsAdmin) {
 			return 'Not authorized';
 		}
 		
 		DiscussionComments.update({
-			_id: discussionCommentId,
-			userId: this.user._id
+			_id: discussionCommentId
 		}, {
 			$set: {
-				status: discussionComment.status,
+				status: discussionCommentStatus,
 			},
 		});
 		return DiscussionComments.findOne(discussionCommentId);
@@ -63,7 +58,7 @@ export default class DiscussionCommentService extends AdminService {
 	/**
 	 * Update discussion comment content
 	 * @param {string} discussionCommentId - id of discussion comment to update
-	 * @param {string} discussionContent - contentr of disscusion comment
+	 * @param {string} discussionContent - content of disscusion comment
 	 */
 	discussionCommentUpdate(discussionCommentId, discussionContent) {
 
@@ -84,7 +79,7 @@ export default class DiscussionCommentService extends AdminService {
 	}
 	/**
 	 * Report selected discussionComment
-	 * @param {String} discussionCommentId - id of the comment to report 
+	 * @param {string} discussionCommentId - id of the comment to report 
 	 */
 	discussionCommentReport(discussionCommentId) {
 
@@ -126,7 +121,7 @@ export default class DiscussionCommentService extends AdminService {
 	}
 	/**
 	 * Undo report on selected discussionComment
-	 * @param {String} discussionCommentId - id of the comment to udno report
+	 * @param {string} discussionCommentId - id of the comment to udno report
 	 */
 	discussionCommentUnreport(discussionCommentId) {
 
@@ -151,7 +146,7 @@ export default class DiscussionCommentService extends AdminService {
 	}
 	/**
 	 * Upvote on selected discussionComment
-	 * @param {String} discussionCommentId - id of the comment to upvote
+	 * @param {string} discussionCommentId - id of the comment to upvote
 	 */
 	discussionCommentUpvote(discussionCommentId) {
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
@@ -170,6 +165,37 @@ export default class DiscussionCommentService extends AdminService {
 			});
 		} catch (err) {
 			throw err;
+		}
+	}
+	/**
+	 * Insert new discussionComment
+	 * @param {string} discussionContent - content of disscusion comment, which will be inserted
+	 */
+	discussionCommentInsert(discussionContent, commentId, tenantId) {
+
+		if (this.userIsNobody) {
+			return new Error('not authorized');
+		}
+		const commentsInDiscussion = DiscussionComments.find({commentId: commentId}).fetch();
+
+		const discussionComment = {
+			commentId: commentId,
+			tenantId: tenantId,
+			content: discussionContent,
+			userId: this.user._id,
+			votes: 1,
+			voters: [this.user._id],
+			status: 'pending'
+		};
+	
+		// check if discussion comments for this comment have not been disabled:
+		const comment = Comments.findOne({_id: commentId});
+		if (comment.discussionCommentsDisabled) throw new Error('insert denied - discussionCommentsDisabled');
+	
+		try {
+			DiscussionComments.insert(discussionComment);
+		} catch (err) {
+			throw new Error(err);
 		}
 	}
 }

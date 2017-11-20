@@ -23,19 +23,19 @@ const discussionCommentsMutationFields = {
 			discussionCommentId: {
 				type: new GraphQLNonNull(GraphQLString)
 			},
-			discussionComment: {
-				type: new GraphQLNonNull(DiscussionCommentInputType)
+			discussionCommentStatus: {
+				type: new GraphQLNonNull(GraphQLString)
 			}
 		},
-		async resolve(parent, {discussionCommentId, discussionComment}, {token}) {
+		async resolve(parent, {discussionCommentId, discussionCommentStatus}, {token}) {
 			const discussionCommentsService = new DiscussionCommentService({token});
-			return await discussionCommentsService.discussionCommentUpdateStatus(discussionCommentId, discussionComment);
+			return await discussionCommentsService.discussionCommentUpdateStatus(discussionCommentId, discussionCommentStatus);
 		}
 	},
-	discussionCommentUpdate:{
+	discussionCommentUpdate: {
 		type: DiscussionCommentType,
 		description: 'Update a discussion comment content',
-		args:{
+		args: {
 			discussionCommentId: {
 				type: new GraphQLNonNull(GraphQLString)
 			},
@@ -43,9 +43,9 @@ const discussionCommentsMutationFields = {
 				type: new GraphQLNonNull(GraphQLString)
 			}
 		},
-		async resolve(parent, {discussionCommentId, discussionContent}, {token}){
+		async resolve(parent, {discussionCommentId, discussionContent}, {token}) {
 			const discussionCommentsService = new DiscussionCommentService({token});
-			return await discussionCommentsService.discussionCommentUpdate(discussionCommentId,discussionContent);
+			return await discussionCommentsService.discussionCommentUpdate(discussionCommentId, discussionContent);
 		}
 	},
 	discussionCommentRemove: {
@@ -61,7 +61,7 @@ const discussionCommentsMutationFields = {
 			return await discussionCommentsService.discussionCommentRemove(discussionCommentId);
 		}
 	},
-	discussionCommentReport:{
+	discussionCommentReport: {
 		type: DiscussionCommentType,
 		description: 'Report discussionComment',
 		args: {
@@ -74,7 +74,26 @@ const discussionCommentsMutationFields = {
 			return await discussionCommentsService.discussionCommentReport(discussionCommentId);
 		}
 	},
-	discussionCommentUnreport:{
+	discussionCommentInsert: {
+		type: DiscussionCommentType,
+		description: 'Report discussionComment',
+		args: {
+			commentId: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			discussionContent: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			tenantId: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {commentId, discussionContent, tenantId}, {token}) {
+			const discussionCommentsService = new DiscussionCommentService({token});
+			return await discussionCommentsService.discussionCommentInsert(commentId, discussionContent, tenantId);
+		}
+	},
+	discussionCommentUnreport: {
 		type: DiscussionCommentType,
 		description: 'Undo your report',
 		args: {
@@ -87,7 +106,7 @@ const discussionCommentsMutationFields = {
 			return await discussionCommentsService.discussionCommentUnreport(discussionCommentId);
 		}
 	},
-	discussionCommentUpvote:{
+	discussionCommentUpvote: {
 		type: DiscussionCommentType,
 		description: 'Vote for this discussionComment',
 		args: {

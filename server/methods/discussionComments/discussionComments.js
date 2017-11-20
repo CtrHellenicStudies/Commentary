@@ -91,7 +91,7 @@ function updateDiscussionComment(discussionCommentId, discussionCommentData) {
 function notifyAfterPublishRejection(id, status) {
 
 	const discussionComment = DiscussionComments.findOne(id);
-	constdiscussionComments = {};
+	const discussionComments = {};
 	const user = Meteor.users.findOne({ _id: discussionComment.userId });
 	const avatar = user.profile && user.profile.url ? user.profile.url : '/images/default_user.jpg';
 	const discussionCommentsArray = [];
@@ -119,7 +119,7 @@ function notifyAfterPublishRejection(id, status) {
 		}, {
 			$push: {'subscriptions.notifications': notification
 			}
-		}, function() {
+		}, function sendNotificationEmail() {
 			sendBatchNotificationEmailsForComment(discussionComment.commentId, user._id);
 		});
 	} else if (status === 'trash') {
@@ -141,7 +141,7 @@ function sendNotification(configurationObj) {
 
 }
 DiscussionComments.find().observeChanges({
-	changed: function(id, fields) {
+	changed: function changed(id, fields) {
 		if (!fields.status)			{ return; }
 		notifyAfterPublishRejection(id, fields.status);
 	}

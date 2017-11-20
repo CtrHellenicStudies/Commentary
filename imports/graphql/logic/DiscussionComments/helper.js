@@ -7,7 +7,7 @@ import Config from '/imports/lib/_config/_config.js';
  * @param {object} comment - comment under which discussionComment is reported
  * @param {*} discussionComment - reported discussionComment
  */
-function sendReportMessage(comment, discussionComment){
+function sendReportMessage(comment, discussionComment) {
 	let commentTitle = '';
 	if (comment.revisions.length) {
 		comment.revisions.sort(Utils.sortRevisions);
@@ -45,4 +45,4 @@ function sendReportMessage(comment, discussionComment){
 		`,
 	});
 }
-export { sendReportMessage  };
+export { sendReportMessage };

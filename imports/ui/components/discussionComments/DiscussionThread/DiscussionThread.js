@@ -6,6 +6,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import { compose } from 'react-apollo';
+import { 
+	discussionCommentInsertMutation,
+	discussionCommentsQuery } from '/imports/graphql/methods/discussionComments';
 
 // models
 import DiscussionComments from '/imports/models/discussionComments';
@@ -30,6 +34,7 @@ const DiscussionThread = React.createClass({
 		commenters: PropTypes.array,
 		discussionCommentsDisabled: PropTypes.bool,
 		ready: PropTypes.bool,
+		discussionCommentInsert: PropTypes.func
 	},
 
 	getInitialState() {
@@ -50,11 +55,9 @@ const DiscussionThread = React.createClass({
 		const content = $(this.newCommentForm).find('textarea').val();
 		const that = this;
 
-		Meteor.call('discussionComments.insert', {
+		this.props.discussionCommentInsert(this.props.comment._id,
 			content,
-			tenantId: Session.get('tenantId'),
-			commentId: this.props.comment._id,
-		});
+			Session.get('tenantId'));
 
 		$(this.newCommentForm).find('textarea').val('');
 	},
@@ -240,14 +243,14 @@ const DiscussionThread = React.createClass({
 });
 
 
-export default createContainer(({ comment }) => {
-	let discussionComments = [],
-		userDiscussionComments = [],
-		handleUsers, 
-		handleDiscuss,
-		users = [];
+const cont = createContainer(({ comment }) => {
+	let discussionComments = [];
+	let	userDiscussionComments = [];
+	let	handleDiscuss;
+	let	users = [];
 
-	handleUsers = Meteor.subscribe('users.all', Session.get('tenantId'));
+	const handleUsers = Meteor.subscribe('users.all', Session.get('tenantId'));
+
 	users = Meteor.users.find({}).fetch();
 
 	if (comment) {
@@ -276,3 +279,5 @@ export default createContainer(({ comment }) => {
 		ready: null,
 	};
 }, DiscussionThread);
+export default compose(
+	discussionCommentsQuery, discussionCommentInsertMutation)(cont);

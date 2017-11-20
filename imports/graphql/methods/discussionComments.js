@@ -25,7 +25,7 @@ const discussionCommentRemove = gql`
 	}
 }
  `;
- const discussionCommentReport = gql`
+const discussionCommentReport = gql`
  	mutation discussionCommentReport($id: String!) {
  	discussionCommentReport(discussionCommentId: $id) {
 	 	_id
@@ -48,14 +48,14 @@ const discussionCommentUpvote = gql`
 `;
 
 const discussionCommentUpdateStatus = gql`
-	mutation discussionCommentUpdateStatus($id: String! $discussionComment: DiscussionCommentInputType!) {
-	discussionCommentUpdateStatus(discussionCommentId: $id discussionComment: $discussionComment) {
+	mutation discussionCommentUpdateStatus($id: String! $discussionCommentStatus: DiscussionCommentInputType!) {
+	discussionCommentUpdateStatus(discussionCommentId: $id discussionCommentStatus: $discussionCommentStatus) {
 		_id
 		status
 	}
 }
  `;
- const discussionCommentUpdate = gql`
+const discussionCommentUpdate = gql`
  mutation discussionCommentUpdate($id: String! $discussionContent: String!) {
 	discussionCommentUpdate(discussionCommentId: $id discussionContent: $discussionContent) {
 	 _id
@@ -63,14 +63,22 @@ const discussionCommentUpdateStatus = gql`
  }
 }
 `;
-
+const discussionCommentInsert = gql`
+mutation discussionCommentInsert($discussionContent: String! $commentId: String! $tenantId: String!) {
+	discussionCommentInsert(discussionContent: $discussionContent commentId: $commentId tenantId: $tenantId) {
+	content
+	commentId
+	tenantId
+}
+}
+`;
 const discussionCommentsQuery = graphql(query, {
 	name: 'discussionCommentsQuery'
 });
 
 const discussionCommentUpdateStatusMutation = graphql(discussionCommentUpdateStatus, {
 	props: (params) => ({
-		discussionCommentUpdateStatus: (id, discussionComment) => params.discussionCommentUpdateStatus({variables: {id, discussionComment}}),
+		discussionCommentUpdateStatus: (id, discussionCommentStatus) => params.discussionCommentUpdateStatus({variables: {id, discussionCommentStatus}}),
 	}),
 	name: 'discussionCommentUpdateStatus',
 	options: {
@@ -124,11 +132,21 @@ const discussionCommentUpvoteMutation = graphql(discussionCommentUpvote, {
 		refetchQueries: ['discussionCommentsQuery']
 	}
 });
+const discussionCommentInsertMutation = graphql(discussionCommentInsert, {
+	props: (params) => ({
+		discussionCommentInsert: (discussionContent, commentId, tenantId) => params.discussionCommentInsertMutation({variables: {discussionContent, commentId, tenantId}}),
+	}),
+	name: 'discussionCommentInsertMutation',
+	options: {
+		refetchQueries: ['discussionCommentsQuery']
+	}
+});
 
 export {discussionCommentsQuery,
-	 	discussionCommentUpdateStatusMutation,
+		discussionCommentUpdateStatusMutation,
 		discussionCommentRemoveMutation,
 		discussionCommentUpdateMutation,
 		discussionCommentReportMutation,
 		discussionCommentUnreportMutation,
-		discussionCommentUpvoteMutation}
+		discussionCommentUpvoteMutation,
+		discussionCommentInsertMutation };

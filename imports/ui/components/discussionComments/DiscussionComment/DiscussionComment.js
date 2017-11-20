@@ -18,9 +18,9 @@ import {
 	discussionCommentUnreportMutation} 
 	from '/imports/graphql/methods/discussionComments';
 
-class DiscussionComment extends Component{
+class DiscussionComment extends Component {
 
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.state = {
 			editMode: false,
@@ -52,7 +52,7 @@ class DiscussionComment extends Component{
 		const content = $(this.updateCommentForm).find('textarea').val();
 		const { discussionComment } = this.props;
 		this.props.discussionCommentUpdate(discussionComment._id, content).catch((e) => {
-			console.log(e)
+			console.log(e);
 		});
 		this.setState({
 			editMode: false,
@@ -60,9 +60,9 @@ class DiscussionComment extends Component{
 	}
 	upvoteDiscussionComment() {
 		const { currentUser, discussionComment } = this.props;
-		if(currentUser){
+		if (currentUser) {
 			this.props.discussionCommentUpvote(discussionComment._id).catch((e) => {
-				console.log(e)
+				console.log(e);
 			});
 		}
 	}
@@ -386,12 +386,19 @@ class DiscussionComment extends Component{
 		);
 	}
 
-};
-DiscussionComment.propTypes ={
+}
+DiscussionComment.propTypes = {
 	discussionComment: PropTypes.object.isRequired,
 	currentUser: PropTypes.object,
 	user: PropTypes.object,
-}
+	discussionCommentUpdate: PropTypes.func,
+	discussionCommentUnreport: PropTypes.func,
+	discussionCommentReport: PropTypes.func,
+	discussionCommentUpvote: PropTypes.func,
+
+
+
+};
 const cont = createContainer(({ discussionComment }) => {
 
 	let handle;
@@ -406,9 +413,9 @@ const cont = createContainer(({ discussionComment }) => {
 	};
 
 }, DiscussionComment);
- export default compose(
-	 discussionCommentUpdateMutation, 
-	 discussionCommentReportMutation,
-	 discussionCommentsQuery,
-	 discussionCommentUpvoteMutation,
-	 discussionCommentUnreportMutation)(cont);
+export default compose(
+	discussionCommentUpdateMutation, 
+	discussionCommentReportMutation,
+	discussionCommentsQuery,
+	discussionCommentUpvoteMutation,
+	discussionCommentUnreportMutation)(cont);

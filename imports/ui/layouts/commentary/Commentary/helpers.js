@@ -1,6 +1,3 @@
-// models:
-import Commenters from '/imports/models/commenters';
-import Comments from '/imports/models/comments';
 
 /*
 	helpers
@@ -110,23 +107,27 @@ const createQueryFromFilters = (filters) => {
 
 const getCommentGroupId = (commentGroup) => {
 	let id = '';
-	let container = commentGroup.comments;
-	if (!commentGroup.comments) {
-		container = commentGroup;
-	}
-	container.forEach((comment) => {
+	commentGroup.comments.forEach((comment) => {
 		id += `-${comment._id}`;
 	});
 	return id.slice(1);
 };
-
+function addCommetersToCommentGroup(allCommenters, comment, commenters = {}) {
+	comment.commenters.map((_commenter) => {
+		const commenter = allCommenters.find(x => x.slug === _commenter.slug);
+		if (commenter) {
+			commenters[commenter._id] = commenter;
+		}
+	});
+	return commenters;
+}
 function isFromCommentGroup(comment, commentGroup) {
 	return comment.work.title === commentGroup.work.title
 		&& comment.subwork.n === commentGroup.subwork.n
 		&& comment.lineFrom === commentGroup.lineFrom
 		&& comment.lineTo === commentGroup.lineTo;
 }
-const parseCommentsToCommentGroups = (comments) => {
+const parseCommentsToCommentGroups = (comments, allCommenters) => {
 	const commentGroups = [];
 	// Make comment groups from comments
 	let isInCommentGroup = false;
@@ -136,13 +137,7 @@ const parseCommentsToCommentGroups = (comments) => {
 			commentGroups.map((commentGroup) => {
 				if (isFromCommentGroup(comment, commentGroup)) {
 					isInCommentGroup = true;
-					console.log(comment.commenters);
-					const commenter = Commenters.findOne({
-						slug: comment.commenters[0].slug,
-					});
-					commentGroup.comments.push({comment: comment,
-						commenter: commenter});
-					commentGroup.commenters.push(commenter);
+					commentGroup.comments.push(comment);
 				}
 			});
 
@@ -154,9 +149,7 @@ const parseCommentsToCommentGroups = (comments) => {
 				} else {
 					ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
 				}
-				const commenter = Commenters.findOne({
-					slug: comment.commenters[0].slug
-				});
+
 				commentGroups.push({
 					ref,
 					selectedLemmaEdition: {
@@ -168,13 +161,18 @@ const parseCommentsToCommentGroups = (comments) => {
 					lineTo: comment.lineTo,
 					nLines: comment.nLines,
 					comments: [comment],
-					commenters: [commenter],
-					_id: getCommentGroupId([comment])
 				});
 			}
 		} else if (process.env.NODE_ENV === 'development') {
 			console.error(`Review comment ${comment._id} metadata`);
 		}
+	});
+	commentGroups.map((commentGroup) => {
+		commentGroup._id = getCommentGroupId(commentGroup);
+		commentGroup.commenters = {};
+		commentGroup.comments.map((comment) => {
+			addCommetersToCommentGroup(allCommenters, comment, commentGroup.commenters);
+		});
 	});
 
 	return commentGroups;

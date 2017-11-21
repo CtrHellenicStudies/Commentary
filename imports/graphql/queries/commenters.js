@@ -8,7 +8,7 @@ import { GraphQLString, GraphQLID, GraphQLList } from 'graphql';
 import { CommenterType } from '/imports/graphql/types/models/commenter';
 
 // logic
-import CommentersService from '../logic/commenters';
+import CommentersService from '../logic/Commenters/commenters';
 
 const commenterQueryFields = {
 	commenters: {
@@ -24,7 +24,7 @@ const commenterQueryFields = {
 		},
 		async resolve(parent, { _id, tenantId }, {token}) {
 			const commentersService = new CommentersService({token});
-			return await commentersService.commentersGet(_id, tenantId);
+			return await commentersService.commentersQuery(_id, tenantId);
 		},
 	},
 };

@@ -9,7 +9,7 @@ import { CommenterType, CommenterInputType } from '/imports/graphql/types/models
 import { RemoveType } from '/imports/graphql/types/index';
 
 // logic
-import CommentersService from '../logic/commenters';
+import CommentersService from '../logic/Commenters/commenters';
 
 const commenterMutationFields = {
 

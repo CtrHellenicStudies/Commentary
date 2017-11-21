@@ -82,6 +82,7 @@ class CommentDetail extends React.Component {
 			values: PropTypes.arrayOf(PropTypes.any).isRequired,
 		})),
 		history: PropTypes.object,
+		commenters: PropTypes.object,
 		toggleSearchTerm: PropTypes.func,
 		isOnHomeView: PropTypes.bool,
 		showLoginModal: PropTypes.func,
@@ -286,7 +287,7 @@ class CommentDetail extends React.Component {
 					<CommentUpper
 						title={selectedRevision.title}
 						commentId={comment._id}
-						commenters={comment.commenters}
+						commenters={this.props.commenters}
 						updateDate={getUpdateDate(selectedRevision)}
 						userCanEditCommenters={getUserCanEditCommenters()}
 					/>

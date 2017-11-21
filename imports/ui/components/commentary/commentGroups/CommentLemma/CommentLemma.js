@@ -41,7 +41,7 @@ class CommentLemma extends React.Component {
 			}),
 			lineFrom: PropTypes.number.isRequired,
 			lineTo: PropTypes.number,
-			commenters: PropTypes.arrayOf(PropTypes.shape({
+			commenters: PropTypes.objectOf(PropTypes.shape({
 				_id: PropTypes.string.isRequired,
 				name: PropTypes.string.isRequired,
 				slug: PropTypes.string.isRequired,

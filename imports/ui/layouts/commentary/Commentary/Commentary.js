@@ -9,6 +9,7 @@ import { debounce } from 'throttle-debounce';
 import { compose } from 'react-apollo';
 
 import { commentsQuery } from '/imports/graphql/methods/comments';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 
 // models:
@@ -43,6 +44,7 @@ class Commentary extends Component {
 		loadMoreComments: PropTypes.func,
 		history: PropTypes.object,
 		commentsQuery: PropTypes.object,
+		commentersQuery: PropTypes.object,
 		isMoreComments: PropTypes.bool,
 		ready: PropTypes.bool,
 		settings: PropTypes.shape({
@@ -281,7 +283,8 @@ class Commentary extends Component {
 
 		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
 		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
-		const commentGroups = this.props.commentsQuery.loading ? [] : parseCommentsToCommentGroups(this.props.commentsQuery.comments);
+		const commentGroups = this.props.commentsQuery.loading || this.props.commentersQuery.loading ? 
+			[] : parseCommentsToCommentGroups(this.props.commentsQuery.comments, this.props.commentersQuery.commenters);
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
 		}
@@ -341,7 +344,7 @@ class Commentary extends Component {
 	}
 }
 
-export default compose(commentsQuery)(Commentary);
+export default compose(commentsQuery, commentersQuery)(Commentary);
 
 // export default createContainer(({ filters, skip, limit, queryCom }) => {
 

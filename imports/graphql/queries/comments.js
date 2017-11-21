@@ -15,34 +15,13 @@ const commentQueryFields = {
 		type: new GraphQLList(CommentType),
 		description: 'Get list of all comments by tenant or for a specific work/passage',
 		args: {
-			tenantId: {
-				type: GraphQLID,
-			},
-			limit: {
-				type: GraphQLInt,
-			},
-			skip: {
-				type: GraphQLInt,
-			},
-			workSlug: {
+			queryParam: {
 				type: GraphQLString,
-			},
-			subworkN: {
-				type: GraphQLInt,
-			},
-			lineFrom: {
-				type: GraphQLInt,
-			},
-			lineTo: {
-				type: GraphQLInt,
-			},
-			isAnnotation: {
-				type: GraphQLBoolean,
 			}
 		},
-		async resolve(parent, { tenantId, limit, skip, workSlug, subworkN }, {token}) {
+		async resolve(parent, { queryParam }, {token}) {
 			const commentService = new CommentService({token});
-			return await commentService.commentsGet(tenantId, limit, skip, workSlug, subworkN);
+			return await commentService.commentsGet(queryParam);
 		}
 	},
 	commentsOn: {

@@ -70,8 +70,6 @@ class CommentGroup extends React.Component {
 	}
 	getCommentersOfComment(comment) {
 		const commenters = {};
-		console.log(comment);
-		console.log(this.props.commentGroup);
 		comment.commenters.map((commenter) => {
 			commenters[commenter._id] = this.props.commentGroup.commenters[commenter._id];
 		});

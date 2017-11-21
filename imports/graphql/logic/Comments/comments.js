@@ -16,22 +16,15 @@ export default class CommentService extends AdminService {
 	 * @param {string} subworkN - number of subwork
 	 * @returns {Object[]} array of comments
 	 */
-	commentsGet(tenantId, limit, skip, workSlug, subworkN) {
-		if (this.userIsNobody) {
-			return new Error('Not authorized');
+	commentsGet(queryParam) {
+
+		// const args = prepareGetCommentsArgs(workSlug, subworkN, tenantId);
+		const options = prepareGetCommentsOptions();
+		let query = JSON.parse(queryParam);
+		if (queryParam === null) {
+			query = {};
 		}
-
-		const args = prepareGetCommentsArgs(workSlug, subworkN, tenantId);
-		const options = prepareGetCommentsOptions(skip, limit);
-		const comments = Comments.find(args, options).fetch();
-
-		comments.map((comment) => {
-			try {
-				comment.urn = comment.urn;
-			} catch (e) {
-				console.log(e);
-			}
-		});
+		const comments = Comments.find(query, options).fetch();
 		return comments;
 	}
 

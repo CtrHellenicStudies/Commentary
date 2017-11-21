@@ -3,26 +3,26 @@ import { gql, graphql } from 'react-apollo';
 const query = gql`
 query commenters {
 	commenters {
-        _id
-        avatar
+		_id
+		avatar
 		name
 		slug
-        tenantId
-        bio
-        featureOnHomepage
-        nCommentsHymns
-        nCommentsIliad
-        nCommentsOdyssey
-        nCommentsTotal
-        nCommentsWorks
-        tagline
+		tenantId
+		bio
+		featureOnHomepage
+		nCommentsHymns
+		nCommentsIliad
+		nCommentsOdyssey
+		nCommentsTotal
+		nCommentsWorks
+		tagline
 	}
 }
 `;
 
 const commenterRemove = gql`
 	mutation commenterRemove($id: String!) {
-        commenterRemove(commenterId: $id) {
+		commenterRemove(commenterId: $id) {
 		_id
 	}
 }
@@ -78,6 +78,6 @@ const commenterInsertMutation = graphql(commenterInsert, {
 });
 
 export {commentersQuery,
-        commenterInsertMutation,
-        commenterUpdateMutation,
-        commeterRemoveMutation };
+		commenterInsertMutation,
+		commenterUpdateMutation,
+		commeterRemoveMutation };

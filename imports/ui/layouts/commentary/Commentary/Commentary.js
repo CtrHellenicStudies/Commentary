@@ -78,9 +78,9 @@ class Commentary extends Component {
 				lines: [],
 			},
 			commentLemmaGroups: [],
-			multiline: null
+			multiline: null,
+			comments: []
 		};
-
 		// methods:
 		this.toggleLemmaEdition = this.toggleLemmaEdition.bind(this);
 		this.removeLemma = this.removeLemma.bind(this);
@@ -93,8 +93,16 @@ class Commentary extends Component {
 		this.loadMoreComments = this.loadMoreComments.bind(this);
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
-	}
+		this.getCommentsQuery = this.getCommentsQuery.bind(this);
 
+
+	}
+	componentDidMount() {
+		const promise = this.props.commentsQuery.refetch({
+			queryParam: this.getCommentsQuery(this.props.filters)
+		});
+
+	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
@@ -250,7 +258,6 @@ class Commentary extends Component {
 			this.props.loadMoreComments();
 		}
 	}
-
 	renderNoCommentsOrLoading() {
 		const { isOnHomeView, isMoreComments, ready } = this.props;
 		const { commentGroups } = this.state;
@@ -278,13 +285,33 @@ class Commentary extends Component {
 
 		return '';
 	}
-
+	getCommentsQuery(filters) {
+		const query = createQueryFromFilters(filters);
+		if (Session.get('tenantId')) {
+			query.tenantId = Session.get('tenantId');
+		}
+		if ('$text' in query) {
+			const textsearch = new RegExp(query.$text, 'i');
+			if (!query.$or) {
+				query.$or = [
+					{ 'revisions.title': textsearch },
+					{ 'revisions.text': textsearch },
+				];
+			} else {
+				query.$or.push({$and: [			
+					{ 'revisions.title': textsearch },
+					{ 'revisions.text': textsearch }]});
+			}
+			delete query.$text;
+		}
+		query.tenantId = Session.get('tenantId');
+		return JSON.stringify(query);
+	}
 	render() {
-
 		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
 		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
-		const commentGroups = this.props.commentsQuery.loading || this.props.commentersQuery.loading ? 
-			[] : parseCommentsToCommentGroups(this.props.commentsQuery.comments, this.props.commentersQuery.commenters);
+		const commentGroups = this.props.commentersQuery.loading || this.props.commentsQuery.loading ? 
+			[] : parseCommentsToCommentGroups(this.props.commentsQuery.comments, this.props.commentersQuery.commenters);	
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
 		}
@@ -343,38 +370,10 @@ class Commentary extends Component {
 		);
 	}
 }
-
 export default compose(commentsQuery, commentersQuery)(Commentary);
 
-// export default createContainer(({ filters, skip, limit, queryCom }) => {
+// export default createContainer(({ filters, skip, limit, queryCom }) => {d
 
-	// let commentGroups = [];
-
-	// const query = createQueryFromFilters(filters);
-	// query.tenantId = Session.get('tenantId');
-
-	// SUBSCRIPTIONS:
-//	const commentsSub = commentsQuery(query, skip, limit);
-	// let isMoreComments = true;
-
-	// Update textsearch in query for client minimongo
-	// if ('$text' in query) {
-	// 	const textsearch = new RegExp(query.$text, 'i');
-	// 	if (!query.$or) {
-	// 		query.$or = [
-	// 			{ 'revisions.title': textsearch },
-	// 			{ 'revisions.text': textsearch },
-	// 		];
-	// 	} else {
-	// 		query.$or.push({$and: [			
-	// 			{ 'revisions.title': textsearch },
-	// 			{ 'revisions.text': textsearch }]});
-	// 	}
-	// 	delete query.$text;
-	// }
-
-	// FETCH DATA:
-	// const comments = commentsQuery();
 
 	// commentGroups = parseCommentsToCommentGroups(comments);
 

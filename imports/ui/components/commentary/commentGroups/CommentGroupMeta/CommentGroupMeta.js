@@ -47,7 +47,7 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 							>
 								<AvatarIcon
 									avatar={
-										(commentGroup.commenters[key] && 'avatar' in commentGroup.commenters[key]) ?
+										(commentGroup.commenters[key] && commentGroup.commenters[key].avatar) ?
 										commentGroup.commenters[key].avatar.src
 										: null
 									}

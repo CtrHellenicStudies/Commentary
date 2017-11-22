@@ -257,6 +257,7 @@ class Home extends Component {
 									comments={comments}
 									skip={0}
 									limit={10}
+									tenantId={Session.get('tenantId')}
 								/>
 								:
 								<Spinner />

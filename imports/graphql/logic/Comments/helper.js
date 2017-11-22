@@ -5,7 +5,7 @@ import Comments from '/imports/models/comments';
  * @param {number} skip - number of comments to skip
  * @param {number} limit - limit of comments to show
  */
-function prepareGetCommentsOptions(skip, limit) {
+function prepareGetCommentsOptions(limit, skip) {
 
 	const options = {
 		sort: {
@@ -37,7 +37,7 @@ function prepareGetCommentsOptions(skip, limit) {
  * @param {number} subworkN 
  * @param {string} tenantId - id of comment tenant
  */
-function prepareGetCommentsArgs(workSlug, subworkN, tenantId) {
+function prepareGetCommentsArgs(tenantId) {
 	const args = {};
 	if ('work' in args) {
 		args['work.slug'] = slugify(workSlug);

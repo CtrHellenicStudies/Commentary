@@ -1,8 +1,8 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query commentsQuery($queryParam: String) {
-	comments(queryParam: $queryParam) {
+query commentsQuery($queryParam: String $skip: Int $limit: Int) {
+	comments(queryParam: $queryParam skip: $skip limit: $limit) {
 		_id
 		urn
 		originalDate
@@ -32,6 +32,11 @@ query commentsQuery($queryParam: String) {
 	}
 }
 `;
+const queryMore = gql`
+query commentsMoreQuery($queryParam: String $skip: Int $limit: Int) {
+	commentsMore(queryParam: $queryParam skip: $skip limit: $limit)
+}
+`;
 
 const commentRemove = gql`
 	mutation commentRemove($id: String!) {
@@ -47,6 +52,12 @@ const commentsQuery = graphql(query, {
 		refetchQueries: ['commentsQuery']
 	}
 });
+const commentsMoreQuery = graphql(queryMore, {
+	name: 'commentsMoreQuery',
+	options: {
+		refetchQueries: ['commentsMoreQuery']
+	}
+});
 
 const commentRemoveMutation = graphql(commentRemove, {
 	props: (params) => ({
@@ -58,4 +69,4 @@ const commentRemoveMutation = graphql(commentRemove, {
 	}
 });
 
-export {commentsQuery, commentRemoveMutation};
+export {commentsQuery, commentsMoreQuery, commentRemoveMutation};

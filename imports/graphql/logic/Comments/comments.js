@@ -9,23 +9,47 @@ export default class CommentService extends AdminService {
 
 	/**
 	 * Get comments for admin interface
-	 * @param {string} tenantId - id of current tenant
+	 * @param {string} queryParam - query describing comments to get
 	 * @param {number} limit - mongo orm limit
 	 * @param {number} skip - mongo orm skip
-	 * @param {string} workSlug - slug for work
-	 * @param {string} subworkN - number of subwork
 	 * @returns {Object[]} array of comments
 	 */
-	commentsGet(queryParam) {
-
+	commentsGet(queryParam, limit, skip) {
+		console.log(queryParam);
 		// const args = prepareGetCommentsArgs(workSlug, subworkN, tenantId);
-		const options = prepareGetCommentsOptions();
+		const options = prepareGetCommentsOptions(limit, skip);
 		let query = JSON.parse(queryParam);
 		if (queryParam === null) {
 			query = {};
 		}
 		const comments = Comments.find(query, options).fetch();
 		return comments;
+	}
+		/**
+	 * Get comments for admin interface
+	 * @param {string} queryParam - query describing comments to get
+	 * @param {number} limit - mongo orm limit
+	 * @param {number} skip - mongo orm skip
+	 * @returns {boolean} is there any other comments which are possible to get
+	 */
+	commentsGetMore(queryParam, limit, skip) {
+		console.log('update', queryParam, limit, skip);
+		if (!queryParam && !limit && !skip) {
+			return true;
+		}
+		try { 
+			const MAX_LIMIT = 1000;
+			// const args = prepareGetCommentsArgs(workSlug, subworkN, tenantId);
+			const options = prepareGetCommentsOptions(MAX_LIMIT, skip);
+			let query = JSON.parse(queryParam);
+			if (queryParam === null) {
+				query = {};
+			}
+			const comments = Comments.find(query, options).fetch();
+			return comments.length > limit;
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	/**

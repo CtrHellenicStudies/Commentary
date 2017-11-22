@@ -17,11 +17,36 @@ const commentQueryFields = {
 		args: {
 			queryParam: {
 				type: GraphQLString,
-			}
+			},
+			limit: {
+				type: GraphQLInt,
+			},
+			skip: {
+				type: GraphQLInt,
+			},
 		},
-		async resolve(parent, { queryParam }, {token}) {
+		async resolve(parent, { queryParam, limit, skip}, {token}) {
 			const commentService = new CommentService({token});
-			return await commentService.commentsGet(queryParam);
+			return await commentService.commentsGet(queryParam, limit, skip);
+		}
+	},
+	commentsMore: {
+		type: GraphQLBoolean,
+		description: 'Find if there is more comments to take',
+		args: {
+			queryParam: {
+				type: GraphQLString,
+			},
+			limit: {
+				type: GraphQLInt,
+			},
+			skip: {
+				type: GraphQLInt,
+			},
+		},
+		async resolve(parent, { queryParam, limit, skip}, {token}) {
+			const commentService = new CommentService({token});
+			return await commentService.commentsGetMore(queryParam, limit, skip);
 		}
 	},
 	commentsOn: {

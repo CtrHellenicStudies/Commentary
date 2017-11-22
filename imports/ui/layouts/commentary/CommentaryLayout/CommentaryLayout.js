@@ -199,6 +199,7 @@ class CommentaryLayout extends React.Component {
 							loadMoreComments={this.loadMoreComments}
 							history={this.props.history}
 							skip={skip}
+							tenantId={Session.get('tenantId')}
 							limit={limit}
 						/>
 

@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
 import { compose } from 'react-apollo';
 
-import { commentsQuery } from '/imports/graphql/methods/comments';
+import { commentsQuery, commentsMoreQuery } from '/imports/graphql/methods/comments';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 
@@ -45,7 +45,7 @@ class Commentary extends Component {
 		history: PropTypes.object,
 		commentsQuery: PropTypes.object,
 		commentersQuery: PropTypes.object,
-		isMoreComments: PropTypes.bool,
+		commentsMoreQuery: PropTypes.object,
 		ready: PropTypes.bool,
 		settings: PropTypes.shape({
 			title: PropTypes.string,
@@ -78,8 +78,7 @@ class Commentary extends Component {
 				lines: [],
 			},
 			commentLemmaGroups: [],
-			multiline: null,
-			comments: []
+			multiline: null
 		};
 		// methods:
 		this.toggleLemmaEdition = this.toggleLemmaEdition.bind(this);
@@ -97,11 +96,15 @@ class Commentary extends Component {
 
 
 	}
-	componentDidMount() {
-		const promise = this.props.commentsQuery.refetch({
-			queryParam: this.getCommentsQuery(this.props.filters)
+	componentWillReceiveProps(newProps) {
+		this.refetchQuery(newProps.tenantId);
+	}
+	refetchQuery(tenantId) {
+		this.props.commentsQuery.refetch({
+			queryParam: this.getCommentsQuery(this.props.filters, tenantId),
+			limit: this.props.limit,
+			skip: this.props.skip
 		});
-
 	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
@@ -252,14 +255,13 @@ class Commentary extends Component {
 	loadMoreComments() {
 		if (
 			!this.props.isOnHomeView
-			&& this.state.commentGroups.length
-			&& this.props.isMoreComments
+			&& this.props.commentsMoreQuery.commentsMore
 		) {
 			this.props.loadMoreComments();
 		}
 	}
 	renderNoCommentsOrLoading() {
-		const { isOnHomeView, isMoreComments, ready } = this.props;
+		const { isOnHomeView, ready } = this.props;
 		const { commentGroups } = this.state;
 
 		if (
@@ -273,7 +275,7 @@ class Commentary extends Component {
 						</p>
 					</div>
 				);
-			} else if (isMoreComments) {
+			} else if (this.props.commentsMoreQuery.commentsMore) {
 				return (
 					<div className="ahcip-spinner commentary-loading">
 						<div className="double-bounce1" />
@@ -285,7 +287,8 @@ class Commentary extends Component {
 
 		return '';
 	}
-	getCommentsQuery(filters) {
+	getCommentsQuery(filters, tenantId) {
+		console.log(tenantId);
 		const query = createQueryFromFilters(filters);
 		if (Session.get('tenantId')) {
 			query.tenantId = Session.get('tenantId');
@@ -304,18 +307,18 @@ class Commentary extends Component {
 			}
 			delete query.$text;
 		}
-		query.tenantId = Session.get('tenantId');
+		query.tenantId = tenantId;
 		return JSON.stringify(query);
 	}
 	render() {
 		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
 		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
 		const commentGroups = this.props.commentersQuery.loading || this.props.commentsQuery.loading ? 
-			[] : parseCommentsToCommentGroups(this.props.commentsQuery.comments, this.props.commentersQuery.commenters);	
+			[] : parseCommentsToCommentGroups(this.props.commentsQuery.comments,
+				this.props.commentersQuery.commenters);	
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
 		}
-
 		if (!commentGroups) {
 			return null;
 		}
@@ -370,24 +373,5 @@ class Commentary extends Component {
 		);
 	}
 }
-export default compose(commentsQuery, commentersQuery)(Commentary);
+export default compose(commentsQuery, commentersQuery, commentsMoreQuery)(Commentary);
 
-// export default createContainer(({ filters, skip, limit, queryCom }) => {d
-
-
-	// commentGroups = parseCommentsToCommentGroups(comments);
-
-	// if (comments.length < limit) {
-	// 	isMoreComments = false;
-	// }
-
-	// const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-// 	return {
-// 		commentGroups,
-// 		isMoreComments,
-// 		ready: commentsSub.ready(),
-// 		settings: settingsHandle.ready() ? Settings.findOne() : {},
-// 	};
-
-// }, grapphQlComponent);

@@ -19,7 +19,7 @@ import CommentsService from '../logic/Comments/comments';
 
 
 const commentMutationFields = {
-	commentCreate: {
+	commentInsert: {
 		type: CommentType,
 		description: 'Create new comment',
 		args: {

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
-import Comments from '/imports/models/comments';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import { Link } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ import Utils from '/imports/lib/utils';
 import muiTheme from '/imports/lib/muiTheme';
 
 // components:
+import { commentsQuery } from '/imports/graphql/methods/comments';
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
 import WorksList from '/imports/ui/components/works/WorksList';
 import KeywordsList from '/imports/ui/components/keywords/KeywordsList';
@@ -29,8 +30,23 @@ class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.scrollToIntro = this.scrollToIntro.bind(this);
+		this.getCommentsQuery = this.getCommentsQuery.bind(this);
 	}
-
+	componentWillReceiveProps(newProps) {
+		if (newProps.tenantId && 
+			!this.props.commentsQuery.variables.tenantId) {
+			this.props.commentsQuery.refetch({
+				queryParam: this.getCommentsQuery(newProps.tenantId),
+				limit: 10,
+				skip: 0
+			});
+		}
+	}
+	getCommentsQuery(tenantId) {
+		const query = {};
+		query.tenantId = tenantId;
+		return JSON.stringify(query);
+	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
@@ -50,7 +66,8 @@ class Home extends Component {
 	}
 
 	render() {
-		const { settings, comments, ready } = this.props;
+		const { settings } = this.props;
+		const comments = this.props.commentsQuery.loading ? [] : this.props.commentsQuery.comments;
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
@@ -250,18 +267,14 @@ class Home extends Component {
 					<section className="get-started">
 						<h2 className="block-title">Get Started</h2>
 						<div className="get-started-comments">
-							{ready ?
-								<Commentary
-									isOnHomeView
-									filters={[]}
-									comments={comments}
-									skip={0}
-									limit={10}
-									tenantId={Session.get('tenantId')}
-								/>
-								:
-								<Spinner />
-							}
+							<Commentary
+								isOnHomeView
+								filters={[]}
+								comments={comments}
+								skip={0}
+								limit={10}
+								tenantId={Session.get('tenantId')}
+							/>
 							<div className="read-more-link">
 								<Link to="/commentary">
 									<RaisedButton
@@ -282,8 +295,7 @@ class Home extends Component {
 
 Home.propTypes = {
 	settings: PropTypes.object,
-	comments: PropTypes.array,
-	ready: PropTypes.bool,
+	commentsQuery: PropTypes.object,
 	isTest: PropTypes.bool,
 };
 
@@ -292,14 +304,4 @@ Home.childContextTypes = {
 };
 
 
-export default createContainer(() => {
-	const query = { tenantId: Session.get('tenantId') };
-	const commentsSub = Meteor.subscribe('comments', query, 0, 10);
-
-	const comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
-
-	return {
-		comments,
-		ready: commentsSub.ready(),
-	};
-}, Home);
+export default compose(commentsQuery)(Home);

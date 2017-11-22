@@ -4,14 +4,16 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose, ApolloProvider } from 'react-apollo';
+
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { ApolloProvider } from 'react-apollo';
 import qs from 'qs-lite';
 
 // components:
+import { commentsInsertMutation } from '/imports/graphql/methods/comments';
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
@@ -492,4 +494,4 @@ const AddCommentLayoutContainer = (() => {
 	};
 }, AddCommentLayout);
 
-export default AddCommentLayoutContainer;
+export default compose(commentsInsertMutation)(AddCommentLayoutContainer);

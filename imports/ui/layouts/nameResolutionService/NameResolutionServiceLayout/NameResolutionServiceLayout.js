@@ -50,7 +50,8 @@ const resolveV2 = (props) => {
 		tenant = Tenants.findOne({_id: comment.tenantId});
 	}
 
-	if (comment && tenant) {//TODO
+	if (comment && tenant) { 
+		// TODO
 		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}/commentary/?urn=${urn}&revision=${revision}`;
 	}
 

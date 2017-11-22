@@ -42,6 +42,7 @@ class Commentary extends Component {
 		showLoginModal: PropTypes.func,
 		toggleSearchTerm: PropTypes.func,
 		loadMoreComments: PropTypes.func,
+		tenantId: PropTypes.string,
 		history: PropTypes.object,
 		commentsQuery: PropTypes.object,
 		commentersQuery: PropTypes.object,
@@ -97,7 +98,12 @@ class Commentary extends Component {
 
 	}
 	componentWillReceiveProps(newProps) {
-		this.refetchQuery(newProps.tenantId);
+		if (newProps.tenantId && 
+			(!this.props.commentsQuery.variables.tenantId ||
+			newProps.limit !== this.props.limit ||
+			newProp.skip !== this.props.skip)) {
+			this.refetchQuery(newProps.tenantId);
+		}
 	}
 	refetchQuery(tenantId) {
 		this.props.commentsQuery.refetch({
@@ -288,11 +294,8 @@ class Commentary extends Component {
 		return '';
 	}
 	getCommentsQuery(filters, tenantId) {
-		console.log(tenantId);
 		const query = createQueryFromFilters(filters);
-		if (Session.get('tenantId')) {
-			query.tenantId = Session.get('tenantId');
-		}
+		query.tenantId = tenantId;
 		if ('$text' in query) {
 			const textsearch = new RegExp(query.$text, 'i');
 			if (!query.$or) {

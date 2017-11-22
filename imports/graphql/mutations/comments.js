@@ -5,7 +5,7 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
-import CommentType from '/imports/graphql/types/models/comment';
+import CommentType, { CommentInputType } from '/imports/graphql/types/models/comment';
 import { RemoveType } from '/imports/graphql/types/index';
 
 // models
@@ -23,28 +23,13 @@ const commentMutationFields = {
 		type: CommentType,
 		description: 'Create new comment',
 		args: {
-			title: {
-				type: new GraphQLNonNull(GraphQLString),
-			},
-			content: {
-				type: new GraphQLNonNull(GraphQLString),
-			},
-			commenter: {
-				type: new GraphQLNonNull(GraphQLString),
-			},
-		},
-		resolve(parent, { title, content }, { user, tenant }) {
-
-			// only a logged in user and coming from the admin page, can create new project
-			if (user && tenant.adminPage) {
-				return Comments.insert({
-					tenantId: tenant._id,
-					title,
-					description,
-				});
+			comment: {
+				type: new GraphQLNonNull(CommentInputType)
 			}
-
-			throw AuthenticationError();
+		},
+		async resolve(parent, {comment}, {token}) {
+			const commentsService = new CommentsService({token});
+			return await commentsService.commentInsert(comment);
 		}
 	},
 	commentRemove: {

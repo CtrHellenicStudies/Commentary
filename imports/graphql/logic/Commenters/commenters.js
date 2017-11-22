@@ -1,4 +1,6 @@
 import Commenters from '/imports/models/commenters';
+// errors
+import { AuthenticationError } from '/imports/errors';
 import AdminService from '../adminService';
 
 /**
@@ -39,7 +41,7 @@ export default class CommentService extends AdminService {
 		if (this.userIsAdmin) {
 			return Commenters.update(_id, {$set: commenter});
 		}
-		return new Error('Not authorized');
+		throw AuthenticationError();
 	}
 
 	/**
@@ -51,7 +53,7 @@ export default class CommentService extends AdminService {
 		if (this.userIsAdmin) {
 			return Commenters.remove({_id: commenterId});
 		}
-		return new Error('Not authorized');
+		throw AuthenticationError();
 	}
 
 	/**
@@ -64,6 +66,6 @@ export default class CommentService extends AdminService {
 			const commenterId = Commenters.insert({...commenter});
 			return Commenters.findOne(commenterId);
 		}
-		return new Error('Not authorized');
+		throw AuthenticationError();
 	}
 }

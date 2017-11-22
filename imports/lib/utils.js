@@ -2,10 +2,12 @@ import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
 import {convertFromRaw, EditorState, ContentState} from 'draft-js';
+import {compose} from 'react-apollo';
 
 // models
 import Editions from '/imports/models/editions';
 import Commenters from '/imports/models/commenters';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 // lib
 import Config from './_config/_config';
@@ -27,16 +29,16 @@ const Utils = {
 		}
 		return moment(date).format('D/M/YYYY');
 	},
-	resolveUrn(urn){
+	resolveUrn(urn) {
 		let ret = urn;
-		try{
-			if(urn.v2)
+		try {
+			if (urn.v2) {
 				ret = urn.v2;
-			else
+			} else {
 				ret = urn.v1;
+			}
 				
-		}
-		catch(error){
+		} catch (error) {
 			console.log('Old urn exists in database.');
 		}
 		return ret;
@@ -291,14 +293,12 @@ const Utils = {
 
 		return editions;
 	},
-	getCommenters(commenterData) {
-
+	getCommenters(commenterData, commenters) {
+		console.log(this);
 		const commentersList = [];
 
 		commenterData.forEach(commenter => {
-			const currentCommenter = Commenters.findOne({
-				_id: commenter.value,
-			}, {fields: {_id: 1, slug: 1, name: 1}});
+			const currentCommenter = commenters.find(x => x._id === commenter.value);
 			commentersList.push(currentCommenter);
 		});
 
@@ -359,13 +359,13 @@ const Utils = {
 			blockToHTML: (block) => {
 				const type = block.type;
 				if (type === 'atomic') {
-							  return {start: '<span>', end: '</span>'};
+					return {start: '<span>', end: '</span>'};
 				}
 				if (type === 'unstyled') {
-							  return <p />;
+					return <p />;
 				}
 				return <span />;
-						  },
+			},
 			entityToHTML: (entity, originalText) => {
 				let ret = this.decodeHtml(originalText);
 				switch (entity.type) {
@@ -493,4 +493,4 @@ export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	};
 }
 
-export default Utils;
+export default compose(commentersQuery)(Utils);

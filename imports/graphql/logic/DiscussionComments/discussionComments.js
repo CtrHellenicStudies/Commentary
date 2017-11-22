@@ -1,5 +1,7 @@
 import DiscussionComments from '/imports/models/discussionComments';
 import Comments from '/imports/models/comments';
+// errors
+import { AuthenticationError } from '/imports/errors';
 import AdminService from '../adminService';
 import { sendReportMessage } from './helper';
 
@@ -31,7 +33,7 @@ export default class DiscussionCommentService extends AdminService {
 	discussionCommentUpdateStatus(discussionCommentId, discussionCommentStatus) {
 		console.log(discussionCommentStatus);
 		if (!this.userIsAdmin) {
-			return 'Not authorized';
+			throw AuthenticationError();
 		}
 		
 		DiscussionComments.update({
@@ -53,7 +55,7 @@ export default class DiscussionCommentService extends AdminService {
 		if (this.userIsAdmin) {
 			return DiscussionComments.remove({_id: discussionCommentId});
 		}
-		return 'Not authorized';
+		throw AuthenticationError();
 	}
 	/**
 	 * Update discussion comment content
@@ -63,7 +65,7 @@ export default class DiscussionCommentService extends AdminService {
 	discussionCommentUpdate(discussionCommentId, discussionContent) {
 
 		if (this.userIsNobody) {
-			return 'Not authorized';
+			throw AuthenticationError();
 		}
 
 		try {
@@ -84,7 +86,7 @@ export default class DiscussionCommentService extends AdminService {
 	discussionCommentReport(discussionCommentId) {
 
 		if (this.userIsNobody) {
-			return new Error('Not authorized');
+			throw AuthenticationError();
 		}
 
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
@@ -126,7 +128,7 @@ export default class DiscussionCommentService extends AdminService {
 	discussionCommentUnreport(discussionCommentId) {
 
 		if (this.userIsNobody) {
-			return new Error('Not authorized');
+			throw AuthenticationError();
 		}
 
 		const discussionComment = DiscussionComments.findOne(discussionCommentId);
@@ -153,7 +155,7 @@ export default class DiscussionCommentService extends AdminService {
 		
 		if (this.userIsNobody || 
 			discussionComment.voters.indexOf(this.user._id) >= 0) {
-			return 'Not authorized'; 
+			throw AuthenticationError();
 		}
 
 		try {
@@ -174,7 +176,7 @@ export default class DiscussionCommentService extends AdminService {
 	discussionCommentInsert(discussionContent, commentId, tenantId) {
 
 		if (this.userIsNobody) {
-			return new Error('not authorized');
+			throw AuthenticationError();
 		}
 		const commentsInDiscussion = DiscussionComments.find({commentId: commentId}).fetch();
 

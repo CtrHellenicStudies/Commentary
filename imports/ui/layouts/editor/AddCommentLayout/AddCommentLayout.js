@@ -219,7 +219,7 @@ class AddCommentLayout extends React.Component {
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const referenceWorks = formData.referenceWorks;
-		const commenters = Utils.getCommenters(formData.commenterValue);
+		const commenters = Utils.getCommenters(formData.commenterValue, this.props.commenters);
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = Cookies.get('loginToken');
 
@@ -258,15 +258,7 @@ class AddCommentLayout extends React.Component {
 			status: 'publish',
 		};
 
-		Meteor.call('comments.insert', token, comment, (error, commentId) => {
-			if (error) {
-				console.error(error);
-				return null;
-			}
-			const urlParams = qs.stringify({_id: commentId});
-
-			this.props.history.push(`/commentary?${urlParams}`);
-		});
+		this.props.commentInsert(comment);
 	}
 
 	getWork() {
@@ -494,4 +486,4 @@ const AddCommentLayoutContainer = (() => {
 	};
 }, AddCommentLayout);
 
-export default compose(commentsInsertMutation)(AddCommentLayoutContainer);
+export default compose(commentsInsertMutation, commentersQuery)(AddCommentLayoutContainer);

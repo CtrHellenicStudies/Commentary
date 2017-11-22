@@ -1,5 +1,9 @@
 import Comments from '/imports/models/comments';
+// errors
+import { AuthenticationError } from '/imports/errors';
+
 import AdminService from '../adminService';
+
 import { prepareGetCommentsOptions, prepareGetCommentsArgs } from './helper';
 
 /**
@@ -33,7 +37,6 @@ export default class CommentService extends AdminService {
 	 * @returns {boolean} is there any other comments which are possible to get
 	 */
 	commentsGetMore(queryParam, limit, skip) {
-		console.log('update', queryParam, limit, skip);
 		if (!queryParam && !limit && !skip) {
 			return true;
 		}
@@ -84,6 +87,17 @@ export default class CommentService extends AdminService {
 		if (this.userIsAdmin) {
 			return Comments.remove({ _id });
 		}
-		return new Error('Not authorized');
+		throw AuthenticationError();
+	}
+	/**
+	 * Add a comment
+	 * @param {object} comment - comment to insert
+	 */
+	commentInsert(comment) {
+		if (this.userIsNobody) {
+			throw AuthenticationError();
+		}
+		console.log(comment);
+		return Comments.insert(comment);
 	}
 }

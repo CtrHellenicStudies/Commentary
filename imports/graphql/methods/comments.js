@@ -46,8 +46,8 @@ const commentRemove = gql`
 }
  `;
 const commentInsert = gql`
-	mutation commentInsert($title: String! $content: String! $commenter: String!) {
-		commentInsert(title: $title content: $content commenter: $commenter) {
+	mutation commentInsert($comment: CommentInputType!) {
+		commentInsert(comment: $comment) {
 		_id
 	}
 }
@@ -75,9 +75,9 @@ const commentRemoveMutation = graphql(commentRemove, {
 		refetchQueries: ['commentsQuery']
 	}
 });
-const commentInsertMutation = graphql(commentInsert, {
+const commentsInsertMutation = graphql(commentInsert, {
 	props: (params) => ({
-		commentInsert: (id) => params.commentInsertMutation({variables: {id}}),
+		commentInsert: (comment) => params.commentInsertMutation({variables: {comment}}),
 	}),
 	name: 'commentInsertMutation',
 	options: {
@@ -85,4 +85,4 @@ const commentInsertMutation = graphql(commentInsert, {
 	}
 });
 
-export {commentsQuery, commentsMoreQuery, commentRemoveMutation};
+export {commentsQuery, commentsMoreQuery, commentRemoveMutation, commentsInsertMutation};

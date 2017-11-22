@@ -8,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
+import {compose} from 'react-apollo';
 import Cookies from 'js-cookie';
 import slugify from 'slugify';
 
@@ -28,6 +29,7 @@ import { convertToHTML } from 'draft-convert';
 
 // models
 import Commenters from '/imports/models/commenters';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 // lib:
@@ -328,7 +330,23 @@ class AddComment extends React.Component {
 	}
 	render() {
 		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
-		const { commentersOptions, tags } = this.props;
+		let commenters = [];
+		const commentersOptions = [];
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters;
+		}
+		commenters.forEach((commenter) => {
+			if (!commentersOptions.some(val => (
+				commenter._id === val.value
+			))) {
+				commentersOptions.push({
+					value: commenter._id,
+					label: commenter.name,
+				});
+			}
+		});
+		const { tags } = this.props;
+		console.log(this.props.ready);
 		if (!this.props.ready) {
 			return null;
 		}
@@ -452,30 +470,12 @@ const AddCommentContainer = createContainer(() => {
 		}
 	});
 
-	const handleCommenters = Meteor.subscribe('commenters', Session.get('tenantId'));
-	const commentersOptions = [];
-	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
-	}
-	commenters.forEach((commenter) => {
-		if (!commentersOptions.some(val => (
-			commenter._id === val.value
-		))) {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		}
-	});
-
 	return {
-		ready: handleKeywords.ready() && handleWorks.ready() && handleCommenters.ready(),
+		ready: handleKeywords.ready() && handleWorks.ready(),
 		tags,
-		referenceWorkOptions,
-		commentersOptions,
+		referenceWorkOptions
 	};
 
 }, AddComment);
 
-export default AddCommentContainer;
+export default compose(commentersQuery)(AddCommentContainer);

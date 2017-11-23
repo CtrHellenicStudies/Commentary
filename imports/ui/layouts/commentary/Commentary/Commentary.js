@@ -30,7 +30,7 @@ import Utils from '/imports/lib/utils';
 import muiTheme from '/imports/lib/muiTheme';
 
 // helpers:
-import { createQueryFromFilters, parseCommentsToCommentGroups } from './helpers';
+import { getCommentsQuery, parseCommentsToCommentGroups } from './helpers';
 
 
 class Commentary extends Component {
@@ -46,6 +46,7 @@ class Commentary extends Component {
 		history: PropTypes.object,
 		commentsQuery: PropTypes.object,
 		commentersQuery: PropTypes.object,
+		commentGroups: PropTypes.array,
 		commentsMoreQuery: PropTypes.object,
 		ready: PropTypes.bool,
 		settings: PropTypes.shape({
@@ -93,29 +94,8 @@ class Commentary extends Component {
 		this.loadMoreComments = this.loadMoreComments.bind(this);
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
-		this.getCommentsQuery = this.getCommentsQuery.bind(this);
 
 
-	}
-	componentWillReceiveProps(newProps) {
-		if (newProps.tenantId && 
-			(!this.props.commentsQuery.variables.tenantId ||
-			newProps.limit !== this.props.limit ||
-			newProp.skip !== this.props.skip)) {
-			this.refetchQuery(newProps.tenantId);
-		}
-	}
-	refetchQuery(tenantId) {
-		this.props.commentsQuery.refetch({
-			queryParam: this.getCommentsQuery(this.props.filters, tenantId),
-			limit: this.props.limit,
-			skip: this.props.skip
-		});
-		this.props.commentsMoreQuery.refetch({
-			queryParam: this.getCommentsQuery(this.props.filters, tenantId),
-			limit: this.props.limit,
-			skip: this.props.skip
-		});
 	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
@@ -298,32 +278,9 @@ class Commentary extends Component {
 
 		return '';
 	}
-	getCommentsQuery(filters, tenantId) {
-		const query = createQueryFromFilters(filters);
-		query.tenantId = tenantId;
-		if ('$text' in query) {
-			const textsearch = new RegExp(query.$text, 'i');
-			if (!query.$or) {
-				query.$or = [
-					{ 'revisions.title': textsearch },
-					{ 'revisions.text': textsearch },
-				];
-			} else {
-				query.$or.push({$and: [			
-					{ 'revisions.title': textsearch },
-					{ 'revisions.text': textsearch }]});
-			}
-			delete query.$text;
-		}
-		query.tenantId = tenantId;
-		return JSON.stringify(query);
-	}
 	render() {
-		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
+		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, commentGroups } = this.props;
 		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
-		const commentGroups = this.props.commentersQuery.loading || this.props.commentsQuery.loading ? 
-			[] : parseCommentsToCommentGroups(this.props.commentsQuery.comments,
-				this.props.commentersQuery.commenters);	
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
 		}
@@ -381,5 +338,26 @@ class Commentary extends Component {
 		);
 	}
 }
-export default compose(commentsQuery, commentersQuery, commentsMoreQuery)(Commentary);
+const cont = createContainer(props => {
+
+	props.commentsQuery.refetch({
+		queryParam: getCommentsQuery(props.filters, Session.get('tenantId')),
+		limit: props.limit,
+		skip: props.skip
+	});
+	props.commentsMoreQuery.refetch({
+		queryParam: getCommentsQuery(props.filters, Session.get('tenantId')),
+		limit: props.limit,
+		skip: props.skip
+	});
+
+	const commentGroups = props.commentersQuery.loading || props.commentsQuery.loading ? 
+		[] : parseCommentsToCommentGroups(props.commentsQuery.comments,
+			props.commentersQuery.commenters);	
+	return {
+		commentGroups
+	};
+}, Commentary);
+console.log(cont);
+export default compose(commentsQuery, commentersQuery, commentsMoreQuery)(cont);
 

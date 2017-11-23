@@ -178,6 +178,7 @@ KeywordDetail.propTypes = {
 	keyword: PropTypes.object,
 	settings: PropTypes.object,
 	keywordComments: PropTypes.array,
+	history: PropTypes.array
 };
 
 KeywordDetail.childContextTypes = {

@@ -25,6 +25,7 @@ export default class CommentService extends AdminService {
 		if (queryParam === null) {
 			query = {};
 		}
+		query.isAnnotation = {$ne: true};
 		const comments = Comments.find(query, options).fetch();
 		return comments;
 	}

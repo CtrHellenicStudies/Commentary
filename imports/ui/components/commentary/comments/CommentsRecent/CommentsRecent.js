@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
 
@@ -10,6 +11,7 @@ import Slider from 'react-slick';
 import Comments from '/imports/models/comments';
 
 // lib:
+import { commentsQuery } from '/imports/graphql/methods/comments';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
@@ -97,18 +99,15 @@ CommentsRecent.defaultProps = {
 /*
 	END CommentsRecent
 */
-
-export default createContainer(() => {
-	const handle = Meteor.subscribe('comments.recent.tenant', Session.get('tenantId'), 3);
-	let comments = [];
-	if (handle.ready()) {
-		comments = Comments.find({}, {
-			sort: {
-				updated: -1,
-			},
-		}).fetch();
-	}
+const cont = createContainer(props => {
+	console.log(props);
+	props.commentsQuery.refetch({
+		tenantId: Session.get('tenantId'),
+		limit: 3,
+	});
+	const comments = props.commentsQuery.loading ? [] : props.commentsQuery.comments;
 	return {
 		comments,
 	};
 }, CommentsRecent);
+export default compose(commentsQuery)(cont);

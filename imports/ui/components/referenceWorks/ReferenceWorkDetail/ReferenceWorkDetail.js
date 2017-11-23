@@ -139,6 +139,7 @@ ReferenceWorkDetail.propTypes = {
 	referenceWork: PropTypes.object,
 	settings: PropTypes.object,
 	commenters: PropTypes.array,
+	desc: PropTypes.string
 };
 
 

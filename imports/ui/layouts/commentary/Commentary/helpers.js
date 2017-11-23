@@ -127,6 +127,26 @@ function isFromCommentGroup(comment, commentGroup) {
 		&& comment.lineFrom === commentGroup.lineFrom
 		&& comment.lineTo === commentGroup.lineTo;
 }
+function getCommentsQuery(filters, tenantId) {
+	const query = createQueryFromFilters(filters);
+	query.tenantId = tenantId;
+	if ('$text' in query) {
+		const textsearch = new RegExp(query.$text, 'i');
+		if (!query.$or) {
+			query.$or = [
+				{ 'revisions.title': textsearch },
+				{ 'revisions.text': textsearch },
+			];
+		} else {
+			query.$or.push({$and: [			
+				{ 'revisions.title': textsearch },
+				{ 'revisions.text': textsearch }]});
+		}
+		delete query.$text;
+	}
+	query.tenantId = tenantId;
+	return JSON.stringify(query);
+}
 const parseCommentsToCommentGroups = (comments, allCommenters) => {
 	const commentGroups = [];
 	// Make comment groups from comments
@@ -179,7 +199,7 @@ const parseCommentsToCommentGroups = (comments, allCommenters) => {
 };
 
 export {
-	createQueryFromFilters,
 	parseCommentsToCommentGroups,
-	getCommentGroupId
+	getCommentGroupId,
+	getCommentsQuery
 };

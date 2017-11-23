@@ -45,14 +45,10 @@ mutation commenterInsert($id: String! $CommenterInputType: String!) {
 }
 `;
 const commentersQuery = (function commentersQueryFunc() {
-	const tenantId = Session ? Session.get('tenantId') : '';
 	return graphql(query, {
 		name: 'commentersQuery',
 		options: {
-			refetchQueries: ['commenters'],
-			variables: {
-				tenantId: tenantId
-			}
+			refetchQueries: ['commenters']
 		}
 	});
 }());

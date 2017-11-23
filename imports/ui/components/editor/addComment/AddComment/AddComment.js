@@ -64,7 +64,8 @@ class AddComment extends React.Component {
 		submitForm: PropTypes.func.isRequired,
 		tags: PropTypes.array,
 		referenceWorkOptions: PropTypes.array,
-		ready: PropTypes.bool
+		ready: PropTypes.bool,
+		commenters: PropTypes.array
 	};
 
 	static defaultProps = {
@@ -363,11 +364,8 @@ class AddComment extends React.Component {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	render() {
+		const { commenters } = this.props;
 		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
-		let commenters = [];
-		if (Meteor.user() && Meteor.user().canEditCommenters) {
-			commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters;
-		}
 		const commentersOptions = this.getCommentersForUser(commenters);
 
 		const { tags } = this.props;
@@ -475,9 +473,15 @@ class AddComment extends React.Component {
 	}
 }
 
-const AddCommentContainer = createContainer(() => {
+const AddCommentContainer = createContainer(props => {
 	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-
+	let commenters = [];
+	this.props.commentersQuery.refetchQuery({
+		tenantId: Session.get('tenantId')
+	});
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters;
+	}
 	const tags = Keywords.find().fetch();
 	const handleWorks = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
@@ -497,7 +501,8 @@ const AddCommentContainer = createContainer(() => {
 	return {
 		ready: handleKeywords.ready() && handleWorks.ready(),
 		tags,
-		referenceWorkOptions
+		referenceWorkOptions,
+		commenters
 	};
 
 }, AddComment);

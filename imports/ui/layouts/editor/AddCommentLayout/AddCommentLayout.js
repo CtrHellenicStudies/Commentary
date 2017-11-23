@@ -14,7 +14,6 @@ import qs from 'qs-lite';
 
 // components:
 import { commentsInsertMutation } from '/imports/graphql/methods/comments';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
@@ -90,6 +89,8 @@ const getFilterValues = (filters) => {
 class AddCommentLayout extends React.Component {
 	static propTypes = {
 		ready: PropTypes.bool,
+		commentInsert: PropTypes.func,
+		history: PropTypes.array
 	};
 
 	static defaultProps = {
@@ -489,4 +490,4 @@ const AddCommentLayoutContainer = (() => {
 	};
 }, AddCommentLayout);
 
-export default compose(commentsInsertMutation, commentersQuery)(AddCommentLayoutContainer);
+export default compose(commentsInsertMutation)(AddCommentLayoutContainer);

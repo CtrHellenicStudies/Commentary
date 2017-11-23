@@ -42,6 +42,7 @@ const AddRevisionLayout = React.createClass({
 		ready: PropTypes.bool,
 		comment: PropTypes.object,
 		commenters: PropTypes.array,
+		history: PropTypes.array,
 		keywords: PropTypes.array,
 	},
 

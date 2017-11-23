@@ -15,7 +15,7 @@ import Comments from '/imports/models/comments';
 import { AuthenticationError } from '/imports/errors';
 
 // logic
-import CommentsService from '../logic/Comments/comments';
+import CommentService from '../logic/Comments/comment';
 
 
 const commentMutationFields = {
@@ -28,7 +28,7 @@ const commentMutationFields = {
 			}
 		},
 		resolve(parent, {comment}, {token}) {
-			const commentsService = new CommentsService({token});
+			const commentsService = new CommentService({token});
 			return commentsService.commentInsert(comment);
 		}
 	},
@@ -41,7 +41,7 @@ const commentMutationFields = {
 			}
 		},
 		async resolve(parent, {commentId}, {token}) {
-			const commentsService = new CommentsService({token});
+			const commentsService = new CommentService({token});
 			return await commentsService.commentRemove(commentId);
 		}
 	}

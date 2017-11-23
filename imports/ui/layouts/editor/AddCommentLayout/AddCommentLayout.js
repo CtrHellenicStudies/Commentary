@@ -14,6 +14,7 @@ import qs from 'qs-lite';
 
 // components:
 import { commentsInsertMutation } from '/imports/graphql/methods/comments';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
@@ -28,7 +29,6 @@ import configureStore from '/imports/store/configureStore';
 import Utils from '/imports/lib/utils';
 
 // models
-import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 
@@ -51,13 +51,6 @@ const getReferenceWorks = (formData) => {
 		referenceWorks = ReferenceWorks.findOne({_id: formData.referenceWorksValue.value});
 	}
 	return referenceWorks;
-};
-
-const getCommenter = (formData) => {
-	const commenter = Commenters.findOne({
-		_id: formData.commenterValue.value,
-	});
-	return commenter;
 };
 
 
@@ -209,7 +202,7 @@ class AddCommentLayout extends React.Component {
 
 	// --- BEGNI ADD COMMENT --- //
 
-	addComment(formData, textValue, textRawValue) {
+	addComment(formData, possibleCommenters, textValue, textRawValue) {
 		this.setState({
 			loading: true,
 		});
@@ -219,7 +212,7 @@ class AddCommentLayout extends React.Component {
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const referenceWorks = formData.referenceWorks;
-		const commenters = Utils.getCommenters(formData.commenterValue, this.props.commenters);
+		const commenters = Utils.getCommenters(formData.commenterValue, possibleCommenters);
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = Cookies.get('loginToken');
 
@@ -258,7 +251,17 @@ class AddCommentLayout extends React.Component {
 			status: 'publish',
 		};
 
-		this.props.commentInsert(comment);
+		this.props.commentInsert(comment).then((res) => {
+			if (res.data.commentInsert._id) {
+				this.setState({
+					loading: false
+				});
+				const urlParams = qs.stringify({_id: res.data.commentInsert._id});
+				
+				this.props.history.push(`/commentary?${urlParams}`);
+				
+			}
+		});
 	}
 
 	getWork() {

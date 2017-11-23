@@ -111,6 +111,11 @@ class Commentary extends Component {
 			limit: this.props.limit,
 			skip: this.props.skip
 		});
+		this.props.commentsMoreQuery.refetch({
+			queryParam: this.getCommentsQuery(this.props.filters, tenantId),
+			limit: this.props.limit,
+			skip: this.props.skip
+		});
 	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };

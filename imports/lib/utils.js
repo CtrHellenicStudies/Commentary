@@ -294,7 +294,6 @@ const Utils = {
 		return editions;
 	},
 	getCommenters(commenterData, commenters) {
-		console.log(this);
 		const commentersList = [];
 
 		commenterData.forEach(commenter => {
@@ -493,4 +492,4 @@ export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	};
 }
 
-export default compose(commentersQuery)(Utils);
+export default Utils;

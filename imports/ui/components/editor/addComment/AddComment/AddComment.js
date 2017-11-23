@@ -28,7 +28,6 @@ import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 
 // models
-import Commenters from '/imports/models/commenters';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -61,8 +60,8 @@ const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 class AddComment extends React.Component {
 	static propTypes = {
 		selectedLineFrom: PropTypes.number,
+		commentersQuery: PropTypes.object,
 		submitForm: PropTypes.func.isRequired,
-		commentersOptions: PropTypes.array,
 		tags: PropTypes.array,
 		referenceWorkOptions: PropTypes.array,
 		ready: PropTypes.bool
@@ -70,7 +69,6 @@ class AddComment extends React.Component {
 
 	static defaultProps = {
 		selectedLineFrom: null,
-		commentersOptions: [],
 		tags: [],
 	};
 
@@ -110,6 +108,8 @@ class AddComment extends React.Component {
 		this.addNewTag = this.addNewTag.bind(this);
 		this.addNewReferenceWork = this.addNewReferenceWork.bind(this);
 		this.updateReferenceWorks = this.updateReferenceWorks.bind(this);
+		this.getCommentersForUser = this.getCommentersForUser.bind(this);
+		this.filterCommentersForUser = this.filterCommentersForUser.bind(this);
 	}
 
 	_enableButton() {
@@ -171,7 +171,12 @@ class AddComment extends React.Component {
 		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
-		this.props.submitForm(this.state, textHtml, textRaw);
+		this.props.submitForm(
+			this.state,
+			this.filterCommentersForUser(this.props.commentersQuery.commenters),
+			textHtml,
+			textRaw
+		);
 	} 
 	showSnackBar(error) {
 		this.setState({
@@ -324,6 +329,35 @@ class AddComment extends React.Component {
 			}
 		});
 	}
+	getCommentersForUser(commenters) {
+		const commentersOptions = [];
+		commenters.forEach((commenter) => {
+			if (!commentersOptions.some(val => (
+				commenter._id === val.value
+			))) {
+				if (Meteor.user().canEditCommenters.find(x => x === commenter._id) !== undefined) {
+					commentersOptions.push({
+						value: commenter._id,
+						label: commenter.name,
+					});
+				}
+			}
+		});
+		return commentersOptions;
+	}
+	filterCommentersForUser(commenters) {
+		const commentersOptions = [];
+		commenters.forEach((commenter) => {
+			if (!commentersOptions.some(val => (
+				commenter._id === val._id
+			))) {
+				if (Meteor.user().canEditCommenters.find(x => x === commenter._id) !== undefined) {
+					commentersOptions.push(commenter);
+				}
+			}
+		});
+		return commentersOptions;
+	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
@@ -331,22 +365,12 @@ class AddComment extends React.Component {
 	render() {
 		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
 		let commenters = [];
-		const commentersOptions = [];
 		if (Meteor.user() && Meteor.user().canEditCommenters) {
 			commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters;
 		}
-		commenters.forEach((commenter) => {
-			if (!commentersOptions.some(val => (
-				commenter._id === val.value
-			))) {
-				commentersOptions.push({
-					value: commenter._id,
-					label: commenter.name,
-				});
-			}
-		});
+		const commentersOptions = this.getCommentersForUser(commenters);
+
 		const { tags } = this.props;
-		console.log(this.props.ready);
 		if (!this.props.ready) {
 			return null;
 		}

@@ -4,7 +4,7 @@ import { AuthenticationError } from '/imports/errors';
 
 import AdminService from '../adminService';
 
-import { prepareGetCommentsOptions, prepareGetCommentsArgs } from './helper';
+import { prepareGetCommentsOptions, getURN } from './helper';
 
 /**
  * Logic-layer service for dealing with comments
@@ -19,8 +19,7 @@ export default class CommentService extends AdminService {
 	 * @returns {Object[]} array of comments
 	 */
 	commentsGet(queryParam, limit, skip) {
-		console.log(queryParam);
-		// const args = prepareGetCommentsArgs(workSlug, subworkN, tenantId);
+
 		const options = prepareGetCommentsOptions(limit, skip);
 		let query = JSON.parse(queryParam);
 		if (queryParam === null) {
@@ -38,7 +37,7 @@ export default class CommentService extends AdminService {
 	 */
 	commentsGetMore(queryParam, limit, skip) {
 		if (!queryParam && !limit && !skip) {
-			return true;
+			return false;
 		}
 		try { 
 			const MAX_LIMIT = 1000;
@@ -97,7 +96,17 @@ export default class CommentService extends AdminService {
 		if (this.userIsNobody) {
 			throw AuthenticationError();
 		}
-		console.log(comment);
-		return Comments.insert(comment);
+		let commentId;
+		let ret;
+		try {
+			commentId = Comments.insert({...comment});
+			ret = Comments.findOne({_id: commentId});
+			ret.urn = getURN(ret);
+			Comments.update({_id: commentId}, {$set: {urn: ret.urn}});
+		} catch (e) {
+			console.log(e);
+			return '';
+		}
+		return Comments.findOne({_id: commentId});
 	}
 }

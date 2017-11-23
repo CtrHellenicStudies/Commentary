@@ -15,16 +15,13 @@ const commenterQueryFields = {
 		type: new GraphQLList(CommenterType),
 		description: 'Get list of all commenters',
 		args: {
-			_id: {
+			tenantId: {
 				type: GraphQLString,
 			},
-			tenantId: {
-				type: GraphQLID,
-			},
 		},
-		async resolve(parent, { _id, tenantId }, {token}) {
+		async resolve(parent, { tenantId }, {token}) {
 			const commentersService = new CommentersService({token});
-			return await commentersService.commentersQuery(_id, tenantId);
+			return await commentersService.commentersQuery(tenantId);
 		},
 	},
 };

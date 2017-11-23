@@ -10,16 +10,13 @@ export default class CommentService extends AdminService {
 
 	/**
 	 * Get commenters for the supplied _id and tenantId
-	 * @param {string} _id - commenter id
 	 * @param {string} tenantId - id for current tenant
 	 * @returns {Object[]} array of commenters
 	 */
-	commentersQuery(_id, tenantId) {
+	commentersQuery(tenantId) {
+		console.log(tenantId);
 		const args = {};
 
-		if (_id) {
-			args._id = _id;
-		}
 		if (tenantId) {
 			args.tenantId = tenantId;
 		}

@@ -1,8 +1,9 @@
 import { gql, graphql } from 'react-apollo';
+import { Session } from 'meteor/session';
 
 const query = gql`
-query commenters {
-	commenters {
+query commenters ($tenantId: String) {
+	commenters (tenantId: $tenantId) {
 		_id
 		avatar
 		name
@@ -43,9 +44,18 @@ mutation commenterInsert($id: String! $CommenterInputType: String!) {
  }
 }
 `;
-const commentersQuery = graphql(query, {
-	name: 'commentersQuery'
-});
+const commentersQuery = (function commentersQueryFunc() {
+	const tenantId = Session ? Session.get('tenantId') : '';
+	return graphql(query, {
+		name: 'commentersQuery',
+		options: {
+			refetchQueries: ['commenters'],
+			variables: {
+				tenantId: tenantId
+			}
+		}
+	});
+}());
 
 const commenterUpdateMutation = graphql(commenterUpdate, {
 	props: (params) => ({

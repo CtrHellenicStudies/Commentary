@@ -130,7 +130,6 @@ class CommentDetail extends React.Component {
 			persistentIdentifierModalLeft: 0,
 			searchTerm: ''
 		};
-
 		// methods:
 		this.getRevisionIndex = this.getRevisionIndex.bind(this);
 		this.addSearchTerm = this.addSearchTerm.bind(this);

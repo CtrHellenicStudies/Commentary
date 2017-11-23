@@ -27,9 +27,9 @@ const commentMutationFields = {
 				type: new GraphQLNonNull(CommentInputType)
 			}
 		},
-		async resolve(parent, {comment}, {token}) {
+		resolve(parent, {comment}, {token}) {
 			const commentsService = new CommentsService({token});
-			return await commentsService.commentInsert(comment);
+			return commentsService.commentInsert(comment);
 		}
 	},
 	commentRemove: {

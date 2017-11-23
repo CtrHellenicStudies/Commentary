@@ -340,16 +340,18 @@ class Commentary extends Component {
 }
 const cont = createContainer(props => {
 
-	props.commentsQuery.refetch({
-		queryParam: getCommentsQuery(props.filters, Session.get('tenantId')),
-		limit: props.limit,
-		skip: props.skip
-	});
-	props.commentsMoreQuery.refetch({
-		queryParam: getCommentsQuery(props.filters, Session.get('tenantId')),
-		limit: props.limit,
-		skip: props.skip
-	});
+	if (Session.get('tenantId')) {
+		props.commentsQuery.refetch({
+			queryParam: getCommentsQuery(props.filters, Session.get('tenantId')),
+			limit: props.limit,
+			skip: props.skip
+		});
+		props.commentsMoreQuery.refetch({
+			queryParam: getCommentsQuery(props.filters, Session.get('tenantId')),
+			limit: props.limit,
+			skip: props.skip
+		});
+	}
 
 	const commentGroups = props.commentersQuery.loading || props.commentsQuery.loading ? 
 		[] : parseCommentsToCommentGroups(props.commentsQuery.comments,

@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import muiTheme from '/imports/lib/muiTheme';
+import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -143,11 +145,10 @@ ReferenceWorkDetail.propTypes = {
 };
 
 
-const ReferenceWorkDetailContainer = createContainer(({ match }) => {
-	const slug = match.params.slug;
+const ReferenceWorkDetailContainer = createContainer(props => {
+	const slug = props.match.params.slug;
 	// SUBSCRIPTIONS:
 	Meteor.subscribe('referenceWorks.slug', slug, Session.get('tenantId'));
-	Meteor.subscribe('commenters', Session.get('tenantId'));
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 	// FETCH DATA:
@@ -155,12 +156,17 @@ const ReferenceWorkDetailContainer = createContainer(({ match }) => {
 		slug,
 	};
 	const referenceWork = ReferenceWorks.findOne(query);
-
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	let commenters = [];
 	if (referenceWork && 'authors' in referenceWork) {
-		commenters = Commenters.find({
-			_id: { $in: referenceWork.authors },
-		}, { sort: { name: 1 } }).fetch();
+		commenters = tenantCommenters.find((x => 
+			referenceWork.authors.find(y => y === x._id) !== undefined))
+			.sort(function alphabetical(a, b) { return a > b; });
 	}
 
 	return {
@@ -171,4 +177,4 @@ const ReferenceWorkDetailContainer = createContainer(({ match }) => {
 	};
 }, ReferenceWorkDetail);
 
-export default ReferenceWorkDetailContainer;
+export default compose(commentersQuery)(ReferenceWorkDetailContainer);

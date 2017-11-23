@@ -360,6 +360,5 @@ const cont = createContainer(props => {
 		commentGroups
 	};
 }, Commentary);
-console.log(cont);
 export default compose(commentsQuery, commentersQuery, commentsMoreQuery)(cont);
 

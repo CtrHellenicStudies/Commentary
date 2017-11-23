@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import RaisedButton from 'material-ui/RaisedButton';
+import { compose } from 'react-apollo';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
@@ -27,6 +28,7 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
@@ -347,7 +349,7 @@ const EditKeyword = React.createClass({
 	},
 });
 
-const EditKeywordContainer = createContainer(() => {
+const EditKeywordContainer = createContainer(props => {
 	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
 	const keywordsOptions = [];
 	const keywords = Keywords.find({ type: 'word' }).fetch();
@@ -379,11 +381,17 @@ const EditKeywordContainer = createContainer(() => {
 		});
 	});
 
-	Meteor.subscribe('commenters', Session.get('tenantId'));
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
 	const commentersOptions = [];
+	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
+		commenters = tenantCommenters.find((x => 
+			Meteor.user().canEditCommenters.find(y => y === x._id) !== undefined));
 	}
 	commenters.forEach((commenter) => {
 		commentersOptions.push({
@@ -400,4 +408,4 @@ const EditKeywordContainer = createContainer(() => {
 	};
 }, EditKeyword);
 
-export default EditKeywordContainer;
+export default compose(commentersQuery)(EditKeywordContainer);

@@ -4,12 +4,13 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider, compose } from 'react-apollo';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import { createBrowserHistory } from 'history';
@@ -353,20 +354,24 @@ const AddRevisionLayout = React.createClass({
 	},
 });
 
-const AddRevisionLayoutContainer = createContainer(({ commentId }) => {
+const AddRevisionLayoutContainer = createContainer(props => {
 	const commentsSub = Meteor.subscribe('comments.id', commentId, Session.get('tenantId'));
-	const commentersSub = Meteor.subscribe('commenters', Session.get('tenantId'));
 	const keywordsSub = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
-	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready() && commentersSub.ready();
-
-	const comment = Comments.findOne({_id: commentId});
+	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const comment = Comments.findOne({_id: props.commentId});
+	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	const commenters = [];
 	if (comment) {
 		comment.commenters.forEach((commenter) => {
-			commenters.push(Commenters.findOne({
-				slug: commenter.slug,
-			}));
+			commenters.push(tenantCommenters.find(
+				x.slug === commenter.slug,
+			));
 		});
 	}
 	const keywords = Keywords.find().fetch();

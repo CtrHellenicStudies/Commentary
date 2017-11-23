@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
+import { compose } from 'react-apollo';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
@@ -20,6 +21,7 @@ import Commenters from '/imports/models/commenters';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 
 
 class AddTranslation extends React.Component {
@@ -224,7 +226,7 @@ AddTranslation.propTypes = {
 	commentersOptions: PropTypes.array,
 };
 
-const AddTranslationContainer = createContainer(() => {
+const AddTranslationContainer = createContainer(props => {
 	Meteor.subscribe('works', Session.get('tenantId'));
 	const works = Works.find().fetch();
 	const worksOptions = [];
@@ -236,12 +238,17 @@ const AddTranslationContainer = createContainer(() => {
 			subworks: work.subworks
 		});
 	});
-
-	Meteor.subscribe('commenters', Session.get('tenantId'));
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
 	const commentersOptions = [];
+	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
+		commenters = tenantCommenters.find((x => 
+			Meteor.user().canEditCommenters.find(y => y === x._id) !== undefined));
 	}
 	commenters.forEach((commenter) => {
 		commentersOptions.push({
@@ -255,4 +262,4 @@ const AddTranslationContainer = createContainer(() => {
 	};
 }, AddTranslation);
 
-export default AddTranslationContainer;
+export default compose(commentersQuery)(AddTranslationContainer);

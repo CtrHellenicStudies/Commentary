@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { Session } from 'meteor/session';
+import { compose } from 'react-apollo';
 import _ from 'lodash';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -378,15 +380,19 @@ const CommentarySearchPanel = React.createClass({
 	},
 });
 
-export default createContainer(({ addCommentPage }) => {
+export default createContainer(props => {
 	let works = [];
 	let keywords = [];
 	let keyideas = [];
 	let commenters = [];
 	let referenceWorks = [];
 
-	if (!addCommentPage) {
-		Meteor.subscribe('commenters', Session.get('tenantId'));
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	if (!props.addCommentPage) {
 		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	}
@@ -395,7 +401,7 @@ export default createContainer(({ addCommentPage }) => {
 	// FETCH DATA:
 	keyideas = Keywords.find({ type: 'idea' }).fetch();
 	keywords = Keywords.find({ type: 'word' }).fetch();
-	commenters = Commenters.find().fetch();
+	commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	works = Works.find({}, { sort: { order: 1 } }).fetch();
 	referenceWorks = ReferenceWorks.find({}, { sort: { title: 1 } }).fetch();
 

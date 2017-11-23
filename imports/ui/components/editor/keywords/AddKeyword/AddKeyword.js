@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
 import {stateFromHTML} from 'draft-js-import-html';
 import Snackbar from 'material-ui/Snackbar';
-import Utils from '../../../../../lib/utils';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
@@ -28,6 +28,8 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import Utils from '../../../../../lib/utils';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 
 
 const AddKeyword = React.createClass({
@@ -296,7 +298,7 @@ const AddKeyword = React.createClass({
 	},
 });
 
-const AddKeywordContainer = createContainer(() => {
+const AddKeywordContainer = createContainer(props => {
 	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 	const keywordsOptions = [];
 	const keywords = Keywords.find({ type: 'word' }).fetch();
@@ -328,11 +330,17 @@ const AddKeywordContainer = createContainer(() => {
 		});
 	});
 
-	Meteor.subscribe('commenters', Session.get('tenantId'));
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
 	const commentersOptions = [];
+	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
+		commenters = tenantCommenters.find((x => 
+			Meteor.user().canEditCommenters.find(y => y === x._id) !== undefined));
 	}
 	commenters.forEach((commenter) => {
 		commentersOptions.push({
@@ -350,4 +358,4 @@ const AddKeywordContainer = createContainer(() => {
 
 }, AddKeyword);
 
-export default AddKeywordContainer;
+export default compose(commentersQuery)(AddKeywordContainer);

@@ -4,7 +4,9 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import TextField from 'material-ui/TextField';
 import { createContainer } from 'meteor/react-meteor-data';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import _ from 'lodash';
+import { compose } from 'react-apollo';
 
 // models:
 import Commenters from '/imports/models/commenters';
@@ -334,13 +336,12 @@ class CommentarySearchToolbar extends React.Component {
 */
 
 
-const commentarySearchToolbarContainer = createContainer(({ addCommentPage }) => {
+const commentarySearchToolbarContainer = createContainer(props => {
 
 	const tenantId = Session.get('tenantId');
 
 	// SUBSCRIPTIONS:
-	if (!addCommentPage) {
-		Meteor.subscribe('commenters');
+	if (!props.addCommentPage) {
 		Meteor.subscribe('keywords.all', {tenantId: tenantId});
 		Meteor.subscribe('referenceWorks', tenantId);
 	}
@@ -349,11 +350,11 @@ const commentarySearchToolbarContainer = createContainer(({ addCommentPage }) =>
 	return {
 		keyideas: Keywords.find({ type: 'idea' }).fetch(),
 		keywords: Keywords.find({ type: 'word' }).fetch(),
-		commenters: Commenters.find().fetch(),
+		commenters: props.commentersQuery.loading ? [] : props.commentersQuery.commenters,
 		works: Works.find({}, { sort: { order: 1 } }).fetch(),
 		referenceWorks: ReferenceWorks.find({}, { sort: { title: 1 } }).fetch(),
 	};
 
 }, CommentarySearchToolbar);
 
-export default commentarySearchToolbarContainer;
+export default compose(commentersQuery)(commentarySearchToolbarContainer);

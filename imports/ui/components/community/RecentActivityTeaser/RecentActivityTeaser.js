@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { compose } from 'react-apollo';
 import { createContainer } from 'meteor/react-meteor-data';
+
 import moment from 'moment';
 
 import Books from '/imports/models/books';
@@ -158,4 +161,4 @@ const RecentActivityTeaserContainer = createContainer(({ comment }) => {
 	};
 }, RecentActivityTeaser);
 
-export default RecentActivityTeaserContainer;
+export default compose(commentersQuery)(RecentActivityTeaserContainer);

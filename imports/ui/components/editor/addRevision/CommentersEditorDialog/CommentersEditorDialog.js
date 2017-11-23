@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { compose } from 'react-apollo';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import IconMenu from 'material-ui/IconMenu';
@@ -168,4 +170,4 @@ const CommentersEditorDialogContainer = createContainer(({ commenters }) => {
 	};
 }, CommentersEditorDialog);
 
-export default CommentersEditorDialogContainer;
+export default compose(commentersQuery)(CommentersEditorDialogContainer);

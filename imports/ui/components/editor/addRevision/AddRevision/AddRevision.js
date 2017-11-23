@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
+import { compose } from 'react-apollo';
 import { Roles } from 'meteor/alanning:roles';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { Session } from 'meteor/session';
-import {Creatable} from 'react-select';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
@@ -18,11 +19,10 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Utils from '/imports/lib/utils';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Select, { Createable } from 'react-select';
+import Select, { Creatable } from 'react-select';
 import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -49,8 +49,10 @@ import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/l
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
-import CommentersEditorDialog from '../CommentersEditorDialog';
 import ReferenceWork from '/imports/ui/components/editor/addComment/AddComment/referenceWork/ReferenceWork';
+
+import CommentersEditorDialog from '../CommentersEditorDialog';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
@@ -126,7 +128,6 @@ class AddRevision extends React.Component {
 	}
 
 	_getRevisionEditorState(revision) {
-		(revision);
 		if (revision.textRaw) {
 			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
 		} else if (revision.text) {
@@ -552,6 +553,8 @@ AddRevision.propTypes = {
 	tags: PropTypes.array,
 	referenceWorkOptions: PropTypes.array,
 	commentersOptions: PropTypes.array,
+	history: PropTypes.array,
+	ready: PropTypes.bool
 };
 
 AddRevision.childContextTypes = {
@@ -596,11 +599,11 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 		}
 	});
 	return {
-		ready: handleKeywords.ready() && handleWorks.ready() && handleCommenters.ready(),
+		ready: handleKeywords.ready() && handleWorks.ready(),
 		tags,
 		referenceWorkOptions,
 		commentersOptions,
 	};
 }, AddRevision);
 
-export default AddRevisionContainer;
+export default compose(commentersQuery)(AddRevisionContainer);

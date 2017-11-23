@@ -4,6 +4,9 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
+import { compose } from 'react-apollo';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+
 import muiTheme from '/imports/lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
@@ -201,7 +204,7 @@ class CommenterDetail extends React.Component {
 	}
 }
 
-export default createContainer(({match}) => {
+const cont = createContainer(({match}) => {
 	const slug = match.params.slug;
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 	const commentersHandle = Meteor.subscribe('commenters.slug', slug, Session.get('tenantId'));
@@ -221,3 +224,4 @@ export default createContainer(({match}) => {
 		ready: settingsHandle.ready() && commentersHandle.ready(),
 	};
 }, CommenterDetail);
+export default (commentersQuery)(cont);

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -31,7 +33,7 @@ CommentersList.defaultProps = {
 };
 
 
-export default createContainer(({ limit, featureOnHomepage }) => {
+const cont = createContainer(({ limit, featureOnHomepage }) => {
 	let commenters = [];
 	let _limit = 100;
 	if (limit) {
@@ -58,3 +60,4 @@ export default createContainer(({ limit, featureOnHomepage }) => {
 		commenters,
 	};
 }, CommentersList);
+export default (commentersQuery)(cont);

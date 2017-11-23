@@ -4,6 +4,8 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -346,21 +348,25 @@ const AddRevisionLayout = React.createClass({
 	},
 });
 
-const AddRevisionLayoutContainer = createContainer(({match}) => {
-	const commentId = match.params.commentId;
+const AddRevisionLayoutContainer = createContainer(props => {
+	const commentId = props.match.params.commentId;
 	const commentsSub = Meteor.subscribe('comments.id', commentId, Session.get('tenantId'));
-	const commentersSub = Meteor.subscribe('commenters', Session.get('tenantId'));
 	const keywordsSub = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
-	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready() && commentersSub.ready();
-
+	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
 	const comment = Comments.findOne({_id: commentId});
+	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	const commenters = [];
 	if (comment) {
 		comment.commenters.forEach((commenter) => {
-			commenters.push(Commenters.findOne({
-				slug: commenter.slug,
-			}));
+			commenters.push(tenantCommenters.find(
+				x.slug === commenter.slug,
+			));
 		});
 	}
 	const keywords = Keywords.find().fetch();
@@ -373,4 +379,4 @@ const AddRevisionLayoutContainer = createContainer(({match}) => {
 	};
 }, AddRevisionLayout);
 
-export default AddRevisionLayoutContainer;
+export default compose(commentersQuery)(AddRevisionLayoutContainer);

@@ -119,9 +119,8 @@ class RecentActivityTeaser extends React.Component {
 	}
 }
 
-const RecentActivityTeaserContainer = createContainer(({ comment }) => {
+const RecentActivityTeaserContainer = createContainer(props => {
 
-	const handle = Meteor.subscribe('commenters.all');
 	const booksHandle = Meteor.subscribe('books');
 	const tenantsHandle = Meteor.subscribe('tenants');
 	const commenterIds = [];
@@ -132,24 +131,30 @@ const RecentActivityTeaserContainer = createContainer(({ comment }) => {
 	let book;
 	let settings;
 
-	if (comment) {
-		const settingsHandle = Meteor.subscribe('settings.tenant', comment.tenantId);
+	if (props.comment) {
+		const settingsHandle = Meteor.subscribe('settings.tenant', props.comment.tenantId);
 
-		if ('commenters' in comment) {
-			comment.commenters.forEach((commenter) => {
+		if (props.comment.commenters) {
+			props.comment.commenters.forEach((commenter) => {
 				commenterIds.push(commenter._id);
 			});
 		}
 
-		if (comment.users) {
-			userIds = comment.users;
+		if (props.comment.users) {
+			userIds = props.comment.users;
 		}
-
-		commenters = Commenters.find({ _id: { $in: commenterIds } }).fetch();
+		if (Session.get('tenantId')) {
+			props.commentersQuery.refetch({
+				tenantId: Session.get('tenantId')
+			});
+		}
+		commenters = currentCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
+			commenterIds.find(y => y === x._id));
+	
 		users = Meteor.users.find({ _id: { $in: userIds } }).fetch();
-		tenant = Tenants.findOne({ _id: comment.tenantId });
-		book = Books.findOne({'chapters.url': comment.bookChapterUrl});
-		settings = Settings.findOne({ tenantId: comment.tenantId });
+		tenant = Tenants.findOne({ _id: props.comment.tenantId });
+		book = Books.findOne({'chapters.url': props.comment.bookChapterUrl});
+		settings = Settings.findOne({ tenantId: props.comment.tenantId });
 	}
 
 	return {

@@ -157,11 +157,16 @@ CommentersEditorDialog.propTypes = {
 	open: PropTypes.bool,
 };
 
-const CommentersEditorDialogContainer = createContainer(({ commenters }) => {
-	Meteor.subscribe('commenters.all', {tenantId: Session.get('tenantId')});
-	const commentersIds = commenters.map(commenter => commenter._id);
-	const allCommenters = Commenters.find().fetch();
-	const currentCommenters = Commenters.find({_id: {$in: commentersIds}}).fetch();
+const CommentersEditorDialogContainer = createContainer(props => {
+	const commentersIds = props.commenters.map(commenter => commenter._id);
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const allCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
+	const currentCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
+		commentersIds.find(y => y === x._id));
 
 	return {
 		commentersIds,

@@ -204,14 +204,19 @@ class CommenterDetail extends React.Component {
 	}
 }
 
-const cont = createContainer(({match}) => {
-	const slug = match.params.slug;
+const cont = createContainer(props => {
+	const slug = props.match.params.slug;
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	const commentersHandle = Meteor.subscribe('commenters.slug', slug, Session.get('tenantId'));
+	if (Session.get('tenantId')) {
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
 
 	let avatarUrl;
 
-	const commenter = Commenters.findOne({ slug });
+	const commenter = props.commentersQuery.loading ? {} : 
+		props.commentersQuery.commenters.find(x => x.slug === slug);
 
 	if (commenter && commenter.avatar) {
 		avatarUrl = commenter.avatar.src;
@@ -221,7 +226,7 @@ const cont = createContainer(({match}) => {
 		commenter,
 		avatarUrl,
 		settings: Settings.findOne(),
-		ready: settingsHandle.ready() && commentersHandle.ready(),
+		ready: settingsHandle.ready()
 	};
 }, CommenterDetail);
 export default (commentersQuery)(cont);

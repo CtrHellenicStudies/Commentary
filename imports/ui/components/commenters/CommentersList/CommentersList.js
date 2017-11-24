@@ -39,23 +39,16 @@ const cont = createContainer(props => {
 	if (props.limit) {
 		_limit = props.limit;
 	}
-
-	// SUBSCRIPTIONS:
-	if (props.featureOnHomepage) {
-		Meteor.subscribe('commenters.featureOnHomepage', Session.get('tenantId'), _limit);
-		commenters = Commenters.find({
-			featureOnHomepage: true,
-		}, {
-			sort: {
-				name: 1,
-			},
-			_limit,
-		}).fetch();
-	} else {
+	if (Session.get('tenantId')) {
 		props.commentersQuery.refetch({
 			tenantId: Session.get('tenantId')
 		});
-		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
+	}
+	commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
+	// SUBSCRIPTIONS:
+	if (props.featureOnHomepage) {
+		commenters = props.commentersQuery ? [] : props.commentersQuery.commenters
+		.filter(x => x.featureOnHomepage === true);
 	}
 
 	return {

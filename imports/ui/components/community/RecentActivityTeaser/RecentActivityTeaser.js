@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { booksQuery } from '/imports/graphql/methods/books';
 import { compose } from 'react-apollo';
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -121,7 +122,6 @@ class RecentActivityTeaser extends React.Component {
 
 const RecentActivityTeaserContainer = createContainer(props => {
 
-	const booksHandle = Meteor.subscribe('books');
 	const tenantsHandle = Meteor.subscribe('tenants');
 	const commenterIds = [];
 	let userIds = [];
@@ -153,7 +153,8 @@ const RecentActivityTeaserContainer = createContainer(props => {
 	
 		users = Meteor.users.find({ _id: { $in: userIds } }).fetch();
 		tenant = Tenants.findOne({ _id: props.comment.tenantId });
-		book = Books.findOne({'chapters.url': props.comment.bookChapterUrl});
+		book = props.booksQuery.loading ? {} : props.booksQuery.find(x => 
+			x.chapters.url === props.comment.bookChapterUrl);
 		settings = Settings.findOne({ tenantId: props.comment.tenantId });
 	}
 
@@ -166,4 +167,4 @@ const RecentActivityTeaserContainer = createContainer(props => {
 	};
 }, RecentActivityTeaser);
 
-export default compose(commentersQuery)(RecentActivityTeaserContainer);
+export default compose(commentersQuery, booksQuery)(RecentActivityTeaserContainer);

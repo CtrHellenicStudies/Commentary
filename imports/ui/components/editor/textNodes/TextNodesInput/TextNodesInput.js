@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { compose } from 'react-apollo';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 import autoBind from 'react-autobind';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -19,7 +21,6 @@ import Cookies from 'js-cookie';
 import { debounce } from 'throttle-debounce';
 
 // models:
-import Editions from '/imports/models/editions';
 import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';
 
@@ -264,7 +265,10 @@ TextNodesInput.propTypes = {
 };
 
 
-const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, subworkN, lineFrom, limit }) => {
+const TextNodesInputContainer = createContainer(props => {
+
+	const { workId, workSlug, editionId, subworkN, lineFrom, limit } = props;
+
 	let textNodes;
 	let textNodesByEditions = [];
 	let textNodesByEditionsSorted = [];
@@ -281,12 +285,12 @@ const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, 
 		lemmaQuery['work.slug'] = 'hymns';
 	}
 	const textNodeSubscription = Meteor.subscribe('textNodes', lemmaQuery, 0, limit);
-	const editionsSubscription = Meteor.subscribe('editions');
-	const ready = textNodeSubscription.ready() && editionsSubscription.ready();
+	const ready = textNodeSubscription.ready();
 
 	if (ready) {
 		textNodes = TextNodes.find(lemmaQuery).fetch();
-		textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, Editions);
+		textNodesByEditions = !props.editionsWuery.loading ?
+			Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions) : [];
 		textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
 
 		textNodesByEditionsSorted.forEach(edition => {
@@ -319,4 +323,4 @@ const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, 
 
 }, TextNodesInput);
 
-export default TextNodesInputContainer;
+export default compose(editionsQuery)(TextNodesInputContainer);

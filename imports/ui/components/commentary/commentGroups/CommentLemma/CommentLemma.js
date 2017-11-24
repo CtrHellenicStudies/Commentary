@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { compose } from 'react-apollo';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
@@ -17,7 +19,6 @@ import _ from 'underscore';
 import TextNodes from '/imports/models/textNodes';
 import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
-import Editions from '/imports/models/editions';
 
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';
@@ -382,7 +383,10 @@ class CommentLemma extends React.Component {
 
 }
 
-export default createContainer(({ commentGroup, multiline }) => {
+const cont = createContainer(props => {
+	
+	const { commentGroup, multiline } = props;
+
 	let lemmaQuery = {};
 	let translationAuthors = [];
 	const translationNodesHandle = Meteor.subscribe('translationNodes', Session.get('tenantId'));
@@ -422,9 +426,9 @@ export default createContainer(({ commentGroup, multiline }) => {
 	}
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
-	const editionsSubscription = Meteor.subscribe('editions');
 	const textNodesCursor = TextNodes.find(lemmaQuery);
-	let editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+	let editions = !props.editionsQuery.loading ?
+		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 
 	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
 
@@ -435,3 +439,4 @@ export default createContainer(({ commentGroup, multiline }) => {
 	};
 
 }, CommentLemma);
+export default (editionsQuery)(cont);

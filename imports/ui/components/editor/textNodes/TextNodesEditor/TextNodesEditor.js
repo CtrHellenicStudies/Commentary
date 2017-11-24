@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 import Select from 'react-select';
 import autoBind from 'react-autobind';
 import {
@@ -384,8 +386,7 @@ TextNodesEditor.propTypes = {
 
 const TextNodesEditorContainer = createContainer(props => {
 
-	Meteor.subscribe('editions');
-	const editions = Editions.find().fetch();
+	const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
 
 	Meteor.subscribe('works', Session.get('tenantId'));
 	const works = Works.find().fetch();
@@ -397,4 +398,4 @@ const TextNodesEditorContainer = createContainer(props => {
 
 }, TextNodesEditor);
 
-export default TextNodesEditorContainer;
+export default compose(editionsQuery)(TextNodesEditorContainer);

@@ -5,8 +5,6 @@ import {convertFromRaw, EditorState, ContentState} from 'draft-js';
 import {compose} from 'react-apollo';
 
 // models
-import Editions from '/imports/models/editions';
-import Commenters from '/imports/models/commenters';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 // lib
@@ -253,14 +251,14 @@ const Utils = {
 
 		return domain;
 	},
-	textFromTextNodesGroupedByEdition(textNodesCursor) {
+	textFromTextNodesGroupedByEdition(textNodesCursor, _editions) {
 		const editions = [];
 		textNodesCursor.forEach((textNode) => {
 			textNode.text.forEach((text) => {
 				let myEdition = editions.find(e => text.edition === e._id);
 
 				if (!myEdition) {
-					const foundEdition = Editions.findOne({ _id: text.edition });
+					const foundEdition = _editions.find(x => x._id === text.edition);
 					myEdition = {
 						_id: foundEdition._id,
 						title: foundEdition.title,

@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import { Meteor } from 'meteor/meteor';
+import { compose } from 'react-apollo';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // models:
 import TextNodes from '/imports/models/textNodes';
-import Editions from '/imports/models/editions';
 
 // components:
 import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText';
@@ -136,8 +137,8 @@ ContextPanelContent.defaultProps = {
 };
 
 
-export default createContainer(({ lineFrom, workSlug, subworkN, multiline }) => {
-
+const cont = createContainer(props => {
+	const { lineFrom, workSlug, subworkN, multiline } = props;
 	const lineTo = lineFrom + 49;
 
 	const lemmaQuery = {
@@ -154,9 +155,9 @@ export default createContainer(({ lineFrom, workSlug, subworkN, multiline }) => 
 	}
 
 	Meteor.subscribe('textNodes', lemmaQuery);
-	const editionsSubscription = Meteor.subscribe('editions');
 	const textNodesCursor = TextNodes.find(lemmaQuery);
-	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+	const editions = !props.editionsQuery.loading ?
+		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 
 	let sortedEditions;
 
@@ -173,3 +174,4 @@ export default createContainer(({ lineFrom, workSlug, subworkN, multiline }) => 
 	};
 
 }, ContextPanelContent);
+export default compose(editionsQuery)(cont);

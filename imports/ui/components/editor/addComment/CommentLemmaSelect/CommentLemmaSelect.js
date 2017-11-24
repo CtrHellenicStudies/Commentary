@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
@@ -142,7 +144,9 @@ const CommentLemmaSelect = React.createClass({
 	},
 });
 
-const CommentLemmaSelectContainer = createContainer(({ selectedLineFrom, selectedLineTo, workSlug, subworkN }) => {
+const CommentLemmaSelectContainer = createContainer(props => {
+	
+	const { selectedLineFrom, selectedLineTo, workSlug, subworkN } = props;
 	const lemmaText = [];
 	// var commentGroup = this.props.commentGroup;
 	const selectedLemmaEdition = {
@@ -173,14 +177,14 @@ const CommentLemmaSelectContainer = createContainer(({ selectedLineFrom, selecte
 	const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
 	const textNodesCursor = TextNodes.find(lemmaQuery);
 
-	const editionsSubscription = Meteor.subscribe('editions');
-	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+	const editions = !props.editionsQuery.loading ?
+		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 
 	return {
 		lemmaText: editions,
 		selectedLemmaEdition: editions[0],
-		ready: textNodesSubscription.ready() && editionsSubscription.ready(),
+		ready: textNodesSubscription.ready()
 	};
 }, CommentLemmaSelect);
 
-export default CommentLemmaSelectContainer;
+export default compose(editionsQuery)(CommentLemmaSelectContainer);

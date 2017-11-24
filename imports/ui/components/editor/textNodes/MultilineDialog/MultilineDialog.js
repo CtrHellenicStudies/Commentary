@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
+import { compose } from 'react-apollo';
+import { editionsInsertMutation,
+	editionsRemoveMutation } from '/imports/graphql/methods/editions';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import IconMenu from 'material-ui/IconMenu';
@@ -71,7 +74,9 @@ class MultilineDialog extends React.Component {
 					multiline: ''
 				});
 			}
+
 		});
+		// this.editionsRemove(this.state.edition, multiline);
 	}
 
 	render() {
@@ -162,4 +167,4 @@ MultilineDialog.propTypes = {
 };
 
 
-export default MultilineDialog;
+export default MultilineDialog; // compose(editionsInsertMutation, editionsRemoveMutation)(MultilineDialog);

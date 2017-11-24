@@ -1,5 +1,5 @@
 import Editions from '/imports/models/editions';
-import AdminService from './adminService';
+import AdminService from '../adminService';
 
 /**
  * Logic-layer service for dealing with editions
@@ -12,15 +12,12 @@ export default class EditionsService extends AdminService {
 	 * @returns {Object[]} array of editions
 	 */
 	editionsGet(editionId) {
-		if (this.userIsAdmin) {
-			const args = {};
+		const args = {};
 
-			if (editionId) {
-				args._id = tenantId;
-			}
-
-			return Editions.find(args).fetch();
+		if (editionId) {
+			args._id = tenantId;
 		}
-		return new Error('Not authorized');
+
+		return Editions.find(args).fetch();
 	}
 }

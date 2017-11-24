@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { compose } from 'react-apollo';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -14,47 +16,6 @@ import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } 
 
 // models
 import TextNodes from '/imports/models/textNodes';
-import Editions from '/imports/models/editions';
-
-// const textFromTextNodesGroupedByEdition = (nodesCursor) => {
-// 	const editions = [];
-// 	nodesCursor.forEach((node) => {
-// 		node.text.forEach((text) => {
-// 			let myEdition = editions.find(e => text.edition === e._id);
-
-// 			if (!myEdition) {
-// 				const foundEdition = Editions.findOne({ _id: text.edition });
-// 				myEdition = {
-// 					_id: foundEdition._id,
-// 					title: foundEdition.title,
-// 					slug: foundEdition.slug,
-// 					lines: [],
-// 				};
-// 				editions.push(myEdition);
-// 			}
-
-// 			myEdition.lines.push({
-// 				html: text.html,
-// 				n: text.n,
-// 			});
-// 		});
-// 	});
-
-// 	// sort lines for each edition by line number
-// 	for (let i = 0; i < editions.length; ++i) {
-// 		editions[i].lines.sort((a, b) => {
-// 			if (a.n < b.n) {
-// 				return -1;
-// 			} else if (b.n < a.n) {
-// 				return 1;
-// 			}
-// 			return 0;
-// 		});
-// 	}
-
-// 	return editions;
-// };
-
 
 const KeywordContext = React.createClass({
 
@@ -140,11 +101,10 @@ const KeywordContext = React.createClass({
 
 });
 
-const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
+const KeywordContextContainer = createContainer(props => {
+	const { keyword, maxLines } = props;
 	let lemmaText = [];
 	const context = {};
-
-	const editionsSubscription = Meteor.subscribe('editions');
 
 	if (!keyword) {
 		return {
@@ -174,7 +134,8 @@ const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
 
 		if (textNodesSub.ready()) {
 			const textNodesCursor = TextNodes.find(textNodesQuery);
-			lemmaText = editionsSubscription ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+			lemmaText = !props.editionsQuery.loading ? 
+				Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 		}
 
 	} else {
@@ -195,7 +156,8 @@ const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
 
 				if (textNodesSub.ready()) {
 					const textNodesCursor = TextNodes.find(textNodesQuery);
-					lemmaText = editionsSubscription ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+					lemmaText = !props.editionsQuery.loading ?
+						Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 				}
 			}
 		}
@@ -208,4 +170,4 @@ const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
 }, KeywordContext);
 
 
-export default KeywordContextContainer;
+export default compose(editionsQuery)(KeywordContextContainer);

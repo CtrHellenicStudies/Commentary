@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
+import { compose } from 'react-apollo';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -8,7 +10,6 @@ import Draggable from 'react-draggable';
 
 // models
 import TextNodes from '/imports/models/textNodes';
-import Editions from '/imports/models/editions';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -171,9 +172,9 @@ const LemmaReferenceModalContainer = createContainer(({work, subwork, lineFrom, 
 
 	const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
-	const editionsSubscription = Meteor.subscribe('editions');
 	const textNodesCursor = TextNodes.find(lemmaQuery);
-	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+	const editions = props.editionsQuery.loading ?
+		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 
 	return {
 		lemmaText: editions,
@@ -181,4 +182,4 @@ const LemmaReferenceModalContainer = createContainer(({work, subwork, lineFrom, 
 	};
 }, LemmaReferenceModal);
 
-export default LemmaReferenceModalContainer;
+export default compose(editionsQuery)(LemmaReferenceModalContainer);

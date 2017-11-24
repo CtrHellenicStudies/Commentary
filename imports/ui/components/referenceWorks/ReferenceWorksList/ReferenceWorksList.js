@@ -73,7 +73,6 @@ const ReferenceWorksListContainer = createContainer(({ commenterId }) => {
 
 	// FETCH DATA:
 	const referenceWorks = ReferenceWorks.find(query, { sort: { title: 1 } }).fetch();
-	console.log(referenceWorks);
 
 	return {
 		referenceWorks,

@@ -14,7 +14,6 @@ export default class CommentService extends AdminService {
 	 * @returns {Object[]} array of commenters
 	 */
 	commentersQuery(tenantId) {
-		console.log(tenantId);
 		const args = {};
 
 		if (tenantId) {

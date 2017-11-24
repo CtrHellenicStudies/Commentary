@@ -31,7 +31,7 @@ export default class DiscussionCommentService extends AdminService {
 	 * @returns {Object} updated discussion comment
 	 */
 	discussionCommentUpdateStatus(discussionCommentId, discussionCommentStatus) {
-		console.log(discussionCommentStatus);
+
 		if (!this.userIsAdmin) {
 			throw AuthenticationError();
 		}

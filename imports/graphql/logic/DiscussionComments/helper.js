@@ -87,7 +87,6 @@ function notifyAfterPublishRejection(id, status) {
 			sendBatchNotificationEmailsForComment(discussionComment.commentId, user._id);
 		});
 	} else if (status === 'trash') {
-		console.log('removed!');
 		sendDiscussionCommentRejectEmail(discussionCommentId);
 	}
 
@@ -95,7 +94,6 @@ function notifyAfterPublishRejection(id, status) {
 
 }
 function sendNotification(configurationObj) {
-	console.log(configurationObj.to);
 	Email.send({
 		to: 'aniutka.pop@gmail.com',
 		from: Config.emails.from,

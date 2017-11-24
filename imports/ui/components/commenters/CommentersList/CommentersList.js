@@ -33,15 +33,15 @@ CommentersList.defaultProps = {
 };
 
 
-const cont = createContainer(({ limit, featureOnHomepage }) => {
+const cont = createContainer(props => {
 	let commenters = [];
 	let _limit = 100;
-	if (limit) {
-		_limit = limit;
+	if (props.limit) {
+		_limit = props.limit;
 	}
 
 	// SUBSCRIPTIONS:
-	if (featureOnHomepage) {
+	if (props.featureOnHomepage) {
 		Meteor.subscribe('commenters.featureOnHomepage', Session.get('tenantId'), _limit);
 		commenters = Commenters.find({
 			featureOnHomepage: true,
@@ -52,12 +52,14 @@ const cont = createContainer(({ limit, featureOnHomepage }) => {
 			_limit,
 		}).fetch();
 	} else {
-		Meteor.subscribe('commenters', Session.get('tenantId'), _limit);
-		commenters = Commenters.find({}, { sort: { name: 1 }, _limit }).fetch();
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	}
 
 	return {
 		commenters,
 	};
 }, CommentersList);
-export default (commentersQuery)(cont);
+export default compose(commentersQuery)(cont);

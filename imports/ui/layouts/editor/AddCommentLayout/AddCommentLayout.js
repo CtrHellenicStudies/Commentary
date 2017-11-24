@@ -90,7 +90,7 @@ class AddCommentLayout extends React.Component {
 	static propTypes = {
 		ready: PropTypes.bool,
 		commentInsert: PropTypes.func,
-		history: PropTypes.array
+		history: PropTypes.object
 	};
 
 	static defaultProps = {

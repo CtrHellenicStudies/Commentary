@@ -561,13 +561,19 @@ AddRevision.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-const AddRevisionContainer = createContainer(({ comment }) => {
+const AddRevisionContainer = createContainer(props => {
 
 	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-	const handleCommenters = Meteor.subscribe('commenters', Session.get('tenantId'));
 
 	const tags = Keywords.find().fetch();
-
+	this.props.commentersQuery.refetch({
+		tenantId: Session.get('tenantId')
+	});
+	let commenters = [];
+	if (Meteor.user() && Meteor.user().canEditCommenters) {
+		commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters.filter(x => 
+			Meteor.user().canEditCommenters.find(y => y === x._id));
+	}
 	const handleWorks = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	const referenceWorks = ReferenceWorks.find().fetch();
 	const referenceWorkOptions = [];
@@ -584,10 +590,6 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 	});
 
 	const commentersOptions = [];
-	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
-	}
 	commenters.forEach((commenter) => {
 		if (!commentersOptions.some(val => (
 				commenter._id === val.value

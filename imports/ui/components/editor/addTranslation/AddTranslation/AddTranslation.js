@@ -247,7 +247,7 @@ const AddTranslationContainer = createContainer(props => {
 	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = tenantCommenters.find((x => 
+		commenters = tenantCommenters.filter((x => 
 			Meteor.user().canEditCommenters.find(y => y === x._id) !== undefined));
 	}
 	commenters.forEach((commenter) => {

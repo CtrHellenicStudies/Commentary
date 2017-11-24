@@ -164,7 +164,7 @@ const ReferenceWorkDetailContainer = createContainer(props => {
 	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	let commenters = [];
 	if (referenceWork && 'authors' in referenceWork) {
-		commenters = tenantCommenters.find((x => 
+		commenters = tenantCommenters.filter((x => 
 			referenceWork.authors.find(y => y === x._id) !== undefined))
 			.sort(function alphabetical(a, b) { return a > b; });
 	}

@@ -380,7 +380,7 @@ const CommentarySearchPanel = React.createClass({
 	},
 });
 
-export default createContainer(props => {
+const cont = createContainer(props => {
 	let works = [];
 	let keywords = [];
 	let keyideas = [];
@@ -413,3 +413,4 @@ export default createContainer(props => {
 		referenceWorks,
 	};
 }, CommentarySearchPanel);
+export default compose(commentersQuery)(cont);

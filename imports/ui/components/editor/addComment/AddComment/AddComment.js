@@ -476,11 +476,12 @@ class AddComment extends React.Component {
 const AddCommentContainer = createContainer(props => {
 	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 	let commenters = [];
-	this.props.commentersQuery.refetchQuery({
+	props.commentersQuery.refetch({
 		tenantId: Session.get('tenantId')
 	});
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters;
+		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
+			Meteor.user().canEditCommenters.find(y => y === x._id));
 	}
 	const tags = Keywords.find().fetch();
 	const handleWorks = Meteor.subscribe('referenceWorks', Session.get('tenantId'));

@@ -53,7 +53,7 @@ const CommentUpperRight = props => (
 					<Link to={`/commenters/${props.commenters[key].slug}`}>
 						<AvatarIcon
 							avatar={
-								(props.commenters[key] && 'avatar' in props.commenters[key]) ?
+								(props.commenters[key] && props.commenters[key].avatar) ?
 								props.commenters[key].avatar.src
 								: null
 							}

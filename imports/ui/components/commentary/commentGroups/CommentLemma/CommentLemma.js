@@ -55,7 +55,7 @@ class CommentLemma extends React.Component {
 		index: PropTypes.string.isRequired,
 		hideLemma: PropTypes.bool.isRequired,
 		translationAuthors: PropTypes.array,
-		multiline: PropTypes.bool,
+		multiline: PropTypes.string,
 		selectMultiLine: PropTypes.func,
 
 		// from createContainer:
@@ -425,7 +425,6 @@ export default createContainer(({ commentGroup, multiline }) => {
 	const editionsSubscription = Meteor.subscribe('editions');
 	const textNodesCursor = TextNodes.find(lemmaQuery);
 	let editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
-
 	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
 
 	return {

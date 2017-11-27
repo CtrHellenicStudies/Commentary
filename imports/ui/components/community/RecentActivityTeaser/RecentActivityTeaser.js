@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { booksQuery } from '/imports/graphql/methods/books';
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
 import { compose } from 'react-apollo';
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -122,7 +123,6 @@ class RecentActivityTeaser extends React.Component {
 
 const RecentActivityTeaserContainer = createContainer(props => {
 
-	const tenantsHandle = Meteor.subscribe('tenants');
 	const commenterIds = [];
 	let userIds = [];
 	let commenters = [];
@@ -147,12 +147,13 @@ const RecentActivityTeaserContainer = createContainer(props => {
 			props.commentersQuery.refetch({
 				tenantId: Session.get('tenantId')
 			});
+			props.tenantsQuery.variables.tenantId = Session.get('tenantId');
 		}
 		commenters = currentCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
 			commenterIds.find(y => y === x._id));
 	
 		users = Meteor.users.find({ _id: { $in: userIds } }).fetch();
-		tenant = Tenants.findOne({ _id: props.comment.tenantId });
+		tenant = props.tenantsQuery.loading ? {} : props.tenantsQuery.tenants;
 		book = props.booksQuery.loading ? {} : props.booksQuery.find(x => 
 			x.chapters.url === props.comment.bookChapterUrl);
 		settings = Settings.findOne({ tenantId: props.comment.tenantId });
@@ -167,4 +168,4 @@ const RecentActivityTeaserContainer = createContainer(props => {
 	};
 }, RecentActivityTeaser);
 
-export default compose(commentersQuery, booksQuery)(RecentActivityTeaserContainer);
+export default compose(commentersQuery, booksQuery, tenantsQuery)(RecentActivityTeaserContainer);

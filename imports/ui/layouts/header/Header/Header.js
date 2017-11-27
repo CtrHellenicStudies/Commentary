@@ -7,10 +7,13 @@ import { Session } from 'meteor/session';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import { Link } from 'react-router-dom';
+import { compose } from 'react-apollo';
 
 // models:
 import Settings from '/imports/models/settings';
-import Tenants from '/imports/models/tenants';
+
+// graphql
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
 
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
@@ -74,6 +77,10 @@ class Header extends React.Component {
 			subdomain: PropTypes.string,
 			isAnnotation: PropTypes.bool,
 		}),
+		showSignup: PropTypes.func,
+		showForgotPwd: PropTypes.func,
+		history: PropTypes.any,
+		user: PropTypes.object
 
 	};
 
@@ -465,15 +472,20 @@ class Header extends React.Component {
 	END Header
 */
 
-export default createContainer(() => {
+const cont = createContainer((props) => {
 
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	const handleTenants = Meteor.subscribe('tenants');
 
+	if (Session.get('tenantId')) {
+		props.tenantsQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
 	return {
 		settings: Settings.findOne({}),
-		tenant: Tenants.findOne({ _id: Session.get('tenantId') }),
+		tenant: props.tenantsQuery.loading ? {} : props.tenantsQuery.tenants[0],
 		user: Meteor.user()
 	};
 
 }, Header);
+export default compose(tenantsQuery)(cont);

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
 import Comments from '/imports/models/comments';
-import Tenants from '/imports/models/tenants';
 import Utils from '/imports/lib/utils';
 
 
@@ -22,8 +23,8 @@ const resolveV1 = (props) => {
 	const comment = Comments.findOne({ _id: props.commentId });
 
 	if (comment) {
-		const tenantsHandle = Meteor.subscribe('tenants');
-		tenant = Tenants.findOne({_id: comment.tenantId});
+		this.props.tenantsQuery.variables.tenantId = comment.tenantId;
+		tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants;
 	}
 
 	if (comment && tenant) {
@@ -46,8 +47,8 @@ const resolveV2 = (props) => {
 	const comment = Comments.findOne({ _id: props.commentId });
 
 	if (comment) {
-		const tenantsHandle = Meteor.subscribe('tenants');
-		tenant = Tenants.findOne({_id: comment.tenantId});
+		this.props.tenantsQuery.variables.tenantId = comment.tenantId;
+		tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants;
 	}
 
 	if (comment && tenant) { 
@@ -130,7 +131,6 @@ class NameResolutionServiceLayout extends React.Component {
 
 const nameResolutionServiceLayoutContainer = createContainer((props) => {
 	let resolveURL;
-
 	switch (props.version) {
 	case 1:
 		resolveURL = resolveV1(props);
@@ -149,4 +149,4 @@ const nameResolutionServiceLayoutContainer = createContainer((props) => {
 }, NameResolutionServiceLayout);
 
 
-export default nameResolutionServiceLayoutContainer;
+export default compose(tenantsQuery)(nameResolutionServiceLayoutContainer);

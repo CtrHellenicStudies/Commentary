@@ -1,5 +1,5 @@
 import Tenants from '/imports/models/tenants';
-import AdminService from './adminService';
+import AdminService from '../adminService';
 
 /**
  * Logic-layer service for dealing with tenants
@@ -12,16 +12,14 @@ export default class TenantsService extends AdminService {
 	 * @returns {Object[]} array of tenants
 	 */
 	tenantsGet(_id) {
-		if (this.userIsAdmin) {
-			const args = {};
+		
+		const args = {};
 
-			if (_id) {
-				args._id = _id;
-			}
-
-			return Tenants.find(args).fetch();
+		if (_id) {
+			args._id = _id;
 		}
-		return new Error('Not authorized');
+
+		return Tenants.find(args).fetch();
 	}
 
 	/**

@@ -9,7 +9,7 @@ import { TenantType, TenantInputType } from '/imports/graphql/types/models/tenan
 import { RemoveType } from '/imports/graphql/types/index';
 
 // logic
-import TenantsService from '../logic/tenants';
+import TenantsService from '../logic/Tenants/tenants';
 
 const tenantsMutationFields = {
 	tenantCreate: {

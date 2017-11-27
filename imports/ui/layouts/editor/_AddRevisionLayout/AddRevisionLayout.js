@@ -286,69 +286,64 @@ const AddRevisionLayout = React.createClass({
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				<ApolloProvider
-					client={client}
-					store={store}
-				>
-					<div>
-						{ready && comment ?
-							<div className="chs-layout chs-editor-layout add-comment-layout">
-								<Header
-									toggleSearchTerm={this.toggleSearchTerm}
-									handleChangeLineN={this.handleChangeLineN}
-									filters={filters}
-									initialSearchEnabled
-									addCommentPage
-								/>
-								<main>
-									<div className="commentary-comments">
-										<div className="comment-group">
-											<CommentLemmaSelect
-												ref={(component) => { this.commentLemmaSelect = component; }}
-												selectedLineFrom={comment.lineFrom}
-												selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
-												workSlug={comment.work.slug}
-												subworkN={comment.subwork.n}
-											/>
+				<div>
+					{ready && comment ?
+						<div className="chs-layout chs-editor-layout add-comment-layout">
+							<Header
+								toggleSearchTerm={this.toggleSearchTerm}
+								handleChangeLineN={this.handleChangeLineN}
+								filters={filters}
+								initialSearchEnabled
+								addCommentPage
+							/>
+							<main>
+								<div className="commentary-comments">
+									<div className="comment-group">
+										<CommentLemmaSelect
+											ref={(component) => { this.commentLemmaSelect = component; }}
+											selectedLineFrom={comment.lineFrom}
+											selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+											workSlug={comment.work.slug}
+											subworkN={comment.subwork.n}
+										/>
 
-											<AddRevision
-												submitForm={this.addRevision}
-												update={this.update}
-												comment={comment}
-											/>
+										<AddRevision
+											submitForm={this.addRevision}
+											update={this.update}
+											comment={comment}
+										/>
 
-											<ContextPanel
-												open={this.state.contextReaderOpen}
-												workSlug={comment.work.slug}
-												subworkN={comment.subwork.n}
-												lineFrom={comment.lineFrom}
-												selectedLineFrom={comment.lineFrom}
-												selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
-												editor
-												disableEdit
-											/>
-										</div>
+										<ContextPanel
+											open={this.state.contextReaderOpen}
+											workSlug={comment.work.slug}
+											subworkN={comment.subwork.n}
+											lineFrom={comment.lineFrom}
+											selectedLineFrom={comment.lineFrom}
+											selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+											editor
+											disableEdit
+										/>
 									</div>
-								</main>
-								<FilterWidget
-									filters={filters}
-									toggleSearchTerm={this.toggleSearchTerm}
-								/>
-								<Snackbar
-									className="editor-snackbar"
-									open={this.state.snackbarOpen}
-									message={this.state.snackbarMessage}
-									autoHideDuration={4000}
-								/>
-							</div>
-							:
-							<div className="ahcip-spinner commentary-loading full-page-spinner">
-								<div className="double-bounce1" />
-								<div className="double-bounce2" />
-							</div>
-						}
-					</div>
-				</ApolloProvider>
+								</div>
+							</main>
+							<FilterWidget
+								filters={filters}
+								toggleSearchTerm={this.toggleSearchTerm}
+							/>
+							<Snackbar
+								className="editor-snackbar"
+								open={this.state.snackbarOpen}
+								message={this.state.snackbarMessage}
+								autoHideDuration={4000}
+							/>
+						</div>
+						:
+						<div className="ahcip-spinner commentary-loading full-page-spinner">
+							<div className="double-bounce1" />
+							<div className="double-bounce2" />
+						</div>
+					}
+				</div>
 			</MuiThemeProvider>
 		);
 	},

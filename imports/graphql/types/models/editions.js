@@ -1,6 +1,7 @@
 import {
 	GraphQLObjectType,
 	GraphQLString,
+	GraphQLInputObjectType
 } from 'graphql';
 
 /**
@@ -22,5 +23,24 @@ const EditionsType = new GraphQLObjectType({
 		}
 	}
 });
+/**
+ * Edition type
+ * @type {GraphQLObjectType}
+ */
+const EditionsInputType = new GraphQLInputObjectType({
+	name: 'EditionsInputType',
+	description: 'An edition input',
+	fields: {
+		_id: {
+			type: GraphQLString,
+		},
+		title: {
+			type: GraphQLString
+		},
+		slug: {
+			type: GraphQLString
+		}
+	}
+});
 
-export { EditionsType };
+export { EditionsType, EditionsInputType };

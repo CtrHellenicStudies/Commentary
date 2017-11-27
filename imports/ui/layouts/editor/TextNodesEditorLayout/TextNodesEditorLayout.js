@@ -70,26 +70,21 @@ class TextNodesEditorLayout extends React.Component {
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				<ApolloProvider
-					client={client}
-					store={store}
-				>
-					<div className="chs-layout chs-editor-layout add-comment-layout">
-						<Header
-							toggleSearchTerm={() => {}}
-							handleChangeLineN={() => {}}
-							filters={[]}
-							selectedWork={{ slug: 'iliad' }}
-						/>
-						<main>
-							<div className="commentary-comments">
-								<div className="comment-group">
-									<TextNodesEditor />
-								</div>
+				<div className="chs-layout chs-editor-layout add-comment-layout">
+					<Header
+						toggleSearchTerm={() => {}}
+						handleChangeLineN={() => {}}
+						filters={[]}
+						selectedWork={{ slug: 'iliad' }}
+					/>
+					<main>
+						<div className="commentary-comments">
+							<div className="comment-group">
+								<TextNodesEditor />
 							</div>
-						</main>
-					</div>
-				</ApolloProvider>
+						</div>
+					</main>
+				</div>
 			</MuiThemeProvider>
 		);
 	}

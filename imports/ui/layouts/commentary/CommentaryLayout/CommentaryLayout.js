@@ -16,7 +16,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { ApolloProvider, createNetworkInterface } from 'react-apollo';
+import { ApolloProvider } from 'react-apollo';
 import qs from 'qs-lite';
 import Cookies from 'js-cookie';
 

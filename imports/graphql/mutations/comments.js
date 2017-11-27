@@ -8,8 +8,6 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import CommentType, { CommentInputType } from '/imports/graphql/types/models/comment';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// models
-import Comments from '/imports/models/comments';
 
 // errors
 import { AuthenticationError } from '/imports/errors';
@@ -27,9 +25,9 @@ const commentMutationFields = {
 				type: new GraphQLNonNull(CommentInputType)
 			}
 		},
-		resolve(parent, {comment}, {token}) {
+		async resolve(parent, {comment}, {token}) {
 			const commentsService = new CommentService({token});
-			return commentsService.commentInsert(comment);
+			return await commentsService.commentInsert(comment);
 		}
 	},
 	commentRemove: {

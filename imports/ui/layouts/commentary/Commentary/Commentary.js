@@ -252,13 +252,12 @@ class Commentary extends Component {
 		}
 	}
 	renderNoCommentsOrLoading() {
-		const { isOnHomeView, ready } = this.props;
-		const { commentGroups } = this.state;
+		const { isOnHomeView, commentGroups } = this.props;
 
 		if (
 			!isOnHomeView
 		) {
-			if (ready && commentGroups.length === 0) {
+			if (!this.props.commentsMoreQuery.commentsMore) {
 				return (
 					<div className="no-commentary-wrap">
 						<p className="no-commentary no-results">
@@ -266,17 +265,14 @@ class Commentary extends Component {
 						</p>
 					</div>
 				);
-			} else if (this.props.commentsMoreQuery.commentsMore) {
-				return (
-					<div className="ahcip-spinner commentary-loading">
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
-					</div>
-				);
 			}
+			return (
+				<div className="ahcip-spinner commentary-loading">
+					<div className="double-bounce1" />
+					<div className="double-bounce2" />
+				</div>
+			);
 		}
-
-		return '';
 	}
 	render() {
 		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, commentGroups } = this.props;

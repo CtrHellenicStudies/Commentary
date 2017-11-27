@@ -289,7 +289,7 @@ const TextNodesInputContainer = createContainer(props => {
 
 	if (ready) {
 		textNodes = TextNodes.find(lemmaQuery).fetch();
-		textNodesByEditions = !props.editionsWuery.loading ?
+		textNodesByEditions = !props.editionsQuery.loading ?
 			Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions) : [];
 		textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
 

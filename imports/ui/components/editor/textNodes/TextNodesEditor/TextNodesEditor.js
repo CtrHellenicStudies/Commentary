@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -36,7 +36,7 @@ import TranslationSelect from '../TranslationSelect/TranslationSelect';
 import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
 
 
-class TextNodesEditor extends React.Component {
+class TextNodesEditor extends Component {
 	constructor(props) {
 		super(props);
 
@@ -122,6 +122,7 @@ class TextNodesEditor extends React.Component {
 	}
 
 	showMultilineDialog() {
+
 		this.setState({
 			multiLineDialogOpen: true,
 		});

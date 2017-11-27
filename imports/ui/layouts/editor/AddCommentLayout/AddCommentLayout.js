@@ -4,6 +4,8 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
+import { editionsInsertMutation,
+	editionsRemoveMutation} from '/imports/graphql/methods/editions';
 import { compose, ApolloProvider } from 'react-apollo';
 
 import slugify from 'slugify';
@@ -251,7 +253,11 @@ class AddCommentLayout extends React.Component {
 			created: new Date(),
 			status: 'publish',
 		};
-
+		this.props.editionsInsert({
+			_id: 'adasdasdasdas',
+			slug: 'asdasdasd',
+			title: 'asdasdasd'
+		}, 'adasdasd');
 		this.props.commentInsert(comment).then((res) => {
 			if (res.data.commentInsert._id) {
 				this.setState({
@@ -420,61 +426,56 @@ class AddCommentLayout extends React.Component {
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				<ApolloProvider
-					client={client}
-					store={store}
-				>
-					{!loading ?
-						<div className="chs-layout chs-editor-layout add-comment-layout">
-							<Header
-								toggleSearchTerm={this.toggleSearchTerm}
-								handleChangeLineN={this.handleChangeLineN}
-								selectedWork={this.getWork(filters)}
-								filters={filters}
-								initialSearchEnabled
-								addCommentPage
-							/>
-							<main>
-								<div className="commentary-comments">
-									<div className="comment-group">
-										<CommentLemmaSelect
-											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={selectedLineFrom}
-											selectedLineTo={selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-										/>
+				{!loading ?
+					<div className="chs-layout chs-editor-layout add-comment-layout">
+						<Header
+							toggleSearchTerm={this.toggleSearchTerm}
+							handleChangeLineN={this.handleChangeLineN}
+							selectedWork={this.getWork(filters)}
+							filters={filters}
+							initialSearchEnabled
+							addCommentPage
+						/>
+						<main>
+							<div className="commentary-comments">
+								<div className="comment-group">
+									<CommentLemmaSelect
+										ref={(component) => { this.commentLemmaSelect = component; }}
+										selectedLineFrom={selectedLineFrom}
+										selectedLineTo={selectedLineTo}
+										workSlug={work ? work.slug : 'iliad'}
+										subworkN={subwork ? subwork.n : 1}
+									/>
 
-										<AddComment
-											selectedLineFrom={selectedLineFrom}
-											selectedLineTo={selectedLineTo}
-											submitForm={this.addComment}
-											work={work}
-										/>
+									<AddComment
+										selectedLineFrom={selectedLineFrom}
+										selectedLineTo={selectedLineTo}
+										submitForm={this.addComment}
+										work={work}
+									/>
 
-										<ContextPanel
-											open={contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
-											lineFrom={lineFrom || 1}
-											selectedLineFrom={selectedLineFrom}
-											selectedLineTo={selectedLineTo}
-											updateSelectedLines={this.updateSelectedLines}
-											editor
-										/>
-									</div>
+									<ContextPanel
+										open={contextReaderOpen}
+										workSlug={work ? work.slug : 'iliad'}
+										subworkN={subwork ? subwork.n : 1}
+										lineFrom={lineFrom || 1}
+										selectedLineFrom={selectedLineFrom}
+										selectedLineTo={selectedLineTo}
+										updateSelectedLines={this.updateSelectedLines}
+										editor
+									/>
 								</div>
+							</div>
 
-								<FilterWidget
-									filters={filters}
-									toggleSearchTerm={this.toggleSearchTerm}
-								/>
-							</main>
-						</div>
-						:
-						<Spinner fullPage />
-					}
-				</ApolloProvider>
+							<FilterWidget
+								filters={filters}
+								toggleSearchTerm={this.toggleSearchTerm}
+							/>
+						</main>
+					</div>
+					:
+					<Spinner fullPage />
+				}
 			</MuiThemeProvider>
 		);
 	}
@@ -490,4 +491,4 @@ const AddCommentLayoutContainer = (() => {
 	};
 }, AddCommentLayout);
 
-export default compose(commentsInsertMutation)(AddCommentLayoutContainer);
+export default compose(commentsInsertMutation, editionsInsertMutation, editionsRemoveMutation)(AddCommentLayoutContainer);

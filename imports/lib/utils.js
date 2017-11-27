@@ -34,7 +34,7 @@ const Utils = {
 				ret = urn.v2;
 			else
 				ret = urn.v1;
-				
+
 		}
 		catch(error){
 			console.log('Old urn exists in database.');
@@ -310,7 +310,7 @@ const Utils = {
 		editions.forEach((edition, index) => {
 			const joinedText = edition.lines.map(line => line.html).join(' ');
 
-			const tag = new RegExp(`<lb ed="${multiline}" id="\\d+" />`, 'ig');
+			const tag = new RegExp(`<lb id="\\d+" ed="${multiline}" />`, 'ig');
 			const id = /id="\d+"/ig;
 
 			const textArray = joinedText.split(tag);

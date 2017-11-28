@@ -6,6 +6,7 @@ import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
 import { Roles } from 'meteor/alanning:roles';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorkCreateMutation } from '/imports/graphql/methods/referenceWorks';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
@@ -241,10 +242,10 @@ class AddRevision extends React.Component {
 			slug: slugify(reference.value.toLowerCase()),
 			tenantId: Session.get('tenantId')
 		};
-		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
-			if (err) {
+		this.props.referenceWorkCreate(_reference).then(error => {
+			if (error) {
 				this.showSnackBar(err);
-			}			else {
+			} else {
 				this.showSnackBar({message: 'Reference work added'});
 			}
 		});
@@ -554,7 +555,8 @@ AddRevision.propTypes = {
 	referenceWorkOptions: PropTypes.array,
 	commentersOptions: PropTypes.array,
 	history: PropTypes.array,
-	ready: PropTypes.bool
+	ready: PropTypes.bool,
+	referenceWorkCreate: PropTypes.func
 };
 
 AddRevision.childContextTypes = {
@@ -574,8 +576,12 @@ const AddRevisionContainer = createContainer(props => {
 		commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters.filter(x => 
 			Meteor.user().canEditCommenters.find(y => y === x._id));
 	}
-	const handleWorks = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-	const referenceWorks = ReferenceWorks.find().fetch();
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
 		if (!referenceWorkOptions.some(val => (
@@ -601,11 +607,11 @@ const AddRevisionContainer = createContainer(props => {
 		}
 	});
 	return {
-		ready: handleKeywords.ready() && handleWorks.ready(),
+		ready: handleKeywords.ready(),
 		tags,
 		referenceWorkOptions,
 		commentersOptions,
 	};
 }, AddRevision);
 
-export default compose(commentersQuery)(AddRevisionContainer);
+export default compose(commentersQuery, referenceWorkCreateMutation)(AddRevisionContainer);

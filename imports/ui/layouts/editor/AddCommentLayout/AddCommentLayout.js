@@ -4,8 +4,6 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
-import { editionsInsertMutation,
-	editionsRemoveMutation} from '/imports/graphql/methods/editions';
 import { compose, ApolloProvider } from 'react-apollo';
 
 import slugify from 'slugify';
@@ -253,11 +251,6 @@ class AddCommentLayout extends React.Component {
 			created: new Date(),
 			status: 'publish',
 		};
-		this.props.editionsInsert({
-			_id: 'adasdasdasdas',
-			slug: 'asdasdasd',
-			title: 'asdasdasd'
-		}, 'adasdasd');
 		this.props.commentInsert(comment).then((res) => {
 			if (res.data.commentInsert._id) {
 				this.setState({
@@ -491,4 +484,4 @@ const AddCommentLayoutContainer = (() => {
 	};
 }, AddCommentLayout);
 
-export default compose(commentsInsertMutation, editionsInsertMutation, editionsRemoveMutation)(AddCommentLayoutContainer);
+export default compose(commentsInsertMutation)(AddCommentLayoutContainer);

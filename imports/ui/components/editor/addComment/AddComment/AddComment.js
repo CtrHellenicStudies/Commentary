@@ -27,8 +27,11 @@ import { stateToHTML } from 'draft-js-export-html';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 
-// models
+// graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+
+// models
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 // lib:
@@ -65,7 +68,8 @@ class AddComment extends React.Component {
 		tags: PropTypes.array,
 		referenceWorkOptions: PropTypes.array,
 		ready: PropTypes.bool,
-		commenters: PropTypes.array
+		commenters: PropTypes.array,
+		referenceWorkCreate: PropTypes.func
 	};
 
 	static defaultProps = {
@@ -322,7 +326,7 @@ class AddComment extends React.Component {
 			slug: slugify(reference.value.toLowerCase()),
 			tenantId: Session.get('tenantId')
 		};
-		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
+		this.props.referenceWorkCreate(_reference).then(err => {
 			if (err) {
 				this.showSnackBar(err);
 			}			else {
@@ -476,16 +480,20 @@ class AddComment extends React.Component {
 const AddCommentContainer = createContainer(props => {
 	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 	let commenters = [];
-	props.commentersQuery.refetch({
-		tenantId: Session.get('tenantId')
-	});
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
 		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
 			Meteor.user().canEditCommenters.find(y => y === x._id));
 	}
 	const tags = Keywords.find().fetch();
-	const handleWorks = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-	const referenceWorks = ReferenceWorks.find().fetch();
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
 		if (!referenceWorkOptions.some(val => (
@@ -500,7 +508,7 @@ const AddCommentContainer = createContainer(props => {
 	});
 
 	return {
-		ready: handleKeywords.ready() && handleWorks.ready(),
+		ready: handleKeywords.ready(),
 		tags,
 		referenceWorkOptions,
 		commenters
@@ -508,4 +516,4 @@ const AddCommentContainer = createContainer(props => {
 
 }, AddComment);
 
-export default compose(commentersQuery)(AddCommentContainer);
+export default compose(commentersQuery, referenceWorkCreateMutation, referenceWorksQuery)(AddCommentContainer);

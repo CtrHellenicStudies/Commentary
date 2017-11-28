@@ -4,6 +4,10 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import qs from 'qs-lite';
+import { compose } from 'react-apollo';
+
+// graphql
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // models:
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -356,20 +360,25 @@ class CommentDetail extends React.Component {
 	END CommentDetail
 */
 
-export default createContainer(({ comment }) => {
+const cont = createContainer((props) => {
 
+	const { comment } = props;
 	const tenantId = Session.get('tenantId');
 
-	const handleReferenceWorks = Meteor.subscribe('referenceWorks', tenantId);
 	const handleSettings = Meteor.subscribe('settings.tenant', tenantId);
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
 
 	const referenceWorkIds = [];
 	let referenceWorks = [];
-	if (comment && comment.referenceWorks) {
+	if (comment && comment.referenceWorks && !props.referenceWorksQuery.loading) {
 		comment.referenceWorks.forEach((referenceWork) => {
 			referenceWorkIds.push(referenceWork.referenceWorkId);
 		});
-		referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
+		referenceWorks = props.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined);
 	}
 
 	const settings = Settings.findOne({ tenantId });
@@ -380,6 +389,7 @@ export default createContainer(({ comment }) => {
 		user,
 		referenceWorks,
 		settings,
-		ready: handleReferenceWorks.ready() && handleSettings.ready(),
+		ready: handleSettings.ready(),
 	};
 }, CommentDetail);
+export default compose(referenceWorksQuery)(cont);

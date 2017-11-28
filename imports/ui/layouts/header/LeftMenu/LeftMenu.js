@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 
@@ -192,11 +194,17 @@ LeftMenu.defaultProps = {
 */
 
 
-export default createContainer(() => {
+const cont = createContainer((props) => {
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	if (Session.get('tenantId')) {
+		props.tenantsQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
 	return {
 		settings: Settings.findOne({}),
 		currentUser: Meteor.users.findOne({_id: Meteor.userId()}),
-		tenant: Tenants.findOne({_id: Session.get('tenantId')})
+		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants[0]
 	};
 }, LeftMenu);
+export default compose(tenantsQuery)(cont);

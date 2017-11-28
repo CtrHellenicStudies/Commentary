@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import RaisedButton from 'material-ui/RaisedButton';
 import { compose } from 'react-apollo';
 import FontIcon from 'material-ui/FontIcon';
@@ -19,6 +18,10 @@ import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import Utils from '/imports/lib/utils';
+
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -371,9 +374,13 @@ const EditKeywordContainer = createContainer(props => {
 		});
 	});
 
-	Meteor.subscribe('referenceWorks');
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const referenceWorksOptions = [];
-	const referenceWorks = ReferenceWorks.find().fetch();
 	referenceWorks.forEach((referenceWork) => {
 		referenceWorksOptions.push({
 			value: referenceWork._id,
@@ -408,4 +415,4 @@ const EditKeywordContainer = createContainer(props => {
 	};
 }, EditKeyword);
 
-export default compose(commentersQuery)(EditKeywordContainer);
+export default compose(commentersQuery, referenceWorksQuery)(EditKeywordContainer);

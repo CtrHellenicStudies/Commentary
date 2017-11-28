@@ -266,12 +266,14 @@ class Commentary extends Component {
 					</div>
 				);
 			}
-			return (
-				<div className="ahcip-spinner commentary-loading">
-					<div className="double-bounce1" />
-					<div className="double-bounce2" />
-				</div>
-			);
+			if (!this.props.ready) {
+				return (
+					<div className="ahcip-spinner commentary-loading">
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
+					</div>
+				);
+			}
 		}
 	}
 	render() {
@@ -353,7 +355,8 @@ const cont = createContainer(props => {
 		[] : parseCommentsToCommentGroups(props.commentsQuery.comments,
 			props.commentersQuery.commenters);	
 	return {
-		commentGroups
+		commentGroups,
+		ready: !props.commentsQuery.loading && !props.commentersQuery.loading && !props.commentsMoreQuery.loading
 	};
 }, Commentary);
 export default compose(commentsQuery, commentersQuery, commentsMoreQuery)(cont);

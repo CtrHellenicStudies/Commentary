@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
@@ -11,6 +11,10 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import Utils from '/imports/lib/utils';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { compose } from 'react-apollo';
+
+// graphql
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // models
 import Keywords from '/imports/models/keywords';
@@ -150,14 +154,20 @@ class AddRevision extends React.Component {
 }
 
 
-const AddRevisionContainer = createContainer(({ comment }) => {
+const AddRevisionContainer = createContainer((props) => {
+
+	const { comment } = props;
 
 	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
 
 	const tags = Keywords.find().fetch();
 
-	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-	const referenceWorks = ReferenceWorks.find().fetch();
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
 		if (!referenceWorkOptions.some(val => (
@@ -190,4 +200,4 @@ const AddRevisionForm = reduxForm({
 })(AddRevisionContainer);
 
 
-export default AddRevisionForm;
+export default compose(referenceWorksQuery)(AddRevisionForm);

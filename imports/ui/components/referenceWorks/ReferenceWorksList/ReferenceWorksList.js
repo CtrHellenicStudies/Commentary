@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 
 import Masonry from 'react-masonry-component/lib';
 
 // models
 import ReferenceWorks from '/imports/models/referenceWorks';
+
+// graphql
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // components
 import ReferenceWorkTeaser from '/imports/ui/components/referenceWorks/ReferenceWorkTeaser';
@@ -61,22 +65,25 @@ ReferenceWorksList.propTypes = {
 	referenceWorks: PropTypes.array,
 };
 
-const ReferenceWorksListContainer = createContainer(({ commenterId }) => {
+const ReferenceWorksListContainer = createContainer((props) => {
+	const { commenterId } = props;
 	// SUBSCRIPTIONS:
 	const query = {};
-	if (commenterId) {
-		query.authors = commenterId;
-		Meteor.subscribe('referenceWorks.commenterId', commenterId, Session.get('tenantId'));
-	} else {
-		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+	let referenceWorks;
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({	
+			tenantId: Session.get('tenantId')	
+		});
 	}
-
-	// FETCH DATA:
-	const referenceWorks = ReferenceWorks.find(query, { sort: { title: 1 } }).fetch();
+	if (commenterId) {
+		referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === commenterId);
+	} else {
+		referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
+	}
 
 	return {
 		referenceWorks,
 	};
 }, ReferenceWorksList);
 
-export default ReferenceWorksListContainer;
+export default compose(referenceWorksQuery)(ReferenceWorksListContainer);

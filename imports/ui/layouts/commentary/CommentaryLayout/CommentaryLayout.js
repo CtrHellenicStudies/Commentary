@@ -16,7 +16,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider, compose } from 'react-apollo';
 import qs from 'qs-lite';
 import Cookies from 'js-cookie';
 
@@ -25,6 +25,9 @@ import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import configureStore from '/imports/store/configureStore';
 import Header from '/imports/ui/layouts/header/Header';
+
+// graphql
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // models
 import Works from '/imports/models/works';
@@ -52,6 +55,7 @@ class CommentaryLayout extends React.Component {
 		referenceWorks: PropTypes.array,
 		works: PropTypes.array,
 		isTest: PropTypes.bool,
+		history: PropTypes.any
 	};
 
 	static childContextTypes = {
@@ -217,14 +221,20 @@ class CommentaryLayout extends React.Component {
 	}
 }
 
-export default createContainer(({match}) => {
+const cont = createContainer((props) => {
 
-	const handleReference = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
+	const { match } = props;
 	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
 	const queryParams = qs.parse(window.location.search.substr(1));
 	const params = match.params;
 
-	const referenceWorks = ReferenceWorks.find().fetch();
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+
+	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const works = Works.find().fetch();
 
 	return {
@@ -232,6 +242,7 @@ export default createContainer(({match}) => {
 		queryParams,
 		referenceWorks,
 		works,
-		ready: handleReference.ready() && handleWorks.ready(),
+		ready: handleWorks.ready(),
 	};
 }, CommentaryLayout);
+export default compose(referenceWorksQuery)(cont);

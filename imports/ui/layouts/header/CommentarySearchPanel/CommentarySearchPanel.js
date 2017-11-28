@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { Session } from 'meteor/session';
 import { compose } from 'react-apollo';
 import _ from 'lodash';
@@ -17,6 +16,10 @@ import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 import Works from '/imports/models/works';
+
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // components:
 import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
@@ -391,10 +394,12 @@ const cont = createContainer(props => {
 		props.commentersQuery.refetch({
 			tenantId: Session.get('tenantId')
 		});
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
 	}
 	if (!props.addCommentPage) {
 		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
 	}
 	Meteor.subscribe('works', Session.get('tenantId'));
 
@@ -403,7 +408,7 @@ const cont = createContainer(props => {
 	keywords = Keywords.find({ type: 'word' }).fetch();
 	commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	works = Works.find({}, { sort: { order: 1 } }).fetch();
-	referenceWorks = ReferenceWorks.find({}, { sort: { title: 1 } }).fetch();
+	referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 
 	return {
 		keyideas,
@@ -413,4 +418,4 @@ const cont = createContainer(props => {
 		referenceWorks,
 	};
 }, CommentarySearchPanel);
-export default compose(commentersQuery)(cont);
+export default compose(commentersQuery, referenceWorksQuery)(cont);

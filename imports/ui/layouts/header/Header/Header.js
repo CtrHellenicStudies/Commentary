@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
@@ -57,7 +57,7 @@ const styles = {
 /*
 	BEGIN Header
 */
-class Header extends React.Component {
+class Header extends Component {
 	static propTypes = {
 		filters: PropTypes.any, // eslint-disable-line react/forbid-prop-types
 		toggleSearchTerm: PropTypes.func,

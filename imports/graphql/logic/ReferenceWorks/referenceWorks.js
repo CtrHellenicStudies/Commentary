@@ -1,5 +1,5 @@
 import ReferenceWorks from '/imports/models/referenceWorks';
-import AdminService from './adminService';
+import AdminService from '../adminService';
 
 /**
  * Logic-layer service for dealing with reference works

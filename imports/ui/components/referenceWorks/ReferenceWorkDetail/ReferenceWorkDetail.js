@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import muiTheme from '/imports/lib/muiTheme';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -17,6 +16,10 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+
 // models
 import Settings from '/imports/models/settings';
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -26,7 +29,7 @@ import Commenters from '/imports/models/commenters';
 import Utils from '/imports/lib/utils';
 
 
-class ReferenceWorkDetail extends React.Component {
+class ReferenceWorkDetail extends Component {
 
 	createMarkup() {
 		let __html = '';
@@ -148,22 +151,20 @@ ReferenceWorkDetail.propTypes = {
 const ReferenceWorkDetailContainer = createContainer(props => {
 	const slug = props.match.params.slug;
 	// SUBSCRIPTIONS:
-	Meteor.subscribe('referenceWorks.slug', slug, Session.get('tenantId'));
 	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
-	// FETCH DATA:
-	const query = {
-		slug,
-	};
-	const referenceWork = ReferenceWorks.findOne(query);
+	const referenceWork = props.referenceWorksQuery.loading ? undefined : props.referenceWorksQuery.referenceWorks.find(x => x.slug === slug);
 	if (Session.get('tenantId')) {
 		props.commentersQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+		props.referenceWorksQuery.refetch({
 			tenantId: Session.get('tenantId')
 		});
 	}
 	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	let commenters = [];
-	if (referenceWork && 'authors' in referenceWork) {
+	if (referenceWork && referenceWork.authors) {
 		commenters = tenantCommenters.filter((x => 
 			referenceWork.authors.find(y => y === x._id) !== undefined))
 			.sort(function alphabetical(a, b) { return a > b; });
@@ -177,4 +178,4 @@ const ReferenceWorkDetailContainer = createContainer(props => {
 	};
 }, ReferenceWorkDetail);
 
-export default compose(commentersQuery)(ReferenceWorkDetailContainer);
+export default compose(commentersQuery, referenceWorksQuery)(ReferenceWorkDetailContainer);

@@ -13,7 +13,7 @@ class AdminService {
 		});
 		this.userIsAdmin = this.user && this.user.roles ? this.user.roles.indexOf('admin') !== -1 : false;
 		this.userIsEditor = this.user && this.user.roles ? this.user.roles.indexOf('editor') !== -1 : false;
-		this.userIsCommenter = this.user & this.user.roles ? this.user.roles.indexOf('commenter') !== -1 : false;
+		this.userIsCommenter = this.user && this.user.roles ? this.user.roles.indexOf('commenter') !== -1 : false;
 		this.userIsNobody = !this.userIsAdmin && !this.userIsCommenter && !this.userIsEditor;
 	}
 }

@@ -4,7 +4,6 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import TextField from 'material-ui/TextField';
 import { createContainer } from 'meteor/react-meteor-data';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import _ from 'lodash';
 import { compose } from 'react-apollo';
 
@@ -13,6 +12,10 @@ import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 import Works from '/imports/models/works';
+
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // components:
 import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns';
@@ -343,7 +346,9 @@ const commentarySearchToolbarContainer = createContainer(props => {
 	// SUBSCRIPTIONS:
 	if (!props.addCommentPage) {
 		Meteor.subscribe('keywords.all', {tenantId: tenantId});
-		Meteor.subscribe('referenceWorks', tenantId);
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
 	}
 	Meteor.subscribe('works', tenantId);
 
@@ -352,9 +357,9 @@ const commentarySearchToolbarContainer = createContainer(props => {
 		keywords: Keywords.find({ type: 'word' }).fetch(),
 		commenters: props.commentersQuery.loading ? [] : props.commentersQuery.commenters,
 		works: Works.find({}, { sort: { order: 1 } }).fetch(),
-		referenceWorks: ReferenceWorks.find({}, { sort: { title: 1 } }).fetch(),
+		referenceWorks: props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks,
 	};
 
 }, CommentarySearchToolbar);
 
-export default compose(commentersQuery)(commentarySearchToolbarContainer);
+export default compose(commentersQuery, referenceWorksQuery)(commentarySearchToolbarContainer);

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -19,6 +18,9 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
 import { convertToHTML } from 'draft-convert';
 
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -320,9 +322,13 @@ const AddKeywordContainer = createContainer(props => {
 		});
 	});
 
-	Meteor.subscribe('referenceWorks');
 	const referenceWorksOptions = [];
-	const referenceWorks = ReferenceWorks.find().fetch();
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	referenceWorks.forEach((referenceWork) => {
 		referenceWorksOptions.push({
 			value: referenceWork._id,
@@ -358,4 +364,4 @@ const AddKeywordContainer = createContainer(props => {
 
 }, AddKeyword);
 
-export default compose(commentersQuery)(AddKeywordContainer);
+export default compose(commentersQuery, referenceWorksQuery)(AddKeywordContainer);

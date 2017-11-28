@@ -14,6 +14,10 @@ import {
 	ControlLabel,
 } from 'react-bootstrap';
 import Select, { Creatable } from 'react-select';
+import { compose } from 'react-apollo';
+
+// graphql
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // models
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -185,10 +189,14 @@ ReferenceWorksInput.propTypes = {
 };
 
 
-const ReferenceWorksInputContainer = createContainer(() => {
+const ReferenceWorksInputContainer = createContainer((props) => {
 
-	Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-	const referenceWorks = ReferenceWorks.find().fetch();
+	if (Session.get('tenantId')) {
+		props.referenceWorksQuery.refetch({
+			tenantId: Session.get('tenantId')
+		});
+	}
+	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
 		if (!referenceWorkOptions.some(val => (
@@ -209,4 +217,4 @@ const ReferenceWorksInputContainer = createContainer(() => {
 }, ReferenceWorksInput);
 
 
-export default ReferenceWorksInputContainer;
+export default compose(referenceWorksQuery)(ReferenceWorksInputContainer);

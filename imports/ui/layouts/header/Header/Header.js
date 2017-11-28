@@ -14,6 +14,7 @@ import Settings from '/imports/models/settings';
 
 // graphql
 import { tenantsQuery } from '/imports/graphql/methods/tenants';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
@@ -474,18 +475,13 @@ class Header extends Component {
 
 const cont = createContainer((props) => {
 
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	const tenantId = Session.get('tenantId');
 
-	if (Session.get('tenantId')) {
-		props.tenantsQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
-	}
 	return {
-		settings: Settings.findOne({}),
-		tenant: props.tenantsQuery.loading ? {} : props.tenantsQuery.tenants[0],
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+		tenant: props.tenantsQuery.loading ? {} : props.tenantsQuery.tenants.find(x => x._id === tenantId),
 		user: Meteor.user()
 	};
 
 }, Header);
-export default compose(tenantsQuery)(cont);
+export default compose(tenantsQuery, settingsQuery)(cont);

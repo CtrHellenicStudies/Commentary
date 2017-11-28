@@ -10,11 +10,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
+import { compose } from 'react-apollo';
 
 // models
 import Comments from '/imports/models/comments';
 import Keywords from '/imports/models/keywords';
 import Settings from '/imports/models/settings';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // components
 import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
@@ -186,11 +190,13 @@ KeywordDetail.childContextTypes = {
 };
 
 
-const KeywordDetailContainer = createContainer(({ match }) => {
+const KeywordDetailContainer = createContainer((props) => {
+
+	const { match } = props;
 	const slug = match.params.slug;
+	const tenantId = Session.get('tenantId');
 	// SUBSCRIPTIONS:
 	Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
 
 	// FETCH DATA:
@@ -209,9 +215,9 @@ const KeywordDetailContainer = createContainer(({ match }) => {
 
 	return {
 		keyword,
-		settings: settingsHandle.ready() ? Settings.findOne() : {},
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
 		keywordComments,
 	};
 }, KeywordDetail);
 
-export default KeywordDetailContainer;
+export default compose(settingsQuery)(KeywordDetailContainer);

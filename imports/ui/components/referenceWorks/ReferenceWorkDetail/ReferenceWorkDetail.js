@@ -19,6 +19,7 @@ import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Settings from '/imports/models/settings';
@@ -149,20 +150,12 @@ ReferenceWorkDetail.propTypes = {
 
 
 const ReferenceWorkDetailContainer = createContainer(props => {
-	const slug = props.match.params.slug;
-	// SUBSCRIPTIONS:
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
-	const referenceWork = props.referenceWorksQuery.loading ? undefined : props.referenceWorksQuery.referenceWorks.find(x => x.slug === slug);
-	if (Session.get('tenantId')) {
-		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
-		props.referenceWorksQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
-	}
-	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
+	const slug = props.match.params.slug;
+	const tenantId = Session.get('tenantId');
+
+	const referenceWork = props.referenceWorksQuery.loading ? undefined : props.referenceWorksQuery.referenceWorks.find(x => x.slug === slug && x.tenantId === tenantId);
+	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => x.tenantId === tenantId);
 	let commenters = [];
 	if (referenceWork && referenceWork.authors) {
 		commenters = tenantCommenters.filter((x => 
@@ -174,8 +167,10 @@ const ReferenceWorkDetailContainer = createContainer(props => {
 		slug,
 		referenceWork,
 		commenters,
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' },
+		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
 	};
 }, ReferenceWorkDetail);
 
-export default compose(commentersQuery, referenceWorksQuery)(ReferenceWorkDetailContainer);
+export default compose(commentersQuery,
+	referenceWorksQuery,
+	settingsQuery)(ReferenceWorkDetailContainer);

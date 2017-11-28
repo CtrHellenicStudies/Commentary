@@ -8,6 +8,7 @@ import { compose } from 'react-apollo';
 
 // graphql
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models:
 import ReferenceWorks from '/imports/models/referenceWorks';
@@ -365,23 +366,16 @@ const cont = createContainer((props) => {
 	const { comment } = props;
 	const tenantId = Session.get('tenantId');
 
-	const handleSettings = Meteor.subscribe('settings.tenant', tenantId);
-	if (Session.get('tenantId')) {
-		props.referenceWorksQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
-	}
-
 	const referenceWorkIds = [];
 	let referenceWorks = [];
 	if (comment && comment.referenceWorks && !props.referenceWorksQuery.loading) {
 		comment.referenceWorks.forEach((referenceWork) => {
 			referenceWorkIds.push(referenceWork.referenceWorkId);
 		});
-		referenceWorks = props.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined);
+		referenceWorks = props.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined && x.tenantId === tenantId);
 	}
 
-	const settings = Settings.findOne({ tenantId });
+	const settings = props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId);
 
 	const user = Meteor.user();
 
@@ -389,7 +383,7 @@ const cont = createContainer((props) => {
 		user,
 		referenceWorks,
 		settings,
-		ready: handleSettings.ready(),
+		ready: !props.settingsQuery.loading && !props.referenceWorksQuery.loading,
 	};
 }, CommentDetail);
-export default compose(referenceWorksQuery)(cont);
+export default compose(referenceWorksQuery, settingsQuery)(cont);

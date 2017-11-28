@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
-import { booksQuery } from '/imports/graphql/methods/books';
-import { tenantsQuery } from '/imports/graphql/methods/tenants';
 import { compose } from 'react-apollo';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import moment from 'moment';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { booksQuery } from '/imports/graphql/methods/books';
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
 
 import Books from '/imports/models/books';
 import Commenters from '/imports/models/commenters';
@@ -124,6 +127,7 @@ class RecentActivityTeaser extends React.Component {
 const RecentActivityTeaserContainer = createContainer(props => {
 
 	const commenterIds = [];
+	const tenantId = Session.get('tenantId');
 	let userIds = [];
 	let commenters = [];
 	let users = [];
@@ -132,7 +136,6 @@ const RecentActivityTeaserContainer = createContainer(props => {
 	let settings;
 
 	if (props.comment) {
-		const settingsHandle = Meteor.subscribe('settings.tenant', props.comment.tenantId);
 
 		if (props.comment.commenters) {
 			props.comment.commenters.forEach((commenter) => {
@@ -143,20 +146,15 @@ const RecentActivityTeaserContainer = createContainer(props => {
 		if (props.comment.users) {
 			userIds = props.comment.users;
 		}
-		if (Session.get('tenantId')) {
-			props.commentersQuery.refetch({
-				tenantId: Session.get('tenantId')
-			});
-			props.tenantsQuery.variables.tenantId = Session.get('tenantId');
-		}
+		
 		commenters = currentCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
-			commenterIds.find(y => y === x._id));
+			commenterIds.find(y => y === x._id) !== undefined);
 	
 		users = Meteor.users.find({ _id: { $in: userIds } }).fetch();
-		tenant = props.tenantsQuery.loading ? {} : props.tenantsQuery.tenants;
+		tenant = props.tenantsQuery.loading ? {} : props.tenantsQuery.tenants.find(x => x._id === tenantId);
 		book = props.booksQuery.loading ? {} : props.booksQuery.find(x => 
 			x.chapters.url === props.comment.bookChapterUrl);
-		settings = Settings.findOne({ tenantId: props.comment.tenantId });
+		settings = props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId);
 	}
 
 	return {
@@ -168,4 +166,7 @@ const RecentActivityTeaserContainer = createContainer(props => {
 	};
 }, RecentActivityTeaser);
 
-export default compose(commentersQuery, booksQuery, tenantsQuery)(RecentActivityTeaserContainer);
+export default compose(commentersQuery,
+	booksQuery,
+	tenantsQuery,
+	settingsQuery)(RecentActivityTeaserContainer);

@@ -6,10 +6,14 @@ import { Session } from 'meteor/session';
 import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Link } from 'react-router-dom';
+import { compose } from 'react-apollo';
 
 // models
 import Settings from '/imports/models/settings';
-import Tenants from '/imports/models/tenants';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -126,11 +130,13 @@ Footer.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-export default createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+const cont = createContainer((props) => {
+
+	const tenantId = Session.get('tenantId');
 
 	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : {},
-		tenant: Tenants.findOne({ _id: Session.get('tenantId') })
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)
 	};
 }, Footer);
+export default compose(settingsQuery, tenantsQuery)(cont);

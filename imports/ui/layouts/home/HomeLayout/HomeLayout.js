@@ -9,6 +9,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // graphql
 import { tenantsQuery } from '/imports/graphql/methods/tenants';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Settings from '/imports/models/settings';
@@ -95,16 +96,11 @@ HomeLayout.propTypes = {
 };
 
 const HomeLayoutContainer = createContainer((props) => {
-
-	if (Session.get('tenantId')) {
-		props.tenantsQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
-	}
+	const tenantId = Session.get('tenantId');
 	return {
-		settings: Settings.findOne(),
-		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants[0]
+		settings: props.settingsQuery.loading ? undefined : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)
 	};
 }, HomeLayout);
 
-export default compose(tenantsQuery)(HomeLayoutContainer);
+export default compose(tenantsQuery, settingsQuery)(HomeLayoutContainer);

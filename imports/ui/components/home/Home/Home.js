@@ -14,8 +14,11 @@ import { Link } from 'react-router-dom';
 import Utils from '/imports/lib/utils';
 import muiTheme from '/imports/lib/muiTheme';
 
-// components:
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 import { commentsQuery } from '/imports/graphql/methods/comments';
+
+// components:
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
 import WorksList from '/imports/ui/components/works/WorksList';
 import KeywordsList from '/imports/ui/components/keywords/KeywordsList';
@@ -30,22 +33,6 @@ class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.scrollToIntro = this.scrollToIntro.bind(this);
-		this.getCommentsQuery = this.getCommentsQuery.bind(this);
-	}
-	componentWillReceiveProps(newProps) {
-		if (newProps.tenantId && 
-			!this.props.commentsQuery.variables.tenantId) {
-			this.props.commentsQuery.refetch({
-				queryParam: this.getCommentsQuery(newProps.tenantId),
-				limit: 10,
-				skip: 0
-			});
-		}
-	}
-	getCommentsQuery(tenantId) {
-		const query = {};
-		query.tenantId = tenantId;
-		return JSON.stringify(query);
 	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
@@ -66,8 +53,7 @@ class Home extends Component {
 	}
 
 	render() {
-		const { settings } = this.props;
-		const comments = this.props.commentsQuery.loading ? [] : this.props.commentsQuery.comments;
+		const { settings, comments } = this.props;
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
@@ -295,6 +281,7 @@ class Home extends Component {
 
 Home.propTypes = {
 	settings: PropTypes.object,
+	comments: PropTypes.array,
 	commentsQuery: PropTypes.object,
 	isTest: PropTypes.bool,
 };
@@ -303,5 +290,15 @@ Home.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
+const cont = createContainer(props => {
+	const tenantId = Session.get('tenantId');
+	const skip = props.skip ? props.skip : 0;
+	const limit = props.limit ? props.limit : 10;
+	console.log(props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId));
+	return {
+		comments: props.commentsQuery.loading ? [] : props.commentsQuery.comments.filter(x => x.tenantId === tenantId).slice(skip, limit + skip),
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
+	};
+}, Home);
 
-export default compose(commentsQuery)(Home);
+export default compose(commentsQuery, settingsQuery)(cont);

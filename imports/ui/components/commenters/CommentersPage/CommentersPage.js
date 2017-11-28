@@ -6,12 +6,16 @@ import { createContainer } from 'meteor/react-meteor-data';
 import muiTheme from '/imports/lib/muiTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { compose } from 'react-apollo';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
 import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
 import Header from '/imports/ui/layouts/header/Header';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Settings from '/imports/models/settings';
@@ -71,13 +75,15 @@ CommentersPage.propTypes = {
 	settings: PropTypes.object
 };
 
-const commentersPageContainer = createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+const commentersPageContainer = createContainer((props) => {
+
+	const tenantId = Session.get('tenantId');
+	const settings = props.settingsQuery.loading ? { title: ''} : props.settingsQuery.settings.find(x => x.tenantId === tenantId);
 
 	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		settings: settings
 	};
 }, CommentersPage);
 
 
-export default commentersPageContainer;
+export default compose(settingsQuery)(commentersPageContainer);

@@ -4,6 +4,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 
 // components
 import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
@@ -19,6 +20,9 @@ import Header from '/imports/ui/layouts/header/Header';
 
 // api
 import Settings from '/imports/models/settings';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -179,12 +183,13 @@ class ProfilePage extends React.Component {
 	}
 }
 
-export default createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+const cont = createContainer((props) => {
+	const tenantId = Session.get('tenantId');
 
 	return {
 		user: Meteor.user(),
 		settings: Settings.findOne(),
-		ready: settingsHandle.ready(),
+		ready: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
 	};
 }, ProfilePage);
+export default compose(settingsQuery)(cont);

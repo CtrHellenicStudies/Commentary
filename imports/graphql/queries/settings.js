@@ -7,7 +7,7 @@ import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 import { SettingsType } from '/imports/graphql/types/models/settings';
 
 // logic
-import SettingsService from '../logic/settings';
+import SettingsService from '../logic/Settings/settings';
 
 const settingsQueryFields = {
 	settings: {

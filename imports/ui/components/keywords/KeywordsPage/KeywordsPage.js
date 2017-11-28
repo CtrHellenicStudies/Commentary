@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 
 // lib
 import Utils from '/imports/lib/utils';
 import RaisedButton from 'material-ui/RaisedButton';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Settings from '/imports/models/settings';
@@ -95,12 +99,12 @@ class KeywordsPage extends Component {
 
 }
 
-const KeywordsPageContainer = createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+const KeywordsPageContainer = createContainer((props) => {
+	const tenantId = Session.get('tenantId');
 
 	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
 	};
 }, KeywordsPage);
 
-export default KeywordsPageContainer;
+export default compose(settingsQuery)(KeywordsPageContainer);

@@ -1,5 +1,5 @@
 import Settings from '/imports/models/settings';
-import AdminService from './adminService';
+import AdminService from '../adminService';
 
 /**
  * Logic-layer service for dealing with settings

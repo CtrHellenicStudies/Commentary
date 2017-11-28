@@ -5,12 +5,15 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
 import { compose } from 'react-apollo';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 import muiTheme from '/imports/lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -206,17 +209,12 @@ class CommenterDetail extends React.Component {
 
 const cont = createContainer(props => {
 	const slug = props.match.params.slug;
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	if (Session.get('tenantId')) {
-		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
-	}
+	const tenantId = Session.get('tenantId');
 
 	let avatarUrl;
 
 	const commenter = props.commentersQuery.loading ? {} : 
-		props.commentersQuery.commenters.find(x => x.slug === slug);
+		props.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
 
 	if (commenter && commenter.avatar) {
 		avatarUrl = commenter.avatar.src;
@@ -225,8 +223,8 @@ const cont = createContainer(props => {
 	return {
 		commenter,
 		avatarUrl,
-		settings: Settings.findOne(),
-		ready: settingsHandle.ready()
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings,
+		ready: !props.settingsQuery.loading || !props.commentersQuery.loading
 	};
 }, CommenterDetail);
-export default (commentersQuery)(cont);
+export default (commentersQuery, settingsQuery)(cont);

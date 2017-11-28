@@ -4,7 +4,6 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
-import { tenantsQuery } from '/imports/graphql/methods/tenants';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 
@@ -12,6 +11,10 @@ import Drawer from 'material-ui/Drawer';
 import Tenants from '/imports/models/tenants';
 import Settings from '/imports/models/settings';
 import { Link } from 'react-router-dom';
+
+// graphql
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // components:
 import SideNavTop from '/imports/ui/components/header/SideNavTop';
@@ -195,16 +198,12 @@ LeftMenu.defaultProps = {
 
 
 const cont = createContainer((props) => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	if (Session.get('tenantId')) {
-		props.tenantsQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
-	}
+	
+	const tenantId = Session.get('tenantId');
 	return {
-		settings: Settings.findOne({}),
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
 		currentUser: Meteor.users.findOne({_id: Meteor.userId()}),
-		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants[0]
+		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)
 	};
 }, LeftMenu);
-export default compose(tenantsQuery)(cont);
+export default compose(tenantsQuery, settingsQuery)(cont);

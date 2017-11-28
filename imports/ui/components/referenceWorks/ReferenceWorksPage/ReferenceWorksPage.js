@@ -7,6 +7,7 @@ import muiTheme from '/imports/lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { compose } from 'react-apollo';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
@@ -16,6 +17,9 @@ import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 // models
 import Settings from '/imports/models/settings';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // lib
 import Utils from '/imports/lib/utils';
@@ -73,12 +77,12 @@ ReferenceWorksPage.propTypes = {
 	settings: PropTypes.object,
 };
 
-const ReferenceWorksPageContainer = createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+const ReferenceWorksPageContainer = createContainer((props) => {
+	const tenantId = Session.get('tenantId');
 
 	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
 	};
 }, ReferenceWorksPage);
 
-export default ReferenceWorksPageContainer;
+export default compose(settingsQuery)(ReferenceWorksPageContainer);

@@ -6,6 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import { compose } from 'react-apollo';
 
 // layouts & components
 import Header from '/imports/ui/layouts/header/Header';
@@ -13,6 +14,9 @@ import Footer from '/imports/ui/components/footer/Footer';
 import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
 import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 import CommunityPage from '/imports/ui/components/community/CommunityPage';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Settings from '/imports/models/settings';
@@ -56,13 +60,13 @@ const CommunityLayout = React.createClass({
 });
 
 
-const CommunityLayoutContainer = createContainer(() => {
-	const handle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+const CommunityLayoutContainer = createContainer((props) => {
+	const tenantId = Session.get('tenantId');
 
 	return {
-		settings: Settings.findOne(),
-		ready: handle.ready(),
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+		ready: !props.settingsQuery.loading,
 	};
 }, CommunityLayout);
 
-export default CommunityLayoutContainer;
+export default compose(settingsQuery)(CommunityLayoutContainer);

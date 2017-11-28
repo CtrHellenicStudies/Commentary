@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
+import { compose } from 'react-apollo';
 
 // lib
 import Utils from '/imports/lib/utils';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Pages from '/imports/models/pages';
@@ -101,13 +105,13 @@ Page.propTypes = {
 };
 
 
-const pageContainer = createContainer(({ slug }) => {
+const pageContainer = createContainer((props) => {
+	const { slug } = props;
 	let images = [];
 	let thumbnails = [];
 
 	const tenantId = Session.get('tenantId');
 	const pageHandle = Meteor.subscribe('pages', tenantId, slug);
-	const settingsHandle = Meteor.subscribe('settings.tenant', tenantId);
 
 	const page = Pages.findOne({ slug, tenantId });
 
@@ -124,8 +128,8 @@ const pageContainer = createContainer(({ slug }) => {
 		ready: pageHandle.ready(),
 		images,
 		thumbnails,
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
+		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
 	};
 }, Page);
 
-export default pageContainer;
+export default compose(settingsQuery)(pageContainer);

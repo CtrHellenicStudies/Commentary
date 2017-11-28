@@ -9,7 +9,7 @@ import { SettingsType, SettingsInputType } from '/imports/graphql/types/models/s
 import { RemoveType } from '/imports/graphql/types/index';
 
 // logic
-import SettingsService from '../logic/settings';
+import SettingsService from '../logic/Settings/settings';
 
 const settingsMutationFields = {
 

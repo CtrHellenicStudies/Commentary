@@ -25,6 +25,7 @@ import MenuItem from '/imports/ui/components/shared/MenuItem';
 	helpers
 */
 const getUsername = (currentUser) => {
+	console.log(currentUser);
 	let username = '';
 	if (currentUser) {
 		if (currentUser.profile && currentUser.profile.name) {
@@ -198,7 +199,7 @@ LeftMenu.defaultProps = {
 
 
 const cont = createContainer((props) => {
-	
+
 	const tenantId = Session.get('tenantId');
 	return {
 		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),

@@ -188,8 +188,8 @@ const cont = createContainer((props) => {
 
 	return {
 		user: Meteor.user(),
-		settings: Settings.findOne(),
-		ready: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+		ready: !props.settingsQuery.loading,
 	};
 }, ProfilePage);
 export default compose(settingsQuery)(cont);

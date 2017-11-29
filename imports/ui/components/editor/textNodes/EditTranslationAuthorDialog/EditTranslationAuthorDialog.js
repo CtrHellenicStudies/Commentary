@@ -7,6 +7,10 @@ import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 import { Meteor } from 'meteor/meteor';
 import Cookies from 'js-cookie';
+import { compose } from 'react-apollo';
+
+// graphql
+import {} from '/imports/graphql/methods/translations';
 
 class EditTranslationAuthorDialog extends Component {
 
@@ -98,7 +102,7 @@ EditTranslationAuthorDialog.propTypes = {
 	addNewAuthor: PropTypes.func,
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
-	translation: PropTypes.array
+	translation: PropTypes.string
 };
 
-export default EditTranslationAuthorDialog;
+export default compose()(EditTranslationAuthorDialog);

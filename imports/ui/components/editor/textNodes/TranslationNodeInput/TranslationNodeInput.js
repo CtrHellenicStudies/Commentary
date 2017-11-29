@@ -175,6 +175,8 @@ function getTranslationQueries(query, filter) {
 	if (query.loading) {
 		return [];
 	}
+	console.log(filter);
+	console.log(query.translations);
 	return query.translations.filter(x => 
 		x.tenantId === filter.tenantId &&
 		x.work === filter.work && 

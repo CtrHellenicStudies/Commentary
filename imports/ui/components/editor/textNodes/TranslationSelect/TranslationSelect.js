@@ -6,7 +6,12 @@ import {
 	FormGroup,
 } from 'react-bootstrap';
 import Select from 'react-select';
+import { compose } from 'react-apollo';
 import { Session } from 'meteor/session';
+
+// graphql
+import {} from '/imports/graphql/methods/translations';
+
 import EditTranslationAuthorDialog from '../EditTranslationAuthorDialog/EditTranslationAuthorDialog';
 
 class TranslationSelect extends React.Component {
@@ -141,4 +146,4 @@ const TranslationSelectContainer = createContainer(props => {
 
 }, TranslationSelect);
 
-export default TranslationSelectContainer;
+export default compose()(TranslationSelectContainer);

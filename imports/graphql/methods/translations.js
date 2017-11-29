@@ -7,10 +7,8 @@ query translationsQuery ($tenantId: ID) {
         author
         work
         subwork
-        lineFrom
-        lineTo
-        nLines
-        revisions
+        n
+        text
     }
 }
 `;

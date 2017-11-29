@@ -1,5 +1,6 @@
 import {
 	GraphQLObjectType,
+	GraphQLInputObjectType,
 	GraphQLString,
 	GraphQLInt,
 	GraphQLList
@@ -17,35 +18,74 @@ const TranslationType = new GraphQLObjectType({
 	fields: {
 		tenantId: {
 			type: GraphQLString,
+			optional: true
 		},
 		created: {
 			type: GraphQLDate,
+			optional: true
 		},
 		updated: {
 			type: GraphQLDate,
+			optional: true
 		},
 		author: {
 			type: GraphQLString,
+			optional: true
 		},
 		work: {
 			type: GraphQLString,
+			optional: true
 		},
 		subwork: {
 			type: GraphQLInt,
+			optional: true
 		},
-		lineFrom: {
+		n: {
 			type: GraphQLInt,
+			optional: true
 		},
-		lineTo: {
-			type: GraphQLInt,
-		},
-		nLines: {
-			type: GraphQLInt,
-		},
-		revisions: {
-			type: new GraphQLList(GraphQLJSON),
+		text: {
+			type: GraphQLString,
+			optional: true
 		},
 	},
 });
+const TranslationInputType = new GraphQLInputObjectType({
+	name: 'TranslationInputType',
+	fields: {
+		tenantId: {
+			type: GraphQLString,
+			optional: true
+		},
+		created: {
+			type: GraphQLDate,
+			optional: true
+		},
+		updated: {
+			type: GraphQLDate,
+			optional: true
+		},
+		author: {
+			type: GraphQLString,
+			optional: true
+		},
+		work: {
+			type: GraphQLString,
+			optional: true
+		},
+		subwork: {
+			type: GraphQLInt,
+			optional: true
+		},
+		n: {
+			type: GraphQLInt,
+			optional: true
+		},
+		text: {
+			type: GraphQLString,
+			optional: true
+		},
+	}
+});
 
-export {TranslationType};
+export { TranslationType };

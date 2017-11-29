@@ -22,6 +22,8 @@ import TranslationNodes from '/imports/models/translationNodes';
 // graphql
 import { editionsQuery } from '/imports/graphql/methods/editions';
 import { textNodesQuery } from '/imports/graphql/methods/textNodes';
+import { translationsQuery } from '/imports/graphql/methods/translations';
+
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';
 import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';
@@ -384,13 +386,23 @@ class CommentLemma extends React.Component {
 	}
 
 }
-
+function getTranslationQueries(query, filter) {
+	if (query.loading) {
+		return [];
+	}
+	return query.translations.filter(x => 
+		x.work === filter.work && 
+		x.subwork === filter.work &&
+		x.n >= filter.lineFrom &&
+		x.n <= filter.lineTo).map(translation =>
+			translation.author
+		);
+}
 const cont = createContainer(props => {
 	
 	const { commentGroup, multiline } = props;
 	const tenantId = Session.get('tenantId');
 	let translationAuthors = [];
-	const translationNodesHandle = Meteor.subscribe('translationNodes', Session.get('tenantId'));
 	if (commentGroup) {
 
 		if (!commentGroup.lineTo) {
@@ -400,14 +412,11 @@ const cont = createContainer(props => {
 		const translationNodesQuery = {
 			work: commentGroup.work.slug,
 			subwork: Number(commentGroup.subwork.title),
-			$and: [{n: {$gte: commentGroup.lineFrom}}, {n: {$lte: commentGroup.lineTo}}],
+			lineFrom: commentGroup.lineFrom,
+			lineTo: commentGroup.lineTo
 		};
 
-		translationAuthors = _.uniq(
-			TranslationNodes.find(translationNodesQuery)
-				.fetch()
-				.map(translation => translation.author)
-			);
+		translationAuthors = _.uniq(getTranslationQueries(props.translationsQuery, translationNodesQuery));
 	}
 	if (tenantId) {
 		props.textNodesQuery.refetch({
@@ -428,8 +437,12 @@ const cont = createContainer(props => {
 	return {
 		translationAuthors,
 		editions,
-		ready: !props.textNodesQuery.loading && translationNodesHandle.ready(),
+		ready: !props.textNodesQuery.loading && !props.translationsQuery.loading,
 	};
 
 }, CommentLemma);
-export default compose(editionsQuery, textNodesQuery)(cont);
+export default compose(
+	editionsQuery,
+	textNodesQuery,
+	translationsQuery
+)(cont);

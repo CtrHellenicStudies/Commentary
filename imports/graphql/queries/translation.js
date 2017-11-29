@@ -7,7 +7,7 @@ import { GraphQLID, GraphQLList } from 'graphql';
 import { TranslationType } from '/imports/graphql/types/models/translation';
 
 // logic
-import TranslationService from '../logic/translations';
+import TranslationService from '../logic/Translations/translations';
 
 const translationsQueryFields = {
 	translations: {

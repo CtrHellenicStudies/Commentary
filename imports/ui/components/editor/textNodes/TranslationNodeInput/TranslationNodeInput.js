@@ -4,6 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 } from 'react-bootstrap';
+import { compose } from 'react-apollo';
 import TranslationNodes from '/imports/models/translationNodes';
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import TextField from 'material-ui/TextField';
@@ -11,6 +12,9 @@ import Snackbar from 'material-ui/Snackbar';
 import _ from 'lodash';
 import {debounce} from 'throttle-debounce';
 import Cookies from 'js-cookie';
+
+// graphql
+import { translationsQuery } from '/imports/graphql/methods/translations';
 
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');
 
@@ -166,14 +170,29 @@ TranslationNodeInput.propTypes = {
 	translationNodes: PropTypes.array,
 	ready: PropTypes.bool,
 };
+function getTranslationQueries(query, filter) {
 
-const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation}) => {
+	if (query.loading) {
+		return [];
+	}
+	return query.translations.filter(x => 
+		x.tenantId === filter.tenantId &&
+		x.work === filter.work && 
+		x.subwork === filter.subwork).slice(filter.skip, filter.limit);
+}
+const TranslationInputContainer = createContainer((props) => {
+
+	const {selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation} = props;
 	const tenantId = Session.get('tenantId');
+	const filter = {
+		tenantId: tenantId,
+		work: selectedWork._id,
+		subwork: selectedSubwork,
+		skip: startAtLine,
+		limit: limit
+	};
 
-	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtLine, limit);
-	const ready = translationNodeSubscription.ready();
-
-	const translation = TranslationNodes.find().fetch();
+	const translation = getTranslationQueries(props.translationsQuery, filter);
 
 	const translationNodes = [];
 	for (let i = 0; i < limit; i++) {
@@ -197,10 +216,10 @@ const TranslationInputContainer = createContainer(({selectedWork, selectedSubwor
 	}
 
 	return {
-		ready,
+		ready: !props.translationsQuery.loading,
 		translationNodes
 	};
 
 }, TranslationNodeInput);
 
-export default TranslationInputContainer;
+export default compose(translationsQuery)(TranslationInputContainer);

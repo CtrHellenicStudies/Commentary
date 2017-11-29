@@ -1,5 +1,5 @@
-import Translation from '/imports/models/translations';
-import AdminService from './adminService';
+import TranslationNodes from '/imports/models/translationNodes';
+import AdminService from '../adminService';
 
 /**
  * Logic-layer service for dealing with translations
@@ -13,15 +13,12 @@ export default class TranslationsService extends AdminService {
 	 * @returns {Object[]} array of translations 
 	 */
 	translationGet(tenantId) {
-		if (this.userIsAdmin) {
-			const args = {};
+		const args = {};
 
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
-
-			return Translation.find(args).fetch();
+		if (tenantId) {
+			args.tenantId = tenantId;
 		}
-		return new Error('Not authorized');
+
+		return TranslationNodes.find(args).fetch();
 	}
 }

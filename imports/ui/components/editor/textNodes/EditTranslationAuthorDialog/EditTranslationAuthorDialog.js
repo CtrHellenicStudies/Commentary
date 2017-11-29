@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -8,7 +8,7 @@ import _ from 'underscore';
 import { Meteor } from 'meteor/meteor';
 import Cookies from 'js-cookie';
 
-class EditTranslationAuthorDialog extends React.Component {
+class EditTranslationAuthorDialog extends Component {
 
 	constructor(props) {
 		super(props);
@@ -98,6 +98,7 @@ EditTranslationAuthorDialog.propTypes = {
 	addNewAuthor: PropTypes.func,
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
+	translation: PropTypes.array
 };
 
 export default EditTranslationAuthorDialog;

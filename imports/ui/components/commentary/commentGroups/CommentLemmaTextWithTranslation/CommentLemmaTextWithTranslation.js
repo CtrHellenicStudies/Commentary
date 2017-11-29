@@ -2,13 +2,17 @@ import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
-import React from 'react';
+import { compose } from 'react-apollo';
+import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
 import _ from 'lodash';
 
-class CommentLemmaTextWithTranslation extends React.Component {
+// graphql
+import { translationsQuery } from '/imports/graphql/methods/translations';
+
+class CommentLemmaTextWithTranslation extends Component {
 
 	render() {
 		const { commentGroup, linesWithTranslation, author } = this.props;
@@ -62,8 +66,20 @@ CommentLemmaTextWithTranslation.propTypes = {
 	commentGroup: PropTypes.object,
 	author: PropTypes.string,
 };
+function getTranslationQueries(query, filter) {
+	if (query.loading) {
+		return [];
+	}
+	return query.translations.filter(x => 
+		x.author === filter.author &&
+		x.work === filter.work && 
+		x.subwork === filter.work &&
+		x.n >= filter.lineFrom &&
+		x.n <= filter.lineTo);
+}
+const cont = createContainer((props) => {
 
-export default createContainer(({ commentGroup, lines, author }) => {
+	const { commentGroup, lines, author } = props;
 	let translationNodesQuery = {};
 	const linesWithTranslation = [];
 
@@ -72,12 +88,12 @@ export default createContainer(({ commentGroup, lines, author }) => {
 			author: author,
 			subwork: commentGroup.subwork.n,
 			work: commentGroup.work.slug,
-			$and: [{n: {$gte: commentGroup.lineFrom}}, {n: {$lte: commentGroup.lineTo}}],
+			lineFrom: commentGroup.lineFrom,
+			lineTo: commentGroup.lineTo,
 		};
 	}
 
-	const handleNodes = Meteor.subscribe('translationNodes', Session.get('tenantId'));
-	const translationNodes = TranslationNodes.find(translationNodesQuery).fetch();
+	const translationNodes = props.getTranslationQueries(translationsQuery, translationNodesQuery);
 
 	let nLines = 0;
 
@@ -101,6 +117,7 @@ export default createContainer(({ commentGroup, lines, author }) => {
 
 	return {
 		linesWithTranslation,
-		ready: handleNodes.ready(),
+		ready: !props.translationsQuery.loading
 	};
 }, CommentLemmaTextWithTranslation);
+export default compose(translationsQuery)(cont);

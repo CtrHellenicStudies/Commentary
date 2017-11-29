@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { compose } from 'react-apollo';
-import { editionsQuery } from '/imports/graphql/methods/editions';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -13,6 +12,10 @@ import FontIcon from 'material-ui/FontIcon';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
+
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // models
 import TextNodes from '/imports/models/textNodes';
@@ -102,7 +105,10 @@ const KeywordContext = React.createClass({
 });
 
 const KeywordContextContainer = createContainer(props => {
+
 	const { keyword, maxLines } = props;
+	const tenantId = Session.get('tenantId');
+
 	let lemmaText = [];
 	const context = {};
 
@@ -114,26 +120,24 @@ const KeywordContextContainer = createContainer(props => {
 	}
 
 	if (keyword.work && keyword.subwork && keyword.lineFrom) {
-		const textNodesQuery = {
-			'work.slug': keyword.work.slug,
-			'subwork.n': keyword.subwork.n,
-			'text.n': {
-				$gte: keyword.lineFrom,
-				$lte: keyword.lineFrom,
-			},
-		};
-		if (keyword.lineTo) {
-			textNodesQuery['text.n'].$lte = keyword.lineTo;
+
+		if (tenantId) {
+			props.textNodesQuery.refetch({
+				tenantId: tenantId,
+				workSlug: keyword.work.slug,
+				subworkN: keyword.subwork.n,
+				lineFrom: keyword.lineFrom,
+				lineTo: keyword.lineTo ? keyword.lineTo : keyword.lineFrom
+			});
 		}
-		const textNodesSub = Meteor.subscribe('textnodes.keyword_context', textNodesQuery);
 
-		context.work = textNodesQuery['work.slug'];
-		context.subwork = textNodesQuery['subwork.n'];
-		context.lineFrom = textNodesQuery['text.n'].$gte;
-		context.lineTo = textNodesQuery['text.n'].$lte;
+		context.work = keyword.work.slug;
+		context.subwork = keyword.subwork.n;
+		context.lineFrom = keyword.lineFrom;
+		context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
 
-		if (textNodesSub.ready()) {
-			const textNodesCursor = TextNodes.find(textNodesQuery);
+		if (!props.textNodesQuery.loading) {
+			const textNodesCursor = props.textNodesQuery.textNodes;
 			lemmaText = !props.editionsQuery.loading ? 
 				Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 		}
@@ -146,15 +150,16 @@ const KeywordContextContainer = createContainer(props => {
 
 			if (commentCursor.count() > 0) {
 				const comment = commentCursor.fetch()[0];
-				const textNodesQuery = makeKeywordContextQueryFromComment(comment, maxLines);
-				const textNodesSub = Meteor.subscribe('textnodes.keyword_context', textNodesQuery);
+				const query = makeKeywordContextQueryFromComment(comment, maxLines);
+				if (tenantId) {
+					props.textNodesQuery.refetch(query);
+				}
+				context.work = query.workSlug;
+				context.subwork = query.subworkN;
+				context.lineFrom = query.lineFrom;
+				context.lineTo = query.lineTo;
 
-				context.work = textNodesQuery['work.slug'];
-				context.subwork = textNodesQuery['subwork.n'];
-				context.lineFrom = textNodesQuery['text.n'].$gte;
-				context.lineTo = textNodesQuery['text.n'].$lte;
-
-				if (textNodesSub.ready()) {
+				if (!props.textNodesQuery.loading) {
 					const textNodesCursor = TextNodes.find(textNodesQuery);
 					lemmaText = !props.editionsQuery.loading ?
 						Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
@@ -170,4 +175,4 @@ const KeywordContextContainer = createContainer(props => {
 }, KeywordContext);
 
 
-export default compose(editionsQuery)(KeywordContextContainer);
+export default compose(editionsQuery, textNodesQuery)(KeywordContextContainer);

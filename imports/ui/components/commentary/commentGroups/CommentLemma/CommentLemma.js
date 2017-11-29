@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { compose } from 'react-apollo';
-import { editionsQuery } from '/imports/graphql/methods/editions';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
@@ -20,6 +19,9 @@ import TextNodes from '/imports/models/textNodes';
 import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
 
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 // components:
 import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';
 import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';
@@ -386,27 +388,10 @@ class CommentLemma extends React.Component {
 const cont = createContainer(props => {
 	
 	const { commentGroup, multiline } = props;
-
-	let lemmaQuery = {};
+	const tenantId = Session.get('tenantId');
 	let translationAuthors = [];
 	const translationNodesHandle = Meteor.subscribe('translationNodes', Session.get('tenantId'));
 	if (commentGroup) {
-		lemmaQuery = {
-			'work.slug': commentGroup.work.slug,
-			'subwork.n': commentGroup.subwork.n,
-			'text.n': {
-				$gte: commentGroup.lineFrom,
-			},
-		};
-
-		if (typeof commentGroup.lineTo !== 'undefined') {
-			lemmaQuery['text.n'].$lte = commentGroup.lineTo;
-		} else {
-			lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
-		}
-		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-			lemmaQuery['work.slug'] = 'hymns';
-		}
 
 		if (!commentGroup.lineTo) {
 			commentGroup.lineTo = commentGroup.lineFrom;
@@ -424,9 +409,17 @@ const cont = createContainer(props => {
 				.map(translation => translation.author)
 			);
 	}
+	if (tenantId) {
+		props.textNodesQuery.refetch({
+			tenantId: tenantId,
+			workSlug: commentGroup.work.slag === 'homeric-hymns' ? 'hymns' : commentGroup.work.slug,
+			subworkN: commentGroup.subwork.n,
+			lineFrom: commentGroup.lineFrom,
+			lineTo: commentGroup.lineTo !== 'undefined' ? commentGroup.lineTo : commentGroup.lineFrom
+		});
+	}
 
-	const handle = Meteor.subscribe('textNodes', lemmaQuery);
-	const textNodesCursor = TextNodes.find(lemmaQuery);
+	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
 	let editions = !props.editionsQuery.loading ?
 		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 
@@ -435,8 +428,8 @@ const cont = createContainer(props => {
 	return {
 		translationAuthors,
 		editions,
-		ready: handle.ready() && translationNodesHandle.ready(),
+		ready: !props.textNodesQuery.loading && translationNodesHandle.ready(),
 	};
 
 }, CommentLemma);
-export default (editionsQuery)(cont);
+export default compose(editionsQuery, textNodesQuery)(cont);

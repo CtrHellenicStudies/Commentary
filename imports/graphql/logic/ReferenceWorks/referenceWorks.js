@@ -13,23 +13,21 @@ export default class ReferenceWorksService extends AdminService {
 	 * @returns {Object[]} array of reference works
 	 */
 	referenceWorksGet(id, tenantId) {
-		if (this.userIsAdmin) {
-			const args = {};
 
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
-			if (id) {
-				args._id = id;
-			}
+		const args = {};
 
-			return ReferenceWorks.find(args, {
-				sort: {
-					slug: 1
-				}
-			}).fetch();
+		if (tenantId) {
+			args.tenantId = tenantId;
 		}
-		return new Error('Not authorized');
+		if (id) {
+			args._id = id;
+		}
+
+		return ReferenceWorks.find(args, {
+			sort: {
+				slug: 1
+			}
+		}).fetch();
 	}
 
 

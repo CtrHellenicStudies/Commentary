@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
-import { editionsQuery } from '/imports/graphql/methods/editions';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // models:
@@ -12,6 +11,10 @@ import TextNodes from '/imports/models/textNodes';
 // components:
 import ContextPanelText from '/imports/ui/components/commentary/contextPanel/ContextPanelText';
 import ContextPanelTabs from '/imports/ui/components/commentary/contextPanel/ContextPanelTabs';
+
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // lib:
 import Utils from '/imports/lib/utils';
@@ -138,24 +141,21 @@ ContextPanelContent.defaultProps = {
 
 
 const cont = createContainer(props => {
+
 	const { lineFrom, workSlug, subworkN, multiline } = props;
 	const lineTo = lineFrom + 49;
+	const tenantId = Session.get('tenantId');
 
-	const lemmaQuery = {
-		'work.slug': workSlug,
-		'subwork.n': subworkN,
-		'text.n': {
-			$gte: lineFrom,
-			$lte: lineTo,
-		},
-	};
-
-	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-		lemmaQuery['work.slug'] = 'hymns';
+	if (tenantId) {
+		props.textNodesQuery.refetch({
+			workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+			subworkN: subworkN,
+			lineFrom: lineFrom,
+			lineTo: lineTo
+		});
 	}
 
-	Meteor.subscribe('textNodes', lemmaQuery);
-	const textNodesCursor = TextNodes.find(lemmaQuery);
+	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
 	const editions = !props.editionsQuery.loading ?
 		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 
@@ -174,4 +174,4 @@ const cont = createContainer(props => {
 	};
 
 }, ContextPanelContent);
-export default compose(editionsQuery)(cont);
+export default compose(editionsQuery, textNodesQuery)(cont);

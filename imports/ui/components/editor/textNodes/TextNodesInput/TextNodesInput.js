@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { compose } from 'react-apollo';
-import { editionsQuery } from '/imports/graphql/methods/editions';
 import autoBind from 'react-autobind';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -21,12 +20,15 @@ import Cookies from 'js-cookie';
 import { debounce } from 'throttle-debounce';
 
 // models:
-import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';
 
 // lib:
 import Utils from '/imports/lib/utils';
 import _ from 'lodash';
+
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -268,27 +270,29 @@ TextNodesInput.propTypes = {
 const TextNodesInputContainer = createContainer(props => {
 
 	const { workId, workSlug, editionId, subworkN, lineFrom, limit } = props;
+	const tenantId = Session.get('tenantId');
 
 	let textNodes;
 	let textNodesByEditions = [];
 	let textNodesByEditionsSorted = [];
 	let selectedEdition = { lines: [] };
 
-	const lemmaQuery = {
-		'work.slug': workSlug,
-		'subwork.n': subworkN,
-		$and: [{'text.n': {$gte: parseInt(lineFrom, 10)}}, {'text.n': {$lte: parseInt(lineFrom, 10) + limit}}],
-		'text.edition': editionId
-	};
+	const ready = !props.textNodesQuery.loading;
 
-	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-		lemmaQuery['work.slug'] = 'hymns';
+	if (tenantId) {
+		props.textNodesQuery.refetch({
+			tenantId: tenantId,
+			workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+			subworkN: subworkN,
+			lineFrom: parseInt(lineFrom, 10),
+			lineTo: parseInt(lineFrom, 10) + limit,
+			editionId: editionId,
+			limit: limit
+		});
 	}
-	const textNodeSubscription = Meteor.subscribe('textNodes', lemmaQuery, 0, limit);
-	const ready = textNodeSubscription.ready();
-
 	if (ready) {
-		textNodes = TextNodes.find(lemmaQuery).fetch();
+		textNodes = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
+		console.log(textNodes);
 		textNodesByEditions = !props.editionsQuery.loading ?
 			Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions) : [];
 		textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
@@ -323,4 +327,4 @@ const TextNodesInputContainer = createContainer(props => {
 
 }, TextNodesInput);
 
-export default compose(editionsQuery)(TextNodesInputContainer);
+export default compose(editionsQuery, textNodesQuery)(TextNodesInputContainer);

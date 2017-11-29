@@ -14,20 +14,18 @@ export default class SettingsService extends AdminService {
 	 * @returns {Object[]} array of settings
 	 */
 	settingsGet(_id, tenantId) {
-		if (this.userIsAdmin) {
-			const args = {};
 
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
+		const args = {};
 
-			if (_id) {
-				args._id = _id;
-			}
-
-			return Settings.find(args).fetch();
+		if (tenantId) {
+			args.tenantId = tenantId;
 		}
-		return new Error('Not authorized');
+
+		if (_id) {
+			args._id = _id;
+		}
+
+		return Settings.find(args).fetch();
 	}
 
 	/**

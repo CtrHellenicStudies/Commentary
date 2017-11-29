@@ -3,15 +3,14 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
-import { editionsQuery } from '/imports/graphql/methods/editions';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// models
-import TextNodes from '/imports/models/textNodes';
-import Editions from '/imports/models/editions';
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -147,35 +146,22 @@ const CommentLemmaSelect = React.createClass({
 const CommentLemmaSelectContainer = createContainer(props => {
 	
 	const { selectedLineFrom, selectedLineTo, workSlug, subworkN } = props;
-	const lemmaText = [];
-	// var commentGroup = this.props.commentGroup;
+	const tenantId = Session.get('tenantId');
+
 	const selectedLemmaEdition = {
 		lines: [],
 		slug: '',
 	};
-	let lemmaQuery = {};
-	if (selectedLineFrom <= selectedLineTo) {
-		lemmaQuery = {
-			'work.slug': workSlug,
-			'subwork.n': subworkN,
-			'text.n': {
-				$gte: selectedLineFrom,
-				$lte: selectedLineTo,
-			},
-		};
-	} else {
-		lemmaQuery = {
-			'work.slug': workSlug,
-			'subwork.n': subworkN,
-			'text.n': {
-				$gte: selectedLineFrom,
-				$lte: selectedLineFrom,
-			},
-		};
+	if (tenantId) {
+		props.textNodesQuery.refetch({
+			tenantId: tenantId,
+			workSlug: workSlug,
+			subworkN: subworkN,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineFrom <= selectedLineTo ? selectedLineTo : selectedLineFrom
+		});
 	}
-
-	const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
-	const textNodesCursor = TextNodes.find(lemmaQuery);
+	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
 
 	const editions = !props.editionsQuery.loading ?
 		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
@@ -183,8 +169,8 @@ const CommentLemmaSelectContainer = createContainer(props => {
 	return {
 		lemmaText: editions,
 		selectedLemmaEdition: editions[0],
-		ready: textNodesSubscription.ready()
+		ready: !props.textNodesQuery.loading
 	};
 }, CommentLemmaSelect);
 
-export default compose(editionsQuery)(CommentLemmaSelectContainer);
+export default compose(editionsQuery, textNodesQuery)(CommentLemmaSelectContainer);

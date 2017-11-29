@@ -25,7 +25,6 @@ import MenuItem from '/imports/ui/components/shared/MenuItem';
 	helpers
 */
 const getUsername = (currentUser) => {
-	console.log(currentUser);
 	let username = '';
 	if (currentUser) {
 		if (currentUser.profile && currentUser.profile.name) {

@@ -17,7 +17,7 @@ import { TextNodeType, TextNodeInputType } from '/imports/graphql/types/models/t
 import { RemoveType } from '/imports/graphql/types/index';
 
 // logic
-import TextNodeService from '../logic/textNodes';
+import TextNodeService from '../logic/TextNodes/textNodes';
 
 const textNodeMutationFields = {
 	textNodeCreate: {

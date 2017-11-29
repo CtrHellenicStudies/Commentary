@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
-import { editionsQuery } from '/imports/graphql/methods/editions';
 import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -10,6 +9,10 @@ import Draggable from 'react-draggable';
 
 // models
 import TextNodes from '/imports/models/textNodes';
+
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -154,32 +157,29 @@ const LemmaReferenceModal = React.createClass({
 
 });
 
-const LemmaReferenceModalContainer = createContainer(({work, subwork, lineFrom, lineTo}) => {
-	const lemmaQuery = {
-		'work.slug': work,
-		'subwork.n': subwork,
-		'text.n': {
-			$gte: lineFrom,
-		},
-	};
-	const lemmaText = [];
+const LemmaReferenceModalContainer = createContainer((props) => {
 
-	if (lineTo) {
-		lemmaQuery['text.n'].$lte = lineTo;
-	} else {
-		lemmaQuery['text.n'].$lte = lineFrom;
+	const { work, subwork, lineFrom, lineTo } = props;
+	const tenantId = Session.get('tenantId');
+
+	if (tenantId) {
+		props.textNodesQuery.refetch({
+			tenantId: tenantId,
+			workSlug: work,
+			subworkN: subwork,
+			lineFrom: lineFrom,
+			lineTo: lineFrom <= lineTo ? lineTo : lineFrom
+		});
 	}
 
-	const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
-	const handle = Meteor.subscribe('textNodes', lemmaQuery);
-	const textNodesCursor = TextNodes.find(lemmaQuery);
+	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
 	const editions = props.editionsQuery.loading ?
 		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
 
 	return {
 		lemmaText: editions,
-		ready: textHandle.ready(),
+		ready: !props.textNodesQuery.loading && !props.editionsQuery.editions,
 	};
 }, LemmaReferenceModal);
 
-export default compose(editionsQuery)(LemmaReferenceModalContainer);
+export default compose(editionsQuery, textNodesQuery)(LemmaReferenceModalContainer);

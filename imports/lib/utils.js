@@ -473,7 +473,7 @@ export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	let lineTo = comment.lineFrom;
 	if (comment.hasOwnProperty('lineTo')) {
 		lineTo = comment.lineFrom + Math.min(
-				maxLines,
+				maxLines, 
 				comment.lineTo - comment.lineFrom
 			);
 	} else if (comment.hasOwnProperty('nLines')) {
@@ -481,12 +481,10 @@ export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	}
 
 	return {
-		'work.slug': comment.work.slug,
-		'subwork.n': comment.subwork.n,
-		'text.n': {
-			$gte: comment.lineFrom,
-			$lte: lineTo,
-		},
+		workSlug: comment.work.slug,
+		subworkN: comment.subwork.n,
+		lineFrom: comment.lineFrom,
+		lineTo: lineTo,
 	};
 }
 

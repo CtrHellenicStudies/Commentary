@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 import TextNodes from '/imports/models/textNodes';
+
+// graphql
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 const UserBookmarksList = React.createClass({
 	propTypes: {
@@ -54,10 +58,10 @@ const UserBookmarksListContainer = createContainer(() => {
 			bookmarks.push(new Meteor.Collection.ObjectID(bookmark));
 		});
 
-		const handleText = Meteor.subscribe('textNodes', { _id: { $in: bookmarks } });
 
-		if (handleText.ready()) {
-			bookmarkedText = TextNodes.find({ _id: { $in: bookmarks } }).fetch();
+		if (!props.textNodesQuery.loading) {
+			bookmarkedText = props.textNodesQuery.loading ? [] :
+			props.textNodesQuery.textNodes.filter(x => bookmarks.find(y => y === x._id) !== undefined);
 		}
 	}
 
@@ -66,4 +70,4 @@ const UserBookmarksListContainer = createContainer(() => {
 	};
 }, UserBookmarksList);
 
-export default UserBookmarksListContainer;
+export default compose(textNodesQuery)(UserBookmarksListContainer);

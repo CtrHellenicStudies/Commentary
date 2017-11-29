@@ -7,10 +7,9 @@ mutation textNodeCreate($textNode: TextNodeInputType!) {
 	}
 }
  `;
-
 const textNodeUpdate = gql`
-	mutation textNodeUpdate($_id: String $textNode: TextNodeInputType!) {
-	textNodeUpdate(_id: $_id textNode: $textNode) {
+	mutation textNodeUpdate($_id: String! $editionId: String! $updatedText: String! $updatedTextN: Int) {
+	textNodeUpdate(id: $_id editionId: $editionId updatedText: $updatedText updatedTextN: $updatedTextN) {
 		_id
 	}
 }
@@ -28,7 +27,7 @@ const queryById = gql`
 query textNodesQueryById($id: ID!) {
   textNodes(_id: $id) {
   tenantId
-  text
+  text 
   work
   subwork
   relatedPassages
@@ -57,10 +56,11 @@ const textNodeCreateMutation = graphql(textNodeCreate, {
 	}),
 	name: 'textNodeCreateMutation'
 });
-
+// _id, editionId, updatedText, updatedTextN)
 const textNodeUpdateMutation = graphql(textNodeUpdate, {
 	props: (params) => ({
-		textNodeUpdate: (_id, textNode) => params.textNodeUpdateMutation({variables: {id: _id, textNode: textNode}}),
+		textNodeUpdate: (_id, editionId, updatedText, updatedTextN) =>
+		params.textNodeUpdateMutation({variables: {id: _id, editionId: editionId, updatedText: updatedText, updatedTextN: updatedTextN}}),
 	}),
 	name: 'textNodeUpdateMutation',
 	options: {
@@ -80,17 +80,6 @@ const textNodeRemoveMutation = graphql(textNodeRemove, {
 
 const textNodesQuery = graphql(query, {
 	name: 'textNodesQuery',
-	// options: ({params}) => {
-	// 	return ({
-	// 		variables: {
-	// 			tenantId: params.tenantId,
-	// 			workSlug: params.workSlug,
-	// 			subworkN: params.subworkN,
-	// 			lineFrom: params.lineFrom,
-	// 			lineTo: params.lineTo
-	// 		},
-	// 	});
-	// },
 });
 
 const textNodesQueryById = graphql(queryById, {

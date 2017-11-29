@@ -12,6 +12,7 @@ import {
 } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
 
+
 // types
 import { TextNodeType, TextNodeInputType } from '/imports/graphql/types/models/textNode';
 import { RemoveType } from '/imports/graphql/types/index';
@@ -31,6 +32,29 @@ const textNodeMutationFields = {
 		async resolve(parent, { textNode }, { token }) {
 			const textNodeService = new TextNodeService({token});
 			return await textNodeService.textNodeCreate(textNode);
+		}
+	},
+	// _id, editionId, updatedText, updatedTextN)
+	textNodeUpdate: {
+		type: TextNodeType,
+		description: 'Update textNode',
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLString),
+			},
+			editionId: {
+				type: new GraphQLNonNull(GraphQLString),
+			},
+			updatedText: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			updatedTextN: {
+				type: new GraphQLNonNull(GraphQLInt)
+			}
+		},
+		async resolve(parent, { id, editionId, updatedText, updatedTextN }, { token }) {
+			const textNodeService = new TextNodeService({token});
+			return await textNodeService.textNodeUpdate(id, editionId, updatedText, updatedTextN);
 		}
 	},
 	textNodeRemove: {

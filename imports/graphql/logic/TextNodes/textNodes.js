@@ -19,7 +19,39 @@ export default class TextNodesService extends AdminService {
 		}
 		return new Error('Not authorized');
 	}
-
+	/**
+	 * Update textNode
+	 * @param {String} id 
+	 * @param {String} editionId 
+	 * @param {String} updatedText 
+	 * @param {Int} updatedTextN 
+	 */
+	textNodeUpdate(id, editionId, updatedText, updatedTextN) {
+		if (this.userIsNobody) {
+			throw new Error('not-authorized');
+		}
+		const textNode = TextNodes.findOne({ _id: id });
+		if (!textNode) {
+			throw new Error('text-editor', 'Unable to update text for provided text node ID');
+		}
+	
+		const textNodeTextValues = textNode.text.slice();
+		textNodeTextValues.forEach(textValue => {
+			if (textValue.edition === editionId) {
+				textValue.html = updatedText;
+				textValue.n = updatedTextN;
+				textValue.text = stripTags(updatedText);
+			}
+		});
+	
+		return TextNodes.update({
+			_id: id,
+		}, {
+			$set: {
+				text: textNodeTextValues,
+			},
+		});
+	}
 	/**
 	 * Get text nodes
 	 * @param {string} _id - id of text node

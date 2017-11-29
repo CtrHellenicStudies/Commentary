@@ -28,7 +28,7 @@ import _ from 'lodash';
 
 // graphql
 import { editionsQuery } from '/imports/graphql/methods/editions';
-import { textNodesQuery } from '/imports/graphql/methods/textNodes';
+import { textNodesQuery, textNodeUpdateMutation } from '/imports/graphql/methods/textNodes';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -129,11 +129,7 @@ class TextNodesInput extends React.Component {
 		if (typeof editedTextNodeId === 'object') {
 			editedTextNodeId = editedTextNodeId.valueOf();
 		}
-
-		// Call update method on meteor backend
-		Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
-			editionId, editedTextNode.text, newValue,
-		(err, res) => {
+		this.props.textNodeUpdate(editedTextNodeId, editionId, editedTextNode.text, newValue).then((err, res) => {
 			if (err) {
 				console.error('Error editing text', err);
 				this.showSnackBar(err.message);
@@ -156,8 +152,7 @@ class TextNodesInput extends React.Component {
 
 		debounce(500, () => {
 			// Call update method on meteor backend
-			Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
-				editionId, newValue, editedTextNode.n,
+			props.textNodesUpdate(editedTextNodeId, editionId, newValue, editedTextNode.n).then(
 			(err, res) => {
 				if (err) {
 					console.error('Error editing text', err);
@@ -292,7 +287,6 @@ const TextNodesInputContainer = createContainer(props => {
 	}
 	if (ready) {
 		textNodes = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
-		console.log(textNodes);
 		textNodesByEditions = !props.editionsQuery.loading ?
 			Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions) : [];
 		textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
@@ -327,4 +321,7 @@ const TextNodesInputContainer = createContainer(props => {
 
 }, TextNodesInput);
 
-export default compose(editionsQuery, textNodesQuery)(TextNodesInputContainer);
+export default compose(
+	editionsQuery,
+	textNodesQuery,
+	textNodeUpdateMutation)(TextNodesInputContainer);

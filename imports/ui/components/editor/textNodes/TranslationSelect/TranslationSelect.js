@@ -10,7 +10,7 @@ import { compose } from 'react-apollo';
 import { Session } from 'meteor/session';
 
 // graphql
-import {} from '/imports/graphql/methods/translations';
+import { translationAuthorsQuery } from '/imports/graphql/methods/translations';
 
 import EditTranslationAuthorDialog from '../EditTranslationAuthorDialog/EditTranslationAuthorDialog';
 
@@ -52,13 +52,13 @@ class TranslationSelect extends React.Component {
 	}
 
 	addNewAuthor(newAuthor) {
-		const currentAuthors = Session.get('translationOptions');
+		const currentAuthors = this.prop.translationOptions;
 		currentAuthors.push(newAuthor);
 		this.setState({
 			selectedTranslation: newAuthor
 		});
 		this.props.selectTranslation(newAuthor);
-		Session.set('translationOptions', currentAuthors);
+		// TODO insert author
 	}
 
 	render() {
@@ -68,8 +68,8 @@ class TranslationSelect extends React.Component {
 
 		this.props.translationOptions.map(translation => {
 			translationOptions.push({
-				value: translation,
-				label: translation,
+				value: translation.author,
+				label: translation.author,
 			});
 		});
 
@@ -120,17 +120,14 @@ TranslationSelect.propTypes = {
 };
 
 const TranslationSelectContainer = createContainer(props => {
-	const translationOptions = Session.get('translationOptions') ? Session.get('translationOptions') : [];
 
 	let workDetails = null;
+	const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authors;
 
 	if (props.selectedWork && props.selectedSubwork) {
-		Meteor.call('translationNodes.getAuthors', Session.get('tenantId'), props.selectedWork, props.selectedSubwork, (err, result) => {
-			if (!err) {
-				Session.set('translationOptions', result);
-			} else {
-				throw new Error(err);
-			}
+		props.translationAuthorsQuery.refetch({
+			selectedWork: props.selectedWork,
+			selectedSubwork: props.selectedSubwork
 		});
 		workDetails = {
 			tenantId: Session.get('tenantId'),
@@ -146,4 +143,4 @@ const TranslationSelectContainer = createContainer(props => {
 
 }, TranslationSelect);
 
-export default compose()(TranslationSelectContainer);
+export default compose(translationAuthorsQuery)(TranslationSelectContainer);

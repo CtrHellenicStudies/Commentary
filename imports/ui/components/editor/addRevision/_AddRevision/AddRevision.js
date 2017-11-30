@@ -157,14 +157,14 @@ class AddRevision extends React.Component {
 const AddRevisionContainer = createContainer((props) => {
 
 	const { comment } = props;
-
-	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+	const tenantId = Session.get('tenantId');
+	Meteor.subscribe('keywords.all', {tenantId: tenantId});
 
 	const tags = Keywords.find().fetch();
 
-	if (Session.get('tenantId')) {
+	if (tenantId) {
 		props.referenceWorksQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: tenantId
 		});
 	}
 	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;

@@ -139,20 +139,19 @@ ContextPanelContent.defaultProps = {
 	editor: false,
 };
 
-
 const cont = createContainer(props => {
 
 	const { lineFrom, workSlug, subworkN, multiline } = props;
 	const lineTo = lineFrom + 49;
 	const tenantId = Session.get('tenantId');
-
-	if (tenantId) {
-		props.textNodesQuery.refetch({
-			workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
-			subworkN: subworkN,
-			lineFrom: lineFrom,
-			lineTo: lineTo
-		});
+	const properties = {
+		workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+		subworkN: subworkN,
+		lineFrom: lineFrom,
+		lineTo: lineTo
+	};
+	if (Utils.shouldRefetchQuery(properties, props.textNodesQuery.variables)) {
+		props.textNodesQuery.refetch(properties);
 	}
 
 	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;

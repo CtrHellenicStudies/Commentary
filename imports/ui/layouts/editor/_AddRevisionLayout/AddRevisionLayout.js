@@ -43,7 +43,7 @@ const AddRevisionLayout = React.createClass({
 		ready: PropTypes.bool,
 		comment: PropTypes.object,
 		commenters: PropTypes.array,
-		history: PropTypes.array,
+		history: PropTypes.object,
 		keywords: PropTypes.array,
 	},
 
@@ -362,9 +362,10 @@ const AddRevisionLayoutContainer = createContainer(props => {
 	const comment = Comments.findOne({_id: props.commentId});
 	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	const commenters = [];
+	console.log('no chyba nei');
 	if (comment) {
 		comment.commenters.forEach((commenter) => {
-			commenters.push(tenantCommenters.find(
+			commenters.push(tenantCommenters.find(x =>
 				x.slug === commenter.slug,
 			));
 		});

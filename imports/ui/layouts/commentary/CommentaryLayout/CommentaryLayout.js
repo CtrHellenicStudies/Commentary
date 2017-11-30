@@ -224,14 +224,16 @@ class CommentaryLayout extends React.Component {
 const cont = createContainer((props) => {
 
 	const { match } = props;
+	const tenantId = Session.get('tenantId');
+	const properties = {
+		tenantId: tenantId
+	};
 	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
 	const queryParams = qs.parse(window.location.search.substr(1));
 	const params = match.params;
 
-	if (Session.get('tenantId')) {
-		props.referenceWorksQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
+	if (tenantId && Utils.shouldRefetchQuery(properties, props.referenceWorksQuery.variables)) {
+		props.referenceWorksQuery.refetch(properties);
 	}
 
 	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;

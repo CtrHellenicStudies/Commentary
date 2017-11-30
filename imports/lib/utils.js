@@ -401,7 +401,14 @@ const Utils = {
 		}
 		return true;
 	},
-
+	shouldRefetchQuery(properties, variables) {
+		for (const [key, value] of Object.entries(properties)) {
+			if (properties[key] !== variables[key]) {
+				return true;
+			}
+		}
+		return false;
+	},
 	getSuggestionsFromComments(comments) {
 		const suggestions = [];
 

@@ -418,14 +418,15 @@ const cont = createContainer(props => {
 
 		translationAuthors = _.uniq(getTranslationQueries(props.translationsQuery, translationNodesQuery));
 	}
-	if (tenantId) {
-		props.textNodesQuery.refetch({
-			tenantId: tenantId,
-			workSlug: commentGroup.work.slag === 'homeric-hymns' ? 'hymns' : commentGroup.work.slug,
-			subworkN: commentGroup.subwork.n,
-			lineFrom: commentGroup.lineFrom,
-			lineTo: commentGroup.lineTo !== 'undefined' ? commentGroup.lineTo : commentGroup.lineFrom
-		});
+	const properties = {
+		tenantId: tenantId,
+		workSlug: commentGroup.work.slag === 'homeric-hymns' ? 'hymns' : commentGroup.work.slug,
+		subworkN: commentGroup.subwork.n,
+		lineFrom: commentGroup.lineFrom,
+		lineTo: commentGroup.lineTo !== 'undefined' ? commentGroup.lineTo : commentGroup.lineFrom
+	};
+	if (tenantId && Utils.shouldRefetchQuery(properties, props.textNodesQuery.variables)) {
+		props.textNodesQuery.refetch(properties);
 	}
 
 	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;

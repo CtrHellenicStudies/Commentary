@@ -568,12 +568,12 @@ const AddRevisionContainer = createContainer(props => {
 	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
 	const tags = Keywords.find().fetch();
-	this.props.commentersQuery.refetch({
+	props.commentersQuery.refetch({
 		tenantId: Session.get('tenantId')
 	});
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters.filter(x => 
+		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
 			Meteor.user().canEditCommenters.find(y => y === x._id));
 	}
 	if (Session.get('tenantId')) {

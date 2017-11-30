@@ -5,6 +5,7 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
+import Utils from '/imports/lib/utils';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -36,13 +37,15 @@ CommentersList.defaultProps = {
 const cont = createContainer(props => {
 	let commenters = [];
 	let _limit = 100;
+	const tenantId = Session.get('tenantId');
+	const properites = {
+		tenantId: tenantId
+	};
 	if (props.limit) {
 		_limit = props.limit;
 	}
-	if (Session.get('tenantId')) {
-		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
+	if (tenantId && Utils.shouldRefetchQuery(properites, props.commentersQuery.variables)) {
+		props.commentersQuery.refetch(properites);
 	}
 	commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	// SUBSCRIPTIONS:

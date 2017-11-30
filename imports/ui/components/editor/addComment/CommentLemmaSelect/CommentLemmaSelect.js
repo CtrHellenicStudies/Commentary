@@ -147,19 +147,20 @@ const CommentLemmaSelectContainer = createContainer(props => {
 	
 	const { selectedLineFrom, selectedLineTo, workSlug, subworkN } = props;
 	const tenantId = Session.get('tenantId');
+	const properties = {
+		tenantId: tenantId,
+		workSlug: workSlug,
+		subworkN: subworkN,
+		lineFrom: selectedLineFrom,
+		lineTo: selectedLineFrom <= selectedLineTo ? selectedLineTo : selectedLineFrom
+	};
 
 	const selectedLemmaEdition = {
 		lines: [],
 		slug: '',
 	};
-	if (tenantId) {
-		props.textNodesQuery.refetch({
-			tenantId: tenantId,
-			workSlug: workSlug,
-			subworkN: subworkN,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineFrom <= selectedLineTo ? selectedLineTo : selectedLineFrom
-		});
+	if (tenantId && Utils.shouldRefetchQuery(properties, props.textNodesQuery.variables)) {
+		props.textNodesQuery.refetch(properties);
 	}
 	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
 

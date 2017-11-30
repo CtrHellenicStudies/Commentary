@@ -8,6 +8,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
+import Utils from '/imports/lib/utils';
 import Snackbar from 'material-ui/Snackbar';
 import {
 	FormGroup,
@@ -191,10 +192,12 @@ ReferenceWorksInput.propTypes = {
 
 const ReferenceWorksInputContainer = createContainer((props) => {
 
-	if (Session.get('tenantId')) {
-		props.referenceWorksQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
+	const tenantId = Session.get('tenantId');
+	const properties = {
+		tenantId: tenantId
+	};
+	if (tenantId && Utils.shouldRefetchQuery(properties, props.referenceWorksQuery.variables)) {
+		props.referenceWorksQuery.refetch(properties);
 	}
 	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const referenceWorkOptions = [];

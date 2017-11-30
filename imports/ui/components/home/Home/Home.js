@@ -294,7 +294,6 @@ const cont = createContainer(props => {
 	const tenantId = Session.get('tenantId');
 	const skip = props.skip ? props.skip : 0;
 	const limit = props.limit ? props.limit : 10;
-	console.log(props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId));
 	return {
 		comments: props.commentsQuery.loading ? [] : props.commentsQuery.comments.filter(x => x.tenantId === tenantId).slice(skip, limit + skip),
 		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId)

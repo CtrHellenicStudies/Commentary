@@ -88,4 +88,4 @@ const TranslationInputType = new GraphQLInputObjectType({
 	}
 });
 
-export { TranslationType };
+export { TranslationType, TranslationInputType };

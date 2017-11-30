@@ -14,7 +14,11 @@ import {debounce} from 'throttle-debounce';
 import Cookies from 'js-cookie';
 
 // graphql
-import { translationsQuery } from '/imports/graphql/methods/translations';
+import {
+	translationsQuery,
+	translationRemoveMutation,
+	translationUpdateMutation 
+} from '/imports/graphql/methods/translations';
 
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');
 
@@ -52,18 +56,17 @@ class TranslationNodeInput extends React.Component {
 
 			debounce(500, () => {
 				// Call update method on meteor backend
-				Meteor.call('translationNode.update', Cookies.get('loginToken'), currentTranslationNode,
-					(err, res) => {
-						if (err) {
-							console.error('Error editing text', err);
-							this.showSnackBar(err.message);
-						} else {
-							this.showSnackBar('Updated');
-							this.setState({
-								inserting: false
-							});
-						}
-					});
+				this.props.translationUpdate(currentTranslationNode).then((err, res) => {
+					if (err) {
+						console.error('Error editing text', err);
+						this.showSnackBar(err.message);
+					} else {
+						this.showSnackBar('Updated');
+						this.setState({
+							inserting: false
+						});
+					}
+				});
 			})();
 		} else if (!newValue && !this.state.inserting) {
 			this.setState({
@@ -71,7 +74,7 @@ class TranslationNodeInput extends React.Component {
 			});
 			debounce(500, () => {
 				// Call update method on meteor backend
-				Meteor.call('translationNode.remove', Cookies.get('loginToken'), currentTranslationNode._id, (err, res) => {
+				this.props.translationRemove(currentTranslationNode._id).then((err, res) => {
 					if (err) {
 						console.error('Error removing text', err);
 						this.showSnackBar(err.message);
@@ -169,18 +172,23 @@ class TranslationNodeInput extends React.Component {
 TranslationNodeInput.propTypes = {
 	translationNodes: PropTypes.array,
 	ready: PropTypes.bool,
+	translationRemove: PropTypes.func,
+	translationUpdate: PropTypes.func
 };
 function getTranslationQueries(query, filter) {
 
 	if (query.loading) {
 		return [];
 	}
-	console.log(filter);
-	console.log(query.translations);
 	return query.translations.filter(x => 
 		x.tenantId === filter.tenantId &&
 		x.work === filter.work && 
-		x.subwork === filter.subwork).slice(filter.skip, filter.limit);
+		parseInt(x.subwork) === parseInt(filter.subwork) &&
+		x.author === filter.author)
+		.sort(function(a, b) {
+			return parseInt(a.n) - parseInt(b.n);
+		})
+		.slice(filter.skip, filter.limit);
 }
 const TranslationInputContainer = createContainer((props) => {
 
@@ -188,33 +196,36 @@ const TranslationInputContainer = createContainer((props) => {
 	const tenantId = Session.get('tenantId');
 	const filter = {
 		tenantId: tenantId,
-		work: selectedWork._id,
+		work: selectedWork.slug,
 		subwork: selectedSubwork,
-		skip: startAtLine,
-		limit: limit
+		skip: startAtLine - 1,
+		limit: limit,
+		author: selectedTranslation
 	};
 
 	const translation = getTranslationQueries(props.translationsQuery, filter);
 
-	const translationNodes = [];
-	for (let i = 0; i < limit; i++) {
-		let newLine;
-		const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
+	const translationNodes = translation;
+	if (!translation || translation.length === 0) {
+		for (let i = 0; i < limit; i++) {
+			let newLine;
+			const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
 
-		if (arrIndex >= 0) {
-			newLine = translation[arrIndex];
-		}		else {
-			newLine = {
-				n: i + parseInt(startAtLine),
-				text: '',
-				tenantId: tenantId,
-				work: selectedWork.slug,
-				subwork: selectedSubwork,
-				author: selectedTranslation,
-			};
+			if (arrIndex >= 0) {
+				newLine = translation[arrIndex];
+			}		else {
+				newLine = {
+					n: i + parseInt(startAtLine),
+					text: '',
+					tenantId: tenantId,
+					work: selectedWork.slug,
+					subwork: selectedSubwork,
+					author: selectedTranslation,
+				};
+			}
+
+			translationNodes.push(newLine);
 		}
-
-		translationNodes.push(newLine);
 	}
 
 	return {
@@ -224,4 +235,8 @@ const TranslationInputContainer = createContainer((props) => {
 
 }, TranslationNodeInput);
 
-export default compose(translationsQuery)(TranslationInputContainer);
+export default compose(
+	translationsQuery,
+	translationRemoveMutation,
+	translationUpdateMutation
+)(TranslationInputContainer);

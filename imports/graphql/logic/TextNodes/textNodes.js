@@ -86,16 +86,8 @@ export default class TextNodesService extends AdminService {
 			args['text.n'] = { $gte: lineFrom };
 		}
 		if (lineTo) {
-			args['text.n'] = { $lte: lineTo };
+			args.$and = [{'text.n': { $gte: lineFrom }}, {'text.n': { $lte: lineTo }}];
 		}
-
-		// TODO: reinstate search for line letter and text
-		// if (lineLetter) {
-		// 	args['text.letter'] = lineLetter;
-		// }
-		// if (text) {
-		// 	args['text.text'] = { $regex: text, $options: 'i'};
-		// }
 
 		if (workSlug) {
 			args['work.slug'] = slugify(workSlug);
@@ -115,7 +107,6 @@ export default class TextNodesService extends AdminService {
 		} else {
 			options.skip = 0;
 		}
-
 		return TextNodes.find(args, options).fetch();
 	}
 

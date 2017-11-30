@@ -152,7 +152,7 @@ class ContextPanel extends React.Component {
 		const subworkN = getsubworkN(this.props);
 
 		Meteor.call('getMaxLine', workSlug, subworkN, (err, res) => {
-			if (err) throw Meteor.Erorr(err);
+			if (err) console.log(err);
 			this.setState({
 				maxLine: res,
 			});

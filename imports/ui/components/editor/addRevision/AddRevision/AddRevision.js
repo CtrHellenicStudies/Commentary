@@ -6,7 +6,7 @@ import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
 import { Roles } from 'meteor/alanning:roles';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
-import { referenceWorkCreateMutation } from '/imports/graphql/methods/referenceWorks';
+import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
@@ -568,17 +568,18 @@ const AddRevisionContainer = createContainer(props => {
 	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
 	const tags = Keywords.find().fetch();
-	props.commentersQuery.refetch({
-		tenantId: Session.get('tenantId')
-	});
+	const tenantId = Session.get('tenantId');
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
 		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
 			Meteor.user().canEditCommenters.find(y => y === x._id));
 	}
-	if (Session.get('tenantId')) {
+	if (tenantId) {
+		props.commentersQuery.refetch({
+			tenantId: tenantId
+		});
 		props.referenceWorksQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: tenantId
 		});
 	}
 	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
@@ -614,4 +615,4 @@ const AddRevisionContainer = createContainer(props => {
 	};
 }, AddRevision);
 
-export default compose(commentersQuery, referenceWorkCreateMutation)(AddRevisionContainer);
+export default compose(commentersQuery, referenceWorksQuery, referenceWorkCreateMutation)(AddRevisionContainer);

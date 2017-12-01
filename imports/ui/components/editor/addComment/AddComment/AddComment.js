@@ -30,7 +30,9 @@ import { convertToHTML } from 'draft-convert';
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
-import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import { keywordsQuery,
+		keywordInsertMutation,
+		keywordUpdateMutation } from '/imports/graphql/methods/keywords';
 
 // models
 import Keywords from '/imports/models/keywords';
@@ -71,7 +73,9 @@ class AddComment extends React.Component {
 		referenceWorkOptions: PropTypes.array,
 		ready: PropTypes.bool,
 		commenters: PropTypes.array,
-		referenceWorkCreate: PropTypes.func
+		referenceWorkCreate: PropTypes.func,
+		keywordInsert: PropTypes.func,
+		keywordUpdate: PropTypes.func
 	};
 
 	static defaultProps = {
@@ -289,19 +293,30 @@ class AddComment extends React.Component {
 	}
 
 	selectTagType(tagId, event, index) {
+
 		const currentTags = this.state.tagsValue;
-		currentTags[index].keyword.type = event.target.value;
+		this.setState({
+			tagsValue: event.target.value
+		});
+		const newKeyword = {};
+		for (const [key, value] of Object.entries(currentTags[index].keyword)) {
+			if (key === 'type') {
+				newKeyword[key] = event.target.value;
+			} else if (key !== '_id' && key !== '__typename') {
+				newKeyword[key] = value;
+			}
+		}
+		currentTags[index].keyword = newKeyword;
 		this.setState({
 			tagsValue: currentTags
 		});
-
-		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value, (err) => {
-			if (err) {
-				this.showSnackBar(err);
-			}			else {
-				this.showSnackBar({message: 'Keyword type changed'});
-			}
-		});
+		this.props.keywordUpdate(tagId, newKeyword);
+		// 	if (err) {
+		// 		this.showSnackBar(err);
+		// 	}			else {
+		// 		this.showSnackBar({message: 'Keyword type changed'});
+		// 	}
+		// });
 	}
 
 	addNewTag(tag) {
@@ -313,14 +328,13 @@ class AddComment extends React.Component {
 			count: 1,
 			tenantId: Session.get('tenantId'),
 		}];
-
-		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
-			if (err) {
-				this.showSnackBar(err);
-			} else {
-				this.showSnackBar({message: 'Tag added'});
-			}
-		});
+		this.props.keywordInsert(keyword);
+		// 	if (err) {
+		// 		this.showSnackBar(err);
+		// 	} else {
+		// 		this.showSnackBar({message: 'Tag added'});
+		// 	}
+		// });
 	}
 	addNewReferenceWork(reference) {
 		const _reference = {
@@ -530,5 +544,7 @@ export default compose(
 	commentersQuery,
 	referenceWorkCreateMutation,
 	referenceWorksQuery,
-	keywordsQuery
+	keywordsQuery,
+	keywordInsertMutation,
+	keywordUpdateMutation
 )(AddCommentContainer);

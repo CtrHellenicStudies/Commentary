@@ -49,6 +49,13 @@ const keywordRemove = gql`
 	}
 }
  `;
+const keywordInsert = gql`
+ mutation keywordInsert($keyword: KeywordInputType!) {
+	keywordInsert(keyword: $keyword) {
+	 _id
+ }
+}
+`;
 
 const keywordUpdate = gql`
 	mutation keywordUpdate($id: String! $keyword: KeywordInputType!) {
@@ -93,9 +100,20 @@ const keywordUpdateMutation = graphql(keywordUpdate, {
 	}
 });
 
+const keywordInsertMutation = graphql(keywordInsert, {
+	props: (params) => ({
+		keywordInsert: (keyword) => params.keywordInsertMutation({variables: {keyword}}),
+	}),
+	name: 'keywordInsertMutation',
+	options: {
+		refetchQueries: ['keywordsQuery']
+	}
+});
+
 export {
     keywordsQuery,
     keywordsQueryById,
     keywordRemoveMutation,
-    keywordUpdateMutation
+	keywordUpdateMutation,
+	keywordInsertMutation
 };

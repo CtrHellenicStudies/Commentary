@@ -42,7 +42,9 @@ import Commenters from '/imports/models/commenters';
 import muiTheme from '/imports/lib/muiTheme';
 
 // graphql
-import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import { keywordsQuery,
+		keywordInsertMutation,
+		keywordUpdateMutation } from '/imports/graphql/methods/keywords';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
@@ -359,18 +361,28 @@ class AddRevision extends React.Component {
 	}
 	selectTagType(tagId, event, index) {
 		const currentTags = this.state.tagsValue;
-		currentTags[index].keyword.type = event.target.value;
+		this.setState({
+			tagsValue: event.target.value
+		});
+		const newKeyword = {};
+		for (const [key, value] of Object.entries(currentTags[index].keyword)) {
+			if (key === 'type') {
+				newKeyword[key] = event.target.value;
+			} else if (key !== '_id' && key !== '__typename') {
+				newKeyword[key] = value;
+			}
+		}
+		currentTags[index].keyword = newKeyword;
 		this.setState({
 			tagsValue: currentTags
 		});
-
-		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value, (err) => {
-			if (err) {
-				this.showSnackBar(err);
-			}			else {
-				this.showSnackBar({message: 'Keyword type changed'});
-			}
-		});
+		this.props.keywordUpdate(tagId, newKeyword);
+		// 	if (err) {
+		// 		this.showSnackBar(err);
+		// 	}			else {
+		// 		this.showSnackBar({message: 'Keyword type changed'});
+		// 	}
+		// });
 	}
 
 	addNewTag(tag) {
@@ -382,14 +394,13 @@ class AddRevision extends React.Component {
 			count: 1,
 			tenantId: Session.get('tenantId'),
 		}];
-
-		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
-			if (err) {
-				this.showSnackBar(err);
-			}			else {
-				this.showSnackBar({message: 'Tag added'});
-			}
-		});
+		this.props.keywordInsert(keyword);
+		// 	if (err) {
+		// 		this.showSnackBar(err);
+		// 	}			else {
+		// 		this.showSnackBar({message: 'Tag added'});
+		// 	}
+		// });
 	}
 
 	render() {
@@ -559,7 +570,9 @@ AddRevision.propTypes = {
 	commentersOptions: PropTypes.array,
 	history: PropTypes.array,
 	ready: PropTypes.bool,
-	referenceWorkCreate: PropTypes.func
+	referenceWorkCreate: PropTypes.func,
+	keywordInsert: PropTypes.func,
+	keywordUpdate: PropTypes.func
 };
 
 AddRevision.childContextTypes = {
@@ -623,5 +636,7 @@ export default compose(
 	commentersQuery,
 	referenceWorksQuery,
 	referenceWorkCreateMutation,
-	keywordsQuery
+	keywordsQuery,
+	keywordInsertMutation,
+	keywordUpdateMutation
 )(AddRevisionContainer);

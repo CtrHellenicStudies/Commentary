@@ -4,11 +4,15 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 import slugify from 'slugify';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+// graphql
+import { keywordInsertMutation } from '/imports/graphql/methods/keywords';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -28,6 +32,8 @@ const AddKeywordLayout = React.createClass({
 	propTypes: {
 		ready: PropTypes.bool,
 		isTest: PropTypes.bool,
+		history: PropTypes.object,
+		keywordInsert: PropTypes.func
 	},
 
 	childContextTypes: {
@@ -200,7 +206,7 @@ const AddKeywordLayout = React.createClass({
 		this.setState({
 			loading: true,
 		});
-
+		const that = this;
 		// get data for keyword :
 		const work = this.getWork();
 		const subwork = this.getSubwork();
@@ -230,14 +236,16 @@ const AddKeywordLayout = React.createClass({
 			count: 1,
 			tenantId: Session.get('tenantId'),
 		};
-
-		Meteor.call('keywords.insert', token, [keyword], (error) => {
-			if (error) {
-				this.showSnackBar(error);
-			} else {
-				this.props.history.push(`/tags/${keyword.slug}`);
-			}
-		});
+		this.props.keywordInsert(keyword).then(function() {
+			that.props.history.push(`/tags/${keyword.slug}`);
+		}
+		);
+		// 	if (error) {
+		// 		this.showSnackBar(error);
+		// 	} else {
+		// 		this.props.history.push(`/tags/${keyword.slug}`);
+		// 	}
+		// });
 	},
 
 	showSnackBar(error) {
@@ -435,4 +443,4 @@ const AddKeywordLayoutContainer = (() => {
 	};
 }, AddKeywordLayout);
 
-export default AddKeywordLayoutContainer;
+export default (keywordInsertMutation)(AddKeywordLayoutContainer);

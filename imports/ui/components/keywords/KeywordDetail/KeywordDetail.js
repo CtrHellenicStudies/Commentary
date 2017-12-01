@@ -19,7 +19,7 @@ import Settings from '/imports/models/settings';
 
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
-import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import { keywordsQuery, keywordRemoveMutation } from '/imports/graphql/methods/keywords';
 
 // components
 import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
@@ -51,13 +51,13 @@ class KeywordDetail extends Component {
 
 	deleteKeyword() {
 		const { keyword } = this.props;
-		Meteor.call('keywords.delete', Cookies.get('loginToken'), keyword._id, (error, keywordId) => {
-			if (error) {
-				console.log(keywordId, error);
-			} else {
-				this.props.history.push('/words');
-			}
-		});
+		this.props.keywordRemove(keyword._id);
+		// 	if (error) {
+		// 		console.log(keywordId, error);
+		// 	} else {
+		// 		this.props.history.push('/words');
+		// 	}
+		// });
 	}
 
 	_keywordDescriptionOnClick(e) {
@@ -183,7 +183,8 @@ KeywordDetail.propTypes = {
 	keyword: PropTypes.object,
 	settings: PropTypes.object,
 	keywordComments: PropTypes.array,
-	history: PropTypes.array
+	history: PropTypes.object,
+	keywordRemove: PropTypes.func
 };
 
 KeywordDetail.childContextTypes = {
@@ -203,8 +204,8 @@ const KeywordDetailContainer = createContainer((props) => {
 		});
 	}
 
-	const keyword = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
-		.fiter(x => x.slug === slug);
+	const keyword = props.keywordsQuery.loading ? {} : props.keywordsQuery.keywords
+		.find(x => x.slug === slug);
 
 	let keywordComments = null;
 	if (keyword) {
@@ -223,5 +224,6 @@ const KeywordDetailContainer = createContainer((props) => {
 
 export default compose(
 	settingsQuery,
-	keywordsQuery
+	keywordsQuery,
+	keywordRemoveMutation
 )(KeywordDetailContainer);

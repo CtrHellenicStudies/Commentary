@@ -43,6 +43,19 @@ const keywordsMutationFields = {
 			const keywordService = new KeywordService({token});
 			return await keywordService.keywordUpdate(keywordId, keyword);
 		}
+	},
+	keywordInsert: {
+		type: KeywordType,
+		description: 'Insert a single keyword',
+		args: {
+			keyword: {
+				type: new GraphQLNonNull(KeywordInputType)
+			}
+		},
+		async resolve(parent, {keyword}, {token}) {
+			const keywordService = new KeywordService({token});
+			return await keywordService.keywordInsert(keyword);
+		}
 	}
 };
 

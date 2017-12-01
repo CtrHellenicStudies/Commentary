@@ -47,9 +47,16 @@ export default class KeywordsService extends AdminService {
 	 * @returns {boolean} result of mongo orm update
 	 */
 	keywordUpdate(keywordId, keyword) {
+		console.log(keyword);
 		if (this.userIsAdmin) {
 			return Keywords.update(keywordId, {$set: keyword});
 		}
 		return new Error('Not authorized');
+	}
+	keywordInsert(keyword) {
+		if (this.userIsNobody) {
+			return new Error('Not authorized');
+		}
+		return Keywords.insert({...keyword});
 	}
 }

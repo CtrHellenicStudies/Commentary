@@ -15,7 +15,7 @@ import Keywords from '/imports/models/keywords';
 import Header from '/imports/ui/layouts/header/Header';
 
 // graphql
-import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import { keywordsQuery, keywordUpdateMutation } from '/imports/graphql/methods/keywords';
 
 // components
 import Spinner from '/imports/ui/components/loading/Spinner';
@@ -35,7 +35,8 @@ const EditKeywordLayout = React.createClass({
 		slug: PropTypes.string,
 		ready: PropTypes.bool,
 		keyword: PropTypes.object,
-		history: PropTypes.object
+		history: PropTypes.object,
+		keywordUpdate: PropTypes.func
 	},
 
 	childContextTypes: {
@@ -154,7 +155,7 @@ const EditKeywordLayout = React.createClass({
 		const type = this.getType();
 		const token = Cookies.get('loginToken');
 		const { keyword } = this.props;
-
+		const that = this;
 		// create keyword object to be inserted:
 		const keywordCandidate = {
 			work: {
@@ -177,14 +178,15 @@ const EditKeywordLayout = React.createClass({
 			tenantId: Session.get('tenantId'),
 			count: 1,
 		};
-
-		Meteor.call('keywords.update', token, keyword._id, keywordCandidate, (error) => {
-			if (error) {
-				this.showSnackBar(error);
-			} else {
-				this.props.history.push(`/tags/${keywordCandidate.slug}`);
-			}
+		this.props.keywordUpdate(keyword._id, keywordCandidate).then(function() {
+			that.props.history.push(`/tags/${keywordCandidate.slug}`);
 		});
+		// 	if (error) {
+		// 		this.showSnackBar(error);
+		// 	} else {
+		// 		this.props.history.push(`/tags/${keywordCandidate.slug}`);
+		// 	}
+		// });
 	},
 	showSnackBar(error) {
 		this.setState({
@@ -453,4 +455,7 @@ const EditKeywordLayoutContainer = createContainer((props) => {
 	};
 }, EditKeywordLayout);
 
-export default compose(keywordsQuery)(EditKeywordLayoutContainer);
+export default compose(
+	keywordsQuery,
+	keywordUpdateMutation
+)(EditKeywordLayoutContainer);

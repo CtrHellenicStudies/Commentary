@@ -22,6 +22,7 @@ import Utils from '/imports/lib/utils';
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -353,9 +354,12 @@ const EditKeyword = React.createClass({
 });
 
 const EditKeywordContainer = createContainer(props => {
-	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
+
+	const tenantId = Session.get('tenantId');
+
 	const keywordsOptions = [];
-	const keywords = Keywords.find({ type: 'word' }).fetch();
+	const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
+	.filter(x => x.type === 'word');
 	keywords.forEach((keyword) => {
 		keywordsOptions.push({
 			value: keyword.title,
@@ -365,7 +369,8 @@ const EditKeywordContainer = createContainer(props => {
 	});
 
 	const keyideasOptions = [];
-	const keyideas = Keywords.find({ type: 'idea' }).fetch();
+	const keyideas = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
+	.filter(x => x.type === 'idea');
 	keyideas.forEach((keyidea) => {
 		keyideasOptions.push({
 			value: keyidea.title,
@@ -374,9 +379,15 @@ const EditKeywordContainer = createContainer(props => {
 		});
 	});
 
-	if (Session.get('tenantId')) {
+	if (tenantId) {
 		props.referenceWorksQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: tenantId
+		});
+		props.commentersQuery.refetch({
+			tenantId: tenantId
+		});
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
 		});
 	}
 	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
@@ -388,11 +399,6 @@ const EditKeywordContainer = createContainer(props => {
 		});
 	});
 
-	if (Session.get('tenantId')) {
-		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
-		});
-	}
 	const commentersOptions = [];
 	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	let commenters = [];
@@ -415,4 +421,8 @@ const EditKeywordContainer = createContainer(props => {
 	};
 }, EditKeyword);
 
-export default compose(commentersQuery, referenceWorksQuery)(EditKeywordContainer);
+export default compose(
+	commentersQuery,
+	referenceWorksQuery,
+	keywordsQuery
+)(EditKeywordContainer);

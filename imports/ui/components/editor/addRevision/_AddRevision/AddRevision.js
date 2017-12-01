@@ -15,6 +15,7 @@ import { compose } from 'react-apollo';
 
 // graphql
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // models
 import Keywords from '/imports/models/keywords';
@@ -158,12 +159,14 @@ const AddRevisionContainer = createContainer((props) => {
 
 	const { comment } = props;
 	const tenantId = Session.get('tenantId');
-	Meteor.subscribe('keywords.all', {tenantId: tenantId});
 
-	const tags = Keywords.find().fetch();
+	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 
 	if (tenantId) {
 		props.referenceWorksQuery.refetch({
+			tenantId: tenantId
+		});
+		props.keywordsQuery.refetch({
 			tenantId: tenantId
 		});
 	}
@@ -200,4 +203,7 @@ const AddRevisionForm = reduxForm({
 })(AddRevisionContainer);
 
 
-export default compose(referenceWorksQuery)(AddRevisionForm);
+export default compose(
+	referenceWorksQuery,
+	keywordsQuery
+)(AddRevisionForm);

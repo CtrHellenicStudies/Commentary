@@ -5,8 +5,6 @@ import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
 import { Roles } from 'meteor/alanning:roles';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
-import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
@@ -42,6 +40,11 @@ import Commenters from '/imports/models/commenters';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
+
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // helpers:
 import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
@@ -565,9 +568,7 @@ AddRevision.childContextTypes = {
 
 const AddRevisionContainer = createContainer(props => {
 
-	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-
-	const tags = Keywords.find().fetch();
+	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 	const tenantId = Session.get('tenantId');
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
@@ -579,6 +580,9 @@ const AddRevisionContainer = createContainer(props => {
 			tenantId: tenantId
 		});
 		props.referenceWorksQuery.refetch({
+			tenantId: tenantId
+		});
+		props.keywordsQuery.refetch({
 			tenantId: tenantId
 		});
 	}
@@ -608,11 +612,16 @@ const AddRevisionContainer = createContainer(props => {
 		}
 	});
 	return {
-		ready: handleKeywords.ready(),
+		ready: !props.commentersQuery.loading && !props.referenceWorksQuery.loading && !props.keywordsQuery.loading,
 		tags,
 		referenceWorkOptions,
 		commentersOptions,
 	};
 }, AddRevision);
 
-export default compose(commentersQuery, referenceWorksQuery, referenceWorkCreateMutation)(AddRevisionContainer);
+export default compose(
+	commentersQuery,
+	referenceWorksQuery,
+	referenceWorkCreateMutation,
+	keywordsQuery
+)(AddRevisionContainer);

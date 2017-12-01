@@ -19,6 +19,7 @@ import Settings from '/imports/models/settings';
 
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // components
 import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
@@ -220,4 +221,7 @@ const KeywordDetailContainer = createContainer((props) => {
 	};
 }, KeywordDetail);
 
-export default compose(settingsQuery)(KeywordDetailContainer);
+export default compose(
+	settingsQuery,
+	keywordsQuery
+)(KeywordDetailContainer);

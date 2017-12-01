@@ -30,10 +30,12 @@ import { convertToHTML } from 'draft-convert';
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // models
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
+
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
@@ -478,23 +480,29 @@ class AddComment extends React.Component {
 }
 
 const AddCommentContainer = createContainer(props => {
-	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+
 	let commenters = [];
 	const tenantId = Session.get('tenantId');
 	const properties = {
 		tenantId: tenantId
 	};
+	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
+
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
 		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
 			Meteor.user().canEditCommenters.find(y => y === x._id));
 	}
-	const tags = Keywords.find().fetch();
+
 	if (tenantId && Utils.shouldRefetchQuery(properties, props.commentersQuery.variables)) {
 		props.commentersQuery.refetch(properties);
 	}
 	if (tenantId && Utils.shouldRefetchQuery(properties, props.referenceWorksQuery.variables)) {
 		props.referenceWorksQuery.refetch(properties);
 	}
+	if (tenantId && Utils.shouldRefetchQuery(properties, props.keywordsQuery.variables)) {
+		props.keywordsQuery.refetch(properties);
+	}
+	
 	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const referenceWorkOptions = [];
 	referenceWorks.forEach((referenceWork) => {
@@ -510,7 +518,7 @@ const AddCommentContainer = createContainer(props => {
 	});
 
 	return {
-		ready: handleKeywords.ready(),
+		ready: !props.keywordsQuery.loading && !props.referenceWorksQuery.loading && !props.commentersQuery.loading,
 		tags,
 		referenceWorkOptions,
 		commenters
@@ -518,4 +526,9 @@ const AddCommentContainer = createContainer(props => {
 
 }, AddComment);
 
-export default compose(commentersQuery, referenceWorkCreateMutation, referenceWorksQuery)(AddCommentContainer);
+export default compose(
+	commentersQuery,
+	referenceWorkCreateMutation,
+	referenceWorksQuery,
+	keywordsQuery
+)(AddCommentContainer);

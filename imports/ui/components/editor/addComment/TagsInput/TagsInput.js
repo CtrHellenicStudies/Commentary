@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import autoBind from 'react-autobind';
+import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
@@ -20,6 +21,9 @@ import Keywords from '/imports/models/keywords';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 const ListGroupItemDnD = createListGroupItemDnD('tagBlocks');
 
@@ -149,9 +153,16 @@ TagsInput.propTypes = {
 	addNewTag: PropTypes.func,
 };
 
-const TagsInputContainer = createContainer(() => {
-	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-	const tags = Keywords.find().fetch();
+const TagsInputContainer = createContainer((props) => {
+
+	const tenantId = Session.get('tenantId');
+	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
+
+	if (tenantId) {
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
+	}
 
 	return {
 		tags,
@@ -159,4 +170,4 @@ const TagsInputContainer = createContainer(() => {
 
 }, TagsInput);
 
-export default TagsInputContainer;
+export default compose(keywordsQuery)(TagsInputContainer);

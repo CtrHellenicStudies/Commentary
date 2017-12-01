@@ -1,5 +1,5 @@
 import Keywords from '/imports/models/keywords';
-import AdminService from './adminService';
+import AdminService from '../adminService';
 
 /**
  * Logic-layer service for dealing with keywords
@@ -13,22 +13,19 @@ export default class KeywordsService extends AdminService {
 	 * @returns {Object[]} array of tags 
 	 */
 	keywordsGet(id, tenantId) {
-		if (this.userIsAdmin) {
-			const args = {};
+		const args = {};
 
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
-			if (id) {
-				args._id = id;
-			}
-			return Keywords.find(args, {
-				sort: {
-					slug: 1,
-				}
-			}).fetch();
+		if (tenantId) {
+			args.tenantId = tenantId;
 		}
-		return new Error('Not authorized');
+		if (id) {
+			args._id = id;
+		}
+		return Keywords.find(args, {
+			sort: {
+				slug: 1,
+			}
+		}).fetch();
 	}
 
 	/**

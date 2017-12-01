@@ -12,7 +12,7 @@ import { RemoveType } from '/imports/graphql/types/index';
 import Keywords from '/imports/models/keywords';
 
 // logic
-import KeywordService from '../logic/keywords';
+import KeywordService from '../logic/Keywords/keywords';
 
 const keywordsMutationFields = {
 	keywordRemove: {

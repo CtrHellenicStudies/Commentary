@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -12,6 +13,9 @@ import Keywords from '/imports/models/keywords';
 
 // layouts
 import Header from '/imports/ui/layouts/header/Header';
+
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // components
 import Spinner from '/imports/ui/components/loading/Spinner';
@@ -31,6 +35,7 @@ const EditKeywordLayout = React.createClass({
 		slug: PropTypes.string,
 		ready: PropTypes.bool,
 		keyword: PropTypes.object,
+		history: PropTypes.object
 	},
 
 	childContextTypes: {
@@ -424,13 +429,22 @@ const EditKeywordLayout = React.createClass({
 	},
 });
 
-const EditKeywordLayoutContainer = createContainer(({ match }) => {
+const EditKeywordLayoutContainer = createContainer((props) => {
+
+	const { match } = props;
+	const tenantId = Session.get('tenantId');
 	const slug = match.params.slug;
-	const keywordsSub = Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
-	const ready = Roles.subscription.ready() && keywordsSub.ready();
+	const ready = Roles.subscription.ready() && !props.keywordsQuery.keywords;
+
+	if (tenantId) {
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
+	}
+
 	let keyword = {};
 	if (ready) {
-		keyword = Keywords.findOne({ slug });
+		keyword = props.keywordsQuery.keywords.find(x => x.slug === slug);
 	}
 
 	return {
@@ -439,4 +453,4 @@ const EditKeywordLayoutContainer = createContainer(({ match }) => {
 	};
 }, EditKeywordLayout);
 
-export default EditKeywordLayoutContainer;
+export default compose(keywordsQuery)(EditKeywordLayoutContainer);

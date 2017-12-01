@@ -4,7 +4,6 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
@@ -23,6 +22,10 @@ import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
 import AddRevision from '/imports/ui/components/editor/addRevision/AddRevision';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
+
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -349,14 +352,18 @@ const AddRevisionLayout = React.createClass({
 });
 
 const AddRevisionLayoutContainer = createContainer(props => {
+
 	const commentId = props.match.params.commentId;
 	const commentsSub = Meteor.subscribe('comments.id', commentId, Session.get('tenantId'));
-	const keywordsSub = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+	const tenantId = Session.get('tenantId');
 
-	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
-	if (Session.get('tenantId')) {
+	const ready = Roles.subscription.ready() && commentsSub.ready() && !props.keywordsQuery.loading;
+	if (tenantId) {
 		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: tenantId
+		});
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
 		});
 	}
 	const comment = Comments.findOne({_id: commentId});
@@ -369,7 +376,7 @@ const AddRevisionLayoutContainer = createContainer(props => {
 			));
 		});
 	}
-	const keywords = Keywords.find().fetch();
+	const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 
 	return {
 		ready,
@@ -379,4 +386,7 @@ const AddRevisionLayoutContainer = createContainer(props => {
 	};
 }, AddRevisionLayout);
 
-export default compose(commentersQuery)(AddRevisionLayoutContainer);
+export default compose(
+	commentersQuery,
+	keywordsQuery
+)(AddRevisionLayoutContainer);

@@ -4,7 +4,6 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Roles } from 'meteor/alanning:roles';
 import { createContainer } from 'meteor/react-meteor-data';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -32,6 +31,10 @@ import muiTheme from '/imports/lib/muiTheme';
 import client from '/imports/middleware/apolloClient';
 import configureStore from '/imports/store/configureStore';
 import Utils from '/imports/lib/utils';
+
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 // redux integration for layout
 const store = configureStore();
@@ -350,19 +353,22 @@ const AddRevisionLayout = React.createClass({
 });
 
 const AddRevisionLayoutContainer = createContainer(props => {
+
+	const tenantId = Session.get('tenantId');
 	const commentsSub = Meteor.subscribe('comments.id', commentId, Session.get('tenantId'));
-	const keywordsSub = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
 
 	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
-	if (Session.get('tenantId')) {
+	if (tenantId) {
 		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: tenantId
+		});
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
 		});
 	}
 	const comment = Comments.findOne({_id: props.commentId});
 	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	const commenters = [];
-	console.log('no chyba nei');
 	if (comment) {
 		comment.commenters.forEach((commenter) => {
 			commenters.push(tenantCommenters.find(x =>
@@ -370,7 +376,7 @@ const AddRevisionLayoutContainer = createContainer(props => {
 			));
 		});
 	}
-	const keywords = Keywords.find().fetch();
+	const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 
 	return {
 		ready,
@@ -380,4 +386,4 @@ const AddRevisionLayoutContainer = createContainer(props => {
 	};
 }, AddRevisionLayout);
 
-export default AddRevisionLayoutContainer;
+export default compose(keywordsQuery)(AddRevisionLayoutContainer);

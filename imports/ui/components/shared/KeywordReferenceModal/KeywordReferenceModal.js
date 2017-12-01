@@ -4,9 +4,13 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Draggable from 'react-draggable';
+import { compose } from 'react-apollo';
 
 // models
 import Keywords from '/imports/models/keywords';
+
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -81,18 +85,23 @@ const KeywordReferenceModal = React.createClass({
 
 });
 
-const KeywordReferenceModalContainer = createContainer(({ keywordSlug }) => {
+const KeywordReferenceModalContainer = createContainer((props) => {
+	const { keywordSlug } = props;
+	const tenantId = Session.get('tenantId');
 	const query = {
 		slug: keywordSlug,
 	};
-
-	const handle = Meteor.subscribe('keywords.all', query);
-	const keyword = Keywords.findOne(query);
+	if (tenantId) {
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
+	}
+	const keyword = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 
 	return {
 		keyword,
-		ready: handle.ready(),
+		ready: !props.keywordsQuery.loading,
 	};
 }, KeywordReferenceModal);
 
-export default KeywordReferenceModalContainer;
+export default compose(keywordsQuery)(KeywordReferenceModalContainer);

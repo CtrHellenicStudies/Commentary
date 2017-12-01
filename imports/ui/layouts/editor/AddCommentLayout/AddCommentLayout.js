@@ -54,12 +54,19 @@ const getReferenceWorks = (formData) => {
 
 
 const getKeywords = (formData) => {
+	
 	const keywords = [];
 
 	formData.tagsValue.forEach((tag) => {
-		const keyword = tag.keyword;
-		keyword.isMentionedInLemma = tag.isMentionedInLemma;
-		keywords.push(keyword);
+		const keywordCopy = {};
+		for (const [key, value] of Object.entries(HTMLTableHeaderCellElement.keyword)) {
+			if (key === 'isMetionedInLemma') {
+				keywordCopy[key] = tag.isMentionedInLemma;
+			} else {
+				keywordCopy[key] = value;
+			}
+		}
+		keywords.push(keywordCopy);
 	});
 	return keywords;
 };

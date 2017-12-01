@@ -196,15 +196,15 @@ const KeywordDetailContainer = createContainer((props) => {
 	const { match } = props;
 	const slug = match.params.slug;
 	const tenantId = Session.get('tenantId');
-	// SUBSCRIPTIONS:
-	Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
 
+	if (tenantId) {
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
+	}
 
-	// FETCH DATA:
-	const query = {
-		slug,
-	};
-	const keyword = Keywords.findOne(query);
+	const keyword = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
+		.fiter(x => x.slug === slug);
 
 	let keywordComments = null;
 	if (keyword) {

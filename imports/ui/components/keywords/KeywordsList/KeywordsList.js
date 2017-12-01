@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
+import { compose } from 'react-apollo';
 
 // models
 import Keywords from '/imports/models/keywords';
+
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // components
 import KeywordTeaser from '/imports/ui/components/keywords/KeywordTeaser';
@@ -41,35 +45,47 @@ KeywordsList.propTypes = {
 	limit: PropTypes.number,
 	keywords: PropTypes.array,
 };
+function getKeywordsByQuery(type, query, limit) {
 
-export default createContainer(({ type, limit }) => {
+	if (query.loading) {
+		return [];
+	}
+	 return query.keywords.filter(x => 
+		x.type === type &&
+		x.count > 1).slice(0, limit);
+}
+const cont = createContainer((props) => {
+
+	const { type, limit } = props;
 	const skip = 0;
+	const tenantId = Session.get('tenantId');
 	let _limit = 100;
+
 	if (limit) {
 		_limit = limit;
 	}
+	if (tenantId) {
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
+	}
 
-	const query = {
-		type,
-		tenantId: Session.get('tenantId'),
-		count: { $gte: 1 },
-	};
-
+	let keywords = [];
 	switch (type) {
 	case 'word':
-		Meteor.subscribe('keywords.keywords', query, skip, _limit);
+		keywords = getKeywordsByQuery('word', props.keywordsQuery, _limit);
 		break;
 	case 'idea':
-		Meteor.subscribe('keywords.keyideas', query, skip, _limit);
+		keywords = getKeywordsByQuery('idea', props.keywordsQuery, _limit);
 		break;
 	default:
 		break;
 	}
-
-	const keywords = Keywords.find(query, { limit: _limit }).fetch() || [];
 
 	return {
 		keywords,
 		type,
 	};
 }, KeywordsList);
+
+export default compose(keywordsQuery)(cont);

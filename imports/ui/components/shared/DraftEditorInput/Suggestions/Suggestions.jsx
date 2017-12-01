@@ -6,7 +6,11 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import { createContainer } from 'meteor/react-meteor-data';
 import Keywords from '/imports/models/keywords';
 import { fromJS } from 'immutable';
+import { compose } from 'react-apollo';
 import Utils from '/imports/lib/utils';
+
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 class Suggestions extends Component {
 
@@ -65,12 +69,25 @@ class Suggestions extends Component {
 		);
 	}
 }
-export default createContainer(() => {
-	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+Suggestions.propTypes = {
+	mentionPlugin: PropTypes.object,
+	keywordPlugin: PropTypes.object,
+	tags: PropTypes.array
+};
+const cont = createContainer((props) => {
 
-	const tags = Keywords.find().fetch();
+	const tenantId = Session.get('tenantId');
+
+	if (tenantId) {
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
+	}
+	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 
 	return {
 		tags
 	};
 }, Suggestions);
+
+export default compose(keywordsQuery)(cont);

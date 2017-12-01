@@ -20,6 +20,7 @@ import Works from '/imports/models/works';
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // components:
 import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
@@ -384,28 +385,30 @@ const CommentarySearchPanel = React.createClass({
 });
 
 const cont = createContainer(props => {
+
 	let works = [];
 	let keywords = [];
 	let keyideas = [];
 	let commenters = [];
 	let referenceWorks = [];
+	const tenantId = Session.get('tenantId');
 
-	if (Session.get('tenantId')) {
+	if (tenantId) {
 		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: tenantId
 		});
 		props.referenceWorksQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: tenantId
 		});
-	}
-	if (!props.addCommentPage) {
-		Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
 	}
 	Meteor.subscribe('works', Session.get('tenantId'));
 
 	// FETCH DATA:
-	keyideas = Keywords.find({ type: 'idea' }).fetch();
-	keywords = Keywords.find({ type: 'word' }).fetch();
+	keyideas = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'idea');
+	keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'word');
 	commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	works = Works.find({}, { sort: { order: 1 } }).fetch();
 	referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
@@ -418,4 +421,8 @@ const cont = createContainer(props => {
 		referenceWorks,
 	};
 }, CommentarySearchPanel);
-export default compose(commentersQuery, referenceWorksQuery)(cont);
+export default compose(
+	commentersQuery,
+	referenceWorksQuery,
+	keywordsQuery
+)(cont);

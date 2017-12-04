@@ -400,8 +400,7 @@ function getTranslationQueries(query, filter) {
 }
 const cont = createContainer(props => {
 	
-	const { commentGroup, multiline } = props;
-	const tenantId = Session.get('tenantId');
+	const { commentGroup, multiline, tenantId } = props;
 	let translationAuthors = [];
 	if (commentGroup) {
 

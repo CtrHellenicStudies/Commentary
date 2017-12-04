@@ -3,20 +3,16 @@ import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
 import FlatButton from 'material-ui/FlatButton';
+import { compose } from 'react-apollo';
+
+// graphql
+import { commentsRemoveMutation } from '/imports/graphql/methods/comments';
 
 class RemoveCommentButton extends React.Component {
 
 	removeComment() {
 		const authToken = Cookies.get('loginToken');
-
-		Meteor.call('comment.delete', authToken, this.props.commentId, (err) => {
-			if (err) {
-				console.error(err);
-				return false;
-			}
-
-			// this.props.history.push('/commentary');
-		});
+		this.commentsRemove(this.props.commentId);
 	}
 
 
@@ -43,4 +39,4 @@ RemoveCommentButton.propTypes = {
 	commentId: PropTypes.string.isRequired,
 };
 
-export default RemoveCommentButton;
+export default compose(commentsRemoveMutation)(RemoveCommentButton);

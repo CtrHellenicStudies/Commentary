@@ -27,6 +27,7 @@ import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
+import { read } from 'fs';
 
 
 class Home extends Component {
@@ -53,7 +54,7 @@ class Home extends Component {
 	}
 
 	render() {
-		const { settings, comments } = this.props;
+		const { settings, comments, ready } = this.props;
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
@@ -253,14 +254,16 @@ class Home extends Component {
 					<section className="get-started">
 						<h2 className="block-title">Get Started</h2>
 						<div className="get-started-comments">
-							<Commentary
-								isOnHomeView
-								filters={[]}
-								comments={comments}
-								skip={0}
-								limit={10}
-								tenantId={Session.get('tenantId')}
-							/>
+							{ready ?
+								<Commentary
+									isOnHomeView
+									filters={[]}
+									comments={comments}
+									skip={0}
+									limit={10}
+									tenantId={Session.get('tenantId')}
+								/> : ''
+							}
 							<div className="read-more-link">
 								<Link to="/commentary">
 									<RaisedButton
@@ -284,6 +287,7 @@ Home.propTypes = {
 	comments: PropTypes.array,
 	commentsQuery: PropTypes.object,
 	isTest: PropTypes.bool,
+	ready: PropTypes.bool
 };
 
 Home.childContextTypes = {
@@ -296,7 +300,8 @@ const cont = createContainer(props => {
 	const limit = props.limit ? props.limit : 10;
 	return {
 		comments: props.commentsQuery.loading ? [] : props.commentsQuery.comments.filter(x => x.tenantId === tenantId).slice(skip, limit + skip),
-		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+		ready: !props.commentsQuery.loading && !props.settingsQuery.loading
 	};
 }, Home);
 

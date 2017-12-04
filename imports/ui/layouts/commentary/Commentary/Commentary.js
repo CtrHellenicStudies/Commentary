@@ -26,6 +26,7 @@ import InfiniteScroll from '/imports/ui/components/shared/InfiniteScroll';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 
 // lib
+import RaisedButton from 'material-ui/RaisedButton';
 import Utils from '/imports/lib/utils';
 import muiTheme from '/imports/lib/muiTheme';
 
@@ -100,7 +101,9 @@ class Commentary extends Component {
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
+	raiseLimit() {
 
+	}
 	setPageTitleAndMeta() {
 
 		const { filters, settings } = this.props;
@@ -289,30 +292,32 @@ class Commentary extends Component {
 		return (
 			<div className="commentary-primary content ">
 				{/* --- BEGIN comments list */}
-				<InfiniteScroll
-					endPadding={120}
-					loadMore={debounce(1000, this.loadMoreComments)}
-				>
-					<div className="commentary-comments commentary-comment-groups">
-						{commentGroups.map(commentGroup => (
-							<CommentGroup
-								key={commentGroup._id}
-								commentGroupIndex={commentGroup._id}
-								commentGroup={commentGroup}
-								contextPanelOpen={contextPanelOpen}
-								showContextPanel={this.showContextPanel}
-								setContextScrollPosition={this.setContextScrollPosition}
-								toggleSearchTerm={toggleSearchTerm}
-								showLoginModal={showLoginModal}
-								filters={filters}
-								isOnHomeView={isOnHomeView}
-								history={this.props.history}
-								selectMultiLine={this.selectMultiLine}
-								multiline={this.state.multiline}
-							/>
-						))}
-					</div>
-				</InfiniteScroll>
+				<div className="commentary-comments commentary-comment-groups">
+					{commentGroups.map(commentGroup => (
+						<CommentGroup
+							key={commentGroup._id}
+							commentGroupIndex={commentGroup._id}
+							commentGroup={commentGroup}
+							contextPanelOpen={contextPanelOpen}
+							showContextPanel={this.showContextPanel}
+							setContextScrollPosition={this.setContextScrollPosition}
+							toggleSearchTerm={toggleSearchTerm}
+							showLoginModal={showLoginModal}
+							filters={filters}
+							isOnHomeView={isOnHomeView}
+							history={this.props.history}
+							selectMultiLine={this.selectMultiLine}
+							multiline={this.state.multiline}
+						/>
+					))}
+				</div>
+				<div className="read-more-link">
+					<RaisedButton
+						onClick={this.loadMoreComments}
+						className="cover-link show-more commentary-raise-button"
+						label="Read More"
+					/>
+				</div>
 				{/* --- END comments list */}
 
 				{this.renderNoCommentsOrLoading()}
@@ -337,14 +342,14 @@ class Commentary extends Component {
 	}
 }
 const cont = createContainer(props => {
-
-	const tenantId = Session.get('tenantId');
+	const { tenantId, filters, limit, skip } = props;
 	const properties = {
-		queryParam: getCommentsQuery(props.filters, tenantId),
-		limit: props.limit,
-		skip: props.skip
+		limit: limit,
+		skip: skip
 	};
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.commentersQuery.variables)) {
+	if (props.tenantId && Utils.shouldRefetchQuery(properties, props.commentersQuery.variables)) {
+		properties.queryParam = getCommentsQuery(filters, tenantId);
+
 		props.commentsQuery.refetch(properties);
 		props.commentsMoreQuery.refetch(properties);
 	}
@@ -357,5 +362,9 @@ const cont = createContainer(props => {
 		ready: !props.commentsQuery.loading && !props.commentersQuery.loading && !props.commentsMoreQuery.loading
 	};
 }, Commentary);
-export default compose(commentsQuery, commentersQuery, commentsMoreQuery)(cont);
+export default compose(
+	commentsQuery,
+	commentersQuery,
+	commentsMoreQuery
+)(cont);
 

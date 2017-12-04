@@ -5,6 +5,7 @@ import { StickyContainer } from 'react-sticky';
 // layouts:
 import CommentDetail from '/imports/ui/components/commentary/comments/CommentDetail';
 import CommentLemma from '/imports/ui/components/commentary/commentGroups/CommentLemma';
+import { Session } from 'meteor/session';
 
 
 class CommentGroup extends React.Component {
@@ -113,6 +114,7 @@ class CommentGroup extends React.Component {
 							hideLemma={hideLemma}
 							selectMultiLine={selectMultiLine}
 							multiline={this.props.multiline}
+							tenantId={Session.get('tenantId')}
 						/>
 
 						{commentGroup.comments.map(comment => (

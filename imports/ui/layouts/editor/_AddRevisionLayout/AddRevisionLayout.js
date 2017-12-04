@@ -35,7 +35,7 @@ import Utils from '/imports/lib/utils';
 // graphql
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
-import { commentsQuery } from '/imports/graphql/methods/comments';
+import { commentsQuery, commentsUpdateMutation } from '/imports/graphql/methods/comments';
 
 // redux integration for layout
 const store = configureStore();
@@ -101,15 +101,7 @@ const AddRevisionLayout = React.createClass({
 				referenceWorks: formData.referenceWorks,
 			};
 		}
-
-		Meteor.call('comment.update', authToken, comment._id, update, (_err) => {
-			if (_err) {
-				console.error('Error updating comment after adding revision', _err);
-				this.showSnackBar(_err.error);
-			} else {
-				this.showSnackBar('Comment updated');
-			}
-
+		this.props.commentUpdate(comment._id, update).then(function() {
 			this.props.history.push(`/commentary/${comment._id}/edit`);
 		});
 		// TODO: handle behavior after comment added (add info about success)
@@ -356,7 +348,6 @@ const AddRevisionLayout = React.createClass({
 const AddRevisionLayoutContainer = createContainer(props => {
 
 	const tenantId = Session.get('tenantId');
-	const commentsSub = Meteor.subscribe('comments.id', commentId, Session.get('tenantId'));
 
 	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
 	if (tenantId) {
@@ -366,8 +357,11 @@ const AddRevisionLayoutContainer = createContainer(props => {
 		props.keywordsQuery.refetch({
 			tenantId: tenantId
 		});
+		props.commentsQuery.refetch({
+			queryParam: JSON.stringify({_id: props.commentId})
+		})
 	}
-	const comment = Comments.findOne({_id: props.commentId});
+	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments;
 	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	const commenters = [];
 	if (comment) {
@@ -390,5 +384,6 @@ const AddRevisionLayoutContainer = createContainer(props => {
 export default compose(
 	keywordsQuery,
 	commentsQuery,
-	commentersQuery
+	commentersQuery,
+	commentsUpdateMutation
 )(AddRevisionLayoutContainer);

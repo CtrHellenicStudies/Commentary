@@ -52,6 +52,13 @@ const commentInsert = gql`
 	}
 }
 `;
+const commentUpdate = gql`
+mutation commentUpdate($id: String! $comment: CommentInputType!) {
+	commentUpdate(id: $id comment: $comment) {
+	_id
+}
+}
+`;
 
 const commentsQuery = graphql(query, {
 	name: 'commentsQuery',
@@ -84,10 +91,20 @@ const commentsInsertMutation = graphql(commentInsert, {
 		refetchQueries: ['commentsQuery']
 	}
 });
+const commentsUpdateMutation = graphql(commentUpdate, {
+	props: (params) => ({
+		commentUpdate: (id, comment) => params.commentsUpdateMutation({variables: {id, comment}}),
+	}),
+	name: 'commentsUpdateMutation',
+	options: {
+		refetchQueries: ['commentsQuery']
+	}
+});
 
 export {
 	commentsQuery,
 	commentsMoreQuery,
 	commentRemoveMutation,
-	commentsInsertMutation
+	commentsInsertMutation,
+	commentsUpdateMutation
 };

@@ -21,9 +21,12 @@ const resolveV1 = (props) => {
 	const revision = urnParams.splice(-1);
 	const urn = `${urnParams.join('.')}`;
 
-	const commentHandle = Meteor.subscribe('comments', {_id: props.commentId}, 0);
-	const comment = Comments.findOne({ _id: props.commentId });
-
+	if (!props.commentsQuery.variables.queryParam) {
+		props.commentsQuery.refetch({
+			queryParam: JSON.stringify({_id: props.commentId})
+		});
+	}
+	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments[0];
 	if (comment) {
 		this.props.tenantsQuery.variables.tenantId = comment.tenantId;
 		tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants;
@@ -45,8 +48,12 @@ const resolveV2 = (props) => {
 	const revision = urnParams.splice(-1);
 	const urn = `${urnParams.join('.')}`;
 
-	const commentHandle = Meteor.subscribe('comments', {_id: props.commentId});
-	const comment = Comments.findOne({ _id: props.commentId });
+	if (!props.commentsQuery.variables.queryParam) {
+		props.commentsQuery.refetch({
+			queryParam: JSON.stringify({_id: props.commentId})
+		});
+	}
+	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments[0];
 
 	if (comment) {
 		this.props.tenantsQuery.variables.tenantId = comment.tenantId;

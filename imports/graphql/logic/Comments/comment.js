@@ -43,4 +43,68 @@ export default class CommentService extends AdminService {
 		}
 		return Comments.findOne({_id: commentId});
 	}
+	/**
+	 * Update comment
+	 * @param {String} id 
+	 * @param {object} comment 
+	 */
+	commentUpdate(id, comment) {
+		if (user.userIsNobody) { // TODO editor or admin
+			throw AuthenticationError();
+		}
+		try {
+			commentId = Comments.update({_id: id}, {$set: comment});
+
+		} catch (e) {
+			console.log(e);
+			return '';
+		}
+	}
+	addRevision(commentId, revision) {
+	
+		if (this.userIsNobody) {
+			throw AuthenticationError();
+		}
+
+		const revisionId = Random.id();
+		revision._id = revisionId;
+	
+		try {
+			Comments.update({
+				_id: commentId,
+			}, {
+				$push: {
+					revisions: revision,
+				},
+			});
+		} catch (err) {
+			throw new Error(`Error adding revision to comment: ${err}`);
+		}
+		return revisionId;
+	}
+	removeRevision(commentId, revision) {
+		
+		if (this.userIsNobody) {
+			throw AuthenticationError();
+		}
+
+		const revisionId = Random.id();
+		revision._id = revisionId;
+	
+		try {
+			Comments.update({
+				_id: commentId,
+			}, {
+				$pull: {
+					revisions: revision,
+				},
+			}, {
+				getAutoValues: false,
+			});
+		} catch (err) {
+			throw new Error(`Error adding revision to comment: ${err}`);
+		}
+		return revisionId;
+	}
+	
 }

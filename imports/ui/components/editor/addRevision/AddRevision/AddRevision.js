@@ -42,6 +42,7 @@ import Commenters from '/imports/models/commenters';
 import muiTheme from '/imports/lib/muiTheme';
 
 // graphql
+import { commentRemoveMutation } from '/imports/graphql/methods/comments';
 import { keywordsQuery,
 		keywordInsertMutation,
 		keywordUpdateMutation } from '/imports/graphql/methods/keywords';
@@ -208,13 +209,7 @@ class AddRevision extends React.Component {
 
 	removeComment() {
 		const authToken = Cookies.get('loginToken');
-
-		Meteor.call('comment.delete', authToken, this.props.comment._id, (err) => {
-			if (err) {
-				console.error(err);
-				return false;
-			}
-
+		this.props.commentRemove(this.props.comment._id).then(function() {
 			this.props.history.push('/commentary');
 		});
 	}
@@ -633,6 +628,7 @@ const AddRevisionContainer = createContainer(props => {
 }, AddRevision);
 
 export default compose(
+	commentRemoveMutation,
 	commentersQuery,
 	referenceWorksQuery,
 	referenceWorkCreateMutation,

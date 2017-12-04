@@ -30,6 +30,22 @@ const commentMutationFields = {
 			return await commentsService.commentInsert(comment);
 		}
 	},
+	commentUpdate: {
+		type: CommentType,
+		description: 'Update comment',
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			comment: {
+				type: new GraphQLNonNull(CommentInputType)
+			}
+		},
+		async resolve(parent, {id, comment}, {token}) {
+			const commentsService = new CommentService({token});
+			return await commentsService.commentUpdate(id, comment);
+		}
+	},
 	commentRemove: {
 		type: RemoveType,
 		description: 'Remove a single comment',

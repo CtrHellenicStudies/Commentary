@@ -50,8 +50,11 @@ class KeywordDetail extends Component {
 	}
 
 	deleteKeyword() {
+		const that = this;
 		const { keyword } = this.props;
-		this.props.keywordRemove(keyword._id);
+		this.props.keywordRemove(keyword._id).then(function() {
+			that.props.history.push('/words');
+		});
 		// 	if (error) {
 		// 		console.log(keywordId, error);
 		// 	} else {

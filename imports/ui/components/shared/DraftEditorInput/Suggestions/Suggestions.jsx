@@ -10,6 +10,7 @@ import { compose } from 'react-apollo';
 import Utils from '/imports/lib/utils';
 
 // graphql
+import { commentsQuery } from '/imports/graphql/methods/comments';
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 class Suggestions extends Component {
@@ -22,14 +23,12 @@ class Suggestions extends Component {
 		};
 	}
 	onMentionSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', undefined, value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
+		const taht = this;
+		props.commentsQuery.refetch({
+			queryParam: JSON.stringify({ $text: { $search: value } }),
+			limit: 5
+		}).then(function() {
 			const _mentions = Utils.getSuggestionsFromComments(res);
-
 			this.setState({
 				mentions: defaultSuggestionsFilter(value, fromJS(_mentions))
 			});
@@ -84,10 +83,14 @@ const cont = createContainer((props) => {
 		});
 	}
 	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
+	const comments = props.commentsQuery.loading ? [] : props.commentsQuery.comments;
 
 	return {
 		tags
 	};
 }, Suggestions);
 
-export default compose(keywordsQuery)(cont);
+export default compose(
+	keywordsQuery,
+	commentsQuery
+)(cont);

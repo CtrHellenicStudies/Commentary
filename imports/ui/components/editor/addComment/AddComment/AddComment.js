@@ -321,13 +321,13 @@ class AddComment extends React.Component {
 
 	addNewTag(tag) {
 
-		const keyword = [{
+		const keyword = {
 			title: tag.value,
 			slug: slugify(tag.value.toLowerCase()),
 			type: 'word',
 			count: 1,
 			tenantId: Session.get('tenantId'),
-		}];
+		};
 		this.props.keywordInsert(keyword);
 		// 	if (err) {
 		// 		this.showSnackBar(err);

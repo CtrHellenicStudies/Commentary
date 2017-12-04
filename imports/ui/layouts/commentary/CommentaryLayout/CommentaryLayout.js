@@ -28,10 +28,8 @@ import Header from '/imports/ui/layouts/header/Header';
 
 // graphql
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { worksQuery } from '/imports/graphql/methods/works';
 
-// models
-import Works from '/imports/models/works';
-import ReferenceWorks from '/imports/models/referenceWorks';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -228,23 +226,27 @@ const cont = createContainer((props) => {
 	const properties = {
 		tenantId: tenantId
 	};
-	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
 	const queryParams = qs.parse(window.location.search.substr(1));
 	const params = match.params;
 
 	if (tenantId && Utils.shouldRefetchQuery(properties, props.referenceWorksQuery.variables)) {
 		props.referenceWorksQuery.refetch(properties);
 	}
+	if (tenantId && Utils.shouldRefetchQuery(properties, props.worksQuery.variables)) {
+		props.worksQuery.refetch(properties);
+	}
 
 	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
-	const works = Works.find().fetch();
+	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 
 	return {
 		params,
 		queryParams,
 		referenceWorks,
-		works,
-		ready: handleWorks.ready(),
+		works
 	};
 }, CommentaryLayout);
-export default compose(referenceWorksQuery)(cont);
+export default compose(
+	referenceWorksQuery,
+	worksQuery
+)(cont);

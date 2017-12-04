@@ -4,7 +4,6 @@ import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
 import { compose } from 'react-apollo';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
@@ -14,6 +13,10 @@ import { WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/S
 import { Creatable } from 'react-select';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { worksQuery } from '/imports/graphql/methods/works';
 
 // models
 import Works from '/imports/models/works';
@@ -227,8 +230,13 @@ AddTranslation.propTypes = {
 };
 
 const AddTranslationContainer = createContainer(props => {
-	Meteor.subscribe('works', Session.get('tenantId'));
-	const works = Works.find().fetch();
+	const tenantId = Session.get('tenantId');
+	if (tenantId) {
+		props.works.refetch({
+			tenantId: tenantId
+		});
+	}
+	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 	const worksOptions = [];
 	works.forEach((work) => {
 		worksOptions.push({
@@ -262,4 +270,7 @@ const AddTranslationContainer = createContainer(props => {
 	};
 }, AddTranslation);
 
-export default compose(commentersQuery)(AddTranslationContainer);
+export default compose(
+	commentersQuery,
+
+)(AddTranslationContainer);

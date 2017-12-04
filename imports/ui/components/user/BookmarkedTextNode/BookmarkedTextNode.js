@@ -5,8 +5,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// models
-import Works from '/imports/models/works';
+// graphql
+import { worksQuery } from '/imports/graphql/methods/works';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -126,12 +126,18 @@ const BookmarkedTextNode = React.createClass({
 	},
 });
 
-const BookmarkedTextNodeContainer = createContainer(({ text }) => {
+const BookmarkedTextNodeContainer = createContainer((props) => {
+	const { text } = props;
+	const tenantId = Session.get('tenantId');
 	let work = null;
 	if (text) {
 		const query = { _id: text.work };
-		const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
-		work = Works.findOne(query);
+		if (tenantId) {
+			props.worksQuery.refetch({
+				tenantId: tenantId
+			});
+		}
+		work = props.worksQuery.loading ? {} : props.worksQuery.works.find(x => x._id === text.work);
 	}
 
 	return {
@@ -139,4 +145,4 @@ const BookmarkedTextNodeContainer = createContainer(({ text }) => {
 	};
 }, BookmarkedTextNode);
 
-export default BookmarkedTextNodeContainer;
+export default compose(worksQuery)(BookmarkedTextNodeContainer);

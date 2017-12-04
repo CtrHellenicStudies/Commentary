@@ -5,10 +5,13 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { Meteor } from 'meteor/meteor';
+import { compose } from 'react-apollo';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Mongo } from 'meteor/mongo';
 
+// graphql
+import { worksQuery } from '/imports/graphql/methods/works';
 
 // models
 import Works from '/imports/models/works';
@@ -147,13 +150,18 @@ class BookmarksForm extends React.Component {
 	}
 }
 
-const BookmarksFormContainer = createContainer(() => {
-	Meteor.subscribe('works', Session.get('tenantId')).ready();
-	const works = Works.find().fetch();
+const BookmarksFormContainer = createContainer((props) => {
+	const tenantId = Session.get('tenantId');
+	if (tenantId) {
+		props.worksQuery.refetch({
+			tenantId: tenantId
+		});
+	}
+	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 
 	return {
 		works
 	};
 }, BookmarksForm);
 
-export default BookmarksFormContainer;
+export default compose(worksQuery)(BookmarksFormContainer);

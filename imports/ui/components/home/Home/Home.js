@@ -146,7 +146,7 @@ class Home extends Component {
 								</h2>
 
 								<div className="intro-col intro-col-text">
-									{settings.introBlocks.map((block, i) => (
+									{ready ? settings.introBlocks.map((block, i) => (
 										<div
 											key={i}
 											className="mb40 mb-xs-24l intro-block-text"
@@ -170,7 +170,7 @@ class Home extends Component {
 												</div>
 											: ''}
 										</div>
-									))}
+									)) : ''}
 								</div>
 								<div className="intro-col intro-col-image image-wrap wow fadeIn">
 									<img

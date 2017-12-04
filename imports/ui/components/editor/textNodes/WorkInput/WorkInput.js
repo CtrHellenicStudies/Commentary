@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// models
-import Works from '/imports/models/works';
+// graphql
+import { worksQuery } from '/imports/graphql/methods/works';
 
 // components
 import WorkOption from './WorkOption';
+import { Session } from 'inspector';
 
 
 class WorkInput extends React.Component {
@@ -33,12 +35,17 @@ WorkInput.propTypes = {
 };
 
 const WorkInputContainer = createContainer(props => {
-	Meteor.subscribe('works', Session.get('tenantId'));
-	const works = Works.find().fetch();
+	const tenantId = Session.get('tenantId');
+	if (tenantId) {
+		props.worksQuery.refetch({
+			tenantId: tenantId
+		});
+	}
+	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 
 	return {
 		works,
 	};
 }, WorkInput);
 
-export default WorkInputContainer;
+export default compose(worksQuery)(WorkInputContainer);

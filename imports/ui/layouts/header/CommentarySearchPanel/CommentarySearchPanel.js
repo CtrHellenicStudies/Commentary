@@ -21,6 +21,7 @@ import Works from '/imports/models/works';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import { worksQuery } from '/imports/graphql/methods/works';
 
 // components:
 import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
@@ -403,14 +404,16 @@ const cont = createContainer(props => {
 		props.keywordsQuery.refetch({
 			tenantId: tenantId
 		});
+		props.worksQuery.refetch({
+			tenantId: tenantId
+		});
 	}
-	Meteor.subscribe('works', Session.get('tenantId'));
 
 	// FETCH DATA:
 	keyideas = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'idea');
 	keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'word');
 	commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
-	works = Works.find({}, { sort: { order: 1 } }).fetch();
+	works = props.worksQuery.loading ? [] : props.worksQuery.works;
 	referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 
 	return {
@@ -424,5 +427,6 @@ const cont = createContainer(props => {
 export default compose(
 	commentersQuery,
 	referenceWorksQuery,
-	keywordsQuery
+	keywordsQuery,
+	worksQuery
 )(cont);

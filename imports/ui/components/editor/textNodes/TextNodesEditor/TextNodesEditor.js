@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
-import { editionsQuery } from '/imports/graphql/methods/editions';
 import Select from 'react-select';
 import autoBind from 'react-autobind';
 import {
@@ -14,6 +13,10 @@ import {
 } from 'react-bootstrap';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+
+// graphql
+import { worksQuery } from '/imports/graphql/methods/works';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 
 // actions
 import * as textNodesActions from '/imports/actions/textNodes';
@@ -79,7 +82,7 @@ class TextNodesEditor extends Component {
 
 		this.setState({
 			selectedWork: setValue,
-			subworks: _selectedWork ? _selectedWork.subworks.sort(Utils.sortBy('n')) : [],
+			subworks: _selectedWork ? _selectedWork.subworks.slice().sort(Utils.sortBy('n')) : [],
 		});
 	}
 
@@ -388,9 +391,14 @@ TextNodesEditor.propTypes = {
 const TextNodesEditorContainer = createContainer(props => {
 
 	const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
+	const tenantId = Session.get('tenantId');
 
-	Meteor.subscribe('works', Session.get('tenantId'));
-	const works = Works.find().fetch();
+	if (tenantId) {
+		props.worksQuery.refetch({
+			tenantId: tenantId
+		});
+	}
+	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 
 	return {
 		works,
@@ -399,4 +407,7 @@ const TextNodesEditorContainer = createContainer(props => {
 
 }, TextNodesEditor);
 
-export default compose(editionsQuery)(TextNodesEditorContainer);
+export default compose(
+	editionsQuery,
+	worksQuery
+)(TextNodesEditorContainer);

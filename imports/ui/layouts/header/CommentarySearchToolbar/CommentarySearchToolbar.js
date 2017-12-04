@@ -17,11 +17,12 @@ import Works from '/imports/models/works';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
+import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
+import { worksQuery } from '/imports/graphql/methods/works';
 
 // components:
 import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns';
 import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
-import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
 
 
 /*
@@ -352,14 +353,16 @@ const commentarySearchToolbarContainer = createContainer(props => {
 		props.referenceWorksQuery.refetch({
 			tenantId: tenantId
 		});
+		props.worksQuery.refetch({
+			tenantId: tenantId
+		});
 	}
-	Meteor.subscribe('works', tenantId);
 
 	return {
 		keyideas: props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'idea'),
 		keywords: props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'word'),
 		commenters: props.commentersQuery.loading ? [] : props.commentersQuery.commenters,
-		works: Works.find({}, { sort: { order: 1 } }).fetch(),
+		works: props.worksQuery.loading ? [] : props.worksQuery.works,
 		referenceWorks: props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks,
 	};
 
@@ -368,5 +371,6 @@ const commentarySearchToolbarContainer = createContainer(props => {
 export default compose(
 	commentersQuery,
 	referenceWorksQuery,
-	keywordsQuery
+	keywordsQuery,
+	worksQuery
 )(commentarySearchToolbarContainer);

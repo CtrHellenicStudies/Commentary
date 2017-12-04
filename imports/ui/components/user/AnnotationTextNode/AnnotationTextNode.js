@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
+import { compose } from 'react-apollo';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
+
+// graphql
+import { worksQuery } from '/imports/graphql/methods/works';
 
 
 const AnnotationTextNode = React.createClass({
@@ -118,13 +122,18 @@ const AnnotationTextNode = React.createClass({
 	},
 });
 
-const AnnotationTextNodeContainer = createContainer(({ text }) => {
+const AnnotationTextNodeContainer = createContainer((props) => {
+	const { text } = props;
 	let work = null;
-
+	const tenantId = Session.get('tenantId');
 	if (text) {
 		const query = { _id: text.work };
-		const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
-		work = Works.findOne(query);
+		if (tenantId) {
+			props.worksQuery.refetch({
+				tenantId: tenantId
+			});
+		}
+		work = props.worksQuery.loading ? [] : props.worksQuery.works.find(x => x._id === tex.work);
 	}
 
 	return {
@@ -132,4 +141,4 @@ const AnnotationTextNodeContainer = createContainer(({ text }) => {
 	};
 }, AnnotationTextNode);
 
-export default AnnotationTextNodeContainer;
+export default compose(worksQuery)(AnnotationTextNodeContainer);

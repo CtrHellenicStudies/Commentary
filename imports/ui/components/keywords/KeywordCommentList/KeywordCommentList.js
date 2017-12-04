@@ -29,7 +29,7 @@ const KeywordCommentList = (props) => {
 	return (
 		<div className="comment-outer has-discussion">
 			{props.keywordComments.map((comment, i) => {
-				const selectedRevision = comment.revisions.pop();
+				const selectedRevision = comment.revisions[comment.revisions.length - 1];
 				const updated = selectedRevision.updated;
 				const format = 'D MMMM YYYY';
 

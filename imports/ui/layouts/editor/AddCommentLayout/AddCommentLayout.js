@@ -59,7 +59,7 @@ const getKeywords = (formData) => {
 
 	formData.tagsValue.forEach((tag) => {
 		const keywordCopy = {};
-		for (const [key, value] of Object.entries(HTMLTableHeaderCellElement.keyword)) {
+		for (const [key, value] of Object.entries(tag.keyword)) {
 			if (key === 'isMetionedInLemma') {
 				keywordCopy[key] = tag.isMentionedInLemma;
 			} else {

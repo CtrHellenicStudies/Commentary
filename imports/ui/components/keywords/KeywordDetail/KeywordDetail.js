@@ -20,6 +20,7 @@ import Settings from '/imports/models/settings';
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
 import { keywordsQuery, keywordRemoveMutation } from '/imports/graphql/methods/keywords';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // components
 import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
@@ -213,9 +214,10 @@ const KeywordDetailContainer = createContainer((props) => {
 	let keywordComments = null;
 	if (keyword) {
 		const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
-		Meteor.subscribe('comments', keywordCommentsQuery);
-
-		keywordComments = Comments.find(keywordCommentsQuery).fetch();
+		props.commentsQuery.refetch({
+			queryParam: JSON.stringify(keywordCommentsQuery)
+		});
+		keywordComments = props.commentsQuery.loading ? [] : props.commentsQuery.comments;
 	}
 
 	return {
@@ -228,5 +230,6 @@ const KeywordDetailContainer = createContainer((props) => {
 export default compose(
 	settingsQuery,
 	keywordsQuery,
-	keywordRemoveMutation
+	keywordRemoveMutation,
+	commentsQuery
 )(KeywordDetailContainer);

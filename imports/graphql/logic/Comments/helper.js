@@ -10,7 +10,7 @@ import Books from '/imports/models/books';
  */
 
 const COMMENT_ID_LENGTH = 7;
-function prepareGetCommentsOptions(limit, skip) {
+function prepareGetCommentsOptions(limit, skip, sortRecent) {
 
 	const options = {
 		sort: {
@@ -33,6 +33,9 @@ function prepareGetCommentsOptions(limit, skip) {
 		options.limit = limit;
 	} else {
 		options.limit = 30;
+	}
+	if (sortRecent) {
+		options.sort = { updated: -1 };
 	}
 	return options;
 }

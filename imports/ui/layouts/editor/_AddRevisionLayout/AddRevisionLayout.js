@@ -35,6 +35,7 @@ import Utils from '/imports/lib/utils';
 // graphql
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // redux integration for layout
 const store = configureStore();
@@ -386,4 +387,8 @@ const AddRevisionLayoutContainer = createContainer(props => {
 	};
 }, AddRevisionLayout);
 
-export default compose(keywordsQuery)(AddRevisionLayoutContainer);
+export default compose(
+	keywordsQuery,
+	commentsQuery,
+	commentersQuery
+)(AddRevisionLayoutContainer);

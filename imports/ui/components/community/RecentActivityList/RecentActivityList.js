@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
+import { compose } from 'react-apollo';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // models
 import Comments from '/imports/models/comments';
@@ -47,15 +49,20 @@ class RecentActivityList extends React.Component {
 	}
 }
 
-const RecentActivityListContainer = createContainer(({ skip, limit }) => {
-	let comments = [];
-	const handle = Meteor.subscribe('comments.recent', skip, limit);
-	comments = Comments.find({}, { sort: { updated: -1 } }).fetch();
+const RecentActivityListContainer = createContainer((props) => {
+	const { skip, limit } = props;
+	const comments = props.commentsQuery.loading ? [] : props.commentsQuery.comments
+		.slice(skip, limit + skip);
+	if (!this.props.commentsQuery.variables.sortRecent) {
+		this.commentsQuery.refetch({
+			sortRecent: true
+		});
+	}
 
 	return {
 		comments,
-		ready: handle.ready(),
+		ready: !props.commentsQuery.loading
 	};
 }, RecentActivityList);
 
-export default RecentActivityListContainer;
+export default compose(commentsQuery)(RecentActivityListContainer);

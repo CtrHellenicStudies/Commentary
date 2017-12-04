@@ -1,8 +1,8 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query commentsQuery($queryParam: String $skip: Int $limit: Int) {
-	comments(queryParam: $queryParam skip: $skip limit: $limit) {
+query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Boolean) {
+	comments(queryParam: $queryParam skip: $skip limit: $limit sortRecent: $sortRecent) {
 		_id
 		urn
 		originalDate
@@ -85,4 +85,9 @@ const commentsInsertMutation = graphql(commentInsert, {
 	}
 });
 
-export {commentsQuery, commentsMoreQuery, commentRemoveMutation, commentsInsertMutation};
+export {
+	commentsQuery,
+	commentsMoreQuery,
+	commentRemoveMutation,
+	commentsInsertMutation
+};

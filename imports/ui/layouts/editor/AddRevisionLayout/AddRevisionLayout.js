@@ -26,6 +26,7 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 // graphql
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -388,5 +389,6 @@ const AddRevisionLayoutContainer = createContainer(props => {
 
 export default compose(
 	commentersQuery,
-	keywordsQuery
+	keywordsQuery,
+	commentsQuery
 )(AddRevisionLayoutContainer);

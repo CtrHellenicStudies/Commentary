@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { compose } from 'react-apollo';
 
 // models
 import DiscussionComments from '/imports/models/discussionComments';
@@ -12,6 +13,9 @@ import DiscussionComments from '/imports/models/discussionComments';
 import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+
+// graphql
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -257,4 +261,4 @@ const PublicProfilePageContainer = createContainer(({ userId }) => {
 	};
 }, PublicProfilePage);
 
-export default PublicProfilePageContainer;
+export default compose(commentsQuery)(PublicProfilePageContainer);

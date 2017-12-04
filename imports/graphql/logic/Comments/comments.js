@@ -16,9 +16,10 @@ export default class CommentService extends AdminService {
 	 * @param {string} queryParam - query describing comments to get
 	 * @param {number} limit - mongo orm limit
 	 * @param {number} skip - mongo orm skip
+	 * @param {boolean} sortRecent - if should sort in the recent sequence
 	 * @returns {Object[]} array of comments
 	 */
-	commentsGet(queryParam, limit, skip) {
+	commentsGet(queryParam, limit, skip, sortRecent) {
 
 		const options = prepareGetCommentsOptions(limit, skip);
 		let query = JSON.parse(queryParam);

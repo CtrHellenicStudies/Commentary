@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
-import { tenantsQuery } from '/imports/graphql/methods/tenants';
 import Comments from '/imports/models/comments';
 import Utils from '/imports/lib/utils';
 
+// graphql
+import { commentsQuery } from '/imports/graphql/methods/comments';
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
 
 const resolveV1 = (props) => {
 	let resolveURL;
@@ -149,4 +151,7 @@ const nameResolutionServiceLayoutContainer = createContainer((props) => {
 }, NameResolutionServiceLayout);
 
 
-export default compose(tenantsQuery)(nameResolutionServiceLayoutContainer);
+export default compose(
+	tenantsQuery,
+	commentsQuery
+)(nameResolutionServiceLayoutContainer);

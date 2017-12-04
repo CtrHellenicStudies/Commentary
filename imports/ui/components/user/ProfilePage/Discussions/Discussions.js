@@ -12,6 +12,7 @@ import Settings from '/imports/models/settings';
 
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // components
 import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
@@ -86,4 +87,7 @@ const DiscussionsContainer = createContainer((props) => {
 	};
 }, Discussions);
 
-export default compose(settingsQuery)(DiscussionsContainer);
+export default compose(
+	settingsQuery,
+	commentsQuery
+)(DiscussionsContainer);

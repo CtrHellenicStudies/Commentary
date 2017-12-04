@@ -24,10 +24,13 @@ const commentQueryFields = {
 			skip: {
 				type: GraphQLInt,
 			},
+			sortRecent: {
+				type: GraphQLBoolean
+			}
 		},
-		async resolve(parent, { queryParam, limit, skip}, {token}) {
+		async resolve(parent, { queryParam, limit, skip, sortRecent}, {token}) {
 			const commentService = new CommentService({token});
-			return await commentService.commentsGet(queryParam, limit, skip);
+			return await commentService.commentsGet(queryParam, limit, skip, sortRecent);
 		}
 	},
 	commentsMore: {

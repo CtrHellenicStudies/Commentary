@@ -16,6 +16,7 @@ import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } 
 // graphql
 import { editionsQuery } from '/imports/graphql/methods/editions';
 import { textNodesQuery } from '/imports/graphql/methods/textNodes';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // models
 import TextNodes from '/imports/models/textNodes';
@@ -129,6 +130,7 @@ const KeywordContextContainer = createContainer(props => {
 				lineFrom: keyword.lineFrom,
 				lineTo: keyword.lineTo ? keyword.lineTo : keyword.lineFrom
 			});
+			
 		}
 
 		context.work = keyword.work.slug;
@@ -143,13 +145,20 @@ const KeywordContextContainer = createContainer(props => {
 		}
 
 	} else {
-		const commentsSub = Meteor.subscribe('comments.keyword_context', keyword._id, Session.get('tenantId'));
+		if (tenantId) {
+			const query = {};
+			query['keyword._id'] = keyword._id;
+			query.tenantId = tenantId;
+			props.commentsQuery.refetch({
+				queryParam: JSON.stringify(query),
+				limit: 1
+			});
+		}
+		
+		if (!props.commentsQuery.loading) {
 
-		if (commentsSub.ready()) {
-			const commentCursor = queryCommentWithKeywordId(keyword._id);
-
-			if (commentCursor.count() > 0) {
-				const comment = commentCursor.fetch()[0];
+			if (props.commentsQuery.comments.length > 0) {
+				const comment = props.commentsQuery.comments[0];
 				const query = makeKeywordContextQueryFromComment(comment, maxLines);
 				if (tenantId) {
 					props.textNodesQuery.refetch(query);
@@ -175,4 +184,8 @@ const KeywordContextContainer = createContainer(props => {
 }, KeywordContext);
 
 
-export default compose(editionsQuery, textNodesQuery)(KeywordContextContainer);
+export default compose(
+	editionsQuery,
+	commentsQuery,
+	textNodesQuery
+)(KeywordContextContainer);

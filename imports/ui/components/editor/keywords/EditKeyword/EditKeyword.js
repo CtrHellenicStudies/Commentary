@@ -355,7 +355,7 @@ const EditKeyword = React.createClass({
 
 const EditKeywordContainer = createContainer(props => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	const keywordsOptions = [];
 	const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords

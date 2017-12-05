@@ -101,7 +101,6 @@ CommentsRecent.defaultProps = {
 */
 const cont = createContainer(props => {
 	props.commentsQuery.refetch({
-		tenantId: Session.get('tenantId'),
 		limit: 3,
 	});
 	const comments = props.commentsQuery.loading ? [] : props.commentsQuery.comments;

@@ -200,7 +200,7 @@ const KeywordDetailContainer = createContainer((props) => {
 
 	const { match } = props;
 	const slug = match.params.slug;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	if (tenantId) {
 		props.keywordsQuery.refetch({

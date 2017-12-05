@@ -184,7 +184,7 @@ class ProfilePage extends React.Component {
 }
 
 const cont = createContainer((props) => {
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	return {
 		user: Meteor.user(),

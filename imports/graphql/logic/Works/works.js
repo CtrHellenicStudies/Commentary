@@ -1,5 +1,5 @@
 import Works from '/imports/models/works';
-import AdminService from './adminService';
+import AdminService from '../adminService';
 
 /**
  * Logic-layer service for dealing with works
@@ -29,7 +29,7 @@ export default class WorksService extends AdminService {
 	 * @returns {Object} newly created work
 	 */
 	workInsert(work) {
-		if (this.userIsAdmin) {
+		if (!this.userIsNobody) {
 			const newWork = work;
 			newWork.subworks = this.rewriteSubworks(work.subworks);
 
@@ -46,7 +46,7 @@ export default class WorksService extends AdminService {
 	 * @returns {boolean} result from mongo orm update
 	 */
 	workUpdate(_id, work) {
-		if (this.userIsAdmin) {
+		if (!this.userIsNobody) {
 			const newWork = work;
 			newWork.subworks = this.rewriteSubworks(work.subworks);
 
@@ -62,24 +62,25 @@ export default class WorksService extends AdminService {
 	 * @returns {Object[]} array of works
 	 */
 	worksGet(_id, tenantId) {
-		if (this.userIsAdmin) {
-			const args = {};
+		const args = {};
 
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
-
-			if (_id) {
-				args._id = _id;
-			}
-
-			return Works.find(args, {
-				sort: {
-					slug: 1
-				}
-			}).fetch();
+		if (tenantId) {
+			args.tenantId = tenantId;
 		}
-		return new Error('Not authorized');
+
+		if (_id) {
+			args._id = _id;
+		}
+		console.log(Works.find(args, {
+			sort: {
+				slug: 1
+			}
+		}).fetch());
+		return Works.find(args, {
+			sort: {
+				slug: 1
+			}
+		}).fetch();
 	}
 
 	/**
@@ -88,7 +89,7 @@ export default class WorksService extends AdminService {
 	 * @returns {boolean} result from mongo orm remove
 	 */
 	workRemove(_id) {
-		if (this.userIsAdmin) {
+		if (!this.userIsNobody) {
 			return Works.remove({ _id });
 		}
 		return new Error('Not authorized');

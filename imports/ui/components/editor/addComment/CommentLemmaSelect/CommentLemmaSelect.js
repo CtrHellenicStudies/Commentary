@@ -146,7 +146,7 @@ const CommentLemmaSelect = React.createClass({
 const CommentLemmaSelectContainer = createContainer(props => {
 	
 	const { selectedLineFrom, selectedLineTo, workSlug, subworkN } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const properties = {
 		tenantId: tenantId,
 		workSlug: workSlug,

@@ -209,7 +209,7 @@ class CommenterDetail extends React.Component {
 
 const cont = createContainer(props => {
 	const slug = props.match.params.slug;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	let avatarUrl;
 

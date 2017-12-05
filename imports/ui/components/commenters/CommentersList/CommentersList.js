@@ -37,7 +37,7 @@ CommentersList.defaultProps = {
 const cont = createContainer(props => {
 	let commenters = [];
 	let _limit = 100;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const properites = {
 		tenantId: tenantId
 	};
@@ -50,7 +50,7 @@ const cont = createContainer(props => {
 	commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 	// SUBSCRIPTIONS:
 	if (props.featureOnHomepage) {
-		commenters = props.commentersQuery ? [] : props.commentersQuery.commenters
+		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters
 		.filter(x => x.featureOnHomepage === true);
 	}
 

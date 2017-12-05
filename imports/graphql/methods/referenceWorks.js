@@ -71,6 +71,7 @@ mutation referenceWorkCreate($referenceWork: ReferenceWorkInputType!) {
  `;
 
 const referenceWorksQuery = graphql(query, {
+	options: {	notifyOnNetworkStatusChange: true},
 	name: 'referenceWorksQuery'
 });
 

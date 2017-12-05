@@ -57,7 +57,7 @@ const DiscussionThread = React.createClass({
 
 		this.props.discussionCommentInsert(this.props.comment._id,
 			content,
-			Session.get('tenantId'));
+			sessionStorage.getItem('tenantId'));
 
 		$(this.newCommentForm).find('textarea').val('');
 	},
@@ -249,12 +249,12 @@ const cont = createContainer(({ comment }) => {
 	let	handleDiscuss;
 	let	users = [];
 
-	const handleUsers = Meteor.subscribe('users.all', Session.get('tenantId'));
+	const handleUsers = Meteor.subscribe('users.all', sessionStorage.getItem('tenantId'));
 
 	users = Meteor.users.find({}).fetch();
 
 	if (comment) {
-		handleDiscuss = Meteor.subscribe('discussionComments', comment._id, Session.get('tenantId'));
+		handleDiscuss = Meteor.subscribe('discussionComments', comment._id, sessionStorage.getItem('tenantId'));
 		discussionComments = DiscussionComments.find({
 			commentId: comment._id,
 			status: 'publish'

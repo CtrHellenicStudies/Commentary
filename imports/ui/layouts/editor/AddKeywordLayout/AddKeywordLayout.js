@@ -234,7 +234,7 @@ const AddKeywordLayout = React.createClass({
 			descriptionRaw: textRawValue,
 			type: this.state.selectedType,
 			count: 1,
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 		};
 		this.props.keywordInsert(keyword).then(function() {
 			that.props.history.push(`/tags/${keyword.slug}`);

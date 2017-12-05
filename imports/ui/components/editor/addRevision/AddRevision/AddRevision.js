@@ -240,7 +240,7 @@ class AddRevision extends React.Component {
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
-			tenantId: Session.get('tenantId')
+			tenantId: sessionStorage.getItem('tenantId')
 		};
 		this.props.referenceWorkCreate(_reference).then(error => {
 			if (error) {
@@ -387,7 +387,7 @@ class AddRevision extends React.Component {
 			slug: slugify(tag.value.toLowerCase()),
 			type: 'word',
 			count: 1,
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 		}];
 		this.props.keywordInsert(keyword);
 		// 	if (err) {
@@ -577,7 +577,7 @@ AddRevision.childContextTypes = {
 const AddRevisionContainer = createContainer(props => {
 
 	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	let commenters = [];
 	if (Meteor.user() && Meteor.user().canEditCommenters) {
 		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 

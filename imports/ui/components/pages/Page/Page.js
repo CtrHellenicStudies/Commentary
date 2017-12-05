@@ -110,7 +110,7 @@ const pageContainer = createContainer((props) => {
 	let images = [];
 	let thumbnails = [];
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const pageHandle = Meteor.subscribe('pages', tenantId, slug);
 
 	const page = Pages.findOne({ slug, tenantId });

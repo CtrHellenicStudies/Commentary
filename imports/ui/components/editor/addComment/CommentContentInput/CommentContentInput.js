@@ -84,7 +84,7 @@ CommentContentInput.propTypes = {
 
 const CommentContentInputContainer = createContainer(() => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	if (tenantId) {
 
 	}

@@ -108,7 +108,7 @@ const KeywordContext = React.createClass({
 const KeywordContextContainer = createContainer(props => {
 
 	const { keyword, maxLines } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	let lemmaText = [];
 	const context = {};

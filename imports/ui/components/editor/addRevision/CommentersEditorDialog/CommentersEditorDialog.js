@@ -159,9 +159,9 @@ CommentersEditorDialog.propTypes = {
 
 const CommentersEditorDialogContainer = createContainer(props => {
 	const commentersIds = props.commenters.map(commenter => commenter._id);
-	if (Session.get('tenantId')) {
+	if (sessionStorage.getItem('tenantId')) {
 		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: sessionStorage.getItem('tenantId')
 		});
 	}
 	const allCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;

@@ -199,7 +199,7 @@ LeftMenu.defaultProps = {
 
 const cont = createContainer((props) => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	return {
 		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
 		currentUser: Meteor.users.findOne({_id: Meteor.userId()}),

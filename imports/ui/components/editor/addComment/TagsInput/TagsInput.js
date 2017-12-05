@@ -155,7 +155,7 @@ TagsInput.propTypes = {
 
 const TagsInputContainer = createContainer((props) => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 
 	if (tenantId) {

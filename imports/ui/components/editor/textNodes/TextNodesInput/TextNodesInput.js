@@ -85,7 +85,7 @@ class TextNodesInput extends React.Component {
 				_id: workId,
 				slug: workSlug,
 			},
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 		});
 		this.setState({
 			textNodes: this.state.textNodes,
@@ -265,7 +265,7 @@ TextNodesInput.propTypes = {
 const TextNodesInputContainer = createContainer(props => {
 
 	const { workId, workSlug, editionId, subworkN, lineFrom, limit } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	let textNodes;
 	let textNodesByEditions = [];

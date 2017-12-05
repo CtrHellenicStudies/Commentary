@@ -364,7 +364,7 @@ class CommentDetail extends React.Component {
 const cont = createContainer((props) => {
 
 	const { comment } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	const referenceWorkIds = [];
 	let referenceWorks = [];

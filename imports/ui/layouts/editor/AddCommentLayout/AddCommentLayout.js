@@ -254,7 +254,7 @@ class AddCommentLayout extends React.Component {
 			commenters: commenters.length ? commenters : [{}],
 			keywords: keywords || [{}],
 			referenceWorks: referenceWorks,
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 			created: new Date(),
 			status: 'publish',
 		};

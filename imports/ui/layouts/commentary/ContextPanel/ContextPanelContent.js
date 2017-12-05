@@ -143,7 +143,7 @@ const cont = createContainer(props => {
 
 	const { lineFrom, workSlug, subworkN, multiline } = props;
 	const lineTo = lineFrom + 49;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const properties = {
 		workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
 		subworkN: subworkN,

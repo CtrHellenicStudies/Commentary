@@ -114,7 +114,7 @@ class CommentGroup extends React.Component {
 							hideLemma={hideLemma}
 							selectMultiLine={selectMultiLine}
 							multiline={this.props.multiline}
-							tenantId={Session.get('tenantId')}
+							tenantId={sessionStorage.getItem('tenantId')}
 						/>
 
 						{commentGroup.comments.map(comment => (

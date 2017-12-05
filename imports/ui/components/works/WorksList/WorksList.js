@@ -57,12 +57,8 @@ WorksList.childContextTypes = {
 
 const cont = createContainer((props) => {
 
-	const tenantId = Session.get('tenantId');
-	if (tenantId) {
-		props.worksQuery.refetch({
-			tenantId: tenantId
-		});
-	}
+	const tenantId = sessionStorage.getItem('tenantId');
+
 	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 	return {
 		works

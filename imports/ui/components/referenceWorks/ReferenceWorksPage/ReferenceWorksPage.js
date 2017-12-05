@@ -78,7 +78,7 @@ ReferenceWorksPage.propTypes = {
 };
 
 const ReferenceWorksPageContainer = createContainer((props) => {
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	return {
 		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)

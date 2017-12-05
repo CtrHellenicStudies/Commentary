@@ -391,13 +391,7 @@ TextNodesEditor.propTypes = {
 const TextNodesEditorContainer = createContainer(props => {
 
 	const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
-	const tenantId = Session.get('tenantId');
-
-	if (tenantId) {
-		props.worksQuery.refetch({
-			tenantId: tenantId
-		});
-	}
+	const tenantId = sessionStorage.getItem('tenantId');
 	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 
 	return {

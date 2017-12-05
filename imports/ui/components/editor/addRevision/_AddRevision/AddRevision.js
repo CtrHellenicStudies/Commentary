@@ -158,7 +158,7 @@ class AddRevision extends React.Component {
 const AddRevisionContainer = createContainer((props) => {
 
 	const { comment } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 

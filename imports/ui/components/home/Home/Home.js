@@ -261,7 +261,7 @@ class Home extends Component {
 									comments={comments}
 									skip={0}
 									limit={10}
-									tenantId={Session.get('tenantId')}
+									tenantId={sessionStorage.getItem('tenantId')}
 								/> : ''
 							}
 							<div className="read-more-link">
@@ -295,7 +295,7 @@ Home.childContextTypes = {
 };
 
 const cont = createContainer(props => {
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const skip = props.skip ? props.skip : 0;
 	const limit = props.limit ? props.limit : 10;
 	return {

@@ -61,7 +61,7 @@ const CommunityLayout = React.createClass({
 
 
 const CommunityLayoutContainer = createContainer((props) => {
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	return {
 		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),

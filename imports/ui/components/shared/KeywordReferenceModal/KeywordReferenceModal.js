@@ -87,7 +87,7 @@ const KeywordReferenceModal = React.createClass({
 
 const KeywordReferenceModalContainer = createContainer((props) => {
 	const { keywordSlug } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const query = {
 		slug: keywordSlug,
 	};

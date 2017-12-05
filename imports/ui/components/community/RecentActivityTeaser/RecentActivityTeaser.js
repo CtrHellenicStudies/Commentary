@@ -127,7 +127,7 @@ class RecentActivityTeaser extends React.Component {
 const RecentActivityTeaserContainer = createContainer(props => {
 
 	const commenterIds = [];
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	let userIds = [];
 	let commenters = [];
 	let users = [];

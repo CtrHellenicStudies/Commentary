@@ -76,7 +76,7 @@ class HomeLayout extends Component {
 
 					<Home
 						settings={settings}
-						tenantId={Session.get('tenantId')}
+						tenantId={sessionStorage.getItem('tenantId')}
 					/>
 
 					<Footer />
@@ -96,7 +96,7 @@ HomeLayout.propTypes = {
 };
 
 const HomeLayoutContainer = createContainer((props) => {
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	return {
 		settings: props.settingsQuery.loading ? undefined : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
 		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)

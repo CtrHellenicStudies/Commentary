@@ -175,7 +175,7 @@ const EditKeywordLayout = React.createClass({
 			description: textValue,
 			descriptionRaw: textRawValue,
 			type: this.state.selectedType,
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 			count: 1,
 		};
 		this.props.keywordUpdate(keyword._id, keywordCandidate).then(function() {
@@ -434,7 +434,7 @@ const EditKeywordLayout = React.createClass({
 const EditKeywordLayoutContainer = createContainer((props) => {
 
 	const { match } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const slug = match.params.slug;
 	const ready = Roles.subscription.ready() && !props.keywordsQuery.keywords;
 

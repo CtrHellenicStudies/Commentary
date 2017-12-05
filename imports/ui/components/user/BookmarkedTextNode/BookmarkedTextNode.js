@@ -128,15 +128,10 @@ const BookmarkedTextNode = React.createClass({
 
 const BookmarkedTextNodeContainer = createContainer((props) => {
 	const { text } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	let work = null;
 	if (text) {
 		const query = { _id: text.work };
-		if (tenantId) {
-			props.worksQuery.refetch({
-				tenantId: tenantId
-			});
-		}
 		work = props.worksQuery.loading ? {} : props.worksQuery.works.find(x => x._id === text.work);
 	}
 

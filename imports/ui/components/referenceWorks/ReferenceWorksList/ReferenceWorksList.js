@@ -70,9 +70,9 @@ const ReferenceWorksListContainer = createContainer((props) => {
 	// SUBSCRIPTIONS:
 	const query = {};
 	let referenceWorks;
-	if (Session.get('tenantId')) {
+	if (sessionStorage.getItem('tenantId')) {
 		props.referenceWorksQuery.refetch({	
-			tenantId: Session.get('tenantId')	
+			tenantId: sessionStorage.getItem('tenantId')	
 		});
 	}
 	if (commenterId) {

@@ -75,7 +75,7 @@ Suggestions.propTypes = {
 };
 const cont = createContainer((props) => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	if (tenantId) {
 		props.keywordsQuery.refetch({

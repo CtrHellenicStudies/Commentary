@@ -230,7 +230,7 @@ AddTranslation.propTypes = {
 };
 
 const AddTranslationContainer = createContainer(props => {
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	if (tenantId) {
 		props.works.refetch({
 			tenantId: tenantId
@@ -246,9 +246,9 @@ const AddTranslationContainer = createContainer(props => {
 			subworks: work.subworks
 		});
 	});
-	if (Session.get('tenantId')) {
+	if (sessionStorage.getItem('tenantId')) {
 		props.commentersQuery.refetch({
-			tenantId: Session.get('tenantId')
+			tenantId: sessionStorage.getItem('tenantId')
 		});
 	}
 	const commentersOptions = [];

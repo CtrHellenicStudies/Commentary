@@ -1,8 +1,8 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query keywordsQuery {
-	keywords {
+query keywordsQuery($tenantId: ID $queryParam: String) {
+	keywords (tenantId: $tenantId queryParam: $queryParam) {
 	_id
     title
     slug
@@ -66,7 +66,14 @@ const keywordUpdate = gql`
  `;
 
 const keywordsQuery = graphql(query, {
-	name: 'keywordsQuery'
+	name: 'keywordsQuery',
+	options: () => {
+		return ({
+			variables: {
+				tenantId: sessionStorage.getItem('tenantId')
+			}
+		});
+	}
 });
 
 const keywordsQueryById = graphql(queryById, {

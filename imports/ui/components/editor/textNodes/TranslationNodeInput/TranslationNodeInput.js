@@ -193,7 +193,7 @@ function getTranslationQueries(query, filter) {
 const TranslationInputContainer = createContainer((props) => {
 
 	const {selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation} = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const filter = {
 		tenantId: tenantId,
 		work: selectedWork.slug,

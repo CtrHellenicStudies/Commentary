@@ -392,7 +392,7 @@ const cont = createContainer(props => {
 	let keyideas = [];
 	let commenters = [];
 	let referenceWorks = [];
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	if (tenantId) {
 		props.commentersQuery.refetch({
@@ -404,9 +404,7 @@ const cont = createContainer(props => {
 		props.keywordsQuery.refetch({
 			tenantId: tenantId
 		});
-		props.worksQuery.refetch({
-			tenantId: tenantId
-		});
+
 	}
 
 	// FETCH DATA:

@@ -303,7 +303,7 @@ const AddKeyword = React.createClass({
 
 const AddKeywordContainer = createContainer(props => {
 	
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const keywordsOptions = [];
 	const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
 		.filter(x => x.type === 'word');

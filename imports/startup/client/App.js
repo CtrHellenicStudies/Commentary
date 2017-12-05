@@ -82,7 +82,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	/>
 );
 const routes = (props) => {
-	if (!Session.get('tenantId')) {
+	if (!sessionStorage.getItem('tenantId')) {
 		const hostnameArray = document.location.hostname.split('.');
 		let subdomain;
 
@@ -94,12 +94,12 @@ const routes = (props) => {
 		}
 		props.tenantsBySubdomainQuery.variables.subdomain = subdomain;
 		if (!props.tenantsBySubdomainQuery.loading && props.tenantsBySubdomainQuery.tenantBySubdomain) {
-			Session.set('tenantId', props.tenantsBySubdomainQuery.tenantBySubdomain._id);
+			sessionStorage.setItem('tenantId', props.tenantsBySubdomainQuery.tenantBySubdomain._id);
 		} else if (!props.tenantsBySubdomainQuery.loading && !props.tenantsBySubdomainQuery.tenantBySubdomain) {
-			Session.set('noTenant', true);
+			sessionStorage.setItem('noTenant', true);
 		}
 	}
-	if (Session.get('noTenant')) {
+	if (sessionStorage.getItem('noTenant')) {
 		return <Route component={NotFound} />;
 	}
 	return (

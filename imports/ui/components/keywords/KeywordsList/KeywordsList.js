@@ -45,38 +45,40 @@ KeywordsList.propTypes = {
 	limit: PropTypes.number,
 	keywords: PropTypes.array,
 };
-function getKeywordsByQuery(type, query, limit) {
+function getKeywordsByQuery(query, limit) {
 
 	if (query.loading) {
 		return [];
 	}
-	 return query.keywords.filter(x => 
-		x.type === type &&
-		x.count > 1).slice(0, limit);
+	return query.keywords.slice(0, limit);
 }
 const cont = createContainer((props) => {
 
 	const { type, limit } = props;
 	const skip = 0;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	let _limit = 100;
-
+	const query = {
+		type: type,
+		count: { $gte: 1}
+	};
 	if (limit) {
 		_limit = limit;
 	}
 	if (tenantId) {
 		props.keywordsQuery.refetch({
-			tenantId: tenantId
+			tenantId: tenantId,
+			queryParam: JSON.stringify(query)
 		});
 	}
 
 	let keywords = [];
 	switch (type) {
 	case 'word':
-		keywords = getKeywordsByQuery('word', props.keywordsQuery, _limit);
+		keywords = getKeywordsByQuery(props.keywordsQuery, _limit);
 		break;
 	case 'idea':
-		keywords = getKeywordsByQuery('idea', props.keywordsQuery, _limit);
+		keywords = getKeywordsByQuery(props.keywordsQuery, _limit);
 		break;
 	default:
 		break;

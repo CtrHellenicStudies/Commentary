@@ -7,7 +7,7 @@ import { GraphQLID, GraphQLList } from 'graphql';
 import { WorkType } from '/imports/graphql/types/models/work';
 
 // logic
-import WorksService from '../logic/works';
+import WorksService from '../logic/Works/works';
 
 
 const workQueryFields = {

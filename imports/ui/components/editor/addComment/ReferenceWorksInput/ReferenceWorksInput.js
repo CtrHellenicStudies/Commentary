@@ -192,7 +192,7 @@ ReferenceWorksInput.propTypes = {
 
 const ReferenceWorksInputContainer = createContainer((props) => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const properties = {
 		tenantId: tenantId
 	};

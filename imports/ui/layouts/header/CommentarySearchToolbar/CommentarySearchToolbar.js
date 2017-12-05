@@ -343,7 +343,7 @@ class CommentarySearchToolbar extends React.Component {
 
 const commentarySearchToolbarContainer = createContainer(props => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	// SUBSCRIPTIONS:
 	if (!props.addCommentPage) {
@@ -351,9 +351,6 @@ const commentarySearchToolbarContainer = createContainer(props => {
 			tenantId: tenantId
 		});
 		props.referenceWorksQuery.refetch({
-			tenantId: tenantId
-		});
-		props.worksQuery.refetch({
 			tenantId: tenantId
 		});
 	}

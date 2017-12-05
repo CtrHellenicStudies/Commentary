@@ -347,8 +347,9 @@ const cont = createContainer(props => {
 		limit: limit,
 		skip: skip
 	};
-	if (props.tenantId && Utils.shouldRefetchQuery(properties, props.commentersQuery.variables)) {
+	if (props.tenantId && Utils.shouldRefetchQuery(properties, props.commentsQuery.variables)) {
 		properties.queryParam = getCommentsQuery(filters, tenantId);
+
 
 		props.commentsQuery.refetch(properties);
 		props.commentsMoreQuery.refetch(properties);

@@ -12,9 +12,11 @@ export default class KeywordsService extends AdminService {
 	 * @param {string} tenantId - id of tenant
 	 * @returns {Object[]} array of tags 
 	 */
-	keywordsGet(id, tenantId) {
-		const args = {};
-
+	keywordsGet(id, tenantId, queryParam) {
+		let args = {};
+		if (queryParam) {
+			args = JSON.parse(queryParam);
+		}
 		if (tenantId) {
 			args.tenantId = tenantId;
 		}
@@ -23,7 +25,7 @@ export default class KeywordsService extends AdminService {
 		}
 		return Keywords.find(args, {
 			sort: {
-				slug: 1,
+				title: 1,
 			}
 		}).fetch();
 	}

@@ -9,7 +9,7 @@ call the “this._updateRoute(filters)” method
 with new “filters” object passed as first attribute.
 
 */
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
@@ -45,7 +45,7 @@ import {
 	createFilterFromURL
 } from './helpers';
 
-class CommentaryLayout extends React.Component {
+class CommentaryLayout extends Component {
 
 	static propTypes = {
 		queryParams: PropTypes.object,
@@ -201,7 +201,7 @@ class CommentaryLayout extends React.Component {
 							loadMoreComments={this.loadMoreComments}
 							history={this.props.history}
 							skip={skip}
-							tenantId={Session.get('tenantId')}
+							tenantId={sessionStorage.getItem('tenantId')}
 							limit={limit}
 						/>
 
@@ -222,19 +222,17 @@ class CommentaryLayout extends React.Component {
 const cont = createContainer((props) => {
 
 	const { match } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const properties = {
 		tenantId: tenantId
 	};
 	const queryParams = qs.parse(window.location.search.substr(1));
 	const params = match.params;
 
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.referenceWorksQuery.variables)) {
+	if (tenantId) {
 		props.referenceWorksQuery.refetch(properties);
 	}
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.worksQuery.variables)) {
-		props.worksQuery.refetch(properties);
-	}
+
 
 	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 	const works = props.worksQuery.loading ? [] : props.worksQuery.works;

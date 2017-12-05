@@ -160,7 +160,7 @@ const LemmaReferenceModal = React.createClass({
 const LemmaReferenceModalContainer = createContainer((props) => {
 
 	const { work, subwork, lineFrom, lineTo } = props;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	if (tenantId) {
 		props.textNodesQuery.refetch({

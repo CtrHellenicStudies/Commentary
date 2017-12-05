@@ -152,7 +152,7 @@ ReferenceWorkDetail.propTypes = {
 const ReferenceWorkDetailContainer = createContainer(props => {
 
 	const slug = props.match.params.slug;
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	const referenceWork = props.referenceWorksQuery.loading ? undefined : props.referenceWorksQuery.referenceWorks.find(x => x.slug === slug && x.tenantId === tenantId);
 	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => x.tenantId === tenantId);

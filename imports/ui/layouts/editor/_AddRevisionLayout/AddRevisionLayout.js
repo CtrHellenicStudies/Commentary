@@ -347,7 +347,7 @@ const AddRevisionLayout = React.createClass({
 
 const AddRevisionLayoutContainer = createContainer(props => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 
 	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
 	if (tenantId) {

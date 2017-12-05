@@ -326,7 +326,7 @@ class AddComment extends React.Component {
 			slug: slugify(tag.value.toLowerCase()),
 			type: 'word',
 			count: 1,
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 		};
 		this.props.keywordInsert(keyword);
 		// 	if (err) {
@@ -340,7 +340,7 @@ class AddComment extends React.Component {
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
-			tenantId: Session.get('tenantId')
+			tenantId: sessionStorage.getItem('tenantId')
 		};
 		this.props.referenceWorkCreate(_reference).then(err => {
 			if (err) {
@@ -496,7 +496,7 @@ class AddComment extends React.Component {
 const AddCommentContainer = createContainer(props => {
 
 	let commenters = [];
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const properties = {
 		tenantId: tenantId
 	};

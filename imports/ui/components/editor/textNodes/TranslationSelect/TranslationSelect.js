@@ -130,7 +130,7 @@ const TranslationSelectContainer = createContainer(props => {
 			selectedSubwork: props.selectedSubwork
 		});
 		workDetails = {
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 			work: props.selectedWork,
 			subwork: props.selectedSubwork,
 		};

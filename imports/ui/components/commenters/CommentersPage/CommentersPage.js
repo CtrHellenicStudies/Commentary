@@ -77,7 +77,7 @@ CommentersPage.propTypes = {
 
 const commentersPageContainer = createContainer((props) => {
 
-	const tenantId = Session.get('tenantId');
+	const tenantId = sessionStorage.getItem('tenantId');
 	const settings = props.settingsQuery.loading ? { title: ''} : props.settingsQuery.settings.find(x => x.tenantId === tenantId);
 
 	return {

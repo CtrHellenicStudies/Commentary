@@ -96,13 +96,7 @@ class Commentary extends Component {
 		this.selectMultiLine = this.selectMultiLine.bind(this);
 
 		const {filters, limit, skip } = this.props;
-		const properties = {
-			limit: limit,
-			skip: skip,
-			queryParam: getCommentsQuery(filters, sessionStorage.getItem('tenantId'))
-		};
-		props.commentsQuery.refetch(properties);
-		props.commentsMoreQuery.refetch(properties);
+		props.commentsQuery.refetch();
 
 	}
 	getChildContext() {

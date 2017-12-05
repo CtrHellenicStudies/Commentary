@@ -87,6 +87,35 @@ class CommentLemma extends React.Component {
 			multiline: null
 		};
 
+		const { commentGroup, multiline} = this.props;
+		let translationAuthors = [];
+		if (commentGroup) {
+	
+			if (!commentGroup.lineTo) {
+				commentGroup.lineTo = commentGroup.lineFrom;
+			}
+	
+			const translationNodesQuery = {
+				work: commentGroup.work.slug,
+				subwork: Number(commentGroup.subwork.title),
+				lineFrom: commentGroup.lineFrom,
+				lineTo: commentGroup.lineTo
+			};
+	
+			translationAuthors = _.uniq(getTranslationQueries(this.props.translationsQuery, translationNodesQuery));
+		}
+		const properties = {
+			tenantId: sessionStorage.getItem('tenantId'),
+			workSlug: commentGroup.work.slag === 'homeric-hymns' ? 'hymns' : commentGroup.work.slug,
+			subworkN: commentGroup.subwork.n,
+			lineFrom: commentGroup.lineFrom,
+			lineTo: commentGroup.lineTo !== 'undefined' ? commentGroup.lineTo : commentGroup.lineFrom
+		};
+		if (Utils.shouldRefetchQuery(properties, this.props.textNodesQuery.variables)) {
+			this.props.textNodesQuery.refetch(properties);
+		}
+
+
 		// methods:
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.showContextPanel = this.showContextPanel.bind(this);
@@ -199,9 +228,13 @@ class CommentLemma extends React.Component {
 
 
 	render() {
-		const { commentGroup, hideLemma, editions, ready, translationAuthors } = this.props;
+		const { commentGroup, hideLemma, ready, translationAuthors } = this.props;
 		const { selectedLemmaEditionIndex, selectedAuthor, showTranslation } = this.state;
-
+		const textNodesCursor = this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes;
+		let editions = !this.props.editionsQuery.loading ?
+			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, this.props.editionsQuery.editions) : [];
+	
+		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 
@@ -398,52 +431,8 @@ function getTranslationQueries(query, filter) {
 			translation.author
 		);
 }
-const cont = createContainer(props => {
-	
-	const { commentGroup, multiline, tenantId } = props;
-	let translationAuthors = [];
-	if (commentGroup) {
-
-		if (!commentGroup.lineTo) {
-			commentGroup.lineTo = commentGroup.lineFrom;
-		}
-
-		const translationNodesQuery = {
-			work: commentGroup.work.slug,
-			subwork: Number(commentGroup.subwork.title),
-			lineFrom: commentGroup.lineFrom,
-			lineTo: commentGroup.lineTo
-		};
-
-		translationAuthors = _.uniq(getTranslationQueries(props.translationsQuery, translationNodesQuery));
-	}
-	const properties = {
-		tenantId: tenantId,
-		workSlug: commentGroup.work.slag === 'homeric-hymns' ? 'hymns' : commentGroup.work.slug,
-		subworkN: commentGroup.subwork.n,
-		lineFrom: commentGroup.lineFrom,
-		lineTo: commentGroup.lineTo !== 'undefined' ? commentGroup.lineTo : commentGroup.lineFrom
-	};
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.textNodesQuery.variables)) {
-		console.log('refetch');
-		props.textNodesQuery.refetch(properties);
-	}
-
-	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
-	let editions = !props.editionsQuery.loading ?
-		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
-
-	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
-
-	return {
-		translationAuthors,
-		editions,
-		ready: !props.textNodesQuery.loading && !props.translationsQuery.loading,
-	};
-
-}, CommentLemma);
 export default compose(
 	editionsQuery,
 	textNodesQuery,
 	translationsQuery
-)(cont);
+)(CommentLemma);

@@ -383,9 +383,6 @@ const EditKeywordContainer = createContainer(props => {
 		props.referenceWorksQuery.refetch({
 			tenantId: tenantId
 		});
-		props.commentersQuery.refetch({
-			tenantId: tenantId
-		});
 		props.keywordsQuery.refetch({
 			tenantId: tenantId
 		});

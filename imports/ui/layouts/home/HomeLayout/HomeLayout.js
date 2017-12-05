@@ -76,7 +76,6 @@ class HomeLayout extends Component {
 
 					<Home
 						settings={settings}
-						tenantId={sessionStorage.getItem('tenantId')}
 					/>
 
 					<Footer />

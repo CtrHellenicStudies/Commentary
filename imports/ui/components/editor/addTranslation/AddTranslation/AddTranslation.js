@@ -231,11 +231,6 @@ AddTranslation.propTypes = {
 
 const AddTranslationContainer = createContainer(props => {
 	const tenantId = sessionStorage.getItem('tenantId');
-	if (tenantId) {
-		props.works.refetch({
-			tenantId: tenantId
-		});
-	}
 	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 	const worksOptions = [];
 	works.forEach((work) => {

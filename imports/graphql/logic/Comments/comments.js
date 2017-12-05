@@ -21,6 +21,7 @@ export default class CommentService extends AdminService {
 	 */
 	commentsGet(queryParam, limit, skip, sortRecent) {
 
+		console.log(queryParam);
 		const options = prepareGetCommentsOptions(limit, skip);
 		let query = JSON.parse(queryParam);
 		if (queryParam === null) {
@@ -28,6 +29,7 @@ export default class CommentService extends AdminService {
 		}
 		query.isAnnotation = {$ne: true};
 		const comments = Comments.find(query, options).fetch();
+		console.log(comments[0].work);
 		return comments;
 	}
 		/**

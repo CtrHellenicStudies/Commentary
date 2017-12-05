@@ -80,6 +80,9 @@ const textNodeRemoveMutation = graphql(textNodeRemove, {
 
 const textNodesQuery = graphql(query, {
 	name: 'textNodesQuery',
+	options: {
+		refetchQueries: ['textNodesQuery']
+	}
 });
 
 const textNodesQueryById = graphql(queryById, {

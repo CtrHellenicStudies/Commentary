@@ -65,7 +65,10 @@ const translationUpdateMutation = graphql(translationUpdate, {
 	}
 });
 const translationsQuery = graphql(query, {
-	name: 'translationsQuery'
+	name: 'translationsQuery',
+	options: {
+		refetchQueries: ['translationsQuery']
+	}
 });
 const translationAuthorsQuery = graphql(queryAuthors, {
 	name: 'translationAuthorsQuery'

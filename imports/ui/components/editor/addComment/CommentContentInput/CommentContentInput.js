@@ -85,9 +85,7 @@ CommentContentInput.propTypes = {
 const CommentContentInputContainer = createContainer(() => {
 
 	const tenantId = sessionStorage.getItem('tenantId');
-	if (tenantId) {
 
-	}
 	const tags = Keywords.find().fetch();
 
 	return {

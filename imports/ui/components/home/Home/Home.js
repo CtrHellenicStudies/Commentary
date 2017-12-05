@@ -16,7 +16,6 @@ import muiTheme from '/imports/lib/muiTheme';
 
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
-import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // components:
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
@@ -54,7 +53,7 @@ class Home extends Component {
 	}
 
 	render() {
-		const { settings, comments, ready } = this.props;
+		const { settings, ready } = this.props;
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
@@ -258,10 +257,8 @@ class Home extends Component {
 								<Commentary
 									isOnHomeView
 									filters={[]}
-									comments={comments}
 									skip={0}
 									limit={10}
-									tenantId={sessionStorage.getItem('tenantId')}
 								/> : ''
 							}
 							<div className="read-more-link">
@@ -284,8 +281,6 @@ class Home extends Component {
 
 Home.propTypes = {
 	settings: PropTypes.object,
-	comments: PropTypes.array,
-	commentsQuery: PropTypes.object,
 	isTest: PropTypes.bool,
 	ready: PropTypes.bool
 };
@@ -299,10 +294,9 @@ const cont = createContainer(props => {
 	const skip = props.skip ? props.skip : 0;
 	const limit = props.limit ? props.limit : 10;
 	return {
-		comments: props.commentsQuery.loading ? [] : props.commentsQuery.comments.filter(x => x.tenantId === tenantId).slice(skip, limit + skip),
 		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-		ready: !props.commentsQuery.loading && !props.settingsQuery.loading
+		ready: !props.settingsQuery.loading
 	};
 }, Home);
 
-export default compose(commentsQuery, settingsQuery)(cont);
+export default compose(settingsQuery)(cont);

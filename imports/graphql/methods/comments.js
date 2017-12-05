@@ -61,17 +61,7 @@ mutation commentUpdate($id: String! $comment: CommentInputType!) {
 `;
 
 const commentsQuery = graphql(query, {
-	name: 'commentsQuery',
-	options: {
-		options: () => {
-			return ({
-				variables: {
-					tenantId: sessionStorage.getItem('tenantId')
-				}
-			});
-		},
-		refetchQueries: ['commentsQuery']
-	}
+	name: 'commentsQuery'
 });
 const commentsMoreQuery = graphql(queryMore, {
 	name: 'commentsMoreQuery',

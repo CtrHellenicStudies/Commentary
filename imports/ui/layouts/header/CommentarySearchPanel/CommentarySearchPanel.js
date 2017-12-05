@@ -395,9 +395,6 @@ const cont = createContainer(props => {
 	const tenantId = sessionStorage.getItem('tenantId');
 
 	if (tenantId) {
-		props.commentersQuery.refetch({
-			tenantId: tenantId
-		});
 		props.referenceWorksQuery.refetch({
 			tenantId: tenantId
 		});

@@ -350,9 +350,6 @@ const AddRevisionLayoutContainer = createContainer(props => {
 
 	const ready = Roles.subscription.ready() && commentsSub.ready() && !props.keywordsQuery.loading;
 	if (tenantId) {
-		props.commentersQuery.refetch({
-			tenantId: tenantId
-		});
 		props.keywordsQuery.refetch({
 			tenantId: tenantId
 		});

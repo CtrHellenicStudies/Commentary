@@ -71,11 +71,6 @@ export default class WorksService extends AdminService {
 		if (_id) {
 			args._id = _id;
 		}
-		console.log(Works.find(args, {
-			sort: {
-				slug: 1
-			}
-		}).fetch());
 		return Works.find(args, {
 			sort: {
 				slug: 1

@@ -425,6 +425,7 @@ const cont = createContainer(props => {
 		lineTo: commentGroup.lineTo !== 'undefined' ? commentGroup.lineTo : commentGroup.lineFrom
 	};
 	if (tenantId && Utils.shouldRefetchQuery(properties, props.textNodesQuery.variables)) {
+		console.log('refetch');
 		props.textNodesQuery.refetch(properties);
 	}
 

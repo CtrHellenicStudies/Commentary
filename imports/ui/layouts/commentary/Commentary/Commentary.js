@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
 import Parser from 'simple-text-parser';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
@@ -96,6 +95,14 @@ class Commentary extends Component {
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
 
+		const {filters, limit, skip } = this.props;
+		const properties = {
+			limit: limit,
+			skip: skip,
+			queryParam: getCommentsQuery(filters, sessionStorage.getItem('tenantId'))
+		};
+		props.commentsQuery.refetch(properties);
+		props.commentsMoreQuery.refetch(properties);
 
 	}
 	getChildContext() {
@@ -280,11 +287,14 @@ class Commentary extends Component {
 		}
 	}
 	render() {
-		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, commentGroups } = this.props;
+		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
 		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
 		}
+		const commentGroups = this.props.commentersQuery.loading || this.props.commentsQuery.loading ? 
+		[] : parseCommentsToCommentGroups(this.props.commentsQuery.comments,
+			this.props.commentersQuery.commenters);	
 		if (!commentGroups) {
 			return null;
 		}
@@ -341,31 +351,9 @@ class Commentary extends Component {
 		);
 	}
 }
-const cont = createContainer(props => {
-	const { tenantId, filters, limit, skip } = props;
-	const properties = {
-		limit: limit,
-		skip: skip
-	};
-	if (props.tenantId && Utils.shouldRefetchQuery(properties, props.commentsQuery.variables)) {
-		properties.queryParam = getCommentsQuery(filters, tenantId);
-
-
-		props.commentsQuery.refetch(properties);
-		props.commentsMoreQuery.refetch(properties);
-	}
-
-	const commentGroups = props.commentersQuery.loading || props.commentsQuery.loading ? 
-		[] : parseCommentsToCommentGroups(props.commentsQuery.comments,
-			props.commentersQuery.commenters);	
-	return {
-		commentGroups,
-		ready: !props.commentsQuery.loading && !props.commentersQuery.loading && !props.commentsMoreQuery.loading
-	};
-}, Commentary);
 export default compose(
 	commentsQuery,
 	commentersQuery,
 	commentsMoreQuery
-)(cont);
+)(Commentary);
 

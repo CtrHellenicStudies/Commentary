@@ -584,9 +584,6 @@ const AddRevisionContainer = createContainer(props => {
 			Meteor.user().canEditCommenters.find(y => y === x._id));
 	}
 	if (tenantId) {
-		props.commentersQuery.refetch({
-			tenantId: tenantId
-		});
 		props.referenceWorksQuery.refetch({
 			tenantId: tenantId
 		});

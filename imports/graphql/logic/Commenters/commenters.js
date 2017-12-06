@@ -1,12 +1,12 @@
 import Commenters from '/imports/models/commenters';
 // errors
 import { AuthenticationError } from '/imports/errors';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with commenters
  */
-export default class CommentService extends AdminService {
+export default class CommentService extends GraphQLService {
 
 	/**
 	 * Get commenters for the supplied _id and tenantId

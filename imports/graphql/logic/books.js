@@ -1,10 +1,10 @@
 import Books from '/imports/models/books';
-import AdminService from './adminService';
+import GraphQLService from './graphQLService';
 
 /**
  * Logic-layer service for dealing with books
  */
-export default class BookService extends AdminService {
+export default class BookService extends GraphQLService {
 
 	/**
 	 * Rewrite chapters for modifiying books

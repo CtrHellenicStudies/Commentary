@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import autoBind from 'react-autobind';
 import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';

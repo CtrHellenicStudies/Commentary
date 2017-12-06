@@ -1,10 +1,10 @@
 import Tenants from '/imports/models/tenants';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with tenants
  */
-export default class TenantsService extends AdminService {
+export default class TenantsService extends GraphQLService {
 
 	/**
 	 * Get tenants

@@ -1,10 +1,10 @@
 import Keywords from '/imports/models/keywords';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with keywords
  */
-export default class KeywordsService extends AdminService {
+export default class KeywordsService extends GraphQLService {
 
 	/**
 	 * Get tags (keywords) for tenant

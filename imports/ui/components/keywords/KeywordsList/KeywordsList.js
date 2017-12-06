@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Session } from 'meteor/session';
+
 import { compose } from 'react-apollo';
 
 // models
@@ -14,10 +14,18 @@ import { keywordsQuery } from '/imports/graphql/methods/keywords';
 // components
 import KeywordTeaser from '/imports/ui/components/keywords/KeywordTeaser';
 
-class KeywordsList extends React.Component {
+function getKeywordsByQuery(query, limit) {
+
+	if (query.loading) {
+		return [];
+	}
+	return query.keywords.slice(0, limit);
+}
+
+class KeywordsList extends Component {
 
 	renderKeywords() {
-		const { keywords } = this.props;
+		const { keywords } = this.state;
 
 		if (!keywords) {
 			return null;
@@ -29,6 +37,42 @@ class KeywordsList extends React.Component {
 				keyword={keyword}
 			/>
 		));
+	}
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentWillReceiveProps(newProps) {
+		const { type, limit } = newProps;
+		const skip = 0;
+		const tenantId = sessionStorage.getItem('tenantId');
+		let _limit = 100;
+		const query = {
+			type: type,
+			count: { $gte: 1}
+		};
+		if (limit) {
+			_limit = limit;
+		}
+		newProps.keywordsQuery.refetch({
+			tenantId: tenantId,
+			queryParam: JSON.stringify(query)
+		});
+	
+		let keywords = [];
+		switch (type) {
+		case 'word':
+			keywords = getKeywordsByQuery(newProps.keywordsQuery, _limit);
+			break;
+		case 'idea':
+			keywords = getKeywordsByQuery(newProps.keywordsQuery, _limit);
+			break;
+		default:
+			break;
+		}
+		this.setState({
+			keywords: keywords,
+		});
 	}
 
 	render() {
@@ -45,49 +89,5 @@ KeywordsList.propTypes = {
 	limit: PropTypes.number,
 	keywords: PropTypes.array,
 };
-function getKeywordsByQuery(query, limit) {
 
-	if (query.loading) {
-		return [];
-	}
-	return query.keywords.slice(0, limit);
-}
-const cont = createContainer((props) => {
-
-	const { type, limit } = props;
-	const skip = 0;
-	const tenantId = sessionStorage.getItem('tenantId');
-	let _limit = 100;
-	const query = {
-		type: type,
-		count: { $gte: 1}
-	};
-	if (limit) {
-		_limit = limit;
-	}
-	if (tenantId) {
-		props.keywordsQuery.refetch({
-			tenantId: tenantId,
-			queryParam: JSON.stringify(query)
-		});
-	}
-
-	let keywords = [];
-	switch (type) {
-	case 'word':
-		keywords = getKeywordsByQuery(props.keywordsQuery, _limit);
-		break;
-	case 'idea':
-		keywords = getKeywordsByQuery(props.keywordsQuery, _limit);
-		break;
-	default:
-		break;
-	}
-
-	return {
-		keywords,
-		type,
-	};
-}, KeywordsList);
-
-export default compose(keywordsQuery)(cont);
+export default compose(keywordsQuery)(KeywordsList);

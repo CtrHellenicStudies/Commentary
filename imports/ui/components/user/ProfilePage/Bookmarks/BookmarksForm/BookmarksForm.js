@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import { Mongo } from 'meteor/mongo';
 

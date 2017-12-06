@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import qs from 'qs-lite';
 import { compose } from 'react-apollo';
@@ -151,6 +151,30 @@ class CommentDetail extends React.Component {
 		const { filters } = this.props;
 		const { searchTerm } = this.state;
 
+		const tenantId = sessionStorage.getItem('tenantId');
+		const { comment } = nextProps;
+
+		const referenceWorkIds = [];
+		let referenceWorks = [];
+
+		if (comment && comment.referenceWorks && !nextProps.referenceWorksQuery.loading) {
+			comment.referenceWorks.forEach((referenceWork) => {
+				referenceWorkIds.push(referenceWork.referenceWorkId);
+			});
+			referenceWorks = nextProps.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined && x.tenantId === tenantId);
+		}
+	
+		const settings = nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
+	
+		const user = Meteor.user();
+		const ready = !nextProps.referenceWorksQuery.loading && !nextProps.settingsQuery.loading;
+
+		this.setState({
+			settings: settings,
+			user: user,
+			ready: ready,
+			referenceWorks: referenceWorks
+		});
 		if (filters.find(filter => filter.key === 'textsearch') !== searchTerm && filters && filters.find(filter => filter.key === 'textsearch')) {
 			const searchTermsObject = filters.find(filter => filter.key === 'textsearch');
 			this.setState({
@@ -266,26 +290,11 @@ class CommentDetail extends React.Component {
 			selectedRevisionIndex: parseInt(event.currentTarget.id, 10),
 		});
 	}
-
 	render() {
 
 		const { comment, filters} = this.props;
-		const { discussionVisible, searchTerm } = this.state;
-		const tenantId = sessionStorage.getItem('tenantId');
-		
-		const referenceWorkIds = [];
-		let referenceWorks = [];
-		if (comment && comment.referenceWorks && !this.props.referenceWorksQuery.loading) {
-			comment.referenceWorks.forEach((referenceWork) => {
-				referenceWorkIds.push(referenceWork.referenceWorkId);
-			});
-			referenceWorks = this.props.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined && x.tenantId === tenantId);
-		}
-	
-		const settings = this.props.settingsQuery.loading ? {} : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId);
-	
-		const user = Meteor.user();
-		const ready = !this.props.referenceWorksQuery.loading && !this.props.settingsQuery.loading;
+		const { discussionVisible, searchTerm, user, referenceWorks, ready, settings } = this.state;
+
 		if (!ready) {
 			// TODO: handle loading for component
 			return null;

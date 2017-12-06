@@ -2,13 +2,13 @@ import DiscussionComments from '/imports/models/discussionComments';
 import Comments from '/imports/models/comments';
 // errors
 import { AuthenticationError } from '/imports/errors';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 import { sendReportMessage } from './helper';
 
 /**
  * Logic-layer service for dealing with discussion comments
  */
-export default class DiscussionCommentService extends AdminService {
+export default class DiscussionCommentService extends GraphQLService {
 
 	/**
 	 * Get discussion comments

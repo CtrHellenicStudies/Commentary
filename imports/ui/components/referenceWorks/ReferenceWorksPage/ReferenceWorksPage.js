@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import muiTheme from '/imports/lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';

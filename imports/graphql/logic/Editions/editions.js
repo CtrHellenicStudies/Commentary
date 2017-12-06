@@ -1,10 +1,10 @@
 import Editions from '/imports/models/editions';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with editions
  */
-export default class EditionsService extends AdminService {
+export default class EditionsService extends GraphQLService {
 
 	/**
 	 * Get editions

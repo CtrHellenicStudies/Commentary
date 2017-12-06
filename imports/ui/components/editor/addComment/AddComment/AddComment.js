@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import { Random } from 'meteor/random';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -336,12 +336,6 @@ class AddComment extends React.Component {
 			tenantId: sessionStorage.getItem('tenantId'),
 		};
 		this.props.keywordInsert(keyword);
-		// 	if (err) {
-		// 		this.showSnackBar(err);
-		// 	} else {
-		// 		this.showSnackBar({message: 'Tag added'});
-		// 	}
-		// });
 	}
 	addNewReferenceWork(reference) {
 		const _reference = {
@@ -389,6 +383,9 @@ class AddComment extends React.Component {
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
+	}
+	componentWillReceiveProps(newProps) {
+		
 	}
 	render() {
 		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;

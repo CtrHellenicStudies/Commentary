@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import TextField from 'material-ui/TextField';
 import { createContainer } from 'meteor/react-meteor-data';
 import _ from 'lodash';

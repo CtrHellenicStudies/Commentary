@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
 import { compose } from 'react-apollo';
@@ -15,9 +15,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { settingsQuery } from '/imports/graphql/methods/settings';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 
-// models
-import Commenters from '/imports/models/commenters';
-import Settings from '/imports/models/settings';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
@@ -212,7 +209,6 @@ const cont = createContainer(props => {
 	const tenantId = sessionStorage.getItem('tenantId');
 
 	let avatarUrl;
-
 	const commenter = props.commentersQuery.loading ? {} : 
 		props.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
 
@@ -227,4 +223,4 @@ const cont = createContainer(props => {
 		ready: !props.settingsQuery.loading || !props.commentersQuery.loading
 	};
 }, CommenterDetail);
-export default (commentersQuery, settingsQuery)(cont);
+export default compose(commentersQuery, settingsQuery)(cont);

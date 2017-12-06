@@ -1,10 +1,10 @@
 import Works from '/imports/models/works';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with works
  */
-export default class WorksService extends AdminService {
+export default class WorksService extends GraphQLService {
 
 	/**
 	 * Rewrite subworks for modifiying works

@@ -12,7 +12,7 @@ import TextField from 'material-ui/TextField';
 import { WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns';
 import { Creatable } from 'react-select';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';

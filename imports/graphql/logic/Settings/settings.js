@@ -1,10 +1,10 @@
 import Settings from '/imports/models/settings';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with settings
  */
-export default class SettingsService extends AdminService {
+export default class SettingsService extends GraphQLService {
 
 
 	/**

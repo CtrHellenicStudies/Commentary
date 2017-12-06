@@ -1,10 +1,10 @@
 import Pages from '/imports/models/pages';
-import AdminService from './adminService';
+import GraphQLService from './graphQLService';
 
 /**
  * Logic-layer service for dealing with pages
  */
-export default class PageService extends AdminService {
+export default class PageService extends GraphQLService {
 
 	/**
 	 * Get pages

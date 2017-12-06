@@ -1,10 +1,10 @@
 import ReferenceWorks from '/imports/models/referenceWorks';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with reference works
  */
-export default class ReferenceWorksService extends AdminService {
+export default class ReferenceWorksService extends GraphQLService {
 
 	/**
 	 * Get reference works

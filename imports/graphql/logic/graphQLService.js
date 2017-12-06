@@ -5,7 +5,7 @@ import { Accounts } from 'meteor/accounts-base';
  * if a user is an admin and able to edit content
  */
 
-class AdminService {
+class GraphQLService {
 	constructor({ token }) {
 		this.token = token || '';
 		this.user = Meteor.users.findOne({
@@ -18,4 +18,4 @@ class AdminService {
 	}
 }
 
-export default AdminService;
+export default GraphQLService;

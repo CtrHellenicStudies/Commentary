@@ -24,11 +24,11 @@ class Suggestions extends Component {
 	}
 	onMentionSearchChange({ value }) {
 		const taht = this;
-		props.commentsQuery.refetch({
+		this.props.commentsQuery.refetch({
 			queryParam: JSON.stringify({ $text: { $search: value } }),
 			limit: 5
-		}).then(function() {
-			const _mentions = Utils.getSuggestionsFromComments(res);
+		}).then(function(res) {
+			const _mentions = Utils.getSuggestionsFromComments(res.data.comments);
 			this.setState({
 				mentions: defaultSuggestionsFilter(value, fromJS(_mentions))
 			});

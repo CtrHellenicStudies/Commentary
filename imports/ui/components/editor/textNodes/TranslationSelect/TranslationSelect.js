@@ -7,7 +7,7 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { compose } from 'react-apollo';
-import { Session } from 'meteor/session';
+
 
 // graphql
 import { translationAuthorsQuery } from '/imports/graphql/methods/translations';

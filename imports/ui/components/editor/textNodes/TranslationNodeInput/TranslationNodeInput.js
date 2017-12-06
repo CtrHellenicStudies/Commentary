@@ -46,9 +46,9 @@ class TranslationNodeInput extends React.Component {
 	onChangeText(event, newValue) {
 		const index = parseInt(event.target.name.replace('_text', ''), 10);
 		const currentTranslationNode = this.state.translationNodes[index];
-
-		currentTranslationNode.text = newValue;
-
+		const updatedObject = Object.assign({}, currentTranslationNode);
+		updatedObject.text = newValue;
+		delete updatedObject.__typename;
 		if (newValue && !this.state.inserting) {
 			this.setState({
 				inserting: true
@@ -56,15 +56,14 @@ class TranslationNodeInput extends React.Component {
 
 			debounce(500, () => {
 				// Call update method on meteor backend
-				this.props.translationUpdate(currentTranslationNode).then((err, res) => {
-					if (err) {
-						console.error('Error editing text', err);
-						this.showSnackBar(err.message);
-					} else {
-						this.showSnackBar('Updated');
+				this.props.translationUpdate(updatedObject).then((res) => {
+					if (res.data) {
 						this.setState({
 							inserting: false
 						});
+						this.showSnackBar('Updated');
+					} else {
+						this.showSnackBar('Error');
 					}
 				});
 			})();
@@ -105,7 +104,9 @@ class TranslationNodeInput extends React.Component {
 		}, 4000);
 	}
 	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
+		if (this.timeout) { 
+			clearTimeout(this.timeout); 
+		}
 	}
 	render() {
 		const {translationNodes} = this.state;

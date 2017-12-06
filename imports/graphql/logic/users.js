@@ -1,10 +1,10 @@
 import {Meteor} from 'meteor/meteor';
-import AdminService from './adminService';
+import GraphQLService from './graphQLService';
 
 /**
  * Logic-layer service for dealing with users
  */
-export default class UserService extends AdminService {
+export default class UserService extends GraphQLService {
 
 	/**
 	 * Get users (admin method)

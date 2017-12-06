@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -280,4 +280,6 @@ const cont = createContainer(({ comment }) => {
 	};
 }, DiscussionThread);
 export default compose(
-	discussionCommentsQuery, discussionCommentInsertMutation)(cont);
+	discussionCommentsQuery,
+	discussionCommentInsertMutation
+)(cont);

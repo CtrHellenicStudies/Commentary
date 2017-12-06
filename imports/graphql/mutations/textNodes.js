@@ -70,6 +70,22 @@ const textNodeMutationFields = {
 			return await textNodeService.textNodeRemove(textNodeId);
 		}
 	},
+	getMaxLine: {
+		type: GraphQLString,
+		description: 'Get max line',
+		args: {
+			workSlug: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			subworkN: {
+				type: new GraphQLNonNull(GraphQLInt)
+			}
+		},
+		async resolve(parent, {workSlug, subworkN}, {token}) {
+			const textNodeService = new TextNodeService({token});
+			return await textNodeService.getMaxLine(workSlug, subworkN);
+		}
+	}
 };
 
 export default textNodeMutationFields;

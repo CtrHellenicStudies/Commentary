@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import { Field } from 'redux-form';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';

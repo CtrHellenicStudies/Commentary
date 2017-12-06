@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import { moment } from 'meteor/momentjs:moment';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -13,7 +13,6 @@ import { compose } from 'react-apollo';
 import { 
 	discussionCommentUpdateMutation, 
 	discussionCommentReportMutation,
-	discussionCommentsQuery,
 	discussionCommentUpvoteMutation,
 	discussionCommentUnreportMutation} 
 	from '/imports/graphql/methods/discussionComments';
@@ -416,6 +415,5 @@ const cont = createContainer(({ discussionComment }) => {
 export default compose(
 	discussionCommentUpdateMutation, 
 	discussionCommentReportMutation,
-	discussionCommentsQuery,
 	discussionCommentUpvoteMutation,
 	discussionCommentUnreportMutation)(cont);

@@ -15,7 +15,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { grey400 } from 'material-ui/styles/colors';
 import _ from 'underscore';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import Cookies from 'js-cookie';
 import { createContainer } from 'meteor/react-meteor-data';
 import Select from 'react-select';

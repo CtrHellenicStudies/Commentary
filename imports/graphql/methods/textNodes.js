@@ -22,7 +22,11 @@ const textNodeRemove = gql`
 	}
 }
  `;
-
+const getMaxLine = gql`
+mutation getMaxLine($workSlug: String! $subworkN: Int!) {
+	getMaxLine(workSlug: $workSlug subworkN: $subworkN)
+}
+`;
 const queryById = gql`
 query textNodesQueryById($id: ID!) {
   textNodes(_id: $id) {
@@ -96,10 +100,15 @@ const textNodesQueryById = graphql(queryById, {
 	name: 'textNodesQueryById'
 });
 
+const getMaxLineMutation = graphql(getMaxLine, {
+	name: 'getMaxLine'
+});
+
 export {
 	textNodeCreateMutation,
 	textNodesQueryById,
 	textNodeUpdateMutation,
 	textNodeRemoveMutation,
-	textNodesQuery
+	textNodesQuery,
+	getMaxLineMutation
 };

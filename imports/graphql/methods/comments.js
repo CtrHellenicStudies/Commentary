@@ -1,4 +1,5 @@
 import { gql, graphql } from 'react-apollo';
+import { getCommentsQuery } from './helper';
 
 const query = gql`
 query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Boolean) {
@@ -67,7 +68,7 @@ const commentsQuery = graphql(query, {
 			variables: {
 				skip: params.skip,
 				limit: params.limit,
-				queryParam: JSON.stringify({ tenantId: sessionStorage.getItem('tenantId')})
+				queryParam: getCommentsQuery(params.filters, sessionStorage.getItem('tenantId'))
 			}
 		});
 	}

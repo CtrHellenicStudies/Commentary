@@ -12,7 +12,7 @@ with new “filters” object passed as first attribute.
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -75,12 +75,15 @@ class CommentaryLayout extends Component {
 			skip: 0,
 			limit: 10,
 			queryParams: qs.parse(window.location.search.substr(1)),
-			params: this.props.match
+			params: this.props.match,
+			referenceWorks: [],
+			works: []
 		};
 
 		this.props.referenceWorksQuery.refetch({
 			tenantId: sessionStorage.getItem('tenantId')
 		});
+	
 
 		this.getChildContext = this.getChildContext.bind(this);
 		this.getFilterValue = this.getFilterValue.bind(this);
@@ -179,12 +182,16 @@ class CommentaryLayout extends Component {
 			modalLoginLowered: false,
 		});
 	}
-
+	componentWillReceiveProps(nextProps) {
+		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
+		const works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works;
+		this.setState({
+			referenceWorks: referenceWorks,
+			works: works
+		});
+	}
 	render() {
-		const { skip, limit, modalLoginLowered, queryParams, params } = this.state;
-
-		const referenceWorks = this.props.referenceWorksQuery.loading ? [] : this.props.referenceWorksQuery.referenceWorks;
-		const works = this.props.worksQuery.loading ? [] : this.props.worksQuery.works;
+		const { skip, limit, modalLoginLowered, queryParams, params, referenceWorks, works } = this.state;
 
 		// create filters object based on the queryParams or params
 		const filters = createFilterFromURL(params, queryParams, works, referenceWorks);

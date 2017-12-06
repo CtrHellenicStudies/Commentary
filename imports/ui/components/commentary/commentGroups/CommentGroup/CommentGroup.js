@@ -5,7 +5,7 @@ import { StickyContainer } from 'react-sticky';
 // layouts:
 import CommentDetail from '/imports/ui/components/commentary/comments/CommentDetail';
 import CommentLemma from '/imports/ui/components/commentary/commentGroups/CommentLemma';
-import { Session } from 'meteor/session';
+
 
 
 class CommentGroup extends React.Component {

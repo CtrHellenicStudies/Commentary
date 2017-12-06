@@ -1,12 +1,12 @@
 import { Mongo } from 'meteor/mongo';
 import TextNodes from '/imports/models/textNodes';
 import slugify from 'slugify';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with textNodes
  */
-export default class TextNodesService extends AdminService {
+export default class TextNodesService extends GraphQLService {
 
 	/**
 	 * Create a text node
@@ -121,5 +121,39 @@ export default class TextNodesService extends AdminService {
 			return TextNodes.remove({_id: removeId});
 		}
 		return new Error('Not authorized');
+	}
+	/**
+	 * Get max line
+	 * @param {String} workSlug 
+	 * @param {Number} subworkN 
+	 */
+	getMaxLine(workSlug, subworkN) {
+
+		let maxLine = 0;
+		
+		if (workSlug === 'homeric-hymns') {
+			workSlug = 'hymns';
+		}
+	
+		const _maxLine = TextNodes.aggregate([{
+			$match: {
+				'work.slug': workSlug,
+				'subwork.n': subworkN,
+			},
+		}, {
+			$group: {
+				_id: 'maxLine',
+				maxLine: {
+					$max: '$text.n',
+				},
+			},
+		}]);
+	
+		if (_maxLine && _maxLine.length) {
+			maxLine = _maxLine[0].maxLine[0]; // granted that all text.editions have the same max line number
+		}
+	
+		return maxLine;
+	
 	}
 }

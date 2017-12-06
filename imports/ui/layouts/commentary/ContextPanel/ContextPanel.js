@@ -15,9 +15,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
+import { compose } from 'react-apollo';
 
 // private component:
 import ContextPanelContent from './ContextPanelContent';
+
+// graphql
+import { getMaxLineMutation } from '../../../../graphql/methods/textNodes';
 
 
 /*
@@ -150,11 +154,11 @@ class ContextPanel extends React.Component {
 
 		const workSlug = getWorkSlug(this.props);
 		const subworkN = getsubworkN(this.props);
+		const that = this;
 
-		Meteor.call('getMaxLine', workSlug, subworkN, (err, res) => {
-			if (err) console.log(err);
-			this.setState({
-				maxLine: res,
+		this.props.getMaxLine(workSlug, subworkN).then(function(res) {
+			that.setState({
+				maxLine: parseInt(res.data.getMaxLine),
 			});
 		});
 	}
@@ -241,4 +245,4 @@ class ContextPanel extends React.Component {
 	}
 }
 
-export default ContextPanel;
+export default compose(getMaxLineMutation)(ContextPanel);

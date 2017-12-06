@@ -2,14 +2,14 @@ import Comments from '/imports/models/comments';
 // errors
 import { AuthenticationError } from '/imports/errors';
 
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 import { prepareGetCommentsOptions, getURN } from './helper';
 
 /**
  * Logic-layer service for dealing with comments
  */
-export default class CommentService extends AdminService {
+export default class CommentService extends GraphQLService {
 
 	/**
 	 * Remove a comment

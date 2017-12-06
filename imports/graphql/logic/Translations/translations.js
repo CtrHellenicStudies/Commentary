@@ -1,12 +1,12 @@
 import TranslationNodes from '/imports/models/translationNodes';
 import Works from '/imports/models/works';
 import { Meteor } from 'meteor/meteor';
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 /**
  * Logic-layer service for dealing with translations
  */
-export default class TranslationsService extends AdminService {
+export default class TranslationsService extends GraphQLService {
 
 	/**
 	 * DEPRECATED

@@ -2,14 +2,14 @@ import Comments from '/imports/models/comments';
 // errors
 import { AuthenticationError } from '/imports/errors';
 
-import AdminService from '../adminService';
+import GraphQLService from '../graphQLService';
 
 import { prepareGetCommentsOptions, getURN } from './helper';
 
 /**
  * Logic-layer service for dealing with comments
  */
-export default class CommentService extends AdminService {
+export default class CommentService extends GraphQLService {
 
 	/**
 	 * Get comments for admin interface
@@ -21,7 +21,6 @@ export default class CommentService extends AdminService {
 	 */
 	commentsGet(queryParam, limit, skip, sortRecent) {
 
-		console.log(queryParam);
 		const options = prepareGetCommentsOptions(limit, skip);
 		let query = JSON.parse(queryParam);
 		if (queryParam === null) {
@@ -29,7 +28,6 @@ export default class CommentService extends AdminService {
 		}
 		query.isAnnotation = {$ne: true};
 		const comments = Comments.find(query, options).fetch();
-		console.log(comments[0].work);
 		return comments;
 	}
 		/**

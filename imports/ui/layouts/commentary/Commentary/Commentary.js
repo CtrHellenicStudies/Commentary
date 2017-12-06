@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import Parser from 'simple-text-parser';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
@@ -269,7 +269,7 @@ class Commentary extends Component {
 					</div>
 				);
 			}
-			if (!this.props.ready) {
+			if (this.props.commentersQuery.loading || this.props.commentsQuery.loading) {
 				return (
 					<div className="ahcip-spinner commentary-loading">
 						<div className="double-bounce1" />
@@ -279,15 +279,19 @@ class Commentary extends Component {
 			}
 		}
 	}
+	componentWillReceiveProps(newProps) {
+		this.setState({
+			commentGroups: newProps.commentersQuery.loading || newProps.commentsQuery.loading ? 
+			[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments,
+				newProps.commentersQuery.commenters)
+		});
+	}
 	render() {
 		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
-		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
+		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, commentGroups } = this.state;
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
 		}
-		const commentGroups = this.props.commentersQuery.loading || this.props.commentsQuery.loading ? 
-		[] : parseCommentsToCommentGroups(this.props.commentsQuery.comments,
-			this.props.commentersQuery.commenters);	
 		if (!commentGroups) {
 			return null;
 		}

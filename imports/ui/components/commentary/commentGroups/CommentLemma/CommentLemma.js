@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
 import { compose } from 'react-apollo';
-import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import FontIcon from 'material-ui/FontIcon';
@@ -74,7 +73,6 @@ class CommentLemma extends React.Component {
 		multiline: PropTypes.bool,
 		selectMultiLine: PropTypes.func,
 
-		// from createContainer:
 		editions: PropTypes.arrayOf(PropTypes.shape({
 			title: PropTypes.string.isRequired,
 			slug: PropTypes.string.isRequired,

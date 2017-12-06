@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
+
 import qs from 'qs-lite';
 import { compose } from 'react-apollo';
 
@@ -95,7 +95,6 @@ class CommentDetail extends React.Component {
 		user: PropTypes.object,
 
 
-		// from createContainer:
 		referenceWorks: PropTypes.arrayOf(PropTypes.shape({
 			title: PropTypes.string.isRequired,
 			slug: PropTypes.string.isRequired,

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 import { ApolloProvider } from 'react-apollo';
 import { syncHistoryWithStore } from 'react-router-redux';

@@ -49,7 +49,6 @@ class CommentaryLayout extends Component {
 
 	static propTypes = {
 		queryParams: PropTypes.object,
-		params: PropTypes.object,
 		referenceWorks: PropTypes.array,
 		works: PropTypes.array,
 		isTest: PropTypes.bool,
@@ -75,7 +74,13 @@ class CommentaryLayout extends Component {
 			modalLoginLowered: false,
 			skip: 0,
 			limit: 10,
+			queryParams: qs.parse(window.location.search.substr(1)),
+			params: this.props.match
 		};
+
+		this.props.referenceWorksQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
 
 		this.getChildContext = this.getChildContext.bind(this);
 		this.getFilterValue = this.getFilterValue.bind(this);
@@ -118,7 +123,7 @@ class CommentaryLayout extends Component {
 	}
 
 	_toggleSearchTerm(key, value) {
-		const { queryParams } = this.props;
+		const { queryParams } = this.state;
 
 		const oldFilters = createFilterFromQueryParams(queryParams);
 
@@ -134,7 +139,7 @@ class CommentaryLayout extends Component {
 	}
 
 	_handleChangeTextsearch(e, textsearch) {
-		const { queryParams } = this.props;
+		const { queryParams } = this.state;
 		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the textsearch
@@ -144,7 +149,7 @@ class CommentaryLayout extends Component {
 	}
 
 	_handleChangeLineN(e) {
-		const { queryParams } = this.props;
+		const { queryParams } = this.state;
 		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the 'e' attribute
@@ -176,8 +181,10 @@ class CommentaryLayout extends Component {
 	}
 
 	render() {
-		const { queryParams, params, works, referenceWorks } = this.props;
-		const { skip, limit, modalLoginLowered } = this.state;
+		const { skip, limit, modalLoginLowered, queryParams, params } = this.state;
+
+		const referenceWorks = this.props.referenceWorksQuery.loading ? [] : this.props.referenceWorksQuery.referenceWorks;
+		const works = this.props.worksQuery.loading ? [] : this.props.worksQuery.works;
 
 		// create filters object based on the queryParams or params
 		const filters = createFilterFromURL(params, queryParams, works, referenceWorks);
@@ -217,33 +224,7 @@ class CommentaryLayout extends Component {
 		);
 	}
 }
-
-const cont = createContainer((props) => {
-
-	const { match } = props;
-	const tenantId = sessionStorage.getItem('tenantId');
-	const properties = {
-		tenantId: tenantId
-	};
-	const queryParams = qs.parse(window.location.search.substr(1));
-	const params = match.params;
-
-	if (tenantId) {
-		props.referenceWorksQuery.refetch(properties);
-	}
-
-
-	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
-	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
-
-	return {
-		params,
-		queryParams,
-		referenceWorks,
-		works
-	};
-}, CommentaryLayout);
 export default compose(
 	referenceWorksQuery,
 	worksQuery
-)(cont);
+)(CommentaryLayout);

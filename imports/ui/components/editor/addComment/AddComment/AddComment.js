@@ -121,6 +121,13 @@ class AddComment extends React.Component {
 		this.updateReferenceWorks = this.updateReferenceWorks.bind(this);
 		this.getCommentersForUser = this.getCommentersForUser.bind(this);
 		this.filterCommentersForUser = this.filterCommentersForUser.bind(this);
+
+		const properties = {
+			tenantId: sessionStorage.getItem('tenantId')
+		};
+		this.props.commentersQuery.refetch(properties);
+		this.props.referenceWorksQuery.refetch(properties);
+		this.props.keywordsQuery.refetch(properties);
 	}
 
 	_enableButton() {
@@ -384,14 +391,32 @@ class AddComment extends React.Component {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	render() {
-		const { commenters } = this.props;
 		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
-		const commentersOptions = this.getCommentersForUser(commenters);
-
-		const { tags } = this.props;
-		if (!this.props.ready) {
+		const ready = !this.props.keywordsQuery.loading && !this.props.referenceWorksQuery.loading && !this.props.commentersQuery.loading;
+		if (!ready) {
 			return null;
 		}
+		let commenters = [];
+		const tags = this.props.keywordsQuery.loading ? [] : this.props.keywordsQuery.keywords;
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters.filter(x => 
+				Meteor.user().canEditCommenters.find(y => y === x._id));
+		}
+		const commentersOptions = this.getCommentersForUser(commenters);		
+		const referenceWorks = this.props.referenceWorksQuery.loading ? [] : this.props.referenceWorksQuery.referenceWorks;
+		const referenceWorkOptions = [];
+		referenceWorks.forEach((referenceWork) => {
+			if (!referenceWorkOptions.some(val => (
+				referenceWork.slug === val.slug
+			))) {
+				referenceWorkOptions.push({
+					value: referenceWork._id,
+					label: referenceWork.title,
+					slug: referenceWork.slug,
+				});
+			}
+		});
+
 		return (
 			<div className="comments lemma-panel-visible ">
 				<div className={'comment-outer'}>
@@ -493,53 +518,6 @@ class AddComment extends React.Component {
 	}
 }
 
-const AddCommentContainer = createContainer(props => {
-
-	let commenters = [];
-	const tenantId = sessionStorage.getItem('tenantId');
-	const properties = {
-		tenantId: tenantId
-	};
-	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
-
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
-			Meteor.user().canEditCommenters.find(y => y === x._id));
-	}
-
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.commentersQuery.variables)) {
-		props.commentersQuery.refetch(properties);
-	}
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.referenceWorksQuery.variables)) {
-		props.referenceWorksQuery.refetch(properties);
-	}
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.keywordsQuery.variables)) {
-		props.keywordsQuery.refetch(properties);
-	}
-	
-	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
-	const referenceWorkOptions = [];
-	referenceWorks.forEach((referenceWork) => {
-		if (!referenceWorkOptions.some(val => (
-			referenceWork.slug === val.slug
-		))) {
-			referenceWorkOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-				slug: referenceWork.slug,
-			});
-		}
-	});
-
-	return {
-		ready: !props.keywordsQuery.loading && !props.referenceWorksQuery.loading && !props.commentersQuery.loading,
-		tags,
-		referenceWorkOptions,
-		commenters
-	};
-
-}, AddComment);
-
 export default compose(
 	commentersQuery,
 	referenceWorkCreateMutation,
@@ -547,4 +525,4 @@ export default compose(
 	keywordsQuery,
 	keywordInsertMutation,
 	keywordUpdateMutation
-)(AddCommentContainer);
+)(AddComment);

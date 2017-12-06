@@ -53,10 +53,13 @@ class Home extends Component {
 	}
 
 	render() {
-		const { settings, ready } = this.props;
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
+
+		const tenantId = sessionStorage.getItem('tenantId');
+		const ready = !this.props.settingsQuery.loading;
+		const settings = this.props.settingsQuery.loading ? {} : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId); 
 
 		if (!settings) {
 			return <LoadingHome />;
@@ -289,14 +292,4 @@ Home.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-const cont = createContainer(props => {
-	const tenantId = sessionStorage.getItem('tenantId');
-	const skip = props.skip ? props.skip : 0;
-	const limit = props.limit ? props.limit : 10;
-	return {
-		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-		ready: !props.settingsQuery.loading
-	};
-}, Home);
-
-export default compose(settingsQuery)(cont);
+export default compose(settingsQuery)(Home);

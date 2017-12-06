@@ -33,6 +33,18 @@ import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
 // lib:
 import Utils from '/imports/lib/utils';
 
+function getTranslationQueries(query, filter) {
+	if (query.loading) {
+		return [];
+	}
+	return query.translations.filter(x => 
+		x.work === filter.work && 
+		x.subwork === filter.subwork &&
+		x.n >= filter.lineFrom &&
+		x.n <= filter.lineTo).map(translation =>
+			translation.author
+		);
+}
 class CommentLemma extends React.Component {
 
 	static propTypes = {
@@ -59,7 +71,6 @@ class CommentLemma extends React.Component {
 		setScrollPosition: PropTypes.func.isRequired,
 		index: PropTypes.string.isRequired,
 		hideLemma: PropTypes.bool.isRequired,
-		translationAuthors: PropTypes.array,
 		multiline: PropTypes.bool,
 		selectMultiLine: PropTypes.func,
 
@@ -67,43 +78,27 @@ class CommentLemma extends React.Component {
 		editions: PropTypes.arrayOf(PropTypes.shape({
 			title: PropTypes.string.isRequired,
 			slug: PropTypes.string.isRequired,
-		})),
-		ready: PropTypes.bool,
+		}))
 	};
 
 	static defaultProps = {
-		editions: null,
-		ready: false,
+		editions: null
 	};
 
 	constructor(props) {
 		super(props);
+
+
+		const { commentGroup, multiline} = this.props;
+
 
 		this.state = {
 			selectedLemmaEditionIndex: 0,
 			showTranslation: false,
 			translationMenuOpen: false,
 			multilineMenuOpen: false,
-			multiline: null
+			multiline: null,
 		};
-
-		const { commentGroup, multiline} = this.props;
-		let translationAuthors = [];
-		if (commentGroup) {
-	
-			if (!commentGroup.lineTo) {
-				commentGroup.lineTo = commentGroup.lineFrom;
-			}
-	
-			const translationNodesQuery = {
-				work: commentGroup.work.slug,
-				subwork: Number(commentGroup.subwork.title),
-				lineFrom: commentGroup.lineFrom,
-				lineTo: commentGroup.lineTo
-			};
-	
-			translationAuthors = _.uniq(getTranslationQueries(this.props.translationsQuery, translationNodesQuery));
-		}
 		const properties = {
 			tenantId: sessionStorage.getItem('tenantId'),
 			workSlug: commentGroup.work.slag === 'homeric-hymns' ? 'hymns' : commentGroup.work.slug,
@@ -111,9 +106,7 @@ class CommentLemma extends React.Component {
 			lineFrom: commentGroup.lineFrom,
 			lineTo: commentGroup.lineTo !== 'undefined' ? commentGroup.lineTo : commentGroup.lineFrom
 		};
-		if (Utils.shouldRefetchQuery(properties, this.props.textNodesQuery.variables)) {
-			this.props.textNodesQuery.refetch(properties);
-		}
+		this.props.textNodesQuery.refetch(properties);
 
 
 		// methods:
@@ -228,16 +221,33 @@ class CommentLemma extends React.Component {
 
 
 	render() {
-		const { commentGroup, hideLemma, ready, translationAuthors } = this.props;
+		const { commentGroup, hideLemma,  multiline } = this.props;
 		const { selectedLemmaEditionIndex, selectedAuthor, showTranslation } = this.state;
 		const textNodesCursor = this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes;
 		let editions = !this.props.editionsQuery.loading ?
 			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, this.props.editionsQuery.editions) : [];
-	
+		const ready = !this.props.editionsQuery.loading
+			&& !this.props.textNodesQuery.loading
+			&& !this.props.translationsQuery.loading;
 		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
-
+		let translationAuthors = [];
+		if (commentGroup) {
+	
+			if (!commentGroup.lineTo) {
+				commentGroup.lineTo = commentGroup.lineFrom;
+			}
+	
+			const translationNodesQuery = {
+				work: commentGroup.work.slug,
+				subwork: Number(commentGroup.subwork.title),
+				lineFrom: commentGroup.lineFrom,
+				lineTo: commentGroup.lineTo
+			};
+	
+			translationAuthors = _.uniq(getTranslationQueries(this.props.translationsQuery, translationNodesQuery));
+		}
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
@@ -418,18 +428,6 @@ class CommentLemma extends React.Component {
 		);
 	}
 
-}
-function getTranslationQueries(query, filter) {
-	if (query.loading) {
-		return [];
-	}
-	return query.translations.filter(x => 
-		x.work === filter.work && 
-		x.subwork === filter.work &&
-		x.n >= filter.lineFrom &&
-		x.n <= filter.lineTo).map(translation =>
-			translation.author
-		);
 }
 export default compose(
 	editionsQuery,

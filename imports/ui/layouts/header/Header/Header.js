@@ -105,6 +105,7 @@ class Header extends Component {
 			modalLoginLowered: false,
 			modalSignupLowered: !!props.showSignup,
 			modalForgotPwdLowered: !!props.showForgotPwd,
+			tenantId: sessionStorage.getItem('tenantId')
 		};
 
 		// methods:
@@ -244,8 +245,13 @@ class Header extends Component {
 
 	render() {
 
-		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage, selectedWork } = this.props;
+		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, addCommentPage, selectedWork } = this.props;
 		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered } = this.state;
+
+		const user = Meteor.user();
+
+		const settings = this.props.settingsQuery.loading ? {} : this.props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId);
+		const tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId);
 		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;
 		const modalForgotPwdLowered = this.state.modalForgotPwdLowered || this.props.showForgotPwd;
 		return (
@@ -318,7 +324,7 @@ class Header extends Component {
 											</Link>
 										</span>
 									}
-									{this.props.user ?
+									{user ?
 										<div>
 											{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 												<div className="user-header-links admin-header-links">
@@ -443,7 +449,7 @@ class Header extends Component {
 					}
 				</header>
 
-				{!this.props.user && modalLoginLowered &&
+				{!user && modalLoginLowered &&
 					<ModalLogin
 						lowered={modalLoginLowered}
 						closeModal={this.closeLoginModal}
@@ -451,14 +457,14 @@ class Header extends Component {
 						history={this.props.history}
 					/>
 				}
-				{!this.props.user && modalSignupLowered &&
+				{!user && modalSignupLowered &&
 					<ModalSignup
 						lowered={modalSignupLowered}
 						closeModal={this.closeSignupModal}
 						loginModal={this.showLoginModal}
 					/>
 				}
-				{!this.props.user && modalForgotPwdLowered &&
+				{!user && modalForgotPwdLowered &&
 				<ModalForgotPwd
 					lowered={modalForgotPwdLowered}
 					signupModal={this.showSignupModal}
@@ -473,15 +479,7 @@ class Header extends Component {
 	END Header
 */
 
-const cont = createContainer((props) => {
-
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	return {
-		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-		tenant: props.tenantsQuery.loading ? {} : props.tenantsQuery.tenants.find(x => x._id === tenantId),
-		user: Meteor.user()
-	};
-
-}, Header);
-export default compose(tenantsQuery, settingsQuery)(cont);
+export default compose(
+	tenantsQuery,
+	settingsQuery
+)(Header);

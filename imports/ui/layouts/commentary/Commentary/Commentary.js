@@ -95,8 +95,7 @@ class Commentary extends Component {
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
 
-		const {filters, limit, skip } = this.props;
-		props.commentsQuery.refetch();
+		this.props.commentsQuery.refetch();
 
 	}
 	getChildContext() {

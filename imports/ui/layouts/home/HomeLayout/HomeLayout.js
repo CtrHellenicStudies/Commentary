@@ -48,7 +48,11 @@ class HomeLayout extends Component {
 	}
 
 	render() {
-		const { settings, tenant } = this.props;
+
+		const tenantId = sessionStorage.getItem('tenantId');
+		const settings = this.props.settingsQuery.loading ? undefined : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId);
+		const tenant = this.props.tenantsQuery.loading ? undefined : this.props.tenantsQuery.tenants.find(x => x._id === tenantId);
+		
 		if (!tenant) {
 			return <LoadingHome />;
 		}
@@ -87,19 +91,9 @@ class HomeLayout extends Component {
 }
 
 HomeLayout.propTypes = {
-	settings: PropTypes.object,
-	tenant: PropTypes.object,
 	signup: PropTypes.func,
 	showForgotPwd: PropTypes.func,
 	history: PropTypes.any
 };
 
-const HomeLayoutContainer = createContainer((props) => {
-	const tenantId = sessionStorage.getItem('tenantId');
-	return {
-		settings: props.settingsQuery.loading ? undefined : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)
-	};
-}, HomeLayout);
-
-export default compose(tenantsQuery, settingsQuery)(HomeLayoutContainer);
+export default compose(tenantsQuery, settingsQuery)(HomeLayout);

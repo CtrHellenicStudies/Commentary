@@ -269,9 +269,23 @@ class CommentDetail extends React.Component {
 
 	render() {
 
-		const { comment, referenceWorks, ready, filters, user } = this.props;
+		const { comment, filters} = this.props;
 		const { discussionVisible, searchTerm } = this.state;
-
+		const tenantId = sessionStorage.getItem('tenantId');
+		
+		const referenceWorkIds = [];
+		let referenceWorks = [];
+		if (comment && comment.referenceWorks && !this.props.referenceWorksQuery.loading) {
+			comment.referenceWorks.forEach((referenceWork) => {
+				referenceWorkIds.push(referenceWork.referenceWorkId);
+			});
+			referenceWorks = this.props.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined && x.tenantId === tenantId);
+		}
+	
+		const settings = this.props.settingsQuery.loading ? {} : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId);
+	
+		const user = Meteor.user();
+		const ready = !this.props.referenceWorksQuery.loading && !this.props.settingsQuery.loading;
 		if (!ready) {
 			// TODO: handle loading for component
 			return null;
@@ -327,7 +341,7 @@ class CommentDetail extends React.Component {
 					discussionVisible={this.state.discussionVisible}
 					toggleLemma={this.props.toggleLemma}
 					showLoginModal={this.props.showLoginModal}
-					discussionCommentsDisabled={this.props.settings.discussionCommentsDisabled}
+					discussionCommentsDisabled={settings.discussionCommentsDisabled}
 				/>
 
 				{this.state.lemmaReferenceModalVisible ?
@@ -360,30 +374,4 @@ class CommentDetail extends React.Component {
 /*
 	END CommentDetail
 */
-
-const cont = createContainer((props) => {
-
-	const { comment } = props;
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	const referenceWorkIds = [];
-	let referenceWorks = [];
-	if (comment && comment.referenceWorks && !props.referenceWorksQuery.loading) {
-		comment.referenceWorks.forEach((referenceWork) => {
-			referenceWorkIds.push(referenceWork.referenceWorkId);
-		});
-		referenceWorks = props.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined && x.tenantId === tenantId);
-	}
-
-	const settings = props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId);
-
-	const user = Meteor.user();
-
-	return {
-		user,
-		referenceWorks,
-		settings,
-		ready: !props.settingsQuery.loading && !props.referenceWorksQuery.loading,
-	};
-}, CommentDetail);
-export default compose(referenceWorksQuery, settingsQuery)(cont);
+export default compose(referenceWorksQuery, settingsQuery)(CommentDetail);

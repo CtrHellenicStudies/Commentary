@@ -56,7 +56,7 @@ class CommentGroup extends React.Component {
 		super(props);
 
 		this.state = {
-			hideLemma: false,
+			hideLemma: false
 		};
 
 		// methods:

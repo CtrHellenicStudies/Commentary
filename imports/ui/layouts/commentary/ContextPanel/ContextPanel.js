@@ -62,6 +62,7 @@ class ContextPanel extends React.Component {
 		}),
 		closeContextPanel: PropTypes.func,
 		commentLemmaIndex: PropTypes.string,
+		getMaxLine: PropTypes.func,
 
 		// requiered if editor:
 		disableEdit: PropTypes.bool,
@@ -205,7 +206,9 @@ class ContextPanel extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		if (this.props.lineFrom) {
 			this.setState({
-				lineFrom: nextProps.lineFrom
+				lineFrom: nextProps.lineFrom,
+				workSlug: getWorkSlug(this.props),
+				subworkN: getsubworkN(this.props)
 			});
 		}
 	}
@@ -213,10 +216,7 @@ class ContextPanel extends React.Component {
 	render() {
 
 		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline } = this.props;
-		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition } = this.state;
-
-		const workSlug = getWorkSlug(this.props);
-		const subworkN = getsubworkN(this.props);
+		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition, workSlug, subworkN } = this.state;
 
 		return (
 			<ContextPanelContent

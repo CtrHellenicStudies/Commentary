@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import Translations from '/imports/models/translations';
-import TranslationNodes from '/imports/models/translationNodes';
 import _ from 'lodash';
 
 // graphql
@@ -109,13 +107,9 @@ class CommentLemmaTextWithTranslation extends Component {
 }
 
 CommentLemmaTextWithTranslation.propTypes = {
-	linesWithTranslation: PropTypes.arrayOf(PropTypes.shape({
-		html: PropTypes.string,
-		english: PropTypes.string,
-		n: PropTypes.number.isRequired,
-	})).isRequired,
 	commentGroup: PropTypes.object,
 	author: PropTypes.string,
+	lines: PropTypes.number
 };
 
 export default compose(translationsQuery)(CommentLemmaTextWithTranslation);

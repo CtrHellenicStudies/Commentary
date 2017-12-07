@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -33,41 +33,30 @@ import Utils from '/imports/lib/utils';
 import muiTheme from '/imports/lib/muiTheme';
 
 
-const CommentarySearchPanel = React.createClass({
+class CommentarySearchPanel extends Component {
 
-	propTypes: {
-		filters: PropTypes.array,
-		toggleSearchTerm: PropTypes.func,
-		handleChangeTextsearch: PropTypes.func,
-		handleChangeLineN: PropTypes.func,
-		open: PropTypes.bool,
-		closeRightMenu: PropTypes.func,
-		keyideas: PropTypes.array,
-		keywords: PropTypes.array,
-		commenters: PropTypes.array,
-		works: PropTypes.array,
-		referenceWorks: PropTypes.array,
-		isTest: PropTypes.bool,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			subworks: [],
 			activeWork: '',
 		};
-	},
+		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
+		this.toggleWorkSearchTerm = this.toggleWorkSearchTerm.bind(this);
+		this.handleChangeTextsearch = this.handleChangeTextsearch.bind(this);
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+		const tenantId = sessionStorage.getItem('tenantId');
+		this.props.referenceWorksQuery.refetch({
+			tenantId: tenantId
+		});
+		this.props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
+	}
 
 	toggleSearchTerm(key, value) {
 		this.props.toggleSearchTerm(key, value);
-	},
+	}
 
 	toggleWorkSearchTerm(key, value) {
 		const work = value;
@@ -98,15 +87,37 @@ const CommentarySearchPanel = React.createClass({
 		}
 
 		this.props.toggleSearchTerm(key, newValue);
-	},
+	}
 
 	handleChangeTextsearch() {
 		this.props.handleChangeTextsearch($('.text-search--drawer input').val());
-	},
+	}
+	componentWillReceiveProps(nextProps) {
+		let works = [];
+		let keywords = [];
+		let keyideas = [];
+		let commenters = [];
+		let referenceWorks = [];
+	
+		// FETCH DATA:
+		keyideas = nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea');
+		keywords = nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords.filter(x => x.type === 'word');
+		commenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters;
+		works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works;
+		referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
 
+		this.setState({
+			keyideas: keyideas,
+			keywords: keywords,
+			commenters: commenters,
+			works: works,
+			referenceWorks: referenceWorks
+		});
+	}
 	render() {
 		const self = this;
-		const { keyideas, keywords, commenters, works, referenceWorks, isTest } = this.props;
+		const { isTest } = this.props;
+		const { keyideas, keywords, commenters, works, referenceWorks } = this.state;
 		const filters = this.props.filters || [];
 
 		const styles = {
@@ -382,46 +393,24 @@ const CommentarySearchPanel = React.createClass({
 				</Card>
 			</Drawer>
 		);
-	},
-});
-
-const cont = createContainer(props => {
-
-	let works = [];
-	let keywords = [];
-	let keyideas = [];
-	let commenters = [];
-	let referenceWorks = [];
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	if (tenantId) {
-		props.referenceWorksQuery.refetch({
-			tenantId: tenantId
-		});
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
-
 	}
-
-	// FETCH DATA:
-	keyideas = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'idea');
-	keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'word');
-	commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
-	works = props.worksQuery.loading ? [] : props.worksQuery.works;
-	referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
-
-	return {
-		keyideas,
-		keywords,
-		commenters,
-		works,
-		referenceWorks,
-	};
-}, CommentarySearchPanel);
+}
+CommentarySearchPanel.propTypes = {
+	filters: PropTypes.array,
+	toggleSearchTerm: PropTypes.func,
+	handleChangeTextsearch: PropTypes.func,
+	handleChangeLineN: PropTypes.func,
+	open: PropTypes.bool,
+	closeRightMenu: PropTypes.func,
+	isTest: PropTypes.bool,
+	keywordsQuery: PropTypes.object,
+	referenceWorksQuery: PropTypes.object,
+	commentersQuery: PropTypes.object,
+	worksQuery: PropTypes.object
+};
 export default compose(
 	commentersQuery,
 	referenceWorksQuery,
 	keywordsQuery,
 	worksQuery
-)(cont);
+)(CommentarySearchPanel);

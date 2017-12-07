@@ -51,7 +51,10 @@ class CommentaryLayout extends Component {
 		referenceWorks: PropTypes.array,
 		works: PropTypes.array,
 		isTest: PropTypes.bool,
-		history: PropTypes.any
+		history: PropTypes.any,
+		worksQuery: PropTypes.object,
+		referenceWorksQuery: PropTypes.object,
+		match: PropTypes.object
 	};
 
 	static childContextTypes = {
@@ -186,20 +189,19 @@ class CommentaryLayout extends Component {
 		const works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works;
 		this.setState({
 			referenceWorks: referenceWorks,
-			works: works
+			works: works,
+			filters: createFilterFromURL(this.state.params, this.state.queryParams, this.state.works, this.state.referenceWorks)
 		});
 	}
 	render() {
-		const { skip, limit, modalLoginLowered, queryParams, params, referenceWorks, works } = this.state;
-
+		const { skip, limit, modalLoginLowered, queryParams, params, referenceWorks, works, filters } = this.state;
 		// create filters object based on the queryParams or params
-		const filters = createFilterFromURL(params, queryParams, works, referenceWorks);
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header
-							filters={filters}
+							filters={this.state.filters}
 							toggleSearchTerm={this._toggleSearchTerm}
 							handleChangeLineN={this._handleChangeLineN}
 							handleChangeTextsearch={this._handleChangeTextsearch}

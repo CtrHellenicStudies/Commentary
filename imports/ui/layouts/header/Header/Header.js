@@ -68,6 +68,8 @@ class Header extends Component {
 		isOnHomeView: PropTypes.bool,
 		isTest: PropTypes.bool,
 		selectedWork: PropTypes.object,
+		tenantsQuery: PropTypes.object,
+		settingsQuery: PropTypes.object,
 
 		// from creatContainer:
 		settings: PropTypes.shape({
@@ -104,7 +106,8 @@ class Header extends Component {
 			modalLoginLowered: false,
 			modalSignupLowered: !!props.showSignup,
 			modalForgotPwdLowered: !!props.showForgotPwd,
-			tenantId: sessionStorage.getItem('tenantId')
+			tenantId: sessionStorage.getItem('tenantId'),
+			user: Meteor.user()
 		};
 
 		// methods:
@@ -241,16 +244,16 @@ class Header extends Component {
 			modalForgotPwdLowered: false,
 		});
 	}
-
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
+			tenant: this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId),
+		});
+	}
 	render() {
 
 		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, addCommentPage, selectedWork } = this.props;
-		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered } = this.state;
-
-		const user = Meteor.user();
-
-		const settings = this.props.settingsQuery.loading ? {} : this.props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId);
-		const tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId);
+		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered, settings, tenant, user } = this.state;
 		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;
 		const modalForgotPwdLowered = this.state.modalForgotPwdLowered || this.props.showForgotPwd;
 		return (

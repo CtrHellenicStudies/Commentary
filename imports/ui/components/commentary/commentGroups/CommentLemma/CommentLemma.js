@@ -13,18 +13,12 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 
-// models:
-import TextNodes from '/imports/models/textNodes';
-import Translations from '/imports/models/translations';
-import TranslationNodes from '/imports/models/translationNodes';
-
 // graphql
 import { editionsQuery } from '/imports/graphql/methods/editions';
 import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 import { translationsQuery } from '/imports/graphql/methods/translations';
 
 // components:
-import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';
 import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';
 import TranslationLayout from '/imports/ui/layouts/commentary/TranslationLayout';
 import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
@@ -76,7 +70,10 @@ class CommentLemma extends React.Component {
 		editions: PropTypes.arrayOf(PropTypes.shape({
 			title: PropTypes.string.isRequired,
 			slug: PropTypes.string.isRequired,
-		}))
+		})),
+		editionsQuery: PropTypes.object,
+		textNodesQuery: PropTypes.object,
+		translationsQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -96,6 +93,8 @@ class CommentLemma extends React.Component {
 			translationMenuOpen: false,
 			multilineMenuOpen: false,
 			multiline: null,
+			translationAuthors: [],
+			editions: []
 		};
 		const properties = {
 			tenantId: sessionStorage.getItem('tenantId'),
@@ -217,16 +216,15 @@ class CommentLemma extends React.Component {
 		});
 	}
 
-
-	render() {
-		const { commentGroup, hideLemma,  multiline } = this.props;
-		const { selectedLemmaEditionIndex, selectedAuthor, showTranslation } = this.state;
-		const textNodesCursor = this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes;
-		let editions = !this.props.editionsQuery.loading ?
-			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, this.props.editionsQuery.editions) : [];
-		const ready = !this.props.editionsQuery.loading
-			&& !this.props.textNodesQuery.loading
-			&& !this.props.translationsQuery.loading;
+	componentWillReceiveProps(nextProps) {
+		const { commentGroup, multiline } = nextProps;
+		const { selectedLemmaEditionIndex } = this.state;
+		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
+		let editions = !nextProps.editionsQuery.loading ?
+			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions) : [];
+		const ready = !nextProps.editionsQuery.loading
+			&& !nextProps.textNodesQuery.loading
+			&& !nextProps.translationsQuery.loading;
 		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
@@ -246,6 +244,17 @@ class CommentLemma extends React.Component {
 	
 			translationAuthors = _.uniq(getTranslationQueries(this.props.translationsQuery, translationNodesQuery));
 		}
+
+		this.setState({
+			translationAuthors: translationAuthors,
+			ready: ready,
+			editions: editions,
+			selectedLemmaEdition: selectedLemmaEdition
+		});
+	}
+	render() {
+		const { commentGroup, hideLemma, multiline} = this.props;
+		const { selectedAuthor, showTranslation, selectedLemmaEdition, editions, ready, translationAuthors } = this.state;
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';

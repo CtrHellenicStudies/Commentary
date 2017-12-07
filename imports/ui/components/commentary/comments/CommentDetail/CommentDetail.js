@@ -92,17 +92,8 @@ class CommentDetail extends React.Component {
 		isOnHomeView: PropTypes.bool,
 		showLoginModal: PropTypes.func,
 		toggleLemma: PropTypes.func.isRequired,
-		user: PropTypes.object,
-
-
-		referenceWorks: PropTypes.arrayOf(PropTypes.shape({
-			title: PropTypes.string.isRequired,
-			slug: PropTypes.string.isRequired,
-		})),
-		settings: PropTypes.shape({
-			discussionCommentsDisabled: PropTypes.bool,
-		}),
-		ready: PropTypes.bool,
+		referenceWorksQuery: PropTypes.object,
+		settingsQuery: PropTypes.object,
 	};
 
 	static defaultProps = {

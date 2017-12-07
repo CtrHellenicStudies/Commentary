@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
@@ -7,8 +7,6 @@ import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 
 // models:
-import Tenants from '/imports/models/tenants';
-import Settings from '/imports/models/settings';
 import { Link } from 'react-router-dom';
 
 // graphql
@@ -39,160 +37,164 @@ const getUsername = (currentUser) => {
 /*
 	BEGIN LeftMenu
 */
-const LeftMenu = (props) => {
-	const { open, closeLeftMenu } = props;
-	const tenantId = sessionStorage.getItem('tenantId');
-	const settings = props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId);
-	const currentUser = Meteor.users.findOne({_id: Meteor.userId()});
-	const tenant = props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId);
-	return (
-			
-		<Drawer
-			open={open}
-			docked={false}
-			onRequestChange={closeLeftMenu}
-			className="md-sidenav-left"
-		>
-			<SideNavTop
-				currentUser={currentUser}
-				username={getUsername(currentUser)}
-			/>
-			{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
-				<div>
-					{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['admin']) ?
-						<MenuItem
-							href="http://ahcip-admin.chs.harvard.edu"
-							target="_blank"
-							primaryText="Admin"
-							onClick={closeLeftMenu}
-						/>
-					: ''}
-					<Link to="/commentary/create">
-						<MenuItem
-							primaryText="Add Comment"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/tags/create">
-						<MenuItem
-							primaryText="Add Tag"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/textNodes/edit">
-						<MenuItem
-							primaryText="Add Translation"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/textNodes/edit">
-						<MenuItem
-							primaryText="Edit Source Text"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
+class LeftMenu extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			tenantId: sessionStorage.getItem('tenantId')
+		};
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			tenant: nextProps.tenantsQuery.loading ? undefined : nextProps.tenantsQuery.tenants.find(x => x._id === this.state.tenantId),
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
+			currentUser: Meteor.users.findOne({_id: Meteor.userId()})
+		});
+	}
+	render() {
+		const { open, closeLeftMenu } = this.props;
+		const { tenant, settings, currentUser } = this.state;
 
-					<Divider />
-				</div>
-				:
-				'' }
-			<Link to="/">
-				<MenuItem
-					primaryText="Home"
-					onClick={closeLeftMenu}
+		return (
+				
+			<Drawer
+				open={open}
+				docked={false}
+				onRequestChange={closeLeftMenu}
+				className="md-sidenav-left"
+			>
+				<SideNavTop
+					currentUser={currentUser}
+					username={getUsername(currentUser)}
 				/>
-			</Link>
-			{tenant && !tenant.isAnnotation &&
-				<span>
-					<Link to="/commentary">
-						<MenuItem
-							primaryText="Commentary"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/words">
-						<MenuItem
-							primaryText="Words"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/ideas">
-						<MenuItem
-							primaryText="Ideas"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/commenters">
-						<MenuItem
-							primaryText="Commentators"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/referenceWorks">
-						<MenuItem
-							primaryText="Reference Works"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to={settings && settings.aboutURL ? settings.aboutURL : '/about'}>
-						<MenuItem
-							primaryText="About"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/#visualizations">
-						<MenuItem
-							primaryText="Visualizations"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
+				{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
+					<div>
+						{tenant && !tenant.isAnnotation && Roles.userIsInRole(Meteor.userId(), ['admin']) ?
+							<MenuItem
+								href="http://ahcip-admin.chs.harvard.edu"
+								target="_blank"
+								primaryText="Admin"
+								onClick={closeLeftMenu}
+							/>
+						: ''}
+						<Link to="/commentary/create">
+							<MenuItem
+								primaryText="Add Comment"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/tags/create">
+							<MenuItem
+								primaryText="Add Tag"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/textNodes/edit">
+							<MenuItem
+								primaryText="Add Translation"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/textNodes/edit">
+							<MenuItem
+								primaryText="Edit Source Text"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
 
-				</span>
-			}
-			<Divider />
+						<Divider />
+					</div>
+					:
+					'' }
+				<Link to="/">
+					<MenuItem
+						primaryText="Home"
+						onClick={closeLeftMenu}
+					/>
+				</Link>
+				{tenant && !tenant.isAnnotation &&
+					<span>
+						<Link to="/commentary">
+							<MenuItem
+								primaryText="Commentary"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/words">
+							<MenuItem
+								primaryText="Words"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/ideas">
+							<MenuItem
+								primaryText="Ideas"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/commenters">
+							<MenuItem
+								primaryText="Commentators"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/referenceWorks">
+							<MenuItem
+								primaryText="Reference Works"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to={settings && settings.aboutURL ? settings.aboutURL : '/about'}>
+							<MenuItem
+								primaryText="About"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/#visualizations">
+							<MenuItem
+								primaryText="Visualizations"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
 
-			{Meteor.user() ?
-				<div>
-					<Link to="/profile">
-						<MenuItem
-							primaryText="Profile"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-					<Link to="/sign-out">
-						<MenuItem
-							primaryText="Sign out"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-				</div>
-				:
-				<div>
-					<Link to="/sign-in">
-						<MenuItem
-							primaryText="Sign in"
-							onClick={closeLeftMenu}
-						/>
-					</Link>
-				</div>
-			}
-		</Drawer>
-	);
-};
+					</span>
+				}
+				<Divider />
+
+				{Meteor.user() ?
+					<div>
+						<Link to="/profile">
+							<MenuItem
+								primaryText="Profile"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+						<Link to="/sign-out">
+							<MenuItem
+								primaryText="Sign out"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+					</div>
+					:
+					<div>
+						<Link to="/sign-in">
+							<MenuItem
+								primaryText="Sign in"
+								onClick={closeLeftMenu}
+							/>
+						</Link>
+					</div>
+				}
+			</Drawer>
+		);
+	}
+}
 LeftMenu.propTypes = {
 	open: PropTypes.bool.isRequired,
 	closeLeftMenu: PropTypes.func.isRequired,
-	tenant: PropTypes.shape({
-		isAnnotation: PropTypes.bool.isRequired,
-	}),
-	currentUser: PropTypes.shape({
-		profile: PropTypes.shape({
-			avatarUrl: PropTypes.string,
-			name: PropTypes.string,
-		}),
-		username: PropTypes.string,
-	}),
-	settings: PropTypes.object,
+	settingsQuery: PropTypes.object,
+	tenantsQuery: PropTypes.object,
 };
 
 LeftMenu.defaultProps = {

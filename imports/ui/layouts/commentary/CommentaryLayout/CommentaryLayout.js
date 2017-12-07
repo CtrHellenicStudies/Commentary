@@ -22,7 +22,6 @@ import Cookies from 'js-cookie';
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
-import configureStore from '/imports/store/configureStore';
 import Header from '/imports/ui/layouts/header/Header';
 
 // graphql

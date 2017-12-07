@@ -21,8 +21,11 @@ import { ApolloClient } from 'apollo-client';
 
 import App from './client/App';
 
+const uriAddress = Meteor.settings.public.graphql ? Meteor.settings.public.graphql : 'http://ahcip.orphe.us/graphql'; // TODO
+
+
 const networkInterface = createNetworkInterface({
-	uri: Meteor.settings.public.graphql,
+	uri: uriAddress,
 });
 const client = new ApolloClient({
 	networkInterface

@@ -23,15 +23,12 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 import client from '/imports/middleware/apolloClient';
-import configureStore from '/imports/store/configureStore';
 import Utils from '/imports/lib/utils';
 
 // models
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
 
-
-const store = configureStore();
 /*
  *	helpers
  */

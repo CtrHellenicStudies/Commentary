@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import FlatButton from 'material-ui/FlatButton';
 import { compose } from 'react-apollo';
 
@@ -52,6 +51,8 @@ class CommenterDetail extends React.Component {
 			title: PropTypes.string.isRequired,
 		}),
 		isTest: PropTypes.bool,
+		match: PropTypes.object,
+		commentersQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -104,9 +105,26 @@ class CommenterDetail extends React.Component {
 		if (Utils.isJson(biography))			{ return JSON.parse(biography).html; }
 		return biography;
 	}
+	componentWillReceiveProps(nextProps) {
+		const slug = nextProps.match.params.slug;
+		const tenantId = sessionStorage.getItem('tenantId');
+	
+		let avatarUrl;
+		const commenter = nextProps.commentersQuery.loading ? {} : 
+		nextProps.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
+	
+		if (commenter && commenter.avatar) {
+			avatarUrl = commenter.avatar.src;
+		}
+		this.setState({
+			avatarUrl: avatarUrl,
+			commenter: commenter,
+			settings: settings
+		});
+	}
 	render() {
-		const { commenter, settings, avatarUrl, isTest } = this.props;
-		const { readMoreBio, subscribed, loggedIn } = this.state;
+		const { isTest } = this.props;
+		const { readMoreBio, subscribed, loggedIn, commenter, settings, avatarUrl } = this.state;
 
 		if (commenter) {
 			Utils.setTitle(`${commenter.name} | ${settings.title}`);
@@ -203,24 +221,7 @@ class CommenterDetail extends React.Component {
 		);
 	}
 }
-
-const cont = createContainer(props => {
-	const slug = props.match.params.slug;
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	let avatarUrl;
-	const commenter = props.commentersQuery.loading ? {} : 
-		props.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
-
-	if (commenter && commenter.avatar) {
-		avatarUrl = commenter.avatar.src;
-	}
-
-	return {
-		commenter,
-		avatarUrl,
-		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings,
-		ready: !props.settingsQuery.loading || !props.commentersQuery.loading
-	};
-}, CommenterDetail);
-export default compose(commentersQuery, settingsQuery)(cont);
+export default compose(
+	commentersQuery,
+	settingsQuery
+)(CommenterDetail);

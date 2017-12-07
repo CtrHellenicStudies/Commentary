@@ -57,9 +57,9 @@ class CommentersList extends Component {
 	}
 }
 CommentersList.propTypes = {
-	commenters: PropTypes.arrayOf(PropTypes.shape({
-		_id: PropTypes.string.isRequired,
-	}).isRequired),
+	commentersQuery: PropTypes.object,
+	featureOnHomepage: PropTypes.bool,
+	limit: PropTypes.number
 };
 CommentersList.defaultProps = {
 	commenters: [],

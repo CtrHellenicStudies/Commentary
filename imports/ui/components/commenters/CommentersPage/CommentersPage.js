@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import muiTheme from '/imports/lib/muiTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -25,8 +24,19 @@ import Utils from '/imports/lib/utils';
 
 class CommentersPage extends Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentWillReceiveProps(nextProps) {
+		const tenantId = sessionStorage.getItem('tenantId');
+		const settings = nextProps.settingsQuery.loading ? { title: ''} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
+		this.setState({
+			settings: settings
+		});
+	}
 	render() {
-		const { settings } = this.props;
+		const { settings } = this.state;
 
 		if (!settings) {
 			return null;
@@ -72,18 +82,8 @@ class CommentersPage extends Component {
 }
 
 CommentersPage.propTypes = {
-	settings: PropTypes.object
+	settingsQuery: PropTypes.object
 };
 
-const commentersPageContainer = createContainer((props) => {
 
-	const tenantId = sessionStorage.getItem('tenantId');
-	const settings = props.settingsQuery.loading ? { title: ''} : props.settingsQuery.settings.find(x => x.tenantId === tenantId);
-
-	return {
-		settings: settings
-	};
-}, CommentersPage);
-
-
-export default compose(settingsQuery)(commentersPageContainer);
+export default compose(settingsQuery)(CommentersPage);

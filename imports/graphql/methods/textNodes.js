@@ -101,7 +101,10 @@ const textNodesQueryById = graphql(queryById, {
 });
 
 const getMaxLineMutation = graphql(getMaxLine, {
-	name: 'getMaxLine'
+	name: 'getMaxLine',
+	props: (params) => ({
+		getMaxLine: (workSlug, subworkN) => params.getMaxLine({variables: {workSlug: workSlug, subworkN: subworkN}}),
+	}),
 });
 
 export {

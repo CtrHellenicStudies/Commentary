@@ -30,7 +30,7 @@ class ReferenceWorksList extends React.Component {
 			/>
 		));
 	}
-
+	
 	render() {
 		const { referenceWorks } = this.props;
 		const masonryOptions = {

@@ -1,23 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
-import { ApolloProvider, compose } from 'react-apollo';
-import { syncHistoryWithStore } from 'react-router-redux';
-import { browserHistory } from 'react-router';
-import { createBrowserHistory } from 'history';
-
-// models
-import Comments from '/imports/models/comments';
-import Commenters from '/imports/models/commenters';
-import Keywords from '/imports/models/keywords';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -26,44 +17,67 @@ import CommentLemmaSelect from '/imports/ui/components/editor/addComment/Comment
 import AddRevision from '/imports/ui/components/editor/addRevision/AddRevision';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
-// lib
-import muiTheme from '/imports/lib/muiTheme';
-import client from '/imports/middleware/apolloClient';
-import configureStore from '/imports/store/configureStore';
-import Utils from '/imports/lib/utils';
-
 // graphql
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { commentsQuery, commentsUpdateMutation } from '/imports/graphql/methods/comments';
 
-// redux integration for layout
-const store = configureStore();
-const history = syncHistoryWithStore(createBrowserHistory(), store);
+// lib
+import muiTheme from '/imports/lib/muiTheme';
+import Utils from '/imports/lib/utils';
 
-const AddRevisionLayout = React.createClass({
+class AddRevisionLayout extends Component {
 
-	propTypes: {
-		ready: PropTypes.bool,
-		comment: PropTypes.object,
-		commenters: PropTypes.array,
-		history: PropTypes.object,
-		keywords: PropTypes.array,
-	},
-
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			filters: [],
 			contextReaderOpen: true,
 			snackbarOpen: false,
-			snackbarMessage: '',
+			snackbarMessage: ''
 		};
-	},
 
+		this.addRevision = this.addRevision.bind(this);
+		this.update = this.update.bind(this);
+		this.getKeywords = this.getKeywords.bind(this);
+		this.closeContextReader = this.closeContextReader.bind(this);
+		this.openContextReader = this.openContextReader.bind(this);
+		this.handlePermissions = this.handlePermissions.bind(this);
+		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
+		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.showSnackBar = this.showSnackBar.bind(this);
+
+		this.props.keywordsQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
+		this.props.commentsQuery.refetch({
+			queryParam: JSON.stringify({_id: commentId})
+		});
+	}
+	componentWillReceiveProps(nextProps) {
+		const commentId = nextProps.match.params.commentId;
+		
+		const comment = nextProps.commentsQuery.loading ? {} : nextProps.commentsQuery.comments;
+		const tenantCommenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters;
+		const commenters = [];
+		if (comment) {
+			comment.commenters.forEach((commenter) => {
+				commenters.push(tenantCommenters.find(x =>
+					x.slug === commenter.slug,
+				));
+			});
+		}
+		const keywords = nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords;
+		this.setState({
+			comment: comment,
+			ready: Roles.subscrition.ready() && !nextProps.commentersQuery.loading && !nextProps.commentsQuery.loading,
+			keywords: keywords,
+			commenters: commenters
+		});
+	}
 	componentWillUpdate() {
 		if (this.props.ready) this.handlePermissions();
-	},
-
+	}
 	addRevision(formData, textValue, textRawValue) {
 		const self = this;
 		const { comment } = this.props;
@@ -85,8 +99,8 @@ const AddRevisionLayout = React.createClass({
 			}
 			self.update(formData);
 		});
-	},
-
+		// TODO: handle behavior after comment added (add info about success)
+	}
 	update(formData) {
 		const { comment } = this.props;
 
@@ -96,17 +110,15 @@ const AddRevisionLayout = React.createClass({
 		let update = [{}];
 		if (keywords) {
 			update = {
-				commenters: Utils.getCommenters(formData.commenterValue),
 				keywords,
 				referenceWorks: formData.referenceWorks,
+				commenters: Utils.getCommenters(formData.commenterValue)
 			};
 		}
-		this.props.commentUpdate(comment._id, update).then(function() {
+		this.props.commentUpdate(comment.id, update).then(function() {
 			this.props.history.push(`/commentary/${comment._id}/edit`);
 		});
-		// TODO: handle behavior after comment added (add info about success)
-	},
-
+	}
 	getKeywords(formData) {
 		const keywords = [];
 
@@ -116,24 +128,21 @@ const AddRevisionLayout = React.createClass({
 			keywords.push(keyword);
 		});
 		return keywords;
-	},
-
+	}
 	closeContextReader() {
 		this.setState({
 			contextReaderOpen: false,
 		});
-	},
-
+	}
 	openContextReader() {
 		this.setState({
 			contextReaderOpen: true,
 		});
-	},
-
+	}
 	handlePermissions() {
-		if (this.props.comment && this.props.commenters.length) {
+		if (this.state.comment && this.state.commenters.length) {
 			let isOwner = false;
-			this.props.commenters.forEach((commenter) => {
+			this.state.commenters.forEach((commenter) => {
 				if (!isOwner) {
 					isOwner = (~Meteor.user().canEditCommenters.indexOf(commenter._id));
 				}
@@ -142,8 +151,7 @@ const AddRevisionLayout = React.createClass({
 				this.props.history.push('/');
 			}
 		}
-	},
-
+	}
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
 		let keyIsInFilter = false;
@@ -191,8 +199,7 @@ const AddRevisionLayout = React.createClass({
 			filters,
 			skip: 0,
 		});
-	},
-
+	}
 	handleChangeLineN(e) {
 		const filters = this.state.filters;
 
@@ -259,128 +266,110 @@ const AddRevisionLayout = React.createClass({
 		this.setState({
 			filters,
 		});
-	},
-	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
-	},
+	}
 	showSnackBar(message) {
 		this.setState({
 			snackbarOpen: true,
 			snackbarMessage: message,
 		});
 		this.timeout = setTimeout(() => {
-			this.setState({
+			this.timeout = this.setState({
 				snackbarOpen: false,
 			});
 		}, 4000);
-	},
-
+	}
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
+	}
 	render() {
 		const filters = this.state.filters;
-		const { ready, comment } = this.props;
+		const { ready, comment } = this.state;
+
 		Utils.setTitle('Add Revision | The Center for Hellenic Studies Commentaries');
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				<div>
-					{ready && comment ?
-						<div className="chs-layout chs-editor-layout add-comment-layout">
-							<Header
-								toggleSearchTerm={this.toggleSearchTerm}
-								handleChangeLineN={this.handleChangeLineN}
-								filters={filters}
-								initialSearchEnabled
-								addCommentPage
-							/>
-							<main>
-								<div className="commentary-comments">
-									<div className="comment-group">
-										<CommentLemmaSelect
-											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={comment.lineFrom}
-											selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
-											workSlug={comment.work.slug}
-											subworkN={comment.subwork.n}
-										/>
+				{ready && comment ?
+					<div className="chs-layout chs-editor-layout add-comment-layout">
 
-										<AddRevision
-											submitForm={this.addRevision}
-											update={this.update}
-											comment={comment}
-										/>
+						<Header
+							toggleSearchTerm={this.toggleSearchTerm}
+							handleChangeLineN={this.handleChangeLineN}
+							filters={filters}
+							initialSearchEnabled
+							addCommentPage
+						/>
 
-										<ContextPanel
-											open={this.state.contextReaderOpen}
-											workSlug={comment.work.slug}
-											subworkN={comment.subwork.n}
-											lineFrom={comment.lineFrom}
-											selectedLineFrom={comment.lineFrom}
-											selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
-											editor
-											disableEdit
-										/>
-									</div>
+						<main>
+
+							<div className="commentary-comments">
+								<div className="comment-group">
+									<CommentLemmaSelect
+										ref={(component) => { this.commentLemmaSelect = component; }}
+										selectedLineFrom={comment.lineFrom}
+										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+										workSlug={comment.work.slug}
+										subworkN={comment.subwork.n}
+									/>
+
+									<AddRevision
+										submitForm={this.addRevision}
+										update={this.update}
+										comment={comment}
+									/>
+
+									<ContextPanel
+										open={this.state.contextReaderOpen}
+										workSlug={comment.work.slug}
+										subworkN={comment.subwork.n}
+										lineFrom={comment.lineFrom}
+										selectedLineFrom={comment.lineFrom}
+										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+										editor
+										disableEdit
+									/>
 								</div>
-							</main>
-							<FilterWidget
-								filters={filters}
-								toggleSearchTerm={this.toggleSearchTerm}
-							/>
-							<Snackbar
-								className="editor-snackbar"
-								open={this.state.snackbarOpen}
-								message={this.state.snackbarMessage}
-								autoHideDuration={4000}
-							/>
-						</div>
-						:
-						<div className="ahcip-spinner commentary-loading full-page-spinner">
-							<div className="double-bounce1" />
-							<div className="double-bounce2" />
-						</div>
-					}
-				</div>
+							</div>
+
+
+						</main>
+
+						<FilterWidget
+							filters={filters}
+							toggleSearchTerm={this.toggleSearchTerm}
+						/>
+						<Snackbar
+							className="editor-snackbar"
+							open={this.state.snackbarOpen}
+							message={this.state.snackbarMessage}
+							autoHideDuration={4000}
+						/>
+
+					</div>
+					:
+					<div className="ahcip-spinner commentary-loading full-page-spinner">
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
+					</div>
+				}
+
 			</MuiThemeProvider>
 		);
-	},
-});
-
-const AddRevisionLayoutContainer = createContainer(props => {
-
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	const ready = Roles.subscription.ready() && commentsSub.ready() && keywordsSub.ready();
-	if (tenantId) {
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
-		props.commentsQuery.refetch({
-			queryParam: JSON.stringify({_id: props.commentId})
-		});
 	}
-	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments;
-	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
-	const commenters = [];
-	if (comment) {
-		comment.commenters.forEach((commenter) => {
-			commenters.push(tenantCommenters.find(x =>
-				x.slug === commenter.slug,
-			));
-		});
-	}
-	const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
+}
+AddRevisionLayout.propTypes = {
+	history: PropTypes.object,
+	commentUpdate: PropTypes.func,
+	commentersQuery: PropTypes.object,
+	commentsQuery: PropTypes.object,
+	keywordsQuery: PropTypes.object,
+	match: PropTypes.object
 
-	return {
-		ready,
-		comment,
-		commenters,
-		keywords,
-	};
-}, AddRevisionLayout);
+};
 
 export default compose(
+	commentersQuery,
 	keywordsQuery,
 	commentsQuery,
-	commentersQuery,
 	commentsUpdateMutation
-)(AddRevisionLayoutContainer);
+)(AddRevisionLayout);

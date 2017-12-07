@@ -1,20 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
-
-// models
-import Comments from '/imports/models/comments';
-import Commenters from '/imports/models/commenters';
-import Keywords from '/imports/models/keywords';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -32,29 +26,58 @@ import { commentsQuery, commentsUpdateMutation } from '/imports/graphql/methods/
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
-const AddRevisionLayout = React.createClass({
+class AddRevisionLayout extends Component {
 
-	propTypes: {
-		ready: PropTypes.bool,
-		comment: PropTypes.object,
-		commenters: PropTypes.array,
-		keywords: PropTypes.array,
-		history: PropTypes.object
-	},
-
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			filters: [],
 			contextReaderOpen: true,
 			snackbarOpen: false,
-			snackbarMessage: '',
+			snackbarMessage: ''
 		};
-	},
 
+		this.addRevision = this.addRevision.bind(this);
+		this.update = this.update.bind(this);
+		this.getKeywords = this.getKeywords.bind(this);
+		this.closeContextReader = this.closeContextReader.bind(this);
+		this.openContextReader = this.openContextReader.bind(this);
+		this.handlePermissions = this.handlePermissions.bind(this);
+		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
+		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.showSnackBar = this.showSnackBar.bind(this);
+
+		this.props.keywordsQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
+		this.props.commentsQuery.refetch({
+			queryParam: JSON.stringify({_id: commentId})
+		});
+	}
+	componentWillReceiveProps(nextProps) {
+		const commentId = nextProps.match.params.commentId;
+		
+		const comment = nextProps.commentsQuery.loading ? {} : nextProps.commentsQuery.comments;
+		const tenantCommenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters;
+		const commenters = [];
+		if (comment) {
+			comment.commenters.forEach((commenter) => {
+				commenters.push(tenantCommenters.find(x =>
+					x.slug === commenter.slug,
+				));
+			});
+		}
+		const keywords = nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords;
+		this.setState({
+			comment: comment,
+			ready: Roles.subscrition.ready() && !nextProps.commentersQuery.loading && !nextProps.commentsQuery.loading,
+			keywords: keywords,
+			commenters: commenters
+		});
+	}
 	componentWillUpdate() {
 		if (this.props.ready) this.handlePermissions();
-	},
-
+	}
 	addRevision(formData, textValue, textRawValue) {
 		const self = this;
 		const { comment } = this.props;
@@ -77,8 +100,7 @@ const AddRevisionLayout = React.createClass({
 			self.update(formData);
 		});
 		// TODO: handle behavior after comment added (add info about success)
-	},
-
+	}
 	update(formData) {
 		const { comment } = this.props;
 
@@ -96,8 +118,7 @@ const AddRevisionLayout = React.createClass({
 		this.props.commentUpdate(comment.id, update).then(function() {
 			this.props.history.push(`/commentary/${comment._id}/edit`);
 		});
-	},
-
+	}
 	getKeywords(formData) {
 		const keywords = [];
 
@@ -107,24 +128,21 @@ const AddRevisionLayout = React.createClass({
 			keywords.push(keyword);
 		});
 		return keywords;
-	},
-
+	}
 	closeContextReader() {
 		this.setState({
 			contextReaderOpen: false,
 		});
-	},
-
+	}
 	openContextReader() {
 		this.setState({
 			contextReaderOpen: true,
 		});
-	},
-
+	}
 	handlePermissions() {
-		if (this.props.comment && this.props.commenters.length) {
+		if (this.state.comment && this.state.commenters.length) {
 			let isOwner = false;
-			this.props.commenters.forEach((commenter) => {
+			this.state.commenters.forEach((commenter) => {
 				if (!isOwner) {
 					isOwner = (~Meteor.user().canEditCommenters.indexOf(commenter._id));
 				}
@@ -133,8 +151,7 @@ const AddRevisionLayout = React.createClass({
 				this.props.history.push('/');
 			}
 		}
-	},
-
+	}
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
 		let keyIsInFilter = false;
@@ -182,8 +199,7 @@ const AddRevisionLayout = React.createClass({
 			filters,
 			skip: 0,
 		});
-	},
-
+	}
 	handleChangeLineN(e) {
 		const filters = this.state.filters;
 
@@ -250,8 +266,7 @@ const AddRevisionLayout = React.createClass({
 		this.setState({
 			filters,
 		});
-	},
-
+	}
 	showSnackBar(message) {
 		this.setState({
 			snackbarOpen: true,
@@ -262,13 +277,13 @@ const AddRevisionLayout = React.createClass({
 				snackbarOpen: false,
 			});
 		}, 4000);
-	},
+	}
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
-	},
+	}
 	render() {
 		const filters = this.state.filters;
-		const { ready, comment } = this.props;
+		const { ready, comment } = this.state;
 
 		Utils.setTitle('Add Revision | The Center for Hellenic Studies Commentaries');
 
@@ -340,46 +355,21 @@ const AddRevisionLayout = React.createClass({
 
 			</MuiThemeProvider>
 		);
-	},
-});
-
-const AddRevisionLayoutContainer = createContainer(props => {
-
-	const commentId = props.match.params.commentId;
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	const ready = Roles.subscription.ready() && commentsSub.ready() && !props.keywordsQuery.loading;
-	if (tenantId) {
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
-		props.commentsQuery.refetch({
-			queryParam: JSON.stringify({_id: commentId})
-		});
 	}
-	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments;
-	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
-	const commenters = [];
-	if (comment) {
-		comment.commenters.forEach((commenter) => {
-			commenters.push(tenantCommenters.find(x =>
-				x.slug === commenter.slug,
-			));
-		});
-	}
-	const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
+}
+AddRevisionLayout.propTypes = {
+	history: PropTypes.object,
+	commentUpdate: PropTypes.func,
+	commentersQuery: PropTypes.object,
+	commentsQuery: PropTypes.object,
+	keywordsQuery: PropTypes.object,
+	match: PropTypes.object
 
-	return {
-		ready,
-		comment,
-		commenters,
-		keywords,
-	};
-}, AddRevisionLayout);
+};
 
 export default compose(
 	commentersQuery,
 	keywordsQuery,
 	commentsQuery,
 	commentsUpdateMutation
-)(AddRevisionLayoutContainer);
+)(AddRevisionLayout);

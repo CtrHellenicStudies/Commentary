@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import { Field } from 'redux-form';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
@@ -20,15 +19,12 @@ import { compose } from 'react-apollo';
 // graphql
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
-// models
-import ReferenceWorks from '/imports/models/referenceWorks';
-
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
-class ReferenceWorksInput extends React.Component {
+class ReferenceWorksInput extends Component {
 
 	constructor(props) {
 		super(props);
@@ -40,6 +36,9 @@ class ReferenceWorksInput extends React.Component {
 		this.addReferenceWorkBlock = this.addReferenceWorkBlock.bind(this);
 		this.removeReferenceWorkBlock = this.removeReferenceWorkBlock.bind(this);
 		this.moveReferenceWorkBlock = this.moveReferenceWorkBlock.bind(this);
+		this.props.referenceWorksQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
 	}
 
 	addReferenceWorkBlock() {
@@ -68,10 +67,27 @@ class ReferenceWorksInput extends React.Component {
 			},
 		}));
 	}
+	componentWillReceiveProps(nextProps) {
 
+		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
+		const referenceWorkOptions = [];
+		referenceWorks.forEach((referenceWork) => {
+			if (!referenceWorkOptions.some(val => (
+				referenceWork.slug === val.slug
+			))) {
+				referenceWorkOptions.push({
+					value: referenceWork._id,
+					label: referenceWork.title,
+					slug: referenceWork.slug,
+				});
+			}
+		});
+		this.setState({
+			referenceWorksOptions: referenceWorks
+		});
+	}
 	render() {
-		const { referenceWorks } = this.state;
-		const { referenceWorkOptions } = this.props;
+		const { referenceWorks, referenceWorkOptions } = this.state;
 
 		return (
 			<div className="comment-reference">
@@ -186,38 +202,7 @@ class ReferenceWorksInput extends React.Component {
 }
 
 ReferenceWorksInput.propTypes = {
-	referenceWorkOptions: PropTypes.array,
+	referenceWorksQuery: PropTypes.array,
 };
 
-
-const ReferenceWorksInputContainer = createContainer((props) => {
-
-	const tenantId = sessionStorage.getItem('tenantId');
-	const properties = {
-		tenantId: tenantId
-	};
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.referenceWorksQuery.variables)) {
-		props.referenceWorksQuery.refetch(properties);
-	}
-	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
-	const referenceWorkOptions = [];
-	referenceWorks.forEach((referenceWork) => {
-		if (!referenceWorkOptions.some(val => (
-			referenceWork.slug === val.slug
-		))) {
-			referenceWorkOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-				slug: referenceWork.slug,
-			});
-		}
-	});
-
-	return {
-		referenceWorkOptions,
-	};
-
-}, ReferenceWorksInput);
-
-
-export default compose(referenceWorksQuery)(ReferenceWorksInputContainer);
+export default compose(referenceWorksQuery)(ReferenceWorksInput);

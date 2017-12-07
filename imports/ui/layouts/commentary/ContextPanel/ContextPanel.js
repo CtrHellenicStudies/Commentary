@@ -17,11 +17,12 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
 
+// graphql
+import { getMaxLineMutation } from '/imports/graphql/methods/textNodes';
+
 // private component:
 import ContextPanelContent from './ContextPanelContent';
 
-// graphql
-import { getMaxLineMutation } from '../../../../graphql/methods/textNodes';
 
 
 /*
@@ -153,10 +154,9 @@ class ContextPanel extends React.Component {
 
 	setMaxLine() {
 
+		const that = this;
 		const workSlug = getWorkSlug(this.props);
 		const subworkN = getsubworkN(this.props);
-		const that = this;
-
 		this.props.getMaxLine(workSlug, subworkN).then(function(res) {
 			that.setState({
 				maxLine: parseInt(res.data.getMaxLine),
@@ -204,11 +204,9 @@ class ContextPanel extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.lineFrom) {
+		if (nextProps.lineFrom) {
 			this.setState({
 				lineFrom: nextProps.lineFrom,
-				workSlug: getWorkSlug(this.props),
-				subworkN: getsubworkN(this.props)
 			});
 		}
 	}
@@ -216,7 +214,10 @@ class ContextPanel extends React.Component {
 	render() {
 
 		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline } = this.props;
-		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition, workSlug, subworkN } = this.state;
+		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition } = this.state;
+
+		const workSlug = getWorkSlug(this.props);
+		const subworkN = getsubworkN(this.props);
 
 		return (
 			<ContextPanelContent

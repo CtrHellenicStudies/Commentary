@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'meteor/react-meteor-data';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
@@ -8,34 +7,17 @@ import { stateFromHTML } from 'draft-js-import-html';
 import { fromJS } from 'immutable';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
-import { compose } from 'react-apollo';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 // import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-// models
-import Keywords from '/imports/models/keywords';
-import ReferenceWorks from '/imports/models/referenceWorks';
-
 // components
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
-import CommentRevisionSelect from '/imports/ui/components/commentary/comments/CommentRevisionSelect';
 
-// graphql
-import { keywordsQuery } from '/imports/graphql/methods/keywords';
-
-// lib:
-import muiTheme from '/imports/lib/muiTheme';
 
 // helpers:
 import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
 
 import DraftInputEditor from '../../../shared/DraftEditorInput/DraftEditorInput';
-
-
-
 
 
 class CommentContentInput extends React.Component {
@@ -49,6 +31,7 @@ class CommentContentInput extends React.Component {
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 			textValue: '',
+			
 		};
 		this.onTextChange = this.onTextChange.bind(this);
 	}
@@ -61,7 +44,6 @@ class CommentContentInput extends React.Component {
 			textValue: textHtml,
 		});
 	}
-
 
 	render() {
 		return (
@@ -79,19 +61,7 @@ class CommentContentInput extends React.Component {
 }
 
 CommentContentInput.propTypes = {
-	tags: PropTypes.array,
+	keywordsQuery: PropTypes.object
 };
 
-const CommentContentInputContainer = createContainer(() => {
-
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	const tags = Keywords.find().fetch();
-
-	return {
-		tags,
-	};
-
-}, CommentContentInput);
-
-export default CommentContentInputContainer;
+export default CommentContentInput;

@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -17,37 +16,44 @@ import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
 
-const CommentLemmaSelect = React.createClass({
+class CommentLemmaSelect extends Component {
 
-	propTypes: {
-		workSlug: PropTypes.string.isRequired,
-		subworkN: PropTypes.number.isRequired,
-		selectedLineFrom: PropTypes.number.isRequired,
-		selectedLineTo: PropTypes.number.isRequired,
-		selectedLemmaEdition: PropTypes.object,
-		lemmaText: PropTypes.array,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			selectedLemmaEdition: '',
 			lineLetterValue: '',
 		};
-	},
+		this.onLineLetterValueChange = this.onLineLetterValueChange.bind(this);
+		this.toggleEdition = this.toggleEdition.bind(this);
+		const { selectedLineFrom, selectedLineTo, workSlug, subworkN } = this.props;
+		const properties = {
+			tenantId: sessionStorage.getItem('tenantId'),
+			workSlug: workSlug,
+			subworkN: subworkN,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineFrom <= selectedLineTo ? selectedLineTo : selectedLineFrom
+		};
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+		props.textNodesQuery.refetch(properties);
+	}
+	componentWillReceiveProps(nextProps) {
 
+		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
+		
+		const editions = !nextProps.editionsQuery.loading ?
+			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions) : [];
+
+		this.setState({
+			lemmaText: editions,
+			selectedLemmaEdition: editions[0],
+		});
+	}
 	onLineLetterValueChange(event) {
 		this.setState({
 			lineLetterValue: event.target.value,
 		});
-	},
+	}
 
 	toggleEdition(editionSlug) {
 		if (this.state.selectedLemmaEdition !== editionSlug) {
@@ -55,8 +61,7 @@ const CommentLemmaSelect = React.createClass({
 				selectedLemmaEdition: editionSlug,
 			});
 		}
-	},
-
+	}
 	render() {
 		const self = this;
 
@@ -65,11 +70,11 @@ const CommentLemmaSelect = React.createClass({
 				<div className="comment-outer comment-lemma-comment-outer">
 
 					{this.props.selectedLineFrom > 0 &&
-						this.props.selectedLemmaEdition &&
-						'lines' in this.props.selectedLemmaEdition ?
+						this.state.selectedLemmaEdition &&
+						'lines' in this.state.selectedLemmaEdition ?
 							<article className="comment lemma-comment paper-shadow">
 
-								{this.props.selectedLemmaEdition.lines.map((line, i) => (
+								{this.state.selectedLemmaEdition.lines.map((line, i) => (
 									<p
 										key={i}
 										className="lemma-text"
@@ -93,14 +98,14 @@ const CommentLemmaSelect = React.createClass({
 							}
 
 								<div className="edition-tabs tabs">
-									{this.props.lemmaText.map((lemmaTextEdition, i) => {
+									{this.state.lemmaText.map((lemmaTextEdition, i) => {
 										const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
 										return (<RaisedButton
 											key={i}
 											label={lemmaEditionTitle}
 											data-edition={lemmaTextEdition.title}
-											className={self.props.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+											className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
 											'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
 											onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 										/>);
@@ -109,14 +114,6 @@ const CommentLemmaSelect = React.createClass({
 
 								<div className="context-tabs tabs">
 
-									{/* <RaisedButton
-								 className="context-tab tab"
-								 onClick={this.props.openContextReader}
-								 label="Context"
-								 labelPosition="before"
-								 icon={<FontIcon className="mdi mdi-chevron-right" />}
-								 /> */}
-
 								</div>
 
 							</article>
@@ -124,54 +121,24 @@ const CommentLemmaSelect = React.createClass({
 
 							<article className="comment lemma-comment paper-shadow">
 								<p className="lemma-text no-lines-selected">No line(s) selected</p>
-								{/* <div className="context-tabs tabs">
-							 <RaisedButton
-							 className="context-tab tab"
-							 onClick={this.props.openContextReader}
-							 label="Context"
-							 labelPosition="before"
-							 icon={<FontIcon className="mdi mdi-chevron-right" />}
-							 >
-							 </RaisedButton>
-							 </div>*/}
 							</article>
 					}
 
 				</div>
 			</div>
 		);
-	},
-});
-
-const CommentLemmaSelectContainer = createContainer(props => {
-	
-	const { selectedLineFrom, selectedLineTo, workSlug, subworkN } = props;
-	const tenantId = sessionStorage.getItem('tenantId');
-	const properties = {
-		tenantId: tenantId,
-		workSlug: workSlug,
-		subworkN: subworkN,
-		lineFrom: selectedLineFrom,
-		lineTo: selectedLineFrom <= selectedLineTo ? selectedLineTo : selectedLineFrom
-	};
-
-	const selectedLemmaEdition = {
-		lines: [],
-		slug: '',
-	};
-	if (tenantId && Utils.shouldRefetchQuery(properties, props.textNodesQuery.variables)) {
-		props.textNodesQuery.refetch(properties);
 	}
-	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
+}
+CommentLemmaSelect.propTypes = {
+	workSlug: PropTypes.string.isRequired,
+	subworkN: PropTypes.number.isRequired,
+	selectedLineFrom: PropTypes.number.isRequired,
+	selectedLineTo: PropTypes.number.isRequired,
+	textNodesQuery: PropTypes.object,
+	editionsQuery: PropTypes.object
+};
 
-	const editions = !props.editionsQuery.loading ?
-		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
-
-	return {
-		lemmaText: editions,
-		selectedLemmaEdition: editions[0],
-		ready: !props.textNodesQuery.loading
-	};
-}, CommentLemmaSelect);
-
-export default compose(editionsQuery, textNodesQuery)(CommentLemmaSelectContainer);
+export default compose(
+	editionsQuery,
+	textNodesQuery
+)(CommentLemmaSelect);

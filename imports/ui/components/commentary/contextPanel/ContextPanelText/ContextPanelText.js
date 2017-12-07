@@ -263,14 +263,6 @@ ContextPanelText.propTypes = {
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,
 	selectedLemmaEdition: PropTypes.string.isRequired,
-	lemmaText: PropTypes.arrayOf(PropTypes.shape({
-		title: PropTypes.string.isRequired,
-		slug: PropTypes.string.isRequired,
-		lines: PropTypes.arrayOf(PropTypes.shape({
-			n: PropTypes.number.isRequired,
-			html: PropTypes.string.isRequired,
-		}))
-	})).isRequired,
 	commentGroup: PropTypes.shape({
 		lineFrom: PropTypes.number.isRequired,
 		lineTo: PropTypes.number,

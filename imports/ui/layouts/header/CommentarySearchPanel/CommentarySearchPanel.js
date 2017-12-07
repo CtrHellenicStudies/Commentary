@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 
 import { compose } from 'react-apollo';
 import _ from 'lodash';
@@ -10,12 +9,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-
-// models:
-import Commenters from '/imports/models/commenters';
-import Keywords from '/imports/models/keywords';
-import ReferenceWorks from '/imports/models/referenceWorks';
-import Works from '/imports/models/works';
 
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';

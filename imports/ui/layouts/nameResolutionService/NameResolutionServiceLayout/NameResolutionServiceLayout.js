@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
-import Comments from '/imports/models/comments';
 import Utils from '/imports/lib/utils';
 
 // graphql
@@ -69,16 +67,34 @@ const resolveV2 = (props) => {
 };
 
 
-class NameResolutionServiceLayout extends React.Component {
+class NameResolutionServiceLayout extends Component {
 
 	static propTypes = {
 		urn: PropTypes.string,
 		doi: PropTypes.string,
 		resolveURL: PropTypes.string,
+		version: PropTypes.number
 	}
-
+	componentWillReceiveProps(nextProps) {
+		let resolveURL;
+		switch (nextProps.version) {
+		case 1:
+			resolveURL = resolveV1(nextProps);
+			break;
+		case 2:
+			resolveURL = resolveV2(nextProps);
+			break;
+		default:
+			resolveURL = resolveV1(nextProps);
+			break;
+		}
+		this.setState({
+			resolveURL: resolveURL
+		});
+	}
 	resolve() {
-		const { doi, urn, resolveURL } = this.props;
+		const { doi, urn } = this.props;
+		const { resolveURL } = this.state;
 
 		if (!doi && !urn) {
 			return (
@@ -138,27 +154,7 @@ class NameResolutionServiceLayout extends React.Component {
 	}
 }
 
-const nameResolutionServiceLayoutContainer = createContainer((props) => {
-	let resolveURL;
-	switch (props.version) {
-	case 1:
-		resolveURL = resolveV1(props);
-		break;
-	case 2:
-		resolveURL = resolveV2(props);
-		break;
-	default:
-		resolveURL = resolveV1(props);
-		break;
-	}
-
-	return {
-		resolveURL,
-	};
-}, NameResolutionServiceLayout);
-
-
 export default compose(
 	tenantsQuery,
 	commentsQuery
-)(nameResolutionServiceLayoutContainer);
+)(NameResolutionServiceLayout);

@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -25,21 +24,21 @@ import Settings from '/imports/models/settings';
 import muiTheme from '/imports/lib/muiTheme';
 
 
-const CommunityLayout = React.createClass({
-	propTypes: {
-		settings: PropTypes.object,
-	},
+class CommunityLayout extends Component {
 
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
+	constructor(props) {
+		super(props);
+		this.state = {
+			tenantId: sessionStorage.getItem('tenantId')
+		};
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId)
+		});
+	}
 	render() {
-		const { settings } = this.props;
+		const { settings } = this.state;
 
 		if (!settings) {
 			return <LoadingHome />;
@@ -55,18 +54,11 @@ const CommunityLayout = React.createClass({
 				</div>
 			</MuiThemeProvider>
 		);
-	},
+	}
 
-});
+}
+CommunityLayout.propTypes = {
+	settingsQuery: PropTypes.object,
+};
 
-
-const CommunityLayoutContainer = createContainer((props) => {
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	return {
-		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-		ready: !props.settingsQuery.loading,
-	};
-}, CommunityLayout);
-
-export default compose(settingsQuery)(CommunityLayoutContainer);
+export default compose(settingsQuery)(CommunityLayout);

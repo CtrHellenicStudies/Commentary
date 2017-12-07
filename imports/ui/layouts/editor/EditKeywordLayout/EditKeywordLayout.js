@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -29,22 +28,12 @@ import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
 
-const EditKeywordLayout = React.createClass({
+class EditKeywordLayout extends Component {
 
-	propTypes: {
-		slug: PropTypes.string,
-		ready: PropTypes.bool,
-		keyword: PropTypes.object,
-		history: PropTypes.object,
-		keywordUpdate: PropTypes.func
-	},
+	constructor(props) {
 
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+		super(props);
+		this.state = {
 			filters: [],
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
@@ -54,26 +43,53 @@ const EditKeywordLayout = React.createClass({
 			snackbarMessage: '',
 			contextReaderOpen: true,
 		};
-	},
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+		this.handlePermissions = this.handlePermissions.bind(this);
+		this.updateSelectedLines = this.updateSelectedLines.bind(this);
+		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
+		this.updateKeyword = this.updateKeyword.bind(this);
+		this.showSnackBar = this.showSnackBar.bind(this);
+		this.getWork = this.getWork.bind(this);
+		this.getSubwork = this.getSubwork.bind(this);
+		this.getLineLetter = this.getLineLetter.bind(this);
+		this.getCommenter = this.getCommenter.bind(this);
+		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
+		this.getType = this.getType.bind(this);
+		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
+		this.onTypeChange = this.onTypeChange.bind(this);
+		this.handleChangeLineN = this.handleChangeLineN.bind(this);
 
+		props.keywordsQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
+	}
+	componentWillReceiveProps(nextProps) {
+		const { match } = nextProps;
+		const slug = match.params.slug;
+		const ready = Roles.subscription.ready() && !nextProps.keywordsQuery.keywords;
+	
+		let keyword = {};
+		if (ready) {
+			keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
+		}
+		this.setState({
+			ready: ready,
+			keyword: keyword
+		});
+	}
 	componentWillUpdate() {
-		if (this.props.ready) this.handlePermissions();
-	},
+		if (this.state.ready) this.handlePermissions();
+	}
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
-	},
+	}
 	handlePermissions() {
-		if (Roles.subscription.ready()) {
+		if (this.state.ready) {
 			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
 				this.props.history.push('/');
 			}
 		}
-	},
-
+	}
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
 		if (selectedLineFrom === null) {
 			this.setState({
@@ -91,8 +107,7 @@ const EditKeywordLayout = React.createClass({
 		} else {
 			// do nothing
 		}
-	},
-
+	}
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
 		let keyIsInFilter = false;
@@ -140,8 +155,7 @@ const EditKeywordLayout = React.createClass({
 			filters,
 			skip: 0,
 		});
-	},
-
+	}
 	updateKeyword(formData, textValue, textRawValue) {
 		this.setState({
 			loading: true,
@@ -154,7 +168,7 @@ const EditKeywordLayout = React.createClass({
 		const selectedLineTo = this.getSelectedLineTo();
 		const type = this.getType();
 		const token = Cookies.get('loginToken');
-		const { keyword } = this.props;
+		const { keyword } = this.state;
 		const that = this;
 		// create keyword object to be inserted:
 		const keywordCandidate = {
@@ -167,8 +181,8 @@ const EditKeywordLayout = React.createClass({
 				title: subwork.title,
 				n: subwork.n,
 			},
-			lineFrom: this.state.selectedLineFrom || this.props.keyword.lineFrom,
-			lineTo: selectedLineTo || this.props.keyword.lineTo,
+			lineFrom: this.state.selectedLineFrom || keyword.lineFrom,
+			lineTo: selectedLineTo || keyword.lineTo,
 			lineLetter,
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
@@ -181,13 +195,7 @@ const EditKeywordLayout = React.createClass({
 		this.props.keywordUpdate(keyword._id, keywordCandidate).then(function() {
 			that.props.history.push(`/tags/${keywordCandidate.slug}`);
 		});
-		// 	if (error) {
-		// 		this.showSnackBar(error);
-		// 	} else {
-		// 		this.props.history.push(`/tags/${keywordCandidate.slug}`);
-		// 	}
-		// });
-	},
+	}
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
@@ -198,8 +206,7 @@ const EditKeywordLayout = React.createClass({
 				snackbarOpen: false,
 			});
 		}, 4000);
-	},
-
+	}
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
@@ -215,8 +222,7 @@ const EditKeywordLayout = React.createClass({
 			};
 		}
 		return work;
-	},
-
+	}
 	getSubwork() {
 		let subwork = null;
 		this.state.filters.forEach((filter) => {
@@ -231,16 +237,14 @@ const EditKeywordLayout = React.createClass({
 			};
 		}
 		return subwork;
-	},
-
+	}
 	getLineLetter() {
 		let lineLetter = '';
 		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
 			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
 		}
 		return lineLetter;
-	},
-
+	}
 	getCommenter(formData) {
 		let commenter = null;
 		if (Meteor.user().canEditCommenters.length > 1) {
@@ -253,8 +257,7 @@ const EditKeywordLayout = React.createClass({
 			});
 		}
 		return commenter;
-	},
-
+	}
 	getSelectedLineTo() {
 		let selectedLineTo = 0;
 		if (this.state.selectedLineTo === 0) {
@@ -263,24 +266,20 @@ const EditKeywordLayout = React.createClass({
 			selectedLineTo = this.state.selectedLineTo;
 		}
 		return selectedLineTo;
-	},
-
+	}
 	getType() {
 		return this.state.selectedType;
-	},
-
+	}
 	lineLetterUpdate(value) {
 		this.setState({
 			lineLetter: value,
 		});
-	},
-
+	}
 	onTypeChange(type) {
 		this.setState({
 			selectedType: type,
 		});
-	},
-
+	}
 	handleChangeLineN(e) {
 		const filters = this.state.filters;
 
@@ -347,11 +346,10 @@ const EditKeywordLayout = React.createClass({
 		this.setState({
 			filters,
 		});
-	},
-
+	}
 	render() {
 		const filters = this.state.filters;
-		const { ready, keyword } = this.props;
+		const { ready, keyword } = this.state;
 		let work;
 		let subwork;
 		let lineFrom;
@@ -428,34 +426,16 @@ const EditKeywordLayout = React.createClass({
 				}
 			</MuiThemeProvider>
 		);
-	},
-});
-
-const EditKeywordLayoutContainer = createContainer((props) => {
-
-	const { match } = props;
-	const tenantId = sessionStorage.getItem('tenantId');
-	const slug = match.params.slug;
-	const ready = Roles.subscription.ready() && !props.keywordsQuery.keywords;
-
-	if (tenantId) {
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
 	}
-
-	let keyword = {};
-	if (ready) {
-		keyword = props.keywordsQuery.keywords.find(x => x.slug === slug);
-	}
-
-	return {
-		ready,
-		keyword,
-	};
-}, EditKeywordLayout);
-
+}
+EditKeywordLayout.propTypes = {
+	slug: PropTypes.string,
+	history: PropTypes.object,
+	keywordUpdate: PropTypes.func,
+	match: PropTypes.object,
+	keywordsQuery: PropTypes.object
+};
 export default compose(
 	keywordsQuery,
 	keywordUpdateMutation
-)(EditKeywordLayoutContainer);
+)(EditKeywordLayout);

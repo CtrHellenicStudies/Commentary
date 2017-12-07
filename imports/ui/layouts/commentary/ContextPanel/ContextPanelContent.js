@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
-import { createContainer } from 'meteor/react-meteor-data';
 
 // models:
 import TextNodes from '/imports/models/textNodes';
@@ -47,46 +46,91 @@ const getSortedEditions = (editions) => {
 
 
 
-const ContextPanelContent = ({ open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaEdition, lemmaText, lineFrom, lineTo, commentGroup, maxLine, toggleEdition, toggleHighlighting, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor }) => (
-	<div className={getContextPanelStyles(open, highlightingVisible)}>
+class ContextPanelContent extends Component {
+	constructor(props) {
+		super(props);
+		const { lineFrom, workSlug, subworkN, multiline } = props;
+		const lineTo = lineFrom + 49;
+		const properties = {
+			workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+			subworkN: subworkN,
+			lineFrom: lineFrom,
+			lineTo: lineTo
+		};
+		this.state = {
+			lineTo: lineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
+	}
+	componentWillReceiveProps(nextProps) {
 
-		{closeContextPanel &&
-			<IconButton
-				className="close-lemma-panel"
-				onClick={closeContextPanel}
-				iconClassName="mdi mdi-close"
-			/>
+		const { lineFrom, multiline } = nextProps;
+		const lineTo = lineFrom + 49;
+		const tenantId = sessionStorage.getItem('tenantId');
+	
+		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
+		const editions = !nextProps.editionsQuery.loading ?
+			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions) : [];
+	
+		let sortedEditions;
+	
+		if (multiline) {
+			const parsedEditions = Utils.parseMultilineEdition(editions, multiline);
+			sortedEditions = getSortedEditions(parsedEditions);
+		} else {
+			sortedEditions = getSortedEditions(editions);
 		}
+		this.setState({
+			lineTo: lineTo,
+			lemmaText: sortedEditions
+		});
+	}
+	render() {
+		const { open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaEdition, lineFrom, commentGroup, maxLine, toggleEdition,
+			toggleHighlighting, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
+		const { lineTo, lemmaText } = this.state;
+		return (
+			<div className={getContextPanelStyles(open, highlightingVisible)}>
 
-		<ContextPanelText
-			onBeforeClicked={onBeforeClicked}
-			onAfterClicked={onAfterClicked}
-			selectedLemmaEdition={selectedLemmaEdition}
-			lemmaText={lemmaText}
-			lineFrom={lineFrom}
-			lineTo={lineTo}
-			commentGroup={commentGroup}
-			maxLine={maxLine}
-			highlightingVisible={highlightingVisible}
-			disableEdit={disableEdit}
-			selectedLineFrom={selectedLineFrom}
-			selectedLineTo={selectedLineTo}
-			updateSelectedLines={updateSelectedLines}
-			editor={editor}
-		/>
+				{closeContextPanel &&
+					<IconButton
+						className="close-lemma-panel"
+						onClick={closeContextPanel}
+						iconClassName="mdi mdi-close"
+					/>
+				}
 
-		<ContextPanelTabs
-			lemmaText={lemmaText}
-			selectedLemmaEdition={selectedLemmaEdition}
-			toggleEdition={toggleEdition}
-			toggleHighlighting={toggleHighlighting}
-			highlightingVisible={highlightingVisible}
-			disableEdit={disableEdit}
-			editor={editor}
-		/>
+				<ContextPanelText
+					onBeforeClicked={onBeforeClicked}
+					onAfterClicked={onAfterClicked}
+					selectedLemmaEdition={selectedLemmaEdition}
+					lemmaText={lemmaText}
+					lineFrom={lineFrom}
+					lineTo={lineTo}
+					commentGroup={commentGroup}
+					maxLine={maxLine}
+					highlightingVisible={highlightingVisible}
+					disableEdit={disableEdit}
+					selectedLineFrom={selectedLineFrom}
+					selectedLineTo={selectedLineTo}
+					updateSelectedLines={updateSelectedLines}
+					editor={editor}
+				/>
 
-	</div>
-);
+				<ContextPanelTabs
+					lemmaText={lemmaText}
+					selectedLemmaEdition={selectedLemmaEdition}
+					toggleEdition={toggleEdition}
+					toggleHighlighting={toggleHighlighting}
+					highlightingVisible={highlightingVisible}
+					disableEdit={disableEdit}
+					editor={editor}
+				/>
+
+			</div>
+		);
+	}
+}
 ContextPanelContent.propTypes = {
 	open: PropTypes.bool.isRequired,
 	commentGroup: PropTypes.shape({
@@ -105,21 +149,12 @@ ContextPanelContent.propTypes = {
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,
 	selectedLemmaEdition: PropTypes.string.isRequired,
-	lemmaText: PropTypes.arrayOf(PropTypes.shape({
-		title: PropTypes.string.isRequired,
-		slug: PropTypes.string.isRequired,
-		lines: PropTypes.arrayOf(PropTypes.shape({
-			n: PropTypes.number.isRequired,
-			html: PropTypes.string.isRequired,
-		})).isRequired,
-	})).isRequired,
 	lineFrom: PropTypes.number.isRequired,
-	lineTo: PropTypes.number.isRequired,
 	maxLine: PropTypes.number.isRequired,
 	toggleEdition: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,
-	workSlug: PropTypes.string.isRequired,
-	subworkN: PropTypes.number.isRequired,
+	workSlug: PropTypes.string,
+	subworkN: PropTypes.number,
 
 	// requiered if editor:
 	disableEdit: PropTypes.bool,
@@ -127,6 +162,9 @@ ContextPanelContent.propTypes = {
 	selectedLineTo: PropTypes.number,
 	updateSelectedLines: PropTypes.func,
 	editor: PropTypes.bool,
+	textNodesQuery: PropTypes.object,
+	editionsQuery: PropTypes.object,
+	multiline: PropTypes.bool
 };
 ContextPanelContent.defaultProps = {
 	commentGroup: null,
@@ -138,39 +176,7 @@ ContextPanelContent.defaultProps = {
 	updateSelectedLines: null,
 	editor: false,
 };
-
-const cont = createContainer(props => {
-
-	const { lineFrom, workSlug, subworkN, multiline } = props;
-	const lineTo = lineFrom + 49;
-	const tenantId = sessionStorage.getItem('tenantId');
-	const properties = {
-		workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
-		subworkN: subworkN,
-		lineFrom: lineFrom,
-		lineTo: lineTo
-	};
-	if (Utils.shouldRefetchQuery(properties, props.textNodesQuery.variables)) {
-		props.textNodesQuery.refetch(properties);
-	}
-
-	const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
-	const editions = !props.editionsQuery.loading ?
-		Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
-
-	let sortedEditions;
-
-	if (multiline) {
-		const parsedEditions = Utils.parseMultilineEdition(editions, multiline);
-		sortedEditions = getSortedEditions(parsedEditions);
-	} else {
-		sortedEditions = getSortedEditions(editions);
-	}
-
-	return {
-		lemmaText: sortedEditions,
-		lineTo,
-	};
-
-}, ContextPanelContent);
-export default compose(editionsQuery, textNodesQuery)(cont);
+export default compose(
+	editionsQuery,
+	textNodesQuery
+)(ContextPanelContent);

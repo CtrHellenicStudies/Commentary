@@ -16,7 +16,6 @@ import EditKeywordLayout from '/imports/ui/layouts/editor/EditKeywordLayout';
 import TextNodesEditorLayout from '/imports/ui/layouts/editor/TextNodesEditorLayout';
 import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
 import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
-import UserLayout from '/imports/ui/layouts/user/UserLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
 import { ApolloProvider, createNetworkInterface, compose } from 'react-apollo';

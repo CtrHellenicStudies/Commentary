@@ -1,17 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
 import TextField from 'material-ui/TextField';
-import { createContainer } from 'meteor/react-meteor-data';
 import _ from 'lodash';
 import { compose } from 'react-apollo';
 
-// models:
-import Commenters from '/imports/models/commenters';
-import Keywords from '/imports/models/keywords';
-import ReferenceWorks from '/imports/models/referenceWorks';
-import Works from '/imports/models/works';
 
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
@@ -66,7 +60,7 @@ const getWorkInFilter = (filters) => {
 /*
 	BEGIN CommentarySearchToolbar
 */
-class CommentarySearchToolbar extends React.Component {
+class CommentarySearchToolbar extends Component {
 
 	static propTypes = {
 		filters: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -76,36 +70,10 @@ class CommentarySearchToolbar extends React.Component {
 		addCommentPage: PropTypes.bool.isRequired,
 		isTest: PropTypes.bool,
 		selectedWork: PropTypes.object,
-
-		// from createContainer:
-		keywords: PropTypes.arrayOf(PropTypes.shape({
-			_id: PropTypes.string.isRequired,
-			title: PropTypes.string.isRequired,
-			slug: PropTypes.string.isRequired,
-		})),
-		keyideas: PropTypes.arrayOf(PropTypes.shape({
-			_id: PropTypes.string.isRequired,
-			title: PropTypes.string.isRequired,
-			slug: PropTypes.string.isRequired,
-		})),
-		commenters: PropTypes.arrayOf(PropTypes.shape({
-			_id: PropTypes.string.isRequired,
-			name: PropTypes.string.isRequired,
-			slug: PropTypes.string.isRequired,
-		})),
-		referenceWorks: PropTypes.arrayOf(PropTypes.shape({
-			_id: PropTypes.string.isRequired,
-			title: PropTypes.string.isRequired,
-		})),
-		works: PropTypes.arrayOf(PropTypes.shape({
-			_id: PropTypes.string.isRequired,
-			title: PropTypes.string.isRequired,
-			slug: PropTypes.string.isRequired,
-			subworks: PropTypes.arrayOf(PropTypes.shape({
-				n: PropTypes.number.isRequired,
-				title: PropTypes.string.isRequired,
-			})),
-		})),
+		worksQuery: PropTypes.object,
+		referenceWorksQuery: PropTypes.object,
+		commentersQuery: PropTypes.object,
+		keywordsQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -133,6 +101,15 @@ class CommentarySearchToolbar extends React.Component {
 		this.toggleMoreDropdown = this.toggleMoreDropdown.bind(this);
 		this.switchToHymns = this.switchToHymns.bind(this);
 		this.switchToBooks = this.switchToBooks.bind(this);
+		const tenantId = sessionStorage.getItem('tenantId');
+		if (!this.props.addCommentPage) {
+			this.props.keywordsQuery.refetch({
+				tenantId: tenantId
+			});
+			this.props.referenceWorksQuery.refetch({
+				tenantId: tenantId
+			});
+		}
 	}
 
 	toggleSearchDropdown(targetDropdown) {
@@ -193,12 +170,23 @@ class CommentarySearchToolbar extends React.Component {
 				subworksTitle: nextProps.selectedWork.slug === 'homeric-hymns' ? 'Hymn' : 'Book'
 			});
 		}
+
+		if (nextProps.addCommentPage) {
+			this.setState({
+				keyideas: nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
+				keywords: nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),
+				commenters: nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters,
+				works: nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works,
+				referenceWorks: nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks,
+			});
+		}
 	}
 
 
 	render() {
 
-		const { toggleSearchTerm, filters, addCommentPage, keywords, keyideas, commenters, referenceWorks, works, handleChangeLineN } = this.props;
+		const { toggleSearchTerm, filters, addCommentPage, handleChangeLineN } = this.props;
+		const { keywords, keyideas, commenters, referenceWorks, works } = this.state;
 		const { searchDropdownOpen, moreDropdownOpen, subworksTitle } = this.state;
 
 		const lineFrom = getLineFrom(filters);
@@ -340,34 +328,9 @@ class CommentarySearchToolbar extends React.Component {
 	END CommentarySearchToolbar
 */
 
-
-const commentarySearchToolbarContainer = createContainer(props => {
-
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	// SUBSCRIPTIONS:
-	if (!props.addCommentPage) {
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
-		props.referenceWorksQuery.refetch({
-			tenantId: tenantId
-		});
-	}
-
-	return {
-		keyideas: props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'idea'),
-		keywords: props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords.filter(x => x.type === 'word'),
-		commenters: props.commentersQuery.loading ? [] : props.commentersQuery.commenters,
-		works: props.worksQuery.loading ? [] : props.worksQuery.works,
-		referenceWorks: props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks,
-	};
-
-}, CommentarySearchToolbar);
-
 export default compose(
 	commentersQuery,
 	referenceWorksQuery,
 	keywordsQuery,
 	worksQuery
-)(commentarySearchToolbarContainer);
+)(CommentarySearchToolbar);

@@ -7,7 +7,7 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 const settings = Meteor.settings.public;
 
 // Network interface for react graphql client
-const uriAddress = settings.REACT_APP_GRAPHQL_SERVER ? settings.graphql : 'http://ahcip.orphe.us/graphql';
+const uriAddress = settings.REACT_APP_GRAPHQL_SERVER ? settings.graphql : 'http://ahcip.orphe.us/graphql'; // TODO
 const networkInterface = createNetworkInterface({
 	uri: uriAddress,
 });

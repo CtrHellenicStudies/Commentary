@@ -40,12 +40,14 @@ class CommentLemmaText extends React.Component {
 						key={i}
 						className="lemma-text-line"
 					>
-						<span className={`
-							line-n ${(lines[i].n % 5) === 0  && lines[i].n !== 0 ? 
-								'line-n--visible'
-							:
-								''}
-							`}>
+						<span
+							className={`
+								line-n ${(lines[i].n % 5) === 0  && lines[i].n !== 0 ?
+									'line-n--visible'
+								:
+									''}
+							`}
+						>
 							{lines[i].n}
 						</span>
 						<p

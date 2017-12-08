@@ -31,7 +31,14 @@ class CommentLemmaTextWithTranslation extends React.Component {
 						<div
 							className="lemma-text-line lemma-text-line--source"
 						>
-							<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
+							<span
+								className={`
+									line-n ${(lines[i].n % 5) === 0  && lines[i].n !== 0 ?
+										'line-n--visible'
+									:
+										''}
+								`}
+							>
 								{line.n}
 							</span>
 							<p

@@ -397,8 +397,8 @@ const AddKeywordLayout = React.createClass({
 									<div className="comment-group">
 										<CommentLemmaSelect
 											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
+											lineFrom={this.state.selectedLineFrom}
+											lineTo={this.state.selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
 										/>

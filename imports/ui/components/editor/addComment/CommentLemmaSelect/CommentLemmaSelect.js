@@ -26,19 +26,10 @@ class CommentLemmaSelect extends Component {
 		};
 		this.onLineLetterValueChange = this.onLineLetterValueChange.bind(this);
 		this.toggleEdition = this.toggleEdition.bind(this);
-		const { selectedLineFrom, selectedLineTo, workSlug, subworkN } = this.props;
-		const properties = {
-			tenantId: sessionStorage.getItem('tenantId'),
-			workSlug: workSlug,
-			subworkN: subworkN,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineFrom <= selectedLineTo ? selectedLineTo : selectedLineFrom
-		};
 
-		props.textNodesQuery.refetch(properties);
+		props.textNodesQuery.refetch();
 	}
 	componentWillReceiveProps(nextProps) {
-
 		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
 		
 		const editions = !nextProps.editionsQuery.loading ?
@@ -64,14 +55,13 @@ class CommentLemmaSelect extends Component {
 	}
 	render() {
 		const self = this;
-
 		return (
 			<div className="comments lemma-panel-visible">
 				<div className="comment-outer comment-lemma-comment-outer">
 
-					{this.props.selectedLineFrom > 0 &&
+					{this.props.lineFrom > 0 &&
 						this.state.selectedLemmaEdition &&
-						'lines' in this.state.selectedLemmaEdition ?
+						this.state.selectedLemmaEdition.lines ?
 							<article className="comment lemma-comment paper-shadow">
 
 								{this.state.selectedLemmaEdition.lines.map((line, i) => (
@@ -82,7 +72,7 @@ class CommentLemmaSelect extends Component {
 									/>
 							))}
 
-								{self.props.selectedLineTo === 0 ?
+								{self.props.lineTo === 0 ?
 									<div>
 										<TextField
 											name="lineLetter"
@@ -112,9 +102,7 @@ class CommentLemmaSelect extends Component {
 									})}
 								</div>
 
-								<div className="context-tabs tabs">
-
-								</div>
+								<div className="context-tabs tabs" />
 
 							</article>
 						:
@@ -132,8 +120,8 @@ class CommentLemmaSelect extends Component {
 CommentLemmaSelect.propTypes = {
 	workSlug: PropTypes.string.isRequired,
 	subworkN: PropTypes.number.isRequired,
-	selectedLineFrom: PropTypes.number.isRequired,
-	selectedLineTo: PropTypes.number.isRequired,
+	lineFrom: PropTypes.number.isRequired,
+	lineTo: PropTypes.number.isRequired,
 	textNodesQuery: PropTypes.object,
 	editionsQuery: PropTypes.object
 };

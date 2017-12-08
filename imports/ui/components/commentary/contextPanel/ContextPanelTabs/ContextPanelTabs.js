@@ -118,6 +118,10 @@ const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, togg
 	</div>
 );
 ContextPanelTabs.propTypes = {
+	lemmaText: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		slug: PropTypes.string.isRequired,
+	})),
 	selectedLemmaEdition: PropTypes.string.isRequired,
 	toggleEdition: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,

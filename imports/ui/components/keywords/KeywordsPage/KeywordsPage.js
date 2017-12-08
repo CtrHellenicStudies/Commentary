@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
 
 // lib
@@ -31,7 +30,7 @@ class KeywordsPage extends Component {
 	static propTypes = {
 		type: PropTypes.string.isRequired,
 		title: PropTypes.string.isRequired,
-		settings: PropTypes.object,
+		settingsQuery: PropTypes.object,
 	};
 	raiseLimit() {
 		this.setState({
@@ -45,8 +44,15 @@ class KeywordsPage extends Component {
 			limit: 1
 		};
 	}
+	componentWillReceiveProps(props) {
+		const tenantId = sessionStorage.getItem('tenantId');
+		this.setState({
+			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
+		});
+	}
 	render() {
-		const { title, type, settings } = this.props;
+		const { title, type} = this.props;
+		const { settings } = this.state;
 
 		if (!settings) {
 			return <LoadingPage />;
@@ -99,12 +105,4 @@ class KeywordsPage extends Component {
 
 }
 
-const KeywordsPageContainer = createContainer((props) => {
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	return {
-		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
-	};
-}, KeywordsPage);
-
-export default compose(settingsQuery)(KeywordsPageContainer);
+export default compose(settingsQuery)(KeywordsPage);

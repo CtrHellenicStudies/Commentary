@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import muiTheme from '/imports/lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
@@ -15,9 +14,6 @@ import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceW
 import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
-// models
-import Settings from '/imports/models/settings';
-
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
 
@@ -25,10 +21,19 @@ import { settingsQuery } from '/imports/graphql/methods/settings';
 import Utils from '/imports/lib/utils';
 
 
-class ReferenceWorksPage extends React.Component {
+class ReferenceWorksPage extends Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			settings: nextProps.settingsQuery.loading ? { title: '' } : nextProps.settingsQuery.settings.find(x => x.tenantId === sessionStorage.getItem('tenantId'))
+		});
+	}
 	render() {
-		const { settings } = this.props;
+		const { settings } = this.state;
 
 		if (!settings) {
 			return <LoadingPage />;
@@ -74,15 +79,6 @@ class ReferenceWorksPage extends React.Component {
 
 ReferenceWorksPage.propTypes = {
 	title: PropTypes.string.isRequired,
-	settings: PropTypes.object,
+	settingsQuery: PropTypes.object,
 };
-
-const ReferenceWorksPageContainer = createContainer((props) => {
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	return {
-		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
-	};
-}, ReferenceWorksPage);
-
-export default compose(settingsQuery)(ReferenceWorksPageContainer);
+export default compose(settingsQuery)(ReferenceWorksPage);

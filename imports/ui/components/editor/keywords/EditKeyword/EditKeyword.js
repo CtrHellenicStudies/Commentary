@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
 import { compose } from 'react-apollo';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
+import { createContainer } from 'meteor/react-meteor-data';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select

@@ -107,6 +107,7 @@ export default class TextNodesService extends GraphQLService {
 		} else {
 			options.skip = 0;
 		}
+		console.log(lineFrom, ' ', lineTo, ' ', TextNodes.find(args, options).fetch().length);
 		return TextNodes.find(args, options).fetch();
 	}
 

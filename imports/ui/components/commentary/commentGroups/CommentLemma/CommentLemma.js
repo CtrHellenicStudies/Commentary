@@ -96,14 +96,6 @@ class CommentLemma extends React.Component {
 			translationAuthors: [],
 			editions: []
 		};
-		const properties = {
-			tenantId: sessionStorage.getItem('tenantId'),
-			workSlug: commentGroup.work.slag === 'homeric-hymns' ? 'hymns' : commentGroup.work.slug,
-			subworkN: commentGroup.subwork.n,
-			lineFrom: commentGroup.lineFrom,
-			lineTo: commentGroup.lineTo !== 'undefined' ? commentGroup.lineTo : commentGroup.lineFrom
-		};
-		this.props.textNodesQuery.refetch(properties);
 
 
 		// methods:
@@ -217,6 +209,8 @@ class CommentLemma extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+
+
 		const { commentGroup, multiline } = nextProps;
 		const { selectedLemmaEditionIndex } = this.state;
 		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
@@ -229,6 +223,7 @@ class CommentLemma extends React.Component {
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
+
 		if (commentGroup) {
 	
 			if (!commentGroup.lineTo) {
@@ -242,7 +237,7 @@ class CommentLemma extends React.Component {
 				lineTo: commentGroup.lineTo
 			};
 	
-			translationAuthors = _.uniq(getTranslationQueries(this.props.translationsQuery, translationNodesQuery));
+			translationAuthors = _.uniq(getTranslationQueries(nextProps.translationsQuery, translationNodesQuery));
 		}
 
 		this.setState({

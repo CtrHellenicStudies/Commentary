@@ -1,14 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
 
 import Masonry from 'react-masonry-component/lib';
-
-// models
-import ReferenceWorks from '/imports/models/referenceWorks';
 
 // graphql
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
@@ -22,8 +18,28 @@ import Utils from '/imports/lib/utils';
 
 class ReferenceWorksList extends React.Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {};
+
+		this.props.referenceWorksQuery.refetch({	
+			tenantId: sessionStorage.getItem('tenantId')	
+		});
+	}
+	componentWillReceiveProps(props) {
+
+		let referenceWorks;
+		if (commenterId) {
+			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === commenterId);
+		} else {
+			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
+		}
+		this.setState({
+			referenceWorks: referenceWorks
+		});
+	}
 	renderReferenceWorks() {
-		return this.props.referenceWorks.map((referenceWork, i) => (
+		return this.state.referenceWorks.map((referenceWork, i) => (
 			<ReferenceWorkTeaser
 				key={i}
 				referenceWork={referenceWork}
@@ -32,7 +48,7 @@ class ReferenceWorksList extends React.Component {
 	}
 	
 	render() {
-		const { referenceWorks } = this.props;
+		const { referenceWorks } = this.state;
 		const masonryOptions = {
 			isFitWidth: true,
 			transitionDuration: 300,
@@ -62,28 +78,7 @@ class ReferenceWorksList extends React.Component {
 
 ReferenceWorksList.propTypes = {
 	commenterId: PropTypes.string,
-	referenceWorks: PropTypes.array,
+	referenceWorksQuery: PropTypes.array,
 };
 
-const ReferenceWorksListContainer = createContainer((props) => {
-	const { commenterId } = props;
-	// SUBSCRIPTIONS:
-	const query = {};
-	let referenceWorks;
-	if (sessionStorage.getItem('tenantId')) {
-		props.referenceWorksQuery.refetch({	
-			tenantId: sessionStorage.getItem('tenantId')	
-		});
-	}
-	if (commenterId) {
-		referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === commenterId);
-	} else {
-		referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
-	}
-
-	return {
-		referenceWorks,
-	};
-}, ReferenceWorksList);
-
-export default compose(referenceWorksQuery)(ReferenceWorksListContainer);
+export default compose(referenceWorksQuery)(ReferenceWorksList);

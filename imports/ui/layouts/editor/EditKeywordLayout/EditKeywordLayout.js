@@ -66,7 +66,7 @@ class EditKeywordLayout extends Component {
 	componentWillReceiveProps(nextProps) {
 		const { match } = nextProps;
 		const slug = match.params.slug;
-		const ready = Roles.subscription.ready() && !nextProps.keywordsQuery.keywords;
+		const ready = Roles.subscription.ready() && !nextProps.keywordsQuery.loading;
 	
 		let keyword = {};
 		if (ready) {

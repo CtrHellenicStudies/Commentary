@@ -275,15 +275,7 @@ const TextNodesInputContainer = createContainer(props => {
 	const ready = !props.textNodesQuery.loading;
 
 	if (tenantId) {
-		props.textNodesQuery.refetch({
-			tenantId: tenantId,
-			workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
-			subworkN: subworkN,
-			lineFrom: parseInt(lineFrom, 10),
-			lineTo: parseInt(lineFrom, 10) + limit,
-			editionId: editionId,
-			limit: limit
-		});
+		props.textNodesQuery.refetch();
 	}
 	if (ready) {
 		textNodes = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;

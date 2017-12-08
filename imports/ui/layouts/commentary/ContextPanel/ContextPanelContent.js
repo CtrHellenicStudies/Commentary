@@ -49,18 +49,11 @@ const getSortedEditions = (editions) => {
 class ContextPanelContent extends Component {
 	constructor(props) {
 		super(props);
-		const { lineFrom, workSlug, subworkN, multiline } = props;
-		const lineTo = lineFrom + 49;
-		const properties = {
-			workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
-			subworkN: subworkN,
-			lineFrom: lineFrom,
-			lineTo: lineTo
-		};
+		const { lineFrom } = props;
 		this.state = {
-			lineTo: lineTo
+			lineTo: lineFrom + 49
 		};
-		this.props.textNodesQuery.refetch(properties);
+		this.props.textNodesQuery.refetch();
 	}
 	componentWillReceiveProps(nextProps) {
 

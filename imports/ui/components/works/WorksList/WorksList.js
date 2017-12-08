@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -20,14 +19,21 @@ import { worksQuery } from '/imports/graphql/methods/works';
 import muiTheme from '/imports/lib/muiTheme';
 
 
-class WorksList extends React.Component {
+class WorksList extends Component {
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
+	constructor(props) {
+		super(props);
+		this.state = {
+			works: []
+		};
 	}
-
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			works: nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works
+		});
+	}
 	renderWorks() {
-		const { works} = this.props;
+		const { works} = this.state;
 		return works.map((work, i) => (
 			<WorkVisualization
 				key={i}
@@ -47,21 +53,7 @@ class WorksList extends React.Component {
 }
 
 WorksList.propTypes = {
-	works: PropTypes.array,
+	worksQuery: PropTypes.object,
 };
 
-WorksList.childContextTypes = {
-	muiTheme: PropTypes.object.isRequired,
-};
-
-
-const cont = createContainer((props) => {
-
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
-	return {
-		works
-	};
-}, WorksList);
-export default compose(worksQuery)(cont);
+export default compose(worksQuery)(WorksList);

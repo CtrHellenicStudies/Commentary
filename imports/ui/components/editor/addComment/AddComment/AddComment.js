@@ -74,7 +74,9 @@ class AddComment extends React.Component {
 		commenters: PropTypes.array,
 		referenceWorkCreate: PropTypes.func,
 		keywordInsert: PropTypes.func,
-		keywordUpdate: PropTypes.func
+		keywordUpdate: PropTypes.func,
+		keywordsQuery: PropTypes.object,
+		referenceWorksQuery: PropTypes.object
 	};
 
 	static defaultProps = {

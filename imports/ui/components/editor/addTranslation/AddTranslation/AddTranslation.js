@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
 import { compose } from 'react-apollo';
@@ -17,10 +16,6 @@ import { Meteor } from 'meteor/meteor';
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { worksQuery } from '/imports/graphql/methods/works';
-
-// models
-import Works from '/imports/models/works';
-import Commenters from '/imports/models/commenters';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -64,8 +59,43 @@ class AddTranslation extends React.Component {
 		this.onLineToSubworkChange = this.onLineToSubworkChange.bind(this);
 		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
 		this.onEditorChange = this.onEditorChange.bind(this);
-	}
 
+		this.props.commentersQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
+	}
+	componentWillReceiveProps(props) {
+
+		const tenantId = sessionStorage.getItem('tenantId');
+		const works = props.worksQuery.loading ? [] : props.worksQuery.works;
+		const worksOptions = [];
+		works.forEach((work) => {
+			worksOptions.push({
+				value: work._id,
+				label: work.title,
+				slug: work.slug,
+				subworks: work.subworks
+			});
+		});
+		const commentersOptions = [];
+		const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
+		let commenters = [];
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			commenters = tenantCommenters.filter((x => 
+				Meteor.user().canEditCommenters.find(y => y === x._id) !== undefined));
+		}
+		commenters.forEach((commenter) => {
+			commentersOptions.push({
+				value: commenter._id,
+				label: commenter.name,
+			});
+		});
+
+		this.setState({
+			worksOptions,
+			commentersOptions
+		});
+	}
 	onEditorChange(editorState) {
 		this.setState({
 			editorState: editorState
@@ -156,7 +186,8 @@ class AddTranslation extends React.Component {
 	}
 
 	render() {
-		const { isTest, worksOptions, commentersOptions } = this.props;
+		const { isTest } = this.props;
+		const { worksOptions, commentersOptions } = this.state;
 
 		const getSubworks = () => {
 			const subworks = [];
@@ -225,47 +256,12 @@ AddTranslation.childContextTypes = {
 AddTranslation.propTypes = {
 	submitForm: PropTypes.func,
 	isTest: PropTypes.bool,
-	worksOptions: PropTypes.array,
-	commentersOptions: PropTypes.array,
+	commentersQuery: PropTypes.object,
+	worksQuery: PropTypes.object,
 };
 
-const AddTranslationContainer = createContainer(props => {
-	const tenantId = sessionStorage.getItem('tenantId');
-	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
-	const worksOptions = [];
-	works.forEach((work) => {
-		worksOptions.push({
-			value: work._id,
-			label: work.title,
-			slug: work.slug,
-			subworks: work.subworks
-		});
-	});
-	if (sessionStorage.getItem('tenantId')) {
-		props.commentersQuery.refetch({
-			tenantId: sessionStorage.getItem('tenantId')
-		});
-	}
-	const commentersOptions = [];
-	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
-	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = tenantCommenters.filter((x => 
-			Meteor.user().canEditCommenters.find(y => y === x._id) !== undefined));
-	}
-	commenters.forEach((commenter) => {
-		commentersOptions.push({
-			value: commenter._id,
-			label: commenter.name,
-		});
-	});
-	return {
-		worksOptions,
-		commentersOptions,
-	};
-}, AddTranslation);
-
 export default compose(
+	worksQuery,
 	commentersQuery,
 
-)(AddTranslationContainer);
+)(AddTranslation);

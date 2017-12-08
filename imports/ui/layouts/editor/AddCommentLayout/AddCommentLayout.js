@@ -437,8 +437,8 @@ class AddCommentLayout extends React.Component {
 								<div className="comment-group">
 									<CommentLemmaSelect
 										ref={(component) => { this.commentLemmaSelect = component; }}
-										selectedLineFrom={selectedLineFrom}
-										selectedLineTo={selectedLineTo}
+										lineFrom={selectedLineFrom}
+										lineTo={selectedLineTo}
 										workSlug={work ? work.slug : 'iliad'}
 										subworkN={subwork ? subwork.n : 1}
 									/>

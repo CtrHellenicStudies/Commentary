@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -17,28 +17,40 @@ import _ from 'underscore';
 import { Meteor } from 'meteor/meteor';
 
 import Cookies from 'js-cookie';
-import { createContainer } from 'meteor/react-meteor-data';
 import Select from 'react-select';
 import AutoComplete from 'material-ui/AutoComplete';
 import Person from 'material-ui/svg-icons/social/person';
 
-import Commenters from '/imports/models/commenters';
-
-class CommentersEditorDialog extends React.Component {
+class CommentersEditorDialog extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			commenters: this.props.currentCommenters,
 			searchText: ''
 		};
 		this.deleteCommenter = this.deleteCommenter.bind(this);
 		this.selectCommenter = this.selectCommenter.bind(this);
 		this.changeSearchTextValue = this.changeSearchTextValue.bind(this);
-	}
 
+		this.props.commentersQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
+	}
+	componentWillReceiveProps(props) {
+
+		const commentersIds = props.commenters.map(commenter => commenter._id);
+		const allCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
+		const currentCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
+			commentersIds.find(y => y === x._id));
+	
+		thi.setState({
+			commentersIds,
+			allCommenters,
+			currentCommenters
+		});
+	}
 	deleteCommenter(index) {
-		const currentCommenters = this.state.commenters;
+		const currentCommenters = this.state.currentCommenters;
 		currentCommenters.splice(index, 1);
 
 		this.props.setCommenters(currentCommenters);
@@ -52,7 +64,7 @@ class CommentersEditorDialog extends React.Component {
 
 	selectCommenter(commenter) {
 		if (commenter.name) {
-			const currentCommenters = this.state.commenters;
+			const currentCommenters = this.state.currentCommenters;
 			currentCommenters.push(commenter);
 
 			this.props.setCommenters(currentCommenters);
@@ -64,8 +76,8 @@ class CommentersEditorDialog extends React.Component {
 	}
 
 	render() {
-		const { allCommenters, commentersIds } = this.props;
-		const { commenters } = this.state;
+		const { allCommenters, commentersIds } = this.state;
+		const { currentCommenters } = this.state;
 		const commentersList = [];
 		allCommenters.forEach((commenter) => {
 			if (commentersIds.indexOf(commenter._id) === -1) {
@@ -149,30 +161,11 @@ class CommentersEditorDialog extends React.Component {
 }
 
 CommentersEditorDialog.propTypes = {
-	currentCommenters: PropTypes.array,
 	setCommenters: PropTypes.func,
-	allCommenters: PropTypes.array,
-	commentersIds: PropTypes.array,
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
+	commenters: PropTypes.array,
+	commentersQuery: PropTypes.object
 };
 
-const CommentersEditorDialogContainer = createContainer(props => {
-	const commentersIds = props.commenters.map(commenter => commenter._id);
-	if (sessionStorage.getItem('tenantId')) {
-		props.commentersQuery.refetch({
-			tenantId: sessionStorage.getItem('tenantId')
-		});
-	}
-	const allCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
-	const currentCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
-		commentersIds.find(y => y === x._id));
-
-	return {
-		commentersIds,
-		allCommenters,
-		currentCommenters
-	};
-}, CommentersEditorDialog);
-
-export default compose(commentersQuery)(CommentersEditorDialogContainer);
+export default compose(commentersQuery)(CommentersEditorDialog);

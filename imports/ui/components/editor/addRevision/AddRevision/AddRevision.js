@@ -5,8 +5,6 @@ import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
 import { Roles } from 'meteor/alanning:roles';
-
-import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 	ControlLabel,
@@ -32,11 +30,6 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import Snackbar from 'material-ui/Snackbar';
 import slugify from 'slugify';
 import _ from 'underscore';
-
-// models
-import Keywords from '/imports/models/keywords';
-import ReferenceWorks from '/imports/models/referenceWorks';
-import Commenters from '/imports/models/commenters';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -110,8 +103,55 @@ class AddRevision extends React.Component {
 			snackbarOpen: false,
 
 		};
+		const tenantId = sessionStorage.getItem('tenantId');
+		props.referenceWorksQuery.refetch({
+			tenantId: tenantId
+		});
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
 
 		autoBind(this);
+	}
+	componentWillReceiveProps(props) {
+
+		const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
+		let commenters = [];
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
+				Meteor.user().canEditCommenters.find(y => y === x._id));
+		}
+		const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
+		const referenceWorkOptions = [];
+		referenceWorks.forEach((referenceWork) => {
+			if (!referenceWorkOptions.some(val => (
+				referenceWork.slug === val.slug
+			))) {
+				referenceWorkOptions.push({
+					value: referenceWork._id,
+					label: referenceWork.title,
+					slug: referenceWork.slug,
+				});
+			}
+		});
+	
+		const commentersOptions = [];
+		commenters.forEach((commenter) => {
+			if (!commentersOptions.some(val => (
+					commenter._id === val.value
+				))) {
+				commentersOptions.push({
+					value: commenter._id,
+					label: commenter.name,
+				});
+			}
+		});
+		this.setState({
+			ready: !props.commentersQuery.loading && !props.referenceWorksQuery.loading && !props.keywordsQuery.loading,
+			tags,
+			referenceWorkOptions,
+			commentersOptions,
+		});
 	}
 
 	getChildContext() {
@@ -168,7 +208,7 @@ class AddRevision extends React.Component {
 
 	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
-		const keywords = this.props.tags;
+		const keywords = this.state.tags;
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
@@ -283,8 +323,7 @@ class AddRevision extends React.Component {
 	}
 
 	onTagValueChange(tag, i) {
-		const { tags } = this.props;
-		const { tagsValue } = this.state;
+		const { tagsValue, tags } = this.state;
 
 		let _selectedKeyword;
 		if (tag)			{
@@ -399,9 +438,9 @@ class AddRevision extends React.Component {
 	}
 
 	render() {
-		const { comment, commentersOptions } = this.props;
-		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
-		const { referenceWorkOptions, tags } = this.props;
+		const { comment } = this.props;
+		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue, commentersOptions } = this.state;
+		const { referenceWorkOptions, tags } = this.state;
 		const revisions = _.sortBy(comment.revisions, 'created');
 
 		return (
@@ -499,8 +538,8 @@ class AddRevision extends React.Component {
 								<ReferenceWork 
 									referenceWorks={this.state.referenceWorks}
 									update={this.updateReferenceWorks}
-									referenceWorkOptions={this.props.referenceWorkOptions} 
-									ready={this.props.ready}
+									referenceWorkOptions={this.state.referenceWorkOptions} 
+									ready={this.state.ready}
 									addNew={this.addNewReferenceWork}
 								/>
 
@@ -560,70 +599,19 @@ AddRevision.propTypes = {
 	submitForm: PropTypes.func.isRequired,
 	update: PropTypes.func.isRequired,
 	comment: PropTypes.object.isRequired,
-	tags: PropTypes.array,
-	referenceWorkOptions: PropTypes.array,
-	commentersOptions: PropTypes.array,
 	history: PropTypes.array,
-	ready: PropTypes.bool,
 	referenceWorkCreate: PropTypes.func,
 	keywordInsert: PropTypes.func,
-	keywordUpdate: PropTypes.func
+	keywordUpdate: PropTypes.func,
+	commentersQuery: PropTypes.object,
+	keywordsQuery: PropTypes.object,
+	referenceWorksQuery: PropTypes.object,
+	commentRemove: PropTypes.func
 };
 
 AddRevision.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
-
-const AddRevisionContainer = createContainer(props => {
-
-	const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
-	const tenantId = sessionStorage.getItem('tenantId');
-	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
-			Meteor.user().canEditCommenters.find(y => y === x._id));
-	}
-	if (tenantId) {
-		props.referenceWorksQuery.refetch({
-			tenantId: tenantId
-		});
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
-	}
-	const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
-	const referenceWorkOptions = [];
-	referenceWorks.forEach((referenceWork) => {
-		if (!referenceWorkOptions.some(val => (
-			referenceWork.slug === val.slug
-		))) {
-			referenceWorkOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-				slug: referenceWork.slug,
-			});
-		}
-	});
-
-	const commentersOptions = [];
-	commenters.forEach((commenter) => {
-		if (!commentersOptions.some(val => (
-				commenter._id === val.value
-			))) {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		}
-	});
-	return {
-		ready: !props.commentersQuery.loading && !props.referenceWorksQuery.loading && !props.keywordsQuery.loading,
-		tags,
-		referenceWorkOptions,
-		commentersOptions,
-	};
-}, AddRevision);
-
 export default compose(
 	commentRemoveMutation,
 	commentersQuery,
@@ -632,4 +620,4 @@ export default compose(
 	keywordsQuery,
 	keywordInsertMutation,
 	keywordUpdateMutation
-)(AddRevisionContainer);
+)(AddRevision);

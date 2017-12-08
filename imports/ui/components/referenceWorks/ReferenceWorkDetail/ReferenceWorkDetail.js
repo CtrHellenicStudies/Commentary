@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import muiTheme from '/imports/lib/muiTheme';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -21,21 +20,41 @@ import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 import { settingsQuery } from '/imports/graphql/methods/settings';
 
-// models
-import Settings from '/imports/models/settings';
-import ReferenceWorks from '/imports/models/referenceWorks';
-import Commenters from '/imports/models/commenters';
-
 // lib
 import Utils from '/imports/lib/utils';
 
 
 class ReferenceWorkDetail extends Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentWillReceiveProps(props) {
+
+		const slug = props.match.params.slug;
+		const tenantId = sessionStorage.getItem('tenantId');
+	
+		const referenceWork = props.referenceWorksQuery.loading ? undefined : props.referenceWorksQuery.referenceWorks.find(x => x.slug === slug && x.tenantId === tenantId);
+		const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => x.tenantId === tenantId);
+		let commenters = [];
+		if (referenceWork && referenceWork.authors) {
+			commenters = tenantCommenters.filter((x => 
+				referenceWork.authors.find(y => y === x._id) !== undefined))
+				.sort(function alphabetical(a, b) { return a > b; });
+		}
+
+		this.setState({
+			slug,
+			referenceWork,
+			commenters,
+			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
+		});
+	}
 	createMarkup() {
 		let __html = '';
 		const { desc } = this.props;
-		if (this.props.referenceWork) {
+		if (this.state.referenceWork) {
 			__html += '<p>';
 			__html += desc ? desc.replace('\n', '</p><p>') : '';
 			__html += '</p>';
@@ -46,7 +65,7 @@ class ReferenceWorkDetail extends Component {
 	}
 
 	render() {
-		const { referenceWork, commenters, settings } = this.props;
+		const { referenceWork, commenters, settings } = this.state;
 		const commentersNames = [];
 		let commentersTitle = '';
 
@@ -141,36 +160,14 @@ class ReferenceWorkDetail extends Component {
 }
 
 ReferenceWorkDetail.propTypes = {
-	slug: PropTypes.string.isRequired,
-	referenceWork: PropTypes.object,
-	settings: PropTypes.object,
-	commenters: PropTypes.array,
-	desc: PropTypes.string
+	desc: PropTypes.string,
+	commentersQuery: PropTypes.object,
+	referenceWorksQuery: PropTypes.object,
+	settingsQuery: PropTypes.object,
+	match: PropTypes.object
 };
-
-
-const ReferenceWorkDetailContainer = createContainer(props => {
-
-	const slug = props.match.params.slug;
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	const referenceWork = props.referenceWorksQuery.loading ? undefined : props.referenceWorksQuery.referenceWorks.find(x => x.slug === slug && x.tenantId === tenantId);
-	const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => x.tenantId === tenantId);
-	let commenters = [];
-	if (referenceWork && referenceWork.authors) {
-		commenters = tenantCommenters.filter((x => 
-			referenceWork.authors.find(y => y === x._id) !== undefined))
-			.sort(function alphabetical(a, b) { return a > b; });
-	}
-
-	return {
-		slug,
-		referenceWork,
-		commenters,
-		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-	};
-}, ReferenceWorkDetail);
-
-export default compose(commentersQuery,
+export default compose(
+	commentersQuery,
 	referenceWorksQuery,
-	settingsQuery)(ReferenceWorkDetailContainer);
+	settingsQuery
+)(ReferenceWorkDetail);

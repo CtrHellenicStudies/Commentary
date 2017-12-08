@@ -203,8 +203,8 @@ class TextNodesEditor extends Component {
 				editionId={_selectedEdition._id}
 				subworkN={_selectedSubwork.n}
 				subworkTitle={selectedSubwork.title}
-				lineFrom={startAtLine}
-				limit={limit}
+				lineFrom={parseInt(startAtLine, 10)}
+				limit={parseInt(startAtLine, 10) + limit}
 				loadMore={this.loadMoreText}
 			/>
 		);

@@ -81,11 +81,34 @@ const textNodeRemoveMutation = graphql(textNodeRemove, {
 		refetchQueries: ['textNodesQuery']
 	}
 });
-
+function isValue(val) {
+	return val !== undefined && val !== null;
+}
 const textNodesQuery = graphql(query, {
 	name: 'textNodesQuery',
-	options: {
-		refetchQueries: ['textNodesQuery']
+	options: (params) => {
+		console.log(params);
+		if (params) {
+			const workSlug = isValue(params.workSlug) ? params.workSlug : params.commentGroup.work.slug;
+			const subworkN = isValue(params.subworkN) ? params.subworkN : params.commentGroup.subwork.n;
+			const lineFrom = isValue(params.lineFrom) ? params.lineFrom : params.commentGroup.lineFrom;
+			let lineTo = params.lineTo;
+			if (params.commentGroup) {
+				lineTo = isValue(params.commentGroup.lineTo) ? params.commentGroup.lineTo : lineFrom;
+			} else if (!isValue(lineTo) || lineTo < lineFrom) {
+				lineTo = lineFrom;
+			}
+			return ({
+				variables: {
+					tenantId: sessionStorage.getItem('tenantId'),
+					workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+					subworkN: subworkN,
+					lineFrom: lineFrom,
+					lineTo: lineTo,
+					editionId: params.editionId
+				}
+			});
+		}
 	}
 });
 

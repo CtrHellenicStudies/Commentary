@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 } from 'react-bootstrap';
@@ -22,12 +21,27 @@ import {
 
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');
 
-class TranslationNodeInput extends React.Component {
+function getTranslationQueries(query, filter) {
+	
+	if (query.loading) {
+		return [];
+	}
+	return query.translations.filter(x => 
+		x.tenantId === filter.tenantId &&
+		x.work === filter.work && 
+		parseInt(x.subwork) === parseInt(filter.subwork) &&
+		x.author === filter.author)
+		.sort(function(a, b) {
+			return parseInt(a.n) - parseInt(b.n);
+		})
+		.slice(filter.skip, filter.limit);
+}
+class TranslationNodeInput extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			translationNodes: this.props.translationNodes,
+			translationNodes: this.state.translationNodes,
 			snackbarOpen: false,
 			snackbarMessage: '',
 			inserting: false,
@@ -37,9 +51,46 @@ class TranslationNodeInput extends React.Component {
 		this.moveTextNodeBlock = this.moveTextNodeBlock.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(props) {
+		const {selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation} = props;
+		const tenantId = sessionStorage.getItem('tenantId');
+		const filter = {
+			tenantId: tenantId,
+			work: selectedWork.slug,
+			subwork: selectedSubwork,
+			skip: startAtLine - 1,
+			limit: limit,
+			author: selectedTranslation
+		};
+	
+		const translation = getTranslationQueries(props.translationsQuery, filter);
+	
+		const translationNodes = translation;
+		if (!translation || translation.length === 0) {
+			for (let i = 0; i < limit; i++) {
+				let newLine;
+				const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
+	
+				if (arrIndex >= 0) {
+					newLine = translation[arrIndex];
+				}		else {
+					newLine = {
+						n: i + parseInt(startAtLine),
+						text: '',
+						tenantId: tenantId,
+						work: selectedWork.slug,
+						subwork: selectedSubwork,
+						author: selectedTranslation,
+					};
+				}
+	
+				translationNodes.push(newLine);
+			}
+		}
+	
 		this.setState({
-			translationNodes: nextProps.translationNodes,
+			translationNodes: translationNodes,
+			ready: !props.translationsQuery.loading
 		});
 	}
 
@@ -111,7 +162,7 @@ class TranslationNodeInput extends React.Component {
 	render() {
 		const {translationNodes} = this.state;
 
-		if (!this.props.ready) {
+		if (!this.state.ready) {
 			return null;
 		}
 
@@ -171,73 +222,17 @@ class TranslationNodeInput extends React.Component {
 }
 
 TranslationNodeInput.propTypes = {
-	translationNodes: PropTypes.array,
-	ready: PropTypes.bool,
 	translationRemove: PropTypes.func,
-	translationUpdate: PropTypes.func
+	translationUpdate: PropTypes.func,
+	translationsQuery: PropTypes.object,
+	startAtLine: PropTypes.number,
+	selectedSubwork: PropTypes.number,
+	selectedWork: PropTypes.string,
+	limit: PropTypes.number,
+	selectedTranslation: PropTypes.number
 };
-function getTranslationQueries(query, filter) {
-
-	if (query.loading) {
-		return [];
-	}
-	return query.translations.filter(x => 
-		x.tenantId === filter.tenantId &&
-		x.work === filter.work && 
-		parseInt(x.subwork) === parseInt(filter.subwork) &&
-		x.author === filter.author)
-		.sort(function(a, b) {
-			return parseInt(a.n) - parseInt(b.n);
-		})
-		.slice(filter.skip, filter.limit);
-}
-const TranslationInputContainer = createContainer((props) => {
-
-	const {selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation} = props;
-	const tenantId = sessionStorage.getItem('tenantId');
-	const filter = {
-		tenantId: tenantId,
-		work: selectedWork.slug,
-		subwork: selectedSubwork,
-		skip: startAtLine - 1,
-		limit: limit,
-		author: selectedTranslation
-	};
-
-	const translation = getTranslationQueries(props.translationsQuery, filter);
-
-	const translationNodes = translation;
-	if (!translation || translation.length === 0) {
-		for (let i = 0; i < limit; i++) {
-			let newLine;
-			const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
-
-			if (arrIndex >= 0) {
-				newLine = translation[arrIndex];
-			}		else {
-				newLine = {
-					n: i + parseInt(startAtLine),
-					text: '',
-					tenantId: tenantId,
-					work: selectedWork.slug,
-					subwork: selectedSubwork,
-					author: selectedTranslation,
-				};
-			}
-
-			translationNodes.push(newLine);
-		}
-	}
-
-	return {
-		ready: !props.translationsQuery.loading,
-		translationNodes
-	};
-
-}, TranslationNodeInput);
-
 export default compose(
 	translationsQuery,
 	translationRemoveMutation,
 	translationUpdateMutation
-)(TranslationInputContainer);
+)(TranslationNodeInput);

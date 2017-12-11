@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -11,11 +10,6 @@ import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
 import { compose } from 'react-apollo';
-
-// models
-import Comments from '/imports/models/comments';
-import Keywords from '/imports/models/keywords';
-import Settings from '/imports/models/settings';
 
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
@@ -44,40 +38,41 @@ class KeywordDetail extends Component {
 			referenceLeft: 0,
 			keyword: ''
 		};
-		this.preparetextNodeDatas = this.preparetextNodeDatas.bind(this);
-		this.setState(this.preparetextNodeDatas());
-	}
-	preparetextNodeDatas() {
-		const { keyword } = this.props;
-		if (!keyword) {
-			return null;
-		}
-		const datas = {};
-		if (keyword.work && keyword.subwork && keyword.lineFrom) {
-			datas.lineFrom = keyword.lineFrom;
-			datas.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
-			datas.workSlug = keyword.work.slug;
-			datas.subworkN = keyword.subwork.n;
-		} else {
 
-		}
+		const tenantId = sessionStorage.getItem('tenantId');
+		this.props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
+
 	}
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
+	componentWillReceiveProps(props) {
+		const { match } = props;
+		const slug = match.params.slug;
+	
+		const keyword = props.keywordsQuery.loading ? {} : props.keywordsQuery.keywords
+			.find(x => x.slug === slug);
+	
+		let keywordComments = null;
+		if (keyword) {
+			const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
+			props.commentsQuery.refetch({
+				queryParam: JSON.stringify(keywordCommentsQuery)
+			});
+			keywordComments = props.commentsQuery.loading ? [] : props.commentsQuery.comments;
+		}
+		this.setState({
+			keyword,
+			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+			keywordComments,
+		});
 	}
 
 	deleteKeyword() {
 		const that = this;
-		const { keyword } = this.props;
+		const { keyword } = this.state;
 		this.props.keywordRemove(keyword._id).then(function() {
 			that.props.history.push('/words');
 		});
-		// 	if (error) {
-		// 		console.log(keywordId, error);
-		// 	} else {
-		// 		this.props.history.push('/words');
-		// 	}
-		// });
 	}
 
 	_keywordDescriptionOnClick(e) {
@@ -104,7 +99,7 @@ class KeywordDetail extends Component {
 	}
 
 	render() {
-		const { keyword, settings, keywordComments } = this.props;
+		const { keyword, settings, keywordComments } = this.state;
 
 		if (!keyword) {
 			return <div />;
@@ -203,55 +198,17 @@ class KeywordDetail extends Component {
 		);
 	}
 }
-
-
 KeywordDetail.propTypes = {
-	keyword: PropTypes.object,
-	settings: PropTypes.object,
-	keywordComments: PropTypes.array,
+	settingsQuery: PropTypes.object,
+	keywordsQuery: PropTypes.object,
+	commentsQuery: PropTypes.object,
 	history: PropTypes.object,
-	keywordRemove: PropTypes.func
+	keywordRemove: PropTypes.func,
+	match: PropTypes.object
 };
-
-KeywordDetail.childContextTypes = {
-	muiTheme: PropTypes.object.isRequired,
-};
-
-
-const KeywordDetailContainer = createContainer((props) => {
-
-	const { match } = props;
-	const slug = match.params.slug;
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	if (tenantId) {
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
-	}
-
-	const keyword = props.keywordsQuery.loading ? {} : props.keywordsQuery.keywords
-		.find(x => x.slug === slug);
-
-	let keywordComments = null;
-	if (keyword) {
-		const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
-		props.commentsQuery.refetch({
-			queryParam: JSON.stringify(keywordCommentsQuery)
-		});
-		keywordComments = props.commentsQuery.loading ? [] : props.commentsQuery.comments;
-	}
-
-	return {
-		keyword,
-		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-		keywordComments,
-	};
-}, KeywordDetail);
-
 export default compose(
 	settingsQuery,
 	keywordsQuery,
 	keywordRemoveMutation,
 	commentsQuery
-)(KeywordDetailContainer);
+)(KeywordDetail);

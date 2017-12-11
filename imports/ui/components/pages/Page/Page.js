@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 
 import { compose } from 'react-apollo';
 
@@ -10,10 +9,7 @@ import Utils from '/imports/lib/utils';
 
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
-
-// models
-import Pages from '/imports/models/pages';
-import Settings from '/imports/models/settings';
+import { pagesQuery } from '/imports/graphql/methods/pages';
 
 // layouts
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
@@ -27,8 +23,31 @@ import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImage
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
 
-class Page extends React.Component {
+class Page extends Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {
+			tenantId: sessionStorage.getItem('tenantId')
+		};
+	}
+	componentWillReceiveProps(props) {
+		const { slug } = props;
+		let thumbnails = [];
+	
+		const page = props.pagesQuery.loading ? {} : props.pagesQuery.find(x => x.slug === slug);
+		if (page) {
+			if (page.headerImage && Array.isArray(page.headerImage)) {
+				thumbnails = Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch();
+			}
+		}
+		this.setState({
+			page,
+			ready: !props.settingsQuery.loading && !props.pagesQuery.loading,
+			thumbnails,
+			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
+		});
+	}
 	render() {
 		const { page, settings, slug, ready } = this.props;
 		let content;
@@ -94,42 +113,12 @@ class Page extends React.Component {
 		);
 	}
 }
-
 Page.propTypes = {
 	slug: PropTypes.string,
-	page: PropTypes.object,
-	ready: PropTypes.bool,
-	images: PropTypes.array,
-	thumbnails: PropTypes.array,
-	settings: PropTypes.object,
+	pagesQuery: PropTypes.object,
+	settingsQuery: PropTypes.object
 };
-
-
-const pageContainer = createContainer((props) => {
-	const { slug } = props;
-	let images = [];
-	let thumbnails = [];
-
-	const tenantId = sessionStorage.getItem('tenantId');
-	const pageHandle = Meteor.subscribe('pages', tenantId, slug);
-
-	const page = Pages.findOne({ slug, tenantId });
-
-	const imageHandle = Meteor.subscribe('pageImages', tenantId, slug);
-	if (page) {
-		if (page.headerImage && Array.isArray(page.headerImage)) {
-			images = Images.find({ _id: { $in: page.headerImage } }).fetch();
-			thumbnails = Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch();
-		}
-	}
-
-	return {
-		page,
-		ready: pageHandle.ready(),
-		images,
-		thumbnails,
-		settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
-	};
-}, Page);
-
-export default compose(settingsQuery)(pageContainer);
+export default compose(
+	settingsQuery,
+	pagesQuery
+)(Page);

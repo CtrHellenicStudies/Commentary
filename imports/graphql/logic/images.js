@@ -1,4 +1,4 @@
-import Pages from '/imports/models/pages';
+import Images from '/imports/models/images';
 import GraphQLService from './graphQLService';
 
 /**

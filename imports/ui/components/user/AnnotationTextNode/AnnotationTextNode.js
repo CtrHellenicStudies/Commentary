@@ -1,34 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 
 import { compose } from 'react-apollo';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
-// lib:
-import muiTheme from '/imports/lib/muiTheme';
 
 // graphql
 import { worksQuery } from '/imports/graphql/methods/works';
 
 
-const AnnotationTextNode = React.createClass({
+class AnnotationTextNode extends Component {
 
-	propTypes: {
-		annotation: PropTypes.object,
-		work: PropTypes.object,
-		isOdd: PropTypes.bool,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
+	constructor(props) {
+		super(props);
+		this.state = {};
+		this.getTextLocation = this.getTextLocation.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		const { text } = props;
+		let work = null;
+		if (text) {
+			const query = { _id: text.work };
+			work = props.worksQuery.loading ? [] : props.worksQuery.works.find(x => x._id === tex.work);
+		}
+		this.setState({
+			work: work
+		});
+	}
 	getTextLocation() {
 		const text = this.data.text;
 		let location = '';
@@ -59,12 +56,7 @@ const AnnotationTextNode = React.createClass({
 			location,
 			textN,
 		};
-	},
-
-	handleClick() {
-
-	},
-
+	}
 
 	render() {
 		// const text = this.props.text;
@@ -119,21 +111,12 @@ const AnnotationTextNode = React.createClass({
 
 			</a>
 		);
-	},
-});
-
-const AnnotationTextNodeContainer = createContainer((props) => {
-	const { text } = props;
-	let work = null;
-	const tenantId = sessionStorage.getItem('tenantId');
-	if (text) {
-		const query = { _id: text.work };
-		work = props.worksQuery.loading ? [] : props.worksQuery.works.find(x => x._id === tex.work);
 	}
-
-	return {
-		work,
-	};
-}, AnnotationTextNode);
-
-export default compose(worksQuery)(AnnotationTextNodeContainer);
+}
+AnnotationTextNode.propTypes = {
+	annotation: PropTypes.object,
+	text: PropTypes.string,
+	worksQuery: PropTypes.object,
+	isOdd: PropTypes.bool,
+};
+export default compose(worksQuery)(AnnotationTextNode);

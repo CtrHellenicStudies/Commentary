@@ -51,7 +51,7 @@ export default class KeywordsService extends GraphQLService {
 	keywordUpdate(keywordId, keyword) {
 		console.log(keyword);
 		if (this.userIsAdmin) {
-			return Keywords.update(keywordId, {$set: keyword});
+			return Keywords.update(keywordId, {$set: {...keyword}});
 		}
 		return new Error('Not authorized');
 	}

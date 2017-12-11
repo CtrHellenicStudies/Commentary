@@ -357,6 +357,8 @@ class AddTranslationLayout extends React.Component {
 											selectedLineTo={selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
+											shouldUpdateQuery={this.state.updateQuery}
+											updateQuery={this.updateQuery}
 										/> : ''}
 
 									<AddTranslation

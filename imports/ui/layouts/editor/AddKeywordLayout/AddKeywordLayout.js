@@ -221,7 +221,7 @@ const AddKeywordLayout = React.createClass({
 				order: work.order,
 			},
 			subwork: {
-				title: subwork.title,
+				title: subwork.title, 
 				n: subwork.n,
 			},
 			lineFrom: this.state.selectedLineFrom,
@@ -401,6 +401,8 @@ const AddKeywordLayout = React.createClass({
 											lineTo={this.state.selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
+											shouldUpdateQuery={this.state.updateQuery}
+											updateQuery={this.updateQuery}
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}

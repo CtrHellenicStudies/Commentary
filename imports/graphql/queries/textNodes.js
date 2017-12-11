@@ -43,9 +43,9 @@ const textNodeQueryFields = {
 				type: GraphQLString,
 			},
 		},
-		resolve(parent, { _id, tenantId, limit, skip, workSlug, subworkN, editionId, lineFrom, lineTo }, {token}) {
+		async resolve(parent, { _id, tenantId, limit, skip, workSlug, subworkN, editionId, lineFrom, lineTo }, {token}) {
 			const textNodesService = new TextNodesService({token});
-			return textNodesService.textNodesGet(_id, tenantId, limit, skip, workSlug, subworkN, editionId, lineFrom, lineTo);
+			return await textNodesService.textNodesGet(_id, tenantId, limit, skip, workSlug, subworkN, editionId, lineFrom, lineTo);
 		}
 	},
 };

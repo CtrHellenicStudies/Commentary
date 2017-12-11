@@ -10,7 +10,6 @@ import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 import ModalChangePwd from '/imports/ui/layouts/auth/ModalChangePwd';
-import Notifications from '/imports/ui/components/user/ProfilePage/Notifications';
 import Discussions from '/imports/ui/components/user/ProfilePage/Discussions';
 import Annotations from '/imports/ui/components/user/ProfilePage/Annotations';
 import Account from '/imports/ui/components/user/ProfilePage/Account';

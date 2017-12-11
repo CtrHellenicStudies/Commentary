@@ -27,13 +27,28 @@ class CommentLemmaSelect extends Component {
 		this.onLineLetterValueChange = this.onLineLetterValueChange.bind(this);
 		this.toggleEdition = this.toggleEdition.bind(this);
 
-		props.textNodesQuery.refetch();
 	}
 	componentWillReceiveProps(nextProps) {
-		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
-		
-		const editions = !nextProps.editionsQuery.loading ?
-			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions) : [];
+		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+			return;
+		}
+		const { lineFrom, workSlug, subworkN } = nextProps;
+		let lineTo = nextProps.lineTo;	
+		if (!nextProps.textNodesQuery.variables.workSlug || this.props.shouldUpdateQuery) {	
+			console.log('CommentLemmaSelect');
+			this.props.updateQuery();
+			lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;			
+			const properties = {
+				tenantId: sessionStorage.getItem('tenantId'),
+				workSlug: workSlug,
+				subworkN: subworkN,
+				lineFrom: lineFrom,
+				lineTo: lineTo
+			};
+			nextProps.textNodesQuery.refetch(properties);
+		}
+		const textNodesCursor = nextProps.textNodesQuery.textNodes;		
+		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 
 		this.setState({
 			lemmaText: editions,
@@ -123,7 +138,9 @@ CommentLemmaSelect.propTypes = {
 	lineFrom: PropTypes.number.isRequired,
 	lineTo: PropTypes.number.isRequired,
 	textNodesQuery: PropTypes.object,
-	editionsQuery: PropTypes.object
+	editionsQuery: PropTypes.object,
+	updateQuery: PropTypes.func,
+	shouldUpdateQuery: PropTypes.bool
 };
 
 export default compose(

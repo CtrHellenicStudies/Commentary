@@ -310,6 +310,8 @@ class AddRevisionLayout extends Component {
 										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
+										shouldUpdateQuery={this.state.updateQuery}
+										updateQuery={this.updateQuery}
 									/>
 
 									<AddRevision

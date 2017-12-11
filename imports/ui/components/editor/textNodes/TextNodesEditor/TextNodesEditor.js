@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { createContainer } from 'meteor/react-meteor-data';
 import { compose } from 'react-apollo';
 import Select from 'react-select';
 import autoBind from 'react-autobind';
@@ -67,11 +66,18 @@ class TextNodesEditor extends Component {
 
 		autoBind(this);
 	}
-
+	componentWillReceiveProps(props) {
+		const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
+		const works = props.worksQuery.loading ? [] : props.worksQuery.works;
+		this.setState({
+			works,
+			editions
+		});
+	}
 	selectWork(event) {
 		const setValue = event ? event.value : '';
 
-		const { works } = this.props;
+		const { works } = this.state;
 		let _selectedWork;
 
 		works.forEach(work => {
@@ -174,7 +180,7 @@ class TextNodesEditor extends Component {
 			return null;
 		}
 
-		const { works, editions } = this.props;
+		const { works, editions } = this.state;
 		let _selectedWork;
 		let _selectedEdition;
 		let _selectedSubwork;
@@ -216,7 +222,7 @@ class TextNodesEditor extends Component {
 		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
 			return null;
 		}
-		this.props.works.forEach(work => {
+		this.state.works.forEach(work => {
 			if (work._id === selectedWork) {
 				_selectedWork = work;
 			}
@@ -234,7 +240,7 @@ class TextNodesEditor extends Component {
 	}
 
 	render() {
-		const { works, editions } = this.props;
+		const { works, editions } = this.state;
 		const { subworks, selectedWork, selectedEdition, selectedSubwork, startAtLine } = this.state;
 
 		let _selectedWork;
@@ -380,28 +386,11 @@ class TextNodesEditor extends Component {
 		);
 	}
 }
-
-
 TextNodesEditor.propTypes = {
-	works: PropTypes.array,
-	editions: PropTypes.array,
+	worksQuery: PropTypes.object,
+	editionsQuery: PropTypes.object,
 };
-
-
-const TextNodesEditorContainer = createContainer(props => {
-
-	const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
-	const tenantId = sessionStorage.getItem('tenantId');
-	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
-
-	return {
-		works,
-		editions,
-	};
-
-}, TextNodesEditor);
-
 export default compose(
 	editionsQuery,
 	worksQuery
-)(TextNodesEditorContainer);
+)(TextNodesEditor);

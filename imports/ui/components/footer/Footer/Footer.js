@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 
 import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Link } from 'react-router-dom';
 import { compose } from 'react-apollo';
-
-// models
-import Settings from '/imports/models/settings';
 
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
@@ -21,14 +17,20 @@ import muiTheme from '/imports/lib/muiTheme';
 
 class Footer extends Component {
 
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
+	constructor(props) {
+		super(props);
+		this.state = {};
 	}
+	componentWillReceiveProps(props) {
+		const tenantId = sessionStorage.getItem('tenantId');
 
-
+		this.setState({
+			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+			tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)
+		});
+	}
 	render() {
-		const { settings, tenant } = this.props;
+		const { settings, tenant } = this.state;
 		const now = new Date();
 		const year = now.getFullYear();
 
@@ -119,24 +121,8 @@ class Footer extends Component {
 		);
 	}
 }
-
-
 Footer.propTypes = {
-	settings: PropTypes.object,
-	tenant: PropTypes.object,
+	settingsQuery: PropTypes.object,
+	tenantsQuery: PropTypes.object,
 };
-
-Footer.childContextTypes = {
-	muiTheme: PropTypes.object.isRequired,
-};
-
-const cont = createContainer((props) => {
-
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	return {
-		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-		tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)
-	};
-}, Footer);
-export default compose(settingsQuery, tenantsQuery)(cont);
+export default compose(settingsQuery, tenantsQuery)(Footer);

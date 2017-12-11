@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'meteor/react-meteor-data';
 import {
 	ControlLabel,
 	FormGroup,
@@ -26,7 +25,26 @@ class TranslationSelect extends React.Component {
 		this.handleCloseEditDialog = this.handleCloseEditDialog.bind(this);
 		this.addNewAuthor = this.addNewAuthor.bind(this);
 	}
-
+	componentWillReceiveProps(props) {
+		let workDetails = null;
+		const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authors;
+	
+		if (props.selectedWork && props.selectedSubwork) {
+			props.translationAuthorsQuery.refetch({
+				selectedWork: props.selectedWork,
+				selectedSubwork: props.selectedSubwork
+			});
+			workDetails = {
+				tenantId: sessionStorage.getItem('tenantId'),
+				work: props.selectedWork,
+				subwork: props.selectedSubwork,
+			};
+		}
+		this.setState({
+			workDetails: workDetails,
+			translationOptions: translationOptions
+		});
+	}
 	selectTranslation(event) {
 		const setValue = event ? event.value : '';
 		this.setState({
@@ -66,7 +84,7 @@ class TranslationSelect extends React.Component {
 		const translationOptions = [];
 		const workDetails = this.props.workDetails;
 
-		this.props.translationOptions.map(translation => {
+		this.state.translationOptions.map(translation => {
 			translationOptions.push({
 				value: translation.author,
 				label: translation.author,
@@ -116,31 +134,9 @@ class TranslationSelect extends React.Component {
 TranslationSelect.propTypes = {
 	selectTranslation: PropTypes.func,
 	workDetails: PropTypes.object,
-	translationOptions: PropTypes.array,
+	translationAuthorsQuery: PropTypes.object,
+	selectedSubwork: PropTypes.number,
+	selectedWork: PropTypes.string
 };
 
-const TranslationSelectContainer = createContainer(props => {
-
-	let workDetails = null;
-	const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authors;
-
-	if (props.selectedWork && props.selectedSubwork) {
-		props.translationAuthorsQuery.refetch({
-			selectedWork: props.selectedWork,
-			selectedSubwork: props.selectedSubwork
-		});
-		workDetails = {
-			tenantId: sessionStorage.getItem('tenantId'),
-			work: props.selectedWork,
-			subwork: props.selectedSubwork,
-		};
-	}
-
-	return {
-		workDetails,
-		translationOptions,
-	};
-
-}, TranslationSelect);
-
-export default compose(translationAuthorsQuery)(TranslationSelectContainer);
+export default compose(translationAuthorsQuery)(TranslationSelect);

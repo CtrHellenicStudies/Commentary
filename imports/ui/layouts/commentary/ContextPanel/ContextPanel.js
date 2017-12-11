@@ -227,8 +227,8 @@ class ContextPanel extends React.Component {
 				subworkN={subworkN}
 				commentGroup={commentGroup}
 				highlightingVisible={highlightingVisible}
-				lineFrom={lineFrom}
-				lineTo={lineFrom + 49}
+				lineFrom={selectedLineFrom}
+				lineTo={selectedLineFrom + 49}
 				maxLine={maxLine}
 				selectedLemmaEdition={selectedLemmaEdition}
 				onBeforeClicked={this.onBeforeClicked}

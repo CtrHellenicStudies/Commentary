@@ -124,12 +124,17 @@ class AddCommentLayout extends React.Component {
 		this.openContextReader = this.openContextReader.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
 		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.updateQuery = this.updateQuery.bind(this);
 	}
 
 	componentWillUpdate() {
 		handlePermissions();
 	}
-
+	updateQuery() {
+		this.setState({
+			shouldUpdateQuery: false
+		});
+	}
 	// --- BEGNI LINE SELECTION --- //
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
@@ -441,6 +446,8 @@ class AddCommentLayout extends React.Component {
 										lineTo={selectedLineTo}
 										workSlug={work ? work.slug : 'iliad'}
 										subworkN={subwork ? subwork.n : 1}
+										shouldUpdateQuery={this.state.updateQuery}
+										updateQuery={this.updateQuery}
 									/>
 
 									<AddComment

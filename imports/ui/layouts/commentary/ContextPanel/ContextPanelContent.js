@@ -53,17 +53,32 @@ class ContextPanelContent extends Component {
 		this.state = {
 			lineTo: lineFrom + 49
 		};
-		this.props.textNodesQuery.refetch();
 	}
 	componentWillReceiveProps(nextProps) {
 
 		const { lineFrom, multiline } = nextProps;
-		const lineTo = lineFrom + 49;
 		const tenantId = sessionStorage.getItem('tenantId');
+
+		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+			return;
+		}
+		const lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;	
+		console.log('ContextPanel');
+		if (!nextProps.textNodesQuery.variables.workSlug) {
+
+			const { workSlug, subworkN } = nextProps;		
+			const properties = {
+				tenantId: tenantId,
+				workSlug: workSlug,
+				subworkN: subworkN,
+				lineFrom: lineFrom,
+				lineTo: lineTo
+			};
+			nextProps.textNodesQuery.refetch(properties);
+		}
 	
-		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
-		const editions = !nextProps.editionsQuery.loading ?
-			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions) : [];
+		const textNodesCursor = nextProps.textNodesQuery.textNodes;
+		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 	
 		let sortedEditions;
 	
@@ -143,6 +158,7 @@ ContextPanelContent.propTypes = {
 	onAfterClicked: PropTypes.func.isRequired,
 	selectedLemmaEdition: PropTypes.string.isRequired,
 	lineFrom: PropTypes.number.isRequired,
+	lineTo: PropTypes.number.isRequired,
 	maxLine: PropTypes.number.isRequired,
 	toggleEdition: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,

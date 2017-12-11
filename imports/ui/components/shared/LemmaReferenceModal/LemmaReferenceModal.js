@@ -22,18 +22,31 @@ class LemmaReferenceModal extends Component {
 		this.setState({
 			selectedLemmaEditionIndex: 0,
 		});
-
-		this.props.textNodesQuery.refetch();
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.toggleHighlighting = this.toggleHighlighting.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
-		const textNodesCursor = props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes;
-		const editions = props.editionsQuery.loading ?
-			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
+		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+			return;
+		}
+		console.log(nextProps.textNodesQuery.variables);
+		if (nextProps.textNodesQuery.variables.workSlug === undefined) {
+			const { lineFrom, work, subwork } = this.props;
+			const lineTo = !this.props.lineTo || lineFrom > this.props.lineTo ? lineFrom : this.props.lineTo;
+			const properties = {
+				tenantId: sessionStorage.getItem('tenantId'),
+				workSlug: worker.slug,
+				subworkN: subwork.n,
+				lineFrom: lineFrom,
+				lineTo: lineTo
+			};
+			nextProps.textNodesQuery.refetch(properties);
+		}
+		const textNodesCursor = nextProps.textNodesQuery.textNodes;
+		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 		this.setState({
 			lemmaText: editions,
-			ready: !props.textNodesQuery.loading && !props.editionsQuery.editions,
+			ready: !nextProps.textNodesQuery.loading && !nextProps.editionsQuery.editions,
 		});
 	}
 	toggleEdition(editionSlug) {

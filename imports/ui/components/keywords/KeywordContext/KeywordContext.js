@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
 import { compose } from 'react-apollo';
-import { createContainer } from 'meteor/react-meteor-data';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -21,38 +20,97 @@ import { commentsQuery } from '/imports/graphql/methods/comments';
 // models
 import TextNodes from '/imports/models/textNodes';
 
-const KeywordContext = React.createClass({
-
-	propTypes: {
-		keyword: PropTypes.object,
-		lemmaText: PropTypes.array,
-		context: PropTypes.object,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+class KeywordContext extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
 			selectedLemma: 0,
 		};
-	},
+		this.toggleEdition = this.toggleEdition.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		if (props.commentsQuery.loading ||
+			props.editionsQuery.loading ||
+			props.textNodesQuery.loading) {
+			return;
+		}
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+		const { keyword, maxLines } = props;
+		const tenantId = sessionStorage.getItem('tenantId');
 
+		let lemmaText = [];
+		const context = {};
+
+		if (!keyword) {
+			return {
+				lemmaText,
+				context,
+			};
+		}
+
+		if (keyword.work && keyword.subwork && keyword.lineFrom) {
+
+
+			context.work = keyword.work.slug;
+			context.subwork = keyword.subwork.n;
+			context.lineFrom = keyword.lineFrom;
+			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
+
+			if (!props.textNodesQuery.loading) {
+				const textNodesCursor = props.textNodesQuery.textNodes;
+				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
+			}
+			props.textNodesQuery.refetch({
+				lineFrom: context.lineFrom,
+				lineTo: context.lineTo,
+				subworkN: context.subwork,
+				tenantId: tenantId,
+				workSlug: context.work
+			});
+
+		} else {
+			if (tenantId) {
+				const query = {};
+				query['keyword._id'] = keyword._id;
+				query.tenantId = tenantId;
+				props.commentsQuery.refetch({
+					queryParam: JSON.stringify(query),
+					limit: 1
+				});
+			}
+			
+			if (!props.commentsQuery.loading) {
+
+				if (props.commentsQuery.comments.length > 0) {
+					const comment = props.commentsQuery.comments[0];
+					const query = makeKeywordContextQueryFromComment(comment, maxLines);
+					props.textNodesQuery.refetch(query);
+					context.work = query.workSlug;
+					context.subwork = query.subworkN;
+					context.lineFrom = query.lineFrom;
+					context.lineTo = query.lineTo;
+
+					const textNodesCursor = TextNodes.find(textNodesQuery);
+					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
+				}
+			}
+		}
+		this.setState({
+			lemmaText: lemmaText,
+			context: context,
+		});
+	}
 	toggleEdition(newSelectedLemma) {
-		if (this.state.selectedLemma !== newSelectedLemma && newSelectedLemma < this.props.lemmaText.length) {
+		if (this.state.selectedLemma !== newSelectedLemma && newSelectedLemma < this.state.lemmaText.length) {
 			this.setState({
 				selectedLemma: newSelectedLemma,
 			});
 		}
-	},
+	}
 
 	render() {
-		const { keyword, context, lemmaText } = this.props;
+		const { keyword} = this.props;
+		const { context, lemmaText } = this.state;
 
 		if (!lemmaText || !lemmaText.length) {
 			return null;
@@ -101,91 +159,19 @@ const KeywordContext = React.createClass({
 				</div>
 			</article>
 		);
-	},
-
-});
-
-const KeywordContextContainer = createContainer(props => {
-
-	const { keyword, maxLines } = props;
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	let lemmaText = [];
-	const context = {};
-
-	if (!keyword) {
-		return {
-			lemmaText,
-			context,
-		};
 	}
 
-	if (keyword.work && keyword.subwork && keyword.lineFrom) {
-
-		if (tenantId) {
-			props.textNodesQuery.refetch({
-				tenantId: tenantId,
-				workSlug: keyword.work.slug,
-				subworkN: keyword.subwork.n,
-				lineFrom: keyword.lineFrom,
-				lineTo: keyword.lineTo ? keyword.lineTo : keyword.lineFrom
-			});
-			
-		}
-
-		context.work = keyword.work.slug;
-		context.subwork = keyword.subwork.n;
-		context.lineFrom = keyword.lineFrom;
-		context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
-
-		if (!props.textNodesQuery.loading) {
-			const textNodesCursor = props.textNodesQuery.textNodes;
-			lemmaText = !props.editionsQuery.loading ? 
-				Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
-		}
-
-	} else {
-		if (tenantId) {
-			const query = {};
-			query['keyword._id'] = keyword._id;
-			query.tenantId = tenantId;
-			props.commentsQuery.refetch({
-				queryParam: JSON.stringify(query),
-				limit: 1
-			});
-		}
-		
-		if (!props.commentsQuery.loading) {
-
-			if (props.commentsQuery.comments.length > 0) {
-				const comment = props.commentsQuery.comments[0];
-				const query = makeKeywordContextQueryFromComment(comment, maxLines);
-				if (tenantId) {
-					props.textNodesQuery.refetch(query);
-				}
-				context.work = query.workSlug;
-				context.subwork = query.subworkN;
-				context.lineFrom = query.lineFrom;
-				context.lineTo = query.lineTo;
-
-				if (!props.textNodesQuery.loading) {
-					const textNodesCursor = TextNodes.find(textNodesQuery);
-					lemmaText = !props.editionsQuery.loading ?
-						Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions) : [];
-				}
-			}
-		}
-	}
-
-	return {
-		lemmaText,
-		context,
-	};
-}, KeywordContext);
-
+}
+KeywordContext.propTypes = {
+	keyword: PropTypes.object,
+	editionsQuery: PropTypes.object,
+	commentsQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object,
+	maxLines: PropTypes.number
+};
 
 export default compose(
 	editionsQuery,
 	commentsQuery,
 	textNodesQuery
-)(KeywordContextContainer);
+)(KeywordContext);

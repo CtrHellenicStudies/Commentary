@@ -210,9 +210,13 @@ class CommentLemma extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 
-
 		const { commentGroup, multiline } = nextProps;
 		const { selectedLemmaEditionIndex } = this.state;
+
+		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+			return;
+		}
+
 		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
 		let editions = !nextProps.editionsQuery.loading ?
 			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions) : [];
@@ -223,9 +227,17 @@ class CommentLemma extends React.Component {
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
-
 		if (commentGroup) {
-	
+			console.log('CommentLemma');
+			if (!nextProps.textNodesQuery.variables.workSlug) {
+				const properties = {
+					workSlug: commentGroup.work.slug,
+					subworkN: Number(commentGroup.subwork.title),
+					lineFrom: commentGroup.lineFrom,
+					lineTo: commentGroup.lineTo ? commentGroup.lineTo : commentGroup.lineFrom
+				};
+				nextProps.textNodesQuery.refetch(properties);
+			}
 			if (!commentGroup.lineTo) {
 				commentGroup.lineTo = commentGroup.lineFrom;
 			}

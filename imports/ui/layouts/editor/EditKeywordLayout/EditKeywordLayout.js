@@ -388,10 +388,12 @@ class EditKeywordLayout extends Component {
 								<div className="comment-group">
 									<CommentLemmaSelect
 										ref={(component) => { this.keywordLemmaSelect = component; }}
-										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
-										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || 0}
+										lineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
+										lineTo={this.state.selectedLineTo || keyword.lineTo || 0}
 										workSlug={('work' in keyword) ? keyword.work.slug : 'iliad'}
 										subworkN={('subwork' in keyword) ? keyword.subwork.n : 1}
+										shouldUpdateQuery={this.state.updateQuery}
+										updateQuery={this.updateQuery}
 									/>
 
 									<EditKeyword

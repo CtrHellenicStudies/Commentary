@@ -30,7 +30,7 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
-import Utils from '/imports/lib/utils';
+import Utils, {makeKeywordContextQueryFromComment} from '/imports/lib/utils';
 
 
 class KeywordDetail extends Component {
@@ -44,8 +44,24 @@ class KeywordDetail extends Component {
 			referenceLeft: 0,
 			keyword: ''
 		};
+		this.preparetextNodeDatas = this.preparetextNodeDatas.bind(this);
+		this.setState(this.preparetextNodeDatas());
 	}
+	preparetextNodeDatas() {
+		const { keyword } = this.props;
+		if (!keyword) {
+			return null;
+		}
+		const datas = {};
+		if (keyword.work && keyword.subwork && keyword.lineFrom) {
+			datas.lineFrom = keyword.lineFrom;
+			datas.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
+			datas.workSlug = keyword.work.slug;
+			datas.subworkN = keyword.subwork.n;
+		} else {
 
+		}
+	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
@@ -139,7 +155,13 @@ class KeywordDetail extends Component {
 
 						<section className="page-content">
 							{keyword.lineFrom ?
-								<KeywordContext keyword={keyword} />
+								<KeywordContext 
+									keyword={keyword}
+									lineFrom={this.state.lineFrom} 
+									lineTo={this.state.lineTo}
+									workSlug={this.state.workSlug}
+									subworkN={this.state.subworkN}
+								/>
 							: ''}
 							{(
 								keyword.description

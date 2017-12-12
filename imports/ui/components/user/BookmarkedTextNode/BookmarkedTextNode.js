@@ -1,33 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
-
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // graphql
 import { worksQuery } from '/imports/graphql/methods/works';
 
-// lib
-import muiTheme from '/imports/lib/muiTheme';
+class BookmarkedTextNode extends Component {
 
-
-const BookmarkedTextNode = React.createClass({
-
-	propTypes: {
-		text: PropTypes.object,
-		work: PropTypes.object,
-		isOdd: PropTypes.bool,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
+	constructor(props) {
+		super(props);
+		this.state = {};
+		this.getTextLocation = this.getTextLocation.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		const { text } = props;
+		let work = null;
+		if (text) {
+			const query = { _id: text.work };
+			work = props.worksQuery.loading ? {} : props.worksQuery.works.find(x => x._id === text.work);
+		}
+		this.setState({
+			work: work
+		});
+	}
 	getTextLocation() {
 		const text = this.props.text;
 		let location = '';
@@ -65,15 +60,10 @@ const BookmarkedTextNode = React.createClass({
 			location,
 			textN,
 		};
-	},
-
-	handleClick() {
-
-	},
-
-
+	}
 	render() {
-		const { text, work } = this.props;
+		const { text } = this.props;
+		const { work } = this.state;
 		let textClasses = 'text-node bookmark-text-node clearfix';
 		const textLocation = this.getTextLocation();
 		let workTitle = '';
@@ -123,21 +113,12 @@ const BookmarkedTextNode = React.createClass({
 
 			</a>
 		);
-	},
-});
-
-const BookmarkedTextNodeContainer = createContainer((props) => {
-	const { text } = props;
-	const tenantId = sessionStorage.getItem('tenantId');
-	let work = null;
-	if (text) {
-		const query = { _id: text.work };
-		work = props.worksQuery.loading ? {} : props.worksQuery.works.find(x => x._id === text.work);
 	}
+}
+BookmarkedTextNode.propTypes = {
+	text: PropTypes.object,
+	worksQuery: PropTypes.object,
+	isOdd: PropTypes.bool
+};
 
-	return {
-		work,
-	};
-}, BookmarkedTextNode);
-
-export default compose(worksQuery)(BookmarkedTextNodeContainer);
+export default compose(worksQuery)(BookmarkedTextNode);

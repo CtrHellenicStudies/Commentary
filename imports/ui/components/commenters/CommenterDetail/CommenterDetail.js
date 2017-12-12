@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
@@ -25,7 +25,7 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 // lib
 import Utils from '/imports/lib/utils';
 
-class CommenterDetail extends React.Component {
+class CommenterDetail extends Component {
 	constructor(props) {
 		super(props);
 
@@ -41,18 +41,14 @@ class CommenterDetail extends React.Component {
 	}
 
 	static propTypes = {
-		commenter: PropTypes.shape({
-			name: PropTypes.string.isRequired,
-			bio: PropTypes.string,
-			_id: PropTypes.string
-		}),
 		avatarUrl: PropTypes.string,
 		settings: PropTypes.shape({
 			title: PropTypes.string.isRequired,
 		}),
 		isTest: PropTypes.bool,
 		match: PropTypes.object,
-		commentersQuery: PropTypes.object
+		commentersQuery: PropTypes.object,
+		settingsQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -70,8 +66,7 @@ class CommenterDetail extends React.Component {
 	}
 
 	subscribe() {
-		const { subscribed } = this.state;
-		const { commenter } = this.props;
+		const { subscribed, commenter } = this.state;
 
 		const commenterObj = {
 			_id: commenter._id,
@@ -105,13 +100,13 @@ class CommenterDetail extends React.Component {
 		if (Utils.isJson(biography))			{ return JSON.parse(biography).html; }
 		return biography;
 	}
-	componentWillReceiveProps(nextProps) {
-		const slug = nextProps.match.params.slug;
+	componentWillReceiveProps(props) {
+		const slug = props.match.params.slug;
 		const tenantId = sessionStorage.getItem('tenantId');
 	
 		let avatarUrl;
-		const commenter = nextProps.commentersQuery.loading ? {} : 
-		nextProps.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
+		const commenter = props.commentersQuery.loading ? {} : 
+		props.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
 	
 		if (commenter && commenter.avatar) {
 			avatarUrl = commenter.avatar.src;
@@ -119,7 +114,7 @@ class CommenterDetail extends React.Component {
 		this.setState({
 			avatarUrl: avatarUrl,
 			commenter: commenter,
-			settings: settings
+			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings
 		});
 	}
 	render() {

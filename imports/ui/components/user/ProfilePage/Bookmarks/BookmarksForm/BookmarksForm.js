@@ -7,14 +7,10 @@ import FlatButton from 'material-ui/FlatButton';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import { Mongo } from 'meteor/mongo';
 
 // graphql
 import { worksQuery } from '/imports/graphql/methods/works';
-
-// models
-import Works from '/imports/models/works';
 
 class BookmarksForm extends React.Component {
 	constructor(props) {
@@ -33,24 +29,19 @@ class BookmarksForm extends React.Component {
 	}
 
 	static propTypes = {
-		works: PropTypes.array,
+		worksQuery: PropTypes.object,
 		toggleBookmarksForm: PropTypes.func
 	}
 
-	static deafultProps = {
-		works: []
-	}
-
 	componentWillReceiveProps(nextProps) {
-		const {works} = this.props;
-
-		if (nextProps !== this.props) {
-			this.setState({
-				selectedWork: nextProps.works[0],
-				selectedSubwork: nextProps.works[0].subworks[0].slug
-			});
-			console.log(nextProps);
+		if (nextProps.worksQuery.loading) {
+			return;
 		}
+		this.setState({
+			works: nextProps.worksQuery.works,
+			selectedWork: nextProps.worksQuery.works[0],
+			selectedSubwork: nextProps.worksQuery.works[0].subworks[0].slug
+		});
 	}
 
 	getWork(event, index, value) {
@@ -88,7 +79,7 @@ class BookmarksForm extends React.Component {
 	}
 
 	render() {
-		const { works } = this.props;
+		const { works } = this.state;
 		const { selectedWork, selectedSubwork, subworks, selectedLineFrom, selectedLineTo } = this.state;
 
 		if (!selectedWork || !works) { return <div><h2 style={{textAlign: 'center'}}>loading...</h2></div>; }
@@ -150,14 +141,4 @@ class BookmarksForm extends React.Component {
 	}
 }
 
-const BookmarksFormContainer = createContainer((props) => {
-	const tenantId = sessionStorage.getItem('tenantId');
-
-	const works = props.worksQuery.loading ? [] : props.worksQuery.works;
-
-	return {
-		works
-	};
-}, BookmarksForm);
-
-export default compose(worksQuery)(BookmarksFormContainer);
+export default compose(worksQuery)(BookmarksForm);

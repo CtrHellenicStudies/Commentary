@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
-import { createContainer } from 'meteor/react-meteor-data';
 import { moment } from 'meteor/momentjs:moment';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -36,6 +35,14 @@ class DiscussionComment extends Component {
 		this.toggleMoreOptions = this.toggleMoreOptions.bind(this);
 		this.toggleShareOptions = this.toggleShareOptions.bind(this);
 		this.readDiscussionComment = this.readDiscussionComment.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		let user;
+	
+		if (props.discussionComment) {
+			user = Meteor.users.findOne({ _id: props.discussionComment.userId });
+		}
+		this.setState({user: user});
 	}
 	showEditMode() {
 		this.setState({
@@ -107,7 +114,8 @@ class DiscussionComment extends Component {
 	render() {
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
-		const { discussionComment, user } = this.props;
+		const { discussionComment } = this.props;
+		const { user } = this.state;
 		let userLink = '';
 		let userUpvoted = false;
 		let userReported = false;
@@ -389,7 +397,6 @@ class DiscussionComment extends Component {
 DiscussionComment.propTypes = {
 	discussionComment: PropTypes.object.isRequired,
 	currentUser: PropTypes.object,
-	user: PropTypes.object,
 	discussionCommentUpdate: PropTypes.func,
 	discussionCommentUnreport: PropTypes.func,
 	discussionCommentReport: PropTypes.func,
@@ -398,22 +405,8 @@ DiscussionComment.propTypes = {
 
 
 };
-const cont = createContainer(({ discussionComment }) => {
-
-	let handle;
-	let user;
-
-	if (discussionComment) {
-		user = Meteor.users.findOne({ _id: discussionComment.userId });
-	}
-
-	return {
-		user
-	};
-
-}, DiscussionComment);
 export default compose(
 	discussionCommentUpdateMutation, 
 	discussionCommentReportMutation,
 	discussionCommentUpvoteMutation,
-	discussionCommentUnreportMutation)(cont);
+	discussionCommentUnreportMutation)(DiscussionComment);

@@ -58,7 +58,7 @@ class ProfilePage extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			user: Meteor.user(),
-			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId),
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
 			ready: !nextProps.settingsQuery.loading
 		});
 	}

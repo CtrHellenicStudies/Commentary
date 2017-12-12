@@ -29,8 +29,8 @@ class ReferenceWorksList extends React.Component {
 	componentWillReceiveProps(props) {
 
 		let referenceWorks;
-		if (commenterId) {
-			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === commenterId);
+		if (props.commenterId) {
+			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === props.commenterId);
 		} else {
 			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
 		}
@@ -78,7 +78,7 @@ class ReferenceWorksList extends React.Component {
 
 ReferenceWorksList.propTypes = {
 	commenterId: PropTypes.string,
-	referenceWorksQuery: PropTypes.array,
+	referenceWorksQuery: PropTypes.object,
 };
 
 export default compose(referenceWorksQuery)(ReferenceWorksList);

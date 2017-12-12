@@ -1,7 +1,7 @@
 import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
-import {convertFromRaw, EditorState, ContentState} from 'draft-js';
+import {convertFromRaw, EditorState, ContentState, convertFromHTML} from 'draft-js';
 import {compose} from 'react-apollo';
 
 // models
@@ -346,9 +346,20 @@ const Utils = {
 	},
 	getEditorState(content) {
 		let _content = content || '';
-		_content = JSON.parse(_content);
-		const constState = convertFromRaw(_content);
-		return EditorState.createWithContent(constState);
+		if (this.isJson(content)) {
+			_content = JSON.parse(_content);
+			if (_content.raw) {
+				_content = _content.raw;
+			}
+			const constState = convertFromRaw(_content);
+			return EditorState.createWithContent(constState);
+		}
+		const constState = convertFromHTML(content);
+		const state = ContentState.createFromBlockArray(
+			constState.contentBlocks,
+			constState.entityMap
+			);
+		return EditorState.createWithContent(state);
 	},
 	getHtmlFromContext(context) {
 		return convertToHTML({

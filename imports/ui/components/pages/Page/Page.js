@@ -35,7 +35,7 @@ class Page extends Component {
 		const { slug } = props;
 		let thumbnails = [];
 	
-		const page = props.pagesQuery.loading ? {} : props.pagesQuery.find(x => x.slug === slug);
+		const page = props.pagesQuery.loading ? {} : props.pagesQuery.pages.find(x => x.slug === slug);
 		if (page) {
 			if (page.headerImage && Array.isArray(page.headerImage)) {
 				thumbnails = Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch();
@@ -45,11 +45,12 @@ class Page extends Component {
 			page,
 			ready: !props.settingsQuery.loading && !props.pagesQuery.loading,
 			thumbnails,
-			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
+			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId)
 		});
 	}
 	render() {
-		const { page, settings, slug, ready } = this.props;
+		const { slug } = this.props;
+		const { page, settings, ready } = this.state;
 		let content;
 		if (page)			{ content = Utils.getHtmlFromContext(Utils.getEditorState(page.content).getCurrentContent()); }
 		const headerImageUrl = '/images/apotheosis_homer.jpg';

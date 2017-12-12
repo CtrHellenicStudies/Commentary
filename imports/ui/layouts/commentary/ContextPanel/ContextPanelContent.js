@@ -63,7 +63,6 @@ class ContextPanelContent extends Component {
 			return;
 		}
 		const lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;	
-		console.log('ContextPanel');
 		if (!nextProps.textNodesQuery.variables.workSlug) {
 
 			const { workSlug, subworkN } = nextProps;		

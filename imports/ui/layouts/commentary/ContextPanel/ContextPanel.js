@@ -12,7 +12,7 @@
 
 */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'react-apollo';
@@ -47,7 +47,7 @@ const getsubworkN = (props) => {
 const LINE_THRESHOLD = 25;
 
 
-class ContextPanel extends React.Component {
+class ContextPanel extends Component {
 	static propTypes = {
 		open: PropTypes.bool.isRequired,
 		commentGroup: PropTypes.shape({

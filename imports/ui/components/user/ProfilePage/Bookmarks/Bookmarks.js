@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import FlatButton from 'material-ui/FlatButton';
-import { createContainer } from 'meteor/react-meteor-data';
 import { Card, CardHeader } from 'material-ui/Card';
 
 import BookmarksForm from '/imports/ui/components/user/ProfilePage/Bookmarks/BookmarksForm';
@@ -13,25 +12,13 @@ class Bookmarks extends React.Component {
 
 		this.state = {
 			toggleBookmarksForm: false,
-			bookmarks: []
+			bookmarks: [],
+			subscriptions: Meteor.user().subscriptions
 		};
 
 		this.toggleBookmarksForm = this.toggleBookmarksForm.bind(this);
 		this.removeBookmark = this.removeBookmark.bind(this);
 	}
-
-	componentWillReceiveProps(nextProps) {
-		if (this.props.subscriptions !== nextProps.subscriptions) {
-			this.setState({
-				bookmarks: nextProps.subscriptions.bookmarks
-			});
-		}
-	}
-
-	static propTypes = {
-		subscriptions: PropTypes.object
-	}
-
 	toggleBookmarksForm() {
 		const {toggleBookmarksForm} = this.state;
 		this.setState({
@@ -54,14 +41,14 @@ class Bookmarks extends React.Component {
 			}
 		});
 
-		console.log('bookmark in collection: ', this.props.subscriptions.bookmarks);
+		console.log('bookmark in collection: ', this.state.subscriptions.bookmarks);
 		console.log('bookmarks after update: ', bookmarks);
 
 	}
 
 	render() {
 		const { toggleBookmarksForm, bookmarks } = this.state;
-		const { subscriptions } = this.props;
+		const { subscriptions } = this.state;
 
 		return (
 			<div>
@@ -103,11 +90,4 @@ class Bookmarks extends React.Component {
 	}
 }
 
-const BookmarksContainer = createContainer(() => {
-	const subscriptions = Meteor.user().subscriptions;
-	return {
-		subscriptions
-	};
-}, Bookmarks);
-
-export default BookmarksContainer;
+export default Bookmarks;

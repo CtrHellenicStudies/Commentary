@@ -10,10 +10,6 @@ import { compose } from 'react-apollo';
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 import { settingsQuery } from '/imports/graphql/methods/settings';
 
-// models:
-import ReferenceWorks from '/imports/models/referenceWorks';
-import Settings from '/imports/models/settings';
-
 // components:
 import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';
 import CommentKeywordsContainer from '/imports/ui/components/commentary/comments/CommentKeywordsContainer';
@@ -373,4 +369,7 @@ class CommentDetail extends React.Component {
 /*
 	END CommentDetail
 */
-export default compose(referenceWorksQuery, settingsQuery)(CommentDetail);
+export default compose(
+	referenceWorksQuery,
+	settingsQuery
+)(CommentDetail);

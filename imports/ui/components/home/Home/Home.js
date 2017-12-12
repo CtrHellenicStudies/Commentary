@@ -82,7 +82,7 @@ class Home extends Component {
 			settings.homepageIntroductionImageCaption
 			&& settings.homepageIntroductionImageCaption.length
 		) {
-			introImageCaption = settings.homepageIntroductionImageCaption;
+			introImageCaption = Utils.getHtmlFromContext(Utils.getEditorState(settings.homepageIntroductionImageCaption).getCurrentContent());
 		}
 
 		Utils.setTitle(`Home | ${settings ? settings.title : ''}`);
@@ -282,9 +282,8 @@ class Home extends Component {
 
 
 Home.propTypes = {
-	settings: PropTypes.object,
+	settingsQuery: PropTypes.object,
 	isTest: PropTypes.bool,
-	ready: PropTypes.bool
 };
 
 Home.childContextTypes = {

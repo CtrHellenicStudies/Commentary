@@ -228,7 +228,6 @@ class CommentLemma extends React.Component {
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
 		if (commentGroup) {
-			console.log('CommentLemma');
 			if (!nextProps.textNodesQuery.variables.workSlug) {
 				const properties = {
 					workSlug: commentGroup.work.slug,

@@ -23,6 +23,7 @@ export default class CommentService extends GraphQLService {
 
 		const options = prepareGetCommentsOptions(limit, skip);
 		let query = JSON.parse(queryParam);
+		console.log(query);
 		if (queryParam === null) {
 			query = {};
 		}

@@ -12,6 +12,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // graphql
 import { keywordInsertMutation } from '/imports/graphql/methods/keywords';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -32,7 +33,8 @@ const AddKeywordLayout = React.createClass({
 		ready: PropTypes.bool,
 		isTest: PropTypes.bool,
 		history: PropTypes.object,
-		keywordInsert: PropTypes.func
+		keywordInsert: PropTypes.func,
+		textNodesQuery: PropTypes.object
 	},
 
 	childContextTypes: {
@@ -183,18 +185,41 @@ const AddKeywordLayout = React.createClass({
 			this.setState({
 				selectedLineTo,
 			});
+			selectedLineFrom = this.state.selectedLineFrom;
 		} else if (selectedLineTo === null) {
 			this.setState({
 				selectedLineFrom,
 			});
+			selectedLineTo = this.state.selectedLineTo;
 		} else if (selectedLineTo != null && selectedLineTo != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
 		} else {
-			// do nothing
+			return;
 		}
+		const { filters } = this.state;
+		let work;
+		let subwork;
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			} else if (filter.key === 'subworks') {
+				subwork = filter.values[0];
+			} else if (filter.key === 'lineTo') {
+				lineTo = filter.values[0];
+			} else if (filter.key === 'lineFrom') {
+				lineFrom = filter.values[0];
+			}
+		});
+		const properties = {
+			workSlug: work ? work.slug : 'iliad',
+			subworkN: subwork ? subwork.n : 1,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
 	},
 
 	// --- END LINE SELECTION --- //
@@ -239,12 +264,6 @@ const AddKeywordLayout = React.createClass({
 			that.props.history.push(`/tags/${keyword.slug}`);
 		}
 		);
-		// 	if (error) {
-		// 		this.showSnackBar(error);
-		// 	} else {
-		// 		this.props.history.push(`/tags/${keyword.slug}`);
-		// 	}
-		// });
 	},
 
 	showSnackBar(error) {
@@ -403,6 +422,7 @@ const AddKeywordLayout = React.createClass({
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
+											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}				
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}
@@ -444,4 +464,7 @@ const AddKeywordLayoutContainer = (() => {
 	};
 }, AddKeywordLayout);
 
-export default (keywordInsertMutation)(AddKeywordLayoutContainer);
+export default compose(
+	keywordInsertMutation,
+	textNodesQuery
+)(AddKeywordLayoutContainer);

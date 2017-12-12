@@ -18,7 +18,8 @@ class TranslationSelect extends React.Component {
 		super(props);
 		this.state = {
 			selectedTranslation: null,
-			editDialogOpen: false
+			editDialogOpen: false,
+			translationOptions: []
 		};
 		this.selectTranslation = this.selectTranslation.bind(this);
 		this.showEditDialog = this.showEditDialog.bind(this);

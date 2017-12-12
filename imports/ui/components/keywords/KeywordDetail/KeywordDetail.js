@@ -36,12 +36,12 @@ class KeywordDetail extends Component {
 			keywordReferenceModalVisible: false,
 			referenceTop: 0,
 			referenceLeft: 0,
-			keyword: ''
+			keyword: '',
+			tenantId: sessionStorage.getItem('tenantId')
 		};
 
-		const tenantId = sessionStorage.getItem('tenantId');
 		this.props.keywordsQuery.refetch({
-			tenantId: tenantId
+			tenantId: this.state.tenantId
 		});
 
 	}
@@ -62,7 +62,7 @@ class KeywordDetail extends Component {
 		}
 		this.setState({
 			keyword,
-			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
+			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
 			keywordComments,
 		});
 	}

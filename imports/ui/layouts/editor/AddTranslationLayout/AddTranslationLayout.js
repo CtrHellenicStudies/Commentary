@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
@@ -13,7 +13,7 @@ import { convertToRaw } from 'draft-js';
 import Cookies from 'js-cookie';
 
 // graphql
-import {} from '/imports/graphql/methods/translations';
+import {textNodesQuery} from '/imports/graphql/methods/textNodes';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -61,10 +61,11 @@ const getFilterValues = (filters) => {
 };
 
 
-class AddTranslationLayout extends React.Component {
+class AddTranslationLayout extends Component {
 	static propTypes = {
 		ready: PropTypes.bool,
-		history: PropTypes.array
+		history: PropTypes.array,
+		textNodesQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -123,16 +124,27 @@ class AddTranslationLayout extends React.Component {
 			this.setState({
 				selectedLineTo,
 			});
+			selectedLineTo = this.state.selectedLineTo;
 		} else if (selectedLineTo === null) {
 			this.setState({
 				selectedLineFrom,
 			});
+			selectedLineFrom = this.state.selectedLineFrom;
 		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
 		}
+		const { filters } = this.state;
+		const { work, subwork } = getFilterValues(filters);
+		const properties = {
+			workSlug: work ? work.slug : 'iliad',
+			subworkN: subwork ? subwork.n : 1,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
 	}
 
 	toggleSearchTerm(key, value) {
@@ -359,6 +371,7 @@ class AddTranslationLayout extends React.Component {
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
+											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 										/> : ''}
 
 									<AddTranslation
@@ -403,4 +416,4 @@ const AddTranslationLayoutContainer = (() => {
 	};
 }, AddTranslationLayout);
 
-export default compose()(AddTranslationLayoutContainer);
+export default compose(textNodesQuery)(AddTranslationLayoutContainer);

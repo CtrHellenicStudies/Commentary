@@ -9,7 +9,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // graphql
 import { editionsQuery } from '/imports/graphql/methods/editions';
-import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -29,26 +28,10 @@ class CommentLemmaSelect extends Component {
 
 	}
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+		if (!nextProps.textNodes || nextProps.editionsQuery.loading) {
 			return;
 		}
-		const { lineFrom, workSlug, subworkN } = nextProps;
-		let lineTo = nextProps.lineTo;	
-		if (!nextProps.textNodesQuery.variables.workSlug || this.props.shouldUpdateQuery) {	
-			console.log('CommentLemmaSelect');
-			this.props.updateQuery();
-			lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;			
-			const properties = {
-				tenantId: sessionStorage.getItem('tenantId'),
-				workSlug: workSlug,
-				subworkN: subworkN,
-				lineFrom: lineFrom,
-				lineTo: lineTo
-			};
-			nextProps.textNodesQuery.refetch(properties);
-		}
-		const textNodesCursor = nextProps.textNodesQuery.textNodes;		
-		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
+		const editions = Utils.textFromTextNodesGroupedByEdition(nextProps.textNodes, nextProps.editionsQuery.editions);
 
 		this.setState({
 			lemmaText: editions,
@@ -137,13 +120,12 @@ CommentLemmaSelect.propTypes = {
 	subworkN: PropTypes.number.isRequired,
 	lineFrom: PropTypes.number.isRequired,
 	lineTo: PropTypes.number.isRequired,
-	textNodesQuery: PropTypes.object,
+	textNodes: PropTypes.array,
 	editionsQuery: PropTypes.object,
 	updateQuery: PropTypes.func,
 	shouldUpdateQuery: PropTypes.bool
 };
 
 export default compose(
-	editionsQuery,
-	textNodesQuery
+	editionsQuery
 )(CommentLemmaSelect);

@@ -58,6 +58,8 @@ class TextNodesEditor extends Component {
 			selectedTranslation,
 			startAtLine,
 			limit,
+			works: [],
+			editions: [],
 			editWorkDialogOpen: false,
 			editEditionDialogOpen: false,
 			editSubworkDialogOpen: false,

@@ -73,6 +73,16 @@ const commentsQuery = graphql(query, {
 		});
 	}
 });
+const commentsQueryById = graphql(query, {
+	name: 'commentsQueryById',
+	options: (params) => {
+		return ({
+			variables: {
+				queryParam: JSON.stringify({_id: params.match.params.commentId})
+			}
+		});
+	}
+});
 const commentsMoreQuery = graphql(queryMore, {
 	name: 'commentsMoreQuery',
 	options: {
@@ -113,5 +123,6 @@ export {
 	commentsMoreQuery,
 	commentRemoveMutation,
 	commentsInsertMutation,
-	commentsUpdateMutation
+	commentsUpdateMutation,
+	commentsQueryById
 };

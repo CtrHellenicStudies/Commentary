@@ -15,6 +15,7 @@ import Header from '/imports/ui/layouts/header/Header';
 
 // graphql
 import { keywordsQuery, keywordUpdateMutation } from '/imports/graphql/methods/keywords';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // components
 import Spinner from '/imports/ui/components/loading/Spinner';
@@ -64,16 +65,30 @@ class EditKeywordLayout extends Component {
 		});
 	}
 	componentWillReceiveProps(nextProps) {
+		if (nextProps.keywordsQuery.loading || nextProps.textNodesQuery.loading) {
+			if (!nextProps.textNodesQuery.loading) {
+				this.setState({
+					ready: false
+				});
+			}
+			return;
+		}
 		const { match } = nextProps;
 		const slug = match.params.slug;
-		const ready = Roles.subscription.ready() && !nextProps.keywordsQuery.loading;
 	
-		let keyword = {};
-		if (ready) {
-			keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
+		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
+		if (!this.props.textNodesQuery.variables.workSlug) {
+			this.props.textNodesQuery.refetch({
+				tenantId: sessionStorage.getItem('tenantId'),
+				lineFrom: this.state.selectedLineFrom || keyword.lineFrom || 0,
+				lineTo: this.state.selectedLineTo || keyword.lineTo || 0,
+				workSlug: keyword.work ? keyword.work.slug : 'iliad',
+				subworkN: keyword.subwork ? keyword.subwork.n : 1
+			});
+			return;
 		}
 		this.setState({
-			ready: ready,
+			ready: true,
 			keyword: keyword
 		});
 	}
@@ -95,18 +110,41 @@ class EditKeywordLayout extends Component {
 			this.setState({
 				selectedLineTo,
 			});
+			selectedLineFrom = this.state.selectedLineFrom;
 		} else if (selectedLineTo === null) {
 			this.setState({
 				selectedLineFrom,
 			});
+			selectedLineTo = this.state.selectedLineTo;
 		} else if (selectedLineTo != null && selectedLineTo != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
 		} else {
-			// do nothing
+			return;
 		}
+		const { filters } = this.state;
+		let work;
+		let subwork;
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			} else if (filter.key === 'subworks') {
+				subwork = filter.values[0];
+			} else if (filter.key === 'lineTo') {
+				lineTo = filter.values[0];
+			} else if (filter.key === 'lineFrom') {
+				lineFrom = filter.values[0];
+			}
+		});
+		const properties = {
+			workSlug: work ? work.slug : 'iliad',
+			subworkN: subwork ? subwork.n : 1,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
 	}
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
@@ -390,10 +428,11 @@ class EditKeywordLayout extends Component {
 										ref={(component) => { this.keywordLemmaSelect = component; }}
 										lineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
 										lineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										workSlug={('work' in keyword) ? keyword.work.slug : 'iliad'}
-										subworkN={('subwork' in keyword) ? keyword.subwork.n : 1}
+										workSlug={keyword.work ? keyword.work.slug : 'iliad'}
+										subworkN={keyword.subwork ? keyword.subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
+										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 									/>
 
 									<EditKeyword
@@ -409,8 +448,8 @@ class EditKeywordLayout extends Component {
 										workSlug={work ? work.slug : 'iliad'}
 										subworkN={subwork ? subwork.n : 1}
 										lineFrom={lineFrom || 1}
-										selectedLineFrom={this.state.selectedLineFrom}
-										selectedLineTo={this.state.selectedLineTo}
+										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
+										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || 0}
 										updateSelectedLines={this.updateSelectedLines}
 										editor
 									/>
@@ -435,9 +474,11 @@ EditKeywordLayout.propTypes = {
 	history: PropTypes.object,
 	keywordUpdate: PropTypes.func,
 	match: PropTypes.object,
-	keywordsQuery: PropTypes.object
+	keywordsQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object
 };
 export default compose(
 	keywordsQuery,
-	keywordUpdateMutation
+	keywordUpdateMutation,
+	textNodesQuery
 )(EditKeywordLayout);

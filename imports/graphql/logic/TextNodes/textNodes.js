@@ -88,7 +88,9 @@ export default class TextNodesService extends GraphQLService {
 		if (lineTo) {
 			args.$and = [{'text.n': { $gte: lineFrom }}, {'text.n': { $lte: lineTo }}];
 		}
-
+		if (lineTo === 0) {
+			args.$and = [{'text.n': { $gte: lineFrom }}, {'text.n': { $lte: lineFrom }}];
+		}
 		if (workSlug) {
 			args['work.slug'] = slugify(workSlug);
 		}

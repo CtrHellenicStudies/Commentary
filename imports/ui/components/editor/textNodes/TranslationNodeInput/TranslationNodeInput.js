@@ -41,7 +41,7 @@ class TranslationNodeInput extends Component {
 		super(props);
 
 		this.state = {
-			translationNodes: this.state.translationNodes,
+			translationNodes: [],
 			snackbarOpen: false,
 			snackbarMessage: '',
 			inserting: false,
@@ -227,9 +227,9 @@ TranslationNodeInput.propTypes = {
 	translationsQuery: PropTypes.object,
 	startAtLine: PropTypes.number,
 	selectedSubwork: PropTypes.number,
-	selectedWork: PropTypes.string,
+	selectedWork: PropTypes.object,
 	limit: PropTypes.number,
-	selectedTranslation: PropTypes.number
+	selectedTranslation: PropTypes.string
 };
 export default compose(
 	translationsQuery,

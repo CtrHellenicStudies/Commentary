@@ -20,7 +20,8 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 // graphql
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
-import { commentsQuery, commentsUpdateMutation } from '/imports/graphql/methods/comments';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
+import { commentsQueryById, commentsUpdateMutation } from '/imports/graphql/methods/comments';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -34,7 +35,8 @@ class AddRevisionLayout extends Component {
 			filters: [],
 			contextReaderOpen: true,
 			snackbarOpen: false,
-			snackbarMessage: ''
+			snackbarMessage: '',
+			ready: false
 		};
 
 		this.addRevision = this.addRevision.bind(this);
@@ -50,15 +52,22 @@ class AddRevisionLayout extends Component {
 		this.props.keywordsQuery.refetch({
 			tenantId: sessionStorage.getItem('tenantId')
 		});
-		this.props.commentsQuery.refetch({
-			queryParam: JSON.stringify({_id: commentId})
-		});
+		this.props.commentsQueryById.refetch();
 	}
 	componentWillReceiveProps(nextProps) {
+		if (nextProps.commentsQueryById.loading || 
+			nextProps.keywordsQuery.loading || 
+			nextProps.commentersQuery.loading ||
+			nextProps.textNodesQuery.loading) {
+			this.setState({
+				ready: false
+			});
+			return;
+		}
 		const commentId = nextProps.match.params.commentId;
 		
-		const comment = nextProps.commentsQuery.loading ? {} : nextProps.commentsQuery.comments;
-		const tenantCommenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters;
+		const comment = nextProps.commentsQueryById.comments[0];
+		const tenantCommenters = nextProps.commentersQuery.commenters;
 		const commenters = [];
 		if (comment) {
 			comment.commenters.forEach((commenter) => {
@@ -67,20 +76,30 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-		const keywords = nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords;
+		if (!this.props.textNodesQuery.variables.workSlug) {
+			this.props.textNodesQuery.refetch({
+				tenantId: sessionStorage.getItem('tenantId'),
+				lineFrom: comment.lineFrom,
+				lineTo: comment.lineTo,
+				workSlug: comment.work.slug,
+				subworkN: comment.subwork.n
+			});
+			return;
+		}
+		const keywords = nextProps.keywordsQuery.keywords;
 		this.setState({
 			comment: comment,
-			ready: Roles.subscrition.ready() && !nextProps.commentersQuery.loading && !nextProps.commentsQuery.loading,
+			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
 			commenters: commenters
 		});
 	}
 	componentWillUpdate() {
-		if (this.props.ready) this.handlePermissions();
+		if (this.state.ready) this.handlePermissions();
 	}
 	addRevision(formData, textValue, textRawValue) {
 		const self = this;
-		const { comment } = this.props;
+		const { comment } = this.state;
 		const token = Cookies.get('loginToken');
 		const revision = {
 			title: formData.titleValue,
@@ -102,7 +121,7 @@ class AddRevisionLayout extends Component {
 		// TODO: handle behavior after comment added (add info about success)
 	}
 	update(formData) {
-		const { comment } = this.props;
+		const { comment } = this.state;
 
 		const keywords = this.getKeywords(formData);
 		const authToken = Cookies.get('loginToken');
@@ -144,7 +163,7 @@ class AddRevisionLayout extends Component {
 			let isOwner = false;
 			this.state.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (~Meteor.user().canEditCommenters.indexOf(commenter._id));
+					isOwner = (Meteor.user().canEditCommenters.indexOf(commenter._id));
 				}
 			});
 			if (!isOwner) {
@@ -306,12 +325,13 @@ class AddRevisionLayout extends Component {
 								<div className="comment-group">
 									<CommentLemmaSelect
 										ref={(component) => { this.commentLemmaSelect = component; }}
-										selectedLineFrom={comment.lineFrom}
-										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
+										lineFrom={comment.lineFrom}
+										lineTo={(comment.lineFrom + comment.nLines) - 1}
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
+										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 									/>
 
 									<AddRevision
@@ -363,15 +383,17 @@ AddRevisionLayout.propTypes = {
 	history: PropTypes.object,
 	commentUpdate: PropTypes.func,
 	commentersQuery: PropTypes.object,
-	commentsQuery: PropTypes.object,
+	commentsQueryById: PropTypes.object,
 	keywordsQuery: PropTypes.object,
-	match: PropTypes.object
+	match: PropTypes.object,
+	textNodesQuery: PropTypes.object
 
 };
 
 export default compose(
 	commentersQuery,
 	keywordsQuery,
-	commentsQuery,
-	commentsUpdateMutation
+	commentsQueryById,
+	commentsUpdateMutation,
+	textNodesQuery
 )(AddRevisionLayout);

@@ -372,5 +372,7 @@ EditKeyword.propTypes = {
 	keywordsQuery: PropTypes.object
 };
 export default compose(
-	keywordsQuery
+	keywordsQuery,
+	referenceWorksQuery,
+	commentersQuery
 )(EditKeyword);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 
@@ -12,7 +12,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import qs from 'qs-lite';
 
 // components:
-import { commentsInsertMutation } from '/imports/graphql/methods/comments';
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
@@ -25,9 +24,9 @@ import muiTheme from '/imports/lib/muiTheme';
 import client from '/imports/middleware/apolloClient';
 import Utils from '/imports/lib/utils';
 
-// models
-import Keywords from '/imports/models/keywords';
-import ReferenceWorks from '/imports/models/referenceWorks';
+// graphql
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
+import { commentsInsertMutation } from '/imports/graphql/methods/comments';
 
 /*
  *	helpers
@@ -89,11 +88,12 @@ const getFilterValues = (filters) => {
 /*
  *	BEGIN AddCommentLayout
  */
-class AddCommentLayout extends React.Component {
+class AddCommentLayout extends Component {
 	static propTypes = {
 		ready: PropTypes.bool,
 		commentInsert: PropTypes.func,
-		history: PropTypes.object
+		history: PropTypes.object,
+		textNodesQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -142,18 +142,29 @@ class AddCommentLayout extends React.Component {
 			this.setState({
 				selectedLineTo,
 			});
+			selectedLineFrom = this.state.selectedLineFrom;
 		} else if (selectedLineTo === null) {
 			this.setState({
 				selectedLineFrom,
 			});
+			selectedLineTo = this.state.selectedLineTo;
 		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
 		} else {
-			// do nothing
+			return;
 		}
+		const { filters } = this.state;
+		const { work, subwork } = getFilterValues(filters);
+		const properties = {
+			workSlug: work ? work.slug : 'iliad',
+			subworkN: subwork ? subwork.n : 1,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
 	}
 
 	toggleSearchTerm(key, value) {
@@ -448,6 +459,7 @@ class AddCommentLayout extends React.Component {
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
+										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 									/>
 
 									<AddComment
@@ -494,4 +506,7 @@ const AddCommentLayoutContainer = (() => {
 	};
 }, AddCommentLayout);
 
-export default compose(commentsInsertMutation)(AddCommentLayoutContainer);
+export default compose(
+	commentsInsertMutation,
+	textNodesQuery
+)(AddCommentLayoutContainer);

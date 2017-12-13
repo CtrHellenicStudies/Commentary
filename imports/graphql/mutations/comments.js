@@ -6,6 +6,7 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
 import CommentType, { CommentInputType } from '/imports/graphql/types/models/comment';
+import { RevisionInputType } from '/imports/graphql/types/models/revision';
 import { RemoveType } from '/imports/graphql/types/index';
 
 
@@ -57,6 +58,35 @@ const commentMutationFields = {
 		async resolve(parent, {commentId}, {token}) {
 			const commentsService = new CommentService({token});
 			return await commentsService.commentRemove(commentId);
+		}
+	},
+	commentInsertRevision: {
+		type: CommentType,
+		description: 'Add new revision',
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			revision: {
+				type: new GraphQLNonNull(RevisionInputType)
+			}
+		},
+		async resolve(parent, {id, revision}, {token}) {
+			const commentsService = new CommentService({token});
+			return await commentsService.addRevision(id, revision);
+		}
+	},
+	commentRemoveRevision: {
+		type: RemoveType,
+		description: 'Remove a single comment',
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {id}, {token}) {
+			const commentsService = new CommentService({token});
+			return await commentsService.removeRevision(id);
 		}
 	}
 };

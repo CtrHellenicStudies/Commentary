@@ -21,7 +21,9 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { textNodesQuery } from '/imports/graphql/methods/textNodes';
-import { commentsQueryById, commentsUpdateMutation } from '/imports/graphql/methods/comments';
+import { commentsQueryById,
+	commentsUpdateMutation,
+	commentAddRevisionMutation } from '/imports/graphql/methods/comments';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -98,7 +100,6 @@ class AddRevisionLayout extends Component {
 		if (this.state.ready) this.handlePermissions();
 	}
 	addRevision(formData, textValue, textRawValue) {
-		const self = this;
 		const { comment } = this.state;
 		const token = Cookies.get('loginToken');
 		const revision = {
@@ -108,17 +109,11 @@ class AddRevisionLayout extends Component {
 			created: new Date(),
 			slug: slugify(formData.titleValue),
 		};
-
-		Meteor.call('comments.add.revision', token, comment._id, revision, (err) => {
-			if (err) {
-				console.error('Error adding revision', err);
-				this.showSnackBar(err.error);
-			} else {
-				this.showSnackBar('Revision added');
-			}
-			self.update(formData);
+		const that = this;
+		this.props.commentInsertRevision(comment._id, revision).then(function() {
+			that.showSnackBar('Revision added');
+			that.update(formData);
 		});
-		// TODO: handle behavior after comment added (add info about success)
 	}
 	update(formData) {
 		const { comment } = this.state;
@@ -131,7 +126,7 @@ class AddRevisionLayout extends Component {
 			update = {
 				keywords,
 				referenceWorks: formData.referenceWorks,
-				commenters: Utils.getCommenters(formData.commenterValue)
+				commenters: Utils.getCommenters(formData.commenterValue, this.state.commenters)
 			};
 		}
 		this.props.commentUpdate(comment.id, update).then(function() {
@@ -386,7 +381,8 @@ AddRevisionLayout.propTypes = {
 	commentsQueryById: PropTypes.object,
 	keywordsQuery: PropTypes.object,
 	match: PropTypes.object,
-	textNodesQuery: PropTypes.object
+	textNodesQuery: PropTypes.object,
+	commentInsertRevision: PropTypes.func
 
 };
 
@@ -395,5 +391,6 @@ export default compose(
 	keywordsQuery,
 	commentsQueryById,
 	commentsUpdateMutation,
+	commentAddRevisionMutation,
 	textNodesQuery
 )(AddRevisionLayout);

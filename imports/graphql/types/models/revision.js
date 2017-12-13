@@ -26,6 +26,9 @@ const RevisionInputType = new GraphQLInputObjectType({
 		created: {
 			type: GraphQLDate,
 		},
+		slug: {
+			type: GraphQLString
+		}
 	},
 });
 

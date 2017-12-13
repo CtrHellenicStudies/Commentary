@@ -1,4 +1,5 @@
 import Comments from '/imports/models/comments';
+import Commenters from '/imports/models/commenters';
 // errors
 import { AuthenticationError } from '/imports/errors';
 
@@ -65,16 +66,33 @@ export default class CommentService extends GraphQLService {
 		if (this.userIsNobody) {
 			throw AuthenticationError();
 		}
-
+		const comment = Comments.findOne({ _id: commentId });
+		const commenters = Commenters.find().fetch();
+	
+		let allowedToEdit = false;
+		this.user.canEditCommenters.forEach((commenterId) => {
+			comment.commenters.forEach((commenter) => {
+				commenters.forEach((_commenter) => {
+					if (
+							commenter.slug === _commenter.slug
+						&& _commenter._id === commenterId
+					) {
+						allowedToEdit = true;
+					}
+				});
+			});
+		});
+		if (!allowedToEdit) {
+			throw AuthenticationError();
+		}
 		const revisionId = Random.id();
 		revision._id = revisionId;
-	
 		try {
 			Comments.update({
 				_id: commentId,
 			}, {
 				$push: {
-					revisions: revision,
+					revisions: {...revision},
 				},
 			});
 		} catch (err) {

@@ -35,7 +35,8 @@ import _ from 'underscore';
 import muiTheme from '/imports/lib/muiTheme';
 
 // graphql
-import { commentRemoveMutation } from '/imports/graphql/methods/comments';
+import { commentRemoveMutation,
+	commentRemoveRevisionMutation } from '/imports/graphql/methods/comments';
 import { keywordsQuery,
 		keywordInsertMutation,
 		keywordUpdateMutation } from '/imports/graphql/methods/keywords';
@@ -268,12 +269,9 @@ class AddRevision extends React.Component {
 	removeRevision() {
 		const self = this;
 		const authToken = Cookies.get('loginToken');
-		Meteor.call('comment.remove.revision', authToken, this.props.comment._id, this.state.revision, (err) => {
-			if (err) {
-				throw new Meteor.Error('Error removing revision');
-			}
-
-			this.props.history.push(`/commentary/${self.props.comment._id}/edit`);
+		const that = this;
+		this.props.commentRemoveRevision(this.props.comment._id, this.state.revision).then(function() {
+			this.props.history.push(`/commentary/${that.props.comment._id}/edit`);
 		});
 	}
 	addNewReferenceWork(reference) {
@@ -411,12 +409,6 @@ class AddRevision extends React.Component {
 			tagsValue: currentTags
 		});
 		this.props.keywordUpdate(tagId, newKeyword);
-		// 	if (err) {
-		// 		this.showSnackBar(err);
-		// 	}			else {
-		// 		this.showSnackBar({message: 'Keyword type changed'});
-		// 	}
-		// });
 	}
 
 	addNewTag(tag) {
@@ -429,12 +421,6 @@ class AddRevision extends React.Component {
 			tenantId: sessionStorage.getItem('tenantId'),
 		}];
 		this.props.keywordInsert(keyword);
-		// 	if (err) {
-		// 		this.showSnackBar(err);
-		// 	}			else {
-		// 		this.showSnackBar({message: 'Tag added'});
-		// 	}
-		// });
 	}
 
 	render() {
@@ -606,7 +592,8 @@ AddRevision.propTypes = {
 	commentersQuery: PropTypes.object,
 	keywordsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,
-	commentRemove: PropTypes.func
+	commentRemove: PropTypes.func,
+	commentRemoveRevision: PropTypes.func
 };
 
 AddRevision.childContextTypes = {
@@ -619,5 +606,6 @@ export default compose(
 	referenceWorkCreateMutation,
 	keywordsQuery,
 	keywordInsertMutation,
-	keywordUpdateMutation
+	keywordUpdateMutation,
+	commentRemoveRevisionMutation
 )(AddRevision);

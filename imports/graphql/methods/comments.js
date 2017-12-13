@@ -61,6 +61,20 @@ mutation commentUpdate($id: String! $comment: CommentInputType!) {
 }
 `;
 
+const commentRemoveRevision = gql`
+mutation commentRemoveRevision($id: String!) {
+	commentRemoveRevision(id: $id) {
+	_id
+}
+}
+`;
+const commentInsertRevision = gql`
+mutation commentInsertRevision($id: String! $revision: RevisionInputType!) {
+	commentInsertRevision(id: $id revision: $revision) {
+	_id
+}
+}
+`;
 const commentsQuery = graphql(query, {
 	name: 'commentsQuery',
 	options: (params) => {
@@ -117,6 +131,24 @@ const commentsUpdateMutation = graphql(commentUpdate, {
 		refetchQueries: ['commentsQuery']
 	}
 });
+const commentAddRevisionMutation = graphql(commentInsertRevision, {
+	props: (params) => ({
+		commentInsertRevision: (id, revision) => params.commentAddRevisionMutation({variables: {id, revision}}),
+	}),
+	name: 'commentAddRevisionMutation',
+	options: {
+		refetchQueries: ['commentsQuery']
+	}
+});
+const commentRemoveRevisionMutation = graphql(commentRemoveRevision, {
+	props: (params) => ({
+		commentRemoveRevision: (id) => params.commentRemoveRevisionMutation({variables: {id}}),
+	}),
+	name: 'commentRemoveRevisionMutation',
+	options: {
+		refetchQueries: ['commentsQuery']
+	}
+});
 
 export {
 	commentsQuery,
@@ -124,5 +156,7 @@ export {
 	commentRemoveMutation,
 	commentsInsertMutation,
 	commentsUpdateMutation,
-	commentsQueryById
+	commentsQueryById,
+	commentAddRevisionMutation,
+	commentRemoveRevisionMutation
 };

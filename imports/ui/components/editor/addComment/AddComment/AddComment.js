@@ -68,9 +68,6 @@ class AddComment extends React.Component {
 		selectedLineFrom: PropTypes.number,
 		commentersQuery: PropTypes.object,
 		submitForm: PropTypes.func.isRequired,
-		tags: PropTypes.array,
-		referenceWorkOptions: PropTypes.array,
-		ready: PropTypes.bool,
 		commenters: PropTypes.array,
 		referenceWorkCreate: PropTypes.func,
 		keywordInsert: PropTypes.func,
@@ -100,6 +97,7 @@ class AddComment extends React.Component {
 
 			snackbarOpen: false,
 			snackbarMessage: '',
+			ready: false
 		};
 
 		// methods:
@@ -268,7 +266,7 @@ class AddComment extends React.Component {
 	}
 
 	onTagValueChange(tag, i) {
-		const { tags } = this.props;
+		const { tags } = this.state;
 		const { tagsValue } = this.state;
 
 		let _selectedKeyword;
@@ -386,22 +384,21 @@ class AddComment extends React.Component {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	componentWillReceiveProps(newProps) {
-		
-	}
-	render() {
-		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
-		const ready = !this.props.keywordsQuery.loading && !this.props.referenceWorksQuery.loading && !this.props.commentersQuery.loading;
-		if (!ready) {
-			return null;
+		const ready = !newProps.keywordsQuery.loading && !newProps.referenceWorksQuery.loading && !newProps.commentersQuery.loading;
+		if (!ready && this.state.ready) {
+			this.setState({
+				ready: false
+			});
+			return;
 		}
 		let commenters = [];
-		const tags = this.props.keywordsQuery.loading ? [] : this.props.keywordsQuery.keywords;
+		const tags = newProps.keywordsQuery.keywords;
 		if (Meteor.user() && Meteor.user().canEditCommenters) {
-			commenters = this.props.commentersQuery.loading ? [] : this.props.commentersQuery.commenters.filter(x => 
+			commenters = newProps.commentersQuery.commenters.filter(x => 
 				Meteor.user().canEditCommenters.find(y => y === x._id));
 		}
 		const commentersOptions = this.getCommentersForUser(commenters);		
-		const referenceWorks = this.props.referenceWorksQuery.loading ? [] : this.props.referenceWorksQuery.referenceWorks;
+		const referenceWorks = newProps.referenceWorksQuery.referenceWorks;
 		const referenceWorkOptions = [];
 		referenceWorks.forEach((referenceWork) => {
 			if (!referenceWorkOptions.some(val => (
@@ -414,6 +411,15 @@ class AddComment extends React.Component {
 				});
 			}
 		});
+		this.setState({
+			ready: true,
+			referenceWorkOptions: referenceWorkOptions,
+			commentersOptions: commentersOptions,
+			tags: tags
+		});
+	}
+	render() {
+		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue, commentersOptions } = this.state;
 
 		return (
 			<div className="comments lemma-panel-visible ">
@@ -477,15 +483,15 @@ class AddComment extends React.Component {
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellcheck
-									tags={this.props.tags}
+									tags={this.state.tags}
 									mediaOn
 								/>
 
 								<ReferenceWork 
 									update={this.updateReferenceWorks} 
-									referenceWorkOptions={this.props.referenceWorkOptions} 
+									referenceWorkOptions={this.state.referenceWorkOptions} 
 									referenceWorks={this.state.referenceWorks}
-									ready={this.props.ready}
+									ready={this.state.ready}
 									addNew={this.addNewReferenceWork}
 								/>
 

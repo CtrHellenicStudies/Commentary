@@ -79,6 +79,7 @@ class HomeLayout extends Component {
 
 					<Home
 						settings={settings}
+						history={this.props.history}
 					/>
 
 					<Footer />

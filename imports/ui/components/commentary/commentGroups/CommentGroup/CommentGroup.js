@@ -125,6 +125,7 @@ class CommentGroup extends React.Component {
 									comment={comment}
 									commenters={this.getCommentersOfComment(comment)}
 									toggleSearchTerm={!isOnHomeView ? toggleSearchTerm : null}
+									isOnHomeView={this.props.isOnHomeView}
 									filters={filters}
 									toggleLemma={this.toggleLemma}
 									showLoginModal={showLoginModal}

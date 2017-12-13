@@ -64,6 +64,7 @@ class CommentLemma extends React.Component {
 		setScrollPosition: PropTypes.func.isRequired,
 		index: PropTypes.string.isRequired,
 		hideLemma: PropTypes.bool.isRequired,
+		translationAuthors: PropTypes.array,
 		multiline: PropTypes.bool,
 		selectMultiLine: PropTypes.func,
 

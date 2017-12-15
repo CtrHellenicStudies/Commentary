@@ -8,7 +8,7 @@ import { GraphQLString, GraphQLList } from 'graphql';
 import { ReferenceWorkType } from '/imports/graphql/types/models/referenceWork';
 
 // logic
-import ReferenceWorksService from '../logic/referenceWorks';
+import ReferenceWorksService from '../logic/ReferenceWorks/referenceWorks';
 
 
 const referenceWorkQueryFields = {

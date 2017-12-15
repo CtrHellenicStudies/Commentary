@@ -12,12 +12,13 @@ import {
 } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
 
+
 // types
 import { TextNodeType, TextNodeInputType } from '/imports/graphql/types/models/textNode';
 import { RemoveType } from '/imports/graphql/types/index';
 
 // logic
-import TextNodeService from '../logic/textNodes';
+import TextNodeService from '../logic/TextNodes/textNodes';
 
 const textNodeMutationFields = {
 	textNodeCreate: {
@@ -33,6 +34,29 @@ const textNodeMutationFields = {
 			return await textNodeService.textNodeCreate(textNode);
 		}
 	},
+	// _id, editionId, updatedText, updatedTextN)
+	textNodeUpdate: {
+		type: TextNodeType,
+		description: 'Update textNode',
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLString),
+			},
+			editionId: {
+				type: new GraphQLNonNull(GraphQLString),
+			},
+			updatedText: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			updatedTextN: {
+				type: new GraphQLNonNull(GraphQLInt)
+			}
+		},
+		async resolve(parent, { id, editionId, updatedText, updatedTextN }, { token }) {
+			const textNodeService = new TextNodeService({token});
+			return await textNodeService.textNodeUpdate(id, editionId, updatedText, updatedTextN);
+		}
+	},
 	textNodeRemove: {
 		type: RemoveType,
 		description: 'Remove a single text node',
@@ -46,6 +70,22 @@ const textNodeMutationFields = {
 			return await textNodeService.textNodeRemove(textNodeId);
 		}
 	},
+	getMaxLine: {
+		type: GraphQLString,
+		description: 'Get max line',
+		args: {
+			workSlug: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			subworkN: {
+				type: new GraphQLNonNull(GraphQLInt)
+			}
+		},
+		async resolve(parent, {workSlug, subworkN}, {token}) {
+			const textNodeService = new TextNodeService({token});
+			return await textNodeService.getMaxLine(workSlug, subworkN);
+		}
+	}
 };
 
 export default textNodeMutationFields;

@@ -23,9 +23,11 @@ const CommentInputType = new GraphQLInputObjectType({
 		},
 		urn: {
 			type: GraphQLString,
+			optional: true
 		},
 		originalDate: {
 			type: GraphQLDate,
+			optional: true
 		},
 		status: {
 			type: GraphQLString,
@@ -111,7 +113,7 @@ const CommentType = new GraphQLObjectType({
 			type: GraphQLString,
 		},
 		urn: {
-			type: GraphQLString,
+			type: GraphQLJSON,
 		},
 		originalDate: {
 			type: GraphQLDate,

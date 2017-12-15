@@ -1,119 +1,121 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import { moment } from 'meteor/momentjs:moment';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import { Link } from 'react-router-dom';
+import { compose } from 'react-apollo';
+import { 
+	discussionCommentUpdateMutation, 
+	discussionCommentReportMutation,
+	discussionCommentUpvoteMutation,
+	discussionCommentUnreportMutation} 
+	from '/imports/graphql/methods/discussionComments';
 
-const DiscussionComment = React.createClass({
+class DiscussionComment extends Component {
 
-	propTypes: {
-		discussionComment: PropTypes.object.isRequired,
-		currentUser: PropTypes.object,
-		user: PropTypes.object,
-	},
-
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			editMode: false,
 			moreOptionsVisible: false,
 			shareOptionsVisible: false,
 			readComment: false,
 		};
-	},
-
+		this.showEditMode = this.showEditMode.bind(this);
+		this.closeEditMode = this.closeEditMode.bind(this);
+		this.updateDiscussionComment = this.updateDiscussionComment.bind(this);
+		this.upvoteDiscussionComment = this.upvoteDiscussionComment.bind(this);
+		this.reportDiscussionComment = this.reportDiscussionComment.bind(this);
+		this.unreportDiscussionComment = this.unreportDiscussionComment.bind(this);
+		this.toggleMoreOptions = this.toggleMoreOptions.bind(this);
+		this.toggleShareOptions = this.toggleShareOptions.bind(this);
+		this.readDiscussionComment = this.readDiscussionComment.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		let user;
+	
+		if (props.discussionComment) {
+			user = Meteor.users.findOne({ _id: props.discussionComment.userId });
+		}
+		this.setState({user: user});
+	}
 	showEditMode() {
 		this.setState({
 			editMode: true,
 		});
-	},
-
+	}
 	closeEditMode() {
 		this.setState({
 			editMode: false,
 		});
-	},
-
+	}
 	updateDiscussionComment() {
 		const content = $(this.updateCommentForm).find('textarea').val();
 		const { discussionComment } = this.props;
-
-		Meteor.call('discussionComments.update',
-			discussionComment._id,
-			{
-				commentId: discussionComment.commentId,
-				tenantId: discussionComment.tenantId,
-				content
-			},
-		);
-
+		this.props.discussionCommentUpdate(discussionComment._id, content).catch((e) => {
+			console.log(e);
+		});
 		this.setState({
 			editMode: false,
 		});
-	},
-
+	}
 	upvoteDiscussionComment() {
-		const { currentUser } = this.props;
+		const { currentUser, discussionComment } = this.props;
 		if (currentUser) {
-			Meteor.call('discussionComments.upvote',
-				this.props.discussionComment._id
-			);
+			this.props.discussionCommentUpvote(discussionComment._id).catch((e) => {
+				console.log(e);
+			});
 		}
-	},
-
+	}
 	reportDiscussionComment() {
-		const { currentUser } = this.props;
+		const { currentUser, discussionComment } = this.props;
 		if (currentUser) {
 			this.setState({
 				moreOptionsVisible: false,
 			});
-			Meteor.call('discussionComments.report',
-				this.props.discussionComment._id
-			);
+			this.props.discussionCommentReport(discussionComment._id).catch((e) => {
+				console.log(e);
+			});
 		}
-	},
-
+	}
 	unreportDiscussionComment() {
-		const { currentUser } = this.props;
+		const { currentUser, discussionComment } = this.props;
 		if (currentUser) {
 			this.setState({
 				readComment: false,
 			});
-			Meteor.call('discussionComments.unreport',
-				this.props.discussionComment._id
-			);
+			this.props.discussionCommentUnreport(discussionComment._id).catch((e) => {
+				console.log(e);
+			});
 		}
-	},
-
+	}
 	toggleMoreOptions() {
 		this.setState({
 			moreOptionsVisible: !this.state.moreOptionsVisible,
 			shareOptionsVisible: false,
 		});
-	},
-
+	}
 	toggleShareOptions() {
 		this.setState({
 			shareOptionsVisible: !this.state.shareOptionsVisible,
 			moreOptionsVisible: false,
 		});
-	},
-
+	}
 	readDiscussionComment() {
 		this.setState({
 			readComment: true,
 		});
-	},
-
+	}
 	render() {
 		const self = this;
 		const userIsLoggedIn = Meteor.user();
-		const { discussionComment, user } = this.props;
+		const { discussionComment } = this.props;
+		const { user } = this.state;
 		let userLink = '';
 		let userUpvoted = false;
 		let userReported = false;
@@ -209,9 +211,6 @@ const DiscussionComment = React.createClass({
 					</div>
 					<div className="inner-comment-row">
 						<div className="discussion-comment-text">
-							{/* <div
-							 dangerouslySetInnerHTML={{ __html: discussionComment.content}}
-							 ></div> */}
 							{this.state.editMode ?
 								<form
 									className="update-comment-form clearfix"
@@ -317,35 +316,6 @@ const DiscussionComment = React.createClass({
 						}
 					</div>
 
-
-					{/* false ?
-						<div className="reply-create-form">
-							<div className="add-comment-wrap">
-								<form
-									className="new-comment-form"
-									name="new-comment-form"
-								>
-									<div className="add-comment-row-1">
-										<textarea
-											className="new-comment-text"
-											placeholder="Enter your reply here . . . "
-										/>
-										<RaisedButton
-											label="Submit"
-											type="submit"
-											className="submit-comment-button paper-shadow"
-										/>
-										<RaisedButton
-											label="Close Reply"
-											className="close-form-button"
-											onClick={this.closeReply}
-										/>
-									</div>
-								</form>
-							</div>
-						</div>
-						: '' */}
-
 					<div className="discussion-comment-children">
 
 						{discussionComment.children.map((discussionCommentChild, j) =>
@@ -421,26 +391,22 @@ const DiscussionComment = React.createClass({
 				</div>
 			</div>
 		);
-	},
-
-});
-
-const DiscussionCommentContainer = createContainer(({ discussionComment }) => {
-
-	let handle;
-	let user;
-
-	if (discussionComment) {
-		handle = Meteor.subscribe('users.id', discussionComment.userId);
-		user = Meteor.users.findOne({ _id: discussionComment.userId });
 	}
 
-	return {
-		user,
-		ready: handle && handle.ready(),
-		discussionComment,
-	};
+}
+DiscussionComment.propTypes = {
+	discussionComment: PropTypes.object.isRequired,
+	currentUser: PropTypes.object,
+	discussionCommentUpdate: PropTypes.func,
+	discussionCommentUnreport: PropTypes.func,
+	discussionCommentReport: PropTypes.func,
+	discussionCommentUpvote: PropTypes.func,
 
-}, DiscussionComment);
 
-export default DiscussionCommentContainer;
+
+};
+export default compose(
+	discussionCommentUpdateMutation, 
+	discussionCommentReportMutation,
+	discussionCommentUpvoteMutation,
+	discussionCommentUnreportMutation)(DiscussionComment);

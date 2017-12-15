@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import FlatButton from 'material-ui/FlatButton';
+import { compose } from 'react-apollo';
+
 import muiTheme from '/imports/lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// models
-import Commenters from '/imports/models/commenters';
-import Settings from '/imports/models/settings';
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
@@ -23,7 +25,7 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 // lib
 import Utils from '/imports/lib/utils';
 
-class CommenterDetail extends React.Component {
+class CommenterDetail extends Component {
 	constructor(props) {
 		super(props);
 
@@ -39,16 +41,14 @@ class CommenterDetail extends React.Component {
 	}
 
 	static propTypes = {
-		commenter: PropTypes.shape({
-			name: PropTypes.string.isRequired,
-			bio: PropTypes.string,
-			_id: PropTypes.string
-		}),
 		avatarUrl: PropTypes.string,
 		settings: PropTypes.shape({
 			title: PropTypes.string.isRequired,
 		}),
 		isTest: PropTypes.bool,
+		match: PropTypes.object,
+		commentersQuery: PropTypes.object,
+		settingsQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -66,8 +66,7 @@ class CommenterDetail extends React.Component {
 	}
 
 	subscribe() {
-		const { subscribed } = this.state;
-		const { commenter } = this.props;
+		const { subscribed, commenter } = this.state;
 
 		const commenterObj = {
 			_id: commenter._id,
@@ -101,9 +100,26 @@ class CommenterDetail extends React.Component {
 		if (Utils.isJson(biography))			{ return JSON.parse(biography).html; }
 		return biography;
 	}
+	componentWillReceiveProps(props) {
+		const slug = props.match.params.slug;
+		const tenantId = sessionStorage.getItem('tenantId');
+	
+		let avatarUrl;
+		const commenter = props.commentersQuery.loading ? {} : 
+		props.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
+	
+		if (commenter && commenter.avatar) {
+			avatarUrl = commenter.avatar.src;
+		}
+		this.setState({
+			avatarUrl: avatarUrl,
+			commenter: commenter,
+			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings
+		});
+	}
 	render() {
-		const { commenter, settings, avatarUrl, isTest } = this.props;
-		const { readMoreBio, subscribed, loggedIn } = this.state;
+		const { isTest } = this.props;
+		const { readMoreBio, subscribed, loggedIn, commenter, settings, avatarUrl } = this.state;
 
 		if (commenter) {
 			Utils.setTitle(`${commenter.name} | ${settings.title}`);
@@ -200,24 +216,7 @@ class CommenterDetail extends React.Component {
 		);
 	}
 }
-
-export default createContainer(({match}) => {
-	const slug = match.params.slug;
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	const commentersHandle = Meteor.subscribe('commenters.slug', slug, Session.get('tenantId'));
-
-	let avatarUrl;
-
-	const commenter = Commenters.findOne({ slug });
-
-	if (commenter && commenter.avatar) {
-		avatarUrl = commenter.avatar.src;
-	}
-
-	return {
-		commenter,
-		avatarUrl,
-		settings: Settings.findOne(),
-		ready: settingsHandle.ready() && commentersHandle.ready(),
-	};
-}, CommenterDetail);
+export default compose(
+	commentersQuery,
+	settingsQuery
+)(CommenterDetail);

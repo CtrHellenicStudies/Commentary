@@ -5,46 +5,46 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 // types
-import CommentType from '/imports/graphql/types/models/comment';
+import CommentType, { CommentInputType } from '/imports/graphql/types/models/comment';
+import { RevisionInputType } from '/imports/graphql/types/models/revision';
 import { RemoveType } from '/imports/graphql/types/index';
 
-// models
-import Comments from '/imports/models/comments';
 
 // errors
 import { AuthenticationError } from '/imports/errors';
 
 // logic
-import CommentsService from '../logic/comments';
+import CommentService from '../logic/Comments/comment';
 
 
 const commentMutationFields = {
-	commentCreate: {
+	commentInsert: {
 		type: CommentType,
 		description: 'Create new comment',
 		args: {
-			title: {
-				type: new GraphQLNonNull(GraphQLString),
-			},
-			content: {
-				type: new GraphQLNonNull(GraphQLString),
-			},
-			commenter: {
-				type: new GraphQLNonNull(GraphQLString),
-			},
-		},
-		resolve(parent, { title, content }, { user, tenant }) {
-
-			// only a logged in user and coming from the admin page, can create new project
-			if (user && tenant.adminPage) {
-				return Comments.insert({
-					tenantId: tenant._id,
-					title,
-					description,
-				});
+			comment: {
+				type: new GraphQLNonNull(CommentInputType)
 			}
-
-			throw AuthenticationError();
+		},
+		async resolve(parent, {comment}, {token}) {
+			const commentsService = new CommentService({token});
+			return await commentsService.commentInsert(comment);
+		}
+	},
+	commentUpdate: {
+		type: CommentType,
+		description: 'Update comment',
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			comment: {
+				type: new GraphQLNonNull(CommentInputType)
+			}
+		},
+		async resolve(parent, {id, comment}, {token}) {
+			const commentsService = new CommentService({token});
+			return await commentsService.commentUpdate(id, comment);
 		}
 	},
 	commentRemove: {
@@ -56,8 +56,37 @@ const commentMutationFields = {
 			}
 		},
 		async resolve(parent, {commentId}, {token}) {
-			const commentsService = new CommentsService({token});
+			const commentsService = new CommentService({token});
 			return await commentsService.commentRemove(commentId);
+		}
+	},
+	commentInsertRevision: {
+		type: CommentType,
+		description: 'Add new revision',
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			revision: {
+				type: new GraphQLNonNull(RevisionInputType)
+			}
+		},
+		async resolve(parent, {id, revision}, {token}) {
+			const commentsService = new CommentService({token});
+			return await commentsService.addRevision(id, revision);
+		}
+	},
+	commentRemoveRevision: {
+		type: RemoveType,
+		description: 'Remove a single comment',
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(parent, {id}, {token}) {
+			const commentsService = new CommentService({token});
+			return await commentsService.removeRevision(id);
 		}
 	}
 };

@@ -1,11 +1,11 @@
 import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
-import {convertFromRaw, EditorState, ContentState} from 'draft-js';
+import {convertFromRaw, EditorState, ContentState, convertFromHTML} from 'draft-js';
+import {compose} from 'react-apollo';
 
 // models
-import Editions from '/imports/models/editions';
-import Commenters from '/imports/models/commenters';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 // lib
 import Config from './_config/_config';
@@ -27,16 +27,16 @@ const Utils = {
 		}
 		return moment(date).format('D/M/YYYY');
 	},
-	resolveUrn(urn){
+	resolveUrn(urn) {
 		let ret = urn;
-		try{
-			if(urn.v2)
+		try {
+			if (urn.v2) {
 				ret = urn.v2;
-			else
+			} else {
 				ret = urn.v1;
-
-		}
-		catch(error){
+			}
+				
+		} catch (error) {
 			console.log('Old urn exists in database.');
 		}
 		return ret;
@@ -251,14 +251,14 @@ const Utils = {
 
 		return domain;
 	},
-	textFromTextNodesGroupedByEdition(textNodesCursor) {
+	textFromTextNodesGroupedByEdition(textNodesCursor, _editions) {
 		const editions = [];
 		textNodesCursor.forEach((textNode) => {
 			textNode.text.forEach((text) => {
 				let myEdition = editions.find(e => text.edition === e._id);
 
 				if (!myEdition) {
-					const foundEdition = Editions.findOne({ _id: text.edition });
+					const foundEdition = _editions.find(x => x._id === text.edition);
 					myEdition = {
 						_id: foundEdition._id,
 						title: foundEdition.title,
@@ -291,14 +291,11 @@ const Utils = {
 
 		return editions;
 	},
-	getCommenters(commenterData) {
-
+	getCommenters(commenterData, commenters) {
 		const commentersList = [];
 
 		commenterData.forEach(commenter => {
-			const currentCommenter = Commenters.findOne({
-				_id: commenter.value,
-			}, {fields: {_id: 1, slug: 1, name: 1}});
+			const currentCommenter = commenters.find(x => x._id === commenter.value);
 			commentersList.push(currentCommenter);
 		});
 
@@ -349,9 +346,20 @@ const Utils = {
 	},
 	getEditorState(content) {
 		let _content = content || '';
-		_content = JSON.parse(_content);
-		const constState = convertFromRaw(_content);
-		return EditorState.createWithContent(constState);
+		if (this.isJson(content)) {
+			_content = JSON.parse(_content);
+			if (_content.raw) {
+				_content = _content.raw;
+			}
+			const constState = convertFromRaw(_content);
+			return EditorState.createWithContent(constState);
+		}
+		const constState = convertFromHTML(content);
+		const state = ContentState.createFromBlockArray(
+			constState.contentBlocks,
+			constState.entityMap
+			);
+		return EditorState.createWithContent(state);
 	},
 	getHtmlFromContext(context) {
 		return convertToHTML({
@@ -359,13 +367,13 @@ const Utils = {
 			blockToHTML: (block) => {
 				const type = block.type;
 				if (type === 'atomic') {
-							  return {start: '<span>', end: '</span>'};
+					return {start: '<span>', end: '</span>'};
 				}
 				if (type === 'unstyled') {
-							  return <p />;
+					return <p />;
 				}
 				return <span />;
-						  },
+			},
 			entityToHTML: (entity, originalText) => {
 				let ret = this.decodeHtml(originalText);
 				switch (entity.type) {
@@ -404,7 +412,14 @@ const Utils = {
 		}
 		return true;
 	},
-
+	shouldRefetchQuery(properties, variables) {
+		for (const [key, value] of Object.entries(properties)) {
+			if (properties[key] !== variables[key]) {
+				return true;
+			}
+		}
+		return false;
+	},
 	getSuggestionsFromComments(comments) {
 		const suggestions = [];
 
@@ -439,23 +454,7 @@ const Utils = {
 			});
 		}
 		return suggestions;
-	},
-	// sendNotificationEmails(disscusion, users, content){
-	// 	let listOfEmails = {},
-	// 	to = [],
-	// 	text = '<h3>Someone answered to comment in your discussion:</h3>' + '<i>"'+ content+ '"</i>';
-	// 	disscusion.map((discuss) => {
-	// 		users.map((user) => {
-	// 			if(user._id === discuss.userId && user._id !== Meteor.userId()){
-	// 				listOfEmails[user._id] = user.emails[0].address;
-	// 			}
-	// 		});
-	// 	});
-	// 	for (const [key, value] of Object.entries(listOfEmails)) {
-	// 		to.push(value);
-	// 	}
-	// 	Meteor.call('disscusionComments.sendNotification', {to: to, text: text});
-	// }
+	}
 };
 
 /**
@@ -492,7 +491,7 @@ export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	let lineTo = comment.lineFrom;
 	if (comment.hasOwnProperty('lineTo')) {
 		lineTo = comment.lineFrom + Math.min(
-				maxLines,
+				maxLines, 
 				comment.lineTo - comment.lineFrom
 			);
 	} else if (comment.hasOwnProperty('nLines')) {
@@ -500,12 +499,10 @@ export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	}
 
 	return {
-		'work.slug': comment.work.slug,
-		'subwork.n': comment.subwork.n,
-		'text.n': {
-			$gte: comment.lineFrom,
-			$lte: lineTo,
-		},
+		workSlug: comment.work.slug,
+		subworkN: comment.subwork.n,
+		lineFrom: comment.lineFrom,
+		lineTo: lineTo,
 	};
 }
 

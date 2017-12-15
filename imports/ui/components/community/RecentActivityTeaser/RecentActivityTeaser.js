@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
+
 import moment from 'moment';
 
-import Books from '/imports/models/books';
-import Commenters from '/imports/models/commenters';
-import Tenants from '/imports/models/tenants';
-import Settings from '/imports/models/settings';
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { booksQuery } from '/imports/graphql/methods/books';
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
+
 import Utils from '/imports/lib/utils';
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import { Link } from 'react-router-dom';
@@ -15,15 +18,59 @@ import { Link } from 'react-router-dom';
 class RecentActivityTeaser extends React.Component {
 	static propTypes = {
 		comment: PropTypes.object.isRequired,
-		tenant: PropTypes.object,
-		settings: PropTypes.object,
-		book: PropTypes.object,
-		commenters: PropTypes.array,
-		users: PropTypes.array,
+		commentersQuery: PropTypes.object,
+		tenantsQuery: PropTypes.object,
+		settingsQuery: PropTypes.object,
+		booksQuery: PropTypes.object
 	}
-
+	constructor(props) {
+		super(props);
+		this.state = {
+			tenantId: sessionStorage.getItem('tenantId')
+		};
+	}
+	componentWillReceiveProps(nextProps) {
+		const commenterIds = [];
+		const tenantId = this.state.tenantId;
+		let userIds = [];
+		let commenters = [];
+		let users = [];
+		let tenant;
+		let book;
+		let settings;
+	
+		if (nextProps.comment) {
+	
+			if (nextProps.comment.commenters) {
+				nextProps.comment.commenters.forEach((commenter) => {
+					commenterIds.push(commenter._id);
+				});
+			}
+	
+			if (nextProps.comment.users) {
+				userIds = nextProps.comment.users;
+			}
+			
+			commenters = currentCommenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters.filter(x =>
+				commenterIds.find(y => y === x._id) !== undefined);
+		
+			users = Meteor.users.find({ _id: { $in: userIds } }).fetch();
+			tenant = nextProps.tenantsQuery.loading ? {} : nextProps.tenantsQuery.tenants.find(x => x._id === tenantId);
+			book = nextProps.booksQuery.loading ? {} : nextProps.booksQuery.find(x => 
+				x.chapters.url === nextProps.comment.bookChapterUrl);
+			settings = nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
+		}
+		this.setState({
+			commenters: commenters,
+			users: users,
+			tenant: tenant,
+			book: book,
+			settings: settings
+		});
+	}
 	render() {
-		const { comment, commenters, users, tenant, settings, book } = this.props;
+		const { comment } = this.props;
+		const { commenters, users, tenant, settings, book } = this.state;
 
 		const styles = {
 			commenterAvatar: {
@@ -116,46 +163,9 @@ class RecentActivityTeaser extends React.Component {
 	}
 }
 
-const RecentActivityTeaserContainer = createContainer(({ comment }) => {
-
-	const handle = Meteor.subscribe('commenters.all');
-	const booksHandle = Meteor.subscribe('books');
-	const tenantsHandle = Meteor.subscribe('tenants');
-	const commenterIds = [];
-	let userIds = [];
-	let commenters = [];
-	let users = [];
-	let tenant;
-	let book;
-	let settings;
-
-	if (comment) {
-		const settingsHandle = Meteor.subscribe('settings.tenant', comment.tenantId);
-
-		if ('commenters' in comment) {
-			comment.commenters.forEach((commenter) => {
-				commenterIds.push(commenter._id);
-			});
-		}
-
-		if (comment.users) {
-			userIds = comment.users;
-		}
-
-		commenters = Commenters.find({ _id: { $in: commenterIds } }).fetch();
-		users = Meteor.users.find({ _id: { $in: userIds } }).fetch();
-		tenant = Tenants.findOne({ _id: comment.tenantId });
-		book = Books.findOne({'chapters.url': comment.bookChapterUrl});
-		settings = Settings.findOne({ tenantId: comment.tenantId });
-	}
-
-	return {
-		commenters,
-		users,
-		tenant,
-		book,
-		settings,
-	};
-}, RecentActivityTeaser);
-
-export default RecentActivityTeaserContainer;
+export default compose(
+	commentersQuery,
+	booksQuery,
+	tenantsQuery,
+	settingsQuery
+)(RecentActivityTeaser);

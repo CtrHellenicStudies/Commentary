@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 import RaisedButton from 'material-ui/RaisedButton';
-
-// models
-import Comments from '/imports/models/comments';
+import { compose } from 'react-apollo';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // components
 import RecentActivityTeaser from '../RecentActivityTeaser';
 
-class RecentActivityList extends React.Component {
+class RecentActivityList extends Component {
 	static propTypes = {
 		comments: PropTypes.array,
 		loadMore: PropTypes.func,
+		commentsQuery: PropTypes.object
 	}
 
 	constructor(props) {
@@ -22,8 +21,21 @@ class RecentActivityList extends React.Component {
 			skip: 0,
 			limit: 12,
 		};
+		if (!this.props.commentsQuery.variables.sortRecent) {
+			this.commentsQuery.refetch({
+				sortRecent: true
+			});
+		}
 	}
+	componentWillReceiveProps(nextProps) {
+		const comments = nextProps.commentsQuery.loading ? [] : nextProps.commentsQuery.comments
+		.slice(skip, limit + skip);
 
+		this.setState({
+			comments,
+			ready: !nextProps.commentsQuery.loading
+		});
+	}
 	render() {
 		const { comments, loadMore } = this.props;
 
@@ -47,15 +59,4 @@ class RecentActivityList extends React.Component {
 	}
 }
 
-const RecentActivityListContainer = createContainer(({ skip, limit }) => {
-	let comments = [];
-	const handle = Meteor.subscribe('comments.recent', skip, limit);
-	comments = Comments.find({}, { sort: { updated: -1 } }).fetch();
-
-	return {
-		comments,
-		ready: handle.ready(),
-	};
-}, RecentActivityList);
-
-export default RecentActivityListContainer;
+export default compose(commentsQuery)(RecentActivityList);

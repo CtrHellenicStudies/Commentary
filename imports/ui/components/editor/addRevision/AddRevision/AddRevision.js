@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import { Meteor } from 'meteor/meteor';
+import { compose } from 'react-apollo';
 import { Roles } from 'meteor/alanning:roles';
-import { Session } from 'meteor/session';
-import {Creatable} from 'react-select';
-import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 	ControlLabel,
@@ -18,11 +16,10 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Utils from '/imports/lib/utils';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Select, { Createable } from 'react-select';
+import Select, { Creatable } from 'react-select';
 import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -34,13 +31,17 @@ import Snackbar from 'material-ui/Snackbar';
 import slugify from 'slugify';
 import _ from 'underscore';
 
-// models
-import Keywords from '/imports/models/keywords';
-import ReferenceWorks from '/imports/models/referenceWorks';
-import Commenters from '/imports/models/commenters';
-
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
+
+// graphql
+import { commentRemoveMutation,
+	commentRemoveRevisionMutation } from '/imports/graphql/methods/comments';
+import { keywordsQuery,
+		keywordInsertMutation,
+		keywordUpdateMutation } from '/imports/graphql/methods/keywords';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // helpers:
 import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/linkDecorator';
@@ -49,8 +50,10 @@ import linkDecorator from '/imports/ui/components/editor/addComment/LinkButton/l
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
-import CommentersEditorDialog from '../CommentersEditorDialog';
 import ReferenceWork from '/imports/ui/components/editor/addComment/AddComment/referenceWork/ReferenceWork';
+
+import CommentersEditorDialog from '../CommentersEditorDialog';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
@@ -101,8 +104,55 @@ class AddRevision extends React.Component {
 			snackbarOpen: false,
 
 		};
+		const tenantId = sessionStorage.getItem('tenantId');
+		props.referenceWorksQuery.refetch({
+			tenantId: tenantId
+		});
+		props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
 
 		autoBind(this);
+	}
+	componentWillReceiveProps(props) {
+
+		const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
+		let commenters = [];
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
+				Meteor.user().canEditCommenters.find(y => y === x._id));
+		}
+		const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
+		const referenceWorkOptions = [];
+		referenceWorks.forEach((referenceWork) => {
+			if (!referenceWorkOptions.some(val => (
+				referenceWork.slug === val.slug
+			))) {
+				referenceWorkOptions.push({
+					value: referenceWork._id,
+					label: referenceWork.title,
+					slug: referenceWork.slug,
+				});
+			}
+		});
+	
+		const commentersOptions = [];
+		commenters.forEach((commenter) => {
+			if (!commentersOptions.some(val => (
+					commenter._id === val.value
+				))) {
+				commentersOptions.push({
+					value: commenter._id,
+					label: commenter.name,
+				});
+			}
+		});
+		this.setState({
+			ready: !props.commentersQuery.loading && !props.referenceWorksQuery.loading && !props.keywordsQuery.loading,
+			tags,
+			referenceWorkOptions,
+			commentersOptions,
+		});
 	}
 
 	getChildContext() {
@@ -126,7 +176,6 @@ class AddRevision extends React.Component {
 	}
 
 	_getRevisionEditorState(revision) {
-		(revision);
 		if (revision.textRaw) {
 			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
 		} else if (revision.text) {
@@ -160,7 +209,7 @@ class AddRevision extends React.Component {
 
 	_onKeywordSearchChange({ value }) {
 		const keywordSuggestions = [];
-		const keywords = this.props.tags;
+		const keywords = this.state.tags;
 		keywords.forEach((keyword) => {
 			keywordSuggestions.push({
 				name: keyword.label,
@@ -201,13 +250,7 @@ class AddRevision extends React.Component {
 
 	removeComment() {
 		const authToken = Cookies.get('loginToken');
-
-		Meteor.call('comment.delete', authToken, this.props.comment._id, (err) => {
-			if (err) {
-				console.error(err);
-				return false;
-			}
-
+		this.props.commentRemove(this.props.comment._id).then(function() {
 			this.props.history.push('/commentary');
 		});
 	}
@@ -226,24 +269,21 @@ class AddRevision extends React.Component {
 	removeRevision() {
 		const self = this;
 		const authToken = Cookies.get('loginToken');
-		Meteor.call('comment.remove.revision', authToken, this.props.comment._id, this.state.revision, (err) => {
-			if (err) {
-				throw new Meteor.Error('Error removing revision');
-			}
-
-			this.props.history.push(`/commentary/${self.props.comment._id}/edit`);
+		const that = this;
+		this.props.commentRemoveRevision(this.props.comment._id, this.state.revision).then(function() {
+			this.props.history.push(`/commentary/${that.props.comment._id}/edit`);
 		});
 	}
 	addNewReferenceWork(reference) {
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
-			tenantId: Session.get('tenantId')
+			tenantId: sessionStorage.getItem('tenantId')
 		};
-		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
-			if (err) {
+		this.props.referenceWorkCreate(_reference).then(error => {
+			if (error) {
 				this.showSnackBar(err);
-			}			else {
+			} else {
 				this.showSnackBar({message: 'Reference work added'});
 			}
 		});
@@ -281,8 +321,7 @@ class AddRevision extends React.Component {
 	}
 
 	onTagValueChange(tag, i) {
-		const { tags } = this.props;
-		const { tagsValue } = this.state;
+		const { tagsValue, tags } = this.state;
 
 		let _selectedKeyword;
 		if (tag)			{
@@ -354,18 +393,22 @@ class AddRevision extends React.Component {
 	}
 	selectTagType(tagId, event, index) {
 		const currentTags = this.state.tagsValue;
-		currentTags[index].keyword.type = event.target.value;
+		this.setState({
+			tagsValue: event.target.value
+		});
+		const newKeyword = {};
+		for (const [key, value] of Object.entries(currentTags[index].keyword)) {
+			if (key === 'type') {
+				newKeyword[key] = event.target.value;
+			} else if (key !== '_id' && key !== '__typename') {
+				newKeyword[key] = value;
+			}
+		}
+		currentTags[index].keyword = newKeyword;
 		this.setState({
 			tagsValue: currentTags
 		});
-
-		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value, (err) => {
-			if (err) {
-				this.showSnackBar(err);
-			}			else {
-				this.showSnackBar({message: 'Keyword type changed'});
-			}
-		});
+		this.props.keywordUpdate(tagId, newKeyword);
 	}
 
 	addNewTag(tag) {
@@ -375,22 +418,15 @@ class AddRevision extends React.Component {
 			slug: slugify(tag.value.toLowerCase()),
 			type: 'word',
 			count: 1,
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 		}];
-
-		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
-			if (err) {
-				this.showSnackBar(err);
-			}			else {
-				this.showSnackBar({message: 'Tag added'});
-			}
-		});
+		this.props.keywordInsert(keyword);
 	}
 
 	render() {
-		const { comment, commentersOptions } = this.props;
-		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue } = this.state;
-		const { referenceWorkOptions, tags } = this.props;
+		const { comment } = this.props;
+		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue, commentersOptions } = this.state;
+		const { referenceWorkOptions, tags } = this.state;
 		const revisions = _.sortBy(comment.revisions, 'created');
 
 		return (
@@ -488,8 +524,8 @@ class AddRevision extends React.Component {
 								<ReferenceWork 
 									referenceWorks={this.state.referenceWorks}
 									update={this.updateReferenceWorks}
-									referenceWorkOptions={this.props.referenceWorkOptions} 
-									ready={this.props.ready}
+									referenceWorkOptions={this.state.referenceWorkOptions} 
+									ready={this.state.ready}
 									addNew={this.addNewReferenceWork}
 								/>
 
@@ -549,58 +585,27 @@ AddRevision.propTypes = {
 	submitForm: PropTypes.func.isRequired,
 	update: PropTypes.func.isRequired,
 	comment: PropTypes.object.isRequired,
-	tags: PropTypes.array,
-	referenceWorkOptions: PropTypes.array,
-	commentersOptions: PropTypes.array,
+	history: PropTypes.array,
+	referenceWorkCreate: PropTypes.func,
+	keywordInsert: PropTypes.func,
+	keywordUpdate: PropTypes.func,
+	commentersQuery: PropTypes.object,
+	keywordsQuery: PropTypes.object,
+	referenceWorksQuery: PropTypes.object,
+	commentRemove: PropTypes.func,
+	commentRemoveRevision: PropTypes.func
 };
 
 AddRevision.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
-
-const AddRevisionContainer = createContainer(({ comment }) => {
-
-	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-	const handleCommenters = Meteor.subscribe('commenters', Session.get('tenantId'));
-
-	const tags = Keywords.find().fetch();
-
-	const handleWorks = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-	const referenceWorks = ReferenceWorks.find().fetch();
-	const referenceWorkOptions = [];
-	referenceWorks.forEach((referenceWork) => {
-		if (!referenceWorkOptions.some(val => (
-			referenceWork.slug === val.slug
-		))) {
-			referenceWorkOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-				slug: referenceWork.slug,
-			});
-		}
-	});
-
-	const commentersOptions = [];
-	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
-	}
-	commenters.forEach((commenter) => {
-		if (!commentersOptions.some(val => (
-				commenter._id === val.value
-			))) {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		}
-	});
-	return {
-		ready: handleKeywords.ready() && handleWorks.ready() && handleCommenters.ready(),
-		tags,
-		referenceWorkOptions,
-		commentersOptions,
-	};
-}, AddRevision);
-
-export default AddRevisionContainer;
+export default compose(
+	commentRemoveMutation,
+	commentersQuery,
+	referenceWorksQuery,
+	referenceWorkCreateMutation,
+	keywordsQuery,
+	keywordInsertMutation,
+	keywordUpdateMutation,
+	commentRemoveRevisionMutation
+)(AddRevision);

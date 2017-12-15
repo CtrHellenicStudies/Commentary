@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import { HOC as formsyHOC } from 'formsy-react';
 import Editor from 'draft-js-plugins-editor';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import { createContainer } from 'meteor/react-meteor-data';
-import Keywords from '/imports/models/keywords';
 import { fromJS } from 'immutable';
+import { compose } from 'react-apollo';
 import Utils from '/imports/lib/utils';
+
+// graphql
+import { commentsQuery } from '/imports/graphql/methods/comments';
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 class Suggestions extends Component {
 
@@ -16,16 +19,24 @@ class Suggestions extends Component {
 			mentions: fromJS([]),
 			keywords: fromJS([])
 		};
+
+		props.keywordsQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			tags: nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords,
+			comments: nextProps.commentsQuery.loading ? [] : nextProps.commentsQuery.comments
+		});
 	}
 	onMentionSearchChange({ value }) {
-		// use Meteor call method, as comments are not available on clint app
-		Meteor.call('comments.getSuggestions', undefined, value, (err, res) => {
-			// handle error:
-			if (err) throw new Meteor.Error(err);
-
-			// handle response:
-			const _mentions = Utils.getSuggestionsFromComments(res);
-
+		const taht = this;
+		this.props.commentsQuery.refetch({
+			queryParam: JSON.stringify({ $text: { $search: value } }),
+			limit: 5
+		}).then(function(res) {
+			const _mentions = Utils.getSuggestionsFromComments(res.data.comments);
 			this.setState({
 				mentions: defaultSuggestionsFilter(value, fromJS(_mentions))
 			});
@@ -33,7 +44,7 @@ class Suggestions extends Component {
 	}
 	onKeywordSearchChange({ value }) {
 		const _keywords = [];
-		this.props.tags.forEach((keyword) => {
+		this.state.tags.forEach((keyword) => {
 			_keywords.push({
 				name: keyword.title,
 				link: `/tags/${keyword.slug}`,
@@ -49,7 +60,7 @@ class Suggestions extends Component {
 		const KeywordsSuggestions = this.props.keywordPlugin.MentionSuggestions;
 		return (
 			<div>
-				{this.props.tags !== undefined ? (
+				{this.state.tags !== undefined ? (
 					<div>
 						<this.props.mentionPlugin.MentionSuggestions
 							onSearchChange={this.onMentionSearchChange.bind(this)}
@@ -65,12 +76,14 @@ class Suggestions extends Component {
 		);
 	}
 }
-export default createContainer(() => {
-	Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
+Suggestions.propTypes = {
+	mentionPlugin: PropTypes.object,
+	keywordPlugin: PropTypes.object,
+	commentsQuery: PropTypes.object,
+	keywordsQuery: PropTypes.object
+};
 
-	const tags = Keywords.find().fetch();
-
-	return {
-		tags
-	};
-}, Suggestions);
+export default compose(
+	keywordsQuery,
+	commentsQuery
+)(Suggestions);

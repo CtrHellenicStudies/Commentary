@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 	ControlLabel,
@@ -19,13 +19,15 @@ import Cookies from 'js-cookie';
 import { debounce } from 'throttle-debounce';
 
 // models:
-import Editions from '/imports/models/editions';
-import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';
 
 // lib:
 import Utils from '/imports/lib/utils';
 import _ from 'lodash';
+
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery, textNodeUpdateMutation } from '/imports/graphql/methods/textNodes';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -37,14 +39,14 @@ import { getSortedEditions } from '../helpers';
 const ListGroupItemDnD = createListGroupItemDnD('textNodeBlocks');
 
 
-class TextNodesInput extends React.Component {
+class TextNodesInput extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			textNodes: this.props.textNodes,
 			snackbarOpen: false,
 			snackbarMessage: '',
+			ready: false
 		};
 
 		this.onChangeN = this.onChangeN.bind(this);
@@ -55,9 +57,64 @@ class TextNodesInput extends React.Component {
 		this.showSnackBar = this.showSnackBar.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(props) {
+		
+		if (props.editionsQuery.loading || props.textNodesQuery.loading) {
+			return;
+		}
+		const { workId, workSlug, editionId, subworkN, lineFrom, limit } = props;
+		const tenantId = sessionStorage.getItem('tenantId');
+		if (!props.textNodesQuery.variables.workSlug) {
+			const properties = {
+				tenantId: tenantId,
+				workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+				subworkN: subworkN,
+				lineFrom: parseInt(lineFrom, 10),
+				lineTo: parseInt(lineFrom, 10) + limit,
+				editionId: editionId,
+				limit: limit
+	
+			};
+			props.textNodesQuery.refetch(properties);
+			return;
+		}
+		let textNodes;
+		let textNodesByEditions = [];
+		let textNodesByEditionsSorted = [];
+		let selectedEdition = { lines: [] };
+	
+		const ready = true;
+	
+		if (ready) {
+			textNodes = props.textNodesQuery.textNodes;
+			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions);
+			textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
+	
+			textNodesByEditionsSorted.forEach(edition => {
+				if (edition._id === editionId) {
+					selectedEdition = edition;
+				}
+			});
+	
+			if (!selectedEdition) {
+				// TODO: handle errors related to incorrectly selected edition
+				return null;
+			}
+		}
+	
+		const assignedTextNodes = [];
+	
+		for (let i = 0; i < limit; i++) {
+			let newLine;
+			const arrIndex = _.findIndex(selectedEdition.lines, (line) => line.n === i + parseInt(lineFrom));
+			if (arrIndex >= 0) {
+				newLine = selectedEdition.lines[arrIndex];
+				assignedTextNodes.push(newLine);
+			}
+		}
 		this.setState({
-			textNodes: nextProps.textNodes,
+			textNodes: assignedTextNodes,
+			ready: ready,
 		});
 
 	}
@@ -82,7 +139,7 @@ class TextNodesInput extends React.Component {
 				_id: workId,
 				slug: workSlug,
 			},
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 		});
 		this.setState({
 			textNodes: this.state.textNodes,
@@ -126,11 +183,7 @@ class TextNodesInput extends React.Component {
 		if (typeof editedTextNodeId === 'object') {
 			editedTextNodeId = editedTextNodeId.valueOf();
 		}
-
-		// Call update method on meteor backend
-		Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
-			editionId, editedTextNode.text, newValue,
-		(err, res) => {
+		this.props.textNodeUpdate(editedTextNodeId, editionId, editedTextNode.text, newValue).then((err, res) => {
 			if (err) {
 				console.error('Error editing text', err);
 				this.showSnackBar(err.message);
@@ -153,8 +206,7 @@ class TextNodesInput extends React.Component {
 
 		debounce(500, () => {
 			// Call update method on meteor backend
-			Meteor.call('textNodes.updateTextForEdition', Cookies.get('loginToken'), editedTextNodeId,
-				editionId, newValue, editedTextNode.n,
+			props.textNodesUpdate(editedTextNodeId, editionId, newValue, editedTextNode.n).then(
 			(err, res) => {
 				if (err) {
 					console.error('Error editing text', err);
@@ -181,10 +233,10 @@ class TextNodesInput extends React.Component {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	render() {
-		const { textNodes } = this.state;
+		const { textNodes, ready } = this.state;
 
 
-		if (!this.props.ready) {
+		if (!ready) {
 			return null;
 		}
 
@@ -249,7 +301,6 @@ class TextNodesInput extends React.Component {
 }
 
 TextNodesInput.propTypes = {
-	textNodes: PropTypes.array,
 	workId: PropTypes.string,
 	workSlug: PropTypes.string,
 	subworkTitle: PropTypes.string,
@@ -259,64 +310,14 @@ TextNodesInput.propTypes = {
 	editionId: PropTypes.string,
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
-	ready: PropTypes.bool,
 	loadMore: PropTypes.func,
+	textNodesQuery: PropTypes.object,
+	editionsQuery: PropTypes.object,
+	textNodeUpdate: PropTypes.func,
+	limit: PropTypes.number
 };
 
-
-const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, subworkN, lineFrom, limit }) => {
-	let textNodes;
-	let textNodesByEditions = [];
-	let textNodesByEditionsSorted = [];
-	let selectedEdition = { lines: [] };
-
-	const lemmaQuery = {
-		'work.slug': workSlug,
-		'subwork.n': subworkN,
-		$and: [{'text.n': {$gte: parseInt(lineFrom, 10)}}, {'text.n': {$lte: parseInt(lineFrom, 10) + limit}}],
-		'text.edition': editionId
-	};
-
-	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-		lemmaQuery['work.slug'] = 'hymns';
-	}
-	const textNodeSubscription = Meteor.subscribe('textNodes', lemmaQuery, 0, limit);
-	const editionsSubscription = Meteor.subscribe('editions');
-	const ready = textNodeSubscription.ready() && editionsSubscription.ready();
-
-	if (ready) {
-		textNodes = TextNodes.find(lemmaQuery).fetch();
-		textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, Editions);
-		textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
-
-		textNodesByEditionsSorted.forEach(edition => {
-			if (edition._id === editionId) {
-				selectedEdition = edition;
-			}
-		});
-
-		if (!selectedEdition) {
-			// TODO: handle errors related to incorrectly selected edition
-			return null;
-		}
-	}
-
-	const assignedTextNodes = [];
-
-	for (let i = 0; i < limit; i++) {
-		let newLine;
-		const arrIndex = _.findIndex(selectedEdition.lines, (line) => line.n === i + parseInt(lineFrom));
-		if (arrIndex >= 0) {
-			newLine = selectedEdition.lines[arrIndex];
-			assignedTextNodes.push(newLine);
-		}
-	}
-
-	return {
-		textNodes: assignedTextNodes,
-		ready,
-	};
-
-}, TextNodesInput);
-
-export default TextNodesInputContainer;
+export default compose(
+	editionsQuery,
+	textNodesQuery,
+	textNodeUpdateMutation)(TextNodesInput);

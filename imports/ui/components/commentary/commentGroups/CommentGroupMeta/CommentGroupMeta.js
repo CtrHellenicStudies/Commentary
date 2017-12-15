@@ -32,23 +32,23 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 				</div>
 				<div className="comment-group-commenters">
 
-					{commentGroup.commenters.map(commenter => (
+					{Object.keys(commentGroup.commenters).map(key => (
 						<div
-							key={commenter._id}
+							key={commentGroup.commenters[key]._id}
 							className="comment-author"
-							data-commenter-id={commenter._id}
+							data-commenter-id={commentGroup.commenters[key]._id}
 						>
 							<span className="comment-author-name">
-								{commenter.name}
+								{commentGroup.commenters[key].name}
 							</span>
 							<a
 								className="comment-author-image-wrap paper-shadow"
-								href={`/commenters/${commenter.slug}`}
+								href={`/commenters/${commentGroup.commenters[key].slug}`}
 							>
 								<AvatarIcon
 									avatar={
-										(commenter && 'avatar' in commenter) ?
-										commenter.avatar.src
+										(commentGroup.commenters[key] && commentGroup.commenters[key].avatar) ?
+										commentGroup.commenters[key].avatar.src
 										: null
 									}
 								/>
@@ -68,7 +68,7 @@ CommentGroupMeta.propTypes = {
 		}),
 		lineFrom: PropTypes.number.isRequired,
 		lineTo: PropTypes.number,
-		commenters: PropTypes.arrayOf(PropTypes.shape({
+		commenters: PropTypes.objectOf(PropTypes.shape({
 			_id: PropTypes.string.isRequired,
 			name: PropTypes.string.isRequired,
 			slug: PropTypes.string.isRequired,

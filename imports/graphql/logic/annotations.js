@@ -3,12 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import Comments from '/imports/models/comments';
 import Books from '/imports/models/books';
 
-import AdminService from './adminService';
+import GraphQLService from './graphQLService';
 
 /**
  * Logic-layer service for dealing with annotations
  */
-export default class AnnotationService extends AdminService {
+export default class AnnotationService extends GraphQLService {
 	constructor(props) {
 		super(props);
 		if (props.token) {

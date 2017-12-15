@@ -121,7 +121,7 @@ ContextPanelTabs.propTypes = {
 	lemmaText: PropTypes.arrayOf(PropTypes.shape({
 		title: PropTypes.string.isRequired,
 		slug: PropTypes.string.isRequired,
-	})).isRequired,
+	})),
 	selectedLemmaEdition: PropTypes.string.isRequired,
 	toggleEdition: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,

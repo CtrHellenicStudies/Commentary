@@ -27,7 +27,7 @@ const KeywordType = new GraphQLObjectType({
 			type: GraphQLString,
 		},
 		descriptionRaw: {
-			type: GraphQLString,
+			type: GraphQLJSON,
 		},
 		type: {
 			type: GraphQLString,
@@ -77,7 +77,7 @@ const KeywordInputType = new GraphQLInputObjectType({
 			type: GraphQLString,
 		},
 		descriptionRaw: {
-			type: GraphQLString,
+			type: GraphQLJSON,
 		},
 		type: {
 			type: GraphQLString,

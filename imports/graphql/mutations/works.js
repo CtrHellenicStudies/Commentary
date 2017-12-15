@@ -13,7 +13,7 @@ import { RemoveType } from '/imports/graphql/types/index';
 import Works from '/imports/models/works';
 
 // logic
-import WorksService from '../logic/works';
+import WorksService from '../logic/Works/works';
 
 const worksMutationFields = {
 	workCreate: {

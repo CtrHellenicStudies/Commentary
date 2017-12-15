@@ -1,34 +1,33 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Draggable from 'react-draggable';
+import { compose } from 'react-apollo';
 
-// models
-import Keywords from '/imports/models/keywords';
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 
-const KeywordReferenceModal = React.createClass({
+class KeywordReferenceModal extends Component {
 
-	propTypes: {
-		visible: PropTypes.bool,
-		top: PropTypes.number,
-		left: PropTypes.number,
-		keyword: PropTypes.string,
-		close: PropTypes.func,
-	},
+	constructor(props) {
+		super(props);
+		this.state = {};
+		this.renderKeywordHTML = this.renderKeywordHTML.bind(this);
 
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
+		this.props.keywordsQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			keyword: nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords,
+			ready: !nextProps.keywordsQuery.loading,
+		});
+	}
 	renderKeywordHTML() {
 		let html = '';
 		const keyword = this.data.keyword;
@@ -38,11 +37,11 @@ const KeywordReferenceModal = React.createClass({
 		}
 
 		return { __html: html };
-	},
+	}
 
 	render() {
 		const self = this;
-		const { keyword } = this.props;
+		const { keyword } = this.state;
 		const styles = {
 			modal: {
 				top: this.props.top,
@@ -77,22 +76,16 @@ const KeywordReferenceModal = React.createClass({
 				</div>
 			</Draggable>
 		);
-	},
+	}
 
-});
+}
 
-const KeywordReferenceModalContainer = createContainer(({ keywordSlug }) => {
-	const query = {
-		slug: keywordSlug,
-	};
+KeywordReferenceModal.propTypes = {
+	visible: PropTypes.bool,
+	top: PropTypes.number,
+	left: PropTypes.number,
+	close: PropTypes.func,
+	keywordsQuery: PropTypes.object
+};
 
-	const handle = Meteor.subscribe('keywords.all', query);
-	const keyword = Keywords.findOne(query);
-
-	return {
-		keyword,
-		ready: handle.ready(),
-	};
-}, KeywordReferenceModal);
-
-export default KeywordReferenceModalContainer;
+export default compose(keywordsQuery)(KeywordReferenceModal);

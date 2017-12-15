@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'meteor/react-meteor-data';
-import Comments from '/imports/models/comments';
-import Tenants from '/imports/models/tenants';
+import { compose } from 'react-apollo';
 import Utils from '/imports/lib/utils';
 
+// graphql
+import { commentsQuery } from '/imports/graphql/methods/comments';
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
 
 const resolveV1 = (props) => {
 	let resolveURL;
@@ -18,12 +19,15 @@ const resolveV1 = (props) => {
 	const revision = urnParams.splice(-1);
 	const urn = `${urnParams.join('.')}`;
 
-	const commentHandle = Meteor.subscribe('comments', {_id: props.commentId}, 0);
-	const comment = Comments.findOne({ _id: props.commentId });
-
+	if (!props.commentsQuery.variables.queryParam) {
+		props.commentsQuery.refetch({
+			queryParam: JSON.stringify({_id: props.commentId})
+		});
+	}
+	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments[0];
 	if (comment) {
-		const tenantsHandle = Meteor.subscribe('tenants');
-		tenant = Tenants.findOne({_id: comment.tenantId});
+		this.props.tenantsQuery.variables.tenantId = comment.tenantId;
+		tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants;
 	}
 
 	if (comment && tenant) {
@@ -42,15 +46,20 @@ const resolveV2 = (props) => {
 	const revision = urnParams.splice(-1);
 	const urn = `${urnParams.join('.')}`;
 
-	const commentHandle = Meteor.subscribe('comments', {_id: props.commentId});
-	const comment = Comments.findOne({ _id: props.commentId });
+	if (!props.commentsQuery.variables.queryParam) {
+		props.commentsQuery.refetch({
+			queryParam: JSON.stringify({_id: props.commentId})
+		});
+	}
+	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments[0];
 
 	if (comment) {
-		const tenantsHandle = Meteor.subscribe('tenants');
-		tenant = Tenants.findOne({_id: comment.tenantId});
+		this.props.tenantsQuery.variables.tenantId = comment.tenantId;
+		tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants;
 	}
 
-	if (comment && tenant) {//TODO
+	if (comment && tenant) { 
+		// TODO
 		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}/commentary/?urn=${urn}&revision=${revision}`;
 	}
 
@@ -58,16 +67,34 @@ const resolveV2 = (props) => {
 };
 
 
-class NameResolutionServiceLayout extends React.Component {
+class NameResolutionServiceLayout extends Component {
 
 	static propTypes = {
 		urn: PropTypes.string,
 		doi: PropTypes.string,
 		resolveURL: PropTypes.string,
+		version: PropTypes.number
 	}
-
+	componentWillReceiveProps(nextProps) {
+		let resolveURL;
+		switch (nextProps.version) {
+		case 1:
+			resolveURL = resolveV1(nextProps);
+			break;
+		case 2:
+			resolveURL = resolveV2(nextProps);
+			break;
+		default:
+			resolveURL = resolveV1(nextProps);
+			break;
+		}
+		this.setState({
+			resolveURL: resolveURL
+		});
+	}
 	resolve() {
-		const { doi, urn, resolveURL } = this.props;
+		const { doi, urn } = this.props;
+		const { resolveURL } = this.state;
 
 		if (!doi && !urn) {
 			return (
@@ -127,25 +154,7 @@ class NameResolutionServiceLayout extends React.Component {
 	}
 }
 
-const nameResolutionServiceLayoutContainer = createContainer((props) => {
-	let resolveURL;
-
-	switch (props.version) {
-	case 1:
-		resolveURL = resolveV1(props);
-		break;
-	case 2:
-		resolveURL = resolveV2(props);
-		break;
-	default:
-		resolveURL = resolveV1(props);
-		break;
-	}
-
-	return {
-		resolveURL,
-	};
-}, NameResolutionServiceLayout);
-
-
-export default nameResolutionServiceLayoutContainer;
+export default compose(
+	tenantsQuery,
+	commentsQuery
+)(NameResolutionServiceLayout);

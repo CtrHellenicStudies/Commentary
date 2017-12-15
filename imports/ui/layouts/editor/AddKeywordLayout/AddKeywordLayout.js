@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 import slugify from 'slugify';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+// graphql
+import { keywordInsertMutation } from '/imports/graphql/methods/keywords';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -28,6 +32,9 @@ const AddKeywordLayout = React.createClass({
 	propTypes: {
 		ready: PropTypes.bool,
 		isTest: PropTypes.bool,
+		history: PropTypes.object,
+		keywordInsert: PropTypes.func,
+		textNodesQuery: PropTypes.object
 	},
 
 	childContextTypes: {
@@ -178,18 +185,41 @@ const AddKeywordLayout = React.createClass({
 			this.setState({
 				selectedLineTo,
 			});
+			selectedLineFrom = this.state.selectedLineFrom;
 		} else if (selectedLineTo === null) {
 			this.setState({
 				selectedLineFrom,
 			});
+			selectedLineTo = this.state.selectedLineTo;
 		} else if (selectedLineTo != null && selectedLineTo != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
 		} else {
-			// do nothing
+			return;
 		}
+		const { filters } = this.state;
+		let work;
+		let subwork;
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			} else if (filter.key === 'subworks') {
+				subwork = filter.values[0];
+			} else if (filter.key === 'lineTo') {
+				lineTo = filter.values[0];
+			} else if (filter.key === 'lineFrom') {
+				lineFrom = filter.values[0];
+			}
+		});
+		const properties = {
+			workSlug: work ? work.slug : 'iliad',
+			subworkN: subwork ? subwork.n : 1,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
 	},
 
 	// --- END LINE SELECTION --- //
@@ -200,7 +230,7 @@ const AddKeywordLayout = React.createClass({
 		this.setState({
 			loading: true,
 		});
-
+		const that = this;
 		// get data for keyword :
 		const work = this.getWork();
 		const subwork = this.getSubwork();
@@ -216,7 +246,7 @@ const AddKeywordLayout = React.createClass({
 				order: work.order,
 			},
 			subwork: {
-				title: subwork.title,
+				title: subwork.title, 
 				n: subwork.n,
 			},
 			lineFrom: this.state.selectedLineFrom,
@@ -228,16 +258,12 @@ const AddKeywordLayout = React.createClass({
 			descriptionRaw: textRawValue,
 			type: this.state.selectedType,
 			count: 1,
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 		};
-
-		Meteor.call('keywords.insert', token, [keyword], (error) => {
-			if (error) {
-				this.showSnackBar(error);
-			} else {
-				this.props.history.push(`/tags/${keyword.slug}`);
-			}
-		});
+		this.props.keywordInsert(keyword).then(function() {
+			that.props.history.push(`/tags/${keyword.slug}`);
+		}
+		);
 	},
 
 	showSnackBar(error) {
@@ -390,10 +416,13 @@ const AddKeywordLayout = React.createClass({
 									<div className="comment-group">
 										<CommentLemmaSelect
 											ref={(component) => { this.commentLemmaSelect = component; }}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
+											lineFrom={this.state.selectedLineFrom}
+											lineTo={this.state.selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
+											shouldUpdateQuery={this.state.updateQuery}
+											updateQuery={this.updateQuery}
+											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}				
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}
@@ -435,4 +464,7 @@ const AddKeywordLayoutContainer = (() => {
 	};
 }, AddKeywordLayout);
 
-export default AddKeywordLayoutContainer;
+export default compose(
+	keywordInsertMutation,
+	textNodesQuery
+)(AddKeywordLayoutContainer);

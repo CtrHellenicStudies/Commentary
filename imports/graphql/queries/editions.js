@@ -8,7 +8,7 @@ import { GraphQLID, GraphQLList } from 'graphql';
 import {EditionsType} from '/imports/graphql/types/models/editions';
 
 // logic
-import EditionsService from '../logic/editions';
+import EditionsService from '../logic/Editions/editions';
 
 const editionsQueryFields = {
 	editions: {

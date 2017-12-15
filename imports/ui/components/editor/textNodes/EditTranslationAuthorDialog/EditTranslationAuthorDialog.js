@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -7,8 +7,12 @@ import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 import { Meteor } from 'meteor/meteor';
 import Cookies from 'js-cookie';
+import { compose } from 'react-apollo';
 
-class EditTranslationAuthorDialog extends React.Component {
+// graphql
+import { translationAddAuthorMutation, translationUpdateAuthorMutation } from '/imports/graphql/methods/translations';
+
+class EditTranslationAuthorDialog extends Component {
 
 	constructor(props) {
 		super(props);
@@ -25,7 +29,8 @@ class EditTranslationAuthorDialog extends React.Component {
 	}
 	handleSubmit() {
 		if (this.state.authorName && !this.props.translation) {
-			Meteor.call('translationNodes.addAuthor', Cookies.get('loginToken'), this.props.workDetails, this.state.authorName, (err, result) => {
+			this.props.translationAddAuthor(this.props.workDetails, this.state.authorName)
+			.then((err, result) => {
 				if (!err) {
 					this.props.addNewAuthor(this.state.authorName);
 					this.props.handleClose();
@@ -34,7 +39,8 @@ class EditTranslationAuthorDialog extends React.Component {
 				}
 			});
 		}		else if (this.state.authorName) {
-			Meteor.call('translationNodes.updateAuthor', Cookies.get('loginToken'), this.props.workDetails, this.props.translation, this.state.authorName, (err, result) => {
+			this.props.translationUpdateAuthor(this.props.workDetails, this.props.translation, this.state.authorName)
+			.then((err, result) => {
 				if (!err) {
 					this.props.addNewAuthor(this.state.authorName);
 					this.props.handleClose();
@@ -98,6 +104,9 @@ EditTranslationAuthorDialog.propTypes = {
 	addNewAuthor: PropTypes.func,
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
+	translation: PropTypes.string,
+	translationAddAuthor: PropTypes.func,
+	translationUpdateAuthor: PropTypes.func
 };
 
-export default EditTranslationAuthorDialog;
+export default compose(translationAddAuthorMutation, translationUpdateAuthorMutation)(EditTranslationAuthorDialog);

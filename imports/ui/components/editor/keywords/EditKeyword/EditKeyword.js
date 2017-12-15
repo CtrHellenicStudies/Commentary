@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import RaisedButton from 'material-ui/RaisedButton';
+import { compose } from 'react-apollo';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
@@ -18,6 +17,11 @@ import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import Utils from '/imports/lib/utils';
+
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -27,6 +31,7 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 // lib
 import muiTheme from '/imports/lib/muiTheme';
 import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
@@ -35,23 +40,10 @@ const singleLinePlugin = createSingleLinePlugin();
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
 
-const EditKeyword = React.createClass({
+class EditKeyword extends Component {
 
-	propTypes: {
-		submitForm: PropTypes.func.isRequired,
-		onTypeChange: PropTypes.func.isRequired,
-		keyword: PropTypes.object,
-		selectedLineFrom: PropTypes.number,
-		selectedLineTo: PropTypes.number,
-		keywordsOptions: PropTypes.array,
-		keyideasOptions: PropTypes.array,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
+	constructor(props) {
+		super(props);
 		const keyword = this.props.keyword;
 		let keywordTitle = '';
 		let keywordDescription = '';
@@ -69,8 +61,7 @@ const EditKeyword = React.createClass({
 				description = EditorState.createEmpty();
 			}
 		}
-
-		return {
+		this.state = {
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(keywordTitle)),
 			textEditorState: description,
 
@@ -79,14 +70,56 @@ const EditKeyword = React.createClass({
 
 			snackbarOpen: false,
 			snackbarMessage: '',
-			suggestions: fromJS([]),
+			suggestions: fromJS([])
 		};
-	},
+		const tenantId = sessionStorage.getItem('tenantId');
+		this.props.referenceWorksQuery.refetch({
+			tenantId: tenantId
+		});
+		this.props.keywordsQuery.refetch({
+			tenantId: tenantId
+		});
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
+		this._getKeywordEditorState = this._getKeywordEditorState.bind(this);
+		this.onTitleChange = this.onTitleChange.bind(this);
+		this.onTextChange = this.onTextChange.bind(this);
+		this.onTypeChange = this.onTypeChange.bind(this);
+		this.onKeywordsValueChange = this.onKeyideasValueChange.bind(this);
+		this.onNewOptionCreator = this.onNewOptionCreator.bind(this);
+		this.shouldKeyDownEventCreateNewOption = this.shouldKeyDownEventCreateNewOption.bind(this);
+		this.isOptionUnique = this.isOptionUnique.bind(this);
+		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.showSnackBar = this.showSnackBar.bind(this);
+		this.validateStateForSubmit = this.validateStateForSubmit.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		const keywordsOptions = [];
+		const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
+		.filter(x => x.type === 'word');
+		keywords.forEach((keyword) => {
+			keywordsOptions.push({
+				value: keyword.title,
+				label: keyword.title,
+				slug: keyword.slug,
+			});
+		});
+	
+		const keyideasOptions = [];
+		const keyideas = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
+		.filter(x => x.type === 'idea');
+		keyideas.forEach((keyidea) => {
+			keyideasOptions.push({
+				value: keyidea.title,
+				label: keyidea.title,
+				slug: keyidea.slug,
+			});
+		});
+		this.setState({
+			keyideasOptions: keyideasOptions,
+			keywordsOptions: keywordsOptions
+		});
+	}
 	_getKeywordEditorState(keyword) {
 		if (keyword.descriptionRaw && Object.keys(keyword.descriptionRaw).length) {
 			return EditorState.createWithContent(convertFromRaw(keyword.descriptionRaw));
@@ -100,8 +133,7 @@ const EditKeyword = React.createClass({
 			);
 		}
 		throw new Meteor.Error('missing filed description or descriptionRaw in keyword');
-	},
-
+	}
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
 		const title = jQuery(titleHtml).text();
@@ -109,47 +141,34 @@ const EditKeyword = React.createClass({
 			titleEditorState,
 			titleValue: title,
 		});
-	},
-
+	}
 	onTextChange(textEditorState) {
-		// var textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
-		/*
-		this.setState({
-			textEditorState,
-			textValue: textEditorState.toString('html'),
-		});
-		*/
-
 		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
 
 		this.setState({
 			textEditorState,
 			textValue: textHtml,
 		});
-	},
-
+	}
 	onTypeChange(e, type) {
 		this.props.onTypeChange(type);
-	},
-
+	}
 	onKeywordsValueChange(keywords) {
 		this.setState({
 			keywordsValue: keywords,
 		});
-	},
-
+	}
 	onKeyideasValueChange(keyidea) {
 		this.setState({
 			keyideasValue: keyidea,
 		});
-	},
-
+	}
 	onNewOptionCreator(newOption) {
 		return {
 			label: newOption.label,
 			value: newOption.label
 		};
-	},
+	}
 	shouldKeyDownEventCreateNewOption(sig) {
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
@@ -157,11 +176,10 @@ const EditKeyword = React.createClass({
 		}
 
 		return false;
-	},
-
+	}
 	isOptionUnique(newOption) {
-		const keywordsOptions = this.props.keywordsOptions;
-		const keyideasOptions = this.props.keyideasOptions;
+		const keywordsOptions = this.state.keywordsOptions;
+		const keyideasOptions = this.state.keyideasOptions;
 		const keywordsValue = this.state.keywordsValue ? this.state.keywordsValue : [];
 		const keyideasValue = this.state.keyideasValue ? this.state.keyideasValue : [];
 		const BreakException = {};
@@ -182,14 +200,12 @@ const EditKeyword = React.createClass({
 			if (e === BreakException) return false;
 		}
 		return true;
-	},
-
+	}
 	onCommenterValueChange(comenter) {
 		this.setState({
 			commenterValue: comenter,
 		});
-	},
-
+	}
 	handleSubmit(event) {
 		const { textEditorState } = this.state;
 		event.preventDefault();
@@ -205,8 +221,7 @@ const EditKeyword = React.createClass({
 		if (!error.errors) {
 			this.props.submitForm(this.state, descriptionHtml, descriptionRaw);
 		}
-	},
-
+	}
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
@@ -217,10 +232,10 @@ const EditKeyword = React.createClass({
 				snackbarOpen: false,
 			});
 		}, 4000);
-	},
+	}
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
-	},
+	}
 	validateStateForSubmit() {
 		let errors = false;
 		let errorMessage = 'Missing comment data:';
@@ -236,7 +251,7 @@ const EditKeyword = React.createClass({
 			errors,
 			errorMessage,
 		};
-	},
+	}
 
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 
@@ -344,60 +359,20 @@ const EditKeyword = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
-
-const EditKeywordContainer = createContainer(() => {
-	Meteor.subscribe('keywords.all', {tenantId: Session.get('tenantId')});
-	const keywordsOptions = [];
-	const keywords = Keywords.find({ type: 'word' }).fetch();
-	keywords.forEach((keyword) => {
-		keywordsOptions.push({
-			value: keyword.title,
-			label: keyword.title,
-			slug: keyword.slug,
-		});
-	});
-
-	const keyideasOptions = [];
-	const keyideas = Keywords.find({ type: 'idea' }).fetch();
-	keyideas.forEach((keyidea) => {
-		keyideasOptions.push({
-			value: keyidea.title,
-			label: keyidea.title,
-			slug: keyidea.slug,
-		});
-	});
-
-	Meteor.subscribe('referenceWorks');
-	const referenceWorksOptions = [];
-	const referenceWorks = ReferenceWorks.find().fetch();
-	referenceWorks.forEach((referenceWork) => {
-		referenceWorksOptions.push({
-			value: referenceWork._id,
-			label: referenceWork.title,
-		});
-	});
-
-	Meteor.subscribe('commenters', Session.get('tenantId'));
-	const commentersOptions = [];
-	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters } }).fetch();
 	}
-	commenters.forEach((commenter) => {
-		commentersOptions.push({
-			value: commenter._id,
-			label: commenter.name,
-		});
-	});
-
-	return {
-		keywordsOptions,
-		keyideasOptions,
-		referenceWorksOptions,
-		commentersOptions,
-	};
-}, EditKeyword);
-
-export default EditKeywordContainer;
+}
+EditKeyword.propTypes = {
+	submitForm: PropTypes.func.isRequired,
+	onTypeChange: PropTypes.func.isRequired,
+	keyword: PropTypes.object,
+	selectedLineFrom: PropTypes.number,
+	selectedLineTo: PropTypes.number,
+	referenceWorksQuery: PropTypes.object,
+	commentersQuery: PropTypes.object,
+	keywordsQuery: PropTypes.object
+};
+export default compose(
+	keywordsQuery,
+	referenceWorksQuery,
+	commentersQuery
+)(EditKeyword);

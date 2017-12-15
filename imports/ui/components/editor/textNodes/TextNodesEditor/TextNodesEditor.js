@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 import Select from 'react-select';
 import autoBind from 'react-autobind';
 import {
@@ -12,6 +12,10 @@ import {
 } from 'react-bootstrap';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+
+// graphql
+import { worksQuery } from '/imports/graphql/methods/works';
+import { editionsQuery } from '/imports/graphql/methods/editions';
 
 // actions
 import * as textNodesActions from '/imports/actions/textNodes';
@@ -34,7 +38,7 @@ import TranslationSelect from '../TranslationSelect/TranslationSelect';
 import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
 
 
-class TextNodesEditor extends React.Component {
+class TextNodesEditor extends Component {
 	constructor(props) {
 		super(props);
 
@@ -54,6 +58,8 @@ class TextNodesEditor extends React.Component {
 			selectedTranslation,
 			startAtLine,
 			limit,
+			works: [],
+			editions: [],
 			editWorkDialogOpen: false,
 			editEditionDialogOpen: false,
 			editSubworkDialogOpen: false,
@@ -62,11 +68,18 @@ class TextNodesEditor extends React.Component {
 
 		autoBind(this);
 	}
-
+	componentWillReceiveProps(props) {
+		const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
+		const works = props.worksQuery.loading ? [] : props.worksQuery.works;
+		this.setState({
+			works,
+			editions
+		});
+	}
 	selectWork(event) {
 		const setValue = event ? event.value : '';
 
-		const { works } = this.props;
+		const { works } = this.state;
 		let _selectedWork;
 
 		works.forEach(work => {
@@ -77,7 +90,7 @@ class TextNodesEditor extends React.Component {
 
 		this.setState({
 			selectedWork: setValue,
-			subworks: _selectedWork ? _selectedWork.subworks.sort(Utils.sortBy('n')) : [],
+			subworks: _selectedWork ? _selectedWork.subworks.slice().sort(Utils.sortBy('n')) : [],
 		});
 	}
 
@@ -120,6 +133,7 @@ class TextNodesEditor extends React.Component {
 	}
 
 	showMultilineDialog() {
+
 		this.setState({
 			multiLineDialogOpen: true,
 		});
@@ -168,7 +182,7 @@ class TextNodesEditor extends React.Component {
 			return null;
 		}
 
-		const { works, editions } = this.props;
+		const { works, editions } = this.state;
 		let _selectedWork;
 		let _selectedEdition;
 		let _selectedSubwork;
@@ -197,8 +211,8 @@ class TextNodesEditor extends React.Component {
 				editionId={_selectedEdition._id}
 				subworkN={_selectedSubwork.n}
 				subworkTitle={selectedSubwork.title}
-				lineFrom={startAtLine}
-				limit={limit}
+				lineFrom={parseInt(startAtLine, 10)}
+				limit={parseInt(startAtLine, 10) + limit}
 				loadMore={this.loadMoreText}
 			/>
 		);
@@ -210,7 +224,7 @@ class TextNodesEditor extends React.Component {
 		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
 			return null;
 		}
-		this.props.works.forEach(work => {
+		this.state.works.forEach(work => {
 			if (work._id === selectedWork) {
 				_selectedWork = work;
 			}
@@ -228,7 +242,7 @@ class TextNodesEditor extends React.Component {
 	}
 
 	render() {
-		const { works, editions } = this.props;
+		const { works, editions } = this.state;
 		const { subworks, selectedWork, selectedEdition, selectedSubwork, startAtLine } = this.state;
 
 		let _selectedWork;
@@ -374,27 +388,11 @@ class TextNodesEditor extends React.Component {
 		);
 	}
 }
-
-
 TextNodesEditor.propTypes = {
-	works: PropTypes.array,
-	editions: PropTypes.array,
+	worksQuery: PropTypes.object,
+	editionsQuery: PropTypes.object,
 };
-
-
-const TextNodesEditorContainer = createContainer(props => {
-
-	Meteor.subscribe('editions');
-	const editions = Editions.find().fetch();
-
-	Meteor.subscribe('works', Session.get('tenantId'));
-	const works = Works.find().fetch();
-
-	return {
-		works,
-		editions,
-	};
-
-}, TextNodesEditor);
-
-export default TextNodesEditorContainer;
+export default compose(
+	editionsQuery,
+	worksQuery
+)(TextNodesEditor);

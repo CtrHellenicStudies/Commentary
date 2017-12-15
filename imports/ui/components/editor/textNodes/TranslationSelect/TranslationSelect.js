@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'meteor/react-meteor-data';
 import {
 	ControlLabel,
 	FormGroup,
 } from 'react-bootstrap';
 import Select from 'react-select';
-import { Session } from 'meteor/session';
+import { compose } from 'react-apollo';
+
+
+// graphql
+import { translationAuthorsQuery } from '/imports/graphql/methods/translations';
+
 import EditTranslationAuthorDialog from '../EditTranslationAuthorDialog/EditTranslationAuthorDialog';
 
 class TranslationSelect extends React.Component {
@@ -14,14 +18,34 @@ class TranslationSelect extends React.Component {
 		super(props);
 		this.state = {
 			selectedTranslation: null,
-			editDialogOpen: false
+			editDialogOpen: false,
+			translationOptions: []
 		};
 		this.selectTranslation = this.selectTranslation.bind(this);
 		this.showEditDialog = this.showEditDialog.bind(this);
 		this.handleCloseEditDialog = this.handleCloseEditDialog.bind(this);
 		this.addNewAuthor = this.addNewAuthor.bind(this);
 	}
-
+	componentWillReceiveProps(props) {
+		let workDetails = null;
+		const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authors;
+	
+		if (props.selectedWork && props.selectedSubwork) {
+			props.translationAuthorsQuery.refetch({
+				selectedWork: props.selectedWork,
+				selectedSubwork: props.selectedSubwork
+			});
+			workDetails = {
+				tenantId: sessionStorage.getItem('tenantId'),
+				work: props.selectedWork,
+				subwork: props.selectedSubwork,
+			};
+		}
+		this.setState({
+			workDetails: workDetails,
+			translationOptions: translationOptions
+		});
+	}
 	selectTranslation(event) {
 		const setValue = event ? event.value : '';
 		this.setState({
@@ -47,13 +71,13 @@ class TranslationSelect extends React.Component {
 	}
 
 	addNewAuthor(newAuthor) {
-		const currentAuthors = Session.get('translationOptions');
+		const currentAuthors = this.prop.translationOptions;
 		currentAuthors.push(newAuthor);
 		this.setState({
 			selectedTranslation: newAuthor
 		});
 		this.props.selectTranslation(newAuthor);
-		Session.set('translationOptions', currentAuthors);
+		// TODO insert author
 	}
 
 	render() {
@@ -61,10 +85,10 @@ class TranslationSelect extends React.Component {
 		const translationOptions = [];
 		const workDetails = this.props.workDetails;
 
-		this.props.translationOptions.map(translation => {
+		this.state.translationOptions.map(translation => {
 			translationOptions.push({
-				value: translation,
-				label: translation,
+				value: translation.author,
+				label: translation.author,
 			});
 		});
 
@@ -111,34 +135,9 @@ class TranslationSelect extends React.Component {
 TranslationSelect.propTypes = {
 	selectTranslation: PropTypes.func,
 	workDetails: PropTypes.object,
-	translationOptions: PropTypes.array,
+	translationAuthorsQuery: PropTypes.object,
+	selectedSubwork: PropTypes.number,
+	selectedWork: PropTypes.string
 };
 
-const TranslationSelectContainer = createContainer(props => {
-	const translationOptions = Session.get('translationOptions') ? Session.get('translationOptions') : [];
-
-	let workDetails = null;
-
-	if (props.selectedWork && props.selectedSubwork) {
-		Meteor.call('translationNodes.getAuthors', Session.get('tenantId'), props.selectedWork, props.selectedSubwork, (err, result) => {
-			if (!err) {
-				Session.set('translationOptions', result);
-			} else {
-				throw new Error(err);
-			}
-		});
-		workDetails = {
-			tenantId: Session.get('tenantId'),
-			work: props.selectedWork,
-			subwork: props.selectedSubwork,
-		};
-	}
-
-	return {
-		workDetails,
-		translationOptions,
-	};
-
-}, TranslationSelect);
-
-export default TranslationSelectContainer;
+export default compose(translationAuthorsQuery)(TranslationSelect);

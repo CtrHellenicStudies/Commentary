@@ -8,15 +8,15 @@ import { GraphQLID, GraphQLInt, GraphQLString, GraphQLList, GraphQLBoolean } fro
 import CommentType from '/imports/graphql/types/models/comment';
 
 // logic
-import CommentService from '../logic/comments';
+import CommentService from '../logic/Comments/comments';
 
 const commentQueryFields = {
 	comments: {
 		type: new GraphQLList(CommentType),
 		description: 'Get list of all comments by tenant or for a specific work/passage',
 		args: {
-			tenantId: {
-				type: GraphQLID,
+			queryParam: {
+				type: GraphQLString,
 			},
 			limit: {
 				type: GraphQLInt,
@@ -24,25 +24,32 @@ const commentQueryFields = {
 			skip: {
 				type: GraphQLInt,
 			},
-			workSlug: {
-				type: GraphQLString,
-			},
-			subworkN: {
-				type: GraphQLInt,
-			},
-			lineFrom: {
-				type: GraphQLInt,
-			},
-			lineTo: {
-				type: GraphQLInt,
-			},
-			isAnnotation: {
-				type: GraphQLBoolean,
+			sortRecent: {
+				type: GraphQLBoolean
 			}
 		},
-		async resolve(parent, { tenantId, limit, skip, workSlug, subworkN }, {token}) {
+		async resolve(parent, { queryParam, limit, skip, sortRecent}, {token}) {
 			const commentService = new CommentService({token});
-			return await commentService.commentsGet(tenantId, limit, skip, workSlug, subworkN);
+			return await commentService.commentsGet(queryParam, limit, skip, sortRecent);
+		}
+	},
+	commentsMore: {
+		type: GraphQLBoolean,
+		description: 'Find if there is more comments to take',
+		args: {
+			queryParam: {
+				type: GraphQLString,
+			},
+			limit: {
+				type: GraphQLInt,
+			},
+			skip: {
+				type: GraphQLInt,
+			},
+		},
+		async resolve(parent, { queryParam, limit, skip}, {token}) {
+			const commentService = new CommentService({token});
+			return await commentService.commentsGetMore(queryParam, limit, skip);
 		}
 	},
 	commentsOn: {

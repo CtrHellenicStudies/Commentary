@@ -1,55 +1,59 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import Draggable from 'react-draggable';
 
-// models
-import TextNodes from '/imports/models/textNodes';
-import Editions from '/imports/models/editions';
+
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
 import Utils from '/imports/lib/utils';
 
-const LemmaReferenceModal = React.createClass({
+class LemmaReferenceModal extends Component {
 
-	propTypes: {
-		visible: PropTypes.bool,
-		top: PropTypes.number.isRequired,
-		left: PropTypes.number.isRequired,
-		work: PropTypes.string.isRequired,
-		subwork: PropTypes.number.isRequired,
-		lineFrom: PropTypes.number.isRequired,
-		lineTo: PropTypes.number,
-		closeLemmaReference: PropTypes.func.isRequired,
-		lemmaText: PropTypes.array,
-		ready: PropTypes.bool,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.setState({
 			selectedLemmaEditionIndex: 0,
-
-		};
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
-
+		});
+		this.toggleEdition = this.toggleEdition.bind(this);
+		this.toggleHighlighting = this.toggleHighlighting.bind(this);
+	}
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+			return;
+		}
+		console.log(nextProps.textNodesQuery.variables);
+		if (nextProps.textNodesQuery.variables.workSlug === undefined) {
+			const { lineFrom, work, subwork } = this.props;
+			const lineTo = !this.props.lineTo || lineFrom > this.props.lineTo ? lineFrom : this.props.lineTo;
+			const properties = {
+				tenantId: sessionStorage.getItem('tenantId'),
+				workSlug: worker.slug,
+				subworkN: subwork.n,
+				lineFrom: lineFrom,
+				lineTo: lineTo
+			};
+			nextProps.textNodesQuery.refetch(properties);
+		}
+		const textNodesCursor = nextProps.textNodesQuery.textNodes;
+		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
+		this.setState({
+			lemmaText: editions,
+			ready: !nextProps.textNodesQuery.loading && !nextProps.editionsQuery.editions,
+		});
+	}
 	toggleEdition(editionSlug) {
-		if (this.props.lemmaText.length) {
-			if (this.props.lemmaText[this.state.selectedLemmaEditionIndex].slug !== editionSlug) {
+		if (this.state.lemmaText.length) {
+			if (this.state.lemmaText[this.state.selectedLemmaEditionIndex].slug !== editionSlug) {
 				let newSelectedEditionIndex = 0;
-				this.props.lemmaText.forEach((edition, index) => {
+				this.state.lemmaText.forEach((edition, index) => {
 					if (edition.slug === editionSlug) {
 						newSelectedEditionIndex = index;
 					}
@@ -60,20 +64,18 @@ const LemmaReferenceModal = React.createClass({
 				});
 			}
 		}
-	},
-
+	}
 	toggleHighlighting() {
 		this.setState({
 			highlightingVisible: !this.state.highlightingVisible,
 		});
-	},
-
+	}
 	render() {
 		const self = this;
 		const lemmaText =
-			this.props.lemmaText || [];
+			this.state.lemmaText || [];
 		const selectedLemmaEdition =
-			this.props.lemmaText[this.state.selectedLemmaEditionIndex] || { lines: [] };
+			this.state.lemmaText[this.state.selectedLemmaEditionIndex] || { lines: [] };
 		const styles = {
 			lemmaReferenceModal: {
 				top: this.props.top,
@@ -92,7 +94,7 @@ const LemmaReferenceModal = React.createClass({
 				>
 					<article className="comment	lemma-comment paper-shadow ">
 
-						{this.props.ready ?
+						{this.state.ready ?
 							<div className="reference-text">
 								{selectedLemmaEdition.lines.map((line, i) => (
 									<p
@@ -124,20 +126,7 @@ const LemmaReferenceModal = React.createClass({
 								);
 							})}
 						</div>
-						<div className="meta-tabs tabs">
-							{/*
-							<FlatButton
-								label="Entities"
-								className="edition-tab tab"
-								onClick={this.toggleEntities}
-							/>
-							<FlatButton
-								label="Scansion"
-								className="edition-tab tab"
-								onClick={this.toggleScansion}
-							/>
-							*/}
-						</div>
+						<div className="meta-tabs tabs" />
 
 						<i
 							className="mdi mdi-close paper-shadow"
@@ -149,36 +138,24 @@ const LemmaReferenceModal = React.createClass({
 			</Draggable>
 
 		);
-	},
-
-});
-
-const LemmaReferenceModalContainer = createContainer(({work, subwork, lineFrom, lineTo}) => {
-	const lemmaQuery = {
-		'work.slug': work,
-		'subwork.n': subwork,
-		'text.n': {
-			$gte: lineFrom,
-		},
-	};
-	const lemmaText = [];
-
-	if (lineTo) {
-		lemmaQuery['text.n'].$lte = lineTo;
-	} else {
-		lemmaQuery['text.n'].$lte = lineFrom;
 	}
 
-	const textHandle = Meteor.subscribe('textNodes', lemmaQuery);
-	const handle = Meteor.subscribe('textNodes', lemmaQuery);
-	const editionsSubscription = Meteor.subscribe('editions');
-	const textNodesCursor = TextNodes.find(lemmaQuery);
-	const editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
+}
 
-	return {
-		lemmaText: editions,
-		ready: textHandle.ready(),
-	};
-}, LemmaReferenceModal);
+LemmaReferenceModal.propTypes = {
+	visible: PropTypes.bool,
+	top: PropTypes.number.isRequired,
+	left: PropTypes.number.isRequired,
+	work: PropTypes.string.isRequired,
+	subwork: PropTypes.number.isRequired,
+	lineFrom: PropTypes.number.isRequired,
+	lineTo: PropTypes.number,
+	closeLemmaReference: PropTypes.func.isRequired,
+	editionsQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object
+};
 
-export default LemmaReferenceModalContainer;
+export default compose(
+	editionsQuery,
+	textNodesQuery
+)(LemmaReferenceModal);

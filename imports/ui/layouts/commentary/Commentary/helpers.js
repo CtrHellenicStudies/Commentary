@@ -1,111 +1,7 @@
-// models:
-import Commenters from '/imports/models/commenters';
-import Comments from '/imports/models/comments';
 
 /*
 	helpers
 */
-
-const createQueryFromFilters = (filters) => {
-	const query = {};
-	let values = [];
-	if (filters) {
-		filters.forEach((filter) => {
-			switch (filter.key) {
-			case '_id':
-				// query._id = filter.values[0];
-				query.$or = [{_id: filter.values[0]}, {urn: filter.values[0]}];
-				break;
-			case 'textsearch':
-				query.$text = {
-					$search: filter.values[0],
-				};
-				break;
-			case 'keyideas':
-			case 'keywords':
-				values = [];
-				filter.values.forEach((value) => {
-					values.push(value.slug);
-				});
-				query['keywords.slug'] = {
-					$in: values,
-				};
-				break;
-
-			case 'commenters':
-				values = [];
-				filter.values.forEach((value) => {
-					values.push(value.slug);
-				});
-				query['commenters.slug'] = {
-					$in: values,
-				};
-				break;
-
-			case 'reference':
-				values = [];
-				filter.values.forEach((value) => {
-					values.push(value._id);
-				});
-				query['referenceWorks.referenceWorkId'] = {
-					$in: values,
-				};
-				break;
-
-			case 'works':
-				values = [];
-				filter.values.forEach((value) => {
-					values.push(value.slug);
-				});
-				query['work.slug'] = {
-					$in: values,
-				};
-				break;
-
-			case 'subworks':
-				values = [];
-				filter.values.forEach((value) => {
-					values.push(value.n);
-				});
-				query['subwork.n'] = {
-					$in: values,
-				};
-				break;
-
-			case 'lineFrom':
-				// Values will always be an array with a length of one
-				query.lineFrom = query.lineFrom || {};
-				query.lineFrom.$gte = filter.values[0];
-				break;
-
-			case 'lineTo':
-				// Values will always be an array with a length of one
-				query.lineFrom = query.lineFrom || {};
-				query.lineFrom.$lte = filter.values[0];
-				break;
-
-			case 'wordpressId':
-				// Values will always be an array with a length of one
-				query.wordpressId = filter.values[0];
-				break;
-
-			case 'urn':
-				// Values will always be an array with a length of one
-				if(!query.$or)
-					query.$or = [{"urn.v2": filter.values[0]}, {"urn.v1": filter.values[0]}];
-				else
-					query.$or.push({$and:[{"urn.v2": filter.values[0]}, {"urn.v1": filter.values[0]}]});
-				break;
-
-			default:
-				break;
-			}
-		});
-	}
-
-	return query;
-};
-
 
 const getCommentGroupId = (commentGroup) => {
 	let id = '';
@@ -114,22 +10,30 @@ const getCommentGroupId = (commentGroup) => {
 	});
 	return id.slice(1);
 };
-
-
-const parseCommentsToCommentGroups = (comments) => {
+function addCommetersToCommentGroup(allCommenters, comment, commenters = {}) {
+	comment.commenters.map((_commenter) => {
+		const commenter = allCommenters.find(x => x.slug === _commenter.slug);
+		if (commenter) {
+			commenters[commenter._id] = commenter;
+		}
+	});
+	return commenters;
+}
+function isFromCommentGroup(comment, commentGroup) {
+	return comment.work.title === commentGroup.work.title
+		&& comment.subwork.n === commentGroup.subwork.n
+		&& comment.lineFrom === commentGroup.lineFrom
+		&& comment.lineTo === commentGroup.lineTo;
+}
+const parseCommentsToCommentGroups = (comments, allCommenters) => {
 	const commentGroups = [];
 	// Make comment groups from comments
 	let isInCommentGroup = false;
-	comments.forEach((comment) => {
+	comments.map((comment) => {
 		isInCommentGroup = false;
-		if ('work' in comment) {
-			commentGroups.forEach((commentGroup) => {
-				if (
-					comment.work.title === commentGroup.work.title
-					&& comment.subwork.n === commentGroup.subwork.n
-					&& comment.lineFrom === commentGroup.lineFrom
-					&& comment.lineTo === commentGroup.lineTo
-				) {
+		if (comment.work) {
+			commentGroups.map((commentGroup) => {
+				if (isFromCommentGroup(comment, commentGroup)) {
 					isInCommentGroup = true;
 					commentGroup.comments.push(comment);
 				}
@@ -161,46 +65,18 @@ const parseCommentsToCommentGroups = (comments) => {
 			console.error(`Review comment ${comment._id} metadata`);
 		}
 	});
-
-	// Unique commenters for each comment group
-	commentGroups.forEach((commentGroup, commentGroupIndex) => {
-		// let isInCommenters = false;
-		const commenters = [];
-		// const commenterSubscription = Meteor.subscribe('commenters', Session.get('tenantId'));
-		commentGroup.comments.forEach((comment, commentIndex) => {
-			// isInCommenters = false;
-
-			comment.commenters.forEach((commenter, i) => {
-				const commenterRecord = Commenters.findOne({
-					slug: commenter.slug,
-				});
-				if (commenterRecord) {
-					commentGroups[commentGroupIndex].comments[commentIndex].commenters[i] = commenterRecord;
-
-					// get commenter avatar
-					if (commenterRecord.avatar) {
-						commenterRecord.avatar = commenterRecord.avatar;
-					}
-
-					// add to the unique commenter set
-					if (commenters.some(c => c.slug === commenter.slug)) {
-						// isInCommenters = true;
-					} else {
-						commenters.push(commenterRecord);
-					}
-				}
-			});
-		});
-		commentGroups[commentGroupIndex].commenters = commenters;
-
+	commentGroups.map((commentGroup) => {
 		commentGroup._id = getCommentGroupId(commentGroup);
+		commentGroup.commenters = {};
+		commentGroup.comments.map((comment) => {
+			addCommetersToCommentGroup(allCommenters, comment, commentGroup.commenters);
+		});
 	});
 
 	return commentGroups;
 };
 
 export {
-	createQueryFromFilters,
 	parseCommentsToCommentGroups,
-	getCommentGroupId
+	getCommentGroupId,
 };

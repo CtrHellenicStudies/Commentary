@@ -1,10 +1,10 @@
 import LinkedDataSchema from '/imports/models/linkedDataSchemas';
-import AdminService from './adminService';
+import GraphQLService from './graphQLService';
 
 /**
  * Logic-layer service for dealing with linked data schemata
  */
-export default class LinkedDataSchemaService extends AdminService {
+export default class LinkedDataSchemaService extends GraphQLService {
 
 	/**
 	 * Get linked data schemata

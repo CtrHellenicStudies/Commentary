@@ -12,7 +12,7 @@ import { RemoveType } from '/imports/graphql/types/index';
 import Keywords from '/imports/models/keywords';
 
 // logic
-import KeywordService from '../logic/keywords';
+import KeywordService from '../logic/Keywords/keywords';
 
 const keywordsMutationFields = {
 	keywordRemove: {
@@ -42,6 +42,19 @@ const keywordsMutationFields = {
 		async resolve(parent, {keywordId, keyword}, {token}) {
 			const keywordService = new KeywordService({token});
 			return await keywordService.keywordUpdate(keywordId, keyword);
+		}
+	},
+	keywordInsert: {
+		type: KeywordType,
+		description: 'Insert a single keyword',
+		args: {
+			keyword: {
+				type: new GraphQLNonNull(KeywordInputType)
+			}
+		},
+		async resolve(parent, {keyword}, {token}) {
+			const keywordService = new KeywordService({token});
+			return await keywordService.keywordInsert(keyword);
 		}
 	}
 };

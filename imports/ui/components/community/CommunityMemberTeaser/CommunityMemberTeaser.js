@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
 
 import Utils from '/imports/lib/utils';

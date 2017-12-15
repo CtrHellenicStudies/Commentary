@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import { compose } from 'react-apollo';
 
 // layouts & components
 import Header from '/imports/ui/layouts/header/Header';
@@ -14,6 +14,9 @@ import { SnackAttack } from '/imports/ui/components/shared/SnackAttack';
 import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 import CommunityPage from '/imports/ui/components/community/CommunityPage';
 
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
+
 // models
 import Settings from '/imports/models/settings';
 
@@ -21,21 +24,21 @@ import Settings from '/imports/models/settings';
 import muiTheme from '/imports/lib/muiTheme';
 
 
-const CommunityLayout = React.createClass({
-	propTypes: {
-		settings: PropTypes.object,
-	},
+class CommunityLayout extends Component {
 
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
+	constructor(props) {
+		super(props);
+		this.state = {
+			tenantId: sessionStorage.getItem('tenantId')
+		};
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId)
+		});
+	}
 	render() {
-		const { settings } = this.props;
+		const { settings } = this.state;
 
 		if (!settings) {
 			return <LoadingHome />;
@@ -51,18 +54,11 @@ const CommunityLayout = React.createClass({
 				</div>
 			</MuiThemeProvider>
 		);
-	},
+	}
 
-});
+}
+CommunityLayout.propTypes = {
+	settingsQuery: PropTypes.object,
+};
 
-
-const CommunityLayoutContainer = createContainer(() => {
-	const handle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-	return {
-		settings: Settings.findOne(),
-		ready: handle.ready(),
-	};
-}, CommunityLayout);
-
-export default CommunityLayoutContainer;
+export default compose(settingsQuery)(CommunityLayout);

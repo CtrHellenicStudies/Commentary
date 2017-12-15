@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
+import { compose } from 'react-apollo';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -12,82 +12,105 @@ import FontIcon from 'material-ui/FontIcon';
 import muiTheme from '/imports/lib/muiTheme';
 import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '/imports/lib/utils';
 
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
+import { commentsQuery } from '/imports/graphql/methods/comments';
+
 // models
 import TextNodes from '/imports/models/textNodes';
-import Editions from '/imports/models/editions';
 
-// const textFromTextNodesGroupedByEdition = (nodesCursor) => {
-// 	const editions = [];
-// 	nodesCursor.forEach((node) => {
-// 		node.text.forEach((text) => {
-// 			let myEdition = editions.find(e => text.edition === e._id);
-
-// 			if (!myEdition) {
-// 				const foundEdition = Editions.findOne({ _id: text.edition });
-// 				myEdition = {
-// 					_id: foundEdition._id,
-// 					title: foundEdition.title,
-// 					slug: foundEdition.slug,
-// 					lines: [],
-// 				};
-// 				editions.push(myEdition);
-// 			}
-
-// 			myEdition.lines.push({
-// 				html: text.html,
-// 				n: text.n,
-// 			});
-// 		});
-// 	});
-
-// 	// sort lines for each edition by line number
-// 	for (let i = 0; i < editions.length; ++i) {
-// 		editions[i].lines.sort((a, b) => {
-// 			if (a.n < b.n) {
-// 				return -1;
-// 			} else if (b.n < a.n) {
-// 				return 1;
-// 			}
-// 			return 0;
-// 		});
-// 	}
-
-// 	return editions;
-// };
-
-
-const KeywordContext = React.createClass({
-
-	propTypes: {
-		keyword: PropTypes.object,
-		lemmaText: PropTypes.array,
-		context: PropTypes.object,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+class KeywordContext extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
 			selectedLemma: 0,
 		};
-	},
+		this.toggleEdition = this.toggleEdition.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		if (props.commentsQuery.loading ||
+			props.editionsQuery.loading ||
+			props.textNodesQuery.loading) {
+			return;
+		}
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+		const { keyword, maxLines } = props;
+		const tenantId = sessionStorage.getItem('tenantId');
 
+		let lemmaText = [];
+		const context = {};
+
+		if (!keyword) {
+			return {
+				lemmaText,
+				context,
+			};
+		}
+
+		if (keyword.work && keyword.subwork && keyword.lineFrom) {
+
+
+			context.work = keyword.work.slug;
+			context.subwork = keyword.subwork.n;
+			context.lineFrom = keyword.lineFrom;
+			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
+
+			if (!props.textNodesQuery.loading) {
+				const textNodesCursor = props.textNodesQuery.textNodes;
+				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
+			}
+			props.textNodesQuery.refetch({
+				lineFrom: context.lineFrom,
+				lineTo: context.lineTo,
+				subworkN: context.subwork,
+				tenantId: tenantId,
+				workSlug: context.work
+			});
+
+		} else {
+			if (tenantId) {
+				const query = {};
+				query['keyword._id'] = keyword._id;
+				query.tenantId = tenantId;
+				props.commentsQuery.refetch({
+					queryParam: JSON.stringify(query),
+					limit: 1
+				});
+			}
+			
+			if (!props.commentsQuery.loading) {
+
+				if (props.commentsQuery.comments.length > 0) {
+					const comment = props.commentsQuery.comments[0];
+					const query = makeKeywordContextQueryFromComment(comment, maxLines);
+					props.textNodesQuery.refetch(query);
+					context.work = query.workSlug;
+					context.subwork = query.subworkN;
+					context.lineFrom = query.lineFrom;
+					context.lineTo = query.lineTo;
+
+					const textNodesCursor = TextNodes.find(textNodesQuery);
+					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
+				}
+			}
+		}
+		this.setState({
+			lemmaText: lemmaText,
+			context: context,
+		});
+	}
 	toggleEdition(newSelectedLemma) {
-		if (this.state.selectedLemma !== newSelectedLemma && newSelectedLemma < this.props.lemmaText.length) {
+		if (this.state.selectedLemma !== newSelectedLemma && newSelectedLemma < this.state.lemmaText.length) {
 			this.setState({
 				selectedLemma: newSelectedLemma,
 			});
 		}
-	},
+	}
 
 	render() {
-		const { keyword, context, lemmaText } = this.props;
+		const { keyword} = this.props;
+		const { context, lemmaText } = this.state;
 
 		if (!lemmaText || !lemmaText.length) {
 			return null;
@@ -136,76 +159,19 @@ const KeywordContext = React.createClass({
 				</div>
 			</article>
 		);
-	},
-
-});
-
-const KeywordContextContainer = createContainer(({ keyword, maxLines }) => {
-	let lemmaText = [];
-	const context = {};
-
-	const editionsSubscription = Meteor.subscribe('editions');
-
-	if (!keyword) {
-		return {
-			lemmaText,
-			context,
-		};
 	}
 
-	if (keyword.work && keyword.subwork && keyword.lineFrom) {
-		const textNodesQuery = {
-			'work.slug': keyword.work.slug,
-			'subwork.n': keyword.subwork.n,
-			'text.n': {
-				$gte: keyword.lineFrom,
-				$lte: keyword.lineFrom,
-			},
-		};
-		if (keyword.lineTo) {
-			textNodesQuery['text.n'].$lte = keyword.lineTo;
-		}
-		const textNodesSub = Meteor.subscribe('textnodes.keyword_context', textNodesQuery);
+}
+KeywordContext.propTypes = {
+	keyword: PropTypes.object,
+	editionsQuery: PropTypes.object,
+	commentsQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object,
+	maxLines: PropTypes.number
+};
 
-		context.work = textNodesQuery['work.slug'];
-		context.subwork = textNodesQuery['subwork.n'];
-		context.lineFrom = textNodesQuery['text.n'].$gte;
-		context.lineTo = textNodesQuery['text.n'].$lte;
-
-		if (textNodesSub.ready()) {
-			const textNodesCursor = TextNodes.find(textNodesQuery);
-			lemmaText = editionsSubscription ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
-		}
-
-	} else {
-		const commentsSub = Meteor.subscribe('comments.keyword_context', keyword._id, Session.get('tenantId'));
-
-		if (commentsSub.ready()) {
-			const commentCursor = queryCommentWithKeywordId(keyword._id);
-
-			if (commentCursor.count() > 0) {
-				const comment = commentCursor.fetch()[0];
-				const textNodesQuery = makeKeywordContextQueryFromComment(comment, maxLines);
-				const textNodesSub = Meteor.subscribe('textnodes.keyword_context', textNodesQuery);
-
-				context.work = textNodesQuery['work.slug'];
-				context.subwork = textNodesQuery['subwork.n'];
-				context.lineFrom = textNodesQuery['text.n'].$gte;
-				context.lineTo = textNodesQuery['text.n'].$lte;
-
-				if (textNodesSub.ready()) {
-					const textNodesCursor = TextNodes.find(textNodesQuery);
-					lemmaText = editionsSubscription ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
-				}
-			}
-		}
-	}
-
-	return {
-		lemmaText,
-		context,
-	};
-}, KeywordContext);
-
-
-export default KeywordContextContainer;
+export default compose(
+	editionsQuery,
+	commentsQuery,
+	textNodesQuery
+)(KeywordContext);

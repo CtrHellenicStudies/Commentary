@@ -9,23 +9,25 @@ call the “this._updateRoute(filters)” method
 with new “filters” object passed as first attribute.
 
 */
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { ApolloProvider, compose } from 'react-apollo';
 import qs from 'qs-lite';
+import Cookies from 'js-cookie';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
 
-// models
-import Works from '/imports/models/works';
-import ReferenceWorks from '/imports/models/referenceWorks';
+// graphql
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { worksQuery } from '/imports/graphql/methods/works';
+
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -41,15 +43,17 @@ import {
 	createFilterFromURL
 } from './helpers';
 
-
-class CommentaryLayout extends React.Component {
+class CommentaryLayout extends Component {
 
 	static propTypes = {
 		queryParams: PropTypes.object,
-		params: PropTypes.object,
 		referenceWorks: PropTypes.array,
 		works: PropTypes.array,
 		isTest: PropTypes.bool,
+		history: PropTypes.any,
+		worksQuery: PropTypes.object,
+		referenceWorksQuery: PropTypes.object,
+		match: PropTypes.object
 	};
 
 	static childContextTypes = {
@@ -71,7 +75,16 @@ class CommentaryLayout extends React.Component {
 			modalLoginLowered: false,
 			skip: 0,
 			limit: 10,
+			queryParams: qs.parse(window.location.search.substr(1)),
+			params: this.props.match,
+			referenceWorks: [],
+			works: []
 		};
+
+		this.props.referenceWorksQuery.refetch({
+			tenantId: sessionStorage.getItem('tenantId')
+		});
+	
 
 		this.getChildContext = this.getChildContext.bind(this);
 		this.getFilterValue = this.getFilterValue.bind(this);
@@ -114,7 +127,7 @@ class CommentaryLayout extends React.Component {
 	}
 
 	_toggleSearchTerm(key, value) {
-		const { queryParams } = this.props;
+		const { queryParams } = this.state;
 
 		const oldFilters = createFilterFromQueryParams(queryParams);
 
@@ -130,7 +143,7 @@ class CommentaryLayout extends React.Component {
 	}
 
 	_handleChangeTextsearch(e, textsearch) {
-		const { queryParams } = this.props;
+		const { queryParams } = this.state;
 		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the textsearch
@@ -140,7 +153,7 @@ class CommentaryLayout extends React.Component {
 	}
 
 	_handleChangeLineN(e) {
-		const { queryParams } = this.props;
+		const { queryParams } = this.state;
 		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the 'e' attribute
@@ -170,20 +183,24 @@ class CommentaryLayout extends React.Component {
 			modalLoginLowered: false,
 		});
 	}
-
+	componentWillReceiveProps(nextProps) {
+		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
+		const works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works;
+		this.setState({
+			referenceWorks: referenceWorks,
+			works: works,
+			filters: createFilterFromURL(this.state.params, this.state.queryParams, this.state.works, this.state.referenceWorks)
+		});
+	}
 	render() {
-		const { queryParams, params, works, referenceWorks } = this.props;
-		const { skip, limit, modalLoginLowered } = this.state;
-
+		const { skip, limit, modalLoginLowered, queryParams, params, referenceWorks, works, filters } = this.state;
 		// create filters object based on the queryParams or params
-		const filters = createFilterFromURL(params, queryParams, works, referenceWorks);
-
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header
-							filters={filters}
+							filters={this.state.filters}
 							toggleSearchTerm={this._toggleSearchTerm}
 							handleChangeLineN={this._handleChangeLineN}
 							handleChangeTextsearch={this._handleChangeTextsearch}
@@ -214,22 +231,7 @@ class CommentaryLayout extends React.Component {
 		);
 	}
 }
-
-export default createContainer(({match}) => {
-
-	const handleReference = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-	const handleWorks = Meteor.subscribe('works', Session.get('tenantId'));
-	const queryParams = qs.parse(window.location.search.substr(1));
-	const params = match.params;
-
-	const referenceWorks = ReferenceWorks.find().fetch();
-	const works = Works.find().fetch();
-
-	return {
-		params,
-		queryParams,
-		referenceWorks,
-		works,
-		ready: handleReference.ready() && handleWorks.ready(),
-	};
-}, CommentaryLayout);
+export default compose(
+	referenceWorksQuery,
+	worksQuery
+)(CommentaryLayout);

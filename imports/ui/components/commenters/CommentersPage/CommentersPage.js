@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import muiTheme from '/imports/lib/muiTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { compose } from 'react-apollo';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
 import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
 import Header from '/imports/ui/layouts/header/Header';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Settings from '/imports/models/settings';
@@ -21,8 +24,19 @@ import Utils from '/imports/lib/utils';
 
 class CommentersPage extends Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentWillReceiveProps(nextProps) {
+		const tenantId = sessionStorage.getItem('tenantId');
+		const settings = nextProps.settingsQuery.loading ? { title: ''} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
+		this.setState({
+			settings: settings
+		});
+	}
 	render() {
-		const { settings } = this.props;
+		const { settings } = this.state;
 
 		if (!settings) {
 			return null;
@@ -68,16 +82,8 @@ class CommentersPage extends Component {
 }
 
 CommentersPage.propTypes = {
-	settings: PropTypes.object
+	settingsQuery: PropTypes.object
 };
 
-const commentersPageContainer = createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
 
-	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
-	};
-}, CommentersPage);
-
-
-export default commentersPageContainer;
+export default compose(settingsQuery)(CommentersPage);

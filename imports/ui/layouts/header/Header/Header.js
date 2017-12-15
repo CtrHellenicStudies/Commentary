@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
-import { Session } from 'meteor/session';
+
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import { Link } from 'react-router-dom';
+import { compose } from 'react-apollo';
 
 // models:
 import Settings from '/imports/models/settings';
-import Tenants from '/imports/models/tenants';
+
+// graphql
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // layouts:
 import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
@@ -54,7 +57,7 @@ const styles = {
 /*
 	BEGIN Header
 */
-class Header extends React.Component {
+class Header extends Component {
 	static propTypes = {
 		filters: PropTypes.any, // eslint-disable-line react/forbid-prop-types
 		toggleSearchTerm: PropTypes.func,
@@ -65,6 +68,8 @@ class Header extends React.Component {
 		isOnHomeView: PropTypes.bool,
 		isTest: PropTypes.bool,
 		selectedWork: PropTypes.object,
+		tenantsQuery: PropTypes.object,
+		settingsQuery: PropTypes.object,
 
 		// from creatContainer:
 		settings: PropTypes.shape({
@@ -74,6 +79,10 @@ class Header extends React.Component {
 			subdomain: PropTypes.string,
 			isAnnotation: PropTypes.bool,
 		}),
+		showSignup: PropTypes.func,
+		showForgotPwd: PropTypes.func,
+		history: PropTypes.any,
+		user: PropTypes.object
 
 	};
 
@@ -97,6 +106,8 @@ class Header extends React.Component {
 			modalLoginLowered: false,
 			modalSignupLowered: !!props.showSignup,
 			modalForgotPwdLowered: !!props.showForgotPwd,
+			tenantId: sessionStorage.getItem('tenantId'),
+			user: Meteor.user()
 		};
 
 		// methods:
@@ -233,11 +244,16 @@ class Header extends React.Component {
 			modalForgotPwdLowered: false,
 		});
 	}
-
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
+			tenant: this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId),
+		});
+	}
 	render() {
 
-		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, tenant, settings, addCommentPage, selectedWork } = this.props;
-		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered } = this.state;
+		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, addCommentPage, selectedWork } = this.props;
+		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered, settings, tenant, user } = this.state;
 		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;
 		const modalForgotPwdLowered = this.state.modalForgotPwdLowered || this.props.showForgotPwd;
 		return (
@@ -310,7 +326,7 @@ class Header extends React.Component {
 											</Link>
 										</span>
 									}
-									{this.props.user ?
+									{user ?
 										<div>
 											{Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) ?
 												<div className="user-header-links admin-header-links">
@@ -435,7 +451,7 @@ class Header extends React.Component {
 					}
 				</header>
 
-				{!this.props.user && modalLoginLowered &&
+				{!user && modalLoginLowered &&
 					<ModalLogin
 						lowered={modalLoginLowered}
 						closeModal={this.closeLoginModal}
@@ -443,14 +459,14 @@ class Header extends React.Component {
 						history={this.props.history}
 					/>
 				}
-				{!this.props.user && modalSignupLowered &&
+				{!user && modalSignupLowered &&
 					<ModalSignup
 						lowered={modalSignupLowered}
 						closeModal={this.closeSignupModal}
 						loginModal={this.showLoginModal}
 					/>
 				}
-				{!this.props.user && modalForgotPwdLowered &&
+				{!user && modalForgotPwdLowered &&
 				<ModalForgotPwd
 					lowered={modalForgotPwdLowered}
 					signupModal={this.showSignupModal}
@@ -465,15 +481,7 @@ class Header extends React.Component {
 	END Header
 */
 
-export default createContainer(() => {
-
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	const handleTenants = Meteor.subscribe('tenants');
-
-	return {
-		settings: Settings.findOne({}),
-		tenant: Tenants.findOne({ _id: Session.get('tenantId') }),
-		user: Meteor.user()
-	};
-
-}, Header);
+export default compose(
+	tenantsQuery,
+	settingsQuery
+)(Header);

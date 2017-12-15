@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import muiTheme from '/imports/lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { compose } from 'react-apollo';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
@@ -14,17 +14,26 @@ import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceW
 import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsRecent';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
-// models
-import Settings from '/imports/models/settings';
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // lib
 import Utils from '/imports/lib/utils';
 
 
-class ReferenceWorksPage extends React.Component {
+class ReferenceWorksPage extends Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			settings: nextProps.settingsQuery.loading ? { title: '' } : nextProps.settingsQuery.settings.find(x => x.tenantId === sessionStorage.getItem('tenantId'))
+		});
+	}
 	render() {
-		const { settings } = this.props;
+		const { settings } = this.state;
 
 		if (!settings) {
 			return <LoadingPage />;
@@ -70,15 +79,6 @@ class ReferenceWorksPage extends React.Component {
 
 ReferenceWorksPage.propTypes = {
 	title: PropTypes.string.isRequired,
-	settings: PropTypes.object,
+	settingsQuery: PropTypes.object,
 };
-
-const ReferenceWorksPageContainer = createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
-	};
-}, ReferenceWorksPage);
-
-export default ReferenceWorksPageContainer;
+export default compose(settingsQuery)(ReferenceWorksPage);

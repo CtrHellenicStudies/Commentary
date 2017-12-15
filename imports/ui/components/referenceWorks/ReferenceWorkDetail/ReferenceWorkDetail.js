@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import muiTheme from '/imports/lib/muiTheme';
+import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -15,21 +15,46 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 import AvatarIcon from '/imports/ui/components/avatar/AvatarIcon';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 
-// models
-import Settings from '/imports/models/settings';
-import ReferenceWorks from '/imports/models/referenceWorks';
-import Commenters from '/imports/models/commenters';
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // lib
 import Utils from '/imports/lib/utils';
 
 
-class ReferenceWorkDetail extends React.Component {
+class ReferenceWorkDetail extends Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentWillReceiveProps(props) {
+
+		const slug = props.match.params.slug;
+		const tenantId = sessionStorage.getItem('tenantId');
+	
+		const referenceWork = props.referenceWorksQuery.loading ? undefined : props.referenceWorksQuery.referenceWorks.find(x => x.slug === slug && x.tenantId === tenantId);
+		const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => x.tenantId === tenantId);
+		let commenters = [];
+		if (referenceWork && referenceWork.authors) {
+			commenters = tenantCommenters.filter((x => 
+				referenceWork.authors.find(y => y === x._id) !== undefined))
+				.sort(function alphabetical(a, b) { return a > b; });
+		}
+
+		this.setState({
+			slug,
+			referenceWork,
+			commenters,
+			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
+		});
+	}
 	createMarkup() {
 		let __html = '';
 		const { desc } = this.props;
-		if (this.props.referenceWork) {
+		if (this.state.referenceWork) {
 			__html += '<p>';
 			__html += desc ? desc.replace('\n', '</p><p>') : '';
 			__html += '</p>';
@@ -40,7 +65,7 @@ class ReferenceWorkDetail extends React.Component {
 	}
 
 	render() {
-		const { referenceWork, commenters, settings } = this.props;
+		const { referenceWork, commenters, settings } = this.state;
 		const commentersNames = [];
 		let commentersTitle = '';
 
@@ -135,39 +160,14 @@ class ReferenceWorkDetail extends React.Component {
 }
 
 ReferenceWorkDetail.propTypes = {
-	slug: PropTypes.string.isRequired,
-	referenceWork: PropTypes.object,
-	settings: PropTypes.object,
-	commenters: PropTypes.array,
+	desc: PropTypes.string,
+	commentersQuery: PropTypes.object,
+	referenceWorksQuery: PropTypes.object,
+	settingsQuery: PropTypes.object,
+	match: PropTypes.object
 };
-
-
-const ReferenceWorkDetailContainer = createContainer(({ match }) => {
-	const slug = match.params.slug;
-	// SUBSCRIPTIONS:
-	Meteor.subscribe('referenceWorks.slug', slug, Session.get('tenantId'));
-	Meteor.subscribe('commenters', Session.get('tenantId'));
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-	// FETCH DATA:
-	const query = {
-		slug,
-	};
-	const referenceWork = ReferenceWorks.findOne(query);
-
-	let commenters = [];
-	if (referenceWork && 'authors' in referenceWork) {
-		commenters = Commenters.find({
-			_id: { $in: referenceWork.authors },
-		}, { sort: { name: 1 } }).fetch();
-	}
-
-	return {
-		slug,
-		referenceWork,
-		commenters,
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' },
-	};
-}, ReferenceWorkDetail);
-
-export default ReferenceWorkDetailContainer;
+export default compose(
+	commentersQuery,
+	referenceWorksQuery,
+	settingsQuery
+)(ReferenceWorkDetail);

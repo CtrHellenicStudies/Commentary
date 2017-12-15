@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
+import { compose } from 'react-apollo';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
-import Comments from '/imports/models/comments';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import { Link } from 'react-router-dom';
 
 // lib
 import Utils from '/imports/lib/utils';
 import muiTheme from '/imports/lib/muiTheme';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // components:
 import CommentersList from '/imports/ui/components/commenters/CommentersList';
@@ -23,6 +25,7 @@ import LoadingHome from '/imports/ui/components/loading/LoadingHome';
 
 // layouts:
 import Commentary from '/imports/ui/layouts/commentary/Commentary';
+import { read } from 'fs';
 
 
 class Home extends Component {
@@ -30,7 +33,6 @@ class Home extends Component {
 		super(props);
 		this.scrollToIntro = this.scrollToIntro.bind(this);
 	}
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
@@ -50,10 +52,13 @@ class Home extends Component {
 	}
 
 	render() {
-		const { settings, comments, ready } = this.props;
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
+
+		const tenantId = sessionStorage.getItem('tenantId');
+		const ready = !this.props.settingsQuery.loading;
+		const settings = this.props.settingsQuery.loading ? {} : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId); 
 
 		if (!settings) {
 			return <LoadingHome />;
@@ -77,7 +82,7 @@ class Home extends Component {
 			settings.homepageIntroductionImageCaption
 			&& settings.homepageIntroductionImageCaption.length
 		) {
-			introImageCaption = settings.homepageIntroductionImageCaption;
+			introImageCaption = Utils.getHtmlFromContext(Utils.getEditorState(settings.homepageIntroductionImageCaption).getCurrentContent());
 		}
 
 		Utils.setTitle(`Home | ${settings ? settings.title : ''}`);
@@ -142,7 +147,7 @@ class Home extends Component {
 								</h2>
 
 								<div className="intro-col intro-col-text">
-									{settings.introBlocks.map((block, i) => (
+									{ready ? settings.introBlocks.map((block, i) => (
 										<div
 											key={i}
 											className="mb40 mb-xs-24l intro-block-text"
@@ -166,7 +171,7 @@ class Home extends Component {
 												</div>
 											: ''}
 										</div>
-									))}
+									)) : ''}
 								</div>
 								<div className="intro-col intro-col-image image-wrap wow fadeIn">
 									<img
@@ -254,12 +259,10 @@ class Home extends Component {
 								<Commentary
 									isOnHomeView
 									filters={[]}
-									comments={comments}
 									skip={0}
 									limit={10}
-								/>
-								:
-								<Spinner />
+									history={this.props.history}
+								/> : ''
 							}
 							<div className="read-more-link">
 								<Link to="/commentary">
@@ -280,25 +283,13 @@ class Home extends Component {
 
 
 Home.propTypes = {
-	settings: PropTypes.object,
-	comments: PropTypes.array,
-	ready: PropTypes.bool,
+	settingsQuery: PropTypes.object,
 	isTest: PropTypes.bool,
+	history: PropTypes.object
 };
 
 Home.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-
-export default createContainer(() => {
-	const query = { tenantId: Session.get('tenantId') };
-	const commentsSub = Meteor.subscribe('comments', query, 0, 10);
-
-	const comments = Comments.find({}, { sort: { 'work.order': 1, 'subwork.n': 1, lineFrom: 1, nLines: -1 } }).fetch();
-
-	return {
-		comments,
-		ready: commentsSub.ready(),
-	};
-}, Home);
+export default compose(settingsQuery)(Home);

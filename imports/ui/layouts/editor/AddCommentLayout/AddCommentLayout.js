@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
+import { compose, ApolloProvider } from 'react-apollo';
+
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -20,13 +21,12 @@ import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
+import client from '/imports/middleware/apolloClient';
 import Utils from '/imports/lib/utils';
 
-// models
-import Commenters from '/imports/models/commenters';
-import Keywords from '/imports/models/keywords';
-import ReferenceWorks from '/imports/models/referenceWorks';
-
+// graphql
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
+import { commentsInsertMutation } from '/imports/graphql/methods/comments';
 
 /*
  *	helpers
@@ -47,21 +47,21 @@ const getReferenceWorks = (formData) => {
 	return referenceWorks;
 };
 
-const getCommenter = (formData) => {
-	const commenter = Commenters.findOne({
-		_id: formData.commenterValue.value,
-	});
-	return commenter;
-};
-
 
 const getKeywords = (formData) => {
+	
 	const keywords = [];
 
 	formData.tagsValue.forEach((tag) => {
-		const keyword = tag.keyword;
-		keyword.isMentionedInLemma = tag.isMentionedInLemma;
-		keywords.push(keyword);
+		const keywordCopy = {};
+		for (const [key, value] of Object.entries(tag.keyword)) {
+			if (key === 'isMetionedInLemma') {
+				keywordCopy[key] = tag.isMentionedInLemma;
+			} else {
+				keywordCopy[key] = value;
+			}
+		}
+		keywords.push(keywordCopy);
 	});
 	return keywords;
 };
@@ -88,9 +88,12 @@ const getFilterValues = (filters) => {
 /*
  *	BEGIN AddCommentLayout
  */
-class AddCommentLayout extends React.Component {
+class AddCommentLayout extends Component {
 	static propTypes = {
 		ready: PropTypes.bool,
+		commentInsert: PropTypes.func,
+		history: PropTypes.object,
+		textNodesQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -121,12 +124,17 @@ class AddCommentLayout extends React.Component {
 		this.openContextReader = this.openContextReader.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
 		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.updateQuery = this.updateQuery.bind(this);
 	}
 
 	componentWillUpdate() {
 		handlePermissions();
 	}
-
+	updateQuery() {
+		this.setState({
+			shouldUpdateQuery: false
+		});
+	}
 	// --- BEGNI LINE SELECTION --- //
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
@@ -134,18 +142,29 @@ class AddCommentLayout extends React.Component {
 			this.setState({
 				selectedLineTo,
 			});
+			selectedLineFrom = this.state.selectedLineFrom;
 		} else if (selectedLineTo === null) {
 			this.setState({
 				selectedLineFrom,
 			});
+			selectedLineTo = this.state.selectedLineTo;
 		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
 		} else {
-			// do nothing
+			return;
 		}
+		const { filters } = this.state;
+		const { work, subwork } = getFilterValues(filters);
+		const properties = {
+			workSlug: work ? work.slug : 'iliad',
+			subworkN: subwork ? subwork.n : 1,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
 	}
 
 	toggleSearchTerm(key, value) {
@@ -203,7 +222,7 @@ class AddCommentLayout extends React.Component {
 
 	// --- BEGNI ADD COMMENT --- //
 
-	addComment(formData, textValue, textRawValue) {
+	addComment(formData, possibleCommenters, textValue, textRawValue) {
 		this.setState({
 			loading: true,
 		});
@@ -213,7 +232,7 @@ class AddCommentLayout extends React.Component {
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const referenceWorks = formData.referenceWorks;
-		const commenters = Utils.getCommenters(formData.commenterValue);
+		const commenters = Utils.getCommenters(formData.commenterValue, possibleCommenters);
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = Cookies.get('loginToken');
 
@@ -247,19 +266,20 @@ class AddCommentLayout extends React.Component {
 			commenters: commenters.length ? commenters : [{}],
 			keywords: keywords || [{}],
 			referenceWorks: referenceWorks,
-			tenantId: Session.get('tenantId'),
+			tenantId: sessionStorage.getItem('tenantId'),
 			created: new Date(),
 			status: 'publish',
 		};
-
-		Meteor.call('comments.insert', token, comment, (error, commentId) => {
-			if (error) {
-				console.error(error);
-				return null;
+		this.props.commentInsert(comment).then((res) => {
+			if (res.data.commentInsert._id) {
+				this.setState({
+					loading: false
+				});
+				const urlParams = qs.stringify({_id: res.data.commentInsert._id});
+				
+				this.props.history.push(`/commentary?${urlParams}`);
+				
 			}
-			const urlParams = qs.stringify({_id: commentId});
-
-			this.props.history.push(`/commentary?${urlParams}`);
 		});
 	}
 
@@ -433,10 +453,13 @@ class AddCommentLayout extends React.Component {
 								<div className="comment-group">
 									<CommentLemmaSelect
 										ref={(component) => { this.commentLemmaSelect = component; }}
-										selectedLineFrom={selectedLineFrom}
-										selectedLineTo={selectedLineTo}
+										lineFrom={selectedLineFrom}
+										lineTo={selectedLineTo}
 										workSlug={work ? work.slug : 'iliad'}
 										subworkN={subwork ? subwork.n : 1}
+										shouldUpdateQuery={this.state.updateQuery}
+										updateQuery={this.updateQuery}
+										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 									/>
 
 									<AddComment
@@ -483,4 +506,7 @@ const AddCommentLayoutContainer = (() => {
 	};
 }, AddCommentLayout);
 
-export default AddCommentLayoutContainer;
+export default compose(
+	commentsInsertMutation,
+	textNodesQuery
+)(AddCommentLayoutContainer);

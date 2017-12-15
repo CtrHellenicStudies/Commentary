@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
-import qs from 'qs-lite';
 
-// models:
-import ReferenceWorks from '/imports/models/referenceWorks';
-import Settings from '/imports/models/settings';
+
+import qs from 'qs-lite';
+import { compose } from 'react-apollo';
+
+// graphql
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // components:
 import CommentUpper from '/imports/ui/components/commentary/comments/CommentUpper';
@@ -81,22 +82,14 @@ class CommentDetail extends React.Component {
 			key: PropTypes.string.isRequired,
 			values: PropTypes.arrayOf(PropTypes.any).isRequired,
 		})),
+		history: PropTypes.object,
+		commenters: PropTypes.object,
 		toggleSearchTerm: PropTypes.func,
 		isOnHomeView: PropTypes.bool,
 		showLoginModal: PropTypes.func,
 		toggleLemma: PropTypes.func.isRequired,
-		user: PropTypes.object,
-
-
-		// from createContainer:
-		referenceWorks: PropTypes.arrayOf(PropTypes.shape({
-			title: PropTypes.string.isRequired,
-			slug: PropTypes.string.isRequired,
-		})),
-		settings: PropTypes.shape({
-			discussionCommentsDisabled: PropTypes.bool,
-		}),
-		ready: PropTypes.bool,
+		referenceWorksQuery: PropTypes.object,
+		settingsQuery: PropTypes.object,
 	};
 
 	static defaultProps = {
@@ -128,7 +121,6 @@ class CommentDetail extends React.Component {
 			persistentIdentifierModalLeft: 0,
 			searchTerm: ''
 		};
-
 		// methods:
 		this.getRevisionIndex = this.getRevisionIndex.bind(this);
 		this.addSearchTerm = this.addSearchTerm.bind(this);
@@ -145,6 +137,30 @@ class CommentDetail extends React.Component {
 		const { filters } = this.props;
 		const { searchTerm } = this.state;
 
+		const tenantId = sessionStorage.getItem('tenantId');
+		const { comment } = nextProps;
+
+		const referenceWorkIds = [];
+		let referenceWorks = [];
+
+		if (comment && comment.referenceWorks && !nextProps.referenceWorksQuery.loading) {
+			comment.referenceWorks.forEach((referenceWork) => {
+				referenceWorkIds.push(referenceWork.referenceWorkId);
+			});
+			referenceWorks = nextProps.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined && x.tenantId === tenantId);
+		}
+	
+		const settings = nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
+	
+		const user = Meteor.user();
+		const ready = !nextProps.referenceWorksQuery.loading && !nextProps.settingsQuery.loading;
+
+		this.setState({
+			settings: settings,
+			user: user,
+			ready: ready,
+			referenceWorks: referenceWorks
+		});
 		if (filters.find(filter => filter.key === 'textsearch') !== searchTerm && filters && filters.find(filter => filter.key === 'textsearch')) {
 			const searchTermsObject = filters.find(filter => filter.key === 'textsearch');
 			this.setState({
@@ -175,7 +191,7 @@ class CommentDetail extends React.Component {
 	}
 
 	addSearchTerm(keyword) {
-		if (!('isOnHomeView' in this.props) || this.props.isOnHomeView === false) {
+		if (!(this.props.isOnHomeView) || this.props.isOnHomeView === false) {
 			this.props.toggleSearchTerm('keywords', keyword);
 		} else {
 			const urlParams = qs.stringify({ keywords: keyword.slug });
@@ -260,11 +276,10 @@ class CommentDetail extends React.Component {
 			selectedRevisionIndex: parseInt(event.currentTarget.id, 10),
 		});
 	}
-
 	render() {
 
-		const { comment, referenceWorks, ready, filters, user } = this.props;
-		const { discussionVisible, searchTerm } = this.state;
+		const { comment, filters} = this.props;
+		const { discussionVisible, searchTerm, user, referenceWorks, ready, settings } = this.state;
 
 		if (!ready) {
 			// TODO: handle loading for component
@@ -285,7 +300,7 @@ class CommentDetail extends React.Component {
 					<CommentUpper
 						title={selectedRevision.title}
 						commentId={comment._id}
-						commenters={comment.commenters}
+						commenters={this.props.commenters}
 						updateDate={getUpdateDate(selectedRevision)}
 						userCanEditCommenters={getUserCanEditCommenters()}
 					/>
@@ -321,7 +336,7 @@ class CommentDetail extends React.Component {
 					discussionVisible={this.state.discussionVisible}
 					toggleLemma={this.props.toggleLemma}
 					showLoginModal={this.props.showLoginModal}
-					discussionCommentsDisabled={this.props.settings.discussionCommentsDisabled}
+					discussionCommentsDisabled={settings.discussionCommentsDisabled}
 				/>
 
 				{this.state.lemmaReferenceModalVisible ?
@@ -354,31 +369,7 @@ class CommentDetail extends React.Component {
 /*
 	END CommentDetail
 */
-
-export default createContainer(({ comment }) => {
-
-	const tenantId = Session.get('tenantId');
-
-	const handleReferenceWorks = Meteor.subscribe('referenceWorks', tenantId);
-	const handleSettings = Meteor.subscribe('settings.tenant', tenantId);
-
-	const referenceWorkIds = [];
-	let referenceWorks = [];
-	if (comment && 'referenceWorks' in comment) {
-		comment.referenceWorks.forEach((referenceWork) => {
-			referenceWorkIds.push(referenceWork.referenceWorkId);
-		});
-		referenceWorks = ReferenceWorks.find({ _id: { $in: referenceWorkIds } }).fetch();
-	}
-
-	const settings = Settings.findOne({ tenantId });
-
-	const user = Meteor.user();
-
-	return {
-		user,
-		referenceWorks,
-		settings,
-		ready: handleReferenceWorks.ready() && handleSettings.ready(),
-	};
-}, CommentDetail);
+export default compose(
+	referenceWorksQuery,
+	settingsQuery
+)(CommentDetail);

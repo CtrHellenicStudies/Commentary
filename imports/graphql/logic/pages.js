@@ -1,10 +1,10 @@
 import Pages from '/imports/models/pages';
-import AdminService from './adminService';
+import GraphQLService from './graphQLService';
 
 /**
  * Logic-layer service for dealing with pages
  */
-export default class PageService extends AdminService {
+export default class PageService extends GraphQLService {
 
 	/**
 	 * Get pages
@@ -13,17 +13,14 @@ export default class PageService extends AdminService {
 	 * @returns {Object[]} array of pages
 	 */
 	pagesGet(_id, tenantId) {
-		if (this.userIsAdmin) {
-			const args = {};
-			if (tenantId) {
-				args.tenantId = tenantId;
-			}
-			if (_id) {
-				args._id = _id;
-			}
-			return Pages.find(args).fetch();
+		const args = {};
+		if (tenantId) {
+			args.tenantId = tenantId;
 		}
-		return new Error('Not authorized');
+		if (_id) {
+			args._id = _id;
+		}
+		return Pages.find(args).fetch();
 	}
 
 	/**

@@ -26,7 +26,7 @@ CommentUpperLeft.propTypes = {
 */
 const CommentUpperRight = props => (
 	<div className="comment-upper-right">
-		{_.every(props.commenters, commenter => props.userCanEditCommenters.indexOf(commenter._id) > -1) ?
+		{Object.keys(props.commenters).map(key => ((props.userCanEditCommenters.indexOf(props.commenters[key]._id) > -1) ?
 			<Link to={`/commentary/${props.commentId}/edit`}>
 				<FlatButton
 					label="Edit comment"
@@ -35,26 +35,26 @@ const CommentUpperRight = props => (
 			</Link>
 			:
 			''
-		}
-		{props.commenters.map(commenter => (
+		))}
+		{Object.keys(props.commenters).map(key => (
 			<div
-				key={commenter._id}
+				key={props.commenters[key]._id}
 				className="comment-author"
 			>
 				<div className={'comment-author-text'}>
-					<Link to={`/commenters/${commenter.slug}`}>
-						<span className="comment-author-name">{commenter.name}</span>
+					<Link to={`/commenters/${props.commenters[key].slug}`}>
+						<span className="comment-author-name">{props.commenters[key].name}</span>
 					</Link>
 					<span>
 						{props.updateDate}
 					</span>
 				</div>
 				<div className="comment-author-image-wrap paper-shadow">
-					<Link to={`/commenters/${commenter.slug}`}>
+					<Link to={`/commenters/${props.commenters[key].slug}`}>
 						<AvatarIcon
 							avatar={
-								(commenter && 'avatar' in commenter) ?
-								commenter.avatar.src
+								(props.commenters[key] && props.commenters[key].avatar) ?
+								props.commenters[key].avatar.src
 								: null
 							}
 						/>
@@ -65,7 +65,7 @@ const CommentUpperRight = props => (
 	</div>
 );
 CommentUpperRight.propTypes = {
-	commenters: PropTypes.arrayOf(PropTypes.shape({
+	commenters: PropTypes.objectOf(PropTypes.shape({
 		_id: PropTypes.string.isRequired,
 		slug: PropTypes.string.isRequired,
 		name: PropTypes.string.isRequired,
@@ -105,7 +105,7 @@ const CommentUpper = props => (
 CommentUpper.propTypes = {
 	title: PropTypes.string.isRequired,
 	commentId: PropTypes.string.isRequired,
-	commenters: PropTypes.arrayOf(PropTypes.shape({
+	commenters: PropTypes.objectOf(PropTypes.shape({
 		_id: PropTypes.string.isRequired,
 		slug: PropTypes.string.isRequired,
 		name: PropTypes.string.isRequired,

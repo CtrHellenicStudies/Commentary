@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
 
 import SubcriptionsFeed from '/imports/ui/components/user/ProfilePage/Notifications/SubscriptionsFeed';
 import RecentActivity from '/imports/ui/components/user/ProfilePage/Notifications/RecentActivity';
 
-class Notifications extends React.Component {
-	static propTypes = {
-		subscriptions: PropTypes.object
+class Notifications extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			subscriptions: Meteor.user().subscriptions
+		};
 	}
 
 	render () {
-		const { subscriptions } = this.props;
+		const { subscriptions } = this.state;
 
 		return (
 			<div>
@@ -29,11 +31,4 @@ class Notifications extends React.Component {
 	}
 }
 
-const NotificationsContainer = createContainer(() => {
-	const subscriptions = Meteor.user().subscriptions;
-	return {
-		subscriptions
-	};
-}, Notifications);
-
-export default NotificationsContainer;
+export default Notifications;

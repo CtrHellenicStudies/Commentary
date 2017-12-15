@@ -63,7 +63,7 @@ const WorkVisualization = React.createClass({
 		};
 
 		// Data preporation:
-		const dataBarGraph = work.subworks || [];
+		const dataBarGraph = work.subworks.slice() || [];
 		dataBarGraph.sort((a, b) => {
 			if (a.n < b.n) {
 				return -1;

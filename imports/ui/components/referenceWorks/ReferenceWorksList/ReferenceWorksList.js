@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
+import { compose } from 'react-apollo';
 
 import Masonry from 'react-masonry-component/lib';
 
-// models
-import ReferenceWorks from '/imports/models/referenceWorks';
+// graphql
+import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
 
 // components
 import ReferenceWorkTeaser from '/imports/ui/components/referenceWorks/ReferenceWorkTeaser';
@@ -18,17 +18,37 @@ import Utils from '/imports/lib/utils';
 
 class ReferenceWorksList extends React.Component {
 
+	constructor(props) {
+		super(props);
+		this.state = {};
+
+		this.props.referenceWorksQuery.refetch({	
+			tenantId: sessionStorage.getItem('tenantId')	
+		});
+	}
+	componentWillReceiveProps(props) {
+
+		let referenceWorks;
+		if (props.commenterId) {
+			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === props.commenterId);
+		} else {
+			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
+		}
+		this.setState({
+			referenceWorks: referenceWorks
+		});
+	}
 	renderReferenceWorks() {
-		return this.props.referenceWorks.map((referenceWork, i) => (
+		return this.state.referenceWorks.map((referenceWork, i) => (
 			<ReferenceWorkTeaser
 				key={i}
 				referenceWork={referenceWork}
 			/>
 		));
 	}
-
+	
 	render() {
-		const { referenceWorks } = this.props;
+		const { referenceWorks } = this.state;
 		const masonryOptions = {
 			isFitWidth: true,
 			transitionDuration: 300,
@@ -58,26 +78,7 @@ class ReferenceWorksList extends React.Component {
 
 ReferenceWorksList.propTypes = {
 	commenterId: PropTypes.string,
-	referenceWorks: PropTypes.array,
+	referenceWorksQuery: PropTypes.object,
 };
 
-const ReferenceWorksListContainer = createContainer(({ commenterId }) => {
-	// SUBSCRIPTIONS:
-	const query = {};
-	if (commenterId) {
-		query.authors = commenterId;
-		Meteor.subscribe('referenceWorks.commenterId', commenterId, Session.get('tenantId'));
-	} else {
-		Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-	}
-
-	// FETCH DATA:
-	const referenceWorks = ReferenceWorks.find(query, { sort: { title: 1 } }).fetch();
-	console.log(referenceWorks);
-
-	return {
-		referenceWorks,
-	};
-}, ReferenceWorksList);
-
-export default ReferenceWorksListContainer;
+export default compose(referenceWorksQuery)(ReferenceWorksList);

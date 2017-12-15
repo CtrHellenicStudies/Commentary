@@ -8,7 +8,7 @@ import { ReferenceWorkType, ReferenceWorkInputType} from '/imports/graphql/types
 import { RemoveType } from '/imports/graphql/types/index';
 
 // logic
-import ReferenceWorksService from '../logic/referenceWorks';
+import ReferenceWorksService from '../logic/ReferenceWorks/referenceWorks';
 
 const referenceWorksMutationFields = {
 	referenceWorkRemove: {

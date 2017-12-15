@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Commenters from '/imports/models/commenters';
 import slugify from 'slugify';
+import { compose } from 'react-apollo';
 import { convertToRaw } from 'draft-js';
 import Cookies from 'js-cookie';
+
+// graphql
+import {textNodesQuery} from '/imports/graphql/methods/textNodes';
 
 // components:
 import Header from '/imports/ui/layouts/header/Header';
@@ -58,9 +61,11 @@ const getFilterValues = (filters) => {
 };
 
 
-class AddTranslationLayout extends React.Component {
+class AddTranslationLayout extends Component {
 	static propTypes = {
 		ready: PropTypes.bool,
+		history: PropTypes.array,
+		textNodesQuery: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -86,7 +91,6 @@ class AddTranslationLayout extends React.Component {
 		this.updateSelectedLines = this.updateSelectedLines.bind(this);
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
 
-		this.addTranslation = this.addTranslation.bind(this);
 		this.getWork = this.getWork.bind(this);
 		this.getSubwork = this.getSubwork.bind(this);
 		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
@@ -120,16 +124,27 @@ class AddTranslationLayout extends React.Component {
 			this.setState({
 				selectedLineTo,
 			});
+			selectedLineTo = this.state.selectedLineTo;
 		} else if (selectedLineTo === null) {
 			this.setState({
 				selectedLineFrom,
 			});
+			selectedLineFrom = this.state.selectedLineFrom;
 		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
 		}
+		const { filters } = this.state;
+		const { work, subwork } = getFilterValues(filters);
+		const properties = {
+			workSlug: work ? work.slug : 'iliad',
+			subworkN: subwork ? subwork.n : 1,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
 	}
 
 	toggleSearchTerm(key, value) {
@@ -321,41 +336,6 @@ class AddTranslationLayout extends React.Component {
 		});
 	}
 
-	addTranslation(formData, textValue) {
-
-		this.setState({
-			loading: true,
-		});
-
-		// get data for translation
-		const token = Cookies.get('loginToken');
-		const work = this.getWork();
-		const subwork = this.getSubwork();
-		const author = Meteor.user();
-		const lineFrom = this.state.selectedLineFrom;
-		const tenantId = Session.get('tenantId');
-		const created = new Date();
-
-		for (let i = lineFrom, j = 0; j < textValue.blocks.length; i++, j++) {
-			const currentNode = {
-				tenantId,
-				author: author.profile.name ? author.profile.name : author.username,
-				created,
-				work: work.slug,
-				subwork: subwork.n,
-				n: i,
-				text: textValue.blocks[j].text,
-			};
-			Meteor.call('translationNode.insert', token, currentNode, (error) => { // eslint-disable-line
-				if (error) {
-					console.log(error);
-				} else {
-					this.props.history.push('/commentary');
-				}
-			});
-		}
-	}
-
 	render() {
 		const {
 			filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen,
@@ -389,12 +369,14 @@ class AddTranslationLayout extends React.Component {
 											selectedLineTo={selectedLineTo}
 											workSlug={work ? work.slug : 'iliad'}
 											subworkN={subwork ? subwork.n : 1}
+											shouldUpdateQuery={this.state.updateQuery}
+											updateQuery={this.updateQuery}
+											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 										/> : ''}
 
 									<AddTranslation
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}
-										submitForm={this.addTranslation}
 										toggleInputLines={this.toggleInputLines}
 										toggleInputLinesIsToggled={toggleInputLinesIsToggled}
 										toggleInputLinesLabel={toggleInputLinesIsToggled ? 'Select Lines' : 'Input Lines'}
@@ -434,4 +416,4 @@ const AddTranslationLayoutContainer = (() => {
 	};
 }, AddTranslationLayout);
 
-export default AddTranslationLayoutContainer;
+export default compose(textNodesQuery)(AddTranslationLayoutContainer);

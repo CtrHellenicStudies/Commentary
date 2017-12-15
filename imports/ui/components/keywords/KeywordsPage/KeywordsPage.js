@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
+import { compose } from 'react-apollo';
 
 // lib
 import Utils from '/imports/lib/utils';
 import RaisedButton from 'material-ui/RaisedButton';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Settings from '/imports/models/settings';
@@ -27,7 +30,7 @@ class KeywordsPage extends Component {
 	static propTypes = {
 		type: PropTypes.string.isRequired,
 		title: PropTypes.string.isRequired,
-		settings: PropTypes.object,
+		settingsQuery: PropTypes.object,
 	};
 	raiseLimit() {
 		this.setState({
@@ -41,8 +44,15 @@ class KeywordsPage extends Component {
 			limit: 1
 		};
 	}
+	componentWillReceiveProps(props) {
+		const tenantId = sessionStorage.getItem('tenantId');
+		this.setState({
+			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
+		});
+	}
 	render() {
-		const { title, type, settings } = this.props;
+		const { title, type} = this.props;
+		const { settings } = this.state;
 
 		if (!settings) {
 			return <LoadingPage />;
@@ -95,12 +105,4 @@ class KeywordsPage extends Component {
 
 }
 
-const KeywordsPageContainer = createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-	return {
-		settings: settingsHandle.ready() ? Settings.findOne() : { title: '' }
-	};
-}, KeywordsPage);
-
-export default KeywordsPageContainer;
+export default compose(settingsQuery)(KeywordsPage);

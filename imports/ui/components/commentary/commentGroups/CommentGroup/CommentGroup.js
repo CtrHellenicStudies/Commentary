@@ -7,6 +7,7 @@ import CommentDetail from '/imports/ui/components/commentary/comments/CommentDet
 import CommentLemma from '/imports/ui/components/commentary/commentGroups/CommentLemma';
 
 
+
 class CommentGroup extends React.Component {
 	static propTypes = {
 		commentGroup: PropTypes.shape({
@@ -19,7 +20,7 @@ class CommentGroup extends React.Component {
 			}),
 			lineFrom: PropTypes.number.isRequired,
 			lineTo: PropTypes.number,
-			commenters: PropTypes.arrayOf(PropTypes.shape({
+			commenters: PropTypes.objectOf(PropTypes.shape({
 				_id: PropTypes.string.isRequired,
 				name: PropTypes.string.isRequired,
 				slug: PropTypes.string.isRequired,
@@ -28,6 +29,7 @@ class CommentGroup extends React.Component {
 				})
 			}))
 		}).isRequired,
+		history: PropTypes.object,
 		commentGroupIndex: PropTypes.string.isRequired,
 		contextPanelOpen: PropTypes.bool.isRequired,
 		showContextPanel: PropTypes.func.isRequired,
@@ -54,11 +56,12 @@ class CommentGroup extends React.Component {
 		super(props);
 
 		this.state = {
-			hideLemma: false,
+			hideLemma: false
 		};
 
 		// methods:
 		this.toggleLemma = this.toggleLemma.bind(this);
+		this.getCommentersOfComment = this.getCommentersOfComment.bind(this);
 	}
 
 	toggleLemma() {
@@ -66,11 +69,18 @@ class CommentGroup extends React.Component {
 			hideLemma: !this.state.hideLemma,
 		});
 	}
-
+	getCommentersOfComment(comment) {
+		const commenters = {};
+		comment.commenters.map((commenter) => {
+			commenters[commenter._id] = this.props.commentGroup.commenters[commenter._id];
+		});
+		return commenters;
+	}
 	render() {
 		const { commentGroup, commentGroupIndex, contextPanelOpen, showLoginModal,
 			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm, selectMultiLine } = this.props;
 		const { hideLemma } = this.state;
+		
 		let isOnHomeView = false;
 
 		let commentsClass = 'comments ';
@@ -113,7 +123,9 @@ class CommentGroup extends React.Component {
 								<CommentDetail
 									key={`${comment}-comment-detail`}
 									comment={comment}
+									commenters={this.getCommentersOfComment(comment)}
 									toggleSearchTerm={!isOnHomeView ? toggleSearchTerm : null}
+									isOnHomeView={this.props.isOnHomeView}
 									filters={filters}
 									toggleLemma={this.toggleLemma}
 									showLoginModal={showLoginModal}

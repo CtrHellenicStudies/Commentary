@@ -8,7 +8,7 @@ import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 import {KeywordType} from '/imports/graphql/types/models/keyword';
 
 // logic
-import KeywordsService from '../logic/keywords';
+import KeywordsService from '../logic/Keywords/keywords';
 
 const keywordQueryFields = {
 	keywords: {
@@ -21,10 +21,13 @@ const keywordQueryFields = {
 			id: {
 				type: GraphQLString,
 			},
+			queryParam: {
+				type: GraphQLString
+			}
 		},
-		async resolve(parent, { tenantId, id }, {token}) {
+		async resolve(parent, { tenantId, id , queryParam}, {token}) {
 			const keywordsService = new KeywordsService({token});
-			return await keywordsService.keywordsGet(id, tenantId);
+			return await keywordsService.keywordsGet(id, tenantId, queryParam);
 
 			/*
 			 * TODO: reinstate the linked data api schema

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import { Random } from 'meteor/random';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
+import {compose} from 'react-apollo';
 import Cookies from 'js-cookie';
 import slugify from 'slugify';
 
@@ -21,22 +21,21 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { EditorState, convertToRaw, Modifier, CompositeDecorator } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { stateToHTML } from 'draft-js-export-html';
 import update from 'immutability-helper';
 import { convertToHTML } from 'draft-convert';
 
+// graphql
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+import { referenceWorkCreateMutation, referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
+import { keywordsQuery,
+		keywordInsertMutation,
+		keywordUpdateMutation } from '/imports/graphql/methods/keywords';
+
 // models
-import Commenters from '/imports/models/commenters';
 import Keywords from '/imports/models/keywords';
 import ReferenceWorks from '/imports/models/referenceWorks';
-
-// components
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
-import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
-import ReferenceWork from './referenceWork/ReferenceWork';
 
 // lib:
 import muiTheme from '/imports/lib/muiTheme';
@@ -44,6 +43,13 @@ import Utils from '/imports/lib/utils';
 
 // helpers:
 import linkDecorator from '/imports/ui/components//editor/addComment/LinkButton/linkDecorator';
+
+// components
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
+import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
+import ReferenceWork from './referenceWork/ReferenceWork';
 
 /*
  *	helpers
@@ -60,15 +66,18 @@ const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 class AddComment extends React.Component {
 	static propTypes = {
 		selectedLineFrom: PropTypes.number,
+		commentersQuery: PropTypes.object,
 		submitForm: PropTypes.func.isRequired,
-		commentersOptions: PropTypes.array,
-		tags: PropTypes.array,
-		referenceWorkOptions: PropTypes.array,
+		commenters: PropTypes.array,
+		referenceWorkCreate: PropTypes.func,
+		keywordInsert: PropTypes.func,
+		keywordUpdate: PropTypes.func,
+		keywordsQuery: PropTypes.object,
+		referenceWorksQuery: PropTypes.object
 	};
 
 	static defaultProps = {
 		selectedLineFrom: null,
-		commentersOptions: [],
 		tags: [],
 	};
 
@@ -88,6 +97,7 @@ class AddComment extends React.Component {
 
 			snackbarOpen: false,
 			snackbarMessage: '',
+			ready: false
 		};
 
 		// methods:
@@ -108,6 +118,15 @@ class AddComment extends React.Component {
 		this.addNewTag = this.addNewTag.bind(this);
 		this.addNewReferenceWork = this.addNewReferenceWork.bind(this);
 		this.updateReferenceWorks = this.updateReferenceWorks.bind(this);
+		this.getCommentersForUser = this.getCommentersForUser.bind(this);
+		this.filterCommentersForUser = this.filterCommentersForUser.bind(this);
+
+		const properties = {
+			tenantId: sessionStorage.getItem('tenantId')
+		};
+		this.props.commentersQuery.refetch(properties);
+		this.props.referenceWorksQuery.refetch(properties);
+		this.props.keywordsQuery.refetch(properties);
 	}
 
 	_enableButton() {
@@ -169,7 +188,12 @@ class AddComment extends React.Component {
 		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
-		this.props.submitForm(this.state, textHtml, textRaw);
+		this.props.submitForm(
+			this.state,
+			this.filterCommentersForUser(this.props.commentersQuery.commenters),
+			textHtml,
+			textRaw
+		);
 	} 
 	showSnackBar(error) {
 		this.setState({
@@ -242,7 +266,7 @@ class AddComment extends React.Component {
 	}
 
 	onTagValueChange(tag, i) {
-		const { tags } = this.props;
+		const { tags } = this.state;
 		const { tagsValue } = this.state;
 
 		let _selectedKeyword;
@@ -275,46 +299,50 @@ class AddComment extends React.Component {
 	}
 
 	selectTagType(tagId, event, index) {
+
 		const currentTags = this.state.tagsValue;
-		currentTags[index].keyword.type = event.target.value;
+		this.setState({
+			tagsValue: event.target.value
+		});
+		const newKeyword = {};
+		for (const [key, value] of Object.entries(currentTags[index].keyword)) {
+			if (key === 'type') {
+				newKeyword[key] = event.target.value;
+			} else if (key !== '_id' && key !== '__typename') {
+				newKeyword[key] = value;
+			}
+		}
+		currentTags[index].keyword = newKeyword;
 		this.setState({
 			tagsValue: currentTags
 		});
-
-		Meteor.call('keywords.changeType', Cookies.get('loginToken'), tagId, event.target.value, (err) => {
-			if (err) {
-				this.showSnackBar(err);
-			}			else {
-				this.showSnackBar({message: 'Keyword type changed'});
-			}
-		});
+		this.props.keywordUpdate(tagId, newKeyword);
+		// 	if (err) {
+		// 		this.showSnackBar(err);
+		// 	}			else {
+		// 		this.showSnackBar({message: 'Keyword type changed'});
+		// 	}
+		// });
 	}
 
 	addNewTag(tag) {
 
-		const keyword = [{
+		const keyword = {
 			title: tag.value,
 			slug: slugify(tag.value.toLowerCase()),
 			type: 'word',
 			count: 1,
-			tenantId: Session.get('tenantId'),
-		}];
-
-		Meteor.call('keywords.insert', Cookies.get('loginToken'), keyword, (err) => {
-			if (err) {
-				this.showSnackBar(err);
-			} else {
-				this.showSnackBar({message: 'Tag added'});
-			}
-		});
+			tenantId: sessionStorage.getItem('tenantId'),
+		};
+		this.props.keywordInsert(keyword);
 	}
 	addNewReferenceWork(reference) {
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
-			tenantId: Session.get('tenantId')
+			tenantId: sessionStorage.getItem('tenantId')
 		};
-		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
+		this.props.referenceWorkCreate(_reference).then(err => {
 			if (err) {
 				this.showSnackBar(err);
 			}			else {
@@ -322,16 +350,77 @@ class AddComment extends React.Component {
 			}
 		});
 	}
+	getCommentersForUser(commenters) {
+		const commentersOptions = [];
+		commenters.forEach((commenter) => {
+			if (!commentersOptions.some(val => (
+				commenter._id === val.value
+			))) {
+				if (Meteor.user().canEditCommenters.find(x => x === commenter._id) !== undefined) {
+					commentersOptions.push({
+						value: commenter._id,
+						label: commenter.name,
+					});
+				}
+			}
+		});
+		return commentersOptions;
+	}
+	filterCommentersForUser(commenters) {
+		const commentersOptions = [];
+		commenters.forEach((commenter) => {
+			if (!commentersOptions.some(val => (
+				commenter._id === val._id
+			))) {
+				if (Meteor.user().canEditCommenters.find(x => x === commenter._id) !== undefined) {
+					commentersOptions.push(commenter);
+				}
+			}
+		});
+		return commentersOptions;
+	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
-	render() {
-		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue } = this.state;
-		const { commentersOptions, tags } = this.props;
-		if (!this.props.ready) {
-		    return null;
+	componentWillReceiveProps(newProps) {
+		const ready = !newProps.keywordsQuery.loading && !newProps.referenceWorksQuery.loading && !newProps.commentersQuery.loading;
+		if (!ready && this.state.ready) {
+			this.setState({
+				ready: false
+			});
+			return;
 		}
+		let commenters = [];
+		const tags = newProps.keywordsQuery.keywords;
+		if (Meteor.user() && Meteor.user().canEditCommenters) {
+			commenters = newProps.commentersQuery.commenters.filter(x => 
+				Meteor.user().canEditCommenters.find(y => y === x._id));
+		}
+		const commentersOptions = this.getCommentersForUser(commenters);		
+		const referenceWorks = newProps.referenceWorksQuery.referenceWorks;
+		const referenceWorkOptions = [];
+		referenceWorks.forEach((referenceWork) => {
+			if (!referenceWorkOptions.some(val => (
+				referenceWork.slug === val.slug
+			))) {
+				referenceWorkOptions.push({
+					value: referenceWork._id,
+					label: referenceWork.title,
+					slug: referenceWork.slug,
+				});
+			}
+		});
+		this.setState({
+			ready: true,
+			referenceWorkOptions: referenceWorkOptions,
+			commentersOptions: commentersOptions,
+			tags: tags
+		});
+	}
+	render() {
+		const { revision, titleEditorState, keyideasValue, textEditorState, tagsValue, commentersOptions } = this.state;
+
 		return (
 			<div className="comments lemma-panel-visible ">
 				<div className={'comment-outer'}>
@@ -394,15 +483,15 @@ class AddComment extends React.Component {
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellcheck
-									tags={this.props.tags}
+									tags={this.state.tags}
 									mediaOn
 								/>
 
 								<ReferenceWork 
 									update={this.updateReferenceWorks} 
-									referenceWorkOptions={this.props.referenceWorkOptions} 
+									referenceWorkOptions={this.state.referenceWorkOptions} 
 									referenceWorks={this.state.referenceWorks}
-									ready={this.props.ready}
+									ready={this.state.ready}
 									addNew={this.addNewReferenceWork}
 								/>
 
@@ -433,49 +522,11 @@ class AddComment extends React.Component {
 	}
 }
 
-const AddCommentContainer = createContainer(() => {
-	const handleKeywords = Meteor.subscribe('keywords.all', { tenantId: Session.get('tenantId') });
-
-	const tags = Keywords.find().fetch();
-	const handleWorks = Meteor.subscribe('referenceWorks', Session.get('tenantId'));
-	const referenceWorks = ReferenceWorks.find().fetch();
-	const referenceWorkOptions = [];
-	referenceWorks.forEach((referenceWork) => {
-		if (!referenceWorkOptions.some(val => (
-			referenceWork.slug === val.slug
-		))) {
-			referenceWorkOptions.push({
-				value: referenceWork._id,
-				label: referenceWork.title,
-				slug: referenceWork.slug,
-			});
-		}
-	});
-
-	const handleCommenters = Meteor.subscribe('commenters', Session.get('tenantId'));
-	const commentersOptions = [];
-	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
-	}
-	commenters.forEach((commenter) => {
-		if (!commentersOptions.some(val => (
-			commenter._id === val.value
-		))) {
-			commentersOptions.push({
-				value: commenter._id,
-				label: commenter.name,
-			});
-		}
-	});
-
-	return {
-		ready: handleKeywords.ready() && handleWorks.ready() && handleCommenters.ready(),
-		tags,
-		referenceWorkOptions,
-		commentersOptions,
-	};
-
-}, AddComment);
-
-export default AddCommentContainer;
+export default compose(
+	commentersQuery,
+	referenceWorkCreateMutation,
+	referenceWorksQuery,
+	keywordsQuery,
+	keywordInsertMutation,
+	keywordUpdateMutation
+)(AddComment);

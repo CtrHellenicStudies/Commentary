@@ -1,47 +1,40 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { compose } from 'react-apollo';
 
-// models
-import Keywords from '/imports/models/keywords';
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
-// lib
-import muiTheme from '/imports/lib/muiTheme';
 
-const KeywordReferenceModal = React.createClass({
-
-	propTypes: {
-		visible: PropTypes.bool,
-		top: PropTypes.number,
-		left: PropTypes.number,
-		keyword: PropTypes.string,
-		close: PropTypes.func,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
-
+class KeywordReferenceModal extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {};
+		this.renderKeywordHTML = this.renderKeywordHTML.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		const { keywordSlug } = props;
+		const keyword = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
+			.find(x => x.slug === keywordSlug);
+		this.setState({
+			keyword: keyword
+		});
+	}
 	renderKeywordHTML() {
 		let html = '';
-		const { keyword } = this.props;
+		const { keyword } = this.state;
 
 		if (keyword && 'description' in keyword && keyword.description.length) {
 			html = `${Utils.trunc(keyword.description, 120)} <a href="/words/${keyword.slug}">Read more</a>`;
 		}
 
 		return { __html: html };
-	},
+	}
 
 	render() {
 		const self = this;
-		const { keyword } = this.props;
+		const { keyword } = this.state;
 		const styles = {
 			modal: {
 				top: this.props.top,
@@ -79,21 +72,16 @@ const KeywordReferenceModal = React.createClass({
 			</div>
 
 		);
-	},
+	}
 
-});
+}
+KeywordReferenceModal.propTypes = {
+	visible: PropTypes.bool,
+	top: PropTypes.number,
+	left: PropTypes.number,
+	close: PropTypes.func,
+	keywordSlug: PropTypes.string,
+	keywordsQuery: PropTypes.object
+};
 
-const KeywordReferenceModalContainer = createContainer(({ keywordSlug }) => {
-	const query = {
-		slug: keywordSlug,
-	};
-	const handle = Meteor.subscribe('keywords.all', query);
-	const keyword = Keywords.findOne(query);
-
-	return {
-		keyword,
-		ready: handle.ready(),
-	};
-}, KeywordReferenceModal);
-
-export default KeywordReferenceModalContainer;
+export default compose(keywordsQuery)(KeywordReferenceModal);

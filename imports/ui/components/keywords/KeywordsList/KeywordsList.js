@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
-import { Session } from 'meteor/session';
+
+import { compose } from 'react-apollo';
 
 // models
 import Keywords from '/imports/models/keywords';
 
+// graphql
+import { keywordsQuery } from '/imports/graphql/methods/keywords';
+
 // components
 import KeywordTeaser from '/imports/ui/components/keywords/KeywordTeaser';
 
-class KeywordsList extends React.Component {
+function getKeywordsByQuery(query, limit) {
+
+	if (query.loading) {
+		return [];
+	}
+	return query.keywords.slice(0, limit);
+}
+
+class KeywordsList extends Component {
 
 	renderKeywords() {
-		const { keywords } = this.props;
+		const { keywords } = this.state;
 
 		if (!keywords) {
 			return null;
@@ -25,6 +36,42 @@ class KeywordsList extends React.Component {
 				keyword={keyword}
 			/>
 		));
+	}
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentWillReceiveProps(newProps) {
+		const { type, limit } = newProps;
+		const skip = 0;
+		const tenantId = sessionStorage.getItem('tenantId');
+		let _limit = 100;
+		const query = {
+			type: type,
+			count: { $gte: 1}
+		};
+		if (limit) {
+			_limit = limit;
+		}
+		newProps.keywordsQuery.refetch({
+			tenantId: tenantId,
+			queryParam: JSON.stringify(query)
+		});
+	
+		let keywords = [];
+		switch (type) {
+		case 'word':
+			keywords = getKeywordsByQuery(newProps.keywordsQuery, _limit);
+			break;
+		case 'idea':
+			keywords = getKeywordsByQuery(newProps.keywordsQuery, _limit);
+			break;
+		default:
+			break;
+		}
+		this.setState({
+			keywords: keywords,
+		});
 	}
 
 	render() {
@@ -42,34 +89,4 @@ KeywordsList.propTypes = {
 	keywords: PropTypes.array,
 };
 
-export default createContainer(({ type, limit }) => {
-	const skip = 0;
-	let _limit = 100;
-	if (limit) {
-		_limit = limit;
-	}
-
-	const query = {
-		type,
-		tenantId: Session.get('tenantId'),
-		count: { $gte: 1 },
-	};
-
-	switch (type) {
-	case 'word':
-		Meteor.subscribe('keywords.keywords', query, skip, _limit);
-		break;
-	case 'idea':
-		Meteor.subscribe('keywords.keyideas', query, skip, _limit);
-		break;
-	default:
-		break;
-	}
-
-	const keywords = Keywords.find(query, { limit: _limit }).fetch() || [];
-
-	return {
-		keywords,
-		type,
-	};
-}, KeywordsList);
+export default compose(keywordsQuery)(KeywordsList);

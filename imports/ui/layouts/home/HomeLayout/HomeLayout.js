@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
+import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// graphql
+import { tenantsQuery } from '/imports/graphql/methods/tenants';
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // models
 import Settings from '/imports/models/settings';
@@ -43,8 +47,12 @@ class HomeLayout extends Component {
 	}
 
 	render() {
-		const { settings, tenant, ready } = this.props;
-		if (!ready || !tenant) {
+
+		const tenantId = sessionStorage.getItem('tenantId');
+		const settings = this.props.settingsQuery.loading ? undefined : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId);
+		const tenant = this.props.tenantsQuery.loading ? undefined : this.props.tenantsQuery.tenants.find(x => x._id === tenantId);
+		
+		if (!tenant) {
 			return <LoadingHome />;
 		}
 
@@ -71,6 +79,7 @@ class HomeLayout extends Component {
 
 					<Home
 						settings={settings}
+						history={this.props.history}
 					/>
 
 					<Footer />
@@ -82,18 +91,9 @@ class HomeLayout extends Component {
 }
 
 HomeLayout.propTypes = {
-	settings: PropTypes.object,
-	ready: PropTypes.bool,
-	tenant: PropTypes.object,
+	signup: PropTypes.func,
+	showForgotPwd: PropTypes.func,
+	history: PropTypes.any
 };
 
-const HomeLayoutContainer = createContainer(() => {
-	const handle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-	return {
-		settings: Settings.findOne(),
-		tenant: Tenant.findOne({_id: Session.get('tenantId')}),
-		ready: handle.ready(),
-	};
-}, HomeLayout);
-
-export default HomeLayoutContainer;
+export default compose(tenantsQuery, settingsQuery)(HomeLayout);

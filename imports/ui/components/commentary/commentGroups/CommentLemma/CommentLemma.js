@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
+import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import FontIcon from 'material-ui/FontIcon';
@@ -13,14 +13,12 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 
-// models:
-import TextNodes from '/imports/models/textNodes';
-import Translations from '/imports/models/translations';
-import TranslationNodes from '/imports/models/translationNodes';
-import Editions from '/imports/models/editions';
+// graphql
+import { editionsQuery } from '/imports/graphql/methods/editions';
+import { textNodesQuery } from '/imports/graphql/methods/textNodes';
+import { translationsQuery } from '/imports/graphql/methods/translations';
 
 // components:
-import CommentLemmaText from '/imports/ui/components/commentary/commentGroups/CommentLemmaText';
 import CommentGroupMeta from '/imports/ui/components/commentary/commentGroups/CommentGroupMeta';
 import TranslationLayout from '/imports/ui/layouts/commentary/TranslationLayout';
 import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
@@ -28,6 +26,18 @@ import LoadingLemma from '/imports/ui/components/loading/LoadingLemma';
 // lib:
 import Utils from '/imports/lib/utils';
 
+function getTranslationQueries(query, filter) {
+	if (query.loading) {
+		return [];
+	}
+	return query.translations.filter(x => 
+		x.work === filter.work && 
+		x.subwork === filter.subwork &&
+		x.n >= filter.lineFrom &&
+		x.n <= filter.lineTo).map(translation =>
+			translation.author
+		);
+}
 class CommentLemma extends React.Component {
 
 	static propTypes = {
@@ -41,7 +51,7 @@ class CommentLemma extends React.Component {
 			}),
 			lineFrom: PropTypes.number.isRequired,
 			lineTo: PropTypes.number,
-			commenters: PropTypes.arrayOf(PropTypes.shape({
+			commenters: PropTypes.objectOf(PropTypes.shape({
 				_id: PropTypes.string.isRequired,
 				name: PropTypes.string.isRequired,
 				slug: PropTypes.string.isRequired,
@@ -55,32 +65,39 @@ class CommentLemma extends React.Component {
 		index: PropTypes.string.isRequired,
 		hideLemma: PropTypes.bool.isRequired,
 		translationAuthors: PropTypes.array,
-		multiline: PropTypes.string,
+		multiline: PropTypes.bool,
 		selectMultiLine: PropTypes.func,
 
-		// from createContainer:
 		editions: PropTypes.arrayOf(PropTypes.shape({
 			title: PropTypes.string.isRequired,
 			slug: PropTypes.string.isRequired,
 		})),
-		ready: PropTypes.bool,
+		editionsQuery: PropTypes.object,
+		textNodesQuery: PropTypes.object,
+		translationsQuery: PropTypes.object
 	};
 
 	static defaultProps = {
-		editions: null,
-		ready: false,
+		editions: null
 	};
 
 	constructor(props) {
 		super(props);
+
+
+		const { commentGroup, multiline} = this.props;
+
 
 		this.state = {
 			selectedLemmaEditionIndex: 0,
 			showTranslation: false,
 			translationMenuOpen: false,
 			multilineMenuOpen: false,
-			multiline: null
+			multiline: null,
+			translationAuthors: [],
+			editions: []
 		};
+
 
 		// methods:
 		this.toggleEdition = this.toggleEdition.bind(this);
@@ -192,14 +209,59 @@ class CommentLemma extends React.Component {
 		});
 	}
 
+	componentWillReceiveProps(nextProps) {
 
-	render() {
-		const { commentGroup, hideLemma, editions, ready, translationAuthors } = this.props;
-		const { selectedLemmaEditionIndex, selectedAuthor, showTranslation } = this.state;
+		const { commentGroup, multiline } = nextProps;
+		const { selectedLemmaEditionIndex } = this.state;
 
+		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+			return;
+		}
+
+		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
+		let editions = !nextProps.editionsQuery.loading ?
+			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions) : [];
+		const ready = !nextProps.editionsQuery.loading
+			&& !nextProps.textNodesQuery.loading
+			&& !nextProps.translationsQuery.loading;
+		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+		let translationAuthors = [];
+		if (commentGroup) {
+			if (!nextProps.textNodesQuery.variables.workSlug) {
+				const properties = {
+					workSlug: commentGroup.work.slug,
+					subworkN: Number(commentGroup.subwork.title),
+					lineFrom: commentGroup.lineFrom,
+					lineTo: commentGroup.lineTo ? commentGroup.lineTo : commentGroup.lineFrom
+				};
+				nextProps.textNodesQuery.refetch(properties);
+			}
+			if (!commentGroup.lineTo) {
+				commentGroup.lineTo = commentGroup.lineFrom;
+			}
+	
+			const translationNodesQuery = {
+				work: commentGroup.work.slug,
+				subwork: Number(commentGroup.subwork.title),
+				lineFrom: commentGroup.lineFrom,
+				lineTo: commentGroup.lineTo
+			};
+	
+			translationAuthors = _.uniq(getTranslationQueries(nextProps.translationsQuery, translationNodesQuery));
+		}
 
+		this.setState({
+			translationAuthors: translationAuthors,
+			ready: ready,
+			editions: editions,
+			selectedLemmaEdition: selectedLemmaEdition
+		});
+	}
+	render() {
+		const { commentGroup, hideLemma, multiline} = this.props;
+		const { selectedAuthor, showTranslation, selectedLemmaEdition, editions, ready, translationAuthors } = this.state;
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
@@ -381,56 +443,8 @@ class CommentLemma extends React.Component {
 	}
 
 }
-
-export default createContainer(({ commentGroup, multiline }) => {
-	let lemmaQuery = {};
-	let translationAuthors = [];
-	const translationNodesHandle = Meteor.subscribe('translationNodes', Session.get('tenantId'));
-	if (commentGroup) {
-		lemmaQuery = {
-			'work.slug': commentGroup.work.slug,
-			'subwork.n': commentGroup.subwork.n,
-			'text.n': {
-				$gte: commentGroup.lineFrom,
-			},
-		};
-
-		if (typeof commentGroup.lineTo !== 'undefined') {
-			lemmaQuery['text.n'].$lte = commentGroup.lineTo;
-		} else {
-			lemmaQuery['text.n'].$lte = commentGroup.lineFrom;
-		}
-		if (lemmaQuery['work.slug'] === 'homeric-hymns') {
-			lemmaQuery['work.slug'] = 'hymns';
-		}
-
-		if (!commentGroup.lineTo) {
-			commentGroup.lineTo = commentGroup.lineFrom;
-		}
-
-		const translationNodesQuery = {
-			work: commentGroup.work.slug,
-			subwork: Number(commentGroup.subwork.title),
-			$and: [{n: {$gte: commentGroup.lineFrom}}, {n: {$lte: commentGroup.lineTo}}],
-		};
-
-		translationAuthors = _.uniq(
-			TranslationNodes.find(translationNodesQuery)
-				.fetch()
-				.map(translation => translation.author)
-			);
-	}
-
-	const handle = Meteor.subscribe('textNodes', lemmaQuery);
-	const editionsSubscription = Meteor.subscribe('editions');
-	const textNodesCursor = TextNodes.find(lemmaQuery);
-	let editions = editionsSubscription.ready() ? Utils.textFromTextNodesGroupedByEdition(textNodesCursor, Editions) : [];
-	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
-
-	return {
-		translationAuthors,
-		editions,
-		ready: handle.ready() && translationNodesHandle.ready(),
-	};
-
-}, CommentLemma);
+export default compose(
+	editionsQuery,
+	textNodesQuery,
+	translationsQuery
+)(CommentLemma);

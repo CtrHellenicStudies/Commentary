@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
+import { compose } from 'react-apollo';
+import { editionsInsertMutation,
+	editionsRemoveMutation} from '/imports/graphql/methods/editions';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import IconMenu from 'material-ui/IconMenu';
@@ -14,7 +17,7 @@ import _ from 'underscore';
 import { Meteor } from 'meteor/meteor';
 import Cookies from 'js-cookie';
 
-class MultilineDialog extends React.Component {
+class MultilineDialog extends Component {
 
 	constructor(props) {
 		super(props);
@@ -44,8 +47,14 @@ class MultilineDialog extends React.Component {
 			});
 
 		} else {
-			Meteor.call('multiline.insert', Cookies.get('loginToken'), this.state.edition, this.state.multiline, (err) => {
-				if (err) {
+			const edition = {
+				_id: this.state.edition._id,
+				title: this.state.edition.title,
+				slug: this.state.edition.slug
+			};
+			this.props.editionsInsert(edition, this.state.multiline).then(res => {
+				console.log(res);
+				if (res.err) {
 					this.setState({
 						error: err
 					});
@@ -60,8 +69,9 @@ class MultilineDialog extends React.Component {
 	}
 
 	deleteMultiline(multiline) {
-		Meteor.call('multiline.delete', Cookies.get('loginToken'), this.state.edition, multiline, (err) => {
-			if (err) {
+		this.props.editionsRemove(this.state.edition, multiline).then(res => {
+			console.log(res);
+			if (res.err) {
 				this.setState({
 					error: err
 				});
@@ -159,7 +169,9 @@ MultilineDialog.propTypes = {
 	edition: PropTypes.object,
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
+	editionsInsert: PropTypes.func,
+	editionsRemove: PropTypes.func
 };
 
 
-export default MultilineDialog;
+export default compose(editionsInsertMutation, editionsRemoveMutation)(MultilineDialog);

@@ -12,12 +12,17 @@
 
 */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
+import { compose } from 'react-apollo';
+
+// graphql
+import { getMaxLineMutation } from '/imports/graphql/methods/textNodes';
 
 // private component:
 import ContextPanelContent from './ContextPanelContent';
+
 
 
 /*
@@ -42,7 +47,7 @@ const getsubworkN = (props) => {
 const LINE_THRESHOLD = 25;
 
 
-class ContextPanel extends React.Component {
+class ContextPanel extends Component {
 	static propTypes = {
 		open: PropTypes.bool.isRequired,
 		commentGroup: PropTypes.shape({
@@ -58,6 +63,7 @@ class ContextPanel extends React.Component {
 		}),
 		closeContextPanel: PropTypes.func,
 		commentLemmaIndex: PropTypes.string,
+		getMaxLine: PropTypes.func,
 
 		// requiered if editor:
 		disableEdit: PropTypes.bool,
@@ -148,13 +154,12 @@ class ContextPanel extends React.Component {
 
 	setMaxLine() {
 
+		const that = this;
 		const workSlug = getWorkSlug(this.props);
 		const subworkN = getsubworkN(this.props);
-
-		Meteor.call('getMaxLine', workSlug, subworkN, (err, res) => {
-			if (err) throw new Meteor.Erorr(err);
-			this.setState({
-				maxLine: res,
+		this.props.getMaxLine(workSlug, subworkN).then(function(res) {
+			that.setState({
+				maxLine: parseInt(res.data.getMaxLine),
 			});
 		});
 	}
@@ -199,9 +204,9 @@ class ContextPanel extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.lineFrom) {
+		if (nextProps.lineFrom) {
 			this.setState({
-				lineFrom: nextProps.lineFrom
+				lineFrom: nextProps.lineFrom,
 			});
 		}
 	}
@@ -222,7 +227,8 @@ class ContextPanel extends React.Component {
 				subworkN={subworkN}
 				commentGroup={commentGroup}
 				highlightingVisible={highlightingVisible}
-				lineFrom={lineFrom}
+				lineFrom={selectedLineFrom}
+				lineTo={selectedLineFrom + 49}
 				maxLine={maxLine}
 				selectedLemmaEdition={selectedLemmaEdition}
 				onBeforeClicked={this.onBeforeClicked}
@@ -241,4 +247,4 @@ class ContextPanel extends React.Component {
 	}
 }
 
-export default ContextPanel;
+export default compose(getMaxLineMutation)(ContextPanel);

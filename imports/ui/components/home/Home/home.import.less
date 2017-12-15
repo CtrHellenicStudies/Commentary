@@ -393,17 +393,6 @@ section.goals {
   background-color: @accent;
   text-align: center;
 
-  .block-screen {
-    /*
-    background-image( linear-gradient(
-                    rgba(62,39,35, 0.9),
-                    rgba(62,39,35, 0.7) 10%,
-                    rgba(62,39,35, 0.7) 90%,
-                    rgba(62,39,35, 0.9)
-    ) );
-    */
-
-  }
   .goal {
     color: @light;
     width: 26%;
@@ -462,13 +451,14 @@ section.keywords {
 .background-gray {
   background: #f6f6f6;
 }
-
+.show-more {
+  color: @light;
+}
 .show-more {
   margin-top: 60px;
 
   span {
     font-size: 20px;
-    color: @light;
   }
 
 }
@@ -557,14 +547,6 @@ section.browse-commentary {
         color: @text-secondary;
 
       }
-      /*
-      &:hover{
-          span {
-              color:@primary;
-
-          }
-      }
-      */
 
     }
   }
@@ -584,17 +566,6 @@ section.commentors {
   background-color: @primary-dark;
   background: @light;
 
-  .block-screen {
-    /*
-    background-image( linear-gradient(
-                    rgba(94, 63, 55, 0.9),
-                    rgba(94, 63, 55, 0.8) 10%,
-                    rgba(94, 63, 55, 0.8) 90%,
-                    rgba(94, 63, 55, 0.9)
-    ) );
-    */
-
-  }
 
   h2 {
     color: @light;
@@ -721,7 +692,6 @@ section.get-started{
   }
 
 }
-
 // IE11 fix that will prevent the commenter image from disappearing or blink on-hover
 _:-ms-lang(x), .hvr-grow {
   transition-duration: 0s !important;

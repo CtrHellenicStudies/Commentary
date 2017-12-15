@@ -3,8 +3,8 @@ import React from 'react';
 import {Session} from 'meteor/session';
 import Cookies from 'js-cookie';
 import Utils from '/imports/lib/utils';
+import { tenantsBySubdomainQuery } from '/imports/graphql/methods/tenants';
 import { Meteor } from 'meteor/meteor';
-import Tenants from '/imports/models/tenants';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -16,9 +16,9 @@ import EditKeywordLayout from '/imports/ui/layouts/editor/EditKeywordLayout';
 import TextNodesEditorLayout from '/imports/ui/layouts/editor/TextNodesEditorLayout';
 import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
 import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
-import UserLayout from '/imports/ui/layouts/user/UserLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
+import { ApolloProvider, createNetworkInterface, compose } from 'react-apollo';
 
 // pages
 
@@ -64,10 +64,6 @@ if (Meteor.isClient) {
 	Utils.setBaseDocMeta();
 }
 
-if (!Tenants.findOne()) {
-	Meteor.subscribe('tenants');
-}
-
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
 		{...rest} render={props => (
@@ -85,7 +81,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	/>
 );
 const routes = (props) => {
-	if (!Session.get('tenantId')) {
+	if (!sessionStorage.getItem('tenantId')) {
 		const hostnameArray = document.location.hostname.split('.');
 		let subdomain;
 
@@ -95,15 +91,14 @@ const routes = (props) => {
 			subdomain = '';
 			return <Route component={NotFound} />;
 		}
-		Meteor.call('findTenantBySubdomain', subdomain, (err, tenant) => {
-			if (tenant) {
-				Session.set('tenantId', tenant._id);
-			} else {
-				Session.set('noTenant', true);
-			}
-		});
+		props.tenantsBySubdomainQuery.variables.subdomain = subdomain;
+		if (!props.tenantsBySubdomainQuery.loading && props.tenantsBySubdomainQuery.tenantBySubdomain) {
+			sessionStorage.setItem('tenantId', props.tenantsBySubdomainQuery.tenantBySubdomain._id);
+		} else if (!props.tenantsBySubdomainQuery.loading && !props.tenantsBySubdomainQuery.tenantBySubdomain) {
+			sessionStorage.setItem('noTenant', true);
+		}
 	}
-	if (Session.get('noTenant')) {
+	if (sessionStorage.getItem('noTenant')) {
 		return <Route component={NotFound} />;
 	}
 	return (
@@ -147,7 +142,7 @@ const routes = (props) => {
 					} catch (err) {
 						console.log(err);
 					} finally {
-						return <Redirect to="/" />;
+						return (<Redirect to="/" />);
 					}
 				}}
 			/>
@@ -156,7 +151,7 @@ const routes = (props) => {
 			/>
 			<Route exact path="/v1/" component={NameResolutionServiceLayout} />
 			<Route
-				exact path="/v1/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={1} urn={params.match.params.urn} commentId={params.match.params.commentId}/>}
+				exact path="/v1/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={1} urn={params.match.params.urn} commentId={params.match.params.commentId} />}
 			/>
 			<Route 
 				exact path="/v2/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={2} urn={params.match.params.urn} commentId={params.match.params.commentId} />}
@@ -177,10 +172,9 @@ const routes = (props) => {
 		</Switch>
 	);
 };
-const App = () => (
+const App = (props) => (
 	<BrowserRouter>
-		{routes()}
+		{routes(props)}
 	</BrowserRouter>
 );
-
-export default App;
+export default compose(tenantsBySubdomainQuery)(App);

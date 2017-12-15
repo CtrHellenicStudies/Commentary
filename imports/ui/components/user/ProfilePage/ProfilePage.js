@@ -3,22 +3,23 @@ import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { createContainer } from 'meteor/react-meteor-data';
+import { compose } from 'react-apollo';
 
 // components
 import AvatarEditor from '/imports/ui/components/avatar/AvatarEditor';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
 import LoadingPage from '/imports/ui/components/loading/LoadingPage';
 import ModalChangePwd from '/imports/ui/layouts/auth/ModalChangePwd';
-import Notifications from '/imports/ui/components/user/ProfilePage/Notifications';
 import Discussions from '/imports/ui/components/user/ProfilePage/Discussions';
 import Annotations from '/imports/ui/components/user/ProfilePage/Annotations';
-import Bookmarks from '/imports/ui/components/user/ProfilePage/Bookmarks';
 import Account from '/imports/ui/components/user/ProfilePage/Account';
 import Header from '/imports/ui/layouts/header/Header';
 
 // api
 import Settings from '/imports/models/settings';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
@@ -45,7 +46,8 @@ class ProfilePage extends React.Component {
 			usernameError: '',
 			emailError: '',
 			modalChangePwdLowered: false,
-			isPublicEmail: false
+			isPublicEmail: false,
+			tenantId: sessionStorage.getItem('tenantId')
 		};
 
 		this.getChildContext = this.getChildContext.bind(this);
@@ -53,10 +55,15 @@ class ProfilePage extends React.Component {
 		this.showChangePwdModal = this.showChangePwdModal.bind(this);
 		this.closeChangePwdModal = this.closeChangePwdModal.bind(this);
 	}
-
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			user: Meteor.user(),
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
+			ready: !nextProps.settingsQuery.loading
+		});
+	}
 	static propTypes = {
-		user: PropTypes.object,
-		settings: PropTypes.object,
+		settingsQuery: PropTypes.object
 	}
 
 	static childContextTypes = {
@@ -87,7 +94,7 @@ class ProfilePage extends React.Component {
 	}
 
 	render() {
-		const { user, settings } = this.props;
+		const { user, settings } = this.state;
 
 		const toggleStyle = {
 			style: {
@@ -178,13 +185,4 @@ class ProfilePage extends React.Component {
 		);
 	}
 }
-
-export default createContainer(() => {
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-	return {
-		user: Meteor.user(),
-		settings: Settings.findOne(),
-		ready: settingsHandle.ready(),
-	};
-}, ProfilePage);
+export default compose(settingsQuery)(ProfilePage);

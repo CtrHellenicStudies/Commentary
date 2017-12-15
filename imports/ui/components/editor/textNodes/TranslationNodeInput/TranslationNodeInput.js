@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 } from 'react-bootstrap';
+import { compose } from 'react-apollo';
 import TranslationNodes from '/imports/models/translationNodes';
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import TextField from 'material-ui/TextField';
@@ -12,14 +12,36 @@ import _ from 'lodash';
 import {debounce} from 'throttle-debounce';
 import Cookies from 'js-cookie';
 
+// graphql
+import {
+	translationsQuery,
+	translationRemoveMutation,
+	translationUpdateMutation 
+} from '/imports/graphql/methods/translations';
+
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');
 
-class TranslationNodeInput extends React.Component {
+function getTranslationQueries(query, filter) {
+	
+	if (query.loading) {
+		return [];
+	}
+	return query.translations.filter(x => 
+		x.tenantId === filter.tenantId &&
+		x.work === filter.work && 
+		parseInt(x.subwork) === parseInt(filter.subwork) &&
+		x.author === filter.author)
+		.sort(function(a, b) {
+			return parseInt(a.n) - parseInt(b.n);
+		})
+		.slice(filter.skip, filter.limit);
+}
+class TranslationNodeInput extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			translationNodes: this.props.translationNodes,
+			translationNodes: [],
 			snackbarOpen: false,
 			snackbarMessage: '',
 			inserting: false,
@@ -29,18 +51,55 @@ class TranslationNodeInput extends React.Component {
 		this.moveTextNodeBlock = this.moveTextNodeBlock.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(props) {
+		const {selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation} = props;
+		const tenantId = sessionStorage.getItem('tenantId');
+		const filter = {
+			tenantId: tenantId,
+			work: selectedWork.slug,
+			subwork: selectedSubwork,
+			skip: startAtLine - 1,
+			limit: limit,
+			author: selectedTranslation
+		};
+	
+		const translation = getTranslationQueries(props.translationsQuery, filter);
+	
+		const translationNodes = translation;
+		if (!translation || translation.length === 0) {
+			for (let i = 0; i < limit; i++) {
+				let newLine;
+				const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
+	
+				if (arrIndex >= 0) {
+					newLine = translation[arrIndex];
+				}		else {
+					newLine = {
+						n: i + parseInt(startAtLine),
+						text: '',
+						tenantId: tenantId,
+						work: selectedWork.slug,
+						subwork: selectedSubwork,
+						author: selectedTranslation,
+					};
+				}
+	
+				translationNodes.push(newLine);
+			}
+		}
+	
 		this.setState({
-			translationNodes: nextProps.translationNodes,
+			translationNodes: translationNodes,
+			ready: !props.translationsQuery.loading
 		});
 	}
 
 	onChangeText(event, newValue) {
 		const index = parseInt(event.target.name.replace('_text', ''), 10);
 		const currentTranslationNode = this.state.translationNodes[index];
-
-		currentTranslationNode.text = newValue;
-
+		const updatedObject = Object.assign({}, currentTranslationNode);
+		updatedObject.text = newValue;
+		delete updatedObject.__typename;
 		if (newValue && !this.state.inserting) {
 			this.setState({
 				inserting: true
@@ -48,18 +107,16 @@ class TranslationNodeInput extends React.Component {
 
 			debounce(500, () => {
 				// Call update method on meteor backend
-				Meteor.call('translationNode.update', Cookies.get('loginToken'), currentTranslationNode,
-					(err, res) => {
-						if (err) {
-							console.error('Error editing text', err);
-							this.showSnackBar(err.message);
-						} else {
-							this.showSnackBar('Updated');
-							this.setState({
-								inserting: false
-							});
-						}
-					});
+				this.props.translationUpdate(updatedObject).then((res) => {
+					if (res.data) {
+						this.setState({
+							inserting: false
+						});
+						this.showSnackBar('Updated');
+					} else {
+						this.showSnackBar('Error');
+					}
+				});
 			})();
 		} else if (!newValue && !this.state.inserting) {
 			this.setState({
@@ -67,7 +124,7 @@ class TranslationNodeInput extends React.Component {
 			});
 			debounce(500, () => {
 				// Call update method on meteor backend
-				Meteor.call('translationNode.remove', Cookies.get('loginToken'), currentTranslationNode._id, (err, res) => {
+				this.props.translationRemove(currentTranslationNode._id).then((err, res) => {
 					if (err) {
 						console.error('Error removing text', err);
 						this.showSnackBar(err.message);
@@ -98,12 +155,14 @@ class TranslationNodeInput extends React.Component {
 		}, 4000);
 	}
 	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
+		if (this.timeout) { 
+			clearTimeout(this.timeout); 
+		}
 	}
 	render() {
 		const {translationNodes} = this.state;
 
-		if (!this.props.ready) {
+		if (!this.state.ready) {
 			return null;
 		}
 
@@ -163,44 +222,17 @@ class TranslationNodeInput extends React.Component {
 }
 
 TranslationNodeInput.propTypes = {
-	translationNodes: PropTypes.array,
-	ready: PropTypes.bool,
+	translationRemove: PropTypes.func,
+	translationUpdate: PropTypes.func,
+	translationsQuery: PropTypes.object,
+	startAtLine: PropTypes.number,
+	selectedSubwork: PropTypes.number,
+	selectedWork: PropTypes.object,
+	limit: PropTypes.number,
+	selectedTranslation: PropTypes.string
 };
-
-const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation}) => {
-	const tenantId = Session.get('tenantId');
-
-	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtLine, limit);
-	const ready = translationNodeSubscription.ready();
-
-	const translation = TranslationNodes.find().fetch();
-
-	const translationNodes = [];
-	for (let i = 0; i < limit; i++) {
-		let newLine;
-		const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
-
-		if (arrIndex >= 0) {
-			newLine = translation[arrIndex];
-		}		else {
-			newLine = {
-				n: i + parseInt(startAtLine),
-				text: '',
-				tenantId: tenantId,
-				work: selectedWork.slug,
-				subwork: selectedSubwork,
-				author: selectedTranslation,
-			};
-		}
-
-		translationNodes.push(newLine);
-	}
-
-	return {
-		ready,
-		translationNodes
-	};
-
-}, TranslationNodeInput);
-
-export default TranslationInputContainer;
+export default compose(
+	translationsQuery,
+	translationRemoveMutation,
+	translationUpdateMutation
+)(TranslationNodeInput);

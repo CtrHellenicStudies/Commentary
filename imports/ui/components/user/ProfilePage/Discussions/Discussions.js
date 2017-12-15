@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { Component} from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Session } from 'meteor/session';
+
+import { compose } from 'react-apollo';
 
 // models
 import DiscussionComments from '/imports/models/discussionComments';
 import Comments from '/imports/models/comments';
 import Settings from '/imports/models/settings';
+
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // components
 import DiscussionCommentsList from '/imports/ui/components/discussionComments/DiscussionCommentsList';
@@ -36,9 +41,9 @@ class Discussions extends React.Component {
 	}
 }
 
-const DiscussionsContainer = createContainer(() => {
+const DiscussionsContainer = createContainer((props) => {
 	let discussionComments = [];
-	Meteor.subscribe('settings.tenant', Session.get('tenantId'));
+	const tenantId = sessionStorage.getItem('tenantId');
 	Meteor.subscribe('user.discussionComments', Meteor.userId());
 	Meteor.subscribe('user.annotations', Meteor.userId());
 	Meteor.subscribe('user.bookmarks', Meteor.userId());
@@ -50,7 +55,7 @@ const DiscussionsContainer = createContainer(() => {
 	discussionComments.forEach((discussionComment, discussionCommentIndex) => {
 		const commentHandle = Meteor.subscribe('comments', {
 			_id: discussionComment.commentId,
-			tenantId: Session.get('tenantId')
+			tenantId: tenantId
 		}, 0, 1);
 
 		if (commentHandle.ready()) {
@@ -78,8 +83,11 @@ const DiscussionsContainer = createContainer(() => {
 
 	return {
 		discussionComments: [],
-		settings: Settings.findOne(),
+		settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
 	};
 }, Discussions);
 
-export default DiscussionsContainer;
+export default compose(
+	settingsQuery,
+	commentsQuery
+)(DiscussionsContainer);

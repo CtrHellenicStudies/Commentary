@@ -46,6 +46,7 @@ const addTranslationAuthor = (token, workDetails, authorName) => {
 	const workSlug = Works.findOne(workDetails.work).slug;
 
 	const newAuthor = Object.assign({}, workDetails, {author: authorName, work: workSlug});
+	console.log(newAuthor);
 
 	return TranslationNodes.insert(newAuthor);
 };

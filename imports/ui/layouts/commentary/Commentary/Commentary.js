@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import Parser from 'simple-text-parser';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { debounce } from 'throttle-debounce';
+import { compose } from 'react-apollo';
+
+import { commentsQuery, commentsMoreQuery } from '/imports/graphql/methods/comments';
+import { commentersQuery } from '/imports/graphql/methods/commenters';
+
 
 // models:
 import Comments from '/imports/models/comments';
@@ -21,14 +25,15 @@ import InfiniteScroll from '/imports/ui/components/shared/InfiniteScroll';
 import FilterWidget from '/imports/ui/components/commentary/FilterWidget';
 
 // lib
+import RaisedButton from 'material-ui/RaisedButton';
 import Utils from '/imports/lib/utils';
 import muiTheme from '/imports/lib/muiTheme';
 
 // helpers:
-import { createQueryFromFilters, parseCommentsToCommentGroups } from './helpers';
+import { getCommentsQuery, parseCommentsToCommentGroups } from './helpers';
 
 
-class Commentary extends React.Component {
+class Commentary extends Component {
 	static propTypes = {
 		skip: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
 		limit: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
@@ -37,28 +42,12 @@ class Commentary extends React.Component {
 		showLoginModal: PropTypes.func,
 		toggleSearchTerm: PropTypes.func,
 		loadMoreComments: PropTypes.func,
-
-		// from createContainer:
-		commentGroups: PropTypes.arrayOf(PropTypes.shape({
-			work: PropTypes.shape({
-				slug: PropTypes.string.isRequired,
-				title: PropTypes.string.isRequired,
-			}),
-			subwork: PropTypes.shape({
-				n: PropTypes.number.isRequired,
-			}),
-			lineFrom: PropTypes.number.isRequired,
-			lineTo: PropTypes.number,
-			commenters: PropTypes.arrayOf(PropTypes.shape({
-				_id: PropTypes.string.isRequired,
-				name: PropTypes.string.isRequired,
-				slug: PropTypes.string.isRequired,
-				avatar: PropTypes.shape({
-					src: PropTypes.string,
-				})
-			}))
-		})),
-		isMoreComments: PropTypes.bool,
+		tenantId: PropTypes.string,
+		history: PropTypes.object,
+		commentsQuery: PropTypes.object,
+		commentersQuery: PropTypes.object,
+		commentGroups: PropTypes.array,
+		commentsMoreQuery: PropTypes.object,
 		ready: PropTypes.bool,
 		settings: PropTypes.shape({
 			title: PropTypes.string,
@@ -93,7 +82,6 @@ class Commentary extends React.Component {
 			commentLemmaGroups: [],
 			multiline: null
 		};
-
 		// methods:
 		this.toggleLemmaEdition = this.toggleLemmaEdition.bind(this);
 		this.removeLemma = this.removeLemma.bind(this);
@@ -106,15 +94,20 @@ class Commentary extends React.Component {
 		this.loadMoreComments = this.loadMoreComments.bind(this);
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
-	}
 
+		this.props.commentsQuery.refetch();
+
+	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
+	raiseLimit() {
 
+	}
 	setPageTitleAndMeta() {
 
-		const { filters, settings, commentGroups } = this.props;
+		const { filters, settings } = this.props;
+		const commentGroups = this.props.commentsQuery ? [] : parseCommentsToCommentGroups(this.props.commentsQuery.comments);
 
 		let title = '';
 		let values = [];
@@ -256,20 +249,18 @@ class Commentary extends React.Component {
 	loadMoreComments() {
 		if (
 			!this.props.isOnHomeView
-			&& this.props.commentGroups.length
-			&& this.props.isMoreComments
+			&& this.props.commentsMoreQuery.commentsMore
 		) {
 			this.props.loadMoreComments();
 		}
 	}
-
 	renderNoCommentsOrLoading() {
-		const { isOnHomeView, isMoreComments, commentGroups, ready } = this.props;
+		const { isOnHomeView, commentGroups } = this.props;
 
 		if (
 			!isOnHomeView
 		) {
-			if (ready && commentGroups.length === 0) {
+			if (!this.props.commentsMoreQuery.commentsMore) {
 				return (
 					<div className="no-commentary-wrap">
 						<p className="no-commentary no-results">
@@ -277,7 +268,8 @@ class Commentary extends React.Component {
 						</p>
 					</div>
 				);
-			} else if (isMoreComments) {
+			}
+			if (this.props.commentersQuery.loading || this.props.commentsQuery.loading) {
 				return (
 					<div className="ahcip-spinner commentary-loading">
 						<div className="double-bounce1" />
@@ -286,19 +278,20 @@ class Commentary extends React.Component {
 				);
 			}
 		}
-
-		return '';
 	}
-
+	componentWillReceiveProps(newProps) {
+		this.setState({
+			commentGroups: newProps.commentersQuery.loading || newProps.commentsQuery.loading ? 
+			[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments,
+				newProps.commentersQuery.commenters)
+		});
+	}
 	render() {
-
-		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, commentGroups } = this.props;
-		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex } = this.state;
-
+		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
+		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, commentGroups } = this.state;
 		if (!isOnHomeView) {
 			this.setPageTitleAndMeta();
 		}
-
 		if (!commentGroups) {
 			return null;
 		}
@@ -306,30 +299,32 @@ class Commentary extends React.Component {
 		return (
 			<div className="commentary-primary content ">
 				{/* --- BEGIN comments list */}
-				<InfiniteScroll
-					endPadding={120}
-					loadMore={debounce(1000, this.loadMoreComments)}
-				>
-					<div className="commentary-comments commentary-comment-groups">
-						{commentGroups.map(commentGroup => (
-							<CommentGroup
-								key={commentGroup._id}
-								commentGroupIndex={commentGroup._id}
-								commentGroup={commentGroup}
-								contextPanelOpen={contextPanelOpen}
-								showContextPanel={this.showContextPanel}
-								setContextScrollPosition={this.setContextScrollPosition}
-								toggleSearchTerm={toggleSearchTerm}
-								showLoginModal={showLoginModal}
-								filters={filters}
-								isOnHomeView={isOnHomeView}
-								history={this.props.history}
-								selectMultiLine={this.selectMultiLine}
-								multiline={this.state.multiline}
-							/>
-						))}
-					</div>
-				</InfiniteScroll>
+				<div className="commentary-comments commentary-comment-groups">
+					{commentGroups.map(commentGroup => (
+						<CommentGroup
+							key={commentGroup._id}
+							commentGroupIndex={commentGroup._id}
+							commentGroup={commentGroup}
+							contextPanelOpen={contextPanelOpen}
+							showContextPanel={this.showContextPanel}
+							setContextScrollPosition={this.setContextScrollPosition}
+							toggleSearchTerm={toggleSearchTerm}
+							showLoginModal={showLoginModal}
+							filters={filters}
+							isOnHomeView={isOnHomeView}
+							history={this.props.history}
+							selectMultiLine={this.selectMultiLine}
+							multiline={this.state.multiline}
+						/>
+					))}
+				</div>
+				<div className="read-more-link">
+					<RaisedButton
+						onClick={this.loadMoreComments}
+						className="cover-link show-more commentary-raise-button"
+						label="Read More"
+					/>
+				</div>
 				{/* --- END comments list */}
 
 				{this.renderNoCommentsOrLoading()}
@@ -353,57 +348,9 @@ class Commentary extends React.Component {
 		);
 	}
 }
+export default compose(
+	commentsQuery,
+	commentersQuery,
+	commentsMoreQuery
+)(Commentary);
 
-
-export default createContainer(({ filters, skip, limit }) => {
-
-	let commentGroups = [];
-
-	const query = createQueryFromFilters(filters);
-	query.tenantId = Session.get('tenantId');
-
-	// SUBSCRIPTIONS:
-	const commentsSub = Meteor.subscribe('comments', query, skip, limit);
-	let isMoreComments = true;
-
-	// Update textsearch in query for client minimongo
-	if ('$text' in query) {
-		const textsearch = new RegExp(query.$text, 'i');
-		if(!query.$or)
-			query.$or = [
-				{ 'revisions.title': textsearch },
-				{ 'revisions.text': textsearch },
-			];
-		else
-			query.$or.push({$and:[			
-				{ 'revisions.title': textsearch },
-				{ 'revisions.text': textsearch },]});
-		delete query.$text;
-	}
-
-	// FETCH DATA:
-	const comments = Comments.find(query, {
-		sort: {
-			'work.order': 1,
-			'subwork.n': 1,
-			lineFrom: 1,
-			nLines: -1,
-		},
-	}).fetch();
-
-	commentGroups = parseCommentsToCommentGroups(comments);
-
-	if (comments.length < limit) {
-		isMoreComments = false;
-	}
-
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-	return {
-		commentGroups,
-		isMoreComments,
-		ready: commentsSub.ready(),
-		settings: settingsHandle.ready() ? Settings.findOne() : {},
-	};
-
-}, Commentary);

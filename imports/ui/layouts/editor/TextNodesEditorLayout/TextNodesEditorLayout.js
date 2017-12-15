@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
+
 import { Roles } from 'meteor/alanning:roles';
-import { createContainer } from 'meteor/react-meteor-data';
 import slugify from 'slugify';
 import { ApolloProvider } from 'react-apollo';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -70,26 +69,21 @@ class TextNodesEditorLayout extends React.Component {
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				<ApolloProvider
-					client={client}
-					store={store}
-				>
-					<div className="chs-layout chs-editor-layout add-comment-layout">
-						<Header
-							toggleSearchTerm={() => {}}
-							handleChangeLineN={() => {}}
-							filters={[]}
-							selectedWork={{ slug: 'iliad' }}
-						/>
-						<main>
-							<div className="commentary-comments">
-								<div className="comment-group">
-									<TextNodesEditor />
-								</div>
+				<div className="chs-layout chs-editor-layout add-comment-layout">
+					<Header
+						toggleSearchTerm={() => {}}
+						handleChangeLineN={() => {}}
+						filters={[]}
+						selectedWork={{ slug: 'iliad' }}
+					/>
+					<main>
+						<div className="commentary-comments">
+							<div className="comment-group">
+								<TextNodesEditor />
 							</div>
-						</main>
-					</div>
-				</ApolloProvider>
+						</div>
+					</main>
+				</div>
 			</MuiThemeProvider>
 		);
 	}

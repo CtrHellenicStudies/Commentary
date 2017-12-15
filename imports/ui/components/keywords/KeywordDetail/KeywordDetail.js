@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { createContainer } from 'meteor/react-meteor-data';
+
 import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -10,11 +9,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
+import { compose } from 'react-apollo';
 
-// models
-import Comments from '/imports/models/comments';
-import Keywords from '/imports/models/keywords';
-import Settings from '/imports/models/settings';
+// graphql
+import { settingsQuery } from '/imports/graphql/methods/settings';
+import { keywordsQuery, keywordRemoveMutation } from '/imports/graphql/methods/keywords';
+import { commentsQuery } from '/imports/graphql/methods/comments';
 
 // components
 import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
@@ -24,7 +24,7 @@ import CommentsRecent from '/imports/ui/components/commentary/comments/CommentsR
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';
-import Utils from '/imports/lib/utils';
+import Utils, {makeKeywordContextQueryFromComment} from '/imports/lib/utils';
 
 
 class KeywordDetail extends Component {
@@ -36,22 +36,42 @@ class KeywordDetail extends Component {
 			keywordReferenceModalVisible: false,
 			referenceTop: 0,
 			referenceLeft: 0,
-			keyword: ''
+			keyword: '',
+			tenantId: sessionStorage.getItem('tenantId')
 		};
-	}
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
+		this.props.keywordsQuery.refetch({
+			tenantId: this.state.tenantId
+		});
+
+	}
+	componentWillReceiveProps(props) {
+		const { match } = props;
+		const slug = match.params.slug;
+	
+		const keyword = props.keywordsQuery.loading ? {} : props.keywordsQuery.keywords
+			.find(x => x.slug === slug);
+	
+		let keywordComments = null;
+		if (keyword) {
+			const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
+			props.commentsQuery.refetch({
+				queryParam: JSON.stringify(keywordCommentsQuery)
+			});
+			keywordComments = props.commentsQuery.loading ? [] : props.commentsQuery.comments;
+		}
+		this.setState({
+			keyword,
+			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
+			keywordComments,
+		});
 	}
 
 	deleteKeyword() {
-		const { keyword } = this.props;
-		Meteor.call('keywords.delete', Cookies.get('loginToken'), keyword._id, (error, keywordId) => {
-			if (error) {
-				console.log(keywordId, error);
-			} else {
-				this.props.history.push('/words');
-			}
+		const that = this;
+		const { keyword } = this.state;
+		this.props.keywordRemove(keyword._id).then(function() {
+			that.props.history.push('/words');
 		});
 	}
 
@@ -79,7 +99,7 @@ class KeywordDetail extends Component {
 	}
 
 	render() {
-		const { keyword, settings, keywordComments } = this.props;
+		const { keyword, settings, keywordComments } = this.state;
 
 		if (!keyword) {
 			return <div />;
@@ -130,7 +150,13 @@ class KeywordDetail extends Component {
 
 						<section className="page-content">
 							{keyword.lineFrom ?
-								<KeywordContext keyword={keyword} />
+								<KeywordContext 
+									keyword={keyword}
+									lineFrom={this.state.lineFrom} 
+									lineTo={this.state.lineTo}
+									workSlug={this.state.workSlug}
+									subworkN={this.state.subworkN}
+								/>
 							: ''}
 							{(
 								keyword.description
@@ -172,45 +198,17 @@ class KeywordDetail extends Component {
 		);
 	}
 }
-
-
 KeywordDetail.propTypes = {
-	keyword: PropTypes.object,
-	settings: PropTypes.object,
-	keywordComments: PropTypes.array,
+	settingsQuery: PropTypes.object,
+	keywordsQuery: PropTypes.object,
+	commentsQuery: PropTypes.object,
+	history: PropTypes.object,
+	keywordRemove: PropTypes.func,
+	match: PropTypes.object
 };
-
-KeywordDetail.childContextTypes = {
-	muiTheme: PropTypes.object.isRequired,
-};
-
-
-const KeywordDetailContainer = createContainer(({ match }) => {
-	const slug = match.params.slug;
-	// SUBSCRIPTIONS:
-	Meteor.subscribe('keywords.slug', slug, Session.get('tenantId'));
-	const settingsHandle = Meteor.subscribe('settings.tenant', Session.get('tenantId'));
-
-
-	// FETCH DATA:
-	const query = {
-		slug,
-	};
-	const keyword = Keywords.findOne(query);
-
-	let keywordComments = null;
-	if (keyword) {
-		const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
-		Meteor.subscribe('comments', keywordCommentsQuery);
-
-		keywordComments = Comments.find(keywordCommentsQuery).fetch();
-	}
-
-	return {
-		keyword,
-		settings: settingsHandle.ready() ? Settings.findOne() : {},
-		keywordComments,
-	};
-}, KeywordDetail);
-
-export default KeywordDetailContainer;
+export default compose(
+	settingsQuery,
+	keywordsQuery,
+	keywordRemoveMutation,
+	commentsQuery
+)(KeywordDetail);

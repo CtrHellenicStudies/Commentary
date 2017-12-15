@@ -191,7 +191,7 @@ class CommentDetail extends React.Component {
 	}
 
 	addSearchTerm(keyword) {
-		if (!('isOnHomeView' in this.props) || this.props.isOnHomeView === false) {
+		if (!(this.props.isOnHomeView) || this.props.isOnHomeView === false) {
 			this.props.toggleSearchTerm('keywords', keyword);
 		} else {
 			const urlParams = qs.stringify({ keywords: keyword.slug });

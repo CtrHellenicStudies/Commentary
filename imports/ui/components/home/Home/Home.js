@@ -261,6 +261,7 @@ class Home extends Component {
 									filters={[]}
 									skip={0}
 									limit={10}
+									history={this.props.history}
 								/> : ''
 							}
 							<div className="read-more-link">
@@ -284,6 +285,7 @@ class Home extends Component {
 Home.propTypes = {
 	settingsQuery: PropTypes.object,
 	isTest: PropTypes.bool,
+	history: PropTypes.object
 };
 
 Home.childContextTypes = {

@@ -48,7 +48,6 @@ class Commentary extends Component {
 		commentersQuery: PropTypes.object,
 		commentGroups: PropTypes.array,
 		commentsMoreQuery: PropTypes.object,
-		ready: PropTypes.bool,
 		settings: PropTypes.shape({
 			title: PropTypes.string,
 		}),

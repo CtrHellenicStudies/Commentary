@@ -10,7 +10,12 @@ query settingsQuery {
   subtitle
   footer
   emails
-  introBlocks
+  introBlocks {
+	  title
+	  text
+	  linkURL
+	  linkText
+  }
   tenantId
   webhooksToken
   homepageCover

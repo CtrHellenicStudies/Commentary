@@ -12,13 +12,13 @@ query worksQuery ($tenantId: ID) {
 		order
 		nComments
 		subworks {
-      title
-      slug
-      n
-      tlgNumber
-      nComments
-      commentHeatmap
-    }
+			title
+			slug
+			n
+			tlgNumber
+			nComments
+			commentHeatmap
+		}
 	}
 }
 `;

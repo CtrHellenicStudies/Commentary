@@ -81,7 +81,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	/>
 );
 const routes = (props) => {
-	if (!sessionStorage.getItem('tenantId')) {
+	if (!sessionStorage.getItem('tenantId') || sessionStorage.getItem('tenantId') === 'null') {
 		const hostnameArray = document.location.hostname.split('.');
 		let subdomain;
 

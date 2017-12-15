@@ -5,8 +5,22 @@ query translationsQuery ($tenantId: ID) {
 	translations (tenantId: $tenantId) {
 		tenantId
 		author
-		work
-		subwork
+		work {
+			_id
+			title
+			tenantId
+			slug
+			subworks {
+				title
+				slug
+				n
+			}
+		}
+		subwork {
+			title
+			slug
+			n
+		}
 		n
 		text
 	}

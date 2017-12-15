@@ -9,10 +9,31 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 		originalDate
 		status
 		tenantId
-		commenters
+		commenters {
+			_id
+			name
+			avatar
+			bio
+			isAuthor
+			slug
+		}
 		users
-		work
-		subwork
+		work {
+			_id
+			title
+			tenantId
+			slug
+			subworks {
+				title
+				slug
+				n
+			}
+		}
+		subwork {
+			title
+			slug
+			n
+		}
 		lineFrom
 		lineTo
 		lineLetter
@@ -22,10 +43,57 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 		commentOrder
 		parentCommentId
 		referenceId
-		referenceWorks
-		keywords
-		revisions
-		discussionComments
+		referenceWorks {
+			_id
+			title
+			slug
+			tenantId
+			link
+			authors
+			coverImage
+			urnCode
+			date
+			description
+			citation
+		}
+		keywords {
+			_id
+			title
+			slug
+			description
+			descriptionRaw
+			type
+			count
+			work {
+				_id
+			}
+			subwork {
+				n
+			}
+			lineFrom
+			lineTo
+			lineLetter
+			tenantId
+			nLines
+		}
+		revisions {
+			_id
+			title
+			text
+			slug
+			tenantId
+		}
+		discussionComments {
+			content
+			status
+			votes
+			commentId
+			parentId
+			voters
+			reported
+			usersReported
+			tenantId
+		}
 		isAnnotation
 		discussionCommentsDisabled
 		created

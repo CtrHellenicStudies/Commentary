@@ -47,8 +47,22 @@ query textNodesQuery ($tenantId: ID $workSlug: String $subworkN: Int $lineFrom: 
   _id
   tenantId
   text
-  work
-  subwork
+  work {
+	_id
+	title
+	tenantId
+	slug
+	subworks {
+		title
+		slug
+		n
+	}
+}
+subwork {
+	title
+	slug
+	n
+}
   relatedPassages
   }
 }

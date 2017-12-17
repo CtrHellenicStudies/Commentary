@@ -80,6 +80,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	)}
 	/>
 );
+
 const routes = (props) => {
 	if (!sessionStorage.getItem('tenantId')) {
 		const hostnameArray = document.location.hostname.split('.');
@@ -91,38 +92,57 @@ const routes = (props) => {
 			subdomain = '';
 			return <Route component={NotFound} />;
 		}
+
 		props.tenantsBySubdomainQuery.variables.subdomain = subdomain;
-		if (!props.tenantsBySubdomainQuery.loading && props.tenantsBySubdomainQuery.tenantBySubdomain) {
+		if (
+			!props.tenantsBySubdomainQuery.loading
+			&& props.tenantsBySubdomainQuery.tenantBySubdomain
+		) {
 			sessionStorage.setItem('tenantId', props.tenantsBySubdomainQuery.tenantBySubdomain._id);
-		} else if (!props.tenantsBySubdomainQuery.loading && !props.tenantsBySubdomainQuery.tenantBySubdomain) {
+
+		} else if (
+			!props.tenantsBySubdomainQuery.loading
+			&& !props.tenantsBySubdomainQuery.tenantBySubdomain
+		) {
 			sessionStorage.setItem('noTenant', true);
 		}
 	}
+
 	if (sessionStorage.getItem('noTenant')) {
 		return <Route component={NotFound} />;
 	}
+
 	return (
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
-			<Route
-				exact path="/sign-in" render={(params) => <HomeLayout {...params} signup />}
-			/>
+
+			{/** Commentary routes */}
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
-			<Route exact path="/commenters" component={CommentersPage} />
+
+
+			{/** Tags routes */}
 			<PrivateRoute exact path="/tags/:slug/edit" component={EditKeywordLayout} />
 			<PrivateRoute exact path="/tags/create" component={AddKeywordLayout} />
 			<Route exact path="/tags/:slug" component={KeywordDetail} />
 			<Route path="/words" render={() => <KeywordsPage type="word" title="Words" />} />
 			<Route path="/ideas" render={() => <KeywordsPage type="idea" title="Ideas" />} />
+
+			{/** Reference works routes */}
 			<Route exact path="/referenceWorks/:slug" component={ReferenceWorkDetail} />
 			<Route exact path="/referenceWorks" render={() => <ReferenceWorksPage title="ReferenceWorks" />} />
+
+			{/** Commenters routes */}
 			<Route path="/commenters/:slug" render={(props) => <CommenterDetail {...props} defaultAvatarUrl="/images/default_user.jpg" />} />
 			<Route exact path="/commenters" component={CommentersPage} />
+
+			{/** Commenters routes */}
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
 			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
+
+			{/** Users routes */}
 			<Route
 				path="/users/:userId" render={(params) => {
 					if (Meteor.userId() && Meteor.userId() === params.match.params.userId) {
@@ -130,6 +150,11 @@ const routes = (props) => {
 					}
 					return <PublicProfilePage userId={params.match.params.userId} />;
 				}}
+			/>
+
+			{/** Auth routes */}
+			<Route
+				exact path="/sign-in" render={(params) => <HomeLayout {...params} signup />}
 			/>
 			<Route
 				path="/sign-out" render={() => {
@@ -149,16 +174,21 @@ const routes = (props) => {
 			<Route
 				exact path="/forgot-password" render={(params) => <HomeLayout {...params} showForgotPwd />}
 			/>
+
+
+			{/** NRS routes */}
 			<Route exact path="/v1/" component={NameResolutionServiceLayout} />
 			<Route
 				exact path="/v1/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={1} urn={params.match.params.urn} commentId={params.match.params.commentId} />}
 			/>
-			<Route 
+			<Route
 				exact path="/v2/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={2} urn={params.match.params.urn} commentId={params.match.params.commentId} />}
 			/>
 			<Route
 				exact path="/v1/doi:doi" render={(params) => <NameResolutionServiceLayout version={1} doi={params.match.params.doi} />}
 			/>
+
+			{/** Basic page routes */}
 			<Route
 				path="/:slug" render={(params) => {
 					const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
@@ -168,6 +198,8 @@ const routes = (props) => {
 					return <Redirect to="/" />;
 				}}
 			/>
+
+			{/** 404 routes */}
 			<Route component={NotFound} />
 		</Switch>
 	);

@@ -54,19 +54,26 @@ class LeftMenu extends Component {
 
 	render() {
 		const { open, closeLeftMenu } = this.props;
-		const { tenant, settings, currentUser } = this.state;
+		const { currentUser } = this.state;
 
 		let tenant;
 		let settings;
-		if (this.props.tenantsQuery && !this.props.tenantsQuery.loading) {
+
+		if (
+			!this.props.tenantsQuery.loading
+			&& this.props.tenantsQuery.tenants
+		) {
 			tenant = this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId);
 		}
-		if (this.props.settingsQuery && !this.props.settingsQuery.loading) {
+
+		if (
+			!this.props.settingsQuery.loading
+			&& this.props.settingsQuery.settings
+		) {
 		 	settings = this.props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId);
 		}
 
 		return (
-
 			<Drawer
 				open={open}
 				docked={false}

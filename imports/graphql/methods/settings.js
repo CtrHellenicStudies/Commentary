@@ -10,7 +10,12 @@ query settingsQuery {
   subtitle
   footer
   emails
-  introBlocks
+  introBlocks {
+		title
+		text
+		linkURL
+		linkText
+	}
   tenantId
   webhooksToken
   homepageCover
@@ -40,7 +45,12 @@ query settingsQuery($id: String!) {
   homepageIntroductionImage
   homepageIntroductionImageCaption
   discussionCommentsDisabled
-  introBlocks
+  introBlocks {
+		title
+		text
+		linkURL
+		linkText
+	}
   aboutURL
   }
 }
@@ -63,7 +73,12 @@ const settingsUpdate = gql`
   homepageIntroductionImage
   homepageIntroductionImageCaption
   discussionCommentsDisabled
-  introBlocks
+  introBlocks {
+		title
+		text
+		linkURL
+		linkText
+	}
   aboutURL
 	}
 }

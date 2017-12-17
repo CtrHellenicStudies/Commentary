@@ -1,8 +1,10 @@
 import { DocHead } from 'meteor/kadira:dochead';
 import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
-import {convertFromRaw, EditorState, ContentState, convertFromHTML} from 'draft-js';
-import {compose} from 'react-apollo';
+import {
+	convertFromRaw, EditorState, ContentState, convertFromHTML 
+} from 'draft-js';
+import { compose } from 'react-apollo';
 
 // models
 import { commentersQuery } from '/imports/graphql/methods/commenters';
@@ -35,7 +37,7 @@ const Utils = {
 			} else {
 				ret = urn.v1;
 			}
-				
+
 		} catch (error) {
 			console.log('Old urn exists in database.');
 		}
@@ -491,7 +493,7 @@ export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	let lineTo = comment.lineFrom;
 	if (comment.hasOwnProperty('lineTo')) {
 		lineTo = comment.lineFrom + Math.min(
-				maxLines, 
+				maxLines,
 				comment.lineTo - comment.lineFrom
 			);
 	} else if (comment.hasOwnProperty('nLines')) {

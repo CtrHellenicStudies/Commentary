@@ -1,10 +1,15 @@
-import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import React from 'react';
-import {Session} from 'meteor/session';
+import { Session } from 'meteor/session';
 import Cookies from 'js-cookie';
-import Utils from '/imports/lib/utils';
-import { tenantsBySubdomainQuery } from '/imports/graphql/methods/tenants';
 import { Meteor } from 'meteor/meteor';
+import { ApolloProvider, createNetworkInterface, compose } from 'react-apollo';
+
+// lib
+import Utils from '/imports/lib/utils';
+
+// graphql
+import { tenantsBySubdomainQuery } from '/imports/graphql/methods/tenants';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -18,10 +23,8 @@ import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
 import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
-import { ApolloProvider, createNetworkInterface, compose } from 'react-apollo';
 
 // pages
-
 import Page from '/imports/ui/components/pages/Page';
 import CommentersPage from '/imports/ui/components/commenters/CommentersPage';
 import CommenterDetail from '/imports/ui/components/commenters/CommenterDetail';
@@ -31,7 +34,8 @@ import ProfilePage from '/imports/ui/components/user/ProfilePage';
 import PublicProfilePage from '/imports/ui/components/user/PublicProfilePage';
 import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
-import ModalSignup from '../../ui/layouts/auth/ModalSignup/ModalSignup';
+import ModalSignup from '/imports/ui/layouts/auth/ModalSignup/ModalSignup';
+
 
 if (Meteor.userId()) {
 	Meteor.subscribe('users.id', Meteor.userId());
@@ -60,10 +64,15 @@ if (Meteor.userId()) {
 		Meteor.loginWithToken(loginToken);
 	}
 }
+
 if (Meteor.isClient) {
 	Utils.setBaseDocMeta();
 }
 
+/**
+ * Private route
+ * create a route restricted to a logged in user
+ */
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
 		{...rest} render={props => (
@@ -81,19 +90,17 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	/>
 );
 
+/**
+ * Application routes
+ */
 const routes = (props) => {
-	if (!sessionStorage.getItem('tenantId')) {
-		const hostnameArray = document.location.hostname.split('.');
-		let subdomain;
 
-		if (hostnameArray.length > 2) {
-			subdomain = hostnameArray[0];
-		} else {
-			subdomain = '';
+	if (!sessionStorage.getItem('tenantId')) {
+
+		if (!props.tenantSubdomain) {
 			return <Route component={NotFound} />;
 		}
 
-		props.tenantsBySubdomainQuery.variables.subdomain = subdomain;
 		if (
 			!props.tenantsBySubdomainQuery.loading
 			&& props.tenantsBySubdomainQuery.tenantBySubdomain
@@ -107,6 +114,12 @@ const routes = (props) => {
 			sessionStorage.setItem('noTenant', true);
 		}
 	}
+
+	console.log('#################');
+	console.log('#################');
+	console.log(props);
+	console.log('#################');
+	console.log('#################');
 
 	if (sessionStorage.getItem('noTenant')) {
 		return <Route component={NotFound} />;
@@ -204,9 +217,14 @@ const routes = (props) => {
 		</Switch>
 	);
 };
+
+/**
+ * Main application entry point
+ */
 const App = (props) => (
 	<BrowserRouter>
 		{routes(props)}
 	</BrowserRouter>
 );
+
 export default compose(tenantsBySubdomainQuery)(App);

@@ -11,6 +11,7 @@ const uriAddress = settings.REACT_APP_GRAPHQL_SERVER ? settings.graphql : 'http:
 const networkInterface = createNetworkInterface({
 	uri: uriAddress,
 });
+
 /**
  * Connection to graphql server
  * @type {ApolloClient}

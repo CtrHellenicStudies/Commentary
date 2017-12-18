@@ -41,6 +41,10 @@ Settings.schema = new SimpleSchema({
 	tenantId: {
 		type: String,
 	},
+	works: {
+		type: [Object],
+		optional: true,
+	},
 
 	webhooksToken: {
 		optional: true,

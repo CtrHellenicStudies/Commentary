@@ -184,6 +184,7 @@ class CommentaryLayout extends Component {
 		});
 	}
 	componentWillReceiveProps(nextProps) {
+		console.log(nextProps);
 		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
 		const works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works;
 		this.setState({

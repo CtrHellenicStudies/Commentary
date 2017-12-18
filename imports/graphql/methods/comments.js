@@ -5,14 +5,18 @@ const query = gql`
 query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Boolean) {
 	comments(queryParam: $queryParam skip: $skip limit: $limit sortRecent: $sortRecent) {
 		_id
-		urn
+		urn {
+			v2
+		}
 		originalDate
 		status
 		tenantId
 		commenters {
 			_id
 			name
-			avatar
+			avatar {
+				src
+			}
 			bio
 			isAuthor
 			slug

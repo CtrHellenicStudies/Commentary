@@ -72,7 +72,6 @@ const parseCommentsToCommentGroups = (comments, allCommenters) => {
 			addCommetersToCommentGroup(allCommenters, comment, commentGroup.commenters);
 		});
 	});
-
 	return commentGroups;
 };
 

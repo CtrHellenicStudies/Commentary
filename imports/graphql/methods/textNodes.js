@@ -31,9 +31,28 @@ const queryById = gql`
 query textNodesQueryById($id: ID!) {
   textNodes(_id: $id) {
   tenantId
-  text 
-  work
-  subwork
+	text {
+		n
+		text
+		html
+		edition
+	}
+	work {
+		_id
+		title
+		tenantId
+		slug
+		subworks {
+			title
+			slug
+			n
+		}
+	}
+	subwork {
+		title
+		slug
+		n
+	}
   relatedPassages
   }
 }
@@ -46,7 +65,12 @@ query textNodesQuery ($tenantId: ID $workSlug: String $subworkN: Int $lineFrom: 
 	lineFrom: $lineFrom lineTo: $lineTo skip: $skip limit: $limit editionId: $editionId) {
   _id
   tenantId
-  text
+  text {
+		n
+		text
+		html
+		edition
+	}
   work {
 	_id
 	title

@@ -4,7 +4,9 @@ const query = gql`
 query commenters ($tenantId: String) {
 	commenters (tenantId: $tenantId) {
 		_id
-		avatar
+		avatar {
+			src
+		}
 		name
 		slug
 		tenantId

@@ -8,7 +8,6 @@ import { debounce } from 'throttle-debounce';
 import { compose } from 'react-apollo';
 
 import { commentsQuery, commentsMoreQuery } from '/imports/graphql/methods/comments';
-import { commentersQuery } from '/imports/graphql/methods/commenters';
 
 
 // models:
@@ -45,7 +44,6 @@ class Commentary extends Component {
 		tenantId: PropTypes.string,
 		history: PropTypes.object,
 		commentsQuery: PropTypes.object,
-		commentersQuery: PropTypes.object,
 		commentGroups: PropTypes.array,
 		commentsMoreQuery: PropTypes.object,
 		settings: PropTypes.shape({
@@ -268,7 +266,7 @@ class Commentary extends Component {
 					</div>
 				);
 			}
-			if (this.props.commentersQuery.loading || this.props.commentsQuery.loading) {
+			if (this.props.commentsQuery.loading) {
 				return (
 					<div className="ahcip-spinner commentary-loading">
 						<div className="double-bounce1" />
@@ -280,9 +278,8 @@ class Commentary extends Component {
 	}
 	componentWillReceiveProps(newProps) {
 		this.setState({
-			commentGroups: newProps.commentersQuery.loading || newProps.commentsQuery.loading ? 
-			[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments,
-				newProps.commentersQuery.commenters)
+			commentGroups: newProps.commentsQuery.loading ? 
+			[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments)
 		});
 	}
 	render() {
@@ -294,7 +291,6 @@ class Commentary extends Component {
 		if (!commentGroups) {
 			return null;
 		}
-
 		return (
 			<div className="commentary-primary content ">
 				{/* --- BEGIN comments list */}
@@ -349,7 +345,6 @@ class Commentary extends Component {
 }
 export default compose(
 	commentsQuery,
-	commentersQuery,
 	commentsMoreQuery
 )(Commentary);
 

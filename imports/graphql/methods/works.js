@@ -2,7 +2,7 @@ import { gql, graphql } from 'react-apollo';
 
 const query = gql`
 query worksQuery ($tenantId: ID) {
-	works (tenantId: $tenantId) {
+	worksAhcip (tenantId: $tenantId) {
 		_id
 		title
 		tenantId
@@ -32,5 +32,5 @@ const worksQuery = graphql(query, {
 		});
 	}
 });
-
+console.log(worksQuery);
 export { worksQuery };

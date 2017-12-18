@@ -45,7 +45,12 @@ query settingsQuery($id: String!) {
   homepageIntroductionImage
   homepageIntroductionImageCaption
   discussionCommentsDisabled
-  introBlocks
+  introBlocks {
+		title
+		text
+		linkURL
+		linkText
+	}
   aboutURL
   }
 }
@@ -68,7 +73,12 @@ const settingsUpdate = gql`
   homepageIntroductionImage
   homepageIntroductionImageCaption
   discussionCommentsDisabled
-  introBlocks
+  introBlocks {
+		title
+		text
+		linkURL
+		linkText
+	}
   aboutURL
 	}
 }

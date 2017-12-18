@@ -23,7 +23,8 @@ Meteor.startup(() => {
 		try {
 			Roles.createRole(role);
 		} catch (err) {
-			console.log(err);
+			// Do not log errors for expected behavior of Roles existing
+			// console.log(err);
 		}
 	});
 

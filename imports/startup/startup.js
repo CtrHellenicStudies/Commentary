@@ -21,12 +21,13 @@ import { ApolloClient } from 'apollo-client';
 
 import App from './client/App';
 
+// Setup apollo client network interface (also TODO @ /imports/middleware/apolloClient)
 const uriAddress = Meteor.settings.public.graphql ? Meteor.settings.public.graphql : 'http://ahcip.orphe.us/graphql'; // TODO
-
 
 const networkInterface = createNetworkInterface({
 	uri: uriAddress,
 });
+
 const client = new ApolloClient({
 	networkInterface
 });
@@ -42,8 +43,20 @@ networkInterface.use([{
 	}
 }]);
 
-Meteor.startup(() => {
-	// injectTapEventPlugin();
-	render(<ApolloProvider client={client}><App /></ApolloProvider>, document.getElementById('app'));
-});
+// Get tenant subdomain
+const hostnameArray = document.location.hostname.split('.');
+let tenantSubdomain;
+if (hostnameArray.length > 2) {
+	tenantSubdomain = hostnameArray[0];
+}
 
+Meteor.startup(() => {
+	render(
+		<ApolloProvider client={client}>
+			<App
+				subdomain={tenantSubdomain}
+			/>
+		</ApolloProvider>,
+		document.getElementById('app')
+	);
+});

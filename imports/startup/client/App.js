@@ -1,10 +1,15 @@
-import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import React from 'react';
-import {Session} from 'meteor/session';
+import { Session } from 'meteor/session';
 import Cookies from 'js-cookie';
-import Utils from '/imports/lib/utils';
-import { tenantsBySubdomainQuery } from '/imports/graphql/methods/tenants';
 import { Meteor } from 'meteor/meteor';
+import { ApolloProvider, createNetworkInterface, compose } from 'react-apollo';
+
+// lib
+import Utils from '/imports/lib/utils';
+
+// graphql
+import { tenantsBySubdomainQuery } from '/imports/graphql/methods/tenants';
 
 // layouts
 import CommentaryLayout from '/imports/ui/layouts/commentary/CommentaryLayout';
@@ -18,10 +23,8 @@ import HomeLayout from '/imports/ui/layouts/home/HomeLayout';
 import MasterLayout from '/imports/ui/layouts/master/MasterLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 import NotFound from '/imports/ui/layouts/notFound/NotFound';
-import { ApolloProvider, createNetworkInterface, compose } from 'react-apollo';
 
 // pages
-
 import Page from '/imports/ui/components/pages/Page';
 import CommentersPage from '/imports/ui/components/commenters/CommentersPage';
 import CommenterDetail from '/imports/ui/components/commenters/CommenterDetail';
@@ -31,7 +34,8 @@ import ProfilePage from '/imports/ui/components/user/ProfilePage';
 import PublicProfilePage from '/imports/ui/components/user/PublicProfilePage';
 import ReferenceWorksPage from '/imports/ui/components/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from '/imports/ui/components/referenceWorks/ReferenceWorkDetail';
-import ModalSignup from '../../ui/layouts/auth/ModalSignup/ModalSignup';
+import ModalSignup from '/imports/ui/layouts/auth/ModalSignup/ModalSignup';
+
 
 if (Meteor.userId()) {
 	Meteor.subscribe('users.id', Meteor.userId());
@@ -60,10 +64,15 @@ if (Meteor.userId()) {
 		Meteor.loginWithToken(loginToken);
 	}
 }
+
 if (Meteor.isClient) {
 	Utils.setBaseDocMeta();
 }
 
+/**
+ * Private route
+ * create a route restricted to a logged in user
+ */
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
 		{...rest} render={props => (
@@ -80,49 +89,67 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	)}
 	/>
 );
-const routes = (props) => {
-	if (!sessionStorage.getItem('tenantId') || sessionStorage.getItem('tenantId') === 'null') {
-		const hostnameArray = document.location.hostname.split('.');
-		let subdomain;
 
-		if (hostnameArray.length > 2) {
-			subdomain = hostnameArray[0];
-		} else {
-			subdomain = '';
+/**
+ * Application routes
+ */
+const routes = (props) => {
+
+	if (!sessionStorage.getItem('tenantId')) {
+		if (!props.subdomain) {
 			return <Route component={NotFound} />;
 		}
-		props.tenantsBySubdomainQuery.variables.subdomain = subdomain;
-		if (!props.tenantsBySubdomainQuery.loading && props.tenantsBySubdomainQuery.tenantBySubdomain) {
+
+		if (
+			!props.tenantsBySubdomainQuery.loading
+			&& props.tenantsBySubdomainQuery.tenantBySubdomain
+		) {
 			sessionStorage.setItem('tenantId', props.tenantsBySubdomainQuery.tenantBySubdomain._id);
-		} else if (!props.tenantsBySubdomainQuery.loading && !props.tenantsBySubdomainQuery.tenantBySubdomain) {
+
+		} else if (
+			!props.tenantsBySubdomainQuery.loading
+			&& !props.tenantsBySubdomainQuery.tenantBySubdomain
+		) {
 			sessionStorage.setItem('noTenant', true);
 		}
 	}
+
+
 	if (sessionStorage.getItem('noTenant')) {
 		return <Route component={NotFound} />;
 	}
+
 	return (
 		<Switch>
 			<Route exact path="/" component={HomeLayout} />
-			<Route
-				exact path="/sign-in" render={(params) => <HomeLayout {...params} signup />}
-			/>
+
+			{/** Commentary routes */}
 			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
 			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
-			<Route exact path="/commenters" component={CommentersPage} />
+
+
+			{/** Tags routes */}
 			<PrivateRoute exact path="/tags/:slug/edit" component={EditKeywordLayout} />
 			<PrivateRoute exact path="/tags/create" component={AddKeywordLayout} />
 			<Route exact path="/tags/:slug" component={KeywordDetail} />
 			<Route path="/words" render={() => <KeywordsPage type="word" title="Words" />} />
 			<Route path="/ideas" render={() => <KeywordsPage type="idea" title="Ideas" />} />
+
+			{/** Reference works routes */}
 			<Route exact path="/referenceWorks/:slug" component={ReferenceWorkDetail} />
 			<Route exact path="/referenceWorks" render={() => <ReferenceWorksPage title="ReferenceWorks" />} />
+
+			{/** Commenters routes */}
 			<Route path="/commenters/:slug" render={(props) => <CommenterDetail {...props} defaultAvatarUrl="/images/default_user.jpg" />} />
 			<Route exact path="/commenters" component={CommentersPage} />
+
+			{/** Editor routes */}
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
 			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
+
+			{/** Users routes */}
 			<Route
 				path="/users/:userId" render={(params) => {
 					if (Meteor.userId() && Meteor.userId() === params.match.params.userId) {
@@ -130,6 +157,11 @@ const routes = (props) => {
 					}
 					return <PublicProfilePage userId={params.match.params.userId} />;
 				}}
+			/>
+
+			{/** Auth routes */}
+			<Route
+				exact path="/sign-in" render={(params) => <HomeLayout {...params} signup />}
 			/>
 			<Route
 				path="/sign-out" render={() => {
@@ -149,16 +181,21 @@ const routes = (props) => {
 			<Route
 				exact path="/forgot-password" render={(params) => <HomeLayout {...params} showForgotPwd />}
 			/>
+
+
+			{/** NRS routes */}
 			<Route exact path="/v1/" component={NameResolutionServiceLayout} />
 			<Route
 				exact path="/v1/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={1} urn={params.match.params.urn} commentId={params.match.params.commentId} />}
 			/>
-			<Route 
+			<Route
 				exact path="/v2/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={2} urn={params.match.params.urn} commentId={params.match.params.commentId} />}
 			/>
 			<Route
 				exact path="/v1/doi:doi" render={(params) => <NameResolutionServiceLayout version={1} doi={params.match.params.doi} />}
 			/>
+
+			{/** Basic page routes */}
 			<Route
 				path="/:slug" render={(params) => {
 					const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
@@ -168,13 +205,20 @@ const routes = (props) => {
 					return <Redirect to="/" />;
 				}}
 			/>
+
+			{/** 404 routes */}
 			<Route component={NotFound} />
 		</Switch>
 	);
 };
+
+/**
+ * Main application entry point
+ */
 const App = (props) => (
 	<BrowserRouter>
 		{routes(props)}
 	</BrowserRouter>
 );
+
 export default compose(tenantsBySubdomainQuery)(App);

@@ -44,19 +44,36 @@ class LeftMenu extends Component {
 			tenantId: sessionStorage.getItem('tenantId')
 		};
 	}
+
 	componentWillReceiveProps(nextProps) {
+
 		this.setState({
-			tenant: nextProps.tenantsQuery.loading ? undefined : nextProps.tenantsQuery.tenants.find(x => x._id === this.state.tenantId),
-			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
 			currentUser: Meteor.users.findOne({_id: Meteor.userId()})
 		});
 	}
+
 	render() {
 		const { open, closeLeftMenu } = this.props;
-		const { tenant, settings, currentUser } = this.state;
+		const { currentUser } = this.state;
+
+		let tenant;
+		let settings;
+
+		if (
+			!this.props.tenantsQuery.loading
+			&& this.props.tenantsQuery.tenants
+		) {
+			tenant = this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId);
+		}
+
+		if (
+			!this.props.settingsQuery.loading
+			&& this.props.settingsQuery.settings
+		) {
+		 	settings = this.props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId);
+		}
 
 		return (
-				
 			<Drawer
 				open={open}
 				docked={false}
@@ -190,6 +207,7 @@ class LeftMenu extends Component {
 		);
 	}
 }
+
 LeftMenu.propTypes = {
 	open: PropTypes.bool.isRequired,
 	closeLeftMenu: PropTypes.func.isRequired,

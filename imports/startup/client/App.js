@@ -96,8 +96,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 const routes = (props) => {
 
 	if (!sessionStorage.getItem('tenantId')) {
-
-		if (!props.tenantSubdomain) {
+		if (!props.subdomain) {
 			return <Route component={NotFound} />;
 		}
 
@@ -115,11 +114,6 @@ const routes = (props) => {
 		}
 	}
 
-	console.log('#################');
-	console.log('#################');
-	console.log(props);
-	console.log('#################');
-	console.log('#################');
 
 	if (sessionStorage.getItem('noTenant')) {
 		return <Route component={NotFound} />;
@@ -150,7 +144,7 @@ const routes = (props) => {
 			<Route path="/commenters/:slug" render={(props) => <CommenterDetail {...props} defaultAvatarUrl="/images/default_user.jpg" />} />
 			<Route exact path="/commenters" component={CommentersPage} />
 
-			{/** Commenters routes */}
+			{/** Editor routes */}
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
 			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
 			<PrivateRoute exact path="/profile" component={ProfilePage} />

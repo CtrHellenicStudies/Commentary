@@ -33,7 +33,12 @@ class WorksList extends Component {
 		});
 	}
 	renderWorks() {
-		const { works} = this.state;
+		const { works } = this.state;
+
+		if (!works) {
+			return null;
+		}
+
 		return works.map((work, i) => (
 			<WorkVisualization
 				key={i}

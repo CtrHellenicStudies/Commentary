@@ -9,7 +9,15 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 		originalDate
 		status
 		tenantId
-		commenters
+		commenters {
+			_id
+			avatar
+			name
+			slug
+			tenantId
+			bio
+			tagline
+		}
 		users
 		work
 		subwork

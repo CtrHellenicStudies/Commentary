@@ -22,6 +22,10 @@ function getKeywordsByQuery(query, limit) {
 }
 
 class KeywordsList extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
 
 	renderKeywords() {
 		const { keywords } = this.state;
@@ -37,10 +41,7 @@ class KeywordsList extends Component {
 			/>
 		));
 	}
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
+
 	componentWillReceiveProps(newProps) {
 		const { type, limit } = newProps;
 		const skip = 0;
@@ -57,7 +58,7 @@ class KeywordsList extends Component {
 			tenantId: tenantId,
 			queryParam: JSON.stringify(query)
 		});
-	
+
 		let keywords = [];
 		switch (type) {
 		case 'word':

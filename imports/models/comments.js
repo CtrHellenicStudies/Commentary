@@ -73,6 +73,12 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	lemmaCitation: {
+		type: Object,
+		optional: true,
+
+	},
+
 	work: {
 		type: Object,
 		optional: true,

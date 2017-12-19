@@ -121,8 +121,8 @@ class EditKeyword extends Component {
 		});
 	}
 	_getKeywordEditorState(keyword) {
-		if (keyword.descriptionRaw && Object.keys(keyword.descriptionRaw).length) {
-			return EditorState.createWithContent(convertFromRaw(keyword.descriptionRaw));
+		if (keyword.descriptionRaw && Object.keys(JSON.parse(keyword.descriptionRaw)).length) {
+			return EditorState.createWithContent(convertFromRaw(JSON.parse(keyword.descriptionRaw)));
 		} else if (keyword.description) {
 			const blocksFromHTML = convertFromHTML(keyword.description);
 			return EditorState.createWithContent(

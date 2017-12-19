@@ -263,11 +263,19 @@ class AddCommentLayout extends Component {
 				created: referenceWorks ? referenceWorks.date : new Date(),
 				slug: slugify(formData.titleValue),
 			}],
-			commenters: commenters.length ? commenters : [{}],
+			commenters: commenters.map(function(commenter) {
+				const _commenter = JSON.parse(JSON.stringify(commenter));
+				delete _commenter._id;
+				delete _commenter.__typename;
+				delete _commenter.avatar;
+				delete _commenter.textRaw;
+				console.log(_commenter);
+				return _commenter;
+			}),
 			keywords: keywords || [{}],
 			referenceWorks: referenceWorks,
 			tenantId: sessionStorage.getItem('tenantId'),
-			created: new Date(),
+			// created: JSON.stringify(new Date()), TODO
 			status: 'publish',
 		};
 		this.props.commentInsert(comment).then((res) => {

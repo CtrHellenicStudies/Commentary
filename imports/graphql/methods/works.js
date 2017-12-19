@@ -32,5 +32,4 @@ const worksQuery = graphql(query, {
 		});
 	}
 });
-console.log(worksQuery);
 export { worksQuery };

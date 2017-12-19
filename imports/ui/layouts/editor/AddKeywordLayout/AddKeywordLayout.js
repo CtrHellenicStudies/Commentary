@@ -237,7 +237,6 @@ const AddKeywordLayout = React.createClass({
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
 		const token = Cookies.get('loginToken');
-
 		// create keyword object to be inserted:
 		const keyword = {
 			work: {
@@ -255,7 +254,7 @@ const AddKeywordLayout = React.createClass({
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
 			description: textValue,
-			descriptionRaw: textRawValue,
+			descriptionRaw: JSON.stringify(textRawValue),
 			type: this.state.selectedType,
 			count: 1,
 			tenantId: sessionStorage.getItem('tenantId'),

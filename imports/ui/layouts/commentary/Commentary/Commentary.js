@@ -91,7 +91,6 @@ class Commentary extends Component {
 		this.loadMoreComments = this.loadMoreComments.bind(this);
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
-		console.log(this.props);
 
 		this.props.commentsQuery.refetch();
 

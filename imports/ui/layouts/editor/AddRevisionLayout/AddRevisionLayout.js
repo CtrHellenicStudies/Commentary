@@ -39,7 +39,8 @@ class AddRevisionLayout extends Component {
 			snackbarOpen: false,
 			snackbarMessage: '',
 			ready: false,
-			refetchTextNodes: true
+			refetchTextNodes: true,
+			textNodes: []
 		};
 
 		this.addRevision = this.addRevision.bind(this);

@@ -5,22 +5,8 @@ query translationsQuery ($tenantId: ID) {
 	translations (tenantId: $tenantId) {
 		tenantId
 		author
-		work {
-			_id
-			title
-			tenantId
-			slug
-			subworks {
-				title
-				slug
-				n
-			}
-		}
-		subwork {
-			title
-			slug
-			n
-		}
+		work
+		subwork
 		n
 		text
 	}
@@ -28,7 +14,7 @@ query translationsQuery ($tenantId: ID) {
 `;
 const queryAuthors = gql`
 query translationAuthorsQuery ($selectedWork: String $selectedSubwork: String) {
-	authors (selectedWork: $selectedWork selectedSubwork: $selectedSubwork) {
+	authorsOfTranslations (selectedWork: $selectedWork selectedSubwork: $selectedSubwork) {
 		author
 	}
 }

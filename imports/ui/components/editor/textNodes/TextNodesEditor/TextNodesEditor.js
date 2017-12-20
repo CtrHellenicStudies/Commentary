@@ -70,7 +70,7 @@ class TextNodesEditor extends Component {
 	}
 	componentWillReceiveProps(props) {
 		const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
-		const works = props.worksQuery.loading ? [] : props.worksQuery.works;
+		const works = props.worksQuery.loading ? [] : props.worksQuery.worksAhcip;
 		this.setState({
 			works,
 			editions
@@ -103,6 +103,7 @@ class TextNodesEditor extends Component {
 
 	selectSubwork(event) {
 		const setValue = event ? event.value : '';
+		console.log(setValue);
 		this.setState({
 			selectedSubwork: setValue
 		});

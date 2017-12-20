@@ -154,7 +154,7 @@ const commentsQuery = graphql(query, {
 			variables: {
 				skip: params.skip,
 				limit: params.limit,
-				queryParam: getCommentsQuery(params.filters, sessionStorage.getItem('tenantId'))
+				queryParam: getCommentsQuery(params.filters, sessionStorage.getItem('tenantId'), params.queryParams)
 			}
 		});
 	}

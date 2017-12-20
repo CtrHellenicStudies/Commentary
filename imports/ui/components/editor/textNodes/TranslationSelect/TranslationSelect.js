@@ -25,16 +25,28 @@ class TranslationSelect extends React.Component {
 		this.showEditDialog = this.showEditDialog.bind(this);
 		this.handleCloseEditDialog = this.handleCloseEditDialog.bind(this);
 		this.addNewAuthor = this.addNewAuthor.bind(this);
+
+		if (this.props.selectedSubwork && this.props.selectedWork) {
+			console.log(props.selectedSubwork, props.selectedWork);
+			this.props.translationAuthorsQuery.refetch({
+				selectedWork: this.props.selectedWork,
+				selectedSubwork: this.props.selectedSubwork
+			});
+		}
 	}
 	componentWillReceiveProps(props) {
 		let workDetails = null;
-		const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authors;
+		const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authorsOfTranslations;
 	
-		if (props.selectedWork && props.selectedSubwork) {
-			props.translationAuthorsQuery.refetch({
-				selectedWork: props.selectedWork,
-				selectedSubwork: props.selectedSubwork
-			});
+		if (props.selectedWork !== this.props.selectedWork || 
+			props.selectedSubwork !== this.props.selectedSubwork) {
+			if (props.selectedSubwork && props.selectedWork) {
+				console.log(props.selectedSubwork, props.selectedWork);
+				props.translationAuthorsQuery.refetch({
+					selectedWork: props.selectedWork,
+					selectedSubwork: props.selectedSubwork
+				});
+			}
 			workDetails = {
 				tenantId: sessionStorage.getItem('tenantId'),
 				work: props.selectedWork,

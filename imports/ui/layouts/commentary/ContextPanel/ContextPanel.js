@@ -183,18 +183,18 @@ class ContextPanel extends Component {
 			switch (state) {
 			case 'open':
 				window.requestAnimationFrame(() => {
-					setTimeout(() => {
+					this.timeouts.push(setTimeout(() => {
 						const scroll = $(`#comment-group-${this.props.commentLemmaIndex}`).offset().top;
 						$(document).scrollTop(scroll);
-					}, 300);
+					}, 300));
 				});
 				break;
 			case 'close':
 				window.requestAnimationFrame(() => {
-					setTimeout(() => {
+					this.timeouts.push(setTimeout(() => {
 						const scroll = $(`#comment-group-${this.props.commentLemmaIndex}`).offset().top;
 						$(document).scrollTop(scroll);
-					}, 1000);
+					}, 1000));
 				});
 				break;
 			default:
@@ -208,6 +208,11 @@ class ContextPanel extends Component {
 			this.setState({
 				lineFrom: nextProps.lineFrom,
 			});
+		}
+	}
+	componentWillUnmount() {
+		if (this.timeouts) {
+			this.timeouts.forEach(clearTimeout);
 		}
 	}
 

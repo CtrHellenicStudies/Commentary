@@ -398,7 +398,7 @@ class AddComment extends React.Component {
 				Meteor.user().canEditCommenters.find(y => y === x._id));
 		}
 		const commentersOptions = this.getCommentersForUser(commenters);		
-		const referenceWorks = newProps.referenceWorksQuery.referenceWorks;
+		const referenceWorks = newProps.referenceWorksQuery.referenceWorks ? newProps.referenceWorksQuery.referenceWorks : [];
 		const referenceWorkOptions = [];
 		referenceWorks.forEach((referenceWork) => {
 			if (!referenceWorkOptions.some(val => (

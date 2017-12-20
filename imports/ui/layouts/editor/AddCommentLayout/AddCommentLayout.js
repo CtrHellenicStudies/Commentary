@@ -269,7 +269,6 @@ class AddCommentLayout extends Component {
 				delete _commenter.__typename;
 				delete _commenter.avatar;
 				delete _commenter.textRaw;
-				console.log(_commenter);
 				return _commenter;
 			}),
 			keywords: keywords || [{}],

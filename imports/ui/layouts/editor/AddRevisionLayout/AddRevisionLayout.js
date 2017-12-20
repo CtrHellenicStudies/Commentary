@@ -38,7 +38,8 @@ class AddRevisionLayout extends Component {
 			contextReaderOpen: true,
 			snackbarOpen: false,
 			snackbarMessage: '',
-			ready: false
+			ready: false,
+			refetchTextNodes: true
 		};
 
 		this.addRevision = this.addRevision.bind(this);
@@ -78,13 +79,16 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-		if (!this.props.textNodesQuery.variables.workSlug) {
+		if (this.state.refetchTextNodes) {
 			this.props.textNodesQuery.refetch({
 				tenantId: sessionStorage.getItem('tenantId'),
 				lineFrom: comment.lineFrom,
 				lineTo: comment.lineTo,
 				workSlug: comment.work.slug,
 				subworkN: comment.subwork.n
+			});
+			this.setState({
+				refetchTextNodes: false
 			});
 			return;
 		}
@@ -93,7 +97,8 @@ class AddRevisionLayout extends Component {
 			comment: comment,
 			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
-			commenters: commenters
+			commenters: commenters,
+			textNodes: this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes
 		});
 	}
 	componentWillUpdate() {
@@ -326,7 +331,7 @@ class AddRevisionLayout extends Component {
 										subworkN={comment.subwork.n}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
-										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
+										textNodes={this.state.textNodes}
 									/>
 
 									<AddRevision

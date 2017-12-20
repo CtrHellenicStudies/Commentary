@@ -92,7 +92,11 @@ class CommentarySearchToolbar extends Component {
 			searchDropdownOpen: '',
 			moreDropdownOpen: false,
 			activeWorkNew: null,
-			subworksTitle: 'Book'
+			subworksTitle: 'Book',
+			referenceWorks: [],
+			works: [],
+			keywords: [],
+			keyideas: []
 		};
 
 		// methods:
@@ -106,12 +110,8 @@ class CommentarySearchToolbar extends Component {
 			this.props.keywordsQuery.refetch({
 				tenantId: tenantId
 			});
-			this.props.referenceWorksQuery.refetch({
-				tenantId: tenantId
-			});
 		}
 	}
-
 	toggleSearchDropdown(targetDropdown) {
 		if (this.state.searchDropdownOpen === targetDropdown) {
 			this.setState({
@@ -123,30 +123,29 @@ class CommentarySearchToolbar extends Component {
 			});
 		}
 	}
-
 	toggleMoreDropdown() {
 		this.setState({
 			moreDropdownOpen: !this.state.moreDropdownOpen,
 		});
 	}
-
 	switchToHymns() {
 		this.setState({
 			selectedWork: 'Hymn',
 		});
 	}
-
 	switchToBooks() {
 		this.setState({
 			selectedWork: 'Book',
 		});
 	}
-
-
-
 	componentWillReceiveProps(nextProps) {
 		let workFilter;
-
+		if (nextProps.keywordsQuery.loading ||
+			nextProps.commentersQuery.loading ||
+			nextProps.worksQuery.loading ||
+			nextProps.referenceWorksQuery.loading) {
+			return;
+		}
 		if (
 			this.props.filters
 			&& nextProps.filters
@@ -173,11 +172,11 @@ class CommentarySearchToolbar extends Component {
 
 		if (nextProps.addCommentPage) {
 			this.setState({
-				keyideas: nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
-				keywords: nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),
-				commenters: nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters,
-				works: nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works,
-				referenceWorks: nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks,
+				keyideas: nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
+				keywords: nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),
+				commenters: nextProps.commentersQuery.commenters,
+				works: nextProps.worksQuery.works,
+				referenceWorks: nextProps.referenceWorksQuery.referenceWorks,
 			});
 		}
 	}

@@ -165,7 +165,7 @@ export default class ReferenceWork extends React.Component {
 
 							return (
 								<ListGroupItemDnD
-									key={referenceWork.referenceWorkId}
+									key={referenceWork._id}
 									index={i}
 									className="form-subitem form-subitem--referenceWork"
 									moveListGroupItem={this.moveReferenceWorkBlock}
@@ -180,15 +180,15 @@ export default class ReferenceWork extends React.Component {
 											<IconButton
 												iconClassName="mdi mdi-close"
 												style={{
-										padding: '0',
-										width: '32px',
-										height: '32px',
-										borderRadius: '100%',
-										border: '1px solid #eee',
-										color: '#666',
-										margin: '0 auto',
-										background: '#f6f6f6',
-									}}
+													padding: '0',
+													width: '32px',
+													height: '32px',
+													borderRadius: '100%',
+													border: '1px solid #eee',
+													color: '#666',
+													margin: '0 auto',
+													background: '#f6f6f6',
+												}}
 											/>
 										</div>
 										<Select.Creatable
@@ -196,7 +196,7 @@ export default class ReferenceWork extends React.Component {
 											id="referenceWorks"
 											required={false}
 											options={_referenceWorkOptions}
-											value={this.state.referenceWorks[i].referenceWorkId}
+											value={this.state.referenceWorks[i]._id}
 											onChange={(x) => this.onReferenceWorksValueChange(x, i)}
 											placeholder="Reference Work . . ."
 											onNewOptionClick={this.props.addNew}

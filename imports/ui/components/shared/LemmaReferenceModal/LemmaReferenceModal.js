@@ -34,7 +34,6 @@ class LemmaReferenceModal extends Component {
 			const { lineFrom, work, subwork } = this.props;
 			const lineTo = !this.props.lineTo || lineFrom > this.props.lineTo ? lineFrom : this.props.lineTo;
 			const properties = {
-				tenantId: sessionStorage.getItem('tenantId'),
 				workSlug: worker.slug,
 				subworkN: subwork.n,
 				lineFrom: lineFrom,

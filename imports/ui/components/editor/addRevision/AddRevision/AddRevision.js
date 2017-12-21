@@ -508,6 +508,7 @@ class AddRevision extends React.Component {
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
 									selectTagType={this.selectTagType}
 									addNewTag={this.addNewTag}
+									keywords={tags}
 								/>
 
 							</div>

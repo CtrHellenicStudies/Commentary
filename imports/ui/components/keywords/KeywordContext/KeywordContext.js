@@ -64,7 +64,6 @@ class KeywordContext extends Component {
 				lineFrom: context.lineFrom,
 				lineTo: context.lineTo,
 				subworkN: context.subwork,
-				tenantId: tenantId,
 				workSlug: context.work
 			});
 
@@ -72,7 +71,6 @@ class KeywordContext extends Component {
 			if (tenantId) {
 				const query = {};
 				query['keyword._id'] = keyword._id;
-				query.tenantId = tenantId;
 				props.commentsQuery.refetch({
 					queryParam: JSON.stringify(query),
 					limit: 1

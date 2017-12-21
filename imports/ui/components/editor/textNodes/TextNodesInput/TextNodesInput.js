@@ -63,10 +63,8 @@ class TextNodesInput extends Component {
 			return;
 		}
 		const { workId, workSlug, editionId, subworkN, lineFrom, limit } = props;
-		const tenantId = sessionStorage.getItem('tenantId');
 		if (!props.textNodesQuery.variables.workSlug) {
 			const properties = {
-				tenantId: tenantId,
 				workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
 				subworkN: subworkN,
 				lineFrom: parseInt(lineFrom, 10),

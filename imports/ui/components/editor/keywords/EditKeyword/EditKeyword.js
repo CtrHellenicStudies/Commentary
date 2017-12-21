@@ -21,7 +21,6 @@ import Utils from '/imports/lib/utils';
 // graphql
 import { commentersQuery } from '/imports/graphql/methods/commenters';
 import { referenceWorksQuery } from '/imports/graphql/methods/referenceWorks';
-import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 // models
 import Commenters from '/imports/models/commenters';
@@ -76,9 +75,6 @@ class EditKeyword extends Component {
 		this.props.referenceWorksQuery.refetch({
 			tenantId: tenantId
 		});
-		this.props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
 
 		this._getKeywordEditorState = this._getKeywordEditorState.bind(this);
 		this.onTitleChange = this.onTitleChange.bind(this);
@@ -95,7 +91,7 @@ class EditKeyword extends Component {
 	}
 	componentWillReceiveProps(props) {
 		const keywordsOptions = [];
-		const keywords = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
+		const keywords = !this.props.keywords ? [] : this.props.keywords
 		.filter(x => x.type === 'word');
 		keywords.forEach((keyword) => {
 			keywordsOptions.push({
@@ -106,7 +102,7 @@ class EditKeyword extends Component {
 		});
 	
 		const keyideasOptions = [];
-		const keyideas = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
+		const keyideas = !this.props.keywords ? [] : this.props.keywords
 		.filter(x => x.type === 'idea');
 		keyideas.forEach((keyidea) => {
 			keyideasOptions.push({
@@ -369,10 +365,9 @@ EditKeyword.propTypes = {
 	selectedLineTo: PropTypes.number,
 	referenceWorksQuery: PropTypes.object,
 	commentersQuery: PropTypes.object,
-	keywordsQuery: PropTypes.object
+	keywords: PropTypes.array
 };
 export default compose(
-	keywordsQuery,
 	referenceWorksQuery,
 	commentersQuery
 )(EditKeyword);

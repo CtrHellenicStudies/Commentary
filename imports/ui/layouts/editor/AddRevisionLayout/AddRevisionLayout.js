@@ -80,9 +80,8 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-		if (this.state.refetchTextNodes) {
+		if (this.state.refetchTextNodes || nextProps.textNodesQuery.textNodes.length === 100) {
 			this.props.textNodesQuery.refetch({
-				tenantId: sessionStorage.getItem('tenantId'),
 				lineFrom: comment.lineFrom,
 				lineTo: comment.lineTo,
 				workSlug: comment.work.slug,
@@ -292,24 +291,20 @@ class AddRevisionLayout extends Component {
 			snackbarOpen: true,
 			snackbarMessage: message,
 		});
-		this.timeout = setTimeout(() => {
-			this.timeout = this.setState({
+		setTimeout(() => {
+			this.setState({
 				snackbarOpen: false,
 			});
 		}, 4000);
 	}
-	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
-	}
 	render() {
-		const filters = this.state.filters;
-		const { ready, comment } = this.state;
+		const { ready, comment, filters, textNodes } = this.state;
 
 		Utils.setTitle('Add Revision | The Center for Hellenic Studies Commentaries');
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				{ready && comment ?
+				{ready ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 
 						<Header
@@ -330,10 +325,8 @@ class AddRevisionLayout extends Component {
 										lineTo={(comment.lineFrom + comment.nLines) - 1}
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
-										shouldUpdateQuery={this.state.updateQuery}
-										updateQuery={this.updateQuery}
-										textNodes={this.state.textNodes}
-									/>
+										textNodes={textNodes}
+									/> 
 
 									<AddRevision
 										submitForm={this.addRevision}

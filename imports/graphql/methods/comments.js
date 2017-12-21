@@ -46,19 +46,12 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 		nLines
 		commentOrder
 		parentCommentId
-		referenceId
 		referenceWorks {
-			_id
-			title
-			slug
-			tenantId
-			link
-			authors
-			coverImage
-			urnCode
-			date
-			description
-			citation
+			referenceWorkId
+			section
+			chapter
+			note
+			translation
 		}
 		keywords {
 			_id

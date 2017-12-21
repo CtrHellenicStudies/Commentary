@@ -6,9 +6,6 @@ import { compose } from 'react-apollo';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// models
-import Works from '/imports/models/works';
-
 // components
 import WorkVisualization from '/imports/ui/components/works/WorkVisualization';
 
@@ -29,7 +26,7 @@ class WorksList extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			works: nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works
+			works: nextProps.worksQuery.loading ? [] : nextProps.worksQuery.worksAhcip
 		});
 	}
 	renderWorks() {

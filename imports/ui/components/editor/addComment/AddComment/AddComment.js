@@ -470,6 +470,7 @@ class AddComment extends React.Component {
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
 									selectTagType={this.selectTagType}
 									addNewTag={this.addNewTag}
+									keywords={this.state.tags}
 								/>
 
 							</div>

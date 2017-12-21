@@ -165,7 +165,7 @@ export default class ReferenceWork extends React.Component {
 
 							return (
 								<ListGroupItemDnD
-									key={referenceWork._id}
+									key={referenceWork.referenceWorkId}
 									index={i}
 									className="form-subitem form-subitem--referenceWork"
 									moveListGroupItem={this.moveReferenceWorkBlock}
@@ -196,7 +196,7 @@ export default class ReferenceWork extends React.Component {
 											id="referenceWorks"
 											required={false}
 											options={_referenceWorkOptions}
-											value={this.state.referenceWorks[i]._id}
+											value={this.state.referenceWorks[i].referenceWorkId}
 											onChange={(x) => this.onReferenceWorksValueChange(x, i)}
 											placeholder="Reference Work . . ."
 											onNewOptionClick={this.props.addNew}

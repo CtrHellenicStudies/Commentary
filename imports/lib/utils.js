@@ -356,7 +356,7 @@ const Utils = {
 			const constState = convertFromRaw(_content);
 			return EditorState.createWithContent(constState);
 		}
-		const constState = convertFromHTML(content);
+		const constState = convertFromHTML(_content);
 		const state = ContentState.createFromBlockArray(
 			constState.contentBlocks,
 			constState.entityMap

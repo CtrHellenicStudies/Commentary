@@ -180,15 +180,15 @@ export default class ReferenceWork extends React.Component {
 											<IconButton
 												iconClassName="mdi mdi-close"
 												style={{
-										padding: '0',
-										width: '32px',
-										height: '32px',
-										borderRadius: '100%',
-										border: '1px solid #eee',
-										color: '#666',
-										margin: '0 auto',
-										background: '#f6f6f6',
-									}}
+													padding: '0',
+													width: '32px',
+													height: '32px',
+													borderRadius: '100%',
+													border: '1px solid #eee',
+													color: '#666',
+													margin: '0 auto',
+													background: '#f6f6f6',
+												}}
 											/>
 										</div>
 										<Select.Creatable

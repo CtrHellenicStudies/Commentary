@@ -13,7 +13,6 @@ import {
 	FormControl,
 } from 'react-bootstrap';
 import Select from 'react-select';
-import update from 'immutability-helper';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
@@ -23,26 +22,13 @@ import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
 const ListGroupItemDnD = createListGroupItemDnD('tagBlocks');
 class TagsInput extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};	
-		this.props.keywordsQuery.refetch({
-			tenantId: sessionStorage.getItem('tenantId')
-		});
-	}
-	componentWillReceiveProps(props) {
-		this.setState({
-			tags: props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords
-		});
-	}
 	render() {
 		const {
 			tagsValue, addTagBlock, removeTagBlock, moveTagBlock,
-			onTagValueChange, onIsMentionedInLemmaChange, selectTagType, addNewTag
-		} = this.props;
-		const { tags } = this.state;
+			onTagValueChange, onIsMentionedInLemmaChange, selectTagType, addNewTag,
+			keywords } = this.props;
 
-		if (!tags) {
+		if (!keywords) {
 			return (
 				<div className="comment-reference comment-tags" />
 			);
@@ -58,7 +44,7 @@ class TagsInput extends Component {
 					<ListGroupDnD>
 						{tagsValue.map((tag, i) => {
 							const _tagsOptions = [];
-							tags.forEach((t) => {
+							keywords.forEach((t) => {
 								_tagsOptions.push({
 									value: t._id,
 									label: t.title,
@@ -154,6 +140,6 @@ TagsInput.propTypes = {
 	onIsMentionedInLemmaChange: PropTypes.func,
 	selectTagType: PropTypes.func,
 	addNewTag: PropTypes.func,
-	keywordsQuery: PropTypes.object
+	keywords: PropTypes.array
 };
-export default compose(keywordsQuery)(TagsInput);
+export default TagsInput;

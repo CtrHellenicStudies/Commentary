@@ -39,9 +39,6 @@ class CommentarySearchPanel extends Component {
 		this.handleChangeTextsearch = this.handleChangeTextsearch.bind(this);
 
 		const tenantId = sessionStorage.getItem('tenantId');
-		this.props.referenceWorksQuery.refetch({
-			tenantId: tenantId
-		});
 		this.props.keywordsQuery.refetch({
 			tenantId: tenantId
 		});

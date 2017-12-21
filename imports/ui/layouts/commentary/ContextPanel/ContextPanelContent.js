@@ -67,7 +67,6 @@ class ContextPanelContent extends Component {
 
 			const { workSlug, subworkN } = nextProps;		
 			const properties = {
-				tenantId: tenantId,
 				workSlug: workSlug,
 				subworkN: subworkN,
 				lineFrom: lineFrom,

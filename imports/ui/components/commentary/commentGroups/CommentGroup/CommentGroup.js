@@ -12,8 +12,8 @@ class CommentGroup extends React.Component {
 	static propTypes = {
 		commentGroup: PropTypes.shape({
 			work: PropTypes.shape({
-				slug: PropTypes.string.isRequired,
-				title: PropTypes.string.isRequired,
+				slug: PropTypes.string,
+				title: PropTypes.string,
 			}),
 			subwork: PropTypes.shape({
 				n: PropTypes.number.isRequired,

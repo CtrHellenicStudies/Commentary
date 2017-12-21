@@ -50,7 +50,7 @@ class CommentRevisionSelect extends React.Component {
 						const updated = getRevisionDate(revision);
 						return (
 							<FlatButton
-								key={revision._id}
+								key={revision._id || i}
 								id={i}
 								data-id={revision._id}
 								className={this.getClassName(selectedRevisionIndex, i)}
@@ -64,7 +64,7 @@ class CommentRevisionSelect extends React.Component {
 						const updated = getRevisionDate(revision);
 						return (
 							<FlatButton
-								key={revision._id}
+								key={revision._id || i}
 								id={i}
 								data-id={revision._id}
 								className={this.getClassName(selectedRevisionIndex, i)}

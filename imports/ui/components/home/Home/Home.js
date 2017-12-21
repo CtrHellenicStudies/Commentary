@@ -32,6 +32,7 @@ class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.scrollToIntro = this.scrollToIntro.bind(this);
+		this.state = {};
 	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
@@ -50,15 +51,19 @@ class Home extends Component {
 
 		e.preventDefault();
 	}
+	componentWillReceiveProps(nextProps) {
+		const tenantId = sessionStorage.getItem('tenantId');
 
+		this.setState({
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId),
+			ready: !nextProps.settingsQuery.loading
+		});
+	}
 	render() {
 		let imageUrl = `${location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
-
-		const tenantId = sessionStorage.getItem('tenantId');
-		const ready = !this.props.settingsQuery.loading;
-		const settings = this.props.settingsQuery.loading ? {} : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId); 
+		const { settings, ready } = this.state;
 
 		if (!settings) {
 			return <LoadingHome />;

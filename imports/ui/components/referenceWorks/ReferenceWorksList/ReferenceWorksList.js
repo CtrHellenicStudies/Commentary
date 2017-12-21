@@ -20,19 +20,20 @@ class ReferenceWorksList extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {};
-
-		this.props.referenceWorksQuery.refetch({	
-			tenantId: sessionStorage.getItem('tenantId')	
-		});
+		this.state = {
+			referenceWorks: []
+		};
 	}
 	componentWillReceiveProps(props) {
 
+		if (props.referenceWorksQuery.loading) {
+			return;
+		}
 		let referenceWorks;
 		if (props.commenterId) {
-			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === props.commenterId);
+			referenceWorks = props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === props.commenterId);
 		} else {
-			referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
+			referenceWorks = props.referenceWorksQuery.referenceWorks;
 		}
 		this.setState({
 			referenceWorks: referenceWorks

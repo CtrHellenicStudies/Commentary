@@ -37,7 +37,7 @@ class Page extends Component {
 	
 		const page = props.pagesQuery.loading ? {} : props.pagesQuery.pages.find(x => x.slug === slug);
 		if (page) {
-			if (page.headerImage && Array.isArray(page.headerImage)) {
+			if (page.headerImage && Array.isArray(page.headerImage) && page.headerImage.length > 0) {
 				thumbnails = Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch();
 			}
 		}

@@ -10,12 +10,9 @@ const getCommentGroupId = (commentGroup) => {
 	});
 	return id.slice(1);
 };
-function addCommetersToCommentGroup(allCommenters, comment, commenters = {}) {
+function addCommetersToCommentGroup(comment, commenters = {}) {
 	comment.commenters.map((_commenter) => {
-		const commenter = allCommenters.find(x => x.slug === _commenter.slug);
-		if (commenter) {
-			commenters[commenter._id] = commenter;
-		}
+		commenters[_commenter._id] = _commenter;
 	});
 	return commenters;
 }
@@ -25,7 +22,7 @@ function isFromCommentGroup(comment, commentGroup) {
 		&& comment.lineFrom === commentGroup.lineFrom
 		&& comment.lineTo === commentGroup.lineTo;
 }
-const parseCommentsToCommentGroups = (comments, allCommenters) => {
+const parseCommentsToCommentGroups = (comments) => {
 	const commentGroups = [];
 	// Make comment groups from comments
 	let isInCommentGroup = false;
@@ -69,10 +66,9 @@ const parseCommentsToCommentGroups = (comments, allCommenters) => {
 		commentGroup._id = getCommentGroupId(commentGroup);
 		commentGroup.commenters = {};
 		commentGroup.comments.map((comment) => {
-			addCommetersToCommentGroup(allCommenters, comment, commentGroup.commenters);
+			addCommetersToCommentGroup(comment, commentGroup.commenters);
 		});
 	});
-
 	return commentGroups;
 };
 

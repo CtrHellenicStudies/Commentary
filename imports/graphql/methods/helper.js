@@ -6,7 +6,7 @@ const createQueryFromFilters = (filters) => {
 			switch (filter.key) {
 			case '_id':
 				// query._id = filter.values[0];
-				query.$or = [{_id: filter.values[0]}, {urn: filter.values[0]}];
+				query.$or = [{_id: filter.values[0]}];
 				break;
 			case 'textsearch':
 				query.$text = {
@@ -99,7 +99,7 @@ const createQueryFromFilters = (filters) => {
 	return query;
 };
 
-function getCommentsQuery(filters, tenantId) {
+function getCommentsQuery(filters, tenantId, additionalParam) {
 	const query = createQueryFromFilters(filters);
 	query.tenantId = tenantId;
 	if ('$text' in query) {
@@ -115,6 +115,9 @@ function getCommentsQuery(filters, tenantId) {
 				{ 'revisions.text': textsearch }]});
 		}
 		delete query.$text;
+	}
+	if (additionalParam) {
+		query._id = additionalParam._id;
 	}
 	query.tenantId = tenantId;
 	return JSON.stringify(query);

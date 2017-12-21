@@ -14,7 +14,7 @@ query translationsQuery ($tenantId: ID) {
 `;
 const queryAuthors = gql`
 query translationAuthorsQuery ($selectedWork: String $selectedSubwork: String) {
-	authors (selectedWork: $selectedWork selectedSubwork: $selectedSubwork) {
+	authorsOfTranslations (selectedWork: $selectedWork selectedSubwork: $selectedSubwork) {
 		author
 	}
 }

@@ -5,22 +5,39 @@ const query = gql`
 query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Boolean) {
 	comments(queryParam: $queryParam skip: $skip limit: $limit sortRecent: $sortRecent) {
 		_id
-		urn
+		urn {
+			v2
+		}
 		originalDate
 		status
 		tenantId
 		commenters {
 			_id
-			avatar
 			name
-			slug
-			tenantId
+			avatar {
+				src
+			}
 			bio
-			tagline
+			isAuthor
+			slug
 		}
 		users
-		work
-		subwork
+		work {
+			_id
+			title
+			tenantId
+			slug
+			subworks {
+				title
+				slug
+				n
+			}
+		}
+		subwork {
+			title
+			slug
+			n
+		}
 		lineFrom
 		lineTo
 		lineLetter
@@ -29,11 +46,51 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 		nLines
 		commentOrder
 		parentCommentId
-		referenceId
-		referenceWorks
-		keywords
-		revisions
-		discussionComments
+		referenceWorks {
+			referenceWorkId
+			section
+			chapter
+			note
+			translation
+		}
+		keywords {
+			_id
+			title
+			slug
+			description
+			descriptionRaw
+			type
+			count
+			work {
+				_id
+			}
+			subwork {
+				n
+			}
+			lineFrom
+			lineTo
+			lineLetter
+			tenantId
+			nLines
+		}
+		revisions {
+			_id
+			title
+			text
+			slug
+			tenantId
+		}
+		discussionComments {
+			content
+			status
+			votes
+			commentId
+			parentId
+			voters
+			reported
+			usersReported
+			tenantId
+		}
 		isAnnotation
 		discussionCommentsDisabled
 		created
@@ -90,7 +147,7 @@ const commentsQuery = graphql(query, {
 			variables: {
 				skip: params.skip,
 				limit: params.limit,
-				queryParam: getCommentsQuery(params.filters, sessionStorage.getItem('tenantId'))
+				queryParam: getCommentsQuery(params.filters, sessionStorage.getItem('tenantId'), params.queryParams)
 			}
 		});
 	}

@@ -4,9 +4,6 @@ import { Meteor } from 'meteor/meteor';
 
 import { compose } from 'react-apollo';
 
-// models
-import Keywords from '/imports/models/keywords';
-
 // graphql
 import { keywordsQuery } from '/imports/graphql/methods/keywords';
 
@@ -25,6 +22,16 @@ class KeywordsList extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
+		const tenantId = sessionStorage.getItem('tenantId');
+
+		const query = {
+			type: this.props.type,
+			count: { $gte: 1}
+		};
+		this.props.keywordsQuery.refetch({
+			tenantId: tenantId,
+			queryParam: JSON.stringify(query)
+		});
 	}
 
 	renderKeywords() {
@@ -45,21 +52,12 @@ class KeywordsList extends Component {
 	componentWillReceiveProps(newProps) {
 		const { type, limit } = newProps;
 		const skip = 0;
-		const tenantId = sessionStorage.getItem('tenantId');
 		let _limit = 100;
-		const query = {
-			type: type,
-			count: { $gte: 1}
-		};
+
+		let keywords = [];
 		if (limit) {
 			_limit = limit;
 		}
-		newProps.keywordsQuery.refetch({
-			tenantId: tenantId,
-			queryParam: JSON.stringify(query)
-		});
-
-		let keywords = [];
 		switch (type) {
 		case 'word':
 			keywords = getKeywordsByQuery(newProps.keywordsQuery, _limit);
@@ -87,7 +85,7 @@ class KeywordsList extends Component {
 KeywordsList.propTypes = {
 	type: PropTypes.string.isRequired,
 	limit: PropTypes.number,
-	keywords: PropTypes.array,
+	keywordsQuery: PropTypes.object,
 };
 
 export default compose(keywordsQuery)(KeywordsList);

@@ -2,7 +2,7 @@ import { gql, graphql } from 'react-apollo';
 
 const query = gql`
 query worksQuery ($tenantId: ID) {
-	works (tenantId: $tenantId) {
+	worksAhcip (tenantId: $tenantId) {
 		_id
 		title
 		tenantId
@@ -12,13 +12,13 @@ query worksQuery ($tenantId: ID) {
 		order
 		nComments
 		subworks {
-      title
-      slug
-      n
-      tlgNumber
-      nComments
-      commentHeatmap
-    }
+			title
+			slug
+			n
+			tlgNumber
+			nComments
+			commentHeatmap
+		}
 	}
 }
 `;
@@ -32,5 +32,4 @@ const worksQuery = graphql(query, {
 		});
 	}
 });
-
 export { worksQuery };

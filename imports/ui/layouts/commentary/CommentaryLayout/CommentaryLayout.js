@@ -216,6 +216,7 @@ class CommentaryLayout extends Component {
 							history={this.props.history}
 							skip={skip}
 							limit={limit}
+							queryParams={queryParams}
 						/>
 
 					</div>

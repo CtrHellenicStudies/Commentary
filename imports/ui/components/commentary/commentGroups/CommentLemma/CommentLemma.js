@@ -43,8 +43,8 @@ class CommentLemma extends React.Component {
 	static propTypes = {
 		commentGroup: PropTypes.shape({
 			work: PropTypes.shape({
-				slug: PropTypes.string.isRequired,
-				title: PropTypes.string.isRequired,
+				slug: PropTypes.string,
+				title: PropTypes.string,
 			}),
 			subwork: PropTypes.shape({
 				n: PropTypes.number.isRequired,
@@ -214,22 +214,22 @@ class CommentLemma extends React.Component {
 		const { commentGroup, multiline } = nextProps;
 		const { selectedLemmaEditionIndex } = this.state;
 
-		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+		if (nextProps.textNodesQuery.loading || 
+			nextProps.editionsQuery.loading || 
+			nextProps.translationsQuery.loading) {
 			return;
 		}
 
-		const textNodesCursor = nextProps.textNodesQuery.loading ? [] : nextProps.textNodesQuery.textNodes;
-		let editions = !nextProps.editionsQuery.loading ?
-			Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions) : [];
-		const ready = !nextProps.editionsQuery.loading
-			&& !nextProps.textNodesQuery.loading
-			&& !nextProps.translationsQuery.loading;
+		const textNodesCursor = nextProps.textNodesQuery.textNodes;
+		let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
+		const ready = true;
 		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
 		if (commentGroup) {
 			if (!nextProps.textNodesQuery.variables.workSlug) {
+				nextProps.textNodesQuery.variables.workSlug = commentGroup.work.slug;
 				const properties = {
 					workSlug: commentGroup.work.slug,
 					subworkN: Number(commentGroup.subwork.title),

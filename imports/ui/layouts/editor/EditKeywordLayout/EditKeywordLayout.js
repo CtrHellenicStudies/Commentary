@@ -43,6 +43,7 @@ class EditKeywordLayout extends Component {
 			snackbarOpen: false,
 			snackbarMessage: '',
 			contextReaderOpen: true,
+			refetchTextNodes: true
 		};
 
 		this.handlePermissions = this.handlePermissions.bind(this);
@@ -59,8 +60,7 @@ class EditKeywordLayout extends Component {
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
 		this.onTypeChange = this.onTypeChange.bind(this);
 		this.handleChangeLineN = this.handleChangeLineN.bind(this);
-
-		props.keywordsQuery.refetch({
+		this.props.keywordsQuery.refetch({
 			tenantId: sessionStorage.getItem('tenantId')
 		});
 	}
@@ -75,21 +75,25 @@ class EditKeywordLayout extends Component {
 		}
 		const { match } = nextProps;
 		const slug = match.params.slug;
-	
+		console.log(nextProps.textNodesQuery.textNodes.length);
 		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
-		if (!this.props.textNodesQuery.variables.workSlug) {
+		if (this.state.refetchTextNodes || nextProps.textNodesQuery.textNodes.length === 100) {
 			this.props.textNodesQuery.refetch({
-				tenantId: sessionStorage.getItem('tenantId'),
 				lineFrom: this.state.selectedLineFrom || keyword.lineFrom || 0,
 				lineTo: this.state.selectedLineTo || keyword.lineTo || 0,
 				workSlug: keyword.work ? keyword.work.slug : 'iliad',
 				subworkN: keyword.subwork ? keyword.subwork.n : 1
 			});
+			this.setState({
+				refetchTextNodes: false
+			});
 			return;
 		}
 		this.setState({
 			ready: true,
-			keyword: keyword
+			keyword: keyword,
+			textNodes: nextProps.textNodesQuery.textNodes,
+			keywords: nextProps.keywordsQuery.keywords
 		});
 	}
 	componentWillUpdate() {
@@ -225,7 +229,7 @@ class EditKeywordLayout extends Component {
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
 			description: textValue,
-			descriptionRaw: textRawValue,
+			descriptionRaw: JSON.stringify(textRawValue),
 			type: this.state.selectedType,
 			tenantId: sessionStorage.getItem('tenantId'),
 			count: 1,
@@ -387,7 +391,7 @@ class EditKeywordLayout extends Component {
 	}
 	render() {
 		const filters = this.state.filters;
-		const { ready, keyword } = this.state;
+		const { ready, keyword, keywords } = this.state;
 		let work;
 		let subwork;
 		let lineFrom;
@@ -432,7 +436,7 @@ class EditKeywordLayout extends Component {
 										subworkN={keyword.subwork ? keyword.subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
-										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
+										textNodes={this.state.textNodes}
 									/>
 
 									<EditKeyword
@@ -441,6 +445,7 @@ class EditKeywordLayout extends Component {
 										submitForm={this.updateKeyword}
 										onTypeChange={this.onTypeChange}
 										keyword={keyword}
+										kewrods={keywords}
 									/>
 
 									<ContextPanel

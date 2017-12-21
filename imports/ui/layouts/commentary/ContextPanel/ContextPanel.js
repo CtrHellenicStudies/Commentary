@@ -210,6 +210,11 @@ class ContextPanel extends Component {
 			});
 		}
 	}
+	componentWillUnmount() {
+		if (this.timeouts) {
+			this.timeouts.forEach(clearTimeout);
+		}
+	}
 
 	render() {
 

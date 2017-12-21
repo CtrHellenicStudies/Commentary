@@ -1,8 +1,8 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query keywordsQuery($tenantId: ID $queryParam: String) {
-	keywords (tenantId: $tenantId queryParam: $queryParam) {
+query keywordsQuery($tenantId: ID $queryParam: String $slug: String) {
+	keywords (tenantId: $tenantId queryParam: $queryParam slug: $slug) {
 	_id
     title
     slug
@@ -10,8 +10,22 @@ query keywordsQuery($tenantId: ID $queryParam: String) {
     descriptionRaw
     type
     count
-    work
-    subwork
+	work {
+		_id
+		title
+		tenantId
+		slug
+		subworks {
+			title
+			slug
+			n
+		}
+	}
+	subwork {
+		title
+		slug
+		n
+	}
     lineFrom
     lineTo
     lineLetter
@@ -22,7 +36,7 @@ query keywordsQuery($tenantId: ID $queryParam: String) {
 `;
 
 const queryById = gql`
-query keywordsQuery($id: String!) {
+query keywordsQuery($id: String) {
   keywords(id: $id) {
 	_id
     title
@@ -31,8 +45,22 @@ query keywordsQuery($id: String!) {
     descriptionRaw
     type
     count
-    work
-    subwork
+	work {
+		_id
+		title
+		tenantId
+		slug
+	subworks {
+		title
+		slug
+		n
+	}
+	}
+	subwork {
+		title
+		slug
+		n
+	}
     lineFrom
     lineTo
     lineLetter
@@ -67,23 +95,12 @@ const keywordUpdate = gql`
 
 const keywordsQuery = graphql(query, {
 	name: 'keywordsQuery',
-	options: () => {
-		return ({
-			variables: {
-				tenantId: sessionStorage.getItem('tenantId')
-			}
-		});
+	options: {
+		refetchQueries: ['keywordsQuery']
 	}
 });
 
 const keywordsQueryById = graphql(queryById, {
-	options: ({params}) => {
-		return ({
-			variables: {
-				id: params.id
-			},
-		});
-	},
 	name: 'keywordsQueryById'
 });
 

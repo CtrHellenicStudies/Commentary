@@ -59,9 +59,4 @@ class CommentContentInput extends React.Component {
 		);
 	}
 }
-
-CommentContentInput.propTypes = {
-	keywordsQuery: PropTypes.object
-};
-
 export default CommentContentInput;

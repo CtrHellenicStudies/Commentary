@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
-
-import { Random } from 'meteor/random';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
 import Cookies from 'js-cookie';
 import slugify from 'slugify';
+import randomID from 'random-id';
 
 // https://github.com/JedWatson/react-select
 import Formsy from 'formsy-react';
@@ -33,6 +31,10 @@ const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 export default class ReferenceWork extends React.Component {
 	static propTypes = {
 		referenceWorkOptions: PropTypes.array,
+		referenceWorks: PropTypes.array,
+		update: PropTypes.func,
+		ready: PropTypes.bool,
+		addNew: PropTypes.func
 	};
 
 	static defaultProps = {
@@ -44,7 +46,7 @@ export default class ReferenceWork extends React.Component {
 		super(props);
 		if (this.props.referenceWorks) {
 			this.state = {
-				referenceWorks: this.props.referenceWorks,
+				referenceWorks: JSON.parse(JSON.stringify(this.props.referenceWorks)),
 			};
 		} else {
 			this.state = {
@@ -62,7 +64,9 @@ export default class ReferenceWork extends React.Component {
 		this.changeTranslation = this.changeTranslation.bind(this);
 	}
 	componentWillReceiveProps(newProps) {
-		if (newProps.referenceWorks)			{ this.setState({referenceWorks: newProps.referenceWorks}); }
+		if (newProps.referenceWorks) { 
+			this.setState({referenceWorks: JSON.parse(JSON.stringify(newProps.referenceWorks))}); 
+		}
 	}
 	changeNote(event, value, i) {
 		const _referenceWorks = this.state.referenceWorks;
@@ -70,6 +74,7 @@ export default class ReferenceWork extends React.Component {
 		this.setState({
 			referenceWorks: _referenceWorks
 		});
+		this.props.update(_referenceWorks);
 	}
 	changeSection(event, value, i) {
 		const _referenceWorks = this.state.referenceWorks;
@@ -77,6 +82,7 @@ export default class ReferenceWork extends React.Component {
 		this.setState({
 			referenceWorks: _referenceWorks
 		});
+		this.props.update(_referenceWorks);
 	}
 	changeTranslation(event, value, i) {
 		const _referenceWorks = this.state.referenceWorks;
@@ -84,6 +90,7 @@ export default class ReferenceWork extends React.Component {
 		this.setState({
 			referenceWorks: _referenceWorks
 		});
+		this.props.update(_referenceWorks);
 	}
 	changeChapter(event, value, i) {
 		const _referenceWorks = this.state.referenceWorks;
@@ -91,6 +98,7 @@ export default class ReferenceWork extends React.Component {
 		this.setState({
 			referenceWorks: _referenceWorks
 		});
+		this.props.update(_referenceWorks);
 	}
 	onReferenceWorksValueChange(referenceWork, i) {
 		const referenceWorks = this.state.referenceWorks;
@@ -102,10 +110,11 @@ export default class ReferenceWork extends React.Component {
 		this.setState({
 			referenceWorks
 		});
+		this.props.update(referenceWorks);
 
 	}
 	addReferenceWorkBlock() {
-		this.state.referenceWorks.push({ referenceWorkId: Random.id() });
+		this.state.referenceWorks.push({ referenceWorkId: randomID(20) });
 		this.props.update(this.state.referenceWorks);
 	}
 
@@ -132,7 +141,7 @@ export default class ReferenceWork extends React.Component {
 		const { referenceWorks } = this.state;
 		const { referenceWorkOptions } = this.props;
 		if (!this.props.ready) {
-		    return null;
+			return null;
 		}
 		return (
 

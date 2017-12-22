@@ -17,7 +17,7 @@ const commentsURNsFix = () => {
 				},
 			});
 		} catch (err) {
-			throw new Meteor.Error(`Error fixing comment.commentsURNsFix ${comment._id}: ${err}`);
+			throw new Error(`Error fixing comment.commentsURNsFix ${comment._id}: ${err}`);
 		}
 	});
 	console.log(' -- method commentsURNsFix run completed');

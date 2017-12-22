@@ -106,7 +106,6 @@ class TranslationNodeInput extends Component {
 			});
 
 			debounce(500, () => {
-				// Call update method on meteor backend
 				this.props.translationUpdate(updatedObject).then((res) => {
 					if (res.data) {
 						this.setState({
@@ -123,7 +122,6 @@ class TranslationNodeInput extends Component {
 				inserting: true
 			});
 			debounce(500, () => {
-				// Call update method on meteor backend
 				this.props.translationRemove(currentTranslationNode._id).then((err, res) => {
 					if (err) {
 						console.error('Error removing text', err);

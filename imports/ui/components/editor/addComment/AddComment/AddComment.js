@@ -228,7 +228,7 @@ class AddComment extends React.Component {
 		}
 		if (errors === true) {
 			errorMessage = errorMessage.slice(0, -1);
-			errorMessage = new Meteor.Error('data-missing', 'Missing comment data:'.concat(errorMessage, '.'));
+			errorMessage = new Error('data-missing', 'Missing comment data:'.concat(errorMessage, '.'));
 		}
 		return errorMessage;
 	}

@@ -24,11 +24,11 @@ Meteor.method('publishComments', (commentCandidate) => {
 	const settings = Settings.findOne({ tenantId: tenant._id });
 
 	if (!settings || settings.webhooksToken !== commentCandidate.token) {
-		throw new Meteor.Error('Webhook publishing not authorized');
+		throw new Error('Webhook publishing not authorized');
 	}
 
 	if (!tenant) {
-		throw new Meteor.Error(
+		throw new Error(
 			`could not find tenant for given subdomain; was ${commentCandidate.subdomain}`);
 	}
 

@@ -106,12 +106,13 @@ class AddRevisionLayout extends Component {
 	}
 	addRevision(formData, textValue, textRawValue) {
 		const { comment } = this.state;
+		const now = new Date();
 		const token = Cookies.get('loginToken');
 		const revision = {
 			title: formData.titleValue,
 			text: textValue,
 			textRaw: textRawValue,
-			created: new Date(),
+			created: new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()).toISOString(),
 			slug: slugify(formData.titleValue),
 		};
 		const that = this;

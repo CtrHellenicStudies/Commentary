@@ -22,7 +22,7 @@ const commentsCommentersIdsFix = () => {
 				},
 			});
 		} catch (err) {
-			throw new Meteor.Error(`Error fixing comment.commentersIdsFix ${comment._id}: ${err}`);
+			throw new Error(`Error fixing comment.commentersIdsFix ${comment._id}: ${err}`);
 		}
 	});
 	console.log(' -- method commentsCommentersIdsFix run completed');

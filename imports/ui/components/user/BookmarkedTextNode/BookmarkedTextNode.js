@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
 
 // graphql
 import { worksQuery } from '/imports/graphql/methods/works';

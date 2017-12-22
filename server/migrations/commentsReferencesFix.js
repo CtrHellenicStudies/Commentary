@@ -19,7 +19,7 @@ const commentsReferenceWorkFix = () => {
 					},
 				});
 			} catch (err) {
-				throw new Meteor.Error(`Error fixing comment.referenceWorkId ${comment._id}.${comment.referenceId}: ${err}`);
+				throw new Error(`Error fixing comment.referenceWorkId ${comment._id}.${comment.referenceId}: ${err}`);
 			}
 		}
 	});

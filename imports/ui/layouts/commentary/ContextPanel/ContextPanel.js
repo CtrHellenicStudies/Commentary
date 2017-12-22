@@ -31,17 +31,17 @@ import ContextPanelContent from './ContextPanelContent';
 const getLineFrom = (props) => {
 	if (props.commentGroup) return props.commentGroup.lineFrom;
 	if (props.workSlug) return props.lineFrom;
-	throw new Meteor.Error('commentGroup or lineFrom missing in ContextPanel component - one of two is requierd');
+	throw new Error('commentGroup or lineFrom missing in ContextPanel component - one of two is requierd');
 };
 const getWorkSlug = (props) => {
 	if (props.commentGroup) return props.commentGroup.work.slug;
 	if (props.workSlug) return props.workSlug;
-	throw new Meteor.Error('commentGroup or workSlug missing in ContextPanel component - one of two is requierd');
+	throw new Error('commentGroup or workSlug missing in ContextPanel component - one of two is requierd');
 };
 const getsubworkN = (props) => {
 	if (props.commentGroup) return props.commentGroup.subwork.n;
 	if (props.subworkN) return props.subworkN;
-	throw new Meteor.Error('commentGroup or subworkN missing in ContextPanel component - one of two is requierd');
+	throw new Error('commentGroup or subworkN missing in ContextPanel component - one of two is requierd');
 };
 
 const LINE_THRESHOLD = 25;

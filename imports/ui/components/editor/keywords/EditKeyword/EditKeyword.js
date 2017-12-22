@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import { compose } from 'react-apollo';
@@ -128,7 +127,7 @@ class EditKeyword extends Component {
 				)
 			);
 		}
-		throw new Meteor.Error('missing filed description or descriptionRaw in keyword');
+		throw new Error('missing filed description or descriptionRaw in keyword');
 	}
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());

@@ -70,7 +70,7 @@ const workCitationToLemmaURN = () => {
 				},
 			});
 		} catch (err) {
-			throw new Meteor.Error(`Error fixing comment.workCitationToLemmaURN ${comment._id}: ${err}`);
+			throw new Error(`Error fixing comment.workCitationToLemmaURN ${comment._id}: ${err}`);
 		}
 	});
 

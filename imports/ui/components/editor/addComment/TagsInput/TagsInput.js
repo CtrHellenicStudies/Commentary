@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
 
 import autoBind from 'react-autobind';
 import { compose } from 'react-apollo';

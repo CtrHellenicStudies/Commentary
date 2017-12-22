@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
-import { Meteor } from 'meteor/meteor';
 import FlatButton from 'material-ui/FlatButton';
 import { compose } from 'react-apollo';
 

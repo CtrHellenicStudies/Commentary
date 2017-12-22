@@ -24,17 +24,17 @@ Meteor.method('publishKeywords', (keywordCandidate) => {
 	const settings = Settings.findOne({ tenantId: tenant._id });
 
 	if (!settings || settings.webhooksToken !== keywordCandidate.token) {
-		throw new Meteor.Error('Webhook publishing not authorized');
+		throw new Error('Webhook publishing not authorized');
 	}
 
 	if (keywordCandidate.type !== 'word' && keywordCandidate.type !== 'idea') {
-		throw new Meteor.Error(
+		throw new Error(
 			`type must be word or idea; was ${keywordCandidate.type}`);
 	}
 
 
 	if (!tenant) {
-		throw new Meteor.Error(
+		throw new Error(
 			`could not find tenant for given subdomain; was ${keywordCandidate.subdomain}`);
 	}
 

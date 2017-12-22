@@ -23,11 +23,11 @@ export const getAuthorizedUser = (roles, token) => {
 	}
 
 	if (!user) {
-		throw new Meteor.Error('Could not find logged in user');
+		throw new Error('Could not find logged in user');
 	}
 
 	if (!(_.intersection(roles, user.roles).length)) {
-		throw new Meteor.Error(`User ${user._id} attempted action in an unauthorized role`);
+		throw new Error(`User ${user._id} attempted action in an unauthorized role`);
 	}
 
 	return user;

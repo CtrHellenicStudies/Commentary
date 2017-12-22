@@ -1,4 +1,3 @@
-import { check } from 'meteor/check';
 import _ from 'underscore';
 
 // models
@@ -406,12 +405,6 @@ const _splitUrnIsOk = (splitURN) => {
 			&& splitURN[1] === 'cts'
 			&& splitURN[2] === 'greekLit'
 			) {
-			// check(splitURN[3], String); // artist
-			// check(splitURN[4], String); // work
-			// check(splitURN[5], String); // subwork
-			// check(splitURN[6], String); // line / lines
-			// check(splitURN[7], String); // comment id
-			// check(splitURN[8], String); // revision
 			return true;
 		}
 	}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -16,9 +15,6 @@ import CommunityPage from '/imports/ui/components/community/CommunityPage';
 
 // graphql
 import { settingsQuery } from '/imports/graphql/methods/settings';
-
-// models
-import Settings from '/imports/models/settings';
 
 // lib
 import muiTheme from '/imports/lib/muiTheme';

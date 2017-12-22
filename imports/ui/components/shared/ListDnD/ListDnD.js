@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
@@ -142,7 +141,7 @@ function createListGroupItemDnD (ItemType) {
 		const ListGroupItemDnD = DropTarget(ItemType, listGroupItemTarget, collectTarget)(dragSource);
 		return ListGroupItemDnD;
 	}
-	throw new Meteor.Error('Incorrect ItemType provided to function createListGroupItemDnD');
+	throw new Error('Incorrect ItemType provided to function createListGroupItemDnD');
 }
 
 /*

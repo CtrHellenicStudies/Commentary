@@ -15,7 +15,7 @@ const usersProfileNamesFix = () => {
 				},
 			});
 		} catch (err) {
-			throw new Meteor.Error(`Error fixing user ${user._id}: ${err}`);
+			throw new Error(`Error fixing user ${user._id}: ${err}`);
 		}
 	});
 	console.log(' -- method usersProfileNamesFix run completed');

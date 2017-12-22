@@ -38,7 +38,7 @@ const accountsMethods = {
 	},
 	updateAccount(field, value) {
 		if (!Meteor.userId()) {
-			throw new Meteor.Error('not-authorized');
+			throw new Error('not-authorized');
 		}
 
 		check(field, String);
@@ -54,7 +54,7 @@ const accountsMethods = {
 				}, setModifier
 			);
 		} catch (err) {
-			throw new Meteor.Error('user update failed');
+			throw new Error('user update failed');
 		}
 		return result;
 	},
@@ -66,7 +66,7 @@ const accountsMethods = {
 				_id: Meteor.userId(),
 			});
 		}
-		throw new Meteor.Error('not-authorized');
+		throw new Error('not-authorized');
 	},
 	currentAdminUser() {
 		return Meteor.users.findOne({ _id: Meteor.userId(), roles: {$in: ['admin']} });
@@ -75,7 +75,7 @@ const accountsMethods = {
 		const userId = Meteor.userId();
 
 		if (!userId) {
-			throw new Meteor.Error('custom-accounts', 'getNewStampedToken called but user is not logged in');
+			throw new Error('custom-accounts', 'getNewStampedToken called but user is not logged in');
 		}
 
 		const stampedToken = Accounts._generateStampedLoginToken();

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Draggable from 'react-draggable';
 import { compose } from 'react-apollo';

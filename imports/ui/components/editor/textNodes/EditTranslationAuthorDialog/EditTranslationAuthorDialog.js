@@ -5,7 +5,6 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import _ from 'underscore';
-import { Meteor } from 'meteor/meteor';
 import Cookies from 'js-cookie';
 import { compose } from 'react-apollo';
 

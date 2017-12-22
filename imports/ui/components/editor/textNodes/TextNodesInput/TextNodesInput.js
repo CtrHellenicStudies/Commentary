@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
-import { Meteor } from 'meteor/meteor';
 import {
 	FormGroup,
 	ControlLabel,
@@ -203,7 +202,6 @@ class TextNodesInput extends Component {
 		}
 
 		debounce(500, () => {
-			// Call update method on meteor backend
 			props.textNodesUpdate(editedTextNodeId, editionId, newValue, editedTextNode.n).then(
 			(err, res) => {
 				if (err) {

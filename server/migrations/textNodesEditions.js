@@ -80,7 +80,7 @@ function updateTextNodes() {
 				// if edition found update newTextNode object
 				if (edition && edition._id) {
 					newTextNode.text[i].edition = edition._id;
-				} else throw new Meteor.Error('Edition not found');
+				} else throw new Error('Edition not found');
 			}
 		});
 

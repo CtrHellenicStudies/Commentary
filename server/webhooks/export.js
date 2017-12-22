@@ -19,7 +19,7 @@ Meteor.method('exportToGit', (exportParams) => {
 	const settings = Settings.findOne({ tenantId: tenant._id });
 
 	if (!settings || settings.webhooksToken !== exportParams.token) {
-		throw new Meteor.Error('Webhook export not authorized');
+		throw new Error('Webhook export not authorized');
 	}
 
 	const deleteFolderRecursive = (path) => {
@@ -38,7 +38,7 @@ Meteor.method('exportToGit', (exportParams) => {
 
 	simpleGit().clone(exportSettings.repo, exportDir, [], Meteor.bindEnvironment((err) => {
 		if (err) {
-			throw new Meteor.Error('git-export', `Error cloning repo ${err}`);
+			throw new Error('git-export', `Error cloning repo ${err}`);
 		}
 
 		// When necessary, implement a skip/limit to partition the export files
@@ -47,7 +47,7 @@ Meteor.method('exportToGit', (exportParams) => {
 		try {
 			fs.writeFileSync(`${exportDir}/comments.json`, JSON.stringify(comments), 'utf8');
 		} catch (fileErr) {
-			throw new Meteor.Error('git-export', `Error writing file ${fileErr}`);
+			throw new Error('git-export', `Error writing file ${fileErr}`);
 		}
 
 		simpleGit()

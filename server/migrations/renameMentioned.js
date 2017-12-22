@@ -12,7 +12,7 @@ Meteor.methods({
 			'services.resume.loginTokens.hashedToken': Accounts._hashLoginToken(token),
 		})
 		) {
-			throw new Meteor.Error('renameMentioned', 'not-authorized');
+			throw new Error('renameMentioned', 'not-authorized');
 		}
 
 		Comments.find({'keywords.isMentionedInLemma': true}).forEach((comment) => {

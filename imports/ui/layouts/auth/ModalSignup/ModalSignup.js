@@ -58,7 +58,7 @@ class ModalSignup extends React.Component {
 			this.setState({
 				errorMsg: 'Passwords do not match.',
 			});
-			throw new Meteor.Error('Passwords do not match');
+			throw new Error('Passwords do not match');
 		}
 
 		const password = Accounts._hashPassword(checkPassword);

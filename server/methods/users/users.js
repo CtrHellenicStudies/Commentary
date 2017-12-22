@@ -59,11 +59,11 @@ const usersInsert = (token, user) => {
 				$set: user,
 			});
 		} catch (err) {
-			throw new Meteor.Error('meteor-ddp-admin', `Error with creating user: ${err}`);
+			throw new MError('meteor-ddp-admin', `Error with creating user: ${err}`);
 		}
 	}
 
-	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	throw new Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 };
 
 const usersUpdate = (token, _id, user) => {
@@ -104,7 +104,7 @@ const usersUpdate = (token, _id, user) => {
 		});
 	}
 
-	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	throw new Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 };
 
 const usersRemove = (token, userId) => {
@@ -120,7 +120,7 @@ const usersRemove = (token, userId) => {
 
 	}
 
-	throw new Meteor.Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
+	throw new Error('meteor-ddp-admin', 'Attempted publishing with invalid token');
 };
 
 const updatePosition = (token, _id, position) => {
@@ -143,7 +143,7 @@ const updatePosition = (token, _id, position) => {
 	}
 
 	if (!user) {
-		throw new Meteor.Error('recent-position-update', 'not-logged-in');
+		throw new Error('recent-position-update', 'not-logged-in');
 	}
 
 	let recentPositions = user.recentPositions || [];

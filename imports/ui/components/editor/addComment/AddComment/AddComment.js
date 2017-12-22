@@ -268,7 +268,6 @@ class AddComment extends React.Component {
 	onTagValueChange(tag, i) {
 		const { tags } = this.state;
 		const { tagsValue } = this.state;
-
 		let _selectedKeyword;
 		if (tag)			{
 			tags.forEach(_tag => {
@@ -277,7 +276,6 @@ class AddComment extends React.Component {
 				}
 			}); 
 		}
-
 
 		tagsValue[i].tagId = tag ? tag.value : undefined;
 		tagsValue[i].keyword = _selectedKeyword;
@@ -393,7 +391,7 @@ class AddComment extends React.Component {
 		}
 		let commenters = [];
 		const tags = newProps.keywordsQuery.keywords;
-		if (Meteor.user() && Meteor.user().canEditCommenters) {
+		if (Meteor.user() && Meteor.user().canEditCommenters && newProps.commentersQuery.commenters) {
 			commenters = newProps.commentersQuery.commenters.filter(x => 
 				Meteor.user().canEditCommenters.find(y => y === x._id));
 		}

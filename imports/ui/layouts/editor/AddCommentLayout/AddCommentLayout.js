@@ -57,7 +57,7 @@ const getKeywords = (formData) => {
 		for (const [key, value] of Object.entries(tag.keyword)) {
 			if (key === 'isMetionedInLemma') {
 				keywordCopy[key] = tag.isMentionedInLemma;
-			} else {
+			} else if(key !== '__typename') {
 				keywordCopy[key] = value;
 			}
 		}

@@ -17,7 +17,10 @@ query worksQuery ($tenantId: ID) {
 			n
 			tlgNumber
 			nComments
-			commentHeatmap
+			commentHeatmap {
+				n
+				nComments
+			}
 		}
 	}
 }

@@ -584,7 +584,7 @@ const WorkVisualization = React.createClass({
 			const foundSubwork = this.props.work.subworks.find(function(element, index, array) {
 				return element.n === self.state.selectedBar;
 			});
-			const dataHeatMap = foundSubwork.commentHeatmap;
+			const dataHeatMap = JSON.parse(JSON.stringify(foundSubwork.commentHeatmap));
 			const subworkN = foundSubwork.n;
 			dataHeatMap.sort(function(a, b) {
 				if (a.n < b.n)

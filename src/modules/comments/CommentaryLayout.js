@@ -19,8 +19,8 @@ import qs from 'qs-lite';
 import Cookies from 'js-cookie';
 
 // layouts:
-import Commentary from '/imports/ui/layouts/commentary/Commentary';
-import ModalLogin from '/imports/ui/layouts/auth/ModalLogin';
+import Commentary from './commentary/Commentary';
+import ModalLogin from '../login/ModalLogin';
 import Header from '/imports/ui/layouts/header/Header';
 
 // graphql

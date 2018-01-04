@@ -18,7 +18,7 @@ import FilterWidget from '../../filters/FilterWidget';
 import Spinner from '../../../components/loading/Spinner';
 import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
 import AddKeyword from './AddKeyword';
-import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
+import ContextPanel from '../../contextPanel/ContextPanel';
 
 // lib
 import muiTheme from '../../../lib/muiTheme';

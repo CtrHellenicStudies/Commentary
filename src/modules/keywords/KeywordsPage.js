@@ -13,7 +13,7 @@ import { settingsQuery } from '../../graphql/methods/settings';
 import { Link } from 'react-router-dom';
 
 // components
-import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import LoadingPage from '../../components/loading/LoadingPage';
 import KeywordsList from './KeywordsList';
 import muiTheme from '../../lib/muiTheme';

@@ -19,7 +19,7 @@ import Spinner from '../../../components/loading/Spinner';
 import FilterWidget from '../../filters/FilterWidget';
 import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
 import EditKeyword from './EditKeyword';
-import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
+import ContextPanel from '../../contextPanel/ContextPanel';
 
 // lib
 import muiTheme from '../../../lib/muiTheme';

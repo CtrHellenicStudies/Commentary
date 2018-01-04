@@ -8,7 +8,7 @@ import Header from '/imports/ui/layouts/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
-import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import ReferenceWorksList from '../referenceWorks/ReferenceWorksList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
 import AvatarIcon from '../profile/avatar/AvatarIcon';

@@ -14,7 +14,7 @@ import { login, logout } from './auth/auth'
 import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
 
 // layouts
-import CommentaryLayout from './modules/comenters/CommentaryLayout';
+import CommentaryLayout from './modules/comments/CommentaryLayout';
 import AddCommentLayout from './modules/comments/addComment/AddCommentLayout';
 import AddKeywordLayout from './modules/keywords/addKeyword/AddKeywordLayout';
 import AddTranslationLayout from './modules/translations/addTranslation/AddTranslationLayout';

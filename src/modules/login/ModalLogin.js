@@ -1,0 +1,187 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Utils from '../../lib/utils';
+import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
+
+// components:
+import OAuthButtons from './OAuthButtons';
+import PWDLoginForm from './PWDLoginForm';
+
+
+const ESCAPE_KEY = 27;
+
+
+class ModalLogin extends React.Component {
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			errorMsg: '',
+			errorSocial: '',
+		};
+
+		// methods:
+		this._handleKeyDown = this._handleKeyDown.bind(this);
+		this.handleLogin = this.handleLogin.bind(this);
+		this.handleLoginFacebook = this.handleLoginFacebook.bind(this);
+		this.handleLoginGoogle = this.handleLoginGoogle.bind(this);
+		this.handleLoginTwitter = this.handleLoginTwitter.bind(this);
+		this.signup = this.signup.bind(this);
+		this.forgot = this.forgot.bind(this);
+	}
+
+	componentWillMount() {
+		document.addEventListener('keydown', this._handleKeyDown);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this._handleKeyDown);
+	}
+
+	_handleKeyDown(event) {
+
+		const { closeModal } = this.props;
+
+		if (event.keyCode === ESCAPE_KEY) closeModal();
+	}
+
+	handleLogin(email, password) {
+        // TODO
+		// Meteor.loginWithPassword(email, password, (err) => {
+		// 	const domain = Utils.getEnvDomain();
+		// 	if (!err) {
+		// 		this.props.closeModal();
+		// 		Cookies.set('userId', Meteor.userId(), { domain });
+		// 		Cookies.set('loginToken', localStorage['Meteor.loginToken'], { domain });
+		// 	} else {
+		// 		this.setState({
+		// 			errorMsg: 'Invalid email or password',
+		// 		});
+		// 	}
+		// }); 
+	}
+
+	handleLoginFacebook() {
+        // TODO
+		// Meteor.loginWithFacebook({}, (err) => {
+		// 	if (!err) {
+		// 		this.props.closeModal();
+		// 	} else {
+		// 		this.setState({
+		// 			errorSocial: `Error with signing in with Facebook: ${err.message}`,
+		// 		});
+		// 	}
+		// });
+	}
+
+	handleLoginGoogle() {
+        // TODO
+		// Meteor.loginWithGoogle({}, (err) => {
+		// 	if (!err) {
+		// 		this.props.closeModal();
+		// 	} else {
+		// 		this.setState({
+		// 			errorSocial: `Error with signing in with Google: ${err.message}`,
+		// 		});
+		// 	}
+		// });
+	}
+
+	handleLoginTwitter() {
+        // TODO
+		// Meteor.loginWithTwitter({}, (err) => {
+		// 	if (!err) {
+		// 		this.props.closeModal();
+		// 	} else {
+		// 		this.setState({
+		// 			errorSocial: `Error with signing in with Twitter: ${err.message}`,
+		// 		});
+		// 	}
+		// });
+	}
+	signup() {
+		this.props.closeModal();
+		this.props.signupModal();
+	}
+	forgot(event) {
+		event.preventDefault();
+		this.props.closeModal();
+		this.props.history.push('/forgot-password');
+	}
+
+	render() {
+
+		const { lowered, closeModal } = this.props;
+		const { errorSocial, errorMsg } = this.state;
+
+		return (
+			<div>
+				{!Cookies.getItem('user') &&
+					<div
+						className={`ahcip-modal-login
+						ahcip-modal ahcip-login-signup ${((lowered) ? ' lowered' : '')}`}
+					>
+						<div
+							className="close-modal paper-shadow"
+							onClick={closeModal}
+						>
+							<i className="mdi mdi-close" />
+						</div>
+						<div className="modal-inner">
+							<div className="at-form">
+
+								<div className="at-title">
+									<h3>Sign In</h3>
+								</div>
+
+								<span className="error-text">
+									{errorSocial}
+								</span>
+
+								<OAuthButtons
+									handleFacebook={this.handleLoginFacebook}
+									handleGoogle={this.handleLoginGoogle}
+									handleTwitter={this.handleLoginTwitter}
+								/>
+
+								<div className="at-sep">
+									<strong>OR</strong>
+								</div>
+
+								<PWDLoginForm
+									login={this.handleLogin}
+									errorMsg={errorMsg}
+									closeModal={closeModal}
+									history={this.props.history}
+								/>
+
+								<div className="at-signup-link">
+									<p>
+										Don't have an account? <a href="#signup" id="at-signUp" onClick={this.signup} className="at-link at-signup">Register.</a>
+									</p>
+								</div>
+								<div className="at-resend-verification-email-link at-wrap">
+									<p>
+										Verification email lost? <a href="" onClick={this.forgot} id="at-resend-verification-email" className="at-link at-resend-verification-email">Send again.</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>}
+			</div>
+		);
+	}
+}
+ModalLogin.propTypes = {
+	lowered: PropTypes.bool,
+	closeModal: PropTypes.func,
+	history: PropTypes.array,
+	signupModal: PropTypes.func
+};
+ModalLogin.defaultProps = {
+	lowered: false,
+};
+
+export default ModalLogin;

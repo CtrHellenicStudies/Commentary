@@ -8,12 +8,12 @@ import { compose } from 'react-apollo';
 
 // components
 import AvatarEditor from './avatar/AvatarEditor';
-import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import LoadingPage from '../../components/loading/LoadingPage';
-import ModalChangePwd from '/imports/ui/layouts/auth/ModalChangePwd';
-import Discussions from '/imports/ui/components/user/ProfilePage/Discussions';
-import Annotations from '/imports/ui/components/user/ProfilePage/Annotations';
-import Account from '/imports/ui/components/user/ProfilePage/Account';
+import ModalChangePwd from '../login/ModalChangePwd';
+import Discussions from './Discussions';
+import Annotations from './Annotations';
+import Account from './Account';
 import Header from '/imports/ui/layouts/header/Header';
 
 // graphql

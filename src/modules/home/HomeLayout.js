@@ -13,7 +13,7 @@ import { settingsQuery } from '../../graphql/methods/settings';
 // layouts
 import Header from '/imports/ui/layouts/header/Header';
 import Footer from '../../components/footer/Footer';
-import CommunityLayout from '/imports/ui/layouts/community/CommunityLayout';
+import CommunityLayout from '../community/CommunityLayout';
 import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
 
 // components

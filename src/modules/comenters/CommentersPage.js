@@ -7,7 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { compose } from 'react-apollo';
 
 // components
-import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import CommentersList from '../comenters/CommentersList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
 import Header from '/imports/ui/layouts/header/Header';

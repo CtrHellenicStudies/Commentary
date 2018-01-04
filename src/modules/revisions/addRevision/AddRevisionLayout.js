@@ -13,7 +13,7 @@ import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
 import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
 import AddRevision from './AddRevision';
-import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
+import ContextPanel from '../../contextPanel/ContextPanel';
 
 // graphql
 import { keywordsQuery } from '../../../graphql/methods/keywords';

@@ -18,7 +18,7 @@ import { commentsQuery } from '../../graphql/methods/comments';
 
 // components
 import KeywordContext from './KeywordContext';
-import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import KeywordCommentList from './KeywordsCommentList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
 

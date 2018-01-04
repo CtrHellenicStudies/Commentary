@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { compose } from 'react-apollo';
 
 // components
-import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import ReferenceWorksList from './ReferenceWorksList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
 import LoadingPage from '../../components/loading/LoadingPage';

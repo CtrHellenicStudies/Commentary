@@ -14,10 +14,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '../filters/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
-import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
-import AddKeyword from '/imports/ui/components/editor/keywords/AddKeyword';
+import CommentLemmaSelect from '../comments/addComment/commentLemma/CommentLemmaSelect';
+import AddKeyword from '../keywords/addKeyword/AddKeyword';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
-import TextNodesEditor from '/imports/ui/components/editor/textNodes/TextNodesEditor';
+import TextNodesEditor from './TextNodesEditor';
 
 // lib
 import muiTheme from '../../lib/muiTheme';

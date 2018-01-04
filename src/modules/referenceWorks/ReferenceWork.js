@@ -19,7 +19,7 @@ import Select from 'react-select';
 import update from 'immutability-helper';
 
 // components
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '../shared/listDnD/ListDnD';
 
 
 

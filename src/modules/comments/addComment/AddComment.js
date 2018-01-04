@@ -37,12 +37,12 @@ import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 // helpers:
-import linkDecorator from '/imports/ui/components//editor/addComment/LinkButton/linkDecorator';
+import linkDecorator from '../../inputs/linkButton/linkDecorator';
 
 // components
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
-import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
-import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
+import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
+import LinkButton from '../../inputs/linkButton/LinkButton';
+import TagsInput from '../../inputs/tagsInput/TagsInput';
 import DraftEditorInput from '../../draftEditor/DraftEditorInput';
 import ReferenceWork from '../../referenceWorks/ReferenceWork';
 

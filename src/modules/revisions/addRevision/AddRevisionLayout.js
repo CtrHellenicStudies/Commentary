@@ -11,8 +11,8 @@ import Snackbar from 'material-ui/Snackbar';
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
-import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
-import AddRevision from '/imports/ui/components/editor/addRevision/AddRevision';
+import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
+import AddRevision from './AddRevision';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // graphql

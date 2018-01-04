@@ -7,33 +7,33 @@ import { ApolloProvider, createNetworkInterface } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 
 // lib
-import Utils from './modules/lib/utils';
-import { login, logout } from './modules/auth/auth'
+import Utils from './lib/utils';
+import { login, logout } from './auth/auth'
 
 // graphql
-import { tenantsBySubdomainQuery } from './modules/graphql/methods/tenants'
+import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
 
 // layouts
-import CommentaryLayout from './modules/components/comenters/CommentaryLayout';
-import AddCommentLayout from './modules/components/comments/addComment/AddCommentLayout';
-import AddKeywordLayout from './modules/components/keywords/addKeyword/AddKeywordLayout';
-import AddTranslationLayout from './modules/components/translations/addTranslation/AddTranslationLayout';
-import AddRevisionLayout from './modules/components/revisions/addRevision/AddRevisionLayout';
-import EditKeywordLayout from './modules/components/keywords/editKeyword/EditKeywordLayout';
-import TextNodesEditorLayout from './modules/components/textNodes/TextNodesEditorLayout';
-import HomeLayout from './modules/components/home/HomeLayout';
-import NameResolutionServiceLayout from './modules/components/services/NameResolutionServiceLayout';
-import NotFound from './modules/components/notFound/NotFound';
+import CommentaryLayout from './modules/comenters/CommentaryLayout';
+import AddCommentLayout from './modules/comments/addComment/AddCommentLayout';
+import AddKeywordLayout from './modules/keywords/addKeyword/AddKeywordLayout';
+import AddTranslationLayout from './modules/translations/addTranslation/AddTranslationLayout';
+import AddRevisionLayout from './modules/revisions/addRevision/AddRevisionLayout';
+import EditKeywordLayout from './modules/keywords/editKeyword/EditKeywordLayout';
+import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
+import HomeLayout from './modules/home/HomeLayout';
+import NameResolutionServiceLayout from './modules/services/NameResolutionServiceLayout';
+import NotFound from './modules/notFound/NotFound';
 
 // pages
-import Page from './modules/components/page/Page';
-import CommentersPage from './modules/components/comenters/CommentersPage';
-import CommenterDetail from './modules/components/comenters/CommenterDetail';
-import KeywordsPage from './modules/components/keywords/KeywordsPage';
-import KeywordDetail from './modules/components/keywords/KeywordDetail';
-import ProfilePage from './modules/components/profile/ProfilePage';
-import ReferenceWorksPage from './modules/components/referenceWorks/ReferenceWorksPage';
-import ReferenceWorkDetail from './modules/components/referenceWorks/ReferenceWorkDetail';
+import Page from './modules/page/Page';
+import CommentersPage from './modules/comenters/CommentersPage';
+import CommenterDetail from './modules/comenters/CommenterDetail';
+import KeywordsPage from './modules/keywords/KeywordsPage';
+import KeywordDetail from './modules/keywords/KeywordDetail';
+import ProfilePage from './modules/profile/ProfilePage';
+import ReferenceWorksPage from './modules/referenceWorks/ReferenceWorksPage';
+import ReferenceWorkDetail from './modules/referenceWorks/ReferenceWorkDetail';
 
 
 const loginToken = Cookies.get('token');

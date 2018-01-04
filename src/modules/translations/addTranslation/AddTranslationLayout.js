@@ -15,8 +15,8 @@ import { textNodesQuery } from '../../../graphql/methods/textNodes';
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
 import Spinner from '/imports/ui/components/loading/Spinner';
-import CommentLemmaSelect from '/imports/ui/components/editor/addComment/CommentLemmaSelect';
-import AddTranslation from '/imports/ui/components/editor/addTranslation/AddTranslation';
+import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
+import AddTranslation from './AddTranslation';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';
 
 // lib

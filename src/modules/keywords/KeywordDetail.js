@@ -7,7 +7,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 import { compose } from 'react-apollo';
 import $ from 'jquery';
 

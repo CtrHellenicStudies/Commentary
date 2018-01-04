@@ -21,7 +21,7 @@ import Cookies from 'js-cookie';
 // layouts:
 import Commentary from './commentary/Commentary';
 import ModalLogin from '../login/ModalLogin';
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 
 // graphql
 import { referenceWorksQuery } from '../../graphql/methods/referenceWorks';

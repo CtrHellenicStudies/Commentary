@@ -11,10 +11,10 @@ import { tenantsQuery } from '../../graphql/methods/tenants';
 import { settingsQuery } from '../../graphql/methods/settings';
 
 // layouts
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import CommunityLayout from '../community/CommunityLayout';
-import NameResolutionServiceLayout from '/imports/ui/layouts/nameResolutionService/NameResolutionServiceLayout';
+import NameResolutionServiceLayout from '../services/NameResolutionServiceLayout';
 
 // components
 import Home from './Home';

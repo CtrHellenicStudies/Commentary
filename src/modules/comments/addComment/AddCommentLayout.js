@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import mongoose from 'mongoose';
 
-import { compose, ApolloProvider } from 'react-apollo';
+import { compose } from 'react-apollo';
 
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
@@ -11,7 +11,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import qs from 'qs-lite';
 
 // components:
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../../components/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
 import Spinner from '../../../components/loading/Spinner';
 import CommentLemmaSelect from './commentLemma/CommentLemmaSelect';
@@ -20,7 +20,6 @@ import ContextPanel from '../../contextPanel/ContextPanel';
 
 // lib
 import muiTheme from '../../../lib/muiTheme';
-import client from '../../../configuration/client';
 import Utils from '../../../lib/utils';
 
 // graphql
@@ -37,14 +36,6 @@ const handlePermissions = () => {
 	// 	}
 	// }
     // TODO
-};
-
-const getReferenceWorks = (formData) => {
-	let referenceWorks = null;
-	if (formData.referenceWorksValue) {
-		//referenceWorks = ReferenceWorks.findOne({_id: formData.referenceWorksValue.value}); // TODO
-	}
-	return referenceWorks;
 };
 
 
@@ -226,7 +217,6 @@ class AddCommentLayout extends Component {
 		const referenceWorks = formData.referenceWorks;
 		const commenters = Utils.getCommenters(formData.commenterValue, possibleCommenters);
 		const selectedLineTo = this.getSelectedLineTo();
-		const token = Cookies.get('loginToken');
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);

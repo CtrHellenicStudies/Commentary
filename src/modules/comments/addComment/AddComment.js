@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
-import {compose} from 'react-apollo';
+import { compose } from 'react-apollo';
 import Cookies from 'js-cookie';
 import slugify from 'slugify';
 

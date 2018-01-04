@@ -18,7 +18,7 @@ import LoadingPage from '../../components/loading/LoadingPage';
 import KeywordsList from './KeywordsList';
 import muiTheme from '../../lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 

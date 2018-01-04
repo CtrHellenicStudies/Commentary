@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';

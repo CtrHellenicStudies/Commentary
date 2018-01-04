@@ -10,7 +10,7 @@ import { compose } from 'react-apollo';
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import CommentersList from '../comenters/CommentersList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';

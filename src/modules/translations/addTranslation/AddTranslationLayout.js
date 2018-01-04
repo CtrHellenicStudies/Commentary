@@ -12,7 +12,7 @@ import Cookies from 'js-cookie';
 import { textNodesQuery } from '../../../graphql/methods/textNodes';
 
 // components:
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../../components/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
 import Spinner from '../../../components/loading/Spinner';
 import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';

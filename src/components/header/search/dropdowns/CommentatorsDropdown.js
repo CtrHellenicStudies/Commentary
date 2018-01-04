@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // components:
-import SearchToolDropdown from '../../../../components/header/search/SearchToolDropdown';
-import SearchTermButton from '../../../../components/header/search/SearchTermButton';
+import SearchToolDropdown from '../SearchToolDropdown';
+import SearchTermButton from '../SearchTermButton';
 
 // helpers:
 import { isActive, dropdownPropTypes, dropdownDefaultProps } from '../helpers';

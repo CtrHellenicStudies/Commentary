@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import muiTheme from '../../lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { compose } from 'react-apollo';
 

@@ -5,7 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { compose } from 'react-apollo';
 
 // layouts & components
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { SnackAttack } from '../shared/SnackAttack';
 import LoadingHome from '../../components/loading/LoadingHome';

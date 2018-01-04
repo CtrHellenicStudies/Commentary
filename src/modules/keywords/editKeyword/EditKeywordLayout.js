@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Cookies from 'js-cookie';
 
 // layouts
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../../components/header/Header';
 
 // graphql
 import { keywordsQuery, keywordUpdateMutation } from '../../../graphql/methods/keywords';

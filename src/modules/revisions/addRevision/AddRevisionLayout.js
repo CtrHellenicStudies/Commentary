@@ -9,7 +9,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
 
 // components:
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../../components/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
 import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
 import AddRevision from './AddRevision';

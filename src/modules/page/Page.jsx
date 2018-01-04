@@ -11,10 +11,10 @@ import { settingsQuery } from '../../graphql/methods/settings';
 import { pagesQuery } from '../../graphql/methods/pages';
 
 // layouts
-import NotFound from '/imports/ui/layouts/notFound/NotFound';
+import NotFound from '../notFound/NotFound';
 import muiTheme from '../../lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components

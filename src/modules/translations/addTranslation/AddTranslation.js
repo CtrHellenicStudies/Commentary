@@ -7,10 +7,6 @@ import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
-import Toggle from 'material-ui/Toggle';
-import TextField from 'material-ui/TextField';
-import { WorksDropdown, SubworksDropdown } from '../../inputs/searchDropdowns/SearchDropdowns';
-import { Creatable } from 'react-select';
 
 
 // graphql

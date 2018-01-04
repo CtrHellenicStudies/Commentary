@@ -11,7 +11,7 @@ import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components:
-import Header from '/imports/ui/layouts/header/Header';
+import Header from '../../components/header/Header';
 import FilterWidget from '../filters/FilterWidget';
 import Spinner from '../../components/loading/Spinner';
 import CommentLemmaSelect from '../comments/addComment/commentLemma/CommentLemmaSelect';

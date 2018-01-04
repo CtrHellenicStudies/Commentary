@@ -17,7 +17,7 @@ import { commentersQuery } from '../../graphql/methods/commenters';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
-import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import LoadingPage from '../../components/loading/LoadingPage';
 import CommenterReferenceWorks from '../comenters/commenterReferenceWorks/CommenterReferenceWorks';
 import CommenterVisualizations from '../comenters/commenterVizualizations/CommenterVizualizations';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';

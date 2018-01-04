@@ -17,9 +17,9 @@ import { keywordsQuery, keywordRemoveMutation } from '../../graphql/methods/keyw
 import { commentsQuery } from '../../graphql/methods/comments';
 
 // components
-import KeywordContext from '/imports/ui/components/keywords/KeywordContext';
+import KeywordContext from './KeywordContext';
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
-import KeywordCommentList from '/imports/ui/components/keywords/KeywordCommentList';
+import KeywordCommentList from './KeywordsCommentList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
 
 // lib

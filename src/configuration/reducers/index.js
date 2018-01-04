@@ -8,7 +8,7 @@ import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 
 import client from '../client';
-import * as ActionTypes from '../actions';
+import * as ActionTypes from '../../actions';
 
 import comments from './comments';
 import textNodes from './textNodes';

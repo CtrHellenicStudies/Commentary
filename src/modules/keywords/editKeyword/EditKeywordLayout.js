@@ -15,7 +15,7 @@ import { keywordsQuery, keywordUpdateMutation } from '../../../graphql/methods/k
 import { textNodesQuery } from '../../../graphql/methods/textNodes';
 
 // components
-import Spinner from '/imports/ui/components/loading/Spinner';
+import Spinner from '../../../components/loading/Spinner';
 import FilterWidget from '../../filters/FilterWidget';
 import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
 import EditKeyword from './EditKeyword';

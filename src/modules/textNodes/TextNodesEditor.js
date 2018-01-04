@@ -24,13 +24,13 @@ import * as textNodesActions from '../../actions/textNodes';
 import Utils from '../../lib/utils';
 
 // components
-import TextNodesInput from '../TextNodesInput';
-import EditWorkDialog from '../EditWorkDialog';
-import EditEditionDialog from '../EditEditionDialog';
-import EditSubworkDialog from '../EditSubworkDialog';
-import MultilineDialog from '../MultilineDialog';
-import TranslationSelect from '../TranslationSelect/TranslationSelect';
-import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
+import TextNodesInput from './input/TextNodesInput';
+import EditWorkDialog from './dialog/EditWorkDialog';
+import EditEditionDialog from './dialog/EditEditionDialog';
+import EditSubworkDialog from './dialog/EditSubworkDialog';
+import MultilineDialog from './multiline/MultilineDialog';
+import TranslationSelect from '../translations/select/TranslationSelect';
+import TranslationNodeInput from '../translations/input/TranslationNodeInput';
 
 
 class TextNodesEditor extends Component {

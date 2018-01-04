@@ -9,10 +9,10 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
-import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceWorksList';
+import ReferenceWorksList from '../referenceWorks/ReferenceWorksList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
 import AvatarIcon from '../profile/avatar/AvatarIcon';
-import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import LoadingPage from '../../components/loading/LoadingPage';
 
 // graphql
 import { commentersQuery } from '../../graphql/methods/commenters';

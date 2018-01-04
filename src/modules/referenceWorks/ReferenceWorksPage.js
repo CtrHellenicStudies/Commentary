@@ -9,9 +9,9 @@ import { compose } from 'react-apollo';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
-import ReferenceWorksList from '/imports/ui/components/referenceWorks/ReferenceWorksList';
+import ReferenceWorksList from './ReferenceWorksList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
-import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import LoadingPage from '../../components/loading/LoadingPage';
 
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';

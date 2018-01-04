@@ -14,8 +14,8 @@ import { Link } from 'react-router-dom';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
-import LoadingPage from '/imports/ui/components/loading/LoadingPage';
-import KeywordsList from '/imports/ui/components/keywords/KeywordsList';
+import LoadingPage from '../../components/loading/LoadingPage';
+import KeywordsList from './KeywordsList';
 import muiTheme from '../../lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '/imports/ui/layouts/header/Header';

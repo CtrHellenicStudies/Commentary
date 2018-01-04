@@ -19,7 +19,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '/imports/ui/components/shared/BackgroundImageHolder';
-import LoadingPage from '/imports/ui/components/loading/LoadingPage';
+import LoadingPage from '../../components/loading/LoadingPage';
 
 
 class Page extends Component {

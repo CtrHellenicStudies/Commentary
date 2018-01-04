@@ -2,7 +2,7 @@
  * Resolvers for modifing comments with comment editor 
  */
 
-import * as types from '../actions/comments';
+import * as types from '../../actions/comments';
 
 export default (state = [], action) => {
 	switch (action.type) {

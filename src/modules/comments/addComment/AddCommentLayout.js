@@ -13,7 +13,7 @@ import qs from 'qs-lite';
 // components:
 import Header from '/imports/ui/layouts/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
-import Spinner from '/imports/ui/components/loading/Spinner';
+import Spinner from '../../../components/loading/Spinner';
 import CommentLemmaSelect from './commentLemma/CommentLemmaSelect';
 import AddComment from './AddComment';
 import ContextPanel from '/imports/ui/layouts/commentary/ContextPanel';

@@ -1,0 +1,140 @@
+.loading {
+
+	&.home {
+		.content.primary {
+			min-height: none;
+			height: 100vh;
+			position: relative;
+		}
+	}
+
+	.block.header {
+		height:500px;
+		background: #5d4037;
+		-webkit-animation: page-head-flash linear 2s;
+		animation: page-head-flash linear 2s;
+	}
+
+	.page-content {
+		height:600px;
+		max-width:700px;
+		width:100%;
+	}
+
+}
+
+.loading-mock {
+	border-radius:2px;
+	-webkit-animation: flash linear 1.2s infinite;
+	animation: flash linear 1.2s infinite;
+}
+
+.title-filler {
+	background:#444;
+	height:60px;
+	width:50%;
+  margin: 120px auto 0px;
+	line-height:1.3em;
+	display:inline-block;
+	border-radius:2px;
+}
+
+.content-filler {
+	background:#aaa;
+	height:30px;
+	width:100%;
+	margin:25px 0;
+
+	&.content-filler-2 {
+		width:70%;
+	}
+}
+
+.lemma-filler {
+	background:#ddd;
+	height:20px;
+	width:100%;
+	margin:15px 0;
+
+	&.lemma-filler-2 {
+		width:70%;
+	}
+}
+
+.home-filler {
+	background: rgba(255, 255, 255, 0.2);
+	height:60px;
+	width:66%;
+	margin:40px 0;
+
+	&.home-filler-2 {
+		height:36px;
+		width:50%;
+		margin:50px 0;
+	}
+
+	&.home-filler-3 {
+		height: 60px;
+		width: 160px;
+		margin: 25px 25px 25px 0;
+		display: inline-block;
+	}
+
+	&.home-filler-header {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 80px;
+		z-index: 1;
+		background: rgba(255, 255, 255, 0.1);
+		margin: 0;
+	}
+
+	&.home-filler-scroll-down {
+		position: absolute;
+		bottom: 50px;
+		right: 30px;
+		width: 260px;
+		height: 30px;
+		z-index: 1;
+		background: rgba(255, 255, 255, 0.1);
+		margin: 0;
+	}
+}
+
+@-webkit-keyframes page-head-fade {
+	0% { opacity: .8; }
+	100% { opacity: 1; }
+}
+@keyframes page-head-fade {
+	0% { opacity: .8; }
+	100% { opacity: 1; }
+}
+
+@media (max-width:800px){
+	.home-filler {
+		&.home-filler-scroll-down {
+			display: none;
+		}
+	}
+}
+
+@media (max-width: 650px){
+	.home-filler {
+		&.home-filler-3 {
+			display: none;
+		}
+	}
+}
+
+@media (max-width: 500px){
+	.home-filler {
+		&.home-filler-1 {
+			width: 100%;
+		}
+		&.home-filler-2 {
+			width: 66%;
+		}
+	}
+}

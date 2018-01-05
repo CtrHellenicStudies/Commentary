@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+
+
+// css
+import "./less/main.css";
+
 import Cookies from 'js-cookie';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';

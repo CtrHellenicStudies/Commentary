@@ -27,6 +27,7 @@
     "material-ui": "^0.16.4",
     "moment": "^2.18.1",
     "mongoose": "^4.13.7",
+    "node-less-chokidar": "^0.1.2",
     "qs-lite": "0.0.1",
     "random-id": "0.0.2",
     "react": "^15.6.1",
@@ -60,8 +61,12 @@
     "union-class-names": "^1.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build-css": "node-less-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-less-chokidar src/ -o src/ --watch --recursive",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build-js": "react-scripts build",
+    "build": "npm-run-all build-css build-js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

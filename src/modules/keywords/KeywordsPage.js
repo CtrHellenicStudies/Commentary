@@ -10,16 +10,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';
 
-import { Link } from 'react-router-dom';
-
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import LoadingPage from '../../components/loading/LoadingPage';
 import KeywordsList from './KeywordsList';
-import muiTheme from '../../lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '../../components/header/Header';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 
 class KeywordsPage extends Component {

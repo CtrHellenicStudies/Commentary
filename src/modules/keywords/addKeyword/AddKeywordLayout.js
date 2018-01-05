@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // graphql
@@ -15,7 +14,6 @@ import { textNodesQuery } from '../../../graphql/methods/textNodes';
 // components:
 import Header from '../../../components/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
-import Spinner from '../../../components/loading/Spinner';
 import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
 import AddKeyword from './AddKeyword';
 import ContextPanel from '../../contextPanel/ContextPanel';
@@ -25,21 +23,11 @@ import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 
-const AddKeywordLayout = React.createClass({
+class AddKeywordLayout extends Component {
 
-	propTypes: {
-		isTest: PropTypes.bool,
-		history: PropTypes.object,
-		keywordInsert: PropTypes.func,
-		textNodesQuery: PropTypes.object
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			filters: [],
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
@@ -47,16 +35,26 @@ const AddKeywordLayout = React.createClass({
 			contextReaderOpen: true,
 			loading: false,
 		};
-	},
 
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+		this.getWork = this.getWork.bind(this);
+		this.getSubwork = this.getSubwork.bind(this);
+		this.getLineLetter = this.getLineLetter.bind(this);
+		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
+		this.getType = this.getType.bind(this);
+		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
+		this.updateSelectedLines = this.updateSelectedLines.bind(this);
+		this.addKeyword = this.addKeyword.bind(this);
+		this.showSnackBar = this.showSnackBar.bind(this);
+		this.onTypeChange = this.onTypeChange.bind(this);
+		this.handlePermissions = this.handlePermissions.bind(this);
+		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
+		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+
+	}
 
 	componentWillUpdate() {
 		this.handlePermissions();
-	},
-
+	}
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
@@ -72,8 +70,7 @@ const AddKeywordLayout = React.createClass({
 			};
 		}
 		return work;
-	},
-
+	}
 	getSubwork() {
 		let subwork = null;
 		this.state.filters.forEach((filter) => {
@@ -88,16 +85,14 @@ const AddKeywordLayout = React.createClass({
 			};
 		}
 		return subwork;
-	},
-
+	}
 	getLineLetter() {
 		let lineLetter = '';
 		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
 			lineLetter = this.state.lineLetterValue;
 		}
 		return lineLetter;
-	},
-
+	}
 	getSelectedLineTo() {
 		let selectedLineTo = 0;
 		if (this.state.selectedLineTo === 0) {
@@ -106,14 +101,10 @@ const AddKeywordLayout = React.createClass({
 			selectedLineTo = this.state.selectedLineTo;
 		}
 		return selectedLineTo;
-	},
-
+	}
 	getType() {
 		return this.state.selectedType;
-	},
-
-	// --- BEGIN LINE SELECTION --- //
-
+	}
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
 		let keyIsInFilter = false;
@@ -161,8 +152,7 @@ const AddKeywordLayout = React.createClass({
 			filters,
 			skip: 0,
 		});
-	},
-
+	}
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
 		if (selectedLineFrom === null) {
 			this.setState({
@@ -185,17 +175,11 @@ const AddKeywordLayout = React.createClass({
 		const { filters } = this.state;
 		let work;
         let subwork;
-        let lineFrom;
-        let lineTo;
 		filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
 			} else if (filter.key === 'subworks') {
 				subwork = filter.values[0];
-			} else if (filter.key === 'lineTo') {
-				lineTo = filter.values[0];
-			} else if (filter.key === 'lineFrom') {
-				lineFrom = filter.values[0];
 			}
 		});
 		const properties = {
@@ -205,12 +189,7 @@ const AddKeywordLayout = React.createClass({
 			lineTo: selectedLineTo
 		};
 		this.props.textNodesQuery.refetch(properties);
-	},
-
-	// --- END LINE SELECTION --- //
-
-	// --- BEGNI ADD COMMENT --- //
-
+	}
 	addKeyword(formData, textValue, textRawValue) {
 		this.setState({
 			loading: true,
@@ -221,7 +200,6 @@ const AddKeywordLayout = React.createClass({
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
-		const token = Cookies.get('loginToken');
 		// create keyword object to be inserted:
 		const keyword = {
 			work: {
@@ -248,8 +226,7 @@ const AddKeywordLayout = React.createClass({
 			that.props.history.push(`/tags/${keyword.slug}`);
 		}
 		);
-	},
-
+	}
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
@@ -260,35 +237,27 @@ const AddKeywordLayout = React.createClass({
 				snackbarOpen: false,
 			});
 		}, 4000);
-	},
+	}
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
-	},
+	}
 	onTypeChange(type) {
 		this.setState({
 			selectedType: type,
 		});
-	},
-
-	// --- BEGNI PERMISSIONS HANDLE --- //
-
+	}
 	handlePermissions() {
 		// if (Roles.subscription.ready()) {
 		// 	if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
 		// 		this.props.history.push('/');
 		// 	}
 		// } TODO
-	},
-
-	// --- END PERMISSIONS HANDLE --- //
-
-
+	}
 	lineLetterUpdate(value) {
 		this.setState({
 			lineLetter: value,
 		});
-	},
-
+	}
 	handleChangeLineN(e) {
 		const filters = this.state.filters;
 
@@ -356,17 +325,13 @@ const AddKeywordLayout = React.createClass({
 		this.setState({
 			filters,
 		});
-	},
-	getChildrenContext() {
-		return getMuiTheme(muiTheme);
-	},
+	}
 	render() {
-		const { filters, loading } = this.state;
+		const { filters } = this.state;
 		const { isTest } = this.props;
 		let work;
 		let subwork;
 		let lineFrom;
-		let lineTo;
 
 		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
 
@@ -375,8 +340,6 @@ const AddKeywordLayout = React.createClass({
 				work = filter.values[0];
 			} else if (filter.key === 'subworks') {
 				subwork = filter.values[0];
-			} else if (filter.key === 'lineTo') {
-				lineTo = filter.values[0];
 			} else if (filter.key === 'lineFrom') {
 				lineFrom = filter.values[0];
 			}
@@ -440,9 +403,18 @@ const AddKeywordLayout = React.createClass({
 				</div>
 			</MuiThemeProvider>
 		);
-	},
-});
+	}
+}
+AddKeywordLayout.propTypes = {
+	isTest: PropTypes.bool,
+	history: PropTypes.object,
+	keywordInsert: PropTypes.func,
+	textNodesQuery: PropTypes.object
+};
 
+AddKeywordLayout.childContextTypes = {
+	muiTheme: PropTypes.object.isRequired,
+};
 export default compose(
 	keywordInsertMutation,
 	textNodesQuery

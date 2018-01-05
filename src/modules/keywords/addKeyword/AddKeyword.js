@@ -7,16 +7,11 @@ import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
-import {stateFromHTML} from 'draft-js-import-html';
 import Snackbar from 'material-ui/Snackbar';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
-import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import { fromJS } from 'immutable';
-import { convertToHTML } from 'draft-convert';
 
 // graphql
 import { commentersQuery } from '../../../graphql/methods/commenters';
@@ -24,8 +19,6 @@ import { keywordsQuery } from '../../../graphql/methods/keywords';
 
 
 // lib
-import muiTheme from '../../../lib/muiTheme';
-import LinkButton from '../../inputs/linkButton/LinkButton';
 import Utils from '../../../lib/utils';
 import DraftEditorInput from '../../draftEditor/DraftEditorInput';
 

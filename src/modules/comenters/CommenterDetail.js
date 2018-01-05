@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 
-import FlatButton from 'material-ui/FlatButton';
 import { compose } from 'react-apollo';
 
-import muiTheme from '../../lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '../../components/header/Header';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';
@@ -28,7 +25,6 @@ import Utils from '../../lib/utils';
 class CommenterDetail extends Component {
 	constructor(props) {
 		super(props);
-        const user = 
 		this.state = {
 			readMoreBio: false,
 			loggedIn: Cookies.getItem('user'),
@@ -49,18 +45,18 @@ class CommenterDetail extends Component {
 	}
 
 	subscribe() {
-		const { subscribed, commenter } = this.state;
+		// const { subscribed, commenter } = this.state;
 
-		const commenterObj = {
-			_id: commenter._id,
-			name: commenter.name,
-			bio: commenter.bio,
-			tagline: commenter.tagline,
-			updated: commenter.updated,
-			slug: commenter.slug,
-			avatar: {src: commenter.avatar.src},
-			subscribedOn: new Date()
-		};
+		// const commenterObj = {
+		// 	_id: commenter._id,
+		// 	name: commenter.name,
+		// 	bio: commenter.bio,
+		// 	tagline: commenter.tagline,
+		// 	updated: commenter.updated,
+		// 	slug: commenter.slug,
+		// 	avatar: {src: commenter.avatar.src},
+		// 	subscribedOn: new Date()
+		// };
         // TODO
 		// if (!subscribed) {
 		// 	Meteor.users.update({_id: Meteor.userId()}, {
@@ -75,9 +71,9 @@ class CommenterDetail extends Component {
 		// 		}
 		// 	});
 		// }
-		this.setState({
-			subscribed: !subscribed
-		});
+		// this.setState({
+		// 	subscribed: !subscribed
+		// });
 	}
 	getBiographyHTML(biography) {
 		if (Utils.isJson(biography))			{ return JSON.parse(biography).html; }
@@ -102,7 +98,7 @@ class CommenterDetail extends Component {
 	}
 	render() {
 		const { isTest } = this.props;
-		const { readMoreBio, subscribed, loggedIn, commenter, settings, avatarUrl } = this.state;
+		const { readMoreBio, commenter, settings, avatarUrl } = this.state;
 
 		if (commenter) {
 			Utils.setTitle(`${commenter.name} | ${settings.title}`);

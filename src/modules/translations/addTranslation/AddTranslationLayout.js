@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import slugify from 'slugify';
 import { compose } from 'react-apollo';
-import { convertToRaw } from 'draft-js';
-import Cookies from 'js-cookie';
 
 // graphql
 import { textNodesQuery } from '../../../graphql/methods/textNodes';
@@ -20,7 +16,6 @@ import AddTranslation from './AddTranslation';
 import ContextPanel from '../../contextPanel/ContextPanel';
 
 // lib
-import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 

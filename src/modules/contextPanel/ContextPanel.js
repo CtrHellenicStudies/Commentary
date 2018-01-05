@@ -117,7 +117,7 @@ class ContextPanel extends Component {
 		const subworkN = getsubworkN(this.props);
 		this.props.getMaxLine(workSlug, subworkN).then(function(res) {
 			that.setState({
-				maxLine: parseInt(res.data.getMaxLine),
+				maxLine: parseInt(res.data.getMaxLine, 10),
 			});
 		});
 	}
@@ -177,7 +177,7 @@ class ContextPanel extends Component {
 	render() {
 
 		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline } = this.props;
-		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition } = this.state;
+		const { highlightingVisible, maxLine, selectedLemmaEdition } = this.state;
 
 		const workSlug = getWorkSlug(this.props);
 		const subworkN = getsubworkN(this.props);

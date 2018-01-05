@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { HOC as formsyHOC } from 'formsy-react';
-import Editor from 'draft-js-plugins-editor';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
+import { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import { fromJS } from 'immutable';
 import { compose } from 'react-apollo';
 import Utils from '../../lib/utils';
@@ -31,7 +29,6 @@ class Suggestions extends Component {
 		});
 	}
 	onMentionSearchChange({ value }) {
-		const taht = this;
 		this.props.commentsQuery.refetch({
 			queryParam: JSON.stringify({ $text: { $search: value } }),
 			limit: 5
@@ -56,8 +53,6 @@ class Suggestions extends Component {
 		});
 	}
 	render() {
-		const { MentionSuggestions } = this.props.mentionPlugin;
-		const KeywordsSuggestions = this.props.keywordPlugin.MentionSuggestions;
 		return (
 			<div>
 				{this.state.tags !== undefined ? (

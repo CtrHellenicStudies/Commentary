@@ -1,9 +1,10 @@
 import React from 'react';
+import createClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import DiscussionCommentTeaser from './teaser/DiscussionCommetTeaser';
 
 // List of discussionComments
-const DiscussionCommentsList = React.createClass({
+const DiscussionCommentsList = createClass({
 
 	propTypes: {
 		discussionComments: PropTypes.array,

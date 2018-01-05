@@ -235,8 +235,8 @@ class CommentDetail extends React.Component {
 	}
 	render() {
 
-		const { comment, filters} = this.props;
-		const { discussionVisible, searchTerm, user, referenceWorks, ready, settings } = this.state;
+		const { comment } = this.props;
+		const { discussionVisible, searchTerm, referenceWorks, ready, settings } = this.state;
 
 		if (!ready) {
 			// TODO: handle loading for component

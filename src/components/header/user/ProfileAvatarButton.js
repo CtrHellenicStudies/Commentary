@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
-import Utils from '../../../lib/utils';
 import AvatarIcon from '../../../modules/profile/avatar/AvatarIcon';
 import UserDropdown from './UserDropdown';
 

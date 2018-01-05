@@ -12,10 +12,8 @@ import { pagesQuery } from '../../graphql/methods/pages';
 
 // layouts
 import NotFound from '../notFound/NotFound';
-import muiTheme from '../../lib/muiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '../../components/header/Header';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';

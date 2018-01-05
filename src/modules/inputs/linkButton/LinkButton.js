@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { RichUtils, EditorState, Modifier, CompositeDecorator } from 'draft-js';
+import { RichUtils, EditorState } from 'draft-js';
 import unionClassNames from 'union-class-names';
 import { debounce } from 'throttle-debounce';
-import stylePropType from 'react-style-proptype';
 
-import { stateToHTML } from 'draft-js-export-html';
 
 // components:
 import LinkButtonDialog from './LinkButtonDialog';

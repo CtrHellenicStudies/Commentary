@@ -33,7 +33,6 @@ class KeywordReferenceModal extends Component {
 	}
 
 	render() {
-		const self = this;
 		const { keyword } = this.state;
 		const styles = {
 			modal: {

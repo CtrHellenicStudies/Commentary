@@ -11,11 +11,8 @@ import { referenceWorksQuery } from '../../graphql/methods/referenceWorks';
 // components
 import ReferenceWorkTeaser from './teaser/ReferenceWorkTeaser';
 
-// lib
-import Utils from '../../lib/utils';
 
-
-class ReferenceWorksList extends React.Component {
+class ReferenceWorksList extends Component {
 
 	constructor(props) {
 		super(props);

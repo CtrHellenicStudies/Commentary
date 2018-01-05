@@ -2,11 +2,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import createClass from 'create-react-class';
 
 // TODO: upgrade to d3v4
 // import * as d3 from 'd3';
 
-const WorkVisualization = React.createClass({
+const WorkVisualization = createClass({
 
 	propTypes: {
 		work: PropTypes.object.isRequired,

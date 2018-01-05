@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
 import React, { Component } from 'react';
-import FlatButton from 'material-ui/FlatButton';
 import _ from 'lodash';
 
 // graphql
@@ -62,13 +61,8 @@ class CommentLemmaTextWithTranslation extends Component {
 		});
 	}
 	render() {
-		const { commentGroup, author } = this.props;
+		const { author } = this.props;
 		const { linesWithTranslation } = this.state;
-		let nLines = 0;
-
-		if (commentGroup) {
-			nLines = commentGroup.nLines;
-		}
 
 		return (
 			<div className="comment-lemma-text comment-lemma-text--with-translation">

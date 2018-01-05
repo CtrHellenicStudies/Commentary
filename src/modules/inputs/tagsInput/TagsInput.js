@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import autoBind from 'react-autobind';
-import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
@@ -15,9 +13,6 @@ import Select from 'react-select';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
-
-// graphql
-import { keywordsQuery } from '../../../graphql/methods/keywords';
 
 const ListGroupItemDnD = createListGroupItemDnD('tagBlocks');
 class TagsInput extends Component {

@@ -57,7 +57,6 @@ class AddTranslation extends React.Component {
 	}
 	componentWillReceiveProps(props) {
 
-		const tenantId = sessionStorage.getItem('tenantId');
 		const works = props.worksQuery.loading ? [] : props.worksQuery.works;
 		const worksOptions = [];
 		works.forEach((work) => {
@@ -179,26 +178,6 @@ class AddTranslation extends React.Component {
 
 	render() {
 		const { isTest } = this.props;
-		const { worksOptions, commentersOptions } = this.state;
-
-		const getSubworks = () => {
-			const subworks = [];
-			this.state.lineFromWork.subworks.forEach((subwork) => {
-				subworks.push({
-					value: subwork.n,
-					label: subwork.title,
-					slug: subwork.slug,
-				});
-			});
-			return subworks;
-		};
-
-		const toggleStyle = {
-			style: {
-				margin: '20px 0 0 0',
-				paddingLeft: 15,
-			},
-		};
 
 		if (isTest) {
 			return null;

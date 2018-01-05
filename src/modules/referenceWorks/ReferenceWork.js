@@ -1,15 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
-import Snackbar from 'material-ui/Snackbar';
-import Cookies from 'js-cookie';
-import slugify from 'slugify';
 import randomID from 'random-id';
-
-// https://github.com/JedWatson/react-select
-import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import {
 	FormGroup,

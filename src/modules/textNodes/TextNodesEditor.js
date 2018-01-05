@@ -1,24 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { compose } from 'react-apollo';
 import Select from 'react-select';
 import autoBind from 'react-autobind';
 import {
 	ControlLabel,
 	FormGroup,
-	FormControl,
 } from 'react-bootstrap';
-import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
 // graphql
 import { worksQuery } from '../../graphql/methods/works';
 import { editionsQuery } from '../../graphql/methods/editions';
 
-// actions
-import * as textNodesActions from '../../actions/textNodes';
 
 // lib:
 import Utils from '../../lib/utils';
@@ -161,7 +155,7 @@ class TextNodesEditor extends Component {
 
 	updateStartAtLine(e, newValue) {
 		this.setState({
-			startAtLine: parseInt(newValue),
+			startAtLine: parseInt(newValue, 10),
 		});
 	}
 
@@ -172,7 +166,7 @@ class TextNodesEditor extends Component {
 	}
 
 	renderTextNodesInput() {
-		const { subworks, selectedWork, selectedEdition, selectedSubwork, startAtLine, limit } = this.state;
+		const { selectedWork, selectedEdition, selectedSubwork, startAtLine, limit } = this.state;
 
 		if (!selectedWork || !selectedEdition || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null) {
 			return null;
@@ -239,7 +233,7 @@ class TextNodesEditor extends Component {
 
 	render() {
 		const { works, editions } = this.state;
-		const { subworks, selectedWork, selectedEdition, selectedSubwork, startAtLine } = this.state;
+		const { subworks, selectedWork, selectedEdition, selectedSubwork } = this.state;
 
 		let _selectedWork;
 		let _selectedEdition;
@@ -254,12 +248,14 @@ class TextNodesEditor extends Component {
 					}
 				});
 			}
+			return true;
 		});
 
 		editions.forEach(edition => {
 			if (edition._id === selectedEdition) {
 				_selectedEdition = edition;
 			}
+			return true;
 		});
 
 		const workOptions = [];
@@ -268,6 +264,7 @@ class TextNodesEditor extends Component {
 				value: work._id,
 				label: work.title,
 			});
+			return true;
 		});
 
 		const editionOptions = [];
@@ -276,6 +273,7 @@ class TextNodesEditor extends Component {
 				value: edition._id,
 				label: edition.title,
 			});
+			return true;
 		});
 
 		const subworkOptions = [];
@@ -284,6 +282,7 @@ class TextNodesEditor extends Component {
 				value: subwork.n,
 				label: subwork.title,
 			});
+			return true;
 		});
 
 		const translationOptions = {

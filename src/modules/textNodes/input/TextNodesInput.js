@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { compose } from 'react-apollo';
-import autoBind from 'react-autobind';
-import mongoose, { mongo } from 'mongoose';
-import {
-	FormGroup,
-	ControlLabel,
-} from 'react-bootstrap';
+import mongoose from 'mongoose';
+import { FormGroup } from 'react-bootstrap';
 import update from 'immutability-helper';
 import RaisedButton from 'material-ui/RaisedButton';
-import FontIcon from 'material-ui/FontIcon';
-import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
-import Cookies from 'js-cookie';
 import { debounce } from 'throttle-debounce';
 
 // lib:
@@ -59,7 +50,7 @@ class TextNodesInput extends Component {
 		if (props.editionsQuery.loading || props.textNodesQuery.loading) {
 			return;
 		}
-		const { workId, workSlug, editionId, subworkN, lineFrom, limit } = props;
+		const { workSlug, editionId, subworkN, lineFrom, limit } = props;
 		if (!props.textNodesQuery.variables.workSlug) {
 			const properties = {
 				workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
@@ -101,7 +92,7 @@ class TextNodesInput extends Component {
 	
 		for (let i = 0; i < limit; i++) {
 			let newLine;
-			const arrIndex = _.findIndex(selectedEdition.lines, (line) => line.n === i + parseInt(lineFrom));
+			const arrIndex = _.findIndex(selectedEdition.lines, (line) => line.n === i + parseInt(lineFrom, 10));
 			if (arrIndex >= 0) {
 				newLine = selectedEdition.lines[arrIndex];
 				assignedTextNodes.push(newLine);
@@ -115,8 +106,7 @@ class TextNodesInput extends Component {
 	}
 
 	addTextNodeBlock() {
-		const { workId, workSlug, editionId, subworkN, subworkTitle, lineFrom, defaultTextNodes } = this.props;
-		const { textNodes } = this.state;
+		const { workId, workSlug, editionId, subworkN, subworkTitle } = this.props;
 		const defaultN = 1;
 
 		this.state.textNodes.push({
@@ -149,7 +139,6 @@ class TextNodesInput extends Component {
 
 	moveTextNodeBlock(dragIndex, hoverIndex) {
 		const { textNodes } = this.state;
-		const { editionId } = this.props;
 
 		const dragIntroBlock = textNodes[dragIndex];
 		this.setState(update(this.state, {

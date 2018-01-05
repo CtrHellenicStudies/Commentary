@@ -31,6 +31,7 @@ class CommentGroup extends React.Component {
 		const commenters = {};
 		comment.commenters.map((commenter) => {
 			commenters[commenter._id] = this.props.commentGroup.commenters[commenter._id];
+			return true;
 		});
 		return commenters;
 	}

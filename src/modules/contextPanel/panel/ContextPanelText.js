@@ -160,7 +160,7 @@ class ContextPanelText extends React.Component {
 	*/
 
 	render() {
-		const { onBeforeClicked, selectedLemmaEdition, highlightingVisible, lineFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
+		const { onBeforeClicked, selectedLemmaEdition, highlightingVisible, lineFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, editor } = this.props;
 
 		const selectedEditionText = getSelectedEditionText(lemmaText, selectedLemmaEdition);
 

@@ -9,7 +9,6 @@ import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 import _ from 'lodash';
 import {debounce} from 'throttle-debounce';
-import Cookies from 'js-cookie';
 
 // graphql
 import {
@@ -28,10 +27,10 @@ function getTranslationQueries(query, filter) {
 	return query.translations.filter(x => 
 		x.tenantId === filter.tenantId &&
 		x.work === filter.work && 
-		parseInt(x.subwork) === parseInt(filter.subwork) &&
+		parseInt(x.subwork, 10) === parseInt(filter.subwork, 10) &&
 		x.author === filter.author)
 		.sort(function(a, b) {
-			return parseInt(a.n) - parseInt(b.n);
+			return parseInt(a.n, 10) - parseInt(b.n, 10);
 		})
 		.slice(filter.skip, filter.limit);
 }
@@ -68,13 +67,13 @@ class TranslationNodeInput extends Component {
 		if (!translation || translation.length === 0) {
 			for (let i = 0; i < limit; i++) {
 				let newLine;
-				const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
+				const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine, 10));
 	
 				if (arrIndex >= 0) {
 					newLine = translation[arrIndex];
 				}		else {
 					newLine = {
-						n: i + parseInt(startAtLine),
+						n: i + parseInt(startAtLine, 10),
 						text: '',
 						tenantId: tenantId,
 						work: selectedWork.slug,

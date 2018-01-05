@@ -20,12 +20,10 @@ import { settingsQuery } from '../../graphql/methods/settings';
 import CommentersList from '../comenters/CommentersList';
 import WorksList from '../works/WorksList';
 import KeywordsList from '../keywords/KeywordsList';
-import Spinner from '../../components/loading/Spinner';
 import LoadingHome from '../../components/loading/LoadingHome';
 
 // layouts:
 import Commentary from '../comments/commentary/Commentary';
-import { read } from 'fs';
 
 
 class Home extends Component {

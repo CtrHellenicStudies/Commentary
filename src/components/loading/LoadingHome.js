@@ -1,6 +1,7 @@
 import React from 'react';
+import createClass from 'create-react-class';
 
-const LoadingHome = React.createClass({
+const LoadingHome = createClass({
 	render() {
 		return (
 			<div className="loading home">

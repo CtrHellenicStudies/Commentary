@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import DraftEditorInput from '../draftEditor/DraftEditorInput';
 import Utils from '../../lib/utils';
 import { debounce } from 'throttle-debounce';
@@ -38,7 +36,7 @@ class Account extends React.Component {
 
 	handleChangeTextDebounced(field, value) {
 		const user = this.props.user;
-		let emailValue = [];
+		// let emailValue = [];
 		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
 		switch (field) {
 		case 'username':
@@ -61,10 +59,10 @@ class Account extends React.Component {
 					emailError: '',
 				});
 				if (user.emails && user.emails.length > 0) {
-					emailValue = [{
-						address: value || user.emails[0].address,
-						verified: user.emails[0].verified,
-					}];
+					// emailValue = [{
+					// 	address: value || user.emails[0].address,
+					// 	verified: user.emails[0].verified,
+					// }];
 				}
 				// Meteor.call('updateAccount', field, emailValue, (err) => {
 				// 	if (err) {
@@ -92,11 +90,10 @@ class Account extends React.Component {
 		this.handleChangeTextDebounced(field, value);
 	}
 	handleDraftChange(editorState) {
-		const value = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
+		//const value = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
 		// Meteor.call('updateAccount', 'profile.biography', value, (err) => {
 		// 	if (err) {
 		// 		console.error(err);
-		// 	}
 		// }); TODO
 		this.setState({editorState: editorState});
 	}

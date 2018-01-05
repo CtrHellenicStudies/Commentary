@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import createClass from 'create-react-class';
 
-const Spinner = React.createClass({
+const Spinner = createClass({
 
 	propTypes: {
 		fullPage: PropTypes.bool,

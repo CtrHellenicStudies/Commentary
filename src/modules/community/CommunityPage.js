@@ -1,19 +1,12 @@
 import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import RecentActivity from './RecentActivity';
 import CommunityDirectory from './CommunityDirectory';
 
-const muiTheme = {
-	palette: {
-		primary1Color: 'transparent',
-		accent1Color: '#dddddd',
-	},
-};
 
 class CommunityPage extends React.Component {
 	render() {

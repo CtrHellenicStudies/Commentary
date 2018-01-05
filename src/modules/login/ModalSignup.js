@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 
 // components:
-import Utils from '../../lib/utils';
 import OAuthButtons from './OAuthButtons';
 import PWDSignupForm from './PWDSignupForm';
 

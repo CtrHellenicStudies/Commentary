@@ -50,7 +50,6 @@ class KeywordsList extends Component {
 
 	componentWillReceiveProps(newProps) {
 		const { type, limit } = newProps;
-		const skip = 0;
 		let _limit = 100;
 
 		let keywords = [];

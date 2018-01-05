@@ -2,22 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import Utils from '../../../lib/utils';
 import AvatarIcon from '../../profile/avatar/AvatarIcon';
 
 class CommunityMemberTeaser extends React.Component {
 
 	render() {
 		const { user } = this.props;
-		let userExcerpt = '';
 		let profilePicture = '';
 		let username = user.username || '';
 		const userUrl = `/users/${user._id}/${user.username || ''}`;
 
 		if (user.profile) {
-			userExcerpt = user.profile.biography ? Utils.trunc(user.profile.biography, 120) : '';
 			if ('name' in user.profile) {
-				username = user.profile.name;
+			username = user.profile.name;
 			}
 			if ('picture' in user.profile) {
 				profilePicture = user.profile.picture;

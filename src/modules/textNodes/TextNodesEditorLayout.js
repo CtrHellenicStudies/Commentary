@@ -1,33 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import slugify from 'slugify';
-import { ApolloProvider } from 'react-apollo';
-import { syncHistoryWithStore } from 'react-router-redux';
-import { browserHistory } from 'react-router';
-import { createBrowserHistory } from 'history';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components:
 import Header from '../../components/header/Header';
-import FilterWidget from '../filters/FilterWidget';
-import Spinner from '../../components/loading/Spinner';
-import CommentLemmaSelect from '../comments/addComment/commentLemma/CommentLemmaSelect';
-import AddKeyword from '../keywords/addKeyword/AddKeyword';
-import ContextPanel from '../contextPanel/ContextPanel';
 import TextNodesEditor from './TextNodesEditor';
 
 // lib
 import muiTheme from '../../lib/muiTheme';
-import configureStore from '../../configuration/store';
 import Utils from '../../lib/utils';
-
-// redux integration for layout
-const store = configureStore();
-const history = syncHistoryWithStore(createBrowserHistory(), store);
-
 
 class TextNodesEditorLayout extends React.Component {
 	getChildContext() {

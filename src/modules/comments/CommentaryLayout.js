@@ -14,9 +14,8 @@ import PropTypes from 'prop-types';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { ApolloProvider, compose } from 'react-apollo';
+import { compose } from 'react-apollo';
 import qs from 'qs-lite';
-import Cookies from 'js-cookie';
 
 // layouts:
 import Commentary from './commentary/Commentary';
@@ -30,7 +29,6 @@ import { worksQuery } from '../../graphql/methods/works';
 
 // lib:
 import muiTheme from '../../lib/muiTheme';
-import Utils from '../../lib/utils';
 
 // helpers:
 import {
@@ -171,7 +169,7 @@ class CommentaryLayout extends Component {
 		});
 	}
 	render() {
-		const { skip, limit, modalLoginLowered, queryParams, params, referenceWorks, works, filters } = this.state;
+		const { skip, limit, modalLoginLowered, queryParams, filters } = this.state;
 		// create filters object based on the queryParams or params
 		return (
 			<MuiThemeProvider>

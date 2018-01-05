@@ -14,9 +14,6 @@ import CommunityPage from './CommunityPage';
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';
 
-// lib
-import muiTheme from '../../lib/muiTheme';
-
 
 class CommunityLayout extends Component {
 

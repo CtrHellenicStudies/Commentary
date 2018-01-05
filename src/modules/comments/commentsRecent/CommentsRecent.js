@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'react-slick';
 
 
 // lib:
 import { commentsQuery } from '../../../graphql/methods/comments';
-import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 

@@ -1,6 +1,7 @@
 import React from 'react';
+import createClass from 'create-react-class';
 
-const LoadingPage = React.createClass({
+const LoadingPage = createClass({
 	render() {
 		return (
 			<div className="loading">

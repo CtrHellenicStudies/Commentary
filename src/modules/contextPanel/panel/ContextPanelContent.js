@@ -54,7 +54,6 @@ class ContextPanelContent extends Component {
 	componentWillReceiveProps(nextProps) {
 
 		const { lineFrom, multiline } = nextProps;
-		const tenantId = sessionStorage.getItem('tenantId');
 
 		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
 			return;

@@ -11,8 +11,9 @@ const getCommentGroupId = (commentGroup) => {
 	return id.slice(1);
 };
 function addCommetersToCommentGroup(comment, commenters = {}) {
-	comment.commenters.map((_commenter) => {
+	comment.commenters.map(function(_commenter) {
 		commenters[_commenter._id] = _commenter;
+		return true;
 	});
 	return commenters;
 }
@@ -34,6 +35,7 @@ const parseCommentsToCommentGroups = (comments) => {
 					isInCommentGroup = true;
 					commentGroup.comments.push(comment);
 				}
+				return true;
 			});
 
 			if (!isInCommentGroup) {
@@ -61,13 +63,16 @@ const parseCommentsToCommentGroups = (comments) => {
 		} else if (process.env.NODE_ENV === 'development') {
 			console.error(`Review comment ${comment._id} metadata`);
 		}
+		return true;
 	});
 	commentGroups.map((commentGroup) => {
 		commentGroup._id = getCommentGroupId(commentGroup);
 		commentGroup.commenters = {};
 		commentGroup.comments.map((comment) => {
 			addCommetersToCommentGroup(comment, commentGroup.commenters);
+			return true;
 		});
+		return true;
 	});
 	return commentGroups;
 };

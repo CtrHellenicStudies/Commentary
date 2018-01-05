@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import muiTheme from '../../lib/muiTheme';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '../../components/header/Header';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import ReferenceWorksList from '../referenceWorks/ReferenceWorksList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
-import AvatarIcon from '../profile/avatar/AvatarIcon';
 import LoadingPage from '../../components/loading/LoadingPage';
 
 // graphql

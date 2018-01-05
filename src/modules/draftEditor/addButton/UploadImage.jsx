@@ -25,7 +25,7 @@ export default class AvatarEditor extends React.Component {
 	}
 
 	onDrop(acceptedFiles, rejectedFiles) {
-		const context = { type: 'user' };
+		// const context = { type: 'user' };
 		const uploader = {}; // TODO = new Slingshot.Upload('uploads', context);
 
 		if (rejectedFiles && rejectedFiles.length) {

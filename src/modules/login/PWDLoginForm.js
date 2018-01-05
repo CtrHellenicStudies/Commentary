@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-import { Link } from 'react-router-dom';
 
 const PWDLoginForm = ({ errorMsg, login, closeModal, history }) => {
 
@@ -21,7 +20,7 @@ const PWDLoginForm = ({ errorMsg, login, closeModal, history }) => {
 
 	return (
 		<div className="at-pwd-form">
-			<form role="form" id="at-pwd-form" noValidate="" onSubmit={handleLogin}>
+			<form id="at-pwd-form" noValidate="" onSubmit={handleLogin}>
 				<fieldset>
 					<div className="at-input form-group has-feedback">
 						<label className="control-label" htmlFor="at-field-email">

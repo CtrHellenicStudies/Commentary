@@ -15,7 +15,7 @@ const PWDSignupForm = ({ signup, errorMsg }) => {
 
 	return (
 		<div className="at-pwd-form">
-			<form role="form" id="at-pwd-form" noValidate="" onSubmit={handleSignup} >
+			<form id="at-pwd-form" noValidate="" onSubmit={handleSignup} >
 				<fieldset>
 					<div className="at-input form-group has-feedback">
 						<label className="control-label" htmlFor="at-field-email">

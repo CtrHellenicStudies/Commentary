@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Parser from 'simple-text-parser';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { debounce } from 'throttle-debounce';
 import { compose } from 'react-apollo';
 
 import { commentsQuery, commentsMoreQuery } from '../../../graphql/methods/comments';
@@ -13,7 +11,6 @@ import CommentGroup from './commentGroup/CommentGroup';
 import ContextPanel from '../../contextPanel/ContextPanel';
 
 // components:
-import InfiniteScroll from '../../shared/InfiniteScroll';
 import FilterWidget from '../../filters/FilterWidget';
 
 // lib
@@ -22,7 +19,7 @@ import Utils from '../../../lib/utils';
 import muiTheme from '../../../lib/muiTheme';
 
 // helpers:
-import { getCommentsQuery, parseCommentsToCommentGroups } from './helpers';
+import { parseCommentsToCommentGroups } from './helpers';
 
 
 class Commentary extends Component {
@@ -76,7 +73,6 @@ class Commentary extends Component {
 
 		let title = '';
 		let values = [];
-		let work = '';
 		const workDefault = 'Commentary';
 		let subwork = null;
 		let lineFrom = 0;
@@ -95,7 +91,6 @@ class Commentary extends Component {
 				filter.values.forEach((value) => {
 					values.push(value.slug);
 				});
-				work = values.join(', ');
 				break;
 
 			case 'subworks':
@@ -220,7 +215,7 @@ class Commentary extends Component {
 		}
 	}
 	renderNoCommentsOrLoading() {
-		const { isOnHomeView, commentGroups } = this.props;
+		const { isOnHomeView } = this.props;
 
 		if (
 			!isOnHomeView

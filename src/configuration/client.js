@@ -1,5 +1,4 @@
 import { ApolloClient, createNetworkInterface } from 'react-apollo';
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 
 
 const settings = process.env;

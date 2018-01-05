@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -23,8 +21,7 @@ import KeywordCommentList from './KeywordsCommentList';
 import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
 
 // lib
-import muiTheme from '../../lib/muiTheme';
-import Utils, {makeKeywordContextQueryFromComment} from '../../lib/utils';
+import Utils from '../../lib/utils';
 
 
 class KeywordDetail extends Component {

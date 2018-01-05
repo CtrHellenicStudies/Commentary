@@ -7,29 +7,19 @@ import { Router } from 'react-router';
 import $ from 'jquery';
 import { compose } from 'react-apollo';
 import mongoose from 'mongoose';
-import {
-	FormGroup,
-	ControlLabel,
-} from 'react-bootstrap';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-import IconButton from 'material-ui/IconButton';
 import Utils from '../../../lib/utils';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Select, { Creatable } from 'react-select';
+import Select from 'react-select';
 import Formsy from 'formsy-react';
-import { FormsyText } from 'formsy-material-ui/lib';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
-import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { fromJS } from 'immutable';
 import update from 'immutability-helper';
-import { convertToHTML } from 'draft-convert';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import Snackbar from 'material-ui/Snackbar';
+import { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import slugify from 'slugify';
 import _ from 'underscore';
 
@@ -49,15 +39,10 @@ import { referenceWorkCreateMutation, referenceWorksQuery } from '../../../graph
 import linkDecorator from '../../inputs/linkButton/linkDecorator';
 
 // components
-import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
-import LinkButton from '../../inputs/linkButton/LinkButton';
 import TagsInput from '../../inputs/tagsInput/TagsInput';
 import ReferenceWork from '../../referenceWorks/ReferenceWork';
 
-import CommentersEditorDialog from '../../comenters/dialogEditor/CommentersEditorDialog';
 import DraftEditorInput from '../../draftEditor/DraftEditorInput';
-
-const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
 
 class AddRevision extends React.Component {
@@ -241,18 +226,18 @@ class AddRevision extends React.Component {
 
 	handleUpdate() {
 		const data = this.refs.form.getModel(); // eslint-disable-line
+		const referenceWorks = this.state.referenceWorks;
 		let key;
 
 		for (key in data) { // eslint-disable-line
 			const params = key.split('_');
 			params[0] = parseInt(params[0], 10);
-			this.state.referenceWorks[params[0]][params[1]] = data[key];
+			referenceWorks[params[0]][params[1]] = data[key];
 		}
 		this.props.update(this.state);
 	}
 
 	removeComment() {
-		const authToken = Cookies.get('loginToken');
 		this.props.commentRemove(this.props.comment._id).then(function() {
 			this.props.history.push('/commentary');
 		});
@@ -270,8 +255,6 @@ class AddRevision extends React.Component {
 	}
 
 	removeRevision() {
-		const self = this;
-		const authToken = Cookies.get('loginToken');
 		const that = this;
 		this.props.commentRemoveRevision(this.props.comment._id, this.state.revision).then(function() {
 			this.props.history.push(`/commentary/${that.props.comment._id}/edit`);
@@ -428,8 +411,8 @@ class AddRevision extends React.Component {
 
 	render() {
 		const { comment } = this.props;
-		const { revision, titleEditorState, referenceWorks, textEditorState, tagsValue, commentersOptions } = this.state;
-		const { referenceWorkOptions, tags } = this.state;
+		const { revision, titleEditorState, textEditorState, tagsValue, commentersOptions } = this.state;
+		const { tags } = this.state;
 		const revisions = _.sortBy(comment.revisions, 'created');
 
 		return (

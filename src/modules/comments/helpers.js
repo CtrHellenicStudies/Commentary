@@ -1,4 +1,3 @@
-import _ from 'underscore';
 
 // lib
 import Utils from '../../lib/utils';
@@ -424,7 +423,6 @@ const _getUrnFilters = (urn, works) => {
 			if (_work) filterValues.works = _work;
 		}
 		if (splitURN[5] && filterValues.works) {
-			const subworkTlg = splitURN[5];
 			filterValues.subworks = {
 				n: Number(splitURN[5]),
 				title: Number(splitURN[5]).toString(),

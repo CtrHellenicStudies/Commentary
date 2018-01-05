@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts
 import Header from '../../components/header/Header';
@@ -9,22 +8,7 @@ import Header from '../../components/header/Header';
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 
-// lib
-import muiTheme from '../../lib/muiTheme';
-
-const NotFound = React.createClass({
-
-	propTypes: {
-		isTest: PropTypes.bool,
-	},
-
-	childContextTypes: {
-		muiTheme: PropTypes.object.isRequired,
-	},
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
-	},
+class NotFound extends Component {
 
 	render() {
 		const expressionsOfWoe = [
@@ -95,7 +79,13 @@ const NotFound = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
+NotFound.propTypes = {
+	isTest: PropTypes.bool,
+};
+NotFound.childContextTypes = {
+	muiTheme: PropTypes.object.isRequired,
+};
 
 export default NotFound;

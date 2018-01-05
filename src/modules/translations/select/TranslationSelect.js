@@ -13,7 +13,7 @@ import { translationAuthorsQuery } from '../../../graphql/methods/translations';
 
 import EditTranslationAuthorDialog from '../dialog/EditTranslationAuthorDialog';
 
-class TranslationSelect extends React.Component {
+class TranslationSelect extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -102,6 +102,7 @@ class TranslationSelect extends React.Component {
 				value: translation.author,
 				label: translation.author,
 			});
+			return true;
 		});
 
 		return (

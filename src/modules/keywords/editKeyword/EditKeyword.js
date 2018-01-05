@@ -7,15 +7,12 @@ import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import $ from 'jquery';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // https://github.com/JedWatson/react-select
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import { convertToHTML } from 'draft-convert';
 import { fromJS } from 'immutable';
-import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import Utils from '../../../lib/utils';
 
 // graphql
@@ -23,17 +20,11 @@ import { commentersQuery } from '../../../graphql/methods/commenters';
 import { referenceWorksQuery } from '../../../graphql/methods/referenceWorks';
 
 
-// lib
-import muiTheme from '../../../lib/muiTheme';
-import LinkButton from '../../inputs/linkButton/LinkButton';
+// component
 import DraftEditorInput from '../../draftEditor/DraftEditorInput';
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
-
-
-const mentionPlugin = createMentionPlugin();
-const { MentionSuggestions } = mentionPlugin;
 
 class EditKeyword extends Component {
 
@@ -249,21 +240,6 @@ class EditKeyword extends Component {
 
 	render() {
 		const { keyword } = this.props;
-		const toolbarConfig = {
-			display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
-			INLINE_STYLE_BUTTONS: [{
-				label: 'Italic',
-				style: 'ITALIC',
-			}, {
-				label: 'Underline',
-				style: 'UNDERLINE',
-			}],
-			BLOCK_TYPE_BUTTONS: [{
-				label: 'UL',
-				style: 'unordered-list-item',
-			}],
-		};
-
 		const styles = {
 			block: {
 				maxWidth: 250,

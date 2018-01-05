@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import createClass from 'create-react-class';
 
 // lib
 import muiTheme from '../../lib/muiTheme';
 
-const ModalChangePwd = React.createClass({
+const ModalChangePwd = createClass({
 
 	propTypes: {
 		lowered: PropTypes.bool,

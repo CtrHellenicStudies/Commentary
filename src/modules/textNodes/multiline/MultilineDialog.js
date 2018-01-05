@@ -13,8 +13,6 @@ import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/MenuItem';
 import { grey400 } from 'material-ui/styles/colors';
-import _ from 'underscore';
-import Cookies from 'js-cookie';
 
 class MultilineDialog extends Component {
 

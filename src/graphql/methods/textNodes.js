@@ -119,9 +119,6 @@ const textNodeRemoveMutation = graphql(textNodeRemove, {
 		refetchQueries: ['textNodesQuery']
 	}
 });
-function isValue(val) {
-	return val !== undefined && val !== null;
-}
 const textNodesQuery = graphql(query, {
 	name: 'textNodesQuery',
 	options: {

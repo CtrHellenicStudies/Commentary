@@ -42,7 +42,7 @@ class CommentBodyText extends React.Component {
 
 
 	render() {
-		const { text, onTextClick, searchTerm } = this.props;
+		const { text, onTextClick } = this.props;
 
 		return (
 			<div

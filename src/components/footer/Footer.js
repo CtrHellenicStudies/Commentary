@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import FlatButton from 'material-ui/FlatButton';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Link } from 'react-router-dom';
 import { compose } from 'react-apollo';
 
@@ -10,8 +9,6 @@ import { compose } from 'react-apollo';
 import { settingsQuery } from '../../graphql/methods/settings';
 import { tenantsQuery } from '../../graphql/methods/tenants';
 
-// lib:
-import muiTheme from '../../lib/muiTheme';
 
 
 class Footer extends Component {

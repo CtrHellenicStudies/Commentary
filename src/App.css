@@ -8509,6 +8509,87 @@ body {
 }
 /* Utils */
 /* Layouts and Components */
+#not-found {
+  width: 100%;
+  margin: 0 auto;
+}
+#not-found .not-found-image {
+  width: 25%;
+  max-height: 400px;
+  float: left;
+}
+#not-found .not-found-title {
+  width: 100%;
+  float: right;
+  background: url(/img/bg-footer.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 320px;
+}
+#not-found .not-found-title h1 {
+  font-size: 30px;
+  color: #1f2128;
+  margin-bottom: 20px;
+  margin-top: 80px;
+}
+#not-found .not-found-title a.gotohomepage {
+  background-color: #de4f4f;
+  color: #fff;
+  width: 180px;
+  line-height: 40px;
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  height: 40px;
+}
+.snackAttack > div > div > span {
+  color: #ffffff !important;
+}
+.axis path {
+  display: none;
+}
+.y-axis line {
+  stroke: #efebde;
+  stroke-width: 1;
+  opacity: .8;
+}
+.heatmap-cell {
+  stroke: #d7d1c0;
+  cursor: pointer;
+}
+.heatmap-cell-selected {
+  stroke: #d59518;
+  stroke-width: 2px;
+}
+.heatmap-label-x {
+  font: 12px sans-serif;
+  font-family: Helvetica, sans-serif;
+}
+.heatmap-label-y {
+  font: 12px sans-serif;
+  font-family: Helvetica, sans-serif;
+}
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 220px;
+  height: 18px;
+  padding: 2px;
+  font: 12px sans-serif;
+  font-family: Helvetica, sans-serif;
+  color: #333333;
+  background: #d59518;
+  border: 0px;
+  border-radius: 1px;
+  pointer-events: none;
+}
+.commenter-work-visualization .work-teaser .text-title {
+  font-size: 28px;
+  margin: 0 30px;
+  padding: 40px 0 0;
+}
 /* Responsive */
 @media (max-width: 1600px) {
   .search-dropdown--more {

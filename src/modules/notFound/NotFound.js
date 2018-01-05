@@ -9,7 +9,6 @@ import Header from '../../components/header/Header';
 
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import '../notFound/notFound.import.css'
 
 class NotFound extends Component {
 

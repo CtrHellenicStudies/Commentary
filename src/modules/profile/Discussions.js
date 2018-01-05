@@ -16,7 +16,7 @@ class Discussions extends Component {
 		super(props);
 		this.state = {};
 		this.props.discussionCommentsQuery.refetch({
-			userId: Cookies.getItem('user'),
+			userId: Cookies.get('user'),
 			discussionComments: [] // TODO
 		});
 	}

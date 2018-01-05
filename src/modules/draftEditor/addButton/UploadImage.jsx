@@ -11,7 +11,7 @@ import { sendSnack } from '../../shared/SnackAttack';
 export default class AvatarEditor extends React.Component {
 	constructor(props) {
 		super(props);
-        const user = Cookies.getItem('user');
+        const user = Cookies.get('user');
 		this.state = {
 			avatarUrl: user && user.profile && user.profile.avatarUrl ? user.profile.avatarUrl : props.defaultAvatarUrl,
 		};

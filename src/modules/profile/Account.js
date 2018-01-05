@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState } from 'draft-js';
 import DraftEditorInput from '../draftEditor/DraftEditorInput';
 import Utils from '../../lib/utils';
 import { debounce } from 'throttle-debounce';

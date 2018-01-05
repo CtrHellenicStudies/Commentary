@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
-import DropDownMenu from 'material-ui/DropDownMenu';
 import FontIcon from 'material-ui/FontIcon';
 import { Sticky } from 'react-sticky';
 import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 
 // graphql
@@ -42,10 +40,6 @@ class CommentLemma extends React.Component {
 	constructor(props) {
 		super(props);
 
-
-		const { commentGroup, multiline} = this.props;
-
-
 		this.state = {
 			selectedLemmaEditionIndex: 0,
 			showTranslation: false,
@@ -55,7 +49,6 @@ class CommentLemma extends React.Component {
 			translationAuthors: [],
 			editions: []
 		};
-
 
 		// methods:
 		this.toggleEdition = this.toggleEdition.bind(this);
@@ -218,7 +211,7 @@ class CommentLemma extends React.Component {
 		});
 	}
 	render() {
-		const { commentGroup, hideLemma, multiline} = this.props;
+		const { commentGroup, hideLemma } = this.props;
 		const { selectedAuthor, showTranslation, selectedLemmaEdition, editions, ready, translationAuthors } = this.state;
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {

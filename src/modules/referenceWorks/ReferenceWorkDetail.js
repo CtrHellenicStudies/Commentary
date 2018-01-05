@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
 import Header from '../../components/header/Header';
 
 // components
@@ -81,7 +83,7 @@ class ReferenceWorkDetail extends Component {
 		Utils.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page reference-works-page reference-works-detail-page">
 					<Header />
 					<div className="content primary">

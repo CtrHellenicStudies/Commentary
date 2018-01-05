@@ -15,6 +15,9 @@ import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import LoadingPage from '../../components/loading/LoadingPage';
 import KeywordsList from './KeywordsList';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
+
 import Header from '../../components/header/Header';
 
 
@@ -55,7 +58,7 @@ class KeywordsPage extends Component {
 		Utils.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page keywords-page">
 					<Header />
 					<div className="content primary">

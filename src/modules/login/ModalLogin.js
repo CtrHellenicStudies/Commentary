@@ -116,7 +116,7 @@ class ModalLogin extends React.Component {
 
 		return (
 			<div>
-				{!Cookies.getItem('user') &&
+				{!Cookies.get('user') &&
 					<div
 						className={`ahcip-modal-login
 						ahcip-modal ahcip-login-signup ${((lowered) ? ' lowered' : '')}`}

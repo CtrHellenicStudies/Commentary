@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
+
 import Header from '../../components/header/Header';
 import { compose } from 'react-apollo';
 
@@ -41,7 +44,7 @@ class ReferenceWorksPage extends Component {
 		Utils.setMetaImage(`${window.location.origin}/images/achilles_2.jpg`);
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page reference-works-page">
 					<Header />
 					<div className="content primary">

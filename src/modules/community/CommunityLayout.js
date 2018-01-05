@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
+
 import { compose } from 'react-apollo';
 
 // layouts & components
@@ -36,7 +39,7 @@ class CommunityLayout extends Component {
 		}
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout community-layout">
 					<Header />
 					<CommunityPage />

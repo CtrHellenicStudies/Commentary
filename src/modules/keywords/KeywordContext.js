@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
-
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
 // lib
-import muiTheme from '../../lib/muiTheme';
-import Utils, { queryCommentWithKeywordId, makeKeywordContextQueryFromComment } from '../../lib/utils';
+import Utils, { makeKeywordContextQueryFromComment } from '../../lib/utils';
 
 // graphql
 import { editionsQuery } from '../../graphql/methods/editions';

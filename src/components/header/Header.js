@@ -69,7 +69,7 @@ class Header extends Component {
 			modalSignupLowered: !!props.showSignup,
 			modalForgotPwdLowered: !!props.showForgotPwd,
 			tenantId: sessionStorage.getItem('tenantId'),
-			user: Cookies.getItem('user')
+			user: Cookies.get('user')
 		};
 
 		// methods:
@@ -290,7 +290,7 @@ class Header extends Component {
 									}
 									{user ?
 										<div>
-                                            {   Cookies.getItem('user')._id
+                                            {   Cookies.get('user')._id
                                                 // TODO Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) 
                                             ?
 												<div className="user-header-links admin-header-links">

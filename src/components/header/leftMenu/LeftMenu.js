@@ -47,7 +47,7 @@ class LeftMenu extends Component {
 	componentWillReceiveProps(nextProps) {
 
 		this.setState({
-			currentUser: Cookies.getItem('user')
+			currentUser: Cookies.get('user')
 		});
 	}
 
@@ -182,7 +182,7 @@ class LeftMenu extends Component {
 				}
 				<Divider />
 
-				{Cookies.getItem('user') ?
+				{Cookies.get('user') ?
 					<div>
 						<Link to="/profile">
 							<MenuItem

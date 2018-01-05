@@ -5,6 +5,9 @@ import Cookies from 'js-cookie';
 import { compose } from 'react-apollo';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
+
 import Header from '../../components/header/Header';
 
 // graphql
@@ -27,8 +30,8 @@ class CommenterDetail extends Component {
 		super(props);
 		this.state = {
 			readMoreBio: false,
-			loggedIn: Cookies.getItem('user'),
-			subscriptions: Cookies.getItem('user') && Cookies.getItem('user').subscriptions
+			loggedIn: Cookies.get('user'),
+			subscriptions: Cookies.get('user') && Cookies.get('user').subscriptions
 		};
 
 		// methods:
@@ -108,7 +111,7 @@ class CommenterDetail extends Component {
 
 		return (
 			(commenter ?
-				<MuiThemeProvider>
+				<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 					<div className="page page-commenter-detail">
 						<Header />
 						<div className="content primary">

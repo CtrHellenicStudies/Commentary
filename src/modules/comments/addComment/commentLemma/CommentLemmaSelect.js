@@ -4,13 +4,10 @@ import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
 // graphql
 import { editionsQuery } from '../../../../graphql/methods/editions';
 
 // lib:
-import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 
 

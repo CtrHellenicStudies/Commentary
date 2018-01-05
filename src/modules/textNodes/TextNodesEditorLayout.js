@@ -38,7 +38,7 @@ class TextNodesEditorLayout extends React.Component {
 	// --- BEGNI PERMISSIONS HANDLE --- //
 	handlePermissions() {
 		// if (Roles.subscription.ready()) {
-		// 	if (!Roles.userIsInRole(Cookies.getItem('user')._id, ['editor', 'admin', 'commenter'])) {
+		// 	if (!Roles.userIsInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
 		// 		this.props.history.push('/');
 		// 	}
 		// } TODO
@@ -48,7 +48,7 @@ class TextNodesEditorLayout extends React.Component {
 		Utils.setTitle('Edit Source Text | The Center for Hellenic Studies Commentaries');
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout chs-editor-layout add-comment-layout">
 					<Header
 						toggleSearchTerm={() => {}}

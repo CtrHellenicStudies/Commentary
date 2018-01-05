@@ -5,7 +5,7 @@ import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Cookies from 'js-cookie';
+import muiTheme from '../../../lib/muiTheme';
 
 // layouts
 import Header from '../../../components/header/Header';
@@ -22,7 +22,6 @@ import EditKeyword from './EditKeyword';
 import ContextPanel from '../../contextPanel/ContextPanel';
 
 // lib
-import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 
@@ -100,7 +99,7 @@ class EditKeywordLayout extends Component {
 	}
 	handlePermissions() {
 		// if (this.state.ready) {
-		// 	if (!Roles.userIsInRole(Cookies.getItem('user')._id, ['editor', 'admin', 'commenter'])) {
+		// 	if (!Roles.userIsInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
 		// 		this.props.history.push('/');
 		// 	}
 		// } // TODo
@@ -127,17 +126,11 @@ class EditKeywordLayout extends Component {
 		const { filters } = this.state;
 		let work;
         let subwork;
-        let lineTo;
-        let lineFrom;
 		filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
 			} else if (filter.key === 'subworks') {
 				subwork = filter.values[0];
-			} else if (filter.key === 'lineTo') {
-				lineTo = filter.values[0];
-			} else if (filter.key === 'lineFrom') {
-				lineFrom = filter.values[0];
 			}
 		});
 		const properties = {
@@ -206,8 +199,6 @@ class EditKeywordLayout extends Component {
 		const subwork = this.getSubwork();
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
-		const type = this.getType();
-		const token = Cookies.get('loginToken');
 		const { keyword } = this.state;
 		const that = this;
 		// create keyword object to be inserted:
@@ -380,7 +371,6 @@ class EditKeywordLayout extends Component {
 		let work;
 		let subwork;
 		let lineFrom;
-		let lineTo;
 
 		Utils.setTitle('Edit Tag | The Center for Hellenic Studies Commentaries');
 
@@ -389,15 +379,13 @@ class EditKeywordLayout extends Component {
 				work = filter.values[0];
 			} else if (filter.key === 'subworks') {
 				subwork = filter.values[0];
-			} else if (filter.key === 'lineTo') {
-				lineTo = filter.values[0];
 			} else if (filter.key === 'lineFrom') {
 				lineFrom = filter.values[0];
 			}
 		});
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{ready && keyword ?
 					<div className="chs-layout chs-editor-layout edit-keyword-layout">
 

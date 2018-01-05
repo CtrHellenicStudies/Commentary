@@ -3,17 +3,11 @@ import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
 // components
 import WorkVisualization from './WorkVizualization';
 
 // graphql
 import { worksQuery } from '../../graphql/methods/works';
-
-// lib
-import muiTheme from '../../lib/muiTheme';
-
 
 class WorksList extends Component {
 

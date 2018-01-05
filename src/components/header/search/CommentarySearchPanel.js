@@ -5,7 +5,6 @@ import $ from 'jquery';
 import { compose } from 'react-apollo';
 import _ from 'lodash';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -23,7 +22,6 @@ import { WorksCard } from './cards/SearchCards';
 
 // lib:
 import Utils from '../../../lib/utils';
-import muiTheme from '../../../lib/muiTheme';
 
 
 class CommentarySearchPanel extends Component {

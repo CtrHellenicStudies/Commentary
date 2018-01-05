@@ -105,7 +105,7 @@ class AddRevision extends React.Component {
 
 		const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
         let commenters = [];
-        const user = Cookies.getItem('user');
+        const user = Cookies.get('user');
 		if (user && user.canEditCommenters) {
 			commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
 				user.canEditCommenters.find(y => y === x._id));
@@ -525,7 +525,7 @@ class AddRevision extends React.Component {
 									/>
 								</div>
 								{(
-									// Roles.userIsInRole(Cookies.getItem('user'), ['editor', 'admin'])
+									// Roles.userIsInRole(Cookies.get('user'), ['editor', 'admin'])
                                     // && TODO
                                     comment.revisions.length > 1
 								) ?

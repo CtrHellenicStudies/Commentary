@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
 import { commentersQuery } from '../../graphql/methods/commenters';
-import Utils from '../../lib/utils';
 
 
 // components
@@ -17,14 +16,10 @@ class CommentersList extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		let commenters = [];
-		let _limit = 100;
 		const tenantId = sessionStorage.getItem('tenantId');
 		const properites = {
 			tenantId: tenantId
 		};
-		if (nextProps.limit) {
-			_limit = nextProps.limit;
-		}
 		nextProps.commentersQuery.refetch(properites);
 		commenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters;
 		// SUBSCRIPTIONS:

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
 
 // layouts
 import Header from '../../components/header/Header';
@@ -36,7 +38,9 @@ class NotFound extends Component {
 
 		return (
 			<div className="chs-layout master-layout not-found-layout">
-				<Header />
+				<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+					<Header />
+				</ MuiThemeProvider>
 				<div className="page page-not-found content primary">
 
 					<section className="block header header-page	cover parallax">

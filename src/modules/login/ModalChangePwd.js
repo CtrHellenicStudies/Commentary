@@ -42,7 +42,7 @@ const ModalChangePwd = createClass({
 
 		return (
 			<div>
-				{Cookies.getItem('user')._id ?
+				{Cookies.get('user')._id ?
 					<div
 						className={`ahcip-modal-login
 						ahcip-modal ahcip-login-signup ${((lowered) ? ' lowered' : '')}`}

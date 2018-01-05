@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../../lib/muiTheme';
+
 import { compose } from 'react-apollo';
 
 // graphql
@@ -313,7 +316,7 @@ class AddTranslationLayout extends Component {
 		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{!loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<Header

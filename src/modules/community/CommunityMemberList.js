@@ -27,4 +27,4 @@ class CommunityMemberList extends Component {
 CommunityMemberList.propTypes = {
 	usersQuery: PropTypes.object,
 };
-export default compose(CommunityMemberList)(usersQuery);
+export default compose(usersQuery)(CommunityMemberList);

@@ -8,7 +8,7 @@ import AvatarIcon from '../../../modules/profile/avatar/AvatarIcon';
 
 const SideNavTop = ({ currentUser, username }) => (
 	<div className="sidenav-top">
-		{Cookies.getItem('user') &&
+		{Cookies.get('user') &&
 			<Link to="/profile">
 				<div className="user-image paper-shadow">
 					<AvatarIcon avatar={currentUser && currentUser.profile ? currentUser.profile.avatarUrl : '/images/default_user.jpg'} />

@@ -4,14 +4,6 @@ import { convertToHTML } from 'draft-convert';
 import {
 	convertFromRaw, EditorState, ContentState, convertFromHTML 
 } from 'draft-js';
-import { compose } from 'react-apollo';
-
-// models
-import { commentersQuery } from '../graphql/methods/commenters';
-
-// lib
-import Config from './config'
-
 
 /**
  * General application specific utility / helper functions
@@ -139,10 +131,11 @@ const Utils = {
 		};
 	},
 	setBaseDocMeta() {
+		console.log(process);
 		Utils.setMetaTag('name', 'url', 'content', window.location.href);
 		Utils.setMetaTag('name', 'twitter:card', 'content', 'summary');
 		Utils.setMetaTag('name', 'twitter:url', 'content', window.location.href);
-		if ('serviceConfigurations' in process.env.SERVICE_CONFIGURATIONS) {
+		if (process.env.SERVICE_CONFIGURATIONS) {
 			Utils.setMetaTag('property', 'fb:app_id', 'content', process.env.FACEBOOK_APP_ID);
 		}
 		Utils.setMetaTag('property', 'og:url', 'content', window.location.href);
@@ -278,7 +271,6 @@ const Utils = {
 			const joinedText = edition.lines.map(line => line.html).join(' ');
 
 			const tag = new RegExp(`<lb id="\\d+" ed="${multiline}" />`, 'ig');
-			const id = /id="\d+"/ig;
 
 			const textArray = joinedText.split(tag);
 			const parser = new Parser();
@@ -289,7 +281,7 @@ const Utils = {
 			});
 			parser.render(joinedText);
 
-			const numberArray = lineArray.map((line) => parseInt(line.substr(4, line.length - 2)));
+			const numberArray = lineArray.map((line) => parseInt(line.substr(4, line.length - 2), 10));
 
 			if (numberArray.length) {
 				numberArray.unshift(numberArray[0] - 1);
@@ -383,7 +375,7 @@ const Utils = {
 		return true;
 	},
 	shouldRefetchQuery(properties, variables) {
-		for (const [key, value] of Object.entries(properties)) {
+		for (const [key] of Object.entries(properties)) {
 			if (properties[key] !== variables[key]) {
 				return true;
 			}

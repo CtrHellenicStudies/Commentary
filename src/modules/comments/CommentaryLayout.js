@@ -172,7 +172,7 @@ class CommentaryLayout extends Component {
 		const { skip, limit, modalLoginLowered, queryParams, filters } = this.state;
 		// create filters object based on the queryParams or params
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header

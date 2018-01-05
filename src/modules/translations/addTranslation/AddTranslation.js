@@ -70,7 +70,7 @@ class AddTranslation extends React.Component {
 		const commentersOptions = [];
 		const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
         let commenters = [];
-        const user = Cookies.getItem('user');
+        const user = Cookies.get('user');
 		if (user && user.canEditCommenters) {
 			commenters = tenantCommenters.filter((x => 
 				user.canEditCommenters.find(y => y === x._id) !== undefined));

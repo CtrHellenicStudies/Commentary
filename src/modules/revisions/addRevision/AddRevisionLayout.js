@@ -6,6 +6,8 @@ import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
+
 import Snackbar from 'material-ui/Snackbar';
 
 // components:
@@ -24,7 +26,6 @@ import { commentsQueryById,
 	commentAddRevisionMutation } from '../../../graphql/methods/comments';
 
 // lib
-import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 class AddRevisionLayout extends Component {
@@ -66,7 +67,6 @@ class AddRevisionLayout extends Component {
 			});
 			return;
 		}
-		const commentId = nextProps.match.params.commentId;
 		
 		const comment = nextProps.commentsQueryById.comments[0];
 		const tenantCommenters = nextProps.commentersQuery.commenters;
@@ -105,7 +105,6 @@ class AddRevisionLayout extends Component {
 	addRevision(formData, textValue, textRawValue) {
 		const { comment } = this.state;
 		const now = new Date();
-		const token = Cookies.get('loginToken');
 		const revision = {
 			title: formData.titleValue,
 			text: textValue,
@@ -123,7 +122,6 @@ class AddRevisionLayout extends Component {
 		const { comment } = this.state;
 
 		const keywords = this.getKeywords(formData);
-		const authToken = Cookies.get('loginToken');
 
 		let update = [{}];
 		if (keywords) {
@@ -162,7 +160,7 @@ class AddRevisionLayout extends Component {
 			let isOwner = false;
 			this.state.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (Cookies.getItem('user').canEditCommenters.indexOf(commenter._id));
+					isOwner = (Cookies.get('user').canEditCommenters.indexOf(commenter._id));
 				}
 			});
 			if (!isOwner) {
@@ -302,7 +300,7 @@ class AddRevisionLayout extends Component {
 		Utils.setTitle('Add Revision | The Center for Hellenic Studies Commentaries');
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{ready ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 

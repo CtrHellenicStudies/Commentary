@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../../lib/muiTheme';
 
 // graphql
 import { keywordInsertMutation } from '../../../graphql/methods/keywords';
@@ -19,7 +20,6 @@ import AddKeyword from './AddKeyword';
 import ContextPanel from '../../contextPanel/ContextPanel';
 
 // lib
-import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 
@@ -346,7 +346,7 @@ class AddKeywordLayout extends Component {
 		});
 
 		return (
-			<MuiThemeProvider muiTheme={this.getChildrenContext()}>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout chs-editor-layout add-comment-layout">
 					<div>
 						<Header

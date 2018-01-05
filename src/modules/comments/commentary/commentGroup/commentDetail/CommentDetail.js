@@ -37,7 +37,7 @@ const getUpdateDate = (selectedRevision) => {
 };
 
 const getUserCanEditCommenters = () => {
-	const user = Cookies.getItem('user');
+	const user = Cookies.get('user');
 	if (user && user.canEditCommenters) {
 		return user.canEditCommenters;
 	}
@@ -109,7 +109,7 @@ class CommentDetail extends React.Component {
 	
 		const settings = nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
 	
-		const user = Cookies.getItem('user');
+		const user = Cookies.get('user');
 		const ready = !nextProps.referenceWorksQuery.loading && !nextProps.settingsQuery.loading;
 
 		this.setState({

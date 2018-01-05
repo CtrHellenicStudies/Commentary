@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
 
 // graphql
 import { tenantsQuery } from '../../graphql/methods/tenants';
@@ -19,9 +20,6 @@ import NameResolutionServiceLayout from '../services/NameResolutionServiceLayout
 // components
 import Home from './Home';
 import LoadingHome from '../../components/loading/LoadingHome';
-
-// lib
-import muiTheme from '../../lib/muiTheme';
 
 
 class HomeLayout extends Component {
@@ -64,7 +62,7 @@ class HomeLayout extends Component {
 		}
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout home-layout">
 					<Header
 						isOnHomeView

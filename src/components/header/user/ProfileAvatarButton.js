@@ -11,7 +11,7 @@ class ProfileAvatarButton extends Component {
 	}
 	componentWillReceiveProps(props) {
 		let notifications = [];
-		const user = Cookies.getItem('user');
+		const user = Cookies.get('user');
 		if (user && user.subscriptions) {
 			notifications = user.subscriptions.notifications;
 		}
@@ -20,7 +20,7 @@ class ProfileAvatarButton extends Component {
 		});
 	}
 	render() {
-		const loggedInUser = Cookies.getItem('user');
+		const loggedInUser = Cookies.get('user');
 		const showUserDropdown = false;
 		const numberOfNotifications = this.state.notifications ? this.state.notifications.length : 0;
 

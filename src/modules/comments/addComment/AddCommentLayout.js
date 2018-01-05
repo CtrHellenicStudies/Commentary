@@ -5,7 +5,6 @@ import mongoose from 'mongoose';
 import { compose } from 'react-apollo';
 
 import slugify from 'slugify';
-import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import qs from 'qs-lite';
@@ -31,7 +30,7 @@ import { commentsInsertMutation } from '../../../graphql/methods/comments';
  */
 const handlePermissions = () => {
 	// if (Roles.subscription.ready()) {
-	// 	if (!Roles.userIsInRole(Cookies.getItem('user')._id, ['editor', 'admin', 'commenter'])) {
+	// 	if (!Roles.userIsInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
 	// 		this.props.history.push('/');
 	// 	}
 	// }
@@ -423,7 +422,7 @@ class AddCommentLayout extends Component {
 	render() {
 
 		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
-		const { work, subwork, lineFrom, lineTo } = getFilterValues(filters);
+		const { work, subwork, lineFrom } = getFilterValues(filters);
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 

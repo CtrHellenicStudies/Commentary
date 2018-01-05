@@ -13,6 +13,8 @@ import { pagesQuery } from '../../graphql/methods/pages';
 // layouts
 import NotFound from '../notFound/NotFound';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
 import Header from '../../components/header/Header';
 
 // components
@@ -72,7 +74,7 @@ class Page extends Component {
 		}
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className={`page page-${slug} content primary page-custom`}>
 					<Header />
 					<section className="block header header-page cover parallax">

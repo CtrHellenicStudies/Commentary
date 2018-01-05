@@ -55,7 +55,7 @@ class ProfilePage extends React.Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			user: Cookies.getItem('user'),
+			user: Cookies.get('user'),
 			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
 			ready: !nextProps.settingsQuery.loading
 		});
@@ -91,16 +91,6 @@ class ProfilePage extends React.Component {
 	render() {
 		const { user, settings } = this.state;
 
-		const toggleStyle = {
-			style: {
-				margin: '20px 0 0 0',
-			},
-		};
-
-		const changePwdStyle = {
-			margin: '11px 0 0 0',
-		};
-
 		if (settings) {
 			Utils.setTitle(`Profile Page | ${settings.title}`);
 			Utils.setDescription('');
@@ -111,15 +101,8 @@ class ProfilePage extends React.Component {
 			return <LoadingPage />;
 		}
 
-
-		let showTabs = false;
-		if (window.innerWidth > 800) {
-			showTabs = true;
-		}
-
-
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page page-user-profile">
 					<Header />
 					<div className="content primary">

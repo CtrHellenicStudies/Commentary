@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
+
 import { compose } from 'react-apollo';
 
 // components
@@ -40,7 +43,7 @@ class CommentersPage extends Component {
 		Utils.setDescription(`Commentators for ${settings.title}`);
 		Utils.setMetaImage(`${window.location.origin}/images/capitals.jpg`);
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page page-commenters">
 					<Header />
 					<div className="content primary">

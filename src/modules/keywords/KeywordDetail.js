@@ -5,6 +5,9 @@ import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiTheme from '../../lib/muiTheme';
+
 import Header from '../../components/header/Header';
 import { compose } from 'react-apollo';
 import $ from 'jquery';
@@ -109,7 +112,7 @@ class KeywordDetail extends Component {
 		Utils.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page keywords-page keywords-detail-page">
 					<Header />
 					<div className="content primary">
@@ -123,7 +126,7 @@ class KeywordDetail extends Component {
 									<div className="center-content">
 										<div className="page-title-wrap">
 											<h2 className="page-title ">{keyword.title}</h2>
-											{Cookies.getItem('user').roles.length > 0 ?
+											{Cookies.get('user').roles.length > 0 ?
 												<div>
 													<Link to={`/tags/${keyword.slug}/edit`}>
 														<RaisedButton

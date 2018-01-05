@@ -3,8 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { compose } from 'react-apollo';
-import { ApolloProvider, createNetworkInterface } from 'react-apollo';
-import { ApolloClient } from 'apollo-client';
 
 // lib
 import Utils from './lib/utils';
@@ -15,12 +13,12 @@ import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
 
 // layouts
 import CommentaryLayout from './modules/comments/CommentaryLayout';
-import AddCommentLayout from './modules/comments/addComment/AddCommentLayout';
+//import AddCommentLayout from './modules/comments/addComment/AddCommentLayout';
 import AddKeywordLayout from './modules/keywords/addKeyword/AddKeywordLayout';
 import AddTranslationLayout from './modules/translations/addTranslation/AddTranslationLayout';
-import AddRevisionLayout from './modules/revisions/addRevision/AddRevisionLayout';
+// import AddRevisionLayout from './modules/revisions/addRevision/AddRevisionLayout';
 import EditKeywordLayout from './modules/keywords/editKeyword/EditKeywordLayout';
-import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
+// import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
 import HomeLayout from './modules/home/HomeLayout';
 import NameResolutionServiceLayout from './modules/services/NameResolutionServiceLayout';
 import NotFound from './modules/notFound/NotFound';
@@ -41,35 +39,8 @@ if (loginToken) {
 	login(loginToken);
 }
 
-const uriAddress = process.env.graphql ? process.env.public.GRAPHQL : 'http://ahcip.orphe.us/graphql'; // TODO
-console.log(uriAddress);
-
-const networkInterface = createNetworkInterface({
-	uri: uriAddress,
-});
-
-const client = new ApolloClient({
-	networkInterface
-});
-
-networkInterface.use([{
-	applyMiddleware(req, next) {
-		if (!req.options.headers) {
-			req.options.headers = {};
-		}
-		const token = Cookies.get('loginToken');
-		req.options.headers.authorization = token;
-		next();
-	}
-}]);
-
-// Get tenant subdomain
-const hostnameArray = document.location.hostname.split('.');
-let tenantSubdomain;
-if (hostnameArray.length > 2) {
-	tenantSubdomain = hostnameArray[0];
-}
 Utils.setBaseDocMeta();
+
 
 /**
  * Private route
@@ -124,9 +95,9 @@ const routes = (props) => {
 			<Route exact path="/" component={HomeLayout} />
 
 			{/** Commentary routes */}
-			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
+			{/* <PrivateRoute exact path="/commentary/create" component={AddCommentLayout} /> */}
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
-			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
+			{/* <PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} /> */}
 
 
 			{/** Tags routes */}
@@ -146,7 +117,7 @@ const routes = (props) => {
 
 			{/** Editor routes */}
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
-			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
+			{/* <PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} /> */}
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
 
 			{/** Users routes */}

@@ -10,7 +10,7 @@ export default class AvatarEditor extends Component {
 		super(props);
 
 		this.state = {
-			avatarUrl: Cookies.getItem('user') && Cookies.getItem('user').profile && Cookies.getItem('user').profile.avatarUrl ? Cookies.getItem('user').profile.avatarUrl : props.defaultAvatarUrl,
+			avatarUrl: Cookies.get('user') && Cookies.get('user').profile && Cookies.get('user').profile.avatarUrl ? Cookies.get('user').profile.avatarUrl : props.defaultAvatarUrl,
 		};
 
 		// binding users

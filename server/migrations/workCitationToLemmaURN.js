@@ -36,7 +36,7 @@ const workCitationToLemmaURN = () => {
 	const comments = Comments.find().fetch();
 
 	comments.forEach((comment) => {
-		let lemmaCitation = {
+		const lemmaCitation = {
 			collection: 'urn:cts:greekLit',
 			textGroup: null,
 			work: null,
@@ -57,7 +57,7 @@ const workCitationToLemmaURN = () => {
 			lemmaCitation.passage = `${comment.subwork.n}.${comment.lineFrom}`;
 
 			if ('lineTo' in comment) {
-				lemmaCitation.passage = `${lemmaCitation.passage}-${comment.subwork.n}.${comment.lineTo}`
+				lemmaCitation.passage = `${lemmaCitation.passage}-${comment.subwork.n}.${comment.lineTo}`;
 			}
 		}
 

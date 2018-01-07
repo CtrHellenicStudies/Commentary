@@ -11,6 +11,12 @@ k8s/production
 buildTag.js
 build_tag.js
 jest_0
+build
+coverage
+/**/*.css
+/**/*.css.map
+dump.rdb
+doc
 
 # Temp files
 tmp/

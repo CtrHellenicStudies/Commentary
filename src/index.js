@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'ion-rangeslider/js/ion.rangeSlider.js';
+import 'ion-rangeslider/css/ion.rangeSlider.css';
+import 'ion-rangeslider/css/ion.rangeSlider.skinFlat.css';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 
 // css
@@ -13,6 +18,8 @@ import { ApolloProvider, createNetworkInterface } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 require('dotenv').config();
 require('dotenv').load();
+
+injectTapEventPlugin();
 
 const uriAddress = process.env.graphql ? process.env.graphql : 'http://localhost:3002/graphql';
 console.log(uriAddress);

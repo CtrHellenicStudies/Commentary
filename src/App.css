@@ -12959,6 +12959,323 @@ section.reference-work-single {
   padding: 20px 0;
   display: block;
 }
+.userAvatarDelete {
+  position: absolute;
+  left: 50%;
+  margin-left: 140px;
+  bottom: 0;
+  z-index: 2;
+}
+.userAvatarDeleteActive {
+  cursor: pointer;
+}
+.userAvatarDeleteInactive {
+  cursor: default;
+  display: none;
+}
+.avatar-icon {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.user-profile-tease a {
+  width: 100%;
+  padding: 20px;
+}
+.user-profile-tease .user-image-wrap {
+  border-radius: 50%;
+  overflow: hidden;
+  vertical-align: top;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+}
+.user-profile-tease .user-image-wrap img {
+  width: 40px;
+}
+.user-profile-tease h3 {
+  vertical-align: top;
+  display: inline-block;
+  font-size: 20px;
+  padding: 10px 0 10px 10px;
+  margin: 0;
+}
+.page-user-profile .block.header {
+  height: 260px;
+}
+.page-user-profile .page-content {
+  overflow: visible;
+}
+.user-profile-section {
+  position: relative;
+}
+.user-profile-section .user-profile-picture-container {
+  position: absolute;
+  z-index: 1;
+  top: -210px;
+  width: 230px;
+  height: 230px;
+  left: 50%;
+  margin-left: -100px;
+}
+.user-profile-section .user-profile-picture {
+  border-radius: 100%;
+  overflow: hidden;
+  border: 3px solid #fff;
+  width: 230px;
+  height: 230px;
+  cursor: pointer;
+}
+.user-profile-section .user-profile-picture:hover .upload-profile-picture {
+  opacity: 1;
+}
+.user-profile-section .user-profile-picture img {
+  display: block;
+  width: 100%;
+}
+.user-profile-section .user-profile-picture .upload-profile-picture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  -webkit-transition: opacity 200ms ease-out;
+  -moz-transition: opacity 200ms ease-out;
+  -ms-transition: opacity 200ms ease-out;
+  -o-transition: opacity 200ms ease-out;
+  transition: all opacity 200ms ease-out ease;
+  -webkit-transition: all opacity 200ms ease-out ease;
+  -moz-transition: all opacity 200ms ease-out ease;
+  border-radius: 100%;
+  overflow: hidden;
+  border: 3px solid #fff;
+  cursor: pointer;
+}
+.user-profile-section .user-profile-picture .upload-profile-picture .mdi.mdi-image-area {
+  color: #fff;
+  opacity: 0.5;
+  margin-top: 70px;
+  display: block;
+}
+.user-profile-section .user-profile-picture .upload-profile-picture .mdi.mdi-image-area:before {
+  font-size: 60px;
+}
+.user-profile-section .user-profile-picture .upload-profile-picture .help-text {
+  font-size: 14px;
+  font-style: italic;
+  color: #fff;
+  opacity: 0.5;
+  display: block;
+  width: 60%;
+  text-align: center;
+  margin: 0 auto;
+}
+.page-user-profile--public .user-profile-section .user-profile-picture {
+  cursor: default;
+}
+.user-profile-textfields {
+  text-align: left;
+  max-width: 740px;
+  margin: 30px auto;
+}
+.user-profile-textfields .form-save-help {
+  text-align: center !important;
+  margin: 0 auto !important;
+  font-family: 'Merriweather', serif;
+  color: #727272;
+  font-size: 16px;
+  display: block;
+}
+.user-profile-textfields span {
+  margin: 0 !important;
+}
+.user-profile-textfields h3 {
+  text-align: left !important;
+}
+.page-content .user-divider {
+  margin: 100px auto;
+  width: 100%;
+  max-width: 320px;
+  height: 4px;
+  background: #CCCCCC;
+}
+.user-account-form .fieldcontain {
+  display: block;
+  width: 100%;
+  padding: 5px 0;
+}
+.user-account-form label {
+  float: left;
+  clear: both;
+  font-size: 14px;
+  color: #795548;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+}
+.user-account-form label .required-indicator {
+  color: #63232D;
+}
+.user-account-form .user-avatar-wrap {
+  width: 260px;
+  margin: 5px 10px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.user-account-form .user-avatar-wrap img {
+  clear: both;
+  width: 100%;
+}
+.user-account-form input[type="file"] {
+  padding: 0 10px;
+}
+.user-account-form input[type="submit"] {
+  width: auto;
+  padding: 5px 50px;
+  display: block;
+  margin: 25px 0;
+  height: auto;
+}
+#remember_me_holder input {
+  margin-left: 10px;
+}
+.public-profile-link h3 {
+  font-family: 'Proxima N W01 At Smbd';
+  font-size: 18px;
+  text-transform: uppercase;
+  margin: 20px 0 0 0 !important;
+  padding-right: 12px;
+  color: #795548;
+}
+.public-profile-link a {
+  font-weight: lighter;
+  font-family: 'ProximaNW01-AltLightReg';
+  font-size: 18px;
+  border-bottom: 2px solid #795548;
+}
+.public-profile-link a:hover {
+  border-bottom: 2px solid #ffffff;
+}
+.public-profile-link span {
+  font-weight: lighter;
+  font-family: 'ProximaNW01-AltLightReg';
+  font-size: 18px;
+}
+.public-profile-biography p {
+  font-family: 'Merriweather', serif;
+  line-height: 1.7em;
+  word-wrap: break-word;
+  font-weight: 300;
+  font-size: 18px;
+  color: #727272;
+  margin: 0 !important;
+}
+.public-profile-name h2 {
+  margin-bottom: 20px;
+  font-family: 'Proxima N W01 At Smbd';
+  font-size: 28px;
+  color: #000000;
+}
+.dropzone {
+  width: 0px !important;
+  height: 0px !important;
+  border-width: 0px !important;
+  border-color: transparent !important;
+  border-style: none !important;
+  border-radius: 0px !important;
+}
+.user-profile-tabs {
+  margin-top: 50px;
+}
+.user-profile-tabs button div,
+.user-profile-tabs button span {
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  text-transform: none;
+}
+.page .page-content .user-profile-tabs h2,
+.page .page-content .user-profile-tabs h3 {
+  margin: 50px auto 20px;
+  text-align: center;
+}
+.text-node.bookmark-text-node {
+  clear: both;
+  text-align: left;
+  padding: 20px;
+  display: block;
+  background: #f6f6f6;
+  width: 100%;
+  max-width: none;
+  border-bottom: 1px solid #eee;
+}
+.text-node.bookmark-text-node:hover {
+  background: #eee;
+}
+.text-node.bookmark-text-node.bookmark-text-node--odd {
+  background: #fefefe;
+}
+.text-node.bookmark-text-node .text-left-header {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0;
+  padding: 0;
+  float: left;
+  opacity: 1;
+  top: auto;
+  left: auto;
+  text-align: left;
+  width: auto;
+  padding: 0px 10px;
+}
+.text-node.bookmark-text-node .text-left-header .section-numbering {
+  width: auto;
+  font-size: 25px;
+}
+.text-node.bookmark-text-node .text-html {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0;
+  padding: 0;
+  float: left;
+  padding: 0px 10px;
+  line-height: 1.4em;
+  font-size: 20px;
+}
+.page-user-profile .content.primary {
+  position: relative;
+  z-index: 1;
+}
+.user-profile-tabs-wrap {
+  max-width: 1100px;
+  margin: -48px auto 0;
+  position: relative;
+}
+.user-profile-tabs > div {
+  background: transparent !important;
+}
+.annotations-tab-content {
+  padding: 90px 0 120px;
+}
+.works-list--bookshelf {
+  padding: 60px 0 120px;
+  margin: 0 auto;
+  min-height: 600px;
+}
+.no-results--bookshelf {
+  opacity: 0.7;
+  text-align: center;
+  padding-top: 60px;
+  max-width: 680px;
+  font-size: 22px;
+  line-height: 1.5em;
+}
 /* Responsive */
 @media (max-width: 1600px) {
   .search-dropdown--more {

@@ -14,7 +14,7 @@ import { ApolloClient } from 'apollo-client';
 require('dotenv').config();
 require('dotenv').load();
 
-const uriAddress = process.env.graphql ? process.env.public.GRAPHQL : 'http://localhost:3002/graphql'; // TODO
+const uriAddress = process.env.graphql ? process.env.graphql : 'http://localhost:3002/graphql';
 console.log(uriAddress);
 
 const networkInterface = createNetworkInterface({

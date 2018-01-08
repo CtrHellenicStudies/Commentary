@@ -19,6 +19,7 @@ import LeftMenu from './leftMenu/LeftMenu';
 import CommentarySearchToolbar from './search/CommentarySearchToolbar';
 import CommentarySearchPanel from './search/CommentarySearchPanel';
 import ProfileAvatarButton from './user/ProfileAvatarButton';
+import Utils from '../../lib/utils';
 
 /*
 	helpers
@@ -290,8 +291,8 @@ class Header extends Component {
 									}
 									{user ?
 										<div>
-                                            {   Cookies.get('user')._id
-                                                // TODO Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) 
+                                            {   Cookies.get('user')._id &&
+                                                Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter']) 
                                             ?
 												<div className="user-header-links admin-header-links">
 													{tenant && !tenant.isAnnotation &&

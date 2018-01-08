@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
+import Cookies from 'js-cookie';
 
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -28,12 +29,9 @@ import { commentsInsertMutation } from '../../../graphql/methods/comments';
  *	helpers
  */
 const handlePermissions = () => {
-	// if (Roles.subscription.ready()) {
-	// 	if (!Roles.userIsInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
-	// 		this.props.history.push('/');
-	// 	}
-	// }
-    // TODO
+	if (!Utils.userIsInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
+		this.props.history.push('/');
+	}
 };
 
 

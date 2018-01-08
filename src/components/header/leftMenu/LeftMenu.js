@@ -15,6 +15,7 @@ import { settingsQuery } from '../../../graphql/methods/settings';
 // components:
 import SideNavTop from './SideNavTop';
 import MenuItem from './MenuItem';
+import Utils from '../../../lib/utils';
 
 
 /*
@@ -83,8 +84,8 @@ class LeftMenu extends Component {
 					currentUser={currentUser}
 					username={getUsername(currentUser)}
 				/>
-                {tenant && !tenant.isAnnotation  
-                // && Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter']) TODO
+				{tenant && !tenant.isAnnotation && Cookies.get('user') &&
+				Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])
                 ?
 					<div>
                         {tenant && !tenant.isAnnotation 

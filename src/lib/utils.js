@@ -91,6 +91,16 @@ const Utils = {
 		}
 		return cmp;
 	},
+	userInRole(user, roles) {
+		for(let i = 0; i < user.roles.length; i += 1) {
+			for(let j = 0; j < roles.length; j += 1) {
+				if(user.roles[i] === roles[j]) {
+					return true;
+				}
+			}
+		}
+		return false;
+	},
 	sortBy: function sort() {
 		const fields = [];
 		const nFields = arguments.length;

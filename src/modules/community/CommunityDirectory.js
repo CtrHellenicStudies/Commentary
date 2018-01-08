@@ -13,6 +13,7 @@ class CommunityDirectory extends React.Component {
 				<h3>Community Directory</h3>
 				<CommunityMemberList />
 			</div>
+
 		);
 	}
 }

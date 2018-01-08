@@ -5,6 +5,7 @@ local
 private/settings/*.json
 production.json
 *.log
+*.css
 .uploads
 node_modules
 k8s/production

@@ -41,7 +41,11 @@ if (loginToken) {
 
 Utils.setBaseDocMeta();
 
-
+const hostnameArray = document.location.hostname.split('.');
+let tenantSubdomain;
+if (hostnameArray.length > 2) {
+	tenantSubdomain = hostnameArray[0];
+}
 /**
  * Private route
  * create a route restricted to a logged in user
@@ -68,8 +72,16 @@ Cookies.get('token') ? (
  */
 const routes = (props) => {
 	if (!sessionStorage.getItem('tenantId')) {
-		if (!props.subdomain) {
+		if (!tenantSubdomain) {
 			return <Route component={NotFound} />;
+		}
+		else {
+			sessionStorage.removeItem('noTenant');
+			if (!props.tenantsBySubdomainQuery.tenantBySubdomain) {
+				props.tenantsBySubdomainQuery.refetch({
+					subdomain: tenantSubdomain
+				});
+			}
 		}
 
 		if (

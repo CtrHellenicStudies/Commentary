@@ -1,0 +1,379 @@
+/******************************************************************************
+
+						  ___ _  _ ___
+						 / __| || / __|
+						| (__| __ \__ \
+						 \___|_||_|___/
+
+  		The Center for Hellenic Studies
+
+
+ |  Style Variables for A Homer Commentary in Progress and CHS Annotations
+ |
+ |   1. Colors
+ |   2. Typography
+ |   3. Mixins
+
+
+******************************************************************************/
+/******************************************************************************
+
+1. Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.1 Base Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.2 Brand Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.3 Text Colors
+
+******************************************************************************/
+/******************************************************************************
+
+2. Typography
+
+Available Fonts:
+
+=================================
+Google Fonts
+=================================
+font-family: 'Gentium Basic', serif;
+font-family: 'Merriweather', serif;
+
+
+=================================
+Fonts.com
+=================================
+font-family:'Museo Sans W01_900';
+font-family:'ProximaNW01-AltLightReg';
+font-family:'Proxima N W01 At Smbd';
+font-family:'Museo W01_700';
+font-family:'Proxima N W01 Thin Reg';
+font-family:'Proxima Nova W08 Reg';
+font-family:'Proxima Nova W15 Medium';
+font-family:'Proxima Nova W07 Semibold';
+font-family:'Proxima Nova W07 Bold';
+font-family:'Proxima Nova W07 Extrabold';
+font-family:'Proxima Nova W07 Black';
+
+=================================
+Material Design Icons
+=================================
+font-family: "Material Design Icons";
+
+******************************************************************************/
+/******************************************************************************
+
+2.1 Base Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.2 Title Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.3 Reading Environment Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.4 Material Design Icons
+
+******************************************************************************/
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("/fonts/materialdesignicons-webfont.eot?v=1.7.22");
+  src: url("/fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("/fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("/fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("/fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("/fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/******************************************************************************
+
+3. Mixins
+
+******************************************************************************/
+@-webkit-keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.keyword {
+  background: #fff;
+  display: inline-block;
+  vertical-align: top;
+  padding: 15px 25px;
+  margin: 7px;
+  border-top: 2px solid #795548;
+  width: 40%;
+  text-align: left;
+}
+.keyword .keyword-title {
+  color: #212121;
+  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-size: 22px;
+  text-transform: uppercase;
+  margin-right: 10px;
+  display: inline-block;
+  padding: 10px 0 5px;
+  vertical-align: top;
+}
+.keyword .keyword-title:hover {
+  color: #795548;
+}
+.keyword .keyword-comment-count {
+  font-size: 16px;
+  font-weight: light;
+  color: #999;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0;
+  padding: 15px 0 0 0;
+}
+.keyword .keyword-description {
+  display: block;
+  color: #aaa;
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  width: 97%;
+  margin: 0 auto;
+  padding-bottom: 30px;
+  text-align: left;
+}
+.keyword .md-card-title {
+  display: inline-block;
+}
+.keywords-page .page-content {
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+}
+.keywords-page .page-content .keyword .keyword-subheader {
+  margin: 10px 0;
+}
+.keywords-page .comment {
+  margin: 20px auto;
+}
+section.keyword-single {
+  background: #f6f6f6;
+}
+.keyword-teaser {
+  width: 95%;
+  max-width: 1000px;
+  background: #f6f6f6;
+  cursor: pointer;
+  margin: 10px auto;
+  padding: 20px;
+  text-align: left;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 1px -1px rgba(0, 0, 0, 0.2);
+}
+.keyword-teaser.keyword-open {
+  background: #fff;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.14), 0 3px 7px 0 rgba(0, 0, 0, 0.12), 0 5px 3px -4px rgba(0, 0, 0, 0.2);
+}
+.keyword-teaser.keyword-open .keyword-title {
+  color: #1e1e1e;
+}
+.keyword-teaser.keyword-open .keyword-comment-count,
+.keyword-teaser.keyword-open .keyword-description,
+.keyword-teaser.keyword-open .mdi,
+.keyword-teaser.keyword-open .keyword-read-more {
+  color: #727272;
+}
+.keyword-teaser.keyword-open .keyword-description,
+.keyword-teaser.keyword-open hr {
+  display: block;
+}
+.keyword-teaser.keyword-open .mdi.mdi-minus {
+  display: inline-block;
+}
+.keyword-teaser.keyword-open .mdi.mdi-plus {
+  display: none;
+}
+.keyword-teaser.keyword-open .keyword-read-more {
+  display: block;
+}
+.keyword-teaser.keyword-open:hover {
+  background: #fff;
+}
+.keyword-teaser.keyword-open:hover .keyword-title {
+  color: #1e1e1e;
+}
+.keyword-teaser.keyword-open:hover .keyword-title:hover {
+  color: #1e1e1e;
+}
+.keyword-teaser.keyword-open:hover .keyword-comment-count,
+.keyword-teaser.keyword-open:hover .keyword-description,
+.keyword-teaser.keyword-open:hover .mdi,
+.keyword-teaser.keyword-open:hover .keyword-read-more {
+  color: #727272;
+}
+.keyword-teaser.keyword-open:hover .keyword-comment-count:hover,
+.keyword-teaser.keyword-open:hover .keyword-description:hover,
+.keyword-teaser.keyword-open:hover .mdi:hover,
+.keyword-teaser.keyword-open:hover .keyword-read-more:hover {
+  color: #727272;
+}
+.keyword-teaser:hover {
+  background: #63232D;
+}
+.keyword-teaser:hover .keyword-title,
+.keyword-teaser:hover .keyword-comment-count,
+.keyword-teaser:hover .keyword-description,
+.keyword-teaser:hover .mdi,
+.keyword-teaser:hover .keyword-read-more {
+  color: #fff;
+}
+.keyword-teaser:hover .keyword-title:hover,
+.keyword-teaser:hover .keyword-comment-count:hover,
+.keyword-teaser:hover .keyword-description:hover,
+.keyword-teaser:hover .mdi:hover,
+.keyword-teaser:hover .keyword-read-more:hover {
+  color: #fff;
+}
+.keyword-teaser .keyword-title {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 22px;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  margin: 0;
+}
+.keyword-teaser .mdi {
+  display: inline-block;
+  vertical-align: top;
+  float: right;
+  padding: 7px 10px;
+  color: #727272;
+}
+.keyword-teaser .mdi.mdi-minus {
+  display: none;
+}
+.keyword-teaser .keyword-comment-count {
+  font-style: italic;
+  float: right;
+  display: inline-block;
+  vertical-align: top;
+  padding: 4px 10px;
+  font-size: 14px;
+  font-family: 'Merriweather', serif;
+  font-weight: light;
+  color: #727272;
+}
+.keyword-teaser hr {
+  width: 100%;
+  margin: 15px auto;
+  display: none;
+}
+.keyword-teaser .keyword-description {
+  display: none;
+  width: 98%;
+  margin: 10px 5px 20px;
+  max-width: 700px;
+  font-size: 15px;
+  font-family: 'Merriweather', serif;
+  line-height: 1.5em;
+}
+.keyword-teaser .keyword-read-more {
+  display: none;
+  clear: both;
+  color: #727272;
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin: 10px 6px 0;
+  font-weight: light;
+}
+.keyword-teaser .keyword-read-more:hover {
+  color: #212121;
+}
+.keywords-page .keyword-teaser {
+  border: 1px solid #ddd;
+}
+.keywords-page .keyword-teaser h4 {
+  padding: 0;
+}
+.keywords-page .keyword-teaser .keyword-description {
+  margin: 15px 5px;
+}
+.keywords-page .keyword-teaser .mdi {
+  padding: 19px 10px;
+}
+.keyword-editor {
+  min-height: 220px;
+}
+.keyword-type-radio {
+  display: inline-block !important;
+  vertical-align: top !important;
+  width: auto !important;
+  padding: 0px 20px 0 0;
+}
+.keywords-detail-page .page-content {
+  min-height: 600px;
+}
+.keywords-detail-page .page-content .keyword-description {
+  min-height: 220px;
+}
+.keywords-detail-page .page-content h2 {
+  text-align: center;
+  margin: 50px auto 15px;
+}
+.keywords-detail-page .page-content .no-description-available,
+.keywords-detail-page .page-content .no-results {
+  padding: 60px 0 180px;
+  color: #727272;
+  text-align: center;
+  font-family: 'Merriweather', serif;
+  font-size: 20px;
+  font-weight: 100;
+}
+.keywords-detail-page article.lemma-comment {
+  margin: 20px auto;
+}
+.keywords-detail-page article.lemma-comment p.lemma-text {
+  padding: 2px 15px;
+}
+.keyword-context {
+  width: 95%;
+}
+.keyword-context .lemma-comment-ref-header {
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 0px 15px 10px;
+  display: block;
+  text-transform: uppercase;
+}
+.page-content hr {
+  max-width: 360px;
+  margin: 15px auto 0;
+  background: #d7ccc8;
+  height: 4px;
+  border: none !important;
+}

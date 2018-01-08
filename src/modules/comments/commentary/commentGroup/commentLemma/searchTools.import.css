@@ -1,0 +1,433 @@
+/*
+ * Archive page styles
+ */
+/******************************************************************************
+
+						  ___ _  _ ___
+						 / __| || / __|
+						| (__| __ \__ \
+						 \___|_||_|___/
+
+  		The Center for Hellenic Studies
+
+
+ |  Style Variables for A Homer Commentary in Progress and CHS Annotations
+ |
+ |   1. Colors
+ |   2. Typography
+ |   3. Mixins
+
+
+******************************************************************************/
+/******************************************************************************
+
+1. Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.1 Base Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.2 Brand Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.3 Text Colors
+
+******************************************************************************/
+/******************************************************************************
+
+2. Typography
+
+Available Fonts:
+
+=================================
+Google Fonts
+=================================
+font-family: 'Gentium Basic', serif;
+font-family: 'Merriweather', serif;
+
+
+=================================
+Fonts.com
+=================================
+font-family:'Museo Sans W01_900';
+font-family:'ProximaNW01-AltLightReg';
+font-family:'Proxima N W01 At Smbd';
+font-family:'Museo W01_700';
+font-family:'Proxima N W01 Thin Reg';
+font-family:'Proxima Nova W08 Reg';
+font-family:'Proxima Nova W15 Medium';
+font-family:'Proxima Nova W07 Semibold';
+font-family:'Proxima Nova W07 Bold';
+font-family:'Proxima Nova W07 Extrabold';
+font-family:'Proxima Nova W07 Black';
+
+=================================
+Material Design Icons
+=================================
+font-family: "Material Design Icons";
+
+******************************************************************************/
+/******************************************************************************
+
+2.1 Base Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.2 Title Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.3 Reading Environment Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.4 Material Design Icons
+
+******************************************************************************/
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("/fonts/materialdesignicons-webfont.eot?v=1.7.22");
+  src: url("/fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("/fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("/fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("/fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("/fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/******************************************************************************
+
+3. Mixins
+
+******************************************************************************/
+@-webkit-keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.search-tools {
+  margin: 0px auto;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+  float: right;
+}
+.dropdown {
+  display: inline-block;
+  vertical-align: top;
+  position: inherit;
+}
+.dropdown.open > button.search-tool {
+  background: #795548 !important;
+}
+.dropdown.open > button.search-tool span,
+.dropdown.open > button.search-tool i,
+.dropdown.open > button.search-tool .mdi {
+  color: #fff !important;
+}
+.dropdown.open > .dropdown-panel {
+  display: block !important;
+  height: 200px;
+  width: 100%;
+  top: 80px;
+  background: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+.dropdown.open > .dropdown-menu {
+  -webkit-transform: scale(1, 1);
+  transform: scale(1, 1);
+  opacity: 1;
+}
+.dropdown .dropdown-menu {
+  width: 100%;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.98);
+  margin: 0;
+  max-height: 460px;
+  text-align: center;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  padding: 10px 0 30px;
+  opacity: .3;
+  -webkit-transform-origin: top;
+  transform-origin: top;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  transform: scale(1, 0);
+  -ms-transform: scale(1, 0);
+  -webkit-transform: scale(1, 0);
+  display: block;
+  transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+}
+.dropdown .dropdown-menu .dropdown-menu-inner {
+  width: 95%;
+  margin: 0 auto;
+  max-width: 1200px;
+  text-align: left;
+  overflow-y: scroll;
+  max-height: 392px;
+}
+.dropdown .dropdown-menu li {
+  display: inline-block;
+  vertical-align: top;
+  width: 23%;
+  margin: 5px 1%;
+  text-align: left;
+  overflow: hidden;
+}
+.search-term-button {
+  background: #fefefe;
+  width: 100%;
+  height: 42px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  padding: 2px 10px 4px;
+  border: 1px solid #f6f6f6;
+  box-radius: 2px;
+  outline: none;
+  -webkit-transition: all 100ms ease-in-out;
+  -moz-transition: all 100ms ease-in-out;
+  -ms-transition: all 100ms ease-in-out;
+  -o-transition: all 100ms ease-in-out;
+}
+.search-term-button:focus {
+  outline: none;
+}
+.search-term-button:hover {
+  background: #fafafa;
+}
+.search-term-button:hover .search-term-button-label {
+  color: #1e1e1e;
+}
+.search-term-button.search-term-button--active {
+  background-color: #795548 !important;
+}
+.search-term-button.search-term-button--active span {
+  color: #fff !important;
+}
+.search-term-button.search-term-button--active:hover .search-term-button-label {
+  color: #fff;
+}
+.search-term-button.search-term-button--active .search-term-button-label {
+  color: #fff;
+}
+.search-term-button .search-term-button-icon {
+  display: none !important;
+}
+.search-term-button .search-term-button-icon:before {
+  font-size: 18px;
+}
+.search-term-button .search-term-button-label {
+  font-family: 'Proxima N W01 At Smbd', sans-serif 12px;
+  font-weight: bold;
+  color: #727272;
+}
+.search-dropdown--more {
+  display: none;
+}
+.search-dropdown--more .search-dropdown {
+  display: none;
+}
+.search-dropdown--more .text-search {
+  display: none;
+}
+.search-tool {
+  display: inline-block;
+  vertical-align: top;
+  height: 69px;
+  background: #fff;
+  padding: 10px 20px 5px 25px;
+  border-right: 1px solid #ddd;
+  margin-right: -5px;
+}
+.search-tool.search-type-keyword {
+  border-left: 1px solid #ddd;
+}
+.search-tool.search-tool-disabled {
+  opacity: 0.5;
+}
+.search-tool:hover {
+  background: #bc5500;
+}
+.search-tool span,
+.search-tool i,
+.search-tool input {
+  display: inline-block;
+  vertical-align: top;
+}
+.search-tool span {
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-size: 14px;
+  color: #5D4037;
+}
+.search-tool i {
+  color: #5D4037;
+  font-size: 18px;
+  margin: 9px 0 6px 20px;
+}
+.search-tool.selected {
+  background: #795548;
+}
+.search-tool.selected .unchecked {
+  display: none;
+}
+.search-tool.selected .checked {
+  display: inline-block;
+}
+.search-tool .checked {
+  display: none;
+}
+.text-search {
+  padding: 0;
+  color: #212121;
+  background: transparent;
+  border: 0;
+}
+.text-search:hover {
+  background: transparent;
+}
+.text-search input {
+  background: transparent;
+  width: 260px;
+  border-bottom: 2px solid #5D4037;
+  height: auto;
+  padding: 10px;
+}
+.text-search input:focus {
+  outline: none;
+}
+.line-search {
+  width: 250px;
+  padding: 10px 50px 10px 15px;
+  position: relative;
+}
+.line-search.disabled .disabled-screen {
+  display: block;
+}
+.line-search label {
+  font-family: 'Proxima N W01 At Smbd', sans-serif 14px;
+  color: #5D4037;
+  display: inline-block;
+  padding: 14px 5px 5px 0;
+}
+.line-search input {
+  width: 69px;
+  margin: 3px 10px 0 0;
+  font-family: 'Proxima Nova A W07 Light', sans-serif 14px;
+}
+.line-search .irs-bar {
+  height: 10px;
+  top: 26px;
+}
+.line-search .disabled-screen {
+  display: none;
+  background: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+.md-menu-toolbar {
+  opacity: 1;
+}
+.md-menu-toolbar.ng-hide-add,
+.md-menu-toolbar.ng-hide-remove {
+  transition: all linear 2s;
+}
+.md-menu-toolbar.ng-hide {
+  display: none;
+  opacity: 0;
+}
+.search .nav-wrap,
+.line-wrap {
+  display: none;
+}
+.search .side-menu .side-menu-head span.site-title {
+  display: none;
+}
+.search .comm-button .go-to-commentary {
+  display: inline-block;
+  float: right;
+  margin: 10px 30px 0px 0px;
+  padding: 14px 26px;
+  font-family: 'Proxima N W01 At Smbd', sans-serif 16px;
+  background: #607D8B;
+  color: #fff;
+  border-radius: 0px;
+  outline: none;
+}
+.search .comm-button .go-to-commentary:hover {
+  background: #00BCD4;
+}
+.archive.search {
+  margin: none;
+  padding: none;
+}
+.query-box {
+  display: block;
+  position: relative;
+  height: 250px;
+  width: 100%;
+  font-size: 44px;
+  padding-top: 20px;
+  border: none;
+}
+.content-wrap input {
+  line-height: normal;
+  text-decoration: none;
+  outline: none;
+  padding-left: 30px;
+}
+.no-results {
+  text-align: center;
+}
+.no-results span {
+  font-family: 'Proxima N W01 At Smbd', sans-serif 16px;
+}
+.close-dropdown {
+  position: absolute !important;
+  right: 40px;
+  bottom: -20px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  margin: 5px;
+  background: #fff !important;
+  padding: 0 !important;
+}
+.close-dropdown .mdi {
+  padding: 3px 5px !important;
+}
+header .right-drawer-toggle {
+  display: none !important;
+}
+.search-dropdown--more .dropdown .dropdown-menu {
+  top: 90px;
+}

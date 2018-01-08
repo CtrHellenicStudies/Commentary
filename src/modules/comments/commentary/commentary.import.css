@@ -1,0 +1,934 @@
+/******************************************************************************
+
+						  ___ _  _ ___
+						 / __| || / __|
+						| (__| __ \__ \
+						 \___|_||_|___/
+
+  		The Center for Hellenic Studies
+
+
+ |  Style Variables for A Homer Commentary in Progress and CHS Annotations
+ |
+ |   1. Colors
+ |   2. Typography
+ |   3. Mixins
+
+
+******************************************************************************/
+/******************************************************************************
+
+1. Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.1 Base Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.2 Brand Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.3 Text Colors
+
+******************************************************************************/
+/******************************************************************************
+
+2. Typography
+
+Available Fonts:
+
+=================================
+Google Fonts
+=================================
+font-family: 'Gentium Basic', serif;
+font-family: 'Merriweather', serif;
+
+
+=================================
+Fonts.com
+=================================
+font-family:'Museo Sans W01_900';
+font-family:'ProximaNW01-AltLightReg';
+font-family:'Proxima N W01 At Smbd';
+font-family:'Museo W01_700';
+font-family:'Proxima N W01 Thin Reg';
+font-family:'Proxima Nova W08 Reg';
+font-family:'Proxima Nova W15 Medium';
+font-family:'Proxima Nova W07 Semibold';
+font-family:'Proxima Nova W07 Bold';
+font-family:'Proxima Nova W07 Extrabold';
+font-family:'Proxima Nova W07 Black';
+
+=================================
+Material Design Icons
+=================================
+font-family: "Material Design Icons";
+
+******************************************************************************/
+/******************************************************************************
+
+2.1 Base Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.2 Title Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.3 Reading Environment Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.4 Material Design Icons
+
+******************************************************************************/
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("/fonts/materialdesignicons-webfont.eot?v=1.7.22");
+  src: url("/fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("/fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("/fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("/fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("/fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/******************************************************************************
+
+3. Mixins
+
+******************************************************************************/
+@-webkit-keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+header .active-comment-meta {
+  margin-top: 5px;
+}
+header .active-comment-meta h3 {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 22px;
+}
+header .active-comment-meta .lemma-text {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 20px;
+  padding: 0 10px;
+  margin: 0;
+}
+.commentary-index .comm-button .go-to-commentary {
+  display: none;
+}
+.comment-index {
+  background: #f6f6f6;
+}
+.comment-index footer {
+  display: none;
+}
+header .line-wrap {
+  float: right;
+}
+header .line-wrap .line-text,
+header .line-wrap .line-ref,
+header .line-wrap .search {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+}
+header .line-wrap .line-text {
+  margin-top: 20px;
+  padding: 0 10px;
+  font-size: 18px;
+  font-family: 'Gentium Basic', 'Merriweather', Georgia, Times New Roman, serif;
+}
+header .line-wrap .line-ref {
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-size: 18px;
+  padding: 3px 20px 3px 15px;
+  border-right: 1px solid #aaa;
+  margin-top: 18px;
+}
+.commentary-layout > .cover-link.show-more button {
+  background: #4994c9 !important;
+  border: 2px solid #4994c9 !important;
+}
+.commentary-layout > .cover-link.show-more > span {
+  color: #fff !important;
+}
+.commentary-primary {
+  background: #f6f6f6;
+}
+.comment-group {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  padding: 15px 25px;
+  clear: both;
+  position: relative;
+}
+.comment-group.comment-ref--fixed .comment-group-meta-inner {
+  position: fixed;
+  top: 100px;
+}
+.comment-group.comment-ref--fixed .comment-group-meta-inner .comment-group-ref-above {
+  margin-right: 15px;
+}
+.comment-group.comment-ref--fixed .comment-group-meta-inner .comment-group-commenters {
+  padding-right: 15px;
+}
+.comment-group .comment-group-end {
+  margin: 100px auto 0;
+  outline: none;
+  border: none;
+  height: 5px;
+  background: #D7CCC8;
+  min-width: 200px;
+  width: 50%;
+}
+.comment-group-meta {
+  text-align: right;
+  padding: 40px 0;
+  display: inline-block;
+  vertical-align: top;
+  width: 10%;
+}
+.comment-group-meta .comment-group-meta-inner {
+  position: absolute;
+  top: 115px;
+  left: 3%;
+}
+.comment-group-meta .comment-group-meta-inner-fixed {
+  position: fixed;
+  top: 70px;
+  left: 6%;
+  z-index: 1;
+}
+.comment-group-meta .comment-group-meta-inner-bottom {
+  position: absolute;
+  bottom: 173px;
+  left: 6%;
+}
+.comment-group-meta .comment-group-ref-above {
+  cursor: default;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #727272;
+  padding: 30px 0px 5px 0;
+  margin: 0 0px 0 0;
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-size: 16px;
+  text-align: right;
+  float: right;
+  clear: both;
+  display: block;
+}
+.comment-group-meta h2.comment-group-ref-below {
+  cursor: default;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-size: 46px;
+  font-weight: bold;
+  color: #424242;
+  margin: 0;
+  padding: 10px 0px 20px;
+  display: inline-block;
+  vertical-align: top;
+  max-width: 65px;
+  text-align: right;
+  float: right;
+  clear: both;
+  display: block;
+  width: auto;
+}
+.comment-group-meta h2.comment-group-ref-below span {
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-size: 46px;
+  font-weight: bold;
+}
+.comment-group-meta h2.comment-group-ref-below.fixed {
+  top: 50px;
+  left: 112px;
+}
+.comment-group-meta .comment-group-ref-lemma {
+  text-align: right;
+  padding: 0px 0;
+  width: 60%;
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: top;
+  display: none;
+}
+.comment-group-meta .comment-group-ref-lemma p {
+  padding: 5px;
+  margin: 0;
+  font-size: 18px;
+  color: #727272;
+}
+.comment-group-meta .comment-group-commenters {
+  padding: 5px 0px 10px 0;
+}
+.comment-group-meta .comment-group-commenters .comment-author {
+  clear: both;
+  position: relative;
+}
+.comment-group-meta .comment-group-commenters .comment-author-name {
+  color: #727272;
+  font-size: 12px;
+  top: 15px;
+  right: 60px;
+  text-transform: uppercase;
+  position: absolute;
+  opacity: 0;
+  line-height: 1.4em;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+}
+.comment-group-meta .comment-group-commenters .comment-author-image-wrap {
+  margin: 5px 0;
+  display: block;
+  float: right;
+}
+.comments {
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+.comment-outer {
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+}
+.comment {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+  margin: 20px 0 20px 10%;
+  background: #fff;
+  width: 74%;
+  text-align: left;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  position: relative;
+}
+.comment:hover .comment-revisions {
+  opacity: 1;
+}
+.comment.comment--title-fixed .comment-fixed-title-wrap {
+  position: fixed;
+  top: 70px;
+  opacity: 1;
+  height: 63px;
+}
+.comment h1 {
+  margin: 0;
+  padding: 10px 0;
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-size: 28px;
+  color: rgba(0, 0, 0, 0.8);
+}
+.comment .comment-upper,
+.comment .comment-lower {
+  display: block;
+  width: 90%;
+  margin: 0 auto;
+  clear: both;
+}
+.comment .comment-upper {
+  padding-top: 50px;
+}
+.comment .comment-lower {
+  padding-bottom: 40px;
+}
+.comment .comment-upper-left,
+.comment .comment-upper-right {
+  display: inline-block;
+  vertical-align: top;
+}
+.comment .comment-upper-right {
+  text-align: right;
+  float: right;
+}
+.comment .comment-revisions {
+  background: #fafafa;
+  border-top: 1px solid #ddd;
+  padding: 0;
+  opacity: 0;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+}
+.comment .comment-revisions .revision {
+  display: inline-block;
+  margin-right: -4px;
+  border-right: 1px solid #ddd !important;
+  border-bottom: 1px solid #ddd !important;
+  border-radius: 0 !important;
+}
+.comment .comment-revisions .revision span {
+  padding: 0px 20px;
+  display: block;
+  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  color: #999;
+  font-weight: 300 !important;
+}
+.comment .comment-revisions .revision.selected-revision {
+  border-right: 1px solid #795548 !important;
+  border-bottom: 1px solid #795548 !important;
+}
+.comment .comment-revisions .revision.selected-revision span {
+  background: #795548;
+  color: #fff;
+}
+.comment .revision-diff table {
+  padding: 20px 0 0;
+}
+.comment .revision-diff-title {
+  font-size: 18px;
+}
+.edition-tab-outer {
+  display: inline-block;
+}
+.edition-tab {
+  display: inline-block;
+  margin: 5px;
+  box-shadow: none !important;
+  border-radius: 2px;
+}
+.edition-tab.selected-edition-tab {
+  background: #795548 !important;
+  margin: 3px;
+  color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 2px;
+}
+.edition-tab.selected-edition-tab button,
+.edition-tab.selected-edition-tab div {
+  background: #795548 !important;
+}
+.edition-tab.selected-edition-tab span {
+  color: #fff !important;
+}
+.edition-tab.selected-edition-tab:hover {
+  background: #3E2723 !important;
+}
+.edition-tab.selected-edition-tab:hover button,
+.edition-tab.selected-edition-tab:hover div {
+  background: #3E2723 !important;
+}
+.edition-tab button {
+  padding: 5px 10px;
+  max-width: none;
+  text-overflow: ellipsis;
+}
+.edition-tab button span {
+  font-size: 12px !important;
+}
+.edition-multiline {
+  margin-left: -3px;
+  background-color: #A1887F !important;
+  min-width: 40px !important;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
+}
+.edition-multiline button,
+.edition-multiline div {
+  background: #A1887F !important;
+}
+.edition-multiline span {
+  color: #fff !important;
+}
+.comment-fixed-title-wrap {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  display: block;
+  border-radius: 0px;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+.comment-fixed-title-wrap .comment-fixed-title,
+.comment-fixed-title-wrap .comment-fixed-lemma {
+  display: inline-block;
+  vertical-align: top;
+}
+.comment-fixed-title-wrap .comment-fixed-title {
+  padding: 13px 10px 10px 20px;
+  font-size: 22px;
+  margin: 9px 0;
+}
+.comment-fixed-title-wrap .comment-fixed-lemma {
+  font-size: 19px;
+  padding-top: 19px;
+  margin: 0;
+  color: #727272;
+}
+.comment-fixed-title-wrap .comment-author-name {
+  font-size: 15px;
+  display: block;
+  float: right;
+  padding: 21px 20px 0px 20px;
+  color: #727272;
+}
+.comment-fixed-title-wrap .comment-author-name:hover {
+  color: #795548;
+}
+.comment-author {
+  margin: 12px 0 0;
+}
+.comment-author .comment-author-text {
+  display: inline-block;
+  vertical-align: top;
+  padding: 4px 10px;
+}
+.comment-author .comment-author-name {
+  display: block;
+  font-size: 16px;
+}
+.comment-author .comment-author-name:hover {
+  color: #795548;
+}
+.comment-author .comment-date {
+  display: block;
+  margin-top: 0px;
+  font-size: 12px;
+  color: #ddd;
+  text-transform: uppercase;
+}
+.comment-author .comment-author-image-wrap {
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 50px;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border: 1px solid #CCCCCC;
+}
+.comment-author .comment-author-image-wrap img {
+  width: 100%;
+}
+.comment-keywords-container {
+  width: 90%;
+  margin: 0 auto;
+}
+.comment-keywords {
+  margin: 15px 0 10px 0;
+}
+.comment-keyword {
+  background: #795548;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 10px 10px 0;
+  border-radius: 0;
+  cursor: pointer;
+  min-height: 0;
+  line-height: 1.3em;
+}
+.comment-keyword button {
+  background-color: #795548 !important;
+}
+.comment-keyword span {
+  color: #fff !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+}
+.comment-keyword:hover,
+.comment-keyword:focus {
+  color: #fff;
+  background: #3E2723 !important;
+}
+.comment-body {
+  margin-top: 30px;
+  padding: 0 5px;
+  cursor: default;
+}
+.comment-body:focus {
+  outline: none;
+  border: none;
+}
+.comment-body p,
+.comment-body li,
+.comment-body span,
+.comment-body a {
+  font-family: 'Merriweather', serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.76em;
+  width: 100%;
+  margin: 0;
+  max-width: 1000px;
+  padding: 15px 0;
+  word-break: break-word;
+}
+.comment-body ol,
+.comment-body ul {
+  list-style: disc;
+  margin: 0px;
+  padding: 5px 15px;
+}
+.comment-body ol li,
+.comment-body ul li {
+  margin: 0;
+  padding: 2px 0;
+  font-size: 16px;
+}
+.comment-body a {
+  cursor: pointer;
+  border-bottom: 2px solid #795548;
+  box-shadow: none;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.7);
+  padding: 0;
+}
+.comment-body a:hover {
+  border-bottom: 2px solid #fff;
+}
+.comment-reference {
+  padding-top: 30px;
+}
+.comment-reference h4 {
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  margin: 0;
+  padding-right: 12px;
+  color: #795548;
+}
+.comment-reference h4,
+.comment-reference a {
+  display: inline-block;
+  vertical-align: top;
+}
+.comment-reference a {
+  font-weight: lighter;
+  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-size: 18px;
+  border-bottom: 2px solid #795548;
+  box-shadow: none;
+  padding: 0 2px;
+}
+.comment-reference a:hover {
+  border-bottom: 2px solid #D7CCC8;
+}
+.comment-persistent-identifier {
+  position: absolute;
+  width: 100%;
+  text-align: right;
+  bottom: 80px;
+  right: 50px;
+}
+.comment-persistent-identifier a,
+.comment-persistent-identifier span {
+  display: inline-block;
+}
+.comment-persistent-identifier a {
+  font-size: 12px;
+  background: #f6f6f6;
+  border-radius: 2px;
+  padding: 5px 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+  opacity: 0.7;
+}
+.comment-persistent-identifier a:hover {
+  background: #795548;
+  opacity: 1;
+}
+.comment-persistent-identifier a:hover span {
+  color: #fff;
+}
+.comment-meta-section {
+  margin: 20px auto 30px;
+  width: 100%;
+}
+.comment-meta-section h4 {
+  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-size: 26px;
+}
+.comment-meta-section .item-link {
+  display: inline-block;
+  border-bottom: 1px solid #795548;
+  box-shadow: inset 0 -2px 0 #795548;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+.comment-meta-section .item-link:hover,
+.comment-meta-section .item-link:focus {
+  border-bottom: 1px solid #352721;
+  box-shadow: inset 0 -2px 0 #352721;
+}
+.comment-meta-section .item-info {
+  display: block;
+  color: rgba(0, 0, 0, 0.7);
+}
+.comment-outer.discussion--width .comment {
+  width: 50%;
+  margin-left: 0;
+}
+.comment-outer.discussion--width .discussion-wrap {
+  width: 49%;
+}
+.comment-outer.discussion--width .continue-discussion {
+  display: none;
+}
+.comment-outer.discussion--width .discussion-thread {
+  display: block;
+}
+.comment-outer.discussion--visible .discussion-thread {
+  opacity: 1;
+}
+.profile-picture {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50px;
+  border: 1px solid #CCCCCC;
+}
+.profile-picture img {
+  width: 100%;
+}
+.reply-create-form {
+  margin: 10px 0px 20px 40px;
+}
+.reply-create-form.shown {
+  display: block;
+}
+.comments.lemma-panel-visible {
+  text-align: left;
+}
+.comments.lemma-panel-visible .comment-group-meta {
+  width: 0;
+  display: none;
+}
+.comments.lemma-panel-visible .comment-group-meta h2 {
+  opacity: 0;
+}
+.comments.lemma-panel-visible .comment-outer {
+  text-align: left;
+  width: 56%;
+}
+.comments.lemma-panel-visible .comment {
+  margin-left: 5px;
+  width: 100%;
+}
+.comments.lemma-panel-visible .comment.lemma-comment {
+  margin-left: 0;
+}
+.comments.lemma-panel-visible .discussion-wrap {
+  display: none;
+}
+.comments.lemma-panel-visible .translation-available-flag {
+  display: none;
+}
+.ahcip-spinner {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  margin: 100px auto;
+}
+.full-page-spinner {
+  margin: 45vh auto !important;
+  left: 50%;
+  position: fixed;
+}
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #795548;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-animation: sk-bounce 2s infinite ease-in-out;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+.double-bounce2 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+@-webkit-keyframes sk-bounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
+}
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+    -webkit-transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+  }
+}
+.lemma-spinner {
+  width: 40px;
+  height: 40px;
+  margin: 30px auto;
+  background-color: #795548;
+  border-radius: 100%;
+  -webkit-animation: sk-scaleout 1s infinite ease-in-out;
+  animation: sk-scaleout 1s infinite ease-in-out;
+}
+@-webkit-keyframes sk-scaleout {
+  0% {
+    -webkit-transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    opacity: 0;
+  }
+}
+@keyframes sk-scaleout {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+/*
+   * Single comment in commentary styles
+   */
+.single-commentary .comment {
+  margin: 20px auto;
+}
+.single-commentary .comment .comment-upper,
+.single-commentary .comment .comment-lower {
+  margin: 0 auto;
+  width: 90%;
+}
+.single-commentary .comment-group-ref,
+.single-commentary .lemma-comment {
+  float: left;
+}
+.single-commentary .comment-group-ref {
+  width: 12.5%;
+}
+.single-commentary .discussion-wrap {
+  width: 75%;
+  margin: 0 auto;
+  float: none;
+  clear: both;
+}
+.single-commentary .discussion-thread {
+  display: block;
+  opacity: 1;
+  margin: 30px auto;
+  padding: 0;
+}
+.single-commentary .discussion-comment {
+  padding-left: 50px;
+  padding-top: 60px;
+}
+.single-commentary .discussion-thread .add-comment-wrap {
+  padding: 60px 50px;
+  padding-bottom: 50px;
+}
+.single-commentary .discussion-thread .add-comment-wrap .add-comment-row-2 {
+  text-align: right;
+  padding-top: 20px;
+}
+.single .continue-discussion {
+  display: none;
+}
+.no-commentary {
+  font-family: 'Merriweather', serif;
+  font-size: 22px;
+  line-height: 1.8em;
+  width: 90%;
+  max-width: 700px;
+  margin: 100px auto;
+  padding: 20px 0;
+  text-align: left;
+  color: #ddd;
+  font-style: italic;
+}
+.fixed {
+  position: fixed !important;
+}
+.table-diff {
+  text-align: justify;
+}
+.table-diff .texttitle {
+  font-size: 16px;
+  padding: 10px 10px;
+}
+.table-diff .delete {
+  background: #fbe9eb;
+}
+.table-diff .delete th {
+  background: #fac5cd;
+  border-right: 1px solid #f9aeb9;
+  text-align: center;
+}
+.table-diff .insert {
+  background: #ddfbe6;
+}
+.table-diff .insert th {
+  background: #c7f0d2;
+  border-right: 1px solid #a3d5b0;
+  text-align: center;
+}
+.table-diff .equal {
+  background: #fdfdfd;
+}
+.table-diff .equal th {
+  background: #f4f4f4;
+  border-right: 1px solid #dcdcdc;
+  text-align: center;
+}
+.table-diff th {
+  padding: 0 10px;
+}
+.table-diff td {
+  padding: 2px 10px;
+}

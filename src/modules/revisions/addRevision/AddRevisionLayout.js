@@ -6,7 +6,7 @@ import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../lib/muiTheme';
+import muiTheme from '../../../lib/muiTheme';
 
 import Snackbar from 'material-ui/Snackbar';
 

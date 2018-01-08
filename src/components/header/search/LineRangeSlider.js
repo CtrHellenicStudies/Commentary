@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'throttle-debounce';
 import $ from 'jquery';
+import ionRangeSlider from 'ion-rangeslider'; 
 
 const id = 'line-range';
 

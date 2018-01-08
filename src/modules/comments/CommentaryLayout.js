@@ -61,7 +61,6 @@ class CommentaryLayout extends Component {
 		});
 	
 
-		this.getChildContext = this.getChildContext.bind(this);
 		this.getFilterValue = this.getFilterValue.bind(this);
 		this._updateRoute = this._updateRoute.bind(this);
 		this._toggleSearchTerm = this._toggleSearchTerm.bind(this);
@@ -70,10 +69,6 @@ class CommentaryLayout extends Component {
 		this.loadMoreComments = this.loadMoreComments.bind(this);
 		this.showLoginModal = this.showLoginModal.bind(this);
 		this.closeLoginModal = this.closeLoginModal.bind(this);
-	}
-
-	getChildContext() {
-		return { muiTheme: getMuiTheme(muiTheme) };
 	}
 
 	getFilterValue(filters, key) {

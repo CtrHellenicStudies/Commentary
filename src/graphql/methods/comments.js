@@ -84,7 +84,6 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			content
 			status
 			votes
-			commentId
 			parentId
 			voters
 			reported

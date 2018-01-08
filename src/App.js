@@ -13,12 +13,12 @@ import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
 
 // layouts
 import CommentaryLayout from './modules/comments/CommentaryLayout';
-//import AddCommentLayout from './modules/comments/addComment/AddCommentLayout';
+import AddCommentLayout from './modules/comments/addComment/AddCommentLayout';
 import AddKeywordLayout from './modules/keywords/addKeyword/AddKeywordLayout';
 import AddTranslationLayout from './modules/translations/addTranslation/AddTranslationLayout';
-// import AddRevisionLayout from './modules/revisions/addRevision/AddRevisionLayout';
+import AddRevisionLayout from './modules/revisions/addRevision/AddRevisionLayout';
 import EditKeywordLayout from './modules/keywords/editKeyword/EditKeywordLayout';
-// import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
+import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
 import HomeLayout from './modules/home/HomeLayout';
 import NameResolutionServiceLayout from './modules/services/NameResolutionServiceLayout';
 import NotFound from './modules/notFound/NotFound';
@@ -107,9 +107,9 @@ const routes = (props) => {
 			<Route exact path="/" component={HomeLayout} />
 
 			{/** Commentary routes */}
-			{/* <PrivateRoute exact path="/commentary/create" component={AddCommentLayout} /> */}
+			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
 			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
-			{/* <PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} /> */}
+			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
 
 
 			{/** Tags routes */}
@@ -129,7 +129,7 @@ const routes = (props) => {
 
 			{/** Editor routes */}
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
-			{/* <PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} /> */}
+			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
 
 			{/** Users routes */}

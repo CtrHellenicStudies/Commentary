@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import mongoose from 'mongoose';
 
 import { compose } from 'react-apollo';
 
@@ -219,7 +218,7 @@ class AddCommentLayout extends Component {
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);
-		const revisionId = mongoose.Types.ObjectId();
+		const revisionId = Date.now();
 
 		// create comment object to be inserted:
 		const comment = {

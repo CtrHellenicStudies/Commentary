@@ -1,8 +1,8 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query discussionComments($commentId: String) {
-	discussionComments(commentId: $commentId) {
+query discussionComments{
+	discussionComments{
 		_id
 		userId
 		content

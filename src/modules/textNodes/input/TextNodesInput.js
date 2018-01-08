@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
-import mongoose from 'mongoose';
 import { FormGroup } from 'react-bootstrap';
 import update from 'immutability-helper';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -110,7 +109,7 @@ class TextNodesInput extends Component {
 		const defaultN = 1;
 
 		this.state.textNodes.push({
-			_id: mongoose.Types.ObjectId(),
+			_id: Date.now(),
 			text: {
 				edition: editionId,
 				n: defaultN,

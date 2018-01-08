@@ -6,7 +6,6 @@ import Cookies from 'js-cookie';
 import { Router } from 'react-router';
 import $ from 'jquery';
 import { compose } from 'react-apollo';
-import mongoose from 'mongoose';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -276,7 +275,7 @@ class AddRevision extends React.Component {
 	}
 	addTagBlock() {
 		const newTagBlock = {
-			tagId: mongoose.Types.ObjectId(),
+			tagId: Date.now(),
 			isNotMentionedInLemma: false,
 			isSet: false,
 		};

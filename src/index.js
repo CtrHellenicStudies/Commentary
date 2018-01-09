@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import "./less/main.css";
 import 'ion-rangeslider/js/ion.rangeSlider.js';
 import 'ion-rangeslider/css/ion.rangeSlider.css';
 import 'ion-rangeslider/css/ion.rangeSlider.skinFlat.css';
-
+import 'mdi/css/materialdesignicons.css';
+import 'draft-js-mention-plugin/lib/plugin.css';
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
+import 'normalize.css';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 
 // css
-import "./less/main.css";
 
 import Cookies from 'js-cookie';
 import App from './App';

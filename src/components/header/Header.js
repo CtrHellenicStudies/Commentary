@@ -409,7 +409,7 @@ class Header extends Component {
 													<IconButton
 														className="search-button"
 														onClick={this.toggleSearchMode}
-														iconClassName="muidocs-icon-custom-github">
+														iconClassName="material-icons">
 														search
 													</IconButton>
 												</div>

@@ -125,7 +125,7 @@ class ModalLogin extends React.Component {
 							className="close-modal paper-shadow"
 							onClick={closeModal}
 						>
-							<i className="mdi mdi-close" />
+							<i className="material-icons">close</i>
 						</div>
 						<div className="modal-inner">
 							<div className="at-form">

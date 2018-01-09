@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
+import Headroom from 'headroom.js';
 
 function backgroundImages () {
 	$('.background-image-holder').each((i, elem) => {
@@ -22,6 +23,11 @@ class BackgroundImageHolder extends React.Component {
 
 	componentDidMount() {
 		backgroundImages();
+		const elem = document.querySelector('header');
+		if (elem) {
+			const headroom = new Headroom(elem);
+			headroom.init();
+		}
 	}
 
 	render() {

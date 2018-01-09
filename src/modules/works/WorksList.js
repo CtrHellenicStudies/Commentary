@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
 // components
-// import WorkVisualization from './WorkVizualization';
+import WorkVisualization from './WorkVizualization';
 
 // graphql
 import { worksQuery } from '../../graphql/methods/works';
@@ -30,11 +30,10 @@ class WorksList extends Component {
 		}
 
 		return works.map((work, i) => (
-			// <WorkVisualization
-			// 	key={i}
-			// 	work={work}
-			// />
-			''
+			<WorkVisualization
+				key={i}
+				work={work}
+			/>
 		));
 	}
 

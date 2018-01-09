@@ -98,8 +98,10 @@ class ContextPanelContent extends Component {
 					<IconButton
 						className="close-lemma-panel"
 						onClick={closeContextPanel}
-						iconClassName="mdi mdi-close"
-					/>
+						iconClassName="material-icons"
+					>close
+					</IconButton>
+
 				}
 
 				<ContextPanelText

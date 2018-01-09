@@ -133,9 +133,10 @@ const DiscussionThread = createClass({
 							<div className="add-comment-wrap paper-shadow">
 								<IconButton
 									className="close-discussion paper-shadow"
-									iconClassName="mdi mdi-close"
+									iconClassName="material-icons"
 									onClick={() => { this.hideDiscussionThread(); this.props.toggleLemma(); }}
-								/>
+								>close
+								</IconButton>
 								<div className="no-results-wrap">
 									<span className="no-results-text">The discussion comments are currently disabled for this commentary.</span>
 								</div>
@@ -144,9 +145,10 @@ const DiscussionThread = createClass({
 							<div className="add-comment-wrap paper-shadow ">
 								<IconButton
 									className="close-discussion paper-shadow"
-									iconClassName="mdi mdi-close"
+									iconClassName="material-icons"
 									onClick={() => { this.hideDiscussionThread(); this.props.toggleLemma(); }}
-								/>
+								>close
+								</IconButton>
 
 								<form
 									ref={(component) => { this.newCommentForm = component; }}

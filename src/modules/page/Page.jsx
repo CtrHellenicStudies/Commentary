@@ -51,7 +51,13 @@ class Page extends Component {
 		const { slug } = this.props;
 		const { page, settings, ready } = this.state;
 		let content;
-		if (page)			{ content = Utils.getHtmlFromContext(Utils.getEditorState(page.content).getCurrentContent()); }
+		if (page) { 
+			if(Utils.isJson(page.content)) {
+				content = Utils.getHtmlFromContext(Utils.getEditorState(page.content).getCurrentContent());
+			} else {
+				content = page.content;
+			}
+		}
 		const headerImageUrl = '/images/apotheosis_homer.jpg';
 
 		if (!ready) {

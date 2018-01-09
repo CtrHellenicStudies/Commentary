@@ -96,6 +96,7 @@ class CommentersEditorDialog extends Component {
 
 		const iconButtonElement = (
 			<IconButton
+				iconClassName="material-icons"
 				touch
 			>
 				<MoreVertIcon color={grey400} />

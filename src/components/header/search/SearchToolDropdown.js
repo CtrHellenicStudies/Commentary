@@ -25,11 +25,12 @@ const SearchToolDropdown = ({ name, children, open, toggle, disabled }) => (
 
 			<IconButton
 				className="close-dropdown"
-				iconClassName="mdi mdi-close"
+				iconClassName="material-icons"
 				onClick={() => {
 					toggle(name);
-				}}
-			/>
+				}}>
+				close
+			</IconButton>
 		</ul>
 	</div>
 );

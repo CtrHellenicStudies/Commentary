@@ -22,12 +22,6 @@ class BackgroundImageHolder extends React.Component {
 
 	componentDidMount() {
 		backgroundImages();
-		const elem = document.querySelector('header');
-		if (elem) {
-			// TODO
-			//const headroom = new Headroom(elem);
-			//headroom.init();
-		}
 	}
 
 	render() {

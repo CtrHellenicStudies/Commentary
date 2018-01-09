@@ -102,6 +102,7 @@ class MultilineDialog extends Component {
 			<IconButton
 				touch
 				tooltipPosition="bottom-left"
+				
 			>
 				<MoreVertIcon color={grey400} />
 			</IconButton>

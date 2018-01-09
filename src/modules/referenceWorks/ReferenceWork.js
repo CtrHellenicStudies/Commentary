@@ -168,7 +168,7 @@ export default class ReferenceWork extends React.Component {
 											onClick={this.removeReferenceWorkBlock.bind(this, i)}
 										>
 											<IconButton
-												iconClassName="mdi mdi-close"
+												iconClassName="material-icons"
 												style={{
 													padding: '0',
 													width: '32px',
@@ -179,7 +179,7 @@ export default class ReferenceWork extends React.Component {
 													margin: '0 auto',
 													background: '#f6f6f6',
 												}}
-											/>
+											>close</IconButton>
 										</div>
 										<Select.Creatable
 											name="referenceWorks"

@@ -247,10 +247,11 @@ class Header extends Component {
 							<div className="toolbar-tools">
 								<IconButton
 									className="left-drawer-toggle"
+									iconClassName="material-icons"
 									style={styles.leftMenuToggle}
-									iconClassName="mdi mdi-menu"
-									onClick={this.toggleLeftMenu}
-								/>
+									onClick={this.toggleLeftMenu}>
+										menu
+								</IconButton>
 
 								{tenant && tenant.isAnnotation ?
 									<a href="//chs.harvard.edu" className="header-home-link" >
@@ -266,9 +267,10 @@ class Header extends Component {
 									<div className="search-toggle">
 										<IconButton
 											className="search-button right-drawer-toggle"
-											onClick={this.toggleRightMenu}
-											iconClassName="mdi mdi-magnify"
-										/>
+											iconClassName="material-icons"
+											onClick={this.toggleRightMenu}>
+												search
+										</IconButton>
 									</div>
 								}
 
@@ -358,9 +360,10 @@ class Header extends Component {
 										<div className="search-toggle">
 											<IconButton
 												className="search-button"
-												onClick={this.toggleSearchMode}
-												iconClassName="mdi mdi-magnify"
-											/>
+												iconClassName="material-icons"
+												onClick={this.toggleSearchMode}>
+													search
+											</IconButton>
 										</div>
 									}
 								</div>
@@ -373,16 +376,18 @@ class Header extends Component {
 									<div className="toolbar-tools">
 										<IconButton
 											className="left-drawer-toggle"
+											iconClassName="material-icons"
 											style={styles.leftMenuToggle}
-											iconClassName="mdi mdi-menu"
-											onClick={this.toggleLeftMenu}
-										/>
+											onClick={this.toggleLeftMenu}>
+												menu
+										</IconButton>
 										<div className="search-toggle">
 											<IconButton
 												className="search-button right-drawer-toggle"
 												onClick={this.toggleRightMenu}
-												iconClassName="mdi mdi-magnify"
-											/>
+												iconClassName="material-icons">
+												search
+											</IconButton>
 										</div>
 
 										{!isOnHomeView && (
@@ -404,8 +409,9 @@ class Header extends Component {
 													<IconButton
 														className="search-button"
 														onClick={this.toggleSearchMode}
-														iconClassName="mdi mdi-magnify"
-													/>
+														iconClassName="muidocs-icon-custom-github">
+														search
+													</IconButton>
 												</div>
 											</div>
 										: ''}

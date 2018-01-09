@@ -142,59 +142,59 @@ const Utils = {
 	},
 	setBaseDocMeta() {
 		console.log(process);
-		Utils.setMetaTag('name', 'url', 'content', window.location.href);
-		Utils.setMetaTag('name', 'twitter:card', 'content', 'summary');
-		Utils.setMetaTag('name', 'twitter:url', 'content', window.location.href);
+		Utils.setMetaTag('name', 'url', window.location.href);
+		Utils.setMetaTag('name', 'twitter:card', 'summary');
+		Utils.setMetaTag('name', 'twitter:url', window.location.href);
 		if (process.env.SERVICE_CONFIGURATIONS) {
-			Utils.setMetaTag('property', 'fb:app_id', 'content', process.env.FACEBOOK_APP_ID);
+			Utils.setMetaTag('property', 'fb:app_id', process.env.FACEBOOK_APP_ID);
 		}
-		Utils.setMetaTag('property', 'og:url', 'content', window.location.href);
-		Utils.setMetaTag('property', 'og:type', 'content', 'website');
+		Utils.setMetaTag('property', 'og:url', window.location.href);
+		Utils.setMetaTag('property', 'og:type', 'website');
 		Utils.setLinkTag('rel', 'canonical', 'href', window.location.href);
 	},
 	setTitle(title) {
         document.title = `${title}`;
-		Utils.setMetaTag('property', 'og:title', 'content', title);
-		Utils.setMetaTag('property', 'og:site_name', 'content', title);
-		Utils.setMetaTag('property', 'og:local', 'content', 'en_US');
-		Utils.setMetaTag('property', 'twitter:title', 'content', title);
-		Utils.setMetaTag('itemprop', 'title', 'content', title);
+		Utils.setMetaTag('property', 'og:title', title);
+		Utils.setMetaTag('property', 'og:site_name', title);
+		Utils.setMetaTag('property', 'og:local', 'en_US');
+		Utils.setMetaTag('property', 'twitter:title', title);
+		Utils.setMetaTag('itemprop', 'title', title);
 	},
 	setDescription(description) {
-		Utils.setMetaTag('name', 'description', 'content', description);
-		Utils.setMetaTag('property', 'og:description', 'content', description);
-		Utils.setMetaTag('property', 'twitter:description', 'content', description);
-		Utils.setMetaTag('itemprop', 'description', 'content', description);
+		Utils.setMetaTag('name', 'description', description);
+		Utils.setMetaTag('property', 'og:description',  description);
+		Utils.setMetaTag('property', 'twitter:description', description);
+		Utils.setMetaTag('itemprop', 'description',  description);
 	},
 	setMetaImage(imageSrc = null) {
 		if (imageSrc) {
-			Utils.setMetaTag('property', 'og:image', 'content', imageSrc);
-			Utils.setMetaTag('property', 'twitter:image', 'content', imageSrc);
-			Utils.setMetaTag('itemprop', 'image', 'content', imageSrc);
+			Utils.setMetaTag('property', 'og:image', imageSrc);
+			Utils.setMetaTag('property', 'twitter:image', imageSrc);
+			Utils.setMetaTag('itemprop', 'image', imageSrc);
 		} else {
-			Utils.setMetaTag('property', 'og:image', 'content', `${window.location.origin}/images/hector.jpg`);
-			Utils.setMetaTag('property', 'twitter:image', 'content', `${window.location.origin}/images/hector.jpg`);
-			Utils.setMetaTag('itemprop', 'image', 'content', `${window.location.origin}/images/hector.jpg`);
+			Utils.setMetaTag('property', 'og:image', `${window.location.origin}/images/hector.jpg`);
+			Utils.setMetaTag('property', 'twitter:image', `${window.location.origin}/images/hector.jpg`);
+			Utils.setMetaTag('itemprop', 'image', `${window.location.origin}/images/hector.jpg`);
 		}
 	},
-	setMetaTag(attr1, key, attr2, val) {
-		const metaInfo = {};
-		metaInfo[attr1] = key;
-		metaInfo[attr2] = val;
+	setMetaTag(attr1, key, val) {
+		const meta = document.createElement('meta');
+		meta[attr1] = key;
+		meta['content'] = val;
 		if ($(`meta[${attr1}="${key}"]`).length) {
-			$(`meta[${attr1}="${key}"]`).attr(attr2, val);
+			$(`meta[${attr1}="${key}"]`).attr('conetnt', val);
 		} else {
-			//DocHead.addMeta(metaInfo); //TODO
+			document.getElementsByTagName('head')[0].appendChild(meta);
 		}
 	},
 	setLinkTag(attr1, key, attr2, val) {
-		const linkInfo = {};
-		linkInfo[attr1] = key;
-		linkInfo[attr2] = val;
+		const link = document.createElement('link');
+		link[attr1] = key;
+		link[attr2] = val;
 		if ($(`link[${attr1}="${key}"]`).length) {
 			$(`link[${attr1}="${key}"]`).attr(attr2, val);
 		} else {
-			//DocHead.addLink(linkInfo); TODO
+			document.getElementsByTagName('head')[0].appendChild(link);
 		}
 	},
 	replaceLast(str, find, replace) {

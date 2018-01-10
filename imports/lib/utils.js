@@ -15,12 +15,6 @@ import Config from './_config/_config';
  * General application specific utility / helper functions
  */
 const Utils = {
-	isReady: (sub) => {
-		if (sub) {
-			return FlowRouter.subsReady(sub);
-		}
-		return FlowRouter.subsReady();
-	},
 	prettyDate: (date) => {
 		if (Config.dateFormat) {
 			return moment(date).format(Config.dateFormat);
@@ -34,7 +28,7 @@ const Utils = {
 				ret = urn.v2;
 			else
 				ret = urn.v1;
-				
+
 		}
 		catch(error){
 			console.log('Old urn exists in database.');

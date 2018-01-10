@@ -7530,11 +7530,6 @@ header .module.widget-handle {
   padding: 0;
 }
 .headroom {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 1940px;
-  z-index: 100;
   -webkit-transition: transform 0ms linear;
   -moz-transition: transform 0ms linear;
   -ms-transition: transform 0ms linear;

@@ -52,21 +52,20 @@ if (hostnameArray.length > 2) {
  */
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
-		{...rest}
-		render={props => (
-Cookies.get('token') ? (
-	<Component {...props} />
-) : (
-	<Redirect
-		to={{
-			pathname: '/login',
-			state: { from: props.location },
-		}}
-	/>)
-)}
+		{...rest} render={props => (
+		Cookies.get('token') ? (
+			<Component {...props} />
+		) : (
+			<Redirect
+				to={{
+					pathname: '/login',
+					state: { from: props.location }
+				}}
+			/>
+		)
+	)}
 	/>
 );
-
 /**
  * Application routes
  */
@@ -133,14 +132,14 @@ const routes = (props) => {
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
 
 			{/** Users routes */}
-			{/* <Route
-path="/users/:userId" render={(params) => {
-if (Cookies.get('token')) {
-return <Redirect to="/profile" />;
-}
-return <PublicProfilePage userId={Cookies.get('token')} />;
-}}
-/> */}
+			<Route
+				path="/users/:userId" render={(params) => {
+				if (Cookies.get('token')) {
+					return <Redirect to="/profile" />;
+				}
+					// return <PublicProfilePage userId={Cookies.get('token')} />;
+				}}
+				/>
 
 			{/** Auth routes */}
 			<Route

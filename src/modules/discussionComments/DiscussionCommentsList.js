@@ -31,13 +31,13 @@ const DiscussionCommentsList = createClass({
 
 		return (
 			<div className="discussion-comments-list">
-				{discussionComments.map((discussionComment, i) => (
+				{discussionComments ? discussionComments.map((discussionComment, i) => (
 					<DiscussionCommentTeaser
 						key={i}
 						discussionComment={discussionComment}
 					/>
-				))}
-				{!discussionComments.length ?
+				)) :  ''}
+				{!discussionComments || !discussionComments.length ?
 					this.renderNoCommentsMessage()
 					: ''
 				}

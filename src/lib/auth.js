@@ -9,11 +9,7 @@ const userLoggedIn = () => {
 	return false;
 };
 const login = async (data) => {
-	console.log(loginService);
-	console.log(registerService);
 	if (userLoggedIn()) {
-		console.log('token null');
-		Cookies.remove('token');
 		return null;
 	}
 

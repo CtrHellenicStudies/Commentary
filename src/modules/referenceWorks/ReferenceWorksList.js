@@ -27,7 +27,7 @@ class ReferenceWorksList extends Component {
 		}
 		let referenceWorks;
 		if (props.commenterId) {
-			referenceWorks = props.referenceWorksQuery.referenceWorks.filter(x => x.commenterId === props.commenterId);
+			referenceWorks = props.referenceWorksQuery.referenceWorks.filter(x => x.authors.find(y => y === props.commenterId));
 		} else {
 			referenceWorks = props.referenceWorksQuery.referenceWorks;
 		}

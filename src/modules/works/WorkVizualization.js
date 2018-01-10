@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
 import createClass from 'create-react-class';
 
 // TODO: upgrade to d3v4

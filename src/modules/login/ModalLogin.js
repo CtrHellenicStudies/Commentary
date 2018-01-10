@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 
 // components:
 import OAuthButtons from './OAuthButtons';
 import PWDLoginForm from './PWDLoginForm';
+import { login } from '../../lib/auth';
 
 
 const ESCAPE_KEY = 27;
 
 
-class ModalLogin extends React.Component {
+class ModalLogin extends Component {
 
 	constructor(props) {
 		super(props);
@@ -46,6 +47,7 @@ class ModalLogin extends React.Component {
 	}
 
 	handleLogin(email, password) {
+		login({ username: email, password: password });
         // TODO
 		// Meteor.loginWithPassword(email, password, (err) => {
 		// 	const domain = Utils.getEnvDomain();
@@ -175,7 +177,7 @@ class ModalLogin extends React.Component {
 ModalLogin.propTypes = {
 	lowered: PropTypes.bool,
 	closeModal: PropTypes.func,
-	history: PropTypes.array,
+	history: PropTypes.object,
 	signupModal: PropTypes.func
 };
 ModalLogin.defaultProps = {

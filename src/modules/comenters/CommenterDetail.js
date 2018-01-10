@@ -79,7 +79,9 @@ class CommenterDetail extends Component {
 		// });
 	}
 	getBiographyHTML(biography) {
-		if (Utils.isJson(biography))			{ return JSON.parse(biography).html; }
+		if (Utils.isJson(biography)) {
+			return JSON.parse(biography).html; 
+		}
 		return biography;
 	}
 	componentWillReceiveProps(props) {

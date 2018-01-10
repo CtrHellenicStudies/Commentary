@@ -30,14 +30,11 @@ const settings = {
 class CommentsRecent extends Component {
 	constructor(props) {
 		super(props);
-		this.props.commentsQuery.refetch({
-			limit: 3,
-		});
 		this.state = {};
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			comments: nextProps.commentsQuery.loading ? [] : nextProps.commentsQuery.comments
+			comments: nextProps.commentsQuery.loading ? [] : nextProps.commentsQuery.comments.slice(0,3)
 		});
 	}
 	render() {
@@ -84,7 +81,7 @@ class CommentsRecent extends Component {
 	}
 }
 CommentsRecent.propTypes = {
-	commentsQuery: PropTypes.func
+	commentsQuery: PropTypes.object
 };
 CommentsRecent.defaultProps = {
 	comments: null,

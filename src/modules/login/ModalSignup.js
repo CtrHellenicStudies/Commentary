@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { register } from '../../lib/auth';
 
 // components:
 import OAuthButtons from './OAuthButtons';
 import PWDSignupForm from './PWDSignupForm';
 
-class ModalSignup extends React.Component {
+class ModalSignup extends Component {
 
 	constructor(props) {
 		super(props);
@@ -47,38 +48,8 @@ class ModalSignup extends React.Component {
 			});
 			throw new Error('Passwords do not match');
 		}
+		register({username: email, password: checkPassword});
 
-		//const password = Accounts._hashPassword(checkPassword);
-
-		// Meteor.call('createAccount', { email, password }, (err, result) => {
-		// 	const path = '/';
-		// 	if (!err) {
-		// 		Meteor.loginWithToken(result.stampedToken.token, (_err) => {
-		// 			if (_err) {
-		// 				this.setState({
-		// 					errorMsg: 'Invalid email or password',
-		// 				});
-
-		// 				return false;
-		// 			}
-
-		// 			const domain = Utils.getEnvDomain();
-
-		// 			if (domain) {
-		// 				Cookies.set('userId', Meteor.userId(), { domain });
-		// 				Cookies.set('loginToken', result.stampedToken.token, { domain });
-		// 			} else {
-		// 				Cookies.set('userId', Meteor.userId());
-		// 				Cookies.set('loginToken', result.stampedToken.token);
-		// 			}
-		// 			this.props.closeModal();
-		// 		});
-		// 	} else {
-		// 		this.setState({
-		// 			errorMsg: 'Invalid email or password',
-		// 		});
-		// 	}
-		// }); TODO
 	}
 
 	handleSignupFacebook() {

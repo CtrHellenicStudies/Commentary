@@ -126,7 +126,7 @@ class KeywordDetail extends Component {
 									<div className="center-content">
 										<div className="page-title-wrap">
 											<h2 className="page-title ">{keyword.title}</h2>
-											{Cookies.get('user').roles.length > 0 ?
+											{Cookies.get('user') && Cookies.get('user').roles.length > 0 ?
 												<div>
 													<Link to={`/tags/${keyword.slug}/edit`}>
 														<RaisedButton

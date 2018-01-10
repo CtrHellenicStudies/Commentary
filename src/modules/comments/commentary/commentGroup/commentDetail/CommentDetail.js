@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import $ from 'jquery';
@@ -56,7 +56,7 @@ const getCommentClass = (discussionVisible) => {
 /*
 	BEGIN CommentDetail
 */
-class CommentDetail extends React.Component {
+class CommentDetail extends Component {
 
 	constructor(props) {
 		super(props);

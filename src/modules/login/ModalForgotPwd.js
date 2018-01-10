@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Cookies from 'js-cookie';
 
-export default class ModalForgotPwd extends React.Component {
+export default class ModalForgotPwd extends Component {
 	constructor(props) {
 		super(props);
 		this.emailValue = this.emailValue.bind(this);

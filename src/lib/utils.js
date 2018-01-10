@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
+import Cookies from 'js-cookie';
 import {
 	convertFromRaw, EditorState, ContentState, convertFromHTML 
 } from 'draft-js';
@@ -92,7 +93,13 @@ const Utils = {
 		return cmp;
 	},
 	userInRole(user, roles) {
-		for(let i = 0; i < user.roles.length; i += 1) {
+		if (!user) {
+			return false;
+		} else if(typeof user === 'string') {
+			user = JSON.parse(user);
+			Cookies.set('user', user);
+		}
+		for(let i = 0; user.roles && i < user.roles.length; i += 1) {
 			for(let j = 0; j < roles.length; j += 1) {
 				if(user.roles[i] === roles[j]) {
 					return true;
@@ -342,7 +349,7 @@ const Utils = {
 					return {start: '<span>', end: '</span>'};
 				}
 				if (type === 'unstyled') {
-					return '<p />';
+					return '<p>' + block.text + '</p>';
 				}
 				return '<span />';
 			},

@@ -67,7 +67,9 @@ class TranslationSelect extends Component {
 	}
 
 	componentWillUnmount() {
-		delete sessionStorage.keys.translationOptions;
+		if (sessionStorage.keys && sessionStorage.keys.translationOptions) {
+			delete sessionStorage.keys.translationOptions;
+		}
 	}
 
 	showEditDialog() {

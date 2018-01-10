@@ -25,15 +25,6 @@ import Utils from '../../../lib/utils';
 import { textNodesQuery } from '../../../graphql/methods/textNodes';
 import { commentsInsertMutation } from '../../../graphql/methods/comments';
 
-/*
- *	helpers
- */
-const handlePermissions = () => {
-	if (!Utils.userIsInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
-		this.props.history.push('/');
-	}
-};
-
 
 const getKeywords = (formData) => {
 	
@@ -107,7 +98,9 @@ class AddCommentLayout extends Component {
 	}
 
 	componentWillUpdate() {
-		handlePermissions();
+		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
+			this.props.history.push('/');
+		}
 	}
 	updateQuery() {
 		this.setState({

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -12,7 +13,7 @@ import TextNodesEditor from './TextNodesEditor';
 import muiTheme from '../../lib/muiTheme';
 import Utils from '../../lib/utils';
 
-class TextNodesEditorLayout extends React.Component {
+class TextNodesEditorLayout extends Component {
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
@@ -37,11 +38,9 @@ class TextNodesEditorLayout extends React.Component {
 
 	// --- BEGNI PERMISSIONS HANDLE --- //
 	handlePermissions() {
-		// if (Roles.subscription.ready()) {
-		// 	if (!Roles.userIsInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
-		// 		this.props.history.push('/');
-		// 	}
-		// } TODO
+		if (!Utils.userInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
+			this.props.history.push('/');
+		}
 	}
 
 	render() {

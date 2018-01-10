@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import autoBind from 'react-autobind';
@@ -44,7 +44,7 @@ import ReferenceWork from '../../referenceWorks/ReferenceWork';
 import DraftEditorInput from '../../draftEditor/DraftEditorInput';
 
 
-class AddRevision extends React.Component {
+class AddRevision extends Component {
 
 	constructor(props) {
 		super(props);
@@ -524,8 +524,8 @@ class AddRevision extends React.Component {
 									/>
 								</div>
 								{(
-									// Roles.userIsInRole(Cookies.get('user'), ['editor', 'admin'])
-                                    // && TODO
+									Utils.userInRole(Cookies.get('user'), ['editor', 'admin'])
+                                   &&
                                     comment.revisions.length > 1
 								) ?
 									<div className="comment-edit-action-button comment-edit-action-button--remove">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -8,7 +8,7 @@ import RecentActivity from './RecentActivity';
 import CommunityDirectory from './CommunityDirectory';
 
 
-class CommunityPage extends React.Component {
+class CommunityPage extends Component {
 	render() {
 		return (
 			<div className="page page-community content primary">

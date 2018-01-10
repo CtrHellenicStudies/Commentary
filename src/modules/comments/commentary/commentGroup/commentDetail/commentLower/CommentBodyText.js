@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // lib
 import createRevisionMarkup from '../../../../../../lib/createRevisionMarkup';
 
 
-class CommentBodyText extends React.Component {
+class CommentBodyText extends Component {
 
 	constructor(props) {
 		super(props);

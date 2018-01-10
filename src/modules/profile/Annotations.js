@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-class Annotations extends React.Component {
+class Annotations extends Component {
 	render() {
 		return (
 			<div>

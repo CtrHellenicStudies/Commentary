@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
 
@@ -35,7 +35,7 @@ import ReferenceWork from '../../referenceWorks/ReferenceWork';
 /*
  *	BEGIN AddComment
  */
-class AddComment extends React.Component {
+class AddComment extends Component {
 
 	constructor(props) {
 		super(props);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 
@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import { sendSnack } from '../../shared/SnackAttack';
 
-export default class AvatarEditor extends React.Component {
+export default class AvatarEditor extends Component {
 	constructor(props) {
 		super(props);
         const user = Cookies.get('user');

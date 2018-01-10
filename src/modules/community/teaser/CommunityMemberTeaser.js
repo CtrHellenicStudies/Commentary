@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import AvatarIcon from '../../profile/avatar/AvatarIcon';
 
-class CommunityMemberTeaser extends React.Component {
+class CommunityMemberTeaser extends Component {
 
 	render() {
 		const { user } = this.props;

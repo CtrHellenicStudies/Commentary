@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -9,7 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 import { sortRevisions, getRevisionDate } from './helpers';
 
-class CommentCitation extends React.Component {
+class CommentCitation extends Component {
 
 	constructor(props) {
 		super(props);

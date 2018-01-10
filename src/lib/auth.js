@@ -1,18 +1,24 @@
 import Cookies from 'js-cookie';
 
-
+const loginService = process.env.LOGIN_SERVICE ? process.env.LOGIN_SERVICE : 'http://localhost:3002/auth/login';
+const registerService = process.env.REGISTER_SERVICE ? process.env.REGISTER_SERVICE : 'http://localhost:3002/auth/register';
 const userLoggedIn = () => {
 	const token = Cookies.get('token');
 
 	if (token) return true;
 	return false;
 };
-
 const login = async (data) => {
-	if (userLoggedIn()) return null;
+	console.log(loginService);
+	console.log(registerService);
+	if (userLoggedIn()) {
+		console.log('token null');
+		Cookies.remove('token');
+		return null;
+	}
 
 	try {
-		const res = await fetch(`http://localhost:3002/auth/login`, {
+		const res = await fetch(loginService, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
@@ -29,8 +35,12 @@ const login = async (data) => {
 		}
 		const resJson = await res.json();
 		if (resJson.token) {
-			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'ahcip.local';
-			Cookies.set('token', resJson.token, { domain });
+			Cookies.set('token', resJson.token);
+			console.log(atob(resJson.token.split('.')[1]));
+            let dataJSON = JSON.parse(atob(resJson.token.split('.')[1]));
+            delete dataJSON.password;
+			Cookies.set('user', dataJSON);
+			window.location.reload();
 			return resJson;
 		}
 	} catch (err) {
@@ -38,15 +48,17 @@ const login = async (data) => {
 	}
 };
 
-const logoutUser = async () => {
+const logout = async () => {
 	Cookies.remove('user');
+	Cookies.remove('token');
+	document.location.href="/";
 };
 
 const register = async (data) => {
 	if (userLoggedIn()) return null;
 
 	try {
-		const res = await fetch(`http://localhost:3002/auth/register`, {
+		const res = await fetch(registerService, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
@@ -62,9 +74,11 @@ const register = async (data) => {
 		}
 		const resJson = await res.json();
 		if (resJson.token) {
-			// TODO: Add domain: 'orphe.us' options to cookie for cross hostname auth
-			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'ahcip.local';
-			Cookies.set('token', resJson.token, { domain });
+            Cookies.set('token', resJson.token);
+            let dataJSON = JSON.parse(resJson.token.split('.')[1]);
+            delete dataJSON.password;
+			Cookies.set('user', dataJSON);
+			window.location.reload();
 			return resJson;
 		}
 		if (resJson.passwordStrength) {
@@ -102,4 +116,4 @@ const verifyToken = async () => {
 	return null;
 };
 
-export { login, logoutUser, register, verifyToken };
+export { login, logout, register, verifyToken };

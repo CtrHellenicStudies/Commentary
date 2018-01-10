@@ -88,9 +88,8 @@ class LeftMenu extends Component {
 				Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])
                 ?
 					<div>
-                        {tenant && !tenant.isAnnotation 
-                        //&& 
-                        //Roles.userIsInRole(Meteor.userId(), ['admin'])
+                        {tenant && !tenant.isAnnotation  &&
+                        Utils.userInRole(Cookies.get('user'), ['admin'])
                          ?
 							<MenuItem
 								href="http://ahcip-admin.chs.harvard.edu"

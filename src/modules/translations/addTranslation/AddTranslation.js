@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { EditorState, convertToRaw } from 'draft-js';
@@ -18,7 +18,7 @@ import muiTheme from '../../../lib/muiTheme';
 import DraftEditorInput from '../../draftEditor/DraftEditorInput';
 
 
-class AddTranslation extends React.Component {
+class AddTranslation extends Component {
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };

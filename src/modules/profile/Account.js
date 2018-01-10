@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -8,7 +8,7 @@ import DraftEditorInput from '../draftEditor/DraftEditorInput';
 import Utils from '../../lib/utils';
 import { debounce } from 'throttle-debounce';
 
-class Account extends React.Component {
+class Account extends Component {
 	constructor(props) {
 		super(props);
 		let biography;

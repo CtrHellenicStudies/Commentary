@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StickyContainer } from 'react-sticky';
 
@@ -8,7 +8,7 @@ import CommentLemma from './commentLemma/CommentLemma';
 
 
 
-class CommentGroup extends React.Component {
+class CommentGroup extends Component {
 
 	constructor(props) {
 		super(props);

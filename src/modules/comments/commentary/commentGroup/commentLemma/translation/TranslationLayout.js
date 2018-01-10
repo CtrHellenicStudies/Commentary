@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CommentLemmaText from './CommentLemmaText';
 import CommentLemmaTextWithTranslation from './CommentLemmaTextWithTranslation';
 
-class TranslationLayout extends React.Component {
+class TranslationLayout extends Component {
 	render() {
 		const { commentGroup, showTranslation, lines, author } = this.props;
 

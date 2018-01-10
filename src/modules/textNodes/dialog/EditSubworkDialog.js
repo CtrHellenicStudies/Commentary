@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 
 
-class EditSubworkDialog extends React.Component {
+class EditSubworkDialog extends Component {
 
 	constructor(props) {
 		super(props);

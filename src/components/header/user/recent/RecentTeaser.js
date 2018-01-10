@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Utils from '../../../../lib/utils';
 
-class RecentTeaser extends React.Component {
+class RecentTeaser extends Component {
 
 	render() {
 		const { recentItem } = this.props;

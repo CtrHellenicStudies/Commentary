@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -69,7 +69,7 @@ LineNumbering.propTypes = {
 /*
 	BEGIN ContextPanelText
 */
-class ContextPanelText extends React.Component {
+class ContextPanelText extends Component {
 
 	constructor(props) {
 		super(props);

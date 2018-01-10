@@ -6,7 +6,7 @@ import { compose } from 'react-apollo';
 
 // lib
 import Utils from './lib/utils';
-import { login, logout } from './auth/auth'
+import { login, logout } from './lib/auth'
 
 // graphql
 import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
@@ -152,11 +152,7 @@ return <PublicProfilePage userId={Cookies.get('token')} />;
 				path="/sign-out"
 				render={() => {
 					try {
-						logout(() => {
-							const domain = Utils.getEnvDomain();
-							Cookies.remove('userId', { domain });
-							Cookies.remove('loginToken', { domain });
-						});
+						logout();
 					} catch (err) {
 						console.log(err);
 					} finally {

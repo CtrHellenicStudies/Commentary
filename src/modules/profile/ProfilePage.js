@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import Cookies from 'js-cookie';
@@ -33,7 +33,7 @@ const tabMuiTheme = {
 	},
 };
 
-class ProfilePage extends React.Component {
+class ProfilePage extends Component {
 	constructor(props) {
 		super(props);
 

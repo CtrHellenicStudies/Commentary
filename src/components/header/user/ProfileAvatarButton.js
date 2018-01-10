@@ -45,7 +45,7 @@ class ProfileAvatarButton extends Component {
 						}
 						<AvatarIcon
 							className="avatarIcon"
-							avatar={'profile' in loggedInUser ? loggedInUser.profile.avatarUrl : ''}
+							avatar={loggedInUser.profile ? loggedInUser.profile.avatarUrl : ''}
 						/>
 					</a>
 				</div>

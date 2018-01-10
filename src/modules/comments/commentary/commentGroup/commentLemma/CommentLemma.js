@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
@@ -35,7 +35,7 @@ function getTranslationQueries(query, filter) {
 			translation.author
 		);
 }
-class CommentLemma extends React.Component {
+class CommentLemma extends Component {
 
 	constructor(props) {
 		super(props);

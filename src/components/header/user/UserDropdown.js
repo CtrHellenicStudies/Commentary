@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
 import Utils from '../../../lib/utils';
 import RecentList from './recent/RecentList';
+import { logout } from '../../../lib/auth';
 
 
-class UserDropdown extends React.Component {
+class UserDropdown extends Component {
 
 	constructor(props) {
 		super(props);
@@ -16,10 +16,7 @@ class UserDropdown extends React.Component {
 	}
 
 	signOut() {
-		const domain = Utils.getEnvDomain();
-		Cookies.remove('userId', { domain });
-		Cookies.remove('loginToken', { domain });
-		window.location.reload();
+		logout();
 		this.setState({
 			authenticated: false,
 		});

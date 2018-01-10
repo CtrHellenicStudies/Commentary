@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
@@ -98,11 +99,11 @@ class EditKeywordLayout extends Component {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	handlePermissions() {
-		// if (this.state.ready) {
-		// 	if (!Roles.userIsInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
-		// 		this.props.history.push('/');
-		// 	}
-		// } // TODo
+		if (this.state.ready) {
+			if (!Utils.userInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
+				this.props.history.push('/');
+			}
+		}
 	}
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
 		if (selectedLineFrom === null) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -8,7 +8,7 @@ import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 
-class KeywordTeaser extends React.Component {
+class KeywordTeaser extends Component {
 
 	constructor(props) {
 		super(props);

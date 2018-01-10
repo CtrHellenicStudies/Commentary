@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
@@ -247,11 +248,9 @@ class AddKeywordLayout extends Component {
 		});
 	}
 	handlePermissions() {
-		// if (Roles.subscription.ready()) {
-		// 	if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-		// 		this.props.history.push('/');
-		// 	}
-		// } TODO
+		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
+			this.props.history.push('/');
+		}
 	}
 	lineLetterUpdate(value) {
 		this.setState({

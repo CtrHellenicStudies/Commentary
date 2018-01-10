@@ -22,7 +22,6 @@ import Select, { Createable } from 'react-select';
 import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
-import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
@@ -33,6 +32,8 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import Snackbar from 'material-ui/Snackbar';
 import slugify from 'slugify';
 import _ from 'underscore';
+import { withRouter } from 'react-router';
+
 
 // models
 import Keywords from '/imports/models/keywords';
@@ -51,6 +52,8 @@ import LinkButton from '/imports/ui/components/editor/addComment/LinkButton';
 import TagsInput from '/imports/ui/components/editor/addComment/TagsInput';
 import CommentersEditorDialog from '../CommentersEditorDialog';
 import ReferenceWork from '/imports/ui/components/editor/addComment/AddComment/referenceWork/ReferenceWork';
+
+import DraftEditorInput from '../../../shared/DraftEditorInput/DraftEditorInput';
 
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
@@ -411,7 +414,7 @@ class AddRevision extends React.Component {
 										<FlatButton
 											className="go-to-commentary-link"
 											onClick={() => {
-												FlowRouter.go('/commentary/', {}, {_id: comment._id});
+												this.props.history.push(`/commentary/?_id=${comment._id}`);
 											}}
 											style={{
 												border: '1px solid #ddd',
@@ -485,10 +488,10 @@ class AddRevision extends React.Component {
 									spellcheck
 									mediaOn
 								/>
-								<ReferenceWork 
+								<ReferenceWork
 									referenceWorks={this.state.referenceWorks}
 									update={this.updateReferenceWorks}
-									referenceWorkOptions={this.props.referenceWorkOptions} 
+									referenceWorkOptions={this.props.referenceWorkOptions}
 									ready={this.props.ready}
 									addNew={this.addNewReferenceWork}
 								/>
@@ -603,4 +606,4 @@ const AddRevisionContainer = createContainer(({ comment }) => {
 	};
 }, AddRevision);
 
-export default AddRevisionContainer;
+export default withRouter(AddRevisionContainer);

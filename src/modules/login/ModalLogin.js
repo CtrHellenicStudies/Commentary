@@ -24,9 +24,6 @@ class ModalLogin extends Component {
 		// methods:
 		this._handleKeyDown = this._handleKeyDown.bind(this);
 		this.handleLogin = this.handleLogin.bind(this);
-		this.handleLoginFacebook = this.handleLoginFacebook.bind(this);
-		this.handleLoginGoogle = this.handleLoginGoogle.bind(this);
-		this.handleLoginTwitter = this.handleLoginTwitter.bind(this);
 		this.signup = this.signup.bind(this);
 		this.forgot = this.forgot.bind(this);
 	}
@@ -45,61 +42,8 @@ class ModalLogin extends Component {
 
 		if (event.keyCode === ESCAPE_KEY) closeModal();
 	}
-
 	handleLogin(email, password) {
 		login({ username: email, password: password });
-        // TODO
-		// Meteor.loginWithPassword(email, password, (err) => {
-		// 	const domain = Utils.getEnvDomain();
-		// 	if (!err) {
-		// 		this.props.closeModal();
-		// 		Cookies.set('userId', Meteor.userId(), { domain });
-		// 		Cookies.set('loginToken', localStorage['Meteor.loginToken'], { domain });
-		// 	} else {
-		// 		this.setState({
-		// 			errorMsg: 'Invalid email or password',
-		// 		});
-		// 	}
-		// }); 
-	}
-
-	handleLoginFacebook() {
-        // TODO
-		// Meteor.loginWithFacebook({}, (err) => {
-		// 	if (!err) {
-		// 		this.props.closeModal();
-		// 	} else {
-		// 		this.setState({
-		// 			errorSocial: `Error with signing in with Facebook: ${err.message}`,
-		// 		});
-		// 	}
-		// });
-	}
-
-	handleLoginGoogle() {
-        // TODO
-		// Meteor.loginWithGoogle({}, (err) => {
-		// 	if (!err) {
-		// 		this.props.closeModal();
-		// 	} else {
-		// 		this.setState({
-		// 			errorSocial: `Error with signing in with Google: ${err.message}`,
-		// 		});
-		// 	}
-		// });
-	}
-
-	handleLoginTwitter() {
-        // TODO
-		// Meteor.loginWithTwitter({}, (err) => {
-		// 	if (!err) {
-		// 		this.props.closeModal();
-		// 	} else {
-		// 		this.setState({
-		// 			errorSocial: `Error with signing in with Twitter: ${err.message}`,
-		// 		});
-		// 	}
-		// });
 	}
 	signup() {
 		this.props.closeModal();
@@ -141,9 +85,6 @@ class ModalLogin extends Component {
 								</span>
 
 								<OAuthButtons
-									handleFacebook={this.handleLoginFacebook}
-									handleGoogle={this.handleLoginGoogle}
-									handleTwitter={this.handleLoginTwitter}
 								/>
 
 								<div className="at-sep">

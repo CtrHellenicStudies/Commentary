@@ -1289,10 +1289,6 @@ footer.bg-dark li,
   margin-right: 8px;
   margin-bottom: 24px;
 }
-.btn:last-child,
-.btn:last-of-type {
-  margin-right: 0;
-}
 .btn:hover {
   background: #795548;
   color: #fff;
@@ -7283,9 +7279,9 @@ button.at-btn {
 }
 button.at-social-btn {
   border: none;
-}
-button.at-social-btn i {
-  margin-top: 9px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 button#at-btn {
   padding: 5px 12px;
@@ -7988,19 +7984,26 @@ footer .social-list li a:hover a {
 .ahcip-modal.lowered {
   transform: translateY(0%) translateZ(0);
 }
+.ahcip-modal .at-oauth {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
 .ahcip-modal .close-modal {
   position: fixed;
   top: 20px;
   right: 20px;
   width: 50px;
   height: 50px;
-  display: block;
   background: #eee;
   border-radius: 50%;
   padding: 8px 0;
   cursor: pointer;
   outline: none;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .ahcip-modal .close-modal:hover,
 .ahcip-modal .close-modal:focus {

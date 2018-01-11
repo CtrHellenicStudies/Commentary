@@ -882,10 +882,6 @@ footer.bg-dark li,
   margin-right: 8px;
   margin-bottom: 24px;
 }
-.btn:last-child,
-.btn:last-of-type {
-  margin-right: 0;
-}
 .btn:hover {
   background: #795548;
   color: #fff;
@@ -6444,9 +6440,9 @@ button.at-btn {
 }
 button.at-social-btn {
   border: none;
-}
-button.at-social-btn i {
-  margin-top: 9px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 button#at-btn {
   padding: 5px 12px;

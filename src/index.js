@@ -20,7 +20,6 @@ import registerServiceWorker from './registerServiceWorker';
 import { ApolloProvider, createNetworkInterface } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 require('dotenv').config();
-require('dotenv').load();
 
 injectTapEventPlugin();
 

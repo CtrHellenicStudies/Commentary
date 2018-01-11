@@ -879,10 +879,6 @@ footer.bg-dark li,
   margin-right: 8px;
   margin-bottom: 24px;
 }
-.btn:last-child,
-.btn:last-of-type {
-  margin-right: 0;
-}
 .btn:hover {
   background: #795548;
   color: #fff;

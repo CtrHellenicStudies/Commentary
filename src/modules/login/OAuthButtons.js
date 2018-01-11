@@ -1,39 +1,77 @@
-import React from 'react';
+import React, { Component } from 'react';
+import hello from 'hellojs';
+import { login } from '../../lib/auth';
 import PropTypes from 'prop-types';
 
-const OAuthButtons = ({ handleFacebook, handleGoogle, handleTwitter }) => (
-	<div className="at-oauth">
-		{handleFacebook &&
-			<button
-				className="btn at-social-btn"
-				id="at-facebook"
-				name="facebook"
-				onClick={handleFacebook}
-			>
-				<i className="fa fa-facebook" /> Sign In with Facebook
-			</button>}
+hello.init({
+	facebook: process.env.FACEBOOK_SECRET,
+	twitter: process.env.TWITTER_SECRET,
+	google: process.env.GOOGLE_SECRET
+}, {
+	// redirect_uri: '/',
+	oauth_proxy: `${process.env.REACT_APP_GRAPHQL_SERVER}/oauthproxy`,
+});
 
-		{handleGoogle &&
-			<button
-				className="btn at-social-btn"
-				id="at-google"
-				name="google"
-				onClick={handleGoogle}
-			>
-				<i className="fa fa-google" /> Sign In with Google
-			</button>}
+class OAuthButtons extends Component {
+	
+	constructor(props) {
+		super(props);
+		this.state = {};
+		this.handleAuth = this.handleAuth.bind(this);
+	}
+	async handleAuth(type) {
+		this.setState({
+			disabledButtons: true,
+		});
 
-		{handleTwitter &&
-			<button
-				className="btn at-social-btn"
-				id="at-twitter"
-				name="twitter"
-				onClick={handleTwitter}
-			>
-				<i className="fa fa-twitter" /> Sign In with Twitter
-			</button>}
-	</div>
-);
+		try {
+			const auth = await hello(type).login();
+
+			if (type === 'twitter') {
+				await login({ network: auth.network, oauthToken: auth.authResponse.oauth_token, oauthTokenSecret: auth.authResponse.oauth_token_secret });
+			} else {
+				await login({ network: auth.network, accessToken: auth.authResponse.access_token });
+			}
+			console.log(process.env);
+
+		} catch (err) {
+			this.setState({
+				errorOauth: err.message,
+				disabledButtons: false,
+			});
+		}
+	}
+	render(){
+		return(
+			<div className="at-oauth">
+					<button
+						className="btn at-social-btn"
+						id="at-facebook"
+						name="facebook"
+						onClick={this.handleAuth.bind(this, 'facebook')}
+					>
+						<i className="fa fa-facebook" /> Sign In with Facebook
+					</button>
+					<button
+						className="btn at-social-btn"
+						id="at-google"
+						name="google"
+						onClick={this.handleAuth.bind(this, 'google')}
+					>
+						<i className="fa fa-google" /> Sign In with Google
+					</button>
+					<button
+						className="btn at-social-btn"
+						id="at-twitter"
+						name="twitter"
+						onClick={this.handleAuth.bind(this, 'twitter')}
+					>
+						<i className="fa fa-twitter" /> Sign In with Twitter
+					</button>
+			</div>
+			);
+	}
+}
 OAuthButtons.propTypes = {
 	handleFacebook: PropTypes.func,
 	handleGoogle: PropTypes.func,

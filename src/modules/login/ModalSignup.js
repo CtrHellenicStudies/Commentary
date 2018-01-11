@@ -20,9 +20,6 @@ class ModalSignup extends Component {
 		// methids
 		this._handleKeyDown = this._handleKeyDown.bind(this);
 		this.handleSignup = this.handleSignup.bind(this);
-		this.handleSignupFacebook = this.handleSignupFacebook.bind(this);
-		this.handleSignupGoogle = this.handleSignupGoogle.bind(this);
-		this.handleSignupTwitter = this.handleSignupTwitter.bind(this);
 		this.goToSigIn = this.goToSigIn.bind(this);
 	}
 
@@ -50,42 +47,6 @@ class ModalSignup extends Component {
 		}
 		register({username: email, password: checkPassword});
 
-	}
-
-	handleSignupFacebook() {
-		// Meteor.loginWithFacebook({}, (err) => {
-		// 	if (!err) {
-		// 		this.props.closeModal();
-		// 	} else {
-		// 		this.setState({
-		// 			errorSocial: `Error with signing in with Facebook: ${err.reason}`,
-		// 		});
-		// 	}
-		// }); TODO
-	}
-
-	handleSignupGoogle() {
-		// Meteor.loginWithGoogle({}, (err) => {
-		// 	if (!err) {
-		// 		this.props.closeModal();
-		// 	} else {
-		// 		this.setState({
-		// 			errorSocial: `Error with signing in with Google: ${err.reason}`,
-		// 		});
-		// 	}
-		// }); TODO
-	}
-
-	handleSignupTwitter() {
-		// Meteor.loginWithTwitter({}, (err) => {
-		// 	if (!err) {
-		// 		this.props.closeModal();
-		// 	} else {
-		// 		this.setState({
-		// 			errorSocial: `Error with signing in with Twitter: ${err.reason}`,
-		// 		});
-		// 	}
-		// }); TODO
 	}
 
 	goToSigIn(event) {
@@ -118,9 +79,6 @@ class ModalSignup extends Component {
 							{errorSocial}
 						</span>
 						<OAuthButtons
-							handleFacebook={this.handleSignupFacebook}
-							handleGoogle={this.handleSignupGoogle}
-							handleTwitter={this.handleSignupTwitter}
 						/>
 						<div className="at-sep">
 							<strong>OR</strong>

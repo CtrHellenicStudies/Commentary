@@ -32,18 +32,11 @@ class Page extends Component {
 	}
 	componentWillReceiveProps(props) {
 		const { slug } = props;
-		let thumbnails = [];
 	
 		const page = props.pagesQuery.loading ? {} : props.pagesQuery.pages.find(x => x.slug === slug);
-		if (page) {
-			if (page.headerImage && Array.isArray(page.headerImage) && page.headerImage.length > 0) {
-				thumbnails = [];//Thumbnails.find({ originalId: { $in: page.headerImage } }).fetch(); TODO
-			}
-		}
 		this.setState({
 			page,
 			ready: !props.settingsQuery.loading && !props.pagesQuery.loading,
-			thumbnails,
 			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId)
 		});
 	}

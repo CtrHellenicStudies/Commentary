@@ -81,7 +81,7 @@ class KeywordContext extends Component {
 					context.lineFrom = query.lineFrom;
 					context.lineTo = query.lineTo;
 
-					const textNodesCursor = {}; // TODO TextNodes.find(textNodesQuery);
+					const textNodesCursor = textNodesQuery.loading ? [] : textNodesQuery.textNodes;
 					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
 				}
 			}

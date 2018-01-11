@@ -20,6 +20,7 @@ import muiTheme from '../../../lib/muiTheme';
 
 // helpers:
 import { parseCommentsToCommentGroups } from './helpers';
+import { worksQuery } from '../../../graphql/methods/works';
 
 
 class Commentary extends Component {
@@ -77,6 +78,7 @@ class Commentary extends Component {
 		let subwork = null;
 		let lineFrom = 0;
 		let lineTo = 0;
+		let work = '';
 		let metaSubject = 'Commentaries on Classical Texts';
 		let description = '';
 
@@ -91,6 +93,7 @@ class Commentary extends Component {
 				filter.values.forEach((value) => {
 					values.push(value.slug);
 				});
+				work = values.join(', ');
 				break;
 
 			case 'subworks':
@@ -112,7 +115,7 @@ class Commentary extends Component {
 			}
 		});
 
-		const foundWork = {}; // Works.findOne({ slug: work }); TODO
+		const foundWork = worksQuery.loading ? {} : worksQuery.works.find(x => x.slug === work)
 		if (foundWork) {
 			title = foundWork.title;
 		} else {
@@ -332,6 +335,7 @@ Commentary.defaultProps = {
 };
 export default compose(
 	commentsQuery,
-	commentsMoreQuery
+	commentsMoreQuery,
+	worksQuery
 )(Commentary);
 

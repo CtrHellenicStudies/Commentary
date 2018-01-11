@@ -2,12 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { compose } from 'react-apollo';
 
 // components
 import AvatarIcon from '../profile/avatar/AvatarIcon';
 
 // lib
 import createRevisionMarkup from '../../lib/createRevisionMarkup';
+
+// graphql
+import { commentersQuery } from '../../graphql/methods/commenters';
 
 
 const KeywordCommentList = (props) => {
@@ -44,10 +48,8 @@ const KeywordCommentList = (props) => {
 
 							<div className="comment-upper-right">
 								{comment.commenters.map((commenter, _i) => {
-                                    const commenterRecord = {}; // TODO
-									// const commenterRecord = Commenters.findOne({
-									// 	slug: commenter.slug,
-									// });
+									const commenterRecord = commentersQuery.loading ? {} : commentersQuery.find(x =>
+										x.slug === commenter.slug);
 
 									if (!commenterRecord) {
 										return null;
@@ -99,4 +101,4 @@ KeywordCommentList.propTypes = {
 	keywordComments: PropTypes.array,
 };
 
-export default KeywordCommentList;
+export default compose(commentersQuery)(KeywordCommentList);

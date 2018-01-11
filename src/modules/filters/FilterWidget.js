@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
+import { compose } from 'react-apollo';
 
 import Utils from '../../lib/utils';
+import { commentersQuery } from '../../graphql/methods/commenters';
 
 /*
 	helpers
@@ -27,8 +29,7 @@ const FilterWidget = ({ filters, toggleSearchTerm }) => (
 				{filter.values.map((val, j) => {
 					// commenters query through URL fix:
 					if (filter.key === 'commenters' && !val.name && val.wordpressId) {
-						const foundCommenter = undefined;
-						//const foundCommenter = Commenters.findOne({ wordpressId: val.wordpressId }); TODO
+						const foundCommenter = commentersQuery.loading ? {} :commentersQuery.commenters.find(x => x.wordpressId === val.wordpressId);
 						if (foundCommenter) {
 							filters[i][j].name = foundCommenter.name;
 						}
@@ -60,4 +61,4 @@ FilterWidget.propTypes = {
 	toggleSearchTerm: PropTypes.func.isRequired,
 };
 
-export default FilterWidget;
+export default compose(commentersQuery)(FilterWidget);

@@ -84,7 +84,7 @@ class CommentCitation extends Component {
 										Revision {moment(updated).format('D MMMM YYYY')}
 									</label>
 									<span className="urn">
-										<a //TODO
+										<a
 											href={`//nrs.${Utils.getEnvDomain()}/v2/${urn}.${comment.revisions.length - i - 1}/${comment._id}`}
 										>
 											nrs.chs.harvard.edu/v2/{urn}.{comment.revisions.length - i - 1}

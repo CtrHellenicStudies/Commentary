@@ -36,14 +36,6 @@ class Home extends Component {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
 
-	componentDidMount() {
-		const { isTest } = this.props;
-
-		if (!isTest) {
-			//new WOW().init(); TODO
-		}
-	}
-
 	scrollToIntro(e) {
 		$('html, body').animate({ scrollTop: $('#intro').offset().top - 100 }, 300);
 

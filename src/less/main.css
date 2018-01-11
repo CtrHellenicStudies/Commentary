@@ -12976,6 +12976,13 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   height: 80px;
   display: block;
   cursor: pointer;
+  -webkit-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  -moz-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  -ms-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  -o-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  transition: all all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms ease;
+  -webkit-transition: all all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms ease;
+  -moz-transition: all all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms ease;
   padding: 25px 16px;
 }
 .profileButton a:hover {

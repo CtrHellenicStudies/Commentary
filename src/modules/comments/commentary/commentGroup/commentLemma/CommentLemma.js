@@ -182,11 +182,12 @@ class CommentLemma extends Component {
 			if (!nextProps.collectionQuery.variables.work) {
 				nextProps.collectionQuery.variables.work = commentGroup.work.slug;
 				console.log(commentGroup);
+				const cuttedPassage = commentGroup.comments[0].lemmaCitation.passage.split('-');
 				const properties = {
-					work: commentGroup.work.slug, // TODO
-				//	subworkN: Number(commentGroup.subwork.title),
-					start: commentGroup.lineFrom,
-					end: commentGroup.lineTo ? commentGroup.lineTo : commentGroup.lineFrom
+					work: `${commentGroup.comments[0].lemmaCitation.work}:
+					${commentGroup.comments[0].lemmaCitation.textGroup}.
+					${commentGroup.comments[0].lemmaCitation.textGroup}`,
+					location: [cuttedPassage[0].split('.')[0], cuttedPassage[0].split('.')[1]],
 				};
 				nextProps.collectionQuery.refetch(properties);
 			}

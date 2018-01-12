@@ -1,26 +1,14 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query worksQuery ($tenantId: ID) {
-	worksAhcip (tenantId: $tenantId) {
-		_id
-		title
-		tenantId
-		tlgCreator
-		tlg
-		slug
-		order
-		nComments
-		subworks {
-			title
+query worksQuery ($collection: String $textGroup: String) {
+	collection(urn: $collection) {
+		textGroup(urn: $textGroup) {
+		  works {
 			slug
-			n
-			tlgNumber
-			nComments
-			commentHeatmap {
-				n
-				nComments
-			}
+			original_title
+			
+		  }
 		}
 	}
 }
@@ -30,7 +18,8 @@ const worksQuery = graphql(query, {
 	options: () => {
 		return ({
 			variables: {
-				tenantId: sessionStorage.getItem('tenantId')
+				collection: "urn:cts:greekLit",
+				textGroup: "urn:cts:greekLit:tlg0012"
 			}
 		});
 	}

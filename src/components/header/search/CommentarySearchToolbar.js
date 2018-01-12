@@ -151,7 +151,7 @@ class CommentarySearchToolbar extends Component {
 				keyideas: nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
 				keywords: nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),
 				commenters: nextProps.commentersQuery.commenters,
-				works: nextProps.worksQuery.works,
+				works: nextProps.worksQuery.collection.textGroup.works,
 				referenceWorks: nextProps.referenceWorksQuery.referenceWorks,
 			});
 		}

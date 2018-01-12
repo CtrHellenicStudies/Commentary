@@ -19,7 +19,7 @@ class WorksList extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			works: nextProps.worksQuery.loading ? [] : nextProps.worksQuery.worksAhcip
+			works: nextProps.worksQuery.loading ? [] : nextProps.worksQuery.collection.textGroup.works
 		});
 	}
 	renderWorks() {

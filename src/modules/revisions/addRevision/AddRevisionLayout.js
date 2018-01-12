@@ -79,7 +79,12 @@ class AddRevisionLayout extends Component {
 			});
 		}
 		if (this.state.refetchTextNodes || nextProps.collectionQuery.work.textNodes.length === 100) {
+			const cuttedPassage = comment.lemmaCitation.passage.split('-');
 			this.props.collectionQuery.refetch({
+				work: `${comment.lemmaCitation.work}:
+				${comment.lemmaCitation.textGroup}.
+				${comment.lemmaCitation.textGroup}`,
+				location: [cuttedPassage[0].split('.')[0], cuttedPassage[0].split('.')[1]],
 				start: comment.lineFrom,
 				end: comment.lineTo,
 				work: comment.work.slug, // TODO

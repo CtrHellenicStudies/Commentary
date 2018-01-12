@@ -6,6 +6,7 @@ query worksQuery ($collection: String $textGroup: String) {
 		textGroup(urn: $textGroup) {
 		  works {
 			slug
+			urn
 			original_title
 			
 		  }

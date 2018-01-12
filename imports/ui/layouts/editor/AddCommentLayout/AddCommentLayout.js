@@ -213,6 +213,7 @@ class AddCommentLayout extends React.Component {
 		// get data for comment:
 		const work = this.getWork();
 		const subwork = this.getSubwork();
+		const section = this.getSection();
 		const lineLetter = this.getLineLetter();
 		const referenceWorks = formData.referenceWorks;
 		const commenters = Utils.getCommenters(formData.commenterValue);
@@ -253,6 +254,12 @@ class AddCommentLayout extends React.Component {
 			created: new Date(),
 			status: 'publish',
 		};
+
+		if (section) {
+			comment.section = {
+				n: section.n,
+			};
+		}
 
 		Meteor.call('comments.insert', token, comment, (error, commentId) => {
 			if (error) {
@@ -296,6 +303,25 @@ class AddCommentLayout extends React.Component {
 			};
 		}
 		return subwork;
+	}
+
+	getSection() {
+		let section = null;
+		const subdomain = window.location.hostname.split('.')[0];
+
+		this.state.filters.forEach((filter) => {
+			if (filter.key === 'sections') {
+				section = filter.values[0];
+			}
+		});
+
+		if (!section && subdomain === 'pausanias') {
+			section = {
+				n: 1,
+			};
+		}
+
+		return section;
 	}
 
 	getLineLetter() {
@@ -418,6 +444,16 @@ class AddCommentLayout extends React.Component {
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 
+		let sectionN = null;
+		const subdomain = window.location.hostname.split('.')[0];
+		if (subdomain === 'pausanias') {
+			if (section) {
+				sectionN = section;
+			} else {
+				sectionN = 1;
+			}
+		}
+
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{!loading ?
@@ -439,12 +475,14 @@ class AddCommentLayout extends React.Component {
 										selectedLineTo={selectedLineTo}
 										workSlug={work ? work.slug : 'iliad'}
 										subworkN={subwork ? subwork.n : 1}
-										subworkN={section ? section.n : 1}
+										sectionN={sectionN}
 									/>
 
 									<AddComment
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}
+										subworkN={subwork ? subwork.n : 1}
+										sectionN={sectionN}
 										submitForm={this.addComment}
 										work={work}
 									/>
@@ -453,7 +491,7 @@ class AddCommentLayout extends React.Component {
 										open={contextReaderOpen}
 										workSlug={work ? work.slug : 'iliad'}
 										subworkN={subwork ? subwork.n : 1}
-										sectionN={section ? section.n : 1}
+										sectionN={sectionN}
 										lineFrom={lineFrom || 1}
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}

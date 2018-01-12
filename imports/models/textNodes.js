@@ -49,6 +49,12 @@ TextNodes.schema = new SimpleSchema({
 	'subwork.n': {
 		type: Number,
 	},
+	section: {
+		type: Object,
+	},
+	'section.n': {
+		type: Number,
+	},
 	relatedPassages: {
 		type: [Object],
 	},

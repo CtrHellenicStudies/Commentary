@@ -21,6 +21,7 @@ const CommentLemmaSelect = React.createClass({
 	propTypes: {
 		workSlug: PropTypes.string.isRequired,
 		subworkN: PropTypes.number.isRequired,
+		sectionN: PropTypes.number,
 		selectedLineFrom: PropTypes.number.isRequired,
 		selectedLineTo: PropTypes.number.isRequired,
 		selectedLemmaEdition: PropTypes.object,
@@ -142,7 +143,7 @@ const CommentLemmaSelect = React.createClass({
 	},
 });
 
-const CommentLemmaSelectContainer = createContainer(({ selectedLineFrom, selectedLineTo, workSlug, subworkN }) => {
+const CommentLemmaSelectContainer = createContainer(({ selectedLineFrom, selectedLineTo, workSlug, subworkN, sectionN }) => {
 	const lemmaText = [];
 	// var commentGroup = this.props.commentGroup;
 	const selectedLemmaEdition = {
@@ -168,6 +169,10 @@ const CommentLemmaSelectContainer = createContainer(({ selectedLineFrom, selecte
 				$lte: selectedLineFrom,
 			},
 		};
+	}
+
+	if (sectionN) {
+		lemmaQuery['section.n'] = sectionN;
 	}
 
 	const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);

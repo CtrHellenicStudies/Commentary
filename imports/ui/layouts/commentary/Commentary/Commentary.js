@@ -375,7 +375,7 @@ export default createContainer(({ filters, skip, limit }) => {
 				{ 'revisions.text': textsearch },
 			];
 		else
-			query.$or.push({$and:[			
+			query.$or.push({$and:[
 				{ 'revisions.title': textsearch },
 				{ 'revisions.text': textsearch },]});
 		delete query.$text;

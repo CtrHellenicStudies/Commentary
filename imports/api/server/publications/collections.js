@@ -218,6 +218,11 @@ Meteor.publish('textNodes', (query = {}, skip = 0, limit = 100) => {
 	return TextNodes.find(query, {
 		skip,
 		limit,
+		sort: {
+			'subwork.n': 1,
+			'section.n': 1,
+			'text.n': 1,
+		},
 	});
 });
 

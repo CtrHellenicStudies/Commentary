@@ -13,7 +13,7 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 import Works from '/imports/models/works';
 
 // components:
-import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from '/imports/ui/components/header/SearchDropdowns';
+import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown, SectionsDropdown } from '/imports/ui/components/header/SearchDropdowns';
 import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
 import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
 
@@ -197,6 +197,7 @@ class CommentarySearchToolbar extends React.Component {
 		const lineFrom = getLineFrom(filters);
 		const lineTo = getLineTo(filters);
 		const workInFilter = getWorkInFilter(filters);
+		const subdomain = window.location.hostname.split('.')[0];
 
 		return (
 			<span>
@@ -263,6 +264,16 @@ class CommentarySearchToolbar extends React.Component {
 					workInFilter={workInFilter}
 					filters={filters}
 				/>
+
+				{subdomain === 'pausanias' ?
+					<SectionsDropdown
+						searchDropdownOpen={searchDropdownOpen}
+						toggleSearchDropdown={this.toggleSearchDropdown}
+						toggleSearchTerm={toggleSearchTerm}
+						workInFilter={workInFilter}
+						filters={filters}
+					/>
+				: ''}
 
 				<div
 					style={{ width: 250, padding: '10px 20px' }}

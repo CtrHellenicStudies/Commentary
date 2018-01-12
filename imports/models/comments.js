@@ -114,6 +114,16 @@ Comments.schema = new SimpleSchema({
 		optional: true,
 	},
 
+	section: {
+		type: Object,
+		optional: true,
+	},
+
+	'section.n': {
+		type: Number,
+		optional: true,
+	},
+
 	lineFrom: {
 		type: Number,
 		optional: true,

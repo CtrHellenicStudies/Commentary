@@ -74,6 +74,8 @@ const getFilterValues = (filters) => {
 			filterValues.work = filter.values[0];
 		} else if (filter.key === 'subworks') {
 			filterValues.subwork = filter.values[0];
+		} else if (filter.key === 'sections') {
+			filterValues.section = filter.values[0];
 		} else if (filter.key === 'lineTo') {
 			filterValues.lineTo = filter.values[0];
 		} else if (filter.key === 'lineFrom') {
@@ -412,7 +414,7 @@ class AddCommentLayout extends React.Component {
 	render() {
 
 		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
-		const { work, subwork, lineFrom, lineTo } = getFilterValues(filters);
+		const { work, subwork, lineFrom, lineTo, section } = getFilterValues(filters);
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 
@@ -437,6 +439,7 @@ class AddCommentLayout extends React.Component {
 										selectedLineTo={selectedLineTo}
 										workSlug={work ? work.slug : 'iliad'}
 										subworkN={subwork ? subwork.n : 1}
+										subworkN={section ? section.n : 1}
 									/>
 
 									<AddComment
@@ -450,6 +453,7 @@ class AddCommentLayout extends React.Component {
 										open={contextReaderOpen}
 										workSlug={work ? work.slug : 'iliad'}
 										subworkN={subwork ? subwork.n : 1}
+										sectionN={section ? section.n : 1}
 										lineFrom={lineFrom || 1}
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}

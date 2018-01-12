@@ -136,7 +136,7 @@ ContextPanelContent.defaultProps = {
 };
 
 
-export default createContainer(({ lineFrom, workSlug, subworkN, multiline }) => {
+export default createContainer(({ lineFrom, workSlug, subworkN, sectionN, multiline }) => {
 
 	const lineTo = lineFrom + 49;
 
@@ -149,9 +149,14 @@ export default createContainer(({ lineFrom, workSlug, subworkN, multiline }) => 
 		},
 	};
 
+	if (sectionN) {
+		lemmaQuery['section.n'] = sectionN;
+	}
+
 	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
 		lemmaQuery['work.slug'] = 'hymns';
 	}
+
 
 	Meteor.subscribe('textNodes', lemmaQuery);
 	const editionsSubscription = Meteor.subscribe('editions');

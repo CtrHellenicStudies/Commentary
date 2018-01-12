@@ -33,10 +33,26 @@ const getWorkSlug = (props) => {
 	if (props.workSlug) return props.workSlug;
 	throw new Meteor.Error('commentGroup or workSlug missing in ContextPanel component - one of two is requierd');
 };
-const getsubworkN = (props) => {
+const getSubworkN = (props) => {
 	if (props.commentGroup) return props.commentGroup.subwork.n;
 	if (props.subworkN) return props.subworkN;
 	throw new Meteor.Error('commentGroup or subworkN missing in ContextPanel component - one of two is requierd');
+};
+
+const getSectionN = (props) => {
+
+	const subdomain = window.location.hostname.split('.')[0];
+
+
+	if (subdomain === 'pausanias') {
+		if (props.commentGroup) {
+			return props.commentGroup.section.n;
+		} else if (props.sectionN) {
+			return props.sectionN;
+		}
+	}
+
+	return null;
 };
 
 const LINE_THRESHOLD = 25;
@@ -149,7 +165,7 @@ class ContextPanel extends React.Component {
 	setMaxLine() {
 
 		const workSlug = getWorkSlug(this.props);
-		const subworkN = getsubworkN(this.props);
+		const subworkN = getSubworkN(this.props);
 
 		Meteor.call('getMaxLine', workSlug, subworkN, (err, res) => {
 			if (err) throw new Meteor.Erorr(err);
@@ -212,7 +228,8 @@ class ContextPanel extends React.Component {
 		const { highlightingVisible, lineFrom, maxLine, selectedLemmaEdition } = this.state;
 
 		const workSlug = getWorkSlug(this.props);
-		const subworkN = getsubworkN(this.props);
+		const subworkN = getSubworkN(this.props);
+		const sectionN = getSectionN(this.props);
 
 		return (
 			<ContextPanelContent
@@ -220,6 +237,7 @@ class ContextPanel extends React.Component {
 				closeContextPanel={closeContextPanel}
 				workSlug={workSlug}
 				subworkN={subworkN}
+				sectionN={sectionN}
 				commentGroup={commentGroup}
 				highlightingVisible={highlightingVisible}
 				lineFrom={lineFrom}

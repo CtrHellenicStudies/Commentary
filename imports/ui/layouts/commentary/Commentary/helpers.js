@@ -72,6 +72,16 @@ const createQueryFromFilters = (filters) => {
 				};
 				break;
 
+			case 'sections':
+				values = [];
+				filter.values.forEach((value) => {
+					values.push(value.n);
+				});
+				query['section.n'] = {
+					$in: values,
+				};
+				break;
+
 			case 'lineFrom':
 				// Values will always be an array with a length of one
 				query.lineFrom = query.lineFrom || {};

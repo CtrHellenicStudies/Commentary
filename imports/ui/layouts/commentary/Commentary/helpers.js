@@ -161,6 +161,7 @@ const parseCommentsToCommentGroups = (comments) => {
 					},
 					work: comment.work,
 					subwork: comment.subwork,
+					section: comment.section,
 					lineFrom: comment.lineFrom,
 					lineTo: comment.lineTo,
 					nLines: comment.nLines,

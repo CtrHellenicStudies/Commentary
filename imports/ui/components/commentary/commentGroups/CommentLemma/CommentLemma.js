@@ -395,6 +395,10 @@ export default createContainer(({ commentGroup, multiline }) => {
 			},
 		};
 
+		if (commentGroup.section && commentGroup.section.n) {
+			lemmaQuery['section.n'] = commentGroup.section.n;
+		}
+
 		if (typeof commentGroup.lineTo !== 'undefined') {
 			lemmaQuery['text.n'].$lte = commentGroup.lineTo;
 		} else {
@@ -420,6 +424,8 @@ export default createContainer(({ commentGroup, multiline }) => {
 				.map(translation => translation.author)
 			);
 	}
+	console.log('######commentlemm lemmaquery');
+	console.log(lemmaQuery);
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
 	const editionsSubscription = Meteor.subscribe('editions');

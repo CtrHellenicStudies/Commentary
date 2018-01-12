@@ -17,6 +17,9 @@ class CommentGroup extends React.Component {
 			subwork: PropTypes.shape({
 				n: PropTypes.number.isRequired,
 			}),
+			section: PropTypes.shape({
+				n: PropTypes.number,
+			}),
 			lineFrom: PropTypes.number.isRequired,
 			lineTo: PropTypes.number,
 			commenters: PropTypes.arrayOf(PropTypes.shape({

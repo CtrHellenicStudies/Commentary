@@ -304,7 +304,7 @@ class Commentary extends React.Component {
 		}
 
 		return (
-			<div className="commentary-primary content ">
+			<div className="commentary-primary content">
 				{/* --- BEGIN comments list */}
 				<InfiniteScroll
 					endPadding={120}
@@ -386,6 +386,7 @@ export default createContainer(({ filters, skip, limit }) => {
 		sort: {
 			'work.order': 1,
 			'subwork.n': 1,
+			'section.n': 1,
 			lineFrom: 1,
 			nLines: -1,
 		},

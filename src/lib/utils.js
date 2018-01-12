@@ -24,6 +24,15 @@ const Utils = {
 		}
 		return ret;
 	},
+	createLemmaCitation(work, lineFrom, lineTo) { 
+		return lemmaCitation = {
+			collection: "urn:cts:greekLit",
+			textGroup: "urn:cts:greekLit:tlg0012",
+			work: work,
+			passage: `1.${lineFrom+1}-1.${lineTo+1}`
+		};
+
+	},
 	timeSince: (date) => {
 		let interval;
 		const seconds = Math.floor((new Date() - date) / 1000);

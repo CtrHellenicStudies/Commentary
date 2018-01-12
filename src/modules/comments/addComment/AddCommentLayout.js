@@ -206,6 +206,7 @@ class AddCommentLayout extends Component {
 		const referenceWorks = formData.referenceWorks;
 		const commenters = Utils.getCommenters(formData.commenterValue, possibleCommenters);
 		const selectedLineTo = this.getSelectedLineTo();
+		const lemmaCitation = utils.createLemmaCitation(work, this.state.selectedLineFrom, selectedLineTo);
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);
@@ -225,6 +226,7 @@ class AddCommentLayout extends Component {
 			lineFrom: this.state.selectedLineFrom,
 			lineTo: selectedLineTo,
 			lineLetter,
+			lemmaCitation: lemmaCitation,
 			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
 			revisions: [{
 				_id: revisionId.valueOf(),

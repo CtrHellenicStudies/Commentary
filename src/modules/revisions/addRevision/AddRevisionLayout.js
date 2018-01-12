@@ -20,10 +20,10 @@ import ContextPanel from '../../contextPanel/ContextPanel';
 // graphql
 import { keywordsQuery } from '../../../graphql/methods/keywords';
 import { commentersQuery } from '../../../graphql/methods/commenters';
-import { textNodesQuery } from '../../../graphql/methods/textNodes';
 import { commentsQueryById,
 	commentsUpdateMutation,
 	commentAddRevisionMutation } from '../../../graphql/methods/comments';
+import collectionQuery from '../../../graphql/methods/collection';
 
 // lib
 import Utils from '../../../lib/utils';
@@ -61,7 +61,7 @@ class AddRevisionLayout extends Component {
 		if (nextProps.commentsQueryById.loading || 
 			nextProps.keywordsQuery.loading || 
 			nextProps.commentersQuery.loading ||
-			nextProps.textNodesQuery.loading) {
+			nextProps.collectionQuery.loading) {
 			this.setState({
 				ready: false
 			});
@@ -78,12 +78,12 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-		if (this.state.refetchTextNodes || nextProps.textNodesQuery.textNodes.length === 100) {
-			this.props.textNodesQuery.refetch({
-				lineFrom: comment.lineFrom,
-				lineTo: comment.lineTo,
-				workSlug: comment.work.slug,
-				subworkN: comment.subwork.n
+		if (this.state.refetchTextNodes || nextProps.collectionQuery.work.textNodes.length === 100) {
+			this.props.collectionQuery.refetch({
+				start: comment.lineFrom,
+				end: comment.lineTo,
+				work: comment.work.slug, // TODO
+				// subworkN: comment.subwork.n
 			});
 			this.setState({
 				refetchTextNodes: false
@@ -96,7 +96,7 @@ class AddRevisionLayout extends Component {
 			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
 			commenters: commenters,
-			textNodes: this.props.textNodesQuery.textNodes
+			textNodes: this.props.collectionQuery.work.textNodes
 		});
 	}
 	componentWillUpdate() {
@@ -377,7 +377,7 @@ AddRevisionLayout.propTypes = {
 	commentsQueryById: PropTypes.object,
 	keywordsQuery: PropTypes.object,
 	match: PropTypes.object,
-	textNodesQuery: PropTypes.object,
+	collectionQuery: PropTypes.object,
 	commentInsertRevision: PropTypes.func
 
 };
@@ -388,5 +388,5 @@ export default compose(
 	commentsQueryById,
 	commentsUpdateMutation,
 	commentAddRevisionMutation,
-	textNodesQuery
+	collectionQuery
 )(AddRevisionLayout);

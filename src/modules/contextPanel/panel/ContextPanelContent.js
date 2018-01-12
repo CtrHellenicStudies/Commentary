@@ -9,8 +9,8 @@ import ContextPanelText from './ContextPanelText';
 import ContextPanelTabs from './ContextPanelTabs';
 
 // graphql
+import collectionQuery from '../../../graphql/methods/collection';
 import { editionsQuery } from '../../../graphql/methods/editions';
-import { textNodesQuery } from '../../../graphql/methods/textNodes';
 
 // lib:
 import Utils from '../../../lib/utils';
@@ -55,23 +55,23 @@ class ContextPanelContent extends Component {
 
 		const { lineFrom, multiline } = nextProps;
 
-		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
+		if (nextProps.collectionQuery.loading || nextProps.editionsQuery.loading) {
 			return;
 		}
 		const lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;	
-		if (!nextProps.textNodesQuery.variables.workSlug) {
+		if (!nextProps.collectionQuery.variables.work) {
 
 			const { workSlug, subworkN } = nextProps;		
 			const properties = {
-				workSlug: workSlug,
+				work: workSlug,
 				subworkN: subworkN,
-				lineFrom: lineFrom,
-				lineTo: lineTo
+				start: lineFrom,
+				end: lineTo
 			};
-			nextProps.textNodesQuery.refetch(properties);
+			nextProps.collectionQuery.refetch(properties);
 		}
 	
-		const textNodesCursor = nextProps.textNodesQuery.textNodes;
+		const textNodesCursor = nextProps.collectionQuery.work.textNodes;
 		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 	
 		let sortedEditions;
@@ -167,7 +167,7 @@ ContextPanelContent.propTypes = {
 	selectedLineTo: PropTypes.number,
 	updateSelectedLines: PropTypes.func,
 	editor: PropTypes.bool,
-	textNodesQuery: PropTypes.object,
+	collectionQuery: PropTypes.object,
 	editionsQuery: PropTypes.object,
 	multiline: PropTypes.bool
 };
@@ -183,5 +183,5 @@ ContextPanelContent.defaultProps = {
 };
 export default compose(
 	editionsQuery,
-	textNodesQuery
+	collectionQuery
 )(ContextPanelContent);

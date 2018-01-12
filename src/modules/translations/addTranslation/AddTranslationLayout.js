@@ -8,7 +8,7 @@ import muiTheme from '../../../lib/muiTheme';
 import { compose } from 'react-apollo';
 
 // graphql
-import { textNodesQuery } from '../../../graphql/methods/textNodes';
+import collectionQuery from '../../../graphql/methods/collection';
 
 // components:
 import Header from '../../../components/header/Header';
@@ -110,12 +110,12 @@ class AddTranslationLayout extends Component {
 		const { filters } = this.state;
 		const { work, subwork } = getFilterValues(filters);
 		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
+			work: work ? work.slug : 'iliad', // TODO
+			// subworkN: subwork ? subwork.n : 1,
+			start: selectedLineFrom,
+			end: selectedLineTo
 		};
-		this.props.textNodesQuery.refetch(properties);
+		this.props.collectionQuery.refetch(properties);
 	}
 
 	toggleSearchTerm(key, value) {
@@ -342,7 +342,7 @@ class AddTranslationLayout extends Component {
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
+											textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.work.textNodes}
 										/> : ''}
 
 									<AddTranslation
@@ -382,10 +382,10 @@ class AddTranslationLayout extends Component {
 AddTranslationLayout.propTypes = {
 	ready: PropTypes.bool,
 	history: PropTypes.array,
-	textNodesQuery: PropTypes.object
+	collectionQuery: PropTypes.object
 };
 AddTranslationLayout.defaultProps = {
 	ready: false,
 };
 
-export default compose(textNodesQuery)(AddTranslationLayout);
+export default compose(collectionQuery)(AddTranslationLayout);

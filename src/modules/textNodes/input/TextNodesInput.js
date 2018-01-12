@@ -14,7 +14,8 @@ import _ from 'lodash';
 
 // graphql
 import { editionsQuery } from '../../../graphql/methods/editions';
-import { textNodesQuery, textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
+import { textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
+import collectionQuery from '../../../graphql/methods/collection';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
@@ -46,11 +47,11 @@ class TextNodesInput extends Component {
 
 	componentWillReceiveProps(props) {
 		
-		if (props.editionsQuery.loading || props.textNodesQuery.loading) {
+		if (props.editionsQuery.loading || props.collectionQuery.loading) {
 			return;
 		}
 		const { workSlug, editionId, subworkN, lineFrom, limit } = props;
-		if (!props.textNodesQuery.variables.workSlug) {
+		if (!props.collectionQuery.variables.workSlug) {
 			const properties = {
 				workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
 				subworkN: subworkN,
@@ -60,7 +61,7 @@ class TextNodesInput extends Component {
 				limit: limit
 	
 			};
-			props.textNodesQuery.refetch(properties);
+			props.collectionQuery.refetch(properties);
 			return;
 		}
 		let textNodes;
@@ -71,7 +72,7 @@ class TextNodesInput extends Component {
 		const ready = true;
 	
 		if (ready) {
-			textNodes = props.textNodesQuery.textNodes;
+			textNodes = props.collectionQuery.textNodes;
 			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions);
 			textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
 	
@@ -293,7 +294,7 @@ TextNodesInput.propTypes = {
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
 	loadMore: PropTypes.func,
-	textNodesQuery: PropTypes.object,
+	collectionQuery: PropTypes.object,
 	editionsQuery: PropTypes.object,
 	textNodeUpdate: PropTypes.func,
 	limit: PropTypes.number
@@ -301,5 +302,5 @@ TextNodesInput.propTypes = {
 
 export default compose(
 	editionsQuery,
-	textNodesQuery,
+	collectionQuery,
 	textNodeUpdateMutation)(TextNodesInput);

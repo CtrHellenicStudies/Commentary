@@ -22,8 +22,8 @@ import muiTheme from '../../../lib/muiTheme';
 import Utils from '../../../lib/utils';
 
 // graphql
-import { textNodesQuery } from '../../../graphql/methods/textNodes';
 import { commentsInsertMutation } from '../../../graphql/methods/comments';
+import collectionQuery from '../../../graphql/methods/collection';
 
 
 const getKeywords = (formData) => {
@@ -131,12 +131,12 @@ class AddCommentLayout extends Component {
 		const { filters } = this.state;
 		const { work, subwork } = getFilterValues(filters);
 		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
+			work: work ? work.slug : 'iliad', // TODO
+		//	subworkN: subwork ? subwork.n : 1,
+			start: selectedLineFrom,
+			end: selectedLineTo
 		};
-		this.props.textNodesQuery.refetch(properties);
+		this.props.collectionQuery.refetch(properties);
 	}
 
 	toggleSearchTerm(key, value) {
@@ -439,7 +439,7 @@ class AddCommentLayout extends Component {
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
-										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
+										textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.textNodes.work.textNodes}
 									/>
 
 									<AddComment
@@ -478,10 +478,10 @@ class AddCommentLayout extends Component {
 AddCommentLayout.propTypes = {
 	commentInsert: PropTypes.func,
 	history: PropTypes.object,
-	textNodesQuery: PropTypes.object
+	collectionQuery: PropTypes.object
 };
 
 export default compose(
 	commentsInsertMutation,
-	textNodesQuery
+	collectionQuery
 )(AddCommentLayout);

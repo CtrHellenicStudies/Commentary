@@ -13,7 +13,7 @@ import Header from '../../../components/header/Header';
 
 // graphql
 import { keywordsQuery, keywordUpdateMutation } from '../../../graphql/methods/keywords';
-import { textNodesQuery } from '../../../graphql/methods/textNodes';
+import collectionQuery from '../../../graphql/methods/collection';
 
 // components
 import Spinner from '../../../components/loading/Spinner';
@@ -61,8 +61,8 @@ class EditKeywordLayout extends Component {
 		});
 	}
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.keywordsQuery.loading || nextProps.textNodesQuery.loading) {
-			if (!nextProps.textNodesQuery.loading) {
+		if (nextProps.keywordsQuery.loading || nextProps.collectionQuery.loading) {
+			if (!nextProps.collectionQuery.loading) {
 				this.setState({
 					ready: false
 				});
@@ -71,14 +71,14 @@ class EditKeywordLayout extends Component {
 		}
 		const { match } = nextProps;
 		const slug = match.params.slug;
-		console.log(nextProps.textNodesQuery.textNodes.length);
+		console.log(nextProps.collectionQuery.work.textNodes.length);
 		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
-		if (this.state.refetchTextNodes || nextProps.textNodesQuery.textNodes.length === 100) {
-			this.props.textNodesQuery.refetch({
-				lineFrom: this.state.selectedLineFrom || keyword.lineFrom || 0,
-				lineTo: this.state.selectedLineTo || keyword.lineTo || 0,
-				workSlug: keyword.work ? keyword.work.slug : 'iliad',
-				subworkN: keyword.subwork ? keyword.subwork.n : 1
+		if (this.state.refetchTextNodes || nextProps.collectionQuery.work.textNodes.length === 100) {
+			this.props.collectionQuery.refetch({
+				start: this.state.selectedLineFrom || keyword.lineFrom || 0,
+				end: this.state.selectedLineTo || keyword.lineTo || 0,
+				work: keyword.work ? keyword.work.slug : 'iliad', // TODO
+				//subworkN: keyword.subwork ? keyword.subwork.n : 1
 			});
 			this.setState({
 				refetchTextNodes: false
@@ -88,7 +88,7 @@ class EditKeywordLayout extends Component {
 		this.setState({
 			ready: true,
 			keyword: keyword,
-			textNodes: nextProps.textNodesQuery.textNodes,
+			textNodes: nextProps.collectionQuery.textNodes,
 			keywords: nextProps.keywordsQuery.keywords
 		});
 	}
@@ -140,7 +140,7 @@ class EditKeywordLayout extends Component {
 			lineFrom: selectedLineFrom,
 			lineTo: selectedLineTo
 		};
-		this.props.textNodesQuery.refetch(properties);
+		this.props.collectionQuery.refetch(properties);
 	}
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
@@ -454,10 +454,10 @@ EditKeywordLayout.propTypes = {
 	keywordUpdate: PropTypes.func,
 	match: PropTypes.object,
 	keywordsQuery: PropTypes.object,
-	textNodesQuery: PropTypes.object
+	collectionQuery: PropTypes.object
 };
 export default compose(
 	keywordsQuery,
 	keywordUpdateMutation,
-	textNodesQuery
+	collectionQuery
 )(EditKeywordLayout);

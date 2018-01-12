@@ -11,7 +11,7 @@ import muiTheme from '../../../lib/muiTheme';
 
 // graphql
 import { keywordInsertMutation } from '../../../graphql/methods/keywords';
-import { textNodesQuery } from '../../../graphql/methods/textNodes';
+import collectionQuery from '../../../graphql/methods/collection';
 
 // components:
 import Header from '../../../components/header/Header';
@@ -184,12 +184,12 @@ class AddKeywordLayout extends Component {
 			}
 		});
 		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
+			work: work ? work.slug : 'iliad', // TODO
+			//subworkN: subwork ? subwork.n : 1,
+			start: selectedLineFrom,
+			end: selectedLineTo
 		};
-		this.props.textNodesQuery.refetch(properties);
+		this.props.collectionQuery.refetch(properties);
 	}
 	addKeyword(formData, textValue, textRawValue) {
 		this.setState({
@@ -370,7 +370,7 @@ class AddKeywordLayout extends Component {
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}				
+											textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.work.textNodes}				
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}
@@ -408,7 +408,7 @@ AddKeywordLayout.propTypes = {
 	isTest: PropTypes.bool,
 	history: PropTypes.object,
 	keywordInsert: PropTypes.func,
-	textNodesQuery: PropTypes.object
+	collectionQuery: PropTypes.object
 };
 
 AddKeywordLayout.childContextTypes = {
@@ -416,5 +416,5 @@ AddKeywordLayout.childContextTypes = {
 };
 export default compose(
 	keywordInsertMutation,
-	textNodesQuery
+	collectionQuery
 )(AddKeywordLayout);

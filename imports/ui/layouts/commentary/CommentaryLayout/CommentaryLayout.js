@@ -37,7 +37,7 @@ import {
 	createQueryParamsFromFilters,
 	updateFilterOnChangeLineEvent,
 	updateFilterOnChangeTextSearchEvent,
-	updateFilterOnCKeyAndValueChangeEvent,
+	updateFilterOnKeyAndValueChangeEvent,
 	createFilterFromURL
 } from './helpers';
 
@@ -119,7 +119,7 @@ class CommentaryLayout extends React.Component {
 		const oldFilters = createFilterFromQueryParams(queryParams);
 
 		// update filter based on the key and value
-		const filters = updateFilterOnCKeyAndValueChangeEvent(oldFilters, key, value);
+		const filters = updateFilterOnKeyAndValueChangeEvent(oldFilters, key, value);
 
 		this.setState({
 			skip: 0,

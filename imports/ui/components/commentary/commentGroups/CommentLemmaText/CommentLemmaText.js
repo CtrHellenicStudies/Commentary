@@ -70,9 +70,7 @@ class CommentLemmaText extends React.Component {
 		// if not longText
 		return (
 			<div className="comment-lemma-text">
-				{lines.map((line, i) => {
-					console.log(line)
-					return (
+				{lines.map((line, i) => (
 					<div
 						key={i}
 						className="lemma-text-line"
@@ -86,8 +84,7 @@ class CommentLemmaText extends React.Component {
 							dangerouslySetInnerHTML={{ __html: line.html }}
 						/>
 					</div>
-				)}
-			)}
+				))}
 			</div>
 		);
 	}

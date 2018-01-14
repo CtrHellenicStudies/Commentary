@@ -15,6 +15,29 @@ const styles = {
 	},
 };
 
+const getLabel = val => {
+	let label = '';
+
+	if (!val) {
+		return label;
+	}
+
+	if (val.title) {
+		label = val.title;
+	} else if (val.name) {
+		label = val.name;
+	} else if (val.slug) {
+		label = val.slug;
+	} else if (val.n) {
+		label = val.n.toString();
+	} else {
+		label = val.toString();
+	}
+
+	label = label.replace('-', '');
+
+	return Utils.trunc(label, 30);
+};
 
 const FilterWidget = ({ filters, toggleSearchTerm }) => (
 	<div className="filters">
@@ -37,7 +60,7 @@ const FilterWidget = ({ filters, toggleSearchTerm }) => (
 							key={j}
 							labelPosition="before"
 							className="filter-val "
-							label={Utils.trunc((val.title || val.name || val.slug || val.toString()).replace('-', ' '), 30)}
+							label={getLabel(val)}
 							onClick={toggleSearchTerm.bind(null, filter.key, val)}
 							icon={
 								<FontIcon

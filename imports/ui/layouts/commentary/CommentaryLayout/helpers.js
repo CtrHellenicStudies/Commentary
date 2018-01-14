@@ -134,6 +134,25 @@ const _createFilterFromQueryParams = (queryParams, referenceWorks = []) => {
 		});
 	}
 
+	if ('sections' in queryParams) {
+		const sections = [];
+
+		new Set(queryParams.sections.split(',')).forEach((section) => {
+			const sectionNumber = parseInt(section, 10);
+
+			if (!Number.isNaN(sectionNumber)) {
+				sections.push({
+					n: sectionNumber,
+				});
+			}
+		});
+
+		filters.push({
+			key: 'sections',
+			values: sections,
+		});
+	}
+
 	if ('lineFrom' in queryParams) {
 		const lineFrom = parseInt(queryParams.lineFrom, 10);
 
@@ -209,6 +228,9 @@ const _createQueryParamsFromFilters = (filters) => {
 				break;
 			case 'subworks':
 				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value.title);
+				break;
+			case 'sections':
+				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
 				break;
 			case 'keyideas':
 			case 'keywords':
@@ -349,7 +371,7 @@ const _updateFilterOnChangeTextSearchEvent = (oldFilters, e, textsearch) => {
 	return filters;
 };
 
-const _updateFilterOnCKeyAndValueChangeEvent = (oldFilters, key, value) => {
+const _updateFilterOnKeyAndValueChangeEvent = (oldFilters, key, value) => {
 	const filters = oldFilters;
 
 	let keyIsInFilter = false;
@@ -396,6 +418,8 @@ const _updateFilterOnCKeyAndValueChangeEvent = (oldFilters, key, value) => {
 			values: [value],
 		});
 	}
+	console.log('#######2@@@@@@@@@')
+	console.log(filters);
 
 	return filters;
 };
@@ -501,6 +525,6 @@ export {
 	_createQueryParamsFromFilters as createQueryParamsFromFilters,
 	_updateFilterOnChangeLineEvent as updateFilterOnChangeLineEvent,
 	_updateFilterOnChangeTextSearchEvent as updateFilterOnChangeTextSearchEvent,
-	_updateFilterOnCKeyAndValueChangeEvent as updateFilterOnCKeyAndValueChangeEvent,
+	_updateFilterOnKeyAndValueChangeEvent as updateFilterOnKeyAndValueChangeEvent,
 	_createFilterFromURL as createFilterFromURL
 };

@@ -78,6 +78,12 @@ class Home extends Component {
 			&& settings.homepageIntroductionImageCaption.length
 		) {
 			introImageCaption = settings.homepageIntroductionImageCaption;
+			try {
+				introImageCaption = JSON.parse(introImageCaption);
+ 				introImageCaption = introImageCaption.html;
+			} catch (e) {
+				
+			}
 		}
 
 		Utils.setTitle(`Home | ${settings ? settings.title : ''}`);

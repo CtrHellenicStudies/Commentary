@@ -17,6 +17,13 @@ const getLineTo = (commentGroup) => {
 	return `- ${commentGroup.lineTo}`;
 };
 
+const getSection = (commentGroup) => {
+	if ('section' in commentGroup) {
+		return `${commentGroup.section.n}.`;
+	}
+	return '';
+};
+
 const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 	<div className="comment-group-meta">
 		{hideLemma === false ?
@@ -26,7 +33,7 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 						{getWorkTitle(commentGroup)} {commentGroup.subwork.title}
 					</span>
 					<h2 className="comment-group-ref-below">
-						{commentGroup.lineFrom}{getLineTo(commentGroup)}
+						{getSection(commentGroup)}{commentGroup.lineFrom}{getLineTo(commentGroup)}
 					</h2>
 
 				</div>
@@ -60,11 +67,15 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 		: '' }
 	</div>
 );
+
 CommentGroupMeta.propTypes = {
 	hideLemma: PropTypes.bool,
 	commentGroup: PropTypes.shape({
 		subwork: PropTypes.shape({
 			title: PropTypes.string.isRequired,
+		}),
+		section: PropTypes.shape({
+			n: PropTypes.number,
 		}),
 		lineFrom: PropTypes.number.isRequired,
 		lineTo: PropTypes.number,
@@ -78,6 +89,7 @@ CommentGroupMeta.propTypes = {
 		}))
 	}),
 };
+
 CommentGroupMeta.defaultProps = {
 	hideLemma: false,
 	commentGroup: null,

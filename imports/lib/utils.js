@@ -267,6 +267,7 @@ const Utils = {
 					_id: textNode._id,
 					html: text.html,
 					n: text.n,
+					section: textNode.section,
 				});
 			});
 		});

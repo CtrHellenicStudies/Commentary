@@ -32,7 +32,8 @@ class CommentLemmaTextWithTranslation extends React.Component {
 							className="lemma-text-line lemma-text-line--source"
 						>
 							<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
-								{line.n}
+								{'section' in line ? `${line.section.n}.` : null}{line.n}
+								foobar
 							</span>
 							<p
 								className="lemma-text"
@@ -58,6 +59,7 @@ CommentLemmaTextWithTranslation.propTypes = {
 		html: PropTypes.string,
 		english: PropTypes.string,
 		n: PropTypes.number.isRequired,
+		section: PropTypes.object,
 	})).isRequired,
 	commentGroup: PropTypes.object,
 	author: PropTypes.string,
@@ -88,7 +90,8 @@ export default createContainer(({ commentGroup, lines, author }) => {
 	for (let i = 0; i < nLines; i++) {
 		const newLine = {
 			n: lines[i].n,
-			html: lines[i].html
+			html: lines[i].html,
+			section: lines[i].section,
 		};
 		linesWithTranslation.push(newLine);
 	}
@@ -96,6 +99,7 @@ export default createContainer(({ commentGroup, lines, author }) => {
 		const arrIndex = _.findIndex(linesWithTranslation, (line) => line.n === node.n);
 		linesWithTranslation[arrIndex]._id = node._id;
 		linesWithTranslation[arrIndex].n = node.n;
+		linesWithTranslation[arrIndex].section = node.section;
 		linesWithTranslation[arrIndex].english = node.text;
 	});
 

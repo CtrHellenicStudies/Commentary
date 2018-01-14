@@ -39,6 +39,9 @@ class CommentLemma extends React.Component {
 			subwork: PropTypes.shape({
 				n: PropTypes.number.isRequired,
 			}),
+			section: PropTypes.shape({
+				n: PropTypes.number,
+			}),
 			lineFrom: PropTypes.number.isRequired,
 			lineTo: PropTypes.number,
 			commenters: PropTypes.arrayOf(PropTypes.shape({
@@ -198,7 +201,13 @@ class CommentLemma extends React.Component {
 		const { selectedLemmaEditionIndex, selectedAuthor, showTranslation } = this.state;
 
 		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
-		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+
+		const subdomain = location.hostname.split('.')[0];
+		if (subdomain === 'pausanias') {
+			selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'section.n', 'n'));
+		} else {
+			selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+		}
 
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
@@ -424,8 +433,6 @@ export default createContainer(({ commentGroup, multiline }) => {
 				.map(translation => translation.author)
 			);
 	}
-	console.log('######commentlemm lemmaquery');
-	console.log(lemmaQuery);
 
 	const handle = Meteor.subscribe('textNodes', lemmaQuery);
 	const editionsSubscription = Meteor.subscribe('editions');

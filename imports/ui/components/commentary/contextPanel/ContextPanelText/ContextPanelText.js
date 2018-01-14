@@ -196,7 +196,10 @@ class ContextPanelText extends React.Component {
 											dangerouslySetInnerHTML={{ __html: line.html }}
 										/>
 
-										<LineNumbering n={line.n} />
+										<LineNumbering
+											n={line.n}
+											section={line.section}
+										/>
 									</div>
 								);
 							})
@@ -219,7 +222,7 @@ class ContextPanelText extends React.Component {
 										style={!disableEdit ? { cursor: 'pointer' } : null}
 									/>
 
-									<LineNumbering n={line.n} />
+									<LineNumbering n={line.n} section={line.section} />
 								</div>
 							))
 						);
@@ -235,7 +238,7 @@ class ContextPanelText extends React.Component {
 										dangerouslySetInnerHTML={{ __html: line.html }}
 									/>
 
-									<LineNumbering n={line.n} />
+									<LineNumbering n={line.n} section={line.section} />
 								</div>
 							))
 						);

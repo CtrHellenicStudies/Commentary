@@ -71,9 +71,9 @@ class EditKeywordLayout extends Component {
 		}
 		const { match } = nextProps;
 		const slug = match.params.slug;
-		console.log(nextProps.collectionQuery.work.textNodes.length);
+		const textNodes = nextProps.collectionQuery.collection.textGroup.work.textNodes;
 		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
-		if (this.state.refetchTextNodes || nextProps.collectionQuery.work.textNodes.length === 100) {
+		if (this.state.refetchTextNodes || textNodeslength === 100) {
 			// const properies = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(keyword.work ? keyword.work.slug : 'iliad',
 			// this.state.selectedLineFrom || keyword.lineFrom || 0, this.state.selectedLineTo || keyword.lineTo || 0));
 			this.setState({
@@ -84,7 +84,7 @@ class EditKeywordLayout extends Component {
 		this.setState({
 			ready: true,
 			keyword: keyword,
-			textNodes: nextProps.collectionQuery.textNodes,
+			textNodes: textNodes,
 			keywords: nextProps.keywordsQuery.keywords
 		});
 	}
@@ -127,7 +127,7 @@ class EditKeywordLayout extends Component {
 				work = filter.values[0];
 			}
 		});
-		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
+		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation( // TODO
 			work ? work.slug : 'iliad', selectedLineFrom, selectedLineTo
 		));
 		this.props.collectionQuery.refetch(properties);

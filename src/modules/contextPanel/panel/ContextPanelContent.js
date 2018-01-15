@@ -61,17 +61,14 @@ class ContextPanelContent extends Component {
 		const lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;	
 		if (!nextProps.collectionQuery.variables.work) {
 
-			const { workSlug, subworkN } = nextProps;		
-			const properties = {
-				work: workSlug,
-				subworkN: subworkN,
-				start: lineFrom,
-				end: lineTo
-			};
+			const { workSlug, subworkN } = nextProps;	
+			const 	properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation( // TODO
+				workSlug, lineFrom, lineTo
+			));
 			nextProps.collectionQuery.refetch(properties);
 		}
 	
-		const textNodesCursor = nextProps.collectionQuery.work.textNodes;
+		const textNodesCursor = nextProps.collectionQuery.collection.textGroup.work.textNodes;
 		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 	
 		let sortedEditions;

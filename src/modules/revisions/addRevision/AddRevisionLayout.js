@@ -78,14 +78,9 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-		if (this.state.refetchTextNodes || nextProps.collectionQuery.work.textNodes.length === 100) {
-			const cuttedPassage = comment.lemmaCitation.passage.split('-');
-			this.props.collectionQuery.refetch({
-				work: `${comment.lemmaCitation.work}:
-				${comment.lemmaCitation.textGroup}.
-				${comment.lemmaCitation.textGroup}`,
-				location: [cuttedPassage[0].split('.')[0], cuttedPassage[0].split('.')[1]],
-			});
+		if (this.state.refetchTextNodes || nextProps.collectionQuery.collection.textGroup.work.textNodes.length === 100) {
+			const properties = Utils.getCollectionQueryProperties(comment.lemmaCitation);
+			this.props.collectionQuery.refetch(properties);
 			this.setState({
 				refetchTextNodes: false
 			});
@@ -97,7 +92,7 @@ class AddRevisionLayout extends Component {
 			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
 			commenters: commenters,
-			textNodes: this.props.collectionQuery.work.textNodes
+			textNodes: this.props.collectionQuery.collection.textGroup.work.textNodes
 		});
 	}
 	componentWillUpdate() {

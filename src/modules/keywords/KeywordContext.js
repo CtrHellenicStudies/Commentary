@@ -50,7 +50,7 @@ class KeywordContext extends Component {
 			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
 
 			if (!props.collectionQuery.loading) {
-				const textNodesCursor = props.collectionQuery.work.textNodes;
+				const textNodesCursor = props.collectionQuery.collection.textGroup.work.textNodes;
 				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
 			}
 			const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
@@ -72,13 +72,13 @@ class KeywordContext extends Component {
 				if (props.commentsQuery.comments.length > 0) {
 					const comment = props.commentsQuery.comments[0];
 					const query = makeKeywordContextQueryFromComment(comment, maxLines); //TODO
-					props.collectionQuery.refetch(query);
+					props.collectionQuery.refetch(comment.lemmaCitation);
 					context.work = query.workSlug;
 					context.subwork = query.subworkN;
 					context.lineFrom = query.lineFrom;
 					context.lineTo = query.lineTo;
 
-					const textNodesCursor = collectionQuery.loading ? [] : collectionQuery.work.textNodes;
+					const textNodesCursor = collectionQuery.loading ? [] : collectionQuery.collection.textGroup.work.textNodes;
 					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
 				}
 			}

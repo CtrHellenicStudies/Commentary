@@ -362,7 +362,7 @@ class AddKeywordLayout extends Component {
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.work.textNodes}				
+											textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.collection.textGroup.work.textNodes}				
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}

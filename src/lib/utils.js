@@ -42,6 +42,23 @@ const Utils = {
 			location: [splittedPassage[0], splittedPassage[1]]
 		};
 	},
+	encodeBookBySlug(slug) {
+		const code = {
+			urn : 'urn:cts:greekLit:tlg0012.tlg001',
+			slug : 'iliad-2'
+		};
+		switch(slug) {
+			case 'odyssey':
+				code = { 
+					urn: 'urn:cts:greekLit:tlg0012.tlg002',
+					slug: 'odyssey-2'
+				};
+				break;
+			default:
+				break;
+		}
+		return code;
+	},
 	timeSince: (date) => {
 		let interval;
 		const seconds = Math.floor((new Date() - date) / 1000);

@@ -180,7 +180,8 @@ class AddKeywordLayout extends Component {
 				work = filter.values[0];
 			}
 		});
-		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(work ? work.slug : 'iliad', selectedLineFrom, selectedLineTo));
+		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
+		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(code.urn, selectedLineFrom, selectedLineTo));
 		this.props.collectionQuery.refetch(properties);
 	}
 	addKeyword(formData, textValue, textRawValue) {

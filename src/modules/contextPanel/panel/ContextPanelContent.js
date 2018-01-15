@@ -62,8 +62,9 @@ class ContextPanelContent extends Component {
 		if (!nextProps.collectionQuery.variables.work) {
 
 			const { workSlug, subworkN } = nextProps;	
-			const 	properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation( // TODO
-				workSlug, lineFrom, lineTo
+			const code = Utils.encodeBookBySlug(workSlug);
+			const 	properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
+				code.urn, lineFrom, lineTo
 			));
 			nextProps.collectionQuery.refetch(properties);
 		}

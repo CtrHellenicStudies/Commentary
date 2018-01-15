@@ -43,7 +43,7 @@ const Utils = {
 		};
 	},
 	encodeBookBySlug(slug) {
-		const code = {
+		let code = {
 			urn : 'urn:cts:greekLit:tlg0012.tlg001',
 			slug : 'iliad-2'
 		};

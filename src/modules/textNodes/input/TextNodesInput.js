@@ -52,8 +52,9 @@ class TextNodesInput extends Component {
 		}
 		const { workSlug, editionId, lineFrom, limit } = props;
 		if (!props.collectionQuery.variables.urn1) {
+			const code = Utils.encodeBookBySlug('homeric-hymns' ? 'hymns' : workSlug);
 			const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
-				workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+				code.urn,
 				parseInt(lineFrom, 10),
 				parseInt(lineFrom, 10) + limit
 			));

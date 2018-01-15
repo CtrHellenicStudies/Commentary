@@ -109,8 +109,9 @@ class AddTranslationLayout extends Component {
 		}
 		const { filters } = this.state;
 		const { work } = getFilterValues(filters);
+		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
 		const properties = Utils.getCollectionQueryProperties(
-			Utils.createLemmaCitation(work ? work.slug : 'iliad', 
+			Utils.createLemmaCitation(code.urn, 
 			selectedLineFrom, selectedLineTo)
 		);
 		this.props.collectionQuery.refetch(properties);

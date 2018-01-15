@@ -154,12 +154,12 @@ font-family: "Material Design Icons";
   margin: 0 20px;
 }
 .text-nodes-editor-meta-input label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
 }
 .text-nodes-editor-meta-input button {
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   padding: 5px 10px;
   background: transparent;
@@ -178,12 +178,12 @@ font-family: "Material Design Icons";
   display: block;
 }
 .text-nodes-editor-text-input label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
 }
 .text-nodes-editor-text-input button {
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   padding: 5px 10px;
   background: transparent;

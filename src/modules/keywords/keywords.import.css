@@ -136,7 +136,7 @@ font-family: "Material Design Icons";
 }
 .keyword .keyword-title {
   color: #212121;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 22px;
   text-transform: uppercase;
   margin-right: 10px;
@@ -262,7 +262,7 @@ section.keyword-single {
   display: inline-block;
   vertical-align: top;
   font-size: 22px;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   margin: 0;
 }
 .keyword-teaser .mdi {
@@ -304,7 +304,7 @@ section.keyword-single {
   display: none;
   clear: both;
   color: #727272;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   text-transform: uppercase;
   font-size: 12px;
   margin: 10px 6px 0;
@@ -363,7 +363,7 @@ section.keyword-single {
   width: 95%;
 }
 .keyword-context .lemma-comment-ref-header {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-weight: bold;
   font-size: 16px;
   padding: 0px 15px 10px;

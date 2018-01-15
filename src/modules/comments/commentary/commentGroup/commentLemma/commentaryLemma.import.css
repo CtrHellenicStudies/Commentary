@@ -231,7 +231,7 @@ font-family: "Material Design Icons";
   text-overflow: ellipsis;
 }
 .lemma-panel .md-button span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
 }
 .lemma-panel .md-button.selected-edition-tab {
@@ -460,7 +460,7 @@ article.lemma-comment .context-tabs {
 }
 .commentary-lemma-show-more-button button div span {
   font-size: 12px !important;
-  font-family: 'Proxima Nova A W07 Light', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
   display: inline-block;
   vertical-align: bottom;
 }

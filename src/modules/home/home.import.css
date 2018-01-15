@@ -291,12 +291,12 @@ section.header .center-content .direct-down:hover {
 }
 .cover-link button span,
 .cover-link a span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
   text-transform: uppercase;
   font-weight: 700 !important;
 }
 .cover-link span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   text-transform: uppercase;
   font-weight: 700;
 }
@@ -425,7 +425,7 @@ section.intro .intro-col-image .caption p {
   margin: 0;
   font-size: 14px;
   color: #727272;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   width: 100%;
   max-width: none;
 }
@@ -530,7 +530,7 @@ section.browse-commentary .data-visualization-container img {
 .commentary-text .text-title {
   width: 100%;
   margin: 0 auto;
-  font-family: 'Proxima Nova W08 Reg', sans-serif 42px;
+  font-family: 'Proxima Nova', sans-serif 42px;
   text-align: center;
 }
 .commentary-text .text-divider {

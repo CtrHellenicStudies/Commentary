@@ -6788,7 +6788,7 @@ input,
 p,
 span,
 label {
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   color: #212121;
 }
 body {
@@ -6806,7 +6806,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 a {
   color: #1e1e1e;
@@ -6919,25 +6919,25 @@ body > .container {
  */
 ::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 :-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 ::-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 :-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
@@ -7301,7 +7301,7 @@ button#at-btn {
   padding: 10px 15px;
   font-size: 18px;
   color: #1e1e1e;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   background: #fff;
   height: auto;
   border: 2px solid #aaa;
@@ -7315,7 +7315,7 @@ button#at-btn {
   color: #e31d3b;
   font-size: 16px;
   font-weight: bold;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 .md-tooltip {
   display: none;
@@ -7447,7 +7447,7 @@ header .header-section-wrap .account-button {
 }
 header .header-section-wrap a span,
 header .header-section-wrap .account-button span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
 }
 header .nav-wrap {
@@ -7487,7 +7487,7 @@ header .header-home-link h3.logo {
 }
 header a[type="button"],
 header button {
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
 }
 header ul.menu {
   margin: 0;
@@ -7855,7 +7855,7 @@ footer .footer-nav-links div {
   vertical-align: top;
 }
 footer .footer-nav-links a {
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
   height: auto !important;
   margin: 0 2px !important;
 }
@@ -8074,7 +8074,7 @@ footer .social-list li a:hover a {
 .login-links .login-option span {
   width: 80%;
   text-align: center;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
   margin: 0;
@@ -8115,7 +8115,7 @@ footer .social-list li a:hover a {
   text-align: left;
   padding: 3px 0;
   border-bottom: #fefefe;
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
 }
 .md-sidenav-left a i,
 .md-sidenav-left a span {
@@ -8129,7 +8129,7 @@ footer .social-list li a:hover a {
 .md-sidenav-left a span {
   font-size: 17px;
   padding: 5px 10px;
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
 }
 .md-sidenav-left hr {
   margin-bottom: 5px;
@@ -8149,7 +8149,7 @@ footer .social-list li a:hover a {
 }
 .sidenav-top .user-fullname {
   text-overflow: ellipsis;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 20px;
   color: #fff;
   width: 220px;
@@ -8876,7 +8876,7 @@ body {
     padding-top: 5px;
   }
   .comment-group-meta .comment-group-ref-above {
-    font-family: 'Proxima Nova W08 Reg', sans-serif;
+    font-family: 'Proxima Nova', sans-serif;
     font-size: 22px;
     line-height: 1.4em;
     display: inline-block;
@@ -8894,7 +8894,7 @@ body {
     content: ".";
   }
   .comment-group-meta h2.comment-group-ref-below {
-    font-family: 'Proxima Nova W08 Reg', sans-serif;
+    font-family: 'Proxima Nova', sans-serif;
     font-size: 22px;
     line-height: 1.4em;
     display: inline-block;
@@ -8962,7 +8962,7 @@ body {
   .discussion-wrap .continue-discussion h4.continue-discussion-label {
     font-size: 18px;
     font-weight: bold;
-    font-family: 'Proxima N W01 At Smbd', sans-serif;
+    font-family: 'Proxima Nova', sans-serif;
     display: inline-block;
     text-transform: uppercase;
     color: #727272;
@@ -9814,7 +9814,7 @@ div.tooltip {
   left: 10px;
   color: #fff;
   line-height: 1.3em;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-weight: bold;
 }
 .continue-discussion-icon i {
@@ -9860,7 +9860,7 @@ div.tooltip {
   text-align: right;
 }
 .discussion-thread .sort-by-wrap .sort-by-label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   color: #727272;
   text-transform: uppercase;
@@ -9876,7 +9876,7 @@ div.tooltip {
   margin: 0px 2px;
 }
 .discussion-thread .sort-by-wrap .sort-by-option span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   color: #5D4037;
 }
@@ -9957,7 +9957,7 @@ div.tooltip {
   min-height: 0;
 }
 .discussion-thread .add-comment-wrap .md-button span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -10089,7 +10089,7 @@ div.tooltip {
   color: #727272;
   text-transform: uppercase;
   font-weight: bold;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   display: block;
   width: 100%;
   background: #eee;
@@ -10113,7 +10113,7 @@ div.tooltip {
   clear: both;
 }
 .discussion-comment .discussion-commenter-meta .discussion-commenter-name {
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 18px;
 }
 .discussion-comment .discussion-commenter-meta .discussion-commenter-name:hover {
@@ -10179,7 +10179,7 @@ div.tooltip {
 .discussion-comment .inner-comment-row .md-button span {
   display: inline-block;
   vertical-align: top;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -10288,7 +10288,7 @@ div.tooltip {
   text-align: center;
 }
 .commenter-teaser .commenter-teaser-text .project-link {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.4);
 }
@@ -10439,7 +10439,7 @@ div.tooltip {
 .page-content .read-more-button span {
   font-size: 12px;
   margin: 0;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -10577,7 +10577,7 @@ div.tooltip {
   right: 0;
   margin: -22px auto 0;
   display: block;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   text-align: center;
   color: #fff;
   text-transform: uppercase;
@@ -10599,7 +10599,7 @@ div.tooltip {
   right: 0;
   margin: -22px auto 0;
   display: block;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   text-align: center;
   color: #fff;
   text-transform: uppercase;
@@ -10716,7 +10716,7 @@ header .line-wrap .line-text {
   font-family: 'Gentium Basic', 'Merriweather', Georgia, Times New Roman, serif;
 }
 header .line-wrap .line-ref {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 18px;
   padding: 3px 20px 3px 15px;
   border-right: 1px solid #aaa;
@@ -10789,7 +10789,7 @@ header .line-wrap .line-ref {
   color: #727272;
   padding: 30px 0px 5px 0;
   margin: 0 0px 0 0;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-align: right;
   float: right;
@@ -10798,7 +10798,7 @@ header .line-wrap .line-ref {
 }
 .comment-group-meta h2.comment-group-ref-below {
   cursor: default;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 46px;
   font-weight: bold;
   color: #424242;
@@ -10814,7 +10814,7 @@ header .line-wrap .line-ref {
   width: auto;
 }
 .comment-group-meta h2.comment-group-ref-below span {
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 46px;
   font-weight: bold;
 }
@@ -10917,7 +10917,7 @@ header .line-wrap .line-ref {
 .comment h1 {
   margin: 0;
   padding: 10px 0;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 28px;
   color: rgba(0, 0, 0, 0.8);
 }
@@ -10966,7 +10966,7 @@ header .line-wrap .line-ref {
 .comment .comment-revisions .revision span {
   padding: 0px 20px;
   display: block;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px !important;
   text-transform: uppercase;
   color: #999;
@@ -11188,7 +11188,7 @@ header .line-wrap .line-ref {
   padding-top: 30px;
 }
 .comment-reference h4 {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 18px;
   text-transform: uppercase;
   margin: 0;
@@ -11202,7 +11202,7 @@ header .line-wrap .line-ref {
 }
 .comment-reference a {
   font-weight: lighter;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 18px;
   border-bottom: 2px solid #795548;
   box-shadow: none;
@@ -11243,7 +11243,7 @@ header .line-wrap .line-ref {
   width: 100%;
 }
 .comment-meta-section h4 {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 26px;
 }
 .comment-meta-section .item-link {
@@ -11671,7 +11671,7 @@ header .line-wrap .line-ref {
   text-overflow: ellipsis;
 }
 .lemma-panel .md-button span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
 }
 .lemma-panel .md-button.selected-edition-tab {
@@ -11909,7 +11909,7 @@ article.lemma-comment .context-tabs {
 }
 .commentary-lemma-show-more-button button div span {
   font-size: 12px !important;
-  font-family: 'Proxima Nova A W07 Light', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
   display: inline-block;
   vertical-align: bottom;
 }
@@ -11930,7 +11930,7 @@ article.lemma-comment .context-tabs {
   color: #999;
 }
 .translated-by-label {
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-weight: bold;
   font-size: 14px;
   margin-left: 55%;
@@ -11982,7 +11982,7 @@ article.lemma-comment .context-tabs {
   color: #fff;
   padding: 10px 20px;
   border: 1px solid #795548;
-  font-family: 'Proxima N W01 At Smbd', sans-serif 14px;
+  font-family: 'Proxima Nova', sans-serif 14px;
   text-transform: uppercase;
 }
 .filter .filter-val {
@@ -12014,7 +12014,7 @@ article.lemma-comment .context-tabs {
   padding: 4px;
 }
 .filter .filter-val span {
-  font-family: 'Proxima Nova A W07 Light', sans-serif 13px;
+  font-family: 'Proxima Nova', sans-serif 13px;
   display: inline-block;
   vertical-align: top;
 }
@@ -12141,7 +12141,7 @@ article.lemma-comment .context-tabs {
   font-size: 18px;
 }
 .search-term-button .search-term-button-label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif 12px;
+  font-family: 'Proxima Nova', sans-serif 12px;
   font-weight: bold;
   color: #727272;
 }
@@ -12179,7 +12179,7 @@ article.lemma-comment .context-tabs {
   vertical-align: top;
 }
 .search-tool span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
   color: #5D4037;
 }
@@ -12228,7 +12228,7 @@ article.lemma-comment .context-tabs {
   display: block;
 }
 .line-search label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif 14px;
+  font-family: 'Proxima Nova', sans-serif 14px;
   color: #5D4037;
   display: inline-block;
   padding: 14px 5px 5px 0;
@@ -12236,7 +12236,7 @@ article.lemma-comment .context-tabs {
 .line-search input {
   width: 69px;
   margin: 3px 10px 0 0;
-  font-family: 'Proxima Nova A W07 Light', sans-serif 14px;
+  font-family: 'Proxima Nova', sans-serif 14px;
 }
 .line-search .irs-bar {
   height: 10px;
@@ -12275,7 +12275,7 @@ article.lemma-comment .context-tabs {
   float: right;
   margin: 10px 30px 0px 0px;
   padding: 14px 26px;
-  font-family: 'Proxima N W01 At Smbd', sans-serif 16px;
+  font-family: 'Proxima Nova', sans-serif 16px;
   background: #607D8B;
   color: #fff;
   border-radius: 0px;
@@ -12307,7 +12307,7 @@ article.lemma-comment .context-tabs {
   text-align: center;
 }
 .no-results span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif 16px;
+  font-family: 'Proxima Nova', sans-serif 16px;
 }
 .close-dropdown {
   position: absolute !important;
@@ -12361,7 +12361,7 @@ header .right-drawer-toggle {
   background: #fff;
 }
 .search-tools-drawer .card-header > div > span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-weight: bold;
   font-size: 14px !important;
   color: #727272 !important;
@@ -12379,7 +12379,7 @@ header .right-drawer-toggle {
 }
 .search-tools-drawer .search-term-button span {
   text-transform: uppercase;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   color: #727272;
 }
@@ -12451,10 +12451,10 @@ header .right-drawer-toggle {
 .comment-citation-urn label {
   font-size: 14px;
   padding-right: 15px;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 .comment-citation-urn .urn {
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   padding-right: 15px;
   font-weight: 100;
   font-size: 14px;
@@ -12540,7 +12540,7 @@ header .right-drawer-toggle {
 }
 .page.page-community .page-content h3 {
   font-size: 22px;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   margin: 60px auto 30px;
   padding: 0 0 10px;
   border-bottom: 2px solid #CCCCCC;
@@ -12578,7 +12578,7 @@ header .right-drawer-toggle {
   width: 100%;
   margin: 20px auto;
   font-size: 24px;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 .user-discussion-comments .user-discussion-comment {
   width: 100%;
@@ -12593,7 +12593,7 @@ header .right-drawer-toggle {
   margin: 0 auto;
   max-width: 710px;
   display: block;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   color: #727272;
   text-transform: uppercase;
   font-weight: bold;
@@ -12888,12 +12888,12 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   margin: 0 20px;
 }
 .text-nodes-editor-meta-input label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
 }
 .text-nodes-editor-meta-input button {
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   padding: 5px 10px;
   background: transparent;
@@ -12915,12 +12915,12 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   display: block;
 }
 .text-nodes-editor-text-input label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
 }
 .text-nodes-editor-text-input button {
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   padding: 5px 10px;
   background: transparent;
@@ -13031,14 +13031,14 @@ header .header-section-wrap .account-button span.notificationBadge {
 }
 .recentTeaserTitle {
   display: block;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
   padding: 5px 0;
   color: $text;
 }
 .recentTeaserChapter {
   display: block;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 13px;
   padding: 5px;
   color: #666;
@@ -13258,12 +13258,12 @@ section.header .center-content .direct-down:hover {
 }
 .cover-link button span,
 .cover-link a span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
   text-transform: uppercase;
   font-weight: 700 !important;
 }
 .cover-link span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   text-transform: uppercase;
   font-weight: 700;
 }
@@ -13392,7 +13392,7 @@ section.intro .intro-col-image .caption p {
   margin: 0;
   font-size: 14px;
   color: #727272;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   width: 100%;
   max-width: none;
 }
@@ -13500,7 +13500,7 @@ section.browse-commentary .data-visualization-container img {
 .commentary-text .text-title {
   width: 100%;
   margin: 0 auto;
-  font-family: 'Proxima Nova W08 Reg', sans-serif 42px;
+  font-family: 'Proxima Nova', sans-serif 42px;
   text-align: center;
 }
 .commentary-text .text-divider {
@@ -13646,7 +13646,7 @@ _:-ms-lang(x),
 }
 .keyword .keyword-title {
   color: #212121;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 22px;
   text-transform: uppercase;
   margin-right: 10px;
@@ -13772,7 +13772,7 @@ section.keyword-single {
   display: inline-block;
   vertical-align: top;
   font-size: 22px;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   margin: 0;
 }
 .keyword-teaser .mdi {
@@ -13814,7 +13814,7 @@ section.keyword-single {
   display: none;
   clear: both;
   color: #727272;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   text-transform: uppercase;
   font-size: 12px;
   margin: 10px 6px 0;
@@ -13873,7 +13873,7 @@ section.keyword-single {
   width: 95%;
 }
 .keyword-context .lemma-comment-ref-header {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-weight: bold;
   font-size: 16px;
   padding: 0px 15px 10px;
@@ -13898,7 +13898,7 @@ section.keyword-single {
 .keywords-suggestion {
   display: block;
   padding: 5px 15px;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-weight: 300;
   font-size: 16px;
   cursor: pointer;
@@ -13919,7 +13919,7 @@ section.keyword-single {
 }
 .reference-work .reference-work-title {
   color: #212121;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 26px;
   text-transform: uppercase;
   margin-right: 10px;
@@ -13970,7 +13970,7 @@ section.reference-work-single {
   display: inline-block;
   vertical-align: top;
   font-size: 24px;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   margin: 0 !important;
   padding: 10px 0 !important;
   line-height: 1.4em;
@@ -14019,7 +14019,7 @@ section.reference-work-single {
 .reference-work-teaser .reference-work-read-more {
   clear: both;
   color: #727272;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   text-transform: uppercase;
   font-size: 12px;
   margin: 10px 0px 0 !important;
@@ -14061,7 +14061,7 @@ section.reference-work-single {
 }
 .read-online-link {
   color: #fff;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 20px;
   font-weight: 300;
   text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
@@ -14364,7 +14364,7 @@ section.reference-work-single {
 }
 .user-profile-tabs button div,
 .user-profile-tabs button span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 18px;
   font-weight: 300;
   text-transform: none;
@@ -14491,7 +14491,7 @@ section.reference-work-single {
 .page .page-content h5 {
   max-width: 750px;
   padding: 10px 0;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 .page .page-content h1 {
   font-size: 42px;
@@ -14544,7 +14544,7 @@ section.reference-work-single {
   line-height: 56px;
   font-weight: lighter !important;
   text-align: left;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 48px;
   padding-bottom: 30px;
 }

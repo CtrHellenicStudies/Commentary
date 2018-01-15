@@ -74,12 +74,8 @@ class EditKeywordLayout extends Component {
 		console.log(nextProps.collectionQuery.work.textNodes.length);
 		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
 		if (this.state.refetchTextNodes || nextProps.collectionQuery.work.textNodes.length === 100) {
-			this.props.collectionQuery.refetch({
-				start: this.state.selectedLineFrom || keyword.lineFrom || 0,
-				end: this.state.selectedLineTo || keyword.lineTo || 0,
-				work: keyword.work ? keyword.work.slug : 'iliad', // TODO
-				//subworkN: keyword.subwork ? keyword.subwork.n : 1
-			});
+			// const properies = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(keyword.work ? keyword.work.slug : 'iliad',
+			// this.state.selectedLineFrom || keyword.lineFrom || 0, this.state.selectedLineTo || keyword.lineTo || 0));
 			this.setState({
 				refetchTextNodes: false
 			});
@@ -126,20 +122,14 @@ class EditKeywordLayout extends Component {
 		}
 		const { filters } = this.state;
 		let work;
-        let subwork;
 		filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
 			}
 		});
-		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
-		};
+		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
+			work ? work.slug : 'iliad', selectedLineFrom, selectedLineTo
+		));
 		this.props.collectionQuery.refetch(properties);
 	}
 	toggleSearchTerm(key, value) {

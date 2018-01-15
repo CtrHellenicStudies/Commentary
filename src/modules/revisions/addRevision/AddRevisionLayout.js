@@ -85,10 +85,6 @@ class AddRevisionLayout extends Component {
 				${comment.lemmaCitation.textGroup}.
 				${comment.lemmaCitation.textGroup}`,
 				location: [cuttedPassage[0].split('.')[0], cuttedPassage[0].split('.')[1]],
-				start: comment.lineFrom,
-				end: comment.lineTo,
-				work: comment.work.slug, // TODO
-				// subworkN: comment.subwork.n
 			});
 			this.setState({
 				refetchTextNodes: false

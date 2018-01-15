@@ -93,6 +93,12 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 		isAnnotation
 		discussionCommentsDisabled
 		created
+		lemmaCitation {
+			passage
+			work
+			textGroup
+			corpus
+		}
 		updated
 	}
 }

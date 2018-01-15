@@ -108,13 +108,11 @@ class AddTranslationLayout extends Component {
 			});
 		}
 		const { filters } = this.state;
-		const { work, subwork } = getFilterValues(filters);
-		const properties = {
-			work: work ? work.slug : 'iliad', // TODO
-			// subworkN: subwork ? subwork.n : 1,
-			start: selectedLineFrom,
-			end: selectedLineTo
-		};
+		const { work } = getFilterValues(filters);
+		const properties = Utils.getCollectionQueryProperties(
+			Utils.createLemmaCitation(work ? work.slug : 'iliad', 
+			selectedLineFrom, selectedLineTo)
+		);
 		this.props.collectionQuery.refetch(properties);
 	}
 

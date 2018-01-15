@@ -50,17 +50,13 @@ class TextNodesInput extends Component {
 		if (props.editionsQuery.loading || props.collectionQuery.loading) {
 			return;
 		}
-		const { workSlug, editionId, subworkN, lineFrom, limit } = props;
+		const { workSlug, editionId, lineFrom, limit } = props;
 		if (!props.collectionQuery.variables.workSlug) {
-			const properties = {
-				workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
-				subworkN: subworkN,
-				lineFrom: parseInt(lineFrom, 10),
-				lineTo: parseInt(lineFrom, 10) + limit,
-				editionId: editionId,
-				limit: limit
-	
-			};
+			const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
+				workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+				parseInt(lineFrom, 10),
+				parseInt(lineFrom, 10) + limit
+			));
 			props.collectionQuery.refetch(properties);
 			return;
 		}

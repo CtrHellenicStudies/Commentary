@@ -129,13 +129,8 @@ class AddCommentLayout extends Component {
 			return;
 		}
 		const { filters } = this.state;
-		const { work, subwork } = getFilterValues(filters);
-		const properties = {
-			work: work ? work.slug : 'iliad', // TODO
-		//	subworkN: subwork ? subwork.n : 1,
-			start: selectedLineFrom,
-			end: selectedLineTo
-		};
+		const { work } = getFilterValues(filters);
+		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(work, 0, 49));
 		this.props.collectionQuery.refetch(properties);
 	}
 
@@ -206,7 +201,7 @@ class AddCommentLayout extends Component {
 		const referenceWorks = formData.referenceWorks;
 		const commenters = Utils.getCommenters(formData.commenterValue, possibleCommenters);
 		const selectedLineTo = this.getSelectedLineTo();
-		const lemmaCitation = utils.createLemmaCitation(work, this.state.selectedLineFrom, selectedLineTo);
+		const lemmaCitation = Utils.createLemmaCitation(work, this.state.selectedLineFrom, selectedLineTo);
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);

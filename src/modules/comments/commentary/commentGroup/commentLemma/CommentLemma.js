@@ -62,24 +62,24 @@ class CommentLemma extends Component {
 
 
 	toggleEdition(editionSlug) {
-		const { editions } = this.props;
-		const { selectedLemmaEditionIndex } = this.state;
+		// const { editions } = this.props;
+		// const { selectedLemmaEditionIndex } = this.state;
 
-		if (editions && editions.length) {
-			if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
-				let newSelectedEditionIndex = 0;
+		// if (editions && editions.length) {
+		// 	if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
+		// 		let newSelectedEditionIndex = 0;
 
-				editions.forEach((edition, index) => {
-					if (edition.slug === editionSlug) {
-						newSelectedEditionIndex = index;
-					}
-				});
+		// 		editions.forEach((edition, index) => {
+		// 			if (edition.slug === editionSlug) {
+		// 				newSelectedEditionIndex = index;
+		// 			}
+		// 		});
 
-				this.setState({
-					selectedLemmaEditionIndex: newSelectedEditionIndex,
-				});
-			}
-		}
+		// 		// this.setState({
+		// 		// 	selectedLemmaEditionIndex: newSelectedEditionIndex,
+		// 		// });
+		// 	}
+		// }
 	}
 
 	showContextPanel(commentGroup) {
@@ -163,32 +163,27 @@ class CommentLemma extends Component {
 	componentWillReceiveProps(nextProps) {
 
 		const { commentGroup, multiline } = nextProps;
-		const { selectedLemmaEditionIndex } = this.state;
+//		const { selectedLemmaEditionIndex } = this.state;
 
 		if (nextProps.collectionQuery.loading || 
-			nextProps.editionsQuery.loading || 
+//			nextProps.editionsQuery.loading || 
 			nextProps.translationsQuery.loading) {
 			return;
 		}
 		console.log()
-		const textNodesCursor = nextProps.collectionQuery.work ? nextProps.collectionQuery.work.textNodes: [];
-		let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
+		const textNodesCursor = nextProps.collectionQuery.collection ? nextProps.collectionQuery.collection.textGroup.work.textNodes: [];
+	//	let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 		const ready = true;
-		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
-		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
-		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+	//	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
+	//	const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
+	//	selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
-		if (commentGroup) {
+		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
 			if (!nextProps.collectionQuery.variables.work) {
 				nextProps.collectionQuery.variables.work = commentGroup.work.slug;
 				console.log(commentGroup);
 				const cuttedPassage = commentGroup.comments[0].lemmaCitation.passage.split('-');
-				const properties = {
-					work: `${commentGroup.comments[0].lemmaCitation.work}:
-					${commentGroup.comments[0].lemmaCitation.textGroup}.
-					${commentGroup.comments[0].lemmaCitation.textGroup}`,
-					location: [cuttedPassage[0].split('.')[0], cuttedPassage[0].split('.')[1]],
-				};
+				const properties = Utils.getCollectionQueryProperties(commentGroup.comments[0].lemmaCitation);
 				nextProps.collectionQuery.refetch(properties);
 			}
 			if (!commentGroup.lineTo) {
@@ -208,13 +203,13 @@ class CommentLemma extends Component {
 		this.setState({
 			translationAuthors: translationAuthors,
 			ready: ready,
-			editions: editions,
-			selectedLemmaEdition: selectedLemmaEdition
+		//	editions: editions,
+		//	selectedLemmaEdition: selectedLemmaEdition
 		});
 	}
 	render() {
 		const { commentGroup, hideLemma } = this.props;
-		const { selectedAuthor, showTranslation, selectedLemmaEdition, editions, ready, translationAuthors } = this.state;
+		const { selectedAuthor, showTranslation, ready, translationAuthors } = this.state;
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
@@ -250,7 +245,7 @@ class CommentLemma extends Component {
 						<TranslationLayout
 							commentGroup={commentGroup}
 							showTranslation={showTranslation}
-							lines={selectedLemmaEdition.lines}
+						//	lines={selectedLemmaEdition.lines}
 							author={selectedAuthor}
 						/>
 						:
@@ -259,7 +254,7 @@ class CommentLemma extends Component {
 
 					<div className="edition-tabs tabs" />
 					<div className="edition-tabs tabs">
-						{editions.map((lemmaTextEdition, i) => {
+						{/* {editions.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
 							const multiLineList = lemmaTextEdition.multiLine && lemmaTextEdition.multiLine.length ? lemmaTextEdition.multiLine : [];
 
@@ -338,7 +333,7 @@ class CommentLemma extends Component {
 									{popover}
 								</div>
 							);
-						})}
+						})} */}
 
 						{translationAuthors.length > 0 ?
 							<RaisedButton

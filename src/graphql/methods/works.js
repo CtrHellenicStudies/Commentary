@@ -14,6 +14,23 @@ query worksQuery ($collection: String $textGroup: String) {
 	}
 }
 `;
+const subworks = gql`
+query subworksQuery{
+  worksAhcip {
+    subworks {
+      title
+      slug
+      n
+      tlgNumber
+      nComments
+      commentHeatmap {
+        nComments
+        n
+      }
+    }
+  }
+}
+`;
 const worksQuery = graphql(query, {
 	name: 'worksQuery',
 	options: () => {
@@ -25,4 +42,7 @@ const worksQuery = graphql(query, {
 		});
 	}
 });
-export { worksQuery };
+const subworksQuery = graphql(subworks, {
+	name: 'subworksQuery',
+});
+export { worksQuery, subworksQuery };

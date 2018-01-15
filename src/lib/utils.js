@@ -25,13 +25,22 @@ const Utils = {
 		return ret;
 	},
 	createLemmaCitation(work, lineFrom, lineTo) { 
-		return lemmaCitation = {
-			collection: "urn:cts:greekLit",
+		return {
+			corpus: "urn:cts:greekLit",
 			textGroup: "urn:cts:greekLit:tlg0012",
 			work: work,
 			passage: `1.${lineFrom+1}-1.${lineTo+1}`
 		};
 
+	},
+	getCollectionQueryProperties(lemmaCitation) {
+		const splittedPassage = lemmaCitation.passage.split('-')[0].split('.');
+		return {
+			urn1: lemmaCitation.corpus,
+			urn2: lemmaCitation.corpus + ':' + lemmaCitation.textGroup,
+			urn3: lemmaCitation.corpus + ':' + lemmaCitation.textGroup + '.' + lemmaCitation.work,
+			location: [splittedPassage[0], splittedPassage[1]]
+		};
 	},
 	timeSince: (date) => {
 		let interval;

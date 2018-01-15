@@ -175,20 +175,12 @@ class AddKeywordLayout extends Component {
 		}
 		const { filters } = this.state;
 		let work;
-        let subwork;
 		filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
 			}
 		});
-		const properties = {
-			work: work ? work.slug : 'iliad', // TODO
-			//subworkN: subwork ? subwork.n : 1,
-			start: selectedLineFrom,
-			end: selectedLineTo
-		};
+		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(work ? work.slug : 'iliad', selectedLineFrom, selectedLineTo));
 		this.props.collectionQuery.refetch(properties);
 	}
 	addKeyword(formData, textValue, textRawValue) {

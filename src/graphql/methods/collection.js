@@ -2,21 +2,25 @@ import { gql, graphql } from 'react-apollo';
 
 
 const query = gql`
-	query collectionQuery($urn: String $start: Int) {
-    work(urn: $urn) {
-      id
-      urn
-      language {
-        id
-        title
-      }
-      textNodes(startsAtIndex: $start) {
+	query collectionQuery($urn1: String $urn2: String $urn3: String $location: [Int]) {
+    collection(urn: $urn1) {
+    textGroup(urn: $urn2) {
+      work(urn: $urn3) {
         id
         urn
-        location
-        text
+        language {
+          id
+          title
+        }
+        textNodes(location: $location) {
+          id
+          urn
+          location
+          text
+       }
       }
     }
+  }
 	}
 `;
 

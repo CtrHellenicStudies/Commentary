@@ -53,12 +53,9 @@ class KeywordContext extends Component {
 				const textNodesCursor = props.collectionQuery.work.textNodes;
 				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
 			}
-			props.collectionQuery.refetch({
-				start: context.lineFrom,
-				end: context.lineTo, // TPDO
-				//subworkN: context.subwork,
-				work: context.work
-			});
+			const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
+				context.work, context.lineFrom, context.lineTo
+			));
 
 		} else {
 			if (tenantId) {
@@ -74,7 +71,7 @@ class KeywordContext extends Component {
 
 				if (props.commentsQuery.comments.length > 0) {
 					const comment = props.commentsQuery.comments[0];
-					const query = makeKeywordContextQueryFromComment(comment, maxLines);
+					const query = makeKeywordContextQueryFromComment(comment, maxLines); //TODO
 					props.collectionQuery.refetch(query);
 					context.work = query.workSlug;
 					context.subwork = query.subworkN;

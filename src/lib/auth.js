@@ -10,7 +10,6 @@ const userLoggedIn = () => {
 };
 const login = async (data) => {
 	if (userLoggedIn()) {
-		console.log('logged_in');
 		return null;
 	}
 

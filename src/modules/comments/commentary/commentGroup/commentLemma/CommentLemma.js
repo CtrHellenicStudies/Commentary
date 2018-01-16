@@ -170,7 +170,6 @@ class CommentLemma extends Component {
 			nextProps.translationsQuery.loading) {
 			return;
 		}
-		console.log()
 		const textNodesCursor = nextProps.collectionQuery.work ? nextProps.collectionQuery.work.textNodes: [];
 		let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 		const ready = true;
@@ -181,7 +180,6 @@ class CommentLemma extends Component {
 		if (commentGroup) {
 			if (!nextProps.collectionQuery.variables.work) {
 				nextProps.collectionQuery.variables.work = commentGroup.work.slug;
-				console.log(commentGroup);
 				const properties = {
 					work: commentGroup.work.slug, // TODO
 				//	subworkN: Number(commentGroup.subwork.title),

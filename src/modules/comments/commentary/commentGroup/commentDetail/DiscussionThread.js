@@ -50,8 +50,22 @@ class DiscussionThread extends Component {
 			});
 			return;
 		}
+		let discussionComments = props.discussionCommentsQuery.discussionComments;
+		let helpArray = JSON.parse(JSON.stringify(props.discussionCommentsQuery.discussionComments));
+		switch (this.state.sortMethod) {
+			case 'votes':
+				helpArray.sort(Utils.sortBy('votes', 'updated'));
+				discussionComments = helpArray;
+				break;
+			case 'recent':
+				helpArray.sort(Utils.sortBy('updated', 'votes'));
+				discussionComments = helpArray;
+				break;
+			default:
+				break;
+			}
 		this.setState({
-			discussionComments: props.discussionCommentsQuery.discussionComments,
+			discussionComments: discussionComments,
 			users: props.usersQuery.users,
 			ready: true
 		});
@@ -108,17 +122,6 @@ class DiscussionThread extends Component {
 			color: '#FFFFFF',
 		};
 
-		switch (this.state.sortMethod) {
-		case 'votes':
-			discussionComments.sort(Utils.sortBy('votes', 'updated'));
-			break;
-		case 'recent':
-			discussionComments.sort(Utils.sortBy('updated', 'votes'));
-			break;
-		default:
-			break;
-		}
-
 		return (
 
 			<div className={discussionWrapClass}>
@@ -134,7 +137,7 @@ class DiscussionThread extends Component {
 						<i className="mdi mdi-comment" />
 						{this.state.discussionComments.length ?
 							<span className="continue-discussion-text">
-								{this.props.discussionComments.length}
+								{this.state.discussionComments.length}
 							</span>
 						: ''}
 					</div>
@@ -217,7 +220,7 @@ class DiscussionThread extends Component {
 						<div
 							className="sort-by-wrap"
 						/>
-						{this.props.discussionComments.length === 0 ?
+						{this.state.discussionComments.length === 0 ?
 							<div className="no-results-wrap">
 								{!comment.discussionCommentsDisabled && !discussionCommentsDisabled ?
 									<span className="no-results-text">No discussion comments.</span>
@@ -239,7 +242,7 @@ class DiscussionThread extends Component {
 								/>
 							</div>
 						}
-						{this.props.discussionComments.map((discussionComment, i) =>
+						{this.state.discussionComments.map((discussionComment, i) =>
 							(<DiscussionComment
 								key={i}
 								className="discussion-comment paper-shadow"
@@ -260,7 +263,7 @@ DiscussionThread.propTypes = {
 	hideDiscussionThread: PropTypes.func.isRequired,
 	toggleLemma: PropTypes.func.isRequired,
 	showLoginModal: PropTypes.func,
-	discussionCommentsQuery: PropTypes.func,
+	discussionCommentsQuery: PropTypes.object,
 	commenters: PropTypes.array,
 	discussionCommentInsert: PropTypes.func
 };

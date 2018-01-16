@@ -96,6 +96,7 @@ const Utils = {
 		if (!user) {
 			return false;
 		} else if(typeof user === 'string') {
+			console.log(user);
 			user = JSON.parse(user);
 			Cookies.set('user', user);
 		}
@@ -148,7 +149,6 @@ const Utils = {
 		};
 	},
 	setBaseDocMeta() {
-		console.log(process);
 		Utils.setMetaTag('name', 'url', window.location.href);
 		Utils.setMetaTag('name', 'twitter:card', 'summary');
 		Utils.setMetaTag('name', 'twitter:url', window.location.href);

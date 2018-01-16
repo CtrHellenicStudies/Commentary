@@ -1,0 +1,466 @@
+/******************************************************************************
+
+						  ___ _  _ ___
+						 / __| || / __|
+						| (__| __ \__ \
+						 \___|_||_|___/
+
+  		The Center for Hellenic Studies
+
+
+ |  Style Variables for A Homer Commentary in Progress and CHS Annotations
+ |
+ |   1. Colors
+ |   2. Typography
+ |   3. Mixins
+
+
+******************************************************************************/
+/******************************************************************************
+
+1. Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.1 Base Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.2 Brand Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.3 Text Colors
+
+******************************************************************************/
+/******************************************************************************
+
+2. Typography
+
+Available Fonts:
+
+=================================
+Google Fonts
+=================================
+font-family: 'Gentium Basic', serif;
+font-family: 'Merriweather', serif;
+
+
+=================================
+Fonts.com
+=================================
+font-family:'Museo Sans W01_900';
+font-family:'ProximaNW01-AltLightReg';
+font-family:'Proxima N W01 At Smbd';
+font-family:'Museo W01_700';
+font-family:'Proxima N W01 Thin Reg';
+font-family:'Proxima Nova W08 Reg';
+font-family:'Proxima Nova W15 Medium';
+font-family:'Proxima Nova W07 Semibold';
+font-family:'Proxima Nova W07 Bold';
+font-family:'Proxima Nova W07 Extrabold';
+font-family:'Proxima Nova W07 Black';
+
+=================================
+Material Design Icons
+=================================
+font-family: "Material Design Icons";
+
+******************************************************************************/
+/******************************************************************************
+
+2.1 Base Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.2 Title Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.3 Reading Environment Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.4 Material Design Icons
+
+******************************************************************************/
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
+  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/******************************************************************************
+
+3. Mixins
+
+******************************************************************************/
+@-webkit-keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.lemma-panel {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background: #fff;
+  padding: 20px 30px;
+  height: 100%;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  transform: translateX(100%) translateZ(0);
+  min-width: 200px;
+  max-width: 630px;
+  width: 42%;
+}
+.lemma-panel.extended {
+  transform: translateX(0%) translateZ(0);
+}
+.lemma-panel.extended .close-lemma-panel {
+  display: block;
+}
+.lemma-panel.highlighting-visible .lemma-line.highlighted .lemma-text {
+  background: #def9fc;
+  border-bottom: 1px solid #def9fc;
+}
+.lemma-panel .lemma-text-wrap {
+  margin: 57px 0 1%;
+  padding: 10px 30px 10px 0;
+  height: 89%;
+  overflow-y: scroll;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+.lemma-panel .lemma-text-wrap::-webkit-scrollbar {
+  width: 8px;
+}
+.lemma-panel .lemma-text-wrap::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #ddd;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+.lemma-panel .lemma-text-wrap::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  background: #999;
+  -webkit-box-shadow: inset 0 0 6px #727272;
+}
+.lemma-panel .lemma-text-wrap::-webkit-scrollbar-thumb:window-inactive {
+  background: #999;
+}
+.lemma-panel .lemma-line {
+  width: 100%;
+  padding: 0;
+  position: relative;
+}
+.lemma-panel .lemma-line:hover .lemma-meta .lemma-line-n {
+  opacity: 1;
+}
+.lemma-panel .lemma-line .lemma-text {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.7);
+  border-bottom: 1px solid #fff;
+  padding: 4px 5px;
+  -webkit-transition: all 300ms ease-in-out;
+  -moz-transition: all 300ms ease-in-out;
+  -ms-transition: all 300ms ease-in-out;
+  -o-transition: all 300ms ease-in-out;
+}
+.lemma-panel .lemma-line .lemma-meta {
+  display: inline-block;
+  vertical-align: top;
+  width: 30px;
+  text-align: right;
+  padding: 0 10px 0 0;
+  position: absolute;
+  right: -26px;
+  top: 4px;
+  color: #727272;
+}
+.lemma-panel .lemma-line .lemma-meta span {
+  font-size: 11px;
+  text-align: right;
+}
+.lemma-panel .lemma-line .lemma-meta .lemma-line-n {
+  opacity: 0;
+  -webkit-transition: all 100ms ease-out;
+  -moz-transition: all 100ms ease-out;
+  -ms-transition: all 100ms ease-out;
+  -o-transition: all 100ms ease-out;
+}
+.lemma-panel .lemma-line .lemma-meta .lemma-line-n.lemma-line-n--displayed {
+  opacity: 1;
+}
+.lemma-panel .md-button {
+  display: inline-block;
+  padding: 5px 10px;
+  line-height: 1.3em;
+  min-height: 0;
+  margin: 5px;
+  max-width: 200px;
+  text-overflow: ellipsis;
+}
+.lemma-panel .md-button span {
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: 14px;
+}
+.lemma-panel .md-button.selected-edition-tab {
+  background: #795548;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  margin: 3px;
+  color: #fff;
+}
+.lemma-panel .md-button.selected-edition-tab span {
+  color: #fff;
+}
+.lemma-panel .md-button.selected-edition-tab:focus {
+  background: #5D4037;
+}
+.lemma-panel .edition-tabs,
+.lemma-panel .meta-tabs {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+}
+.lemma-panel .meta-tabs {
+  margin-top: 4px;
+}
+.lemma-panel .lemma-load {
+  padding: 10px 0 10px 30px;
+}
+.lemma-panel .close-lemma-panel {
+  top: 90px;
+  left: -26px;
+  font-size: 22px;
+  background: #eee;
+  border-radius: 50px;
+  border: 1px solid #ddd;
+  padding: 7px 10px;
+  display: none;
+  position: absolute !important;
+  background: #fff !important;
+  border-radius: 100%;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2) !important;
+}
+.lemma-panel .close-lemma-panel:hover,
+.lemma-panel .close-lemma-panel:focus {
+  opacity: 1;
+  background: #ddd;
+}
+.lemma-panel-tabs {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  background: #ffffff;
+  padding: 5px 20px 7px;
+}
+.reference-modal {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: auto;
+  display: none;
+  z-index: 90;
+  cursor: move;
+  /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.reference-modal.reference-modal-visible {
+  display: block;
+}
+.reference-modal .comment {
+  width: auto;
+  border: none;
+  margin: 0;
+  padding: 20px 30px 15px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  position: relative;
+  width: 500px;
+}
+.reference-modal .comment p.lemma-text {
+  padding: 5px;
+  font-size: 18px;
+}
+.reference-modal .comment .context-tabs,
+.reference-modal .comment .edition-tabs {
+  padding-top: 10px;
+}
+.reference-modal .comment button span {
+  font-size: 12px;
+}
+.reference-modal .reference-text {
+  max-height: 168px;
+  overflow-y: scroll;
+  border-bottom: 1px solid #eee;
+}
+.reference-modal .mdi-close {
+  border-radius: 50%;
+  background: #fff;
+  padding: 10px;
+  font-size: 22px;
+  position: absolute;
+  top: -10px;
+  right: -15px;
+  cursor: pointer;
+}
+.reference-modal .mdi-close:hover {
+  background: #eee;
+}
+.reference-modal .mdi-close:focus {
+  outline: none;
+  border: none;
+}
+.before-link .light button > div,
+.after-link .light button > div {
+  background: #795548;
+}
+.before-link .light button > div span,
+.after-link .light button > div span,
+.before-link .light button > div i,
+.after-link .light button > div i {
+  color: #fff !important;
+}
+article.lemma-comment {
+  border-top: 2px solid #795548;
+  padding: 50px 40px;
+}
+article.lemma-comment .lemma-text-line:hover .line-n {
+  opacity: 1;
+}
+article.lemma-comment .line-n {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 12px;
+  color: #727272;
+  padding: 5px 0;
+  width: 5%;
+  min-width: 22px;
+  opacity: 0;
+  -webkit-transition: opacity 100ms ease-in-out;
+  -moz-transition: opacity 100ms ease-in-out;
+  -ms-transition: opacity 100ms ease-in-out;
+  -o-transition: opacity 100ms ease-in-out;
+}
+article.lemma-comment .line-n.line-n--visible {
+  opacity: 1;
+}
+article.lemma-comment p.lemma-text {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 20px;
+  font-weight: normal;
+  color: #212121;
+  padding: 5px 10px;
+  margin: 0;
+  width: 94%;
+}
+article.lemma-comment .context-tab {
+  box-shadow: none !important;
+}
+article.lemma-comment .context-tab:hover i {
+  margin-right: -4px;
+}
+article.lemma-comment .context-tab span {
+  text-transform: uppercase;
+  font-size: 12px !important;
+  color: #727272;
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 1px;
+  -webkit-transition: all 100ms ease-out;
+  -moz-transition: all 100ms ease-out;
+  -ms-transition: all 100ms ease-out;
+  -o-transition: all 100ms ease-out;
+  padding-right: 3px;
+  margin: 0px;
+}
+article.lemma-comment .context-tab .mdi {
+  color: #727272;
+  display: inline-block;
+  vertical-align: top;
+  -webkit-transition: all 100ms ease-out;
+  -moz-transition: all 100ms ease-out;
+  -ms-transition: all 100ms ease-out;
+  -o-transition: all 100ms ease-out;
+  margin-top: 2px;
+  margin-right: 0px;
+}
+article.lemma-comment .context-tab .mdi:before {
+  font-size: 18px;
+}
+article.lemma-comment .context-tabs,
+article.lemma-comment .edition-tabs {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 30px;
+}
+article.lemma-comment .context-tabs {
+  float: right;
+}
+.lemma-loading .lemma-loading-top {
+  background: #eee;
+  height: 24px;
+  width: 60%;
+  margin: 0 15px 15px;
+  -webkit-animation: flash linear 1.2s infinite;
+  animation: flash linear 1.2s infinite;
+}
+.lemma-loading .lemma-loading-bottom {
+  background: #eee;
+  height: 24px;
+  width: 40%;
+  margin: 15px 15px 22px;
+  -webkit-animation: flash linear 1.2s infinite;
+  animation: flash linear 1.2s infinite;
+}
+.commentary-lemma-show-more-button {
+  margin: 10px 42px 0;
+}
+.commentary-lemma-show-more-button i.mdi {
+  color: #727272;
+  padding-top: 3px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+.commentary-lemma-show-more-button i.mdi:before {
+  font-size: 22px;
+}
+.commentary-lemma-show-more-button button div span {
+  font-size: 12px !important;
+  font-family: 'Proxima Nova', sans-serif !important;
+  display: inline-block;
+  vertical-align: bottom;
+}

@@ -1,0 +1,593 @@
+/******************************************************************************
+
+						  ___ _  _ ___
+						 / __| || / __|
+						| (__| __ \__ \
+						 \___|_||_|___/
+
+  		The Center for Hellenic Studies
+
+
+ |  Style Variables for A Homer Commentary in Progress and CHS Annotations
+ |
+ |   1. Colors
+ |   2. Typography
+ |   3. Mixins
+
+
+******************************************************************************/
+/******************************************************************************
+
+1. Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.1 Base Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.2 Brand Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.3 Text Colors
+
+******************************************************************************/
+/******************************************************************************
+
+2. Typography
+
+Available Fonts:
+
+=================================
+Google Fonts
+=================================
+font-family: 'Gentium Basic', serif;
+font-family: 'Merriweather', serif;
+
+
+=================================
+Fonts.com
+=================================
+font-family:'Museo Sans W01_900';
+font-family:'ProximaNW01-AltLightReg';
+font-family:'Proxima N W01 At Smbd';
+font-family:'Museo W01_700';
+font-family:'Proxima N W01 Thin Reg';
+font-family:'Proxima Nova W08 Reg';
+font-family:'Proxima Nova W15 Medium';
+font-family:'Proxima Nova W07 Semibold';
+font-family:'Proxima Nova W07 Bold';
+font-family:'Proxima Nova W07 Extrabold';
+font-family:'Proxima Nova W07 Black';
+
+=================================
+Material Design Icons
+=================================
+font-family: "Material Design Icons";
+
+******************************************************************************/
+/******************************************************************************
+
+2.1 Base Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.2 Title Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.3 Reading Environment Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.4 Material Design Icons
+
+******************************************************************************/
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
+  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/******************************************************************************
+
+3. Mixins
+
+******************************************************************************/
+@-webkit-keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.page .page-content .discussion-comments-list .no-results {
+  margin: 60px auto;
+  text-align: center;
+  font-size: 18px;
+  color: #727272;
+}
+.discussion-wrap {
+  margin: 0px;
+  text-align: left;
+  width: 10%;
+  display: inline-block;
+  min-width: 77px;
+  -webkit-transition: all 300ms ease-out 0ms;
+  -moz-transition: all 300ms ease-out 0ms;
+  -ms-transition: all 300ms ease-out 0ms;
+  -o-transition: all 300ms ease-out 0ms;
+}
+.discussion-wrap:focus {
+  outline: none;
+  border: none;
+}
+.continue-discussion {
+  margin: 80px 0;
+  cursor: pointer;
+  padding-left: 20px;
+  text-align: left;
+  position: relative;
+}
+.continue-discussion:hover i {
+  color: #795548;
+}
+.continue-discussion:focus {
+  outline: none;
+  border: none;
+}
+.continue-discussion .continue-discussion-label {
+  display: none;
+}
+.continue-discussion-icon {
+  position: relative;
+}
+.continue-discussion-icon span {
+  font-size: 14px;
+  padding: 16px 8px 0;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  text-transform: uppercase;
+  position: absolute;
+  top: 0;
+  left: 10px;
+  color: #fff;
+  line-height: 1.3em;
+  font-family: 'Proxima Nova', sans-serif;
+  font-weight: bold;
+}
+.continue-discussion-icon i {
+  display: inline-block;
+  vertical-align: top;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  color: #D7CCC8;
+  font-size: 38px;
+  padding: 6px 0;
+}
+.continue-discussion-icon i:before {
+  font-size: 46px;
+}
+.continue-discussion-text {
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0px 5px;
+}
+.discussion-thread {
+  display: none;
+  opacity: 0;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  padding: 20px 0 20px 30px;
+}
+.discussion-thread .sort-by-wrap {
+  margin: 20px 0 5px;
+  padding: 0 0px;
+  width: 100%;
+  clear: both;
+  text-align: right;
+}
+.discussion-thread .sort-by-wrap .sort-by-label {
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: 12px;
+  color: #727272;
+  text-transform: uppercase;
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px 10px;
+}
+.discussion-thread .sort-by-wrap .sort-by-option {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0px 10px;
+  min-height: 0;
+  margin: 0px 2px;
+}
+.discussion-thread .sort-by-wrap .sort-by-option span {
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: 16px;
+  color: #5D4037;
+}
+.discussion-thread .sort-by-wrap .sort-by-option.selected-sort {
+  border-bottom: 2px solid #5D4037;
+}
+.discussion-thread .add-comment-wrap {
+  width: 100%;
+  clear: both;
+  background: #fff;
+  padding: 30px 30px 20px;
+  position: relative;
+  text-align: left;
+}
+.discussion-thread .add-comment-wrap .profile-picture {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50px;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 10px;
+  border: 1px solid #CCCCCC;
+}
+.discussion-thread .add-comment-wrap .profile-picture img {
+  width: 100%;
+}
+.discussion-thread .add-comment-wrap textarea {
+  width: 85%;
+  margin: 3px 0;
+  padding: 10px;
+  outline: none;
+  border: none;
+  resize: none;
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.7);
+  background: #fff;
+  text-transform: none;
+}
+.discussion-thread .add-comment-wrap textarea::-webkit-input-placeholder {
+  text-transform: none;
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.3);
+}
+.discussion-thread .add-comment-wrap textarea:-moz-placeholder {
+  text-transform: none;
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.3);
+}
+.discussion-thread .add-comment-wrap textarea::-moz-placeholder {
+  text-transform: none;
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.3);
+}
+.discussion-thread .add-comment-wrap textarea:-ms-input-placeholder {
+  text-transform: none;
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.3);
+}
+.discussion-thread .add-comment-wrap .md-button {
+  padding: 2px 15px;
+  margin: 0;
+  min-height: 0;
+}
+.discussion-thread .add-comment-wrap .md-button span {
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.discussion-thread .add-comment-wrap .submit-comment-button {
+  background: #795548 !important;
+}
+.discussion-thread .add-comment-wrap .submit-comment-button button {
+  background: #795548 !important;
+}
+.discussion-thread .add-comment-wrap .submit-comment-button span {
+  color: #fff !important;
+}
+.discussion-thread .add-comment-wrap .submit-comment-button:disabled {
+  background: #D7CCC8;
+  cursor: default;
+}
+.discussion-thread .add-comment-wrap .close-discussion {
+  font-size: 22px;
+  padding: 9px 10px 10px;
+  background: #fff !important;
+  border-radius: 50%;
+  position: absolute !important;
+  top: -15px;
+  right: -15px;
+}
+.discussion-thread .add-comment-wrap .new-comment-login {
+  display: inline-block;
+  vertical-align: top;
+}
+.discussion-thread .add-comment-wrap .error-message {
+  display: inline-block;
+  vertical-align: top;
+  float: left;
+  margin: 6px 0 0 0;
+  display: none;
+}
+.discussion-thread .add-comment-wrap .add-comment-row-2 {
+  text-align: right;
+}
+.discussion-thread .update-comment-form textarea {
+  background: transparent;
+  border: none;
+  outline: none;
+  margin: 0 0 10px 0;
+  border-bottom: 2px solid #ddd;
+  padding: 10px;
+  resize: none;
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.7);
+  background: #fff;
+  text-transform: none;
+}
+.discussion-thread .update-comment-form textarea:focus {
+  border: none;
+  border-bottom: 1px solid #eee;
+  outline: none;
+}
+.discussion-thread .update-comment-form .comment-edit-buttons {
+  position: absolute;
+  right: 42px;
+  bottom: 20px;
+}
+.discussion-thread .update-comment-form .submit-comment-button {
+  float: right;
+  margin: 0 3px;
+  border-radius: 2px;
+}
+.discussion-thread .update-comment-form .submit-comment-button button > div {
+  background: #795548 !important;
+}
+.discussion-thread .update-comment-form .submit-comment-button span {
+  color: #fff !important;
+}
+.discussion-thread .update-comment-form .submit-comment-button:hover > div,
+.discussion-thread .update-comment-form .submit-comment-button:focus > div {
+  background: #5D4037 !important;
+}
+.discussion-thread .update-comment-form .close-form-button {
+  float: right;
+}
+.discussion-thread .discussion-comments {
+  margin: 0px 0 0;
+}
+.discussion-thread .no-results-wrap {
+  margin: 15px auto;
+  width: 95%;
+}
+.discussion-thread .no-results-text {
+  font-size: 16px;
+  font-family: 'Merriweather', serif;
+  line-height: 1.5em;
+  color: #727272;
+}
+.error-message .error-message-text {
+  color: #56282F;
+  font-size: 14px;
+}
+.discussion-comments {
+  width: 100%;
+  clear: both;
+}
+.discussion-comment {
+  background: #fff;
+  padding: 0px;
+  margin: 10px auto;
+  position: relative;
+  text-align: left;
+}
+.discussion-comment.discussion-comment--user-reported {
+  background: #fefefe;
+  max-height: 170px;
+  overflow: hidden;
+}
+.discussion-comment.discussion-comment--user-reported .discussion-comment-content {
+  filter: blur(10px);
+  opacity: 0.6;
+}
+.discussion-comment.discussion-comment--user-reported .discussion-comment-user-reported-message {
+  display: block;
+}
+.discussion-comment .discussion-comment-content {
+  padding: 30px 20px;
+}
+.discussion-comment .discussion-comment-status {
+  font-size: 12px;
+  color: #727272;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: 'Proxima Nova', sans-serif;
+  display: block;
+  width: 100%;
+  background: #eee;
+  border-top: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  padding: 5px 30px;
+}
+.discussion-comment .profile-picture {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 15px;
+  border: 1px solid #CCCCCC;
+}
+.discussion-comment .discussion-commenter-meta {
+  display: inline-block;
+  vertical-align: top;
+}
+.discussion-comment .discussion-commenter-meta span {
+  display: block;
+  clear: both;
+}
+.discussion-comment .discussion-commenter-meta .discussion-commenter-name {
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: 18px;
+}
+.discussion-comment .discussion-commenter-meta .discussion-commenter-name:hover {
+  color: #795548;
+}
+.discussion-comment .discussion-commenter-meta .discussion-comment-date {
+  font-size: 12px;
+  margin-top: 0px;
+  color: #ddd;
+  text-transform: uppercase;
+}
+.discussion-comment .discussion-commenter-meta .discussion-comment-date span {
+  display: inline;
+  font-size: 12px;
+  color: #ddd;
+  text-transform: uppercase;
+}
+.discussion-comment .discussion-comment-text {
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  margin-top: 20px;
+}
+.discussion-comment .discussion-comment-text p {
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  color: rgba(0, 0, 0, 0.7);
+}
+.discussion-comment .discussion-comment-text p.comment-removed {
+  color: #727272;
+}
+.discussion-comment .inner-comment-row .vote-up.upvoted {
+  color: #00BCD4;
+  cursor: default;
+  background: transparent !important;
+}
+.discussion-comment .inner-comment-row .vote-up.upvoted:hover {
+  background: transparent !important;
+}
+.discussion-comment .inner-comment-row .vote-up.upvoted i,
+.discussion-comment .inner-comment-row .vote-up.upvoted span {
+  color: #00BCD4 !important;
+  background: transparent !important;
+  cursor: default;
+}
+.discussion-comment .inner-comment-row .vote-up .md-tooltip {
+  top: -45px;
+}
+.discussion-comment .inner-comment-row .md-button {
+  padding: 2px 15px;
+  margin: 0;
+  min-height: 0;
+}
+.discussion-comment .inner-comment-row .md-button i {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 28px;
+  padding-top: 4px;
+}
+.discussion-comment .inner-comment-row .md-button span {
+  display: inline-block;
+  vertical-align: top;
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.discussion-comment-user-reported-message {
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  display: none;
+  color: #727272;
+}
+.discussion-comment-children .discussion-comment {
+  margin-left: 40px;
+}
+.sort-method-select {
+  text-align: right;
+}
+.discussion-comment-button {
+  min-width: 0 !important;
+  padding: 5px 8px !important;
+  height: auto !important;
+  position: relative;
+  overflow: visible !important;
+}
+.discussion-comment-button:hover .md-tooltip {
+  display: block;
+}
+.discussion-comment-button.toggle-more-button .md-tooltip {
+  left: -23px;
+}
+.more-options {
+  display: none;
+  position: absolute;
+  bottom: -30px;
+  z-index: 1;
+  background: #f6f6f6;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+.more-options.more-options--visible {
+  display: block;
+}
+.more-options.share-options {
+  left: 110px;
+  bottom: -175px;
+}
+.more-options .discussion-comment-button {
+  display: block !important;
+  border-bottom: 1px solid #eee !important;
+  margin: 0 !important;
+  text-align: left !important;
+}

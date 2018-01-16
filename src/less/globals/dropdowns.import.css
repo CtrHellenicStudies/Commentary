@@ -1,0 +1,19 @@
+.dropdown {
+  position: relative;
+}
+.dropdown .dropdown-head {
+  cursor: pointer;
+}
+.dropdown .dropdown-head label,
+.dropdown .dropdown-head .dropdown-arrow {
+  cursor: pointer;
+}
+.dropdown .dropdown-panel {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.dropdown-search-tools {
+  display: none;
+}

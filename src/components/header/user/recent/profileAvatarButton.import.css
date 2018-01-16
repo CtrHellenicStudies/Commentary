@@ -1,0 +1,174 @@
+/******************************************************************************
+
+						  ___ _  _ ___
+						 / __| || / __|
+						| (__| __ \__ \
+						 \___|_||_|___/
+
+  		The Center for Hellenic Studies
+
+
+ |  Style Variables for A Homer Commentary in Progress and CHS Annotations
+ |
+ |   1. Colors
+ |   2. Typography
+ |   3. Mixins
+
+
+******************************************************************************/
+/******************************************************************************
+
+1. Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.1 Base Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.2 Brand Colors
+
+******************************************************************************/
+/******************************************************************************
+
+1.3 Text Colors
+
+******************************************************************************/
+/******************************************************************************
+
+2. Typography
+
+Available Fonts:
+
+=================================
+Google Fonts
+=================================
+font-family: 'Gentium Basic', serif;
+font-family: 'Merriweather', serif;
+
+
+=================================
+Fonts.com
+=================================
+font-family:'Museo Sans W01_900';
+font-family:'ProximaNW01-AltLightReg';
+font-family:'Proxima N W01 At Smbd';
+font-family:'Museo W01_700';
+font-family:'Proxima N W01 Thin Reg';
+font-family:'Proxima Nova W08 Reg';
+font-family:'Proxima Nova W15 Medium';
+font-family:'Proxima Nova W07 Semibold';
+font-family:'Proxima Nova W07 Bold';
+font-family:'Proxima Nova W07 Extrabold';
+font-family:'Proxima Nova W07 Black';
+
+=================================
+Material Design Icons
+=================================
+font-family: "Material Design Icons";
+
+******************************************************************************/
+/******************************************************************************
+
+2.1 Base Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.2 Title Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.3 Reading Environment Fonts
+
+******************************************************************************/
+/******************************************************************************
+
+2.4 Material Design Icons
+
+******************************************************************************/
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
+  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/******************************************************************************
+
+3. Mixins
+
+******************************************************************************/
+@-webkit-keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.profileButton {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0;
+  padding: 0;
+}
+.profileButton a {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  height: 80px;
+  display: block;
+  cursor: pointer;
+  -webkit-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  -moz-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  -ms-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  -o-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  padding: 25px 16px;
+}
+.profileButton a:hover {
+  background-color: rgba(153, 153, 153, 0.2);
+}
+.profileButtonAvatar {
+  position: relative;
+}
+.profileButtonAvatar .avatar-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  border: 1px solid #eee;
+}
+.notificationBadge {
+  font-size: 10px;
+  padding: 4px 6px;
+  right: 15px;
+  line-height: 10px;
+  top: 15px;
+  position: absolute;
+  background: #f6f6f6;
+  color: #5D4037;
+  border-radius: 100%;
+  height: 18px;
+  width: 18px;
+}
+header .header-section-wrap a span.notificationBadge,
+header .header-section-wrap .account-button span.notificationBadge {
+  font-size: 10px;
+}

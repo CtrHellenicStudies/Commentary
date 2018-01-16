@@ -1,12 +1,10 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query usersQuery ($tenantId: ID) {
+query usersQuery ($tenantId: String) {
 	users (tenantId: $tenantId) {
+		_id
         username
-        name
-        email
-        bio
 	}
 }
 `;

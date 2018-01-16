@@ -45,7 +45,14 @@ class ModalSignup extends Component {
 			});
 			throw new Error('Passwords do not match');
 		}
-		register({username: email, password: checkPassword});
+		const that = this;
+		register({username: email, password: checkPassword}).then(function(ret) {
+			if(ret) {
+				that.setState({
+					errorMsg: ret.message
+				});
+			}
+		});
 
 	}
 

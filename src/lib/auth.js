@@ -10,6 +10,7 @@ const userLoggedIn = () => {
 };
 const login = async (data) => {
 	if (userLoggedIn()) {
+		console.log('logged_in');
 		return null;
 	}
 
@@ -31,16 +32,16 @@ const login = async (data) => {
 		}
 		const resJson = await res.json();
 		if (resJson.token) {
-			Cookies.set('token', resJson.token);
 			console.log(atob(resJson.token.split('.')[1]));
             let dataJSON = JSON.parse(atob(resJson.token.split('.')[1]));
-            delete dataJSON.password;
+			delete dataJSON.password;
+			Cookies.set('token', resJson.token);
 			Cookies.set('user', dataJSON);
 			window.location.reload();
 			return resJson;
 		}
 	} catch (err) {
-		throw err;
+		return err;
 	}
 };
 
@@ -70,9 +71,10 @@ const register = async (data) => {
 		}
 		const resJson = await res.json();
 		if (resJson.token) {
-            Cookies.set('token', resJson.token);
-            let dataJSON = JSON.parse(resJson.token.split('.')[1]);
-            delete dataJSON.password;
+			console.log(resJson);
+            let dataJSON = JSON.parse(atob(resJson.token.split('.')[1]));
+			delete dataJSON.password;
+			Cookies.set('token', resJson.token);
 			Cookies.set('user', dataJSON);
 			window.location.reload();
 			return resJson;
@@ -84,7 +86,7 @@ const register = async (data) => {
 			});
 		}
 	} catch (err) {
-		throw err;
+		return err;
 	}
 };
 

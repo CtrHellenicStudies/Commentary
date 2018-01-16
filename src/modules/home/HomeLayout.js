@@ -35,7 +35,9 @@ class HomeLayout extends Component {
 	componentDidMount() {
 		if (typeof window.location.hash !== 'undefined' && window.location.hash.length > 0) {
 			setTimeout(() => {
-				$('html, body').animate({ scrollTop: $(window.location.hash).offset().top - 100 }, 300);
+				if ($(window.location.hash).offset()) {
+					$('html, body').animate({ scrollTop: $(window.location.hash).offset().top - 100 }, 300);
+				}
 			}, 1000);
 		}
 	}

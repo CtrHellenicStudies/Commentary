@@ -338,14 +338,15 @@ class Header extends Component {
 										</div>
 									:
 										<div>
+											{ isOnHomeView ? 
 											<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
 												<FlatButton
 													label="Login"
 													onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
 													style={styles.flatButton}
 													className="account-button account-button-login"
-												/>
-											</Link>
+												/> 
+											</Link>: ''}
 											<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
 												<FlatButton
 													label="Join the Community"

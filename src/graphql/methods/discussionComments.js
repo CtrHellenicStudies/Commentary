@@ -73,7 +73,7 @@ mutation discussionCommentInsert($discussionContent: String! $commentId: String!
 }
 `;
 const discussionCommentsQuery = graphql(query, {
-	name: 'discussionCommentsQuery'
+	name: 'discussionCommentsQuery',
 });
 
 const discussionCommentUpdateStatusMutation = graphql(discussionCommentUpdateStatus, {

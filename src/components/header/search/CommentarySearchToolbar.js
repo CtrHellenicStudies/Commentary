@@ -238,11 +238,11 @@ class CommentarySearchToolbar extends Component {
 					style={{ width: 250, padding: '10px 20px' }}
 					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
 				>
-					<LineRangeSlider
+					{/* <LineRangeSlider
 						handleChangeLineN={handleChangeLineN}
 						lineFrom={lineFrom}
 						lineTo={lineTo}
-					/>
+					/> */}
 					<div className="disabled-screen" />
 				</div>
 

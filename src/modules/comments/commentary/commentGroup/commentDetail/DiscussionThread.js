@@ -51,6 +51,7 @@ class DiscussionThread extends Component {
 			return;
 		}
 		let discussionComments = props.discussionCommentsQuery.discussionComments;
+		console.log(discussionComments);
 		let helpArray = JSON.parse(JSON.stringify(props.discussionCommentsQuery.discussionComments));
 		switch (this.state.sortMethod) {
 			case 'votes':

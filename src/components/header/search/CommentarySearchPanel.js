@@ -229,9 +229,9 @@ class CommentarySearchPanel extends Component {
 					/>
 					<CardText expandable style={styles.wrapper}>
 						<div style={styles.lineSearch} className="line-search">
-							<LineRangeSlider
+							{/* <LineRangeSlider
 								handleChangeLineN={this.props.handleChangeLineN}
-							/>
+							/> */}
 						</div>
 					</CardText>
 				</Card>

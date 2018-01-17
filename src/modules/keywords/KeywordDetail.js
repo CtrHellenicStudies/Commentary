@@ -110,6 +110,7 @@ class KeywordDetail extends Component {
 			Utils.setDescription(Utils.trunc(keyword.description, 150));
 		}
 		Utils.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
+		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -126,11 +127,11 @@ class KeywordDetail extends Component {
 									<div className="center-content">
 										<div className="page-title-wrap">
 											<h2 className="page-title ">{keyword.title}</h2>
-											{Cookies.get('user') && Cookies.get('user').roles && Cookies.get('user').roles.length > 0 ?
+											{user && user.roles && user.roles.length > 0 ?
 												<div>
 													<Link to={`/tags/${keyword.slug}/edit`}>
 														<RaisedButton
-															// href={`/tags/${keyword.slug}/edit`}
+															href={`/tags/${keyword.slug}/edit`}
 															className="cover-link light"
 															label="Edit"
 														/>

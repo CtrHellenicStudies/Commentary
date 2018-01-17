@@ -83,7 +83,6 @@ const routes = (props) => {
 			id: id,
 		});
 	} else if(Cookies.get('user') && !props.usersQuery.loading) {
-		console.log(props.usersQuery.users[0]);
 		Cookies.set('user', props.usersQuery.users[0]);
 	}
 	if (!sessionStorage.getItem('tenantId')) {

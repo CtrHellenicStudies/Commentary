@@ -203,8 +203,8 @@ class DiscussionComment extends Component {
 							</Link>
 							<span className="discussion-comment-date">
 								<span>{discussionComment.updated ? 'Updated: ' : 'Created: '}</span>
-								{moment(discussionComment.updated ||
-									discussionComment.created).format('D MMMM YYYY')}
+								{ discussionComment.updated ||
+									discussionComment.created ? moment().format('D MMMM YYYY'): ''}
 							</span>
 						</div>
 

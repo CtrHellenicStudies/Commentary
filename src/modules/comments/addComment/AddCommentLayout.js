@@ -248,16 +248,13 @@ class AddCommentLayout extends Component {
 			// created: JSON.stringify(new Date()), TODO
 			status: 'publish',
 		};
+		const that = this;
 		this.props.commentInsert(comment).then((res) => {
 			if (res.data.commentInsert._id) {
-				this.setState({
-					loading: false
-				});
 				const urlParams = qs.stringify({_id: res.data.commentInsert._id});
-				
-				this.props.history.push(`/commentary?${urlParams}`);
-				
+				that.props.history.push(`/commentary?${urlParams}`);	
 			}
+			this.props.history.push(`/`);
 		});
 	}
 

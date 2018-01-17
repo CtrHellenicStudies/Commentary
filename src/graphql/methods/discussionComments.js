@@ -1,8 +1,8 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query discussionComments{
-	discussionComments{
+query discussionComments($commentId: String $tenantId: String $userId: String){
+	discussionComments(commentId: $commentId tenantId: $tenantId userId: $userId){
 		_id
 		userId
 		content
@@ -73,7 +73,7 @@ mutation discussionCommentInsert($discussionContent: String! $commentId: String!
 }
 `;
 const discussionCommentsQuery = graphql(query, {
-	name: 'discussionCommentsQuery'
+	name: 'discussionCommentsQuery',
 });
 
 const discussionCommentUpdateStatusMutation = graphql(discussionCommentUpdateStatus, {
@@ -142,7 +142,7 @@ const discussionCommentInsertMutation = graphql(discussionCommentInsert, {
 	}
 });
 
-export {discussionCommentsQuery,
+export { discussionCommentsQuery,
 		discussionCommentUpdateStatusMutation,
 		discussionCommentRemoveMutation,
 		discussionCommentUpdateMutation,

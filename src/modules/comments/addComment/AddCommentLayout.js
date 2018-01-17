@@ -23,7 +23,7 @@ import Utils from '../../../lib/utils';
 
 // graphql
 import { commentsInsertMutation } from '../../../graphql/methods/comments';
-import collectionQuery from '../../../graphql/methods/collection';
+import { textNodesQuery } from '../../../graphql/methods/textNodes';
 
 
 const getKeywords = (formData) => {
@@ -129,9 +129,20 @@ class AddCommentLayout extends Component {
 			return;
 		}
 		const { filters } = this.state;
+<<<<<<< HEAD
 		const { work } = getFilterValues(filters); // TODO
 		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(work, 0, 49));
 		this.props.collectionQuery.refetch(properties);
+=======
+		const { work, subwork } = getFilterValues(filters);
+		const properties = {
+			workSlug: work ? work.slug : 'iliad',
+			subworkN: subwork ? subwork.n : 1,
+			lineFrom: selectedLineFrom,
+			lineTo: selectedLineTo
+		};
+		this.props.textNodesQuery.refetch(properties);
+>>>>>>> develop
 	}
 
 	toggleSearchTerm(key, value) {
@@ -245,16 +256,13 @@ class AddCommentLayout extends Component {
 			// created: JSON.stringify(new Date()), TODO
 			status: 'publish',
 		};
+		const that = this;
 		this.props.commentInsert(comment).then((res) => {
 			if (res.data.commentInsert._id) {
-				this.setState({
-					loading: false
-				});
 				const urlParams = qs.stringify({_id: res.data.commentInsert._id});
-				
-				this.props.history.push(`/commentary?${urlParams}`);
-				
+				that.props.history.push(`/commentary?${urlParams}`);	
 			}
+			this.props.history.push(`/`);
 		});
 	}
 
@@ -436,7 +444,11 @@ class AddCommentLayout extends Component {
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
+<<<<<<< HEAD
 										textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.collection.textGroup.work.textNodes}
+=======
+										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodesAhcip}
+>>>>>>> develop
 									/>
 
 									<AddComment
@@ -475,10 +487,10 @@ class AddCommentLayout extends Component {
 AddCommentLayout.propTypes = {
 	commentInsert: PropTypes.func,
 	history: PropTypes.object,
-	collectionQuery: PropTypes.object
+	textNodesQuery: PropTypes.object
 };
 
 export default compose(
 	commentsInsertMutation,
-	collectionQuery
+	textNodesQuery
 )(AddCommentLayout);

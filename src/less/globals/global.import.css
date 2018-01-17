@@ -5949,7 +5949,7 @@ input,
 p,
 span,
 label {
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   color: #212121;
 }
 body {
@@ -5967,7 +5967,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 a {
   color: #1e1e1e;
@@ -6080,25 +6080,25 @@ body > .container {
  */
 ::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 :-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 ::-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 :-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
@@ -6462,7 +6462,7 @@ button#at-btn {
   padding: 10px 15px;
   font-size: 18px;
   color: #1e1e1e;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   background: #fff;
   height: auto;
   border: 2px solid #aaa;
@@ -6476,7 +6476,7 @@ button#at-btn {
   color: #e31d3b;
   font-size: 16px;
   font-weight: bold;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 .md-tooltip {
   display: none;

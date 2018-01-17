@@ -29,7 +29,7 @@ mutation getMaxLine($workSlug: String! $subworkN: Int!) {
 `;
 const queryById = gql`
 query textNodesQueryById($id: ID!) {
-  textNodes(_id: $id) {
+  textNodesAhcip(_id: $id) {
   tenantId
 	text {
 		n
@@ -61,10 +61,9 @@ query textNodesQueryById($id: ID!) {
 const query = gql`
 query textNodesQuery ($tenantId: ID $workSlug: String $subworkN: Int $lineFrom: Int
 	 $lineTo: Int $skip: Int $limit: Int $editionId: String) {
-  textNodes (tenantId: $tenantId workSlug: $workSlug subworkN: $subworkN
+		textNodesAhcip (tenantId: $tenantId workSlug: $workSlug subworkN: $subworkN
 	lineFrom: $lineFrom lineTo: $lineTo skip: $skip limit: $limit editionId: $editionId) {
   _id
-  tenantId
   text {
 		n
 		text

@@ -10,6 +10,7 @@ import { login, logout } from './lib/auth'
 
 // graphql
 import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
+import { usersQuery } from './graphql/methods/users';
 
 // layouts
 import CommentaryLayout from './modules/comments/CommentaryLayout';
@@ -70,6 +71,20 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
  * Application routes
  */
 const routes = (props) => {
+
+	const user = Cookies.get('user');
+	if (user !== undefined &&
+		user !== null && 
+		!props.usersQuery.loading &&
+		props.usersQuery.users.length && 
+		!(props.usersQuery.users[0]._id === JSON.parse(Cookies.get('user'))._id)) {
+		const id = JSON.parse(user)._id;
+		props.usersQuery.refetch({
+			id: id,
+		});
+	} else if(Cookies.get('user') && !props.usersQuery.loading) {
+		Cookies.set('user', props.usersQuery.users[0]);
+	}
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
 			return <Route component={NotFound} />;
@@ -220,11 +235,11 @@ const App = props => (
 	</BrowserRouter>
 );
 PrivateRoute.propTypes = {
-	component: PropTypes.object,
+	component: PropTypes.func,
 	location: PropTypes.string
 };
 routes.propTypes = {
 	subdomain: PropTypes.string,
 	tenantsBySubdomainQuery: PropTypes.object
 };
-export default compose(tenantsBySubdomainQuery)(App);
+export default compose(tenantsBySubdomainQuery, usersQuery)(App);

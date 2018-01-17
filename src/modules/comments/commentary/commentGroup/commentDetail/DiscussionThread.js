@@ -1,5 +1,4 @@
-import React from 'react';
-import createClass from 'create-react-class';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
 import Cookies from 'js-cookie';
@@ -7,9 +6,12 @@ import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import { compose } from 'react-apollo';
+
+// graphql
 import { 
 	discussionCommentInsertMutation,
 	discussionCommentsQuery } from '../../../../../graphql/methods/discussionComments';
+import { usersQuery } from '../../../../../graphql/methods/users';
 
 // lib
 import Utils from '../../../../../lib/utils';
@@ -17,36 +19,65 @@ import Utils from '../../../../../lib/utils';
 // components
 import DiscussionComment from '../../../../discussionComments/DiscussionComment';
 
-const DiscussionThread = createClass({
+class DiscussionThread extends Component {
 
-	propTypes: {
-		comment: PropTypes.object.isRequired,
-		discussionVisible: PropTypes.bool.isRequired,
-		showDiscussionThread: PropTypes.func.isRequired,
-		hideDiscussionThread: PropTypes.func.isRequired,
-		toggleLemma: PropTypes.func.isRequired,
-		showLoginModal: PropTypes.func,
-		discussionComments: PropTypes.array,
-		commenters: PropTypes.array,
-		discussionCommentsDisabled: PropTypes.bool,
-		ready: PropTypes.bool,
-		discussionCommentInsert: PropTypes.func
-	},
-
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			sortMethod: 'votes',
-		};
-	},
-
+			discussionComments: [],
+			getDissComments: true,
+			ready: false,
+			discussionCommentsDisabled: []
+		}
+		this.showDiscussionThread = this.showDiscussionThread.bind(this);
+		this.hideDiscussionThread = this.hideDiscussionThread.bind(this);
+		this.addDiscussionComment = this.addDiscussionComment.bind(this);
+		this.sortMethodSelect = this.sortMethodSelect.bind(this);
+	}
+	componentWillReceiveProps(props) {
+		if (props.usersQuery.loading || !props.comment || props.discussionCommentsQuery.loading) {
+			return;
+		}
+		if (this.state.getDissComments) {
+			const properties = {
+				tenantId: sessionStorage.getItem('tenantId'),
+				commentId: props.comment._id
+			};
+			props.discussionCommentsQuery.refetch(properties);
+			this.setState({
+				getDissComments: false
+			});
+			return;
+		}
+		let discussionComments = props.discussionCommentsQuery.discussionComments;
+		console.log(discussionComments);
+		let helpArray = JSON.parse(JSON.stringify(props.discussionCommentsQuery.discussionComments));
+		switch (this.state.sortMethod) {
+			case 'votes':
+				helpArray.sort(Utils.sortBy('votes', 'updated'));
+				discussionComments = helpArray;
+				break;
+			case 'recent':
+				helpArray.sort(Utils.sortBy('updated', 'votes'));
+				discussionComments = helpArray;
+				break;
+			default:
+				break;
+			}
+		this.setState({
+			discussionComments: discussionComments,
+			users: props.usersQuery.users,
+			ready: true
+		});
+		
+	}
 	showDiscussionThread() {
 		this.props.showDiscussionThread(this.props.comment);
-	},
-
+	}
 	hideDiscussionThread() {
 		this.props.hideDiscussionThread();
-	},
-
+	}
 	addDiscussionComment() {
 		const content = $(this.newCommentForm).find('textarea').val();
 
@@ -55,17 +86,16 @@ const DiscussionThread = createClass({
 			sessionStorage.getItem('tenantId'));
 
 		$(this.newCommentForm).find('textarea').val('');
-	},
-
+	}
 	sortMethodSelect(value) {
 		this.setState({
 			sortMethod: value,
 		});
-	},
-
+	}
 	render() {
 		const currentUser = Cookies.get('user');
-		const { discussionComments, comment, discussionCommentsDisabled } = this.props;
+		const { comment } = this.props;
+		const { discussionComments, discussionCommentsDisabled } = this.state
 
 		if (!discussionComments) {
 			return null;
@@ -93,17 +123,6 @@ const DiscussionThread = createClass({
 			color: '#FFFFFF',
 		};
 
-		switch (this.state.sortMethod) {
-		case 'votes':
-			discussionComments.sort(Utils.sortBy('votes', 'updated'));
-			break;
-		case 'recent':
-			discussionComments.sort(Utils.sortBy('updated', 'votes'));
-			break;
-		default:
-			break;
-		}
-
 		return (
 
 			<div className={discussionWrapClass}>
@@ -117,15 +136,15 @@ const DiscussionThread = createClass({
 						onClick={this.props.toggleLemma}
 					>
 						<i className="mdi mdi-comment" />
-						{this.props.discussionComments.length ?
+						{this.state.discussionComments.length ?
 							<span className="continue-discussion-text">
-								{this.props.discussionComments.length}
+								{this.state.discussionComments.length}
 							</span>
 						: ''}
 					</div>
 				</div>
 
-				{!this.props.ready ?
+				{!this.state.ready ?
 					''
 					:
 					<div className="discussion-thread">
@@ -202,7 +221,7 @@ const DiscussionThread = createClass({
 						<div
 							className="sort-by-wrap"
 						/>
-						{this.props.discussionComments.length === 0 ?
+						{this.state.discussionComments.length === 0 ?
 							<div className="no-results-wrap">
 								{!comment.discussionCommentsDisabled && !discussionCommentsDisabled ?
 									<span className="no-results-text">No discussion comments.</span>
@@ -224,7 +243,7 @@ const DiscussionThread = createClass({
 								/>
 							</div>
 						}
-						{this.props.discussionComments.map((discussionComment, i) =>
+						{this.state.discussionComments.map((discussionComment, i) =>
 							(<DiscussionComment
 								key={i}
 								className="discussion-comment paper-shadow"
@@ -236,47 +255,21 @@ const DiscussionThread = createClass({
 				}
 			</div>
 		);
-	},
-});
-
-
-// const cont = createContainer(({ comment }) => {
-// 	let discussionComments = [];
-// 	let	userDiscussionComments = [];
-// 	let	handleDiscuss;
-// 	let	users = [];
-
-// 	const handleUsers = Meteor.subscribe('users.all', sessionStorage.getItem('tenantId'));
-
-// 	users = Meteor.users.find({}).fetch();
-
-// 	if (comment) {
-// 		handleDiscuss = Meteor.subscribe('discussionComments', comment._id, sessionStorage.getItem('tenantId'));
-// 		discussionComments = DiscussionComments.find({
-// 			commentId: comment._id,
-// 			status: 'publish'
-// 		}).fetch();
-// 		userDiscussionComments = DiscussionComments.find({
-// 			commentId: comment._id,
-// 			userId: Meteor.userId(),
-// 		}).fetch();
-
-// 		discussionComments.push(...userDiscussionComments);
-
-// 		return {
-// 			discussionComments,
-// 			users,
-// 			ready: handleDiscuss.ready() && handleUsers.ready()
-// 		};
-// 	}
-
-// 	return {
-// 		discussionComments,
-// 		users,
-// 		ready: null,
-// 	};
-// }, DiscussionThread); TODO
+	}
+}
+DiscussionThread.propTypes = {
+	comment: PropTypes.object.isRequired,
+	discussionVisible: PropTypes.bool.isRequired,
+	showDiscussionThread: PropTypes.func.isRequired,
+	hideDiscussionThread: PropTypes.func.isRequired,
+	toggleLemma: PropTypes.func.isRequired,
+	showLoginModal: PropTypes.func,
+	discussionCommentsQuery: PropTypes.object,
+	commenters: PropTypes.array,
+	discussionCommentInsert: PropTypes.func
+};
 export default compose(
 	discussionCommentsQuery,
-	discussionCommentInsertMutation
+	discussionCommentInsertMutation,
+	usersQuery
 )(DiscussionThread);

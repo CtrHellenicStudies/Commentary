@@ -178,7 +178,7 @@ font-family: "Material Design Icons";
   left: 10px;
   color: #fff;
   line-height: 1.3em;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-weight: bold;
 }
 .continue-discussion-icon i {
@@ -218,7 +218,7 @@ font-family: "Material Design Icons";
   text-align: right;
 }
 .discussion-thread .sort-by-wrap .sort-by-label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   color: #727272;
   text-transform: uppercase;
@@ -234,7 +234,7 @@ font-family: "Material Design Icons";
   margin: 0px 2px;
 }
 .discussion-thread .sort-by-wrap .sort-by-option span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   color: #5D4037;
 }
@@ -315,7 +315,7 @@ font-family: "Material Design Icons";
   min-height: 0;
 }
 .discussion-thread .add-comment-wrap .md-button span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -447,7 +447,7 @@ font-family: "Material Design Icons";
   color: #727272;
   text-transform: uppercase;
   font-weight: bold;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   display: block;
   width: 100%;
   background: #eee;
@@ -471,7 +471,7 @@ font-family: "Material Design Icons";
   clear: both;
 }
 .discussion-comment .discussion-commenter-meta .discussion-commenter-name {
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 18px;
 }
 .discussion-comment .discussion-commenter-meta .discussion-commenter-name:hover {
@@ -537,7 +537,7 @@ font-family: "Material Design Icons";
 .discussion-comment .inner-comment-row .md-button span {
   display: inline-block;
   vertical-align: top;
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
 }

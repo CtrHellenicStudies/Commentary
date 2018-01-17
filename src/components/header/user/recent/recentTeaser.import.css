@@ -138,14 +138,14 @@ font-family: "Material Design Icons";
 }
 .recentTeaserTitle {
   display: block;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
   padding: 5px 0;
   color: $text;
 }
 .recentTeaserChapter {
   display: block;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 13px;
   padding: 5px;
   color: #666;

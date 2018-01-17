@@ -14,8 +14,7 @@ import _ from 'lodash';
 
 // graphql
 import { editionsQuery } from '../../../graphql/methods/editions';
-import { textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
-import collectionQuery from '../../../graphql/methods/collection';
+import { textNodesQuery, textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
@@ -47,9 +46,10 @@ class TextNodesInput extends Component {
 
 	componentWillReceiveProps(props) {
 		
-		if (props.editionsQuery.loading || props.collectionQuery.loading) {
+		if (props.editionsQuery.loading || props.textNodesQuery.loading) {
 			return;
 		}
+<<<<<<< HEAD
 		const { workSlug, editionId, lineFrom, limit } = props;
 		if (!props.collectionQuery.variables.urn1) {
 			const code = Utils.encodeBookBySlug('homeric-hymns' ? 'hymns' : workSlug);
@@ -59,6 +59,20 @@ class TextNodesInput extends Component {
 				parseInt(lineFrom, 10) + limit
 			));
 			props.collectionQuery.refetch(properties);
+=======
+		const { workSlug, editionId, subworkN, lineFrom, limit } = props;
+		if (!props.textNodesQuery.variables.workSlug) {
+			const properties = {
+				workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
+				subworkN: subworkN,
+				lineFrom: parseInt(lineFrom, 10),
+				lineTo: parseInt(lineFrom, 10) + limit,
+				editionId: editionId,
+				limit: limit
+	
+			};
+			props.textNodesQuery.refetch(properties);
+>>>>>>> develop
 			return;
 		}
 		let textNodes;
@@ -69,7 +83,11 @@ class TextNodesInput extends Component {
 		const ready = true;
 	
 		if (ready) {
+<<<<<<< HEAD
 			textNodes = props.collectionQuery.collection.textGroup.work.textNodes;
+=======
+			textNodes = props.textNodesQuery.textNodesAhcip;
+>>>>>>> develop
 			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions);
 			textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
 	
@@ -291,7 +309,7 @@ TextNodesInput.propTypes = {
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
 	loadMore: PropTypes.func,
-	collectionQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object,
 	editionsQuery: PropTypes.object,
 	textNodeUpdate: PropTypes.func,
 	limit: PropTypes.number
@@ -299,5 +317,5 @@ TextNodesInput.propTypes = {
 
 export default compose(
 	editionsQuery,
-	collectionQuery,
+	textNodesQuery,
 	textNodeUpdateMutation)(TextNodesInput);

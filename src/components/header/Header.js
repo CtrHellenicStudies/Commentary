@@ -58,7 +58,7 @@ class Header extends Component {
 
 	constructor(props) {
 		super(props);
-
+		const user = Cookies.get('user');
 		this.state = {
 			leftMenuOpen: false,
 			rightMenuOpen: false,
@@ -70,7 +70,7 @@ class Header extends Component {
 			modalSignupLowered: !!props.showSignup,
 			modalForgotPwdLowered: !!props.showForgotPwd,
 			tenantId: sessionStorage.getItem('tenantId'),
-			user: Cookies.get('user')
+			user: user ? JSON.parse(user) : undefined
 		};
 
 		// methods:
@@ -293,8 +293,8 @@ class Header extends Component {
 									}
 									{user ?
 										<div>
-                                            {   Cookies.get('user')._id &&
-                                                Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter']) 
+                                            {   this.state.user &&
+                                                Utils.userInRole(this.state.user, ['editor', 'admin', 'commenter']) 
                                             ?
 												<div className="user-header-links admin-header-links">
 													{tenant && !tenant.isAnnotation &&
@@ -338,14 +338,15 @@ class Header extends Component {
 										</div>
 									:
 										<div>
+											{ isOnHomeView ? 
 											<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
 												<FlatButton
 													label="Login"
 													onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
 													style={styles.flatButton}
 													className="account-button account-button-login"
-												/>
-											</Link>
+												/> 
+											</Link>: ''}
 											<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
 												<FlatButton
 													label="Join the Community"

@@ -221,7 +221,7 @@ header .header-section-wrap .account-button {
 }
 header .header-section-wrap a span,
 header .header-section-wrap .account-button span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
 }
 header .nav-wrap {
@@ -261,7 +261,7 @@ header .header-home-link h3.logo {
 }
 header a[type="button"],
 header button {
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
 }
 header ul.menu {
   margin: 0;

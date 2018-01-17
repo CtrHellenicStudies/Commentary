@@ -132,7 +132,7 @@ font-family: "Material Design Icons";
   text-align: left;
   padding: 3px 0;
   border-bottom: #fefefe;
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
 }
 .md-sidenav-left a i,
 .md-sidenav-left a span {
@@ -146,7 +146,7 @@ font-family: "Material Design Icons";
 .md-sidenav-left a span {
   font-size: 17px;
   padding: 5px 10px;
-  font-family: 'Proxima N W01 At Smbd', sans-serif !important;
+  font-family: 'Proxima Nova', sans-serif !important;
 }
 .md-sidenav-left hr {
   margin-bottom: 5px;
@@ -166,7 +166,7 @@ font-family: "Material Design Icons";
 }
 .sidenav-top .user-fullname {
   text-overflow: ellipsis;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 20px;
   color: #fff;
   width: 220px;

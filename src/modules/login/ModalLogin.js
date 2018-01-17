@@ -43,7 +43,14 @@ class ModalLogin extends Component {
 		if (event.keyCode === ESCAPE_KEY) closeModal();
 	}
 	handleLogin(email, password) {
-		login({ username: email, password: password });
+		const that = this;
+		login({ username: email, password: password }).then(function(ret) {
+			if(ret) {
+				that.setState({
+					errorMsg: ret.message
+				});
+			}
+		});
 	}
 	signup() {
 		this.props.closeModal();

@@ -183,7 +183,6 @@ const Utils = {
 		};
 	},
 	setBaseDocMeta() {
-		console.log(process);
 		Utils.setMetaTag('name', 'url', window.location.href);
 		Utils.setMetaTag('name', 'twitter:card', 'summary');
 		Utils.setMetaTag('name', 'twitter:url', window.location.href);

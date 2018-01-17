@@ -148,7 +148,7 @@ font-family: "Material Design Icons";
   color: #fff;
   padding: 10px 20px;
   border: 1px solid #795548;
-  font-family: 'Proxima N W01 At Smbd', sans-serif 14px;
+  font-family: 'Proxima Nova', sans-serif 14px;
   text-transform: uppercase;
 }
 .filter .filter-val {
@@ -180,7 +180,7 @@ font-family: "Material Design Icons";
   padding: 4px;
 }
 .filter .filter-val span {
-  font-family: 'Proxima Nova A W07 Light', sans-serif 13px;
+  font-family: 'Proxima Nova', sans-serif 13px;
   display: inline-block;
   vertical-align: top;
 }

@@ -9,7 +9,7 @@ import ContextPanelText from './ContextPanelText';
 import ContextPanelTabs from './ContextPanelTabs';
 
 // graphql
-import collectionQuery from '../../../graphql/methods/collection';
+import { textNodesQuery } from '../../../graphql/methods/textNodes';
 import { editionsQuery } from '../../../graphql/methods/editions';
 
 // lib:
@@ -55,12 +55,13 @@ class ContextPanelContent extends Component {
 
 		const { lineFrom, multiline } = nextProps;
 
-		if (nextProps.collectionQuery.loading || nextProps.editionsQuery.loading) {
+		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
 			return;
 		}
 		const lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;	
-		if (!nextProps.collectionQuery.variables.work) {
+		if (!nextProps.textNodesQuery.variables.workSlug) {
 
+<<<<<<< HEAD
 			const { workSlug, subworkN } = nextProps;	
 			const code = Utils.encodeBookBySlug(workSlug);
 			const 	properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
@@ -70,6 +71,22 @@ class ContextPanelContent extends Component {
 		}
 	
 		const textNodesCursor = nextProps.collectionQuery.collection.textGroup.work.textNodes;
+=======
+			const { workSlug, subworkN } = nextProps;		
+			const properties = {
+				workSlug: workSlug,
+				work: workSlug,
+				subworkN: subworkN,
+				lineFrom: lineFrom,
+				lineTo: lineTo,
+				start: lineFrom,
+				end: lineTo
+			};
+			nextProps.textNodesQuery.refetch(properties);
+		}
+	
+		const textNodesCursor = nextProps.textNodesQuery.textNodesAhcip;
+>>>>>>> develop
 		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 	
 		let sortedEditions;
@@ -165,7 +182,7 @@ ContextPanelContent.propTypes = {
 	selectedLineTo: PropTypes.number,
 	updateSelectedLines: PropTypes.func,
 	editor: PropTypes.bool,
-	collectionQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object,
 	editionsQuery: PropTypes.object,
 	multiline: PropTypes.bool
 };
@@ -181,5 +198,5 @@ ContextPanelContent.defaultProps = {
 };
 export default compose(
 	editionsQuery,
-	collectionQuery
+	textNodesQuery
 )(ContextPanelContent);

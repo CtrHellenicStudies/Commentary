@@ -244,7 +244,7 @@ font-family: "Material Design Icons";
   font-size: 18px;
 }
 .search-term-button .search-term-button-label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif 12px;
+  font-family: 'Proxima Nova', sans-serif 12px;
   font-weight: bold;
   color: #727272;
 }
@@ -282,7 +282,7 @@ font-family: "Material Design Icons";
   vertical-align: top;
 }
 .search-tool span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
   color: #5D4037;
 }
@@ -331,7 +331,7 @@ font-family: "Material Design Icons";
   display: block;
 }
 .line-search label {
-  font-family: 'Proxima N W01 At Smbd', sans-serif 14px;
+  font-family: 'Proxima Nova', sans-serif 14px;
   color: #5D4037;
   display: inline-block;
   padding: 14px 5px 5px 0;
@@ -339,7 +339,7 @@ font-family: "Material Design Icons";
 .line-search input {
   width: 69px;
   margin: 3px 10px 0 0;
-  font-family: 'Proxima Nova A W07 Light', sans-serif 14px;
+  font-family: 'Proxima Nova', sans-serif 14px;
 }
 .line-search .irs-bar {
   height: 10px;
@@ -378,7 +378,7 @@ font-family: "Material Design Icons";
   float: right;
   margin: 10px 30px 0px 0px;
   padding: 14px 26px;
-  font-family: 'Proxima N W01 At Smbd', sans-serif 16px;
+  font-family: 'Proxima Nova', sans-serif 16px;
   background: #607D8B;
   color: #fff;
   border-radius: 0px;
@@ -410,7 +410,7 @@ font-family: "Material Design Icons";
   text-align: center;
 }
 .no-results span {
-  font-family: 'Proxima N W01 At Smbd', sans-serif 16px;
+  font-family: 'Proxima Nova', sans-serif 16px;
 }
 .close-dropdown {
   position: absolute !important;

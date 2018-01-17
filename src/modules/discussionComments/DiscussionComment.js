@@ -40,7 +40,7 @@ class DiscussionComment extends Component {
 		let user;
 	
 		if (props.discussionComment) {
-			user = Cookies.get('user');
+			user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		}
 		this.setState({user: user});
 	}
@@ -136,7 +136,7 @@ class DiscussionComment extends Component {
 				username = user.username;
 				userLink = `/users/${user._id}/${user.username}`;
 			} else if (
-				'emails' in user
+				user.emails
 				&& user.emails.length
 			) {
 				userLink = `/users/${user._id}`;
@@ -203,8 +203,8 @@ class DiscussionComment extends Component {
 							</Link>
 							<span className="discussion-comment-date">
 								<span>{discussionComment.updated ? 'Updated: ' : 'Created: '}</span>
-								{moment(discussionComment.updated ||
-									discussionComment.created).format('D MMMM YYYY')}
+								{ discussionComment.updated ||
+									discussionComment.created ? moment().format('D MMMM YYYY'): ''}
 							</span>
 						</div>
 
@@ -260,8 +260,7 @@ class DiscussionComment extends Component {
 							''
 						}
 						{(
-								'currentUser' in self.props
-							&& self.props.currentUser
+							self.props.currentUser
 							&& user
 							&& self.props.currentUser._id === user._id
 						) ?
@@ -396,7 +395,7 @@ class DiscussionComment extends Component {
 }
 DiscussionComment.propTypes = {
 	discussionComment: PropTypes.object.isRequired,
-	currentUser: PropTypes.object,
+	currentUser: PropTypes.string,
 	discussionCommentUpdate: PropTypes.func,
 	discussionCommentUnreport: PropTypes.func,
 	discussionCommentReport: PropTypes.func,

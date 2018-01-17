@@ -488,7 +488,7 @@ font-family: "Material Design Icons";
     padding-top: 5px;
   }
   .comment-group-meta .comment-group-ref-above {
-    font-family: 'Proxima Nova W08 Reg', sans-serif;
+    font-family: 'Proxima Nova', sans-serif;
     font-size: 22px;
     line-height: 1.4em;
     display: inline-block;
@@ -506,7 +506,7 @@ font-family: "Material Design Icons";
     content: ".";
   }
   .comment-group-meta h2.comment-group-ref-below {
-    font-family: 'Proxima Nova W08 Reg', sans-serif;
+    font-family: 'Proxima Nova', sans-serif;
     font-size: 22px;
     line-height: 1.4em;
     display: inline-block;
@@ -571,7 +571,7 @@ font-family: "Material Design Icons";
   .discussion-wrap .continue-discussion h4.continue-discussion-label {
     font-size: 18px;
     font-weight: bold;
-    font-family: 'Proxima N W01 At Smbd', sans-serif;
+    font-family: 'Proxima Nova', sans-serif;
     display: inline-block;
     text-transform: uppercase;
     color: #727272;

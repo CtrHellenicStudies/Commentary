@@ -22,11 +22,7 @@ const SideNavTop = ({ currentUser, username }) => (
 	</div>
 );
 SideNavTop.propTypes = {
-	currentUser: PropTypes.shape({
-		profile: PropTypes.shape({
-			avatarUrl: PropTypes.string,
-		}),
-	}),
+	currentUser: PropTypes.string,
 	username: PropTypes.string,
 };
 SideNavTop.defaultProps = {

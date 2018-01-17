@@ -135,7 +135,7 @@ font-family: "Material Design Icons";
   width: 100%;
   margin: 20px auto;
   font-size: 24px;
-  font-family: 'Proxima Nova W08 Reg', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 .user-discussion-comments .user-discussion-comment {
   width: 100%;
@@ -150,7 +150,7 @@ font-family: "Material Design Icons";
   margin: 0 auto;
   max-width: 710px;
   display: block;
-  font-family: 'Proxima Nova A W07 Light', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   color: #727272;
   text-transform: uppercase;
   font-weight: bold;

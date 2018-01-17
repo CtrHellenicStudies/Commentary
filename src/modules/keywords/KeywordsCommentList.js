@@ -48,7 +48,7 @@ const KeywordCommentList = (props) => {
 
 							<div className="comment-upper-right">
 								{comment.commenters.map((commenter, _i) => {
-									const commenterRecord = commentersQuery.loading ? {} : commentersQuery.find(x =>
+									const commenterRecord = props.commentersQuery.loading ? {} : props.commentersQuery.commenters.find(x =>
 										x.slug === commenter.slug);
 
 									if (!commenterRecord) {

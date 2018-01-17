@@ -310,7 +310,7 @@ class AddComment extends Component {
 			if (!commentersOptions.some(val => (
 				commenter._id === val.value
 			))) {
-				if (Cookies.get('user').canEditCommenters.find(x => x === commenter._id) !== undefined) {
+				if (JSON.parse(Cookies.get('user')).canEditCommenters.find(x => x === commenter._id) !== undefined) {
 					commentersOptions.push({
 						value: commenter._id,
 						label: commenter.name,
@@ -326,7 +326,7 @@ class AddComment extends Component {
 			if (!commentersOptions.some(val => (
 				commenter._id === val._id
 			))) {
-				if (Cookies.get('user').canEditCommenters.find(x => x === commenter._id) !== undefined) {
+				if (JSON.parse(Cookies.get('user')).canEditCommenters.find(x => x === commenter._id) !== undefined) {
 					commentersOptions.push(commenter);
 				}
 			}
@@ -345,11 +345,12 @@ class AddComment extends Component {
 			});
 			return;
 		}
+		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		let commenters = [];
 		const tags = newProps.keywordsQuery.keywords;
-		if (Cookies.get('user') && Cookies.get('user').canEditCommenters && newProps.commentersQuery.commenters) {
+		if (user && user.canEditCommenters && newProps.commentersQuery.commenters) {
 			commenters = newProps.commentersQuery.commenters.filter(x => 
-				Cookies.get('user').canEditCommenters.find(y => y === x._id));
+				user.canEditCommenters.find(y => y === x._id));
 		}
 		const commentersOptions = this.getCommentersForUser(commenters);		
 		const referenceWorks = newProps.referenceWorksQuery.referenceWorks ? newProps.referenceWorksQuery.referenceWorks : [];
@@ -438,7 +439,6 @@ class AddComment extends Component {
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellcheck
-									tags={this.state.tags}
 									mediaOn
 								/>
 

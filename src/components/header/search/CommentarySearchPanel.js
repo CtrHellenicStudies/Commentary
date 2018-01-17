@@ -134,7 +134,7 @@ class CommentarySearchPanel extends Component {
 				background: '#f2f2f2',
 			},
 			cardHeader: {
-				fontFamily: 'Proxima N W01 At Smbd',
+				fontFamily: 'Proxima Nova',
 				textTransform: 'uppercase',
 				fontSize: '14px',
 				fontWeight: 'bold',
@@ -229,9 +229,9 @@ class CommentarySearchPanel extends Component {
 					/>
 					<CardText expandable style={styles.wrapper}>
 						<div style={styles.lineSearch} className="line-search">
-							<LineRangeSlider
+							{/* <LineRangeSlider
 								handleChangeLineN={this.props.handleChangeLineN}
-							/>
+							/> */}
 						</div>
 					</CardText>
 				</Card>

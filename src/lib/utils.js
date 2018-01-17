@@ -96,7 +96,6 @@ const Utils = {
 		if (!user) {
 			return false;
 		} else if(typeof user === 'string') {
-			console.log(user);
 			user = JSON.parse(user);
 			Cookies.set('user', user);
 		}

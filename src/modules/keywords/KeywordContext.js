@@ -11,7 +11,7 @@ import Utils, { makeKeywordContextQueryFromComment } from '../../lib/utils';
 // graphql
 import { editionsQuery } from '../../graphql/methods/editions';
 import { commentsQuery } from '../../graphql/methods/comments';
-import collectionQuery from '../../graphql/methods/collection';
+import { textNodesQuery } from '../../graphql/methods/textNodes';
 
 class KeywordContext extends Component {
 	constructor(props) {
@@ -24,7 +24,7 @@ class KeywordContext extends Component {
 	componentWillReceiveProps(props) {
 		if (props.commentsQuery.loading ||
 			props.editionsQuery.loading ||
-			props.collectionQuery.loading) {
+			props.textNodesQuery.loading) {
 			return;
 		}
 
@@ -49,15 +49,15 @@ class KeywordContext extends Component {
 			context.lineFrom = keyword.lineFrom;
 			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
 
-			if (!props.collectionQuery.loading) {
-				const textNodesCursor = props.collectionQuery.work.textNodes;
+			if (!props.textNodesQuery.loading) {
+				const textNodesCursor = props.textNodesQuery.textNodesAhcip;
 				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
 			}
-			props.collectionQuery.refetch({
-				start: context.lineFrom,
-				end: context.lineTo, // TPDO
-				//subworkN: context.subwork,
-				work: context.work
+			props.textNodesQuery.refetch({
+				lineFrom: context.lineFrom,
+				lineTo: context.lineTo,
+				subworkN: context.subwork,
+				workSlug: context.work
 			});
 
 		} else {
@@ -75,13 +75,13 @@ class KeywordContext extends Component {
 				if (props.commentsQuery.comments.length > 0) {
 					const comment = props.commentsQuery.comments[0];
 					const query = makeKeywordContextQueryFromComment(comment, maxLines);
-					props.collectionQuery.refetch(query);
+					props.textNodesQuery.refetch(query);
 					context.work = query.workSlug;
 					context.subwork = query.subworkN;
 					context.lineFrom = query.lineFrom;
 					context.lineTo = query.lineTo;
 
-					const textNodesCursor = collectionQuery.loading ? [] : collectionQuery.work.textNodes;
+					const textNodesCursor = textNodesQuery.loading ? [] : textNodesQuery.textNodesAhcip;
 					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
 				}
 			}
@@ -157,12 +157,12 @@ KeywordContext.propTypes = {
 	keyword: PropTypes.object,
 	editionsQuery: PropTypes.object,
 	commentsQuery: PropTypes.object,
-	collectionQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object,
 	maxLines: PropTypes.number
 };
 
 export default compose(
 	editionsQuery,
 	commentsQuery,
-	collectionQuery
+	textNodesQuery
 )(KeywordContext);

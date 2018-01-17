@@ -11,7 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import _ from 'underscore';
 
 // graphql
-import collectionQuery from '../../../../../graphql/methods/collection';
+import { textNodesQuery } from '../../../../../graphql/methods/textNodes';
 import { editionsQuery } from '../../../../../graphql/methods/editions';
 import { translationsQuery } from '../../../../../graphql/methods/translations';
 
@@ -165,12 +165,12 @@ class CommentLemma extends Component {
 		const { commentGroup, multiline } = nextProps;
 		const { selectedLemmaEditionIndex } = this.state;
 
-		if (nextProps.collectionQuery.loading || 
+		if (nextProps.textNodesQuery.loading || 
 			nextProps.editionsQuery.loading || 
 			nextProps.translationsQuery.loading) {
 			return;
 		}
-		const textNodesCursor = nextProps.collectionQuery.work ? nextProps.collectionQuery.work.textNodes: [];
+		const textNodesCursor = nextProps.textNodesQuery.textNodesAhcip;
 		let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 		const ready = true;
 		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
@@ -178,15 +178,16 @@ class CommentLemma extends Component {
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
 		if (commentGroup) {
-			if (!nextProps.collectionQuery.variables.work) {
-				nextProps.collectionQuery.variables.work = commentGroup.work.slug;
+			if (!nextProps.textNodesQuery.variables.workSlug) {
+				nextProps.textNodesQuery.variables.workSlug = commentGroup.work.slug;
 				const properties = {
-					work: commentGroup.work.slug, // TODO
-				//	subworkN: Number(commentGroup.subwork.title),
-					start: commentGroup.lineFrom,
-					end: commentGroup.lineTo ? commentGroup.lineTo : commentGroup.lineFrom
+					workSlug: commentGroup.work.slug,
+					subworkN: Number(commentGroup.subwork.title),
+					lineFrom: commentGroup.lineFrom,
+					lineTo: commentGroup.lineTo ? commentGroup.lineTo : commentGroup.lineFrom
+
 				};
-				nextProps.collectionQuery.refetch(properties);
+				nextProps.textNodesQuery.refetch(properties);
 			}
 			if (!commentGroup.lineTo) {
 				commentGroup.lineTo = commentGroup.lineFrom;
@@ -426,7 +427,7 @@ CommentLemma.propTypes = {
 		slug: PropTypes.string.isRequired,
 	})),
 	editionsQuery: PropTypes.object,
-	collectionQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object,
 	translationsQuery: PropTypes.object
 };
 CommentLemma.defaultProps = {
@@ -434,6 +435,6 @@ CommentLemma.defaultProps = {
 };
 export default compose(
 	editionsQuery,
-	collectionQuery,
+	textNodesQuery,
 	translationsQuery
 )(CommentLemma);

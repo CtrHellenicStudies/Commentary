@@ -60,8 +60,6 @@ class ContextPanelContent extends Component {
 		}
 		const lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;	
 		if (!nextProps.textNodesQuery.variables.workSlug) {
-
-<<<<<<< HEAD
 			const { workSlug, subworkN } = nextProps;	
 			const code = Utils.encodeBookBySlug(workSlug);
 			const 	properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
@@ -71,22 +69,6 @@ class ContextPanelContent extends Component {
 		}
 	
 		const textNodesCursor = nextProps.collectionQuery.collection.textGroup.work.textNodes;
-=======
-			const { workSlug, subworkN } = nextProps;		
-			const properties = {
-				workSlug: workSlug,
-				work: workSlug,
-				subworkN: subworkN,
-				lineFrom: lineFrom,
-				lineTo: lineTo,
-				start: lineFrom,
-				end: lineTo
-			};
-			nextProps.textNodesQuery.refetch(properties);
-		}
-	
-		const textNodesCursor = nextProps.textNodesQuery.textNodesAhcip;
->>>>>>> develop
 		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
 	
 		let sortedEditions;

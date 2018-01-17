@@ -129,20 +129,10 @@ class AddCommentLayout extends Component {
 			return;
 		}
 		const { filters } = this.state;
-<<<<<<< HEAD
 		const { work } = getFilterValues(filters); // TODO
 		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(work, 0, 49));
 		this.props.collectionQuery.refetch(properties);
-=======
-		const { work, subwork } = getFilterValues(filters);
-		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
-		};
-		this.props.textNodesQuery.refetch(properties);
->>>>>>> develop
+
 	}
 
 	toggleSearchTerm(key, value) {
@@ -444,11 +434,8 @@ class AddCommentLayout extends Component {
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
-<<<<<<< HEAD
 										textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.collection.textGroup.work.textNodes}
-=======
-										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodesAhcip}
->>>>>>> develop
+
 									/>
 
 									<AddComment

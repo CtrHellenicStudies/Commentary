@@ -108,7 +108,6 @@ class AddTranslationLayout extends Component {
 			});
 		}
 		const { filters } = this.state;
-<<<<<<< HEAD
 		const { work } = getFilterValues(filters);
 		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
 		const properties = Utils.getCollectionQueryProperties(
@@ -116,16 +115,6 @@ class AddTranslationLayout extends Component {
 			selectedLineFrom, selectedLineTo)
 		);
 		this.props.collectionQuery.refetch(properties);
-=======
-		const { work, subwork } = getFilterValues(filters);
-		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
-		};
-		this.props.textNodesQuery.refetch(properties);
->>>>>>> develop
 	}
 
 	toggleSearchTerm(key, value) {
@@ -352,11 +341,7 @@ class AddTranslationLayout extends Component {
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-<<<<<<< HEAD
 											textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.collection.textGroup.work.textNodes}
-=======
-											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodesAhcip}
->>>>>>> develop
 										/> : ''}
 
 									<AddTranslation

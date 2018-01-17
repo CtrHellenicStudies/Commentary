@@ -78,19 +78,10 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-<<<<<<< HEAD
 		if (this.state.refetchTextNodes || nextProps.collectionQuery.collection.textGroup.work.textNodes.length === 100) {
 			const properties = Utils.getCollectionQueryProperties(comment.lemmaCitation);
 			this.props.collectionQuery.refetch(properties);
-=======
-		if (this.state.refetchTextNodes || nextProps.textNodesQuery.work.textNodes.length === 100) {
-			this.props.textNodesQuery.refetch({
-				lineFrom: comment.lineFrom,
-				lineTo: comment.lineTo,
-				workSlug: comment.work.slug,
-				subworkN: comment.subwork.n
-			});
->>>>>>> develop
+
 			this.setState({
 				refetchTextNodes: false
 			});
@@ -102,11 +93,8 @@ class AddRevisionLayout extends Component {
 			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
 			commenters: commenters,
-<<<<<<< HEAD
 			textNodes: this.props.collectionQuery.collection.textGroup.work.textNodes
-=======
-			textNodes: this.props.textNodesQuery.textNodesAhcip
->>>>>>> develop
+
 		});
 	}
 	componentWillUpdate() {

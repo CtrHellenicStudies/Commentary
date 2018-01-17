@@ -164,8 +164,6 @@ class CommentLemma extends Component {
 
 		const { commentGroup, multiline } = nextProps;
 //		const { selectedLemmaEditionIndex } = this.state;
-
-<<<<<<< HEAD
 		if (nextProps.collectionQuery.loading || 
 //			nextProps.editionsQuery.loading || 
 			nextProps.translationsQuery.loading) {
@@ -174,21 +172,11 @@ class CommentLemma extends Component {
 		console.log()
 		const textNodesCursor = nextProps.collectionQuery.collection ? nextProps.collectionQuery.collection.textGroup.work.textNodes: [];
 	//	let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
-=======
-		if (nextProps.textNodesQuery.loading || 
-			nextProps.editionsQuery.loading || 
-			nextProps.translationsQuery.loading) {
-			return;
-		}
-		const textNodesCursor = nextProps.textNodesQuery.textNodesAhcip;
-		let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
->>>>>>> develop
 		const ready = true;
 	//	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
 	//	const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
 	//	selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
-<<<<<<< HEAD
 		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
 			if (!nextProps.collectionQuery.variables.work) {
 				nextProps.collectionQuery.variables.work = commentGroup.work.slug;
@@ -196,19 +184,6 @@ class CommentLemma extends Component {
 				const cuttedPassage = commentGroup.comments[0].lemmaCitation.passage.split('-');
 				const properties = Utils.getCollectionQueryProperties(commentGroup.comments[0].lemmaCitation);
 				nextProps.collectionQuery.refetch(properties);
-=======
-		if (commentGroup) {
-			if (!nextProps.textNodesQuery.variables.workSlug) {
-				nextProps.textNodesQuery.variables.workSlug = commentGroup.work.slug;
-				const properties = {
-					workSlug: commentGroup.work.slug,
-					subworkN: Number(commentGroup.subwork.title),
-					lineFrom: commentGroup.lineFrom,
-					lineTo: commentGroup.lineTo ? commentGroup.lineTo : commentGroup.lineFrom
-
-				};
-				nextProps.textNodesQuery.refetch(properties);
->>>>>>> develop
 			}
 			if (!commentGroup.lineTo) {
 				commentGroup.lineTo = commentGroup.lineFrom;

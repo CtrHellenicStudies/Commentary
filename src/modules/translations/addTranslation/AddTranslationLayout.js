@@ -110,11 +110,11 @@ class AddTranslationLayout extends Component {
 		const { filters } = this.state;
 		const { work } = getFilterValues(filters);
 		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
-		const properties = Utils.getCollectionQueryProperties(
+		const properties = Utils.getUrnTextNodesProperties(
 			Utils.createLemmaCitation(code.urn, 
 			selectedLineFrom, selectedLineTo)
 		);
-		this.props.collectionQuery.refetch(properties);
+		this.props.textNodesQuery.refetch(properties);
 	}
 
 	toggleSearchTerm(key, value) {
@@ -341,7 +341,7 @@ class AddTranslationLayout extends Component {
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.collection.textGroup.work.textNodes}
+											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 										/> : ''}
 
 									<AddTranslation

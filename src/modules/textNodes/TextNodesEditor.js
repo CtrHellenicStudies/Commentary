@@ -59,7 +59,7 @@ class TextNodesEditor extends Component {
 	}
 	componentWillReceiveProps(props) {
 		const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
-		const works = props.worksQuery.loading ? [] : props.worksQuery.works.collection.textGroup;
+		const works = props.worksQuery.loading ? [] : props.worksQuery.collections.textGroups.works;
 		this.setState({
 			works,
 			editions

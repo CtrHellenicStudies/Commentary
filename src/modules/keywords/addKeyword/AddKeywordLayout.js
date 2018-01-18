@@ -181,8 +181,8 @@ class AddKeywordLayout extends Component {
 			}
 		});
 		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
-		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(code.urn, selectedLineFrom, selectedLineTo));
-		this.props.collectionQuery.refetch(properties);
+		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(code.urn, selectedLineFrom, selectedLineTo));
+		this.props.textNodesQuery.refetch(properties);
 
 	}
 	addKeyword(formData, textValue, textRawValue) {
@@ -364,7 +364,7 @@ class AddKeywordLayout extends Component {
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.collection.textGroup.work.textNodes}				
+											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}				
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}

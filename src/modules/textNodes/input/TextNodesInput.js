@@ -50,14 +50,14 @@ class TextNodesInput extends Component {
 			return;
 		}
 		const { workSlug, editionId, lineFrom, limit } = props;
-		if (!props.collectionQuery.variables.urn1) {
+		if (!props.textNodesQuery.variables.urn) {
 			const code = Utils.encodeBookBySlug('homeric-hymns' ? 'hymns' : workSlug);
-			const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
+			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 				code.urn,
 				parseInt(lineFrom, 10),
 				parseInt(lineFrom, 10) + limit
 			));
-			props.collectionQuery.refetch(properties);
+			props.textNodesQuery.refetch(properties);
 			return;
 		}
 		let textNodes;
@@ -68,7 +68,7 @@ class TextNodesInput extends Component {
 		const ready = true;
 	
 		if (ready) {
-			textNodes = props.collectionQuery.collection.textGroup.work.textNodes;
+			textNodes = props.textNodesQuery.textNodes;
 			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions);
 			textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
 	

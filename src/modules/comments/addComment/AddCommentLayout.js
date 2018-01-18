@@ -130,8 +130,8 @@ class AddCommentLayout extends Component {
 		}
 		const { filters } = this.state;
 		const { work } = getFilterValues(filters); // TODO
-		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(work, 0, 49));
-		this.props.collectionQuery.refetch(properties);
+		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work, 0, 49));
+		this.props.textNodesQuery.refetch(properties);
 
 	}
 
@@ -434,7 +434,7 @@ class AddCommentLayout extends Component {
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
-										textNodes={this.props.collectionQuery.loading ? [] : this.props.collectionQuery.collection.textGroup.work.textNodes}
+										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 
 									/>
 

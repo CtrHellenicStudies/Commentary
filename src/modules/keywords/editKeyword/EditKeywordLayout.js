@@ -71,7 +71,7 @@ class EditKeywordLayout extends Component {
 		}
 		const { match } = nextProps;
 		const slug = match.params.slug;
-		const textNodes = nextProps.collectionQuery.collection.textGroup.work.textNodes;
+		const textNodes = nextProps.textNodesQuery.textNodes;
 		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
 		if (this.state.refetchTextNodes) {// || textNodeslength === 100) {
 			// const properies = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(keyword.work ? keyword.work.slug : 'iliad',
@@ -128,10 +128,10 @@ class EditKeywordLayout extends Component {
 			}
 		});
 		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
-		const properties = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(
+		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 			code.urn, selectedLineFrom, selectedLineTo
 		));
-		this.props.collectionQuery.refetch(properties);
+		this.props.textNodesQuery.refetch(properties);
 
 	}
 	toggleSearchTerm(key, value) {

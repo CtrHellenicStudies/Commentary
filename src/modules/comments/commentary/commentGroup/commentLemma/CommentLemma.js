@@ -163,27 +163,24 @@ class CommentLemma extends Component {
 	componentWillReceiveProps(nextProps) {
 
 		const { commentGroup, multiline } = nextProps;
-//		const { selectedLemmaEditionIndex } = this.state;
-		if (nextProps.collectionQuery.loading || 
-//			nextProps.editionsQuery.loading || 
+		const { selectedLemmaEditionIndex } = this.state;
+		if (nextProps.textNodesQuery.loading || 
+			nextProps.editionsQuery.loading || 
 			nextProps.translationsQuery.loading) {
 			return;
 		}
-		console.log()
-		const textNodesCursor = nextProps.collectionQuery.collection ? nextProps.collectionQuery.collection.textGroup.work.textNodes: [];
-	//	let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
+		const textNodesCursor = nextProps.textNodesQuery.textNodes ? nextProps.textNodesQuery.textNodes: [];
+		let editions = nextProps.editionsQuery.editions;
 		const ready = true;
-	//	editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
-	//	const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
-	//	selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
+		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
+		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
+		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
 		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
-			if (!nextProps.collectionQuery.variables.work) {
-				nextProps.collectionQuery.variables.work = commentGroup.work.slug;
+			if (!nextProps.textNodesQuery.variables.urn && commentGroup.comments[0].lemmaCitation.passage) {
 				console.log(commentGroup);
-				const cuttedPassage = commentGroup.comments[0].lemmaCitation.passage.split('-');
-				const properties = Utils.getCollectionQueryProperties(commentGroup.comments[0].lemmaCitation);
-				nextProps.collectionQuery.refetch(properties);
+				const properties = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
+				nextProps.textNodesQuery.refetch(properties);
 			}
 			if (!commentGroup.lineTo) {
 				commentGroup.lineTo = commentGroup.lineFrom;
@@ -202,13 +199,13 @@ class CommentLemma extends Component {
 		this.setState({
 			translationAuthors: translationAuthors,
 			ready: ready,
-		//	editions: editions,
-		//	selectedLemmaEdition: selectedLemmaEdition
+			editions: editions,
+			selectedLemmaEdition: selectedLemmaEdition
 		});
 	}
 	render() {
 		const { commentGroup, hideLemma } = this.props;
-		const { selectedAuthor, showTranslation, ready, translationAuthors } = this.state;
+		const { selectedAuthor, showTranslation, ready, translationAuthors, selectedLemmaEdition } = this.state;
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
@@ -244,7 +241,7 @@ class CommentLemma extends Component {
 						<TranslationLayout
 							commentGroup={commentGroup}
 							showTranslation={showTranslation}
-						//	lines={selectedLemmaEdition.lines}
+							lines={selectedLemmaEdition.lines}
 							author={selectedAuthor}
 						/>
 						:

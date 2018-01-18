@@ -33,13 +33,13 @@ const Utils = {
 		};
 
 	},
-	getCollectionQueryProperties(lemmaCitation) {
+	getUrnTextNodesProperties(lemmaCitation) {
 		const splittedPassage = lemmaCitation.passage.split('-')[0].split('.');
+		console.log(`${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${lemmaCitation.work}
+		:${splittedPassage[0]}-${splittedPassage[1]}`);
 		return {
-			urn1: lemmaCitation.corpus,
-			urn2: lemmaCitation.corpus + ':' + lemmaCitation.textGroup,
-			urn3: lemmaCitation.corpus + ':' + lemmaCitation.textGroup + '.' + lemmaCitation.work,
-			location: [splittedPassage[0], splittedPassage[1]]
+			urn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${lemmaCitation.work}
+			:${splittedPassage[0]}-${splittedPassage[1]}`
 		};
 	},
 	encodeBookBySlug(slug) {

@@ -115,7 +115,7 @@ class Commentary extends Component {
 			}
 		});
 
-		const foundWork = worksQuery.loading ? {} : worksQuery.collection.textGroup.works.find(x => x.slug === work)
+		const foundWork = worksQuery.loading ? {} : worksQuery.collections.textGroups.works.find(x => x.slug === work)
 		if (foundWork) {
 			title = foundWork.title;
 		} else {

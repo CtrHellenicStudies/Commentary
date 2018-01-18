@@ -78,9 +78,9 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-		if (this.state.refetchTextNodes || nextProps.collectionQuery.collection.textGroup.work.textNodes.length === 100) {
-			const properties = Utils.getCollectionQueryProperties(comment.lemmaCitation);
-			this.props.collectionQuery.refetch(properties);
+		if (this.state.refetchTextNodes || nextProps.textNodesQuery.textNodes.length === 100) {
+			const properties = Utils.getUrnTextNodesProperties(comment.lemmaCitation);
+			this.props.textNodesQuery.refetch(properties);
 
 			this.setState({
 				refetchTextNodes: false
@@ -93,7 +93,7 @@ class AddRevisionLayout extends Component {
 			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
 			commenters: commenters,
-			textNodes: this.props.collectionQuery.collection.textGroup.work.textNodes
+			textNodes: this.props.textNodesQuery.textNodes
 
 		});
 	}

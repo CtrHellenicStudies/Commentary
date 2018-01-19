@@ -31,13 +31,6 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 /*
  *	helpers
  */
-const handlePermissions = () => {
-	if (Roles.subscription.ready()) {
-		if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
-			this.props.history.push('/');
-		}
-	}
-};
 
 const getReferenceWorks = (formData) => {
 	let referenceWorks = null;
@@ -126,7 +119,17 @@ class AddCommentLayout extends React.Component {
 	}
 
 	componentWillUpdate() {
-		handlePermissions();
+		this.handlePermissions();
+	}
+
+	handlePermissions() {
+		/**
+		if (Roles.subscription.ready()) {
+			if (!Roles.userIsInRole(Meteor.userId(), ['editor', 'admin', 'commenter'])) {
+				this.props.history.push('/');
+			}
+		}
+		*/
 	}
 
 	// --- BEGNI LINE SELECTION --- //
@@ -273,19 +276,36 @@ class AddCommentLayout extends React.Component {
 	}
 
 	getWork() {
+		const subdomain = window.location.hostname.split('.')[0];
 		let work = null;
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
 			}
 		});
+
 		if (!work) {
-			work = {
-				title: 'Iliad',
-				slug: 'iliad',
-				order: 1,
-			};
+			if (subdomain === 'ahcip') {
+				work = {
+					slug: 'iliad',
+					title: 'Iliad',
+					order: 1,
+				};
+			} else if (subdomain === 'pindar') {
+				work = {
+					slug: 'olympian',
+					title: 'Olympian',
+					order: 1,
+				};
+			} else if (subdomain === 'pausanias') {
+				work = {
+					slug: 'description-of-greece',
+					title: 'Description of Greece',
+					order: 1,
+				};
+			}
 		}
+
 		return work;
 	}
 
@@ -311,7 +331,7 @@ class AddCommentLayout extends React.Component {
 
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'chapters') {
-				section = filter.values[0];
+				section = { n: filter.values[0] };
 			}
 		});
 
@@ -454,6 +474,20 @@ class AddCommentLayout extends React.Component {
 			}
 		}
 
+		let workSlug = null;
+		if (work) {
+			workSlug = work.slug;
+		} else {
+			if (subdomain === 'ahcip') {
+				workSlug = 'iliad';
+			} else if (subdomain === 'pindar') {
+				workSlug = 'olympian';
+			} else if (subdomain === 'pausanias') {
+				workSlug = 'description-of-greece';
+			}
+		}
+
+
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				{!loading ?
@@ -473,7 +507,7 @@ class AddCommentLayout extends React.Component {
 										ref={(component) => { this.commentLemmaSelect = component; }}
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}
-										workSlug={work ? work.slug : 'iliad'}
+										workSlug={workSlug}
 										subworkN={subwork ? subwork.n : 1}
 										sectionN={sectionN}
 									/>
@@ -489,7 +523,7 @@ class AddCommentLayout extends React.Component {
 
 									<ContextPanel
 										open={contextReaderOpen}
-										workSlug={work ? work.slug : 'iliad'}
+										workSlug={workSlug}
 										subworkN={subwork ? subwork.n : 1}
 										sectionN={sectionN}
 										lineFrom={lineFrom || 1}

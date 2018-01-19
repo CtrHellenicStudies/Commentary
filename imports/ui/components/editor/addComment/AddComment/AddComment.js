@@ -77,7 +77,7 @@ class AddComment extends React.Component {
 
 		this.state = {
 			titleEditorState: EditorState.createEmpty(),
-			textEditorState: EditorState.createEmpty(linkDecorator),
+			textEditorState: EditorState.createEmpty(),
 
 			commenterValue: null,
 			titleValue: '',
@@ -170,7 +170,7 @@ class AddComment extends React.Component {
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
 		this.props.submitForm(this.state, textHtml, textRaw);
-	} 
+	}
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: true,
@@ -251,7 +251,7 @@ class AddComment extends React.Component {
 				if (_tag._id === tag.value) {
 					_selectedKeyword = _tag;
 				}
-			}); 
+			});
 		}
 
 
@@ -345,20 +345,16 @@ class AddComment extends React.Component {
 							style={{ marginLeft: 0 }}
 						>
 							<div className="comment-upper">
-								{commentersOptions && commentersOptions.length ?
-									<Select
-										name="commenter"
-										id="commenter"
-										required={false}
-										options={commentersOptions}
-										value={this.state.commenterValue}
-										onChange={this.onCommenterValueChange}
-										placeholder="Commentator..."
-										multi
-									/>
-									:
-									''
-								}
+								<Select
+									name="commenter"
+									id="commenter"
+									required={false}
+									options={commentersOptions}
+									value={this.state.commenterValue}
+									onChange={this.onCommenterValueChange}
+									placeholder="Commentator..."
+									multi
+								/>
 								<h1 className="add-comment-title">
 									<DraftEditorInput
 										name="comment_title"
@@ -398,9 +394,9 @@ class AddComment extends React.Component {
 									mediaOn
 								/>
 
-								<ReferenceWork 
-									update={this.updateReferenceWorks} 
-									referenceWorkOptions={this.props.referenceWorkOptions} 
+								<ReferenceWork
+									update={this.updateReferenceWorks}
+									referenceWorkOptions={this.props.referenceWorkOptions}
 									referenceWorks={this.state.referenceWorks}
 									ready={this.props.ready}
 									addNew={this.addNewReferenceWork}
@@ -455,9 +451,7 @@ const AddCommentContainer = createContainer(() => {
 	const handleCommenters = Meteor.subscribe('commenters', Session.get('tenantId'));
 	const commentersOptions = [];
 	let commenters = [];
-	if (Meteor.user() && Meteor.user().canEditCommenters) {
-		commenters = Commenters.find({ _id: { $in: Meteor.user().canEditCommenters} }).fetch();
-	}
+	commenters = Commenters.find().fetch();
 	commenters.forEach((commenter) => {
 		if (!commentersOptions.some(val => (
 			commenter._id === val.value

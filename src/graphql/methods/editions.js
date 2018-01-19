@@ -44,7 +44,8 @@ const editionsRemoveMutation = graphql(editionsRemove, {
 const editionsQuery = graphql(query, {
 	name: 'editionsQuery'
 });
-export { editionsQuery,
-        editionsRemoveMutation,
-        editionsInsertMutation
+export { 
+	editionsQuery,
+    editionsRemoveMutation,
+    editionsInsertMutation
 };

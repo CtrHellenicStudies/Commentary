@@ -17,22 +17,6 @@ import SearchToolDropdown from './SearchToolDropdown';
 import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from './dropdowns/SearchDropdowns';
 import LineRangeSlider from './LineRangeSlider';
 
-
-/*
-	helpers
-*/
-const getLineFrom = (filters) => {
-
-	const filterLineFrom = filters.find(filter => filter.key === 'lineFrom');
-
-	let lineFrom = null;
-	if (filterLineFrom) {
-		lineFrom = filterLineFrom.values[0];
-	}
-
-	return lineFrom;
-};
-
 const getLineTo = (filters) => {
 
 	const filterLineTo = filters.find(filter => filter.key === 'lineTo');
@@ -164,8 +148,6 @@ class CommentarySearchToolbar extends Component {
 		const { keywords, keyideas, commenters, referenceWorks, works } = this.state;
 		const { searchDropdownOpen, moreDropdownOpen, subworksTitle } = this.state;
 
-		const lineFrom = getLineFrom(filters);
-		const lineTo = getLineTo(filters);
 		const workInFilter = getWorkInFilter(filters);
 
 		return (

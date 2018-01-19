@@ -62,24 +62,24 @@ class CommentLemma extends Component {
 
 
 	toggleEdition(editionSlug) {
-		// const { editions } = this.props;
-		// const { selectedLemmaEditionIndex } = this.state;
+		const { editions } = this.props;
+		const { selectedLemmaEditionIndex } = this.state;
 
-		// if (editions && editions.length) {
-		// 	if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
-		// 		let newSelectedEditionIndex = 0;
+		if (editions && editions.length) {
+			if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
+				let newSelectedEditionIndex = 0;
 
-		// 		editions.forEach((edition, index) => {
-		// 			if (edition.slug === editionSlug) {
-		// 				newSelectedEditionIndex = index;
-		// 			}
-		// 		});
+				editions.forEach((edition, index) => {
+					if (edition.slug === editionSlug) {
+						newSelectedEditionIndex = index;
+					}
+				});
 
-		// 		// this.setState({
-		// 		// 	selectedLemmaEditionIndex: newSelectedEditionIndex,
-		// 		// });
-		// 	}
-		// }
+				this.setState({
+					selectedLemmaEditionIndex: newSelectedEditionIndex,
+				});
+			}
+		}
 	}
 
 	showContextPanel(commentGroup) {

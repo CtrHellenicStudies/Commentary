@@ -26,8 +26,6 @@ query keywordsQuery($tenantId: ID $queryParam: String $slug: String) {
 		slug
 		n
 	}
-    lineFrom
-    lineTo
     lineLetter
     nLines
     tenantId

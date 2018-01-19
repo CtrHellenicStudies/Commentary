@@ -36,8 +36,7 @@ const Utils = {
 	},
 	getUrnTextNodesProperties(lemmaCitation) {
 		return {
-			urn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${lemmaCitation.work}
-			:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
+			urn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${lemmaCitation.work}:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
 		};
 	},
 	encodeBookBySlug(slug) {

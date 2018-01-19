@@ -28,11 +28,6 @@ import ContextPanelContent from './panel/ContextPanelContent';
 /*
 	helpers
 */
-const getLineFrom = (props) => {
-	if (props.commentGroup) return props.commentGroup.lineFrom;
-	if (props.workSlug) return props.lineFrom;
-	throw new Error('commentGroup or lineFrom missing in ContextPanel component - one of two is requierd');
-};
 const getWorkSlug = (props) => {
 	if (props.commentGroup) return props.commentGroup.work.slug;
 	if (props.workSlug) return props.workSlug;
@@ -54,7 +49,7 @@ class ContextPanel extends Component {
 
 		this.state = {
 			selectedLemmaEdition: '',
-			lineFrom: getLineFrom(props),
+			lineFrom: props.passageFrom,
 			maxLine: 0,
 			highlightingVisible: false,
 		};
@@ -162,9 +157,9 @@ class ContextPanel extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.lineFrom) {
+		if (nextProps.passageFrom) {
 			this.setState({
-				lineFrom: nextProps.lineFrom,
+				passageFrom: nextProps.passageFrom,
 			});
 		}
 	}
@@ -190,8 +185,8 @@ class ContextPanel extends Component {
 				subworkN={subworkN}
 				commentGroup={commentGroup}
 				highlightingVisible={highlightingVisible}
-				lineFrom={selectedLineFrom}
-				lineTo={selectedLineFrom + 49}
+				passageFrom={selectedLineFrom}
+				passageTo={selectedLineFrom + 49}
 				maxLine={maxLine}
 				selectedLemmaEdition={selectedLemmaEdition}
 				onBeforeClicked={this.onBeforeClicked}

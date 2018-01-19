@@ -74,7 +74,7 @@ const getFilterValues = (filters) => {
 			filterValues.work = filter.values[0];
 		} else if (filter.key === 'subworks') {
 			filterValues.subwork = filter.values[0];
-		} else if (filter.key === 'sections') {
+		} else if (filter.key === 'chapters') {
 			filterValues.section = filter.values[0];
 		} else if (filter.key === 'lineTo') {
 			filterValues.lineTo = filter.values[0];
@@ -310,7 +310,7 @@ class AddCommentLayout extends React.Component {
 		const subdomain = window.location.hostname.split('.')[0];
 
 		this.state.filters.forEach((filter) => {
-			if (filter.key === 'sections') {
+			if (filter.key === 'chapters') {
 				section = filter.values[0];
 			}
 		});

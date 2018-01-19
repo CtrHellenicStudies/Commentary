@@ -4,7 +4,7 @@ import CommentatorsDropdown from './CommentatorsDropdown';
 import ReferenceDropdown from './ReferenceDropdown';
 import WorksDropdown from './WorksDropdown';
 import SubworksDropdown from './SubworksDropdown';
-import SectionsDropdown from './SectionsDropdown';
+import ChaptersDropdown from './ChaptersDropdown';
 
 
 const SearchDropdowns = {
@@ -14,8 +14,8 @@ const SearchDropdowns = {
 	ReferenceDropdown,
 	WorksDropdown,
 	SubworksDropdown,
-	SectionsDropdown,
+	ChaptersDropdown,
 };
 
-export { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown, SectionsDropdown };
+export { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown, ChaptersDropdown };
 export default SearchDropdowns;

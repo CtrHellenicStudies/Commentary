@@ -8,15 +8,17 @@ class LineRangeSlider extends React.Component {
 
 	componentDidMount() {
 
+		const subdomain = location.hostname.split('.')[0];
 		const { handleChangeLineN, lineFrom, lineTo } = this.props;
+
 		$(`#${id}`).ionRangeSlider({
 			type: 'double',
 			min: 1,
-			max: 909,
+			max: subdomain === 'pausanias' ? 12 : 909,
 			grid: true,
 			prettify_enabled: true,
 			prettify_separator: ',',
-			prefix: 'Line: ',
+			prefix: subdomain === 'pausanias' ? 'Section: ' : 'Line: ',
 			values_separator: ' to ',
 			onChange: debounce(500, handleChangeLineN),
 			from: lineFrom,

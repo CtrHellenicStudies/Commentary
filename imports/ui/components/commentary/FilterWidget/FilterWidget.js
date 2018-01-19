@@ -34,7 +34,7 @@ const getLabel = val => {
 		label = val.toString();
 	}
 
-	label = label.replace('-', '');
+	label = label.replace('-', ' ');
 
 	return Utils.trunc(label, 30);
 };

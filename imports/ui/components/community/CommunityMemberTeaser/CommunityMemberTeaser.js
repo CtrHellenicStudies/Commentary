@@ -37,7 +37,7 @@ class CommunityMemberTeaser extends React.Component {
 
 
 		return (
-			<div className="communityMemberTeaser hvr-grow wow fadeIn">
+			<div className="communityMemberTeaser hvr-grow ">
 				<Link to={userUrl}>
 					<div className="user-image paper-shadow">
 						<AvatarIcon avatar={profilePicture} />

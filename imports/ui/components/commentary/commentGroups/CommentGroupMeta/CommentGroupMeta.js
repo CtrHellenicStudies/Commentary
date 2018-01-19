@@ -18,7 +18,7 @@ const getLineTo = (commentGroup) => {
 };
 
 const getSection = (commentGroup) => {
-	if ('section' in commentGroup) {
+	if ('section' in commentGroup && commentGroup.section) {
 		return `${commentGroup.section.n}.`;
 	}
 	return '';

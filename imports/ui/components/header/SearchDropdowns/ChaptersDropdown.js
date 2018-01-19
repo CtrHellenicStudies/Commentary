@@ -10,12 +10,12 @@ import SearchTermButton from '/imports/ui/components/header/SearchTermButton';
 import { isActive, dropdownPropTypes, dropdownDefaultProps } from './helpers';
 
 /*
-	BEGIN SectionsDropdown
+	BEGIN ChaptersDropdown
 */
-const SectionsDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, selectedWork, workInFilter, filters }) => (
+const ChaptersDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, selectedWork, workInFilter, filters }) => (
 	<SearchToolDropdown
-		name="Section"
-		open={searchDropdownOpen === 'Section'}
+		name="Chapter"
+		open={searchDropdownOpen === 'Chapter'}
 		toggle={toggleSearchDropdown}
 		disabled={!workInFilter}
 	>
@@ -25,27 +25,27 @@ const SectionsDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, tog
 					key={section}
 					toggleSearchTerm={toggleSearchTerm}
 					label={section.toString()}
-					searchTermKey="sections"
+					searchTermKey="chapters"
 					value={section}
-					active={isActive(filters, section, 'sections', 'n')}
+					active={isActive(filters, {n: section}, 'chapters', 'n')}
 				/>
 			))
 		}
 	</SearchToolDropdown>
 );
 
-SectionsDropdown.propTypes = {
+ChaptersDropdown.propTypes = {
 	...dropdownPropTypes,
 	workInFilter: PropTypes.bool.isRequired,
 };
 
-SectionsDropdown.defaultProps = {
+ChaptersDropdown.defaultProps = {
 
 	...dropdownDefaultProps,
 };
 
 /*
-	END SectionsDropdown
+	END ChaptersDropdown
 */
 
-export default SectionsDropdown;
+export default ChaptersDropdown;

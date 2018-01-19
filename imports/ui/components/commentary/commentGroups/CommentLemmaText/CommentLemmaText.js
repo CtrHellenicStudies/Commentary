@@ -41,7 +41,7 @@ class CommentLemmaText extends React.Component {
 						className="lemma-text-line"
 					>
 						<span className={`line-n ${(lines[i].n % 5) === 0 ? 'line-n--visible' : ''}`}>
-							{'section' in lines[i] ? `${lines[i].section.n}.` : null}{lines[i].n}
+							{'section' in lines[i] && lines[i].section ? `${lines[i].section.n}.` : null}{lines[i].n}
 						</span>
 						<p
 							className="lemma-text"
@@ -77,7 +77,7 @@ class CommentLemmaText extends React.Component {
 						style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
 					>
 						<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
-							{'section' in line ? `${line.section.n}.` : null}{line.n}
+							{'section' in line && line.section ? `${line.section.n}.` : null}{line.n}
 						</span>
 						<p
 							className="lemma-text"

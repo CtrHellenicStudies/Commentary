@@ -22,7 +22,7 @@ class CommenterTeaser extends Component {
 
 
 		return (
-			<div className="commenter-teaser hvr-grow wow fadeIn">
+			<div className="commenter-teaser hvr-grow ">
 				<a href={commenterUrl}>
 					<div className="commenter-image paper-shadow">
 						{commenter && commenter.avatar ?

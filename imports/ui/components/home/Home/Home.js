@@ -82,7 +82,7 @@ class Home extends Component {
 				introImageCaption = JSON.parse(introImageCaption);
  				introImageCaption = introImageCaption.html;
 			} catch (e) {
-				
+
 			}
 		}
 
@@ -101,9 +101,7 @@ class Home extends Component {
 						/>
 
 						<div
-							className="container v-align-transform wow fadeIn"
-							data-wow-duration="1s"
-							data-wow-delay="0.1s"
+							className="container v-align-transform "
 						>
 
 							<div className="grid inner">
@@ -174,7 +172,7 @@ class Home extends Component {
 										</div>
 									))}
 								</div>
-								<div className="intro-col intro-col-image image-wrap wow fadeIn">
+								<div className="intro-col intro-col-image image-wrap ">
 									<img
 										className="paper-shadow"
 										alt={introImageCaption}

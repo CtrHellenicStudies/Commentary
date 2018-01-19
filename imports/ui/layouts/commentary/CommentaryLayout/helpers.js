@@ -113,7 +113,6 @@ const _createFilterFromQueryParams = (queryParams, referenceWorks = []) => {
 	}
 
 	if ('subworks' in queryParams) {
-		// console.log('current query params: ', queryParams);
 		const subworks = [];
 
 		new Set(queryParams.subworks.split(',')).forEach((subwork) => {
@@ -134,10 +133,10 @@ const _createFilterFromQueryParams = (queryParams, referenceWorks = []) => {
 		});
 	}
 
-	if ('sections' in queryParams) {
+	if ('chapters' in queryParams) {
 		const sections = [];
 
-		new Set(queryParams.sections.split(',')).forEach((section) => {
+		new Set(queryParams.chapters.split(',')).forEach((section) => {
 			const sectionNumber = parseInt(section, 10);
 
 			if (!Number.isNaN(sectionNumber)) {
@@ -148,7 +147,7 @@ const _createFilterFromQueryParams = (queryParams, referenceWorks = []) => {
 		});
 
 		filters.push({
-			key: 'sections',
+			key: 'chapters',
 			values: sections,
 		});
 	}
@@ -229,7 +228,7 @@ const _createQueryParamsFromFilters = (filters) => {
 			case 'subworks':
 				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value.title);
 				break;
-			case 'sections':
+			case 'chapters':
 				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
 				break;
 			case 'keyideas':
@@ -418,8 +417,6 @@ const _updateFilterOnKeyAndValueChangeEvent = (oldFilters, key, value) => {
 			values: [value],
 		});
 	}
-	console.log('#######2@@@@@@@@@')
-	console.log(filters);
 
 	return filters;
 };
@@ -444,8 +441,6 @@ const _splitUrnIsOk = (splitURN) => {
 
 const _getUrnFilters = (urn, works) => {
 	const splitURN = urn.split(/[:.]/);
-	// console.log('splitURN', splitURN);
-
 	const urnFilters = [];
 
 	if (_splitUrnIsOk(splitURN)) {

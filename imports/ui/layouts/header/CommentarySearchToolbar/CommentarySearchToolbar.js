@@ -13,7 +13,7 @@ import ReferenceWorks from '/imports/models/referenceWorks';
 import Works from '/imports/models/works';
 
 // components:
-import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown, SectionsDropdown } from '/imports/ui/components/header/SearchDropdowns';
+import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown, ChaptersDropdown } from '/imports/ui/components/header/SearchDropdowns';
 import LineRangeSlider from '/imports/ui/components/header/LineRangeSlider';
 import SearchToolDropdown from '/imports/ui/components/header/SearchToolDropdown';
 
@@ -266,7 +266,7 @@ class CommentarySearchToolbar extends React.Component {
 				/>
 
 				{subdomain === 'pausanias' ?
-					<SectionsDropdown
+					<ChaptersDropdown
 						searchDropdownOpen={searchDropdownOpen}
 						toggleSearchDropdown={this.toggleSearchDropdown}
 						toggleSearchTerm={toggleSearchTerm}

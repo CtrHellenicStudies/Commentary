@@ -72,7 +72,7 @@ const createQueryFromFilters = (filters) => {
 				};
 				break;
 
-			case 'sections':
+			case 'chapters':
 				values = [];
 				filter.values.forEach((value) => {
 					values.push(value.n);

@@ -38,8 +38,6 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			slug
 			n
 		}
-		lineFrom
-		lineTo
 		lineLetter
 		bookChapterUrl
 		paragraphN

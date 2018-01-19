@@ -54,7 +54,7 @@ class KeywordDetail extends Component {
 	
 		let keywordComments = null;
 		if (keyword) {
-			const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } };
+			const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } }; // TODO can be change for keywordId
 			props.commentsQuery.refetch({
 				queryParam: JSON.stringify(keywordCommentsQuery)
 			});

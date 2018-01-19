@@ -173,11 +173,12 @@ class CommentLemma extends Component {
 		let editions = nextProps.editionsQuery.editions;
 		const ready = true;
 		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
-		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
+		const selectedLemmaEdition = editions[selectedLemmaEditionIndex].lines ? editions[selectedLemmaEditionIndex] : { lines: [] };
+		console.log(selectedLemmaEdition);
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
 		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
-			if (!nextProps.textNodesQuery.variables.urn && commentGroup.comments[0].lemmaCitation.passage) {
+			if (!nextProps.textNodesQuery.variables.urn && commentGroup.comments[0].lemmaCitation.passageFrom) {
 				console.log(commentGroup);
 				const properties = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
 				nextProps.textNodesQuery.refetch(properties);

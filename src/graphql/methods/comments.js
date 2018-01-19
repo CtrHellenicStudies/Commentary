@@ -94,7 +94,8 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 		discussionCommentsDisabled
 		created
 		lemmaCitation {
-			passage
+			passageFrom
+			passageTo
 			work
 			textGroup
 			corpus

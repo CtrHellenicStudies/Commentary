@@ -23,6 +23,8 @@ query worksQuery {
 const subworks = gql`
 query subworksQuery{
   worksAhcip {
+		slug
+		title
     subworks {
       title
       slug

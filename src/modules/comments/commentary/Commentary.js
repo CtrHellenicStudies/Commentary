@@ -70,7 +70,7 @@ class Commentary extends Component {
 	setPageTitleAndMeta() {
 
 		const { filters, settings } = this.props;
-		const commentGroups = this.props.commentsQuery ? [] : parseCommentsToCommentGroups(this.props.commentsQuery.comments);
+		const commentGroups = this.props.commentsQuery.loading ? [] : parseCommentsToCommentGroups(this.props.commentsQuery.comments);
 
 		let title = '';
 		let values = [];

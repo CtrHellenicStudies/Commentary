@@ -40,7 +40,8 @@ const workCitationToLemmaURN = () => {
 			collection: 'urn:cts:greekLit',
 			textGroup: null,
 			work: null,
-			passage: {},
+			passageFrom: 1.1,
+			passageTo: 1.2
 		};
 
 		tlgMappingForWorks.forEach(mapping => {
@@ -54,10 +55,10 @@ const workCitationToLemmaURN = () => {
 		});
 
 		if (comment.subwork) {
-			lemmaCitation.passage = `${comment.subwork.n}.${comment.lineFrom}`;
+			lemmaCitation.passageFrom = `${comment.subwork.n}.${comment.lineFrom}`;
 
-			if ('lineTo' in comment) {
-				lemmaCitation.passage = `${lemmaCitation.passage}-${comment.subwork.n}.${comment.lineTo}`;
+			if (comment.lineTo) {
+				lemmaCitation.passageTo = `${comment.subwork.n}.${comment.lineTo}`;
 			}
 		}
 

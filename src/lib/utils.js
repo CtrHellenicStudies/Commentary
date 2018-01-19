@@ -29,17 +29,15 @@ const Utils = {
 			corpus: "urn:cts:greekLit",
 			textGroup: "urn:cts:greekLit:tlg0012",
 			work: work,
-			passage: `1.${lineFrom+1}-1.${lineTo+1}`
+			passageFrom: `1.${lineFrom+1}`,
+			passageTo: `1.${lineTo+1}`
 		};
 
 	},
 	getUrnTextNodesProperties(lemmaCitation) {
-		const splittedPassage = lemmaCitation.passage.split('-')[0].split('.');
-		console.log(`${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${lemmaCitation.work}
-		:${splittedPassage[0]}-${splittedPassage[1]}`);
 		return {
 			urn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${lemmaCitation.work}
-			:${splittedPassage[0]}-${splittedPassage[1]}`
+			:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
 		};
 	},
 	encodeBookBySlug(slug) {

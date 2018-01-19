@@ -297,6 +297,7 @@ const AddRevisionLayout = React.createClass({
 										selectedLineTo={(comment.lineFrom + comment.nLines) - 1}
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
+										sectionN={'section' in comment && comment.section ? comment.section.n : null}
 									/>
 
 									<AddRevision

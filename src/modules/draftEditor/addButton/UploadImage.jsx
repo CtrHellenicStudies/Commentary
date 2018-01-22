@@ -36,7 +36,7 @@ export default class AvatarEditor extends Component {
 		uploadFile(acceptedFiles[0], (error, downloadUrl) => {
 			if (error) {
 				// Log service detailed response
-				console.error('Error uploading', uploader.xhr.response);
+				console.error(error);
 				sendSnack(error);
 			} else {
 				this.props.uploadedUrl(downloadUrl);

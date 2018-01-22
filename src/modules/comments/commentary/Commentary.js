@@ -123,10 +123,8 @@ class Commentary extends Component {
 	}
 
 	loadMoreComments() {
-		if (
-			!this.props.isOnHomeView
-			&& this.props.commentsMoreQuery.commentsMore
-		) {
+		if (!this.props.isOnHomeView
+		&& this.props.commentsMoreQuery.commentsMore) {
 			this.props.loadMoreComments();
 		}
 	}
@@ -167,7 +165,7 @@ class Commentary extends Component {
 		}
 	}
 	render() {
-		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
+		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, history } = this.props;
 		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, commentGroups } = this.state;
 		if (!commentGroups) {
 			return null;
@@ -188,7 +186,7 @@ class Commentary extends Component {
 							showLoginModal={showLoginModal}
 							filters={filters}
 							isOnHomeView={isOnHomeView}
-							history={this.props.history}
+							history={history}
 							selectMultiLine={this.selectMultiLine}
 							multiline={this.state.multiline}
 						/>

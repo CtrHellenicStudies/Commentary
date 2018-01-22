@@ -43,10 +43,7 @@ if (loginToken) {
 Utils.setBaseDocMeta();
 
 const hostnameArray = document.location.hostname.split('.');
-let tenantSubdomain;
-if (hostnameArray.length > 2) {
-	tenantSubdomain = hostnameArray[0];
-}
+const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
 /**
  * Private route
  * create a route restricted to a logged in user
@@ -70,45 +67,48 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 /**
  * Application routes
  */
+function canGetUserDatas(user, usersQuery) {
+	if(user !== null && 
+	!usersQuery.loading &&
+	usersQuery.users.length && 
+	!(usersQuery.users[0]._id === user._id)) {
+		return true;
+	}
+	return false;
+} 
+function setTenantInSession (tenantsBySubdomainQuery) {
+	if (!tenantsBySubdomainQuery.loading
+		&& tenantsBySubdomainQuery.tenantBySubdomain) {
+		sessionStorage.setItem('tenantId', tenantsBySubdomainQuery.tenantBySubdomain._id);
+	} else if (!tenantsBySubdomainQuery.loading
+		&& !tenantsBySubdomainQuery.tenantBySubdomain) {
+		sessionStorage.setItem('noTenant', true);
+	}
+}
 const routes = (props) => {
 
+	const { usersQuery, tenantsBySubdomainQuery } = props;
 	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
-	if (user !== undefined &&
-		user !== null && 
-		!props.usersQuery.loading &&
-		props.usersQuery.users.length && 
-		!(props.usersQuery.users[0]._id === user._id)) {
+	if (canGetUserDatas(user, usersQuery)) {
 		const id = JSON.parse(user)._id;
-		props.usersQuery.refetch({
+		usersQuery.refetch({
 			id: id,
 		});
-	} else if(user && !props.usersQuery.loading) {
-		Cookies.set('user', props.usersQuery.users[0]);
+	} else if(user && !usersQuery.loading) {
+		Cookies.set('user', usersQuery.users[0]);
 	}
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
 			return <Route component={NotFound} />;
-		}
-		else {
+		} else {
 			sessionStorage.removeItem('noTenant');
-			if (!props.tenantsBySubdomainQuery.tenantBySubdomain) {
-				props.tenantsBySubdomainQuery.refetch({
+			if (!tenantsBySubdomainQuery.tenantBySubdomain) {
+				tenantsBySubdomainQuery.refetch({
 					subdomain: tenantSubdomain
 				});
 			}
 		}
-
-		if (
-!props.tenantsBySubdomainQuery.loading
-&& props.tenantsBySubdomainQuery.tenantBySubdomain
-) {
-			sessionStorage.setItem('tenantId', props.tenantsBySubdomainQuery.tenantBySubdomain._id);
-		} else if (
-!props.tenantsBySubdomainQuery.loading
-&& !props.tenantsBySubdomainQuery.tenantBySubdomain
-) {
-			sessionStorage.setItem('noTenant', true);
-		}
+		setTenantInSession(tenantsBySubdomainQuery);
 	}
 
 

@@ -114,7 +114,7 @@ class DiscussionComment extends Component {
 	render() {
 		const self = this;
 		const userIsLoggedIn = this.state.user;
-		const { discussionComment } = this.props;
+		const { discussionComment, currentUser } = this.props;
 		const { user } = this.state;
 		let userLink = '';
 		let userUpvoted = false;
@@ -135,29 +135,23 @@ class DiscussionComment extends Component {
 			if (user.username) {
 				username = user.username;
 				userLink = `/users/${user._id}/${user.username}`;
-			} else if (
-				user.emails
-				&& user.emails.length
-			) {
+			} else if (user.emails
+			&& user.emails.length) {
 				userLink = `/users/${user._id}`;
 				username = user.emails[0].address.split('@')[0];
 			}
 		}
 
-		if (
-			this.props.currentUser &&
-			discussionComment.voters &&
-			discussionComment.voters.indexOf(this.props.currentUser._id) >= 0
-		) {
+		if (currentUser &&
+		discussionComment.voters &&
+		discussionComment.voters.indexOf(currentUser._id) >= 0) {
 			userUpvoted = true;
 		}
 
-		if (
-			this.props.currentUser &&
-			discussionComment.usersReported &&
-			discussionComment.reported > 0 &&
-			discussionComment.usersReported.indexOf(this.props.currentUser._id) >= 0
-		) {
+		if (currentUser &&
+		discussionComment.usersReported &&
+		discussionComment.reported > 0 &&
+		discussionComment.usersReported.indexOf(currentUser._id) >= 0) {
 			userReported = true;
 		}
 

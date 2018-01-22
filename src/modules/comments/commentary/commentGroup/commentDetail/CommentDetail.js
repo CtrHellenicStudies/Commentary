@@ -148,11 +148,12 @@ class CommentDetail extends Component {
 	}
 
 	addSearchTerm(keyword) {
-		if (!(this.props.isOnHomeView) || this.props.isOnHomeView === false) {
-			this.props.toggleSearchTerm('keywords', keyword);
+		const { isOnHomeView, toggleSearchTerm, history } = this.props;
+		if (!(isOnHomeView) || isOnHomeView === false) {
+			toggleSearchTerm('keywords', keyword);
 		} else {
 			const urlParams = qs.stringify({ keywords: keyword.slug });
-			this.props.history.push(`/commentary/${urlParams}`);
+			history.push(`/commentary/${urlParams}`);
 		}
 	}
 
@@ -235,7 +236,7 @@ class CommentDetail extends Component {
 	}
 	render() {
 
-		const { comment } = this.props;
+		const { comment, commenters, toggleLemma, showLoginModal } = this.props;
 		const { discussionVisible, searchTerm, referenceWorks, ready, settings } = this.state;
 
 		if (!ready) {
@@ -257,7 +258,7 @@ class CommentDetail extends Component {
 					<CommentUpper
 						title={selectedRevision.title}
 						commentId={comment._id}
-						commenters={this.props.commenters}
+						commenters={commenters}
 						updateDate={getUpdateDate(selectedRevision)}
 						userCanEditCommenters={getUserCanEditCommenters()}
 					/>
@@ -291,8 +292,8 @@ class CommentDetail extends Component {
 					showDiscussionThread={this.showDiscussionThread}
 					hideDiscussionThread={this.hideDiscussionThread}
 					discussionVisible={this.state.discussionVisible}
-					toggleLemma={this.props.toggleLemma}
-					showLoginModal={this.props.showLoginModal}
+					toggleLemma={toggleLemma}
+					showLoginModal={showLoginModal}
 					discussionCommentsDisabled={settings.discussionCommentsDisabled}
 				/>
 

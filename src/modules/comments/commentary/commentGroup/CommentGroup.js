@@ -37,18 +37,13 @@ class CommentGroup extends Component {
 	}
 	render() {
 		const { commentGroup, commentGroupIndex, contextPanelOpen, showLoginModal,
-			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm, selectMultiLine } = this.props;
+			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm, 
+			selectMultiLine, isOnHomeView, history, multiline } = this.props;
 		const { hideLemma } = this.state;
-		
-		let isOnHomeView = false;
 
 		let commentsClass = 'comments ';
 		if (contextPanelOpen) {
 			commentsClass += 'lemma-panel-visible';
-		}
-
-		if ('isOnHomeView' in this.props) {
-			isOnHomeView = this.props.isOnHomeView;
 		}
 
 		let workTitle = commentGroup.work.title;
@@ -72,7 +67,7 @@ class CommentGroup extends Component {
 							setScrollPosition={setContextScrollPosition}
 							hideLemma={hideLemma}
 							selectMultiLine={selectMultiLine}
-							multiline={this.props.multiline}
+							multiline={multiline}
 						/>
 
 						{commentGroup.comments.map(comment => (
@@ -84,11 +79,11 @@ class CommentGroup extends Component {
 									comment={comment}
 									commenters={this.getCommentersOfComment(comment)}
 									toggleSearchTerm={!isOnHomeView ? toggleSearchTerm : null}
-									isOnHomeView={this.props.isOnHomeView}
+									isOnHomeView={isOnHomeView}
 									filters={filters}
 									toggleLemma={this.toggleLemma}
 									showLoginModal={showLoginModal}
-									history={this.props.history}
+									history={history}
 								/>
 							</div>
 						))}

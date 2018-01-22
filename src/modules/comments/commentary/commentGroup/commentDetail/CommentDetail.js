@@ -37,7 +37,7 @@ const getUpdateDate = (selectedRevision) => {
 };
 
 const getUserCanEditCommenters = () => {
-	const user = Cookies.get('user');
+	const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 	if (user && user.canEditCommenters) {
 		return user.canEditCommenters;
 	}

@@ -271,12 +271,6 @@ class AddComment extends Component {
 			tagsValue: currentTags
 		});
 		this.props.keywordUpdate(tagId, newKeyword);
-		// 	if (err) {
-		// 		this.showSnackBar(err);
-		// 	}			else {
-		// 		this.showSnackBar({message: 'Keyword type changed'});
-		// 	}
-		// });
 	}
 
 	addNewTag(tag) {

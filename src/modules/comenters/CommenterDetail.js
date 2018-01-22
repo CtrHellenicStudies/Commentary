@@ -28,10 +28,11 @@ import Utils from '../../lib/utils';
 class CommenterDetail extends Component {
 	constructor(props) {
 		super(props);
+		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		this.state = {
 			readMoreBio: false,
-			loggedIn: Cookies.get('user'),
-			subscriptions: Cookies.get('user') && Cookies.get('user').subscriptions
+			loggedIn: user,
+			subscriptions: user && user.subscriptions
 		};
 
 		// methods:

@@ -113,7 +113,7 @@ class DiscussionComment extends Component {
 	}
 	render() {
 		const self = this;
-		const userIsLoggedIn = Cookies.get('user');
+		const userIsLoggedIn = this.state.user;
 		const { discussionComment } = this.props;
 		const { user } = this.state;
 		let userLink = '';

@@ -72,17 +72,17 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
  */
 const routes = (props) => {
 
-	const user = Cookies.get('user');
+	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
 	if (user !== undefined &&
 		user !== null && 
 		!props.usersQuery.loading &&
 		props.usersQuery.users.length && 
-		!(props.usersQuery.users[0]._id === JSON.parse(Cookies.get('user'))._id)) {
+		!(props.usersQuery.users[0]._id === user._id)) {
 		const id = JSON.parse(user)._id;
 		props.usersQuery.refetch({
 			id: id,
 		});
-	} else if(Cookies.get('user') && !props.usersQuery.loading) {
+	} else if(user && !props.usersQuery.loading) {
 		Cookies.set('user', props.usersQuery.users[0]);
 	}
 	if (!sessionStorage.getItem('tenantId')) {

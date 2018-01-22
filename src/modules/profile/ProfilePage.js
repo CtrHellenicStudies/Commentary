@@ -55,7 +55,7 @@ class ProfilePage extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			user: Cookies.get('user'),
+			user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined,
 			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
 			ready: !nextProps.settingsQuery.loading
 		});

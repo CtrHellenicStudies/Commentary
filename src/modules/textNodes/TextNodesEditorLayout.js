@@ -38,7 +38,7 @@ class TextNodesEditorLayout extends Component {
 
 	// --- BEGNI PERMISSIONS HANDLE --- //
 	handlePermissions() {
-		if (!Utils.userInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
+		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 			this.props.history.push('/');
 		}
 	}

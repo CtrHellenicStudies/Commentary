@@ -92,7 +92,7 @@ class DiscussionThread extends Component {
 		});
 	}
 	render() {
-		const currentUser = Cookies.get('user');
+		const currentUser = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		const { comment } = this.props;
 		const { discussionComments, discussionCommentsDisabled } = this.state
 

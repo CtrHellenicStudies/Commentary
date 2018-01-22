@@ -104,7 +104,7 @@ class AddRevision extends Component {
 
 		const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
         let commenters = [];
-        const user = Cookies.get('user');
+        const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		if (user && user.canEditCommenters) {
 			commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
 				user.canEditCommenters.find(y => y === x._id));

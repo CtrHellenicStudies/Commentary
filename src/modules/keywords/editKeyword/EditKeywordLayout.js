@@ -96,7 +96,7 @@ class EditKeywordLayout extends Component {
 	}
 	handlePermissions() {
 		if (this.state.ready) {
-			if (!Utils.userInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
+			if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 				this.props.history.push('/');
 			}
 		}

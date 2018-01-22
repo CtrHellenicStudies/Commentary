@@ -155,10 +155,11 @@ class AddRevisionLayout extends Component {
 	}
 	handlePermissions() {
 		if (this.state.comment && this.state.commenters.length) {
+			const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 			let isOwner = false;
 			this.state.commenters.forEach((commenter) => {
 				if (!isOwner) {
-					isOwner = (Cookies.get('user').canEditCommenters.indexOf(commenter._id));
+					isOwner = (user && user.canEditCommenters.indexOf(commenter._id));
 				}
 			});
 			if (!isOwner) {

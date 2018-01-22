@@ -8,9 +8,9 @@ import { sendSnack } from '../../shared/SnackAttack';
 export default class AvatarEditor extends Component {
 	constructor(props) {
 		super(props);
-
+		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		this.state = {
-			avatarUrl: Cookies.get('user') && Cookies.get('user').profile && Cookies.get('user').profile.avatarUrl ? Cookies.get('user').profile.avatarUrl : props.defaultAvatarUrl,
+			avatarUrl: user && user.profile && user.profile.avatarUrl ? user.profile.avatarUrl : props.defaultAvatarUrl,
 		};
 
 		// binding users

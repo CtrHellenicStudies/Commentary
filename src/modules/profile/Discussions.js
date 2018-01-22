@@ -16,8 +16,9 @@ class Discussions extends Component {
 		this.state = {
 			discussionComments: []
 		};
+		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		this.props.discussionCommentsQuery.refetch({
-			userId: Cookies.get('user')._id,
+			userId: user && user._id,
 		});
 	}
 	componentWillReceiveProps(props) {

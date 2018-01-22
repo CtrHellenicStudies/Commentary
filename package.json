@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "apollo-client": "^1.9.2",
+    "aws-sdk": "^2.185.0",
     "create-react-class": "^15.6.2",
     "d3": "^3.5.12",
     "diff": "^3.0.1",

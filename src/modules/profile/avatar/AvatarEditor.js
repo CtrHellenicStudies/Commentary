@@ -4,6 +4,7 @@ import autoBind from 'react-autobind';
 import DropZone from 'react-dropzone';
 import Cookies from 'js-cookie';
 import { sendSnack } from '../../shared/SnackAttack';
+import { uploadFile } from '../../../lib/s3';
 
 export default class AvatarEditor extends Component {
 	constructor(props) {
@@ -23,7 +24,6 @@ export default class AvatarEditor extends Component {
 
 	onDrop(acceptedFiles, rejectedFiles) {
         const uploader = {};
-		//const uploader = new Slingshot.Upload('uploads', context); TODO
 
 		if (rejectedFiles && rejectedFiles.length) {
 			sendSnack('There was an error uploading your profile picture');

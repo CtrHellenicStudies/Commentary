@@ -57,8 +57,6 @@ class Commentary extends Component {
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
 
-		this.props.commentsQuery.refetch();
-
 	}
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };

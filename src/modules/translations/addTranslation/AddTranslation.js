@@ -57,7 +57,7 @@ class AddTranslation extends Component {
 	}
 	componentWillReceiveProps(props) {
 
-		const works = props.worksQuery.loading ? [] : props.worksQuery.collections.textGroups.works;
+		const works = props.worksQuery.loading ? [] : props.worksQuery.collections[0].textGroups[0].works;
 		const worksOptions = [];
 		works.forEach((work) => {
 			worksOptions.push({

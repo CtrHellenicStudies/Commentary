@@ -19,7 +19,7 @@ import Utils from '../../../lib/utils';
 import muiTheme from '../../../lib/muiTheme';
 
 // helpers:
-import { parseCommentsToCommentGroups } from './helpers';
+import { parseCommentsToCommentGroups, setPageTitleAndMeta } from './helpers';
 import { worksQuery } from '../../../graphql/methods/works';
 
 
@@ -53,7 +53,6 @@ class Commentary extends Component {
 		this.showContextPanel = this.showContextPanel.bind(this);
 		this.closeContextPanel = this.closeContextPanel.bind(this);
 		this.setContextScrollPosition = this.setContextScrollPosition.bind(this);
-		this.setPageTitleAndMeta = this.setPageTitleAndMeta.bind(this);
 		this.loadMoreComments = this.loadMoreComments.bind(this);
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
@@ -66,90 +65,6 @@ class Commentary extends Component {
 	}
 	raiseLimit() {
 
-	}
-	setPageTitleAndMeta() {
-
-		const { filters, settings } = this.props;
-		const commentGroups = this.props.commentsQuery.loading ? [] : parseCommentsToCommentGroups(this.props.commentsQuery.comments);
-
-		let title = '';
-		let values = [];
-		const workDefault = 'Commentary';
-		let subwork = null;
-		let lineFrom = 0;
-		let lineTo = 0;
-		let work = '';
-		let metaSubject = 'Commentaries on Classical Texts';
-		let description = '';
-
-		if (!settings) {
-			return null;
-		}
-
-		filters.forEach((filter) => {
-			values = [];
-			switch (filter.key) {
-			case 'works':
-				filter.values.forEach((value) => {
-					values.push(value.slug);
-				});
-				work = values.join(', ');
-				break;
-
-			case 'subworks':
-				filter.values.forEach((value) => {
-					values.push(value.n);
-				});
-				subwork = values.join(', ');
-				break;
-
-			case 'lineFrom':
-				lineFrom = filter.values[0];
-				break;
-
-			case 'lineTo':
-				lineTo = filter.values[0];
-				break;
-			default:
-				break;
-			}
-		});
-
-		const foundWork = worksQuery.loading ? {} : worksQuery.collections.textGroups.works.find(x => x.slug === work)
-		if (foundWork) {
-			title = foundWork.title;
-		} else {
-			title = workDefault;
-		}
-
-		if (subwork) title = `${title} ${subwork}`;
-		if (lineFrom) {
-			if (lineTo) {
-				title = `${title}.${lineFrom}-${lineTo}`;
-			} else {
-				title = `${title}.${lineFrom}`;
-			}
-		} else if (lineTo) {
-			title = `${title}.${lineTo}`;
-		} else {
-			title = `${title}`;
-		}
-		title = `${title} | ${settings.title || ''}`;
-
-		metaSubject = `${metaSubject}, ${title}, Philology`;
-
-		if (
-			commentGroups.length
-			&& commentGroups[0].comments.length
-			&& commentGroups[0].comments[0].revisions.length
-		) {
-			description = Utils.trunc(commentGroups[0].comments[0].revisions[0].text, 120);
-		}
-
-		Utils.setMetaTag('name', 'subject', 'content', metaSubject);
-		Utils.setTitle(title);
-		Utils.setDescription(`Commentary on ${title}: ${description}`);
-		Utils.setMetaImage();
 	}
 
 	toggleLemmaEdition() {
@@ -243,17 +158,19 @@ class Commentary extends Component {
 		}
 	}
 	componentWillReceiveProps(newProps) {
+		const commentGroups = newProps.commentsQuery.loading ? 
+		[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments);
+		const { filters, settings, worksQuery, isOnHomeView } = this.props;
 		this.setState({
-			commentGroups: newProps.commentsQuery.loading ? 
-			[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments)
+			commentGroups: commentGroups
 		});
+		if (!isOnHomeView) {
+			setPageTitleAndMeta(filters, settings, commentGroups, worksQuery);
+		}
 	}
 	render() {
 		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
 		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, commentGroups } = this.state;
-		if (!isOnHomeView) {
-			this.setPageTitleAndMeta();
-		}
 		if (!commentGroups) {
 			return null;
 		}

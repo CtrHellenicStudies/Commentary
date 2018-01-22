@@ -156,7 +156,7 @@ class CommentaryLayout extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
-		const works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.collections.textGroups.works;
+		const works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.collections[0].textGroups[0].works
 		this.setState({
 			referenceWorks: referenceWorks,
 			works: works,

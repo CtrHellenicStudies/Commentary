@@ -44,6 +44,7 @@ class TextNodesEditor extends React.Component {
 		const selectedTranslation = null;
 		const subworks = [];
 		const startAtLine = null;
+		const startAtSection = null;
 		const limit = 50;
 
 		this.state = {
@@ -53,6 +54,7 @@ class TextNodesEditor extends React.Component {
 			selectedSubwork,
 			selectedTranslation,
 			startAtLine,
+			startAtSection,
 			limit,
 			editWorkDialogOpen: false,
 			editEditionDialogOpen: false,
@@ -155,6 +157,12 @@ class TextNodesEditor extends React.Component {
 		});
 	}
 
+	updateStartAtSection(e, newValue) {
+		this.setState({
+			startAtSection: parseInt(newValue),
+		});
+	}
+
 	loadMoreText() {
 		this.setState({
 			limit: this.state.limit + 50,
@@ -162,9 +170,19 @@ class TextNodesEditor extends React.Component {
 	}
 
 	renderTextNodesInput() {
-		const { subworks, selectedWork, selectedEdition, selectedSubwork, startAtLine, limit } = this.state;
+		const {
+			subworks, selectedWork, selectedEdition, selectedSubwork, startAtLine,
+			startAtSection, limit,
+		} = this.state;
 
-		if (!selectedWork || !selectedEdition || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null) {
+		if (
+				!selectedWork
+			|| !selectedEdition
+			|| !selectedSubwork
+			|| !startAtSection
+			|| typeof startAtLine === 'undefined'
+			|| startAtLine === null
+		) {
 			return null;
 		}
 
@@ -197,6 +215,7 @@ class TextNodesEditor extends React.Component {
 				editionId={_selectedEdition._id}
 				subworkN={_selectedSubwork.n}
 				subworkTitle={selectedSubwork.title}
+				sectionN={startAtSection}
 				lineFrom={startAtLine}
 				limit={limit}
 				loadMore={this.loadMoreText}
@@ -205,7 +224,7 @@ class TextNodesEditor extends React.Component {
 	}
 
 	renderTranslationNodesInput() {
-		const { selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation } = this.state;
+		const { selectedWork, selectedSubwork, startAtSection, startAtLine, limit, selectedTranslation } = this.state;
 		let _selectedWork;
 		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
 			return null;
@@ -220,6 +239,7 @@ class TextNodesEditor extends React.Component {
 				selectedWork={_selectedWork}
 				selectedSubwork={selectedSubwork}
 				startAtLine={startAtLine}
+				startAtSection={startAtSection}
 				limit={limit}
 				selectedTranslation={selectedTranslation}
 				loadMore={this.loadMoreText}
@@ -281,6 +301,8 @@ class TextNodesEditor extends React.Component {
 			selectedSubwork,
 		};
 
+		const subdomain = window.location.hostname.split('.')[0];
+
 
 		return (
 			<div className="text-nodes-editor paper-shadow">
@@ -318,9 +340,21 @@ class TextNodesEditor extends React.Component {
 							/>
 						</FormGroup>
 					</div>
+					{subdomain === 'pausanias' ?
+						<div className="text-nodes-editor-meta-input section-input">
+							<FormGroup controlId="formControlsSelect">
+								<ControlLabel>Start at Section</ControlLabel>
+								<br />
+								<TextField
+									hintText="0"
+									onChange={this.updateStartAtSection}
+								/>
+							</FormGroup>
+						</div>
+					: ''}
 					<div className="text-nodes-editor-meta-input line-from-input">
 						<FormGroup controlId="formControlsSelect">
-							<ControlLabel>Start at line</ControlLabel>
+							<ControlLabel>Start at {subdomain === 'pausanias' ? 'Paragraph' : 'Line'}</ControlLabel>
 							<br />
 							<TextField
 								hintText="0"

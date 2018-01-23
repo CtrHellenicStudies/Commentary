@@ -167,10 +167,10 @@ TranslationNodeInput.propTypes = {
 	ready: PropTypes.bool,
 };
 
-const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation}) => {
+const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, startAtSection, limit, selectedTranslation}) => {
 	const tenantId = Session.get('tenantId');
 
-	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtLine, limit);
+	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtLine, startAtSection, limit);
 	const ready = translationNodeSubscription.ready();
 
 	const translation = TranslationNodes.find().fetch();

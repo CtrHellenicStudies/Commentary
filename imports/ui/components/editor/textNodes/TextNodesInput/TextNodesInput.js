@@ -188,6 +188,8 @@ class TextNodesInput extends React.Component {
 			return null;
 		}
 
+		const subdomain = window.location.hostname.split('.')[0];
+
 		return (
 			<FormGroup
 				controlId="textNodes"
@@ -203,7 +205,7 @@ class TextNodesInput extends React.Component {
 						>
 							<div
 								className="reference-work-item"
-							>							
+							>
 								<FormGroup className="text-node-number-input">
 									<TextField
 										name={`${i}_number`}
@@ -226,6 +228,7 @@ class TextNodesInput extends React.Component {
 											margin: '0 10px',
 										}}
 										onChange={this.onChangeText}
+										multiLine={subdomain === 'pausanias'}
 									/>
 								</FormGroup>
 							</div>

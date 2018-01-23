@@ -175,14 +175,6 @@ const CommentLemmaSelectContainer = createContainer(({ selectedLineFrom, selecte
 		lemmaQuery['section.n'] = sectionN;
 	}
 
-	console.log("##########")
-	console.log("##########")
-	console.log(sectionN)
-	console.log(lemmaQuery);
-	console.log("##########")
-	console.log("##########")
-
-
 	const textNodesSubscription = Meteor.subscribe('textNodes', lemmaQuery);
 	const textNodesCursor = TextNodes.find(lemmaQuery);
 

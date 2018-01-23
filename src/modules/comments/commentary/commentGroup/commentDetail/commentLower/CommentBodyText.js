@@ -13,7 +13,7 @@ class CommentBodyText extends Component {
 		this.highlightText = this.highlightText.bind(this);
 	}
 
-
+	
 	highlightText(text) {
 		const { searchTerm } = this.props;
 		const termToHighlightRegEx = new RegExp(searchTerm, 'ig');

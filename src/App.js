@@ -68,7 +68,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
  * Application routes
  */
 function canGetUserDatas(user, usersQuery) {
-	if(user !== null && 
+	if(user && 
 	!usersQuery.loading &&
 	usersQuery.users.length && 
 	!(usersQuery.users[0]._id === user._id)) {

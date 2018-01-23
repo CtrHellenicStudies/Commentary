@@ -89,6 +89,42 @@ const register = async (data) => {
 	}
 };
 
+
+
+const A = [
+	[0, 10, 10, 0, 0, 2, 0],//0
+	[0, 0, 0, 0, 5, 0, 0],//1
+	[0, -9, 0, -8, 0, 0, 0],//2
+	[0, 0, 0, 0, 0, 0, 3],//3
+	[0, 0, 4, 0, 0, 0, -4],//4
+	[0, 0, 0, 0, 0, 0, 1],//5
+	[0, 0, 0, 0, 0, 0, 0]//6
+];
+const S = 0;
+const F = 6;
+function yourFunction(A, S, F) {
+
+	const n = A.length;
+	const dist = Array(n);
+	const pre = Array(n);
+
+	for(let i = 0; i < n; i ++ ) {
+		dist[i] = Infinity;
+		pre[i] = null;
+	}
+	for (let i = 0; i < n; i ++) {
+		for (let j = 0; j < n; j ++) {
+			for(let k = 0; k < n; k ++) {
+				if(dist[j] + A[j][k] < dist[k]) {
+					dist[k] = A[j][k] + dist[j];
+					pre[k] = j;
+				}
+			}
+		}
+	}
+}
+
+
 const verifyToken = async () => {
 	const token = Cookies.get('token');
 	if (token) {

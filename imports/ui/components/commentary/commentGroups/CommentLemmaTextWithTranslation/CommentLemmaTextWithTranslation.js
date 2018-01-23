@@ -23,32 +23,36 @@ class CommentLemmaTextWithTranslation extends React.Component {
 				<label className="translated-by-label">
 					Translated by {author}
 				</label>
-				{linesWithTranslation.map((line, i) => (
-					<div
-						className="translation-lemma-text-line-outer"
-						key={`${line.n}-${i}`}
-					>
+				{linesWithTranslation.map((line, i) => {
+					if (line.n === 0) {
+						return null;
+					}
+					return (
 						<div
-							className="lemma-text-line lemma-text-line--source"
+							className="translation-lemma-text-line-outer"
+							key={`${line.n}-${i}`}
 						>
-							<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
-								{'section' in line ? `${line.section.n}.` : null}{line.n}
-								foobar
-							</span>
-							<p
-								className="lemma-text"
-								dangerouslySetInnerHTML={{ __html: line.html }}
-							/>
+							<div
+								className="lemma-text-line lemma-text-line--source"
+							>
+								<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
+									{'section' in line ? `${line.section.n}.` : null}{line.n}
+								</span>
+								<p
+									className="lemma-text"
+									dangerouslySetInnerHTML={{ __html: line.html }}
+								/>
+							</div>
+							<div
+								className="lemma-text-line lemma-text-line--translation"
+							>
+								<p className="translation-text">
+									{line.english}
+								</p>
+							</div>
 						</div>
-						<div
-							className="lemma-text-line lemma-text-line--translation"
-						>
-							<p className="translation-text">
-								{line.english}
-							</p>
-						</div>
-					</div>
-				))}
+					)
+				})}
 			</div>
 		);
 	}

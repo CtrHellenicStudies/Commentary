@@ -43,7 +43,7 @@ class CommentGroup extends React.Component {
 		})),
 		showLoginModal: PropTypes.func,
 		isOnHomeView: PropTypes.bool,
-		multiline: PropTypes.bool,
+		multiline: PropTypes.string,
 	};
 
 	static defaultProps = {

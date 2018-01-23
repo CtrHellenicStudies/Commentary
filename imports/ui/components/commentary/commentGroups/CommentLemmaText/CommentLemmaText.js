@@ -35,20 +35,22 @@ class CommentLemmaText extends React.Component {
 			// construct the HTML to be rendered
 			// number of lines depended on the expanded state
 			for (let i = 0; i < loops; i += 1) {
-				linesHTML.push(
-					<div
-						key={i}
-						className="lemma-text-line"
-					>
-						<span className={`line-n ${(lines[i].n % 5) === 0 ? 'line-n--visible' : ''}`}>
-							{'section' in lines[i] && lines[i].section ? `${lines[i].section.n}.` : null}{lines[i].n}
-						</span>
-						<p
-							className="lemma-text"
-							dangerouslySetInnerHTML={{ __html: lines[i].html }}
-						/>
-					</div>
-				);
+				if (lines[i].n !== 0) {
+					linesHTML.push(
+						<div
+							key={i}
+							className="lemma-text-line"
+						>
+							<span className={`line-n ${(lines[i].n % 5) === 0 ? 'line-n--visible' : ''}`}>
+								{'section' in lines[i] && lines[i].section ? `${lines[i].section.n}.` : null}{lines[i].n}
+							</span>
+							<p
+								className="lemma-text"
+								dangerouslySetInnerHTML={{ __html: lines[i].html }}
+							/>
+						</div>
+					);
+				}
 			}
 
 			return (
@@ -70,21 +72,26 @@ class CommentLemmaText extends React.Component {
 		// if not longText
 		return (
 			<div className="comment-lemma-text">
-				{lines.map((line, i) => (
-					<div
-						key={i}
-						className="lemma-text-line"
-						style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
-					>
-						<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
-							{'section' in line && line.section ? `${line.section.n}.` : null}{line.n}
-						</span>
-						<p
-							className="lemma-text"
-							dangerouslySetInnerHTML={{ __html: line.html }}
-						/>
-					</div>
-				))}
+				{lines.map((line, i) => {
+					if (line.n === 0) {
+						return null;
+					}
+					return (
+						<div
+							key={i}
+							className="lemma-text-line"
+							style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
+						>
+							<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
+								{'section' in line && line.section ? `${line.section.n}.` : null}{line.n}
+							</span>
+							<p
+								className="lemma-text"
+								dangerouslySetInnerHTML={{ __html: line.html }}
+							/>
+						</div>
+					);
+				})}
 			</div>
 		);
 	}

@@ -305,7 +305,7 @@ const Utils = {
 		editions.forEach((edition, index) => {
 			const joinedText = edition.lines.map(line => line.html).join(' ');
 
-			const tag = new RegExp(`<lb ed="${multiline}" id="\\d+" />`, 'ig');
+			const tag = new RegExp(`<lb id="\\d+" ed="${multiline}" />`, 'ig');
 			const id = /id="\d+"/ig;
 
 			const textArray = joinedText.split(tag);

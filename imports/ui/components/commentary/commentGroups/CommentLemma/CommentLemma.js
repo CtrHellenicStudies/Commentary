@@ -15,7 +15,6 @@ import _ from 'underscore';
 
 // models:
 import TextNodes from '/imports/models/textNodes';
-import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
 import Editions from '/imports/models/editions';
 

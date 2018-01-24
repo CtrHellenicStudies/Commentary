@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
 import { Accounts } from 'meteor/accounts-base';
 

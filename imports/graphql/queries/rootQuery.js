@@ -13,7 +13,6 @@ import discussionCommentQueryFields from './discussionComments';
 import linkedDataSchemaFields from './linkedDataSchema';
 import pagesQueryFields from './pages';
 import settingsQueryFields from './settings';
-import translationsQueryFields from './translation';
 import editionsQueryFields from './editions';
 import usersQueryFields from './users';
 
@@ -38,7 +37,6 @@ const RootQuery = new GraphQLObjectType({
 		...linkedDataSchemaFields,
 		...pagesQueryFields,
 		...settingsQueryFields,
-		...translationsQueryFields,
 		...editionsQueryFields,
 		...usersQueryFields,
 	},

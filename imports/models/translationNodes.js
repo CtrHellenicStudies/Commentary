@@ -41,6 +41,10 @@ TranslationNodes.schema = new SimpleSchema({
 		type: Number,
 		optional: true
 	},
+	section: {
+		type: Number,
+		optional: true
+	},
 	text: {
 		type: String,
 		optional: true

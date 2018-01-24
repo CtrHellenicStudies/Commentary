@@ -4,7 +4,6 @@ import { Session } from 'meteor/session';
 import { createContainer } from 'meteor/react-meteor-data';
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import Translations from '/imports/models/translations';
 import TranslationNodes from '/imports/models/translationNodes';
 import _ from 'lodash';
 

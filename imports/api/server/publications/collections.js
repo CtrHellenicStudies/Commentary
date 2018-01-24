@@ -19,7 +19,6 @@ import TextNodes from '/imports/models/textNodes';
 import Works from '/imports/models/works';
 import Settings from '/imports/models/settings';
 import TranslationNodes from '/imports/models/translationNodes';
-import Translations from '/imports/models/translations';
 import Editions from '/imports/models/editions';
 
 // lib
@@ -624,13 +623,6 @@ Meteor.publish('settings.tenant', (tenantId) => {
 
 
 /**
- * DEPRECATED
- * Get all translations, sorted by tenantId
- * @returns {Object[]} Cursor of translations
- */
-Meteor.publish('translations', () => Translations.find({}, { sort: { tenantId: 1 }}));
-
-/**
  * Get all translation Nodes, sorted by tenantId
  * @returns {Object[]} Cursor of translationNodes
  */
@@ -646,12 +638,13 @@ Meteor.publish('translationNodes', () => TranslationNodes.find({}, { sort: { ten
  * @param {number} limit - mongo limit
  * @returns {Object[]} Cursor of translationNodes
  */
-Meteor.publish('translationNodes.work', (tenantId, workId, subwork, author, skip = 0, limit = 100) => {
+Meteor.publish('translationNodes.work', (tenantId, workId, subwork, author, section = null, skip = 0, limit = 100) => {
 	check(tenantId, String);
 	check(workId, String);
 	check(parseInt(subwork), Number);
 	check(author, String);
 	check(subwork, Number);
+	check(parseInt(section), Match.Maybe(Number));
 	check(parseInt(skip), Number);
 	check(parseInt(limit), Number);
 
@@ -661,8 +654,18 @@ Meteor.publish('translationNodes.work', (tenantId, workId, subwork, author, skip
 		subwork,
 		tenantId,
 		author,
+		section,
 		$and: [{n: {$gte: parseInt(skip)}}, {n: {$lte: parseInt(skip) + parseInt(limit) - 1}}]
-	}, {sort: {tenantId: 1}});
+	}, {
+		sort: {
+			tenantId: 1,
+			work: 1,
+			subwork: 1,
+			section: 1,
+			n: 1,
+		}
+	});
+
 	return result;
 });
 

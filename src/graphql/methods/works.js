@@ -6,7 +6,7 @@ query worksQuery {
 			id
 			title
 			urn
-			textGroups(urn: "urn:cts:greekLit:tlg0012") {
+			textGroups(urn: "urn:cts:greekLit:tlg0013") {
 				id
 				title
 				urn

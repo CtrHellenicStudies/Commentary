@@ -74,7 +74,7 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-		if (this.state.refetchTextNodes || nextProps.textNodesQuery.textNodes.length === 100) {
+		if (this.state.refetchTextNodes || nextProps.textNodesQuery.collections[0].textGroups[0].works.textNodes.length === 100) {
 			const properties = Utils.getUrnTextNodesProperties(comment.lemmaCitation);
 			this.props.textNodesQuery.refetch(properties);
 
@@ -89,7 +89,7 @@ class AddRevisionLayout extends Component {
 			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
 			commenters: commenters,
-			textNodes: this.props.textNodesQuery.textNodes
+			textNodes: this.props.textNodesQuery.collections[0].textGroups[0].works
 
 		});
 	}

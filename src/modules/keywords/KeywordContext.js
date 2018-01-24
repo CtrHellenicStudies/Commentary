@@ -49,8 +49,8 @@ class KeywordContext extends Component {
 			context.lineFrom = keyword.lineFrom;
 			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
 			if (!props.textNodesQuery.loading) {
-				const textNodesCursor = props.textNodesQuery.textNodes;
-				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
+				const textNodesCursor = props.textNodesQuery.collections[0].textGroups[0].works;
+				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.collections[0].textGroups[0].works);
 			}
 			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 				context.work, context.lineFrom, context.lineTo
@@ -77,9 +77,9 @@ class KeywordContext extends Component {
 					context.subwork = query.subworkN;
 					context.lineFrom = query.lineFrom;
 					context.lineTo = query.lineTo;
-					const textNodesCursor = textNodesQuery.loading ? [] : textNodesQuery.textNodes;
+					const textNodesCursor = props.extNodesQuery.loading ? [] : props.textNodesQuery.collections[0].textGroups[0].works;
 
-					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
+					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.collections[0].textGroups[0].works);
 				}
 			}
 		}

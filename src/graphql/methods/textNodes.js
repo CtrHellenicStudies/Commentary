@@ -37,11 +37,32 @@ query textNodesQueryById($id: ID!) {
 `;
 
 const query = gql`
-query textNodesQuery($urn: CtsUrn) {
-  textNodes(urn: $urn, language: "greek") {
-	  id
-	  text
-  }
+query textNodesQuery($workUrn: CtsUrn, $textNodesUrn: CtsUrn) {
+		collections(urn: "urn:cts:greekLit") {
+			id
+			title
+			urn
+			textGroups(urn: "urn:cts:greekLit:tlg0013") {
+				id
+				title
+				urn
+				works(language: "greek", urn: $workUrn) {
+					id
+					original_title
+					version {
+						id
+					}
+					urn
+					slug
+					textNodes(urn: $textNodesUrn) {
+						id
+						text
+						location
+						urn
+        			}
+				}
+			}
+		}
 }
 `;
 

@@ -6,7 +6,6 @@ import CommentLemmaTextWithTranslation from './CommentLemmaTextWithTranslation';
 class TranslationLayout extends Component {
 	render() {
 		const { commentGroup, showTranslation, lines, author } = this.props;
-		console.log(commentGroup, lines);
 		return (
 			<div>
 				{showTranslation ?

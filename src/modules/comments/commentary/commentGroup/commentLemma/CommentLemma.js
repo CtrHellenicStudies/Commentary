@@ -169,18 +169,21 @@ class CommentLemma extends Component {
 			nextProps.translationsQuery.loading) {
 			return;
 		}
-		const textNodesCursor = nextProps.textNodesQuery.textNodes ? nextProps.textNodesQuery.textNodes: [];
-		let editions = nextProps.editionsQuery.editions;
+		const textNodesCursor = nextProps.textNodesQuery.collections ? nextProps.textNodesQuery.collections[0].textGroups[0].works: [];
+		console.log(nextProps.textNodesQuery.collections);
+		console.log(nextProps.editionsQuery.collections);
+		let editions = Utils.textFromTextNodesGroupedByEdition(
+			textNodesCursor, 
+			nextProps.editionsQuery.collections[0].textGroups[0].works);
 		const ready = true;
 		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
-		const selectedLemmaEdition = editions[selectedLemmaEditionIndex].lines ? editions[selectedLemmaEditionIndex] : { lines: [] };
-		console.log(selectedLemmaEdition);
+		const selectedLemmaEdition = editions.length && editions[selectedLemmaEditionIndex].lines ? editions[selectedLemmaEditionIndex] : { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
 		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
 			if (!nextProps.textNodesQuery.variables.urn && commentGroup.comments[0].lemmaCitation.passageFrom) {
-				console.log(commentGroup);
 				const properties = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
+				console.log('refetch ', properties);
 				nextProps.textNodesQuery.refetch(properties);
 			}
 			if (!commentGroup.lineTo) {
@@ -206,7 +209,7 @@ class CommentLemma extends Component {
 	}
 	render() {
 		const { commentGroup, hideLemma } = this.props;
-		const { selectedAuthor, showTranslation, ready, translationAuthors, selectedLemmaEdition } = this.state;
+		const { selectedAuthor, showTranslation, ready, translationAuthors, selectedLemmaEdition, editions } = this.state;
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';
@@ -251,7 +254,7 @@ class CommentLemma extends Component {
 
 					<div className="edition-tabs tabs" />
 					<div className="edition-tabs tabs">
-						{/* {editions.map((lemmaTextEdition, i) => {
+						{editions.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
 							const multiLineList = lemmaTextEdition.multiLine && lemmaTextEdition.multiLine.length ? lemmaTextEdition.multiLine : [];
 
@@ -330,7 +333,7 @@ class CommentLemma extends Component {
 									{popover}
 								</div>
 							);
-						})} */}
+						})}
 
 						{translationAuthors.length > 0 ?
 							<RaisedButton

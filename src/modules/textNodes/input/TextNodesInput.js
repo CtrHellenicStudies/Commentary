@@ -68,8 +68,8 @@ class TextNodesInput extends Component {
 		const ready = true;
 	
 		if (ready) {
-			textNodes = props.textNodesQuery.textNodes;
-			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions);
+			textNodes = props.textNodesQuery.collections[0].textGroups[0].works;
+			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.collections[0].textGroups[0].works);
 			textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
 	
 			textNodesByEditionsSorted.forEach(edition => {

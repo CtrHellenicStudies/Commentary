@@ -71,7 +71,7 @@ class EditKeywordLayout extends Component {
 		}
 		const { match } = nextProps;
 		const slug = match.params.slug;
-		const textNodes = nextProps.textNodesQuery.textNodes;
+		const textNodes = nextProps.textNodesQuery.collections[0].textGroups[0].works;
 		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
 		if (this.state.refetchTextNodes) {// || textNodeslength === 100) {
 			// const properies = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(keyword.work ? keyword.work.slug : 'iliad',

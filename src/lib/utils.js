@@ -27,7 +27,7 @@ const Utils = {
 	createLemmaCitation(work, lineFrom, lineTo) { 
 		return {
 			corpus: "urn:cts:greekLit",
-			textGroup: "urn:cts:greekLit:tlg0012",
+			textGroup: "tlg0013",
 			work: work,
 			passageFrom: `1.${lineFrom+1}`,
 			passageTo: `1.${lineTo+1}`
@@ -36,18 +36,19 @@ const Utils = {
 	},
 	getUrnTextNodesProperties(lemmaCitation) {
 		return {
-			urn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${lemmaCitation.work}:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
+			workUrn:(`${lemmaCitation.corpus}:${lemmaCitation.textGroup === "tlg0012" ? "tlg00113": "tlg00112"}.${lemmaCitation.work}`).toString(),
+			textNodesUrn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup === "tlg0012" ? "tlg00113": "tlg00112"}.${lemmaCitation.work}:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
 		};
 	},
 	encodeBookBySlug(slug) {
 		let code = {
-			urn : 'urn:cts:greekLit:tlg0012.tlg001',
+			urn : 'urn:cts:greekLit:tlg0013.tlg001',
 			slug : 'iliad-2'
 		};
 		switch(slug) {
 			case 'odyssey':
 				code = { 
-					urn: 'urn:cts:greekLit:tlg0012.tlg002',
+					urn: 'urn:cts:greekLit:tlg0013.tlg002',
 					slug: 'odyssey-2'
 				};
 				break;
@@ -262,45 +263,35 @@ const Utils = {
 
 		return domain;
 	},
-	textFromTextNodesGroupedByEdition(textNodesCursor, _editions) {
-		const editions = [];
-		textNodesCursor.forEach((textNode) => {
-			textNode.text.forEach((text) => {
-				let myEdition = editions.find(e => text.edition === e._id);
+	textFromTextNodesGroupedByEdition(worksWithTextNodes, _versions) {
+		let i = 0;
+		const versions = [];
+		worksWithTextNodes.forEach((work) => {
+			work.textNodes.forEach((textNode) => {
+				let myVersion = versions.find(e => work.slug === e.slug);
 
-				if (!myEdition) {
-					const foundEdition = _editions.find(x => x._id === text.edition);
-					myEdition = {
-						_id: foundEdition._id,
-						title: foundEdition.title,
-						slug: foundEdition.slug,
-						multiLine: foundEdition.multiLine,
+				if (!myVersion) {
+					const foundVersion = _versions.find(x => x.slug === work.slug);
+					myVersion = {
+						_id: foundVersion._id,
+						title: foundVersion.title,
+						slug: foundVersion.slug,
+						//multiLine: foundEdition.multiLine, TODO
 						lines: [],
 					};
-					editions.push(myEdition);
+					versions.push(myVersion);
 				}
 
-				myEdition.lines.push({
-					_id: textNode._id,
-					html: text.html,
-					n: text.n,
+				myVersion.lines.push({
+					_id: textNode.id,
+					html: textNode.text,
+					n: i,
 				});
+				i ++;
 			});
 		});
 
-		// sort lines for each edition by line number
-		for (let i = 0; i < editions.length; ++i) {
-			editions[i].lines.sort((a, b) => {
-				if (a.n < b.n) {
-					return -1;
-				} else if (b.n < a.n) {
-					return 1;
-				}
-				return 0;
-			});
-		}
-
-		return editions;
+		return versions;
 	},
 	getCommenters(commenterData, commenters) {
 		const commentersList = [];

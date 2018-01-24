@@ -149,6 +149,7 @@ class CommentarySearchToolbar extends Component {
 		const { searchDropdownOpen, moreDropdownOpen, subworksTitle } = this.state;
 
 		const workInFilter = getWorkInFilter(filters);
+		console.log(filters);
 
 		return (
 			<span>

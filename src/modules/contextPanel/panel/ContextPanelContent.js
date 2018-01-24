@@ -68,8 +68,8 @@ class ContextPanelContent extends Component {
 			nextProps.textNodesQuery.refetch(properties);
 		}
 	
-		const textNodesCursor = nextProps.textNodesQuery.textNodes;
-		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
+		const textNodesCursor = nextProps.textNodesQuery.collections[0].textGroups[0].works
+		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.collections[0].textGroups[0].works);
 	
 		let sortedEditions;
 	

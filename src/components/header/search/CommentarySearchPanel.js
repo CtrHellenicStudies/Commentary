@@ -93,6 +93,7 @@ class CommentarySearchPanel extends Component {
 		commenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters;
 		works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.collections[0].textGroups[0].works;
 		referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
+		console.log(works);
 
 		this.setState({
 			keyideas: keyideas,

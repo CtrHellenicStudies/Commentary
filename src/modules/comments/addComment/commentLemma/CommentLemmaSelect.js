@@ -27,7 +27,7 @@ class CommentLemmaSelect extends Component {
 		if (!nextProps.textNodes || nextProps.editionsQuery.loading) {
 			return;
 		}
-		const editions = Utils.textFromTextNodesGroupedByEdition(nextProps.textNodes, nextProps.editionsQuery.editions);
+		const editions = Utils.textFromTextNodesGroupedByEdition(nextProps.textNodes, nextProps.editionsQuery.collections[0].textGroups[0].works);
 
 		this.setState({
 			lemmaText: editions,

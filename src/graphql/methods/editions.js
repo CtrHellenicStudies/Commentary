@@ -2,11 +2,18 @@ import { gql, graphql } from 'react-apollo';
 
 const query = gql`
 query editionsQuery{
-  editions {
-  _id
-  title
-  slug
-  }
+	collections(urn: "urn:cts:greekLit") {
+		textGroups(urn: "urn:cts:greekLit:tlg0013") {
+			works(language: "greek") {
+		   		slug
+	  			version {
+					id
+					title
+					slug
+	 			}
+			}
+		}
+	}
 }
 `;
 const editionsRemove = gql`

@@ -179,7 +179,6 @@ class TextNodesEditor extends React.Component {
 				!selectedWork
 			|| !selectedEdition
 			|| !selectedSubwork
-			|| !startAtSection
 			|| typeof startAtLine === 'undefined'
 			|| startAtLine === null
 		) {

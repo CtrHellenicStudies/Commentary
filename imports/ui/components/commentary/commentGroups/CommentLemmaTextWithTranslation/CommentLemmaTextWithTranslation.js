@@ -35,7 +35,7 @@ class CommentLemmaTextWithTranslation extends React.Component {
 								className="lemma-text-line lemma-text-line--source"
 							>
 								<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
-									{'section' in line ? `${line.section}.` : null}{line.n}
+									{'section' in line && line.section ? `${line.section}.` : null}{line.n}
 								</span>
 								<p
 									className="lemma-text"
@@ -100,7 +100,7 @@ export default createContainer(({ commentGroup, lines, author }) => {
 			linesWithTranslation.push(newLine);
 		}
 	}
-	
+
 	translationNodes.forEach((node) => {
 		const arrIndex = _.findIndex(linesWithTranslation, (line) => line.n === node.n);
 		linesWithTranslation[arrIndex]._id = node._id;

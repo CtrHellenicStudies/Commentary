@@ -267,7 +267,7 @@ TextNodesInput.propTypes = {
 };
 
 
-const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, subworkN, lineFrom, limit }) => {
+const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, subworkN, sectionN, lineFrom, limit }) => {
 	let textNodes;
 	let textNodesByEditions = [];
 	let textNodesByEditionsSorted = [];
@@ -279,6 +279,9 @@ const TextNodesInputContainer = createContainer(({ workId, workSlug, editionId, 
 		$and: [{'text.n': {$gte: parseInt(lineFrom, 10)}}, {'text.n': {$lte: parseInt(lineFrom, 10) + limit}}],
 		'text.edition': editionId
 	};
+	if (sectionN) {
+		lemmaQuery['section.n'] = sectionN;
+	}
 
 	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
 		lemmaQuery['work.slug'] = 'hymns';

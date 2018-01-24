@@ -224,20 +224,32 @@ class TextNodesEditor extends React.Component {
 	}
 
 	renderTranslationNodesInput() {
-		const { selectedWork, selectedSubwork, startAtSection, startAtLine, limit, selectedTranslation } = this.state;
+		const { selectedWork, selectedEdition, selectedSubwork, startAtSection, startAtLine, limit, selectedTranslation } = this.state;
+		const { works, editions } = this.props;
+
 		let _selectedWork;
+		let _selectedEdition;
 		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
 			return null;
 		}
-		this.props.works.forEach(work => {
+
+		works.forEach(work => {
 			if (work._id === selectedWork) {
 				_selectedWork = work;
 			}
 		});
+
+		editions.forEach(edition => {
+			if (edition._id === selectedEdition) {
+				_selectedEdition = edition;
+			}
+		});
+
 		return (
 			<TranslationNodeInput
 				selectedWork={_selectedWork}
 				selectedSubwork={selectedSubwork}
+				selectedEdition={_selectedEdition._id}
 				startAtLine={startAtLine}
 				startAtSection={startAtSection}
 				limit={limit}

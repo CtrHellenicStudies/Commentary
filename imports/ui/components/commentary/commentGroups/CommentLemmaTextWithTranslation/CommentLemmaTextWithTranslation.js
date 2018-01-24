@@ -35,7 +35,7 @@ class CommentLemmaTextWithTranslation extends React.Component {
 								className="lemma-text-line lemma-text-line--source"
 							>
 								<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
-									{'section' in line ? `${line.section.n}.` : null}{line.n}
+									{'section' in line ? `${line.section}.` : null}{line.n}
 								</span>
 								<p
 									className="lemma-text"
@@ -62,7 +62,7 @@ CommentLemmaTextWithTranslation.propTypes = {
 		html: PropTypes.string,
 		english: PropTypes.string,
 		n: PropTypes.number.isRequired,
-		section: PropTypes.object,
+		section: PropTypes.number,
 	})).isRequired,
 	commentGroup: PropTypes.object,
 	author: PropTypes.string,

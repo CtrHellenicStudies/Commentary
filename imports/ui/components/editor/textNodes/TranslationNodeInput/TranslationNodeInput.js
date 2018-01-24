@@ -4,13 +4,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 import {
 	FormGroup,
 } from 'react-bootstrap';
-import TranslationNodes from '/imports/models/translationNodes';
-import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 import _ from 'lodash';
 import {debounce} from 'throttle-debounce';
 import Cookies from 'js-cookie';
+
+import TextNodes from '/imports/models/textNodes';
+import TranslationNodes from '/imports/models/translationNodes';
+import { ListGroupDnD, createListGroupItemDnD } from '/imports/ui/components/shared/ListDnD';
 
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');
 
@@ -170,33 +172,58 @@ TranslationNodeInput.propTypes = {
 	ready: PropTypes.bool,
 };
 
-const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, startAtSection, limit, selectedTranslation}) => {
+const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, startAtSection, limit, selectedTranslation, selectedEdition}) => {
 	const tenantId = Session.get('tenantId');
 
-	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtSection, startAtLine, limit);
-	const ready = translationNodeSubscription.ready();
+	const lemmaQuery = {
+		'work.slug': selectedWork.slug,
+		'subwork.n': selectedSubwork,
+		$and: [{'text.n': {$gte: parseInt(startAtLine, 10)}}, {'text.n': {$lte: parseInt(startAtLine, 10) + limit}}],
+		'text.edition': selectedEdition,
+	};
+	if (startAtSection) {
+		lemmaQuery['section.n'] = startAtSection;
+	}
 
-	const translation = TranslationNodes.find().fetch();
+	if (lemmaQuery['work.slug'] === 'homeric-hymns') {
+		lemmaQuery['work.slug'] = 'hymns';
+	}
+	let textNodes = [];
+	const textNodeSubscription = Meteor.subscribe('textNodes', lemmaQuery, 0, limit);
 
 	const translationNodes = [];
-	for (let i = 0; i < limit; i++) {
-		let newLine;
-		const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
+	let translation = [];
+	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtSection, startAtLine, limit);
 
-		if (arrIndex >= 0) {
-			newLine = translation[arrIndex];
-		}		else {
-			newLine = {
-				n: i + parseInt(startAtLine),
-				text: '',
-				tenantId: tenantId,
-				work: selectedWork.slug,
-				subwork: selectedSubwork,
-				author: selectedTranslation,
-			};
+
+	const ready = textNodeSubscription.ready() && translationNodeSubscription.ready();
+
+	if (ready) {
+		textNodes = TextNodes.find(lemmaQuery).fetch();
+		translation = TranslationNodes.find().fetch();
+	}
+
+	if (textNodes && textNodes.length) {
+		for (let i = 0; i < textNodes.length; i++) {
+			let newLine;
+			const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine));
+
+			if (arrIndex >= 0) {
+				newLine = translation[arrIndex];
+			}		else {
+				newLine = {
+					n: i + parseInt(startAtLine),
+					section: startAtSection,
+					text: '',
+					tenantId: tenantId,
+					work: selectedWork.slug,
+					subwork: selectedSubwork,
+					author: selectedTranslation,
+				};
+			}
+
+			translationNodes.push(newLine);
 		}
-
-		translationNodes.push(newLine);
 	}
 
 	return {

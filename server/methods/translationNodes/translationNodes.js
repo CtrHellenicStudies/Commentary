@@ -16,6 +16,7 @@ const translationsNodeUpdate = (token, translationNode) => {
 	const query = {
 		author: translationNode.author,
 		n: translationNode.n,
+		section: translationNode.section,
 		subwork: translationNode.subwork,
 		work: translationNode.work
 	};

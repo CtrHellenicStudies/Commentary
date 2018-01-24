@@ -107,6 +107,8 @@ class TranslationNodeInput extends React.Component {
 			return null;
 		}
 
+		const subdomain = window.location.hostname.split('.')[0];
+
 		return (
 			<FormGroup
 				controlId="textNodes"
@@ -145,6 +147,7 @@ class TranslationNodeInput extends React.Component {
 											margin: '0 10px',
 										}}
 										onChange={this.onChangeText}
+										multiLine={subdomain === 'pausanias'}
 									/>
 								</FormGroup>
 							</div>
@@ -170,7 +173,7 @@ TranslationNodeInput.propTypes = {
 const TranslationInputContainer = createContainer(({selectedWork, selectedSubwork, startAtLine, startAtSection, limit, selectedTranslation}) => {
 	const tenantId = Session.get('tenantId');
 
-	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtLine, startAtSection, limit);
+	const translationNodeSubscription = Meteor.subscribe('translationNodes.work', tenantId, selectedWork._id, selectedSubwork, selectedTranslation, startAtSection, startAtLine, limit);
 	const ready = translationNodeSubscription.ready();
 
 	const translation = TranslationNodes.find().fetch();

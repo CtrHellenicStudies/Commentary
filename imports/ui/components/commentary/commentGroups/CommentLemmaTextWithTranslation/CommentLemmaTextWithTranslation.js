@@ -91,13 +91,16 @@ export default createContainer(({ commentGroup, lines, author }) => {
 	}
 
 	for (let i = 0; i < nLines; i++) {
-		const newLine = {
-			n: lines[i].n,
-			html: lines[i].html,
-			section: lines[i].section,
-		};
-		linesWithTranslation.push(newLine);
+		if (lines[i]) {
+			const newLine = {
+				n: lines[i].n,
+				html: lines[i].html,
+				section: lines[i].section,
+			};
+			linesWithTranslation.push(newLine);
+		}
 	}
+	
 	translationNodes.forEach((node) => {
 		const arrIndex = _.findIndex(linesWithTranslation, (line) => line.n === node.n);
 		linesWithTranslation[arrIndex]._id = node._id;

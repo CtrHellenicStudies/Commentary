@@ -171,7 +171,6 @@ class CommentLemma extends Component {
 		}
 		const textNodesCursor = nextProps.textNodesQuery.collections ? nextProps.textNodesQuery.collections[0].textGroups[0].works: [];
 		console.log(nextProps.textNodesQuery.collections);
-		console.log(nextProps.editionsQuery.collections);
 		let editions = Utils.textFromTextNodesGroupedByEdition(
 			textNodesCursor, 
 			nextProps.editionsQuery.collections[0].textGroups[0].works);

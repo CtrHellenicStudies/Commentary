@@ -131,6 +131,7 @@ class AddCommentLayout extends Component {
 		const { filters } = this.state;
 		const { work } = getFilterValues(filters); // TODO
 		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work, 0, 49));
+		console.log(properties);
 		this.props.textNodesQuery.refetch(properties);
 
 	}

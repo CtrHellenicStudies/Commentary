@@ -27,7 +27,6 @@ class TranslationSelect extends Component {
 		this.addNewAuthor = this.addNewAuthor.bind(this);
 
 		if (this.props.selectedSubwork && this.props.selectedWork) {
-			console.log(props.selectedSubwork, props.selectedWork);
 			this.props.translationAuthorsQuery.refetch({
 				selectedWork: this.props.selectedWork,
 				selectedSubwork: this.props.selectedSubwork
@@ -41,7 +40,6 @@ class TranslationSelect extends Component {
 		if (props.selectedWork !== this.props.selectedWork || 
 			props.selectedSubwork !== this.props.selectedSubwork) {
 			if (props.selectedSubwork && props.selectedWork) {
-				console.log(props.selectedSubwork, props.selectedWork);
 				props.translationAuthorsQuery.refetch({
 					selectedWork: props.selectedWork,
 					selectedSubwork: props.selectedSubwork

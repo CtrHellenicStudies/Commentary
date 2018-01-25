@@ -28,16 +28,17 @@ const Utils = {
 		return {
 			corpus: "urn:cts:greekLit",
 			textGroup: "tlg0013",
-			work: work,
+			work: work.replace('tlg',''),
 			passageFrom: `1.${lineFrom+1}`,
 			passageTo: `1.${lineTo+1}`
 		};
 
 	},
 	getUrnTextNodesProperties(lemmaCitation) {
+		const work = lemmaCitation.work.replace('tlg','');
 		return {
-			workUrn:(`${lemmaCitation.corpus}:${lemmaCitation.textGroup === "tlg0012" ? "tlg00113": "tlg00112"}.${lemmaCitation.work}`).toString(),
-			textNodesUrn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup === "tlg0012" ? "tlg00113": "tlg00112"}.${lemmaCitation.work}:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
+			workUrn:(`${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${work}`).toString(),
+			textNodesUrn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${work}:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
 		};
 	},
 	encodeBookBySlug(slug) {

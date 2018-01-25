@@ -24,7 +24,6 @@ require('dotenv').config();
 injectTapEventPlugin();
 
 const uriAddress = process.env.graphql ? process.env.graphql : 'http://localhost:3002/graphql';
-console.log(uriAddress);
 
 const networkInterface = createNetworkInterface({
 	uri: uriAddress,

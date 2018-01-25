@@ -92,7 +92,6 @@ class TextNodesEditor extends Component {
 
 	selectSubwork(event) {
 		const setValue = event ? event.value : '';
-		console.log(setValue);
 		this.setState({
 			selectedSubwork: setValue
 		});

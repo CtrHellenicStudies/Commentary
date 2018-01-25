@@ -31,7 +31,6 @@ const login = async (data) => {
 		}
 		const resJson = await res.json();
 		if (resJson.token) {
-			console.log(atob(resJson.token.split('.')[1]));
             let dataJSON = JSON.parse(atob(resJson.token.split('.')[1]));
 			delete dataJSON.password;
 			Cookies.set('token', resJson.token);

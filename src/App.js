@@ -76,39 +76,38 @@ function canGetUserDatas(user, usersQuery) {
 	}
 	return false;
 } 
-function setTenantInSession (tenantsBySubdomainQuery) {
-	if (!tenantsBySubdomainQuery.loading
-		&& tenantsBySubdomainQuery.tenantBySubdomain) {
-		sessionStorage.setItem('tenantId', tenantsBySubdomainQuery.tenantBySubdomain._id);
-	} else if (!tenantsBySubdomainQuery.loading
-		&& !tenantsBySubdomainQuery.tenantBySubdomain) {
+function setTenantInSession (query) {
+	if (!query.loading
+		&& query.tenantBySubdomain) {
+		sessionStorage.setItem('tenantId', query.tenantBySubdomain._id);
+	} else if (!query.loading
+		&& !query.tenantBySubdomain) {
 		sessionStorage.setItem('noTenant', true);
 	}
 }
 const routes = (props) => {
 
-	const { usersQuery, tenantsBySubdomainQuery } = props;
 	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
 	if (canGetUserDatas(user, usersQuery)) {
 		const id = JSON.parse(user)._id;
-		usersQuery.refetch({
+		props.usersQuery.refetch({
 			id: id,
 		});
-	} else if(user && !usersQuery.loading) {
-		Cookies.set('user', usersQuery.users[0]);
+	} else if(user && !props.usersQuery.loading) {
+		Cookies.set('user', props.usersQuery.users[0]);
 	}
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
 			return <Route component={NotFound} />;
 		} else {
 			sessionStorage.removeItem('noTenant');
-			if (!tenantsBySubdomainQuery.tenantBySubdomain) {
-				tenantsBySubdomainQuery.refetch({
+			if (!props.tenantsBySubdomainQuery.tenantBySubdomain) {
+				props.tenantsBySubdomainQuery.refetch({
 					subdomain: tenantSubdomain
 				});
 			}
 		}
-		setTenantInSession(tenantsBySubdomainQuery);
+		setTenantInSession(props.tenantsBySubdomainQuery);
 	}
 
 

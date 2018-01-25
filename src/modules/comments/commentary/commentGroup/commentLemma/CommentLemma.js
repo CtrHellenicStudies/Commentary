@@ -62,7 +62,7 @@ class CommentLemma extends Component {
 
 
 	toggleEdition(editionSlug) {
-		const { editions } = this.props;
+		const { editions } = this.state;
 		const { selectedLemmaEditionIndex } = this.state;
 
 		if (editions && editions.length) {

@@ -171,7 +171,7 @@ class ContextPanel extends Component {
 
 	render() {
 
-		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline } = this.props;
+		const { open, passageFrom, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline } = this.props;
 		const { highlightingVisible, maxLine, selectedLemmaEdition } = this.state;
 
 		const workSlug = getWorkSlug(this.props);
@@ -188,6 +188,8 @@ class ContextPanel extends Component {
 				passageFrom={selectedLineFrom}
 				passageTo={selectedLineFrom + 49}
 				maxLine={maxLine}
+				lineFrom={passageFrom}
+				lineTo={passageFrom+1}
 				selectedLemmaEdition={selectedLemmaEdition}
 				onBeforeClicked={this.onBeforeClicked}
 				onAfterClicked={this.onAfterClicked}

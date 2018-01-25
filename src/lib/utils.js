@@ -265,7 +265,7 @@ const Utils = {
 		return domain;
 	},
 	textFromTextNodesGroupedByEdition(worksWithTextNodes, _versions) {
-		let i = 0;
+
 		const versions = [];
 		worksWithTextNodes.forEach((work) => {
 			work.textNodes.forEach((textNode) => {
@@ -274,8 +274,8 @@ const Utils = {
 				if (!myVersion) {
 					const foundVersion = _versions.find(x => x.slug === work.slug);
 					myVersion = {
-						_id: foundVersion._id,
-						title: foundVersion.title,
+						_id: foundVersion.version.id,
+						title: foundVersion.version.title,
 						slug: foundVersion.slug,
 						//multiLine: foundEdition.multiLine, TODO
 						lines: [],
@@ -286,11 +286,11 @@ const Utils = {
 				myVersion.lines.push({
 					_id: textNode.id,
 					html: textNode.text,
-					n: i,
+					n: textNode.location[0],
 				});
-				i ++;
 			});
 		});
+		console.log(versions.length);
 
 		return versions;
 	},

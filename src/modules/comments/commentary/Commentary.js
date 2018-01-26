@@ -20,7 +20,7 @@ import muiTheme from '../../../lib/muiTheme';
 
 // helpers:
 import { parseCommentsToCommentGroups, setPageTitleAndMeta } from './helpers';
-import { worksQuery } from '../../../graphql/methods/works';
+import { editionsQuery } from '../../../graphql/methods/editions';
 
 
 class Commentary extends Component {
@@ -156,12 +156,12 @@ class Commentary extends Component {
 	componentWillReceiveProps(newProps) {
 		const commentGroups = newProps.commentsQuery.loading ? 
 		[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments);
-		const { filters, settings, worksQuery, isOnHomeView } = this.props;
+		const { filters, settings, isOnHomeView } = newProps;
 		this.setState({
 			commentGroups: commentGroups
 		});
 		if (!isOnHomeView) {
-			setPageTitleAndMeta(filters, settings, commentGroups, worksQuery);
+			setPageTitleAndMeta(filters, settings, commentGroups, newProps.editionsQuery);
 		}
 	}
 	render() {
@@ -250,6 +250,6 @@ Commentary.defaultProps = {
 export default compose(
 	commentsQuery,
 	commentsMoreQuery,
-	worksQuery
+	editionsQuery
 )(Commentary);
 

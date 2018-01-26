@@ -3,9 +3,18 @@ import { gql, graphql } from 'react-apollo';
 const query = gql`
 query editionsQuery{
 	collections(urn: "urn:cts:greekLit") {
+		id
+		title
+		urn
 		textGroups(urn: "urn:cts:greekLit:tlg0013") {
+			id
+			title
+			urn
 			works(language: "greek") {
-		   		slug
+				   slug
+				   english_title
+				   urn
+				   id
 	  			version {
 					id
 					title

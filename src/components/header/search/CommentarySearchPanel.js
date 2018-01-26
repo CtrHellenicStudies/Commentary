@@ -13,7 +13,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { commentersQuery } from '../../../graphql/methods/commenters';
 import { referenceWorksQuery } from '../../../graphql/methods/referenceWorks';
 import { keywordsQuery } from '../../../graphql/methods/keywords';
-import { worksQuery } from '../../../graphql/methods/works';
+import { editionsQuery } from '../../../graphql/methods/editions';
 
 // components:
 import LineRangeSlider from './LineRangeSlider';
@@ -31,6 +31,11 @@ class CommentarySearchPanel extends Component {
 		this.state = {
 			subworks: [],
 			activeWork: '',
+			keyideas: [],
+			keywords: [],
+			commenters: [],
+			works: [],
+			referenceWorks: []
 		};
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
 		this.toggleWorkSearchTerm = this.toggleWorkSearchTerm.bind(this);
@@ -86,13 +91,20 @@ class CommentarySearchPanel extends Component {
 		let keyideas = [];
 		let commenters = [];
 		let referenceWorks = [];
+
+		if(nextProps.editionsQuery.loading||
+			nextProps.keywordsQuery.loading ||
+			nextProps.commentersQuery.loading ||
+			nextProps.referenceWorksQuery.loading) {
+				return;
+			}
 	
 		// FETCH DATA:
-		keyideas = nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea');
-		keywords = nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords.filter(x => x.type === 'word');
-		commenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters;
-		works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.collections[0].textGroups[0].works;
-		referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
+		keyideas = nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea');
+		keywords = nextProps.keywordsQuery.keywords.filter(x => x.type === 'word');
+		commenters = nextProps.commentersQuery.commenters;
+		works = nextProps.editionsQuery.collections[0].textGroups[0].works;
+		referenceWorks = nextProps.referenceWorksQuery.referenceWorks;
 
 		this.setState({
 			keyideas: keyideas,
@@ -394,11 +406,11 @@ CommentarySearchPanel.propTypes = {
 	keywordsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,
 	commentersQuery: PropTypes.object,
-	worksQuery: PropTypes.object
+	editionsQuery: PropTypes.object
 };
 export default compose(
 	commentersQuery,
 	referenceWorksQuery,
 	keywordsQuery,
-	worksQuery
+	editionsQuery
 )(CommentarySearchPanel);

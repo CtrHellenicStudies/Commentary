@@ -10,7 +10,7 @@ import { compose } from 'react-apollo';
 import { commentersQuery } from '../../../graphql/methods/commenters';
 import { referenceWorksQuery } from '../../../graphql/methods/referenceWorks';
 import { keywordsQuery } from '../../../graphql/methods/keywords';
-import { worksQuery } from '../../../graphql/methods/works';
+import { editionsQuery } from '../../../graphql/methods/editions';
 
 // components:
 import SearchToolDropdown from './SearchToolDropdown';
@@ -102,8 +102,8 @@ class CommentarySearchToolbar extends Component {
 		let workFilter;
 		if (nextProps.keywordsQuery.loading ||
 			nextProps.commentersQuery.loading ||
-			nextProps.worksQuery.loading ||
-			nextProps.referenceWorksQuery.loading) {
+			nextProps.editionsQuery.loading ||
+			nextProps.editionsQuery.loading) {
 			return;
 		}
 		if (
@@ -135,7 +135,7 @@ class CommentarySearchToolbar extends Component {
 				keyideas: nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
 				keywords: nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),
 				commenters: nextProps.commentersQuery.commenters,
-				works: nextProps.worksQuery.collections[0].textGroups[0].works,
+				works: nextProps.editionsQuery.collections[0].textGroups[0].works,
 				referenceWorks: nextProps.referenceWorksQuery.referenceWorks,
 			});
 		}
@@ -292,7 +292,7 @@ CommentarySearchToolbar.propTypes = {
 	addCommentPage: PropTypes.bool.isRequired,
 	isTest: PropTypes.bool,
 	selectedWork: PropTypes.object,
-	worksQuery: PropTypes.object,
+	editionsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,
 	commentersQuery: PropTypes.object,
 	keywordsQuery: PropTypes.object
@@ -309,5 +309,5 @@ export default compose(
 	commentersQuery,
 	referenceWorksQuery,
 	keywordsQuery,
-	worksQuery
+	editionsQuery
 )(CommentarySearchToolbar);

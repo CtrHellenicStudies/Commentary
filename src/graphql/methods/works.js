@@ -13,6 +13,7 @@ query worksQuery {
 				works(language: "greek") {
 					id
 					original_title
+					english_title
 					urn
 					slug
 				}

@@ -34,6 +34,16 @@ const Utils = {
 		};
 
 	},
+	worksFromEditions(editions) {
+		const works = [];
+		editions.forEach(function(edition) {
+			const work = works.find(x => x.urn === edition.urn);
+			if (!work) {
+				works.push(edition);
+			}
+		});
+		return works;
+	},
 	getUrnTextNodesProperties(lemmaCitation) {
 		const work = lemmaCitation.work.replace('tlg','');
 		return {

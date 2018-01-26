@@ -10,7 +10,6 @@ import {
 import TextField from 'material-ui/TextField';
 
 // graphql
-import { worksQuery } from '../../graphql/methods/works';
 import { editionsQuery } from '../../graphql/methods/editions';
 
 
@@ -54,16 +53,14 @@ class TextNodesEditor extends Component {
 			editSubworkDialogOpen: false,
 			multiLineDialogOpen: false
 		};
-
 		autoBind(this);
 	}
 	componentWillReceiveProps(props) {
-		if(props.editionsQuery.loading ||
-			props.worksQuery.loading) {
+		if (props.editionsQuery.loading) {
 				return;
 		}
 		const editions = props.editionsQuery.collections[0].textGroups[0].works;
-		const works = props.worksQuery.collections[0].textGroups[0].works;
+		const works = Utils.worksFromEditions(editions);
 		this.setState({
 			works,
 			editions
@@ -73,17 +70,22 @@ class TextNodesEditor extends Component {
 		const setValue = event ? event.value : '';
 
 		const { works } = this.state;
+		let editionsAvailable = [];
 		let _selectedWork;
-
 		works.forEach(work => {
-			if (work._id === setValue) {
+			if (work.id === setValue) {
 				_selectedWork = work;
 			}
 		});
-
+		this.state.editions.forEach(function(edition) {
+			if (edition.urn === _selectedWork.urn) {
+				editionsAvailable.push(edition);
+			}
+		});
 		this.setState({
 			selectedWork: setValue,
-			subworks: _selectedWork ? _selectedWork.subworks.slice().sort(Utils.sortBy('n')) : [],
+			editionsAvailable: editionsAvailable
+		//	subworks: _selectedWork
 		});
 	}
 
@@ -237,7 +239,7 @@ class TextNodesEditor extends Component {
 	render() {
 		const { works, editions } = this.state;
 		const { subworks, selectedWork, selectedEdition, selectedSubwork } = this.state;
-
+		let editionsAvailable = this.state.editionsAvailable ? this.state.editionsAvailable : editions;
 		let _selectedWork;
 		let _selectedEdition;
 		let _selectedSubwork;
@@ -264,17 +266,17 @@ class TextNodesEditor extends Component {
 		const workOptions = [];
 		works.map(work => {
 			workOptions.push({
-				value: work._id,
-				label: work.title,
+				value: work.id,
+				label: work.english_title,
 			});
 			return true;
 		});
 
 		const editionOptions = [];
-		editions.map(edition => {
+		editionsAvailable.map(edition => {
 			editionOptions.push({
-				value: edition._id,
-				label: edition.title,
+				value: edition.id,
+				label: edition.slug,
 			});
 			return true;
 		});
@@ -387,10 +389,8 @@ class TextNodesEditor extends Component {
 	}
 }
 TextNodesEditor.propTypes = {
-	worksQuery: PropTypes.object,
 	editionsQuery: PropTypes.object,
 };
 export default compose(
-	editionsQuery,
-	worksQuery
+	editionsQuery
 )(TextNodesEditor);

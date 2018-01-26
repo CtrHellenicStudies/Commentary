@@ -24,7 +24,7 @@ import Header from '../../components/header/Header';
 
 // graphql
 import { referenceWorksQuery } from '../../graphql/methods/referenceWorks';
-import { worksQuery } from '../../graphql/methods/works';
+import { editionsQuery } from '../../graphql/methods/editions';
 
 
 // lib:
@@ -157,7 +157,7 @@ class CommentaryLayout extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
-		const works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.collections[0].textGroups[0].works
+		const works = nextProps.editionsQuery.loading ? [] : nextProps.editionsQuery.collections[0].textGroups[0].works
 		this.setState({
 			referenceWorks: referenceWorks,
 			works: works,
@@ -218,11 +218,11 @@ CommentaryLayout.propTypes = {
 	works: PropTypes.array,
 	isTest: PropTypes.bool,
 	history: PropTypes.any,
-	worksQuery: PropTypes.object,
+	editionsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,
 	match: PropTypes.object
 };
 export default compose(
 	referenceWorksQuery,
-	worksQuery
+	editionsQuery
 )(CommentaryLayout);

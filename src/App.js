@@ -67,11 +67,11 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 /**
  * Application routes
  */
-function canGetUserDatas(user, usersQuery) {
+function canGetUserDatas(user, query) {
 	if(user && 
-	!usersQuery.loading &&
-	usersQuery.users.length && 
-	!(usersQuery.users[0]._id === user._id)) {
+	!query.loading &&
+	query.users.length && 
+	!(query.users[0]._id === user._id)) {
 		return true;
 	}
 	return false;
@@ -88,13 +88,14 @@ function setTenantInSession (query) {
 const routes = (props) => {
 
 	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
-	if (canGetUserDatas(user, usersQuery)) {
+	if (canGetUserDatas(user, props.usersQuery)) {
 		const id = JSON.parse(user)._id;
 		props.usersQuery.refetch({
 			id: id,
 		});
 	} else if(user && !props.usersQuery.loading) {
 		Cookies.set('user', props.usersQuery.users[0]);
+		console.log(props.usersQuery.users[0]);
 	}
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {

@@ -166,7 +166,8 @@ class Commentary extends Component {
 	}
 	render() {
 		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, history } = this.props;
-		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, commentGroups } = this.state;
+		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, commentGroups,
+			multiline,  } = this.state;
 		if (!commentGroups) {
 			return null;
 		}
@@ -188,7 +189,7 @@ class Commentary extends Component {
 							isOnHomeView={isOnHomeView}
 							history={history}
 							selectMultiLine={this.selectMultiLine}
-							multiline={this.state.multiline}
+							multiline={multiline}
 						/>
 					))}
 				</div>
@@ -209,7 +210,7 @@ class Commentary extends Component {
 						closeContextPanel={this.closeContextPanel}
 						commentGroup={contextCommentGroupSelected}
 						commentLemmaIndex={commentLemmaIndex}
-						multiline={this.state.multiline}
+						multiline={multiline}
 					/>
 					: ''}
 				{!isOnHomeView ?

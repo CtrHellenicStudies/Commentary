@@ -50,7 +50,7 @@ class TextNodesInput extends Component {
 			return;
 		}
 		const { workSlug, editionId, lineFrom, limit } = props;
-		if (!props.textNodesQuery.variables.urn) {
+		if (!props.textNodesQuery.variables.workUrn) {
 			const code = Utils.encodeBookBySlug('homeric-hymns' ? 'hymns' : workSlug);
 			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 				code.urn,

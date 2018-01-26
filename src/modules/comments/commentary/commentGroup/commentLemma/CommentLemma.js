@@ -64,6 +64,7 @@ class CommentLemma extends Component {
 	toggleEdition(editionSlug) {
 		const { editions } = this.state;
 		const { selectedLemmaEditionIndex } = this.state;
+		let selectedLemmaEdition = this.state.selectedLemmaEdition;
 
 		if (editions && editions.length) {
 			if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
@@ -72,23 +73,23 @@ class CommentLemma extends Component {
 				editions.forEach((edition, index) => {
 					if (edition.slug === editionSlug) {
 						newSelectedEditionIndex = index;
+						selectedLemmaEdition = edition;
 					}
 				});
 
 				this.setState({
 					selectedLemmaEditionIndex: newSelectedEditionIndex,
+					selectedLemmaEdition: selectedLemmaEdition
 				});
 			}
 		}
 	}
-
 	showContextPanel(commentGroup) {
 		const { index, setScrollPosition, showContextPanel } = this.props;
 
 		setScrollPosition(index);
 		showContextPanel(commentGroup);
 	}
-
 	handleAuthorChange(event, value) {
 		const { selectedAuthor, showTranslation } = this.state;
 
@@ -111,7 +112,6 @@ class CommentLemma extends Component {
 			});
 		}
 	}
-
 	handleMultilineSelect(event, value) {
 		this.props.selectMultiLine(value);
 
@@ -119,7 +119,6 @@ class CommentLemma extends Component {
 			multilineMenuOpen: false,
 		});
 	}
-
 	handleOpenTranslationMenu(event) {
     // This prevents ghost click.
 		event.preventDefault();
@@ -131,7 +130,6 @@ class CommentLemma extends Component {
 			anchorEl: event.currentTarget,
 		});
 	}
-
 	handleOpenMultilineMenu(event) {
 		// This prevents ghost click.
 		event.preventDefault();
@@ -151,7 +149,6 @@ class CommentLemma extends Component {
 			multilineMenuOpen: false,
 		});
 	}
-
 	handleOpenEditionMenu() {
 		const { openEditionMenu } = this.state;
 
@@ -159,7 +156,6 @@ class CommentLemma extends Component {
 			openEditionMenu: !openEditionMenu
 		});
 	}
-
 	componentWillReceiveProps(nextProps) {
 
 		const { commentGroup, multiline } = nextProps;
@@ -180,7 +176,7 @@ class CommentLemma extends Component {
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
 		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
-			if (!nextProps.textNodesQuery.variables.urn && commentGroup.comments[0].lemmaCitation.passageFrom) {
+			if (!nextProps.textNodesQuery.variables.workUrn && commentGroup.comments[0].lemmaCitation.passageFrom) {
 				const properties = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
 				console.log('refetch ', properties);
 				nextProps.textNodesQuery.refetch(properties);

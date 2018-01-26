@@ -56,6 +56,26 @@ class AddKeywordLayout extends Component {
 	componentWillUpdate() {
 		this.handlePermissions();
 	}
+	componentWillReceiveProps(props) {
+		const { filters } = this.state;
+		let work = 'tlg001';
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			}
+		});
+		if (props.textNodesQuery.loading) {
+			return;
+		}
+		if (!props.textNodesQuery.variables.workUrn) {
+			props.textNodesQuery.refetch(Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)));
+			return;
+		}
+		this.setState({
+			textNodes: props.textNodesQuery.collections[0].textGroups[0].works,
+			work: work
+		});
+	}
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
@@ -66,7 +86,7 @@ class AddKeywordLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: 'iliad',
+				slug: 'tlg001',
 				order: 1,
 			};
 		}
@@ -180,7 +200,7 @@ class AddKeywordLayout extends Component {
 				work = filter.values[0];
 			}
 		});
-		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
+		const code = Utils.encodeBookBySlug(work ? work.slug : 'tlg001');
 		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(code.urn, selectedLineFrom, selectedLineTo));
 		this.props.textNodesQuery.refetch(properties);
 
@@ -320,23 +340,11 @@ class AddKeywordLayout extends Component {
 		});
 	}
 	render() {
-		const { filters } = this.state;
+		const { filters, textNodes, work } = this.state;
 		const { isTest } = this.props;
-		let work;
-		let subwork;
 		let lineFrom;
 
 		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
-
-		filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
-			} else if (filter.key === 'lineFrom') {
-				lineFrom = filter.values[0];
-			}
-		});
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -360,11 +368,10 @@ class AddKeywordLayout extends Component {
 											ref={(component) => { this.commentLemmaSelect = component; }}
 											lineFrom={this.state.selectedLineFrom}
 											lineTo={this.state.selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
+											workSlug={work}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.collections[0].textGroups[0].works}				
+											textNodes={textNodes}				
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}
@@ -374,8 +381,7 @@ class AddKeywordLayout extends Component {
 										/>
 										<ContextPanel
 											open={this.state.contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
+											workSlug={work ? work : 'tlg001'}
 											lineFrom={lineFrom || 1}
 											selectedLineFrom={this.state.selectedLineFrom}
 											selectedLineTo={this.state.selectedLineTo}

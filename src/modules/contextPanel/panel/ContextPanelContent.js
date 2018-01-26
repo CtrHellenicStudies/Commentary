@@ -53,24 +53,20 @@ class ContextPanelContent extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 
-		const { lineFrom, multiline } = nextProps;
+		const { lemmaCitation, multiline } = nextProps;
 
 		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
 			return;
 		}
-		const lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;	
-		if (!nextProps.textNodesQuery.variables.urn) {
+		if (!nextProps.textNodesQuery.variables.workUrn) {
 			const { workSlug, subworkN } = nextProps;	
 			const code = Utils.encodeBookBySlug(workSlug);
-			console.log(lineFrom, lineTo);
-			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
-				code.urn, lineFrom, lineTo
-			));
+			const properties = Utils.getUrnTextNodesProperties(lemmaCitation);
 			console.log(properties);
 			nextProps.textNodesQuery.refetch(properties);
 		}
 	
-		const textNodesCursor = nextProps.textNodesQuery.collections[0].textGroups[0].works
+		const textNodesCursor = nextProps.textNodesQuery.collections[0].textGroups[0].works;
 		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.collections[0].textGroups[0].works);
 	
 		let sortedEditions;
@@ -82,7 +78,6 @@ class ContextPanelContent extends Component {
 			sortedEditions = getSortedEditions(editions);
 		}
 		this.setState({
-			lineTo: lineTo,
 			lemmaText: sortedEditions
 		});
 	}

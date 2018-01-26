@@ -166,7 +166,6 @@ class CommentLemma extends Component {
 			return;
 		}
 		const textNodesCursor = nextProps.textNodesQuery.collections ? nextProps.textNodesQuery.collections[0].textGroups[0].works: [];
-		console.log(nextProps.textNodesQuery.collections);
 		let editions = Utils.textFromTextNodesGroupedByEdition(
 			textNodesCursor, 
 			nextProps.editionsQuery.collections[0].textGroups[0].works);
@@ -178,8 +177,8 @@ class CommentLemma extends Component {
 		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
 			if (!nextProps.textNodesQuery.variables.workUrn && commentGroup.comments[0].lemmaCitation.passageFrom) {
 				const properties = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
-				console.log('refetch ', properties);
 				nextProps.textNodesQuery.refetch(properties);
+				return;
 			}
 			if (!commentGroup.lineTo) {
 				commentGroup.lineTo = commentGroup.lineFrom;

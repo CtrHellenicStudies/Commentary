@@ -290,7 +290,6 @@ const Utils = {
 				});
 			});
 		});
-		console.log(versions.length);
 
 		return versions;
 	},

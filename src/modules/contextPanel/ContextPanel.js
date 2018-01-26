@@ -48,6 +48,7 @@ class ContextPanel extends Component {
 			lineFrom: props.passageFrom,
 			maxLine: 0,
 			highlightingVisible: false,
+			lemmaCitation: Utils.createLemmaCitation('tlg001', 0, 49)
 		};
 
 		this.setMaxLine();

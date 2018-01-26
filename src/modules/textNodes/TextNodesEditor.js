@@ -58,8 +58,12 @@ class TextNodesEditor extends Component {
 		autoBind(this);
 	}
 	componentWillReceiveProps(props) {
-		const editions = props.editionsQuery.loading ? [] : props.editionsQuery.collections[0].textGroups[0].works;
-		const works = props.worksQuery.loading ? [] : props.worksQuery.collections[0].textGroups[0].works;
+		if(props.editionsQuery.loading ||
+			props.worksQuery.loading) {
+				return;
+		}
+		const editions = props.editionsQuery.collections[0].textGroups[0].works;
+		const works = props.worksQuery.collections[0].textGroups[0].works;
 		this.setState({
 			works,
 			editions

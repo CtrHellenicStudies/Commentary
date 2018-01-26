@@ -62,7 +62,6 @@ const getFilterValues = (filters) => {
 	return filterValues;
 };
 
-
 /*
  *	BEGIN AddCommentLayout
  */
@@ -96,7 +95,26 @@ class AddCommentLayout extends Component {
 		this.updateQuery = this.updateQuery.bind(this);
 		this.getChildrenContext = this.getChildrenContext.bind(this);
 	}
-
+	componentWillReceiveProps(props) {
+		const { filters } = this.state;
+		let work = 'tlg001';
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			}
+		});
+		if (props.textNodesQuery.loading) {
+			return;
+		}
+		if (!props.textNodesQuery.variables.workUrn) {
+			props.textNodesQuery.refetch(Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)));
+			return;
+		}
+		this.setState({
+			textNodes: props.textNodesQuery.collections[0].textGroups[0].works,
+			work: work
+		});
+	}
 	componentWillUpdate() {
 		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 			this.props.history.push('/');
@@ -406,7 +424,7 @@ class AddCommentLayout extends Component {
 	}
 	render() {
 
-		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
+		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen, textNodes } = this.state;
 		const { work, subwork, lineFrom } = getFilterValues(filters);
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
@@ -434,7 +452,7 @@ class AddCommentLayout extends Component {
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
-										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.collections[0].textGroups[0].works}
+										textNodes={textNodes}
 
 									/>
 

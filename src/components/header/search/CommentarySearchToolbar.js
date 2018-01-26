@@ -129,13 +129,14 @@ class CommentarySearchToolbar extends Component {
 				subworksTitle: nextProps.selectedWork.slug === 'homeric-hymns' ? 'Hymn' : 'Book'
 			});
 		}
-
+		this.setState({
+			works: nextProps.editionsQuery.collections[0].textGroups[0].works,
+		});
 		if (nextProps.addCommentPage) {
 			this.setState({
 				keyideas: nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
 				keywords: nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),
 				commenters: nextProps.commentersQuery.commenters,
-				works: nextProps.editionsQuery.collections[0].textGroups[0].works,
 				referenceWorks: nextProps.referenceWorksQuery.referenceWorks,
 			});
 		}

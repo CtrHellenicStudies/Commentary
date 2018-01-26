@@ -16,6 +16,7 @@ import { editionsQuery } from '../../../graphql/methods/editions';
 import SearchToolDropdown from './SearchToolDropdown';
 import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from './dropdowns/SearchDropdowns';
 import LineRangeSlider from './LineRangeSlider';
+import Utils from '../../../lib/utils';
 
 const getLineTo = (filters) => {
 
@@ -130,9 +131,9 @@ class CommentarySearchToolbar extends Component {
 			});
 		}
 		this.setState({
-			works: nextProps.editionsQuery.collections[0].textGroups[0].works,
+			works: Utils.worksFromEditions(nextProps.editionsQuery.collections[0].textGroups[0].works),
 		});
-		if (nextProps.addCommentPage) {
+		if (!nextProps.addCommentPage) {
 			this.setState({
 				keyideas: nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
 				keywords: nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),

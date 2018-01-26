@@ -20,9 +20,9 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggle
 	>
 		{works.map(work => (
 			<SearchTermButton
-				key={work._id}
+				key={work.id}
 				toggleSearchTerm={toggleSearchTerm}
-				label={work.title}
+				label={work.english_title}
 				searchTermKey="works"
 				value={work}
 				activeWork={isActive(filters, work, 'works')}

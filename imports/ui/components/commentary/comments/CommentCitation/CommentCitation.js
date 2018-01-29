@@ -93,7 +93,7 @@ class CommentCitation extends React.Component {
 									</label>
 									<span className="urn">
 										<a //TODO
-											href={`//nrs.${Utils.getEnvDomain()}/v2/${urn}.${comment.revisions.length - i - 1}/${comment._id}`}
+											href={`//nrs.${Utils.getEnvDomain()}/v2/${urn}.${comment.revisions.length - i - 1}`}
 										>
 											nrs.chs.harvard.edu/v2/{urn}.{comment.revisions.length - i - 1}
 										</a>

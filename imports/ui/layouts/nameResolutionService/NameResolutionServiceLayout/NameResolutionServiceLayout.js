@@ -42,12 +42,6 @@ const resolveV2 = (props) => {
 	const revision = urnParams.splice(-1);
 	const urn = `${urnParams.join('.')}`;
 
-	console.log('####')
-	console.log('####')
-	console.log(urn);
-	console.log('####')
-	console.log('####')
-
 	const commentHandle = Meteor.subscribe('comments', { 'urn.v2': urn });
 	const comment = Comments.findOne({ 'urn.v2': urn });
 

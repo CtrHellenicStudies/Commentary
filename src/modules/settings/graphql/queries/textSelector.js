@@ -13,13 +13,11 @@ const query = gql`
 			id
 			urn
 			title
-			textGroups {
+
+			textGroups(urn: $textGroupUrn) {
 				id
 				urn
 				title
-			}
-
-			textGroup(urn: $textGroupUrn) {
 				works {
 					id
 					urn

@@ -17,7 +17,7 @@ class SettingEditor extends React.Component {
 		return (
 			<div className="settingEditor">
 
-				<h1>{setting ? 'Edit this Setting included with your project' : 'Add a Setting to your project'}</h1>
+				<h1>Configure texts included in this commentary</h1>
 
 				<form
 					className="settingEditorForm"

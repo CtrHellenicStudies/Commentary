@@ -42,5 +42,5 @@ const TextSelectorContainer = props => {
 
 
 export default compose(
-	textSelectorQuery, textListQuery,
+	textSelectorQuery,
 )(TextSelectorContainer);

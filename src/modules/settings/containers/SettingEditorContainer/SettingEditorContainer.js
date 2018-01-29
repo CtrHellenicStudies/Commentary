@@ -154,6 +154,4 @@ class SettingEditorContainer extends React.Component {
 }
 
 export default compose(
-	settingCreateMutation, settingUpdateMutation, settingRemoveMutation,
-	settingDetailQuery,
 )(SettingEditorContainer);

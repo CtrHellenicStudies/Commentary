@@ -34,6 +34,9 @@ import ProfilePage from './modules/profile/ProfilePage';
 import ReferenceWorksPage from './modules/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from './modules/referenceWorks/ReferenceWorkDetail';
 
+// modules
+import settingsRoutes from './modules/settings/routes';
+
 
 const loginToken = Cookies.get('token');
 if (loginToken) {
@@ -74,9 +77,9 @@ const routes = (props) => {
 
 	const user = Cookies.get('user');
 	if (user !== undefined &&
-		user !== null && 
+		user !== null &&
 		!props.usersQuery.loading &&
-		props.usersQuery.users.length && 
+		props.usersQuery.users.length &&
 		!(props.usersQuery.users[0]._id === JSON.parse(Cookies.get('user'))._id)) {
 		const id = JSON.parse(user)._id;
 		props.usersQuery.refetch({
@@ -145,6 +148,9 @@ const routes = (props) => {
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
 			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
+
+			{/** Settings routes */}
+			{settingsRoutes}
 
 			{/** Users routes */}
 			<Route

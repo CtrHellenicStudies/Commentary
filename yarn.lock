@@ -1605,7 +1605,7 @@ cookie-signature@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
 
-cookie@0.3.1:
+cookie@0.3.1, cookie@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
 
@@ -3347,7 +3347,7 @@ hoek@4.x.x:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.0.tgz#72d9d0754f7fe25ca2d01ad8f8f9a9449a89526d"
 
-hoist-non-react-statics@^1.0.0:
+hoist-non-react-statics@^1.0.0, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
@@ -5762,7 +5762,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0:
+prop-types@^15.0.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
@@ -5945,6 +5945,14 @@ react-bootstrap@^0.30.10:
     react-prop-types "^0.4.0"
     uncontrollable "^4.0.1"
     warning "^3.0.0"
+
+react-cookie@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-cookie/-/react-cookie-2.1.2.tgz#f8005f4d39e0ac906371ec45d7ed519851222f81"
+  dependencies:
+    hoist-non-react-statics "^1.2.0"
+    prop-types "^15.0.0"
+    universal-cookie "^2.1.2"
 
 react-copy-to-clipboard@^5.0.1:
   version "5.0.1"
@@ -7415,6 +7423,13 @@ uniqid@^4.0.0:
 uniqs@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/uniqs/-/uniqs-2.0.0.tgz#ffede4b36b25290696e6e165d4a59edb998e6b02"
+
+universal-cookie@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/universal-cookie/-/universal-cookie-2.1.2.tgz#7c0824c0e027f572789538932f066315611c2836"
+  dependencies:
+    cookie "^0.3.1"
+    object-assign "^4.1.0"
 
 universalify@^0.1.0:
   version "0.1.1"

@@ -41,7 +41,7 @@ class AddComment extends Component {
 		super(props);
 
 		this.state = {
-			titleEditorState: EditorState.createEmpty(),
+			titleEditorState: EditorState.createEmpty(linkDecorator),
 			textEditorState: EditorState.createEmpty(linkDecorator),
 
 			commenterValue: null,

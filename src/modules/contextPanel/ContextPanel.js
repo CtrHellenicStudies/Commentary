@@ -34,7 +34,17 @@ const getWorkSlug = (props) => {
 	if (props.workSlug) return props.workSlug;
 	throw new Error('commentGroup or workSlug missing in ContextPanel component - one of two is requierd');
 };
-
+function setLemmaCitation(commentGroup, _lemmaCitation) {
+	let lemmaCitation;
+	if (commentGroup) {
+		lemmaCitation = commentGroup.comments[0].lemmaCitation;
+	} else if (_lemmaCitation) {
+		lemmaCitation = _lemmaCitation;
+	} else {
+		lemmaCitation = Utils.createLemmaCitation('tlg001', 0, 49);
+	}
+	return lemmaCitation;
+}
 const LINE_THRESHOLD = 25;
 
 
@@ -48,7 +58,7 @@ class ContextPanel extends Component {
 			lineFrom: props.passageFrom,
 			maxLine: 0,
 			highlightingVisible: false,
-			lemmaCitation: Utils.createLemmaCitation('tlg001', 0, 49)
+			lemmaCitation: setLemmaCitation(props.commentGroup, props.lemmaCitation)
 		};
 
 		this.setMaxLine();
@@ -154,16 +164,8 @@ class ContextPanel extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		let lemmaCitation;
-		if (nextProps.commentGroup) {
-			lemmaCitation = nextProps.commentGroup.comments[0].lemmaCitation;
-		} else if (nextProps.lemmaCitation) {
-			lemmaCitation = nextProps.lemmaCitation;
-		} else {
-			lemmaCitation = Utils.createLemmaCitation('tlg001', 0, 49);
-		}
 		this.setState({
-			lemmaCitation: lemmaCitation
+			lemmaCitation: setLemmaCitation(nextProps.commentGroup, nextProps.lemmaCitation)
 		});
 	}
 	componentWillUnmount() {

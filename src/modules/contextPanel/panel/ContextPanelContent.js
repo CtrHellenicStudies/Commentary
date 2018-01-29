@@ -62,6 +62,7 @@ class ContextPanelContent extends Component {
 			const { workSlug, subworkN } = nextProps;	
 			const code = Utils.encodeBookBySlug(workSlug);
 			const properties = Utils.getUrnTextNodesProperties(lemmaCitation);
+			console.log(properties);
 			nextProps.textNodesQuery.refetch(properties);
 			return;
 		}
@@ -147,8 +148,8 @@ ContextPanelContent.propTypes = {
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,
 	selectedLemmaEdition: PropTypes.string.isRequired,
-	lineFrom: PropTypes.number.isRequired,
-	lineTo: PropTypes.number.isRequired,
+	lineFrom: PropTypes.number,
+	lineTo: PropTypes.number,
 	maxLine: PropTypes.number.isRequired,
 	toggleEdition: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,

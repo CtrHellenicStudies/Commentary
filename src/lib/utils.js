@@ -296,7 +296,7 @@ const Utils = {
 				myVersion.lines.push({
 					_id: textNode.id,
 					html: textNode.text,
-					n: textNode.location[0],
+					n: textNode.location[1],
 				});
 			});
 		});

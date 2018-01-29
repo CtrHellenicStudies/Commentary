@@ -138,20 +138,22 @@ class ContextPanelText extends Component {
 	handleLineClick(event) {
 		if (!this.props.disableEdit) {
 
+			const selectedLines = getSelectedEditionText(this.props.lemmaText, this.props.selectedLemmaEdition);
+
 			const { selectedLineFrom, selectedLineTo, updateSelectedLines } = this.props;
 
 			const target = event.target;
 			const id = parseInt(target.id, 10);
 			if (selectedLineFrom === 0) {
-				updateSelectedLines(id, null);
+				updateSelectedLines(id, null, selectedLines);
 			} else if (id === selectedLineFrom && selectedLineTo === 0) {
-				updateSelectedLines(0, null);
+				updateSelectedLines(0, null, selectedLines);
 			} else if (selectedLineTo === 0 && id > selectedLineFrom) {
-				updateSelectedLines(null, id);
+				updateSelectedLines(null, id, selectedLines);
 			} else if (selectedLineTo === 0 && id < selectedLineFrom) {
-				updateSelectedLines(id, selectedLineFrom);
+				updateSelectedLines(id, selectedLineFrom, selectedLines);
 			} else {
-				updateSelectedLines(id, 0);
+				updateSelectedLines(id, 0, selectedLines);
 			}
 		}
 	}
@@ -258,7 +260,7 @@ class ContextPanelText extends Component {
 }
 
 ContextPanelText.propTypes = {
-	lineFrom: PropTypes.number.isRequired,
+	lineFrom: PropTypes.number,
 	lineTo: PropTypes.number,
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,

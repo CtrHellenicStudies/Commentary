@@ -128,27 +128,32 @@ class AddCommentLayout extends Component {
 	// --- BEGNI LINE SELECTION --- //
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
+		const { filters } = this.state;
+		const { work } = getFilterValues(filters); // TODO
+		console.log(selectedLineFrom, selectedLineTo);
+		let properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49));
 		if (selectedLineFrom === null) {
 			this.setState({
 				selectedLineTo,
 			});
-			selectedLineFrom = this.state.selectedLineFrom;
-		} else if (selectedLineTo === null) {
+			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, selectedLineTo));
+		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
 			this.setState({
-				selectedLineFrom,
+				selectedLineFrom: selectedLineFrom - 1,
+				selectedLineTo: selectedLineFrom
 			});
-			selectedLineTo = this.state.selectedLineTo;
+			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', selectedLineFrom - 1, selectedLineFrom));
 		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
+			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', selectedLineFrom, selectedLineTo));
 		} else {
 			return;
 		}
-		const { filters } = this.state;
-		const { work } = getFilterValues(filters); // TODO
-		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work, 0, 49));
+		console.log(properties);
+		console.log(properties);
 		this.props.textNodesQuery.refetch(properties);
 
 	}
@@ -448,7 +453,7 @@ class AddCommentLayout extends Component {
 										ref={(component) => { this.commentLemmaSelect = component; }}
 										lineFrom={selectedLineFrom}
 										lineTo={selectedLineTo}
-										workSlug={work ? work.slug : 'iliad'}
+										work={work ? work : 'tlg0013'}
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}

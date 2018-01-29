@@ -177,6 +177,7 @@ class CommentLemma extends Component {
 		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
 			if (!nextProps.textNodesQuery.variables.workUrn && commentGroup.comments[0].lemmaCitation.passageFrom) {
 				const properties = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
+				console.log(properties);
 				nextProps.textNodesQuery.refetch(properties);
 				return;
 			}

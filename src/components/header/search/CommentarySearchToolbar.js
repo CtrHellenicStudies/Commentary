@@ -208,7 +208,7 @@ class CommentarySearchToolbar extends Component {
 					filters={filters}
 				/>
 
-				<SubworksDropdown
+				{/* <SubworksDropdown
 					works={works}
 					searchDropdownOpen={searchDropdownOpen}
 					toggleSearchDropdown={this.toggleSearchDropdown}
@@ -216,7 +216,7 @@ class CommentarySearchToolbar extends Component {
 					selectedWork={subworksTitle}
 					workInFilter={workInFilter}
 					filters={filters}
-				/>
+				/> */}
 
 				<div
 					style={{ width: 250, padding: '10px 20px' }}

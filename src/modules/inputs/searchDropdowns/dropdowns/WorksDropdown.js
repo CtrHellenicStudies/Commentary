@@ -32,9 +32,8 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggle
 );
 WorksDropdown.propTypes = {
 	works: PropTypes.arrayOf(PropTypes.shape({
-		_id: PropTypes.string.isRequired,
-		title: PropTypes.string.isRequired,
-		slug: PropTypes.string.isRequired,
+		id: PropTypes.number.isRequired,
+		english_title: PropTypes.string.isRequired,
 	})),
 	...dropdownPropTypes,
 };

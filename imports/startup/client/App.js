@@ -156,9 +156,16 @@ const routes = (props) => {
 			/>
 			<Route exact path="/v1/" component={NameResolutionServiceLayout} />
 			<Route
+				exact path="/v1/:urn" render={(params) => <NameResolutionServiceLayout version={1} urn={params.match.params.urn} />}
+			/>
+			<Route
 				exact path="/v1/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={1} urn={params.match.params.urn} commentId={params.match.params.commentId}/>}
 			/>
-			<Route 
+			<Route exact path="/v2/" component={NameResolutionServiceLayout} />
+			<Route
+				exact path="/v2/:urn" render={(params) => <NameResolutionServiceLayout version={2} urn={params.match.params.urn} />}
+			/>
+			<Route
 				exact path="/v2/:urn/:commentId" render={(params) => <NameResolutionServiceLayout version={2} urn={params.match.params.urn} commentId={params.match.params.commentId} />}
 			/>
 			<Route

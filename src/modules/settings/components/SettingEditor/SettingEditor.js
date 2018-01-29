@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 
 
-import SettingSelectorContainer from '../../containers/SettingSelectorContainer';
+import TextSelectorContainer from '../../containers/TextSelectorContainer';
 
 
 import './SettingEditor.css';
@@ -24,7 +24,7 @@ class SettingEditor extends React.Component {
 					onSubmit={this.props.handleSubmit}
 				>
 
-					<SettingSelectorContainer
+					<TextSelectorContainer
 						collectionId={collection}
 						settingGroupUrn={settingGroup}
 						workUrn={work}

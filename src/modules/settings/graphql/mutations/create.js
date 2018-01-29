@@ -2,7 +2,6 @@ import { gql, graphql } from 'react-apollo';
 
 import getCurrentProjectHostname from '../../../../lib/getCurrentProjectHostname';
 
-
 const settingCreate = gql`
 mutation settingCreate($hostname: String!, $setting: TextInputType!) {
 	settingCreate(hostname: $hostname, setting: $setting) {

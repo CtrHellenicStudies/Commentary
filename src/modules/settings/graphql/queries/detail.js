@@ -24,7 +24,6 @@ const settingQuery = graphql(query, {
 	options: ({ params }) => ({
 		variables: {
 			hostname: getCurrentProjectHostname(),
-			id: params.id,
 		}
 	}),
 });

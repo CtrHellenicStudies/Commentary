@@ -1,19 +1,13 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route } from 'react-router';
 
-// layouts
-import ProjectLayout from '../../projects/layouts/ProjectLayout';
 
 // components
-import TextEditorContainer from '../containers/TextEditorContainer';
-import TextDetailContainer from '../containers/TextDetailContainer';
-import TextListPageContainer from '../containers/TextListPageContainer';
+import SettingEditorContainer from '../containers/SettingEditorContainer';
 
 
 export default (
 	<div>
-		<Route path="/settings" component={ProjectLayout}>
-			<IndexRoute component={TextEditorContainer} />
-		</Route>
+		<Route exact path="/settings" component={SettingEditorContainer} />
 	</div>
 );

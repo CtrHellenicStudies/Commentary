@@ -2,14 +2,14 @@ import React from 'react';
 import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
 
-import TextEditor from '../../components/TextEditor';
-import textDetailQuery from '../../graphql/queries/detail';
-import textCreateMutation from '../../graphql/mutations/create';
-import textUpdateMutation from '../../graphql/mutations/update';
-import textRemoveMutation from '../../graphql/mutations/remove';
+import SettingEditor from '../../components/SettingEditor';
+import settingDetailQuery from '../../graphql/queries/detail';
+import settingCreateMutation from '../../graphql/mutations/create';
+import settingUpdateMutation from '../../graphql/mutations/update';
+import settingRemoveMutation from '../../graphql/mutations/remove';
 
 
-class TextEditorContainer extends React.Component {
+class SettingEditorContainer extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -58,7 +58,7 @@ class TextEditorContainer extends React.Component {
 
 	handleSubmit(_values) {
 		const values = {}; // Object.assign({}, _values);
-		const { textCreate, textUpdate, router } = this.props;
+		const { settingCreate, settingUpdate, router } = this.props;
 		const { collection, textGroup, work } = this.state;
 
 
@@ -71,17 +71,17 @@ class TextEditorContainer extends React.Component {
 		// create or update
 		if ('_id' in _values) {
 			values._id = _values._id;
-			textUpdate(values)
+			settingUpdate(values)
 				.then((response) => {
-					router.replace(`/texts/${values._id}`);
+					router.replace(`/settings/${values._id}`);
 				})
 				.catch((err) => {
 					console.error(err);
 				});
 		} else {
-			textCreate(values)
+			settingCreate(values)
 				.then((response) => {
-					router.replace('/texts/');
+					router.replace('/settings/');
 				})
 				.catch((err) => {
 					console.error(err);
@@ -89,12 +89,12 @@ class TextEditorContainer extends React.Component {
 		}
 	}
 
-	handleRemove(textId) {
-		const { textRemove, router } = this.props;
+	handleRemove(settingId) {
+		const { settingRemove, router } = this.props;
 
-		textRemove(textId)
+		settingRemove(settingId)
 			.then((response) => {
-				router.replace('/texts');
+				router.replace('/settings');
 			})
 			.catch((err) => {
 				console.error(err);
@@ -137,7 +137,7 @@ class TextEditorContainer extends React.Component {
 		}
 
 		return (
-			<TextEditor
+			<SettingEditor
 				onSubmit={this.handleSubmit}
 				onRemove={this.handleRemove}
 				initialValues={text}
@@ -154,6 +154,6 @@ class TextEditorContainer extends React.Component {
 }
 
 export default compose(
-	textCreateMutation, textUpdateMutation, textRemoveMutation,
-	textDetailQuery,
-)(TextEditorContainer);
+	settingCreateMutation, settingUpdateMutation, settingRemoveMutation,
+	settingDetailQuery,
+)(SettingEditorContainer);

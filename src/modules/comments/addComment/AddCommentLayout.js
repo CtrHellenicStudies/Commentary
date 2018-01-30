@@ -144,7 +144,7 @@ class AddCommentLayout extends Component {
 				selectedLineTo: selectedLineFrom
 			});
 			finalFrom = selectedLineFrom - 1;
-			finalTo = selectedLineTo;
+			finalTo = selectedLineFrom;
 		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
@@ -228,7 +228,7 @@ class AddCommentLayout extends Component {
 		const referenceWorks = formData.referenceWorks;
 		const commenters = Utils.getCommenters(formData.commenterValue, possibleCommenters);
 		const selectedLineTo = this.getSelectedLineTo();
-		const lemmaCitation = Utils.createLemmaCitation(work, this.state.selectedLineFrom, selectedLineTo);
+		const lemmaCitation = Utils.createLemmaCitation(work.slug, this.state.selectedLineFrom, selectedLineTo);
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);

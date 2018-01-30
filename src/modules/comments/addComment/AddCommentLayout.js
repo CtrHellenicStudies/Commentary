@@ -277,8 +277,9 @@ class AddCommentLayout extends Component {
 			if (res.data.commentInsert._id) {
 				const urlParams = qs.stringify({_id: res.data.commentInsert._id});
 				that.props.history.push(`/commentary?${urlParams}`);	
+			} else {
+				this.props.history.push(`/`);
 			}
-			this.props.history.push(`/`);
 		});
 	}
 

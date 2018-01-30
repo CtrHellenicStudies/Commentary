@@ -91,8 +91,11 @@ class TextNodesEditor extends Component {
 
 	selectEdition(event) {
 		const setValue = event ? event.value : '';
+		const { editions } = this.state;
+
 		this.setState({
-			selectedEdition: setValue
+			selectedEdition: setValue,
+			textNodes: Utils.textFromTextNodesGroupedByEdition(editions, editions)
 		});
 	}
 

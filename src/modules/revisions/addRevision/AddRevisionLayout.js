@@ -74,7 +74,7 @@ class AddRevisionLayout extends Component {
 				));
 			});
 		}
-		if (this.state.refetchTextNodes || nextProps.textNodesQuery.collections[0].textGroups[0].works.textNodes.length === 100) {
+		if (this.state.refetchTextNodes) {
 			const properties = Utils.getUrnTextNodesProperties(comment.lemmaCitation);
 			this.props.textNodesQuery.refetch(properties);
 

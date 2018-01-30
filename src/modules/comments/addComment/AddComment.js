@@ -24,9 +24,6 @@ import { keywordsQuery,
 // lib:
 import Utils from '../../../lib/utils';
 
-// helpers:
-import linkDecorator from '../../inputs/linkButton/linkDecorator';
-
 // components
 import TagsInput from '../../inputs/tagsInput/TagsInput';
 import DraftEditorInput from '../../draftEditor/DraftEditorInput';
@@ -41,8 +38,8 @@ class AddComment extends Component {
 		super(props);
 
 		this.state = {
-			titleEditorState: EditorState.createEmpty(linkDecorator),
-			textEditorState: EditorState.createEmpty(linkDecorator),
+			titleEditorState: EditorState.createEmpty(),
+			textEditorState: EditorState.createEmpty(),
 
 			commenterValue: null,
 			titleValue: '',

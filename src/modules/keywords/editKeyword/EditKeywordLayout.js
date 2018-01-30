@@ -74,7 +74,7 @@ class EditKeywordLayout extends Component {
 		const textNodes = nextProps.textNodesQuery.collections[0].textGroups[0].works;
 		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
 		if (this.state.refetchTextNodes) {// || textNodeslength === 100) {
-			// const properies = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(keyword.work ? keyword.work.slug : 'iliad',
+			// const properies = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(keyword.work ? keyword.work.slug : '001',
 			// this.state.selectedLineFrom || keyword.lineFrom || 0, this.state.selectedLineTo || keyword.lineTo || 0));
 			this.setState({
 				refetchTextNodes: false
@@ -127,7 +127,7 @@ class EditKeywordLayout extends Component {
 				work = filter.values[0];
 			}
 		});
-		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
+		const code = Utils.encodeBookBySlug(work ? work.slug : '001');
 		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 			code.urn, selectedLineFrom, selectedLineTo
 		));
@@ -241,7 +241,7 @@ class EditKeywordLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: 'iliad',
+				slug: '001',
 				order: 1,
 			};
 		}
@@ -398,7 +398,7 @@ class EditKeywordLayout extends Component {
 										ref={(component) => { this.keywordLemmaSelect = component; }}
 										lineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
 										lineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										workSlug={keyword.work ? keyword.work.slug : 'iliad'}
+										workSlug={keyword.work ? keyword.work.slug : '001'}
 										subworkN={keyword.subwork ? keyword.subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
@@ -416,7 +416,7 @@ class EditKeywordLayout extends Component {
 
 									<ContextPanel
 										open={this.state.contextReaderOpen}
-										workSlug={work ? work.slug : 'iliad'}
+										workSlug={work ? work.slug : '001'}
 										subworkN={subwork ? subwork.n : 1}
 										lineFrom={lineFrom || 1}
 										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}

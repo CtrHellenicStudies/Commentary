@@ -68,7 +68,7 @@ class CommentDetail extends Component {
 			keywordReferenceModalVisible: false,
 			referenceTop: 0,
 			referenceLeft: 0,
-			lemmaReferenceWork: 'iliad',
+			lemmaReferenceWork: '001',
 			lemmaReferenceSubwork: 0,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,
@@ -211,7 +211,7 @@ class CommentDetail extends Component {
 	closeLemmaReference() {
 		this.setState({
 			lemmaReferenceModalVisible: false,
-			lemmaReferenceWork: 'iliad',
+			lemmaReferenceWork: '001',
 			lemmaReferenceSubwork: 0,
 			lemmaReferenceLineFrom: 0,
 			lemmaReferenceLineTo: null,

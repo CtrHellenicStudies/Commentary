@@ -35,10 +35,11 @@ class AddKeywordLayout extends Component {
 			selectedType: 'word',
 			contextReaderOpen: true,
 			loading: false,
+			selectedTextNodes: []
 		};
 
 		this.getWork = this.getWork.bind(this);
-		this.getSubwork = this.getSubwork.bind(this);
+		this.getChapter = this.getChapter.bind(this);
 		this.getLineLetter = this.getLineLetter.bind(this);
 		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
 		this.getType = this.getType.bind(this);
@@ -90,22 +91,22 @@ class AddKeywordLayout extends Component {
 				order: 1,
 			};
 		}
+		console.log(work);
 		return work;
 	}
-	getSubwork() {
-		let subwork = null;
+	getChapter() {
+		let chapter = null;
 		this.state.filters.forEach((filter) => {
-			if (filter.key === 'subworks') {
-				subwork = filter.values[0];
+			if (filter.key === 'chapters') {
+				chapter = filter.values[0];
 			}
 		});
-		if (!subwork) {
-			subwork = {
-				title: '1',
+		if (!chapter) {
+			chapter = {
 				n: 1,
 			};
 		}
-		return subwork;
+		return chapter;
 	}
 	getLineLetter() {
 		let lineLetter = '';
@@ -175,35 +176,40 @@ class AddKeywordLayout extends Component {
 		});
 	}
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
+		const { filters, textNodes } = this.state;
+		let work;
+		let finalFrom = 0, finalTo = 0;
 		if (selectedLineFrom === null) {
 			this.setState({
 				selectedLineTo,
 			});
-			selectedLineFrom = this.state.selectedLineFrom;
-		} else if (selectedLineTo === null) {
+			finalFrom = 0;
+			finalTo = selectedLineTo;
+		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
 			this.setState({
-				selectedLineFrom,
+				selectedLineFrom: selectedLineFrom - 1,
+				selectedLineTo: selectedLineFrom
 			});
-			selectedLineTo = this.state.selectedLineTo;
-		} else if (selectedLineTo != null && selectedLineTo != null) {
+			finalFrom = selectedLineFrom - 1;
+			finalTo = selectedLineFrom;
+		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
+			finalFrom = selectedLineFrom;
+			finalTo = selectedLineTo;
 		} else {
 			return;
 		}
-		const { filters } = this.state;
-		let work;
 		filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
 			}
 		});
-		const code = Utils.encodeBookBySlug(work ? work.slug : 'tlg001');
-		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(code.urn, selectedLineFrom, selectedLineTo));
-		this.props.textNodesQuery.refetch(properties);
-
+		this.setState({
+			selectedTextNodes: Utils.filterTextNodesBySelectedLines(textNodes, finalFrom, finalTo)
+		});
 	}
 	addKeyword(formData, textValue, textRawValue) {
 		this.setState({
@@ -212,9 +218,10 @@ class AddKeywordLayout extends Component {
 		const that = this;
 		// get data for keyword :
 		const work = this.getWork();
-		const subwork = this.getSubwork();
+		const chapter = this.getChapter();
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
+		console.log(this.state.selectedLineFrom, this.state.selectedLineTo);
 		// create keyword object to be inserted:
 		const keyword = {
 			work: {
@@ -223,11 +230,10 @@ class AddKeywordLayout extends Component {
 				order: work.order,
 			},
 			subwork: {
-				title: subwork.title, 
-				n: subwork.n,
+				n: chapter.n,
 			},
 			lineFrom: this.state.selectedLineFrom,
-			lineTo: selectedLineTo,
+			lineTo: this.state.selectedLineTo,
 			lineLetter,
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
@@ -340,7 +346,7 @@ class AddKeywordLayout extends Component {
 		});
 	}
 	render() {
-		const { filters, textNodes, work } = this.state;
+		const { filters, textNodes, work, selectedTextNodes } = this.state;
 		const { isTest } = this.props;
 		let lineFrom;
 
@@ -371,7 +377,7 @@ class AddKeywordLayout extends Component {
 											workSlug={work}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={textNodes}				
+											textNodes={selectedTextNodes}				
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}
@@ -386,6 +392,7 @@ class AddKeywordLayout extends Component {
 											selectedLineFrom={this.state.selectedLineFrom}
 											selectedLineTo={this.state.selectedLineTo}
 											updateSelectedLines={this.updateSelectedLines}
+											textNodes={textNodes}
 											editor
 										/>
 									</div>

@@ -208,7 +208,7 @@ class CommentaryLayout extends Component {
 CommentaryLayout.defaultProps = {
 	queryParams: {
 		lineTo: 611,
-		work: 'iliad',
+		work: '001',
 		subworks: '1'
 	}
 };

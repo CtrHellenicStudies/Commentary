@@ -59,9 +59,6 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			descriptionRaw
 			type
 			count
-			work {
-				_id
-			}
 			subwork {
 				n
 			}

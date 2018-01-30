@@ -53,7 +53,7 @@ class TextNodesEditorLayout extends Component {
 						toggleSearchTerm={() => {}}
 						handleChangeLineN={() => {}}
 						filters={[]}
-						selectedWork={{ slug: 'iliad' }}
+						selectedWork={{ slug: '001' }}
 					/>
 					<main>
 						<div className="commentary-comments">

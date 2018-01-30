@@ -37,7 +37,11 @@ class KeywordDetail extends Component {
 			referenceTop: 0,
 			referenceLeft: 0,
 			keyword: '',
-			tenantId: sessionStorage.getItem('tenantId')
+			tenantId: sessionStorage.getItem('tenantId'),
+			kewyord: {},
+			keywordComments: [],
+			settings: {}
+
 		};
 
 		this.props.keywordsQuery.refetch({
@@ -46,11 +50,15 @@ class KeywordDetail extends Component {
 
 	}
 	componentWillReceiveProps(props) {
+
+		if (props.keywordsQuery.loading || props.commentsQuery.loading
+			|| props.settingsQuery.loading) {
+			return;
+		}
 		const { match } = props;
 		const slug = match.params.slug;
 	
-		const keyword = props.keywordsQuery.loading ? {} : props.keywordsQuery.keywords
-			.find(x => x.slug === slug);
+		const keyword =  props.keywordsQuery.keywords.find(x => x.slug === slug);
 	
 		let keywordComments = null;
 		if (keyword) {
@@ -58,11 +66,11 @@ class KeywordDetail extends Component {
 			props.commentsQuery.refetch({
 				queryParam: JSON.stringify(keywordCommentsQuery)
 			});
-			keywordComments = props.commentsQuery.loading ? [] : props.commentsQuery.comments;
+			keywordComments = props.commentsQuery.comments;
 		}
 		this.setState({
 			keyword,
-			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
+			settings: props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
 			keywordComments,
 		});
 	}

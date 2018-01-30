@@ -41,7 +41,8 @@ class KeywordContext extends Component {
 			};
 		}
 
-		if (keyword.work && keyword.subwork && keyword.lineFrom) {
+		if (keyword.work && keyword.subwork && keyword.lineFrom
+			&& !props.textNodesQuery.variables.workUrn && !props.textNodesQuery.variables.work) {
 
 
 			context.work = keyword.work.slug;
@@ -55,6 +56,8 @@ class KeywordContext extends Component {
 			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 				context.work, context.lineFrom, context.lineTo
 			));
+			props.textNodesQuery.refetch(properties);
+			return;
 
 		} else {
 			if (tenantId) {
@@ -66,22 +69,17 @@ class KeywordContext extends Component {
 				});
 			}
 			
-			if (!props.commentsQuery.loading) {
-
-				if (props.commentsQuery.comments.length > 0) {
-					const comment = props.commentsQuery.comments[0];
-					const query = makeKeywordContextQueryFromComment(comment, maxLines); //TODO
-					props.textNodesQuery.refetch(comment.lemmaCitation);
-
-					context.work = query.workSlug;
-					context.subwork = query.subworkN;
-					context.lineFrom = query.lineFrom;
-					context.lineTo = query.lineTo;
-					const textNodesCursor = props.extNodesQuery.loading ? [] : props.textNodesQuery.collections[0].textGroups[0].works;
-
-					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.collections[0].textGroups[0].works);
-				}
+			if (props.commentsQuery.comments.length > 0) {
+				const comment = props.commentsQuery.comments[0];
+				const query = makeKeywordContextQueryFromComment(comment, maxLines); //TODO
+				context.work = query.workSlug;
+				context.subwork = query.subworkN;
+				context.lineFrom = query.lineFrom;
+				context.lineTo = query.lineTo;
 			}
+			const textNodesCursor = props.textNodesQuery.collections[0].textGroups[0].works;
+
+			lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.collections[0].textGroups[0].works);
 		}
 		this.setState({
 			lemmaText: lemmaText,

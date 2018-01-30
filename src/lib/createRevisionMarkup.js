@@ -8,7 +8,7 @@ const createRevisionMarkup = (html) => {
 
 	const workNamesSpace = [{
 		title: 'Iliad',
-		slug: 'iliad',
+		slug: '001',
 	}, {
 		title: 'Odyssey',
 		slug: 'odyssey',
@@ -21,7 +21,7 @@ const createRevisionMarkup = (html) => {
 	}];
 	const workNamesPeriod = [{
 		title: 'Il',
-		slug: 'iliad',
+		slug: '001',
 	}, {
 		title: 'Od',
 		slug: 'odyssey',
@@ -30,7 +30,7 @@ const createRevisionMarkup = (html) => {
 		slug: 'hymns',
 	}, {
 		title: 'I',
-		slug: 'iliad',
+		slug: '001',
 	}, {
 		title: 'O',
 		slug: 'odyssey',

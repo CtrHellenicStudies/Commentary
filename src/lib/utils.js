@@ -44,6 +44,13 @@ const Utils = {
 		});
 		return works;
 	},
+	filterTextNodesBySelectedLines(editions, lineStart, lineEnd) {
+		const ret = [];
+		editions.forEach(function(edition) {
+			ret.push({textNodes: edition.textNodes.slice(lineStart, lineEnd), slug: edition.slug});
+		});
+		return ret;
+	},
 	getUrnTextNodesProperties(lemmaCitation) {
 		const work = lemmaCitation.work.replace('tlg','');
 		return {

@@ -58,7 +58,7 @@ class ContextPanelContent extends Component {
 		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
 			return;
 		}
-		if (!nextProps.textNodesQuery.variables.workUrn) {
+		if (!nextProps.textNodesQuery.variables.workUrn && !nextProps.textNodes) {
 			const { workSlug, subworkN } = nextProps;	
 			const code = Utils.encodeBookBySlug(workSlug);
 			const properties = Utils.getUrnTextNodesProperties(lemmaCitation);
@@ -67,7 +67,7 @@ class ContextPanelContent extends Component {
 			return;
 		}
 	
-		const textNodesCursor = nextProps.textNodesQuery.collections[0].textGroups[0].works;
+		const textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.collections[0].textGroups[0].works;
 		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.collections[0].textGroups[0].works);
 	
 		let sortedEditions;

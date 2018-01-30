@@ -76,7 +76,8 @@ class AddCommentLayout extends Component {
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
-			selectedWork: ''
+			selectedWork: '',
+			selectedTextNodes: []
 		};
 
 		// methods:
@@ -128,34 +129,36 @@ class AddCommentLayout extends Component {
 	// --- BEGNI LINE SELECTION --- //
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
-		const { filters } = this.state;
+		const { filters, textNodes } = this.state;
 		const { work } = getFilterValues(filters); // TODO
-		console.log(selectedLineFrom, selectedLineTo);
-		let properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49));
+		let finalFrom = 0, finalTo = 0;
 		if (selectedLineFrom === null) {
 			this.setState({
 				selectedLineTo,
 			});
-			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, selectedLineTo));
+			finalFrom = 0;
+			finalTo = selectedLineTo;
 		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
 			this.setState({
 				selectedLineFrom: selectedLineFrom - 1,
 				selectedLineTo: selectedLineFrom
 			});
-			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', selectedLineFrom - 1, selectedLineFrom));
+			finalFrom = selectedLineFrom - 1;
+			finalTo = selectedLineTo;
 		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
-			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', selectedLineFrom, selectedLineTo));
+			finalFrom = selectedLineFrom;
+			finalTo = selectedLineTo;
 		} else {
 			return;
 		}
-		console.log(properties);
-		console.log(properties);
-		this.props.textNodesQuery.refetch(properties);
 
+		this.setState({
+			selectedTextNodes: Utils.filterTextNodesBySelectedLines(textNodes, finalFrom, finalTo)
+		});
 	}
 
 	toggleSearchTerm(key, value) {
@@ -289,7 +292,7 @@ class AddCommentLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: 'iliad',
+				slug: '001',
 				order: 1,
 			};
 		}
@@ -429,7 +432,7 @@ class AddCommentLayout extends Component {
 	}
 	render() {
 
-		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen, textNodes } = this.state;
+		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen, textNodes, selectedTextNodes } = this.state;
 		const { work, subwork, lineFrom } = getFilterValues(filters);
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
@@ -457,7 +460,7 @@ class AddCommentLayout extends Component {
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
-										textNodes={textNodes}
+										textNodes={selectedTextNodes}
 
 									/>
 
@@ -470,12 +473,13 @@ class AddCommentLayout extends Component {
 
 									<ContextPanel
 										open={contextReaderOpen}
-										workSlug={work ? work.slug : 'iliad'}
+										workSlug={work ? work.slug : '001'}
 										subworkN={subwork ? subwork.n : 1}
 										lineFrom={lineFrom || 1}
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}
 										updateSelectedLines={this.updateSelectedLines}
+										textNodes={textNodes}
 										editor
 									/>
 								</div>

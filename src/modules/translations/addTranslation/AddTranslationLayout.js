@@ -109,7 +109,7 @@ class AddTranslationLayout extends Component {
 		}
 		const { filters } = this.state;
 		const { work } = getFilterValues(filters);
-		const code = Utils.encodeBookBySlug(work ? work.slug : 'iliad');
+		const code = Utils.encodeBookBySlug(work ? work.slug : '001');
 		const properties = Utils.getUrnTextNodesProperties(
 			Utils.createLemmaCitation(code.urn, 
 			selectedLineFrom, selectedLineTo)
@@ -177,7 +177,7 @@ class AddTranslationLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: 'iliad',
+				slug: '001',
 				order: 1,
 			};
 		}
@@ -337,7 +337,7 @@ class AddTranslationLayout extends Component {
 											}}
 											selectedLineFrom={selectedLineFrom}
 											selectedLineTo={selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
+											workSlug={work ? work.slug : '001'}
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
@@ -354,7 +354,7 @@ class AddTranslationLayout extends Component {
 									{!toggleInputLinesIsToggled ?
 										<ContextPanel
 											open={contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
+											workSlug={work ? work.slug : '001'}
 											subworkN={subwork ? subwork.n : 1}
 											lineFrom={lineFrom || 1}
 											selectedLineFrom={selectedLineFrom}

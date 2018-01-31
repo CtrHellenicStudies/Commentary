@@ -36,7 +36,6 @@ class TextNodesEditor extends Component {
 		const selectedSubwork = null;
 		const selectedTranslation = null;
 		const subworks = [];
-		const startAtLine = null;
 		const limit = 50;
 
 		this.state = {
@@ -45,7 +44,8 @@ class TextNodesEditor extends Component {
 			selectedEdition,
 			selectedSubwork,
 			selectedTranslation,
-			startAtLine,
+			startAtLocation: undefined,
+			endAtLocation: undefined,
 			limit,
 			works: [],
 			editions: [],
@@ -162,9 +162,14 @@ class TextNodesEditor extends Component {
 		});
 	}
 
-	updateStartAtLine(e, newValue) {
+	updateStartAtLocation(e, newValue) {
 		this.setState({
-			startAtLine: parseInt(newValue, 10),
+			endAtLocation: parseInt(newValue, 10),
+		});
+	}
+	updateEndsAtLocation(e, newValue) {
+		this.setState({
+			startAtLocation: parseInt(newValue, 10),
 		});
 	}
 
@@ -175,9 +180,9 @@ class TextNodesEditor extends Component {
 	}
 
 	renderTextNodesInput() {
-		const { selectedWork, selectedEdition, selectedSubwork, startAtLine, limit } = this.state;
+		const { selectedWork, selectedEdition, selectedSubwork, startAtLocation, endAtLocation, limit } = this.state;
 
-		if (!selectedWork || !selectedEdition || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null) {
+		if (!selectedWork || !selectedEdition || !selectedSubwork || !startAtLocation || !endAtLocation) {
 			return null;
 		}
 
@@ -210,8 +215,8 @@ class TextNodesEditor extends Component {
 				editionId={_selectedEdition._id}
 				subworkN={_selectedSubwork.n}
 				subworkTitle={selectedSubwork.title}
-				lineFrom={parseInt(startAtLine, 10)}
-				limit={parseInt(startAtLine, 10) + limit}
+				locationStar={startAtLocation}
+				locationEnd={endAtLocation}
 				loadMore={this.loadMoreText}
 			/>
 		);
@@ -325,24 +330,23 @@ class TextNodesEditor extends Component {
 							/>
 						</FormGroup>
 					</div>
-					<div className="text-nodes-editor-meta-input subwork-input">
+					<div className="text-nodes-editor-meta-input line-from-input">
 						<FormGroup controlId="formControlsSelect">
-							<ControlLabel>Subwork (Book/Poem/Rhapsody/etc)</ControlLabel>
-							<Select
-								name="subwork-select"
-								value={selectedSubwork}
-								options={subworkOptions}
-								onChange={this.selectSubwork}
+							<ControlLabel>Start at location</ControlLabel>
+							<br />
+							<TextField
+								hintText="0"
+								onChange={this.updateStartAtLocation}
 							/>
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input line-from-input">
 						<FormGroup controlId="formControlsSelect">
-							<ControlLabel>Start at line</ControlLabel>
+							<ControlLabel>Finish at location</ControlLabel>
 							<br />
 							<TextField
 								hintText="0"
-								onChange={this.updateStartAtLine}
+								onChange={this.updateEndsAtLocation}
 							/>
 						</FormGroup>
 					</div>

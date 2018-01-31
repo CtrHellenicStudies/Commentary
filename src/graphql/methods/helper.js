@@ -101,7 +101,6 @@ const createQueryFromFilters = (filters) => {
 
 function getCommentsQuery(filters, tenantId, additionalParam) {
 	const query = createQueryFromFilters(filters);
-	query.tenantId = tenantId;
 	if ('$text' in query) {
 		const textsearch = new RegExp(query.$text, 'i');
 		if (!query.$or) {

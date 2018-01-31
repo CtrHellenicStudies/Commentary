@@ -108,13 +108,12 @@ class AddTranslationLayout extends Component {
 			});
 		}
 		const { filters } = this.state;
-		const { work, subwork } = getFilterValues(filters);
-		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
-		};
+		const { work } = getFilterValues(filters);
+		const code = Utils.encodeBookBySlug(work ? work.slug : '001');
+		const properties = Utils.getUrnTextNodesProperties(
+			Utils.createLemmaCitation(code.urn, 
+			selectedLineFrom, selectedLineTo)
+		);
 		this.props.textNodesQuery.refetch(properties);
 	}
 
@@ -178,7 +177,7 @@ class AddTranslationLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: 'iliad',
+				slug: '001',
 				order: 1,
 			};
 		}
@@ -338,11 +337,11 @@ class AddTranslationLayout extends Component {
 											}}
 											selectedLineFrom={selectedLineFrom}
 											selectedLineTo={selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
+											workSlug={work ? work.slug : '001'}
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodesAhcip}
+											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.collections[0].textGroups[0].works}
 										/> : ''}
 
 									<AddTranslation
@@ -355,7 +354,7 @@ class AddTranslationLayout extends Component {
 									{!toggleInputLinesIsToggled ?
 										<ContextPanel
 											open={contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
+											workSlug={work ? work.slug : '001'}
 											subworkN={subwork ? subwork.n : 1}
 											lineFrom={lineFrom || 1}
 											selectedLineFrom={selectedLineFrom}

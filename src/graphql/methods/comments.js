@@ -38,8 +38,6 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			slug
 			n
 		}
-		lineFrom
-		lineTo
 		lineLetter
 		bookChapterUrl
 		paragraphN
@@ -61,9 +59,6 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			descriptionRaw
 			type
 			count
-			work {
-				_id
-			}
 			subwork {
 				n
 			}
@@ -93,6 +88,13 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 		isAnnotation
 		discussionCommentsDisabled
 		created
+		lemmaCitation {
+			passageFrom
+			passageTo
+			work
+			textGroup
+			corpus
+		}
 		updated
 	}
 }

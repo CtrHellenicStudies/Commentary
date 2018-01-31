@@ -8,26 +8,19 @@ query keywordsQuery($tenantId: ID $queryParam: String $slug: String) {
     slug
     description
     descriptionRaw
-    type
+	type
+	lineFrom
+	lineTo
     count
 	work {
-		_id
 		title
-		tenantId
 		slug
-		subworks {
-			title
-			slug
-			n
-		}
 	}
 	subwork {
 		title
 		slug
 		n
 	}
-    lineFrom
-    lineTo
     lineLetter
     nLines
     tenantId
@@ -46,15 +39,8 @@ query keywordsQuery($id: String) {
     type
     count
 	work {
-		_id
-		title
-		tenantId
-		slug
-	subworks {
 		title
 		slug
-		n
-	}
 	}
 	subwork {
 		title

@@ -130,9 +130,10 @@ font-family: "Material Design Icons";
 .search-tools {
   margin: 0px auto;
   text-align: center;
-  display: inline-block;
   vertical-align: top;
   float: right;
+  display: flex;
+  max-width: 80%;
 }
 .dropdown {
   display: inline-block;

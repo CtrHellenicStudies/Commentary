@@ -22,28 +22,29 @@ import { getMaxLineMutation } from '../../graphql/methods/textNodes';
 
 // private component:
 import ContextPanelContent from './panel/ContextPanelContent';
+import Utils from '../../lib/utils';
 
 
 
 /*
 	helpers
 */
-const getLineFrom = (props) => {
-	if (props.commentGroup) return props.commentGroup.lineFrom;
-	if (props.workSlug) return props.lineFrom;
-	throw new Error('commentGroup or lineFrom missing in ContextPanel component - one of two is requierd');
-};
 const getWorkSlug = (props) => {
 	if (props.commentGroup) return props.commentGroup.work.slug;
 	if (props.workSlug) return props.workSlug;
 	throw new Error('commentGroup or workSlug missing in ContextPanel component - one of two is requierd');
 };
-const getsubworkN = (props) => {
-	if (props.commentGroup) return props.commentGroup.subwork.n;
-	if (props.subworkN) return props.subworkN;
-	throw new Error('commentGroup or subworkN missing in ContextPanel component - one of two is requierd');
-};
-
+function setLemmaCitation(commentGroup, _lemmaCitation) {
+	let lemmaCitation;
+	if (commentGroup) {
+		lemmaCitation = commentGroup.comments[0].lemmaCitation;
+	} else if (_lemmaCitation) {
+		lemmaCitation = _lemmaCitation;
+	} else {
+		lemmaCitation = Utils.createLemmaCitation('tlg001', 0, 49);
+	}
+	return lemmaCitation;
+}
 const LINE_THRESHOLD = 25;
 
 
@@ -54,9 +55,10 @@ class ContextPanel extends Component {
 
 		this.state = {
 			selectedLemmaEdition: '',
-			lineFrom: getLineFrom(props),
+			lineFrom: props.passageFrom,
 			maxLine: 0,
 			highlightingVisible: false,
+			lemmaCitation: setLemmaCitation(props.commentGroup, props.lemmaCitation)
 		};
 
 		this.setMaxLine();
@@ -114,7 +116,7 @@ class ContextPanel extends Component {
 
 		const that = this;
 		const workSlug = getWorkSlug(this.props);
-		const subworkN = getsubworkN(this.props);
+		const subworkN = 1;
 		this.props.getMaxLine(workSlug, subworkN).then(function(res) {
 			that.setState({
 				maxLine: parseInt(res.data.getMaxLine, 10),
@@ -162,11 +164,9 @@ class ContextPanel extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.lineFrom) {
-			this.setState({
-				lineFrom: nextProps.lineFrom,
-			});
-		}
+		this.setState({
+			lemmaCitation: setLemmaCitation(nextProps.commentGroup, nextProps.lemmaCitation)
+		});
 	}
 	componentWillUnmount() {
 		if (this.timeouts) {
@@ -176,29 +176,30 @@ class ContextPanel extends Component {
 
 	render() {
 
-		const { open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline } = this.props;
-		const { highlightingVisible, maxLine, selectedLemmaEdition } = this.state;
+		const { open, passageFrom, closeContextPanel, commentGroup,
+			 	disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline,
+				textNodes } = this.props;
+		const { highlightingVisible, maxLine, selectedLemmaEdition, lemmaCitation } = this.state;
 
 		const workSlug = getWorkSlug(this.props);
-		const subworkN = getsubworkN(this.props);
 
 		return (
 			<ContextPanelContent
 				open={open}
 				closeContextPanel={closeContextPanel}
 				workSlug={workSlug}
-				subworkN={subworkN}
 				commentGroup={commentGroup}
 				highlightingVisible={highlightingVisible}
-				lineFrom={selectedLineFrom}
-				lineTo={selectedLineFrom + 49}
+				passageFrom={selectedLineFrom}
+				passageTo={selectedLineFrom + 49}
 				maxLine={maxLine}
+				lemmaCitation={lemmaCitation}
 				selectedLemmaEdition={selectedLemmaEdition}
 				onBeforeClicked={this.onBeforeClicked}
 				onAfterClicked={this.onAfterClicked}
 				toggleEdition={this.toggleEdition}
 				toggleHighlighting={this.toggleHighlighting}
-
+				textNodes={textNodes}
 				disableEdit={disableEdit}
 				selectedLineFrom={selectedLineFrom}
 				selectedLineTo={selectedLineTo}

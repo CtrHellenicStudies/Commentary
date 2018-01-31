@@ -46,10 +46,7 @@ if (loginToken) {
 Utils.setBaseDocMeta();
 
 const hostnameArray = document.location.hostname.split('.');
-let tenantSubdomain;
-if (hostnameArray.length > 2) {
-	tenantSubdomain = hostnameArray[0];
-}
+const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
 /**
  * Private route
  * create a route restricted to a logged in user
@@ -73,26 +70,49 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 /**
  * Application routes
  */
+function canGetUserDatas(user, query) {
+	if(user && 
+	!query.loading &&
+	query.users.length && 
+	!(query.users[0]._id === user._id)) {
+		return true;
+	}
+	return false;
+} 
+function setTenantInSession (query) {
+	if (!query.loading
+		&& query.tenantBySubdomain) {
+		sessionStorage.setItem('tenantId', query.tenantBySubdomain._id);
+	} else if (!query.loading
+		&& !query.tenantBySubdomain) {
+		sessionStorage.setItem('noTenant', true);
+	}
+}
 const routes = (props) => {
 
+<<<<<<< HEAD
 	const user = Cookies.get('user');
 	if (user !== undefined &&
 		user !== null &&
 		!props.usersQuery.loading &&
 		props.usersQuery.users.length &&
 		!(props.usersQuery.users[0]._id === JSON.parse(Cookies.get('user'))._id)) {
+=======
+	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
+	if (canGetUserDatas(user, props.usersQuery)) {
+>>>>>>> feature/textServer
 		const id = JSON.parse(user)._id;
 		props.usersQuery.refetch({
 			id: id,
 		});
-	} else if(Cookies.get('user') && !props.usersQuery.loading) {
+	} else if(user && !props.usersQuery.loading) {
 		Cookies.set('user', props.usersQuery.users[0]);
+		console.log(props.usersQuery.users[0]);
 	}
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
 			return <Route component={NotFound} />;
-		}
-		else {
+		} else {
 			sessionStorage.removeItem('noTenant');
 			if (!props.tenantsBySubdomainQuery.tenantBySubdomain) {
 				props.tenantsBySubdomainQuery.refetch({
@@ -100,18 +120,7 @@ const routes = (props) => {
 				});
 			}
 		}
-
-		if (
-!props.tenantsBySubdomainQuery.loading
-&& props.tenantsBySubdomainQuery.tenantBySubdomain
-) {
-			sessionStorage.setItem('tenantId', props.tenantsBySubdomainQuery.tenantBySubdomain._id);
-		} else if (
-!props.tenantsBySubdomainQuery.loading
-&& !props.tenantsBySubdomainQuery.tenantBySubdomain
-) {
-			sessionStorage.setItem('noTenant', true);
-		}
+		setTenantInSession(props.tenantsBySubdomainQuery);
 	}
 
 

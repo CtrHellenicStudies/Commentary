@@ -29,6 +29,8 @@ class HomeLayout extends Component {
 
 		this.state = {
 			filters: [],
+			settings: [],
+			tenant: undefined
 		};
 	}
 
@@ -41,13 +43,22 @@ class HomeLayout extends Component {
 			}, 1000);
 		}
 	}
+	componentWillReceiveProps(props) {
+		if(this.props.settingsQuery.loading || this.props.tenantsQuery.loading) {
+			return;
+		}
+		const tenantId = sessionStorage.getItem('tenantId');
+		const settings = this.props.settingsQuery.settings.find(x => x.tenantId === tenantId);
+		const tenant = this.props.tenantsQuery.tenants.find(x => x._id === tenantId);
+		this.setState({
+			settings: settings,
+			tenant: tenant
+		});
+
+	}
 
 	render() {
-
-		const tenantId = sessionStorage.getItem('tenantId');
-		const settings = this.props.settingsQuery.loading ? undefined : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId);
-		const tenant = this.props.tenantsQuery.loading ? undefined : this.props.tenantsQuery.tenants.find(x => x._id === tenantId);
-		
+		const { tenant, settings } = this.state;
 		if (!tenant) {
 			return <LoadingHome />;
 		}

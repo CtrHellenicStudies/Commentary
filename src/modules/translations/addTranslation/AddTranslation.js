@@ -57,7 +57,7 @@ class AddTranslation extends Component {
 	}
 	componentWillReceiveProps(props) {
 
-		const works = props.worksQuery.loading ? [] : props.worksQuery.works;
+		const works = props.worksQuery.loading ? [] : props.worksQuery.collections[0].textGroups[0].works;
 		const worksOptions = [];
 		works.forEach((work) => {
 			worksOptions.push({
@@ -70,7 +70,7 @@ class AddTranslation extends Component {
 		const commentersOptions = [];
 		const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
         let commenters = [];
-        const user = Cookies.get('user');
+        const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		if (user && user.canEditCommenters) {
 			commenters = tenantCommenters.filter((x => 
 				user.canEditCommenters.find(y => y === x._id) !== undefined));

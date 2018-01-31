@@ -24,7 +24,7 @@ import Header from '../../components/header/Header';
 
 // graphql
 import { referenceWorksQuery } from '../../graphql/methods/referenceWorks';
-import { worksQuery } from '../../graphql/methods/works';
+import { editionsQuery } from '../../graphql/methods/editions';
 
 
 // lib:
@@ -84,8 +84,9 @@ class CommentaryLayout extends Component {
 
 	_updateRoute(filters) {
 		let queryParams = {};
+		const { referenceWorks, history } = this.props;
 		if (filters) {
-			queryParams = createQueryParamsFromFilters(filters, this.props.referenceWorks);
+			queryParams = createQueryParamsFromFilters(filters, referenceWorks);
 		} else {
 			queryParams = this.props.queryParams;
 		}
@@ -93,7 +94,7 @@ class CommentaryLayout extends Component {
 		// update route
 		const urlParams = qs.stringify(queryParams);
 
-		this.props.history.push(`/commentary/?${urlParams}`);
+		history.push(`/commentary/?${urlParams}`);
 	}
 
 	_toggleSearchTerm(key, value) {
@@ -156,7 +157,7 @@ class CommentaryLayout extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
-		const works = nextProps.worksQuery.loading ? [] : nextProps.worksQuery.works;
+		const works = nextProps.editionsQuery.loading ? [] : nextProps.editionsQuery.collections[0].textGroups[0].works
 		this.setState({
 			referenceWorks: referenceWorks,
 			works: works,
@@ -165,6 +166,7 @@ class CommentaryLayout extends Component {
 	}
 	render() {
 		const { skip, limit, modalLoginLowered, queryParams, filters } = this.state;
+		const { isTest, history } =  this.props;
 		// create filters object based on the queryParams or params
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -175,7 +177,7 @@ class CommentaryLayout extends Component {
 							toggleSearchTerm={this._toggleSearchTerm}
 							handleChangeLineN={this._handleChangeLineN}
 							handleChangeTextsearch={this._handleChangeTextsearch}
-							isTest={this.props.isTest}
+							isTest={isTest}
 							initialSearchEnabled
 						/>
 
@@ -184,7 +186,7 @@ class CommentaryLayout extends Component {
 							toggleSearchTerm={this._toggleSearchTerm}
 							showLoginModal={this.showLoginModal}
 							loadMoreComments={this.loadMoreComments}
-							history={this.props.history}
+							history={history}
 							skip={skip}
 							limit={limit}
 							queryParams={queryParams}
@@ -206,7 +208,7 @@ class CommentaryLayout extends Component {
 CommentaryLayout.defaultProps = {
 	queryParams: {
 		lineTo: 611,
-		work: 'iliad',
+		work: '001',
 		subworks: '1'
 	}
 };
@@ -216,11 +218,11 @@ CommentaryLayout.propTypes = {
 	works: PropTypes.array,
 	isTest: PropTypes.bool,
 	history: PropTypes.any,
-	worksQuery: PropTypes.object,
+	editionsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,
 	match: PropTypes.object
 };
 export default compose(
 	referenceWorksQuery,
-	worksQuery
+	editionsQuery
 )(CommentaryLayout);

@@ -35,10 +35,11 @@ class AddKeywordLayout extends Component {
 			selectedType: 'word',
 			contextReaderOpen: true,
 			loading: false,
+			selectedTextNodes: []
 		};
 
 		this.getWork = this.getWork.bind(this);
-		this.getSubwork = this.getSubwork.bind(this);
+		this.getChapter = this.getChapter.bind(this);
 		this.getLineLetter = this.getLineLetter.bind(this);
 		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
 		this.getType = this.getType.bind(this);
@@ -56,6 +57,26 @@ class AddKeywordLayout extends Component {
 	componentWillUpdate() {
 		this.handlePermissions();
 	}
+	componentWillReceiveProps(props) {
+		const { filters } = this.state;
+		let work = 'tlg001';
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			}
+		});
+		if (props.textNodesQuery.loading) {
+			return;
+		}
+		if (!props.textNodesQuery.variables.workUrn) {
+			props.textNodesQuery.refetch(Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)));
+			return;
+		}
+		this.setState({
+			textNodes: props.textNodesQuery.collections[0].textGroups[0].works,
+			work: work
+		});
+	}
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
@@ -66,26 +87,26 @@ class AddKeywordLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: 'iliad',
+				slug: 'tlg001',
 				order: 1,
 			};
 		}
+		console.log(work);
 		return work;
 	}
-	getSubwork() {
-		let subwork = null;
+	getChapter() {
+		let chapter = null;
 		this.state.filters.forEach((filter) => {
-			if (filter.key === 'subworks') {
-				subwork = filter.values[0];
+			if (filter.key === 'chapters') {
+				chapter = filter.values[0];
 			}
 		});
-		if (!subwork) {
-			subwork = {
-				title: '1',
+		if (!chapter) {
+			chapter = {
 				n: 1,
 			};
 		}
-		return subwork;
+		return chapter;
 	}
 	getLineLetter() {
 		let lineLetter = '';
@@ -155,41 +176,40 @@ class AddKeywordLayout extends Component {
 		});
 	}
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
+		const { filters, textNodes } = this.state;
+		let work;
+		let finalFrom = 0, finalTo = 0;
 		if (selectedLineFrom === null) {
 			this.setState({
 				selectedLineTo,
 			});
-			selectedLineFrom = this.state.selectedLineFrom;
-		} else if (selectedLineTo === null) {
+			finalFrom = 0;
+			finalTo = selectedLineTo;
+		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
 			this.setState({
-				selectedLineFrom,
+				selectedLineFrom: selectedLineFrom - 1,
+				selectedLineTo: selectedLineFrom
 			});
-			selectedLineTo = this.state.selectedLineTo;
-		} else if (selectedLineTo != null && selectedLineTo != null) {
+			finalFrom = selectedLineFrom - 1;
+			finalTo = selectedLineFrom;
+		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
+			finalFrom = selectedLineFrom;
+			finalTo = selectedLineTo;
 		} else {
 			return;
 		}
-		const { filters } = this.state;
-		let work;
-        let subwork;
 		filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
 			}
 		});
-		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
-		};
-		this.props.textNodesQuery.refetch(properties);
+		this.setState({
+			selectedTextNodes: Utils.filterTextNodesBySelectedLines(textNodes, finalFrom, finalTo)
+		});
 	}
 	addKeyword(formData, textValue, textRawValue) {
 		this.setState({
@@ -198,9 +218,10 @@ class AddKeywordLayout extends Component {
 		const that = this;
 		// get data for keyword :
 		const work = this.getWork();
-		const subwork = this.getSubwork();
+		const chapter = this.getChapter();
 		const lineLetter = this.getLineLetter();
 		const selectedLineTo = this.getSelectedLineTo();
+		console.log(this.state.selectedLineFrom, this.state.selectedLineTo);
 		// create keyword object to be inserted:
 		const keyword = {
 			work: {
@@ -209,11 +230,10 @@ class AddKeywordLayout extends Component {
 				order: work.order,
 			},
 			subwork: {
-				title: subwork.title, 
-				n: subwork.n,
+				n: chapter.n,
 			},
 			lineFrom: this.state.selectedLineFrom,
-			lineTo: selectedLineTo,
+			lineTo: this.state.selectedLineTo,
 			lineLetter,
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
@@ -326,23 +346,11 @@ class AddKeywordLayout extends Component {
 		});
 	}
 	render() {
-		const { filters } = this.state;
+		const { filters, textNodes, work, selectedTextNodes } = this.state;
 		const { isTest } = this.props;
-		let work;
-		let subwork;
 		let lineFrom;
 
 		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
-
-		filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
-			} else if (filter.key === 'lineFrom') {
-				lineFrom = filter.values[0];
-			}
-		});
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -366,11 +374,10 @@ class AddKeywordLayout extends Component {
 											ref={(component) => { this.commentLemmaSelect = component; }}
 											lineFrom={this.state.selectedLineFrom}
 											lineTo={this.state.selectedLineTo}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
+											workSlug={work}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodesAhcip}				
+											textNodes={selectedTextNodes}				
 										/>
 										<AddKeyword
 											selectedLineFrom={this.state.selectedLineFrom}
@@ -380,12 +387,12 @@ class AddKeywordLayout extends Component {
 										/>
 										<ContextPanel
 											open={this.state.contextReaderOpen}
-											workSlug={work ? work.slug : 'iliad'}
-											subworkN={subwork ? subwork.n : 1}
+											workSlug={work ? work : 'tlg001'}
 											lineFrom={lineFrom || 1}
 											selectedLineFrom={this.state.selectedLineFrom}
 											selectedLineTo={this.state.selectedLineTo}
 											updateSelectedLines={this.updateSelectedLines}
+											textNodes={textNodes}
 											editor
 										/>
 									</div>

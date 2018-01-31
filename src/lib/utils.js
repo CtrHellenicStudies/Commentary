@@ -24,6 +24,57 @@ const Utils = {
 		}
 		return ret;
 	},
+	createLemmaCitation(work, lineFrom, lineTo) { 
+		return {
+			corpus: "urn:cts:greekLit",
+			textGroup: "tlg0013",
+			work: work.replace('tlg',''),
+			passageFrom: `1.${lineFrom+1}`,
+			passageTo: `1.${lineTo+1}`
+		};
+
+	},
+	worksFromEditions(editions) {
+		const works = [];
+		editions.forEach(function(edition) {
+			const work = works.find(x => x.urn === edition.urn);
+			if (!work) {
+				works.push(edition);
+			}
+		});
+		return works;
+	},
+	filterTextNodesBySelectedLines(editions, lineStart, lineEnd) {
+		const ret = [];
+		editions.forEach(function(edition) {
+			ret.push({textNodes: edition.textNodes.slice(lineStart, lineEnd), slug: edition.slug});
+		});
+		return ret;
+	},
+	getUrnTextNodesProperties(lemmaCitation) {
+		const work = lemmaCitation.work.replace('tlg','');
+		return {
+			workUrn:(`${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${work}`).toString(),
+			textNodesUrn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${work}:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
+		};
+	},
+	encodeBookBySlug(slug) {
+		let code = {
+			urn : 'urn:cts:greekLit:tlg0013.tlg001',
+			slug : 'iliad-2'
+		};
+		switch(slug) {
+			case 'odyssey':
+				code = { 
+					urn: 'urn:cts:greekLit:tlg0013.tlg002',
+					slug: 'odyssey-2'
+				};
+				break;
+			default:
+				break;
+		}
+		return code;
+	},
 	timeSince: (date) => {
 		let interval;
 		const seconds = Math.floor((new Date() - date) / 1000);
@@ -230,45 +281,34 @@ const Utils = {
 
 		return domain;
 	},
-	textFromTextNodesGroupedByEdition(textNodesCursor, _editions) {
-		const editions = [];
-		textNodesCursor.forEach((textNode) => {
-			textNode.text.forEach((text) => {
-				let myEdition = editions.find(e => text.edition === e._id);
+	textFromTextNodesGroupedByEdition(worksWithTextNodes, _versions) {
 
-				if (!myEdition) {
-					const foundEdition = _editions.find(x => x._id === text.edition);
-					myEdition = {
-						_id: foundEdition._id,
-						title: foundEdition.title,
-						slug: foundEdition.slug,
-						multiLine: foundEdition.multiLine,
+		const versions = [];
+		worksWithTextNodes.forEach((work) => {
+			work.textNodes.forEach((textNode) => {
+				let myVersion = versions.find(e => work.slug === e.slug);
+
+				if (!myVersion) {
+					const foundVersion = _versions.find(x => x.slug === work.slug);
+					myVersion = {
+						_id: foundVersion.version.id,
+						title: foundVersion.version.title,
+						slug: foundVersion.slug,
+						//multiLine: foundEdition.multiLine, TODO
 						lines: [],
 					};
-					editions.push(myEdition);
+					versions.push(myVersion);
 				}
 
-				myEdition.lines.push({
-					_id: textNode._id,
-					html: text.html,
-					n: text.n,
+				myVersion.lines.push({
+					_id: textNode.id,
+					html: textNode.text,
+					n: textNode.location[1],
 				});
 			});
 		});
 
-		// sort lines for each edition by line number
-		for (let i = 0; i < editions.length; ++i) {
-			editions[i].lines.sort((a, b) => {
-				if (a.n < b.n) {
-					return -1;
-				} else if (b.n < a.n) {
-					return 1;
-				}
-				return 0;
-			});
-		}
-
-		return editions;
+		return versions;
 	},
 	getCommenters(commenterData, commenters) {
 		const commentersList = [];

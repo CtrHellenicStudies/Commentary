@@ -62,7 +62,6 @@ const getFilterValues = (filters) => {
 	return filterValues;
 };
 
-
 /*
  *	BEGIN AddCommentLayout
  */
@@ -77,7 +76,8 @@ class AddCommentLayout extends Component {
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
-			selectedWork: ''
+			selectedWork: '',
+			selectedTextNodes: []
 		};
 
 		// methods:
@@ -96,7 +96,26 @@ class AddCommentLayout extends Component {
 		this.updateQuery = this.updateQuery.bind(this);
 		this.getChildrenContext = this.getChildrenContext.bind(this);
 	}
-
+	componentWillReceiveProps(props) {
+		const { filters } = this.state;
+		let work = 'tlg001';
+		filters.forEach((filter) => {
+			if (filter.key === 'works') {
+				work = filter.values[0];
+			}
+		});
+		if (props.textNodesQuery.loading) {
+			return;
+		}
+		if (!props.textNodesQuery.variables.workUrn) {
+			props.textNodesQuery.refetch(Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)));
+			return;
+		}
+		this.setState({
+			textNodes: props.textNodesQuery.collections[0].textGroups[0].works,
+			work: work
+		});
+	}
 	componentWillUpdate() {
 		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 			this.props.history.push('/');
@@ -110,33 +129,36 @@ class AddCommentLayout extends Component {
 	// --- BEGNI LINE SELECTION --- //
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
+		const { filters, textNodes } = this.state;
+		const { work } = getFilterValues(filters); // TODO
+		let finalFrom = 0, finalTo = 0;
 		if (selectedLineFrom === null) {
 			this.setState({
 				selectedLineTo,
 			});
-			selectedLineFrom = this.state.selectedLineFrom;
-		} else if (selectedLineTo === null) {
+			finalFrom = 0;
+			finalTo = selectedLineTo;
+		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
 			this.setState({
-				selectedLineFrom,
+				selectedLineFrom: selectedLineFrom - 1,
+				selectedLineTo: selectedLineFrom
 			});
-			selectedLineTo = this.state.selectedLineTo;
+			finalFrom = selectedLineFrom - 1;
+			finalTo = selectedLineFrom;
 		} else if (selectedLineTo != null && selectedLineFrom != null) {
 			this.setState({
 				selectedLineFrom,
 				selectedLineTo,
 			});
+			finalFrom = selectedLineFrom;
+			finalTo = selectedLineTo;
 		} else {
 			return;
 		}
-		const { filters } = this.state;
-		const { work, subwork } = getFilterValues(filters);
-		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
-		};
-		this.props.textNodesQuery.refetch(properties);
+
+		this.setState({
+			selectedTextNodes: Utils.filterTextNodesBySelectedLines(textNodes, finalFrom, finalTo)
+		});
 	}
 
 	toggleSearchTerm(key, value) {
@@ -206,6 +228,7 @@ class AddCommentLayout extends Component {
 		const referenceWorks = formData.referenceWorks;
 		const commenters = Utils.getCommenters(formData.commenterValue, possibleCommenters);
 		const selectedLineTo = this.getSelectedLineTo();
+		const lemmaCitation = Utils.createLemmaCitation(work.slug, this.state.selectedLineFrom, selectedLineTo);
 
 		// get keywords after they were created:
 		const keywords = getKeywords(formData);
@@ -225,6 +248,7 @@ class AddCommentLayout extends Component {
 			lineFrom: this.state.selectedLineFrom,
 			lineTo: selectedLineTo,
 			lineLetter,
+			lemmaCitation: lemmaCitation,
 			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
 			revisions: [{
 				_id: revisionId.valueOf(),
@@ -253,8 +277,9 @@ class AddCommentLayout extends Component {
 			if (res.data.commentInsert._id) {
 				const urlParams = qs.stringify({_id: res.data.commentInsert._id});
 				that.props.history.push(`/commentary?${urlParams}`);	
+			} else {
+				this.props.history.push(`/`);
 			}
-			this.props.history.push(`/`);
 		});
 	}
 
@@ -268,7 +293,7 @@ class AddCommentLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: 'iliad',
+				slug: '001',
 				order: 1,
 			};
 		}
@@ -408,7 +433,7 @@ class AddCommentLayout extends Component {
 	}
 	render() {
 
-		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen } = this.state;
+		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen, textNodes, selectedTextNodes } = this.state;
 		const { work, subwork, lineFrom } = getFilterValues(filters);
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
@@ -432,11 +457,12 @@ class AddCommentLayout extends Component {
 										ref={(component) => { this.commentLemmaSelect = component; }}
 										lineFrom={selectedLineFrom}
 										lineTo={selectedLineTo}
-										workSlug={work ? work.slug : 'iliad'}
+										work={work ? work : 'tlg0013'}
 										subworkN={subwork ? subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
-										textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodesAhcip}
+										textNodes={selectedTextNodes}
+
 									/>
 
 									<AddComment
@@ -448,12 +474,13 @@ class AddCommentLayout extends Component {
 
 									<ContextPanel
 										open={contextReaderOpen}
-										workSlug={work ? work.slug : 'iliad'}
+										workSlug={work ? work.slug : '001'}
 										subworkN={subwork ? subwork.n : 1}
 										lineFrom={lineFrom || 1}
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}
 										updateSelectedLines={this.updateSelectedLines}
+										textNodes={textNodes}
 										editor
 									/>
 								</div>

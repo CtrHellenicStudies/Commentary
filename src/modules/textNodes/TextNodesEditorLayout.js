@@ -38,7 +38,7 @@ class TextNodesEditorLayout extends Component {
 
 	// --- BEGNI PERMISSIONS HANDLE --- //
 	handlePermissions() {
-		if (!Utils.userInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
+		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 			this.props.history.push('/');
 		}
 	}
@@ -53,7 +53,7 @@ class TextNodesEditorLayout extends Component {
 						toggleSearchTerm={() => {}}
 						handleChangeLineN={() => {}}
 						filters={[]}
-						selectedWork={{ slug: 'iliad' }}
+						selectedWork={{ slug: '001' }}
 					/>
 					<main>
 						<div className="commentary-comments">

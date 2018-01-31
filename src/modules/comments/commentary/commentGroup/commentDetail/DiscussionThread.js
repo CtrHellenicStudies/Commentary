@@ -51,7 +51,6 @@ class DiscussionThread extends Component {
 			return;
 		}
 		let discussionComments = props.discussionCommentsQuery.discussionComments;
-		console.log(discussionComments);
 		let helpArray = JSON.parse(JSON.stringify(props.discussionCommentsQuery.discussionComments));
 		switch (this.state.sortMethod) {
 			case 'votes':
@@ -93,8 +92,8 @@ class DiscussionThread extends Component {
 		});
 	}
 	render() {
-		const currentUser = Cookies.get('user');
-		const { comment } = this.props;
+		const currentUser = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
+		const { comment, toggleLemma, showLoginModal } = this.props;
 		const { discussionComments, discussionCommentsDisabled } = this.state
 
 		if (!discussionComments) {
@@ -133,7 +132,7 @@ class DiscussionThread extends Component {
 					<h4 className="continue-discussion-label">Discussion</h4>
 					<div
 						className="continue-discussion-icon"
-						onClick={this.props.toggleLemma}
+						onClick={toggleLemma}
 					>
 						<i className="mdi mdi-comment" />
 						{this.state.discussionComments.length ?
@@ -153,7 +152,7 @@ class DiscussionThread extends Component {
 								<IconButton
 									className="close-discussion paper-shadow"
 									iconClassName="material-icons"
-									onClick={() => { this.hideDiscussionThread(); this.props.toggleLemma(); }}
+									onClick={() => { this.hideDiscussionThread(); toggleLemma(); }}
 								>close
 								</IconButton>
 								<div className="no-results-wrap">
@@ -165,7 +164,7 @@ class DiscussionThread extends Component {
 								<IconButton
 									className="close-discussion paper-shadow"
 									iconClassName="material-icons"
-									onClick={() => { this.hideDiscussionThread(); this.props.toggleLemma(); }}
+									onClick={() => { this.hideDiscussionThread(); toggleLemma(); }}
 								>close
 								</IconButton>
 
@@ -204,7 +203,7 @@ class DiscussionThread extends Component {
 												<FlatButton
 													label="Login"
 													className="login-link"
-													onClick={this.props.showLoginModal}
+													onClick={showLoginModal}
 												/>
 												<FlatButton
 													label="Join"

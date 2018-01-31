@@ -20,7 +20,7 @@ const styles = {
 
 const FilterWidget = ({ filters, toggleSearchTerm }) => (
 	<div className="filters">
-		{filters.map((filter, i) => ((['lineFrom', 'lineTo'].indexOf(filter.key) < 0) ?
+		{filters ? filters.map((filter, i) => ((['lineFrom', 'lineTo'].indexOf(filter.key) < 0) ?
 			<div
 				key={i}
 				className="filter "
@@ -52,7 +52,7 @@ const FilterWidget = ({ filters, toggleSearchTerm }) => (
 				})}
 			</div>
 			: ''
-		))}
+		)): ''}
 
 	</div>
 );

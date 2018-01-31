@@ -24,9 +24,6 @@ import { keywordsQuery,
 // lib:
 import Utils from '../../../lib/utils';
 
-// helpers:
-import linkDecorator from '../../inputs/linkButton/linkDecorator';
-
 // components
 import TagsInput from '../../inputs/tagsInput/TagsInput';
 import DraftEditorInput from '../../draftEditor/DraftEditorInput';
@@ -42,7 +39,7 @@ class AddComment extends Component {
 
 		this.state = {
 			titleEditorState: EditorState.createEmpty(),
-			textEditorState: EditorState.createEmpty(linkDecorator),
+			textEditorState: EditorState.createEmpty(),
 
 			commenterValue: null,
 			titleValue: '',
@@ -271,12 +268,6 @@ class AddComment extends Component {
 			tagsValue: currentTags
 		});
 		this.props.keywordUpdate(tagId, newKeyword);
-		// 	if (err) {
-		// 		this.showSnackBar(err);
-		// 	}			else {
-		// 		this.showSnackBar({message: 'Keyword type changed'});
-		// 	}
-		// });
 	}
 
 	addNewTag(tag) {

@@ -53,29 +53,22 @@ class ContextPanelContent extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 
-		const { lineFrom, multiline } = nextProps;
+		const { lemmaCitation, multiline } = nextProps;
 
 		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
 			return;
 		}
-		const lineTo = !nextProps.lineTo || lineFrom > nextProps.lineTo ? lineFrom : nextProps.lineTo;	
-		if (!nextProps.textNodesQuery.variables.workSlug) {
-
-			const { workSlug, subworkN } = nextProps;		
-			const properties = {
-				workSlug: workSlug,
-				work: workSlug,
-				subworkN: subworkN,
-				lineFrom: lineFrom,
-				lineTo: lineTo,
-				start: lineFrom,
-				end: lineTo
-			};
+		if (!nextProps.textNodesQuery.variables.workUrn && !nextProps.textNodes) {
+			const { workSlug, subworkN } = nextProps;	
+			const code = Utils.encodeBookBySlug(workSlug);
+			const properties = Utils.getUrnTextNodesProperties(lemmaCitation);
+			console.log(properties);
 			nextProps.textNodesQuery.refetch(properties);
+			return;
 		}
 	
-		const textNodesCursor = nextProps.textNodesQuery.textNodesAhcip;
-		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
+		const textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.collections[0].textGroups[0].works;
+		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.collections[0].textGroups[0].works);
 	
 		let sortedEditions;
 	
@@ -86,7 +79,6 @@ class ContextPanelContent extends Component {
 			sortedEditions = getSortedEditions(editions);
 		}
 		this.setState({
-			lineTo: lineTo,
 			lemmaText: sortedEditions
 		});
 	}
@@ -156,8 +148,8 @@ ContextPanelContent.propTypes = {
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,
 	selectedLemmaEdition: PropTypes.string.isRequired,
-	lineFrom: PropTypes.number.isRequired,
-	lineTo: PropTypes.number.isRequired,
+	lineFrom: PropTypes.number,
+	lineTo: PropTypes.number,
 	maxLine: PropTypes.number.isRequired,
 	toggleEdition: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,

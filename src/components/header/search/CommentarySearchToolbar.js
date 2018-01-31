@@ -10,28 +10,13 @@ import { compose } from 'react-apollo';
 import { commentersQuery } from '../../../graphql/methods/commenters';
 import { referenceWorksQuery } from '../../../graphql/methods/referenceWorks';
 import { keywordsQuery } from '../../../graphql/methods/keywords';
-import { worksQuery } from '../../../graphql/methods/works';
+import { editionsQuery } from '../../../graphql/methods/editions';
 
 // components:
 import SearchToolDropdown from './SearchToolDropdown';
 import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from './dropdowns/SearchDropdowns';
 import LineRangeSlider from './LineRangeSlider';
-
-
-/*
-	helpers
-*/
-const getLineFrom = (filters) => {
-
-	const filterLineFrom = filters.find(filter => filter.key === 'lineFrom');
-
-	let lineFrom = null;
-	if (filterLineFrom) {
-		lineFrom = filterLineFrom.values[0];
-	}
-
-	return lineFrom;
-};
+import Utils from '../../../lib/utils';
 
 const getLineTo = (filters) => {
 
@@ -72,7 +57,9 @@ class CommentarySearchToolbar extends Component {
 			referenceWorks: [],
 			works: [],
 			keywords: [],
-			keyideas: []
+			keyideas: [],
+			lineFrom: 0,
+			lineTo: 909
 		};
 
 		// methods:
@@ -118,8 +105,8 @@ class CommentarySearchToolbar extends Component {
 		let workFilter;
 		if (nextProps.keywordsQuery.loading ||
 			nextProps.commentersQuery.loading ||
-			nextProps.worksQuery.loading ||
-			nextProps.referenceWorksQuery.loading) {
+			nextProps.editionsQuery.loading ||
+			nextProps.editionsQuery.loading) {
 			return;
 		}
 		if (
@@ -145,13 +132,14 @@ class CommentarySearchToolbar extends Component {
 				subworksTitle: nextProps.selectedWork.slug === 'homeric-hymns' ? 'Hymn' : 'Book'
 			});
 		}
-
-		if (nextProps.addCommentPage) {
+		this.setState({
+			works: Utils.worksFromEditions(nextProps.editionsQuery.collections[0].textGroups[0].works),
+		});
+		if (!nextProps.addCommentPage) {
 			this.setState({
 				keyideas: nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
 				keywords: nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),
 				commenters: nextProps.commentersQuery.commenters,
-				works: nextProps.worksQuery.works,
 				referenceWorks: nextProps.referenceWorksQuery.referenceWorks,
 			});
 		}
@@ -162,10 +150,8 @@ class CommentarySearchToolbar extends Component {
 
 		const { toggleSearchTerm, filters, addCommentPage, handleChangeLineN } = this.props;
 		const { keywords, keyideas, commenters, referenceWorks, works } = this.state;
-		const { searchDropdownOpen, moreDropdownOpen, subworksTitle } = this.state;
+		const { searchDropdownOpen, moreDropdownOpen, subworksTitle, lineFrom, lineTo } = this.state;
 
-		const lineFrom = getLineFrom(filters);
-		const lineTo = getLineTo(filters);
 		const workInFilter = getWorkInFilter(filters);
 
 		return (
@@ -215,7 +201,6 @@ class CommentarySearchToolbar extends Component {
 						toggleSearchTerm={toggleSearchTerm}
 						filters={filters}
 					/>}
-
 				<WorksDropdown
 					works={works}
 					searchDropdownOpen={searchDropdownOpen}
@@ -224,7 +209,7 @@ class CommentarySearchToolbar extends Component {
 					filters={filters}
 				/>
 
-				<SubworksDropdown
+				{/* <SubworksDropdown
 					works={works}
 					searchDropdownOpen={searchDropdownOpen}
 					toggleSearchDropdown={this.toggleSearchDropdown}
@@ -232,17 +217,17 @@ class CommentarySearchToolbar extends Component {
 					selectedWork={subworksTitle}
 					workInFilter={workInFilter}
 					filters={filters}
-				/>
+				/> */}
 
 				<div
 					style={{ width: 250, padding: '10px 20px' }}
 					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
 				>
-					{/* <LineRangeSlider
+					<LineRangeSlider
 						handleChangeLineN={handleChangeLineN}
 						lineFrom={lineFrom}
 						lineTo={lineTo}
-					/> */}
+					/>
 					<div className="disabled-screen" />
 				</div>
 
@@ -310,7 +295,7 @@ CommentarySearchToolbar.propTypes = {
 	addCommentPage: PropTypes.bool.isRequired,
 	isTest: PropTypes.bool,
 	selectedWork: PropTypes.object,
-	worksQuery: PropTypes.object,
+	editionsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,
 	commentersQuery: PropTypes.object,
 	keywordsQuery: PropTypes.object
@@ -327,5 +312,5 @@ export default compose(
 	commentersQuery,
 	referenceWorksQuery,
 	keywordsQuery,
-	worksQuery
+	editionsQuery
 )(CommentarySearchToolbar);

@@ -6,12 +6,14 @@ import DropZone from 'react-dropzone';
 import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import { uploadFile } from '../../../lib/s3';
 import { sendSnack } from '../../shared/SnackAttack';
+
 
 export default class AvatarEditor extends Component {
 	constructor(props) {
 		super(props);
-        const user = Cookies.get('user');
+        const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		this.state = {
 			avatarUrl: user && user.profile && user.profile.avatarUrl ? user.profile.avatarUrl : props.defaultAvatarUrl,
 		};
@@ -26,16 +28,15 @@ export default class AvatarEditor extends Component {
 
 	onDrop(acceptedFiles, rejectedFiles) {
 		// const context = { type: 'user' };
-		const uploader = {}; // TODO = new Slingshot.Upload('uploads', context);
 
 		if (rejectedFiles && rejectedFiles.length) {
 			sendSnack('There was an error uploading your profile picture');
 		}
 
-		uploader.send(acceptedFiles[0], (error, downloadUrl) => {
+		uploadFile(acceptedFiles[0], (error, downloadUrl) => {
 			if (error) {
 				// Log service detailed response
-				console.error('Error uploading', uploader.xhr.response);
+				console.error(error);
 				sendSnack(error);
 			} else {
 				this.props.uploadedUrl(downloadUrl);

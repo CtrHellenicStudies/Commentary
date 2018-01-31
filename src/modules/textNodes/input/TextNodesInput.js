@@ -49,17 +49,14 @@ class TextNodesInput extends Component {
 		if (props.editionsQuery.loading || props.textNodesQuery.loading) {
 			return;
 		}
-		const { workSlug, editionId, subworkN, lineFrom, limit } = props;
-		if (!props.textNodesQuery.variables.workSlug) {
-			const properties = {
-				workSlug: workSlug === 'homeric-hymns' ? 'hymns' : workSlug,
-				subworkN: subworkN,
-				lineFrom: parseInt(lineFrom, 10),
-				lineTo: parseInt(lineFrom, 10) + limit,
-				editionId: editionId,
-				limit: limit
-	
-			};
+		const { workSlug, editionId, lineFrom, limit } = props;
+		if (!props.textNodesQuery.variables.workUrn) {
+			const code = Utils.encodeBookBySlug('homeric-hymns' ? 'hymns' : workSlug);
+			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
+				code.urn,
+				parseInt(lineFrom, 10),
+				parseInt(lineFrom, 10) + limit
+			));
 			props.textNodesQuery.refetch(properties);
 			return;
 		}
@@ -71,8 +68,8 @@ class TextNodesInput extends Component {
 		const ready = true;
 	
 		if (ready) {
-			textNodes = props.textNodesQuery.textNodesAhcip;
-			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.editions);
+			textNodes = props.textNodesQuery.collections[0].textGroups[0].works;
+			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.collections[0].textGroups[0].works);
 			textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
 	
 			textNodesByEditionsSorted.forEach(edition => {

@@ -7,19 +7,19 @@ import { compose } from 'react-apollo';
 import WorkVisualization from './WorkVizualization';
 
 // graphql
-import { worksQuery } from '../../graphql/methods/works';
+import { subworksQuery } from '../../graphql/methods/works';
 
 class WorksList extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			works: []
+			works: props.subworksQuery.loading ? [] : props.subworksQuery.worksAhcip
 		};
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			works: nextProps.worksQuery.loading ? [] : nextProps.worksQuery.worksAhcip
+			works: nextProps.subworksQuery.loading ? [] : nextProps.subworksQuery.worksAhcip
 		});
 	}
 	renderWorks() {
@@ -48,7 +48,7 @@ class WorksList extends Component {
 }
 
 WorksList.propTypes = {
-	worksQuery: PropTypes.object,
+	subworksQuery: PropTypes.object,
 };
 
-export default compose(worksQuery)(WorksList);
+export default compose(subworksQuery)(WorksList);

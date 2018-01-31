@@ -62,8 +62,9 @@ class CommentLemma extends Component {
 
 
 	toggleEdition(editionSlug) {
-		const { editions } = this.props;
+		const { editions } = this.state;
 		const { selectedLemmaEditionIndex } = this.state;
+		let selectedLemmaEdition = this.state.selectedLemmaEdition;
 
 		if (editions && editions.length) {
 			if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
@@ -72,23 +73,23 @@ class CommentLemma extends Component {
 				editions.forEach((edition, index) => {
 					if (edition.slug === editionSlug) {
 						newSelectedEditionIndex = index;
+						selectedLemmaEdition = edition;
 					}
 				});
 
 				this.setState({
 					selectedLemmaEditionIndex: newSelectedEditionIndex,
+					selectedLemmaEdition: selectedLemmaEdition
 				});
 			}
 		}
 	}
-
 	showContextPanel(commentGroup) {
 		const { index, setScrollPosition, showContextPanel } = this.props;
 
 		setScrollPosition(index);
 		showContextPanel(commentGroup);
 	}
-
 	handleAuthorChange(event, value) {
 		const { selectedAuthor, showTranslation } = this.state;
 
@@ -111,7 +112,6 @@ class CommentLemma extends Component {
 			});
 		}
 	}
-
 	handleMultilineSelect(event, value) {
 		this.props.selectMultiLine(value);
 
@@ -119,7 +119,6 @@ class CommentLemma extends Component {
 			multilineMenuOpen: false,
 		});
 	}
-
 	handleOpenTranslationMenu(event) {
     // This prevents ghost click.
 		event.preventDefault();
@@ -131,7 +130,6 @@ class CommentLemma extends Component {
 			anchorEl: event.currentTarget,
 		});
 	}
-
 	handleOpenMultilineMenu(event) {
 		// This prevents ghost click.
 		event.preventDefault();
@@ -151,7 +149,6 @@ class CommentLemma extends Component {
 			multilineMenuOpen: false,
 		});
 	}
-
 	handleOpenEditionMenu() {
 		const { openEditionMenu } = this.state;
 
@@ -159,35 +156,30 @@ class CommentLemma extends Component {
 			openEditionMenu: !openEditionMenu
 		});
 	}
-
 	componentWillReceiveProps(nextProps) {
 
 		const { commentGroup, multiline } = nextProps;
 		const { selectedLemmaEditionIndex } = this.state;
-
 		if (nextProps.textNodesQuery.loading || 
 			nextProps.editionsQuery.loading || 
 			nextProps.translationsQuery.loading) {
 			return;
 		}
-		const textNodesCursor = nextProps.textNodesQuery.textNodesAhcip;
-		let editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.editions);
+		const textNodesCursor = nextProps.textNodesQuery.collections ? nextProps.textNodesQuery.collections[0].textGroups[0].works: [];
+		let editions = Utils.textFromTextNodesGroupedByEdition(
+			textNodesCursor, 
+			nextProps.editionsQuery.collections[0].textGroups[0].works);
 		const ready = true;
 		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
-		const selectedLemmaEdition = editions[selectedLemmaEditionIndex] || { lines: [] };
+		const selectedLemmaEdition = editions.length && editions[selectedLemmaEditionIndex].lines ? editions[selectedLemmaEditionIndex] : { lines: [] };
 		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
 		let translationAuthors = [];
-		if (commentGroup) {
-			if (!nextProps.textNodesQuery.variables.workSlug) {
-				nextProps.textNodesQuery.variables.workSlug = commentGroup.work.slug;
-				const properties = {
-					workSlug: commentGroup.work.slug,
-					subworkN: Number(commentGroup.subwork.title),
-					lineFrom: commentGroup.lineFrom,
-					lineTo: commentGroup.lineTo ? commentGroup.lineTo : commentGroup.lineFrom
-
-				};
+		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
+			if (!nextProps.textNodesQuery.variables.workUrn && commentGroup.comments[0].lemmaCitation.passageFrom) {
+				const properties = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
+				console.log(properties);
 				nextProps.textNodesQuery.refetch(properties);
+				return;
 			}
 			if (!commentGroup.lineTo) {
 				commentGroup.lineTo = commentGroup.lineFrom;
@@ -212,7 +204,7 @@ class CommentLemma extends Component {
 	}
 	render() {
 		const { commentGroup, hideLemma } = this.props;
-		const { selectedAuthor, showTranslation, selectedLemmaEdition, editions, ready, translationAuthors } = this.state;
+		const { selectedAuthor, showTranslation, ready, translationAuthors, selectedLemmaEdition, editions } = this.state;
 		let workTitle = commentGroup.work.title;
 		if (workTitle === 'Homeric Hymns') {
 			workTitle = 'Hymns';

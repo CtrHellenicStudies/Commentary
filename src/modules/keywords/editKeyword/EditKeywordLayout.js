@@ -71,15 +71,11 @@ class EditKeywordLayout extends Component {
 		}
 		const { match } = nextProps;
 		const slug = match.params.slug;
-		console.log(nextProps.textNodesQuery.textNodesAhcip.length);
+		const textNodes = nextProps.textNodesQuery.collections[0].textGroups[0].works;
 		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
-		if (this.state.refetchTextNodes || nextProps.textNodesQuery.textNodesAhcip.length === 100) {
-			this.props.textNodesQuery.refetch({
-				lineFrom: this.state.selectedLineFrom || keyword.lineFrom || 0,
-				lineTo: this.state.selectedLineTo || keyword.lineTo || 0,
-				workSlug: keyword.work ? keyword.work.slug : 'iliad',
-				subworkN: keyword.subwork ? keyword.subwork.n : 1
-			});
+		if (this.state.refetchTextNodes) {// || textNodeslength === 100) {
+			// const properies = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(keyword.work ? keyword.work.slug : '001',
+			// this.state.selectedLineFrom || keyword.lineFrom || 0, this.state.selectedLineTo || keyword.lineTo || 0));
 			this.setState({
 				refetchTextNodes: false
 			});
@@ -88,7 +84,7 @@ class EditKeywordLayout extends Component {
 		this.setState({
 			ready: true,
 			keyword: keyword,
-			textNodes: nextProps.textNodesQuery.textNodesAhcip,
+			textNodes: textNodes,
 			keywords: nextProps.keywordsQuery.keywords
 		});
 	}
@@ -100,7 +96,7 @@ class EditKeywordLayout extends Component {
 	}
 	handlePermissions() {
 		if (this.state.ready) {
-			if (!Utils.userInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
+			if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 				this.props.history.push('/');
 			}
 		}
@@ -126,21 +122,17 @@ class EditKeywordLayout extends Component {
 		}
 		const { filters } = this.state;
 		let work;
-        let subwork;
 		filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
 			}
 		});
-		const properties = {
-			workSlug: work ? work.slug : 'iliad',
-			subworkN: subwork ? subwork.n : 1,
-			lineFrom: selectedLineFrom,
-			lineTo: selectedLineTo
-		};
+		const code = Utils.encodeBookBySlug(work ? work.slug : '001');
+		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
+			code.urn, selectedLineFrom, selectedLineTo
+		));
 		this.props.textNodesQuery.refetch(properties);
+
 	}
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
@@ -249,7 +241,7 @@ class EditKeywordLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: 'iliad',
+				slug: '001',
 				order: 1,
 			};
 		}
@@ -406,7 +398,7 @@ class EditKeywordLayout extends Component {
 										ref={(component) => { this.keywordLemmaSelect = component; }}
 										lineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
 										lineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										workSlug={keyword.work ? keyword.work.slug : 'iliad'}
+										workSlug={keyword.work ? keyword.work.slug : '001'}
 										subworkN={keyword.subwork ? keyword.subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
@@ -424,7 +416,7 @@ class EditKeywordLayout extends Component {
 
 									<ContextPanel
 										open={this.state.contextReaderOpen}
-										workSlug={work ? work.slug : 'iliad'}
+										workSlug={work ? work.slug : '001'}
 										subworkN={subwork ? subwork.n : 1}
 										lineFrom={lineFrom || 1}
 										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}

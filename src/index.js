@@ -28,8 +28,31 @@ require('dotenv').config();
 // inject material ui tap event (will be able to be removed in later version)
 injectTapEventPlugin();
 
+<<<<<<< HEAD
 // configure store
 const store = configureStore();
+=======
+const uriAddress = process.env.graphql ? process.env.graphql : 'http://localhost:3002/graphql';
+
+const networkInterface = createNetworkInterface({
+	uri: uriAddress,
+});
+
+const client = new ApolloClient({
+	networkInterface
+});
+
+networkInterface.use([{
+	applyMiddleware(req, next) {
+		if (!req.options.headers) {
+			req.options.headers = {};
+		}
+		const token = Cookies.get('loginToken');
+		req.options.headers.authorization = token;
+		next();
+	}
+}]);
+>>>>>>> feature/textServer
 
 // render the application
 ReactDOM.render(

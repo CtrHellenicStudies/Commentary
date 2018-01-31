@@ -26,9 +26,9 @@ const WorksCard = ({ works, toggleWorkSearchTerm, styles, filters }) => (
 		<CardText expandable style={styles.wrapper}>
 			{works.map(work => (
 				<SearchTermButtonPanel
-					key={work._id}
+					key={work.id}
 					toggleSearchTerm={toggleWorkSearchTerm}
-					label={work.title}
+					label={work.english_title}
 					searchTermKey="works"
 					value={work}
 					active={isActive(filters, work, 'works')}

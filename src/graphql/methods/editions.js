@@ -2,11 +2,27 @@ import { gql, graphql } from 'react-apollo';
 
 const query = gql`
 query editionsQuery{
-  editions {
-  _id
-  title
-  slug
-  }
+	collections(urn: "urn:cts:greekLit") {
+		id
+		title
+		urn
+		textGroups(urn: "urn:cts:greekLit:tlg0013") {
+			id
+			title
+			urn
+			works(language: "greek") {
+				   slug
+				   english_title
+				   urn
+				   id
+	  			version {
+					id
+					title
+					slug
+	 			}
+			}
+		}
+	}
 }
 `;
 const editionsRemove = gql`
@@ -44,7 +60,8 @@ const editionsRemoveMutation = graphql(editionsRemove, {
 const editionsQuery = graphql(query, {
 	name: 'editionsQuery'
 });
-export { editionsQuery,
-        editionsRemoveMutation,
-        editionsInsertMutation
+export { 
+	editionsQuery,
+    editionsRemoveMutation,
+    editionsInsertMutation
 };

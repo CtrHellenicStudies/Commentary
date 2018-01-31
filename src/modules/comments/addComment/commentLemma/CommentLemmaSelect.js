@@ -24,10 +24,12 @@ class CommentLemmaSelect extends Component {
 
 	}
 	componentWillReceiveProps(nextProps) {
-		if (!nextProps.textNodes || nextProps.editionsQuery.loading) {
+		if (!nextProps.textNodes || nextProps.editionsQuery.loading && 
+			!(nextProps.lineFrom !== this.props.lineFrom 
+			|| nextProps.lineTo !== this.props.lineTo)) {
 			return;
 		}
-		const editions = Utils.textFromTextNodesGroupedByEdition(nextProps.textNodes, nextProps.editionsQuery.editions);
+		const editions = Utils.textFromTextNodesGroupedByEdition(nextProps.textNodes, nextProps.editionsQuery.collections[0].textGroups[0].works);
 
 		this.setState({
 			lemmaText: editions,
@@ -112,7 +114,7 @@ class CommentLemmaSelect extends Component {
 	}
 }
 CommentLemmaSelect.propTypes = {
-	workSlug: PropTypes.string.isRequired,
+	work: PropTypes.string.isRequired,
 	subworkN: PropTypes.number.isRequired,
 	lineFrom: PropTypes.number.isRequired,
 	lineTo: PropTypes.number.isRequired,

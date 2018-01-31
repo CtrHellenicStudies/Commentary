@@ -19,8 +19,8 @@ import Utils from '../../../lib/utils';
 import muiTheme from '../../../lib/muiTheme';
 
 // helpers:
-import { parseCommentsToCommentGroups } from './helpers';
-import { worksQuery } from '../../../graphql/methods/works';
+import { parseCommentsToCommentGroups, setPageTitleAndMeta } from './helpers';
+import { editionsQuery } from '../../../graphql/methods/editions';
 
 
 class Commentary extends Component {
@@ -53,12 +53,9 @@ class Commentary extends Component {
 		this.showContextPanel = this.showContextPanel.bind(this);
 		this.closeContextPanel = this.closeContextPanel.bind(this);
 		this.setContextScrollPosition = this.setContextScrollPosition.bind(this);
-		this.setPageTitleAndMeta = this.setPageTitleAndMeta.bind(this);
 		this.loadMoreComments = this.loadMoreComments.bind(this);
 		this.renderNoCommentsOrLoading = this.renderNoCommentsOrLoading.bind(this);
 		this.selectMultiLine = this.selectMultiLine.bind(this);
-
-		this.props.commentsQuery.refetch();
 
 	}
 	getChildContext() {
@@ -66,90 +63,6 @@ class Commentary extends Component {
 	}
 	raiseLimit() {
 
-	}
-	setPageTitleAndMeta() {
-
-		const { filters, settings } = this.props;
-		const commentGroups = this.props.commentsQuery ? [] : parseCommentsToCommentGroups(this.props.commentsQuery.comments);
-
-		let title = '';
-		let values = [];
-		const workDefault = 'Commentary';
-		let subwork = null;
-		let lineFrom = 0;
-		let lineTo = 0;
-		let work = '';
-		let metaSubject = 'Commentaries on Classical Texts';
-		let description = '';
-
-		if (!settings) {
-			return null;
-		}
-
-		filters.forEach((filter) => {
-			values = [];
-			switch (filter.key) {
-			case 'works':
-				filter.values.forEach((value) => {
-					values.push(value.slug);
-				});
-				work = values.join(', ');
-				break;
-
-			case 'subworks':
-				filter.values.forEach((value) => {
-					values.push(value.n);
-				});
-				subwork = values.join(', ');
-				break;
-
-			case 'lineFrom':
-				lineFrom = filter.values[0];
-				break;
-
-			case 'lineTo':
-				lineTo = filter.values[0];
-				break;
-			default:
-				break;
-			}
-		});
-
-		const foundWork = worksQuery.loading ? {} : worksQuery.works.find(x => x.slug === work)
-		if (foundWork) {
-			title = foundWork.title;
-		} else {
-			title = workDefault;
-		}
-
-		if (subwork) title = `${title} ${subwork}`;
-		if (lineFrom) {
-			if (lineTo) {
-				title = `${title}.${lineFrom}-${lineTo}`;
-			} else {
-				title = `${title}.${lineFrom}`;
-			}
-		} else if (lineTo) {
-			title = `${title}.${lineTo}`;
-		} else {
-			title = `${title}`;
-		}
-		title = `${title} | ${settings.title || ''}`;
-
-		metaSubject = `${metaSubject}, ${title}, Philology`;
-
-		if (
-			commentGroups.length
-			&& commentGroups[0].comments.length
-			&& commentGroups[0].comments[0].revisions.length
-		) {
-			description = Utils.trunc(commentGroups[0].comments[0].revisions[0].text, 120);
-		}
-
-		Utils.setMetaTag('name', 'subject', 'content', metaSubject);
-		Utils.setTitle(title);
-		Utils.setDescription(`Commentary on ${title}: ${description}`);
-		Utils.setMetaImage();
 	}
 
 	toggleLemmaEdition() {
@@ -210,10 +123,8 @@ class Commentary extends Component {
 	}
 
 	loadMoreComments() {
-		if (
-			!this.props.isOnHomeView
-			&& this.props.commentsMoreQuery.commentsMore
-		) {
+		if (!this.props.isOnHomeView
+		&& this.props.commentsMoreQuery.commentsMore) {
 			this.props.loadMoreComments();
 		}
 	}
@@ -243,17 +154,20 @@ class Commentary extends Component {
 		}
 	}
 	componentWillReceiveProps(newProps) {
+		const commentGroups = newProps.commentsQuery.loading ? 
+		[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments);
+		const { filters, settings, isOnHomeView } = newProps;
 		this.setState({
-			commentGroups: newProps.commentsQuery.loading ? 
-			[] : parseCommentsToCommentGroups(newProps.commentsQuery.comments)
+			commentGroups: commentGroups
 		});
+		if (!isOnHomeView) {
+			setPageTitleAndMeta(filters, settings, commentGroups, newProps.editionsQuery);
+		}
 	}
 	render() {
-		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters } = this.props;
-		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, commentGroups } = this.state;
-		if (!isOnHomeView) {
-			this.setPageTitleAndMeta();
-		}
+		const { isOnHomeView, toggleSearchTerm, showLoginModal, filters, history } = this.props;
+		const { contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, commentGroups,
+			multiline,  } = this.state;
 		if (!commentGroups) {
 			return null;
 		}
@@ -273,9 +187,9 @@ class Commentary extends Component {
 							showLoginModal={showLoginModal}
 							filters={filters}
 							isOnHomeView={isOnHomeView}
-							history={this.props.history}
+							history={history}
 							selectMultiLine={this.selectMultiLine}
-							multiline={this.state.multiline}
+							multiline={multiline}
 						/>
 					))}
 				</div>
@@ -296,7 +210,7 @@ class Commentary extends Component {
 						closeContextPanel={this.closeContextPanel}
 						commentGroup={contextCommentGroupSelected}
 						commentLemmaIndex={commentLemmaIndex}
-						multiline={this.state.multiline}
+						multiline={multiline}
 					/>
 					: ''}
 				{!isOnHomeView ?
@@ -336,6 +250,6 @@ Commentary.defaultProps = {
 export default compose(
 	commentsQuery,
 	commentsMoreQuery,
-	worksQuery
+	editionsQuery
 )(Commentary);
 

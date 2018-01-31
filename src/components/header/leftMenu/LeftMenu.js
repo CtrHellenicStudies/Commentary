@@ -58,6 +58,7 @@ class LeftMenu extends Component {
 
 		let tenant;
 		let settings;
+		const user = Cookies.get('user') ? Cookies.get('user') : undefined;
 
 		if (
 			!this.props.tenantsQuery.loading
@@ -84,12 +85,12 @@ class LeftMenu extends Component {
 					currentUser={currentUser}
 					username={getUsername(currentUser)}
 				/>
-				{tenant && !tenant.isAnnotation && Cookies.get('user') &&
-				Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])
+				{tenant && !tenant.isAnnotation && user &&
+				Utils.userInRole(user, ['editor', 'admin', 'commenter'])
                 ?
 					<div>
                         {tenant && !tenant.isAnnotation  &&
-                        Utils.userInRole(Cookies.get('user'), ['admin'])
+                        Utils.userInRole(user, ['admin'])
                          ?
 							<MenuItem
 								href="http://ahcip-admin.chs.harvard.edu"
@@ -182,7 +183,7 @@ class LeftMenu extends Component {
 				}
 				<Divider />
 
-				{Cookies.get('user') ?
+				{user ?
 					<div>
 						<Link to="/profile">
 							<MenuItem

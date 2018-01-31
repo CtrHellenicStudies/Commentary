@@ -10,8 +10,8 @@ import {
 import TextField from 'material-ui/TextField';
 
 // graphql
-import { worksQuery } from '../../graphql/methods/works';
 import { editionsQuery } from '../../graphql/methods/editions';
+import { textNodesQuery } from '../../graphql/methods/textNodes';
 
 
 // lib:
@@ -54,12 +54,14 @@ class TextNodesEditor extends Component {
 			editSubworkDialogOpen: false,
 			multiLineDialogOpen: false
 		};
-
 		autoBind(this);
 	}
 	componentWillReceiveProps(props) {
-		const editions = props.editionsQuery.loading ? [] : props.editionsQuery.editions;
-		const works = props.worksQuery.loading ? [] : props.worksQuery.worksAhcip;
+		if (props.editionsQuery.loading) {
+				return;
+		}
+		const editions = props.editionsQuery.collections[0].textGroups[0].works;
+		const works = Utils.worksFromEditions(editions);
 		this.setState({
 			works,
 			editions
@@ -69,30 +71,37 @@ class TextNodesEditor extends Component {
 		const setValue = event ? event.value : '';
 
 		const { works } = this.state;
+		let editionsAvailable = [];
 		let _selectedWork;
-
 		works.forEach(work => {
-			if (work._id === setValue) {
+			if (work.id === setValue) {
 				_selectedWork = work;
 			}
 		});
-
+		this.state.editions.forEach(function(edition) {
+			if (edition.urn === _selectedWork.urn) {
+				editionsAvailable.push(edition);
+			}
+		});
 		this.setState({
 			selectedWork: setValue,
-			subworks: _selectedWork ? _selectedWork.subworks.slice().sort(Utils.sortBy('n')) : [],
+			editionsAvailable: editionsAvailable
+		//	subworks: _selectedWork
 		});
 	}
 
 	selectEdition(event) {
 		const setValue = event ? event.value : '';
+		const { editions } = this.state;
+
 		this.setState({
-			selectedEdition: setValue
+			selectedEdition: setValue,
+			textNodes: Utils.textFromTextNodesGroupedByEdition(editions, editions)
 		});
 	}
 
 	selectSubwork(event) {
 		const setValue = event ? event.value : '';
-		console.log(setValue);
 		this.setState({
 			selectedSubwork: setValue
 		});
@@ -234,7 +243,7 @@ class TextNodesEditor extends Component {
 	render() {
 		const { works, editions } = this.state;
 		const { subworks, selectedWork, selectedEdition, selectedSubwork } = this.state;
-
+		let editionsAvailable = this.state.editionsAvailable ? this.state.editionsAvailable : editions;
 		let _selectedWork;
 		let _selectedEdition;
 		let _selectedSubwork;
@@ -261,17 +270,17 @@ class TextNodesEditor extends Component {
 		const workOptions = [];
 		works.map(work => {
 			workOptions.push({
-				value: work._id,
-				label: work.title,
+				value: work.id,
+				label: work.english_title,
 			});
 			return true;
 		});
 
 		const editionOptions = [];
-		editions.map(edition => {
+		editionsAvailable.map(edition => {
 			editionOptions.push({
-				value: edition._id,
-				label: edition.title,
+				value: edition.id,
+				label: edition.slug,
 			});
 			return true;
 		});
@@ -384,10 +393,10 @@ class TextNodesEditor extends Component {
 	}
 }
 TextNodesEditor.propTypes = {
-	worksQuery: PropTypes.object,
 	editionsQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object
 };
 export default compose(
 	editionsQuery,
-	worksQuery
+	textNodesQuery
 )(TextNodesEditor);

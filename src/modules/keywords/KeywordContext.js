@@ -41,24 +41,23 @@ class KeywordContext extends Component {
 			};
 		}
 
-		if (keyword.work && keyword.subwork && keyword.lineFrom) {
+		if (keyword.work && keyword.subwork && keyword.lineFrom
+			&& !props.textNodesQuery.variables.workUrn && !props.textNodesQuery.variables.work) {
 
 
 			context.work = keyword.work.slug;
 			context.subwork = keyword.subwork.n;
 			context.lineFrom = keyword.lineFrom;
 			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
-
 			if (!props.textNodesQuery.loading) {
-				const textNodesCursor = props.textNodesQuery.textNodesAhcip;
-				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
+				const textNodesCursor = props.textNodesQuery.collections[0].textGroups[0].works;
+				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.collections[0].textGroups[0].works);
 			}
-			props.textNodesQuery.refetch({
-				lineFrom: context.lineFrom,
-				lineTo: context.lineTo,
-				subworkN: context.subwork,
-				workSlug: context.work
-			});
+			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
+				context.work, context.lineFrom, context.lineTo
+			));
+			props.textNodesQuery.refetch(properties);
+			return;
 
 		} else {
 			if (tenantId) {
@@ -70,21 +69,17 @@ class KeywordContext extends Component {
 				});
 			}
 			
-			if (!props.commentsQuery.loading) {
-
-				if (props.commentsQuery.comments.length > 0) {
-					const comment = props.commentsQuery.comments[0];
-					const query = makeKeywordContextQueryFromComment(comment, maxLines);
-					props.textNodesQuery.refetch(query);
-					context.work = query.workSlug;
-					context.subwork = query.subworkN;
-					context.lineFrom = query.lineFrom;
-					context.lineTo = query.lineTo;
-
-					const textNodesCursor = textNodesQuery.loading ? [] : textNodesQuery.textNodesAhcip;
-					lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.editions);
-				}
+			if (props.commentsQuery.comments.length > 0) {
+				const comment = props.commentsQuery.comments[0];
+				const query = makeKeywordContextQueryFromComment(comment, maxLines); //TODO
+				context.work = query.workSlug;
+				context.subwork = query.subworkN;
+				context.lineFrom = query.lineFrom;
+				context.lineTo = query.lineTo;
 			}
+			const textNodesCursor = props.textNodesQuery.collections[0].textGroups[0].works;
+
+			lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.collections[0].textGroups[0].works);
 		}
 		this.setState({
 			lemmaText: lemmaText,

@@ -57,7 +57,9 @@ class CommentarySearchToolbar extends Component {
 			referenceWorks: [],
 			works: [],
 			keywords: [],
-			keyideas: []
+			keyideas: [],
+			lineFrom: 0,
+			lineTo: 909
 		};
 
 		// methods:
@@ -148,7 +150,7 @@ class CommentarySearchToolbar extends Component {
 
 		const { toggleSearchTerm, filters, addCommentPage, handleChangeLineN } = this.props;
 		const { keywords, keyideas, commenters, referenceWorks, works } = this.state;
-		const { searchDropdownOpen, moreDropdownOpen, subworksTitle } = this.state;
+		const { searchDropdownOpen, moreDropdownOpen, subworksTitle, lineFrom, lineTo } = this.state;
 
 		const workInFilter = getWorkInFilter(filters);
 
@@ -199,7 +201,6 @@ class CommentarySearchToolbar extends Component {
 						toggleSearchTerm={toggleSearchTerm}
 						filters={filters}
 					/>}
-
 				<WorksDropdown
 					works={works}
 					searchDropdownOpen={searchDropdownOpen}
@@ -222,11 +223,11 @@ class CommentarySearchToolbar extends Component {
 					style={{ width: 250, padding: '10px 20px' }}
 					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
 				>
-					{/* <LineRangeSlider
+					<LineRangeSlider
 						handleChangeLineN={handleChangeLineN}
 						lineFrom={lineFrom}
 						lineTo={lineTo}
-					/> */}
+					/>
 					<div className="disabled-screen" />
 				</div>
 

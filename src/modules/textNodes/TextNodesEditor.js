@@ -11,6 +11,7 @@ import TextField from 'material-ui/TextField';
 
 // graphql
 import { editionsQuery } from '../../graphql/methods/editions';
+import { textNodesQuery } from '../../graphql/methods/textNodes';
 
 
 // lib:
@@ -393,7 +394,9 @@ class TextNodesEditor extends Component {
 }
 TextNodesEditor.propTypes = {
 	editionsQuery: PropTypes.object,
+	textNodesQuery: PropTypes.object
 };
 export default compose(
-	editionsQuery
+	editionsQuery,
+	textNodesQuery
 )(TextNodesEditor);

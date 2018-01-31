@@ -130,18 +130,17 @@ class AddCommentLayout extends Component {
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
 		const { filters, textNodes } = this.state;
-		const { work } = getFilterValues(filters); // TODO
 		let finalFrom = 0, finalTo = 0;
 		if (selectedLineFrom === null) {
 			this.setState({
 				selectedLineTo,
 			});
-			finalFrom = 0;
+			finalFrom = this.state.selectedLineFrom;
 			finalTo = selectedLineTo;
 		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
 			this.setState({
 				selectedLineFrom: selectedLineFrom - 1,
-				selectedLineTo: selectedLineFrom
+				selectedLineTo: 0
 			});
 			finalFrom = selectedLineFrom - 1;
 			finalTo = selectedLineFrom;

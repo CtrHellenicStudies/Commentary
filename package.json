@@ -48,6 +48,7 @@
     "react-apollo": "^1.4.16",
     "react-autobind": "^1.0.6",
     "react-bootstrap": "^0.30.10",
+    "react-cookie": "^2.1.2",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dnd": "^2.3.0",
     "react-dnd-html5-backend": "^2.3.0",
@@ -76,7 +77,8 @@
     "subscriptions-transport-ws": "^0.8.3",
     "throttle-debounce": "^1.0.1",
     "underscore": "^1.8.3",
-    "union-class-names": "^1.0.0"
+    "union-class-names": "^1.0.0",
+    "universal-cookie": "^2.1.2"
   },
   "scripts": {
     "build-css": "node-less-chokidar src/ -o src/",

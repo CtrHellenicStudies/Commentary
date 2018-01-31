@@ -19,6 +19,7 @@ coverage
 /**/*.css.map
 dump.rdb
 doc
+.env*.local
 
 # Temp files
 tmp/

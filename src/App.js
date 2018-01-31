@@ -34,6 +34,9 @@ import ProfilePage from './modules/profile/ProfilePage';
 import ReferenceWorksPage from './modules/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from './modules/referenceWorks/ReferenceWorkDetail';
 
+// modules
+import settingsRoutes from './modules/settings/routes';
+
 
 const loginToken = Cookies.get('token');
 if (loginToken) {
@@ -86,7 +89,6 @@ function setTenantInSession (query) {
 	}
 }
 const routes = (props) => {
-
 	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
 	if (canGetUserDatas(user, props.usersQuery)) {
 		const id = JSON.parse(user)._id;
@@ -145,6 +147,9 @@ const routes = (props) => {
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />
 			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
+
+			{/** Settings routes */}
+			{settingsRoutes}
 
 			{/** Users routes */}
 			<Route

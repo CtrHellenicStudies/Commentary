@@ -89,18 +89,8 @@ function setTenantInSession (query) {
 	}
 }
 const routes = (props) => {
-
-<<<<<<< HEAD
-	const user = Cookies.get('user');
-	if (user !== undefined &&
-		user !== null &&
-		!props.usersQuery.loading &&
-		props.usersQuery.users.length &&
-		!(props.usersQuery.users[0]._id === JSON.parse(Cookies.get('user'))._id)) {
-=======
 	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
 	if (canGetUserDatas(user, props.usersQuery)) {
->>>>>>> feature/textServer
 		const id = JSON.parse(user)._id;
 		props.usersQuery.refetch({
 			id: id,

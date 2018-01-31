@@ -2,13 +2,13 @@ import { ApolloClient, createNetworkInterface } from 'react-apollo';
 // import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 import Cookies from 'universal-cookie';
 
-
 const cookies = new Cookies();
 // TODO: determine best way of handling env variable names with CRA 
-const uriAddress = process.env.graphql ? process.env.graphql : 'http://localhost:3002/graphql';
+console.log(process.env);
+const uriAddress = process.env.REACT_APP_GRAPHQL;
 
 const networkInterface = createNetworkInterface({
-	uri: uriAddress, // `${process.env.REACT_APP_GRAPHQL_SERVER}/${process.env.REACT_APP_GRAPHQL_URI}`,
+	uri: uriAddress,
 	opts: {
 		credentials: 'include',
 	}

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import { Cookies } from 'js-cookie';
 import { CookiesProvider } from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { ApolloProvider, createNetworkInterface } from 'react-apollo';
@@ -28,11 +29,9 @@ require('dotenv').config();
 // inject material ui tap event (will be able to be removed in later version)
 injectTapEventPlugin();
 
-<<<<<<< HEAD
 // configure store
 const store = configureStore();
-=======
-const uriAddress = process.env.graphql ? process.env.graphql : 'http://localhost:3002/graphql';
+const uriAddress = process.env.REACT_APP_GRAPHQL;
 
 const networkInterface = createNetworkInterface({
 	uri: uriAddress,
@@ -52,7 +51,6 @@ networkInterface.use([{
 		next();
 	}
 }]);
->>>>>>> feature/textServer
 
 // render the application
 ReactDOM.render(
@@ -61,9 +59,9 @@ ReactDOM.render(
 	store={store}
 >
 	<MuiThemeProvider>
-		<CookiesProvider>
+	<CookiesProvider>
 			<App />
-		</CookiesProvider>
+	</CookiesProvider>
 	</MuiThemeProvider>
 </ApolloProvider>
 , document.getElementById('root'));

@@ -6,7 +6,7 @@ import { reduxForm } from 'redux-form';
 import TextSelectorContainer from '../../containers/TextSelectorContainer';
 
 
-import './SettingEditor.css';
+//import './SettingEditor.css';
 
 
 class SettingEditor extends React.Component {

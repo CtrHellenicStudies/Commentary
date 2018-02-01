@@ -45,28 +45,28 @@ class OAuthButtons extends Component {
 		return(
 			<div className="at-oauth">
 					<button
-						className="btn at-social-btn"
+						className="btn at-social-btn social-facebook"
 						id="at-facebook"
 						name="facebook"
 						onClick={this.handleAuth.bind(this, 'facebook')}
 					>
-						<i className="fa fa-facebook" /> Sign In with Facebook
+						<i className="fab fa-facebook-f" /> Sign In with Facebook
 					</button>
 					<button
-						className="btn at-social-btn"
+						className="btn at-social-btn social-google"
 						id="at-google"
 						name="google"
 						onClick={this.handleAuth.bind(this, 'google')}
 					>
-						<i className="fa fa-google" /> Sign In with Google
+						<i className="fab fa-google" /> Sign In with Google
 					</button>
 					<button
-						className="btn at-social-btn"
+						className="btn at-social-btn social-twitter"
 						id="at-twitter"
 						name="twitter"
 						onClick={this.handleAuth.bind(this, 'twitter')}
 					>
-						<i className="fa fa-twitter" /> Sign In with Twitter
+						<i className="fab fa-twitter" /> Sign In with Twitter
 					</button>
 			</div>
 			);

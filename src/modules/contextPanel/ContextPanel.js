@@ -176,7 +176,7 @@ class ContextPanel extends Component {
 
 	render() {
 
-		const { open, passageFrom, closeContextPanel, commentGroup,
+		const { open, closeContextPanel, commentGroup,
 			 	disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline,
 				textNodes } = this.props;
 		const { highlightingVisible, maxLine, selectedLemmaEdition, lemmaCitation } = this.state;

@@ -38,6 +38,7 @@ tramp
 *.iml
 *.iws
 .vscode/
+.env*.local
 
 # OS
 .DS_Store

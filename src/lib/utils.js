@@ -24,13 +24,19 @@ const Utils = {
 		}
 		return ret;
 	},
-	createLemmaCitation(work, lineFrom, lineTo) { 
+	createLemmaCitation(work, lineFrom, lineTo, chapterFrom, chapterTo) { 
+		if(chapterFrom === undefined || chapterFrom === null) {
+			chapterFrom = 1;
+		}
+		if(chapterTo === undefined || chapterTo === null) {
+			chapterTo = 1;
+		}
 		return {
 			corpus: "urn:cts:greekLit",
 			textGroup: "tlg0013",
 			work: work.replace('tlg',''),
-			passageFrom: `1.${lineFrom+1}`,
-			passageTo: `1.${lineTo+1}`
+			passageFrom: `${chapterFrom}.${lineFrom+1}`,
+			passageTo: `${chapterTo}.${lineTo+1}`
 		};
 
 	},
@@ -290,21 +296,24 @@ const Utils = {
 
 				if (!myVersion) {
 					const foundVersion = _versions.find(x => x.slug === work.slug);
-					myVersion = {
-						_id: foundVersion.version.id,
-						title: foundVersion.version.title,
-						slug: foundVersion.slug,
-						//multiLine: foundEdition.multiLine, TODO
-						lines: [],
-					};
-					versions.push(myVersion);
+					if (foundVersion) {
+						myVersion = {
+							_id: foundVersion.version.id,
+							title: foundVersion.version.title,
+							slug: foundVersion.slug,
+							//multiLine: foundEdition.multiLine, TODO
+							lines: [],
+						};
+						versions.push(myVersion);
+					}
 				}
-
-				myVersion.lines.push({
-					_id: textNode.id,
-					html: textNode.text,
-					n: textNode.location[1],
-				});
+				if(myVersion) {
+					myVersion.lines.push({
+						_id: textNode.id,
+						html: textNode.text,
+						n: textNode.location[1],
+					});
+				}
 			});
 		});
 

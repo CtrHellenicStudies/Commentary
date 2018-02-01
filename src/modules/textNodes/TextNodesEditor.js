@@ -27,6 +27,20 @@ import TranslationSelect from '../translations/select/TranslationSelect';
 import TranslationNodeInput from '../translations/input/TranslationNodeInput';
 
 
+function isLocation(location) {
+
+	if(!location) {
+		return false;
+	}
+	const cutted = location.split('.');
+	let ret = cutted;
+	if(cutted.length !== 2) {
+		ret = false;
+	} else if(isNaN(parseInt(cutted[0], 10)) || isNaN(parseInt(cutted[1], 10))) {
+		ret  = false;
+	}
+	return ret;
+}
 class TextNodesEditor extends Component {
 	constructor(props) {
 		super(props);
@@ -36,7 +50,6 @@ class TextNodesEditor extends Component {
 		const selectedSubwork = null;
 		const selectedTranslation = null;
 		const subworks = [];
-		const startAtLine = null;
 		const limit = 50;
 
 		this.state = {
@@ -45,7 +58,8 @@ class TextNodesEditor extends Component {
 			selectedEdition,
 			selectedSubwork,
 			selectedTranslation,
-			startAtLine,
+			startAtLocation: undefined,
+			endAtLocation: undefined,
 			limit,
 			works: [],
 			editions: [],
@@ -57,19 +71,43 @@ class TextNodesEditor extends Component {
 		autoBind(this);
 	}
 	componentWillReceiveProps(props) {
-		if (props.editionsQuery.loading) {
+		if (props.editionsQuery.loading || props.textNodesQuery.loading) {
 				return;
 		}
+		const { selectedEdition, selectedWork } = this.state;
 		const editions = props.editionsQuery.collections[0].textGroups[0].works;
 		const works = Utils.worksFromEditions(editions);
 		this.setState({
 			works,
-			editions
+			editions,
+			textNodes: Utils.textFromTextNodesGroupedByEdition(
+				props.textNodesQuery.collections[0].textGroups[0].works,
+				editions)
 		});
+		if (selectedEdition && selectedWork) {
+			let _selectedEdition;
+			let _selectedWork;
+			works.forEach(work => {
+				if (work.id === selectedWork) {
+					_selectedWork = work;
+				}
+			});
+			this.state.editions.forEach(function(edition) {
+				if (edition.urn === _selectedWork.urn) {
+					_selectedEdition = [edition];
+					return;
+				}
+			});
+			this.setState({
+				textNodes: Utils.textFromTextNodesGroupedByEdition(
+					props.textNodesQuery.collections[0].textGroups[0].works,
+					_selectedEdition)
+			});
+		}
 	}
 	selectWork(event) {
 		const setValue = event ? event.value : '';
-
+		const { selectedEdition, startAtLocation, endAtLocation } = this.state;
 		const { works } = this.state;
 		let editionsAvailable = [];
 		let _selectedWork;
@@ -88,23 +126,21 @@ class TextNodesEditor extends Component {
 			editionsAvailable: editionsAvailable
 		//	subworks: _selectedWork
 		});
+		const locationFrom = isLocation(startAtLocation);
+		const locationTo = isLocation(endAtLocation);
+		this.refetchTextNodesQuery(selectedEdition, setValue, locationFrom, locationTo);
 	}
 
 	selectEdition(event) {
 		const setValue = event ? event.value : '';
-		const { editions } = this.state;
+		const { editions, selectedWork, startAtLocation, endAtLocation } = this.state;
 
 		this.setState({
 			selectedEdition: setValue,
-			textNodes: Utils.textFromTextNodesGroupedByEdition(editions, editions)
 		});
-	}
-
-	selectSubwork(event) {
-		const setValue = event ? event.value : '';
-		this.setState({
-			selectedSubwork: setValue
-		});
+		const locationFrom = isLocation(startAtLocation);
+		const locationTo = isLocation(endAtLocation);
+		this.refetchTextNodesQuery(setValue, selectedWork, locationFrom, locationTo);
 	}
 
 	selectTranslation(selectedTranslation) {
@@ -162,12 +198,49 @@ class TextNodesEditor extends Component {
 		});
 	}
 
-	updateStartAtLine(e, newValue) {
-		this.setState({
-			startAtLine: parseInt(newValue, 10),
-		});
-	}
+	updateStartAtLocation(e, newValue) {
 
+		const { endAtLocation, selectedEdition, selectedWork } = this.state;
+		this.setState({
+			startAtLocation: newValue,
+		});
+		const locationFrom = isLocation(newValue);
+		const locationTo = isLocation(endAtLocation);
+		this.refetchTextNodesQuery(selectedEdition, selectedWork, locationFrom, locationTo);
+	}
+	updateEndsAtLocation(e, newValue) {
+
+		const { startAtLocation, selectedEdition, selectedWork } = this.state;
+		this.setState({
+			endAtLocation: newValue,
+		});
+		const locationFrom = isLocation(startAtLocation) ;
+		const locationTo = isLocation(newValue);
+		this.refetchTextNodesQuery(selectedEdition,selectedWork,locationFrom, locationTo);
+	}
+	refetchTextNodesQuery(selectedEdition, selectedWork, locationFrom, locationTo) {
+
+		const { works } = this.state;
+		let finalWork;
+		works.forEach(work => {
+			if (work.id === selectedWork) {
+				finalWork = work;
+				return;
+			}
+		});
+		if(locationFrom && locationTo
+			&& selectedEdition !== undefined
+			&& selectedWork !== undefined) {		
+				this.props.textNodesQuery.refetch({
+					workUrn: finalWork.urn,
+					textNodesUrn: `${finalWork.urn}:${locationFrom[0]}.${locationFrom[1]}-${locationTo[0]}.${locationTo[1]}`
+				});
+			}
+			console.log({
+				workUrn: finalWork.urn,
+				textNodesUrn: `${finalWork.urn}:${locationFrom[0]}.${locationFrom[1]}-${locationTo[0]}.${locationTo[1]}`
+			});
+	}
 	loadMoreText() {
 		this.setState({
 			limit: this.state.limit + 50,
@@ -175,63 +248,33 @@ class TextNodesEditor extends Component {
 	}
 
 	renderTextNodesInput() {
-		const { selectedWork, selectedEdition, selectedSubwork, startAtLine, limit } = this.state;
+		const { selectedWork, selectedEdition, startAtLocation, endAtLocation, limit, textNodes } = this.state;
 
-		if (!selectedWork || !selectedEdition || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null) {
+		if (!selectedWork || !selectedEdition || !startAtLocation || !endAtLocation) {
 			return null;
 		}
 
-		const { works, editions } = this.state;
-		let _selectedWork;
-		let _selectedEdition;
-		let _selectedSubwork;
-
-		works.forEach(work => {
-			if (work._id === selectedWork) {
-				_selectedWork = work;
-				_selectedWork.subworks.forEach(subwork => {
-					if (subwork.n === selectedSubwork) {
-						_selectedSubwork = subwork;
-					}
-				});
-			}
-		});
-
-		editions.forEach(edition => {
-			if (edition._id === selectedEdition) {
-				_selectedEdition = edition;
-			}
-		});
-
 		return (
 			<TextNodesInput
-				workId={_selectedWork._id}
-				workSlug={_selectedWork.slug}
-				editionId={_selectedEdition._id}
-				subworkN={_selectedSubwork.n}
-				subworkTitle={selectedSubwork.title}
-				lineFrom={parseInt(startAtLine, 10)}
-				limit={parseInt(startAtLine, 10) + limit}
-				loadMore={this.loadMoreText}
+				textNodes={textNodes}
 			/>
 		);
 	}
 
 	renderTranslationNodesInput() {
-		const { selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation } = this.state;
+		const { selectedWork, startAtLine, limit, selectedTranslation } = this.state;
 		let _selectedWork;
-		if (!selectedWork || !selectedSubwork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
+		if (!selectedWork || typeof startAtLine === 'undefined' || startAtLine === null || !selectedTranslation) {
 			return null;
 		}
 		this.state.works.forEach(work => {
-			if (work._id === selectedWork) {
+			if (work.id === selectedWork) {
 				_selectedWork = work;
 			}
 		});
 		return (
 			<TranslationNodeInput
 				selectedWork={_selectedWork}
-				selectedSubwork={selectedSubwork}
 				startAtLine={startAtLine}
 				limit={limit}
 				selectedTranslation={selectedTranslation}
@@ -249,19 +292,14 @@ class TextNodesEditor extends Component {
 		let _selectedSubwork;
 
 		works.forEach(work => {
-			if (work._id === selectedWork) {
+			if (work.id === selectedWork) {
 				_selectedWork = work;
-				_selectedWork.subworks.forEach(subwork => {
-					if (subwork.n === selectedSubwork) {
-						_selectedSubwork = subwork;
-					}
-				});
 			}
 			return true;
 		});
 
 		editions.forEach(edition => {
-			if (edition._id === selectedEdition) {
+			if (edition.id === selectedEdition) {
 				_selectedEdition = edition;
 			}
 			return true;
@@ -325,24 +363,23 @@ class TextNodesEditor extends Component {
 							/>
 						</FormGroup>
 					</div>
-					<div className="text-nodes-editor-meta-input subwork-input">
+					<div className="text-nodes-editor-meta-input line-from-input">
 						<FormGroup controlId="formControlsSelect">
-							<ControlLabel>Subwork (Book/Poem/Rhapsody/etc)</ControlLabel>
-							<Select
-								name="subwork-select"
-								value={selectedSubwork}
-								options={subworkOptions}
-								onChange={this.selectSubwork}
+							<ControlLabel>Start at location</ControlLabel>
+							<br />
+							<TextField
+								hintText="0"
+								onChange={this.updateStartAtLocation}
 							/>
 						</FormGroup>
 					</div>
 					<div className="text-nodes-editor-meta-input line-from-input">
 						<FormGroup controlId="formControlsSelect">
-							<ControlLabel>Start at line</ControlLabel>
+							<ControlLabel>Finish at location</ControlLabel>
 							<br />
 							<TextField
 								hintText="0"
-								onChange={this.updateStartAtLine}
+								onChange={this.updateEndsAtLocation}
 							/>
 						</FormGroup>
 					</div>

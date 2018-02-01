@@ -148,9 +148,6 @@ const routes = (props) => {
 			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
 			<PrivateRoute exact path="/profile" component={ProfilePage} />
 
-			{/** Settings routes */}
-			{settingsRoutes}
-
 			{/** Users routes */}
 			<Route
 				path="/users/:userId" render={(params) => {
@@ -168,6 +165,7 @@ const routes = (props) => {
 				render={params => <HomeLayout {...params} signup />}
 			/>
 			<Route
+				exact
 				path="/sign-out"
 				render={() => {
 					try {
@@ -227,6 +225,8 @@ const routes = (props) => {
 
 			{/** 404 routes */}
 			<Route component={NotFound} />
+			{/** Settings routes */}
+			{settingsRoutes}
 		</Switch>
 	);
 };

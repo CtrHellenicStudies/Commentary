@@ -76,7 +76,7 @@ class AddRevisionLayout extends Component {
 		}
 		if (this.state.refetchTextNodes) {
 			const properties = Utils.getUrnTextNodesProperties(comment.lemmaCitation);
-			this.props.textNodesQuery.refetch(properties);
+			nextProps.textNodesQuery.refetch(properties);
 
 			this.setState({
 				refetchTextNodes: false
@@ -89,7 +89,7 @@ class AddRevisionLayout extends Component {
 			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
 			commenters: commenters,
-			textNodes: this.props.textNodesQuery.collections[0].textGroups[0].works
+			textNodes: nextProps.textNodesQuery.collections[0].textGroups[0].works
 
 		});
 	}
@@ -206,8 +206,8 @@ class AddRevisionLayout extends Component {
 								<div className="comment-group">
 									<CommentLemmaSelect
 										ref={(component) => { this.commentLemmaSelect = component; }}
-										lineFrom={comment.lineFrom}
-										lineTo={(comment.lineFrom + comment.nLines) - 1}
+										lineFrom={parseInt(comment.lemmaCitation.passageFrom.split('.')[1], 10)-1}
+										lineTo={parseInt(comment.lemmaCitation.passageTo.split('.')[1], 10)-1}
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
 										textNodes={textNodes}

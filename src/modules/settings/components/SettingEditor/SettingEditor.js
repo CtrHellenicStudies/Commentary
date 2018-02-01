@@ -12,7 +12,7 @@ import TextSelectorContainer from '../../containers/TextSelectorContainer';
 class SettingEditor extends React.Component {
 
 	render() {
-		const { setting, collection, settingGroup, work } = this.props;
+		const { collection, settingGroup, work } = this.props;
 
 		return (
 			<div className="settingEditor">

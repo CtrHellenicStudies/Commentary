@@ -14,7 +14,7 @@ import _ from 'lodash';
 
 // graphql
 import { editionsQuery } from '../../../graphql/methods/editions';
-import { textNodesQuery, textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
+import { textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
@@ -45,58 +45,9 @@ class TextNodesInput extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-		
-		if (props.editionsQuery.loading || props.textNodesQuery.loading) {
-			return;
-		}
-		const { workSlug, editionId, lineFrom, limit } = props;
-		if (!props.textNodesQuery.variables.workUrn) {
-			const code = Utils.encodeBookBySlug('homeric-hymns' ? 'hymns' : workSlug);
-			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
-				code.urn,
-				parseInt(lineFrom, 10),
-				parseInt(lineFrom, 10) + limit
-			));
-			props.textNodesQuery.refetch(properties);
-			return;
-		}
-		let textNodes;
-		let textNodesByEditions = [];
-		let textNodesByEditionsSorted = [];
-		let selectedEdition = { lines: [] };
 	
-		const ready = true;
-	
-		if (ready) {
-			textNodes = props.textNodesQuery.collections[0].textGroups[0].works;
-			textNodesByEditions = Utils.textFromTextNodesGroupedByEdition(textNodes, props.editionsQuery.collections[0].textGroups[0].works);
-			textNodesByEditionsSorted = getSortedEditions(textNodesByEditions);
-	
-			textNodesByEditionsSorted.forEach(edition => {
-				if (edition._id === editionId) {
-					selectedEdition = edition;
-				}
-			});
-	
-			if (!selectedEdition) {
-				// TODO: handle errors related to incorrectly selected edition
-				return null;
-			}
-		}
-	
-		const assignedTextNodes = [];
-	
-		for (let i = 0; i < limit; i++) {
-			let newLine;
-			const arrIndex = _.findIndex(selectedEdition.lines, (line) => line.n === i + parseInt(lineFrom, 10));
-			if (arrIndex >= 0) {
-				newLine = selectedEdition.lines[arrIndex];
-				assignedTextNodes.push(newLine);
-			}
-		}
 		this.setState({
-			textNodes: assignedTextNodes,
-			ready: ready,
+			textNodes: props.textNodes,
 		});
 
 	}
@@ -212,10 +163,10 @@ class TextNodesInput extends Component {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
 	render() {
-		const { textNodes, ready } = this.state;
+		const { textNodes } = this.props;
 
 
-		if (!ready) {
+		if (!textNodes) {
 			return null;
 		}
 
@@ -225,9 +176,9 @@ class TextNodesInput extends Component {
 				className="text-nodes-editor-text-input"
 			>
 				<ListGroupDnD>
-					{textNodes.map((textNode, i) => (
+					{textNodes[0].lines.map((line, i) => (
 						<ListGroupItemDnD
-							key={textNode.n}
+							key={line.n}
 							index={i}
 							className="form-subitem form-subitem--textNode text-node-input"
 							moveListGroupItem={this.moveTextNodeBlock}
@@ -239,7 +190,7 @@ class TextNodesInput extends Component {
 									<TextField
 										name={`${i}_number`}
 										hintText="0"
-										defaultValue={textNode.n}
+										defaultValue={line.n}
 										style={{
 											width: '40px',
 											margin: '0 10px',
@@ -251,7 +202,7 @@ class TextNodesInput extends Component {
 								<FormGroup className="text-node-text-input">
 									<TextField
 										name={`${i}_text`}
-										defaultValue={textNode.html}
+										defaultValue={line.html}
 										style={{
 											width: '700px',
 											margin: '0 10px',
@@ -284,13 +235,14 @@ TextNodesInput.propTypes = {
 	workSlug: PropTypes.string,
 	subworkTitle: PropTypes.string,
 	subworkN: PropTypes.number,
-	lineFrom: PropTypes.number,
+	locationStart: PropTypes.string,
+	locationEnd: PropTypes.string,
 	defaultTextNodes: PropTypes.array,
 	editionId: PropTypes.string,
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
 	loadMore: PropTypes.func,
-	textNodesQuery: PropTypes.object,
+	textNodes: PropTypes.array,
 	editionsQuery: PropTypes.object,
 	textNodeUpdate: PropTypes.func,
 	limit: PropTypes.number
@@ -298,5 +250,4 @@ TextNodesInput.propTypes = {
 
 export default compose(
 	editionsQuery,
-	textNodesQuery,
 	textNodeUpdateMutation)(TextNodesInput);

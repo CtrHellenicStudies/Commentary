@@ -117,12 +117,6 @@ class LeftMenu extends Component {
 								onClick={closeLeftMenu}
 							/>
 						</Link>
-						<Link to="/textNodes/edit">
-							<MenuItem
-								primaryText="Edit Source Text"
-								onClick={closeLeftMenu}
-							/>
-						</Link>
 
 						<Divider />
 					</div>

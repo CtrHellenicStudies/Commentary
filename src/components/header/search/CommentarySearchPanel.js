@@ -22,6 +22,7 @@ import { WorksCard } from './cards/SearchCards';
 
 // lib:
 import Utils from '../../../lib/utils';
+import BookAndChapterPager from './BookAndChapterPages';
 
 
 class CommentarySearchPanel extends Component {
@@ -241,9 +242,7 @@ class CommentarySearchPanel extends Component {
 					/>
 					<CardText expandable style={styles.wrapper}>
 						<div style={styles.lineSearch} className="line-search">
-							{/* <LineRangeSlider
-								handleChangeLineN={this.props.handleChangeLineN}
-							/> */}
+							<BookAndChapterPager />
 						</div>
 					</CardText>
 				</Card>

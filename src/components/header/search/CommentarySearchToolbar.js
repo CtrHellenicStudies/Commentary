@@ -17,6 +17,7 @@ import SearchToolDropdown from './SearchToolDropdown';
 import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from './dropdowns/SearchDropdowns';
 import LineRangeSlider from './LineRangeSlider';
 import Utils from '../../../lib/utils';
+import BookAndChapterPager from './BookAndChapterPages';
 
 const getLineTo = (filters) => {
 
@@ -220,14 +221,10 @@ class CommentarySearchToolbar extends Component {
 				/> */}
 
 				<div
-					style={{ width: 250, padding: '10px 20px' }}
+					style={{padding: '10px 20px' }}
 					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
 				>
-					<LineRangeSlider
-						handleChangeLineN={handleChangeLineN}
-						lineFrom={lineFrom}
-						lineTo={lineTo}
-					/>
+					<BookAndChapterPager />
 					<div className="disabled-screen" />
 				</div>
 

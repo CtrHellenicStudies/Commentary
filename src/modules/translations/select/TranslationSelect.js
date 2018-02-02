@@ -116,11 +116,11 @@ class TranslationSelect extends Component {
 						onChange={this.selectTranslation}
 					/>
 
-					{ this.props.workDetails && !this.state.selectedTranslation ?
+					{ !this.state.selectedTranslation ?
 						<button
 							onClick={this.showEditDialog}
 						>
-						Add new author
+						Add new translation
 					</button> : ''
 					}
 					{this.state.selectedTranslation ?

@@ -8215,6 +8215,8 @@ footer .social-list li a:hover a {
 .book-and-chapter-button {
   border: none;
   padding: 5px;
+  background: transparent;
+  color: #795548;
 }
 .book-and-chapter-button svg {
   border: none;
@@ -8229,6 +8231,7 @@ footer .social-list li a:hover a {
   margin: 0 5px;
   font-size: 15px;
   font-weight: 600;
+  letter-spacing: 1px;
 }
 .pagination {
   clear: both;

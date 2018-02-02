@@ -117,7 +117,7 @@ class CommentarySearchPanel extends Component {
 	}
 	render() {
 		const self = this;
-		const { isTest } = this.props;
+		const { isTest, handlePagination } = this.props;
 		const { keyideas, keywords, commenters, works, referenceWorks } = this.state;
 		const filters = this.props.filters || [];
 
@@ -242,7 +242,8 @@ class CommentarySearchPanel extends Component {
 					/>
 					<CardText expandable style={styles.wrapper}>
 						<div style={styles.lineSearch} className="line-search">
-							<BookAndChapterPager />
+							<BookAndChapterPager
+								updateTextInformations={handlePagination} />
 						</div>
 					</CardText>
 				</Card>
@@ -398,7 +399,7 @@ CommentarySearchPanel.propTypes = {
 	filters: PropTypes.array,
 	toggleSearchTerm: PropTypes.func,
 	handleChangeTextsearch: PropTypes.func,
-	handleChangeLineN: PropTypes.func,
+	handlePagination: PropTypes.func,
 	open: PropTypes.bool,
 	closeRightMenu: PropTypes.func,
 	isTest: PropTypes.bool,

@@ -215,7 +215,7 @@ class Header extends Component {
 	}
 	render() {
 
-		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handleChangeLineN, addCommentPage, selectedWork } = this.props;
+		const { filters, isOnHomeView, isTest, toggleSearchTerm, handleChangeTextsearch, handlePagination, addCommentPage, selectedWork } = this.props;
 		const { leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered, settings, tenant, user } = this.state;
 		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;
 		const modalForgotPwdLowered = this.state.modalForgotPwdLowered || this.props.showForgotPwd;
@@ -229,12 +229,12 @@ class Header extends Component {
 				{!isOnHomeView && (
 					toggleSearchTerm
 					&& handleChangeTextsearch
-					&& handleChangeLineN
+					&& handlePagination
 				) ?
 					<CommentarySearchPanel
 						toggleSearchTerm={toggleSearchTerm}
 						handleChangeTextsearch={handleChangeTextsearch}
-						handleChangeLineN={handleChangeLineN}
+						handlePagination={handlePagination}
 						open={rightMenuOpen}
 						closeRightMenu={this.closeRightMenu}
 						filters={filters}
@@ -393,14 +393,14 @@ class Header extends Component {
 
 										{!isOnHomeView && (
 											toggleSearchTerm
-											&& handleChangeLineN
+											&& handlePagination
 										) ?
 											<div className="search-tools collapse">
 
 												<CommentarySearchToolbar
 													toggleSearchTerm={toggleSearchTerm}
 													handleChangeTextsearch={handleChangeTextsearch}
-													handleChangeLineN={handleChangeLineN}
+													handlePagination={handlePagination}
 													filters={filters}
 													addCommentPage={addCommentPage}
 													isTest={isTest}
@@ -456,7 +456,7 @@ Header.propTypes = {
 	filters: PropTypes.any, // eslint-disable-line react/forbid-prop-types
 	toggleSearchTerm: PropTypes.func,
 	handleChangeTextsearch: PropTypes.func,
-	handleChangeLineN: PropTypes.func,
+	handlePagination: PropTypes.func,
 	initialSearchEnabled: PropTypes.bool,
 	addCommentPage: PropTypes.bool,
 	isOnHomeView: PropTypes.bool,

@@ -55,7 +55,7 @@ class EditKeywordLayout extends Component {
 		this.getType = this.getType.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
 		this.onTypeChange = this.onTypeChange.bind(this);
-		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.handlePagination = this.handlePagination.bind(this);
 		this.props.keywordsQuery.refetch({
 			tenantId: sessionStorage.getItem('tenantId')
 		});
@@ -291,7 +291,7 @@ class EditKeywordLayout extends Component {
 			selectedType: type,
 		});
 	}
-	handleChangeLineN(e) {
+	handlePagination(e) {
 		const filters = this.state.filters;
 
 		if (e.from > 1) {
@@ -384,7 +384,7 @@ class EditKeywordLayout extends Component {
 
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
-							handleChangeLineN={this.handleChangeLineN}
+							handlePagination={this.handlePagination}
 							filters={filters}
 							initialSearchEnabled
 							addCommentPage

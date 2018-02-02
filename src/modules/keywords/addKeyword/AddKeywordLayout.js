@@ -50,7 +50,7 @@ class AddKeywordLayout extends Component {
 		this.onTypeChange = this.onTypeChange.bind(this);
 		this.handlePermissions = this.handlePermissions.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
-		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.handlePagination = this.handlePagination.bind(this);
 
 	}
 
@@ -277,7 +277,7 @@ class AddKeywordLayout extends Component {
 			lineLetter: value,
 		});
 	}
-	handleChangeLineN(e) {
+	handlePagination(e) {
 		const filters = this.state.filters;
 
 		if (e.from > 1) {
@@ -358,7 +358,7 @@ class AddKeywordLayout extends Component {
 					<div>
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
-							handleChangeLineN={this.handleChangeLineN}
+							handlePagination={this.handlePagination}
 							filters={filters}
 							initialSearchEnabled
 							addCommentPage

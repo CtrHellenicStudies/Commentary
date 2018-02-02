@@ -149,7 +149,7 @@ class CommentarySearchToolbar extends Component {
 
 	render() {
 
-		const { toggleSearchTerm, filters, addCommentPage, handleChangeLineN } = this.props;
+		const { toggleSearchTerm, filters, addCommentPage, handlePagination } = this.props;
 		const { keywords, keyideas, commenters, referenceWorks, works } = this.state;
 		const { searchDropdownOpen, moreDropdownOpen, subworksTitle, lineFrom, lineTo } = this.state;
 
@@ -224,7 +224,9 @@ class CommentarySearchToolbar extends Component {
 					style={{padding: '10px 20px' }}
 					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
 				>
-					<BookAndChapterPager />
+					<BookAndChapterPager
+						updateTextInformations={handlePagination}
+						 />
 					<div className="disabled-screen" />
 				</div>
 
@@ -288,7 +290,7 @@ CommentarySearchToolbar.propTypes = {
 	filters: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
 	toggleSearchTerm: PropTypes.func.isRequired,
 	handleChangeTextsearch: PropTypes.func,
-	handleChangeLineN: PropTypes.func.isRequired,
+	handlePagination: PropTypes.func.isRequired,
 	addCommentPage: PropTypes.bool.isRequired,
 	isTest: PropTypes.bool,
 	selectedWork: PropTypes.object,

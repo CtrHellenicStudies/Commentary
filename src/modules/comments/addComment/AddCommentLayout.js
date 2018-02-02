@@ -92,7 +92,7 @@ class AddCommentLayout extends Component {
 		this.closeContextReader = this.closeContextReader.bind(this);
 		this.openContextReader = this.openContextReader.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
-		this.handleChangeLineN = this.handleChangeLineN.bind(this);
+		this.handlePagination = this.handlePagination.bind(this);
 		this.updateQuery = this.updateQuery.bind(this);
 		this.getChildrenContext = this.getChildrenContext.bind(this);
 	}
@@ -359,73 +359,26 @@ class AddCommentLayout extends Component {
 		});
 	}
 
-	handleChangeLineN(e) {
+	handlePagination(book, chapter) {
 		const { filters } = this.state;
+		const work = this.getWork();
 
-		if (e.from > 1) {
-			let lineFromInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineFrom') {
-					filters[i].values = [e.from];
-					lineFromInFilters = true;
-				}
-			});
-
-			if (!lineFromInFilters) {
-				filters.push({
-					key: 'lineFrom',
-					values: [e.from],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineFrom') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
-
-		if (e.to < 2100) {
-			let lineToInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineTo') {
-					filters[i].values = [e.to];
-					lineToInFilters = true;
-				}
-			});
-
-			if (!lineToInFilters) {
-				filters.push({
-					key: 'lineTo',
-					values: [e.to],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineTo') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
-
-
+		filters.book = book;
+		filters.chapter = chapter;
+		
 		this.setState({
 			filters,
 		});
+		let properties;
+		if (work) {
+			properties = {
+				workUrn: work.urn,
+				textNodesUrn: `${work.urn}:${chapter - 1}.1-${chapter}.1`
+			}
+		} else {
+			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation('tlg001', 1, 1, chapter - 1, chapter));
+		}
+		this.props.textNodesQuery.refetch(properties);
 	}
 	getChildrenContext() {
 		return getMuiTheme(muiTheme);
@@ -443,7 +396,7 @@ class AddCommentLayout extends Component {
 					<div className="chs-layout chs-editor-layout add-comment-layout">
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
-							handleChangeLineN={this.handleChangeLineN}
+							handlePagination={this.handlePagination}
 							selectedWork={this.getWork(filters)}
 							filters={filters}
 							initialSearchEnabled

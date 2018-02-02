@@ -53,7 +53,7 @@ class ContextPanelContent extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 
-		const { lemmaCitation, multiline } = nextProps;
+		const { lemmaCitation, multiline, filters } = nextProps;
 
 		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
 			return;
@@ -66,9 +66,18 @@ class ContextPanelContent extends Component {
 			nextProps.textNodesQuery.refetch(properties);
 			return;
 		}
-	
+		let _editions = nextProps.editionsQuery.collections[0].textGroups[0].works;
+		if (filters.edition) {
+			const workUrn = Utils.getUrnTextNodesProperties(lemmaCitation).workUrn.replace('tlg0013', 'tlg0012');
+			_editions = nextProps.editionsQuery.collections[0].textGroups[0].works.filter(work => work.urn === workUrn);
+			if(_editions.length <= filters.edition) {
+				_editions = [_editions[filters.edition - 1]];
+			} else {
+				_editions = nextProps.editionsQuery.collections[0].textGroups[0].works;
+			}
+		}
 		const textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.collections[0].textGroups[0].works;
-		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, nextProps.editionsQuery.collections[0].textGroups[0].works);
+		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, _editions);
 	
 		let sortedEditions;
 	
@@ -106,6 +115,7 @@ class ContextPanelContent extends Component {
 					lemmaText={lemmaText}
 					lineFrom={lineFrom}
 					lineTo={lineTo}
+					
 					commentGroup={commentGroup}
 					maxLine={maxLine}
 					highlightingVisible={highlightingVisible}
@@ -144,6 +154,7 @@ ContextPanelContent.propTypes = {
 		ref: PropTypes.string.isRequired,
 	}),
 	closeContextPanel: PropTypes.func,
+	filters: PropTypes.object,
 	highlightingVisible: PropTypes.bool.isRequired,
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,

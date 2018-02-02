@@ -178,7 +178,7 @@ class ContextPanel extends Component {
 
 		const { open, closeContextPanel, commentGroup,
 			 	disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline,
-				textNodes } = this.props;
+				textNodes, filters } = this.props;
 		const { highlightingVisible, maxLine, selectedLemmaEdition, lemmaCitation } = this.state;
 
 		const workSlug = getWorkSlug(this.props);
@@ -186,6 +186,7 @@ class ContextPanel extends Component {
 		return (
 			<ContextPanelContent
 				open={open}
+				filters={filters}
 				closeContextPanel={closeContextPanel}
 				workSlug={workSlug}
 				commentGroup={commentGroup}
@@ -226,7 +227,7 @@ ContextPanel.propTypes = {
 	closeContextPanel: PropTypes.func,
 	commentLemmaIndex: PropTypes.string,
 	getMaxLine: PropTypes.func,
-
+	filters: PropTypes.object,
 	// requiered if editor:
 	disableEdit: PropTypes.bool,
 	selectedLineFrom: PropTypes.number,

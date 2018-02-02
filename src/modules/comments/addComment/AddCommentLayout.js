@@ -363,7 +363,7 @@ class AddCommentLayout extends Component {
 		const { filters } = this.state;
 		const work = this.getWork();
 
-		filters.book = book;
+		filters.edition = book;
 		filters.chapter = chapter;
 		
 		this.setState({
@@ -429,6 +429,7 @@ class AddCommentLayout extends Component {
 										workSlug={work ? work.slug : '001'}
 										subworkN={subwork ? subwork.n : 1}
 										lineFrom={lineFrom || 1}
+										filters={filters}
 										selectedLineFrom={selectedLineFrom}
 										selectedLineTo={selectedLineTo}
 										updateSelectedLines={this.updateSelectedLines}

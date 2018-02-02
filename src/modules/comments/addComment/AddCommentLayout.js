@@ -129,7 +129,7 @@ class AddCommentLayout extends Component {
 	// --- BEGNI LINE SELECTION --- //
 
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
-		const { filters, textNodes } = this.state;
+		const { textNodes } = this.state;
 		let finalFrom = 0, finalTo = 0;
 		if (selectedLineFrom === null) {
 			this.setState({

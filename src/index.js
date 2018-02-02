@@ -5,7 +5,6 @@ import { Cookies } from 'js-cookie';
 import { CookiesProvider } from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { ApolloProvider, createNetworkInterface } from 'react-apollo';
-import { ApolloClient } from 'apollo-client';
 
 // static content
 import 'ion-rangeslider/js/ion.rangeSlider.js';
@@ -37,9 +36,6 @@ const networkInterface = createNetworkInterface({
 	uri: uriAddress,
 });
 
-const client = new ApolloClient({
-	networkInterface
-});
 
 networkInterface.use([{
 	applyMiddleware(req, next) {

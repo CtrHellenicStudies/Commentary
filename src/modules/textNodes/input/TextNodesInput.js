@@ -9,8 +9,6 @@ import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 
 // lib:
-import Utils from '../../../lib/utils';
-import _ from 'lodash';
 
 // graphql
 import { editionsQuery } from '../../../graphql/methods/editions';
@@ -18,10 +16,6 @@ import { textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
-
-// helpers
-import { getSortedEditions } from '../helpers';
-
 
 const ListGroupItemDnD = createListGroupItemDnD('textNodeBlocks');
 

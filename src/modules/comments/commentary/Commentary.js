@@ -15,7 +15,6 @@ import FilterWidget from '../../filters/FilterWidget';
 
 // lib
 import RaisedButton from 'material-ui/RaisedButton';
-import Utils from '../../../lib/utils';
 import muiTheme from '../../../lib/muiTheme';
 
 // helpers:

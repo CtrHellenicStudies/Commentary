@@ -4,7 +4,6 @@ import autoBind from 'react-autobind';
 import DropZone from 'react-dropzone';
 import Cookies from 'js-cookie';
 import { sendSnack } from '../../shared/SnackAttack';
-import { uploadFile } from '../../../lib/s3';
 
 export default class AvatarEditor extends Component {
 	constructor(props) {

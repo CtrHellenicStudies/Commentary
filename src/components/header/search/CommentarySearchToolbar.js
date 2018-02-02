@@ -14,22 +14,10 @@ import { editionsQuery } from '../../../graphql/methods/editions';
 
 // components:
 import SearchToolDropdown from './SearchToolDropdown';
-import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown, SubworksDropdown } from './dropdowns/SearchDropdowns';
-import LineRangeSlider from './LineRangeSlider';
+import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown } from './dropdowns/SearchDropdowns';
 import Utils from '../../../lib/utils';
 import BookAndChapterPager from './BookAndChapterPages';
 
-const getLineTo = (filters) => {
-
-	const filterLineTo = filters.find(filter => filter.key === 'lineTo');
-
-	let lineTo = null;
-	if (filterLineTo) {
-		lineTo = filterLineTo.values[0];
-	}
-
-	return lineTo;
-};
 
 const getWorkInFilter = (filters) => {
 	let workInFilter = false;
@@ -151,7 +139,7 @@ class CommentarySearchToolbar extends Component {
 
 		const { toggleSearchTerm, filters, addCommentPage, handlePagination } = this.props;
 		const { keywords, keyideas, commenters, referenceWorks, works } = this.state;
-		const { searchDropdownOpen, moreDropdownOpen, subworksTitle, lineFrom, lineTo } = this.state;
+		const { searchDropdownOpen, moreDropdownOpen } = this.state;
 
 		const workInFilter = getWorkInFilter(filters);
 
@@ -209,16 +197,6 @@ class CommentarySearchToolbar extends Component {
 					toggleSearchTerm={toggleSearchTerm}
 					filters={filters}
 				/>
-
-				{/* <SubworksDropdown
-					works={works}
-					searchDropdownOpen={searchDropdownOpen}
-					toggleSearchDropdown={this.toggleSearchDropdown}
-					toggleSearchTerm={toggleSearchTerm}
-					selectedWork={subworksTitle}
-					workInFilter={workInFilter}
-					filters={filters}
-				/> */}
 
 				<div
 					style={{padding: '10px 20px' }}

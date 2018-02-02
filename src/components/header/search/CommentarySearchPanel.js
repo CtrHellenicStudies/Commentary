@@ -16,7 +16,6 @@ import { keywordsQuery } from '../../../graphql/methods/keywords';
 import { editionsQuery } from '../../../graphql/methods/editions';
 
 // components:
-import LineRangeSlider from './LineRangeSlider';
 import SearchTermButtonPanel from './SearchTermButtonPanel';
 import { WorksCard } from './cards/SearchCards';
 

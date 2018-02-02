@@ -176,8 +176,7 @@ class AddKeywordLayout extends Component {
 		});
 	}
 	updateSelectedLines(selectedLineFrom, selectedLineTo) {
-		const { filters, textNodes } = this.state;
-		let work;
+		const { textNodes } = this.state;
 		let finalFrom = 0, finalTo = 0;
 		if (selectedLineFrom === null) {
 			this.setState({
@@ -202,11 +201,6 @@ class AddKeywordLayout extends Component {
 		} else {
 			return;
 		}
-		filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			}
-		});
 		this.setState({
 			selectedTextNodes: Utils.filterTextNodesBySelectedLines(textNodes, finalFrom, finalTo)
 		});
@@ -220,7 +214,6 @@ class AddKeywordLayout extends Component {
 		const work = this.getWork();
 		const chapter = this.getChapter();
 		const lineLetter = this.getLineLetter();
-		const selectedLineTo = this.getSelectedLineTo();
 		console.log(this.state.selectedLineFrom, this.state.selectedLineTo);
 		// create keyword object to be inserted:
 		const keyword = {

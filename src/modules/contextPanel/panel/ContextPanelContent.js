@@ -59,8 +59,6 @@ class ContextPanelContent extends Component {
 			return;
 		}
 		if (!nextProps.textNodesQuery.variables.workUrn && !nextProps.textNodes) {
-			const { workSlug, subworkN } = nextProps;	
-			const code = Utils.encodeBookBySlug(workSlug);
 			const properties = Utils.getUrnTextNodesProperties(lemmaCitation);
 			console.log(properties);
 			nextProps.textNodesQuery.refetch(properties);

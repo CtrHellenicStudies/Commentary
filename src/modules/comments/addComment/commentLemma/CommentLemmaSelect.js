@@ -23,10 +23,19 @@ class CommentLemmaSelect extends Component {
 		this.toggleEdition = this.toggleEdition.bind(this);
 
 	}
+	areQueriesStillLoadingOrTextNodesFromParent(props) {
+		let ret = false;
+		if(!props.textNodes) {
+			ret = true;
+		} else if (props.editionsQuery.loading && 
+			!(props.lineFrom !== this.props.lineFrom 
+			|| props.lineTo !== this.props.lineTo)) {
+				ret = true;
+		}
+		return ret;
+	}
 	componentWillReceiveProps(nextProps) {
-		if (!nextProps.textNodes || nextProps.editionsQuery.loading && 
-			!(nextProps.lineFrom !== this.props.lineFrom 
-			|| nextProps.lineTo !== this.props.lineTo)) {
+		if (this.areQueriesStillLoadingOrTextNodesFromParent(nextProps)) {
 			return;
 		}
 		const editions = Utils.textFromTextNodesGroupedByEdition(nextProps.textNodes, nextProps.editionsQuery.collections[0].textGroups[0].works);

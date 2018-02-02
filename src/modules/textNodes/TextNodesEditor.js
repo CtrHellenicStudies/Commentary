@@ -133,7 +133,7 @@ class TextNodesEditor extends Component {
 
 	selectEdition(event) {
 		const setValue = event ? event.value : '';
-		const { editions, selectedWork, startAtLocation, endAtLocation } = this.state;
+		const { selectedWork, startAtLocation, endAtLocation } = this.state;
 
 		this.setState({
 			selectedEdition: setValue,
@@ -248,7 +248,7 @@ class TextNodesEditor extends Component {
 	}
 
 	renderTextNodesInput() {
-		const { selectedWork, selectedEdition, startAtLocation, endAtLocation, limit, textNodes } = this.state;
+		const { selectedWork, selectedEdition, startAtLocation, endAtLocation, textNodes } = this.state;
 
 		if (!selectedWork || !selectedEdition || !startAtLocation || !endAtLocation) {
 			return null;

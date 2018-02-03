@@ -1,7 +1,8 @@
 const serializeLemmaCitationToUrn = (value) => {
 	let result = 'urn:cts';
+	debugger;
 
-	if ('corpus' in value && value.corpus && value.corpus.length) {
+	if ('ctsNamespace' in value && value.ctsNamespace && value.ctsNamespace.length) {
 		result = `${result}:${value.ctsNamespace}`;
 	} else {
 		return result;
@@ -49,7 +50,7 @@ const serializeLemmaCitationToUrn = (value) => {
 const serializeLemmaCitationToWorkUrn = (value) => {
 	let result = 'urn:cts';
 
-	if ('corpus' in value && value.corpus && value.corpus.length) {
+	if ('ctsNamespace' in value && value.ctsNamespace && value.ctsNamespace.length) {
 		result = `${result}:${value.ctsNamespace}`;
 	} else {
 		return result;

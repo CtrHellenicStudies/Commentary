@@ -93,7 +93,7 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			passageTo
 			work
 			textGroup
-			corpus
+			ctsNamespace
 		}
 		updated
 	}

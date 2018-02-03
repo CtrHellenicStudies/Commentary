@@ -35,7 +35,7 @@ const Utils = {
 			chapterTo = 1;
 		}
 		return {
-			corpus: "urn:cts:greekLit",
+			ctsNamespace: "urn:cts:greekLit",
 			textGroup: "tlg0013",
 			work: work.replace('tlg',''),
 			passageFrom: `${chapterFrom}.${lineFrom+1}`,

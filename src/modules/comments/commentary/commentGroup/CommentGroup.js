@@ -55,6 +55,14 @@ class CommentGroup extends Component {
 		// parse data from comment group lemma citation to query
 		const urns = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
 		textNodesUrn = urns.textNodesUrn;
+		
+		console.log('#####')
+		console.log('#####')
+		console.log('#####')
+		console.log(textNodesUrn);
+		console.log('#####')
+		console.log('#####')
+		console.log('#####')
 
 
 		return (

@@ -4,16 +4,15 @@ import { login } from '../../lib/auth';
 import PropTypes from 'prop-types';
 
 hello.init({
-	facebook: process.env.FACEBOOK_CLIENT_ID,
-	twitter: process.env.TWITTER_CLIENT_ID,
-	google: process.env.GOOGLE_CLIENT_ID
+	facebook: process.env.REACT_APP_FACEBOOK_CLIENT_ID,
+	twitter: process.env.REACT_APP_TWITTER_CONSUMER_KEY,
+	google: process.env.REACT_APP_GOOGLE_CLIENT_ID,
 }, {
-	// redirect_uri: '/',
-	redirect_uri: `${process.env.REACT_APP_GRAPHQL_SERVER}/oauthproxy`,
+	redirect_uri: `${process.env.REACT_APP_GRAPHQL}/oauthproxy`,
 });
 
 class OAuthButtons extends Component {
-	
+
 	constructor(props) {
 		super(props);
 		this.state = {};

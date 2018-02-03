@@ -2,19 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AvatarIcon from '../../../../profile/avatar/AvatarIcon';
 
-const getWorkTitle = (commentGroup) => {
-	let workTitle = commentGroup.work.title;
-	if (workTitle === 'Homeric Hymns') {
-		workTitle = 'Hymns';
-	}
+const getWorkTitle = ({ lemmaCitation }) => {
+	// TODO: use work from query
+	let workTitle = lemmaCitation.work;
 	return workTitle;
 };
 
-const getLineTo = (commentGroup) => {
-	if (commentGroup.lineTo === commentGroup.lineFrom || !commentGroup.lineTo) {
-		return '';
+const getLineTo = ({ lemmaCitation }) => {
+	if (lemmaCitation.passageTo && lemmaCitation.passageTo.length) {
+		return `- ${lemmaCitation.passageTo.join('.')}`;
 	}
-	return `- ${commentGroup.lineTo}`;
+	return '';
 };
 
 const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
@@ -23,10 +21,10 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 			<div className="comment-group-meta-inner comment-group-meta-ref">
 				<div className="comment-group-ref">
 					<span className="comment-group-ref-above">
-						{getWorkTitle(commentGroup)} {commentGroup.subwork.title}
+						{`${commentGroup.lemmaCitation.textGroup}.${getWorkTitle(commentGroup)}`}
 					</span>
 					<h2 className="comment-group-ref-below">
-						{commentGroup.lineFrom}{getLineTo(commentGroup)}
+						{commentGroup.lemmaCitation.passageFrom.join('.')}{getLineTo(commentGroup)}
 					</h2>
 
 				</div>
@@ -63,11 +61,12 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 CommentGroupMeta.propTypes = {
 	hideLemma: PropTypes.bool,
 	commentGroup: PropTypes.shape({
-		subwork: PropTypes.shape({
-			title: PropTypes.string.isRequired,
+		lemmaCitation: PropTypes.shape({
+			textGroup: PropTypes.string,
+			work: PropTypes.string,
+			passageFrom: PropTypes.arrayOf(PropTypes.number),
+			passageTo: PropTypes.arrayOf(PropTypes.number),
 		}),
-		lineFrom: PropTypes.number.isRequired,
-		lineTo: PropTypes.number,
 		commenters: PropTypes.objectOf(PropTypes.shape({
 			_id: PropTypes.string.isRequired,
 			name: PropTypes.string.isRequired,

@@ -9,7 +9,6 @@ import { compose } from 'react-apollo';
 
 // graphql
 import { referenceWorksQuery } from '../../../../../graphql/methods/referenceWorks';
-import { settingsQuery } from '../../../../../graphql/methods/settings';
 
 // components:
 import CommentUpper from './CommentUpper';
@@ -100,32 +99,36 @@ class CommentDetail extends Component {
 		const referenceWorkIds = [];
 		let referenceWorks = [];
 
+		/*
 		if (comment && comment.referenceWorks && !nextProps.referenceWorksQuery.loading) {
 			comment.referenceWorks.forEach((referenceWork) => {
 				referenceWorkIds.push(referenceWork.referenceWorkId);
 			});
 			referenceWorks = nextProps.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined && x.tenantId === tenantId);
 		}
-	
-		const settings = nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
-	
+
 		const user = Cookies.get('user');
-		const ready = !nextProps.referenceWorksQuery.loading && !nextProps.settingsQuery.loading;
+		const ready = !nextProps.referenceWorksQuery.loading;
 
 		this.setState({
-			settings: settings,
-			user: user,
-			ready: ready,
-			referenceWorks: referenceWorks
+			user,
+			ready,
+			referenceWorks,
 		});
-		if (filters && 
-		filters.find(filter => filter.key === 'textsearch') !== searchTerm 
-		&& filters && filters.find(filter => filter.key === 'textsearch')) {
+		*/
+
+		/*
+		if (
+			filters
+			&& filters.find(filter => filter.key === 'textsearch') !== searchTerm
+			&& filters.find(filter => filter.key === 'textsearch')
+		) {
 			const searchTermsObject = filters.find(filter => filter.key === 'textsearch');
 			this.setState({
 				searchTerm: searchTermsObject.values[0]
 			});
 		}
+		*/
 	}
 
 	getRevisionIndex() {
@@ -289,6 +292,8 @@ class CommentDetail extends Component {
 
 				</article>
 
+				{/*
+					Disable all discussion threads for the moment to increase performance
 				<DiscussionThread
 					comment={comment}
 					showDiscussionThread={this.showDiscussionThread}
@@ -298,6 +303,7 @@ class CommentDetail extends Component {
 					showLoginModal={showLoginModal}
 					discussionCommentsDisabled={settings.discussionCommentsDisabled}
 				/>
+				*/}
 
 				{this.state.lemmaReferenceModalVisible ?
 					<LemmaReferenceModal
@@ -359,7 +365,6 @@ CommentDetail.propTypes = {
 	showLoginModal: PropTypes.func,
 	toggleLemma: PropTypes.func.isRequired,
 	referenceWorksQuery: PropTypes.object,
-	settingsQuery: PropTypes.object,
 };
 CommentDetail.defaultProps = {
 	filters: null,
@@ -373,6 +378,5 @@ CommentDetail.defaultProps = {
 	END CommentDetail
 */
 export default compose(
-	referenceWorksQuery,
-	settingsQuery
+	// referenceWorksQuery,
 )(CommentDetail);

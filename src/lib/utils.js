@@ -3,8 +3,11 @@ import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
 import Cookies from 'js-cookie';
 import {
-	convertFromRaw, EditorState, ContentState, convertFromHTML 
+	convertFromRaw, EditorState, ContentState, convertFromHTML
 } from 'draft-js';
+
+import serializeLemmaCitationToUrn, { serializeLemmaCitationToWorkUrn } from '../modules/cts/lib/serializeLemmaCitationToUrn';
+
 
 /**
  * General application specific utility / helper functions
@@ -24,7 +27,7 @@ const Utils = {
 		}
 		return ret;
 	},
-	createLemmaCitation(work, lineFrom, lineTo, chapterFrom, chapterTo) { 
+	createLemmaCitation(work, lineFrom, lineTo, chapterFrom, chapterTo) {
 		if(chapterFrom === undefined || chapterFrom === null) {
 			chapterFrom = 1;
 		}
@@ -58,10 +61,9 @@ const Utils = {
 		return ret;
 	},
 	getUrnTextNodesProperties(lemmaCitation) {
-		const work = lemmaCitation.work.replace('tlg','');
 		return {
-			workUrn:(`${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${work}`).toString(),
-			textNodesUrn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${work}:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
+			workUrn: serializeLemmaCitationToWorkUrn(lemmaCitation),
+			textNodesUrn: serializeLemmaCitationToUrn(lemmaCitation),
 		};
 	},
 	encodeBookBySlug(slug) {
@@ -71,7 +73,7 @@ const Utils = {
 		};
 		switch(slug) {
 			case 'odyssey':
-				code = { 
+				code = {
 					urn: 'urn:cts:greekLit:tlg0013.tlg002',
 					slug: 'odyssey-2'
 				};

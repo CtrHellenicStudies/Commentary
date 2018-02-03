@@ -13,7 +13,7 @@ import _ from 'underscore';
 // graphql
 import { textNodesQuery } from '../../../../../graphql/methods/textNodes';
 import { editionsQuery } from '../../../../../graphql/methods/editions';
-import { translationsQuery } from '../../../../../graphql/methods/translations';
+// import { translationsQuery } from '../../../../../graphql/methods/translations';
 
 // components:
 import CommentGroupMeta from './CommentGroupMeta';
@@ -27,8 +27,8 @@ function getTranslationQueries(query, filter) {
 	if (query.loading) {
 		return [];
 	}
-	return query.translations.filter(x => 
-		x.work === filter.work && 
+	return query.translations.filter(x =>
+		x.work === filter.work &&
 		x.subwork === filter.subwork &&
 		x.n >= filter.lineFrom &&
 		x.n <= filter.lineTo).map(translation =>
@@ -160,55 +160,50 @@ class CommentLemma extends Component {
 
 		const { commentGroup, multiline } = nextProps;
 		const { selectedLemmaEditionIndex } = this.state;
-		if (nextProps.textNodesQuery.loading || 
-			nextProps.editionsQuery.loading || 
-			nextProps.translationsQuery.loading) {
+		let translationAuthors = [];
+
+		// handle loading state
+		if (nextProps.textNodesQuery.loading
+			|| nextProps.editionsQuery.loading
+			// || nextProps.translationsQuery.loading
+		) {
 			return;
 		}
-		const textNodesCursor = nextProps.textNodesQuery.collections ? nextProps.textNodesQuery.collections[0].textGroups[0].works: [];
+
+		// text nodes data
+		const textNodesCursor = nextProps.textNodesQuery.collections ? nextProps.textNodesQuery.collections[0].textGroups[0].works : [];
+
+		// set editions from textnodes data
 		let editions = Utils.textFromTextNodesGroupedByEdition(
-			textNodesCursor, 
+			textNodesCursor,
 			nextProps.editionsQuery.collections[0].textGroups[0].works);
+
+		// data is loaded
 		const ready = true;
-		editions = multiline ? Utils.parseMultilineEdition(editions, multiline) : editions;
-		const selectedLemmaEdition = editions.length && editions[selectedLemmaEditionIndex].lines ? editions[selectedLemmaEditionIndex] : { lines: [] };
-		selectedLemmaEdition.lines.sort(Utils.sortBy('subwork.n', 'n'));
-		let translationAuthors = [];
-		if (commentGroup && commentGroup.comments[0].lemmaCitation) {
-			if (!nextProps.textNodesQuery.variables.workUrn && commentGroup.comments[0].lemmaCitation.passageFrom) {
-				const properties = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
-				console.log(properties);
-				nextProps.textNodesQuery.refetch(properties);
-				return;
-			}
-			if (!commentGroup.lineTo) {
-				commentGroup.lineTo = commentGroup.lineFrom;
-			}
-	
-			const translationNodesQuery = {
-				work: commentGroup.work.slug,
-				subwork: Number(commentGroup.subwork.title),
-				lineFrom: commentGroup.lineFrom,
-				lineTo: commentGroup.lineTo
-			};
-	
-			translationAuthors = _.uniq(getTranslationQueries(nextProps.translationsQuery, translationNodesQuery));
-		}
+
+		// if necessary, parse editions into multiline data
+		editions = multiline ?
+			Utils.parseMultilineEdition(editions, multiline)
+			:
+			editions;
+		const selectedLemmaEdition = (editions.length && editions[selectedLemmaEditionIndex].lines) ?
+			editions[selectedLemmaEditionIndex]
+			:
+			{ lines: [] };
 
 		this.setState({
-			translationAuthors: translationAuthors,
-			ready: ready,
-			editions: editions,
-			selectedLemmaEdition: selectedLemmaEdition
+			translationAuthors,
+			ready,
+			editions,
+			selectedLemmaEdition,
 		});
 	}
 	render() {
 		const { commentGroup, hideLemma } = this.props;
 		const { selectedAuthor, showTranslation, ready, translationAuthors, selectedLemmaEdition, editions } = this.state;
-		let workTitle = commentGroup.work.title;
-		if (workTitle === 'Homeric Hymns') {
-			workTitle = 'Hymns';
-		}
+
+		// TODO: use work from query
+		let workTitle = commentGroup.lemmaCitation.work;
 
 		return (
 			<div className="comment-outer comment-lemma-comment-outer">
@@ -388,15 +383,12 @@ class CommentLemma extends Component {
 }
 CommentLemma.propTypes = {
 	commentGroup: PropTypes.shape({
-		work: PropTypes.shape({
-			slug: PropTypes.string,
-			title: PropTypes.string,
+		lemmaCitation: PropTypes.shape({
+			textGroup: PropTypes.string,
+			work: PropTypes.string,
+			passageFrom: PropTypes.arrayOf(PropTypes.number),
+			passageTo: PropTypes.arrayOf(PropTypes.number),
 		}),
-		subwork: PropTypes.shape({
-			n: PropTypes.number.isRequired,
-		}),
-		lineFrom: PropTypes.number.isRequired,
-		lineTo: PropTypes.number,
 		commenters: PropTypes.objectOf(PropTypes.shape({
 			_id: PropTypes.string.isRequired,
 			name: PropTypes.string.isRequired,
@@ -420,13 +412,15 @@ CommentLemma.propTypes = {
 	})),
 	editionsQuery: PropTypes.object,
 	textNodesQuery: PropTypes.object,
-	translationsQuery: PropTypes.object
+	// translationsQuery: PropTypes.object
 };
+
 CommentLemma.defaultProps = {
 	editions: null
 };
+
 export default compose(
 	editionsQuery,
 	textNodesQuery,
-	translationsQuery
+	// translationsQuery // TODO: readd translations
 )(CommentLemma);

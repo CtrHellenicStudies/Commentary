@@ -1,4 +1,7 @@
+import _ from 'underscore';
+
 import Utils from '../../../lib/utils';
+
 
 /*
 	helpers
@@ -11,6 +14,7 @@ const getCommentGroupId = (commentGroup) => {
 	});
 	return id.slice(1);
 };
+
 function addCommetersToCommentGroup(comment, commenters = {}) {
 	comment.commenters.map(function(_commenter) {
 		commenters[_commenter._id] = _commenter;
@@ -18,19 +22,18 @@ function addCommetersToCommentGroup(comment, commenters = {}) {
 	});
 	return commenters;
 }
+
 function isFromCommentGroup(comment, commentGroup) {
-	return comment.work.title === commentGroup.work.title
-		&& comment.subwork.n === commentGroup.subwork.n
-		&& comment.lineFrom === commentGroup.lineFrom
-		&& comment.lineTo === commentGroup.lineTo;
+	return _.isMatch(comment.lemmaCitation, commentGroup.lemmaCitation);
 }
+
 const parseCommentsToCommentGroups = (comments) => {
 	const commentGroups = [];
 	// Make comment groups from comments
 	let isInCommentGroup = false;
 	comments.map((comment) => {
 		isInCommentGroup = false;
-		if (comment.work) {
+		if (comment.lemmaCitation) {
 			commentGroups.map((commentGroup) => {
 				if (isFromCommentGroup(comment, commentGroup)) {
 					isInCommentGroup = true;
@@ -40,27 +43,16 @@ const parseCommentsToCommentGroups = (comments) => {
 			});
 
 			if (!isInCommentGroup) {
-				let ref;
-
-				if (comment.work.title === 'Homeric Hymns') {
-					ref = `Hymns ${comment.subwork.n}.${comment.lineFrom}`;
-				} else {
-					ref = `${comment.work.title} ${comment.subwork.n}.${comment.lineFrom}`;
-				}
-
 				commentGroups.push({
-					ref,
 					selectedLemmaEdition: {
 						lines: [],
 					},
-					work: comment.work,
-					subwork: comment.subwork,
-					lineFrom: comment.lineFrom,
-					lineTo: comment.lineTo,
 					nLines: comment.nLines,
 					comments: [comment],
+					lemmaCitation: comment.lemmaCitation,
 				});
 			}
+
 		} else if (process.env.NODE_ENV === 'development') {
 			console.error(`Review comment ${comment._id} metadata`);
 		}
@@ -81,10 +73,8 @@ function setPageTitleAndMeta (filters, settings, commentGroups, worksQuery) {
 	let title = '';
 	let values = [];
 	const workDefault = 'Commentary';
-	let subwork = null;
-	let lineFrom = 0;
-	let lineTo = 0;
 	let work = '';
+	let passage = '';
 	let metaSubject = 'Commentaries on Classical Texts';
 	let description = '';
 
@@ -102,21 +92,8 @@ function setPageTitleAndMeta (filters, settings, commentGroups, worksQuery) {
 			work = values.join(', ');
 			break;
 
-		case 'subworks':
-			filter.values.forEach((value) => {
-				values.push(value.n);
-			});
-			subwork = values.join(', ');
-			break;
-
-		case 'lineFrom':
-			lineFrom = filter.values[0];
-			break;
-
-		case 'lineTo':
-			lineTo = filter.values[0];
-			break;
-		default:
+		case 'passage':
+			passage = filter.values[0];
 			break;
 		}
 	});
@@ -128,18 +105,10 @@ function setPageTitleAndMeta (filters, settings, commentGroups, worksQuery) {
 		title = workDefault;
 	}
 
-	if (subwork) title = `${title} ${subwork}`;
-	if (lineFrom) {
-		if (lineTo) {
-			title = `${title}.${lineFrom}-${lineTo}`;
-		} else {
-			title = `${title}.${lineFrom}`;
-		}
-	} else if (lineTo) {
-		title = `${title}.${lineTo}`;
-	} else {
-		title = `${title}`;
+	if (passage) {
+		title = `${title}.${passage}`;
 	}
+
 	title = `${title} | ${settings.title || ''}`;
 
 	metaSubject = `${metaSubject}, ${title}, Philology`;

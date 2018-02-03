@@ -6,6 +6,8 @@ import { StickyContainer } from 'react-sticky';
 import CommentDetail from './commentDetail/CommentDetail';
 import CommentLemma from './commentLemma/CommentLemma';
 
+// lib:
+import Utils from '../../../../lib/utils';
 
 
 class CommentGroup extends Component {
@@ -37,19 +39,23 @@ class CommentGroup extends Component {
 	}
 	render() {
 		const { commentGroup, commentGroupIndex, contextPanelOpen, showLoginModal,
-			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm, 
+			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm,
 			selectMultiLine, isOnHomeView, history, multiline } = this.props;
 		const { hideLemma } = this.state;
+		let textNodesUrn = '';
 
 		let commentsClass = 'comments ';
 		if (contextPanelOpen) {
 			commentsClass += 'lemma-panel-visible';
 		}
 
-		let workTitle = commentGroup.work.title;
-		if (workTitle === 'Homeric Hymns') {
-			workTitle = 'Hymns';
-		}
+		// TODO: use work from query
+		let workTitle = commentGroup.lemmaCitation.work;
+
+		// parse data from comment group lemma citation to query
+		const urns = Utils.getUrnTextNodesProperties(commentGroup.comments[0].lemmaCitation);
+		textNodesUrn = urns.textNodesUrn;
+
 
 		return (
 			<div
@@ -68,6 +74,7 @@ class CommentGroup extends Component {
 							hideLemma={hideLemma}
 							selectMultiLine={selectMultiLine}
 							multiline={multiline}
+							textNodesUrn={textNodesUrn}
 						/>
 
 						{commentGroup.comments.map(comment => (
@@ -96,15 +103,12 @@ class CommentGroup extends Component {
 }
 CommentGroup.propTypes = {
 	commentGroup: PropTypes.shape({
-		work: PropTypes.shape({
-			slug: PropTypes.string,
-			title: PropTypes.string,
+		lemmaCitation: PropTypes.shape({
+			textGroup: PropTypes.string,
+			work: PropTypes.string,
+			passageFrom: PropTypes.arrayOf(PropTypes.number),
+			passageTo: PropTypes.arrayOf(PropTypes.number),
 		}),
-		subwork: PropTypes.shape({
-			n: PropTypes.number.isRequired,
-		}),
-		lineFrom: PropTypes.number.isRequired,
-		lineTo: PropTypes.number,
 		commenters: PropTypes.objectOf(PropTypes.shape({
 			_id: PropTypes.string.isRequired,
 			name: PropTypes.string.isRequired,

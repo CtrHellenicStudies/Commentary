@@ -218,7 +218,8 @@ header .line-wrap .line-ref {
 .comment-group-meta .comment-group-meta-inner {
   position: absolute;
   top: 115px;
-  left: 3%;
+  max-width: 9vw;
+  left: 0%;
 }
 .comment-group-meta .comment-group-meta-inner-fixed {
   position: fixed;
@@ -241,21 +242,19 @@ header .line-wrap .line-ref {
   font-family: 'Proxima Nova', sans-serif;
   font-size: 16px;
   text-align: right;
-  float: right;
   clear: both;
   display: block;
 }
 .comment-group-meta h2.comment-group-ref-below {
   cursor: default;
   font-family: 'Proxima Nova', sans-serif;
-  font-size: 46px;
+  font-size: 36px;
   font-weight: bold;
   color: #424242;
   margin: 0;
   padding: 10px 0px 20px;
   display: inline-block;
   vertical-align: top;
-  max-width: 65px;
   text-align: right;
   float: right;
   clear: both;

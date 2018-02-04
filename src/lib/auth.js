@@ -1,13 +1,15 @@
 import Cookies from 'js-cookie';
 
-const loginService = process.env.LOGIN_SERVICE ? process.env.LOGIN_SERVICE : 'http://localhost:3002/auth/login';
-const registerService = process.env.REGISTER_SERVICE ? process.env.REGISTER_SERVICE : 'http://localhost:3002/auth/register';
+const loginService = `${process.env.REACT_APP_AUTHENTICATION_API}/auth/login`;
+const registerService = `${process.env.REACT_APP_AUTHENTICATION_API}/auth/register`;
+
 const userLoggedIn = () => {
 	const token = Cookies.get('token');
 
 	if (token) return true;
 	return false;
 };
+
 const login = async (data) => {
 	if (userLoggedIn()) {
 		return null;

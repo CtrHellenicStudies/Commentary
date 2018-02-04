@@ -30,7 +30,7 @@ injectTapEventPlugin();
 
 // configure store
 const store = configureStore();
-const uriAddress = process.env.REACT_APP_GRAPHQL;
+const uriAddress = process.env.REACT_APP_GRAPHQL_API;
 
 const networkInterface = createNetworkInterface({
 	uri: uriAddress,

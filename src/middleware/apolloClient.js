@@ -5,7 +5,7 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 // TODO: determine best way of handling env variable names with CRA 
 console.log(process.env);
-const uriAddress = process.env.REACT_APP_GRAPHQL;
+const uriAddress = process.env.REACT_APP_GRAPHQL_API;
 
 const networkInterface = createNetworkInterface({
 	uri: uriAddress,

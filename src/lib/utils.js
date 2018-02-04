@@ -343,7 +343,8 @@ const Utils = {
 					textNodeVersion.translation = textNode.translation;
 					translations.push(textNodeVersion);
 
-				// if textnode language is not set, omit for the moment
+				// if textnode language is not set, omit
+				// TODO: send bug report if textnode language is not found
 				} else if (
 					textNode.language
 					&& textNode.language.id

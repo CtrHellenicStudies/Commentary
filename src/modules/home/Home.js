@@ -17,13 +17,13 @@ import muiTheme from '../../lib/muiTheme';
 import { settingsQuery } from '../../graphql/methods/settings';
 
 // components:
-import CommentersList from '../comenters/CommentersList';
+import CommentersList from '../commenters/CommentersList';
 import WorksList from '../works/WorksList';
 import KeywordsList from '../keywords/KeywordsList';
 import LoadingHome from '../../components/loading/LoadingHome';
 
 // layouts:
-import Commentary from '../comments/commentary/Commentary';
+import Commentary from '../comments/components/Commentary';
 
 
 class Home extends Component {

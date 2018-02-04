@@ -36,33 +36,46 @@ query textNodesQueryById($id: ID!) {
 }
 `;
 
+/*
 const query = gql`
-query textNodesQuery($workUrn: CtsUrn, $textNodesUrn: CtsUrn) {
-		collections(urn: "urn:cts:greekLit") {
+query textNodesQuery($collectionUrn: CtsUrn, $textGroupUrn: CtsUrn, $workUrn: CtsUrn, $textNodesUrn: CtsUrn, $language: String) {
+	collections(urn: $collectionUrn) {
+		id
+		title
+		urn
+		textGroups(urn: $textGroupUrn) {
 			id
 			title
 			urn
-			textGroups(urn: "urn:cts:greekLit:tlg0013") {
+			works(language: $language, urn: $workUrn) {
 				id
-				title
-				urn
-				works(language: "greek", urn: $workUrn) {
+				original_title
+				version {
 					id
-					original_title
-					version {
-						id
-					}
+				}
+				urn
+				slug
+				textNodes(urn: $textNodesUrn) {
+					id
+					text
+					location
 					urn
-					slug
-					textNodes(urn: $textNodesUrn) {
-						id
-						text
-						location
-						urn
-        			}
 				}
 			}
 		}
+	}
+}
+`;
+*/
+
+const query = gql`
+query textNodesQuery($textNodesUrn: CtsUrn) {
+	textNodes(urn: $textNodesUrn) {
+		id
+		text
+		location
+		urn
+	}
 }
 `;
 
@@ -72,6 +85,7 @@ const textNodeCreateMutation = graphql(textNodeCreate, {
 	}),
 	name: 'textNodeCreateMutation'
 });
+
 // _id, editionId, updatedText, updatedTextN)
 const textNodeUpdateMutation = graphql(textNodeUpdate, {
 	props: (params) => ({

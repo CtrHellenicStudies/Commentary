@@ -26,8 +26,9 @@ import _ from 'underscore';
 import muiTheme from '../../../lib/muiTheme';
 
 // graphql
-import { commentRemoveMutation,
-	commentRemoveRevisionMutation } from '../../../graphql/methods/comments';
+import commentRemoveMutation from '../../comments/graphql/mutations/remove';
+import commentRemoveRevisionMutation from '../../comments/graphql/mutations/removeRevision';
+
 import { keywordsQuery,
 		keywordInsertMutation,
 		keywordUpdateMutation } from '../../../graphql/methods/keywords';
@@ -106,7 +107,7 @@ class AddRevision extends Component {
         let commenters = [];
         const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		if (user && user.canEditCommenters) {
-			commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => 
+			commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
 				user.canEditCommenters.find(y => y === x._id));
 		}
 		const referenceWorks = props.referenceWorksQuery.loading ? [] : props.referenceWorksQuery.referenceWorks;
@@ -122,7 +123,7 @@ class AddRevision extends Component {
 				});
 			}
 		});
-	
+
 		const commentersOptions = [];
 		commenters.forEach((commenter) => {
 			if (!commentersOptions.some(val => (
@@ -507,10 +508,10 @@ class AddRevision extends Component {
 									spellcheck
 									mediaOn
 								/>
-								<ReferenceWork 
+								<ReferenceWork
 									referenceWorks={this.state.referenceWorks}
 									update={this.updateReferenceWorks}
-									referenceWorkOptions={this.state.referenceWorkOptions} 
+									referenceWorkOptions={this.state.referenceWorkOptions}
 									ready={this.state.ready}
 									addNew={this.addNewReferenceWork}
 								/>

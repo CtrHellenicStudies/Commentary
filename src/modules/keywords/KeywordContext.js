@@ -9,8 +9,8 @@ import FontIcon from 'material-ui/FontIcon';
 import Utils, { makeKeywordContextQueryFromComment } from '../../lib/utils';
 
 // graphql
+import commentsQuery from '../comments/graphql/queries/comments';
 import { editionsQuery } from '../../graphql/methods/editions';
-import { commentsQuery } from '../../graphql/methods/comments';
 import { textNodesQuery } from '../../graphql/methods/textNodes';
 
 class KeywordContext extends Component {
@@ -68,7 +68,7 @@ class KeywordContext extends Component {
 					limit: 1
 				});
 			}
-			
+
 			if (props.commentsQuery.comments.length > 0) {
 				const comment = props.commentsQuery.comments[0];
 				const query = makeKeywordContextQueryFromComment(comment, maxLines); //TODO

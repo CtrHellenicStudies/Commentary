@@ -1,26 +1,16 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query editionsQuery{
-	collections(urn: "urn:cts:greekLit") {
-		id
-		title
-		urn
-		textGroups(urn: "urn:cts:greekLit:tlg0013") {
+query editionsQuery($workUrn: CtsUrn) {
+	works(urn: $workUrn, language: "greek") {
+	  slug
+	  english_title
+	  urn
+	  id
+		version {
 			id
 			title
-			urn
-			works(language: "greek") {
-				   slug
-				   english_title
-				   urn
-				   id
-	  			version {
-					id
-					title
-					slug
-	 			}
-			}
+			slug
 		}
 	}
 }
@@ -60,7 +50,7 @@ const editionsRemoveMutation = graphql(editionsRemove, {
 const editionsQuery = graphql(query, {
 	name: 'editionsQuery'
 });
-export { 
+export {
 	editionsQuery,
     editionsRemoveMutation,
     editionsInsertMutation

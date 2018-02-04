@@ -15,13 +15,13 @@ import $ from 'jquery';
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';
 import { keywordsQuery, keywordRemoveMutation } from '../../graphql/methods/keywords';
-import { commentsQuery } from '../../graphql/methods/comments';
+import commentsQuery from '../comments/graphql/queries/comments';
 
 // components
 import KeywordContext from './KeywordContext';
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import KeywordCommentList from './KeywordsCommentList';
-import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
+import CommentsRecent from '../comments/components/CommentsRecent';
 
 // lib
 import Utils from '../../lib/utils';
@@ -57,9 +57,9 @@ class KeywordDetail extends Component {
 		}
 		const { match } = props;
 		const slug = match.params.slug;
-	
+
 		const keyword =  props.keywordsQuery.keywords.find(x => x.slug === slug);
-	
+
 		let keywordComments = null;
 		if (keyword) {
 			const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } }; // TODO can be change for keywordId
@@ -159,9 +159,9 @@ class KeywordDetail extends Component {
 
 						<section className="page-content">
 							{keyword.lineFrom ?
-								<KeywordContext 
+								<KeywordContext
 									keyword={keyword}
-									lineFrom={this.state.lineFrom} 
+									lineFrom={this.state.lineFrom}
 									lineTo={this.state.lineTo}
 									workSlug={this.state.workSlug}
 									subworkN={this.state.subworkN}

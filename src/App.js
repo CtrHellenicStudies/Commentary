@@ -13,8 +13,8 @@ import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
 import { usersQuery } from './graphql/methods/users';
 
 // layouts
-import CommentaryLayout from './modules/comments/CommentaryLayout';
-import AddCommentLayout from './modules/comments/addComment/AddCommentLayout';
+import CommentaryLayout from './modules/comments/layouts/CommentaryLayout';
+import AddCommentLayout from './modules/comments/layouts/AddCommentLayout';
 import AddKeywordLayout from './modules/keywords/addKeyword/AddKeywordLayout';
 import AddTranslationLayout from './modules/translations/addTranslation/AddTranslationLayout';
 import AddRevisionLayout from './modules/revisions/addRevision/AddRevisionLayout';
@@ -26,8 +26,8 @@ import NotFound from './modules/notFound/NotFound';
 
 // pages
 import Page from './modules/page/Page';
-import CommentersPage from './modules/comenters/CommentersPage';
-import CommenterDetail from './modules/comenters/CommenterDetail';
+import CommentersPage from './modules/commenters/CommentersPage';
+import CommenterDetail from './modules/commenters/CommenterDetail';
 import KeywordsPage from './modules/keywords/KeywordsPage';
 import KeywordDetail from './modules/keywords/KeywordDetail';
 import ProfilePage from './modules/profile/ProfilePage';

@@ -6,7 +6,7 @@ import {
 	convertFromRaw, EditorState, ContentState, convertFromHTML
 } from 'draft-js';
 
-import serializeLemmaCitationToUrn, { serializeLemmaCitationToWorkUrn } from '../modules/cts/lib/serializeLemmaCitationToUrn';
+import serializeUrn from '../modules/cts/lib/serializeUrn';
 
 
 /**
@@ -38,8 +38,8 @@ const Utils = {
 			ctsNamespace: "urn:cts:greekLit",
 			textGroup: "tlg0013",
 			work: work.replace('tlg',''),
-			passageFrom: `${chapterFrom}.${lineFrom+1}`,
-			passageTo: `${chapterTo}.${lineTo+1}`
+			passageFrom: `${chapterFrom}.${lineFrom}`,
+			passageTo: `${chapterTo}.${lineTo}`
 		};
 
 	},
@@ -62,8 +62,8 @@ const Utils = {
 	},
 	getUrnTextNodesProperties(lemmaCitation) {
 		return {
-			workUrn: serializeLemmaCitationToWorkUrn(lemmaCitation),
-			textNodesUrn: serializeLemmaCitationToUrn(lemmaCitation),
+			workUrn: serializeUrn(lemmaCitation),
+			textNodesUrn: serializeUrn(lemmaCitation),
 		};
 	},
 	encodeBookBySlug(slug) {
@@ -132,7 +132,7 @@ const Utils = {
 		const capitalized = str.charAt(0).toUpperCase() + str.slice(1);
 		return capitalized;
 	},
-	defaultCmp: function defaultCmp(a, b) {
+	defaultCmp: (a, b) => {
 		if (a === b) return 0;
 		return a < b ? -1 : 1;
 	},
@@ -167,7 +167,7 @@ const Utils = {
 		}
 		return false;
 	},
-	sortBy: function sort() {
+	sortBy: () => {
 		const fields = [];
 		const nFields = arguments.length;
 		let field;
@@ -289,34 +289,38 @@ const Utils = {
 
 		return domain;
 	},
-	textFromTextNodesGroupedByEdition(worksWithTextNodes, _versions) {
 
+	/**
+	 * Get textNodes as array based on selected edition
+	 */
+	textFromTextNodesGroupedByEdition(textNodes, _versions) {
 		const versions = [];
-		worksWithTextNodes.forEach((work) => {
-			work.textNodes.forEach((textNode) => {
-				let myVersion = versions.find(e => work.slug === e.slug);
 
-				if (!myVersion) {
-					const foundVersion = _versions.find(x => x.slug === work.slug);
-					if (foundVersion) {
-						myVersion = {
-							_id: foundVersion.version.id,
-							title: foundVersion.version.title,
-							slug: foundVersion.slug,
-							//multiLine: foundEdition.multiLine, TODO
-							lines: [],
-						};
-						versions.push(myVersion);
-					}
+		// works
+		textNodes.forEach((textNode) => {
+			let myVersion = versions.find(v => textNode.urn.startsWith(v.urn));
+
+			if (!myVersion) {
+				const foundVersion = _versions.find(v => textNode.urn.startsWith(v.urn));
+				if (foundVersion) {
+					myVersion = {
+						_id: foundVersion.version.id,
+						title: foundVersion.version.title,
+						slug: foundVersion.slug,
+						// multiLine: foundEdition.multiLine, TODO
+						lines: [],
+					};
+					versions.push(myVersion);
 				}
-				if(myVersion) {
-					myVersion.lines.push({
-						_id: textNode.id,
-						html: textNode.text,
-						n: textNode.location[1],
-					});
-				}
-			});
+			}
+
+			if(myVersion) {
+				myVersion.lines.push({
+					_id: textNode.id,
+					html: textNode.text,
+					n: textNode.location[1],
+				});
+			}
 		});
 
 		return versions;
@@ -367,12 +371,15 @@ const Utils = {
 			} else {
 				return new Error('Parsing error');
 			}
+
 			const currentEdition = edition;
 			currentEdition.lines = result;
 			parsedEditions.push(currentEdition);
 		});
+
 		return parsedEditions;
 	},
+
 	getEditorState(content) {
 		let _content = content || '';
 		if (this.isJson(content)) {
@@ -390,6 +397,7 @@ const Utils = {
 			);
 		return EditorState.createWithContent(state);
 	},
+
 	getHtmlFromContext(context) {
 		return convertToHTML({
 						// performe necessary html transformations:
@@ -428,11 +436,13 @@ const Utils = {
 			},
 		})(context);
 	},
+
 	decodeHtml(html) {
 		const txt = document.createElement('textarea');
 		txt.innerHTML = html;
 		return txt.value;
 	},
+
 	isJson(str) {
 		try {
 			JSON.parse(str);
@@ -441,6 +451,7 @@ const Utils = {
 		}
 		return true;
 	},
+
 	shouldRefetchQuery(properties, variables) {
 		for (const [key] of Object.entries(properties)) {
 			if (properties[key] !== variables[key]) {
@@ -449,6 +460,7 @@ const Utils = {
 		}
 		return false;
 	},
+
 	getSuggestionsFromComments(comments) {
 		const suggestions = [];
 

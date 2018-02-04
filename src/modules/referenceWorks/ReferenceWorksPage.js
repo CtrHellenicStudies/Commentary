@@ -11,7 +11,7 @@ import { compose } from 'react-apollo';
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import ReferenceWorksList from './ReferenceWorksList';
-import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
+import CommentsRecent from '../comments/components/CommentsRecent';
 import LoadingPage from '../../components/loading/LoadingPage';
 
 // graphql

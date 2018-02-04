@@ -27,20 +27,15 @@ const serializeUrn = (value) => {
 		return result;
 	}
 
+	/** version, exemplar, and translation are optional but must be in order */
 	if ('version' in value && value.version && value.version.length) {
 		result = `${result}.${value.version}`;
 		if ('exemplar' in value && value.exemplar && value.exemplar.length) {
 			result = `${result}.${value.exemplar}`;
 			if ('translation' in value && value.translation && value.translation.length) {
 				result = `${result}.${value.translation}`;
-			} else {
-				return result;
 			}
-		} else {
-			return result;
 		}
-	} else {
-		return result;
 	}
 
 

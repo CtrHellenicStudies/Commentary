@@ -9,7 +9,7 @@ import Header from '../../components/header/Header';
 
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import CommentsRecent from '../comments/commentsRecent/CommentsRecent';
+import CommentsRecent from '../comments/components/CommentsRecent';
 import LoadingPage from '../../components/loading/LoadingPage';
 
 // graphql

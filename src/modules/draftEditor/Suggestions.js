@@ -6,7 +6,7 @@ import { compose } from 'react-apollo';
 import Utils from '../../lib/utils';
 
 // graphql
-import { commentsQuery } from '../../graphql/methods/comments';
+import commentsQuery from '../comments/graphql/queries/comments';
 import { keywordsQuery } from '../../graphql/methods/keywords';
 
 class Suggestions extends Component {

@@ -16,7 +16,7 @@ import { textNodesQuery } from '../../../graphql/methods/textNodes';
 // components:
 import Header from '../../../components/header/Header';
 import FilterWidget from '../../filters/FilterWidget';
-import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
+import CommentLemmaSelect from '../../comments/components/CommentLemmaSelect';
 import AddKeyword from './AddKeyword';
 import ContextPanel from '../../contextPanel/ContextPanel';
 

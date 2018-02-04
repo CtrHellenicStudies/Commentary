@@ -4,7 +4,7 @@ import { compose } from 'react-apollo';
 import Utils from '../../lib/utils';
 
 // graphql
-import { commentsQuery } from '../../graphql/methods/comments';
+import commentsQuery from '../comments/graphql/queries/comments';
 import { tenantsQuery } from '../../graphql/methods/tenants';
 
 const resolveV1 = (props) => {
@@ -58,7 +58,7 @@ const resolveV2 = (props) => {
 		tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants;
 	}
 
-	if (comment && tenant) { 
+	if (comment && tenant) {
 		// TODO
 		resolveURL = `//${tenant.subdomain}.${Utils.getEnvDomain()}/commentary/?urn=${urn}&revision=${revision}`;
 	}

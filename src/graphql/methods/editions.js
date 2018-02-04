@@ -2,12 +2,22 @@ import { gql, graphql } from 'react-apollo';
 
 const query = gql`
 query editionsQuery($workUrn: CtsUrn) {
-	works(urn: $workUrn, language: "greek") {
+	works(urn: $workUrn) {
 	  slug
 	  english_title
 	  urn
 	  id
 		version {
+			id
+			title
+			slug
+		}
+		exemplar {
+			id
+			title
+			slug
+		}
+		translation {
 			id
 			title
 			slug

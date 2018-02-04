@@ -1,4 +1,4 @@
-const serializeUrn = (value) => {
+const serializeUrn = (value, type) => {
 
 	if (!value) {
 		return '';
@@ -27,6 +27,11 @@ const serializeUrn = (value) => {
 		return result;
 	}
 
+	// TODO: determine better architecture for class of CTS URN getting only work
+	if (type === 'work') {
+		return result;
+	}
+
 	/** version, exemplar, and translation are optional but must be in order */
 	if ('version' in value && value.version && value.version.length) {
 		result = `${result}.${value.version}`;
@@ -37,6 +42,8 @@ const serializeUrn = (value) => {
 			}
 		}
 	}
+
+
 
 
 	if ('passage' in value && value.passage && value.passage.length) {

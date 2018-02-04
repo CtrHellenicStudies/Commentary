@@ -77,6 +77,7 @@
     "subscriptions-transport-ws": "^0.8.3",
     "throttle-debounce": "^1.0.1",
     "underscore": "^1.8.3",
+    "underscore.string": "^3.3.4",
     "union-class-names": "^1.0.0",
     "universal-cookie": "^2.1.2"
   },

@@ -24,31 +24,34 @@ class CommentLemmaText extends Component {
 		const { textNodes } = this.props;
 		const { expanded } = this.state;
 
-		const textLenghtBound = 10;
-		const longText = textNodes.length > textLenghtBound;
+		const textLengthBound = 10;
+		const longText = textNodes.length > textLengthBound;
 
 		// if long text
 		if (longText) {
-			const loops = expanded ? textNodes.length : textLenghtBound;
+			const loops = expanded ? textNodes.length : textLengthBound;
 			const textNodesHTML = [];
+			let lastLocationIndex = null;
 
 			// construct the HTML to be rendered
 			// number of textNodes depended on the expanded state
 			for (let i = 0; i < loops; i += 1) {
+				lastLocationIndex = textNodes[i].location[textNodes[i].location.length - 1];
+
 				textNodesHTML.push(
 					<div
-						key={i}
+						key={textNodes[i].location.join('.')}
 						className="lemma-text-line"
 					>
 						<span
 							className={`
-								line-n ${(textNodes[i].n % 5) === 0  && textNodes[i].n !== 0 ?
+								line-n ${(lastLocationIndex % 5) === 0  && lastLocationIndex.n !== 0 ?
 									'line-n--visible'
 								:
 									''}
 							`}
 						>
-							{textNodes[i].n}
+							{textNodes[i].location.join('.')}
 						</span>
 						<p
 							className="lemma-text"
@@ -77,21 +80,25 @@ class CommentLemmaText extends Component {
 		// if not longText
 		return (
 			<div className="comment-lemma-text">
-				{textNodes.map((line, i) => (
-					<div
-						key={i}
-						className="lemma-text-line"
-						style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
-					>
-						<span className={`line-n ${(line.n % 5) === 0 ? 'line-n--visible' : ''}`}>
-							{line.n}
-						</span>
-						<p
-							className="lemma-text"
-							dangerouslySetInnerHTML={{ __html: line.html }}
-						/>
-					</div>
-				))}
+				{textNodes.map((textNode, i) => {
+					const lastLocationIndex = textNode.location[textNode.location.length - 1];
+
+					return (
+						<div
+							key={textNode.location.join('.')}
+							className="lemma-text-line"
+							style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
+						>
+							<span className={`line-n ${(lastLocationIndex % 5) === 0 ? 'line-n--visible' : ''}`}>
+								{textNode.location.join('.')}
+							</span>
+							<p
+								className="lemma-text"
+								dangerouslySetInnerHTML={{ __html: textNode.html }}
+							/>
+						</div>
+					);
+				})}
 			</div>
 		);
 	}
@@ -100,7 +107,7 @@ class CommentLemmaText extends Component {
 CommentLemmaText.propTypes = {
 	textNodes: PropTypes.arrayOf(PropTypes.shape({
 		html: PropTypes.string.isRequired,
-		n: PropTypes.number.isRequired,
+		location: PropTypes.arrayOf(PropTypes.number.isRequired),
 	})).isRequired,
 };
 

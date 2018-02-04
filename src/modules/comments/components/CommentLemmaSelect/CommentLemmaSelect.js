@@ -92,7 +92,7 @@ class CommentLemmaSelect extends Component {
 								''
 							}
 
-								<div className="edition-tabs tabs">
+								<div className="version-tabs tabs">
 									{this.state.lemmaText.map((lemmaTextEdition, i) => {
 										const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
@@ -101,7 +101,7 @@ class CommentLemmaSelect extends Component {
 											label={lemmaEditionTitle}
 											data-edition={lemmaTextEdition.title}
 											className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
-											'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+											'version-tab tab selected-version-tab' : 'version-tab tab'}
 											onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 										/>);
 									})}

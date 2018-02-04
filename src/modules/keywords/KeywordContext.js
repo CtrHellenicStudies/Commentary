@@ -116,7 +116,7 @@ class KeywordContext extends Component {
 						/>)
 					)}
 				</div>
-				<div className="edition-tabs tabs">
+				<div className="version-tabs tabs">
 					{
 						lemmaText.map((lemmaTextEdition, i) => {
 							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
@@ -126,7 +126,7 @@ class KeywordContext extends Component {
 									key={i}
 									label={lemmaEditionTitle}
 									data-edition={lemmaTextEdition.title}
-									className={this.state.selectedLemma === i ? 'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
+									className={this.state.selectedLemma === i ? 'version-tab tab selected-version-tab' : 'version-tab tab'}
 									onClick={this.toggleEdition.bind(null, i)}
 								/>
 							);

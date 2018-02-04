@@ -291,40 +291,71 @@ const Utils = {
 	},
 
 	/**
-	 * Get textNodes as array based on selected edition
+	 * Get textNodes as array by version
 	 */
-	textFromTextNodesGroupedByEdition(textNodes, _versions) {
+	textFromTextNodesGroupedByVersion(textNodes) {
 		const versions = [];
+		const translations = [];
 
-		// works
+		// handle case for no textNodes submitted
+		if (!textNodes) {
+			return [];
+		}
+
+		// split textnodes by version
 		textNodes.forEach((textNode) => {
-			let myVersion = versions.find(v => textNode.urn.startsWith(v.urn));
+			let textNodeVersion = versions.find(v => textNode.version.id === v.id);
+			let textNodeTranslation = translations.find(v => textNode.version.id === v.id);
 
-			if (!myVersion) {
-				const foundVersion = _versions.find(v => textNode.urn.startsWith(v.urn));
-				if (foundVersion) {
-					myVersion = {
-						_id: foundVersion.version.id,
-						title: foundVersion.version.title,
-						slug: foundVersion.slug,
-						// multiLine: foundEdition.multiLine, TODO
-						lines: [],
-					};
-					versions.push(myVersion);
-				}
-			}
-
-			if(myVersion) {
-				myVersion.lines.push({
-					_id: textNode.id,
+			if (textNodeVersion) {
+				textNodeVersion.textNodes.push({
+					id: textNode.id,
 					html: textNode.text,
-					n: textNode.location[1],
+					location: textNode.location,
+					index: textNode.index,
 				});
+
+			} else if (textNodeTranslation) {
+				textNodeTranslation.textNodes.push({
+					id: textNode.id,
+					html: textNode.text,
+					location: textNode.location,
+					index: textNode.index,
+				});
+
+			} else {
+				textNodeVersion = {
+					...textNode.version,
+					language: textNode.language,
+					textNodes: [],
+
+					// TODO add multiLine support to version with : textNode.version.multiLine
+				};
+
+				// If translation is set or is not in classical language, add as translation
+				if (
+						(textNode.translation && textNode.translation.id)
+					|| (
+							textNode.language
+						&& ~['english', 'french', 'german', 'italian'].indexOf(textNode.language.slug)
+					)
+				) {
+					textNodeVersion.translation = textNode.translation;
+					translations.push(textNodeVersion);
+
+				// if textnode language is not set, omit for the moment
+				} else if (
+					textNode.language
+					&& textNode.language.id
+				) {
+					versions.push(textNodeVersion);
+				}
 			}
 		});
 
-		return versions;
+		return { versions, translations };
 	},
+
 	getCommenters(commenterData, commenters) {
 		const commentersList = [];
 
@@ -335,11 +366,11 @@ const Utils = {
 
 		return commentersList;
 	},
-	parseMultilineEdition(editions, multiline) {
-		const parsedEditions = [];
+	parseMultilineVersion(versions, multiline) {
+		const parsedVersions = [];
 
-		editions.forEach((edition, index) => {
-			const joinedText = edition.lines.map(line => line.html).join(' ');
+		versions.forEach((version, index) => {
+			const joinedText = version.lines.map(line => line.html).join(' ');
 
 			const tag = new RegExp(`<lb id="\\d+" ed="${multiline}" />`, 'ig');
 
@@ -372,12 +403,12 @@ const Utils = {
 				return new Error('Parsing error');
 			}
 
-			const currentEdition = edition;
-			currentEdition.lines = result;
-			parsedEditions.push(currentEdition);
+			const currentVersion = version;
+			currentVersion.lines = result;
+			parsedVersions.push(currentVersion);
 		});
 
-		return parsedEditions;
+		return parsedVersions;
 	},
 
 	getEditorState(content) {

@@ -69,12 +69,27 @@ query textNodesQuery($collectionUrn: CtsUrn, $textGroupUrn: CtsUrn, $workUrn: Ct
 */
 
 const query = gql`
-query textNodesQuery($textNodesUrn: CtsUrn) {
+query textNodesQuery($textNodesUrn: CtsUrn!) {
 	textNodes(urn: $textNodesUrn) {
 		id
 		text
 		location
 		urn
+		version {
+			id
+			title
+			slug
+		}
+		translation {
+			id
+			title
+			slug
+		}
+		language {
+			id
+			title
+			slug
+		}
 	}
 }
 `;

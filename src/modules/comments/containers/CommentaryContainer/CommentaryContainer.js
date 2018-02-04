@@ -23,22 +23,29 @@ class CommentaryContainer extends React.Component {
 		let commentGroups = [];
 
 		if (!isOnHomeView) {
-			if (this.props.commentsQuery.loading) {
+			if (
+        this.props.commentsQuery.loading
+        || this.props.commentsMoreQuery.loading
+      ) {
 				return (
-					<div className="ahcip-spinner commentary-loading">
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
-					</div>
+    			<div className="commentary-primary content ">
+  					<div className="ahcip-spinner commentary-loading">
+  						<div className="double-bounce1" />
+  						<div className="double-bounce2" />
+  					</div>
+          </div>
 				);
 			}
 
       if (!this.props.commentsMoreQuery.commentsMore) {
 				return (
-					<div className="no-commentary-wrap">
-						<p className="no-commentary no-results">
-							No commentary available for the current search.
-						</p>
-					</div>
+    			<div className="commentary-primary content ">
+  					<div className="no-commentary-wrap">
+  						<p className="no-commentary no-results">
+  							No commentary available for the current search.
+  						</p>
+  					</div>
+          </div>
 				);
 			}
 		}

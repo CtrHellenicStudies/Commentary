@@ -4,8 +4,6 @@ import autoBind from 'react-autobind';
 
 // graphql
 import { textNodesQuery } from '../../../../graphql/methods/textNodes';
-import { editionsQuery } from '../../../../graphql/methods/editions';
-// import { translationsQuery } from '../../../../graphql/methods/translations';
 
 // components
 import CommentLemma from '../../components/CommentLemma';
@@ -21,31 +19,32 @@ class CommentLemmaContainer extends React.Component {
 		super(props);
 
 		this.state = {
-			selectedLemmaEditionIndex: 0,
+			selectedLemmaVersionIndex: 0,
+			selectedTranslationVersionIndex: null,
 		};
 
 		autoBind(this);
 	}
 
-	toggleEdition(editionSlug) {
-		const { editions } = this.state;
-		const { selectedLemmaEditionIndex } = this.state;
-		let selectedLemmaEdition = this.state.selectedLemmaEdition;
+	toggleVersion(versionId) {
+		const { versions } = this.state;
+		const { selectedLemmaVersionIndex } = this.state;
+		let selectedLemmaVersion = this.state.selectedLemmaVersion;
 
-		if (editions && editions.length) {
-			if (editions[selectedLemmaEditionIndex].slug !== editionSlug) {
-				let newSelectedEditionIndex = 0;
+		if (versions && versions.length) {
+			if (versions[selectedLemmaVersionIndex].id !== versionId) {
+				let newSelectedVersionIndex = 0;
 
-				editions.forEach((edition, index) => {
-					if (edition.slug === editionSlug) {
-						newSelectedEditionIndex = index;
-						selectedLemmaEdition = edition;
+				versions.forEach((version, index) => {
+					if (version.id === versionId) {
+						newSelectedVersionIndex = index;
+						selectedLemmaVersion = version;
 					}
 				});
 
 				this.setState({
-					selectedLemmaEditionIndex: newSelectedEditionIndex,
-					selectedLemmaEdition: selectedLemmaEdition
+					selectedLemmaVersionIndex: newSelectedVersionIndex,
+					selectedLemmaVersion: selectedLemmaVersion
 				});
 			}
 		}
@@ -53,55 +52,70 @@ class CommentLemmaContainer extends React.Component {
 
   render() {
 		const { commentGroup, multiline } = this.props;
-		const { selectedLemmaEditionIndex } = this.state;
-		let translationAuthors = [];
+		const { selectedLemmaVersionIndex, selectedTranslationVersionIndex } = this.state;
+		let textNodes = [];
+		let works = [];
+		let versionsWithText = [];
+		let translationsWithText = [];
+		let selectedLemmaVersion = { textNodes: [] };
+		let selectedTranslationVersion = { textNodes: [] };
 
-		if (this.props.textNodesQuery.loading
-			|| this.props.editionsQuery.loading
-			// || this.props.translationsQuery.loading
-		) {
+		if (this.props.textNodesQuery.loading) {
 			return <LoadingLemma />
 		}
 
 		// text nodes data
-		const textNodes = this.props.textNodesQuery.textNodes;
+		if (
+			this.props.textNodesQuery
+			&& this.props.textNodesQuery.textNodes
+		) {
+			textNodes = this.props.textNodesQuery.textNodes;
+		}
 
-		// set editions from textnodes data
-		let editions = Utils.textFromTextNodesGroupedByEdition(
-			textNodes,
-			this.props.editionsQuery.works,
-		);
+		// TODO: potentially structure data from backend to prevent this transformation
+		// in the future
+		// set versions from textnodes data
+		if (textNodes && textNodes.length) {
+			const allVersions = Utils.textFromTextNodesGroupedByVersion(textNodes);
+			versionsWithText = allVersions.versions;
+			translationsWithText = allVersions.translations;
+		}
 
-		// if necessary, parse editions into multiline data
-		editions = multiline ?
-			Utils.parseMultilineEdition(editions, multiline)
+		// if necessary, parse versions into multiline data
+		versionsWithText = multiline ?
+			Utils.parseMultilineVersion(versionsWithText, multiline)
 			:
-			editions;
-		const selectedLemmaEdition = (editions.length && editions[selectedLemmaEditionIndex].textNodes) ?
-			editions[selectedLemmaEditionIndex]
-			:
-			{ textNodes: [] };
+			versionsWithText;
+
+		// set selected version
+		if (
+			versionsWithText.length
+			&& versionsWithText[selectedLemmaVersionIndex]
+		) {
+			selectedLemmaVersion = versionsWithText[selectedLemmaVersionIndex];
+		}
+
 
 
     return (
       <CommentLemma
 				commentGroup={commentGroup}
-				editions={editions}
-				translationAuthors={translationAuthors}
-        selectedLemmaEdition={selectedLemmaEdition}
+				versions={versionsWithText}
+				translations={translationsWithText}
+        selectedLemmaVersion={selectedLemmaVersion}
+				selectedTranslationVersion={selectedTranslationVersion}
 				showContextPanel={this.props.showContextPanel}
 				index={this.props.index}
 				setScrollPosition={this.props.setScrollPosition}
 				hideLemma={this.props.hideLemma}
 				selectMultiLine={this.props.selectMultiLine}
 				multiline={this.props.multiline}
+				toggleVersion={this.toggleVersion}
       />
     );
   }
 }
 
 export default compose(
-	editionsQuery,
 	textNodesQuery,
-	// translationsQuery // TODO: readd translations
 )(CommentLemmaContainer);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
+import _s from 'underscore.string';
 import { compose } from 'react-apollo';
 import { Sticky } from 'react-sticky';
 import autoBind from 'react-autobind';
@@ -28,6 +29,7 @@ class CommentLemma extends Component {
 			showTranslation: false,
 			translationMenuOpen: false,
 			multilineMenuOpen: false,
+			versionMenuOpen: false,
 		};
 
 		autoBind(this);
@@ -40,29 +42,6 @@ class CommentLemma extends Component {
 		showContextPanel(commentGroup);
 	}
 
-	handleAuthorChange(event, value) {
-		const { selectedAuthor, showTranslation } = this.state;
-
-		if (!selectedAuthor) {
-			this.setState({
-				selectedAuthor: value,
-				showTranslation: true,
-				translationsMenuOpen: false,
-			});
-		} else if (selectedAuthor === value) {
-			this.setState({
-				showTranslation: !showTranslation,
-				translationsMenuOpen: false,
-			});
-		} else if (selectedAuthor !== value) {
-			this.setState({
-				selectedAuthor: value,
-				showTranslation: true,
-				translationsMenuOpen: false,
-			});
-		}
-	}
-
 	handleMultilineSelect(event, value) {
 		this.props.selectMultiLine(value);
 
@@ -71,7 +50,7 @@ class CommentLemma extends Component {
 		});
 	}
 
-	handleOpenTranslationMenu(event) {
+	handleToggleTranslationMenu(event) {
     // This prevents ghost click.
 		event.preventDefault();
 
@@ -83,7 +62,13 @@ class CommentLemma extends Component {
 		});
 	}
 
-	handleOpenMultilineMenu(event) {
+	handleRequestCloseTranslationMenu() {
+		this.setState({
+			translationsMenuOpen: false,
+		});
+	}
+
+	handleToggleMultilineMenu(event) {
 		// This prevents ghost click.
 		event.preventDefault();
 
@@ -95,25 +80,33 @@ class CommentLemma extends Component {
 		});
 	}
 
-	handleCloseMultilineMenu(event) {
+	handleToggleVersionMenu(event) {
 		// This prevents ghost click.
 		event.preventDefault();
 
+		const { multilineMenuOpen } = this.state;
+
 		this.setState({
-			multilineMenuOpen: false,
+			versionMenuOpen: !multilineMenuOpen,
+			versionAnchorEl: event.currentTarget,
 		});
 	}
 
-	handleOpenEditionMenu() {
-		const { openEditionMenu } = this.state;
-
+	handleRequestCloseVersionMenu() {
 		this.setState({
-			openEditionMenu: !openEditionMenu
+			versionMenuOpen: false,
 		});
+	}
+
+	toggleVersion(e, value) {
+		this.setState({
+			versionMenuOpen: false,
+		});
+		this.props.toggleVersion(value);
 	}
 
 	render() {
-		const { commentGroup, editions, selectedLemmaEdition, translationAuthors, hideLemma } = this.props;
+		const { commentGroup, versions, selectedLemmaVersion, translations, hideLemma } = this.props;
 		const { selectedAuthor, showTranslation } = this.state;
 
 		// TODO: use work from query
@@ -134,38 +127,69 @@ class CommentLemma extends Component {
 					<CommentLemmaInner
 						commentGroup={commentGroup}
 						showTranslation={showTranslation}
-						textNodes={selectedLemmaEdition.textNodes}
-						author={selectedAuthor}
+						textNodes={selectedLemmaVersion.textNodes}
 					/>
 
-					<div className="edition-tabs tabs" />
-					<div className="edition-tabs tabs">
-						{editions.map((lemmaTextEdition, i) => {
-							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 41);
-							const multiLineList = lemmaTextEdition.multiLine && lemmaTextEdition.multiLine.length ? lemmaTextEdition.multiLine : [];
+					<div className="version-tabs tabs">
+						<div
+							className="version-tab-outer"
+						>
+							<RaisedButton
+								label="Versions"
+								className="version-tab"
+								onClick={this.handleToggleVersionMenu}
+							/>
+							<Popover
+								open={this.state.versionMenuOpen}
+								anchorEl={this.state.versionAnchorEl}
+								anchorOrigin={{
+									horizontal: 'left',
+									vertical: 'bottom',
+								}}
+								targetOrigin={{
+									horizontal: 'left',
+									vertical: 'top',
+								}}
+								onRequestClose={this.handleRequestCloseVersionMenu}
+								animation={PopoverAnimationVertical}
+							>
+								<Menu
+									value={selectedLemmaVersion.id}
+									onChange={this.toggleVersion}
+									className="version-menu"
+								>
+									{versions.map((version, i) => {
+										const lemmaVersionTitle = _s.prune(version.title, 30);
+										return (
+											<MenuItem
+												key={version.id}
+												value={version.id}
+												primaryText={lemmaVersionTitle}
+												className="menu-item version-menu-item"
+												style={{
+													fontFamily: '"Proxima Nova A W07 Light", sans-serif',
+													fontSize: '12px',
+												}}
+											/>
+										)
+									})}
+								</Menu>
+							</Popover>
+						</div>
 
-							const editionButton = (
-								<RaisedButton
-									key={`${lemmaTextEdition.slug}-${i}`}
-									label={lemmaEditionTitle}
-									data-edition={lemmaTextEdition.title}
-									className={selectedLemmaEdition.slug === lemmaTextEdition.slug ?
-										'edition-tab tab selected-edition-tab' : 'edition-tab tab'}
-									onClick={this.toggleEdition.bind(null, lemmaTextEdition.slug)}
-								/>
-							);
+						{	/*
 							const multiLine = multiLineList.length ? (
 								<RaisedButton
-									key={`${lemmaTextEdition.slug}-multi-${i}`}
+									key={`${lemmaTextVersion.slug}-multi-${i}`}
 									icon={<FontIcon className="mdi mdi-chevron-down" />}
-									className="edition-multiline"
-									onClick={this.handleOpenMultilineMenu}
+									className="version-multiline"
+									onClick={this.handleToggleMultilineMenu}
 								/>
 							) : '';
 
 							const popover = (
 								<Popover
-									key={`${lemmaTextEdition.slug}-popover-${i}`}
+									key={`${lemmaTextVersion.slug}-popover-${i}`}
 									open={this.state.multilineMenuOpen}
 									anchorEl={this.state.multilineAnchorEl}
 									anchorOrigin={{
@@ -208,24 +232,14 @@ class CommentLemma extends Component {
 									</Menu>
 								</Popover>
 							);
+							*/
+						}
 
-							return (
-								<div
-									key={`${lemmaTextEdition.slug}-${i}`}
-									className="edition-tab-outer"
-								>
-									{editionButton}
-									{multiLine}
-									{popover}
-								</div>
-							);
-						})}
-
-						{translationAuthors.length > 0 ?
+						{translations.length > 0 ?
 							<RaisedButton
-								onTouchTap={this.handleOpenTranslationMenu}
+								onTouchTap={this.handleToggleTranslationMenu}
 								label="Translation"
-								className={`edition-tab tab translation-tab ${showTranslation} ? 'translation-tab--active' : ''}`}
+								className={`version-tab tab translation-tab ${showTranslation} ? 'translation-tab--active' : ''}`}
 							/>
 						: ''}
 						<Popover
@@ -239,18 +253,18 @@ class CommentLemma extends Component {
 								horizontal: 'left',
 								vertical: 'top',
 							}}
-							onRequestClose={this.handleRequestClose}
+							onRequestClose={this.handleRequestCloseTranslationMenu}
 							animation={PopoverAnimationVertical}
 						>
 							<Menu
 								onChange={this.handleAuthorChange}
 								className="translation-author-menu"
 							>
-								{translationAuthors.map((author, i) => (
+								{translations.map((translation, i) => (
 									<MenuItem
-										key={`${author}-${i}`}
-										value={author}
-										primaryText={author}
+										key={translation.id}
+										value={translation.id}
+										primaryText={translation.title}
 										className="translation-author-menu-item"
 										style={{
 											fontFamily: '"Proxima Nova A W07 Light", sans-serif',
@@ -298,21 +312,19 @@ CommentLemma.propTypes = {
 	setScrollPosition: PropTypes.func.isRequired,
 	index: PropTypes.string.isRequired,
 	hideLemma: PropTypes.bool.isRequired,
-	translationAuthors: PropTypes.array,
 	multiline: PropTypes.bool,
 	selectMultiLine: PropTypes.func,
 
-	editions: PropTypes.arrayOf(PropTypes.shape({
+	translations: PropTypes.array,
+
+	versions: PropTypes.arrayOf(PropTypes.shape({
 		title: PropTypes.string.isRequired,
 		slug: PropTypes.string.isRequired,
 	})),
-	editionsQuery: PropTypes.object,
-	textNodesQuery: PropTypes.object,
-	// translationsQuery: PropTypes.object
 };
 
 CommentLemma.defaultProps = {
-	editions: null
+	versions: null
 };
 
 export default CommentLemma;

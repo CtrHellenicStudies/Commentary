@@ -68,8 +68,8 @@ class CommentGroup extends Component {
 							hideLemma={hideLemma}
 							selectMultiLine={selectMultiLine}
 							multiline={multiline}
-							textNodeUrn={serializeUrn(commentGroup.lemmaCitation)}
-							workUrn={serializeUrn(commentGroup.lemmaCitation)}
+							textNodesUrn={serializeUrn(commentGroup.lemmaCitation)}
+							workUrn={serializeUrn(commentGroup.lemmaCitation, 'work')}
 						/>
 
 						{commentGroup.comments.map(comment => (

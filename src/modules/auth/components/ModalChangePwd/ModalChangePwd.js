@@ -31,8 +31,8 @@ class ModalChangePwd extends React.Component {
 		return (
 			<div>
 				<div
-					className={`orpheus-modal-login
-					orpheus-modal orpheus-login-signup ${((lowered) ? ' lowered' : '')}`}
+					className={`chs-modal-login
+					chs-modal chs-login-signup ${((lowered) ? ' lowered' : '')}`}
 				>
 					<div
 						className="close-modal paper-shadow"

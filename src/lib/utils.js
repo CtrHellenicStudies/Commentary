@@ -281,8 +281,8 @@ const Utils = {
 
 		if (window.location.hostname.match(/\w+.chs.harvard.edu/)) {
 			domain = 'chs.harvard.edu';
-		} else if (window.location.hostname.match(/\w+.chs.orphe.us/)) {
-			domain = 'chs.orphe.us';
+		} else if (window.location.hostname.match(/\w+.chs.chs.harvard.edu/)) {
+			domain = 'chs.chs.harvard.edu';
 		} else if (window.location.hostname.match(/\w+.chs.local/)) {
 			domain = 'chs.local';
 		}

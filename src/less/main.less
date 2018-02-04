@@ -31,17 +31,23 @@
 
 /* Layouts and Components */
 
-@import '../modules/notFound/notFound.import.less';//done
+// shared
 @import '../modules/shared/snackattack.import.less';//done
+
+// works
 @import '../modules/works/works.import.less';//done
 @import '../modules/works/workVisualization.import.less';//done
-@import '../modules/discussionComments/discussionComments.import.less'; //done
+
+// commenters
 @import '../modules/commenters/commenters.import.less';//done
 @import '../modules/commenters/commenterDetail.import.less';//done
 @import '../modules/commenters/commenterVizualizations/commenterVisualizations.import.less';//done
 @import '../modules/commenters/referenceWorks/commenterReferenceWorks.import.less';//done
+
+// editor
 @import '../modules/draftEditor/draftinput.import.less';//done
 
+// comments nad revisions
 @import '../modules/comments/components/Commentary/commentary.import.less';//done
 @import '../modules/comments/components/CommentLemma/commentaryLemma.import.less';//done
 @import '../modules/comments/components/CommentDetail/CommentCitation/commentCitation.import.less';//done
@@ -49,32 +55,58 @@
 @import '../modules/comments/less/filters.import.less';//done
 @import '../modules/comments/less/searchTools.import.less';//done
 @import '../modules/comments/less/searchToolsDrawer.import.less';//done
+@import '../modules/comments/components/AddComment/addComment.import.less';//done
+@import '../modules/revisions/addRevision/addRevision.import.less';//done
 
+// discussion comments
+@import '../modules/discussionComments/discussionComments.import.less'; //done
+@import '../modules/discussionComments/discussionCommentsList.import.less';//done
+
+// community
 @import '../modules/community/comunityDirectory.import.less';//done
 @import '../modules/community/communityMemberList.import.less';//done
 @import '../modules/community/teaser/recentActivityTeaser.import.less';//done
 @import '../modules/community/communityPage.import.less';//done
 @import '../modules/community/recentActivityList.import.less';//done
 @import '../modules/community/recentActivity.import.css';//done
-@import '../modules/discussionComments/discussionCommentsList.import.less';//done
-@import '../modules/comments/components/AddComment/addComment.import.less';//done
-@import '../modules/revisions/addRevision/addRevision.import.less';//done
-@import '../modules/translations/addTranslation/addTranslation.import.less';//done
+
+// textnodes and translations
 @import '../modules/textNodes/textNodesEditor.import.less';//done
 @import '../modules/textNodes/input/textNodesInput.import.less';//done
+@import '../modules/translations/addTranslation/addTranslation.import.less';//done
+
+// header
 @import '../components/header/user/recent/profileAvatarButton.import.less';//done
 @import '../components/header/user/recent/recentList.import.less';//done
 @import '../components/header/user/recent/recentTeaser.import.less';//done
 @import '../components/header/search/dropdowns/userDropdown.import.less';//done
-@import '../modules/home/home.import.less';//done
+
+// auth
+@import '../modules/auth/components/Login/Login.import.less';
+@import '../modules/auth/components/OAuthButtons/OAuthButtons.import.less';
+@import '../modules/auth/components/PWDLoginForm/PWDLoginForm.import.less';
+
+// keywords
 @import '../modules/keywords/keywords.import.less';//done
 @import '../modules/keywords/keywordsSuggestions.import.less';//done
+
+// reference works
 @import '../modules/referenceWorks/referenceWorks.import.less';//done
+
+// user accounts
 @import '../modules/profile/profilePage.import.less';//done
-@import '../modules/services/nameResolutionService.import.less';//done
 @import '../modules/profile/avatar/avatar.import.less';
 @import './account.import.less';
 @import './bookmarks.import.less';
 @import './users.import.less';
 @import './usersShelf.import.less';
+
+// services
+@import '../modules/services/nameResolutionService.import.less';//done
+
+// pages
 @import '../modules/page/page.import.less';
+@import '../modules/notFound/notFound.import.less';//done
+
+// home
+@import '../modules/home/home.import.less';//done

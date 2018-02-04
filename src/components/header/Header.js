@@ -12,9 +12,9 @@ import { tenantsQuery } from '../../graphql/methods/tenants';
 import { settingsQuery } from '../../graphql/methods/settings';
 
 // layouts:
-import ModalLogin from '../../modules/login/ModalLogin';
-import ModalSignup from '../../modules/login/ModalSignup';
-import ModalForgotPwd from '../../modules/login/ModalForgotPwd';
+import ModalLogin from '../../modules/auth/components/ModalLogin';
+import ModalSignup from '../../modules/auth/components/ModalSignup';
+// import ModalForgotPwd from '../../modules/auth/components/ModalForgotPwd';
 import LeftMenu from './leftMenu/LeftMenu';
 import CommentarySearchToolbar from './search/CommentarySearchToolbar';
 import CommentarySearchPanel from './search/CommentarySearchPanel';
@@ -294,7 +294,7 @@ class Header extends Component {
 									{user ?
 										<div>
                                             {   this.state.user &&
-                                                Utils.userInRole(this.state.user, ['editor', 'admin', 'commenter']) 
+                                                Utils.userInRole(this.state.user, ['editor', 'admin', 'commenter'])
                                             ?
 												<div className="user-header-links admin-header-links">
 													{tenant && !tenant.isAnnotation &&
@@ -338,14 +338,14 @@ class Header extends Component {
 										</div>
 									:
 										<div>
-											{ isOnHomeView ? 
+											{ isOnHomeView ?
 											<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
 												<FlatButton
 													label="Login"
 													onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
 													style={styles.flatButton}
 													className="account-button account-button-login"
-												/> 
+												/>
 											</Link>: ''}
 											<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
 												<FlatButton
@@ -439,11 +439,13 @@ class Header extends Component {
 					/>
 				}
 				{!user && modalForgotPwdLowered &&
-				<ModalForgotPwd
-					lowered={modalForgotPwdLowered}
-					signupModal={this.showSignupModal}
-					closeModal={this.closeForgotPwdModal}
-				/>
+					<div >
+						{/*<ModalForgotPwd
+							lowered={modalForgotPwdLowered}
+							signupModal={this.showSignupModal}
+							closeModal={this.closeForgotPwdModal}
+						/>*/}
+					</div>
 				}
 			</div>
 		);

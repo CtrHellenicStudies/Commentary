@@ -11,6 +11,7 @@ with new “filters” object passed as first attribute.
 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import autoBind from 'react-autobind';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -57,14 +58,7 @@ class CommentaryLayout extends Component {
 		});
 
 
-		this.getFilterValue = this.getFilterValue.bind(this);
-		this._updateRoute = this._updateRoute.bind(this);
-		this._toggleSearchTerm = this._toggleSearchTerm.bind(this);
-		this._handleChangeTextsearch = this._handleChangeTextsearch.bind(this);
-		this._handleChangeLineN = this._handleChangeLineN.bind(this);
-		this.loadMoreComments = this.loadMoreComments.bind(this);
-		this.showLoginModal = this.showLoginModal.bind(this);
-		this.closeLoginModal = this.closeLoginModal.bind(this);
+		autoBind(this);
 	}
 
 	getFilterValue(filters, key) {
@@ -135,9 +129,15 @@ class CommentaryLayout extends Component {
 	}
 
 	loadMoreComments() {
-		this.setState({
-			limit: this.state.limit + 10,
-		});
+		if (
+			!this.props.isOnHomeView
+			&& this.props.commentsMoreQuery
+			&& this.props.commentsMoreQuery.commentsMore
+		) {
+			this.setState({
+				limit: this.state.limit + 10,
+			});
+		}
 	}
 
 	showLoginModal() {

@@ -8,7 +8,7 @@ hello.init({
 	twitter: process.env.REACT_APP_TWITTER_CONSUMER_KEY,
 	google: process.env.REACT_APP_GOOGLE_CLIENT_ID,
 }, {
-	redirect_uri: `${process.env.REACT_APP_GRAPHQL}/oauthproxy`,
+	redirect_uri: `${process.env.REACT_APP_AUTHENTICATION_API}/oauthproxy`,
 });
 
 class OAuthButtons extends Component {

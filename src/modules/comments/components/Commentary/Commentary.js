@@ -110,14 +110,6 @@ class Commentary extends Component {
 		});
 	}
 
-	loadMoreComments() {
-		if (!this.props.isOnHomeView
-		&& this.props.commentsMoreQuery.commentsMore) {
-			this.props.loadMoreComments();
-		}
-	}
-
-
 	render() {
 		const {
 			isOnHomeView, toggleSearchTerm, showLoginModal, filters, settings, history,
@@ -156,7 +148,7 @@ class Commentary extends Component {
 				</div>
 				<div className="read-more-link">
 					<RaisedButton
-						onClick={this.loadMoreComments}
+						onClick={this.props.loadMoreComments}
 						className="cover-link show-more commentary-raise-button"
 						label="Read More"
 					/>

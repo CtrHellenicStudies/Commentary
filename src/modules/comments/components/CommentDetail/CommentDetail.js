@@ -10,7 +10,7 @@ import { compose } from 'react-apollo';
 // graphql
 import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
 
-// components:
+// components
 import CommentUpper from './CommentUpper';
 import CommentKeywords from './CommentKeywords';
 import CommentLower from './CommentLower';
@@ -90,31 +90,6 @@ class CommentDetail extends Component {
 		const { filters } = this.props;
 		const { searchTerm } = this.state;
 
-		const tenantId = sessionStorage.getItem('tenantId');
-		const { comment } = nextProps;
-
-		const referenceWorkIds = [];
-		let referenceWorks = [];
-
-		/*
-		if (comment && comment.referenceWorks && !nextProps.referenceWorksQuery.loading) {
-			comment.referenceWorks.forEach((referenceWork) => {
-				referenceWorkIds.push(referenceWork.referenceWorkId);
-			});
-			referenceWorks = nextProps.referenceWorksQuery.referenceWorks.filter(x => referenceWorkIds.find(y => x._id === y) !== undefined && x.tenantId === tenantId);
-		}
-
-		const user = Cookies.get('user');
-		const ready = !nextProps.referenceWorksQuery.loading;
-
-		this.setState({
-			user,
-			ready,
-			referenceWorks,
-		});
-		*/
-
-		/*
 		if (
 			filters
 			&& filters.find(filter => filter.key === 'textsearch') !== searchTerm
@@ -125,7 +100,6 @@ class CommentDetail extends Component {
 				searchTerm: searchTermsObject.values[0]
 			});
 		}
-		*/
 	}
 
 	getRevisionIndex() {
@@ -239,9 +213,9 @@ class CommentDetail extends Component {
 	render() {
 
 		const { comment, commenters, toggleLemma, showLoginModal } = this.props;
-		const { discussionVisible, searchTerm, referenceWorks, ready, settings } = this.state;
+		const { discussionVisible, searchTerm, referenceWorks, settings } = this.state;
 
-		if (!ready) {
+		if (!comment) {
 			// TODO: handle loading for component
 			return null;
 		}
@@ -289,8 +263,6 @@ class CommentDetail extends Component {
 
 				</article>
 
-				{/*
-					Disable all discussion threads for the moment to increase performance
 				<DiscussionThread
 					comment={comment}
 					showDiscussionThread={this.showDiscussionThread}
@@ -298,9 +270,8 @@ class CommentDetail extends Component {
 					discussionVisible={this.state.discussionVisible}
 					toggleLemma={toggleLemma}
 					showLoginModal={showLoginModal}
-					discussionCommentsDisabled={settings.discussionCommentsDisabled}
+					discussionCommentsDisabled={true}
 				/>
-				*/}
 
 				{this.state.lemmaReferenceModalVisible ?
 					<LemmaReferenceModal
@@ -328,6 +299,7 @@ class CommentDetail extends Component {
 		);
 	}
 }
+
 CommentDetail.propTypes = {
 	comment: PropTypes.shape({
 		_id: PropTypes.string.isRequired,
@@ -363,6 +335,7 @@ CommentDetail.propTypes = {
 	toggleLemma: PropTypes.func.isRequired,
 	referenceWorksQuery: PropTypes.object,
 };
+
 CommentDetail.defaultProps = {
 	filters: null,
 	toggleSearchTerm: null,
@@ -371,9 +344,9 @@ CommentDetail.defaultProps = {
 	referenceWorks: null,
 	ready: false,
 };
+
 /*
 	END CommentDetail
 */
-export default compose(
-	// referenceWorksQuery,
-)(CommentDetail);
+
+export default CommentDetail;

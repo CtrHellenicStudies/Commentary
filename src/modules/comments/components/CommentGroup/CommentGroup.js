@@ -73,21 +73,17 @@ class CommentGroup extends Component {
 						/>
 
 						{commentGroup.comments.map(comment => (
-							<div
+							<CommentDetail
 								key={comment._id}
-							>
-								<CommentDetail
-									key={`${comment}-comment-detail`}
-									comment={comment}
-									commenters={this.getCommentersOfComment(comment)}
-									toggleSearchTerm={!isOnHomeView ? toggleSearchTerm : null}
-									isOnHomeView={isOnHomeView}
-									filters={filters}
-									toggleLemma={this.toggleLemma}
-									showLoginModal={showLoginModal}
-									history={history}
-								/>
-							</div>
+								comment={comment}
+								commenters={this.getCommentersOfComment(comment)}
+								toggleSearchTerm={!isOnHomeView ? toggleSearchTerm : null}
+								isOnHomeView={isOnHomeView}
+								filters={filters}
+								toggleLemma={this.toggleLemma}
+								showLoginModal={showLoginModal}
+								history={history}
+							/>
 						))}
 					</StickyContainer>
 				</div>

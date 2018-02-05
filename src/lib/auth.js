@@ -14,7 +14,7 @@ const login = async (data) => {
 	if (userLoggedIn()) return null;
 
 	try {
-		const res = await fetch(`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_LOGIN_URI}`, {
+		const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/login`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
@@ -30,7 +30,7 @@ const login = async (data) => {
 		}
 		const resJson = await res.json();
 		if (resJson.token) {
-			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'orpheus.local';
+			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
 			cookies.set('token', resJson.token, { domain });
 			return resJson;
 		}
@@ -40,7 +40,7 @@ const login = async (data) => {
 };
 
 const logoutUser = async () => {
-	const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'orpheus.local';
+	const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
 	cookies.remove('token', { domain });
 	cookies.remove('hello', { domain });
 };
@@ -49,7 +49,7 @@ const register = async (data) => {
 	if (userLoggedIn()) return null;
 
 	try {
-		const res = await fetch(`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_REGISTER_URI}`, {
+		const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/register`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
@@ -66,7 +66,7 @@ const register = async (data) => {
 		const resJson = await res.json();
 		if (resJson.token) {
 			// TODO: Add domain: 'orphe.us' options to cookie for cross hostname auth
-			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'orpheus.local';
+			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
 			cookies.set('token', resJson.token, { domain });
 			return resJson;
 		}
@@ -85,7 +85,7 @@ const verifyToken = async () => {
 	const token = cookies.get('token');
 	if (token) {
 		try {
-			const res = await fetch(`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_VERIFY_TOKEN_URI}`, {
+			const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/verify-token`, {
 				method: 'POST',
 				credentials: 'include',
 				headers: {
@@ -99,7 +99,7 @@ const verifyToken = async () => {
 			}
 			return res.json();
 		} catch (err) {
-			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'orpheus.local';
+			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
 			cookies.remove('token', { domain });
 			cookies.remove('hello', { domain });
 

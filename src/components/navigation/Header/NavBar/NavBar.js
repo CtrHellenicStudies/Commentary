@@ -24,6 +24,7 @@ import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // actions
 import { toggleLeftMenu } from '../../../../actions/leftMenu';
+import { toggleAuthModal } from '../../../../modules/auth/actions';
 
 // styles
 const styles = {
@@ -194,16 +195,19 @@ class NavBar extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		// TODO: move this to container
 		this.setState({
 			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
 			tenant: this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId),
 		});
 	}
+
 	render() {
 
 		const {
 			filters, isOnHomeView, toggleSearchTerm, handleChangeTextsearch, handlePagination,
 			addCommentPage, selectedWork, toggleAuthModal, dispatchToggleLeftMenu, userId, logout,
+			dispatchToggleAuthModal,
 		} = this.props;
 		const {
 			leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered, settings,
@@ -315,19 +319,18 @@ class NavBar extends React.Component {
 										</div>
 									:
 										<div>
-											{ isOnHomeView ?
 											<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
 												<FlatButton
 													label="Login"
-													onClick={tenant && !tenant.isAnnotation ? this.showLoginModal : undefined}
+													onClick={dispatchToggleAuthModal}
 													style={styles.flatButton}
 													className="account-button account-button-login"
 												/>
-											</Link>: ''}
+											</Link>
 											<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
 												<FlatButton
 													label="Join the Community"
-													onClick={tenant && !tenant.isAnnotation ? this.showSignupModal : undefined}
+													onClick={dispatchToggleAuthModal}
 													style={styles.flatButton}
 													className="account-button account-button-login"
 												/>
@@ -415,6 +418,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 	dispatchToggleLeftMenu: (open) => {
 		dispatch(toggleLeftMenu(open));
+	},
+	dispatchToggleAuthModal: (open) => {
+		dispatch(toggleAuthModal(open));
 	},
 });
 

@@ -2,10 +2,13 @@ import { gql, graphql } from 'react-apollo';
 
 const query = gql`
 	query userAvatarQuery {
-		userProfile {
+		getAuthedUser {
 			_id
-			avatar
-			name
+			username
+			profile {
+				name
+				avatarUrl
+			}
 		}
 	}
 `;

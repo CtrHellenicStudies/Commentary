@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import ProfileNav from '../ProfileNav';
 
-import './ProfileProjects.css';
+
 
 const ProfileProjects = ({ projects }) => (
 	<div className="profileProjects">

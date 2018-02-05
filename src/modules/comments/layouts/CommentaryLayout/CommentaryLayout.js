@@ -21,7 +21,7 @@ import qs from 'qs-lite';
 // components
 import CommentaryContainer from '../../containers/CommentaryContainer';
 import ModalLogin from '../../../login/ModalLogin';
-import Header from '../../../../components/header/Header';
+import Header from '../../../../components/navigation/Header';
 
 // graphql
 import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';

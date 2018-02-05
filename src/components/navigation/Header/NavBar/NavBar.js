@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Headroom from 'react-headroom';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 // components
 import NavBarHeader from './NavBarHeader';
 import UserAvatarContainer from '../../../../modules/users/containers/UserAvatarContainer';
 
 // styles
-import './NavBar.css';
+
 
 
 const NavBar = ({ toggleAuthModal, toggleLeftMenu, userId, logout }) => (

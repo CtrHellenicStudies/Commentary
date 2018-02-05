@@ -11,7 +11,7 @@ import { compose } from 'react-apollo';
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import CommentersList from '../commenters/CommentersList';
 import CommentsRecent from '../comments/components/CommentsRecent';
-import Header from '../../components/header/Header';
+import Header from '../../components/navigation/Header';
 
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';

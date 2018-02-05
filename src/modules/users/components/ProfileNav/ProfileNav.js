@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router';
 
-import './ProfileNav.css';
+
 
 
 const ProfileNav = (props) => {

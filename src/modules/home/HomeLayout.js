@@ -12,8 +12,8 @@ import { tenantsQuery } from '../../graphql/methods/tenants';
 import { settingsQuery } from '../../graphql/methods/settings';
 
 // layouts
-import Header from '../../components/header/Header';
-import Footer from '../../components/footer/Footer';
+import Header from '../../components/navigation/Header';
+import Footer from '../../components/navigation/Footer';
 import CommunityLayout from '../community/CommunityLayout';
 import NameResolutionServiceLayout from '../services/NameResolutionServiceLayout';
 

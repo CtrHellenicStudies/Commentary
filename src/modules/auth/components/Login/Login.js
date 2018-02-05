@@ -4,7 +4,7 @@ import hello from 'hellojs';
 
 import OAuthButtons from '../OAuthButtons';
 import PWDLoginForm from '../PWDLoginForm';
-import './Login.css';
+
 
 hello.init({
 	facebook: process.env.REACT_APP_FACBOOK_CLIENT_ID,

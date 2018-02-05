@@ -3,7 +3,7 @@ import React from 'react';
 import _ from 'underscore';
 import PaginationButton from '../PaginationButton';
 
-import './Pagination.css';
+
 
 const Pagination = ({ limit, total }) => {
 	const numPages = Math.ceil(total / limit);

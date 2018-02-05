@@ -14,7 +14,7 @@ import ModalChangePwd from '../login/ModalChangePwd';
 import Discussions from './Discussions';
 import Annotations from './Annotations';
 import Account from './Account';
-import Header from '../../components/header/Header';
+import Header from '../../components/navigation/Header';
 
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';

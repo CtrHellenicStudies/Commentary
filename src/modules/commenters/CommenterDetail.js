@@ -8,7 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiTheme from '../../lib/muiTheme';
 
-import Header from '../../components/header/Header';
+import Header from '../../components/navigation/Header';
 
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';

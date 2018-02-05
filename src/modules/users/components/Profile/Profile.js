@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import ProfileNav from '../ProfileNav';
 import { required, maxLength } from '../../../../lib/formHelpers';
 
-import './Profile.css';
+
 
 
 const maxLength200 = maxLength(200);

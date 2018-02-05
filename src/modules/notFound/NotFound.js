@@ -5,7 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiTheme from '../../lib/muiTheme';
 
 // layouts
-import Header from '../../components/header/Header';
+import Header from '../../components/navigation/Header';
 
 // components
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';

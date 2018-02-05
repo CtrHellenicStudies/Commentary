@@ -19,7 +19,6 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import apolloClient from './middleware/apolloClient';
-import './index.css';
 import "./less/main.css";
 
 // setup dotenv

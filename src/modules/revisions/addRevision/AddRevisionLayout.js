@@ -12,7 +12,7 @@ import Snackbar from 'material-ui/Snackbar';
 import { handleChangeLineN, toggleSearchTerm } from './helper';
 
 // components:
-import Header from '../../../components/header/Header';
+import Header from '../../../components/navigation/Header';
 import FilterWidget from '../../filters/FilterWidget';
 import CommentLemmaSelect from '../../comments/components/CommentLemmaSelect';
 import AddRevision from './AddRevision';

@@ -17,7 +17,7 @@ import { logoutUser } from '../../../lib/auth';
 // lib
 import getCurrentProjectHostname from '../../../lib/getCurrentProjectHostname';
 
-import './LeftMenu.css';
+
 
 
 class LeftMenu extends React.Component {

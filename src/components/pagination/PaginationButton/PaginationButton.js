@@ -2,7 +2,7 @@ import React from 'react';
 import PaginationPrev from './PaginationPrev';
 import PaginationPage from './PaginationPage';
 import PaginationNext from './PaginationNext';
-import './PaginationButton.css';
+
 
 class PaginationButton extends React.Component {
 

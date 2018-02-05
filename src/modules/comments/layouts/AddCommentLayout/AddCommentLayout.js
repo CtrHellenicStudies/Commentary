@@ -10,7 +10,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import qs from 'qs-lite';
 
 // components:
-import Header from '../../../../components/header/Header';
+import Header from '../../../../components/navigation/Header';
 import Spinner from '../../../../components/loading/Spinner';
 import ContextPanel from '../../../contextPanel/ContextPanel';
 import FilterWidget from '../../../filters/FilterWidget';

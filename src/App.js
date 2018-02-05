@@ -6,7 +6,7 @@ import { compose } from 'react-apollo';
 
 // lib
 import Utils from './lib/utils';
-import { login, logout } from './lib/auth'
+import { login, logoutUser } from './lib/auth'
 
 // graphql
 import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
@@ -71,14 +71,14 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
  * Application routes
  */
 function canGetUserDatas(user, query) {
-	if(user && 
+	if(user &&
 	!query.loading &&
-	query.users.length && 
+	query.users.length &&
 	!(query.users[0]._id === user._id)) {
 		return true;
 	}
 	return false;
-} 
+}
 function setTenantInSession (query) {
 	if (!query.loading
 		&& query.tenantBySubdomain) {
@@ -169,7 +169,7 @@ const routes = (props) => {
 				path="/sign-out"
 				render={() => {
 					try {
-						logout();
+						logoutUser();
 					} catch (err) {
 						console.log(err);
 					} finally {

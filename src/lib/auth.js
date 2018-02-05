@@ -1,22 +1,20 @@
-import Cookies from 'js-cookie';
+import Cookies from 'universal-cookie';
 
-const loginService = `${process.env.REACT_APP_AUTHENTICATION_API}/auth/login`;
-const registerService = `${process.env.REACT_APP_AUTHENTICATION_API}/auth/register`;
+const cookies = new Cookies();
+
 
 const userLoggedIn = () => {
-	const token = Cookies.get('token');
+	const token = cookies.get('token');
 
 	if (token) return true;
 	return false;
 };
 
 const login = async (data) => {
-	if (userLoggedIn()) {
-		return null;
-	}
+	if (userLoggedIn()) return null;
 
 	try {
-		const res = await fetch(loginService, {
+		const res = await fetch(`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_LOGIN_URI}`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
@@ -28,34 +26,30 @@ const login = async (data) => {
 			})
 		});
 		if (!res.ok) {
-            console.log(res);
 			throw new Error(res.statusText);
 		}
 		const resJson = await res.json();
 		if (resJson.token) {
-            let dataJSON = JSON.parse(atob(resJson.token.split('.')[1]));
-			delete dataJSON.password;
-			Cookies.set('token', resJson.token);
-			Cookies.set('user', dataJSON);
-			window.location.reload();
+			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'orpheus.local';
+			cookies.set('token', resJson.token, { domain });
 			return resJson;
 		}
 	} catch (err) {
-		return err;
+		throw err;
 	}
 };
 
-const logout = async () => {
-	Cookies.remove('user');
-	Cookies.remove('token');
-	document.location.href="/";
+const logoutUser = async () => {
+	const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'orpheus.local';
+	cookies.remove('token', { domain });
+	cookies.remove('hello', { domain });
 };
 
 const register = async (data) => {
 	if (userLoggedIn()) return null;
 
 	try {
-		const res = await fetch(registerService, {
+		const res = await fetch(`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_REGISTER_URI}`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
@@ -71,12 +65,9 @@ const register = async (data) => {
 		}
 		const resJson = await res.json();
 		if (resJson.token) {
-			console.log(resJson);
-            let dataJSON = JSON.parse(atob(resJson.token.split('.')[1]));
-			delete dataJSON.password;
-			Cookies.set('token', resJson.token);
-			Cookies.set('user', dataJSON);
-			window.location.reload();
+			// TODO: Add domain: 'orphe.us' options to cookie for cross hostname auth
+			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'orpheus.local';
+			cookies.set('token', resJson.token, { domain });
 			return resJson;
 		}
 		if (resJson.passwordStrength) {
@@ -86,13 +77,12 @@ const register = async (data) => {
 			});
 		}
 	} catch (err) {
-		return err;
+		throw err;
 	}
 };
 
-
 const verifyToken = async () => {
-	const token = Cookies.get('token');
+	const token = cookies.get('token');
 	if (token) {
 		try {
 			const res = await fetch(`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_VERIFY_TOKEN_URI}`, {
@@ -109,10 +99,14 @@ const verifyToken = async () => {
 			}
 			return res.json();
 		} catch (err) {
+			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'orpheus.local';
+			cookies.remove('token', { domain });
+			cookies.remove('hello', { domain });
+
 			console.error(err);
 		}
 	}
 	return null;
 };
 
-export { login, logout, register, verifyToken };
+export { login, logoutUser, register, verifyToken };

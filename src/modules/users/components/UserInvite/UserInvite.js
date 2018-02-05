@@ -5,7 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 import DashboardNav from '../../../dashboard/components/DashboardNav';
 import { required, maxLength } from '../../../../lib/formHelpers';
 
-import './UserInvite.css';
+
 
 
 const maxLength200 = maxLength(200);

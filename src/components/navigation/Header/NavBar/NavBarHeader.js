@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { toggleLeftMenu } from '../../../../actions/leftMenu';
 
-import './NavBarHeader.css';
+
 
 const NavBarHeader = ({ dispatchToggleLeftMenu, leftMenuOpen }) => (
 	<div className="nav-header">

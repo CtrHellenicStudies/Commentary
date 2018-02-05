@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as bricksActions from '../../../../actions/bricks';
 
-import './Bricks.css';
+
 
 
 class _Bricks extends React.Component {

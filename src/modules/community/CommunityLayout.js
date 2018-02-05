@@ -8,8 +8,8 @@ import muiTheme from '../../lib/muiTheme';
 import { compose } from 'react-apollo';
 
 // layouts & components
-import Header from '../../components/header/Header';
-import Footer from '../../components/footer/Footer';
+import Header from '../../components/navigation/Header';
+import Footer from '../../components/navigation/Footer';
 import { SnackAttack } from '../shared/SnackAttack';
 import LoadingHome from '../../components/loading/LoadingHome';
 import CommunityPage from './CommunityPage';

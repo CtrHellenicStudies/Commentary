@@ -6,7 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components:
-import Header from '../../components/header/Header';
+import Header from '../../components/navigation/Header';
 
 // lib
 import muiTheme from '../../lib/muiTheme';

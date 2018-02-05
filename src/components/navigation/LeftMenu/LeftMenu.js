@@ -30,23 +30,15 @@ class LeftMenu extends React.Component {
 		};
 	}
 
-	componentWillReceiveProps(nextProps) {
-
-		this.setState({
-			currentUser: Cookies.get('user')
-		});
-	}
-
 	render() {
 		const {
 			leftMenuOpen, closeLeftMenu, userId, dispatchLogout,
 			dispatchToggleAuthModal
 		} = this.props;
-		const { currentUser } = this.state;
 
 		let tenant;
 		let settings;
-		const user = Cookies.get('user') ? Cookies.get('user') : undefined;
+		let user = null;
 
 		/*
 		 * TODO move query to container with compose
@@ -75,16 +67,11 @@ class LeftMenu extends React.Component {
 				<LeftMenuHead />
 				<div className="leftMenuContent">
 					{(
-							tenant
-						&& !tenant.isAnnotation
-						&& user
-						&& Utils.userInRole(user, ['editor', 'admin', 'commenter'])
+						Utils.userInRole(user, ['editor', 'admin', 'commenter'])
 					) ?
 						<div>
               {(
-									tenant
-								&& !tenant.isAnnotation
-								&& Utils.userInRole(user, ['admin'])
+								Utils.userInRole(user, ['admin'])
 							) ?
 								<MenuItem
 									href="http://ahcip-admin.chs.harvard.edu"
@@ -167,7 +154,7 @@ class LeftMenu extends React.Component {
 					</MenuItem>
 					<Divider />
 
-					{user ?
+					{userId ?
 						<div>
 							<MenuItem
 								to="/profile"

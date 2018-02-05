@@ -351,8 +351,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	dispatchToggleLeftMenu: (open) => {
-		dispatch(toggleLeftMenu(open));
+	dispatchToggleLeftMenu: () => {
+		dispatch(toggleLeftMenu(true));
 	},
 	dispatchToggleAuthModal: (open) => {
 		dispatch(toggleAuthModal(open));

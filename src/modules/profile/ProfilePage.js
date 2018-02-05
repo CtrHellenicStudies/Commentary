@@ -10,11 +10,11 @@ import { compose } from 'react-apollo';
 import AvatarEditor from './avatar/AvatarEditor';
 import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import LoadingPage from '../../components/loading/LoadingPage';
-import ModalChangePwd from '../login/ModalChangePwd';
+import ModalChangePwd from '../auth/components/ModalChangePwd';
 import Discussions from './Discussions';
 import Annotations from './Annotations';
 import Account from './Account';
-import Header from '../../components/header/Header';
+import Header from '../../components/navigation/Header';
 
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';

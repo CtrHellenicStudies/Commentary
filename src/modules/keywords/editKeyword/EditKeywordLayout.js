@@ -9,7 +9,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiTheme from '../../../lib/muiTheme';
 
 // layouts
-import Header from '../../../components/header/Header';
+import Header from '../../../components/navigation/Header';
 
 // graphql
 import { keywordsQuery, keywordUpdateMutation } from '../../../graphql/methods/keywords';
@@ -18,7 +18,7 @@ import { textNodesQuery } from '../../../graphql/methods/textNodes';
 // components
 import Spinner from '../../../components/loading/Spinner';
 import FilterWidget from '../../filters/FilterWidget';
-import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
+import CommentLemmaSelect from '../../comments/components/CommentLemmaSelect';
 import EditKeyword from './EditKeyword';
 import ContextPanel from '../../contextPanel/ContextPanel';
 

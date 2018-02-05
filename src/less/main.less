@@ -23,56 +23,106 @@
 @import "./globals/editorial.import.less";
 @import "./globals/slider.import.less";
 @import "./globals/dropdowns.import.less";
-@import "./globals/loading.import.less"; 
+@import "./globals/loading.import.less";
 @import "./globals/responsive.import.less";
 
 /* Utils */
 @import "./utils/fonts.import.less";
 
 /* Layouts and Components */
+// common/shared
+@import '../components/common/buttons/Button/Button.import.less';
+@import '../components/common/cover/BackgroundImage/BackgroundImage.import.less';
+@import '../components/common/cover/Bricks/Bricks.import.less';
+@import '../components/common/cover/Cover/Cover.import.less';
+@import '../components/common/cover/CoverTitle/CoverTitle.import.less';
+@import '../components/common/editor/DraftEditorInput/DraftEditorInput.import.less';
+@import '../components/common/modal/Modal/Modal.import.less';
+@import '../components/navigation/Footer/Footer.import.less';
+@import '../components/navigation/Header/NavBar/NavBar.import.less';
+@import '../components/navigation/Header/NavBar/NavBarHeader.import.less';
+@import '../components/navigation/LeftMenu/LeftMenu.import.less';
+@import '../components/navigation/LeftMenuHead/LeftMenuHead.import.less';
+@import '../components/navigation/MenuItem/MenuItem.import.less';
+@import '../components/navigation/MenuSubItem/MenuSubItem.import.less';
+@import '../components/pagination/NoResults/NoResults.import.less';
+@import '../components/pagination/Pagination/Pagination.import.less';
+@import '../components/pagination/PaginationButton/PaginationButton.import.less';
+@import '../modules/shared/snackattack.import.less';
 
-@import '../modules/notFound/notFound.import.less';//done
-@import '../modules/shared/snackattack.import.less';//done 
-@import '../modules/works/works.import.less';//done
-@import '../modules/works/workVisualization.import.less';//done
-@import '../modules/discussionComments/discussionComments.import.less'; //done
-@import '../modules/comenters/commenters.import.less';//done
-@import '../modules/comenters/commenterDetail.import.less';//done
-@import '../modules/comenters/commenterVizualizations/commenterVisualizations.import.less';//done
-@import '../modules/comenters/referenceWorks/commenterReferenceWorks.import.less';//done
-@import '../modules/comments/commentary/commentary.import.less';//done
-@import '../modules/draftEditor/draftinput.import.less';//done
-@import '../modules/comments/commentary/commentGroup/commentLemma/commentaryLemma.import.less';//done
-@import '../modules/comments/commentary/commentGroup/commentLemma/translation/translations.import.less';//done
-@import '../modules/comments/commentary/commentGroup/commentLemma/filters.import.less';//done
-@import '../modules/comments/commentary/commentGroup/commentLemma/searchTools.import.less';//done
-@import '../modules/comments/commentary/commentGroup/commentLemma/searchToolsDrawer.import.less';//done
-@import '../modules/comments/commentary/commentGroup/commentDetail/commentCitation.import.less';//done  
-@import '../modules/community/comunityDirectory.import.less';//done
-@import '../modules/community/communityMemberList.import.less';//done
-@import '../modules/community/teaser/recentActivityTeaser.import.less';//done 
-@import '../modules/community/communityPage.import.less';//done
-@import '../modules/community/recentActivityList.import.less';//done
-@import '../modules/community/recentActivity.import.css';//done
-@import '../modules/discussionComments/discussionCommentsList.import.less';//done
-@import '../modules/comments/addComment/addComment.import.less';//done
-@import '../modules/revisions/addRevision/addRevision.import.less';//done
-@import '../modules/translations/addTranslation/addTranslation.import.less';//done
-@import '../modules/textNodes/textNodesEditor.import.less';//done
-@import '../modules/textNodes/input/textNodesInput.import.less';//done
-@import '../components/header/user/recent/profileAvatarButton.import.less';//done
-@import '../components/header/user/recent/recentList.import.less';//done
-@import '../components/header/user/recent/recentTeaser.import.less';//done
-@import '../components/header/search/dropdowns/userDropdown.import.less';//done
-@import '../modules/home/home.import.less';//done
-@import '../modules/keywords/keywords.import.less';//done
-@import '../modules/keywords/keywordsSuggestions.import.less';//done
-@import '../modules/referenceWorks/referenceWorks.import.less';//done
-@import '../modules/profile/profilePage.import.less';//done
-@import '../modules/services/nameResolutionService.import.less';//done
+// works
+@import '../modules/works/works.import.less';
+@import '../modules/works/workVisualization.import.less';
+
+// commenters
+@import '../modules/commenters/commenters.import.less';
+@import '../modules/commenters/commenterDetail.import.less';
+@import '../modules/commenters/commenterVizualizations/commenterVisualizations.import.less';
+@import '../modules/commenters/referenceWorks/commenterReferenceWorks.import.less';
+
+// editor
+@import '../modules/draftEditor/draftinput.import.less';
+
+// comments nad revisions
+@import '../modules/comments/components/Commentary/commentary.import.less';
+@import '../modules/comments/components/CommentLemma/commentaryLemma.import.less';
+@import '../modules/comments/components/CommentDetail/CommentCitation/commentCitation.import.less';
+@import '../modules/comments/less/translations.import.less';
+@import '../modules/comments/less/filters.import.less';
+@import '../modules/comments/less/searchTools.import.less';
+@import '../modules/comments/less/searchToolsDrawer.import.less';
+@import '../modules/comments/components/AddComment/addComment.import.less';
+@import '../modules/revisions/addRevision/addRevision.import.less';
+
+// discussion comments
+@import '../modules/discussionComments/discussionComments.import.less';
+@import '../modules/discussionComments/discussionCommentsList.import.less';
+
+// community
+@import '../modules/community/comunityDirectory.import.less';
+@import '../modules/community/communityMemberList.import.less';
+@import '../modules/community/teaser/recentActivityTeaser.import.less';
+@import '../modules/community/communityPage.import.less';
+@import '../modules/community/recentActivityList.import.less';
+@import '../modules/community/recentActivity.import.css';
+
+// textnodes and translations
+@import '../modules/textNodes/textNodesEditor.import.less';
+@import '../modules/textNodes/input/textNodesInput.import.less';
+@import '../modules/translations/addTranslation/addTranslation.import.less';
+
+// header
+@import '../modules/users/components/ProfileAvatarButton/ProfileAvatarButton.import.less';
+@import '../modules/users/components/RecentList/RecentList.import.less';
+@import '../modules/users/components/RecentTeaser/RecentTeaser.import.less';
+@import '../modules/users/components/UserDropdown/UserDropdown.import.less';
+
+// auth
+@import '../modules/auth/components/Login/Login.import.less';
+@import '../modules/auth/components/OAuthButtons/OAuthButtons.import.less';
+@import '../modules/auth/components/PWDLoginForm/PWDLoginForm.import.less';
+
+// keywords
+@import '../modules/keywords/keywords.import.less';
+@import '../modules/keywords/keywordsSuggestions.import.less';
+
+// reference works
+@import '../modules/referenceWorks/referenceWorks.import.less';
+
+// user accounts
+@import '../modules/profile/profilePage.import.less';
 @import '../modules/profile/avatar/avatar.import.less';
 @import './account.import.less';
 @import './bookmarks.import.less';
 @import './users.import.less';
 @import './usersShelf.import.less';
+
+// services
+@import '../modules/services/nameResolutionService.import.less';
+
+// pages
 @import '../modules/page/page.import.less';
+@import '../modules/notFound/notFound.import.less';
+
+// home
+@import '../modules/home/home.import.less';

@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
+import bricks from './bricks';
+import leftMenu from './leftMenu';
+import authReducers from '../modules/auth/reducers';
 import client from '../middleware/apolloClient';
 
 
@@ -19,12 +22,14 @@ const errorMessage = (state = null, action) => {
 	return state;
 };
 
-
 const rootReducer = combineReducers({
 	form: formReducer,
 	errorMessage,
 	apollo: client.reducer(), // graphql data
 	routing: routerReducer,
+	bricks,
+	leftMenu,
+	auth: authReducers,
 });
 
 export default rootReducer;

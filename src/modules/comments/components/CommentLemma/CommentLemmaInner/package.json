@@ -1,0 +1,6 @@
+{
+  "name": "CommentLemmaInner",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./CommentLemmaInner.js"
+}

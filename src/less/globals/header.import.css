@@ -124,7 +124,7 @@ font-family: "Material Design Icons";
     opacity: 1;
   }
 }
-header {
+.headroom {
   width: 100%;
   height: 80px;
   position: fixed;
@@ -140,33 +140,33 @@ header {
   -o-transition: all 300ms ease-out;
   border-bottom: 1px solid #eee;
 }
-header.search-enabled {
+.headroom.search-enabled {
   background: #f6f6f6;
 }
-header.search-enabled .search-toggle button {
+.headroom.search-enabled .search-toggle button {
   background-color: #795548;
 }
-header.search-enabled .search-toggle button span,
-header.search-enabled .search-toggle button i {
+.headroom.search-enabled .search-toggle button span,
+.headroom.search-enabled .search-toggle button i {
   color: #fff;
 }
-header a {
+.headroom a {
   color: rgba(0, 0, 0, 0.8);
   text-decoration: none;
   margin: 0;
   padding: 0;
 }
-header a:hover {
+.headroom a:hover {
   color: rgba(0, 0, 0, 0.8);
 }
-header a:visited,
-header a:focus {
+.headroom a:visited,
+.headroom a:focus {
   text-decoration: none;
   outline: none;
   color: rgba(0, 0, 0, 0.8);
 }
-header .site-title,
-header .active-comment-meta {
+.headroom .site-title,
+.headroom .active-comment-meta {
   display: inline-block;
   vertical-align: top;
   min-width: 0;
@@ -177,21 +177,21 @@ header .active-comment-meta {
   -ms-transition: all 100ms ease-out;
   -o-transition: all 100ms ease-out;
 }
-header .site-title:hover,
-header .active-comment-meta:hover,
-header .site-title:focus,
-header .active-comment-meta:focus {
+.headroom .site-title:hover,
+.headroom .active-comment-meta:hover,
+.headroom .site-title:focus,
+.headroom .active-comment-meta:focus {
   color: #795548;
   background: transparent !important;
 }
-header .site-title:hover h3.logo,
-header .active-comment-meta:hover h3.logo,
-header .site-title:focus h3.logo,
-header .active-comment-meta:focus h3.logo {
+.headroom .site-title:hover h3.logo,
+.headroom .active-comment-meta:hover h3.logo,
+.headroom .site-title:focus h3.logo,
+.headroom .active-comment-meta:focus h3.logo {
   color: #795548;
 }
-header .site-title h3.logo,
-header .active-comment-meta h3.logo {
+.headroom .site-title h3.logo,
+.headroom .active-comment-meta h3.logo {
   color: #444;
   font-size: 18px;
   margin: 10px 0;
@@ -202,87 +202,87 @@ header .active-comment-meta h3.logo {
   -ms-transition: all 100ms ease-out;
   -o-transition: all 100ms ease-out;
 }
-header .header-section-wrap {
+.headroom .header-section-wrap {
   display: inline-block;
   vertical-align: top;
   padding: 0;
 }
-header .header-section-wrap > div {
+.headroom .header-section-wrap > div {
   display: inline-block;
   vertical-align: top;
 }
-header .header-section-wrap a,
-header .header-section-wrap .account-button {
+.headroom .header-section-wrap a,
+.headroom .header-section-wrap .account-button {
   display: inline-block;
   vertical-align: top;
   color: rgba(0, 0, 0, 0.8);
   text-transform: uppercase;
   margin: 0 10px;
 }
-header .header-section-wrap a span,
-header .header-section-wrap .account-button span {
+.headroom .header-section-wrap a span,
+.headroom .header-section-wrap .account-button span {
   font-family: 'Proxima Nova', sans-serif;
   font-size: 14px;
 }
-header .nav-wrap {
+.headroom .nav-wrap {
   float: right;
 }
-header .search-toggle {
+.headroom .search-toggle {
   float: right;
   margin: 0 0 0 5px;
   padding-right: 10px;
 }
-header .search-toggle i {
+.headroom .search-toggle i {
   font-size: 24px;
 }
-header .container.close-navbar {
+.headroom .container.close-navbar {
   width: 100%;
 }
-header .left-drawer-toggle {
+.headroom .left-drawer-toggle {
   display: inline-block;
   vertical-align: top;
 }
-header button.search-button {
+.headroom button.search-button {
   padding: 29px 46px 29px 20px !important;
   height: 80px !important;
   margin-right: 5px !important;
 }
-header .header-home-link {
+.headroom .header-home-link {
   padding: 22px 5px ;
   vertical-align: top ;
   display: inline-block;
 }
-header .header-home-link h3.logo {
+.headroom .header-home-link h3.logo {
   font-family: 'Museo Sans W01_900', sans-serif !important;
   font-weight: 900 !important;
   font-size: 19px !important;
   color: #212121;
   text-transform: none	!important;
 }
-header a[type="button"],
-header button {
+.headroom a[type="button"],
+.headroom button {
   font-family: 'Proxima Nova', sans-serif !important;
 }
-header ul.menu {
+.headroom ul.menu {
   margin: 0;
   padding: 0;
 }
-header ul.menu > li {
+.headroom ul.menu > li {
   margin: 0;
   padding: 0;
 }
-header .search-module {
+.headroom .search-module {
   border-right: 1px solid #CCCCCC;
   border-right: none;
 }
-header .toggle-left-menu i {
+.headroom .toggle-left-menu i {
   margin-top: 10px;
 }
-header .navbar-nav.navbar-right:last-child {
+.headroom .navbar-nav.navbar-right:last-child {
   margin: 0;
 }
-header .module,
-header .module.widget-handle {
+.headroom .module,
+.headroom .module.widget-handle {
   padding: 0;
 }
 .dropdown-menu {

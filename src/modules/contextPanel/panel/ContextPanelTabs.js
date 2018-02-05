@@ -9,8 +9,8 @@ import Utils from '../../../lib/utils';
 	helpers
 */
 const getEditionTabClass = (selectedLemmaEdition, lemmaTextEdition, index) => {
-	const normalClass = 'edition-tab tab';
-	const selectedClass = 'edition-tab tab selected-edition-tab';
+	const normalClass = 'version-tab tab';
+	const selectedClass = 'version-tab tab selected-version-tab';
 
 	if (!selectedLemmaEdition.length && index === 0) return selectedClass;
 	if (selectedLemmaEdition === lemmaTextEdition.slug) return selectedClass;
@@ -21,7 +21,7 @@ const getEditionTabClass = (selectedLemmaEdition, lemmaTextEdition, index) => {
 	BEGIN EditionTabs
 */
 const EditionTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition }) => (
-	<div className="edition-tabs tabs">
+	<div className="version-tabs tabs">
 		{lemmaText.map((lemmaTextEdition, index) => {
 			const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
@@ -61,11 +61,11 @@ EditionTabs.defaultProps = {
 	BEGIN MetaTabs
 */
 const MetaTabs = ({ toggleHighlighting, highlightingVisible }) => (
-	<div className="edition-tabs tabs">
+	<div className="version-tabs tabs">
 		{toggleHighlighting &&
 			<RaisedButton
 				label="Highlighting"
-				className="edition-tab tab"
+				className="version-tab tab"
 				onClick={toggleHighlighting}
 				backgroundColor={highlightingVisible ? '#795548' : null}
 				labelStyle={highlightingVisible ? {color: '#ffffff'} : null}
@@ -73,12 +73,12 @@ const MetaTabs = ({ toggleHighlighting, highlightingVisible }) => (
 		{/*
 		<FlatButton
 			label="Entities"
-			className="edition-tab tab"
+			className="version-tab tab"
 			onClick={this.toggleEntities}
 		/>
 		<FlatButton
 			label="Scansion"
-			className="edition-tab tab"
+			className="version-tab tab"
 			onClick={this.toggleScansion}
 		/>
 		*/}

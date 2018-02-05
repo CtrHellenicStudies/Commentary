@@ -12,18 +12,18 @@ import Snackbar from 'material-ui/Snackbar';
 import { handleChangeLineN, toggleSearchTerm } from './helper';
 
 // components:
-import Header from '../../../components/header/Header';
+import Header from '../../../components/navigation/Header';
 import FilterWidget from '../../filters/FilterWidget';
-import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
+import CommentLemmaSelect from '../../comments/components/CommentLemmaSelect';
 import AddRevision from './AddRevision';
 import ContextPanel from '../../contextPanel/ContextPanel';
 
 // graphql
+import commentsQueryById from '../../comments/graphql/queries/commentsById';
+import commentsUpdateMutation from '../../comments/graphql/mutations/update';
+import commentAddRevisionMutation from  '../../comments/graphql/mutations/addRevision';
 import { keywordsQuery } from '../../../graphql/methods/keywords';
 import { commentersQuery } from '../../../graphql/methods/commenters';
-import { commentsQueryById,
-	commentsUpdateMutation,
-	commentAddRevisionMutation } from '../../../graphql/methods/comments';
 import { textNodesQuery } from '../../../graphql/methods/textNodes';
 
 // lib
@@ -54,8 +54,8 @@ class AddRevisionLayout extends Component {
 		this.showSnackBar = this.showSnackBar.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.commentsQueryById.loading || 
-			nextProps.keywordsQuery.loading || 
+		if (nextProps.commentsQueryById.loading ||
+			nextProps.keywordsQuery.loading ||
 			nextProps.commentersQuery.loading ||
 			nextProps.textNodesQuery.loading) {
 			this.setState({
@@ -63,7 +63,7 @@ class AddRevisionLayout extends Component {
 			});
 			return;
 		}
-		
+
 		const comment = nextProps.commentsQueryById.comments[0];
 		const tenantCommenters = nextProps.commentersQuery.commenters;
 		const commenters = [];
@@ -211,7 +211,7 @@ class AddRevisionLayout extends Component {
 										workSlug={comment.work.slug}
 										subworkN={comment.subwork.n}
 										textNodes={textNodes}
-									/> 
+									/>
 
 									<AddRevision
 										submitForm={this.addRevision}

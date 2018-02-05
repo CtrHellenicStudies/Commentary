@@ -11,10 +11,10 @@ import { compose } from 'react-apollo';
 import { textNodesQuery } from '../../../graphql/methods/textNodes';
 
 // components:
-import Header from '../../../components/header/Header';
+import Header from '../../../components/navigation/Header';
 import FilterWidget from '../../filters/FilterWidget';
 import Spinner from '../../../components/loading/Spinner';
-import CommentLemmaSelect from '../../comments/addComment/commentLemma/CommentLemmaSelect';
+import CommentLemmaSelect from '../../comments/components/CommentLemmaSelect';
 import AddTranslation from './AddTranslation';
 import ContextPanel from '../../contextPanel/ContextPanel';
 

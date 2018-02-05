@@ -7,21 +7,21 @@
     margin: 0px auto;
     // max-width:1500px;
     //background-color:#eee;
-  
+
     .container {
       position: relative;
       z-index: 1;
     }
     .background-image-holder {
       //@include filter(blur(0px));
-  
+
     }
-  
+
     &.parallax > .background-image-holder, &.parallax .slides li > .background-image-holder {
       transition: opacity 300ms ease, filter 1000ms ease, -webkit-filter 1000ms ease !important;
-  
+
     }
-  
+
     h2 {
       font-size: 34px;
       padding: 60px 30px;
@@ -32,7 +32,7 @@
       width: 100%;
       text-align: center;
     }
-  
+
     p {
       font-family: @font-commentary;
       font-size: 20px;
@@ -43,7 +43,7 @@
       padding: 20px 0;
       text-align: left;
       color: @text-reading;
-  
+
       a {
         text-decoration: none;
         border-bottom: 1px solid @accent-light;
@@ -55,9 +55,9 @@
           box-shadow: none;
         }
       }
-  
+
     }
-  
+
     .block-screen {
       position: absolute;
       top: 0;
@@ -71,7 +71,7 @@
               rgba(0, 0, 0, 0.4),
               rgba(0, 0, 0, 0.6)
       );
-  
+
       &.brown {
         .gradient(
                 rgba(62, 39, 35, 0.7),
@@ -79,7 +79,7 @@
                 rgba(62, 39, 35, 0.5),
                 rgba(62, 39, 35, 0.7)
         );
-  
+
       }
       &.light-brown {
         .gradient(
@@ -89,11 +89,11 @@
                 rgba(94, 63, 55, 0.6)
         );
       }
-  
+
     }
-  
+
   }
-  
+
   .scroll-down-helper {
     position: absolute;
     bottom: 30px;
@@ -102,7 +102,7 @@
     width: 400px;
     text-align: right;
     opacity: 0.4;
-  
+
     p {
       display: inline-block;
       vertical-align: top;
@@ -110,36 +110,36 @@
       font-size: 14px;
       line-height: 1.3em;
       text-align: right;
-  
+
     }
-  
+
     .mdi {
       display: inline-block;
       vertical-align: top;
       color: @light;
       padding: 19px 5px;
       font-size: 22px;
-  
+
     }
-  
+
   }
-  
+
   .fadeInBlock {
     opacity: 0;
   }
-  
+
   section.header {
-  
+
     position: relative;
     padding: 0;
     background-color: @primary-dark;
-  
+
     .center-content {
       width: 100%;
       text-align: left;
       color: @light;
-      padding: 0 0 60px 0;
-  
+      padding: 0 0 180px 0;
+
       .site-title {
         font-family: @font-accent;
         font-size: 4.5em;
@@ -161,148 +161,148 @@
         line-height: 1.2em;
         padding: 20px 0;
       }
-  
+
       .direct-down {
         display: block;
         margin-top: 100px;
         text-align: center;
         font-size: 80px;
         cursor: pointer;
-  
+
         &:hover {
-  
+
           margin-top: 102px;
         }
-  
+
       }
-  
+
     }
-  
+
   }
-  
+
   .cover-link {
     display: inline-block;
     margin: 10px 10px 10px 0;
     color: @light;
     border-radius: 0px !important;
     border: 2px solid @light;
-  
+
     button, a {
       border-radius: 0px !important;
       height: auto !important;
-  
+
       > div {
-  
+
         > div {
           padding: 10px 20px !important;
           height: auto !important;
-  
+
         }
-  
+
       }
-  
+
       span {
-  
+
         font-family: @font-label !important;
         text-transform: uppercase;
         font-weight: 700 !important;
-  
+
       }
-  
+
     }
-  
+
     span {
       font-family: @font-label;
       text-transform: uppercase;
       font-weight: 700;
-  
+
     }
-  
+
     &:hover {
       background: @primary-dark !important;
       color: @light !important;
       border: 2px solid @primary-dark !important;
-  
+
     }
-  
+
     &.learn-more {
       background-color: @ahcip-red !important;
       border: 2px solid @ahcip-red;
       color: @light;
-  
+
       button, a {
         background-color: @ahcip-red !important;
-  
+
         span {
           color: @light !important;
-  
+
         }
-  
+
       }
-  
+
       &:hover {
         background: transparent !important;
         border: 2px solid @light !important;
         color: @light !important;
-  
+
         button {
           background-color: transparent !important;
         }
-  
+
         span {
           color: @light !important;
-  
+
         }
       }
-  
+
     }
-  
+
     &.go-to-commentary {
       background: @ahcip-blue;
       border: 2px solid @ahcip-blue;
       color: @light;
-  
+
       button, a {
         background-color: @ahcip-blue !important;
-  
+
         span {
           color: @light !important;
-  
+
         }
-  
+
       }
-  
+
       &:hover {
         background: transparent !important;
         border: 2px solid @light !important;
         color: @light !important;
-  
+
         button {
           background-color: transparent !important;
-  
+
           span {
             color: @light !important;
-  
+
           }
-  
+
         }
       }
-  
+
     }
-  
+
     &.accent {
       background: @accent;
       border: 2px solid @accent;
       color: @light;
-  
+
       &:hover {
         background: @accent-dark-2 !important;
         border: 2px solid @accent-dark-2 !important;
         color: @light !important;
       }
-  
+
     }
-  
+
     &.dark {
       background: @light;
       border: 2px solid @dark;
@@ -310,7 +310,7 @@
       span {
         color: @dark;
       }
-  
+
       &:hover {
         background: @accent-dark-2 !important;
         border: 2px solid @accent-dark-2 !important;
@@ -319,14 +319,14 @@
           color: @light !important;
         }
       }
-  
+
     }
-  
+
   }
-  
+
   section.intro {
     background: @light;
-  
+
     .intro-col {
       display: inline-block;
       vertical-align: top;
@@ -339,30 +339,30 @@
       width: 45%;
       margin-left: 4%;
     }
-  
+
     .intro-block-header {
       margin-bottom: 16px;
     }
-  
+
     .intro-block-desc {
       color: @text-reading;
-  
+
     }
-  
+
       .intro-block-link.cover-link.dark {
       padding: 0;
           margin-right: 0 !important;
       border: 2px solid @dark;
       color: @dark;
-  
+
           span {
               font-size: 12px !important;
           }
-  
+
           a > div > div {
               padding: 5px 10px !important;
           }
-  
+
           &:hover {
               background: @md-primary !important;
               border: 2px solid @md-primary !important;
@@ -372,7 +372,7 @@
               }
           }
       }
-  
+
       .intro-col-image {
           .caption {
               p {
@@ -386,69 +386,69 @@
               }
           }
       }
-  
+
   }
-  
+
   section.goals {
     padding: 100px 0;
     background-color: @accent;
     text-align: center;
-  
+
     .goal {
       color: @light;
       width: 26%;
       margin: 0 2%;
       padding: 20px 0;
-  
+
       img {
         width: 45%;
       }
-  
+
       .goal-text {
         padding: 20px;
-  
+
       }
-  
+
       h3 {
         color: @light;
         cursor: default;
-  
+
       }
-  
+
       .goal-desc {
         color: #ddd;
         padding: 10px 0;
       }
-  
+
     }
-  
+
   }
-  
+
   section.keywords {
     background: @ahcip-red;
     //background:url('/images/amorphous_marble.png');
     //background-size:cover;
     padding: 140px 0 100px;
-  
+
       &.keyideas {
         background: @md-primary-900;
           padding:100px 0 160px;
       }
-  
+
     h2 {
       padding: 0;
       color: @light;
     }
-  
+
     .keywords {
       width: 100%;
       max-width: 1200px;
       margin: 20px auto;
       text-align: center;
     }
-  
+
   }
-  
+
   .background-gray {
     background: #f6f6f6;
   }
@@ -457,17 +457,17 @@
   }
   .show-more {
     margin-top: 60px;
-  
+
     span {
       font-size: 20px;
     }
-  
+
   }
-  
+
   //Commentary Section styles
   section.browse-commentary {
     background: url('/assets/marble_background.png');
-  
+
     .visualizations-coaching-text {
       font-size: 16px;
       font-family: @font-reading;
@@ -479,19 +479,19 @@
       margin: 15px auto;
       color: @text-secondary;
     }
-  
+
     .data-visualization-container {
       max-width: 1000px;
       margin: 15px auto;
       img {
         width: 100%;
         margin: 15px auto 50px;
-  
+
       }
     }
-  
+
   }
-  
+
   .commentary-text {
     width: 90%;
     max-width: 1200px;
@@ -501,33 +501,33 @@
     .transition(all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1));
     display: block;
     clear: both;
-  
+
     &.hymns {
       .text-subwork .subwork-inner {
         &:hover {
           .subwork-alpha {
             transform: rotate(180deg) scaleX(0.5);
             opacity: 0;
-  
+
           }
           .subwork-num {
             transform: rotate(0deg) scaleX(1);
             opacity: 1;
-  
+
           }
-  
+
         }
-  
+
       }
     }
-  
+
     .text-title {
       width: 100%;
       margin: 0 auto;
       font-family: @font-title(42px);
       text-align: center;
     }
-  
+
     .text-divider {
       margin: 25px auto;
       width: 100%;
@@ -535,76 +535,76 @@
       height: 4px;
       background: @primary;
     }
-  
+
     .text-meta {
       text-align: center;
       padding: 20px 0;
-  
+
       a {
         display: inline-block;
         font-style: italic;
         padding: 5px 10px;
         span {
           color: @text-secondary;
-  
+
         }
-  
+
       }
     }
-  
+
     .text-subworks {
       width: 100%;
       max-width: 1200px;
       margin: 20px auto;
       text-align: center;
-  
+
     }
-  
+
   }
-  
+
   //Author styles
   section.commentors {
     background-color: @primary-dark;
     background: @light;
-  
-  
+
+
     h2 {
       color: @light;
       padding: 60px 0 20px;
     }
-  
+
     .cover-link.show-more {
       background: @ahcip-blue;
       border: 2px solid @ahcip-blue;
       color: @light;
-  
+
       button, a {
         background-color: @ahcip-blue !important;
-  
+
         span {
           color: @light !important;
-  
+
         }
-  
+
       }
-  
+
       &:hover {
         background: transparent !important;
         border: 2px solid @light !important;
         color: @light !important;
-  
+
         button, a {
           background-color: transparent !important;
-  
+
           span {
             color: @light !important;
-  
+
           }
-  
+
         }
       }
     }
-  
+
   }
   section.page-content {
     .cover-link.show-more {
@@ -613,88 +613,87 @@
       color: @light;
       button, a {
         background-color: @ahcip-blue !important;
-  
+
         span {
           color: @light !important;
-  
+
         }
-  
+
       }
-  
+
       &:hover {
         background: transparent !important;
         border: 2px solid @light !important;
         color: @light !important;
-  
+
         button, a {
           background-color: transparent !important;
-  
+
           span {
             color: @light !important;
-  
+
           }
-  
+
         }
       }
     }
   }
   section.get-started{
     background: @background-gray;
-  
+
     h2.block-title {
       padding-bottom: 0;
       margin-bottom: 0;
     }
-  
+
     .comment-reference a {
       box-shadow: none;
     }
-  
+
     .lemma-panel {
       text-align: left;
     }
-  
+
     article.lemma-comment {
       p.lemma-text {
         line-height: 1.3em;
-  
+
       }
     }
-  
+
     .cover-link.show-more {
       background: @ahcip-blue;
       border: 2px solid @ahcip-blue;
       color: @light;
       button, a {
         background-color: @ahcip-blue !important;
-  
+
         span {
           color: @light !important;
-  
+
         }
-  
+
       }
-  
+
       &:hover {
         background: transparent !important;
         border: 2px solid @light !important;
         color: @light !important;
-  
+
         button, a {
           background-color: transparent !important;
-  
+
           span {
             color: @light !important;
-  
+
           }
-  
+
         }
       }
     }
-  
+
   }
   // IE11 fix that will prevent the commenter image from disappearing or blink on-hover
   _:-ms-lang(x), .hvr-grow {
     transition-duration: 0s !important;
   }
-  

@@ -1,20 +1,20 @@
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
+import Cookies from 'universal-cookie';
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // lib
 import Utils from './lib/utils';
-import { login, logout } from './lib/auth'
+import { login, logoutUser } from './lib/auth'
 
 // graphql
 import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
-import { usersQuery } from './graphql/methods/users';
 
 // layouts
-import CommentaryLayout from './modules/comments/CommentaryLayout';
-import AddCommentLayout from './modules/comments/addComment/AddCommentLayout';
+import CommentaryLayout from './modules/comments/layouts/CommentaryLayout';
+import AddCommentLayout from './modules/comments/layouts/AddCommentLayout';
 import AddKeywordLayout from './modules/keywords/addKeyword/AddKeywordLayout';
 import AddTranslationLayout from './modules/translations/addTranslation/AddTranslationLayout';
 import AddRevisionLayout from './modules/revisions/addRevision/AddRevisionLayout';
@@ -26,8 +26,8 @@ import NotFound from './modules/notFound/NotFound';
 
 // pages
 import Page from './modules/page/Page';
-import CommentersPage from './modules/comenters/CommentersPage';
-import CommenterDetail from './modules/comenters/CommenterDetail';
+import CommentersPage from './modules/commenters/CommentersPage';
+import CommenterDetail from './modules/commenters/CommenterDetail';
 import KeywordsPage from './modules/keywords/KeywordsPage';
 import KeywordDetail from './modules/keywords/KeywordDetail';
 import ProfilePage from './modules/profile/ProfilePage';
@@ -37,16 +37,20 @@ import ReferenceWorkDetail from './modules/referenceWorks/ReferenceWorkDetail';
 // modules
 import settingsRoutes from './modules/settings/routes';
 
-
-const loginToken = Cookies.get('token');
-if (loginToken) {
-	login(loginToken);
+// login with token
+const cookies = new Cookies();
+const token = cookies.get('token');
+if (token) {
+	login(token);
 }
 
+// set the base document meta for the application
 Utils.setBaseDocMeta();
 
+// parse tenant subdomain
 const hostnameArray = document.location.hostname.split('.');
 const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
+
 /**
  * Private route
  * create a route restricted to a logged in user
@@ -54,7 +58,7 @@ const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
 		{...rest} render={props => (
-		Cookies.get('token') ? (
+		cookies.get('token') ? (
 			<Component {...props} />
 		) : (
 			<Redirect
@@ -67,18 +71,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	)}
 	/>
 );
+
 /**
  * Application routes
  */
-function canGetUserDatas(user, query) {
-	if(user && 
-	!query.loading &&
-	query.users.length && 
-	!(query.users[0]._id === user._id)) {
-		return true;
-	}
-	return false;
-} 
 function setTenantInSession (query) {
 	if (!query.loading
 		&& query.tenantBySubdomain) {
@@ -88,17 +84,8 @@ function setTenantInSession (query) {
 		sessionStorage.setItem('noTenant', true);
 	}
 }
+
 const routes = (props) => {
-	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
-	if (canGetUserDatas(user, props.usersQuery)) {
-		const id = JSON.parse(user)._id;
-		props.usersQuery.refetch({
-			id: id,
-		});
-	} else if(user && !props.usersQuery.loading) {
-		Cookies.set('user', props.usersQuery.users[0]);
-		console.log(props.usersQuery.users[0]);
-	}
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
 			return <Route component={NotFound} />;
@@ -112,7 +99,6 @@ const routes = (props) => {
 		}
 		setTenantInSession(props.tenantsBySubdomainQuery);
 	}
-
 
 	if (sessionStorage.getItem('noTenant')) {
 		return <Route component={NotFound} />;
@@ -151,10 +137,10 @@ const routes = (props) => {
 			{/** Users routes */}
 			<Route
 				path="/users/:userId" render={(params) => {
-				if (Cookies.get('token')) {
+				if (props.userId) {
 					return <Redirect to="/profile" />;
 				}
-					// return <PublicProfilePage userId={Cookies.get('token')} />;
+					// return <PublicProfilePage userId={cookies.get('token')} />;
 				}}
 				/>
 
@@ -169,12 +155,9 @@ const routes = (props) => {
 				path="/sign-out"
 				render={() => {
 					try {
-						logout();
+						logoutUser();
 					} catch (err) {
 						console.log(err);
-					} finally {
-						console.log('error');
-                      //  return (<Redirect to="/" />);
 					}
 				}}
 			/>
@@ -225,6 +208,7 @@ const routes = (props) => {
 
 			{/** 404 routes */}
 			<Route component={NotFound} />
+
 			{/** Settings routes */}
 			{settingsRoutes}
 		</Switch>
@@ -239,12 +223,23 @@ const App = props => (
 		{routes(props)}
 	</BrowserRouter>
 );
+
 PrivateRoute.propTypes = {
 	component: PropTypes.func,
 	location: PropTypes.string
 };
+
 routes.propTypes = {
 	subdomain: PropTypes.string,
 	tenantsBySubdomainQuery: PropTypes.object
 };
-export default compose(tenantsBySubdomainQuery, usersQuery)(App);
+
+const mapStateToProps = state => ({
+	userId: state.auth.userId,
+	username: state.auth.username,
+});
+
+export default compose(
+	tenantsBySubdomainQuery,
+	connect(mapStateToProps),
+)(App);

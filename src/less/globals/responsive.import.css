@@ -1072,17 +1072,17 @@ font-family: "Material Design Icons";
     float: none;
   }
   article.lemma-comment .context-tabs span,
-  article.lemma-comment .edition-tabs span {
+  article.lemma-comment .version-tabs span {
     font-size: 12px !important;
   }
   article.lemma-comment .context-tabs .mdi:before,
-  article.lemma-comment .edition-tabs .mdi:before {
+  article.lemma-comment .version-tabs .mdi:before {
     font-size: 16px;
   }
-  article.lemma-comment .edition-tab {
+  article.lemma-comment .version-tab {
     margin: 0 2px 0 0;
   }
-  article.lemma-comment .edition-tab.selected-edition-tab {
+  article.lemma-comment .version-tab.selected-version-tab {
     margin: 0 2px 0 0;
   }
   .reference-work-teaser {
@@ -1201,23 +1201,23 @@ font-family: "Material Design Icons";
     width: 200px;
   }
   article.lemma-comment .context-tabs,
-  article.lemma-comment .edition-tabs {
+  article.lemma-comment .version-tabs {
     padding-top: 15px;
   }
-  article.lemma-comment .edition-tab,
+  article.lemma-comment .version-tab,
   article.lemma-comment .context-tab {
     min-width: 0 !important;
   }
-  article.lemma-comment .edition-tab > button,
+  article.lemma-comment .version-tab > button,
   article.lemma-comment .context-tab > button,
-  article.lemma-comment .edition-tab > div,
+  article.lemma-comment .version-tab > div,
   article.lemma-comment .context-tab > div {
     height: auto !important;
     line-height: 30px !important;
   }
-  article.lemma-comment .edition-tab > button div,
+  article.lemma-comment .version-tab > button div,
   article.lemma-comment .context-tab > button div,
-  article.lemma-comment .edition-tab > div div,
+  article.lemma-comment .version-tab > div div,
   article.lemma-comment .context-tab > div div {
     height: auto !important;
   }

@@ -5,8 +5,12 @@ import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-// components:
-import Header from '../../components/header/Header';
+// components
+import Header from '../../components/navigation/Header';
+
+// auth
+import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
+import { login, register, logoutUser, verifyToken } from '../../lib/auth';
 
 // lib
 import muiTheme from '../../lib/muiTheme';
@@ -60,6 +64,12 @@ class MainLayout extends Component {
 							</div>
 						</div>
 					</main>
+					<AuthModalContainer
+						loginMethod={login}
+						signupMethod={register}
+						logoutMethod={logoutUser}
+						getUserFromServer={verifyToken}
+					/>
 				</div>
 			</MuiThemeProvider>
 		);

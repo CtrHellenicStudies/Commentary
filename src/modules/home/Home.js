@@ -17,13 +17,13 @@ import muiTheme from '../../lib/muiTheme';
 import { settingsQuery } from '../../graphql/methods/settings';
 
 // components:
-import CommentersList from '../comenters/CommentersList';
+import CommentersList from '../commenters/CommentersList';
 import WorksList from '../works/WorksList';
 import KeywordsList from '../keywords/KeywordsList';
 import LoadingHome from '../../components/loading/LoadingHome';
 
 // layouts:
-import Commentary from '../comments/commentary/Commentary';
+import CommentaryContainer from '../comments/containers/CommentaryContainer';
 
 
 class Home extends Component {
@@ -251,12 +251,11 @@ class Home extends Component {
 						<h2 className="block-title">Get Started</h2>
 						<div className="get-started-comments">
 							{ready ?
-								<Commentary
+								<CommentaryContainer
 									isOnHomeView
 									filters={[]}
 									skip={0}
 									limit={10}
-									history={this.props.history}
 								/> : ''
 							}
 							<div className="read-more-link">
@@ -280,7 +279,6 @@ class Home extends Component {
 Home.propTypes = {
 	settingsQuery: PropTypes.object,
 	isTest: PropTypes.bool,
-	history: PropTypes.object
 };
 
 Home.childContextTypes = {

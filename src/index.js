@@ -19,7 +19,6 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import apolloClient from './middleware/apolloClient';
-import './index.css';
 import "./less/main.css";
 
 // setup dotenv
@@ -30,7 +29,7 @@ injectTapEventPlugin();
 
 // configure store
 const store = configureStore();
-const uriAddress = process.env.REACT_APP_GRAPHQL;
+const uriAddress = process.env.REACT_APP_GRAPHQL_API;
 
 const networkInterface = createNetworkInterface({
 	uri: uriAddress,
@@ -42,7 +41,7 @@ networkInterface.use([{
 		if (!req.options.headers) {
 			req.options.headers = {};
 		}
-		const token = Cookies.get('loginToken');
+		const token = Cookies.get('token');
 		req.options.headers.authorization = token;
 		next();
 	}

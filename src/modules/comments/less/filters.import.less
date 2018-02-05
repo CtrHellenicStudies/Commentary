@@ -1,0 +1,77 @@
+@import '../../../less/variables.import.less';
+
+.filters {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    overflow: visible;
+    max-width: 450px;
+    width: 90%;
+
+  }
+
+  .filter {
+    display: block;
+    margin: 4px 0;
+    //.transition( all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) );
+
+    .filter-key, .filter-vals, .filter-val {
+      display: inline-block;
+      vertical-align: top;
+      //.transition( all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) );
+      margin-right: -5px;
+
+    }
+
+    .filter-key {
+      background: @primary;
+      color: @light;
+      padding: 10px 20px;
+      border: 1px solid @primary;
+      font-family: @font-label(14px);
+      text-transform: uppercase;
+
+    }
+
+    .filter-val {
+      padding: 0;
+      border: 1px solid #eee;
+      margin: 0 -5px 0 4px;
+      color: @primary-dark;
+      background: rgba(255, 255, 255, 0.95);
+      height: 45px !important;
+      border-radius: 0 !important;
+
+      &:hover {
+        background: #fff;
+
+      }
+
+      &:first-child {
+        border-left: none;
+        margin: 0 5px;
+
+      }
+
+      button {
+        height: 45px !important;
+        border-radius: 0 !important;
+        div div {
+          height: 45px !important;
+          border-radius: 0 !important;
+          span {
+            height: 45px !important;
+            padding: 4px;
+          }
+        }
+      }
+
+      span {
+        font-family: @font-body(13px);
+        display: inline-block;
+        vertical-align: top;
+
+      }
+    }
+
+  }

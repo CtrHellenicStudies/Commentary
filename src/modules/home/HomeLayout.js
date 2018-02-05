@@ -12,14 +12,18 @@ import { tenantsQuery } from '../../graphql/methods/tenants';
 import { settingsQuery } from '../../graphql/methods/settings';
 
 // layouts
-import Header from '../../components/header/Header';
-import Footer from '../../components/footer/Footer';
+import Header from '../../components/navigation/Header';
+import Footer from '../../components/navigation/Footer';
 import CommunityLayout from '../community/CommunityLayout';
 import NameResolutionServiceLayout from '../services/NameResolutionServiceLayout';
 
 // components
 import Home from './Home';
 import LoadingHome from '../../components/loading/LoadingHome';
+
+// auth
+import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
+import { login, register, logoutUser, verifyToken } from '../../lib/auth';
 
 
 class HomeLayout extends Component {
@@ -90,6 +94,12 @@ class HomeLayout extends Component {
 					/>
 
 					<Footer />
+					<AuthModalContainer
+						loginMethod={login}
+						signupMethod={register}
+						logoutMethod={logoutUser}
+						getUserFromServer={verifyToken}
+					/>
 				</div>
 			</MuiThemeProvider>
 		);

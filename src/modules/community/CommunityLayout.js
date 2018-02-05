@@ -8,11 +8,15 @@ import muiTheme from '../../lib/muiTheme';
 import { compose } from 'react-apollo';
 
 // layouts & components
-import Header from '../../components/header/Header';
-import Footer from '../../components/footer/Footer';
+import Header from '../../components/navigation/Header';
+import Footer from '../../components/navigation/Footer';
 import { SnackAttack } from '../shared/SnackAttack';
 import LoadingHome from '../../components/loading/LoadingHome';
 import CommunityPage from './CommunityPage';
+
+// auth
+import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
+import { login, register, logoutUser, verifyToken } from '../../lib/auth';
 
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';
@@ -45,6 +49,12 @@ class CommunityLayout extends Component {
 					<CommunityPage />
 					<Footer />
 					<SnackAttack />
+					<AuthModalContainer
+						loginMethod={login}
+						signupMethod={register}
+						logoutMethod={logoutUser}
+						getUserFromServer={verifyToken}
+					/>
 				</div>
 			</MuiThemeProvider>
 		);

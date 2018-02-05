@@ -3,8 +3,11 @@ import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
 import Cookies from 'js-cookie';
 import {
-	convertFromRaw, EditorState, ContentState, convertFromHTML 
+	convertFromRaw, EditorState, ContentState, convertFromHTML
 } from 'draft-js';
+
+import serializeUrn from '../modules/cts/lib/serializeUrn';
+
 
 /**
  * General application specific utility / helper functions
@@ -24,7 +27,7 @@ const Utils = {
 		}
 		return ret;
 	},
-	createLemmaCitation(work, lineFrom, lineTo, chapterFrom, chapterTo) { 
+	createLemmaCitation(work, lineFrom, lineTo, chapterFrom, chapterTo) {
 		if(chapterFrom === undefined || chapterFrom === null) {
 			chapterFrom = 1;
 		}
@@ -32,11 +35,11 @@ const Utils = {
 			chapterTo = 1;
 		}
 		return {
-			corpus: "urn:cts:greekLit",
+			ctsNamespace: "urn:cts:greekLit",
 			textGroup: "tlg0013",
 			work: work.replace('tlg',''),
-			passageFrom: `${chapterFrom}.${lineFrom+1}`,
-			passageTo: `${chapterTo}.${lineTo+1}`
+			passageFrom: `${chapterFrom}.${lineFrom}`,
+			passageTo: `${chapterTo}.${lineTo}`
 		};
 
 	},
@@ -58,10 +61,9 @@ const Utils = {
 		return ret;
 	},
 	getUrnTextNodesProperties(lemmaCitation) {
-		const work = lemmaCitation.work.replace('tlg','');
 		return {
-			workUrn:(`${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${work}`).toString(),
-			textNodesUrn: `${lemmaCitation.corpus}:${lemmaCitation.textGroup}.${work}:${lemmaCitation.passageFrom}-${lemmaCitation.passageTo}`
+			workUrn: serializeUrn(lemmaCitation),
+			textNodesUrn: serializeUrn(lemmaCitation),
 		};
 	},
 	encodeBookBySlug(slug) {
@@ -71,7 +73,7 @@ const Utils = {
 		};
 		switch(slug) {
 			case 'odyssey':
-				code = { 
+				code = {
 					urn: 'urn:cts:greekLit:tlg0013.tlg002',
 					slug: 'odyssey-2'
 				};
@@ -130,7 +132,7 @@ const Utils = {
 		const capitalized = str.charAt(0).toUpperCase() + str.slice(1);
 		return capitalized;
 	},
-	defaultCmp: function defaultCmp(a, b) {
+	defaultCmp: (a, b) => {
 		if (a === b) return 0;
 		return a < b ? -1 : 1;
 	},
@@ -165,7 +167,7 @@ const Utils = {
 		}
 		return false;
 	},
-	sortBy: function sort() {
+	sortBy: () => {
 		const fields = [];
 		const nFields = arguments.length;
 		let field;
@@ -279,46 +281,82 @@ const Utils = {
 
 		if (window.location.hostname.match(/\w+.chs.harvard.edu/)) {
 			domain = 'chs.harvard.edu';
-		} else if (window.location.hostname.match(/\w+.chs.orphe.us/)) {
-			domain = 'chs.orphe.us';
+		} else if (window.location.hostname.match(/\w+.chs.chs.harvard.edu/)) {
+			domain = 'chs.chs.harvard.edu';
 		} else if (window.location.hostname.match(/\w+.chs.local/)) {
 			domain = 'chs.local';
 		}
 
 		return domain;
 	},
-	textFromTextNodesGroupedByEdition(worksWithTextNodes, _versions) {
 
+	/**
+	 * Get textNodes as array by version
+	 */
+	textFromTextNodesGroupedByVersion(textNodes) {
 		const versions = [];
-		worksWithTextNodes.forEach((work) => {
-			work.textNodes.forEach((textNode) => {
-				let myVersion = versions.find(e => work.slug === e.slug);
+		const translations = [];
 
-				if (!myVersion) {
-					const foundVersion = _versions.find(x => x.slug === work.slug);
-					if (foundVersion) {
-						myVersion = {
-							_id: foundVersion.version.id,
-							title: foundVersion.version.title,
-							slug: foundVersion.slug,
-							//multiLine: foundEdition.multiLine, TODO
-							lines: [],
-						};
-						versions.push(myVersion);
-					}
+		// handle case for no textNodes submitted
+		if (!textNodes) {
+			return [];
+		}
+
+		// split textnodes by version
+		textNodes.forEach((textNode) => {
+			let textNodeVersion = versions.find(v => textNode.version.id === v.id);
+			let textNodeTranslation = translations.find(v => textNode.version.id === v.id);
+
+			if (textNodeVersion) {
+				textNodeVersion.textNodes.push({
+					id: textNode.id,
+					html: textNode.text,
+					location: textNode.location,
+					index: textNode.index,
+				});
+
+			} else if (textNodeTranslation) {
+				textNodeTranslation.textNodes.push({
+					id: textNode.id,
+					html: textNode.text,
+					location: textNode.location,
+					index: textNode.index,
+				});
+
+			} else {
+				textNodeVersion = {
+					...textNode.version,
+					language: textNode.language,
+					textNodes: [],
+
+					// TODO add multiLine support to version with : textNode.version.multiLine
+				};
+
+				// If translation is set or is not in classical language, add as translation
+				if (
+						(textNode.translation && textNode.translation.id)
+					|| (
+							textNode.language
+						&& ~['english', 'french', 'german', 'italian'].indexOf(textNode.language.slug)
+					)
+				) {
+					textNodeVersion.translation = textNode.translation;
+					translations.push(textNodeVersion);
+
+				// if textnode language is not set, omit
+				// TODO: send bug report if textnode language is not found
+				} else if (
+					textNode.language
+					&& textNode.language.id
+				) {
+					versions.push(textNodeVersion);
 				}
-				if(myVersion) {
-					myVersion.lines.push({
-						_id: textNode.id,
-						html: textNode.text,
-						n: textNode.location[1],
-					});
-				}
-			});
+			}
 		});
 
-		return versions;
+		return { versions, translations };
 	},
+
 	getCommenters(commenterData, commenters) {
 		const commentersList = [];
 
@@ -329,11 +367,11 @@ const Utils = {
 
 		return commentersList;
 	},
-	parseMultilineEdition(editions, multiline) {
-		const parsedEditions = [];
+	parseMultilineVersion(versions, multiline) {
+		const parsedVersions = [];
 
-		editions.forEach((edition, index) => {
-			const joinedText = edition.lines.map(line => line.html).join(' ');
+		versions.forEach((version, index) => {
+			const joinedText = version.lines.map(line => line.html).join(' ');
 
 			const tag = new RegExp(`<lb id="\\d+" ed="${multiline}" />`, 'ig');
 
@@ -365,12 +403,15 @@ const Utils = {
 			} else {
 				return new Error('Parsing error');
 			}
-			const currentEdition = edition;
-			currentEdition.lines = result;
-			parsedEditions.push(currentEdition);
+
+			const currentVersion = version;
+			currentVersion.lines = result;
+			parsedVersions.push(currentVersion);
 		});
-		return parsedEditions;
+
+		return parsedVersions;
 	},
+
 	getEditorState(content) {
 		let _content = content || '';
 		if (this.isJson(content)) {
@@ -388,6 +429,7 @@ const Utils = {
 			);
 		return EditorState.createWithContent(state);
 	},
+
 	getHtmlFromContext(context) {
 		return convertToHTML({
 						// performe necessary html transformations:
@@ -426,11 +468,13 @@ const Utils = {
 			},
 		})(context);
 	},
+
 	decodeHtml(html) {
 		const txt = document.createElement('textarea');
 		txt.innerHTML = html;
 		return txt.value;
 	},
+
 	isJson(str) {
 		try {
 			JSON.parse(str);
@@ -439,6 +483,7 @@ const Utils = {
 		}
 		return true;
 	},
+
 	shouldRefetchQuery(properties, variables) {
 		for (const [key] of Object.entries(properties)) {
 			if (properties[key] !== variables[key]) {
@@ -447,6 +492,7 @@ const Utils = {
 		}
 		return false;
 	},
+
 	getSuggestionsFromComments(comments) {
 		const suggestions = [];
 

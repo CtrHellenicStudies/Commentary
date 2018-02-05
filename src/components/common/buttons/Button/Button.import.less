@@ -1,0 +1,82 @@
+@import '../../../../less/variables.import.less';
+
+.chs-button {
+	padding: 15px 25px;
+	margin: 10px;
+	border: 2px solid @light;
+	text-transform: uppercase;
+	font-family: @font-label;
+	color: @light;
+	cursor: pointer;
+
+	&.chs-button--primary {
+		background: @primary;
+		border: 2px solid @primary;
+		&.chs-button--outline {
+			border: 2px solid @light;
+		}
+		&:hover {
+			background: @primary-dark;
+			border: 2px solid @primary-dark;
+			color: @light;
+		}
+	}
+
+	&.chs-button--accent {
+		background: @accent;
+		border: 2px solid @accent;
+		&.chs-button--outline {
+			border: 2px solid @light;
+		}
+		&:hover {
+			background: @accent-dark;
+			border: 2px solid @accent-dark;
+			color: @light;
+		}
+	}
+
+	&.chs-button--light {
+		background: @light;
+		border: 2px solid @light;
+		color: @dark;
+		&.chs-button--outline {
+			border: 2px solid @dark;
+		}
+		&.chs-button--outline-dark {
+			border: 2px solid @light;
+		}
+		&:hover {
+			background: @primary;
+			border: 2px solid @primary;
+			color: @light;
+		}
+	}
+
+	&.chs-button--trans-light {
+		background: rgba(255, 255, 255, 0.4);
+		border: 2px solid rgba(255, 255, 255, 0.4);
+		color: @dark;
+		&.chs-button--outline {
+			border: 2px solid @dark;
+		}
+		&:hover {
+			background: @primary;
+			border: 2px solid @primary;
+			color: @light;
+		}
+	}
+
+	&.chs-button--dark {
+		background: @dark;
+		border: 2px solid @dark;
+		color: @light;
+		&.chs-button--outline {
+			border: 2px solid @dark;
+		}
+		&:hover {
+			background: @primary;
+			border: 2px solid @primary;
+			color: @light;
+		}
+	}
+}

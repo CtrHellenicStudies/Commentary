@@ -35,7 +35,8 @@ class AddKeywordLayout extends Component {
 			selectedType: 'word',
 			contextReaderOpen: true,
 			loading: false,
-			selectedTextNodes: []
+			selectedTextNodes: [],
+			filter: {}
 		};
 
 		this.getWork = this.getWork.bind(this);
@@ -270,76 +271,29 @@ class AddKeywordLayout extends Component {
 			lineLetter: value,
 		});
 	}
-	handlePagination(e) {
-		const filters = this.state.filters;
+	handlePagination(book, chapter) {
+		const { filter } = this.state;
+		const work = this.getWork();
 
-		if (e.from > 1) {
-			let lineFromInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineFrom') {
-					filters[i].values = [e.from];
-					lineFromInFilters = true;
-				}
-			});
-
-			if (!lineFromInFilters) {
-				filters.push({
-					key: 'lineFrom',
-					values: [e.from],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineFrom') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
-
-		if (e.to < 2100) {
-			let lineToInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineTo') {
-					filters[i].values = [e.to];
-					lineToInFilters = true;
-				}
-			});
-
-			if (!lineToInFilters) {
-				filters.push({
-					key: 'lineTo',
-					values: [e.to],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineTo') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
-
-
+		filter.edition = book;
+		filter.chapter = chapter;
+		
 		this.setState({
-			filters,
+			filter,
 		});
+		let properties;
+		if (work) {
+			properties = {
+				workUrn: work.urn,
+				textNodesUrn: `${work.urn}:${chapter - 1}.1-${chapter}.1`
+			}
+		} else {
+			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation('tlg001', 1, 1, chapter - 1, chapter));
+		}
+		this.props.textNodesQuery.refetch(properties);
 	}
 	render() {
-		const { filters, textNodes, work, selectedTextNodes } = this.state;
+		const { filters, textNodes, work, selectedTextNodes, filter } = this.state;
 		const { isTest } = this.props;
 		let lineFrom;
 
@@ -352,7 +306,7 @@ class AddKeywordLayout extends Component {
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
 							handlePagination={this.handlePagination}
-							filters={filters}
+							filters={filter}
 							initialSearchEnabled
 							addCommentPage
 							selectedWork={this.getWork(filters)}

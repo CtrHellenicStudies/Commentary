@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -83,7 +84,14 @@ class UserDropdown extends Component {
 		);
 	}
 }
+
 UserDropdown.propTypes = {
 	user: PropTypes.object.isRequired,
 };
-export default UserDropdown;
+
+const mapStateToProps = state => ({
+	userId: state.auth.userId,
+	username: state.auth.username,
+});
+
+export default connect(mapStateToProps)(UserDropdown);

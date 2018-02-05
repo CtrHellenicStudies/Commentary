@@ -41,7 +41,7 @@ networkInterface.use([{
 		if (!req.options.headers) {
 			req.options.headers = {};
 		}
-		const token = Cookies.get('loginToken');
+		const token = Cookies.get('token');
 		req.options.headers.authorization = token;
 		next();
 	}

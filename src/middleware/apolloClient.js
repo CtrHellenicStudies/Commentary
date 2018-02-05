@@ -19,7 +19,7 @@ networkInterface.use([{
 		if (!req.options.headers) {
 			req.options.headers = {}; // Create the header object if needed.
 		}
-		req.options.headers.authorization = cookies.get('loginToken') ? cookies.get('loginToken') : null;
+		req.options.headers.authorization = cookies.get('token') ? cookies.get('token') : null;
 		next();
 	}
 }]);

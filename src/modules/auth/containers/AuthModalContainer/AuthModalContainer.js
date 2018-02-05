@@ -21,7 +21,7 @@ class AuthModalContainer extends React.Component {
 		dispatchLogin: PropTypes.func.isRequired,
 		dispatchSignup: PropTypes.func.isRequired,
 		dispatchToggleAuthModal: PropTypes.func.isRequired,
-		dispachChangeAuthMode: PropTypes.func.isRequired,
+		dispatchChangeAuthMode: PropTypes.func.isRequired,
 		showAuthModal: PropTypes.bool,
 		authMode: PropTypes.string,
 	};
@@ -55,13 +55,13 @@ class AuthModalContainer extends React.Component {
 	}
 
 	async _initiateUser() {
-		const { getUserFromServer, dispachSetUser } = this.props;
+		const { getUserFromServer, dispatchSetUser } = this.props;
 		if (getUserFromServer) {
 			try {
 				const user = await getUserFromServer();
 				if (user) {
 					user.userId = user._id;
-					dispachSetUser(user);
+					dispatchSetUser(user);
 				}
 			} catch (err) {
 				console.error(err);
@@ -72,7 +72,7 @@ class AuthModalContainer extends React.Component {
 	}
 
 	render() {
-		const { showAuthModal, dispatchToggleAuthModal, authMode, dispachChangeAuthMode, dispatchLogin, dispatchSignup } = this.props;
+		const { showAuthModal, dispatchToggleAuthModal, authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup } = this.props;
 
 		return (
 			<Modal
@@ -82,13 +82,13 @@ class AuthModalContainer extends React.Component {
 				<div>
 					{authMode === 'login' ?
 						<Login
-							onRegisterClick={dispachChangeAuthMode.bind(null, 'signup')}
+							onRegisterClick={dispatchChangeAuthMode.bind(null, 'signup')}
 							login={dispatchLogin}
 						/>
 					: null}
 					{authMode === 'signup' ?
 						<Signup
-							onSigninClick={dispachChangeAuthMode.bind(null, 'login')}
+							onSigninClick={dispatchChangeAuthMode.bind(null, 'login')}
 							signup={dispatchSignup}
 						/>
 					: null}
@@ -107,10 +107,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	dispatchToggleAuthModal: (value) => {
 		dispatch(toggleAuthModal(value));
 	},
-	dispachChangeAuthMode: (mode) => {
+	dispatchChangeAuthMode: (mode) => {
 		dispatch(changeAuthMode(mode));
 	},
-	dispachSetUser: (userObject) => {
+	dispatchSetUser: (userObject) => {
 		dispatch(setUser(userObject));
 		dispatch(toggleAuthModal(false));
 	},

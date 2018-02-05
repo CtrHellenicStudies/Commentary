@@ -87,7 +87,6 @@ class NavBar extends React.Component {
 	}
 
 	toggleSearchMode() {
-
 		const { addCommentPage } = this.props;
 		const { searchEnabled } = this.state;
 
@@ -111,7 +110,6 @@ class NavBar extends React.Component {
 	}
 
 	toggleSearchDropdown(targetDropdown) {
-
 		const { searchDropdownOpen } = this.state;
 
 		if (searchDropdownOpen === targetDropdown) {
@@ -126,7 +124,6 @@ class NavBar extends React.Component {
 	}
 
 	toggleWorkSearchTerm(key, value) {
-
 		const { toggleSearchTerm } = this.props;
 		const { activeWork } = this.state;
 
@@ -221,8 +218,6 @@ class NavBar extends React.Component {
 			<Headroom className="navbar">
 				{!isOnHomeView && (
 					toggleSearchTerm
-					&& handleChangeTextsearch
-					&& handlePagination
 				) ?
 					<CommentarySearchPanel
 						toggleSearchTerm={toggleSearchTerm}
@@ -245,77 +240,29 @@ class NavBar extends React.Component {
 										menu
 								</IconButton>
 
-								{tenant && tenant.isAnnotation ?
-									<a href="//chs.harvard.edu" className="header-home-link" >
-										<h3 className="logo">{settings ? settings.name : ''}</h3>
-									</a>
-								:
-									<Link to="/" className="header-home-link">
-										<h3 className="logo">{settings ? settings.name : ''}</h3>
-									</Link>
-								}
+								<Link to="/" className="header-home-link">
+									<h3 className="logo">{settings ? settings.name : ''}</h3>
+								</Link>
 
 								<div className="header-section-wrap nav-wrap collapse" >
-									{tenant && !tenant.isAnnotation &&
-										<span>
-											<Link to="/commentary">
-												<FlatButton
-													label="Commentary"
-													style={styles.flatButton}
-												/>
-											</Link>
-											<Link to={settings && settings.aboutURL ? settings.aboutURL : '/about'}>
-												<FlatButton
-													label="About"
-													style={styles.flatButton}
-												/>
-											</Link>
-										</span>
-									}
-									{user ?
-										<div>
-			                {this.state.user
-												&& Utils.userInRole(this.state.user, ['editor', 'admin', 'commenter'])
-			                  ?
-												<div className="user-header-links admin-header-links">
-													{tenant && !tenant.isAnnotation &&
-														<span>
-															<Link to="/commentary/create">
-																<FlatButton
-																	label="Add Comment"
-																	className=""
-																	style={styles.flatButton}
-																/>
-															</Link>
-															<Link to="/tags/create">
-																<FlatButton
-																	label="Add Tag"
-																	className=""
-																	style={styles.flatButton}
-																/>
-															</Link>
-															<Link to="/textNodes/edit">
-																<FlatButton
-																	label="Add Translation"
-																	className=""
-																	style={styles.flatButton}
-																/>
-															</Link>
-														</span>
-													}
-													<ProfileAvatarButton
-														showUserDropdown={this.showUserDropdown}
-														hideUserDropdown={this.hideUserDropdown}
-													/>
-												</div>
-												:
-												<div className="user-header-links">
-													<ProfileAvatarButton
-														showUserDropdown={this.showUserDropdown}
-														hideUserDropdown={this.hideUserDropdown}
-													/>
-												</div>
-											}
+									<Link to="/commentary">
+										<FlatButton
+											label="Commentary"
+											style={styles.flatButton}
+										/>
+									</Link>
+									<Link to={settings && settings.aboutURL ? settings.aboutURL : '/about'}>
+										<FlatButton
+											label="About"
+											style={styles.flatButton}
+										/>
+									</Link>
+									{userId ?
+										<div className="user-header-links">
+											<ProfileAvatarButton
+												showUserDropdown={this.showUserDropdown}
+												hideUserDropdown={this.hideUserDropdown}
+											/>
 										</div>
 									:
 										<div>
@@ -337,66 +284,54 @@ class NavBar extends React.Component {
 											</Link>
 										</div>
 									}
-									{tenant && !tenant.isAnnotation &&
-										<div className="search-toggle">
-											<IconButton
-												className="search-button"
-												iconClassName="material-icons"
-												onClick={this.toggleSearchMode}>
-													search
-											</IconButton>
-										</div>
-									}
+									<div className="search-toggle">
+										<IconButton
+											className="search-button"
+											iconClassName="material-icons"
+											onClick={this.toggleSearchMode}>
+												search
+										</IconButton>
+									</div>
 								</div>
 							</div>
 						</div>
 					:
-						<div>
-							{tenant && !tenant.isAnnotation &&
-								<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
-									<div className="toolbar-tools">
+						<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
+							<div className="toolbar-tools">
+								<IconButton
+									className="left-drawer-toggle"
+									iconClassName="material-icons"
+									style={styles.leftMenuToggle}
+									onClick={dispatchToggleLeftMenu}>
+										menu
+								</IconButton>
+								<div className="search-toggle">
+									<IconButton
+										className="search-button right-drawer-toggle"
+										onClick={this.toggleRightMenu}
+										iconClassName="material-icons">
+										search
+									</IconButton>
+								</div>
+								<div className="search-tools collapse">
+									<CommentarySearchToolbar
+										toggleSearchTerm={toggleSearchTerm}
+										handleChangeTextsearch={handleChangeTextsearch}
+										handlePagination={handlePagination}
+										filters={filters}
+										addCommentPage={addCommentPage}
+										selectedWork={selectedWork}
+									/>
+									<div className="search-toggle">
 										<IconButton
-											className="left-drawer-toggle"
-											iconClassName="material-icons"
-											style={styles.leftMenuToggle}
-											onClick={dispatchToggleLeftMenu}>
-												menu
+											className="search-button"
+											onClick={this.toggleSearchMode}
+											iconClassName="material-icons">
+											search
 										</IconButton>
-										<div className="search-toggle">
-											<IconButton
-												className="search-button right-drawer-toggle"
-												onClick={this.toggleRightMenu}
-												iconClassName="material-icons">
-												search
-											</IconButton>
-										</div>
-
-										{!isOnHomeView && (
-											toggleSearchTerm
-											&& handlePagination
-										) ?
-											<div className="search-tools collapse">
-												<CommentarySearchToolbar
-													toggleSearchTerm={toggleSearchTerm}
-													handleChangeTextsearch={handleChangeTextsearch}
-													handlePagination={handlePagination}
-													filters={filters}
-													addCommentPage={addCommentPage}
-													selectedWork={selectedWork}
-												/>
-												<div className="search-toggle">
-													<IconButton
-														className="search-button"
-														onClick={this.toggleSearchMode}
-														iconClassName="material-icons">
-														search
-													</IconButton>
-												</div>
-											</div>
-										: ''}
 									</div>
 								</div>
-							}
+							</div>
 						</div>
 					}
 				</div>

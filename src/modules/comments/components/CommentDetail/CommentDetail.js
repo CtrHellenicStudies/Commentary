@@ -105,13 +105,17 @@ class CommentDetail extends Component {
 	getRevisionIndex() {
 		const { comment, filters } = this.props;
 		let selectedRevisionIndex = this.state.selectedRevisionIndex;
+
 		if (selectedRevisionIndex === null) {
 			let foundRevision = null;
-			filters.forEach((filter) => {
-				if (filter.key === 'revision') {
-					foundRevision = filter.values[0];
-				}
-			});
+
+			if (filters) {
+				filters.forEach((filter) => {
+					if (filter.key === 'revision') {
+						foundRevision = filter.values[0];
+					}
+				});
+			}
 
 			if (foundRevision != null && foundRevision >= 0 &&
 				foundRevision < comment.revisions.length) {

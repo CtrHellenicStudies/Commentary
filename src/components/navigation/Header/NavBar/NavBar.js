@@ -22,7 +22,7 @@ import Utils from '../../../../lib/utils';
 import { tenantsQuery } from '../../../../graphql/methods/tenants';
 import { settingsQuery } from '../../../../graphql/methods/settings';
 
-// actions 
+// actions
 import { toggleLeftMenu } from '../../../../actions/leftMenu';
 
 // styles
@@ -249,17 +249,6 @@ class NavBar extends React.Component {
 									<Link to="/" className="header-home-link">
 										<h3 className="logo">{settings ? settings.name : ''}</h3>
 									</Link>
-								}
-
-								{tenant && !tenant.isAnnotation &&
-									<div className="search-toggle">
-										<IconButton
-											className="search-button right-drawer-toggle"
-											iconClassName="material-icons"
-											onClick={this.toggleRightMenu}>
-												search
-										</IconButton>
-									</div>
 								}
 
 								<div className="header-section-wrap nav-wrap collapse" >

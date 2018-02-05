@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Utils from '../../../lib/utils';
-import RecentList from './recent/RecentList';
-import { logoutUser } from '../../../lib/auth';
+
+// lib
+import Utils from '../../../../lib/utils';
+
+// components
+import RecentList from '../RecentList';
+
+// auth
+import { logoutUser } from '../../../../lib/auth';
 
 
 class UserDropdown extends Component {
@@ -16,7 +22,7 @@ class UserDropdown extends Component {
 	}
 
 	signOut() {
-		logout();
+		logoutUser();
 		this.setState({
 			authenticated: false,
 		});

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
-import AvatarIcon from '../../../modules/profile/avatar/AvatarIcon';
-import UserDropdown from './UserDropdown';
+import AvatarIcon from '../../../profile/avatar/AvatarIcon';
+import UserDropdown from '../UserDropdown';
 
 class ProfileAvatarButton extends Component {
 	constructor(props) {

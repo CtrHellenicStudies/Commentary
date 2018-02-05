@@ -49,13 +49,13 @@ class CommunityLayout extends Component {
 					<CommunityPage />
 					<Footer />
 					<SnackAttack />
+					<AuthModalContainer
+						loginMethod={login}
+						signupMethod={register}
+						logoutMethod={logoutUser}
+						getUserFromServer={verifyToken}
+					/>
 				</div>
-				<AuthModalContainer
-					loginMethod={login}
-					signupMethod={register}
-					logoutMethod={logoutUser}
-					getUserFromServer={verifyToken}
-				/>
 			</MuiThemeProvider>
 		);
 	}

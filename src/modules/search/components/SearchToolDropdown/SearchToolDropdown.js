@@ -34,6 +34,7 @@ const SearchToolDropdown = ({ name, children, open, toggle, disabled }) => (
 		</ul>
 	</div>
 );
+
 SearchToolDropdown.propTypes = {
 	name: PropTypes.string.isRequired, // name of the dropdown option
 	children: PropTypes.node.isRequired, // content to show inside dropdown
@@ -41,6 +42,7 @@ SearchToolDropdown.propTypes = {
 	toggle: PropTypes.func.isRequired, // function to toggle the dropdown
 	disabled: PropTypes.bool, // whether dropdown is disabled or not
 };
+
 SearchToolDropdown.defaultProps = {
 	disabled: false,
 };

@@ -10,18 +10,18 @@ import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
 // graphql
-import { commentersQuery } from '../../../graphql/methods/commenters';
-import { referenceWorksQuery } from '../../../graphql/methods/referenceWorks';
-import { keywordsQuery } from '../../../graphql/methods/keywords';
-import { editionsQuery } from '../../../graphql/methods/editions';
+import { commentersQuery } from '../../../../graphql/methods/commenters';
+import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
+import { keywordsQuery } from '../../../../graphql/methods/keywords';
+import { editionsQuery } from '../../../../graphql/methods/editions';
 
-// components:
-import SearchTermButtonPanel from './SearchTermButtonPanel';
-import { WorksCard } from './cards/SearchCards';
+// components
+import SearchTermButtonPanel from '../SearchTermButtonPanel';
+import WorksCard from '../WorksCard';
+import BookAndChapterPager from '../BookAndChapterPages';
 
-// lib:
-import Utils from '../../../lib/utils';
-import BookAndChapterPager from './BookAndChapterPages';
+// lib
+import Utils from '../../../../lib/utils';
 
 
 class CommentarySearchPanel extends Component {
@@ -98,7 +98,7 @@ class CommentarySearchPanel extends Component {
 			nextProps.referenceWorksQuery.loading) {
 				return;
 			}
-	
+
 		// FETCH DATA:
 		keyideas = nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea');
 		keywords = nextProps.keywordsQuery.keywords.filter(x => x.type === 'word');

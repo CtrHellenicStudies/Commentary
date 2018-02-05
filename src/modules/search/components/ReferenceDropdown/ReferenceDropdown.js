@@ -9,7 +9,7 @@ import SearchTermButton from '../SearchTermButton';
 import Utils from '../../../../lib/utils';
 
 // helpers:
-import { isActive, dropdownPropTypes, dropdownDefaultProps } from '../helpers';
+import { isActive, dropdownPropTypes, dropdownDefaultProps } from '../../lib/helpers';
 
 /*
 	BEGIN ReferenceDropdown

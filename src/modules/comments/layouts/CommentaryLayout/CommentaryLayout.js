@@ -178,13 +178,13 @@ class CommentaryLayout extends Component {
 						/>
 
 					</div>
+					<AuthModalContainer
+						loginMethod={login}
+						signupMethod={register}
+						logoutMethod={logoutUser}
+						getUserFromServer={verifyToken}
+					/>
 				</div>
-				<AuthModalContainer
-					loginMethod={login}
-					signupMethod={register}
-					logoutMethod={logoutUser}
-					getUserFromServer={verifyToken}
-				/>
 			</MuiThemeProvider>
 		);
 	}

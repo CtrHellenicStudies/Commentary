@@ -94,13 +94,13 @@ class HomeLayout extends Component {
 					/>
 
 					<Footer />
+					<AuthModalContainer
+						loginMethod={login}
+						signupMethod={register}
+						logoutMethod={logoutUser}
+						getUserFromServer={verifyToken}
+					/>
 				</div>
-				<AuthModalContainer
-					loginMethod={login}
-					signupMethod={register}
-					logoutMethod={logoutUser}
-					getUserFromServer={verifyToken}
-				/>
 			</MuiThemeProvider>
 		);
 	}

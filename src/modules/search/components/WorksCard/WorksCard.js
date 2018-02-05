@@ -6,7 +6,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import SearchTermButtonPanel from '../SearchTermButtonPanel';
 
 // helpers:
-import { isActive } from './helpers';
+import { isActive } from '../../lib/helpers';
 
 
 /*

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import RecentTeaser from './RecentTeaser';
+
+// components
+import RecentTeaser from '../RecentTeaser';
+
 
 class RecentList extends Component {
 

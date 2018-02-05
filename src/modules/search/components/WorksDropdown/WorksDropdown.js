@@ -6,7 +6,7 @@ import SearchToolDropdown from '../SearchToolDropdown';
 import SearchTermButton from '../SearchTermButton';
 
 // helpers:
-import { isActive, dropdownPropTypes, dropdownDefaultProps } from '../helpers';
+import { isActive, dropdownPropTypes, dropdownDefaultProps } from '../../lib/helpers';
 
 /*
 	BEGIN WorksDropdown

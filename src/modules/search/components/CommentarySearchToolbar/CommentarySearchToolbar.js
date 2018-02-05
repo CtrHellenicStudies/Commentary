@@ -7,16 +7,22 @@ import { compose } from 'react-apollo';
 
 
 // graphql
-import { commentersQuery } from '../../../graphql/methods/commenters';
-import { referenceWorksQuery } from '../../../graphql/methods/referenceWorks';
-import { keywordsQuery } from '../../../graphql/methods/keywords';
-import { editionsQuery } from '../../../graphql/methods/editions';
+import { commentersQuery } from '../../../../graphql/methods/commenters';
+import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
+import { keywordsQuery } from '../../../../graphql/methods/keywords';
+import { editionsQuery } from '../../../../graphql/methods/editions';
 
 // components:
-import SearchToolDropdown from './SearchToolDropdown';
-import { KeywordsDropdown, KeyideasDropdown, CommentatorsDropdown, ReferenceDropdown, WorksDropdown } from './dropdowns/SearchDropdowns';
-import Utils from '../../../lib/utils';
-import BookAndChapterPager from './BookAndChapterPages';
+import SearchToolDropdown from '../SearchToolDropdown';
+import KeywordsDropdown from '../KeywordsDropdown';
+import KeyideasDropdown from '../KeyideasDropdown';
+import CommentatorsDropdown from '../CommentatorsDropdown';
+import ReferenceDropdown from '../ReferenceDropdown';
+import WorksDropdown from '../WorksDropdown';
+import BookAndChapterPages from '../BookAndChapterPages';
+
+// lib
+import Utils from '../../../../lib/utils';
 
 
 const getWorkInFilter = (filters) => {
@@ -202,9 +208,9 @@ class CommentarySearchToolbar extends Component {
 					style={{padding: '10px 20px' }}
 					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
 				>
-					<BookAndChapterPager
+					<BookAndChapterPages
 						updateTextInformations={handlePagination}
-						 />
+					/>
 					<div className="disabled-screen" />
 				</div>
 

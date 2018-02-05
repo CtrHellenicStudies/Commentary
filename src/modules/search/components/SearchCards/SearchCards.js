@@ -1,5 +1,5 @@
 
-import WorksCard from './WorksCard';
+import WorksCard from '../WorksCard';
 
 
 const SearchCards = {

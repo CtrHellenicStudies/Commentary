@@ -64,13 +64,13 @@ class MainLayout extends Component {
 							</div>
 						</div>
 					</main>
+					<AuthModalContainer
+						loginMethod={login}
+						signupMethod={register}
+						logoutMethod={logoutUser}
+						getUserFromServer={verifyToken}
+					/>
 				</div>
-				<AuthModalContainer
-					loginMethod={login}
-					signupMethod={register}
-					logoutMethod={logoutUser}
-					getUserFromServer={verifyToken}
-				/>
 			</MuiThemeProvider>
 		);
 	}

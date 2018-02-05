@@ -20,8 +20,11 @@ import qs from 'qs-lite';
 
 // components
 import CommentaryContainer from '../../containers/CommentaryContainer';
-import ModalLogin from '../../../login/ModalLogin';
 import Header from '../../../../components/navigation/Header';
+
+// auth
+import AuthModalContainer from '../../../../modules/auth/containers/AuthModalContainer';
+import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 // graphql
 import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
@@ -57,7 +60,6 @@ class CommentaryLayout extends Component {
 			tenantId: sessionStorage.getItem('tenantId')
 		});
 
-
 		autoBind(this);
 	}
 
@@ -89,9 +91,7 @@ class CommentaryLayout extends Component {
 
 	_toggleSearchTerm(key, value) {
 		const { queryParams } = this.state;
-
 		const oldFilters = createFilterFromQueryParams(queryParams);
-		console.log(queryParams);
 
 		// update filter based on the key and value
 		const filters = updateFilterOnKeyAndValueChangeEvent(oldFilters, key, value);
@@ -140,17 +140,6 @@ class CommentaryLayout extends Component {
 		}
 	}
 
-	showLoginModal() {
-		this.setState({
-			modalLoginLowered: true,
-		});
-	}
-
-	closeLoginModal() {
-		this.setState({
-			modalLoginLowered: false,
-		});
-	}
 	componentWillReceiveProps(nextProps) {
 		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
 		const works = nextProps.editionsQuery.loading ? [] : nextProps.editionsQuery.works
@@ -160,6 +149,7 @@ class CommentaryLayout extends Component {
 			filters: createFilterFromURL(this.state.params, this.state.queryParams, this.state.works, this.state.referenceWorks)
 		});
 	}
+
 	render() {
 		const { skip, limit, modalLoginLowered, queryParams, filters } = this.state;
 		const { isTest, history } =  this.props;
@@ -188,14 +178,13 @@ class CommentaryLayout extends Component {
 						/>
 
 					</div>
-					{modalLoginLowered ?
-						<ModalLogin
-							lowered={modalLoginLowered}
-							closeModal={this.closeLoginModal}
-						/>
-						: ''
-					}
 				</div>
+				<AuthModalContainer
+					loginMethod={login}
+					signupMethod={register}
+					logoutMethod={logoutUser}
+					getUserFromServer={verifyToken}
+				/>
 			</MuiThemeProvider>
 		);
 	}

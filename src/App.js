@@ -37,16 +37,19 @@ import ReferenceWorkDetail from './modules/referenceWorks/ReferenceWorkDetail';
 // modules
 import settingsRoutes from './modules/settings/routes';
 
-
+// login with token
 const loginToken = Cookies.get('token');
 if (loginToken) {
 	login(loginToken);
 }
 
+// set the base document meta for the application
 Utils.setBaseDocMeta();
 
+// parse tenant subdomain
 const hostnameArray = document.location.hostname.split('.');
 const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
+
 /**
  * Private route
  * create a route restricted to a logged in user
@@ -67,6 +70,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	)}
 	/>
 );
+
 /**
  * Application routes
  */
@@ -79,6 +83,7 @@ function canGetUserDatas(user, query) {
 	}
 	return false;
 }
+
 function setTenantInSession (query) {
 	if (!query.loading
 		&& query.tenantBySubdomain) {
@@ -88,6 +93,7 @@ function setTenantInSession (query) {
 		sessionStorage.setItem('noTenant', true);
 	}
 }
+
 const routes = (props) => {
 	const user = !Cookies.get('user') ? undefined : JSON.parse(Cookies.get('user'));
 	if (canGetUserDatas(user, props.usersQuery)) {
@@ -97,7 +103,6 @@ const routes = (props) => {
 		});
 	} else if(user && !props.usersQuery.loading) {
 		Cookies.set('user', props.usersQuery.users[0]);
-		console.log(props.usersQuery.users[0]);
 	}
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
@@ -112,7 +117,6 @@ const routes = (props) => {
 		}
 		setTenantInSession(props.tenantsBySubdomainQuery);
 	}
-
 
 	if (sessionStorage.getItem('noTenant')) {
 		return <Route component={NotFound} />;
@@ -172,9 +176,6 @@ const routes = (props) => {
 						logoutUser();
 					} catch (err) {
 						console.log(err);
-					} finally {
-						console.log('error');
-                      //  return (<Redirect to="/" />);
 					}
 				}}
 			/>
@@ -225,6 +226,7 @@ const routes = (props) => {
 
 			{/** 404 routes */}
 			<Route component={NotFound} />
+
 			{/** Settings routes */}
 			{settingsRoutes}
 		</Switch>
@@ -239,12 +241,15 @@ const App = props => (
 		{routes(props)}
 	</BrowserRouter>
 );
+
 PrivateRoute.propTypes = {
 	component: PropTypes.func,
 	location: PropTypes.string
 };
+
 routes.propTypes = {
 	subdomain: PropTypes.string,
 	tenantsBySubdomainQuery: PropTypes.object
 };
+
 export default compose(tenantsBySubdomainQuery, usersQuery)(App);

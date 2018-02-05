@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 
-import '../PWDLoginForm/PWDLoginForm.css';
 
 // actions
 import { toggleAuthModal, setUser } from '../../actions';

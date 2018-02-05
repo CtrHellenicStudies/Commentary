@@ -14,6 +14,10 @@ import { SnackAttack } from '../shared/SnackAttack';
 import LoadingHome from '../../components/loading/LoadingHome';
 import CommunityPage from './CommunityPage';
 
+// auth
+import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
+import { login, register, logoutUser, verifyToken } from '../../lib/auth';
+
 // graphql
 import { settingsQuery } from '../../graphql/methods/settings';
 
@@ -46,6 +50,12 @@ class CommunityLayout extends Component {
 					<Footer />
 					<SnackAttack />
 				</div>
+				<AuthModalContainer
+					loginMethod={login}
+					signupMethod={register}
+					logoutMethod={logoutUser}
+					getUserFromServer={verifyToken}
+				/>
 			</MuiThemeProvider>
 		);
 	}

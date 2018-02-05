@@ -21,6 +21,10 @@ import NameResolutionServiceLayout from '../services/NameResolutionServiceLayout
 import Home from './Home';
 import LoadingHome from '../../components/loading/LoadingHome';
 
+// auth
+import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
+import { login, register, logoutUser, verifyToken } from '../../lib/auth';
+
 
 class HomeLayout extends Component {
 
@@ -91,6 +95,12 @@ class HomeLayout extends Component {
 
 					<Footer />
 				</div>
+				<AuthModalContainer
+					loginMethod={login}
+					signupMethod={register}
+					logoutMethod={logoutUser}
+					getUserFromServer={verifyToken}
+				/>
 			</MuiThemeProvider>
 		);
 	}

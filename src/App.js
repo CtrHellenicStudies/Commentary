@@ -127,7 +127,7 @@ const routes = (props) => {
 
 			{/** Commenters routes */}
 			<Route path="/commenters/:slug" render={params => <CommenterDetail {...params} defaultAvatarUrl="/images/default_user.jpg" />} />
-			<Route exact path="/commenters" component={CommentersPage} />
+			<Route exact path="/commentators" component={CommentersPage} />
 
 			{/** Editor routes */}
 			<PrivateRoute exact path="/translation/create" component={AddTranslationLayout} />

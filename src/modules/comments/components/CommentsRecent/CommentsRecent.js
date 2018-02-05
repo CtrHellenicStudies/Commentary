@@ -66,9 +66,9 @@ class CommentsRecent extends Component {
 											{comment.commenters.map(commenter => (
 												` ${commenter.name},`
 											))}
-											{` ${comment.work.title} ${
+											{comment.work ? ` ${comment.work.title} ${
 											comment.subwork.title}.${comment.lineFrom}-${
-											comment.lineFrom + comment.nLines}`}
+											comment.lineFrom + comment.nLines}`: ''}
 										</h4>
 									</div>
 								))}

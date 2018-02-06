@@ -215,7 +215,7 @@ class Home extends Component {
 							but try clicking on the shaded elements and see what happens.
 						</span>
 						<div className="container data-visualization-container">
-							<WorksList />
+							{/* <WorksList /> */}
 						</div>
 					</section>
 

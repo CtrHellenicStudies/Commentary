@@ -306,7 +306,7 @@ const Utils = {
 		textNodes.forEach((textNode) => {
 
 			// check if not version in textnode
-			if (!textNode.version || !textNode.verison.id) {
+			if (!textNode.version || !textNode.version.id) {
 
 				if (versions.length) {
 					versions[0].textNodes.push({

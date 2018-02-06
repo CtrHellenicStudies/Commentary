@@ -204,7 +204,7 @@ class NavBar extends React.Component {
 		const {
 			filters, isOnHomeView, toggleSearchTerm, handleChangeTextsearch, handlePagination,
 			addCommentPage, selectedWork, toggleAuthModal, dispatchToggleLeftMenu, userId, logout,
-			dispatchToggleAuthModal,
+			dispatchToggleAuthModal, roles
 		} = this.props;
 		const {
 			leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered, settings,
@@ -260,7 +260,7 @@ class NavBar extends React.Component {
 									{	Utils.userInRole(roles, ['admin']) ?
 										(
 											<div>
-												
+
 											</div>
 										) : ''
 

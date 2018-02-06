@@ -78,6 +78,7 @@ class CommentLemmaContainer extends React.Component {
 		// set versions from textnodes data
 		if (textNodes && textNodes.length) {
 			const allVersions = Utils.textFromTextNodesGroupedByVersion(textNodes);
+			console.log(allVersions);
 			versionsWithText = allVersions.versions;
 			translationsWithText = allVersions.translations;
 		}

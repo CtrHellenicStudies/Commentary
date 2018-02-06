@@ -151,16 +151,13 @@ const Utils = {
 		}
 		return cmp;
 	},
-	userInRole(user, roles) {
-		if (!user) {
+	userInRole(currentRoles, roles) {
+		if (!currentRoles) {
 			return false;
-		} else if(typeof user === 'string') {
-			user = JSON.parse(user);
-			Cookies.set('user', user);
 		}
-		for(let i = 0; user.roles && i < user.roles.length; i += 1) {
+		for(let i = 0; currentRoles && i < currentRoles.length; i += 1) {
 			for(let j = 0; j < roles.length; j += 1) {
-				if(user.roles[i] === roles[j]) {
+				if(currentRoles[i] === roles[j]) {
 					return true;
 				}
 			}

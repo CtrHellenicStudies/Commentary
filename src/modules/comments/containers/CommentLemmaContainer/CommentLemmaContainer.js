@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
+import { connect } from 'react-redux';
 
 // graphql
 import { textNodesQuery } from '../../../../graphql/methods/textNodes';
@@ -115,7 +116,6 @@ class CommentLemmaContainer extends React.Component {
     );
   }
 }
-
 export default compose(
 	textNodesQuery,
 )(CommentLemmaContainer);

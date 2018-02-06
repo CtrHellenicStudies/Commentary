@@ -257,6 +257,14 @@ class NavBar extends React.Component {
 											style={styles.flatButton}
 										/>
 									</Link>
+									{	Utils.userInRole(roles, ['admin']) ?
+										(
+											<div>
+												
+											</div>
+										) : ''
+
+									}
 									{userId ?
 										<div className="user-header-links">
 											<ProfileAvatarButton
@@ -347,6 +355,7 @@ NavBar.propTypes = {
 
 const mapStateToProps = state => ({
 	userId: state.auth.userId,
+	roles: state.auth.roles,
 	leftMenuOpen: state.leftMenu.open,
 });
 

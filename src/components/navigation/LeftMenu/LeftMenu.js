@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 
@@ -33,12 +32,11 @@ class LeftMenu extends React.Component {
 	render() {
 		const {
 			leftMenuOpen, closeLeftMenu, userId, dispatchLogout,
-			dispatchToggleAuthModal
+			dispatchToggleAuthModal, roles
 		} = this.props;
 
 		let tenant;
 		let settings;
-		let user = null;
 
 		/*
 		 * TODO move query to container with compose
@@ -66,42 +64,31 @@ class LeftMenu extends React.Component {
 			>
 				<LeftMenuHead />
 				<div className="leftMenuContent">
-					{(
-						Utils.userInRole(user, ['editor', 'admin', 'commenter'])
-					) ?
-						<div>
-              {(
-								Utils.userInRole(user, ['admin'])
-							) ?
-								<MenuItem
-									href="http://ahcip-admin.chs.harvard.edu"
+				{Utils.userInRole(roles, ['admin']) ?
+							 
+								(<MenuItem
+									to="http://ahcip-admin.chs.harvard.edu"
 									target="_blank"
 									primaryText="Admin"
-									onClick={closeLeftMenu}
-								/>
-							:
-							''}
-							<Link to="/commentary/create">
-								<MenuItem
-									primaryText="Add Comment"
-									onClick={closeLeftMenu}
-								/>
-							</Link>
-							<Link to="/tags/create">
-								<MenuItem
-									primaryText="Add Tag"
-									onClick={closeLeftMenu}
-								/>
-							</Link>
-							<Link to="/textNodes/edit">
-								<MenuItem
-									primaryText="Add Translation"
-									onClick={closeLeftMenu}
-								/>
-							</Link>
+								onClick={closeLeftMenu} />) : ''}
+					{Utils.userInRole(roles, ['editor', 'admin', 'commenter'])
+					 ? (
+						  <div>  
+					 		<MenuItem to="/commentary/create"
+								onClick={closeLeftMenu}>
+									Add Comment
+							</MenuItem>
+							<MenuItem to="/tags/create"
+								onClick={closeLeftMenu}>
+									Add Tag
+							</MenuItem>
+							<MenuItem to="/textNodes/edit"
+								onClick={closeLeftMenu}>
+									Add Translation
+							</MenuItem>
 
 							<Divider />
-						</div>
+						</div>)
 					:
 					'' }
 					<MenuItem
@@ -199,6 +186,7 @@ LeftMenu.defaultProps = {
 const mapStateToProps = (state, props) => ({
 	leftMenuOpen: state.leftMenu.open,
 	userId: state.auth.userId,
+	roles: state.auth.roles
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

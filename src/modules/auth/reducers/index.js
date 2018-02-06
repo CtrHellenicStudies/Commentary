@@ -35,10 +35,12 @@ export default (state = initialState, action) => {
 		};
 	}
 	case types.SET_USER: {
+		console.log(action);
 		return {
 			...state,
 			username: action.username,
 			userId: action.userId,
+			roles: action.roles
 		};
 	}
 	case types.REMOVE_USER: {
@@ -46,6 +48,7 @@ export default (state = initialState, action) => {
 			...state,
 			username: null,
 			userId: null,
+			roles: null
 		};
 	}
 	default:

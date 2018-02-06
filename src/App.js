@@ -237,6 +237,7 @@ routes.propTypes = {
 const mapStateToProps = state => ({
 	userId: state.auth.userId,
 	username: state.auth.username,
+	roles: state.auth.roles
 });
 
 export default compose(

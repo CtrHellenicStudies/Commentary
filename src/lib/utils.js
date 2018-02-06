@@ -301,6 +301,37 @@ const Utils = {
 
 		// split textnodes by version
 		textNodes.forEach((textNode) => {
+
+			// check if not version in textnode
+			if (!textNode.version || !textNode.version.id) {
+
+				if (versions.length) {
+					versions[0].textNodes.push({
+						id: textNode.id,
+						html: textNode.text,
+						location: textNode.location,
+						index: textNode.index,
+					});
+				} else {
+					versions.push({
+						id: 1,
+						title: "",
+						language: textNode.language,
+						textNodes: [{
+							id: textNode.id,
+							html: textNode.text,
+							location: textNode.location,
+							index: textNode.index,
+						}],
+						// TODO add multiLine support to version with : textNode.version.multiLine
+					});
+				}
+
+				return;
+			}
+
+
+			// if version
 			let textNodeVersion = versions.find(v => textNode.version.id === v.id);
 			let textNodeTranslation = translations.find(v => textNode.version.id === v.id);
 

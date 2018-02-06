@@ -69,7 +69,7 @@ query textNodesQuery($collectionUrn: CtsUrn, $textGroupUrn: CtsUrn, $workUrn: Ct
 */
 
 const query = gql`
-query textNodesQuery($textNodesUrn: CtsUrn) {
+query textNodesQuery($textNodesUrn: CtsUrn!) {
 	textNodes(urn: $textNodesUrn) {
 		id
 		text

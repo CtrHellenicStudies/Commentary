@@ -124,7 +124,6 @@ class CommentLemmaSelect extends Component {
 }
 CommentLemmaSelect.propTypes = {
 	work: PropTypes.string.isRequired,
-	subworkN: PropTypes.number.isRequired,
 	lineFrom: PropTypes.number.isRequired,
 	lineTo: PropTypes.number.isRequired,
 	textNodes: PropTypes.array,

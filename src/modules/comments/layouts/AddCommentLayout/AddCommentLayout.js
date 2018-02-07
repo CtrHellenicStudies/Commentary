@@ -23,7 +23,7 @@ import Utils from '../../../../lib/utils';
 
 // graphql
 import commentsInsertMutation from '../../graphql/mutations/insert';
-import { textNodesQuery } from '../../../../graphql/methods/textNodes';
+import AddCommentContainer from '../../containers/AddCommentContainer/AddCommentContainer';
 
 
 const getKeywords = (formData) => {
@@ -42,24 +42,6 @@ const getKeywords = (formData) => {
 		keywords.push(keywordCopy);
 	});
 	return keywords;
-};
-
-const getFilterValues = (filters) => {
-	const filterValues = {};
-
-	filters.forEach((filter) => {
-		if (filter.key === 'works') {
-			filterValues.work = filter.values[0];
-		} else if (filter.key === 'subworks') {
-			filterValues.subwork = filter.values[0];
-		} else if (filter.key === 'lineTo') {
-			filterValues.lineTo = filter.values[0];
-		} else if (filter.key === 'lineFrom') {
-			filterValues.lineFrom = filter.values[0];
-		}
-	});
-
-	return filterValues;
 };
 
 /*
@@ -104,15 +86,8 @@ class AddCommentLayout extends Component {
 				work = filter.values[0];
 			}
 		});
-		if (props.textNodesQuery.loading) {
-			return;
-		}
-		if (!props.textNodesQuery.variables.workUrn) {
-			props.textNodesQuery.refetch(Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)));
-			return;
-		}
 		this.setState({
-			textNodes: props.textNodesQuery.collections[0].textGroups[0].works,
+			textNodesUrn: Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)).textNodesUrn,
 			work: work
 		});
 	}
@@ -378,6 +353,9 @@ class AddCommentLayout extends Component {
 		} else {
 			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation('tlg001', 1, 1, chapter - 1, chapter));
 		}
+		this.setState({
+			textNodesUrn: properties.textNodesUrn
+		});
 		this.props.textNodesQuery.refetch(properties);
 	}
 	getChildrenContext() {
@@ -385,8 +363,8 @@ class AddCommentLayout extends Component {
 	}
 	render() {
 
-		const { filters, loading, selectedLineFrom, selectedLineTo, contextReaderOpen, textNodes, selectedTextNodes } = this.state;
-		const { work, subwork, lineFrom } = getFilterValues(filters);
+		const { filters, loading } = this.state;
+		const textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 
@@ -402,48 +380,9 @@ class AddCommentLayout extends Component {
 							initialSearchEnabled
 							addCommentPage
 						/>
-						<main>
-							<div className="commentary-comments">
-								<div className="comment-group">
-									<CommentLemmaSelect
-										ref={(component) => { this.commentLemmaSelect = component; }}
-										lineFrom={selectedLineFrom}
-										lineTo={selectedLineTo}
-										work={work ? work : 'tlg0013'}
-										subworkN={subwork ? subwork.n : 1}
-										shouldUpdateQuery={this.state.updateQuery}
-										updateQuery={this.updateQuery}
-										textNodes={selectedTextNodes}
-
-									/>
-
-									<AddComment
-										selectedLineFrom={selectedLineFrom}
-										selectedLineTo={selectedLineTo}
-										submitForm={this.addComment}
-										work={work}
-									/>
-
-									<ContextPanel
-										open={contextReaderOpen}
-										workSlug={work ? work.slug : '001'}
-										subworkN={subwork ? subwork.n : 1}
-										lineFrom={lineFrom || 1}
-										filters={filters}
-										selectedLineFrom={selectedLineFrom}
-										selectedLineTo={selectedLineTo}
-										updateSelectedLines={this.updateSelectedLines}
-										textNodes={textNodes}
-										editor
-									/>
-								</div>
-							</div>
-
-							<FilterWidget
-								filters={filters}
-								toggleSearchTerm={this.toggleSearchTerm}
-							/>
-						</main>
+						<AddCommentContainer
+							textNodesUrn={textNodesUrn}
+							filters={filters} />
 					</div>
 					:
 					<Spinner fullPage />
@@ -455,10 +394,8 @@ class AddCommentLayout extends Component {
 AddCommentLayout.propTypes = {
 	commentInsert: PropTypes.func,
 	history: PropTypes.object,
-	textNodesQuery: PropTypes.object
 };
 
 export default compose(
 	commentsInsertMutation,
-	textNodesQuery
 )(AddCommentLayout);

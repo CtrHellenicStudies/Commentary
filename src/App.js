@@ -15,10 +15,10 @@ import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
 // layouts
 import CommentaryLayout from './modules/comments/layouts/CommentaryLayout';
 import AddCommentLayout from './modules/comments/layouts/AddCommentLayout';
-import AddKeywordLayout from './modules/keywords/addKeyword/AddKeywordLayout';
+import AddKeywordLayout from './modules/keywords/layouts/AddKeywordLayout/AddKeywordLayout';
 import AddTranslationLayout from './modules/translations/addTranslation/AddTranslationLayout';
-import AddRevisionLayout from './modules/revisions/addRevision/AddRevisionLayout';
-import EditKeywordLayout from './modules/keywords/editKeyword/EditKeywordLayout';
+import AddRevisionLayout from './modules/revisions/layouts/AddRevisionLayout/AddRevisionLayout';
+import EditKeywordLayout from './modules/keywords/layouts/EditKeywordsLayout/EditKeywordLayout';
 import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
 import HomeLayout from './modules/home/HomeLayout';
 import NameResolutionServiceLayout from './modules/services/NameResolutionServiceLayout';
@@ -28,8 +28,8 @@ import NotFound from './modules/notFound/NotFound';
 import Page from './modules/page/Page';
 import CommentersPage from './modules/commenters/CommentersPage';
 import CommenterDetail from './modules/commenters/CommenterDetail';
-import KeywordsPage from './modules/keywords/KeywordsPage';
-import KeywordDetail from './modules/keywords/KeywordDetail';
+import KeywordsPage from './modules/keywords/components/KeywordsPage/KeywordsPage';
+import KeywordDetail from './modules/keywords/components/KeywordDetail/KeywordDetail';
 import ProfilePage from './modules/profile/ProfilePage';
 import ReferenceWorksPage from './modules/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from './modules/referenceWorks/ReferenceWorkDetail';

@@ -18,15 +18,15 @@ import update from 'immutability-helper';
 // graphql
 import { commentersQuery } from '../../../../graphql/methods/commenters';
 import { referenceWorkCreateMutation, referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
-import { keywordsQuery,
-		keywordInsertMutation,
-		keywordUpdateMutation } from '../../../../graphql/methods/keywords';
+
+import { keywordInsertMutation, keywordUpdateMutation} from '../../graphql/mutations/keywords'
+import { keywordsQuery } from '../../graphql/queries/keywords';
 // lib:
 import Utils from '../../../../lib/utils';
 
 // components
 import TagsInput from '../../../inputs/tagsInput/TagsInput';
-import DraftEditorInput from '../../../draftEditor/DraftEditorInput';
+import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
 import ReferenceWork from '../../../referenceWorks/ReferenceWork';
 
 /*

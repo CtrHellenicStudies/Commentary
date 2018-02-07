@@ -17,7 +17,7 @@ import CommentLower from './CommentLower';
 import CommentRevisionSelect from './CommentRevisionSelect';
 import DiscussionThread from './DiscussionThread';
 import LemmaReferenceModal from './LemmaReferenceModal';
-import KeywordReferenceModal from '../../../keywords/KeywordReferenceModal';
+import KeywordReferenceModal from '../../../keywords/components/KeywordReferenceModal/KeywordReferenceModal';
 
 // lib
 import sortRevisions from '../../lib/sortRevisions';

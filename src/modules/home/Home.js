@@ -19,7 +19,7 @@ import { settingsQuery } from '../../graphql/methods/settings';
 // components:
 import CommentersList from '../commenters/CommentersList';
 import WorksList from '../works/WorksList';
-import KeywordsList from '../keywords/KeywordsList';
+import KeywordsList from '../keywords/components/KeywordsList/KeywordsList';
 import LoadingHome from '../../components/loading/LoadingHome';
 
 // layouts:

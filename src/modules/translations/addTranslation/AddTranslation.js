@@ -15,7 +15,7 @@ import { worksQuery } from '../../../graphql/methods/works';
 
 // lib
 import muiTheme from '../../../lib/muiTheme';
-import DraftEditorInput from '../../draftEditor/DraftEditorInput';
+import DraftEditorInput from '../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
 
 
 class AddTranslation extends Component {

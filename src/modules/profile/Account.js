@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import { EditorState } from 'draft-js';
-import DraftEditorInput from '../draftEditor/DraftEditorInput';
+import DraftEditorInput from '../draftEditor/components/DraftEditiorInput/DraftEditorInput';
 import Utils from '../../lib/utils';
 import { debounce } from 'throttle-debounce';
 

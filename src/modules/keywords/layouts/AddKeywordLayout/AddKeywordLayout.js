@@ -11,7 +11,6 @@ import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
 import { keywordInsertMutation } from '../../graphql/mutations/keywords';
-import { textNodesQuery } from '../../../../graphql/methods/textNodes';
 
 // components:
 import Header from '../../../../components/navigation/Header';
@@ -22,6 +21,7 @@ import ContextPanel from '../../../contextPanel/ContextPanel';
 
 // lib
 import Utils from '../../../../lib/utils';
+import AddKeywordContainer from '../../containers/AddKeywordContainer/AddKeywordContainer';
 
 
 class AddKeywordLayout extends Component {
@@ -45,7 +45,6 @@ class AddKeywordLayout extends Component {
 		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
 		this.getType = this.getType.bind(this);
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
-		this.updateSelectedLines = this.updateSelectedLines.bind(this);
 		this.addKeyword = this.addKeyword.bind(this);
 		this.showSnackBar = this.showSnackBar.bind(this);
 		this.onTypeChange = this.onTypeChange.bind(this);
@@ -66,15 +65,8 @@ class AddKeywordLayout extends Component {
 				work = filter.values[0];
 			}
 		});
-		if (props.textNodesQuery.loading) {
-			return;
-		}
-		if (!props.textNodesQuery.variables.workUrn) {
-			props.textNodesQuery.refetch(Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)));
-			return;
-		}
 		this.setState({
-			textNodes: props.textNodesQuery.collections[0].textGroups[0].works,
+			textNodes: Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)).textNodesUrn,
 			work: work
 		});
 	}
@@ -176,36 +168,6 @@ class AddKeywordLayout extends Component {
 			skip: 0,
 		});
 	}
-	updateSelectedLines(selectedLineFrom, selectedLineTo) {
-		const { textNodes } = this.state;
-		let finalFrom = 0, finalTo = 0;
-		if (selectedLineFrom === null) {
-			this.setState({
-				selectedLineTo,
-			});
-			finalFrom = 0;
-			finalTo = selectedLineTo;
-		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
-			this.setState({
-				selectedLineFrom: selectedLineFrom - 1,
-				selectedLineTo: selectedLineFrom
-			});
-			finalFrom = selectedLineFrom - 1;
-			finalTo = selectedLineFrom;
-		} else if (selectedLineTo != null && selectedLineFrom != null) {
-			this.setState({
-				selectedLineFrom,
-				selectedLineTo,
-			});
-			finalFrom = selectedLineFrom;
-			finalTo = selectedLineTo;
-		} else {
-			return;
-		}
-		this.setState({
-			selectedTextNodes: Utils.filterTextNodesBySelectedLines(textNodes, finalFrom, finalTo)
-		});
-	}
 	addKeyword(formData, textValue, textRawValue) {
 		this.setState({
 			loading: true,
@@ -290,12 +252,15 @@ class AddKeywordLayout extends Component {
 		} else {
 			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation('tlg001', 1, 1, chapter - 1, chapter));
 		}
-		this.props.textNodesQuery.refetch(properties);
+		this.setState({
+			textNodesUrn: properties.textNodesUrn
+		});
 	}
 	render() {
 		const { filters, textNodes, work, selectedTextNodes, filter } = this.state;
 		const { isTest } = this.props;
 		let lineFrom;
+		let textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';
 
 		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
 
@@ -314,36 +279,9 @@ class AddKeywordLayout extends Component {
 
 						{!isTest ?
 							<main>
-
-								<div className="commentary-comments">
-									<div className="comment-group">
-										<CommentLemmaSelect
-											ref={(component) => { this.commentLemmaSelect = component; }}
-											lineFrom={this.state.selectedLineFrom}
-											lineTo={this.state.selectedLineTo}
-											workSlug={work}
-											shouldUpdateQuery={this.state.updateQuery}
-											updateQuery={this.updateQuery}
-											textNodes={selectedTextNodes}				
-										/>
-										<AddKeyword
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											submitForm={this.addKeyword}
-											onTypeChange={this.onTypeChange}
-										/>
-										<ContextPanel
-											open={this.state.contextReaderOpen}
-											workSlug={work ? work : 'tlg001'}
-											lineFrom={lineFrom || 1}
-											selectedLineFrom={this.state.selectedLineFrom}
-											selectedLineTo={this.state.selectedLineTo}
-											updateSelectedLines={this.updateSelectedLines}
-											textNodes={textNodes}
-											editor
-										/>
-									</div>
-								</div>
+								<AddKeywordContainer
+									textNodesUrn={textNodesUrn}
+									work={work} />
 
 								<FilterWidget
 									filters={filters}
@@ -362,13 +300,11 @@ AddKeywordLayout.propTypes = {
 	isTest: PropTypes.bool,
 	history: PropTypes.object,
 	keywordInsert: PropTypes.func,
-	textNodesQuery: PropTypes.object
 };
 
 AddKeywordLayout.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 export default compose(
-	keywordInsertMutation,
-	textNodesQuery
+	keywordInsertMutation
 )(AddKeywordLayout);

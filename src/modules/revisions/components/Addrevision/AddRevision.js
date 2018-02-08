@@ -30,7 +30,7 @@ import commentRemoveMutation from '../../../comments/graphql/mutations/remove';
 import commentRemoveRevisionMutation from '../../../comments/graphql/mutations/removeRevision';
 import { keywordsQuery } from '../../../keywords/graphql/queries/keywords';
 import { keywordInsertMutation, keywordUpdateMutation } from '../../../keywords/graphql/mutations/keywords';
-import { commentersQuery } from '../../../../graphql/methods/commenters';
+import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import { referenceWorkCreateMutation, referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
 
 // helpers:

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import WorkVisualization from '../../works/WorkVizualization';
+import WorkVisualization from '../../../works/WorkVizualization';
 
 
 class CommenterWorkVisualization extends Component {

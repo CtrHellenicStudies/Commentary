@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
-import { commentersQuery } from '../../graphql/methods/commenters';
+import commentersQuery from '../../graphql/queries/commentersQuery';
 
 
 // components
-import CommenterTeaser from '../commenters/teaser/CommenterTeaser';
+import CommenterTeaser from '../CommenterTeaser/CommenterTeaser';
 
 
 class CommentersList extends Component { 

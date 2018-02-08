@@ -5,7 +5,7 @@ import FontIcon from 'material-ui/FontIcon';
 import { compose } from 'react-apollo';
 
 import Utils from '../../lib/utils';
-import { commentersQuery } from '../../graphql/methods/commenters';
+import commentersQuery from '../commenters/graphql/queries/commentersQuery';
 
 /*
 	helpers

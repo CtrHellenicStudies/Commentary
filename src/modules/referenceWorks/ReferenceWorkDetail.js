@@ -13,7 +13,7 @@ import CommentsRecent from '../comments/components/CommentsRecent';
 import LoadingPage from '../../components/loading/LoadingPage';
 
 // graphql
-import { commentersQuery } from '../../graphql/methods/commenters';
+import commentersQuery from '../commenters/graphql/queries/commentersQuery';
 import { referenceWorksQuery } from '../../graphql/methods/referenceWorks';
 import { settingsQuery } from '../../graphql/methods/settings';
 

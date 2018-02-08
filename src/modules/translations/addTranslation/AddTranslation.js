@@ -10,7 +10,7 @@ import Formsy from 'formsy-react';
 
 
 // graphql
-import { commentersQuery } from '../../../graphql/methods/commenters';
+import commentersQuery from '../../commenters/graphql/queries/commentersQuery';
 import { worksQuery } from '../../../graphql/methods/works';
 
 // lib

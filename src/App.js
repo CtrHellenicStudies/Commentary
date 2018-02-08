@@ -26,8 +26,8 @@ import NotFound from './modules/notFound/NotFound';
 
 // pages
 import Page from './modules/page/Page';
-import CommentersPage from './modules/commenters/CommentersPage';
-import CommenterDetail from './modules/commenters/CommenterDetail';
+import CommentersPage from './modules/commenters/components/CommenterPage/CommentersPage';
+import CommenterDetail from './modules/commenters/components/CommenterDetail/CommenterDetail';
 import KeywordsPage from './modules/keywords/components/KeywordsPage/KeywordsPage';
 import KeywordDetail from './modules/keywords/components/KeywordDetail/KeywordDetail';
 import ProfilePage from './modules/profile/ProfilePage';

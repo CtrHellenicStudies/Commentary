@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AvatarIcon from '../../profile/avatar/AvatarIcon';
-import Utils from '../../../lib/utils';
+import AvatarIcon from '../../../profile/avatar/AvatarIcon';
+import Utils from '../../../../lib/utils';
 
 // lib:
-import muiTheme from '../../../lib/muiTheme';
+import muiTheme from '../../../../lib/muiTheme';
 
 // commenter Teaser
 class CommenterTeaser extends Component {

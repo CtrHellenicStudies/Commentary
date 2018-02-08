@@ -16,7 +16,7 @@ import { stateToHTML } from 'draft-js-export-html';
 import update from 'immutability-helper';
 
 // graphql
-import { commentersQuery } from '../../../../graphql/methods/commenters';
+import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import { referenceWorkCreateMutation, referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
 
 import { keywordInsertMutation, keywordUpdateMutation} from '../../graphql/mutations/keywords'

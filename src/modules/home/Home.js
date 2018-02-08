@@ -17,7 +17,7 @@ import muiTheme from '../../lib/muiTheme';
 import { settingsQuery } from '../../graphql/methods/settings';
 
 // components:
-import CommentersList from '../commenters/CommentersList';
+import CommentersList from '../commenters/components/CommenterList/CommentersList';
 import WorksList from '../works/WorksList';
 import KeywordsList from '../keywords/components/KeywordsList/KeywordsList';
 import LoadingHome from '../../components/loading/LoadingHome';

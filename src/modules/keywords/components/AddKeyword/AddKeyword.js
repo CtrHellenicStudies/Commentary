@@ -14,7 +14,7 @@ import { stateToHTML } from 'draft-js-export-html';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 // graphql
-import { commentersQuery } from '../../../../graphql/methods/commenters';
+import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import { keywordsQuery } from '../../graphql/queries/keywords';
 
 

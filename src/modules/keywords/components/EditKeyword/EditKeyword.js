@@ -16,7 +16,7 @@ import { fromJS } from 'immutable';
 import Utils from '../../../../lib/utils';
 
 // graphql
-import { commentersQuery } from '../../../../graphql/methods/commenters';
+import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
 
 

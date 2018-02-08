@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../lib/muiTheme';
+import muiTheme from '../../../../lib/muiTheme';
 
 import { compose } from 'react-apollo';
 
 // components
-import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import CommentersList from '../commenters/CommentersList';
-import CommentsRecent from '../comments/components/CommentsRecent';
-import Header from '../../components/navigation/Header';
+import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import CommentersList from '../CommenterList/CommentersList';
+import CommentsRecent from '../../../comments/components/CommentsRecent';
+import Header from '../../../../components/navigation/Header';
 
 // graphql
-import { settingsQuery } from '../../graphql/methods/settings';
+import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // lib
-import Utils from '../../lib/utils';
+import Utils from '../../../../lib/utils';
 
 class CommentersPage extends Component {
 

@@ -7,7 +7,7 @@ import { compose } from 'react-apollo';
 
 
 // graphql
-import { commentersQuery } from '../../../../graphql/methods/commenters';
+import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
 import { keywordsQuery } from '../../graphql/queries/keywords';
 import { editionsQuery } from '../../../../graphql/methods/editions';

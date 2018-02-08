@@ -6,24 +6,24 @@ import { compose } from 'react-apollo';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../lib/muiTheme';
+import muiTheme from '../../../../lib/muiTheme';
 
-import Header from '../../components/navigation/Header';
+import Header from '../../../../components/navigation/Header';
 
 // graphql
-import { settingsQuery } from '../../graphql/methods/settings';
-import { commentersQuery } from '../../graphql/methods/commenters';
+import { settingsQuery } from '../../../../graphql/methods/settings';
+import commentersQuery from '../../graphql/queries/commentersQuery';
 
 
 // components
-import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import LoadingPage from '../../components/loading/LoadingPage';
-import CommenterReferenceWorks from './referenceWorks/CommenterReferenceWorks';
-import CommenterVisualizations from '../commenters/commenterVizualizations/CommenterVizualizations';
-import CommentsRecent from '../comments/components/CommentsRecent';
+import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import LoadingPage from '../../../../components/loading/LoadingPage';
+import CommenterReferenceWorks from '../CommenterReferenceWorks/CommenterReferenceWorks';
+import CommenterVisualizations from '../CommenterVisualizations/CommenterVisualizations';
+import CommentsRecent from '../../../comments/components/CommentsRecent';
 
 // lib
-import Utils from '../../lib/utils';
+import Utils from '../../../../lib/utils';
 
 class CommenterDetail extends Component {
 	constructor(props) {

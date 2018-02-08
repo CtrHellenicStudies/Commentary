@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // lib:
-import muiTheme from '../../../lib/muiTheme';
+import muiTheme from '../../../../lib/muiTheme';
 
 // components
-import CommenterWorkCircle from './CommenterWorkCircle';
-import CommenterWorkVisualization from './CommenterWorkVisualization';
+import CommenterWorkCircle from '../CommenterWorkCircle/CommenterWorkCircle';
+import CommenterWorkVisualization from '../CommenterWorkVisualization/CommenterWorkVisualization';
 
 
 class CommenterVisualizations extends Component {

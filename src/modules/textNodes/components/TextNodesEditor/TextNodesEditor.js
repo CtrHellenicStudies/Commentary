@@ -98,7 +98,7 @@ class TextNodesEditor extends Component {
 			});
 			this.setState({
 				textNodes: props.textNodesQuery.textNodes
-			});/*  */
+			});
 		}
 	}
 	selectWork(event) {

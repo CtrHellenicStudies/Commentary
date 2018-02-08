@@ -140,6 +140,9 @@ button.navbar-toggle {
   background: inherit;
 }
 .navbar {
+  margin-bottom: 0 !important;
+}
+.navbar {
   margin-left: 0;
 }
 #iron-router-progress {
@@ -12447,9 +12450,6 @@ header .right-drawer-toggle {
 .add-comment .add-comment-form .form-element {
   width: 90% !important;
   margin: 0 5%;
-}
-.chs-editor-layout {
-  padding: 70px 0 0 0;
 }
 .chs-editor-layout .DraftEditor-root span,
 .chs-editor-layout .DraftEditor-root .public-DraftEditorPlaceholder-inner {

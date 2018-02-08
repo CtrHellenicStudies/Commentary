@@ -138,6 +138,9 @@ button.navbar-toggle {
   background: inherit;
 }
 .navbar {
+  margin-bottom: 0 !important;
+}
+.navbar {
   margin-left: 0;
 }
 #iron-router-progress {

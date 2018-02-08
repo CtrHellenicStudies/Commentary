@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // components
-import CommunityMemberList from './CommunityMemberList';
+import CommunityMemberList from '../CommunityMemberList/CommunityMemberList';
 
 
 class CommunityDirectory extends Component {

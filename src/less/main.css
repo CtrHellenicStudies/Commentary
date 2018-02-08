@@ -91,7 +91,7 @@ font-family: "Material Design Icons";
 
 ******************************************************************************/
 @import url("//fonts.googleapis.com/css?family=Raleway:100,600|Open+Sans:400,900|Merriweather:300|Roboto+Condensed:300,700");
-@import '../modules/community/recentActivity.import.css';
+@import '../modules/community/less/recentActivity.import.css';
 @font-face {
   font-family: "Material Design Icons";
   src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");

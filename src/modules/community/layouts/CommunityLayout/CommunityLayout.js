@@ -3,23 +3,24 @@ import PropTypes from 'prop-types';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../lib/muiTheme';
 
 import { compose } from 'react-apollo';
 
+import muiTheme from '../../../../lib/muiTheme';
+
 // layouts & components
-import Header from '../../components/navigation/Header';
-import Footer from '../../components/navigation/Footer';
-import { SnackAttack } from '../shared/SnackAttack';
-import LoadingHome from '../../components/loading/LoadingHome';
-import CommunityPage from './CommunityPage';
+import Header from '../../../../components/navigation/Header';
+import Footer from '../../../../components/navigation/Footer';
+import { SnackAttack } from '../../../shared/SnackAttack';
+import LoadingHome from '../../../../components/loading/LoadingHome';
+import CommunityPage from '../../components/CommunityPage/CommunityPage';
 
 // auth
-import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
-import { login, register, logoutUser, verifyToken } from '../../lib/auth';
+import AuthModalContainer from '../../../../modules/auth/containers/AuthModalContainer';
+import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 // graphql
-import { settingsQuery } from '../../graphql/methods/settings';
+import { settingsQuery } from '../../../../graphql/methods/settings';
 
 
 class CommunityLayout extends Component {

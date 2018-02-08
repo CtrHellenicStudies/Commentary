@@ -14,7 +14,7 @@ import { settingsQuery } from '../../graphql/methods/settings';
 // layouts
 import Header from '../../components/navigation/Header';
 import Footer from '../../components/navigation/Footer';
-import CommunityLayout from '../community/CommunityLayout';
+import CommunityLayout from '../community/layouts/CommunityLayout/CommunityLayout';
 import NameResolutionServiceLayout from '../services/NameResolutionServiceLayout';
 
 // components

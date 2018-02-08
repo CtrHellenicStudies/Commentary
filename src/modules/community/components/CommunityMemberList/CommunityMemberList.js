@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
 // graphql
-import { usersQuery } from '../../graphql/methods/users';
+import { usersQuery } from '../../../../graphql/methods/users';
 
 
-import CommunityMemberTeaser from './teaser/CommunityMemberTeaser';
+import CommunityMemberTeaser from '../CommunityMemberTeaser/CommunityMemberTeaser';
 
 class CommunityMemberList extends Component {
 	render() {

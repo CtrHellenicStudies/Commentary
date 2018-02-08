@@ -5,25 +5,25 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../lib/muiTheme';
+import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
-import { tenantsQuery } from '../../graphql/methods/tenants';
-import { settingsQuery } from '../../graphql/methods/settings';
+import { tenantsQuery } from '../../../../graphql/methods/tenants';
+import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // layouts
-import Header from '../../components/navigation/Header';
-import Footer from '../../components/navigation/Footer';
-import CommunityLayout from '../community/layouts/CommunityLayout/CommunityLayout';
-import NameResolutionServiceLayout from '../services/NameResolutionServiceLayout';
+import Header from '../../../../components/navigation/Header';
+import Footer from '../../../../components/navigation/Footer';
+import CommunityLayout from '../../../community/layouts/CommunityLayout/CommunityLayout';
+import NameResolutionServiceLayout from '../../../services/NameResolutionServiceLayout';
 
 // components
-import Home from './Home';
-import LoadingHome from '../../components/loading/LoadingHome';
+import Home from '../../components/Home/Home';
+import LoadingHome from '../../../../components/loading/LoadingHome';
 
 // auth
-import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
-import { login, register, logoutUser, verifyToken } from '../../lib/auth';
+import AuthModalContainer from '../../../../modules/auth/containers/AuthModalContainer';
+import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 
 class HomeLayout extends Component {

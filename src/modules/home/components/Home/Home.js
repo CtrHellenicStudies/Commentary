@@ -6,24 +6,24 @@ import { compose } from 'react-apollo';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
-import BackgroundImageHolder from '../shared/BackgroundImageHolder';
 import { Link } from 'react-router-dom';
 
 // lib
-import Utils from '../../lib/utils';
-import muiTheme from '../../lib/muiTheme';
+import Utils from '../../../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
-import { settingsQuery } from '../../graphql/methods/settings';
+import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // components:
-import CommentersList from '../commenters/components/CommenterList/CommentersList';
-import WorksList from '../works/WorksList';
-import KeywordsList from '../keywords/components/KeywordsList/KeywordsList';
-import LoadingHome from '../../components/loading/LoadingHome';
+import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import CommentersList from '../../../commenters/components/CommenterList/CommentersList';
+import WorksList from '../../../works/WorksList';
+import KeywordsList from '../../../keywords/components/KeywordsList/KeywordsList';
+import LoadingHome from '../../../../components/loading/LoadingHome';
 
 // layouts:
-import CommentaryContainer from '../comments/containers/CommentaryContainer';
+import CommentaryContainer from '../../../comments/containers/CommentaryContainer';
 
 
 class Home extends Component {

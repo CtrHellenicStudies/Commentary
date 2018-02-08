@@ -22,7 +22,7 @@ import EditKeywordLayout from './modules/keywords/layouts/EditKeywordsLayout/Edi
 import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
 import HomeLayout from './modules/home/layouts/HomeLayouts/HomeLayout';
 import NameResolutionServiceLayout from './modules/services/NameResolutionServiceLayout';
-import NotFound from './modules/notFound/NotFound';
+import NotFound from './modules/notFound/components/NotFound/NotFound';
 
 // pages
 import Page from './modules/page/Page';

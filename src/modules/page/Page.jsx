@@ -11,7 +11,7 @@ import { settingsQuery } from '../../graphql/methods/settings';
 import { pagesQuery } from '../../graphql/methods/pages';
 
 // layouts
-import NotFound from '../notFound/NotFound';
+import NotFound from '../notFound/components/NotFound/NotFound';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiTheme from '../../lib/muiTheme';

@@ -8,16 +8,16 @@ import FlatButton from 'material-ui/FlatButton';
 import { compose } from 'react-apollo';
 
 // graphql
-import { 
-	discussionCommentInsertMutation,
-	discussionCommentsQuery } from '../../../../../graphql/methods/discussionComments';
+import discussionCommentInsert from '../../../../discussionComments/graphql/mutations/discussionCommentInsert';
+import discussionCommentsQuery  from '../../../../discussionComments/graphql/queries/discussionCommentsQuery';
+
 import { usersQuery } from '../../../../../graphql/methods/users';
 
 // lib
 import Utils from '../../../../../lib/utils';
 
 // components
-import DiscussionComment from '../../../../discussionComments/DiscussionComment';
+import DiscussionComment from '../../../../discussionComments/components/DiscussionComment/DiscussionComment';
 
 class DiscussionThread extends Component {
 
@@ -269,6 +269,6 @@ DiscussionThread.propTypes = {
 };
 export default compose(
 	discussionCommentsQuery,
-	discussionCommentInsertMutation,
+	discussionCommentInsert,
 	usersQuery
 )(DiscussionThread);

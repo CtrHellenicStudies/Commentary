@@ -1,7 +1,7 @@
 import React from 'react';
 import createClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import DiscussionCommentTeaser from './teaser/DiscussionCommetTeaser';
+import DiscussionCommentTeaser from '../DiscussionCommentTeaser/DiscussionCommetTeaser';
 
 // List of discussionComments
 const DiscussionCommentsList = createClass({

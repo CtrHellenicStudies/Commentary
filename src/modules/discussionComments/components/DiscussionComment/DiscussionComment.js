@@ -9,13 +9,15 @@ import FontIcon from 'material-ui/FontIcon';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { compose } from 'react-apollo';
-import { 
-	discussionCommentUpdateMutation, 
-	discussionCommentReportMutation,
-	discussionCommentUpvoteMutation,
-	discussionCommentUnreportMutation} 
-	from '../../graphql/methods/discussionComments';
 
+
+// graphql
+import discussionCommentUpdate from '../../graphql/mutations/discussionCommentUpdate';
+import discussionCommentReport from '../../graphql/mutations/discussionCommentReport';
+import discussionCommentUpvote from '../../graphql/mutations/discussionCommentUpvote';
+import discussionCommentUnreport from '../../graphql/mutations/discussionCommentUnreport';
+
+discussionCommentUnreport
 class DiscussionComment extends Component {
 
 	constructor(props) {
@@ -399,7 +401,7 @@ DiscussionComment.propTypes = {
 
 };
 export default compose(
-	discussionCommentUpdateMutation, 
-	discussionCommentReportMutation,
-	discussionCommentUpvoteMutation,
-	discussionCommentUnreportMutation)(DiscussionComment);
+	discussionCommentReport,
+	discussionCommentUnreport,
+	discussionCommentUpvote,
+	discussionCommentUpdate)(DiscussionComment);

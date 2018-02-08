@@ -5,10 +5,10 @@ import Cookies from 'js-cookie';
 import { compose } from 'react-apollo';
 
 // graphql
-import { discussionCommentsQuery } from '../../graphql/methods/discussionComments';
+import  discussionCommentsQuery from '../discussionComments/graphql/queries/discussionCommentsQuery';
 
 // components
-import DiscussionCommentsList from '../discussionComments/DiscussionCommentsList';
+import DiscussionCommentsList from '../discussionComments/components/DiscussionCommentsList/DiscussionCommentsList';
 
 class Discussions extends Component {
 	constructor(props) {

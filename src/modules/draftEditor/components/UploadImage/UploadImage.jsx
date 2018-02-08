@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { uploadFile } from '../../../../lib/s3';
-import { sendSnack } from '../../../shared/SnackAttack';
+import { sendSnack } from '../../../shared/components/SnackAttack/SnackAttack';
 
 
 export default class AvatarEditor extends Component {

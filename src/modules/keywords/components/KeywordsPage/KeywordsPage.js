@@ -13,7 +13,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // components
-import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 import KeywordsList from '../KeywordsList/KeywordsList';
 import muiTheme from '../../../../lib/muiTheme';

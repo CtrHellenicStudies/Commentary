@@ -3,7 +3,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components
-import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import RecentActivity from '../RecentActivity/RecentActivity';
 import CommunityDirectory from '../CommunityDirectory/CommunityDirectory';
 

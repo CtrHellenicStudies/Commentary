@@ -8,7 +8,7 @@ import { compose } from 'react-apollo';
 
 // components
 import AvatarEditor from '../AvatarEditor/AvatarEditor';
-import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 import ModalChangePwd from '../../../auth/components/ModalChangePwd';
 import Discussions from '../Discussions/Discussions';

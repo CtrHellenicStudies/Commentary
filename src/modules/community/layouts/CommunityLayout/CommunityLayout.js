@@ -11,7 +11,7 @@ import muiTheme from '../../../../lib/muiTheme';
 // layouts & components
 import Header from '../../../../components/navigation/Header';
 import Footer from '../../../../components/navigation/Footer';
-import { SnackAttack } from '../../../shared/SnackAttack';
+import { SnackAttack } from '../../../shared/components/SnackAttack/SnackAttack';
 import LoadingHome from '../../../../components/loading/LoadingHome';
 import CommunityPage from '../../components/CommunityPage/CommunityPage';
 

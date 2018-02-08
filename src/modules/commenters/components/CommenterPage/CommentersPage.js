@@ -8,7 +8,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import { compose } from 'react-apollo';
 
 // components
-import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import CommentersList from '../CommenterList/CommentersList';
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 import Header from '../../../../components/navigation/Header';

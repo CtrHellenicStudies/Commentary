@@ -20,7 +20,7 @@ import commentsQuery from '../../../comments/graphql/queries/comments';
 
 // components
 import KeywordContext from '../KeywordContext/KeywordContext';
-import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import KeywordCommentList from '../KeywordsCommentList/KeywordsCommentList';
 import CommentsRecent from '../../../comments/components/CommentsRecent/CommentsRecent';
 

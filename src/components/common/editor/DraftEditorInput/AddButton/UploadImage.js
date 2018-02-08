@@ -6,7 +6,7 @@ import DropZone from 'react-dropzone';
 import { Meteor } from 'meteor/meteor';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { sendSnack } from '/imports/ui/components/shared/SnackAttack';
+import { sendSnack } from '/imports/ui/components/shared/components/SnackAttack/SnackAttack';
 
 export default class AvatarEditor extends React.Component {
 	constructor(props) {

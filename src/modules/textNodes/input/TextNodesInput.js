@@ -15,7 +15,7 @@ import { editionsQuery } from '../../../graphql/methods/editions';
 import { textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
 
 // components
-import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '../../shared/components/ListDnD/ListDnD';
 
 const ListGroupItemDnD = createListGroupItemDnD('textNodeBlocks');
 

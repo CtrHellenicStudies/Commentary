@@ -8,7 +8,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import Header from '../../../../components/navigation/Header';
 
 // components
-import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 

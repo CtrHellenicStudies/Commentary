@@ -16,7 +16,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // components:
-import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import CommentersList from '../../../commenters/components/CommenterList/CommentersList';
 import WorksList from '../../../works/WorksList';
 import KeywordsList from '../../../keywords/components/KeywordsList/KeywordsList';

@@ -7,7 +7,7 @@ import Utils from '../../../../lib/utils';
 
 // graphql
 import commentsQuery from '../../../comments/graphql/queries/comments';
-import { keywordsQuery } from '../../graphql/queries/keywords';
+import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
 
 class Suggestions extends Component {
 

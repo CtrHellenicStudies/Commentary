@@ -22,7 +22,7 @@ import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextP
 import commentsQueryById from '../../../comments/graphql/queries/commentsById';
 import commentsUpdateMutation from '../../../comments/graphql/mutations/update';
 import commentAddRevisionMutation from  '../../../comments/graphql/mutations/addRevision';
-import { keywordsQuery } from '../../../keywords/graphql/queries/keywords';
+import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import { textNodesQuery } from '../../../../graphql/methods/textNodes';
 

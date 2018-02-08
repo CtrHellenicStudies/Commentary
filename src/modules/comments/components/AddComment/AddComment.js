@@ -19,8 +19,10 @@ import update from 'immutability-helper';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import { keywordInsertMutation, keywordUpdateMutation} from '../../graphql/mutations/keywords'
-import { keywordsQuery } from '../../graphql/queries/keywords';
+import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
+import keywordInsertMutation from '../../../keywords/graphql/mutations/keywordsInsert';
+import keywordUpdateMutation from '../../../keywords/graphql/mutations/keywordsUpdate';
+
 // lib:
 import Utils from '../../../../lib/utils';
 

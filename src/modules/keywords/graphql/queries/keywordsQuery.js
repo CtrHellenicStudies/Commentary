@@ -36,6 +36,4 @@ const keywordsQuery = graphql(query, {
 	}
 });
 
-export {
-    keywordsQuery
-};
+export default keywordsQuery;

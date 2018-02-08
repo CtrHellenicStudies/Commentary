@@ -10,7 +10,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
-import { keywordInsertMutation } from '../../graphql/mutations/keywords';
+import keywordInsertMutation from '../../graphql/mutations/keywordsInsert';
 
 // components:
 import Header from '../../../../components/navigation/Header';

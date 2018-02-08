@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
 // graphql
-import { keywordsQuery } from '../../graphql/queries/keywords';
+import keywordsQuery from '../../graphql/queries/keywordsQuery';
 
 // components
 import KeywordTeaser from '../KeywordsTeaser/KeywordTeaser';

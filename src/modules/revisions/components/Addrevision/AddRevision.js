@@ -28,8 +28,9 @@ import muiTheme from '../../../../lib/muiTheme';
 // graphql
 import commentRemoveMutation from '../../../comments/graphql/mutations/remove';
 import commentRemoveRevisionMutation from '../../../comments/graphql/mutations/removeRevision';
-import { keywordsQuery } from '../../../keywords/graphql/queries/keywords';
-import { keywordInsertMutation, keywordUpdateMutation } from '../../../keywords/graphql/mutations/keywords';
+import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
+import keywordInsertMutation from '../../../keywords/graphql/mutations/keywordsInsert';
+import keywordsUpdate from '../../../keywords/graphql/mutations/keywordsUpdate';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
@@ -42,7 +43,6 @@ import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
 import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/ReferenceWork';
 
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
-
 
 class AddRevision extends Component {
 
@@ -593,6 +593,6 @@ export default compose(
 	referenceWorkCreateMutation,
 	keywordsQuery,
 	keywordInsertMutation,
-	keywordUpdateMutation,
+	keywordsUpdate,
 	commentRemoveRevisionMutation
 )(AddRevision);

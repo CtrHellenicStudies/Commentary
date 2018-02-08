@@ -15,8 +15,7 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import { keywordsQuery } from '../../graphql/queries/keywords';
-
+import keywordsQuery from '../../graphql/queries/keywordsQuery';
 
 // lib
 import Utils from '../../../../lib/utils';

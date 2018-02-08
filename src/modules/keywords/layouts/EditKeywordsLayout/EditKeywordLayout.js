@@ -12,8 +12,8 @@ import muiTheme from '../../../../lib/muiTheme';
 import Header from '../../../../components/navigation/Header';
 
 // graphql
-import { keywordsQuery } from '../../graphql/queries/keywords';
-import { keywordUpdateMutation } from '../../graphql/mutations/keywords';
+import keywordsQuery from '../../graphql/queries/keywordsQuery';
+import keywordsUpdate from '../../graphql/mutations/keywordsUpdate';
 import { textNodesQuery } from '../../../../graphql/methods/textNodes';
 
 // components
@@ -451,6 +451,6 @@ EditKeywordLayout.propTypes = {
 };
 export default compose(
 	keywordsQuery,
-	keywordUpdateMutation,
+	keywordsUpdate,
 	textNodesQuery
 )(EditKeywordLayout);

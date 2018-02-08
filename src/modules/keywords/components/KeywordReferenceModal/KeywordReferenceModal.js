@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
 // graphql
-import { keywordsQuery } from '../../graphql/queries/keywords';
-import Utils from '../../../../lib/utils';
+import keywordsQuery from '../../graphql/queries/keywordsQuery';
 
+// lib
+import Utils from '../../../../lib/utils';
 
 class KeywordReferenceModal extends Component {
 	constructor(props) {

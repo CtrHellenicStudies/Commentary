@@ -14,8 +14,8 @@ import $ from 'jquery';
 
 // graphql
 import { settingsQuery } from '../../../../graphql/methods/settings';
-import { keywordRemoveMutation } from '../../graphql/mutations/keywords';
-import { keywordsQuery } from '../../graphql/queries/keywords';
+import keywordsQuery from '../../graphql/queries/keywordsQuery';
+import keywordRemoveMutation from '../../graphql/mutations/keywordsRemove';
 import commentsQuery from '../../../comments/graphql/queries/comments';
 
 // components
@@ -26,7 +26,6 @@ import CommentsRecent from '../../../comments/components/CommentsRecent/Comments
 
 // lib
 import Utils from '../../../../lib/utils';
-
 
 class KeywordDetail extends Component {
 

@@ -128,7 +128,7 @@ class CommentarySearchToolbar extends Component {
 			});
 		}
 		this.setState({
-			works: Utils.worksFromEditions(nextProps.editionsQuery.collections[0].textGroups[0].works),
+			works: Utils.worksFromEditions(nextProps.editionsQuery.works),
 		});
 		if (!nextProps.addCommentPage) {
 			this.setState({

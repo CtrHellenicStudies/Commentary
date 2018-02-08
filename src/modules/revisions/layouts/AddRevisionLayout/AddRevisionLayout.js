@@ -89,7 +89,7 @@ class AddRevisionLayout extends Component {
 			ready: !nextProps.commentsQueryById.loading && !nextProps.commentsQueryById.loading,
 			keywords: keywords,
 			commenters: commenters,
-			textNodes: nextProps.textNodesQuery.collections[0].textGroups[0].works
+			textNodes: nextProps.textNodesQuery.textNodes
 
 		});
 	}

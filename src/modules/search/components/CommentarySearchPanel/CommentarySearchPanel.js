@@ -102,7 +102,7 @@ class CommentarySearchPanel extends Component {
 		keyideas = nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea');
 		keywords = nextProps.keywordsQuery.keywords.filter(x => x.type === 'word');
 		commenters = nextProps.commentersQuery.commenters;
-		works = nextProps.editionsQuery.collections[0].textGroups[0].works;
+		works = nextProps.editionsQuery.works;
 		referenceWorks = nextProps.referenceWorksQuery.referenceWorks;
 
 		this.setState({

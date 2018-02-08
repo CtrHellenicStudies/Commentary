@@ -75,14 +75,12 @@ class TextNodesEditor extends Component {
 				return;
 		}
 		const { selectedEdition, selectedWork } = this.state;
-		const editions = props.editionsQuery.collections[0].textGroups[0].works;
+		const editions = props.editionsQuery.works;
 		const works = Utils.worksFromEditions(editions);
 		this.setState({
 			works,
 			editions,
-			textNodes: Utils.textFromTextNodesGroupedByEdition(
-				props.textNodesQuery.collections[0].textGroups[0].works,
-				editions)
+			textNodes: props.textNodesQuery.textNodes
 		});
 		if (selectedEdition && selectedWork) {
 			let _selectedEdition;
@@ -99,10 +97,8 @@ class TextNodesEditor extends Component {
 				}
 			});
 			this.setState({
-				textNodes: Utils.textFromTextNodesGroupedByEdition(
-					props.textNodesQuery.collections[0].textGroups[0].works,
-					_selectedEdition)
-			});
+				textNodes: props.textNodesQuery.textNodes
+			});/*  */
 		}
 	}
 	selectWork(event) {
@@ -434,6 +430,6 @@ TextNodesEditor.propTypes = {
 	textNodesQuery: PropTypes.object
 };
 export default compose(
+	textNodesQuery,
 	editionsQuery,
-	textNodesQuery
 )(TextNodesEditor);

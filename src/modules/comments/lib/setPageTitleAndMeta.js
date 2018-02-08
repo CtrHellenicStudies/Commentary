@@ -32,7 +32,7 @@ const setPageTitleAndMeta = (filters, settings, commentGroups, worksQuery) => {
 		}
 	});
 
-	const foundWork = worksQuery.loading ? {} : worksQuery.collections[0].textGroups[0].works.find(x => x.slug === work)
+	const foundWork = worksQuery.loading ? {} : worksQuery.works.find(x => x.slug === work)
 	if (foundWork) {
 		title = foundWork.title;
 	} else {

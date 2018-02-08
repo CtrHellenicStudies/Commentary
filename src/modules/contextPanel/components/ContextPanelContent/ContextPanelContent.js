@@ -64,18 +64,18 @@ class ContextPanelContent extends Component {
 			nextProps.textNodesQuery.refetch(properties);
 			return;
 		}
-		let _editions = nextProps.editionsQuery.collections[0].textGroups[0].works;
+		let _editions = nextProps.editionsQuery.works;
 		if (filters.edition) {
 			const workUrn = Utils.getUrnTextNodesProperties(lemmaCitation).workUrn.replace('tlg0013', 'tlg0012');
-			_editions = nextProps.editionsQuery.collections[0].textGroups[0].works.filter(work => work.urn === workUrn);
+			_editions = nextProps.editionsQuery.works.filter(work => work.urn === workUrn);
 			if(_editions.length <= filters.edition) {
 				_editions = [_editions[filters.edition - 1]];
 			} else {
-				_editions = nextProps.editionsQuery.collections[0].textGroups[0].works;
+				_editions = nextProps.editionsQuery.works;
 			}
 		}
-		const textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.collections[0].textGroups[0].works;
-		const editions = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, _editions);
+		const textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.textNodes;
+		const editions = textNodesCursor;
 	
 		let sortedEditions;
 	

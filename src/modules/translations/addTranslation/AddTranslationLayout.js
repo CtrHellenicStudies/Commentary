@@ -341,7 +341,7 @@ class AddTranslationLayout extends Component {
 											subworkN={subwork ? subwork.n : 1}
 											shouldUpdateQuery={this.state.updateQuery}
 											updateQuery={this.updateQuery}
-											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.collections[0].textGroups[0].works}
+											textNodes={this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes}
 										/> : ''}
 
 									<AddTranslation

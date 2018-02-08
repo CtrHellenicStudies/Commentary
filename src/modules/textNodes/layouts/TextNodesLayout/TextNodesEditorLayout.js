@@ -7,7 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components:
 import Header from '../../../../components/navigation/Header';
-import TextNodesEditor from '../../components/TextNodesEditor/TextNodesEditor';
+import TextNodesEditorContainer from '../../containers/TextNodesEditorContainer/TextNodesEditorContainer';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
@@ -58,7 +58,7 @@ class TextNodesEditorLayout extends Component {
 					<main>
 						<div className="commentary-comments">
 							<div className="comment-group">
-								<TextNodesEditor />
+								<TextNodesEditorContainer />
 							</div>
 						</div>
 					</main>

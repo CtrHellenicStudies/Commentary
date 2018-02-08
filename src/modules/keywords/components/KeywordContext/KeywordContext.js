@@ -50,8 +50,8 @@ class KeywordContext extends Component {
 			context.lineFrom = keyword.lineFrom;
 			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
 			if (!props.textNodesQuery.loading) {
-				const textNodesCursor = props.textNodesQuery.collections[0].textGroups[0].works;
-				lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.collections[0].textGroups[0].works);
+				const textNodesCursor = props.textNodesQuery.textNodes;
+				lemmaText = textNodesCursor, props.editionsQuery.works
 			}
 			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 				context.work, context.lineFrom, context.lineTo
@@ -77,9 +77,9 @@ class KeywordContext extends Component {
 				context.lineFrom = query.lineFrom;
 				context.lineTo = query.lineTo;
 			}
-			const textNodesCursor = props.textNodesQuery.collections[0].textGroups[0].works;
+			const textNodesCursor = props.textNodesQuery.textNodes;
 
-			lemmaText = Utils.textFromTextNodesGroupedByEdition(textNodesCursor, props.editionsQuery.collections[0].textGroups[0].works);
+			lemmaText = textNodesCursor;
 		}
 		this.setState({
 			lemmaText: lemmaText,

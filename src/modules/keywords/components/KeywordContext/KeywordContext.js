@@ -11,7 +11,7 @@ import Utils, { makeKeywordContextQueryFromComment } from '../../../../lib/utils
 // graphql
 import commentsQuery from '../../../comments/graphql/queries/comments';
 import { editionsQuery } from '../../../../graphql/methods/editions';
-import { textNodesQuery } from '../../../../graphql/methods/textNodes';
+import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 class KeywordContext extends Component {
 	constructor(props) {

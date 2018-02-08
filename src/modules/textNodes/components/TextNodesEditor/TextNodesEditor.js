@@ -10,21 +10,21 @@ import {
 import TextField from 'material-ui/TextField';
 
 // graphql
-import { editionsQuery } from '../../graphql/methods/editions';
-import { textNodesQuery } from '../../graphql/methods/textNodes';
+import { editionsQuery } from '../../../../graphql/methods/editions';
+import textNodesQuery from '../../graphql/queries/textNodesQuery';
 
 
 // lib:
-import Utils from '../../lib/utils';
+import Utils from '../../../../lib/utils';
 
 // components
-import TextNodesInput from './input/TextNodesInput';
-import EditWorkDialog from './dialog/EditWorkDialog';
-import EditEditionDialog from './dialog/EditEditionDialog';
-import EditSubworkDialog from './dialog/EditSubworkDialog';
-import MultilineDialog from './multiline/MultilineDialog';
-import TranslationSelect from '../translations/select/TranslationSelect';
-import TranslationNodeInput from '../translations/input/TranslationNodeInput';
+import TextNodesInput from '../TextNodesInput/TextNodesInput';
+import EditWorkDialog from '../EditWorkDialog/EditWorkDialog';
+import EditEditionDialog from '../EditEditionDialog/EditEditionDialog';
+import EditSubworkDialog from '../EditSubworkDialog/EditSubworkDialog';
+import MultilineDialog from '../MultilineDialog/MultilineDialog';
+import TranslationSelect from '../../../translations/select/TranslationSelect';
+import TranslationNodeInput from '../../../translations/input/TranslationNodeInput';
 
 
 function isLocation(location) {

@@ -6,12 +6,12 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components:
-import Header from '../../components/navigation/Header';
-import TextNodesEditor from './TextNodesEditor';
+import Header from '../../../../components/navigation/Header';
+import TextNodesEditor from '../../components/TextNodesEditor/TextNodesEditor';
 
 // lib
-import muiTheme from '../../lib/muiTheme';
-import Utils from '../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
+import Utils from '../../../../lib/utils';
 
 class TextNodesEditorLayout extends Component {
 	getChildContext() {

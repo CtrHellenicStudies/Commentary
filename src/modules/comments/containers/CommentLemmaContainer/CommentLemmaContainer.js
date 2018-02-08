@@ -4,7 +4,7 @@ import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 
 // graphql
-import { textNodesQuery } from '../../../../graphql/methods/textNodes';
+import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 // components
 import CommentLemma from '../../components/CommentLemma';

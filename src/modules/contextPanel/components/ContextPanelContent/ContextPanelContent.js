@@ -9,7 +9,7 @@ import ContextPanelText from '../ContextPanelText/ContextPanelText';
 import ContextPanelTabs from '../ContextPanelTabs/ContextPanelTabs';
 
 // graphql
-import { textNodesQuery } from '../../../../graphql/methods/textNodes';
+import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 import { editionsQuery } from '../../../../graphql/methods/editions';
 
 // lib:

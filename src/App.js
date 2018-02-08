@@ -19,7 +19,7 @@ import AddKeywordLayout from './modules/keywords/layouts/AddKeywordLayout/AddKey
 import AddTranslationLayout from './modules/translations/addTranslation/AddTranslationLayout';
 import AddRevisionLayout from './modules/revisions/layouts/AddRevisionLayout/AddRevisionLayout';
 import EditKeywordLayout from './modules/keywords/layouts/EditKeywordsLayout/EditKeywordLayout';
-import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
+import TextNodesEditorLayout from './modules/textNodes/layouts/TextNodesLayout/TextNodesEditorLayout';
 import HomeLayout from './modules/home/layouts/HomeLayouts/HomeLayout';
 import NameResolutionServiceLayout from './modules/services/layouts/NameResolutionServiceLayout/NameResolutionServiceLayout';
 import NotFound from './modules/notFound/components/NotFound/NotFound';

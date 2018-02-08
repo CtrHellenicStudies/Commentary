@@ -8,7 +8,7 @@ import muiTheme from '../../../lib/muiTheme';
 import { compose } from 'react-apollo';
 
 // graphql
-import { textNodesQuery } from '../../../graphql/methods/textNodes';
+import textNodesQuery from '../../textNodes/graphql/queries/textNodesQuery';
 
 // components:
 import Header from '../../../components/navigation/Header';

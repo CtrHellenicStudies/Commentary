@@ -11,11 +11,11 @@ import { debounce } from 'throttle-debounce';
 // lib:
 
 // graphql
-import { editionsQuery } from '../../../graphql/methods/editions';
-import { textNodeUpdateMutation } from '../../../graphql/methods/textNodes';
+import { editionsQuery } from '../../../../graphql/methods/editions';
+import textNodeUpdateMutation from '../../graphql/mutations/textNodesUpdate';
 
 // components
-import { ListGroupDnD, createListGroupItemDnD } from '../../shared/components/ListDnD/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
 
 const ListGroupItemDnD = createListGroupItemDnD('textNodeBlocks');
 

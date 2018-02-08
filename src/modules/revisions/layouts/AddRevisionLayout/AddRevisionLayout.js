@@ -24,7 +24,7 @@ import commentsUpdateMutation from '../../../comments/graphql/mutations/update';
 import commentAddRevisionMutation from  '../../../comments/graphql/mutations/addRevision';
 import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import { textNodesQuery } from '../../../../graphql/methods/textNodes';
+import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 // lib
 import Utils from '../../../../lib/utils';

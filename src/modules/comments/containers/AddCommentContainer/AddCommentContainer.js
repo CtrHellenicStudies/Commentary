@@ -9,7 +9,7 @@ import CommentLemmaSelect from '../../components/CommentLemmaSelect/CommentLemma
 import AddComment from '../../components/AddComment/AddComment';
 
 // graphql
-import { textNodesQuery } from '../../../../graphql/methods/textNodes';
+import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 const getFilterValues = (filters) => {
 	const filterValues = {};

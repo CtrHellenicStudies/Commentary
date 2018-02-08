@@ -14,7 +14,7 @@ import Header from '../../../../components/navigation/Header';
 // graphql
 import keywordsQuery from '../../graphql/queries/keywordsQuery';
 import keywordsUpdate from '../../graphql/mutations/keywordsUpdate';
-import { textNodesQuery } from '../../../../graphql/methods/textNodes';
+import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 // components
 import Spinner from '../../../../components/loading/Spinner/Spinner';

@@ -21,7 +21,7 @@ import Spinner from '../../../../components/loading/Spinner/Spinner';
 import FilterWidget from '../../../filters/FilterWidget';
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
 import EditKeyword from '../../components/EditKeyword/EditKeyword';
-import ContextPanel from '../../../contextPanel/ContextPanel';
+import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 // lib
 import Utils from '../../../../lib/utils';

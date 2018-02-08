@@ -18,11 +18,11 @@ import { compose } from 'react-apollo';
 import $ from 'jquery';
 
 // graphql
-import { getMaxLineMutation } from '../../graphql/methods/textNodes';
+import { getMaxLineMutation } from '../../../../graphql/methods/textNodes';
 
 // private component:
-import ContextPanelContent from './panel/ContextPanelContent';
-import Utils from '../../lib/utils';
+import ContextPanelContent from '../ContextPanelContent/ContextPanelContent';
+import Utils from '../../../../lib/utils';
 
 
 

@@ -16,7 +16,7 @@ import Header from '../../../../components/navigation/Header';
 import FilterWidget from '../../../filters/FilterWidget';
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
 import AddRevision from '../../components/Addrevision/AddRevision';
-import ContextPanel from '../../../contextPanel/ContextPanel';
+import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 // graphql
 import commentsQueryById from '../../../comments/graphql/queries/commentsById';

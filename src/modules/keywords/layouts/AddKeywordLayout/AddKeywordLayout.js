@@ -17,7 +17,7 @@ import Header from '../../../../components/navigation/Header';
 import FilterWidget from '../../../filters/FilterWidget';
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
 import AddKeyword from '../../components/AddKeyword/AddKeyword';
-import ContextPanel from '../../../contextPanel/ContextPanel';
+import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 // lib
 import Utils from '../../../../lib/utils';

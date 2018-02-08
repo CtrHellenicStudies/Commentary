@@ -16,7 +16,7 @@ import FilterWidget from '../../filters/FilterWidget';
 import Spinner from '../../../components/loading/Spinner';
 import CommentLemmaSelect from '../../comments/components/CommentLemmaSelect';
 import AddTranslation from './AddTranslation';
-import ContextPanel from '../../contextPanel/ContextPanel';
+import ContextPanel from '../../contextPanel/components/ContextPanel/ContextPanel';
 
 // lib
 import Utils from '../../../lib/utils';

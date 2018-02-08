@@ -12,7 +12,6 @@ import qs from 'qs-lite';
 // components:
 import Header from '../../../../components/navigation/Header';
 import Spinner from '../../../../components/loading/Spinner';
-import ContextPanel from '../../../contextPanel/ContextPanel';
 import FilterWidget from '../../../filters/FilterWidget';
 import CommentLemmaSelect from '../../components/CommentLemmaSelect';
 import AddComment from '../../components/AddComment';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 
 // lib:
-import Utils from '../../../lib/utils';
+import Utils from '../../../../lib/utils';
 
 /*
 	helpers

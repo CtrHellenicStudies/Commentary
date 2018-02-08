@@ -7,7 +7,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts
 import CommentGroup from '../CommentGroup';
-import ContextPanel from '../../../contextPanel/ContextPanel';
+import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 // components
 import FilterWidget from '../../../filters/FilterWidget';

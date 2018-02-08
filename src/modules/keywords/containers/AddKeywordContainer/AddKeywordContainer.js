@@ -7,7 +7,7 @@ import commentsQuery from '../../../comments/graphql/queries/comments';
 // components
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect/CommentLemmaSelect';
 import AddKeyword from '../../components/AddKeyword/AddKeyword';
-import ContextPanel from '../../../contextPanel/ContextPanel';
+import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 // lib
 import Utils from '../../../../lib/utils';

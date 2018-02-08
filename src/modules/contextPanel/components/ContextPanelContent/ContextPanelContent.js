@@ -5,15 +5,15 @@ import { compose } from 'react-apollo';
 import _ from 'lodash';
 
 // components:
-import ContextPanelText from './ContextPanelText';
-import ContextPanelTabs from './ContextPanelTabs';
+import ContextPanelText from '../ContextPanelText/ContextPanelText';
+import ContextPanelTabs from '../ContextPanelTabs/ContextPanelTabs';
 
 // graphql
-import { textNodesQuery } from '../../../graphql/methods/textNodes';
-import { editionsQuery } from '../../../graphql/methods/editions';
+import { textNodesQuery } from '../../../../graphql/methods/textNodes';
+import { editionsQuery } from '../../../../graphql/methods/editions';
 
 // lib:
-import Utils from '../../../lib/utils';
+import Utils from '../../../../lib/utils';
 
 /*
 	helpers

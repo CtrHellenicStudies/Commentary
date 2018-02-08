@@ -4,7 +4,7 @@ import Utils from '../../../../lib/utils';
 
 // components
 import FilterWidget from '../../../filters/FilterWidget';
-import ContextPanel from '../../../contextPanel/ContextPanel';
+import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 import CommentLemmaSelect from '../../components/CommentLemmaSelect/CommentLemmaSelect';
 import AddComment from '../../components/AddComment/AddComment';
 

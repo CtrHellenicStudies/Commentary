@@ -25,7 +25,7 @@ import { keywordsQuery } from '../../graphql/queries/keywords';
 import Utils from '../../../../lib/utils';
 
 // components
-import TagsInput from '../../../inputs/tagsInput/TagsInput';
+import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
 import ReferenceWork from '../../../referenceWorks/ReferenceWork';
 

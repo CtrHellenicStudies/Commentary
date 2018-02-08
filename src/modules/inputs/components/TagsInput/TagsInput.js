@@ -12,7 +12,7 @@ import {
 import Select from 'react-select';
 
 // components
-import { ListGroupDnD, createListGroupItemDnD } from '../../shared/listDnD/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/listDnD/ListDnD';
 
 const ListGroupItemDnD = createListGroupItemDnD('tagBlocks');
 class TagsInput extends Component {

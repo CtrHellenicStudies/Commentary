@@ -34,10 +34,10 @@ import commentersQuery from '../../../commenters/graphql/queries/commentersQuery
 import { referenceWorkCreateMutation, referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
 
 // helpers:
-import linkDecorator from '../../../inputs/linkButton/linkDecorator';
+import linkDecorator from '../../../inputs/components/LinkDecorator/linkDecorator';
 
 // components
-import TagsInput from '../../../inputs/tagsInput/TagsInput';
+import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
 import ReferenceWork from '../../../referenceWorks/ReferenceWork';
 
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';

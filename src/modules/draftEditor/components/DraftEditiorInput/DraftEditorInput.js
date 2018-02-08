@@ -17,7 +17,7 @@ import {
 } from 'draft-js-buttons';
 
 // components
-import LinkButton from '../../../inputs/linkButton/LinkButton'
+import LinkButton from '../../../inputs/components/LinkButton/LinkButton'
 import VideoAdd from '../VideoAdd/VideoAdd';
 import ImageAdd from '../ImageAdd/ImageAdd';
 import Suggestions from '../Suggestions/Suggestions';

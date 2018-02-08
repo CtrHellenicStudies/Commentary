@@ -6,10 +6,10 @@ import { debounce } from 'throttle-debounce';
 
 
 // components:
-import LinkButtonDialog from './LinkButtonDialog';
+import LinkButtonDialog from '../LinkButtonDialog/LinkButtonDialog';
 
 // helpers:
-import linkDecorator from './linkDecorator';
+import linkDecorator from '../LinkDecorator/linkDecorator';
 
 /*
  *	helper

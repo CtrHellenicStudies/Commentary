@@ -17,8 +17,8 @@ import update from 'immutability-helper';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import { referenceWorkCreateMutation, referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
-
+import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
+import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 import { keywordInsertMutation, keywordUpdateMutation} from '../../graphql/mutations/keywords'
 import { keywordsQuery } from '../../graphql/queries/keywords';
 // lib:
@@ -27,7 +27,8 @@ import Utils from '../../../../lib/utils';
 // components
 import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
-import ReferenceWork from '../../../referenceWorks/ReferenceWork';
+import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/ReferenceWork';
+
 
 /*
  *	BEGIN AddComment

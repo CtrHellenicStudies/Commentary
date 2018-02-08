@@ -31,8 +31,8 @@ import CommenterDetail from './modules/commenters/components/CommenterDetail/Com
 import KeywordsPage from './modules/keywords/components/KeywordsPage/KeywordsPage';
 import KeywordDetail from './modules/keywords/components/KeywordDetail/KeywordDetail';
 import ProfilePage from './modules/profile/components/ProfilePage/ProfilePage';
-import ReferenceWorksPage from './modules/referenceWorks/ReferenceWorksPage';
-import ReferenceWorkDetail from './modules/referenceWorks/ReferenceWorkDetail';
+import ReferenceWorksPage from './modules/referenceWorks/components/ReferenceWorksPage/ReferenceWorksPage';
+import ReferenceWorkDetail from './modules/referenceWorks/components/ReferenceWorkDetail/ReferenceWorkDetail';
 
 // modules
 import settingsRoutes from './modules/settings/routes';

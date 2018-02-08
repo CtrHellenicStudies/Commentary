@@ -11,7 +11,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
+import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 import { keywordsQuery } from '../../graphql/queries/keywords';
 import { editionsQuery } from '../../../../graphql/methods/editions';
 
@@ -22,7 +22,6 @@ import BookAndChapterPager from '../BookAndChapterPages';
 
 // lib
 import Utils from '../../../../lib/utils';
-
 
 class CommentarySearchPanel extends Component {
 

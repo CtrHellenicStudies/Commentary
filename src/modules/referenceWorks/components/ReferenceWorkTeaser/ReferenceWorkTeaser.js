@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // lib
-import muiTheme from '../../../lib/muiTheme';
-import Utils from '../../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
+import Utils from '../../../../lib/utils';
 
 class ReferenceWorkTeaser extends Component {
 

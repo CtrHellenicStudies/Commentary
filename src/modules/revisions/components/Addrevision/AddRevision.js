@@ -31,14 +31,15 @@ import commentRemoveRevisionMutation from '../../../comments/graphql/mutations/r
 import { keywordsQuery } from '../../../keywords/graphql/queries/keywords';
 import { keywordInsertMutation, keywordUpdateMutation } from '../../../keywords/graphql/mutations/keywords';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import { referenceWorkCreateMutation, referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
+import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
+import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
 
 // helpers:
 import linkDecorator from '../../../inputs/components/LinkDecorator/linkDecorator';
 
 // components
 import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
-import ReferenceWork from '../../../referenceWorks/ReferenceWork';
+import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/ReferenceWork';
 
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
 

@@ -6,11 +6,10 @@ import { compose } from 'react-apollo';
 import Masonry from 'react-masonry-component/lib';
 
 // graphql
-import { referenceWorksQuery } from '../../graphql/methods/referenceWorks';
+import referenceWorksQuery from '../../graphql/queries/referenceWorksQuery';
 
 // components
-import ReferenceWorkTeaser from './teaser/ReferenceWorkTeaser';
-
+import ReferenceWorkTeaser from '../ReferenceWorkTeaser/ReferenceWorkTeaser';
 
 class ReferenceWorksList extends Component {
 

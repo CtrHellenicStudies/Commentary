@@ -4,21 +4,21 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../lib/muiTheme';
-import Header from '../../components/navigation/Header';
+import muiTheme from '../../../../lib/muiTheme';
+import Header from '../../../../components/navigation/Header';
 
 // components
-import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import CommentsRecent from '../comments/components/CommentsRecent';
-import LoadingPage from '../../components/loading/LoadingPage';
+import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import CommentsRecent from '../../../comments/components/CommentsRecent';
+import LoadingPage from '../../../../components/loading/LoadingPage';
 
 // graphql
-import commentersQuery from '../commenters/graphql/queries/commentersQuery';
-import { referenceWorksQuery } from '../../graphql/methods/referenceWorks';
-import { settingsQuery } from '../../graphql/methods/settings';
+import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import referenceWorksQuery from '../../graphql/queries/referenceWorksQuery';
+import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // lib
-import Utils from '../../lib/utils';
+import Utils from '../../../../lib/utils';
 
 
 class ReferenceWorkDetail extends Component {

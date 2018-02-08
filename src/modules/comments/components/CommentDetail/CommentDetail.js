@@ -8,7 +8,7 @@ import qs from 'qs-lite';
 import { compose } from 'react-apollo';
 
 // graphql
-import { referenceWorksQuery } from '../../../../graphql/methods/referenceWorks';
+import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 
 // components
 import CommentUpper from './CommentUpper';

@@ -3,23 +3,22 @@ import PropTypes from 'prop-types';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../lib/muiTheme';
+import muiTheme from '../../../../lib/muiTheme';
 
-import Header from '../../components/navigation/Header';
+import Header from '../../../../components/navigation/Header';
 import { compose } from 'react-apollo';
 
 // components
-import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import ReferenceWorksList from './ReferenceWorksList';
-import CommentsRecent from '../comments/components/CommentsRecent';
-import LoadingPage from '../../components/loading/LoadingPage';
+import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import ReferenceWorksList from '../ReferenceWorksList/ReferenceWorksList';
+import CommentsRecent from '../../../comments/components/CommentsRecent';
+import LoadingPage from '../../../../components/loading/LoadingPage';
 
 // graphql
-import { settingsQuery } from '../../graphql/methods/settings';
+import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // lib
-import Utils from '../../lib/utils';
-
+import Utils from '../../../../lib/utils';
 
 class ReferenceWorksPage extends Component {
 

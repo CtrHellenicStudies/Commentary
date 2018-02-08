@@ -18,7 +18,7 @@ import { settingsQuery } from '../../../../graphql/methods/settings';
 // components:
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import CommentersList from '../../../commenters/components/CommenterList/CommentersList';
-import WorksList from '../../../works/WorksList';
+import WorksList from '../../../works/components/WorksList/WorksList';
 import KeywordsList from '../../../keywords/components/KeywordsList/KeywordsList';
 import LoadingHome from '../../../../components/loading/LoadingHome';
 

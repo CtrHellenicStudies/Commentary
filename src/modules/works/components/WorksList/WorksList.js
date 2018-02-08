@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
 // components
-import WorkVisualization from './WorkVizualization';
+import WorkVisualization from '../WorkVisualization/WorkVizualization';
 
 // graphql
-import { subworksQuery } from '../../graphql/methods/works';
+import { subworksQuery } from '../../../../graphql/methods/works';
 
 class WorksList extends Component {
 

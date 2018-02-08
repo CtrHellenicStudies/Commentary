@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AvatarIcon from '../../../../profile/avatar/AvatarIcon';
+import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
 
 const getWorkTitle = ({ lemmaCitation }) => {
 	// TODO: use work from query

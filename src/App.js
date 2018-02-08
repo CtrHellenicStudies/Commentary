@@ -30,7 +30,7 @@ import CommentersPage from './modules/commenters/components/CommenterPage/Commen
 import CommenterDetail from './modules/commenters/components/CommenterDetail/CommenterDetail';
 import KeywordsPage from './modules/keywords/components/KeywordsPage/KeywordsPage';
 import KeywordDetail from './modules/keywords/components/KeywordDetail/KeywordDetail';
-import ProfilePage from './modules/profile/ProfilePage';
+import ProfilePage from './modules/profile/components/ProfilePage/ProfilePage';
 import ReferenceWorksPage from './modules/referenceWorks/ReferenceWorksPage';
 import ReferenceWorkDetail from './modules/referenceWorks/ReferenceWorkDetail';
 

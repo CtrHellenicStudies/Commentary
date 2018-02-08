@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AvatarIcon from '../../../../profile/avatar/AvatarIcon';
+import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import { Link } from 'react-router-dom';

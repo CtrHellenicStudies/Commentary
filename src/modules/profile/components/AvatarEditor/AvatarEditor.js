@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import DropZone from 'react-dropzone';
 import Cookies from 'js-cookie';
-import { sendSnack } from '../../shared/SnackAttack';
+import { sendSnack } from '../../../shared/SnackAttack';
 
 export default class AvatarEditor extends Component {
 	constructor(props) {

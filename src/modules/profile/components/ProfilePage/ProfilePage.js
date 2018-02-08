@@ -7,21 +7,21 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { compose } from 'react-apollo';
 
 // components
-import AvatarEditor from './avatar/AvatarEditor';
-import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import LoadingPage from '../../components/loading/LoadingPage';
-import ModalChangePwd from '../auth/components/ModalChangePwd';
-import Discussions from './Discussions';
-import Annotations from './Annotations';
-import Account from './Account';
-import Header from '../../components/navigation/Header';
+import AvatarEditor from '../AvatarEditor/AvatarEditor';
+import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import LoadingPage from '../../../../components/loading/LoadingPage';
+import ModalChangePwd from '../../../auth/components/ModalChangePwd';
+import Discussions from '../Discussions/Discussions';
+import Annotations from '../Annotations/Annotations';
+import Account from '../Account/Account';
+import Header from '../../../../components/navigation/Header';
 
 // graphql
-import { settingsQuery } from '../../graphql/methods/settings';
+import { settingsQuery } from '../../../../graphql/methods/settings';
 
 // lib
-import muiTheme from '../../lib/muiTheme';
-import Utils from '../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
+import Utils from '../../../../lib/utils';
 
 // Mui theme for tabs
 const tabMuiTheme = {

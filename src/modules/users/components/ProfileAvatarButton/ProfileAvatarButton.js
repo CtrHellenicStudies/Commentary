@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
 
-import AvatarIcon from '../../../profile/avatar/AvatarIcon';
+import AvatarIcon from '../../../profile/components/AvatarIcon/AvatarIcon';
 import UserDropdown from '../UserDropdown';
 
 class ProfileAvatarButton extends Component {

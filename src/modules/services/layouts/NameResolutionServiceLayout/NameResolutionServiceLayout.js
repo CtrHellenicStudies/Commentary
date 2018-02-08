@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
-import Utils from '../../lib/utils';
+import Utils from '../../../../lib/utils';
 
 // graphql
-import commentsQuery from '../comments/graphql/queries/comments';
-import { tenantsQuery } from '../../graphql/methods/tenants';
+import commentsQuery from '../../../comments/graphql/queries/comments';
+import { tenantsQuery } from '../../../../graphql/methods/tenants';
 
 const resolveV1 = (props) => {
 	let resolveURL;

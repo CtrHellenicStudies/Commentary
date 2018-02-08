@@ -21,7 +21,7 @@ import AddRevisionLayout from './modules/revisions/layouts/AddRevisionLayout/Add
 import EditKeywordLayout from './modules/keywords/layouts/EditKeywordsLayout/EditKeywordLayout';
 import TextNodesEditorLayout from './modules/textNodes/TextNodesEditorLayout';
 import HomeLayout from './modules/home/layouts/HomeLayouts/HomeLayout';
-import NameResolutionServiceLayout from './modules/services/NameResolutionServiceLayout';
+import NameResolutionServiceLayout from './modules/services/layouts/NameResolutionServiceLayout/NameResolutionServiceLayout';
 import NotFound from './modules/notFound/components/NotFound/NotFound';
 
 // pages

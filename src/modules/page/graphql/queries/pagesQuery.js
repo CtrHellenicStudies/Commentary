@@ -44,4 +44,4 @@ const pagesQueryById = graphql(queryById, {
 	name: 'pagesQueryById'
 });
 
-export {pagesQueryById, pagesQuery};
+export default pagesQuery;

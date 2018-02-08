@@ -2,24 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
-
-// lib
-import Utils from '../../lib/utils';
-
-// graphql
-import { settingsQuery } from '../../graphql/methods/settings';
-import { pagesQuery } from '../../graphql/methods/pages';
-
-// layouts
-import NotFound from '../notFound/components/NotFound/NotFound';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../lib/muiTheme';
-import Header from '../../components/navigation/Header';
+
+// lib
+import Utils from '../../../../lib/utils';
+
+// graphql
+import { settingsQuery } from '../../../../graphql/methods/settings';
+import pagesQuery from '../../graphql/queries/pagesQuery';
+
+// layouts
+import NotFound from '../../../notFound/components/NotFound/NotFound';
+import muiTheme from '../../../../lib/muiTheme';
+import Header from '../../../../components/navigation/Header';
 
 // components
-import BackgroundImageHolder from '../shared/BackgroundImageHolder';
-import LoadingPage from '../../components/loading/LoadingPage';
+import BackgroundImageHolder from '../../../shared/BackgroundImageHolder';
+import LoadingPage from '../../../../components/loading/LoadingPage';
 
 
 class Page extends Component {

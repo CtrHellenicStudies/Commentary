@@ -25,7 +25,7 @@ import NameResolutionServiceLayout from './modules/services/NameResolutionServic
 import NotFound from './modules/notFound/components/NotFound/NotFound';
 
 // pages
-import Page from './modules/page/Page';
+import Page from './modules/page/components/Page/Page';
 import CommentersPage from './modules/commenters/components/CommenterPage/CommentersPage';
 import CommenterDetail from './modules/commenters/components/CommenterDetail/CommenterDetail';
 import KeywordsPage from './modules/keywords/components/KeywordsPage/KeywordsPage';

@@ -3,7 +3,7 @@ import { compose } from 'react-apollo';
 import Utils from '../../../../lib/utils';
 
 // components
-import FilterWidget from '../../../filters/FilterWidget';
+import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 import CommentLemmaSelect from '../../components/CommentLemmaSelect/CommentLemmaSelect';
 import AddComment from '../../components/AddComment/AddComment';

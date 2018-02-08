@@ -10,7 +10,7 @@ import CommentGroup from '../CommentGroup';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 // components
-import FilterWidget from '../../../filters/FilterWidget';
+import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';

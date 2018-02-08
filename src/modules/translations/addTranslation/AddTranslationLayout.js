@@ -12,7 +12,7 @@ import { textNodesQuery } from '../../../graphql/methods/textNodes';
 
 // components:
 import Header from '../../../components/navigation/Header';
-import FilterWidget from '../../filters/FilterWidget';
+import FilterWidget from '../../filters/components/FilterWidget/FilterWidget';
 import Spinner from '../../../components/loading/Spinner';
 import CommentLemmaSelect from '../../comments/components/CommentLemmaSelect';
 import AddTranslation from './AddTranslation';

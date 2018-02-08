@@ -18,7 +18,7 @@ import { textNodesQuery } from '../../../../graphql/methods/textNodes';
 
 // components
 import Spinner from '../../../../components/loading/Spinner/Spinner';
-import FilterWidget from '../../../filters/FilterWidget';
+import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
 import EditKeyword from '../../components/EditKeyword/EditKeyword';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';

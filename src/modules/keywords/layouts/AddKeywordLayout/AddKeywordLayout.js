@@ -14,7 +14,7 @@ import { keywordInsertMutation } from '../../graphql/mutations/keywords';
 
 // components:
 import Header from '../../../../components/navigation/Header';
-import FilterWidget from '../../../filters/FilterWidget';
+import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
 import AddKeyword from '../../components/AddKeyword/AddKeyword';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';

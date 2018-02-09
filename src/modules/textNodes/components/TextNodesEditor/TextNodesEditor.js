@@ -23,8 +23,8 @@ import EditWorkDialog from '../EditWorkDialog/EditWorkDialog';
 import EditEditionDialog from '../EditEditionDialog/EditEditionDialog';
 import EditSubworkDialog from '../EditSubworkDialog/EditSubworkDialog';
 import MultilineDialog from '../MultilineDialog/MultilineDialog';
-import TranslationSelect from '../../../translations/select/TranslationSelect';
-import TranslationNodeInput from '../../../translations/input/TranslationNodeInput';
+import TranslationSelect from '../TranslationSelect/TranslationSelect';
+import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
 
 
 function isLocation(location) {

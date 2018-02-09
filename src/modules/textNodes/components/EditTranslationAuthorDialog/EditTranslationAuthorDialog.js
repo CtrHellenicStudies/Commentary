@@ -6,7 +6,8 @@ import TextField from 'material-ui/TextField';
 import { compose } from 'react-apollo';
 
 // graphql
-import { translationAddAuthorMutation, translationUpdateAuthorMutation } from '../../../graphql/methods/translations';
+// TODO
+//import { translationAddAuthorMutation, translationUpdateAuthorMutation } from '../../../graphql/methods/translations';
 
 class EditTranslationAuthorDialog extends Component {
 
@@ -104,5 +105,6 @@ EditTranslationAuthorDialog.propTypes = {
 	translationAddAuthor: PropTypes.func,
 	translationUpdateAuthor: PropTypes.func
 };
-
-export default compose(translationAddAuthorMutation, translationUpdateAuthorMutation)(EditTranslationAuthorDialog);
+// TODO
+export default EditTranslationAuthorDialog;
+//export default compose(translationAddAuthorMutation, translationUpdateAuthorMutation)(EditTranslationAuthorDialog);

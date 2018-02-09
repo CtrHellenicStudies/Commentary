@@ -9,9 +9,10 @@ import { compose } from 'react-apollo';
 
 
 // graphql
-import { translationAuthorsQuery } from '../../../graphql/methods/translations';
+// TODO
+// import { translationAuthorsQuery } from '../../../graphql/methods/translations';
 
-import EditTranslationAuthorDialog from '../dialog/EditTranslationAuthorDialog';
+import EditTranslationAuthorDialog from '../EditTranslationAuthorDialog/EditTranslationAuthorDialog';
 
 class TranslationSelect extends Component {
 	constructor(props) {
@@ -33,29 +34,30 @@ class TranslationSelect extends Component {
 			});
 		}
 	}
-	componentWillReceiveProps(props) {
-		let workDetails = null;
-		const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authorsOfTranslations;
+	// TODO - translations with authors
+	// componentWillReceiveProps(props) {
+	// 	let workDetails = null;
+	// 	const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authorsOfTranslations;
 	
-		if (props.selectedWork !== this.props.selectedWork || 
-			props.selectedSubwork !== this.props.selectedSubwork) {
-			if (props.selectedSubwork && props.selectedWork) {
-				props.translationAuthorsQuery.refetch({
-					selectedWork: props.selectedWork,
-					selectedSubwork: props.selectedSubwork
-				});
-			}
-			workDetails = {
-				tenantId: sessionStorage.getItem('tenantId'),
-				work: props.selectedWork,
-				subwork: props.selectedSubwork,
-			};
-		}
-		this.setState({
-			workDetails: workDetails,
-			translationOptions: translationOptions
-		});
-	}
+	// 	if (props.selectedWork !== this.props.selectedWork || 
+	// 		props.selectedSubwork !== this.props.selectedSubwork) {
+	// 		if (props.selectedSubwork && props.selectedWork) {
+	// 			props.translationAuthorsQuery.refetch({
+	// 				selectedWork: props.selectedWork,
+	// 				selectedSubwork: props.selectedSubwork
+	// 			});
+	// 		}
+	// 		workDetails = {
+	// 			tenantId: sessionStorage.getItem('tenantId'),
+	// 			work: props.selectedWork,
+	// 			subwork: props.selectedSubwork,
+	// 		};
+	// 	}
+	// 	this.setState({
+	// 		workDetails: workDetails,
+	// 		translationOptions: translationOptions
+	// 	});
+	// }
 	selectTranslation(event) {
 		const setValue = event ? event.value : '';
 		this.setState({
@@ -152,5 +154,6 @@ TranslationSelect.propTypes = {
 	selectedSubwork: PropTypes.number,
 	selectedWork: PropTypes.string
 };
-
-export default compose(translationAuthorsQuery)(TranslationSelect);
+export default TranslationSelect;
+// TODO
+//export default compose(translationAuthorsQuery)(TranslationSelect);

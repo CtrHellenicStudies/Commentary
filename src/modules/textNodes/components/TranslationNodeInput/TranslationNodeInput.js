@@ -4,18 +4,20 @@ import {
 	FormGroup,
 } from 'react-bootstrap';
 import { compose } from 'react-apollo';
-import { ListGroupDnD, createListGroupItemDnD } from '../../shared/components/ListDnD/ListDnD';
 import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 import _ from 'lodash';
 import {debounce} from 'throttle-debounce';
 
-// graphql
-import {
-	translationsQuery,
-	translationRemoveMutation,
-	translationUpdateMutation 
-} from '../../../graphql/methods/translations';
+// components
+import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
+
+// TODO
+// import {
+// 	translationsQuery,
+// 	translationRemoveMutation,
+// 	translationUpdateMutation 
+// } from '../../../graphql/methods/translations';
 
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');
 
@@ -227,8 +229,12 @@ TranslationNodeInput.propTypes = {
 	limit: PropTypes.number,
 	selectedTranslation: PropTypes.string
 };
-export default compose(
-	translationsQuery,
-	translationRemoveMutation,
-	translationUpdateMutation
-)(TranslationNodeInput);
+export default TranslationNodeInput;
+
+// TODO
+
+// export default compose(
+// 	translationsQuery,
+// 	translationRemoveMutation,
+// 	translationUpdateMutation
+// )(TranslationNodeInput);

@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 */
 const getSelectedEditionText = (lemmaText, selectedLemmaEdition) => {
 	let selectedEditionText = { lines: [], slug: '', title: '' };
+	console.log(lemmaText);
 	if (selectedLemmaEdition && selectedLemmaEdition.length) {
 		lemmaText.forEach((edition) => {
 			if (edition.slug === selectedLemmaEdition) {
@@ -14,7 +15,14 @@ const getSelectedEditionText = (lemmaText, selectedLemmaEdition) => {
 			}
 		});
 	} else if (lemmaText && lemmaText.length) {
-		selectedEditionText = lemmaText[0];
+		selectedEditionText.title = lemmaText[0][0].version.title;
+		selectedEditionText.slug = lemmaText[0][0].version.slug;
+		lemmaText[0].forEach(textNode => {
+			selectedEditionText.lines.push({
+				n: textNode.location[0],
+				html: textNode.text,		
+			});
+		});
 	}
 	return selectedEditionText;
 };
@@ -164,7 +172,7 @@ class ContextPanelText extends Component {
 	render() {
 		const { onBeforeClicked, selectedLemmaEdition, highlightingVisible, lineFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, editor } = this.props;
 
-		const selectedEditionText = getSelectedEditionText(lemmaText, selectedLemmaEdition);
+		
 
 		const contextPanelTextState = getContextPanelTextState(commentGroup, editor);
 
@@ -182,6 +190,8 @@ class ContextPanelText extends Component {
 				: '' }
 
 				{(() => {
+					const selectedEditionText = getSelectedEditionText(lemmaText, selectedLemmaEdition);
+					console.log(selectedEditionText);
 					switch (contextPanelTextState) {
 					case 'context for comment group':
 						return (

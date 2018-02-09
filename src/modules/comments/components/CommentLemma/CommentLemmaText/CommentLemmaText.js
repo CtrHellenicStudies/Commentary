@@ -40,7 +40,7 @@ class CommentLemmaText extends Component {
 
 				textNodesHTML.push(
 					<div
-						key={textNodes[i].location.join('.')}
+						key={`${textNodes[i].location.join('.')}.${textNodes[i].id}`}
 						className="lemma-text-line"
 					>
 						<span

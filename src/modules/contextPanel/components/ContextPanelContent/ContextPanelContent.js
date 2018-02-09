@@ -32,15 +32,14 @@ const getSortedEditions = (editions) => {
 	const sortedEditions = [];
 	editions.forEach((edition) => {
 		const newEdition = {
-			slug: edition.slug,
-			title: edition.title,
+			slug: edition.version.slug,
+			title: edition.version.title,
 			lines: _.sortBy(edition.lines, 'n')
 		};
 		sortedEditions.push(newEdition);
 	});
 	return sortedEditions;
 };
-
 
 
 class ContextPanelContent extends Component {
@@ -58,33 +57,21 @@ class ContextPanelContent extends Component {
 		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
 			return;
 		}
-		if (!nextProps.textNodesQuery.variables.workUrn && !nextProps.textNodes) {
-			const properties = Utils.getUrnTextNodesProperties(lemmaCitation);
-			console.log(properties);
-			nextProps.textNodesQuery.refetch(properties);
-			return;
-		}
 		let _editions = nextProps.editionsQuery.works;
-		if (filters.edition) {
-			const workUrn = Utils.getUrnTextNodesProperties(lemmaCitation).workUrn.replace('tlg0013', 'tlg0012');
-			_editions = nextProps.editionsQuery.works.filter(work => work.urn === workUrn);
-			if(_editions.length <= filters.edition) {
-				_editions = [_editions[filters.edition - 1]];
-			} else {
-				_editions = nextProps.editionsQuery.works;
-			}
-		}
 		const textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.textNodes;
-		const editions = textNodesCursor;
+		//const editions = textNodesCursor;
 	
 		let sortedEditions;
 	
 		if (multiline) {
-			const parsedEditions = Utils.parseMultilineEdition(editions, multiline);
+			const parsedEditions = Utils.parseMultilineEdition(textNodesCursor, multiline);
 			sortedEditions = getSortedEditions(parsedEditions);
 		} else {
-			sortedEditions = getSortedEditions(editions);
+		//	sortedEditions = getSortedEditions(editions);
+			sortedEditions = [];
+			sortedEditions[0] = textNodesCursor;
 		}
+		console.log(sortedEditions);
 		this.setState({
 			lemmaText: sortedEditions
 		});
@@ -110,10 +97,7 @@ class ContextPanelContent extends Component {
 					onBeforeClicked={onBeforeClicked}
 					onAfterClicked={onAfterClicked}
 					selectedLemmaEdition={selectedLemmaEdition}
-					lemmaText={lemmaText}
-					lineFrom={lineFrom}
-					lineTo={lineTo}
-					
+					lemmaText={lemmaText}				
 					commentGroup={commentGroup}
 					maxLine={maxLine}
 					highlightingVisible={highlightingVisible}
@@ -162,8 +146,6 @@ ContextPanelContent.propTypes = {
 	maxLine: PropTypes.number.isRequired,
 	toggleEdition: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,
-	workSlug: PropTypes.string,
-	subworkN: PropTypes.number,
 
 	// requiered if editor:
 	disableEdit: PropTypes.bool,

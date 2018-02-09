@@ -22,17 +22,15 @@ import getMaxLineMutation from '../../../textNodes/graphql/mutations/getMaxLine'
 
 // private component:
 import ContextPanelContent from '../ContextPanelContent/ContextPanelContent';
+
+// lib
 import Utils from '../../../../lib/utils';
+import serializeUrn from '../../../cts/lib/serializeUrn';
 
 
 /*
 	helpers
 */
-const getWorkSlug = (props) => {
-	if (props.commentGroup) return props.commentGroup.work.slug;
-	if (props.workSlug) return props.workSlug;
-	throw new Error('commentGroup or workSlug missing in ContextPanel component - one of two is requierd');
-};
 function setLemmaCitation(commentGroup, _lemmaCitation) {
 	let lemmaCitation;
 	if (commentGroup) {
@@ -60,7 +58,6 @@ class ContextPanel extends Component {
 			lemmaCitation: setLemmaCitation(props.commentGroup, props.lemmaCitation)
 		};
 
-		this.setMaxLine();
 
 		// methods:
 		this.onAfterClicked = this.onAfterClicked.bind(this);
@@ -68,7 +65,6 @@ class ContextPanel extends Component {
 		this.toggleEdition = this.toggleEdition.bind(this);
 		this.toggleHighlighting = this.toggleHighlighting.bind(this);
 		this.scrollElement = this.scrollElement.bind(this);
-		this.setMaxLine = this.setMaxLine.bind(this);
 	}
 
 	componentDidMount() {
@@ -83,9 +79,6 @@ class ContextPanel extends Component {
 		}
 
 		// if work or subwork updated - update maxline
-		if (prevProps.workSlug !== this.props.workSlug || prevProps.subworkN !== this.props.subworkN) {
-			this.setMaxLine();
-		}
 	}
 
 	onAfterClicked() {
@@ -111,17 +104,6 @@ class ContextPanel extends Component {
 		}
 	}
 
-	setMaxLine() {
-
-		const that = this;
-		const workSlug = getWorkSlug(this.props);
-		const subworkN = 1;
-		this.props.getMaxLine(workSlug, subworkN).then(function(res) {
-			that.setState({
-				maxLine: parseInt(res.data.getMaxLine, 10),
-			});
-		});
-	}
 
 	toggleEdition(editionSlug) {
 		if (this.state.selectedLemmaEdition !== editionSlug) {
@@ -177,17 +159,20 @@ class ContextPanel extends Component {
 
 		const { open, closeContextPanel, commentGroup,
 			 	disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline,
-				textNodes, filters, textNodesUrn } = this.props;
+				textNodes, filters } = this.props;
 		const { highlightingVisible, maxLine, selectedLemmaEdition, lemmaCitation } = this.state;
-
-		const workSlug = getWorkSlug(this.props);
-
+		let textNodesUrn = 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';
+		if(commentGroup.lemmaCitation) {
+			const lemmaCitationTemp = JSON.parse(JSON.stringify(commentGroup.lemmaCitation));
+			lemmaCitationTemp.passageFrom[1] = 1;
+			lemmaCitationTemp.passageTo[0] = lemmaCitationTemp.passageTo + 1;
+			textNodesUrn = serializeUrn(lemmaCitationTemp);
+		}
 		return (
 			<ContextPanelContent
 				open={open}
 				filters={filters}
 				closeContextPanel={closeContextPanel}
-				workSlug={workSlug}
 				commentGroup={commentGroup}
 				highlightingVisible={highlightingVisible}
 				passageFrom={selectedLineFrom}
@@ -213,28 +198,14 @@ class ContextPanel extends Component {
 }
 ContextPanel.propTypes = {
 	open: PropTypes.bool.isRequired,
-	commentGroup: PropTypes.shape({
-		work: PropTypes.shape({
-			slug: PropTypes.string.isRequired,
-		}),
-		subwork: PropTypes.shape({
-			n: PropTypes.number.isRequired,
-		}),
-		lineFrom: PropTypes.number.isRequired,
-		lineTo: PropTypes.number,
-		ref: PropTypes.string.isRequired,
-	}),
 	closeContextPanel: PropTypes.func,
 	commentLemmaIndex: PropTypes.string,
 	getMaxLine: PropTypes.func,
 	filters: PropTypes.object,
-	// requiered if editor:
 	disableEdit: PropTypes.bool,
 	selectedLineFrom: PropTypes.number,
 	selectedLineTo: PropTypes.number,
 	updateSelectedLines: PropTypes.func,
-	workSlug: PropTypes.string,
-	subworkN: PropTypes.number,
 	editor: PropTypes.bool,
 	lineFrom: PropTypes.number,
 	multiline: PropTypes.string,
@@ -249,8 +220,6 @@ ContextPanel.defaultProps = {
 	selectedLineFrom: 0,
 	selectedLineTo: 0,
 	updateSelectedLines: null,
-	workSlug: null,
-	subworkN: null,
 	editor: false,
 };
 export default compose(getMaxLineMutation)(ContextPanel);

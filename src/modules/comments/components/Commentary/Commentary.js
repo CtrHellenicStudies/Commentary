@@ -123,7 +123,7 @@ class Commentary extends Component {
 		if (!isOnHomeView) {
 			setPageTitleAndMeta(filters, settings, commentGroups);
 		}
-
+		console.log(contextCommentGroupSelected);
 		return (
 			<div className="commentary-primary content ">
 				{/* --- BEGIN comments list */}
@@ -155,13 +155,15 @@ class Commentary extends Component {
 				</div>
 				{/* --- END comments list */}
 
-				{'work' in contextCommentGroupSelected ?
+				{contextPanelOpen ?
+					
 					<ContextPanel
 						open={contextPanelOpen}
 						closeContextPanel={this.closeContextPanel}
 						commentGroup={contextCommentGroupSelected}
 						commentLemmaIndex={commentLemmaIndex}
 						multiline={multiline}
+						filters={filters}
 					/>
 				: ''}
 

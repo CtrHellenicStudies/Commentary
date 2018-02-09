@@ -41,13 +41,12 @@ class CommentGroup extends Component {
 			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm,
 			selectMultiLine, isOnHomeView, history, multiline } = this.props;
 		const { hideLemma } = this.state;
-		console.log(commentGroup.lemmaCitation);
+		console.log(serializeUrn(commentGroup.lemmaCitation));
 
 		let commentsClass = 'comments ';
 		if (contextPanelOpen) {
 			commentsClass += 'lemma-panel-visible';
 		}
-
 		// TODO: use work from query
 		let workTitle = commentGroup.lemmaCitation.work;
 

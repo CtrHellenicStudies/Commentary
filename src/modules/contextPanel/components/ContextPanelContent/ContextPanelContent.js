@@ -58,9 +58,11 @@ class ContextPanelContent extends Component {
 			return;
 		}
 		let _editions = nextProps.editionsQuery.works;
-		const textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.textNodes;
+		let textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.textNodes;
 		//const editions = textNodesCursor;
-	
+		if (this.props.textNodes) {
+			textNodesCursor = this.props.textNodes;
+		}
 		let sortedEditions;
 	
 		if (multiline) {

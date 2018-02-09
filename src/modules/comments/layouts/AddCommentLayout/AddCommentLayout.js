@@ -23,6 +23,7 @@ import Utils from '../../../../lib/utils';
 // graphql
 import commentsInsertMutation from '../../graphql/mutations/insert';
 import AddCommentContainer from '../../containers/AddCommentContainer/AddCommentContainer';
+import serializeUrn from '../../../cts/lib/serializeUrn';
 
 
 const getKeywords = (formData) => {
@@ -76,8 +77,7 @@ class AddCommentLayout extends Component {
 		this.handlePagination = this.handlePagination.bind(this);
 		this.updateQuery = this.updateQuery.bind(this);
 		this.getChildrenContext = this.getChildrenContext.bind(this);
-	}
-	componentWillReceiveProps(props) {
+
 		const { filters } = this.state;
 		let work = 'tlg001';
 		filters.forEach((filter) => {
@@ -86,7 +86,7 @@ class AddCommentLayout extends Component {
 			}
 		});
 		this.setState({
-			textNodesUrn: Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)).textNodesUrn,
+			textNodesUrn: serializeUrn(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)),
 			work: work
 		});
 	}
@@ -355,7 +355,6 @@ class AddCommentLayout extends Component {
 		this.setState({
 			textNodesUrn: properties.textNodesUrn
 		});
-		this.props.textNodesQuery.refetch(properties);
 	}
 	getChildrenContext() {
 		return getMuiTheme(muiTheme);
@@ -363,7 +362,7 @@ class AddCommentLayout extends Component {
 	render() {
 
 		const { filters, loading } = this.state;
-		const textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';
+		const textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 

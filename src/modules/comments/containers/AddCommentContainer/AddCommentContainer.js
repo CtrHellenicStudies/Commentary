@@ -35,7 +35,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
     }
     componentWillReceiveProps(props) {
         this.setState({
-            textNodes: this.props.textNodesQuery.loading ? [] : this.props.textNodesQuery.textNodes
+            textNodes: props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes
         });
     }
     render() {
@@ -43,7 +43,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 		const { selectedLineFrom, selectedLineTo, contextReaderOpen, selectedTextNodes, textNodes } = this.state;
         const { filters, textNodesUrn } = this.props;
         const { work, lineFrom } = getFilterValues(filters);
-
+        console.log(textNodes);
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 
 		return (
@@ -67,20 +67,17 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
                                 submitForm={this.addComment}
                                 work={work}
                             />
-
-                            <ContextPanel
-                                open={contextReaderOpen}
-                                workSlug={work ? work.slug : '001'}
-                                lineFrom={lineFrom || 1}
-                                filters={filters}
-                                selectedLineFrom={selectedLineFrom}
-                                selectedLineTo={selectedLineTo}
-                                updateSelectedLines={this.updateSelectedLines}
-                                textNodes={textNodes}
-                                textNodesUrn={textNodesUrn}
-                                editor
-                            />
                         </div>
+                        <ContextPanel
+                            open={contextReaderOpen}
+                            filters={filters}
+                            selectedLineFrom={selectedLineFrom}
+                            selectedLineTo={selectedLineTo}
+                            updateSelectedLines={this.updateSelectedLines}
+                            textNodes={textNodes}
+                            textNodesUrn={textNodesUrn}
+                            editor
+                        />
                     </div>
 
                     <FilterWidget

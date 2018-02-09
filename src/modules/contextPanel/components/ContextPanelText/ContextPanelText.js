@@ -7,14 +7,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 */
 const getSelectedEditionText = (lemmaText, selectedLemmaEdition) => {
 	let selectedEditionText = { lines: [], slug: '', title: '' };
-	console.log(lemmaText);
 	if (selectedLemmaEdition && selectedLemmaEdition.length) {
 		lemmaText.forEach((edition) => {
 			if (edition.slug === selectedLemmaEdition) {
 				selectedEditionText = edition;
 			}
 		});
-	} else if (lemmaText && lemmaText.length) {
+	} else if (lemmaText && lemmaText.length && lemmaText[0].length) {
 		selectedEditionText.title = lemmaText[0][0].version.title;
 		selectedEditionText.slug = lemmaText[0][0].version.slug;
 		lemmaText[0].forEach(textNode => {
@@ -191,6 +190,7 @@ class ContextPanelText extends Component {
 
 				{(() => {
 					const selectedEditionText = getSelectedEditionText(lemmaText, selectedLemmaEdition);
+					console.log(contextPanelTextState);
 					console.log(selectedEditionText);
 					switch (contextPanelTextState) {
 					case 'context for comment group':

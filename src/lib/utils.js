@@ -36,8 +36,8 @@ const Utils = {
 		}
 		return {
 			ctsNamespace: "greekLit",
-			textGroup: "tlg0013",
-			work: work.replace('tlg',''),
+			textGroup: "tlg0012",
+			work: work,
 			passageFrom: `${chapterFrom}.${lineFrom}`,
 			passageTo: `${chapterTo}.${lineTo}`
 		};

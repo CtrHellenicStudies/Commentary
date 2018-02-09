@@ -162,7 +162,7 @@ class ContextPanel extends Component {
 				textNodes, filters } = this.props;
 		const { highlightingVisible, maxLine, selectedLemmaEdition, lemmaCitation } = this.state;
 		let textNodesUrn = 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';
-		if(commentGroup.lemmaCitation) {
+		if(commentGroup && commentGroup.lemmaCitation) {
 			const lemmaCitationTemp = JSON.parse(JSON.stringify(commentGroup.lemmaCitation));
 			lemmaCitationTemp.passageFrom[1] = 1;
 			lemmaCitationTemp.passageTo[0] = lemmaCitationTemp.passageTo + 1;

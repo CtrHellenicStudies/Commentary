@@ -123,7 +123,6 @@ class Commentary extends Component {
 		if (!isOnHomeView) {
 			setPageTitleAndMeta(filters, settings, commentGroups);
 		}
-		console.log(contextCommentGroupSelected);
 		return (
 			<div className="commentary-primary content ">
 				{/* --- BEGIN comments list */}

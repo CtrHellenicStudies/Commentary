@@ -57,7 +57,6 @@ query textNodesQuery($textNodesUrn: CtsUrn!) {
 	}
 }
 `;
-// _id, editionId, updatedText, updatedTextN)
 
 const textNodesQuery = graphql(query, {
 	name: 'textNodesQuery',

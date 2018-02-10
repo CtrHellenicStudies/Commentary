@@ -21,29 +21,9 @@ query worksQuery {
 		}
 }
 `;
-const subworks = gql`
-query subworksQuery{
-  worksAhcip {
-		slug
-		title
-    subworks {
-      title
-      slug
-      n
-      tlgNumber
-      nComments
-      commentHeatmap {
-        nComments
-        n
-      }
-    }
-  }
-}
-`;
+
 const worksQuery = graphql(query, {
 	name: 'worksQuery',
 });
-const subworksQuery = graphql(subworks, {
-	name: 'subworksQuery',
-});
-export { worksQuery, subworksQuery };
+
+export { worksQuery };

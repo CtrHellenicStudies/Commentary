@@ -44,14 +44,7 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			descriptionRaw
 			type
 			count
-			subwork {
-				n
-			}
-			lineFrom
-			lineTo
-			lineLetter
 			tenantId
-			nLines
 		}
 		revisions {
 			_id

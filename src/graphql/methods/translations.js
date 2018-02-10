@@ -6,7 +6,6 @@ query translationsQuery ($tenantId: ID) {
 		tenantId
 		author
 		work
-		subwork
 		n
 		text
 	}

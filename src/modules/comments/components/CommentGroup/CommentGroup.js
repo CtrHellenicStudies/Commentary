@@ -41,7 +41,6 @@ class CommentGroup extends Component {
 			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm,
 			selectMultiLine, isOnHomeView, history, multiline } = this.props;
 		const { hideLemma } = this.state;
-		console.log(serializeUrn(commentGroup.lemmaCitation));
 
 		let commentsClass = 'comments ';
 		if (contextPanelOpen) {

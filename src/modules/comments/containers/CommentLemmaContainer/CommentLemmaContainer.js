@@ -103,7 +103,7 @@ class CommentLemmaContainer extends React.Component {
 				commentGroup={commentGroup}
 				versions={versionsWithText}
 				translations={translationsWithText}
-        		selectedLemmaVersion={selectedLemmaVersion}
+    		selectedLemmaVersion={selectedLemmaVersion}
 				selectedTranslationVersion={selectedTranslationVersion}
 				showContextPanel={this.props.showContextPanel}
 				index={this.props.index}

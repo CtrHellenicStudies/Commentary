@@ -24,22 +24,6 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			slug
 		}
 		users
-		work {
-			_id
-			title
-			tenantId
-			slug
-			subworks {
-				title
-				slug
-				n
-			}
-		}
-		subwork {
-			title
-			slug
-			n
-		}
 		lineLetter
 		bookChapterUrl
 		paragraphN

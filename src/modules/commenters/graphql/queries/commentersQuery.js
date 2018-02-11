@@ -13,10 +13,6 @@ query commenters ($tenantId: String) {
 		bio
 		featureOnHomepage
 		nCommentsHymns
-		nCommentsIliad
-		nCommentsOdyssey
-		nCommentsTotal
-		nCommentsWorks
 		tagline
 	}
 }

@@ -12,7 +12,7 @@ query commenters ($tenantId: String) {
 		tenantId
 		bio
 		featureOnHomepage
-		nCommentsHymns
+		nCommentsTotal
 		tagline
 	}
 }

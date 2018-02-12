@@ -38,8 +38,8 @@ const Utils = {
 			ctsNamespace: "greekLit",
 			textGroup: "tlg0012",
 			work: work,
-			passageFrom: `${chapterFrom}.${lineFrom}`,
-			passageTo: `${chapterTo}.${lineTo}`
+			passageFrom: [chapterFrom, lineFrom],
+			passageTo: [chapterTo, lineTo]
 		};
 
 	},

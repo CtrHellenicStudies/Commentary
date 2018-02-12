@@ -63,9 +63,9 @@ class AddCommentLayout extends Component {
 		};
 
 		// methods:
-		this.updateSelectedLines = this.updateSelectedLines.bind(this);
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
 
+		this.updateSelectedLines = this.updateSelectedLines.bind(this);
 		this.addComment = this.addComment.bind(this);
 		this.getWork = this.getWork.bind(this);
 		this.getSubwork = this.getSubwork.bind(this);
@@ -95,45 +95,18 @@ class AddCommentLayout extends Component {
 			this.props.history.push('/');
 		}
 	}
+	updateSelectedLines(_textNodes) {
+		this.setState({
+			selectedTextNodes: _textNodes
+		});
+	}
+
 	updateQuery() {
 		this.setState({
 			shouldUpdateQuery: false
 		});
 	}
 	// --- BEGNI LINE SELECTION --- //
-
-	updateSelectedLines(selectedLineFrom, selectedLineTo) {
-		const { textNodes } = this.state;
-		let finalFrom = 0, finalTo = 0;
-		if (selectedLineFrom === null) {
-			this.setState({
-				selectedLineTo,
-			});
-			finalFrom = this.state.selectedLineFrom;
-			finalTo = selectedLineTo;
-		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
-			this.setState({
-				selectedLineFrom: selectedLineFrom - 1,
-				selectedLineTo: 0
-			});
-			finalFrom = selectedLineFrom - 1;
-			finalTo = selectedLineFrom;
-		} else if (selectedLineTo != null && selectedLineFrom != null) {
-			this.setState({
-				selectedLineFrom,
-				selectedLineTo,
-			});
-			finalFrom = selectedLineFrom;
-			finalTo = selectedLineTo;
-		} else {
-			return;
-		}
-
-		this.setState({
-			selectedTextNodes: Utils.filterTextNodesBySelectedLines(textNodes, finalFrom, finalTo)
-		});
-	}
-
 	toggleSearchTerm(key, value) {
 		const { filters } = this.state;
 
@@ -361,7 +334,7 @@ class AddCommentLayout extends Component {
 	}
 	render() {
 
-		const { filters, loading } = this.state;
+		const { filters, loading, selectedTextNodes } = this.state;
 		const textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
@@ -380,7 +353,9 @@ class AddCommentLayout extends Component {
 						/>
 						<AddCommentContainer
 							textNodesUrn={textNodesUrn}
-							filters={filters} />
+							filters={filters}
+							selectedTextNodes={selectedTextNodes}
+							updateSelectedLines={this.updateSelectedLines} />
 					</div>
 					:
 					<Spinner fullPage />

@@ -73,7 +73,6 @@ class ContextPanelContent extends Component {
 			sortedEditions = [];
 			sortedEditions[0] = textNodesCursor;
 		}
-		console.log(sortedEditions);
 		this.setState({
 			lemmaText: sortedEditions
 		});

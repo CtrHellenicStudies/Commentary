@@ -152,15 +152,15 @@ class ContextPanelText extends Component {
 			const target = event.target;
 			const id = parseInt(target.id, 10);
 			if (selectedLineFrom === 0) {
-				updateSelectedLines(id, null, selectedLines);
+				updateSelectedLines(selectedLines);
 			} else if (id === selectedLineFrom && selectedLineTo === 0) {
-				updateSelectedLines(0, null, selectedLines);
+				updateSelectedLines(selectedLines.slice(id, id + 1));
 			} else if (selectedLineTo === 0 && id > selectedLineFrom) {
-				updateSelectedLines(null, id, selectedLines);
+				updateSelectedLines(selectedLines.slice(id, id + 1));
 			} else if (selectedLineTo === 0 && id < selectedLineFrom) {
-				updateSelectedLines(id, selectedLineFrom, selectedLines);
+				updateSelectedLines(selectedLines.slice(id, selectedLineFrom));
 			} else {
-				updateSelectedLines(id, 0, selectedLines);
+				updateSelectedLines(selectedLines.slice(id, id + 1));
 			}
 		}
 	}
@@ -190,8 +190,6 @@ class ContextPanelText extends Component {
 
 				{(() => {
 					const selectedEditionText = getSelectedEditionText(lemmaText, selectedLemmaEdition);
-					console.log(contextPanelTextState);
-					console.log(selectedEditionText);
 					switch (contextPanelTextState) {
 					case 'context for comment group':
 						return (

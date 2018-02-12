@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { compose } from 'react-apollo';
 import Utils from '../../../../lib/utils';
 
@@ -40,10 +40,9 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
     }
     render() {
 
-		const { selectedLineFrom, selectedLineTo, contextReaderOpen, selectedTextNodes, textNodes } = this.state;
-        const { filters, textNodesUrn } = this.props;
+		const { selectedLineFrom, selectedLineTo, contextReaderOpen, textNodes } = this.state;
+        const { filters, textNodesUrn, updateSelectedLines, selectedTextNodes } = this.props;
         const { work, lineFrom } = getFilterValues(filters);
-        console.log(textNodes);
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 
 		return (
@@ -51,14 +50,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
                     <div className="commentary-comments">
                         <div className="comment-group">
                             <CommentLemmaSelect
-                                ref={(component) => { this.commentLemmaSelect = component; }}
-                                lineFrom={selectedLineFrom}
-                                lineTo={selectedLineTo}
-                                work={work ? work : 'tlg0013'}
-                                shouldUpdateQuery={this.state.updateQuery}
-                                updateQuery={this.updateQuery}
-                                textNodes={selectedTextNodes}
-
+                                //textNodes={selectedTextNodes}
                             />
 
                             <AddComment
@@ -73,7 +65,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
                             filters={filters}
                             selectedLineFrom={selectedLineFrom}
                             selectedLineTo={selectedLineTo}
-                            updateSelectedLines={this.updateSelectedLines}
+                            updateSelectedLines={updateSelectedLines}
                             textNodes={textNodes}
                             textNodesUrn={textNodesUrn}
                             editor
@@ -88,5 +80,8 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 		);
 	}
 }
-
+AddCommentContainer.props = {
+    selectedTextNodes: PropTypes.object,
+    textNodesQuery: PropTypes.func
+};
 export default compose(textNodesQuery)(AddCommentContainer);

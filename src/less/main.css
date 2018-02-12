@@ -11519,7 +11519,7 @@ header .line-wrap .line-ref {
 }
 .lemma-panel {
   position: fixed;
-  z-index: 1;
+  z-index: 0;
   top: 0;
   right: 0;
   background: #fff;
@@ -11532,10 +11532,10 @@ header .line-wrap .line-ref {
   transition: all all 300ms ease-out ease;
   -webkit-transition: all all 300ms ease-out ease;
   -moz-transition: all all 300ms ease-out ease;
-  transform: translateX(100%) translateZ(0);
   min-width: 200px;
   max-width: 630px;
   width: 42%;
+  margin: 50px 0;
 }
 .lemma-panel.extended {
   transform: translateX(0%) translateZ(0);
@@ -11548,7 +11548,6 @@ header .line-wrap .line-ref {
   border-bottom: 1px solid #def9fc;
 }
 .lemma-panel .lemma-text-wrap {
-  margin: 57px 0 1%;
   padding: 10px 30px 10px 0;
   height: 89%;
   overflow-y: scroll;
@@ -13397,9 +13396,6 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 }
 .text-nodes-input-action-button {
   margin: 5px 10px;
-}
-.comments.comments--add-translation {
-  padding: 0 0 120px;
 }
 .profileButton {
   display: inline-block;

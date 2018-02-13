@@ -58,7 +58,66 @@ class CommentLemmaSelect extends Component {
 		}
 	}
 	render() {
-		return (<div></div>
+		const self = this;
+		const { selectedLemmaEdition } = this.state;
+		return (
+			<div className="comments lemma-panel-visible">
+				<div className="comment-outer comment-lemma-comment-outer">
+
+					{selectedLemmaEdition &&
+						selectedLemmaEdition.lines ?
+							<article className="comment lemma-comment paper-shadow">
+								
+								{selectedLemmaEdition.lines.map((line, i) => (
+									<p
+										key={i}
+										className="lemma-text"
+										dangerouslySetInnerHTML={{ __html: line.html }}
+									></p>
+							))}
+
+								{self.props.lineTo === 0 ?
+									<div>
+										<TextField
+											name="lineLetter"
+											id="lineLetter"
+											required={false}
+											floatingLabelText="Line letter..."
+											value={this.state.lineLetterValue}
+											onChange={this.onLineLetterValueChange}
+										/>
+									</div>
+								:
+								''
+							}
+
+								{/* <div className="version-tabs tabs">
+									{this.state.lemmaText.map((lemmaTextEdition, i) => {
+										const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+
+										return (<RaisedButton
+											key={i}
+											label={lemmaEditionTitle}
+											data-edition={lemmaTextEdition.title}
+											className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+											'version-tab tab selected-version-tab' : 'version-tab tab'}
+											onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
+										/>);
+									})}
+								</div> */}
+
+								<div className="context-tabs tabs" />
+
+							</article>
+						:
+
+							<article className="comment lemma-comment paper-shadow">
+								<p className="lemma-text no-lines-selected">No line(s) selected</p>
+							</article>
+					}
+
+				</div>
+			</div>
 		);
 	}
 }

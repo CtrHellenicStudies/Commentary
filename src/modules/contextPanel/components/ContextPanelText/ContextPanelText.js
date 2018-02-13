@@ -82,6 +82,10 @@ class ContextPanelText extends Component {
 		super(props);
 
 		this.lines = [];
+		this.state = {
+			selectedLineFrom: 0,
+			selectedLineTo: 0
+		}
 
 		// methods:
 		this.handeLineMouseEnter = this.handeLineMouseEnter.bind(this);
@@ -91,7 +95,8 @@ class ContextPanelText extends Component {
 
 	componentDidUpdate(prevProps, prevState) {
 
-		const { selectedLineFrom, selectedLineTo, lineFrom, lineTo } = this.props;
+		const { lineFrom, lineTo } = this.props;
+		const { selectedLineFrom, selectedLineTo } = this.state;
 
 		// hanlde highliting selected lines:
 		if (Object.keys(this.lines).length) {
@@ -143,25 +148,31 @@ class ContextPanelText extends Component {
 	}
 
 	handleLineClick(event) {
-		if (!this.props.disableEdit) {
+		console.log('I am here');
+		 if (!this.props.disableEdit) {
 
-			const selectedLines = getSelectedEditionText(this.props.lemmaText, this.props.selectedLemmaEdition);
+		 	const selectedLines = getSelectedEditionText(this.props.lemmaText, this.props.selectedLemmaEdition).lines;
 
-			const { selectedLineFrom, selectedLineTo, updateSelectedLines } = this.props;
+			 const { updateSelectedLines } = this.props;
+			 const { selectedLineFrom, selectedLineTo } = this.state;
 
-			const target = event.target;
-			const id = parseInt(target.id, 10);
-			if (selectedLineFrom === 0) {
-				updateSelectedLines(selectedLines);
-			} else if (id === selectedLineFrom && selectedLineTo === 0) {
-				updateSelectedLines(selectedLines.slice(id, id + 1));
-			} else if (selectedLineTo === 0 && id > selectedLineFrom) {
-				updateSelectedLines(selectedLines.slice(id, id + 1));
+		 	const target = event.target;
+		 	let textNodesToUpdate;
+			 const id = parseInt(target.id, 10);
+			 console.log(selectedLines);
+			if (selectedLineTo === 0 && id > selectedLineFrom) {
+				textNodesToUpdate = selectedLines.slice(selectedLineFrom, id);
+				this.setState({selectedLineTo : id});
 			} else if (selectedLineTo === 0 && id < selectedLineFrom) {
-				updateSelectedLines(selectedLines.slice(id, selectedLineFrom));
+				textNodesToUpdate = selectedLines.slice(id, id + 1);
+				this.setState({selectedLineFrom: id});
 			} else {
-				updateSelectedLines(selectedLines.slice(id, id + 1));
+				textNodesToUpdate = selectedLines.slice(id, id + 1);
+				this.setState({
+					selectedLineFrom: id,
+					selectedLineTo: 0});
 			}
+			updateSelectedLines({lines: textNodesToUpdate});
 		}
 	}
 	/*
@@ -220,7 +231,7 @@ class ContextPanelText extends Component {
 								>
 									<div
 										className="lemma-text"
-										id={line.n}
+										id={i}
 										ref={(component) => { this.lines[(line.n).toString()] = component; }}
 										dangerouslySetInnerHTML={{ __html: line.html }}
 										onMouseEnter={this.handeLineMouseEnter}
@@ -282,8 +293,6 @@ ContextPanelText.propTypes = {
 
 	// requiered if editor:
 	disableEdit: PropTypes.bool,
-	selectedLineFrom: PropTypes.number,
-	selectedLineTo: PropTypes.number,
 	updateSelectedLines: PropTypes.func,
 	editor: PropTypes.bool,
 };
@@ -292,8 +301,6 @@ ContextPanelText.defaultProps = {
 	commentGroup: null,
 
 	disableEdit: false,
-	selectedLineFrom: 0,
-	selectedLineTo: 0,
 	updateSelectedLines: null,
 	editor: false,
 };

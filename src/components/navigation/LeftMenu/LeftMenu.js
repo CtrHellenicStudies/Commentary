@@ -186,7 +186,8 @@ LeftMenu.defaultProps = {
 const mapStateToProps = (state, props) => ({
 	leftMenuOpen: state.leftMenu.open,
 	userId: state.auth.userId,
-	roles: state.auth.roles
+	roles: state.auth.roles,
+	commenters: state.auth.commenters
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

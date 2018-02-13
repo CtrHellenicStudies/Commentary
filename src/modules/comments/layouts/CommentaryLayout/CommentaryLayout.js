@@ -191,7 +191,7 @@ class CommentaryLayout extends Component {
 CommentaryLayout.defaultProps = {
 	queryParams: {
 		lineTo: 611,
-		work: '001',
+		work: 'tlg001',
 		subworks: '1'
 	}
 };

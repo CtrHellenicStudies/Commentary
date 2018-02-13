@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
+import { connect } from 'react-redux';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -174,10 +175,6 @@ class AddComment extends Component {
 			errors = true;
 			errorMessage += ' comment text,';
 		}
-		if (!this.props.selectedLineFrom) {
-			errors = true;
-			errorMessage += ' no line selected,';
-		}
 		if (!this.state.commenterValue) {
 			errors = true;
 			errorMessage += ' no commenter selected,';
@@ -298,13 +295,15 @@ class AddComment extends Component {
 			}
 		});
 	}
-	getCommentersForUser(commenters) {
+	getCommentersForUser(_commenters) {
 		const commentersOptions = [];
-		commenters.forEach((commenter) => {
+		const { commenters } = this.props;
+		console.log(commenters);
+		_commenters.forEach((commenter) => {
 			if (!commentersOptions.some(val => (
 				commenter._id === val.value
 			))) {
-				if (JSON.parse(Cookies.get('user')).canEditCommenters.find(x => x === commenter._id) !== undefined) {
+				if (commenters.find(x => x === commenter._id) !== undefined) {
 					commentersOptions.push({
 						value: commenter._id,
 						label: commenter.name,
@@ -314,13 +313,14 @@ class AddComment extends Component {
 		});
 		return commentersOptions;
 	}
-	filterCommentersForUser(commenters) {
+	filterCommentersForUser(_commenters) {
 		const commentersOptions = [];
-		commenters.forEach((commenter) => {
+		const { commenters } = this.props;
+		_commenters.forEach((commenter) => {
 			if (!commentersOptions.some(val => (
 				commenter._id === val._id
 			))) {
-				if (JSON.parse(Cookies.get('user')).canEditCommenters.find(x => x === commenter._id) !== undefined) {
+				if (commenters.find(x => x === commenter._id) !== undefined) {
 					commentersOptions.push(commenter);
 				}
 			}
@@ -339,14 +339,15 @@ class AddComment extends Component {
 			});
 			return;
 		}
+		const { commenters } = this.props;
 		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
-		let commenters = [];
+		let _commenters = [];
 		const tags = newProps.keywordsQuery.keywords;
-		if (user && user.canEditCommenters && newProps.commentersQuery.commenters) {
-			commenters = newProps.commentersQuery.commenters.filter(x =>
-				user.canEditCommenters.find(y => y === x._id));
+		if (commenters) {
+			_commenters = newProps.commentersQuery.commenters.filter(x =>
+				commenters.find(y => y === x._id));
 		}
-		const commentersOptions = this.getCommentersForUser(commenters);
+		const commentersOptions = this.getCommentersForUser(_commenters);
 		const referenceWorks = newProps.referenceWorksQuery.referenceWorks ? newProps.referenceWorksQuery.referenceWorks : [];
 		const referenceWorkOptions = [];
 		referenceWorks.forEach((referenceWork) => {
@@ -485,11 +486,17 @@ AddComment.defaultProps = {
 	selectedLineFrom: null,
 	tags: [],
 };
+
+const mapStateToProps = (state, props) => ({
+	commenters: state.auth.commenters,
+});
+
 export default compose(
 	commentersQuery,
 	referenceWorkCreateMutation,
 	referenceWorksQuery,
 	keywordsQuery,
 	keywordInsertMutation,
-	keywordUpdateMutation
+	keywordUpdateMutation,
+	connect(mapStateToProps)
 )(AddComment);

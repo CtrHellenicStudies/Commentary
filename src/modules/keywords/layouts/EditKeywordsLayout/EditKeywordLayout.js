@@ -128,7 +128,7 @@ class EditKeywordLayout extends Component {
 				work = filter.values[0];
 			}
 		});
-		const code = Utils.encodeBookBySlug(work ? work.slug : '001');
+		const code = Utils.encodeBookBySlug(work ? work.slug : 'tlg001');
 		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 			code.urn, selectedLineFrom, selectedLineTo
 		));
@@ -242,7 +242,7 @@ class EditKeywordLayout extends Component {
 		if (!work) {
 			work = {
 				title: 'Iliad',
-				slug: '001',
+				slug: 'tlg001',
 				order: 1,
 			};
 		}
@@ -399,7 +399,7 @@ class EditKeywordLayout extends Component {
 										ref={(component) => { this.keywordLemmaSelect = component; }}
 										lineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
 										lineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										workSlug={keyword.work ? keyword.work.slug : '001'}
+										workSlug={keyword.work ? keyword.work.slug : 'tlg001001'}
 										subworkN={keyword.subwork ? keyword.subwork.n : 1}
 										shouldUpdateQuery={this.state.updateQuery}
 										updateQuery={this.updateQuery}
@@ -417,7 +417,7 @@ class EditKeywordLayout extends Component {
 
 									<ContextPanel
 										open={this.state.contextReaderOpen}
-										workSlug={work ? work.slug : '001'}
+										workSlug={work ? work.slug : 'tlg001'}
 										subworkN={subwork ? subwork.n : 1}
 										lineFrom={lineFrom || 1}
 										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}

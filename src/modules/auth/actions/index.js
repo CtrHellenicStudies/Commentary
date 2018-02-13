@@ -19,11 +19,12 @@ export const changeAuthMode = authMode => ({
 	type: CHANGE_AUTH_MODE,
 	authMode,
 });
-export const setUser = ({ username, userId, roles }) => ({
+export const setUser = ({ username, userId, roles, commenters }) => ({
 	type: SET_USER,
 	username,
 	userId,
-	roles
+	roles,
+	commenters
 });
 export const removeUser = () => ({
 	type: REMOVE_USER,

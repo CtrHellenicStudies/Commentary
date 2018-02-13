@@ -31,17 +31,26 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            selectedTextNodes: []
+        };
+
+        this.updateSelectedLines = this.updateSelectedLines.bind(this);
     }
     componentWillReceiveProps(props) {
         this.setState({
             textNodes: props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes
         });
     }
+    updateSelectedLines(_textNodes) {
+		console.log(_textNodes);
+		this.setState({selectedTextNodes : [_textNodes]});
+	}
     render() {
 
-		const { selectedLineFrom, selectedLineTo, contextReaderOpen, textNodes } = this.state;
-        const { filters, textNodesUrn, updateSelectedLines, selectedTextNodes } = this.props;
+        const { selectedLineFrom, selectedTextNodes,
+                selectedLineTo, contextReaderOpen, textNodes} = this.state;
+        const { filters, textNodesUrn, submitForm } = this.props;
         const { work, lineFrom } = getFilterValues(filters);
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 
@@ -50,13 +59,13 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
                     <div className="commentary-comments">
                         <div className="comment-group">
                             <CommentLemmaSelect
-                                //textNodes={selectedTextNodes}
+                                textNodes={selectedTextNodes}
                             />
 
                             <AddComment
                                 selectedLineFrom={selectedLineFrom}
                                 selectedLineTo={selectedLineTo}
-                                submitForm={this.addComment}
+                                submitForm={submitForm}
                                 work={work}
                             />
                         </div>
@@ -65,7 +74,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
                             filters={filters}
                             selectedLineFrom={selectedLineFrom}
                             selectedLineTo={selectedLineTo}
-                            updateSelectedLines={updateSelectedLines}
+                            updateSelectedLines={this.updateSelectedLines}
                             textNodes={textNodes}
                             textNodesUrn={textNodesUrn}
                             editor

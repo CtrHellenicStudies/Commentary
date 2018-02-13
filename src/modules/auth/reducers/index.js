@@ -40,7 +40,8 @@ export default (state = initialState, action) => {
 			...state,
 			username: action.username,
 			userId: action.userId,
-			roles: action.roles
+			roles: action.roles,
+			commenters: action.commenters
 		};
 	}
 	case types.REMOVE_USER: {
@@ -48,7 +49,8 @@ export default (state = initialState, action) => {
 			...state,
 			username: null,
 			userId: null,
-			roles: null
+			roles: null,
+			commenters: null
 		};
 	}
 	default:

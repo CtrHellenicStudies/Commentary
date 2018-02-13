@@ -58,14 +58,11 @@ class AddCommentLayout extends Component {
 			selectedLineTo: 0,
 			contextReaderOpen: true,
 			loading: false,
-			selectedWork: '',
-			selectedTextNodes: []
+			selectedWork: ''
 		};
 
 		// methods:
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
-
-		this.updateSelectedLines = this.updateSelectedLines.bind(this);
 		this.addComment = this.addComment.bind(this);
 		this.getWork = this.getWork.bind(this);
 		this.getSubwork = this.getSubwork.bind(this);
@@ -94,11 +91,6 @@ class AddCommentLayout extends Component {
 		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 			this.props.history.push('/');
 		}
-	}
-	updateSelectedLines(_textNodes) {
-		this.setState({
-			selectedTextNodes: _textNodes
-		});
 	}
 
 	updateQuery() {
@@ -169,8 +161,6 @@ class AddCommentLayout extends Component {
 
 		// get data for comment:
 		const work = this.getWork();
-		const subwork = this.getSubwork();
-		const lineLetter = this.getLineLetter();
 		const referenceWorks = formData.referenceWorks;
 		const commenters = Utils.getCommenters(formData.commenterValue, possibleCommenters);
 		const selectedLineTo = this.getSelectedLineTo();
@@ -182,18 +172,6 @@ class AddCommentLayout extends Component {
 
 		// create comment object to be inserted:
 		const comment = {
-			work: {
-				title: work.title,
-				slug: work.slug,
-				order: work.order,
-			},
-			subwork: {
-				title: subwork.title,
-				n: subwork.n,
-			},
-			lineFrom: this.state.selectedLineFrom,
-			lineTo: selectedLineTo,
-			lineLetter,
 			lemmaCitation: lemmaCitation,
 			nLines: (selectedLineTo - this.state.selectedLineFrom) + 1,
 			revisions: [{
@@ -334,7 +312,7 @@ class AddCommentLayout extends Component {
 	}
 	render() {
 
-		const { filters, loading, selectedTextNodes } = this.state;
+		const { filters, loading } = this.state;
 		const textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
@@ -354,8 +332,7 @@ class AddCommentLayout extends Component {
 						<AddCommentContainer
 							textNodesUrn={textNodesUrn}
 							filters={filters}
-							selectedTextNodes={selectedTextNodes}
-							updateSelectedLines={this.updateSelectedLines} />
+							submitForm={this.addComment} />
 					</div>
 					:
 					<Spinner fullPage />

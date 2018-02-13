@@ -158,7 +158,8 @@ class ContextPanel extends Component {
 	render() {
 
 		const { open, closeContextPanel, commentGroup,
-			 	disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor, multiline,
+				disableEdit, selectedLineFrom, selectedLineTo,
+				updateSelectedLines, editor, multiline,
 				textNodes, filters } = this.props;
 		const { highlightingVisible, maxLine, selectedLemmaEdition, lemmaCitation } = this.state;
 		let textNodesUrn = 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';

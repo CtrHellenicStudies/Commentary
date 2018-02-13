@@ -357,6 +357,7 @@ const mapStateToProps = state => ({
 	userId: state.auth.userId,
 	roles: state.auth.roles,
 	leftMenuOpen: state.leftMenu.open,
+	commenters: state.auth.commenters
 });
 
 const mapDispatchToProps = dispatch => ({

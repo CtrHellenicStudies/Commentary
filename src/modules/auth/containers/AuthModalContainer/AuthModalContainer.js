@@ -61,6 +61,7 @@ class AuthModalContainer extends React.Component {
 				const user = await getUserFromServer();
 				if (user) {
 					user.userId = user._id;
+					user.commenters = user.canEditCommenters;
 					dispatchSetUser(user);
 				}
 			} catch (err) {

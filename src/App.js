@@ -39,6 +39,7 @@ import settingsRoutes from './modules/settings/routes';
 // login with token
 const cookies = new Cookies();
 const token = cookies.get('token');
+console.log(token);
 if (token) {
 	login(token);
 }
@@ -235,7 +236,8 @@ routes.propTypes = {
 const mapStateToProps = state => ({
 	userId: state.auth.userId,
 	username: state.auth.username,
-	roles: state.auth.roles
+	roles: state.auth.roles,
+	commenters: state.auth.commenters
 });
 
 export default compose(

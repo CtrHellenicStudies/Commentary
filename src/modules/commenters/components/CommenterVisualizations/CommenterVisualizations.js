@@ -92,7 +92,7 @@ class CommenterVisualizations extends Component {
 						<CommenterWorkCircle
 							toggleVisibleWork={this.toggleVisibleWork}
 							workTitle={'Iliad'}
-							workSlug={'001'}
+							workSlug={'tlg001'}
 							workLevel={workIliadLevel}
 							nComments={commenter.nCommentsIliad}
 						/>

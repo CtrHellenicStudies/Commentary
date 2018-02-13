@@ -10,12 +10,16 @@ import LeftMenu from '../LeftMenu';
 import * as authActions from '../../../modules/auth/actions';
 
 
-const Header = ({ toggleAuthModal, userId }) => (
+const Header = ({ toggleAuthModal, userId, initialSearchEnabled, filters, toggleSearchTerm, handlePagination }) => (
 	<div>
 		<LeftMenu />
 		<NavBar
+			toggleSearchTerm={toggleSearchTerm}
 			toggleAuthModal={toggleAuthModal}
+			handlePagination={handlePagination}
 			userId={userId}
+			initialSearchEnabled={initialSearchEnabled}
+			filters={filters}
 		/>
 	</div>
 );

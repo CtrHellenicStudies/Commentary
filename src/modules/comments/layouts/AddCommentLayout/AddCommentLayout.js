@@ -143,10 +143,10 @@ class AddCommentLayout extends Component {
 			});
 		}
 
-		this.setState({
-			filters,
-			skip: 0,
-		});
+		// this.setState({
+		// 	filters,
+		// 	skip: 0,
+		// });
 	}
 
 	// --- END LINE SELECTION --- //

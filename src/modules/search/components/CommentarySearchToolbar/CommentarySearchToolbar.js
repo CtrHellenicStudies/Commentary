@@ -151,7 +151,7 @@ class CommentarySearchToolbar extends Component {
 
 		return (
 			<span>
-				{!addCommentPage ?
+				{/* {!addCommentPage ?
 					<div className="search-tool text-search text-search--header">
 						<TextField
 							hintText=""
@@ -159,7 +159,7 @@ class CommentarySearchToolbar extends Component {
 							onChange={this.handleChangeTextsearch}
 						/>
 					</div>
-				: '' }
+				: '' } */}
 
 				{!addCommentPage &&
 					<KeywordsDropdown
@@ -221,13 +221,13 @@ class CommentarySearchToolbar extends Component {
 						toggle={this.toggleMoreDropdown}
 						disabled={false}
 					>
-						<div className="search-tool text-search">
+						{/* <div className="search-tool text-search">
 							<TextField
 								hintText=""
 								floatingLabelText="Search"
 								onChange={this.handleChangeTextsearch}
 							/>
-						</div>
+						</div> */}
 
 						<KeywordsDropdown
 							keywords={keywords}

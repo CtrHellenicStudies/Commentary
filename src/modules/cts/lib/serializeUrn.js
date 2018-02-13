@@ -59,7 +59,7 @@ const serializeUrn = (value, type) => {
 			result = `${result}-${value.passageTo.join('.')}`;
 		}
 	}
-
+	console.log(result);
 	return result;
 };
 

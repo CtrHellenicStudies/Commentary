@@ -19,7 +19,18 @@ import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components
 
 const ListGroupItemDnD = createListGroupItemDnD('textNodeBlocks');
 
-
+const getSelectedEditionText = (textNodes) => {
+	let selectedEditionText = { lines: [], slug: '', title: '' };
+	selectedEditionText.title = textNodes[0].version.title;
+	selectedEditionText.slug = textNodes[0].version.slug;
+	textNodes.forEach(textNode => {
+		selectedEditionText.lines.push({
+			n: textNode.location[0],
+			html: textNode.text,		
+		});
+	});
+	return selectedEditionText;
+};
 class TextNodesInput extends Component {
 
 	constructor(props) {
@@ -160,19 +171,19 @@ class TextNodesInput extends Component {
 		const { textNodes } = this.props;
 
 
-		if (!textNodes) {
+		if (!textNodes || !textNodes.length) {
 			return null;
 		}
-
+		console.log(textNodes);
 		return (
 			<FormGroup
 				controlId="textNodes"
 				className="text-nodes-editor-text-input"
 			>
 				<ListGroupDnD>
-					{textNodes[0].lines.map((line, i) => (
+					{getSelectedEditionText(textNodes).lines.map((line, i) => (
 						<ListGroupItemDnD
-							key={line.n}
+							key={i}
 							index={i}
 							className="form-subitem form-subitem--textNode text-node-input"
 							moveListGroupItem={this.moveTextNodeBlock}

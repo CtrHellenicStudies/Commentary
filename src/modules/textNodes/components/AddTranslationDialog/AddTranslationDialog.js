@@ -9,19 +9,38 @@ import { compose } from 'react-apollo';
 // TODO
 //import { translationAddAuthorMutation, translationUpdateAuthorMutation } from '../../../graphql/methods/translations';
 
-class EditTranslationAuthorDialog extends Component {
+class AddTranslationDialog extends Component {
 
 	constructor(props) {
 		super(props);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.setValue = this.setValue.bind(this);
 		this.state = {
-			authorName: this.props.translation
+			
 		};
+
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.setTitle = this.setTitle.bind(this);
+		this.setDecription = this.setDescription.bind(this);
+		this.setSlug = this.setSlug.bind(this);
+		this.setUrn = this.setUrn.bind(this);
 	}
-	setValue(event) {
+	setTitle(event) {
 		this.setState({
-			authorName: event.target.value
+			title: event.target.value
+		});
+	}
+	setSlug(event) {
+		this.setState({
+			slug: event.target.value
+		});
+	}
+	setDescription(event) {
+		this.setState({
+			descrition: event.target.value
+		});
+	}
+	setUrn(event) {
+		this.setState({
+			urn: event.target.value
 		});
 	}
 	handleSubmit() {
@@ -69,8 +88,8 @@ class EditTranslationAuthorDialog extends Component {
 			<Dialog
 				title={
 					translation
-						? 'Edit Author'
-						: 'Create Author'
+						? 'Edit translation'
+						: 'Create translation'
 				}
 				actions={actions}
 				modal={false}
@@ -80,12 +99,45 @@ class EditTranslationAuthorDialog extends Component {
 				<div className="text-node-editor-meta-form edit-subwork-form">
 					<div className="edit-form-input">
 						<label>
-							Author
+							Title
 						</label>
 						<TextField
-							name="translation_author"
+							name="translation_title"
 							defaultValue={translation || ''}
-							onChange={this.setValue}
+							onChange={this.setTitle}
+							fullWidth
+						/>
+					</div>
+					<div className="edit-form-input">
+						<label>
+							Description
+						</label>
+						<TextField
+							name="translation_description"
+							defaultValue={translation || ''}
+							onChange={this.setDecription}
+							fullWidth
+						/>
+					</div>
+					<div className="edit-form-input">
+						<label>
+							slug
+						</label>
+						<TextField
+							name="translation_slug"
+							defaultValue={translation || ''}
+							onChange={this.setSlug}
+							fullWidth
+						/>
+					</div>
+					<div className="edit-form-input">
+						<label>
+							Urn
+						</label>
+						<TextField
+							name="translation_urn"
+							defaultValue={translation || ''}
+							onChange={this.setUrn}
 							fullWidth
 						/>
 					</div>
@@ -96,7 +148,7 @@ class EditTranslationAuthorDialog extends Component {
 	}
 }
 
-EditTranslationAuthorDialog.propTypes = {
+AddTranslationDialog.propTypes = {
 	workDetails: PropTypes.object,
 	addNewAuthor: PropTypes.func,
 	handleClose: PropTypes.func,
@@ -106,5 +158,5 @@ EditTranslationAuthorDialog.propTypes = {
 	translationUpdateAuthor: PropTypes.func
 };
 // TODO
-export default EditTranslationAuthorDialog;
+export default AddTranslationDialog;
 //export default compose(translationAddAuthorMutation, translationUpdateAuthorMutation)(EditTranslationAuthorDialog);

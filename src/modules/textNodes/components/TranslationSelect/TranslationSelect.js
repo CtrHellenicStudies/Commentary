@@ -12,7 +12,7 @@ import { compose } from 'react-apollo';
 // TODO
 // import { translationAuthorsQuery } from '../../../graphql/methods/translations';
 
-import EditTranslationAuthorDialog from '../EditTranslationAuthorDialog/EditTranslationAuthorDialog';
+import AddTranslationDialog from '../AddTranslationDialog/AddTranslationDialog';
 
 class TranslationSelect extends Component {
 	constructor(props) {
@@ -135,7 +135,7 @@ class TranslationSelect extends Component {
 
 
 				</FormGroup>
-				<EditTranslationAuthorDialog
+				<AddTranslationDialog
 					open={this.state.editDialogOpen}
 					handleClose={this.handleCloseEditDialog}
 					translation={this.state.selectedTranslation}

@@ -13,12 +13,9 @@ class Header extends Component {
 	constructor(props) {
 		super(props);
 	}
-	componentWillReceiveProps(props) {
-		console.log(props.workFilters);
-	}
 	render() {
 		const { toggleAuthModal, userId, initialSearchEnabled, workFilters,
-			 toggleSearchTerm, handlePagination } = this.props;
+			 toggleSearchTerm, handlePagination, work } = this.props;
 		return (
 		<div>
 			<LeftMenu />
@@ -27,6 +24,7 @@ class Header extends Component {
 				toggleAuthModal={toggleAuthModal}
 				handlePagination={handlePagination}
 				userId={userId}
+				work={work}
 				initialSearchEnabled={initialSearchEnabled}
 				filters={workFilters}
 			/>

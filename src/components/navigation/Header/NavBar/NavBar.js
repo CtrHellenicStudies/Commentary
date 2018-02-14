@@ -323,6 +323,7 @@ class NavBar extends React.Component {
 								</div>
 								<div className="search-tools collapse">
 									<CommentarySearchToolbar
+										work={this.props.work}
 										toggleSearchTerm={toggleSearchTerm}
 										handleChangeTextsearch={handleChangeTextsearch}
 										handlePagination={handlePagination}

@@ -102,7 +102,8 @@ class CommentarySearchPanel extends Component {
 		keyideas = nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea');
 		keywords = nextProps.keywordsQuery.keywords.filter(x => x.type === 'word');
 		commenters = nextProps.commentersQuery.commenters;
-		works = nextProps.editionsQuery.works;
+		works = nextProps.editionsQuery.works.find(x => x.urn.split(':')[3].split('.')[0] === 'tlg0012');
+		console.log(works);
 		referenceWorks = nextProps.referenceWorksQuery.referenceWorks;
 
 		this.setState({
@@ -241,6 +242,7 @@ class CommentarySearchPanel extends Component {
 					<CardText expandable style={styles.wrapper}>
 						<div style={styles.lineSearch} className="line-search">
 							<BookAndChapterPager
+								work={this.state.activeWork}
 								updateTextInformations={handlePagination} />
 						</div>
 					</CardText>

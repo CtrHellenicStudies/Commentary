@@ -40,8 +40,6 @@ class AddKeywordLayout extends Component {
 		};
 
 		this.getWork = this.getWork.bind(this);
-		this.getChapter = this.getChapter.bind(this);
-		this.getLineLetter = this.getLineLetter.bind(this);
 		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
 		this.getType = this.getType.bind(this);
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
@@ -86,27 +84,6 @@ class AddKeywordLayout extends Component {
 		}
 		console.log(work);
 		return work;
-	}
-	getChapter() {
-		let chapter = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'chapters') {
-				chapter = filter.values[0];
-			}
-		});
-		if (!chapter) {
-			chapter = {
-				n: 1,
-			};
-		}
-		return chapter;
-	}
-	getLineLetter() {
-		let lineLetter = '';
-		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
-			lineLetter = this.state.lineLetterValue;
-		}
-		return lineLetter;
 	}
 	getSelectedLineTo() {
 		let selectedLineTo = 0;
@@ -174,9 +151,6 @@ class AddKeywordLayout extends Component {
 		});
 		const that = this;
 		// get data for keyword :
-		const work = this.getWork();
-		const chapter = this.getChapter();
-		const lineLetter = this.getLineLetter();
 		// create keyword object to be inserted:
 		const keyword = {
 			title: formData.titleValue,

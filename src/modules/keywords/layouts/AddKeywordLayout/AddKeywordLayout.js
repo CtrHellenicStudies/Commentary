@@ -177,20 +177,8 @@ class AddKeywordLayout extends Component {
 		const work = this.getWork();
 		const chapter = this.getChapter();
 		const lineLetter = this.getLineLetter();
-		console.log(this.state.selectedLineFrom, this.state.selectedLineTo);
 		// create keyword object to be inserted:
 		const keyword = {
-			work: {
-				title: work.title,
-				slug: work.slug,
-				order: work.order,
-			},
-			subwork: {
-				n: chapter.n,
-			},
-			lineFrom: this.state.selectedLineFrom,
-			lineTo: this.state.selectedLineTo,
-			lineLetter,
 			title: formData.titleValue,
 			slug: slugify(formData.titleValue.toLowerCase()),
 			description: textValue,
@@ -260,7 +248,7 @@ class AddKeywordLayout extends Component {
 		const { filters, textNodes, work, selectedTextNodes, filter } = this.state;
 		const { isTest } = this.props;
 		let lineFrom;
-		let textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';
+		let textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
 		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
 
@@ -271,7 +259,7 @@ class AddKeywordLayout extends Component {
 						<Header
 							toggleSearchTerm={this.toggleSearchTerm}
 							handlePagination={this.handlePagination}
-							filters={filter}
+							workFilters={filters}
 							initialSearchEnabled
 							addCommentPage
 							selectedWork={this.getWork(filters)}
@@ -281,6 +269,7 @@ class AddKeywordLayout extends Component {
 							<main>
 								<AddKeywordContainer
 									textNodesUrn={textNodesUrn}
+									addKeyword={this.addKeyword}
 									work={work} />
 
 								<FilterWidget

@@ -72,7 +72,7 @@ const KeywordCommentList = (props) => {
 												<Link to={`/commenters/${commenterRecord.slug}`}>
 													<AvatarIcon
 														avatar={
-															(commenterRecord && 'avatar' in commenterRecord) ?
+															(commenterRecord && commenterRecord.avatar) ?
 															commenterRecord.avatar.src
 															: null
 														}

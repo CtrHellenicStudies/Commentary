@@ -298,7 +298,6 @@ class AddComment extends Component {
 	getCommentersForUser(_commenters) {
 		const commentersOptions = [];
 		const { commenters } = this.props;
-		console.log(commenters);
 		_commenters.forEach((commenter) => {
 			if (!commentersOptions.some(val => (
 				commenter._id === val.value

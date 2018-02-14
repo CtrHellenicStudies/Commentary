@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { compose } from 'react-apollo';
 
 // graphql
-import commentsQuery from '../../../comments/graphql/queries/comments';
+import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 // components
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect/CommentLemmaSelect';
@@ -20,44 +20,18 @@ const AddKeywordContainer = class AddKeywordContainerClass extends Component {
             textNodes: [],
             selectedTextNodes: []
         };
+        this.updateSelectedLines = this.updateSelectedLines.bind(this);
     }
-    updateSelectedLines(selectedLineFrom, selectedLineTo) {
-		const { textNodes } = this.state;
-		let finalFrom = 0, finalTo = 0;
-		if (selectedLineFrom === null) {
-			this.setState({
-				selectedLineTo,
-			});
-			finalFrom = 0;
-			finalTo = selectedLineTo;
-		} else if (selectedLineTo === null || selectedLineFrom > selectedLineTo) {
-			this.setState({
-				selectedLineFrom: selectedLineFrom - 1,
-				selectedLineTo: selectedLineFrom
-			});
-			finalFrom = selectedLineFrom - 1;
-			finalTo = selectedLineFrom;
-		} else if (selectedLineTo != null && selectedLineFrom != null) {
-			this.setState({
-				selectedLineFrom,
-				selectedLineTo,
-			});
-			finalFrom = selectedLineFrom;
-			finalTo = selectedLineTo;
-		} else {
-			return;
-		}
-		this.setState({
-			selectedTextNodes: Utils.filterTextNodesBySelectedLines(textNodes, finalFrom, finalTo)
-		});
-	}
+    updateSelectedLines(_textNodes) {
+		this.setState({selectedTextNodes : [_textNodes]});
+    }
     componentWillReceiveProps(props) {
         this.setState({
             textNodes: props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes
         });
     }
     render() {
-        const { work, textNodesUrn } = this.props;
+        const { work, textNodesUrn, addKeyword } = this.props;
         const { textNodes, selectedTextNodes } = this.state;
 
         let lineFrom;
@@ -65,18 +39,12 @@ const AddKeywordContainer = class AddKeywordContainerClass extends Component {
             <div className="commentary-comments">
                 <div className="comment-group">
                     <CommentLemmaSelect
-                        ref={(component) => { this.commentLemmaSelect = component; }}
-                        lineFrom={this.state.selectedLineFrom}
-                        lineTo={this.state.selectedLineTo}
-                        workSlug={work}
-                        shouldUpdateQuery={this.state.updateQuery}
-                        updateQuery={this.updateQuery}
-                        textNodes={selectedTextNodes}				
+                         textNodes={selectedTextNodes}			
                     />
                     <AddKeyword
                         selectedLineFrom={this.state.selectedLineFrom}
                         selectedLineTo={this.state.selectedLineTo}
-                        submitForm={this.addKeyword}
+                        submitForm={addKeyword}
                         onTypeChange={this.onTypeChange}
                     />
                     <ContextPanel
@@ -95,4 +63,4 @@ const AddKeywordContainer = class AddKeywordContainerClass extends Component {
         );
     }
 }
-export default compose(commentsQuery)(AddKeywordContainer);
+export default compose(textNodesQuery)(AddKeywordContainer);

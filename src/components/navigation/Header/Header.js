@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -9,24 +9,36 @@ import LeftMenu from '../LeftMenu';
 // actions
 import * as authActions from '../../../modules/auth/actions';
 
-
-const Header = ({ toggleAuthModal, userId, initialSearchEnabled, filters, toggleSearchTerm, handlePagination }) => (
-	<div>
-		<LeftMenu />
-		<NavBar
-			toggleSearchTerm={toggleSearchTerm}
-			toggleAuthModal={toggleAuthModal}
-			handlePagination={handlePagination}
-			userId={userId}
-			initialSearchEnabled={initialSearchEnabled}
-			filters={filters}
-		/>
-	</div>
-);
+class Header extends Component {
+	constructor(props) {
+		super(props);
+	}
+	componentWillReceiveProps(props) {
+		console.log(props.workFilters);
+	}
+	render() {
+		const { toggleAuthModal, userId, initialSearchEnabled, workFilters,
+			 toggleSearchTerm, handlePagination } = this.props;
+		return (
+		<div>
+			<LeftMenu />
+			<NavBar
+				toggleSearchTerm={toggleSearchTerm}
+				toggleAuthModal={toggleAuthModal}
+				handlePagination={handlePagination}
+				userId={userId}
+				initialSearchEnabled={initialSearchEnabled}
+				filters={workFilters}
+			/>
+		</div>
+		);
+	}
+};
 
 Header.propTypes = {
 	toggleAuthModal: PropTypes.func.isRequired,
 	userId: PropTypes.string,
+	workFilters: PropTypes.array
 };
 
 Header.defaultProps = {
@@ -44,7 +56,4 @@ const mapDispatchToProps = dispatch => ({
 	},
 });
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(Header);
+export default Header;

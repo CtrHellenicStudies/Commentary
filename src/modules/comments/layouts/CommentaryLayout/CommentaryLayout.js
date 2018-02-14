@@ -52,7 +52,8 @@ class CommentaryLayout extends Component {
 			queryParams: qs.parse(window.location.search.substr(1)),
 			params: this.props.match,
 			referenceWorks: [],
-			works: []
+			works: [],
+			filters: []
 		};
 
 		this.props.referenceWorksQuery.refetch({
@@ -158,7 +159,7 @@ class CommentaryLayout extends Component {
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header
-							filters={this.state.filters}
+							workFilters={this.state.filters}
 							toggleSearchTerm={this._toggleSearchTerm}
 							handleChangeLineN={this._handleChangeLineN}
 							handleChangeTextsearch={this._handleChangeTextsearch}

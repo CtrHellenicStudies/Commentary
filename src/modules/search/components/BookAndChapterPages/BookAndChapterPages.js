@@ -16,6 +16,9 @@ export default class BookAndChapterPager extends Component {
         this.decreaseEdition = this.decreaseEdition.bind(this);
         this.decreaseChapter = this.decreaseChapter.bind(this);
     }
+    componentWillReceiveProps(props) {
+        
+    }
     increaseEdition() {
 
         const { edition, chapter } = this.state;

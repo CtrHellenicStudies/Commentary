@@ -60,8 +60,8 @@ class ContextPanelContent extends Component {
 		let _editions = nextProps.editionsQuery.works;
 		let textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.textNodes;
 		//const editions = textNodesCursor;
-		if (this.props.textNodes) {
-			textNodesCursor = this.props.textNodes;
+		if (nextProps.textNodes) {
+			textNodesCursor = nextProps.textNodes;
 		}
 		let sortedEditions;
 	
@@ -71,7 +71,7 @@ class ContextPanelContent extends Component {
 		} else {
 		//	sortedEditions = getSortedEditions(editions);
 			sortedEditions = [];
-			sortedEditions[0] = textNodesCursor;
+			sortedEditions.push(textNodesCursor);
 		}
 		this.setState({
 			lemmaText: sortedEditions

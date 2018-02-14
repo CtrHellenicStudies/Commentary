@@ -10,7 +10,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import qs from 'qs-lite';
 
 // components:
-import Header from '../../../../components/navigation/Header';
 import Spinner from '../../../../components/loading/Spinner';
 import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 import CommentLemmaSelect from '../../components/CommentLemmaSelect';
@@ -62,35 +61,37 @@ class AddCommentLayout extends Component {
 		};
 
 		// methods:
-		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
 		this.addComment = this.addComment.bind(this);
-		this.getWork = this.getWork.bind(this);
 		this.getSubwork = this.getSubwork.bind(this);
 		this.getLineLetter = this.getLineLetter.bind(this);
 		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
 		this.closeContextReader = this.closeContextReader.bind(this);
 		this.openContextReader = this.openContextReader.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
-		this.handlePagination = this.handlePagination.bind(this);
 		this.updateQuery = this.updateQuery.bind(this);
 		this.getChildrenContext = this.getChildrenContext.bind(this);
 
-		const { filters } = this.state;
 		let work = 'tlg001';
-		filters.forEach((filter) => {
+		this.setState({
+			textNodesUrn: serializeUrn(Utils.createLemmaCitation(work, 0, 49)),
+			work: work
+		});
+	}
+	getWork() {
+		let work = null;
+		this.state.filters.forEach((filter) => {
 			if (filter.key === 'works') {
 				work = filter.values[0];
 			}
 		});
-		this.setState({
-			textNodesUrn: serializeUrn(Utils.createLemmaCitation(work ? work : 'tlg001', 0, 49)),
-			work: work
-		});
-	}
-	componentWillUpdate() {
-		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
-			this.props.history.push('/');
+		if (!work) {
+			work = {
+				title: 'Iliad',
+				slug: '001',
+				order: 1,
+			};
 		}
+		return work;
 	}
 
 	updateQuery() {
@@ -99,55 +100,7 @@ class AddCommentLayout extends Component {
 		});
 	}
 	// --- BEGNI LINE SELECTION --- //
-	toggleSearchTerm(key, value) {
-		const { filters } = this.state;
 
-		let keyIsInFilter = false;
-		let valueIsInFilter = false;
-		let filterValueToRemove;
-		let filterToRemove;
-
-		filters.forEach((filter, i) => {
-			if (filter.key === key) {
-				keyIsInFilter = true;
-
-				filter.values.forEach((filterValue, j) => {
-					if (filterValue._id === value._id) {
-						valueIsInFilter = true;
-						filterValueToRemove = j;
-					}
-				});
-
-				if (valueIsInFilter) {
-					filter.values.splice(filterValueToRemove, 1);
-					if (filter.values.length === 0) {
-						filterToRemove = i;
-					}
-				} else if (key === 'works') {
-					filters[i].values = [value];
-				} else {
-					filters[i].values.push(value);
-				}
-			}
-		});
-
-
-		if (typeof filterToRemove !== 'undefined') {
-			filters.splice(filterToRemove, 1);
-		}
-
-		if (!keyIsInFilter) {
-			filters.push({
-				key,
-				values: [value],
-			});
-		}
-
-		// this.setState({
-		// 	filters,
-		// 	skip: 0,
-		// });
-	}
 
 	// --- END LINE SELECTION --- //
 
@@ -207,7 +160,7 @@ class AddCommentLayout extends Component {
 		});
 	}
 
-	getWork() {
+	getWorkgetWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'works') {
@@ -284,35 +237,16 @@ class AddCommentLayout extends Component {
 		});
 	}
 
-	handlePagination(book, chapter) {
-		const { filters } = this.state;
-		const work = this.getWork();
-
-		filters.edition = book;
-		filters.chapter = chapter;
-
-		this.setState({
-			filters,
-		});
-		let properties;
-		if (work) {
-			properties = {
-				workUrn: work.urn,
-				textNodesUrn: `${work.urn}:${chapter - 1}.1-${chapter}.1`
-			}
-		} else {
-			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation('tlg001', 1, 1, chapter - 1, chapter));
-		}
-		this.setState({
-			textNodesUrn: properties.textNodesUrn
-		});
-	}
+	
 	getChildrenContext() {
 		return getMuiTheme(muiTheme);
 	}
+	updatetextNodesUrn(urn) {
+		this.setState({textNodesUrn: urn});
+	}
 	render() {
 
-		const { filters, loading } = this.state;
+		const { loading } = this.state;
 		const textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
@@ -321,18 +255,10 @@ class AddCommentLayout extends Component {
 			<MuiThemeProvider muiTheme={this.getChildrenContext()}>
 				{!loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
-						<Header
-							toggleSearchTerm={this.toggleSearchTerm}
-							handlePagination={this.handlePagination}
-							selectedWork={this.getWork(filters)}
-							filters={filters}
-							initialSearchEnabled
-							addCommentPage
-						/>
 						<AddCommentContainer
 							textNodesUrn={textNodesUrn}
-							filters={filters}
-							submitForm={this.addComment} />
+							submitForm={this.addComment}
+							updatetextNodesUrn={this.updatetextNodesUrn.bind(this)} />
 					</div>
 					:
 					<Spinner fullPage />

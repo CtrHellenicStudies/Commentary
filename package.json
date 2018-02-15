@@ -152,7 +152,7 @@
     "lint:staged": "lint-staged",
     "lint": "npm run lint:js",
     "pretest": "npm run lint",
-    "start": "MONGO_URL=mongodb://localhost:27017/ahcip meteor --settings ./private/settings/production.json --port=5000",
+    "start": "MONGO_URL=mongodb://localhost:27017/ahcip_v1 meteor --settings ./private/settings/production.json --port=5000",
     "test": "jest",
     "test:watch": "npm run test -- --reporter min --watch"
   },

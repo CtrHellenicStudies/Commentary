@@ -58,7 +58,6 @@ class NavBar extends React.Component {
 
 	constructor(props) {
 		super(props);
-		const user = Cookies.get('user');
 		this.state = {
 			leftMenuOpen: false,
 			rightMenuOpen: false,
@@ -70,7 +69,6 @@ class NavBar extends React.Component {
 			modalSignupLowered: !!props.showSignup,
 			modalForgotPwdLowered: !!props.showForgotPwd,
 			tenantId: sessionStorage.getItem('tenantId'),
-			user: user ? JSON.parse(user) : undefined
 		};
 
 		// methods:
@@ -208,7 +206,7 @@ class NavBar extends React.Component {
 		} = this.props;
 		const {
 			leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered, settings,
-			tenant, user,
+			tenant,
 		} = this.state;
 
 		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;

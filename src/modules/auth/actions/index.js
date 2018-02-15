@@ -42,10 +42,12 @@ export const login = (loginMethod, data) => async (dispatch) => {
 };
 
 export const logout = logoutMethod => async (dispatch) => {
+	console.log('I am loging out');
 	try {
 		await logoutMethod();
 		dispatch(removeUser());
 		dispatch(toggleAuthModal(false));
+		window.location.reload()
 	} catch (err) {
 		throw err;
 	}

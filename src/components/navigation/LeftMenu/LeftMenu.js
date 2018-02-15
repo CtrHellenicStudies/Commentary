@@ -151,7 +151,7 @@ class LeftMenu extends React.Component {
 							</MenuItem>
 							<MenuItem
 								to="/"
-								onClick={closeLeftMenu}
+								onClick={dispatchLogout}
 							>
 								Sign out
 							</MenuItem>

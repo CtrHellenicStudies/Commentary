@@ -91,41 +91,23 @@ class ContextPanelText extends Component {
 		this.handeLineMouseEnter = this.handeLineMouseEnter.bind(this);
 		this.handeLineMouseLeave = this.handeLineMouseLeave.bind(this);
 		this.handleLineClick = this.handleLineClick.bind(this);
+		this.updateBorderLines = this.updateBorderLines.bind(this);
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-
-		const { lineFrom, lineTo } = this.props;
-		const { selectedLineFrom, selectedLineTo } = this.state;
-
+	updateBorderLines(lineFrom, lineTo) {
 		// hanlde highliting selected lines:
-		if (Object.keys(this.lines).length) {
-			if (selectedLineFrom === 0) {
-				for (let i = lineFrom; i <= lineTo; i += 1) {
-					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
-						this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
-					}
-				}
-			} else if (selectedLineTo === 0) {
-				for (let i = lineFrom; i <= lineTo; i += 1) {
-					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
-						if (i === selectedLineFrom) {
-							this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-						} else if (i.toString() in this.lines) {
-							this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
-						}
-					}
-				}
-			} else {
-				for (let i = lineFrom; i <= lineTo; i += 1) {
-					if (i.toString() in this.lines && this.lines[i.toString()] && this.lines[i.toString()].style) {
-						if (i >= selectedLineFrom && i <= selectedLineTo) {
-							this.lines[i.toString()].style.borderBottom = '2px solid #B2EBF2';
-						} else if (i.toString() in this.lines) {
-							this.lines[i.toString()].style.borderBottom = '2px solid #ffffff';
-						}
-					}
-				}
+		let _lineTo = lineTo;
+		if(lineTo === 0) {
+			_lineTo = lineFrom + 1;
+		}
+		if(!Object.keys(this.lines).length) {
+			return;
+		}
+		for (let i = 1; i <= Object.keys(this.lines).length; i += 1) {
+			if (i > lineFrom && i <= _lineTo) {
+				this.lines[(i-1).toString()].style.borderBottom = '2px solid #B2EBF2';
+			} else  {
+				this.lines[(i-1).toString()].style.borderBottom = '';
 			}
 		}
 	}
@@ -160,17 +142,20 @@ class ContextPanelText extends Component {
 		 	let textNodesToUpdate;
 			 const id = parseInt(target.id, 10);
 			 console.log(selectedLines);
-			if (selectedLineTo === 0 && id > selectedLineFrom) {
-				textNodesToUpdate = selectedLines.slice(selectedLineFrom, id);
+			if (selectedLineTo === 0 && id > selectedLineFrom && selectedLineFrom !== 0) {
+				textNodesToUpdate = selectedLines.slice(selectedLineFrom, id+1);
 				this.setState({selectedLineTo : id});
+				this.updateBorderLines(selectedLineFrom, id + 1);
 			} else if (selectedLineTo === 0 && id < selectedLineFrom) {
 				textNodesToUpdate = selectedLines.slice(id, id + 1);
 				this.setState({selectedLineFrom: id});
+				this.updateBorderLines(id, id + 1);
 			} else {
 				textNodesToUpdate = selectedLines.slice(id, id + 1);
 				this.setState({
 					selectedLineFrom: id,
 					selectedLineTo: 0});
+				this.updateBorderLines(id, 0);
 			}
 			updateSelectedLines({lines: textNodesToUpdate});
 		}
@@ -232,7 +217,7 @@ class ContextPanelText extends Component {
 									<div
 										className="lemma-text"
 										id={i}
-										ref={(component) => { this.lines[(line.n).toString()] = component; }}
+										ref={(component) => { this.lines[(i).toString()] = component; }}
 										dangerouslySetInnerHTML={{ __html: line.html }}
 										onMouseEnter={this.handeLineMouseEnter}
 										onMouseLeave={this.handeLineMouseLeave}

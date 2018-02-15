@@ -25,14 +25,6 @@ mutation translationUpdate($translation: TranslationInputType!) {
 	}
 }
 `;
-// const translationInsert = gql`
-// mutation translationInsert($translation: TranslationInputType!) {
-// 	translationInsert(translation: $translation) {
-// 		text
-// 	}
-// }
-// `;
-
 const translationRemove = gql`
 mutation translationRemove($id: String!) {
 	translationRemove(textNodeId: $id) {

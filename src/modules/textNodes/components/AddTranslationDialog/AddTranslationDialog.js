@@ -6,15 +6,13 @@ import TextField from 'material-ui/TextField';
 import { compose } from 'react-apollo';
 
 // graphql
-// TODO
-//import { translationAddAuthorMutation, translationUpdateAuthorMutation } from '../../../graphql/methods/translations';
+import translationCreateMutation from '../../graphql/mutations/textNodesCreate';
 
 class AddTranslationDialog extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			
+		this.state = {		
 		};
 
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,25 +42,17 @@ class AddTranslationDialog extends Component {
 		});
 	}
 	handleSubmit() {
-		if (this.state.authorName && !this.props.translation) {
-			this.props.translationAddAuthor(this.props.workDetails, this.state.authorName)
-			.then((err, result) => {
-				if (!err) {
-					this.props.addNewAuthor(this.state.authorName);
-					this.props.handleClose();
-				} else {
-					throw new Error(err);
-				}
-			});
-		}		else if (this.state.authorName) {
-			this.props.translationUpdateAuthor(this.props.workDetails, this.props.translation, this.state.authorName)
-			.then((err, result) => {
-				if (!err) {
-					this.props.addNewAuthor(this.state.authorName);
-					this.props.handleClose();
-				} else {
-					throw new Error(err);
-				}
+		if (this.state.title 
+		&& this.state.slug
+		&& this.state.urn) {
+			const translation = {
+				slug: this.state.slug,
+				title: this.state.title,
+				description: this.state.description ? this.state.description : '',
+				urn: this.state.urn
+			};
+			this.props.translationCreate(translation).then(function(result){
+				console.log(result);
 			});
 		}
 	}
@@ -157,6 +147,5 @@ AddTranslationDialog.propTypes = {
 	translationAddAuthor: PropTypes.func,
 	translationUpdateAuthor: PropTypes.func
 };
-// TODO
-export default AddTranslationDialog;
-//export default compose(translationAddAuthorMutation, translationUpdateAuthorMutation)(EditTranslationAuthorDialog);
+
+export default compose(translationCreateMutation)(AddTranslationDialog);

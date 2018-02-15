@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
@@ -8,7 +7,6 @@ import Drawer from 'material-ui/Drawer';
 // components
 import { toggleLeftMenu } from '../../../actions/leftMenu';
 import MenuItem from '../MenuItem';
-import MenuSubItem from '../MenuSubItem';
 import LeftMenuHead from '../LeftMenuHead';
 
 // actions
@@ -16,7 +14,6 @@ import { logout, toggleAuthModal } from '../../../modules/auth/actions';
 import { logoutUser } from '../../../lib/auth';
 
 // lib
-import getCurrentProjectHostname from '../../../lib/getCurrentProjectHostname';
 import Utils from '../../../lib/utils';
 
 
@@ -35,7 +32,6 @@ class LeftMenu extends React.Component {
 			dispatchToggleAuthModal, roles
 		} = this.props;
 
-		let tenant;
 		let settings;
 
 		/*

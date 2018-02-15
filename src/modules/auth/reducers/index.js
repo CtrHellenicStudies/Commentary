@@ -35,7 +35,6 @@ export default (state = initialState, action) => {
 		};
 	}
 	case types.SET_USER: {
-		console.log(action);
 		return {
 			...state,
 			username: action.username,

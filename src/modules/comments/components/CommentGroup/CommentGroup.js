@@ -47,7 +47,7 @@ class CommentGroup extends Component {
 			commentsClass += 'lemma-panel-visible';
 		}
 		// TODO: use work from query
-		let workTitle = commentGroup.lemmaCitation.work;
+		// let workTitle = commentGroup.lemmaCitation.work;
 
 		return (
 			<div

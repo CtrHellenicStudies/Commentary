@@ -151,8 +151,8 @@ class CommentaryLayout extends Component {
 	}
 
 	render() {
-		const { skip, limit, modalLoginLowered, queryParams, filters } = this.state;
-		const { isTest, history } =  this.props;
+		const { skip, limit, queryParams, filters } = this.state;
+		const { isTest } =  this.props;
 		// create filters object based on the queryParams or params
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

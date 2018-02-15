@@ -97,8 +97,11 @@ const KeywordCommentList = (props) => {
 		</div>
 	);
 };
+
 KeywordCommentList.propTypes = {
 	keywordComments: PropTypes.array,
 };
 
-export default compose(commentersQuery)(KeywordCommentList);
+export default compose(
+	commentersQuery
+)(KeywordCommentList);

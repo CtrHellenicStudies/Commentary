@@ -9,9 +9,6 @@ import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect/
 import AddKeyword from '../../components/AddKeyword/AddKeyword';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
-// lib
-import Utils from '../../../../lib/utils';
-
 
 const AddKeywordContainer = class AddKeywordContainerClass extends Component {
     constructor(props) {

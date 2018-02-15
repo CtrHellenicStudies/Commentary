@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // components
 import NavBar from './NavBar';
 import LeftMenu from '../LeftMenu';
+import { connect } from 'react-redux';
+import { compose } from 'react-apollo';
 
 // actions
 import * as authActions from '../../../modules/auth/actions';
 
 class Header extends Component {
-	constructor(props) {
-		super(props);
-	}
 	render() {
 		const { toggleAuthModal, userId, initialSearchEnabled, workFilters,
 			 toggleSearchTerm, handlePagination, work } = this.props;
@@ -54,4 +52,6 @@ const mapDispatchToProps = dispatch => ({
 	},
 });
 
-export default Header;
+export default compose(
+	connect(mapStateToProps, mapDispatchToProps)
+)(Header);

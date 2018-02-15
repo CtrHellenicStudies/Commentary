@@ -4,7 +4,6 @@ import { compose } from 'react-apollo';
 // graphql
 import commentsQuery from '../../graphql/queries/comments';
 import commentsMoreQuery from '../../graphql/queries/commentsMore';
-import { editionsQuery } from '../../../../graphql/methods/editions';
 
 // components
 import Commentary from '../../components/Commentary';
@@ -16,10 +15,7 @@ import parseCommentsToCommentGroups from '../../lib/parseCommentsToCommentGroups
 class CommentaryContainer extends React.Component {
 
   render() {
-		const {
-      filters, toggleSearchTerm, showLoginModal, loadMoreComments, isOnHomeView,
-      skip, limit, queryParams,
-    } = this.props;
+		const { filters, isOnHomeView, skip, limit, queryParams } = this.props;
 		let commentGroups = [];
 
 		if (!isOnHomeView) {

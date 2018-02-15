@@ -51,7 +51,7 @@ class KeywordContext extends Component {
 			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
 			if (!props.textNodesQuery.loading) {
 				const textNodesCursor = props.textNodesQuery.textNodes;
-				lemmaText = textNodesCursor, props.editionsQuery.works
+				lemmaText = textNodesCursor;
 			}
 			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
 				context.work, context.lineFrom, context.lineTo

@@ -83,19 +83,6 @@ class TextNodesEditor extends Component {
 			textNodes: props.textNodesQuery.textNodes
 		});
 		if (selectedEdition && selectedWork) {
-			let _selectedEdition;
-			let _selectedWork;
-			works.forEach(work => {
-				if (work.id === selectedWork) {
-					_selectedWork = work;
-				}
-			});
-			this.state.editions.forEach(function(edition) {
-				if (edition.urn === _selectedWork.urn) {
-					_selectedEdition = [edition];
-					return;
-				}
-			});
 			this.setState({
 				textNodes: props.textNodesQuery.textNodes
 			});
@@ -232,10 +219,6 @@ class TextNodesEditor extends Component {
 					textNodesUrn: `${finalWork.urn}:${locationFrom[0]}.${locationFrom[1]}-${locationTo[0]}.${locationTo[1]}`
 				});
 			}
-			console.log({
-				workUrn: finalWork.urn,
-				textNodesUrn: `${finalWork.urn}:${locationFrom[0]}.${locationFrom[1]}-${locationTo[0]}.${locationTo[1]}`
-			});
 	}
 	loadMoreText() {
 		this.setState({

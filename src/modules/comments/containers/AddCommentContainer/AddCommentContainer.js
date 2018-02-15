@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { compose } from 'react-apollo';
 import Utils from '../../../../lib/utils';
 import Header from '../../../../components/navigation/Header/Header';
@@ -8,6 +8,7 @@ import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget'
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 import CommentLemmaSelect from '../../components/CommentLemmaSelect/CommentLemmaSelect';
 import AddComment from '../../components/AddComment/AddComment';
+import PropTypes from 'prop-types';
 
 // graphql
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
@@ -141,7 +142,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
         const { selectedLineFrom, selectedTextNodes, filters,
                 selectedLineTo, contextReaderOpen, textNodes} = this.state;
         const { textNodesUrn, submitForm } = this.props;
-		const { work, lineFrom } = getFilterValues(filters);
+		const { work } = getFilterValues(filters);
 		
         
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');

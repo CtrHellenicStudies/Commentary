@@ -5,10 +5,6 @@ import $ from 'jquery';
 import moment from 'moment';
 
 import qs from 'qs-lite';
-import { compose } from 'react-apollo';
-
-// graphql
-import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 
 // components
 import CommentUpper from './CommentUpper';
@@ -217,7 +213,7 @@ class CommentDetail extends Component {
 	render() {
 
 		const { comment, commenters, toggleLemma, showLoginModal } = this.props;
-		const { discussionVisible, searchTerm, referenceWorks, settings } = this.state;
+		const { discussionVisible, searchTerm, referenceWorks } = this.state;
 
 		if (!comment) {
 			// TODO: handle loading for component

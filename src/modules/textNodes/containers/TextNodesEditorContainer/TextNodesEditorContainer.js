@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-// graphql
-import { editionsQuery } from '../../../../graphql/methods/editions';
-
 // components
 import TextNodesEditor from '../../components/TextNodesEditor/TextNodesEditor';
 

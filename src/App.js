@@ -39,7 +39,6 @@ import settingsRoutes from './modules/settings/routes';
 // login with token
 const cookies = new Cookies();
 const token = cookies.get('token');
-console.log(token);
 if (token) {
 	login(token);
 }

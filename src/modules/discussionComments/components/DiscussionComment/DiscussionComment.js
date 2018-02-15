@@ -17,7 +17,6 @@ import discussionCommentReport from '../../graphql/mutations/discussionCommentRe
 import discussionCommentUpvote from '../../graphql/mutations/discussionCommentUpvote';
 import discussionCommentUnreport from '../../graphql/mutations/discussionCommentUnreport';
 
-discussionCommentUnreport
 class DiscussionComment extends Component {
 
 	constructor(props) {

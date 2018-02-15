@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
-import Cookies from 'js-cookie';
 import {
 	convertFromRaw, EditorState, ContentState, convertFromHTML
 } from 'draft-js';

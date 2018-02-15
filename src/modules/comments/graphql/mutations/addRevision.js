@@ -1,9 +1,5 @@
 import { gql, graphql } from 'react-apollo';
 
-// lib
-import getCommentsQuery from '../../lib/getCommentsQuery';
-
-
 const commentInsertRevision = gql`
 mutation commentInsertRevision($id: String! $revision: RevisionInputType!) {
 	commentInsertRevision(id: $id revision: $revision) {

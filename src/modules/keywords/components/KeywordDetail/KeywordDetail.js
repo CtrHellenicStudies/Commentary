@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -10,6 +9,7 @@ import muiTheme from '../../../../lib/muiTheme';
 
 import Header from '../../../../components/navigation/Header/Header';
 import { compose } from 'react-apollo';
+import { connect } from 'react-redux';
 import $ from 'jquery';
 
 // graphql
@@ -108,7 +108,8 @@ class KeywordDetail extends Component {
 
 	render() {
 		const { keyword, settings, keywordComments } = this.state;
-
+		const { roles } = this.props;
+		console.log(roles);
 		if (!keyword) {
 			return <div />;
 		}
@@ -118,7 +119,6 @@ class KeywordDetail extends Component {
 			Utils.setDescription(Utils.trunc(keyword.description, 150));
 		}
 		Utils.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
-		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -135,7 +135,7 @@ class KeywordDetail extends Component {
 									<div className="center-content">
 										<div className="page-title-wrap">
 											<h2 className="page-title ">{keyword.title}</h2>
-											{user && user.roles && user.roles.length > 0 ?
+											{roles && roles.length > 0 ?
 												<div>
 													<Link to={`/tags/${keyword.slug}/edit`}>
 														<RaisedButton
@@ -197,6 +197,11 @@ class KeywordDetail extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => ({
+	roles: state.auth.roles,
+});
+
 KeywordDetail.propTypes = {
 	settingsQuery: PropTypes.object,
 	keywordsQuery: PropTypes.object,
@@ -204,8 +209,9 @@ KeywordDetail.propTypes = {
 	history: PropTypes.object,
 	keywordRemove: PropTypes.func,
 	match: PropTypes.object
-};
+}; 
 export default compose(
+	connect(mapStateToProps),
 	settingsQuery,
 	keywordsQuery,
 	keywordRemoveMutation,

@@ -3,10 +3,10 @@ import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
 
 import SettingEditor from '../../components/SettingEditor';
-import settingDetailQuery from '../../graphql/queries/detail';
-import settingCreateMutation from '../../graphql/mutations/create';
-import settingUpdateMutation from '../../graphql/mutations/update';
-import settingRemoveMutation from '../../graphql/mutations/remove';
+// import settingDetailQuery from '../../graphql/queries/detail';
+// import settingCreateMutation from '../../graphql/mutations/create';
+// import settingUpdateMutation from '../../graphql/mutations/update';
+// import settingRemoveMutation from '../../graphql/mutations/remove';
 
 
 class SettingEditorContainer extends React.Component {

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
 	FormGroup,
 } from 'react-bootstrap';
-import { compose } from 'react-apollo';
 import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 import _ from 'lodash';

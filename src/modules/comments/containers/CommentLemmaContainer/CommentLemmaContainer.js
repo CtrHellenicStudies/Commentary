@@ -9,7 +9,6 @@ import CommentLemma from '../../components/CommentLemma';
 import LoadingLemma from '../../../../components/loading/LoadingLemma';
 
 // lib
-import parseCommentsToCommentGroups from '../../lib/parseCommentsToCommentGroups';
 import Utils from '../../../../lib/utils';
 
 
@@ -51,9 +50,8 @@ class CommentLemmaContainer extends React.Component {
 
   render() {
 		const { commentGroup, multiline } = this.props;
-		const { selectedLemmaVersionIndex, selectedTranslationVersionIndex } = this.state;
+		const { selectedLemmaVersionIndex } = this.state;
 		let textNodes = [];
-		let works = [];
 		let versionsWithText = [];
 		let translationsWithText = [];
 		let selectedLemmaVersion = { textNodes: [] };

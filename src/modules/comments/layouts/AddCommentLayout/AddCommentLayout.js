@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
-import Cookies from 'js-cookie';
 
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -11,9 +10,6 @@ import qs from 'qs-lite';
 
 // components:
 import Spinner from '../../../../components/loading/Spinner';
-import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
-import CommentLemmaSelect from '../../components/CommentLemmaSelect';
-import AddComment from '../../components/AddComment';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';

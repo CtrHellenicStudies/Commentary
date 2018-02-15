@@ -1,6 +1,5 @@
 import * as JsDiff from 'diff'
 import { blue50, blue800, red50, red800, black, fullWhite } from 'material-ui/styles/colors';
-import _ from 'lodash';
 
 import sortRevisions from './sortRevisions';
 

@@ -1,8 +1,5 @@
 import { gql, graphql } from 'react-apollo';
 
-// lib
-import getCommentsQuery from '../../lib/getCommentsQuery';
-
 const query = gql`
 query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Boolean) {
 	comments(queryParam: $queryParam skip: $skip limit: $limit sortRecent: $sortRecent) {

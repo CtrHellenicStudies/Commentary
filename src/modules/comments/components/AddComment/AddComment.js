@@ -7,7 +7,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import { compose } from 'react-apollo';
-import Cookies from 'js-cookie';
 import slugify from 'slugify';
 
 import Formsy from 'formsy-react';
@@ -339,7 +338,6 @@ class AddComment extends Component {
 			return;
 		}
 		const { commenters } = this.props;
-		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		let _commenters = [];
 		const tags = newProps.keywordsQuery.keywords;
 		if (commenters) {

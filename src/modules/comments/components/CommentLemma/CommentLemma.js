@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'underscore';
 import _s from 'underscore.string';
-import { compose } from 'react-apollo';
 import { Sticky } from 'react-sticky';
 import autoBind from 'react-autobind';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -15,10 +13,6 @@ import MenuItem from 'material-ui/MenuItem';
 // components
 import CommentGroupMeta from './CommentGroupMeta';
 import CommentLemmaInner from './CommentLemmaInner';
-
-// lib
-import Utils from '../../../../lib/utils';
-
 
 class CommentLemma extends Component {
 
@@ -107,10 +101,7 @@ class CommentLemma extends Component {
 
 	render() {
 		const { commentGroup, versions, selectedLemmaVersion, translations, hideLemma } = this.props;
-		const { selectedAuthor, showTranslation } = this.state;
-
-		// TODO: use work from query
-		let workTitle = commentGroup.lemmaCitation.work;
+		const { showTranslation } = this.state;
 
 		return (
 			<div className="comment-outer comment-lemma-comment-outer">

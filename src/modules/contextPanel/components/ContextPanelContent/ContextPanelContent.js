@@ -52,12 +52,11 @@ class ContextPanelContent extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 
-		const { lemmaCitation, multiline, filters } = nextProps;
+		const { multiline } = nextProps;
 
 		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
 			return;
 		}
-		let _editions = nextProps.editionsQuery.works;
 		let textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.textNodes;
 		//const editions = textNodesCursor;
 		if (nextProps.textNodes) {
@@ -78,9 +77,9 @@ class ContextPanelContent extends Component {
 		});
 	}
 	render() {
-		const { open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaEdition, lineFrom, commentGroup, maxLine, toggleEdition,
+		const { open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaEdition, commentGroup, maxLine, toggleEdition,
 			toggleHighlighting, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
-		const { lineTo, lemmaText } = this.state;
+		const { lemmaText } = this.state;
 		return (
 			<div className={getContextPanelStyles(open, highlightingVisible)}>
 

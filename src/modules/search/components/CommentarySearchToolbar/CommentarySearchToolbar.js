@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import TextField from 'material-ui/TextField';
 import _ from 'lodash';
 import { compose } from 'react-apollo';
 

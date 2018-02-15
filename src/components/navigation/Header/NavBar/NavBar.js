@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
 import { compose } from 'react-apollo';
 import Headroom from 'react-headroom';
 import { Link } from 'react-router-dom';
@@ -9,11 +8,9 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 
 // components
-import NavBarHeader from './NavBarHeader';
 import CommentarySearchToolbar from '../../../../modules/search/components/CommentarySearchToolbar';
 import CommentarySearchPanel from '../../../../modules/search/components/CommentarySearchPanel';
 import ProfileAvatarButton from '../../../../modules/users/components/ProfileAvatarButton';
-import UserAvatarContainer from '../../../../modules/users/containers/UserAvatarContainer';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -201,16 +198,10 @@ class NavBar extends React.Component {
 
 		const {
 			filters, isOnHomeView, toggleSearchTerm, handleChangeTextsearch, handlePagination,
-			addCommentPage, selectedWork, toggleAuthModal, dispatchToggleLeftMenu, userId, logout,
+			addCommentPage, selectedWork, dispatchToggleLeftMenu, userId,
 			dispatchToggleAuthModal, roles
 		} = this.props;
-		const {
-			leftMenuOpen, rightMenuOpen, searchEnabled, modalLoginLowered, settings,
-			tenant,
-		} = this.state;
-
-		const modalSignupLowered = this.state.modalSignupLowered || this.props.showSignup;
-		const modalForgotPwdLowered = this.state.modalForgotPwdLowered || this.props.showForgotPwd;
+		const { rightMenuOpen, searchEnabled, settings, tenant } = this.state;
 
 		return (
 			<Headroom className="navbar">

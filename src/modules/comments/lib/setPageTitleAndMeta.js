@@ -29,6 +29,8 @@ const setPageTitleAndMeta = (filters, settings, commentGroups, worksQuery) => {
 		case 'passage':
 			passage = filter.values[0];
 			break;
+		default:
+			break;
 		}
 	});
 

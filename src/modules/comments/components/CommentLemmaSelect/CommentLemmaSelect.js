@@ -1,14 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { compose } from 'react-apollo';
-import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-
+import PropTypes from 'prop-types';
 // graphql
 import { editionsQuery } from '../../../../graphql/methods/editions';
-
-// lib:
-import Utils from '../../../../lib/utils';
-
 
 class CommentLemmaSelect extends Component {
 

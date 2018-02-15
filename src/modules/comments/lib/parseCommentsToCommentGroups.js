@@ -1,6 +1,5 @@
 import _ from 'underscore';
 
-import Utils from '../../../lib/utils';
 import getCommentGroupId from './getCommentGroupId';
 
 

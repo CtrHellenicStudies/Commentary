@@ -15,9 +15,6 @@ import keywordInsertMutation from '../../graphql/mutations/keywordsInsert';
 // components:
 import Header from '../../../../components/navigation/Header';
 import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
-import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
-import AddKeyword from '../../components/AddKeyword/AddKeyword';
-import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -219,9 +216,8 @@ class AddKeywordLayout extends Component {
 		});
 	}
 	render() {
-		const { filters, textNodes, work, selectedTextNodes, filter } = this.state;
+		const { filters, work, } = this.state;
 		const { isTest } = this.props;
-		let lineFrom;
 		let textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
 		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');

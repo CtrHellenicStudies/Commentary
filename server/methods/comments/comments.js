@@ -22,6 +22,8 @@ const commentsInsert = (token, comment) => {
 	const roles = ['editor', 'admin', 'commenter'];
 	const user = getAuthorizedUser(roles, token);
 
+	comment.revisions[0].created = new Date().toISOString();
+
 	// add comment to db
 	let commentId;
 	try {
@@ -306,6 +308,7 @@ const commentsAddRevision = (token, commentId, revision) => {
 
 	const revisionId = Random.id();
 	revision._id = revisionId;
+	revision.created = new Date().toISOString();
 
 	try {
 		Comments.update({

@@ -48,6 +48,9 @@ const serializeUrn = (value, type) => {
 		value.passage.forEach((passage, i) => {
 			if (i !== 0) {
 				result = `${result}-`;
+				if (value.passage[0].join('.') === passage.join('.')) {
+					return;
+				}
 			}
 			result = `${result}${passage.join('.')}`;
 		});
@@ -55,7 +58,7 @@ const serializeUrn = (value, type) => {
 		result = `${result}:`;
 		result = `${result}${value.passageFrom.join('.')}`;
 
-		if ('passageTo' in value && value.passageTo) {
+		if ('passageTo' in value && value.passageTo && value.passageFrom.join('.') !== value.passageTo.join('.')) {
 			result = `${result}-${value.passageTo.join('.')}`;
 		}
 	}

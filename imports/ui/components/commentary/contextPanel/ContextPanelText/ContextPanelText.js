@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
+import $ from 'jquery';
 
 /*
 	BEGIN helpers
@@ -140,8 +141,15 @@ class ContextPanelText extends React.Component {
 
 			const { selectedLineFrom, selectedLineTo, updateSelectedLines } = this.props;
 
-			const target = event.target;
-			const id = parseInt(target.id, 10);
+			let target = event.target;
+			let id = null;
+			if (!~event.target.className.indexOf('lemma-text')) {
+				// This is the most simple way to do this, despite any objections to its dependency
+				target = $(event.target).parent('.lemma-text');
+				id = parseInt(target[0].id);
+			} else {
+				id = parseInt(target.id, 10);
+			}
 			if (selectedLineFrom === 0) {
 				updateSelectedLines(id, null);
 			} else if (id === selectedLineFrom && selectedLineTo === 0) {

@@ -91,19 +91,21 @@ class CommentarySearchPanel extends Component {
 		let commenters = [];
 		let referenceWorks = [];
 
-		if(nextProps.editionsQuery.loading||
+		if (
+			nextProps.editionsQuery.loading ||
 			nextProps.keywordsQuery.loading ||
 			nextProps.commentersQuery.loading ||
-			nextProps.referenceWorksQuery.loading) {
-				return;
-			}
+			nextProps.referenceWorksQuery.loading
+		)
+		{
+			return;
+		}
 
 		// FETCH DATA:
 		keyideas = nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea');
 		keywords = nextProps.keywordsQuery.keywords.filter(x => x.type === 'word');
 		commenters = nextProps.commentersQuery.commenters;
-		works = nextProps.editionsQuery.works.find(x => x.urn.split(':')[3].split('.')[0] === 'tlg0012');
-		console.log(works);
+		works = nextProps.editionsQuery.works;
 		referenceWorks = nextProps.referenceWorksQuery.referenceWorks;
 
 		this.setState({
@@ -116,7 +118,7 @@ class CommentarySearchPanel extends Component {
 	}
 	render() {
 		const self = this;
-		const { isTest, handlePagination } = this.props;
+		const { handlePagination } = this.props;
 		const { keyideas, keywords, commenters, works, referenceWorks } = this.state;
 		const filters = this.props.filters || [];
 
@@ -176,14 +178,12 @@ class CommentarySearchPanel extends Component {
 				style={styles.drawer}
 			>
 				<div className="search-tool text-search text-search--drawer">
-					{!isTest ?
-						<TextField
-							hintText=""
-							floatingLabelText="Search"
-							fullWidth
-							onChange={_.debounce(this.handleChangeTextsearch, 300)}
-						/>
-					: ''}
+					<TextField
+						hintText=""
+						floatingLabelText="Search"
+						fullWidth
+						onChange={_.debounce(this.handleChangeTextsearch, 300)}
+					/>
 				</div>
 
 				<WorksCard

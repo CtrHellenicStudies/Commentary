@@ -58,7 +58,7 @@ const FilterWidget = ({ filters, toggleSearchTerm }) => (
 );
 FilterWidget.propTypes = {
 	filters: PropTypes.array.isRequired,
-	toggleSearchTerm: PropTypes.func.isRequired,
+	toggleSearchTerm: PropTypes.func,
 };
 
 export default compose(commentersQuery)(FilterWidget);

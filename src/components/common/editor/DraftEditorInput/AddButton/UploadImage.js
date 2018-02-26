@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
-import { Slingshot } from 'meteor/edgee:slingshot';
 import DropZone from 'react-dropzone';
-import { Meteor } from 'meteor/meteor';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { sendSnack } from '/imports/ui/components/shared/components/SnackAttack/SnackAttack';
@@ -46,7 +44,7 @@ export default class AvatarEditor extends React.Component {
 	render() {
 		return (
 			<DropZone className="draft-editor-dropzone" onDrop={this.onDrop} multiple={false} accept={'image/*'}>
-				<RaisedButton className="draft-add-video-confirm-button" onClick={this.addVideo}>Upload image</RaisedButton>                
+				<RaisedButton className="draft-add-video-confirm-button" onClick={this.addVideo}>Upload image</RaisedButton>
 			</DropZone>
 		);
 	}

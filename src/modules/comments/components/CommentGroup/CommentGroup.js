@@ -46,6 +46,7 @@ class CommentGroup extends Component {
 		if (contextPanelOpen) {
 			commentsClass += 'lemma-panel-visible';
 		}
+		
 		// TODO: use work from query
 		// let workTitle = commentGroup.lemmaCitation.work;
 

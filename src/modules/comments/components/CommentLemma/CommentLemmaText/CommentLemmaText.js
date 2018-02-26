@@ -55,7 +55,7 @@ class CommentLemmaText extends Component {
 						</span>
 						<p
 							className="lemma-text"
-							dangerouslySetInnerHTML={{ __html: textNodes[i].html }}
+							dangerouslySetInnerHTML={{ __html: textNodes[i].text }}
 						/>
 					</div>
 				);
@@ -94,7 +94,7 @@ class CommentLemmaText extends Component {
 							</span>
 							<p
 								className="lemma-text"
-								dangerouslySetInnerHTML={{ __html: textNode.html }}
+								dangerouslySetInnerHTML={{ __html: textNode.text }}
 							/>
 						</div>
 					);
@@ -106,7 +106,7 @@ class CommentLemmaText extends Component {
 
 CommentLemmaText.propTypes = {
 	textNodes: PropTypes.arrayOf(PropTypes.shape({
-		html: PropTypes.string.isRequired,
+		text: PropTypes.string.isRequired,
 		location: PropTypes.arrayOf(PropTypes.number.isRequired),
 	})).isRequired,
 };

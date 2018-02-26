@@ -100,7 +100,9 @@ class CommentLemma extends Component {
 	}
 
 	render() {
-		const { commentGroup, versions, selectedLemmaVersion, translations, hideLemma } = this.props;
+		const {
+			commentGroup, versions, selectedLemmaVersion, translations, hideLemma,
+		} = this.props;
 		const { showTranslation } = this.state;
 
 		return (

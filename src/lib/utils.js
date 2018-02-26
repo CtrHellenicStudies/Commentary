@@ -300,31 +300,33 @@ const Utils = {
 
 		// split textnodes by version
 		textNodes.forEach((textNode) => {
-			// check if not version in textnode
-			if (!textNode.version || !textNode.version.id) {
 
+			// check if not version in textnode (should be fixed in textserver)
+			if (!textNode.version || !textNode.version.id) {
+				// if not version on textnode, just add it to the default version
 				if (versions.length) {
 					versions[0].textNodes.push({
 						id: textNode.id,
-						html: textNode.text,
+						text: textNode.text,
 						location: textNode.location,
 						index: textNode.index,
 					});
 				} else {
+					// add default version
 					versions.push({
 						id: 1,
 						title: "",
 						language: textNode.language,
 						textNodes: [{
 							id: textNode.id,
-							html: textNode.text,
+							text: textNode.text,
 							location: textNode.location,
 							index: textNode.index,
 						}],
 						// TODO add multiLine support to version with : textNode.version.multiLine
 					});
 				}
-
+				// pass
 				return;
 			}
 
@@ -336,7 +338,7 @@ const Utils = {
 			if (textNodeVersion) {
 				textNodeVersion.textNodes.push({
 					id: textNode.id,
-					html: textNode.text,
+					text: textNode.text,
 					location: textNode.location,
 					index: textNode.index,
 				});
@@ -344,7 +346,7 @@ const Utils = {
 			} else if (textNodeTranslation) {
 				textNodeTranslation.textNodes.push({
 					id: textNode.id,
-					html: textNode.text,
+					text: textNode.text,
 					location: textNode.location,
 					index: textNode.index,
 				});
@@ -353,8 +355,12 @@ const Utils = {
 				textNodeVersion = {
 					...textNode.version,
 					language: textNode.language,
-					textNodes: [],
-
+					textNodes: [{
+						id: textNode.id,
+						text: textNode.text,
+						location: textNode.location,
+						index: textNode.index,
+					}],
 					// TODO add multiLine support to version with : textNode.version.multiLine
 				};
 

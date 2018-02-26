@@ -320,14 +320,6 @@ class NavBar extends React.Component {
 										addCommentPage={addCommentPage}
 										selectedWork={selectedWork}
 									/>
-									<div className="search-toggle">
-										<IconButton
-											className="search-button"
-											onClick={this.toggleSearchMode}
-											iconClassName="material-icons">
-											search
-										</IconButton>
-									</div>
 								</div>
 							</div>
 						</div>

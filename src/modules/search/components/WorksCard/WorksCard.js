@@ -37,17 +37,17 @@ const WorksCard = ({ works, toggleWorkSearchTerm, styles, filters }) => (
 		</CardText>
 	</Card>
 );
+
 WorksCard.propTypes = {
 	works: PropTypes.arrayOf(PropTypes.shape({
-		_id: PropTypes.string.isRequired,
-		title: PropTypes.string.isRequired,
+		id: PropTypes.number.isRequired,
+		english_title: PropTypes.string.isRequired,
 		slug: PropTypes.string.isRequired,
 	})),
-	//...cardPropTypes,
 };
+
 WorksCard.defaultProps = {
 	works: [],
-	//...cardDefaultProps,
 };
 /*
 	END WorksCard

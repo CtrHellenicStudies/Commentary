@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class BookAndChapterPager extends Component {
+
+/**
+ * Location browser allows a user to browse through a work using arrow keys
+ * For each work it should represent the document structure of that work, for
+ * example, if a work's document structure (in the XML called RefsDecl) is
+ * Book-Chapter, this component should allow a user to browse by Book and Chapter.
+ * If a work's document structure is Book-Chapter-Section, it should allow a
+ * user to browse by Book, Chapter, and Section.
+ */
+export default class LocationBrowser extends Component {
 
     constructor(props) {
         super(props);
@@ -25,7 +34,7 @@ export default class BookAndChapterPager extends Component {
     increaseEdition() {
 
         const { edition, chapter } = this.state;
-        this.props.updateTextInformations(
+        this.props.updateTextLocation(
             edition + 1,
             chapter
         );
@@ -36,7 +45,7 @@ export default class BookAndChapterPager extends Component {
     increaseChapter() {
 
         const { edition, chapter } = this.state;
-        this.props.updateTextInformations(
+        this.props.updateTextLocation(
             edition,
             chapter + 1,
         );
@@ -47,7 +56,7 @@ export default class BookAndChapterPager extends Component {
     decreaseEdition() {
 
         const { edition, chapter } = this.state;
-        this.props.updateTextInformations(
+        this.props.updateTextLocation(
             Math.max(1, edition - 1),
             chapter
         );
@@ -58,7 +67,7 @@ export default class BookAndChapterPager extends Component {
     decreaseChapter() {
 
         const { edition, chapter } = this.state;
-        this.props.updateTextInformations(
+        this.props.updateTextLocation(
             edition,
             Math.max(1, chapter - 1)
         );
@@ -94,8 +103,9 @@ export default class BookAndChapterPager extends Component {
         );
     }
 }
-BookAndChapterPager.propTypes = {
+
+LocationBrowser.propTypes = {
     maxChapter: PropTypes.number,
     maxEdition: PropTypes.number,
-    updateTextInformations: PropTypes.func.isRequired
+    updateTextLocation: PropTypes.func,
 };

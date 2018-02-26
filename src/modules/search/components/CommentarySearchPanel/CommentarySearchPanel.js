@@ -1,10 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-
 import { compose } from 'react-apollo';
 import _ from 'lodash';
-
 import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -18,7 +16,7 @@ import { editionsQuery } from '../../../../graphql/methods/editions';
 // components
 import SearchTermButtonPanel from '../SearchTermButtonPanel';
 import WorksCard from '../WorksCard';
-import BookAndChapterPager from '../BookAndChapterPages';
+import LocationBrowser from '../LocationBrowser';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -241,9 +239,9 @@ class CommentarySearchPanel extends Component {
 					/>
 					<CardText expandable style={styles.wrapper}>
 						<div style={styles.lineSearch} className="line-search">
-							<BookAndChapterPager
+							<LocationBrowser
 								work={this.state.activeWork}
-								updateTextInformations={handlePagination} />
+								updateTextLocation={handlePagination} />
 						</div>
 					</CardText>
 				</Card>

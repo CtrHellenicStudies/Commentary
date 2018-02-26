@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import TextField from 'material-ui/TextField';
 import _ from 'lodash';
 import { compose } from 'react-apollo';
 
@@ -18,7 +18,7 @@ import KeyideasDropdown from '../KeyideasDropdown';
 import CommentatorsDropdown from '../CommentatorsDropdown';
 import ReferenceDropdown from '../ReferenceDropdown';
 import WorksDropdown from '../WorksDropdown';
-import BookAndChapterPages from '../BookAndChapterPages';
+import LocationBrowser from '../LocationBrowser';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -150,7 +150,7 @@ class CommentarySearchToolbar extends Component {
 
 		return (
 			<span>
-				{/* {!addCommentPage ?
+				{!addCommentPage ?
 					<div className="search-tool text-search text-search--header">
 						<TextField
 							hintText=""
@@ -158,7 +158,7 @@ class CommentarySearchToolbar extends Component {
 							onChange={this.handleChangeTextsearch}
 						/>
 					</div>
-				: '' } */}
+				: '' }
 
 				{!addCommentPage &&
 					<KeywordsDropdown
@@ -207,8 +207,8 @@ class CommentarySearchToolbar extends Component {
 					style={{padding: '10px 20px' }}
 					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
 				>
-					<BookAndChapterPages
-						updateTextInformations={handlePagination}
+					<LocationBrowser
+						updateTextLocation={handlePagination}
 					/>
 					<div className="disabled-screen" />
 				</div>
@@ -220,14 +220,13 @@ class CommentarySearchToolbar extends Component {
 						toggle={this.toggleMoreDropdown}
 						disabled={false}
 					>
-						{/* <div className="search-tool text-search">
+						<div className="search-tool text-search">
 							<TextField
 								hintText=""
 								floatingLabelText="Search"
 								onChange={this.handleChangeTextsearch}
 							/>
-						</div> */}
-
+						</div>
 						<KeywordsDropdown
 							keywords={keywords}
 							searchDropdownOpen={searchDropdownOpen}
@@ -271,11 +270,10 @@ class CommentarySearchToolbar extends Component {
 */
 CommentarySearchToolbar.propTypes = {
 	filters: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
-	toggleSearchTerm: PropTypes.func.isRequired,
+	toggleSearchTerm: PropTypes.func,
 	handleChangeTextsearch: PropTypes.func,
-	handlePagination: PropTypes.func.isRequired,
-	addCommentPage: PropTypes.bool.isRequired,
-	isTest: PropTypes.bool,
+	handlePagination: PropTypes.func,
+	addCommentPage: PropTypes.bool,
 	selectedWork: PropTypes.object,
 	editionsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,

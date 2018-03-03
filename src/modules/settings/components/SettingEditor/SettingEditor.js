@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm } from 'redux-form';
-
-
+import { Field, reduxForm } from 'redux-form';
+import { required, maxLength } from '../../../../lib/formHelpers';
 import TextSelectorContainer from '../../containers/TextSelectorContainer';
 
 
-//
+const maxLength200 = maxLength(200);
+
 
 
 class SettingEditor extends React.Component {
@@ -17,12 +17,44 @@ class SettingEditor extends React.Component {
 		return (
 			<div className="settingEditor">
 
-				<h1>Configure texts included in this commentary</h1>
+				<h1>Configure settings for this commentary</h1>
 
 				<form
-					className="settingEditorForm"
+					className="chsForm settingEditorForm"
 					onSubmit={this.props.handleSubmit}
 				>
+
+					<div className="chsFormInputOuter settingFormInputOuter">
+						<label>What is your Commentary&apos;s title?</label>
+						<Field
+							name="title"
+							type="text"
+							component="input"
+							placeholder="Your Commentary&apos;s title . . ."
+							validate={[required, maxLength200]}
+						/>
+						<span
+							className="chsFormHelp settingsFormHelp"
+						>
+							?
+						</span>
+					</div>
+
+					<div className="chsFormInputOuter settingsFormInputOuter">
+						<label>What is your Commentary&apos;s subtitle?</label>
+						<Field
+							name="title"
+							type="text"
+							component="input"
+							placeholder="Your Commentary&apos;s subtitle . . ."
+							validate={[required, maxLength200]}
+						/>
+						<span
+							className="chsFormHelp settingsFormHelp"
+						>
+							?
+						</span>
+					</div>
 
 					<TextSelectorContainer
 						collectionId={collection}

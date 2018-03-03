@@ -54,6 +54,8 @@ class TextSelector extends React.Component {
 
 		return (
 			<div className="textSelector">
+				<label>Choose works to be included in this Commentary</label>
+
 				<div className="textSelectorFormInputOuter">
 					<div className="textSelectorSelectField">
 						<SelectField

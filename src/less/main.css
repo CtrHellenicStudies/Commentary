@@ -10698,6 +10698,35 @@ div.tooltip {
 .draft-button-container {
   display: flex;
 }
+.chsFormInputOuter {
+  margin: 50px 0;
+}
+.chsFormInputOuter label {
+  font-size: 14px;
+  display: block;
+}
+.chsFormInputOuter input {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 38px;
+  font-family: 'Merriweather', serif;
+  font-weight: 100;
+  color: #1e1e1e;
+  border: none;
+  border-bottom: 2px solid #eee;
+  padding: 15px 15px 5px 15px;
+  margin: 20px 0;
+  outline: none;
+  width: 90%;
+  max-width: 660px;
+  text-align: left;
+}
+.chsFormInputOuter input:focus {
+  outline: none;
+}
+.chsFormInputOuter input::placeholder {
+  color: #bbb;
+}
 header .active-comment-meta {
   margin-top: 5px;
 }
@@ -10784,7 +10813,7 @@ header .line-wrap .line-ref {
 }
 .comment-group-meta {
   text-align: right;
-  padding: 40px 0;
+  padding: 0;
   display: inline-block;
   vertical-align: top;
   width: 10%;

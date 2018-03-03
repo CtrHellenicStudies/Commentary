@@ -21,33 +21,7 @@ class MainLayout extends Component {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
 
-	componentWillUpdate() {
-		this.handlePermissions();
-	}
-	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
-	}
-	showSnackBar(error) {
-		this.setState({
-			snackbarOpen: error.errors,
-			snackbarMessage: error.errorMessage,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-			});
-		}, 4000);
-	}
-
-	// --- BEGNI PERMISSIONS HANDLE --- //
-	handlePermissions() {
-		if (!Utils.userInRole(Cookies.get('user')._id, ['editor', 'admin', 'commenter'])) {
-			// this.props.history.push('/');
-		}
-	}
-
 	render() {
-
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout chs-editor-layout add-comment-layout">

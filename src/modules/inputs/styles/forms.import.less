@@ -1,0 +1,35 @@
+@import '../../../less/variables.import.less';
+
+.chsFormInputOuter {
+	margin: 50px 0;
+
+	label {
+		font-size: 14px;
+		display: block;
+	}
+
+	input {
+		display: inline-block;
+		vertical-align: top;
+		font-size: 38px;
+		font-family: @font-reading;
+		font-weight: 100;
+		color: @dark;
+		border: none;
+		border-bottom: 2px solid @divider-light;
+		padding: 15px 15px 5px 15px;
+		margin: 20px 0;
+		outline: none;
+		width: 90%;
+		max-width: 660px;
+		text-align: left;
+
+		&:focus {
+			outline: none;
+		}
+
+		&::placeholder {
+			color: #bbb;
+		}
+	}
+}

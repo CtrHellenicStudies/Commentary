@@ -63,6 +63,7 @@ font-family:'Proxima Nova W07 Semibold';
 font-family:'Proxima Nova W07 Bold';
 font-family:'Proxima Nova W07 Extrabold';
 font-family:'Proxima Nova W07 Black';
+font-family:'Proxima Nova A W07 Light';
 
 =================================
 Material Design Icons
@@ -90,13 +91,6 @@ font-family: "Material Design Icons";
 2.4 Material Design Icons
 
 ******************************************************************************/
-@font-face {
-  font-family: "Material Design Icons";
-  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
-  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
 /******************************************************************************
 
 3. Mixins
@@ -488,7 +482,7 @@ font-family: "Material Design Icons";
     padding-top: 5px;
   }
   .comment-group-meta .comment-group-ref-above {
-    font-family: 'Proxima Nova', sans-serif;
+    font-family: 'ProximaNW01-AltLightReg', sans-serif;
     font-size: 22px;
     line-height: 1.4em;
     display: inline-block;
@@ -506,7 +500,7 @@ font-family: "Material Design Icons";
     content: ".";
   }
   .comment-group-meta h2.comment-group-ref-below {
-    font-family: 'Proxima Nova', sans-serif;
+    font-family: 'ProximaNW01-AltLightReg', sans-serif;
     font-size: 22px;
     line-height: 1.4em;
     display: inline-block;
@@ -571,7 +565,7 @@ font-family: "Material Design Icons";
   .discussion-wrap .continue-discussion h4.continue-discussion-label {
     font-size: 18px;
     font-weight: bold;
-    font-family: 'Proxima Nova', sans-serif;
+    font-family: 'Proxima Nova W15 Medium', sans-serif;
     display: inline-block;
     text-transform: uppercase;
     color: #727272;

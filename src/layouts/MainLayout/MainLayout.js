@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -14,7 +13,7 @@ import { login, register, logoutUser, verifyToken } from '../../lib/auth';
 
 // lib
 import muiTheme from '../../lib/muiTheme';
-import Utils from '../../lib/utils';
+
 
 class MainLayout extends Component {
 	getChildContext() {

@@ -1,30 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { required, maxLength } from '../../../../lib/formHelpers';
-import TextSelectorContainer from '../../containers/TextSelectorContainer';
 
+import { required, maxLength } from '../../../../lib/formHelpers';
+
+import Modal from '../../../../components/common/modal/Modal';
+import WorkSelectorContainer from '../../containers/WorkSelectorContainer';
+import CommentaryWorksContainer from '../../containers/CommentaryWorksContainer';
+
+import './SettingEditor.import.css';
+import '../../../inputs/styles/forms.import.css';
 
 const maxLength200 = maxLength(200);
 
 
-
 class SettingEditor extends React.Component {
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			showWorkSelectorModal: false,
+		};
+	}
+
+	toggleWorkSelectorModal()  {
+		this.setState({
+			showWorkSelectorModal: !this.state.showWorkSelectorModal,
+		});
+	}
 
 	render() {
 		const { collection, settingGroup, work } = this.props;
+		const { showWorkSelectorModal } = this.state;
 
 		return (
-			<div className="settingEditor">
-
-				<h1>Configure settings for this commentary</h1>
+			<div className="settingsEditor">
+				<h1>Settings</h1>
 
 				<form
-					className="chsForm settingEditorForm"
+					className="chsForm settingsEditorForm"
 					onSubmit={this.props.handleSubmit}
 				>
 
-					<div className="chsFormInputOuter settingFormInputOuter">
+					<div className="chsFormInputOuter settingsFormInputOuter">
 						<label>What is your Commentary&apos;s title?</label>
 						<Field
 							name="title"
@@ -43,32 +62,44 @@ class SettingEditor extends React.Component {
 					<div className="chsFormInputOuter settingsFormInputOuter">
 						<label>What is your Commentary&apos;s subtitle?</label>
 						<Field
-							name="title"
-							type="text"
-							component="input"
+							name="subtitle"
+							component="textarea"
 							placeholder="Your Commentary&apos;s subtitle . . ."
 							validate={[required, maxLength200]}
 						/>
+					</div>
+
+					<div className="chsFormInputOuter settingsFormInputOuter">
+						<label>Manage works included in this Commentary</label>
 						<span
 							className="chsFormHelp settingsFormHelp"
 						>
 							?
 						</span>
+
+						<CommentaryWorksContainer
+							toggleWorkSelectorModal={this.toggleWorkSelectorModal}
+						/>
 					</div>
 
-					<TextSelectorContainer
-						collectionId={collection}
-						settingGroupUrn={settingGroup}
-						workUrn={work}
-						handleSelectCollection={this.props.handleSelectCollection}
-						handleSelectSettingGroup={this.props.handleSelectSettingGroup}
-						handleSelectWork={this.props.handleSelectWork}
-					/>
+					<Modal
+						show={showWorkSelectorModal}
+						closeModal={this.toggleWorkSelectorModal}
+					>
+						<WorkSelectorContainer
+							collectionId={collection}
+							settingGroupUrn={settingGroup}
+							workUrn={work}
+							handleSelectCollection={this.props.handleSelectCollection}
+							handleSelectSettingGroup={this.props.handleSelectSettingGroup}
+							handleSelectWork={this.props.handleSelectWork}
+						/>
+					</Modal>
 
 					<button
 						type="submit"
 						className={`
-							settingEditorButton
+							chsFormButton settingsEditorButton
 						`}
 					>
 						Save

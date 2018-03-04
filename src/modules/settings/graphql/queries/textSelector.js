@@ -2,7 +2,7 @@ import { gql, graphql } from 'react-apollo';
 
 
 const query = gql`
-	query textSelectorQuery($collectionId: Int, $textGroupUrn: String) {
+	query textSelectorQuery($collectionId: Int, $textGroupUrn: CtsUrn) {
 		collections {
 	    id
 	    urn
@@ -18,6 +18,7 @@ const query = gql`
 				id
 				urn
 				title
+				
 				works {
 					id
 					urn

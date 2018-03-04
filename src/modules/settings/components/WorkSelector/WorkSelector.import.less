@@ -1,31 +1,13 @@
 @import '../../../../less/variables.import.less';
 
 .textSelector {
-	padding: 0;
-	max-width: 990px;
-	margin: 0 auto;
+	width: 100%;
 
-	h1 {
-		color: @dark;
-		font-size: 48px;
-		margin-top: 90px;
-	}
-
-	hr {
-		max-width: 120px;
-		width: 90%;
-		margin: 20px 0;
-		height: 3px;
-		background: @divider;
-		border: none;
-		outline: none;
-		display: none;
-	}
-
-	.textNameAvailabilityFormURLOuterDisabled {
-		input, .textNameAvailabilityFormURL {
-			opacity: 0.4;
-		}
+	label {
+		font-size: 16px;
+    font-family: @font-label;
+    font-weight: bold;
+		display: block;
 	}
 }
 
@@ -38,41 +20,6 @@
 	align-items: left;
 	justify-content: center;
 
-	label {
-		font-size: 14px;
-		display: block;
-	}
-
-	input, textarea {
-		display: inline-block;
-		vertical-align: top;
-		font-size: 38px;
-		font-family: @font-reading;
-		font-weight: 100;
-		color: @dark;
-		border: none;
-		border-bottom: 2px solid @divider;
-		padding: 15px 15px 5px 15px;
-		margin: 20px 0;
-		outline: none;
-		width: 90%;
-		max-width: 990px;
-		text-align: left;
-
-		&:focus {
-			outline: none;
-		}
-
-		&::placeholder {
-			color: #bbb;
-		}
-	}
-
-	textarea {
-		font-size: 22px;
-		line-height: 1.7em;
-		min-height: 180px;
-	}
 }
 
 .textSelectorSelectField {

@@ -63,6 +63,7 @@ font-family:'Proxima Nova W07 Semibold';
 font-family:'Proxima Nova W07 Bold';
 font-family:'Proxima Nova W07 Extrabold';
 font-family:'Proxima Nova W07 Black';
+font-family:'Proxima Nova A W07 Light';
 
 =================================
 Material Design Icons
@@ -90,13 +91,6 @@ font-family: "Material Design Icons";
 2.4 Material Design Icons
 
 ******************************************************************************/
-@font-face {
-  font-family: "Material Design Icons";
-  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
-  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
 /******************************************************************************
 
 3. Mixins

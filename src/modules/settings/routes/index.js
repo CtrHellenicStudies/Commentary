@@ -8,9 +8,11 @@ import MainLayout from '../../../layouts/MainLayout';
 import SettingEditorContainer from '../containers/SettingEditorContainer';
 
 
-// TODO: figure out better way of managing layout in react router 4
 export default (
-	<div>
-		<Route path="/settings" component={() => (<MainLayout><SettingEditorContainer /></MainLayout>)} />
-	</div>
+	<Route>
+		<div>
+			<Route path="/admin/" component={MainLayout} />
+			<Route path="/admin/settings" component={SettingEditorContainer} />
+		</div>
+	</Route>
 );

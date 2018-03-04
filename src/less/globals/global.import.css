@@ -66,6 +66,7 @@ font-family:'Proxima Nova W07 Semibold';
 font-family:'Proxima Nova W07 Bold';
 font-family:'Proxima Nova W07 Extrabold';
 font-family:'Proxima Nova W07 Black';
+font-family:'Proxima Nova A W07 Light';
 
 =================================
 Material Design Icons
@@ -93,13 +94,6 @@ font-family: "Material Design Icons";
 2.4 Material Design Icons
 
 ******************************************************************************/
-@font-face {
-  font-family: "Material Design Icons";
-  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
-  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
 /******************************************************************************
 
 3. Mixins
@@ -5949,7 +5943,7 @@ input,
 p,
 span,
 label {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   color: #212121;
 }
 body {
@@ -5967,7 +5961,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
 }
 a {
   color: #1e1e1e;
@@ -6080,25 +6074,25 @@ body > .container {
  */
 ::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 :-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 ::-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 :-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
@@ -6499,7 +6493,7 @@ button#at-btn {
   padding: 10px 15px;
   font-size: 18px;
   color: #1e1e1e;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   background: #fff;
   height: auto;
   border: 2px solid #aaa;
@@ -6513,7 +6507,7 @@ button#at-btn {
   color: #e31d3b;
   font-size: 16px;
   font-weight: bold;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
 }
 .md-tooltip {
   display: none;

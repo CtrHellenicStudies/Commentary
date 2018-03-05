@@ -3,10 +3,10 @@ import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
 
 import SettingEditor from '../../components/SettingEditor';
-// import settingDetailQuery from '../../graphql/queries/detail';
-// import settingCreateMutation from '../../graphql/mutations/create';
-// import settingUpdateMutation from '../../graphql/mutations/update';
-// import settingRemoveMutation from '../../graphql/mutations/remove';
+import tenantBySubdomainQuery from '../../../tenants/graphql/queries/tenantBySubdomain';
+import settingCreateMutation from '../../graphql/mutations/create';
+import settingUpdateMutation from '../../graphql/mutations/update';
+import settingRemoveMutation from '../../graphql/mutations/remove';
 
 
 class SettingEditorContainer extends React.Component {
@@ -76,10 +76,10 @@ class SettingEditorContainer extends React.Component {
 		// Get text from query
 		let settings;
 		if (
-			this.props.settingsQuery
-			&& this.props.settingsQuery.project
+			this.props.tenantQuery
+			&& this.props.tenantQuery.tenantBySubdomain
 		) {
-			settings = this.props.settingsQuery.project.settings;
+			settings = this.props.tenantQuery.tenantBySubdomain.settings;
 		}
 
 		return (
@@ -95,4 +95,6 @@ class SettingEditorContainer extends React.Component {
 }
 
 export default compose(
+	tenantBySubdomainQuery, settingCreateMutation, settingUpdateMutation,
+	settingRemoveMutation,
 )(SettingEditorContainer);

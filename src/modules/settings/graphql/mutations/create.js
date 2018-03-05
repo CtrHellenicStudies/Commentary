@@ -30,11 +30,6 @@ const settingsCreateMutation = graphql(settingsCreate, {
 	name: 'settingsCreateMutation',
 	options: {
 		refetchQueries: ['settingsQuery'],
-		update: (dataStore, submittedData) => {
-			const data = dataStore.readQuery({query: query});
-			data.settings.push(submittedData.data.settingsCreate);
-			dataStore.writeQuery({query: query, data});
-		}
 	}
 });
 

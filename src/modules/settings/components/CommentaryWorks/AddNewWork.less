@@ -1,0 +1,47 @@
+@import '../../../../less/variables.import.less';
+
+.addNewWork {
+  cursor: pointer;
+  background: #fefefe;
+  padding: 30px 0;
+  width: 210px;
+  height: 190px;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid @divider;
+  border-radius: 2px;
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.1);
+  .transition(all 100ms ease-in-out);
+
+  &:hover {
+    background: #ffffff;
+    box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.1);
+
+    i, label {
+      color: darken(@primary, 10%);
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  i {
+    color: @primary;
+    margin: 20px auto;
+    display: block;
+    .transition(all 100ms ease-in-out);
+
+    &:before {
+      font-size: 56px;
+    }
+  }
+
+  label {
+    font-size: 14px !important;
+    color: @primary;
+    text-transform: uppercase;
+    font-family: @font-label;
+    .transition(all 100ms ease-in-out);
+  }
+}

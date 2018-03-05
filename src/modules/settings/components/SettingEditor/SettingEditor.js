@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
+import autoBind from 'react-autobind';
 
 import { required, maxLength } from '../../../../lib/formHelpers';
 
@@ -22,6 +23,7 @@ class SettingEditor extends React.Component {
 		this.state = {
 			showWorkSelectorModal: false,
 		};
+		autoBind(this);
 	}
 
 	toggleWorkSelectorModal()  {
@@ -44,7 +46,9 @@ class SettingEditor extends React.Component {
 				>
 
 					<div className="chsFormInputOuter settingsFormInputOuter">
-						<label>What is your Commentary&apos;s title?</label>
+						<label>
+							What is your Commentary&apos;s title?
+						</label>
 						<Field
 							name="title"
 							type="text"
@@ -52,15 +56,12 @@ class SettingEditor extends React.Component {
 							placeholder="Your Commentary&apos;s title . . ."
 							validate={[required, maxLength200]}
 						/>
-						<span
-							className="chsFormHelp settingsFormHelp"
-						>
-							?
-						</span>
 					</div>
 
 					<div className="chsFormInputOuter settingsFormInputOuter">
-						<label>What is your Commentary&apos;s subtitle?</label>
+						<label>
+							What is your Commentary&apos;s subtitle?
+						</label>
 						<Field
 							name="subtitle"
 							component="textarea"
@@ -70,13 +71,9 @@ class SettingEditor extends React.Component {
 					</div>
 
 					<div className="chsFormInputOuter settingsFormInputOuter">
-						<label>Manage works included in this Commentary</label>
-						<span
-							className="chsFormHelp settingsFormHelp"
-						>
-							?
-						</span>
-
+						<label>
+							Manage works included in this Commentary
+						</label>
 						<CommentaryWorksContainer
 							toggleWorkSelectorModal={this.toggleWorkSelectorModal}
 						/>

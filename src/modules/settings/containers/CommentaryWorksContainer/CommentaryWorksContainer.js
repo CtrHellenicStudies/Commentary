@@ -4,13 +4,14 @@ import { compose } from 'react-apollo';
 import CommentaryWorks from '../../components/CommentaryWorks';
 
 
-const CommentaryWorksContainer = props => {
+const CommentaryWorksContainer = ({ toggleWorkSelectorModal, worksQuery }) => {
 
   let works = [];
 
   return (
     <CommentaryWorks
       works={works}
+      toggleWorkSelectorModal={toggleWorkSelectorModal}
     />
   );
 }

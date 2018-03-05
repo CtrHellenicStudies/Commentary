@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import { Card } from 'material-ui/Card';
-// import IconButton from 'material-ui/IconButton';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import _s from 'underscore.string';
@@ -13,68 +12,34 @@ import './WorkTeaser.css';
 
 // Work Teaser
 class WorkTeaser extends React.Component {
-
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			// isInShelf: false,
-		};
-		autoBind(this);
-	}
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
 	}
 
-	toggleShelf(isChecked) {
-		this.setState({
-			// isInShelf: !this.state.isInShelf,
-		});
-	}
-
 	render() {
-		const work = this.props.work;
+		const { work } = this.props;
 		const workUrl = `/texts/${work.id}/${work.slug}`;
-
-		/*
-		// let isInShelf = this.props.isInShelf;
-		if (this.state.isInShelf) {
-			isInShelf = this.state.isInShelf;
-		}
-		*/
 
 		return (
 			<Card
-				className="work-teaser"
+				className="workTeaser"
 			>
-
-				<div className="card-meta-left">
-					{/*
-					<IconButton
-						tooltip="Add to Your Library"
-						tooltipPosition="top-center"
-						className={`icon-favorite-button ${isInShelf ? 'in-user-shelf' : ''}`}
-						iconClassName="mdi mdi-book-open-variant"
-						onClick={this.toggleShelf.bind(this, isInShelf)}
-					/>
-					*/}
-
-					<div className="card-meta-items">
+				<div className="cardMetaLeft">
+					<div className="cardMetaItems">
 						{work.language ?
-							<span className="card-meta card-meta-left-language">
+							<span className="cardMeta cardMetaLeftLanguage">
 								{work.language.title}
 							</span>
 						: ''}
 						{work.date ?
-							<span className="card-meta card-meta-left-date">
+							<span className="cardMeta cardMetaLeftDate">
 								{work.date}
 							</span>
 						:
 							''
 						}
 						{work.translation ?
-							<span className="card-meta card-meta-left-corpus">
+							<span className="cardMeta cardMetaLeftCorpus">
 								{_s.prune(work.translation.title, 30)}
 							</span>
 						: ''}
@@ -83,12 +48,12 @@ class WorkTeaser extends React.Component {
 
 				<a
 					href={workUrl}
-					className="work-teaser-title"
+					className="workTeaserTitle"
 				>
 					<h3 >
 						{_s.prune(work.english_title, 40)}
 						{work.original_title && work.english_title !== work.original_title ?
-							<span className="work-teaser-original-title">
+							<span className="workTeaserOriginalTitle">
 								{_s.prune(work.original_title, 40)}
 							</span>
 							:
@@ -97,18 +62,18 @@ class WorkTeaser extends React.Component {
 					</h3>
 				</a>
 
-				<span className="work-teaser-version">
+				<span className="workTeaserVersion">
 					{work.version ? _s.prune(work.version.title, 90) : ''}
 				</span>
 
-				<div className="card-meta-bottom">
-					<span className="card-meta meta-count-commentary">
+				<div className="cardMetaBottom">
+					<span className="cardMeta metaCountCommentary">
 						{work.countComments || 0} Commentary
 					</span>
-					<span className="card-meta meta-count-translations">
+					<span className="cardMeta metaCountTranslations">
 						{work.countTranslations || 0} Translations
 					</span>
-					<span className="card-meta meta-count-annotations">
+					<span className="cardMeta metaCountAnnotations">
 						{work.countAnnotations || 0} Annotations
 					</span>
 				</div>

@@ -1,23 +1,31 @@
 import React from 'react';
-import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { updatePage } from '../../../actions/pagination';
 
 const PaginationFirst = props => (
-	<Link
-		to={{
-			pathname: '/',
-			query: {
-				...props.location.query,
-				page: props.page,
-			},
-		}}
+	<button
+		type="button"
+		onClick={props.updatePage.bind(this, props.page)}
 	>
 		<i className="mdi mdi-chevron-left" />
 		<span>
 			First
 		</span>
-	</Link>
+	</button>
 );
 
+const mapStateToProps = state => ({
+	activePage: state.pagination.page,
+});
 
-export default withRouter(PaginationFirst);
+const mapDispatchToProps = dispatch => ({
+	updatePage: (page) => {
+		dispatch(updatePage(page));
+	},
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(PaginationFirst);

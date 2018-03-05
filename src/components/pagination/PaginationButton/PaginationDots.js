@@ -1,11 +1,11 @@
 import React from 'react';
 
 const PaginationPage = props => (
-	<div>
+	<button disabled>
 		<span>
 			&hellip;
 		</span>
-	</div>
+	</button>
 );
 
 

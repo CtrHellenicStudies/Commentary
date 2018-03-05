@@ -19,7 +19,7 @@ class SearchResults extends React.Component {
 	}
 
 	render() {
-		const { works, total, page } = this.props;
+		const { works, total, page, handleUpdatePagination } = this.props;
 
 		return (
 			<div
@@ -41,7 +41,6 @@ class SearchResults extends React.Component {
 
 				<Pagination
 					total={total}
-					page={page}
 					limit={30}
 				/>
 			</div>

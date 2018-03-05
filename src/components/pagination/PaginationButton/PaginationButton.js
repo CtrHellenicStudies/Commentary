@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import PaginationPrev from './PaginationPrev';
 import PaginationPage from './PaginationPage';
 import PaginationNext from './PaginationNext';
@@ -11,7 +13,7 @@ import './PaginationButton.css';
 class PaginationButton extends React.Component {
 
 	renderButtonContent() {
-		const { prev, next, dots, page, first, last } = this.props;
+		const { prev, next, dots, page, first, last, activePage } = this.props;
 
 		if (prev) {
 			return <PaginationPrev page={page} />;
@@ -31,9 +33,9 @@ class PaginationButton extends React.Component {
 
 	render() {
 		const classes = [];
-		const { isActive } = this.props;
+		const { activePage, page } = this.props;
 
-		if (isActive) {
+		if (activePage && activePage === page) {
 			classes.push('isActive');
 		}
 
@@ -47,4 +49,10 @@ class PaginationButton extends React.Component {
 	}
 }
 
-export default PaginationButton;
+const mapStateToProps = state => ({
+	activePage: state.pagination.page,
+});
+
+export default connect(
+	mapStateToProps,
+)(PaginationButton);

@@ -1,23 +1,31 @@
 import React from 'react';
-import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-const PaginationNext = ({ location, page }) => (
-	<Link
-		to={{
-			pathname: '/',
-			query: {
-				...location.query,
-				page,
-			},
-		}}
+import { updatePage } from '../../../actions/pagination';
+
+const PaginationNext = ({ updatePage, location, activePage }) => (
+	<button
+		type="button"
+		onClick={updatePage.bind(this, activePage + 1)}
 	>
 		<span>
 			Next
 		</span>
 		<i className="mdi mdi-chevron-right" />
-	</Link>
+	</button>
 );
 
+const mapStateToProps = state => ({
+	activePage: state.pagination.page,
+});
 
-export default withRouter(PaginationNext);
+const mapDispatchToProps = dispatch => ({
+	updatePage: (page) => {
+		dispatch(updatePage(page));
+	},
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(PaginationNext);

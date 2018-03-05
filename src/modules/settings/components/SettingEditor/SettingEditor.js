@@ -93,12 +93,14 @@ class SettingEditor extends React.Component {
 					closeModal={this.toggleWorkSelectorModal}
 					innerFullWidth
 				>
-					<h3>
-						Select works for this Commentary
-					</h3>
-					<WorkSearchContainer
-						handleSelectWork={this.props.handleSelectWork}
-					/>
+					<div>
+						<h3>
+							Select works for this Commentary
+						</h3>
+						<WorkSearchContainer
+							handleSelectWork={this.props.handleSelectWork}
+						/>
+					</div>
 				</Modal>
 			</div>
 		);

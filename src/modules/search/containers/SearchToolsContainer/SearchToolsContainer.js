@@ -16,13 +16,6 @@ class SearchToolsContainer extends React.Component {
 
 
 	handleSubmit(values) {
-		this.props.router.push({
-			pathname: '/browse',
-			query: {
-				textsearch: values.textsearch,
-				language: values.language,
-			},
-		});
 	}
 
 	render() {
@@ -38,18 +31,10 @@ class SearchToolsContainer extends React.Component {
 			languages = this.props.languageListQuery.languages;
 		}
 
-		if (this.props.location.query) {
-			textsearch = this.props.location.query.textsearch;
-			language = this.props.location.query.language;
-		}
 
 		return (
 			<SearchTools
 				onSubmit={this.handleSubmit}
-				initialValues={{
-					textsearch,
-					language,
-				}}
 				languages={languages}
       />
 		);

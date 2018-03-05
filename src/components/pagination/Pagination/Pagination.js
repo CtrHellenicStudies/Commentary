@@ -1,7 +1,8 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
 import _ from 'underscore';
+import { connect } from 'react-redux';
+
 import PaginationButton from '../PaginationButton';
 
 import './Pagination.css';
@@ -15,7 +16,6 @@ const Pagination = ({ limit, total, location, page }) => {
 	if (numPages <= 1) {
 		return null;
 	}
-
 
 	const activePage = page || 1;
 
@@ -60,21 +60,12 @@ const Pagination = ({ limit, total, location, page }) => {
 					dots
 				/>
 			: ''}
-			{pages.map((_page) => {
-				let isActive = false;
-
-				if (activePage === _page) {
-					isActive = true;
-				}
-
-				return (
-					<PaginationButton
-						key={_page}
-						page={_page}
-						isActive={isActive}
-					/>
-				);
-			})}
+			{pages.map((_page) => (
+				<PaginationButton
+					key={_page}
+					page={_page}
+				/>
+			))}
 			{nextDots ?
 				<PaginationButton
 					dots
@@ -95,5 +86,10 @@ const Pagination = ({ limit, total, location, page }) => {
 	);
 };
 
+const mapStateToProps = state => ({
+	page: state.pagination.page,
+});
 
-export default withRouter(Pagination);
+export default connect(
+	mapStateToProps,
+)(Pagination);

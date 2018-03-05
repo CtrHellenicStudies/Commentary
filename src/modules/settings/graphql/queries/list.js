@@ -1,30 +1,35 @@
 import { gql, graphql } from 'react-apollo';
 
-import getCurrentProjectHostname from '../../../../lib/getCurrentProjectHostname';
-
-
 const query = gql`
-	query settingListQuery($hostname: String) {
-		project(hostname: $hostname) {
-	    _id
-			settings {
-				_id
-			  projectId
-			  ctsNamespace
-			  settingGroup
-			  work
-			}
-		}
-	}
+query settingsQuery {
+  settings {
+  _id
+  name
+  domain
+  title
+  subtitle
+  footer
+  emails
+  introBlocks {
+	  title
+	  text
+	  linkURL
+	  linkText
+  }
+  tenantId
+  webhooksToken
+  homepageCover
+  homepageIntroduction
+  homepageIntroductionImage
+  homepageIntroductionImageCaption
+  discussionCommentsDisabled
+  aboutURL
+  }
+}
 `;
 
-const settingListQuery = graphql(query, {
-	name: 'settingListQuery',
-	options: ({ params }) => ({
-		variables: {
-			hostname: getCurrentProjectHostname(),
-		}
-	}),
+const settingsQuery = graphql(query, {
+	name: 'settingsQuery'
 });
 
-export default settingListQuery;
+export default settingsQuery;

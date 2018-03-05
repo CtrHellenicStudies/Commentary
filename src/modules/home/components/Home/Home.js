@@ -13,7 +13,7 @@ import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 
 // components:
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';

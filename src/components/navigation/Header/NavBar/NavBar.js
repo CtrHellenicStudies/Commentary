@@ -17,7 +17,7 @@ import Utils from '../../../../lib/utils';
 
 // graphql
 import { tenantsQuery } from '../../../../graphql/methods/tenants';
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../../modules/settings/graphql/queries/list';
 
 // actions
 import { toggleLeftMenu } from '../../../../actions/leftMenu';

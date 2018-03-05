@@ -1,28 +1,41 @@
 import { gql, graphql } from 'react-apollo';
 
-import getCurrentProjectHostname from '../../../../lib/getCurrentProjectHostname';
 
-const settingCreate = gql`
-mutation settingCreate($hostname: String!, $setting: TextInputType!) {
-	settingCreate(hostname: $hostname, setting: $setting) {
-    _id
+const settingsCreate = gql`
+mutation settingsCreate($settings: SettingsInputType!) {
+	settingsCreate(settings: $settings) {
+		_id
+		name
+		domain
+		title
+		subtitle
+		footer
+		emails
+		tenantId
+		webhooksToken
+		homepageCover
+		homepageIntroduction
+		homepageIntroductionImage
+		homepageIntroductionImageCaption
+		discussionCommentsDisabled
+		aboutURL
+		}
 	}
-}
 `;
 
-const settingCreateMutation = graphql(settingCreate, {
-	props: params => ({
-		settingCreate: (setting) => params.settingCreateMutation({
-			variables: {
-				setting,
-				hostname: getCurrentProjectHostname(),
-			},
-		}),
+const settingsCreateMutation = graphql(settingsCreate, {
+	props: (params) => ({
+		settingsCreate: settings => params.settingsCreateMutation({variables: {settings}}),
 	}),
-	name: 'settingCreateMutation',
+	name: 'settingsCreateMutation',
 	options: {
-		refetchQueries: ['settingListQuery', 'settingQuery'],
-	},
+		refetchQueries: ['settingsQuery'],
+		update: (dataStore, submittedData) => {
+			const data = dataStore.readQuery({query: query});
+			data.settings.push(submittedData.data.settingsCreate);
+			dataStore.writeQuery({query: query, data});
+		}
+	}
 });
 
-export default settingCreateMutation;
+export default settingsCreateMutation;

@@ -9,7 +9,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Utils from '../../../../lib/utils';
 
 // graphql
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 import pagesQuery from '../../graphql/queries/pagesQuery';
 
 // layouts

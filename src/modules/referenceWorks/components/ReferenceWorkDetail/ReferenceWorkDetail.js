@@ -15,7 +15,7 @@ import LoadingPage from '../../../../components/loading/LoadingPage';
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorksQuery from '../../graphql/queries/referenceWorksQuery';
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
 import Utils from '../../../../lib/utils';

@@ -6,8 +6,8 @@
   justify-content: center;
 
   input[type='text'] {
-    min-width: 33%;
-    max-width: 420px;
+    min-width: 40%;
+    max-width: 500px;
     border: none;
     border-bottom: 2px solid @dark;
     font-family: @font-reading;
@@ -16,6 +16,11 @@
     padding: 10px 15px;
     margin: 0 10px;
     color: @dark;
+    background: transparent;
+    
+    &:focus {
+      outline: none;
+    }
   }
 
   button[type='submit'] {
@@ -57,9 +62,17 @@
   }
 
   select {
-    font-size: 22px;
-    font-family: @font-reading;
-
+    font-size: 18px;
+    text-transform: none;
     margin: 0 10px;
+    border: 2px solid @divider;
+    background: transparent;
+    color: @dark;
+    min-width: 220px;
+
+    &:hover, &:focus {
+      border: 2px solid @primary;
+      background: transparent;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
+import { formValueSelector } from 'redux-form';
 
 import SearchToolsContainer from '../../../search/containers/SearchToolsContainer';
 import SearchResultsContainer from '../../../search/containers/SearchResultsContainer';
@@ -47,4 +48,16 @@ WorkSearchContainer.defaultProps = {
   language: null,
 };
 
-export default WorkSearchContainer;
+const selector = formValueSelector('SearchTools');
+
+export default connect(
+  state => {
+    // can select values individually
+    const textsearch = selector(state, 'textsearch')
+    const language = selector(state, 'language')
+    return {
+      textsearch,
+      language,
+    };
+  }
+)(WorkSearchContainer);

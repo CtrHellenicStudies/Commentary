@@ -78,17 +78,6 @@ class SettingEditor extends React.Component {
 							toggleWorkSelectorModal={this.toggleWorkSelectorModal}
 						/>
 					</div>
-
-					<Modal
-						show={showWorkSelectorModal}
-						closeModal={this.toggleWorkSelectorModal}
-						innerFullWidth
-					>
-						<WorkSearchContainer
-							handleSelectWork={this.props.handleSelectWork}
-						/>
-					</Modal>
-
 					<button
 						type="submit"
 						className={`
@@ -98,6 +87,19 @@ class SettingEditor extends React.Component {
 						Save
 					</button>
 				</form>
+
+				<Modal
+					show={showWorkSelectorModal}
+					closeModal={this.toggleWorkSelectorModal}
+					innerFullWidth
+				>
+					<h3>
+						Select works for this Commentary
+					</h3>
+					<WorkSearchContainer
+						handleSelectWork={this.props.handleSelectWork}
+					/>
+				</Modal>
 			</div>
 		);
 	}

@@ -19,7 +19,7 @@ const SearchTools = props => {
 				/>
 			<div className="searchSelect">
 				<label>
-						Language
+						Language:
 				</label>
 				<Field
 					name="language"
@@ -37,12 +37,6 @@ const SearchTools = props => {
 
 				</Field>
 			</div>
-			<button
-				type="submit"
-				disabled={pristine || submitting}
-				>
-          Submit
-			</button>
 		</form>
 	);
 }

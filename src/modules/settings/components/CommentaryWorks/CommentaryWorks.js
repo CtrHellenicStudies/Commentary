@@ -8,11 +8,13 @@ import AddNewWork from './AddNewWork';
 import './CommentaryWorks.css';
 
 
-const CommentaryWorks = ({ works, toggleWorkSelectorModal }) => (
+const CommentaryWorks = ({ works, toggleWorkSelectorModal, handleSelectWork }) => (
   <div className="commentaryWorks">
     {works.map(work => (
       <WorkTeaser
+        key={work.id}
         work={work}
+        handleSelectWork={handleSelectWork}
       />
     ))}
     <AddNewWork
@@ -20,6 +22,10 @@ const CommentaryWorks = ({ works, toggleWorkSelectorModal }) => (
     />
   </div>
 );
+
+CommentaryWorks.defaultProps = {
+  works: [],
+};
 
 CommentaryWorks.propTypes = {
   works: PropTypes.array,

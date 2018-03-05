@@ -26,6 +26,7 @@ const SearchResultsContainer = props => {
 			works={works}
 			total={total}
 			page={props.page}
+			handleSelectWork={props.handleSelectWork}
     />
 	);
 }

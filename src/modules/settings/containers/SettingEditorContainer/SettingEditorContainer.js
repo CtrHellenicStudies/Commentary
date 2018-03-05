@@ -14,45 +14,26 @@ class SettingEditorContainer extends React.Component {
 		super(props);
 
 		this.state = {
-			collection: null,
-			textGroup: '',
-			work: '',
+			works: [],
 		};
 		autoBind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		let text = null;
-		if (
-				!this.state.collection
-			&& nextProps.textQuery
-			&& nextProps.textQuery.project
-			&& nextProps.textQuery.project.text
-		) {
-			text = nextProps.textQuery.project.text;
-			this.setState({
-				collection: parseInt(text.ctsNamespace, 10),
-				textGroup: text.textGroup,
-				work: text.work,
-			});
+	handleSelectWork(work) {
+		const { works } = this.state;
+
+		if (works.some(w => ( w.id === work.id ))) {
+			works.forEach((w, i) => {
+				if (w.id === work.id) {
+					works.splice(i, 1);
+				}
+			})
+		} else {
+			works.push(work);
 		}
-	}
 
-	handleSelectCollection(event, index, value) {
 		this.setState({
-			collection: value,
-		});
-	}
-
-	handleSelectTextGroup(event, index, value) {
-		this.setState({
-			textGroup: value,
-		});
-	}
-
-	handleSelectWork(event, index, value) {
-		this.setState({
-			work: value,
+			works,
 		});
 	}
 
@@ -89,65 +70,25 @@ class SettingEditorContainer extends React.Component {
 		}
 	}
 
-	handleRemove(settingId) {
-		const { settingRemove, router } = this.props;
-
-		settingRemove(settingId)
-			.then((response) => {
-				router.replace('/settings');
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}
-
-	changeImageValue(coverImage) {
-		this.setState({
-			coverImage
-		});
-	}
-
-	toggleSelectedItem(item) {
-		const selectedItems = this.state.selectedItems.slice();
-
-		if (selectedItems.some(selectedItem => selectedItem._id === item._id)) {
-			selectedItems.splice(
-				selectedItems.findIndex(selectedItem => selectedItem._id === item._id),
-				1
-			);
-		} else {
-			selectedItems.push(item);
-		}
-
-		this.setState({
-			selectedItems,
-		});
-	}
-
 	render() {
-		const { collection, textGroup, work } = this.state;
+		const { works } = this.state;
 
 		// Get text from query
-		let text;
+		let settings;
 		if (
-			this.props.textQuery
-			&& this.props.textQuery.project
+			this.props.settingsQuery
+			&& this.props.settingsQuery.project
 		) {
-			text = this.props.textQuery.project.text;
+			settings = this.props.settingsQuery.project.settings;
 		}
 
 		return (
 			<SettingEditor
 				onSubmit={this.handleSubmit}
 				onRemove={this.handleRemove}
-				initialValues={text}
-				text={text}
-				handleSelectCollection={this.handleSelectCollection}
-				handleSelectTextGroup={this.handleSelectTextGroup}
+				initialValues={settings}
 				handleSelectWork={this.handleSelectWork}
-				collection={collection}
-				textGroup={textGroup}
-				work={work}
+				works={works}
 			/>
 		);
 	}

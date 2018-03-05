@@ -18,7 +18,6 @@ class WorkTeaser extends React.Component {
 
 	render() {
 		const { work } = this.props;
-		const workUrl = `/texts/${work.id}/${work.slug}`;
 
 		return (
 			<Card
@@ -46,9 +45,9 @@ class WorkTeaser extends React.Component {
 					</div>
 				</div>
 
-				<a
-					href={workUrl}
+				<button
 					className="workTeaserTitle"
+					onClick={this.props.handleSelectWork.bind(this, work)}
 				>
 					<h3 >
 						{_s.prune(work.english_title, 40)}
@@ -60,7 +59,7 @@ class WorkTeaser extends React.Component {
 							''
 						}
 					</h3>
-				</a>
+				</button>
 
 				<span className="workTeaserVersion">
 					{work.version ? _s.prune(work.version.title, 90) : ''}

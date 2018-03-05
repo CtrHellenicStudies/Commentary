@@ -26,6 +26,13 @@ class SettingEditor extends React.Component {
 		autoBind(this);
 	}
 
+	handleSelectWork(work) {
+		this.setState({
+			showWorkSelectorModal: false,
+		});
+		this.props.handleSelectWork(work);
+	}
+
 	toggleWorkSelectorModal()  {
 		this.setState({
 			showWorkSelectorModal: !this.state.showWorkSelectorModal,
@@ -33,7 +40,7 @@ class SettingEditor extends React.Component {
 	}
 
 	render() {
-		const { collection, settingGroup, work } = this.props;
+		const { collection, settingGroup, works } = this.props;
 		const { showWorkSelectorModal } = this.state;
 
 		return (
@@ -75,7 +82,9 @@ class SettingEditor extends React.Component {
 							Manage works included in this Commentary
 						</label>
 						<CommentaryWorksContainer
+							works={works}
 							toggleWorkSelectorModal={this.toggleWorkSelectorModal}
+							handleSelectWork={this.handleSelectWork}
 						/>
 					</div>
 					<button
@@ -98,7 +107,7 @@ class SettingEditor extends React.Component {
 							Select works for this Commentary
 						</h3>
 						<WorkSearchContainer
-							handleSelectWork={this.props.handleSelectWork}
+							handleSelectWork={this.handleSelectWork}
 						/>
 					</div>
 				</Modal>

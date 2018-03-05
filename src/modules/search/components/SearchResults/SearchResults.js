@@ -10,10 +10,12 @@ import './SearchResults.css';
 class SearchResults extends React.Component {
 
 	renderWorks() {
-		return this.props.works.map((work) => (
+		const { handleSelectWork, works } = this.props;
+		return works.map((work) => (
 			<WorkTeaser
 				key={work.id}
 				work={work}
+				handleSelectWork={handleSelectWork}
 			/>
 		));
 	}

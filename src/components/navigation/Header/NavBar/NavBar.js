@@ -204,7 +204,12 @@ class NavBar extends React.Component {
 		const { rightMenuOpen, searchEnabled, settings, tenant } = this.state;
 
 		return (
-			<Headroom className="navbar">
+			<Headroom
+				className="navbar"
+				style={{
+					zIndex: 98,
+				}}
+			>
 				{!isOnHomeView && (
 					toggleSearchTerm
 				) ?

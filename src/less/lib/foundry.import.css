@@ -2748,29 +2748,6 @@ form iframe.mail-list-form {
   }
 }
 /*!---------- 17. PAGINATION ----------*/
-.pagination {
-  margin: 0;
-}
-.pagination li {
-  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-.pagination li a {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  text-align: center;
-  padding-top: 6px;
-  margin: 0 4px;
-  color: #292929;
-  font-weight: 400;
-}
-.pagination li a:hover,
-.pagination li.active a,
-.pagination li.active:hover a {
-  background: #795548;
-  color: #fff;
-  border-color: #795548;
-}
 /*!---------- 18. ICON FEATURES ----------*/
 .feature.boxed {
   padding: 32px;

@@ -65,18 +65,6 @@ class WorkTeaser extends React.Component {
 				<span className="workTeaserVersion">
 					{work.version ? _s.prune(work.version.title, 90) : ''}
 				</span>
-
-				<div className="cardMetaBottom">
-					<span className="cardMeta metaCountCommentary">
-						{work.countComments || 0} Commentary
-					</span>
-					<span className="cardMeta metaCountTranslations">
-						{work.countTranslations || 0} Translations
-					</span>
-					<span className="cardMeta metaCountAnnotations">
-						{work.countAnnotations || 0} Annotations
-					</span>
-				</div>
 			</Card>
 		);
 	}

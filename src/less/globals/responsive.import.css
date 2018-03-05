@@ -340,9 +340,6 @@ font-family: "Material Design Icons";
   .text-item.with-meta .meta-toggle {
     top: 0;
   }
-  .pagination {
-    width: 100%;
-  }
   .features-block .feature {
     width: 50%;
   }
@@ -1102,17 +1099,6 @@ font-family: "Material Design Icons";
 @media (max-width: 500px) {
   header .social-wrap {
     display: none;
-  }
-  .pagination .seq-page {
-    width: 100%;
-    border-bottom: 1px solid #795548;
-  }
-  .pagination .seq-page a {
-    text-align: center;
-    padding: 10px;
-  }
-  .pagination .seq-page:first-child {
-    border-top: 1px solid #795548;
   }
   .get-more {
     width: 100%;

@@ -6,7 +6,7 @@ import autoBind from 'react-autobind';
 import { required, maxLength } from '../../../../lib/formHelpers';
 
 import Modal from '../../../../components/common/modal/Modal';
-import WorkSelectorContainer from '../../containers/WorkSelectorContainer';
+import WorkSearchContainer from '../../../search/containers/WorkSearchContainer';
 import CommentaryWorksContainer from '../../containers/CommentaryWorksContainer';
 
 import './SettingEditor.import.css';
@@ -82,13 +82,9 @@ class SettingEditor extends React.Component {
 					<Modal
 						show={showWorkSelectorModal}
 						closeModal={this.toggleWorkSelectorModal}
+						innerFullWidth
 					>
-						<WorkSelectorContainer
-							collectionId={collection}
-							settingGroupUrn={settingGroup}
-							workUrn={work}
-							handleSelectCollection={this.props.handleSelectCollection}
-							handleSelectSettingGroup={this.props.handleSelectSettingGroup}
+						<WorkSearchContainer
 							handleSelectWork={this.props.handleSelectWork}
 						/>
 					</Modal>

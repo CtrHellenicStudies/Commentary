@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
+import './Modal.css';
 
-
-const Modal = ({ children, classes, show, closeModal }) => {
+const Modal = ({ children, classes, show, closeModal, innerFullWidth }) => {
 
 	if (show) {
 		return (
@@ -17,7 +17,7 @@ const Modal = ({ children, classes, show, closeModal }) => {
 				>
 					<i className="mdi mdi-close" />
 				</div>
-				<div className="modalInner">
+				<div className={`modalInner ${innerFullWidth ? 'modalInnerFullWidth' : ''}`}>
 					{children}
 				</div>
 			</div>

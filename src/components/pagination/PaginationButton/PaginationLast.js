@@ -2,22 +2,22 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
-const PaginationPrev = props => (
+const PaginationLast = props => (
 	<Link
 		to={{
 			pathname: '/',
 			query: {
 				...props.location.query,
-				page: (props.location.query.page ? parseInt(props.location.query.page, 10) : 2) - 1,
+				page: props.page,
 			},
 		}}
 	>
-		<i className="mdi mdi-chevron-left" />
 		<span>
-			Previous
+			Last
 		</span>
+		<i className="mdi mdi-chevron-right" />
 	</Link>
 );
 
 
-export default withRouter(PaginationPrev);
+export default withRouter(PaginationLast);

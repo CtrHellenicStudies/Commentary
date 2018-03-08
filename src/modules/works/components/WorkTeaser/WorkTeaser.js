@@ -48,6 +48,7 @@ class WorkTeaser extends React.Component {
 				<button
 					className="workTeaserTitle"
 					onClick={this.props.handleSelectWork.bind(this, work)}
+			    type="button"
 				>
 					<h3 >
 						{_s.prune(work.english_title, 40)}

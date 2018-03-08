@@ -5,7 +5,6 @@ import CommentaryWorks from '../../components/CommentaryWorks';
 
 
 const CommentaryWorksContainer = ({ works, toggleWorkSelectorModal, handleSelectWork }) => {
-  console.log('works', works);
   return (
     <CommentaryWorks
       works={works}

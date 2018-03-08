@@ -4,8 +4,8 @@ import autoBind from 'react-autobind';
 
 import SettingEditor from '../../components/SettingEditor';
 import tenantBySubdomainQuery from '../../../tenants/graphql/queries/tenantBySubdomain';
-import settingCreateMutation from '../../graphql/mutations/create';
-import settingUpdateMutation from '../../graphql/mutations/update';
+import settingsCreateMutation from '../../graphql/mutations/create';
+import settingsUpdateMutation from '../../graphql/mutations/update';
 import settingRemoveMutation from '../../graphql/mutations/remove';
 
 
@@ -38,31 +38,32 @@ class SettingEditorContainer extends React.Component {
 	}
 
 	handleSubmit(_values) {
-		const values = {}; // Object.assign({}, _values);
-		const { settingCreate, settingUpdate, router } = this.props;
+		const values = Object.assign({}, _values);
+		const { settingsCreate, settingsUpdate, router } = this.props;
 		const { collection, textGroup, work } = this.state;
 
 
 		values.ctsNamespace = collection;
 		values.textGroup = textGroup;
 		values.work = work;
+
 		// remove unused values
 		delete values.__typename;
 
 		// create or update
 		if ('_id' in _values) {
 			values._id = _values._id;
-			settingUpdate(values)
+			settingsUpdate(values)
 				.then((response) => {
-					router.replace(`/settings/${values._id}`);
+					router.replace('/admin/settings');
 				})
 				.catch((err) => {
 					console.error(err);
 				});
 		} else {
-			settingCreate(values)
+			settingsCreate(values)
 				.then((response) => {
-					router.replace('/settings/');
+					router.replace('/admin/settings');
 				})
 				.catch((err) => {
 					console.error(err);
@@ -95,6 +96,6 @@ class SettingEditorContainer extends React.Component {
 }
 
 export default compose(
-	tenantBySubdomainQuery, settingCreateMutation, settingUpdateMutation,
+	tenantBySubdomainQuery, settingsCreateMutation, settingsUpdateMutation,
 	settingRemoveMutation,
 )(SettingEditorContainer);

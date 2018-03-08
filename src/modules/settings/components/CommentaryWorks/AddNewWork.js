@@ -7,6 +7,7 @@ const AddNewWork = ({ toggleWorkSelectorModal }) => (
   <button
     className="addNewWork workTeaser"
     onClick={toggleWorkSelectorModal}
+    type="button"
   >
     <i className="mdi mdi-plus addNewWorkIcon" />
     <label>

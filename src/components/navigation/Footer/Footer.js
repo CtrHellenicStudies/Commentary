@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { compose } from 'react-apollo';
 
 // graphql
-import { settingsQuery } from '../../../graphql/methods/settings';
+import settingsQuery from '../../../modules/settings/graphql/queries/list';
 import { tenantsQuery } from '../../../graphql/methods/tenants';
 
 

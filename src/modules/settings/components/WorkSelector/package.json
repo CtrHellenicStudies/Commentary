@@ -1,0 +1,6 @@
+{
+  "name": "WorkSelector",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./WorkSelector.js"
+}

@@ -63,6 +63,7 @@ font-family:'Proxima Nova W07 Semibold';
 font-family:'Proxima Nova W07 Bold';
 font-family:'Proxima Nova W07 Extrabold';
 font-family:'Proxima Nova W07 Black';
+font-family:'Proxima Nova A W07 Light';
 
 =================================
 Material Design Icons
@@ -90,13 +91,6 @@ font-family: "Material Design Icons";
 2.4 Material Design Icons
 
 ******************************************************************************/
-@font-face {
-  font-family: "Material Design Icons";
-  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
-  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
 /******************************************************************************
 
 3. Mixins
@@ -221,7 +215,7 @@ font-family: "Material Design Icons";
 }
 .headroom .header-section-wrap a span,
 .headroom .header-section-wrap .account-button span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 14px;
 }
 .headroom .nav-wrap {
@@ -261,7 +255,7 @@ font-family: "Material Design Icons";
 }
 .headroom a[type="button"],
 .headroom button {
-  font-family: 'Proxima Nova', sans-serif !important;
+  font-family: 'Proxima Nova W15 Medium', sans-serif !important;
 }
 .headroom ul.menu {
   margin: 0;

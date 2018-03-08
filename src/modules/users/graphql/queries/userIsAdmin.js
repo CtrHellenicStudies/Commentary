@@ -1,11 +1,11 @@
 import { gql, graphql } from 'react-apollo';
 
-import getCurrentProjectHostname from '../../../../lib/getCurrentProjectHostname';
+import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
 
 
 const query = gql`
-	query userIsAdminQuery($hostname: String) {
-		project(hostname: $hostname) {
+	query userIsAdminQuery($subdomain: String) {
+		tenantBySubdomain(subdomain: $hostname) {
 			_id
 			userIsAdmin
 		}
@@ -16,8 +16,8 @@ const userIsAdminQuery = graphql(query, {
 	name: 'userIsAdminQuery',
 	options: ({ params }) => ({
 		variables: {
-			hostname: getCurrentProjectHostname(),
-		}
+			subdomain: getCurrentSubdomain(),
+		},
 	}),
 });
 

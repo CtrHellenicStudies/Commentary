@@ -3,10 +3,10 @@ import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
 
 import SettingEditor from '../../components/SettingEditor';
-// import settingDetailQuery from '../../graphql/queries/detail';
-// import settingCreateMutation from '../../graphql/mutations/create';
-// import settingUpdateMutation from '../../graphql/mutations/update';
-// import settingRemoveMutation from '../../graphql/mutations/remove';
+import tenantBySubdomainQuery from '../../../tenants/graphql/queries/tenantBySubdomain';
+import settingsCreateMutation from '../../graphql/mutations/create';
+import settingsUpdateMutation from '../../graphql/mutations/update';
+import settingRemoveMutation from '../../graphql/mutations/remove';
 
 
 class SettingEditorContainer extends React.Component {
@@ -14,144 +14,88 @@ class SettingEditorContainer extends React.Component {
 		super(props);
 
 		this.state = {
-			collection: null,
-			textGroup: '',
-			work: '',
+			works: [],
 		};
 		autoBind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		let text = null;
-		if (
-				!this.state.collection
-			&& nextProps.textQuery
-			&& nextProps.textQuery.project
-			&& nextProps.textQuery.project.text
-		) {
-			text = nextProps.textQuery.project.text;
-			this.setState({
-				collection: parseInt(text.ctsNamespace, 10),
-				textGroup: text.textGroup,
-				work: text.work,
-			});
+	handleSelectWork(work) {
+		const { works } = this.state;
+
+		if (works.some(w => ( w.id === work.id ))) {
+			works.forEach((w, i) => {
+				if (w.id === work.id) {
+					works.splice(i, 1);
+				}
+			})
+		} else {
+			works.push(work);
 		}
-	}
 
-	handleSelectCollection(event, index, value) {
 		this.setState({
-			collection: value,
-		});
-	}
-
-	handleSelectTextGroup(event, index, value) {
-		this.setState({
-			textGroup: value,
-		});
-	}
-
-	handleSelectWork(event, index, value) {
-		this.setState({
-			work: value,
+			works,
 		});
 	}
 
 	handleSubmit(_values) {
-		const values = {}; // Object.assign({}, _values);
-		const { settingCreate, settingUpdate, router } = this.props;
+		const values = Object.assign({}, _values);
+		const { settingsCreate, settingsUpdate, router } = this.props;
 		const { collection, textGroup, work } = this.state;
 
 
 		values.ctsNamespace = collection;
 		values.textGroup = textGroup;
 		values.work = work;
+
 		// remove unused values
 		delete values.__typename;
 
 		// create or update
 		if ('_id' in _values) {
 			values._id = _values._id;
-			settingUpdate(values)
+			settingsUpdate(values)
 				.then((response) => {
-					router.replace(`/settings/${values._id}`);
+					router.replace('/admin/settings');
 				})
 				.catch((err) => {
 					console.error(err);
 				});
 		} else {
-			settingCreate(values)
+			settingsCreate(values)
 				.then((response) => {
-					router.replace('/settings/');
+					router.replace('/admin/settings');
 				})
 				.catch((err) => {
 					console.error(err);
 				});
 		}
-	}
-
-	handleRemove(settingId) {
-		const { settingRemove, router } = this.props;
-
-		settingRemove(settingId)
-			.then((response) => {
-				router.replace('/settings');
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}
-
-	changeImageValue(coverImage) {
-		this.setState({
-			coverImage
-		});
-	}
-
-	toggleSelectedItem(item) {
-		const selectedItems = this.state.selectedItems.slice();
-
-		if (selectedItems.some(selectedItem => selectedItem._id === item._id)) {
-			selectedItems.splice(
-				selectedItems.findIndex(selectedItem => selectedItem._id === item._id),
-				1
-			);
-		} else {
-			selectedItems.push(item);
-		}
-
-		this.setState({
-			selectedItems,
-		});
 	}
 
 	render() {
-		const { collection, textGroup, work } = this.state;
+		const { works } = this.state;
 
 		// Get text from query
-		let text;
+		let settings;
 		if (
-			this.props.textQuery
-			&& this.props.textQuery.project
+			this.props.tenantQuery
+			&& this.props.tenantQuery.tenantBySubdomain
 		) {
-			text = this.props.textQuery.project.text;
+			settings = this.props.tenantQuery.tenantBySubdomain.settings;
 		}
 
 		return (
 			<SettingEditor
 				onSubmit={this.handleSubmit}
 				onRemove={this.handleRemove}
-				initialValues={text}
-				text={text}
-				handleSelectCollection={this.handleSelectCollection}
-				handleSelectTextGroup={this.handleSelectTextGroup}
+				initialValues={settings}
 				handleSelectWork={this.handleSelectWork}
-				collection={collection}
-				textGroup={textGroup}
-				work={work}
+				works={works}
 			/>
 		);
 	}
 }
 
 export default compose(
+	tenantBySubdomainQuery, settingsCreateMutation, settingsUpdateMutation,
+	settingRemoveMutation,
 )(SettingEditorContainer);

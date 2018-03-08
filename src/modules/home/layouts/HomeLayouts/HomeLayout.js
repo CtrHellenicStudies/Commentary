@@ -9,7 +9,7 @@ import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
 import { tenantsQuery } from '../../../../graphql/methods/tenants';
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 
 // layouts
 import Header from '../../../../components/navigation/Header';

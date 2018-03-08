@@ -15,7 +15,7 @@ import CommentsRecent from '../../../comments/components/CommentsRecent';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 
 // graphql
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
 import Utils from '../../../../lib/utils';

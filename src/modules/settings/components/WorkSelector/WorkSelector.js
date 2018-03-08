@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-//
+import './WorkSelector.import.css';
 
 
-
-class TextSelector extends React.Component {
+class WorkSelector extends React.Component {
 
 	render() {
 		const {
@@ -16,7 +15,7 @@ class TextSelector extends React.Component {
 
 		const styles = {
 			selectList: {
-				fontFamily: '"Freight Text W03 Book", Georgia, serif',
+				fontFamily: '"Merriweather", Georgia, serif',
 				fontSize: '22px',
 				fontWeight: '100',
 				color: '#222',
@@ -25,7 +24,7 @@ class TextSelector extends React.Component {
 				lineHeight: '1.7em',
 			},
 			menuItem: {
-				fontFamily: '"Freight Text W03 Book", Georgia, serif',
+				fontFamily: '"Merriweather", Georgia, serif',
 				fontSize: '22px',
 				fontWeight: '100',
 				color: '#222',
@@ -54,7 +53,9 @@ class TextSelector extends React.Component {
 
 		return (
 			<div className="textSelector">
-				<div className="textSelectorFormInputOuter">
+				<label>Choose works to be included in this Commentary</label>
+
+				<div className="chsFormInputOuter textSelectorFormInputOuter">
 					<div className="textSelectorSelectField">
 						<SelectField
 							floatingLabelText="Select Collection (CTS Namespace)."
@@ -143,15 +144,15 @@ class TextSelector extends React.Component {
 	}
 }
 
-TextSelector.propTypes = {
+WorkSelector.propTypes = {
 	collection: PropTypes.object,
 	collections: PropTypes.array,
 };
 
-TextSelector.defaultProps = {
+WorkSelector.defaultProps = {
 	collection: null,
 	collections: [],
 };
 
 
-export default TextSelector;
+export default WorkSelector;

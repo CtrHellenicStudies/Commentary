@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 
 // graphql
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 import keywordsQuery from '../../graphql/queries/keywordsQuery';
 import keywordRemoveMutation from '../../graphql/mutations/keywordsRemove';
 import commentsQuery from '../../../comments/graphql/queries/comments';

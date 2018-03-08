@@ -1,29 +1,23 @@
 import { gql, graphql } from 'react-apollo';
 
-import getCurrentProjectHostname from '../../../../lib/getCurrentProjectHostname';
 
-
-const settingRemove = gql`
-	mutation settingRemove($id: String!, $hostname: String!) {
-	settingRemove(_id: $id, hostname: $hostname) {
-		result
+const settingsRemove = gql`
+	mutation settingsRemove($id: String!) {
+	settingsRemove(settingsId: $id) {
+		_id
 	}
 }
-`;
+ `;
 
-const settingRemoveMutation = graphql(settingRemove, {
-	props: params => ({
-		settingRemove: id => params.settingRemoveMutation({
-			variables: {
-				id,
-				hostname: getCurrentProjectHostname(),
-			},
-		}),
+const settingsRemoveMutation = graphql(settingsRemove, {
+	props: (params) => ({
+		settingsRemove: (id) => params.settingsRemoveMutation({variables: {id}}),
 	}),
-	name: 'settingRemoveMutation',
+	name: 'settingsRemoveMutation',
 	options: {
-		refetchQueries: ['settingListQuery', 'settingQuery'],
-	},
+		refetchQueries: ['settingsQuery']
+	}
 });
 
-export default settingRemoveMutation;
+
+export default settingsRemoveMutation;

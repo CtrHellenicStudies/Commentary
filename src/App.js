@@ -191,6 +191,9 @@ const routes = (props) => {
 				path="/v1/doi:doi"
 				render={params => <NameResolutionServiceLayout version={1} doi={params.match.params.doi} />}
 			/>
+			
+			{/** Settings routes */}
+			{settingsRoutes}
 
 			{/** Basic page routes */}
 			<Route
@@ -206,9 +209,6 @@ const routes = (props) => {
 
 			{/** 404 routes */}
 			<Route component={NotFound} />
-
-			{/** Settings routes */}
-			{settingsRoutes}
 		</Switch>
 	);
 };

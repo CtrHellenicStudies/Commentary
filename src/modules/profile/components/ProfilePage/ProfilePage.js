@@ -17,7 +17,7 @@ import Account from '../Account/Account';
 import Header from '../../../../components/navigation/Header';
 
 // graphql
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';

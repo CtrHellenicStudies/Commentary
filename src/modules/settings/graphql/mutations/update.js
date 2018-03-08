@@ -1,26 +1,46 @@
 import { gql, graphql } from 'react-apollo';
 
-const settingUpdate = gql`
-	mutation settingUpdate($setting: TextInputType!) {
-	settingUpdate(setting: $setting) {
-		_id
+
+const settingsUpdate = gql`
+	mutation settingsUpdate($settings: SettingsInputType!) {
+		settingsUpdate(settings: $settings) {
+		  _id
+		  name
+		  domain
+		  title
+		  subtitle
+		  footer
+		  emails
+		  tenantId
+		  webhooksToken
+		  homepageCover
+		  homepageIntroduction
+		  homepageIntroductionImage
+		  homepageIntroductionImageCaption
+		  discussionCommentsDisabled
+		  introBlocks {
+				title
+				text
+				linkURL
+				linkText
+			}
+		  aboutURL
+		}
 	}
-}
 `;
 
-const settingUpdateMutation = graphql(settingUpdate, {
-	props: params => ({
-		settingUpdate: (setting) => params.settingUpdateMutation({
+const settingsUpdateMutation = graphql(settingsUpdate, {
+	props: (params) => ({
+		settingsUpdate: (settings) => params.settingsUpdateMutation({
 			variables: {
-				setting,
+				settings,
 			},
 		}),
 	}),
-	name: 'settingUpdateMutation',
+	name: 'settingsUpdateMutation',
 	options: {
-		refetchQueries: ['settingListQuery', 'settingQuery'],
-	},
+		refetchQueries: ['settingsQuery']
+	}
 });
 
-
-export default settingUpdateMutation;
+export default settingsUpdateMutation;

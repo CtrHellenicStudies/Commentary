@@ -11,7 +11,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import Header from '../../../../components/navigation/Header';
 
 // graphql
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 import commentersQuery from '../../graphql/queries/commentersQuery';
 
 

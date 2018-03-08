@@ -14,7 +14,7 @@ import CommentsRecent from '../../../comments/components/CommentsRecent';
 import Header from '../../../../components/navigation/Header';
 
 // graphql
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
 import Utils from '../../../../lib/utils';

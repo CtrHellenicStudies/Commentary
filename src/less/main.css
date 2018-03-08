@@ -63,6 +63,7 @@ font-family:'Proxima Nova W07 Semibold';
 font-family:'Proxima Nova W07 Bold';
 font-family:'Proxima Nova W07 Extrabold';
 font-family:'Proxima Nova W07 Black';
+font-family:'Proxima Nova A W07 Light';
 
 =================================
 Material Design Icons
@@ -90,20 +91,13 @@ font-family: "Material Design Icons";
 2.4 Material Design Icons
 
 ******************************************************************************/
-@import url("//fonts.googleapis.com/css?family=Raleway:100,600|Open+Sans:400,900|Merriweather:300|Roboto+Condensed:300,700");
-@import '../modules/community/less/recentActivity.import.css';
-@font-face {
-  font-family: "Material Design Icons";
-  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
-  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
 /******************************************************************************
 
 3. Mixins
 
 ******************************************************************************/
+@import url("//fonts.googleapis.com/css?family=Raleway:100,600|Open+Sans:400,900|Merriweather:300|Roboto+Condensed:300,700");
+@import '../modules/community/less/recentActivity.import.css';
 @-webkit-keyframes flash {
   0% {
     opacity: 1;
@@ -151,211 +145,6 @@ button.navbar-toggle {
 }
 #iron-router-progress.spinner:before {
   border-color: #392822;
-}
-/* Fix background color */
-.admin-layout .content {
-  background: inherit;
-}
-.fixed .main-header {
-  height: 60px;
-}
-body.fixed {
-  background: #ecf0f5;
-}
-.admin-layout {
-  width: 100%;
-}
-.admin-layout .main-header .logo {
-  height: 60px;
-  font-family: 'Museo Sans W01_900', sans-serif;
-  padding-top: 5px;
-}
-.admin-layout .main-header .navbar .nav > li > a {
-  font-size: 18px;
-  height: 60px;
-  padding-top: 20px;
-}
-.admin-layout .main-header .navbar .sidebar-toggle {
-  height: 60px;
-}
-.admin-layout .skin-blue .sidebar-menu > li > a {
-  font-size: 16px;
-}
-.admin-layout .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
-  border: 1px solid #ddd;
-  border-radius: 0;
-}
-.admin-layout .navbar-custom-menu > .navbar-nav > li > .dropdown-menu a {
-  color: #1e1e1e;
-  font-size: 16px;
-  padding: 15px 20px;
-  width: 100%;
-}
-.admin-layout .sidebar {
-  margin-top: 20px;
-}
-.admin-layout .pagination {
-  width: 100%;
-}
-.admin-layout .pagination > li > a {
-  width: auto;
-  height: auto;
-  padding: 10px;
-}
-.admin-layout .btn.btn-primary {
-  color: #fff;
-}
-.admin-layout .btn.btn-primary:hover,
-.admin-layout .btn.btn-primary:focus {
-  color: #fff;
-}
-.admin-layout .btn.btn-primary:hover i,
-.admin-layout .btn.btn-primary:focus i {
-  color: #fff;
-}
-.admin-layout .btn.btn-primary i {
-  color: #fff;
-}
-.admin-layout .btn.btn-default {
-  color: #1e1e1e;
-}
-.admin-layout .btn.btn-default:hover,
-.admin-layout .btn.btn-default:focus {
-  color: #1e1e1e;
-}
-.admin-layout .btn.btn-default:hover i,
-.admin-layout .btn.btn-default:focus i {
-  color: #1e1e1e;
-}
-.admin-layout .btn.btn-default i {
-  color: #1e1e1e;
-}
-.admin-layout input[type="text"],
-.admin-layout textarea,
-.admin-layout input[type="password"],
-.admin-layout input[type="email"] {
-  font-size: 16px !important;
-  padding: 30px 15px;
-  background: #fff;
-  border: 1px solid #CCCCCC;
-}
-.admin-layout input[type="search"] {
-  font-size: 16px !important;
-  border: 1px solid #CCCCCC;
-  height: 42px;
-}
-.admin-layout input[type="number"] {
-  font-size: 16px !important;
-  padding: 10px;
-  height: 42px;
-}
-.admin-layout .dataTables_wrapper table.dataTable > tbody > tr > td:first-child {
-  font-size: 26px;
-  padding: 25px 15px;
-}
-.dataTable .btn {
-  margin: 9px 0px 0;
-}
-.form-group label {
-  font-size: 18px;
-}
-.content-header > .breadcrumb > li > a {
-  font-size: 18px;
-}
-.small-box {
-  box-shadow: 1px 0px 1px #795548;
-}
-.small-box h3 {
-  padding: 20px 0px 0px 20px;
-}
-.small-box p {
-  font-size: 22px !important;
-  padding: 15px;
-}
-.small-box.bg-blue {
-  background-color: #fff !important;
-}
-.small-box .small-box-footer {
-  background: #5D4037 !important;
-}
-.small-box .icon {
-  top: 10px !important;
-}
-select.input-sm {
-  height: 42px;
-}
-.btn-sm {
-  height: 42px !important;
-  display: inline-block;
-}
-.btn-danger,
-.btn-primary,
-.btn-primary:visited {
-  background: #795548 !important;
-  color: #fff !important;
-  border: 2px solid #795548 !important;
-  box-shadow: none;
-  font-weight: bold;
-}
-.btn-danger span,
-.btn-primary span,
-.btn-primary:visited span,
-.btn-danger i,
-.btn-primary i,
-.btn-primary:visited i {
-  color: #fff !important;
-}
-.btn-danger:hover,
-.btn-primary:hover,
-.btn-primary:visited:hover,
-.btn-danger:focus,
-.btn-primary:focus,
-.btn-primary:visited:focus {
-  background: #4E342E !important;
-  color: #fff !important;
-  border: 2px solid #4E342E !important;
-  font-weight: bold;
-}
-.btn-danger:hover span,
-.btn-primary:hover span,
-.btn-primary:visited:hover span,
-.btn-danger:focus span,
-.btn-primary:focus span,
-.btn-primary:visited:focus span,
-.btn-danger:hover i,
-.btn-primary:hover i,
-.btn-primary:visited:hover i,
-.btn-danger:focus i,
-.btn-primary:focus i,
-.btn-primary:visited:focus i {
-  color: #fff !important;
-}
-.btn:visited {
-  color: #fff;
-}
-.skin-blue .main-header .navbar {
-  background: #3E2723;
-}
-.skin-blue .main-header .logo {
-  background-color: #795548 !important;
-  text-transform: lowercase;
-  font-size: 12px;
-  max-height: none;
-}
-.skin-blue .sidebar-menu > li > a span {
-  color: #fff;
-}
-.bg-aqua,
-.callout.callout-info,
-.alert-info,
-.label-info,
-.modal-info .modal-body {
-  background: #eee !important;
-  border: 1px solid #ddd !important;
-}
-.avatar-image {
-  width: 200px;
-  height: 200px;
 }
 /* Draft */
 /**
@@ -3167,29 +2956,6 @@ form iframe.mail-list-form {
   }
 }
 /*!---------- 17. PAGINATION ----------*/
-.pagination {
-  margin: 0;
-}
-.pagination li {
-  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-.pagination li a {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  text-align: center;
-  padding-top: 6px;
-  margin: 0 4px;
-  color: #292929;
-  font-weight: 400;
-}
-.pagination li a:hover,
-.pagination li.active a,
-.pagination li.active:hover a {
-  background: #795548;
-  color: #fff;
-  border-color: #795548;
-}
 /*!---------- 18. ICON FEATURES ----------*/
 .feature.boxed {
   padding: 32px;
@@ -5209,7 +4975,6 @@ video {
   -moz-transition: all 0.3s ease;
   margin-right: 8px;
   margin-bottom: 24px;
-  height: 42px !important;
   height: 30px;
   font-size: 11px;
   line-height: 27px;
@@ -6354,6 +6119,13 @@ footer.bg-dark a {
     padding-bottom: 240px !important;
   }
 }
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("fonts/materialdesignicons-webfont.eot?v=1.7.22");
+  src: url("fonts/materialdesignicons-webfont.eot?#iefix&v=1.7.22") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2?v=1.7.22") format("woff2"), url("fonts/materialdesignicons-webfont.woff?v=1.7.22") format("woff"), url("fonts/materialdesignicons-webfont.ttf?v=1.7.22") format("truetype"), url("fonts/materialdesignicons-webfont.svg?v=1.7.22#materialdesigniconsregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
 .mdi::before {
   font-size: 24px;
   line-height: 14px;
@@ -6791,7 +6563,7 @@ input,
 p,
 span,
 label {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   color: #212121;
 }
 body {
@@ -6809,7 +6581,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
 }
 a {
   color: #1e1e1e;
@@ -6922,25 +6694,25 @@ body > .container {
  */
 ::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 :-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 ::-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
 :-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 16px;
   text-transform: none;
 }
@@ -7341,7 +7113,7 @@ button#at-btn {
   padding: 10px 15px;
   font-size: 18px;
   color: #1e1e1e;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   background: #fff;
   height: auto;
   border: 2px solid #aaa;
@@ -7355,7 +7127,7 @@ button#at-btn {
   color: #e31d3b;
   font-size: 16px;
   font-weight: bold;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
 }
 .md-tooltip {
   display: none;
@@ -7487,7 +7259,7 @@ button#at-btn {
 }
 .headroom .header-section-wrap a span,
 .headroom .header-section-wrap .account-button span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 14px;
 }
 .headroom .nav-wrap {
@@ -7527,7 +7299,7 @@ button#at-btn {
 }
 .headroom a[type="button"],
 .headroom button {
-  font-family: 'Proxima Nova', sans-serif !important;
+  font-family: 'Proxima Nova W15 Medium', sans-serif !important;
 }
 .headroom ul.menu {
   margin: 0;
@@ -7895,7 +7667,7 @@ footer .footer-nav-links div {
   vertical-align: top;
 }
 footer .footer-nav-links a {
-  font-family: 'Proxima Nova', sans-serif !important;
+  font-family: 'Proxima Nova W15 Medium', sans-serif !important;
   height: auto !important;
   margin: 0 2px !important;
 }
@@ -8114,7 +7886,7 @@ footer .social-list li a:hover a {
 .login-links .login-option span {
   width: 80%;
   text-align: center;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
   margin: 0;
@@ -8155,7 +7927,7 @@ footer .social-list li a:hover a {
   text-align: left;
   padding: 3px 0;
   border-bottom: #fefefe;
-  font-family: 'Proxima Nova', sans-serif !important;
+  font-family: 'Proxima Nova W15 Medium', sans-serif !important;
 }
 .md-sidenav-left a i,
 .md-sidenav-left a span {
@@ -8169,7 +7941,7 @@ footer .social-list li a:hover a {
 .md-sidenav-left a span {
   font-size: 17px;
   padding: 5px 10px;
-  font-family: 'Proxima Nova', sans-serif !important;
+  font-family: 'Proxima Nova W15 Medium', sans-serif !important;
 }
 .md-sidenav-left hr {
   margin-bottom: 5px;
@@ -8189,7 +7961,7 @@ footer .social-list li a:hover a {
 }
 .sidenav-top .user-fullname {
   text-overflow: ellipsis;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
   font-size: 20px;
   color: #fff;
   width: 220px;
@@ -8234,48 +8006,6 @@ footer .social-list li a:hover a {
   margin: 0 5px;
   font-size: 15px;
   letter-spacing: 1px;
-}
-.pagination {
-  clear: both;
-  width: 50%;
-  margin: 0 auto;
-}
-.pagination a {
-  background: rgba(0, 0, 0, 0.6);
-  text-decoration: none;
-}
-.pagination a:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
-.pagination .seq-page {
-  display: inline-block;
-  vertical-align: top;
-}
-.pagination .seq-page a {
-  font-family: 'Gentium Basic', 'Merriweather', Georgia, Times New Roman, serif;
-  color: #fff;
-  display: block;
-  vertical-align: top;
-  font-size: 20px;
-  text-transform: uppercase;
-  padding: 30px;
-}
-.pagination .seq-page span.fa {
-  font-size: 12px;
-  padding: 8px 15px;
-  vertical-align: top;
-}
-.pagination .prev-page {
-  float: left;
-}
-.pagination .prev-page a {
-  text-align: right;
-}
-.pagination .next-page {
-  float: right;
-}
-.pagination .next-page a {
-  text-align: left;
 }
 /*
  * Shared styles for single articles and projects
@@ -8796,9 +8526,6 @@ body {
   .text-item.with-meta .meta-toggle {
     top: 0;
   }
-  .pagination {
-    width: 100%;
-  }
   .features-block .feature {
     width: 50%;
   }
@@ -8941,7 +8668,7 @@ body {
     padding-top: 5px;
   }
   .comment-group-meta .comment-group-ref-above {
-    font-family: 'Proxima Nova', sans-serif;
+    font-family: 'ProximaNW01-AltLightReg', sans-serif;
     font-size: 22px;
     line-height: 1.4em;
     display: inline-block;
@@ -8959,7 +8686,7 @@ body {
     content: ".";
   }
   .comment-group-meta h2.comment-group-ref-below {
-    font-family: 'Proxima Nova', sans-serif;
+    font-family: 'ProximaNW01-AltLightReg', sans-serif;
     font-size: 22px;
     line-height: 1.4em;
     display: inline-block;
@@ -9027,7 +8754,7 @@ body {
   .discussion-wrap .continue-discussion h4.continue-discussion-label {
     font-size: 18px;
     font-weight: bold;
-    font-family: 'Proxima Nova', sans-serif;
+    font-family: 'Proxima Nova W15 Medium', sans-serif;
     display: inline-block;
     text-transform: uppercase;
     color: #727272;
@@ -9568,17 +9295,6 @@ body {
   header .social-wrap {
     display: none;
   }
-  .pagination .seq-page {
-    width: 100%;
-    border-bottom: 1px solid #795548;
-  }
-  .pagination .seq-page a {
-    text-align: center;
-    padding: 10px;
-  }
-  .pagination .seq-page:first-child {
-    border-top: 1px solid #795548;
-  }
   .get-more {
     width: 100%;
   }
@@ -9743,7 +9459,7 @@ body {
   margin: 10px;
   border: 2px solid #fff;
   text-transform: uppercase;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   color: #fff;
   cursor: pointer;
 }
@@ -9945,7 +9661,7 @@ body {
   vertical-align: baseline;
 }
 .coverLink {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   color: #795548;
   font-size: 22px;
   font-weight: 100;
@@ -10022,48 +9738,6 @@ body {
 .draft-button-container {
   display: flex;
 }
-.chsModal {
-  background: rgba(255, 255, 255, 0.94);
-  width: 100vw;
-  height: 100vh;
-  text-align: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  color: #1e1e1e;
-  overflow-y: scroll;
-}
-.chsModal .modalInner {
-  margin: 30px auto;
-  display: inline-block;
-  max-width: 720px;
-  width: 95%;
-}
-.chsModal .closeModal {
-  position: fixed;
-  top: 25px;
-  right: 25px;
-  width: 44px;
-  height: 44px;
-  border: 2px #999 solid;
-  background: #999;
-  border-radius: 100%;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  @include transition(all 100ms ease-in-out);
-}
-.chsModal .closeModal:hover {
-  background: #1e1e1e;
-  border: #1e1e1e 2px solid;
-  color: #fff;
-}
-.chsModal .closeModal i:before {
-  font-size: 22px;
-}
 .leftMenu {
   background: #fff;
 }
@@ -10079,7 +9753,7 @@ body {
   text-align: left;
   font-size: 12px;
   text-transform: uppercase;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   cursor: pointer;
 }
 .menuSubItem {
@@ -10088,7 +9762,7 @@ body {
   text-align: left;
   font-size: 12px;
   text-transform: uppercase;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   cursor: pointer;
 }
 .menuSubItem.menuSubItemLast {
@@ -10099,56 +9773,6 @@ body {
   border-left: 2px solid #CCCCCC;
   color: #1e1e1e;
   display: block;
-}
-.noResults {
-  text-align: left;
-}
-.noResults p {
-  width: 90%;
-  max-width: 720px;
-  font-size: 22px;
-  font-family: 'Merriweather', serif;
-  font-weight: 100;
-}
-.pagination {
-  margin: 60px auto;
-  text-align: center;
-  display: block;
-}
-.paginationButton {
-  background: #eee;
-  color: #795548;
-  display: inline-block;
-  vertical-align: top;
-  cursor: pointer;
-  margin: 10px;
-  border: 2px solid #eee;
-  padding: 5px 15px;
-  @include transition(all 100ms ease-in-out);
-}
-.paginationButton:hover {
-  background: #fff;
-  border: 2px solid #795548;
-}
-.paginationButton.isActive {
-  background: #795548;
-  border: 2px solid #795548;
-  outline: 1px solid #fff;
-  color: #fff;
-}
-.paginationButton.isActive span {
-  color: #fff;
-}
-.paginationButton span {
-  display: inline-block;
-  vertical-align: top;
-  font-family: 'Proxima Nova', sans-serif;
-}
-.paginationButton i {
-  display: inline-block;
-  vertical-align: top;
-  padding-top: 7px;
-  line-height: 10px;
 }
 .snackAttack > div > div > span {
   color: #ffffff !important;
@@ -10244,14 +9868,14 @@ div.tooltip {
   color: #fff;
   display: block;
   line-height: 1.3em;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   padding: 25px 0;
   width: 100%;
   text-align: center;
 }
 .commenter-teaser .commenter-teaser-text .project-link {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.4);
 }
@@ -10402,7 +10026,7 @@ div.tooltip {
 .page-content .read-more-button span {
   font-size: 12px;
   margin: 0;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -10540,7 +10164,7 @@ div.tooltip {
   right: 0;
   margin: -22px auto 0;
   display: block;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   text-align: center;
   color: #fff;
   text-transform: uppercase;
@@ -10562,7 +10186,7 @@ div.tooltip {
   right: 0;
   margin: -22px auto 0;
   display: block;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   text-align: center;
   color: #fff;
   text-transform: uppercase;
@@ -10698,6 +10322,89 @@ div.tooltip {
 .draft-button-container {
   display: flex;
 }
+.chsFormInputOuter {
+  margin: 50px 0;
+}
+.chsFormInputOuter label {
+  font-size: 16px;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
+  font-weight: bold;
+  display: block;
+}
+.chsFormInputOuter input,
+.chsFormInputOuter textarea {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 28px;
+  font-family: 'Merriweather', Georgia, serif;
+  font-weight: 100;
+  color: #1e1e1e;
+  border: none;
+  border-bottom: 2px solid #CCCCCC;
+  padding: 15px;
+  margin: 20px 0;
+  outline: none;
+  width: 90%;
+  max-width: 990px;
+  setting-align: left;
+  line-height: 1.3em;
+}
+.chsFormInputOuter input:focus,
+.chsFormInputOuter textarea:focus {
+  outline: none;
+}
+.chsFormInputOuter input::placeholder,
+.chsFormInputOuter textarea::placeholder {
+  color: #bbb;
+  font-size: 28px;
+  font-family: 'Merriweather', Georgia, serif;
+  line-height: 1.3em;
+  font-weight: 100;
+}
+.chsFormInputOuter textarea {
+  font-size: 22px;
+  line-height: 1.7em;
+  min-height: 180px;
+}
+.chsFormInputOuter textarea::placeholder {
+  font-size: 22px;
+}
+.chsFormHelp {
+  font-size: 12px;
+  color: #795548;
+  padding: 40px 6px;
+  display: inline-block;
+  vertical-align: top;
+  cursor: pointer;
+}
+.chsFormHelp:hover {
+  color: #5D4037;
+}
+.chsFormButton {
+  display: inline-block;
+  margin: 30px 0;
+  color: #1e1e1e;
+  padding: 15px 25px;
+  background: transparent;
+  border: 2px solid #1e1e1e;
+  text-transform: uppercase;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
+  cursor: pointer;
+  border-radius: 0;
+  outline: 0;
+  @include transition(all 100ms ease-in-out);
+}
+.chsFormButton.disabled {
+  opacity: 0.3;
+}
+.chsFormButton:hover {
+  background: #795548;
+  border: 2px solid #795548;
+  color: #fff;
+}
+.chsFormButton:focus {
+  outline: none;
+}
 header .active-comment-meta {
   margin-top: 5px;
 }
@@ -10739,7 +10446,7 @@ header .line-wrap .line-text {
   font-family: 'Gentium Basic', 'Merriweather', Georgia, Times New Roman, serif;
 }
 header .line-wrap .line-ref {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 18px;
   padding: 3px 20px 3px 15px;
   border-right: 1px solid #aaa;
@@ -10784,7 +10491,7 @@ header .line-wrap .line-ref {
 }
 .comment-group-meta {
   text-align: right;
-  padding: 40px 0;
+  padding: 0;
   display: inline-block;
   vertical-align: top;
   width: 10%;
@@ -10813,7 +10520,7 @@ header .line-wrap .line-ref {
   color: #727272;
   padding: 30px 0px 5px 0;
   margin: 0 0px 0 0;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 16px;
   text-align: right;
   clear: both;
@@ -10821,7 +10528,7 @@ header .line-wrap .line-ref {
 }
 .comment-group-meta h2.comment-group-ref-below {
   cursor: default;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
   font-size: 36px;
   font-weight: bold;
   color: #424242;
@@ -10836,7 +10543,7 @@ header .line-wrap .line-ref {
   width: auto;
 }
 .comment-group-meta h2.comment-group-ref-below span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
   font-size: 46px;
   font-weight: bold;
 }
@@ -10939,7 +10646,7 @@ header .line-wrap .line-ref {
 .comment h1 {
   margin: 0;
   padding: 10px 0;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 28px;
   color: rgba(0, 0, 0, 0.8);
 }
@@ -10988,7 +10695,7 @@ header .line-wrap .line-ref {
 .comment .comment-revisions .revision span {
   padding: 0px 20px;
   display: block;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 12px !important;
   text-transform: uppercase;
   color: #999;
@@ -11173,7 +10880,7 @@ header .line-wrap .line-ref {
 .comment-body li,
 .comment-body span,
 .comment-body a {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 18px;
   font-weight: 300;
   line-height: 1.76em;
@@ -11210,7 +10917,7 @@ header .line-wrap .line-ref {
   padding-top: 30px;
 }
 .comment-reference h4 {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 18px;
   text-transform: uppercase;
   margin: 0;
@@ -11224,7 +10931,7 @@ header .line-wrap .line-ref {
 }
 .comment-reference a {
   font-weight: lighter;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 18px;
   border-bottom: 2px solid #795548;
   box-shadow: none;
@@ -11265,7 +10972,7 @@ header .line-wrap .line-ref {
   width: 100%;
 }
 .comment-meta-section h4 {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 26px;
 }
 .comment-meta-section .item-link {
@@ -11466,7 +11173,7 @@ header .line-wrap .line-ref {
   display: none;
 }
 .no-commentary {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 22px;
   line-height: 1.8em;
   width: 90%;
@@ -11632,7 +11339,7 @@ header .line-wrap .line-ref {
   text-overflow: ellipsis;
 }
 .lemma-panel .md-button span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 14px;
 }
 .lemma-panel .md-button.selected-version-tab {
@@ -11870,7 +11577,7 @@ article.lemma-comment .context-tabs {
 }
 .commentary-lemma-show-more-button button div span {
   font-size: 12px !important;
-  font-family: 'Proxima Nova', sans-serif !important;
+  font-family: 'Proxima Nova W08 Reg', sans-serif !important;
   display: inline-block;
   vertical-align: bottom;
 }
@@ -11905,7 +11612,7 @@ article.lemma-comment .context-tabs {
 .comment-citation-help {
   font-size: 16px;
   font-weight: 100;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   line-height: 1.7em;
   padding: 30px 0 20px;
   margin: 0;
@@ -11942,10 +11649,10 @@ article.lemma-comment .context-tabs {
 .comment-citation-urn label {
   font-size: 14px;
   padding-right: 15px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
 }
 .comment-citation-urn .urn {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   padding-right: 15px;
   font-weight: 100;
   font-size: 14px;
@@ -11983,7 +11690,7 @@ article.lemma-comment .context-tabs {
   color: #999;
 }
 .translated-by-label {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-weight: bold;
   font-size: 14px;
   margin-left: 55%;
@@ -12035,7 +11742,7 @@ article.lemma-comment .context-tabs {
   color: #fff;
   padding: 10px 20px;
   border: 1px solid #795548;
-  font-family: 'Proxima Nova', sans-serif 14px;
+  font-family: 'Proxima Nova W15 Medium', sans-serif 14px;
   text-transform: uppercase;
 }
 .filter .filter-val {
@@ -12067,7 +11774,7 @@ article.lemma-comment .context-tabs {
   padding: 4px;
 }
 .filter .filter-val span {
-  font-family: 'Proxima Nova', sans-serif 13px;
+  font-family: 'Proxima Nova W08 Reg', sans-serif 13px;
   display: inline-block;
   vertical-align: top;
 }
@@ -12195,7 +11902,7 @@ article.lemma-comment .context-tabs {
   font-size: 18px;
 }
 .search-term-button .search-term-button-label {
-  font-family: 'Proxima Nova', sans-serif 12px;
+  font-family: 'Proxima Nova W15 Medium', sans-serif 12px;
   font-weight: bold;
   color: #727272;
 }
@@ -12233,7 +11940,7 @@ article.lemma-comment .context-tabs {
   vertical-align: top;
 }
 .search-tool span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 14px;
   color: #5D4037;
 }
@@ -12281,7 +11988,7 @@ article.lemma-comment .context-tabs {
   display: block;
 }
 .line-search label {
-  font-family: 'Proxima Nova', sans-serif 14px;
+  font-family: 'Proxima Nova W15 Medium', sans-serif 14px;
   color: #5D4037;
   display: inline-block;
   padding: 14px 5px 5px 0;
@@ -12289,7 +11996,7 @@ article.lemma-comment .context-tabs {
 .line-search input {
   width: 69px;
   margin: 3px 10px 0 0;
-  font-family: 'Proxima Nova', sans-serif 14px;
+  font-family: 'Proxima Nova W08 Reg', sans-serif 14px;
 }
 .line-search .irs-bar {
   height: 10px;
@@ -12328,7 +12035,7 @@ article.lemma-comment .context-tabs {
   float: right;
   margin: 10px 30px 0px 0px;
   padding: 14px 26px;
-  font-family: 'Proxima Nova', sans-serif 16px;
+  font-family: 'Proxima Nova W15 Medium', sans-serif 16px;
   background: #607D8B;
   color: #fff;
   border-radius: 0px;
@@ -12360,7 +12067,7 @@ article.lemma-comment .context-tabs {
   text-align: center;
 }
 .no-results span {
-  font-family: 'Proxima Nova', sans-serif 16px;
+  font-family: 'Proxima Nova W15 Medium', sans-serif 16px;
 }
 .close-dropdown {
   position: absolute !important;
@@ -12414,7 +12121,7 @@ header .right-drawer-toggle {
   background: #fff;
 }
 .search-tools-drawer .card-header > div > span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-weight: bold;
   font-size: 14px !important;
   color: #727272 !important;
@@ -12432,7 +12139,7 @@ header .right-drawer-toggle {
 }
 .search-tools-drawer .search-term-button span {
   text-transform: uppercase;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 12px;
   color: #727272;
 }
@@ -12452,7 +12159,7 @@ header .right-drawer-toggle {
 }
 .chs-editor-layout .DraftEditor-root span,
 .chs-editor-layout .DraftEditor-root .public-DraftEditorPlaceholder-inner {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 18px;
   padding: 8px 0;
   line-height: 1.5em;
@@ -12705,7 +12412,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   left: 10px;
   color: #fff;
   line-height: 1.3em;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-weight: bold;
 }
 .continue-discussion-icon i {
@@ -12751,7 +12458,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   text-align: right;
 }
 .discussion-thread .sort-by-wrap .sort-by-label {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 12px;
   color: #727272;
   text-transform: uppercase;
@@ -12767,7 +12474,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   margin: 0px 2px;
 }
 .discussion-thread .sort-by-wrap .sort-by-option span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 16px;
   color: #5D4037;
 }
@@ -12802,7 +12509,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   outline: none;
   border: none;
   resize: none;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   font-weight: 300;
@@ -12812,7 +12519,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 }
 .discussion-thread .add-comment-wrap textarea::-webkit-input-placeholder {
   text-transform: none;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   font-weight: 300;
@@ -12820,7 +12527,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 }
 .discussion-thread .add-comment-wrap textarea:-moz-placeholder {
   text-transform: none;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   font-weight: 300;
@@ -12828,7 +12535,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 }
 .discussion-thread .add-comment-wrap textarea::-moz-placeholder {
   text-transform: none;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   font-weight: 300;
@@ -12836,7 +12543,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 }
 .discussion-thread .add-comment-wrap textarea:-ms-input-placeholder {
   text-transform: none;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   font-weight: 300;
@@ -12848,7 +12555,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   min-height: 0;
 }
 .discussion-thread .add-comment-wrap .md-button span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -12896,7 +12603,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   border-bottom: 2px solid #ddd;
   padding: 10px;
   resize: none;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   font-weight: 300;
@@ -12941,7 +12648,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 }
 .discussion-thread .no-results-text {
   font-size: 16px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   line-height: 1.5em;
   color: #727272;
 }
@@ -12980,7 +12687,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   color: #727272;
   text-transform: uppercase;
   font-weight: bold;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   display: block;
   width: 100%;
   background: #eee;
@@ -13004,7 +12711,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   clear: both;
 }
 .discussion-comment .discussion-commenter-meta .discussion-commenter-name {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
   font-size: 18px;
 }
 .discussion-comment .discussion-commenter-meta .discussion-commenter-name:hover {
@@ -13023,7 +12730,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   text-transform: uppercase;
 }
 .discussion-comment .discussion-comment-text {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   color: rgba(0, 0, 0, 0.7);
@@ -13031,7 +12738,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   margin-top: 20px;
 }
 .discussion-comment .discussion-comment-text p {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   color: rgba(0, 0, 0, 0.7);
@@ -13070,7 +12777,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 .discussion-comment .inner-comment-row .md-button span {
   display: inline-block;
   vertical-align: top;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -13135,7 +12842,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   width: 100%;
   margin: 20px auto;
   font-size: 24px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
 }
 .user-discussion-comments .user-discussion-comment {
   width: 100%;
@@ -13150,7 +12857,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   margin: 0 auto;
   max-width: 710px;
   display: block;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   color: #727272;
   text-transform: uppercase;
   font-weight: bold;
@@ -13265,7 +12972,7 @@ article.lemma-comment p.lemma-text.no-lines-selected {
 }
 .page.page-community .page-content h3 {
   font-size: 22px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
   margin: 60px auto 30px;
   padding: 0 0 10px;
   border-bottom: 2px solid #CCCCCC;
@@ -13322,12 +13029,12 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   margin: 0 20px;
 }
 .text-nodes-editor-meta-input label {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
 }
 .text-nodes-editor-meta-input button {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 12px;
   padding: 5px 10px;
   background: transparent;
@@ -13349,12 +13056,12 @@ article.lemma-comment p.lemma-text.no-lines-selected {
   display: block;
 }
 .text-nodes-editor-text-input label {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
 }
 .text-nodes-editor-text-input button {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 12px;
   padding: 5px 10px;
   background: transparent;
@@ -13465,14 +13172,14 @@ header .header-section-wrap .account-button span.notificationBadge {
 }
 .recentTeaserTitle {
   display: block;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 14px;
   padding: 5px 0;
   color: $text;
 }
 .recentTeaserChapter {
   display: block;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 13px;
   padding: 5px;
   color: #666;
@@ -13500,7 +13207,7 @@ header .header-section-wrap .account-button span.notificationBadge {
   padding: 15px 0px;
 }
 .userDropdownLeft h4 {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 18px;
   font-style: italic;
   padding: 0 20px;
@@ -13544,14 +13251,14 @@ header .header-section-wrap .account-button span.notificationBadge {
 }
 .at-form .error-text {
   font-size: 16px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-weight: 100;
   color: #63232D;
 }
 .at-sep {
   font-size: 14px;
   margin: 15px auto;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-weight: 100;
   color: #212121;
 }
@@ -13584,7 +13291,7 @@ header .header-section-wrap .account-button span.notificationBadge {
 }
 .at-pwd-form label {
   font-size: 14px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-weight: 100;
   color: #212121;
   text-align: left;
@@ -13596,7 +13303,7 @@ header .header-section-wrap .account-button span.notificationBadge {
   border: 2px solid #ddd;
   padding: 20px;
   font-size: 18px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   height: auto;
   color: #1e1e1e;
   font-weight: 100;
@@ -13633,7 +13340,7 @@ header .header-section-wrap .account-button span.notificationBadge {
 }
 .keyword .keyword-title {
   color: #212121;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 22px;
   text-transform: uppercase;
   margin-right: 10px;
@@ -13656,7 +13363,7 @@ header .header-section-wrap .account-button span.notificationBadge {
 .keyword .keyword-description {
   display: block;
   color: #aaa;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 16px;
   line-height: 1.5em;
   width: 97%;
@@ -13759,7 +13466,7 @@ section.keyword-single {
   display: inline-block;
   vertical-align: top;
   font-size: 22px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
   margin: 0;
 }
 .keyword-teaser .mdi {
@@ -13779,7 +13486,7 @@ section.keyword-single {
   vertical-align: top;
   padding: 4px 10px;
   font-size: 14px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-weight: light;
   color: #727272;
 }
@@ -13794,14 +13501,14 @@ section.keyword-single {
   margin: 10px 5px 20px;
   max-width: 700px;
   font-size: 15px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   line-height: 1.5em;
 }
 .keyword-teaser .keyword-read-more {
   display: none;
   clear: both;
   color: #727272;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   text-transform: uppercase;
   font-size: 12px;
   margin: 10px 6px 0;
@@ -13846,7 +13553,7 @@ section.keyword-single {
   padding: 60px 0 180px;
   color: #727272;
   text-align: center;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 20px;
   font-weight: 100;
 }
@@ -13860,7 +13567,7 @@ section.keyword-single {
   width: 95%;
 }
 .keyword-context .lemma-comment-ref-header {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-weight: bold;
   font-size: 16px;
   padding: 0px 15px 10px;
@@ -13885,7 +13592,7 @@ section.keyword-single {
 .keywords-suggestion {
   display: block;
   padding: 5px 15px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-weight: 300;
   font-size: 16px;
   cursor: pointer;
@@ -13906,7 +13613,7 @@ section.keyword-single {
 }
 .reference-work .reference-work-title {
   color: #212121;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 26px;
   text-transform: uppercase;
   margin-right: 10px;
@@ -13957,7 +13664,7 @@ section.reference-work-single {
   display: inline-block;
   vertical-align: top;
   font-size: 24px;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
   margin: 0 !important;
   padding: 10px 0 !important;
   line-height: 1.4em;
@@ -13996,7 +13703,7 @@ section.reference-work-single {
   margin: 25px 0 5px !important;
   max-width: 700px;
   font-size: 15px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   line-height: 1.5em;
   font-weight: 300;
 }
@@ -14006,7 +13713,7 @@ section.reference-work-single {
 .reference-work-teaser .reference-work-read-more {
   clear: both;
   color: #727272;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   text-transform: uppercase;
   font-size: 12px;
   margin: 10px 0px 0 !important;
@@ -14036,7 +13743,7 @@ section.reference-work-single {
 }
 .page.reference-works-detail-page .page-content p,
 .page.reference-works-detail-page .page-content span {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 20px;
   line-height: 1.8em;
   width: 90%;
@@ -14048,7 +13755,7 @@ section.reference-work-single {
 }
 .read-online-link {
   color: #fff;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 20px;
   font-weight: 300;
   text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
@@ -14070,7 +13777,7 @@ section.reference-work-single {
 .reference-work-byline h3,
 .reference-work-byline a {
   font-size: 22px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-weight: 300px;
   display: inline;
   vertical-align: top;
@@ -14223,7 +13930,7 @@ section.reference-work-single {
 .user-profile-textfields .form-save-help {
   text-align: center !important;
   margin: 0 auto !important;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   color: #727272;
   font-size: 16px;
   display: block;
@@ -14331,7 +14038,7 @@ section.reference-work-single {
 }
 .user-profile-tabs button div,
 .user-profile-tabs button span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   font-size: 18px;
   font-weight: 300;
   text-transform: none;
@@ -14478,7 +14185,7 @@ section.reference-work-single {
 .page .page-content h5 {
   max-width: 750px;
   padding: 10px 0;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif;
 }
 .page .page-content h1 {
   font-size: 42px;
@@ -14493,7 +14200,7 @@ section.reference-work-single {
 }
 .page .page-content p {
   max-width: 720px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 20px;
   line-height: 1.7em;
   display: block;
@@ -14512,7 +14219,7 @@ section.reference-work-single {
 .page .page-content .page-byline span {
   text-align: center;
   font-size: 18px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-weight: 300;
   line-height: 1.7em;
 }
@@ -14531,7 +14238,7 @@ section.reference-work-single {
   line-height: 56px;
   font-weight: lighter !important;
   text-align: left;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   font-size: 48px;
   padding-bottom: 30px;
 }
@@ -14827,7 +14534,7 @@ section h2 {
   text-align: center;
 }
 section p {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-size: 20px;
   line-height: 1.8em;
   width: 90%;
@@ -14972,12 +14679,12 @@ section.header .center-content .direct-down:hover {
 }
 .cover-link button span,
 .cover-link a span {
-  font-family: 'Proxima Nova', sans-serif !important;
+  font-family: 'Proxima Nova W15 Medium', sans-serif !important;
   text-transform: uppercase;
   font-weight: 700 !important;
 }
 .cover-link span {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W15 Medium', sans-serif;
   text-transform: uppercase;
   font-weight: 700;
 }
@@ -15106,7 +14813,7 @@ section.intro .intro-col-image .caption p {
   margin: 0;
   font-size: 14px;
   color: #727272;
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: 'Proxima Nova W08 Reg', sans-serif;
   width: 100%;
   max-width: none;
 }
@@ -15170,7 +14877,7 @@ section.browse-commentary {
 }
 section.browse-commentary .visualizations-coaching-text {
   font-size: 16px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', Georgia, serif;
   font-weight: 100;
   line-height: 1.6em;
   display: block;
@@ -15214,7 +14921,7 @@ section.browse-commentary .data-visualization-container img {
 .commentary-text .text-title {
   width: 100%;
   margin: 0 auto;
-  font-family: 'Proxima Nova', sans-serif 42px;
+  font-family: 'ProximaNW01-AltLightReg', sans-serif 42px;
   text-align: center;
 }
 .commentary-text .text-divider {

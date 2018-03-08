@@ -20,7 +20,7 @@ import AuthModalContainer from '../../../../modules/auth/containers/AuthModalCon
 import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 // graphql
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../settings/graphql/queries/list';
 
 
 class CommunityLayout extends Component {

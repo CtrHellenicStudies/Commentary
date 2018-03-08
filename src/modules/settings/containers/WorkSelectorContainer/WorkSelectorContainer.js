@@ -3,10 +3,10 @@ import { compose } from 'react-apollo';
 
 
 import textSelectorQuery from '../../graphql/queries/textSelector';
-import TextSelector from '../../components/TextSelector';
+import WorkSelector from '../../components/WorkSelector';
 
 
-const TextSelectorContainer = props => {
+const WorkSelectorContainer = props => {
 	let collection = null;
 	let collections = [];
 
@@ -26,7 +26,7 @@ const TextSelectorContainer = props => {
 	}
 
 	return (
-		<TextSelector
+		<WorkSelector
 			collection={collection}
 			collections={collections}
 			collectionId={props.collectionId}
@@ -42,4 +42,4 @@ const TextSelectorContainer = props => {
 
 export default compose(
 	textSelectorQuery,
-)(TextSelectorContainer);
+)(WorkSelectorContainer);

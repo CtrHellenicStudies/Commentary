@@ -17,7 +17,7 @@ import Utils from '../../../../lib/utils';
 
 // graphql
 import { tenantsQuery } from '../../../../graphql/methods/tenants';
-import { settingsQuery } from '../../../../graphql/methods/settings';
+import settingsQuery from '../../../../modules/settings/graphql/queries/list';
 
 // actions
 import { toggleLeftMenu } from '../../../../actions/leftMenu';
@@ -204,7 +204,12 @@ class NavBar extends React.Component {
 		const { rightMenuOpen, searchEnabled, settings, tenant } = this.state;
 
 		return (
-			<Headroom className="navbar">
+			<Headroom
+				className="navbar"
+				style={{
+					zIndex: 98,
+				}}
+			>
 				{!isOnHomeView && (
 					toggleSearchTerm
 				) ?

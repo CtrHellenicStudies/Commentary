@@ -4,6 +4,9 @@
 
 import { Slingshot } from 'meteor/edgee:slingshot';
 
+/**
+ * Create directive for uploading files for editor using Meteor settings with AWS
+ */
 Slingshot.createDirective('uploads', Slingshot.S3Storage, {
 	bucket: Meteor.settings.private.aws.S3_BUCKET,
 	AWSAccessKeyId: Meteor.settings.private.aws.AWS_ACCESS_KEY_ID,

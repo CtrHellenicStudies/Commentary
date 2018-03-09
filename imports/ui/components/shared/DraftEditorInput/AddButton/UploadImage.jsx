@@ -8,7 +8,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import { sendSnack } from '/imports/ui/components/shared/SnackAttack';
 
-export default class AvatarEditor extends React.Component {
+/**
+ * Add functionality to draftjs editor to upload images inline 
+ */
+
+export default class UploadImage extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -46,16 +50,16 @@ export default class AvatarEditor extends React.Component {
 	render() {
 		return (
 			<DropZone className="draft-editor-dropzone" onDrop={this.onDrop} multiple={false} accept={'image/*'}>
-				<RaisedButton className="draft-add-video-confirm-button" onClick={this.addVideo}>Upload image</RaisedButton>                
+				<RaisedButton className="draft-add-video-confirm-button" onClick={this.addVideo}>Upload image</RaisedButton>
 			</DropZone>
 		);
 	}
 }
 
-AvatarEditor.propTypes = {
+UploadImage.propTypes = {
 	defaultAvatarUrl: PropTypes.string.isRequired
 };
 
-AvatarEditor.defaultProps = {
+UploadImage.defaultProps = {
 	defaultAvatarUrl: '',
 };

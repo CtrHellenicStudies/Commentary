@@ -317,7 +317,7 @@ class AddComment extends React.Component {
 		Meteor.call('referenceWorks.insert', Cookies.get('loginToken'), _reference, (err) => {
 			if (err) {
 				this.showSnackBar(err);
-			}			else {
+			}	else {
 				this.showSnackBar({message: 'Reference work added'});
 			}
 		});

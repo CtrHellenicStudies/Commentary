@@ -7,7 +7,7 @@ import { compose } from 'react-apollo';
 
 // lib
 import Utils from './lib/utils';
-import { login, logoutUser } from './lib/auth'
+import { login } from './lib/auth'
 
 // graphql
 import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
@@ -35,6 +35,8 @@ import ReferenceWorkDetail from './modules/referenceWorks/components/ReferenceWo
 
 // modules
 import settingsRoutes from './modules/settings/routes';
+import authenticationRoutes from './modules/auth/routes';
+
 
 // login with token
 const cookies = new Cookies();
@@ -56,18 +58,18 @@ const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined
  */
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
-		{...rest} render={props => (
-		cookies.get('token') ? (
-			<Component {...props} />
-		) : (
-			<Redirect
-				to={{
-					pathname: '/login',
-					state: { from: props.location }
-				}}
-			/>
-		)
-	)}
+		{...rest}
+		render={props => (
+			cookies.get('token') ? (
+				<Component {...props} />
+			) : (
+				<Redirect
+					to={{
+						pathname: '/sign-in',
+					}}
+				/>
+			)
+		)}
 	/>
 );
 
@@ -138,32 +140,12 @@ const routes = (props) => {
 				if (props.userId) {
 					return <Redirect to="/profile" />;
 				}
-					// return <PublicProfilePage userId={cookies.get('token')} />;
+					return // <PublicProfilePage userId={cookies.get('token')} />;
 				}}
-				/>
+			/>
 
 			{/** Auth routes */}
-			<Route
-				exact
-				path="/sign-in"
-				render={params => <HomeLayout {...params} signup />}
-			/>
-			<Route
-				exact
-				path="/sign-out"
-				render={() => {
-					try {
-						logoutUser();
-					} catch (err) {
-						console.log(err);
-					}
-				}}
-			/>
-			<Route
-				exact
-				path="/forgot-password"
-				render={params => <HomeLayout {...params} showForgotPwd />}
-			/>
+			{authenticationRoutes}
 
 
 			{/** NRS routes */}
@@ -191,7 +173,7 @@ const routes = (props) => {
 				path="/v1/doi:doi"
 				render={params => <NameResolutionServiceLayout version={1} doi={params.match.params.doi} />}
 			/>
-			
+
 			{/** Settings routes */}
 			{settingsRoutes}
 
@@ -224,7 +206,6 @@ const App = props => (
 
 PrivateRoute.propTypes = {
 	component: PropTypes.func,
-	location: PropTypes.string
 };
 
 routes.propTypes = {

@@ -11,7 +11,10 @@ const userLoggedIn = () => {
 };
 
 const login = async (data) => {
-	if (userLoggedIn()) return null;
+	if (userLoggedIn()) {
+		logoutUser();
+		throw new Error('User tried to login but user is already logged in');
+	}
 
 	try {
 		const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/login`, {
@@ -46,7 +49,10 @@ const logoutUser = async () => {
 };
 
 const register = async (data) => {
-	if (userLoggedIn()) return null;
+	if (userLoggedIn()) {
+		logoutUser();
+		throw new Error('User tried to register but user is already logged in');
+	}
 
 	try {
 		const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/register`, {
@@ -60,9 +66,11 @@ const register = async (data) => {
 				...data
 			})
 		});
+
 		if (!res.ok) {
 			throw new Error(res.statusText);
 		}
+
 		const resJson = await res.json();
 		if (resJson.token) {
 			// TODO: Add domain: 'orphe.us' options to cookie for cross hostname auth
@@ -70,12 +78,14 @@ const register = async (data) => {
 			cookies.set('token', resJson.token, { domain });
 			return resJson;
 		}
+
 		if (resJson.passwordStrength) {
 			throw new Error({
 				passwordError: true,
 				suggestion: resJson.passwordStrength.feedback.suggestions[0],
 			});
 		}
+
 	} catch (err) {
 		throw err;
 	}

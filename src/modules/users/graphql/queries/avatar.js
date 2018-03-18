@@ -2,7 +2,7 @@ import { gql, graphql } from 'react-apollo';
 
 const query = gql`
 	query userAvatarQuery {
-		getAuthedUser {
+		userProfile {
 			_id
 			username
 			profile {

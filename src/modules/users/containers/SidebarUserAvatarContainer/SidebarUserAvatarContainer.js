@@ -13,13 +13,23 @@ const SidebarUserAvatarContainer = (props) => {
 
 	if (props.userAvatarQuery && props.userAvatarQuery.userProfile) {
 		user = props.userAvatarQuery.userProfile;
-		if ('avatar' in user && user.avatar) {
-			avatarUrl = user.avatar;
-		}
-		if ('name' in user) {
-			userName = user.name;
+		userName = user.username;
+
+		if (user.profile) {
+			if ('avatarUrl' in user.profile && user.profile.avatarUrl) {
+				avatarUrl = user.profile.avatarUrl;
+			}
+			if ('name' in user.profile) {
+				userName = user.profile.name;
+			}
 		}
 	}
+	console.log('#####')
+	console.log('#####')
+	console.log('#####')
+	console.log('#####')
+	console.log(props);
+	console.log(user);
 
 	return (
 		<SidebarUserAvatar

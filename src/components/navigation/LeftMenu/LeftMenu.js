@@ -17,6 +17,8 @@ import { logoutUser } from '../../../lib/auth';
 import Utils from '../../../lib/utils';
 
 
+import './LeftMenu.css';
+
 
 class LeftMenu extends React.Component {
 	constructor(props) {
@@ -61,7 +63,7 @@ class LeftMenu extends React.Component {
 				<LeftMenuHead />
 				<div className="leftMenuContent">
 				{Utils.userInRole(roles, ['admin']) ?
-							 
+
 								(<MenuItem
 									to="http://ahcip-admin.chs.harvard.edu"
 									target="_blank"
@@ -69,7 +71,7 @@ class LeftMenu extends React.Component {
 								onClick={closeLeftMenu} />) : ''}
 					{Utils.userInRole(roles, ['editor', 'admin', 'commenter'])
 					 ? (
-						  <div>  
+						  <div>
 					 		<MenuItem to="/commentary/create"
 								onClick={closeLeftMenu}>
 									Add Comment

@@ -246,7 +246,8 @@ class Home extends Component {
 						</div>
 					</section>
 
-					<section className="get-started">
+					{/*
+						<section className="get-started">
 						<h2 className="block-title">Get Started</h2>
 						<div className="get-started-comments">
 							{ready ?
@@ -268,6 +269,7 @@ class Home extends Component {
 							</div>
 						</div>
 					</section>
+					*/}
 				</div>
 			</div>
 		);

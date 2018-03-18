@@ -9738,15 +9738,6 @@ body {
 .draft-button-container {
   display: flex;
 }
-.leftMenu {
-  background: #fff;
-}
-.leftMenuHead {
-  background: #f6f6f6;
-  min-height: 120px;
-  padding: 60px 20px 30px;
-  text-align: left;
-}
 .menuItem {
   padding: 15px 20px;
   display: block;

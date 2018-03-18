@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
 
-const userLoggedIn = () => {
+const userIsLoggedIn = () => {
 	const token = cookies.get('token');
 
 	if (token) return true;
@@ -11,8 +11,7 @@ const userLoggedIn = () => {
 };
 
 const login = async (data) => {
-	if (userLoggedIn()) {
-		logoutUser();
+	if (userIsLoggedIn()) {
 		throw new Error('User tried to login but user is already logged in');
 	}
 
@@ -49,8 +48,7 @@ const logoutUser = async () => {
 };
 
 const register = async (data) => {
-	if (userLoggedIn()) {
-		logoutUser();
+	if (userIsLoggedIn()) {
 		throw new Error('User tried to register but user is already logged in');
 	}
 
@@ -119,4 +117,4 @@ const verifyToken = async () => {
 	return null;
 };
 
-export { login, logoutUser, register, verifyToken };
+export { login, logoutUser, register, verifyToken, userIsLoggedIn };

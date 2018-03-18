@@ -37,13 +37,8 @@ import ReferenceWorkDetail from './modules/referenceWorks/components/ReferenceWo
 import settingsRoutes from './modules/settings/routes';
 import authenticationRoutes from './modules/auth/routes';
 
-
-// login with token
+// instantiate cookies 
 const cookies = new Cookies();
-const token = cookies.get('token');
-if (token) {
-	login(token);
-}
 
 // set the base document meta for the application
 Utils.setBaseDocMeta();

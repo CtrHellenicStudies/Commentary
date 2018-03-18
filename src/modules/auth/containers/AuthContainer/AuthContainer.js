@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { compose } from 'react-apollo';
 
 // auth types:
 import Login from '../../components/Login';
@@ -84,7 +86,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	dispatchSetUser: (userObject) => {
 		dispatch(setUser(userObject));
     // Go to commentary requested route instead of toggling modal
-		// dispatch(toggleAuthModal(false));
+    ownProps.history.push('/');
 	},
 	dispatchLogin: data => dispatch(login(ownProps.loginMethod, data)),
 	dispatchSignup: data => dispatch(login(ownProps.signupMethod, data)),
@@ -93,7 +95,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	},
 });
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+export default compose(
+  withRouter,
+  connect(
+  	mapStateToProps,
+  	mapDispatchToProps
+  ),
 )(AuthContainer);

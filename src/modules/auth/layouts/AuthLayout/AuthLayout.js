@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -13,6 +14,7 @@ import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
+import { userIsLoggedIn } from '../../../../lib/auth';
 
 
 import './AuthLayout.css';
@@ -24,6 +26,10 @@ class AuthLayout extends Component {
 	}
 
 	render() {
+		if (userIsLoggedIn()) {
+			this.props.history.push('/');
+		}
+
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout auth-layout">
@@ -52,4 +58,4 @@ AuthLayout.childContextTypes = {
 };
 
 
-export default AuthLayout;
+export default withRouter(AuthLayout);

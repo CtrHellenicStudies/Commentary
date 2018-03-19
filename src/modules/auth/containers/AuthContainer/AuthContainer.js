@@ -7,6 +7,7 @@ import { compose } from 'react-apollo';
 // auth types:
 import Login from '../../components/Login';
 import Signup from '../../components/Signup';
+import PWDUpdateFormForV2 from '../../components/PWDUpdateFormForV2';
 
 // actions
 import { changeAuthMode, setUser, login, logout } from '../../actions';
@@ -17,6 +18,7 @@ class AuthContainer extends React.Component {
 	static propTypes = {
 		dispatchLogin: PropTypes.func.isRequired,
 		dispatchSignup: PropTypes.func.isRequired,
+		dispatchReset: PropTypes.func.isRequired,
 		dispatchChangeAuthMode: PropTypes.func.isRequired,
 		authMode: PropTypes.string,
 	};
@@ -53,8 +55,18 @@ class AuthContainer extends React.Component {
 
 	render() {
 		const {
-      authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup,
+      authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup, updateV2,
+			dispatchReset,
     } = this.props;
+
+		// Handle the update form for the second version of the Commentaries
+		if (updateV2) {
+			return (
+				<PWDUpdateFormForV2
+					reset={dispatchReset}
+				/>
+			);
+		}
 
 		return (
 			<div>
@@ -90,6 +102,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	},
 	dispatchLogin: data => dispatch(login(ownProps.loginMethod, data)),
 	dispatchSignup: data => dispatch(login(ownProps.signupMethod, data)),
+	dispatchReset: data => dispatch(login(ownProps.resetMethod, data)),
 	dispatchLogout: () => {
 		dispatch(logout(ownProps.logoutMethod));
 	},

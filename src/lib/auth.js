@@ -71,7 +71,47 @@ const register = async (data) => {
 
 		const resJson = await res.json();
 		if (resJson.token) {
-			// TODO: Add domain: 'orphe.us' options to cookie for cross hostname auth
+			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
+			cookies.set('token', resJson.token, { domain });
+			return resJson;
+		}
+
+		if (resJson.passwordStrength) {
+			throw new Error({
+				passwordError: true,
+				suggestion: resJson.passwordStrength.feedback.suggestions[0],
+			});
+		}
+
+	} catch (err) {
+		throw err;
+	}
+};
+
+const resetPassword = async (data) => {
+	if (userIsLoggedIn()) {
+		throw new Error('User tried to register but user is already logged in');
+	}
+
+	try {
+		const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/resetPassword`, {
+			method: 'POST',
+			credentials: 'include',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				...data
+			})
+		});
+
+		if (!res.ok) {
+			throw new Error(res.statusText);
+		}
+
+		const resJson = await res.json();
+		if (resJson.token) {
 			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
 			cookies.set('token', resJson.token, { domain });
 			return resJson;
@@ -117,4 +157,4 @@ const verifyToken = async () => {
 	return null;
 };
 
-export { login, logoutUser, register, verifyToken, userIsLoggedIn };
+export { login, logoutUser, register, verifyToken, userIsLoggedIn, resetPassword };

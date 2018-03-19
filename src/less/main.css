@@ -7110,7 +7110,7 @@ button#at-btn {
 .at-input input[type="text"],
 .at-input input[type="password"] {
   border-radius: 0px;
-  padding: 10px 15px;
+  padding: 20px;
   font-size: 18px;
   color: #1e1e1e;
   font-family: 'Proxima Nova W08 Reg', sans-serif;

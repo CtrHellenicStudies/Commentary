@@ -25,6 +25,15 @@ export default (
 					}
 				}}
 			/>
+			<Route
+				exact
+				path="/update-for-v2"
+				component={() => (
+          <AuthLayout
+            updateV2
+          />
+        )}
+			/>
       {/*
 			<Route
 				exact

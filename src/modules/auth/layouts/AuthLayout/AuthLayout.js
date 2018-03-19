@@ -10,7 +10,7 @@ import Header from '../../../../components/navigation/Header';
 
 // auth
 import AuthContainer from '../../containers/AuthContainer';
-import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
+import { login, register, resetPassword, logoutUser, verifyToken } from '../../../../lib/auth';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
@@ -44,7 +44,9 @@ class AuthLayout extends Component {
   						loginMethod={login}
   						signupMethod={register}
   						logoutMethod={logoutUser}
+							resetMethod={resetPassword}
   						getUserFromServer={verifyToken}
+							updateV2={this.props.updateV2}
   					/>
 					</main>
 				</div>

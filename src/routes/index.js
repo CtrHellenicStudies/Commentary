@@ -13,29 +13,20 @@ import { login } from './lib/auth'
 import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
 
 // layouts
-import CommentaryLayout from './modules/comments/layouts/CommentaryLayout';
-import AddCommentLayout from './modules/comments/layouts/AddCommentLayout';
-import AddKeywordLayout from './modules/keywords/layouts/AddKeywordLayout/AddKeywordLayout';
-import AddRevisionLayout from './modules/revisions/layouts/AddRevisionLayout/AddRevisionLayout';
-import EditKeywordLayout from './modules/keywords/layouts/EditKeywordsLayout/EditKeywordLayout';
-import TextNodesEditorLayout from './modules/textNodes/layouts/TextNodesLayout/TextNodesEditorLayout';
-import HomeLayout from './modules/home/layouts/HomeLayouts/HomeLayout';
-import NameResolutionServiceLayout from './modules/services/layouts/NameResolutionServiceLayout/NameResolutionServiceLayout';
 import NotFound from './modules/notFound/components/NotFound/NotFound';
 
-// pages
-import Page from './modules/page/components/Page/Page';
-import CommentersPage from './modules/commenters/components/CommenterPage/CommentersPage';
-import CommenterDetail from './modules/commenters/components/CommenterDetail/CommenterDetail';
-import KeywordsPage from './modules/keywords/components/KeywordsPage/KeywordsPage';
-import KeywordDetail from './modules/keywords/components/KeywordDetail/KeywordDetail';
-import ProfilePage from './modules/profile/components/ProfilePage/ProfilePage';
-import ReferenceWorksPage from './modules/referenceWorks/components/ReferenceWorksPage/ReferenceWorksPage';
-import ReferenceWorkDetail from './modules/referenceWorks/components/ReferenceWorkDetail/ReferenceWorkDetail';
-
 // modules
-import settingsRoutes from './modules/settings/routes';
 import authenticationRoutes from './modules/auth/routes';
+import commenterRoutes from './modules/commenters/routes';
+import commentsRoutes from './modules/comments/routes';
+import homeRoutes from './modules/home/routes';
+import keywordsRoutes from './modules/keywords/routes';
+import nrsRoutes from './modules/nrs/routes';
+import pageRoutes from './modules/page/routes';
+import referenceWorksRoutes from './modules/referenceWorks/routes';
+import textNodesRoutes from './modules/textNodes/routes';
+import usersRoutes from './modules/users/routes';
+import settingsRoutes from './modules/settings/routes';
 
 // instantiate cookies
 const cookies = new Cookies();
@@ -90,7 +81,7 @@ const routes = (props) => {
 			{commentaryRoutes}
 
 			{/** Tags routes */}
-			{tagRoutes}
+			{keywordsRoutes}
 
 			{/** Reference works routes */}
 			{referenceWorkRoutes}

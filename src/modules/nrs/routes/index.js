@@ -1,9 +1,17 @@
 import React from 'react';
 import { Route } from 'react-router';
 
-export default (
+import NameResolutionServiceLayout from '../layouts/NameResolutionServiceLayout/NameResolutionServiceLayout';
 
-			<Route exact path="/v1/" component={NameResolutionServiceLayout} />
+export default (
+	<Route>
+		<div>
+			<Route
+				exact
+				path="/v1/"
+				component={NameResolutionServiceLayout}
+			/>
+
 			<Route
 				exact
 				path="/v1/:urn/:commentId"
@@ -13,6 +21,7 @@ export default (
 					commentId={params.match.params.commentId}
 				/>)}
 			/>
+
 			<Route
 				exact
 				path="/v2/:urn/:commentId"
@@ -22,10 +31,12 @@ export default (
 					commentId={params.match.params.commentId}
 				/>)}
 			/>
+
 			<Route
 				exact
 				path="/v1/doi:doi"
 				render={params => <NameResolutionServiceLayout version={1} doi={params.match.params.doi} />}
 			/>
-
+		</div>
+	<Route>
 );

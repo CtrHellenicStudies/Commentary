@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route } from 'react-router';
 
+import Page from '../components/Page';
+
 export default (
 	<Route
 		path="/:slug"

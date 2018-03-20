@@ -3,6 +3,7 @@ import { Route, IndexRoute } from 'react-router';
 
 // Projects
 import MainLayout from '../../../layouts/MainLayout';
+import ProfilePage from '../../profile/components/ProfilePage/ProfilePage';
 import ProfileContainer from '../containers/ProfileContainer';
 import ProfileProjectsContainer from '../containers/ProfileProjectsContainer';
 

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route, Redirect } from 'react-router';
 
 // Projects
+import PrivateRoute from '../../../routes/PrivateRoute';
 import MainLayout from '../../../layouts/MainLayout';
 import ProfilePage from '../../profile/components/ProfilePage/ProfilePage';
-import ProfileContainer from '../containers/ProfileContainer';
-import ProfileProjectsContainer from '../containers/ProfileProjectsContainer';
 
 export default (
 	<div>
@@ -17,11 +16,11 @@ export default (
 		*/}
 		<PrivateRoute exact path="/profile" component={ProfilePage} />
 		<Route
-			path="/users/:userId" render={(params) => {
+			path="/users/:userId" render={(props) => {
 			if (props.userId) {
 				return <Redirect to="/profile" />;
 			}
-				return // <PublicProfilePage userId={cookies.get('token')} />;
+				return null; // <PublicProfilePage userId={cookies.get('token')} />;
 			}}
 		/>
 	</div>

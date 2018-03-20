@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, } from 'react-router-dom';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'universal-cookie';
@@ -6,27 +6,27 @@ import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // lib
-import Utils from './lib/utils';
-import { login } from './lib/auth'
+import Utils from '../lib/utils';
+import { login } from '../lib/auth'
 
 // graphql
-import { tenantsBySubdomainQuery } from './graphql/methods/tenants'
+import { tenantsBySubdomainQuery } from '../graphql/methods/tenants'
 
 // layouts
-import NotFound from './modules/notFound/components/NotFound/NotFound';
+import NotFound from '../modules/notFound/components/NotFound/NotFound';
 
 // modules
-import authenticationRoutes from './modules/auth/routes';
-import commenterRoutes from './modules/commenters/routes';
-import commentsRoutes from './modules/comments/routes';
-import homeRoutes from './modules/home/routes';
-import keywordsRoutes from './modules/keywords/routes';
-import nrsRoutes from './modules/nrs/routes';
-import pageRoutes from './modules/page/routes';
-import referenceWorksRoutes from './modules/referenceWorks/routes';
-import textNodesRoutes from './modules/textNodes/routes';
-import usersRoutes from './modules/users/routes';
-import settingsRoutes from './modules/settings/routes';
+import authenticationRoutes from '../modules/auth/routes';
+import commentersRoutes from '../modules/commenters/routes';
+import commentsRoutes from '../modules/comments/routes';
+import homeRoutes from '../modules/home/routes';
+import keywordsRoutes from '../modules/keywords/routes';
+import nrsRoutes from '../modules/nrs/routes';
+import pageRoutes from '../modules/page/routes';
+import referenceWorksRoutes from '../modules/referenceWorks/routes';
+import textNodesRoutes from '../modules/textNodes/routes';
+import usersRoutes from '../modules/users/routes';
+import settingsRoutes from '../modules/settings/routes';
 
 // instantiate cookies
 const cookies = new Cookies();
@@ -78,22 +78,22 @@ const routes = (props) => {
 			{homeRoutes}
 
 			{/** Commentary routes */}
-			{commentaryRoutes}
+			{commentsRoutes}
 
 			{/** Tags routes */}
 			{keywordsRoutes}
 
 			{/** Reference works routes */}
-			{referenceWorkRoutes}
+			{referenceWorksRoutes}
 
 			{/** Commenters routes */}
 			{commentersRoutes}
 
 			{/** TextNode routes */}
-			{textNodeRoutes}
+			{textNodesRoutes}
 
 			{/** Users routes */}
-			{userRoutes}
+			{usersRoutes}
 
 			{/** Auth routes */}
 			{authenticationRoutes}
@@ -122,4 +122,4 @@ const Routes = props => (
 	</BrowserRouter>
 );
 
-export default Routes;
+export default compose(tenantsBySubdomainQuery)(Routes);

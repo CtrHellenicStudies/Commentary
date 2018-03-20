@@ -36,13 +36,15 @@ const Root = ({store, history}) => (
 		store={store}
 	>
 		<MuiThemeProvider>
-			<Routes />
-			<AuthModalContainer
-				loginMethod={login}
-				signupMethod={register}
-				logoutMethod={logoutUser}
-				getUserFromServer={verifyToken}
-			/>
+      <div>
+  			<Routes />
+  			<AuthModalContainer
+  				loginMethod={login}
+  				signupMethod={register}
+  				logoutMethod={logoutUser}
+  				getUserFromServer={verifyToken}
+  			/>
+      </div>
 		</MuiThemeProvider>
 	</ApolloProvider>
 );

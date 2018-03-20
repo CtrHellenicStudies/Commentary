@@ -1,5 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+import { connect } from 'react-redux';
+
+// instantiate cookies
+const cookies = new Cookies();
 
 /**
  * Private route

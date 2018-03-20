@@ -66,6 +66,14 @@ const PWDSignupForm = ({ error, handleSubmit, pristine, reset, submitting, signu
 			<span className="error-text">
 				{error && <strong>{error}</strong>}
 			</span>
+			<button
+				type="submit"
+				className="at-btn submit btn btn-lg btn-block btn-default"
+				id="at-btn"
+				disabled={submitting}
+			>
+				Update
+			</button>
 		</form>
 	</div>
 );

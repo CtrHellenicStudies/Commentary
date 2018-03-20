@@ -37,36 +37,9 @@ import ReferenceWorkDetail from './modules/referenceWorks/components/ReferenceWo
 import settingsRoutes from './modules/settings/routes';
 import authenticationRoutes from './modules/auth/routes';
 
-// instantiate cookies 
+// instantiate cookies
 const cookies = new Cookies();
 
-// set the base document meta for the application
-Utils.setBaseDocMeta();
-
-// parse tenant subdomain
-const hostnameArray = document.location.hostname.split('.');
-const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
-
-/**
- * Private route
- * create a route restricted to a logged in user
- */
-const PrivateRoute = ({ component: Component, ...rest }) => (
-	<Route
-		{...rest}
-		render={props => (
-			cookies.get('token') ? (
-				<Component {...props} />
-			) : (
-				<Redirect
-					to={{
-						pathname: '/sign-in',
-					}}
-				/>
-			)
-		)}
-	/>
-);
 
 /**
  * Application routes
@@ -82,6 +55,14 @@ function setTenantInSession (query) {
 }
 
 const routes = (props) => {
+
+  // set the base document meta for the application
+  Utils.setBaseDocMeta();
+
+  // parse tenant subdomain
+  const hostnameArray = document.location.hostname.split('.');
+  const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
+
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
 			return <Route component={NotFound} />;
@@ -102,87 +83,38 @@ const routes = (props) => {
 
 	return (
 		<Switch>
-			<Route exact path="/" component={HomeLayout} />
+			{/** Home routes */}
+			{homeRoutes}
 
 			{/** Commentary routes */}
-			<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
-			<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
-			<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
-
+			{commentaryRoutes}
 
 			{/** Tags routes */}
-			<PrivateRoute exact path="/tags/:slug/edit" component={EditKeywordLayout} />
-			<PrivateRoute exact path="/tags/create" component={AddKeywordLayout} />
-			<Route exact path="/tags/:slug" component={KeywordDetail} />
-			<Route path="/words" render={() => <KeywordsPage type="word" title="Words" />} />
-			<Route path="/ideas" render={() => <KeywordsPage type="idea" title="Ideas" />} />
+			{tagRoutes}
 
 			{/** Reference works routes */}
-			<Route exact path="/referenceWorks/:slug" component={ReferenceWorkDetail} />
-			<Route exact path="/referenceWorks" render={() => <ReferenceWorksPage title="ReferenceWorks" />} />
+			{referenceWorkRoutes}
 
 			{/** Commenters routes */}
-			<Route path="/commenters/:slug" render={params => <CommenterDetail {...params} defaultAvatarUrl="/images/default_user.jpg" />} />
-			<Route exact path="/commentators" component={CommentersPage} />
+			{commentersRoutes}
 
-			{/** Editor routes */}
-			<PrivateRoute exact path="/textNodes/edit" component={TextNodesEditorLayout} />
-			<PrivateRoute exact path="/profile" component={ProfilePage} />
+			{/** TextNode routes */}
+			{textNodeRoutes}
 
 			{/** Users routes */}
-			<Route
-				path="/users/:userId" render={(params) => {
-				if (props.userId) {
-					return <Redirect to="/profile" />;
-				}
-					return // <PublicProfilePage userId={cookies.get('token')} />;
-				}}
-			/>
+			{userRoutes}
 
 			{/** Auth routes */}
 			{authenticationRoutes}
 
-
 			{/** NRS routes */}
-			<Route exact path="/v1/" component={NameResolutionServiceLayout} />
-			<Route
-				exact
-				path="/v1/:urn/:commentId"
-				render={params => (<NameResolutionServiceLayout
-					version={1}
-					urn={params.match.params.urn}
-					commentId={params.match.params.commentId}
-				/>)}
-			/>
-			<Route
-				exact
-				path="/v2/:urn/:commentId"
-				render={params => (<NameResolutionServiceLayout
-					version={2}
-					urn={params.match.params.urn}
-					commentId={params.match.params.commentId}
-				/>)}
-			/>
-			<Route
-				exact
-				path="/v1/doi:doi"
-				render={params => <NameResolutionServiceLayout version={1} doi={params.match.params.doi} />}
-			/>
+			{nrsRoutes}
 
 			{/** Settings routes */}
 			{settingsRoutes}
 
 			{/** Basic page routes */}
-			<Route
-				path="/:slug"
-				render={(params) => {
-					const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
-					if (reservedRoutes.indexOf(params.slug) === -1) {
-						return <Page slug={params.match.params.slug} />;
-					}
-					return <Redirect to="/" />;
-				}}
-			/>
+			{pageRoutes}
 
 			{/** 404 routes */}
 			<Route component={NotFound} />
@@ -193,29 +125,10 @@ const routes = (props) => {
 /**
  * Main application entry point
  */
-const App = props => (
+const Routes = props => (
 	<BrowserRouter>
 		{routes(props)}
 	</BrowserRouter>
 );
 
-PrivateRoute.propTypes = {
-	component: PropTypes.func,
-};
-
-routes.propTypes = {
-	subdomain: PropTypes.string,
-	tenantsBySubdomainQuery: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-	userId: state.auth.userId,
-	username: state.auth.username,
-	roles: state.auth.roles,
-	commenters: state.auth.commenters
-});
-
-export default compose(
-	tenantsBySubdomainQuery,
-	connect(mapStateToProps),
-)(App);
+export default Routes;

@@ -15,10 +15,9 @@ import 'draft-js-mention-plugin/lib/plugin.css';
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
 import 'normalize.css';
 
-import App from './App';
+import Root from './containers/Root';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
-import apolloClient from './middleware/apolloClient';
 import "./less/main.css";
 
 // setup dotenv
@@ -29,35 +28,10 @@ injectTapEventPlugin();
 
 // configure store
 const store = configureStore();
-const uriAddress = process.env.REACT_APP_GRAPHQL_API;
-
-const networkInterface = createNetworkInterface({
-	uri: uriAddress,
-});
-
-
-networkInterface.use([{
-	applyMiddleware(req, next) {
-		if (!req.options.headers) {
-			req.options.headers = {};
-		}
-		const token = Cookies.get('token');
-		req.options.headers.authorization = token;
-		next();
-	}
-}]);
 
 // render the application
 ReactDOM.render(
-<ApolloProvider
-	client={apolloClient}
-	store={store}
->
-	<MuiThemeProvider>
-	<CookiesProvider>
-			<App />
-	</CookiesProvider>
-	</MuiThemeProvider>
-</ApolloProvider>
-, document.getElementById('root'));
+	<Root store={store} />,
+	document.getElementById('root'),
+);
 registerServiceWorker();

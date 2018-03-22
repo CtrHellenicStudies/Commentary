@@ -12,7 +12,7 @@ const networkInterface = createNetworkInterface({
 	uri: uriAddress,
 	opts: {
 		credentials: 'include',
-	}
+	},
 });
 
 networkInterface.use([{

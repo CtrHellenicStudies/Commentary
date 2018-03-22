@@ -7,6 +7,9 @@ import Utils from '../../../../lib/utils';
 import commentsQuery from '../../../comments/graphql/queries/comments';
 import { tenantsQuery } from '../../../../graphql/methods/tenants';
 
+import './NameResolutionServiceLayout.css';
+
+
 const resolveV1 = (props) => {
 	let resolveURL;
 	let tenant;

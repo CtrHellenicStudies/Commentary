@@ -28,7 +28,7 @@ const EditionTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition }) => (
 			return (
 				<RaisedButton
 					key={lemmaTextEdition.slug}
-					label={lemmaEditionTitle}
+					label={lemmaEditionTitle || ''}
 					data-edition={lemmaTextEdition.title}
 					className={getEditionTabClass(selectedLemmaEdition, lemmaTextEdition, index)}
 					onClick={toggleEdition.bind(null, lemmaTextEdition.slug)}
@@ -47,10 +47,6 @@ EditionTabs.propTypes = {
 EditionTabs.defaultProps = {
 	lemmaText: [],
 };
-
-/*
-	END EditionTabs
-*/
 
 
 /*
@@ -87,9 +83,6 @@ MetaTabs.propTypes = {
 MetaTabs.defaultProps = {
 	toggleHighlighting: null,
 };
-/*
-	END MetaTabs
-*/
 
 
 /*
@@ -122,12 +115,10 @@ ContextPanelTabs.propTypes = {
 	// requiered if editor:
 	editor: PropTypes.bool,
 };
+
 ContextPanelTabs.defaultProps = {
 	editor: false,
 };
-/*
-	BEGIN ContextPanelTabs
-*/
 
 export { EditionTabs, MetaTabs };
 export default ContextPanelTabs;

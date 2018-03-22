@@ -15,7 +15,7 @@ import settingsQuery from '../../../settings/graphql/queries/list';
 import Header from '../../../../components/navigation/Header';
 import Footer from '../../../../components/navigation/Footer';
 import CommunityLayout from '../../../community/layouts/CommunityLayout/CommunityLayout';
-import NameResolutionServiceLayout from '../../../services/layouts/NameResolutionServiceLayout/NameResolutionServiceLayout';
+import NameResolutionServiceLayout from '../../../nrs/layouts/NameResolutionServiceLayout';
 
 // components
 import Home from '../../components/Home/Home';

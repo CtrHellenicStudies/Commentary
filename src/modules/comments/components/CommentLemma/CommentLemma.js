@@ -14,6 +14,9 @@ import MenuItem from 'material-ui/MenuItem';
 import CommentGroupMeta from './CommentGroupMeta';
 import CommentLemmaInner from './CommentLemmaInner';
 
+import './CommentLemma.css';
+
+
 class CommentLemma extends Component {
 
 	constructor(props) {

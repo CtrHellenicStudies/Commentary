@@ -31,6 +31,8 @@ import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
 import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/ReferenceWork';
 
+import './AddComment.css';
+
 
 /*
  *	BEGIN AddComment
@@ -340,7 +342,11 @@ class AddComment extends Component {
 		const { commenters } = this.props;
 		let _commenters = [];
 		const tags = newProps.keywordsQuery.keywords;
-		if (commenters) {
+		if (
+				commenters
+			&& newProps.commentersQuery
+			&& newProps.commentersQuery.commenters
+		) {
 			_commenters = newProps.commentersQuery.commenters.filter(x =>
 				commenters.find(y => y === x._id));
 		}

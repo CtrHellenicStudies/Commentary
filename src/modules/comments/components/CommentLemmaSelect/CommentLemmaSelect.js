@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { compose } from 'react-apollo';
 import TextField from 'material-ui/TextField';
 import PropTypes from 'prop-types';
+
 // graphql
 import { editionsQuery } from '../../../../graphql/methods/editions';
+
 
 class CommentLemmaSelect extends Component {
 
@@ -17,25 +19,28 @@ class CommentLemmaSelect extends Component {
 		this.toggleEdition = this.toggleEdition.bind(this);
 
 	}
+
 	areQueriesStillLoadingOrTextNodesFromParent(props) {
 		let ret = false;
 		if(!props.textNodes) {
 			ret = true;
-		} else if (props.editionsQuery.loading && 
-			!(props.lineFrom !== this.props.lineFrom 
+		} else if (props.editionsQuery.loading &&
+			!(props.lineFrom !== this.props.lineFrom
 			|| props.lineTo !== this.props.lineTo)) {
 				ret = true;
 		}
 		return ret;
 	}
+
 	componentWillReceiveProps(nextProps) {
 		if (this.areQueriesStillLoadingOrTextNodesFromParent(nextProps)) {
 			return;
 		}
+
 		const editions = nextProps.textNodes;
 
 		this.setState({
-		//	lemmaText: editions,
+			// lemmaText: editions,
 			selectedLemmaEdition: editions[0],
 		});
 	}
@@ -62,7 +67,7 @@ class CommentLemmaSelect extends Component {
 					{selectedLemmaEdition &&
 						selectedLemmaEdition.lines ?
 							<article className="comment lemma-comment paper-shadow">
-								
+
 								{selectedLemmaEdition.lines.map((line, i) => (
 									<p
 										key={i}
@@ -118,7 +123,7 @@ class CommentLemmaSelect extends Component {
 }
 CommentLemmaSelect.propTypes = {
 	textNodes: PropTypes.array,
-	editionsQuery: PropTypes.func
+	editionsQuery: PropTypes.object,
 };
 
 export default compose(

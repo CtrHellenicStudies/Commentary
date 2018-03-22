@@ -19,7 +19,7 @@ const getSelectedEditionText = (lemmaText, selectedLemmaEdition) => {
 		lemmaText[0].forEach(textNode => {
 			selectedEditionText.lines.push({
 				n: textNode.location[0],
-				html: textNode.text,		
+				html: textNode.text,
 			});
 		});
 	}
@@ -130,7 +130,6 @@ class ContextPanelText extends Component {
 	}
 
 	handleLineClick(event) {
-		console.log('I am here');
 		 if (!this.props.disableEdit) {
 
 		 	const selectedLines = getSelectedEditionText(this.props.lemmaText, this.props.selectedLemmaEdition).lines;
@@ -140,8 +139,7 @@ class ContextPanelText extends Component {
 
 		 	const target = event.target;
 		 	let textNodesToUpdate;
-			 const id = parseInt(target.id, 10);
-			 console.log(selectedLines);
+		 const id = parseInt(target.id, 10);
 			if (selectedLineTo === 0 && id > selectedLineFrom && selectedLineFrom !== 0) {
 				textNodesToUpdate = selectedLines.slice(selectedLineFrom, id+1);
 				this.setState({selectedLineTo : id});
@@ -167,7 +165,7 @@ class ContextPanelText extends Component {
 	render() {
 		const { onBeforeClicked, selectedLemmaEdition, highlightingVisible, lineFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, editor } = this.props;
 
-		
+
 
 		const contextPanelTextState = getContextPanelTextState(commentGroup, editor);
 

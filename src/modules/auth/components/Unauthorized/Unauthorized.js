@@ -10,10 +10,10 @@ import Header from '../../../../components/navigation/Header';
 // components
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 
-import './NotFound.css';
+import './Unauthorized.css';
 
 
-class NotFound extends Component {
+class Unauthorized extends Component {
 
 	render() {
 		const expressionsOfWoe = [
@@ -34,11 +34,6 @@ class NotFound extends Component {
 		];
 		let randomExpression = expressionsOfWoe[Math.round(Math.random() * expressionsOfWoe.length)];
 
-		// If this is just a test, set the same expression each time to not disrupt snapshot
-		if (this.props.isTest) {
-			randomExpression = 'ὦ Ζεῦ';
-		}
-
 		return (
 			<div className="chs-layout master-layout not-found-layout">
 				<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -56,10 +51,9 @@ class NotFound extends Component {
 								<div className="center-content">
 									<div className="page-title-wrap">
 										<h1 className="page-title">
-											{randomExpression}, 404 Error!
+											{randomExpression}!
 										</h1>
-										<h2>Viewing this page is against the will of the gods</h2>
-										<h4>(Or there's an error somewhere).</h4>
+										<h2>You are not authorized to view this page.</h2>
 									</div>
 								</div>
 							</div>
@@ -88,11 +82,9 @@ class NotFound extends Component {
 		);
 	}
 }
-NotFound.propTypes = {
-	isTest: PropTypes.bool,
-};
-NotFound.childContextTypes = {
+
+Unauthorized.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-export default NotFound;
+export default Unauthorized;

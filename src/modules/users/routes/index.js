@@ -1,17 +1,32 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route, Redirect, Switch } from 'react-router';
 
 // Projects
+import PrivateRoute from '../../../routes/PrivateRoute';
 import MainLayout from '../../../layouts/MainLayout';
-import ProfileContainer from '../containers/ProfileContainer';
-import ProfileProjectsContainer from '../containers/ProfileProjectsContainer';
+import ProfilePage from '../../profile/components/ProfilePage/ProfilePage';
 
-export default (
-	<div>
-		<Route path="/profile" component={MainLayout}>
-			<IndexRoute component={ProfileContainer} />
-			<Route path="/profile/projects" component={ProfileProjectsContainer} />
-		</Route>
-		<Route path="/users/:id" component={ProfileContainer} />
-	</div>
+/** Move this to a separate implementation than private route */
+const profileRoute = (
+	<PrivateRoute
+		exact
+		path="/profile"
+		component={ProfilePage}
+		roles={['any']}
+	/>
 );
+
+const publicProfileRoute = (
+	<Route
+		path="/users/:userId" render={(props) => {
+		if (props.userId) {
+			return <Redirect to="/profile" />;
+		}
+			return null; // <PublicProfilePage userId={cookies.get('token')} />;
+		}}
+	/>
+);
+
+export {
+	profileRoute, publicProfileRoute,
+};

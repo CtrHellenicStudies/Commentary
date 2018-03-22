@@ -31,33 +31,35 @@ const getFilterValues = (filters) => {
 
 const AddCommentContainer = class AddCommentContainerClass extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedTextNodes: [],
-            filters: [],
-        };
+  constructor(props) {
+		super(props);
+		this.state = {
+			selectedTextNodes: [],
+			filters: [],
+		};
 
-        this.updateSelectedLines = this.updateSelectedLines.bind(this);
-        this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
-        this.handlePagination = this.handlePagination.bind(this);
-    }
-    componentWillReceiveProps(props) {
-		console.log(props.textNodesQuery.textNodes);
-        this.setState({
-            textNodes: props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes
-        });
-    }
-    updateSelectedLines(_textNodes) {
+		this.updateSelectedLines = this.updateSelectedLines.bind(this);
+		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
+		this.handlePagination = this.handlePagination.bind(this);
+  }
+
+  componentWillReceiveProps(props) {
+		this.setState({
+			textNodes: props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes
+		});
+  }
+
+  updateSelectedLines(_textNodes) {
 		this.setState({selectedTextNodes : [_textNodes]});
-    }
-    toggleSearchTerm(key, value) {
+  }
+
+  toggleSearchTerm(key, value) {
 		const { filters } = this.state;
 
 		let keyIsInFilter = false;
 		let valueIsInFilter = false;
-        let filterValueToRemove;
-        let filterToRemove;
+	let filterValueToRemove;
+	let filterToRemove;
 
 		filters.forEach((filter, i) => {
 			if (filter.key === key) {
@@ -100,6 +102,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 			skip: 0,
 		});
 	}
+
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
@@ -116,7 +119,8 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 		}
 		return work;
 	}
-    handlePagination(book, chapter) {
+
+  handlePagination(book, chapter) {
 		const { filters } = this.state;
 		const work = this.getWork();
 
@@ -137,63 +141,63 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 		}
 		this.props.updatetextNodesUrn(properties.textNodesUrn);
 	}
-    render() {
 
-        const { selectedLineFrom, selectedTextNodes, filters,
-                selectedLineTo, contextReaderOpen, textNodes} = this.state;
-        const { textNodesUrn, submitForm } = this.props;
+  render() {
+
+	const { selectedLineFrom, selectedTextNodes, filters,
+			selectedLineTo, contextReaderOpen, textNodes} = this.state;
+	const { textNodesUrn, submitForm } = this.props;
 		const { work } = getFilterValues(filters);
-		
-        
+
+
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
 
 		return (
-			
-            <div>
-                <Header
-                    toggleSearchTerm={this.toggleSearchTerm}
-                    handlePagination={this.handlePagination}
-                    workFilters={this.state.filters}
-                    initialSearchEnabled
-                    addCommentPage
-				/>
-                <main>
-                    <div className="commentary-comments">
-                        <div className="comment-group">
-                            <CommentLemmaSelect
-                                textNodes={selectedTextNodes}
-                            />
+	  <div>
+			<Header
+			  toggleSearchTerm={this.toggleSearchTerm}
+			  handlePagination={this.handlePagination}
+			  workFilters={this.state.filters}
+			  initialSearchEnabled
+			  addCommentPage
+			/>
+			<main>
+			  <div className="commentary-comments">
+				  <div className="comment-group">
+					  <CommentLemmaSelect
+						  textNodes={selectedTextNodes}
+					  />
 
-                            <AddComment
-                                selectedLineFrom={selectedLineFrom}
-                                selectedLineTo={selectedLineTo}
-                                submitForm={submitForm}
-                                work={work}
-                            />
-                        </div>
-                        <ContextPanel
-                            open={contextReaderOpen}
-                            filters={filters}
-                            selectedLineFrom={selectedLineFrom}
-                            selectedLineTo={selectedLineTo}
-                            updateSelectedLines={this.updateSelectedLines}
-                            textNodes={textNodes}
-                            textNodesUrn={textNodesUrn}
-                            editor
-                        />
-                    </div>
+					  <AddComment
+						  selectedLineFrom={selectedLineFrom}
+						  selectedLineTo={selectedLineTo}
+						  submitForm={submitForm}
+						  work={work}
+					  />
+				  </div>
+				  <ContextPanel
+					  open={contextReaderOpen}
+					  filters={filters}
+					  selectedLineFrom={selectedLineFrom}
+					  selectedLineTo={selectedLineTo}
+					  updateSelectedLines={this.updateSelectedLines}
+					  textNodes={textNodes}
+					  textNodesUrn={textNodesUrn}
+					  editor
+				  />
+			  </div>
 
-                    <FilterWidget
-                        filters={filters}
-                        toggleSearchTerm={this.toggleSearchTerm}
-                    />
-                </main>
-                </div>
+			  <FilterWidget
+				  filters={filters}
+				  toggleSearchTerm={this.toggleSearchTerm}
+			  />
+			</main>
+	  </div>
 		);
 	}
 }
 AddCommentContainer.props = {
-    selectedTextNodes: PropTypes.object,
-    textNodesQuery: PropTypes.func
+	selectedTextNodes: PropTypes.object,
+	textNodesQuery: PropTypes.func
 };
 export default compose(textNodesQuery)(AddCommentContainer);

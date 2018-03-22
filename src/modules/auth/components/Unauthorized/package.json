@@ -1,0 +1,6 @@
+{
+  "name": "Unauthorized",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./Unauthorized.js"
+}

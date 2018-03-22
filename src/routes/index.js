@@ -18,6 +18,7 @@ import NotFound from '../modules/notFound/components/NotFound/NotFound';
 // modules
 import {
   signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
+	unauthorizedRoute,
 } from '../modules/auth/routes';
 import {
 	addCommentRoute, addRevisionRoute, commentaryRoute,
@@ -126,6 +127,7 @@ const routes = (props) => {
 			{signOutRoute}
 			{updateForV2Route}
 			{forgotPasswordRoute}
+			{unauthorizedRoute}
 
 			{/** NRS routes */}
 			{nrsV1Route}

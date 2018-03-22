@@ -4,6 +4,10 @@ import { logoutUser } from '../../../lib/auth'
 
 // layout
 import AuthLayout from '../layouts/AuthLayout';
+import MainLayout from '../../../layouts/MainLayout';
+
+// component
+import Unauthorized from '../components/Unauthorized';
 
 
 const signInRoute = (
@@ -45,10 +49,19 @@ const forgotPasswordRoute = (
 	<Route
 		exact
 		path="/forgot-password"
-		render={params => <AuthLayout {...params} showForgotPwd />}
+		render={props => <AuthLayout {...props} showForgotPwd />}
+	/>
+);
+
+const unauthorizedRoute = (
+	<Route
+		exact
+		path="/unauthorized"
+		component={Unauthorized}
 	/>
 );
 
 export {
   signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
+  unauthorizedRoute,
 };

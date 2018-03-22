@@ -9,5 +9,6 @@ export default (
     exact
     path="/textNodes/edit"
     component={TextNodesEditorLayout}
+    roles={['commenter', 'editor', 'admin']}
   />
 );

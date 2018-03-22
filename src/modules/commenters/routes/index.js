@@ -5,9 +5,14 @@ import PrivateRoute from '../../../routes/PrivateRoute';
 import CommenterPage from '../components/CommenterPage/CommenterPage';
 import CommenterDetail from '../components/CommenterDetail/CommenterDetail';
 
-export default (
-	<Switch>
-		<Route exact path="/commenters/:slug" component={CommenterDetail} />
-		<Route exact path="/commenters/" component={CommenterPage} />
-	</Switch>
+const commenterDetailRoute = (
+	<Route exact path="/commenters/:slug" component={CommenterDetail} />
 );
+
+const commenterListRoute = (
+	<Route exact path="/commenters/" component={CommenterPage} />
+);
+
+export {
+	commenterDetailRoute, commenterListRoute,
+};

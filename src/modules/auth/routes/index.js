@@ -6,39 +6,49 @@ import { logoutUser } from '../../../lib/auth'
 import AuthLayout from '../layouts/AuthLayout';
 
 
-export default (
-  <Switch>
-		<Route
-			exact
-			path="/sign-in"
-			component={AuthLayout}
-		/>
-		<Route
-			exact
-			path="/sign-out"
-			render={() => {
-				try {
-					logoutUser();
-				} catch (err) {
-					console.log(err);
-				}
-			}}
-		/>
-		<Route
-			exact
-			path="/update-for-v2"
-			component={() => (
-        <AuthLayout
-          updateV2
-        />
-      )}
-		/>
-    {/*
-		<Route
-			exact
-			path="/forgot-password"
-			render={params => <HomeLayout {...params} showForgotPwd />}
-		/>
-    */}
-  </Switch>
+const signInRoute = (
+  <Route
+  	exact
+  	path="/sign-in"
+  	component={AuthLayout}
+  />
 );
+
+const signOutRoute = (
+	<Route
+		exact
+		path="/sign-out"
+		render={() => {
+			try {
+				logoutUser();
+			} catch (err) {
+				console.log(err);
+			}
+		}}
+	/>
+);
+
+const updateForV2Route = (
+	<Route
+		exact
+		path="/update-for-v2"
+		component={() => (
+      <AuthLayout
+        updateV2
+      />
+    )}
+	/>
+);
+
+// TODO: redo with own component instead of modal
+const forgotPasswordRoute = (
+	<Route
+		exact
+		path="/forgot-password"
+		render={params => <AuthLayout {...params} showForgotPwd />}
+	/>
+);
+
+export {
+  signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
+};

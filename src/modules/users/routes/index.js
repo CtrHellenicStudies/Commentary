@@ -6,16 +6,27 @@ import PrivateRoute from '../../../routes/PrivateRoute';
 import MainLayout from '../../../layouts/MainLayout';
 import ProfilePage from '../../profile/components/ProfilePage/ProfilePage';
 
-export default (
-	<Switch>
-		<PrivateRoute exact path="/profile" component={ProfilePage} />
-		<Route
-			path="/users/:userId" render={(props) => {
-			if (props.userId) {
-				return <Redirect to="/profile" />;
-			}
-				return null; // <PublicProfilePage userId={cookies.get('token')} />;
-			}}
-		/>
-	</Switch>
+/** Move this to a separate implementation than private route */
+const profileRoute = (
+	<PrivateRoute
+		exact
+		path="/profile"
+		component={ProfilePage}
+		roles={['any']}
+	/>
 );
+
+const publicProfileRoute = (
+	<Route
+		path="/users/:userId" render={(props) => {
+		if (props.userId) {
+			return <Redirect to="/profile" />;
+		}
+			return null; // <PublicProfilePage userId={cookies.get('token')} />;
+		}}
+	/>
+);
+
+export {
+	profileRoute, publicProfileRoute,
+};

@@ -8,11 +8,14 @@ import MainLayout from '../../../layouts/MainLayout';
 import SettingEditorContainer from '../containers/SettingEditorContainer';
 
 
-export default (
-	<Route>
-		<div>
-			<Route path="/admin/" component={MainLayout} />
-			<Route path="/admin/settings" component={SettingEditorContainer} />
-		</div>
-	</Route>
+const adminRoute = (
+	<Route path="/admin/" component={MainLayout} />
 );
+
+const adminSettingsRoute = (
+	<Route path="/admin/settings" component={SettingEditorContainer} />
+);
+
+export {
+	adminRoute, adminSettingsRoute,
+};

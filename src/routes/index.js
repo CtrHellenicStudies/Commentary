@@ -16,17 +16,34 @@ import { tenantsBySubdomainQuery } from '../graphql/methods/tenants'
 import NotFound from '../modules/notFound/components/NotFound/NotFound';
 
 // modules
-import authenticationRoutes from '../modules/auth/routes';
-import commentersRoutes from '../modules/commenters/routes';
-import commentsRoutes from '../modules/comments/routes';
-import homeRoutes from '../modules/home/routes';
-import keywordsRoutes from '../modules/keywords/routes';
-import nrsRoutes from '../modules/nrs/routes';
-import pageRoutes from '../modules/page/routes';
-import referenceWorksRoutes from '../modules/referenceWorks/routes';
-import textNodesRoutes from '../modules/textNodes/routes';
-import usersRoutes from '../modules/users/routes';
-import settingsRoutes from '../modules/settings/routes';
+import {
+  signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
+} from '../modules/auth/routes';
+import {
+	addCommentRoute, addRevisionRoute, commentaryRoute,
+} from '../modules/comments/routes';
+import {
+	commenterDetailRoute, commenterListRoute,
+} from '../modules/commenters/routes';
+import homeRoute from '../modules/home/routes';
+import {
+  editKeywordRoute, addKeywordRoute, keywordDetailRoute, wordsListRoute,
+  ideasListRoute,
+} from '../modules/keywords/routes';
+import {
+	nrsV1Route, nrsV1RouteWithURN, nrsV2Route, nrsV1DOI,
+} from '../modules/nrs/routes';
+import pageRoute from '../modules/page/routes';
+import {
+	referenceWorkDetailRoute, referenceWorkListRoute,
+} from '../modules/referenceWorks/routes';
+import textNodesRoute from '../modules/textNodes/routes';
+import {
+	profileRoute, publicProfileRoute,
+} from '../modules/users/routes';
+import {
+	adminRoute, adminSettingsRoute,
+} from '../modules/settings/routes';
 
 // instantiate cookies
 const cookies = new Cookies();
@@ -75,37 +92,53 @@ const routes = (props) => {
 	return (
 		<Switch>
 			{/** Home routes */}
-			{homeRoutes}
+			{homeRoute}
 
 			{/** Commentary routes */}
-			{commentsRoutes}
+			{addCommentRoute}
+			{addRevisionRoute}
+			{commentaryRoute}
 
 			{/** Tags routes */}
-			{keywordsRoutes}
+		  {editKeywordRoute}
+			{addKeywordRoute}
+			{keywordDetailRoute}
+			{wordsListRoute}
+		  {ideasListRoute}
 
 			{/** Reference works routes */}
-			{referenceWorksRoutes}
+			{referenceWorkDetailRoute}
+			{referenceWorkListRoute}
 
 			{/** Commenters routes */}
-			{commentersRoutes}
+			{commenterDetailRoute}
+			{commenterListRoute}
 
 			{/** TextNode routes */}
-			{textNodesRoutes}
+			{textNodesRoute}
 
 			{/** Users routes */}
-			{usersRoutes}
+			{profileRoute}
+			{publicProfileRoute}
 
 			{/** Auth routes */}
-			{authenticationRoutes}
+			{signInRoute}
+			{signOutRoute}
+			{updateForV2Route}
+			{forgotPasswordRoute}
 
 			{/** NRS routes */}
-			{nrsRoutes}
+			{nrsV1Route}
+			{nrsV1RouteWithURN}
+			{nrsV2Route}
+			{nrsV1DOI}
 
 			{/** Settings routes */}
-			{settingsRoutes}
+			{adminRoute}
+			{adminSettingsRoute}
 
 			{/** Basic page routes */}
-			{pageRoutes}
+			{pageRoute}
 
 			{/** 404 routes */}
 			<Route component={NotFound} />

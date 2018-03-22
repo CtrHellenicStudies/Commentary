@@ -26,9 +26,12 @@ class AuthLayout extends Component {
 	}
 
 	render() {
+		// If user is logged in, send them to the homepage
 		if (userIsLoggedIn()) {
 			this.props.history.push('/');
 		}
+
+		console.log('foo')
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

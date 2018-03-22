@@ -24,12 +24,6 @@ const SidebarUserAvatarContainer = (props) => {
 			}
 		}
 	}
-	console.log('#####')
-	console.log('#####')
-	console.log('#####')
-	console.log('#####')
-	console.log(props);
-	console.log(user);
 
 	return (
 		<SidebarUserAvatar

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 
 import PrivateRoute from '../../../routes/PrivateRoute';
 import CommentaryLayout from '../layouts/CommentaryLayout';
@@ -8,10 +8,22 @@ import AddRevisionLayout from '../../revisions/layouts/AddRevisionLayout/AddRevi
 
 export default (
   <Route>
-    <div>
-    	<PrivateRoute exact path="/commentary/create" component={AddCommentLayout} />
-    	<Route exact path="/commentary/:urn?" component={CommentaryLayout} />
-    	<PrivateRoute exact path="/commentary/:commentId/edit" component={AddRevisionLayout} />
-    </div>
+    <Switch>
+    	<PrivateRoute
+        exact
+        path="/commentary/create"
+        component={AddCommentLayout}
+      />
+    	<PrivateRoute
+        exact
+        path="/commentary/:commentId/edit"
+        component={AddRevisionLayout}
+      />
+    	<Route
+        exact
+        path="/commentary/:urn?"
+        component={CommentaryLayout}
+      />
+    </Switch>
   </Route>
 );

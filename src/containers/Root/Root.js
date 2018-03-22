@@ -30,7 +30,7 @@ const scrollToElemOrTop = () => {
 	}
 };
 
-const Root = ({store, history}) => (
+const Root = ({ store }) => (
 	<ApolloProvider
 		client={client}
 		store={store}
@@ -51,7 +51,6 @@ const Root = ({store, history}) => (
 
 Root.propTypes = {
 	store: PropTypes.shape({}).isRequired,
-	history: PropTypes.shape({}).isRequired,
 };
 
 export default Root;

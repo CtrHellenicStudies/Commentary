@@ -198,11 +198,11 @@ class ContextPanel extends Component {
 	}
 }
 ContextPanel.propTypes = {
-	open: PropTypes.bool.isRequired,
+	open: PropTypes.bool,
 	closeContextPanel: PropTypes.func,
 	commentLemmaIndex: PropTypes.string,
 	getMaxLine: PropTypes.func,
-	filters: PropTypes.object,
+	filters: PropTypes.array,
 	disableEdit: PropTypes.bool,
 	selectedLineFrom: PropTypes.number,
 	selectedLineTo: PropTypes.number,

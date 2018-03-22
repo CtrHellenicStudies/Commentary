@@ -63,7 +63,7 @@ class ContextPanelContent extends Component {
 			textNodesCursor = nextProps.textNodes;
 		}
 		let sortedEditions;
-	
+
 		if (multiline) {
 			const parsedEditions = Utils.parseMultilineEdition(textNodesCursor, multiline);
 			sortedEditions = getSortedEditions(parsedEditions);
@@ -97,7 +97,7 @@ class ContextPanelContent extends Component {
 					onBeforeClicked={onBeforeClicked}
 					onAfterClicked={onAfterClicked}
 					selectedLemmaEdition={selectedLemmaEdition}
-					lemmaText={lemmaText}				
+					lemmaText={lemmaText}
 					commentGroup={commentGroup}
 					maxLine={maxLine}
 					highlightingVisible={highlightingVisible}
@@ -123,7 +123,7 @@ class ContextPanelContent extends Component {
 	}
 }
 ContextPanelContent.propTypes = {
-	open: PropTypes.bool.isRequired,
+	open: PropTypes.bool,
 	commentGroup: PropTypes.shape({
 		work: PropTypes.shape({
 			slug: PropTypes.string.isRequired,
@@ -136,7 +136,7 @@ ContextPanelContent.propTypes = {
 		ref: PropTypes.string.isRequired,
 	}),
 	closeContextPanel: PropTypes.func,
-	filters: PropTypes.object,
+	filters: PropTypes.array,
 	highlightingVisible: PropTypes.bool.isRequired,
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,
@@ -157,6 +157,7 @@ ContextPanelContent.propTypes = {
 	editionsQuery: PropTypes.object,
 	multiline: PropTypes.bool
 };
+
 ContextPanelContent.defaultProps = {
 	commentGroup: null,
 	closeContextPanel: null,
@@ -167,6 +168,7 @@ ContextPanelContent.defaultProps = {
 	updateSelectedLines: null,
 	editor: false,
 };
+
 export default compose(
 	editionsQuery,
 	textNodesQuery

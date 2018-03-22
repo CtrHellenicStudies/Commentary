@@ -62,13 +62,15 @@ class LeftMenu extends React.Component {
 			>
 				<LeftMenuHead />
 				<div className="leftMenuContent">
-				{Utils.userInRole(roles, ['admin']) ?
-
-								(<MenuItem
-									to="http://ahcip-admin.chs.harvard.edu"
-									target="_blank"
-									primaryText="Admin"
-								onClick={closeLeftMenu} />) : ''}
+					{Utils.userInRole(roles, ['admin']) ?
+						<MenuItem
+							to="http://ahcip-admin.chs.harvard.edu"
+							target="_blank"
+							onClick={closeLeftMenu}
+						>
+							Admin
+						</MenuItem>
+					: ''}
 					{Utils.userInRole(roles, ['editor', 'admin', 'commenter'])
 					 ? (
 						  <div>

@@ -100,7 +100,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     // Go to commentary requested route instead of toggling modal
     ownProps.history.push('/');
 	},
-	dispatchLogin: data => dispatch(login(ownProps.loginMethod, data)),
+	dispatchLogin: data => {
+		dispatch(login(ownProps.loginMethod, data));
+    // Go to commentary requested route instead of toggling modal
+    ownProps.history.push('/');
+	},
 	dispatchSignup: data => dispatch(login(ownProps.signupMethod, data)),
 	dispatchReset: data => dispatch(login(ownProps.resetMethod, data)),
 	dispatchLogout: () => {

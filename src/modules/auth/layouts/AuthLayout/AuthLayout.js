@@ -31,8 +31,6 @@ class AuthLayout extends Component {
 			this.props.history.push('/');
 		}
 
-		console.log('foo')
-
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout auth-layout">

@@ -13,7 +13,6 @@ import TextField from 'material-ui/TextField';
 import { editionsQuery } from '../../../../graphql/methods/editions';
 import textNodesQuery from '../../graphql/queries/textNodesQuery';
 
-
 // lib:
 import Utils from '../../../../lib/utils';
 
@@ -25,6 +24,7 @@ import EditSubworkDialog from '../EditSubworkDialog/EditSubworkDialog';
 import MultilineDialog from '../MultilineDialog/MultilineDialog';
 import TranslationSelect from '../TranslationSelect/TranslationSelect';
 import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
+import RefsDeclEditor from '../RefsDeclEditor';
 
 
 function isLocation(location) {
@@ -213,7 +213,7 @@ class TextNodesEditor extends Component {
 		});
 		if(locationFrom && locationTo
 			&& selectedEdition !== undefined
-			&& selectedWork !== undefined) {		
+			&& selectedWork !== undefined) {
 				this.props.textNodesQuery.refetch({
 					workUrn: finalWork.urn,
 					textNodesUrn: `${finalWork.urn}:${locationFrom[0]}.${locationFrom[1]}-${locationTo[0]}.${locationTo[1]}`
@@ -362,7 +362,11 @@ class TextNodesEditor extends Component {
 							/>
 						</FormGroup>
 					</div>
-					<TranslationSelect {...translationOptions} selectTranslation={this.selectTranslation} />
+					<TranslationSelect
+						{...translationOptions}
+						selectTranslation={this.selectTranslation}
+					/>
+
 					{_selectedEdition ?
 						<div className="text-nodes-editor-meta-input">
 							<FormGroup controlId="multiLineButton">
@@ -372,7 +376,15 @@ class TextNodesEditor extends Component {
 								Manage multiline
 							</button>
 							</FormGroup>
-						</div> : ''}
+						</div>
+					: ''}
+
+					<div className="text-nodes-editor-meta-input">
+						<FormGroup controlId="refsDecl">
+							<ControlLabel>Document Structure (<em>RefsDecl</em>)</ControlLabel>
+							<RefsDeclEditor />
+						</FormGroup>
+					</div>
 				</div>
 
 				{
@@ -380,7 +392,9 @@ class TextNodesEditor extends Component {
 						<div className="row">
 							<div className="col-lg-6">{this.renderTextNodesInput()}</div>
 							<div className="col-lg-6">{this.renderTranslationNodesInput()}</div>
-						</div>) : this.renderTextNodesInput()
+						</div>)
+						:
+						this.renderTextNodesInput()
 				}
 
 				<EditWorkDialog

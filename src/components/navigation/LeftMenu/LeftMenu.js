@@ -84,7 +84,7 @@ class LeftMenu extends React.Component {
 							</MenuItem>
 							<MenuItem to="/textNodes/edit"
 								onClick={closeLeftMenu}>
-									Add Translation
+								Edit Text
 							</MenuItem>
 
 							<Divider />

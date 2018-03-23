@@ -1,0 +1,73 @@
+@import '../../../../less/variables.import.less';
+
+.refsDeclEditor {
+  display: flex;
+  padding: 15px;
+
+  button {
+    padding: 15px 20px;
+    font-size: 12px;
+    background: #fff;
+    border: 1px solid #eee;
+    outline: none;
+    margin: 0 5px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.refsDeclFields {
+  display: flex;
+
+  button {
+    padding: 15px 20px;
+    font-size: 12px;
+    background: #fff;
+    border: 1px solid #eee;
+    outline: none;
+    margin: 0 5px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+}
+
+.refsDecl {
+  display: flex;
+  position: relative;
+  margin: 5px 10px;
+
+  input[type="text"] {
+    background: transparent;
+    color: @dark;
+    font-size: 16px;
+    font-weight: 100;
+    border-bottom: 1px solid @divider;
+
+  }
+
+  .removeButton {
+    position: absolute;
+    border: 1px solid #aaa;
+    border-radius: 100%;
+    line-height: 0;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    right: -5px;
+    background: #fff;
+    top: -5px;
+
+    i {
+      &:before {
+        font-size: 12px;
+        margin-left: -6px;
+        margin-top: -2px;
+      }
+    }
+  }
+}

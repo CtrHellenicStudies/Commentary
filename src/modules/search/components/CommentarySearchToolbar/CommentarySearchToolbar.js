@@ -23,6 +23,8 @@ import LocationBrowser from '../LocationBrowser';
 // lib
 import Utils from '../../../../lib/utils';
 
+import './CommentarySearchToolbar.css';
+
 
 const getWorkInFilter = (filters) => {
 	let workInFilter = false;
@@ -33,6 +35,7 @@ const getWorkInFilter = (filters) => {
 	});
 	return workInFilter;
 };
+
 
 
 /*
@@ -160,41 +163,6 @@ class CommentarySearchToolbar extends Component {
 					</div>
 				: '' }
 
-				{!addCommentPage &&
-					<KeywordsDropdown
-						keywords={keywords}
-						searchDropdownOpen={searchDropdownOpen}
-						toggleSearchDropdown={this.toggleSearchDropdown}
-						toggleSearchTerm={toggleSearchTerm}
-						filters={filters}
-					/>}
-
-				{!addCommentPage &&
-					<KeyideasDropdown
-						keyideas={keyideas}
-						searchDropdownOpen={searchDropdownOpen}
-						toggleSearchDropdown={this.toggleSearchDropdown}
-						toggleSearchTerm={toggleSearchTerm}
-						filters={filters}
-					/>}
-
-				{!addCommentPage &&
-					<CommentatorsDropdown
-						commenters={commenters}
-						searchDropdownOpen={searchDropdownOpen}
-						toggleSearchDropdown={this.toggleSearchDropdown}
-						toggleSearchTerm={toggleSearchTerm}
-						filters={filters}
-					/>}
-
-				{!addCommentPage &&
-					<ReferenceDropdown
-						reference={referenceWorks}
-						searchDropdownOpen={searchDropdownOpen}
-						toggleSearchDropdown={this.toggleSearchDropdown}
-						toggleSearchTerm={toggleSearchTerm}
-						filters={filters}
-					/>}
 				<WorksDropdown
 					works={works}
 					searchDropdownOpen={searchDropdownOpen}
@@ -205,12 +173,11 @@ class CommentarySearchToolbar extends Component {
 
 				<div
 					style={{padding: '10px 20px' }}
-					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
+					className="line-search"
 				>
 					<LocationBrowser
 						updateTextLocation={handlePagination}
 					/>
-					<div className="disabled-screen" />
 				</div>
 
 				{!addCommentPage &&

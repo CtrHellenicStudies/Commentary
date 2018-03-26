@@ -18,7 +18,7 @@ import KeyideasDropdown from '../KeyideasDropdown';
 import CommentatorsDropdown from '../CommentatorsDropdown';
 import ReferenceDropdown from '../ReferenceDropdown';
 import WorksDropdown from '../WorksDropdown';
-import LocationBrowser from '../LocationBrowser';
+import LocationBrowserContainer from '../../containers/LocationBrowserContainer';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -152,7 +152,7 @@ class CommentarySearchToolbar extends Component {
 		const workInFilter = getWorkInFilter(filters);
 
 		return (
-			<span>
+			<div>
 				{!addCommentPage ?
 					<div className="search-tool text-search text-search--header">
 						<TextField
@@ -171,14 +171,9 @@ class CommentarySearchToolbar extends Component {
 					filters={filters}
 				/>
 
-				<div
-					style={{padding: '10px 20px' }}
-					className="line-search"
-				>
-					<LocationBrowser
-						updateTextLocation={handlePagination}
-					/>
-				</div>
+				<LocationBrowserContainer
+					urn={"urn:cts:greekLit:tlg0012.tlg001"}
+				/>
 
 				{!addCommentPage &&
 					<SearchToolDropdown
@@ -226,15 +221,16 @@ class CommentarySearchToolbar extends Component {
 							filters={filters}
 						/>
 
-					</SearchToolDropdown>}
-
-			</span>
+					</SearchToolDropdown>
+				}
+			</div>
 		);
 	}
 }
 /*
 	END CommentarySearchToolbar
 */
+
 CommentarySearchToolbar.propTypes = {
 	filters: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
 	toggleSearchTerm: PropTypes.func,
@@ -247,6 +243,7 @@ CommentarySearchToolbar.propTypes = {
 	commentersQuery: PropTypes.object,
 	keywordsQuery: PropTypes.object
 };
+
 CommentarySearchToolbar.defaultProps = {
 	keywords: [],
 	keyideas: [],
@@ -255,6 +252,7 @@ CommentarySearchToolbar.defaultProps = {
 	works: [],
 	handleChangeTextsearch: null,
 }
+
 export default compose(
 	commentersQuery,
 	referenceWorksQuery,

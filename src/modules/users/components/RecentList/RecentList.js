@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import RecentTeaser from '../RecentTeaser';
 
 
+import './RecentList.css';
+
 class RecentList extends Component {
 
 	render() {

@@ -26,6 +26,8 @@ import TranslationSelect from '../TranslationSelect/TranslationSelect';
 import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
 import RefsDeclEditor from '../RefsDeclEditor';
 
+import './TextNodesEditor.css';
+
 
 function isLocation(location) {
 

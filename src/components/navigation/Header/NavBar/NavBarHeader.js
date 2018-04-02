@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { toggleLeftMenu } from '../../../../actions/leftMenu';
 
+import './NavBarHeader.css';
 
 
 const NavBarHeader = ({ dispatchToggleLeftMenu, leftMenuOpen }) => (

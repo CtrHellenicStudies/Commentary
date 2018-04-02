@@ -11,6 +11,8 @@ import RecentList from '../RecentList';
 // auth
 import { logoutUser } from '../../../../lib/auth';
 
+import './UserDropdown.css';
+
 
 class UserDropdown extends Component {
 

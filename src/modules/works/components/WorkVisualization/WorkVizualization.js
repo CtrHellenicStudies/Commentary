@@ -8,6 +8,9 @@ import createClass from 'create-react-class';
 // TODO: upgrade to d3v4
 import * as d3 from 'd3';
 
+import './WorkVisualization.css';
+
+
 const WorkVisualization = createClass({
 
 	propTypes: {

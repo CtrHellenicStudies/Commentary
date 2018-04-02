@@ -27,6 +27,9 @@ import CommentsRecent from '../../../comments/components/CommentsRecent/Comments
 // lib
 import Utils from '../../../../lib/utils';
 
+import './KeywordDetail.css';
+
+
 class KeywordDetail extends Component {
 
 	constructor(props) {
@@ -209,7 +212,7 @@ KeywordDetail.propTypes = {
 	history: PropTypes.object,
 	keywordRemove: PropTypes.func,
 	match: PropTypes.object
-}; 
+};
 export default compose(
 	connect(mapStateToProps),
 	settingsQuery,

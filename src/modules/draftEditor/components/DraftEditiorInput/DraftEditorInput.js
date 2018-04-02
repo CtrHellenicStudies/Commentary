@@ -22,6 +22,9 @@ import VideoAdd from '../VideoAdd/VideoAdd';
 import ImageAdd from '../ImageAdd/ImageAdd';
 import Suggestions from '../Suggestions/Suggestions';
 
+import './DraftEditorInput.css';
+
+
 const singleLinePlugin = createSingleLinePlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin({
 	structure: [

@@ -10,6 +10,8 @@ import muiTheme from '../../../../lib/muiTheme';
 import CommenterWorkCircle from '../CommenterWorkCircle/CommenterWorkCircle';
 import CommenterWorkVisualization from '../CommenterWorkVisualization/CommenterWorkVisualization';
 
+import './CommenterVisualizations.css';
+
 
 class CommenterVisualizations extends Component {
 

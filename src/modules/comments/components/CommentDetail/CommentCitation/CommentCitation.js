@@ -11,6 +11,8 @@ import Utils from '../../../../../lib/utils';
 import sortRevisions from '../../../lib/sortRevisions';
 import getRevisionDate from '../../../lib/getRevisionDate';
 
+import './CommentCitation.css';
+
 
 class CommentCitation extends Component {
 

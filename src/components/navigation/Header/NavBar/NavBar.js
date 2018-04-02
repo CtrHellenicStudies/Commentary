@@ -23,6 +23,9 @@ import settingsQuery from '../../../../modules/settings/graphql/queries/list';
 import { toggleLeftMenu } from '../../../../actions/leftMenu';
 import { toggleAuthModal } from '../../../../modules/auth/actions';
 
+import './NavBar.css';
+
+
 // styles
 const styles = {
 	flatButton: {

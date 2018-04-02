@@ -2,6 +2,7 @@ import React from 'react';
 
 import Textures from '../Textures';
 
+import './BackgroundImage.css';
 
 
 const BackgroundImage = ({ src }) => {

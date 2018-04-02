@@ -18,6 +18,8 @@ import muiTheme from '../../../../lib/muiTheme';
 // helpers
 import setPageTitleAndMeta from '../../lib/setPageTitleAndMeta';
 
+import './Commentary.css';
+
 
 class Commentary extends Component {
 
@@ -155,7 +157,7 @@ class Commentary extends Component {
 				{/* --- END comments list */}
 
 				{contextPanelOpen ?
-					
+
 					<ContextPanel
 						open={contextPanelOpen}
 						closeContextPanel={this.closeContextPanel}

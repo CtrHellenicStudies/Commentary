@@ -44,6 +44,9 @@ import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/Refe
 
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
 
+import './AddRevision.css';
+
+
 class AddRevision extends Component {
 
 	constructor(props) {

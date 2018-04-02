@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './AvatarIcon.css';
+
+
 export default function AvatarIcon(props) {
 	let url = '/images/default_user.jpg';
 

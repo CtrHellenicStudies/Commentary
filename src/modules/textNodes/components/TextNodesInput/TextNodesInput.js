@@ -17,6 +17,9 @@ import textNodeUpdateMutation from '../../graphql/mutations/textNodesUpdate';
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
 
+import './TextNodesInput.css';
+
+
 const ListGroupItemDnD = createListGroupItemDnD('textNodeBlocks');
 
 const getSelectedEditionText = (textNodes) => {
@@ -26,7 +29,7 @@ const getSelectedEditionText = (textNodes) => {
 	textNodes.forEach(textNode => {
 		selectedEditionText.lines.push({
 			n: textNode.location[0],
-			html: textNode.text,		
+			html: textNode.text,
 		});
 	});
 	return selectedEditionText;
@@ -50,7 +53,7 @@ class TextNodesInput extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-	
+
 		this.setState({
 			textNodes: props.textNodes,
 		});
@@ -190,7 +193,7 @@ class TextNodesInput extends Component {
 						>
 							<div
 								className="reference-work-item"
-							>							
+							>
 								<FormGroup className="text-node-number-input">
 									<TextField
 										name={`${i}_number`}

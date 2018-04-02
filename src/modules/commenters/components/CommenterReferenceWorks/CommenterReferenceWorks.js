@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 import ReferenceWorksList from '../../../referenceWorks/components/ReferenceWorksList/ReferenceWorksList';
 
+import './CommenterReferenceWorks.css';
+
+
 const CommenterReferenceWorks = ({ commenter }) => (
 	<div
 		className="commenter-reference-works"

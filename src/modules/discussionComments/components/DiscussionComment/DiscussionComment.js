@@ -17,6 +17,9 @@ import discussionCommentReport from '../../graphql/mutations/discussionCommentRe
 import discussionCommentUpvote from '../../graphql/mutations/discussionCommentUpvote';
 import discussionCommentUnreport from '../../graphql/mutations/discussionCommentUnreport';
 
+import './DiscussionComment.css';
+
+
 class DiscussionComment extends Component {
 
 	constructor(props) {
@@ -39,7 +42,7 @@ class DiscussionComment extends Component {
 	}
 	componentWillReceiveProps(props) {
 		let user;
-	
+
 		if (props.discussionComment) {
 			user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		}

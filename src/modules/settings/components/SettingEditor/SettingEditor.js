@@ -9,8 +9,7 @@ import Modal from '../../../../components/common/modal/Modal';
 import WorkSearchContainer from '../../../search/containers/WorkSearchContainer';
 import CommentaryWorksContainer from '../../containers/CommentaryWorksContainer';
 
-import './SettingEditor.import.css';
-import '../../../inputs/styles/forms.import.css';
+import './SettingEditor.css';
 
 const maxLength200 = maxLength(200);
 

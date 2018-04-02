@@ -4,9 +4,10 @@ import { compose } from 'react-apollo';
 
 // graphql
 import { usersQuery } from '../../../../graphql/methods/users';
-
-
 import CommunityMemberTeaser from '../CommunityMemberTeaser/CommunityMemberTeaser';
+
+import './CommunityMemberList.css';
+
 
 class CommunityMemberList extends Component {
 	render() {

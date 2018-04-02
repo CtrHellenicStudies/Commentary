@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 
-
+import './PWDLoginForm.css';
 
 
 const wrapSubmit = login => async (values, dispatch) => {

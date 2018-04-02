@@ -7,6 +7,8 @@ import BackgroundImageHolder from '../../../shared/components/BackgroundImageHol
 import RecentActivity from '../RecentActivity/RecentActivity';
 import CommunityDirectory from '../CommunityDirectory/CommunityDirectory';
 
+import './CommunityPage.css';
+
 
 class CommunityPage extends Component {
 	render() {

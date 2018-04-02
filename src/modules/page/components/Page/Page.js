@@ -21,6 +21,8 @@ import Header from '../../../../components/navigation/Header';
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 
+import './Page.css';
+
 
 class Page extends Component {
 
@@ -32,7 +34,7 @@ class Page extends Component {
 	}
 	componentWillReceiveProps(props) {
 		const { slug } = props;
-	
+
 		const page = props.pagesQuery.loading ? {} : props.pagesQuery.pages.find(x => x.slug === slug);
 		this.setState({
 			page,
@@ -44,7 +46,7 @@ class Page extends Component {
 		const { slug } = this.props;
 		const { page, settings, ready } = this.state;
 		let content;
-		if (page) { 
+		if (page) {
 			if(Utils.isJson(page.content)) {
 				content = Utils.getHtmlFromContext(Utils.getEditorState(page.content).getCurrentContent());
 			} else {

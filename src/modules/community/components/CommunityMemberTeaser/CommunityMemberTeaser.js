@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 
 import AvatarIcon from '../../../profile/components/AvatarIcon/AvatarIcon';
 
+import './CommunityMemberTeaser.css';
+
+
 class CommunityMemberTeaser extends Component {
 
 	render() {

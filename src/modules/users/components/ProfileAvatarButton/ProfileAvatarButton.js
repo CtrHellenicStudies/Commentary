@@ -6,6 +6,10 @@ import { connect } from 'react-redux';
 import AvatarIcon from '../../../profile/components/AvatarIcon/AvatarIcon';
 import UserDropdown from '../UserDropdown';
 
+
+import './ProfileAvatarButton.css';
+
+
 class ProfileAvatarButton extends Component {
 	constructor(props) {
 		super(props);

@@ -23,6 +23,10 @@ import settingsQuery from '../../../settings/graphql/queries/list';
 import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 
+
+import './ProfilePage.css';
+
+
 // Mui theme for tabs
 const tabMuiTheme = {
 	palette: {

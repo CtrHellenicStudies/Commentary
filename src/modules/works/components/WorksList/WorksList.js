@@ -8,6 +8,9 @@ import WorkVisualization from '../WorkVisualization/WorkVizualization';
 
 // graphql
 
+import './WorksList.css';
+
+
 class WorksList extends Component {
 
 	constructor(props) {

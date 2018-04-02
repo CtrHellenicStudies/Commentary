@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Snackbar from 'material-ui/Snackbar';
 
+import './SnackAttack.css';
+
+
 const mountedAttacks = new Set();
 
 export function sendSnack(msg) {

@@ -15,6 +15,8 @@ import update from 'immutability-helper';
 import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
 
 
+import './ReferenceWork.css';
+
 
 const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 
@@ -45,8 +47,8 @@ export default class ReferenceWork extends Component {
 		this.changeTranslation = this.changeTranslation.bind(this);
 	}
 	componentWillReceiveProps(newProps) {
-		if (newProps.referenceWorks) { 
-			this.setState({referenceWorks: JSON.parse(JSON.stringify(newProps.referenceWorks))}); 
+		if (newProps.referenceWorks) {
+			this.setState({referenceWorks: JSON.parse(JSON.stringify(newProps.referenceWorks))});
 		}
 	}
 	changeNote(event, value, i) {
@@ -249,4 +251,3 @@ ReferenceWork.defaultProps = {
 	selectedLineFrom: null,
 	referenceWorkOptions: [],
 };
-

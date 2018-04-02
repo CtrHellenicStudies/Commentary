@@ -25,6 +25,10 @@ import CommentsRecent from '../../../comments/components/CommentsRecent';
 // lib
 import Utils from '../../../../lib/utils';
 
+import './CommenterDetail.css';
+
+
+
 class CommenterDetail extends Component {
 	constructor(props) {
 		super(props);
@@ -81,18 +85,18 @@ class CommenterDetail extends Component {
 	}
 	getBiographyHTML(biography) {
 		if (Utils.isJson(biography)) {
-			return JSON.parse(biography).html; 
+			return JSON.parse(biography).html;
 		}
 		return biography;
 	}
 	componentWillReceiveProps(props) {
 		const slug = props.match.params.slug;
 		const tenantId = sessionStorage.getItem('tenantId');
-	
+
 		let avatarUrl;
-		const commenter = props.commentersQuery.loading ? {} : 
+		const commenter = props.commentersQuery.loading ? {} :
 		props.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
-	
+
 		if (commenter && commenter.avatar) {
 			avatarUrl = commenter.avatar.src;
 		}

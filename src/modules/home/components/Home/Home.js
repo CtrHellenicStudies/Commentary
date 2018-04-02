@@ -17,12 +17,14 @@ import settingsQuery from '../../../settings/graphql/queries/list';
 
 // components:
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
-import CommentersList from '../../../commenters/components/CommenterList/CommentersList';
+import CommenterList from '../../../commenters/components/CommenterList/CommenterList';
 import KeywordsList from '../../../keywords/components/KeywordsList/KeywordsList';
 import LoadingHome from '../../../../components/loading/LoadingHome';
 
 // layouts:
 import CommentaryContainer from '../../../comments/containers/CommentaryContainer';
+
+import './Home.css';
 
 
 class Home extends Component {
@@ -193,7 +195,7 @@ class Home extends Component {
 
 						<div className="container">
 							<h2 className="block-title">Commentators</h2>
-							<CommentersList
+							<CommenterList
 								featureOnHomepage
 								defaultAvatarUrl="/images/default_user.jpg"
 								limit={3}

@@ -1,0 +1,6 @@
+{
+  "name": "CommenterEditorDialog",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./CommenterEditorDialog.js"
+}

@@ -15,7 +15,7 @@ import { handleChangeLineN, toggleSearchTerm } from '../../lib/helper';
 import Header from '../../../../components/navigation/Header';
 import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
-import AddRevision from '../../components/Addrevision/AddRevision';
+import AddRevision from '../../components/AddRevision/AddRevision';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 // graphql

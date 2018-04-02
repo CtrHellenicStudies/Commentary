@@ -22,6 +22,7 @@ import ImageAdd from './AddButton/ImageAdd';
 import Suggestions from './Suggestions/Suggestions';
 
 
+import './DraftEditorInput.css';
 
 
 

@@ -132,7 +132,7 @@ font-family: "Material Design Icons";
     display: none;
   }
 }
-@media (max-width: 1410px) {
+@media (max-width: 1500px) {
   .search-dropdown--more .search-dropdown--Commentator {
     display: inline-block;
   }

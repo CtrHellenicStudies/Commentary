@@ -18,10 +18,12 @@ import KeyideasDropdown from '../KeyideasDropdown';
 import CommentatorsDropdown from '../CommentatorsDropdown';
 import ReferenceDropdown from '../ReferenceDropdown';
 import WorksDropdown from '../WorksDropdown';
-import LocationBrowser from '../LocationBrowser';
+import LocationBrowserContainer from '../../containers/LocationBrowserContainer';
 
 // lib
 import Utils from '../../../../lib/utils';
+
+import './CommentarySearchToolbar.css';
 
 
 const getWorkInFilter = (filters) => {
@@ -33,6 +35,7 @@ const getWorkInFilter = (filters) => {
 	});
 	return workInFilter;
 };
+
 
 
 /*
@@ -149,7 +152,7 @@ class CommentarySearchToolbar extends Component {
 		const workInFilter = getWorkInFilter(filters);
 
 		return (
-			<span>
+			<div>
 				{!addCommentPage ?
 					<div className="search-tool text-search text-search--header">
 						<TextField
@@ -160,41 +163,6 @@ class CommentarySearchToolbar extends Component {
 					</div>
 				: '' }
 
-				{!addCommentPage &&
-					<KeywordsDropdown
-						keywords={keywords}
-						searchDropdownOpen={searchDropdownOpen}
-						toggleSearchDropdown={this.toggleSearchDropdown}
-						toggleSearchTerm={toggleSearchTerm}
-						filters={filters}
-					/>}
-
-				{!addCommentPage &&
-					<KeyideasDropdown
-						keyideas={keyideas}
-						searchDropdownOpen={searchDropdownOpen}
-						toggleSearchDropdown={this.toggleSearchDropdown}
-						toggleSearchTerm={toggleSearchTerm}
-						filters={filters}
-					/>}
-
-				{!addCommentPage &&
-					<CommentatorsDropdown
-						commenters={commenters}
-						searchDropdownOpen={searchDropdownOpen}
-						toggleSearchDropdown={this.toggleSearchDropdown}
-						toggleSearchTerm={toggleSearchTerm}
-						filters={filters}
-					/>}
-
-				{!addCommentPage &&
-					<ReferenceDropdown
-						reference={referenceWorks}
-						searchDropdownOpen={searchDropdownOpen}
-						toggleSearchDropdown={this.toggleSearchDropdown}
-						toggleSearchTerm={toggleSearchTerm}
-						filters={filters}
-					/>}
 				<WorksDropdown
 					works={works}
 					searchDropdownOpen={searchDropdownOpen}
@@ -203,15 +171,9 @@ class CommentarySearchToolbar extends Component {
 					filters={filters}
 				/>
 
-				<div
-					style={{padding: '10px 20px' }}
-					className={`line-search ${(workInFilter === false) ? 'disabled' : ''}`}
-				>
-					<LocationBrowser
-						updateTextLocation={handlePagination}
-					/>
-					<div className="disabled-screen" />
-				</div>
+				<LocationBrowserContainer
+					urn={"urn:cts:greekLit:tlg0012.tlg001"}
+				/>
 
 				{!addCommentPage &&
 					<SearchToolDropdown
@@ -259,15 +221,16 @@ class CommentarySearchToolbar extends Component {
 							filters={filters}
 						/>
 
-					</SearchToolDropdown>}
-
-			</span>
+					</SearchToolDropdown>
+				}
+			</div>
 		);
 	}
 }
 /*
 	END CommentarySearchToolbar
 */
+
 CommentarySearchToolbar.propTypes = {
 	filters: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
 	toggleSearchTerm: PropTypes.func,
@@ -280,6 +243,7 @@ CommentarySearchToolbar.propTypes = {
 	commentersQuery: PropTypes.object,
 	keywordsQuery: PropTypes.object
 };
+
 CommentarySearchToolbar.defaultProps = {
 	keywords: [],
 	keyideas: [],
@@ -288,6 +252,7 @@ CommentarySearchToolbar.defaultProps = {
 	works: [],
 	handleChangeTextsearch: null,
 }
+
 export default compose(
 	commentersQuery,
 	referenceWorksQuery,

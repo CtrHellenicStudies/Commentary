@@ -206,6 +206,7 @@ class Home extends Component {
 							</Link>
 						</div>
 					</section>
+					{/*
 					<section id="visualizations" className="browse-commentary block-shadow">
 						<span className="visualizations-coaching-text">
 							The charts below visualize data about the number of comments per book or hymn,
@@ -214,9 +215,10 @@ class Home extends Component {
 							but try clicking on the shaded elements and see what happens.
 						</span>
 						<div className="container data-visualization-container">
-							{/* <WorksList /> */}
+							<WorksList />
 						</div>
 					</section>
+					*/}
 
 					<section className="keywords">
 						<div className="grid inner">

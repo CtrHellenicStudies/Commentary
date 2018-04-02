@@ -352,16 +352,6 @@ class TextNodesEditor extends Component {
 							/>
 						</FormGroup>
 					</div>
-					<div className="text-nodes-editor-meta-input line-from-input">
-						<FormGroup controlId="formControlsSelect">
-							<ControlLabel>Finish at location</ControlLabel>
-							<br />
-							<TextField
-								hintText="0"
-								onChange={this.updateEndsAtLocation}
-							/>
-						</FormGroup>
-					</div>
 					<TranslationSelect
 						{...translationOptions}
 						selectTranslation={this.selectTranslation}

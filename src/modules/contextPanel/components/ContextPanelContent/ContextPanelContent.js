@@ -25,17 +25,17 @@ const getContextPanelStyles = (open, highlightingVisible) => {
 	return contextPanelStyles;
 };
 
-const getSortedEditions = (editions) => {
-	const sortedEditions = [];
+const getSortedVersions = (editions) => {
+	const sortedVersions = [];
 	editions.forEach((edition) => {
-		const newEdition = {
+		const newVersion = {
 			slug: edition.version.slug,
 			title: edition.version.title,
 			lines: _.sortBy(edition.lines, 'n')
 		};
-		sortedEditions.push(newEdition);
+		sortedVersions.push(newVersion);
 	});
-	return sortedEditions;
+	return sortedVersions;
 };
 
 class ContextPanelContent extends Component {
@@ -49,7 +49,7 @@ class ContextPanelContent extends Component {
 	}
 
 	render() {
-		const { open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaEdition, commentGroup, maxLine, toggleEdition,
+		const { open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaVersion, commentGroup, maxLine, toggleVersion,
 			toggleHighlighting, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
 		const { lemmaText } = this.state;
 
@@ -63,29 +63,29 @@ class ContextPanelContent extends Component {
 						iconClassName="material-icons"
 					>close
 					</IconButton>
-
 				}
 
-				<ContextPanelText
-					onBeforeClicked={onBeforeClicked}
-					onAfterClicked={onAfterClicked}
-					selectedLemmaEdition={selectedLemmaEdition}
-					lemmaText={lemmaText}
-					commentGroup={commentGroup}
-					maxLine={maxLine}
-					highlightingVisible={highlightingVisible}
-					disableEdit={disableEdit}
-					selectedLineFrom={selectedLineFrom}
-					selectedLineTo={selectedLineTo}
-					updateSelectedLines={updateSelectedLines}
-					editor={editor}
-				/>
-
+				{selectedLemmaVersion &&
+					<ContextPanelText
+						onBeforeClicked={onBeforeClicked}
+						onAfterClicked={onAfterClicked}
+						selectedLemmaVersion={selectedLemmaVersion}
+						lemmaText={lemmaText}
+						commentGroup={commentGroup}
+						maxLine={maxLine}
+						highlightingVisible={highlightingVisible}
+						disableEdit={disableEdit}
+						selectedLineFrom={selectedLineFrom}
+						selectedLineTo={selectedLineTo}
+						updateSelectedLines={updateSelectedLines}
+						editor={editor}
+					/>
+				}
 				{/*
 				<ContextPanelTabs
 					lemmaText={lemmaText}
-					selectedLemmaEdition={selectedLemmaEdition}
-					toggleEdition={toggleEdition}
+					selectedLemmaVersion={selectedLemmaVersion}
+					toggleVersion={toggleVersion}
 					toggleHighlighting={toggleHighlighting}
 					highlightingVisible={highlightingVisible}
 					disableEdit={disableEdit}
@@ -116,11 +116,11 @@ ContextPanelContent.propTypes = {
 	highlightingVisible: PropTypes.bool.isRequired,
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,
-	selectedLemmaEdition: PropTypes.string.isRequired,
+	selectedLemmaVersion: PropTypes.object.isRequired,
 	lineFrom: PropTypes.number,
 	lineTo: PropTypes.number,
 	maxLine: PropTypes.number.isRequired,
-	toggleEdition: PropTypes.func.isRequired,
+	toggleVersion: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,
 
 	// requiered if editor:

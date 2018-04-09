@@ -5,39 +5,39 @@ import RaisedButton from 'material-ui/RaisedButton';
 /*
 	BEGIN helpers
 */
-const getSelectedEditionText = (lemmaText, selectedLemmaEdition) => {
-	let selectedEditionText = { lines: [], slug: '', title: '' };
-	if (selectedLemmaEdition && selectedLemmaEdition.length) {
+const getSelectedVersionText = (lemmaText, selectedLemmaVersion) => {
+	let selectedVersionText = { textNodes: [], slug: '', title: '' };
+	if (selectedLemmaVersion && selectedLemmaVersion.length) {
 		lemmaText.forEach((edition) => {
-			if (edition.slug === selectedLemmaEdition) {
-				selectedEditionText = edition;
+			if (edition.slug === selectedLemmaVersion) {
+				selectedVersionText = edition;
 			}
 		});
 	} else if (lemmaText && lemmaText.length && lemmaText[0].length) {
-		selectedEditionText.title = lemmaText[0][0].version.title;
-		selectedEditionText.slug = lemmaText[0][0].version.slug;
+		selectedVersionText.title = lemmaText[0][0].version.title;
+		selectedVersionText.slug = lemmaText[0][0].version.slug;
 		lemmaText[0].forEach(textNode => {
-			selectedEditionText.lines.push({
+			selectedVersionText.textNodes.push({
 				n: textNode.location[0],
 				html: textNode.text,
 			});
 		});
 	}
-	return selectedEditionText;
+	return selectedVersionText;
 };
 
-const getLineClass = (lineFrom, lineTo, n, highlightingVisible) => {
-	let usedLineTo = lineFrom;
+const getTextNodeClass = (textNodeFrom, textNodeTo, n, highlightingVisible) => {
+	let usedLineTo = textNodeFrom;
 
-	if (lineTo) {
-		usedLineTo = lineTo;
+	if (textNodeTo) {
+		usedLineTo = textNodeTo;
 	}
 
-	let lineClass = 'lemma-line';
-	if (lineFrom <= n && n <= usedLineTo && highlightingVisible) {
-		lineClass += ' highlighted';
+	let textNodeClass = 'lemma-textNode';
+	if (textNodeFrom <= n && n <= usedLineTo && highlightingVisible) {
+		textNodeClass += ' highlighted';
 	}
-	return lineClass;
+	return textNodeClass;
 };
 
 const getContextPanelTextState = (commentGroup, editor) => {
@@ -53,20 +53,24 @@ const getContextPanelTextState = (commentGroup, editor) => {
 /*
 	BEGIN LineNumbering
 */
-const LineNumbering = ({ n }) => (
-	<div className="lemma-meta">
-		<span
-			className={`lemma-line-n ${
-			(n % 5 === 0 || n === 1) ? 'lemma-line-n--displayed' : ''
-		}`}
-		>
-			{n}
-		</span>
-	</div>
-);
+const LineNumbering = ({ location }) => {
+	const n = location[location.length - 1];
+
+	return (
+		<div className="lemma-meta">
+			<span
+				className={`lemma-textNode-n ${
+				(n % 5 === 0 || n === 1) ? 'lemma-textNode-n--displayed' : ''
+			}`}
+			>
+				{n}
+			</span>
+		</div>
+	);
+}
 
 LineNumbering.propTypes = {
-	n: PropTypes.number.isRequired,
+	location: PropTypes.array.isRequired,
 };
 /*
 	END LineNumbering
@@ -81,7 +85,7 @@ class ContextPanelText extends Component {
 	constructor(props) {
 		super(props);
 
-		this.lines = [];
+		this.textNodes = [];
 		this.state = {
 			selectedLineFrom: 0,
 			selectedLineTo: 0
@@ -94,20 +98,20 @@ class ContextPanelText extends Component {
 		this.updateBorderLines = this.updateBorderLines.bind(this);
 	}
 
-	updateBorderLines(lineFrom, lineTo) {
-		// hanlde highliting selected lines:
-		let _lineTo = lineTo;
-		if(lineTo === 0) {
-			_lineTo = lineFrom + 1;
+	updateBorderLines(textNodeFrom, textNodeTo) {
+		// hanlde highliting selected textNodes:
+		let _textNodeTo = textNodeTo;
+		if(textNodeTo === 0) {
+			_textNodeTo = textNodeFrom + 1;
 		}
-		if(!Object.keys(this.lines).length) {
+		if(!Object.keys(this.textNodes).length) {
 			return;
 		}
-		for (let i = 1; i <= Object.keys(this.lines).length; i += 1) {
-			if (i > lineFrom && i <= _lineTo) {
-				this.lines[(i-1).toString()].style.borderBottom = '2px solid #B2EBF2';
+		for (let i = 1; i <= Object.keys(this.textNodes).length; i += 1) {
+			if (i > textNodeFrom && i <= _textNodeTo) {
+				this.textNodes[(i-1).toString()].style.borderBottom = '2px solid #B2EBF2';
 			} else  {
-				this.lines[(i-1).toString()].style.borderBottom = '';
+				this.textNodes[(i-1).toString()].style.borderBottom = '';
 			}
 		}
 	}
@@ -132,7 +136,7 @@ class ContextPanelText extends Component {
 	handleLineClick(event) {
 		 if (!this.props.disableEdit) {
 
-		 	const selectedLines = getSelectedEditionText(this.props.lemmaText, this.props.selectedLemmaEdition).lines;
+		 	const selectedLines = getSelectedVersionText(this.props.lemmaText, this.props.selectedLemmaVersion).textNodes;
 
 			 const { updateSelectedLines } = this.props;
 			 const { selectedLineFrom, selectedLineTo } = this.state;
@@ -155,7 +159,9 @@ class ContextPanelText extends Component {
 					selectedLineTo: 0});
 				this.updateBorderLines(id, 0);
 			}
-			updateSelectedLines({lines: textNodesToUpdate});
+			updateSelectedLines({
+				textNodes: textNodesToUpdate,
+			});
 		}
 	}
 	/*
@@ -163,15 +169,16 @@ class ContextPanelText extends Component {
 	*/
 
 	render() {
-		const { onBeforeClicked, selectedLemmaEdition, highlightingVisible, lineFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, editor } = this.props;
+		const { onBeforeClicked, selectedLemmaVersion, highlightingVisible, textNodeFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, editor } = this.props;
 
+		console.log(selectedLemmaVersion)
 
 
 		const contextPanelTextState = getContextPanelTextState(commentGroup, editor);
 
 		return (
 			<div className="lemma-text-wrap">
-				{lineFrom > 1 ?
+				{textNodeFrom > 1 ?
 					<div className="before-link">
 						<RaisedButton
 							className="light"
@@ -183,70 +190,69 @@ class ContextPanelText extends Component {
 				: '' }
 
 				{(() => {
-					const selectedEditionText = getSelectedEditionText(lemmaText, selectedLemmaEdition);
 					switch (contextPanelTextState) {
 					case 'context for comment group':
 						return (
-							selectedEditionText.lines.map((line, i) => {
-								const lineClass = getLineClass(commentGroup.lineFrom, commentGroup.lineTo, line.n, highlightingVisible);
+							selectedLemmaVersion.textNodes.map((textNode, i) => {
+								const textNodeClass = getTextNodeClass(commentGroup.textNodeFrom, commentGroup.textNodeTo, textNode.id, highlightingVisible);
 
 								return (
 									<div
-										className={lineClass}
-										key={`${line.n}-${i}`}
+										className={textNodeClass}
+										key={`${textNode.id}-${i}`}
 									>
 										<div
 											className="lemma-text"
-											dangerouslySetInnerHTML={{ __html: line.html }}
+											dangerouslySetInnerHTML={{ __html: textNode.text }}
 										/>
 
-										<LineNumbering n={line.n} />
+										<LineNumbering location={textNode.location} />
 									</div>
 								);
 							})
 						);
 					case 'editor':
 						return (
-							selectedEditionText.lines.map((line, i) => (
+							selectedLemmaVersion.textNodes.map((textNode, i) => (
 								<div
-									className="lemma-line"
-									key={`${line.n}-${i}`}
+									className="lemma-textNode"
+									key={`${textNode.id}-${i}`}
 								>
 									<div
 										className="lemma-text"
-										id={i}
-										ref={(component) => { this.lines[(i).toString()] = component; }}
-										dangerouslySetInnerHTML={{ __html: line.html }}
+										id={textNode.id}
+										ref={(component) => { this.textNodes[(i).toString()] = component; }}
+										dangerouslySetInnerHTML={{ __html: textNode.text }}
 										onMouseEnter={this.handeLineMouseEnter}
 										onMouseLeave={this.handeLineMouseLeave}
 										onClick={this.handleLineClick}
 										style={!disableEdit ? { cursor: 'pointer' } : null}
 									/>
 
-									<LineNumbering n={line.n} />
+									<LineNumbering location={textNode.location} />
 								</div>
 							))
 						);
 					default:
 						return (
-							selectedEditionText.lines.map((line, i) => (
+							selectedLemmaVersion.textNodes.map((textNode, i) => (
 								<div
-									className="lemma-line"
-									key={`${line.n}-${i}`}
+									className="lemma-textNode"
+									key={`${textNode.id}-${i}`}
 								>
 									<div
 										className="lemma-text"
-										dangerouslySetInnerHTML={{ __html: line.html }}
+										dangerouslySetInnerHTML={{ __html: textNode.text }}
 									/>
 
-									<LineNumbering n={line.n} />
+									<LineNumbering location={textNode.location} />
 								</div>
 							))
 						);
 					}
 				})()}
 
-				{lineFrom < maxLine ?
+				{textNodeFrom < maxLine ?
 					<div className="after-link">
 						<RaisedButton
 							className="light"
@@ -262,14 +268,14 @@ class ContextPanelText extends Component {
 }
 
 ContextPanelText.propTypes = {
-	lineFrom: PropTypes.number,
-	lineTo: PropTypes.number,
+	textNodeFrom: PropTypes.number,
+	textNodeTo: PropTypes.number,
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,
-	selectedLemmaEdition: PropTypes.string.isRequired,
+	selectedLemmaVersion: PropTypes.object.isRequired,
 	commentGroup: PropTypes.shape({
-		lineFrom: PropTypes.number.isRequired,
-		lineTo: PropTypes.number,
+		textNodeFrom: PropTypes.number.isRequired,
+		textNodeTo: PropTypes.number,
 	}),
 	maxLine: PropTypes.number,
 	highlightingVisible: PropTypes.bool,

@@ -7,10 +7,18 @@ import { editionsQuery } from '../../../../graphql/methods/editions';
 
 import ContextPanelContent from '../../components/ContextPanelContent';
 
+// lib
+import Utils from '../../../../lib/utils';
+
 
 const ContextPanelContentContainer = props => {
 
   let textNodes = [];
+  let versionsWithText = [];
+  let translationsWithText = [];
+  let selectedLemmaVersion = null;
+  let selectedLemmaVersionIndex = 0;
+  let multiline = false;
 
   if (
       props.textNodesQuery
@@ -19,10 +27,7 @@ const ContextPanelContentContainer = props => {
     textNodes = props.textNodesQuery.textNodes;
   }
 
-  console.log(textNodes);
 
-
-	/**
 	// TODO: potentially structure data from backend to prevent this transformation
 	// in the future
 	// set versions from textnodes data
@@ -45,11 +50,11 @@ const ContextPanelContentContainer = props => {
 	) {
 		selectedLemmaVersion = versionsWithText[selectedLemmaVersionIndex];
 	}
-	*/
 
   return (
     <ContextPanelContent
       {...props}
+      selectedLemmaVersion={selectedLemmaVersion}
     />
   );
 }

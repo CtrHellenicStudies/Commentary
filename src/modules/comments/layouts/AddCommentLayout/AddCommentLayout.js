@@ -64,15 +64,16 @@ class AddCommentLayout extends Component {
 		this.closeContextReader = this.closeContextReader.bind(this);
 		this.openContextReader = this.openContextReader.bind(this);
 		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
-		this.updateQuery = this.updateQuery.bind(this);
 		this.getChildrenContext = this.getChildrenContext.bind(this);
 
 		let work = 'tlg001';
+
 		this.setState({
 			textNodesUrn: serializeUrn(Utils.createLemmaCitation(work, 0, 49)),
-			work: work
+			work,
 		});
 	}
+
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
@@ -80,6 +81,7 @@ class AddCommentLayout extends Component {
 				work = filter.values[0];
 			}
 		});
+
 		if (!work) {
 			work = {
 				title: 'Iliad',
@@ -87,21 +89,9 @@ class AddCommentLayout extends Component {
 				order: 1,
 			};
 		}
+
 		return work;
 	}
-
-	updateQuery() {
-		this.setState({
-			shouldUpdateQuery: false
-		});
-	}
-	// --- BEGNI LINE SELECTION --- //
-
-
-	// --- END LINE SELECTION --- //
-
-
-	// --- BEGNI ADD COMMENT --- //
 
 	addComment(formData, possibleCommenters, textValue, textRawValue) {
 		this.setState({
@@ -145,63 +135,48 @@ class AddCommentLayout extends Component {
 			// created: JSON.stringify(new Date()), TODO
 			status: 'publish',
 		};
-		const that = this;
+
 		this.props.commentInsert(comment).then((res) => {
 			if (res.data.commentInsert._id) {
 				const urlParams = qs.stringify({_id: res.data.commentInsert._id});
-				that.props.history.push(`/commentary?${urlParams}`);
+				this.props.history.push(`/commentary?${urlParams}`);
 			} else {
 				this.props.history.push(`/`);
 			}
 		});
 	}
 
-	getWorkgetWork() {
-		let work = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			}
-		});
-		if (!work) {
-			work = {
-				title: 'Iliad',
-				slug: '001',
-				order: 1,
-			};
-		}
-		return work;
-	}
-
 	getSubwork() {
 		let subwork = null;
+
 		this.state.filters.forEach((filter) => {
 			if (filter.key === 'subworks') {
 				subwork = filter.values[0];
 			}
 		});
+
 		if (!subwork) {
 			subwork = {
 				title: '1',
 				n: 1,
 			};
 		}
+
 		return subwork;
 	}
 
 	getLineLetter() {
-
 		const { selectedLineTo, selectedLineFrom } = this.state;
 
 		let lineLetter = '';
 		if (selectedLineTo === 0 && selectedLineFrom > 0) {
 			lineLetter = this.commentLemmaSelect.state ? this.commentLemmaSelect.state.lineLetterValue : null;
 		}
+
 		return lineLetter;
 	}
 
 	getSelectedLineTo() {
-
 		const { selectedLineTo, selectedLineFrom } = this.state;
 
 		let newSelectedLineTo = 0;
@@ -210,6 +185,7 @@ class AddCommentLayout extends Component {
 		} else {
 			newSelectedLineTo = selectedLineTo;
 		}
+
 		return newSelectedLineTo;
 	}
 
@@ -233,15 +209,16 @@ class AddCommentLayout extends Component {
 		});
 	}
 
-	
+
 	getChildrenContext() {
 		return getMuiTheme(muiTheme);
 	}
+
 	updatetextNodesUrn(urn) {
 		this.setState({textNodesUrn: urn});
 	}
-	render() {
 
+	render() {
 		const { loading } = this.state;
 		const textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
@@ -254,15 +231,19 @@ class AddCommentLayout extends Component {
 						<AddCommentContainer
 							textNodesUrn={textNodesUrn}
 							submitForm={this.addComment}
-							updatetextNodesUrn={this.updatetextNodesUrn.bind(this)} />
+							updatetextNodesUrn={this.updatetextNodesUrn.bind(this)}
+						/>
 					</div>
 					:
-					<Spinner fullPage />
+					<Spinner
+						fullPage
+					/>
 				}
 			</MuiThemeProvider>
 		);
 	}
 }
+
 AddCommentLayout.propTypes = {
 	commentInsert: PropTypes.func,
 	history: PropTypes.object,

@@ -81,6 +81,7 @@ class ContextPanelContent extends Component {
 						editor={editor}
 					/>
 				}
+
 				{/*
 				<ContextPanelTabs
 					lemmaText={lemmaText}

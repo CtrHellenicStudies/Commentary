@@ -327,10 +327,12 @@ class AddComment extends Component {
 		});
 		return commentersOptions;
 	}
+
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
+
 	componentWillReceiveProps(newProps) {
 		const ready = !newProps.keywordsQuery.loading && !newProps.referenceWorksQuery.loading && !newProps.commentersQuery.loading;
 		if (!ready && this.state.ready) {
@@ -364,6 +366,7 @@ class AddComment extends Component {
 				});
 			}
 		});
+
 		this.setState({
 			ready: true,
 			referenceWorkOptions: referenceWorkOptions,
@@ -371,6 +374,7 @@ class AddComment extends Component {
 			tags: tags
 		});
 	}
+
 	render() {
 		const { tagsValue, commentersOptions } = this.state;
 
@@ -471,9 +475,9 @@ class AddComment extends Component {
 				</div>
 			</div>
 		);
-
 	}
 }
+
 AddComment.propTypes = {
 	selectedLineFrom: PropTypes.number,
 	commentersQuery: PropTypes.object,
@@ -485,6 +489,7 @@ AddComment.propTypes = {
 	keywordsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object
 };
+
 AddComment.defaultProps = {
 	selectedLineFrom: null,
 	tags: [],

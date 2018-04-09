@@ -137,7 +137,6 @@ const routes = (props) => {
 
 			{/** Settings routes */}
 			{adminRoute}
-			{adminSettingsRoute}
 
 			{/** Basic page routes */}
 			{pageRoute}

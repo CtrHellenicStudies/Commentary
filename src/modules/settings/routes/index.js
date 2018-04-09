@@ -9,13 +9,9 @@ import SettingEditorContainer from '../containers/SettingEditorContainer';
 
 
 const adminRoute = (
-	<Route path="/admin/" component={MainLayout} />
-);
-
-const adminSettingsRoute = (
-	<Route path="/admin/settings" component={SettingEditorContainer} />
+	<Route path="/admin" render={() => (<MainLayout><SettingEditorContainer /></MainLayout>)} />
 );
 
 export {
-	adminRoute, adminSettingsRoute,
+	adminRoute,
 };

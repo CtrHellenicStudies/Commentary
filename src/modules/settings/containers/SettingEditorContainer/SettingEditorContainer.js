@@ -55,7 +55,7 @@ class SettingEditorContainer extends React.Component {
 			values._id = _values._id;
 			settingsUpdate(values)
 				.then((response) => {
-					router.replace('/admin/settings');
+					router.replace('/admin');
 				})
 				.catch((err) => {
 					console.error(err);
@@ -63,7 +63,7 @@ class SettingEditorContainer extends React.Component {
 		} else {
 			settingsCreate(values)
 				.then((response) => {
-					router.replace('/admin/settings');
+					router.replace('/admin');
 				})
 				.catch((err) => {
 					console.error(err);

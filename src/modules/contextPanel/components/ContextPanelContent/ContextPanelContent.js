@@ -8,10 +8,6 @@ import _ from 'lodash';
 import ContextPanelText from '../ContextPanelText/ContextPanelText';
 import ContextPanelTabs from '../ContextPanelTabs/ContextPanelTabs';
 
-// graphql
-import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
-import { editionsQuery } from '../../../../graphql/methods/editions';
-
 // lib:
 import Utils from '../../../../lib/utils';
 
@@ -28,6 +24,7 @@ const getContextPanelStyles = (open, highlightingVisible) => {
 	}
 	return contextPanelStyles;
 };
+
 const getSortedEditions = (editions) => {
 	const sortedEditions = [];
 	editions.forEach((edition) => {
@@ -41,45 +38,21 @@ const getSortedEditions = (editions) => {
 	return sortedEditions;
 };
 
-
 class ContextPanelContent extends Component {
 	constructor(props) {
 		super(props);
 		const { lineFrom } = props;
+
 		this.state = {
 			lineTo: lineFrom + 49
 		};
 	}
-	componentWillReceiveProps(nextProps) {
 
-		const { multiline } = nextProps;
-
-		if (nextProps.textNodesQuery.loading || nextProps.editionsQuery.loading) {
-			return;
-		}
-		let textNodesCursor = nextProps.textNodes ? nextProps.textNodes : nextProps.textNodesQuery.textNodes;
-		//const editions = textNodesCursor;
-		if (nextProps.textNodes) {
-			textNodesCursor = nextProps.textNodes;
-		}
-		let sortedEditions;
-
-		if (multiline) {
-			const parsedEditions = Utils.parseMultilineEdition(textNodesCursor, multiline);
-			sortedEditions = getSortedEditions(parsedEditions);
-		} else {
-		//	sortedEditions = getSortedEditions(editions);
-			sortedEditions = [];
-			sortedEditions.push(textNodesCursor);
-		}
-		this.setState({
-			lemmaText: sortedEditions
-		});
-	}
 	render() {
 		const { open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaEdition, commentGroup, maxLine, toggleEdition,
 			toggleHighlighting, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
 		const { lemmaText } = this.state;
+
 		return (
 			<div className={getContextPanelStyles(open, highlightingVisible)}>
 
@@ -108,6 +81,7 @@ class ContextPanelContent extends Component {
 					editor={editor}
 				/>
 
+				{/*
 				<ContextPanelTabs
 					lemmaText={lemmaText}
 					selectedLemmaEdition={selectedLemmaEdition}
@@ -117,11 +91,13 @@ class ContextPanelContent extends Component {
 					disableEdit={disableEdit}
 					editor={editor}
 				/>
+				*/}
 
 			</div>
 		);
 	}
 }
+
 ContextPanelContent.propTypes = {
 	open: PropTypes.bool,
 	commentGroup: PropTypes.shape({
@@ -169,7 +145,4 @@ ContextPanelContent.defaultProps = {
 	editor: false,
 };
 
-export default compose(
-	editionsQuery,
-	textNodesQuery
-)(ContextPanelContent);
+export default ContextPanelContent;

@@ -21,7 +21,7 @@ import $ from 'jquery';
 import getMaxLineMutation from '../../../textNodes/graphql/mutations/getMaxLine';
 
 // private component:
-import ContextPanelContent from '../ContextPanelContent/ContextPanelContent';
+import ContextPanelContentContainer from '../../containers/ContextPanelContentContainer';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -156,21 +156,24 @@ class ContextPanel extends Component {
 	}
 
 	render() {
-
 		const { open, closeContextPanel, commentGroup,
 				disableEdit, selectedLineFrom, selectedLineTo,
 				updateSelectedLines, editor, multiline,
 				textNodes, filters } = this.props;
+
 		const { highlightingVisible, maxLine, selectedLemmaEdition, lemmaCitation } = this.state;
-		let textNodesUrn = 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';
+
+		let textNodesUrn = 'urn:cts:greekLit:tlg0012.tlg001';
+
 		if(commentGroup && commentGroup.lemmaCitation) {
 			const lemmaCitationTemp = JSON.parse(JSON.stringify(commentGroup.lemmaCitation));
 			lemmaCitationTemp.passageFrom[1] = 1;
 			lemmaCitationTemp.passageTo[0] = lemmaCitationTemp.passageTo + 1;
 			textNodesUrn = serializeUrn(lemmaCitationTemp);
 		}
+
 		return (
-			<ContextPanelContent
+			<ContextPanelContentContainer
 				open={open}
 				filters={filters}
 				closeContextPanel={closeContextPanel}

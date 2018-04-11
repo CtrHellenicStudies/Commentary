@@ -110,7 +110,7 @@ class ContextPanelText extends Component {
 		for (let i = 1; i <= Object.keys(this.textNodes).length; i += 1) {
 			if (i > textNodeFrom && i <= _textNodeTo) {
 				this.textNodes[(i-1).toString()].style.borderBottom = '2px solid #B2EBF2';
-			} else  {
+			} else {
 				this.textNodes[(i-1).toString()].style.borderBottom = '';
 			}
 		}

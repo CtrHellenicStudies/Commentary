@@ -22,6 +22,7 @@ const getContextPanelStyles = (open, highlightingVisible) => {
 	if (highlightingVisible) {
 		contextPanelStyles += ' highlighting-visible';
 	}
+	
 	return contextPanelStyles;
 };
 
@@ -35,6 +36,7 @@ const getSortedVersions = (editions) => {
 		};
 		sortedVersions.push(newVersion);
 	});
+
 	return sortedVersions;
 };
 

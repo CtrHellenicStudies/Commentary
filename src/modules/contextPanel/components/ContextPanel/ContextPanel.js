@@ -51,7 +51,7 @@ class ContextPanel extends Component {
 		super(props);
 
 		this.state = {
-			selectedLemmaEdition: '',
+			selectedLemmaVersion: '',
 			lineFrom: props.passageFrom,
 			maxLine: 0,
 			highlightingVisible: false,
@@ -62,7 +62,7 @@ class ContextPanel extends Component {
 		// methods:
 		this.onAfterClicked = this.onAfterClicked.bind(this);
 		this.onBeforeClicked = this.onBeforeClicked.bind(this);
-		this.toggleEdition = this.toggleEdition.bind(this);
+		this.toggleVersion = this.toggleVersion.bind(this);
 		this.toggleHighlighting = this.toggleHighlighting.bind(this);
 		this.scrollElement = this.scrollElement.bind(this);
 	}
@@ -72,12 +72,11 @@ class ContextPanel extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		const isLemmaEditionChange = prevState.selectedLemmaEdition !== this.state.selectedLemmaEdition;
+		const isLemmaVersionChange = prevState.selectedLemmaVersion !== this.state.selectedLemmaVersion;
 		const isHighlightingChange = prevState.highlightingVisible !== this.state.highlightingVisible;
-		if (!(isLemmaEditionChange || isHighlightingChange)) {
+		if (!(isLemmaVersionChange || isHighlightingChange)) {
 			this.scrollElement('open');
 		}
-
 		// if work or subwork updated - update maxline
 	}
 
@@ -105,10 +104,10 @@ class ContextPanel extends Component {
 	}
 
 
-	toggleEdition(editionSlug) {
-		if (this.state.selectedLemmaEdition !== editionSlug) {
+	toggleVersion(editionSlug) {
+		if (this.state.selectedLemmaVersion !== editionSlug) {
 			this.setState({
-				selectedLemmaEdition: editionSlug,
+				selectedLemmaVersion: editionSlug,
 			});
 		}
 	}
@@ -149,6 +148,7 @@ class ContextPanel extends Component {
 			lemmaCitation: setLemmaCitation(nextProps.commentGroup, nextProps.lemmaCitation)
 		});
 	}
+
 	componentWillUnmount() {
 		if (this.timeouts) {
 			this.timeouts.forEach(clearTimeout);
@@ -156,12 +156,14 @@ class ContextPanel extends Component {
 	}
 
 	render() {
-		const { open, closeContextPanel, commentGroup,
-				disableEdit, selectedLineFrom, selectedLineTo,
-				updateSelectedLines, editor, multiline,
-				textNodes, filters } = this.props;
+		const {
+			open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom,
+			selectedLineTo, updateSelectedLines, editor, multiline, textNodes, filters
+		} = this.props;
 
-		const { highlightingVisible, maxLine, selectedLemmaEdition, lemmaCitation } = this.state;
+		const {
+			highlightingVisible, maxLine, selectedLemmaVersion, lemmaCitation
+		} = this.state;
 
 		let textNodesUrn = 'urn:cts:greekLit:tlg0012.tlg001';
 
@@ -183,10 +185,10 @@ class ContextPanel extends Component {
 				passageTo={selectedLineFrom + 49}
 				maxLine={maxLine}
 				lemmaCitation={lemmaCitation}
-				selectedLemmaEdition={selectedLemmaEdition}
+				selectedLemmaVersion={selectedLemmaVersion}
 				onBeforeClicked={this.onBeforeClicked}
 				onAfterClicked={this.onAfterClicked}
-				toggleEdition={this.toggleEdition}
+				toggleVersion={this.toggleVersion}
 				toggleHighlighting={this.toggleHighlighting}
 				textNodes={textNodes}
 				disableEdit={disableEdit}
@@ -200,6 +202,7 @@ class ContextPanel extends Component {
 		);
 	}
 }
+
 ContextPanel.propTypes = {
 	open: PropTypes.bool,
 	closeContextPanel: PropTypes.func,
@@ -226,4 +229,5 @@ ContextPanel.defaultProps = {
 	updateSelectedLines: null,
 	editor: false,
 };
+
 export default compose(getMaxLineMutation)(ContextPanel);

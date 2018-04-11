@@ -70,24 +70,31 @@ class LeftMenu extends React.Component {
 							Admin
 						</MenuItem>
 					: ''}
-					{Utils.userInRole(roles, ['editor', 'admin', 'commenter'])
-					 ? (
+					{Utils.userInRole(roles, ['editor', 'admin', 'commenter']) ?
+						(
 						  <div>
-					 		<MenuItem to="/commentary/create"
-								onClick={closeLeftMenu}>
-									Add Comment
-							</MenuItem>
-							<MenuItem to="/tags/create"
-								onClick={closeLeftMenu}>
-									Add Tag
-							</MenuItem>
-							<MenuItem to="/textNodes/edit"
-								onClick={closeLeftMenu}>
-								Edit Text
-							</MenuItem>
+						 		<MenuItem
+									to="/commentary/create"
+									onClick={closeLeftMenu}
+								>
+										Add Comment
+								</MenuItem>
+								<MenuItem
+									to="/tags/create"
+									onClick={closeLeftMenu}
+								>
+										Add Tag
+								</MenuItem>
+								<MenuItem
+									to="/textNodes/edit"
+									onClick={closeLeftMenu}
+								>
+									Edit Text
+								</MenuItem>
 
-							<Divider />
-						</div>)
+								<Divider />
+							</div>
+						)
 					:
 					'' }
 					<MenuItem

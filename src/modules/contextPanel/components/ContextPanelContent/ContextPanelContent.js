@@ -22,7 +22,7 @@ const getContextPanelStyles = (open, highlightingVisible) => {
 	if (highlightingVisible) {
 		contextPanelStyles += ' highlighting-visible';
 	}
-	
+
 	return contextPanelStyles;
 };
 
@@ -119,7 +119,6 @@ ContextPanelContent.propTypes = {
 	highlightingVisible: PropTypes.bool.isRequired,
 	onBeforeClicked: PropTypes.func.isRequired,
 	onAfterClicked: PropTypes.func.isRequired,
-	selectedLemmaVersion: PropTypes.object.isRequired,
 	lineFrom: PropTypes.number,
 	lineTo: PropTypes.number,
 	maxLine: PropTypes.number.isRequired,

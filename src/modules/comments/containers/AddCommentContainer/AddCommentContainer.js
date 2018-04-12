@@ -30,7 +30,6 @@ const getFilterValues = (filters) => {
 };
 
 const AddCommentContainer = class AddCommentContainerClass extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -166,14 +165,14 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 						<div className="comment-group">
 							<CommentLemmaSelect
 								textNodes={selectedTextNodes}
-					  />
+						  />
 
 							<AddComment
 								selectedLineFrom={selectedLineFrom}
 								selectedLineTo={selectedLineTo}
 								submitForm={submitForm}
 								work={work}
-					  />
+						  />
 						</div>
 						<ContextPanel
 							open={contextReaderOpen}
@@ -184,13 +183,13 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 							textNodes={textNodes}
 							textNodesUrn={textNodesUrn}
 							editor
-				  />
+					  />
 					</div>
 
 					<FilterWidget
 						filters={filters}
 						toggleSearchTerm={this.toggleSearchTerm}
-			  />
+				  />
 				</main>
 			</div>
 		);

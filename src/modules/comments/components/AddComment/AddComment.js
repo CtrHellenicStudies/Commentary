@@ -461,7 +461,6 @@ class AddComment extends Component {
 									/>
 								</div>
 							</div>
-
 						</article>
 					</Formsy.Form>
 

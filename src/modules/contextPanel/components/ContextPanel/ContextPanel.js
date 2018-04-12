@@ -158,11 +158,11 @@ class ContextPanel extends Component {
 	render() {
 		const {
 			open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom,
-			selectedLineTo, updateSelectedLines, editor, multiline, textNodes, filters
+			selectedLineTo, updateSelectedLines, editor, multiline, textNodes, filters,
 		} = this.props;
 
 		const {
-			highlightingVisible, maxLine, selectedLemmaVersion, lemmaCitation
+			highlightingVisible, maxLine, lemmaCitation
 		} = this.state;
 
 		let textNodesUrn = 'urn:cts:greekLit:tlg0012.tlg001';
@@ -176,6 +176,7 @@ class ContextPanel extends Component {
 
 		return (
 			<ContextPanelContentContainer
+				disableEdit={disableEdit}
 				open={open}
 				filters={filters}
 				closeContextPanel={closeContextPanel}
@@ -185,16 +186,12 @@ class ContextPanel extends Component {
 				passageTo={selectedLineFrom + 49}
 				maxLine={maxLine}
 				lemmaCitation={lemmaCitation}
-				selectedLemmaVersion={selectedLemmaVersion}
-				onBeforeClicked={this.onBeforeClicked}
-				onAfterClicked={this.onAfterClicked}
-				toggleVersion={this.toggleVersion}
-				toggleHighlighting={this.toggleHighlighting}
 				textNodes={textNodes}
-				disableEdit={disableEdit}
 				selectedLineFrom={selectedLineFrom}
 				selectedLineTo={selectedLineTo}
 				updateSelectedLines={updateSelectedLines}
+				onBeforeClicked={this.onBeforeClicked}
+				onAfterClicked={this.onAfterClicked}
 				editor={editor}
 				multiline={multiline}
 				textNodesUrn={textNodesUrn}

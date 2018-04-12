@@ -92,9 +92,6 @@ class ContextPanelText extends Component {
 		}
 
 		// methods:
-		this.handeLineMouseEnter = this.handeLineMouseEnter.bind(this);
-		this.handeLineMouseLeave = this.handeLineMouseLeave.bind(this);
-		this.handleLineClick = this.handleLineClick.bind(this);
 		this.updateBorderLines = this.updateBorderLines.bind(this);
 	}
 
@@ -119,31 +116,28 @@ class ContextPanelText extends Component {
 	/*
 		BEGIN editor methods:
 	*/
-	handeLineMouseEnter(event) {
-		if (!this.props.disableEdit) {
-			const style = event.target.style;
-			style.backgroundColor = '#E0F7FA';
-		}
-	}
 
-	handeLineMouseLeave(event) {
-		if (!this.props.disableEdit) {
-			const style = event.target.style;
-			style.backgroundColor = '#ffffff';
-		}
-	}
+	handleSelectingTextForComment(e) {
+		const target = e.target;
+		const selObj = window.getSelection();
+		const { anchorNode, extentNode, anchorOffset, extentOffset } = selObj;
 
-	handleLineClick(event) {
-		 if (!this.props.disableEdit) {
+		if (
+			!this.props.disableEdit
+      && anchorOffset !== extentOffset
+      && anchorNode && extentNode
+      && anchorNode.parentElement
+      && extentNode.parentElement
+      && anchorNode.parentElement.className === extentNode.parentElement.className
+		) {
+			const selectedLines = getSelectedVersionText(this.props.lemmaText, this.props.selectedLemmaVersion).textNodes;
 
-		 	const selectedLines = getSelectedVersionText(this.props.lemmaText, this.props.selectedLemmaVersion).textNodes;
+			const { updateSelectedLines } = this.props;
+			const { selectedLineFrom, selectedLineTo } = this.state;
 
-			 const { updateSelectedLines } = this.props;
-			 const { selectedLineFrom, selectedLineTo } = this.state;
+			let textNodesToUpdate;
+			const id = parseInt(target.id, 10);
 
-		 	const target = event.target;
-		 	let textNodesToUpdate;
-		 const id = parseInt(target.id, 10);
 			if (selectedLineTo === 0 && id > selectedLineFrom && selectedLineFrom !== 0) {
 				textNodesToUpdate = selectedLines.slice(selectedLineFrom, id+1);
 				this.setState({selectedLineTo : id});
@@ -162,6 +156,7 @@ class ContextPanelText extends Component {
 			updateSelectedLines({
 				textNodes: textNodesToUpdate,
 			});
+
 		}
 	}
 	/*
@@ -169,9 +164,10 @@ class ContextPanelText extends Component {
 	*/
 
 	render() {
-		const { onBeforeClicked, selectedLemmaVersion, highlightingVisible, textNodeFrom, commentGroup, onAfterClicked, maxLine, disableEdit, editor } = this.props;
-
-		console.log(selectedLemmaVersion)
+		const {
+			onBeforeClicked, selectedLemmaVersion, highlightingVisible, textNodeFrom,
+			commentGroup, onAfterClicked, maxLine, disableEdit, editor,
+		} = this.props;
 
 
 		const contextPanelTextState = getContextPanelTextState(commentGroup, editor);
@@ -223,10 +219,9 @@ class ContextPanelText extends Component {
 										id={textNode.id}
 										ref={(component) => { this.textNodes[(i).toString()] = component; }}
 										dangerouslySetInnerHTML={{ __html: textNode.text }}
-										onMouseEnter={this.handeLineMouseEnter}
-										onMouseLeave={this.handeLineMouseLeave}
 										onClick={this.handleLineClick}
 										style={!disableEdit ? { cursor: 'pointer' } : null}
+										onMouseUp={this.handleSelectingTextForVariant}
 									/>
 
 									<LineNumbering location={textNode.location} />

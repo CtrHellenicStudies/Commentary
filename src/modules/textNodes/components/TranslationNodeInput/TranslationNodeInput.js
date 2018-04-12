@@ -205,7 +205,7 @@ class TranslationNodeInput extends Component {
 								</FormGroup>
 							</div>
 						</ListGroupItemDnD>
-						))}
+					))}
 				</ListGroupDnD>
 				<Snackbar
 					className="editor-snackbar"

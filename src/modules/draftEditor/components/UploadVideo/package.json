@@ -1,0 +1,6 @@
+{
+  "name": "UploadVideo",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./UploadVideo.js"
+}

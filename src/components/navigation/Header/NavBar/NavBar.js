@@ -224,7 +224,7 @@ class NavBar extends React.Component {
 						closeRightMenu={this.closeRightMenu}
 						filters={filters}
 					/>
-				: ''}
+					: ''}
 				<div>
 					{!searchEnabled ?
 						<div className="md-menu-toolbar" >
@@ -269,7 +269,7 @@ class NavBar extends React.Component {
 												hideUserDropdown={this.hideUserDropdown}
 											/>
 										</div>
-									:
+										:
 										<div>
 											<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
 												<FlatButton
@@ -300,7 +300,7 @@ class NavBar extends React.Component {
 								</div>
 							</div>
 						</div>
-					:
+						:
 						<div className="md-menu-toolbar" > {/* Search toolbar for /commentary */}
 							<div className="toolbar-tools">
 								<IconButton
@@ -336,7 +336,7 @@ class NavBar extends React.Component {
 			</Headroom>
 		 );
 	 }
- }
+}
 
 NavBar.propTypes = {
 	toggleAuthModal: PropTypes.func.isRequired,

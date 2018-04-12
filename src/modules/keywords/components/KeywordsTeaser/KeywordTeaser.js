@@ -55,8 +55,8 @@ class KeywordTeaser extends Component {
 				className="keyword-description"
 			> { keyword.description ?
 					Utils.trunc(keyword.description, 300)
-				: 'No description available.'
-			} </span>
+					: 'No description available.'
+				} </span>
 			<a
 				className="keyword-read-more"
 				href={keywordUrl}

@@ -122,7 +122,7 @@ class TranslationSelect extends Component {
 							onClick={this.showEditDialog}
 						>
 						Add new translation
-					</button> : ''
+						</button> : ''
 					}
 					{this.state.selectedTranslation ?
 						<button

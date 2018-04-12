@@ -1,13 +1,9 @@
 import { BrowserRouter, Switch, Route, } from 'react-router-dom';
 import React from 'react';
-import PropTypes from 'prop-types';
-import Cookies from 'universal-cookie';
-import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // lib
 import Utils from '../lib/utils';
-import { login } from '../lib/auth'
 
 // graphql
 import { tenantsBySubdomainQuery } from '../graphql/methods/tenants'
@@ -17,7 +13,7 @@ import NotFound from '../modules/notFound/components/NotFound/NotFound';
 
 // modules
 import {
-  signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
+	signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
 	unauthorizedRoute,
 } from '../modules/auth/routes';
 import {
@@ -28,8 +24,8 @@ import {
 } from '../modules/commenters/routes';
 import homeRoute from '../modules/home/routes';
 import {
-  editKeywordRoute, addKeywordRoute, keywordDetailRoute, wordsListRoute,
-  ideasListRoute,
+	editKeywordRoute, addKeywordRoute, keywordDetailRoute, wordsListRoute,
+	ideasListRoute,
 } from '../modules/keywords/routes';
 import {
 	nrsV1Route, nrsV1RouteWithURN, nrsV2Route, nrsV1DOI,
@@ -43,11 +39,9 @@ import {
 	profileRoute, publicProfileRoute,
 } from '../modules/users/routes';
 import {
-	adminRoute, adminSettingsRoute,
+	adminRoute,
 } from '../modules/settings/routes';
 
-// instantiate cookies
-const cookies = new Cookies();
 
 
 /**
@@ -65,12 +59,12 @@ function setTenantInSession (query) {
 
 const routes = (props) => {
 
-  // set the base document meta for the application
-  Utils.setBaseDocMeta();
+	// set the base document meta for the application
+	Utils.setBaseDocMeta();
 
-  // parse tenant subdomain
-  const hostnameArray = document.location.hostname.split('.');
-  const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
+	// parse tenant subdomain
+	const hostnameArray = document.location.hostname.split('.');
+	const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
 
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
@@ -101,11 +95,11 @@ const routes = (props) => {
 			{commentaryRoute}
 
 			{/** Tags routes */}
-		  {editKeywordRoute}
+			{editKeywordRoute}
 			{addKeywordRoute}
 			{keywordDetailRoute}
 			{wordsListRoute}
-		  {ideasListRoute}
+			{ideasListRoute}
 
 			{/** Reference works routes */}
 			{referenceWorkDetailRoute}

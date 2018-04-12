@@ -248,7 +248,7 @@ class AddKeywordLayout extends Component {
 								/>
 
 							</main>
-						: ''}
+							: ''}
 					</div>
 				</div>
 			</MuiThemeProvider>

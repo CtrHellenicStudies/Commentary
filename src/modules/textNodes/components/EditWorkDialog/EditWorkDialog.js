@@ -45,8 +45,8 @@ class EditWorkDialog extends Component {
 			<Dialog
 				title={
 					work && '_id' in work
-					? 'Edit Work'
-					: 'Create Work'
+						? 'Edit Work'
+						: 'Create Work'
 				}
 				actions={actions}
 				modal={false}

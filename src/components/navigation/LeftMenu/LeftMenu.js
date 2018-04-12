@@ -69,11 +69,11 @@ class LeftMenu extends React.Component {
 						>
 							Admin
 						</MenuItem>
-					: ''}
+						: ''}
 					{Utils.userInRole(roles, ['editor', 'admin', 'commenter']) ?
 						(
-						  <div>
-						 		<MenuItem
+							<div>
+								<MenuItem
 									to="/commentary/create"
 									onClick={closeLeftMenu}
 								>
@@ -95,8 +95,8 @@ class LeftMenu extends React.Component {
 								<Divider />
 							</div>
 						)
-					:
-					'' }
+						:
+						'' }
 					<MenuItem
 						to="/"
 						onClick={closeLeftMenu}

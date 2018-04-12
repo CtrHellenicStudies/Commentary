@@ -181,7 +181,7 @@ class DiscussionComment extends Component {
 					<span className="discussion-comment-status">
 						{status}
 					</span>
-				: ''}
+					: ''}
 				<div className="discussion-comment-content">
 					<div className="inner-comment-row">
 						<div className="discussion-commenter-profile-picture profile-picture paper-shadow">
@@ -267,7 +267,7 @@ class DiscussionComment extends Component {
 								onClick={this.showEditMode}
 								className="discussion-comment-button edit"
 							/>
-						:
+							:
 							''
 						}
 						{this.state.readComment === false ?

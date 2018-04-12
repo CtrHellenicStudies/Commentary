@@ -45,8 +45,8 @@ class EditEditionDialog extends Component {
 			<Dialog
 				title={
 					edition && '_id' in edition
-					? 'Edit Edition'
-					: 'Create Edition'
+						? 'Edit Edition'
+						: 'Create Edition'
 				}
 				actions={actions}
 				modal={false}

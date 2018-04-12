@@ -420,7 +420,7 @@ const _splitUrnIsOk = (splitURN) => {
 		if (splitURN[0] === 'urn'
 			&& splitURN[1] === 'cts'
 			&& splitURN[2] === 'greekLit'
-			) {
+		) {
 			return true;
 		}
 	}

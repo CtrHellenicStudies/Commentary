@@ -20,14 +20,12 @@ class SearchToolsContainer extends React.Component {
 
 	render() {
 		let languages = [];
-		let language = null;
-		let textsearch = null;
 
 		if (
-      this.props.languageListQuery
+			this.props.languageListQuery
       && this.props.languageListQuery.languages
       && this.props.languageListQuery.languages.length
-    ) {
+		) {
 			languages = this.props.languageListQuery.languages;
 		}
 
@@ -36,12 +34,12 @@ class SearchToolsContainer extends React.Component {
 			<SearchTools
 				onSubmit={this.handleSubmit}
 				languages={languages}
-      />
+			/>
 		);
 	}
 }
 
 export default compose(
-  withRouter,
-  languageListQuery,
+	withRouter,
+	languageListQuery,
 )(SearchToolsContainer);

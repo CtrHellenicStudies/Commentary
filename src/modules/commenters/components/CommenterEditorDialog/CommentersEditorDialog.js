@@ -6,17 +6,13 @@ import { List, ListItem } from 'material-ui/List';
 import { commentersQuery } from '../../../graphql/methods/commenters';
 import { compose } from 'react-apollo';
 import Divider from 'material-ui/Divider';
-import TextField from 'material-ui/TextField';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/MenuItem';
 import { grey400 } from 'material-ui/styles/colors';
-import _ from 'underscore';
 
-import Cookies from 'js-cookie';
-import Select from 'react-select';
 import AutoComplete from 'material-ui/AutoComplete';
 import Person from 'material-ui/svg-icons/social/person';
 
@@ -41,7 +37,7 @@ class CommentersEditorDialog extends Component {
 		const allCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
 		const currentCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
 			commentersIds.find(y => y === x._id));
-	
+
 		this.setState({
 			commentersIds,
 			allCommenters,
@@ -76,7 +72,6 @@ class CommentersEditorDialog extends Component {
 
 	render() {
 		const { allCommenters, commentersIds } = this.state;
-		const { currentCommenters } = this.state;
 		const commentersList = [];
 		allCommenters.forEach((commenter) => {
 			if (commentersIds.indexOf(commenter._id) === -1) {

@@ -7,32 +7,32 @@ import refsDeclsQuery from '../../graphql/queries/refsDecls';
 
 const LocationBrowserContainer = props => {
 
-  let location = [];
-  let refsDecls = [];
+	let location = [1, 1];
+	let refsDecls = [];
 
-  if (
-      props.refsDeclsQuery
+	if (
+		props.refsDeclsQuery
     && props.refsDeclsQuery.works
     && props.refsDeclsQuery.works.length
-  ) {
-    props.refsDeclsQuery.works.forEach(work => {
-      if (
-          work.refsDecls
+	) {
+		props.refsDeclsQuery.works.forEach(work => {
+			if (
+				work.refsDecls
         && work.refsDecls.length
-      ) {
-        refsDecls = work.refsDecls;
-      }
-    });
-  }
+			) {
+				refsDecls = work.refsDecls;
+			}
+		});
+	}
 
-  return (
-    <LocationBrowser
-      location={[1, 1]}
-      refsDecls={refsDecls}
-    />
-  );
+	return (
+		<LocationBrowser
+			location={location}
+			refsDecls={refsDecls}
+		/>
+	);
 };
 
 export default compose(
-  refsDeclsQuery,
+	refsDeclsQuery,
 )(LocationBrowserContainer);

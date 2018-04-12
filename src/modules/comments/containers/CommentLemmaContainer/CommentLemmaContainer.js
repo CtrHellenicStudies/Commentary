@@ -48,7 +48,7 @@ class CommentLemmaContainer extends React.Component {
 		}
 	}
 
-  render() {
+	render() {
 		const { commentGroup, multiline } = this.props;
 		const { selectedLemmaVersionIndex } = this.state;
 		let textNodes = [];
@@ -94,12 +94,12 @@ class CommentLemmaContainer extends React.Component {
 
 
 
-    return (
-      <CommentLemma
+		return (
+			<CommentLemma
 				commentGroup={commentGroup}
 				versions={versionsWithText}
 				translations={translationsWithText}
-    		selectedLemmaVersion={selectedLemmaVersion}
+				selectedLemmaVersion={selectedLemmaVersion}
 				selectedTranslationVersion={selectedTranslationVersion}
 				showContextPanel={this.props.showContextPanel}
 				index={this.props.index}
@@ -108,9 +108,9 @@ class CommentLemmaContainer extends React.Component {
 				selectMultiLine={this.props.selectMultiLine}
 				multiline={this.props.multiline}
 				toggleVersion={this.toggleVersion}
-      />
-    );
-  }
+			/>
+		);
+	}
 }
 export default compose(
 	textNodesQuery,

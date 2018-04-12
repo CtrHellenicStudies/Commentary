@@ -99,8 +99,8 @@ class Account extends Component {
 	}
 
 	handleBatchNotification(event, value) {
-        const updateBatch = {};
-        //  = Meteor.users.update({_id: Meteor.userId()}, {
+		const updateBatch = {};
+		//  = Meteor.users.update({_id: Meteor.userId()}, {
 		// 	$set: {
 		// 		batchNotification: value
 		// 	}

@@ -27,7 +27,7 @@ class CommenterTeaser extends Component {
 					<div className="commenter-image paper-shadow">
 						{commenter && commenter.avatar ?
 							<AvatarIcon avatar={commenter.avatar.src} />
-						:
+							:
 							<img
 								src={commenter && commenter.avatar ? commenter.avatar : '/images/default_user.jpg'}
 								alt={commenter.name}

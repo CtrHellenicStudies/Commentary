@@ -9,22 +9,22 @@ import SearchResultsContainer from '../../../search/containers/SearchResultsCont
 import { updatePage } from '../../../../actions/pagination';
 
 class WorkSearchContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    autoBind(this);
-  }
+	constructor(props) {
+		super(props);
+		autoBind(this);
+	}
 
-  componentDidUpdate(prevProps) {
-    if (
-        prevProps.textsearch !== this.props.textsearch
+	componentDidUpdate(prevProps) {
+		if (
+			prevProps.textsearch !== this.props.textsearch
       || prevProps.language !== this.props.language
-    ) {
-      this.props.updatePage(1);
-    }
-  }
+		) {
+			this.props.updatePage(1);
+		}
+	}
 
 	render() {
-    const { textsearch, language, page } = this.props;
+		const { textsearch, language, page } = this.props;
 
 		return (
 			<div className="workSearchContainer">
@@ -32,9 +32,9 @@ class WorkSearchContainer extends React.Component {
 				<SearchResultsContainer
 					textsearch={textsearch}
 					language={language}
-          page={page}
+					page={page}
 					offset={Math.abs(page - 1) * 30}
-          handleSelectWork={this.props.handleSelectWork}
+					handleSelectWork={this.props.handleSelectWork}
 				/>
 			</div>
 		);
@@ -42,22 +42,22 @@ class WorkSearchContainer extends React.Component {
 }
 
 WorkSearchContainer.defaultProps = {
-  textsearch: '',
-  language: null,
-  page: 1,
+	textsearch: '',
+	language: null,
+	page: 1,
 };
 
 const selector = formValueSelector('SearchTools');
 
 const mapStateToProps = state => {
-  const textsearch = selector(state, 'textsearch');
-  const language = selector(state, 'language');
+	const textsearch = selector(state, 'textsearch');
+	const language = selector(state, 'language');
 
-  return {
-    textsearch,
-    language,
+	return {
+		textsearch,
+		language,
   	page: state.pagination.page,
-  };
+	};
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -68,6 +68,6 @@ const mapDispatchToProps = dispatch => ({
 
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+	mapStateToProps,
+	mapDispatchToProps,
 )(WorkSearchContainer);

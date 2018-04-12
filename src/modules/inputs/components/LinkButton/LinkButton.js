@@ -9,7 +9,7 @@ import { debounce } from 'throttle-debounce';
 import LinkButtonDialog from '../LinkButtonDialog/LinkButtonDialog';
 
 // helpers:
-import linkDecorator from '../LinkDecorator/linkDecorator';
+import linkDecorator from '../LinkDecorator/LinkDecorator';
 
 /*
  *	helper

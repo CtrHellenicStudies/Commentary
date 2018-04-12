@@ -46,8 +46,8 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 								<AvatarIcon
 									avatar={
 										(commentGroup.commenters[key] && commentGroup.commenters[key].avatar) ?
-										commentGroup.commenters[key].avatar.src
-										: null
+											commentGroup.commenters[key].avatar.src
+											: null
 									}
 								/>
 							</a>
@@ -55,7 +55,7 @@ const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 					))}
 				</div>
 			</div>
-		: '' }
+			: '' }
 	</div>
 );
 CommentGroupMeta.propTypes = {

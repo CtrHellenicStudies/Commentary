@@ -22,7 +22,7 @@ export default class AvatarEditor extends Component {
 	}
 
 	onDrop(acceptedFiles, rejectedFiles) {
-        const uploader = {};
+		const uploader = {};
 
 		if (rejectedFiles && rejectedFiles.length) {
 			sendSnack('There was an error uploading your profile picture');

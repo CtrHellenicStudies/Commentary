@@ -44,7 +44,7 @@ class DiscussionCommentTeaser extends Component {
 							<span className="user-discussion-comment-status">
 								{status}
 							</span>
-						: ''}
+							: ''}
 					</div>
 				</div>
 				<div className="card-content">

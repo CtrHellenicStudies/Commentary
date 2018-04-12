@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router';
 
-import HomeLayout from '../layouts/HomeLayouts/HomeLayout';
+import HomeLayout from '../layouts/HomeLayout/HomeLayout';
 
 
 export default (

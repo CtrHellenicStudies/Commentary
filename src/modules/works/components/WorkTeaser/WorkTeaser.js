@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import autoBind from 'react-autobind';
 import { Card } from 'material-ui/Card';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -29,26 +28,26 @@ class WorkTeaser extends React.Component {
 							<span className="cardMeta cardMetaLeftLanguage">
 								{work.language.title}
 							</span>
-						: ''}
+							: ''}
 						{work.date ?
 							<span className="cardMeta cardMetaLeftDate">
 								{work.date}
 							</span>
-						:
+							:
 							''
 						}
 						{work.translation ?
 							<span className="cardMeta cardMetaLeftCorpus">
 								{_s.prune(work.translation.title, 30)}
 							</span>
-						: ''}
+							: ''}
 					</div>
 				</div>
 
 				<button
 					className="workTeaserTitle"
 					onClick={this.props.handleSelectWork.bind(this, work)}
-			    type="button"
+					type="button"
 				>
 					<h3 >
 						{_s.prune(work.english_title, 40)}

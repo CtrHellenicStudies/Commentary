@@ -1,21 +1,20 @@
 import React from 'react';
-import { Route, Switch } from 'react-router';
+import { Route } from 'react-router';
 import { logoutUser } from '../../../lib/auth'
 
 // layout
 import AuthLayout from '../layouts/AuthLayout';
-import MainLayout from '../../../layouts/MainLayout';
 
 // component
 import Unauthorized from '../components/Unauthorized';
 
 
 const signInRoute = (
-  <Route
-  	exact
-  	path="/sign-in"
-  	component={AuthLayout}
-  />
+	<Route
+		exact
+		path="/sign-in"
+		component={AuthLayout}
+	/>
 );
 
 const signOutRoute = (
@@ -37,10 +36,10 @@ const updateForV2Route = (
 		exact
 		path="/update-for-v2"
 		component={() => (
-      <AuthLayout
-        updateV2
-      />
-    )}
+			<AuthLayout
+				updateV2
+			/>
+		)}
 	/>
 );
 
@@ -62,6 +61,6 @@ const unauthorizedRoute = (
 );
 
 export {
-  signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
-  unauthorizedRoute,
+	signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
+	unauthorizedRoute,
 };

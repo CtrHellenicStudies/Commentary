@@ -60,8 +60,8 @@ const LineNumbering = ({ location }) => {
 		<div className="lemma-meta">
 			<span
 				className={`lemma-textNode-n ${
-				(n % 5 === 0 || n === 1) ? 'lemma-textNode-n--displayed' : ''
-			}`}
+					(n % 5 === 0 || n === 1) ? 'lemma-textNode-n--displayed' : ''
+				}`}
 			>
 				{n}
 			</span>
@@ -169,7 +169,7 @@ class ContextPanelText extends Component {
 	*/
 
 	render() {
-		const { onBeforeClicked, selectedLemmaVersion, highlightingVisible, textNodeFrom, commentGroup, onAfterClicked, maxLine, lemmaText, disableEdit, editor } = this.props;
+		const { onBeforeClicked, selectedLemmaVersion, highlightingVisible, textNodeFrom, commentGroup, onAfterClicked, maxLine, disableEdit, editor } = this.props;
 
 		console.log(selectedLemmaVersion)
 
@@ -187,7 +187,7 @@ class ContextPanelText extends Component {
 							icon={<i className="mdi mdi-chevron-up" />}
 						/>
 					</div>
-				: '' }
+					: '' }
 
 				{(() => {
 					switch (contextPanelTextState) {
@@ -261,7 +261,7 @@ class ContextPanelText extends Component {
 							icon={<i className="mdi mdi-chevron-down" />}
 						/>
 					</div>
-				: '' }
+					: '' }
 			</div>
 		);
 	}

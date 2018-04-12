@@ -62,6 +62,6 @@ const editionsQuery = graphql(query, {
 });
 export {
 	editionsQuery,
-    editionsRemoveMutation,
-    editionsInsertMutation
+	editionsRemoveMutation,
+	editionsInsertMutation
 };

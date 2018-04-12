@@ -153,7 +153,7 @@ class KeywordDetail extends Component {
 														label="Delete"
 													/>
 												</div>
-											: ''}
+												: ''}
 										</div>
 									</div>
 								</div>
@@ -169,7 +169,7 @@ class KeywordDetail extends Component {
 									workSlug={this.state.workSlug}
 									subworkN={this.state.subworkN}
 								/>
-							: ''}
+								: ''}
 							{(
 								keyword.description
 								&& keyword.description.length
@@ -180,7 +180,7 @@ class KeywordDetail extends Component {
 									dangerouslySetInnerHTML={{ __html: keyword.description }}
 									onClick={this._keywordDescriptionOnClick}
 								/>
-							: ''}
+								: ''}
 
 							<hr />
 

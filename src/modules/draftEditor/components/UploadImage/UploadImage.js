@@ -13,7 +13,7 @@ import { sendSnack } from '../../../shared/components/SnackAttack/SnackAttack';
 export default class AvatarEditor extends Component {
 	constructor(props) {
 		super(props);
-        const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
+		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		this.state = {
 			avatarUrl: user && user.profile && user.profile.avatarUrl ? user.profile.avatarUrl : props.defaultAvatarUrl,
 		};

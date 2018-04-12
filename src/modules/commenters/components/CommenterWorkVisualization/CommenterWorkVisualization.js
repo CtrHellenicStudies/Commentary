@@ -33,7 +33,7 @@ class CommenterWorkVisualization extends Component {
 						work={work}
 						commenterSlug={commenterSlug}
 					/>
-				: ''}
+					: ''}
 			</div>
 		);
 	}

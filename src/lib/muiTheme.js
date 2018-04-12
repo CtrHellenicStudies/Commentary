@@ -1,6 +1,6 @@
 import {
-  grey300,
-  white, darkBlack, fullBlack,
+	grey300,
+	white, darkBlack, fullBlack,
 } from 'material-ui/styles/colors';
 
 import { fade } from 'material-ui/utils/colorManipulator';

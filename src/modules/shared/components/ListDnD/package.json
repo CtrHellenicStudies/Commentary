@@ -1,0 +1,6 @@
+{
+  "name": "ListDnD",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./ListDnD.js"
+}

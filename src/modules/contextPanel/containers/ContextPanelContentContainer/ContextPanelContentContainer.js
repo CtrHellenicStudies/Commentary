@@ -13,19 +13,19 @@ import Utils from '../../../../lib/utils';
 
 const ContextPanelContentContainer = props => {
 
-  let textNodes = [];
-  let versionsWithText = [];
-  let translationsWithText = [];
-  let selectedLemmaVersion = null;
-  let selectedLemmaVersionIndex = 0;
-  let multiline = false;
+	let textNodes = [];
+	let versionsWithText = [];
+	// let translationsWithText = [];
+	let selectedLemmaVersion = null;
+	let selectedLemmaVersionIndex = 0;
+	let multiline = false;
 
-  if (
-      props.textNodesQuery
+	if (
+		props.textNodesQuery
     && props.textNodesQuery.textNodes
-  ) {
-    textNodes = props.textNodesQuery.textNodes;
-  }
+	) {
+		textNodes = props.textNodesQuery.textNodes;
+	}
 
 
 	// TODO: potentially structure data from backend to prevent this transformation
@@ -34,7 +34,7 @@ const ContextPanelContentContainer = props => {
 	if (textNodes && textNodes.length) {
 		const allVersions = Utils.textFromTextNodesGroupedByVersion(textNodes);
 		versionsWithText = allVersions.versions;
-		translationsWithText = allVersions.translations;
+		// translationsWithText = allVersions.translations;
 	}
 
 	// if necessary, parse versions into multiline data
@@ -51,16 +51,16 @@ const ContextPanelContentContainer = props => {
 		selectedLemmaVersion = versionsWithText[selectedLemmaVersionIndex];
 	}
 
-  return (
-    <ContextPanelContent
-      {...props}
-      selectedLemmaVersion={selectedLemmaVersion}
-    />
-  );
+	return (
+		<ContextPanelContent
+			{...props}
+			selectedLemmaVersion={selectedLemmaVersion}
+		/>
+	);
 }
 
 
 export default compose(
-  textNodesQuery,
-  editionsQuery,
+	textNodesQuery,
+	editionsQuery,
 )(ContextPanelContentContainer);

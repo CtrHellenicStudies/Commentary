@@ -15,7 +15,7 @@ const CoverTitle = ({ title, coverLink, coverLinkText, handleRemove }) => (
 			>
 				{coverLinkText}
 			</Link>
-		: ''}
+			: ''}
 		{handleRemove ?
 			<button
 				onClick={handleRemove}
@@ -23,7 +23,7 @@ const CoverTitle = ({ title, coverLink, coverLinkText, handleRemove }) => (
 			>
 				Remove
 			</button>
-		: ''}
+			: ''}
 	</div>
 );
 

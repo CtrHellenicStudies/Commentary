@@ -26,7 +26,7 @@ class CommenterList extends Component {
 		// SUBSCRIPTIONS:
 		if (nextProps.featureOnHomepage) {
 			commenters = nextProps.commentersQuery.loading ? [] : nextProps.commentersQuery.commenters
-			.filter(x => x.featureOnHomepage === true);
+				.filter(x => x.featureOnHomepage === true);
 		}
 		this.setState({
 			commenters: commenters

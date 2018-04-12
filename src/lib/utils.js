@@ -71,14 +71,14 @@ const Utils = {
 			slug : 'iliad-2'
 		};
 		switch(slug) {
-			case 'odyssey':
-				code = {
-					urn: 'urn:cts:greekLit:tlg0013.tlg002',
-					slug: 'odyssey-2'
-				};
-				break;
-			default:
-				break;
+		case 'odyssey':
+			code = {
+				urn: 'urn:cts:greekLit:tlg0013.tlg002',
+				slug: 'odyssey-2'
+			};
+			break;
+		default:
+			break;
 		}
 		return code;
 	},
@@ -214,7 +214,7 @@ const Utils = {
 		Utils.setLinkTag('rel', 'canonical', 'href', window.location.href);
 	},
 	setTitle(title) {
-        document.title = `${title}`;
+		document.title = `${title}`;
 		Utils.setMetaTag('property', 'og:title', title);
 		Utils.setMetaTag('property', 'og:site_name', title);
 		Utils.setMetaTag('property', 'og:local', 'en_US');
@@ -366,9 +366,9 @@ const Utils = {
 
 				// If translation is set or is not in classical language, add as translation
 				if (
-						(textNode.translation && textNode.translation.id)
+					(textNode.translation && textNode.translation.id)
 					|| (
-							textNode.language
+						textNode.language
 						&& ~['english', 'french', 'german', 'italian'].indexOf(textNode.language.slug)
 					)
 				) {
@@ -458,13 +458,13 @@ const Utils = {
 		const state = ContentState.createFromBlockArray(
 			constState.contentBlocks,
 			constState.entityMap
-			);
+		);
 		return EditorState.createWithContent(state);
 	},
 
 	getHtmlFromContext(context) {
 		return convertToHTML({
-						// performe necessary html transformations:
+			// performe necessary html transformations:
 			blockToHTML: (block) => {
 				const type = block.type;
 				if (type === 'atomic') {
@@ -572,9 +572,9 @@ export function makeKeywordContextQueryFromComment(comment, maxLines) {
 	let lineTo = comment.lineFrom;
 	if (comment.hasOwnProperty('lineTo')) {
 		lineTo = comment.lineFrom + Math.min(
-				maxLines,
-				comment.lineTo - comment.lineFrom
-			);
+			maxLines,
+			comment.lineTo - comment.lineFrom
+		);
 	} else if (comment.hasOwnProperty('nLines')) {
 		lineTo = comment.lineFrom + Math.min(maxLines, comment.nLines);
 	}

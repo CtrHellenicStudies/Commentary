@@ -27,7 +27,7 @@ class CommentLemmaSelect extends Component {
 		} else if (props.editionsQuery.loading &&
 			!(props.lineFrom !== this.props.lineFrom
 			|| props.lineTo !== this.props.lineTo)) {
-				ret = true;
+			ret = true;
 		}
 		return ret;
 	}
@@ -63,35 +63,33 @@ class CommentLemmaSelect extends Component {
 		return (
 			<div className="comments lemma-panel-visible">
 				<div className="comment-outer comment-lemma-comment-outer">
+					{selectedLemmaEdition && selectedLemmaEdition.lines ?
+						<article className="comment lemma-comment paper-shadow">
 
-					{selectedLemmaEdition &&
-						selectedLemmaEdition.lines ?
-							<article className="comment lemma-comment paper-shadow">
-
-								{selectedLemmaEdition.lines.map((line, i) => (
-									<p
-										key={i}
-										className="lemma-text"
-										dangerouslySetInnerHTML={{ __html: line.html }}
-									></p>
+							{selectedLemmaEdition.lines.map((line, i) => (
+								<p
+									key={i}
+									className="lemma-text"
+									dangerouslySetInnerHTML={{ __html: line.html }}
+								/>
 							))}
 
-								{self.props.lineTo === 0 ?
-									<div>
-										<TextField
-											name="lineLetter"
-											id="lineLetter"
-											required={false}
-											floatingLabelText="Line letter..."
-											value={this.state.lineLetterValue}
-											onChange={this.onLineLetterValueChange}
-										/>
-									</div>
+							{self.props.lineTo === 0 ?
+								<div>
+									<TextField
+										name="lineLetter"
+										id="lineLetter"
+										required={false}
+										floatingLabelText="Line letter..."
+										value={this.state.lineLetterValue}
+										onChange={this.onLineLetterValueChange}
+									/>
+								</div>
 								:
 								''
 							}
 
-								{/* <div className="version-tabs tabs">
+							{/* <div className="version-tabs tabs">
 									{this.state.lemmaText.map((lemmaTextEdition, i) => {
 										const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
@@ -106,21 +104,20 @@ class CommentLemmaSelect extends Component {
 									})}
 								</div> */}
 
-								<div className="context-tabs tabs" />
-
-							</article>
+							<div className="context-tabs tabs" />
+						</article>
 						:
 
-							<article className="comment lemma-comment paper-shadow">
-								<p className="lemma-text no-lines-selected">No line(s) selected</p>
-							</article>
+						<article className="comment lemma-comment paper-shadow">
+							<p className="lemma-text no-lines-selected">No line(s) selected</p>
+						</article>
 					}
-
 				</div>
 			</div>
 		);
 	}
 }
+
 CommentLemmaSelect.propTypes = {
 	textNodes: PropTypes.array,
 	editionsQuery: PropTypes.object,

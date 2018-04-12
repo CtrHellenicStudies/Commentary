@@ -45,8 +45,8 @@ class EditSubworkDialog extends Component {
 			<Dialog
 				title={
 					subwork && '_id' in subwork
-					? 'Edit Subwork'
-					: 'Create Subwork'
+						? 'Edit Subwork'
+						: 'Create Subwork'
 				}
 				actions={actions}
 				modal={false}

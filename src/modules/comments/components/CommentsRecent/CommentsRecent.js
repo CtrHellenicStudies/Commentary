@@ -67,8 +67,8 @@ class CommentsRecent extends Component {
 												` ${commenter.name},`
 											))}
 											{comment.work ? ` ${comment.work.title} ${
-											comment.subwork.title}.${comment.lineFrom}-${
-											comment.lineFrom + comment.nLines}`: ''}
+												comment.subwork.title}.${comment.lineFrom}-${
+												comment.lineFrom + comment.nLines}`: ''}
 										</h4>
 									</div>
 								))}

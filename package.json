@@ -21,6 +21,7 @@
     "draft-js-plugins-editor": "^2.0.0-beta9",
     "draft-js-single-line-plugin": "0.0.1",
     "draft-js-video-plugin": "^2.0.0-rc8",
+    "editorconfig-tools": "^0.1.1",
     "formsy-material-ui": "^0.6.0",
     "formsy-react": "^0.19.2",
     "graphql": "^0.9.1",
@@ -33,6 +34,7 @@
     "jquery-range": "^1.0.0",
     "js-cookie": "^2.1.4",
     "jsdiff": "^1.1.1",
+    "lint-staged": "^7.0.4",
     "lodash": "^4.17.4",
     "material-design-icons": "^3.0.1",
     "material-ui": "^0.16.4",
@@ -42,6 +44,7 @@
     "mongoose": "^4.13.7",
     "node-less-chokidar": "^0.1.2",
     "normalize.css": "^7.0.0",
+    "pre-commit": "^1.2.2",
     "qs-lite": "0.0.1",
     "random-id": "0.0.2",
     "react": "^15.6.1",
@@ -83,14 +86,43 @@
     "universal-cookie": "^2.1.2"
   },
   "scripts": {
-    "build-css": "node-less-chokidar src/ -o src/",
-    "watch-css": "npm run build-css && node-less-chokidar src/ -o src/ --watch --recursive",
-    "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build-js": "react-scripts build",
-    "build": "npm-run-all build-css build-js",
+    "build": "npm run build:css && react-scripts build",
+    "build:css": "node-less-chokidar src/ -o src/",
+    "watch:css": "npm run build:css && node-less-chokidar src/ -o src/ --watch --recursive",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:staged": "lint-staged",
+    "start:js": "react-scripts start",
+    "start": "npm-run-all -p watch:css start:js",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test:ci": "CI=true react-scripts test --env=jsdom",
+    "jsdoc": "jsdoc src -r -c .jsdoc.json -d docs"
+  },
+  "pre-commit": "lint:staged",
+  "lint-staged": {
+    "*.{md,sh,txt,xml,html,json}": [
+      "editorconfig-tools fix",
+      "git add"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/CtrHellenicStudies/Commentary.git"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/docs/",
+      "!<rootDir>/public/",
+      "!<rootDir>/build/",
+      "!<rootDir>/coverage/",
+      "!<rootDir>/k8s/"
+    ]
   },
   "devDependencies": {
     "npm-run-all": "^4.1.2"

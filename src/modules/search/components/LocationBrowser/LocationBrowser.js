@@ -15,10 +15,12 @@ import './LocationBrowser.css';
  */
 export default class LocationBrowser extends Component {
 
+	/*
 	constructor(props) {
 		super(props);
 
 	}
+	*/
 
 	increaseEdition() {
 	}
@@ -32,56 +34,56 @@ export default class LocationBrowser extends Component {
 	decreaseChapter() {
 	}
 
-  renderLocationBrowserText() {
-    const { location, refsDecls } = this.props;
+	renderLocationBrowserText() {
+		const { location, refsDecls } = this.props;
 
-    let locationBrowserText = '';
+		let locationBrowserText = '';
 
-    refsDecls.forEach((refsDecl, i) => {
-      let refLocation = 1;
+		refsDecls.forEach((refsDecl, i) => {
+			let refLocation = 1;
 
-      // set ref location
-      if (i < location.length && location[i]) {
-        refLocation = location[i];
-      }
+			// set ref location
+			if (i < location.length && location[i]) {
+				refLocation = location[i];
+			}
 
-      locationBrowserText += `${_s(refsDecl.label).capitalize().value()} ${refLocation}`;
+			locationBrowserText += `${_s(refsDecl.label).capitalize().value()} ${refLocation}`;
 
-      // Add trailing comma
-      if (i < refsDecls.length - 1) {
-        locationBrowserText += ', ';
-      }
-    });
+			// Add trailing comma
+			if (i < refsDecls.length - 1) {
+				locationBrowserText += ', ';
+			}
+		});
 
 
-    return (
-      <span>
-        {locationBrowserText}
-      </span>
-    );
-  }
+		return (
+			<span>
+				{locationBrowserText}
+			</span>
+		);
+	}
 
 	render() {
 
 		return (
-      <div className="locationBrowser">
-  			<div className="locationBrowserInner">
-  				<button onClick={this.decreaseEdition} className="locationBrowserButton">
-  				  <i className="mdi mdi-chevron-double-left"></i>
-  				</button>
-  				<button onClick={this.decreaseChapter} className="locationBrowserButton">
-  				  <i className="mdi mdi-chevron-left"></i>
-  				</button>
-  				<span className="locationBrowserText">
-            {this.renderLocationBrowserText()}
-          </span>
-  				<button onClick={this.increaseChapter} className="locationBrowserButton">
-  				  <i className="mdi mdi-chevron-right"></i>
-  				</button>
-  				<button onClick={this.increaseEdition} className="locationBrowserButton">
-  				  <i className="mdi mdi-chevron-double-right"></i>
-  				</button>
-        </div>
+			<div className="locationBrowser">
+				<div className="locationBrowserInner">
+					<button onClick={this.decreaseEdition} className="locationBrowserButton">
+						<i className="mdi mdi-chevron-double-left"></i>
+					</button>
+					<button onClick={this.decreaseChapter} className="locationBrowserButton">
+						<i className="mdi mdi-chevron-left"></i>
+					</button>
+					<span className="locationBrowserText">
+						{this.renderLocationBrowserText()}
+					</span>
+					<button onClick={this.increaseChapter} className="locationBrowserButton">
+						<i className="mdi mdi-chevron-right"></i>
+					</button>
+					<button onClick={this.increaseEdition} className="locationBrowserButton">
+						<i className="mdi mdi-chevron-double-right"></i>
+					</button>
+				</div>
 			</div>
 		);
 	}

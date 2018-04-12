@@ -11,7 +11,7 @@ const textNodeUpdate = gql`
 const textNodeUpdateMutation = graphql(textNodeUpdate, {
 	props: (params) => ({
 		textNodeUpdate: (_id, editionId, updatedText, updatedTextN) =>
-		params.textNodeUpdateMutation({variables: {id: _id, editionId: editionId, updatedText: updatedText, updatedTextN: updatedTextN}}),
+			params.textNodeUpdateMutation({variables: {id: _id, editionId: editionId, updatedText: updatedText, updatedTextN: updatedTextN}}),
 	}),
 	name: 'textNodeUpdateMutation',
 	options: {

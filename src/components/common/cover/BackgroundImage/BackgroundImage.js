@@ -25,7 +25,7 @@ const BackgroundImage = ({ src }) => {
 		>
 			{!src ?
 				<Textures />
-			: ''}
+				: ''}
 		</div>
 	);
 };

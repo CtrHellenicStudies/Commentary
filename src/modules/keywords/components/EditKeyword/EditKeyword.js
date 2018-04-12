@@ -79,7 +79,7 @@ class EditKeyword extends Component {
 	componentWillReceiveProps(props) {
 		const keywordsOptions = [];
 		const keywords = !this.props.keywords ? [] : this.props.keywords
-		.filter(x => x.type === 'word');
+			.filter(x => x.type === 'word');
 		keywords.forEach((keyword) => {
 			keywordsOptions.push({
 				value: keyword.title,
@@ -90,7 +90,7 @@ class EditKeyword extends Component {
 	
 		const keyideasOptions = [];
 		const keyideas = !this.props.keywords ? [] : this.props.keywords
-		.filter(x => x.type === 'idea');
+			.filter(x => x.type === 'idea');
 		keyideas.forEach((keyidea) => {
 			keyideasOptions.push({
 				value: keyidea.title,

@@ -41,12 +41,12 @@ class AuthLayout extends Component {
 						selectedWork={{ slug: '' }}
 					/>
 					<main>
-  					<AuthContainer
-  						loginMethod={login}
-  						signupMethod={register}
-  						logoutMethod={logoutUser}
+						<AuthContainer
+							loginMethod={login}
+							signupMethod={register}
+							logoutMethod={logoutUser}
 							resetMethod={resetPassword}
-  						getUserFromServer={verifyToken}
+							getUserFromServer={verifyToken}
 							updateV2={this.props.updateV2}
   					/>
 					</main>

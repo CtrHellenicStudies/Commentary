@@ -69,7 +69,7 @@ class Footer extends Component {
 											/>
 										</Link>
 									</div>
-								: ''}
+									: ''}
 							</div>
 						</div>
 					</Row>

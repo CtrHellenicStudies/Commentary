@@ -22,7 +22,7 @@ import KeywordsList from '../../../keywords/components/KeywordsList/KeywordsList
 import LoadingHome from '../../../../components/loading/LoadingHome';
 
 // layouts:
-import CommentaryContainer from '../../../comments/containers/CommentaryContainer';
+// import CommentaryContainer from '../../../comments/containers/CommentaryContainer';
 
 import './Home.css';
 
@@ -165,7 +165,7 @@ class Home extends Component {
 														/>
 													</Link>
 												</div>
-											: ''}
+												: ''}
 										</div>
 									)) : ''}
 								</div>

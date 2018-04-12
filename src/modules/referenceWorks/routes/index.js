@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router';
+import { Route } from 'react-router';
 
 import ReferenceWorksPage from '../components/ReferenceWorksPage/ReferenceWorksPage';
 import ReferenceWorkDetail from '../components/ReferenceWorkDetail/ReferenceWorkDetail';
@@ -9,7 +9,7 @@ const referenceWorkDetailRoute = (
 );
 
 const referenceWorkListRoute = (
-		<Route exact path="/referenceWorks" render={() => <ReferenceWorksPage title="ReferenceWorks" />} />
+	<Route exact path="/referenceWorks" render={() => <ReferenceWorksPage title="ReferenceWorks" />} />
 );
 
 export {

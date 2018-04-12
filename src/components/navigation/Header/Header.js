@@ -15,18 +15,18 @@ class Header extends Component {
 		const { toggleAuthModal, userId, initialSearchEnabled, workFilters,
 			 toggleSearchTerm, handlePagination, work } = this.props;
 		return (
-		<div>
-			<LeftMenu />
-			<NavBar
-				toggleSearchTerm={toggleSearchTerm}
-				toggleAuthModal={toggleAuthModal}
-				handlePagination={handlePagination}
-				userId={userId}
-				work={work}
-				initialSearchEnabled={initialSearchEnabled}
-				filters={workFilters}
-			/>
-		</div>
+			<div>
+				<LeftMenu />
+				<NavBar
+					toggleSearchTerm={toggleSearchTerm}
+					toggleAuthModal={toggleAuthModal}
+					handlePagination={handlePagination}
+					userId={userId}
+					work={work}
+					initialSearchEnabled={initialSearchEnabled}
+					filters={workFilters}
+				/>
+			</div>
 		);
 	}
 };

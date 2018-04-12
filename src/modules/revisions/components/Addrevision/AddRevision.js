@@ -36,7 +36,7 @@ import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referen
 import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
 
 // helpers:
-import linkDecorator from '../../../inputs/components/LinkDecorator/linkDecorator';
+import linkDecorator from '../../../inputs/components/LinkDecorator/LinkDecorator';
 
 // components
 import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
@@ -106,8 +106,8 @@ class AddRevision extends Component {
 	componentWillReceiveProps(props) {
 
 		const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
-        let commenters = [];
-        const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
+		let commenters = [];
+		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		if (user && user.canEditCommenters) {
 			commenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
 				user.canEditCommenters.find(y => y === x._id));
@@ -129,8 +129,8 @@ class AddRevision extends Component {
 		const commentersOptions = [];
 		commenters.forEach((commenter) => {
 			if (!commentersOptions.some(val => (
-					commenter._id === val.value
-				))) {
+				commenter._id === val.value
+			))) {
 				commentersOptions.push({
 					value: commenter._id,
 					label: commenter.name,
@@ -473,7 +473,7 @@ class AddRevision extends Component {
 										placeholder="Commentator..."
 										multi
 									/>
-								: ''}
+									: ''}
 								<h1 className="add-comment-title">
 									<DraftEditorInput
 										name="draft_comment_title"
@@ -539,7 +539,7 @@ class AddRevision extends Component {
 											icon={<FontIcon className="mdi mdi-minus" />}
 										/>
 									</div>
-								: '' }
+									: '' }
 								<div className="comment-edit-action-button">
 									<RaisedButton
 										label="Update without adding Revision"

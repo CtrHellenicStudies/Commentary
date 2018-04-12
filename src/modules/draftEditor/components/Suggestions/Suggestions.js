@@ -66,7 +66,7 @@ class Suggestions extends Component {
 							suggestions={this.state.keywords}
 						/>
 					</div>) : ''
-					}
+				}
 			</div>
 		);
 	}

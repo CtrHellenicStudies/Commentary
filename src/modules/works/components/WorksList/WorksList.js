@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
-import { compose } from 'react-apollo';
 
 // components
 import WorkVisualization from '../WorkVisualization/WorkVizualization';

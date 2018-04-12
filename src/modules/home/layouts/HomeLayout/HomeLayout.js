@@ -68,7 +68,7 @@ class HomeLayout extends Component {
 		}
 
 		if (
-				tenant.subdomain === 'nrs'
+			tenant.subdomain === 'nrs'
 			|| tenant.subdomain === 'nrs2'
 		) {
 			return <NameResolutionServiceLayout />;

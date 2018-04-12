@@ -46,9 +46,9 @@ class CommentLemmaText extends Component {
 						<span
 							className={`
 								line-n ${(lastLocationIndex % 5) === 0  && lastLocationIndex.n !== 0 ?
-									'line-n--visible'
-								:
-									''}
+		'line-n--visible'
+		:
+		''}
 							`}
 						>
 							{textNodes[i].location.join('.')}

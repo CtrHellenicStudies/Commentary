@@ -5,7 +5,8 @@ import './SearchTools.css';
 
 
 const SearchTools = props => {
-	const { handleSubmit, pristine, submitting } = props
+	const { handleSubmit, } = props
+	
 	return (
 		<form
 			className="searchTools"
@@ -16,7 +17,7 @@ const SearchTools = props => {
 				component="input"
 				type="text"
 				placeholder="Search . . ."
-				/>
+			/>
 			<div className="searchSelect">
 				<label>
 						Language:
@@ -24,16 +25,16 @@ const SearchTools = props => {
 				<Field
 					name="language"
 					component="select"
-					>
+				>
 					<option />
 					{props.languages.map(language => (
 						<option
 							key={language.id}
 							value={language.slug}
-							>
+						>
 							{language.title}
 						</option>
-						))}
+					))}
 
 				</Field>
 			</div>

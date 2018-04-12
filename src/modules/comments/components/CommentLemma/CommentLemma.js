@@ -48,7 +48,7 @@ class CommentLemma extends Component {
 	}
 
 	handleToggleTranslationMenu(event) {
-    // This prevents ghost click.
+		// This prevents ghost click.
 		event.preventDefault();
 
 		const { translationsMenuOpen } = this.state;
@@ -237,7 +237,7 @@ class CommentLemma extends Component {
 								label="Translation"
 								className={`version-tab tab translation-tab ${showTranslation} ? 'translation-tab--active' : ''}`}
 							/>
-						: ''}
+							: ''}
 						<Popover
 							open={this.state.translationsMenuOpen}
 							anchorEl={this.state.anchorEl}

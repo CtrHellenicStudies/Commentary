@@ -53,17 +53,17 @@ class DiscussionThread extends Component {
 		let discussionComments = props.discussionCommentsQuery.discussionComments;
 		let helpArray = JSON.parse(JSON.stringify(props.discussionCommentsQuery.discussionComments));
 		switch (this.state.sortMethod) {
-			case 'votes':
-				helpArray.sort(Utils.sortBy('votes', 'updated'));
-				discussionComments = helpArray;
-				break;
-			case 'recent':
-				helpArray.sort(Utils.sortBy('updated', 'votes'));
-				discussionComments = helpArray;
-				break;
-			default:
-				break;
-			}
+		case 'votes':
+			helpArray.sort(Utils.sortBy('votes', 'updated'));
+			discussionComments = helpArray;
+			break;
+		case 'recent':
+			helpArray.sort(Utils.sortBy('updated', 'votes'));
+			discussionComments = helpArray;
+			break;
+		default:
+			break;
+		}
 		this.setState({
 			discussionComments: discussionComments,
 			users: props.usersQuery.users,
@@ -139,7 +139,7 @@ class DiscussionThread extends Component {
 							<span className="continue-discussion-text">
 								{this.state.discussionComments.length}
 							</span>
-						: ''}
+							: ''}
 					</div>
 				</div>
 
@@ -159,7 +159,7 @@ class DiscussionThread extends Component {
 									<span className="no-results-text">The discussion comments are currently disabled for this commentary.</span>
 								</div>
 							</div>
-						:
+							:
 							<div className="add-comment-wrap paper-shadow ">
 								<IconButton
 									className="close-discussion paper-shadow"
@@ -196,7 +196,7 @@ class DiscussionThread extends Component {
 												className="submit-comment-button paper-shadow"
 												onClick={this.addDiscussionComment}
 											/>
-										:
+											:
 											<div
 												className="new-comment-login"
 											>
@@ -224,7 +224,7 @@ class DiscussionThread extends Component {
 							<div className="no-results-wrap">
 								{!comment.discussionCommentsDisabled && !discussionCommentsDisabled ?
 									<span className="no-results-text">No discussion comments.</span>
-								: ''}
+									: ''}
 							</div>
 							:
 							<div className="sort-method-select">

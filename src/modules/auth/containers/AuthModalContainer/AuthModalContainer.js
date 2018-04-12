@@ -86,13 +86,13 @@ class AuthModalContainer extends React.Component {
 							onRegisterClick={dispatchChangeAuthMode.bind(null, 'signup')}
 							login={dispatchLogin}
 						/>
-					: null}
+						: null}
 					{authMode === 'signup' ?
 						<Signup
 							onSigninClick={dispatchChangeAuthMode.bind(null, 'login')}
 							signup={dispatchSignup}
 						/>
-					: null}
+						: null}
 				</div>
 			</Modal>
 		);

@@ -17,7 +17,7 @@ class CommunityMemberTeaser extends Component {
 
 		if (user.profile) {
 			if ('name' in user.profile) {
-			username = user.profile.name;
+				username = user.profile.name;
 			}
 			if ('picture' in user.profile) {
 				profilePicture = user.profile.picture;

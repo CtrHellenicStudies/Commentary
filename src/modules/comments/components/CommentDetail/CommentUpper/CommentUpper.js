@@ -53,8 +53,8 @@ const CommentUpperRight = props => (
 						<AvatarIcon
 							avatar={
 								(props.commenters[key] && props.commenters[key].avatar) ?
-								props.commenters[key].avatar.src
-								: null
+									props.commenters[key].avatar.src
+									: null
 							}
 						/>
 					</Link>

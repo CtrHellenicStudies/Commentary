@@ -13,7 +13,7 @@ import './PaginationButton.css';
 class PaginationButton extends React.Component {
 
 	renderButtonContent() {
-		const { prev, next, dots, page, first, last, activePage } = this.props;
+		const { prev, next, dots, page, first, last } = this.props;
 
 		if (prev) {
 			return <PaginationPrev page={page} />;

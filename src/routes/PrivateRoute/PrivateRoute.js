@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { connect } from 'react-redux';
 import _ from 'underscore';

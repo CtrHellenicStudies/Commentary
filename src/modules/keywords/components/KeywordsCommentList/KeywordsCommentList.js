@@ -73,8 +73,8 @@ const KeywordCommentList = (props) => {
 													<AvatarIcon
 														avatar={
 															(commenterRecord && commenterRecord.avatar) ?
-															commenterRecord.avatar.src
-															: null
+																commenterRecord.avatar.src
+																: null
 														}
 													/>
 												</Link>

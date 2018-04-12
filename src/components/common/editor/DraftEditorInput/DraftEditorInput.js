@@ -103,10 +103,10 @@ class DraftEditorInput extends Component {
 						placeholder={this.props.placeholder}
 					/>
 					{ this.props.disableMentions === true ? '' :
-					(<Suggestions
-						mentionPlugin={this.mentionPlugin}
-						keywordPlugin={this.keywordPlugin}
-					/>)
+						(<Suggestions
+							mentionPlugin={this.mentionPlugin}
+							keywordPlugin={this.keywordPlugin}
+						/>)
 					}
 				</div>
 				{ InlineToolbar !== undefined ?

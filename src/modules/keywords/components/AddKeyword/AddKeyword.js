@@ -200,7 +200,7 @@ class AddKeyword extends Component {
 	
 		const keyideasOptions = [];
 		const keyideas = newProps.keywordsQuery.loading ? [] : newProps.keywordsQuery.keywords
-		.filter(x => x.type === 'idea');
+			.filter(x => x.type === 'idea');
 		keyideas.forEach((keyidea) => {
 			keyideasOptions.push({
 				value: keyidea.title,
@@ -211,8 +211,8 @@ class AddKeyword extends Component {
 	
 		const commentersOptions = [];
 		const tenantCommenters = newProps.commentersQuery.loading ? [] : newProps.commentersQuery.commenters;
-        let commenters = [];
-        const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
+		let commenters = [];
+		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		if (user && user.canEditCommenters) {
 			commenters = tenantCommenters.filter((x => 
 				user.canEditCommenters.find(y => y === x._id) !== undefined));

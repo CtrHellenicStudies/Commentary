@@ -26,6 +26,7 @@ import Utils from '../../../../lib/utils';
 import './CommentarySearchToolbar.css';
 
 
+/*
 const getWorkInFilter = (filters) => {
 	let workInFilter = false;
 	filters.forEach((filter) => {
@@ -35,7 +36,7 @@ const getWorkInFilter = (filters) => {
 	});
 	return workInFilter;
 };
-
+*/
 
 
 /*
@@ -145,11 +146,11 @@ class CommentarySearchToolbar extends Component {
 
 	render() {
 
-		const { toggleSearchTerm, filters, addCommentPage, handlePagination } = this.props;
+		const { toggleSearchTerm, filters, addCommentPage } = this.props;
 		const { keywords, keyideas, commenters, referenceWorks, works } = this.state;
 		const { searchDropdownOpen, moreDropdownOpen } = this.state;
 
-		const workInFilter = getWorkInFilter(filters);
+		// const workInFilter = getWorkInFilter(filters);
 
 		return (
 			<div>
@@ -161,7 +162,7 @@ class CommentarySearchToolbar extends Component {
 							onChange={this.handleChangeTextsearch}
 						/>
 					</div>
-				: '' }
+					: '' }
 
 				<WorksDropdown
 					works={works}

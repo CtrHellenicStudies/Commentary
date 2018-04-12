@@ -14,9 +14,9 @@ describe('SearchResults', () => {
 				<SearchResults
 					works={[]}
 					loadMore={() => {}}
-					/>
+				/>
 			</MuiThemeProvider>
-			);
+		);
 		expect(wrapper).toBeDefined();
 	});
 });

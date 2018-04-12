@@ -284,7 +284,7 @@ class CommentDetail extends Component {
 						lineTo={this.state.lemmaReferenceLineTo}
 						closeLemmaReference={this.closeLemmaReference}
 					/>
-				: ''}
+					: ''}
 
 				{this.state.keywordReferenceModalVisible ?
 					<KeywordReferenceModal
@@ -294,7 +294,7 @@ class CommentDetail extends Component {
 						keyword={this.state.keyword}
 						close={this.closeKeywordReference}
 					/>
-				: ''}
+					: ''}
 			</div>
 		);
 	}

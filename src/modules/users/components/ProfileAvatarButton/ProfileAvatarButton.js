@@ -57,7 +57,7 @@ class ProfileAvatarButton extends Component {
 				</div>
 				{showUserDropdown ?
 					<UserDropdown />
-				: ''}
+					: ''}
 			</div>
 		);
 	}

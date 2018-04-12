@@ -14,49 +14,49 @@ import parseCommentsToCommentGroups from '../../lib/parseCommentsToCommentGroups
 
 class CommentaryContainer extends React.Component {
 
-  render() {
+	render() {
 		const { filters, isOnHomeView, skip, limit, queryParams } = this.props;
 		let commentGroups = [];
 
 		if (!isOnHomeView) {
 			if (
-        this.props.commentsQuery.loading
+				this.props.commentsQuery.loading
         || this.props.commentsMoreQuery.loading
-      ) {
+			) {
 				return (
-    			<div className="commentary-primary content ">
-  					<div className="ahcip-spinner commentary-loading">
-  						<div className="double-bounce1" />
-  						<div className="double-bounce2" />
-  					</div>
-          </div>
+					<div className="commentary-primary content ">
+						<div className="ahcip-spinner commentary-loading">
+							<div className="double-bounce1" />
+							<div className="double-bounce2" />
+						</div>
+					</div>
 				);
 			}
 
-      if (!this.props.commentsMoreQuery.commentsMore) {
+			if (!this.props.commentsMoreQuery.commentsMore) {
 				return (
-    			<div className="commentary-primary content ">
-  					<div className="no-commentary-wrap">
-  						<p className="no-commentary no-results">
+					<div className="commentary-primary content ">
+						<div className="no-commentary-wrap">
+							<p className="no-commentary no-results">
   							No commentary available for the current search.
   						</p>
-  					</div>
-          </div>
+						</div>
+					</div>
 				);
 			}
 		}
 
-    if (
-        this.props.commentsQuery
+		if (
+			this.props.commentsQuery
       && this.props.commentsQuery.comments
-    ) {
-      commentGroups = parseCommentsToCommentGroups(this.props.commentsQuery.comments);
-    }
+		) {
+			commentGroups = parseCommentsToCommentGroups(this.props.commentsQuery.comments);
+		}
 
 
-    return (
-      <Commentary
-        commentGroups={commentGroups}
+		return (
+			<Commentary
+				commentGroups={commentGroups}
 				filters={filters}
 				toggleSearchTerm={this.props.toggleSearchTerm}
 				showLoginModal={this.showLoginModal}
@@ -64,12 +64,12 @@ class CommentaryContainer extends React.Component {
 				skip={skip}
 				limit={limit}
 				queryParams={queryParams}
-      />
-    );
-  }
+			/>
+		);
+	}
 }
 
 export default compose(
-  commentsQuery,
-  commentsMoreQuery,
+	commentsQuery,
+	commentsMoreQuery,
 )(CommentaryContainer);

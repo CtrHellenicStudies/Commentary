@@ -9,27 +9,27 @@ import './CommentaryWorks.css';
 
 
 const CommentaryWorks = ({ works, toggleWorkSelectorModal, handleSelectWork }) => (
-  <div className="commentaryWorks">
-    {works.map(work => (
-      <WorkTeaser
-        key={work.id}
-        work={work}
-        handleSelectWork={handleSelectWork}
-      />
-    ))}
-    <AddNewWork
-      toggleWorkSelectorModal={toggleWorkSelectorModal}
-    />
-  </div>
+	<div className="commentaryWorks">
+		{works.map(work => (
+			<WorkTeaser
+				key={work.id}
+				work={work}
+				handleSelectWork={handleSelectWork}
+			/>
+		))}
+		<AddNewWork
+			toggleWorkSelectorModal={toggleWorkSelectorModal}
+		/>
+	</div>
 );
 
 CommentaryWorks.defaultProps = {
-  works: [],
+	works: [],
 };
 
 CommentaryWorks.propTypes = {
-  works: PropTypes.array,
-  toggleWorkSelectorModal: PropTypes.func,
+	works: PropTypes.array,
+	toggleWorkSelectorModal: PropTypes.func,
 };
 
 

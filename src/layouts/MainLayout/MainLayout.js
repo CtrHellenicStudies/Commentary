@@ -33,7 +33,7 @@ class MainLayout extends Component {
 					<main>
 						<div className="commentary-comments">
 							<div className="comment-group">
-            		{this.props.children}
+								{this.props.children}
 							</div>
 						</div>
 					</main>

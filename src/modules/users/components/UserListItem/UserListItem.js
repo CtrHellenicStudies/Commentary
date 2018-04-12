@@ -7,7 +7,7 @@ const UserListItem = ({ _id, name, username, avatarUrl, isActiveUser }) => (
 		<Link
 			to={isActiveUser ?
 				"/profile"
-			:
+				:
 				`/users/${_id}`
 			}
 		>
@@ -23,7 +23,7 @@ const UserListItem = ({ _id, name, username, avatarUrl, isActiveUser }) => (
 			<div className="userListItemUserName">
 				{name ?
 					name
-				:
+					:
 					username
 				}
 			</div>

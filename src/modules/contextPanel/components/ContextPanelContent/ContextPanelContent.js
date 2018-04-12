@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
-import { compose } from 'react-apollo';
-import _ from 'lodash';
 
 // components:
 import ContextPanelText from '../ContextPanelText/ContextPanelText';
-import ContextPanelTabs from '../ContextPanelTabs/ContextPanelTabs';
+// import ContextPanelTabs from '../ContextPanelTabs/ContextPanelTabs';
 
 // lib:
-import Utils from '../../../../lib/utils';
+// import Utils from '../../../../lib/utils';
 
 /*
 	helpers
@@ -26,19 +24,6 @@ const getContextPanelStyles = (open, highlightingVisible) => {
 	return contextPanelStyles;
 };
 
-const getSortedVersions = (editions) => {
-	const sortedVersions = [];
-	editions.forEach((edition) => {
-		const newVersion = {
-			slug: edition.version.slug,
-			title: edition.version.title,
-			lines: _.sortBy(edition.lines, 'n')
-		};
-		sortedVersions.push(newVersion);
-	});
-
-	return sortedVersions;
-};
 
 class ContextPanelContent extends Component {
 	constructor(props) {
@@ -51,8 +36,11 @@ class ContextPanelContent extends Component {
 	}
 
 	render() {
-		const { open, highlightingVisible, closeContextPanel, onBeforeClicked, onAfterClicked, selectedLemmaVersion, commentGroup, maxLine, toggleVersion,
-			toggleHighlighting, disableEdit, selectedLineFrom, selectedLineTo, updateSelectedLines, editor } = this.props;
+		const {
+			open, highlightingVisible, closeContextPanel, onBeforeClicked,
+			onAfterClicked, selectedLemmaVersion, commentGroup, maxLine, disableEdit,
+			selectedLineFrom, selectedLineTo, updateSelectedLines, editor,
+		} = this.props;
 		const { lemmaText } = this.state;
 
 		return (

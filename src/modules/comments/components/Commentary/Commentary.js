@@ -166,14 +166,14 @@ class Commentary extends Component {
 						multiline={multiline}
 						filters={filters}
 					/>
-				: ''}
+					: ''}
 
 				{!isOnHomeView ?
 					<FilterWidget
 						filters={filters}
 						toggleSearchTerm={toggleSearchTerm}
 					/>
-				: ''}
+					: ''}
 			</div>
 		);
 	}

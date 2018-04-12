@@ -15,9 +15,9 @@ describe('SearchTools', () => {
 			<MuiThemeProvider>
 				<SearchTools
 					filters={[]}
-					/>
+				/>
 			</MuiThemeProvider>
-			);
+		);
 		expect(wrapper).toBeDefined();
 	});
 });

@@ -39,7 +39,7 @@ class SettingEditor extends React.Component {
 	}
 
 	render() {
-		const { collection, settingGroup, works } = this.props;
+		const { works } = this.props;
 		const { showWorkSelectorModal } = this.state;
 
 		return (

@@ -106,7 +106,7 @@ class ReferenceWorkDetail extends Component {
 												>
 													Read Online <i className="mdi mdi-open-in-new" />
 												</a>
-											: ''}
+												: ''}
 										</div>
 									</div>
 								</div>
@@ -140,7 +140,7 @@ class ReferenceWorkDetail extends Component {
 									})}
 									</h3>
 								</div>
-							: ''}
+								: ''}
 
 							<div
 								dangerouslySetInnerHTML={this.createMarkup()}

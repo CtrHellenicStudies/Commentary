@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
 export default class VideoAdd extends Component {
-  // Start the popover closed
+	// Start the popover closed
 	state = {
 		url: '',
 		open: false,
 	};
 
-  // When the popover is open and users click anywhere on the page,
-  // the popover should close
+	// When the popover is open and users click anywhere on the page,
+	// the popover should close
 	componentDidMount() {
 		document.addEventListener('click', this.closePopover);
 	}
@@ -18,7 +18,7 @@ export default class VideoAdd extends Component {
 		document.removeEventListener('click', this.closePopover);
 	}
 
-  // Note: make sure whenever a click happens within the popover it is not closed
+	// Note: make sure whenever a click happens within the popover it is not closed
 	onPopoverClick = () => {
 		this.preventNextClose = true;
 	};
@@ -54,8 +54,8 @@ export default class VideoAdd extends Component {
 
 	render() {
 		const popoverClassName = this.state.open ?
-      'draftAddVideoPopover' :
-      'draftAddVideoClosedPopover';
+			'draftAddVideoPopover' :
+			'draftAddVideoClosedPopover';
 		return (
 			<div>
 				<RaisedButton className="draft-add-video-button" onMouseUp={this.openPopover}>{this.props.label}</RaisedButton>

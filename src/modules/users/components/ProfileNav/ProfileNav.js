@@ -12,8 +12,8 @@ const ProfileNav = (props) => {
 				to="/profile"
 				className={
 					activePath === '/profile' ?
-					'profileNavLinkActive'
-					: ''
+						'profileNavLinkActive'
+						: ''
 				}
 			>
 				<i className="mdi mdi-account" />
@@ -23,8 +23,8 @@ const ProfileNav = (props) => {
 				to="/profile/projects"
 				className={
 					activePath === '/profile/projects' ?
-					'profileNavLinkActive'
-					: ''
+						'profileNavLinkActive'
+						: ''
 				}
 			>
 				<i className="mdi mdi-view-dashboard" />
@@ -34,8 +34,8 @@ const ProfileNav = (props) => {
 				to="/create"
 				className={
 					activePath === '/create' ?
-					'profileNavLinkActive'
-					: ''
+						'profileNavLinkActive'
+						: ''
 				}
 			>
 				<i className="mdi mdi-plus" />

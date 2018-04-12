@@ -345,7 +345,7 @@ class AddComment extends Component {
 		let _commenters = [];
 		const tags = newProps.keywordsQuery.keywords;
 		if (
-				commenters
+			commenters
 			&& newProps.commentersQuery
 			&& newProps.commentersQuery.commenters
 		) {

@@ -55,9 +55,9 @@ class AuthContainer extends React.Component {
 
 	render() {
 		const {
-      authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup, updateV2,
+			authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup, updateV2,
 			dispatchReset,
-    } = this.props;
+		} = this.props;
 
 		// Handle the update form for the second version of the Commentaries
 		if (updateV2) {
@@ -75,13 +75,13 @@ class AuthContainer extends React.Component {
 						onRegisterClick={dispatchChangeAuthMode.bind(null, 'signup')}
 						login={dispatchLogin}
 					/>
-				: null}
+					: null}
 				{authMode === 'signup' ?
 					<Signup
 						onSigninClick={dispatchChangeAuthMode.bind(null, 'login')}
 						signup={dispatchSignup}
 					/>
-				: null}
+					: null}
 			</div>
 		);
 	}
@@ -97,13 +97,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	},
 	dispatchSetUser: (userObject) => {
 		dispatch(setUser(userObject));
-    // Go to commentary requested route instead of toggling modal
-    ownProps.history.push('/');
+		// Go to commentary requested route instead of toggling modal
+		ownProps.history.push('/');
 	},
 	dispatchLogin: data => {
 		dispatch(login(ownProps.loginMethod, data));
-    // Go to commentary requested route instead of toggling modal
-    ownProps.history.push('/');
+		// Go to commentary requested route instead of toggling modal
+		ownProps.history.push('/');
 	},
 	dispatchSignup: data => dispatch(login(ownProps.signupMethod, data)),
 	dispatchReset: data => dispatch(login(ownProps.resetMethod, data)),
@@ -113,9 +113,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 export default compose(
-  withRouter,
-  connect(
+	withRouter,
+	connect(
   	mapStateToProps,
   	mapDispatchToProps
-  ),
+	),
 )(AuthContainer);

@@ -1,10 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { Cookies } from 'js-cookie';
-import { CookiesProvider } from 'react-cookie';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { ApolloProvider, createNetworkInterface } from 'react-apollo';
 
 // static content
 import 'ion-rangeslider/js/ion.rangeSlider.js';

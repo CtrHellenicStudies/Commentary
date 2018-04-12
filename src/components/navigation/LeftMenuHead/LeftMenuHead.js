@@ -10,7 +10,7 @@ const LeftMenuHead = ({ userId }) => (
 	<div className="leftMenuHead">
 		{userId ?
 			<SidebarUserAvatarContainer />
-		: ''}
+			: ''}
 	</div>
 );
 

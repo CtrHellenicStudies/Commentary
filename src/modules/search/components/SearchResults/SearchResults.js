@@ -21,7 +21,7 @@ class SearchResults extends React.Component {
 	}
 
 	render() {
-		const { works, total, page, handleUpdatePagination } = this.props;
+		const { works, total } = this.props;
 
 		return (
 			<div
@@ -33,7 +33,7 @@ class SearchResults extends React.Component {
 					>
 						{this.renderWorks()}
 					</div>
-				:
+					:
 					<div className="worksListInner">
 						<p className="noResults">
 							No results found for your query.

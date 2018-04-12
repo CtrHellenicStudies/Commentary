@@ -80,9 +80,9 @@ class CommentLemmaTranslation extends Component {
 							<span
 								className={`
 									line-n ${(line % 5) === 0  && line !== 0 ?
-										'line-n--visible'
-									:
-										''}
+						'line-n--visible'
+						:
+						''}
 								`}
 							>
 								{line.n}

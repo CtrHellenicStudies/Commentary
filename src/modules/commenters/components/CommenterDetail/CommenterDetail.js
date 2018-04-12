@@ -65,7 +65,7 @@ class CommenterDetail extends Component {
 		// 	avatar: {src: commenter.avatar.src},
 		// 	subscribedOn: new Date()
 		// };
-        // TODO
+		// TODO
 		// if (!subscribed) {
 		// 	Meteor.users.update({_id: Meteor.userId()}, {
 		// 		$push: {
@@ -95,7 +95,7 @@ class CommenterDetail extends Component {
 
 		let avatarUrl;
 		const commenter = props.commentersQuery.loading ? {} :
-		props.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
+			props.commentersQuery.commenters.find(x => x.slug === slug && x.tenantId === tenantId);
 
 		if (commenter && commenter.avatar) {
 			avatarUrl = commenter.avatar.src;

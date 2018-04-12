@@ -145,14 +145,14 @@ class TextNodesInput extends Component {
 
 		debounce(500, () => {
 			this.props.textNodesUpdate(editedTextNodeId, editionId, newValue, editedTextNode.n).then(
-			(err, res) => {
-				if (err) {
-					console.error('Error editing text', err);
-					this.showSnackBar(err.message);
-				} else {
-					this.showSnackBar('Updated');
-				}
-			});
+				(err, res) => {
+					if (err) {
+						console.error('Error editing text', err);
+						this.showSnackBar(err.message);
+					} else {
+						this.showSnackBar('Updated');
+					}
+				});
 		})();
 	}
 
@@ -220,7 +220,7 @@ class TextNodesInput extends Component {
 								</FormGroup>
 							</div>
 						</ListGroupItemDnD>
-						))}
+					))}
 				</ListGroupDnD>
 				<RaisedButton
 					label="Show more"

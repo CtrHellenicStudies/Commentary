@@ -60,7 +60,7 @@ class KeywordReferenceModal extends Component {
 								className="lemma-text"
 								dangerouslySetInnerHTML={this.renderKeywordHTML()}
 							/>
-						: ''}
+							: ''}
 					</div>
 
 					<i

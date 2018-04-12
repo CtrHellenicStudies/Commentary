@@ -32,7 +32,7 @@ const ProfileProjects = ({ projects }) => (
 							You don&apos;t belong to any projects. <Link to="/create">Create one.</Link>
 						</p>
 					</div>
-				: ''}
+					: ''}
 			</Row>
 		</Grid>
 	</div>

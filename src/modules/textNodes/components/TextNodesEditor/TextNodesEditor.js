@@ -74,7 +74,7 @@ class TextNodesEditor extends Component {
 	}
 	componentWillReceiveProps(props) {
 		if (props.editionsQuery.loading || props.textNodesQuery.loading) {
-				return;
+			return;
 		}
 		const { selectedEdition, selectedWork } = this.state;
 		const editions = props.editionsQuery.works;
@@ -216,11 +216,11 @@ class TextNodesEditor extends Component {
 		if(locationFrom && locationTo
 			&& selectedEdition !== undefined
 			&& selectedWork !== undefined) {
-				this.props.textNodesQuery.refetch({
-					workUrn: finalWork.urn,
-					textNodesUrn: `${finalWork.urn}:${locationFrom[0]}.${locationFrom[1]}-${locationTo[0]}.${locationTo[1]}`
-				});
-			}
+			this.props.textNodesQuery.refetch({
+				workUrn: finalWork.urn,
+				textNodesUrn: `${finalWork.urn}:${locationFrom[0]}.${locationFrom[1]}-${locationTo[0]}.${locationTo[1]}`
+			});
+		}
 	}
 	loadMoreText() {
 		this.setState({
@@ -366,10 +366,10 @@ class TextNodesEditor extends Component {
 								<br />
 								<button onClick={this.showMultilineDialog}>
 								Manage multiline
-							</button>
+								</button>
 							</FormGroup>
 						</div>
-					: ''}
+						: ''}
 
 					<div className="text-nodes-editor-meta-input">
 						<FormGroup controlId="refsDecl">

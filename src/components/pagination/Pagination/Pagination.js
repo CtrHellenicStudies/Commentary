@@ -49,17 +49,17 @@ const Pagination = ({ limit, total, location, page }) => {
 					first
 					page={1}
 				/>
-			: ''}
+				: ''}
 			{activePage > 1 ?
 				<PaginationButton
 					prev
 				/>
-			: ''}
+				: ''}
 			{prevDots ?
 				<PaginationButton
 					dots
 				/>
-			: ''}
+				: ''}
 			{pages.map((_page) => (
 				<PaginationButton
 					key={_page}
@@ -70,18 +70,18 @@ const Pagination = ({ limit, total, location, page }) => {
 				<PaginationButton
 					dots
 				/>
-			: ''}
+				: ''}
 			{activePage < numPages - 1 ?
 				<PaginationButton
 					next
 				/>
-			: ''}
+				: ''}
 			{nextDots ?
 				<PaginationButton
 					last
 					page={numPages}
 				/>
-			: ''}
+				: ''}
 		</div>
 	);
 };

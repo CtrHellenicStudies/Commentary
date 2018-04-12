@@ -12,11 +12,11 @@ const SearchResultsContainer = props => {
 	let total = 0;
 
 	if (
-    props.workSearchQuery
+		props.workSearchQuery
     && props.workSearchQuery.workSearch
     && props.workSearchQuery.workSearch.works
     && props.workSearchQuery.workSearch.works.length
-  ) {
+	) {
 		works = props.workSearchQuery.workSearch.works;
 		total = props.workSearchQuery.workSearch.total;
 	}
@@ -27,11 +27,11 @@ const SearchResultsContainer = props => {
 			total={total}
 			page={props.page}
 			handleSelectWork={props.handleSelectWork}
-    />
+		/>
 	);
 }
 
 export default compose(
-  workSearchQuery,
-  withRouter,
+	workSearchQuery,
+	withRouter,
 )(SearchResultsContainer);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import autoBind from 'react-autobind';
-import parseLiteralUrn from '../../../cts/lib/parseUrn';
+import { parseValueUrn } from '../../../cts/lib/parseUrn';
 
 /*
 	BEGIN helpers
@@ -134,9 +134,10 @@ class ContextPanelText extends Component {
       && anchorNode.parentElement
       && extentNode.parentElement
 		) {
+
 			const selectedLemma = {
-				passageFrom: parseLiteralUrn(anchorNode.parentElement.dataset.urn),
-				passageTo: parseLiteralUrn(extentNode.parentElement.dataset.urn),
+				passageFrom: parseValueUrn(anchorNode.parentElement.dataset.urn),
+				passageTo: parseValueUrn(extentNode.parentElement.dataset.urn),
 				subreferenceIndexFrom: anchorOffset,
 				subreferenceIndexTo: extentOffset,
 			};

@@ -56,12 +56,21 @@ const serializeUrn = (value, type) => {
 		});
 	} else if ('passageFrom' in value && value.passageFrom && value.passageFrom.length) {
 		result = `${result}:`;
-		result = `${result}${value.passageFrom.join('.')}`;
-
-		if ('passageTo' in value && value.passageTo && value.passageFrom.join('.') !== value.passageTo.join('.')) {
-			result = `${result}-${value.passageTo.join('.')}`;
+		if (typeof value.passageFrom[0] === 'number') {
+			result = `${result}${value.passageFrom.join('.')}`;
+		} else {
+			result = `${result}${value.passageFrom[0].join('.')}`;
+			if (
+					'passageTo' in value
+				&& value.passageTo
+				&& value.passageTo.length
+				&& value.passageFrom[0].join('.') !== value.passageTo[0].join('.')
+			) {
+				result = `${result}-${value.passageTo[0].join('.')}`;
+			}
 		}
 	}
+
 	return result;
 };
 

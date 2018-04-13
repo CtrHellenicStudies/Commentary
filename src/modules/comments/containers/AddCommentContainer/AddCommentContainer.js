@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import { compose } from 'react-apollo';
+import PropTypes from 'prop-types';
+import autoBind from 'react-autobind';
+
 import Utils from '../../../../lib/utils';
 import Header from '../../../../components/navigation/Header/Header';
 
 // components
 import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
-import CommentLemmaSelect from '../../components/CommentLemmaSelect/CommentLemmaSelect';
 import AddComment from '../../components/AddComment/AddComment';
-import PropTypes from 'prop-types';
+import CommentLemmaSelectContainer from '../CommentLemmaSelectContainer';
 
 // graphql
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
+
+// lib
+import getSelectedLemmaUrn from '../../lib/getSelectedLemmaUrn';
+
+
 
 const getFilterValues = (filters) => {
 	const filterValues = {};
@@ -29,7 +36,8 @@ const getFilterValues = (filters) => {
 	return filterValues;
 };
 
-const AddCommentContainer = class AddCommentContainerClass extends Component {
+
+class AddCommentContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -37,9 +45,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 			filters: [],
 		};
 
-		this.updateSelectedLemma = this.updateSelectedLemma.bind(this);
-		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
-		this.handlePagination = this.handlePagination.bind(this);
+		autoBind(this);
 	}
 
 	componentWillReceiveProps(props) {
@@ -143,8 +149,10 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 
 	render() {
 
-		const { selectedLineFrom, selectedTextNodes, filters,
-			selectedLineTo, contextReaderOpen, textNodes} = this.state;
+		const {
+			selectedLemmaCitation, selectedTextNodes, filters, contextReaderOpen,
+			textNodes,
+		} = this.state;
 		const { textNodesUrn, submitForm } = this.props;
 		const { work } = getFilterValues(filters);
 
@@ -163,13 +171,15 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 				<main>
 					<div className="commentary-comments">
 						<div className="comment-group">
-							<CommentLemmaSelectContainer
-								selectedLemmaCitation={selectedLemma}
-						  />
+							{(selectedLemmaCitation && 'passageFrom' in selectedLemmaCitation) ?
+								<CommentLemmaSelectContainer
+									selectedLemmaCitation={selectedLemmaCitation}
+									textNodesUrn={getSelectedLemmaUrn(selectedLemmaCitation)}
+							  />
+							: ''}
 
 							<AddComment
-								selectedLineFrom={selectedLineFrom}
-								selectedLineTo={selectedLineTo}
+								selectedLemmaCitation={selectedLemmaCitation}
 								submitForm={submitForm}
 								work={work}
 						  />
@@ -178,8 +188,7 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 						<ContextPanel
 							open={contextReaderOpen}
 							filters={filters}
-							selectedLineFrom={selectedLineFrom}
-							selectedLineTo={selectedLineTo}
+							selectedLemmaCitation={selectedLemmaCitation}
 							updateSelectedLemma={this.updateSelectedLemma}
 							textNodes={textNodes}
 							textNodesUrn={textNodesUrn}
@@ -196,8 +205,10 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 		);
 	}
 }
+
 AddCommentContainer.props = {
 	selectedTextNodes: PropTypes.object,
 	textNodesQuery: PropTypes.func
 };
+
 export default compose(textNodesQuery)(AddCommentContainer);

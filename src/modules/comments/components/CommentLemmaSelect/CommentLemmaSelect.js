@@ -12,7 +12,7 @@ class CommentLemmaSelect extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedLemmaEdition: '',
+			selectedLemmaVersion: '',
 			lineLetterValue: '',
 		};
 		this.onLineLetterValueChange = this.onLineLetterValueChange.bind(this);
@@ -41,7 +41,7 @@ class CommentLemmaSelect extends Component {
 
 		this.setState({
 			// lemmaText: editions,
-			selectedLemmaEdition: editions[0],
+			selectedLemmaVersion: editions[0],
 		});
 	}
 	onLineLetterValueChange(event) {
@@ -51,22 +51,30 @@ class CommentLemmaSelect extends Component {
 	}
 
 	toggleEdition(editionSlug) {
-		if (this.state.selectedLemmaEdition !== editionSlug) {
+		if (this.state.selectedLemmaVersion !== editionSlug) {
 			this.setState({
-				selectedLemmaEdition: editionSlug,
+				selectedLemmaVersion: editionSlug,
 			});
 		}
 	}
 	render() {
 		const self = this;
-		const { selectedLemmaEdition } = this.state;
+		const { selectedLemmaVersion } = this.state;
+
+		console.log('#####')
+		console.log('#####')
+		console.log('#####')
+		console.log(selectedLemmaVersion);
+		console.log('#####')
+		console.log('#####')
+
+
 		return (
 			<div className="comments lemma-panel-visible">
 				<div className="comment-outer comment-lemma-comment-outer">
-					{selectedLemmaEdition && selectedLemmaEdition.lines ?
+					{selectedLemmaVersion && selectedLemmaVersion.textNodes ?
 						<article className="comment lemma-comment paper-shadow">
-
-							{selectedLemmaEdition.lines.map((line, i) => (
+							{selectedLemmaVersion.lines.map((line, i) => (
 								<p
 									key={i}
 									className="lemma-text"
@@ -88,8 +96,8 @@ class CommentLemmaSelect extends Component {
 								:
 								''
 							}
-
-							{/* <div className="version-tabs tabs">
+							{/*
+								<div className="version-tabs tabs">
 									{this.state.lemmaText.map((lemmaTextEdition, i) => {
 										const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
 
@@ -97,17 +105,17 @@ class CommentLemmaSelect extends Component {
 											key={i}
 											label={lemmaEditionTitle}
 											data-edition={lemmaTextEdition.title}
-											className={self.state.selectedLemmaEdition.slug === lemmaTextEdition.slug ?
+											className={self.state.selectedLemmaVersion.slug === lemmaTextEdition.slug ?
 											'version-tab tab selected-version-tab' : 'version-tab tab'}
 											onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
 										/>);
 									})}
-								</div> */}
+								</div>
+							*/}
 
 							<div className="context-tabs tabs" />
 						</article>
 						:
-
 						<article className="comment lemma-comment paper-shadow">
 							<p className="lemma-text no-lines-selected">No line(s) selected</p>
 						</article>

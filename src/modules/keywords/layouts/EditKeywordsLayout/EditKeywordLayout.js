@@ -45,7 +45,7 @@ class EditKeywordLayout extends Component {
 		};
 
 		this.handlePermissions = this.handlePermissions.bind(this);
-		this.updateSelectedLines = this.updateSelectedLines.bind(this);
+		this.updateSelectedLemma = this.updateSelectedLemma.bind(this);
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
 		this.updateKeyword = this.updateKeyword.bind(this);
 		this.showSnackBar = this.showSnackBar.bind(this);
@@ -102,7 +102,7 @@ class EditKeywordLayout extends Component {
 			}
 		}
 	}
-	updateSelectedLines(selectedLineFrom, selectedLineTo) {
+	updateSelectedLemma(selectedLineFrom, selectedLineTo) {
 		if (selectedLineFrom === null) {
 			this.setState({
 				selectedLineTo,
@@ -422,7 +422,7 @@ class EditKeywordLayout extends Component {
 										lineFrom={lineFrom || 1}
 										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
 										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										updateSelectedLines={this.updateSelectedLines}
+										updateSelectedLemma={this.updateSelectedLemma}
 										editor
 									/>
 								</div>

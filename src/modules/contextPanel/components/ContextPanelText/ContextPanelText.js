@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
+import autoBind from 'react-autobind';
+import parseLiteralUrn from '../../../cts/lib/parseUrn';
 
 /*
 	BEGIN helpers
@@ -91,8 +93,7 @@ class ContextPanelText extends Component {
 			selectedLineTo: 0
 		}
 
-		// methods:
-		this.updateBorderLines = this.updateBorderLines.bind(this);
+		autoBind(this);
 	}
 
 	updateBorderLines(textNodeFrom, textNodeTo) {
@@ -101,14 +102,16 @@ class ContextPanelText extends Component {
 		if(textNodeTo === 0) {
 			_textNodeTo = textNodeFrom + 1;
 		}
+
 		if(!Object.keys(this.textNodes).length) {
 			return;
 		}
+
 		for (let i = 1; i <= Object.keys(this.textNodes).length; i += 1) {
 			if (i > textNodeFrom && i <= _textNodeTo) {
-				this.textNodes[(i-1).toString()].style.borderBottom = '2px solid #B2EBF2';
+				this.textNodes[(i - 1).toString()].style.borderBottom = '2px solid #B2EBF2';
 			} else {
-				this.textNodes[(i-1).toString()].style.borderBottom = '';
+				this.textNodes[(i - 1).toString()].style.borderBottom = '';
 			}
 		}
 	}
@@ -121,42 +124,24 @@ class ContextPanelText extends Component {
 		const target = e.target;
 		const selObj = window.getSelection();
 		const { anchorNode, extentNode, anchorOffset, extentOffset } = selObj;
+		const { updateSelectedLemma } = this.props;
 
 		if (
 			!this.props.disableEdit
       && anchorOffset !== extentOffset
-      && anchorNode && extentNode
+      && anchorNode
+			&& extentNode
       && anchorNode.parentElement
       && extentNode.parentElement
-      && anchorNode.parentElement.className === extentNode.parentElement.className
 		) {
-			const selectedLines = getSelectedVersionText(this.props.lemmaText, this.props.selectedLemmaVersion).textNodes;
+			const selectedLemma = {
+				passageFrom: parseLiteralUrn(anchorNode.parentElement.dataset.urn),
+				passageTo: parseLiteralUrn(extentNode.parentElement.dataset.urn),
+				subreferenceIndexFrom: anchorOffset,
+				subreferenceIndexTo: extentOffset,
+			};
 
-			const { updateSelectedLines } = this.props;
-			const { selectedLineFrom, selectedLineTo } = this.state;
-
-			let textNodesToUpdate;
-			const id = parseInt(target.id, 10);
-
-			if (selectedLineTo === 0 && id > selectedLineFrom && selectedLineFrom !== 0) {
-				textNodesToUpdate = selectedLines.slice(selectedLineFrom, id+1);
-				this.setState({selectedLineTo : id});
-				this.updateBorderLines(selectedLineFrom, id + 1);
-			} else if (selectedLineTo === 0 && id < selectedLineFrom) {
-				textNodesToUpdate = selectedLines.slice(id, id + 1);
-				this.setState({selectedLineFrom: id});
-				this.updateBorderLines(id, id + 1);
-			} else {
-				textNodesToUpdate = selectedLines.slice(id, id + 1);
-				this.setState({
-					selectedLineFrom: id,
-					selectedLineTo: 0});
-				this.updateBorderLines(id, 0);
-			}
-			updateSelectedLines({
-				textNodes: textNodesToUpdate,
-			});
-
+			updateSelectedLemma(selectedLemma);
 		}
 	}
 	/*
@@ -216,12 +201,12 @@ class ContextPanelText extends Component {
 								>
 									<div
 										className="lemma-text"
-										id={textNode.id}
 										ref={(component) => { this.textNodes[(i).toString()] = component; }}
 										dangerouslySetInnerHTML={{ __html: textNode.text }}
-										onClick={this.handleLineClick}
 										style={!disableEdit ? { cursor: 'pointer' } : null}
-										onMouseUp={this.handleSelectingTextForVariant}
+										onMouseUp={this.handleSelectingTextForComment}
+										data-id={textNode.id}
+										data-urn={textNode.urn}
 									/>
 
 									<LineNumbering location={textNode.location} />
@@ -277,7 +262,7 @@ ContextPanelText.propTypes = {
 
 	// requiered if editor:
 	disableEdit: PropTypes.bool,
-	updateSelectedLines: PropTypes.func,
+	updateSelectedLemma: PropTypes.func,
 	editor: PropTypes.bool,
 };
 
@@ -285,7 +270,7 @@ ContextPanelText.defaultProps = {
 	commentGroup: null,
 
 	disableEdit: false,
-	updateSelectedLines: null,
+	updateSelectedLemma: null,
 	editor: false,
 };
 /*

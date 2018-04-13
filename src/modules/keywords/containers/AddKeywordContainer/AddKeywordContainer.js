@@ -17,9 +17,9 @@ const AddKeywordContainer = class AddKeywordContainerClass extends Component {
 			textNodes: [],
 			selectedTextNodes: []
 		};
-		this.updateSelectedLines = this.updateSelectedLines.bind(this);
+		this.updateSelectedLemma = this.updateSelectedLemma.bind(this);
 	}
-	updateSelectedLines(_textNodes) {
+	updateSelectedLemma(_textNodes) {
 		this.setState({selectedTextNodes : [_textNodes]});
 	}
 	componentWillReceiveProps(props) {
@@ -50,7 +50,7 @@ const AddKeywordContainer = class AddKeywordContainerClass extends Component {
 						lineFrom={lineFrom || 1}
 						selectedLineFrom={this.state.selectedLineFrom}
 						selectedLineTo={this.state.selectedLineTo}
-						updateSelectedLines={this.updateSelectedLines}
+						updateSelectedLemma={this.updateSelectedLemma}
 						textNodesUrn={textNodesUrn}
 						textNodes={textNodes}
 						editor

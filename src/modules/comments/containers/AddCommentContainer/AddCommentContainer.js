@@ -33,11 +33,11 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedTextNodes: [],
+			selectedLemmaCitation: null,
 			filters: [],
 		};
 
-		this.updateSelectedLines = this.updateSelectedLines.bind(this);
+		this.updateSelectedLemma = this.updateSelectedLemma.bind(this);
 		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
 		this.handlePagination = this.handlePagination.bind(this);
 	}
@@ -48,8 +48,8 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 		});
 	}
 
-	updateSelectedLines(_textNodes) {
-		this.setState({selectedTextNodes : [_textNodes]});
+	updateSelectedLemma(selectedLemmaCitation) {
+		this.setState({ selectedLemmaCitation });
 	}
 
 	toggleSearchTerm(key, value) {
@@ -163,8 +163,8 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 				<main>
 					<div className="commentary-comments">
 						<div className="comment-group">
-							<CommentLemmaSelect
-								textNodes={selectedTextNodes}
+							<CommentLemmaSelectContainer
+								selectedLemmaCitation={selectedLemma}
 						  />
 
 							<AddComment
@@ -174,12 +174,13 @@ const AddCommentContainer = class AddCommentContainerClass extends Component {
 								work={work}
 						  />
 						</div>
+
 						<ContextPanel
 							open={contextReaderOpen}
 							filters={filters}
 							selectedLineFrom={selectedLineFrom}
 							selectedLineTo={selectedLineTo}
-							updateSelectedLines={this.updateSelectedLines}
+							updateSelectedLemma={this.updateSelectedLemma}
 							textNodes={textNodes}
 							textNodesUrn={textNodesUrn}
 							editor

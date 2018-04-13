@@ -39,7 +39,7 @@ class ContextPanelContent extends Component {
 		const {
 			open, highlightingVisible, closeContextPanel, onBeforeClicked,
 			onAfterClicked, selectedLemmaVersion, commentGroup, maxLine, disableEdit,
-			selectedLineFrom, selectedLineTo, updateSelectedLines, editor,
+			selectedLineFrom, selectedLineTo, updateSelectedLemma, editor,
 		} = this.props;
 		const { lemmaText } = this.state;
 
@@ -67,7 +67,7 @@ class ContextPanelContent extends Component {
 						disableEdit={disableEdit}
 						selectedLineFrom={selectedLineFrom}
 						selectedLineTo={selectedLineTo}
-						updateSelectedLines={updateSelectedLines}
+						updateSelectedLemma={updateSelectedLemma}
 						editor={editor}
 					/>
 				}
@@ -110,14 +110,13 @@ ContextPanelContent.propTypes = {
 	lineFrom: PropTypes.number,
 	lineTo: PropTypes.number,
 	maxLine: PropTypes.number.isRequired,
-	toggleVersion: PropTypes.func.isRequired,
-	toggleHighlighting: PropTypes.func.isRequired,
+	// toggleHighlighting: PropTypes.func.isRequired,
 
 	// requiered if editor:
 	disableEdit: PropTypes.bool,
 	selectedLineFrom: PropTypes.number,
 	selectedLineTo: PropTypes.number,
-	updateSelectedLines: PropTypes.func,
+	updateSelectedLemma: PropTypes.func,
 	editor: PropTypes.bool,
 	textNodesQuery: PropTypes.object,
 	editionsQuery: PropTypes.object,
@@ -131,7 +130,7 @@ ContextPanelContent.defaultProps = {
 	disableEdit: false,
 	selectedLineFrom: 0,
 	selectedLineTo: 0,
-	updateSelectedLines: null,
+	updateSelectedLemma: null,
 	editor: false,
 };
 

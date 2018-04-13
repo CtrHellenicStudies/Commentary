@@ -15,9 +15,11 @@ const ContextPanelContentContainer = props => {
 
 	let textNodes = [];
 	let versionsWithText = [];
-	// let translationsWithText = [];
+	let translationsWithText = [];
 	let selectedLemmaVersion = null;
+	let selectedLemmaTranslation = null;
 	let selectedLemmaVersionIndex = 0;
+	let selectedLemmaTranslationIndex = 0;
 	let multiline = false;
 
 	if (
@@ -34,7 +36,7 @@ const ContextPanelContentContainer = props => {
 	if (textNodes && textNodes.length) {
 		const allVersions = Utils.textFromTextNodesGroupedByVersion(textNodes);
 		versionsWithText = allVersions.versions;
-		// translationsWithText = allVersions.translations;
+		translationsWithText = allVersions.translations;
 	}
 
 	// if necessary, parse versions into multiline data
@@ -47,14 +49,17 @@ const ContextPanelContentContainer = props => {
 	if (
 		versionsWithText.length
 		&& versionsWithText[selectedLemmaVersionIndex]
+		&& versionsWithText[selectedLemmaTranslationIndex]
 	) {
 		selectedLemmaVersion = versionsWithText[selectedLemmaVersionIndex];
+		selectedLemmaTranslation = versionsWithText[selectedLemmaTranslationIndex];
 	}
 
 	return (
 		<ContextPanelContent
 			{...props}
 			selectedLemmaVersion={selectedLemmaVersion}
+			selectedLemmaTranslation={selectedLemmaTranslation}
 		/>
 	);
 }

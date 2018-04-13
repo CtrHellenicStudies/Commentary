@@ -311,6 +311,7 @@ const Utils = {
 						location: textNode.location,
 						index: textNode.index,
 					});
+
 				} else {
 					// add default version
 					versions.push({
@@ -325,6 +326,7 @@ const Utils = {
 						}],
 						// TODO add multiLine support to version with : textNode.version.multiLine
 					});
+
 				}
 				// pass
 				return;
@@ -338,6 +340,7 @@ const Utils = {
 			if (textNodeVersion) {
 				textNodeVersion.textNodes.push({
 					id: textNode.id,
+					urn: textNode.urn,
 					text: textNode.text,
 					location: textNode.location,
 					index: textNode.index,
@@ -346,6 +349,7 @@ const Utils = {
 			} else if (textNodeTranslation) {
 				textNodeTranslation.textNodes.push({
 					id: textNode.id,
+					urn: textNode.urn,
 					text: textNode.text,
 					location: textNode.location,
 					index: textNode.index,
@@ -357,6 +361,7 @@ const Utils = {
 					language: textNode.language,
 					textNodes: [{
 						id: textNode.id,
+						urn: textNode.urn,
 						text: textNode.text,
 						location: textNode.location,
 						index: textNode.index,

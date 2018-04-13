@@ -158,7 +158,7 @@ class ContextPanel extends Component {
 	render() {
 		const {
 			open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom,
-			selectedLineTo, updateSelectedLines, editor, multiline, textNodes, filters,
+			selectedLineTo, updateSelectedLemma, editor, multiline, textNodes, filters,
 		} = this.props;
 
 		const {
@@ -189,7 +189,7 @@ class ContextPanel extends Component {
 				textNodes={textNodes}
 				selectedLineFrom={selectedLineFrom}
 				selectedLineTo={selectedLineTo}
-				updateSelectedLines={updateSelectedLines}
+				updateSelectedLemma={updateSelectedLemma}
 				onBeforeClicked={this.onBeforeClicked}
 				onAfterClicked={this.onAfterClicked}
 				editor={editor}
@@ -209,7 +209,7 @@ ContextPanel.propTypes = {
 	disableEdit: PropTypes.bool,
 	selectedLineFrom: PropTypes.number,
 	selectedLineTo: PropTypes.number,
-	updateSelectedLines: PropTypes.func,
+	updateSelectedLemma: PropTypes.func,
 	editor: PropTypes.bool,
 	lineFrom: PropTypes.number,
 	multiline: PropTypes.string,
@@ -223,7 +223,7 @@ ContextPanel.defaultProps = {
 	disableEdit: false,
 	selectedLineFrom: 0,
 	selectedLineTo: 0,
-	updateSelectedLines: null,
+	updateSelectedLemma: null,
 	editor: false,
 };
 

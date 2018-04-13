@@ -8,16 +8,19 @@ query textNodesQuery($textNodesUrn: CtsUrn!) {
 		text
 		location
 		urn
+
 		version {
 			id
 			title
 			slug
 		}
+
 		translation {
 			id
 			title
 			slug
 		}
+
 		language {
 			id
 			title

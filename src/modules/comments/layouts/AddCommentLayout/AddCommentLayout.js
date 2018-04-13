@@ -215,7 +215,9 @@ class AddCommentLayout extends Component {
 	}
 
 	updatetextNodesUrn(urn) {
-		this.setState({textNodesUrn: urn});
+		this.setState({
+			textNodesUrn: urn,
+		});
 	}
 
 	render() {

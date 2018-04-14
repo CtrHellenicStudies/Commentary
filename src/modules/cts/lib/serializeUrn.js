@@ -61,7 +61,7 @@ const serializeUrn = (value, type) => {
 		} else {
 			result = `${result}${value.passageFrom[0].join('.')}`;
 			if (
-					'passageTo' in value
+				'passageTo' in value
 				&& value.passageTo
 				&& value.passageTo.length
 				&& value.passageFrom[0].join('.') !== value.passageTo[0].join('.')

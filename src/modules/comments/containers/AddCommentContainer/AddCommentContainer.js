@@ -176,7 +176,7 @@ class AddCommentContainer extends Component {
 									selectedLemmaCitation={selectedLemmaCitation}
 									textNodesUrn={getSelectedLemmaUrn(selectedLemmaCitation)}
 							  />
-							: ''}
+								: ''}
 
 							<AddComment
 								selectedLemmaCitation={selectedLemmaCitation}

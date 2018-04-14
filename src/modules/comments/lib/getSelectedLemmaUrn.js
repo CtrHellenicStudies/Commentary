@@ -2,6 +2,7 @@ import serializeUrn from '../../cts/lib/serializeUrn';
 
 
 const getSelectedLemmaUrn = selectedLemma => {
+	console.log(selectedLemma);
 	const lemmaCitation = Object.assign({}, selectedLemma.passageFrom);
 
 	delete lemmaCitation.passage;

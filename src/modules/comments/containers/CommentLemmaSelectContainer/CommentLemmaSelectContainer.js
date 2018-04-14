@@ -2,7 +2,6 @@ import React from 'react';
 import { compose } from 'react-apollo';
 
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
-import { editionsQuery } from '../../../../graphql/methods/editions';
 
 import CommentLemmaSelect from '../../components/CommentLemmaSelect/CommentLemmaSelect';
 
@@ -29,14 +28,6 @@ const CommentLemmaSelectContainer = props => {
 		textNodes = props.textNodesQuery.textNodes;
 	}
 
-	console.log('######')
-	console.log('######')
-	console.log('######')
-	console.log(props);
-	console.log('######')
-	console.log('######')
-	console.log('######')
-
 
 	// TODO: potentially structure data from backend to prevent this transformation
 	// in the future
@@ -60,7 +51,7 @@ const CommentLemmaSelectContainer = props => {
 		&& versionsWithText[selectedLemmaTranslationIndex]
 	) {
 		selectedLemmaVersion = versionsWithText[selectedLemmaVersionIndex];
-		selectedLemmaTranslation = versionsWithText[selectedLemmaTranslationIndex];
+		selectedLemmaTranslation = translationsWithText[selectedLemmaTranslationIndex];
 	}
 
 

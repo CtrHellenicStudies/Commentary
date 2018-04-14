@@ -1,136 +1,45 @@
-import React, { Component } from 'react';
-import { compose } from 'react-apollo';
-import TextField from 'material-ui/TextField';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-// graphql
-import { editionsQuery } from '../../../../graphql/methods/editions';
+
+const CommentLemmaSelect = ({ selectedLemmaVersion, selectedLemmaCitation }) => {
+
+	console.log('#####')
+	console.log('#####')
+	console.log('#####')
+	console.log(selectedLemmaVersion);
+	console.log('#####')
+	console.log('#####')
 
 
-class CommentLemmaSelect extends Component {
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			selectedLemmaVersion: '',
-			lineLetterValue: '',
-		};
-		this.onLineLetterValueChange = this.onLineLetterValueChange.bind(this);
-		this.toggleEdition = this.toggleEdition.bind(this);
-
-	}
-
-	areQueriesStillLoadingOrTextNodesFromParent(props) {
-		let ret = false;
-		if(!props.textNodes) {
-			ret = true;
-		} else if (props.editionsQuery.loading &&
-			!(props.lineFrom !== this.props.lineFrom
-			|| props.lineTo !== this.props.lineTo)) {
-			ret = true;
-		}
-		return ret;
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (this.areQueriesStillLoadingOrTextNodesFromParent(nextProps)) {
-			return;
-		}
-
-		const editions = nextProps.textNodes;
-
-		this.setState({
-			// lemmaText: editions,
-			selectedLemmaVersion: editions[0],
-		});
-	}
-	onLineLetterValueChange(event) {
-		this.setState({
-			lineLetterValue: event.target.value,
-		});
-	}
-
-	toggleEdition(editionSlug) {
-		if (this.state.selectedLemmaVersion !== editionSlug) {
-			this.setState({
-				selectedLemmaVersion: editionSlug,
-			});
-		}
-	}
-	render() {
-		const self = this;
-		const { selectedLemmaVersion } = this.state;
-
-		console.log('#####')
-		console.log('#####')
-		console.log('#####')
-		console.log(selectedLemmaVersion);
-		console.log('#####')
-		console.log('#####')
-
-
-		return (
-			<div className="comments lemma-panel-visible">
-				<div className="comment-outer comment-lemma-comment-outer">
-					{selectedLemmaVersion && selectedLemmaVersion.textNodes ?
-						<article className="comment lemma-comment paper-shadow">
-							{selectedLemmaVersion.lines.map((line, i) => (
-								<p
-									key={i}
-									className="lemma-text"
-									dangerouslySetInnerHTML={{ __html: line.html }}
-								/>
-							))}
-
-							{self.props.lineTo === 0 ?
-								<div>
-									<TextField
-										name="lineLetter"
-										id="lineLetter"
-										required={false}
-										floatingLabelText="Line letter..."
-										value={this.state.lineLetterValue}
-										onChange={this.onLineLetterValueChange}
-									/>
-								</div>
-								:
-								''
-							}
-							{/*
-								<div className="version-tabs tabs">
-									{this.state.lemmaText.map((lemmaTextEdition, i) => {
-										const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
-
-										return (<RaisedButton
-											key={i}
-											label={lemmaEditionTitle}
-											data-edition={lemmaTextEdition.title}
-											className={self.state.selectedLemmaVersion.slug === lemmaTextEdition.slug ?
-											'version-tab tab selected-version-tab' : 'version-tab tab'}
-											onClick={self.toggleEdition.bind(null, lemmaTextEdition.slug)}
-										/>);
-									})}
-								</div>
-							*/}
-
-							<div className="context-tabs tabs" />
-						</article>
-						:
-						<article className="comment lemma-comment paper-shadow">
-							<p className="lemma-text no-lines-selected">No line(s) selected</p>
-						</article>
-					}
-				</div>
+	return (
+		<div className="comments lemma-panel-visible">
+			<div className="comment-outer comment-lemma-comment-outer">
+				{selectedLemmaVersion && selectedLemmaVersion.textNodes ?
+					<article className="comment lemma-comment paper-shadow">
+						{selectedLemmaVersion.textNodes.map((textNode, i) => (
+							<p
+								key={i}
+								className="lemma-text"
+								dangerouslySetInnerHTML={{ __html: textNode.text }}
+							/>
+						))}
+						<div className="context-tabs tabs" />
+					</article>
+					:
+					<article className="comment lemma-comment paper-shadow">
+						<p className="lemma-text no-lines-selected">No line(s) selected</p>
+					</article>
+				}
 			</div>
-		);
-	}
+		</div>
+	);
 }
 
 CommentLemmaSelect.propTypes = {
-	textNodes: PropTypes.array,
-	editionsQuery: PropTypes.object,
+	selectedLemmaCitation: PropTypes.object,
+	selectedLemmaVersion: PropTypes.object,
+	selectedLemmaTranslation: PropTypes.object,
 };
 
-export default compose(
-	editionsQuery
-)(CommentLemmaSelect);
+export default CommentLemmaSelect;

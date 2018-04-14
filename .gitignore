@@ -20,6 +20,7 @@ coverage
 dump.rdb
 doc
 .env*.local
+build
 
 # Temp files
 tmp/

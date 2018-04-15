@@ -1,17 +1,3 @@
-
-/*
-	HOW TO USE:
-
-	1. Used to show selected lines for commentGroup:
-	- props to be set:
-
-
-	2. Used to select lines to be commented in editor:
-	- props to be set:
-
-
-*/
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
@@ -42,7 +28,9 @@ function setLemmaCitation(commentGroup, _lemmaCitation) {
 	}
 	return lemmaCitation;
 }
+
 const LINE_THRESHOLD = 25;
+
 
 
 class ContextPanel extends Component {

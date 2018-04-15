@@ -32,6 +32,7 @@ const styles = {
 		width: 'auto',
 		minWidth: 'none',
 		height: '80px',
+		lineHeight: '1.3em',
 		padding: '25px 5px',
 	},
 	flatIconButton: {

@@ -15,7 +15,7 @@ const NavBarHeader = ({ dispatchToggleLeftMenu, leftMenuOpen }) => (
 		/>
 		<Link to="/">
 			<h2 className="site-title">
-				chs.harvard.edu [alpha]
+				The Center for Hellenic Studies
 			</h2>
 		</Link>
 	</div>

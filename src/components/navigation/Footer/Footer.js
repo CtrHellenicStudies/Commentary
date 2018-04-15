@@ -21,6 +21,7 @@ class Footer extends Component {
 		super(props);
 		this.state = {};
 	}
+
 	componentWillReceiveProps(props) {
 		const tenantId = sessionStorage.getItem('tenantId');
 
@@ -29,13 +30,13 @@ class Footer extends Component {
 			tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)
 		});
 	}
+
 	render() {
 		const { settings, tenant } = this.state;
 		const now = new Date();
 		const year = now.getFullYear();
 
 		return (
-
 			<footer className="block-shadow">
 				<Grid>
 					<Row>
@@ -74,39 +75,41 @@ class Footer extends Component {
 						</div>
 					</Row>
 					<Row>
-						<Col md={5}>
-							<h1 className="logo">{settings ? settings.name : undefined}</h1>
-						</Col>
+						<div className="footerLogoRow clearfix">
+							<Col md={5}>
+								<h1 className="logo">{settings ? settings.name : undefined}</h1>
+							</Col>
 
-						<Col md={2}>
-							<a href="http://chs.harvard.edu" target="_blank" rel="noopener noreferrer">
-								<img
-									className="site-logo"
-									src="/images/center_for_hellenic_studies_lighthouse.png"
-									role="presentation"
-									alt="The Center for Hellenic Studies"
-								/>
-							</a>
-						</Col>
+							<Col md={2}>
+								<a href="http://chs.harvard.edu" target="_blank" rel="noopener noreferrer">
+									<img
+										className="site-logo"
+										src="/images/center_for_hellenic_studies_lighthouse.png"
+										role="presentation"
+										alt="The Center for Hellenic Studies"
+									/>
+								</a>
+							</Col>
 
-						<Col md={5}>
-							<p className="lead">
-								For more information about the Commentary or general media inquiries,
-								please contact &nbsp;
-								<a href={settings && settings.emails ? `mailto:${settings.emails.contact}` : ''}>
-									{settings && settings.emails ? settings.emails.contact : ''}
-								</a>.
-							</p>
+							<Col md={5}>
+								<p className="lead">
+									For more information about the Commentary or general media inquiries,
+									please contact &nbsp;
+									<a href={settings && settings.emails ? `mailto:${settings.emails.contact}` : ''}>
+										{settings && settings.emails ? settings.emails.contact : ''}
+									</a>.
+								</p>
 
-							<p className="lead">
-								This website is provided by <a href="http://chs.harvard.edu" target="_blank" rel="noopener noreferrer">
-									The Center for Hellenic Studies
-								</a>.
-							</p>
-						</Col>
+								<p className="lead">
+									This website is provided by <a href="http://chs.harvard.edu" target="_blank" rel="noopener noreferrer">
+										The Center for Hellenic Studies
+									</a>.
+								</p>
+							</Col>
+						</div>
 					</Row>
 					<Row>
-						<Col md={8}>
+						<Col md={8} mdOffset={2}>
 							<p className="fade-1-4 copyright">
 								Copyright {year} The Center for Hellenic Studies.
 								See our <a href="/terms">terms and privacy policy</a>

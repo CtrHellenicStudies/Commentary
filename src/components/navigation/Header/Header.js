@@ -10,10 +10,17 @@ import { compose } from 'react-apollo';
 // actions
 import * as authActions from '../../../modules/auth/actions';
 
+
+import './Header.css';
+
+
 class Header extends Component {
 	render() {
-		const { toggleAuthModal, userId, initialSearchEnabled, workFilters,
-			 toggleSearchTerm, handlePagination, work } = this.props;
+		const {
+			toggleAuthModal, userId, initialSearchEnabled, workFilters, toggleSearchTerm,
+			handlePagination, work,
+		} = this.props;
+
 		return (
 			<div>
 				<LeftMenu />

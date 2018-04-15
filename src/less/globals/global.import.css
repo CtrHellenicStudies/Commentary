@@ -6034,18 +6034,6 @@ body > .container {
   font-style: italic;
   color: #727272;
 }
-.home-index header.headroom--top,
-.page header.headroom--top {
-  background: transparent;
-  color: #fff;
-  box-shadow: none;
-}
-.home-index header.headroom--top .site-title,
-.page header.headroom--top .site-title,
-.home-index header.headroom--top .active-comment-meta,
-.page header.headroom--top .active-comment-meta {
-  display: none;
-}
 /*
  * Styles for Dropdowns
  */

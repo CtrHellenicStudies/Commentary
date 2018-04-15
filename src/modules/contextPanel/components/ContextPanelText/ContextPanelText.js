@@ -7,26 +7,6 @@ import { parseValueUrn } from '../../../cts/lib/parseUrn';
 /*
 	BEGIN helpers
 */
-const getSelectedVersionText = (lemmaText, selectedLemmaVersion) => {
-	let selectedVersionText = { textNodes: [], slug: '', title: '' };
-	if (selectedLemmaVersion && selectedLemmaVersion.length) {
-		lemmaText.forEach((edition) => {
-			if (edition.slug === selectedLemmaVersion) {
-				selectedVersionText = edition;
-			}
-		});
-	} else if (lemmaText && lemmaText.length && lemmaText[0].length) {
-		selectedVersionText.title = lemmaText[0][0].version.title;
-		selectedVersionText.slug = lemmaText[0][0].version.slug;
-		lemmaText[0].forEach(textNode => {
-			selectedVersionText.textNodes.push({
-				n: textNode.location[0],
-				html: textNode.text,
-			});
-		});
-	}
-	return selectedVersionText;
-};
 
 const getTextNodeClass = (textNodeFrom, textNodeTo, n, highlightingVisible) => {
 	let usedLineTo = textNodeFrom;
@@ -121,10 +101,11 @@ class ContextPanelText extends Component {
 	*/
 
 	handleSelectingTextForComment(e) {
-		const target = e.target;
 		const selObj = window.getSelection();
 		const { anchorNode, extentNode, anchorOffset, extentOffset } = selObj;
 		const { updateSelectedLemma } = this.props;
+		let passageFrom;
+		let passageTo;
 
 		if (
 			!this.props.disableEdit
@@ -134,15 +115,29 @@ class ContextPanelText extends Component {
       && anchorNode.parentElement
       && extentNode.parentElement
 		) {
+			const anchorUrn = parseValueUrn(anchorNode.parentElement.dataset.urn);
+			const extentUrn = parseValueUrn(extentNode.parentElement.dataset.urn);
 
-			const selectedLemma = {
-				passageFrom: parseValueUrn(anchorNode.parentElement.dataset.urn),
-				passageTo: parseValueUrn(extentNode.parentElement.dataset.urn),
+			// Compare both the anchor and extent urn to ensure that are parsed to a
+			// single urn in the correct order
+			if (
+				anchorUrn.passage[0][anchorUrn.passage[0].length - 1] > extentUrn.passage[0][extentUrn.passage[0].length - 1]
+			) {
+				passageFrom = extentUrn;
+				passageTo =  anchorUrn;
+
+			} else {
+				passageFrom = anchorUrn;
+				passageTo = extentUrn;
+
+			}
+
+			updateSelectedLemma({
+				passageFrom,
+				passageTo,
 				subreferenceIndexFrom: anchorOffset,
 				subreferenceIndexTo: extentOffset,
-			};
-
-			updateSelectedLemma(selectedLemma);
+			});
 		}
 	}
 	/*

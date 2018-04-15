@@ -4,6 +4,7 @@ const parsePassage = (passageValue) => {
 
 	passage.forEach((delimiter) => {
 		const location = [];
+
 		delimiter.split('@').forEach((field) => {
 			field.split('.').forEach((locationItem) => {
 				if (!isNaN(parseInt(locationItem, 10))) {
@@ -13,6 +14,7 @@ const parsePassage = (passageValue) => {
 				}
 			});
 		});
+
 		resultPassage.push(location);
 	});
 
@@ -91,7 +93,7 @@ const parseValueUrn = (value) => {
 	if (typeof value === 'string') {
 		const param = {
 			kind: 'StringValue',
-			value: value
+			value,
 		};
 		return parseLiteralUrn(param);
 	}

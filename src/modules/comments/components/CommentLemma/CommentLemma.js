@@ -9,10 +9,13 @@ import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
-
 // components
 import CommentGroupMeta from './CommentGroupMeta';
 import CommentLemmaInner from './CommentLemmaInner';
+
+// lib
+import addTextNodesHighlighting from '../../lib/addTextNodesHighlighting';
+
 
 import './CommentLemma.css';
 
@@ -105,8 +108,10 @@ class CommentLemma extends Component {
 	render() {
 		const {
 			commentGroup, versions, selectedLemmaVersion, translations, hideLemma,
+			lemmaCitation,
 		} = this.props;
 		const { showTranslation } = this.state;
+		const selectedLemmaVersionWithHighlighting = addTextNodesHighlighting(selectedLemmaVersion, lemmaCitation);
 
 		return (
 			<div className="comment-outer comment-lemma-comment-outer">
@@ -123,7 +128,7 @@ class CommentLemma extends Component {
 					<CommentLemmaInner
 						commentGroup={commentGroup}
 						showTranslation={showTranslation}
-						textNodes={selectedLemmaVersion.textNodes}
+						textNodes={selectedLemmaVersionWithHighlighting.textNodes}
 					/>
 
 					<div className="version-tabs tabs">

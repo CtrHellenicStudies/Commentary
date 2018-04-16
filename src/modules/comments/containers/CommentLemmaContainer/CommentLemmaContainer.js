@@ -92,8 +92,6 @@ class CommentLemmaContainer extends React.Component {
 			selectedLemmaVersion = versionsWithText[selectedLemmaVersionIndex];
 		}
 
-
-
 		return (
 			<CommentLemma
 				commentGroup={commentGroup}
@@ -108,6 +106,7 @@ class CommentLemmaContainer extends React.Component {
 				selectMultiLine={this.props.selectMultiLine}
 				multiline={this.props.multiline}
 				toggleVersion={this.toggleVersion}
+				lemmaCitation={this.props.lemmaCitation}
 			/>
 		);
 	}

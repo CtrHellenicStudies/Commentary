@@ -52,6 +52,8 @@ class AddCommentContainer extends Component {
 	async addComment(formData, textValue, textRawValue) {
 		// get data for comment:
 		const lemmaCitation = getSelectedLemmaUrn(this.state.selectedLemmaCitation);
+		lemmaCitation.subreferenceIndexFrom = this.state.selectedLemmaCitation.subreferenceIndexFrom;
+		lemmaCitation.subreferenceIndexTo = this.state.selectedLemmaCitation.subreferenceIndexTo;
 		const revisionId = Date.now();
 
 		// get keywords after they were created:

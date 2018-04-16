@@ -2,7 +2,8 @@
  * Add the highlighting of the lemma to the input source text nodes
  */
 
-const addTextNodesHighlighting = (selectedLemmaVersion, selectedLemmaCitation) => {
+const addTextNodesHighlighting = (_selectedLemmaVersion, selectedLemmaCitation) => {
+	const selectedLemmaVersion = Object.assign({}, _selectedLemmaVersion);
 
 	if (selectedLemmaVersion.textNodes.length > 1) {
 		selectedLemmaVersion.textNodes[0].text = `

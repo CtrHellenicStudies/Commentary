@@ -28,6 +28,7 @@ class CommentGroup extends Component {
 			hideLemma: !this.state.hideLemma,
 		});
 	}
+
 	getCommentersOfComment(comment) {
 		const commenters = {};
 		comment.commenters.map((commenter) => {
@@ -36,6 +37,7 @@ class CommentGroup extends Component {
 		});
 		return commenters;
 	}
+
 	render() {
 		const { commentGroup, commentGroupIndex, contextPanelOpen, showLoginModal,
 			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm,
@@ -46,7 +48,7 @@ class CommentGroup extends Component {
 		if (contextPanelOpen) {
 			commentsClass += 'lemma-panel-visible';
 		}
-		
+
 		// TODO: use work from query
 		// let workTitle = commentGroup.lemmaCitation.work;
 
@@ -69,6 +71,7 @@ class CommentGroup extends Component {
 							multiline={multiline}
 							textNodesUrn={serializeUrn(commentGroup.lemmaCitation)}
 							workUrn={serializeUrn(commentGroup.lemmaCitation, 'work')}
+							lemmaCitation={commentGroup.lemmaCitation}
 						/>
 
 						{commentGroup.comments.map(comment => (

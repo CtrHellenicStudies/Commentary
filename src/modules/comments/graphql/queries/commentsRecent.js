@@ -26,6 +26,8 @@ query commentsRecent($queryParam: String) {
 			work
 			textGroup
 			ctsNamespace
+			subreferenceIndexFrom
+			subreferenceIndexTo
 		}
 		updated
 		created

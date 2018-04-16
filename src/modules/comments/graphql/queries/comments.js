@@ -72,6 +72,8 @@ query commentsQuery($queryParam: String $skip: Int $limit: Int $sortRecent: Bool
 			work
 			textGroup
 			ctsNamespace
+			subreferenceIndexFrom
+			subreferenceIndexTo
 		}
 		updated
 	}

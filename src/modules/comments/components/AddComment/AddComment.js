@@ -14,6 +14,7 @@ import Select from 'react-select';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import update from 'immutability-helper';
+import autoBind from 'react-autobind';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
@@ -30,6 +31,7 @@ import Utils from '../../../../lib/utils';
 import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
 import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/ReferenceWork';
+
 
 import './AddComment.css';
 
@@ -58,33 +60,7 @@ class AddComment extends Component {
 			ready: false
 		};
 
-		// methods:
-		this._enableButton = this._enableButton.bind(this);
-		this._disableButton = this._disableButton.bind(this);
-		this.onTitleChange = this.onTitleChange.bind(this);
-		this.onTextChange = this.onTextChange.bind(this);
-		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.showSnackBar = this.showSnackBar.bind(this);
-		this.validateStateForSubmit = this.validateStateForSubmit.bind(this);
-		this.addTagBlock = this.addTagBlock.bind(this);
-		this.removeTagBlock = this.removeTagBlock.bind(this);
-		this.moveTagBlock = this.moveTagBlock.bind(this);
-		this.onTagValueChange = this.onTagValueChange.bind(this);
-		this.onIsMentionedInLemmaChange = this.onIsMentionedInLemmaChange.bind(this);
-		this.selectTagType = this.selectTagType.bind(this);
-		this.addNewTag = this.addNewTag.bind(this);
-		this.addNewReferenceWork = this.addNewReferenceWork.bind(this);
-		this.updateReferenceWorks = this.updateReferenceWorks.bind(this);
-		this.getCommentersForUser = this.getCommentersForUser.bind(this);
-		this.filterCommentersForUser = this.filterCommentersForUser.bind(this);
-
-		const properties = {
-			tenantId: sessionStorage.getItem('tenantId')
-		};
-		this.props.commentersQuery.refetch(properties);
-		this.props.referenceWorksQuery.refetch(properties);
-		this.props.keywordsQuery.refetch(properties);
+		autoBind(this);
 	}
 
 	_enableButton() {
@@ -98,13 +74,14 @@ class AddComment extends Component {
 			canSubmit: false,
 		});
 	}
+
 	updateReferenceWorks(referenceWorks) {
 		this.setState({
 			referenceWorks: referenceWorks
 		});
 	}
-	// --- BEGIN FORM HANDLE --- //
 
+	// --- BEGIN FORM HANDLE --- //
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
 		const title = $(titleHtml).text();
@@ -121,16 +98,15 @@ class AddComment extends Component {
 			textValue: textHtml,
 		});
 	}
+
 	onCommenterValueChange(commenter) {
 		this.setState({
 			commenterValue: commenter,
 		});
 	}
-
 	// --- END FORM HANDLE --- //
 
 	// --- BEGIN SUBMIT / VALIDATION HANDLE --- //
-
 	handleSubmit() {
 		const { textEditorState } = this.state;
 
@@ -153,6 +129,7 @@ class AddComment extends Component {
 			textRaw
 		);
 	}
+
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: true,
@@ -172,18 +149,22 @@ class AddComment extends Component {
 			errors = true;
 			errorMessage += ' title,';
 		}
+
 		if (this.state.textValue === '<p><br></p>' || !this.state.textValue) {
 			errors = true;
 			errorMessage += ' comment text,';
 		}
+
 		if (!this.state.commenterValue) {
 			errors = true;
 			errorMessage += ' no commenter selected,';
 		}
+
 		if (errors === true) {
 			errorMessage = errorMessage.slice(0, -1);
 			errorMessage = new Error('data-missing', 'Missing comment data:'.concat(errorMessage, '.'));
 		}
+
 		return errorMessage;
 	}
 
@@ -223,7 +204,8 @@ class AddComment extends Component {
 		const { tags } = this.state;
 		const { tagsValue } = this.state;
 		let _selectedKeyword;
-		if (tag)			{
+
+		if (tag) {
 			tags.forEach(_tag => {
 				if (_tag._id === tag.value) {
 					_selectedKeyword = _tag;
@@ -251,11 +233,12 @@ class AddComment extends Component {
 	}
 
 	selectTagType(tagId, event, index) {
-
 		const currentTags = this.state.tagsValue;
+
 		this.setState({
 			tagsValue: event.target.value
 		});
+
 		const newKeyword = {};
 		for (const [key, value] of Object.entries(currentTags[index].keyword)) {
 			if (key === 'type') {
@@ -264,15 +247,16 @@ class AddComment extends Component {
 				newKeyword[key] = value;
 			}
 		}
+
 		currentTags[index].keyword = newKeyword;
 		this.setState({
 			tagsValue: currentTags
 		});
+
 		this.props.keywordUpdate(tagId, newKeyword);
 	}
 
 	addNewTag(tag) {
-
 		const keyword = {
 			title: tag.value,
 			slug: slugify(tag.value.toLowerCase()),
@@ -280,14 +264,17 @@ class AddComment extends Component {
 			count: 1,
 			tenantId: sessionStorage.getItem('tenantId'),
 		};
+
 		this.props.keywordInsert(keyword);
 	}
+
 	addNewReferenceWork(reference) {
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
 			tenantId: sessionStorage.getItem('tenantId')
 		};
+
 		this.props.referenceWorkCreate(_reference).then(err => {
 			if (err) {
 				this.showSnackBar(err);
@@ -296,9 +283,11 @@ class AddComment extends Component {
 			}
 		});
 	}
+
 	getCommentersForUser(_commenters) {
 		const commentersOptions = [];
 		const { commenters } = this.props;
+
 		_commenters.forEach((commenter) => {
 			if (!commentersOptions.some(val => (
 				commenter._id === val.value
@@ -311,11 +300,14 @@ class AddComment extends Component {
 				}
 			}
 		});
+
 		return commentersOptions;
 	}
+
 	filterCommentersForUser(_commenters) {
 		const commentersOptions = [];
 		const { commenters } = this.props;
+
 		_commenters.forEach((commenter) => {
 			if (!commentersOptions.some(val => (
 				commenter._id === val._id
@@ -325,25 +317,24 @@ class AddComment extends Component {
 				}
 			}
 		});
-		return commentersOptions;
-	}
 
-	// --- END SUBMIT / VALIDATION HANDLE --- //
-	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
+		return commentersOptions;
 	}
 
 	componentWillReceiveProps(newProps) {
 		const ready = !newProps.keywordsQuery.loading && !newProps.referenceWorksQuery.loading && !newProps.commentersQuery.loading;
+
 		if (!ready && this.state.ready) {
 			this.setState({
 				ready: false
 			});
 			return;
 		}
+
 		const { commenters } = this.props;
 		let _commenters = [];
 		const tags = newProps.keywordsQuery.keywords;
+
 		if (
 			commenters
 			&& newProps.commentersQuery
@@ -352,9 +343,11 @@ class AddComment extends Component {
 			_commenters = newProps.commentersQuery.commenters.filter(x =>
 				commenters.find(y => y === x._id));
 		}
+
 		const commentersOptions = this.getCommentersForUser(_commenters);
 		const referenceWorks = newProps.referenceWorksQuery.referenceWorks ? newProps.referenceWorksQuery.referenceWorks : [];
 		const referenceWorkOptions = [];
+
 		referenceWorks.forEach((referenceWork) => {
 			if (!referenceWorkOptions.some(val => (
 				referenceWork.slug === val.slug

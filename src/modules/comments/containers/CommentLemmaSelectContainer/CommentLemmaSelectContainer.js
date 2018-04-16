@@ -54,6 +54,13 @@ const CommentLemmaSelectContainer = props => {
 		selectedLemmaTranslation = translationsWithText[selectedLemmaTranslationIndex];
 	}
 
+	if (
+		!selectedLemmaVersion
+		|| !'textNodes' in selectedLemmaVersion
+	) {
+		return null;
+	}
+
 
 	return (
 		<CommentLemmaSelect

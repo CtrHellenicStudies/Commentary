@@ -233,7 +233,7 @@ class CommentarySearchToolbar extends Component {
 */
 
 CommentarySearchToolbar.propTypes = {
-	filters: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
+	filters: PropTypes.any, // eslint-disable-line react/forbid-prop-types
 	toggleSearchTerm: PropTypes.func,
 	handleChangeTextsearch: PropTypes.func,
 	handlePagination: PropTypes.func,
@@ -251,6 +251,7 @@ CommentarySearchToolbar.defaultProps = {
 	commenters: [],
 	referenceWorks: [],
 	works: [],
+	filters: [],
 	handleChangeTextsearch: null,
 }
 

@@ -2,39 +2,32 @@ import React, { Component } from 'react';
 import { compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
+import qs from 'qs-lite';
+import slugify from 'slugify';
+import { withRouter } from 'react-router';
 
-import Utils from '../../../../lib/utils';
 import Header from '../../../../components/navigation/Header/Header';
 
 // components
-import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 import AddComment from '../../components/AddComment/AddComment';
 import CommentLemmaSelectContainer from '../CommentLemmaSelectContainer';
 
 // graphql
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
+import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
+import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
+import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
+import keywordInsertMutation from '../../../keywords/graphql/mutations/keywordsInsert';
+import keywordUpdateMutation from '../../../keywords/graphql/mutations/keywordsUpdate';
+import commentsInsertMutation from '../../graphql/mutations/insert';
 
 // lib
 import getSelectedLemmaUrn from '../../lib/getSelectedLemmaUrn';
-
-
-
-const getFilterValues = (filters) => {
-	const filterValues = {};
-
-	filters.forEach((filter) => {
-		if (filter.key === 'works') {
-			filterValues.work = filter.values[0];
-		} else if (filter.key === 'lineTo') {
-			filterValues.lineTo = filter.values[0];
-		} else if (filter.key === 'lineFrom') {
-			filterValues.lineFrom = filter.values[0];
-		}
-	});
-
-	return filterValues;
-};
+import getSelectOptionsFromCommentFormData from '../../lib/getSelectOptionsFromCommentFormData';
+import getNLinesFromLemmaCitation from '../../lib/getNLinesFromLemmaCitation';
+import serializeUrn from '../../../cts/lib/serializeUrn';
 
 
 class AddCommentContainer extends Component {
@@ -42,129 +35,119 @@ class AddCommentContainer extends Component {
 		super(props);
 		this.state = {
 			selectedLemmaCitation: null,
-			filters: [],
 		};
 
 		autoBind(this);
-	}
-
-	componentWillReceiveProps(props) {
-		this.setState({
-			textNodes: props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes
-		});
 	}
 
 	updateSelectedLemma(selectedLemmaCitation) {
 		this.setState({ selectedLemmaCitation });
 	}
 
-	toggleSearchTerm(key, value) {
-		const { filters } = this.state;
+	handlePagination(textNodesUrn) {
 
-		let keyIsInFilter = false;
-		let valueIsInFilter = false;
-		let filterValueToRemove;
-		let filterToRemove;
-
-		filters.forEach((filter, i) => {
-			if (filter.key === key) {
-				keyIsInFilter = true;
-
-				filter.values.forEach((filterValue, j) => {
-					if (filterValue._id === value._id) {
-						valueIsInFilter = true;
-						filterValueToRemove = j;
-					}
-				});
-
-				if (valueIsInFilter) {
-					filter.values.splice(filterValueToRemove, 1);
-					if (filter.values.length === 0) {
-						filterToRemove = i;
-					}
-				} else if (key === 'works') {
-					filters[i].values = [value];
-				} else {
-					filters[i].values.push(value);
-				}
-			}
-		});
-
-
-		if (typeof filterToRemove !== 'undefined') {
-			filters.splice(filterToRemove, 1);
-		}
-
-		if (!keyIsInFilter) {
-			filters.push({
-				key,
-				values: [value],
-			});
-		}
-
-		this.setState({
-			filters,
-			skip: 0,
-		});
+		this.props.updateTextNodesUrn(textNodesUrn);
 	}
 
-	getWork() {
-		let work = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			}
-		});
-		if (!work) {
-			work = {
-				title: 'Iliad',
-				slug: '001',
-				order: 1,
-			};
-		}
-		return work;
-	}
+	async addComment(formData, textValue, textRawValue) {
+		// get data for comment:
+		const lemmaCitation = getSelectedLemmaUrn(this.state.selectedLemmaCitation);
+		const revisionId = Date.now();
 
-	handlePagination(book, chapter) {
-		const { filters } = this.state;
-		const work = this.getWork();
+		// get keywords after they were created:
+		const { keywords, referenceWorks, commenters } = getSelectOptionsFromCommentFormData(formData);
 
-		filters.edition = book;
-		filters.chapter = chapter;
+		// create comment object to be inserted:
+		const comment = {
+			lemmaCitation,
+			nLines: getNLinesFromLemmaCitation(lemmaCitation),
+			revisions: [{
+				_id: revisionId.valueOf(),
+				title: formData.titleValue,
+				text: textValue,
+				textRaw: textRawValue,
+				created: referenceWorks ? referenceWorks.date : new Date(),
+				slug: slugify(formData.titleValue),
+			}],
+			commenters,
+			keywords,
+			referenceWorks,
+			tenantId: sessionStorage.getItem('tenantId'),
+			status: 'publish',
+		};
 
-		this.setState({
-			filters,
-		});
-		let properties;
-		if (work) {
-			properties = {
-				workUrn: work.urn,
-				textNodesUrn: `${work.urn}:${chapter - 1}.1-${chapter}.1`
-			}
+		const res = await this.props.commentInsert(comment);
+
+		if (res.data.commentInsert._id) {
+			const urlParams = qs.stringify({_id: res.data.commentInsert._id});
+			this.props.history.push(`/commentary?${urlParams}`);
 		} else {
-			properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation('tlg001', 1, 1, chapter - 1, chapter));
+			this.props.history.push(`/`);
 		}
-		this.props.updatetextNodesUrn(properties.textNodesUrn);
 	}
 
 	render() {
 
-		const {
-			selectedLemmaCitation, selectedTextNodes, filters, contextReaderOpen,
-			textNodes,
-		} = this.state;
-		const { textNodesUrn, submitForm } = this.props;
-		const { work } = getFilterValues(filters);
+		const { selectedLemmaCitation, contextReaderOpen } = this.state;
+		const { textNodesUrn } = this.props;
 
+		let textNodes = [];
+		let commenterOptions = [];
+		let referenceWorkOptions = [];
+		let keywordOptions = [];
 
-		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
+		if (
+			this.props.textNodesQuery
+			&& this.props.textNodesQuery.textNodes
+		) {
+			textNodes = this.props.textNodesQuery.textNodes;
+		}
+
+		if (
+			this.props.commentersQuery
+			&& this.props.commentersQuery.commenters
+		) {
+			this.props.commentersQuery.commenters.forEach(commenter => {
+				commenterOptions.push({
+					value: commenter._id,
+					label: commenter.name,
+					slug: commenter.slug,
+				});
+			});
+		}
+
+		if (
+			this.props.referenceWorksQuery
+			&& this.props.referenceWorksQuery.referenceWorks
+		) {
+			this.props.referenceWorksQuery.referenceWorks.forEach(referenceWork => {
+				referenceWorkOptions.push({
+					value: referenceWork._id,
+					label: referenceWork.title,
+					slug: referenceWork.slug,
+				});
+			});
+		}
+
+		if (
+			this.props.keywordsQuery
+			&& this.props.keywordsQuery.keywords
+		) {
+			this.props.keywordsQuery.keywords.forEach(keyword => {
+				keywordOptions.push({
+					value: keyword._id,
+					label: keyword.title,
+					slug: keyword.slug,
+				});
+			});
+		}
+
 
 		return (
 			<div>
 				<Header
-					toggleSearchTerm={this.toggleSearchTerm}
+					toggleSearchTerm={() => {}}
 					handlePagination={this.handlePagination}
-					workFilters={this.state.filters}
 					initialSearchEnabled
 					addCommentPage
 				/>
@@ -174,20 +157,24 @@ class AddCommentContainer extends Component {
 							{(selectedLemmaCitation && 'passageFrom' in selectedLemmaCitation) ?
 								<CommentLemmaSelectContainer
 									selectedLemmaCitation={selectedLemmaCitation}
-									textNodesUrn={getSelectedLemmaUrn(selectedLemmaCitation)}
+									textNodesUrn={serializeUrn(getSelectedLemmaUrn(selectedLemmaCitation))}
 							  />
-								: ''}
+								:
+								''}
 
 							<AddComment
-								selectedLemmaCitation={selectedLemmaCitation}
-								submitForm={submitForm}
-								work={work}
+								addComment={this.addComment}
+								commenterOptions={commenterOptions}
+								referenceWorkOptions={referenceWorkOptions}
+								keywordOptions={keywordOptions}
+								referenceWorkCreate={this.props.referenceWorkCreate}
+								keywordInsert={this.props.keywordInsert}
+								keywordUpdate={this.props.keywordUpdate}
 						  />
 						</div>
 
 						<ContextPanel
 							open={contextReaderOpen}
-							filters={filters}
 							selectedLemmaCitation={selectedLemmaCitation}
 							updateSelectedLemma={this.updateSelectedLemma}
 							textNodes={textNodes}
@@ -195,11 +182,6 @@ class AddCommentContainer extends Component {
 							editor
 					  />
 					</div>
-
-					<FilterWidget
-						filters={filters}
-						toggleSearchTerm={this.toggleSearchTerm}
-				  />
 				</main>
 			</div>
 		);
@@ -211,4 +193,14 @@ AddCommentContainer.props = {
 	textNodesQuery: PropTypes.func
 };
 
-export default compose(textNodesQuery)(AddCommentContainer);
+export default compose(
+	textNodesQuery,
+	commentersQuery,
+	referenceWorkCreateMutation,
+	referenceWorksQuery,
+	keywordsQuery,
+	keywordInsertMutation,
+	keywordUpdateMutation,
+	commentsInsertMutation,
+	withRouter,
+)(AddCommentContainer);

@@ -9,22 +9,14 @@ import Snackbar from 'material-ui/Snackbar';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 
-import Formsy from 'formsy-react';
+import { Form } from 'formsy-react';
 import Select from 'react-select';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import update from 'immutability-helper';
 import autoBind from 'react-autobind';
 
-// graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
-import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
-import keywordInsertMutation from '../../../keywords/graphql/mutations/keywordsInsert';
-import keywordUpdateMutation from '../../../keywords/graphql/mutations/keywordsUpdate';
-
-// lib:
+// lib
 import Utils from '../../../../lib/utils';
 
 // components
@@ -36,9 +28,6 @@ import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/Refe
 import './AddComment.css';
 
 
-/*
- *	BEGIN AddComment
- */
 class AddComment extends Component {
 
 	constructor(props) {
@@ -48,11 +37,11 @@ class AddComment extends Component {
 			titleEditorState: EditorState.createEmpty(),
 			textEditorState: EditorState.createEmpty(),
 
-			commenterValue: null,
 			titleValue: '',
 			textValue: '',
-			referenceWorks: [],
 
+			commentersValue: [],
+			referenceWorksValue: [],
 			tagsValue: [],
 
 			snackbarOpen: false,
@@ -76,15 +65,16 @@ class AddComment extends Component {
 	}
 
 	updateReferenceWorks(referenceWorks) {
+
 		this.setState({
-			referenceWorks: referenceWorks
+			referenceWorks,
 		});
 	}
 
-	// --- BEGIN FORM HANDLE --- //
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
 		const title = $(titleHtml).text();
+
 		this.setState({
 			titleEditorState,
 			titleValue: title,
@@ -93,6 +83,7 @@ class AddComment extends Component {
 
 	onTextChange(textEditorState) {
 		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
+
 		this.setState({
 			textEditorState,
 			textValue: textHtml,
@@ -101,12 +92,10 @@ class AddComment extends Component {
 
 	onCommenterValueChange(commenter) {
 		this.setState({
-			commenterValue: commenter,
+			commentersValue: commenter,
 		});
 	}
-	// --- END FORM HANDLE --- //
 
-	// --- BEGIN SUBMIT / VALIDATION HANDLE --- //
 	handleSubmit() {
 		const { textEditorState } = this.state;
 
@@ -122,9 +111,8 @@ class AddComment extends Component {
 		const textHtml = Utils.getHtmlFromContext(textEditorState.getCurrentContent());
 		const textRaw = convertToRaw(textEditorState.getCurrentContent());
 
-		this.props.submitForm(
+		this.props.addComment(
 			this.state,
-			this.filterCommentersForUser(this.props.commentersQuery.commenters),
 			textHtml,
 			textRaw
 		);
@@ -155,7 +143,7 @@ class AddComment extends Component {
 			errorMessage += ' comment text,';
 		}
 
-		if (!this.state.commenterValue) {
+		if (!this.state.commentersValue) {
 			errors = true;
 			errorMessage += ' no commenter selected,';
 		}
@@ -284,97 +272,14 @@ class AddComment extends Component {
 		});
 	}
 
-	getCommentersForUser(_commenters) {
-		const commentersOptions = [];
-		const { commenters } = this.props;
-
-		_commenters.forEach((commenter) => {
-			if (!commentersOptions.some(val => (
-				commenter._id === val.value
-			))) {
-				if (commenters.find(x => x === commenter._id) !== undefined) {
-					commentersOptions.push({
-						value: commenter._id,
-						label: commenter.name,
-					});
-				}
-			}
-		});
-
-		return commentersOptions;
-	}
-
-	filterCommentersForUser(_commenters) {
-		const commentersOptions = [];
-		const { commenters } = this.props;
-
-		_commenters.forEach((commenter) => {
-			if (!commentersOptions.some(val => (
-				commenter._id === val._id
-			))) {
-				if (commenters.find(x => x === commenter._id) !== undefined) {
-					commentersOptions.push(commenter);
-				}
-			}
-		});
-
-		return commentersOptions;
-	}
-
-	componentWillReceiveProps(newProps) {
-		const ready = !newProps.keywordsQuery.loading && !newProps.referenceWorksQuery.loading && !newProps.commentersQuery.loading;
-
-		if (!ready && this.state.ready) {
-			this.setState({
-				ready: false
-			});
-			return;
-		}
-
-		const { commenters } = this.props;
-		let _commenters = [];
-		const tags = newProps.keywordsQuery.keywords;
-
-		if (
-			commenters
-			&& newProps.commentersQuery
-			&& newProps.commentersQuery.commenters
-		) {
-			_commenters = newProps.commentersQuery.commenters.filter(x =>
-				commenters.find(y => y === x._id));
-		}
-
-		const commentersOptions = this.getCommentersForUser(_commenters);
-		const referenceWorks = newProps.referenceWorksQuery.referenceWorks ? newProps.referenceWorksQuery.referenceWorks : [];
-		const referenceWorkOptions = [];
-
-		referenceWorks.forEach((referenceWork) => {
-			if (!referenceWorkOptions.some(val => (
-				referenceWork.slug === val.slug
-			))) {
-				referenceWorkOptions.push({
-					value: referenceWork._id,
-					label: referenceWork.title,
-					slug: referenceWork.slug,
-				});
-			}
-		});
-
-		this.setState({
-			ready: true,
-			referenceWorkOptions: referenceWorkOptions,
-			commentersOptions: commentersOptions,
-			tags: tags
-		});
-	}
-
 	render() {
-		const { tagsValue, commentersOptions } = this.state;
+		const { tagOptions, commenterOptions, referenceWorkOptions } = this.props;
+		console.log(this.props.selectedLemmaCitation);
 
 		return (
 			<div className="comments lemma-panel-visible ">
 				<div className={'comment-outer'}>
-					<Formsy.Form
+					<Form
 						onValid={this._enableButton}
 						onInvalid={this._disableButton}
 						onValidSubmit={this.handleSubmit}
@@ -384,13 +289,13 @@ class AddComment extends Component {
 							style={{ marginLeft: 0 }}
 						>
 							<div className="comment-upper">
-								{commentersOptions && commentersOptions.length ?
+								{commenterOptions && commenterOptions.length ?
 									<Select
 										name="commenter"
 										id="commenter"
 										required={false}
-										options={commentersOptions}
-										value={this.state.commenterValue}
+										options={commenterOptions}
+										value={this.state.commentersValue}
 										onChange={this.onCommenterValueChange}
 										placeholder="Commentator..."
 										multi
@@ -412,7 +317,7 @@ class AddComment extends Component {
 								</h1>
 
 								<TagsInput
-									tagsValue={tagsValue}
+									tagsValue={this.state.tagsValue}
 									addTagBlock={this.addTagBlock}
 									removeTagBlock={this.removeTagBlock}
 									moveTagBlock={this.moveTagBlock}
@@ -420,7 +325,7 @@ class AddComment extends Component {
 									onIsMentionedInLemmaChange={this.onIsMentionedInLemmaChange}
 									selectTagType={this.selectTagType}
 									addNewTag={this.addNewTag}
-									keywords={this.state.tags}
+									keywords={tagOptions}
 								/>
 
 							</div>
@@ -434,13 +339,12 @@ class AddComment extends Component {
 									onChange={this.onTextChange}
 									placeholder="Comment text..."
 									spellcheck
-									mediaOn
 								/>
 
 								<ReferenceWork
 									update={this.updateReferenceWorks}
-									referenceWorkOptions={this.state.referenceWorkOptions}
-									referenceWorks={this.state.referenceWorks}
+									referenceWorkOptions={referenceWorkOptions}
+									referenceWorks={this.state.referenceWorksValue}
 									ready={this.state.ready}
 									addNew={this.addNewReferenceWork}
 								/>
@@ -455,7 +359,7 @@ class AddComment extends Component {
 								</div>
 							</div>
 						</article>
-					</Formsy.Form>
+					</Form>
 
 					<Snackbar
 						className="editor-snackbar"
@@ -471,19 +375,10 @@ class AddComment extends Component {
 }
 
 AddComment.propTypes = {
-	selectedLineFrom: PropTypes.number,
-	commentersQuery: PropTypes.object,
-	submitForm: PropTypes.func.isRequired,
 	commenters: PropTypes.array,
-	referenceWorkCreate: PropTypes.func,
-	keywordInsert: PropTypes.func,
-	keywordUpdate: PropTypes.func,
-	keywordsQuery: PropTypes.object,
-	referenceWorksQuery: PropTypes.object
 };
 
 AddComment.defaultProps = {
-	selectedLineFrom: null,
 	tags: [],
 };
 
@@ -492,11 +387,5 @@ const mapStateToProps = (state, props) => ({
 });
 
 export default compose(
-	commentersQuery,
-	referenceWorkCreateMutation,
-	referenceWorksQuery,
-	keywordsQuery,
-	keywordInsertMutation,
-	keywordUpdateMutation,
 	connect(mapStateToProps)
 )(AddComment);

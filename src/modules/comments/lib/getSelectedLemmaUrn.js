@@ -1,15 +1,13 @@
-import serializeUrn from '../../cts/lib/serializeUrn';
 
 
 const getSelectedLemmaUrn = selectedLemma => {
 	const lemmaCitation = Object.assign({}, selectedLemma.passageFrom);
 
 	delete lemmaCitation.passage;
-	lemmaCitation.passageFrom = selectedLemma.passageFrom.passage;
-	lemmaCitation.passageTo = selectedLemma.passageTo.passage;
+	lemmaCitation.passageFrom = selectedLemma.passageFrom.passage[0];
+	lemmaCitation.passageTo = selectedLemma.passageTo.passage[0];
 
-	const urn = serializeUrn(lemmaCitation);
-	return urn;
+	return lemmaCitation;
 }
 
 

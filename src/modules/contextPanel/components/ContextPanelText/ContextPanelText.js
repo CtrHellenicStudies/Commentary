@@ -76,26 +76,6 @@ class ContextPanelText extends Component {
 		autoBind(this);
 	}
 
-	updateBorderLines(textNodeFrom, textNodeTo) {
-		// hanlde highliting selected textNodes:
-		let _textNodeTo = textNodeTo;
-		if(textNodeTo === 0) {
-			_textNodeTo = textNodeFrom + 1;
-		}
-
-		if(!Object.keys(this.textNodes).length) {
-			return;
-		}
-
-		for (let i = 1; i <= Object.keys(this.textNodes).length; i += 1) {
-			if (i > textNodeFrom && i <= _textNodeTo) {
-				this.textNodes[(i - 1).toString()].style.borderBottom = '2px solid #B2EBF2';
-			} else {
-				this.textNodes[(i - 1).toString()].style.borderBottom = '';
-			}
-		}
-	}
-
 	/*
 		BEGIN editor methods:
 	*/
@@ -121,7 +101,11 @@ class ContextPanelText extends Component {
 			// Compare both the anchor and extent urn to ensure that are parsed to a
 			// single urn in the correct order
 			if (
-				anchorUrn.passage[0][anchorUrn.passage[0].length - 1] > extentUrn.passage[0][extentUrn.passage[0].length - 1]
+				anchorUrn
+				&& extentUrn
+				&& anchorUrn.passage
+				&& extentUrn.passage
+				&& anchorUrn.passage[0][anchorUrn.passage[0].length - 1] > extentUrn.passage[0][extentUrn.passage[0].length - 1]
 			) {
 				passageFrom = extentUrn;
 				passageTo =  anchorUrn;
@@ -129,7 +113,6 @@ class ContextPanelText extends Component {
 			} else {
 				passageFrom = anchorUrn;
 				passageTo = extentUrn;
-
 			}
 
 			updateSelectedLemma({

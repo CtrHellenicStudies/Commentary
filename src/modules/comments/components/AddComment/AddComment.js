@@ -274,7 +274,6 @@ class AddComment extends Component {
 
 	render() {
 		const { tagOptions, commenterOptions, referenceWorkOptions } = this.props;
-		console.log(this.props.selectedLemmaCitation);
 
 		return (
 			<div className="comments lemma-panel-visible ">

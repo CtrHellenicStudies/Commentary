@@ -42,7 +42,7 @@ class CommentLemmaContainer extends React.Component {
 
 				this.setState({
 					selectedLemmaVersionIndex: newSelectedVersionIndex,
-					selectedLemmaVersion: selectedLemmaVersion
+					selectedLemmaVersion,
 				});
 			}
 		}

@@ -10,7 +10,7 @@ import ContextPanelText from '../ContextPanelText/ContextPanelText';
 // import Utils from '../../../../lib/utils';
 
 /*
-	helpers
+helpers
 */
 const getContextPanelStyles = (open, highlightingVisible) => {
 	let contextPanelStyles = 'lemma-panel paper-shadow';

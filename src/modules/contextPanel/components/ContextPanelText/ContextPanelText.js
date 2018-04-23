@@ -95,8 +95,19 @@ class ContextPanelText extends Component {
       && anchorNode.parentElement
       && extentNode.parentElement
 		) {
-			const anchorUrn = parseValueUrn(anchorNode.parentElement.dataset.urn);
-			const extentUrn = parseValueUrn(extentNode.parentElement.dataset.urn);
+			let anchorTextNode = anchorNode.parentElement;
+			let extentTextNode = extentNode.parentElement;
+
+			if (!anchorTextNode.classList.contains('lemma-text')) {
+				anchorTextNode = anchorNode.parentElement.closest('.lemma-text');
+			}
+
+			if (!extentTextNode.classList.contains('lemma-text')) {
+				extentTextNode = extentNode.parentElement.closest('.lemma-text');
+			}
+
+			const anchorUrn = parseValueUrn(anchorTextNode.dataset.urn);
+			const extentUrn = parseValueUrn(extentTextNode.dataset.urn);
 
 			// Compare both the anchor and extent urn to ensure that are parsed to a
 			// single urn in the correct order
@@ -113,6 +124,7 @@ class ContextPanelText extends Component {
 			} else {
 				passageFrom = anchorUrn;
 				passageTo = extentUrn;
+
 			}
 
 			updateSelectedLemma({

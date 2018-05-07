@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
 
-const getWorkTitle = ({ lemmaCitation }) => {
-	// TODO: use work from query
-	let workTitle = lemmaCitation.work;
-	return workTitle;
-};
+import CommentGroupMetaWorkTitleContainer from '../../../containers/CommentGroupMetaWorkTitleContainer';
+import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
+import serializeUrn from '../../../../cts/lib/serializeUrn';
+
 
 const getLineTo = ({ lemmaCitation }) => {
 	if (lemmaCitation.passageTo && lemmaCitation.passageTo.length) {
@@ -15,14 +13,17 @@ const getLineTo = ({ lemmaCitation }) => {
 	return '';
 };
 
+
 const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
 	<div className="comment-group-meta">
 		{hideLemma === false ?
 			<div className="comment-group-meta-inner comment-group-meta-ref">
 				<div className="comment-group-ref">
-					<span className="comment-group-ref-above">
-						{`${commentGroup.lemmaCitation.textGroup}.${getWorkTitle(commentGroup)}`}
-					</span>
+
+					<CommentGroupMetaWorkTitleContainer
+						textGroupUrn={serializeUrn(commentGroup.lemmaCitation, 'textGroup')}
+						workUrn={serializeUrn(commentGroup.lemmaCitation, 'work')}
+					/>
 					<h2 className="comment-group-ref-below">
 						{commentGroup.lemmaCitation.passageFrom.join('.')}{getLineTo(commentGroup)}
 					</h2>

@@ -21,6 +21,12 @@ const serializeUrn = (value, type) => {
 		return result;
 	}
 
+	// TODO: determine better architecture for class of CTS URN getting only textgroup
+	if (type === 'textGroup') {
+		return result;
+	}
+
+
 	if ('work' in value && value.work && value.work.length) {
 		result = `${result}.${value.work}`;
 	} else {

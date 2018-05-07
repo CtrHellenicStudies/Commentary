@@ -1,10 +1,15 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query workTitleQuery($urn: CtsUrn) {
-	works(urn: $urn) {
+query workTitleQuery($textGroupUrn: CtsUrn, $workUrn: CtsUrn) {
+  textGroups(urn: $textGroupUrn) {
     id
-    english_title
+    title
+
+  	works(urn: $workUrn) {
+      id
+      english_title
+    }
   }
 }
 `;

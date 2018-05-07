@@ -23,7 +23,7 @@ const addTextNodesHighlighting = (_selectedLemmaVersion, selectedLemmaCitation) 
 				${selectedLemmaVersion.textNodes[selectedLemmaVersion.textNodes.length - 1].text.slice(selectedLemmaCitation.subreferenceIndexTo, selectedLemmaVersion.textNodes[selectedLemmaVersion.textNodes.length - 1].text.length)}
 			</span>
 		`;
-	} else {
+	} else if (selectedLemmaVersion.textNodes.length === 1){
 		selectedLemmaVersion.textNodes[0].text = `
 			<span class="lemmaTextUnselected">
 				${selectedLemmaVersion.textNodes[0].text.slice(0, selectedLemmaCitation.subreferenceIndexFrom)}

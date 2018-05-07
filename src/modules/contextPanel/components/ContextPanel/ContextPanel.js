@@ -132,14 +132,12 @@ class ContextPanel extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({
-			lemmaCitation: setLemmaCitation(nextProps.commentGroup, nextProps.lemmaCitation)
-		});
-	}
+		if (nextProps.commentGroup && nextProps.lemmaCitation) {
+			const lemmaCitation = setLemmaCitation(nextProps.commentGroup, nextProps.lemmaCitation);
 
-	componentWillUnmount() {
-		if (this.timeouts) {
-			this.timeouts.forEach(clearTimeout);
+			this.setState({
+				lemmaCitation,
+			});
 		}
 	}
 
@@ -156,7 +154,7 @@ class ContextPanel extends Component {
 		let textNodesUrn = 'urn:cts:greekLit:tlg0016.tlg001';
 
 		if(commentGroup && commentGroup.lemmaCitation) {
-			const lemmaCitationTemp = JSON.parse(JSON.stringify(commentGroup.lemmaCitation));
+			const lemmaCitationTemp = commentGroup.lemmaCitation;
 			lemmaCitationTemp.passageFrom[1] = 1;
 			lemmaCitationTemp.passageTo[0] = lemmaCitationTemp.passageTo + 1;
 			textNodesUrn = serializeUrn(lemmaCitationTemp);

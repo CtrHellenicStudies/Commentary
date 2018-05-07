@@ -26,7 +26,6 @@ class AddCommentLayout extends Component {
 			contextReaderOpen: true,
 			loading: false,
 			selectedWork: '',
-			textNodesUrn: 'urn:cts:greekLit:tlg0012.tlg001:1.1-1.49',
 		};
 
 		autoBind(this);
@@ -48,15 +47,8 @@ class AddCommentLayout extends Component {
 		return getMuiTheme(muiTheme);
 	}
 
-	updatetextNodesUrn(urn) {
-		this.setState({
-			textNodesUrn: urn,
-		});
-	}
-
 	render() {
 		const { loading } = this.state;
-		const textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
 
 		Utils.setTitle('Add Comment | The Center for Hellenic Studies Commentaries');
@@ -65,10 +57,7 @@ class AddCommentLayout extends Component {
 			<MuiThemeProvider muiTheme={this.getChildrenContext()}>
 				{!loading ?
 					<div className="chs-layout chs-editor-layout add-comment-layout">
-						<AddCommentContainer
-							textNodesUrn={textNodesUrn}
-							updatetextNodesUrn={this.updatetextNodesUrn.bind(this)}
-						/>
+						<AddCommentContainer />
 					</div>
 					:
 					<Spinner

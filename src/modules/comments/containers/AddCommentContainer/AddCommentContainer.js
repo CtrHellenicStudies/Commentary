@@ -12,9 +12,9 @@ import Header from '../../../../components/navigation/Header/Header';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 import AddComment from '../../components/AddComment/AddComment';
 import CommentLemmaSelectContainer from '../CommentLemmaSelectContainer';
+import CommentWorkSelect from '../../components/CommentWorkSelect';
 
 // graphql
-import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
@@ -35,6 +35,7 @@ class AddCommentContainer extends Component {
 		super(props);
 		this.state = {
 			selectedLemmaCitation: null,
+			textNodesUrn: '',
 		};
 
 		autoBind(this);
@@ -88,22 +89,18 @@ class AddCommentContainer extends Component {
 		}
 	}
 
+	selectWork(urn) {
+		console.log(urn);
+
+	}
+
 	render() {
 
-		const { selectedLemmaCitation, contextReaderOpen } = this.state;
-		const { textNodesUrn } = this.props;
+		const { selectedLemmaCitation, contextReaderOpen, textNodesUrn } = this.state;
 
-		let textNodes = [];
 		let commenterOptions = [];
 		let referenceWorkOptions = [];
 		let keywordOptions = [];
-
-		if (
-			this.props.textNodesQuery
-			&& this.props.textNodesQuery.textNodes
-		) {
-			textNodes = this.props.textNodesQuery.textNodes;
-		}
 
 		if (
 			this.props.commentersQuery
@@ -156,13 +153,17 @@ class AddCommentContainer extends Component {
 				<main>
 					<div className="commentary-comments">
 						<div className="comment-group">
+							<CommentWorkSelect
+								selectWork={this.selectWork}
+							/>
+
 							{(selectedLemmaCitation && 'passageFrom' in selectedLemmaCitation) ?
 								<CommentLemmaSelectContainer
 									selectedLemmaCitation={selectedLemmaCitation}
 									textNodesUrn={serializeUrn(getSelectedLemmaUrn(selectedLemmaCitation))}
 							  />
-								:
-								''}
+							:
+							''}
 
 							<AddComment
 								addComment={this.addComment}
@@ -179,7 +180,6 @@ class AddCommentContainer extends Component {
 							open={contextReaderOpen}
 							selectedLemmaCitation={selectedLemmaCitation}
 							updateSelectedLemma={this.updateSelectedLemma}
-							textNodes={textNodes}
 							textNodesUrn={textNodesUrn}
 							editor
 					  />
@@ -196,7 +196,6 @@ AddCommentContainer.props = {
 };
 
 export default compose(
-	textNodesQuery,
 	commentersQuery,
 	referenceWorkCreateMutation,
 	referenceWorksQuery,

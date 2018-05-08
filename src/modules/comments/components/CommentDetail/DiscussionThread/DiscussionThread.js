@@ -14,7 +14,7 @@ import discussionCommentsQuery  from '../../../../discussionComments/graphql/que
 import { usersQuery } from '../../../../../graphql/methods/users';
 
 // lib
-import Utils from '../../../../../lib/utils';
+// import Utils from '../../../../../lib/utils';
 
 // components
 import DiscussionComment from '../../../../discussionComments/components/DiscussionComment/DiscussionComment';
@@ -36,6 +36,11 @@ class DiscussionThread extends Component {
 		this.sortMethodSelect = this.sortMethodSelect.bind(this);
 	}
 	componentWillReceiveProps(props) {
+		/**
+
+		Disable discussion comment functionality until requested to reinstate it for the project
+
+
 		if (props.usersQuery.loading || !props.comment || props.discussionCommentsQuery.loading) {
 			return;
 		}
@@ -69,7 +74,11 @@ class DiscussionThread extends Component {
 			users: props.usersQuery.users,
 			ready: true
 		});
-		
+		*/
+
+		this.setState({
+			ready: true,
+		});
 	}
 	showDiscussionThread() {
 		this.props.showDiscussionThread(this.props.comment);

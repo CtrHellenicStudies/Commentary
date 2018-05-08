@@ -152,12 +152,12 @@ class Commentary extends Component {
 						onClick={this.props.loadMoreComments}
 						className="cover-link show-more commentary-raise-button"
 						label="Read More"
+						primary
 					/>
 				</div>
 				{/* --- END comments list */}
 
 				{contextPanelOpen ?
-
 					<ContextPanel
 						open={contextPanelOpen}
 						closeContextPanel={this.closeContextPanel}

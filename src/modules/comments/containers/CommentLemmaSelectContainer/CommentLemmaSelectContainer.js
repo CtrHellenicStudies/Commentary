@@ -56,7 +56,7 @@ const CommentLemmaSelectContainer = props => {
 
 	if (
 		!selectedLemmaVersion
-		|| !'textNodes' in selectedLemmaVersion
+		|| !selectedLemmaVersion.textNodes
 	) {
 		return null;
 	}

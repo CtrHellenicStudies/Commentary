@@ -5,6 +5,13 @@
 const addTextNodesHighlighting = (_selectedLemmaVersion, selectedLemmaCitation) => {
 	const selectedLemmaVersion = Object.assign({}, _selectedLemmaVersion);
 
+	if (
+		typeof selectedLemmaCitation.subreferenceIndexFrom === 'undefined'
+		|| selectedLemmaCitation.subreferenceIndexFrom === null
+	) {
+		return selectedLemmaVersion;
+	}
+
 	if (selectedLemmaVersion.textNodes.length > 1) {
 		selectedLemmaVersion.textNodes[0].text = `
 			<span class="lemmaTextUnselected">

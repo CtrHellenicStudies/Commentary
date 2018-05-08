@@ -15,7 +15,6 @@ const ContextPanelContentContainer = props => {
 
 	let textNodes = [];
 	let versionsWithText = [];
-	let translationsWithText = [];
 	let selectedLemmaVersion = null;
 	let selectedLemmaTranslation = null;
 	let selectedLemmaVersionIndex = 0;
@@ -35,8 +34,7 @@ const ContextPanelContentContainer = props => {
 	// set versions from textnodes data
 	if (textNodes && textNodes.length) {
 		const allVersions = Utils.textFromTextNodesGroupedByVersion(textNodes);
-		versionsWithText = allVersions.versions;
-		translationsWithText = allVersions.translations;
+		versionsWithText = allVersions.versions;;
 	}
 
 	// if necessary, parse versions into multiline data

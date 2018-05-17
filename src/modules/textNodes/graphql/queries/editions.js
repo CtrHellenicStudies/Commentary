@@ -22,6 +22,16 @@ query editionsQuery($workUrn: CtsUrn) {
 			title
 			slug
 		}
+		refsDecls {
+			id
+			label
+			slug
+			description
+			match_pattern
+			replacement_pattern
+			structure_index
+			urn
+		}
 	}
 }
 `;

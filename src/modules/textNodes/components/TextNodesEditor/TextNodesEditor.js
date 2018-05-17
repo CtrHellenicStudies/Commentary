@@ -372,12 +372,16 @@ class TextNodesEditor extends Component {
 						</div>
 						: ''}
 
-					<div className="text-nodes-editor-meta-input">
-						<FormGroup controlId="refsDecl">
-							<ControlLabel>Document Structure (<em>RefsDecl</em>)</ControlLabel>
-							<RefsDeclEditor />
-						</FormGroup>
-					</div>
+					{_selectedEdition ?
+						<div className="text-nodes-editor-meta-input">
+							<FormGroup controlId="refsDecl">
+								<ControlLabel>Document Structure (<em>RefsDecl</em>)</ControlLabel>
+								<RefsDeclEditor
+									initialValues={{ refsDecls: _selectedEdition.refsDecls }}
+								/>
+							</FormGroup>
+						</div>
+						: ''}
 				</div>
 
 				{

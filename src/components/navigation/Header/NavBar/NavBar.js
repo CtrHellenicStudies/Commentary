@@ -16,7 +16,7 @@ import ProfileAvatarButton from '../../../../modules/users/components/ProfileAva
 import Utils from '../../../../lib/utils';
 
 // graphql
-import { tenantsQuery } from '../../../../graphql/methods/tenants';
+import tenantsQuery from '../../../../modules/tenants/graphql/queries/tenants';
 import settingsQuery from '../../../../modules/settings/graphql/queries/list';
 
 // actions

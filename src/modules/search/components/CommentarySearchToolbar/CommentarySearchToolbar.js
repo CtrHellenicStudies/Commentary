@@ -9,7 +9,7 @@ import { compose } from 'react-apollo';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
-import { editionsQuery } from '../../../../graphql/methods/editions';
+import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 
 // components:
 import SearchToolDropdown from '../SearchToolDropdown';

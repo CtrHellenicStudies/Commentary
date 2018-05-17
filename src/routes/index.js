@@ -6,7 +6,7 @@ import { compose } from 'react-apollo';
 import Utils from '../lib/utils';
 
 // graphql
-import { tenantsBySubdomainQuery } from '../graphql/methods/tenants'
+import tenantBySubdomainQuery from '../modules/tenants/graphql/queries/tenantBySubdomain'
 
 // layouts
 import NotFound from '../modules/notFound/components/NotFound/NotFound';
@@ -71,13 +71,13 @@ const routes = (props) => {
 			return <Route component={NotFound} />;
 		} else {
 			sessionStorage.removeItem('noTenant');
-			if (!props.tenantsBySubdomainQuery.tenantBySubdomain) {
-				props.tenantsBySubdomainQuery.refetch({
+			if (!props.tenantBySubdomainQuery.tenantBySubdomain) {
+				props.tenantBySubdomainQuery.refetch({
 					subdomain: tenantSubdomain
 				});
 			}
 		}
-		setTenantInSession(props.tenantsBySubdomainQuery);
+		setTenantInSession(props.tenantBySubdomainQuery);
 	}
 
 	if (sessionStorage.getItem('noTenant')) {
@@ -150,4 +150,4 @@ const Routes = props => (
 	</BrowserRouter>
 );
 
-export default compose(tenantsBySubdomainQuery)(Routes);
+export default compose(tenantBySubdomainQuery)(Routes);

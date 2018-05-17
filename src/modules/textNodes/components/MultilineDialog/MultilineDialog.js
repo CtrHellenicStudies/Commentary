@@ -4,8 +4,10 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
 import { compose } from 'react-apollo';
-import { editionsInsertMutation,
-	editionsRemoveMutation} from '../../../../graphql/methods/editions';
+import {
+	editionsInsertMutation,
+	editionsRemoveMutation, 
+} from '../../graphql/queries/editions';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import IconMenu from 'material-ui/IconMenu';
@@ -102,7 +104,7 @@ class MultilineDialog extends Component {
 			<IconButton
 				touch
 				tooltipPosition="bottom-left"
-				
+
 			>
 				<MoreVertIcon color={grey400} />
 			</IconButton>

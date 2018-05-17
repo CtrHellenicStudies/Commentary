@@ -9,7 +9,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 // graphql
 import settingsQuery from '../../../modules/settings/graphql/queries/list';
-import { tenantsQuery } from '../../../graphql/methods/tenants';
+import tenantsQuery from '../../../modules/tenants/graphql/queries/tenants';
 
 
 import './Footer.css';

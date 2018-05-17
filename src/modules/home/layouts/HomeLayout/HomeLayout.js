@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
-import { tenantsQuery } from '../../../../graphql/methods/tenants';
+import tenantsQuery from '../../../tenants/graphql/queries/tenants';
 import settingsQuery from '../../../settings/graphql/queries/list';
 
 // layouts

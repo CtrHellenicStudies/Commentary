@@ -10,7 +10,7 @@ import {
 import TextField from 'material-ui/TextField';
 
 // graphql
-import { editionsQuery } from '../../../../graphql/methods/editions';
+import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 import textNodesQuery from '../../graphql/queries/textNodesQuery';
 
 // lib:

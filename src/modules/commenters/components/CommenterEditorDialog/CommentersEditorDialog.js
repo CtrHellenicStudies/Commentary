@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
-import { commentersQuery } from '../../../graphql/methods/commenters';
+import commentersQuery from '../../graphql/queries/commenters';
 import { compose } from 'react-apollo';
 import Divider from 'material-ui/Divider';
 import IconMenu from 'material-ui/IconMenu';

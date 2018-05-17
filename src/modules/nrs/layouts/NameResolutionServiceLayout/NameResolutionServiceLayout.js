@@ -5,7 +5,7 @@ import Utils from '../../../../lib/utils';
 
 // graphql
 import commentsQuery from '../../../comments/graphql/queries/comments';
-import { tenantsQuery } from '../../../../graphql/methods/tenants';
+import tenantsQuery from '../../../tenants/graphql/queries/tenants';
 
 import './NameResolutionServiceLayout.css';
 

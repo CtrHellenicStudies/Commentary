@@ -11,7 +11,7 @@ import { debounce } from 'throttle-debounce';
 // lib:
 
 // graphql
-import { editionsQuery } from '../../../../graphql/methods/editions';
+import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 import textNodeUpdateMutation from '../../graphql/mutations/textNodesUpdate';
 
 // components

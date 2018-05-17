@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 
 // graphql
-import { translationsQuery } from '../../../../../graphql/methods/translations';
+import { translationsQuery } from '../../../../textNodes/graphql/queries/translations';
 
 function getTranslationQueries(query, filter) {
 	if (query.loading) {

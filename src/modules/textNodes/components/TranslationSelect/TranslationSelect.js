@@ -9,7 +9,7 @@ import Select from 'react-select';
 
 // graphql
 // TODO
-// import { translationAuthorsQuery } from '../../../graphql/methods/translations';
+// import { translationAuthorsQuery } from '../../../translations/graphql/queries/translations';
 
 import AddTranslationDialog from '../AddTranslationDialog/AddTranslationDialog';
 

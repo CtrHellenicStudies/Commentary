@@ -11,7 +11,7 @@ import { compose } from 'react-apollo';
 import discussionCommentInsert from '../../../../discussionComments/graphql/mutations/discussionCommentInsert';
 import discussionCommentsQuery  from '../../../../discussionComments/graphql/queries/discussionCommentsQuery';
 
-import { usersQuery } from '../../../../../graphql/methods/users';
+import { usersQuery } from '../../../../users/graphql/queries/users';
 
 // lib
 // import Utils from '../../../../../lib/utils';

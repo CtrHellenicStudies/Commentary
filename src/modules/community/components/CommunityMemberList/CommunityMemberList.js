@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
 // graphql
-import { usersQuery } from '../../../../graphql/methods/users';
+import { usersQuery } from '../../../users/graphql/queries/users';
 import CommunityMemberTeaser from '../CommunityMemberTeaser/CommunityMemberTeaser';
 
 import './CommunityMemberList.css';

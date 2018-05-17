@@ -3,7 +3,7 @@ import { compose } from 'react-apollo';
 
 // graphql
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
-import { editionsQuery } from '../../../../graphql/methods/editions';
+import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 
 import ContextPanelContent from '../../components/ContextPanelContent';
 

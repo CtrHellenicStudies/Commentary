@@ -28,7 +28,7 @@ import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 // graphql
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import { editionsQuery } from '../../../../graphql/methods/editions';
+import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';

@@ -26,6 +26,7 @@ import TranslationSelect from '../TranslationSelect/TranslationSelect';
 import TranslationNodeInput from '../TranslationNodeInput/TranslationNodeInput';
 import RefsDeclEditor from '../RefsDeclEditor';
 
+
 import './TextNodesEditor.css';
 
 
@@ -414,10 +415,12 @@ class TextNodesEditor extends Component {
 		);
 	}
 }
+
 TextNodesEditor.propTypes = {
 	editionsQuery: PropTypes.object,
-	textNodesQuery: PropTypes.object
+	textNodesQuery: PropTypes.object,
 };
+
 export default compose(
 	textNodesQuery,
 	editionsQuery,

@@ -37,8 +37,8 @@ class TranslationSelect extends Component {
 	// componentWillReceiveProps(props) {
 	// 	let workDetails = null;
 	// 	const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authorsOfTranslations;
-	
-	// 	if (props.selectedWork !== this.props.selectedWork || 
+
+	// 	if (props.selectedWork !== this.props.selectedWork ||
 	// 		props.selectedSubwork !== this.props.selectedSubwork) {
 	// 		if (props.selectedSubwork && props.selectedWork) {
 	// 			props.translationAuthorsQuery.refetch({
@@ -151,8 +151,9 @@ TranslationSelect.propTypes = {
 	workDetails: PropTypes.object,
 	translationAuthorsQuery: PropTypes.object,
 	selectedSubwork: PropTypes.number,
-	selectedWork: PropTypes.string
+	selectedWork: PropTypes.number,
 };
+
 export default TranslationSelect;
 // TODO
 //export default compose(translationAuthorsQuery)(TranslationSelect);

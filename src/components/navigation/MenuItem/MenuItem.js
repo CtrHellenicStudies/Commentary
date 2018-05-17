@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 
 import './MenuItem.css';
@@ -21,4 +22,4 @@ MenuItem.propTypes = {
 	onClick: PropTypes.func,
 };
 
-export default MenuItem;
+export default withRouter(MenuItem);

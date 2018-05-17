@@ -1,14 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-// component:
-import MenuItem from './MenuItem';
+// component
+import RefsDeclEditor from './RefsDeclEditor';
 
-
-describe('Login', () => {
+describe('RefsDeclEditor', () => {
 	it('renders correctly', () => {
 		const wrapper = shallow(
-			<MenuItem to="/"/>
+			<RefsDeclEditor
+			/>
 		);
 		expect(wrapper).toBeDefined();
 	});

@@ -69,15 +69,17 @@ const routes = (props) => {
 	if (!sessionStorage.getItem('tenantId')) {
 		if (!tenantSubdomain) {
 			return <Route component={NotFound} />;
-		} else {
-			sessionStorage.removeItem('noTenant');
+		}
+
+		sessionStorage.removeItem('noTenant');
+		if (props.tenantBySubdomainQuery) {
 			if (!props.tenantBySubdomainQuery.tenantBySubdomain) {
 				props.tenantBySubdomainQuery.refetch({
 					subdomain: tenantSubdomain
 				});
 			}
+			setTenantInSession(props.tenantBySubdomainQuery);
 		}
-		setTenantInSession(props.tenantBySubdomainQuery);
 	}
 
 	if (sessionStorage.getItem('noTenant')) {

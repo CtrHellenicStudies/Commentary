@@ -112,7 +112,7 @@ class Footer extends Component {
 						<Col md={8} mdOffset={2}>
 							<p className="fade-1-4 copyright">
 								Copyright {year} The Center for Hellenic Studies.
-								See our <a href="/terms">terms and privacy policy</a>
+								See our <a href="/terms">terms and privacy policy</a> and <a href="https://gdpr.harvard.edu/eeaprivacydisclosures" target="_blank" rel="noopener noreferrer">EU/EEA Privacy Disclosures</a>.
 							</p>
 						</Col>
 					</Row>

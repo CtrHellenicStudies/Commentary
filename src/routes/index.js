@@ -47,43 +47,20 @@ import {
 /**
  * Application routes
  */
-function setTenantInSession (query) {
-	if (!query.loading
-		&& query.tenantBySubdomain) {
-		sessionStorage.setItem('tenantId', query.tenantBySubdomain._id);
-	} else if (!query.loading
-		&& !query.tenantBySubdomain) {
-		sessionStorage.setItem('noTenant', true);
-	}
-}
-
 const routes = (props) => {
 
 	// set the base document meta for the application
 	Utils.setBaseDocMeta();
 
-	// parse tenant subdomain
-	const hostnameArray = document.location.hostname.split('.');
-	const tenantSubdomain =  hostnameArray.length > 2 ? hostnameArray[0] : undefined;
-
-	if (!sessionStorage.getItem('tenantId')) {
-		if (!tenantSubdomain) {
+	if (
+		props.tenantQuery
+		&& !props.tenantQuery.loading
+	) {
+		if (!props.tenantQuery.tenantBySubdomain) {
 			return <Route component={NotFound} />;
 		}
 
-		sessionStorage.removeItem('noTenant');
-		if (props.tenantBySubdomainQuery) {
-			if (!props.tenantBySubdomainQuery.tenantBySubdomain) {
-				props.tenantBySubdomainQuery.refetch({
-					subdomain: tenantSubdomain
-				});
-			}
-			setTenantInSession(props.tenantBySubdomainQuery);
-		}
-	}
-
-	if (sessionStorage.getItem('noTenant')) {
-		return <Route component={NotFound} />;
+		sessionStorage.setItem('tenantId', props.tenantQuery.tenantBySubdomain._id);
 	}
 
 	return (

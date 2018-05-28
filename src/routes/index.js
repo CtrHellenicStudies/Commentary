@@ -47,7 +47,7 @@ import {
 /**
  * Application routes
  */
-const routes = (props) => {
+const Routes = (props) => {
 
 	// set the base document meta for the application
 	Utils.setBaseDocMeta();
@@ -64,69 +64,62 @@ const routes = (props) => {
 	}
 
 	return (
-		<Switch>
-			{/** Home routes */}
-			{homeRoute}
+		<BrowserRouter>
+			<Switch>
+				{/** Home routes */}
+				{homeRoute}
 
-			{/** Commentary routes */}
-			{addCommentRoute}
-			{addRevisionRoute}
-			{commentaryRoute}
+				{/** Commentary routes */}
+				{addCommentRoute}
+				{addRevisionRoute}
+				{commentaryRoute}
 
-			{/** Tags routes */}
-			{editKeywordRoute}
-			{addKeywordRoute}
-			{keywordDetailRoute}
-			{wordsListRoute}
-			{ideasListRoute}
+				{/** Tags routes */}
+				{editKeywordRoute}
+				{addKeywordRoute}
+				{keywordDetailRoute}
+				{wordsListRoute}
+				{ideasListRoute}
 
-			{/** Reference works routes */}
-			{referenceWorkDetailRoute}
-			{referenceWorkListRoute}
+				{/** Reference works routes */}
+				{referenceWorkDetailRoute}
+				{referenceWorkListRoute}
 
-			{/** Commenters routes */}
-			{commenterDetailRoute}
-			{commenterListRoute}
+				{/** Commenters routes */}
+				{commenterDetailRoute}
+				{commenterListRoute}
 
-			{/** TextNode routes */}
-			{textNodesRoute}
+				{/** TextNode routes */}
+				{textNodesRoute}
 
-			{/** Users routes */}
-			{profileRoute}
-			{publicProfileRoute}
+				{/** Users routes */}
+				{profileRoute}
+				{publicProfileRoute}
 
-			{/** Auth routes */}
-			{signInRoute}
-			{signOutRoute}
-			{updateForV2Route}
-			{forgotPasswordRoute}
-			{unauthorizedRoute}
+				{/** Auth routes */}
+				{signInRoute}
+				{signOutRoute}
+				{updateForV2Route}
+				{forgotPasswordRoute}
+				{unauthorizedRoute}
 
-			{/** NRS routes */}
-			{nrsV1Route}
-			{nrsV1RouteWithURN}
-			{nrsV2Route}
-			{nrsV1DOI}
+				{/** NRS routes */}
+				{nrsV1Route}
+				{nrsV1RouteWithURN}
+				{nrsV2Route}
+				{nrsV1DOI}
 
-			{/** Settings routes */}
-			{adminRoute}
+				{/** Settings routes */}
+				{adminRoute}
 
-			{/** Basic page routes */}
-			{pageRoute}
+				{/** Basic page routes */}
+				{pageRoute}
 
-			{/** 404 routes */}
-			<Route component={NotFound} />
-		</Switch>
+				{/** 404 routes */}
+				<Route component={NotFound} />
+			</Switch>
+		</BrowserRouter>
 	);
 };
-
-/**
- * Main application entry point
- */
-const Routes = props => (
-	<BrowserRouter>
-		{routes(props)}
-	</BrowserRouter>
-);
 
 export default compose(tenantBySubdomainQuery)(Routes);

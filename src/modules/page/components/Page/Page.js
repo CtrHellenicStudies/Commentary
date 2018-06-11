@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -26,22 +26,18 @@ import './Page.css';
 
 class Page extends Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			tenantId: sessionStorage.getItem('tenantId')
-		};
-	}
 	componentWillReceiveProps(props) {
 		const { slug } = props;
 
+		// TODO: move to container
 		const page = props.pagesQuery.loading ? {} : props.pagesQuery.pages.find(x => x.slug === slug);
 		this.setState({
 			page,
 			ready: !props.settingsQuery.loading && !props.pagesQuery.loading,
-			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId)
+			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === this.props.tenantId)
 		});
 	}
+
 	render() {
 		const { slug } = this.props;
 		const { page, settings, ready } = this.state;
@@ -114,12 +110,19 @@ class Page extends Component {
 		);
 	}
 }
+
 Page.propTypes = {
 	slug: PropTypes.string,
 	pagesQuery: PropTypes.object,
 	settingsQuery: PropTypes.object
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	settingsQuery,
 	pagesQuery
 )(Page);

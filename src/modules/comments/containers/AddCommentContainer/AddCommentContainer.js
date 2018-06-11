@@ -5,10 +5,10 @@ import autoBind from 'react-autobind';
 import qs from 'qs-lite';
 import slugify from 'slugify';
 import { withRouter } from 'react-router';
-
-import Header from '../../../../components/navigation/Header/Header';
+import { connect } from 'react-redux';
 
 // components
+import Header from '../../../../components/navigation/Header/Header';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 import AddComment from '../../components/AddComment/AddComment';
 import CommentLemmaSelectContainer from '../CommentLemmaSelectContainer';
@@ -51,6 +51,8 @@ class AddCommentContainer extends Component {
 	}
 
 	async addComment(formData, textValue, textRawValue) {
+		const { tenantId } = this.props;
+
 		// get data for comment:
 		const lemmaCitation = getSelectedLemmaUrn(this.state.selectedLemmaCitation);
 		lemmaCitation.subreferenceIndexFrom = this.state.selectedLemmaCitation.subreferenceIndexFrom;
@@ -75,7 +77,7 @@ class AddCommentContainer extends Component {
 			commenters,
 			keywords,
 			referenceWorks,
-			tenantId: sessionStorage.getItem('tenantId'),
+			tenantId,
 			status: 'publish',
 		};
 
@@ -162,8 +164,8 @@ class AddCommentContainer extends Component {
 									selectedLemmaCitation={selectedLemmaCitation}
 									textNodesUrn={serializeUrn(getSelectedLemmaUrn(selectedLemmaCitation))}
 							  />
-							:
-							''}
+								:
+								''}
 
 							<AddComment
 								addComment={this.addComment}
@@ -195,7 +197,12 @@ AddCommentContainer.props = {
 	textNodesQuery: PropTypes.func
 };
 
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	commentersQuery,
 	referenceWorkCreateMutation,
 	referenceWorksQuery,

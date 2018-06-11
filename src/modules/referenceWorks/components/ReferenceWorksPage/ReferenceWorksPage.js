@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../../../lib/muiTheme';
-
-import Header from '../../../../components/navigation/Header';
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // components
@@ -13,24 +10,25 @@ import BackgroundImageHolder from '../../../shared/components/BackgroundImageHol
 import ReferenceWorksList from '../ReferenceWorksList/ReferenceWorksList';
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 import LoadingPage from '../../../../components/loading/LoadingPage';
+import Header from '../../../../components/navigation/Header';
 
 // graphql
 import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
 import Utils from '../../../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
+
 
 class ReferenceWorksPage extends Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
 	componentWillReceiveProps(nextProps) {
+		// TODO: move to container
 		this.setState({
-			settings: nextProps.settingsQuery.loading ? { title: '' } : nextProps.settingsQuery.settings.find(x => x.tenantId === sessionStorage.getItem('tenantId'))
+			settings: nextProps.settingsQuery.loading ? { title: '' } : nextProps.settingsQuery.settings.find(x => x.tenantId === this.props.tenantId)
 		});
 	}
+
 	render() {
 		const { settings } = this.state;
 
@@ -75,9 +73,16 @@ class ReferenceWorksPage extends Component {
 
 }
 
-
 ReferenceWorksPage.propTypes = {
 	title: PropTypes.string.isRequired,
 	settingsQuery: PropTypes.object,
 };
-export default compose(settingsQuery)(ReferenceWorksPage);
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	connect(mapStateToProps),
+	settingsQuery,
+)(ReferenceWorksPage);

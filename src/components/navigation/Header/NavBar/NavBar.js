@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
+import autoBind from 'react-autobind';
 
 // components
 import CommentarySearchToolbar from '../../../../modules/search/components/CommentarySearchToolbar';
@@ -59,6 +60,7 @@ class NavBar extends React.Component {
 
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			leftMenuOpen: false,
 			rightMenuOpen: false,
@@ -69,20 +71,9 @@ class NavBar extends React.Component {
 			modalLoginLowered: false,
 			modalSignupLowered: !!props.showSignup,
 			modalForgotPwdLowered: !!props.showForgotPwd,
-			tenantId: sessionStorage.getItem('tenantId'),
 		};
 
-		// methods:
-		this.toggleSearchMode = this.toggleSearchMode.bind(this);
-		this.toggleRightMenu = this.toggleRightMenu.bind(this);
-		this.closeRightMenu = this.closeRightMenu.bind(this);
-		this.toggleSearchDropdown = this.toggleSearchDropdown.bind(this);
-		this.toggleWorkSearchTerm = this.toggleWorkSearchTerm.bind(this);
-		this.showLoginModal = this.showLoginModal.bind(this);
-		this.showSignupModal = this.showSignupModal.bind(this);
-		this.closeLoginModal = this.closeLoginModal.bind(this);
-		this.closeSignupModal = this.closeSignupModal.bind(this);
-		this.closeForgotPwdModal = this.closeForgotPwdModal.bind(this);
+		autoBind(this);
 	}
 
 	toggleSearchMode() {
@@ -193,8 +184,8 @@ class NavBar extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		// TODO: move this to container
 		this.setState({
-			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
-			tenant: this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId),
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.props.tenantId),
+			tenant: this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.props.tenantId),
 		});
 	}
 
@@ -348,7 +339,8 @@ const mapStateToProps = state => ({
 	userId: state.auth.userId,
 	roles: state.auth.roles,
 	leftMenuOpen: state.leftMenu.open,
-	commenters: state.auth.commenters
+	commenters: state.auth.commenters,
+	tenantId: state.tenant.tenantId,
 });
 
 const mapDispatchToProps = dispatch => ({

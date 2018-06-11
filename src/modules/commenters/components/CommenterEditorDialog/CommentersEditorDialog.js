@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
-import commentersQuery from '../../graphql/queries/commenters';
 import { compose } from 'react-apollo';
 import Divider from 'material-ui/Divider';
 import IconMenu from 'material-ui/IconMenu';
@@ -12,23 +12,24 @@ import Avatar from 'material-ui/Avatar';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/MenuItem';
 import { grey400 } from 'material-ui/styles/colors';
-
 import AutoComplete from 'material-ui/AutoComplete';
 import Person from 'material-ui/svg-icons/social/person';
+
+import commentersQuery from '../../graphql/queries/commenters';
+
 
 class CommentersEditorDialog extends Component {
 
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			searchText: ''
 		};
-		this.deleteCommenter = this.deleteCommenter.bind(this);
-		this.selectCommenter = this.selectCommenter.bind(this);
-		this.changeSearchTextValue = this.changeSearchTextValue.bind(this);
 
+		// TODO: replace refetch with container
 		this.props.commentersQuery.refetch({
-			tenantId: sessionStorage.getItem('tenantId')
+			tenantId: this.props.tenantId,
 		});
 	}
 	componentWillReceiveProps(props) {
@@ -163,4 +164,11 @@ CommentersEditorDialog.propTypes = {
 	commentersQuery: PropTypes.object
 };
 
-export default compose(commentersQuery)(CommentersEditorDialog);
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	connect(mapStateToProps),
+	commentersQuery,
+)(CommentersEditorDialog);

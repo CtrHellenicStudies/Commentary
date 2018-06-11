@@ -5,13 +5,17 @@ import {
 	FormGroup,
 } from 'react-bootstrap';
 import Select from 'react-select';
-
+import autoBind from 'react-autobind';
+import { connect } from 'react-redux';
+import { compose } from 'react-apollo';
 
 // graphql
 // TODO
 // import { translationAuthorsQuery } from '../../../translations/graphql/queries/translations';
 
+// components
 import AddTranslationDialog from '../AddTranslationDialog/AddTranslationDialog';
+
 
 class TranslationSelect extends Component {
 	constructor(props) {
@@ -21,18 +25,18 @@ class TranslationSelect extends Component {
 			editDialogOpen: false,
 			translationOptions: []
 		};
-		this.selectTranslation = this.selectTranslation.bind(this);
-		this.showEditDialog = this.showEditDialog.bind(this);
-		this.handleCloseEditDialog = this.handleCloseEditDialog.bind(this);
-		this.addNewAuthor = this.addNewAuthor.bind(this);
 
+		// TODO: move to container
 		if (this.props.selectedSubwork && this.props.selectedWork) {
 			this.props.translationAuthorsQuery.refetch({
 				selectedWork: this.props.selectedWork,
 				selectedSubwork: this.props.selectedSubwork
 			});
 		}
+
+		autoBind(this);
 	}
+
 	// TODO - translations with authors
 	// componentWillReceiveProps(props) {
 	// 	let workDetails = null;
@@ -47,28 +51,24 @@ class TranslationSelect extends Component {
 	// 			});
 	// 		}
 	// 		workDetails = {
-	// 			tenantId: sessionStorage.getItem('tenantId'),
+	// 			tenantId,
 	// 			work: props.selectedWork,
 	// 			subwork: props.selectedSubwork,
 	// 		};
 	// 	}
+	//
 	// 	this.setState({
 	// 		workDetails: workDetails,
 	// 		translationOptions: translationOptions
 	// 	});
 	// }
+
 	selectTranslation(event) {
 		const setValue = event ? event.value : '';
 		this.setState({
 			selectedTranslation: setValue
 		});
 		this.props.selectTranslation(setValue);
-	}
-
-	componentWillUnmount() {
-		if (sessionStorage.keys && sessionStorage.keys.translationOptions) {
-			delete sessionStorage.keys.translationOptions;
-		}
 	}
 
 	showEditDialog() {
@@ -154,6 +154,11 @@ TranslationSelect.propTypes = {
 	selectedWork: PropTypes.number,
 };
 
-export default TranslationSelect;
-// TODO
-//export default compose(translationAuthorsQuery)(TranslationSelect);
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	// translationAuthorsQuery,
+	connect(mapStateToProps),
+)(TranslationSelect);

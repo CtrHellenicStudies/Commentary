@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import _ from 'lodash';
 import { compose } from 'react-apollo';
-
+import { connect } from 'react-redux';
+import autoBind from 'react-autobind';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
@@ -24,19 +25,6 @@ import LocationBrowserContainer from '../../containers/LocationBrowserContainer'
 import Utils from '../../../../lib/utils';
 
 import './CommentarySearchToolbar.css';
-
-
-/*
-const getWorkInFilter = (filters) => {
-	let workInFilter = false;
-	filters.forEach((filter) => {
-		if (filter.key === 'works') {
-			workInFilter = true;
-		}
-	});
-	return workInFilter;
-};
-*/
 
 
 /*
@@ -62,17 +50,17 @@ class CommentarySearchToolbar extends Component {
 
 		// methods:
 		if (props.handleChangeTextsearch) this.handleChangeTextsearch = _.debounce(props.handleChangeTextsearch, 300);
-		this.toggleSearchDropdown = this.toggleSearchDropdown.bind(this);
-		this.toggleMoreDropdown = this.toggleMoreDropdown.bind(this);
-		this.switchToHymns = this.switchToHymns.bind(this);
-		this.switchToBooks = this.switchToBooks.bind(this);
-		const tenantId = sessionStorage.getItem('tenantId');
+
+		const { tenantId } = this.props;
 		if (!this.props.addCommentPage) {
 			this.props.keywordsQuery.refetch({
 				tenantId: tenantId
 			});
 		}
+
+		autoBind(this);
 	}
+
 	toggleSearchDropdown(targetDropdown) {
 		if (this.state.searchDropdownOpen === targetDropdown) {
 			this.setState({
@@ -84,21 +72,13 @@ class CommentarySearchToolbar extends Component {
 			});
 		}
 	}
+
 	toggleMoreDropdown() {
 		this.setState({
 			moreDropdownOpen: !this.state.moreDropdownOpen,
 		});
 	}
-	switchToHymns() {
-		this.setState({
-			selectedWork: 'Hymn',
-		});
-	}
-	switchToBooks() {
-		this.setState({
-			selectedWork: 'Book',
-		});
-	}
+
 	componentWillReceiveProps(nextProps) {
 		let workFilter;
 		if (nextProps.keywordsQuery.loading ||
@@ -143,14 +123,12 @@ class CommentarySearchToolbar extends Component {
 		}
 	}
 
-
 	render() {
-
 		const { toggleSearchTerm, filters, addCommentPage } = this.props;
-		const { keywords, keyideas, commenters, referenceWorks, works } = this.state;
-		const { searchDropdownOpen, moreDropdownOpen } = this.state;
-
-		// const workInFilter = getWorkInFilter(filters);
+		const {
+			keywords, keyideas, commenters, referenceWorks, works, searchDropdownOpen,
+			moreDropdownOpen,
+		} = this.state;
 
 		return (
 			<div>
@@ -255,7 +233,12 @@ CommentarySearchToolbar.defaultProps = {
 	handleChangeTextsearch: null,
 }
 
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	commentersQuery,
 	referenceWorksQuery,
 	keywordsQuery,

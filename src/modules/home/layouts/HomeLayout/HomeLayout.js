@@ -47,18 +47,20 @@ class HomeLayout extends Component {
 			}, 1000);
 		}
 	}
+
 	componentWillReceiveProps(props) {
 		if(this.props.settingsQuery.loading || this.props.tenantsQuery.loading) {
-			return;
+			return null;
 		}
-		const tenantId = sessionStorage.getItem('tenantId');
+
+		const { tenantId } = this.props;
 		const settings = this.props.settingsQuery.settings.find(x => x.tenantId === tenantId);
 		const tenant = this.props.tenantsQuery.tenants.find(x => x._id === tenantId);
+
 		this.setState({
 			settings: settings,
 			tenant: tenant
 		});
-
 	}
 
 	render() {

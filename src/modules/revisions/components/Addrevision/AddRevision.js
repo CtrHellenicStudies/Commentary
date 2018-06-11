@@ -5,6 +5,7 @@ import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import { Router } from 'react-router';
 import $ from 'jquery';
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -52,12 +53,12 @@ class AddRevision extends Component {
 	constructor(props) {
 		super(props);
 
-		const { comment } = this.props;
+		const { comment, tenantId } = this.props;
 		const revisionId = comment.revisions.length - 1;
 		const revision = comment.revisions[revisionId]; // get newest revision
 		let revisionTitle = '';
-
 		const tagsValue = [];
+
 		if (comment.keywords) {
 			comment.keywords.forEach((keyword) => {
 				tagsValue.push({
@@ -72,28 +73,26 @@ class AddRevision extends Component {
 		if (revision && revision.title) {
 			revisionTitle = revision.title;
 		}
+
 		this.updateReferenceWorks = this.updateReferenceWorks.bind(this);
 		this.addNewReferenceWork = this.addNewReferenceWork.bind(this);
+
 		this.state = {
 			revision,
-
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revisionTitle)),
 			textEditorState: this._getRevisionEditorState(revision),
-
 			titleValue: '',
 			textValue: '',
-
 			tagsValue,
-
 			referenceWorks: comment.referenceWorks || [],
 			keywordSuggestions: fromJS([]),
 			commentsSuggestions: fromJS([]),
 			commentersEditorDialogOpen: false,
 			commenterValue: comment.commenters ? comment.commenters.map((commenter) => ({value: commenter._id, label: commenter.name})) : [],
 			snackbarOpen: false,
-
 		};
-		const tenantId = sessionStorage.getItem('tenantId');
+
+		// TODO: move to container
 		props.referenceWorksQuery.refetch({
 			tenantId: tenantId
 		});
@@ -103,8 +102,8 @@ class AddRevision extends Component {
 
 		autoBind(this);
 	}
-	componentWillReceiveProps(props) {
 
+	componentWillReceiveProps(props) {
 		const tags = props.keywordsQuery.loading ? [] : props.keywordsQuery.keywords;
 		let commenters = [];
 		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
@@ -145,14 +144,20 @@ class AddRevision extends Component {
 		});
 	}
 
+	componentWillUnmount() {
+		if (this.timeout)			{ clearTimeout(this.timeout); }
+	}
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
+
 	updateReferenceWorks(referenceWorks) {
 		this.setState({
 			referenceWorks: referenceWorks
 		});
 	}
+
 	_enableButton() {
 		this.setState({
 			canSubmit: true,
@@ -262,12 +267,15 @@ class AddRevision extends Component {
 			this.props.history.push(`/commentary/${that.props.comment._id}/edit`);
 		});
 	}
+
 	addNewReferenceWork(reference) {
+		const { tenantId } = this.props;
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
-			tenantId: sessionStorage.getItem('tenantId')
+			tenantId,
 		};
+
 		this.props.referenceWorkCreate(_reference).then(error => {
 			if (error) {
 				this.showSnackBar(error);
@@ -276,6 +284,7 @@ class AddRevision extends Component {
 			}
 		});
 	}
+
 	addTagBlock() {
 		const newTagBlock = {
 			tagId: Date.now(),
@@ -376,9 +385,7 @@ class AddRevision extends Component {
 			});
 		}, 4000);
 	}
-	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
-	}
+
 	selectTagType(tagId, event, index) {
 		const currentTags = this.state.tagsValue;
 		this.setState({
@@ -400,14 +407,16 @@ class AddRevision extends Component {
 	}
 
 	addNewTag(tag) {
+		const { tenantId } = this.props;
 
 		const keyword = [{
 			title: tag.value,
 			slug: slugify(tag.value.toLowerCase()),
 			type: 'word',
 			count: 1,
-			tenantId: sessionStorage.getItem('tenantId'),
+			tenantId,
 		}];
+		
 		this.props.keywordInsert(keyword);
 	}
 
@@ -589,7 +598,13 @@ AddRevision.propTypes = {
 AddRevision.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	commentRemoveMutation,
 	commentersQuery,
 	referenceWorksQuery,

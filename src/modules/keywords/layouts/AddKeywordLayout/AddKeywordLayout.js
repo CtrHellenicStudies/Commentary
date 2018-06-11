@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
 import keywordInsertMutation from '../../graphql/mutations/keywordsInsert';
@@ -17,6 +15,7 @@ import Header from '../../../../components/navigation/Header';
 import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
 
 // lib
+import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 import AddKeywordContainer from '../../containers/AddKeywordContainer/AddKeywordContainer';
 
@@ -142,11 +141,12 @@ class AddKeywordLayout extends Component {
 			skip: 0,
 		});
 	}
-	addKeyword(formData, textValue, textRawValue) {
+
+	async addKeyword(formData, textValue, textRawValue) {
 		this.setState({
 			loading: true,
 		});
-		const that = this;
+
 		// get data for keyword :
 		// create keyword object to be inserted:
 		const keyword = {
@@ -156,13 +156,13 @@ class AddKeywordLayout extends Component {
 			descriptionRaw: JSON.stringify(textRawValue),
 			type: this.state.selectedType,
 			count: 1,
-			tenantId: sessionStorage.getItem('tenantId'),
+			tenantId: this.props.tenantId,
 		};
-		this.props.keywordInsert(keyword).then(function() {
-			that.props.history.push(`/tags/${keyword.slug}`);
-		}
-		);
+
+		await this.props.keywordInsert(keyword);
+		this.props.history.push(`/tags/${keyword.slug}`);
 	}
+
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
@@ -174,31 +174,36 @@ class AddKeywordLayout extends Component {
 			});
 		}, 4000);
 	}
+
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
+
 	onTypeChange(type) {
 		this.setState({
 			selectedType: type,
 		});
 	}
+
 	handlePermissions() {
 		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 			this.props.history.push('/');
 		}
 	}
+
 	lineLetterUpdate(value) {
 		this.setState({
 			lineLetter: value,
 		});
 	}
+
 	handlePagination(book, chapter) {
 		const { filter } = this.state;
 		const work = this.getWork();
 
 		filter.edition = book;
 		filter.chapter = chapter;
-		
+
 		this.setState({
 			filter,
 		});
@@ -215,6 +220,7 @@ class AddKeywordLayout extends Component {
 			textNodesUrn: properties.textNodesUrn
 		});
 	}
+
 	render() {
 		const { filters, work, } = this.state;
 		const { isTest } = this.props;
@@ -255,6 +261,7 @@ class AddKeywordLayout extends Component {
 		);
 	}
 }
+
 AddKeywordLayout.propTypes = {
 	isTest: PropTypes.bool,
 	history: PropTypes.object,
@@ -264,6 +271,12 @@ AddKeywordLayout.propTypes = {
 AddKeywordLayout.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
-	keywordInsertMutation
+	connect(mapStateToProps),
+	keywordInsertMutation,
 )(AddKeywordLayout);

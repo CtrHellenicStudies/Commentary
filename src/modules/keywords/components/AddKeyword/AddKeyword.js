@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import $ from 'jquery';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
 import Snackbar from 'material-ui/Snackbar';
-
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
@@ -38,10 +37,12 @@ class AddKeyword extends Component {
 			snackbarOpen: false,
 			snackbarMessage: ''
 		};
-		const tenantId = sessionStorage.getItem('tenantId');
+
+		// TODO: move refetch to container
 		this.props.keywordsQuery.refetch({
-			tenantId: tenantId
+			tenantId: props.tenantId
 		});
+
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onTextChange = this.onTextChange.bind(this);
 		this.onTypeChange = this.onTypeChange.bind(this);
@@ -197,7 +198,7 @@ class AddKeyword extends Component {
 				slug: keyword.slug,
 			});
 		});
-	
+
 		const keyideasOptions = [];
 		const keyideas = newProps.keywordsQuery.loading ? [] : newProps.keywordsQuery.keywords
 			.filter(x => x.type === 'idea');
@@ -208,13 +209,13 @@ class AddKeyword extends Component {
 				slug: keyidea.slug,
 			});
 		});
-	
+
 		const commentersOptions = [];
 		const tenantCommenters = newProps.commentersQuery.loading ? [] : newProps.commentersQuery.commenters;
 		let commenters = [];
 		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		if (user && user.canEditCommenters) {
-			commenters = tenantCommenters.filter((x => 
+			commenters = tenantCommenters.filter((x =>
 				user.canEditCommenters.find(y => y === x._id) !== undefined));
 		}
 		commenters.forEach((commenter) => {
@@ -325,6 +326,7 @@ class AddKeyword extends Component {
 		);
 	}
 }
+
 AddKeyword.propTypes = {
 	selectedLineFrom: PropTypes.number,
 	selectedLineTo: PropTypes.number,
@@ -336,7 +338,12 @@ AddKeyword.propTypes = {
 
 };
 
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
 	commentersQuery,
-	keywordsQuery
+	keywordsQuery,
+	connect(mapStateToProps),
 )(AddKeyword);

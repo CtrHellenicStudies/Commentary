@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../../../lib/muiTheme';
-import Header from '../../../../components/navigation/Header';
 
 // components
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 import LoadingPage from '../../../../components/loading/LoadingPage';
+import Header from '../../../../components/navigation/Header';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
@@ -18,25 +17,21 @@ import referenceWorksQuery from '../../graphql/queries/referenceWorksQuery';
 import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
+import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 
 
 class ReferenceWorkDetail extends Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
 	componentWillReceiveProps(props) {
-
 		const slug = props.match.params.slug;
-		const tenantId = sessionStorage.getItem('tenantId');
-	
+		const { tenantId } = this.props;
+
 		const referenceWork = props.referenceWorksQuery.loading ? undefined : props.referenceWorksQuery.referenceWorks.find(x => x.slug === slug && x.tenantId === tenantId);
 		const tenantCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x => x.tenantId === tenantId);
 		let commenters = [];
 		if (referenceWork && referenceWork.authors) {
-			commenters = tenantCommenters.filter((x => 
+			commenters = tenantCommenters.filter((x =>
 				referenceWork.authors.find(y => y === x._id) !== undefined))
 				.sort(function alphabetical(a, b) { return a > b; });
 		}
@@ -163,7 +158,13 @@ ReferenceWorkDetail.propTypes = {
 	settingsQuery: PropTypes.object,
 	match: PropTypes.object
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	commentersQuery,
 	referenceWorksQuery,
 	settingsQuery

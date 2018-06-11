@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../../../lib/muiTheme';
+import autoBind from 'react-autobind';
 
 // layouts
 import Header from '../../../../components/navigation/Header';
@@ -25,6 +25,7 @@ import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextP
 
 // lib
 import Utils from '../../../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
 
 
 class EditKeywordLayout extends Component {
@@ -44,22 +45,13 @@ class EditKeywordLayout extends Component {
 			refetchTextNodes: true
 		};
 
-		this.handlePermissions = this.handlePermissions.bind(this);
-		this.updateSelectedLemma = this.updateSelectedLemma.bind(this);
-		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
-		this.updateKeyword = this.updateKeyword.bind(this);
-		this.showSnackBar = this.showSnackBar.bind(this);
-		this.getWork = this.getWork.bind(this);
-		this.getSubwork = this.getSubwork.bind(this);
-		this.getLineLetter = this.getLineLetter.bind(this);
-		this.getSelectedLineTo = this.getSelectedLineTo.bind(this);
-		this.getType = this.getType.bind(this);
-		this.lineLetterUpdate = this.lineLetterUpdate.bind(this);
-		this.onTypeChange = this.onTypeChange.bind(this);
-		this.handlePagination = this.handlePagination.bind(this);
+
+		// TODO: move refetch to container
 		this.props.keywordsQuery.refetch({
-			tenantId: sessionStorage.getItem('tenantId')
+			tenantId: props.tenantId,
 		});
+
+		autoBind(this);
 	}
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.keywordsQuery.loading || nextProps.textNodesQuery.loading) {
@@ -214,7 +206,7 @@ class EditKeywordLayout extends Component {
 			description: textValue,
 			descriptionRaw: JSON.stringify(textRawValue),
 			type: this.state.selectedType,
-			tenantId: sessionStorage.getItem('tenantId'),
+			tenantId: this.props.tenantId,
 			count: 1,
 		};
 		this.props.keywordUpdate(keyword._id, keywordCandidate).then(function() {
@@ -441,6 +433,7 @@ class EditKeywordLayout extends Component {
 		);
 	}
 }
+
 EditKeywordLayout.propTypes = {
 	slug: PropTypes.string,
 	history: PropTypes.object,
@@ -449,8 +442,14 @@ EditKeywordLayout.propTypes = {
 	keywordsQuery: PropTypes.object,
 	textNodesQuery: PropTypes.object
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	keywordsQuery,
 	keywordsUpdate,
-	textNodesQuery
+	textNodesQuery,
 )(EditKeywordLayout);

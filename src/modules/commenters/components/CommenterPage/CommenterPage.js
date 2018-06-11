@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../../../lib/muiTheme';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // components
@@ -17,6 +15,7 @@ import Header from '../../../../components/navigation/Header';
 import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
+import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 
 class CommentersPage extends Component {
@@ -26,7 +25,7 @@ class CommentersPage extends Component {
 		this.state = {};
 	}
 	componentWillReceiveProps(nextProps) {
-		const tenantId = sessionStorage.getItem('tenantId');
+		const { tenantId } = this.props;
 		const settings = nextProps.settingsQuery.loading ? { title: ''} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
 		this.setState({
 			settings: settings
@@ -82,5 +81,11 @@ CommentersPage.propTypes = {
 	settingsQuery: PropTypes.object
 };
 
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
 
-export default compose(settingsQuery)(CommentersPage);
+export default compose(
+	settingsQuery,
+	connect(mapStateToProps),
+)(CommentersPage);

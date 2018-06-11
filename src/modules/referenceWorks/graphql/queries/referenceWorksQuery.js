@@ -20,13 +20,11 @@ query referenceWorksQuery {
 
 const referenceWorksQuery = graphql(query, {
 	name: 'referenceWorksQuery',
-	options: () => {
-		return ({
-			variables: {
-				tenantId: sessionStorage.getItem('tenantId')
-			}
-		});
-	}
+	options: ({ tenantId }) => ({
+		variables: {
+			tenantId,
+		},
+	}),
 });
 
 export default referenceWorksQuery;

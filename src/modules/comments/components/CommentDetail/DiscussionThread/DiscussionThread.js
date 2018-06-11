@@ -6,6 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import { compose } from 'react-apollo';
+import { connect } from 'react-redux';
 
 // graphql
 import discussionCommentInsert from '../../../../discussionComments/graphql/mutations/discussionCommentInsert';
@@ -40,16 +41,17 @@ class DiscussionThread extends Component {
 
 		Disable discussion comment functionality until requested to reinstate it for the project
 
-
 		if (props.usersQuery.loading || !props.comment || props.discussionCommentsQuery.loading) {
-			return;
+			return null;
 		}
+
+		const { tenantId } = this.props;
+
 		if (this.state.getDissComments) {
-			const properties = {
-				tenantId: sessionStorage.getItem('tenantId'),
+			props.discussionCommentsQuery.refetch({
+				tenantId,
 				commentId: props.comment._id
-			};
-			props.discussionCommentsQuery.refetch(properties);
+			});
 			this.setState({
 				getDissComments: false
 			});
@@ -89,9 +91,11 @@ class DiscussionThread extends Component {
 	addDiscussionComment() {
 		const content = $(this.newCommentForm).find('textarea').val();
 
-		this.props.discussionCommentInsert(this.props.comment._id,
+		this.props.discussionCommentInsert(
+			this.props.comment._id,
 			content,
-			sessionStorage.getItem('tenantId'));
+			this.props.tenantId,
+		);
 
 		$(this.newCommentForm).find('textarea').val('');
 	}
@@ -265,6 +269,7 @@ class DiscussionThread extends Component {
 		);
 	}
 }
+
 DiscussionThread.propTypes = {
 	comment: PropTypes.object.isRequired,
 	discussionVisible: PropTypes.bool.isRequired,
@@ -276,8 +281,14 @@ DiscussionThread.propTypes = {
 	commenters: PropTypes.array,
 	discussionCommentInsert: PropTypes.func
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
 	discussionCommentsQuery,
 	discussionCommentInsert,
-	usersQuery
+	usersQuery,
+	connect(mapStateToProps),
 )(DiscussionThread);

@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import { fromJS } from 'immutable';
 import { compose } from 'react-apollo';
-import Utils from '/imports/lib/utils';
+import { connect } from 'react-redux';
+
+// lib
+import Utils from '../lib/utils';
 
 // graphql
 import { commentsQuery } from '../../../comments/graphql/queries/comments';
@@ -19,16 +22,19 @@ class Suggestions extends Component {
 			keywords: fromJS([])
 		};
 
+		// TODO
 		props.keywordsQuery.refetch({
-			tenantId: sessionStorage.getItem('tenantId')
+			tenantId: this.props.tenantId,
 		});
 	}
+
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			tags: nextProps.keywordsQuery.loading ? [] : nextProps.keywordsQuery.keywords,
 			comments: nextProps.commentsQuery.loading ? [] : nextProps.commentsQuery.comments
 		});
 	}
+
 	onMentionSearchChange({ value }) {
 		this.props.commentsQuery.refetch({
 			queryParam: JSON.stringify({ $text: { $search: value } }),
@@ -40,6 +46,7 @@ class Suggestions extends Component {
 			});
 		});
 	}
+
 	onKeywordSearchChange({ value }) {
 		const _keywords = [];
 		this.state.tags.forEach((keyword) => {
@@ -72,6 +79,7 @@ class Suggestions extends Component {
 		);
 	}
 }
+
 Suggestions.propTypes = {
 	mentionPlugin: PropTypes.object,
 	keywordPlugin: PropTypes.object,
@@ -79,7 +87,12 @@ Suggestions.propTypes = {
 	keywordsQuery: PropTypes.object
 };
 
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	keywordsQuery,
-	commentsQuery
+	commentsQuery,
 )(Suggestions);

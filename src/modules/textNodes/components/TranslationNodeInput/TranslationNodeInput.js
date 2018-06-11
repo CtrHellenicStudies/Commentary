@@ -6,7 +6,9 @@ import {
 import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 import _ from 'lodash';
-import {debounce} from 'throttle-debounce';
+import { debounce } from 'throttle-debounce';
+import { compose } from 'react-apollo';
+import { connect } from 'react-redux';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
@@ -15,19 +17,19 @@ import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components
 // import {
 // 	translationsQuery,
 // 	translationRemoveMutation,
-// 	translationUpdateMutation 
+// 	translationUpdateMutation
 // } from '../../../graphql/methods/translations';
 
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');
 
+
 function getTranslationQueries(query, filter) {
-	
 	if (query.loading) {
 		return [];
 	}
-	return query.translations.filter(x => 
+	return query.translations.filter(x =>
 		x.tenantId === filter.tenantId &&
-		x.work === filter.work && 
+		x.work === filter.work &&
 		parseInt(x.subwork, 10) === parseInt(filter.subwork, 10) &&
 		x.author === filter.author)
 		.sort(function(a, b) {
@@ -35,6 +37,7 @@ function getTranslationQueries(query, filter) {
 		})
 		.slice(filter.skip, filter.limit);
 }
+
 class TranslationNodeInput extends Component {
 	constructor(props) {
 		super(props);
@@ -51,25 +54,27 @@ class TranslationNodeInput extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-		const {selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation} = props;
-		const tenantId = sessionStorage.getItem('tenantId');
+		const {
+			selectedWork, selectedSubwork, startAtLine, limit, selectedTranslation,
+		} = props;
+		const { tenantId } = this.props;
 		const filter = {
-			tenantId: tenantId,
+			tenantId,
 			work: selectedWork.slug,
 			subwork: selectedSubwork,
 			skip: startAtLine - 1,
-			limit: limit,
+			limit,
 			author: selectedTranslation
 		};
-	
+
 		const translation = getTranslationQueries(props.translationsQuery, filter);
-	
+
 		const translationNodes = translation;
 		if (!translation || translation.length === 0) {
 			for (let i = 0; i < limit; i++) {
 				let newLine;
 				const arrIndex = _.findIndex(translation, (line) => line.n === i + parseInt(startAtLine, 10));
-	
+
 				if (arrIndex >= 0) {
 					newLine = translation[arrIndex];
 				}		else {
@@ -82,11 +87,11 @@ class TranslationNodeInput extends Component {
 						author: selectedTranslation,
 					};
 				}
-	
+
 				translationNodes.push(newLine);
 			}
 		}
-	
+
 		this.setState({
 			translationNodes: translationNodes,
 			ready: !props.translationsQuery.loading
@@ -152,8 +157,8 @@ class TranslationNodeInput extends Component {
 		}, 4000);
 	}
 	componentWillUnmount() {
-		if (this.timeout) { 
-			clearTimeout(this.timeout); 
+		if (this.timeout) {
+			clearTimeout(this.timeout);
 		}
 	}
 	render() {
@@ -228,7 +233,14 @@ TranslationNodeInput.propTypes = {
 	limit: PropTypes.number,
 	selectedTranslation: PropTypes.string
 };
-export default TranslationNodeInput;
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	connect(mapStateToProps),
+)(TranslationNodeInput);
 
 // TODO
 

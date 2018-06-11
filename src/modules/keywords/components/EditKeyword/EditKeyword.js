@@ -1,27 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import RaisedButton from 'material-ui/RaisedButton';
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import $ from 'jquery';
-
-// https://github.com/JedWatson/react-select
+import autoBind from 'react-autobind';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import createSingleLinePlugin from 'draft-js-single-line-plugin';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { fromJS } from 'immutable';
+
+// lib
 import Utils from '../../../../lib/utils';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 
-
 // component
 import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
+
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
@@ -47,6 +48,7 @@ class EditKeyword extends Component {
 				description = EditorState.createEmpty();
 			}
 		}
+
 		this.state = {
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(keywordTitle)),
 			textEditorState: description,
@@ -58,24 +60,14 @@ class EditKeyword extends Component {
 			snackbarMessage: '',
 			suggestions: fromJS([])
 		};
-		const tenantId = sessionStorage.getItem('tenantId');
+
 		this.props.referenceWorksQuery.refetch({
-			tenantId: tenantId
+			tenantId: this.props.tenantId
 		});
 
-		this._getKeywordEditorState = this._getKeywordEditorState.bind(this);
-		this.onTitleChange = this.onTitleChange.bind(this);
-		this.onTextChange = this.onTextChange.bind(this);
-		this.onTypeChange = this.onTypeChange.bind(this);
-		this.onKeywordsValueChange = this.onKeyideasValueChange.bind(this);
-		this.onNewOptionCreator = this.onNewOptionCreator.bind(this);
-		this.shouldKeyDownEventCreateNewOption = this.shouldKeyDownEventCreateNewOption.bind(this);
-		this.isOptionUnique = this.isOptionUnique.bind(this);
-		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.showSnackBar = this.showSnackBar.bind(this);
-		this.validateStateForSubmit = this.validateStateForSubmit.bind(this);
+		autoBind(this);
 	}
+
 	componentWillReceiveProps(props) {
 		const keywordsOptions = [];
 		const keywords = !this.props.keywords ? [] : this.props.keywords
@@ -87,7 +79,7 @@ class EditKeyword extends Component {
 				slug: keyword.slug,
 			});
 		});
-	
+
 		const keyideasOptions = [];
 		const keyideas = !this.props.keywords ? [] : this.props.keywords
 			.filter(x => x.type === 'idea');
@@ -103,6 +95,13 @@ class EditKeyword extends Component {
 			keywordsOptions: keywordsOptions
 		});
 	}
+
+	componentWillUnmount() {
+		if (this.timeout)	{
+			clearTimeout(this.timeout);
+		}
+	}
+
 	_getKeywordEditorState(keyword) {
 		if (keyword.descriptionRaw && Object.keys(JSON.parse(keyword.descriptionRaw)).length) {
 			return EditorState.createWithContent(convertFromRaw(JSON.parse(keyword.descriptionRaw)));
@@ -117,6 +116,7 @@ class EditKeyword extends Component {
 		}
 		throw new Error('missing filed description or descriptionRaw in keyword');
 	}
+
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
 		const title = $(titleHtml).text();
@@ -125,6 +125,7 @@ class EditKeyword extends Component {
 			titleValue: title,
 		});
 	}
+
 	onTextChange(textEditorState) {
 		const textHtml = stateToHTML(this.state.textEditorState.getCurrentContent());
 
@@ -133,33 +134,38 @@ class EditKeyword extends Component {
 			textValue: textHtml,
 		});
 	}
+
 	onTypeChange(e, type) {
 		this.props.onTypeChange(type);
 	}
+
 	onKeywordsValueChange(keywords) {
 		this.setState({
 			keywordsValue: keywords,
 		});
 	}
+
 	onKeyideasValueChange(keyidea) {
 		this.setState({
 			keyideasValue: keyidea,
 		});
 	}
+
 	onNewOptionCreator(newOption) {
 		return {
 			label: newOption.label,
 			value: newOption.label
 		};
 	}
+
 	shouldKeyDownEventCreateNewOption(sig) {
 		if (sig.keyCode === 13 ||
 			sig.keyCode === 188) {
 			return true;
 		}
-
 		return false;
 	}
+
 	isOptionUnique(newOption) {
 		const keywordsOptions = this.state.keywordsOptions;
 		const keyideasOptions = this.state.keyideasOptions;
@@ -184,11 +190,13 @@ class EditKeyword extends Component {
 		}
 		return true;
 	}
+
 	onCommenterValueChange(comenter) {
 		this.setState({
 			commenterValue: comenter,
 		});
 	}
+
 	handleSubmit(event) {
 		const { textEditorState } = this.state;
 		event.preventDefault();
@@ -205,6 +213,7 @@ class EditKeyword extends Component {
 			this.props.submitForm(this.state, descriptionHtml, descriptionRaw);
 		}
 	}
+
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
@@ -216,9 +225,7 @@ class EditKeyword extends Component {
 			});
 		}, 4000);
 	}
-	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
-	}
+
 	validateStateForSubmit() {
 		let errors = false;
 		let errorMessage = 'Missing comment data:';
@@ -235,8 +242,6 @@ class EditKeyword extends Component {
 			errorMessage,
 		};
 	}
-
-	// --- END SUBMIT / VALIDATION HANDLE --- //
 
 	render() {
 		const { keyword } = this.props;
@@ -329,6 +334,7 @@ class EditKeyword extends Component {
 		);
 	}
 }
+
 EditKeyword.propTypes = {
 	submitForm: PropTypes.func.isRequired,
 	onTypeChange: PropTypes.func.isRequired,
@@ -339,7 +345,13 @@ EditKeyword.propTypes = {
 	commentersQuery: PropTypes.object,
 	keywords: PropTypes.array
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
 	referenceWorksQuery,
-	commentersQuery
+	commentersQuery,
+	connect(mapStateToProps),
 )(EditKeyword);

@@ -4,7 +4,9 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
+import autoBind from 'react-autobind';
 
 // components
 import AvatarEditor from '../AvatarEditor/AvatarEditor';
@@ -49,18 +51,15 @@ class ProfilePage extends Component {
 			emailError: '',
 			modalChangePwdLowered: false,
 			isPublicEmail: false,
-			tenantId: sessionStorage.getItem('tenantId')
 		};
 
-		this.getChildContext = this.getChildContext.bind(this);
-		this.loadMore = this.loadMore.bind(this);
-		this.showChangePwdModal = this.showChangePwdModal.bind(this);
-		this.closeChangePwdModal = this.closeChangePwdModal.bind(this);
+		autoBind(this);
 	}
+
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined,
-			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
+			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.props.tenantId),
 			ready: !nextProps.settingsQuery.loading
 		});
 	}
@@ -167,7 +166,17 @@ class ProfilePage extends Component {
 		);
 	}
 }
+
 ProfilePage.propTypes = {
 	settingsQuery: PropTypes.object
 };
-export default compose(settingsQuery)(ProfilePage);
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+
+export default compose(
+	connect(mapStateToProps),
+	settingsQuery,
+)(ProfilePage);

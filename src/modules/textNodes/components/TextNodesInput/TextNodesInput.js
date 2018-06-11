@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
+import { connect } from 'react-redux';
 import { FormGroup } from 'react-bootstrap';
 import update from 'immutability-helper';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
-
-// lib:
+import autoBind from 'react-autobind';
 
 // graphql
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
@@ -16,6 +16,7 @@ import textNodeUpdateMutation from '../../graphql/mutations/textNodesUpdate';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
+
 
 import './TextNodesInput.css';
 
@@ -34,8 +35,9 @@ const getSelectedEditionText = (textNodes) => {
 	});
 	return selectedEditionText;
 };
-class TextNodesInput extends Component {
 
+
+class TextNodesInput extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -44,24 +46,25 @@ class TextNodesInput extends Component {
 			ready: false
 		};
 
-		this.onChangeN = this.onChangeN.bind(this);
-		this.onChangeText = this.onChangeText.bind(this);
-		this.addTextNodeBlock = this.addTextNodeBlock.bind(this);
-		this.removeTextNodeBlock = this.removeTextNodeBlock.bind(this);
-		this.moveTextNodeBlock = this.moveTextNodeBlock.bind(this);
-		this.showSnackBar = this.showSnackBar.bind(this);
+		autoBind(this);
 	}
 
 	componentWillReceiveProps(props) {
-
 		this.setState({
 			textNodes: props.textNodes,
 		});
+	}
 
+	componentWillUnmount() {
+		if (this.timeout) {
+			clearTimeout(this.timeout);
+		}
 	}
 
 	addTextNodeBlock() {
-		const { workId, workSlug, editionId, subworkN, subworkTitle } = this.props;
+		const {
+			workId, workSlug, editionId, subworkN, subworkTitle, tenantId,
+		} = this.props;
 		const defaultN = 1;
 
 		this.state.textNodes.push({
@@ -79,8 +82,9 @@ class TextNodesInput extends Component {
 				_id: workId,
 				slug: workSlug,
 			},
-			tenantId: sessionStorage.getItem('tenantId'),
+			tenantId,
 		});
+
 		this.setState({
 			textNodes: this.state.textNodes,
 		});
@@ -167,9 +171,7 @@ class TextNodesInput extends Component {
 			});
 		}, 4000);
 	}
-	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
-	}
+
 	render() {
 		const { textNodes } = this.props;
 
@@ -177,7 +179,7 @@ class TextNodesInput extends Component {
 		if (!textNodes || !textNodes.length) {
 			return null;
 		}
-		console.log(textNodes);
+
 		return (
 			<FormGroup
 				controlId="textNodes"
@@ -256,6 +258,12 @@ TextNodesInput.propTypes = {
 	limit: PropTypes.number
 };
 
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	editionsQuery,
-	textNodeUpdateMutation)(TextNodesInput);
+	textNodeUpdateMutation,
+)(TextNodesInput);

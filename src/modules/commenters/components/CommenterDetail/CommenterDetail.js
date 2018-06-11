@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -90,8 +90,8 @@ class CommenterDetail extends Component {
 		return biography;
 	}
 	componentWillReceiveProps(props) {
+		const { tenantId } = this.props;
 		const slug = props.match.params.slug;
-		const tenantId = sessionStorage.getItem('tenantId');
 
 		let avatarUrl;
 		const commenter = props.commentersQuery.loading ? {} :
@@ -205,6 +205,7 @@ class CommenterDetail extends Component {
 		);
 	}
 }
+
 CommenterDetail.propTypes = {
 	avatarUrl: PropTypes.string,
 	settings: PropTypes.shape({
@@ -215,12 +216,19 @@ CommenterDetail.propTypes = {
 	commentersQuery: PropTypes.object,
 	settingsQuery: PropTypes.object
 };
+
 CommenterDetail.defaultProps = {
 	commenter: null,
 	avatarUrl: null,
 	isTest: false,
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	commentersQuery,
-	settingsQuery
+	settingsQuery,
 )(CommenterDetail);

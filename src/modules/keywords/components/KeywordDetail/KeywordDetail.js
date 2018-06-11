@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../../../lib/muiTheme';
-
-import Header from '../../../../components/navigation/Header/Header';
 import { compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import $ from 'jquery';
@@ -19,6 +15,7 @@ import keywordRemoveMutation from '../../graphql/mutations/keywordsRemove';
 import commentsQuery from '../../../comments/graphql/queries/comments';
 
 // components
+import Header from '../../../../components/navigation/Header/Header';
 import KeywordContext from '../KeywordContext/KeywordContext';
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import KeywordCommentList from '../KeywordsCommentList/KeywordsCommentList';
@@ -26,6 +23,8 @@ import CommentsRecent from '../../../comments/components/CommentsRecent/Comments
 
 // lib
 import Utils from '../../../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
+
 
 import './KeywordDetail.css';
 
@@ -40,20 +39,18 @@ class KeywordDetail extends Component {
 			referenceTop: 0,
 			referenceLeft: 0,
 			keyword: '',
-			tenantId: sessionStorage.getItem('tenantId'),
 			kewyord: {},
 			keywordComments: [],
 			settings: {}
-
 		};
 
+		// TODO: move refetch to container
 		this.props.keywordsQuery.refetch({
-			tenantId: this.state.tenantId
+			tenantId: props.tenantId,
 		});
-
 	}
-	componentWillReceiveProps(props) {
 
+	componentWillReceiveProps(props) {
 		if (props.keywordsQuery.loading || props.commentsQuery.loading
 			|| props.settingsQuery.loading) {
 			return;
@@ -203,6 +200,7 @@ class KeywordDetail extends Component {
 
 const mapStateToProps = state => ({
 	roles: state.auth.roles,
+	tenantId: state.tenant.tenantId,
 });
 
 KeywordDetail.propTypes = {
@@ -213,6 +211,7 @@ KeywordDetail.propTypes = {
 	keywordRemove: PropTypes.func,
 	match: PropTypes.object
 };
+
 export default compose(
 	connect(mapStateToProps),
 	settingsQuery,

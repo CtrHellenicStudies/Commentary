@@ -1,13 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
-import { compose } from 'react-apollo';
-
-// lib
-import Utils from '../../../../lib/utils';
 import RaisedButton from 'material-ui/RaisedButton';
+import { connect } from 'react-redux';
+import { compose } from 'react-apollo';
 
 // graphql
 import settingsQuery from '../../../settings/graphql/queries/list';
@@ -16,18 +13,14 @@ import settingsQuery from '../../../settings/graphql/queries/list';
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 import KeywordsList from '../KeywordsList/KeywordsList';
-import muiTheme from '../../../../lib/muiTheme';
-
 import Header from '../../../../components/navigation/Header';
+
+// lib
+import Utils from '../../../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
 
 
 class KeywordsPage extends Component {
-
-	raiseLimit() {
-		this.setState({
-			limit: this.state.limit + 1
-		});
-	}
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -35,8 +28,15 @@ class KeywordsPage extends Component {
 			limit: 1
 		};
 	}
+
+	raiseLimit() {
+		this.setState({
+			limit: this.state.limit + 1
+		});
+	}
+
 	componentWillReceiveProps(props) {
-		const tenantId = sessionStorage.getItem('tenantId');
+		const { tenantId } = this.props;
 		this.setState({
 			settings: props.settingsQuery.loading ? { title: '' } : props.settingsQuery.settings.find(x => x.tenantId === tenantId)
 		});
@@ -93,11 +93,19 @@ class KeywordsPage extends Component {
 			</MuiThemeProvider>
 		);
 	}
-
 }
+
 KeywordsPage.propTypes = {
 	type: PropTypes.string.isRequired,
 	title: PropTypes.string.isRequired,
 	settingsQuery: PropTypes.object,
 };
-export default compose(settingsQuery)(KeywordsPage);
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	connect(mapStateToProps),
+	settingsQuery,
+)(KeywordsPage);

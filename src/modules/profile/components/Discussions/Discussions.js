@@ -45,7 +45,7 @@ class Discussions extends Component {
 }
 // const DiscussionsContainer = createContainer((props) => {
 // 	let discussionComments = [];
-// 	const tenantId = sessionStorage.getItem('tenantId');
+// 	const { tenantId } = this.props; 
 // 	Meteor.subscribe('user.discussionComments', Meteor.userId());
 // 	Meteor.subscribe('user.annotations', Meteor.userId());
 // 	Meteor.subscribe('user.bookmarks', Meteor.userId());

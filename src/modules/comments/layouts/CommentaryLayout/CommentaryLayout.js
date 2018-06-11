@@ -12,7 +12,7 @@ with new “filters” object passed as first attribute.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
-
+import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { compose } from 'react-apollo';
@@ -56,8 +56,9 @@ class CommentaryLayout extends Component {
 			filters: []
 		};
 
+		// TODO: move refetch to container
 		this.props.referenceWorksQuery.refetch({
-			tenantId: sessionStorage.getItem('tenantId')
+			tenantId: props.tenantId,
 		});
 
 		autoBind(this);
@@ -189,13 +190,13 @@ class CommentaryLayout extends Component {
 		);
 	}
 }
+
 CommentaryLayout.defaultProps = {
 	queryParams: {
 		lineTo: 611,
-		work: 'tlg001',
-		subworks: '1'
 	}
 };
+
 CommentaryLayout.propTypes = {
 	queryParams: PropTypes.object,
 	referenceWorks: PropTypes.array,
@@ -206,7 +207,13 @@ CommentaryLayout.propTypes = {
 	referenceWorksQuery: PropTypes.object,
 	match: PropTypes.object
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
 	referenceWorksQuery,
-	editionsQuery
+	editionsQuery,
+	connect(mapStateToProps),
 )(CommentaryLayout);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
 import { Link } from 'react-router-dom';
 import { compose } from 'react-apollo';
@@ -23,7 +23,7 @@ class Footer extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-		const tenantId = sessionStorage.getItem('tenantId');
+		const { tenantId } = this.props; 
 
 		this.setState({
 			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
@@ -122,8 +122,18 @@ class Footer extends Component {
 		);
 	}
 }
+
 Footer.propTypes = {
 	settingsQuery: PropTypes.object,
 	tenantsQuery: PropTypes.object,
 };
-export default compose(settingsQuery, tenantsQuery)(Footer);
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	connect(mapStateToProps),
+	settingsQuery,
+	tenantsQuery,
+)(Footer);

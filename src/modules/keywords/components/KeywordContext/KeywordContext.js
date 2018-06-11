@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import autoBind from 'react-autobind';
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -14,13 +15,17 @@ import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 class KeywordContext extends Component {
+
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			selectedLemma: 0,
 		};
-		this.toggleEdition = this.toggleEdition.bind(this);
+
+		autoBind(this);
 	}
+
 	componentWillReceiveProps(props) {
 		if (props.commentsQuery.loading ||
 			props.editionsQuery.loading ||
@@ -28,8 +33,7 @@ class KeywordContext extends Component {
 			return;
 		}
 
-		const { keyword, maxLines } = props;
-		const tenantId = sessionStorage.getItem('tenantId');
+		const { keyword, maxLines, tenantId } = props;
 
 		let lemmaText = [];
 		const context = {};
@@ -43,7 +47,6 @@ class KeywordContext extends Component {
 
 		if (keyword.work && keyword.subwork && keyword.lineFrom
 			&& !props.textNodesQuery.variables.workUrn && !props.textNodesQuery.variables.work) {
-
 
 			context.work = keyword.work.slug;
 			context.subwork = keyword.subwork.n;
@@ -77,15 +80,17 @@ class KeywordContext extends Component {
 				context.lineFrom = query.lineFrom;
 				context.lineTo = query.lineTo;
 			}
-			const textNodesCursor = props.textNodesQuery.textNodes;
 
+			const textNodesCursor = props.textNodesQuery.textNodes;
 			lemmaText = textNodesCursor;
 		}
+
 		this.setState({
 			lemmaText: lemmaText,
 			context: context,
 		});
 	}
+
 	toggleEdition(newSelectedLemma) {
 		if (this.state.selectedLemma !== newSelectedLemma && newSelectedLemma < this.state.lemmaText.length) {
 			this.setState({
@@ -95,7 +100,7 @@ class KeywordContext extends Component {
 	}
 
 	render() {
-		const { keyword} = this.props;
+		const { keyword } = this.props;
 		const { context, lemmaText } = this.state;
 
 		if (!lemmaText || !lemmaText.length) {
@@ -146,8 +151,8 @@ class KeywordContext extends Component {
 			</article>
 		);
 	}
-
 }
+
 KeywordContext.propTypes = {
 	keyword: PropTypes.object,
 	editionsQuery: PropTypes.object,
@@ -156,8 +161,13 @@ KeywordContext.propTypes = {
 	maxLines: PropTypes.number
 };
 
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	editionsQuery,
 	commentsQuery,
-	textNodesQuery
+	textNodesQuery,
 )(KeywordContext);

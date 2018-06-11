@@ -15,20 +15,16 @@ query commenters ($tenantId: String) {
 		nCommentsTotal
 		tagline
 	}
-}
-`;
-const commentersQuery = (function commentersQueryFunc() {
-	return graphql(query, {
-		name: 'commentersQuery',
-		options: () => {
-			return ({
-				variables: {
-					tenantId: sessionStorage.getItem('tenantId')
-				}
-			});
+}`;
+
+const commentersQuery = graphql(query, {
+	name: 'commentersQuery',
+	options: ({ tenantId }) => ({
+		variables: {
+			tenantId,
 		}
-	});
-}());
+	}),
+});
 
 
 

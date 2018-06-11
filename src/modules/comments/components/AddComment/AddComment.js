@@ -245,22 +245,25 @@ class AddComment extends Component {
 	}
 
 	addNewTag(tag) {
+		const { tenantId } = this.props;
+
 		const keyword = {
 			title: tag.value,
 			slug: slugify(tag.value.toLowerCase()),
 			type: 'word',
 			count: 1,
-			tenantId: sessionStorage.getItem('tenantId'),
+			tenantId,
 		};
 
 		this.props.keywordInsert(keyword);
 	}
 
 	addNewReferenceWork(reference) {
+		const { tenantId } = this.props;
 		const _reference = {
 			title: reference.value,
 			slug: slugify(reference.value.toLowerCase()),
-			tenantId: sessionStorage.getItem('tenantId')
+			tenantId,
 		};
 
 		this.props.referenceWorkCreate(_reference).then(err => {
@@ -383,6 +386,7 @@ AddComment.defaultProps = {
 
 const mapStateToProps = (state, props) => ({
 	commenters: state.auth.commenters,
+	tenantId: state.tenant.tenantId,
 });
 
 export default compose(

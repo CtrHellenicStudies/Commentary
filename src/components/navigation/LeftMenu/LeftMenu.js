@@ -21,13 +21,6 @@ import './LeftMenu.css';
 
 
 class LeftMenu extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			tenantId: sessionStorage.getItem('tenantId')
-		};
-	}
-
 	render() {
 		const {
 			leftMenuOpen, closeLeftMenu, userId, dispatchLogout,
@@ -193,7 +186,8 @@ const mapStateToProps = (state, props) => ({
 	leftMenuOpen: state.leftMenu.open,
 	userId: state.auth.userId,
 	roles: state.auth.roles,
-	commenters: state.auth.commenters
+	commenters: state.auth.commenters,
+	tenantId: state.tenant.tenantId,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

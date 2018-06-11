@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // graphql
@@ -9,11 +9,12 @@ import keywordsQuery from '../../graphql/queries/keywordsQuery';
 // components
 import KeywordTeaser from '../KeywordsTeaser/KeywordTeaser';
 
-function getKeywordsByQuery(query, limit) {
 
+function getKeywordsByQuery(query, limit) {
 	if (query.loading) {
 		return [];
 	}
+
 	return query.keywords.slice(0, limit);
 }
 
@@ -21,14 +22,15 @@ class KeywordsList extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
-		const tenantId = sessionStorage.getItem('tenantId');
 
 		const query = {
 			type: this.props.type,
 			count: { $gte: 1}
 		};
+
+		// TODO: move refetch to container
 		this.props.keywordsQuery.refetch({
-			tenantId: tenantId,
+			tenantId: props.tenantId,
 			queryParam: JSON.stringify(query)
 		});
 	}
@@ -86,4 +88,11 @@ KeywordsList.propTypes = {
 	keywordsQuery: PropTypes.object,
 };
 
-export default compose(keywordsQuery)(KeywordsList);
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	connect(mapStateToProps),
+	keywordsQuery,
+)(KeywordsList);

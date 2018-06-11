@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
@@ -43,7 +42,7 @@ class Home extends Component {
 		e.preventDefault();
 	}
 	componentWillReceiveProps(nextProps) {
-		const tenantId = sessionStorage.getItem('tenantId');
+		const { tenantId } = this.props; 
 
 		this.setState({
 			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId),
@@ -280,14 +279,19 @@ class Home extends Component {
 	}
 }
 
-
 Home.propTypes = {
 	settingsQuery: PropTypes.object,
-	isTest: PropTypes.bool,
 };
 
 Home.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-export default compose(settingsQuery)(Home);
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	connect(mapStateToProps),
+	settingsQuery,
+)(Home);

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import _ from 'lodash';
 import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import autoBind from 'react-autobind';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
@@ -25,6 +27,7 @@ class CommentarySearchPanel extends Component {
 
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			subworks: [],
 			activeWork: '',
@@ -34,14 +37,13 @@ class CommentarySearchPanel extends Component {
 			works: [],
 			referenceWorks: []
 		};
-		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
-		this.toggleWorkSearchTerm = this.toggleWorkSearchTerm.bind(this);
-		this.handleChangeTextsearch = this.handleChangeTextsearch.bind(this);
 
-		const tenantId = sessionStorage.getItem('tenantId');
+		// TODO: move to container
 		this.props.keywordsQuery.refetch({
-			tenantId: tenantId
+			tenantId: this.props.tenantId
 		});
+
+		autoBind(this);
 	}
 
 	toggleSearchTerm(key, value) {
@@ -406,7 +408,13 @@ CommentarySearchPanel.propTypes = {
 	commentersQuery: PropTypes.object,
 	editionsQuery: PropTypes.object
 };
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
 export default compose(
+	connect(mapStateToProps),
 	commentersQuery,
 	referenceWorksQuery,
 	keywordsQuery,

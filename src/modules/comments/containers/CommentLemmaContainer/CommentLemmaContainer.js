@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
+
 // graphql
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 

@@ -1,6 +1,7 @@
 import { BrowserRouter, Switch, Route, } from 'react-router-dom';
 import React from 'react';
 import { compose } from 'react-apollo';
+import { connect } from 'react-redux';
 
 // lib
 import Utils from '../lib/utils';
@@ -10,6 +11,9 @@ import tenantBySubdomainQuery from '../modules/tenants/graphql/queries/tenantByS
 
 // layouts
 import NotFound from '../modules/notFound/components/NotFound/NotFound';
+
+// redux
+import { setTenantId } from '../modules/tenants/actions';
 
 // modules
 import {
@@ -47,79 +51,116 @@ import {
 /**
  * Application routes
  */
-const Routes = (props) => {
+class Routes extends React.Component {
 
-	// set the base document meta for the application
-	Utils.setBaseDocMeta();
 
-	if (
-		props.tenantQuery
-		&& !props.tenantQuery.loading
-	) {
-		if (!props.tenantQuery.tenantBySubdomain) {
-			return <Route component={NotFound} />;
+	componentWillReceiveProps(nextProps) {
+		const { dispatchSetTenantId } = this.props;
+
+		if (
+			nextProps.tenantQuery
+			&& nextProps.tenantQuery.tenantBySubdomain
+			&& (
+				!this.props.tenantQuery
+				|| !this.props.tenantQuery.tenantBySubdomain
+			)
+		) {
+
+			dispatchSetTenantId(nextProps.tenantQuery.tenantBySubdomain._id);
 		}
-
-		sessionStorage.setItem('tenantId', props.tenantQuery.tenantBySubdomain._id);
 	}
 
-	return (
-		<BrowserRouter>
-			<Switch>
-				{/** Home routes */}
-				{homeRoute}
+	render() {
 
-				{/** Commentary routes */}
-				{addCommentRoute}
-				{addRevisionRoute}
-				{commentaryRoute}
+		// set the base document meta for the application
+		Utils.setBaseDocMeta();
 
-				{/** Tags routes */}
-				{editKeywordRoute}
-				{addKeywordRoute}
-				{keywordDetailRoute}
-				{wordsListRoute}
-				{ideasListRoute}
+		if (
+			this.props.tenantQuery
+			&& !this.props.tenantQuery.loading
+			&& !this.props.tenantQuery.tenantBySubdomain
+		) {
+			return (
+				<BrowserRouter>
+					<Switch>
+						<Route component={NotFound} />;
+					</Switch>
+				</BrowserRouter>
+			);
+		}
 
-				{/** Reference works routes */}
-				{referenceWorkDetailRoute}
-				{referenceWorkListRoute}
+		return (
+			<BrowserRouter>
+				<Switch>
+					{/** Home routes */}
+					{homeRoute}
 
-				{/** Commenters routes */}
-				{commenterDetailRoute}
-				{commenterListRoute}
+					{/** Commentary routes */}
+					{addCommentRoute}
+					{addRevisionRoute}
+					{commentaryRoute}
 
-				{/** TextNode routes */}
-				{textNodesRoute}
+					{/** Tags routes */}
+					{editKeywordRoute}
+					{addKeywordRoute}
+					{keywordDetailRoute}
+					{wordsListRoute}
+					{ideasListRoute}
 
-				{/** Users routes */}
-				{profileRoute}
-				{publicProfileRoute}
+					{/** Reference works routes */}
+					{referenceWorkDetailRoute}
+					{referenceWorkListRoute}
 
-				{/** Auth routes */}
-				{signInRoute}
-				{signOutRoute}
-				{updateForV2Route}
-				{forgotPasswordRoute}
-				{unauthorizedRoute}
+					{/** Commenters routes */}
+					{commenterDetailRoute}
+					{commenterListRoute}
 
-				{/** NRS routes */}
-				{nrsV1Route}
-				{nrsV1RouteWithURN}
-				{nrsV2Route}
-				{nrsV1DOI}
+					{/** TextNode routes */}
+					{textNodesRoute}
 
-				{/** Settings routes */}
-				{adminRoute}
+					{/** Users routes */}
+					{profileRoute}
+					{publicProfileRoute}
 
-				{/** Basic page routes */}
-				{pageRoute}
+					{/** Auth routes */}
+					{signInRoute}
+					{signOutRoute}
+					{updateForV2Route}
+					{forgotPasswordRoute}
+					{unauthorizedRoute}
 
-				{/** 404 routes */}
-				<Route component={NotFound} />
-			</Switch>
-		</BrowserRouter>
-	);
-};
+					{/** NRS routes */}
+					{nrsV1Route}
+					{nrsV1RouteWithURN}
+					{nrsV2Route}
+					{nrsV1DOI}
 
-export default compose(tenantBySubdomainQuery)(Routes);
+					{/** Settings routes */}
+					{adminRoute}
+
+					{/** Basic page routes */}
+					{pageRoute}
+
+					{/** 404 routes */}
+					<Route component={NotFound} />
+				</Switch>
+			</BrowserRouter>
+		);
+	}
+}
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+const mapDispatchToProps = dispatch => ({
+	dispatchSetTenantId: (tenantId) => {
+		dispatch(setTenantId(tenantId));
+	},
+});
+
+
+export default compose(
+	tenantBySubdomainQuery,
+	connect(mapStateToProps, mapDispatchToProps),
+)(Routes);

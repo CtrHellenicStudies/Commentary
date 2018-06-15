@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-import { connect } from 'react-redux';
-import { compose } from 'react-apollo';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
+import autoBind from 'react-autobind';
 
 // lib
 import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
-
-// graphql
-import settingsQuery from '../../../settings/graphql/queries/list';
 
 // components:
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
@@ -29,9 +25,9 @@ import './Home.css';
 class Home extends Component {
 	constructor(props) {
 		super(props);
-		this.scrollToIntro = this.scrollToIntro.bind(this);
-		this.state = {};
+		autoBind(this);
 	}
+
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}
@@ -41,19 +37,12 @@ class Home extends Component {
 
 		e.preventDefault();
 	}
-	componentWillReceiveProps(nextProps) {
-		const { tenantId } = this.props; 
 
-		this.setState({
-			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId),
-			ready: !nextProps.settingsQuery.loading
-		});
-	}
 	render() {
+		const { settings } = this.props;
 		let imageUrl = `${window.location.origin}/images/hector.jpg`;
 		let introImage = '/images/ajax_achilles_3.jpg';
 		let introImageCaption = '';
-		const { settings, ready } = this.state;
 
 		if (!settings) {
 			return <LoadingHome />;
@@ -142,7 +131,7 @@ class Home extends Component {
 								</h2>
 
 								<div className="intro-col intro-col-text">
-									{ready ? settings.introBlocks.map((block, i) => (
+									{settings.introBlocks.map((block, i) => (
 										<div
 											key={i}
 											className="mb40 mb-xs-24l intro-block-text"
@@ -166,7 +155,7 @@ class Home extends Component {
 												</div>
 												: ''}
 										</div>
-									)) : ''}
+									))}
 								</div>
 								<div className="intro-col intro-col-image image-wrap wow fadeIn">
 									<img
@@ -207,7 +196,9 @@ class Home extends Component {
 							</Link>
 						</div>
 					</section>
+
 					{/*
+						TODO: rework visualizations
 					<section id="visualizations" className="browse-commentary block-shadow">
 						<span className="visualizations-coaching-text">
 							The charts below visualize data about the number of comments per book or hymn,
@@ -250,6 +241,7 @@ class Home extends Component {
 					</section>
 
 					{/*
+						TODO: ask Lenny about page load times versus including comments on the homepage
 						<section className="get-started">
 						<h2 className="block-title">Get Started</h2>
 						<div className="get-started-comments">
@@ -280,18 +272,11 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-	settingsQuery: PropTypes.object,
+	settings: PropTypes.object,
 };
 
 Home.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-export default compose(
-	connect(mapStateToProps),
-	settingsQuery,
-)(Home);
+export default Home;

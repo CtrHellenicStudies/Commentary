@@ -395,6 +395,7 @@ class CommentarySearchPanel extends Component {
 		);
 	}
 }
+
 CommentarySearchPanel.propTypes = {
 	filters: PropTypes.array,
 	toggleSearchTerm: PropTypes.func,

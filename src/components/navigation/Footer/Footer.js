@@ -17,22 +17,16 @@ import './Footer.css';
 
 class Footer extends Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-
-	componentWillReceiveProps(props) {
-		const { tenantId } = this.props; 
-
-		this.setState({
-			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings.find(x => x.tenantId === tenantId),
-			tenant: props.tenantsQuery.loading ? undefined : props.tenantsQuery.tenants.find(x => x._id === tenantId)
-		});
-	}
-
 	render() {
-		const { settings, tenant } = this.state;
+		const { tenantId, settingsQuery, tenantsQuery } = this.props;
+		let settings = null;
+		let tenant = null;
+
+		if (settingsQuery && settingsQuery.settings) {
+			settings = settingsQuery.loading ? {} : settingsQuery.settings.find(x => x.tenantId === tenantId);
+			tenant = tenantsQuery.loading ? undefined : tenantsQuery.tenants.find(x => x._id === tenantId);
+		}
+
 		const now = new Date();
 		const year = now.getFullYear();
 

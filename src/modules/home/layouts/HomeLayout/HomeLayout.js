@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// lib
 import muiTheme from '../../../../lib/muiTheme';
 
 // graphql
@@ -18,7 +20,7 @@ import CommunityLayout from '../../../community/layouts/CommunityLayout/Communit
 import NameResolutionServiceLayout from '../../../nrs/layouts/NameResolutionServiceLayout';
 
 // components
-import Home from '../../components/Home/Home';
+import HomeContainer from '../../containers/HomeContainer';
 import LoadingHome from '../../../../components/loading/LoadingHome';
 
 // auth
@@ -48,23 +50,18 @@ class HomeLayout extends Component {
 		}
 	}
 
-	componentWillReceiveProps(props) {
-		if(this.props.settingsQuery.loading || this.props.tenantsQuery.loading) {
-			return null;
+	render() {
+		let tenant = null;
+		const { tenantId, tenantsQuery } = this.props;
+
+
+		if (
+			tenantsQuery
+			&& tenantsQuery.tenants
+		) {
+			tenant = tenantsQuery.tenants.find(x => x._id === tenantId);
 		}
 
-		const { tenantId } = this.props;
-		const settings = this.props.settingsQuery.settings.find(x => x.tenantId === tenantId);
-		const tenant = this.props.tenantsQuery.tenants.find(x => x._id === tenantId);
-
-		this.setState({
-			settings: settings,
-			tenant: tenant
-		});
-	}
-
-	render() {
-		const { tenant, settings } = this.state;
 		if (!tenant) {
 			return <LoadingHome />;
 		}
@@ -90,8 +87,7 @@ class HomeLayout extends Component {
 						history={this.props.history}
 					/>
 
-					<Home
-						settings={settings}
+					<HomeContainer
 						history={this.props.history}
 					/>
 
@@ -115,4 +111,12 @@ HomeLayout.propTypes = {
 	history: PropTypes.any
 };
 
-export default compose(tenantsQuery, settingsQuery)(HomeLayout);
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+export default compose(
+	connect(mapStateToProps),
+	settingsQuery,
+	tenantsQuery,
+)(HomeLayout);

@@ -54,15 +54,8 @@ class CommentaryLayout extends Component {
 			limit: 10,
 			queryParams: qs.parse(window.location.search.substr(1)),
 			params: this.props.match,
-			referenceWorks: [],
-			works: [],
 			filters: []
 		};
-
-		// TODO: move refetch to container
-		this.props.referenceWorksQuery.refetch({
-			tenantId: props.tenantId,
-		});
 
 		autoBind(this);
 	}
@@ -150,11 +143,12 @@ class CommentaryLayout extends Component {
 		this.setState({
 			referenceWorks: referenceWorks,
 			works: works,
-			filters: createFilterFromURL(this.state.params, this.state.queryParams, this.state.works, this.state.referenceWorks)
+			filters: createFilterFromURL(this.state.params, this.state.queryParams, this.state.works, this.props.referenceWorks)
 		});
 	}
 
 	render() {
+		const { tenantId } = this.props;
 		const { skip, limit, queryParams, filters } = this.state;
 
 		// create filters object based on the queryParams or params
@@ -175,6 +169,7 @@ class CommentaryLayout extends Component {
 							toggleSearchTerm={this._toggleSearchTerm}
 							showLoginModal={this.showLoginModal}
 							loadMoreComments={this.loadMoreComments}
+							tenantId={tenantId}
 							skip={skip}
 							limit={limit}
 							queryParams={queryParams}
@@ -194,9 +189,7 @@ class CommentaryLayout extends Component {
 }
 
 CommentaryLayout.defaultProps = {
-	queryParams: {
-		lineTo: 611,
-	}
+	queryParams: {},
 };
 
 CommentaryLayout.propTypes = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ReferenceWorksList from '../../../referenceWorks/components/ReferenceWorksList/ReferenceWorksList';
+import ReferenceWorkList from '../../../referenceWorks/components/ReferenceWorkList';
 
 import './CommenterReferenceWorks.css';
 
@@ -15,7 +15,7 @@ const CommenterReferenceWorks = ({ commenter }) => (
 				Reference Works
 			</h2>
 		</div>
-		<ReferenceWorksList
+		<ReferenceWorkList
 			commenterId={commenter._id}
 		/>
 	</div>

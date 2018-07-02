@@ -11,7 +11,7 @@ import referenceWorksQuery from '../../graphql/queries/referenceWorksQuery';
 // components
 import ReferenceWorkTeaser from '../ReferenceWorkTeaser/ReferenceWorkTeaser';
 
-class ReferenceWorksList extends Component {
+class ReferenceWorkList extends Component {
 
 	constructor(props) {
 		super(props);
@@ -72,9 +72,9 @@ class ReferenceWorksList extends Component {
 
 }
 
-ReferenceWorksList.propTypes = {
+ReferenceWorkList.propTypes = {
 	commenterId: PropTypes.string,
 	referenceWorksQuery: PropTypes.object,
 };
 
-export default compose(referenceWorksQuery)(ReferenceWorksList);
+export default compose(referenceWorksQuery)(ReferenceWorkList);

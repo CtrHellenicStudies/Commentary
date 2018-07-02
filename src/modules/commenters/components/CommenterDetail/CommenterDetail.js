@@ -107,7 +107,6 @@ class CommenterDetail extends Component {
 		});
 	}
 	render() {
-		const { isTest } = this.props;
 		const { readMoreBio, commenter, settings, avatarUrl } = this.state;
 
 		if (commenter) {
@@ -182,7 +181,6 @@ class CommenterDetail extends Component {
 
 								<CommenterVisualizations
 									commenter={commenter}
-									isTest={isTest}
 								/>
 
 								<br />
@@ -211,7 +209,6 @@ CommenterDetail.propTypes = {
 	settings: PropTypes.shape({
 		title: PropTypes.string.isRequired,
 	}),
-	isTest: PropTypes.bool,
 	match: PropTypes.object,
 	commentersQuery: PropTypes.object,
 	settingsQuery: PropTypes.object
@@ -220,7 +217,6 @@ CommenterDetail.propTypes = {
 CommenterDetail.defaultProps = {
 	commenter: null,
 	avatarUrl: null,
-	isTest: false,
 };
 
 const mapStateToProps = (state, props) => ({

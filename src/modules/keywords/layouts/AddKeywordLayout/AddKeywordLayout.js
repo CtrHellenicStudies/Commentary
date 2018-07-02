@@ -223,7 +223,6 @@ class AddKeywordLayout extends Component {
 
 	render() {
 		const { filters, work, } = this.state;
-		const { isTest } = this.props;
 		let textNodesUrn = this.state.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0012.tlg001';
 
 		Utils.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
@@ -241,20 +240,18 @@ class AddKeywordLayout extends Component {
 							selectedWork={this.getWork(filters)}
 						/>
 
-						{!isTest ?
-							<main>
-								<AddKeywordContainer
-									textNodesUrn={textNodesUrn}
-									addKeyword={this.addKeyword}
-									work={work} />
+						<main>
+							<AddKeywordContainer
+								textNodesUrn={textNodesUrn}
+								addKeyword={this.addKeyword}
+								work={work} />
 
-								<FilterWidget
-									filters={filters}
-									toggleSearchTerm={this.toggleSearchTerm}
-								/>
+							<FilterWidget
+								filters={filters}
+								toggleSearchTerm={this.toggleSearchTerm}
+							/>
 
-							</main>
-							: ''}
+						</main>
 					</div>
 				</div>
 			</MuiThemeProvider>
@@ -263,7 +260,6 @@ class AddKeywordLayout extends Component {
 }
 
 AddKeywordLayout.propTypes = {
-	isTest: PropTypes.bool,
 	history: PropTypes.object,
 	keywordInsert: PropTypes.func,
 };

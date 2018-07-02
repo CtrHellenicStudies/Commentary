@@ -1,5 +1,7 @@
 /*
 
+CommentaryLayout
+
 filters – queryParams relations explanation:
 “queryParams” represent state of truth
 “filters” are a friendly object representation of “queryParams” passed to children components
@@ -9,6 +11,7 @@ call the “this._updateRoute(filters)” method
 with new “filters” object passed as first attribute.
 
 */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
@@ -153,7 +156,7 @@ class CommentaryLayout extends Component {
 
 	render() {
 		const { skip, limit, queryParams, filters } = this.state;
-		const { isTest } =  this.props;
+
 		// create filters object based on the queryParams or params
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -164,7 +167,6 @@ class CommentaryLayout extends Component {
 							toggleSearchTerm={this._toggleSearchTerm}
 							handleChangeLineN={this._handleChangeLineN}
 							handleChangeTextsearch={this._handleChangeTextsearch}
-							isTest={isTest}
 							initialSearchEnabled
 						/>
 
@@ -201,7 +203,6 @@ CommentaryLayout.propTypes = {
 	queryParams: PropTypes.object,
 	referenceWorks: PropTypes.array,
 	works: PropTypes.array,
-	isTest: PropTypes.bool,
 	history: PropTypes.any,
 	editionsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,

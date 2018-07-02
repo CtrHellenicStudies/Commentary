@@ -403,7 +403,6 @@ CommentarySearchPanel.propTypes = {
 	handlePagination: PropTypes.func,
 	open: PropTypes.bool,
 	closeRightMenu: PropTypes.func,
-	isTest: PropTypes.bool,
 	keywordsQuery: PropTypes.object,
 	referenceWorksQuery: PropTypes.object,
 	commentersQuery: PropTypes.object,

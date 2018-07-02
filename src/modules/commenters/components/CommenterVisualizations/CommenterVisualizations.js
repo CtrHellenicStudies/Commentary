@@ -42,7 +42,7 @@ class CommenterVisualizations extends Component {
 	}
 
 	renderWorks() {
-		const { commenter, isTest } = this.props;
+		const { commenter, } = this.props;
 
 		if (commenter.nCommentsWorks) {
 			return commenter.nCommentsWorks.map((work, i) =>
@@ -51,7 +51,6 @@ class CommenterVisualizations extends Component {
 					toggleVisibleWork={this.toggleVisibleWork}
 					work={work}
 					commenterSlug={commenter.slug}
-					isTest={isTest}
 				/>)
 			);
 		}
@@ -129,7 +128,6 @@ class CommenterVisualizations extends Component {
 
 CommenterVisualizations.propTypes = {
 	commenter: PropTypes.object.isRequired,
-	isTest: PropTypes.bool,
 };
 
 CommenterVisualizations.childContextTypes = {

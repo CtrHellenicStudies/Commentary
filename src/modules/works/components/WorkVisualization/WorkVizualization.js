@@ -36,12 +36,8 @@ const WorkVisualization = createClass({
 
 	componentDidMount() {
 		const self = this;
-		const { work, isTest } = this.props;
+		const { work } = this.props;
 		const slug = work.slug;
-
-		if (isTest) {
-			return false;
-		}
 
 		let orientation = 'vertical';
 		let width = window.innerWidth * 0.9;

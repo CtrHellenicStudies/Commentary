@@ -34,11 +34,6 @@ class NotFound extends Component {
 		];
 		let randomExpression = expressionsOfWoe[Math.round(Math.random() * expressionsOfWoe.length)];
 
-		// If this is just a test, set the same expression each time to not disrupt snapshot
-		if (this.props.isTest) {
-			randomExpression = 'ὦ Ζεῦ';
-		}
-
 		return (
 			<div className="chs-layout master-layout not-found-layout">
 				<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
@@ -88,9 +83,8 @@ class NotFound extends Component {
 		);
 	}
 }
-NotFound.propTypes = {
-	isTest: PropTypes.bool,
-};
+
+
 NotFound.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };

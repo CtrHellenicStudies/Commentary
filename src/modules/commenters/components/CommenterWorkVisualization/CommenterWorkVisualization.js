@@ -19,7 +19,7 @@ class CommenterWorkVisualization extends Component {
 	}
 
 	render() {
-		const { work, commenterSlug, isTest } = this.props;
+		const { work, commenterSlug } = this.props;
 
 		return (
 			<div className={`commenter-work-visualization commenter-work-visualization--${work.slug}`}>
@@ -27,13 +27,11 @@ class CommenterWorkVisualization extends Component {
 					onClick={this.toggleVisibleWork}
 					className="close-visualization mdi mdi-close"
 				/>
-				{!isTest ?
-					<WorkVisualization
-						ref={(component) => { this.workVisualization = component; }}
-						work={work}
-						commenterSlug={commenterSlug}
-					/>
-					: ''}
+				<WorkVisualization
+					ref={(component) => { this.workVisualization = component; }}
+					work={work}
+					commenterSlug={commenterSlug}
+				/>
 			</div>
 		);
 	}
@@ -43,7 +41,6 @@ CommenterWorkVisualization.propTypes = {
 	work: PropTypes.object.isRequired,
 	toggleVisibleWork: PropTypes.func.isRequired,
 	commenterSlug: PropTypes.string.isRequired,
-	isTest: PropTypes.bool,
 };
 
 export default CommenterWorkVisualization;

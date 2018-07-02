@@ -68,10 +68,6 @@ class TextNodesEditorLayout extends Component {
 	}
 }
 
-TextNodesEditorLayout.propTypes = {
-	isTest: PropTypes.bool,
-};
-
 TextNodesEditorLayout.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };

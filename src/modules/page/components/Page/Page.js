@@ -57,9 +57,7 @@ class Page extends Component {
 			);
 		} else if (ready && !page) {
 			return (
-				<NotFound
-					isTest={slug === '__test__'}
-				/>
+				<NotFound />
 			);
 		}
 

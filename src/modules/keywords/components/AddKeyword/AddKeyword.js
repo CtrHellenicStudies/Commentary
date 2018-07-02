@@ -232,7 +232,6 @@ class AddKeyword extends Component {
 	}
 	// --- END SUBMIT / VALIDATION HANDLE --- //
 	render() {
-		const { isTest } = this.props;
 		const styles = {
 			block: {
 				maxWidth: 250,
@@ -242,10 +241,6 @@ class AddKeyword extends Component {
 			},
 		};
 
-
-		if (isTest) {
-			return null;
-		}
 
 		return (
 			<div className="comments lemma-panel-visible">
@@ -334,8 +329,6 @@ AddKeyword.propTypes = {
 	onTypeChange: PropTypes.func.isRequired,
 	keywordsOptions: PropTypes.array,
 	keyideasOptions: PropTypes.array,
-	isTest: PropTypes.bool,
-
 };
 
 const mapStateToProps = (state, props) => ({

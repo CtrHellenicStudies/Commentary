@@ -138,7 +138,7 @@ class CommentersEditorDialog extends Component {
 							Add new
 						</label>
 						<AutoComplete
-							hintText="enter commentator"
+							hintText="Enter commenter"
 							dataSource={commentersList}
 							dataSourceConfig={{text: 'name', value: 'slug'}}
 							onNewRequest={this.selectCommenter}

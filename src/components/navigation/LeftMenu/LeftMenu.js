@@ -115,7 +115,7 @@ class LeftMenu extends React.Component {
 						Ideas
 					</MenuItem>
 					<MenuItem
-						to="/commentators"
+						to="/commenters"
 						onClick={closeLeftMenu}
 					>
 						Commentators

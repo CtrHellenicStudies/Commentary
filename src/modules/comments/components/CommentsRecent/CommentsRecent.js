@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import { compose } from 'react-apollo';
 import Slider from 'react-slick';
 
 
-// lib:
-import commentsQuery from '../../graphql/queries/comments';
+// lib
 import Utils from '../../../../lib/utils';
 
 
-/*
-	helpers
-*/
+// slider settings
 const settings = {
 	dots: true,
 	arrows: false,
@@ -24,24 +19,15 @@ const settings = {
 	slidesToScroll: 1,
 };
 
-/*
-	BEGIN CommentsRecent
-*/
+
 class CommentsRecent extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-	componentWillReceiveProps(nextProps) {
-		this.setState({
-			comments: nextProps.commentsQuery.loading ? [] : nextProps.commentsQuery.comments.slice(0,3)
-		});
-	}
 	render() {
-		const { comments } = this.state;
+		const { comments } = this.props;
+
 		if (!comments) {
 			return null;
 		}
+
 		return (
 			<section className="background-gray recent-comments">
 				<div className="container">
@@ -80,11 +66,13 @@ class CommentsRecent extends Component {
 		);
 	}
 }
-CommentsRecent.propTypes = {
-	commentsQuery: PropTypes.object
-};
-CommentsRecent.defaultProps = {
-	comments: null,
+
+CommentsRecent.PropTypes = {
+	comments: PropTypes.array,
 };
 
-export default compose(commentsQuery)(CommentsRecent);
+CommentsRecent.defaultProps = {
+	comments: [],
+};
+
+export default CommentsRecent;

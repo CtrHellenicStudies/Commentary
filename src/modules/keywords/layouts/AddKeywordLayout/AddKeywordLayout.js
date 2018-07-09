@@ -8,7 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // graphql
-import keywordInsertMutation from '../../graphql/mutations/keywordsInsert';
+import keywordInsertMutation from '../../graphql/mutations/insert';
 
 // components:
 import Header from '../../../../components/navigation/Header';

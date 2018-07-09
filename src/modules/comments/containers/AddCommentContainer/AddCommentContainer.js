@@ -18,9 +18,9 @@ import CommentWorkSelect from '../../components/CommentWorkSelect';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
-import keywordInsertMutation from '../../../keywords/graphql/mutations/keywordsInsert';
-import keywordUpdateMutation from '../../../keywords/graphql/mutations/keywordsUpdate';
+import keywordsQuery from '../../../keywords/graphql/queries/list';
+import keywordInsertMutation from '../../../keywords/graphql/mutations/insert';
+import keywordUpdateMutation from '../../../keywords/graphql/mutations/update';
 import commentsInsertMutation from '../../graphql/mutations/insert';
 
 // lib

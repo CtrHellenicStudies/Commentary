@@ -29,9 +29,9 @@ import muiTheme from '../../../../lib/muiTheme';
 // graphql
 import commentRemoveMutation from '../../../comments/graphql/mutations/remove';
 import commentRemoveRevisionMutation from '../../../comments/graphql/mutations/removeRevision';
-import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
-import keywordInsertMutation from '../../../keywords/graphql/mutations/keywordsInsert';
-import keywordsUpdate from '../../../keywords/graphql/mutations/keywordsUpdate';
+import keywordsQuery from '../../../keywords/graphql/queries/list';
+import keywordInsertMutation from '../../../keywords/graphql/mutations/insert';
+import keywordsUpdate from '../../../keywords/graphql/mutations/update';
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
@@ -416,7 +416,7 @@ class AddRevision extends Component {
 			count: 1,
 			tenantId,
 		}];
-		
+
 		this.props.keywordInsert(keyword);
 	}
 

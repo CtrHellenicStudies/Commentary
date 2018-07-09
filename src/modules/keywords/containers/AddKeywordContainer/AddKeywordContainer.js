@@ -10,7 +10,7 @@ import AddKeyword from '../../components/AddKeyword/AddKeyword';
 import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
 
 
-const AddKeywordContainer = class AddKeywordContainerClass extends Component {
+class AddKeywordContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -36,7 +36,7 @@ const AddKeywordContainer = class AddKeywordContainerClass extends Component {
 			<div className="commentary-comments">
 				<div className="comment-group">
 					<CommentLemmaSelect
-						textNodes={selectedTextNodes}			
+						textNodes={selectedTextNodes}
 					/>
 					<AddKeyword
 						selectedLineFrom={this.state.selectedLineFrom}

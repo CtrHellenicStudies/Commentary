@@ -9,6 +9,7 @@ import muiTheme from '../../../../lib/muiTheme';
 
 // components
 import Header from '../../../../components/navigation/Header';
+import Footer from '../../../../components/navigation/Footer';
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 
 
@@ -28,41 +29,44 @@ const Page = ({ title, slug, subtitle, byline, content, headerImageUrl, settings
 
 	return (
 		<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-			<div className={`page page-${slug} content primary page-custom`}>
+			<div>
 				<Header />
-				<section className="block header header-page cover parallax">
-					<BackgroundImageHolder
-						imgSrc="/images/apotheosis_homer.jpg"
-					/>
+				<div className={`page page-${slug} content primary page-custom`}>
+					<section className="block header header-page cover parallax">
+						<BackgroundImageHolder
+							imgSrc="/images/apotheosis_homer.jpg"
+						/>
 
-					<div className="container v-align-transform">
-						<div className="grid inner">
-							<div className="center-content">
-								<div className="page-title-wrap">
-									<h1 className="page-title">
-										{title}
-									</h1>
-									{subtitle &&
-										<h2 className="page-subtitle">
-											{subtitle}
-										</h2>
-									}
+						<div className="container v-align-transform">
+							<div className="grid inner">
+								<div className="center-content">
+									<div className="page-title-wrap">
+										<h1 className="page-title">
+											{title}
+										</h1>
+										{subtitle &&
+											<h2 className="page-subtitle">
+												{subtitle}
+											</h2>
+										}
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</section>
+					</section>
 
-				<section className="page-content container">
-					{byline &&
-						<div className="page-byline">
-							<h3>
-								{byline}
-							</h3>
-						</div>
-					}
-					<div dangerouslySetInnerHTML={{ __html: _content }} />
-				</section>
+					<section className="page-content container">
+						{byline &&
+							<div className="page-byline">
+								<h3>
+									{byline}
+								</h3>
+							</div>
+						}
+						<div dangerouslySetInnerHTML={{ __html: _content }} />
+					</section>
+				</div>
+				<Footer />
 			</div>
 		</MuiThemeProvider>
 	);

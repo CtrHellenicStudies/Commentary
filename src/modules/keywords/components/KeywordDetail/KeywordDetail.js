@@ -4,22 +4,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { compose } from 'react-apollo';
-import { connect } from 'react-redux';
 import $ from 'jquery';
 
-// graphql
-import settingsQuery from '../../../settings/graphql/queries/list';
-import keywordsQuery from '../../graphql/queries/keywordsQuery';
-import keywordRemoveMutation from '../../graphql/mutations/keywordsRemove';
-import commentsQuery from '../../../comments/graphql/queries/comments';
-
 // components
-import Header from '../../../../components/navigation/Header/Header';
-import KeywordContext from '../KeywordContext/KeywordContext';
-import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
-import KeywordCommentList from '../KeywordsCommentList/KeywordsCommentList';
-import CommentsRecent from '../../../comments/components/CommentsRecent/CommentsRecent';
+import KeywordContext from '../KeywordContext';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
+import KeywordCommentList from '../KeywordsCommentList';
+import CommentsRecent from '../../../comments/components/CommentsRecent';
+import Header from '../../../../components/navigation/Header';
+import Footer from '../../../../components/navigation/Footer';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -30,7 +23,6 @@ import './KeywordDetail.css';
 
 
 class KeywordDetail extends Component {
-
 	constructor(props) {
 		super(props);
 
@@ -38,53 +30,11 @@ class KeywordDetail extends Component {
 			keywordReferenceModalVisible: false,
 			referenceTop: 0,
 			referenceLeft: 0,
-			keyword: '',
-			kewyord: {},
-			keywordComments: [],
-			settings: {}
 		};
-
-		// TODO: move refetch to container
-		this.props.keywordsQuery.refetch({
-			tenantId: props.tenantId,
-		});
-	}
-
-	componentWillReceiveProps(props) {
-		if (props.keywordsQuery.loading || props.commentsQuery.loading
-			|| props.settingsQuery.loading) {
-			return;
-		}
-		const { match } = props;
-		const slug = match.params.slug;
-
-		const keyword =  props.keywordsQuery.keywords.find(x => x.slug === slug);
-
-		let keywordComments = null;
-		if (keyword) {
-			const keywordCommentsQuery = { keywords: { $elemMatch: { _id: keyword._id } } }; // TODO can be change for keywordId
-			props.commentsQuery.refetch({
-				queryParam: JSON.stringify(keywordCommentsQuery)
-			});
-			keywordComments = props.commentsQuery.comments;
-		}
-		this.setState({
-			keyword,
-			settings: props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId),
-			keywordComments,
-		});
-	}
-
-	deleteKeyword() {
-		const that = this;
-		const { keyword } = this.state;
-		this.props.keywordRemove(keyword._id).then(function() {
-			that.props.history.push('/words');
-		});
 	}
 
 	_keywordDescriptionOnClick(e) {
-		const $target = $(e.target);
+		const $target = $(e.target); // eslint-disable-line
 		const upperOffset = 90;
 		if ($target.hasClass('keyword-gloss')) {
 			const keyword = $target.data().link.replace('/tags/', '');
@@ -98,7 +48,7 @@ class KeywordDetail extends Component {
 	}
 
 	_closeKeywordReference() {
-		this.setState({
+		this.setState({ // eslint-disable-line
 			keywordReferenceModalVisible: false,
 			referenceTop: 0,
 			referenceLeft: 0,
@@ -107,12 +57,7 @@ class KeywordDetail extends Component {
 	}
 
 	render() {
-		const { keyword, settings, keywordComments } = this.state;
-		const { roles } = this.props;
-		console.log(roles);
-		if (!keyword) {
-			return <div />;
-		}
+		const { keyword, settings, keywordComments, roles } = this.props;
 
 		Utils.setTitle(`${keyword.title} | ${settings.title}`);
 		if (keyword.description) {
@@ -122,100 +67,87 @@ class KeywordDetail extends Component {
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				<div className="page keywords-page keywords-detail-page">
+				<div>
 					<Header />
-					<div className="content primary">
-						<section className="block header header-page cover parallax">
-							<BackgroundImageHolder
-								imgSrc="/images/apotheosis_homer.jpg"
-							/>
+					<div className="page keywords-page keywords-detail-page">
+						<div className="content primary">
+							<section className="block header header-page cover parallax">
+								<BackgroundImageHolder
+									imgSrc="/images/apotheosis_homer.jpg"
+								/>
 
-							<div className="container v-align-transform">
-								<div className="grid inner">
-									<div className="center-content">
-										<div className="page-title-wrap">
-											<h2 className="page-title ">{keyword.title}</h2>
-											{roles && roles.length > 0 ?
-												<div>
-													<Link to={`/tags/${keyword.slug}/edit`}>
+								<div className="container v-align-transform">
+									<div className="grid inner">
+										<div className="center-content">
+											<div className="page-title-wrap">
+												<h2 className="page-title ">{keyword.title}</h2>
+												{roles && roles.length > 0 ?
+													<div>
+														<Link to={`/tags/${keyword.slug}/edit`}>
+															<RaisedButton
+																href={`/tags/${keyword.slug}/edit`}
+																className="cover-link light"
+																label="Edit"
+															/>
+														</Link>
 														<RaisedButton
-															href={`/tags/${keyword.slug}/edit`}
+															onClick={this.props.deleteKeyword.bind(this)}
 															className="cover-link light"
-															label="Edit"
+															label="Delete"
 														/>
-													</Link>
-													<RaisedButton
-														onClick={this.deleteKeyword.bind(this)}
-														className="cover-link light"
-														label="Delete"
-													/>
-												</div>
-												: ''}
+													</div>
+													: ''}
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</section>
+							</section>
 
-						<section className="page-content">
-							{keyword.lineFrom ?
-								<KeywordContext
-									keyword={keyword}
-									lineFrom={this.state.lineFrom}
-									lineTo={this.state.lineTo}
-									workSlug={this.state.workSlug}
-									subworkN={this.state.subworkN}
+							<section className="page-content">
+								{keyword.lemmaCitation?
+									<KeywordContext
+										keyword={keyword}
+									/>
+									: ''}
+								{(
+									keyword.description
+									&& keyword.description.length
+									&& keyword.description !== '<p></p>'
+								) ?
+									<div
+										className="keyword-description"
+										dangerouslySetInnerHTML={{ __html: keyword.description }}
+										onClick={this._keywordDescriptionOnClick}
+									/>
+									: ''}
+
+								<hr />
+
+								<h2>Related comments</h2>
+
+								<KeywordCommentList
+									keywordComments={keywordComments}
 								/>
-								: ''}
-							{(
-								keyword.description
-								&& keyword.description.length
-								&& keyword.description !== '<p></p>'
-							) ?
-								<div
-									className="keyword-description"
-									dangerouslySetInnerHTML={{ __html: keyword.description }}
-									onClick={this._keywordDescriptionOnClick}
-								/>
-								: ''}
+							</section>
 
-							<hr />
+							<CommentsRecent />
 
-							<h2>Related comments</h2>
-
-							<KeywordCommentList
-								keywordComments={keywordComments}
-							/>
-
-						</section>
-
-						<CommentsRecent />
-
+						</div>
 					</div>
+					<Footer />
 				</div>
 			</MuiThemeProvider>
 		);
 	}
 }
 
-const mapStateToProps = state => ({
-	roles: state.auth.roles,
-	tenantId: state.tenant.tenantId,
-});
 
 KeywordDetail.propTypes = {
-	settingsQuery: PropTypes.object,
-	keywordsQuery: PropTypes.object,
-	commentsQuery: PropTypes.object,
-	history: PropTypes.object,
-	keywordRemove: PropTypes.func,
-	match: PropTypes.object
+	keyword: PropTypes.object,
+	settings: PropTypes.object,
+	keywordComments: PropTypes.array,
+	roles: PropTypes.array,
+	deleteKeyword: PropTypes.func,
 };
 
-export default compose(
-	connect(mapStateToProps),
-	settingsQuery,
-	keywordsQuery,
-	keywordRemoveMutation,
-	commentsQuery
-)(KeywordDetail);
+export default KeywordDetail;

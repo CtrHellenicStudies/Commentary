@@ -12,8 +12,8 @@ import autoBind from 'react-autobind';
 import Header from '../../../../components/navigation/Header';
 
 // graphql
-import keywordsQuery from '../../graphql/queries/keywordsQuery';
-import keywordsUpdate from '../../graphql/mutations/keywordsUpdate';
+import keywordsQuery from '../../graphql/queries/list';
+import keywordsUpdate from '../../graphql/mutations/update';
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 // components

@@ -9,7 +9,7 @@ import autoBind from 'react-autobind';
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import keywordsQuery from '../../../keywords/graphql/queries/keywordsQuery';
+import keywordsQuery from '../../../keywords/graphql/queries/list';
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 
 // components:

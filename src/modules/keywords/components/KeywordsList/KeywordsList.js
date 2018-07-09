@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // graphql
-import keywordsQuery from '../../graphql/queries/keywordsQuery';
+import keywordsQuery from '../../graphql/queries/list';
 
 // components
 import KeywordTeaser from '../KeywordsTeaser/KeywordTeaser';

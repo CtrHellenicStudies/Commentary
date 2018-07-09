@@ -2,10 +2,11 @@ import React from 'react';
 import { Route } from 'react-router';
 
 import PrivateRoute from '../../../routes/PrivateRoute';
-import AddKeywordLayout from '../layouts/AddKeywordLayout/AddKeywordLayout';
-import EditKeywordLayout from '../layouts/EditKeywordsLayout/EditKeywordLayout';
-import KeywordsPage from '../components/KeywordsPage/KeywordsPage';
-import KeywordDetail from '../components/KeywordDetail/KeywordDetail';
+import AddKeywordLayout from '../layouts/AddKeywordLayout';
+import EditKeywordLayout from '../layouts/EditKeywordsLayout';
+import KeywordsPage from '../components/KeywordsPage';
+import KeywordDetailContainer from '../containers/KeywordDetailContainer';
+
 
 const editKeywordRoute = (
 	<PrivateRoute
@@ -29,7 +30,7 @@ const keywordDetailRoute = (
 	<Route
 		exact
 		path="/tags/:slug"
-		component={KeywordDetail}
+		component={KeywordDetailContainer}
 	/>
 );
 

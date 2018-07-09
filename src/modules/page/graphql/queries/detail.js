@@ -17,9 +17,9 @@ const query = gql`
 
 const pageQuery = graphql(query, {
 	name: 'pageQuery',
-	options: (slug) => ({
+	options: ({ match }) => ({
 		variables: {
-			slug,
+			slug: match.params.slug,
 		},
 	}),
 });

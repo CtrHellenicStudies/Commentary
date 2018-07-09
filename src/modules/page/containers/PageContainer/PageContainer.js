@@ -16,8 +16,10 @@ import Page from '../../components/Page';
 const reservedRoutes = ['admin', 'sign-in', 'sign-up'];
 
 
-const PageContainer = ({ slug, pageQuery, settingsQuery, tenantId }) => {
+const PageContainer = ({ match, pageQuery, settingsQuery, tenantId }) => {
 	let page = null;
+	let settings = {};
+	const slug = match.params.slug;
 
 	// redirect to / if reserved route is selected
 	if (~reservedRoutes.indexOf(slug)) {
@@ -27,23 +29,24 @@ const PageContainer = ({ slug, pageQuery, settingsQuery, tenantId }) => {
 	}
 
 	if (
-		pageQuery
+		pageQuery && settingsQuery
 	) {
 		// loading state
-		if (pageQuery.loading) {
+		if (pageQuery.loading || settingsQuery.loading) {
 			return (
 				<LoadingPage />
 			);
 		}
 
 		// page returned from database
-		if (pageQuery.page) {
+		if (pageQuery.page && settingsQuery.settings) {
 			page = pageQuery.page;
+			settings = settingsQuery.settings.find(x => x.tenantId === tenantId);
 		}
 	}
 
 	// if no page is found, render 404
-	if (!page) {
+	if (!page || !settings) {
 		return (
 			<NotFound />
 		);
@@ -52,6 +55,7 @@ const PageContainer = ({ slug, pageQuery, settingsQuery, tenantId }) => {
 	return (
 		<Page
 			{...page}
+			settings={settings}
 		/>
 	);
 };

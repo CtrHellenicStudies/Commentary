@@ -15,9 +15,7 @@ import BackgroundImageHolder from '../../../shared/components/BackgroundImageHol
 import './Page.css';
 
 
-const Page = ({
-	title, slug, subtitle, byline, content, headerImageUrl, settings
-}) => {
+const Page = ({ title, slug, subtitle, byline, content, headerImageUrl, settings }) => {
 	let _content;
 	if(Utils.isJson(content)) {
 		_content = Utils.getHtmlFromContext(Utils.getEditorState(content).getCurrentContent());
@@ -45,7 +43,7 @@ const Page = ({
 										{title}
 									</h1>
 									{subtitle &&
-										<h2>
+										<h2 className="page-subtitle">
 											{subtitle}
 										</h2>
 									}
@@ -74,6 +72,7 @@ Page.propTypes = {
 	title: PropTypes.string.isRequired,
 	slug: PropTypes.string.isRequired,
 	content: PropTypes.string.isRequired,
+	settings: PropTypes.object.isRequired,
 	subtitle: PropTypes.string,
 	byline: PropTypes.string,
 	headerImageUrl: PropTypes.string,

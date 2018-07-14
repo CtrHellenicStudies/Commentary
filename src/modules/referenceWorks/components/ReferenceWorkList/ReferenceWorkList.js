@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
@@ -11,7 +11,7 @@ import referenceWorksQuery from '../../graphql/queries/referenceWorksQuery';
 // components
 import ReferenceWorkTeaser from '../ReferenceWorkTeaser/ReferenceWorkTeaser';
 
-class ReferenceWorkList extends Component {
+class ReferenceWorkList extends React.Component {
 
 	constructor(props) {
 		super(props);

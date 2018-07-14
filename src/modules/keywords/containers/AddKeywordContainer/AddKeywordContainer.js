@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { compose } from 'react-apollo';
 
 // graphql
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 // components
-import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect/CommentLemmaSelect';
-import AddKeyword from '../../components/AddKeyword/AddKeyword';
-import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
+import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
+import AddKeyword from '../../components/AddKeyword';
+import ContextPanel from '../../../contextPanel/components/ContextPanel';
 
 
-class AddKeywordContainer extends Component {
+class AddKeywordContainer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {

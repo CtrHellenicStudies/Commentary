@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// components
 import CommentGroupMetaWorkTitleContainer from '../../../containers/CommentGroupMetaWorkTitleContainer';
 import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
+
+// cts
 import serializeUrn from '../../../../cts/lib/serializeUrn';
 
 

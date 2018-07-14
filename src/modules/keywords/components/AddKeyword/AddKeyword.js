@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import $ from 'jquery';
@@ -18,9 +18,9 @@ import keywordsQuery from '../../graphql/queries/list';
 
 // lib
 import Utils from '../../../../lib/utils';
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
+import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
 
-class AddKeyword extends Component {
+class AddKeyword extends React.Component {
 
 	constructor(props) {
 		super(props);

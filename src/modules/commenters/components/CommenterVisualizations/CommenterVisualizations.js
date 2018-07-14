@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -13,7 +13,7 @@ import CommenterWorkVisualization from '../CommenterWorkVisualization/CommenterW
 import './CommenterVisualizations.css';
 
 
-class CommenterVisualizations extends Component {
+class CommenterVisualizations extends React.Component {
 
 	constructor(props) {
 		super(props);

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 // components
 import TextNodesEditor from '../../components/TextNodesEditor/TextNodesEditor';
 
-const TextNodesEditorContainer = class TextNodesEditorContainerClass extends Component {
+const TextNodesEditorContainer = class TextNodesEditorContainerClass extends React.Component {
     
 	constructor(props) {
 		super(props);

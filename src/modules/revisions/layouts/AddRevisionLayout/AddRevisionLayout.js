@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
@@ -29,7 +29,7 @@ import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 // lib
 import Utils from '../../../../lib/utils';
 
-class AddRevisionLayout extends Component {
+class AddRevisionLayout extends React.Component {
 
 	constructor(props) {
 		super(props);

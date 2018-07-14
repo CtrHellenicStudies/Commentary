@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // layouts & components
 import Header from '../../../../components/navigation/Header';
 import Footer from '../../../../components/navigation/Footer';
-import { SnackAttack } from '../../../shared/components/SnackAttack/SnackAttack';
+import { SnackAttack } from '../../../shared/components/SnackAttack';
 import LoadingHome from '../../../../components/loading/LoadingHome';
 import CommunityPage from '../../components/CommunityPage/CommunityPage';
 
@@ -23,7 +23,7 @@ import settingsQuery from '../../../settings/graphql/queries/list';
 import muiTheme from '../../../../lib/muiTheme';
 
 
-class CommunityLayout extends Component {
+class CommunityLayout extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		const { tenantId } = this.props;

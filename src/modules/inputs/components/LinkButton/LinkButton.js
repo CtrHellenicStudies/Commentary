@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { RichUtils, EditorState } from 'draft-js';
 import unionClassNames from 'union-class-names';
@@ -6,10 +6,10 @@ import { debounce } from 'throttle-debounce';
 
 
 // components:
-import LinkButtonDialog from '../LinkButtonDialog/LinkButtonDialog';
+import LinkButtonDialog from '../LinkButtonDialog';
 
 // helpers:
-import linkDecorator from '../LinkDecorator/LinkDecorator';
+import linkDecorator from '../LinkDecorator';
 
 /*
  *	helper
@@ -18,7 +18,7 @@ const preventBubblingUp = (event) => { event.preventDefault(); };
 
 
 
-class LinkButton extends Component {
+class LinkButton extends React.Component {
 
 	constructor(props) {
 		super(props);

@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-
 import { moment } from 'moment';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -20,7 +19,7 @@ import discussionCommentUnreport from '../../graphql/mutations/discussionComment
 import './DiscussionComment.css';
 
 
-class DiscussionComment extends Component {
+class DiscussionComment extends React.Component {
 
 	constructor(props) {
 		super(props);

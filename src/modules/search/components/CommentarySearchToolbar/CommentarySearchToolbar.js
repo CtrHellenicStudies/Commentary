@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import _ from 'lodash';
@@ -30,7 +30,7 @@ import './CommentarySearchToolbar.css';
 /*
 	BEGIN CommentarySearchToolbar
 */
-class CommentarySearchToolbar extends Component {
+class CommentarySearchToolbar extends React.Component {
 
 	constructor(props) {
 		super(props);

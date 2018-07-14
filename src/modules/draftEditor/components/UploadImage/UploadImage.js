@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
-// import S3Upload from 'react-s3-uploader/s3upload';
-
 import DropZone from 'react-dropzone';
 import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { sendSnack } from '../../../shared/components/SnackAttack/SnackAttack';
+import { sendSnack } from '../../../shared/components/SnackAttack';
 
 
-export default class AvatarEditor extends Component {
+export default class AvatarEditor extends React.Component {
 	constructor(props) {
 		super(props);
 		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;

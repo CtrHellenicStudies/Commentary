@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -13,7 +13,7 @@ import BackgroundImageHolder from '../../../shared/components/BackgroundImageHol
 import './Unauthorized.css';
 
 
-class Unauthorized extends Component {
+class Unauthorized extends React.Component {
 
 	render() {
 		const expressionsOfWoe = [

@@ -4,7 +4,7 @@ import { Route } from 'react-router';
 import PrivateRoute from '../../../routes/PrivateRoute';
 import AddKeywordLayout from '../layouts/AddKeywordLayout';
 import EditKeywordLayout from '../layouts/EditKeywordsLayout';
-import KeywordsPage from '../components/KeywordsPage';
+import KeywordPage from '../components/KeywordPage';
 import KeywordDetailContainer from '../containers/KeywordDetailContainer';
 
 
@@ -38,7 +38,7 @@ const wordsListRoute = (
 	<Route
 		path="/words"
 		render={() => (
-			<KeywordsPage
+			<KeywordPage
 				type="word"
 				title="Words"
 			/>
@@ -50,7 +50,7 @@ const ideasListRoute = (
 	<Route
 		path="/ideas"
 		render={() => (
-			<KeywordsPage
+			<KeywordPage
 				type="idea"
 				title="Ideas"
 			/>

@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 
 import { compose } from 'react-apollo';
-import React, { Component } from 'react';
+import React from 'react';
 import _ from 'lodash';
 
 // graphql
 import { translationsQuery } from '../../../../textNodes/graphql/queries/translations';
+
 
 function getTranslationQueries(query, filter) {
 	if (query.loading) {
@@ -18,7 +19,9 @@ function getTranslationQueries(query, filter) {
 		x.n >= filter.lineFrom &&
 		x.n <= filter.lineTo);
 }
-class CommentLemmaTranslation extends Component {
+
+
+class CommentLemmaTranslation extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		const { commentGroup, textNodes, author } = nextProps;

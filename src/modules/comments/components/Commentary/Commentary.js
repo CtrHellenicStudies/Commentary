@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import { withRouter } from 'react-router';
@@ -7,10 +7,10 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // layouts
 import CommentGroup from '../CommentGroup';
-import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
+import ContextPanel from '../../../contextPanel/components/ContextPanel';
 
 // components
-import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
+import FilterWidget from '../../../filters/components/FilterWidget';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
@@ -21,7 +21,7 @@ import setPageTitleAndMeta from '../../lib/setPageTitleAndMeta';
 import './Commentary.css';
 
 
-class Commentary extends Component {
+class Commentary extends React.Component {
 
 	static childContextTypes = {
 		muiTheme: PropTypes.object.isRequired,

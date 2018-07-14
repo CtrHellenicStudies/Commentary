@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
 import { connect } from 'react-redux';
@@ -23,7 +23,7 @@ import LocationBrowser from '../LocationBrowser';
 // lib
 import Utils from '../../../../lib/utils';
 
-class CommentarySearchPanel extends Component {
+class CommentarySearchPanel extends React.Component {
 
 	constructor(props) {
 		super(props);

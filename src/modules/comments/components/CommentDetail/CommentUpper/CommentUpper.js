@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import { Link } from 'react-router-dom';
+
+import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
+
 /*
 	BEGIN CommentUpperLeft
 */
@@ -12,6 +14,7 @@ const CommentUpperLeft = props => (
 		<h1>{props.title}</h1>
 	</div>
 );
+
 CommentUpperLeft.propTypes = {
 	title: PropTypes.string.isRequired,
 };

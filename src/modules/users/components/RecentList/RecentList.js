@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 // components
@@ -7,7 +7,7 @@ import RecentTeaser from '../RecentTeaser';
 
 import './RecentList.css';
 
-class RecentList extends Component {
+class RecentList extends React.Component {
 
 	render() {
 		const { recentItems } = this.props;

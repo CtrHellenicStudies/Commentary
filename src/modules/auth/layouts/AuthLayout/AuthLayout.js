@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 
@@ -20,7 +20,7 @@ import { userIsLoggedIn } from '../../../../lib/auth';
 import './AuthLayout.css';
 
 
-class AuthLayout extends Component {
+class AuthLayout extends React.Component {
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Editor from 'draft-js-plugins-editor';
 import createInlineToolbarPlugin, { Separator } from 'draft-js-inline-toolbar-plugin';
@@ -17,10 +17,10 @@ import {
 } from 'draft-js-buttons';
 
 // components
-import LinkButton from '../../../inputs/components/LinkButton/LinkButton'
-import VideoAdd from '../VideoAdd/VideoAdd';
-import ImageAdd from '../ImageAdd/ImageAdd';
-import Suggestions from '../Suggestions/Suggestions';
+import VideoAdd from '../VideoAdd';
+import ImageAdd from '../ImageAdd';
+import LinkButton from '../../../inputs/components/LinkButton'
+import SuggestionsContainer from '../../../inputs/containers/SuggestionsContainer';
 
 import './DraftEditorInput.css';
 
@@ -38,7 +38,7 @@ const inlineToolbarPlugin = createInlineToolbarPlugin({
 		LinkButton,
 	]
 });
-class DraftEditorInput extends Component {
+class DraftEditorInput extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -86,7 +86,7 @@ class DraftEditorInput extends Component {
 						placeholder={this.props.placeholder}
 					/>
 					{ this.props.disableMentions === true ? '' :
-						(<Suggestions
+						(<SuggestionsContainer
 							mentionPlugin={this.mentionPlugin}
 							keywordPlugin={this.keywordPlugin}
 						/>)

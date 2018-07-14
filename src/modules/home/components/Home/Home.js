@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -10,19 +10,16 @@ import autoBind from 'react-autobind';
 import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
 
-// components:
-import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
-import CommenterList from '../../../commenters/components/CommenterList/CommenterList';
-import KeywordsList from '../../../keywords/components/KeywordsList/KeywordsList';
+// components
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
+import CommenterList from '../../../commenters/components/CommenterList';
+import KeywordList from '../../../keywords/components/KeywordList';
 import LoadingHome from '../../../../components/loading/LoadingHome';
-
-// layouts:
-// import CommentaryContainer from '../../../comments/containers/CommentaryContainer';
 
 import './Home.css';
 
 
-class Home extends Component {
+class Home extends React.Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
@@ -216,7 +213,7 @@ class Home extends Component {
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Words</h2>
 							<div className="underline" />
-							<KeywordsList type="word" title="Words" limit={5} />
+							<KeywordList type="word" title="Words" limit={5} />
 							<Link to="/words">
 								<RaisedButton
 									className="cover-link show-more primary "
@@ -230,7 +227,7 @@ class Home extends Component {
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Ideas</h2>
 							<div className="underline" />
-							<KeywordsList type="idea" title="Ideas" limit={5} />
+							<KeywordList type="idea" title="Ideas" limit={5} />
 							<Link to="/ideas">
 								<RaisedButton
 									className="cover-link show-more primary "

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
@@ -12,15 +12,15 @@ import keywordInsertMutation from '../../graphql/mutations/insert';
 
 // components:
 import Header from '../../../../components/navigation/Header';
-import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
+import FilterWidget from '../../../filters/components/FilterWidget';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
-import AddKeywordContainer from '../../containers/AddKeywordContainer/AddKeywordContainer';
+import AddKeywordContainer from '../../containers/AddKeywordContainer';
 
 
-class AddKeywordLayout extends Component {
+class AddKeywordLayout extends React.Component {
 
 	constructor(props) {
 		super(props);

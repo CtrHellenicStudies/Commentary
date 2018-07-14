@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -15,7 +15,7 @@ import { login, register, logoutUser, verifyToken } from '../../lib/auth';
 import muiTheme from '../../lib/muiTheme';
 
 
-class MainLayout extends Component {
+class MainLayout extends React.Component {
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}

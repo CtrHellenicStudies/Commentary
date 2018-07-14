@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
@@ -14,7 +14,8 @@ import commentsQuery from '../../../comments/graphql/queries/comments';
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
-class KeywordContext extends Component {
+
+class KeywordContext extends React.Component {
 
 	constructor(props) {
 		super(props);

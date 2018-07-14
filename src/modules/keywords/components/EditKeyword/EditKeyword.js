@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
@@ -21,13 +21,13 @@ import commentersQuery from '../../../commenters/graphql/queries/commentersQuery
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 
 // component
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
+import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
 
 
 // Create toolbar plugin for editor
 const singleLinePlugin = createSingleLinePlugin();
 
-class EditKeyword extends Component {
+class EditKeyword extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -114,7 +114,7 @@ class EditKeyword extends Component {
 				)
 			);
 		}
-		throw new Error('missing filed description or descriptionRaw in keyword');
+		throw new Error('missing  description or descriptionRaw in keyword');
 	}
 
 	onTitleChange(titleEditorState) {

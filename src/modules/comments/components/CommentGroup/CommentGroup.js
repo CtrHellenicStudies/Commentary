@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { StickyContainer } from 'react-sticky';
 
-// layouts
+// components
 import CommentDetail from '../CommentDetail';
 import CommentLemmaContainer from '../../containers/CommentLemmaContainer';
 
@@ -10,7 +10,7 @@ import CommentLemmaContainer from '../../containers/CommentLemmaContainer';
 import serializeUrn from '../../../cts/lib/serializeUrn';
 
 
-class CommentGroup extends Component {
+class CommentGroup extends React.Component {
 	constructor(props) {
 		super(props);
 

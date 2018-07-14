@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
 // components
@@ -9,7 +9,7 @@ import WorkVisualization from '../WorkVisualization/WorkVizualization';
 import './WorksList.css';
 
 
-class WorksList extends Component {
+class WorksList extends React.Component {
 
 	constructor(props) {
 		super(props);

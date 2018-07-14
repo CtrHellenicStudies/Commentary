@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 
@@ -10,7 +10,7 @@ import  discussionCommentsQuery from '../../../discussionComments/graphql/querie
 // components
 import DiscussionCommentsList from '../../../discussionComments/components/DiscussionCommentsList/DiscussionCommentsList';
 
-class Discussions extends Component {
+class Discussions extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -45,7 +45,7 @@ class Discussions extends Component {
 }
 // const DiscussionsContainer = createContainer((props) => {
 // 	let discussionComments = [];
-// 	const { tenantId } = this.props; 
+// 	const { tenantId } = this.props;
 // 	Meteor.subscribe('user.discussionComments', Meteor.userId());
 // 	Meteor.subscribe('user.annotations', Meteor.userId());
 // 	Meteor.subscribe('user.bookmarks', Meteor.userId());

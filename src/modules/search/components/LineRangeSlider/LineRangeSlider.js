@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'throttle-debounce';
 import $ from 'jquery';
 
 const id = 'line-range';
 
-class LineRangeSlider extends Component {
+class LineRangeSlider extends React.Component {
 
 	componentDidMount() {
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 // components
@@ -14,7 +14,7 @@ import * as authActions from '../../../modules/auth/actions';
 import './Header.css';
 
 
-class Header extends Component {
+class Header extends React.Component {
 	render() {
 		const {
 			toggleAuthModal, userId, initialSearchEnabled, workFilters, toggleSearchTerm,

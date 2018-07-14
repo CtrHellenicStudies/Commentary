@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -9,7 +9,7 @@ import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
 
 // commenter Teaser
-class CommenterTeaser extends Component {
+class CommenterTeaser extends React.Component {
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };

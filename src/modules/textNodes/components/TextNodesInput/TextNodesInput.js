@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -37,7 +37,7 @@ const getSelectedEditionText = (textNodes) => {
 };
 
 
-class TextNodesInput extends Component {
+class TextNodesInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {

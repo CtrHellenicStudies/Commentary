@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
@@ -23,7 +23,7 @@ const ListGroupItemDnD = createListGroupItemDnD('referenceWorkBlocks');
 /*
  *	BEGIN AddComment
  */
-export default class ReferenceWork extends Component {
+export default class ReferenceWork extends React.Component {
 
 	constructor(props) {
 		super(props);

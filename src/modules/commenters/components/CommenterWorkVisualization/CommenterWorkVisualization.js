@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import WorkVisualization from '../../../works/components/WorkVisualization/WorkVizualization';
 
 
-class CommenterWorkVisualization extends Component {
+class CommenterWorkVisualization extends React.Component {
 
 	constructor(props) {
 		super(props);

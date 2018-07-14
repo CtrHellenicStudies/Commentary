@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
 //components
 import UploadImages from '../UploadImage/UploadImage';
 
-export default class ImageAdd extends Component {
+export default class ImageAdd extends React.Component {
 	// Start the popover closed
 	state = {
 		url: '',

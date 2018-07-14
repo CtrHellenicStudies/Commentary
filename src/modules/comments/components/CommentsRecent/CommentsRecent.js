@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 
@@ -20,7 +20,7 @@ const settings = {
 };
 
 
-class CommentsRecent extends Component {
+class CommentsRecent extends React.Component {
 	render() {
 		const { comments } = this.props;
 

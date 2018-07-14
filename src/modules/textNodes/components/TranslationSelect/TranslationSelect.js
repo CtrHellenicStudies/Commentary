@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
 	ControlLabel,
@@ -17,7 +17,7 @@ import { compose } from 'react-apollo';
 import AddTranslationDialog from '../AddTranslationDialog/AddTranslationDialog';
 
 
-class TranslationSelect extends Component {
+class TranslationSelect extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {

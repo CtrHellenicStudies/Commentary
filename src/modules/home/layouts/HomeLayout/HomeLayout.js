@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import $ from 'jquery';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -28,7 +28,7 @@ import AuthModalContainer from '../../../../modules/auth/containers/AuthModalCon
 import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 
-class HomeLayout extends Component {
+class HomeLayout extends React.Component {
 
 	constructor(props) {
 		super(props);

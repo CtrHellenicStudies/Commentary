@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
 import { connect } from 'react-redux';
@@ -20,15 +20,15 @@ import autoBind from 'react-autobind';
 import Utils from '../../../../lib/utils';
 
 // components
-import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
-import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/ReferenceWork';
+import TagsInput from '../../../inputs/components/TagsInput';
+import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
+import ReferenceWork from '../../../referenceWorks/components/ReferenceWork';
 
 
 import './AddComment.css';
 
 
-class AddComment extends Component {
+class AddComment extends React.Component {
 
 	constructor(props) {
 		super(props);

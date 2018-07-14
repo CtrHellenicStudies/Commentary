@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -14,7 +14,7 @@ import { logoutUser } from '../../../../lib/auth';
 import './UserDropdown.css';
 
 
-class UserDropdown extends Component {
+class UserDropdown extends React.Component {
 
 	constructor(props) {
 		super(props);

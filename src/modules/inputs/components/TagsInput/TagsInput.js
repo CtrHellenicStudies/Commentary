@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import RaisedButton from 'material-ui/RaisedButton';
@@ -12,10 +12,12 @@ import {
 import Select from 'react-select';
 
 // components
-import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
+import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD';
+
 
 const ListGroupItemDnD = createListGroupItemDnD('tagBlocks');
-class TagsInput extends Component {
+
+class TagsInput extends React.Component {
 	render() {
 		const {
 			tagsValue, addTagBlock, removeTagBlock, moveTagBlock,

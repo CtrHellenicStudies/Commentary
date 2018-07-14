@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
@@ -21,7 +21,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 
 
-class ReferenceWorkDetail extends Component {
+class ReferenceWorkDetail extends React.Component {
 
 	componentWillReceiveProps(props) {
 		const slug = props.match.params.slug;

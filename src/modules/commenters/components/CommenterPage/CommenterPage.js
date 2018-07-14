@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -18,7 +18,7 @@ import settingsQuery from '../../../settings/graphql/queries/list';
 import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 
-class CommentersPage extends Component {
+class CommentersPage extends React.Component {
 
 	constructor(props) {
 		super(props);

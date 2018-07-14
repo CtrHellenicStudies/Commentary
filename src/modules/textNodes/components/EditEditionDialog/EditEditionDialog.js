@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import _ from 'underscore';
 
 
-class EditEditionDialog extends Component {
+class EditEditionDialog extends React.Component {
 
 	constructor(props) {
 		super(props);

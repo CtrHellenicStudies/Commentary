@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,7 @@ import $ from 'jquery';
 // components
 import KeywordContext from '../KeywordContext';
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
-import KeywordCommentList from '../KeywordsCommentList';
+import KeywordCommentList from '../KeywordCommentList';
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 import Header from '../../../../components/navigation/Header';
 import Footer from '../../../../components/navigation/Footer';
@@ -22,7 +22,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import './KeywordDetail.css';
 
 
-class KeywordDetail extends Component {
+class KeywordDetail extends React.Component {
 	constructor(props) {
 		super(props);
 

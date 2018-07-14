@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Snackbar from 'material-ui/Snackbar';
 
@@ -19,7 +19,7 @@ export function sendSnack(msg) {
 	}
 }
 
-export class SnackAttack extends Component {
+export class SnackAttack extends React.Component {
 	constructor(props) {
 		super(props);
 

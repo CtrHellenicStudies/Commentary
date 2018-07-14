@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
@@ -13,7 +13,7 @@ import TextNodesEditorContainer from '../../containers/TextNodesEditorContainer/
 import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 
-class TextNodesEditorLayout extends Component {
+class TextNodesEditorLayout extends React.Component {
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
 	}

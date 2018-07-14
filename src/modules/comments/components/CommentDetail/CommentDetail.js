@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import $ from 'jquery';
 import moment from 'moment';
-
 import qs from 'qs-lite';
 
 // components
@@ -11,12 +10,13 @@ import CommentUpper from './CommentUpper';
 import CommentKeywords from './CommentKeywords';
 import CommentLower from './CommentLower';
 import CommentRevisionSelect from './CommentRevisionSelect';
-import DiscussionThread from './DiscussionThread';
-import LemmaReferenceModal from './LemmaReferenceModal';
-import KeywordReferenceModal from '../../../keywords/components/KeywordReferenceModal/KeywordReferenceModal';
+import DiscussionThread from '../../../discussionComments/containers/DiscussionThreadContainer';
+import LemmaReferenceModal from '../LemmaReferenceModal';
+import KeywordReferenceModal from '../../../keywords/components/KeywordReferenceModal';
 
 // lib
 import sortRevisions from '../../lib/sortRevisions';
+
 
 const getUpdateDate = (selectedRevision) => {
 	let updated = selectedRevision.created;
@@ -48,7 +48,7 @@ const getCommentClass = (discussionVisible) => {
 /*
 	BEGIN CommentDetail
 */
-class CommentDetail extends Component {
+class CommentDetail extends React.Component {
 
 	constructor(props) {
 		super(props);

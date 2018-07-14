@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -16,7 +16,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/MenuItem';
 import { grey400 } from 'material-ui/styles/colors';
 
-class MultilineDialog extends Component {
+class MultilineDialog extends React.Component {
 
 	constructor(props) {
 		super(props);

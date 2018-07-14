@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
@@ -17,18 +17,18 @@ import keywordsUpdate from '../../graphql/mutations/update';
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 // components
-import Spinner from '../../../../components/loading/Spinner/Spinner';
-import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget';
+import Spinner from '../../../../components/loading/Spinner';
+import FilterWidget from '../../../filters/components/FilterWidget';
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
-import EditKeyword from '../../components/EditKeyword/EditKeyword';
-import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
+import EditKeyword from '../../components/EditKeyword';
+import ContextPanel from '../../../contextPanel/components/ContextPanel';
 
 // lib
 import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
 
 
-class EditKeywordLayout extends Component {
+class EditKeywordLayout extends React.Component {
 
 	constructor(props) {
 

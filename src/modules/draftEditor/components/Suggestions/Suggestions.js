@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import { fromJS } from 'immutable';
@@ -12,8 +12,8 @@ import Utils from '../../../../lib/utils';
 import commentsQuery from '../../../comments/graphql/queries/comments';
 import keywordsQuery from '../../../keywords/graphql/queries/list';
 
-class Suggestions extends Component {
 
+class Suggestions extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {

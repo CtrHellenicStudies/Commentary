@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import _s from 'underscore.string';
 import { Sticky } from 'react-sticky';
@@ -20,7 +20,7 @@ import addTextNodesHighlighting from '../../lib/addTextNodesHighlighting';
 import './CommentLemma.css';
 
 
-class CommentLemma extends Component {
+class CommentLemma extends React.Component {
 
 	constructor(props) {
 		super(props);

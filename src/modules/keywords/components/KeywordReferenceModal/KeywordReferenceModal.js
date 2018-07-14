@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
@@ -8,7 +8,7 @@ import keywordsQuery from '../../graphql/queries/list';
 // lib
 import Utils from '../../../../lib/utils';
 
-class KeywordReferenceModal extends Component {
+class KeywordReferenceModal extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {};

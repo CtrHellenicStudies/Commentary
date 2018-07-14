@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ import './CommenterDetail.css';
 
 
 
-class CommenterDetail extends Component {
+class CommenterDetail extends React.Component {
 	constructor(props) {
 		super(props);
 		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;

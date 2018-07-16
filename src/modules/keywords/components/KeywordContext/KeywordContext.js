@@ -1,18 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
-import { connect } from 'react-redux';
-import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
 // lib
-import Utils, { makeKeywordContextQueryFromComment } from '../../../../lib/utils';
-
-// graphql
-import commentsQuery from '../../../comments/graphql/queries/comments';
-import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
-import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
+import Utils from '../../../../lib/utils';
 
 
 class KeywordContext extends React.Component {
@@ -25,71 +18,6 @@ class KeywordContext extends React.Component {
 		};
 
 		autoBind(this);
-	}
-
-	componentWillReceiveProps(props) {
-		if (props.commentsQuery.loading ||
-			props.editionsQuery.loading ||
-			props.textNodesQuery.loading) {
-			return;
-		}
-
-		const { keyword, maxLines, tenantId } = props;
-
-		let lemmaText = [];
-		const context = {};
-
-		if (!keyword) {
-			return {
-				lemmaText,
-				context,
-			};
-		}
-
-		if (keyword.work && keyword.subwork && keyword.lineFrom
-			&& !props.textNodesQuery.variables.workUrn && !props.textNodesQuery.variables.work) {
-
-			context.work = keyword.work.slug;
-			context.subwork = keyword.subwork.n;
-			context.lineFrom = keyword.lineFrom;
-			context.lineTo = keyword.lineTo ? keyword.lineTo : keyword.lineFrom;
-			if (!props.textNodesQuery.loading) {
-				const textNodesCursor = props.textNodesQuery.textNodes;
-				lemmaText = textNodesCursor;
-			}
-			const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
-				context.work, context.lineFrom, context.lineTo
-			));
-			props.textNodesQuery.refetch(properties);
-			return;
-
-		} else {
-			if (tenantId) {
-				const query = {};
-				query['keyword._id'] = keyword._id;
-				props.commentsQuery.refetch({
-					queryParam: JSON.stringify(query),
-					limit: 1
-				});
-			}
-
-			if (props.commentsQuery.comments.length > 0) {
-				const comment = props.commentsQuery.comments[0];
-				const query = makeKeywordContextQueryFromComment(comment, maxLines); //TODO
-				context.work = query.workSlug;
-				context.subwork = query.subworkN;
-				context.lineFrom = query.lineFrom;
-				context.lineTo = query.lineTo;
-			}
-
-			const textNodesCursor = props.textNodesQuery.textNodes;
-			lemmaText = textNodesCursor;
-		}
-
-		this.setState({
-			lemmaText: lemmaText,
-			context: context,
-		});
 	}
 
 	toggleEdition(newSelectedLemma) {
@@ -162,13 +90,4 @@ KeywordContext.propTypes = {
 	maxLines: PropTypes.number
 };
 
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-export default compose(
-	connect(mapStateToProps),
-	editionsQuery,
-	commentsQuery,
-	textNodesQuery,
-)(KeywordContext);
+export default KeywordContext;

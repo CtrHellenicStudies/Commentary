@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../../../lib/muiTheme';
-
 import Snackbar from 'material-ui/Snackbar';
-import { handleChangeLineN, toggleSearchTerm } from '../../lib/helper';
+import autoBind from 'react-autobind';
 
 // components:
 import Header from '../../../../components/navigation/Header';
@@ -28,6 +25,10 @@ import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
 
 // lib
 import Utils from '../../../../lib/utils';
+import muiTheme from '../../../../lib/muiTheme';
+import { handleChangeLineN, toggleSearchTerm } from '../../lib/helper';
+
+
 
 class AddRevisionLayout extends React.Component {
 
@@ -39,20 +40,12 @@ class AddRevisionLayout extends React.Component {
 			snackbarOpen: false,
 			snackbarMessage: '',
 			ready: false,
-			refetchTextNodes: true,
 			textNodes: []
 		};
 
-		this.addRevision = this.addRevision.bind(this);
-		this.update = this.update.bind(this);
-		this.getKeywords = this.getKeywords.bind(this);
-		this.closeContextReader = this.closeContextReader.bind(this);
-		this.openContextReader = this.openContextReader.bind(this);
-		this.handlePermissions = this.handlePermissions.bind(this);
-		this.toggleSearchTerm = this.toggleSearchTerm.bind(this);
-		this.handleChangeLineN = this.handleChangeLineN.bind(this);
-		this.showSnackBar = this.showSnackBar.bind(this);
+		autoBind(this);
 	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.commentsQueryById.loading ||
 			nextProps.keywordsQuery.loading ||
@@ -74,15 +67,7 @@ class AddRevisionLayout extends React.Component {
 				));
 			});
 		}
-		if (this.state.refetchTextNodes) {
-			const properties = Utils.getUrnTextNodesProperties(comment.lemmaCitation);
-			nextProps.textNodesQuery.refetch(properties);
-
-			this.setState({
-				refetchTextNodes: false
-			});
-			return;
-		}
+		
 		const keywords = nextProps.keywordsQuery.keywords;
 		this.setState({
 			comment: comment,

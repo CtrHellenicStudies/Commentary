@@ -61,10 +61,6 @@ class EditKeyword extends React.Component {
 			suggestions: fromJS([])
 		};
 
-		this.props.referenceWorksQuery.refetch({
-			tenantId: this.props.tenantId
-		});
-
 		autoBind(this);
 	}
 

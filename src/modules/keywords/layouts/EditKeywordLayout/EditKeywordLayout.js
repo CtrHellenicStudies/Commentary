@@ -42,51 +42,20 @@ class EditKeywordLayout extends React.Component {
 			snackbarOpen: false,
 			snackbarMessage: '',
 			contextReaderOpen: true,
-			refetchTextNodes: true
 		};
 
 
-		// TODO: move refetch to container
-		this.props.keywordsQuery.refetch({
-			tenantId: props.tenantId,
-		});
-
 		autoBind(this);
 	}
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.keywordsQuery.loading || nextProps.textNodesQuery.loading) {
-			if (!nextProps.textNodesQuery.loading) {
-				this.setState({
-					ready: false
-				});
-			}
-			return;
-		}
-		const { match } = nextProps;
-		const slug = match.params.slug;
-		const textNodes = nextProps.textNodesQuery.textNodes;
-		const keyword = nextProps.keywordsQuery.keywords.find(x => x.slug === slug);
-		if (this.state.refetchTextNodes) {// || textNodeslength === 100) {
-			// const properies = Utils.getCollectionQueryProperties(Utils.createLemmaCitation(keyword.work ? keyword.work.slug : '001',
-			// this.state.selectedLineFrom || keyword.lineFrom || 0, this.state.selectedLineTo || keyword.lineTo || 0));
-			this.setState({
-				refetchTextNodes: false
-			});
-			return;
-		}
-		this.setState({
-			ready: true,
-			keyword: keyword,
-			textNodes: textNodes,
-			keywords: nextProps.keywordsQuery.keywords
-		});
-	}
+
 	componentWillUpdate() {
 		if (this.state.ready) this.handlePermissions();
 	}
+
 	componentWillUnmount() {
 		if (this.timeout)			{ clearTimeout(this.timeout); }
 	}
+
 	handlePermissions() {
 		if (this.state.ready) {
 			if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
@@ -94,6 +63,7 @@ class EditKeywordLayout extends React.Component {
 			}
 		}
 	}
+
 	updateSelectedLemma(selectedLineFrom, selectedLineTo) {
 		if (selectedLineFrom === null) {
 			this.setState({
@@ -113,20 +83,8 @@ class EditKeywordLayout extends React.Component {
 		} else {
 			return;
 		}
-		const { filters } = this.state;
-		let work;
-		filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			}
-		});
-		const code = Utils.encodeBookBySlug(work ? work.slug : 'tlg001');
-		const properties = Utils.getUrnTextNodesProperties(Utils.createLemmaCitation(
-			code.urn, selectedLineFrom, selectedLineTo
-		));
-		this.props.textNodesQuery.refetch(properties);
-
 	}
+
 	toggleSearchTerm(key, value) {
 		const filters = this.state.filters;
 		let keyIsInFilter = false;
@@ -175,6 +133,7 @@ class EditKeywordLayout extends React.Component {
 			skip: 0,
 		});
 	}
+
 	updateKeyword(formData, textValue, textRawValue) {
 		this.setState({
 			loading: true,
@@ -213,6 +172,7 @@ class EditKeywordLayout extends React.Component {
 			that.props.history.push(`/tags/${keywordCandidate.slug}`);
 		});
 	}
+
 	showSnackBar(error) {
 		this.setState({
 			snackbarOpen: error.errors,
@@ -224,6 +184,7 @@ class EditKeywordLayout extends React.Component {
 			});
 		}, 4000);
 	}
+
 	getWork() {
 		let work = null;
 		this.state.filters.forEach((filter) => {
@@ -240,6 +201,7 @@ class EditKeywordLayout extends React.Component {
 		}
 		return work;
 	}
+
 	getSubwork() {
 		let subwork = null;
 		this.state.filters.forEach((filter) => {
@@ -255,6 +217,7 @@ class EditKeywordLayout extends React.Component {
 		}
 		return subwork;
 	}
+
 	getLineLetter() {
 		let lineLetter = '';
 		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
@@ -262,6 +225,7 @@ class EditKeywordLayout extends React.Component {
 		}
 		return lineLetter;
 	}
+
 	getSelectedLineTo() {
 		let selectedLineTo = 0;
 		if (this.state.selectedLineTo === 0) {
@@ -271,19 +235,23 @@ class EditKeywordLayout extends React.Component {
 		}
 		return selectedLineTo;
 	}
+
 	getType() {
 		return this.state.selectedType;
 	}
+
 	lineLetterUpdate(value) {
 		this.setState({
 			lineLetter: value,
 		});
 	}
+
 	onTypeChange(type) {
 		this.setState({
 			selectedType: type,
 		});
 	}
+
 	handlePagination(e) {
 		const filters = this.state.filters;
 
@@ -351,6 +319,7 @@ class EditKeywordLayout extends React.Component {
 			filters,
 		});
 	}
+
 	render() {
 		const filters = this.state.filters;
 		const { ready, keyword, keywords } = this.state;

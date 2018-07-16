@@ -9,10 +9,6 @@ import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
-// graphql
-// TODO
-// import { translationAuthorsQuery } from '../../../translations/graphql/queries/translations';
-
 // components
 import AddTranslationDialog from '../AddTranslationDialog/AddTranslationDialog';
 
@@ -26,42 +22,8 @@ class TranslationSelect extends React.Component {
 			translationOptions: []
 		};
 
-		// TODO: move to container
-		if (this.props.selectedSubwork && this.props.selectedWork) {
-			this.props.translationAuthorsQuery.refetch({
-				selectedWork: this.props.selectedWork,
-				selectedSubwork: this.props.selectedSubwork
-			});
-		}
-
 		autoBind(this);
 	}
-
-	// TODO - translations with authors
-	// componentWillReceiveProps(props) {
-	// 	let workDetails = null;
-	// 	const translationOptions = props.translationAuthorsQuery.loading ? [] : props.translationAuthorsQuery.authorsOfTranslations;
-
-	// 	if (props.selectedWork !== this.props.selectedWork ||
-	// 		props.selectedSubwork !== this.props.selectedSubwork) {
-	// 		if (props.selectedSubwork && props.selectedWork) {
-	// 			props.translationAuthorsQuery.refetch({
-	// 				selectedWork: props.selectedWork,
-	// 				selectedSubwork: props.selectedSubwork
-	// 			});
-	// 		}
-	// 		workDetails = {
-	// 			tenantId,
-	// 			work: props.selectedWork,
-	// 			subwork: props.selectedSubwork,
-	// 		};
-	// 	}
-	//
-	// 	this.setState({
-	// 		workDetails: workDetails,
-	// 		translationOptions: translationOptions
-	// 	});
-	// }
 
 	selectTranslation(event) {
 		const setValue = event ? event.value : '';

@@ -5,8 +5,6 @@ import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import { Router } from 'react-router';
 import $ from 'jquery';
-import { connect } from 'react-redux';
-import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -26,16 +24,6 @@ import _ from 'underscore';
 import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
 
-// graphql
-import commentRemoveMutation from '../../../comments/graphql/mutations/remove';
-import commentRemoveRevisionMutation from '../../../comments/graphql/mutations/removeRevision';
-import keywordsQuery from '../../../keywords/graphql/queries/list';
-import keywordInsertMutation from '../../../keywords/graphql/mutations/insert';
-import keywordsUpdate from '../../../keywords/graphql/mutations/update';
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
-
 // components
 import LinkDecorator from '../../../inputs/components/LinkDecorator';
 import TagsInput from '../../../inputs/components/TagsInput';
@@ -51,7 +39,7 @@ class AddRevision extends React.Component {
 	constructor(props) {
 		super(props);
 
-		const { comment, tenantId } = this.props;
+		const { comment } = this.props;
 		const revisionId = comment.revisions.length - 1;
 		const revision = comment.revisions[revisionId]; // get newest revision
 		let revisionTitle = '';
@@ -89,14 +77,6 @@ class AddRevision extends React.Component {
 			commenterValue: comment.commenters ? comment.commenters.map((commenter) => ({value: commenter._id, label: commenter.name})) : [],
 			snackbarOpen: false,
 		};
-
-		// TODO: move to container
-		props.referenceWorksQuery.refetch({
-			tenantId: tenantId
-		});
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
 
 		autoBind(this);
 	}
@@ -597,18 +577,4 @@ AddRevision.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-export default compose(
-	connect(mapStateToProps),
-	commentRemoveMutation,
-	commentersQuery,
-	referenceWorksQuery,
-	referenceWorkCreateMutation,
-	keywordsQuery,
-	keywordInsertMutation,
-	keywordsUpdate,
-	commentRemoveRevisionMutation
-)(AddRevision);
+export default AddRevision;

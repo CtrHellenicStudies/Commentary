@@ -1,19 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-import { connect } from 'react-redux';
-import { compose } from 'react-apollo';
 import _ from 'lodash';
 import TextField from 'material-ui/TextField';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import autoBind from 'react-autobind';
-
-// graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import keywordsQuery from '../../../keywords/graphql/queries/list';
-import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 
 // components
 import SearchTermButtonPanel from '../SearchTermButtonPanel';
@@ -22,6 +14,7 @@ import LocationBrowser from '../LocationBrowser';
 
 // lib
 import Utils from '../../../../lib/utils';
+
 
 class CommentarySearchPanel extends React.Component {
 
@@ -37,11 +30,6 @@ class CommentarySearchPanel extends React.Component {
 			works: [],
 			referenceWorks: []
 		};
-
-		// TODO: move to container
-		this.props.keywordsQuery.refetch({
-			tenantId: this.props.tenantId
-		});
 
 		autoBind(this);
 	}
@@ -409,14 +397,4 @@ CommentarySearchPanel.propTypes = {
 	editionsQuery: PropTypes.object
 };
 
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-export default compose(
-	connect(mapStateToProps),
-	commentersQuery,
-	referenceWorksQuery,
-	keywordsQuery,
-	editionsQuery
-)(CommentarySearchPanel);
+export default CommentarySearchPanel;

@@ -21,7 +21,7 @@ import commentersQuery from '../../../commenters/graphql/queries/commentersQuery
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 
 // component
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
+import DraftEditorInput from '../../../inputs/components/DraftEditorInput';
 
 
 // Create toolbar plugin for editor

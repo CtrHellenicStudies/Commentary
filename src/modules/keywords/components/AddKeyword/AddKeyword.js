@@ -2,17 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import $ from 'jquery';
-import RaisedButton from 'material-ui/RaisedButton';
-import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
-import Snackbar from 'material-ui/Snackbar';
+import autoBind from 'react-autobind';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
+import Snackbar from 'material-ui/Snackbar';
+import FontIcon from 'material-ui/FontIcon';
+import RaisedButton from 'material-ui/RaisedButton';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 // lib
 import Utils from '../../../../lib/utils';
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
+import DraftEditorInput from '../../../inputs/components/DraftEditorInput';
+
 
 class AddKeyword extends React.Component {
 
@@ -32,19 +34,9 @@ class AddKeyword extends React.Component {
 			snackbarMessage: ''
 		};
 
-		this.onTitleChange = this.onTitleChange.bind(this);
-		this.onTextChange = this.onTextChange.bind(this);
-		this.onTypeChange = this.onTypeChange.bind(this);
-		this.onKeywordsValueChange = this.onKeywordsValueChange.bind(this);
-		this.onKeyideasValueChange = this.onKeyideasValueChange.bind(this);
-		this.onNewOptionCreator = this.onNewOptionCreator.bind(this);
-		this.onCommenterValueChange = this.onCommenterValueChange.bind(this);
-		this.shouldKeyDownEventCreateNewOption = this.shouldKeyDownEventCreateNewOption.bind(this);
-		this.isOptionUnique = this.isOptionUnique.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.showSnackBar = this.showSnackBar.bind(this);
-		this.validateStateForSubmit = this.validateStateForSubmit.bind(this);
+		autoBind(this);
 	}
+
 	onTitleChange(titleEditorState) {
 		const titleHtml = stateToHTML(this.state.titleEditorState.getCurrentContent());
 		const title = $(titleHtml).text();

@@ -182,11 +182,19 @@ class NavBar extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		// TODO: move this to container
-		this.setState({
-			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.props.tenantId),
-			tenant: this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.props.tenantId),
-		});
+
+		if (
+			nextProps.settingsQuery
+			&& nextProps.settingsQuery.settings
+			&& nextProps.tenantsQuery
+			&& nextProps.tenantsQuery.tenants
+		) {
+			// TODO: move this to container
+			this.setState({
+				settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.props.tenantId),
+				tenant: this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants.find(x => x._id === this.props.tenantId),
+			});
+		}
 	}
 
 	render() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import UploadImages from './UploadImage';
+import UploadImages from '../UploadImage';
 
 export default class ImageAdd extends React.Component {
 	// Start the popover closed

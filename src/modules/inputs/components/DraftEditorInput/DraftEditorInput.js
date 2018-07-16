@@ -16,9 +16,10 @@ import {
 	BlockquoteButton,
 } from 'draft-js-buttons';
 
-import VideoAdd from './AddButton/VideoAdd';
-import ImageAdd from './AddButton/ImageAdd';
-import Suggestions from './Suggestions/Suggestions';
+import VideoAdd from '../VideoAdd';
+import ImageAdd from '../ImageAdd';
+import Suggestions from '../Suggestions';
+import LinkButton from '../LinkButton';
 
 
 import './DraftEditorInput.css';

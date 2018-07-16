@@ -28,7 +28,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import LinkDecorator from '../../../inputs/components/LinkDecorator';
 import TagsInput from '../../../inputs/components/TagsInput';
 import ReferenceWork from '../../../referenceWorks/components/ReferenceWork';
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
+import DraftEditorInput from '../../../inputs/components/DraftEditorInput';
 
 import './AddRevision.css';
 

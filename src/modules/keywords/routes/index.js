@@ -3,7 +3,7 @@ import { Route } from 'react-router';
 
 import PrivateRoute from '../../../routes/PrivateRoute';
 import AddKeywordLayout from '../layouts/AddKeywordLayout';
-import EditKeywordLayout from '../layouts/EditKeywordsLayout';
+import EditKeywordLayout from '../layouts/EditKeywordLayout';
 import KeywordPage from '../components/KeywordPage';
 import KeywordDetailContainer from '../containers/KeywordDetailContainer';
 

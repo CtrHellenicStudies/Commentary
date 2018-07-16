@@ -4,7 +4,7 @@ import { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import { fromJS } from 'immutable';
 
 // lib
-import Utils from '../../../../../lib/utils';
+import Utils from '../../../../lib/utils';
 
 
 class Suggestions extends React.Component {

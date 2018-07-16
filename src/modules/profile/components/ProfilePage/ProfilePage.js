@@ -13,9 +13,9 @@ import AvatarEditor from '../AvatarEditor/AvatarEditor';
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 import ModalChangePwd from '../../../auth/components/ModalChangePwd';
-import Discussions from '../Discussions/Discussions';
-import Annotations from '../Annotations/Annotations';
-import Account from '../Account/Account';
+import Discussion from '../Discussion';
+import Annotations from '../Annotations';
+import Account from '../Account';
 import Header from '../../../../components/navigation/Header';
 
 // graphql
@@ -138,7 +138,7 @@ class ProfilePage extends React.Component {
 									<MuiThemeProvider muiTheme={getMuiTheme(tabMuiTheme)}>
 										<Tabs>
 											<Tab label="Discussions">
-												<Discussions />
+												<Discussion />
 											</Tab>
 											<Tab label="Annotations">
 												<Annotations />

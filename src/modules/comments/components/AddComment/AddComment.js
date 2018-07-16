@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Snackbar from 'material-ui/Snackbar';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
-
 import { Form } from 'formsy-react';
 import Select from 'react-select';
 import { EditorState, convertToRaw } from 'draft-js';
@@ -21,7 +19,7 @@ import Utils from '../../../../lib/utils';
 
 // components
 import TagsInput from '../../../inputs/components/TagsInput';
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
+import DraftEditorInput from '../../../inputs/components/DraftEditorInput';
 import ReferenceWork from '../../../referenceWorks/components/ReferenceWork';
 
 

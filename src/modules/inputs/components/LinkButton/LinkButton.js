@@ -4,12 +4,11 @@ import { RichUtils, EditorState } from 'draft-js';
 import unionClassNames from 'union-class-names';
 import { debounce } from 'throttle-debounce';
 
-
 // components:
-import LinkButtonDialog from '../LinkButtonDialog';
+import LinkButtonDialog from './LinkButtonDialog';
 
 // helpers:
-import linkDecorator from '../LinkDecorator';
+import linkDecorator from './linkDecorator';
 
 /*
  *	helper
@@ -19,6 +18,16 @@ const preventBubblingUp = (event) => { event.preventDefault(); };
 
 
 class LinkButton extends React.Component {
+
+	static propTypes = {
+		getEditorState: PropTypes.func.isRequired,
+		setEditorState: PropTypes.func.isRequired,
+		theme: PropTypes.shape({
+			button: PropTypes.string,
+			active: PropTypes.string,
+			buttonWrapper: PropTypes.string
+		}).isRequired,
+	}
 
 	constructor(props) {
 		super(props);
@@ -190,14 +199,6 @@ class LinkButton extends React.Component {
 		);
 	}
 }
-LinkButton.propTypes = {
-	getEditorState: PropTypes.func.isRequired,
-	setEditorState: PropTypes.func.isRequired,
-	theme: PropTypes.shape({
-		button: PropTypes.string,
-		active: PropTypes.string,
-		buttonWrapper: PropTypes.string
-	}).isRequired,
-};
+
 export default LinkButton;
 export { LinkButtonDialog };

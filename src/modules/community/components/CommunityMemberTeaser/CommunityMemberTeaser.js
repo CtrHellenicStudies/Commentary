@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import AvatarIcon from '../../../profile/components/AvatarIcon/AvatarIcon';
+import AvatarIcon from '../../../profile/components/AvatarIcon';
 
 import './CommunityMemberTeaser.css';
 
 
-class CommunityMemberTeaser extends Component {
+class CommunityMemberTeaser extends React.Component {
 
 	render() {
 		const { user } = this.props;

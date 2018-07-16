@@ -4,7 +4,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { compose } from 'react-apollo';
 
+// lib
 import Utils from '../../../../lib/utils';
+
+// graphql
 import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
 
 /*

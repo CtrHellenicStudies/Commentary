@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
 import Headroom from 'headroom.js';
@@ -19,7 +19,7 @@ function backgroundImages () {
 	}, 300);
 }
 
-class BackgroundImageHolder extends Component {
+class BackgroundImageHolder extends React.Component {
 
 	componentDidMount() {
 		backgroundImages();

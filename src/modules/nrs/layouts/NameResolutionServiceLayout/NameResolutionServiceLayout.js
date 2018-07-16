@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import Utils from '../../../../lib/utils';
@@ -70,7 +70,7 @@ const resolveV2 = (props) => {
 };
 
 
-class NameResolutionServiceLayout extends Component {
+class NameResolutionServiceLayout extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		let resolveURL;

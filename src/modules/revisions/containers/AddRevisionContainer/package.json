@@ -1,0 +1,6 @@
+{
+  "name": "AddRevisionContainer",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./AddRevisionContainer.js"
+}

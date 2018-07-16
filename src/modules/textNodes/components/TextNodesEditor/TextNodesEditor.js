@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import Select from 'react-select';
@@ -44,7 +44,7 @@ function isLocation(location) {
 	}
 	return ret;
 }
-class TextNodesEditor extends Component {
+class TextNodesEditor extends React.Component {
 	constructor(props) {
 		super(props);
 

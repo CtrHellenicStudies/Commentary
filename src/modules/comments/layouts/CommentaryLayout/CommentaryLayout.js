@@ -12,7 +12,7 @@ with new “filters” object passed as first attribute.
 
 */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
@@ -44,7 +44,7 @@ import {
 	createFilterFromURL
 } from '../../lib/queryFilterHelpers';
 
-class CommentaryLayout extends Component {
+class CommentaryLayout extends React.Component {
 	constructor(props) {
 		super(props);
 

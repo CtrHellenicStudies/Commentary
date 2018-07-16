@@ -34,7 +34,7 @@ class KeywordDetailContainer extends React.Component {
   		// loading state
   		if (keywordQuery.loading || settingsQuery.loading) {
   			return (
-					<LoadingPage />
+					<LoadingPage /> // eslint-disable-line
   			);
   		}
 
@@ -48,7 +48,7 @@ class KeywordDetailContainer extends React.Component {
   	// if no keyword is found, render 404
   	if (!keyword || !settings) {
   		return (
-				<NotFound />
+				<NotFound /> // eslint-disable-line
   		);
   	}
 

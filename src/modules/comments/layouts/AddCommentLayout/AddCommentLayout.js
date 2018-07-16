@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import autoBind from 'react-autobind';
@@ -11,10 +11,10 @@ import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
 
 // components
-import AddCommentContainer from '../../containers/AddCommentContainer/AddCommentContainer';
+import AddCommentContainer from '../../containers/AddCommentContainer';
 
 
-class AddCommentLayout extends Component {
+class AddCommentLayout extends React.Component {
 
 	constructor(props) {
 		super(props);

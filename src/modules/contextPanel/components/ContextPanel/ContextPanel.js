@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import $ from 'jquery';
@@ -33,7 +33,7 @@ const LINE_THRESHOLD = 25;
 
 
 
-class ContextPanel extends Component {
+class ContextPanel extends React.Component {
 
 	constructor(props) {
 		super(props);

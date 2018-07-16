@@ -18,7 +18,9 @@ query usersQuery ($tenantId: String $id: ID) {
 	}
 }
 `;
+
 const usersQuery = graphql(query, {
 	name: 'usersQuery',
 });
-export { usersQuery };
+
+export default usersQuery;

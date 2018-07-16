@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import _s from 'underscore.string';
 
@@ -13,7 +13,7 @@ import './LocationBrowser.css';
  * If a work's document structure is Book-Chapter-Section, it should allow a
  * user to browse by Book, Chapter, and Section.
  */
-export default class LocationBrowser extends Component {
+export default class LocationBrowser extends React.Component {
 
 	/*
 	constructor(props) {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -8,7 +8,7 @@ import { compose } from 'react-apollo';
 // graphql
 import translationCreateMutation from '../../graphql/mutations/textNodesCreate';
 
-class AddTranslationDialog extends Component {
+class AddTranslationDialog extends React.Component {
 
 	constructor(props) {
 		super(props);

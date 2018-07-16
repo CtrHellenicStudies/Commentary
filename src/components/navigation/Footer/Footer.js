@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
@@ -15,7 +15,7 @@ import tenantsQuery from '../../../modules/tenants/graphql/queries/tenants';
 import './Footer.css';
 
 
-class Footer extends Component {
+class Footer extends React.Component {
 
 	render() {
 		const { tenantId, settingsQuery, tenantsQuery } = this.props;

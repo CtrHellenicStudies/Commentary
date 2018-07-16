@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
@@ -8,8 +8,8 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
 // components
-import Header from '../../../../components/navigation/Header/Header';
-import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
+import Header from '../../../../components/navigation/Header';
+import ContextPanel from '../../../contextPanel/components/ContextPanel';
 import AddComment from '../../components/AddComment/AddComment';
 import CommentLemmaSelectContainer from '../CommentLemmaSelectContainer';
 import CommentWorkSelect from '../../components/CommentWorkSelect';
@@ -30,7 +30,7 @@ import getNLinesFromLemmaCitation from '../../lib/getNLinesFromLemmaCitation';
 import serializeUrn from '../../../cts/lib/serializeUrn';
 
 
-class AddCommentContainer extends Component {
+class AddCommentContainer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {

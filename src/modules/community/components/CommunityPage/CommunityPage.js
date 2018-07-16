@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // components
-import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
-import RecentActivity from '../RecentActivity/RecentActivity';
-import CommunityDirectory from '../CommunityDirectory/CommunityDirectory';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
+import RecentActivity from '../RecentActivity';
+import CommunityDirectory from '../CommunityDirectory';
 
 import './CommunityPage.css';
 
 
-class CommunityPage extends Component {
+class CommunityPage extends React.Component {
 	render() {
 		return (
 			<div className="page page-community content primary">

@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import $ from 'jquery';
-import { connect } from 'react-redux';
-import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import Formsy from 'formsy-react';
@@ -12,15 +10,11 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
-// graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import keywordsQuery from '../../graphql/queries/list';
-
 // lib
 import Utils from '../../../../lib/utils';
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
+import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
 
-class AddKeyword extends Component {
+class AddKeyword extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -37,11 +31,6 @@ class AddKeyword extends Component {
 			snackbarOpen: false,
 			snackbarMessage: ''
 		};
-
-		// TODO: move refetch to container
-		this.props.keywordsQuery.refetch({
-			tenantId: props.tenantId
-		});
 
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onTextChange = this.onTextChange.bind(this);
@@ -331,12 +320,4 @@ AddKeyword.propTypes = {
 	keyideasOptions: PropTypes.array,
 };
 
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-export default compose(
-	commentersQuery,
-	keywordsQuery,
-	connect(mapStateToProps),
-)(AddKeyword);
+export default AddKeyword;

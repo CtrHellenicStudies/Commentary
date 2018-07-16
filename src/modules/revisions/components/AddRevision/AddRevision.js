@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import autoBind from 'react-autobind';
 import Cookies from 'js-cookie';
 import { Router } from 'react-router';
 import $ from 'jquery';
-import { connect } from 'react-redux';
-import { compose } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -26,34 +24,22 @@ import _ from 'underscore';
 import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
 
-// graphql
-import commentRemoveMutation from '../../../comments/graphql/mutations/remove';
-import commentRemoveRevisionMutation from '../../../comments/graphql/mutations/removeRevision';
-import keywordsQuery from '../../../keywords/graphql/queries/list';
-import keywordInsertMutation from '../../../keywords/graphql/mutations/insert';
-import keywordsUpdate from '../../../keywords/graphql/mutations/update';
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
-
-// helpers:
-import linkDecorator from '../../../inputs/components/LinkDecorator/LinkDecorator';
-
 // components
-import TagsInput from '../../../inputs/components/TagsInput/TagsInput';
-import ReferenceWork from '../../../referenceWorks/components/ReferenceWork/ReferenceWork';
-
-import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput/DraftEditorInput';
+import LinkDecorator from '../../../inputs/components/LinkDecorator';
+import TagsInput from '../../../inputs/components/TagsInput';
+import ReferenceWork from '../../../referenceWorks/components/ReferenceWork';
+import DraftEditorInput from '../../../draftEditor/components/DraftEditiorInput';
 
 import './AddRevision.css';
 
 
-class AddRevision extends Component {
+
+class AddRevision extends React.Component {
 
 	constructor(props) {
 		super(props);
 
-		const { comment, tenantId } = this.props;
+		const { comment } = this.props;
 		const revisionId = comment.revisions.length - 1;
 		const revision = comment.revisions[revisionId]; // get newest revision
 		let revisionTitle = '';
@@ -91,14 +77,6 @@ class AddRevision extends Component {
 			commenterValue: comment.commenters ? comment.commenters.map((commenter) => ({value: commenter._id, label: commenter.name})) : [],
 			snackbarOpen: false,
 		};
-
-		// TODO: move to container
-		props.referenceWorksQuery.refetch({
-			tenantId: tenantId
-		});
-		props.keywordsQuery.refetch({
-			tenantId: tenantId
-		});
 
 		autoBind(this);
 	}
@@ -172,7 +150,7 @@ class AddRevision extends Component {
 
 	_getRevisionEditorState(revision) {
 		if (revision.textRaw) {
-			return EditorState.createWithContent(convertFromRaw(revision.textRaw), linkDecorator);
+			return EditorState.createWithContent(convertFromRaw(revision.textRaw), LinkDecorator);
 		} else if (revision.text) {
 			const blocksFromHTML = convertFromHTML(revision.text);
 			return EditorState.createWithContent(
@@ -180,10 +158,10 @@ class AddRevision extends Component {
 					blocksFromHTML.contentBlocks,
 					blocksFromHTML.entityMap
 				),
-				linkDecorator
+				LinkDecorator
 			);
 		}
-		console.error('missing filed text or textRaw in revision');
+		console.error('Missing field text or textRaw in revision');
 	}
 
 	onTitleChange(titleEditorState) {
@@ -257,7 +235,7 @@ class AddRevision extends Component {
 		this.setState({
 			revision,
 			titleEditorState: EditorState.createWithContent(ContentState.createFromText(revision.title)),
-			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text), linkDecorator),
+			textEditorState: EditorState.createWithContent(stateFromHTML(revision.text), LinkDecorator),
 		});
 	}
 
@@ -599,18 +577,4 @@ AddRevision.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-export default compose(
-	connect(mapStateToProps),
-	commentRemoveMutation,
-	commentersQuery,
-	referenceWorksQuery,
-	referenceWorkCreateMutation,
-	keywordsQuery,
-	keywordInsertMutation,
-	keywordsUpdate,
-	commentRemoveRevisionMutation
-)(AddRevision);
+export default AddRevision;

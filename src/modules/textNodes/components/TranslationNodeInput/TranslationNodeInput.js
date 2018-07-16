@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
 	FormGroup,
@@ -38,7 +38,7 @@ function getTranslationQueries(query, filter) {
 		.slice(filter.skip, filter.limit);
 }
 
-class TranslationNodeInput extends Component {
+class TranslationNodeInput extends React.Component {
 	constructor(props) {
 		super(props);
 

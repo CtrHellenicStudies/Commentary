@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
 // graphql
-import { usersQuery } from '../../../users/graphql/queries/users';
-import CommunityMemberTeaser from '../CommunityMemberTeaser/CommunityMemberTeaser';
+import usersQuery from '../../../users/graphql/queries/users';
+import CommunityMemberTeaser from '../CommunityMemberTeaser';
 
 import './CommunityMemberList.css';
 
 
-class CommunityMemberList extends Component {
+class CommunityMemberList extends React.Component {
 	render() {
 		const users = this.props.usersQuery.users;
 

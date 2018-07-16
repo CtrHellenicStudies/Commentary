@@ -1,18 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import _ from 'lodash';
-import { compose } from 'react-apollo';
-import { connect } from 'react-redux';
 import autoBind from 'react-autobind';
 
-// graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
-import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
-import keywordsQuery from '../../../keywords/graphql/queries/list';
-import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
-
-// components:
+// components
 import SearchToolDropdown from '../SearchToolDropdown';
 import KeywordsDropdown from '../KeywordsDropdown';
 import KeyideasDropdown from '../KeyideasDropdown';
@@ -24,13 +16,14 @@ import LocationBrowserContainer from '../../containers/LocationBrowserContainer'
 // lib
 import Utils from '../../../../lib/utils';
 
+
 import './CommentarySearchToolbar.css';
 
 
 /*
 	BEGIN CommentarySearchToolbar
 */
-class CommentarySearchToolbar extends Component {
+class CommentarySearchToolbar extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -50,14 +43,6 @@ class CommentarySearchToolbar extends Component {
 
 		// methods:
 		if (props.handleChangeTextsearch) this.handleChangeTextsearch = _.debounce(props.handleChangeTextsearch, 300);
-
-		const { tenantId } = this.props;
-		if (!this.props.addCommentPage) {
-			this.props.keywordsQuery.refetch({
-				tenantId: tenantId
-			});
-		}
-
 		autoBind(this);
 	}
 
@@ -233,14 +218,4 @@ CommentarySearchToolbar.defaultProps = {
 	handleChangeTextsearch: null,
 }
 
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-export default compose(
-	connect(mapStateToProps),
-	commentersQuery,
-	referenceWorksQuery,
-	keywordsQuery,
-	editionsQuery
-)(CommentarySearchToolbar);
+export default CommentarySearchToolbar;

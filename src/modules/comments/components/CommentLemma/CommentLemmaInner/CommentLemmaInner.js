@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+
+// components
 import CommentLemmaText from '../CommentLemmaText';
 import CommentLemmaTranslation from '../CommentLemmaTranslation';
 
-class CommentLemmaInner extends Component {
+
+class CommentLemmaInner extends React.Component {
 	render() {
 		const { commentGroup, showTranslation, textNodes, author } = this.props;
 		return (

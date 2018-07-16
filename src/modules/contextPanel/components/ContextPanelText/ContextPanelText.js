@@ -1,8 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import autoBind from 'react-autobind';
+
+
+// cts
 import { parseValueUrn } from '../../../cts/lib/parseUrn';
+
 
 /*
 	BEGIN helpers
@@ -62,7 +66,7 @@ LineNumbering.propTypes = {
 /*
 	BEGIN ContextPanelText
 */
-class ContextPanelText extends Component {
+class ContextPanelText extends React.Component {
 
 	constructor(props) {
 		super(props);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -14,7 +14,7 @@ import getRevisionDate from '../../../lib/getRevisionDate';
 import './CommentCitation.css';
 
 
-class CommentCitation extends Component {
+class CommentCitation extends React.Component {
 
 	constructor(props) {
 		super(props);

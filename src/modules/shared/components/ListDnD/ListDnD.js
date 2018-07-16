@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -109,7 +109,7 @@ const reactDnDPropTypes = {
 	isDragging: PropTypes.bool.isRequired,
 };
 
-class _ListGroupItemDnD extends Component {
+class _ListGroupItemDnD extends React.Component {
 
 
 	render() {

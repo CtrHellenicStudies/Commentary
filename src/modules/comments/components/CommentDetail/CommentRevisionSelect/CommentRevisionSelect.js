@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import FlatButton from 'material-ui/FlatButton';
@@ -11,7 +11,7 @@ import sortRevisions from '../../../lib/sortRevisions';
 import getRevisionDate from '../../../lib/getRevisionDate';
 
 
-class CommentRevisionSelect extends Component {
+class CommentRevisionSelect extends React.Component {
 	constructor(props) {
 		super(props);
 

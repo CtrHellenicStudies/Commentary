@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
-import { compose } from 'react-apollo';
 import Divider from 'material-ui/Divider';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
@@ -15,10 +13,8 @@ import { grey400 } from 'material-ui/styles/colors';
 import AutoComplete from 'material-ui/AutoComplete';
 import Person from 'material-ui/svg-icons/social/person';
 
-import commentersQuery from '../../graphql/queries/commenters';
 
-
-class CommentersEditorDialog extends Component {
+class CommentersEditorDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -26,25 +22,8 @@ class CommentersEditorDialog extends Component {
 		this.state = {
 			searchText: ''
 		};
-
-		// TODO: replace refetch with container
-		this.props.commentersQuery.refetch({
-			tenantId: this.props.tenantId,
-		});
 	}
-	componentWillReceiveProps(props) {
 
-		const commentersIds = props.commenters.map(commenter => commenter._id);
-		const allCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters;
-		const currentCommenters = props.commentersQuery.loading ? [] : props.commentersQuery.commenters.filter(x =>
-			commentersIds.find(y => y === x._id));
-
-		this.setState({
-			commentersIds,
-			allCommenters,
-			currentCommenters
-		});
-	}
 	deleteCommenter(index) {
 		const currentCommenters = this.state.currentCommenters;
 		currentCommenters.splice(index, 1);
@@ -60,10 +39,6 @@ class CommentersEditorDialog extends Component {
 
 	selectCommenter(commenter) {
 		if (commenter.name) {
-			const currentCommenters = this.state.currentCommenters;
-			currentCommenters.push(commenter);
-
-			this.props.setCommenters(currentCommenters);
 
 			this.setState({
 				searchText: ''
@@ -74,13 +49,12 @@ class CommentersEditorDialog extends Component {
 	render() {
 		const { allCommenters, commentersIds } = this.state;
 		const commentersList = [];
+
 		allCommenters.forEach((commenter) => {
 			if (commentersIds.indexOf(commenter._id) === -1) {
 				commentersList.push(commenter);
 			}
 		});
-
-		console.log('commentersList LOG', commentersList);
 
 		const actions = [
 			<FlatButton
@@ -110,30 +84,25 @@ class CommentersEditorDialog extends Component {
 			>
 				<div className="text-node-editor-meta-form edit-subwork-form">
 					<div className="edit-form-input">
-
-
-						<div>
-							<List>
-								{allCommenters.map((commenter, index) =>
-									<div key={`${commenter.slug}-div`}>
-										<ListItem
-											primaryText={commenter.name}
-											key={`${commenter.slug}`}
-											rightIconButton={
-												<IconMenu iconButtonElement={iconButtonElement}>
-													<MenuItem
-														onClick={() => this.deleteCommenter(index)}
-													>Remove from comment</MenuItem>
-												</IconMenu>
-											}
-											leftAvatar={commenter.avatar ? <Avatar src={commenter.avatar.src} /> : <Person />}
-										/>
-										<Divider key={`${commenter.slug}-divider`} />
-									</div>
-								)}
-							</List>
-						</div>
-
+						<List>
+							{commenters.map((commenter, index) =>
+								<div key={`${commenter.slug}-div`}>
+									<ListItem
+										primaryText={commenter.name}
+										key={`${commenter.slug}`}
+										rightIconButton={
+											<IconMenu iconButtonElement={iconButtonElement}>
+												<MenuItem
+													onClick={() => this.deleteCommenter(index)}
+												>Remove from comment</MenuItem>
+											</IconMenu>
+										}
+										leftAvatar={commenter.avatar ? <Avatar src={commenter.avatar.src} /> : <Person />}
+									/>
+									<Divider key={`${commenter.slug}-divider`} />
+								</div>
+							)}
+						</List>
 						<label>
 							Add new
 						</label>
@@ -149,7 +118,6 @@ class CommentersEditorDialog extends Component {
 							searchText={this.state.searchText}
 						/>
 					</div>
-
 				</div>
 			</Dialog>
 		);
@@ -161,14 +129,6 @@ CommentersEditorDialog.propTypes = {
 	handleClose: PropTypes.func,
 	open: PropTypes.bool,
 	commenters: PropTypes.array,
-	commentersQuery: PropTypes.object
 };
 
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-export default compose(
-	connect(mapStateToProps),
-	commentersQuery,
-)(CommentersEditorDialog);
+export default CommentersEditorDialog;

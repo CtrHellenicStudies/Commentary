@@ -1,32 +1,40 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // graphql
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
+import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import keywordsQuery from '../../graphql/queries/list';
 
 // components
-import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect/CommentLemmaSelect';
-import AddKeyword from '../../components/AddKeyword/AddKeyword';
-import ContextPanel from '../../../contextPanel/components/ContextPanel/ContextPanel';
+import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
+import AddKeyword from '../../components/AddKeyword';
+import ContextPanel from '../../../contextPanel/components/ContextPanel';
 
 
-class AddKeywordContainer extends Component {
+class AddKeywordContainer extends React.Component {
 	constructor(props) {
 		super(props);
+		
 		this.state = {
 			textNodes: [],
 			selectedTextNodes: []
 		};
+
 		this.updateSelectedLemma = this.updateSelectedLemma.bind(this);
 	}
+
 	updateSelectedLemma(_textNodes) {
 		this.setState({selectedTextNodes : [_textNodes]});
 	}
+
 	componentWillReceiveProps(props) {
 		this.setState({
 			textNodes: props.textNodesQuery.loading ? [] : props.textNodesQuery.textNodes
 		});
 	}
+
 	render() {
 		const { work, textNodesUrn, addKeyword } = this.props;
 		const { textNodes, selectedTextNodes } = this.state;
@@ -60,4 +68,15 @@ class AddKeywordContainer extends Component {
 		);
 	}
 }
-export default compose(textNodesQuery)(AddKeywordContainer);
+
+const mapStateToProps = (state, props) => ({
+	tenantId: state.tenant.tenantId,
+});
+
+
+export default compose(
+	commentersQuery,
+	keywordsQuery,
+	textNodesQuery,
+	connect(mapStateToProps),
+)(AddKeywordContainer);

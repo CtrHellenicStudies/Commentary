@@ -13,9 +13,6 @@ import ReferenceDropdown from '../ReferenceDropdown';
 import WorksDropdown from '../WorksDropdown';
 import LocationBrowserContainer from '../../containers/LocationBrowserContainer';
 
-// lib
-import Utils from '../../../../lib/utils';
-
 
 import './CommentarySearchToolbar.css';
 
@@ -62,50 +59,6 @@ class CommentarySearchToolbar extends React.Component {
 		this.setState({
 			moreDropdownOpen: !this.state.moreDropdownOpen,
 		});
-	}
-
-	componentWillReceiveProps(nextProps) {
-		let workFilter;
-		if (nextProps.keywordsQuery.loading ||
-			nextProps.commentersQuery.loading ||
-			nextProps.editionsQuery.loading ||
-			nextProps.editionsQuery.loading) {
-			return;
-		}
-		if (
-			this.props.filters
-			&& nextProps.filters
-			&& nextProps.filters.length
-		) {
-			nextProps.filters.forEach((filter) => {
-				if (filter.key === 'works') {
-					workFilter = filter;
-				}
-			});
-
-			if (workFilter && workFilter.values.length) {
-				this.setState({
-					subworksTitle: workFilter.values[0].slug === 'homeric-hymns' ? 'Hymn' : 'Book'
-				});
-			}
-		}
-
-		if (this.props.selectedWork) {
-			this.setState({
-				subworksTitle: nextProps.selectedWork.slug === 'homeric-hymns' ? 'Hymn' : 'Book'
-			});
-		}
-		this.setState({
-			works: Utils.worksFromEditions(nextProps.editionsQuery.works),
-		});
-		if (!nextProps.addCommentPage) {
-			this.setState({
-				keyideas: nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea'),
-				keywords: nextProps.keywordsQuery.keywords.filter(x => x.type === 'word'),
-				commenters: nextProps.commentersQuery.commenters,
-				referenceWorks: nextProps.referenceWorksQuery.referenceWorks,
-			});
-		}
 	}
 
 	render() {

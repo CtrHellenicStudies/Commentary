@@ -16,6 +16,7 @@ const DiscussionThreadContainer = props => {
 
 	return (
 		<DiscussionThread
+			discussionCommentsDisabled
 			discussionComments={discussionComments}
 		/>
 	);

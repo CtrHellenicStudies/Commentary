@@ -72,38 +72,7 @@ class CommentarySearchPanel extends React.Component {
 	handleChangeTextsearch() {
 		this.props.handleChangeTextsearch($('.text-search--drawer input').val());
 	}
-	componentWillReceiveProps(nextProps) {
-		let works = [];
-		let keywords = [];
-		let keyideas = [];
-		let commenters = [];
-		let referenceWorks = [];
 
-		if (
-			nextProps.editionsQuery.loading ||
-			nextProps.keywordsQuery.loading ||
-			nextProps.commentersQuery.loading ||
-			nextProps.referenceWorksQuery.loading
-		)
-		{
-			return;
-		}
-
-		// FETCH DATA:
-		keyideas = nextProps.keywordsQuery.keywords.filter(x => x.type === 'idea');
-		keywords = nextProps.keywordsQuery.keywords.filter(x => x.type === 'word');
-		commenters = nextProps.commentersQuery.commenters;
-		works = nextProps.editionsQuery.works;
-		referenceWorks = nextProps.referenceWorksQuery.referenceWorks;
-
-		this.setState({
-			keyideas: keyideas,
-			keywords: keywords,
-			commenters: commenters,
-			works: works,
-			referenceWorks: referenceWorks
-		});
-	}
 	render() {
 		const self = this;
 		const { handlePagination } = this.props;

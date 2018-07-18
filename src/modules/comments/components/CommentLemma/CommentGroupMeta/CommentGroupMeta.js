@@ -17,51 +17,69 @@ const getLineTo = ({ lemmaCitation }) => {
 };
 
 
-const CommentGroupMeta = ({ hideLemma, commentGroup }) => (
-	<div className="comment-group-meta">
-		{hideLemma === false ?
-			<div className="comment-group-meta-inner comment-group-meta-ref">
-				<div className="comment-group-ref">
+const CommentGroupMeta = ({ hideLemma, commentGroup }) => {
+	const commenters = [];
 
-					<CommentGroupMetaWorkTitleContainer
-						textGroupUrn={serializeUrn(commentGroup.lemmaCitation, 'textGroup')}
-						workUrn={serializeUrn(commentGroup.lemmaCitation, 'work')}
-					/>
-					<h2 className="comment-group-ref-below">
-						{commentGroup.lemmaCitation.passageFrom.join('.')}{getLineTo(commentGroup)}
-					</h2>
+	let isInCommenters = false;
+	Object.keys(commentGroup.commenters).forEach(key => {
+		isInCommenters = false;
+		commenters.forEach(commenter => {
+			if (commentGroup.commenters[key].name === commenter.name) {
+				isInCommenters = true;
+			}
+		});
+		if (!isInCommenters) {
+			commenters.push(commentGroup.commenters[key]);
+		}
+	})
 
-				</div>
-				<div className="comment-group-commenters">
+	return (
+		<div className="comment-group-meta">
+			{hideLemma === false ?
+				<div className="comment-group-meta-inner comment-group-meta-ref">
+					<div className="comment-group-ref">
 
-					{Object.keys(commentGroup.commenters).map(key => (
-						<div
-							key={commentGroup.commenters[key]._id}
-							className="comment-author"
-							data-commenter-id={commentGroup.commenters[key]._id}
-						>
-							<span className="comment-author-name">
-								{commentGroup.commenters[key].name}
-							</span>
-							<a
-								className="comment-author-image-wrap paper-shadow"
-								href={`/commenters/${commentGroup.commenters[key].slug}`}
+						<CommentGroupMetaWorkTitleContainer
+							textGroupUrn={serializeUrn(commentGroup.lemmaCitation, 'textGroup')}
+							workUrn={serializeUrn(commentGroup.lemmaCitation, 'work')}
+						/>
+						<h2 className="comment-group-ref-below">
+							{commentGroup.lemmaCitation.passageFrom.join('.')}{getLineTo(commentGroup)}
+						</h2>
+
+					</div>
+					<div className="comment-group-commenters">
+
+						{commenters.map(commenter => (
+							<div
+								key={commenter._id}
+								className="comment-author"
+								data-commenter-id={commenter._id}
 							>
-								<AvatarIcon
-									avatar={
-										(commentGroup.commenters[key] && commentGroup.commenters[key].avatar) ?
-											commentGroup.commenters[key].avatar.src
-											: null
-									}
-								/>
-							</a>
-						</div>
-					))}
+								<span className="comment-author-name">
+									{commenter.name}
+								</span>
+								<a
+									className="comment-author-image-wrap paper-shadow"
+									href={`/commenters/${commenter.slug}`}
+								>
+									<AvatarIcon
+										avatar={
+											(commenter && commenter.avatar) ?
+												commenter.avatar.src
+												: null
+										}
+									/>
+								</a>
+							</div>
+						))}
+					</div>
 				</div>
-			</div>
-			: '' }
-	</div>
-);
+				: '' }
+		</div>
+	);
+};
+
 CommentGroupMeta.propTypes = {
 	hideLemma: PropTypes.bool,
 	commentGroup: PropTypes.shape({
@@ -81,6 +99,7 @@ CommentGroupMeta.propTypes = {
 		}))
 	}),
 };
+
 CommentGroupMeta.defaultProps = {
 	hideLemma: false,
 	commentGroup: null,

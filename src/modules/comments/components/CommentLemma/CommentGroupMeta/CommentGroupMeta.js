@@ -11,7 +11,7 @@ import serializeUrn from '../../../../cts/lib/serializeUrn';
 
 const getLineTo = ({ lemmaCitation }) => {
 	if (lemmaCitation.passageTo && lemmaCitation.passageTo.length) {
-		return `- ${lemmaCitation.passageTo.join('.')}`;
+		return `-${lemmaCitation.passageTo.join('.')}`;
 	}
 	return '';
 };

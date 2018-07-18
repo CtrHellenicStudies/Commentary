@@ -10,13 +10,20 @@ const CommentGroupMetaWorkTitleContainer = props => {
 	let textGroupTitle = '';
 	let workTitle = '';
 
-	if (
-		props.workTitleQuery
-    && props.workTitleQuery.textGroups
-    && props.workTitleQuery.textGroups.length
-	) {
-		textGroupTitle = props.workTitleQuery.textGroups[0].title
-		workTitle = props.workTitleQuery.textGroups[0].works[0].english_title;
+	if (props.workTitleQuery) {
+		if (
+			props.workTitleQuery.textGroups
+	    && props.workTitleQuery.textGroups.length
+		) {
+			textGroupTitle = props.workTitleQuery.textGroups[0].title
+		}
+
+		if (
+			props.workTitleQuery.works
+	    && props.workTitleQuery.works.length
+		) {
+			workTitle = props.workTitleQuery.works[0].english_title;
+		}
 	}
 
 

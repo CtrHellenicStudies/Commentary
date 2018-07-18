@@ -85,7 +85,7 @@ class CommentLemmaText extends React.Component {
 
 					return (
 						<div
-							key={textNode.location.join('.')}
+							key={`${textNodes[i].location.join('.')}.${textNodes[i].id}`}
 							className="lemma-text-line"
 							style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline'}}
 						>

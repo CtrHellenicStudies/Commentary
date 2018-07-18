@@ -17,21 +17,16 @@ import './Header.css';
 class Header extends React.Component {
 	render() {
 		const {
-			toggleAuthModal, userId, initialSearchEnabled, workFilters, toggleSearchTerm,
-			handlePagination, work,
+			toggleAuthModal, userId, initialSearchEnabled,
 		} = this.props;
 
 		return (
 			<div>
 				<LeftMenu />
 				<NavBar
-					toggleSearchTerm={toggleSearchTerm}
 					toggleAuthModal={toggleAuthModal}
-					handlePagination={handlePagination}
 					userId={userId}
-					work={work}
 					initialSearchEnabled={initialSearchEnabled}
-					filters={workFilters}
 				/>
 			</div>
 		);
@@ -41,7 +36,6 @@ class Header extends React.Component {
 Header.propTypes = {
 	toggleAuthModal: PropTypes.func.isRequired,
 	userId: PropTypes.string,
-	workFilters: PropTypes.array
 };
 
 Header.defaultProps = {

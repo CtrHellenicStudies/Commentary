@@ -10,7 +10,7 @@ import autoBind from 'react-autobind';
 // components
 import SearchTermButtonPanel from '../SearchTermButtonPanel';
 import WorksCard from '../WorksCard';
-import LocationBrowser from '../LocationBrowser';
+import LocationBrowserContainer from '../../containers/LocationBrowserContainer';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -198,9 +198,10 @@ class CommentarySearchPanel extends React.Component {
 					/>
 					<CardText expandable style={styles.wrapper}>
 						<div style={styles.lineSearch} className="line-search">
-							<LocationBrowser
+							<LocationBrowserContainer
 								work={this.state.activeWork}
-								updateTextLocation={handlePagination} />
+								updateTextLocation={handlePagination}
+							/>
 						</div>
 					</CardText>
 				</Card>

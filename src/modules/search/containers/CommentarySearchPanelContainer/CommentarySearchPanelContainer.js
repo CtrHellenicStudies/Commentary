@@ -8,11 +8,16 @@ import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referen
 import keywordsQuery from '../../../keywords/graphql/queries/list';
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 
+// component
+import CommentarySearchPanel from '../../components/CommentarySearchPanel';
+
 
 const CommentarySearchPanelContainer = props => {
 
 	return (
 		<CommentarySearchPanel
+			open={props.open}
+			closeRightMenu={props.closeRightMenu}
 		/>
 	);
 };

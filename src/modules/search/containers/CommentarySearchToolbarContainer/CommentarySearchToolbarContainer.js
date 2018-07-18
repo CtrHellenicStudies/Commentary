@@ -8,6 +8,8 @@ import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referen
 import keywordsQuery from '../../../keywords/graphql/queries/list';
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 
+// component
+import CommentarySearchToolbar from '../../components/CommentarySearchToolbar';
 
 const CommentarySearchToolbarContainer = props => {
 

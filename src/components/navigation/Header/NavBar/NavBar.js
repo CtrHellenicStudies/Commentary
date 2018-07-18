@@ -9,8 +9,8 @@ import IconButton from 'material-ui/IconButton';
 import autoBind from 'react-autobind';
 
 // components
-import CommentarySearchToolbar from '../../../../modules/search/components/CommentarySearchToolbar';
-import CommentarySearchPanel from '../../../../modules/search/components/CommentarySearchPanel';
+import CommentarySearchToolbarContainer from '../../../../modules/search/containers/CommentarySearchToolbarContainer';
+import CommentarySearchPanelContainer from '../../../../modules/search/containers/CommentarySearchPanelContainer';
 import ProfileAvatarButton from '../../../../modules/users/components/ProfileAvatarButton';
 
 // lib
@@ -200,8 +200,7 @@ class NavBar extends React.Component {
 	render() {
 
 		const {
-			filters, isOnHomeView, toggleSearchTerm, handleChangeTextsearch, handlePagination,
-			addCommentPage, selectedWork, dispatchToggleLeftMenu, userId,
+			isOnHomeView, addCommentPage, dispatchToggleLeftMenu, userId,
 			dispatchToggleAuthModal, roles
 		} = this.props;
 		const { rightMenuOpen, searchEnabled, settings, tenant } = this.state;
@@ -213,16 +212,10 @@ class NavBar extends React.Component {
 					zIndex: 98,
 				}}
 			>
-				{!isOnHomeView && (
-					toggleSearchTerm
-				) ?
-					<CommentarySearchPanel
-						toggleSearchTerm={toggleSearchTerm}
-						handleChangeTextsearch={handleChangeTextsearch}
-						handlePagination={handlePagination}
+				{!isOnHomeView ?
+					<CommentarySearchPanelContainer
 						open={rightMenuOpen}
 						closeRightMenu={this.closeRightMenu}
-						filters={filters}
 					/>
 					: ''}
 				<div>
@@ -254,14 +247,6 @@ class NavBar extends React.Component {
 											style={styles.flatButton}
 										/>
 									</Link>
-									{	Utils.userInRole(roles, ['admin']) ?
-										(
-											<div>
-
-											</div>
-										) : ''
-
-									}
 									{userId ?
 										<div className="user-header-links">
 											<ProfileAvatarButton
@@ -319,15 +304,7 @@ class NavBar extends React.Component {
 									</IconButton>
 								</div>
 								<div className="search-tools collapse">
-									<CommentarySearchToolbar
-										work={this.props.work}
-										toggleSearchTerm={toggleSearchTerm}
-										handleChangeTextsearch={handleChangeTextsearch}
-										handlePagination={handlePagination}
-										filters={filters}
-										addCommentPage={addCommentPage}
-										selectedWork={selectedWork}
-									/>
+									<CommentarySearchToolbarContainer />
 								</div>
 							</div>
 						</div>

@@ -24,12 +24,7 @@ class MainLayout extends React.Component {
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout chs-editor-layout add-comment-layout">
-					<Header
-						toggleSearchTerm={() => {}}
-						handleChangeLineN={() => {}}
-						filters={[]}
-						selectedWork={{ slug: '' }}
-					/>
+					<Header />
 					<main>
 						<div className="commentary-comments">
 							<div className="comment-group">

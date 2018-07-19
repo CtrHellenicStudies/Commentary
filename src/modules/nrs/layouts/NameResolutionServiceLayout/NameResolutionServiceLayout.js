@@ -13,6 +13,7 @@ import './NameResolutionServiceLayout.css';
 const resolveV1 = (props) => {
 	let resolveURL;
 	let tenant;
+	let comment;
 
 	if (!props.doi && !props.urn) {
 		return resolveURL;
@@ -27,10 +28,12 @@ const resolveV1 = (props) => {
 			queryParam: JSON.stringify({_id: props.commentId})
 		});
 	}
-	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments[0];
-	if (comment) {
-		this.props.tenantsQuery.variables.tenantId = comment.tenantId;
-		tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants;
+
+	if (props.commentsQuery && props.commentsQuery.comments && props.commentsQuery.comments.length) {
+		comment = props.commentsQuery.comments[0];
+	}
+	if (comment && props.tenantsQuery && props.tenantsQuery.tenants) {
+		tenant = props.tenantsQuery.tenants.find(x => x._id === comment.tenantId);
 	}
 
 	if (comment && tenant) {
@@ -39,12 +42,16 @@ const resolveV1 = (props) => {
 
 	return resolveURL;
 };
+
 const resolveV2 = (props) => {
 	let resolveURL;
 	let tenant;
+	let comment;
+
 	if (!props.doi && !props.urn) {
 		return resolveURL;
 	}
+
 	const urnParams = props.urn.split('.');
 	const revision = urnParams.splice(-1);
 	const urn = `${urnParams.join('.')}`;
@@ -54,11 +61,12 @@ const resolveV2 = (props) => {
 			queryParam: JSON.stringify({_id: props.commentId})
 		});
 	}
-	const comment = props.commentsQuery.loading ? {} : props.commentsQuery.comments[0];
 
-	if (comment) {
-		this.props.tenantsQuery.variables.tenantId = comment.tenantId;
-		tenant = this.props.tenantsQuery.loading ? {} : this.props.tenantsQuery.tenants;
+	if (props.commentsQuery && props.commentsQuery.comments && props.commentsQuery.comments.length) {
+		comment = props.commentsQuery.comments[0];
+	}
+	if (comment && props.tenantsQuery && props.tenantsQuery.tenants) {
+		tenant = props.tenantsQuery.tenants.find(x => x._id === comment.tenantId);
 	}
 
 	if (comment && tenant) {
@@ -69,8 +77,14 @@ const resolveV2 = (props) => {
 	return resolveURL;
 };
 
-
 class NameResolutionServiceLayout extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			resolveURL: '',
+		};
+	}
 
 	componentWillReceiveProps(nextProps) {
 		let resolveURL;
@@ -89,6 +103,7 @@ class NameResolutionServiceLayout extends React.Component {
 			resolveURL: resolveURL
 		});
 	}
+
 	resolve() {
 		const { doi, urn } = this.props;
 		const { resolveURL } = this.state;
@@ -150,12 +165,14 @@ class NameResolutionServiceLayout extends React.Component {
 		);
 	}
 }
+
 NameResolutionServiceLayout.propTypes = {
 	urn: PropTypes.string,
 	doi: PropTypes.string,
 	resolveURL: PropTypes.string,
 	version: PropTypes.number
 };
+
 export default compose(
 	tenantsQuery,
 	commentsQuery

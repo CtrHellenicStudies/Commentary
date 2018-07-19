@@ -232,10 +232,7 @@ class NavBar extends React.Component {
 	}
 
 	render() {
-
-		const {
-			dispatchToggleLeftMenu,
-		} = this.props;
+		const { dispatchToggleLeftMenu } = this.props;
 		const { rightMenuOpen, searchEnabled, settings } = this.state;
 
 		return (

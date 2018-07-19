@@ -78,7 +78,7 @@ class CommentarySearchToolbar extends React.Component {
 							onChange={this.handleChangeTextsearch}
 						/>
 					</div>
-				: '' }
+					: '' }
 
 				<WorksDropdown
 					works={works}
@@ -160,7 +160,6 @@ CommentarySearchToolbar.propTypes = {
 	commenters: PropTypes.array,
 	referenceWorks: PropTypes.array,
 	works: PropTypes.array,
-	filters: PropTypes.array,
 };
 
 CommentarySearchToolbar.defaultProps = {

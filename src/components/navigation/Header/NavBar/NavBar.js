@@ -13,9 +13,6 @@ import CommentarySearchToolbarContainer from '../../../../modules/search/contain
 import CommentarySearchPanelContainer from '../../../../modules/search/containers/CommentarySearchPanelContainer';
 import ProfileAvatarButton from '../../../../modules/users/components/ProfileAvatarButton';
 
-// lib
-import Utils from '../../../../lib/utils';
-
 // graphql
 import tenantsQuery from '../../../../modules/tenants/graphql/queries/tenants';
 import settingsQuery from '../../../../modules/settings/graphql/queries/list';
@@ -197,13 +194,49 @@ class NavBar extends React.Component {
 		}
 	}
 
+	renderUserAvatarOrLogin() {
+		const { userId, dispatchToggleAuthModal } = this.props;
+		const { tenant } = this.state;
+
+		if (userId) {
+			return (
+				<div className="user-header-links">
+					<ProfileAvatarButton
+						showUserDropdown={this.showUserDropdown}
+						hideUserDropdown={this.hideUserDropdown}
+					/>
+				</div>
+			);
+		}
+
+		return (
+			<div>
+				<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
+					<FlatButton
+						label="Login"
+						onClick={dispatchToggleAuthModal}
+						style={styles.flatButton}
+						className="account-button account-button-login"
+					/>
+				</Link>
+				<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
+					<FlatButton
+						label="Join the Community"
+						onClick={dispatchToggleAuthModal}
+						style={styles.flatButton}
+						className="account-button account-button-login"
+					/>
+				</Link>
+			</div>
+		);
+	}
+
 	render() {
 
 		const {
-			isOnHomeView, addCommentPage, dispatchToggleLeftMenu, userId,
-			dispatchToggleAuthModal, roles
+			dispatchToggleLeftMenu,
 		} = this.props;
-		const { rightMenuOpen, searchEnabled, settings, tenant } = this.state;
+		const { rightMenuOpen, searchEnabled, settings } = this.state;
 
 		return (
 			<Headroom
@@ -212,12 +245,10 @@ class NavBar extends React.Component {
 					zIndex: 98,
 				}}
 			>
-				{!isOnHomeView ?
-					<CommentarySearchPanelContainer
-						open={rightMenuOpen}
-						closeRightMenu={this.closeRightMenu}
-					/>
-					: ''}
+				<CommentarySearchPanelContainer
+					open={rightMenuOpen}
+					closeRightMenu={this.closeRightMenu}
+				/>
 				<div>
 					{!searchEnabled ?
 						<div className="md-menu-toolbar" >
@@ -247,33 +278,7 @@ class NavBar extends React.Component {
 											style={styles.flatButton}
 										/>
 									</Link>
-									{userId ?
-										<div className="user-header-links">
-											<ProfileAvatarButton
-												showUserDropdown={this.showUserDropdown}
-												hideUserDropdown={this.hideUserDropdown}
-											/>
-										</div>
-										:
-										<div>
-											<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
-												<FlatButton
-													label="Login"
-													onClick={dispatchToggleAuthModal}
-													style={styles.flatButton}
-													className="account-button account-button-login"
-												/>
-											</Link>
-											<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
-												<FlatButton
-													label="Join the Community"
-													onClick={dispatchToggleAuthModal}
-													style={styles.flatButton}
-													className="account-button account-button-login"
-												/>
-											</Link>
-										</div>
-									}
+									{this.renderUserAvatarOrLogin()}
 									<div className="search-toggle">
 										<IconButton
 											className="search-button"
@@ -298,7 +303,7 @@ class NavBar extends React.Component {
 								<div className="search-toggle">
 									<IconButton
 										className="search-button right-drawer-toggle"
-										onClick={this.toggleRightMenu}
+										onClick={this.toggleSearchMode}
 										iconClassName="material-icons">
 										search
 									</IconButton>

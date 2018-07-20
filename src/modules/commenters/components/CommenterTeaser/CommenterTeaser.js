@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AvatarIcon from '../../../profile/components/AvatarIcon/AvatarIcon';
+import AvatarIcon from '../../../users/components/AvatarIcon';
 import Utils from '../../../../lib/utils';
 
 // lib:

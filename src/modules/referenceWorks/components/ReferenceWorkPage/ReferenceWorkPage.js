@@ -4,7 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
-import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 import Header from '../../../../components/navigation/Header';

@@ -10,7 +10,7 @@ import muiTheme from '../../../../lib/muiTheme';
 // components
 import Header from '../../../../components/navigation/Header';
 import Footer from '../../../../components/navigation/Footer';
-import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
 
 
 import './Page.css';

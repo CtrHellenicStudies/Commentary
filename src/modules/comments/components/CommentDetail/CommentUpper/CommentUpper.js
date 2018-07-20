@@ -4,7 +4,7 @@ import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import { Link } from 'react-router-dom';
 
-import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
+import AvatarIcon from '../../../../users/components/AvatarIcon';
 
 /*
 	BEGIN CommentUpperLeft

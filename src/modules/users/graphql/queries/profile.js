@@ -3,13 +3,18 @@ import { gql, graphql } from 'react-apollo';
 const query = gql`
 	query userProfileQuery {
 		userProfile {
-	    _id
+			_id
 			username
-			avatar
-	    name
-	    email
-	    bio
-			isActiveUser
+			roles
+			profile {
+			  name
+			  biography
+			  twitter
+			  facebook
+			  google
+			  avatarUrl
+			}
+			canEditCommenters
 		}
 	}
 `;

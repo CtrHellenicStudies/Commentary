@@ -1,31 +1,29 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router';
+import { Route } from 'react-router';
 
 // Projects
-import PrivateRoute from '../../../routes/PrivateRoute';
-import ProfilePage from '../../profile/components/ProfilePage/ProfilePage';
+import ProfilePageContainer from '../containers/ProfilePageContainer';
+
 
 /** Move this to a separate implementation than private route */
 const profileRoute = (
-	<PrivateRoute
+	<Route
 		exact
 		path="/profile"
-		component={ProfilePage}
+		component={ProfilePageContainer}
 		roles={['any']}
 	/>
 );
 
+/** TODO: restore the public profile page
 const publicProfileRoute = (
 	<Route
-		path="/users/:userId" render={(props) => {
-			if (props.userId) {
-				return <Redirect to="/profile" />;
-			}
-			return null; // <PublicProfilePage userId={cookies.get('token')} />;
-		}}
+		path="/users/:userId"
+		component={PublicProfilePage}
 	/>
 );
+*/
 
 export {
-	profileRoute, publicProfileRoute,
+	profileRoute, // publicProfileRoute,
 };

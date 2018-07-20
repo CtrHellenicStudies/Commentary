@@ -5,7 +5,7 @@ import moment from 'moment';
 import { compose } from 'react-apollo';
 
 // components
-import AvatarIcon from '../../../profile/components/AvatarIcon/AvatarIcon';
+import AvatarIcon from '../../../users/components/AvatarIcon';
 
 // lib
 import createRevisionMarkup from '../../../../lib/createRevisionMarkup';

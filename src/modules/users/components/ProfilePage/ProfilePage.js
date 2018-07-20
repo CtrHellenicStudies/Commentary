@@ -1,25 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import Cookies from 'js-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { connect } from 'react-redux';
-import { compose } from 'react-apollo';
 import autoBind from 'react-autobind';
 
 // components
-import AvatarEditor from '../AvatarEditor/AvatarEditor';
-import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
-import LoadingPage from '../../../../components/loading/LoadingPage';
+import AvatarEditor from '../AvatarEditor';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
 import ModalChangePwd from '../../../auth/components/ModalChangePwd';
 import Discussion from '../Discussion';
 import Annotations from '../Annotations';
 import Account from '../Account';
 import Header from '../../../../components/navigation/Header';
-
-// graphql
-import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
@@ -45,8 +38,6 @@ class ProfilePage extends React.Component {
 
 		this.state = {
 			annotationCheckList: [],
-			skip: 0,
-			limit: 100,
 			usernameError: '',
 			emailError: '',
 			modalChangePwdLowered: false,
@@ -56,27 +47,12 @@ class ProfilePage extends React.Component {
 		autoBind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		this.setState({
-			user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined,
-			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === this.props.tenantId),
-			ready: !nextProps.settingsQuery.loading
-		});
-	}
-
 	static childContextTypes = {
 		muiTheme: PropTypes.object.isRequired,
 	}
 
-
 	getChildContext() {
 		return { muiTheme: getMuiTheme(muiTheme) };
-	}
-
-	loadMore() {
-		this.setState({
-			skip: this.state.skip + 10,
-		});
 	}
 
 	showChangePwdModal() {
@@ -92,16 +68,12 @@ class ProfilePage extends React.Component {
 	}
 
 	render() {
-		const { user, settings } = this.state;
+		const { user, settings } = this.props;
 
 		if (settings) {
 			Utils.setTitle(`Profile Page | ${settings.title}`);
 			Utils.setDescription('');
 			Utils.setMetaImage('');
-		}
-
-		if (!user) {
-			return <LoadingPage />;
 		}
 
 		return (
@@ -145,7 +117,7 @@ class ProfilePage extends React.Component {
 											</Tab>
 											<Tab label="Account">
 												<MuiThemeProvider>
-													<Account user={user} turnOnPassChange={this.showChangePwdModal} />
+													<Account turnOnPassChange={this.showChangePwdModal} />
 												</MuiThemeProvider>
 											</Tab>
 										</Tabs>
@@ -159,24 +131,11 @@ class ProfilePage extends React.Component {
 							lowered={this.state.modalChangePwdLowered}
 							closeModal={this.closeChangePwdModal}
 						/>
-						: ''
-					}
+						: ''}
 				</div>
 			</MuiThemeProvider>
 		);
 	}
 }
 
-ProfilePage.propTypes = {
-	settingsQuery: PropTypes.object
-};
-
-const mapStateToProps = (state, props) => ({
-	tenantId: state.tenant.tenantId,
-});
-
-
-export default compose(
-	connect(mapStateToProps),
-	settingsQuery,
-)(ProfilePage);
+export default ProfilePage;

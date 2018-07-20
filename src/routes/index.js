@@ -40,7 +40,7 @@ import {
 } from '../modules/referenceWorks/routes';
 import textNodesRoute from '../modules/textNodes/routes';
 import {
-	profileRoute, publicProfileRoute,
+	profileRoute, // publicProfileRoute,
 } from '../modules/users/routes';
 import {
 	adminRoute,
@@ -120,7 +120,7 @@ class Routes extends React.Component {
 
 					{/** Users routes */}
 					{profileRoute}
-					{publicProfileRoute}
+					{/* publicProfileRoute */}
 
 					{/** Auth routes */}
 					{signInRoute}

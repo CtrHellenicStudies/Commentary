@@ -8,7 +8,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import Header from '../../../../components/navigation/Header';
 
 // components
-import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
 
 import './Unauthorized.css';
 

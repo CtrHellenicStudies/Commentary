@@ -131,6 +131,7 @@ const resetPassword = async (data) => {
 
 const verifyToken = async () => {
 	const token = cookies.get('token');
+	console.log(token);
 	if (token) {
 		try {
 			const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/verify-token`, {

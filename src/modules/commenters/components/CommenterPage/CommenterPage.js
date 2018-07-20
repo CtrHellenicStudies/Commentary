@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
 // components
-import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder/BackgroundImageHolder';
+import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
 import CommenterList from '../CommenterList/CommenterList';
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 import Header from '../../../../components/navigation/Header';

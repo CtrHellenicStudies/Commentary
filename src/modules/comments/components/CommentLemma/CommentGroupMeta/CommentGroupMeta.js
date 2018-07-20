@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 // components
 import CommentGroupMetaWorkTitleContainer from '../../../containers/CommentGroupMetaWorkTitleContainer';
-import AvatarIcon from '../../../../profile/components/AvatarIcon/AvatarIcon';
+import AvatarIcon from '../../../../users/components/AvatarIcon';
 
 // cts
 import serializeUrn from '../../../../cts/lib/serializeUrn';

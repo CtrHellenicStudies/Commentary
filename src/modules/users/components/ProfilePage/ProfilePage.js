@@ -117,7 +117,10 @@ class ProfilePage extends React.Component {
 											</Tab>
 											<Tab label="Account">
 												<MuiThemeProvider>
-													<Account turnOnPassChange={this.showChangePwdModal} />
+													<Account
+														turnOnPassChange={this.showChangePwdModal}
+														user={user}
+													/>
 												</MuiThemeProvider>
 											</Tab>
 										</Tabs>

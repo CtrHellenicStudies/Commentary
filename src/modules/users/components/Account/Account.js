@@ -4,9 +4,14 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import { EditorState } from 'draft-js';
+import { debounce } from 'throttle-debounce';
+import autoBind from 'react-autobind';
+
 import DraftEditorInput from '../../../inputs/components/DraftEditorInput/DraftEditorInput';
 import Utils from '../../../../lib/utils';
-import { debounce } from 'throttle-debounce';
+
+
+import './Account.css';
 
 class Account extends React.Component {
 	constructor(props) {
@@ -24,10 +29,7 @@ class Account extends React.Component {
 			editorState: biography
 		};
 
-		this.handleChangeTextDebounced = this.handleChangeTextDebounced.bind(this);
-		this.handleChangeText = this.handleChangeText.bind(this);
-		this.handleBatchNotification = this.handleBatchNotification.bind(this);
-		this.showChangePwdModal = this.showChangePwdModal.bind(this);
+		autoBind(this);
 	}
 
 	componentWillMount() {
@@ -89,13 +91,14 @@ class Account extends React.Component {
 		const value = event.target.value;
 		this.handleChangeTextDebounced(field, value);
 	}
+
 	handleDraftChange(editorState) {
 		//const value = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
 		// Meteor.call('updateAccount', 'profile.biography', value, (err) => {
 		// 	if (err) {
 		// 		console.error(err);
 		// }); TODO
-		this.setState({editorState: editorState});
+		this.setState({ editorState });
 	}
 
 	handleBatchNotification(event, value) {
@@ -172,12 +175,13 @@ class Account extends React.Component {
 				/>
 				<br />
 
-				<DraftEditorInput
-					editorState={this.state.editorState}
-					onChange={this.handleDraftChange.bind(this)}
-					placeholder="Biography..."
-					mediaOn
-				/>
+				<div className="biographyInput">
+					<DraftEditorInput
+						editorState={this.state.editorState}
+						onChange={this.handleDraftChange.bind(this)}
+						placeholder="Biography..."
+					/>
+				</div>
 				<br />
 
 				<TextField
@@ -214,9 +218,7 @@ class Account extends React.Component {
 					defaultValue={user.profile ? user.profile.google : ''}
 					onChange={this.handleChangeText.bind(null, 'google')}
 				/>
-				<br />
-
-				<br />
+				
 				<br />
 				<br />
 

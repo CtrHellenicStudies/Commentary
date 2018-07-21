@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import AvatarIcon from '../../../users/components/AvatarIcon';
 import UserDropdown from '../UserDropdown';
@@ -39,8 +40,8 @@ class ProfileAvatarButton extends React.Component {
 				<div
 					className="profileButtonAvatar"
 				>
-					<a
-						href="/profile"
+					<Link
+						to="/profile"
 					>
 						{numberOfNotifications > 0 ?
 							<span className="profileButtonHeader profileButtonNotificationBadge notificationBadge">
@@ -53,7 +54,7 @@ class ProfileAvatarButton extends React.Component {
 							className="avatarIcon"
 							avatar={profile ? profile.avatarUrl : ''}
 						/>
-					</a>
+					</Link>
 				</div>
 				{showUserDropdown ?
 					<UserDropdown />

@@ -16,8 +16,6 @@ const ProfilePageContainer = props => {
 	let settings;
 	let user;
 
-	console.log(props);
-
 	if (props.settingsQuery.loading || props.userProfileQuery.loading) {
 		return <LoadingPage />;
 	}

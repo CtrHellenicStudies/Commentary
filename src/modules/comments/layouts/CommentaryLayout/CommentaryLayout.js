@@ -40,7 +40,6 @@ import {
 	createQueryParamsFromFilters,
 	updateFilterOnChangeLineEvent,
 	updateFilterOnChangeTextSearchEvent,
-	updateFilterOnKeyAndValueChangeEvent,
 	createFiltersFromURL
 } from '../../lib/queryFilterHelpers';
 
@@ -94,7 +93,7 @@ class CommentaryLayout extends React.Component {
 		this._updateRoute(filters);
 	}
 
-	_handleChangeLineN(e) {
+	_handleBrowse(e) {
 		const { queryParams } = this.state;
 		const oldFilters = createFiltersFromQueryParams(queryParams);
 
@@ -130,15 +129,13 @@ class CommentaryLayout extends React.Component {
 					<div className="chs-layout commentary-layout">
 						<Header
 							workFilters={filters}
-							toggleSearchTerm={this._toggleSearchTerm}
-							handleChangeLineN={this._handleChangeLineN}
+							handleBrowse={this._handleBrowse}
 							handleChangeTextsearch={this._handleChangeTextsearch}
 							initialSearchEnabled
 						/>
 
 						<CommentaryContainer
 							filters={filters}
-							toggleSearchTerm={this._toggleSearchTerm}
 							showLoginModal={this.showLoginModal}
 							loadMoreComments={this.loadMoreComments}
 							tenantId={tenantId}

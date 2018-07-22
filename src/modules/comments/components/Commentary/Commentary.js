@@ -180,8 +180,6 @@ class Commentary extends React.Component {
 }
 
 Commentary.propTypes = {
-	skip: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
-	limit: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
 	isOnHomeView: PropTypes.bool,
 	filters: PropTypes.array,
 	showLoginModal: PropTypes.func,

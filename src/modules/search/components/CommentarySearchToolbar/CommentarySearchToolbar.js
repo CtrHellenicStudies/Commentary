@@ -13,6 +13,9 @@ import ReferenceDropdown from '../ReferenceDropdown';
 import WorksDropdown from '../WorksDropdown';
 import LocationBrowserContainer from '../../containers/LocationBrowserContainer';
 
+// lib
+import toggleSearchTerm from '../../lib/toggleSearchTerm';
+
 
 import './CommentarySearchToolbar.css';
 
@@ -29,13 +32,6 @@ class CommentarySearchToolbar extends React.Component {
 			searchDropdownOpen: '',
 			moreDropdownOpen: false,
 			activeWorkNew: null,
-			subworksTitle: 'Book',
-			referenceWorks: [],
-			works: [],
-			keywords: [],
-			keyideas: [],
-			lineFrom: 0,
-			lineTo: 909
 		};
 
 		// methods:
@@ -62,11 +58,12 @@ class CommentarySearchToolbar extends React.Component {
 	}
 
 	render() {
-		const { toggleSearchTerm, filters, addCommentPage } = this.props;
 		const {
-			keywords, keyideas, commenters, referenceWorks, works, searchDropdownOpen,
-			moreDropdownOpen,
+			searchDropdownOpen, moreDropdownOpen,
 		} = this.state;
+		const {
+			words, ideas, commenters, referenceWorks, works, filters, addCommentPage,
+		} = this.props;
 
 		return (
 			<div>
@@ -107,7 +104,7 @@ class CommentarySearchToolbar extends React.Component {
 							/>
 						</div>
 						<KeywordsDropdown
-							keywords={keywords}
+							keywords={words}
 							searchDropdownOpen={searchDropdownOpen}
 							toggleSearchDropdown={this.toggleSearchDropdown}
 							toggleSearchTerm={toggleSearchTerm}
@@ -115,7 +112,7 @@ class CommentarySearchToolbar extends React.Component {
 						/>
 
 						<KeyideasDropdown
-							keyideas={keyideas}
+							keyideas={ideas}
 							searchDropdownOpen={searchDropdownOpen}
 							toggleSearchDropdown={this.toggleSearchDropdown}
 							toggleSearchTerm={toggleSearchTerm}

@@ -20,7 +20,7 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggle
 	>
 		{works.map(work => (
 			<SearchTermButton
-				key={work.id}
+				key={work.urn}
 				toggleSearchTerm={toggleSearchTerm}
 				label={work.english_title}
 				searchTermKey="works"
@@ -32,7 +32,7 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggle
 );
 WorksDropdown.propTypes = {
 	works: PropTypes.arrayOf(PropTypes.shape({
-		id: PropTypes.number.isRequired,
+		urn: PropTypes.string.isRequired,
 		english_title: PropTypes.string.isRequired,
 	})),
 	...dropdownPropTypes,

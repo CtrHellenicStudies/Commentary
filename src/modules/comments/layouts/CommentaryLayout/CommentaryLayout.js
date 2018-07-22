@@ -38,7 +38,7 @@ import muiTheme from '../../../../lib/muiTheme';
 import {
 	createFiltersFromQueryParams,
 	createQueryParamsFromFilters,
-	updateFilterOnChangeLineEvent,
+	updateFilterOnBrowseEvent,
 	updateFilterOnChangeTextSearchEvent,
 	createFiltersFromURL
 } from '../../lib/queryFilterHelpers';
@@ -69,22 +69,20 @@ class CommentaryLayout extends React.Component {
 	}
 
 	_updateRoute(filters) {
-		let queryParams = {};
-		const { referenceWorks, history } = this.props;
+		let queryParams;
 		if (filters) {
-			queryParams = createQueryParamsFromFilters(filters, referenceWorks);
+			queryParams = createQueryParamsFromFilters(filters);
 		} else {
-			queryParams = this.props.queryParams;
+			queryParams = qs.parse(window.location.search.substr(1));
 		}
 
 		// update route
 		const urlParams = qs.stringify(queryParams);
-
-		history.push(`/commentary/?${urlParams}`);
+		this.props.history.push(`/commentary/?${urlParams}`);
 	}
 
 	_handleChangeTextsearch(e, textsearch) {
-		const { queryParams } = this.state;
+		const queryParams = qs.parse(window.location.search.substr(1));
 		const oldFilters = createFiltersFromQueryParams(queryParams);
 
 		// update filter based on the textsearch
@@ -94,16 +92,12 @@ class CommentaryLayout extends React.Component {
 	}
 
 	_handleBrowse(e) {
-		const { queryParams } = this.state;
+		const queryParams = qs.parse(window.location.search.substr(1));
 		const oldFilters = createFiltersFromQueryParams(queryParams);
 
 		// update filter based on the 'e' attribute
-		const filters = updateFilterOnChangeLineEvent(oldFilters, e);
+		const filters = updateFilterOnBrowseEvent(oldFilters, e);
 
-		this.setState({
-			skip: 0,
-			limit: 10,
-		});
 		this._updateRoute(filters);
 	}
 

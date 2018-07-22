@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import _ from 'lodash';
 import autoBind from 'react-autobind';
+import { withRouter } from 'react-router';
 
 // components
 import SearchToolDropdown from '../SearchToolDropdown';
@@ -15,6 +16,8 @@ import LocationBrowserContainer from '../../containers/LocationBrowserContainer'
 
 // lib
 import toggleSearchTerm from '../../lib/toggleSearchTerm';
+import defaultWorksEditions from '../../../comments/lib/defaultWorksEditions';
+import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
 
 
 import './CommentarySearchToolbar.css';
@@ -58,12 +61,25 @@ class CommentarySearchToolbar extends React.Component {
 	}
 
 	render() {
+		const subdomain = getCurrentSubdomain();
 		const {
 			searchDropdownOpen, moreDropdownOpen,
 		} = this.state;
 		const {
 			words, ideas, commenters, referenceWorks, works, filters, addCommentPage,
 		} = this.props;
+
+		let urn;
+
+		if (
+			this.props.match
+			&& this.props.match.params
+			&& this.props.match.params.urn
+		) {
+			urn = this.props.match.params.urn;
+		} else if (defaultWorksEditions[subdomain]) {
+			urn = defaultWorksEditions[subdomain].defaultWorkUrn;
+		}
 
 		return (
 			<div>
@@ -86,7 +102,7 @@ class CommentarySearchToolbar extends React.Component {
 				/>
 
 				<LocationBrowserContainer
-					urn={"urn:cts:greekLit:tlg0012.tlg001"}
+					urn={urn}
 				/>
 
 				{!addCommentPage &&
@@ -169,4 +185,4 @@ CommentarySearchToolbar.defaultProps = {
 	handleChangeTextsearch: null,
 }
 
-export default CommentarySearchToolbar;
+export default withRouter(CommentarySearchToolbar);

@@ -8,7 +8,7 @@ import { compose } from 'react-apollo';
 import Utils from '../../../../lib/utils';
 
 // graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import commentersQuery from '../../../commenters/graphql/queries/list';
 
 /*
 	helpers

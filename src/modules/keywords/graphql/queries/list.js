@@ -1,8 +1,8 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query keywordsQuery($tenantId: ID $queryParam: String) {
-	keywords (tenantId: $tenantId queryParam: $queryParam) {
+query keywordsQuery($tenantId: ID $queryParam: String $limit: Int $skip: Int) {
+	keywords (tenantId: $tenantId queryParam: $queryParam limit: $limit skip: $skip) {
 		_id
 	  title
 	  slug

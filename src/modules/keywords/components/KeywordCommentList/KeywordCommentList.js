@@ -11,7 +11,7 @@ import AvatarIcon from '../../../users/components/AvatarIcon';
 import createRevisionMarkup from '../../../../lib/createRevisionMarkup';
 
 // graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import commentersQuery from '../../../commenters/graphql/queries/list';
 
 
 const KeywordCommentList = (props) => {

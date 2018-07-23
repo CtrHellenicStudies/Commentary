@@ -15,7 +15,7 @@ import CommentLemmaSelectContainer from '../CommentLemmaSelectContainer';
 import CommentWorkSelect from '../../components/CommentWorkSelect';
 
 // graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import commentersQuery from '../../../commenters/graphql/queries/list';
 import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 import keywordsQuery from '../../../keywords/graphql/queries/list';

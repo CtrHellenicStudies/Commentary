@@ -12,7 +12,7 @@ import LoadingPage from '../../../../components/loading/LoadingPage';
 import Header from '../../../../components/navigation/Header';
 
 // graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import commentersQuery from '../../../commenters/graphql/queries/list';
 import referenceWorksQuery from '../../graphql/queries/referenceWorksQuery';
 import settingsQuery from '../../../settings/graphql/queries/list';
 

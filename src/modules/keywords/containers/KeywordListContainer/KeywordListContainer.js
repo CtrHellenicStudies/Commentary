@@ -5,22 +5,27 @@ import { compose } from 'react-apollo';
 // graphql
 import keywordsQuery from '../../graphql/queries/list';
 
+// component
+import KeywordList from '../../components/KeywordList';
+
 
 const KeywordListContainer = props => {
-
-	const { type, limit } = props;
-	let _limit = 100;
+	const { type } = props;
 
 	let keywords = [];
-	if (limit) {
-		_limit = limit;
+	if (
+		props.keywordsQuery
+		&& props.keywordsQuery.keywords
+	) {
+		keywords = props.keywordsQuery.keywords;
 	}
+
 	switch (type) {
 	case 'word':
-		keywords = getKeywordsByQuery(newProps.keywordsQuery, _limit);
+		keywords = keywords;
 		break;
 	case 'idea':
-		keywords = getKeywordsByQuery(newProps.keywordsQuery, _limit);
+		keywords = keywords;
 		break;
 	default:
 		break;
@@ -28,6 +33,7 @@ const KeywordListContainer = props => {
 
 	return (
 		<KeywordList
+			{...props}
 			keywords={keywords}
 		/>
 	);

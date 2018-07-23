@@ -47,11 +47,11 @@ const CommentUpperRight = props => {
 			{commenters.map(commenter => ((
 				props.userCanEditCommenters.indexOf(commenter._id) > -1) ?
 				<Link to={`/commentary/${props.commentId}/edit`}>
-					<FlatButton
+						<FlatButton
 						label="Edit comment"
 						icon={<FontIcon className="mdi mdi-pen" />}
 					/>
-				</Link>
+					</Link>
 				:
 				''
 			))}

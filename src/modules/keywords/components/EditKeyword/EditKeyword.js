@@ -17,7 +17,7 @@ import { fromJS } from 'immutable';
 import Utils from '../../../../lib/utils';
 
 // graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import commentersQuery from '../../../commenters/graphql/queries/list';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 
 // component

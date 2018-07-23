@@ -2,14 +2,31 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 
-import commentersQuery from '../../graphql/queries/commenters';
+// graphql
+import commentersQuery from '../../graphql/queries/list';
+
+// component
+import CommenterList from '../../components/CommenterList';
 
 
 const CommenterListContainer = props => {
 	let commenters = [];
 
+	if (
+		props.commentersQuery
+		&& props.commentersQuery.commenters
+	) {
+		commenters = props.commentersQuery.commenters
+		if (props.featureOnHomepage) {
+			 commenters = commenters.filter(commenter => (
+				commenter.featureOnHomepage === true
+			));
+		}
+	}
+
 	return (
 		<CommenterList
+			{...props}
 			commenters={commenters}
 		/>
 	);

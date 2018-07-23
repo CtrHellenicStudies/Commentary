@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-import commentersQuery from '../../graphql/queries/commenters';
+import commentersQuery from '../../graphql/queries/list';
 
 
 const CommentersEditorDialogContainer = props => {

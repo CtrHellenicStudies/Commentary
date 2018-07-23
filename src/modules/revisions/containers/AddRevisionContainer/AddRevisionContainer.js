@@ -8,7 +8,7 @@ import commentRemoveRevisionMutation from '../../../comments/graphql/mutations/r
 import keywordsQuery from '../../../keywords/graphql/queries/list';
 import keywordInsertMutation from '../../../keywords/graphql/mutations/insert';
 import keywordsUpdate from '../../../keywords/graphql/mutations/update';
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import commentersQuery from '../../../commenters/graphql/queries/list';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
 

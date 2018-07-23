@@ -12,7 +12,7 @@ import Header from '../../../../components/navigation/Header';
 
 // graphql
 import settingsQuery from '../../../settings/graphql/queries/list';
-import commentersQuery from '../../graphql/queries/commentersQuery';
+import commentersQuery from '../../graphql/queries/list';
 
 
 // components

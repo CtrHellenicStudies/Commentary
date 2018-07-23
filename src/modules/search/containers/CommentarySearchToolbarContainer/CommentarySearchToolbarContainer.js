@@ -3,7 +3,7 @@ import { compose } from 'react-apollo';
 import { connect } from 'react-redux';
 
 // graphql
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import commentersQuery from '../../../commenters/graphql/queries/list';
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
 import keywordsQuery from '../../../keywords/graphql/queries/list';
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';

@@ -12,8 +12,8 @@ import muiTheme from '../../../../lib/muiTheme';
 
 // components
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
-import CommenterList from '../../../commenters/components/CommenterList';
-import KeywordList from '../../../keywords/components/KeywordList';
+import CommenterListContainer from '../../../commenters/containers/CommenterListContainer';
+import KeywordListContainer from '../../../keywords/containers/KeywordListContainer';
 import LoadingHome from '../../../../components/loading/LoadingHome';
 
 import './Home.css';
@@ -173,14 +173,14 @@ class Home extends React.Component {
 						{/* <!--end of container-->*/}
 					</section>
 
-					<section className="commentors">
+					<section className="commenters">
 						<BackgroundImageHolder
 							imgSrc="/images/school-athens.jpg"
 						/>
 
 						<div className="container">
 							<h2 className="block-title">Commentators</h2>
-							<CommenterList
+							<CommenterListContainer
 								featureOnHomepage
 								defaultAvatarUrl="/images/default_user.jpg"
 								limit={3}
@@ -213,7 +213,12 @@ class Home extends React.Component {
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Words</h2>
 							<div className="underline" />
-							<KeywordList type="word" title="Words" limit={5} />
+							<KeywordListContainer
+								type="word"
+								title="Words"
+								limit={5}
+								queryParam={JSON.stringify({ type: 'word' })}
+							/>
 							<Link to="/words">
 								<RaisedButton
 									className="cover-link show-more primary "
@@ -227,7 +232,12 @@ class Home extends React.Component {
 						<div className="grid inner">
 							<h2 className="keyword-divider-title">Ideas</h2>
 							<div className="underline" />
-							<KeywordList type="idea" title="Ideas" limit={5} />
+							<KeywordListContainer
+								type="idea"
+								title="Ideas"
+								limit={5}
+								queryParam={JSON.stringify({ type: 'idea' })}
+							/>
 							<Link to="/ideas">
 								<RaisedButton
 									className="cover-link show-more primary "

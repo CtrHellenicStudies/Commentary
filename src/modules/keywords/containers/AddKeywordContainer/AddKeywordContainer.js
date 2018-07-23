@@ -4,7 +4,7 @@ import { compose } from 'react-apollo';
 
 // graphql
 import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
-import commentersQuery from '../../../commenters/graphql/queries/commentersQuery';
+import commentersQuery from '../../../commenters/graphql/queries/list';
 import keywordsQuery from '../../graphql/queries/list';
 
 // components

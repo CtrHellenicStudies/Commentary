@@ -1,9 +1,43 @@
 import Utils from '../../../lib/utils';
 
 /**
+ * reset the skip and limit of the filters
+ */
+const _resetFiltersSkipLimit = _filters => {
+	const filters = _filters.slice();
+	if (filters.some(filter => (filter.key === 'skip'))) {
+		filters.forEach(filter => {
+			if (filter.key === 'skip') {
+				filter.values = [0];
+			}
+		});
+	} else {
+		filters.push({
+			key: 'skip',
+			values: [0],
+		});
+	}
+
+	if (filters.some(filter => (filter.key === 'limit'))) {
+		filters.forEach(filter => {
+			if (filter.key === 'limit') {
+				filter.values = [10];
+			}
+		});
+	} else {
+		filters.push({
+			key: 'limit',
+			values: [10],
+		});
+	}
+	return filters;
+};
+
+
+/**
  * given an input list of query params, create a list of filters for display and the database queries
  */
-const _createFilterFromQueryParams = (queryParams, referenceWorks = []) => {
+const _createFiltersFromQueryParams = (queryParams, referenceWorks = []) => {
 	const filters = [];
 
 	if (!queryParams) {
@@ -240,6 +274,12 @@ const _createQueryParamsFromFilters = (filters) => {
 			case 'urn':
 				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
 				break;
+			case 'skip':
+				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
+				break;
+			case 'limit':
+				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
+				break;
 			default:
 				break;
 			}
@@ -252,7 +292,7 @@ const _createQueryParamsFromFilters = (filters) => {
 /**
  * For the line change event, update the line filter
  */
-const _updateFilterOnChangeLineEvent = (oldFilters, e) => {
+const _updateFilterOnBrowseEvent = (oldFilters, e) => {
 	const filters = oldFilters;
 
 	if (e.from > 1) {
@@ -315,7 +355,8 @@ const _updateFilterOnChangeLineEvent = (oldFilters, e) => {
 		}
 	}
 
-	return filters;
+
+	return _resetFiltersSkipLimit(filters);
 };
 
 /**
@@ -354,7 +395,7 @@ const _updateFilterOnChangeTextSearchEvent = (oldFilters, e, textsearch) => {
 		}
 	}
 
-	return filters;
+	return _resetFiltersSkipLimit(filters);
 };
 
 /**
@@ -482,7 +523,7 @@ const _getUrnFilters = (urn, works) => {
 /**
  * Create a list of filters from params
  */
-const _createFilterFromParams = (params, works) => {
+const _createFiltersFromParams = (params, works) => {
 	const filters = [];
 
 	if (!params) {
@@ -504,21 +545,21 @@ const _createFilterFromParams = (params, works) => {
 /**
  * Create a list of filters from URL
  */
-const _createFilterFromURL = (params, queryParams, works, referenceWorks) => {
+const _createFiltersFromURL = (params, queryParams, works, referenceWorks) => {
 	let filters = [];
 	if (params.urn) {
-		filters = _createFilterFromParams(params, works);
+		filters = _createFiltersFromParams(params, works);
 	} else if (queryParams) {
-		filters = _createFilterFromQueryParams(queryParams, referenceWorks);
+		filters = _createFiltersFromQueryParams(queryParams, referenceWorks);
 	}
 	return filters;
 };
 
 export {
-	_createFilterFromQueryParams as createFilterFromQueryParams,
+	_createFiltersFromQueryParams as createFiltersFromQueryParams,
 	_createQueryParamsFromFilters as createQueryParamsFromFilters,
-	_updateFilterOnChangeLineEvent as updateFilterOnChangeLineEvent,
+	_updateFilterOnBrowseEvent as updateFilterOnBrowseEvent,
 	_updateFilterOnChangeTextSearchEvent as updateFilterOnChangeTextSearchEvent,
 	_updateFilterOnKeyAndValueChangeEvent as updateFilterOnKeyAndValueChangeEvent,
-	_createFilterFromURL as createFilterFromURL
+	_createFiltersFromURL as createFiltersFromURL
 };

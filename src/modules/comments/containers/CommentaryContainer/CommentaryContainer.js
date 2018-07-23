@@ -33,7 +33,10 @@ class CommentaryContainer extends React.Component {
 				);
 			}
 
-			if (!this.props.commentsMoreQuery.commentsMore) {
+			if (
+				!this.props.commentsMoreQuery.commentsMore
+				&& !this.props.commentsQuery.comments
+			) {
 				return (
 					<div className="commentary-primary content ">
 						<div className="no-commentary-wrap">

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import _ from 'lodash';
 import autoBind from 'react-autobind';
+import { withRouter } from 'react-router';
 
 // components
 import SearchToolDropdown from '../SearchToolDropdown';
@@ -12,6 +13,11 @@ import CommentatorsDropdown from '../CommentatorsDropdown';
 import ReferenceDropdown from '../ReferenceDropdown';
 import WorksDropdown from '../WorksDropdown';
 import LocationBrowserContainer from '../../containers/LocationBrowserContainer';
+
+// lib
+import toggleSearchTerm from '../../lib/toggleSearchTerm';
+import defaultWorksEditions from '../../../comments/lib/defaultWorksEditions';
+import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
 
 
 import './CommentarySearchToolbar.css';
@@ -29,13 +35,6 @@ class CommentarySearchToolbar extends React.Component {
 			searchDropdownOpen: '',
 			moreDropdownOpen: false,
 			activeWorkNew: null,
-			subworksTitle: 'Book',
-			referenceWorks: [],
-			works: [],
-			keywords: [],
-			keyideas: [],
-			lineFrom: 0,
-			lineTo: 909
 		};
 
 		// methods:
@@ -62,11 +61,25 @@ class CommentarySearchToolbar extends React.Component {
 	}
 
 	render() {
-		const { toggleSearchTerm, filters, addCommentPage } = this.props;
+		const subdomain = getCurrentSubdomain();
 		const {
-			keywords, keyideas, commenters, referenceWorks, works, searchDropdownOpen,
-			moreDropdownOpen,
+			searchDropdownOpen, moreDropdownOpen,
 		} = this.state;
+		const {
+			words, ideas, commenters, referenceWorks, works, filters, addCommentPage,
+		} = this.props;
+
+		let urn;
+
+		if (
+			this.props.match
+			&& this.props.match.params
+			&& this.props.match.params.urn
+		) {
+			urn = this.props.match.params.urn;
+		} else if (defaultWorksEditions[subdomain]) {
+			urn = defaultWorksEditions[subdomain].defaultWorkUrn;
+		}
 
 		return (
 			<div>
@@ -89,7 +102,7 @@ class CommentarySearchToolbar extends React.Component {
 				/>
 
 				<LocationBrowserContainer
-					urn={"urn:cts:greekLit:tlg0012.tlg001"}
+					urn={urn}
 				/>
 
 				{!addCommentPage &&
@@ -107,7 +120,7 @@ class CommentarySearchToolbar extends React.Component {
 							/>
 						</div>
 						<KeywordsDropdown
-							keywords={keywords}
+							keywords={words}
 							searchDropdownOpen={searchDropdownOpen}
 							toggleSearchDropdown={this.toggleSearchDropdown}
 							toggleSearchTerm={toggleSearchTerm}
@@ -115,7 +128,7 @@ class CommentarySearchToolbar extends React.Component {
 						/>
 
 						<KeyideasDropdown
-							keyideas={keyideas}
+							keyideas={ideas}
 							searchDropdownOpen={searchDropdownOpen}
 							toggleSearchDropdown={this.toggleSearchDropdown}
 							toggleSearchTerm={toggleSearchTerm}
@@ -172,4 +185,4 @@ CommentarySearchToolbar.defaultProps = {
 	handleChangeTextsearch: null,
 }
 
-export default CommentarySearchToolbar;
+export default withRouter(CommentarySearchToolbar);

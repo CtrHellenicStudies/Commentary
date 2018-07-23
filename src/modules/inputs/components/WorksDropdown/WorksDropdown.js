@@ -30,6 +30,7 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggle
 		))}
 	</SearchToolDropdown>
 );
+
 WorksDropdown.propTypes = {
 	works: PropTypes.arrayOf(PropTypes.shape({
 		id: PropTypes.number.isRequired,
@@ -37,6 +38,7 @@ WorksDropdown.propTypes = {
 	})),
 	...dropdownPropTypes,
 };
+
 WorksDropdown.defaultProps = {
 	works: [],
 	...dropdownDefaultProps,

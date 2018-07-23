@@ -36,13 +36,13 @@ import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 // lib
 import muiTheme from '../../../../lib/muiTheme';
 import {
-	createFilterFromQueryParams,
+	createFiltersFromQueryParams,
 	createQueryParamsFromFilters,
-	updateFilterOnChangeLineEvent,
+	updateFilterOnBrowseEvent,
 	updateFilterOnChangeTextSearchEvent,
-	updateFilterOnKeyAndValueChangeEvent,
-	createFilterFromURL
+	createFiltersFromURL
 } from '../../lib/queryFilterHelpers';
+
 
 class CommentaryLayout extends React.Component {
 	constructor(props) {
@@ -50,9 +50,6 @@ class CommentaryLayout extends React.Component {
 
 		this.state = {
 			modalLoginLowered: false,
-			skip: 0,
-			limit: 10,
-			queryParams: qs.parse(window.location.search.substr(1)),
 			params: this.props.match,
 			filters: []
 		};
@@ -72,38 +69,21 @@ class CommentaryLayout extends React.Component {
 	}
 
 	_updateRoute(filters) {
-		let queryParams = {};
-		const { referenceWorks, history } = this.props;
+		let queryParams;
 		if (filters) {
-			queryParams = createQueryParamsFromFilters(filters, referenceWorks);
+			queryParams = createQueryParamsFromFilters(filters);
 		} else {
-			queryParams = this.props.queryParams;
+			queryParams = qs.parse(window.location.search.substr(1));
 		}
 
 		// update route
 		const urlParams = qs.stringify(queryParams);
-
-		history.push(`/commentary/?${urlParams}`);
-	}
-
-	_toggleSearchTerm(key, value) {
-		const { queryParams } = this.state;
-		const oldFilters = createFilterFromQueryParams(queryParams);
-
-		// update filter based on the key and value
-		const filters = updateFilterOnKeyAndValueChangeEvent(oldFilters, key, value);
-
-		this.setState({
-			skip: 0,
-			limit: 10,
-		});
-
-		this._updateRoute(filters);
+		this.props.history.push(`/commentary/?${urlParams}`);
 	}
 
 	_handleChangeTextsearch(e, textsearch) {
-		const { queryParams } = this.state;
-		const oldFilters = createFilterFromQueryParams(queryParams);
+		const queryParams = qs.parse(window.location.search.substr(1));
+		const oldFilters = createFiltersFromQueryParams(queryParams);
 
 		// update filter based on the textsearch
 		const filters = updateFilterOnChangeTextSearchEvent(oldFilters, e, textsearch);
@@ -111,39 +91,24 @@ class CommentaryLayout extends React.Component {
 		this._updateRoute(filters);
 	}
 
-	_handleChangeLineN(e) {
-		const { queryParams } = this.state;
-		const oldFilters = createFilterFromQueryParams(queryParams);
+	_handleBrowse(e) {
+		const queryParams = qs.parse(window.location.search.substr(1));
+		const oldFilters = createFiltersFromQueryParams(queryParams);
 
 		// update filter based on the 'e' attribute
-		const filters = updateFilterOnChangeLineEvent(oldFilters, e);
+		const filters = updateFilterOnBrowseEvent(oldFilters, e);
 
-		this.setState({
-			skip: 0,
-			limit: 10,
-		});
 		this._updateRoute(filters);
 	}
 
-	loadMoreComments() {
-		if (
-			!this.props.isOnHomeView
-			&& this.props.commentsMoreQuery
-			&& this.props.commentsMoreQuery.commentsMore
-		) {
-			this.setState({
-				limit: this.state.limit + 10,
-			});
-		}
-	}
 
 	componentWillReceiveProps(nextProps) {
 		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
-		const works = nextProps.editionsQuery.loading ? [] : nextProps.editionsQuery.works
+		const works = nextProps.editionsQuery.loading ? [] : nextProps.editionsQuery.works;
 		this.setState({
-			referenceWorks: referenceWorks,
-			works: works,
-			filters: createFilterFromURL(this.state.params, this.state.queryParams, this.state.works, this.props.referenceWorks)
+			referenceWorks,
+			works,
+			filters: createFiltersFromURL(this.state.params, this.state.queryParams, this.state.works, this.props.referenceWorks)
 		});
 	}
 
@@ -157,16 +122,14 @@ class CommentaryLayout extends React.Component {
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header
-							workFilters={this.state.filters}
-							toggleSearchTerm={this._toggleSearchTerm}
-							handleChangeLineN={this._handleChangeLineN}
+							workFilters={filters}
+							handleBrowse={this._handleBrowse}
 							handleChangeTextsearch={this._handleChangeTextsearch}
 							initialSearchEnabled
 						/>
 
 						<CommentaryContainer
 							filters={filters}
-							toggleSearchTerm={this._toggleSearchTerm}
 							showLoginModal={this.showLoginModal}
 							loadMoreComments={this.loadMoreComments}
 							tenantId={tenantId}

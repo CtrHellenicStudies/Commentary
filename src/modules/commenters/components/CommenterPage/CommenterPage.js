@@ -7,7 +7,7 @@ import { compose } from 'react-apollo';
 
 // components
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
-import CommenterList from '../CommenterList/CommenterList';
+import CommenterListContainer from '../../containers/CommenterListContainer';
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 import Header from '../../../../components/navigation/Header';
 
@@ -64,7 +64,7 @@ class CommentersPage extends React.Component {
 						</section>
 						<section className="page-content">
 
-							<CommenterList />
+							<CommenterListContainer />
 
 						</section>
 

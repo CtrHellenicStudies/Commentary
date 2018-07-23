@@ -12,7 +12,7 @@ import settingsQuery from '../../../settings/graphql/queries/list';
 // components
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
 import LoadingPage from '../../../../components/loading/LoadingPage';
-import KeywordList from '../KeywordList';
+import KeywordListContainer from '../../containers/KeywordListContainer';
 import Header from '../../../../components/navigation/Header';
 
 // lib
@@ -79,7 +79,11 @@ class KeywordPage extends React.Component {
 						</section>
 
 						<section className="page-content">
-							<KeywordList type={type} limit={this.state.limit * this.state.portion} />
+							<KeywordListContainer
+								type={type}
+								limit={this.state.limit * this.state.portion}
+								queryParam={JSON.stringify({ type })}
+							/>
 							<div className="read-more-link">
 								<RaisedButton
 									onClick={this.raiseLimit.bind(this)}

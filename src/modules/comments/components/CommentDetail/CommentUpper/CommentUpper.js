@@ -26,46 +26,64 @@ CommentUpperLeft.propTypes = {
 /*
 	BEGIN CommentUpperRight
 */
-const CommentUpperRight = props => (
-	<div className="comment-upper-right">
-		{Object.keys(props.commenters).map(key => ((props.userCanEditCommenters.indexOf(props.commenters[key]._id) > -1) ?
-			<Link to={`/commentary/${props.commentId}/edit`}>
-				<FlatButton
-					label="Edit comment"
-					icon={<FontIcon className="mdi mdi-pen" />}
-				/>
-			</Link>
-			:
-			''
-		))}
-		{Object.keys(props.commenters).map(key => (
-			<div
-				key={props.commenters[key]._id}
-				className="comment-author"
-			>
-				<div className={'comment-author-text'}>
-					<Link to={`/commenters/${props.commenters[key].slug}`}>
-						<span className="comment-author-name">{props.commenters[key].name}</span>
-					</Link>
-					<span>
-						{props.updateDate}
-					</span>
+const CommentUpperRight = props => {
+	const commenters = [];
+
+	let isInCommenters = false;
+	Object.keys(props.commenters).forEach(key => {
+		isInCommenters = false;
+		commenters.forEach(commenter => {
+			if (props.commenters[key].name === commenter.name) {
+				isInCommenters = true;
+			}
+		});
+		if (!isInCommenters) {
+			commenters.push(props.commenters[key]);
+		}
+	});
+
+	return (
+		<div className="comment-upper-right">
+			{commenters.map(commenter => ((
+				props.userCanEditCommenters.indexOf(commenter._id) > -1) ?
+				<Link to={`/commentary/${props.commentId}/edit`}>
+					<FlatButton
+						label="Edit comment"
+						icon={<FontIcon className="mdi mdi-pen" />}
+					/>
+				</Link>
+				:
+				''
+			))}
+			{commenters.map(commenter => (
+				<div
+					key={commenter._id}
+					className="comment-author"
+				>
+					<div className="comment-author-text">
+						<Link to={`/commenters/${commenter.slug}`}>
+							<span className="comment-author-name">{commenter.name}</span>
+						</Link>
+						<span>
+							{props.updateDate}
+						</span>
+					</div>
+					<div className="comment-author-image-wrap paper-shadow">
+						<Link to={`/commenters/${commenter.slug}`}>
+							<AvatarIcon
+								avatar={
+									(commenter && commenter.avatar) ?
+										commenter.avatar.src
+										: null
+								}
+							/>
+						</Link>
+					</div>
 				</div>
-				<div className="comment-author-image-wrap paper-shadow">
-					<Link to={`/commenters/${props.commenters[key].slug}`}>
-						<AvatarIcon
-							avatar={
-								(props.commenters[key] && props.commenters[key].avatar) ?
-									props.commenters[key].avatar.src
-									: null
-							}
-						/>
-					</Link>
-				</div>
-			</div>
-		))}
-	</div>
-);
+			))}
+		</div>
+	);
+};
 CommentUpperRight.propTypes = {
 	commenters: PropTypes.objectOf(PropTypes.shape({
 		_id: PropTypes.string.isRequired,
@@ -129,5 +147,5 @@ CommentUpper.defaultProps = {
 	END CommentUpper
 */
 
-export default CommentUpper;
 export { CommentUpperLeft, CommentUpperRight };
+export default CommentUpper;

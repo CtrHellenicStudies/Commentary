@@ -46,44 +46,44 @@ const defaultWorksEditions = {
 			slug: 'olympian',
 			urn: 'urn:cts:greekLit:tlg0033.tlg001',
 			refsDecls: [{
-				label: 'Book',
-				slug: 'book',
+				label: 'Work',
+				slug: 'work',
 			}, {
-				label: 'Ode',
-				slug: 'ode',
+				label: 'Scroll',
+				slug: 'scroll',
 			}],
 		}, {
 			english_title: 'Pythian',
 			slug: 'pythian',
 			urn: 'urn:cts:greekLit:tlg0033.tlg002',
 			refsDecls: [{
-				label: 'Book',
-				slug: 'book',
+				label: 'Work',
+				slug: 'work',
 			}, {
-				label: 'Ode',
-				slug: 'ode',
+				label: 'Scroll',
+				slug: 'scroll',
 			}],
 		}, {
 			english_title: 'Nemean',
 			slug: 'nemean',
 			urn: 'urn:cts:greekLit:tlg0033.tlg003',
 			refsDecls: [{
-				label: 'Book',
-				slug: 'book',
+				label: 'Work',
+				slug: 'work',
 			}, {
-				label: 'Ode',
-				slug: 'ode',
+				label: 'Scroll',
+				slug: 'scroll',
 			}],
 		}, {
 			english_title: 'Isthmean',
 			slug: 'isthmean',
 			urn: 'urn:cts:greekLit:tlg0033.tlg004',
 			refsDecls: [{
-				label: 'Book',
-				slug: 'book',
+				label: 'Work',
+				slug: 'work',
 			}, {
-				label: 'Ode',
-				slug: 'ode',
+				label: 'Scroll',
+				slug: 'scroll',
 			}],
 		}],
 	},

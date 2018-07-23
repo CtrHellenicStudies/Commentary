@@ -16,11 +16,11 @@ const getClassName = (active, activeWork) => {
 };
 
 
-const SearchTermButton = ({ toggleSearchTerm, label, searchTermKey, value, activeWork, active }) => (
+const SearchTermButton = ({ toggleSearchTerm, label, searchTermKey, value, activeWork, active, history }) => (
 	<li>
 		<button
 			className={getClassName(active, activeWork)}
-			onClick={toggleSearchTerm.bind(null, searchTermKey, value)}
+			onClick={toggleSearchTerm.bind(null, searchTermKey, value, history)}
 		>
 			<span className="search-term-button-label">
 				{label}

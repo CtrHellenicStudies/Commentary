@@ -101,7 +101,6 @@ class CommentaryLayout extends React.Component {
 		this._updateRoute(filters);
 	}
 
-
 	componentWillReceiveProps(nextProps) {
 		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
 		const works = nextProps.editionsQuery.loading ? [] : nextProps.editionsQuery.works;

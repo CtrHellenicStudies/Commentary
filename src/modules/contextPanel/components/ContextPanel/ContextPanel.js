@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import $ from 'jquery';
+import autoBind from 'react-autobind';
 
 // graphql
 import getMaxLineMutation from '../../../textNodes/graphql/mutations/getMaxLine';
@@ -10,24 +11,11 @@ import getMaxLineMutation from '../../../textNodes/graphql/mutations/getMaxLine'
 import ContextPanelContentContainer from '../../containers/ContextPanelContentContainer';
 
 // lib
-import Utils from '../../../../lib/utils';
+import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
 import serializeUrn from '../../../cts/lib/serializeUrn';
+import defaultWorksEditions from '../../../comments/lib/defaultWorksEditions';
 
 
-/*
-	helpers
-*/
-function setLemmaCitation(commentGroup, _lemmaCitation) {
-	let lemmaCitation;
-	if (commentGroup) {
-		lemmaCitation = commentGroup.comments[0].lemmaCitation;
-	} else if (_lemmaCitation) {
-		lemmaCitation = _lemmaCitation;
-	} else {
-		lemmaCitation = Utils.createLemmaCitation('tlg001', 0, 49);
-	}
-	return lemmaCitation;
-}
 
 const LINE_THRESHOLD = 25;
 
@@ -39,20 +27,15 @@ class ContextPanel extends React.Component {
 		super(props);
 
 		this.state = {
-			selectedLemmaVersion: '',
+			selectedLemmaVersionIndex: null,
 			lineFrom: props.passageFrom,
 			maxLine: 0,
 			highlightingVisible: false,
-			lemmaCitation: setLemmaCitation(props.commentGroup, props.lemmaCitation)
 		};
 
 
 		// methods:
-		this.onAfterClicked = this.onAfterClicked.bind(this);
-		this.onBeforeClicked = this.onBeforeClicked.bind(this);
-		this.toggleVersion = this.toggleVersion.bind(this);
-		this.toggleHighlighting = this.toggleHighlighting.bind(this);
-		this.scrollElement = this.scrollElement.bind(this);
+		autoBind(this);
 	}
 
 	componentDidMount() {
@@ -91,21 +74,6 @@ class ContextPanel extends React.Component {
 		}
 	}
 
-
-	toggleVersion(editionSlug) {
-		if (this.state.selectedLemmaVersion !== editionSlug) {
-			this.setState({
-				selectedLemmaVersion: editionSlug,
-			});
-		}
-	}
-
-	toggleHighlighting() {
-		this.setState({
-			highlightingVisible: !this.state.highlightingVisible,
-		});
-	}
-
 	scrollElement(state) {
 		if (!this.props.editor) {
 			switch (state) {
@@ -131,33 +99,36 @@ class ContextPanel extends React.Component {
 		}
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.commentGroup && nextProps.lemmaCitation) {
-			const lemmaCitation = setLemmaCitation(nextProps.commentGroup, nextProps.lemmaCitation);
-
-			this.setState({
-				lemmaCitation,
-			});
-		}
-	}
-
 	render() {
 		const {
 			open, closeContextPanel, commentGroup, disableEdit, selectedLineFrom,
-			selectedLineTo, updateSelectedLemma, editor, multiline, textNodes, filters,
+			selectedLineTo, updateSelectedLemma, editor, multiline, filters,
 		} = this.props;
 
-		const {
-			highlightingVisible, maxLine, lemmaCitation
-		} = this.state;
+		const { maxLine } = this.state;
 
-		let textNodesUrn = 'urn:cts:greekLit:tlg0016.tlg001';
+		const subdomain = getCurrentSubdomain();
+
+		let textNodesUrn = 'urn:cts:greekLit:tlg0012.tlg001';
+
+		if (defaultWorksEditions[subdomain]) {
+			textNodesUrn = defaultWorksEditions.defaultWorkUrn;
+		}
 
 		if(commentGroup && commentGroup.lemmaCitation) {
 			const lemmaCitationTemp = commentGroup.lemmaCitation;
-			lemmaCitationTemp.passageFrom[1] = 1;
-			lemmaCitationTemp.passageTo[0] = lemmaCitationTemp.passageTo + 1;
-			textNodesUrn = serializeUrn(lemmaCitationTemp);
+			let newPassageTo = [];
+			if (
+				lemmaCitationTemp.passageFrom.length
+				&& lemmaCitationTemp.passageTo.length
+			) {
+				newPassageTo = lemmaCitationTemp.passageTo.slice();
+				newPassageTo[newPassageTo.length - 1] = lemmaCitationTemp.passageFrom[lemmaCitationTemp.passageFrom.length - 1] + 49;
+			}
+			textNodesUrn = serializeUrn({
+				...lemmaCitationTemp,
+				passageTo: newPassageTo,
+			});
 		}
 
 		return (
@@ -166,13 +137,7 @@ class ContextPanel extends React.Component {
 				open={open}
 				filters={filters}
 				closeContextPanel={closeContextPanel}
-				commentGroup={commentGroup}
-				highlightingVisible={highlightingVisible}
-				passageFrom={selectedLineFrom}
-				passageTo={selectedLineFrom + 49}
 				maxLine={maxLine}
-				lemmaCitation={lemmaCitation}
-				textNodes={textNodes}
 				selectedLineFrom={selectedLineFrom}
 				selectedLineTo={selectedLineTo}
 				updateSelectedLemma={updateSelectedLemma}

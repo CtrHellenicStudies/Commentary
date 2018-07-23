@@ -8,30 +8,30 @@ import Utils from '../../../../lib/utils';
 /*
 	helpers
 */
-const getEditionTabClass = (selectedLemmaEdition, lemmaTextEdition, index) => {
+const getVersionTabClass = (selectedLemmaVersion, lemmaTextVersion, index) => {
 	const normalClass = 'version-tab tab';
 	const selectedClass = 'version-tab tab selected-version-tab';
 
-	if (!selectedLemmaEdition.length && index === 0) return selectedClass;
-	if (selectedLemmaEdition === lemmaTextEdition.slug) return selectedClass;
+	if (!selectedLemmaVersion && index === 0) return selectedClass;
+	if (selectedLemmaVersion.id === lemmaTextVersion.id) return selectedClass;
 	return normalClass;
 };
 
 /*
-	BEGIN EditionTabs
+	BEGIN VersionTabs
 */
-const EditionTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition }) => (
+const VersionTabs = ({ versions, selectedLemmaVersion, toggleVersion }) => (
 	<div className="version-tabs tabs">
-		{lemmaText.map((lemmaTextEdition, index) => {
-			const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+		{versions.map((version, index) => {
+			const lemmaVersionTitle = Utils.trunc(version.title, 20);
 
 			return (
 				<RaisedButton
-					key={lemmaTextEdition.slug}
-					label={lemmaEditionTitle || ''}
-					data-edition={lemmaTextEdition.title}
-					className={getEditionTabClass(selectedLemmaEdition, lemmaTextEdition, index)}
-					onClick={toggleEdition.bind(null, lemmaTextEdition.slug)}
+					key={version.slug}
+					label={lemmaVersionTitle || ''}
+					data-edition={version.title}
+					className={getVersionTabClass(selectedLemmaVersion, version, index)}
+					onClick={toggleVersion.bind(null, version.id)}
 				/>
 			);
 		})}
@@ -39,13 +39,13 @@ const EditionTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition }) => (
 	</div>
 );
 
-EditionTabs.propTypes = {
-	selectedLemmaEdition: PropTypes.string.isRequired,
-	toggleEdition: PropTypes.func.isRequired,
+VersionTabs.propTypes = {
+	selectedLemmaVersion: PropTypes.object.isRequired,
+	toggleVersion: PropTypes.func.isRequired,
 };
 
-EditionTabs.defaultProps = {
-	lemmaText: [],
+VersionTabs.defaultProps = {
+	versions: [],
 };
 
 
@@ -88,27 +88,25 @@ MetaTabs.defaultProps = {
 /*
 	BEGIN ContextPanelTabs
 */
-const ContextPanelTabs = ({ lemmaText, selectedLemmaEdition, toggleEdition, toggleHighlighting, highlightingVisible, editor }) => (
+const ContextPanelTabs = ({ versions, selectedLemmaVersion, toggleVersion, toggleHighlighting, highlightingVisible, editor }) => (
 	<div className="lemma-panel-tabs">
-
-		<EditionTabs
-			lemmaText={lemmaText}
-			selectedLemmaEdition={selectedLemmaEdition}
-			toggleEdition={toggleEdition}
+		<VersionTabs
+			versions={versions}
+			selectedLemmaVersion={selectedLemmaVersion}
+			toggleVersion={toggleVersion}
 		/>
-
-		{!editor &&
+		{/**!editor &&
 			<MetaTabs
 				toggleHighlighting={toggleHighlighting}
 				highlightingVisible={highlightingVisible}
 			/>
-		}
-
+		*/}
 	</div>
 );
+
 ContextPanelTabs.propTypes = {
-	selectedLemmaEdition: PropTypes.string.isRequired,
-	toggleEdition: PropTypes.func.isRequired,
+	selectedLemmaVersion: PropTypes.object.isRequired,
+	toggleVersion: PropTypes.func.isRequired,
 	toggleHighlighting: PropTypes.func.isRequired,
 	highlightingVisible: PropTypes.bool.isRequired,
 
@@ -120,5 +118,5 @@ ContextPanelTabs.defaultProps = {
 	editor: false,
 };
 
-export { EditionTabs, MetaTabs };
+export { VersionTabs, MetaTabs };
 export default ContextPanelTabs;

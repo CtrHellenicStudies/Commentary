@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
 
@@ -44,4 +45,4 @@ SearchTermButton.defaultProps = {
 	active: false,
 };
 
-export default SearchTermButton;
+export default withRouter(SearchTermButton);

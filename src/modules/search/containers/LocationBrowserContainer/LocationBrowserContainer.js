@@ -40,7 +40,7 @@ const LocationBrowserContainer = props => {
 	if (defaultWorksEditions[subdomain] && defaultWorksEditions[subdomain].works) {
 		works = defaultWorksEditions[subdomain].works;
 		works.forEach(work => {
-			if (work.urn === props.urn) {
+			if (props.urn.indexOf(work.urn) === 0) {
 				refsDecls = work.refsDecls;
 			}
 		});

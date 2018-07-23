@@ -11,12 +11,14 @@ query textNodesQuery($textNodesUrn: CtsUrn!) {
 
 		version {
 			id
+			urn
 			title
 			slug
 		}
 
 		translation {
 			id
+			urn
 			title
 			slug
 		}

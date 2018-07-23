@@ -317,6 +317,7 @@ const Utils = {
 					versions.push({
 						id: 1,
 						title: "",
+						urn: "",
 						language: textNode.language,
 						textNodes: [{
 							id: textNode.id,

@@ -11,6 +11,8 @@ import LoadingLemma from '../../../../components/loading/LoadingLemma';
 
 // lib
 import Utils from '../../../../lib/utils';
+import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
+import defaultWorksEditions from '../../lib/defaultWorksEditions';
 
 
 class CommentLemmaContainer extends React.Component {
@@ -18,7 +20,7 @@ class CommentLemmaContainer extends React.Component {
 		super(props);
 
 		this.state = {
-			selectedLemmaVersionIndex: 0,
+			selectedLemmaVersionIndex: null,
 			selectedTranslationVersionIndex: null,
 		};
 
@@ -26,24 +28,37 @@ class CommentLemmaContainer extends React.Component {
 	}
 
 	toggleVersion(versionId) {
-		const { versions } = this.state;
 		const { selectedLemmaVersionIndex } = this.state;
-		let selectedLemmaVersion = this.state.selectedLemmaVersion;
+		let textNodes = [];
+		let versions = [];
+
+		if (
+			this.props.textNodesQuery
+			&& this.props.textNodesQuery.textNodes
+		) {
+			textNodes = this.props.textNodesQuery.textNodes;
+		}
+
+		if (textNodes && textNodes.length) {
+			const allVersions = Utils.textFromTextNodesGroupedByVersion(textNodes);
+			versions = allVersions.versions;
+		}
 
 		if (versions && versions.length) {
-			if (versions[selectedLemmaVersionIndex].id !== versionId) {
+			if (
+				selectedLemmaVersionIndex === null
+				|| versions[selectedLemmaVersionIndex].id !== versionId
+			) {
 				let newSelectedVersionIndex = 0;
 
 				versions.forEach((version, index) => {
 					if (version.id === versionId) {
 						newSelectedVersionIndex = index;
-						selectedLemmaVersion = version;
 					}
 				});
 
 				this.setState({
 					selectedLemmaVersionIndex: newSelectedVersionIndex,
-					selectedLemmaVersion,
 				});
 			}
 		}
@@ -52,6 +67,7 @@ class CommentLemmaContainer extends React.Component {
 	render() {
 		const { commentGroup, multiline } = this.props;
 		const { selectedLemmaVersionIndex } = this.state;
+		const subdomain = getCurrentSubdomain();
 		let textNodes = [];
 		let versionsWithText = [];
 		let translationsWithText = [];
@@ -86,11 +102,15 @@ class CommentLemmaContainer extends React.Component {
 			versionsWithText;
 
 		// set selected version
-		if (
-			versionsWithText.length
-			&& versionsWithText[selectedLemmaVersionIndex]
-		) {
-			selectedLemmaVersion = versionsWithText[selectedLemmaVersionIndex];
+		if (versionsWithText.length) {
+			if (
+				selectedLemmaVersionIndex !== null
+				&& versionsWithText[selectedLemmaVersionIndex]
+			) {
+				selectedLemmaVersion = versionsWithText[selectedLemmaVersionIndex];
+			} else {
+				selectedLemmaVersion = versionsWithText.find(version => (version.urn === defaultWorksEditions[subdomain].defaultVersionUrn));
+			}
 		}
 
 		return (

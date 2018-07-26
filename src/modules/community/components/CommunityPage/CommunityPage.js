@@ -1,11 +1,16 @@
 import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // components
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
 import RecentActivity from '../RecentActivity';
 import CommunityDirectory from '../CommunityDirectory';
+
+// lib
+import muiTheme from '../../../../lib/muiTheme';
+
 
 import './CommunityPage.css';
 
@@ -33,7 +38,7 @@ class CommunityPage extends React.Component {
 				</section>
 
 				<section className="page-content container">
-					<MuiThemeProvider>
+					<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 						<Tabs>
 							<Tab label="Recent Activity">
 								<RecentActivity />

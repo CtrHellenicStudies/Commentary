@@ -5,8 +5,8 @@ import getCommentsQuery from '../../lib/getCommentsQuery';
 
 
 const query = gql`
-query commentsRecent($queryParam: String) {
-	commentsRecent(queryParam: $queryParam) {
+query commentsRecent($queryParam: String $limit: Int $skip: Int $sortRecent: Boolean) {
+	comments(queryParam: $queryParam limit: $limit skip: $skip sortRecent: $sortRecent) {
 		_id
 		tenantId
 		commenters {
@@ -40,7 +40,10 @@ const commentsRecent = graphql(query, {
 	options: (params) => {
 		return ({
 			variables: {
-				queryParam: getCommentsQuery(params.filters, params.tenantId, params.queryParams)
+				queryParam: getCommentsQuery(params.filters, params.tenantId, params.queryParams),
+				limit: params.limit,
+				skip: params.skip,
+				sortRecent: true,
 			}
 		});
 	}

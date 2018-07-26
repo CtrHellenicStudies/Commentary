@@ -1,7 +1,7 @@
 import React from 'react';
 
 // components
-import CommunityMemberList from '../CommunityMemberList';
+import CommunityMemberListContainer from '../../containers/CommunityMemberListContainer';
 
 import './CommunityDirectory.css';
 
@@ -13,7 +13,7 @@ class CommunityDirectory extends React.Component {
 		return (
 			<div className="communityDirectory">
 				<h3>Community Directory</h3>
-				<CommunityMemberList />
+				<CommunityMemberListContainer />
 			</div>
 
 		);

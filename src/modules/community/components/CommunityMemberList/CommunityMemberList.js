@@ -1,31 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'react-apollo';
 
-// graphql
-import usersQuery from '../../../users/graphql/queries/users';
+// components
 import CommunityMemberTeaser from '../CommunityMemberTeaser';
 
 import './CommunityMemberList.css';
 
 
-class CommunityMemberList extends React.Component {
-	render() {
-		const users = this.props.usersQuery.users;
+const CommunityMemberList = ({ users }) => (
+	<div className="communityMemberList">
+		{users.map((user, i) => (
+			<CommunityMemberTeaser
+				key={i}
+				user={user}
+			/>
+		))}
+	</div>
+);
 
-		return (
-			<div className="communityMemberList">
-				{users.map((user, i) => (
-					<CommunityMemberTeaser
-						key={i}
-						user={user}
-					/>
-				))}
-			</div>
-		);
-	}
-}
 CommunityMemberList.propTypes = {
-	usersQuery: PropTypes.object,
+	users: PropTypes.array,
 };
-export default compose(usersQuery)(CommunityMemberList);
+
+export default CommunityMemberList;

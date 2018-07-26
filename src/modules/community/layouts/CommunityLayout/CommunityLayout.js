@@ -25,16 +25,9 @@ import muiTheme from '../../../../lib/muiTheme';
 
 class CommunityLayout extends React.Component {
 
-	componentWillReceiveProps(nextProps) {
-		const { tenantId } = this.props;
-
-		this.setState({
-			settings: nextProps.settingsQuery.loading ? {} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId)
-		});
-	}
-
 	render() {
-		const { settings } = this.state;
+		const { tenantId } = this.props;
+		const settings = this.props.settingsQuery.loading ? {} : this.props.settingsQuery.settings.find(x => x.tenantId === tenantId)
 
 		if (!settings) {
 			return <LoadingHome />;

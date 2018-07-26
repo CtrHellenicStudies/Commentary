@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import _s from 'underscore.string';
 
 import AvatarIcon from '../../../users/components/AvatarIcon';
 
@@ -41,7 +42,7 @@ class CommunityMemberTeaser extends React.Component {
 				</Link>
 				<div className="user-teaser-text">
 					<Link to={userUrl}>
-						<h4>{username}</h4>
+						<h4>{_s.truncate(username, 20)}</h4>
 					</Link>
 				</div>
 			</div>

@@ -23,7 +23,7 @@ class RecentActivityTeaser extends React.Component {
 	}
 
 	render() {
-		const { comment, commenters, users, settings, book } = this.props;
+		const { comment, users, settings, book } = this.props;
 
 		let title = '';
 		let excerpt = '';
@@ -41,7 +41,7 @@ class RecentActivityTeaser extends React.Component {
 			excerpt = Utils.trunc(mostRecentRevision.text.replace(/(<([^>]+)>)/ig, ''), 120);
 		}
 
-		console.log(commenters)
+		const commenters = comment.commenters;
 		if (commenters && commenters.length) {
 			// TODO: support multiple user annotations
 			commenter = commenters[0];

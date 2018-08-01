@@ -4,7 +4,8 @@ import { Field, reduxForm, SubmissionError } from 'redux-form';
 // lib
 import { resetPassword } from '../../../../lib/auth';
 
-import './ForgotPwdForm.css';
+import './UpdateV2Form.css';
+
 
 
 const wrapSubmit = resetPassword => async (values, dispatch) => {
@@ -35,15 +36,17 @@ const renderField = ({ input, label, type, meta }) => (
 	</div>
 );
 
-
-const ForgotPwdForm = ({ error, handleSubmit, pristine, reset, submitting }) => (
+const UpdateV2Form = ({ error, handleSubmit, pristine, reset, submitting }) => (
 	<div className="authContainer">
 		<div className="at-form">
 			<div className="at-pwd-form forgotPwdForm">
 				<div className="at-title">
 					<h3>
-            Reset your password
-    			</h3>
+						Welcome to the 2.0 version of the Classical Commentaries from the Center for Hellenic Studies!
+					</h3>
+					<p>
+						Please reset your password to sign in.
+					</p>
 				</div>
 				<form onSubmit={handleSubmit(wrapSubmit(resetPassword))}>
 					<Field
@@ -51,11 +54,11 @@ const ForgotPwdForm = ({ error, handleSubmit, pristine, reset, submitting }) => 
 						label="Email"
 						type="email"
 						component={renderField}
-    			/>
+	  			/>
 					<div className="at-pwd-link">
 						<p>
-              To reset your password, enter the email address you use to sign in.
-    				</p>
+	            To reset your password, enter the email address you use to sign in.
+	  				</p>
 						<p className="error-text">
 							{error}
 						</p>
@@ -64,15 +67,26 @@ const ForgotPwdForm = ({ error, handleSubmit, pristine, reset, submitting }) => 
 						type="submit"
 						className="at-btn submit btn btn-lg btn-block btn-default"
 						disabled={submitting}
-    			>
-            Get Reset Link
-    			</button>
+	  			>
+	          Get Reset Link
+	  			</button>
 				</form>
 			</div>
 		</div>
 	</div>
 );
 
+const validate = (values) => {
+	const errors = {};
+
+	if (values.password !== values.passwordRepeat) {
+		errors.passwordRepeat = 'Passwords do not match';
+	}
+
+	return errors;
+};
+
 export default reduxForm({
-	form: 'ForgotPwdForm',
-})(ForgotPwdForm);
+	form: 'UpdateV2Form',
+	validate,
+})(UpdateV2Form);

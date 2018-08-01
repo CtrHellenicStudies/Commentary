@@ -16,24 +16,23 @@ const wrapSubmit = login => async (values, dispatch) => {
 	}
 };
 
-function renderField({ input, label, type, meta }) {
-	return (
-		<div className="at-input form-group has-feedback">
-			<input
-				{...input}
-				type={type}
-				style={{width: '100%'}}
-				placeholder={label}
-				autoCapitalize="none"
-				autoCorrect="off"
-				autoComplete="off"
-				spellCheck="false"
-				required
-			/>
-			{meta.touched && meta.error && <span className="help-block">{meta.error}</span>}
-		</div>
-	);
-}
+const renderField = ({ input, label, type, meta }) => (
+	<div className="at-input form-group has-feedback">
+		<input
+			{...input}
+			type={type}
+			style={{width: '100%'}}
+			placeholder={label}
+			autoCapitalize="none"
+			autoCorrect="off"
+			autoComplete="off"
+			spellCheck="false"
+			required
+		/>
+		{meta.touched && meta.error && <span className="help-block">{meta.error}</span>}
+	</div>
+);
+
 
 const PWDLoginForm = ({ error, handleSubmit, pristine, reset, submitting, login }) => (
 	<div className="at-pwd-form">
@@ -79,10 +78,10 @@ PWDLoginForm.propTypes = {
 	login: PropTypes.func.isRequired,
 };
 PWDLoginForm.defaultProps = {
-	// errorMsg: null,
+	// error: null,
 };
 
 
 export default reduxForm({
-	form: 'PWDLoginForm',  // a unique identifier for this form
+	form: 'PWDLoginForm',
 })(PWDLoginForm);

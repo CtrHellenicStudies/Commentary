@@ -8,8 +8,8 @@ import MainLayout from '../../../layouts/MainLayout';
 // component
 import Unauthorized from '../components/Unauthorized';
 import AuthContainer from '../containers/AuthContainer';
-import ForgotPwdFormContainer from '../containers/ForgotPwdFormContainer';
-import UpdateV2FormContainer from '../containers/UpdateV2FormContainer';
+import ForgotPwdForm from '../components/ForgotPwdForm';
+import UpdateV2Form from '../components/UpdateV2Form';
 
 
 const authRoutes = (
@@ -20,11 +20,11 @@ const authRoutes = (
 		/>
 		<Route
 			path="/auth/update-for-v2"
-			component={UpdateV2FormContainer}
+			component={UpdateV2Form}
 		/>
 		<Route
 			path="/auth/forgot-password"
-			component={ForgotPwdFormContainer}
+			component={ForgotPwdForm}
 		/>
 	</MainLayout>
 );

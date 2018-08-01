@@ -21,24 +21,23 @@ const wrapSubmit = signup => async (values, dispatch) => {
 	}
 };
 
-function renderField({ input, label, type, meta }) {
-	return (
-		<div className="at-input form-group has-feedback">
-			<input
-				{...input}
-				type={type}
-				style={{width: '100%'}}
-				placeholder={label}
-				autoCapitalize="none"
-				autoCorrect="off"
-				autoComplete="off"
-				spellCheck="false"
-				required
-			/>
-			{meta.touched && meta.error && <span className="help-block">{meta.error}</span>}
-		</div>
-	);
-}
+const renderField = ({ input, label, type, meta }) => (
+	<div className="at-input form-group has-feedback">
+		<input
+			{...input}
+			type={type}
+			style={{width: '100%'}}
+			placeholder={label}
+			autoCapitalize="none"
+			autoCorrect="off"
+			autoComplete="off"
+			spellCheck="false"
+			required
+		/>
+		{meta.touched && meta.error && <span className="help-block">{meta.error}</span>}
+	</div>
+);
+
 
 const PWDSignupForm = ({ error, handleSubmit, pristine, reset, submitting, signup }) => (
 	<div className="at-pwd-form">

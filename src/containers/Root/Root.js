@@ -7,10 +7,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Routes from '../../routes';
 import client from '../../middleware/apolloClient';
 
-// auth
-import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
-import { login, register, logoutUser, verifyToken } from '../../lib/auth';
-
 
 const Root = ({ store }) => (
 	<ApolloProvider
@@ -20,12 +16,6 @@ const Root = ({ store }) => (
 		<MuiThemeProvider>
 			<div>
 				<Routes />
-				<AuthModalContainer
-					loginMethod={login}
-					signupMethod={register}
-					logoutMethod={logoutUser}
-					getUserFromServer={verifyToken}
-  			/>
 			</div>
 		</MuiThemeProvider>
 	</ApolloProvider>

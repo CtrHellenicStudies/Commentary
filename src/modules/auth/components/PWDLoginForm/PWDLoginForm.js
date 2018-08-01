@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
+import { Link } from 'react-router-dom';
 
 import './PWDLoginForm.css';
 
@@ -15,24 +16,23 @@ const wrapSubmit = login => async (values, dispatch) => {
 	}
 };
 
-function renderField({ input, label, type, meta }) {
-	return (
-		<div className="at-input form-group has-feedback">
-			<input
-				{...input}
-				type={type}
-				style={{width: '100%'}}
-				placeholder={label}
-				autoCapitalize="none"
-				autoCorrect="off"
-				autoComplete="off"
-				spellCheck="false"
-				required
-			/>
-			{meta.touched && meta.error && <span className="help-block">{meta.error}</span>}
-		</div>
-	);
-}
+const renderField = ({ input, label, type, meta }) => (
+	<div className="at-input form-group has-feedback">
+		<input
+			{...input}
+			type={type}
+			style={{width: '100%'}}
+			placeholder={label}
+			autoCapitalize="none"
+			autoCorrect="off"
+			autoComplete="off"
+			spellCheck="false"
+			required
+		/>
+		{meta.touched && meta.error && <span className="help-block">{meta.error}</span>}
+	</div>
+);
+
 
 const PWDLoginForm = ({ error, handleSubmit, pristine, reset, submitting, login }) => (
 	<div className="at-pwd-form">
@@ -54,7 +54,13 @@ const PWDLoginForm = ({ error, handleSubmit, pristine, reset, submitting, login 
 					{error}
 				</p>
 				<p>
-					<a href="/forgot-password" id="at-forgotPwd" className="at-link at-pwd">Forgot your password?</a>
+					<Link
+						to="/auth/forgot-password"
+						id="at-forgotPwd"
+						className="at-link at-pwd"
+					>
+						Forgot your password?
+					</Link>
 				</p>
 			</div>
 			<button
@@ -72,10 +78,10 @@ PWDLoginForm.propTypes = {
 	login: PropTypes.func.isRequired,
 };
 PWDLoginForm.defaultProps = {
-	// errorMsg: null,
+	// error: null,
 };
 
 
 export default reduxForm({
-	form: 'PWDLoginForm',  // a unique identifier for this form
+	form: 'PWDLoginForm',
 })(PWDLoginForm);

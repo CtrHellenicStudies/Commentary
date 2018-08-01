@@ -20,7 +20,7 @@ const PrivateRoute = ({ auth, roles, component: Component, ...rest }) => {
 	if (!cookies.get('token')) {
 		return (
 			<Redirect
-				to={'/sign-in'}
+				to={'/auth/sign-in'}
 			/>
 		);
 	}

@@ -7,19 +7,14 @@ import { compose } from 'react-apollo';
 // auth types:
 import Login from '../../components/Login';
 import Signup from '../../components/Signup';
-import PWDUpdateFormForV2 from '../../components/PWDUpdateFormForV2';
 
 // actions
 import { changeAuthMode, setUser, login, logout } from '../../actions';
+import { loginUser, register, resetPassword, logoutUser } from '../../../../lib/auth';
 
 
 class AuthContainer extends React.Component {
-
 	static propTypes = {
-		dispatchLogin: PropTypes.func.isRequired,
-		dispatchSignup: PropTypes.func.isRequired,
-		dispatchReset: PropTypes.func.isRequired,
-		dispatchChangeAuthMode: PropTypes.func.isRequired,
 		authMode: PropTypes.string,
 	};
 
@@ -55,21 +50,11 @@ class AuthContainer extends React.Component {
 
 	render() {
 		const {
-			authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup, updateV2,
-			dispatchReset,
+			authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup,
 		} = this.props;
 
-		// Handle the update form for the second version of the Commentaries
-		if (updateV2) {
-			return (
-				<PWDUpdateFormForV2
-					reset={dispatchReset}
-				/>
-			);
-		}
-
 		return (
-			<div>
+			<div className="authContainer">
 				{authMode === 'login' ?
 					<Login
 						onRegisterClick={dispatchChangeAuthMode.bind(null, 'signup')}
@@ -95,20 +80,20 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	dispatchChangeAuthMode: (mode) => {
 		dispatch(changeAuthMode(mode));
 	},
-	dispatchSetUser: (userObject) => {
-		dispatch(setUser(userObject));
+	dispatchSetUser: async (userObject) => {
+		await dispatch(setUser(userObject));
 		// Go to commentary requested route instead of toggling modal
 		ownProps.history.push('/');
 	},
-	dispatchLogin: data => {
-		dispatch(login(ownProps.loginMethod, data));
+	dispatchLogin: async data => {
+		await dispatch(login(loginUser, data));
 		// Go to commentary requested route instead of toggling modal
 		ownProps.history.push('/');
 	},
-	dispatchSignup: data => dispatch(login(ownProps.signupMethod, data)),
-	dispatchReset: data => dispatch(login(ownProps.resetMethod, data)),
+	dispatchSignup: data => dispatch(login(register, data)),
+	dispatchReset: data => dispatch(login(resetPassword, data)),
 	dispatchLogout: () => {
-		dispatch(logout(ownProps.logoutMethod));
+		dispatch(logout(logoutUser));
 	},
 });
 

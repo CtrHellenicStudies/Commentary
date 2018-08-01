@@ -9,7 +9,6 @@ import Header from '../../components/navigation/Header';
 
 // auth
 import AuthModalContainer from '../../modules/auth/containers/AuthModalContainer';
-import { login, register, logoutUser, verifyToken } from '../../lib/auth';
 
 // lib
 import muiTheme from '../../lib/muiTheme';
@@ -32,12 +31,7 @@ class MainLayout extends React.Component {
 							</div>
 						</div>
 					</main>
-					<AuthModalContainer
-						loginMethod={login}
-						signupMethod={register}
-						logoutMethod={logoutUser}
-						getUserFromServer={verifyToken}
-					/>
+					<AuthModalContainer />
 				</div>
 			</MuiThemeProvider>
 		);

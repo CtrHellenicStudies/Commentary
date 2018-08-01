@@ -21,24 +21,23 @@ const wrapSubmit = signup => async (values, dispatch) => {
 	}
 };
 
-function renderField({ input, label, type, meta }) {
-	return (
-		<div className="at-input form-group has-feedback">
-			<input
-				{...input}
-				type={type}
-				style={{width: '100%'}}
-				placeholder={label}
-				autoCapitalize="none"
-				autoCorrect="off"
-				autoComplete="off"
-				spellCheck="false"
-				required
-			/>
-			{meta.touched && meta.error && <span className="help-block">{meta.error}</span>}
-		</div>
-	);
-}
+const renderField = ({ input, label, type, meta }) => (
+	<div className="at-input form-group has-feedback">
+		<input
+			{...input}
+			type={type}
+			style={{width: '100%'}}
+			placeholder={label}
+			autoCapitalize="none"
+			autoCorrect="off"
+			autoComplete="off"
+			spellCheck="false"
+			required
+		/>
+		{meta.touched && meta.error && <span className="help-block">{meta.error}</span>}
+	</div>
+);
+
 
 const PWDSignupForm = ({ error, handleSubmit, pristine, reset, submitting, signup }) => (
 	<div className="at-pwd-form">
@@ -64,11 +63,6 @@ const PWDSignupForm = ({ error, handleSubmit, pristine, reset, submitting, signu
 			<span className="error-text">
 				{error && <strong>{error}</strong>}
 			</span>
-			<div className="at-pwd-link">
-				<p>
-					<a href="/forgot-password" id="at-forgotPwd" className="at-link at-pwd">Forgot your password?</a>
-				</p>
-			</div>
 			<button type="submit" className="at-btn submit btn btn-lg btn-block btn-default" id="at-btn" disabled={submitting}>
 				Register
 			</button>

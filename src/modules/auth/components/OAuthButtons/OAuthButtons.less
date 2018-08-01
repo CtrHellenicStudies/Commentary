@@ -10,12 +10,24 @@
 		border: 2px solid #999;
 		background: #999;
 		color: @light;
+		font-size: 16px;
 
 		&:hover {
 			border: 2px solid @dark;
 			background: @dark;
 			color: @light;
 
+		}
+
+		&:focus {
+			color: @light;
+			outline: none;
+			border: 2px solid @dark;
+
+		}
+
+		i {
+			padding-right: 10px;
 		}
 	}
 }

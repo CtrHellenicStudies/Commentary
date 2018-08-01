@@ -10,7 +10,7 @@ const userIsLoggedIn = () => {
 	return false;
 };
 
-const login = async (data) => {
+const loginUser = async (data) => {
 	if (userIsLoggedIn()) {
 		throw new Error('User tried to login but user is already logged in');
 	}
@@ -157,4 +157,4 @@ const verifyToken = async () => {
 	return null;
 };
 
-export { login, logoutUser, register, verifyToken, userIsLoggedIn, resetPassword };
+export { loginUser, logoutUser, register, verifyToken, userIsLoggedIn, resetPassword };

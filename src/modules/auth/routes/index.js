@@ -3,18 +3,30 @@ import { Route } from 'react-router';
 import { logoutUser } from '../../../lib/auth'
 
 // layout
-import AuthLayout from '../layouts/AuthLayout';
+import MainLayout from '../../../layouts/MainLayout';
 
 // component
 import Unauthorized from '../components/Unauthorized';
+import AuthContainer from '../containers/AuthContainer';
+import ForgotPwdFormContainer from '../containers/ForgotPwdFormContainer';
+import UpdateV2FormContainer from '../containers/UpdateV2FormContainer';
 
 
-const signInRoute = (
-	<Route
-		exact
-		path="/sign-in"
-		component={AuthLayout}
-	/>
+const authRoutes = (
+	<MainLayout>
+		<Route
+			path="/auth/sign-in"
+			component={AuthContainer}
+		/>
+		<Route
+			path="/auth/update-for-v2"
+			component={UpdateV2FormContainer}
+		/>
+		<Route
+			path="/auth/forgot-password"
+			component={ForgotPwdFormContainer}
+		/>
+	</MainLayout>
 );
 
 const signOutRoute = (
@@ -31,26 +43,6 @@ const signOutRoute = (
 	/>
 );
 
-const updateForV2Route = (
-	<Route
-		exact
-		path="/update-for-v2"
-		component={() => (
-			<AuthLayout
-				updateV2
-			/>
-		)}
-	/>
-);
-
-// TODO: redo with own component instead of modal
-const forgotPasswordRoute = (
-	<Route
-		exact
-		path="/forgot-password"
-		render={props => <AuthLayout {...props} showForgotPwd />}
-	/>
-);
 
 const unauthorizedRoute = (
 	<Route
@@ -61,6 +53,5 @@ const unauthorizedRoute = (
 );
 
 export {
-	signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
-	unauthorizedRoute,
+	authRoutes, signOutRoute, unauthorizedRoute,
 };

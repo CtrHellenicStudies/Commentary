@@ -31,17 +31,20 @@ class Login extends React.Component {
 
 		return (
 			<div className="at-form">
-				<h3>
-					Sign In or
-					<button
-						id="at-signUp"
-						className="at-link at-signup"
-						onClick={onRegisterClick}
-					>
-						Create an Account
-					</button>
-					.
-				</h3>
+				<div className="at-title">
+					<h3>
+						Sign In or
+						<button
+							id="at-signUp"
+							className="at-link at-signup"
+							onClick={onRegisterClick}
+						>
+							Create an Account
+						</button>
+						.
+					</h3>
+				</div>
+				
 				<div className="at-signup-link" />
 
 				<OAuthButtons

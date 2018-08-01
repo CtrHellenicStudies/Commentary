@@ -17,8 +17,7 @@ import { setTenantId } from '../modules/tenants/actions';
 
 // modules
 import {
-	signInRoute, signOutRoute, updateForV2Route, forgotPasswordRoute,
-	unauthorizedRoute,
+	authRoutes, signOutRoute, unauthorizedRoute,
 } from '../modules/auth/routes';
 import {
 	addCommentRoute, addRevisionRoute, commentaryRoute,
@@ -123,10 +122,8 @@ class Routes extends React.Component {
 					{/* publicProfileRoute */}
 
 					{/** Auth routes */}
-					{signInRoute}
+					{authRoutes}
 					{signOutRoute}
-					{updateForV2Route}
-					{forgotPasswordRoute}
 					{unauthorizedRoute}
 
 					{/** NRS routes */}

@@ -14,7 +14,6 @@ import CommunityPage from '../../components/CommunityPage/CommunityPage';
 
 // auth
 import AuthModalContainer from '../../../../modules/auth/containers/AuthModalContainer';
-import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 // graphql
 import settingsQuery from '../../../settings/graphql/queries/list';
@@ -40,12 +39,7 @@ class CommunityLayout extends React.Component {
 					<CommunityPage />
 					<Footer />
 					<SnackAttack />
-					<AuthModalContainer
-						loginMethod={login}
-						signupMethod={register}
-						logoutMethod={logoutUser}
-						getUserFromServer={verifyToken}
-					/>
+					<AuthModalContainer />
 				</div>
 			</MuiThemeProvider>
 		);

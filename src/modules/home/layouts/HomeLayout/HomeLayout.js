@@ -25,7 +25,6 @@ import LoadingHome from '../../../../components/loading/LoadingHome';
 
 // auth
 import AuthModalContainer from '../../../../modules/auth/containers/AuthModalContainer';
-import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 
 class HomeLayout extends React.Component {
@@ -92,12 +91,7 @@ class HomeLayout extends React.Component {
 					/>
 
 					<Footer />
-					<AuthModalContainer
-						loginMethod={login}
-						signupMethod={register}
-						logoutMethod={logoutUser}
-						getUserFromServer={verifyToken}
-					/>
+					<AuthModalContainer />
 				</div>
 			</MuiThemeProvider>
 		);

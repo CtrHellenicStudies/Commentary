@@ -27,7 +27,6 @@ import Header from '../../../../components/navigation/Header';
 
 // auth
 import AuthModalContainer from '../../../../modules/auth/containers/AuthModalContainer';
-import { login, register, logoutUser, verifyToken } from '../../../../lib/auth';
 
 // graphql
 import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
@@ -138,12 +137,7 @@ class CommentaryLayout extends React.Component {
 						/>
 
 					</div>
-					<AuthModalContainer
-						loginMethod={login}
-						signupMethod={register}
-						logoutMethod={logoutUser}
-						getUserFromServer={verifyToken}
-					/>
+					<AuthModalContainer />
 				</div>
 			</MuiThemeProvider>
 		);

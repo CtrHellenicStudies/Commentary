@@ -19,7 +19,6 @@ import settingsQuery from '../../../../modules/settings/graphql/queries/list';
 
 // actions
 import { toggleLeftMenu } from '../../../../actions/leftMenu';
-import { toggleAuthModal } from '../../../../modules/auth/actions';
 
 import './NavBar.css';
 
@@ -195,8 +194,7 @@ class NavBar extends React.Component {
 	}
 
 	renderUserAvatarOrLogin() {
-		const { userId, dispatchToggleAuthModal } = this.props;
-		const { tenant } = this.state;
+		const { userId } = this.props;
 
 		if (userId) {
 			return (
@@ -211,18 +209,16 @@ class NavBar extends React.Component {
 
 		return (
 			<div>
-				<Link to={tenant && tenant.isAnnotation ? '/sign-in' : ''}>
+				<Link to="/auth/sign-in">
 					<FlatButton
 						label="Login"
-						onClick={dispatchToggleAuthModal}
 						style={styles.flatButton}
 						className="account-button account-button-login"
 					/>
 				</Link>
-				<Link to={tenant && tenant.isAnnotation ? '/sign-up' : ''}>
+				<Link to="/auth/sign-in">
 					<FlatButton
 						label="Join the Community"
-						onClick={dispatchToggleAuthModal}
 						style={styles.flatButton}
 						className="account-button account-button-login"
 					/>
@@ -318,7 +314,6 @@ class NavBar extends React.Component {
 }
 
 NavBar.propTypes = {
-	toggleAuthModal: PropTypes.func.isRequired,
 	userId: PropTypes.string,
 };
 
@@ -333,9 +328,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 	dispatchToggleLeftMenu: () => {
 		dispatch(toggleLeftMenu(true));
-	},
-	dispatchToggleAuthModal: (open) => {
-		dispatch(toggleAuthModal(open));
 	},
 });
 

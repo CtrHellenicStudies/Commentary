@@ -115,10 +115,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 		dispatch(setUser(userObject));
 		dispatch(toggleAuthModal(false));
 	},
-	dispatchLogin: data => dispatch(login(ownProps.loginMethod, data)),
-	dispatchSignup: data => dispatch(login(ownProps.signupMethod, data)),
+	dispatchLogin: data => dispatch(login(ownProps.loginUser, data)),
+	dispatchSignup: data => dispatch(login(ownProps.register, data)),
 	dispatchLogout: () => {
-		dispatch(logout(ownProps.logoutMethod));
+		dispatch(logout(ownProps.logoutUser));
 	},
 });
 

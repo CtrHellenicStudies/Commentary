@@ -5,7 +5,7 @@ import { Field, reduxForm, SubmissionError } from 'redux-form';
 // actions
 import { toggleAuthModal, setUser } from '../../actions';
 
-import './PWDUpdateFormForV2.css';
+import './UpdateV2FormContainer.css';
 
 
 

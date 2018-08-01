@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
+import { Link } from 'react-router-dom';
 
 import './PWDLoginForm.css';
 
@@ -54,7 +55,13 @@ const PWDLoginForm = ({ error, handleSubmit, pristine, reset, submitting, login 
 					{error}
 				</p>
 				<p>
-					<a href="/forgot-password" id="at-forgotPwd" className="at-link at-pwd">Forgot your password?</a>
+					<Link
+						to="/auth/forgot-password"
+						id="at-forgotPwd"
+						className="at-link at-pwd"
+					>
+						Forgot your password?
+					</Link>
 				</p>
 			</div>
 			<button

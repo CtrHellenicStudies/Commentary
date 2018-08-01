@@ -4,7 +4,7 @@ import { Field, reduxForm, SubmissionError } from 'redux-form';
 // lib
 import { resetPassword } from '../../../../lib/auth';
 
-import './UpdateV2Form.css';
+import './ResetPasswordForm.css';
 
 
 
@@ -36,29 +36,29 @@ const renderField = ({ input, label, type, meta }) => (
 	</div>
 );
 
-const UpdateV2Form = ({ error, handleSubmit, pristine, reset, submitting }) => (
+const ResetPasswordForm = ({ error, handleSubmit, pristine, reset, submitting }) => (
 	<div className="authContainer">
 		<div className="at-form">
-			<div className="at-pwd-form forgotPwdForm">
+			<div className="at-pwd-form resetPwdForm">
 				<div className="at-title">
 					<h3>
-						Welcome to the 2.0 version of the Classical Commentaries from the Center for Hellenic Studies!
+						Set a new password
 					</h3>
-					<p>
-						Please reset your password to sign in.
-					</p>
 				</div>
 				<form onSubmit={handleSubmit(wrapSubmit(resetPassword))}>
 					<Field
-						name="username"
-						label="Email"
-						type="email"
+						name="password"
+						label="Password"
+						type="password"
 						component={renderField}
-	  			/>
+					/>
+					<Field
+						name="passwordRepeat"
+						label="Password (Again)"
+						type="password"
+						component={renderField}
+					/>
 					<div className="at-pwd-link">
-						<p>
-	            To reset your password, enter the email address you use to sign in.
-	  				</p>
 						<p className="error-text">
 							{error}
 						</p>
@@ -68,7 +68,7 @@ const UpdateV2Form = ({ error, handleSubmit, pristine, reset, submitting }) => (
 						className="at-btn submit btn btn-lg btn-block btn-default"
 						disabled={submitting}
 	  			>
-	          Get Reset Link
+						Save new password
 	  			</button>
 				</form>
 			</div>
@@ -87,6 +87,6 @@ const validate = (values) => {
 };
 
 export default reduxForm({
-	form: 'UpdateV2Form',
+	form: 'ResetPasswordForm',
 	validate,
-})(UpdateV2Form);
+})(ResetPasswordForm);

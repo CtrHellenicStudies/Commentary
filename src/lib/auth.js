@@ -27,10 +27,17 @@ const loginUser = async (data) => {
 				...data
 			})
 		});
+
+		const resJson = await res.json();
+
 		if (!res.ok) {
 			throw new Error(res.statusText);
 		}
-		const resJson = await res.json();
+
+		if (resJson.redirectTo) {
+			window.location = resJson.redirectTo;
+		}
+
 		if (resJson.token) {
 			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
 			cookies.set('token', resJson.token, { domain });
@@ -94,7 +101,7 @@ const resetPassword = async (data) => {
 	}
 
 	try {
-		const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/resetPassword`, {
+		const res = await fetch(`${process.env.REACT_APP_AUTHENTICATION_API}/auth/reset-password`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {

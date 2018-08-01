@@ -50,7 +50,7 @@ class AuthContainer extends React.Component {
 
 	render() {
 		const {
-			authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup, 
+			authMode, dispatchChangeAuthMode, dispatchLogin, dispatchSignup,
 		} = this.props;
 
 		return (
@@ -80,13 +80,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	dispatchChangeAuthMode: (mode) => {
 		dispatch(changeAuthMode(mode));
 	},
-	dispatchSetUser: (userObject) => {
-		dispatch(setUser(userObject));
+	dispatchSetUser: async (userObject) => {
+		await dispatch(setUser(userObject));
 		// Go to commentary requested route instead of toggling modal
 		ownProps.history.push('/');
 	},
-	dispatchLogin: data => {
-		dispatch(login(loginUser, data));
+	dispatchLogin: async data => {
+		await dispatch(login(loginUser, data));
 		// Go to commentary requested route instead of toggling modal
 		ownProps.history.push('/');
 	},

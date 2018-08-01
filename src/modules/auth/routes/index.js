@@ -9,7 +9,8 @@ import MainLayout from '../../../layouts/MainLayout';
 import Unauthorized from '../components/Unauthorized';
 import AuthContainer from '../containers/AuthContainer';
 import ForgotPwdForm from '../components/ForgotPwdForm';
-import UpdateV2Form from '../components/UpdateV2Form';
+import ResetPasswordForm from '../components/ResetPasswordForm';
+import UpdateForV2Message from '../components/UpdateForV2Message';
 
 
 const authRoutes = (
@@ -19,8 +20,12 @@ const authRoutes = (
 			component={AuthContainer}
 		/>
 		<Route
+			path="/auth/reset-password"
+			component={ResetPasswordForm}
+		/>
+		<Route
 			path="/auth/update-for-v2"
-			component={UpdateV2Form}
+			component={UpdateForV2Message}
 		/>
 		<Route
 			path="/auth/forgot-password"

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import _s from 'underscore.string';
 
 // lib
 import Utils from '../../../../lib/utils';
@@ -71,7 +72,7 @@ class UserDropdown extends React.Component {
 					<RecentList recentItems={recentItems} />
 				</div>
 				<div className="userDropdownRight">
-					<a href={`http://profile.${Utils.getEnvDomain()}/profile`}>{Utils.trunc(username, 16)}</a>
+					<a href={`http://profile.${Utils.getEnvDomain()}/profile`}>{_s.truncate(username, 16)}</a>
 					<a href={`http://profile.${Utils.getEnvDomain()}/`}>Community</a>
 					<a href={`http://profile.${Utils.getEnvDomain()}/about`}>About</a>
 					<a href="mailto:muellner@chs.harvard.edu">Contact</a>

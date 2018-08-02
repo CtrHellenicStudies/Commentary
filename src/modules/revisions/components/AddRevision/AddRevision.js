@@ -20,9 +20,10 @@ import { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import slugify from 'slugify';
 import _ from 'underscore';
 
-// lib:
+// lib
 import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
+import userInRole from '../../../../lib/userInRole';
 
 // components
 import LinkDecorator from '../../../inputs/components/LinkDecorator';
@@ -123,7 +124,7 @@ class AddRevision extends React.Component {
 	}
 
 	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
+		if (this.timeout) clearTimeout(this.timeout);
 	}
 
 	getChildContext() {
@@ -351,19 +352,6 @@ class AddRevision extends React.Component {
 		});
 	}
 
-	showSnackBar(error) {
-		this.setState({
-			snackbarOpen: true,
-			snackbarMessage: error.message,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-				snackbarMessage: ''
-			});
-		}, 4000);
-	}
-
 	selectTagType(tagId, event, index) {
 		const currentTags = this.state.tagsValue;
 		this.setState({
@@ -514,7 +502,7 @@ class AddRevision extends React.Component {
 									/>
 								</div>
 								{(
-									Utils.userInRole(Cookies.get('user'), ['editor', 'admin'])
+									userInRole(Cookies.get('user'), ['editor', 'admin'])
                                    &&
                                     comment.revisions.length > 1
 								) ?

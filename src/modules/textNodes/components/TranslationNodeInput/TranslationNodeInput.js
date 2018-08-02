@@ -4,7 +4,6 @@ import {
 	FormGroup,
 } from 'react-bootstrap';
 import TextField from 'material-ui/TextField';
-import Snackbar from 'material-ui/Snackbar';
 import _ from 'lodash';
 import { debounce } from 'throttle-debounce';
 import { compose } from 'react-apollo';
@@ -12,13 +11,8 @@ import { connect } from 'react-redux';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
+import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
 
-// TODO
-// import {
-// 	translationsQuery,
-// 	translationRemoveMutation,
-// 	translationUpdateMutation
-// } from '../../../graphql/methods/translations';
 
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');
 
@@ -142,25 +136,16 @@ class TranslationNodeInput extends React.Component {
 	}
 
 	moveTextNodeBlock() {
+		// TODO implement moving text node block
 
 	}
 
-	showSnackBar(message) {
-		this.setState({
-			snackbarOpen: true,
-			snackbarMessage: message,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-			});
-		}, 4000);
-	}
 	componentWillUnmount() {
 		if (this.timeout) {
 			clearTimeout(this.timeout);
 		}
 	}
+
 	render() {
 		const {translationNodes} = this.state;
 
@@ -212,12 +197,7 @@ class TranslationNodeInput extends React.Component {
 						</ListGroupItemDnD>
 					))}
 				</ListGroupDnD>
-				<Snackbar
-					className="editor-snackbar"
-					open={this.state.snackbarOpen}
-					message={this.state.snackbarMessage}
-					autoHideDuration={4000}
-				/>
+				<SnackbarContainer />
 			</FormGroup>
 		);
 	}

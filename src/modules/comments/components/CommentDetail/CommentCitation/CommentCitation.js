@@ -10,6 +10,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Utils from '../../../../../lib/utils';
 import sortRevisions from '../../../lib/sortRevisions';
 import getRevisionDate from '../../../lib/getRevisionDate';
+import resolveUrnVersion from '../../../../cts/lib/resolveUrnVersion';
 
 import './CommentCitation.css';
 
@@ -50,7 +51,7 @@ class CommentCitation extends React.Component {
 		if (!comment) {
 			return null;
 		}
-		const urn = Utils.resolveUrn(comment.urn);
+		const urn = resolveUrnVersion(comment.urn);
 
 		const actions = [
 			<FlatButton

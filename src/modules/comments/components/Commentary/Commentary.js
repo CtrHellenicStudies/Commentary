@@ -14,8 +14,6 @@ import FilterWidget from '../../../filters/components/FilterWidget';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
-
-// helpers
 import setPageTitleAndMeta from '../../lib/setPageTitleAndMeta';
 
 import './Commentary.css';
@@ -114,8 +112,7 @@ class Commentary extends React.Component {
 
 	render() {
 		const {
-			isOnHomeView, toggleSearchTerm, showLoginModal, filters, settings, history,
-			commentGroups,
+			isOnHomeView, showLoginModal, settings, history, commentGroups,
 		} = this.props;
 		const {
 			contextPanelOpen, contextCommentGroupSelected, commentLemmaIndex, multiline,
@@ -123,8 +120,9 @@ class Commentary extends React.Component {
 
 		// set page title and metadata
 		if (!isOnHomeView) {
-			setPageTitleAndMeta(filters, settings, commentGroups);
+			setPageTitleAndMeta(settings, commentGroups);
 		}
+
 		return (
 			<div className="commentary-primary content ">
 				{/* --- BEGIN comments list */}
@@ -137,9 +135,7 @@ class Commentary extends React.Component {
 							contextPanelOpen={contextPanelOpen}
 							showContextPanel={this.showContextPanel}
 							setContextScrollPosition={this.setContextScrollPosition}
-							toggleSearchTerm={toggleSearchTerm}
 							showLoginModal={showLoginModal}
-							filters={filters}
 							isOnHomeView={isOnHomeView}
 							history={history}
 							selectMultiLine={this.selectMultiLine}
@@ -164,15 +160,11 @@ class Commentary extends React.Component {
 						commentGroup={contextCommentGroupSelected}
 						commentLemmaIndex={commentLemmaIndex}
 						multiline={multiline}
-						filters={filters}
 					/>
 					: ''}
 
 				{!isOnHomeView ?
-					<FilterWidget
-						filters={filters}
-						toggleSearchTerm={toggleSearchTerm}
-					/>
+					<FilterWidget />
 					: ''}
 			</div>
 		);
@@ -181,9 +173,7 @@ class Commentary extends React.Component {
 
 Commentary.propTypes = {
 	isOnHomeView: PropTypes.bool,
-	filters: PropTypes.array,
 	showLoginModal: PropTypes.func,
-	toggleSearchTerm: PropTypes.func,
 	loadMoreComments: PropTypes.func,
 	tenantId: PropTypes.string,
 	history: PropTypes.object,
@@ -197,9 +187,7 @@ Commentary.propTypes = {
 
 Commentary.defaultProps = {
 	isOnHomeView: false,
-	filters: null,
 	showLoginModal: null,
-	toggleSearchTerm: null,
 	loadMoreComments: null,
 };
 

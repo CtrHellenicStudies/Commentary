@@ -83,7 +83,8 @@
     "underscore": "^1.8.3",
     "underscore.string": "^3.3.4",
     "union-class-names": "^1.0.0",
-    "universal-cookie": "^2.1.2"
+    "universal-cookie": "^2.1.2",
+    "winston": "^3.0.0"
   },
   "scripts": {
     "build": "npm run build:css && react-scripts build",

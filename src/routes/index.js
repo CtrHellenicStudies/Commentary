@@ -4,7 +4,7 @@ import { compose } from 'react-apollo';
 import { connect } from 'react-redux';
 
 // lib
-import Utils from '../lib/utils';
+import PageMeta from '../lib/pageMeta';
 
 // graphql
 import tenantBySubdomainQuery from '../modules/tenants/graphql/queries/tenantBySubdomain'
@@ -72,7 +72,7 @@ class Routes extends React.Component {
 	render() {
 
 		// set the base document meta for the application
-		Utils.setBaseDocMeta();
+		PageMeta.setBaseDocMeta();
 
 		if (
 			this.props.tenantQuery

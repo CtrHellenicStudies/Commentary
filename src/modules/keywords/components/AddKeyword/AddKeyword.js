@@ -6,14 +6,16 @@ import Formsy from 'formsy-react';
 import autoBind from 'react-autobind';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
-import Snackbar from 'material-ui/Snackbar';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 // lib
 import Utils from '../../../../lib/utils';
+
+// components
 import DraftEditorInput from '../../../inputs/components/DraftEditorInput';
+import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
 
 
 class AddKeyword extends React.Component {
@@ -135,19 +137,8 @@ class AddKeyword extends React.Component {
 		}
 	}
 
-	showSnackBar(error) {
-		this.setState({
-			snackbarOpen: error.errors,
-			snackbarMessage: error.errorMessage,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-			});
-		}, 4000);
-	}
 	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
+		if (this.timeout) clearTimeout(this.timeout);
 	}
 	validateStateForSubmit() {
 		let errors = false;
@@ -291,12 +282,7 @@ class AddKeyword extends React.Component {
 						</Formsy.Form>
 					</article>
 
-					<Snackbar
-						className="editor-snackbar"
-						open={this.state.snackbarOpen}
-						message={this.state.snackbarMessage}
-						autoHideDuration={4000}
-					/>
+					<SnackbarContainer />
 				</div>
 			</div>
 		);

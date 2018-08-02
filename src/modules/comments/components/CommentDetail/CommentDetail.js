@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import $ from 'jquery';
 import moment from 'moment';
-import qs from 'qs-lite';
+import autoBind from 'react-autobind';
 
 // components
 import CommentUpper from './CommentUpper';
@@ -70,48 +70,16 @@ class CommentDetail extends React.Component {
 			persistentIdentifierModalLeft: 0,
 			searchTerm: ''
 		};
-		// methods:
-		this.getRevisionIndex = this.getRevisionIndex.bind(this);
-		this.addSearchTerm = this.addSearchTerm.bind(this);
-		this.showDiscussionThread = this.showDiscussionThread.bind(this);
-		this.hideDiscussionThread = this.hideDiscussionThread.bind(this);
-		this.checkIfToggleReferenceModal = this.checkIfToggleReferenceModal.bind(this);
-		this.closeLemmaReference = this.closeLemmaReference.bind(this);
-		this.closeKeywordReference = this.closeKeywordReference.bind(this);
-		this.selectRevision = this.selectRevision.bind(this);
 
-	}
-
-	componentWillReceiveProps(nextProps) {
-		const { filters } = this.props;
-		const { searchTerm } = this.state;
-
-		if (
-			filters
-			&& filters.find(filter => filter.key === 'textsearch') !== searchTerm
-			&& filters.find(filter => filter.key === 'textsearch')
-		) {
-			const searchTermsObject = filters.find(filter => filter.key === 'textsearch');
-			this.setState({
-				searchTerm: searchTermsObject.values[0]
-			});
-		}
+		autoBind(this);
 	}
 
 	getRevisionIndex() {
-		const { comment, filters } = this.props;
+		const { comment } = this.props;
 		let selectedRevisionIndex = this.state.selectedRevisionIndex;
 
 		if (selectedRevisionIndex === null) {
 			let foundRevision = null;
-
-			if (filters) {
-				filters.forEach((filter) => {
-					if (filter.key === 'revision') {
-						foundRevision = filter.values[0];
-					}
-				});
-			}
 
 			if (foundRevision != null && foundRevision >= 0 &&
 				foundRevision < comment.revisions.length) {
@@ -121,16 +89,6 @@ class CommentDetail extends React.Component {
 			}
 		}
 		return selectedRevisionIndex;
-	}
-
-	addSearchTerm(keyword) {
-		const { isOnHomeView, toggleSearchTerm, history } = this.props;
-		if (!(isOnHomeView) || isOnHomeView === false) {
-			toggleSearchTerm('keywords', keyword);
-		} else {
-			const urlParams = qs.stringify({ keywords: keyword.slug });
-			history.push(`/commentary/${urlParams}`);
-		}
 	}
 
 	showDiscussionThread() {
@@ -241,7 +199,6 @@ class CommentDetail extends React.Component {
 
 					<CommentKeywords
 						keywords={comment.keywords}
-						keywordOnClick={this.addSearchTerm}
 					/>
 
 					<CommentLower
@@ -323,13 +280,8 @@ CommentDetail.propTypes = {
 		})),
 		urn: PropTypes.object,
 	}).isRequired,
-	filters: PropTypes.arrayOf(PropTypes.shape({
-		key: PropTypes.string.isRequired,
-		values: PropTypes.arrayOf(PropTypes.any).isRequired,
-	})),
 	history: PropTypes.object,
 	commenters: PropTypes.object,
-	toggleSearchTerm: PropTypes.func,
 	isOnHomeView: PropTypes.bool,
 	showLoginModal: PropTypes.func,
 	toggleLemma: PropTypes.func.isRequired,
@@ -337,8 +289,6 @@ CommentDetail.propTypes = {
 };
 
 CommentDetail.defaultProps = {
-	filters: null,
-	toggleSearchTerm: null,
 	isOnHomeView: false,
 	showLoginModal: null,
 	referenceWorks: null,

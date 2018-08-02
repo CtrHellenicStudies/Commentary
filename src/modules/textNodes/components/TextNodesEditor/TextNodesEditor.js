@@ -13,7 +13,7 @@ import TextField from 'material-ui/TextField';
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 import textNodesQuery from '../../graphql/queries/textNodesQuery';
 
-// lib:
+// lib
 import Utils from '../../../../lib/utils';
 
 // components

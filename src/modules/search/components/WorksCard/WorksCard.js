@@ -2,17 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
-// components:
+// components
 import SearchTermButtonPanel from '../SearchTermButtonPanel';
 
-// helpers:
-import { isActive } from '../../lib/helpers';
+// lib
+import isActive from '../../../inputs/lib/isActive';
 
 
-/*
-	BEGIN WorksCard
-*/
-const WorksCard = ({ works, toggleWorkSearchTerm, styles, filters }) => (
+const WorksCard = ({ works, styles, filters }) => (
 	<Card
 		className="search-tool-card"
 	>
@@ -27,11 +24,10 @@ const WorksCard = ({ works, toggleWorkSearchTerm, styles, filters }) => (
 			{works.map(work => (
 				<SearchTermButtonPanel
 					key={work.id}
-					toggleSearchTerm={toggleWorkSearchTerm}
 					label={work.english_title}
 					searchTermKey="works"
 					value={work}
-					active={isActive(filters, work, 'works')}
+					active={isActive(work, 'works')}
 				/>
 			))}
 		</CardText>
@@ -49,8 +45,5 @@ WorksCard.propTypes = {
 WorksCard.defaultProps = {
 	works: [],
 };
-/*
-	END WorksCard
-*/
 
 export default WorksCard;

@@ -2,10 +2,10 @@ import React from 'react';
 import { Route } from 'react-router';
 
 import ReferenceWorkPageContainer from '../containers/ReferenceWorkPageContainer';
-import ReferenceWorkDetail from '../components/ReferenceWorkDetail/ReferenceWorkDetail';
+import ReferenceWorkDetailContainer from '../containers/ReferenceWorkDetailContainer';
 
 const referenceWorkDetailRoute = (
-	<Route exact path="/referenceWorks/:slug" component={ReferenceWorkDetail} />
+	<Route exact path="/referenceWorks/:slug" component={ReferenceWorkDetailContainer} />
 );
 
 const referenceWorkListRoute = (

@@ -4,6 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // lib
+import PageMeta from '../../../../lib/pageMeta';
 import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
 
@@ -24,8 +25,8 @@ const Page = ({ title, slug, subtitle, byline, content, headerImageUrl, settings
 		_content = content;
 	}
 
-	Utils.setTitle(`${title} | ${settings.title}`);
-	Utils.setMetaImage(headerImageUrl);
+	PageMeta.setTitle(`${title} | ${settings.title}`);
+	PageMeta.setMetaImage(headerImageUrl);
 
 	return (
 		<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

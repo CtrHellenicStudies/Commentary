@@ -1,29 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
+import _s from 'underscore.string';
 
-// lib:
-import Utils from '../../../../lib/utils';
+// lib
+import getVersionTabClass from '../../lib/getVersionTabClass';
 
-/*
-	helpers
-*/
-const getVersionTabClass = (selectedLemmaVersion, lemmaTextVersion, index) => {
-	const normalClass = 'version-tab tab';
-	const selectedClass = 'version-tab tab selected-version-tab';
 
-	if (!selectedLemmaVersion && index === 0) return selectedClass;
-	if (selectedLemmaVersion.id === lemmaTextVersion.id) return selectedClass;
-	return normalClass;
-};
-
-/*
-	BEGIN VersionTabs
-*/
 const VersionTabs = ({ versions, selectedLemmaVersion, toggleVersion }) => (
 	<div className="version-tabs tabs">
 		{versions.map((version, index) => {
-			const lemmaVersionTitle = Utils.trunc(version.title, 20);
+			const lemmaVersionTitle = _s.truncate(version.title, 20);
 
 			return (
 				<RaisedButton

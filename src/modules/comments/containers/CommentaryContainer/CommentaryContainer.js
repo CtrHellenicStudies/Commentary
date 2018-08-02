@@ -61,7 +61,6 @@ class CommentaryContainer extends React.Component {
 			<Commentary
 				commentGroups={commentGroups}
 				filters={filters}
-				toggleSearchTerm={this.props.toggleSearchTerm}
 				showLoginModal={this.showLoginModal}
 				loadMoreComments={this.loadMoreComments}
 				skip={skip}

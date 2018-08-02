@@ -1,0 +1,6 @@
+{
+  "name": "ContextPanelContainer",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./ContextPanelContainer.js"
+}

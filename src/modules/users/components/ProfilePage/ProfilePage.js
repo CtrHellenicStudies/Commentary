@@ -16,7 +16,7 @@ import Header from '../../../../components/navigation/Header';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
-import Utils from '../../../../lib/utils';
+import PageMeta from '../../../../lib/pageMeta';
 
 
 import './ProfilePage.css';
@@ -71,9 +71,9 @@ class ProfilePage extends React.Component {
 		const { user, settings } = this.props;
 
 		if (settings) {
-			Utils.setTitle(`Profile Page | ${settings.title}`);
-			Utils.setDescription('');
-			Utils.setMetaImage('');
+			PageMeta.setTitle(`Profile Page | ${settings.title}`);
+			PageMeta.setDescription('');
+			PageMeta.setMetaImage('');
 		}
 
 		return (

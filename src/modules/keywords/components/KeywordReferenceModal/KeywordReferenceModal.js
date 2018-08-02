@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
+import _s from 'underscore.string';
 
 // graphql
 import keywordsQuery from '../../graphql/queries/list';
 
-// lib
-import Utils from '../../../../lib/utils';
 
 class KeywordReferenceModal extends React.Component {
 	constructor(props) {
@@ -27,7 +26,7 @@ class KeywordReferenceModal extends React.Component {
 		const { keyword } = this.state;
 
 		if (keyword && 'description' in keyword && keyword.description.length) {
-			html = `${Utils.trunc(keyword.description, 120)} <a href="/words/${keyword.slug}">Read more</a>`;
+			html = `${_s.truncate(keyword.description, 120)} <a href="/words/${keyword.slug}">Read more</a>`;
 		}
 
 		return { __html: html };

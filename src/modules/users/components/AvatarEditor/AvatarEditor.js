@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import DropZone from 'react-dropzone';
 import Cookies from 'js-cookie';
-import { sendSnack } from '../../../shared/components/SnackAttack/SnackAttack';
 
 export default class AvatarEditor extends React.Component {
 	constructor(props) {
@@ -25,24 +24,16 @@ export default class AvatarEditor extends React.Component {
 		const uploader = {};
 
 		if (rejectedFiles && rejectedFiles.length) {
-			sendSnack('There was an error uploading your profile picture');
+			console.error('There was an error uploading your profile picture');
 		}
 
-		uploader.send(acceptedFiles[0], (error, downloadUrl) => {
+		uploader.send(acceptedFiles[0], (error, avatarUrl) => {
 			if (error) {
 				// Log service detailed response
 				console.error('Error uploading', uploader.xhr.response);
-				sendSnack(error);
 			} else {
-				// Meteor.users.update({_id: Meteor.userId()}, {
-				// 	$set: {
-				// 		'profile.avatarUrl': downloadUrl
-				// 	}
-				// }); TODO
-
-				this.setState({ avatarUrl: downloadUrl });
-
-				sendSnack('Profile picture has been uploaded');
+				this.setState({ avatarUrl });
+				console.error('Profile picture has been uploaded');
 			}
 		});
 	}

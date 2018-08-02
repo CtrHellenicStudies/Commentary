@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// components:
+// components
 import SearchToolDropdown from '../SearchToolDropdown';
 import SearchTermButton from '../SearchTermButton';
 
-// helpers:
-import { isActive, dropdownPropTypes, dropdownDefaultProps } from '../../lib/helpers';
+// lib
+import isActive from '../../../inputs/lib/isActive';
+import dropdownPropTypes, { dropdownDefaultProps } from '../../../inputs/lib/dropdownProps';
 
 /*
 	BEGIN WorksDropdown
 */
-const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, filters }) => (
+const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown }) => (
 	<SearchToolDropdown
 		name="Work"
 		open={searchDropdownOpen === 'Work'}
@@ -21,11 +22,10 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown, toggle
 		{works.map(work => (
 			<SearchTermButton
 				key={work.urn}
-				toggleSearchTerm={toggleSearchTerm}
 				label={work.english_title}
 				searchTermKey="works"
 				value={work}
-				activeWork={isActive(filters, work, 'works')}
+				activeWork={isActive(work, 'works')}
 			/>
 		))}
 	</SearchToolDropdown>

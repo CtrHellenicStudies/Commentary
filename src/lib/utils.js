@@ -1,5 +1,3 @@
-import $ from 'jquery';
-import Parser from 'simple-text-parser';
 import { convertToHTML } from 'draft-convert';
 import {
 	convertFromRaw, EditorState, ContentState, convertFromHTML
@@ -12,20 +10,6 @@ import serializeUrn from '../modules/cts/lib/serializeUrn';
  * General application specific utility / helper functions
  */
 const Utils = {
-	resolveUrn(urn) {
-		let ret = urn;
-		try {
-			if (urn.v2) {
-				ret = urn.v2;
-			} else {
-				ret = urn.v1;
-			}
-
-		} catch (error) {
-			console.log('Old urn exists in database.');
-		}
-		return ret;
-	},
 	createLemmaCitation(work, lineFrom, lineTo, chapterFrom, chapterTo) {
 		if(chapterFrom === undefined || chapterFrom === null) {
 			chapterFrom = 1;
@@ -42,6 +26,7 @@ const Utils = {
 		};
 
 	},
+
 	worksFromEditions(editions) {
 		const works = [];
 		editions.forEach(function(edition) {
@@ -52,6 +37,7 @@ const Utils = {
 		});
 		return works;
 	},
+
 	filterTextNodesBySelectedLines(editions, lineStart, lineEnd) {
 		const ret = [];
 		editions.forEach(function(edition) {
@@ -59,12 +45,14 @@ const Utils = {
 		});
 		return ret;
 	},
+
 	getUrnTextNodesProperties(lemmaCitation) {
 		return {
 			workUrn: serializeUrn(lemmaCitation, 'work'),
 			textNodesUrn: serializeUrn(lemmaCitation),
 		};
 	},
+
 	encodeBookBySlug(slug) {
 		let code = {
 			urn : 'urn:cts:greekLit:tlg0013.tlg001',
@@ -82,6 +70,7 @@ const Utils = {
 		}
 		return code;
 	},
+
 	timeSince: (date) => {
 		let interval;
 		const seconds = Math.floor((new Date() - date) / 1000);
@@ -107,30 +96,11 @@ const Utils = {
 		}
 		return 'just now';
 	},
-	trunc: (str, length) => {
-		if (!str)			{ return ''; }
-		const ending = ' ...';
-		let trimLen = length;
-		str = str.replace(/<(?:.|\n)*?>/gm, '');
-
-		if (trimLen == null) {
-			trimLen = 100;
-		}
-
-		if (str.length > length) {
-			return str.substring(0, length - ending.length) + ending;
-		}
-
-		return str;
-	},
 
 	isMobile: () => {
 		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	},
-	capitalize: (str) => {
-		const capitalized = str.charAt(0).toUpperCase() + str.slice(1);
-		return capitalized;
-	},
+
 	defaultCmp: (a, b) => {
 		if (a === b) return 0;
 		return a < b ? -1 : 1;
@@ -150,19 +120,7 @@ const Utils = {
 		}
 		return cmp;
 	},
-	userInRole(currentRoles, roles) {
-		if (!currentRoles) {
-			return false;
-		}
-		for(let i = 0; currentRoles && i < currentRoles.length; i += 1) {
-			for(let j = 0; j < roles.length; j += 1) {
-				if(currentRoles[i] === roles[j]) {
-					return true;
-				}
-			}
-		}
-		return false;
-	},
+
 	sortBy: () => {
 		const fields = [];
 		const nFields = arguments.length;
@@ -202,62 +160,7 @@ const Utils = {
 			return result;
 		};
 	},
-	setBaseDocMeta() {
-		Utils.setMetaTag('name', 'url', window.location.href);
-		Utils.setMetaTag('name', 'twitter:card', 'summary');
-		Utils.setMetaTag('name', 'twitter:url', window.location.href);
-		if (process.env.SERVICE_CONFIGURATIONS) {
-			Utils.setMetaTag('property', 'fb:app_id', process.env.FACEBOOK_APP_ID);
-		}
-		Utils.setMetaTag('property', 'og:url', window.location.href);
-		Utils.setMetaTag('property', 'og:type', 'website');
-		Utils.setLinkTag('rel', 'canonical', 'href', window.location.href);
-	},
-	setTitle(title) {
-		document.title = `${title}`;
-		Utils.setMetaTag('property', 'og:title', title);
-		Utils.setMetaTag('property', 'og:site_name', title);
-		Utils.setMetaTag('property', 'og:local', 'en_US');
-		Utils.setMetaTag('property', 'twitter:title', title);
-		Utils.setMetaTag('itemprop', 'title', title);
-	},
-	setDescription(description) {
-		Utils.setMetaTag('name', 'description', description);
-		Utils.setMetaTag('property', 'og:description',  description);
-		Utils.setMetaTag('property', 'twitter:description', description);
-		Utils.setMetaTag('itemprop', 'description',  description);
-	},
-	setMetaImage(imageSrc = null) {
-		if (imageSrc) {
-			Utils.setMetaTag('property', 'og:image', imageSrc);
-			Utils.setMetaTag('property', 'twitter:image', imageSrc);
-			Utils.setMetaTag('itemprop', 'image', imageSrc);
-		} else {
-			Utils.setMetaTag('property', 'og:image', `${window.location.origin}/images/hector.jpg`);
-			Utils.setMetaTag('property', 'twitter:image', `${window.location.origin}/images/hector.jpg`);
-			Utils.setMetaTag('itemprop', 'image', `${window.location.origin}/images/hector.jpg`);
-		}
-	},
-	setMetaTag(attr1, key, val) {
-		const meta = document.createElement('meta');
-		meta[attr1] = key;
-		meta['content'] = val;
-		if ($(`meta[${attr1}="${key}"]`).length) {
-			$(`meta[${attr1}="${key}"]`).attr('conetnt', val);
-		} else {
-			document.getElementsByTagName('head')[0].appendChild(meta);
-		}
-	},
-	setLinkTag(attr1, key, attr2, val) {
-		const link = document.createElement('link');
-		link[attr1] = key;
-		link[attr2] = val;
-		if ($(`link[${attr1}="${key}"]`).length) {
-			$(`link[${attr1}="${key}"]`).attr(attr2, val);
-		} else {
-			document.getElementsByTagName('head')[0].appendChild(link);
-		}
-	},
+
 	replaceLast(str, find, replace) {
 		const index = str.lastIndexOf(find);
 		if (index >= 0) {
@@ -265,6 +168,7 @@ const Utils = {
 		}
 		return str.toString();
 	},
+
 	getEntityData(entity, key) {
 		if (key === 'link' && !entity.data.mention) {
 			return entity.data.href;
@@ -272,6 +176,7 @@ const Utils = {
 		const foundItem = entity.data.mention._root.entries.find(item => (item[0] === key));
 		return foundItem[1];
 	},
+
 	getEnvDomain() {
 		let domain;
 
@@ -395,61 +300,6 @@ const Utils = {
 		return { versions, translations };
 	},
 
-	getCommenters(commenterData, commenters) {
-		const commentersList = [];
-
-		commenterData.forEach(commenter => {
-			const currentCommenter = commenters.find(x => x._id === commenter.value);
-			commentersList.push(currentCommenter);
-		});
-
-		return commentersList;
-	},
-	parseMultilineVersion(versions, multiline) {
-		const parsedVersions = [];
-
-		versions.forEach((version, index) => {
-			const joinedText = version.lines.map(line => line.html).join(' ');
-
-			const tag = new RegExp(`<lb id="\\d+" ed="${multiline}" />`, 'ig');
-
-			const textArray = joinedText.split(tag);
-			const parser = new Parser();
-
-			const lineArray = [];
-			parser.addRule(/id="\d+"/ig, (arg1) => {
-				lineArray.push(arg1);
-			});
-			parser.render(joinedText);
-
-			const numberArray = lineArray.map((line) => parseInt(line.substr(4, line.length - 2), 10));
-
-			if (numberArray.length) {
-				numberArray.unshift(numberArray[0] - 1);
-			}
-
-			const result = [];
-
-			if (textArray.length === numberArray.length) {
-				for (let i = 0; i < textArray.length; i++) {
-					const currentLine = {
-						html: textArray[i],
-						n: numberArray[i]
-					};
-					result.push(currentLine);
-				}
-			} else {
-				return new Error('Parsing error');
-			}
-
-			const currentVersion = version;
-			currentVersion.lines = result;
-			parsedVersions.push(currentVersion);
-		});
-
-		return parsedVersions;
-	},
-
 	getEditorState(content) {
 		let _content = content || '';
 		if (this.isJson(content)) {
@@ -521,51 +371,6 @@ const Utils = {
 		}
 		return true;
 	},
-
-	shouldRefetchQuery(properties, variables) {
-		for (const [key] of Object.entries(properties)) {
-			if (properties[key] !== variables[key]) {
-				return true;
-			}
-		}
-		return false;
-	},
-
-	getSuggestionsFromComments(comments) {
-		const suggestions = [];
-
-		// if there are comments:
-		if (comments.length) {
-
-			// loop through all comments
-			// add suggestion for each comment
-			comments.forEach((comment) => {
-
-				// get the most recent revision
-				const revision = comment.revisions[comment.revisions.length - 1];
-
-				const suggestion = {
-					// create suggestio name:
-					name: `"${revision.title}" -`,
-
-					// set link for suggestion
-					link: `/commentary?_id=${comment._id}`,
-
-					// set id for suggestion
-					id: comment._id,
-				};
-
-				// loop through commenters and add them to suggestion name
-				comment.commenters.forEach((commenter, i) => {
-					if (i === 0) suggestion.name += ` ${commenter.name}`;
-					else suggestion.name += `, ${commenter.name}`;
-				});
-
-				suggestions.push(suggestion);
-			});
-		}
-		return suggestions;
-	}
 };
 
 /**

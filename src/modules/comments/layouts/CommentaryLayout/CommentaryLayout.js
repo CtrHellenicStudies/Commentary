@@ -39,7 +39,6 @@ import {
 	createQueryParamsFromFilters,
 	updateFilterOnBrowseEvent,
 	updateFilterOnChangeTextSearchEvent,
-	createFiltersFromURL
 } from '../../lib/queryFilterHelpers';
 
 
@@ -47,11 +46,6 @@ class CommentaryLayout extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			modalLoginLowered: false,
-			params: this.props.match,
-			filters: []
-		};
 
 		autoBind(this);
 	}
@@ -100,19 +94,14 @@ class CommentaryLayout extends React.Component {
 		this._updateRoute(filters);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
-		const works = nextProps.editionsQuery.loading ? [] : nextProps.editionsQuery.works;
-		this.setState({
-			referenceWorks,
-			works,
-			filters: createFiltersFromURL(this.state.params, this.state.queryParams, this.state.works, this.props.referenceWorks)
-		});
-	}
-
 	render() {
 		const { tenantId } = this.props;
-		const { skip, limit, queryParams, filters } = this.state;
+		const limit = 10;
+		let skip = 0;
+		const routeQueryParams = qs.parse(window.location.search);
+		if (routeQueryParams.page) {
+			skip = routeQueryParams.page * limit;
+		}
 
 		// create filters object based on the queryParams or params
 		return (
@@ -120,20 +109,15 @@ class CommentaryLayout extends React.Component {
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header
-							workFilters={filters}
 							handleBrowse={this._handleBrowse}
 							handleChangeTextsearch={this._handleChangeTextsearch}
 							initialSearchEnabled
 						/>
 
 						<CommentaryContainer
-							filters={filters}
-							showLoginModal={this.showLoginModal}
-							loadMoreComments={this.loadMoreComments}
 							tenantId={tenantId}
 							skip={skip}
 							limit={limit}
-							queryParams={queryParams}
 						/>
 
 					</div>

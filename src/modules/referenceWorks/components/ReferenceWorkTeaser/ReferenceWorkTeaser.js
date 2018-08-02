@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import _s from 'underscore.string';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
-import Utils from '../../../../lib/utils';
+
 
 class ReferenceWorkTeaser extends React.Component {
 
@@ -15,7 +16,7 @@ class ReferenceWorkTeaser extends React.Component {
 	createMarkup() {
 		const { desc } = this.props;
 		return {
-			__html: desc ? Utils.trunc(desc.replace(/(<([^>]+)>)/ig, ''), 140) : '',
+			__html: desc ? _s.truncate(desc.replace(/(<([^>]+)>)/ig, ''), 140) : '',
 		};
 	}
 

@@ -9,7 +9,7 @@ class LineRangeSlider extends React.Component {
 
 	componentDidMount() {
 
-		const { handleChangeLineN, lineFrom, lineTo } = this.props;
+		const { handleChangeTextLocation, lineFrom, lineTo } = this.props;
 		$(`#${id}`).ionRangeSlider({
 			type: 'double',
 			min: 1,
@@ -19,7 +19,7 @@ class LineRangeSlider extends React.Component {
 			prettify_separator: ',',
 			prefix: 'Line: ',
 			values_separator: ' to ',
-			onChange: debounce(500, handleChangeLineN),
+			onChange: debounce(500, handleChangeTextLocation),
 			from: lineFrom,
 			to: lineTo,
 		});
@@ -31,7 +31,7 @@ class LineRangeSlider extends React.Component {
 
 }
 LineRangeSlider.propTypes = {
-	handleChangeLineN: PropTypes.func.isRequired,
+	handleChangeTextLocation: PropTypes.func.isRequired,
 	lineFrom: PropTypes.number,
 	lineTo: PropTypes.number,
 };

@@ -1,4 +1,4 @@
-import Utils from '../../../lib/utils';
+import _s from 'underscore.string'; 
 
 /**
  * reset the skip and limit of the filters
@@ -132,7 +132,7 @@ const _createFiltersFromQueryParams = (queryParams, referenceWorks = []) => {
 		queryParams.works.split(',').forEach((work) => {
 			works.push({
 				slug: work,
-				title: Utils.capitalize(work),
+				title: _s.capitalize(work),
 			});
 		});
 

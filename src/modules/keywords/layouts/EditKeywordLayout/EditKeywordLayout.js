@@ -8,222 +8,39 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import autoBind from 'react-autobind';
 
-// layouts
-import Header from '../../../../components/navigation/Header';
-
 // graphql
-import keywordsQuery from '../../graphql/queries/list';
-import keywordsUpdate from '../../graphql/mutations/update';
-import textNodesQuery from '../../../textNodes/graphql/queries/textNodesQuery';
+import keywordInsertMutation from '../../graphql/mutations/insert';
 
 // components
-import Spinner from '../../../../components/loading/Spinner';
+import Header from '../../../../components/navigation/Header';
 import FilterWidget from '../../../filters/components/FilterWidget';
-import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
-import EditKeyword from '../../components/EditKeyword';
-import ContextPanel from '../../../contextPanel/components/ContextPanel';
 
 // lib
-import Utils from '../../../../lib/utils';
 import muiTheme from '../../../../lib/muiTheme';
+import PageMeta from '../../../../lib/pageMeta';
+import userInRole from '../../../../lib/userInRole';
+import AddKeywordContainer from '../../containers/AddKeywordContainer';
 
 
-class EditKeywordLayout extends React.Component {
+class AddKeywordLayout extends React.Component {
 
 	constructor(props) {
-
 		super(props);
+
 		this.state = {
-			filters: [],
 			selectedLineFrom: 0,
 			selectedLineTo: 0,
 			selectedType: 'word',
-			loading: false,
-			snackbarOpen: false,
-			snackbarMessage: '',
 			contextReaderOpen: true,
+			loading: false,
+			selectedTextNodes: [],
 		};
-
 
 		autoBind(this);
 	}
 
 	componentWillUpdate() {
-		if (this.state.ready) this.handlePermissions();
-	}
-
-	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
-	}
-
-	handlePermissions() {
-		if (this.state.ready) {
-			if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
-				this.props.history.push('/');
-			}
-		}
-	}
-
-	updateSelectedLemma(selectedLineFrom, selectedLineTo) {
-		if (selectedLineFrom === null) {
-			this.setState({
-				selectedLineTo,
-			});
-			selectedLineFrom = this.state.selectedLineFrom;
-		} else if (selectedLineTo === null) {
-			this.setState({
-				selectedLineFrom,
-			});
-			selectedLineTo = this.state.selectedLineTo;
-		} else if (selectedLineTo != null && selectedLineTo != null) {
-			this.setState({
-				selectedLineFrom,
-				selectedLineTo,
-			});
-		} else {
-			return;
-		}
-	}
-
-	toggleSearchTerm(key, value) {
-		const filters = this.state.filters;
-		let keyIsInFilter = false;
-		let valueIsInFilter = false;
-		let filterValueToRemove;
-		let filterToRemove;
-
-		filters.forEach((filter, i) => {
-			if (filter.key === key) {
-				keyIsInFilter = true;
-
-				filter.values.forEach((filterValue, j) => {
-					if (filterValue._id === value._id) {
-						valueIsInFilter = true;
-						filterValueToRemove = j;
-					}
-				});
-
-				if (valueIsInFilter) {
-					filter.values.splice(filterValueToRemove, 1);
-					if (filter.values.length === 0) {
-						filterToRemove = i;
-					}
-				} else if (key === 'works') {
-					filters[i].values = [value];
-				} else {
-					filter.values.push(value);
-				}
-			}
-		});
-
-
-		if (typeof filterToRemove !== 'undefined') {
-			filters.splice(filterToRemove, 1);
-		}
-
-		if (!keyIsInFilter) {
-			filters.push({
-				key,
-				values: [value],
-			});
-		}
-
-		this.setState({
-			filters,
-			skip: 0,
-		});
-	}
-
-	updateKeyword(formData, textValue, textRawValue) {
-		this.setState({
-			loading: true,
-		});
-
-		// get data for keyword :
-		const work = this.getWork();
-		const subwork = this.getSubwork();
-		const lineLetter = this.getLineLetter();
-		const selectedLineTo = this.getSelectedLineTo();
-		const { keyword } = this.state;
-		const that = this;
-		// create keyword object to be inserted:
-		const keywordCandidate = {
-			work: {
-				title: work.title,
-				slug: work.slug,
-				order: work.order,
-			},
-			subwork: {
-				title: subwork.title,
-				n: subwork.n,
-			},
-			lineFrom: this.state.selectedLineFrom || keyword.lineFrom,
-			lineTo: selectedLineTo || keyword.lineTo,
-			lineLetter,
-			title: formData.titleValue,
-			slug: slugify(formData.titleValue.toLowerCase()),
-			description: textValue,
-			descriptionRaw: JSON.stringify(textRawValue),
-			type: this.state.selectedType,
-			tenantId: this.props.tenantId,
-			count: 1,
-		};
-		this.props.keywordUpdate(keyword._id, keywordCandidate).then(function() {
-			that.props.history.push(`/tags/${keywordCandidate.slug}`);
-		});
-	}
-
-	showSnackBar(error) {
-		this.setState({
-			snackbarOpen: error.errors,
-			snackbarMessage: error.errorMessage,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-			});
-		}, 4000);
-	}
-
-	getWork() {
-		let work = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			}
-		});
-		if (!work) {
-			work = {
-				title: 'Iliad',
-				slug: 'tlg001',
-				order: 1,
-			};
-		}
-		return work;
-	}
-
-	getSubwork() {
-		let subwork = null;
-		this.state.filters.forEach((filter) => {
-			if (filter.key === 'subworks') {
-				subwork = filter.values[0];
-			}
-		});
-		if (!subwork) {
-			subwork = {
-				title: '1',
-				n: 1,
-			};
-		}
-		return subwork;
-	}
-
-	getLineLetter() {
-		let lineLetter = '';
-		if (this.state.selectedLineTo === 0 && this.state.selectedLineFrom > 0) {
-			lineLetter = this.commentLemmaSelect.state.lineLetterValue;
-		}
-		return lineLetter;
+		this.handlePermissions();
 	}
 
 	getSelectedLineTo() {
@@ -240,10 +57,29 @@ class EditKeywordLayout extends React.Component {
 		return this.state.selectedType;
 	}
 
-	lineLetterUpdate(value) {
+	async addKeyword(formData, textValue, textRawValue) {
 		this.setState({
-			lineLetter: value,
+			loading: true,
 		});
+
+		// get data for keyword :
+		// create keyword object to be inserted:
+		const keyword = {
+			title: formData.titleValue,
+			slug: slugify(formData.titleValue.toLowerCase()),
+			description: textValue,
+			descriptionRaw: JSON.stringify(textRawValue),
+			type: this.state.selectedType,
+			count: 1,
+			tenantId: this.props.tenantId,
+		};
+
+		await this.props.keywordInsert(keyword);
+		this.props.history.push(`/tags/${keyword.slug}`);
+	}
+
+	componentWillUnmount() {
+		if (this.timeout)	{ clearTimeout(this.timeout); }
 	}
 
 	onTypeChange(type) {
@@ -252,164 +88,52 @@ class EditKeywordLayout extends React.Component {
 		});
 	}
 
-	handlePagination(e) {
-		const filters = this.state.filters;
-
-		if (e.from > 1) {
-			let lineFromInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineFrom') {
-					filters[i].values = [e.from];
-					lineFromInFilters = true;
-				}
-			});
-
-			if (!lineFromInFilters) {
-				filters.push({
-					key: 'lineFrom',
-					values: [e.from],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineFrom') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
+	handlePermissions() {
+		if (!userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
+			this.props.history.push('/');
 		}
+	}
 
-		if (e.to < 2100) {
-			let lineToInFilters = false;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineTo') {
-					filters[i].values = [e.to];
-					lineToInFilters = true;
-				}
-			});
-
-			if (!lineToInFilters) {
-				filters.push({
-					key: 'lineTo',
-					values: [e.to],
-				});
-			}
-		} else {
-			let filterToRemove;
-
-			filters.forEach((filter, i) => {
-				if (filter.key === 'lineTo') {
-					filterToRemove = i;
-				}
-			});
-
-			if (typeof filterToRemove !== 'undefined') {
-				filters.splice(filterToRemove, 1);
-			}
-		}
-
+	lineLetterUpdate(value) {
 		this.setState({
-			filters,
+			lineLetter: value,
 		});
 	}
 
 	render() {
-		const filters = this.state.filters;
-		const { ready, keyword, keywords } = this.state;
-		let work;
-		let subwork;
-		let lineFrom;
+		const textNodesUrn = 'urn:cts:greekLit:tlg0012.tlg001';
 
-		Utils.setTitle('Edit Tag | The Center for Hellenic Studies Commentaries');
-
-		filters.forEach((filter) => {
-			if (filter.key === 'works') {
-				work = filter.values[0];
-			} else if (filter.key === 'subworks') {
-				subwork = filter.values[0];
-			} else if (filter.key === 'lineFrom') {
-				lineFrom = filter.values[0];
-			}
-		});
+		PageMeta.setTitle('Add Tag | The Center for Hellenic Studies Commentaries');
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-				{ready && keyword ?
-					<div className="chs-layout chs-editor-layout edit-keyword-layout">
-
+				<div className="chs-layout chs-editor-layout add-comment-layout">
+					<div>
 						<Header
-							toggleSearchTerm={this.toggleSearchTerm}
-							handlePagination={this.handlePagination}
-							filters={filters}
 							initialSearchEnabled
-							addCommentPage
 						/>
 
 						<main>
-
-							<div className="commentary-comments">
-								<div className="comment-group">
-									<CommentLemmaSelect
-										ref={(component) => { this.keywordLemmaSelect = component; }}
-										lineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
-										lineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										workSlug={keyword.work ? keyword.work.slug : 'tlg001001'}
-										subworkN={keyword.subwork ? keyword.subwork.n : 1}
-										shouldUpdateQuery={this.state.updateQuery}
-										updateQuery={this.updateQuery}
-										textNodes={this.state.textNodes}
-									/>
-
-									<EditKeyword
-										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || null}
-										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || null}
-										submitForm={this.updateKeyword}
-										onTypeChange={this.onTypeChange}
-										keyword={keyword}
-										kewrods={keywords}
-									/>
-
-									<ContextPanel
-										open={this.state.contextReaderOpen}
-										workSlug={work ? work.slug : 'tlg001'}
-										subworkN={subwork ? subwork.n : 1}
-										lineFrom={lineFrom || 1}
-										selectedLineFrom={this.state.selectedLineFrom || keyword.lineFrom || 0}
-										selectedLineTo={this.state.selectedLineTo || keyword.lineTo || 0}
-										updateSelectedLemma={this.updateSelectedLemma}
-										editor
-									/>
-								</div>
-							</div>
+							<AddKeywordContainer
+								textNodesUrn={textNodesUrn}
+								addKeyword={this.addKeyword}
+							/>
+							<FilterWidget />
 						</main>
-
-						<FilterWidget
-							filters={filters}
-							toggleSearchTerm={this.toggleSearchTerm}
-						/>
 					</div>
-					:
-					<Spinner fullPage />
-				}
+				</div>
 			</MuiThemeProvider>
 		);
 	}
 }
 
-EditKeywordLayout.propTypes = {
-	slug: PropTypes.string,
+AddKeywordLayout.propTypes = {
 	history: PropTypes.object,
-	keywordUpdate: PropTypes.func,
-	match: PropTypes.object,
-	keywordsQuery: PropTypes.object,
-	textNodesQuery: PropTypes.object
+	keywordInsert: PropTypes.func,
+};
+
+AddKeywordLayout.childContextTypes = {
+	muiTheme: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state, props) => ({
@@ -418,7 +142,5 @@ const mapStateToProps = (state, props) => ({
 
 export default compose(
 	connect(mapStateToProps),
-	keywordsQuery,
-	keywordsUpdate,
-	textNodesQuery,
-)(EditKeywordLayout);
+	keywordInsertMutation,
+)(AddKeywordLayout);

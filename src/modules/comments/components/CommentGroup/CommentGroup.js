@@ -39,9 +39,11 @@ class CommentGroup extends React.Component {
 	}
 
 	render() {
-		const { commentGroup, commentGroupIndex, contextPanelOpen, showLoginModal,
-			filters, showContextPanel, setContextScrollPosition, toggleSearchTerm,
-			selectMultiLine, isOnHomeView, history, multiline } = this.props;
+		const {
+			commentGroup, commentGroupIndex, contextPanelOpen, showLoginModal,
+			showContextPanel, setContextScrollPosition, selectMultiLine, isOnHomeView,
+			history, multiline
+		} = this.props;
 		const { hideLemma } = this.state;
 
 		let commentsClass = 'comments ';
@@ -79,9 +81,7 @@ class CommentGroup extends React.Component {
 								key={comment._id}
 								comment={comment}
 								commenters={this.getCommentersOfComment(comment)}
-								toggleSearchTerm={!isOnHomeView ? toggleSearchTerm : null}
 								isOnHomeView={isOnHomeView}
-								filters={filters}
 								toggleLemma={this.toggleLemma}
 								showLoginModal={showLoginModal}
 								history={history}
@@ -118,19 +118,12 @@ CommentGroup.propTypes = {
 	showContextPanel: PropTypes.func.isRequired,
 	setContextScrollPosition: PropTypes.func.isRequired,
 	selectMultiLine: PropTypes.func.isRequired,
-	toggleSearchTerm: PropTypes.func,
-	filters: PropTypes.arrayOf(PropTypes.shape({
-		key: PropTypes.string.isRequired,
-		values: PropTypes.arrayOf(PropTypes.any).isRequired,
-	})),
 	showLoginModal: PropTypes.func,
 	isOnHomeView: PropTypes.bool,
 	multiline: PropTypes.string,
 };
 
 CommentGroup.defaultProps = {
-	toggleSearchTerm: null,
-	filters: null,
 	showLoginModal: null,
 	isOnHomeView: false,
 };

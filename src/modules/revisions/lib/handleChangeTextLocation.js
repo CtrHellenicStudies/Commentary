@@ -1,4 +1,8 @@
-function handleChangeLineN(e, filters) {
+
+/**
+ * Change the text location in the reading or commentary interface
+ */
+const handleChangeTextLocation = (e, filters) => {
 
 	if (e.from > 1) {
 		let lineFromInFilters = false;
@@ -62,54 +66,4 @@ function handleChangeLineN(e, filters) {
 	return filters;
 }
 
-function toggleSearchTerm(key, value, filters) {
-
-	let keyIsInFilter = false;
-	let valueIsInFilter = false;
-	let filterValueToRemove;
-	let filterToRemove;
-
-	filters.forEach((filter, i) => {
-		if (filter.key === key) {
-			keyIsInFilter = true;
-
-			filter.values.forEach((filterValue, j) => {
-				if (filterValue._id === value._id) {
-					valueIsInFilter = true;
-					filterValueToRemove = j;
-				}
-			});
-
-			if (valueIsInFilter) {
-				filter.values.splice(filterValueToRemove, 1);
-				if (filter.values.length === 0) {
-					filterToRemove = i;
-				}
-			} else if (key === 'works') {
-				filters[i].values = [value];
-			} else {
-				filter.values.push(value);
-			}
-		}
-	});
-
-
-	if (typeof filterToRemove !== 'undefined') {
-		filters.splice(filterToRemove, 1);
-	}
-
-	if (!keyIsInFilter) {
-		filters.push({
-			key,
-			values: [value],
-		});
-	}
-	return {
-		filters,
-		skip: 0,
-	};
-}
-export { 
-	handleChangeLineN,
-	toggleSearchTerm 
-};
+export default handleChangeTextLocation;

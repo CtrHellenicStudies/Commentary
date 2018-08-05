@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-import createClass from 'create-react-class';
 
 // TODO: upgrade to d3v4
 import * as d3 from 'd3';
@@ -11,28 +10,25 @@ import * as d3 from 'd3';
 import './WorkVisualization.css';
 
 
-const WorkVisualization = createClass({
+class WorkVisualization extends React.Component {
 
-	propTypes: {
-		work: PropTypes.object.isRequired,
-		commenterSlug: PropTypes.string,
-	},
+	constructor(props) {
+		super(props);
 
-	getInitialState() {
-		return {
+		this.state = {
 			selectedBar: -1,
 			svg: undefined,
 			cellSize: 30,
 			cellPadding: 4,
 		};
-	},
+	}
 
 	close() {
 		this.hideHeatMap();
 		this.setState({
 			selectedBar: -1,
 		});
-	},
+	}
 
 	componentDidMount() {
 		const self = this;
@@ -575,7 +571,7 @@ const WorkVisualization = createClass({
 					.style('opacity', 0.5);
 			});
 		// --- END BUTTON --- //
-	},
+	}
 
 	componentDidUpdate(prevProps, prevState) {
 		const self = this;
@@ -771,7 +767,7 @@ const WorkVisualization = createClass({
 		// --- END ANIMATION - SHOW HEATMAP --- //
 		}
 	// --- END HEATMAP --- //
-	},
+	}
 
 	hideHeatMap() {
 		const self = this;
@@ -841,7 +837,7 @@ const WorkVisualization = createClass({
 			.style('opacity', 0)
 			.style('display', '');
 	// --- END ANIMATION - CONTRACT BAR --- //
-	},
+	}
 
 
 	render() {
@@ -862,7 +858,12 @@ const WorkVisualization = createClass({
 		}
 
 		return null;
-	},
-});
+	}
+}
+
+WorkVisualization.propTypes = {
+	work: PropTypes.object.isRequired,
+	commenterSlug: PropTypes.string,
+};
 
 export default WorkVisualization;

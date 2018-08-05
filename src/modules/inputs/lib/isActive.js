@@ -11,7 +11,7 @@ import {
  */
 const isActive = (element, key, valueKey = 'slug') => {
 	let isActiveVar = false;
-	const queryParams = qs.parse(window.location.search);
+	const queryParams = qs.parse(window.location.search.replace('?', ''));
 	const filters = createFiltersFromQueryParams(queryParams);
 
 	filters.forEach((filter) => {
@@ -25,7 +25,6 @@ const isActive = (element, key, valueKey = 'slug') => {
 	});
 	return isActiveVar;
 };
-
 
 
 export default isActive;

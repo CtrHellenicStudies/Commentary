@@ -1,13 +1,15 @@
 import qs from 'qs-lite';
 
+
 import {
 	createFiltersFromQueryParams,
 	createQueryParamsFromFilters,
 	updateFilterOnKeyAndValueChangeEvent,
 } from '../../comments/lib/queryFilterHelpers';
 
+
 const toggleSearchTerm = (key, value, history) => {
-	let queryParams = qs.parse(window.location.search);
+	let queryParams = qs.parse(window.location.search.replace('?', ''));
 	const oldFilters = createFiltersFromQueryParams(queryParams);
 
 	// update filter based on the key and value
@@ -17,7 +19,6 @@ const toggleSearchTerm = (key, value, history) => {
 
 	// update route
 	const urlParams = qs.stringify(queryParams);
-
 	history.push(`/commentary/?${urlParams}`);
 }
 

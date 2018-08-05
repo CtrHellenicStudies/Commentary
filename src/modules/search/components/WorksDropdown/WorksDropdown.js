@@ -25,7 +25,7 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown }) => (
 				label={work.english_title}
 				searchTermKey="works"
 				value={work}
-				activeWork={isActive(work, 'works')}
+				active={isActive(work, 'works')}
 			/>
 		))}
 	</SearchToolDropdown>

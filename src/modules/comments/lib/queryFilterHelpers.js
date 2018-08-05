@@ -1,35 +1,23 @@
-import _s from 'underscore.string'; 
+import _s from 'underscore.string';
 
 /**
- * reset the skip and limit of the filters
+ * Set filters back to page 0
  */
-const _resetFiltersSkipLimit = _filters => {
+const _resetFiltersPage = _filters => {
 	const filters = _filters.slice();
-	if (filters.some(filter => (filter.key === 'skip'))) {
+	if (filters.some(filter => (filter.key === 'page'))) {
 		filters.forEach(filter => {
-			if (filter.key === 'skip') {
+			if (filter.key === 'page') {
 				filter.values = [0];
 			}
 		});
 	} else {
 		filters.push({
-			key: 'skip',
+			key: 'page',
 			values: [0],
 		});
 	}
 
-	if (filters.some(filter => (filter.key === 'limit'))) {
-		filters.forEach(filter => {
-			if (filter.key === 'limit') {
-				filter.values = [10];
-			}
-		});
-	} else {
-		filters.push({
-			key: 'limit',
-			values: [10],
-		});
-	}
 	return filters;
 };
 
@@ -142,48 +130,11 @@ const _createFiltersFromQueryParams = (queryParams, referenceWorks = []) => {
 		});
 	}
 
-	if ('subworks' in queryParams) {
-		// console.log('current query params: ', queryParams);
-		const subworks = [];
-
-		new Set(queryParams.subworks.split(',')).forEach((subwork) => {
-			const subworkNumber = parseInt(subwork, 10);
-
-			if (!Number.isNaN(subworkNumber)) {
-				subworks.push({
-					title: subwork,
-					n: subworkNumber,
-				});
-			}
-		});
-
-
+	if ('location' in queryParams) {
 		filters.push({
-			key: 'subworks',
-			values: subworks,
+			key: 'location',
+			values: queryParams.location,
 		});
-	}
-
-	if ('lineFrom' in queryParams) {
-		const lineFrom = parseInt(queryParams.lineFrom, 10);
-
-		if (!Number.isNaN(lineFrom)) {
-			filters.push({
-				key: 'lineFrom',
-				values: [lineFrom],
-			});
-		}
-	}
-
-	if ('lineTo' in queryParams) {
-		const lineTo = parseInt(queryParams.lineTo, 10);
-
-		if (!Number.isNaN(lineTo)) {
-			filters.push({
-				key: 'lineTo',
-				values: [lineTo],
-			});
-		}
 	}
 
 	if ('wordpressId' in queryParams) {
@@ -243,8 +194,8 @@ const _createQueryParamsFromFilters = (filters) => {
 			case 'works':
 				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value.slug);
 				break;
-			case 'subworks':
-				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value.title);
+			case 'location':
+				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
 				break;
 			case 'keyideas':
 			case 'keywords':
@@ -252,12 +203,6 @@ const _createQueryParamsFromFilters = (filters) => {
 				break;
 			case 'commenters':
 				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value.slug);
-				break;
-			case 'lineFrom':
-				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
-				break;
-			case 'lineTo':
-				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
 				break;
 			case 'textsearch':
 				queryParams[filter.key] = _getQueryParamValue(queryParams, filter.key, value);
@@ -295,68 +240,10 @@ const _createQueryParamsFromFilters = (filters) => {
 const _updateFilterOnBrowseEvent = (oldFilters, e) => {
 	const filters = oldFilters;
 
-	if (e.from > 1) {
-		let lineFromInFilters = false;
-
-		filters.forEach((filter, i) => {
-			if (filter.key === 'lineFrom') {
-				filters[i].values = [e.from];
-				lineFromInFilters = true;
-			}
-		});
-
-		if (!lineFromInFilters) {
-			filters.push({
-				key: 'lineFrom',
-				values: [e.from],
-			});
-		}
-	} else {
-		let filterToRemove;
-
-		filters.forEach((filter, i) => {
-			if (filter.key === 'lineFrom') {
-				filterToRemove = i;
-			}
-		});
-
-		if (typeof filterToRemove !== 'undefined') {
-			filters.splice(filterToRemove, 1);
-		}
-	}
-
-	if (e.to < 1000) {
-		let lineToInFilters = false;
-
-		filters.forEach((filter, i) => {
-			if (filter.key === 'lineTo') {
-				filters[i].values = [e.to];
-				lineToInFilters = true;
-			}
-		});
-
-		if (!lineToInFilters) {
-			filters.push({
-				key: 'lineTo',
-				values: [e.to],
-			});
-		}
-	} else {
-		let filterToRemove;
-
-		filters.forEach((filter, i) => {
-			if (filter.key === 'lineTo') {
-				filterToRemove = i;
-			}
-		});
-
-		if (typeof filterToRemove !== 'undefined') {
-			filters.splice(filterToRemove, 1);
-		}
-	}
+	// TODO implement location for browse
 
 
-	return _resetFiltersSkipLimit(filters);
+	return _resetFiltersPage(filters);
 };
 
 /**
@@ -395,7 +282,7 @@ const _updateFilterOnChangeTextSearchEvent = (oldFilters, e, textsearch) => {
 		}
 	}
 
-	return _resetFiltersSkipLimit(filters);
+	return _resetFiltersPage(filters);
 };
 
 /**
@@ -452,73 +339,6 @@ const _updateFilterOnKeyAndValueChangeEvent = (oldFilters, key, value) => {
 	return filters;
 };
 
-/**
- * DEPRECATED and should be replaced where used by cts module
- * Verify if cts urn is valid
- */
-const _splitUrnIsOk = (splitURN) => {
-	if (splitURN instanceof Array) {
-		if (splitURN[0] === 'urn'
-			&& splitURN[1] === 'cts'
-			&& splitURN[2] === 'greekLit'
-		) {
-			return true;
-		}
-	}
-	return false;
-};
-
-/**
- * DEPRECATED and should be replaced where used by cts module
- * get filters from parsing a urn
- */
-const _getUrnFilters = (urn, works) => {
-	const splitURN = urn.split(/[:.]/);
-	// console.log('splitURN', splitURN);
-
-	const urnFilters = [];
-
-	if (_splitUrnIsOk(splitURN)) {
-
-		const filterValues = {};
-
-		if (splitURN[4]) {
-			const workTlg = splitURN[4];
-			const _work = works.find(work => work.tlg === workTlg);
-			if (_work) filterValues.works = _work;
-		}
-		if (splitURN[5] && filterValues.works) {
-			filterValues.subworks = {
-				n: Number(splitURN[5]),
-				title: Number(splitURN[5]).toString(),
-			};
-		}
-		if (splitURN[6]) {
-			const lines = splitURN[6].split('-');
-			if (lines.length === 2) {
-				filterValues.lineFrom = Number(lines[0]);
-				filterValues.lineTo = Number(lines[1]);
-			} else if (lines.length === 1) {
-				filterValues.lineFrom = Number(lines[0]);
-				filterValues.lineTo = 909;
-			}
-		}
-		if (splitURN[7]) {
-			const _id = splitURN[7];
-			filterValues._id = _id;
-		}
-		if (splitURN[8]) {
-			const revision = splitURN[8];
-			filterValues.revision = revision;
-		}
-		Object.keys(filterValues).forEach(key => urnFilters.push({
-			key,
-			values: [filterValues[key]],
-		}));
-	}
-
-	return urnFilters;
-};
 
 /**
  * Create a list of filters from params
@@ -531,13 +351,7 @@ const _createFiltersFromParams = (params, works) => {
 	}
 
 	if ('urn' in params) {
-		const urnFilters = _getUrnFilters(params.urn, works);
-
-		if (urnFilters.length) {
-			urnFilters.forEach((urnFilter) => {
-				filters.push(urnFilter);
-			});
-		}
+		// TODO: use cts module for filters
 	}
 	return filters;
 };

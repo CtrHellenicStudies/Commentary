@@ -18,7 +18,7 @@ const setPageTitleAndMeta = (settings, commentGroups, worksQuery) => {
 	let passage = '';
 	let metaSubject = 'Commentaries on Classical Texts';
 	let description = '';
-	const queryParams = qs.parse(window.location.search);
+	const queryParams = qs.parse(window.location.search.replace('?', ''));
 	const filters = createFiltersFromQueryParams(queryParams);
 
 

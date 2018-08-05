@@ -45,8 +45,6 @@ import {
 class CommentaryLayout extends React.Component {
 	constructor(props) {
 		super(props);
-
-
 		autoBind(this);
 	}
 
@@ -98,10 +96,11 @@ class CommentaryLayout extends React.Component {
 		const { tenantId } = this.props;
 		const limit = 10;
 		let skip = 0;
-		const routeQueryParams = qs.parse(window.location.search);
+		const routeQueryParams = qs.parse(window.location.search.replace('?', ''));
 		if (routeQueryParams.page) {
 			skip = routeQueryParams.page * limit;
 		}
+		const filters = createFiltersFromQueryParams(routeQueryParams);
 
 		// create filters object based on the queryParams or params
 		return (
@@ -115,6 +114,7 @@ class CommentaryLayout extends React.Component {
 						/>
 
 						<CommentaryContainer
+							filters={filters}
 							tenantId={tenantId}
 							skip={skip}
 							limit={limit}

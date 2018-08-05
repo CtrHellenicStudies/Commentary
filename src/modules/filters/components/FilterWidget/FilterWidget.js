@@ -3,9 +3,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { compose } from 'react-apollo';
 import _s from 'underscore.string';
+import qs from 'qs-lite';
+import { withRouter } from 'react-router';
 
 // lib
 import toggleSearchTerm from '../../../search/lib/toggleSearchTerm';
+import {
+	createFiltersFromQueryParams,
+} from '../../../comments/lib/queryFilterHelpers';
+
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/list';
@@ -19,8 +25,9 @@ const styles = {
 };
 
 
-const FilterWidget = () => {
-	const filters = [];
+const FilterWidget = props => {
+	const routeQueryParams = qs.parse(window.location.search.replace('?', ''));
+	const filters = createFiltersFromQueryParams(routeQueryParams);
 
 	return (
 		<div className="filters">
@@ -49,7 +56,7 @@ const FilterWidget = () => {
 									labelPosition="before"
 									className="filter-val "
 									label={_s.truncate((val.title || val.name || val.slug || val.toString()).replace('-', ' '), 30)}
-									onClick={toggleSearchTerm.bind(null, filter.key, val)}
+									onClick={toggleSearchTerm.bind(this, filter.key, val, props.history)}
 									icon={
 										<FontIcon
 											className="mdi mdi-close mdi-18px"
@@ -67,4 +74,7 @@ const FilterWidget = () => {
 	);
 };
 
-export default compose(commentersQuery)(FilterWidget);
+export default compose(
+	commentersQuery,
+	withRouter,
+)(FilterWidget);

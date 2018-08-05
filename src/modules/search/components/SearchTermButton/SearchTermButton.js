@@ -7,10 +7,10 @@ import FontIcon from 'material-ui/FontIcon';
 import toggleSearchTerm from '../../lib/toggleSearchTerm';
 
 
-const SearchTermButton = ({ label, searchTermKey, value, activeWork, active, history }) => (
+const SearchTermButton = ({ label, searchTermKey, value, active, history }) => (
 	<li>
 		<button
-			className={`search-term-button ${(active || activeWork) ? 'search-term-button--active' : ''}`}
+			className={`search-term-button ${(active) ? 'search-term-button--active' : ''}`}
 			onClick={toggleSearchTerm.bind(this, searchTermKey, value, history)}
 		>
 			<span className="search-term-button-label">
@@ -27,12 +27,10 @@ SearchTermButton.propTypes = {
 	label: PropTypes.string.isRequired,
 	searchTermKey: PropTypes.string.isRequired,
 	value: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
-	activeWork: PropTypes.bool,
 	active: PropTypes.bool,
 };
 
 SearchTermButton.defaultProps = {
-	activeWork: false,
 	active: false,
 };
 

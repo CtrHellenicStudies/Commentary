@@ -34,7 +34,7 @@ class CommentaryContainer extends React.Component {
 
 		// update route
 		const urlParams = qs.stringify(queryParams);
-		this.props.history.push(`/commentary/?${urlParams}`);
+		this.props.history.push(`${window.location.pathname}?${urlParams}`);
 	}
 
 	render() {

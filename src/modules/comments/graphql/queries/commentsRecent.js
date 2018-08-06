@@ -40,7 +40,7 @@ const commentsRecent = graphql(query, {
 	options: (params) => {
 		return ({
 			variables: {
-				queryParam: getCommentsQuery(params.filters, params.tenantId, params.queryParams),
+				queryParam: getCommentsQuery(params.filters, params.tenantId, params.urn),
 				limit: params.limit,
 				skip: params.skip,
 				sortRecent: true,

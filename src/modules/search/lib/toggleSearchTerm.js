@@ -19,7 +19,7 @@ const toggleSearchTerm = (key, value, history) => {
 
 	// update route
 	const urlParams = qs.stringify(queryParams);
-	history.push(`/commentary/?${urlParams}`);
+	history.push(`${window.location.pathname}?${urlParams}`);
 }
 
 export default toggleSearchTerm;

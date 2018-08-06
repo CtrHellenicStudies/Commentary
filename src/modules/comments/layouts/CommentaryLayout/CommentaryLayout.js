@@ -40,6 +40,8 @@ import {
 	updateFilterOnBrowseEvent,
 	updateFilterOnChangeTextSearchEvent,
 } from '../../lib/queryFilterHelpers';
+import defaultWorksEditions from '../../../comments/lib/defaultWorksEditions';
+import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
 
 
 class CommentaryLayout extends React.Component {
@@ -94,13 +96,25 @@ class CommentaryLayout extends React.Component {
 
 	render() {
 		const { tenantId } = this.props;
+		const subdomain = getCurrentSubdomain();
 		const limit = 10;
 		let skip = 0;
+		let urn = '';
 		const routeQueryParams = qs.parse(window.location.search.replace('?', ''));
 		if (routeQueryParams.page) {
 			skip = routeQueryParams.page * limit;
 		}
 		const filters = createFiltersFromQueryParams(routeQueryParams);
+
+		if (
+			this.props.match
+			&& this.props.match.params
+			&& this.props.match.params.urn
+		) {
+			urn = this.props.match.params.urn;
+		} else if (defaultWorksEditions[subdomain]) {
+			urn = defaultWorksEditions[subdomain].defaultWorkUrn;
+		}
 
 		// create filters object based on the queryParams or params
 		return (
@@ -114,6 +128,7 @@ class CommentaryLayout extends React.Component {
 						/>
 
 						<CommentaryContainer
+							urn={urn}
 							filters={filters}
 							tenantId={tenantId}
 							skip={skip}

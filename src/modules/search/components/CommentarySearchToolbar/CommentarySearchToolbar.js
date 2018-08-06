@@ -12,11 +12,7 @@ import KeyideasDropdown from '../KeyideasDropdown';
 import CommentatorsDropdown from '../CommentatorsDropdown';
 import ReferenceDropdown from '../ReferenceDropdown';
 import WorksDropdown from '../WorksDropdown';
-import LocationBrowserContainer from '../../containers/LocationBrowserContainer';
-
-// lib
-import defaultWorksEditions from '../../../comments/lib/defaultWorksEditions';
-import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
+import RefsDeclBrowserContainer from '../../containers/RefsDeclBrowserContainer';
 
 
 import './CommentarySearchToolbar.css';
@@ -60,25 +56,12 @@ class CommentarySearchToolbar extends React.Component {
 	}
 
 	render() {
-		const subdomain = getCurrentSubdomain();
 		const {
 			searchDropdownOpen, moreDropdownOpen,
 		} = this.state;
 		const {
 			words, ideas, commenters, referenceWorks, works, addCommentPage,
 		} = this.props;
-
-		let urn;
-
-		if (
-			this.props.match
-			&& this.props.match.params
-			&& this.props.match.params.urn
-		) {
-			urn = this.props.match.params.urn;
-		} else if (defaultWorksEditions[subdomain]) {
-			urn = defaultWorksEditions[subdomain].defaultWorkUrn;
-		}
 
 		return (
 			<div>
@@ -98,8 +81,9 @@ class CommentarySearchToolbar extends React.Component {
 					toggleSearchDropdown={this.toggleSearchDropdown}
 				/>
 
-				<LocationBrowserContainer
-					urn={urn}
+				<RefsDeclBrowserContainer
+					searchDropdownOpen={searchDropdownOpen}
+					toggleSearchDropdown={this.toggleSearchDropdown}
 				/>
 
 				{!addCommentPage &&

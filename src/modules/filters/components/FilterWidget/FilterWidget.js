@@ -32,7 +32,7 @@ const FilterWidget = props => {
 	return (
 		<div className="filters">
 			{filters.map((filter, i) => {
-				if (['lineFrom', 'lineTo'].indexOf(filter.key) >= 0) {
+				if (['lineFrom', 'lineTo', 'location'].indexOf(filter.key) >= 0) {
 					return null;
 				}
 

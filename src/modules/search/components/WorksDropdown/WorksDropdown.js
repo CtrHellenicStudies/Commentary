@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 // components
 import SearchToolDropdown from '../SearchToolDropdown';
-import SearchTermButton from '../SearchTermButton';
+import WorksSearchTermButton from '../WorksSearchTermButton';
 
 // lib
 import isActive from '../../../inputs/lib/isActive';
@@ -20,11 +20,10 @@ const WorksDropdown = ({ works, searchDropdownOpen, toggleSearchDropdown }) => (
 		disabled={false}
 	>
 		{works.map(work => (
-			<SearchTermButton
+			<WorksSearchTermButton
 				key={work.urn}
 				label={work.english_title}
-				searchTermKey="works"
-				value={work}
+				value={work.urn}
 				active={isActive(work, 'works')}
 			/>
 		))}

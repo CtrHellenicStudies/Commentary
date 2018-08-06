@@ -1,43 +1,78 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from 'throttle-debounce';
-import $ from 'jquery';
+import Slider, { Handle } from 'rc-slider';
+import Tooltip from 'rc-tooltip';
 
-const id = 'line-range';
+import 'rc-slider/assets/index.css';
+import 'rc-tooltip/assets/bootstrap.css';
 
-class LineRangeSlider extends React.Component {
+import './LineRangeSlider.css';
 
-	componentDidMount() {
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
 
-		const { handleChangeTextLocation, lineFrom, lineTo } = this.props;
-		$(`#${id}`).ionRangeSlider({
-			type: 'double',
-			min: 1,
-			max: 909,
-			grid: true,
-			prettify_enabled: true,
-			prettify_separator: ',',
-			prefix: 'Line: ',
-			values_separator: ' to ',
-			onChange: debounce(500, handleChangeTextLocation),
-			from: lineFrom,
-			to: lineTo,
-		});
-	}
 
-	render() {
-		return <input id={id} />;
-	}
+const handle = (props) => {
+	const { value, dragging, index, ...restProps } = props;
+	return (
+		<Tooltip
+			visible
+			defaultVisible
+			placement="top"
+			key={index}
+		>
+			{value}
+			<Handle value={value} {...restProps} />
+		</Tooltip>
+	);
+};
 
-}
+const LineRangeSlider = ({ handleChangeTextLocation, label, lineFrom, lineTo }) => {
+	const marks = {};
+	marks[lineFrom] = lineFrom.toString();
+	marks[lineTo] = lineTo.toString();
+
+	return (
+		<div className="lineRangeSlider">
+			<label>{label}</label>
+			<div className="lineRangeSliderRange">
+				<Range
+					min={lineFrom}
+					max={lineTo}
+					handle={handle}
+					onAfterChange={handleChangeTextLocation}
+					defaultValue={[lineFrom, lineTo]}
+					marks={marks}
+					pushable
+					trackStyle={[{
+						background: '#795548',
+					}, {
+						background: '#795548',
+					}]}
+					dotStyle={{
+						border: '2px solid #795548',
+					}}
+					handleStyle={[{
+						border: '2px solid #795548',
+						outline: 'none',
+					}, {
+						outline: 'none',
+					}]}
+				/>
+			</div>
+		</div>
+	);
+};
+
 LineRangeSlider.propTypes = {
 	handleChangeTextLocation: PropTypes.func.isRequired,
 	lineFrom: PropTypes.number,
 	lineTo: PropTypes.number,
 };
+
 LineRangeSlider.defaultProps = {
-	lineFrom: null,
-	lineTo: null,
+	lineFrom: 0,
+	lineTo: 0,
 };
 
 export default LineRangeSlider;

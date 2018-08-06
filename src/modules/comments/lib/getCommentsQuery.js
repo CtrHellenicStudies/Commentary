@@ -87,11 +87,6 @@ const createQueryFromFilters = (filters) => {
 				};
 				break;
 
-			case 'location':
-				// Values will always be an array with a length of one
-				query['lemmaCitation.passageFrom'] = filter.values[0];
-				break;
-
 			case 'wordpressId':
 				// Values will always be an array with a length of one
 				query.wordpressId = filter.values[0];
@@ -119,7 +114,7 @@ const createQueryFromFilters = (filters) => {
  * Transfrom the filters to a query to pass to the graphql endpoint for querying
  * comments
  */
-const getCommentsQuery = (filters, tenantId) => {
+const getCommentsQuery = (filters, tenantId, locationUrn) => {
 	const query = createQueryFromFilters(filters);
 	if ('$text' in query) {
 		const textsearch = new RegExp(query.$text, 'i');
@@ -134,6 +129,10 @@ const getCommentsQuery = (filters, tenantId) => {
 				{ 'revisions.text': textsearch }]});
 		}
 		delete query.$text;
+	}
+
+	if (locationUrn) {
+		query.locationUrn = locationUrn;
 	}
 
 	query.tenantId = tenantId;

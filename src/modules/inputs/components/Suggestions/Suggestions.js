@@ -4,7 +4,7 @@ import { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import { fromJS } from 'immutable';
 
 // lib
-import Utils from '../../../../lib/utils';
+import getSuggestionsFromComments from '../../lib/getSuggestionsFromComments';
 
 
 class Suggestions extends React.Component {
@@ -18,7 +18,7 @@ class Suggestions extends React.Component {
 	}
 
 	onMentionSearchChange({ value }) {
-		const _mentions = Utils.getSuggestionsFromComments(this.props.comments);
+		const _mentions = getSuggestionsFromComments(this.props.comments);
 		this.setState({
 			mentions: defaultSuggestionsFilter(value, fromJS(_mentions))
 		});

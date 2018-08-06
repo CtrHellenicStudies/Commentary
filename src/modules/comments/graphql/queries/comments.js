@@ -87,7 +87,7 @@ const commentsQuery = graphql(query, {
 			variables: {
 				skip: params.skip,
 				limit: params.limit,
-				queryParam: getCommentsQuery(params.filters, params.tenantId, params.queryParams)
+				queryParam: getCommentsQuery(params.filters, params.tenantId, params.urn)
 			}
 		});
 	}

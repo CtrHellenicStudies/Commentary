@@ -1,5 +1,8 @@
 import React from 'react';
 import { compose } from 'react-apollo';
+import { withRouter } from 'react-router';
+import qs from 'qs-lite';
+import autoBind from 'react-autobind';
 
 // graphql
 import commentsQuery from '../../graphql/queries/comments';
@@ -13,6 +16,26 @@ import parseCommentsToCommentGroups from '../../lib/parseCommentsToCommentGroups
 
 
 class CommentaryContainer extends React.Component {
+	constructor(props) {
+		super(props);
+		autoBind(this);
+	}
+
+	loadMoreComments() {
+		const queryParams = qs.parse(window.location.search.replace('?', ''));
+		if (
+			typeof queryParams.page !== 'undefined'
+			&& queryParams.page !== null
+		) {
+			queryParams.page = parseInt(queryParams.page, 10) + 1;
+		} else {
+			queryParams.page = 1;
+		}
+
+		// update route
+		const urlParams = qs.stringify(queryParams);
+		this.props.history.push(`${window.location.pathname}?${urlParams}`);
+	}
 
 	render() {
 		const { filters, isOnHomeView, skip, limit, queryParams } = this.props;
@@ -61,7 +84,6 @@ class CommentaryContainer extends React.Component {
 			<Commentary
 				commentGroups={commentGroups}
 				filters={filters}
-				toggleSearchTerm={this.props.toggleSearchTerm}
 				showLoginModal={this.showLoginModal}
 				loadMoreComments={this.loadMoreComments}
 				skip={skip}
@@ -75,4 +97,5 @@ class CommentaryContainer extends React.Component {
 export default compose(
 	commentsQuery,
 	commentsMoreQuery,
+	withRouter,
 )(CommentaryContainer);

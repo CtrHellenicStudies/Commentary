@@ -3,19 +3,18 @@ import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
-
+import _s from 'underscore.string';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import muiTheme from '../../../../lib/muiTheme';
+import autoBind from 'react-autobind';
 
-import Header from '../../../../components/navigation/Header';
 
 // graphql
 import settingsQuery from '../../../settings/graphql/queries/list';
 import commentersQuery from '../../graphql/queries/list';
 
-
 // components
+import Header from '../../../../components/navigation/Header';
 import BackgroundImageHolder from '../../../shared/components/BackgroundImageHolder';
 import LoadingPage from '../../../../components/loading/LoadingPage';
 import CommenterReferenceWorks from '../CommenterReferenceWorks/CommenterReferenceWorks';
@@ -23,7 +22,10 @@ import CommenterVisualizations from '../CommenterVisualizations/CommenterVisuali
 import CommentsRecent from '../../../comments/components/CommentsRecent';
 
 // lib
+import muiTheme from '../../../../lib/muiTheme';
 import Utils from '../../../../lib/utils';
+import PageMeta from '../../../../lib/pageMeta';
+
 
 import './CommenterDetail.css';
 
@@ -32,16 +34,14 @@ import './CommenterDetail.css';
 class CommenterDetail extends React.Component {
 	constructor(props) {
 		super(props);
+
 		const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : undefined;
 		this.state = {
 			readMoreBio: false,
 			loggedIn: user,
 			subscriptions: user && user.subscriptions
 		};
-
-		// methods:
-		this.toggleReadMoreBio = this.toggleReadMoreBio.bind(this);
-		this.subscribe = this.subscribe.bind(this);
+		autoBind(this);
 	}
 
 	toggleReadMoreBio() {
@@ -52,43 +52,13 @@ class CommenterDetail extends React.Component {
 		});
 	}
 
-	subscribe() {
-		// const { subscribed, commenter } = this.state;
-
-		// const commenterObj = {
-		// 	_id: commenter._id,
-		// 	name: commenter.name,
-		// 	bio: commenter.bio,
-		// 	tagline: commenter.tagline,
-		// 	updated: commenter.updated,
-		// 	slug: commenter.slug,
-		// 	avatar: {src: commenter.avatar.src},
-		// 	subscribedOn: new Date()
-		// };
-		// TODO
-		// if (!subscribed) {
-		// 	Meteor.users.update({_id: Meteor.userId()}, {
-		// 		$push: {
-		// 			'subscriptions.commenters': commenterObj
-		// 		}
-		// 	});
-		// } else {
-		// 	Meteor.users.update({_id: Meteor.userId()}, {
-		// 		$pull: {
-		// 			'subscriptions.commenters': {_id: commenterObj._id}
-		// 		}
-		// 	});
-		// }
-		// this.setState({
-		// 	subscribed: !subscribed
-		// });
-	}
 	getBiographyHTML(biography) {
 		if (Utils.isJson(biography)) {
 			return JSON.parse(biography).html;
 		}
 		return biography;
 	}
+
 	componentWillReceiveProps(props) {
 		const { tenantId } = this.props;
 		const slug = props.match.params.slug;
@@ -106,13 +76,14 @@ class CommenterDetail extends React.Component {
 			settings: props.settingsQuery.loading ? {} : props.settingsQuery.settings
 		});
 	}
+
 	render() {
 		const { readMoreBio, commenter, settings, avatarUrl } = this.state;
 
 		if (commenter) {
-			Utils.setTitle(`${commenter.name} | ${settings.title}`);
-			Utils.setDescription(Utils.trunc(commenter.bio, 120));
-			Utils.setMetaImage(avatarUrl);
+			PageMeta.setTitle(`${commenter.name} | ${settings.title}`);
+			PageMeta.setDescription(_s.truncate(commenter.bio, 120));
+			PageMeta.setMetaImage(avatarUrl);
 		}
 
 		return (

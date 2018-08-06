@@ -39,20 +39,14 @@ import {
 	createQueryParamsFromFilters,
 	updateFilterOnBrowseEvent,
 	updateFilterOnChangeTextSearchEvent,
-	createFiltersFromURL
 } from '../../lib/queryFilterHelpers';
+import defaultWorksEditions from '../../../comments/lib/defaultWorksEditions';
+import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
 
 
 class CommentaryLayout extends React.Component {
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			modalLoginLowered: false,
-			params: this.props.match,
-			filters: []
-		};
-
 		autoBind(this);
 	}
 
@@ -100,19 +94,27 @@ class CommentaryLayout extends React.Component {
 		this._updateRoute(filters);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		const referenceWorks = nextProps.referenceWorksQuery.loading ? [] : nextProps.referenceWorksQuery.referenceWorks;
-		const works = nextProps.editionsQuery.loading ? [] : nextProps.editionsQuery.works;
-		this.setState({
-			referenceWorks,
-			works,
-			filters: createFiltersFromURL(this.state.params, this.state.queryParams, this.state.works, this.props.referenceWorks)
-		});
-	}
-
 	render() {
 		const { tenantId } = this.props;
-		const { skip, limit, queryParams, filters } = this.state;
+		const subdomain = getCurrentSubdomain();
+		const limit = 10;
+		let skip = 0;
+		let urn = '';
+		const routeQueryParams = qs.parse(window.location.search.replace('?', ''));
+		if (routeQueryParams.page) {
+			skip = routeQueryParams.page * limit;
+		}
+		const filters = createFiltersFromQueryParams(routeQueryParams);
+
+		if (
+			this.props.match
+			&& this.props.match.params
+			&& this.props.match.params.urn
+		) {
+			urn = this.props.match.params.urn;
+		} else if (defaultWorksEditions[subdomain]) {
+			urn = defaultWorksEditions[subdomain].defaultWorkUrn;
+		}
 
 		// create filters object based on the queryParams or params
 		return (
@@ -120,20 +122,17 @@ class CommentaryLayout extends React.Component {
 				<div>
 					<div className="chs-layout commentary-layout">
 						<Header
-							workFilters={filters}
 							handleBrowse={this._handleBrowse}
 							handleChangeTextsearch={this._handleChangeTextsearch}
 							initialSearchEnabled
 						/>
 
 						<CommentaryContainer
+							urn={urn}
 							filters={filters}
-							showLoginModal={this.showLoginModal}
-							loadMoreComments={this.loadMoreComments}
 							tenantId={tenantId}
 							skip={skip}
 							limit={limit}
-							queryParams={queryParams}
 						/>
 
 					</div>

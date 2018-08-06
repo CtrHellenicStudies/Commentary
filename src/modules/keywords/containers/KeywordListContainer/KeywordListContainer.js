@@ -10,25 +10,12 @@ import KeywordList from '../../components/KeywordList';
 
 
 const KeywordListContainer = props => {
-	const { type } = props;
-
 	let keywords = [];
 	if (
 		props.keywordsQuery
 		&& props.keywordsQuery.keywords
 	) {
 		keywords = props.keywordsQuery.keywords;
-	}
-
-	switch (type) {
-	case 'word':
-		keywords = keywords;
-		break;
-	case 'idea':
-		keywords = keywords;
-		break;
-	default:
-		break;
 	}
 
 	return (

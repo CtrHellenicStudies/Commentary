@@ -8,6 +8,7 @@ import autoBind from 'react-autobind';
 
 // lib
 import Utils from '../../../../lib/utils';
+import PageMeta from '../../../../lib/pageMeta';
 import muiTheme from '../../../../lib/muiTheme';
 
 // components
@@ -66,9 +67,9 @@ class Home extends React.Component {
 			introImageCaption = Utils.getHtmlFromContext(Utils.getEditorState(settings.homepageIntroductionImageCaption).getCurrentContent());
 		}
 
-		Utils.setTitle(`Home | ${settings ? settings.title : ''}`);
-		Utils.setDescription((settings ? settings.subtitle : ''));
-		Utils.setMetaImage(imageUrl);
+		PageMeta.setTitle(`Home | ${settings ? settings.title : ''}`);
+		PageMeta.setDescription((settings ? settings.subtitle : ''));
+		PageMeta.setMetaImage(imageUrl);
 
 		return (
 			<div className="home">

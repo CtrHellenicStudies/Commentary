@@ -5,6 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
+import _s from 'underscore.string';
 
 // graphql
 import settingsQuery from '../../../settings/graphql/queries/list';
@@ -16,7 +17,7 @@ import KeywordListContainer from '../../containers/KeywordListContainer';
 import Header from '../../../../components/navigation/Header';
 
 // lib
-import Utils from '../../../../lib/utils';
+import PageMeta from '../../../../lib/pageMeta';
 import muiTheme from '../../../../lib/muiTheme';
 
 
@@ -50,12 +51,12 @@ class KeywordPage extends React.Component {
 		}
 
 		if (type === 'word') {
-			Utils.setTitle(`Words | ${settings.title}`);
+			PageMeta.setTitle(`Words | ${settings.title}`);
 		} else {
-			Utils.setTitle(`Ideas | ${settings.title}`);
+			PageMeta.setTitle(`Ideas | ${settings.title}`);
 		}
-		Utils.setDescription(`${Utils.capitalize(this.props.type)} for ${settings.title}`);
-		Utils.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
+		PageMeta.setDescription(`${_s.capitalize(this.props.type)} for ${settings.title}`);
+		PageMeta.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

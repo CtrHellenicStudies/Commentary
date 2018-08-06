@@ -16,14 +16,18 @@ import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
-import Utils from '../../../../lib/utils';
+import PageMeta from '../../../../lib/pageMeta';
 
 class CommentersPage extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {};
+
+		this.state = {
+			settings: null,
+		};
 	}
+
 	componentWillReceiveProps(nextProps) {
 		const { tenantId } = this.props;
 		const settings = nextProps.settingsQuery.loading ? { title: ''} : nextProps.settingsQuery.settings.find(x => x.tenantId === tenantId);
@@ -31,6 +35,7 @@ class CommentersPage extends React.Component {
 			settings: settings
 		});
 	}
+
 	render() {
 		const { settings } = this.state;
 
@@ -38,9 +43,9 @@ class CommentersPage extends React.Component {
 			return null;
 		}
 
-		Utils.setTitle(`Commentators | ${settings.title}`);
-		Utils.setDescription(`Commentators for ${settings.title}`);
-		Utils.setMetaImage(`${window.location.origin}/images/capitals.jpg`);
+		PageMeta.setTitle(`Commentators | ${settings.title}`);
+		PageMeta.setDescription(`Commentators for ${settings.title}`);
+		PageMeta.setMetaImage(`${window.location.origin}/images/capitals.jpg`);
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="page page-commenters">

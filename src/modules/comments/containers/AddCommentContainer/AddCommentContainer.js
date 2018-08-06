@@ -147,7 +147,6 @@ class AddCommentContainer extends React.Component {
 		return (
 			<div>
 				<Header
-					toggleSearchTerm={() => {}}
 					handlePagination={this.handlePagination}
 					initialSearchEnabled
 					addCommentPage

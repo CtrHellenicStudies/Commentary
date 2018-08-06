@@ -15,7 +15,7 @@ const getLineTo = ({ lemmaCitation }) => {
 		&& lemmaCitation.passageTo.length
 		&& !(lemmaCitation.passageFrom.join('.') === lemmaCitation.passageTo.join('.'))
 	) {
-		return `-${lemmaCitation.passageTo.join('.')}`;
+		return ` - ${lemmaCitation.passageTo.join('.')}`;
 	}
 	return '';
 };

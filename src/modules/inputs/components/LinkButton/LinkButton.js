@@ -4,10 +4,10 @@ import { RichUtils, EditorState } from 'draft-js';
 import unionClassNames from 'union-class-names';
 import { debounce } from 'throttle-debounce';
 
-// components:
+// components
 import LinkButtonDialog from './LinkButtonDialog';
 
-// helpers:
+// lib
 import linkDecorator from './linkDecorator';
 
 /*

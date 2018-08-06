@@ -1,43 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 
-/*
-	helpers
-*/
-const getClassName = (active, activeWork) => {
-	let className = 'search-term-button';
-
-	if (active || activeWork) className += ' search-term-button--active';
-
-	return className;
-};
+// lib
+import toggleSearchTerm from '../../lib/toggleSearchTerm';
 
 
-/*
-	BEGIN SearchTermButtonPanel
-*/
-const SearchTermButtonPanel = ({ active, activeWork, toggleSearchTerm, label, searchTermKey, value }) => (
+const SearchTermButtonPanel = ({ active, activeWork, label, searchTermKey, value, history }) => (
 	<button
-		className={getClassName(active, activeWork)}
-		onClick={toggleSearchTerm.bind(null, searchTermKey, value)}
+		className={`search-term-button ${(active || activeWork) ? 'search-term-button--active' : ''}`}
+		onClick={toggleSearchTerm.bind(this, searchTermKey, value, history)}
 	>
 		<span>{label}</span>
 	</button>
 );
+
 SearchTermButtonPanel.propTypes = {
-	toggleSearchTerm: PropTypes.func.isRequired,
 	label: PropTypes.string.isRequired,
 	searchTermKey: PropTypes.string.isRequired,
 	value: PropTypes.shape({}).isRequired,
 	active: PropTypes.bool,
 	activeWork: PropTypes.bool,
 };
+
 SearchTermButtonPanel.defaultProps = {
 	active: false,
 	activeWork: false,
 };
-/*
-	END SearchTermButtonPanel
-*/
 
-export default SearchTermButtonPanel;
+
+export default withRouter(SearchTermButtonPanel);

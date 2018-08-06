@@ -12,12 +12,7 @@ import KeyideasDropdown from '../KeyideasDropdown';
 import CommentatorsDropdown from '../CommentatorsDropdown';
 import ReferenceDropdown from '../ReferenceDropdown';
 import WorksDropdown from '../WorksDropdown';
-import LocationBrowserContainer from '../../containers/LocationBrowserContainer';
-
-// lib
-import toggleSearchTerm from '../../lib/toggleSearchTerm';
-import defaultWorksEditions from '../../../comments/lib/defaultWorksEditions';
-import getCurrentSubdomain from '../../../../lib/getCurrentSubdomain';
+import RefsDeclBrowserContainer from '../../containers/RefsDeclBrowserContainer';
 
 
 import './CommentarySearchToolbar.css';
@@ -61,25 +56,12 @@ class CommentarySearchToolbar extends React.Component {
 	}
 
 	render() {
-		const subdomain = getCurrentSubdomain();
 		const {
 			searchDropdownOpen, moreDropdownOpen,
 		} = this.state;
 		const {
-			words, ideas, commenters, referenceWorks, works, filters, addCommentPage,
+			words, ideas, commenters, referenceWorks, works, addCommentPage,
 		} = this.props;
-
-		let urn;
-
-		if (
-			this.props.match
-			&& this.props.match.params
-			&& this.props.match.params.urn
-		) {
-			urn = this.props.match.params.urn;
-		} else if (defaultWorksEditions[subdomain]) {
-			urn = defaultWorksEditions[subdomain].defaultWorkUrn;
-		}
 
 		return (
 			<div>
@@ -97,12 +79,11 @@ class CommentarySearchToolbar extends React.Component {
 					works={works}
 					searchDropdownOpen={searchDropdownOpen}
 					toggleSearchDropdown={this.toggleSearchDropdown}
-					toggleSearchTerm={toggleSearchTerm}
-					filters={filters}
 				/>
 
-				<LocationBrowserContainer
-					urn={urn}
+				<RefsDeclBrowserContainer
+					searchDropdownOpen={searchDropdownOpen}
+					toggleSearchDropdown={this.toggleSearchDropdown}
 				/>
 
 				{!addCommentPage &&
@@ -123,34 +104,25 @@ class CommentarySearchToolbar extends React.Component {
 							keywords={words}
 							searchDropdownOpen={searchDropdownOpen}
 							toggleSearchDropdown={this.toggleSearchDropdown}
-							toggleSearchTerm={toggleSearchTerm}
-							filters={filters}
 						/>
 
 						<KeyideasDropdown
 							keyideas={ideas}
 							searchDropdownOpen={searchDropdownOpen}
 							toggleSearchDropdown={this.toggleSearchDropdown}
-							toggleSearchTerm={toggleSearchTerm}
-							filters={filters}
 						/>
 
 						<CommentatorsDropdown
 							commenters={commenters}
 							searchDropdownOpen={searchDropdownOpen}
 							toggleSearchDropdown={this.toggleSearchDropdown}
-							toggleSearchTerm={toggleSearchTerm}
-							filters={filters}
 						/>
 
 						<ReferenceDropdown
 							reference={referenceWorks}
 							searchDropdownOpen={searchDropdownOpen}
 							toggleSearchDropdown={this.toggleSearchDropdown}
-							toggleSearchTerm={toggleSearchTerm}
-							filters={filters}
 						/>
-
 					</SearchToolDropdown>
 				}
 			</div>
@@ -162,12 +134,6 @@ class CommentarySearchToolbar extends React.Component {
 */
 
 CommentarySearchToolbar.propTypes = {
-	filters: PropTypes.any, // eslint-disable-line react/forbid-prop-types
-	toggleSearchTerm: PropTypes.func,
-	handleChangeTextsearch: PropTypes.func,
-	handlePagination: PropTypes.func,
-	addCommentPage: PropTypes.bool,
-	selectedWork: PropTypes.object,
 	keywords: PropTypes.array,
 	keyideas: PropTypes.array,
 	commenters: PropTypes.array,
@@ -181,8 +147,6 @@ CommentarySearchToolbar.defaultProps = {
 	commenters: [],
 	referenceWorks: [],
 	works: [],
-	filters: [],
-	handleChangeTextsearch: null,
 }
 
 export default withRouter(CommentarySearchToolbar);

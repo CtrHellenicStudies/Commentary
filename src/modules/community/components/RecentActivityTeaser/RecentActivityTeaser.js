@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-
-// lib
-import Utils from '../../../../lib/utils';
+import _s from 'underscore.string';
 
 // components
 import AvatarIcon from '../../../users/components/AvatarIcon';
+
 
 import './RecentActivityTeaser.css';
 
@@ -38,7 +37,7 @@ class RecentActivityTeaser extends React.Component {
 
 		title = mostRecentRevision.title;
 		if (mostRecentRevision.text) {
-			excerpt = Utils.trunc(mostRecentRevision.text.replace(/(<([^>]+)>)/ig, ''), 120);
+			excerpt = _s.truncate(mostRecentRevision.text.replace(/(<([^>]+)>)/ig, ''), 120);
 		}
 
 		const commenters = comment.commenters;

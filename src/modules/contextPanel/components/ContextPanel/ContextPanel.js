@@ -33,8 +33,6 @@ class ContextPanel extends React.Component {
 			highlightingVisible: false,
 		};
 
-
-		// methods:
 		autoBind(this);
 	}
 
@@ -60,7 +58,6 @@ class ContextPanel extends React.Component {
 	}
 
 	onBeforeClicked() {
-
 		const { lineFrom } = this.state;
 
 		if (lineFrom >= LINE_THRESHOLD) {

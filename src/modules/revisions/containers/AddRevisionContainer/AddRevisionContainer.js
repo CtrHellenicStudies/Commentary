@@ -2,6 +2,9 @@ import React from 'react';
 import { compose } from 'react-apollo';
 import { connect } from 'react-redux';
 
+// component
+import AddRevision from '../../components/AddRevision';
+
 // graphql
 import commentRemoveMutation from '../../../comments/graphql/mutations/remove';
 import commentRemoveRevisionMutation from '../../../comments/graphql/mutations/removeRevision';

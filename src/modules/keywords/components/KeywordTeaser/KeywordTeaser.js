@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import _s from 'underscore.string';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
-import Utils from '../../../../lib/utils';
 
 
 class KeywordTeaser extends React.Component {
@@ -53,7 +53,7 @@ class KeywordTeaser extends React.Component {
 			<span
 				className="keyword-description"
 			> { keyword.description ?
-					Utils.trunc(keyword.description, 300)
+					_s.truncate(keyword.description, 300)
 					: 'No description available.'
 				} </span>
 			<a

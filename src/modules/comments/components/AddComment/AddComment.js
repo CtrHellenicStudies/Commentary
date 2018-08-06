@@ -4,7 +4,6 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
-import Snackbar from 'material-ui/Snackbar';
 import { compose } from 'react-apollo';
 import slugify from 'slugify';
 import { Form } from 'formsy-react';
@@ -114,18 +113,6 @@ class AddComment extends React.Component {
 			textHtml,
 			textRaw
 		);
-	}
-
-	showSnackBar(error) {
-		this.setState({
-			snackbarOpen: true,
-			snackbarMessage: error.message,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-			});
-		}, 4000);
 	}
 
 	validateStateForSubmit() {
@@ -360,14 +347,6 @@ class AddComment extends React.Component {
 							</div>
 						</article>
 					</Form>
-
-					<Snackbar
-						className="editor-snackbar"
-						open={this.state.snackbarOpen}
-						message={this.state.snackbarMessage}
-						autoHideDuration={4000}
-					/>
-
 				</div>
 			</div>
 		);

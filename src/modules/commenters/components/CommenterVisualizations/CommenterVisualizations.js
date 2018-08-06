@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-// lib:
+// lib
 import muiTheme from '../../../../lib/muiTheme';
 
 // components

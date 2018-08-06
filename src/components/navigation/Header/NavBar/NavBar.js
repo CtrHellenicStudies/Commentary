@@ -109,38 +109,6 @@ class NavBar extends React.Component {
 		}
 	}
 
-	toggleWorkSearchTerm(key, value) {
-		const { toggleSearchTerm } = this.props;
-		const { activeWork } = this.state;
-
-		value.subworks.forEach((subwork, subworkIndex) => {
-			value.subworks[subworkIndex].work = value;
-		});
-
-		if (activeWork === value.slug) {
-			this.setState({
-				subworks: [],
-				activeWork: '',
-			});
-		} else {
-			value.subworks.sort((a, b) => {
-				if (a.n < b.n) {
-					return -1;
-				}
-				if (a.n > b.n) {
-					return 1;
-				}
-				return 0;
-			});
-			this.setState({
-				subworks: value.subworks,
-				activeWork: value.slug,
-			});
-		}
-
-		toggleSearchTerm(key, value);
-	}
-
 	showLoginModal() {
 		this.setState({
 			modalLoginLowered: true,

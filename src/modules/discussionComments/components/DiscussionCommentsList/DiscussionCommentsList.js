@@ -1,5 +1,4 @@
 import React from 'react';
-import createClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 import DiscussionCommentTeaser from '../DiscussionCommentTeaser';
@@ -9,12 +8,7 @@ import './DiscussionCommentsList.css';
 
 
 // List of discussionComments
-const DiscussionCommentsList = createClass({
-
-	propTypes: {
-		discussionComments: PropTypes.array,
-		isForLoggedInUser: PropTypes.bool,
-	},
+class DiscussionCommentsList extends React.Component {
 
 	renderNoCommentsMessage() {
 		const { isForLoggedInUser } = this.props;
@@ -29,7 +23,7 @@ const DiscussionCommentsList = createClass({
 				{message}
 			</p>
 		);
-	},
+	}
 
 	render() {
 		const { discussionComments } = this.props;
@@ -48,9 +42,13 @@ const DiscussionCommentsList = createClass({
 				}
 			</div>
 		);
-	},
-});
+	}
+}
 
+DiscussionCommentsList.propTypes = {
+	discussionComments: PropTypes.array,
+	isForLoggedInUser: PropTypes.bool,
+};
 
 
 export default DiscussionCommentsList;

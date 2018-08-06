@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { FormGroup } from 'react-bootstrap';
 import update from 'immutability-helper';
 import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import autoBind from 'react-autobind';
@@ -16,6 +15,7 @@ import textNodeUpdateMutation from '../../graphql/mutations/textNodesUpdate';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
+import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
 
 
 import './TextNodesInput.css';
@@ -160,18 +160,6 @@ class TextNodesInput extends React.Component {
 		})();
 	}
 
-	showSnackBar(message) {
-		this.setState({
-			snackbarOpen: true,
-			snackbarMessage: message,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-			});
-		}, 4000);
-	}
-
 	render() {
 		const { textNodes } = this.props;
 
@@ -229,12 +217,7 @@ class TextNodesInput extends React.Component {
 					className="text-nodes-input-action-button"
 					onClick={this.props.loadMore}
 				/>
-				<Snackbar
-					className="editor-snackbar"
-					open={this.state.snackbarOpen}
-					message={this.state.snackbarMessage}
-					autoHideDuration={4000}
-				/>
+				<SnackbarContainer />
 			</FormGroup>
 		);
 	}

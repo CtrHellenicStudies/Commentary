@@ -7,8 +7,6 @@ import DropZone from 'react-dropzone';
 import Cookies from 'js-cookie';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { sendSnack } from '../../../shared/components/SnackAttack/SnackAttack';
-
 
 export default class AvatarEditor extends Component {
 	constructor(props) {
@@ -30,7 +28,7 @@ export default class AvatarEditor extends Component {
 		// const context = { type: 'user' };
 
 		if (rejectedFiles && rejectedFiles.length) {
-			sendSnack('There was an error uploading your profile picture');
+			console.err('Error uploading file');
 		}
 
 		// TODO: implement S3 Upload for uploading file

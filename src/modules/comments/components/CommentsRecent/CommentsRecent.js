@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'react-slick';
-
-
-// lib
-import Utils from '../../../../lib/utils';
+import _s from 'underscore.string';
 
 
 // slider settings
@@ -44,7 +41,7 @@ class CommentsRecent extends React.Component {
 									>
 										<p
 											dangerouslySetInnerHTML={{
-												__html: Utils.trunc(comment.revisions[comment.revisions.length - 1].text, 300),
+												__html: _s.truncate(comment.revisions[comment.revisions.length - 1].text, 300),
 											}}
 										/>
 										<h4>

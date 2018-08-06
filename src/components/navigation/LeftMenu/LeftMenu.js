@@ -14,7 +14,7 @@ import { logout, toggleAuthModal } from '../../../modules/auth/actions';
 import { logoutUser } from '../../../lib/auth';
 
 // lib
-import Utils from '../../../lib/utils';
+import userInRole from '../../../lib/userInRole';
 
 
 import './LeftMenu.css';
@@ -24,27 +24,8 @@ class LeftMenu extends React.Component {
 	render() {
 		const {
 			leftMenuOpen, closeLeftMenu, userId, dispatchLogout,
-			dispatchToggleAuthModal, roles
+			dispatchToggleAuthModal, roles, settings
 		} = this.props;
-
-		let settings;
-
-		/*
-		 * TODO move query to container with compose
-		if (
-			!this.props.tenantsQuery.loading
-			&& this.props.tenantsQuery.tenants
-		) {
-			tenant = this.props.tenantsQuery.tenants.find(x => x._id === this.state.tenantId);
-		}
-
-		if (
-			!this.props.settingsQuery.loading
-			&& this.props.settingsQuery.settings
-		) {
-		 	settings = this.props.settingsQuery.settings.find(x => x.tenantId === this.state.tenantId);
-		}
-		*/
 
 		return (
 			<Drawer
@@ -55,7 +36,7 @@ class LeftMenu extends React.Component {
 			>
 				<LeftMenuHead />
 				<div className="leftMenuContent">
-					{Utils.userInRole(roles, ['admin']) ?
+					{userInRole(roles, ['admin']) ?
 						<MenuItem
 							to="/admin"
 							onClick={closeLeftMenu}
@@ -63,7 +44,7 @@ class LeftMenu extends React.Component {
 							Admin
 						</MenuItem>
 						: ''}
-					{Utils.userInRole(roles, ['editor', 'admin', 'commenter']) ?
+					{userInRole(roles, ['editor', 'admin', 'commenter']) ?
 						(
 							<div>
 								<MenuItem
@@ -132,12 +113,14 @@ class LeftMenu extends React.Component {
 					>
 						About
 					</MenuItem>
+					{/*
 					<MenuItem
 						to="/#visualizations"
 						onClick={closeLeftMenu}
 					>
 						Visualizations
 					</MenuItem>
+					*/}
 					<Divider />
 
 					{userId ?
@@ -203,7 +186,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 		dispatch(toggleLeftMenu(false));
 	},
 });
-
 
 export default connect(
 	mapStateToProps,

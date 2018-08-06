@@ -5,13 +5,15 @@ import PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-// components:
+// components
 import Header from '../../../../components/navigation/Header';
 import TextNodesEditorContainer from '../../containers/TextNodesEditorContainer/TextNodesEditorContainer';
 
 // lib
 import muiTheme from '../../../../lib/muiTheme';
-import Utils from '../../../../lib/utils';
+import PageMeta from '../../../../lib/pageMeta';
+import userInRole from '../../../../lib/userInRole';
+
 
 class TextNodesEditorLayout extends React.Component {
 	getChildContext() {
@@ -21,40 +23,24 @@ class TextNodesEditorLayout extends React.Component {
 	componentWillUpdate() {
 		this.handlePermissions();
 	}
+
 	componentWillUnmount() {
-		if (this.timeout)			{ clearTimeout(this.timeout); }
-	}
-	showSnackBar(error) {
-		this.setState({
-			snackbarOpen: error.errors,
-			snackbarMessage: error.errorMessage,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-			});
-		}, 4000);
+		if (this.timeout) clearTimeout(this.timeout);
 	}
 
-	// --- BEGNI PERMISSIONS HANDLE --- //
 	handlePermissions() {
-		if (!Utils.userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
+		if (!userInRole(Cookies.get('user'), ['editor', 'admin', 'commenter'])) {
 			this.props.history.push('/');
 		}
 	}
 
 	render() {
-		Utils.setTitle('Edit Source Text | The Center for Hellenic Studies Commentaries');
+		PageMeta.setTitle('Edit Source Text | The Center for Hellenic Studies Commentaries');
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout chs-editor-layout add-comment-layout">
-					<Header
-						toggleSearchTerm={() => {}}
-						handleChangeLineN={() => {}}
-						filters={[]}
-						selectedWork={{ slug: 'tlg001' }}
-					/>
+					<Header />
 					<main>
 						<div className="commentary-comments">
 							<div className="comment-group">
@@ -71,7 +57,5 @@ class TextNodesEditorLayout extends React.Component {
 TextNodesEditorLayout.childContextTypes = {
 	muiTheme: PropTypes.object.isRequired,
 };
-
-
 
 export default TextNodesEditorLayout;

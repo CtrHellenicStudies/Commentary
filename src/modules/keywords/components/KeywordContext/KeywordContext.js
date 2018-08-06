@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
-
-// lib
-import Utils from '../../../../lib/utils';
+import _s from 'underscore.string';
 
 
 class KeywordContext extends React.Component {
@@ -53,7 +51,7 @@ class KeywordContext extends React.Component {
 				<div className="version-tabs tabs">
 					{
 						lemmaText.map((lemmaTextEdition, i) => {
-							const lemmaEditionTitle = Utils.trunc(lemmaTextEdition.title, 20);
+							const lemmaEditionTitle = _s.truncate(lemmaTextEdition.title, 20);
 
 							return (
 								<RaisedButton

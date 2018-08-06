@@ -3,69 +3,17 @@ import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import autoBind from 'react-autobind';
 
-
 // cts
 import { parseValueUrn } from '../../../cts/lib/parseUrn';
 
+// lib
+import getContextPanelTextState from '../../lib/getContextPanelTextState';
+import getTextNodeClass from '../../lib/getTextNodeClass';
 
-/*
-	BEGIN helpers
-*/
-
-const getTextNodeClass = (textNodeFrom, textNodeTo, n, highlightingVisible) => {
-	let usedLineTo = textNodeFrom;
-
-	if (textNodeTo) {
-		usedLineTo = textNodeTo;
-	}
-
-	let textNodeClass = 'lemma-textNode';
-	if (textNodeFrom <= n && n <= usedLineTo && highlightingVisible) {
-		textNodeClass += ' highlighted';
-	}
-	return textNodeClass;
-};
-
-const getContextPanelTextState = (commentGroup, editor) => {
-	if (commentGroup) return 'context for comment group';
-	if (editor) return 'editor';
-	return 'default';
-};
-/*
-	END helpers
-*/
+// components
+import LineNumbering from '../LineNumbering';
 
 
-/*
-	BEGIN LineNumbering
-*/
-const LineNumbering = ({ location }) => {
-	const n = location[location.length - 1];
-
-	return (
-		<div className="lemma-meta">
-			<span
-				className={`lemma-textNode-n ${
-					(n % 5 === 0 || n === 1) ? 'lemma-textNode-n--displayed' : ''
-				}`}
-			>
-				{n}
-			</span>
-		</div>
-	);
-}
-
-LineNumbering.propTypes = {
-	location: PropTypes.array.isRequired,
-};
-/*
-	END LineNumbering
-*/
-
-
-/*
-	BEGIN ContextPanelText
-*/
 class ContextPanelText extends React.Component {
 
 	constructor(props) {
@@ -79,10 +27,6 @@ class ContextPanelText extends React.Component {
 
 		autoBind(this);
 	}
-
-	/*
-		BEGIN editor methods:
-	*/
 
 	handleSelectingTextForComment(e) {
 		const selObj = window.getSelection();
@@ -139,14 +83,62 @@ class ContextPanelText extends React.Component {
 			});
 		}
 	}
-	/*
-		END editor methods:
-	*/
+
+	renderContextForCommentGroup() {
+		const {
+			selectedLemmaVersion, highlightingVisible, commentGroup,
+		} = this.props;
+
+		selectedLemmaVersion.textNodes.map((textNode, i) => {
+			const textNodeClass = getTextNodeClass(commentGroup.textNodeFrom, commentGroup.textNodeTo, textNode.id, highlightingVisible);
+
+			return (
+				<div
+					className={textNodeClass}
+					key={`${textNode.id}-${i}`}
+				>
+					<div
+						className="lemma-text"
+						dangerouslySetInnerHTML={{ __html: textNode.text }}
+					/>
+
+					<LineNumbering location={textNode.location} />
+				</div>
+			);
+		});
+	}
+
+	renderContextForEditor() {
+		const {
+			selectedLemmaVersion, disableEdit,
+		} = this.props;
+
+		return (
+			selectedLemmaVersion.textNodes.map((textNode, i) => (
+				<div
+					className="lemma-textNode"
+					key={`${textNode.id}-${i}`}
+				>
+					<div
+						className="lemma-text"
+						ref={(component) => { this.textNodes[(i).toString()] = component; }}
+						dangerouslySetInnerHTML={{ __html: textNode.text }}
+						style={!disableEdit ? { cursor: 'pointer' } : null}
+						onMouseUp={this.handleSelectingTextForComment}
+						data-id={textNode.id}
+						data-urn={textNode.urn}
+					/>
+
+					<LineNumbering location={textNode.location} />
+				</div>
+			))
+		);
+	}
 
 	render() {
 		const {
-			onBeforeClicked, selectedLemmaVersion, highlightingVisible, textNodeFrom,
-			commentGroup, onAfterClicked, maxLine, disableEdit, editor,
+			onBeforeClicked, textNodeFrom, commentGroup, onAfterClicked, maxLine,
+			editor,
 		} = this.props;
 
 
@@ -165,67 +157,11 @@ class ContextPanelText extends React.Component {
 					</div>
 					: '' }
 
-				{(() => {
-					switch (contextPanelTextState) {
-					case 'context for comment group':
-						return (
-							selectedLemmaVersion.textNodes.map((textNode, i) => {
-								const textNodeClass = getTextNodeClass(commentGroup.textNodeFrom, commentGroup.textNodeTo, textNode.id, highlightingVisible);
-
-								return (
-									<div
-										className={textNodeClass}
-										key={`${textNode.id}-${i}`}
-									>
-										<div
-											className="lemma-text"
-											dangerouslySetInnerHTML={{ __html: textNode.text }}
-										/>
-
-										<LineNumbering location={textNode.location} />
-									</div>
-								);
-							})
-						);
-					case 'editor':
-						return (
-							selectedLemmaVersion.textNodes.map((textNode, i) => (
-								<div
-									className="lemma-textNode"
-									key={`${textNode.id}-${i}`}
-								>
-									<div
-										className="lemma-text"
-										ref={(component) => { this.textNodes[(i).toString()] = component; }}
-										dangerouslySetInnerHTML={{ __html: textNode.text }}
-										style={!disableEdit ? { cursor: 'pointer' } : null}
-										onMouseUp={this.handleSelectingTextForComment}
-										data-id={textNode.id}
-										data-urn={textNode.urn}
-									/>
-
-									<LineNumbering location={textNode.location} />
-								</div>
-							))
-						);
-					default:
-						return (
-							selectedLemmaVersion.textNodes.map((textNode, i) => (
-								<div
-									className="lemma-textNode"
-									key={`${textNode.id}-${i}`}
-								>
-									<div
-										className="lemma-text"
-										dangerouslySetInnerHTML={{ __html: textNode.text }}
-									/>
-
-									<LineNumbering location={textNode.location} />
-								</div>
-							))
-						);
-					}
-				})()}
+				{contextPanelTextState === 'editor' ?
+					this.renderContextForEditor()
+					:
+					this.renderContextForCommentGroup()
+				}
 
 				{textNodeFrom < maxLine ?
 					<div className="after-link">
@@ -268,8 +204,5 @@ ContextPanelText.defaultProps = {
 	updateSelectedLemma: null,
 	editor: false,
 };
-/*
-	END ContextPanelText
-*/
 
 export default ContextPanelText;

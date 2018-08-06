@@ -12,12 +12,18 @@ import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 import CommentarySearchPanel from '../../components/CommentarySearchPanel';
 
 
+const handleChangeTextsearch = (val) => {
+
+};
+
+
 const CommentarySearchPanelContainer = props => {
 
 	return (
 		<CommentarySearchPanel
 			open={props.open}
 			closeRightMenu={props.closeRightMenu}
+			handleChangeTextsearch={handleChangeTextsearch}
 		/>
 	);
 };

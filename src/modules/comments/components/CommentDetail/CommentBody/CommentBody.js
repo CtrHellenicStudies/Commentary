@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // components
 import CommentBodyText from '../CommentBodyText';
 
-// helpers
+// lib
 import getRevisionDiff from '../../../lib/getRevisionDiff';
 
 

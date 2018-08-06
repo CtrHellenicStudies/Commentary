@@ -2,24 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 
-// components:
+// components
 import ContextPanelText from '../ContextPanelText';
 import ContextPanelTabs from '../ContextPanelTabs';
 
-/*
- helpers
-*/
-const getContextPanelStyles = (open, highlightingVisible) => {
-	let contextPanelStyles = 'lemma-panel paper-shadow';
-	if (open) {
-		contextPanelStyles += ' extended';
-	}
-	if (highlightingVisible) {
-		contextPanelStyles += ' highlighting-visible';
-	}
-
-	return contextPanelStyles;
-};
+// lib
+import getContextPanelStyles from '../../lib/getContextPanelStyles';
 
 
 class ContextPanelContent extends React.Component {

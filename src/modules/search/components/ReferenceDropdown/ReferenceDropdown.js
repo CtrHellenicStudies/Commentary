@@ -1,20 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _s from 'underscore.string';
 
-// components:
+// components
 import SearchToolDropdown from '../SearchToolDropdown';
 import SearchTermButton from '../SearchTermButton';
 
-// lib:
-import Utils from '../../../../lib/utils';
-
-// helpers:
-import { isActive, dropdownPropTypes, dropdownDefaultProps } from '../../lib/helpers';
+// lib
+import isActive from '../../../inputs/lib/isActive';
+import dropdownPropTypes, { dropdownDefaultProps } from '../../../inputs/lib/dropdownProps';
 
 /*
 	BEGIN ReferenceDropdown
 */
-const ReferenceDropdown = ({ reference, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, filters }) => (
+const ReferenceDropdown = ({ reference, searchDropdownOpen, toggleSearchDropdown }) => (
 	<SearchToolDropdown
 		name="reference"
 		open={searchDropdownOpen === 'reference'}
@@ -24,11 +23,10 @@ const ReferenceDropdown = ({ reference, searchDropdownOpen, toggleSearchDropdown
 		{reference.map(_reference => (
 			<SearchTermButton
 				key={_reference._id}
-				toggleSearchTerm={toggleSearchTerm}
-				label={Utils.trunc(_reference.title, 30)}
+				label={_s.truncate(_reference.title, 30)}
 				searchTermKey="reference"
 				value={_reference}
-				active={isActive(filters, _reference, 'reference', '_id')}
+				active={isActive(_reference, 'reference', '_id')}
 			/>
 		))}
 	</SearchToolDropdown>

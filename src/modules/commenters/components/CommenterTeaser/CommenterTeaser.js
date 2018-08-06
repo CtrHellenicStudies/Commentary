@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import _s from 'underscore.string';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AvatarIcon from '../../../users/components/AvatarIcon';
-import Utils from '../../../../lib/utils';
 
-// lib:
+// component
+import AvatarIcon from '../../../users/components/AvatarIcon';
+
+// lib
 import muiTheme from '../../../../lib/muiTheme';
 
 // commenter Teaser
@@ -18,7 +19,7 @@ class CommenterTeaser extends React.Component {
 	render() {
 		const { commenter } = this.props;
 		const commenterUrl = `/commenters/${commenter.slug}`;
-		const commenterExcerpt = commenter.tagline ? Utils.trunc(commenter.tagline, 120) : '';
+		const commenterExcerpt = commenter.tagline ? _s.truncate(commenter.tagline, 120) : '';
 
 
 		return (

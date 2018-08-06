@@ -2,7 +2,6 @@ import React from 'react';
 import { Route } from 'react-router';
 
 import PrivateRoute from '../../../routes/PrivateRoute';
-import AddKeywordLayout from '../layouts/AddKeywordLayout';
 import EditKeywordLayout from '../layouts/EditKeywordLayout';
 import KeywordPage from '../components/KeywordPage';
 import KeywordDetailContainer from '../containers/KeywordDetailContainer';
@@ -21,7 +20,7 @@ const addKeywordRoute = (
 	<PrivateRoute
 		exact
 		path="/tags/create"
-		component={AddKeywordLayout}
+		component={EditKeywordLayout}
 		roles={['commenter', 'editor', 'admin']}
 	/>
 );

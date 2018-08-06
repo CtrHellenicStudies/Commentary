@@ -4,7 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import { compose } from 'react-apollo';
 import FontIcon from 'material-ui/FontIcon';
-import Snackbar from 'material-ui/Snackbar';
 import $ from 'jquery';
 import autoBind from 'react-autobind';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
@@ -22,6 +21,7 @@ import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referen
 
 // component
 import DraftEditorInput from '../../../inputs/components/DraftEditorInput';
+import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
 
 
 // Create toolbar plugin for editor
@@ -210,18 +210,6 @@ class EditKeyword extends React.Component {
 		}
 	}
 
-	showSnackBar(error) {
-		this.setState({
-			snackbarOpen: error.errors,
-			snackbarMessage: error.errorMessage,
-		});
-		this.timeout = setTimeout(() => {
-			this.setState({
-				snackbarOpen: false,
-			});
-		}, 4000);
-	}
-
 	validateStateForSubmit() {
 		let errors = false;
 		let errorMessage = 'Missing comment data:';
@@ -315,16 +303,8 @@ class EditKeyword extends React.Component {
 								/>
 							</div>
 						</div>
-
 					</article>
-
-					<Snackbar
-						className="editor-snackbar"
-						open={this.state.snackbarOpen}
-						message={this.state.snackbarMessage}
-						autoHideDuration={4000}
-					/>
-
+					<SnackbarContainer />
 				</div>
 			</div>
 		);

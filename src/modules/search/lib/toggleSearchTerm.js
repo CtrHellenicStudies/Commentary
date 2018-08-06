@@ -1,27 +1,25 @@
 import qs from 'qs-lite';
 
+
 import {
 	createFiltersFromQueryParams,
 	createQueryParamsFromFilters,
-	updateFilterOnChangeLineEvent,
-	updateFilterOnChangeTextSearchEvent,
 	updateFilterOnKeyAndValueChangeEvent,
-	createFiltersFromURL
 } from '../../comments/lib/queryFilterHelpers';
 
+
 const toggleSearchTerm = (key, value, history) => {
+	let queryParams = qs.parse(window.location.search.replace('?', ''));
 	const oldFilters = createFiltersFromQueryParams(queryParams);
-	const skip = 0;
-	const limit = 0;
 
 	// update filter based on the key and value
 	const filters = updateFilterOnKeyAndValueChangeEvent(oldFilters, key, value);
-	const queryParams = createQueryParamsFromFilters(filters);
+	queryParams = createQueryParamsFromFilters(filters);
+	queryParams.page = 0;
 
 	// update route
 	const urlParams = qs.stringify(queryParams);
-
-	history.push(`/commentary/?${urlParams}`);
+	history.push(`${window.location.pathname}?${urlParams}`);
 }
 
 export default toggleSearchTerm;

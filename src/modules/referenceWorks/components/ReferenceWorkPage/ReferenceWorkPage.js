@@ -11,7 +11,7 @@ import Header from '../../../../components/navigation/Header';
 import ReferenceWorkList from '../ReferenceWorkList';
 
 // lib
-import Utils from '../../../../lib/utils';
+import PageMeta from '../../../../lib/pageMeta';
 import muiTheme from '../../../../lib/muiTheme';
 
 
@@ -21,9 +21,9 @@ const ReferenceWorkPage = ({ settings }) => {
 		return <LoadingPage />;
 	}
 
-	Utils.setTitle(`Reference Works | ${settings.title}`);
-	Utils.setDescription(`Reference Works for ${settings.title}`);
-	Utils.setMetaImage(`${window.location.origin}/images/achilles_2.jpg`);
+	PageMeta.setTitle(`Reference Works | ${settings.title}`);
+	PageMeta.setDescription(`Reference Works for ${settings.title}`);
+	PageMeta.setMetaImage(`${window.location.origin}/images/achilles_2.jpg`);
 
 	return (
 		<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

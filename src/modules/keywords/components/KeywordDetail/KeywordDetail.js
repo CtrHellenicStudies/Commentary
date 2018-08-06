@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import $ from 'jquery';
+import _s from 'underscore.string';
 
 // components
 import KeywordContext from '../KeywordContext';
@@ -15,7 +16,7 @@ import Header from '../../../../components/navigation/Header';
 import Footer from '../../../../components/navigation/Footer';
 
 // lib
-import Utils from '../../../../lib/utils';
+import PageMeta from '../../../../lib/pageMeta';
 import muiTheme from '../../../../lib/muiTheme';
 
 
@@ -59,11 +60,11 @@ class KeywordDetail extends React.Component {
 	render() {
 		const { keyword, settings, keywordComments, roles } = this.props;
 
-		Utils.setTitle(`${keyword.title} | ${settings.title}`);
+		PageMeta.setTitle(`${keyword.title} | ${settings.title}`);
 		if (keyword.description) {
-			Utils.setDescription(Utils.trunc(keyword.description, 150));
+			PageMeta.setDescription(_s.truncate(keyword.description, 150));
 		}
-		Utils.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
+		PageMeta.setMetaImage(`${window.location.origin}/images/apotheosis_homer.jpg`);
 
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>

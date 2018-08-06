@@ -9,9 +9,11 @@ const defaultWorksEditions = {
 			refsDecls: [{
 				label: 'Book',
 				slug: 'book',
+				range: [0, 23],
 			}, {
 				label: 'Line',
 				slug: 'line',
+				range: [0, 909],
 			}],
 		}, {
 			english_title: 'Odyssey',
@@ -20,9 +22,11 @@ const defaultWorksEditions = {
 			refsDecls: [{
 				label: 'Book',
 				slug: 'book',
+				range: [0, 23],
 			}, {
 				label: 'Line',
 				slug: 'line',
+				range: [0, 909],
 			}],
 		}, {
 			english_title: 'Homeric Hymns',
@@ -31,9 +35,11 @@ const defaultWorksEditions = {
 			refsDecls: [{
 				label: 'Hymn',
 				slug: 'hymn',
+				range: [0, 32],
 			}, {
 				label: 'Line',
 				slug: 'line',
+				range: [0, 909],
 			}],
 		}],
 	},
@@ -46,44 +52,52 @@ const defaultWorksEditions = {
 			slug: 'olympian',
 			urn: 'urn:cts:greekLit:tlg0033.tlg001',
 			refsDecls: [{
-				label: 'Work',
-				slug: 'work',
-			}, {
 				label: 'Scroll',
 				slug: 'scroll',
+				range: [0, 13],
+			}, {
+				label: 'Line',
+				slug: 'line',
+				range: [0, 299],
 			}],
 		}, {
 			english_title: 'Pythian',
 			slug: 'pythian',
 			urn: 'urn:cts:greekLit:tlg0033.tlg002',
 			refsDecls: [{
-				label: 'Work',
-				slug: 'work',
-			}, {
 				label: 'Scroll',
 				slug: 'scroll',
+				range: [0, 13],
+			}, {
+				label: 'Line',
+				slug: 'line',
+				range: [0, 299],
 			}],
 		}, {
 			english_title: 'Nemean',
 			slug: 'nemean',
 			urn: 'urn:cts:greekLit:tlg0033.tlg003',
 			refsDecls: [{
-				label: 'Work',
-				slug: 'work',
-			}, {
 				label: 'Scroll',
 				slug: 'scroll',
+				range: [0, 13],
+			}, {
+				label: 'Line',
+				slug: 'line',
+				range: [0, 299],
 			}],
 		}, {
 			english_title: 'Isthmean',
 			slug: 'isthmean',
 			urn: 'urn:cts:greekLit:tlg0033.tlg004',
 			refsDecls: [{
-				label: 'Work',
-				slug: 'work',
-			}, {
 				label: 'Scroll',
 				slug: 'scroll',
+				range: [0, 13],
+			}, {
+				label: 'Line',
+				slug: 'line',
+				range: [0, 299],
 			}],
 		}],
 	},
@@ -98,12 +112,15 @@ const defaultWorksEditions = {
 			refsDecls: [{
 				label: 'Book',
 				slug: 'book',
+				range: [0, 9],
 			}, {
 				label: 'Chapter',
 				slug: 'chapter',
+				range: [0, 99],
 			}, {
 				label: 'Section',
 				slug: 'section',
+				range: [0, 99],
 			}],
 		}],
 	},

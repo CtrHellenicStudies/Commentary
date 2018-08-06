@@ -1,3 +1,10 @@
+import defaultWorksEditions from './defaultWorksEditions';
+import getCurrentSubdomain from '../../../lib/getCurrentSubdomain';
+import { parseValueUrn } from '../../cts/lib/parseUrn';
+
+/**
+ * Create a query for mongo from the comment filters array
+ */
 const createQueryFromFilters = (filters) => {
 	const query = {};
 	let values = [];
@@ -45,35 +52,39 @@ const createQueryFromFilters = (filters) => {
 				break;
 
 			case 'works':
-				values = [];
+				const subdomain = getCurrentSubdomain();
+				const tenantWorks = defaultWorksEditions[subdomain].works;
+				const ctsNamespaces = [];
+				const textGroups = [];
+				const works = [];
+
 				filter.values.forEach((value) => {
-					values.push(value.slug);
+					tenantWorks.forEach(tenantWork => {
+						if (tenantWork.slug === value.slug) {
+							const workUrn = parseValueUrn(tenantWork.urn);
+
+							if (~!ctsNamespaces.indexOf(workUrn.ctsNamespace)) {
+								ctsNamespaces.push(workUrn.ctsNamespace);
+							}
+							if (~!textGroups.indexOf(workUrn.textGroup)) {
+								textGroups.push(workUrn.textGroup);
+							}
+							if (~!works.indexOf(workUrn.work)) {
+								works.push(workUrn.work);
+							}
+						}
+					});
 				});
-				query['work.slug'] = {
-					$in: values,
+
+				query['lemmaCitation.ctsNamespace'] = {
+					$in: ctsNamespaces,
 				};
-				break;
-
-			case 'subworks':
-				values = [];
-				filter.values.forEach((value) => {
-					values.push(value.n);
-				});
-				query['subwork.n'] = {
-					$in: values,
+				query['lemmaCitation.textGroup'] = {
+					$in: textGroups,
 				};
-				break;
-
-			case 'lineFrom':
-				// Values will always be an array with a length of one
-				query.lineFrom = query.lineFrom || {};
-				query.lineFrom.$gte = filter.values[0];
-				break;
-
-			case 'lineTo':
-				// Values will always be an array with a length of one
-				query.lineFrom = query.lineFrom || {};
-				query.lineFrom.$lte = filter.values[0];
+				query['lemmaCitation.work'] = {
+					$in: works,
+				};
 				break;
 
 			case 'wordpressId':
@@ -99,7 +110,11 @@ const createQueryFromFilters = (filters) => {
 	return query;
 };
 
-const getCommentsQuery = (filters, tenantId, additionalParam) => {
+/**
+ * Transfrom the filters to a query to pass to the graphql endpoint for querying
+ * comments
+ */
+const getCommentsQuery = (filters, tenantId, locationUrn) => {
 	const query = createQueryFromFilters(filters);
 	if ('$text' in query) {
 		const textsearch = new RegExp(query.$text, 'i');
@@ -115,9 +130,11 @@ const getCommentsQuery = (filters, tenantId, additionalParam) => {
 		}
 		delete query.$text;
 	}
-	if (additionalParam) {
-		query._id = additionalParam._id;
+
+	if (locationUrn) {
+		query.locationUrn = locationUrn;
 	}
+
 	query.tenantId = tenantId;
 	return JSON.stringify(query);
 }

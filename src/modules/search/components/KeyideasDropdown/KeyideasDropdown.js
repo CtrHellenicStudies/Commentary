@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// components:
+// components
 import SearchToolDropdown from '../SearchToolDropdown';
 import SearchTermButton from '../SearchTermButton';
 
-// helpers:
-import { isActive, dropdownPropTypes, dropdownDefaultProps } from '../../lib/helpers';
+// lib
+import isActive from '../../../inputs/lib/isActive';
+import dropdownPropTypes, { dropdownDefaultProps } from '../../../inputs/lib/dropdownProps';
 
 /*
 	BEGIN KeyideasDropdown
 */
-const KeyideasDropdown = ({ keyideas, searchDropdownOpen, toggleSearchDropdown, toggleSearchTerm, filters }) => (
+const KeyideasDropdown = ({ keyideas, searchDropdownOpen, toggleSearchDropdown }) => (
 	<SearchToolDropdown
 		name="Ideas"
 		open={searchDropdownOpen === 'Ideas'}
@@ -21,11 +22,10 @@ const KeyideasDropdown = ({ keyideas, searchDropdownOpen, toggleSearchDropdown, 
 		{keyideas.map(keyidea => (
 			<SearchTermButton
 				key={keyidea._id}
-				toggleSearchTerm={toggleSearchTerm}
 				label={keyidea.title}
 				searchTermKey="keyideas"
 				value={keyidea}
-				active={isActive(filters, keyidea, 'keyideas')}
+				active={isActive(keyidea, 'keyideas')}
 			/>
 		))}
 	</SearchToolDropdown>

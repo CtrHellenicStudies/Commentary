@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // layouts & components
 import Header from '../../../../components/navigation/Header';
 import Footer from '../../../../components/navigation/Footer';
-import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
+import SnackbarContainer from '../../../snackBar/containers/SnackbarContainer';
 import LoadingHome from '../../../../components/loading/LoadingHome';
 import CommunityPage from '../../components/CommunityPage/CommunityPage';
 

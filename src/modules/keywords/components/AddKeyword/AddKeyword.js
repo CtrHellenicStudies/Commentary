@@ -15,7 +15,7 @@ import Utils from '../../../../lib/utils';
 
 // components
 import DraftEditorInput from '../../../inputs/components/DraftEditorInput';
-import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
+import SnackbarContainer from '../../../snackBar/containers/SnackbarContainer';
 
 
 class AddKeyword extends React.Component {

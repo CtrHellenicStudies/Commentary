@@ -3,7 +3,7 @@ import { Route } from 'react-router';
 
 import PrivateRoute from '../../../routes/PrivateRoute';
 import CommentaryLayout from '../layouts/CommentaryLayout';
-import AddCommentLayout from '../layouts/AddCommentLayout';
+import EditorLayout from '../layouts/EditorLayout';
 import AddRevisionLayout from '../../revisions/layouts/AddRevisionLayout/AddRevisionLayout';
 
 const addCommentRoute = (
@@ -11,7 +11,7 @@ const addCommentRoute = (
 		exact
 		roles={['commenter', 'editor', 'admin']}
 		path="/commentary/create"
-		component={AddCommentLayout}
+		component={EditorLayout}
 	/>
 );
 

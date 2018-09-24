@@ -16,6 +16,7 @@ const cookies = new Cookies();
  */
 const PrivateRoute = ({ auth, roles, component: Component, ...rest }) => {
 
+	/**
 	// If user is not logged in, send them to sign in screen
 	if (!cookies.get('token')) {
 		return (
@@ -42,6 +43,7 @@ const PrivateRoute = ({ auth, roles, component: Component, ...rest }) => {
 			/>
 		);
 	}
+	*/
 
 	return (
 		<Route

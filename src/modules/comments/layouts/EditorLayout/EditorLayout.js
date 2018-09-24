@@ -7,11 +7,11 @@ import muiTheme from '../../../../lib/muiTheme';
 import PageMeta from '../../../../lib/pageMeta';
 
 // components
-import AddCommentContainer from '../../containers/AddCommentContainer';
-import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
+import CommentEditorContainer from '../../containers/CommentEditorContainer';
+import SnackbarContainer from '../../../snackBar/containers/SnackbarContainer';
 
 
-class AddCommentLayout extends React.Component {
+class EditorLayout extends React.Component {
 
 	getChildrenContext() {
 		return getMuiTheme(muiTheme);
@@ -22,8 +22,8 @@ class AddCommentLayout extends React.Component {
 
 		return (
 			<MuiThemeProvider muiTheme={this.getChildrenContext()}>
-				<div className="chs-layout chs-editor-layout add-comment-layout">
-					<AddCommentContainer />
+				<div className="chs-layout chs-editor-layout editor-layout">
+					<CommentEditorContainer />
 					<SnackbarContainer />
 				</div>
 			</MuiThemeProvider>
@@ -31,4 +31,4 @@ class AddCommentLayout extends React.Component {
 	}
 }
 
-export default AddCommentLayout;
+export default EditorLayout;

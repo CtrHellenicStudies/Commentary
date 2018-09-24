@@ -13,7 +13,7 @@ import FilterWidget from '../../../filters/components/FilterWidget/FilterWidget'
 import CommentLemmaSelect from '../../../comments/components/CommentLemmaSelect';
 import AddRevisionContainer from '../../containers/AddRevisionContainer';
 import ContextPanelContainer from '../../../contextPanel/containers/ContextPanelContainer';
-import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
+import SnackbarContainer from '../../../snackBar/containers/SnackbarContainer';
 
 // graphql
 import commentsQueryById from '../../../comments/graphql/queries/commentsById';

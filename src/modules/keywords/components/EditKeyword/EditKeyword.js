@@ -21,7 +21,7 @@ import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referen
 
 // component
 import DraftEditorInput from '../../../inputs/components/DraftEditorInput';
-import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
+import SnackbarContainer from '../../../snackBar/containers/SnackbarContainer';
 
 
 // Create toolbar plugin for editor

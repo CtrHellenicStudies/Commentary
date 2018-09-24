@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 
 // components
 import { ListGroupDnD, createListGroupItemDnD } from '../../../shared/components/ListDnD/ListDnD';
-import SnackbarContainer from '../../../shared/containers/SnackbarContainer';
+import SnackbarContainer from '../../../snackBar/containers/SnackbarContainer';
 
 
 const ListGroupItemDnD = createListGroupItemDnD('translationNodeBlocks');

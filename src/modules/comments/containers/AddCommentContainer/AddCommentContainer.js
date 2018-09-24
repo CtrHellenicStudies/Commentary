@@ -181,7 +181,6 @@ class AddCommentContainer extends React.Component {
 							open={contextReaderOpen}
 							selectedLemmaCitation={selectedLemmaCitation}
 							updateSelectedLemma={this.updateSelectedLemma}
-							textNodesUrn={textNodesUrn}
 							editor
 					  />
 					</div>

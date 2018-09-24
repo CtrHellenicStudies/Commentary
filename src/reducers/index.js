@@ -6,6 +6,7 @@ import leftMenu from './leftMenu';
 import pagination from './pagination';
 import authReducers from '../modules/auth/reducers';
 import tenantReducers from '../modules/tenants/reducers';
+import snackReducers from '../modules/snackBar/reducers';
 import client from '../middleware/apolloClient';
 
 
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
 	pagination,
 	auth: authReducers,
 	tenant: tenantReducers,
+	snackbar: snackReducers,
 });
 
 export default rootReducer;

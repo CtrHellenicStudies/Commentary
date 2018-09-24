@@ -9,6 +9,7 @@ import PageMeta from '../../../../lib/pageMeta';
 // components
 import CommentEditorContainer from '../../containers/CommentEditorContainer';
 import SnackbarContainer from '../../../snackBar/containers/SnackbarContainer';
+import Header from '../../../../components/navigation/Header';
 
 
 class EditorLayout extends React.Component {
@@ -23,6 +24,7 @@ class EditorLayout extends React.Component {
 		return (
 			<MuiThemeProvider muiTheme={this.getChildrenContext()}>
 				<div className="chs-layout chs-editor-layout editor-layout">
+					<Header />
 					<CommentEditorContainer />
 					<SnackbarContainer />
 				</div>

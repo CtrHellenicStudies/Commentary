@@ -1,0 +1,53 @@
+@import '../../../../../less/variables.import.less';
+
+/*
+*
+*
+delete modal
+*
+*
+*/
+.modalContent {
+	font-family: $font_sans_serif;
+	color: @text-primary;
+	font-size: 0.8rem;
+
+	&.warningContent {
+		font-weight: bold;
+	}
+}
+
+.deleteButtonContainer {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.permanentDelete {
+	width: 80%;
+	padding: 2%;
+	background: #88402a;
+	color: @light;
+	text-transform: uppercase;
+	font-size: 0.8rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+
+	img {
+		margin-right: 5px;
+	}
+}
+
+.cancelDelete {
+	font-size: 0.8rem;
+	text-decoration: underline;
+	margin-top: 60px;
+}
+
+.ReactModal__Body--open {
+	overflow-y: hidden;
+}

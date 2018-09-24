@@ -1,0 +1,93 @@
+@import '../../../../less/variables.import.less';
+
+.articleTextEditor {
+
+	section {
+		padding: 0;
+		margin: 0;
+	}
+
+	.section--last {
+		padding-bottom: 5px;
+	}
+
+	.DraftEditor-editorContainer {
+		font-weight: 100;
+		p, span, div, label {
+			font-family: @font-reading, 'Merriweather', Georgia, serif;
+			font-size: 22px;
+			color: @dark;
+		}
+		h1, h2, h3, h4, h5 {
+			div, span {
+				font-family: "San Francisco", -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, sans-serif;
+			}
+		}
+
+		h1 {
+			div, span {
+				font-size: 42px;
+			}
+		}
+
+		h2 {
+			div, span {
+				font-size: 38px;
+			}
+		}
+
+		h3 {
+			div, span {
+				font-size: 30px;
+			}
+		}
+
+		blockquote {
+			background:rgba(0,0,0, 0.1);
+			padding: 20px;
+			border-radius: 3px;
+			margin-left: 20px;
+			p, span, div, label {
+				font-family: @font-reading, 'Merriweather', Georgia, serif;
+				font-size: 28px;
+				color: @dark;
+			}
+		}
+
+		.graf--code {
+			p, span, div, label {
+				font-family: @font-label;
+				line-height:1.5em;
+			}
+		}
+
+		a {
+			color: $primary;
+			cursor: pointer;
+		}
+	}
+
+	.inlineTooltip-button.control {
+		top: -30px;
+	}
+	.inlineTooltip-menu {
+		margin-top: -30px;
+	}
+}
+
+// Dante hacks
+.inlineTooltip.is-active {
+	margin-top: 22px;
+}
+
+.dante-menu--active {
+	margin-top: -550px;
+}
+
+.post {
+	&.archiveDetail, &.spotlightDetail, &.themesDetail {
+		.postArticle .layoutSingleColumn {
+			margin-left: 0;
+		}
+	}
+}

@@ -4,7 +4,7 @@ import React from 'react';
 import TextNodesEditor from '../../components/TextNodesEditor/TextNodesEditor';
 
 const TextNodesEditorContainer = class TextNodesEditorContainerClass extends React.Component {
-    
+
 	constructor(props) {
 		super(props);
 		this.state ={
@@ -17,7 +17,8 @@ const TextNodesEditorContainer = class TextNodesEditorContainerClass extends Rea
 		const textNodesUrn = this.setState.textNodesUrn ? this.state.textNodesUrn : 'urn:cts:greekLit:tlg0013.tlg001:1.1-2.1';
 		return(
 			<TextNodesEditor
-				textNodesUrn={textNodesUrn} />
+				textNodesUrn={textNodesUrn}
+      />
 		);
 	}
 }

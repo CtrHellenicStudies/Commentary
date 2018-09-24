@@ -1,0 +1,149 @@
+@import '../../../../../less/variables.import.less';
+
+.optionsPanel {
+  // Hack for tonight with negative margins, consider better layout options in the future
+  margin-top: -60px;
+}
+
+.optionsPanelInner {
+  padding: 30px;
+
+  .articleMetaInput {
+  	width: 100%;
+    padding: 15px;
+    border: 2px solid #eee;
+    border-radius: 3px;
+    font-size: 18px;
+    // @include transition(all 100ms ease-in-out);
+
+    &:focus {
+      border: 2px solid $divider;
+
+    }
+  }
+
+}
+
+.articleEditorForm {
+	max-width: 990px;
+	margin: 0 auto;
+	background: $light;
+	position: relative;
+  border-radius: 3px;
+
+	&:before {
+		border-left: 15px solid transparent;
+		border-right: 15px solid transparent;
+		border-bottom: 13px solid #fff;
+		content: "";
+		left: 73%;
+		position: absolute;
+		top: -14px;
+		-webkit-transform: translateX(-50%) translateY(1px);
+		-ms-transform: translateX(-50%) translateY(1px);
+		transform: translateX(-50%) translateY(1px);
+		-webkit-transition: all 0.2s;
+		-o-transition: all 0.2s;
+		transition: all 0.2s;
+	}
+
+	p {
+		font-family: $font_sans_serif;
+		font-size: 15px;
+		font-weight: 600;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1.6;
+		letter-spacing: normal;
+		color: #232323;
+	}
+
+	.articleMetaField {
+		font-family: $font_sans_serif;
+		font-size: 14px;
+		font-weight: 600;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1.67;
+		letter-spacing: normal;
+		color: @text-secondary;
+	}
+}
+
+.articleMetaDescriptionContainer,
+.articleMetaInputContainer {
+	display: inline-flex;
+	width: 50%;
+}
+
+.articleMetaInputContainer {
+	flex-direction: column;
+	padding-right: 10px;
+}
+
+.articleMetaField.aboutMetaField {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+.articleMetaDescriptionContainer {
+	align-items: center;
+	padding-left: 10px;
+  padding-top: 13px;
+
+	p {
+		font-family: $font_sans_serif;
+		font-size: 14px;
+		font-weight: normal;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1.33;
+		letter-spacing: normal;
+		color: @text-secondary;
+	}
+}
+
+.articleMetaContainer {
+	display: flex;
+  margin: 20px auto;
+  justify-content: center;
+  align-items: flex-start;
+
+}
+
+
+.articleEditorListItemCategory {
+	display: none;
+}
+
+.deleteContainer {
+	display: flex;
+	border-top: 1px solid #eee;
+}
+
+.deleteButton {
+	color: @text-secondary;
+	display: flex;
+	align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 20px 30px;
+  font-family: @font-label;
+  font-size: 18px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+
+  img {
+    padding-bottom: 2px;
+    padding-right: 10px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.02);
+    color: @accent;
+    img {
+      fill: @accent;
+    }
+  }
+}

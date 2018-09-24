@@ -1,46 +1,57 @@
 import React from 'react';
 import { Field } from 'redux-form';
+import {
+	FormGroup,
+	ControlLabel,
+	FormControl,
+} from 'react-bootstrap';
 
 
-import CommentLemmaSelectContainer from '../CommentLemmaSelectContainer';
-import CommentWorkSelect from '../../components/CommentWorkSelect';
+// component
+import TextNodesContainer from '../../../../textNodes/containers/TextNodesContainer';
 
+import './CommentCitation.css';
+
+
+const textNodesUrn ='urn:cts:greekLit:tlg0012.tlg001:1.1';
 
 const CommentCitation = props => (
 	<div className="commentCitation">
-		<CommentLemmaContainer
-			urn={props.citationUrn}
+		<TextNodesContainer
+			textNodesUrn={props.citationUrn || textNodesUrn}
 		/>
-		<FormGroup controlId="formControlsSelect">
+		<FormGroup>
 			<ControlLabel>Work</ControlLabel>
+      {/*
 			<Select
 				name="work-select"
 				value={selectedWork}
 				options={workOptions}
 				onChange={this.selectWork}
 			/>
+      */}
 		</FormGroup>
-		<FormGroup controlId="formControlsSelect">
+		<FormGroup>
 			<ControlLabel>From</ControlLabel>
+      {/*
 			<Field
 				name="locationFrom0"
-				type="number"
 			/>
 			<Field
 				name="locationFrom1"
-				type="number"
 			/>
+      */}
 		</FormGroup>
-		<FormGroup controlId="formControlsSelect">
+		<FormGroup>
 			<ControlLabel>To</ControlLabel>
+      {/*
 			<Field
 				name="locationTo0"
-				type="number"
 			/>
 			<Field
 				name="locationTo1"
-				type="number"
 			/>
+      */}
 		</FormGroup>
 	</div>
 );

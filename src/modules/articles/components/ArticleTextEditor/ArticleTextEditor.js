@@ -203,15 +203,15 @@ class ArticleTextEditor extends React.Component {
 			widget_options: {
 				block_types: [
 				// {label: 'p', style: 'unstyled'},
-				{ label: 'h2', style: 'header-one', type: "block" },
-				{ label: 'h3', style: 'header-two', type: "block" },
-				{ label: 'h4', style: 'header-three', type: "block" },
-				{ label: 'blockquote', style: 'blockquote', type: "block" },
-				{ label: 'insertunorderedlist', style: 'unordered-list-item', type: "block" },
-				{ label: 'insertorderedlist', style: 'ordered-list-item', type: "block" },
-				{ label: 'code', style: 'code-block', type: "block" },
-				{ label: 'bold', style: 'BOLD', type: "inline" },
-				{ label: 'italic', style: 'ITALIC', type: "inline" }]
+					{ label: 'h2', style: 'header-one', type: "block" },
+					{ label: 'h3', style: 'header-two', type: "block" },
+					{ label: 'h4', style: 'header-three', type: "block" },
+					{ label: 'blockquote', style: 'blockquote', type: "block" },
+					{ label: 'insertunorderedlist', style: 'unordered-list-item', type: "block" },
+					{ label: 'insertorderedlist', style: 'ordered-list-item', type: "block" },
+					{ label: 'code', style: 'code-block', type: "block" },
+					{ label: 'bold', style: 'BOLD', type: "inline" },
+					{ label: 'italic', style: 'ITALIC', type: "inline" }]
 			}
 		}, {
 			ref: 'add_tooltip',
@@ -268,11 +268,11 @@ class ArticleTextEditor extends React.Component {
 		defaultOptions.key_commands = {
 			"alt-shift": [{ key: 65, cmd: 'add-new-block' }],
 			"alt-cmd": [{ key: 49, cmd: 'toggle_block:header-one' },
-									{ key: 50, cmd: 'toggle_block:header-two' },
-									{ key: 53, cmd: 'toggle_block:blockquote' }],
+				{ key: 50, cmd: 'toggle_block:header-two' },
+				{ key: 53, cmd: 'toggle_block:blockquote' }],
 			"cmd": [{ key: 66, cmd: 'toggle_inline:BOLD' },
-							{ key: 73, cmd: 'toggle_inline:ITALIC' },
-							{ key: 75, cmd: 'insert:link' }]
+				{ key: 73, cmd: 'toggle_inline:ITALIC' },
+				{ key: 75, cmd: 'insert:link' }]
 		}
 
 		defaultOptions.character_convert_mapping = {

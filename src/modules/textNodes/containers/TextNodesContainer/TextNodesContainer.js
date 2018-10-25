@@ -9,15 +9,15 @@ import textNodesQuery from '../../graphql/queries/textNodesQuery';
 
 
 const TextNodesContainer = props => {
-  let textNodes = [];
+	let textNodes = [];
 
-  return (
-    <TextNodes
-      textNodes={textNodes}
-    />
-  );
+	return (
+		<TextNodes
+			textNodes={textNodes}
+		/>
+	);
 }
 
 export default compose(
-  textNodesQuery,
+	textNodesQuery,
 )(TextNodesContainer);

@@ -22,7 +22,7 @@ const CommentCitation = props => (
 		/>
 		<FormGroup>
 			<ControlLabel>Work</ControlLabel>
-      {/*
+			{/*
 			<Select
 				name="work-select"
 				value={selectedWork}
@@ -33,7 +33,7 @@ const CommentCitation = props => (
 		</FormGroup>
 		<FormGroup>
 			<ControlLabel>From</ControlLabel>
-      {/*
+			{/*
 			<Field
 				name="locationFrom0"
 			/>
@@ -44,7 +44,7 @@ const CommentCitation = props => (
 		</FormGroup>
 		<FormGroup>
 			<ControlLabel>To</ControlLabel>
-      {/*
+			{/*
 			<Field
 				name="locationTo0"
 			/>

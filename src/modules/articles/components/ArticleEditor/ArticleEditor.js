@@ -67,37 +67,37 @@ class ArticleEditor extends React.Component {
 	render() {
 		return (
 			<div className="articleEditor">
-					{this.state.showOptionView ?
-						<OptionsPanel
-							categoryType={this.props.categoryType}
-							toggleDeleteModal={this.toggleDeleteModal}
-						/>
+				{this.state.showOptionView ?
+					<OptionsPanel
+						categoryType={this.props.categoryType}
+						toggleDeleteModal={this.toggleDeleteModal}
+					/>
 					: ''}
 
-					<div className="createArticleContainer">
-						<div className="articleEditorFormInputOuter articleEditorFormTitleOuter">
-							<Field
-								name="title"
-								type="text"
-								className="articleTitleInput"
-								component="textarea"
-								placeholder={`Title of the ${(
-									this.props.categoryType === 'theme' ?
+				<div className="createArticleContainer">
+					<div className="articleEditorFormInputOuter articleEditorFormTitleOuter">
+						<Field
+							name="title"
+							type="text"
+							className="articleTitleInput"
+							component="textarea"
+							placeholder={`Title of the ${(
+								this.props.categoryType === 'theme' ?
 									'Theme'
-								:
+									:
 									`${_s(this.props.categoryType).capitalize()._wrapped} article`
-									)}. . .`}
-								validate={[maxLength2000]}
-								required
-							/>
-						</div>
+							)}. . .`}
+							validate={[maxLength2000]}
+							required
+						/>
 					</div>
+				</div>
 
-					<DeleteModal
-						deleteModalOpen={this.state.deleteModalOpen}
-						closeDeleteModal={this.closeDeleteModal}
-						handleRemove={this.props.handleRemove}
-					/>
+				<DeleteModal
+					deleteModalOpen={this.state.deleteModalOpen}
+					closeDeleteModal={this.closeDeleteModal}
+					handleRemove={this.props.handleRemove}
+				/>
 
 				{/** Article text editor must be outside of form to prevent wrongful submits on button clicks */}
 				<ArticleTextEditor

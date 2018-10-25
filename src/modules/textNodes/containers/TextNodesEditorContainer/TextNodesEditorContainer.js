@@ -18,7 +18,7 @@ const TextNodesEditorContainer = class TextNodesEditorContainerClass extends Rea
 		return(
 			<TextNodesEditor
 				textNodesUrn={textNodesUrn}
-      />
+			/>
 		);
 	}
 }

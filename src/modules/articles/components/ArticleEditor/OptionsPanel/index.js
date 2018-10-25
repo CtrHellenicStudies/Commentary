@@ -23,12 +23,12 @@ const OptionsPanel = ({ showOptionView, categoryType, toggleDeleteModal }) => (
 							</div>
       			: categoryType === 'spotlight' ?
 	<div className="categoryDescription">
-		<p>A spotlight post is . . . (insert completed description of Spotlight post)</p>
-	</div>
+									<p>A spotlight post is . . . (insert completed description of Spotlight post)</p>
+								</div>
       			: categoryType === 'theme' ?
 	<div className="categoryDescription">
-		<p>A theme post is . . . (insert completed description of Theme post)</p>
-	</div>
+										<p>A theme post is . . . (insert completed description of Theme post)</p>
+									</div>
       			: '' }
 
 						<div className="articleEditorFormInputOuter">
@@ -250,7 +250,7 @@ const OptionsPanel = ({ showOptionView, categoryType, toggleDeleteModal }) => (
 						</button>
 					</div>
 				</div>
-			: '' }
+				: '' }
 		</div>
 	</div>
 );

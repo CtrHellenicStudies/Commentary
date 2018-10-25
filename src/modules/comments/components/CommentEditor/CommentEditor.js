@@ -24,8 +24,8 @@ class CommentEditor extends React.Component {
 		return (
 			<div className="commentEditor">
 				<form onSubmit={this.props.handleSubmit}>
-          <CommentCitation />
-          <CommentBodyEditor />
+					<CommentCitation />
+					<CommentBodyEditor />
 				</form>
 			</div>
 		);

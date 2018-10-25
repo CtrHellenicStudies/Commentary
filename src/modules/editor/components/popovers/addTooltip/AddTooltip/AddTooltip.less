@@ -1,0 +1,17 @@
+.addTooltip {
+	display: none;
+	position: absolute;
+	left: 20px;
+	z-index: 10;
+	transition: all 100ms ease-in-out;
+
+	&.addTooltipVisible {
+		display: block;
+	}
+
+	&.addTooltipMenuVisible {
+		.addTooltipToggle {
+			transform: rotate(45deg);
+		}
+	}
+}

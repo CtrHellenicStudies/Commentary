@@ -6,9 +6,9 @@ import './TextNodes.css';
 
 const TextNodes = props => {
 
-  return (
-    <div />
-  );
+	return (
+		<div />
+	);
 };
 
 

@@ -15,14 +15,15 @@ class AddItemButton extends React.Component {
 		autoBind(this);
 	}
 
-	handleAddItem() {
-
+	handleToggleAddItemMenu() {
+		const { addTooltip, setAddTooltip } = this.props;
+		setAddTooltip({ ...addTooltip, itemMenuVisible: true });
 	}
 
 	render() {
 		return (
 			<AddTooltipButton
-				onClick={this.handleAddItem}
+				onClick={this.handleToggleAddItemMenu}
 			>
 				<i className="mdi mdi-image-filter" />
 			</AddTooltipButton>
@@ -37,6 +38,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 	setEditorState: (editorState) => {
 		dispatch(editorActions.setEditorState(editorState));
+	},
+	setAddTooltip: (addTooltip) => {
+		dispatch(editorActions.setAddTooltip(addTooltip));
 	},
 });
 

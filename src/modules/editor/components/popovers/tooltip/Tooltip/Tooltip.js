@@ -6,6 +6,7 @@ import editorActions from '../../../../actions';
 
 // components
 import LinkTextInput from '../LinkTextInput';
+import LemmaInput from '../LemmaInput';
 import TooltipButtons from '../TooltipButtons';
 
 import './Tooltip.css';
@@ -21,6 +22,8 @@ class Tooltip extends React.Component {
 			return <TooltipButtons />
 		case 'link':
 			return <LinkTextInput />
+		case 'lemma':
+			return <LemmaInput />
 		default:
 			return <TooltipButtons />
 		}

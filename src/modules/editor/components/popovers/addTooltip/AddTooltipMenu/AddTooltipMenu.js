@@ -7,8 +7,7 @@ import editorActions from '../../../../actions';
 
 // components
 import AddImageButton from './AddImageButton';
-// import AddItemButton from './AddItemButton';
-// import AddSourceTextButton from './AddSourceTextButton';
+import AddItemButton from './AddItemButton';
 
 
 import './AddTooltipMenu.css';
@@ -32,10 +31,7 @@ class AddTooltipMenu extends React.Component {
 				 `}
 			 >
 				 <AddImageButton />
-				 {/*
 				 <AddItemButton />
-				 <AddSourceTextButton />
-				 */}
 			</div>
 		);
 	}

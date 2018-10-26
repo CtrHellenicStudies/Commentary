@@ -1,0 +1,26 @@
+
+.itemList {
+	padding: 33px 0;
+	margin: 0 auto;
+	width: 100%;
+	text-align: center;
+
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: left;
+
+}
+
+.itemList.itemListHorizontal {
+	width: auto;
+	max-height: 720px;
+	overflow-y: hidden;
+	overflow-x: scroll;
+
+	.itemListItem {
+		display: inline-block;
+		vertical-align: top;
+
+	}
+}

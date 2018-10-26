@@ -21,6 +21,7 @@ const defaultState = {
 	addTooltip: {
 		visible: false,
 		menuVisible: false,
+		itemMenuVisible: false,
 		position: {
 			// defaults for the initial click to focus to editor not containing a
 			// selection that we can get a rect from

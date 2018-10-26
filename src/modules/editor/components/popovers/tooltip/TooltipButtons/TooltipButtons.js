@@ -2,6 +2,8 @@ import React from 'react';
 
 import TooltipItem from '../TooltipItem';
 import TooltipLink from '../TooltipLink';
+import TooltipLemma from '../TooltipLemma';
+import TooltipLIMC from '../TooltipLIMC';
 
 
 const TooltipButtons = () => (
@@ -23,6 +25,8 @@ const TooltipButtons = () => (
 			inlineStyle="UNDERLINE"
 		/>
 		<TooltipLink />
+		<TooltipLemma />
+		<TooltipLIMC />
 	</div>
 );
 

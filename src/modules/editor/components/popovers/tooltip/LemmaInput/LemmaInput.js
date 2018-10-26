@@ -12,12 +12,13 @@ import editorActions from '../../../../actions';
 
 // components
 import decorators from '../../../decorators';
+import CommentCitation from '../../../../../comments/components/CommentEditor/CommentCitation';
 
 
-import './LinkTextInput.css';
+import './LemmaInput.css';
 
 
-class LinkTextInput extends React.Component {
+class LemmaInput extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -26,16 +27,16 @@ class LinkTextInput extends React.Component {
 
 	handleInputEnter(e) {
 		if (e.which === 13) {
-			this.createLink(e)
+			this.createLemma(e)
 		}
 	}
 
-	disableLinkMode() {
+	disableLemmaMode() {
 		const { tooltip, setTooltip } = this.props;
 		setTooltip({ ...tooltip, mode: 'buttons' });
 	}
 
-	createLink(e) {
+	createLemma(e) {
 		e.preventDefault();
 
 		let { editorState, setEditorState } = this.props;
@@ -44,35 +45,34 @@ class LinkTextInput extends React.Component {
 		const contentState = editorState.getCurrentContent();
 		const selectionState = editorState.getSelection();
 		const contentStateWithEntity = contentState.createEntity(
-			'LINK',
+			'LEMMA',
 			'MUTABLE',
 			{ url },
 		);
 		const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-		const contentStateWithLink = Modifier.applyEntity(
+		const contentStateWithLemma = Modifier.applyEntity(
 			contentStateWithEntity,
 			selectionState,
 			entityKey
 		);
 
-		const newEditorState = EditorState.createWithContent(contentStateWithLink, decorators);
-		// TODO: Investigate EditorState.push(editorState, contentStateWithLink) instead;
+		const newEditorState = EditorState.createWithContent(contentStateWithLemma, decorators);
+		// TODO: Investigate EditorState.push(editorState, contentStateWithLemma) instead;
 
 		setEditorState(newEditorState);
-		this.disableLinkMode(e);
+		this.disableLemmaMode(e);
 	}
 
 	render() {
 		return (
-			<div className="linkTextInput">
-				<input
-					placeholder="https://example.edu/"
-					onKeyPress={this.handleInputEnter}
-					defaultValue=""
-				/>
+			<div className="lemmaInput">
+				<CommentCitation />
+				<button className="lemmaInputAdd">
+					Add
+				</button>
 				<i
 					className="mdi mdi-close"
-					onClick={this.disableLinkMode}
+					onClick={this.disableLemmaMode}
 				/>
 			</div>
 		);
@@ -94,4 +94,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(LinkTextInput);
+)(LemmaInput);

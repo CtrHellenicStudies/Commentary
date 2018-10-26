@@ -7,6 +7,7 @@ import editorActions from '../../../../actions';
 
 // components
 import AddTooltipMenu from '../AddTooltipMenu';
+import AddItemMenu from '../AddItemMenu';
 import AddTooltipButton from '../AddTooltipButton';
 
 
@@ -48,7 +49,12 @@ class AddTooltip extends React.Component {
 				>
 					<i className="mdi mdi-plus" />
 				</AddTooltipButton>
+
 				<AddTooltipMenu />
+
+				{addTooltip.itemMenuVisible ?
+					<AddItemMenu />
+				: ''}
 			</div>
 		)
 	}

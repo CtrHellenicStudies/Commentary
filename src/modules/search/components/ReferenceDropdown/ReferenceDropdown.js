@@ -7,8 +7,8 @@ import SearchToolDropdown from '../SearchToolDropdown';
 import SearchTermButton from '../SearchTermButton';
 
 // lib
-import isActive from '../../../inputs/lib/isActive';
-import dropdownPropTypes, { dropdownDefaultProps } from '../../../inputs/lib/dropdownProps';
+import isActive from '../../lib/isActive';
+import dropdownPropTypes, { dropdownDefaultProps } from '../../lib/dropdownProps';
 
 /*
 	BEGIN ReferenceDropdown

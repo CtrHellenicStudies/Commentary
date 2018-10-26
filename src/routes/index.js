@@ -20,7 +20,7 @@ import {
 	authRoutes, unauthorizedRoute,
 } from '../modules/auth/routes';
 import {
-	addCommentRoute, addRevisionRoute, commentaryRoute,
+	addCommentRoute, commentaryRoute,
 } from '../modules/comments/routes';
 import {
 	commenterDetailRoute, commenterListRoute,
@@ -94,7 +94,6 @@ class Routes extends React.Component {
 
 					{/** Commentary routes */}
 					{addCommentRoute}
-					{addRevisionRoute}
 					{commentaryRoute}
 
 					{/** Tags routes */}

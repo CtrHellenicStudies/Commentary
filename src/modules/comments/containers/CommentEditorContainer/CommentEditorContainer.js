@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import CommentEditor from '../../components/CommentEditor/CommentEditor';
 
 // graphql
-import referenceWorkCreateMutation from '../../../referenceWorks/graphql/mutations/referenceWorkCreate';
 import keywordInsertMutation from '../../../keywords/graphql/mutations/insert';
 import keywordUpdateMutation from '../../../keywords/graphql/mutations/update';
 import commentsInsertMutation from '../../graphql/mutations/insert';
@@ -89,7 +88,6 @@ const mapStateToProps = (state, props) => ({
 
 export default compose(
 	connect(mapStateToProps),
-	referenceWorkCreateMutation,
 	keywordInsertMutation,
 	keywordUpdateMutation,
 	commentsInsertMutation,

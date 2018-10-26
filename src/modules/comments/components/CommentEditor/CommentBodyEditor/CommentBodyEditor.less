@@ -9,16 +9,22 @@
 	border-radius:2px;
 }
 
-.commentEditorFormInputOuter .commentTitleInput {
+.commentEditorInput {
+	margin: 20px auto;
+
+}
+
+.commentEditorInput .commentTitleInput {
 	font-family: @font-title;
 	display: inline-block;
 	vertical-align: top;
+	background: transparent;
 
-	font-size: 42px;
+	font-size: 28px;
 	font-weight: bold;
 
 	color: #222;
-	border: none;
+	border-bottom: 2px solid @divider;
 	outline: none;
 
 	width: 100%;
@@ -28,4 +34,14 @@
 
 	text-align: left;
 	resize: none;
+
+	&:focus {
+		outline: none;
+		border-bottom: 2px solid @dark;
+	}
+
+	&::placeholder {
+		font-family: @font-title;
+		font-size: 28px;
+	}
 }

@@ -23,15 +23,12 @@ class CommentEditor extends React.Component {
 
 		return (
 			<div className="commentEditor">
-				<form onSubmit={this.props.handleSubmit}>
-					<CommentCitation />
-					<CommentBodyEditor />
-				</form>
+				<CommentCitation />
+				<CommentBodyEditor />
 			</div>
 		);
 	}
 }
 
-export default reduxForm({
-	form: 'CommentEditor',
-})(CommentEditor);
+
+export default CommentEditor;

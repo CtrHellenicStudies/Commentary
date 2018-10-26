@@ -9,8 +9,8 @@ import RefsDeclSearchTermButton from '../RefsDeclSearchTermButton';
 import LineRangeSlider from '../LineRangeSlider';
 
 // lib
-import isActive from '../../../inputs/lib/isActive';
-// import dropdownPropTypes, { dropdownDefaultProps } from '../../../inputs/lib/dropdownProps';
+import isActive from '../../lib/isActive';
+// import dropdownPropTypes, { dropdownDefaultProps } from '../../lib/dropdownProps';
 
 
 import './RefsDeclBrowser.css';

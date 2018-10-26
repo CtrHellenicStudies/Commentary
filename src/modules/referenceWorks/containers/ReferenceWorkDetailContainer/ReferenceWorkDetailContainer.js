@@ -9,7 +9,7 @@ import LoadingPage from '../../../../components/loading/LoadingPage';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/list';
-import referenceWorksQuery from '../../graphql/queries/referenceWorksQuery';
+import referenceWorksQuery from '../../graphql/queries/list';
 import settingsQuery from '../../../settings/graphql/queries/list';
 
 // lib

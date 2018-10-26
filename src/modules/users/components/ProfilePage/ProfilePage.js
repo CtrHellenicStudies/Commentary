@@ -11,7 +11,6 @@ import BackgroundImageHolder from '../../../shared/components/BackgroundImageHol
 import ModalChangePwd from '../../../auth/components/ModalChangePwd';
 import Discussion from '../Discussion';
 import Annotations from '../Annotations';
-import Account from '../Account';
 import Header from '../../../../components/navigation/Header';
 
 // lib
@@ -117,10 +116,9 @@ class ProfilePage extends React.Component {
 											</Tab>
 											<Tab label="Account">
 												<MuiThemeProvider>
-													<Account
-														turnOnPassChange={this.showChangePwdModal}
-														user={user}
-													/>
+													{/*
+														<ProfileEditorContainer />
+													*/}
 												</MuiThemeProvider>
 											</Tab>
 										</Tabs>

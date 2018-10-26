@@ -6,7 +6,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import SearchTermButtonPanel from '../SearchTermButtonPanel';
 
 // lib
-import isActive from '../../../inputs/lib/isActive';
+import isActive from '../../lib/isActive';
 
 
 const WorksCard = ({ works, styles, filters }) => (

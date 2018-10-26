@@ -29,7 +29,7 @@ import Header from '../../../../components/navigation/Header';
 import AuthModalContainer from '../../../../modules/auth/containers/AuthModalContainer';
 
 // graphql
-import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
+import referenceWorksQuery from '../../../referenceWorks/graphql/queries/list';
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 
 // lib

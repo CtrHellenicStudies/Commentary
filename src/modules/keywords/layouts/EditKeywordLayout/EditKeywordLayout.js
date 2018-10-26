@@ -19,7 +19,6 @@ import FilterWidget from '../../../filters/components/FilterWidget';
 import muiTheme from '../../../../lib/muiTheme';
 import PageMeta from '../../../../lib/pageMeta';
 import userInRole from '../../../../lib/userInRole';
-import AddKeywordContainer from '../../containers/AddKeywordContainer';
 
 
 class AddKeywordLayout extends React.Component {
@@ -109,15 +108,12 @@ class AddKeywordLayout extends React.Component {
 			<MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
 				<div className="chs-layout chs-editor-layout add-comment-layout">
 					<div>
-						<Header
-							initialSearchEnabled
-						/>
+						<Header />
 
 						<main>
-							<AddKeywordContainer
-								textNodesUrn={textNodesUrn}
-								addKeyword={this.addKeyword}
-							/>
+							{/*
+							<KeywordEditorContainer />
+							*/}
 							<FilterWidget />
 						</main>
 					</div>

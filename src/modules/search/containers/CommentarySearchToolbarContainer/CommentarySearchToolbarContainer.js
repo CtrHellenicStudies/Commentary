@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 // graphql
 import commentersQuery from '../../../commenters/graphql/queries/list';
-import referenceWorksQuery from '../../../referenceWorks/graphql/queries/referenceWorksQuery';
+import referenceWorksQuery from '../../../referenceWorks/graphql/queries/list';
 import keywordsQuery from '../../../keywords/graphql/queries/list';
 import { editionsQuery } from '../../../textNodes/graphql/queries/editions';
 

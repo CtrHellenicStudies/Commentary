@@ -8,38 +8,18 @@ import { connect } from 'react-redux';
 // redux
 import editorActions from '../../../editor/actions';
 
-// lib
-import addNewBlock from '../../../editor/lib/addNewBlock';
+import './ItemEmbed.css';
 
 
-import './ItemListItem.css';
-
-
-class ItemListItem extends React.Component {
+class ItemEmbed extends React.Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
 	}
 
-	handleItemSelect() {
-		const { editorState, setEditorState, addTooltip, setAddTooltip } = this.props;
-		const options = {
-			item: { ...this.props },
-		};
-
-		const newEditorState = addNewBlock(editorState, 'item', options);
-		setEditorState(newEditorState);
-		setAddTooltip({
-			...addTooltip,
-			visible: false,
-			menuVisible: false,
-			itemMenuVisible: false,
-		});
-	}
-
 
 	render() {
-		const itemUrl = `/items/${this.props._id}/${this.props.slug}`;
+		const itemUrl = `https://attichydria.orphe.us/items/${this.props._id}/${this.props.slug}`;
 
 		let viewer = <div />;
 		let files = [];
@@ -59,7 +39,9 @@ class ItemListItem extends React.Component {
 			if (isImage) {
 				imageUrl = `//iiif.orphe.us/${file.name}/full/300,/0/default.jpg`;
 				viewer = (
-					<img src={imageUrl} alt={this.props.title} />
+					<a href={itemUrl} target="_blank">
+						<img src={imageUrl} alt={this.props.title} />
+					</a>
 				);
 			} else {
 				viewer = (
@@ -77,23 +59,24 @@ class ItemListItem extends React.Component {
 
 		return (
 			<div
-				className="itemListItem"
-				onClick={this.handleItemSelect}
+				className="itemEmbed"
 			>
-				{viewer}
-				<h3>{this.props.title}</h3>
-				{/*
-				<p className="description">
-					{_s.prune(this.props.description, 90)}
-				</p>
-				*/}
+				<div className="itemEmbedInner">
+					{viewer}
+					<a href={itemUrl} target="_blank">
+						<h3>{this.props.title}</h3>
+					</a>
+					<p className="description">
+						{_s.prune(this.props.description, 200)}
+					</p>
+				</div>
 			</div>
 		);
 
 	}
 }
 
-ItemListItem.propTypes = {
+ItemEmbed.propTypes = {
 	imageUrl: PropTypes.string,
 	tags: PropTypes.array,
 	title: PropTypes.string,
@@ -118,4 +101,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(ItemListItem);
+)(ItemEmbed);

@@ -10,10 +10,6 @@ import itemListQuery from '../../graphql/queries/list';
 class ItemListContainer extends React.Component {
 	render() {
 		let items = [];
-		console.log(this.props);
-		console.log(this.props);
-		console.log(this.props);
-		console.log(this.props);
 
 		if (
 			this.props.itemListQuery

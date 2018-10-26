@@ -14,6 +14,7 @@ import AddTooltip from '../popovers/addTooltip/AddTooltip';
 import ImageBlock from '../blocks/ImageBlock';
 import VideoBlock from '../blocks/VideoBlock';
 import EmbedBlock from '../blocks/EmbedBlock';
+import ItemBlock from '../blocks/ItemBlock';
 
 // lib
 import handleTooltips from '../../lib/handleTooltips';
@@ -61,6 +62,15 @@ class OrpheusEditor extends React.Component {
 		case "embed":
 			return {
 				component: EmbedBlock,
+				editable: false,
+				props: {
+					data: block.getData(),
+				},
+			};
+
+		case "item":
+			return {
+				component: ItemBlock,
 				editable: false,
 				props: {
 					data: block.getData(),

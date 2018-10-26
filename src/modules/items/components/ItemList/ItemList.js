@@ -28,7 +28,7 @@ const ItemList = ({ items, horizontal }) => {
 				<NoResults
 					message="No items have been added to this collection yet."
 				/>
-			: ''}
+				: ''}
 		</div>
 	);
 };

@@ -54,7 +54,7 @@ class AddTooltip extends React.Component {
 
 				{addTooltip.itemMenuVisible ?
 					<AddItemMenu />
-				: ''}
+					: ''}
 			</div>
 		)
 	}

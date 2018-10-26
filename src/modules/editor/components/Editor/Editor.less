@@ -1,3 +1,5 @@
+@import '../../../../less/variables.import.less';
+
 #editor {
   position: relative;
   min-width: 200px;
@@ -9,6 +11,23 @@
 .content {
 	line-height: 1.5em;
 	font-size: 18px;
+	font-family: @font-reading;
+
+	h1 {
+		span {
+			font-family: @font-title;
+		}
+	}
+
+	a {
+		border-bottom: 3px solid @md-blue-100;
+		-webkit-box-shadow: inset 0 -4px 0 @md-blue-100;
+		box-shadow: inset 0 -4px 0 @md-blue-100;
+	}
+
+	span {
+		font-family: @font-reading;
+	}
 }
 
 div[data-block="true"] {

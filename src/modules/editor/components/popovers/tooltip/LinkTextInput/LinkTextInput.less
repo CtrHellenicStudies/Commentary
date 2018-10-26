@@ -1,6 +1,4 @@
 .linkTextInput {
-	// do away with these as is necessary!
-
 	display: flex;
 
 	input {
@@ -9,9 +7,15 @@
 		border-radius: 4px;
 		border: none;
 		min-width: 320px;
+		font-size: 18px;
+		padding: 10px;
+		margin: 0;
 
 		&:focus {
 			outline: none;
+		}
+		&::placeholder {
+			color: #aaa;
 		}
 	}
 

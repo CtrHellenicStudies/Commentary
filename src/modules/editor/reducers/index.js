@@ -24,8 +24,8 @@ const defaultState = {
 		position: {
 			// defaults for the initial click to focus to editor not containing a
 			// selection that we can get a rect from
-			top: 48,
-			left: 10,
+			top: 26,
+			left: -33,
 		},
 	},
 };

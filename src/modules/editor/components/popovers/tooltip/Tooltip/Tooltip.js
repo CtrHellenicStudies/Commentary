@@ -32,7 +32,7 @@ class Tooltip extends React.Component {
 		return (
 			<div
 				className={`
-					tooltip
+					chsTooltip
 					${tooltip.visible ? 'tooltipVisible' : ''}
 				`}
 				style={tooltip.position}

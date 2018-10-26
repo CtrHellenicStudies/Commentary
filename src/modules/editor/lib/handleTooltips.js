@@ -10,11 +10,12 @@ const handleTooltips = (props) => {
 
 const getTooltipPosition = ({ top, left }) => {
 	const rect = getVisibleSelectionRect(window);
-	const toolbarHeight = 60;
-	const toolbarWidth = 180; // make dynamic in the future
+	const parent = document.getElementById('editor');
+	const toolbarHeight = 40;
+	const toolbarWidth = 300; // make dynamic in the future
 
 	if (rect) {
-		top = rect.top - toolbarHeight + window.pageYOffset;
+		top = rect.top - toolbarHeight - parent.getBoundingClientRect().top;
 		left = rect.left + (rect.width / 2) - (toolbarWidth / 2);
 	}
 
@@ -40,7 +41,8 @@ const handleTooltip = async ({ editorState, tooltip, setTooltip }) => {
 
 const getAddTooltipPosition = ({ top, left }) => {
 	let rect = null;
-	const toolbarHeight = 20;
+	const toolbarHeight = 10;
+	const parent = document.getElementById('editor');
 
 	// get cursor position
 	const selection = window.getSelection();
@@ -54,7 +56,7 @@ const getAddTooltipPosition = ({ top, left }) => {
 
 	// set position from rect
 	if (rect) {
-		top = rect.top - (toolbarHeight / 2) + window.pageYOffset;
+		top = rect.top - (toolbarHeight / 2) - parent.getBoundingClientRect().top;
 	}
 
 	return {

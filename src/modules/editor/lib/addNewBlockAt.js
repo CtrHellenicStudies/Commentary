@@ -5,11 +5,11 @@ Used from [react-rte](https://github.com/sstur/react-rte/blob/master/src/lib/ins
 by [sstur](https://github.com/sstur)
 */
 const addNewBlockAt = (
-		editorState,
-		pivotBlockKey,
-		newBlockType = "unstyled",
-		data = {}
-	) => {
+	editorState,
+	pivotBlockKey,
+	newBlockType = "unstyled",
+	data = {}
+) => {
 	const content = editorState.getCurrentContent();
 	const blockMap = content.getBlockMap();
 	const block = blockMap.get(pivotBlockKey);

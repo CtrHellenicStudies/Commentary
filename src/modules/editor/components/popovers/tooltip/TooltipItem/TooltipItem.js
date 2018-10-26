@@ -77,9 +77,9 @@ class TooltipItem extends React.Component {
 
 		let selection = editorState.getSelection();
 		let activeBlockType = editorState
-											.getCurrentContent()
-											.getBlockForKey(selection.getStartKey())
-											.getType();
+			.getCurrentContent()
+			.getBlockForKey(selection.getStartKey())
+			.getType();
 		return blockType === activeBlockType;
 	}
 

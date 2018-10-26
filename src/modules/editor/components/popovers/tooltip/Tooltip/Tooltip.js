@@ -17,12 +17,12 @@ class Tooltip extends React.Component {
 		const { tooltip } = this.props;
 
 		switch (tooltip.mode) {
-			case 'buttons':
-				return <TooltipButtons />
-			case 'link':
-				return <LinkTextInput />
-			default:
-				return <TooltipButtons />
+		case 'buttons':
+			return <TooltipButtons />
+		case 'link':
+			return <LinkTextInput />
+		default:
+			return <TooltipButtons />
 		}
 	}
 

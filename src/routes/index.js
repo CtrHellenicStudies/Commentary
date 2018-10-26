@@ -17,7 +17,7 @@ import { setTenantId } from '../modules/tenants/actions';
 
 // modules
 import {
-	authRoutes, signOutRoute, unauthorizedRoute,
+	authRoutes, unauthorizedRoute,
 } from '../modules/auth/routes';
 import {
 	addCommentRoute, addRevisionRoute, commentaryRoute,
@@ -51,8 +51,6 @@ import {
  * Application routes
  */
 class Routes extends React.Component {
-
-
 	componentWillReceiveProps(nextProps) {
 		const { dispatchSetTenantId } = this.props;
 
@@ -123,7 +121,6 @@ class Routes extends React.Component {
 
 					{/** Auth routes */}
 					{authRoutes}
-					{signOutRoute}
 					{unauthorizedRoute}
 
 					{/** NRS routes */}

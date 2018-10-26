@@ -68,7 +68,7 @@ class OrpheusEditor extends React.Component {
 			};
 
 		default:
-		break;
+			break;
 		}
 	}
 

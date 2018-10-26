@@ -7,6 +7,7 @@ import pagination from './pagination';
 import authReducers from '../modules/auth/reducers';
 import tenantReducers from '../modules/tenants/reducers';
 import snackReducers from '../modules/snackBar/reducers';
+import editorReducers from '../modules/editor/reducers';
 import client from '../middleware/apolloClient';
 
 
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
 	auth: authReducers,
 	tenant: tenantReducers,
 	snackbar: snackReducers,
+	editor: editorReducers,
 });
 
 export default rootReducer;

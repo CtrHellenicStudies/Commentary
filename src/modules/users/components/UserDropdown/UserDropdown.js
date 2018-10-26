@@ -10,7 +10,7 @@ import Utils from '../../../../lib/utils';
 import RecentList from '../RecentList';
 
 // auth
-import { logoutUser } from '../../../../lib/auth';
+import { logoutUser } from '../../../auth/lib/auth';
 
 import './UserDropdown.css';
 

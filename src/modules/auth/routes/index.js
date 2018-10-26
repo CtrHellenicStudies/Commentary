@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route } from 'react-router';
-import { logoutUser } from '../../../lib/auth'
 
 // layout
 import MainLayout from '../../../layouts/MainLayout';
@@ -11,6 +10,7 @@ import AuthContainer from '../containers/AuthContainer';
 import ForgotPwdForm from '../components/ForgotPwdForm';
 import ResetPasswordForm from '../components/ResetPasswordForm';
 import UpdateForV2Message from '../components/UpdateForV2Message';
+import Logout from '../components/Logout';
 
 
 const authRoutes = (
@@ -31,21 +31,11 @@ const authRoutes = (
 			path="/auth/forgot-password"
 			component={ForgotPwdForm}
 		/>
+		<Route
+			path="/auth/sign-out"
+			component={Logout}
+		/>
 	</MainLayout>
-);
-
-const signOutRoute = (
-	<Route
-		exact
-		path="/sign-out"
-		render={() => {
-			try {
-				logoutUser();
-			} catch (err) {
-				console.log(err);
-			}
-		}}
-	/>
 );
 
 
@@ -58,5 +48,5 @@ const unauthorizedRoute = (
 );
 
 export {
-	authRoutes, signOutRoute, unauthorizedRoute,
+	authRoutes, unauthorizedRoute,
 };

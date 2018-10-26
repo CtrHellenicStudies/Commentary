@@ -10,7 +10,9 @@ import Signup from '../../components/Signup';
 
 // actions
 import { changeAuthMode, setUser, login, logout } from '../../actions';
-import { loginUser, register, resetPassword, logoutUser } from '../../../../lib/auth';
+import {
+	loginUser, register, resetPassword, logoutUser, verifyToken
+} from '../../lib/auth';
 
 
 class AuthContainer extends React.Component {
@@ -21,32 +23,6 @@ class AuthContainer extends React.Component {
 	static defaultProps = {
 		authMode: 'login'
 	};
-
-	constructor(props) {
-		super(props);
-
-		// methods:
-		this._initiateUser = this._initiateUser.bind(this);
-	}
-
-	async _initiateUser() {
-		const { getUserFromServer, dispatchSetUser } = this.props;
-		if (getUserFromServer) {
-			try {
-				const user = await getUserFromServer();
-				if (user) {
-					user.userId = user._id;
-					user.roles = user.roles;
-					user.commenters = user.canEditCommenters;
-					dispatchSetUser(user);
-				}
-			} catch (err) {
-				console.error(err);
-				// TODO: Determine why dispatchLogout always called on page load
-				// dispatchLogout();
-			}
-		}
-	}
 
 	render() {
 		const {

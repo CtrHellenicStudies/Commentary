@@ -11,7 +11,7 @@ import LeftMenuHead from '../LeftMenuHead';
 
 // actions
 import { logout, toggleAuthModal } from '../../../modules/auth/actions';
-import { logoutUser } from '../../../lib/auth';
+import { logoutUser } from '../../../modules/auth/lib/auth';
 
 // lib
 import userInRole from '../../../lib/userInRole';
@@ -140,8 +140,7 @@ class LeftMenu extends React.Component {
 						</div>
 						:
 						<MenuItem
-							to={'#'}
-							onClick={dispatchToggleAuthModal}
+							to="/auth/sign-in"
 						>
 							Sign up / in
 						</MenuItem>

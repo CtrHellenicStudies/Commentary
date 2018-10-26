@@ -35,7 +35,7 @@ class ImageBlockLoader extends React.Component {
 							{this.renderLoading()}
 						</p>
 					</div>
-		: ''}
+					: ''}
 			</div>
 		)
 	}

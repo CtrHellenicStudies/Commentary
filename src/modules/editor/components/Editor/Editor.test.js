@@ -10,8 +10,8 @@ describe('Editor', () => {
 	it('renders correctly', () => {
 		const wrapper = shallow(
 			<Provider store={configureStore()} >
-			<Editor
-			/>
+				<Editor
+				/>
 			</Provider>
 		);
 		expect(wrapper).toBeDefined();

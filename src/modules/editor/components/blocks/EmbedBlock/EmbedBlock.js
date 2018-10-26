@@ -79,7 +79,7 @@ class EmbedBlock extends React.Component {
 							style={{ backgroundImage: `url('${ this.getImageUrl() }')`}}
 						/>
 					</a>
-				: ''}
+					: ''}
 				<a
 					className="embedText"
 					target='_blank'

@@ -2,7 +2,7 @@ import React from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 
 // lib
-import { resetPassword } from '../../../../lib/auth';
+import { resetPassword } from '../../lib/auth';
 
 import './ForgotPwdForm.css';
 

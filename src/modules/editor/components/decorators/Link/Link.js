@@ -2,7 +2,7 @@ import React from 'react'
 import autoBind from 'react-autobind';
 import {
 	CompositeDecorator,
- } from 'draft-js'
+} from 'draft-js'
 
 
 class Link extends React.Component {

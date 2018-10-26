@@ -12,7 +12,8 @@ const userIsLoggedIn = () => {
 
 const loginUser = async (data) => {
 	if (userIsLoggedIn()) {
-		throw new Error('User tried to login but user is already logged in');
+		await logoutUser();
+		// throw new Error('User tried to login but user is already logged in');
 	}
 
 	try {
@@ -40,7 +41,7 @@ const loginUser = async (data) => {
 
 		if (resJson.token) {
 			const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
-			cookies.set('token', resJson.token, { domain });
+			cookies.set('token', resJson.token, { domain } );
 			return resJson;
 		}
 	} catch (err) {
@@ -48,7 +49,7 @@ const loginUser = async (data) => {
 	}
 };
 
-const logoutUser = async () => {
+const logoutUser = () => {
 	const domain = process.env.REACT_APP_COOKIE_DOMAIN || 'chs.harvard.edu';
 	cookies.remove('token', { domain });
 	cookies.remove('hello', { domain });
@@ -56,7 +57,8 @@ const logoutUser = async () => {
 
 const register = async (data) => {
 	if (userIsLoggedIn()) {
-		throw new Error('User tried to register but user is already logged in');
+		await logoutUser();
+		// throw new Error('User tried to register but user is already logged in');
 	}
 
 	try {
@@ -73,6 +75,7 @@ const register = async (data) => {
 		});
 
 		if (!res.ok) {
+			console.error(res);
 			throw new Error(res.statusText);
 		}
 
@@ -83,12 +86,14 @@ const register = async (data) => {
 			return resJson;
 		}
 
+		/**
 		if (resJson.passwordStrength) {
 			throw new Error({
 				passwordError: true,
 				suggestion: resJson.passwordStrength.feedback.suggestions[0],
 			});
 		}
+		*/
 
 	} catch (err) {
 		throw err;
@@ -97,7 +102,8 @@ const register = async (data) => {
 
 const resetPassword = async (data) => {
 	if (userIsLoggedIn()) {
-		throw new Error('User tried to register but user is already logged in');
+		await logoutUser();
+		// throw new Error('User tried to register but user is already logged in');
 	}
 
 	try {

@@ -7,3 +7,26 @@
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),0 1px 5px 0 rgba(0, 0, 0, 0.12),0 3px 1px -2px rgba(0, 0, 0, 0.2);
 	border-radius:2px;
 }
+
+.commentCitationInput {
+	margin: 10px 0;
+}
+
+.locationInput {
+	display: flex;
+	label {
+		color: @text-secondary;
+	}
+	input {
+		font-size: 18px;
+		padding: 5px 10px;
+		border: none;
+		border-bottom: 1px solid @divider;
+		width: 50px;
+		margin: 0 10px;
+		&:focus {
+			outline: none;
+			border-bottom: 1px solid @dark;
+		}
+	}
+}

@@ -1,14 +1,8 @@
 import React from 'react';
-import { Field } from 'redux-form';
-import {
-	FormGroup,
-	ControlLabel,
-	FormControl,
-} from 'react-bootstrap';
-
 
 // component
 import TextNodesContainer from '../../../../textNodes/containers/TextNodesContainer';
+import WorkInput from '../WorkInput';
 
 import './CommentCitation.css';
 
@@ -20,39 +14,35 @@ const CommentCitation = props => (
 		<TextNodesContainer
 			textNodesUrn={props.citationUrn || textNodesUrn}
 		/>
-		<FormGroup>
-			<ControlLabel>Work</ControlLabel>
-			{/*
-			<Select
-				name="work-select"
-				value={selectedWork}
-				options={workOptions}
-				onChange={this.selectWork}
-			/>
-      */}
-		</FormGroup>
-		<FormGroup>
-			<ControlLabel>From</ControlLabel>
-			{/*
-			<Field
-				name="locationFrom0"
-			/>
-			<Field
-				name="locationFrom1"
-			/>
-      */}
-		</FormGroup>
-		<FormGroup>
-			<ControlLabel>To</ControlLabel>
-			{/*
-			<Field
-				name="locationTo0"
-			/>
-			<Field
-				name="locationTo1"
-			/>
-      */}
-		</FormGroup>
+		<div className="commentCitationInput">
+			<WorkInput />
+		</div>
+		<div className="commentCitationInput">
+			<label>From</label>
+			<div className="locationInput">
+				<label>Book</label>
+				<input
+					type="number"
+				/>
+				<label>Line</label>
+				<input
+					type="number"
+				/>
+			</div>
+		</div>
+		<div className="commentCitationInput">
+			<label>To</label>
+			<div className="locationInput">
+				<label>Book</label>
+				<input
+					type="number"
+				/>
+				<label>Line</label>
+				<input
+					type="number"
+				/>
+			</div>
+		</div>
 	</div>
 );
 

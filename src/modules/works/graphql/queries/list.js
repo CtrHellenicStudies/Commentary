@@ -1,29 +1,24 @@
 import { gql, graphql } from 'react-apollo';
 
 const query = gql`
-query worksQuery {
-		collections(urn: "urn:cts:greekLit") {
+	query worksQuery {
+		works(language: "greek") {
 			id
-			title
+			original_title
+			english_title
 			urn
-			textGroups(urn: "urn:cts:greekLit:tlg0013") {
-				id
-				title
-				urn
-				works(language: "greek") {
-					id
-					original_title
-					english_title
-					urn
-					slug
-				}
-			}
+			slug
 		}
-}
+	}
 `;
 
 const worksQuery = graphql(query, {
 	name: 'worksQuery',
+	options: ({ urn }) => ({
+		variables: {
+			urn,
+		},
+	}),
 });
 
-export { worksQuery };
+export default worksQuery;

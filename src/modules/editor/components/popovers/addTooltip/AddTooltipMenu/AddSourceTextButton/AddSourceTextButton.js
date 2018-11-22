@@ -8,27 +8,23 @@ import editorActions from '../../../../../actions';
 // components
 import AddTooltipMenuItemButton from '../../AddTooltipMenuItemButton';
 
-// icons
-import { MdInsertDriveFile } from "react-icons/md";
 
-class AddItemButton extends React.Component {
+class AddSourceTextButton extends React.Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
 	}
 
-	handleAddItem() {
+	handleAddSourceText() {
 
 	}
 
 	render() {
 		return (
 			<AddTooltipMenuItemButton
-				className="AddTooltipMenuItemButtonDisabled"
-				onClick={this.handleAddItem}
+				onClick={this.handleAddSourceText}
 			>
-				<MdInsertDriveFile />
-				<span>Item</span>
+
 			</AddTooltipMenuItemButton>
 		);
 	}
@@ -47,4 +43,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(AddItemButton);
+)(AddSourceTextButton);

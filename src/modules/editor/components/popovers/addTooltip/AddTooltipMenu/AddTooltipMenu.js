@@ -7,8 +7,12 @@ import editorActions from '../../../../actions';
 
 // components
 import AddImageButton from './AddImageButton';
+import AddDividerButton from './AddDividerButton';
 import AddItemButton from './AddItemButton';
-
+// import AddSourceTextButton from './AddSourceTextButton';
+import AddYoutubeButton from './AddYoutubeButton';
+import AddVimeoButton from './AddVimeoButton';
+import AddSketchfabButton from './AddSketchfabButton';
 
 import './AddTooltipMenu.css';
 
@@ -30,8 +34,26 @@ class AddTooltipMenu extends React.Component {
 					 ${addTooltip.menuVisible ? 'addTooltipMenuVisible' : ''}
 				 `}
 			 >
-				 <AddImageButton />
-				 <AddItemButton />
+				<div className="addTooltipMenuSection">
+					<h6 className="addTooltipMenuSectionHeader">Primary</h6>
+					<div className="addTooltipMenuSectionItems">
+						<AddImageButton />
+						<AddDividerButton />
+						<AddItemButton />
+						{/*<AddSourceTextButton />*/}
+					</div>
+				</div>
+				<div className="addTooltipMenuSection">
+					<h6 className="addTooltipMenuSectionHeader">Embed</h6>
+					<div className="addTooltipMenuSectionItems">
+						<AddYoutubeButton />
+						<AddVimeoButton />
+						<AddSketchfabButton />
+					</div>
+				</div>
+				<div className="addTooltipMenuFooter">
+					More options coming soon.
+				</div>
 			</div>
 		);
 	}

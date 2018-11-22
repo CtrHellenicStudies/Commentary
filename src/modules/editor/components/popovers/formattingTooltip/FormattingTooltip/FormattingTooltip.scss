@@ -1,0 +1,19 @@
+@import './node_modules/orpheus-design-system/src/scss/variables.scss';
+
+.formattingTooltip {
+	display: none;
+	background: $color_grey_900;
+	border-radius: 4px;
+	position: absolute;
+	z-index: 10;
+
+	&.formattingTooltipVisible {
+		display: block;
+	}
+}
+
+
+.formattingTooltipButtons {
+	// Hack: Tried putting this in FormattingTooltipButtons.scss, but the code didn't get picked up on the front-end.
+  display: flex;
+}

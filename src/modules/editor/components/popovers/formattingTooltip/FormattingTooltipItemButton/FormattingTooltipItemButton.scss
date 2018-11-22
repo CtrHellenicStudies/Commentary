@@ -1,0 +1,30 @@
+@import './node_modules/orpheus-design-system/src/scss/variables.scss';
+
+.formattingTooltipItemButton {
+	color: $white;
+	padding: 10px;
+	border: none;
+	cursor: pointer;
+	background: transparent;
+	transition: all 100ms ease-in-out;
+
+	&:hover {
+		background: rgba($white, 0.1);
+		color: $white;
+	}
+
+	&:focus {
+		outline: none;
+		background: rgba($white, 0.2);
+	}
+
+	&:last-child {
+		// Visually ends up giving an equal padding when the link icon is the last one.
+		padding-right: 13px;
+	}
+
+	svg {
+		height: 20px;
+		width: 20px;
+	}
+}

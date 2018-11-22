@@ -9,15 +9,15 @@ import editorActions from '../../../../../actions';
 import AddTooltipMenuItemButton from '../../AddTooltipMenuItemButton';
 
 // icons
-import { MdInsertDriveFile } from "react-icons/md";
+import { FaYoutube } from "react-icons/fa";
 
-class AddItemButton extends React.Component {
+class AddYoutubeButton extends React.Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
 	}
 
-	handleAddItem() {
+	handleAddYoutube() {
 
 	}
 
@@ -25,10 +25,10 @@ class AddItemButton extends React.Component {
 		return (
 			<AddTooltipMenuItemButton
 				className="AddTooltipMenuItemButtonDisabled"
-				onClick={this.handleAddItem}
+				onClick={this.handleAddYoutube}
 			>
-				<MdInsertDriveFile />
-				<span>Item</span>
+				<FaYoutube />
+				<span>YouTube</span>
 			</AddTooltipMenuItemButton>
 		);
 	}
@@ -47,4 +47,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(AddItemButton);
+)(AddYoutubeButton);

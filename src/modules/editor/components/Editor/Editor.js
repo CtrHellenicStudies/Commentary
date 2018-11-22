@@ -3,21 +3,22 @@ import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import {
 	Editor,
+	EditorState,
+	SelectionState,
 } from 'draft-js';
 
 // redux
 import editorActions from '../../actions';
 
 // components
-import Tooltip from '../popovers/tooltip/Tooltip';
+import FormattingTooltip from '../popovers/formattingTooltip/FormattingTooltip';
 import AddTooltip from '../popovers/addTooltip/AddTooltip';
 import ImageBlock from '../blocks/ImageBlock';
 import VideoBlock from '../blocks/VideoBlock';
 import EmbedBlock from '../blocks/EmbedBlock';
-import ItemBlock from '../blocks/ItemBlock';
 
 // lib
-import handleTooltips from '../../lib/handleTooltips';
+import { handleAddTooltip } from '../../lib/handleTooltips';
 
 
 import './Editor.css';
@@ -26,16 +27,29 @@ import './Editor.css';
 class OrpheusEditor extends React.Component {
 
 	constructor(props) {
-		super(props)
+		super(props);
+
+		this.editorRef = React.createRef();
 
 		autoBind(this);
 	}
 
-	async onChange(newEditorState) {
+	componentDidMount() {
+		this.props.setEditorRef(this.editorRef);
+	}
+
+	onBlur(_evt) {
+		const { editorState, setEditorState } = this.props;
+
+		setEditorState(EditorState.acceptSelection(editorState, SelectionState.createEmpty()));
+	}
+
+	onChange(newEditorState) {
 		const { setEditorState } = this.props;
 
-		await setEditorState(newEditorState);
-		await handleTooltips(this.props);
+		setEditorState(newEditorState);
+		// Wait a tick so that the changes propagate
+		setTimeout(() => handleAddTooltip(this.props));
 	}
 
 	handleBlockRenderer(block) {
@@ -68,15 +82,6 @@ class OrpheusEditor extends React.Component {
 				},
 			};
 
-		case "item":
-			return {
-				component: ItemBlock,
-				editable: false,
-				props: {
-					data: block.getData(),
-				},
-			};
-
 		default:
 			break;
 		}
@@ -86,18 +91,18 @@ class OrpheusEditor extends React.Component {
 
 		return (
 			<div
-				id="editor"
+				className="editor"
 			>
-				<div className="content">
-					<Editor
-						editorState={this.props.editorState}
-						onChange={this.onChange}
-						placeholder={this.props.placeholder}
-						readOnly={this.props.readOnly}
-						blockRendererFn={this.handleBlockRenderer}
-					/>
-				</div>
-				<Tooltip />
+				<Editor
+					editorState={this.props.editorState}
+					onBlur={this.onBlur}
+					onChange={this.onChange}
+					placeholder={this.props.placeholder}
+					readOnly={this.props.readOnly}
+					ref={this.editorRef}
+					blockRendererFn={this.handleBlockRenderer}
+				/>
+				<FormattingTooltip />
 				<AddTooltip />
 			</div>
 		);
@@ -105,7 +110,7 @@ class OrpheusEditor extends React.Component {
 }
 
 OrpheusEditor.defaultProps = {
-	placeholder: 'Enter text . . .',
+	placeholder: 'Write your text...',
 	readOnly: false,
 };
 
@@ -115,6 +120,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+	setEditorRef: editorRef => dispatch(editorActions.setEditorRef(editorRef)),
 	setEditorState: (editorState) => {
 		dispatch(editorActions.setEditorState(editorState));
 	},

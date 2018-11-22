@@ -8,7 +8,9 @@ const AddTooltipButton = props => (
 		className={`addTooltipButton ${props.className}`}
 		onClick={props.onClick}
 	>
-		{props.children}
+		<div className="addTooltipInner">
+			{props.children}
+		</div>
 	</button>
 );
 

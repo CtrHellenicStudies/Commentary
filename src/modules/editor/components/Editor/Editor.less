@@ -1,4 +1,31 @@
 @import '../../../../less/variables.import.less';
+// @import './node_modules/orpheus-design-system/src/scss/variables.scss';
+
+.editor {
+  font-size: 1.1rem;
+  position: relative;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+div[data-block="true"], .public-DraftEditorPlaceholder-root {
+	padding: 20px;
+}
+
+.public-DraftEditorPlaceholder-root {
+  position: absolute;
+  z-index: 0;
+}
+
+.public-DraftEditorPlaceholder-inner {
+  color: $color_grey_500;
+}
+
+.DraftEditor-editorContainer {
+  position: relative;
+  z-index: 1;
+}
+
 
 #editor {
   position: relative;

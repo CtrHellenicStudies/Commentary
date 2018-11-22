@@ -6,10 +6,8 @@ import { connect } from 'react-redux';
 import editorActions from '../../../../../actions';
 
 // components
-import AddTooltipMenuItemButton from '../../AddTooltipMenuItemButton';
+import AddTooltipButton from '../../AddTooltipButton';
 
-// icons
-import { MdInsertDriveFile } from "react-icons/md";
 
 class AddItemButton extends React.Component {
 	constructor(props) {
@@ -17,19 +15,18 @@ class AddItemButton extends React.Component {
 		autoBind(this);
 	}
 
-	handleAddItem() {
-
+	handleToggleAddItemMenu() {
+		const { addTooltip, setAddTooltip } = this.props;
+		setAddTooltip({ ...addTooltip, itemMenuVisible: true });
 	}
 
 	render() {
 		return (
-			<AddTooltipMenuItemButton
-				className="AddTooltipMenuItemButtonDisabled"
-				onClick={this.handleAddItem}
+			<AddTooltipButton
+				onClick={this.handleToggleAddItemMenu}
 			>
-				<MdInsertDriveFile />
-				<span>Item</span>
-			</AddTooltipMenuItemButton>
+				<i className="mdi mdi-image-filter" />
+			</AddTooltipButton>
 		);
 	}
 }
@@ -41,6 +38,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 	setEditorState: (editorState) => {
 		dispatch(editorActions.setEditorState(editorState));
+	},
+	setAddTooltip: (addTooltip) => {
+		dispatch(editorActions.setAddTooltip(addTooltip));
 	},
 });
 

@@ -1,0 +1,47 @@
+@import './node_modules/orpheus-design-system/src/scss/variables.scss';
+
+.addTooltipMenuItemButton {
+	@include orpheus_font_subtitle;
+	border-radius: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	cursor: pointer;
+	color: $color_grey_700;
+	padding: 0 20px;
+	width: 33.33333%;
+
+	&:hover {
+		color: $color_grey_800;
+		> svg, > img {
+			color: $color_grey_900;
+			transform: scale(1.02);
+		}
+	}
+
+	&:focus {
+		outline: none;
+		color: $color_grey_900;
+	}
+
+	&:active {
+		color: $black;
+		> svg, > img {
+			color: $black;
+			transform: scale(0.9);
+		}
+	}
+
+	> svg, > img {
+		color: $color_grey_800;
+		height: 40px;
+		margin-bottom: 5px;
+		width: 40px;
+	}
+}
+
+.AddTooltipMenuItemButtonDisabled {
+	cursor: default;
+	pointer-events: none;
+	opacity: 0.3;
+}

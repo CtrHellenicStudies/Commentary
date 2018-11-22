@@ -14,7 +14,7 @@ const hasSelectedText = (editorState) => {
 	if (
 		selectedText
 		&& selectedText.length
-		&& !selectionState.isCollapsed()
+    && !selectionState.isCollapsed()
 		&& (currentContentBlock.getType()).indexOf(draftJsBlockTypes) <= 0
 	) {
 		hasTextSelected = true;

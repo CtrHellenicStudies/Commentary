@@ -8,16 +8,13 @@ import editorActions from '../../../../../actions';
 // components
 import AddTooltipMenuItemButton from '../../AddTooltipMenuItemButton';
 
-// icons
-import { MdInsertDriveFile } from "react-icons/md";
-
-class AddItemButton extends React.Component {
+class AddSketchfabButton extends React.Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
 	}
 
-	handleAddItem() {
+	handleAddSketchfab() {
 
 	}
 
@@ -25,10 +22,10 @@ class AddItemButton extends React.Component {
 		return (
 			<AddTooltipMenuItemButton
 				className="AddTooltipMenuItemButtonDisabled"
-				onClick={this.handleAddItem}
+				onClick={this.handleAddSketchfab}
 			>
-				<MdInsertDriveFile />
-				<span>Item</span>
+				<img src="./img/ic_sketchfab.svg" alt="" />
+				<span>Sketchfab</span>
 			</AddTooltipMenuItemButton>
 		);
 	}
@@ -47,4 +44,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(AddItemButton);
+)(AddSketchfabButton);

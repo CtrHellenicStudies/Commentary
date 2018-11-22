@@ -12,17 +12,17 @@ import AddTooltipMenuItemButton from '../../AddTooltipMenuItemButton';
 import addNewBlock from '../../../../../lib/addNewBlock';
 
 // icons
-import { MdImage } from "react-icons/md";
+import { MdRemove } from "react-icons/md";
 
 
-class AddImageButton extends React.Component {
+class AddDividerButton extends React.Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
 	}
 
-	handleAddImage() {
-		this.refs.fileInput.click()
+	handleAddDivider() {
+
 	}
 
 	handleFileInput(e) {
@@ -48,16 +48,13 @@ class AddImageButton extends React.Component {
 	render() {
 		return (
 			<AddTooltipMenuItemButton
-				onClick={this.handleAddImage}
+				className="AddTooltipMenuItemButtonDisabled"
+				title="Coming soon"
+				disabled
+				onClick={this.handleAddDivider}
 			>
-				<MdImage />
-				<span>Image</span>
-				<input
-					type="file"
-					style={{ display: 'none' }}
-					ref="fileInput"
-					onChange={this.handleFileInput}
-				/>
+				<MdRemove />
+				<span>Separator</span>
 			</AddTooltipMenuItemButton>
 		);
 	}
@@ -79,4 +76,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(AddImageButton);
+)(AddDividerButton);

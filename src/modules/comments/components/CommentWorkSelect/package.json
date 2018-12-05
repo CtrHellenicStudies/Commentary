@@ -1,0 +1,6 @@
+{
+  "name": "CommentWorkSelect",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./CommentWorkSelect.js"
+}

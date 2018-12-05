@@ -7,12 +7,11 @@
 # Center for Hellenic Studies Classical Commentaries
 
 
-The Center for Hellenic Studies (CHS) Classical Commentaries application is part of an ongoing effort of the CHS to create communities around texts. The application is used for creating multi-tenant, textual commentaries for classical texts as well as for creating annotations on the Center for Hellenic Studies website. It also offers a public community of users similar to a social network.
+The Center for Hellenic Studies (CHS) Classical Commentaries application is part of an ongoing effort of the CHS to create communities around texts. The application is used for creating multi-tenant, textual commentaries for classical texts as well as for creating annotations on the Center for Hellenic Studies website. It also offers a public community of users with some functionality similar to a social network.
 
 The application supports three commentaries and two annotation platforms:
 
 [A Homer Commentary in Progress](https://ahcip.chs.harvard.edu) - Commentary on the works of Homer
-
 
 [A Pindar Commentary in Progress](https://pindar.chs.harvard.edu) - Commentary on Pindar's Odes
 
@@ -30,11 +29,14 @@ The application supports three commentaries and two annotation platforms:
 
 ## Development
 
-The CHS Commentaries is currently created with React, GraphQL, and Meteor. Due to the increasing complexity of the application, the trajectory of development will soon see less reliance on Meteor and corresponding packages and more on GraphQL, Redux, and Express.
+The CHS Commentaries application frontend is created with the [Create React App](https://github.com/facebookincubator/create-react-app) and has intentionally not deviated (e.g. ejecting webpack) for easy reuse by the community in the future. The backend for the application is a GraphQL API server built with express that you can find here: https://github.com/CtrHellenicStudies/CommentaryAPI
+
+The Commentary GraphQL API relies on stitching the commentary GraphQL schema with The Center for Hellenic Studies Text Server with [Canonical Text Service](http://cite-architecture.github.io/cts/) underpinnnings here: https://github.com/CtrHellenicStudies/Textserver
+
 
 ### Getting started
 
-To get started developing, you will need to clone the project and [install Meteor](https://www.meteor.com/install). Then, install node dependencies with `meteor npm i`. Next, edit your `hosts` file to add the `chs.local` subdomains:
+To get started developing, you will need to clone the project and [install Yarn](https://yarnpkg.com/lang/en/docs/install/). Then, install node dependencies with `yarn`. Next, edit your `hosts` file to add the `chs.local` subdomains:
 
 ```
 127.0.0.1       chs.local
@@ -49,7 +51,7 @@ To get started developing, you will need to clone the project and [install Meteo
 ... etc
 ```
 
-Finally, start the application with `meteor npm run start`. The application should start on port 5000, and create an initial tenant for you so that you may view the application running at http://ahcip.chs.local:5000.
+Finally, start the application with `yarn start`. The application should start on port 3000, and create an initial tenant for you so that you may view the application running at http://ahcip.chs.local:3000.
 
 ### Branching methodology
 
@@ -59,26 +61,11 @@ The CHS Commentaries generally subscribes to the [git-flow](https://github.com/n
 
 ## Deployment
 
-NOTE: this section is still under active development and will change in subsequent iterations of the project.
+Deployment is currently managed internally with the GitLab CI on the [Archimedes GitLab instance](http://gitlab.archimedes.digital/archimedes/ahcip), but you can follow one of several steps from the [Create React App Documentation for Deployment](https://github.com/facebookincubator/create-react-app).
 
-Deployment is in progress with the GitLab CI on the [Archimedes GitLab instance](http://gitlab.archimedes.digital/archimedes/ahcip).
+**We will update this section soon with more information about how to deploy your own commentary to as simple of hosting environment as GitHub pages. For now the Create React App documentation has this information.**
 
-### Previous method of deployment
-
-The current docker image build creates a stateless webapp image that will reference an external DB.
-
-#### Building the image
-
-From the project directory:
-1) Build the app: `bin/build`
-2) Build the docker image: `bin/build_image`
-
-#### Testing the production image locally
-
-To start the production image locally run `bin/start_prod_loc [MONGO_URL]`
-
-This will create an app instance bound to port 3000 on the host and using MONGO_URL as the DB.
-
+Deployment of the CHS Commentaries platform frontend does not require advanced technical knowledge.
 
 
 ## Contact

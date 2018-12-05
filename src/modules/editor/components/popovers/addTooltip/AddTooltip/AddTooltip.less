@@ -1,0 +1,15 @@
+@import './node_modules/orpheus-design-system/src/scss/variables.scss';
+@import './node_modules/orpheus-design-system/src/scss/mixins/breakpoints.scss';
+
+.addTooltip {
+	display: none;
+	position: absolute;
+	left: 20px;
+	z-index: 10;
+
+	&.addTooltipVisible {
+		@include breakpoint2 {
+			display: block;
+		}
+	}
+}

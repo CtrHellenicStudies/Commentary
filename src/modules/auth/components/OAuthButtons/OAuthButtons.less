@@ -1,0 +1,33 @@
+@import '../../../../less/variables.import.less';
+
+.at-oauth {
+
+	button {
+		width: 100%;
+		padding: 15px 25px;
+		margin: 10px auto;
+		border-radius: 0px;
+		border: 2px solid #999;
+		background: #999;
+		color: @light;
+		font-size: 16px;
+
+		&:hover {
+			border: 2px solid @dark;
+			background: @dark;
+			color: @light;
+
+		}
+
+		&:focus {
+			color: @light;
+			outline: none;
+			border: 2px solid @dark;
+
+		}
+
+		i {
+			padding-right: 10px;
+		}
+	}
+}

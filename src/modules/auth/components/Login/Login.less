@@ -1,0 +1,67 @@
+@import '../../../../less/variables.import.less';
+
+.authContainer {
+	margin: 0 auto;
+	text-align: center;
+	width: 90%;
+	max-width: 720px;
+}
+
+.at-form {
+	margin-top: 80px;
+	
+	h3 {
+		padding: 10px 0;
+		font-size: 28px;
+		color: @text-secondary;
+
+		button {
+			color: @dark;
+			margin-left: 10px;
+			padding: 0 0px 2px;
+			background: none;
+			border: none;
+			outline: none;
+
+			&:hover {
+				color: @primary;
+			}
+		}
+	}
+
+	form {
+		text-align: left;
+		margin: 0 auto;
+	}
+
+	.error-text {
+		font-size: 16px;
+		font-family: @font-body;
+		font-weight: 100;
+		color: @accent;
+	}
+}
+
+.at-sep {
+	font-size: 14px;
+	margin: 15px auto;
+	font-family: @font-label;
+	font-weight: 100;
+	color: @text-primary;
+}
+
+#at-forgotPwd {
+	text-align: left;
+	font-size: 16px;
+	padding: 2px 0 14px;
+	display: block;
+}
+
+#at-resend-verification-email {
+	padding: 0 4px;
+
+}
+
+.at-signup-link, .at-resend-verification-email-link {
+	font-size: 16px;
+}

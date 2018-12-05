@@ -1,0 +1,389 @@
+/******************************************************************************
+
+						  ___ _  _ ___
+						 / __| || / __|
+						| (__| __ \__ \
+						 \___|_||_|___/
+
+  		The Center for Hellenic Studies
+
+
+ |  Style Variables for A Homer Commentary in Progress and CHS Annotations
+ |
+ |   1. Colors
+ |   2. Typography
+ |   3. Mixins
+
+
+******************************************************************************/
+
+
+/******************************************************************************
+
+1. Colors
+
+******************************************************************************/
+
+/******************************************************************************
+
+1.1 Base Colors
+
+******************************************************************************/
+@light: #fff;
+@dark: #1e1e1e;
+@grey: #555;
+@gray: #555;
+@light-gray: #eee;
+@background-gray: #f6f6f6;
+@divider: #CCCCCC;
+@divider-light: #eee;
+@divider-dark: #666;
+@divider-transparent: rgba(204, 204, 204, 0.4);
+@dark-1: rgba(0, 0, 0, 0.6);
+@dark-2: rgba(0, 0, 0, 0.8);
+@light-1: #ddd;
+@light-2: #f0f0f0;
+
+/******************************************************************************
+
+1.2 Brand Colors
+
+******************************************************************************/
+@blue-gray: #03435e;
+@terracotta: #bc5500;
+@dark-brown: #352721;
+@marble: #f7f5f2;
+@tan1: #b6ae97;
+@tan2: #d7d1c0;
+@tan3: #efebde;
+@tan4: #fbf8ec;
+
+@keywords: #a02f19;
+@ahcip-red: @keywords;
+@ahcip-red: @md-primary-700;
+@commenters: #4994c9;
+@ahcip-blue: @commenters;
+
+// Material browns
+@md-primary-100: #D7CCC8;
+@md-primary-200: #BCAAA4;
+@md-primary-300: #A1887F;
+@md-primary-400: #8D6E63;
+@md-primary-500: #795548;
+@md-primary-600: #6D4C41;
+@md-primary-700: #5D4037;
+@md-primary-800: #4E342E;
+@md-primary-900: #3E2723;
+@md-primary: @md-primary-500;
+@md-primary-light: @md-primary-100;
+@md-primary-dark: @md-primary-800;
+
+// Extra Primary colors
+@md-primary-500-60: rgba(121, 85, 72, 0.6);
+@md-primary-500-40: rgba(121, 85, 72, 0.4);
+@md-primary-800-80: rgba(78, 52, 46, 0.8);
+@md-primary-800-60: rgba(78, 52, 46, 0.6);
+@md-primary-800-40: rgba(78, 52, 46, 0.4);
+
+// Blues
+@md-blue-50: #E0F7FA;
+@md-blue-100: #B2EBF2;
+@md-blue-200: #80DEEA;
+@md-blue-300: #4DD0E1;
+@md-blue-400: #26C6DA;
+@md-blue-500: #00BCD4;
+@md-blue-600: #00ACC1;
+@md-blue-700: #0097A7;
+@md-blue-800: #00838F;
+@md-blue-900: #006064;
+
+// Theme colors
+@chs-accent-300: rgba(101, 66, 62, 1);
+@chs-accent-500: #63232D;
+@chs-accent-700: #56282F;
+@chs-accent-900: rgba(51, 19, 16, 1);
+@chs-accent-1100: rgba(39, 9, 6, 1);
+
+// Standardize CHS reds with the md naming convention
+@md-accent: @chs-accent-500;
+@md-accent-300: @chs-accent-300;
+@md-accent-500: @chs-accent-500;
+@md-accent-700: @chs-accent-700;
+@md-accent-900: @chs-accent-900;
+@md-accent-1100: @chs-accent-1100;
+@md-accent-500-60: rgba(244, 67, 54, 0.6);
+@md-accent-500-40: rgba(244, 67, 54, 0.4);
+
+// General help colors
+@trans-light-9: rgba(255, 255, 255, .9);
+@trans-light-8: rgba(255, 255, 255, .8);
+@opaque-dark-1: rgba(100, 100, 100, 1);
+@opaque-dark-2: rgba(50, 50, 50, 1);
+
+// Naming regularization
+@primary: @md-primary-500;
+@primary-dark: @md-primary-700;
+@primary-dark-2: @md-primary-900;
+@primary-light: @md-primary-100;
+@accent: @md-accent-500;
+@accent-dark: @md-accent-700;
+@accent-dark-2: @md-accent-900;
+@accent-light: #BBDEFB;
+
+/******************************************************************************
+
+1.3 Text Colors
+
+******************************************************************************/
+@text-primary: #212121;
+@text-secondary: #727272;
+@text-gray: #999;
+@text-gray-light: #ddd;
+@text-reading: rgba(0, 0, 0, 0.8);
+
+/******************************************************************************
+
+2. Typography
+
+Available Fonts:
+
+=================================
+Google Fonts
+=================================
+font-family: 'Gentium Basic', serif;
+font-family: 'Merriweather', serif;
+
+
+=================================
+Fonts.com
+=================================
+font-family:'Museo Sans W01_900';
+font-family:'ProximaNW01-AltLightReg';
+font-family:'Proxima N W01 At Smbd';
+font-family:'Museo W01_700';
+font-family:'Proxima N W01 Thin Reg';
+font-family:'Proxima Nova W08 Reg';
+font-family:'Proxima Nova W15 Medium';
+font-family:'Proxima Nova W07 Semibold';
+font-family:'Proxima Nova W07 Bold';
+font-family:'Proxima Nova W07 Extrabold';
+font-family:'Proxima Nova W07 Black';
+font-family:'Proxima Nova A W07 Light';
+
+=================================
+Material Design Icons
+=================================
+font-family: "Material Design Icons";
+
+******************************************************************************/
+
+/******************************************************************************
+
+2.1 Base Fonts
+
+******************************************************************************/
+@font-body: 'Proxima Nova W08 Reg', sans-serif;
+@font-label: 'Proxima Nova W15 Medium', sans-serif;
+@font-accent: 'Museo Sans W01_900', sans-serif;
+@font-light: @font-body;
+@font-logo: @font-accent;
+@font-family-default-starter: @font-light;
+@font-family-default-regular: @font-light;
+@font-family-default-regular-alt: @font-label;
+@font-family-default: @font-light;
+
+/******************************************************************************
+
+2.2 Title Fonts
+
+******************************************************************************/
+@font-title: 'ProximaNW01-AltLightReg', sans-serif;
+
+/******************************************************************************
+
+2.3 Reading Environment Fonts
+
+******************************************************************************/
+@font-commentary: 'Merriweather', Georgia, serif;
+@font-reading: @font-commentary;
+@font-lemma: 'Gentium Basic', 'Merriweather', Georgia, Times New Roman, serif;
+
+
+/******************************************************************************
+
+2.4 Material Design Icons
+
+******************************************************************************/
+
+// Font declaration moved to './fonts/mdi.import.less';
+
+/******************************************************************************
+
+3. Mixins
+
+******************************************************************************/
+
+
+.text-shadow (@string: 0 1px 3px rgba(0, 0, 0, 0.25)) {
+  text-shadow: @string;
+}
+
+.box-shadow (@string) {
+  -webkit-box-shadow: @string;
+  -moz-box-shadow: @string;
+  box-shadow: @string;
+}
+
+.drop-shadow (@x: 0, @y: 1px, @blur: 2px, @spread: 0, @alpha: 0.25) {
+  -webkit-box-shadow: @x @y @blur @spread rgba(0, 0, 0, @alpha);
+  -moz-box-shadow: @x @y @blur @spread rgba(0, 0, 0, @alpha);
+  box-shadow: @x @y @blur @spread rgba(0, 0, 0, @alpha);
+}
+
+.inner-shadow (@x: 0, @y: 1px, @blur: 2px, @spread: 0, @alpha: 0.25) {
+  -webkit-box-shadow: inset @x @y @blur @spread rgba(0, 0, 0, @alpha);
+  -moz-box-shadow: inset @x @y @blur @spread rgba(0, 0, 0, @alpha);
+  box-shadow: inset @x @y @blur @spread rgba(0, 0, 0, @alpha);
+}
+
+.box-sizing (@type: border-box) {
+  -webkit-box-sizing: @type;
+  -moz-box-sizing: @type;
+  box-sizing: @type;
+}
+
+.border-radius (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+
+.border-radiuses (@topright: 0, @bottomright: 0, @bottomleft: 0, @topleft: 0) {
+  -webkit-border-top-right-radius: @topright;
+  -webkit-border-bottom-right-radius: @bottomright;
+  -webkit-border-bottom-left-radius: @bottomleft;
+  -webkit-border-top-left-radius: @topleft;
+
+  -moz-border-radius-topright: @topright;
+  -moz-border-radius-bottomright: @bottomright;
+  -moz-border-radius-bottomleft: @bottomleft;
+  -moz-border-radius-topleft: @topleft;
+
+  border-top-right-radius: @topright;
+  border-bottom-right-radius: @bottomright;
+  border-bottom-left-radius: @bottomleft;
+  border-top-left-radius: @topleft;
+
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+
+.opacity (@opacity: 0.5) {
+  -webkit-opacity: @opacity;
+  -moz-opacity: @opacity;
+  opacity: @opacity;
+}
+
+.gradient (@startColor: #eee, @middleColor1:#fff, @middleColor2:#fff, @endColor:#eee) {
+  background-color: @startColor;
+  background: -webkit-gradient(linear, left top, left bottom, from(@startColor), to(@endColor));
+  background: -webkit-linear-gradient(top, @startColor, @middleColor1 10%, @middleColor2 90%, @endColor);
+  background: -moz-linear-gradient(top, @startColor, @middleColor1 10%, @middleColor2 90%, @endColor);
+  background: -ms-linear-gradient(top, @startColor, @middleColor1 10%, @middleColor2 90%, @endColor);
+  background: -o-linear-gradient(top, @startColor, @middleColor1 10%, @middleColor2 90%, @endColor);
+
+}
+
+.horizontal-gradient (@startColor: #eee, @endColor: white) {
+  background-color: @startColor;
+  background-image: -webkit-gradient(linear, left top, right top, from(@startColor), to(@endColor));
+  background-image: -webkit-linear-gradient(left, @startColor, @endColor);
+  background-image: -moz-linear-gradient(left, @startColor, @endColor);
+  background-image: -ms-linear-gradient(left, @startColor, @endColor);
+  background-image: -o-linear-gradient(left, @startColor, @endColor);
+}
+
+.animation (@name, @duration: 300ms, @delay: 0, @ease: ease) {
+  -webkit-animation: @name @duration @delay @ease;
+  -moz-animation: @name @duration @delay @ease;
+  -ms-animation: @name @duration @delay @ease;
+}
+
+.transition (@transition) {
+  -webkit-transition: @transition;
+  -moz-transition: @transition;
+  -ms-transition: @transition;
+  -o-transition: @transition;
+}
+
+.transform(@string) {
+  -webkit-transform: @string;
+  -moz-transform: @string;
+  -ms-transform: @string;
+  -o-transform: @string;
+}
+
+.scale (@factor) {
+  -webkit-transform: scale(@factor);
+  -moz-transform: scale(@factor);
+  -ms-transform: scale(@factor);
+  -o-transform: scale(@factor);
+}
+
+.rotate (@deg) {
+  -webkit-transform: rotate(@deg);
+  -moz-transform: rotate(@deg);
+  -ms-transform: rotate(@deg);
+  -o-transform: rotate(@deg);
+}
+
+.skew (@deg, @deg2) {
+  -webkit-transform: skew(@deg, @deg2);
+  -moz-transform: skew(@deg, @deg2);
+  -ms-transform: skew(@deg, @deg2);
+  -o-transform: skew(@deg, @deg2);
+}
+
+.translate (@x, @y:0) {
+  -webkit-transform: translate(@x, @y);
+  -moz-transform: translate(@x, @y);
+  -ms-transform: translate(@x, @y);
+  -o-transform: translate(@x, @y);
+}
+
+.translate3d (@x, @y: 0, @z: 0) {
+  -webkit-transform: translate3d(@x, @y, @z);
+  -moz-transform: translate3d(@x, @y, @z);
+  -ms-transform: translate3d(@x, @y, @z);
+  -o-transform: translate3d(@x, @y, @z);
+}
+
+.perspective (@value: 1000) {
+  -webkit-perspective: @value;
+  -moz-perspective: @value;
+  -ms-perspective: @value;
+  perspective: @value;
+}
+
+.transform-origin (@x:center, @y:center) {
+  -webkit-transform-origin: @x @y;
+  -moz-transform-origin: @x @y;
+  -ms-transform-origin: @x @y;
+  -o-transform-origin: @x @y;
+}
+
+@-webkit-keyframes flash {
+	0% { opacity: 1; }
+	50% { opacity: .6; }
+	100% { opacity: 1; }
+}
+@keyframes flash {
+	0% { opacity: 1; }
+	50% { opacity: .6; }
+	100% { opacity: 1; }
+}

@@ -1,0 +1,62 @@
+@import '../../../less/variables.import.less';
+
+.search-tools-drawer {
+
+        .text-search {
+            color:@light;
+            background:@md-primary;
+            width:100%;
+            height:100px;
+            padding:15px;
+            span, div, i, input, label {
+                color:@light !important;
+                &::placeholder {
+                    color:@light !important;
+                }
+            }
+
+            hr {
+                border:1px solid @light !important;
+            }
+        }
+
+        .search-tool-card {
+            background:#f6f6f6 !important;
+            box-shadow:none !important;
+
+
+        }
+
+        .card-header {
+            border-bottom:1px solid #eee;
+            background:@light;
+
+            > div > span {
+                font-family:@font-label;
+                font-weight:bold;
+                font-size:14px !important;
+                color:@text-secondary !important;
+            }
+
+        }
+
+        .search-term-button {
+            display:inline-block;
+            vertical-align: top;
+            width:auto;
+            border:none;
+            outline:none;
+            border-radius:2px;
+            margin:4px 12px 4px 0;
+            padding:10px 20px !important;
+            background:#eee;
+
+            span {
+                text-transform:uppercase;
+                font-family:@font-label;
+                font-size:12px;
+                color:@text-secondary;
+            }
+        }
+
+    }

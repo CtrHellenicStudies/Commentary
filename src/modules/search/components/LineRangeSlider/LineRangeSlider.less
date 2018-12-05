@@ -1,0 +1,42 @@
+@import '../../../../less/variables.import.less';
+
+.lineRangeSlider {
+  width: 160px;
+  padding: 29px 10px;
+  z-index: 1;
+  position: relative;
+  display: inline-flex;
+
+  label {
+    position: relative;
+    padding: 0 10px 0 0;
+    vertical-align: middle;
+    letter-spacing: 0px;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-block;
+    font-family: @font-label;
+    font-size: 14px;
+    color: @primary-dark;
+  }
+}
+
+.lineRangeSliderRange {
+  padding: 6px 10px 4px 10px;
+  width: 100%;
+}
+
+.rc-slider-mark {
+  top: 14px;
+}
+
+.rc-slider-tooltip {
+  z-index: 100;
+}
+
+.rc-slider-tooltip-inner {
+  font-size: 10px;
+  height: 22px;
+  margin-top: -2px;
+}

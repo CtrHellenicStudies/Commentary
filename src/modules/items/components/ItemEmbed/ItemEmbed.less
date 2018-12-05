@@ -1,0 +1,61 @@
+@import '../../../../less/variables.import.less';
+
+.itemEmbed {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+.itemEmbedInner {
+	display: inline-block;
+	position: relative;
+	text-align: left;
+	vertical-align: top;
+	margin: 25px auto;
+	width: 90%;
+	max-width: 421px;
+
+	.listItemImageLink {
+		display: block;
+		max-height: 240px;
+		overflow: hidden;
+	}
+
+	img {
+		width: 110%;
+		margin-left: -10px;
+		border: 10px solid transparent;
+		outline: 2px solid transparent;
+		cursor:pointer;
+
+		&:hover {
+			outline: 2px solid @grey;
+		}
+	}
+
+	h3 {
+		font-family: @font-title;
+		color: @text-primary;
+		cursor: pointer;
+		word-wrap: break-word;
+		padding: 10px 0 5px;
+		font-size: 22px;
+		line-height: 1.3em;
+	}
+
+	.description {
+		font-size: 16px;
+		font-family: @font-body;
+		font-weight: 100;
+		color: @text-secondary;
+		padding: 5px 0;
+		line-height: 1.5em;
+	}
+}
+
+#home {
+	.itemEmbed p {
+		font-size: 16px;
+	}
+}

@@ -1,0 +1,54 @@
+@import './node_modules/orpheus-design-system/src/scss/variables.scss';
+
+.addTooltipButton {
+	cursor: pointer;
+	padding: 10px;
+	transition: none;
+
+	&:hover {
+		.addTooltipInner {
+			color: $color_grey_600;
+		}
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	&:active {
+		transition: none;
+		.addTooltipInner {
+			color: $color_grey_500;
+			transition: none;
+		}
+	}
+
+	svg {
+		height: 24px;
+		width: 24px;
+	}
+
+	.addTooltipMenuVisible & {
+		svg {
+			transform: rotate(135deg);
+		}
+	}
+}
+
+.addTooltipInner {
+	background: $white;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	color: $color_grey_500;
+	transition: all 100ms ease-in-out;
+
+	.addTooltipMenuVisible & {
+		background: $color_grey_100;
+	}
+}

@@ -1,0 +1,52 @@
+@import './node_modules/orpheus-design-system/src/scss/reset.scss';
+@import './node_modules/orpheus-design-system/src/scss/variables.scss';
+@import './node_modules/orpheus-design-system/src/scss/mixins/animation.scss';
+
+.addTooltipMenu {
+	background: $white;
+	border-radius: 4px;
+	border: 1px solid $color_grey_400;
+	box-shadow: 0 0 10px rgba($black, 0.2);
+	display: none;
+	margin: -10px 0 40px 10px;
+	overflow: hidden;
+	position: absolute;
+	left: 50px;
+	top: 0;
+
+	&.addTooltipMenuVisible {
+		animation-name: fadeIn, slideInRight;
+		animation-duration: .2s;
+		animation-timing-function: ease-out;
+		display: block;
+	}
+}
+
+.addTooltipMenuSection {
+	margin-bottom: 40px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.addTooltipMenuSectionHeader {
+	@include orpheus_font_overline;
+	background: $color_grey_200;
+	color: $color_grey_700;
+	padding: 5px 0;
+	text-align: center;
+}
+
+.addTooltipMenuSectionItems {
+	display: flex;
+	padding: 20px 0;
+}
+
+.addTooltipMenuFooter {
+	@include orpheus_font_caption;
+	opacity: 0.4;
+	margin-top: -10px;
+	padding-bottom: 20px;
+	text-align: center;
+}

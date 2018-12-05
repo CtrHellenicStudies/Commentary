@@ -1,0 +1,61 @@
+@import '../../../../less/variables.import.less';
+
+.recentActivityTeaser {
+	width: 100%;
+	margin: 5px 0;
+	padding: 15px 0 30px;
+	clear: both;
+
+
+	.avatar-icon {
+		width: 50px;
+		height: 50px;
+		border: 1px solid @divider;
+		border-radius: 100%;
+		margin-top: 5px;
+	}
+
+	a {
+		&:hover {
+			color: @primary;
+		}
+	}
+}
+
+.recentActivityTeaserLeft, .recentActivityTeaserRight {
+	display: inline-block;
+	vertical-align: top;
+	float: left;
+
+}
+
+.recentActivityTeaserLeft {
+	margin: 0 15px;
+	width: 6%;
+}
+
+.recentActivityTeaserRight {
+	margin: 0 15px;
+	width: 84%;
+}
+
+.recentActivityTitle {
+	padding: 0;
+	margin: 0 0 5px 0;
+	font-size: 20px;
+	&:hover {
+		color: @primary;
+	}
+}
+
+.recentActivityByline {
+	font-size: 14px;
+}
+
+.recentActivityExcerpt {
+	font-size: 16px;
+	padding: 0;
+	margin: 5px 0;
+	width: auto;
+	color: @text-secondary;
+}

@@ -1,0 +1,38 @@
+@import '../../../../less/variables.import.less';
+
+.locationBrowser {
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  padding: 0 10px;
+}
+
+.locationBrowserInner {
+	display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.locationBrowserButton {
+	border: none;
+	padding: 5px;
+	background: transparent;
+  color: @primary;
+	cursor: pointer;
+
+	&:hover {
+		color: @primary-dark;
+	}
+
+	&:focus {
+		outline: none;
+	}
+}
+
+.locationBrowserText {
+	text-align: center;
+	vertical-align: middle;
+  margin: 0 5px;
+  font-size: 15px;
+}

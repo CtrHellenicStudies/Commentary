@@ -29,13 +29,13 @@ class OrpheusEditor extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.editorRef = React.createRef();
+		// this.editorRef = React.createRef();
 
 		autoBind(this);
 	}
 
 	componentDidMount() {
-		this.props.setEditorRef(this.editorRef);
+		// this.props.setEditorRef(this.editorRef);
 	}
 
 	onBlur(_evt) {
@@ -91,15 +91,13 @@ class OrpheusEditor extends React.Component {
 
 		return (
 			<div
-				className="editor"
+				className="chsEditor"
 			>
 				<Editor
 					editorState={this.props.editorState}
-					onBlur={this.onBlur}
 					onChange={this.onChange}
 					placeholder={this.props.placeholder}
 					readOnly={this.props.readOnly}
-					ref={this.editorRef}
 					blockRendererFn={this.handleBlockRenderer}
 				/>
 				<FormattingTooltip />
